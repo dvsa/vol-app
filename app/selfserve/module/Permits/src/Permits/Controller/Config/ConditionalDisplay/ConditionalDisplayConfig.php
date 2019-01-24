@@ -72,21 +72,6 @@ class ConditionalDisplayConfig
     ];
 
     const PERMIT_APP_CONFIRM_CHANGE_LICENCE_ECMT = [
-    const IRHP_APP_CAN_BE_CANCELLED = [
-        IrhpAppDataSource::DATA_KEY => [
-            'key' => 'canBeCancelled',
-            'value' => true
-        ],
-    ];
-
-    const IRHP_APP_IS_CANCELLED = [
-        IrhpAppDataSource::DATA_KEY => [
-            'key' => 'isCancelled',
-            'value' => true
-        ],
-    ];
-
-    const PERMIT_APP_CONFIRM_CHANGE = [
         PermitAppDataSource::DATA_KEY => [
             'key' => 'isNotYetSubmitted',
             'value' => true
@@ -109,6 +94,20 @@ class ConditionalDisplayConfig
     const PERMIT_APP_CAN_MAKE_DECLARATION = [
         PermitAppDataSource::DATA_KEY => [
             'key' => 'canMakeDeclaration',
+            'value' => true
+        ],
+    ];
+
+    const IRHP_APP_CAN_BE_CANCELLED = [
+        IrhpAppDataSource::DATA_KEY => [
+            'key' => 'canBeCancelled',
+            'value' => true
+        ],
+    ];
+
+    const IRHP_APP_IS_CANCELLED = [
+        IrhpAppDataSource::DATA_KEY => [
+            'key' => 'isCancelled',
             'value' => true
         ],
     ];
