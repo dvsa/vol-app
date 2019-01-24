@@ -171,4 +171,10 @@ class FormConfig
             'dataSource' => IrhpApplicationDataSource::DATA_KEY,
         ],
     ];
+
+    const FORM_CANCEL_IRHP_APP = [
+        self::FORM_CANCEL_PERMIT_APP_KEY => [
+            'formClass' => 'CancelApplicationForm',
+        ],
+    ];
 }

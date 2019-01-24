@@ -98,6 +98,20 @@ class ConditionalDisplayConfig
         ],
     ];
 
+    const IRHP_APP_CAN_BE_CANCELLED = [
+        IrhpAppDataSource::DATA_KEY => [
+            'key' => 'canBeCancelled',
+            'value' => true
+        ],
+    ];
+
+    const IRHP_APP_IS_CANCELLED = [
+        IrhpAppDataSource::DATA_KEY => [
+            'key' => 'isCancelled',
+            'value' => true
+        ],
+    ];
+
     const IRHP_APP_CAN_MAKE_DECLARATION = [
         IrhpAppDataSource::DATA_KEY => [
             'key' => 'canMakeDeclaration',

@@ -22,6 +22,7 @@ use Permits\Controller\TypeController;
 use Permits\Controller\IrhpApplicationController;
 use Permits\Controller\NoOfPermitsController;
 use Permits\Controller\IrhpCheckAnswersController;
+use Permits\Controller\CancelIrhpApplicationController;
 
 return [
   'controllers' => [
@@ -47,7 +48,7 @@ return [
         NoOfPermitsController::class => NoOfPermitsController::class,
         IrhpApplicationDeclarationController::class => IrhpApplicationDeclarationController::class,
         IrhpCheckAnswersController::class => IrhpCheckAnswersController::class,
-
+        CancelIrhpApplicationController::class => CancelIrhpApplicationController::class,
     ],
   ],
   'router' => [
@@ -162,6 +163,10 @@ return [
                           'type'    => 'segment',
                           'options' => [
                               'route'    => 'cancel[/]',
+                              'defaults' => [
+                                  'controller'    => CancelIrhpApplicationController::class,
+                                  'action'        => 'cancel',
+                              ]
                           ],
                           'may_terminate' => true,
                           'child_routes' => [
@@ -169,6 +174,10 @@ return [
                                   'type'    => 'segment',
                                   'options' => [
                                       'route'    => 'confirmation[/]',
+                                      'defaults' => [
+                                          'controller'    => CancelIrhpApplicationController::class,
+                                          'action'        => 'confirmation',
+                                      ]
                                   ],
                                   'may_terminate' => false,
                               ],
