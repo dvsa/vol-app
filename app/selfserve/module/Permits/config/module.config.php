@@ -2,7 +2,6 @@
 namespace Permits;
 
 use Permits\Controller\IrhpApplicationDeclarationController;
-use Dvsa\Olcs\Api\Domain\CommandHandler\IrhpApplication\CancelApplication;
 use Permits\Controller\CancelApplicationController;
 use Permits\Controller\ConfirmChangeController;
 use Permits\Controller\EmissionsController;
