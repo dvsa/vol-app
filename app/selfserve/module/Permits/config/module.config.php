@@ -81,8 +81,28 @@ return [
                           'type'    => 'segment',
                           'options' => [
                               'route'    => 'licence[/]',
+                              'defaults' => [
+                                  'controller'    => LicenceController::class,
+                                  'action'        => 'question',
+                              ],
                           ],
-                          'may_terminate' => false,
+                          'may_terminate' => true,
+                          'child_routes' => [
+                              'change' => [
+                                  'type'    => 'segment',
+                                  'options' => [
+                                      'route'    => 'change[/[:licence]]',
+                                      'defaults' => [
+                                          'controller'    => ConfirmChangeController::class,
+                                          'action'        => 'question',
+                                      ],
+                                      'constraints' => [
+                                          'licence' => '[0-9]+',
+                                      ],
+                                  ],
+                                  'may_terminate' => true,
+                              ],
+                          ]
                       ],
                       'countries' => [
                           'type'    => 'segment',
@@ -542,7 +562,7 @@ return [
                       'route'    => '[/:id]/licence[/]',
                       'defaults' => [
                           'controller'    => LicenceController::class,
-                          'action'        => 'question',
+                          'action'        => 'ecmt',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',
@@ -556,7 +576,7 @@ return [
                       'route'    => '/:id/change-licence[/[:licence]]',
                       'defaults' => [
                           'controller'    => ConfirmChangeController::class,
-                          'action'        => 'question',
+                          'action'        => 'ecmt',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',

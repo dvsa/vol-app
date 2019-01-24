@@ -28,11 +28,4 @@ class DeclarationSign
      * @Form\Type("\Zend\Form\Element\Button")
      */
     public $sign = null;
-
-    /**
-     * @Form\Attributes({"type":"submit"})
-     * @Form\Options({"label":"lva.section.title.transport-manager-application.print-sign"})
-     * @Form\Type("\Zend\Form\Element\Button")
-     */
-    public $print = null;
 }

@@ -13,6 +13,7 @@ class LastOpenWindow extends AbstractDataSource
 {
     const DATA_KEY = 'lastOpenWindow';
     protected $dto = LastOpenWindowDto::class;
+    protected $paramsMap = ['type' => 'permitType'];
 
     public function __construct()
     {

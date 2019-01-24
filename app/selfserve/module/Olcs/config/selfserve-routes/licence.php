@@ -418,6 +418,28 @@ return [
                                 ],
                             ],
                         ],
+                        'print-sign-return' => [
+                            'may_terminate' => false,
+                            'type' => Segment::class,
+                            'options' => [
+
+                                'route' => 'print-sign-return[/]'
+
+                            ],
+                            'child_routes' => [
+                                'GET' => [
+                                    'may_terminate' => true,
+                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'options' => [
+                                        'verb' => 'GET',
+                                        'defaults' => [
+                                            'controller' => PrintSignReturnController::class,
+                                            'action' => 'index',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
                         'information-changed' => [
                             'may_terminate' => false,
                             'type' => Segment::class,

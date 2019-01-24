@@ -13,6 +13,7 @@ class OpenWindows extends AbstractDataSource
 {
     const DATA_KEY = 'windows';
     protected $dto = OpenWindowsDto::class;
+    protected $paramsMap = ['type' => 'permitType'];
 
     public function __construct()
     {
