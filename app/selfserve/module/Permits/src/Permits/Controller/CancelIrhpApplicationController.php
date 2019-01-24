@@ -58,8 +58,8 @@ class CancelIrhpApplicationController extends AbstractSelfserveController implem
 
     protected $postConfig = [
         'cancel' => [
-            'retrieveData' => false,
-            'checkConditionalDisplay' => false,
+            'retrieveData' => true,
+            'checkConditionalDisplay' => true,
             'command' => CancelApplication::class,
             'params' => ParamsConfig::ID_FROM_ROUTE,
             'step' => IrhpApplicationSection::ROUTE_CANCEL_CONFIRMATION,
