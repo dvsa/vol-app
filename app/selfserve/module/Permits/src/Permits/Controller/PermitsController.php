@@ -74,7 +74,18 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         }
 
         // Get IRHP Applications
-        $response = $this->handleQuery(IrhpApplication::create(['order' => 'DESC']));
+        $response = $this->handleQuery(
+            IrhpApplication::create(
+                [
+                    'order' => 'DESC',
+                    'organisation' => $this->getCurrentOrganisationId(),
+                    'statusIds' => [
+                        RefData::PERMIT_APP_STATUS_VALID,
+                        RefData::PERMIT_APP_STATUS_NOT_YET_SUBMITTED,
+                    ]
+                ]
+            )
+        );
         $data = $response->getResult();
         $results = isset($data['results']) ? $data['results'] : [];
 
