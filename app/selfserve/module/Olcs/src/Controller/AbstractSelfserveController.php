@@ -571,7 +571,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
         array $params = [],
         array $options = []
     ): HttpResponse {
-        if (array_key_exists('SubmitButton', $submittedData['Submit'])) {
+        if (array_key_exists('SubmitButton', $submittedData['Submit']) || array_key_exists('ChangeButton', $submittedData['Submit'])) {
             // Form was submitted normally so continue on chosen path
             $step = $nextStep;
         } else {
