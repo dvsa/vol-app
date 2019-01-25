@@ -734,13 +734,13 @@ $nav = [
                         [
                             'id' => 'licence_surrender',
                             'label' => 'Surrender',
-                            'route' => 'licence/fees',
+                            'route' => 'licence/surrender-licence',
                             'use_route_match' => true,
                             'pages' => [
                                 [
                                     'id' => 'licence_surrender_details',
                                     'label' => 'Surrender details',
-                                    'route' => 'licence/fees/fee_action',
+                                    'route' => 'licence/surrender-licence',
                                 ]
                             ],
                         ],

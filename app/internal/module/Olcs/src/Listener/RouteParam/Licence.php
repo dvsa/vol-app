@@ -3,6 +3,8 @@
 namespace Olcs\Listener\RouteParam;
 
 use Common\RefData;
+use Common\Service\Data\Surrender;
+use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Zend\EventManager\EventManagerInterface;
@@ -22,6 +24,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
     use ListenerAggregateTrait,
         ViewHelperManagerAwareTrait;
 
+
     private $annotationBuilderService;
     private $queryService;
 
@@ -34,6 +37,12 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
      * @var \Common\Service\Data\Licence
      */
     protected $licenceService;
+
+
+    /**
+     * @var Surrender
+     */
+    protected $surrenderService;
 
     /**
      * @var \Zend\Navigation\Navigation
@@ -56,6 +65,18 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
     public function setMarkerService(\Olcs\Service\Marker\MarkerService $markerService)
     {
         $this->markerService = $markerService;
+        return $this;
+    }
+
+
+    /**
+     * @param Surrender $surrender
+     *
+     * @return $this
+     */
+    public function setSurrenderService(Surrender $surrender)
+    {
+        $this->surrenderService = $surrender;
         return $this;
     }
 
@@ -162,6 +183,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         if ($licence['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
             $this->getMainNavigationService()->findOneBy('id', 'licence_bus')->setVisible(0);
         }
+
         if (!$licence['canHaveInspectionRequest']) {
             $this->getMainNavigationService()
                 ->findOneBy('id', 'licence_processing_inspection_request')
@@ -208,6 +230,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         $this->setMarkerService($serviceLocator->get(\Olcs\Service\Marker\MarkerService::class));
         $this->setAnnotationBuilderService($serviceLocator->get('TransferAnnotationBuilder'));
         $this->setQueryService($serviceLocator->get('QueryService'));
+        $this->setSurrenderService($serviceLocator->get('DataServicemanager')->get(Surrender::class));
 
         return $this;
     }
@@ -378,9 +401,13 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
             return false;
         }
 
+        if ($licence['status']['id'] !== RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION) {
+            $this->getMainNavigationService()->findOneById('licence_surrender')->setVisible(0);
+
+        }
         if ($this->isDigitalSurrender($licence)) {
             $sidebarNav->findById('licence-decisions-surrender')->setVisible(0);
-            return false;
+            $this->getMainNavigationService()->findOneById('licence_surrender')->setVisible(1);
         }
 
         return true;
@@ -470,10 +497,25 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         return false;
     }
 
-    private function isDigitalSurrender(array $licence)
+    private function isDigitalSurrender(array $licence): bool
     {
-            $licenceStatus = RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION;
-            if ()
-            return $licence;
+        $surrender = null;
+        if ($licence['status']['id'] === RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION) {
+            try {
+                $surrender = $this->getSurrenderService()->fetchSurrenderData($licence['id']);
+            } catch (UnexpectedResponseException $responseException) {
+                //unable to get data fail gracefully
+                return false;
+            }
+        }
+        return !is_null($surrender);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSurrenderService()
+    {
+        return $this->surrenderService;
     }
 }
