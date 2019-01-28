@@ -22,4 +22,15 @@ class SubmitConfirm
      * @Form\Type("Zend\Form\Element\Button")
      */
     public $submit = null;
+
+    /**
+     * @Form\Name("SaveAndReturnButton")
+     * @Form\Attributes({
+     *     "id":"save-return-button",
+     *     "value":"permits.button.save-return-to-overview",
+     *     "role":"link"
+     * })
+     * @Form\Type("Zend\Form\Element\Submit")
+     */
+    public $save = null;
 }

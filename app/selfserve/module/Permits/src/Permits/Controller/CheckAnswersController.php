@@ -48,6 +48,7 @@ class CheckAnswersController extends AbstractSelfserveController implements Togg
             'command' => UpdateEcmtCheckAnswers::class,
             'params' => ParamsConfig::ID_FROM_ROUTE,
             'step' => EcmtSection::ROUTE_ECMT_DECLARATION,
+            'saveAndReturnStep' => EcmtSection::ROUTE_APPLICATION_OVERVIEW,
         ],
     ];
 }
