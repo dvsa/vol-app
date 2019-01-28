@@ -181,7 +181,6 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         $this->showHideButtons($licence);
         $this->hideSurrenderMenu($licence);
 
-
         if ($licence['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
             $this->getMainNavigationService()->findOneById('licence_bus')->setVisible(0);
         }
@@ -281,10 +280,6 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         $this->showHideResetToValidButton($licence, $sidebarNav);
         $this->showHideUndoSurrenderButton($licence, $sidebarNav);
         $this->showHideUndoTerminateButton($licence, $sidebarNav);
-
-        if ($this->isDigitalSurrender($licence)) {
-            $sidebarNav->findById('licence-decisions-surrender')->setVisible(0);
-        }
     }
 
     /**
@@ -296,7 +291,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
     protected function showHideVariationButton($licence, $sidebarNav)
     {
         // If the licence type is special restricted we can't create a variation
-        if ($licence['licenceType']['id'] == RefData::LICENCE_TYPE_SPECIAL_RESTRICTED) {
+        if ($licence['licenceType']['id'] === RefData::LICENCE_TYPE_SPECIAL_RESTRICTED) {
             $sidebarNav->findById('licence-quick-actions-create-variation')->setVisible(0);
             return false;
         }
@@ -394,6 +389,11 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
      */
     protected function showHideSurrenderButton($licence, $sidebarNav)
     {
+        if ($this->isDigitalSurrender($licence)) {
+            $sidebarNav->findById('licence-decisions-surrender')->setVisible(0);
+            return false;
+        }
+
         if ($licence['status']['id'] === RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION) {
             return true;
         }

@@ -3,6 +3,7 @@
 namespace OlcsTest\Listener\RouteParam;
 
 use Common\Service\Data\Surrender;
+use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParam\Licence;
@@ -585,12 +586,11 @@ class LicenceTest extends TestCase
         $this->onLicenceSetup($licenceId, $licence);
 
         $mockSidebar = m::mock();
-        $this->mockHideButton($mockSidebar, 'licence-quick-actions-create-variation');
         $this->mockHideButton($mockSidebar, 'licence-quick-actions-print-licence');
         $this->mockHideButton($mockSidebar, 'licence-decisions-reset-to-valid');
-        $this->mockHideButton($mockSidebar, 'licence-decisions-curtail');
-        $this->mockHideButton($mockSidebar, 'licence-decisions-revoke');
-        $this->mockHideButton($mockSidebar, 'licence-decisions-suspend');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-curtail', 2);
+        $this->mockHideButton($mockSidebar, 'licence-decisions-revoke', 2);
+        $this->mockHideButton($mockSidebar, 'licence-decisions-suspend', 2);
         $this->mockHideButton($mockSidebar, 'licence-decisions-surrender');
         $this->mockHideButton($mockSidebar, 'licence-decisions-terminate');
         $this->mockHideButton($mockSidebar, 'licence-decisions-undo-surrender');
@@ -600,16 +600,13 @@ class LicenceTest extends TestCase
 
         $this->mockMainNavigation($licence['goodsOrPsv']['id'], true);
 
-
         $mockSurrenderService = m::mock(Surrender::class);
         $mockSurrenderService->shouldReceive('fetchSurrenderData')->with(4)->once()->andReturn([
-            'signatureType'=>['id' =>RefData::SIGNATURE_TYPE_DIGITAL_SIGNATURE]
+            'signatureType' => ['id' => RefData::SIGNATURE_TYPE_DIGITAL_SIGNATURE]
         ]);
         $this->sut->setSurrenderService($mockSurrenderService);
-
         $event = new RouteParam();
         $event->setValue($licenceId);
-
         $this->sut->onLicence($event);
     }
 
@@ -645,13 +642,12 @@ class LicenceTest extends TestCase
         $this->onLicenceSetup($licenceId, $licence);
 
         $mockSidebar = m::mock();
-        $this->mockHideButton($mockSidebar, 'licence-quick-actions-create-variation');
+
         $this->mockHideButton($mockSidebar, 'licence-quick-actions-print-licence');
         $this->mockHideButton($mockSidebar, 'licence-decisions-reset-to-valid');
-        $this->mockHideButton($mockSidebar, 'licence-decisions-curtail');
-        $this->mockHideButton($mockSidebar, 'licence-decisions-revoke');
-        $this->mockHideButton($mockSidebar, 'licence-decisions-suspend');
-        //$this->mockHideButton($mockSidebar, 'licence-decisions-surrender');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-curtail', 2);
+        $this->mockHideButton($mockSidebar, 'licence-decisions-revoke', 2);
+        $this->mockHideButton($mockSidebar, 'licence-decisions-suspend', 2);
         $this->mockHideButton($mockSidebar, 'licence-decisions-terminate');
         $this->mockHideButton($mockSidebar, 'licence-decisions-undo-surrender');
         $this->mockHideButton($mockSidebar, 'licence-decisions-undo-terminate');
@@ -663,7 +659,7 @@ class LicenceTest extends TestCase
 
         $mockSurrenderService = m::mock(Surrender::class);
         $mockSurrenderService->shouldReceive('fetchSurrenderData')->with(4)->once()->andReturn([
-            'signatureType'=>['id' =>RefData::SIGNATURE_TYPE_PHYSICAL_SIGNATURE]
+            'signatureType' => ['id' => RefData::SIGNATURE_TYPE_PHYSICAL_SIGNATURE]
         ]);
         $this->sut->setSurrenderService($mockSurrenderService);
 
@@ -680,17 +676,16 @@ class LicenceTest extends TestCase
      * @param string       $navId
      * @param int          $times
      */
-    protected function mockHideButton($mockSidebar, $navId)
+    protected function mockHideButton($mockSidebar, $navId, $times = 1)
     {
-
         $mockSidebar
             ->shouldReceive('findById')
             ->with($navId)
             ->andReturn(
-                m::mock()
+                m::namedMock(str_replace('-', '', $navId))
                     ->shouldReceive('setVisible')
                     ->with(0)
-                    ->once()
+                    ->times($times)
                     ->getMock()
             );
     }
@@ -710,18 +705,74 @@ class LicenceTest extends TestCase
                 m::mock()->shouldReceive('setVisible')->with(0)->once()->getMock()
             )->getMock();
         } else {
+            $mainNav = m::mock();
             if ($type === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
                 $mockLicenceBusMenu = m::mock(AbstractPage::class);
-                
+                $mockLicenceBusMenu->shouldReceive('setVisible')->with(0)->once()->getMock();
                 $mainNav->shouldReceive('findOneById')->with('licence_bus')->andReturn(
                     $mockLicenceBusMenu
                 );
             }
-
-            $mainNav->shouldReceive('findOneById')->with('licence_surrender')->andReturn(
-                m::mock()->shouldReceive('setVisible')->with(1)->once()
-            )->getMock();
         }
         $this->sut->setMainNavigationService($mainNav);
+    }
+
+    public function testSurrenderServiceFails()
+    {
+        $licenceId = 4;
+        $licence = [
+            'id' => $licenceId,
+            'licNo' => 'L2347137',
+            'licenceType' => [
+                'id' => RefData::LICENCE_TYPE_STANDARD_NATIONAL
+            ],
+            'status' => [
+                'id' => RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION
+            ],
+            'goodsOrPsv' => [
+                'id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE
+            ],
+            'continuationMarker' => 'CONTINUATION_MARKER',
+            'organisation' => 'ORGANISATION',
+            'cases' => 'CASES',
+            'licenceStatusRules' => [],
+            'licenceStatusRules' => [
+                [
+                    'startProcessedDate' => null,
+                    'licenceStatus' => ['id' => 'lsts_suspended'],
+                ]
+            ],
+            'latestNote' => ['comment' => 'latest note', 'priority' => 'Y'],
+            'canHaveInspectionRequest' => true,
+        ];
+
+        $this->onLicenceSetup($licenceId, $licence);
+
+        $mockSidebar = m::mock();
+
+        $this->mockHideButton($mockSidebar, 'licence-quick-actions-print-licence');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-reset-to-valid');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-curtail', 2);
+        $this->mockHideButton($mockSidebar, 'licence-decisions-revoke', 2);
+        $this->mockHideButton($mockSidebar, 'licence-decisions-suspend', 2);
+        $this->mockHideButton($mockSidebar, 'licence-decisions-terminate');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-undo-surrender');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-undo-terminate');
+
+        $this->sut->setNavigationService($mockSidebar);
+
+        $this->mockMainNavigation($licence['goodsOrPsv']['id'], true);
+
+
+        $mockSurrenderService = m::mock(Surrender::class);
+        $mockSurrenderService->shouldReceive('fetchSurrenderData')->with(4)->once()->andThrow(
+            new UnexpectedResponseException('TEST')
+        );
+        $this->sut->setSurrenderService($mockSurrenderService);
+
+        $event = new RouteParam();
+        $event->setValue($licenceId);
+
+        $this->sut->onLicence($event);
     }
 }
