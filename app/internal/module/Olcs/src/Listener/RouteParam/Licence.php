@@ -179,9 +179,15 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
             ->set(isset($licence['latestNote']['priority']) && $licence['latestNote']['priority'] === 'Y');
 
         $this->showHideButtons($licence);
+        $this->hideSurrenderMenu($licence);
 
         if ($licence['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
             $this->getMainNavigationService()->findOneBy('id', 'licence_bus')->setVisible(0);
+        }
+
+
+        if ($this->isDigitalSurrender($licence)) {
+            $this->getMainNavigationService()->findOneBy('id', 'licence_surrender')->setVisible(1);
         }
 
         if (!$licence['canHaveInspectionRequest']) {
@@ -230,7 +236,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         $this->setMarkerService($serviceLocator->get(\Olcs\Service\Marker\MarkerService::class));
         $this->setAnnotationBuilderService($serviceLocator->get('TransferAnnotationBuilder'));
         $this->setQueryService($serviceLocator->get('QueryService'));
-        $this->setSurrenderService($serviceLocator->get('DataServicemanager')->get(Surrender::class));
+        $this->setSurrenderService($serviceLocator->get('DataServiceManager')->get(Surrender::class));
 
         return $this;
     }
@@ -279,6 +285,10 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         $this->showHideResetToValidButton($licence, $sidebarNav);
         $this->showHideUndoSurrenderButton($licence, $sidebarNav);
         $this->showHideUndoTerminateButton($licence, $sidebarNav);
+
+        if ($this->isDigitalSurrender($licence)) {
+            $sidebarNav->findById('licence-decisions-surrender')->setVisible(0);
+        }
     }
 
     /**
@@ -400,16 +410,6 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
             $sidebarNav->findById('licence-decisions-surrender')->setVisible(0);
             return false;
         }
-
-        if ($licence['status']['id'] !== RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION) {
-            $this->getMainNavigationService()->findOneById('licence_surrender')->setVisible(0);
-
-        }
-        if ($this->isDigitalSurrender($licence)) {
-            $sidebarNav->findById('licence-decisions-surrender')->setVisible(0);
-            $this->getMainNavigationService()->findOneById('licence_surrender')->setVisible(1);
-        }
-
         return true;
     }
 
@@ -517,5 +517,15 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
     public function getSurrenderService()
     {
         return $this->surrenderService;
+    }
+
+    /**
+     * @param $licence
+     */
+    protected function hideSurrenderMenu($licence): void
+    {
+        if ($licence['status']['id'] !== RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION) {
+            $this->getMainNavigationService()->findOneById('licence_surrender')->setVisible(0);
+        }
     }
 }
