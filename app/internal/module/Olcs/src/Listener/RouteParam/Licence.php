@@ -181,13 +181,14 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         $this->showHideButtons($licence);
         $this->hideSurrenderMenu($licence);
 
+
         if ($licence['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
-            $this->getMainNavigationService()->findOneBy('id', 'licence_bus')->setVisible(0);
+            $this->getMainNavigationService()->findOneById('licence_bus')->setVisible(0);
         }
 
 
         if ($this->isDigitalSurrender($licence)) {
-            $this->getMainNavigationService()->findOneBy('id', 'licence_surrender')->setVisible(1);
+            $this->getMainNavigationService()->findOneById('licence_surrender')->setVisible(1);
         }
 
         if (!$licence['canHaveInspectionRequest']) {

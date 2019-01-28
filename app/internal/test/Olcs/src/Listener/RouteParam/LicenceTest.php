@@ -55,7 +55,6 @@ class LicenceTest extends TestCase
         $this->sut->setLicenceService($mockLicenceService);
 
 
-
         $mockViewHelperManager = m::mock(\Zend\View\HelperPluginManager::class);
         $this->sut->setViewHelperManager($mockViewHelperManager);
 
@@ -153,8 +152,8 @@ class LicenceTest extends TestCase
 
         $mainNav = m::mock();
         $mainNav
-            ->shouldReceive('findOneBy')
-            ->with('id', 'licence_bus')
+            ->shouldReceive('findOneById')
+            ->with('licence_bus')
             ->andReturn(
                 m::mock()
                     ->shouldReceive('setVisible')
@@ -218,14 +217,13 @@ class LicenceTest extends TestCase
 
         $this->onLicenceSetup($licenceId, $licence);
 
-        // 'surrender' should be hidden for Goods vehicles
         $mockSidebar = m::mock();
         $this->mockHideButton($mockSidebar, 'licence-decisions-undo-surrender');
         $this->mockHideButton($mockSidebar, 'licence-decisions-undo-terminate');
         $this->mockHideButton($mockSidebar, 'licence-decisions-reset-to-valid');
         $this->sut->setNavigationService($mockSidebar);
-        $this->mockMainNavigation();
-        
+        $this->mockMainNavigation($licence['goodsOrPsv']['id']);
+
         $event = new RouteParam();
         $event->setValue($licenceId);
 
@@ -268,12 +266,7 @@ class LicenceTest extends TestCase
         $this->mockHideButton($mockSidebar, 'licence-decisions-undo-surrender');
         $this->mockHideButton($mockSidebar, 'licence-decisions-reset-to-valid');
         $this->sut->setNavigationService($mockSidebar);
-        $mainNav = m::mock();
-        $mainNav->shouldReceive('findOneById')->with('licence_surrender')->andReturn(
-            m::mock()->shouldReceive('setVisible')->with(0)->once()->getMock()
-        )->getMock();
-
-        $this->sut->setMainNavigationService($mainNav);
+        $this->mockMainNavigation($licence['goodsOrPsv']['id']);
         $event = new RouteParam();
         $event->setValue($licenceId);
 
@@ -318,7 +311,7 @@ class LicenceTest extends TestCase
         $this->sut->setNavigationService($mockSidebar);
 
 
-        $this->mockMainNavigation();
+        $this->mockMainNavigation($licence['goodsOrPsv']['id']);
 
 
         $event = new RouteParam();
@@ -365,7 +358,7 @@ class LicenceTest extends TestCase
         $this->mockHideButton($mockSidebar, 'licence-decisions-reset-to-valid');
         $this->sut->setNavigationService($mockSidebar);
 
-        $this->mockMainNavigation();
+        $this->mockMainNavigation($licence['goodsOrPsv']['id']);
 
         $event = new RouteParam();
         $event->setValue($licenceId);
@@ -415,7 +408,7 @@ class LicenceTest extends TestCase
         $this->mockHideButton($mockSidebar, 'licence-decisions-reset-to-valid');
         $this->sut->setNavigationService($mockSidebar);
 
-        $this->mockMainNavigation();
+        $this->mockMainNavigation($licence['goodsOrPsv']['id']);
 
         $event = new RouteParam();
         $event->setValue($licenceId);
@@ -464,7 +457,7 @@ class LicenceTest extends TestCase
         $this->mockHideButton($mockSidebar, 'licence-decisions-reset-to-valid');
         $this->sut->setNavigationService($mockSidebar);
 
-        $this->mockMainNavigation();
+        $this->mockMainNavigation($licence['goodsOrPsv']['id']);
 
 
         $event = new RouteParam();
@@ -515,7 +508,7 @@ class LicenceTest extends TestCase
         $this->mockHideButton($mockSidebar, 'licence-decisions-undo-terminate');
         $this->sut->setNavigationService($mockSidebar);
 
-        $this->mockMainNavigation();
+        $this->mockMainNavigation($licence['goodsOrPsv']['id']);
 
         $event = new RouteParam();
         $event->setValue($licenceId);
@@ -604,7 +597,12 @@ class LicenceTest extends TestCase
 
         $this->sut->setNavigationService($mockSidebar);
 
-        $this->mockMainNavigation();
+        $this->mockMainNavigation($licence['goodsOrPsv']['id'], true);
+
+
+        $mockSurrenderService = m::mock(Surrender::class);
+        $mockSurrenderService->shouldReceive('fetchSurrenderData')->with(4)->once()->andReturn([]);
+        $this->sut->setSurrenderService($mockSurrenderService);
 
         $event = new RouteParam();
         $event->setValue($licenceId);
@@ -634,14 +632,31 @@ class LicenceTest extends TestCase
             );
     }
 
-    protected function mockMainNavigation(): void
+    protected function mockMainNavigation($type, $surrender = false): void
     {
         $mainNav = m::mock();
-        $mainNav->shouldReceive('findOneBy->setVisible')->with(0);
-        $mainNav->shouldReceive('findOneById')->with('licence_surrender')->andReturn(
-            m::mock()->shouldReceive('setVisible')->with(0)->once()->getMock()
-        )->getMock();
 
+        if (!$surrender) {
+            if ($type === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
+                $mainNav->shouldReceive('findOneById')->with('licence_bus')->andReturn(
+                    m::mock()->shouldReceive('setVisible')->with(0)->once()->getMock()
+                )->getMock();
+            }
+
+            $mainNav->shouldReceive('findOneById')->with('licence_surrender')->andReturn(
+                m::mock()->shouldReceive('setVisible')->with(0)->once()->getMock()
+            )->getMock();
+        } else {
+            if ($type === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
+                $mainNav->shouldReceive('findOneById')->with('licence_bus')->andReturn(
+                    m::mock()->shouldReceive('setVisible')->with(3)->once()->getMock()
+                )->getMock();
+            }
+
+            $mainNav->shouldReceive('findOneById')->with('licence_surrender')->andReturn(
+                m::mock()->shouldReceive('setVisible')->with(1)->once()->getMock()
+            );
+        }
         $this->sut->setMainNavigationService($mainNav);
     }
 }
