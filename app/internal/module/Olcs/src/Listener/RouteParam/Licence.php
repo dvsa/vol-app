@@ -186,11 +186,6 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
             $this->getMainNavigationService()->findOneById('licence_bus')->setVisible(0);
         }
 
-
-        if ($this->isDigitalSurrender($licence)) {
-            $this->getMainNavigationService()->findOneById('licence_surrender')->setVisible(1);
-        }
-
         if (!$licence['canHaveInspectionRequest']) {
             $this->getMainNavigationService()
                 ->findOneBy('id', 'licence_processing_inspection_request')
@@ -399,6 +394,9 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
      */
     protected function showHideSurrenderButton($licence, $sidebarNav)
     {
+        if ($licence['status']['id'] === RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION) {
+            return true;
+        }
         // The 'surrender' button is never shown if the licence is not valid
         if ($licence['status']['id'] !== RefData::LICENCE_STATUS_VALID) {
             $sidebarNav->findById('licence-decisions-surrender')->setVisible(0);
@@ -508,8 +506,9 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
                 //unable to get data fail gracefully
                 return false;
             }
+            return $surrender['signatureType']['id'] === RefData::SIGNATURE_TYPE_DIGITAL_SIGNATURE;
         }
-        return !is_null($surrender);
+        return false;
     }
 
     /**

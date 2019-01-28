@@ -601,7 +601,9 @@ class LicenceTest extends TestCase
 
 
         $mockSurrenderService = m::mock(Surrender::class);
-        $mockSurrenderService->shouldReceive('fetchSurrenderData')->with(4)->once()->andReturn([]);
+        $mockSurrenderService->shouldReceive('fetchSurrenderData')->with(4)->once()->andReturn([
+            'signatureType'=>['id' =>RefData::SIGNATURE_TYPE_DIGITAL_SIGNATURE]
+        ]);
         $this->sut->setSurrenderService($mockSurrenderService);
 
         $event = new RouteParam();
@@ -649,7 +651,7 @@ class LicenceTest extends TestCase
         } else {
             if ($type === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
                 $mainNav->shouldReceive('findOneById')->with('licence_bus')->andReturn(
-                    m::mock()->shouldReceive('setVisible')->with(3)->once()->getMock()
+                    m::mock()->shouldReceive('setVisible')->with(0)->once()->getMock()
                 )->getMock();
             }
 
