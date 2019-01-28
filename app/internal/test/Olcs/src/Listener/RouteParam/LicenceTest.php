@@ -54,6 +54,8 @@ class LicenceTest extends TestCase
         $mockLicenceService = m::mock();
         $this->sut->setLicenceService($mockLicenceService);
 
+
+
         $mockViewHelperManager = m::mock(\Zend\View\HelperPluginManager::class);
         $this->sut->setViewHelperManager($mockViewHelperManager);
 
@@ -222,21 +224,8 @@ class LicenceTest extends TestCase
         $this->mockHideButton($mockSidebar, 'licence-decisions-undo-terminate');
         $this->mockHideButton($mockSidebar, 'licence-decisions-reset-to-valid');
         $this->sut->setNavigationService($mockSidebar);
-        $mainNav = m::mock();
-        $mainNav
-            ->shouldReceive('findOneById')
-            ->with('licence_surrender')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('setVisible')
-                    ->with(false)
-                    ->once()
-                    ->getMock()
-            )
-            ->once()
-            ->getMock();
-
-        $this->sut->setMainNavigationService($mainNav);
+        $this->mockMainNavigation();
+        
         $event = new RouteParam();
         $event->setValue($licenceId);
 
