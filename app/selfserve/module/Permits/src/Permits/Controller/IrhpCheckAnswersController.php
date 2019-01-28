@@ -48,6 +48,7 @@ class IrhpCheckAnswersController extends AbstractSelfserveController implements 
             'command' => UpdateCheckAnswers::class,
             'params' => ParamsConfig::ID_FROM_ROUTE,
             'step' => IrhpApplicationSection::ROUTE_DECLARATION,
+            'saveAndReturnStep' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
         ],
     ];
 }
