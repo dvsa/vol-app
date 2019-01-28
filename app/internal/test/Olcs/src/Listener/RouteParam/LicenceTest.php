@@ -9,6 +9,7 @@ use Olcs\Listener\RouteParam\Licence;
 use Mockery as m;
 use Olcs\Listener\RouteParams;
 use Common\RefData;
+use Zend\Navigation\Page\AbstractPage;
 use Zend\View\Helper\Container;
 
 /**
@@ -612,6 +613,66 @@ class LicenceTest extends TestCase
         $this->sut->onLicence($event);
     }
 
+    public function testOnLicenceSurrenderedPhysicallySigned()
+    {
+        $licenceId = 4;
+        $licence = [
+            'id' => $licenceId,
+            'licNo' => 'L2347137',
+            'licenceType' => [
+                'id' => RefData::LICENCE_TYPE_STANDARD_NATIONAL
+            ],
+            'status' => [
+                'id' => RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION
+            ],
+            'goodsOrPsv' => [
+                'id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE
+            ],
+            'continuationMarker' => 'CONTINUATION_MARKER',
+            'organisation' => 'ORGANISATION',
+            'cases' => 'CASES',
+            'licenceStatusRules' => [],
+            'licenceStatusRules' => [
+                [
+                    'startProcessedDate' => null,
+                    'licenceStatus' => ['id' => 'lsts_suspended'],
+                ]
+            ],
+            'latestNote' => ['comment' => 'latest note', 'priority' => 'Y'],
+            'canHaveInspectionRequest' => true,
+        ];
+
+        $this->onLicenceSetup($licenceId, $licence);
+
+        $mockSidebar = m::mock();
+        $this->mockHideButton($mockSidebar, 'licence-quick-actions-create-variation');
+        $this->mockHideButton($mockSidebar, 'licence-quick-actions-print-licence');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-reset-to-valid');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-curtail');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-revoke');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-suspend');
+        //$this->mockHideButton($mockSidebar, 'licence-decisions-surrender');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-terminate');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-undo-surrender');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-undo-terminate');
+
+        $this->sut->setNavigationService($mockSidebar);
+
+        $this->mockMainNavigation($licence['goodsOrPsv']['id'], true);
+
+
+        $mockSurrenderService = m::mock(Surrender::class);
+        $mockSurrenderService->shouldReceive('fetchSurrenderData')->with(4)->once()->andReturn([
+            'signatureType'=>['id' =>RefData::SIGNATURE_TYPE_PHYSICAL_SIGNATURE]
+        ]);
+        $this->sut->setSurrenderService($mockSurrenderService);
+
+        $event = new RouteParam();
+        $event->setValue($licenceId);
+
+        $this->sut->onLicence($event);
+    }
+
     /**
      * Set an expectation that a given nav button should be hidden
      *
@@ -650,14 +711,16 @@ class LicenceTest extends TestCase
             )->getMock();
         } else {
             if ($type === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
+                $mockLicenceBusMenu = m::mock(AbstractPage::class);
+                
                 $mainNav->shouldReceive('findOneById')->with('licence_bus')->andReturn(
-                    m::mock()->shouldReceive('setVisible')->with(0)->once()->getMock()
-                )->getMock();
+                    $mockLicenceBusMenu
+                );
             }
 
             $mainNav->shouldReceive('findOneById')->with('licence_surrender')->andReturn(
-                m::mock()->shouldReceive('setVisible')->with(1)->once()->getMock()
-            );
+                m::mock()->shouldReceive('setVisible')->with(1)->once()
+            )->getMock();
         }
         $this->sut->setMainNavigationService($mainNav);
     }
