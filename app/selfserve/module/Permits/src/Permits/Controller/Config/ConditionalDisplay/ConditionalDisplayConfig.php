@@ -52,6 +52,13 @@ class ConditionalDisplayConfig
         ],
     ];
 
+    const IRHP_APP_READY_FOR_COUNTRIES =  [
+        IrhpAppDataSource::DATA_KEY => [
+            'key' => 'canUpdateCountries',
+            'value' => true
+        ],
+    ];
+
     const IRHP_APP_READY_FOR_NO_OF_PERMITS =  [
         IrhpAppDataSource::DATA_KEY => [
             'key' => 'isReadyForNoOfPermits',
