@@ -24,11 +24,17 @@ class LicenceTest extends TestCase
      * @var Licence
      */
     protected $sut;
+    protected $signatureType;
 
     public function setUp()
     {
         parent::setup();
         $this->sut = new Licence();
+    }
+
+    public function tearDown()
+    {
+        $this->signatureType = null;
     }
 
     public function testAttach()
@@ -597,12 +603,12 @@ class LicenceTest extends TestCase
         $this->mockHideButton($mockSidebar, 'licence-decisions-undo-terminate');
 
         $this->sut->setNavigationService($mockSidebar);
-
+        $this->signatureType = RefData::SIGNATURE_TYPE_DIGITAL_SIGNATURE;
         $this->mockMainNavigation($licence['goodsOrPsv']['id'], true);
 
         $mockSurrenderService = m::mock(Surrender::class);
-        $mockSurrenderService->shouldReceive('fetchSurrenderData')->with(4)->once()->andReturn([
-            'signatureType' => ['id' => RefData::SIGNATURE_TYPE_DIGITAL_SIGNATURE]
+        $mockSurrenderService->shouldReceive('fetchSurrenderData')->with(4)->times(2)->andReturn([
+            'signatureType' => ['id' => $this->signatureType]
         ]);
         $this->sut->setSurrenderService($mockSurrenderService);
         $event = new RouteParam();
@@ -654,12 +660,13 @@ class LicenceTest extends TestCase
 
         $this->sut->setNavigationService($mockSidebar);
 
+        $this->signatureType = RefData::SIGNATURE_TYPE_PHYSICAL_SIGNATURE;
         $this->mockMainNavigation($licence['goodsOrPsv']['id'], true);
 
 
         $mockSurrenderService = m::mock(Surrender::class);
-        $mockSurrenderService->shouldReceive('fetchSurrenderData')->with(4)->once()->andReturn([
-            'signatureType' => ['id' => RefData::SIGNATURE_TYPE_PHYSICAL_SIGNATURE]
+        $mockSurrenderService->shouldReceive('fetchSurrenderData')->with(4)->times(2)->andReturn([
+            'signatureType' => ['id' => $this->signatureType]
         ]);
         $this->sut->setSurrenderService($mockSurrenderService);
 
@@ -712,6 +719,11 @@ class LicenceTest extends TestCase
                 $mainNav->shouldReceive('findOneById')->with('licence_bus')->andReturn(
                     $mockLicenceBusMenu
                 );
+                if ($this->signatureType === RefData::SIGNATURE_TYPE_PHYSICAL_SIGNATURE) {
+                    $mainNav->shouldReceive('findOneById')->with('licence_surrender')->andReturn(
+                        m::mock()->shouldReceive('setVisible')->with(0)->once()->getMock()
+                    )->getMock();
+                }
             }
         }
         $this->sut->setMainNavigationService($mainNav);
@@ -760,12 +772,14 @@ class LicenceTest extends TestCase
         $this->mockHideButton($mockSidebar, 'licence-decisions-undo-terminate');
 
         $this->sut->setNavigationService($mockSidebar);
-
+        $this->signatureType = RefData::SIGNATURE_TYPE_DIGITAL_SIGNATURE;
         $this->mockMainNavigation($licence['goodsOrPsv']['id'], true);
-
+        $this->sut->getMainNavigationService()->shouldReceive('findOneById')->with('licence_surrender')->andReturn(
+        m::mock()->shouldReceive('setVisible')->with(0)->once()->getMock()
+    )->getMock();
 
         $mockSurrenderService = m::mock(Surrender::class);
-        $mockSurrenderService->shouldReceive('fetchSurrenderData')->with(4)->once()->andThrow(
+        $mockSurrenderService->shouldReceive('fetchSurrenderData')->with(4)->times(2)->andThrow(
             new UnexpectedResponseException('TEST')
         );
         $this->sut->setSurrenderService($mockSurrenderService);
