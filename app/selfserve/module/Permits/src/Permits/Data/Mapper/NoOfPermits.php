@@ -15,7 +15,7 @@ use RuntimeException;
 class NoOfPermits
 {
     // TODO: this shouldn't be here
-    const PERMIT_FEE_IN_POUNDS = 8;
+    const PERMIT_FEE_IN_POUNDS = 45;
 
     /**
      * @param array $data
