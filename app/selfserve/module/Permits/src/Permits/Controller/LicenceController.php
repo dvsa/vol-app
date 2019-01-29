@@ -4,9 +4,11 @@ namespace Permits\Controller;
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\Create;
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermitApplication;
+use Dvsa\Olcs\Transfer\Query\IrhpApplication\ActiveApplication;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
+use Permits\Controller\Config\DataSource\IrhpApplication;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
@@ -110,13 +112,41 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
      */
     public function handlePostCommand(array &$config, array $params)
     {
+        $irhpPermitType = isset($this->data['irhpPermitType']) ? $this->data['irhpPermitType'] : $this->data['application']['irhpPermitType'];
+
+        if ($irhpPermitType['name']['id'] === \Common\RefData::PERMIT_TYPE_ANNUAL_BILATERAL && isset($params['licence'])) {
+            $activeApplication = $this->handleResponse($this->handleQuery(ActiveApplication::create(
+                [
+                    'licence' => $params['licence'],
+                    'irhpPermitType' => $irhpPermitType['id']
+                ]
+            )));
+
+            if (isset($this->queryParams['active']) && isset($activeApplication['id']) && ($activeApplication['licence']['id'] == $this->queryParams['active'])) {
+                $config['step'] = IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW;
+                $this->redirectParams = ['id' => $activeApplication['id']];
+                return;
+            } elseif (isset($activeApplication['licence']['id'])) {
+                if ($activeApplication['licence']['id'] == $params['licence']) {
+                    $config['step'] = isset($config['command']) ? IrhpApplicationSection::ROUTE_ADD_LICENCE : IrhpApplicationSection::ROUTE_LICENCE;
+                    $this->redirectOptions = [
+                        'query' => ['active' => $activeApplication['licence']['id']]
+                    ];
+                    return;
+                }
+            }
+        }
+
         if (isset($config['command'])) {
-            if ($this->data['irhpPermitType']['name']['id'] === \Common\RefData::PERMIT_TYPE_ECMT) {
+            if ($irhpPermitType['name']['id'] === \Common\RefData::PERMIT_TYPE_ECMT) {
                 $config['command'] = CreateEcmtPermitApplication::class;
             }
+
             $command = $config['command']::create($params);
+
             $response = $this->handleCommand($command);
             $responseDump = $this->handleResponse($response);
+
             if ($config['params'] === ParamsConfig::NEW_APPLICATION) {
                 $field = 'irhpApplication';
 
