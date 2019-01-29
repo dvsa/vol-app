@@ -25,7 +25,7 @@ class NoOfPermitsTest extends TestCase
         $translationHelperService->shouldReceive('translateReplace')
             ->with(
                 'permits.page.bilateral.no-of-permits.guidance',
-                [7, 8]
+                [7, 45]
             )
             ->andReturn($translatedGuidanceText);
 
