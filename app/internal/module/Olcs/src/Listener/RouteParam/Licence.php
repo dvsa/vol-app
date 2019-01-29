@@ -3,6 +3,8 @@
 namespace Olcs\Listener\RouteParam;
 
 use Common\RefData;
+use Common\Service\Data\Surrender;
+use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Zend\EventManager\EventManagerInterface;
@@ -14,12 +16,14 @@ use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 
 /**
  * Class Licence
+ *
  * @package Olcs\Listener\RouteParam
  */
 class Licence implements ListenerAggregateInterface, FactoryInterface
 {
     use ListenerAggregateTrait,
         ViewHelperManagerAwareTrait;
+
 
     private $annotationBuilderService;
     private $queryService;
@@ -33,6 +37,12 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
      * @var \Common\Service\Data\Licence
      */
     protected $licenceService;
+
+
+    /**
+     * @var Surrender
+     */
+    protected $surrenderService;
 
     /**
      * @var \Zend\Navigation\Navigation
@@ -58,8 +68,21 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         return $this;
     }
 
+
+    /**
+     * @param Surrender $surrender
+     *
+     * @return $this
+     */
+    public function setSurrenderService(Surrender $surrender)
+    {
+        $this->surrenderService = $surrender;
+        return $this;
+    }
+
     /**
      * @param \Common\Service\Data\Licence $licenceService
+     *
      * @return $this
      */
     public function setLicenceService($licenceService)
@@ -78,6 +101,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * @param \Zend\Navigation\Navigation $navigationService
+     *
      * @return $this
      */
     public function setNavigationService($navigationService)
@@ -96,6 +120,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * @param \Zend\Navigation\Navigation $navigationService
+     *
      * @return $this
      */
     public function setMainNavigationService($navigationService)
@@ -154,10 +179,12 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
             ->set(isset($licence['latestNote']['priority']) && $licence['latestNote']['priority'] === 'Y');
 
         $this->showHideButtons($licence);
+        $this->hideSurrenderMenu($licence);
 
         if ($licence['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
-            $this->getMainNavigationService()->findOneBy('id', 'licence_bus')->setVisible(0);
+            $this->getMainNavigationService()->findOneById('licence_bus')->setVisible(0);
         }
+
         if (!$licence['canHaveInspectionRequest']) {
             $this->getMainNavigationService()
                 ->findOneBy('id', 'licence_processing_inspection_request')
@@ -191,6 +218,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
      * Create service
      *
      * @param ServiceLocatorInterface $serviceLocator
+     *
      * @return mixed
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
@@ -203,6 +231,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         $this->setMarkerService($serviceLocator->get(\Olcs\Service\Marker\MarkerService::class));
         $this->setAnnotationBuilderService($serviceLocator->get('TransferAnnotationBuilder'));
         $this->setQueryService($serviceLocator->get('QueryService'));
+        $this->setSurrenderService($serviceLocator->get('DataServiceManager')->get(Surrender::class));
 
         return $this;
     }
@@ -254,14 +283,15 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @param array $licence licence data
+     * @param array                      $licence    licence data
      * @param Zend\Navigation\Navigation $sidebarNav side bar navigation object
+     *
      * @return boolean whether 'Create variation' button is shown or not
      */
     protected function showHideVariationButton($licence, $sidebarNav)
     {
         // If the licence type is special restricted we can't create a variation
-        if ($licence['licenceType']['id'] == RefData::LICENCE_TYPE_SPECIAL_RESTRICTED) {
+        if ($licence['licenceType']['id'] === RefData::LICENCE_TYPE_SPECIAL_RESTRICTED) {
             $sidebarNav->findById('licence-quick-actions-create-variation')->setVisible(0);
             return false;
         }
@@ -283,8 +313,9 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @param array $licence licence data
+     * @param array                      $licence    licence data
      * @param Zend\Navigation\Navigation $sidebarNav side bar navigation object
+     *
      * @return boolean whether 'Print' button is shown or not
      */
     protected function showHidePrintButton($licence, $sidebarNav)
@@ -304,8 +335,9 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @param array $licence licence data
+     * @param array                      $licence    licence data
      * @param Zend\Navigation\Navigation $sidebarNav side bar navigation object
+     *
      * @return boolean whether 'Curtail' 'Revoke' and 'Suspend' buttons are shown or not
      */
     protected function showHideCurtailRevokeSuspendButtons($licence, $sidebarNav)
@@ -330,8 +362,9 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @param array $licence licence data
+     * @param array                      $licence    licence data
      * @param Zend\Navigation\Navigation $sidebarNav side bar navigation object
+     *
      * @return boolean whether 'Reset to valid' button is shown or not
      */
     protected function showHideResetToValidButton($licence, $sidebarNav)
@@ -349,12 +382,21 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @param array $licence licence data
+     * @param array                      $licence    licence data
      * @param Zend\Navigation\Navigation $sidebarNav side bar navigation object
+     *
      * @return boolean whether 'Surrender' button is shown or not
      */
     protected function showHideSurrenderButton($licence, $sidebarNav)
     {
+        if ($this->isDigitalSurrender($licence)) {
+            $sidebarNav->findById('licence-decisions-surrender')->setVisible(0);
+            return false;
+        }
+
+        if ($licence['status']['id'] === RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION) {
+            return true;
+        }
         // The 'surrender' button is never shown if the licence is not valid
         if ($licence['status']['id'] !== RefData::LICENCE_STATUS_VALID) {
             $sidebarNav->findById('licence-decisions-surrender')->setVisible(0);
@@ -367,13 +409,13 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
             $sidebarNav->findById('licence-decisions-surrender')->setVisible(0);
             return false;
         }
-
         return true;
     }
 
     /**
-     * @param array $licence licence data
+     * @param array                      $licence    licence data
      * @param Zend\Navigation\Navigation $sidebarNav side bar navigation object
+     *
      * @return boolean whether 'Terminate' button is shown or not
      */
     protected function showHideTerminateButton($licence, $sidebarNav)
@@ -401,8 +443,9 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @param array $licence licence data
+     * @param array                      $licence    licence data
      * @param Zend\Navigation\Navigation $sidebarNav side bar navigation object
+     *
      * @return boolean whether 'Undo termination' button is shown or not
      */
     protected function showHideUndoTerminateButton($licence, $sidebarNav)
@@ -417,8 +460,9 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @param array $licence licence data
+     * @param array                      $licence    licence data
      * @param Zend\Navigation\Navigation $sidebarNav side bar navigation object
+     *
      * @return boolean whether 'Undo surrender' button is shown or not
      */
     protected function showHideUndoSurrenderButton($licence, $sidebarNav)
@@ -450,5 +494,40 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         }
 
         return false;
+    }
+
+    private function isDigitalSurrender(array $licence): bool
+    {
+        $surrender = null;
+        if ($licence['status']['id'] === RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION) {
+            try {
+                $surrender = $this->getSurrenderService()->fetchSurrenderData($licence['id']);
+            } catch (UnexpectedResponseException $responseException) {
+                //unable to get data fail gracefully
+                return false;
+            }
+            return $surrender['signatureType']['id'] === RefData::SIGNATURE_TYPE_DIGITAL_SIGNATURE;
+        }
+        return false;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSurrenderService()
+    {
+        return $this->surrenderService;
+    }
+
+    /**
+     * @param $licence
+     */
+    protected function hideSurrenderMenu($licence): void
+    {
+        if ($licence['status']['id'] !== RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION ||
+            $licence['status']['id'] === RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION && $this->isDigitalSurrender($licence) === false
+        ) {
+            $this->getMainNavigationService()->findOneById('licence_surrender')->setVisible(0);
+        }
     }
 }

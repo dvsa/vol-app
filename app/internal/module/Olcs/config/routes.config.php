@@ -2375,6 +2375,7 @@ $routes['lva-application']['child_routes'] = array_merge(
  */
 $routeConfigs = [
     __DIR__  . '/routes/licence/case.php',
+    __DIR__  . '/routes/licence/surrender.php',
 ];
 
 // Merge all module config options
