@@ -524,7 +524,9 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
      */
     protected function hideSurrenderMenu($licence): void
     {
-        if ($licence['status']['id'] !== RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION) {
+        if ($licence['status']['id'] !== RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION ||
+            $licence['status']['id'] === RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION && $this->isDigitalSurrender($licence) === false
+        ) {
             $this->getMainNavigationService()->findOneById('licence_surrender')->setVisible(0);
         }
     }
