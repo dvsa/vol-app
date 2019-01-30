@@ -34,7 +34,7 @@ class ReviewController extends AbstractSurrenderController
 
     public function confirmationAction()
     {
-        return $this->nextStep('licence/surrender/declaration/GET', [], []);
+        return $this->nextStep('licence/surrender/destroy/GET', [], []);
     }
 
     /**
