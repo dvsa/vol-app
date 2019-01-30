@@ -117,7 +117,7 @@ class DataSourceConfig
         AvailableCountries::class => [],
     ];
 
-    const PERMIT_IRHP_VALID = [
+    const IRHP_VALID = [
         ValidIrhpPermitsDataSource::class => [],
     ];
 }

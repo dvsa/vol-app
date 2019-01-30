@@ -14,7 +14,7 @@ class IrhpValidPermitsController extends AbstractSelfserveController implements 
     ];
 
     protected $dataSourceConfig = [
-        'generic' => DataSourceConfig::PERMIT_IRHP_VALID,
+        'generic' => DataSourceConfig::IRHP_VALID,
     ];
 
     protected $tableConfig = [
@@ -22,7 +22,7 @@ class IrhpValidPermitsController extends AbstractSelfserveController implements 
     ];
 
     protected $templateConfig = [
-        'generic' => 'permits/irhp-permits-overview',
+        'generic' => 'permits/irhp-valid-permits',
     ];
 
     protected $templateVarsConfig = [

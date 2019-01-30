@@ -68,16 +68,16 @@ return [
         ],
           'may_terminate' => true,
           'child_routes' => [
-              'annual-bilateral-permits' => [
+              'valid' => [
                   'type'    => 'segment',
                   'options' => [
-                      'route'    => '/annual-bilateral-permits/:licence[/]',
+                      'route'    => '/valid/:licence[/]',
                       'defaults' => [
                           'controller'    => IrhpValidPermitsController::class,
                           'action'        => 'generic',
                       ],
                       'constraints' => [
-                          'id' => '[0-9]+',
+                          'licence' => '[0-9]+',
                       ],
                   ],
                   'may_terminate' => false,
