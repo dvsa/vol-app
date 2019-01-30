@@ -24,6 +24,7 @@ use Permits\Controller\IrhpApplicationCountryController;
 use Permits\Controller\NoOfPermitsController;
 use Permits\Controller\IrhpCheckAnswersController;
 use Permits\Controller\CancelIrhpApplicationController;
+use Permits\Controller\IrhpValidPermitsController;
 
 return [
   'controllers' => [
@@ -51,6 +52,7 @@ return [
         IrhpApplicationDeclarationController::class => IrhpApplicationDeclarationController::class,
         IrhpCheckAnswersController::class => IrhpCheckAnswersController::class,
         CancelIrhpApplicationController::class => CancelIrhpApplicationController::class,
+        IrhpValidPermitsController::class => IrhpValidPermitsController::class,
     ],
   ],
   'router' => [
@@ -66,6 +68,20 @@ return [
         ],
           'may_terminate' => true,
           'child_routes' => [
+              'annual-bilateral-permits' => [
+                  'type'    => 'segment',
+                  'options' => [
+                      'route'    => '/annual-bilateral-permits/:licence[/]',
+                      'defaults' => [
+                          'controller'    => IrhpValidPermitsController::class,
+                          'action'        => 'generic',
+                      ],
+                      'constraints' => [
+                          'id' => '[0-9]+',
+                      ],
+                  ],
+                  'may_terminate' => false,
+              ],
               'application' => [
                   'type'    => 'segment',
                   'options' => [
