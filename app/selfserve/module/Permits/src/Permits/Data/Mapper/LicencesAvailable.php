@@ -3,6 +3,7 @@
 namespace Permits\Data\Mapper;
 
 use Common\Form\Elements\Types\HtmlTranslated;
+use Common\RefData;
 use Common\Service\Helper\TranslationHelperService;
 use Permits\Controller\Config\DataSource\LicencesAvailable as LicencesAvailableDataSource;
 
@@ -23,34 +24,39 @@ class LicencesAvailable
     {
         $mapData = $data[LicencesAvailableDataSource::DATA_KEY];
         $isNew = !isset($data['application']['licence']);
+        $irhpPermitTypeID = RefData::ECMT_PERMIT_TYPE_ID;
 
-        if ($isNew) {
-            $isEcmt = $data['irhpPermitType']['name']['id'] === 'permit_ecmt';
-        } else {
-            // Get type from application data
-            $isEcmt = isset($data['application']['permitType']);
+        if (isset($data['application']['irhpPermitType']['id'])) {
+            $irhpPermitTypeID = $data['application']['irhpPermitType']['id'];
+        } elseif (isset($data['irhpPermitType']['id'])) {
+            $irhpPermitTypeID = $data['irhpPermitType']['id'];
         }
 
+        // A variable to add future types if required
+        $displayActive = $irhpPermitTypeID === RefData::IRHP_BILATERAL_PERMIT_TYPE_ID;
+
         $valueOptions = [];
-        $canMakeKey = $isEcmt ? 'canMakeEcmtApplication' : 'canMakeBilateralApplication';
 
         foreach ($mapData['eligibleLicences']['result'] as $key => $option) {
-            $selected = !$isNew ? $option['id'] === $data['application']['licence']['id'] : false;
+            $selected = !$isNew ? $option['id'] === $data['application']['licence']['id'] && empty($data['active']) : false;
 
-            if (!$option[$canMakeKey]) {
-                if ($isNew || $option['id'] !== $data['application']['licence']['id']) {
-                    continue;
-                } else {
-                    $selected = true;
+            if ($irhpPermitTypeID === RefData::ECMT_PERMIT_TYPE_ID) {
+                if (!$option['canMakeEcmtApplication']) {
+                    if ($isNew || $option['id'] !== $data['application']['licence']['id']) {
+                        continue;
+                    }
                 }
-            }
 
-            if ($isEcmt) {
                 if ($option['licenceType']['id'] === \Common\RefData::LICENCE_TYPE_RESTRICTED) {
                     $valueOptions[$option['id']][$option['id'].'Content'] = 'en_GB/markup-ecmt-restricted-licence-conditional';
                     $content = new HtmlTranslated($option['id'] . 'Content');
                     $content->setValue('permits.form.ecmt-licence.restricted-licence.hint');
                     $form->get('fields')->add($content);
+                }
+            } else {
+                if ($displayActive && isset($data['active']) && $option['id'] == $data['active']) {
+                    $data['warning'] = 'permits.irhp.bilateral.already-applied';
+                    $selected = true;
                 }
             }
 
@@ -63,7 +69,7 @@ class LicencesAvailable
             ];
         }
 
-        if ($isEcmt) {
+        if ($irhpPermitTypeID === RefData::ECMT_PERMIT_TYPE_ID) {
             if (count($valueOptions) === 1) {
                 $key = array_keys($valueOptions)[0];
                 $data['question'] = 'permits.page.licence.question.one.licence';

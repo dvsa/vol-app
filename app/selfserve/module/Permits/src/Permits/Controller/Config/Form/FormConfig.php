@@ -37,6 +37,7 @@ class FormConfig
     const FORM_ADD_LICENCE = [
         'licence' => [
             'formClass' => 'LicenceForm',
+            'dataParam' => 'active',
             'dataSource' => LicencesAvailableDataSource::DATA_KEY,
             'mapper' => [
                 'type' => self::FORM_OPTIONS,
@@ -48,6 +49,7 @@ class FormConfig
     const FORM_LICENCE = [
         'licence' => [
             'formClass' => 'LicenceForm',
+            'dataParam' => 'active',
             'dataSource' => IrhpApplicationDataSource::DATA_KEY,
             'mapper' => [
                 'type' => self::FORM_OPTIONS,
