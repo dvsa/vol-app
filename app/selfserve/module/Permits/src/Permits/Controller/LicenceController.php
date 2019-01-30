@@ -174,6 +174,4 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
             }
         }
     }
-
-
 }
