@@ -23,15 +23,16 @@ return array(
         array(
             'title' => 'permits.irhp.valid.permits.table.country',
             'name' => 'country',
-            'stack' => 'irhpPermitApplication->irhpPermitWindow->irhpPermitStock->country->countryDesc',
-            'formatter' => 'StackValue',
+            'formatter' => function ($row, $column, $sm) {
+                $translator = $sm->get('translator');
+                return Escape::html($translator->translate($row['irhpPermitApplication']['irhpPermitWindow']['irhpPermitStock']['country']['countryDesc']));
+            },
         ),
         array(
             'title' => 'permits.irhp.valid.permits.table.application',
             'name' => 'irhpPermitApplication',
-            'formatter' => function ($row) {
-                return Escape::html($row['irhpPermitApplication']['id']);
-            }
+            'stack' => 'irhpPermitApplication->id',
+            'formatter' => 'StackValue',
         ),
 
         array(
