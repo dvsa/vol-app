@@ -945,6 +945,53 @@ $routes = [
                     ],
                 ]
             ],
+            'irhp-application' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'irhp-application[/]',
+                    'defaults' => [
+                        'controller' => 'IrhpApplicationController',
+                        'action' => 'index',
+                    ]
+                ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'add' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'add[/]:permitTypeId[/]',
+                            'defaults' => [
+                                'action' => 'add'
+                            ],
+                            'constraints' => [
+                                'permitTypeId' => '[0-9]+',
+                            ],
+                        ]
+                    ],
+                    'selectType' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'type[/]',
+                            'defaults' => [
+                                'action' => 'selectType'
+                            ]
+                        ]
+                    ],
+                    'application' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => ':action/:irhpAppId[/]',
+                            'constraints' => [
+                                'action' => 'edit|submit|accept|decline|cancel|withdraw',
+                                'irhpAppId' => '[0-9]+',
+                            ],
+                            'defaults' => [
+                                'action' => 'edit'
+                            ]
+                        ]
+                    ],
+                ]
+            ],
             'processing' => [
                 'type' => 'segment',
                 'options' => [
