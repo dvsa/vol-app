@@ -2,6 +2,7 @@
 
 namespace Admin\Listener\RouteParam;
 
+use Common\RefData;
 use Common\Service\Cqrs\Command\CommandSenderAwareInterface;
 use Common\Service\Cqrs\Command\CommandSenderAwareTrait;
 use Common\Service\Cqrs\Query\QuerySenderAwareInterface;
@@ -110,6 +111,9 @@ class IrhpPermitAdminFurniture implements
         $validTo = date('d/m/Y', strtotime($permitStock['validTo']));
         $initialStock = $permitStock['initialStock'];
         $name = $permitStock['irhpPermitType']['name']['description'];
+        if ($permitStock['irhpPermitType']['id'] === RefData::IRHP_BILATERAL_PERMIT_TYPE_ID && !empty($permitStock['country']['countryDesc'])) {
+            $name .= ' ('.$permitStock['country']['countryDesc'].') ';
+        }
 
         return sprintf(
             "Type: %s Validity: %s to %s Quota: %s",

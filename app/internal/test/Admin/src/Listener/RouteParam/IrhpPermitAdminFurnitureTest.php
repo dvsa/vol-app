@@ -80,6 +80,7 @@ class IrhpPermitAdminFurnitureTest extends TestCase
             'validTo' => '31-12-2018',
             'initialStock' => 100,
             'irhpPermitType' => [
+                'id' => '2',
                 'name' => [
                     'description' => 'ECMT'
                 ]
@@ -107,6 +108,62 @@ class IrhpPermitAdminFurnitureTest extends TestCase
                     ->shouldReceive('set')
                     ->once()
                     ->with("Type: ECMT Validity: 01/01/2018 to 31/12/2018 Quota: 100")
+                    ->getMock()
+            )
+            ->getMock();
+
+        $mockViewHelperManager = m::mock('\Zend\View\HelperPluginManager')
+            ->shouldReceive('get')->once()->with('placeholder')->andReturn($mockPlaceholder)
+            ->getMock();
+
+        $mockViewHelperManager->shouldReceive('get')
+            ->with('Url');
+
+        $this->sut->setViewHelperManager($mockViewHelperManager);
+
+        $event = new RouteParam();
+        $event->setValue($stockId);
+
+        $this->sut->onIrhpPermitAdminFurniture($event);
+    }
+
+    public function testOnIrhpPermitAdminBilateralId()
+    {
+        $stockId = 1;
+        $irhpPermitStock = [
+            'id' => $stockId,
+            'validFrom' => '01-01-2018',
+            'validTo' => '31-12-2018',
+            'initialStock' => 100,
+            'irhpPermitType' => [
+                'id' => '4',
+                'name' => [
+                    'description' => 'Annual Bilateral permits (EU and EEA)'
+                ]
+            ]
+        ];
+
+        $this->onIrhpPermitAdminSetup($irhpPermitStock);
+
+        $mockPlaceholder = m::mock()
+            ->shouldReceive('getContainer')
+            ->once()
+            ->with('pageTitle')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('set')
+                    ->once()
+                    ->with('Permits')
+                    ->getMock()
+            )
+            ->shouldReceive('getContainer')
+            ->once()
+            ->with('pageSubtitle')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('set')
+                    ->once()
+                    ->with("Type: Annual Bilateral permits (EU and EEA) Validity: 01/01/2018 to 31/12/2018 Quota: 100")
                     ->getMock()
             )
             ->getMock();

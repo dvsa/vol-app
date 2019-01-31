@@ -34,6 +34,13 @@ return [
             'formatter' => 'IrhpPermitStockType'
         ],
         [
+            'title' => 'Country',
+            'name' => 'country',
+            'formatter' => function ($row) {
+                return empty($row['country']['countryDesc']) ? 'N/A' : $row['country']['countryDesc'];
+            },
+        ],
+        [
             'title' => 'Validity Period',
             'name' => 'validFrom',
             'formatter' => 'IrhpPermitStockValidity'

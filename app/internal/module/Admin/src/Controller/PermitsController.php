@@ -47,6 +47,6 @@ class PermitsController extends AbstractInternalController implements ToggleAwar
      */
     public function indexAction()
     {
-        return $this->redirectToRoute('admin-dashboard/admin-permits/permits-system-settings', [], null, true);
+        return $this->redirectToRoute('admin-dashboard/admin-permits/stocks', [], null, true);
     }
 }

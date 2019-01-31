@@ -49,4 +49,21 @@ class IrhpPermitStock implements MapperInterface
     {
         return $errors;
     }
+
+    /**
+     * Map country data into array for select form element
+     *
+     * @param array $countries
+     * @return array
+     */
+    public static function mapCountryOptions(array $countries): array
+    {
+        $optionData = [];
+
+        foreach ($countries as $country) {
+            $optionData[$country['id']] = $country['countryDesc'];
+        }
+
+        return $optionData;
+    }
 }

@@ -248,34 +248,34 @@ return [
                     'route' => 'admin-dashboard/admin-permits',
                     'pages' => [
                         [
-                            'id' => 'admin-dashboard/admin-permits/permits-system-settings',
+                            'id' => 'admin-dashboard/admin-permits/stocks',
                             'label' => 'Permit system settings',
                             'route' => 'admin-dashboard/admin-permits/stocks'
                         ],
                         [
-                            'id' => 'admin-dashboard/admin-permits/permit-range',
+                            'id' => 'admin-dashboard/admin-permits/ranges',
                             'label' => 'Stock',
                             'route' => 'admin-dashboard/admin-permits/ranges'
                         ],
                         [
-                            'id' => 'admin-dashboard/admin-permits/permit-windows',
+                            'id' => 'admin-dashboard/admin-permits/windows',
                             'label' => 'Window',
                             'route' => 'admin-dashboard/admin-permits/windows'
                         ],
                         [
-                            'id' => 'admin-dashboard/admin-permits/permit-jurisdiction',
+                            'id' => 'admin-dashboard/admin-permits/jurisdiction',
                             'label' => 'Devolved administration',
-                            'route' => 'admin-dashboard/admin-permits/permit-jurisdiction'
+                            'route' => 'admin-dashboard/admin-permits/jurisdiction'
                         ],
                         [
-                            'id' => 'admin-dashboard/admin-permits/permit-sectors',
+                            'id' => 'admin-dashboard/admin-permits/sectors',
                             'label' => 'Sectors',
-                            'route' => 'admin-dashboard/admin-permits/permit-sectors'
+                            'route' => 'admin-dashboard/admin-permits/sectors'
                         ],
                         [
-                            'id' => 'admin-dashboard/admin-permits/permit-scoring',
+                            'id' => 'admin-dashboard/admin-permits/scoring',
                             'label' => 'Scoring',
-                            'route' => 'admin-dashboard/admin-permits/permit-scoring'
+                            'route' => 'admin-dashboard/admin-permits/scoring'
                         ],
                         [
                             'id' => 'admin-dashboard/admin-permits/exported-reports',

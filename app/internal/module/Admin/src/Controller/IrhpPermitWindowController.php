@@ -86,7 +86,7 @@ class IrhpPermitWindowController extends AbstractIrhpPermitAdminController imple
     {
         // If an IRHP Permit Stock ID is not specified then redirect the user to the Permits System Settings page.
         if (!isset($this->params()->fromRoute()['stockId'])) {
-            $this->redirect()->toRoute('admin-dashboard/admin-permits/permits-system-settings');
+            $this->redirect()->toRoute('admin-dashboard/admin-permits/stocks');
         }
 
         return parent::indexAction();
