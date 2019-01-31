@@ -1,0 +1,13 @@
+<?php echo $this->permitsBackLink('common.link.back.label', 'permits'); ?>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <span class="govuk-caption-xl">
+            <?php echo $this->escapeHtml($data['validIrhpPermits']['results'][0]['irhpPermitApplication']['irhpApplication']['licence']['licNo']); ?>
+        </span>
+        <h1 class="govuk-heading-xl">
+            <?php echo $this->escapeHtml($this->translate($data['title'])); ?>
+        </h1>
+        <?php echo $tables['overview-irhp-permits']; ?>
+        <?php echo $this->permitsDashboardLink('permits.link.return.to.dashboard'); ?>
+    </div>
+</div>
