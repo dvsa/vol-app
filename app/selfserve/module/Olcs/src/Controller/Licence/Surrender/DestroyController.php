@@ -53,7 +53,7 @@ class DestroyController extends AbstractSurrenderController
             'licNo' => $this->licence['licNo'],
             'content' => $this->getContent(),
             'form' => $this->getConfirmationForm($translator),
-            'backLink' => $this->getBackLink('licence/surrender/review'),
+            'backLink' => $this->getBackLink('licence/surrender/review/GET'),
         ];
 
     }
