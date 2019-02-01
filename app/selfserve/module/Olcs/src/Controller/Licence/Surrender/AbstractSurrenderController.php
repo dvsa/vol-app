@@ -6,6 +6,8 @@ use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Surrender\Update;
 use Common\Util;
 use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence as SurrenderQuery;
+use Olcs\Controller\Config\DataSource\DataSourceConfig;
+use Olcs\Service\Surrender\SurrenderStateService;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Olcs\Controller\AbstractSelfserveController;
@@ -21,6 +23,10 @@ abstract class AbstractSurrenderController extends AbstractSelfserveController i
         'default' => FeatureToggleConfig::SELFSERVE_SURRENDER_ENABLED
     ];
 
+    protected $dataSourceConfig = [
+        'default' => DataSourceConfig::SURRENDER
+    ];
+
     protected $pageTemplate = 'pages/licence-surrender';
 
     /** @var  \Common\Service\Helper\FormHelperService */
@@ -31,18 +37,18 @@ abstract class AbstractSurrenderController extends AbstractSelfserveController i
 
     protected $licenceId;
 
-
     protected $licence;
-
 
     public function onDispatch(MvcEvent $e)
     {
+        $actionResponse = parent::onDispatch($e);
+        $this->shouldRedirectForState();
         $this->licenceId = (int)$this->params('licence');
         $this->licence = $this->getLicence();
         $this->hlpForm = $this->getServiceLocator()->get('Helper\Form');
         $this->hlpFlashMsgr = $this->getServiceLocator()->get('Helper\FlashMessenger');
         $this->data['licence']['isInternationalLicence'] = $this->licence['licenceType']['id'] === RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL;
-        return parent::onDispatch($e);
+        return $actionResponse;
     }
 
     protected function renderView(array $params): ViewModel
@@ -117,5 +123,17 @@ abstract class AbstractSurrenderController extends AbstractSelfserveController i
             );
         }
         return $view;
+    }
+
+    private function shouldRedirectForState()
+    {
+        $surrenderStateService = new SurrenderStateService($this->data['surrender']);
+
+        $routeForState = $surrenderStateService->fetchRoute();
+
+        if ($routeForState !== $this->getRequest()->getRequestUri())
+        {
+            return $this->redirect()->toRoute($routeForState, [], [], true);
+        }
     }
 }

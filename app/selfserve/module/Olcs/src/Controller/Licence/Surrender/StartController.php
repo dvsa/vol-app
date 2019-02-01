@@ -14,7 +14,7 @@ use Zend\I18n\Translator\Translator;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Helper\FlashMessenger;
 
-class StartController extends AbstractSelfserveController implements ToggleAwareInterface
+class StartController extends AbstractSurrenderController implements ToggleAwareInterface
 {
     protected $toggleConfig = [
         'default' => FeatureToggleConfig::SELFSERVE_SURRENDER_ENABLED
