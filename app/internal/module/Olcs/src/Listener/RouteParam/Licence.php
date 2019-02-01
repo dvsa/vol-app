@@ -389,7 +389,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
      */
     protected function showHideSurrenderButton($licence, $sidebarNav)
     {
-        if ($this->isDigitalSurrender($licence)) {
+        if ($this->isSelfServeSurrender($licence)) {
             $sidebarNav->findById('licence-decisions-surrender')->setVisible(0);
             return false;
         }
@@ -496,7 +496,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         return false;
     }
 
-    private function isDigitalSurrender(array $licence): bool
+    private function isSelfServeSurrender(array $licence): bool
     {
         $surrender = null;
         if ($licence['status']['id'] === RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION) {
@@ -506,7 +506,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
                 //unable to get data fail gracefully
                 return false;
             }
-            return $surrender['signatureType']['id'] === RefData::SIGNATURE_TYPE_DIGITAL_SIGNATURE;
+            return $surrender['signatureType']['id'] !== null;
         }
         return false;
     }
@@ -524,9 +524,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
      */
     protected function hideSurrenderMenu($licence): void
     {
-        if ($licence['status']['id'] !== RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION ||
-            $licence['status']['id'] === RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION && $this->isDigitalSurrender($licence) === false
-        ) {
+        if ($licence['status']['id'] !== RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION) {
             $this->getMainNavigationService()->findOneById('licence_surrender')->setVisible(0);
         }
     }
