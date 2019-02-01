@@ -490,8 +490,9 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
 
         if (isset($configKey[$action])) {
             $configs = $configKey[$action];
-        } elseif (isset($configKey['default'])) {
-            $configs = $configKey['default'];
+        }
+        if (isset($configKey['default'])) {
+            $configs = array_merge($configs, $configKey['default']);
         }
 
         return $configs;
