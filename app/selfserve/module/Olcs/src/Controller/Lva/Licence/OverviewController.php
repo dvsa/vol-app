@@ -5,12 +5,14 @@ namespace Olcs\Controller\Lva\Licence;
 use Common\Controller\Interfaces\MethodToggleAwareInterface;
 use Common\Controller\Lva\AbstractController;
 use Common\RefData;
+use Common\Service\Cqrs\Exception\NotFoundException;
 use Dvsa\Olcs\Transfer\Command\Licence\PrintLicence;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceQry;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 use Olcs\Controller\Lva\Traits\MethodToggleTrait;
 use Olcs\View\Model\Licence\LicenceOverview;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
+use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence;
 
 /**
  * Licence Overview Controller
@@ -28,7 +30,7 @@ class OverviewController extends AbstractController implements MethodToggleAware
     protected $infoBoxLinks = [];
 
     protected $methodToggles = [
-       'addInfoBoxLinks' => FeatureToggleConfig::SELFSERVE_SURRENDER_ENABLED
+        'addInfoBoxLinks' => FeatureToggleConfig::SELFSERVE_SURRENDER_ENABLED
     ];
 
     /**
@@ -142,9 +144,21 @@ class OverviewController extends AbstractController implements MethodToggleAware
                     'options' => [],
                     'reuseMatchedParams' => true
                 ],
-                'linkText' => 'licence.apply-to-surrender'
+                'linkText' => $this->returnSurrenderLinkText($data['id'])
             ];
         }
         return $surrenderLink;
+    }
+
+    private function returnSurrenderLinkText($licenceId)
+    {
+        $dto = ByLicence::create(['id' => $licenceId]);
+
+        try {
+            $this->handleQuery($dto);
+        } catch (NotFoundException $exception) {
+            return 'licence.apply-to-surrender';
+        }
+        return 'licence.continue-surrender-application';
     }
 }
