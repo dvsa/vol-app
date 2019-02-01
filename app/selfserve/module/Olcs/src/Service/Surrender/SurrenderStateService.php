@@ -6,17 +6,13 @@ class SurrenderStateService
 {
     private $surrenderData;
 
-    public function __construct($licenceId)
+    public function __construct(array $surrenderData)
     {
-        $this->surrenderData = $this->getSurrender($licenceId);
+        $this->surrenderData = $surrenderData;
     }
 
-    private function getSurrender($licenceId)
+    public function fetchRoute(): string
     {
-        $response = $this->handleQuery(
-            SurrenderQuery::create(['id' => $licenceId])
-        );
-
-        return $response->getResult();
+        return '';
     }
 }
