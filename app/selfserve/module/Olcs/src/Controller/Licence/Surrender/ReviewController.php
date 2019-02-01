@@ -3,6 +3,7 @@
 namespace Olcs\Controller\Licence\Surrender;
 
 use Common\Data\Mapper\Licence\Surrender\ReviewDetails;
+use Common\RefData;
 use Common\Service\Helper\TranslationHelperService;
 use Olcs\Controller\Config\DataSource\DataSourceConfig;
 use Olcs\Form\Model\Form\Surrender\Review;
@@ -34,6 +35,7 @@ class ReviewController extends AbstractSurrenderController
 
     public function confirmationAction()
     {
+        $this->updateSurrender(RefData::SURRENDER_STATUS_DETAILS_CONFIRMED);
         return $this->nextStep('licence/surrender/destroy/GET', [], []);
     }
 
