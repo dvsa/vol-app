@@ -4,15 +4,12 @@ namespace Olcs\Controller\Licence\Surrender;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Common\Service\Cqrs\Exception\AccessDeniedException;
-use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Transfer\Command\Surrender\Create;
-use Olcs\Controller\AbstractSelfserveController;
 use Olcs\Controller\Config\DataSource\DataSourceConfig;
+use Olcs\Form\Model\Form\Surrender\Start;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Zend\Http\Response;
-use Zend\I18n\Translator\Translator;
 use Zend\Mvc\MvcEvent;
-use Zend\View\Helper\FlashMessenger;
 
 class StartController extends AbstractSurrenderController implements ToggleAwareInterface
 {
@@ -31,7 +28,7 @@ class StartController extends AbstractSurrenderController implements ToggleAware
     protected $formConfig = [
         'index' => [
             'startForm' => [
-                'formClass' => \Olcs\Form\Model\Form\Surrender\Start::class
+                'formClass' => Start::class
             ]
         ]
     ];
@@ -51,8 +48,7 @@ class StartController extends AbstractSurrenderController implements ToggleAware
      */
     public function indexAction()
     {
-        $licence = $this->data['licence'];
-        return $this->getView($licence, $this->translateService);
+        return $this->createView();
     }
 
     /**
@@ -62,30 +58,22 @@ class StartController extends AbstractSurrenderController implements ToggleAware
      */
     public function startAction()
     {
-        $licNo = $this->params('licence');
-        $hlpFlashMsgr = $this->getServiceLocator()->get('Helper\FlashMessenger');
-
         try {
-            $response = $this->handleCommand(Create::create(['id' => $licNo]));
+            $response = $this->handleCommand(Create::create(['id' => $this->licenceId]));
             if ($response->isOk()) {
                 $result = $response->getResult();
                 if (!empty($result)) {
-                    return $this->redirect()->toRoute(
-                        'licence/surrender/review-contact-details/GET',
-                        [
-                            'licence' => $licNo,
-                        ]
-                    );
+                    return $this->redirect()->toRoute('licence/surrender/review-contact-details/GET', [], [], true);
                 }
             }
         } catch (AccessDeniedException $e) {
             $message = $this->translateService->translate('licence.surrender.already.applied');
-            $hlpFlashMsgr->addInfoMessage($message);
+            $this->hlpFlashMsgr->addInfoMessage($message);
         } catch (\Exception $e) {
-            $hlpFlashMsgr->addUnknownError();
+            $this->hlpFlashMsgr->addUnknownError();
         }
 
-        $this->redirect()->refresh();
+        return $this->redirect()->refresh();
     }
 
     private function getGvData()
@@ -96,42 +84,35 @@ class StartController extends AbstractSurrenderController implements ToggleAware
         ];
     }
 
-    private function getPsvData($translateService)
+    private function getPsvData()
     {
         return [
             'pageTitle' => 'licence.surrender.start.title.psv',
-            'cancelBus' => [$translateService->translate('licence.surrender.start.cancel.bus')]
+            'cancelBus' => [$this->translateService->translate('licence.surrender.start.cancel.bus')]
         ];
     }
 
-    /**
-     * getView
-     *
-     * @param Licence    $licence
-     * @param Translator $translateService
-     *
-     * @return \Zend\View\Model\ViewModel
-     */
-    private function getView($licence, $translateService): \Zend\View\Model\ViewModel
+    protected function getViewVariables(): array
     {
-        $view = $this->genericView();
-
-        switch ($licence['goodsOrPsv']['id']) {
+        switch ($this->data['licence']['goodsOrPsv']['id']) {
             case 'lcat_gv':
-                $view->setVariables($this->getGvData());
+                $variables = $this->getGvData();
                 break;
             case 'lcat_psv':
-                $view->setVariables($this->getPsvData($translateService));
+                $variables = $this->getPsvData();
                 break;
             default:
+                $variables = [];
                 break;
         }
 
-        $view->setVariable('licNo', $licence['licNo']);
-        $view->setVariable('body', 'markup-licence-surrender-start');
-        $view->setVariable('backUrl', $this->url()->fromRoute('lva-licence', ['licence' => $licence['id']]));
-        $view->setVariable('startForm', $this->form);
+        $variables = array_merge($variables, [
+            'licNo' => $this->data['surrender']['licence']['licNo'],
+            'body' => 'markup-licence-surrender-start',
+            'backUrl' => $this->getBackLink('lva-licence'),
+            'startForm' => $this->form
+        ]);
 
-        return $view;
+        return $variables;
     }
 }
