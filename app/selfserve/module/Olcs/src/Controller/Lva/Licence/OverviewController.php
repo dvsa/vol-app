@@ -158,7 +158,7 @@ class OverviewController extends AbstractController implements MethodToggleAware
         $dto = ByLicence::create(['id' => $licenceId]);
 
         $linkText = 'licence.continue-surrender-application';
-        $route = 'licence/surrender/review-contact-details/GET';
+        $route = 'licence/surrender/information-changed/GET';
 
         try {
             $this->handleQuery($dto);

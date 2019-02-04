@@ -6,6 +6,7 @@ use Common\Form\Form;
 use Common\RefData;
 use Olcs\Controller\Config\DataSource\DataSourceConfig;
 use Olcs\Form\Model\Form\Surrender\InformationChanged;
+use Olcs\Service\Surrender\SurrenderStateService;
 
 class InformationChangedController extends AbstractSurrenderController
 {
@@ -26,11 +27,26 @@ class InformationChangedController extends AbstractSurrenderController
         'default' => DataSourceConfig::SURRENDER
     ];
 
+    /**
+     * @var SurrenderStateService
+     */
+    private $surrenderStateService;
+
+    /**
+     * @var string
+     */
+    private $surrenderState;
+
     public function indexAction()
     {
-        if (!$this->hasApplicationExpired() && !$this->hasDiscCountChanged()) {
-            return $this->redirect()->toRoute('licence/surrender/review-contact-details/GET', [], [], true);
+        $this->surrenderStateService = new SurrenderStateService($this->data['surrender']);
+        $this->surrenderState = $this->surrenderStateService->getState();
+
+        if ($this->surrenderState === SurrenderStateService::STATE_OK) {
+            return $this->redirect()->toRoute($this->surrenderStateService->fetchRoute(), [], [], true);
         }
+
+        $this->form = $this->alterForm($this->form);
 
         return $this->createView();
     }
@@ -53,7 +69,7 @@ class InformationChangedController extends AbstractSurrenderController
             return 'markup-licence-surrender-information-changed-content-expired';
         }
 
-        if ($this->hasDiscCountChanged()) {
+        if ($this->hasInformationChanged()) {
             return 'markup-licence-surrender-information-changed-content-changed';
         }
     }
@@ -62,7 +78,7 @@ class InformationChangedController extends AbstractSurrenderController
     {
         if ($this->hasApplicationExpired()) {
             $form = $this->alterForExpiry($form);
-        } elseif ($this->hasDiscCountChanged()) {
+        } elseif ($this->hasInformationChanged()) {
             $form = $this->alterForInformationChanged($form);
         }
         return $form;
@@ -82,11 +98,11 @@ class InformationChangedController extends AbstractSurrenderController
 
     protected function hasApplicationExpired(): bool
     {
-        return true;
+        return $this->surrenderState === SurrenderStateService::STATE_EXPIRED;
     }
 
-    protected function hasDiscCountChanged(): bool
+    protected function hasInformationChanged(): bool
     {
-        return true;
+        return $this->surrenderState === SurrenderStateService::STATE_INFORMATION_CHANGED;
     }
 }
