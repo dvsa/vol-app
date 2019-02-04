@@ -4,6 +4,8 @@ namespace Olcs\Controller\Licence\Surrender;
 
 use Common\Form\Form;
 use Common\RefData;
+use Dvsa\Olcs\Transfer\Command\Surrender\Create;
+use Dvsa\Olcs\Transfer\Command\Surrender\Delete;
 use Olcs\Controller\Config\DataSource\DataSourceConfig;
 use Olcs\Form\Model\Form\Surrender\InformationChanged;
 use Olcs\Service\Surrender\SurrenderStateService;
@@ -37,9 +39,14 @@ class InformationChangedController extends AbstractSurrenderController
      */
     private $surrenderState;
 
+    public function __construct()
+    {
+        $this->surrenderStateService = new SurrenderStateService();
+    }
+
     public function indexAction()
     {
-        $this->surrenderStateService = new SurrenderStateService($this->data['surrender']);
+        $this->surrenderStateService->setSurrenderData($this->data['surrender']);
         $this->surrenderState = $this->surrenderStateService->getState();
 
         if ($this->surrenderState === SurrenderStateService::STATE_OK) {
@@ -49,6 +56,20 @@ class InformationChangedController extends AbstractSurrenderController
         $this->form = $this->alterForm($this->form);
 
         return $this->createView();
+    }
+
+    public function submitAction()
+    {
+        $this->surrenderStateService->setSurrenderData($this->data['surrender']);
+
+        if ($this->surrenderStateService->hasExpired()) {
+            if (!$this->deleteSurrender() || !$this->createSurrender()) {
+                $this->hlpFlashMsgr->addUnknownError();
+                return $this->redirect()->refresh();
+            }
+        }
+
+        return $this->redirect()->toRoute('licence/surrender/review-contact-details/GET', [], [], true);
     }
 
     protected function getViewVariables(): array
@@ -104,5 +125,30 @@ class InformationChangedController extends AbstractSurrenderController
     protected function hasInformationChanged(): bool
     {
         return $this->surrenderState === SurrenderStateService::STATE_INFORMATION_CHANGED;
+    }
+
+    protected function deleteSurrender()
+    {
+        try {
+            $response = $this->handleCommand(Delete::create(['id' => $this->licenceId]));
+            return $response->isOk();
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    protected function createSurrender()
+    {
+        try {
+            $response = $this->handleCommand(Create::create(['id' => $this->licenceId]));
+            if ($response->isOk()) {
+                $result = $response->getResult();
+                if (!empty($result)) {
+                    return true;
+                }
+            }
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 }

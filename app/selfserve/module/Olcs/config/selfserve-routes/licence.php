@@ -458,6 +458,17 @@ return [
                                         ],
                                     ],
                                 ],
+                                'POST' => [
+                                    'may_terminate' => true,
+                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'options' => [
+                                        'verb' => 'POST',
+                                        'defaults' => [
+                                            'controller' => InformationChangedController::class,
+                                            'action' => 'submit',
+                                        ],
+                                    ],
+                                ],
                             ],
                         ],
                     ]

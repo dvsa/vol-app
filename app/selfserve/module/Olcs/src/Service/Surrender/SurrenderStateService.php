@@ -13,7 +13,12 @@ class SurrenderStateService
 
     private $surrenderData;
 
-    public function __construct(array $surrenderData)
+    public function __construct(array $surrenderData = null)
+    {
+        $this->surrenderData = $surrenderData;
+    }
+
+    public function setSurrenderData(array $surrenderData)
     {
         $this->surrenderData = $surrenderData;
     }
@@ -62,7 +67,7 @@ class SurrenderStateService
         return $prefix . $page . $suffix;
     }
 
-    private function hasExpired(): bool
+    public function hasExpired(): bool
     {
         $now = new \DateTimeImmutable();
         $modified = $this->getSurrenderCreatedOrModifiedOn();
