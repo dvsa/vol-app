@@ -70,6 +70,10 @@ class IrhpApplicationController extends AbstractInternalController implements
         'edit' => [
             'route' => 'licence/permits',
             'action' => 'index',
+        ],
+        'cancel' => [
+            'route' => 'licence/permits',
+            'action' => 'index',
         ]
     ];
 
