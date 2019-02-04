@@ -158,20 +158,20 @@ class OverviewController extends AbstractController implements MethodToggleAware
     {
         $dto = ByLicence::create(['id' => $licenceId]);
 
-        $linkText = 'licence.continue-surrender-application';
-        $route = 'licence/surrender/information-changed/GET';
-
         try {
             $result = $this->handleQuery($dto);
             $surrender =  $result->getResult();
         } catch (NotFoundException $exception) {
-            $linkText = 'licence.apply-to-surrender';
-            $route = 'licence/surrender/start/GET';
+            return ['licence/surrender/start/GET', 'licence.apply-to-surrender'];
         }
 
+        $route = 'licence/surrender/information-changed/GET';
         $stateService = new SurrenderStateService($surrender);
+
         if ($stateService->getState() === SurrenderStateService::STATE_EXPIRED) {
             $linkText = 'licence.apply-to-surrender';
+        } else {
+            $linkText = 'licence.continue-surrender-application';
         }
         return [$route, $linkText];
     }
