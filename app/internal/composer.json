@@ -56,7 +56,7 @@
         "olcs/OlcsCommon": "dev-develop",
         "olcs/olcs-transfer": "dev-develop",
         "olcs/olcs-utils": "dev-develop",
-        "olcs/olcs-auth": "dev-feature/webdav-documents",
+        "olcs/olcs-auth": "dev-develop",
         "soflomo/purifier": "~0.1.0",
         "olcs/olcs-logging": "dev-develop"
     },
