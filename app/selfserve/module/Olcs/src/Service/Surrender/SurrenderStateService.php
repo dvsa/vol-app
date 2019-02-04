@@ -29,17 +29,12 @@ class SurrenderStateService
             return static::STATE_EXPIRED;
         } elseif ($this->hasInformationChanged()) {
             return static::STATE_INFORMATION_CHANGED;
-        } else {
-            return static::STATE_OK;
         }
+        return static::STATE_OK;
     }
 
     public function fetchRoute(): string
     {
-        $prefix = 'licence/surrender/';
-
-        $suffix = '/GET';
-
         switch ($this->getStatus()) {
             case RefData::SURRENDER_STATUS_START:
                 $page = 'review-contact-details';
@@ -54,8 +49,6 @@ class SurrenderStateService
                 $page = $this->surrenderData['licence']['isInternationalLicence'] ? 'community-licence' : 'review';
                 break;
             case RefData::SURRENDER_STATUS_COMM_LIC_DOCS_COMPLETE:
-                $page = 'review';
-                break;
             case RefData::SURRENDER_STATUS_DETAILS_CONFIRMED:
                 $page = 'review';
                 break;
@@ -64,7 +57,7 @@ class SurrenderStateService
                 break;
         }
 
-        return $prefix . $page . $suffix;
+        return 'licence/surrender/' . $page . '/GET';
     }
 
     public function hasExpired(): bool
@@ -141,7 +134,7 @@ class SurrenderStateService
 
     private function getAddressLastModifiedOn(): ?\DateTimeInterface
     {
-        return new \DateTimeImmutable($this->surrenderData['addressLastModified']);
+        return !is_null($this->surrenderData['addressLastModified']) ? new \DateTimeImmutable($this->surrenderData['addressLastModified']) : null;
     }
 
     private function getSurrenderCreatedOrModifiedOn(): \DateTimeInterface
