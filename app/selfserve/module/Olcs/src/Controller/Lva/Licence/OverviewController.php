@@ -136,29 +136,36 @@ class OverviewController extends AbstractController implements MethodToggleAware
     private function getSurrenderLink($data)
     {
         $surrenderLink = [];
+
+        [$route, $linkText] = $this->returnSurrenderLinkText($data['id']);
+
         if ($data['isLicenceSurrenderAllowed']) {
             $surrenderLink = [
                 'linkUrl' => [
-                    'route' => 'licence/surrender/start/GET',
+                    'route' => $route,
                     'params' => [],
                     'options' => [],
                     'reuseMatchedParams' => true
                 ],
-                'linkText' => $this->returnSurrenderLinkText($data['id'])
+                'linkText' => $linkText
             ];
         }
         return $surrenderLink;
     }
 
-    private function returnSurrenderLinkText($licenceId)
+    private function returnSurrenderLinkText($licenceId) : array
     {
         $dto = ByLicence::create(['id' => $licenceId]);
+
+        $linkText = 'licence.continue-surrender-application';
+        $route = 'licence/surrender/review-contact-details/GET';
 
         try {
             $this->handleQuery($dto);
         } catch (NotFoundException $exception) {
-            return 'licence.apply-to-surrender';
+            $linkText = 'licence.apply-to-surrender';
+            $route = 'licence/surrender/start/GET';
         }
-        return 'licence.continue-surrender-application';
+        return [$route, $linkText];
     }
 }
