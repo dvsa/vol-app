@@ -198,6 +198,14 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
                             ['licence' => $this->params()->fromRoute('licence')],
                             ['query' => ['permitTypeId' => $permitTypeId]]
                         );
+                case RefData::IRHP_BILATERAL_PERMIT_TYPE_ID:
+                    return $this->redirect()
+                        ->toRouteAjax(
+                            'licence/irhp-application/add',
+                            [   'licence' => $this->params()->fromRoute('licence'),
+                                'permitTypeId' => $permitTypeId
+                            ]
+                        );
             }
         }
 
