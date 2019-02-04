@@ -144,6 +144,6 @@ class SurrenderStateService
 
     private function getDiscsOnLicence(): int
     {
-        return $this->surrenderData['licence']['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_GOODS_VEHICLE ? $this->getGoodsDiscsOnLicence() : $this->getPsvDiscsOnLicence();
+        return $this->surrenderData['licence']['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_GOODS_VEHICLE ? $this->getGoodsDiscsOnLicence() : $this->getPsvDiscsOnLicence();
     }
 }

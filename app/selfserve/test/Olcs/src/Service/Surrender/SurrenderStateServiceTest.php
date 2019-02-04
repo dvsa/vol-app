@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 
 class SurrenderStateServiceTest extends TestCase
 {
-
     /**
      * @dataProvider fetchRouteDataProvider
      */
@@ -31,9 +30,14 @@ class SurrenderStateServiceTest extends TestCase
         $this->assertEquals($expected, $service->hasExpired());
     }
 
-    public function testGetState()
+    /**
+     * @dataProvider getStateProvider
+     */
+    public function testGetState($surrender, $expectedState)
     {
+        $service = new SurrenderStateService($surrender);
 
+        $this->assertSame($expectedState, $service->getState());
     }
 
     public function fetchRouteDataProvider()
@@ -135,6 +139,110 @@ class SurrenderStateServiceTest extends TestCase
                 ],
                 'expected' => false
             ]
+        ];
+    }
+
+    public function getStateProvider()
+    {
+        return [
+            'application_expired' => [
+                'surredner' => [
+                    'createdOn' => '2019-01-31 14:13:09',
+                    'lastModifiedOn' => null
+                ],
+                'expected' => SurrenderStateService::STATE_EXPIRED
+            ],
+            'goods_disc_count_information_changed' => [
+                'surredner' => [
+                    'status' => [
+                        'id' => RefData::SURRENDER_STATUS_DISCS_COMPLETE
+                    ],
+                    'discDestroyed' => null,
+                    'discLost' => 10,
+                    'discStolen' => null,
+                    'createdOn' => '2019-01-31 14:13:09',
+                    'lastModifiedOn' => date(DATE_ATOM, time()),
+                    'addressLastModified' => date(DATE_ATOM, time()),
+                    'licence' => [
+                        'goodsOrPsv' => [
+                            'id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE
+                        ],
+                    ],
+                    'goodsDiscsOnLicence' => [
+                        'discCount' => 8
+                    ]
+
+                ],
+                'expected' => SurrenderStateService::STATE_INFORMATION_CHANGED
+            ],
+            'psv_disc_count_information_changed' => [
+                'surredner' => [
+                    'status' => [
+                        'id' => RefData::SURRENDER_STATUS_DISCS_COMPLETE
+                    ],
+                    'discDestroyed' => null,
+                    'discLost' => 9,
+                    'discStolen' => null,
+                    'createdOn' => '2019-01-31 14:13:09',
+                    'lastModifiedOn' => date(DATE_ATOM, time()),
+                    'addressLastModified' => date(DATE_ATOM, time()),
+                    'licence' => [
+                        'goodsOrPsv' => [
+                            'id' => RefData::LICENCE_CATEGORY_PSV
+                        ],
+                    ],
+                    'psvDiscsOnLicence' => [
+                        'discCount' => 5
+                    ]
+
+                ],
+                'expected' => SurrenderStateService::STATE_INFORMATION_CHANGED
+            ],
+            'address_information_changed' => [
+                'surredner' => [
+                    'status' => [
+                        'id' => RefData::SURRENDER_STATUS_DISCS_COMPLETE
+                    ],
+                    'discDestroyed' => null,
+                    'discLost' => 10,
+                    'discStolen' => null,
+                    'createdOn' => '2019-01-31 14:13:09',
+                    'lastModifiedOn' => date(DATE_ATOM, time()-60),
+                    'addressLastModified' => date(DATE_ATOM, time()),
+                    'licence' => [
+                        'goodsOrPsv' => [
+                            'id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE
+                        ],
+                    ],
+                    'goodsDiscsOnLicence' => [
+                        'discCount' => 10
+                    ]
+
+                ],
+                'expected' => SurrenderStateService::STATE_INFORMATION_CHANGED
+            ],
+            'not_expired_and_not_changed' => [
+                'surredner' => [
+                    'status' => [
+                        'id' => RefData::SURRENDER_STATUS_DISCS_COMPLETE
+                    ],
+                    'discDestroyed' => null,
+                    'discLost' => 10,
+                    'discStolen' => null,
+                    'createdOn' => '2019-01-31 14:13:09',
+                    'lastModifiedOn' => date(DATE_ATOM, time()),
+                    'addressLastModified' => date(DATE_ATOM, time()),
+                    'licence' => [
+                        'goodsOrPsv' => [
+                            'id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE
+                        ],
+                    ],
+                    'goodsDiscsOnLicence' => [
+                        'discCount' => 10
+                    ]
+                ],
+                'expected' => SurrenderStateService::STATE_OK
+            ],
         ];
     }
 }
