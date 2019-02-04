@@ -19,6 +19,7 @@ use Dvsa\Olcs\Transfer\Query\IrhpPermitApplication\GetList as ListDTO;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\AvailableCountries;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitWindow\OpenByCountry;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\ById as ItemDto;
+use Dvsa\Olcs\Transfer\Query\IrhpApplication\MaxStockPermits;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceDto;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\CreateFull as CreateDTO;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\UpdateFull as UpdateDTO;
@@ -76,8 +77,6 @@ class IrhpApplicationController extends AbstractInternalController implements
     // Scripts to include when rendering actions.
     protected $inlineScripts = [
         'indexAction' => ['table-actions'],
-        'addAction' => ['forms/irhp-application'],
-        'editAction' => ['forms/irhp-application']
     ];
 
     /**
@@ -148,6 +147,13 @@ class IrhpApplicationController extends AbstractInternalController implements
         $formData['topFields']['irhpPermitType'] = $this->params()->fromRoute('permitTypeId', null);
         $formData['topFields']['licence'] = $this->params()->fromRoute('licence', null);
 
+        $maxStockPermits = $this->handleQuery(
+            MaxStockPermits::create(['licence' => $this->params()->fromRoute('licence', null)])
+        );
+        if (!$maxStockPermits->isOk()) {
+            throw new NotFoundException('Could not retrieve max permits data');
+        }
+        $formData['maxStockPermits']['result'] = $maxStockPermits->getResult()['results'];
 
         // Prepare data structure with open bilateral windows for NoOfPermits form builder
         $formData['application'] = IrhpApplicationMapper::mapApplicationData(
@@ -157,7 +163,13 @@ class IrhpApplicationController extends AbstractInternalController implements
         $formData['application']['licence']['totAuthVehicles'] = $licence['totAuthVehicles'];
 
         // Build the dynamic NoOfPermits per country per year form from Common
-        NoOfPermits::mapForFormOptions($formData, $form, $this->getServiceLocator()->get('Helper\Translation'), 'application');
+        NoOfPermits::mapForFormOptions(
+            $formData,
+            $form,
+            $this->getServiceLocator()->get('Helper\Translation'),
+            'application',
+            'maxStockPermits'
+        );
 
         $form->setData($formData);
 
@@ -187,9 +199,23 @@ class IrhpApplicationController extends AbstractInternalController implements
             $formData
         );
 
+        $maxStockPermits = $this->handleQuery(
+            MaxStockPermits::create(['licence' => $this->params()->fromRoute('licence', null)])
+        );
+        if (!$maxStockPermits->isOk()) {
+            throw new NotFoundException('Could not retrieve max permits data');
+        }
+        $formData['maxStockPermits']['result'] = $maxStockPermits->getResult()['results'];
+
         // Build the dynamic NoOfPermits per country per year form from Common
         $formData['application']['licence']['totAuthVehicles'] = $licence['totAuthVehicles'];
-        NoOfPermits::mapForFormOptions($formData, $form, $this->getServiceLocator()->get('Helper\Translation'), 'application');
+        NoOfPermits::mapForFormOptions(
+            $formData,
+            $form,
+            $this->getServiceLocator()->get('Helper\Translation'),
+            'application',
+            'maxStockPermits'
+        );
 
         $form->setData($formData);
 
