@@ -10,6 +10,7 @@ use Dvsa\Olcs\Transfer\Command\Licence\PrintLicence;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceQry;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 use Olcs\Controller\Lva\Traits\MethodToggleTrait;
+use Olcs\Service\Surrender\SurrenderStateService;
 use Olcs\View\Model\Licence\LicenceOverview;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence;
@@ -161,10 +162,16 @@ class OverviewController extends AbstractController implements MethodToggleAware
         $route = 'licence/surrender/information-changed/GET';
 
         try {
-            $this->handleQuery($dto);
+            $result = $this->handleQuery($dto);
+            $surrender =  $result->getResult();
         } catch (NotFoundException $exception) {
             $linkText = 'licence.apply-to-surrender';
             $route = 'licence/surrender/start/GET';
+        }
+
+        $stateService = new SurrenderStateService($surrender);
+        if ($stateService->getState() === SurrenderStateService::STATE_EXPIRED) {
+            $linkText = 'licence.apply-to-surrender';
         }
         return [$route, $linkText];
     }
