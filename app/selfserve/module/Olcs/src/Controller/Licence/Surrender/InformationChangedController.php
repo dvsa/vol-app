@@ -25,10 +25,6 @@ class InformationChangedController extends AbstractSurrenderController
         'default' => 'licence/surrender-information-changed'
     ];
 
-    protected $dataSourceConfig = [
-        'default' => DataSourceConfig::SURRENDER
-    ];
-
     /**
      * @var SurrenderStateService
      */
