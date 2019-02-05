@@ -2,13 +2,13 @@
 namespace Permits\Controller;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
+use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\Create;
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\ActiveApplication;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
-use Permits\Controller\Config\DataSource\IrhpApplication;
 use Permits\Controller\Config\DataSource\LicencesAvailable;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Controller\Config\Form\FormConfig;
@@ -113,7 +113,7 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
      */
     public function handlePostCommand(array &$config, array $params)
     {
-        $irhpPermitTypeID = \Common\RefData::ECMT_PERMIT_TYPE_ID;
+        $irhpPermitTypeID = RefData::ECMT_PERMIT_TYPE_ID;
 
         if (isset($this->data['application']['irhpPermitType']['id'])) {
             $irhpPermitTypeID = $this->data['application']['irhpPermitType']['id'];
@@ -121,7 +121,7 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
             $irhpPermitTypeID = $this->data['irhpPermitType']['id'];
         }
 
-        if ($irhpPermitTypeID === \Common\RefData::IRHP_BILATERAL_PERMIT_TYPE_ID) {
+        if ($irhpPermitTypeID === RefData::IRHP_BILATERAL_PERMIT_TYPE_ID) {
             $activeApplication = $this->handleResponse($this->handleQuery(ActiveApplication::create(
                 [
                     'licence' => $params['licence'],
@@ -146,7 +146,7 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
         }
 
         if (isset($config['command'])) {
-            if ($irhpPermitTypeID === \Common\RefData::ECMT_PERMIT_TYPE_ID) {
+            if ($irhpPermitTypeID === RefData::ECMT_PERMIT_TYPE_ID) {
                 $config['command'] = CreateEcmtPermitApplication::class;
             }
 
@@ -176,9 +176,12 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
         }
     }
 
+    /**
+     * @return void|\Zend\Http\Response
+     */
     public function checkConditionalDisplay()
     {
-        $irhpPermitTypeID = \Common\RefData::ECMT_PERMIT_TYPE_ID;
+        $irhpPermitTypeID = RefData::ECMT_PERMIT_TYPE_ID;
 
         if (isset($this->data['application']['irhpPermitType']['id'])) {
             $irhpPermitTypeID = $this->data['application']['irhpPermitType']['id'];
@@ -186,7 +189,7 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
             $irhpPermitTypeID = $this->data['irhpPermitType']['id'];
         }
 
-        if ($irhpPermitTypeID !== \Common\RefData::ECMT_PERMIT_TYPE_ID) {
+        if ($irhpPermitTypeID !== RefData::ECMT_PERMIT_TYPE_ID) {
             $this->conditionalDisplayConfig['add'][LicencesAvailable::DATA_KEY]['key'] = 'hasAvailableBilateralLicences';
         }
 
