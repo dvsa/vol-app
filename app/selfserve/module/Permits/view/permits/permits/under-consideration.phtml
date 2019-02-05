@@ -1,37 +1,69 @@
-<?php
-    use Permits\View\Helper\EcmtSection;
-?>
-
-<div class="row ecmt">
-    <div class="two-thirds">
-        <div class="page-header">
-            <p><a href="<?php echo $this->url('permits') ?>" class="back-link"> <?php echo $this->escapeHtml($this->translate('common.link.back.label')); ?></a></p>
-            <div class="page-header__wrapper">
-                <div class="guidance pre-selected highlight-box">
-                    <p><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.consideration.header')); ?></p>
-                    <h2><?php echo $this->escapeHtml($application['licence']['licNo']); ?></h2>
-                </div>
-            </div>
+<?php echo $this->permitsBackLink('common.link.back.label', Permits\View\Helper\EcmtSection::ROUTE_PERMITS); ?>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <div class="heading-box-grey govuk-!-margin-top-0">
+            <span class="govuk-caption-xl"><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.consideration.header')); ?></span>
+            <h1 class="govuk-heading-xl"><?php echo $this->escapeHtml($application['licence']['licNo']); ?></h1>
         </div>
-        <div class="field">
-            <fieldset id="under-consideration" class="inline" data-group="under-consideration">
-                <?php echo $this->table; ?>
-            </fieldset>
-            <div class="field govuk-hint guidance-blue extra-space large">
-                <?php
-                    echo $this->translate('permits.page.ecmt.consideration.response-date');
-                ?>
+        <h2 class="govuk-heading-l">
+            <?php echo $this->escapeHtml($this->translate('permits.page.ecmt.consideration.table.header')); ?>
+        </h2>
+        <dl class="govuk-summary-list">
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    <?php echo $this->escapeHtml($this->translate('permits.page.ecmt.consideration.application.status')); ?>
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    <?php echo $this->getHelperPluginManager()->getServiceLocator()->get('ViewHelperManager')->get('status')->__invoke($application['status']); ?>
+                </dd>
             </div>
-            <p>
-                <a class="action--primary" href="<?php echo $this->url(EcmtSection::ROUTE_WITHDRAW_APPLICATION, [], [], true); ?>">
-                    <?php echo $this->translate('application.withdraw'); ?>
-                </a>
-            </p>
-            <p>
-                <a href="<?php echo $this->url('permits'); ?>">
-                    <?php echo $this->escapeHtml($this->translate('permits.link.return.to.dashboard')); ?>
-                </a>
-            </p>
-        </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    <?php echo $this->escapeHtml($this->translate('permits.page.ecmt.consideration.permit.type')); ?>
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    <?php echo $application['permitType']['description']; ?>
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    <?php echo $this->escapeHtml($this->translate('permits.page.ecmt.consideration.reference.number')); ?>
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    <?php echo $application['applicationRef']; ?>
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    <?php echo $this->escapeHtml($this->translate('permits.page.ecmt.consideration.application.date')); ?>
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    <?php echo date(\DATE_FORMAT, strtotime($application['dateReceived'])); ?>
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    <?php echo $this->escapeHtml($this->translate('permits.page.ecmt.consideration.permits.required')); ?>
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    <?php echo $application['permitsRequired']; ?>
+                </dd>
+            </div>
+            <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                    <?php echo $this->escapeHtml($this->translate('permits.page.ecmt.consideration.application.fee')); ?>
+                </dt>
+                <dd class="govuk-summary-list__value">
+                    <?php echo $application['ecmtApplicationFeeTotal']; ?>
+                </dd>
+            </div>
+        </dl>
+        <?php echo $this->partial('partials/guidance-blue-component', ['guidance' => 'permits.page.ecmt.consideration.response-date']); ?>
+        <a class="govuk-button" href="<?php echo $this->url(Permits\View\Helper\EcmtSection::ROUTE_WITHDRAW_APPLICATION, [], [], true); ?>">
+            <?php echo $this->translate('application.withdraw'); ?>
+        </a>
+        <a class="govuk-link govuk-!-display-block govuk-body" href="<?php echo $this->url('permits'); ?>">
+            <?php echo $this->escapeHtml($this->translate('permits.link.return.to.dashboard')); ?>
+        </a>
     </div>
 </div>
