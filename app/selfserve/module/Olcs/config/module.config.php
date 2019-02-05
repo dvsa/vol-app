@@ -1260,8 +1260,6 @@ return array(
                 => 'Olcs\Controller\Lva\Adapters\VariationPeopleAdapter',
             'DashboardProcessingService'
                 => 'Olcs\Service\Processing\DashboardProcessingService',
-            Olcs\Service\Surrender\SurrenderStateService::class
-            => Olcs\Service\Surrender\SurrenderStateService::class
         ),
         'factories' => array(
             'CookieBannerListener' => \Olcs\Mvc\CookieBannerListener::class,
