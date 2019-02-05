@@ -19,11 +19,11 @@ class IrhpCheckAnswersController extends AbstractSelfserveController implements 
     ];
 
     protected $dataSourceConfig = [
-        'default' => DataSourceConfig::IRHP_APP,
+        'default' => DataSourceConfig::IRHP_APP_CHECK_ANSWERS,
     ];
 
     protected $conditionalDisplayConfig = [
-        'default' => ConditionalDisplayConfig::IRHP_APP_NOT_SUBMITTED,
+        'default' => ConditionalDisplayConfig::IRHP_APP_CAN_CHECK_ANSWERS,
     ];
 
     protected $formConfig = [
@@ -31,7 +31,7 @@ class IrhpCheckAnswersController extends AbstractSelfserveController implements 
     ];
 
     protected $templateConfig = [
-        'generic' => 'permits/irhp-check-answers'
+        'generic' => 'permits/check-answers'
     ];
 
     protected $templateVarsConfig = [
