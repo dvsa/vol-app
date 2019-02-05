@@ -18,7 +18,7 @@ class SurrenderStateServiceTest extends TestCase
 
         $expectedRoute = 'licence/surrender/' . $page . '/GET';
 
-        $this->assertEquals($expectedRoute, $fetchedRoute);
+        $this->assertSame($expectedRoute, $fetchedRoute);
     }
 
     /**
@@ -27,7 +27,7 @@ class SurrenderStateServiceTest extends TestCase
     public function testHasExpired($surrender, $expected)
     {
         $service = new SurrenderStateService($surrender);
-        $this->assertEquals($expected, $service->hasExpired());
+        $this->assertSame($expected, $service->hasExpired());
     }
 
     /**
@@ -146,14 +146,14 @@ class SurrenderStateServiceTest extends TestCase
     {
         return [
             'application_expired' => [
-                'surredner' => [
+                'surrender' => [
                     'createdOn' => '2019-01-31 14:13:09',
                     'lastModifiedOn' => null
                 ],
                 'expected' => SurrenderStateService::STATE_EXPIRED
             ],
             'goods_disc_count_information_changed' => [
-                'surredner' => [
+                'surrender' => [
                     'status' => [
                         'id' => RefData::SURRENDER_STATUS_DISCS_COMPLETE
                     ],
@@ -176,7 +176,7 @@ class SurrenderStateServiceTest extends TestCase
                 'expected' => SurrenderStateService::STATE_INFORMATION_CHANGED
             ],
             'psv_disc_count_information_changed' => [
-                'surredner' => [
+                'surrender' => [
                     'status' => [
                         'id' => RefData::SURRENDER_STATUS_DISCS_COMPLETE
                     ],
@@ -199,7 +199,7 @@ class SurrenderStateServiceTest extends TestCase
                 'expected' => SurrenderStateService::STATE_INFORMATION_CHANGED
             ],
             'address_information_changed' => [
-                'surredner' => [
+                'surrender' => [
                     'status' => [
                         'id' => RefData::SURRENDER_STATUS_DISCS_COMPLETE
                     ],
@@ -222,7 +222,7 @@ class SurrenderStateServiceTest extends TestCase
                 'expected' => SurrenderStateService::STATE_INFORMATION_CHANGED
             ],
             'not_expired_and_not_changed' => [
-                'surredner' => [
+                'surrender' => [
                     'status' => [
                         'id' => RefData::SURRENDER_STATUS_DISCS_COMPLETE
                     ],
