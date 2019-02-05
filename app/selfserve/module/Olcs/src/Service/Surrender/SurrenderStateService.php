@@ -13,14 +13,10 @@ class SurrenderStateService
 
     private $surrenderData;
 
-    public function __construct(array $surrenderData = null)
+    public function setSurrenderData(array $surrenderData): SurrenderStateService
     {
         $this->surrenderData = $surrenderData;
-    }
-
-    public function setSurrenderData(array $surrenderData)
-    {
-        $this->surrenderData = $surrenderData;
+        return $this;
     }
 
     public function getState(): string

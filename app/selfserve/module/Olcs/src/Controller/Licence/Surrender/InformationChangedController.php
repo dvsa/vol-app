@@ -9,6 +9,7 @@ use Dvsa\Olcs\Transfer\Command\Surrender\Delete;
 use Olcs\Controller\Config\DataSource\DataSourceConfig;
 use Olcs\Form\Model\Form\Surrender\InformationChanged;
 use Olcs\Service\Surrender\SurrenderStateService;
+use Zend\Mvc\MvcEvent;
 
 class InformationChangedController extends AbstractSurrenderController
 {
@@ -42,8 +43,7 @@ class InformationChangedController extends AbstractSurrenderController
 
     public function indexAction()
     {
-        $this->surrenderStateService->setSurrenderData($this->data['surrender']);
-        $this->surrenderState = $this->surrenderStateService->getState();
+        $this->surrenderState = $this->surrenderStateService->setSurrenderData($this->data['surrender'])->getState();
 
         if ($this->surrenderState === SurrenderStateService::STATE_OK) {
             return $this->redirect()->toRoute($this->surrenderStateService->fetchRoute(), [], [], true);
@@ -56,9 +56,7 @@ class InformationChangedController extends AbstractSurrenderController
 
     public function submitAction()
     {
-        $this->surrenderStateService->setSurrenderData($this->data['surrender']);
-
-        if ($this->surrenderStateService->hasExpired()) {
+        if ($this->surrenderStateService->setSurrenderData($this->data['surrender'])->hasExpired()) {
             if (!$this->deleteSurrender() || !$this->createSurrender()) {
                 $this->hlpFlashMsgr->addUnknownError();
                 return $this->redirect()->refresh();

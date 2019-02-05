@@ -166,9 +166,9 @@ class OverviewController extends AbstractController implements MethodToggleAware
         }
 
         $route = 'licence/surrender/information-changed/GET';
-        $stateService = new SurrenderStateService($surrender);
+        $stateService = new SurrenderStateService();
 
-        if ($stateService->getState() === SurrenderStateService::STATE_EXPIRED) {
+        if ($stateService->setSurrenderData($surrender)->getState() === SurrenderStateService::STATE_EXPIRED) {
             $linkText = 'licence.apply-to-surrender';
         } else {
             $linkText = 'licence.continue-surrender-application';
