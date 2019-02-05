@@ -11,14 +11,11 @@ class SurrenderStateServiceTest extends TestCase
     /**
      * @dataProvider fetchRouteDataProvider
      */
-    public function testFetchRoute($surrender, $page)
+    public function testFetchRoute($surrender, $expectedRoute)
     {
-        $service = new SurrenderStateService($surrender);
-        $fetchedRoute = $service->fetchRoute();
-
-        $expectedRoute = 'licence/surrender/' . $page . '/GET';
-
-        $this->assertSame($expectedRoute, $fetchedRoute);
+        $service = new SurrenderStateService();
+        $service->setSurrenderData($surrender);
+        $this->assertSame($expectedRoute, $service->fetchRoute());
     }
 
     /**
@@ -26,7 +23,8 @@ class SurrenderStateServiceTest extends TestCase
      */
     public function testHasExpired($surrender, $expected)
     {
-        $service = new SurrenderStateService($surrender);
+        $service = new SurrenderStateService();
+        $service->setSurrenderData($surrender);
         $this->assertSame($expected, $service->hasExpired());
     }
 
@@ -35,8 +33,8 @@ class SurrenderStateServiceTest extends TestCase
      */
     public function testGetState($surrender, $expectedState)
     {
-        $service = new SurrenderStateService($surrender);
-
+        $service = new SurrenderStateService();
+        $service->setSurrenderData($surrender);
         $this->assertSame($expectedState, $service->getState());
     }
 
@@ -49,7 +47,7 @@ class SurrenderStateServiceTest extends TestCase
                         'id' => RefData::SURRENDER_STATUS_START
                     ]
                 ],
-                'page' => 'review-contact-details'
+                'route' => 'licence/surrender/review-contact-details/GET'
             ],
             'status_contacts_complete' => [
                 'surrender' => [
@@ -57,7 +55,7 @@ class SurrenderStateServiceTest extends TestCase
                         'id' => RefData::SURRENDER_STATUS_CONTACTS_COMPLETE
                     ]
                 ],
-                'page' => 'current-discs'
+                'route' => 'licence/surrender/current-discs/GET'
             ],
             'status_discs_complete' => [
                 'surrender' => [
@@ -65,7 +63,7 @@ class SurrenderStateServiceTest extends TestCase
                         'id' => RefData::SURRENDER_STATUS_DISCS_COMPLETE
                     ]
                 ],
-                'page' => 'operator-licence'
+                'route' => 'licence/surrender/operator-licence/GET'
             ],
             'status_lic_docs_complete_is_IL' => [
                 'surrender' => [
@@ -76,7 +74,7 @@ class SurrenderStateServiceTest extends TestCase
                         'isInternationalLicence' => true
                     ]
                 ],
-                'page' => 'community-licence'
+                'route' => 'licence/surrender/community-licence/GET'
             ],
             'status_lic_docs_complete_is_not_IL' => [
                 'surrender' => [
@@ -87,7 +85,7 @@ class SurrenderStateServiceTest extends TestCase
                         'isInternationalLicence' => false
                     ]
                 ],
-                'page' => 'review'
+                'route' => 'licence/surrender/review/GET'
             ],
             'status_comm_lic_docs_complete' => [
                 'surrender' => [
@@ -95,7 +93,7 @@ class SurrenderStateServiceTest extends TestCase
                         'id' => RefData::SURRENDER_STATUS_COMM_LIC_DOCS_COMPLETE
                     ]
                 ],
-                'page' => 'review'
+                'route' => 'licence/surrender/review/GET'
             ],
             'status_details_confirmed' => [
                 'surrender' => [
@@ -103,8 +101,16 @@ class SurrenderStateServiceTest extends TestCase
                         'id' => RefData::SURRENDER_STATUS_DETAILS_CONFIRMED
                     ]
                 ],
-                'page' => 'review'
+                'route' => 'licence/surrender/review/GET'
             ],
+            'default' => [
+                'surrender' => [
+                    'status' => [
+                        'id' => RefData::SURRENDER_STATUS_SIGNED
+                    ]
+                ],
+                'route' => 'lva-licence'
+            ]
         ];
     }
 
@@ -145,6 +151,16 @@ class SurrenderStateServiceTest extends TestCase
     public function getStateProvider()
     {
         return [
+            'application_started' =>[
+                'surrender' => [
+                    'status' => [
+                        'id' => RefData::SURRENDER_STATUS_START
+                    ],
+                    'createdOn' => date(DATE_ATOM, time()),
+                    'lastModifiedOn' => null
+                ],
+                'expected' => SurrenderStateService::STATE_OK
+            ],
             'application_expired' => [
                 'surrender' => [
                     'createdOn' => '2019-01-31 14:13:09',
@@ -207,7 +223,7 @@ class SurrenderStateServiceTest extends TestCase
                     'discLost' => 10,
                     'discStolen' => null,
                     'createdOn' => '2019-01-31 14:13:09',
-                    'lastModifiedOn' => date(DATE_ATOM, time()-60),
+                    'lastModifiedOn' => date(DATE_ATOM, time() - 60),
                     'addressLastModified' => date(DATE_ATOM, time()),
                     'licence' => [
                         'goodsOrPsv' => [
@@ -220,6 +236,29 @@ class SurrenderStateServiceTest extends TestCase
 
                 ],
                 'expected' => SurrenderStateService::STATE_INFORMATION_CHANGED
+            ],
+            'address_information_not_modified' => [
+                'surrender' => [
+                    'status' => [
+                        'id' => RefData::SURRENDER_STATUS_DISCS_COMPLETE
+                    ],
+                    'discDestroyed' => null,
+                    'discLost' => 10,
+                    'discStolen' => null,
+                    'createdOn' => '2019-01-31 14:13:09',
+                    'lastModifiedOn' => date(DATE_ATOM, time() - 60),
+                    'addressLastModified' => null,
+                    'licence' => [
+                        'goodsOrPsv' => [
+                            'id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE
+                        ],
+                    ],
+                    'goodsDiscsOnLicence' => [
+                        'discCount' => 10
+                    ]
+
+                ],
+                'expected' => SurrenderStateService::STATE_OK
             ],
             'not_expired_and_not_changed' => [
                 'surrender' => [

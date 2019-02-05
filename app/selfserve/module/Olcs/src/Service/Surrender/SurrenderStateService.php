@@ -35,6 +35,9 @@ class SurrenderStateService
 
     public function fetchRoute(): string
     {
+        $prefix = 'licence/surrender/';
+        $suffix = '/GET';
+
         switch ($this->getStatus()) {
             case RefData::SURRENDER_STATUS_START:
                 $page = 'review-contact-details';
@@ -53,11 +56,13 @@ class SurrenderStateService
                 $page = 'review';
                 break;
             default:
-                $page = "review-contact-details";
+                $prefix = '';
+                $page = "lva-licence";
+                $suffix = '';
                 break;
         }
 
-        return 'licence/surrender/' . $page . '/GET';
+        return $prefix . $page . $suffix;
     }
 
     public function hasExpired(): bool
