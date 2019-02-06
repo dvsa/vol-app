@@ -13,8 +13,7 @@ use Common\Util\FlashMessengerTrait;
 use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees;
 use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 use Dvsa\Olcs\Transfer\Query\Permits\ById;
-use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermitApplication;
-use Dvsa\Olcs\Transfer\Query\IrhpApplication\GetList as IrhpApplication;
+use Dvsa\Olcs\Transfer\Query\IrhpApplication\GetAllByOrganisation;
 
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtCountries;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtPermitsRequired;
@@ -73,48 +72,31 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
             return $view;
         }
 
-        // Get IRHP Applications
+        // Get IRHP Applications and ECMT Permit Applications
         $response = $this->handleQuery(
-            IrhpApplication::create(
+            GetAllByOrganisation::create(
                 [
-                    'order' => 'DESC',
                     'organisation' => $this->getCurrentOrganisationId(),
-                    'statusIds' => [
-                        RefData::PERMIT_APP_STATUS_VALID,
+                    'irhpApplicationStatuses' => [
                         RefData::PERMIT_APP_STATUS_NOT_YET_SUBMITTED,
-                    ]
+                        RefData::PERMIT_APP_STATUS_UNDER_CONSIDERATION,
+                        RefData::PERMIT_APP_STATUS_AWAITING_FEE,
+                        RefData::PERMIT_APP_STATUS_FEE_PAID,
+                        RefData::PERMIT_APP_STATUS_ISSUING,
+                        RefData::PERMIT_APP_STATUS_VALID,
+                    ],
+                    'sort' => 'licNo, typeDescription, id',
+                    'order' => 'ASC, ASC, ASC',
                 ]
             )
         );
         $data = $response->getResult();
         $results = isset($data['results']) ? $data['results'] : [];
 
-        // Include ECMT Permit Applications
-        $ecmtQuery = EcmtPermitApplication::create(
-            [
-                'order' => 'DESC',
-                'organisation' => $this->getCurrentOrganisationId(),
-                'statusIds' => [
-                    RefData::PERMIT_APP_STATUS_NOT_YET_SUBMITTED,
-                    RefData::PERMIT_APP_STATUS_UNDER_CONSIDERATION,
-                    RefData::PERMIT_APP_STATUS_AWAITING_FEE,
-                    RefData::PERMIT_APP_STATUS_FEE_PAID,
-                    RefData::PERMIT_APP_STATUS_ISSUING,
-                    RefData::PERMIT_APP_STATUS_VALID,
-                ],
-            ]
-        );
-        $ecmtResponse = $this->handleQuery($ecmtQuery);
-        $ecmtData = $ecmtResponse->getResult();
-        $results = array_merge(
-            isset($data['results']) ? $data['results'] : [],
-            $ecmtData['results']
-        );
-
         $applicationData = $issuedData = [];
 
         foreach ($results as $item) {
-            if ($item['status']['id'] === RefData::PERMIT_APP_STATUS_VALID) {
+            if ($item['statusId'] === RefData::PERMIT_APP_STATUS_VALID) {
                 $issuedData[] = $item;
             } else {
                 $applicationData[] = $item;
@@ -122,7 +104,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         }
 
         $table = $this->getServiceLocator()->get('Table');
-        $issuedTable = $table->prepareTable($this->issuedTableName, $issuedData);
+        $issuedTable = $table->prepareTable($this->issuedTableName, $this->alterDataForTable($issuedData));
         $applicationsTable = $table->prepareTable($this->applicationsTableName, $applicationData);
 
         $view->setVariable('isEligible', $eligibleForPermits);
@@ -132,6 +114,35 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $view->setVariable('applicationsTable', $applicationsTable);
 
         return $view;
+    }
+
+    /**
+     * Alter data for table
+     *
+     * @param array $data Data
+     *
+     * @return array
+     */
+    private function alterDataForTable(array $data)
+    {
+        $keys = [];
+
+        foreach ($data as $key => $item) {
+            if ((int)$item['typeId'] === RefData::IRHP_BILATERAL_PERMIT_TYPE_ID) {
+                // group applications into one row per licence
+                if (isset($keys[$item['licenceId']])) {
+                    // add number of permits required to the existing row
+                    $data[$keys[$item['licenceId']]]['permitsRequired'] += $item['permitsRequired'];
+
+                    // remove this line altogether
+                    unset($data[$key]);
+                } else {
+                    $keys[$item['licenceId']] = $key;
+                }
+            }
+        }
+
+        return $data;
     }
 
     public function restrictedCountriesAction()
