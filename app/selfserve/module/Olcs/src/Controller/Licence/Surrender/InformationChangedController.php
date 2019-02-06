@@ -4,8 +4,12 @@ namespace Olcs\Controller\Licence\Surrender;
 
 use Common\Form\Form;
 use Common\RefData;
+use Dvsa\Olcs\Transfer\Command\Surrender\Create;
+use Dvsa\Olcs\Transfer\Command\Surrender\Delete;
 use Olcs\Controller\Config\DataSource\DataSourceConfig;
 use Olcs\Form\Model\Form\Surrender\InformationChanged;
+use Olcs\Service\Surrender\SurrenderStateService;
+use Zend\Mvc\MvcEvent;
 
 class InformationChangedController extends AbstractSurrenderController
 {
@@ -22,17 +26,44 @@ class InformationChangedController extends AbstractSurrenderController
         'default' => 'licence/surrender-information-changed'
     ];
 
-    protected $dataSourceConfig = [
-        'default' => DataSourceConfig::SURRENDER
-    ];
+    /**
+     * @var SurrenderStateService
+     */
+    private $surrenderStateService;
+
+    /**
+     * @var string
+     */
+    private $surrenderState;
+
+    public function __construct()
+    {
+        $this->surrenderStateService = new SurrenderStateService();
+    }
 
     public function indexAction()
     {
-        if (!$this->hasApplicationExpired() && !$this->hasDiscCountChanged()) {
-            return $this->redirect()->toRoute('licence/surrender/review-contact-details/GET', [], [], true);
+        $this->surrenderState = $this->surrenderStateService->setSurrenderData($this->data['surrender'])->getState();
+
+        if ($this->surrenderState === SurrenderStateService::STATE_OK) {
+            return $this->redirect()->toRoute($this->surrenderStateService->fetchRoute(), [], [], true);
         }
 
+        $this->form = $this->alterForm($this->form);
+
         return $this->createView();
+    }
+
+    public function submitAction()
+    {
+        if ($this->surrenderStateService->setSurrenderData($this->data['surrender'])->hasExpired()) {
+            if (!$this->deleteSurrender() || !$this->createSurrender()) {
+                $this->hlpFlashMsgr->addUnknownError();
+                return $this->redirect()->refresh();
+            }
+        }
+
+        return $this->redirect()->toRoute('licence/surrender/review-contact-details/GET', [], [], true);
     }
 
     protected function getViewVariables(): array
@@ -53,7 +84,7 @@ class InformationChangedController extends AbstractSurrenderController
             return 'markup-licence-surrender-information-changed-content-expired';
         }
 
-        if ($this->hasDiscCountChanged()) {
+        if ($this->hasInformationChanged()) {
             return 'markup-licence-surrender-information-changed-content-changed';
         }
     }
@@ -62,7 +93,7 @@ class InformationChangedController extends AbstractSurrenderController
     {
         if ($this->hasApplicationExpired()) {
             $form = $this->alterForExpiry($form);
-        } elseif ($this->hasDiscCountChanged()) {
+        } elseif ($this->hasInformationChanged()) {
             $form = $this->alterForInformationChanged($form);
         }
         return $form;
@@ -82,11 +113,36 @@ class InformationChangedController extends AbstractSurrenderController
 
     protected function hasApplicationExpired(): bool
     {
-        return true;
+        return $this->surrenderState === SurrenderStateService::STATE_EXPIRED;
     }
 
-    protected function hasDiscCountChanged(): bool
+    protected function hasInformationChanged(): bool
     {
-        return true;
+        return $this->surrenderState === SurrenderStateService::STATE_INFORMATION_CHANGED;
+    }
+
+    protected function deleteSurrender()
+    {
+        try {
+            $response = $this->handleCommand(Delete::create(['id' => $this->licenceId]));
+            return $response->isOk();
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    protected function createSurrender()
+    {
+        try {
+            $response = $this->handleCommand(Create::create(['id' => $this->licenceId]));
+            if ($response->isOk()) {
+                $result = $response->getResult();
+                if (!empty($result)) {
+                    return true;
+                }
+            }
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 }

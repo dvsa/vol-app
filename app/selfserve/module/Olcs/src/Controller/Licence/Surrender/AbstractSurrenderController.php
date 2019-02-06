@@ -6,6 +6,7 @@ use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Surrender\Update;
 use Common\Util;
 use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence as SurrenderQuery;
+use Olcs\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Olcs\Controller\AbstractSelfserveController;
@@ -21,6 +22,10 @@ abstract class AbstractSurrenderController extends AbstractSelfserveController i
         'default' => FeatureToggleConfig::SELFSERVE_SURRENDER_ENABLED
     ];
 
+    protected $dataSourceConfig = [
+        'default' => DataSourceConfig::SURRENDER
+    ];
+
     protected $pageTemplate = 'pages/licence-surrender';
 
     /** @var  \Common\Service\Helper\FormHelperService */
@@ -31,9 +36,7 @@ abstract class AbstractSurrenderController extends AbstractSelfserveController i
 
     protected $licenceId;
 
-
     protected $licence;
-
 
     public function onDispatch(MvcEvent $e)
     {
