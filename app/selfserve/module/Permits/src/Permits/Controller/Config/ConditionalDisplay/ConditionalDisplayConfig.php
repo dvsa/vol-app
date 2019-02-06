@@ -33,7 +33,7 @@ class ConditionalDisplayConfig
             'view' => [
                 'template' => 'permits/not-eligible',
             ],
-            'key' => 'hasAvailableLicences',
+            'key' => 'hasAvailableEcmtLicences',
             'value' => true
         ]
     ];

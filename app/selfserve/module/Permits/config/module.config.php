@@ -593,7 +593,7 @@ return [
                       'route'    => '[/:id]/licence[/]',
                       'defaults' => [
                           'controller'    => LicenceController::class,
-                          'action'        => 'ecmt',
+                          'action'        => 'questionEcmt',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',

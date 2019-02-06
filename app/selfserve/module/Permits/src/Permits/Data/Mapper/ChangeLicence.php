@@ -27,7 +27,7 @@ class ChangeLicence
         $isBilateral = $isEcmt ? false : $allData['application']['irhpPermitType']['name']['id'] === 'permit_annual_bilateral';
 
 
-        if (!$data['hasAvailableLicences']) {
+        if ($isEcmt && !$data['hasAvailableEcmtLicences'] || $isBilateral && !$data['hasAvailableBilateralLicences']) {
             throw new BadRequestException('No available licences.');
         }
 
