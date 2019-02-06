@@ -105,6 +105,14 @@ class ConditionalDisplayConfig
         ],
     ];
 
+    const IRHP_APP_CAN_CHECK_ANSWERS = [
+        IrhpAppDataSource::DATA_KEY => [
+            'key' => 'canCheckAnswers',
+            'value' => true,
+            'route' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
+        ],
+    ];
+
     const IRHP_APP_CAN_BE_CANCELLED = [
         IrhpAppDataSource::DATA_KEY => [
             'key' => 'canBeCancelled',

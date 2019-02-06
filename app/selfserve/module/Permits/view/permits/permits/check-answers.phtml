@@ -24,7 +24,11 @@
                         } ?>
                     </dd>
                     <dd class="app-check-your-answers__change">
-                        <?php echo $this->changeAnswerLink($answer['route'], $this->escapeHtml($this->translate($answer['question']))); ?>
+                        <?php
+                        if(isset($answer['route'])) {
+                            echo $this->changeAnswerLink($answer['route'], $this->escapeHtml($this->translate($answer['question'])));
+                        }
+                        ?>
                     </dd>
                 </div>
             <?php } ?>
