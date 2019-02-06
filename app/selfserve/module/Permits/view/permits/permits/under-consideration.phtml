@@ -8,9 +8,7 @@
         <h2 class="govuk-heading-l">
             <?php echo $this->escapeHtml($this->translate('permits.page.ecmt.consideration.title')); ?>
         </h2>
-        <dl class="govuk-summary-list">
-            <?php echo $this->partialLoop('partials/summary-list-row.phtml', $summaryData) ?>
-        </dl>
+        <?php echo $this->partial('partials/summary-list', ['data' => $summaryData]); ?>
         <?php echo $this->partial('partials/guidance-blue-component', ['guidance' => 'permits.page.ecmt.consideration.response-date']); ?>
         <a class="govuk-button" href="<?php echo $this->url(Permits\View\Helper\EcmtSection::ROUTE_WITHDRAW_APPLICATION, [], [], true); ?>">
             <?php echo $this->translate('application.withdraw'); ?>
