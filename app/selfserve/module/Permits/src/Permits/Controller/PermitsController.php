@@ -322,51 +322,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         );
     }
 
-    public function sectorAction()
-    {
-        $id = $this->params()->fromRoute('id', -1);
-
-        //Create form from annotations
-        $form = $this->getForm('SpecialistHaulageForm');
-
-        $setDefaultValues = true;
-
-        $data = $this->params()->fromPost();
-
-        if (is_array($data) && array_key_exists('Submit', $data)) {
-            //Validate
-            $form->setData($data);
-
-            if ($form->isValid()) {
-                $command = UpdateSector::create(['id' => $id, 'sector' => $data['Fields']['SectorList']]);
-                $this->handleCommand($command);
-
-                return $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_CHECK_ANSWERS);
-            } else {
-                //Custom Error Message
-                $form->get('Fields')
-                    ->get('SectorList')
-                    ->setMessages(['error.messages.sector.list']);
-
-                $setDefaultValues = false;
-            }
-        }
-
-        // Read data
-        $application = $this->getApplication($id);
-
-        if ($setDefaultValues && isset($application) && isset($application['sectors'])) {
-            //Format results from DB before setting values on form
-            $selectedValue = $application['sectors']['id'];
-
-            $form->get('Fields')
-                ->get('SectorList')
-                ->setValue($selectedValue);
-        }
-
-        return array('form' => $form, 'id' => $id, 'ref' => $application['applicationRef']);
-    }
-
     public function permitsRequiredAction()
     {
         $id = $this->params()->fromRoute('id', -1);
@@ -466,51 +421,43 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
 
         $ecmtPermitFees = $this->getEcmtPermitFees();
         $ecmtApplicationFee = $ecmtPermitFees['fee'][$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE]['fixedValue'];
-        $ecmtApplicationFeeTotal = $ecmtApplicationFee * $application['permitsRequired'];
 
         /**
-         * @todo status view helper and table config shouldn't be in the controller
          * @var \Common\View\Helper\Status $statusHelper
          */
         $statusHelper = $this->getServiceLocator()->get('ViewHelperManager')->get('status');
 
-        $tableData = array(
-            'results' => array(
-                0 => array(
-                    'applicationDetailsTitle' => 'permits.page.ecmt.consideration.application.status',
-                    'applicationDetailsAnswer' => $statusHelper->__invoke($application['status'])
-                ),
-                1 => array(
-                    'applicationDetailsTitle' => 'permits.page.ecmt.consideration.permit.type',
-                    'applicationDetailsAnswer' => $application['permitType']['description']
-                ),
-                2 => array(
-                    'applicationDetailsTitle' => 'permits.page.ecmt.consideration.reference.number',
-                    'applicationDetailsAnswer' => $application['applicationRef']
-                ),
-                3 => array(
-                    'applicationDetailsTitle' => 'permits.page.ecmt.consideration.application.date',
-                    'applicationDetailsAnswer' => date(\DATE_FORMAT, strtotime($application['dateReceived']))
-                ),
-                4 => array(
-                    'applicationDetailsTitle' => 'permits.page.ecmt.consideration.permits.required',
-                    'applicationDetailsAnswer' => $application['permitsRequired']
-                ),
-                5 => array(
-                    'applicationDetailsTitle' => 'permits.page.ecmt.consideration.application.fee',
-                    'applicationDetailsAnswer' => '£' . $ecmtApplicationFeeTotal
-                )
-            )
-        );
-
-        /** @var \Common\Service\Table\TableBuilder $table */
-        $table = $this->getServiceLocator()
-            ->get('Table')
-            ->prepareTable('under-consideration', $tableData);
+        $summaryData = [
+            0 => [
+                'key' => 'permits.page.ecmt.consideration.application.status',
+                'value' => $statusHelper->__invoke($application['status']),
+                'disableHtmlEscape' => true
+            ],
+            1 => [
+                'key' => 'permits.page.ecmt.consideration.permit.type',
+                'value' => $application['permitType']['description']
+            ],
+            2 => [
+                'key' => 'permits.page.ecmt.consideration.reference.number',
+                'value' => $application['applicationRef']
+            ],
+            3 => [
+                'key' => 'permits.page.ecmt.consideration.application.date',
+                'value' => date(\DATE_FORMAT, strtotime($application['dateReceived']))
+            ],
+            4 => [
+                'key' => 'permits.page.ecmt.consideration.permits.required',
+                'value' => $application['permitsRequired']
+            ],
+            5 => [
+                'key' => 'permits.page.ecmt.consideration.application.fee',
+                'value' => '£' . $ecmtApplicationFee * $application['permitsRequired']
+            ]
+        ];
 
         $view = new ViewModel();
         $view->setVariable('application', $application);
-        $view->setVariable('table', $table);
+        $view->setVariable('summaryData', $summaryData);
 
         return $view;
     }
