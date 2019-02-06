@@ -12,11 +12,6 @@ return [
                 'Apply' => ['class' => 'action--primary']
             ],
         ],
-        'paginate' => [
-            'limit' => [
-                'options' => [10, 25, 50],
-            ],
-        ],
     ],
     'columns' => [
         [
@@ -30,8 +25,7 @@ return [
         ],
         [
             'title' => 'dashboard-table-permit-application-type',
-            'name' => 'permitType',
-            'formatter' => 'RefData'
+            'name' => 'typeDescription',
         ],
         [
             'title' => 'Rec\'d Date',
@@ -41,7 +35,20 @@ return [
         [
             'title' => 'dashboard-table-permit-application-status',
             'name' => 'status',
-            'formatter' => 'RefDataStatus'
+            'formatter' => function ($row) {
+                return $this->callFormatter(
+                    [
+                        'name' => 'status',
+                        'formatter' => 'RefDataStatus',
+                    ],
+                    [
+                        'status' => [
+                            'id' => $row['statusId'],
+                            'description' => $row['statusDescription'],
+                        ],
+                    ]
+                );
+            }
         ]
     ],
 ];
