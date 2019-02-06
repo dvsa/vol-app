@@ -419,7 +419,8 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $summaryData = [
             0 => [
                 'key' => 'permits.page.ecmt.consideration.application.status',
-                'value' => $statusHelper->__invoke($application['status'])
+                'value' => $statusHelper->__invoke($application['status']),
+                'disableHtmlEscape' => true
             ],
             1 => [
                 'key' => 'permits.page.ecmt.consideration.permit.type',
