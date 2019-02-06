@@ -36,13 +36,6 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
     LeftViewProvider,
     ToggleAwareInterface
 {
-    const FEE_TYPE_ECMT_APP = 'IRHPGVAPP';
-    const FEE_TYPE_ECMT_ISSUE = 'IRHPGVISSUE';
-
-    const ECMT_ANNUAL_PERMIT_TYPE_ID = 1;
-    const ECMT_SHORT_TERM_PERMIT_TYPE_ID = 2;
-    const ECMT_REMOVAL_PERMIT_TYPE_ID = 3;
-
     protected $toggleConfig = [
         'default' => [
             FeatureToggle::BACKEND_ECMT
@@ -212,7 +205,7 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
             // Temporary redirect to manually built application forms, when other 2 ECMT manual builds
             // are done this switch can be added too, when Generic forms system done will just redirect there passing ID
             switch ($permitTypeId) {
-                case self::ECMT_ANNUAL_PERMIT_TYPE_ID:
+                case RefData::ECMT_PERMIT_TYPE_ID:
                     return $this->redirect()
                         ->toRouteAjax(
                             'licence/permits/add',
@@ -389,7 +382,7 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
     {
         $response = $this->handleQuery(ItemDto::create(['id' => $this->params()->fromRoute('permitid')]));
         $irhpPermit = $response->getResult();
-        $fee = $this->getOutstandingFee($irhpPermit['fees'], self::FEE_TYPE_ECMT_APP);
+        $fee = $this->getOutstandingFee($irhpPermit['fees'], RefData::IRHP_GV_APPLICATION_FEE_TYPE);
         // The application canBeSubmitted, check for an outstanding fee and redirect ICW User to pay screen
         if ($fee) {
             return $this->redirect()
@@ -482,7 +475,7 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
     {
         $response = $this->handleQuery(ItemDto::create(['id' => $this->params()->fromRoute('permitid')]));
         $irhpPermit = $response->getResult();
-        $fee = $this->getOutstandingFee($irhpPermit['fees'], self::FEE_TYPE_ECMT_ISSUE);
+        $fee = $this->getOutstandingFee($irhpPermit['fees'], RefData::IRHP_GV_ISSUE_FEE_TYPE);
         if ($fee) {
             return $this->redirect()
                 ->toRoute(
