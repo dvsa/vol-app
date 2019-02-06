@@ -2,12 +2,19 @@
 
 namespace PermitsTest\Data\Mapper;
 
-use Mockery as m;
+use Common\Exception\ResourceNotFoundException;
 use Permits\Data\Mapper\IrhpCheckAnswers;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
 class IrhpCheckAnswersTest extends TestCase
 {
+    public function testMapForDisplayError()
+    {
+        $this->expectException(ResourceNotFoundException::class);
+        $this->expectExceptionMessage('No IRHP answers found');
+        $inputData = [];
+        IrhpCheckAnswers::mapForDisplay($inputData);
+    }
 
     public function testMapForDisplay()
     {
@@ -25,36 +32,52 @@ class IrhpCheckAnswersTest extends TestCase
                     'trafficArea' => [ 'name' => 'North East of England' ]
                 ],
             'status' => ['description' => 'Not Yet Submitted'],
-            'irhpPermitApplications' => [],
+            'irhpPermitApplications' => [
+                [
+                    'id' => 7,
+                    'irhpPermitWindow' => [
+                        'endDate' => '2019-06-29T00:00:00+0000',
+                        'id' => 10,
+                        'irhpPermitStock' => [
+                            'country' => [
+                                'countryDesc' => 'Germany'
+                            ],
+                            'validTo' => '2019-12-31'
+                        ]
+                    ],
+                    'permitsRequired' => 12,
+                ]
+            ],
             'applicationRef' =>'OB1234567 / 1',
             'canCheckAnswers' => 1,
-            'permitsRequired' => 12,
         ];
 
         $outputData['canCheckAnswers'] = 1;
         $outputData['answers'] = [
-            0 => [
+            [
                 'question' => 'permits.page.fee.permit.type',
                 'route' => null,
                 'answer' => 'Annual Bilateral (EU and EEA)'
             ],
-            1 => [
+            [
                 'question' => 'permits.check-answers.page.question.licence',
                 'route' => 'permits/application/licence',
                 'answer' =>[
-                    0 => 'OB1234567',
-                    1 => 'North East of England'
+                    'OB1234567',
+                    'North East of England'
                 ]
             ],
-            2 => [
+            [
                 'question' => 'permits.irhp.application.question.countries',
                 'route' => 'permits/application/countries',
-                'answer' => ''
+                'answer' => 'Germany'
             ],
-            3 => [
+            [
                 'question' => 'permits.irhp.application.question.no-of-permits',
                 'route' => 'permits/application/no-of-permits',
-                'answer' => []
+                'answer' => [
+                    '12 permits for Germany in 2019'
+                ]
             ],
         ];
         $outputData['applicationRef'] = $inputData['applicationRef'];
