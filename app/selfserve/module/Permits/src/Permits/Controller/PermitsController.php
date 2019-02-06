@@ -410,10 +410,42 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
 
         $ecmtPermitFees = $this->getEcmtPermitFees();
         $ecmtApplicationFee = $ecmtPermitFees['fee'][$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE]['fixedValue'];
-        $application['ecmtApplicationFeeTotal'] = '£' . $ecmtApplicationFee * $application['permitsRequired'];
+
+        /**
+         * @var \Common\View\Helper\Status $statusHelper
+         */
+        $statusHelper = $this->getServiceLocator()->get('ViewHelperManager')->get('status');
+
+        $summaryData = [
+            0 => [
+                'key' => 'permits.page.ecmt.consideration.application.status',
+                'value' => $statusHelper->__invoke($application['status'])
+            ],
+            1 => [
+                'key' => 'permits.page.ecmt.consideration.permit.type',
+                'value' => $application['permitType']['description']
+            ],
+            2 => [
+                'key' => 'permits.page.ecmt.consideration.reference.number',
+                'value' => $application['applicationRef']
+            ],
+            3 => [
+                'key' => 'permits.page.ecmt.consideration.application.date',
+                'value' => date(\DATE_FORMAT, strtotime($application['dateReceived']))
+            ],
+            4 => [
+                'key' => 'permits.page.ecmt.consideration.permits.required',
+                'value' => $application['permitsRequired']
+            ],
+            5 => [
+                'key' => 'permits.page.ecmt.consideration.application.fee',
+                'value' => '£' . $ecmtApplicationFee * $application['permitsRequired']
+            ]
+        ];
 
         $view = new ViewModel();
         $view->setVariable('application', $application);
+        $view->setVariable('summaryData', $summaryData);
 
         return $view;
     }

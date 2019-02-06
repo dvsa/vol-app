@@ -9,54 +9,7 @@
             <?php echo $this->escapeHtml($this->translate('permits.page.ecmt.consideration.title')); ?>
         </h2>
         <dl class="govuk-summary-list">
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    <?php echo $this->escapeHtml($this->translate('permits.page.ecmt.consideration.application.status')); ?>
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    <?php echo $this->getHelperPluginManager()->getServiceLocator()->get('ViewHelperManager')->get('status')->__invoke($application['status']); ?>
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    <?php echo $this->escapeHtml($this->translate('permits.page.ecmt.consideration.permit.type')); ?>
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    <?php echo $application['permitType']['description']; ?>
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    <?php echo $this->escapeHtml($this->translate('permits.page.ecmt.consideration.reference.number')); ?>
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    <?php echo $application['applicationRef']; ?>
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    <?php echo $this->escapeHtml($this->translate('permits.page.ecmt.consideration.application.date')); ?>
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    <?php echo date(\DATE_FORMAT, strtotime($application['dateReceived'])); ?>
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    <?php echo $this->escapeHtml($this->translate('permits.page.ecmt.consideration.permits.required')); ?>
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    <?php echo $application['permitsRequired']; ?>
-                </dd>
-            </div>
-            <div class="govuk-summary-list__row">
-                <dt class="govuk-summary-list__key">
-                    <?php echo $this->escapeHtml($this->translate('permits.page.ecmt.consideration.application.fee')); ?>
-                </dt>
-                <dd class="govuk-summary-list__value">
-                    <?php echo $application['ecmtApplicationFeeTotal']; ?>
-                </dd>
-            </div>
+            <?php echo $this->partialLoop('partials/summary-list-row.phtml', $summaryData) ?>
         </dl>
         <?php echo $this->partial('partials/guidance-blue-component', ['guidance' => 'permits.page.ecmt.consideration.response-date']); ?>
         <a class="govuk-button" href="<?php echo $this->url(Permits\View\Helper\EcmtSection::ROUTE_WITHDRAW_APPLICATION, [], [], true); ?>">
