@@ -25,7 +25,7 @@ class CommunityLicenceStolen
      *      "options":{
      *          "context_field": "communityLicenceDocument",
      *          "context_values": {"stolen"},
-     *          "inject_post_data" : "communityLicence->communityLicenceDocument",
+     *          "inject_post_data" : "communityLicenceDocument->communityLicenceDocument",
      *           "validators": {
      *              {
      *                  "name": "StringLength",
