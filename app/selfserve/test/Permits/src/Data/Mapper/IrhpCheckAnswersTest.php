@@ -46,6 +46,34 @@ class IrhpCheckAnswersTest extends TestCase
                         ]
                     ],
                     'permitsRequired' => 12,
+                ],
+                [
+                    'id' => 8,
+                    'irhpPermitWindow' => [
+                        'endDate' => '2019-06-29T00:00:00+0000',
+                        'id' => 11,
+                        'irhpPermitStock' => [
+                            'country' => [
+                                'countryDesc' => 'Germany'
+                            ],
+                            'validTo' => '2020-12-31'
+                        ]
+                    ],
+                    'permitsRequired' => 2,
+                ],
+                [
+                    'id' => 9,
+                    'irhpPermitWindow' => [
+                        'endDate' => '2019-06-29T00:00:00+0000',
+                        'id' => 11,
+                        'irhpPermitStock' => [
+                            'country' => [
+                                'countryDesc' => 'Croatia'
+                            ],
+                            'validTo' => '2020-12-31'
+                        ]
+                    ],
+                    'permitsRequired' => 6,
                 ]
             ],
             'applicationRef' =>'OB1234567 / 1',
@@ -70,13 +98,15 @@ class IrhpCheckAnswersTest extends TestCase
             [
                 'question' => 'permits.irhp.application.question.countries',
                 'route' => 'permits/application/countries',
-                'answer' => 'Germany'
+                'answer' => 'Germany, Croatia'
             ],
             [
                 'question' => 'permits.irhp.application.question.no-of-permits',
                 'route' => 'permits/application/no-of-permits',
                 'answer' => [
-                    '12 permits for Germany in 2019'
+                    '12 permits for Germany in 2019',
+                    '2 permits for Germany in 2020',
+                    '6 permits for Croatia in 2020'
                 ]
             ],
         ];
