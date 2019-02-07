@@ -82,7 +82,7 @@ class PrintSignReturnController extends AbstractSurrenderController
             [
                 'pageTitle' => 'licence.surrender.print-sign-return.page.title',
                 'returnLinkText' => 'return-home-button-text',
-                'returnLink' => $this->getBackLink('lva-licence'),
+                'returnLink' => $this->getBackLink('dashboard'),
                 'printLink' => $this->getBackLink('licence/surrender/print-sign-return-print/GET'),
             ];
     }
