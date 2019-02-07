@@ -72,7 +72,7 @@ class ConditionalDisplayConfig
             'value' => true
         ],
         LicencesAvailable::DATA_KEY => [
-            'key' => 'hasAvailableLicences',
+            'key' => 'hasAvailableBilateralLicences',
             'value' => true,
             'route' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
         ]
@@ -84,7 +84,7 @@ class ConditionalDisplayConfig
             'value' => true
         ],
         LicencesAvailable::DATA_KEY => [
-            'key' => 'hasAvailableLicences',
+            'key' => 'hasAvailableEcmtLicences',
             'value' => true,
             'route' => EcmtSection::ROUTE_APPLICATION_OVERVIEW,
         ]
