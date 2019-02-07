@@ -45,7 +45,7 @@ class SurrenderStateService
                 $page = 'operator-licence';
                 break;
             case RefData::SURRENDER_STATUS_LIC_DOCS_COMPLETE:
-                $page = $this->surrenderData['licence']['isInternationalLicence'] ? 'community-licence' : 'review';
+                $page = $this->surrenderData['licence']['licenceType']['id'] === RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL ? 'community-licence' : 'review';
                 break;
             case RefData::SURRENDER_STATUS_COMM_LIC_DOCS_COMPLETE:
             case RefData::SURRENDER_STATUS_DETAILS_CONFIRMED:
@@ -77,6 +77,10 @@ class SurrenderStateService
             return false;
         }
 
+        if (!$this->hasNotEnteredDiscInformation() && ($this->getDiscsOnSurrender() !== $this->getDiscsOnLicence())) {
+            return true;
+        }
+
         $surrenderModified = $this->getSurrenderCreatedOrModifiedOn();
 
         if (is_null($addressModified = $this->getAddressLastModifiedOn())) {
@@ -84,11 +88,6 @@ class SurrenderStateService
         } elseif ($addressModified > $surrenderModified) {
             return true;
         }
-
-        if (!$this->hasNotEnteredDiscInformation() && ($this->getDiscsOnSurrender() !== $this->getDiscsOnLicence())) {
-            return true;
-        }
-
         return false;
     }
 

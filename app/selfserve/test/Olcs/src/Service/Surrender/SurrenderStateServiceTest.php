@@ -71,7 +71,9 @@ class SurrenderStateServiceTest extends TestCase
                         'id' => RefData::SURRENDER_STATUS_LIC_DOCS_COMPLETE
                     ],
                     'licence' => [
-                        'isInternationalLicence' => true
+                        'licenceType' => [
+                            'id' => RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL
+                        ]
                     ]
                 ],
                 'route' => 'licence/surrender/community-licence/GET'
@@ -82,7 +84,9 @@ class SurrenderStateServiceTest extends TestCase
                         'id' => RefData::SURRENDER_STATUS_LIC_DOCS_COMPLETE
                     ],
                     'licence' => [
-                        'isInternationalLicence' => false
+                        'licenceType' => [
+                            'id' => RefData::LICENCE_TYPE_STANDARD_NATIONAL
+                        ]
                     ]
                 ],
                 'route' => 'licence/surrender/review/GET'
