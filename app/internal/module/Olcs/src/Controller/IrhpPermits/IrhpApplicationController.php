@@ -47,8 +47,6 @@ class IrhpApplicationController extends AbstractInternalController implements
     // Maps the route parameter irhpPermitId to the "id" parameter in the the ById (ItemDTO) query.
     protected $itemParams = ['id' => 'irhpAppId'];
 
-    protected $deleteParams = ['id' => 'irhpAppId'];
-
     // Maps the licence route parameter into the ListDTO as licence => value
     protected $listVars = ['licence'];
     protected $listDto = ListDto::class;
@@ -72,6 +70,10 @@ class IrhpApplicationController extends AbstractInternalController implements
             'action' => 'index',
         ],
         'cancel' => [
+            'route' => 'licence/permits',
+            'action' => 'index',
+        ],
+        'submit' => [
             'route' => 'licence/permits',
             'action' => 'index',
         ]
@@ -110,13 +112,61 @@ class IrhpApplicationController extends AbstractInternalController implements
      */
     public function submitAction()
     {
-        return $this->confirmCommand(
-            new ConfirmItem($this->deleteParams),
-            SubmitApplication::class,
-            'Are you sure?',
-            'Submit Application. Are you sure?',
-            'IRHP Application Submitted'
+        $response = $this->handleQuery(ItemDto::create(['id' => $this->params()->fromRoute('irhpAppId')]));
+        $irhpPermit = $response->getResult();
+
+        $feeIds = $this->getOutstandingFeeIds(
+            $irhpPermit['fees'],
+            [
+                RefData::IRHP_GV_APPLICATION_FEE_TYPE,
+                RefData::IRHP_GV_ISSUE_FEE_TYPE
+            ]
         );
+
+        // The application canBeSubmitted, check for an outstanding fee and redirect ICW User to pay screen
+        if (!empty($feeIds)) {
+            return $this->redirect()
+                ->toRoute(
+                    'licence/irhp-application-fees/fee_action',
+                    [
+                        'action' => 'pay-fees',
+                        'fee' => implode(',', $feeIds),
+                        'licence' => $this->params()->fromRoute('licence'),
+                        'irhpAppId' => $this->params()->fromRoute('irhpAppId')
+                    ],
+                    [],
+                    false
+                );
+        } else {
+            // There was no outstanding fee for this application (already been paid) but it is submitable to call handler
+            return $this->confirmCommand(
+                new ConfirmItem($this->itemParams),
+                SubmitApplication::class,
+                'Are you sure?',
+                'Submit Application. Are you sure?',
+                'IRHP Application Submitted'
+            );
+        }
+    }
+
+    /**
+     * check for any outstanding fees of the specified types, return the IDs to pass to Fees controller to pay.
+     *
+     * @param array $fees Array of fees associated with the application
+     * @param array $feeTypes Array of fee types of which we need to know if any are outstanding
+     *
+     * @return array
+     */
+    protected function getOutstandingFeeIds(array $fees, array $feeTypes)
+    {
+        $feeIds = [];
+        foreach ($fees as $key => $fee) {
+            if ($fee['feeStatus']['id'] === RefData::FEE_STATUS_OUTSTANDING
+                && in_array($fee['feeType']['feeType']['id'], $feeTypes)) {
+                $feeIds[] = $fee['id'];
+            }
+        }
+        return $feeIds;
     }
 
     /**
@@ -128,7 +178,7 @@ class IrhpApplicationController extends AbstractInternalController implements
     public function cancelAction()
     {
         return $this->confirmCommand(
-            new ConfirmItem($this->deleteParams),
+            new ConfirmItem($this->itemParams),
             CancelApplication::class,
             'Are you sure?',
             'Cancel Application. Are you sure?',

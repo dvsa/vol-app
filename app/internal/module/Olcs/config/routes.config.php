@@ -1,5 +1,7 @@
 <?php
 
+use Olcs\Controller\IrhpPermits\IrhpApplicationController;
+use Olcs\Controller\IrhpPermits\IrhpApplicationFeesController;
 use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController as TMProcessingNoteController;
 use Olcs\Controller\Application\Processing\ApplicationProcessingNoteController;
 use Olcs\Controller\Licence\BusRegistrationController as LicenceBusController;
@@ -774,6 +776,25 @@ $routes = [
                     'print-receipt' => $feePrintReceiptRoute,
                 ]
             ],
+            'irhp-application-fees' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'irhp-application/:irhpAppId/fees[/]',
+                    'constraints' => [
+                        'permitid' => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => IrhpApplicationFeesController::class,
+                        'action' => 'fees',
+                    ]
+                ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'fee_action' => $feeActionRoute,
+                    'fee_type_ajax' => $feeTypeAjaxRoute,
+                    'print-receipt' => $feePrintReceiptRoute,
+                ]
+            ],
             'permits' => [
                 'type' => 'segment',
                 'options' => [
@@ -950,7 +971,7 @@ $routes = [
                 'options' => [
                     'route' => 'irhp-application[/]',
                     'defaults' => [
-                        'controller' => 'IrhpApplicationController',
+                        'controller' => IrhpApplicationController::class,
                         'action' => 'index',
                     ]
                 ],
