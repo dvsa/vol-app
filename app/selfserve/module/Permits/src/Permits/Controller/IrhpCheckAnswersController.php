@@ -37,7 +37,8 @@ class IrhpCheckAnswersController extends AbstractSelfserveController implements 
     protected $templateVarsConfig = [
         'generic' => [
             'browserTitle' => 'permits.page.check-answers.browser.title',
-            'title' => 'permits.page.check-answers.title'
+            'title' => 'permits.page.check-answers.title',
+            'backUri' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
         ]
     ];
 
