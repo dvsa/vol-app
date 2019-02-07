@@ -7,17 +7,23 @@ use Zend\Form\Annotation as Form;
 class Checks
 {
     /**
-     * @Form\Type("\Zend\Form\Element\Checkbox ")
+     * @Form\Type("Checkbox")
      * @Form\Options({
-     *     "label": "Digital signature has been checked"
+     *     "label": "Digital signature has been checked",
+     *     "label_options": {
+     *          "label_position": "append"
+     *     }
      * })
      */
     public $digitalSignature = null;
 
     /**
-     * @Form\Type("\Zend\Form\Element\Checkbox ")
+     * @Form\Type("Checkbox")
      * @Form\Options({
-     *     "label": "ECMS has been checked"
+     *     "label": "ECMS has been checked",
+     *     "label_options": {
+     *          "label_position": "append"
+     *     }
      * })
      */
     public $ecms = null;
