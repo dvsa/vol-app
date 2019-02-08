@@ -12,6 +12,7 @@ use Permits\Controller\Config\DataSource\ValidIrhpPermits as ValidIrhpPermitsDat
 use Permits\Data\Mapper\FeeList as FeeListMapper;
 use Permits\Data\Mapper\ApplicationFees as ApplicationFeesMapper;
 use Permits\Data\Mapper\AcceptOrDeclinePermits as AcceptOrDeclineMapper;
+use Permits\Data\Mapper\IrhpApplicationFeeSummary;
 use Permits\Data\Mapper\ValidEcmtPermits as ValidEcmtPermitsMapper;
 use Permits\Data\Mapper\CheckAnswers as CheckAnswersMapper;
 use Permits\Controller\Config\DataSource\EcmtConstrainedCountriesList as EcmtConstrainedCountriesDataSource;
@@ -112,6 +113,12 @@ class DataSourceConfig
 
     const IRHP_APP = [
         IrhpAppDataSource::class => [],
+    ];
+
+    const IRHP_APP_FEE = [
+        IrhpAppDataSource::class => [
+            'mapper' => IrhpApplicationFeeSummary::class
+        ],
     ];
 
     const IRHP_APP_COUNTRIES = [

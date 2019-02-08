@@ -1,0 +1,21 @@
+<?php
+    use Permits\Controller\Config\DataSource\IrhpApplication;
+?>
+
+<?php echo $this->permitsBackLink('common.link.back.label', $data['backUri']); ?>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <span class="govuk-caption-xl">
+            <?php echo $this->escapeHtml($data['application']['applicationRef']); ?>
+        </span>
+        <h1 class="govuk-heading-xl">
+            <?php echo $this->escapeHtml($this->translate('permits.page.irhp-fee.permit.fee')); ?>
+        </h1>
+        <?php
+            echo $this->partial('partials/additional-guidance-component', ['additionalGuidance' => 'permits.page.irhp-fee.guidance']);
+            echo $this->partial('partials/summary-list', ['data' => $data[IrhpApplication::DATA_KEY]['mappedFeeData']]);
+        ?>
+    </div>
+    <?php echo $this->form($form); ?>
+    <?php echo $this->permitsBackLink('permits.button.save-return-to-overview', $data['backUri']); ?>
+</div>

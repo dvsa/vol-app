@@ -7,6 +7,7 @@ use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\View\Helper\EcmtSection;
+use Permits\View\Helper\IrhpApplicationSection;
 
 class SubmittedController extends AbstractSelfserveController implements ToggleAwareInterface
 {
@@ -16,11 +17,13 @@ class SubmittedController extends AbstractSelfserveController implements ToggleA
 
     protected $dataSourceConfig = [
         'default' => DataSourceConfig::PERMIT_APP,
+        'irhp-submitted' => DataSourceConfig::IRHP_APP,
     ];
 
     protected $conditionalDisplayConfig = [
         'application-submitted' => ConditionalDisplayConfig::PERMIT_APP_UNDER_CONSIDERATION,
         'issue-submitted' => ConditionalDisplayConfig::PERMIT_APP_PAID,
+        'irhp-submitted' => ConditionalDisplayConfig::IRHP_APP_SUBMITTED,
     ];
 
     protected $templateConfig = [
@@ -48,23 +51,57 @@ class SubmittedController extends AbstractSelfserveController implements ToggleA
             'warning' => 'permits.page.confirmation.submitted.warning',
             'receiptUrl' => ''
         ],
+        'irhp-submitted' => [
+            'browserTitle' => 'permits.page.confirmation.application-submitted.browser.title',
+            'title' => 'permits.page.confirmation.application-submitted.title',
+            'extraContent' => [
+                'title' => 'permits.page.confirmation.bullet.list.title',
+                'list' => 'en_GB/bullets/markup-bilateral-submitted-what-happens-next'
+            ],
+            'warning' => 'permits.page.confirmation.submitted.warning',
+            'receiptUrl' => ''
+        ],
     ];
 
     public function applicationSubmittedAction()
     {
-        if (!empty($this->params()->fromQuery('receipt_reference'))) {
-            $this->data['receiptUrl'] = $this->url()->fromRoute(EcmtSection::ROUTE_PRINT_RECEIPT, ['id' => $this->params()->fromRoute('id'), 'reference' => $this->params()->fromQuery('receipt_reference')]);
-        }
-
+        $this->addReceiptUrl(EcmtSection::ROUTE_PRINT_RECEIPT);
         return parent::genericAction();
     }
 
     public function issueSubmittedAction()
     {
-        if (!empty($this->params()->fromQuery('receipt_reference'))) {
-            $this->data['receiptUrl'] = $this->url()->fromRoute(EcmtSection::ROUTE_PRINT_RECEIPT, ['id' => $this->params()->fromRoute('id'), 'reference' => $this->params()->fromQuery('receipt_reference')]);
-        }
-
+        $this->addReceiptUrl(EcmtSection::ROUTE_PRINT_RECEIPT);
         return parent::genericAction();
+    }
+
+    /**
+     * IRHP submitted action
+     *
+     * @return \Zend\Http\Response|\Zend\View\Model\ViewModel
+     */
+    public function irhpSubmittedAction()
+    {
+        $this->addReceiptUrl(IrhpApplicationSection::ROUTE_PRINT_RECEIPT);
+        return parent::genericAction();
+    }
+
+    /**
+     * Get the receipt url
+     *
+     * @param string $route route for redirect
+     *
+     * @return void
+     */
+    private function addReceiptUrl(string $route): void
+    {
+        if (!empty($this->params()->fromQuery('receipt_reference'))) {
+            $routeParams = [
+                'id' => $this->params()->fromRoute('id'),
+                'reference' => $this->params()->fromQuery('receipt_reference')
+            ];
+
+            $this->data['receiptUrl'] = $this->url()->fromRoute($route, $routeParams);
+        }
     }
 }

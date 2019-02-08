@@ -52,6 +52,13 @@ class ConditionalDisplayConfig
         ],
     ];
 
+    const IRHP_APP_SUBMITTED = [
+        IrhpAppDataSource::DATA_KEY => [
+            'key' => 'isNotYetSubmitted',
+            'value' => false
+        ],
+    ];
+
     const IRHP_APP_READY_FOR_COUNTRIES =  [
         IrhpAppDataSource::DATA_KEY => [
             'key' => 'canUpdateCountries',
