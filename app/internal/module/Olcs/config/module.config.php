@@ -335,6 +335,7 @@ return array(
                 \Olcs\Controller\IrhpPermits\IrhpPermitProcessingNoteController::class,
             \Olcs\Controller\IrhpPermits\IrhpPermitProcessingTasksController::class =>
                 \Olcs\Controller\IrhpPermits\IrhpPermitProcessingTasksController::class,
+            \Olcs\Controller\SurrenderController::class => \Olcs\Controller\SurrenderController::class
         ),
         'factories' => [
             TmCntr\Details\TransportManagerDetailsResponsibilityController::class =>

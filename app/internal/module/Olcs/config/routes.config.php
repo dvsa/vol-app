@@ -248,8 +248,8 @@ $routes = [
                 'options' => [
                     'route' => 'surrender[/]',
                     'defaults' => [
-                        'controller' => 'LicenceDecisionsController',
-                        'action' => 'surrender',
+                        'controller' => \Olcs\Controller\SurrenderController::class,
+                        'action' => 'index',
                     ]
                 ],
             ],
