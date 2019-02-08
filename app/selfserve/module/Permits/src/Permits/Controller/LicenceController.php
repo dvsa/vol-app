@@ -190,7 +190,7 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
         }
 
         if ($irhpPermitTypeID !== RefData::ECMT_PERMIT_TYPE_ID) {
-            $this->conditionalDisplayConfig['add'][LicencesAvailable::DATA_KEY]['key'] = 'hasAvailableBilateralLicences';
+            unset($this->conditionalDisplayConfig['add'][LicencesAvailable::DATA_KEY]);
         }
 
         parent::checkConditionalDisplay();
