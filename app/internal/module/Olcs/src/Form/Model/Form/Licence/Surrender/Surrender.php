@@ -8,9 +8,14 @@ class Surrender
 {
     /**
      * @Form\ComposedObject("Olcs\Form\Model\Form\Licence\Surrender\Fieldset\Checks")
-     * @Form\Attributes(
-     *     {"class":"surrenderChecks"},
-     *    )
+     * @Form\Attributes({
+     *     "class":"surrenderChecks",
+     * })
      */
     protected $checks = null;
+
+    /**
+     * @Form\ComposedObject("Olcs\Form\Model\Form\Licence\Surrender\Fieldset\Actions")
+     */
+    protected $actions = null;
 }
