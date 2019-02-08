@@ -8,6 +8,9 @@ class Checks
 {
     /**
      * @Form\Type("Checkbox")
+     * @Form\Attributes(
+     *     {"class":"surrenderChecks__checkbox"},
+     *     )
      * @Form\Options({
      *     "label": "Digital signature has been checked",
      *     "label_options": {
@@ -19,6 +22,9 @@ class Checks
 
     /**
      * @Form\Type("Checkbox")
+     * @Form\Attributes(
+     *     {"class":"surrenderChecks__checkbox"},
+     *     )
      * @Form\Options({
      *     "label": "ECMS has been checked",
      *     "label_options": {
