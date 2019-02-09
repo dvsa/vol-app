@@ -23,19 +23,25 @@ class FeePartSuccessfulController extends AbstractSelfserveController implements
     ];
 
     protected $conditionalDisplayConfig = [
-        'generic' => ConditionalDisplayConfig::PERMIT_APP_AWAITING_FEE,
+        'default' => ConditionalDisplayConfig::PERMIT_APP_AWAITING_FEE,
     ];
 
     protected $formConfig = [
-        'generic' => FormConfig::FORM_ACCEPT_AND_PAY,
+        'default' => FormConfig::FORM_ACCEPT_AND_PAY,
     ];
 
     protected $templateConfig = [
-        'generic' => 'permits/fee-part-successful',
+        'default' => 'permits/fee-part-successful',
+    ];
+
+    protected $templateVarsConfig = [
+        'default' => [
+            'browserTitle' => 'permits.page.fee.browser.title'
+        ]
     ];
 
     protected $postConfig = [
-        'generic' => [
+        'default' => [
             'params' => ParamsConfig::ID_FROM_ROUTE,
             'step' => EcmtSection::ROUTE_ECMT_PAYMENT_ACTION,
             'conditional' => [

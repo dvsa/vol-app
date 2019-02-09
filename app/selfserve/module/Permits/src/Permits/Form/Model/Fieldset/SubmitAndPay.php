@@ -12,8 +12,7 @@ class SubmitAndPay
     /**
      * @Form\Name("SubmitButton")
      * @Form\Attributes({
-     *     "class":"action--primary large",
-     *     "id":"submit-accept-button",
+     *     "class":"govuk-button",
      *     "value":"permits.button.submit-and-pay",
      *     "role":"link"
      * })

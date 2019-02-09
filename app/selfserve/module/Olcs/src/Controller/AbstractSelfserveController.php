@@ -12,6 +12,7 @@ use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Olcs\Controller\Config\DataSource\DataSourceInterface;
 use Permits\View\Helper\EcmtSection;
+use ReflectionMethod;
 use Zend\Http\Response as HttpResponse;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\ViewModel;
@@ -340,7 +341,15 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
 
             if (isset($config['mapper'])) {
                 $mapper = isset($config['mapper']) ? $config['mapper'] : DefaultMapper::class;
-                $data = $mapper::mapForDisplay($data);
+                $reflection = new ReflectionMethod($mapper, 'mapForDisplay');
+
+                $data = $mapper::mapForDisplay($data, $this->getServiceLocator()->get('Helper\Translation'), $this->url());
+
+                if ($reflection->getNumberOfRequiredParameters() > 2) {
+                    $data = $mapper::mapForDisplay($data, $this->getServiceLocator()->get('Helper\Translation'), $this->url());
+                } else {
+                    $data = $mapper::mapForDisplay($data);
+                }
             }
 
             $this->data[$source::DATA_KEY] = $data;
@@ -351,7 +360,14 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
                         $appendTo => $this->data[$appendTo],
                         $source::DATA_KEY => $data
                     ];
-                    $this->data[$appendTo] = $mapper::mapForDisplay($combinedData);
+
+                    $reflection = new ReflectionMethod($mapper, 'mapForDisplay');
+
+                    if ($reflection->getNumberOfRequiredParameters() > 2) {
+                        $this->data[$appendTo] = $mapper::mapForDisplay($combinedData, $this->getServiceLocator()->get('Helper\Translation'), $this->url());
+                    } else {
+                        $this->data[$appendTo] = $mapper::mapForDisplay($combinedData);
+                    }
                 }
             }
         }

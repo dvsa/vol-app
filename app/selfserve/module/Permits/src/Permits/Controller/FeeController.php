@@ -42,7 +42,13 @@ class FeeController extends AbstractSelfserveController implements ToggleAwareIn
     ];
 
     protected $templateConfig = [
-        'generic' => 'permits/fee'
+        'default' => 'permits/fee'
+    ];
+
+    protected $templateVarsConfig = [
+        'default' => [
+            'browserTitle' => 'permits.page.fee.browser.title'
+        ]
     ];
 
     protected $postConfig = [

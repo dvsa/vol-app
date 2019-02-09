@@ -85,7 +85,9 @@ class DataSourceConfig
     const PERMIT_APP_WITH_FEE_LIST = [
         PermitAppDataSource::class => [],
         FeeListDto::class => [
-            'mapper' => FeeListMapper::class
+            'append' => [
+                PermitAppDataSource::DATA_KEY => FeeListMapper::class
+            ]
         ],
     ];
 
