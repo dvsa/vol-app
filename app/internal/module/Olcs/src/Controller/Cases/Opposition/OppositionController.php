@@ -109,7 +109,7 @@ class OppositionController extends AbstractInternalController implements CaseCon
 
         return $this->details(
             CasesWithOppositionDatesDto::class,
-               new GenericItem(['id' => 'case']),
+            new GenericItem(['id' => 'case']),
             'details',
             'sections/cases/pages/opposition',
             'Opposition details'

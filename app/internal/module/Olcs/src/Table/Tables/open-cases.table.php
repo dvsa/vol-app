@@ -15,10 +15,10 @@ return array(
             'title' => 'Case No.',
             'formatter' => function ($row) {
                 return '<a href="' . $this->generateUrl(
-                        array('case' => $row['id'], 'action' => 'details'),
-                        'case',
-                        true
-                    ) . '">' . $row['id'] . '</a>';
+                    array('case' => $row['id'], 'action' => 'details'),
+                    'case',
+                    true
+                ) . '">' . $row['id'] . '</a>';
             },
             'sort' => 'id'
         ),

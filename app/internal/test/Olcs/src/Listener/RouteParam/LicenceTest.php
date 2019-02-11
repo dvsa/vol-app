@@ -775,8 +775,8 @@ class LicenceTest extends TestCase
         $this->signatureType = RefData::SIGNATURE_TYPE_DIGITAL_SIGNATURE;
         $this->mockMainNavigation($licence['goodsOrPsv']['id'], true);
         $this->sut->getMainNavigationService()->shouldReceive('findOneById')->with('licence_surrender')->andReturn(
-        m::mock()->shouldReceive('setVisible')->with(0)->once()->getMock()
-    )->getMock();
+            m::mock()->shouldReceive('setVisible')->with(0)->once()->getMock()
+        )->getMock();
 
         $mockSurrenderService = m::mock(Surrender::class);
         $mockSurrenderService->shouldReceive('fetchSurrenderData')->with(4)->times(2)->andThrow(

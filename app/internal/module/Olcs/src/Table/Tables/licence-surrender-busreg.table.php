@@ -14,10 +14,10 @@ return array(
             'title' => 'Reg No.',
             'formatter' => function ($data) {
                 return '<a href="' . $this->generateUrl(
-                        array('action' => 'index', 'busRegId' => $data['id']),
-                        'licence/bus-details/service',
-                        true
-                    ) . '">' . $data['regNo'] . '</a>';
+                    array('action' => 'index', 'busRegId' => $data['id']),
+                    'licence/bus-details/service',
+                    true
+                ) . '">' . $data['regNo'] . '</a>';
             },
         ),
         array(
