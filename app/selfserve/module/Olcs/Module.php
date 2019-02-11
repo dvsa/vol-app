@@ -7,6 +7,7 @@ use Zend\Mvc\MvcEvent;
 use Zend\Session\Config\SessionConfig;
 use Zend\Session\Container;
 use Zend\Session\SessionManager;
+use Zend\Validator\AbstractValidator;
 
 /**
  * Module.php
@@ -71,7 +72,7 @@ class Module
 
     /**
      * Set up and configure Session Manager
-     * 
+     *
      * @param array $config Config
      *
      * @return void

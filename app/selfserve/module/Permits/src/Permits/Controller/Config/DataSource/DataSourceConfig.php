@@ -5,6 +5,7 @@ namespace Permits\Controller\Config\DataSource;
 use Permits\Controller\Config\DataSource\FeeList as FeeListDto;
 use Permits\Controller\Config\DataSource\PermitApplication as PermitAppDataSource;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
+use Permits\Controller\Config\DataSource\IrhpMaxStockPermits as IrhpMaxStockPermitsDataSource;
 use Permits\Controller\Config\DataSource\ValidEcmtPermits as ValidEcmtPermitsDataSource;
 use Permits\Controller\Config\DataSource\UnpaidEcmtPermits as UnpaidEcmtPermitsDataSource;
 use Permits\Controller\Config\DataSource\ValidIrhpPermits as ValidIrhpPermitsDataSource;
@@ -126,5 +127,10 @@ class DataSourceConfig
         IrhpAppDataSource::class => [
             'mapper' => IrhpCheckAnswersMapper::class
         ],
+    ];
+
+    const IRHP_APP_WITH_MAX_PERMITS_BY_STOCK = [
+        IrhpAppDataSource::class => [],
+        IrhpMaxStockPermitsDataSource::class => [],
     ];
 }

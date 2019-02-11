@@ -18,7 +18,7 @@ class NoOfPermitsController extends AbstractSelfserveController implements Toggl
     ];
 
     protected $dataSourceConfig = [
-        'default' => DataSourceConfig::IRHP_APP
+        'default' => DataSourceConfig::IRHP_APP_WITH_MAX_PERMITS_BY_STOCK
     ];
 
     protected $conditionalDisplayConfig = [
@@ -37,7 +37,10 @@ class NoOfPermitsController extends AbstractSelfserveController implements Toggl
         'default' => [
             'browserTitle' => 'permits.page.bilateral.no-of-permits.browser.title',
             'question' => 'permits.page.bilateral.no-of-permits.question',
-            'additionalGuidance' => 'permits.page.bilateral.no-of-permits.additional-guidance',
+            'additionalGuidance' => [
+                'value' => 'permits.page.bilateral.no-of-permits.additional-guidance',
+                'disableHtmlEscape' => true
+            ],
             'backUri' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
         ]
     ];
