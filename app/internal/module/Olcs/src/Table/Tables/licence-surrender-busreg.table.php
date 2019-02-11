@@ -1,8 +1,14 @@
 <?php
 return array(
     'variables' => array(
-        'title' => 'There are bus registrations associated with this licence.'
+        'title' => ' active bus registrations associated with this licence.'
     ),
+    'attributes' => array(
+        'name'=>'openbusregs'
+    ),
+    'settings' =>[
+        'showTotal'=>true
+    ],
     'columns' => array(
         array(
             'title' => 'Reg No.',

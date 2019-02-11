@@ -2,10 +2,14 @@
 
 return array(
     'variables' => array(
-        'title' => 'There are (number) open cases associated with this licence'
+        'title' => ' open cases associated with this licence'
     ),
     'attributes' => array(
+        'name' => 'opencases'
     ),
+    'settings' =>[
+        'showTotal'=>true
+    ],
     'columns' => array(
         array(
             'title' => 'Case No.',

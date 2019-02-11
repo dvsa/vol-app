@@ -2,8 +2,8 @@
 
 namespace Olcs\Controller\Licence;
 
-use Dvsa\Olcs\Transfer\Query\Bus\SearchViewList;
 use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence;
+use Dvsa\Olcs\Transfer\Query\Surrender\OpenBusReg;
 use Dvsa\Olcs\Transfer\Query\Surrender\OpenCases;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
@@ -18,6 +18,7 @@ class SurrenderController extends AbstractInternalController
      */
     protected $navigationId = 'licence_surrender';
     protected $cases;
+    protected $counts;
 
 
     /**
@@ -27,9 +28,18 @@ class SurrenderController extends AbstractInternalController
      */
     public function indexAction()
     {
+
         $this->setupCasesTable();
 
         $this->setupBusRegTable();
+
+        if ($this->counts['opencases'] === 0) {
+            $this->placeholder()->setPlaceholder('casesTable', '');
+        }
+
+        if ($this->counts['openbusregs'] === 0) {
+            $this->placeholder()->setPlaceholder('busRegTable', '');
+        }
 
         return $this->details(
             ByLicence::class,
@@ -47,13 +57,20 @@ class SurrenderController extends AbstractInternalController
      */
     private function setupCasesTable()
     {
-        $this->cases = $this->index(
+        $this->index(
             OpenCases::class,
-            new GenericList(['id'=>'licence'], 'id'),
+            new GenericList(['id' => 'licence'], 'id'),
             'casesTable',
             'open-cases',
             $this->tableViewTemplate
         );
+    }
+
+    public function alterTable($table, $data)
+    {
+        $tableName = $table->getAttributes()['name'];
+        $this->counts[$tableName] = $data['count'];
+        return $table;
     }
 
     /**
@@ -64,9 +81,9 @@ class SurrenderController extends AbstractInternalController
     private function setupBusRegTable()
     {
         $this->index(
-            SearchViewList::class,
+            OpenBusReg::class,
             new GenericList([
-                'licId' => 'licence',
+                'id' => 'licence',
             ], 'licId'),
             'busRegTable',
             'licence-surrender-busreg',
