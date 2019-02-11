@@ -265,7 +265,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
                     $value = $config['conditional']['value'];
 
                     if (is_array($field) && array_search($params[$value], $this->data[$dataKey][$field[0]]) === $field[1]
-                        || $this->data[$dataKey][$field] === $value) {
+                        || !is_array($field) && $this->data[$dataKey][$field] === $value) {
                         return $this->redirectConditionalPost($config);
                     }
                 }
