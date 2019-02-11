@@ -4,7 +4,7 @@ return array(
         'title' => ' active bus registrations associated with this licence.'
     ),
     'attributes' => array(
-        'name'=>'openbusregs'
+        'name'=>'busRegistrations'
     ),
     'settings' =>[
         'showTotal'=>true

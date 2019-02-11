@@ -1,12 +1,19 @@
+<div class="content">
 <?php
-
 $details = $this->placeholder('details')->getValue();
- echo $details['licence']['licNo'];
+echo $details['licence']['licNo'];
 ?>
 <h2> Open Items</h2>
 <?php
-$casesTable = $this->placeholder('casesTable')->getValue();
+$casesTable = $this->placeholder('openCases')->getValue();
 echo $casesTable;
-$busRegTable = $this->placeholder('busRegTable')->getValue();
+$busRegTable = $this->placeholder('busRegistrations')->getValue();
 echo $busRegTable;
 ?>
+<section>
+    <?php
+    $form = $this->placeholder('form')->getValue();
+    echo $this->form($form);
+    ?>
+</section>
+</div>

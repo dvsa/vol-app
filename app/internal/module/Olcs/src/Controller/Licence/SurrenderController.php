@@ -2,10 +2,12 @@
 
 namespace Olcs\Controller\Licence;
 
+use Common\Form\Form;
 use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence;
 use Dvsa\Olcs\Transfer\Query\Surrender\OpenBusReg;
 use Dvsa\Olcs\Transfer\Query\Surrender\OpenCases;
 use Olcs\Controller\AbstractInternalController;
+use Olcs\Form\Model\Form\Licence\Surrender\Surrender;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericList;
 
@@ -30,16 +32,16 @@ class SurrenderController extends AbstractInternalController
     {
 
         $this->setupCasesTable();
-
         $this->setupBusRegTable();
+        /**
+         * @var $form Form
+         */
+        $form = $this->getForm(Surrender::class);
 
-        if ($this->counts['opencases'] === 0) {
-            $this->placeholder()->setPlaceholder('casesTable', '');
-        }
 
-        if ($this->counts['openbusregs'] === 0) {
-            $this->placeholder()->setPlaceholder('busRegTable', '');
-        }
+        $this->placeholder()->setPlaceholder('form', $form);
+
+        $this->alterLayout($form);
 
         return $this->details(
             ByLicence::class,
@@ -48,6 +50,17 @@ class SurrenderController extends AbstractInternalController
             'sections/licence/pages/surrender',
             'Surrender details'
         );
+    }
+
+    public function alterLayout($form)
+    {
+        foreach ($this->counts as $key => $value) {
+            if ($value === 0) {
+                $this->placeholder()->setPlaceholder($key, '');
+            } else {
+                $form->get('checks')->remove($key);
+            }
+        }
     }
 
     /**
@@ -60,7 +73,7 @@ class SurrenderController extends AbstractInternalController
         $this->index(
             OpenCases::class,
             new GenericList(['id' => 'licence'], 'id'),
-            'casesTable',
+            'openCases',
             'open-cases',
             $this->tableViewTemplate
         );
@@ -85,7 +98,7 @@ class SurrenderController extends AbstractInternalController
             new GenericList([
                 'id' => 'licence',
             ], 'licId'),
-            'busRegTable',
+            'busRegistrations',
             'licence-surrender-busreg',
             $this->tableViewTemplate
         );

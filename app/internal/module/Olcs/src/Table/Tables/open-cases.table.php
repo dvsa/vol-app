@@ -5,7 +5,7 @@ return array(
         'title' => ' open cases associated with this licence'
     ),
     'attributes' => array(
-        'name' => 'opencases'
+        'name' => 'openCases'
     ),
     'settings' =>[
         'showTotal'=>true
