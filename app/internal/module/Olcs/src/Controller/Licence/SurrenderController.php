@@ -6,6 +6,7 @@ use Dvsa\Olcs\Transfer\Query\Bus\SearchViewList;
 use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence;
 use Dvsa\Olcs\Transfer\Query\Surrender\OpenCases;
 use Olcs\Controller\AbstractInternalController;
+use Olcs\Form\Model\Form\Licence\Surrender\Surrender;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericList;
 
@@ -28,8 +29,9 @@ class SurrenderController extends AbstractInternalController
     public function indexAction()
     {
         $this->setupCasesTable();
-
         $this->setupBusRegTable();
+
+        $form = $this->getForm(Surrender::class);
 
         return $this->details(
             ByLicence::class,
