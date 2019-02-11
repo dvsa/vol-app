@@ -5,14 +5,6 @@ return [
         'title' => 'Issued Permits',
         'empty_message' => 'There are no permit records to display'
     ],
-    'settings' => [
-
-        'paginate' => [
-            'limit' => [
-                'options' => [10, 25, 50],
-            ],
-        ],
-    ],
     'columns' => [
         [
             'title' => 'dashboard-table-permit-application-ref',
@@ -25,8 +17,7 @@ return [
         ],
         [
             'title' => 'dashboard-table-permit-application-type',
-            'name' => 'permitType',
-            'formatter' => 'RefData'
+            'name' => 'typeDescription',
         ],
         [
             'title' => 'Rec\'d Date',
@@ -36,7 +27,20 @@ return [
         [
             'title' => 'dashboard-table-permit-application-status',
             'name' => 'status',
-            'formatter' => 'RefDataStatus'
+            'formatter' => function ($row) {
+                return $this->callFormatter(
+                    [
+                        'name' => 'status',
+                        'formatter' => 'RefDataStatus',
+                    ],
+                    [
+                        'status' => [
+                            'id' => $row['statusId'],
+                            'description' => $row['statusDescription'],
+                        ],
+                    ]
+                );
+            }
         ]
     ],
 ];

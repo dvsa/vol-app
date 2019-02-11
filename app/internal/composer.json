@@ -86,11 +86,11 @@
         }
     },
     "scripts": {
-        "ut": "vendor/bin/phpunit -c test/phpunit.xml --stop-on-failure",
-        "review": "vendor/bin/review",
-        "cs": "vendor/bin/phpcs --severity=1 --standard=vendor/olcs/coding-standards/Profiles/DVSA/CS/ruleset.xml",
-        "coverage": "vendor/bin/phpunit -c test/phpunit.xml --coverage-html ./test/coverage/html",
-        "sonar": "vendor/bin/phpunit -c test/phpunit.xml --coverage-clover ./test/coverage/coverage-report.clover --log-junit ./test/coverage/log.junit",
-        "update-syms": "vendor/bin/composer-update-syms"
+        "ut": "phpunit -c test/phpunit.xml --stop-on-failure",
+        "review": "review",
+        "cs": "phpcs --severity=1 --standard=vendor/olcs/coding-standards/Profiles/DVSA/CS/ruleset.xml",
+        "coverage": "phpunit -c test/phpunit.xml --coverage-html ./test/coverage/html",
+        "sonar": "phpunit -c test/phpunit.xml --coverage-clover ./test/coverage/coverage-report.clover --log-junit ./test/coverage/log.junit",
+        "update-syms": "composer-update-syms"
     }
 }
