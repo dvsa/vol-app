@@ -253,6 +253,17 @@ $routes = [
                     ]
                 ],
             ],
+            'surrender-details' =>[
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'surrender-details[/]',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Licence\SurrenderController::class,
+                        'action' => 'index',
+                    ]
+                ],
+            ],
+
             'terminate-licence' => [
                 'type' => 'segment',
                 'options' => [
