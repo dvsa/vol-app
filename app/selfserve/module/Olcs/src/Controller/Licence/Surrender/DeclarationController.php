@@ -11,12 +11,10 @@ class DeclarationController extends AbstractSurrenderController
 
     public function indexAction()
     {
-        $surrender = $this->getSurrender();
-
         /** @var TranslationHelperService $translator */
         $translator = $this->getServiceLocator()->get('Helper\Translation');
 
-        if ($surrender['disableSignatures'] === false) {
+        if ($this->data['surrender']['disableSignatures'] === false) {
             $this->form = $this->getSignForm();
         } else {
             $this->form = $this->getPrintForm($translator);
@@ -62,10 +60,10 @@ class DeclarationController extends AbstractSurrenderController
         $translator = $this->getServiceLocator()->get('Helper\Translation');
         return [
             'title' => 'licence.surrender.declaration.title',
-            'licNo' => $this->licence['licNo'],
+            'licNo' => $this->data['surrender']['licence']['licNo'],
             'content' => $translator->translateReplace(
                 'markup-licence-surrender-declaration',
-                [$this->licence['licNo']]
+                [$this->data['surrender']['licence']['licNo']]
             ),
             'form' => $this->form,
             'backLink' => $this->getBackLink('lva-licence'),

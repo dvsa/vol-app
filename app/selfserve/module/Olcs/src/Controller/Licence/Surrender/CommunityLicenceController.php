@@ -32,11 +32,6 @@ class CommunityLicenceController extends AbstractSurrenderController
         'default' => 'licence/surrender-licence-documents'
     ];
 
-
-    protected $dataSourceConfig = [
-        'default' => DataSourceConfig::SURRENDER
-    ];
-
     protected $conditionalDisplayConfig = [
         'default' => [
             'licence' => [

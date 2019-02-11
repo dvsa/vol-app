@@ -27,11 +27,6 @@ class OperatorLicenceController extends AbstractSurrenderController
         'default' => 'licence/surrender-licence-documents'
     ];
 
-
-    protected $dataSourceConfig = [
-        'default' => DataSourceConfig::SURRENDER
-    ];
-
     public function indexAction()
     {
         return $this->createView();
@@ -46,7 +41,7 @@ class OperatorLicenceController extends AbstractSurrenderController
             $data = Mapper::mapFromForm($formData);
             if ($this->updateSurrender(RefData::SURRENDER_STATUS_LIC_DOCS_COMPLETE, $data)) {
                 $routeName = 'licence/surrender/review/GET';
-                if ($this->data['licence']['isInternationalLicence'] && $this->data['fromReview'] === false) {
+                if ($this->isInternationalLicence() && $this->data['fromReview'] === false) {
                     $routeName = 'licence/surrender/community-licence/GET';
                 }
                 $this->nextStep($routeName);

@@ -31,12 +31,12 @@ class ReviewContactDetailsController extends AbstractSurrenderController
         $translator = $this->getServiceLocator()->get('Helper\Translation');
         return [
             'title' => 'licence.surrender.review_contact_details.title',
-            'licNo' => $this->licence['licNo'],
+            'licNo' => $this->data['surrender']['licence']['licNo'],
             'content' => 'licence.surrender.review_contact_details.content',
             'note' => 'licence.surrender.review_contact_details.note',
             'form' => $this->getConfirmationForm($translator),
             'backLink' => $this->getBackLink('lva-licence'),
-            'sections' => ReviewContactDetails::makeSections($this->licence, $this->url(), $translator),
+            'sections' => ReviewContactDetails::makeSections($this->data['surrender']['licence'], $this->url(), $translator),
         ];
     }
 

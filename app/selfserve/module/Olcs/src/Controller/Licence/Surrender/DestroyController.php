@@ -50,7 +50,7 @@ class DestroyController extends AbstractSurrenderController
         $translator = $this->getServiceLocator()->get('Helper\Translation');
         return [
             'title' => 'licence.surrender.destroy.title',
-            'licNo' => $this->licence['licNo'],
+            'licNo' => $this->data['surrender']['licence']['licNo'],
             'content' => $this->getContent(),
             'form' => $this->getConfirmationForm($translator),
             'backLink' => $this->getBackLink('licence/surrender/review/GET'),
