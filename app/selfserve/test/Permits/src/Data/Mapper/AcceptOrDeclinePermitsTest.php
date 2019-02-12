@@ -21,25 +21,52 @@ class AcceptOrDeclinePermitsTest extends TestCase
         $feeGrossAmount = '200';
         $permitsAwarded = 5;
 
+        $url = m::mock(Url::class);
+        $url->shouldReceive('fromRoute')
+        ->andReturn('/permits/2/ecmt-unpaid-permits/');
+
         $translationHelperService = m::mock(TranslationHelperService::class);
         $translationHelperService
             ->shouldReceive('translateReplace')
+            ->with(
+                'permits.page.fee.per-permit',
+                [
+                    5,
+                    '£100',
+                    '/permits/2/ecmt-unpaid-permits/'
+                ]
+            )
+            ->once()
             ->andReturn('6 x £123 (per permit) <a class="govuk-link govuk-!-display-block" href="/permits/2/ecmt-unpaid-permits/">View Permits</a>')
-            ->once()
             ->shouldReceive('translateReplace')
+            ->with(
+                'permits.page.ecmt.fee-part-successful.fee.total.value',
+                [
+                    '£200'
+                ]
+            )
+            ->once()
             ->andReturn('£123 (non-refundable)')
-            ->once()
             ->shouldReceive('translateReplace')
+            ->with(
+                'permits.page.fee.permit.validity.dates',
+                [
+                    '01 Jan 2029',
+                    '31 Dec 2029'
+                ]
+            )
+            ->once()
             ->andReturn('01 Jan 2029 to 31 Dec 2029')
-            ->once()
             ->shouldReceive('translateReplace')
+            ->with(
+                'markup-ecmt-fee-part-successful-hint',
+                [
+                    5,
+                    8
+                ]
+            )
             ->andReturn('Due to very high numbers of applications you have been awarded with <b>6 permits</b> out of 8 you applied for.')
             ->once();
-
-
-
-        $url = m::mock(Url::class);
-        $url->shouldReceive('fromRoute');
 
         $inputData = [
             'fees' => [
@@ -87,7 +114,7 @@ class AcceptOrDeclinePermitsTest extends TestCase
             'permitType' => [
                 'description' => 'Annual ECMT'
             ],
-            'permitsRequired' => 2
+            'permitsRequired' => 8
         ];
         $outputData['validityPeriod']['fromDate'] = '921024000';
         $outputData['validityPeriod']['toDate'] = '1583798400';
