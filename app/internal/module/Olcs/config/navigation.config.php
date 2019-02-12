@@ -652,6 +652,7 @@ $nav = [
                         [
                             'id' => 'licence_irhp_applications',
                             'label' => 'IRHP Applications',
+                            'visible' => 0,
                             'route' => 'licence/irhp-application',
 
                             'use_route_match' => true,

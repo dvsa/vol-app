@@ -2,13 +2,16 @@
 
 namespace Olcs\Listener\RouteParam;
 
+use Common\RefData;
 use Common\Service\Cqrs\Command\CommandSenderAwareInterface;
 use Common\Service\Cqrs\Command\CommandSenderAwareTrait;
 use Common\Service\Cqrs\Query\QuerySenderAwareInterface;
 use Common\Service\Cqrs\Query\QuerySenderAwareTrait;
+use Common\Util\Escape;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
-use Dvsa\Olcs\Transfer\Query\Permits\ById as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Permits\ById as EcmtApplicationDto;
+use Dvsa\Olcs\Transfer\Query\IrhpApplication\ById as IrhpApplicationDto;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;
@@ -18,6 +21,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Common\Exception\ResourceNotFoundException;
 use Zend\View\Model\ViewModel;
+use Zend\Mvc\Application;
 
 /**
  * IRHP Permit Furniture
@@ -40,7 +44,16 @@ class IrhpPermitFurniture implements
      */
     protected $navigationService;
 
+    /**
+     * @var \Zend\Navigation\Navigation
+     */
     protected $sidebarNavigationService;
+
+
+    /**
+     * @var Application
+     */
+    protected $applicationService;
 
     /**
      * @return \Zend\Navigation\Navigation
@@ -84,6 +97,24 @@ class IrhpPermitFurniture implements
     }
 
     /**
+     * @return Application
+     */
+    public function getApplicationService()
+    {
+        return $this->applicationService;
+    }
+
+    /**
+     * @param Application $applicationService
+     * @return $this
+     */
+    public function setApplicationService(Application $applicationService)
+    {
+        $this->applicationService = $applicationService;
+        return $this;
+    }
+
+    /**
      * Create service
      *
      * @param ServiceLocatorInterface $serviceLocator
@@ -96,6 +127,7 @@ class IrhpPermitFurniture implements
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
         $this->setNavigationService($serviceLocator->get('Navigation'));
         $this->setSidebarNavigationService($serviceLocator->get('right-sidebar'));
+        $this->setApplicationService($serviceLocator->get('Application'));
 
         return $this;
     }
@@ -156,11 +188,13 @@ class IrhpPermitFurniture implements
         $sidebarNav->findOneBy('id', 'irhp-permit-decisions-withdraw')
             ->setVisible($irhpPermit['canBeWithdrawn']);
 
-        $sidebarNav->findOneBy('id', 'irhp-permit-decisions-accept')
-            ->setVisible($irhpPermit['canBeDeclined']);
+        if (isset($irhpPermit['canBeDeclined'])) {
+            $sidebarNav->findOneBy('id', 'irhp-permit-decisions-accept')
+                ->setVisible($irhpPermit['canBeDeclined']);
 
-        $sidebarNav->findOneBy('id', 'irhp-permit-decisions-decline')
-            ->setVisible($irhpPermit['canBeDeclined']);
+            $sidebarNav->findOneBy('id', 'irhp-permit-decisions-decline')
+                ->setVisible($irhpPermit['canBeDeclined']);
+        }
 
         $right = new ViewModel();
         $right->setTemplate('sections/irhp-permit/partials/right');
@@ -177,9 +211,18 @@ class IrhpPermitFurniture implements
      */
     private function getIrhpPermit($id)
     {
-        $response = $this->getQuerySender()->send(
-            ItemDto::create(['id' => $id])
-        );
+        $routeParams = $this->getApplicationService()->getMvcEvent()->getRouteMatch()->getParams();
+        $permitTypeId = array_key_exists('permitTypeId', $routeParams) ? intval($routeParams['permitTypeId']) : RefData::ECMT_PERMIT_TYPE_ID;
+
+        if ($permitTypeId === RefData::ECMT_PERMIT_TYPE_ID) {
+            $response = $this->getQuerySender()->send(
+                EcmtApplicationDto::create(['id' => $id])
+            );
+        } else {
+            $response = $this->getQuerySender()->send(
+                IrhpApplicationDto::create(['id' => $id])
+            );
+        }
 
         if (!$response->isOk()) {
             throw new ResourceNotFoundException("Irhp Permit id [$id] not found");
@@ -197,6 +240,7 @@ class IrhpPermitFurniture implements
 
     private function getSubTitle($irhpPermit)
     {
-        return $irhpPermit['licence']['organisation']['name'] . ', Permit Application';
+        $typeText = isset($irhpPermit['irhpPermitType']['name']['description']) ? $irhpPermit['irhpPermitType']['name']['description'] : 'ECMT Annual';
+        return $irhpPermit['licence']['organisation']['name'] . ', Permit Application - ' . Escape::html($typeText);
     }
 }
