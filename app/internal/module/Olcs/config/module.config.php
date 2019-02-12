@@ -443,6 +443,8 @@ return array(
             Olcs\Service\Data\DocumentSubCategory::class => Olcs\Service\Data\DocumentSubCategory::class,
             Olcs\Service\Data\DocumentSubCategoryWithDocs::class =>
                 Olcs\Service\Data\DocumentSubCategoryWithDocs::class,
+            Olcs\Service\Data\IrhpPermitPrintCountry::class => Olcs\Service\Data\IrhpPermitPrintCountry::class,
+            Olcs\Service\Data\IrhpPermitPrintStock::class => Olcs\Service\Data\IrhpPermitPrintStock::class,
             Olcs\Service\Data\ScannerCategory::class => Olcs\Service\Data\ScannerCategory::class,
             Olcs\Service\Data\ScannerSubCategory::class => Olcs\Service\Data\ScannerSubCategory::class,
             Olcs\Service\Data\TaskCategory::class => Olcs\Service\Data\TaskCategory::class,

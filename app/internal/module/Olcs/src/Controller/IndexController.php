@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller;
 
+use Common\RefData;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
@@ -192,6 +193,28 @@ class IndexController extends AbstractController implements LeftViewProvider
                     ->setSubCategory($value)
                     ->fetchListOptions();
 
+                break;
+            case 'irhp-permit-print-country':
+                /** @var \Olcs\Service\Data\IrhpPermitPrintCountry $srv */
+                $srv = $sm->get(\Olcs\Service\Data\IrhpPermitPrintCountry::class)
+                    ->setIrhpPermitType($value);
+
+                $results = ['' => 'Please select'] + $srv->fetchListOptions();
+                break;
+            case 'irhp-permit-print-stock-by-country':
+                /** @var \Olcs\Service\Data\IrhpPermitPrintStock $srv */
+                $srv = $sm->get(\Olcs\Service\Data\IrhpPermitPrintStock::class)
+                    ->setIrhpPermitType(RefData::IRHP_BILATERAL_PERMIT_TYPE_ID)
+                    ->setCountry($value);
+
+                $results = ['' => 'Please select'] + $srv->fetchListOptions();
+                break;
+            case 'irhp-permit-print-stock-by-type':
+                /** @var \Olcs\Service\Data\IrhpPermitPrintStock $srv */
+                $srv = $sm->get(\Olcs\Service\Data\IrhpPermitPrintStock::class)
+                    ->setIrhpPermitType($value);
+
+                $results = ['' => 'Please select'] + $srv->fetchListOptions();
                 break;
             default:
                 throw new \Exception('Invalid entity filter key: ' . $key);
