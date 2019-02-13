@@ -93,7 +93,7 @@ class PeopleController extends AbstractController implements AdapterAwareInterfa
      */
     public function getSubmitActionText()
     {
-        return 'Continue to financial History';
+        return 'continue.finance.history.button';
     }
 
     /**
