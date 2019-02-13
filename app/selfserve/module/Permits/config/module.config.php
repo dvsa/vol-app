@@ -21,6 +21,7 @@ use Permits\Controller\PermitsController;
 use Permits\Controller\TypeController;
 use Permits\Controller\IrhpApplicationController;
 use Permits\Controller\IrhpApplicationCountryController;
+use Permits\Controller\IrhpApplicationFeeController;
 use Permits\Controller\NoOfPermitsController;
 use Permits\Controller\IrhpCheckAnswersController;
 use Permits\Controller\CancelIrhpApplicationController;
@@ -52,6 +53,7 @@ return [
         IrhpApplicationDeclarationController::class => IrhpApplicationDeclarationController::class,
         IrhpCheckAnswersController::class => IrhpCheckAnswersController::class,
         CancelIrhpApplicationController::class => CancelIrhpApplicationController::class,
+        IrhpApplicationFeeController::class => IrhpApplicationFeeController::class,
         IrhpValidPermitsController::class => IrhpValidPermitsController::class,
     ],
   ],
@@ -171,6 +173,32 @@ return [
                           'type'    => 'segment',
                           'options' => [
                               'route'    => 'fee[/]',
+                              'defaults' => [
+                                  'controller'    => IrhpApplicationFeeController::class,
+                                  'action'        => 'generic',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'payment' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => 'payment[/]',
+                              'defaults' => [
+                                  'controller'    => IrhpApplicationFeeController::class,
+                                  'action'        => 'payment',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'payment-result' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => 'payment-result[/]',
+                              'defaults' => [
+                                  'controller'    => IrhpApplicationFeeController::class,
+                                  'action'        => 'paymentResult',
+                              ],
                           ],
                           'may_terminate' => false,
                       ],
@@ -178,6 +206,10 @@ return [
                           'type'    => 'segment',
                           'options' => [
                               'route'    => 'submitted[/]',
+                              'defaults' => [
+                                  'controller' => SubmittedController::class,
+                                  'action' => 'irhp-submitted',
+                              ],
                           ],
                           'may_terminate' => false,
                       ],

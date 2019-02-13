@@ -24,6 +24,8 @@ class IrhpApplicationSection extends AbstractHelper
     const ROUTE_DECLARATION = 'permits/application/declaration';
     const ROUTE_FEE = 'permits/application/fee';
     const ROUTE_SUBMITTED = 'permits/application/submitted';
+    const ROUTE_PAYMENT_ACTION = 'permits/application/payment';
+    const ROUTE_PAYMENT_RESULT_ACTION = 'permits/application/payment-result';
 
     const ROUTE_CANCEL_APPLICATION = 'permits/application/cancel';
     const ROUTE_CANCEL_CONFIRMATION = self::ROUTE_CANCEL_APPLICATION . '/confirmation';
@@ -31,6 +33,8 @@ class IrhpApplicationSection extends AbstractHelper
     const ROUTE_WITHDRAW_CONFIRMATION = self::ROUTE_WITHDRAW_APPLICATION . '/confirmation';
     const ROUTE_DECLINE_APPLICATION = 'permits/application/decline';
     const ROUTE_DECLINE_CONFIRMATION = self::ROUTE_DECLINE_APPLICATION . '/confirmation';
+
+    const ROUTE_PRINT_RECEIPT = 'permits/print-receipt';
 
     /**
      * list of overview routes and the field denoting completion status
