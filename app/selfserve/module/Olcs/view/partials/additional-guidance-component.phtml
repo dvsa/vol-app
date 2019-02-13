@@ -1,11 +1,19 @@
-<p>
+<p class="govuk-body">
     <?php
-
-    if (is_array($this->additionalGuidance) && isset($this->additionalGuidance['disableHtmlEscape']) && ($this->additionalGuidance['disableHtmlEscape'] === true)) {
-        echo $this->translate($this->additionalGuidance['value']);
-    } else {
+    if (!is_array($this->additionalGuidance)) {
         echo $this->escapeHtml($this->translate($this->additionalGuidance));
-    }
+    } else {
+        if (isset($this->additionalGuidance['disableHtmlEscape']) && ($this->additionalGuidance['disableHtmlEscape'] === true)) {
+            echo $this->translate($this->additionalGuidance['value']);
+        } else {
+            foreach ($this->additionalGuidance as $key => $line) {
+                echo $this->escapeHtml($this->translate($line));
 
+                if ($key !== (count($this->additionalGuidance) - 1)) {
+                    echo '<br /><br />';
+                }
+            }
+        }
+    }
     ?>
 </p>

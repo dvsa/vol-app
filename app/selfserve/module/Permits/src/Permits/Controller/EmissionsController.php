@@ -34,7 +34,7 @@ class EmissionsController extends AbstractSelfserveController implements ToggleA
         'question' => [
             'browserTitle' => 'permits.page.euro6.emissions.browser.title',
             'question' => 'permits.page.euro6.emissions.question',
-            'guidance' => [
+            'additionalGuidance' => [
                 'permits.page.euro6.emissions.guidance.line.1',
                 'permits.page.euro6.emissions.guidance.line.2',
             ],

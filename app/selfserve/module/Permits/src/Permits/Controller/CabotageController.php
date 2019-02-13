@@ -34,9 +34,7 @@ class CabotageController extends AbstractSelfserveController implements ToggleAw
         'question' => [
             'browserTitle' => 'permits.page.cabotage.browser.title',
             'question' => 'permits.page.cabotage.question',
-            'guidance' => [
-                'permits.page.cabotage.guidance',
-            ],
+            'additionalGuidance' => 'permits.page.cabotage.guidance',
         ]
     ];
 
