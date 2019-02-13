@@ -343,8 +343,6 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
                 $mapper = isset($config['mapper']) ? $config['mapper'] : DefaultMapper::class;
                 $reflection = new ReflectionMethod($mapper, 'mapForDisplay');
 
-                $data = $mapper::mapForDisplay($data, $this->getServiceLocator()->get('Helper\Translation'), $this->url());
-
                 if ($reflection->getNumberOfRequiredParameters() > 2) {
                     $data = $mapper::mapForDisplay($data, $this->getServiceLocator()->get('Helper\Translation'), $this->url());
                 } else {
