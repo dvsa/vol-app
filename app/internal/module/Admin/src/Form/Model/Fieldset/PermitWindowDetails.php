@@ -20,6 +20,19 @@ class PermitWindowDetails
     public $stockId = null;
 
     /**
+     * @Form\Attributes({"id":"emissionsCategory"})
+     * @form\Required(true)
+     * @Form\Options({
+     *     "label": "Emissions category question",
+     *     "empty_option": "Please Select",
+     *     "disable_inarray_validator": false,
+     *     "category": "emissions_category"
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $emissionsCategory = null;
+
+    /**
      * @Form\Type("DateTimeSelect")
      * @form\Required(true)
      * @Form\Attributes({"id":"startDate"})
