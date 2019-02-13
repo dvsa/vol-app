@@ -4,6 +4,10 @@ namespace Olcs\Form\Model\Form\Licence\Surrender;
 
 use Zend\Form\Annotation as Form;
 
+/**
+ * Class Surrender
+ * @package Olcs\Form\Model\Form\Licence\Surrender
+ */
 class Surrender
 {
     /**

@@ -3,6 +3,8 @@
 namespace Olcs\Controller\Licence;
 
 use Common\Form\Form;
+use Dvsa\Olcs\Transfer\Command\Surrender\Approve as ApproveSurrender;
+use Dvsa\Olcs\Transfer\Command\Surrender\Withdraw as WithdrawSurrender;
 use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence;
 use Dvsa\Olcs\Transfer\Query\Surrender\OpenBusReg;
 use Dvsa\Olcs\Transfer\Query\Surrender\OpenCases;
@@ -22,7 +24,6 @@ class SurrenderController extends AbstractInternalController
     protected $cases;
     protected $counts;
 
-
     /**
      * index Action
      *
@@ -30,14 +31,12 @@ class SurrenderController extends AbstractInternalController
      */
     public function indexAction()
     {
-
         $this->setupCasesTable();
         $this->setupBusRegTable();
         /**
          * @var $form Form
          */
         $form = $this->getForm(Surrender::class);
-
 
         $this->placeholder()->setPlaceholder('form', $form);
 
@@ -50,6 +49,44 @@ class SurrenderController extends AbstractInternalController
             'sections/licence/pages/surrender',
             'Surrender details'
         );
+    }
+
+    public function surrenderAction()
+    {
+        $licenceId = (int)$this->params('licence');
+
+        /** @var Form $form */
+        $form = $this->getForm(Surrender::class);
+        $form->setData($this->getRequest()->getPost());
+
+        $this->setupCasesTable();
+        $this->setupBusRegTable();
+
+
+        if ($form->isValid()) {
+//        if ($form->isValid() && $this->counts['openCases'] === 0 && $this->counts['busRegistrations'] === 0) {
+            if ($this->surrenderLicence($licenceId)) {
+                $this->flashMessenger()->addSuccessMessage('licence-status.surrender.message.save.success');
+                return $this->redirect()->toRoute('licence', [], [], true);
+            } else {
+                var_dump("command_fail");
+            }
+
+        }
+
+        var_dump("fail");
+    }
+
+    public function withdrawAction()
+    {
+        $licenceId = (int)$this->params('licence');
+
+        if ($this->withdrawSurrender($licenceId)) {
+            $this->flashMessenger()->addSuccessMessage('licence-status.surrender.message.withdrawn');
+            return $this->redirect()->toRoute('licence', [], [], true);
+        }
+
+        var_dump("fail");
     }
 
     public function alterLayout($form)
@@ -102,5 +139,26 @@ class SurrenderController extends AbstractInternalController
             'licence-surrender-busreg',
             $this->tableViewTemplate
         );
+    }
+
+    private function surrenderLicence(int $licenceId): bool
+    {
+        $surrenderDate = new \DateTime();
+        $command = ApproveSurrender::create([
+            'id' => $licenceId,
+            'surrenderDate' => $surrenderDate->format('Y-m-d')
+        ]);
+        $response = $this->handleCommand($command);
+        return $response->isOk();
+    }
+
+    private function withdrawSurrender(int $licenceId): bool
+    {
+        $command = WithdrawSurrender::create([
+            'id' => $licenceId,
+        ]);
+
+        $response = $this->handleCommand($command);
+        return $response->isOk();
     }
 }

@@ -2,6 +2,7 @@
 
 use Olcs\Controller\IrhpPermits\IrhpApplicationController;
 use Olcs\Controller\IrhpPermits\IrhpApplicationFeesController;
+use Olcs\Controller\Licence\SurrenderController;
 use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController as TMProcessingNoteController;
 use Olcs\Controller\Application\Processing\ApplicationProcessingNoteController;
 use Olcs\Controller\Licence\BusRegistrationController as LicenceBusController;
@@ -256,14 +257,35 @@ $routes = [
                 ],
             ],
             'surrender-details' =>[
+                'may_terminate' => false,
                 'type' => 'segment',
                 'options' => [
                     'route' => 'surrender-details[/]',
-                    'defaults' => [
-                        'controller' => \Olcs\Controller\Licence\SurrenderController::class,
-                        'action' => 'index',
-                    ]
                 ],
+                'child_routes' => [
+                    'GET' => [
+                        'may_terminate' => true,
+                        'type' => \Zend\Mvc\Router\Http\Method::class,
+                        'options' => [
+                            'verb' => 'GET',
+                            'defaults' => [
+                                'controller' => SurrenderController::class,
+                                'action' => 'index'
+                            ],
+                        ],
+                    ],
+                    'POST' => [
+                        'may_terminate' => true,
+                        'type' => \Zend\Mvc\Router\Http\Method::class,
+                        'options' => [
+                            'verb' => 'POST',
+                            'defaults' => [
+                                'controller' => SurrenderController::class,
+                                'action' => 'surrender'
+                            ],
+                        ],
+                    ]
+                ]
             ],
 
             'terminate-licence' => [
