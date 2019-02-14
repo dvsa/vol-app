@@ -9,6 +9,9 @@
 namespace Olcs\View\Model\Licence;
 
 use Common\Controller\Interfaces\MethodToggleAwareInterface;
+use Common\Service\Cqrs\Exception\NotFoundException;
+use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence;
+use Olcs\Service\Surrender\SurrenderStateService;
 use Olcs\View\Model\LvaOverview;
 
 /**
@@ -61,6 +64,45 @@ class LicenceOverview extends LvaOverview
         $this->infoBoxLinks = $this->returnDefaultInfoBoxLinks();
 
         parent::__construct($data, $sections);
+    }
+
+    public function setSurrenderLink($data): void
+    {
+        [$route, $linkText] = $this->returnSurrenderLinkText($data);
+        $surrenderLink = [
+            'linkUrl' => [
+                'route' => $route,
+                'params' => [],
+                'options' => [],
+                'reuseMatchedParams' => true
+            ],
+            'linkText' => $linkText
+        ];
+        $this->addInfoBoxLinks($surrenderLink);
+    }
+
+
+
+
+    /**
+     * @param $surrender
+     *
+     * @return array
+     */
+    private function returnSurrenderLinkText($surrender): array
+    {
+
+        $route = 'licence/surrender/start/GET';
+        $linkText = 'licence.apply-to-surrender';
+        if (empty($surrender)) {
+            return [$route, $linkText];
+        }
+        $stateService = new SurrenderStateService();
+        $route = 'licence/surrender/information-changed/GET';
+        if ($stateService->setSurrenderData($surrender)->getState() !== SurrenderStateService::STATE_EXPIRED) {
+            $linkText = 'licence.continue-surrender-application';
+        }
+        return [$route, $linkText];
     }
 
     public function addInfoBoxLinks(array $additionalInfoBoxLinks): void

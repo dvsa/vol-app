@@ -203,4 +203,142 @@ class LicenceOverviewTest extends \PHPUnit\Framework\TestCase
             ]
         ];
     }
+
+
+    /**
+     * @dataProvider dbSurrenderLink
+     */
+    public function testSetSurrenderLink($data)
+    {
+        $sut = new LicenceOverview($data['licenceData']);
+        $sut->setSurrenderLink($data['surrenderData']);
+        $sut->setInfoBoxLinks();
+        $this->assertEquals($sut->infoBoxLinks, $data['expected']);
+    }
+
+    public function dbSurrenderLink()
+    {
+        return [
+
+            'no-surrender-data' => [
+                [
+                    'licenceData' => [
+                        'licNo' => 1,
+                        'inForceDate' => '2014-01-01',
+                        'expiryDate' => '2015-01-01',
+                        'status' => ['id' => 'status'],
+                        'isExpired' => false,
+                        'isExpiring' => true,
+                        'showExpiryWarning' => 'SHOWEXPIRYWARNING',
+                        'continuationMarker' => ['id' => 12345],
+                        'isLicenceSurrenderAllowed' => true
+                    ],
+                    'surrenderData' => [],
+                    'expected' => [
+                        [
+                            'linkUrl' => [
+                                'route' => 'licence-print',
+                                'params' => [],
+                                'options' => [],
+                                'reuseMatchedParams' => true
+                            ],
+                            'linkText' => 'licence.print'
+                        ],
+                        [
+
+                            'linkUrl' => [
+                                'route' => 'licence/surrender/start/GET',
+                                'params' => [],
+                                'options' => [],
+                                'reuseMatchedParams' => true
+                            ],
+                            'linkText' => 'licence.apply-to-surrender'
+
+                        ]
+                    ]
+                ]
+            ],
+            'surrender-data-not-expired' => [
+                [
+                    'licenceData' => [
+                        'licNo' => 1,
+                        'inForceDate' => '2014-01-01',
+                        'expiryDate' => '2015-01-01',
+                        'status' => ['id' => 'status'],
+                        'isExpired' => false,
+                        'isExpiring' => true,
+                        'showExpiryWarning' => 'SHOWEXPIRYWARNING',
+                        'continuationMarker' => ['id' => 12345],
+                        'isLicenceSurrenderAllowed' => true
+                    ],
+                    'surrenderData' => [
+                        'status' => ['id' => 'surr_sts_start'],
+                        'lastModifiedOn' => date(DATE_ATOM, time()),
+                    ],
+                    'expected' => [
+                        [
+                            'linkUrl' => [
+                                'route' => 'licence-print',
+                                'params' => [],
+                                'options' => [],
+                                'reuseMatchedParams' => true
+                            ],
+                            'linkText' => 'licence.print'
+                        ],
+                        [
+
+                            'linkUrl' => [
+                                'route' => 'licence/surrender/information-changed/GET',
+                                'params' => [],
+                                'options' => [],
+                                'reuseMatchedParams' => true
+                            ],
+                            'linkText' => 'licence.continue-surrender-application'
+
+                        ]
+                    ]
+                ]
+            ],
+            'surrender-data-expired' => [
+                [
+                    'licenceData' => [
+                        'licNo' => 1,
+                        'inForceDate' => '2014-01-01',
+                        'expiryDate' => '2015-01-01',
+                        'status' => ['id' => 'status'],
+                        'isExpired' => false,
+                        'isExpiring' => true,
+                        'showExpiryWarning' => 'SHOWEXPIRYWARNING',
+                        'continuationMarker' => ['id' => 12345],
+                        'isLicenceSurrenderAllowed' => true
+                    ],
+                    'surrenderData' => [
+                        'status' => ['id' => 'surr_sts_start'],
+                        'lastModifiedOn' => date(DATE_ATOM, time() -  (3 * 24 * 60 * 60)),
+                    ],
+                    'expected' => [
+                        [
+                            'linkUrl' => [
+                                'route' => 'licence-print',
+                                'params' => [],
+                                'options' => [],
+                                'reuseMatchedParams' => true
+                            ],
+                            'linkText' => 'licence.print'
+                        ],
+                        [
+
+                            'linkUrl' => [
+                                'route' => 'licence/surrender/information-changed/GET',
+                                'params' => [],
+                                'options' => [],
+                                'reuseMatchedParams' => true
+                            ],
+                            'linkText' => 'licence.apply-to-surrender'
+                        ]
+                    ]
+                ]
+            ]
+        ];
+    }
 }

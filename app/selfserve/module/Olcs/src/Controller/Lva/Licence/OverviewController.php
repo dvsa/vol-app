@@ -10,7 +10,6 @@ use Dvsa\Olcs\Transfer\Command\Licence\PrintLicence;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceQry;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 use Olcs\Controller\Lva\Traits\MethodToggleTrait;
-use Olcs\Service\Surrender\SurrenderStateService;
 use Olcs\View\Model\Licence\LicenceOverview;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence;
@@ -31,7 +30,8 @@ class OverviewController extends AbstractController implements MethodToggleAware
     protected $infoBoxLinks = [];
 
     protected $methodToggles = [
-        'addInfoBoxLinks' => FeatureToggleConfig::SELFSERVE_SURRENDER_ENABLED
+        'showSurrenderLink' => FeatureToggleConfig::SELFSERVE_SURRENDER_ENABLED,
+
     ];
 
     /**
@@ -57,10 +57,12 @@ class OverviewController extends AbstractController implements MethodToggleAware
         $viewModel = new LicenceOverview($data, $this->getAccessibleSections(), $variables);
 
         $this->togglableMethod(
-            $viewModel,
-            'addInfoBoxLinks',
-            $this->getSurrenderLink($data)
+            $this,
+            'showSurrenderLink',
+            $data,
+            $viewModel
         );
+
         $viewModel->setInfoBoxLinks();
         return $viewModel;
     }
@@ -134,45 +136,19 @@ class OverviewController extends AbstractController implements MethodToggleAware
         return $accessibleSections;
     }
 
-    private function getSurrenderLink($data)
+
+    protected function showSurrenderLink(array $data, LicenceOverview $viewModel)
     {
-        $surrenderLink = [];
-
-        [$route, $linkText] = $this->returnSurrenderLinkText($data['id']);
-
         if ($data['isLicenceSurrenderAllowed']) {
-            $surrenderLink = [
-                'linkUrl' => [
-                    'route' => $route,
-                    'params' => [],
-                    'options' => [],
-                    'reuseMatchedParams' => true
-                ],
-                'linkText' => $linkText
-            ];
+            $dto = ByLicence::create(['id' => $data['id']]);
+
+            try {
+                $result = $this->handleQuery($dto);
+                $surrenderData = $result->getResult();
+            } catch (NotFoundException $exception) {
+                $surrenderData = [];
+            }
+            $viewModel->setSurrenderLink($surrenderData);
         }
-        return $surrenderLink;
-    }
-
-    private function returnSurrenderLinkText($licenceId) : array
-    {
-        $dto = ByLicence::create(['id' => $licenceId]);
-
-        try {
-            $result = $this->handleQuery($dto);
-            $surrender =  $result->getResult();
-        } catch (NotFoundException $exception) {
-            return ['licence/surrender/start/GET', 'licence.apply-to-surrender'];
-        }
-
-        $route = 'licence/surrender/information-changed/GET';
-        $stateService = new SurrenderStateService();
-
-        if ($stateService->setSurrenderData($surrender)->getState() === SurrenderStateService::STATE_EXPIRED) {
-            $linkText = 'licence.apply-to-surrender';
-        } else {
-            $linkText = 'licence.continue-surrender-application';
-        }
-        return [$route, $linkText];
     }
 }
