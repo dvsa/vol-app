@@ -82,6 +82,8 @@ class LicenceOverview extends LvaOverview
     }
 
 
+
+
     /**
      * @param $surrender
      *
@@ -90,12 +92,13 @@ class LicenceOverview extends LvaOverview
     private function returnSurrenderLinkText($surrender): array
     {
 
-        $route = 'licence/surrender/information-changed/GET';
+        $route = 'licence/surrender/start/GET';
         $linkText = 'licence.apply-to-surrender';
         if (empty($surrender)) {
             return [$route, $linkText];
         }
         $stateService = new SurrenderStateService();
+        $route = 'licence/surrender/information-changed/GET';
         if ($stateService->setSurrenderData($surrender)->getState() !== SurrenderStateService::STATE_EXPIRED) {
             $linkText = 'licence.continue-surrender-application';
         }
