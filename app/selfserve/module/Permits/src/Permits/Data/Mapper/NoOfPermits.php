@@ -5,6 +5,7 @@ namespace Permits\Data\Mapper;
 use Common\Data\Mapper\Permits\NoOfPermits as CommonNoOfPermitsMapper;
 use Common\Service\Helper\TranslationHelperService;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpApplicationDataSource;
+use Permits\Controller\Config\DataSource\IrhpFeePerPermit as IrhpFeePerPermitDataSource;
 use Permits\Controller\Config\DataSource\IrhpMaxStockPermits as IrhpMaxStockPermitsDataSource;
 
 /**
@@ -26,7 +27,8 @@ class NoOfPermits
             $form,
             $translator,
             IrhpApplicationDataSource::DATA_KEY,
-            IrhpMaxStockPermitsDataSource::DATA_KEY
+            IrhpMaxStockPermitsDataSource::DATA_KEY,
+            IrhpFeePerPermitDataSource::DATA_KEY
         );
     }
 }
