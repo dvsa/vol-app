@@ -58,13 +58,13 @@
             </p>
             <p class="govuk-body">
                 <b><?php echo $this->escapeHtml($this->translate('permits.application.overview.fee-per-permit')); ?></b>
-                <?php echo $this->currencyFormatter($data['irhpFeeList']['appFee']); ?>
+                <?php echo $this->currencyFormatter($data['application']['appFee']); ?>
                 <br/>
                 <?php echo $this->escapeHtml($this->translate('permits.page.non.refundable')); ?>
             </p>
             <p class="govuk-body">
                 <b><?php echo $this->escapeHtml($this->translate('permits.application.overview.total-application-fee')); ?></b>
-                <?php echo $this->currencyFormatter($data['irhpFeeList']['appFee'] * $data['application']['permitsRequired']); ?>
+                <?php echo $this->currencyFormatter($data['application']['appFee'] * $data['application']['permitsRequired']); ?>
             </p>
             <p class="govuk-body"><?php echo $this->escapeHtml($this->translate('permits.application.overview.complete-all-sections-warning')); ?></p>
         </div>
