@@ -1,50 +1,41 @@
 <?php
     use Permits\View\Helper\EcmtSection;
-    $title = $this->translate('permits.application.overview.title');
-    $this->headTitle($title);
-    $application = $data['application'];
-    $fee = $data['irhpFeeList'];
+    echo $this->permitsBackLink('common.link.back.label', EcmtSection::ROUTE_PERMITS);
 ?>
-
-<div class="row ecmt">
-    <div class="two-thirds">
-        <div class="page-header">
-            <p><a href="<?php echo $this->url('permits') ?>" class="back-link"> <?php echo $this->escapeHtml($this->translate('common.link.back.label')); ?></a></p>
-            <div class="page-header__wrapper">
-                <h3 class="page-header__subtitle"><?php echo $this->escapeHtml($application['applicationRef']); ?></h3>
-                <h1 class="js-title">
-                    <?php echo $this->escapeHtml($this->translate('permits.application.overview.main')); ?>
-                </h1>
-            </div>
-        </div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <span class="govuk-caption-xl">
+            <?php echo $this->escapeHtml($data['application']['applicationRef']); ?>
+        </span>
+        <h1 class="govuk-heading-xl">
+            <?php echo $this->escapeHtml($this->translate('permits.application.overview.main')); ?>
+        </h1>
         <?php echo $this->flashMessengerAll(); ?>
-
-        <p class="extra-space large">
-            <?php echo $this->translate('permits.application.overview.complete-all-sections'); ?>
+        <p class="govuk-body">
+            <?php echo $this->escapeHtml($this->translate('permits.application.overview.complete-all-sections')); ?>
             <br>
             <?php
-                $link = $this->translate('permits.link.ecmt.guidance');
-                echo sprintf($this->translate('permits.application.overview.further-guidance'), $link);
+                echo $this->translateReplace(
+                    'permits.application.overview.further-guidance',
+                    [
+                        $this->escapeHtml($this->translate('permits.link.ecmt.guidance'))
+                    ]
+                );
             ?>
         </p>
 
         <div class="field">
-            <div class="table_wrapper">
-                <ol class="overview__list">
-                    <?php
-                    $sections = $this->ecmtSection($application);
-
-                    foreach ($sections as $section) {
+            <ol class="overview__list">
+                <?php
+                    foreach ($this->ecmtSection($data['application']) as $section) {
                         echo $this->render($section);
                     }
-                    ?>
-                </ol>
-            </div>
-            <?php
-            if ($application['canBeSubmitted']) {
+                ?>
+            </ol>
+            <?php if ($data['application']['canBeSubmitted']) {
                 $url = $this->url(EcmtSection::ROUTE_ECMT_FEE, [], [], true);
 
-                if (!$application['hasOutstandingFees']) {
+                if (!$data['application']['hasOutstandingFees']) {
                     $url = $this->url(EcmtSection::ROUTE_ECMT_DECLARATION, [], [], true);
                 }
             ?>
@@ -54,41 +45,41 @@
             <?php } ?>
         </div>
     </div>
-    <!-- SIDE PANEL -->
-    <div class="one-third">
-        <aside class="sidebar" role="complementary">
-
-            <div class="info-box info-box--grey">
-                <h3 class="info-box__heading">
-                    <?php echo $this->translate('permits.application.overview.progress'); ?>
-                </h3>
-                <p>
-                    <b><?php echo $this->escapeHtml($application['sectionCompletion']['totalCompleted']); ?>
-                    of
-                    <?php echo $this->escapeHtml($application['sectionCompletion']['totalSections']); ?> complete</b>
-                </p>
-                <p>
-                    <b><?php echo $this->translate('permits.application.overview.fee-per-permit'); ?></b>
-                    <?php echo $this->currencyFormatter($fee['appFee']); ?>
-                    <br />
-                    <?php echo $this->translate('permits.page.non.refundable'); ?>
-                </p>
-                <p>
-                    <b><?php echo $this->translate('permits.application.overview.total-application-fee'); ?></b>
-                    <?php echo $this->currencyFormatter($fee['appFee'] * $application['permitsRequired']); ?>
-                </p>
-                <p><?php echo $this->translate('permits.application.overview.complete-all-sections-warning'); ?></p>
-            </div>
-
-            <div class="info-box info-box--grey">
-                <h3 class="info-box__heading"><?php echo $this->translate('permits.page.ecmt.consideration.application.status'); ?></h3>
-                <p class="info-box__icon-wrapper"><i class="info-box__icon selfserve-important"></i><?php echo $this->escapeHtml($application['status']['description']); ?></p>
-                <?php if ($application['canBeCancelled']) { ?>
-                    <a href="<?php echo $this->url(EcmtSection::ROUTE_CANCEL_APPLICATION, [], [], true); ?>">
-                        <?php echo $this->translate('permits.page.cancel.question'); ?>
-                    </a>
-                <?php } ?>
-            </div>
-        </aside>
-    </div>
+    <aside class="govuk-grid-column-one-third">
+        <div class="info-box info-box--grey">
+            <h2 class="govuk-heading-m">
+                <?php echo $this->escapeHtml($this->translate('permits.application.overview.progress')); ?>
+            </h2>
+            <p class="govuk-body govuk-!-font-weight-bold">
+                <?php echo $this->translateReplace('permits.application.overview.progress.complete', [
+                    $this->escapeHtml($data['application']['sectionCompletion']['totalCompleted']),
+                    $this->escapeHtml($data['application']['sectionCompletion']['totalSections'])
+                ]); ?>
+            </p>
+            <p class="govuk-body">
+                <b><?php echo $this->escapeHtml($this->translate('permits.application.overview.fee-per-permit')); ?></b>
+                <?php echo $this->currencyFormatter($data['irhpFeeList']['appFee']); ?>
+                <br/>
+                <?php echo $this->escapeHtml($this->translate('permits.page.non.refundable')); ?>
+            </p>
+            <p class="govuk-body">
+                <b><?php echo $this->escapeHtml($this->translate('permits.application.overview.total-application-fee')); ?></b>
+                <?php echo $this->currencyFormatter($data['irhpFeeList']['appFee'] * $data['application']['permitsRequired']); ?>
+            </p>
+            <p class="govuk-body"><?php echo $this->escapeHtml($this->translate('permits.application.overview.complete-all-sections-warning')); ?></p>
+        </div>
+        <div class="info-box info-box--grey">
+            <h3 class="govuk-heading-m">
+                <?php echo $this->escapeHtml($this->translate('permits.page.ecmt.consideration.application.status')); ?>
+            </h3>
+            <p class="info-box__icon-wrapper govuk-body">
+                <i class="info-box__icon selfserve-important"></i><?php echo $this->escapeHtml($data['application']['status']['description']); ?>
+            </p>
+            <?php if ($data['application']['canBeCancelled']) { ?>
+                <a class="govuk-link" href="<?php echo $this->url(EcmtSection::ROUTE_CANCEL_APPLICATION, [], [], true); ?>">
+                    <?php echo $this->escapeHtml($this->translate('permits.page.cancel.question')); ?>
+                </a>
+            <?php } ?>
+        </div>
+    </aside>
 </div>

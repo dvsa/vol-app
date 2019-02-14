@@ -3,25 +3,28 @@
     $this->headTitle($title);
 ?>
 
-<div class="row ecmt">
-    <div class="two-thirds">
-        <div class="page-header">
-            <p><?php echo $this->permitsBackLink(); ?></p>
-            <?php echo $this->formErrors($form); ?>
-            <div class="page-header__wrapper">
-                <h3 class="page-header__subtitle"><?php echo $this->escapeHtml($ref); ?></h3>
-                <h1 class="js-title">
+<?php echo $this->permitsBackLink(); ?>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <?php echo $this->formErrors($form); ?>
+        <span class="govuk-caption-xl">
+            <?php echo $this->escapeHtml($ref); ?>
+        </span>
+        <div class="govuk-fieldset">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                <h1 class="govuk-fieldset__heading">
                     <?php echo $this->escapeHtml($this->translate('permits.page.restricted-countries.question')); ?>
                 </h1>
-                <?php echo $this->translate('markup-ecmt-restricted-countries-hint'); ?>
+            </legend>
+            <?php echo $this->partial('partials/guidance-blue-component', [
+                'guidance' => [
+                    'permits.page.restricted-countries.guidance.line.1',
+                    'permits.page.restricted-countries.guidance.line.2'
+                ]
+            ]); ?>
+            <div class="govuk-form-group">
+                <?php echo $this->form($form); ?>
             </div>
         </div>
-
-        <div class="field">
-            <fieldset id="restricted-countries" class="inline extra-space long" data-group="restricted-countries">
-                <?php echo $this->form($form); ?>
-            </fieldset>
-        </div>
-
     </div>
 </div>
