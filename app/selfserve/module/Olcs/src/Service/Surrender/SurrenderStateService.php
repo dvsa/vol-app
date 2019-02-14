@@ -6,7 +6,6 @@ use Common\RefData;
 
 class SurrenderStateService
 {
-
     const STATE_EXPIRED = 'surrender_application_expired';
     const STATE_INFORMATION_CHANGED = 'surrender_application_changed';
     const STATE_OK = 'surrender_application_ok';
