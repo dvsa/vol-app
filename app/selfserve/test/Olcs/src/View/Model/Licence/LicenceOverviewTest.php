@@ -247,7 +247,7 @@ class LicenceOverviewTest extends \PHPUnit\Framework\TestCase
                         [
 
                             'linkUrl' => [
-                                'route' => 'licence/surrender/information-changed/GET',
+                                'route' => 'licence/surrender/start/GET',
                                 'params' => [],
                                 'options' => [],
                                 'reuseMatchedParams' => true
