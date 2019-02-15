@@ -222,7 +222,8 @@ class IrhpApplicationController extends AbstractInternalController implements
             $form,
             $this->getServiceLocator()->get('Helper\Translation'),
             'application',
-            'maxStockPermits'
+            'maxStockPermits',
+            'feePerPermit'
         );
 
         $form->setData($formData);
@@ -268,7 +269,8 @@ class IrhpApplicationController extends AbstractInternalController implements
             $form,
             $this->getServiceLocator()->get('Helper\Translation'),
             'application',
-            'maxStockPermits'
+            'maxStockPermits',
+            'feePerPermit'
         );
 
         $form->setData($formData);
