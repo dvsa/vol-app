@@ -76,6 +76,7 @@ class Checks
      *          "label_position": "append"
      *     }
      * })
+     * @Form\Required(true)
      * @Form\Validator({
      *     "name": "GreaterThan",
      *     "options": {

@@ -3,6 +3,7 @@
 namespace Olcs\Controller\Licence;
 
 use Common\Form\Form;
+use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Surrender\Approve as ApproveSurrender;
 use Dvsa\Olcs\Transfer\Command\Surrender\Withdraw as WithdrawSurrender;
 use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence;
@@ -77,11 +78,11 @@ class SurrenderController extends AbstractInternalController
             $this->flashMessenger()->addSuccessMessage('licence-status.surrender.message.withdrawn');
             return $this->redirect()->toRoute('licence', [], [], true);
         }
-
-        var_dump("fail");
+        $this->flashMessenger()->addErrorMessage("There was an error withdrawing the surrender");
+        return $this->redirect()->refresh();
     }
 
-    public function alterLayout($form)
+    public function alterLayout(Form $form)
     {
         foreach ($this->counts as $key => $value) {
             if ($value === 0) {
@@ -170,6 +171,7 @@ class SurrenderController extends AbstractInternalController
     {
         $command = WithdrawSurrender::create([
             'id' => $licenceId,
+            'status' => RefData::LICENCE_STATUS_VALID //TODO: Replace this the actual status it should return to
         ]);
 
         $response = $this->handleCommand($command);
