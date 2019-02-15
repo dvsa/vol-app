@@ -601,6 +601,7 @@ class LicenceTest extends TestCase
         $this->mockHideButton($mockSidebar, 'licence-decisions-terminate');
         $this->mockHideButton($mockSidebar, 'licence-decisions-undo-surrender');
         $this->mockHideButton($mockSidebar, 'licence-decisions-undo-terminate');
+        $this->mockHideButton($mockSidebar, 'licence-quick-actions-create-variation');
 
         $this->sut->setNavigationService($mockSidebar);
         $this->signatureType = RefData::SIGNATURE_TYPE_DIGITAL_SIGNATURE;
@@ -658,6 +659,7 @@ class LicenceTest extends TestCase
         $this->mockHideButton($mockSidebar, 'licence-decisions-terminate');
         $this->mockHideButton($mockSidebar, 'licence-decisions-undo-surrender');
         $this->mockHideButton($mockSidebar, 'licence-decisions-undo-terminate');
+        $this->mockHideButton($mockSidebar, 'licence-quick-actions-create-variation');
 
         $this->sut->setNavigationService($mockSidebar);
 
@@ -766,6 +768,10 @@ class LicenceTest extends TestCase
         $this->mockHideButton($mockSidebar, 'licence-decisions-terminate');
         $this->mockHideButton($mockSidebar, 'licence-decisions-undo-surrender');
         $this->mockHideButton($mockSidebar, 'licence-decisions-undo-terminate');
+        $this->mockHideButton($mockSidebar, 'licence-decisions-surrender');
+        $this->mockHideButton($mockSidebar, 'licence-quick-actions-create-variation');
+
+
 
         $this->sut->setNavigationService($mockSidebar);
         $this->signatureType = RefData::SIGNATURE_TYPE_DIGITAL_SIGNATURE;

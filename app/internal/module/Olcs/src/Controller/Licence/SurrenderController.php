@@ -2,16 +2,25 @@
 
 namespace Olcs\Controller\Licence;
 
+use Common\Controller\Interfaces\ToggleAwareInterface;
+use Common\FeatureToggle;
 use Common\Form\Form;
 use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence;
 use Dvsa\Olcs\Transfer\Query\Surrender\OpenBusReg;
 use Dvsa\Olcs\Transfer\Query\Surrender\OpenCases;
 use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Controller\Interfaces\LicenceControllerInterface;
+use Olcs\Controller\Interfaces\RightViewProvider;
 use Olcs\Form\Model\Form\Licence\Surrender\Surrender;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericList;
+use Zend\View\Model\ViewModel;
 
-class SurrenderController extends AbstractInternalController
+class SurrenderController extends AbstractInternalController implements
+    ToggleAwareInterface,
+    LeftViewProvider,
+    LicenceControllerInterface
 {
     /**
      * Holds the navigation ID,
@@ -22,6 +31,11 @@ class SurrenderController extends AbstractInternalController
     protected $cases;
     protected $counts;
 
+    protected $toggleConfig = [
+        'default' => [
+            FeatureToggle::INTERNAL_SURRENDER
+        ],
+    ];
 
     /**
      * index Action
@@ -48,7 +62,7 @@ class SurrenderController extends AbstractInternalController
             new GenericItem(['id' => 'licence']),
             'details',
             'sections/licence/pages/surrender',
-            'Surrender details'
+            'Summary: Application to surrender an operator licence'
         );
     }
 
@@ -103,4 +117,13 @@ class SurrenderController extends AbstractInternalController
             $this->tableViewTemplate
         );
     }
+
+    //todo copy partial into licence/surrender or use other way
+    public function getLeftView()
+    {
+        $view = new ViewModel();
+        $view->setTemplate('sections/bus/partials/left');
+        return $view;
+    }
+
 }

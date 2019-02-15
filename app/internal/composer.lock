@@ -733,7 +733,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-lexer-83893c552fd2045dd78aef794c31e694c37c0b8c-zip-53c158.tar",
                 "reference": "83893c552fd2045dd78aef794c31e694c37c0b8c",
-                "shasum": "18b43deed479b7939e25cc21789b44020b28a10f"
+                "shasum": "cec899dc3d5c4df2fb3f4e4c225bf4192f8c5ee9"
             },
             "require": {
                 "php": ">=5.3.2"
@@ -1067,7 +1067,7 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-common.git",
-                "reference": "1f0a5950f1a61454100e1ee6fc32454a8122924c"
+                "reference": "a996d76960b72c47d9def2d0205ba328dfda99a0"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -1120,7 +1120,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2019-02-06T15:36:10+00:00"
+            "time": "2019-02-13 12:34:41"
         },
         {
             "name": "olcs/olcs-auth",
@@ -1128,7 +1128,7 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-auth.git",
-                "reference": "d25f25db6950abd3abe0794f370655519c0b26a0"
+                "reference": "e825ec5d02cb707fe08873ad1a8cb5b64d682aa0"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -1171,7 +1171,7 @@
                 ]
             },
             "description": "OLCS Authentication",
-            "time": "2019-02-08T14:37:01+00:00"
+            "time": "2019-02-13 08:53:38"
         },
         {
             "name": "olcs/olcs-logging",
@@ -1226,7 +1226,7 @@
                 ]
             },
             "description": "Logging Module for Olcs",
-            "time": "2019-01-31T21:06:50+00:00"
+            "time": "2019-01-31 21:06:50"
         },
         {
             "name": "olcs/olcs-transfer",
@@ -1234,7 +1234,7 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-transfer.git",
-                "reference": "b393e1636354fc24e3394f497e4cea43d09f2439"
+                "reference": "d4e77afe43b72f51fe1b539f69a5cd370b1e572f"
             },
             "require": {
                 "php": ">=5.4",
@@ -1275,7 +1275,7 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2019-02-08T15:41:38+00:00"
+            "time": "2019-02-12 15:03:15"
         },
         {
             "name": "olcs/olcs-utils",
@@ -1324,7 +1324,7 @@
                 ]
             },
             "description": "OLCS Utils",
-            "time": "2019-01-31T21:07:02+00:00"
+            "time": "2019-01-31 21:07:02"
         },
         {
             "name": "psr/log",
@@ -1385,7 +1385,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/soflomo-purifier-1f2d85a1b67bdb75bd86eb7a490e1c12280972b9-zip-b8842f.tar",
                 "reference": "1f2d85a1b67bdb75bd86eb7a490e1c12280972b9",
-                "shasum": "70c2b125e7fd690f1ce262ebfa5195228dd43216"
+                "shasum": "ea7937f729e2a464e602c36c580525f9855b395a"
             },
             "require": {
                 "ezyang/htmlpurifier": ">=4.5.0",
@@ -1558,7 +1558,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/symfony-filesystem-823c035b1a5c13a4924e324d016eb07e70f94735-zip-9c1b69.tar",
                 "reference": "823c035b1a5c13a4924e324d016eb07e70f94735",
-                "shasum": "539d153f2b1aa605a3ac89ec6c5e8b25b867e0db"
+                "shasum": "4f9a1c1c36e6fb6e81d562aeadb88b94e7057684"
             },
             "require": {
                 "php": ">=5.3.3"
@@ -1666,7 +1666,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/zendframework-zendframework-06bf809653a51e843b7a84dc380ac1d8a0a6a1ea-zip-4d29b5.tar",
                 "reference": "06bf809653a51e843b7a84dc380ac1d8a0a6a1ea",
-                "shasum": "115fcbb953bf6c73ebbe21934ccbcb4a21eaa5b6"
+                "shasum": "96f1587ee52bb424370175e742cc0269e9d7057c"
             },
             "require": {
                 "php": ">=5.3.23",
@@ -1829,7 +1829,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/zf-commons-zfc-rbac-42f466656ad9730025a6bbbfd4144ac2f3abb64c-zip-fcc7d7.tar",
                 "reference": "42f466656ad9730025a6bbbfd4144ac2f3abb64c",
-                "shasum": "d773441c43af84c131611f78dee3032410c4dc76"
+                "shasum": "8c94e3c3e3ebb84e48f66d2b8a5c9fea4df8b3f0"
             },
             "require": {
                 "php": ">=5.4",
@@ -1905,7 +1905,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/zfr-rbac-493711bfc2a637fd7c6f23b71b7b55a621c35d9d-zip-85e76c.tar",
                 "reference": "493711bfc2a637fd7c6f23b71b7b55a621c35d9d",
-                "shasum": "0e4ba62f47c21d1a3559f72dbdfdef262fd78b05"
+                "shasum": "95d923e0294efd055fdd8e381a9ea9d46e05e4f9"
             },
             "require": {
                 "php": ">=5.4"
@@ -2199,7 +2199,7 @@
                 }
             },
             "description": "Dev tools",
-            "time": "2018-12-14T13:31:23+00:00"
+            "time": "2018-12-14 13:31:23"
         },
         {
             "name": "olcs/olcs-testhelpers",
@@ -2224,7 +2224,7 @@
                 }
             },
             "description": "OLCS Test helpers",
-            "time": "2019-01-31T21:06:53+00:00"
+            "time": "2019-01-31 21:06:53"
         },
         {
             "name": "pdepend/pdepend",
@@ -2380,7 +2380,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/phpdocumentor-reflection-common-21bdeb5f65d7ebf9f43b1b25d404f87deab5bfb6-zip-5ca449.tar",
                 "reference": "21bdeb5f65d7ebf9f43b1b25d404f87deab5bfb6",
-                "shasum": "6d22b4db10e3cfc544d625240aa2f2b3a8b1930d"
+                "shasum": "94c4e76bf8c0e0c7da4496217a175d50c5d6b1df"
             },
             "require": {
                 "php": ">=5.5"
@@ -2867,7 +2867,7 @@
                 "type": "tar",
                 "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/phpunit-php-text-template-31f8b717e51d9a2afca6c9f046f5d69fc27c8686-zip-c6bcbd.tar",
                 "reference": "31f8b717e51d9a2afca6c9f046f5d69fc27c8686",
-                "shasum": "fe021fc7cd878081e202335219f6abd6a2595e78"
+                "shasum": "d2c6b195850427df82a2abb760dad89a8bfc7e88"
             },
             "require": {
                 "php": ">=5.3.3"
