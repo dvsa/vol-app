@@ -61,10 +61,8 @@ class SurrenderController extends AbstractInternalController
 
         $this->setupCasesTable();
         $this->setupBusRegTable();
-
-
-        if ($form->isValid()) {
-//        if ($form->isValid() && $this->counts['openCases'] === 0 && $this->counts['busRegistrations'] === 0) {
+        
+        if ($form->isValid() && $this->counts['openCases'] === 0 && $this->counts['busRegistrations'] === 0) {
             if ($this->surrenderLicence($licenceId)) {
                 $this->flashMessenger()->addSuccessMessage('licence-status.surrender.message.save.success');
                 return $this->redirect()->toRoute('licence', [], [], true);
