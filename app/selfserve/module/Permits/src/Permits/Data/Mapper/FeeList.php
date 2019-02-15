@@ -47,7 +47,7 @@ class FeeList
             4 => [
                 'key' => 'permits.page.fee.number.permits',
                 'value' => $translator->translateReplace(
-                    'permits.page.fee.per-permit',
+                    'permits.page.fee.number.permits.value',
                     [
                         $data['application']['permitsRequired'],
                         $currency($data['application']['appFee'])
