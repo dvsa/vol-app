@@ -625,7 +625,7 @@ return [
                       'route'    => '[/:id]/licence[/]',
                       'defaults' => [
                           'controller'    => LicenceController::class,
-                          'action'        => 'questionEcmt',
+                          'action'        => 'question-ecmt',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',

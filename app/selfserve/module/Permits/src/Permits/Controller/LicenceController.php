@@ -26,19 +26,19 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
     protected $dataSourceConfig = [
         'add' => DataSourceConfig::PERMIT_APP_ADD_LICENCE,
         'question' => DataSourceConfig::PERMIT_APP_LICENCE,
-        'questionEcmt' => DataSourceConfig::PERMIT_APP_ECMT_LICENCE,
+        'question-ecmt' => DataSourceConfig::PERMIT_APP_ECMT_LICENCE,
     ];
 
     protected $conditionalDisplayConfig = [
         'add' => ConditionalDisplayConfig::PERMIT_APP_CAN_APPLY_SINGLE,
         'question' => ConditionalDisplayConfig::IRHP_APP_NOT_SUBMITTED,
-        'questionEcmt' => ConditionalDisplayConfig::PERMIT_APP_NOT_SUBMITTED,
+        'question-ecmt' => ConditionalDisplayConfig::PERMIT_APP_NOT_SUBMITTED,
     ];
 
     protected $formConfig = [
         'add' => FormConfig::FORM_ADD_LICENCE,
         'question' => FormConfig::FORM_LICENCE,
-        'questionEcmt' => FormConfig::FORM_ECMT_LICENCE,
+        'question-ecmt' => FormConfig::FORM_ECMT_LICENCE,
     ];
 
     protected $templateConfig = [
@@ -56,7 +56,7 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
             'question' => 'permits.page.licence.question',
             'backUri' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW
         ],
-        'questionEcmt' => [
+        'question-ecmt' => [
             'browserTitle' => 'permits.page.licence.browser.title',
             'question' => 'permits.page.licence.question',
             'backUri' => EcmtSection::ROUTE_APPLICATION_OVERVIEW
@@ -79,7 +79,7 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
                 'field' => ['licence', 'id'],
             ]
         ],
-        'questionEcmt' => [
+        'question-ecmt' => [
             'params' => ParamsConfig::CONFIRM_CHANGE,
             'step' => EcmtSection::ROUTE_CONFIRM_CHANGE,
             'conditional' => [
