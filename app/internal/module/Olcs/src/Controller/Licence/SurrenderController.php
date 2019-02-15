@@ -21,8 +21,16 @@ class SurrenderController extends AbstractInternalController
      * represented by a single navigation id.
      */
     protected $navigationId = 'licence_surrender';
-    protected $cases;
+
+    /**
+     * @var array
+     */
     protected $counts;
+
+    /**
+     * @var Form
+     */
+    protected $form;
 
     /**
      * index Action
@@ -31,48 +39,34 @@ class SurrenderController extends AbstractInternalController
      */
     public function indexAction()
     {
-        $this->setupCasesTable();
-        $this->setupBusRegTable();
-        /**
-         * @var $form Form
-         */
-        $form = $this->getForm(Surrender::class);
-
-        $this->placeholder()->setPlaceholder('form', $form);
-
-        $this->alterLayout($form);
-
-        return $this->details(
-            ByLicence::class,
-            new GenericItem(['id' => 'licence']),
-            'details',
-            'sections/licence/pages/surrender',
-            'Surrender details'
-        );
+        $this->setupData();
+        return $this->getView();
     }
 
     public function surrenderAction()
     {
         $licenceId = (int)$this->params('licence');
 
-        /** @var Form $form */
-        $form = $this->getForm(Surrender::class);
-        $form->setData($this->getRequest()->getPost());
+        $this->setupData();
+        $this->form->setData($this->getRequest()->getPost());
 
-        $this->setupCasesTable();
-        $this->setupBusRegTable();
-        
-        if ($form->isValid() && $this->counts['openCases'] === 0 && $this->counts['busRegistrations'] === 0) {
-            if ($this->surrenderLicence($licenceId)) {
-                $this->flashMessenger()->addSuccessMessage('licence-status.surrender.message.save.success');
-                return $this->redirect()->toRoute('licence', [], [], true);
-            } else {
-                var_dump("command_fail");
-            }
-
+        $canSurrender = $this->form->isValid();
+        if ($this->counts['openCases'] > 0 && $this->counts['busRegistrations'] > 0) {
+            $this->flashMessenger()->addErrorMessage("You cannot surrender a licence with open cases or active bus registrations");
+            $canSurrender = false;
         }
 
-        var_dump("fail");
+        if (!$canSurrender) {
+            return $this->getView();
+        }
+
+        if (!$this->surrenderLicence($licenceId)) {
+            $this->flashMessenger()->addErrorMessage("There was an error surrendering the licence");
+            return $this->getView();
+        }
+
+        $this->flashMessenger()->addSuccessMessage('licence-status.surrender.message.save.success');
+        return $this->redirect()->toRoute('licence', [], [], true);
     }
 
     public function withdrawAction()
@@ -98,6 +92,35 @@ class SurrenderController extends AbstractInternalController
         }
     }
 
+    public function alterTable($table, $data)
+    {
+        $tableName = $table->getAttributes()['name'];
+        $this->counts[$tableName] = $data['count'];
+        return $table;
+    }
+
+    private function setupData()
+    {
+        $this->setupCasesTable();
+        $this->setupBusRegTable();
+        $this->form = $this->getForm(Surrender::class);
+    }
+
+    private function getView()
+    {
+        $this->placeholder()->setPlaceholder('form', $this->form);
+
+        $this->alterLayout($this->form);
+
+        return $this->details(
+            ByLicence::class,
+            new GenericItem(['id' => 'licence']),
+            'details',
+            'sections/licence/pages/surrender',
+            'Surrender details'
+        );
+    }
+
     /**
      * Setup Oppositions table
      *
@@ -112,13 +135,6 @@ class SurrenderController extends AbstractInternalController
             'open-cases',
             $this->tableViewTemplate
         );
-    }
-
-    public function alterTable($table, $data)
-    {
-        $tableName = $table->getAttributes()['name'];
-        $this->counts[$tableName] = $data['count'];
-        return $table;
     }
 
     /**
