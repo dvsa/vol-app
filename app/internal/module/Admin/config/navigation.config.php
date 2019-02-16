@@ -230,6 +230,11 @@ return [
                             'label' => 'Open cases',
                             'route' => 'admin-dashboard/admin-report/cases/open',
                         ],
+                        [
+                            'id' => 'admin-dashboard/admin-report/upload',
+                            'label' => 'Upload reports',
+                            'route' => 'admin-dashboard/admin-report/upload',
+                        ],
                     ],
                 ],
                 [
