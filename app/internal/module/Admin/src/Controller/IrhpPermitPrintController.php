@@ -11,7 +11,6 @@ use Dvsa\Olcs\Transfer\Command\Permits\PrintPermits as PrintPermitsDto;
 use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrint as ListDto;
 use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintConfirm as ConfirmListDto;
 use Zend\View\Model\ViewModel;
-use Admin\Form\Model\Form\IrhpPermitPrintFilter as FilterForm;
 
 /**
  * IRHP Permits Stock Print Controller
@@ -28,9 +27,8 @@ class IrhpPermitPrintController extends AbstractInternalController implements Le
     protected $defaultTableSortField = 'permitNumber';
     protected $defaultTableOrderField = 'ASC';
 
-    protected $listVars = [];
+    protected $listVars = ['irhpPermitStock' => 'id'];
     protected $listDto = ListDto::class;
-    protected $filterForm = FilterForm::class;
 
     protected $navigationId = 'admin-dashboard/admin-printing/irhp-permits';
 
@@ -38,6 +36,13 @@ class IrhpPermitPrintController extends AbstractInternalController implements Le
         'confirm' => ['requireRows' => true],
         'cancel' => ['requireRows' => false],
         'print' => ['requireRows' => false],
+    ];
+
+    /**
+     * @var array
+     */
+    protected $inlineScripts = [
+        'indexAction' => ['forms/irhp-permit-print'],
     ];
 
     /**
@@ -59,12 +64,73 @@ class IrhpPermitPrintController extends AbstractInternalController implements Le
     }
 
     /**
+     * Set the page title
+     *
+     * @return void
+     */
+    private function setPageTitle()
+    {
+        $this->placeholder()->setPlaceholder('pageTitle', 'Print IRHP Permits');
+    }
+
+    /**
+     * Action: index
+     *
+     * @return \Zend\Http\Response|ViewModel
+     */
+    public function indexAction()
+    {
+        /** @var \Zend\Http\Request $request */
+        $request = $this->getRequest();
+
+        $form = $this->getForm('IrhpPermitPrint');
+
+        if ($request->isPost()) {
+            $form->setData((array)$request->getPost());
+
+            if ($form->isValid()) {
+                $data = $form->getData();
+
+                return $this->redirect()->toRouteAjax(
+                    'admin-dashboard/admin-printing/irhp-permits',
+                    [
+                        'action' => 'list',
+                        'id' => $data['fields']['irhpPermitStock']
+                    ],
+                    [],
+                    true
+                );
+            }
+        }
+
+        $this->setPageTitle();
+        $view = new ViewModel(['form' => $form]);
+        $view->setTemplate('pages/form');
+
+        return $this->viewBuilder()->buildView($view);
+    }
+
+    /**
+     * List Action
+     *
+     * @return ViewModel | \Zend\Http\Response
+     */
+    public function listAction()
+    {
+        $this->setPageTitle();
+
+        return parent::indexAction();
+    }
+
+    /**
      * Confirm Action
      *
      * @return ViewModel | \Zend\Http\Response
      */
     public function confirmAction()
     {
+        $this->setPageTitle();
+
         return $this->index(
             ConfirmListDto::class,
             new AddFormDefaultData(['ids' => explode(',', $this->params()->fromRoute('id'))]),
@@ -81,6 +147,7 @@ class IrhpPermitPrintController extends AbstractInternalController implements Le
      * @param array                              $data  data
      *
      * @return \Common\Service\Table\TableBuilder
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function alterTable($table, $data)
     {

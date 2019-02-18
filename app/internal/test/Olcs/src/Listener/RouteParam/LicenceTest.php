@@ -770,7 +770,6 @@ class LicenceTest extends TestCase
         $this->sut->setNavigationService($mockSidebar);
         $this->signatureType = RefData::SIGNATURE_TYPE_DIGITAL_SIGNATURE;
         $this->mockMainNavigation($licence['goodsOrPsv']['id'], true);
-       
 
         $mockSurrenderService = m::mock(Surrender::class);
         $mockSurrenderService->shouldReceive('fetchSurrenderData')->with(4)->times(1)->andThrow(

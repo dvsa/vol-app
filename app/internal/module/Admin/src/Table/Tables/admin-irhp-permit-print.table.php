@@ -8,6 +8,10 @@ return [
                     'requireRows' => true,
                     'label' => 'Continue',
                     'class' => 'action--primary js-require--multiple'
+                ],
+                'cancel' => [
+                    'requireRows' => false,
+                    'class' => 'action--secondary'
                 ]
             ]
         ],

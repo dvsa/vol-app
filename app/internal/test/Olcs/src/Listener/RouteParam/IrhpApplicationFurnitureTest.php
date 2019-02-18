@@ -15,7 +15,6 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParam\IrhpApplicationFurniture;
 use Mockery as m;
-use Olcs\Listener\RouteParam\IrhpPermitFurniture;
 use Olcs\Listener\RouteParams;
 use Common\RefData;
 use Zend\View\Model\ViewModel;
@@ -180,10 +179,10 @@ class IrhpApplicationFurnitureTest extends TestCase
     public function testCreateService()
     {
         $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
-        $mockNavigation = m::mock();
+        $mockNavigation = m::mock('Zend\Navigation\Navigation');
         $mockQuerySender = m::mock(QuerySender::class);
         $mockCommandSender = m::mock(CommandSender::class);
-        $mockSidebar = m::mock();
+        $mockSidebar = m::mock('Zend\Navigation\Navigation');
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
@@ -192,7 +191,7 @@ class IrhpApplicationFurnitureTest extends TestCase
         $mockSl->shouldReceive('get')->with('Navigation')->andReturn($mockNavigation);
         $mockSl->shouldReceive('get')->with('right-sidebar')->andReturn($mockSidebar);
 
-        $sut = new IrhpPermitFurniture();
+        $sut = new IrhpApplicationFurniture();
         $service = $sut->createService($mockSl);
 
         $this->assertSame($sut, $service);

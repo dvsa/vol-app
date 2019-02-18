@@ -255,6 +255,17 @@ $routes = [
                     ]
                 ],
             ],
+            'surrender-details' =>[
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'surrender-details[/]',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Licence\SurrenderController::class,
+                        'action' => 'index',
+                    ]
+                ],
+            ],
+
             'terminate-licence' => [
                 'type' => 'segment',
                 'options' => [
@@ -842,15 +853,17 @@ $routes = [
             'irhp-permits' => [
                 'type' => 'segment',
                 'options' => [
-                    'route' => 'permits/:permitid/irhp-permits[/:action][/:irhpPermitId][/]',
+                    'route' => 'permits/:permitid/:permitTypeId/irhp-permits[/:action][/:irhpPermitId][/]',
                     'constraints' => [
                         'permitid' => '[0-9]+',
                         'action' => 'requestReplacement',
                         'irhpPermitId' => '[0-9]+',
+                        'permitTypeId' => '[0-9]+',
                     ],
                     'defaults' => [
                         'controller' => 'IrhpPermitController',
                         'action' => 'index',
+                        'permitTypeId' => 1,
                     ]
                 ],
                 'may_terminate' => true,

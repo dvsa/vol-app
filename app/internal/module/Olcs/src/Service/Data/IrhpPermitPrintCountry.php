@@ -5,24 +5,19 @@ namespace Olcs\Service\Data;
 use Common\Service\Data\AbstractDataService;
 use Common\Service\Data\ListDataInterface;
 use Common\Service\Entity\Exceptions\UnexpectedResponseException;
-use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintStock;
+use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintCountry;
 
 /**
- * Class IrhpPermitPrintStock
+ * Class IrhpPermitPrintCountry
  *
  * @package Olcs\Service\Data
  */
-class IrhpPermitPrintStock extends AbstractDataService implements ListDataInterface
+class IrhpPermitPrintCountry extends AbstractDataService implements ListDataInterface
 {
     /**
      * @var int
      */
     private $irhpPermitType;
-
-    /**
-     * @var string
-     */
-    private $country;
 
     /**
      * Set Irhp Permit Type
@@ -48,29 +43,6 @@ class IrhpPermitPrintStock extends AbstractDataService implements ListDataInterf
     }
 
     /**
-     * Set country
-     *
-     * @param string $country Country
-     *
-     * @return $this
-     */
-    public function setCountry($country)
-    {
-        $this->country = $country;
-        return $this;
-    }
-
-    /**
-     * Get country
-     *
-     * @return string
-     */
-    public function getCountry()
-    {
-        return $this->country;
-    }
-
-    /**
      * Format data
      *
      * @param array $data Data
@@ -82,11 +54,7 @@ class IrhpPermitPrintStock extends AbstractDataService implements ListDataInterf
         $optionData = [];
 
         foreach ($data as $datum) {
-            $optionData[$datum['id']] = sprintf(
-                '%s to %s',
-                $datum['validFrom'],
-                $datum['validTo']
-            );
+            $optionData[$datum['id']] = $datum['countryDesc'];
         }
 
         return $optionData;
@@ -120,22 +88,17 @@ class IrhpPermitPrintStock extends AbstractDataService implements ListDataInterf
      */
     public function fetchListData()
     {
-        if (is_null($this->getData('IrhpPermitPrintStock'))) {
-            $dtoData = ReadyToPrintStock::create(
-                [
-                    'irhpPermitType' => $this->irhpPermitType,
-                    'country' => $this->country,
-                ]
-            );
+        if (is_null($this->getData('IrhpPermitPrintCountry'))) {
+            $dtoData = ReadyToPrintCountry::create(['irhpPermitType' => $this->getIrhpPermitType()]);
             $response = $this->handleQuery($dtoData);
 
             if (!$response->isOk()) {
                 throw new UnexpectedResponseException('unknown-error');
             }
 
-            $this->setData('IrhpPermitPrintStock', $response->getResult()['results']);
+            $this->setData('IrhpPermitPrintCountry', $response->getResult()['results']);
         }
 
-        return $this->getData('IrhpPermitPrintStock');
+        return $this->getData('IrhpPermitPrintCountry');
     }
 }
