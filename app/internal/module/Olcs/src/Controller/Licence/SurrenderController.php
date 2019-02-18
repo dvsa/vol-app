@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Licence;
 
+use Common\Controller\Traits\GenericRenderView;
 use Common\Form\Form;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Surrender\Approve as ApproveSurrender;
@@ -10,12 +11,16 @@ use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence;
 use Dvsa\Olcs\Transfer\Query\Surrender\OpenBusReg;
 use Dvsa\Olcs\Transfer\Query\Surrender\OpenCases;
 use Olcs\Controller\AbstractInternalController;
+use Olcs\Form\Model\Form\Licence\Surrender\Confirmation;
 use Olcs\Form\Model\Form\Licence\Surrender\Surrender;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericList;
+use Zend\View\Model\ViewModel;
 
 class SurrenderController extends AbstractInternalController
 {
+    use GenericRenderView;
+
     /**
      * Holds the navigation ID,
      * required when an entire controller is
@@ -70,27 +75,40 @@ class SurrenderController extends AbstractInternalController
         return $this->redirect()->toRoute('licence', [], [], true);
     }
 
-    public function withdrawAction()
+    public function confirmWithdrawAction()
     {
         $licenceId = (int)$this->params('licence');
 
         if ($this->withdrawSurrender($licenceId)) {
             $this->flashMessenger()->addSuccessMessage('licence-status.surrender.message.withdrawn');
-            return $this->redirect()->toRoute('licence', [], [], true);
+            return $this->redirect()->toRouteAjax('licence', [], [], true);
         }
         $this->flashMessenger()->addErrorMessage("There was an error withdrawing the surrender");
         return $this->redirect()->refresh();
     }
 
-    public function alterLayout(Form $form)
+    public function withdrawAction()
+    {
+        $form = $this->getForm(Confirmation::class);
+        $form->get('messages')->get('message')->setValue('Are you sure you wish to withdraw the application to surrender this licence?');
+
+        $view = new ViewModel();
+        $view->setVariable('form', $form);
+        $view->setTemplate('pages/form');
+
+        return $this->renderView($view, 'Confirm Withdraw');
+    }
+
+    public function alterLayout()
     {
         foreach ($this->counts as $key => $value) {
             if ($value === 0) {
                 $this->placeholder()->setPlaceholder($key, '');
             } else {
-                $form->get('checks')->remove($key);
+                $this->form->get('checks')->remove($key);
             }
         }
+        $this->form->get('actions')->get('withdraw')->setOption('href', $this->url()->fromRoute('licence/surrender-details/withdraw/GET', [], [], true));
     }
 
     public function alterTable($table, $data)
@@ -111,7 +129,7 @@ class SurrenderController extends AbstractInternalController
     {
         $this->placeholder()->setPlaceholder('form', $this->form);
 
-        $this->alterLayout($this->form);
+        $this->alterLayout();
 
         return $this->details(
             ByLicence::class,

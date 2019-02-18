@@ -284,6 +284,37 @@ $routes = [
                                 'action' => 'surrender'
                             ],
                         ],
+                    ],
+                    'withdraw' => [
+                        'may_terminate' => false,
+                        'type' => \Zend\Mvc\Router\Http\Segment::class,
+                        'options' => [
+                            'route' => 'withdraw[/]',
+                        ],
+                        'child_routes' => [
+                            'GET' => [
+                                'may_terminate' => true,
+                                'type' => \Zend\Mvc\Router\Http\Method::class,
+                                'options' => [
+                                    'verb' => 'GET',
+                                    'defaults' => [
+                                        'controller' => SurrenderController::class,
+                                        'action' => 'withdraw'
+                                    ],
+                                ],
+                            ],
+                            'POST' => [
+                                'may_terminate' => true,
+                                'type' => \Zend\Mvc\Router\Http\Method::class,
+                                'options' => [
+                                    'verb' => 'POST',
+                                    'defaults' => [
+                                        'controller' => SurrenderController::class,
+                                        'action' => 'confirmWithdraw'
+                                    ],
+                                ],
+                            ]
+                        ]
                     ]
                 ]
             ],
