@@ -10,6 +10,7 @@ use Dvsa\Olcs\Transfer\Command\Surrender\Withdraw as WithdrawSurrender;
 use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence;
 use Dvsa\Olcs\Transfer\Query\Surrender\OpenBusReg;
 use Dvsa\Olcs\Transfer\Query\Surrender\OpenCases;
+use Dvsa\Olcs\Transfer\Query\Surrender\PreviousLicenceStatus;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Form\Model\Form\Licence\Surrender\Confirmation;
 use Olcs\Form\Model\Form\Licence\Surrender\Surrender;
@@ -186,9 +187,14 @@ class SurrenderController extends AbstractInternalController
 
     private function withdrawSurrender(int $licenceId): bool
     {
+        $query = PreviousLicenceStatus::create(['id' => $licenceId]);
+        $result = $this->handleQuery($query)->getResult();
+        $status = $result['status'];
+
+
         $command = WithdrawSurrender::create([
             'id' => $licenceId,
-            'status' => RefData::LICENCE_STATUS_VALID //TODO: Replace this the actual status it should return to
+            'status' => $status
         ]);
 
         $response = $this->handleCommand($command);
