@@ -75,18 +75,6 @@ class SurrenderController extends AbstractInternalController
         return $this->redirect()->toRoute('licence', [], [], true);
     }
 
-    public function confirmWithdrawAction()
-    {
-        $licenceId = (int)$this->params('licence');
-
-        if ($this->withdrawSurrender($licenceId)) {
-            $this->flashMessenger()->addSuccessMessage('licence-status.surrender.message.withdrawn');
-            return $this->redirect()->toRouteAjax('licence', [], [], true);
-        }
-        $this->flashMessenger()->addErrorMessage("There was an error withdrawing the surrender");
-        return $this->redirect()->refresh();
-    }
-
     public function withdrawAction()
     {
         $form = $this->getForm(Confirmation::class);
@@ -99,6 +87,18 @@ class SurrenderController extends AbstractInternalController
         return $this->renderView($view, 'Confirm Withdraw');
     }
 
+    public function confirmWithdrawAction()
+    {
+        $licenceId = (int)$this->params('licence');
+
+        if ($this->withdrawSurrender($licenceId)) {
+            $this->flashMessenger()->addSuccessMessage('licence-status.surrender.message.withdrawn');
+            return $this->redirect()->toRouteAjax('licence', [], [], true);
+        }
+        $this->flashMessenger()->addErrorMessage("There was an error withdrawing the surrender");
+        return $this->redirect()->refresh();
+    }
+
     public function alterLayout()
     {
         foreach ($this->counts as $key => $value) {
@@ -108,7 +108,6 @@ class SurrenderController extends AbstractInternalController
                 $this->form->get('checks')->remove($key);
             }
         }
-        $this->form->get('actions')->get('withdraw')->setOption('href', $this->url()->fromRoute('licence/surrender-details/withdraw/GET', [], [], true));
     }
 
     public function alterTable($table, $data)
