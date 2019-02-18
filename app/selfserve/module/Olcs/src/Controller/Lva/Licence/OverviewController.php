@@ -141,10 +141,12 @@ class OverviewController extends AbstractController implements MethodToggleAware
     {
         if ($data['isLicenceSurrenderAllowed']) {
             $dto = ByLicence::create(['id' => $data['id']]);
-
+            $surrenderData = [];
             try {
                 $result = $this->handleQuery($dto);
-                $surrenderData = $result->getResult();
+                if ($result->isOk()) {
+                    $surrenderData = $result->getResult();
+                }
             } catch (NotFoundException $exception) {
                 $surrenderData = [];
             }
