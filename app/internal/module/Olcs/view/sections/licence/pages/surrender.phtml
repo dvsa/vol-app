@@ -1,11 +1,9 @@
 <div class="content">
 <?php
-var_dump($this->placeholder('details')->getValue()['id']);
+$details = $this->placeholder('details')->getValue();
 echo $this->render(
     'sections/licence/partials/surrender/application-details',
-    [
-
-    ]
+    ['surrender' =>$details]
 );
 ?>
 <h2> Open Items</h2>

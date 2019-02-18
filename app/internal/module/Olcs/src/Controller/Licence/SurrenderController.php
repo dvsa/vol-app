@@ -118,12 +118,10 @@ class SurrenderController extends AbstractInternalController implements
         );
     }
 
-    //todo copy partial into licence/surrender or use other way
     public function getLeftView()
     {
         $view = new ViewModel();
-        $view->setTemplate('sections/bus/partials/left');
+        $view->setTemplate('sections/licence/partials/surrender/left');
         return $view;
     }
-
 }
