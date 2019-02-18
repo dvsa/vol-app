@@ -1,5 +1,7 @@
 <?php
 
+use Olcs\Controller\IrhpPermits\IrhpApplicationController;
+use Olcs\Controller\IrhpPermits\IrhpApplicationFeesController;
 use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController as TMProcessingNoteController;
 use Olcs\Controller\Application\Processing\ApplicationProcessingNoteController;
 use Olcs\Controller\Licence\BusRegistrationController as LicenceBusController;
@@ -253,6 +255,17 @@ $routes = [
                     ]
                 ],
             ],
+            'surrender-details' =>[
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'surrender-details[/]',
+                    'defaults' => [
+                        'controller' => \Olcs\Controller\Licence\SurrenderController::class,
+                        'action' => 'index',
+                    ]
+                ],
+            ],
+
             'terminate-licence' => [
                 'type' => 'segment',
                 'options' => [
@@ -774,6 +787,25 @@ $routes = [
                     'print-receipt' => $feePrintReceiptRoute,
                 ]
             ],
+            'irhp-application-fees' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'irhp-application/:irhpAppId/fees[/]',
+                    'constraints' => [
+                        'permitid' => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => IrhpApplicationFeesController::class,
+                        'action' => 'fees',
+                    ]
+                ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'fee_action' => $feeActionRoute,
+                    'fee_type_ajax' => $feeTypeAjaxRoute,
+                    'print-receipt' => $feePrintReceiptRoute,
+                ]
+            ],
             'permits' => [
                 'type' => 'segment',
                 'options' => [
@@ -821,15 +853,17 @@ $routes = [
             'irhp-permits' => [
                 'type' => 'segment',
                 'options' => [
-                    'route' => 'permits/:permitid/irhp-permits[/:action][/:irhpPermitId][/]',
+                    'route' => 'permits/:permitid/:permitTypeId/irhp-permits[/:action][/:irhpPermitId][/]',
                     'constraints' => [
                         'permitid' => '[0-9]+',
                         'action' => 'requestReplacement',
                         'irhpPermitId' => '[0-9]+',
+                        'permitTypeId' => '[0-9]+',
                     ],
                     'defaults' => [
                         'controller' => 'IrhpPermitController',
                         'action' => 'index',
+                        'permitTypeId' => 1,
                     ]
                 ],
                 'may_terminate' => true,
@@ -940,6 +974,53 @@ $routes = [
                             'defaults' => [
                                 'controller' => IrhpPermitProcessingTasksController::class,
                                 'action' => 'index'
+                            ]
+                        ]
+                    ],
+                ]
+            ],
+            'irhp-application' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'irhp-application[/]',
+                    'defaults' => [
+                        'controller' => IrhpApplicationController::class,
+                        'action' => 'index',
+                    ]
+                ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'add' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'add[/]:permitTypeId[/]',
+                            'defaults' => [
+                                'action' => 'add'
+                            ],
+                            'constraints' => [
+                                'permitTypeId' => '[0-9]+',
+                            ],
+                        ]
+                    ],
+                    'selectType' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'type[/]',
+                            'defaults' => [
+                                'action' => 'selectType'
+                            ]
+                        ]
+                    ],
+                    'application' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => ':action/:irhpAppId[/]',
+                            'constraints' => [
+                                'action' => 'edit|submit|accept|decline|cancel|withdraw',
+                                'irhpAppId' => '[0-9]+',
+                            ],
+                            'defaults' => [
+                                'action' => 'edit'
                             ]
                         ]
                     ],

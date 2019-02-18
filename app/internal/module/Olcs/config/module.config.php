@@ -18,6 +18,7 @@ use Olcs\Controller\SearchController;
 
 use Olcs\Listener\RouteParam\Application as ApplicationListener;
 use Olcs\Listener\RouteParam\ApplicationFurniture;
+use Olcs\Listener\RouteParam\IrhpApplicationFurniture;
 use Olcs\Listener\RouteParam\VariationFurniture;
 use Olcs\Listener\RouteParam\Licence as LicenceListener;
 use Olcs\Listener\RouteParam\LicenceFurniture;
@@ -326,6 +327,8 @@ return array(
             'CaseDocumentSlaTargetDateController' => 'Olcs\Controller\Sla\CaseDocumentSlaTargetDateController',
             'LicenceDocumentSlaTargetDateController' => 'Olcs\Controller\Sla\LicenceDocumentSlaTargetDateController',
             'IrhpPermitApplicationController' => 'Olcs\Controller\IrhpPermits\IrhpPermitApplicationController',
+            \Olcs\Controller\IrhpPermits\IrhpApplicationController::class => \Olcs\Controller\IrhpPermits\IrhpApplicationController::class,
+            \Olcs\Controller\IrhpPermits\IrhpApplicationFeesController::class => \Olcs\Controller\IrhpPermits\IrhpApplicationFeesController::class,
             'IrhpPermitFeesController' => 'Olcs\Controller\IrhpPermits\IrhpPermitFeesController',
             'IrhpPermitController' => 'Olcs\Controller\IrhpPermits\IrhpPermitController',
             'IrhpDocsController' => 'Olcs\Controller\IrhpPermits\IrhpDocsController',
@@ -335,6 +338,7 @@ return array(
                 \Olcs\Controller\IrhpPermits\IrhpPermitProcessingNoteController::class,
             \Olcs\Controller\IrhpPermits\IrhpPermitProcessingTasksController::class =>
                 \Olcs\Controller\IrhpPermits\IrhpPermitProcessingTasksController::class,
+            Olcs\Controller\Licence\SurrenderController::class => Olcs\Controller\Licence\SurrenderController::class
         ),
         'factories' => [
             TmCntr\Details\TransportManagerDetailsResponsibilityController::class =>
@@ -439,6 +443,8 @@ return array(
             Olcs\Service\Data\DocumentSubCategory::class => Olcs\Service\Data\DocumentSubCategory::class,
             Olcs\Service\Data\DocumentSubCategoryWithDocs::class =>
                 Olcs\Service\Data\DocumentSubCategoryWithDocs::class,
+            Olcs\Service\Data\IrhpPermitPrintCountry::class => Olcs\Service\Data\IrhpPermitPrintCountry::class,
+            Olcs\Service\Data\IrhpPermitPrintStock::class => Olcs\Service\Data\IrhpPermitPrintStock::class,
             Olcs\Service\Data\ScannerCategory::class => Olcs\Service\Data\ScannerCategory::class,
             Olcs\Service\Data\ScannerSubCategory::class => Olcs\Service\Data\ScannerSubCategory::class,
             Olcs\Service\Data\TaskCategory::class => Olcs\Service\Data\TaskCategory::class,
@@ -480,6 +486,7 @@ return array(
             SubmissionsFurniture::class => SubmissionsFurniture::class,
             TransportManagerFurniture::class => TransportManagerFurniture::class,
             IrhpPermitFurniture::class => IrhpPermitFurniture::class,
+            IrhpApplicationFurniture::class => IrhpApplicationFurniture::class,
             'Olcs\Listener\RouteParam\Cases' => 'Olcs\Listener\RouteParam\Cases',
             LicenceListener::class => LicenceListener::class,
             'Olcs\Listener\RouteParam\CaseMarker' => 'Olcs\Listener\RouteParam\CaseMarker',
@@ -580,6 +587,11 @@ return array(
         ],
         \Olcs\Controller\Interfaces\IrhpPermitApplicationControllerInterface::class => [
             RouteParam\IrhpPermitFurniture::class,
+            RouteParam\LicenceFurniture::class,
+            RouteParam\Licence::class,
+        ],
+        \Olcs\Controller\Interfaces\IrhpApplicationControllerInterface::class => [
+            RouteParam\IrhpApplicationFurniture::class,
             RouteParam\LicenceFurniture::class,
             RouteParam\Licence::class,
         ],

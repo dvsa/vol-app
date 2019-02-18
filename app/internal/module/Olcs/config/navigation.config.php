@@ -650,6 +650,48 @@ $nav = [
                             ]
                         ],
                         [
+                            'id' => 'licence_irhp_applications',
+                            'label' => 'IRHP Applications',
+                            'visible' => 0,
+                            'route' => 'licence/irhp-application',
+
+                            'use_route_match' => true,
+                            'pages' => [
+                                [
+                                    'id' => 'licence_irhp_applications-edit',
+                                    'label' => 'Application details',
+                                    'route' => 'licence/irhp-application/application',
+                                    'use_route_match' => true,
+                                    'params' => [
+                                        'action' => 'edit',
+                                        'id' => null
+                                    ],
+                                ],
+                                [
+                                    'id' => 'licence_irhp_applications-cancel',
+                                    'label' => 'Cancel',
+                                    'visible' => 0,
+                                    'route' => 'licence/irhp-application/application',
+                                    'use_route_match' => true,
+                                    'params' => [
+                                        'action' => 'cancel',
+                                        'id' => null
+                                    ],
+                                ],
+                                [
+                                    'id' => 'licence_irhp_applications-submit',
+                                    'label' => 'Submit',
+                                    'visible' => 0,
+                                    'route' => 'licence/irhp-application/application',
+                                    'use_route_match' => true,
+                                    'params' => [
+                                        'action' => 'submit',
+                                        'id' => null
+                                    ],
+                                ]
+                            ]
+                        ],
+                        [
                             'id' => 'licence_documents',
                             'label' => 'Docs & attachments',
                             'route' => 'licence/documents',
@@ -734,13 +776,13 @@ $nav = [
                         [
                             'id' => 'licence_surrender',
                             'label' => 'Surrender',
-                            'route' => 'licence/surrender-licence',
+                            'route' => 'licence/surrender-details',
                             'use_route_match' => true,
                             'pages' => [
                                 [
                                     'id' => 'licence_surrender_details',
                                     'label' => 'Surrender details',
-                                    'route' => 'licence/surrender-licence',
+                                    'route' => 'licence/surrender-details',
                                 ]
                             ],
                         ],

@@ -8,7 +8,9 @@
 
 namespace Olcs\Controller\IrhpPermits;
 
+use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\IrhpPermit\GetListByEcmtId as ListDTO;
+use Dvsa\Olcs\Transfer\Query\IrhpPermit\GetListByIrhpId as IrhpListDTO;
 use Dvsa\Olcs\Transfer\Query\IrhpPermit\ById as ItemDTO;
 use Dvsa\Olcs\Transfer\Command\IrhpPermit\Replace as ReplaceDTO;
 use Olcs\Controller\AbstractInternalController;
@@ -22,7 +24,6 @@ class IrhpPermitController extends AbstractInternalController implements
     IrhpPermitApplicationControllerInterface,
     LeftViewProvider
 {
-
     protected $itemParams = ['id' => 'irhppermitid'];
     protected $deleteParams = ['id' => 'irhppermitid'];
 
@@ -89,12 +90,21 @@ class IrhpPermitController extends AbstractInternalController implements
             }
         }
 
-        $response = $this->handleQuery(ListDTO::create([
+        // Get Permit Type from route, switch relevant class variables for ecmt/irhp DTOs
+        $permitTypeId = intval($this->params()->fromRoute('permitTypeId'));
+        if ($permitTypeId !== RefData::ECMT_PERMIT_TYPE_ID) {
+            $this->listDto = IrhpListDTO::class;
+            $this->listVars = ['irhpApplication' => 'permitid'];
+            $this->tableName = 'irhp-bilateral-permits';
+        }
+
+        $DTOApplicationKey = $permitTypeId === RefData::ECMT_PERMIT_TYPE_ID ? 'ecmtPermitApplication' : 'irhpApplication';
+        $response = $this->handleQuery($this->listDto::create([
             'page' => 1,
             'sort' => 'id',
             'order' => 'ASC',
             'limit' => 10,
-            'ecmtPermitApplication' => $this->params()->fromRoute('permitid'),
+            $DTOApplicationKey => $this->params()->fromRoute('permitid'),
         ]));
 
         if ($response->getResult()['count'] === 0) {

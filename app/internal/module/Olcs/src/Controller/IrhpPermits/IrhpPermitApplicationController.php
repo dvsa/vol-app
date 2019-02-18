@@ -15,7 +15,7 @@ use Common\Service\Cqrs\Exception\NotFoundException;
 use Dvsa\Olcs\Transfer\Command\Permits\CancelEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Command\Permits\EcmtSubmitApplication;
 use Dvsa\Olcs\Transfer\Command\Permits\WithdrawEcmtPermitApplication;
-use Dvsa\Olcs\Transfer\Query\IrhpPermitApplication\GetList as ListDTO;
+use Dvsa\Olcs\Transfer\Query\IrhpApplication\GetAllByLicence as ListDTO;
 use Dvsa\Olcs\Transfer\Query\Permits\ById as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceDto;
 use Dvsa\Olcs\Transfer\Query\Permits\Sectors as SectorsDto;
@@ -36,14 +36,6 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
     LeftViewProvider,
     ToggleAwareInterface
 {
-
-    const FEE_TYPE_ECMT_APP = 'IRHPGVAPP';
-    const FEE_TYPE_ECMT_ISSUE = 'IRHPGVISSUE';
-
-    const ECMT_ANNUAL_PERMIT_TYPE_ID = 1;
-    const ECMT_SHORT_TERM_PERMIT_TYPE_ID = 2;
-    const ECMT_REMOVAL_PERMIT_TYPE_ID = 3;
-
     protected $toggleConfig = [
         'default' => [
             FeatureToggle::BACKEND_ECMT
@@ -59,8 +51,8 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
 
     // Setup the default index table and sort columns/order
     protected $tableName = 'permit-applications';
-    protected $defaultTableSortField = 'id';
-    protected $defaultTableOrderField = 'DESC';
+    protected $defaultTableSortField = 'dateReceived, applicationRef';
+    protected $defaultTableOrderField = 'DESC, DESC';
 
     // Maps the licence route parameter into the ListDTO as licence => value
     protected $listVars = ['licence'];
@@ -71,7 +63,6 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
     protected $mapperClass = IrhpPermitApplicationMapper::class;
     protected $createCommand = CreateDto::class;
     protected $updateCommand = UpdateDto::class;
-
 
     protected $hasMultiDelete = false;
     protected $deleteModalTitle = 'Remove IRHP Permit Application?';
@@ -111,10 +102,10 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
             'route' => 'licence/permits',
             'action' => 'index',
         ],
-         'submit' => [
+        'submit' => [
             'route' => 'licence/permits',
             'action' => 'index',
-             ]
+        ]
 
     ];
 
@@ -141,6 +132,29 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
         $this->indexIssuedTable();
 
         return parent::indexAction();
+    }
+
+    /**
+     * Extra parameters
+     *
+     * @param array $parameters parameters
+     *
+     * @return array
+     */
+    protected function modifyListQueryParameters($parameters)
+    {
+        $parameters['irhpApplicationStatuses'] = [
+            RefData::PERMIT_APP_STATUS_NOT_YET_SUBMITTED,
+            RefData::PERMIT_APP_STATUS_UNDER_CONSIDERATION,
+            RefData::PERMIT_APP_STATUS_AWAITING_FEE,
+            RefData::PERMIT_APP_STATUS_FEE_PAID,
+            RefData::PERMIT_APP_STATUS_ISSUING,
+            RefData::PERMIT_APP_STATUS_CANCELLED,
+            RefData::PERMIT_APP_STATUS_WITHDRAWN,
+            RefData::PERMIT_APP_STATUS_UNSUCCESSFUL,
+        ];
+
+        return $parameters;
     }
 
     /**
@@ -191,12 +205,20 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
             // Temporary redirect to manually built application forms, when other 2 ECMT manual builds
             // are done this switch can be added too, when Generic forms system done will just redirect there passing ID
             switch ($permitTypeId) {
-                case self::ECMT_ANNUAL_PERMIT_TYPE_ID:
+                case RefData::ECMT_PERMIT_TYPE_ID:
                     return $this->redirect()
                         ->toRouteAjax(
                             'licence/permits/add',
                             ['licence' => $this->params()->fromRoute('licence')],
                             ['query' => ['permitTypeId' => $permitTypeId]]
+                        );
+                case RefData::IRHP_BILATERAL_PERMIT_TYPE_ID:
+                    return $this->redirect()
+                        ->toRouteAjax(
+                            'licence/irhp-application/add',
+                            [   'licence' => $this->params()->fromRoute('licence'),
+                                'permitTypeId' => $permitTypeId
+                            ]
                         );
             }
         }
@@ -243,7 +265,6 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
         }
     }
 
-
     /**
      *
      * Helper method to perform the query and setup table for Issued Permits table on dash.
@@ -251,17 +272,18 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
      */
     protected function indexIssuedTable()
     {
-        // No story for this yet i have seen but we now have some data so included it in basic form.
-        // Need some spec on if this table should filter from left panel controls etc. Static list for this story.
-        $response = $this->handleQuery(ListDTO::create([
-            'onlyIssued' => true,
-            'licence' => $this->params()->fromRoute('licence'),
-            'page' => 1,
-            'sort' => 'id',
-            'order' => 'ASC',
-            'limit' => 50,
-            'id' => 1
-        ]));
+        $response = $this->handleQuery(
+            ListDTO::create(
+                [
+                    'licence' => $this->params()->fromRoute('licence'),
+                    'irhpApplicationStatuses' => [
+                        RefData::PERMIT_APP_STATUS_VALID,
+                    ],
+                    'sort' => 'applicationRef',
+                    'order' => 'ASC',
+                ]
+            )
+        );
 
         $data = [];
         if ($response->isOk()) {
@@ -360,7 +382,7 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
     {
         $response = $this->handleQuery(ItemDto::create(['id' => $this->params()->fromRoute('permitid')]));
         $irhpPermit = $response->getResult();
-        $fee = $this->getOutstandingFee($irhpPermit['fees'], self::FEE_TYPE_ECMT_APP);
+        $fee = $this->getOutstandingFee($irhpPermit['fees'], RefData::IRHP_GV_APPLICATION_FEE_TYPE);
         // The application canBeSubmitted, check for an outstanding fee and redirect ICW User to pay screen
         if ($fee) {
             return $this->redirect()
@@ -453,7 +475,7 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
     {
         $response = $this->handleQuery(ItemDto::create(['id' => $this->params()->fromRoute('permitid')]));
         $irhpPermit = $response->getResult();
-        $fee = $this->getOutstandingFee($irhpPermit['fees'], self::FEE_TYPE_ECMT_ISSUE);
+        $fee = $this->getOutstandingFee($irhpPermit['fees'], RefData::IRHP_GV_ISSUE_FEE_TYPE);
         if ($fee) {
             return $this->redirect()
                 ->toRoute(
@@ -531,6 +553,6 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
     protected function setNavigationId($action)
     {
         $navigation = $this->getServiceLocator()->get('Navigation');
-        $navigation->findOneBy('id', 'licence_irhp_permits-'.$action)->setActive();
+        $navigation->findOneBy('id', 'licence_irhp_permits-' . $action)->setActive();
     }
 }

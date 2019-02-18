@@ -53,12 +53,12 @@
         "doctrine/annotations": "^1.2.3",
         "symfony/Filesystem": "~2.6.0",
         "zf-commons/zfc-rbac": "~2.4.0",
-        "olcs/OlcsCommon": "dev-release/4.199b",
-        "olcs/olcs-transfer": "dev-release/4.199b",
-        "olcs/olcs-utils": "dev-release/4.199b",
-        "olcs/olcs-auth": "dev-release/4.199b",
+        "olcs/OlcsCommon": "dev-release/4.200a",
+        "olcs/olcs-transfer": "dev-release/4.200a",
+        "olcs/olcs-utils": "dev-release/4.200a",
+        "olcs/olcs-auth": "dev-release/4.200a",
         "soflomo/purifier": "~0.1.0",
-        "olcs/olcs-logging": "dev-release/4.199b"
+        "olcs/olcs-logging": "dev-release/4.200a"
     },
     "require-dev": {
         "olcs/olcs-devtools": "dev-master",
@@ -86,11 +86,11 @@
         }
     },
     "scripts": {
-        "ut": "vendor/bin/phpunit -c test/phpunit.xml --stop-on-failure",
-        "review": "vendor/bin/review",
-        "cs": "vendor/bin/phpcs --severity=1 --standard=vendor/olcs/coding-standards/Profiles/DVSA/CS/ruleset.xml",
-        "coverage": "vendor/bin/phpunit -c test/phpunit.xml --coverage-html ./test/coverage/html",
-        "sonar": "vendor/bin/phpunit -c test/phpunit.xml --coverage-clover ./test/coverage/coverage-report.clover --log-junit ./test/coverage/log.junit",
-        "update-syms": "vendor/bin/composer-update-syms"
+        "ut": "phpunit -c test/phpunit.xml --stop-on-failure",
+        "review": "review",
+        "cs": "phpcs --severity=1 --standard=vendor/olcs/coding-standards/Profiles/DVSA/CS/ruleset.xml",
+        "coverage": "phpunit -c test/phpunit.xml --coverage-html ./test/coverage/html",
+        "sonar": "phpunit -c test/phpunit.xml --coverage-clover ./test/coverage/coverage-report.clover --log-junit ./test/coverage/log.junit",
+        "update-syms": "composer-update-syms"
     }
 }
