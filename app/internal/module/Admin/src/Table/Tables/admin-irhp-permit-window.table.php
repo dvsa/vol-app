@@ -39,6 +39,11 @@ return [
             'formatter' => 'DateTimezoneFix'
         ],
         [
+            'title' => 'Emissions Question',
+            'name' => 'emissionsCategory',
+            'formatter' => 'RefData'
+        ],
+        [
             'title' => '',
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}'
