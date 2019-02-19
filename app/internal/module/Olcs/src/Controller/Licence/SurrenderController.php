@@ -51,11 +51,23 @@ class SurrenderController extends AbstractInternalController
      */
     protected $licenceType;
 
+    /**
+     * @var array licence
+     */
+    protected $licence;
+
+
+    /**
+     * @param MvcEvent $e
+     *
+     * @return array|mixed
+     */
 
     public function onDispatch(MvcEvent $e)
     {
         $this->licenceId = (int)$this->params('licence');
-        $this->licenceType = $this->getLicence($this->licenceId)['goodsOrPsv']['id'];
+        $this->licence = $this->getLicence($this->licenceId);
+        $this->licenceType = $this->licence['goodsOrPsv']['id'];
         return parent::onDispatch($e);
     }
 
@@ -98,8 +110,6 @@ class SurrenderController extends AbstractInternalController
 
     public function withdrawAction()
     {
-        $licence = $this->getLicence($this->licenceId);
-
         /** @var TranslationHelperService $translator
          */
         $translator = $this->getServiceLocator()->get('Helper\Translation');
@@ -107,7 +117,7 @@ class SurrenderController extends AbstractInternalController
         $form = $this->getForm(Confirmation::class);
         $message = $translator->translateReplace(
             'licence.surrender.internal.withdraw.confirm.message',
-            [$licence['licNo']]
+            [$this->licence['licNo']]
         );
         $form->get('messages')->get('message')->setValue($message);
 
