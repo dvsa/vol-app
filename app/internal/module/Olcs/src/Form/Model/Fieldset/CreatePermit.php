@@ -90,6 +90,15 @@ class CreatePermit extends Base
     public $numVehiclesLabel;
 
     /**
+     * @Form\Type("\Common\Form\Elements\Types\Readonly")
+     * @Form\Options({
+     *     "label": "The minimum Euro emissions standard for the window is "
+     * })
+     *
+     */
+    public $euroEmissionsLabel;
+
+    /**
      * @Form\Name("emissions")
      * @Form\Required(false)
      * @Form\Attributes({
@@ -99,7 +108,7 @@ class CreatePermit extends Base
      * @Form\Options({
      *   "checked_value": "1",
      *   "unchecked_value": "0",
-     *   "label": "ECMT Permit will only be used by vehicles that are Euro6 emissions compliant",
+     *   "label": "ECMT permits will only be used by vehicles that are environmentally compliant with the emissions standard above as a minimum",
      *   "label_attributes": {"class": "form-control form-control--checkbox form-control--advanced"},
      *   "must_be_value": "Yes",
      *   "error-message": "error.messages.euro6"

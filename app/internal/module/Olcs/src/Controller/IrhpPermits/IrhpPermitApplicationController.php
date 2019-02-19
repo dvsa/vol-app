@@ -18,6 +18,7 @@ use Dvsa\Olcs\Transfer\Command\Permits\WithdrawEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\GetAllByLicence as ListDTO;
 use Dvsa\Olcs\Transfer\Query\Permits\ById as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceDto;
+use Dvsa\Olcs\Transfer\Query\Permits\OpenWindows;
 use Dvsa\Olcs\Transfer\Query\Permits\Sectors as SectorsDto;
 use Dvsa\Olcs\Transfer\Command\Permits\CreateFullPermitApplication as CreateDTO;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtPermitApplication as UpdateDTO;
@@ -324,6 +325,7 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
         $licence = $this->getLicence();
         $formData['fields']['numVehicles'] = $licence['totAuthVehicles'];
         $formData['fields']['numVehiclesLabel'] = $licence['totAuthVehicles'];
+        $formData['fields']['euroEmissionsLabel'] = $this->getExistingEmissionsCategoryLabel($formData['fields']);
         $form = $this->getSectors($form, $formData['fields']['sectors']);
         $form->setData($formData);
         return $form;
@@ -339,14 +341,56 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
      */
     protected function alterFormForAdd($form, $formData)
     {
+
         $licence = $this->getLicence();
         $formData['fields']['licence'] = $licence['id'];
         $formData['fields']['numVehicles'] = $licence['totAuthVehicles'];
         $formData['fields']['numVehiclesLabel'] = $licence['totAuthVehicles'];
-        $formData['fields']['dateReceived'] = date("Y-m-d");
+        $formData['fields']['euroEmissionsLabel'] = $this->getCurrentEmissionsCategoryLabel();
+        $formData['fields']['dateReceived'] = date('Y-m-d');
         $form = $this->getSectors($form);
         $form->setData($formData);
         return $form;
+    }
+
+    /**
+     * Gets the emissions category label for the currently open ECMT Annual Window
+     *
+     * @return string
+     * @throws NotFoundException
+     */
+    protected function getCurrentEmissionsCategoryLabel()
+    {
+        $response = $this->handleQuery(
+            OpenWindows::create(
+                [
+                    'currentDateTime' => date('Y-m-d H:i:s'),
+                    'permitType' => RefData::ECMT_PERMIT_TYPE_ID
+                ]
+            )
+        );
+        $windowData = $response->getResult();
+
+        if (empty($windowData['windows'])) {
+            throw new NotFoundException('No open ECMT Annual window found.');
+        }
+
+        return $windowData['windows'][0]['emissionsCategory']['description'];
+    }
+
+    /**
+     * Get emissions category label for an existing/historic ECMT Annual window
+     *
+     * @param array $ecmtPermitApplication Existing ECMT Permit Application
+     * @return string
+     */
+    protected function getExistingEmissionsCategoryLabel(array $ecmtPermitApplication)
+    {
+        if (isset($ecmtPermitApplication['irhpPermitApplications'][0]['irhpPermitWindow']['emissionsCategory']['description'])) {
+            return $ecmtPermitApplication['irhpPermitApplications'][0]['irhpPermitWindow']['emissionsCategory']['description'];
+        } else {
+            return 'No Emissions Category Found';
+        }
     }
 
     /**
