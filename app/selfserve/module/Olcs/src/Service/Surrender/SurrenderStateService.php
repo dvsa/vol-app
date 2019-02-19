@@ -68,6 +68,11 @@ class SurrenderStateService
         return $now->diff($modified)->days >= 2;
     }
 
+    public function getDiscsOnLicence(): int
+    {
+        return $this->surrenderData['licence']['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_GOODS_VEHICLE ? $this->getGoodsDiscsOnLicence() : $this->getPsvDiscsOnLicence();
+    }
+
     private function hasInformationChanged(): bool
     {
         $surrenderStatus = $this->getStatus();
@@ -139,10 +144,5 @@ class SurrenderStateService
     private function getSurrenderCreatedOrModifiedOn(): \DateTimeInterface
     {
         return $this->getModifiedOn() ?? $this->getCreatedOn();
-    }
-
-    private function getDiscsOnLicence(): int
-    {
-        return $this->surrenderData['licence']['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_GOODS_VEHICLE ? $this->getGoodsDiscsOnLicence() : $this->getPsvDiscsOnLicence();
     }
 }
