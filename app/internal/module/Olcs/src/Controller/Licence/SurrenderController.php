@@ -4,6 +4,7 @@ namespace Olcs\Controller\Licence;
 
 use Common\Controller\Traits\GenericRenderView;
 use Common\Form\Form;
+use Common\RefData;
 use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Command\Surrender\Approve as ApproveSurrender;
 use Dvsa\Olcs\Transfer\Command\Surrender\Withdraw as WithdrawSurrender;
@@ -16,6 +17,7 @@ use Olcs\Form\Model\Form\Licence\Surrender\Confirmation;
 use Olcs\Form\Model\Form\Licence\Surrender\Surrender;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericList;
+use Zend\Mvc\MvcEvent;
 use Zend\View\Model\ViewModel;
 
 class SurrenderController extends AbstractInternalController
@@ -40,6 +42,24 @@ class SurrenderController extends AbstractInternalController
     protected $form;
 
     /**
+     * @var int LicenceId
+     */
+    protected $licenceId;
+
+    /**
+     * @var string licence type
+     */
+    protected $licenceType;
+
+
+    public function onDispatch(MvcEvent $e)
+    {
+        $this->licenceId = (int)$this->params('licence');
+        $this->licenceType = $this->getLicence($this->licenceId)['goodsOrPsv']['id'];
+        return parent::onDispatch($e);
+    }
+
+    /**
      * index Action
      *
      * @return \Zend\View\Model\ViewModel
@@ -52,7 +72,7 @@ class SurrenderController extends AbstractInternalController
 
     public function surrenderAction()
     {
-        $licenceId = (int)$this->params('licence');
+
 
         $this->setupData();
         $this->form->setData($this->getRequest()->getPost());
@@ -67,7 +87,7 @@ class SurrenderController extends AbstractInternalController
             return $this->getView();
         }
 
-        if (!$this->surrenderLicence($licenceId)) {
+        if (!$this->surrenderLicence($this->licenceId)) {
             $this->flashMessenger()->addErrorMessage('licence.surrender.internal.surrender.error.generic');
             return $this->getView();
         }
@@ -78,15 +98,17 @@ class SurrenderController extends AbstractInternalController
 
     public function withdrawAction()
     {
-        $licenceId = (int)$this->params('licence');
-        $licence = $this->getLicence($licenceId);
+        $licence = $this->getLicence($this->licenceId);
 
         /** @var TranslationHelperService $translator
          */
         $translator = $this->getServiceLocator()->get('Helper\Translation');
 
         $form = $this->getForm(Confirmation::class);
-        $message = $translator->translateReplace('licence.surrender.internal.withdraw.confirm.message', [$licence['licNo']]);
+        $message = $translator->translateReplace(
+            'licence.surrender.internal.withdraw.confirm.message',
+            [$licence['licNo']]
+        );
         $form->get('messages')->get('message')->setValue($message);
 
         $view = new ViewModel();
@@ -98,9 +120,7 @@ class SurrenderController extends AbstractInternalController
 
     public function confirmWithdrawAction()
     {
-        $licenceId = (int)$this->params('licence');
-
-        if ($this->withdrawSurrender($licenceId)) {
+        if ($this->withdrawSurrender($this->licenceId)) {
             $this->flashMessenger()->addSuccessMessage('licence-status.surrender.message.withdrawn');
             return $this->redirect()->toRouteAjax('licence', [], [], true);
         }
@@ -117,6 +137,9 @@ class SurrenderController extends AbstractInternalController
                 $this->form->get('checks')->remove($key);
             }
         }
+        if ($this->licenceType === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
+            $this->form->get('checks')->remove('busRegistrations');
+        }
     }
 
     public function alterTable($table, $data)
@@ -130,6 +153,7 @@ class SurrenderController extends AbstractInternalController
     {
         $this->setupCasesTable();
         $this->setupBusRegTable();
+
         $this->form = $this->getForm(Surrender::class);
     }
 
@@ -171,6 +195,10 @@ class SurrenderController extends AbstractInternalController
      */
     private function setupBusRegTable()
     {
+        if ($this->licenceType === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
+            $this->counts['busRegistrations'] = 0;
+            return;
+        }
         $this->index(
             OpenBusReg::class,
             new GenericList([
