@@ -4,14 +4,14 @@ namespace Olcs\Controller\Licence;
 
 use Common\Controller\Traits\GenericRenderView;
 use Common\Form\Form;
-use Common\RefData;
+use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Command\Surrender\Approve as ApproveSurrender;
 use Dvsa\Olcs\Transfer\Command\Surrender\Withdraw as WithdrawSurrender;
 use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence;
 use Dvsa\Olcs\Transfer\Query\Surrender\OpenBusReg;
 use Dvsa\Olcs\Transfer\Query\Surrender\OpenCases;
-use Dvsa\Olcs\Transfer\Query\Surrender\PreviousLicenceStatus;
 use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Traits\LicenceControllerTrait;
 use Olcs\Form\Model\Form\Licence\Surrender\Confirmation;
 use Olcs\Form\Model\Form\Licence\Surrender\Surrender;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
@@ -20,7 +20,7 @@ use Zend\View\Model\ViewModel;
 
 class SurrenderController extends AbstractInternalController
 {
-    use GenericRenderView;
+    use GenericRenderView, LicenceControllerTrait;
 
     /**
      * Holds the navigation ID,
@@ -59,7 +59,7 @@ class SurrenderController extends AbstractInternalController
 
         $canSurrender = $this->form->isValid();
         if ($this->counts['openCases'] > 0 && $this->counts['busRegistrations'] > 0) {
-            $this->flashMessenger()->addErrorMessage("You cannot surrender a licence with open cases or active bus registrations");
+            $this->flashMessenger()->addErrorMessage('licence.surrender.internal.surrender.error.open_case_active_bus');
             $canSurrender = false;
         }
 
@@ -68,7 +68,7 @@ class SurrenderController extends AbstractInternalController
         }
 
         if (!$this->surrenderLicence($licenceId)) {
-            $this->flashMessenger()->addErrorMessage("There was an error surrendering the licence");
+            $this->flashMessenger()->addErrorMessage('licence.surrender.internal.surrender.error.generic');
             return $this->getView();
         }
 
@@ -78,8 +78,16 @@ class SurrenderController extends AbstractInternalController
 
     public function withdrawAction()
     {
+        $licenceId = (int)$this->params('licence');
+        $licence = $this->getLicence($licenceId);
+
+        /** @var TranslationHelperService $translator
+         */
+        $translator = $this->getServiceLocator()->get('Helper\Translation');
+
         $form = $this->getForm(Confirmation::class);
-        $form->get('messages')->get('message')->setValue('Are you sure you wish to withdraw the application to surrender this licence?');
+        $message = $translator->translateReplace('licence.surrender.internal.withdraw.confirm.message', [$licence['licNo']]);
+        $form->get('messages')->get('message')->setValue($message);
 
         $view = new ViewModel();
         $view->setVariable('form', $form);
@@ -96,7 +104,7 @@ class SurrenderController extends AbstractInternalController
             $this->flashMessenger()->addSuccessMessage('licence-status.surrender.message.withdrawn');
             return $this->redirect()->toRouteAjax('licence', [], [], true);
         }
-        $this->flashMessenger()->addErrorMessage("There was an error withdrawing the surrender");
+        $this->flashMessenger()->addErrorMessage("licence.surrender.internal.withdraw.error");
         return $this->redirect()->refresh();
     }
 
@@ -187,14 +195,8 @@ class SurrenderController extends AbstractInternalController
 
     private function withdrawSurrender(int $licenceId): bool
     {
-        $query = PreviousLicenceStatus::create(['id' => $licenceId]);
-        $result = $this->handleQuery($query)->getResult();
-        $status = $result['status'];
-
-
         $command = WithdrawSurrender::create([
-            'id' => $licenceId,
-            'status' => $status
+            'id' => $licenceId
         ]);
 
         $response = $this->handleCommand($command);
