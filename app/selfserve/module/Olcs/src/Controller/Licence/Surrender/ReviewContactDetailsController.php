@@ -5,6 +5,7 @@ namespace Olcs\Controller\Licence\Surrender;
 use Common\Data\Mapper\Licence\Surrender\ReviewContactDetails;
 use Common\RefData;
 use Common\Service\Helper\TranslationHelperService;
+use Olcs\Service\Surrender\SurrenderStateService;
 
 class ReviewContactDetailsController extends AbstractSurrenderController
 {
@@ -17,7 +18,7 @@ class ReviewContactDetailsController extends AbstractSurrenderController
     public function postAction()
     {
         if ($this->markContactsComplete()) {
-            return $this->redirect()->toRoute('licence/surrender/current-discs/GET', [], [], true);
+            return $this->redirect()->toRoute($this->getNextStep(), [], [], true);
         }
 
         $this->hlpFlashMsgr->addUnknownError();
@@ -53,5 +54,16 @@ class ReviewContactDetailsController extends AbstractSurrenderController
     protected function markContactsComplete(): bool
     {
         return $this->updateSurrender(RefData::SURRENDER_STATUS_CONTACTS_COMPLETE);
+    }
+
+    protected function getNextStep()
+    {
+        $surrenderStateService = new SurrenderStateService();
+        $surrenderStateService->setSurrenderData($this->data['surrender']);
+        if ($surrenderStateService->getDiscsOnLicence() > 0) {
+            return 'licence/surrender/current-discs/GET';
+        }
+
+        return 'licence/surrender/operator-licence/GET';
     }
 }
