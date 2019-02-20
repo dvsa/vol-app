@@ -35,26 +35,8 @@ class SurrenderDetailsTest extends MockeryTestCase
     /**
      * @dataProvider dpTestGetDeclarationSignatureText
      */
-    public function testGetDeclarationSignatureText($sigType, $expectedText)
+    public function testGetDeclarationSignatureText($surrenderData, $expectedText)
     {
-        $attributes = [
-            'firstname' => 'SomeFirstName',
-            'lastname' => 'SomeLastName'
-        ];
-
-        $surrenderData = [
-            'id' => 4,
-            'status' => RefData::SURRENDER_STATUS_SIGNED,
-            'signatureType' => [
-                'id' => $sigType
-            ],
-            'digitalSignature' => [
-                'createdOn' => '01/01/2014',
-                'attributes' => json_encode($attributes)
-            ]
-
-        ];
-
         $this->assertSame(
             $expectedText,
             $this->sut->__invoke($surrenderData)->getDeclarationSignatureText()
@@ -65,12 +47,29 @@ class SurrenderDetailsTest extends MockeryTestCase
     {
         return [
             'digital_signature' => [
-                'sigType' => RefData::SIGNATURE_TYPE_DIGITAL_SIGNATURE,
+                'surrenderData' => [
+                    'signatureType' => [
+                        'id' => RefData::SIGNATURE_TYPE_DIGITAL_SIGNATURE
+                    ],
+                    'digitalSignature' => [
+                        'createdOn' => '01/01/2014',
+                        'attributes' => json_encode(
+                            [
+                                'firstname' => 'SomeFirstName',
+                                'lastname' => 'SomeLastName'
+                            ]
+                        )
+                    ]
+                ],
                 'expectedText' => 'Digitally signed by SomeFirstName SomeLastName at 1 Jan 2014'
             ],
             'physical_signature' => [
-                'sigType' => RefData::SIGNATURE_TYPE_PHYSICAL_SIGNATURE,
-                'expectedText' => 'Physical signature'
+                'surrenderData' => [
+                    'signatureType' => [
+                        'id' => RefData::SIGNATURE_TYPE_PHYSICAL_SIGNATURE
+                    ],
+                ],
+                'expectedText' => 'Physical signature',
             ]
         ];
     }
