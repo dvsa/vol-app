@@ -92,7 +92,9 @@ class SurrenderController extends AbstractInternalController implements
     public function indexAction()
     {
         $this->setupData();
-        return $this->getView();
+        $view = $this->getView();
+        $this->placeholder()->setPlaceholder('openItems', $this->counts['openCases'] + $this->counts['busRegistrations']);
+        return $view;
     }
 
     public function surrenderAction()
