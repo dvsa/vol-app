@@ -15,14 +15,6 @@ class SurrenderDetailsTest extends MockeryTestCase
 
     public function setUp()
     {
-        $surrender = [
-            'id' => 4,
-            'status' => RefData::SURRENDER_STATUS_SIGNED,
-            'signatureType' => [
-                'id' => RefData::SIGNATURE_TYPE_DIGITAL_SIGNATURE
-            ]
-        ];
-
         $this->sut = new SurrenderDetails();
         parent::setUp();
     }
