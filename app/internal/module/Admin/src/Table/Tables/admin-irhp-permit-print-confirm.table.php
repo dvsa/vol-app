@@ -32,9 +32,7 @@ return [
         ],
         [
             'title' => 'Operator Name',
-            'formatter' => function ($data) {
-                return $data['irhpPermitApplication']['ecmtPermitApplication']['licence']['organisation']['name'];
-            }
+            'formatter' => 'IrhpPermitOrganisationName'
         ],
     ]
 ];

@@ -40,27 +40,11 @@ return [
         ],
         [
             'title' => 'Operator Name',
-            'formatter' => function ($data) {
-                return $data['irhpPermitApplication']['ecmtPermitApplication']['licence']['organisation']['name'];
-            }
+            'formatter' => 'IrhpPermitOrganisationName'
         ],
         [
             'title' => 'Application Ref',
-            'formatter' => function ($data) {
-                return sprintf(
-                    '<a href="%s">%s</a>',
-                    $this->generateUrl(
-                        [
-                            'action' => 'index',
-                            'licence' => $data['irhpPermitApplication']['ecmtPermitApplication']['licence']['id']
-                        ],
-                        'licence/permits',
-                        false
-                    ),
-                    $data['irhpPermitApplication']['ecmtPermitApplication']['applicationRef']
-                );
-            }
-
+            'formatter' => 'IrhpPermitApplicationRefLink'
         ],
         [
             'title' => 'Status',
