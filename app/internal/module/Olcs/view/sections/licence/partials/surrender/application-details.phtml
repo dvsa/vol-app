@@ -1,24 +1,23 @@
-<div class="surrender-govuk-summary-list list-grey">
+<div class="list-grey surrender-govuk-summary-list">
 <div class="govuk-inset-text">
   Use this information to progress the operator's application:
 </div>
-<?php var_dump($this->surrender);?>
 <dl class="govuk-summary-list">
-<section class="vehicle-discs-section">
+<div class="vehicle-discs-section">
     <h4 class="govuk-heading-s">Vehicle discs</h4>
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key govuk-summary-list--border-bottom">
+        <dt class="govuk-summary-list__key">
           <p class="govuk-body">Number of destroyed discs</p>
         </dt>
-        <dd class="govuk-summary-list__value govuk-summary-list--border-bottom">
+        <dd class="govuk-summary-list__value">
             <?php echo $this->surrender['discDestroyed'] ?? 0;?>
         </dd>
       </div>
       <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key govuk-summary-list--border-bottom">
+        <dt class="govuk-summary-list__key">
           <p class="govuk-body">Number of lost discs</p>
         </dt>
-        <dd class="govuk-summary-list__value govuk-summary-list--border-bottom">
+        <dd class="govuk-summary-list__value">
             <?php echo $this->surrender['discLost'] ?? 0;?>
         </dd>
       </div>
@@ -33,10 +32,10 @@
         </div>
     <?php endif ?>
     <div class="govuk-summary-list__row">
-        <dt class="govuk-summary-list__key govuk-summary-list--border-bottom">
-            <p class="govuk-body">Number of Stolen discs</p>
+        <dt class="govuk-summary-list__key">
+            <p class="govuk-body">Number of stolen discs</p>
         </dt>
-        <dd class="govuk-summary-list__value govuk-summary-list--border-bottom">
+        <dd class="govuk-summary-list__value">
             <?php echo $this->surrender['discStolen'] ?? 0;?>
         </dd>
     </div>
@@ -50,7 +49,8 @@
         </dd>
       </div>
     <?php endif ?>
-</section>
+</div>
+<div class="operator-licence-section">
   <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
       Operator licence
@@ -59,6 +59,19 @@
         <?php echo $this->surrender['licenceDocumentStatus']['description'];?>
     </dd>
   </div>
+  <?php if (isset($this->surrender['licenceDocumentInfo'])): ?>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      <p class="govuk-body">Details</p>
+    </dt>
+    <dd class="govuk-summary-list__value">
+        <?php echo $this->surrender['licenceDocumentInfo'];?>
+    </dd>
+  </div>
+  <?php endif ?>
+</div>
+<div class="community-licence-section">
+  <?php if (isset($this->surrender['communityLicenceDocumentStatus'])):?>
   <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
       Community licence
@@ -67,13 +80,24 @@
         <?php echo $this->surrender['communityLicenceDocumentStatus']['description'];?>
     </dd>
   </div>
+     <?php if (isset($this->surrender['communityLicenceDocumentInfo'])): ?>
+       <div class="govuk-summary-list__row">
+         <dt class="govuk-summary-list__key">
+           <p class="govuk-body">Details</p>
+         </dt>
+         <dd class="govuk-summary-list__value">
+         <?php echo $this->surrender['communityLicenceDocumentInfo'];?>
+         </dd>
+       </div>
+    <?php endif ?>
+  <?php endif ?>
+</div>
   <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
       Declaration signature
     </dt>
     <dd class="govuk-summary-list__value">
-      <p class="govuk-body">07700 900457</p>
-      <p class="govuk-body">sarah.phillips@example.com</p>
+        <?php echo $this->surrenderDetails($this->surrender)->getDeclarationSignatureText();?>
     </dd>
   </div>
 </dl>

@@ -343,8 +343,12 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
      */
     protected function showHideCurtailRevokeSuspendButtons($licence, $sidebarNav)
     {
+        $licenceStatuses = [
+            RefData::LICENCE_STATUS_VALID,
+            RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION
+        ];
         // Buttons never shown if the licence is not valid
-        if ($licence['status']['id'] !== RefData::LICENCE_STATUS_VALID) {
+        if (!in_array($licence['status']['id'], $licenceStatuses)) {
             $sidebarNav->findById('licence-decisions-curtail')->setVisible(0);
             $sidebarNav->findById('licence-decisions-revoke')->setVisible(0);
             $sidebarNav->findById('licence-decisions-suspend')->setVisible(0);
