@@ -8,6 +8,7 @@ use Permits\Controller\EmissionsController;
 use Permits\Controller\CabotageController;
 use Permits\Controller\FeePartSuccessfulController;
 use Permits\Controller\LicenceController;
+use Permits\Controller\RestrictedCountriesController;
 use Permits\Controller\SectorsController;
 use Permits\Controller\ValidPermitsController;
 use Permits\Controller\WithdrawApplicationController;
@@ -55,6 +56,7 @@ return [
         CancelIrhpApplicationController::class => CancelIrhpApplicationController::class,
         IrhpApplicationFeeController::class => IrhpApplicationFeeController::class,
         IrhpValidPermitsController::class => IrhpValidPermitsController::class,
+        RestrictedCountriesController::class => RestrictedCountriesController::class,
     ],
   ],
   'router' => [
@@ -676,13 +678,14 @@ return [
                   ],
                   'may_terminate' => false,
               ],
+
               'ecmt-countries' => [
                   'type'    => 'segment',
                   'options' => [
                       'route'    => '/:id/ecmt-countries[/]',
                       'defaults' => [
-                          'controller'    => PermitsController::class,
-                          'action'        => 'restrictedCountries',
+                          'controller'    => RestrictedCountriesController::class,
+                          'action'        => 'question',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',

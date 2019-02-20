@@ -65,6 +65,11 @@ class DataSourceConfig
         Sectors::class => []
     ];
 
+    const PERMIT_APP_RESTRICTED_COUNTRIES = [
+        PermitAppDataSource::class => [],
+        EcmtConstrainedCountriesDataSource::class => []
+    ];
+
     const PERMIT_APP_CHECK_ANSWERS = [
         PermitAppDataSource::class => [
             'mapper' => CheckAnswersMapper::class

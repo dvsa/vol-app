@@ -18,7 +18,7 @@ class RestrictedCountriesFormTest extends AbstractFormValidationTestCase
 
     public function testRestrictedCountries()
     {
-        $element = ['Fields','restrictedCountries'];
+        $element = ['fields','restrictedCountries'];
 
         $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
@@ -28,7 +28,7 @@ class RestrictedCountriesFormTest extends AbstractFormValidationTestCase
     public function testRestrictedCountriesList()
     {
         $this->markTestSkipped();
-        $element = ['Fields','restrictedCountriesList'];
+        $element = ['fields','restrictedCountriesList'];
 
         $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
