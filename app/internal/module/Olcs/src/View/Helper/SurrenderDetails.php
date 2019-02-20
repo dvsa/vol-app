@@ -23,6 +23,6 @@ class SurrenderDetails extends AbstractHelper
             $attributes = json_decode($this->surrender["digitalSignature"]["attributes"]);
             return "Digitally signed by $attributes->firstname $attributes->lastname at $date";
         }
-        return "Physical signature";
+        return 'Physical signature';
     }
 }
