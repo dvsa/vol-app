@@ -2,7 +2,6 @@
 
 namespace Olcs\View\Helper;
 
-
 use Common\RefData;
 use Zend\View\Helper\AbstractHelper;
 
