@@ -8,7 +8,9 @@
 
 namespace Olcs\Controller\Licence\Surrender;
 
+use Common\RefData;
 use Common\Service\Helper\TranslationHelperService;
+use Dvsa\Olcs\Api\Entity\Surrender;
 
 
 class ConfirmationController extends AbstractSurrenderController
@@ -17,6 +19,7 @@ class ConfirmationController extends AbstractSurrenderController
 
     public function indexAction()
     {
+        $this->updateSurrender(RefData::SURRENDER_STATUS_SUBMITTED);
         $params = $this->getViewVariables();
         return $this->renderView($params);
     }
