@@ -377,6 +377,16 @@ return [
                                     ],
                                 ],
                             ],
+                            'upload' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => 'upload[/]',
+                                    'defaults' => [
+                                        'controller' => Admin\Controller\ReportUploadController::class,
+                                        'action' => 'index',
+                                    ]
+                                ],
+                            ],
                         ],
                     ],
                     'admin-user-management' => [
@@ -810,6 +820,7 @@ return [
                 Admin\Controller\IrhpPermitReportingController::class,
             Admin\Controller\IrhpPermitPrintController::class =>
                 Admin\Controller\IrhpPermitPrintController::class,
+            Admin\Controller\ReportUploadController::class => Admin\Controller\ReportUploadController::class,
         ],
     ],
     'view_manager' => [

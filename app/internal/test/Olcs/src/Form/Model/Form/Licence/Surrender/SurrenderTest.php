@@ -3,6 +3,7 @@
 namespace OlcsTest\Form\Model\Form\Licence\Surrender;
 
 use Common\Form\Elements\InputFilters\ActionButton;
+use Common\Form\Elements\InputFilters\ActionLink;
 use Olcs\Form\Model\Form\Licence\Surrender\Surrender;
 use Zend\Form\Element\Checkbox;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
@@ -47,6 +48,6 @@ class SurrenderTest extends AbstractFormValidationTestCase
     public function testWithdrawAction()
     {
         $element = ['actions', 'withdraw'];
-        $this->assertFormElementType($element, ActionButton::class);
+        $this->assertFormElementType($element, ActionLink::class);
     }
 }

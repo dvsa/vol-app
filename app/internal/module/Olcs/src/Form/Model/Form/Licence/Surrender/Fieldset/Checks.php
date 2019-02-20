@@ -20,6 +20,7 @@ class Checks
      *          "label_position": "append"
      *     }
      * })
+     * @Form\Required(false)
      */
     public $openCases = null;
 
@@ -36,6 +37,7 @@ class Checks
      *          "label_position": "append"
      *     }
      * })
+     * @Form\Required(false)
      */
     public $busRegistrations = null;
 
@@ -50,6 +52,16 @@ class Checks
      *          "label_position": "append"
      *     }
      * })
+     * @Form\Required(true)
+     * @Form\Validator({
+     *     "name": "GreaterThan",
+     *     "options": {
+     *          "min": 0,
+     *           "messages": {
+     *              "notGreaterThan": "You must confirm the digital signature has been checked"
+     *          }
+     *     }
+     * })
      */
     public $digitalSignature = null;
 
@@ -62,6 +74,16 @@ class Checks
      *     "label": "ECMS has been checked",
      *     "label_options": {
      *          "label_position": "append"
+     *     }
+     * })
+     * @Form\Required(true)
+     * @Form\Validator({
+     *     "name": "GreaterThan",
+     *     "options": {
+     *          "min": 0,
+     *          "messages": {
+     *              "notGreaterThan": "You must confirm ECMS has been checked"
+     *          }
      *     }
      * })
      */
