@@ -10,8 +10,6 @@ namespace Olcs\Controller\Licence\Surrender;
 
 use Common\RefData;
 use Common\Service\Helper\TranslationHelperService;
-use Dvsa\Olcs\Api\Entity\Surrender;
-
 
 class ConfirmationController extends AbstractSurrenderController
 {
