@@ -200,7 +200,7 @@ class SurrenderController extends AbstractInternalController implements
             new GenericItem(['id' => 'licence']),
             'details',
             'sections/licence/pages/surrender',
-            'Surrender details'
+            'Summary: Application to surrender an operator licence'
         );
     }
 
