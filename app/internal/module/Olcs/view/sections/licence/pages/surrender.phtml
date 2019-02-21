@@ -1,9 +1,15 @@
 <div class="content">
 <?php
 $details = $this->placeholder('details')->getValue();
-echo $details['licence']['licNo'];
+$openItems = $this->placeholder('openItems')->getValue();
+echo $this->render(
+    'sections/licence/partials/surrender/application-details',
+    ['surrender' => $details]
+);
 ?>
+<?php if ($openItems > 0): ?>
 <h2> Open Items</h2>
+<?php endif ?>
 <?php
 $casesTable = $this->placeholder('openCases')->getValue();
 echo $casesTable;
