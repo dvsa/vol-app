@@ -56,7 +56,7 @@ class SurrenderDetailsTest extends MockeryTestCase
                         'attributes' => json_encode(
                             [
                                 'firstname' => 'SomeFirstName',
-                                'lastname' => 'SomeLastName'
+                                'surname' => 'SomeLastName'
                             ]
                         )
                     ]
