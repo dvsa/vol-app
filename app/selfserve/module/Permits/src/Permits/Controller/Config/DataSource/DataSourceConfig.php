@@ -3,7 +3,6 @@
 namespace Permits\Controller\Config\DataSource;
 
 use Common\RefData;
-use Dvsa\Olcs\Api\Entity\IrhpInterface;
 use Permits\Controller\Config\DataSource\FeeList as FeeListDto;
 use Permits\Controller\Config\DataSource\PermitApplication as PermitAppDataSource;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
@@ -20,7 +19,6 @@ use Permits\Data\Mapper\CheckAnswers as CheckAnswersMapper;
 use Permits\Controller\Config\DataSource\EcmtConstrainedCountriesList as EcmtConstrainedCountriesDataSource;
 use Permits\Data\Mapper\ValidEcmtPermitConstrainedCountries as EcmtConstrainedCountriesMapper;
 use Permits\Data\Mapper\IrhpCheckAnswers as IrhpCheckAnswersMapper;
-use Permits\View\Helper\EcmtSection;
 
 /**
  * Holds data source configs that are used regularly

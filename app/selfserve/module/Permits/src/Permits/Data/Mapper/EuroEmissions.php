@@ -18,9 +18,8 @@ class EuroEmissions
      * @param TranslationHelperService $translator
      *
      * @return array
-     * @throws BadRequestException
      */
-    public static function mapForFormOptions(array $data, $form, TranslationHelperService $translator)
+    public static function mapForFormOptions(array $data, $form)
     {
         $emissionsCategory = $data['windows']['windows'][0]['emissionsCategory']['id'];
 
