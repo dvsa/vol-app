@@ -258,6 +258,45 @@ class LicenceOverviewTest extends \PHPUnit\Framework\TestCase
                     ]
                 ]
             ],
+            'surrender-withdrawn' => [
+                [
+                    'licenceData' => [
+                        'licNo' => 1,
+                        'inForceDate' => '2014-01-01',
+                        'expiryDate' => '2015-01-01',
+                        'status' => ['id' => 'status'],
+                        'isExpired' => false,
+                        'isExpiring' => true,
+                        'showExpiryWarning' => 'SHOWEXPIRYWARNING',
+                        'continuationMarker' => ['id' => 12345],
+                        'isLicenceSurrenderAllowed' => true
+                    ],
+                    'surrenderData' => [
+                        'status' => ['id' => 'surr_sts_withdrawn'],
+                        'lastModifiedOn' => date(DATE_ATOM, time()),
+                    ],
+                    'expected' => [
+                        [
+                            'linkUrl' => [
+                                'route' => 'licence-print',
+                                'params' => [],
+                                'options' => [],
+                                'reuseMatchedParams' => true
+                            ],
+                            'linkText' => 'licence.print'
+                        ],
+                        [
+                            'linkUrl' => [
+                                'route' => 'licence/surrender/start/GET',
+                                'params' => [],
+                                'options' => [],
+                                'reuseMatchedParams' => true
+                            ],
+                            'linkText' => 'licence.apply-to-surrender'
+                        ]
+                    ]
+                ]
+            ],
             'surrender-data-not-expired' => [
                 [
                     'licenceData' => [
@@ -314,7 +353,7 @@ class LicenceOverviewTest extends \PHPUnit\Framework\TestCase
                     ],
                     'surrenderData' => [
                         'status' => ['id' => 'surr_sts_start'],
-                        'lastModifiedOn' => date(DATE_ATOM, time() -  (3 * 24 * 60 * 60)),
+                        'lastModifiedOn' => date(DATE_ATOM, time() - (3 * 24 * 60 * 60)),
                     ],
                     'expected' => [
                         [
