@@ -327,7 +327,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
             // If we need to pass in data (not from the route)
             if (isset($config['passInData']['key']) && isset($config['passInData']['func'])) {
                 $this->queryParams[$config['passInData']['key']] = call_user_func_array([$this, $config['passInData']['func']], []);
-            } else if (isset($config['passInData']['key']) && isset($config['passInData']['value'])) {
+            } elseif (isset($config['passInData']['key']) && isset($config['passInData']['value'])) {
                 $this->queryParams[$config['passInData']['key']] = $config['passInData']['value'];
             }
 

@@ -20,7 +20,7 @@ class CheckAnswers
 
         if ($emissionsCategory === RefData::EMISSIONS_CATEGORY_EURO5) {
             $euroEmissionsLabel = 'permits.form.euro5.label';
-            $restrictedCountriesLabel = 'permits.form.euro6.label';
+            $restrictedCountriesLabel = 'permits.page.restricted-countries.euro5.label';
         }
 
         $questions = [

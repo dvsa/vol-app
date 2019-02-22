@@ -24,7 +24,7 @@ class EuroEmissions
     {
         $emissionsCategory = $data['windows']['windows'][0]['emissionsCategory']['id'];
 
-        switch($emissionsCategory) {
+        switch ($emissionsCategory) {
             case RefData::EMISSIONS_CATEGORY_EURO6:
                 $data['question'] = 'permits.page.euro6.emissions.question';
                 $data['additionalGuidance'] = [
