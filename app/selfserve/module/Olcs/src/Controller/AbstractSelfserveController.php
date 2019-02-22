@@ -237,23 +237,33 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     }
 
     /**
-     * @todo mapping data properly from the form, currently does a crude check for data and then uses default mapper
      * @todo handle redirects, currently just assumes a "next step" is present
      * @todo need to put in some error handling to help devs diagnose bad config etc.
      */
     public function handlePost()
     {
         if (!empty($this->postParams)) {
-            $this->form->setData($this->postParams);
+            $config = $this->configsForAction('postConfig');
+            // If controller has specified a mapper class, use it instead of default.
+            $mapper = DefaultMapper::class;
+            if (isset($config['mapperClass'])) {
+                $mapper = $config['mapperClass'];
+            }
 
+            $formData = $this->postParams;
+            // If controller specified a pre-process mapper method, invoke it before setting data to form.
+            if (isset($config['preprocessMethod']) && method_exists($mapper, $config['preprocessMethod'])) {
+                $formData = $mapper::{$config['preprocessMethod']}($this->postParams);
+            }
+
+            $this->form->setData($formData);
             if ($this->form->isValid()) {
                 $saveData = [];
 
-                if (isset($this->postParams['fields'])) {
-                    $saveData = DefaultMapper::mapFromForm($this->postParams);
+                if (isset($formData['fields'])) {
+                    $saveData = $mapper::mapFromForm($this->postParams);
                 }
 
-                $config = $this->configsForAction('postConfig');
                 $params = array_merge($this->fetchHandlePostParams(), $saveData);
                 $this->redirectParams = [];
                 $this->redirectOptions = [];
