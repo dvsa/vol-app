@@ -4,16 +4,16 @@ namespace Permits\Form\Model\Form;
 use Zend\Form\Annotation as Form;
 
 /**
- * @Form\Name("Euro6Emissions")
+ * @Form\Name("EuroEmissions")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
  */
 
-class Euro6EmissionsForm
+class EuroEmissionsForm
 {
     /**
      * @Form\Name("fields")
-     * @Form\ComposedObject("Permits\Form\Model\Fieldset\Euro6Emissions")
+     * @Form\ComposedObject("Permits\Form\Model\Fieldset\EuroEmissions")
      */
     public $fields = null;
 

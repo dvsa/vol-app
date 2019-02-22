@@ -650,10 +650,10 @@ return [
                   ],
                   'may_terminate' => true,
               ],
-              'ecmt-euro6' => [
+              'ecmt-emissions' => [
                   'type'    => 'segment',
                   'options' => [
-                      'route'    => '/:id/ecmt-euro6[/]',
+                      'route'    => '/:id/ecmt-emissions[/]',
                       'defaults' => [
                           'controller'    => EmissionsController::class,
                           'action'        => 'question',

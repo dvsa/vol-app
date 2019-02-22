@@ -335,8 +335,12 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
         //retrieve DTO data
         foreach ($dataSourceConfig as $dataSource => $config) {
             // If we need to pass in data (not from the route)
-            if (isset($config['passInUserData'])) {
-                $this->queryParams['id'] = call_user_func_array([$this, $config['passInUserData']], []);
+            if (isset($config['passInData']['key'])) {
+                if (isset($config['passInData']['func'])) {
+                    $this->queryParams[$config['passInData']['key']] = call_user_func_array([$this, $config['passInData']['func']], []);
+                } elseif (isset($config['passInData']['value'])) {
+                    $this->queryParams[$config['passInData']['key']] = $config['passInData']['value'];
+                }
             }
 
             /**
