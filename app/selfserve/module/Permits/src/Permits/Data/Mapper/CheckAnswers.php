@@ -2,6 +2,7 @@
 
 namespace Permits\Data\Mapper;
 
+use Common\RefData;
 use Common\Util\Escape;
 use Permits\View\Helper\EcmtSection;
 
@@ -13,11 +14,20 @@ class CheckAnswers
 {
     public static function mapForDisplay(array $data)
     {
+        $emissionsCategory = $data['windows']['windows'][0]['emissionsCategory']['id'];
+        $euroEmissionsLabel = 'permits.form.euro6.label';
+        $restrictedCountriesLabel = 'permits.page.restricted-countries.question';
+
+        if ($emissionsCategory === RefData::EMISSIONS_CATEGORY_EURO5) {
+            $euroEmissionsLabel = 'permits.form.euro5.label';
+            $restrictedCountriesLabel = 'permits.form.euro6.label';
+        }
+
         $questions = [
             'permits.check-answers.page.question.licence',
-            'permits.form.euro6.label',
+            $euroEmissionsLabel,
             'permits.form.cabotage.label',
-            'permits.page.restricted-countries.question',
+            $restrictedCountriesLabel,
             'permits.page.permits.required.question',
             'permits.page.number-of-trips.question',
             'permits.page.international.journey.question',
@@ -26,7 +36,7 @@ class CheckAnswers
 
         $routes = [
             EcmtSection::ROUTE_LICENCE,
-            EcmtSection::ROUTE_ECMT_EURO6,
+            EcmtSection::ROUTE_ECMT_EURO_EMISSIONS,
             EcmtSection::ROUTE_ECMT_CABOTAGE,
             EcmtSection::ROUTE_ECMT_COUNTRIES,
             EcmtSection::ROUTE_ECMT_NO_OF_PERMITS,
@@ -37,22 +47,22 @@ class CheckAnswers
 
         $countries = [];
 
-        foreach ($data['countrys'] as $country) {
+        foreach ($data['application']['countrys'] as $country) {
             $countries[] = $country['countryDesc'];
         }
 
         $answersFormatted = [
             [
-                Escape::html($data['licence']['licNo']),
-                Escape::html($data['licence']['trafficArea']['name']),
+                Escape::html($data['application']['licence']['licNo']),
+                Escape::html($data['application']['licence']['trafficArea']['name']),
             ],
-            $data['emissions'] ? 'Yes' : 'No',
-            $data['cabotage'] ? 'Yes' : 'No',
+            $data['application']['emissions'] ? 'Yes' : 'No',
+            $data['application']['cabotage'] ? 'Yes' : 'No',
             empty($countries) ? 'No' : ['Yes', implode(', ', $countries)],
-            $data['permitsRequired'],
-            $data['trips'],
-            $data['internationalJourneys']['description'],
-            $data['sectors']['name']
+            $data['application']['permitsRequired'],
+            $data['application']['trips'],
+            $data['application']['internationalJourneys']['description'],
+            $data['application']['sectors']['name']
         ];
 
         foreach ($questions as $index => $question) {
@@ -64,9 +74,9 @@ class CheckAnswers
         }
 
         return [
-            'canCheckAnswers' => $data['canCheckAnswers'],
+            'canCheckAnswers' => $data['application']['canCheckAnswers'],
             'answers' => $answers,
-            'applicationRef' => $data['applicationRef']
+            'applicationRef' => $data['application']['applicationRef']
         ];
     }
 }

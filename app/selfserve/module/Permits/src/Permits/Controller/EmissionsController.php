@@ -19,7 +19,7 @@ class EmissionsController extends AbstractSelfserveController implements ToggleA
     ];
 
     protected $dataSourceConfig = [
-        'default' => DataSourceConfig::PERMIT_APP,
+        'default' => DataSourceConfig::PERMIT_APP_ECMT_EMISSIONS,
     ];
 
     protected $conditionalDisplayConfig = [

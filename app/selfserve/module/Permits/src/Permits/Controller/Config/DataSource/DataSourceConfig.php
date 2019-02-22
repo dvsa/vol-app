@@ -2,6 +2,8 @@
 
 namespace Permits\Controller\Config\DataSource;
 
+use Common\RefData;
+use Dvsa\Olcs\Api\Entity\IrhpInterface;
 use Permits\Controller\Config\DataSource\FeeList as FeeListDto;
 use Permits\Controller\Config\DataSource\PermitApplication as PermitAppDataSource;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
@@ -18,6 +20,7 @@ use Permits\Data\Mapper\CheckAnswers as CheckAnswersMapper;
 use Permits\Controller\Config\DataSource\EcmtConstrainedCountriesList as EcmtConstrainedCountriesDataSource;
 use Permits\Data\Mapper\ValidEcmtPermitConstrainedCountries as EcmtConstrainedCountriesMapper;
 use Permits\Data\Mapper\IrhpCheckAnswers as IrhpCheckAnswersMapper;
+use Permits\View\Helper\EcmtSection;
 
 /**
  * Holds data source configs that are used regularly
@@ -32,7 +35,10 @@ class DataSourceConfig
         AvailableTypes::class => [],
         LastOpenWindow::class => [],
         LicencesAvailable::class => [
-            'passInUserData' => 'getCurrentOrganisationId'
+            'passInData' => [
+                'key' => 'id',
+                'func' => 'getCurrentOrganisationId'
+            ]
         ]
     ];
 
@@ -40,7 +46,10 @@ class DataSourceConfig
         OpenWindows::class => [],
         LastOpenWindow::class => [],
         LicencesAvailable::class => [
-            'passInUserData' => 'getCurrentOrganisationId'
+            'passInData' => [
+                'key' => 'id',
+                'func' => 'getCurrentOrganisationId'
+            ]
         ],
         IrhpPermitType::class => []
     ];
@@ -48,15 +57,31 @@ class DataSourceConfig
     const PERMIT_APP_LICENCE = [
         IrhpAppDataSource::class => [],
         LicencesAvailable::class => [
-            'passInUserData' => 'getCurrentOrganisationId',
+            'passInData' => [
+                'key' => 'id',
+                'func' => 'getCurrentOrganisationId'
+            ]
         ]
     ];
 
     const PERMIT_APP_ECMT_LICENCE = [
         PermitAppDataSource::class => [],
         LicencesAvailable::class => [
-            'passInUserData' => 'getCurrentOrganisationId',
+            'passInData' => [
+                'key' => 'id',
+                'func' => 'getCurrentOrganisationId'
+            ]
         ]
+    ];
+
+    const PERMIT_APP_ECMT_EMISSIONS = [
+        PermitAppDataSource::class => [],
+        OpenWindows::class => [
+            'passInData' => [
+                'key' => 'type',
+                'value' => RefData::ECMT_PERMIT_TYPE_ID
+            ]
+        ],
     ];
 
     const PERMIT_APP_SECTORS = [
@@ -65,8 +90,15 @@ class DataSourceConfig
     ];
 
     const PERMIT_APP_CHECK_ANSWERS = [
-        PermitAppDataSource::class => [
-            'mapper' => CheckAnswersMapper::class
+        PermitAppDataSource::class => [],
+        OpenWindows::class => [
+            'passInData' => [
+                'key' => 'type',
+                'value' => RefData::ECMT_PERMIT_TYPE_ID
+            ],
+            'append' => [
+                PermitAppDataSource::DATA_KEY => CheckAnswersMapper::class
+            ]
         ],
     ];
 
