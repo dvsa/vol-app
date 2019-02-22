@@ -29,16 +29,16 @@ class SurrenderDetails extends AbstractHelper
     public function returnLicenceDocumentDetailsText(): string
     {
         if ($this->surrender['licenceDocumentStatus']['id'] === RefData::SURRENDER_DOC_STATUS_STOLEN) {
-            return 'Stolen licence document details';
+            return 'Licence document stolen details';
         }
-        return 'Lost licence document details';
+        return 'Licence document lost details';
     }
 
     public function returnCommunityLicenceDocumentDetailsText(): string
     {
         if ($this->surrender['communityLicenceDocumentStatus']['id'] === RefData::SURRENDER_DOC_STATUS_STOLEN) {
-            return 'Stolen community licence document details';
+            return 'Community licence stolen document details';
         }
-        return 'Lost community licence document details';
+        return 'Community licence lost document details';
     }
 }
