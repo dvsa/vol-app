@@ -77,7 +77,7 @@ class CheckAnswersTest extends MockeryTestCase
                     'answer' => 'Yes',
                 ],
                 3 => [
-                    'question' => 'permits.page.restricted-countries.euro5.label',
+                    'question' => 'permits.form.restricted.countries.euro5.label',
                     'route' => 'permits/ecmt-countries',
                     'answer' => 'No',
                 ],
