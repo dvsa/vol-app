@@ -18,36 +18,56 @@
         </dt>
         <dd class="govuk-summary-list__value">
             <?php echo $this->surrender['discLost'] ?? 0;?>
-            <?php if (!empty($this->surrender['discLostInfo'])): ?>
-            <br> <?php echo $this->surrender['discLostInfo']; ?>
-            <?php endif ?>
         </dd>
       </div>
+      <?php if (!empty($this->surrender['discLostInfo'])): ?>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key govuk-summary-list__key--weight-normal">
+          Details of lost discs
+        </dt>
+        <dd class="govuk-summary-list__value">
+            <?php echo $this->surrender['discLostInfo']; ?>
+        </dd>
+      </div>
+      <?php endif ?>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key">
           Number of stolen discs
         </dt>
         <dd class="govuk-summary-list__value">
            <?php echo $this->surrender['discStolen'] ?? 0;?>
-           <?php if (!empty($this->surrender['discStolenInfo'])): ?>
-           <br> <?php echo $this->surrender['discStolenInfo']; ?>
-           <?php endif ?>
         </dd>
       </div>
+      <?php if (!empty($this->surrender['discStolenInfo'])): ?>
+      <div class="govuk-summary-list__row">
+        <dt class="govuk-summary-list__key govuk-summary-list__key--weight-normal">
+          Details of stolen discs
+        </dt>
+        <dd class="govuk-summary-list__value">
+            <?php echo $this->surrender['discStolenInfo']; ?>
+        </dd>
+      </div>
+      <?php endif ?>
 </dl>
-<hr class="govuk-section-break govuk-section-break--visible">
-<dl class="govuk-summary-list">
+<dl class="govuk-summary-list govuk-summary-list--no-border">
   <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
-      Operator Licence
+      Operator licence
     </dt>
     <dd class="govuk-summary-list__value">
         <?php echo $this->surrender['licenceDocumentStatus']['description'];?>
-        <?php if (isset($this->surrender['licenceDocumentInfo'])): ?>
-            <br> <?php echo $this->surrender['licenceDocumentInfo']; ?>
-        <?php endif ?>
     </dd>
   </div>
+  <?php if (isset($this->surrender['licenceDocumentInfo'])): ?>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key govuk-summary-list__key--weight-normal">
+      <?php echo $this->surrenderDetails($this->surrender)->returnLicenceDocumentDetailsText();?>
+    </dt>
+    <dd class="govuk-summary-list__value">
+        <?php echo $this->surrender['licenceDocumentInfo'];?>
+    </dd>
+  </div>
+  <?php endif ?>
 
   <?php if (isset($this->surrender['communityLicenceDocumentStatus'])):?>
   <div class="govuk-summary-list__row">
@@ -56,12 +76,22 @@
     </dt>
     <dd class="govuk-summary-list__value">
         <?php echo $this->surrender['communityLicenceDocumentStatus']['description'];?>
-        <?php if (isset($this->surrender['communityLicenceDocumentInfo'])): ?>
-            <br> <?php echo $this->surrender['communityLicenceDocumentInfo']; ?>
-        <?php endif ?>
+    </dd>
+  </div>
+  <?php if (isset($this->surrender['communityLicenceDocumentInfo'])): ?>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key govuk-summary-list__key--weight-normal">
+      <?php echo $this->surrenderDetails($this->surrender)->returnCommunityLicenceDocumentDetailsText();?>
+    </dt>
+    <dd class="govuk-summary-list__value">
+        <?php echo $this->surrender['communityLicenceDocumentInfo']; ?>
     </dd>
   </div>
   <?php endif ?>
+  <?php endif ?>
+</dl>
+
+<dl class="govuk-summary-list govuk-summary-list--no-border">
 
   <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">

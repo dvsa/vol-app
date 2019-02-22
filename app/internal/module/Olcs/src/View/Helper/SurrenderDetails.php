@@ -25,4 +25,20 @@ class SurrenderDetails extends AbstractHelper
         }
         return 'Physical signature';
     }
+
+    public function returnLicenceDocumentDetailsText(): string
+    {
+        if ($this->surrender['licenceDocumentStatus']['id'] === RefData::SURRENDER_DOC_STATUS_STOLEN) {
+            return 'Stolen licence document details';
+        }
+        return 'Lost licence document details';
+    }
+
+    public function returnCommunityLicenceDocumentDetailsText(): string
+    {
+        if ($this->surrender['communityLicenceDocumentStatus']['id'] === RefData::SURRENDER_DOC_STATUS_STOLEN) {
+            return 'Stolen community licence document details';
+        }
+        return 'Lost community licence document details';
+    }
 }
