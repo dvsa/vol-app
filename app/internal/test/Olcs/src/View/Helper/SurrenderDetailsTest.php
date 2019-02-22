@@ -61,7 +61,7 @@ class SurrenderDetailsTest extends MockeryTestCase
                         )
                     ]
                 ],
-                'expectedText' => 'Digitally signed by SomeFirstName SomeLastName at 1 Jan 2014'
+                'expectedText' => 'Digitally signed by SomeFirstName SomeLastName on 1 Jan 2014'
             ],
             'physical_signature' => [
                 'surrenderData' => [
