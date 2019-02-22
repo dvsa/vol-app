@@ -73,4 +73,70 @@ class SurrenderDetailsTest extends MockeryTestCase
             ]
         ];
     }
+
+    /**
+     * @dataProvider dpTestReturnCommunityLicenceDocumentDetailsText
+     */
+    public function testReturnCommunityLicenceDocumentDetailsText($surrenderData, $expectedText)
+    {
+        $this->assertSame(
+            $expectedText,
+            $this->sut->__invoke($surrenderData)->returnCommunityLicenceDocumentDetailsText()
+        );
+    }
+
+    public function dpTestReturnCommunityLicenceDocumentDetailsText()
+    {
+        return [
+            [
+                'surrenderData' => [
+                    'communityLicenceDocumentStatus' => [
+                        'id' => RefData::SURRENDER_DOC_STATUS_STOLEN
+                    ],
+                ],
+                'expected' => 'Details of stolen community licence document'
+            ],
+            [
+                'surrenderData' => [
+                    'communityLicenceDocumentStatus' => [
+                        'id' => RefData::SURRENDER_DOC_STATUS_LOST
+                    ],
+                ],
+                'expected' => 'Details of lost community licence document'
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider dpTestReturnLicenceDocumentDetailsText
+     */
+    public function testReturnLicenceDocumentDetailsText($surrenderData, $expectedText)
+    {
+        $this->assertSame(
+            $expectedText,
+            $this->sut->__invoke($surrenderData)->returnLicenceDocumentDetailsText()
+        );
+    }
+
+    public function dpTestReturnLicenceDocumentDetailsText()
+    {
+        return [
+            [
+                'surrenderData' => [
+                    'licenceDocumentStatus' => [
+                        'id' => RefData::SURRENDER_DOC_STATUS_STOLEN
+                    ],
+                ],
+                'expected' => 'Details of stolen operator licence document'
+            ],
+            [
+                'surrenderData' => [
+                    'licenceDocumentStatus' => [
+                        'id' => RefData::SURRENDER_DOC_STATUS_LOST
+                    ],
+                ],
+                'expected' => 'Details of lost operator licence document'
+            ]
+        ];
+    }
 }
