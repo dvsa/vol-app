@@ -8,6 +8,7 @@ class SurrenderStateService
 {
     const STATE_EXPIRED = 'surrender_application_expired';
     const STATE_INFORMATION_CHANGED = 'surrender_application_changed';
+    const STATE_WITHDRAWN = 'surrender_application_withdrawn';
     const STATE_OK = 'surrender_application_ok';
 
     private $surrenderData;
@@ -20,11 +21,18 @@ class SurrenderStateService
 
     public function getState(): string
     {
+        if ($this->hasBeenWithdrawn()) {
+            return static::STATE_WITHDRAWN;
+        }
+
         if ($this->hasExpired()) {
             return static::STATE_EXPIRED;
-        } elseif ($this->hasInformationChanged()) {
+        }
+
+        if ($this->hasInformationChanged()) {
             return static::STATE_INFORMATION_CHANGED;
         }
+
         return static::STATE_OK;
     }
 
@@ -71,6 +79,11 @@ class SurrenderStateService
     public function getDiscsOnLicence(): int
     {
         return $this->surrenderData['licence']['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_GOODS_VEHICLE ? $this->getGoodsDiscsOnLicence() : $this->getPsvDiscsOnLicence();
+    }
+
+    public function hasBeenWithdrawn(): bool
+    {
+        return $this->getStatus() === RefData::SURRENDER_STATUS_WITHDRAWN;
     }
 
     private function hasInformationChanged(): bool

@@ -97,9 +97,16 @@ class LicenceOverview extends LvaOverview
         if (empty($surrender)) {
             return [$route, $linkText];
         }
+
         $stateService = new SurrenderStateService();
+        $state = $stateService->setSurrenderData($surrender)->getState();
+
+        if ($state === SurrenderStateService::STATE_WITHDRAWN) {
+            return [$route, $linkText];
+        }
+
         $route = 'licence/surrender/information-changed/GET';
-        if ($stateService->setSurrenderData($surrender)->getState() !== SurrenderStateService::STATE_EXPIRED) {
+        if ($state !== SurrenderStateService::STATE_EXPIRED) {
             $linkText = 'licence.continue-surrender-application';
         }
         return [$route, $linkText];
