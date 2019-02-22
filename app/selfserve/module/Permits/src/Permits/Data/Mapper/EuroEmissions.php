@@ -2,8 +2,6 @@
 
 namespace Permits\Data\Mapper;
 
-use Common\Exception\BadRequestException;
-use Common\Service\Helper\TranslationHelperService;
 use Common\RefData;
 
 /**
@@ -13,10 +11,8 @@ use Common\RefData;
 class EuroEmissions
 {
     /**
-     * @param array                    $data
-     * @param                          $form
-     * @param TranslationHelperService $translator
-     *
+     * @param array $data
+     * @param $form
      * @return array
      */
     public static function mapForFormOptions(array $data, $form)
