@@ -21,7 +21,7 @@ class SurrenderDetails extends AbstractHelper
             $unixTimeStamp = strtotime($this->surrender["digitalSignature"]['createdOn']);
             $date = date("j M Y", $unixTimeStamp);
             $attributes = json_decode($this->surrender["digitalSignature"]["attributes"]);
-            return "Digitally signed by $attributes->firstname $attributes->surname at $date";
+            return "Digitally signed by $attributes->firstname $attributes->surname on $date";
         }
         return 'Physical signature';
     }
