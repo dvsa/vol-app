@@ -17,8 +17,8 @@ class ConfirmationController extends AbstractSurrenderController
 
     public function indexAction()
     {
-        $this->updateSurrender(RefData::SURRENDER_STATUS_SUBMITTED);
         $params = $this->getViewVariables();
+        $this->updateSurrender(RefData::SURRENDER_STATUS_SUBMITTED);
         return $this->renderView($params);
     }
 
