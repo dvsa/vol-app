@@ -595,10 +595,11 @@ return [
                             'scoring' => [
                                 'type' => 'Segment',
                                 'options' => [
-                                    'route' => 'stocks/:stockId/scoring[/:action][/]',
+                                    'route' => 'stocks/:stockId/scoring[/:action][/:deviation]',
                                     'constraints' => [
                                         'stockId' =>'[0-9\,]+',
-                                        'action' => '(index|accept|run|status)'
+                                        'action' => '(index|accept|runStandard|runWithMeanDeviation|status)',
+                                        'deviation' =>'[0-9\.]+'
                                     ],
                                     'defaults' => [
                                         'controller' => \Admin\Controller\IrhpPermitScoringController::class,
