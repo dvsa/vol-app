@@ -29,6 +29,7 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\IrhpApplication as IrhpApplicationMapper;
 use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
+use Zend\Http\Response;
 use Zend\View\Model\ViewModel;
 
 class IrhpApplicationController extends AbstractInternalController implements
@@ -102,6 +103,55 @@ class IrhpApplicationController extends AbstractInternalController implements
 
         return $view;
     }
+
+    /**
+     * @return mixed|Response
+     *
+     * Small override to handle the cancel button on the Add form as this form is not shown in a JS modal popup
+     *
+     */
+    public function addAction()
+    {
+        $request = $this->getRequest();
+        if ($request->isPost() && array_key_exists('back', (array)$this->params()->fromPost()['form-actions'])) {
+            return $this->permitDashRedirect();
+        }
+
+        return parent::addAction();
+    }
+
+    /**
+     * @return mixed|Response
+     *
+     * Small override to handle the cancel button on the Edit form
+     *
+     */
+    public function editAction()
+    {
+        $request = $this->getRequest();
+        if ($request->isPost() && array_key_exists('back', (array)$this->params()->fromPost()['form-actions'])) {
+            return $this->permitDashRedirect();
+        }
+
+        return parent::editAction();
+    }
+
+    /**
+     *
+     * Dash redirect helper
+     *
+     * @return Response
+     *
+     */
+    protected function permitDashRedirect()
+    {
+        return $this->redirect()
+            ->toRoute(
+                'licence/permits',
+                ['licence' => $this->params()->fromRoute('licence')]
+            );
+    }
+
 
     /**
      * Handles click of the Submit button on right-sidebar
