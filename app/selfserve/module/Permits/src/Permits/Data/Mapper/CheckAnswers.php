@@ -51,6 +51,14 @@ class CheckAnswers
             $countries[] = $country['countryDesc'];
         }
 
+        if (empty($countries) && $data['application']['windowEmissionsCategory'] == RefData::EMISSIONS_CATEGORY_EURO6) {
+            $restrictedCountries = 'No';
+        } elseif (empty($countries) && $data['application']['windowEmissionsCategory'] == RefData::EMISSIONS_CATEGORY_EURO5) {
+            $restrictedCountries = 'Yes';
+        } else {
+            $restrictedCountries = ['Yes', implode(', ', $countries)];
+        }
+
         $answersFormatted = [
             [
                 Escape::html($data['application']['licence']['licNo']),
@@ -58,7 +66,7 @@ class CheckAnswers
             ],
             $data['application']['emissions'] ? 'Yes' : 'No',
             $data['application']['cabotage'] ? 'Yes' : 'No',
-            empty($countries) ? 'No' : ['Yes', implode(', ', $countries)],
+            $restrictedCountries,
             $data['application']['permitsRequired'],
             $data['application']['trips'],
             $data['application']['internationalJourneys']['description'],
