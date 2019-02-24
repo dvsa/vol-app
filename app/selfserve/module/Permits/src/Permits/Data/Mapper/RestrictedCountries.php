@@ -25,6 +25,11 @@ class RestrictedCountries
             $form->remove('fields');
             $data['guidance'] = 'permits.page.restricted-countries.guidance.euro5';
             $data['question'] = 'permits.page.restricted-countries.title.euro5';
+            if (!is_null($data[PermitAppDataSource::DATA_KEY]['hasRestrictedCountries'])) {
+                $form->get('euro5Fields')
+                    ->get('restrictedCountries')
+                    ->setValue(1);
+            }
         } else {
             $form->remove('euro5Fields');
             $data['guidance'] = [
@@ -48,6 +53,13 @@ class RestrictedCountries
                 ];
             }
             $form->get('fields')->get('yesContent')->get('restrictedCountriesList')->setValueOptions($valueOptions);
+            if (!is_null($data[PermitAppDataSource::DATA_KEY]['hasRestrictedCountries'])) {
+                $restrictedCountries = $data[PermitAppDataSource::DATA_KEY]['hasRestrictedCountries'] == true ? 1 : 0;
+
+                $form->get('fields')
+                    ->get('restrictedCountries')
+                    ->setValue($restrictedCountries);
+            }
         }
 
         return $data;
