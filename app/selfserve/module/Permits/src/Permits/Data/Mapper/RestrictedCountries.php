@@ -73,7 +73,10 @@ class RestrictedCountries
      */
     public static function mapFromForm(array $data): array
     {
-        $data['fields']['countryIds'] = isset($data['fields']['yesContent']['restrictedCountriesList']) ? $data['fields']['yesContent']['restrictedCountriesList'] : [];
+        $data['fields']['countryIds'] =
+            (int)$data['fields']['restrictedCountries'] === 1 && isset($data['fields']['yesContent']['restrictedCountriesList'])
+                ? $data['fields']['yesContent']['restrictedCountriesList'] : [];
+
         return $data['fields'];
     }
 
