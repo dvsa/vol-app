@@ -48,10 +48,10 @@ class ConfirmationController extends AbstractSurrenderController
 
     protected function getSurrender()
     {
-        $surrender = GetSignature::create(
+        $result = $this->handleQuery(GetSignature::create(
             ['id' => $this->licenceId]
-        );
-        return $surrender;
+        ));
+        return $result->getResult();
     }
 
     /**
