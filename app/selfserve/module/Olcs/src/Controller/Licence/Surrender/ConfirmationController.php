@@ -10,6 +10,7 @@ namespace Olcs\Controller\Licence\Surrender;
 
 use Common\RefData;
 use Common\Service\Helper\TranslationHelperService;
+use Dvsa\Olcs\Transfer\Query\Surrender\GetSignature;
 
 class ConfirmationController extends AbstractSurrenderController
 {
@@ -28,7 +29,7 @@ class ConfirmationController extends AbstractSurrenderController
         $attributes = json_decode($this->getSurrender()["digitalSignature"]["attributes"]);
         $names[] = $attributes->firstname ?? '';
         $names[] = $attributes->surname ?? '';
-        
+
         return implode(' ', $names);
     }
 
@@ -43,6 +44,13 @@ class ConfirmationController extends AbstractSurrenderController
         return $this->url()->fromRoute('dashboard');
     }
 
+    protected function getSurrender()
+    {
+        $surrender = GetSignature::create(
+            ['id' => $this->licenceId]
+        );
+        return $surrender;
+    }
 
     /**
      * @return array
