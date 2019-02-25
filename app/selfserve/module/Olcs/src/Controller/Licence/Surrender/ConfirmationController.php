@@ -15,6 +15,8 @@ use Dvsa\Olcs\Transfer\Query\Surrender\GetSignature;
 class ConfirmationController extends AbstractSurrenderController
 {
     protected $pageTemplate = 'pages/confirmation';
+    protected $dataSourceConfig = [
+    ];
 
     public function indexAction()
     {
