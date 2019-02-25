@@ -20,7 +20,6 @@ class RestrictedCountries
      */
     public static function mapForFormOptions(array $data, Form $form)
     {
-
         if ($data[PermitAppDataSource::DATA_KEY]['windowEmissionsCategory'] === RefData::EMISSIONS_CATEGORY_EURO5) {
             $form->remove('fields');
             $data['guidance'] = 'permits.page.restricted-countries.guidance.euro5';
@@ -84,14 +83,28 @@ class RestrictedCountries
      * Pre-process post data before its passed to $form->setData
      *
      * @param array $data
+     * @param Form $form
      * @return array
      */
-    public static function preprocessFormData(array $data): array
+    public static function preprocessFormData(array $data, Form $form): array
     {
+        $preProcess = [];
+        if (isset($data['fields'])) {
+            if ((int)$data['fields']['restrictedCountries'] === 1 && empty($data['fields']['yesContent']['restrictedCountriesList'])) {
+                $form->get('fields')
+                    ->get('yesContent')
+                    ->get('restrictedCountriesList')
+                    ->setMessages(['error.messages.restricted.countries.list']);
+                $preProcess['invalidForm'] = true;
+            }
+        }
+
         if (isset($data['euro5Fields'])) {
             $data['fields']['restrictedCountries'] = $data['euro5Fields']['restrictedCountries'];
             $data['fields']['yesContent']['restrictedCountriesList'] = [];
         }
-        return $data;
+
+        $preProcess['formData'] = $data;
+        return $preProcess;
     }
 }
