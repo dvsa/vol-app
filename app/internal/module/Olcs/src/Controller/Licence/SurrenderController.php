@@ -2,6 +2,8 @@
 
 namespace Olcs\Controller\Licence;
 
+use Common\Controller\Interfaces\ToggleAwareInterface;
+use Common\FeatureToggle;
 use Common\Controller\Traits\GenericRenderView;
 use Common\Form\Form;
 use Common\RefData;
@@ -12,6 +14,8 @@ use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence;
 use Dvsa\Olcs\Transfer\Query\Surrender\OpenBusReg;
 use Dvsa\Olcs\Transfer\Query\Surrender\OpenCases;
 use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Olcs\Controller\Traits\LicenceControllerTrait;
 use Olcs\Form\Model\Form\Licence\Surrender\Confirmation;
 use Olcs\Form\Model\Form\Licence\Surrender\Surrender;
@@ -20,9 +24,18 @@ use Olcs\Mvc\Controller\ParameterProvider\GenericList;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\ViewModel;
 
-class SurrenderController extends AbstractInternalController
+class SurrenderController extends AbstractInternalController implements
+    ToggleAwareInterface,
+    LeftViewProvider,
+    LicenceControllerInterface
 {
     use GenericRenderView, LicenceControllerTrait;
+
+    protected $toggleConfig = [
+            'default' => [
+                FeatureToggle::INTERNAL_SURRENDER
+            ],
+    ];
 
     /**
      * Holds the navigation ID,
@@ -79,13 +92,13 @@ class SurrenderController extends AbstractInternalController
     public function indexAction()
     {
         $this->setupData();
-        return $this->getView();
+        $view = $this->getView();
+        $this->placeholder()->setPlaceholder('openItems', $this->counts['openCases'] + $this->counts['busRegistrations']);
+        return $view;
     }
 
     public function surrenderAction()
     {
-
-
         $this->setupData();
         $this->form->setData($this->getRequest()->getPost());
 
@@ -159,6 +172,15 @@ class SurrenderController extends AbstractInternalController
         return $table;
     }
 
+    public function getLeftView()
+    {
+        {
+            $view = new ViewModel();
+            $view->setTemplate('sections/licence/partials/surrender/left');
+            return $view;
+        }
+    }
+
     private function setupData()
     {
         $this->setupCasesTable();
@@ -178,7 +200,7 @@ class SurrenderController extends AbstractInternalController
             new GenericItem(['id' => 'licence']),
             'details',
             'sections/licence/pages/surrender',
-            'Surrender details'
+            'Summary: Application to surrender an operator licence'
         );
     }
 

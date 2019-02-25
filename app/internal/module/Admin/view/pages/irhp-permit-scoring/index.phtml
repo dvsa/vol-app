@@ -1,11 +1,16 @@
 <?php
     $stockId = $this->placeholder('stockId')->getValue();
     $operationBaseUrl = 'admin-dashboard/admin-permits/scoring';
-    $runHref = $this->url($operationBaseUrl, ['stockId' => $stockId, 'action' => 'run']);
+    $runWithDeviationHref = $this->url($operationBaseUrl, ['stockId' => $stockId, 'deviation' => 'deviation', 'action' => 'runWithMeanDeviation']);
+    $runHref = $this->url($operationBaseUrl, ['stockId' => $stockId, 'action' => 'runStandard']);
     $acceptHref = $this->url($operationBaseUrl, ['stockId' => $stockId, 'action' => 'accept']);
 ?>
 <div style="float: right;">
-    <a id="runButton" style="visibility: hidden;" class="action--primary large js-modal-ajax" href="<?php echo($runHref); ?>">
+    <a id="runWithDeviationButton" style="display: none;" class="action--primary large js-modal-ajax" data-href="<?php echo($runWithDeviationHref); ?>">
+        Run with mean deviation
+    </a>
+    <input type="number" id="deviation" min="0" style="visibility: hidden" name="deviation" placeholder="Mean deviation"/>
+     <a id="runButton" style="margin-left: 20px; visibility: hidden;" class="action--primary large js-modal-ajax" href="<?php echo($runHref); ?>">
         Run
     </a>
     <a id="acceptButton" style="margin-left: 20px; visibility: hidden;" class="action--primary large js-modal-ajax" href="<?php echo($acceptHref); ?>">
