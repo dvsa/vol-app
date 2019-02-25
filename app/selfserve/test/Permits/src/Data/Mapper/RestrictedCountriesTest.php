@@ -52,7 +52,13 @@ class RestrictedCountriesTest extends TestCase
             ]
         ];
 
-        self::assertEquals($data, RestrictedCountries::preprocessFormData($data));
+        $expected = [
+            'formData' => $data
+        ];
+
+        $mockForm = m::mock(Form::class);
+
+        self::assertEquals($expected, RestrictedCountries::preprocessFormData($data, $mockForm));
     }
 
     public function testPreprocessFormDataEuro5()
@@ -64,9 +70,26 @@ class RestrictedCountriesTest extends TestCase
         ];
 
         $expected = [
-            'euro5Fields' => [
-                'restrictedCountries' => 1,
-            ],
+            'formData' => [
+                'euro5Fields' => [
+                    'restrictedCountries' => 1,
+                ],
+                'fields' => [
+                    'restrictedCountries' => 1,
+                    'yesContent' => [
+                        'restrictedCountriesList' => []
+                    ]
+                ]
+            ]
+        ];
+
+        $mockForm = m::mock(Form::class);
+        self::assertEquals($expected, RestrictedCountries::preprocessFormData($data, $mockForm));
+    }
+
+    public function testPreprocessFormDataEuro6YesNoCountries()
+    {
+        $data = [
             'fields' => [
                 'restrictedCountries' => 1,
                 'yesContent' => [
@@ -75,7 +98,27 @@ class RestrictedCountriesTest extends TestCase
             ]
         ];
 
-        self::assertEquals($expected, RestrictedCountries::preprocessFormData($data));
+        $expected = [
+            'formData' => $data,
+            'invalidForm' => true
+        ];
+
+        $mockForm = m::mock(Form::class);
+        $mockForm->shouldReceive('get')
+            ->with('fields')
+            ->once()
+            ->andReturnSelf()
+            ->shouldReceive('get')
+            ->with('yesContent')
+            ->once()
+            ->andReturnSelf()
+            ->shouldReceive('get')
+            ->with('restrictedCountriesList')
+            ->andReturnSelf()
+            ->shouldReceive('setMessages')
+            ->with(['error.messages.restricted.countries.list']);
+
+        self::assertEquals($expected, RestrictedCountries::preprocessFormData($data, $mockForm));
     }
 
     public function testMapFormOptionsEuro5()

@@ -253,15 +253,16 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
             $formData = $this->postParams;
             // If controller specified a pre-process mapper method, invoke it before setting data to form.
             if (isset($config['preprocessMethod']) && method_exists($mapper, $config['preprocessMethod'])) {
-                $formData = $mapper::{$config['preprocessMethod']}($this->postParams);
+                $preProcess = $mapper::{$config['preprocessMethod']}($this->postParams, $this->form);
+                $formData = $preProcess['formData'];
             }
 
             $this->form->setData($formData);
-            if ($this->form->isValid()) {
+            if ($this->form->isValid() && !isset($preProcess['invalidForm'])) {
                 $saveData = [];
 
                 if (isset($formData['fields'])) {
-                    $saveData = $mapper::mapFromForm($this->postParams);
+                    $saveData = $mapper::mapFromForm($formData);
                 }
 
                 $params = array_merge($this->fetchHandlePostParams(), $saveData);
