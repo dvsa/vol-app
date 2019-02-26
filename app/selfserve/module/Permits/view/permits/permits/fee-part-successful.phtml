@@ -1,101 +1,16 @@
-<?php
-    use Permits\View\Helper\EcmtSection;
-
-$title = $this->translate('permits.page.fee.title');
-$this->headTitle($title);
-$application = $data['application'];
-$translatorHelper = $this->getHelperPluginManager()->getServiceLocator()->get('Helper\Translation');
-?>
-
-<div class="row ecmt">
-    <div class="two-thirds">
-        <div class="page-header">
-            <p><a href="<?php echo $this->url('permits') ?>" class="back-link"> <?php echo $this->escapeHtml($this->translate('common.link.back.label')); ?></a></p>
-            <?php echo $this->formErrors($form); ?>
-
-            <div class="page-header__wrapper">
-                <h1 class="js-title">
-                    <?php
-                    if ($data['application']['hasOutstandingFees'] === 0) {
-                        echo $this->escapeHtml($this->translate('waived-paid-permits.page.fee-part-successful.title'));
-                    } else {
-                        echo $this->escapeHtml($this->translate('permits.page.fee-part-successful.title'));
-                    }
-                    ?>
-
-                    <?php
-                    $markup = ($application['irhpPermitApplications'][0]['permitsAwarded'] === $application['permitsRequired']) ? 'markup-ecmt-fee-successful-hint' : 'markup-ecmt-fee-part-successful-hint';
-                    echo $translatorHelper->translateReplace(
-                            $markup,
-                            [$application['irhpPermitApplications'][0]['permitsAwarded'],
-                             $application['permitsRequired']]
-                    ); ?>
-                </h1>
-            </div>
-        </div>
-        <div class="field">
-            <div class="form-group form-steps ">
-                <div class="form-group">
-                    <dl>
-                        <div>
-                            <dt><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.consideration.reference.number')); ?></dt>
-                            <dd>
-                                <?php echo $this->escapeHtml($application['applicationRef']); ?>
-                            </dd>
-                        </div>
-                        <div>
-                            <dt><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.consideration.permit.type')); ?></dt>
-                            <dd>
-                                <?php echo $this->escapeHtml($application['permitType']['description']); ?>
-                            </dd>
-                        </div>
-                        <div>
-                            <dt><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.fee-part-successful.permit.validity')); ?></dt>
-                            <dd>
-                                <?php
-                                    echo $this->escapeHtml($this->translateReplace(
-                                        'permits.page.ecmt.fee-part-successful.permit.validity.value',
-                                        [
-                                            date(\DATE_FORMAT, $application['validityPeriod']['fromDate']),
-                                            date(\DATE_FORMAT, $application['validityPeriod']['toDate'])
-                                        ]
-                                    ));
-                                ?>
-                            </dd>
-                        </div>
-                        <?php
-                        if ($data['application']['hasOutstandingFees'] !== 0): ?>
-                            <div>
-                                <dt><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.fee-part-successful.issuing.fee')); ?></dt>
-                                <dd>
-                                    <?php echo $this->escapeHtml($application['numPermitsAwarded'] . ' x ' . $this->currencyFormatter($application['issuingFee'])); ?>
-                                    <br />
-                                    <a href="<?php echo $this->url(EcmtSection::ROUTE_ECMT_UNPAID_PERMITS, [], [], true); ?>">
-                                        <?php echo $this->escapeHtml($this->translate('permits.page.view.permits')); ?>
-                                    </a>
-                                </dd>
-
-                                <dt><?php echo $this->escapeHtml($this->translate('permits.page.ecmt.fee-part-successful.issuing.fee.total')); ?></dt>
-                                <dd><?php echo $this->escapeHtml($this->translateReplace('permits.page.ecmt.fee-part-successful.fee.total.value', [$this->currencyFormatter($application['issuingFeeTotal'])])); ?></dd>
-                            </div>
-                        <?php endif; ?>
-                        <div>
-                            <dt>
-                                <?php
-                                if ($data['application']['hasOutstandingFees'] === 0) {
-                                    echo $this->escapeHtml($this->translate('waived.paid.permits.page.ecmt.fee-part-successful.payment.due'));
-                                } else {
-                                    echo $this->escapeHtml($this->translate('permits.page.ecmt.fee-part-successful.payment.due'));
-                                }
-                                ?>
-                            </dt>
-                            <dd><?php echo date(\DATE_FORMAT, strtotime($application['dueDate'])); ?></dd>
-                        </div>
-                    </dl>
-                </div>
-            </div>
-            <?php echo $this->form($form); ?>
-            <p><a href="<?php echo $this->url('permits') ?>"> <?php echo $this->escapeHtml($this->translate('permits.link.cancel.return.to.dashboard')); ?></a></p>
-        </div>
+<?php echo $this->permitsBackLink(); ?>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <?php echo $this->formErrors($form); ?>
+        <span class="govuk-caption-xl">
+            <?php echo $this->escapeHtml($data['application']['applicationRef']); ?>
+        </span>
+        <h1 class="govuk-heading-xl">
+            <?php echo $this->escapeHtml($this->translate($data['application']['title'])); ?>
+        </h1>
+        <?php echo $this->partial('partials/guidance-blue-component', ['guidance' => $data['application']['guidance']]); ?>
+        <?php echo $this->partial('partials/summary-list', ['data' => $data['application']['summaryData']]); ?>
+        <?php echo $this->form($form); ?>
+        <?php echo $this->permitsBackLink('permits.link.cancel.return.to.dashboard', 'permits'); ?>
     </div>
 </div>

@@ -8,6 +8,7 @@ use Permits\Controller\EmissionsController;
 use Permits\Controller\CabotageController;
 use Permits\Controller\FeePartSuccessfulController;
 use Permits\Controller\LicenceController;
+use Permits\Controller\RestrictedCountriesController;
 use Permits\Controller\SectorsController;
 use Permits\Controller\ValidPermitsController;
 use Permits\Controller\WithdrawApplicationController;
@@ -21,6 +22,7 @@ use Permits\Controller\PermitsController;
 use Permits\Controller\TypeController;
 use Permits\Controller\IrhpApplicationController;
 use Permits\Controller\IrhpApplicationCountryController;
+use Permits\Controller\IrhpApplicationFeeController;
 use Permits\Controller\NoOfPermitsController;
 use Permits\Controller\IrhpCheckAnswersController;
 use Permits\Controller\CancelIrhpApplicationController;
@@ -52,7 +54,9 @@ return [
         IrhpApplicationDeclarationController::class => IrhpApplicationDeclarationController::class,
         IrhpCheckAnswersController::class => IrhpCheckAnswersController::class,
         CancelIrhpApplicationController::class => CancelIrhpApplicationController::class,
+        IrhpApplicationFeeController::class => IrhpApplicationFeeController::class,
         IrhpValidPermitsController::class => IrhpValidPermitsController::class,
+        RestrictedCountriesController::class => RestrictedCountriesController::class,
     ],
   ],
   'router' => [
@@ -171,6 +175,32 @@ return [
                           'type'    => 'segment',
                           'options' => [
                               'route'    => 'fee[/]',
+                              'defaults' => [
+                                  'controller'    => IrhpApplicationFeeController::class,
+                                  'action'        => 'generic',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'payment' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => 'payment[/]',
+                              'defaults' => [
+                                  'controller'    => IrhpApplicationFeeController::class,
+                                  'action'        => 'payment',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'payment-result' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => 'payment-result[/]',
+                              'defaults' => [
+                                  'controller'    => IrhpApplicationFeeController::class,
+                                  'action'        => 'paymentResult',
+                              ],
                           ],
                           'may_terminate' => false,
                       ],
@@ -178,6 +208,10 @@ return [
                           'type'    => 'segment',
                           'options' => [
                               'route'    => 'submitted[/]',
+                              'defaults' => [
+                                  'controller' => SubmittedController::class,
+                                  'action' => 'irhp-submitted',
+                              ],
                           ],
                           'may_terminate' => false,
                       ],
@@ -593,7 +627,7 @@ return [
                       'route'    => '[/:id]/licence[/]',
                       'defaults' => [
                           'controller'    => LicenceController::class,
-                          'action'        => 'questionEcmt',
+                          'action'        => 'question-ecmt',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',
@@ -616,10 +650,10 @@ return [
                   ],
                   'may_terminate' => true,
               ],
-              'ecmt-euro6' => [
+              'ecmt-emissions' => [
                   'type'    => 'segment',
                   'options' => [
-                      'route'    => '/:id/ecmt-euro6[/]',
+                      'route'    => '/:id/ecmt-emissions[/]',
                       'defaults' => [
                           'controller'    => EmissionsController::class,
                           'action'        => 'question',
@@ -644,13 +678,14 @@ return [
                   ],
                   'may_terminate' => false,
               ],
+
               'ecmt-countries' => [
                   'type'    => 'segment',
                   'options' => [
                       'route'    => '/:id/ecmt-countries[/]',
                       'defaults' => [
-                          'controller'    => PermitsController::class,
-                          'action'        => 'restrictedCountries',
+                          'controller'    => RestrictedCountriesController::class,
+                          'action'        => 'question',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',

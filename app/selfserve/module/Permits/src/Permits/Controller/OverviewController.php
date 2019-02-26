@@ -24,4 +24,10 @@ class OverviewController extends AbstractSelfserveController implements ToggleAw
     protected $templateConfig = [
         'generic' => 'permits/application-overview'
     ];
+
+    protected $templateVarsConfig = [
+        'default' => [
+            'browserTitle' => 'permits.application.overview.browser.title',
+        ]
+    ];
 }

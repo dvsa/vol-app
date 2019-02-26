@@ -3,6 +3,7 @@
 namespace PermitsTest\Data\Mapper;
 
 use Common\Form\Form;
+use Common\RefData;
 use Mockery as m;
 use Permits\Data\Mapper\LicencesAvailable;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
@@ -54,7 +55,7 @@ class LicencesAvailableTest extends TestCase
             '2 licences available for selection' => [
                 'data' => [
                     'irhpPermitType' => [
-                        'id' => 1,
+                        'id' => RefData::ECMT_PERMIT_TYPE_ID,
                     ],
                     'licencesAvailable' => [
                         'eligibleLicences' => [
@@ -66,10 +67,10 @@ class LicencesAvailableTest extends TestCase
                                     'totAuthVehicles' => 12,
                                     'licenceType' => [
                                         'description' => 'Standard International',
-                                        'displayOrder' => NULL,
+                                        'displayOrder' => null,
                                         'id' => 'ltyp_si',
                                         'olbsKey' => 'SI',
-                                        'parent' => NULL,
+                                        'parent' => null,
                                         'refDataCategoryId' => 'lic_type',
                                         'version' => 1,
                                     ],
@@ -84,10 +85,10 @@ class LicencesAvailableTest extends TestCase
                                     'totAuthVehicles' => 12,
                                     'licenceType' => [
                                         'description' => 'Standard International',
-                                        'displayOrder' => NULL,
+                                        'displayOrder' => null,
                                         'id' => 'ltyp_si',
                                         'olbsKey' => 'SI',
-                                        'parent' => NULL,
+                                        'parent' => null,
                                         'refDataCategoryId' => 'lic_type',
                                         'version' => 1,
                                     ],
@@ -102,10 +103,10 @@ class LicencesAvailableTest extends TestCase
                                     'totAuthVehicles' => 12,
                                     'licenceType' => [
                                         'description' => 'Standard International',
-                                        'displayOrder' => NULL,
+                                        'displayOrder' => null,
                                         'id' => 'ltyp_si',
                                         'olbsKey' => 'SI',
-                                        'parent' => NULL,
+                                        'parent' => null,
                                         'refDataCategoryId' => 'lic_type',
                                         'version' => 1,
                                     ],
@@ -119,7 +120,7 @@ class LicencesAvailableTest extends TestCase
                 ],
                 'expected' => [
                     'irhpPermitType' => [
-                        'id' => 1,
+                        'id' => RefData::ECMT_PERMIT_TYPE_ID,
                     ],
                     'licencesAvailable' => [
                         'eligibleLicences' => [
@@ -131,10 +132,10 @@ class LicencesAvailableTest extends TestCase
                                     'totAuthVehicles' => 12,
                                     'licenceType' => [
                                         'description' => 'Standard International',
-                                        'displayOrder' => NULL,
+                                        'displayOrder' => null,
                                         'id' => 'ltyp_si',
                                         'olbsKey' => 'SI',
-                                        'parent' => NULL,
+                                        'parent' => null,
                                         'refDataCategoryId' => 'lic_type',
                                         'version' => 1,
                                     ],
@@ -149,10 +150,10 @@ class LicencesAvailableTest extends TestCase
                                     'totAuthVehicles' => 12,
                                     'licenceType' => [
                                         'description' => 'Standard International',
-                                        'displayOrder' => NULL,
+                                        'displayOrder' => null,
                                         'id' => 'ltyp_si',
                                         'olbsKey' => 'SI',
-                                        'parent' => NULL,
+                                        'parent' => null,
                                         'refDataCategoryId' => 'lic_type',
                                         'version' => 1,
                                     ],
@@ -167,10 +168,10 @@ class LicencesAvailableTest extends TestCase
                                     'totAuthVehicles' => 12,
                                     'licenceType' => [
                                         'description' => 'Standard International',
-                                        'displayOrder' => NULL,
+                                        'displayOrder' => null,
                                         'id' => 'ltyp_si',
                                         'olbsKey' => 'SI',
-                                        'parent' => NULL,
+                                        'parent' => null,
                                         'refDataCategoryId' => 'lic_type',
                                         'version' => 1,
                                     ],
@@ -180,7 +181,8 @@ class LicencesAvailableTest extends TestCase
                                 ]
                             ]
                         ]
-                    ]
+                    ],
+                    'warning' => LicencesAvailable::ECMT_PREVIOUSLY_APPLIED_MESSAGE,
                 ],
                 'expectedValueOptions' => [
                     7 => [

@@ -12,6 +12,7 @@ use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Olcs\Controller\Config\DataSource\DataSourceInterface;
 use Permits\View\Helper\EcmtSection;
+use ReflectionMethod;
 use Zend\Http\Response as HttpResponse;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\ViewModel;
@@ -236,23 +237,34 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     }
 
     /**
-     * @todo mapping data properly from the form, currently does a crude check for data and then uses default mapper
      * @todo handle redirects, currently just assumes a "next step" is present
      * @todo need to put in some error handling to help devs diagnose bad config etc.
      */
     public function handlePost()
     {
         if (!empty($this->postParams)) {
-            $this->form->setData($this->postParams);
+            $config = $this->configsForAction('postConfig');
+            // If controller has specified a mapper class, use it instead of default.
+            $mapper = DefaultMapper::class;
+            if (isset($config['mapperClass'])) {
+                $mapper = $config['mapperClass'];
+            }
 
-            if ($this->form->isValid()) {
+            $formData = $this->postParams;
+            // If controller specified a pre-process mapper method, invoke it before setting data to form.
+            if (isset($config['preprocessMethod']) && method_exists($mapper, $config['preprocessMethod'])) {
+                $preProcess = $mapper::{$config['preprocessMethod']}($this->postParams, $this->form);
+                $formData = $preProcess['formData'];
+            }
+
+            $this->form->setData($formData);
+            if ($this->form->isValid() && !isset($preProcess['invalidForm'])) {
                 $saveData = [];
 
-                if (isset($this->postParams['fields'])) {
-                    $saveData = DefaultMapper::mapFromForm($this->postParams);
+                if (isset($formData['fields'])) {
+                    $saveData = $mapper::mapFromForm($formData);
                 }
 
-                $config = $this->configsForAction('postConfig');
                 $params = array_merge($this->fetchHandlePostParams(), $saveData);
                 $this->redirectParams = [];
                 $this->redirectOptions = [];
@@ -265,7 +277,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
                     $value = $config['conditional']['value'];
 
                     if (is_array($field) && array_search($params[$value], $this->data[$dataKey][$field[0]]) === $field[1]
-                        || $this->data[$dataKey][$field] === $value) {
+                        || !is_array($field) && $this->data[$dataKey][$field] === $value) {
                         return $this->redirectConditionalPost($config);
                     }
                 }
@@ -324,8 +336,12 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
         //retrieve DTO data
         foreach ($dataSourceConfig as $dataSource => $config) {
             // If we need to pass in data (not from the route)
-            if (isset($config['passInUserData'])) {
-                $this->queryParams['id'] = call_user_func_array([$this, $config['passInUserData']], []);
+            if (isset($config['passInData']['key'])) {
+                if (isset($config['passInData']['func'])) {
+                    $this->queryParams[$config['passInData']['key']] = call_user_func_array([$this, $config['passInData']['func']], []);
+                } elseif (isset($config['passInData']['value'])) {
+                    $this->queryParams[$config['passInData']['key']] = $config['passInData']['value'];
+                }
             }
 
             /**
@@ -340,7 +356,13 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
 
             if (isset($config['mapper'])) {
                 $mapper = isset($config['mapper']) ? $config['mapper'] : DefaultMapper::class;
-                $data = $mapper::mapForDisplay($data);
+                $reflection = new ReflectionMethod($mapper, 'mapForDisplay');
+
+                if ($reflection->getNumberOfRequiredParameters() > 2) {
+                    $data = $mapper::mapForDisplay($data, $this->getServiceLocator()->get('Helper\Translation'), $this->url());
+                } else {
+                    $data = $mapper::mapForDisplay($data);
+                }
             }
 
             $this->data[$source::DATA_KEY] = $data;
@@ -351,7 +373,14 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
                         $appendTo => $this->data[$appendTo],
                         $source::DATA_KEY => $data
                     ];
-                    $this->data[$appendTo] = $mapper::mapForDisplay($combinedData);
+
+                    $reflection = new ReflectionMethod($mapper, 'mapForDisplay');
+
+                    if ($reflection->getNumberOfRequiredParameters() > 2) {
+                        $this->data[$appendTo] = $mapper::mapForDisplay($combinedData, $this->getServiceLocator()->get('Helper\Translation'), $this->url());
+                    } else {
+                        $this->data[$appendTo] = $mapper::mapForDisplay($combinedData);
+                    }
                 }
             }
         }

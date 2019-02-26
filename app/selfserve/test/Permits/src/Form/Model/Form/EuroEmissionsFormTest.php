@@ -6,18 +6,18 @@ use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 use Zend\Validator;
 
 /**
- * Class Euro6EmissionsFormTest
+ * Class EuroEmissionsFormTest
  *
  * @group FormTests
  */
-class Euro6EmissionsFormTest extends AbstractFormValidationTestCase
+class EuroEmissionsFormTest extends AbstractFormValidationTestCase
 {
     /**
      * @var string The class name of the form being tested
      */
-    protected $formName = \Permits\Form\Model\Form\Euro6EmissionsForm::class;
+    protected $formName = \Permits\Form\Model\Form\EuroEmissionsForm::class;
 
-    public function testMeetsEuro6()
+    public function testMeetsEuro()
     {
         $element = ['fields', 'emissions'];
 
@@ -37,5 +37,4 @@ class Euro6EmissionsFormTest extends AbstractFormValidationTestCase
         $this->assertFormElementActionButton($element);
         $this->assertFormElementType($element, "Zend\Form\Element\Submit");
     }
-
 }

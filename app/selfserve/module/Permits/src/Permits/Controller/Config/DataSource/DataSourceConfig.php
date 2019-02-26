@@ -2,9 +2,11 @@
 
 namespace Permits\Controller\Config\DataSource;
 
+use Common\RefData;
 use Permits\Controller\Config\DataSource\FeeList as FeeListDto;
 use Permits\Controller\Config\DataSource\PermitApplication as PermitAppDataSource;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
+use Permits\Controller\Config\DataSource\IrhpFeePerPermit as IrhpFeePerPermitDataSource;
 use Permits\Controller\Config\DataSource\IrhpMaxStockPermits as IrhpMaxStockPermitsDataSource;
 use Permits\Controller\Config\DataSource\ValidEcmtPermits as ValidEcmtPermitsDataSource;
 use Permits\Controller\Config\DataSource\UnpaidEcmtPermits as UnpaidEcmtPermitsDataSource;
@@ -12,6 +14,7 @@ use Permits\Controller\Config\DataSource\ValidIrhpPermits as ValidIrhpPermitsDat
 use Permits\Data\Mapper\FeeList as FeeListMapper;
 use Permits\Data\Mapper\ApplicationFees as ApplicationFeesMapper;
 use Permits\Data\Mapper\AcceptOrDeclinePermits as AcceptOrDeclineMapper;
+use Permits\Data\Mapper\IrhpApplicationFeeSummary;
 use Permits\Data\Mapper\ValidEcmtPermits as ValidEcmtPermitsMapper;
 use Permits\Data\Mapper\CheckAnswers as CheckAnswersMapper;
 use Permits\Controller\Config\DataSource\EcmtConstrainedCountriesList as EcmtConstrainedCountriesDataSource;
@@ -31,7 +34,10 @@ class DataSourceConfig
         AvailableTypes::class => [],
         LastOpenWindow::class => [],
         LicencesAvailable::class => [
-            'passInUserData' => 'getCurrentOrganisationId'
+            'passInData' => [
+                'key' => 'id',
+                'func' => 'getCurrentOrganisationId'
+            ]
         ]
     ];
 
@@ -39,7 +45,10 @@ class DataSourceConfig
         OpenWindows::class => [],
         LastOpenWindow::class => [],
         LicencesAvailable::class => [
-            'passInUserData' => 'getCurrentOrganisationId'
+            'passInData' => [
+                'key' => 'id',
+                'func' => 'getCurrentOrganisationId'
+            ]
         ],
         IrhpPermitType::class => []
     ];
@@ -47,15 +56,31 @@ class DataSourceConfig
     const PERMIT_APP_LICENCE = [
         IrhpAppDataSource::class => [],
         LicencesAvailable::class => [
-            'passInUserData' => 'getCurrentOrganisationId',
+            'passInData' => [
+                'key' => 'id',
+                'func' => 'getCurrentOrganisationId'
+            ]
         ]
     ];
 
     const PERMIT_APP_ECMT_LICENCE = [
         PermitAppDataSource::class => [],
         LicencesAvailable::class => [
-            'passInUserData' => 'getCurrentOrganisationId',
+            'passInData' => [
+                'key' => 'id',
+                'func' => 'getCurrentOrganisationId'
+            ]
         ]
+    ];
+
+    const PERMIT_APP_ECMT_EMISSIONS = [
+        PermitAppDataSource::class => [],
+        OpenWindows::class => [
+            'passInData' => [
+                'key' => 'type',
+                'value' => RefData::ECMT_PERMIT_TYPE_ID
+            ]
+        ],
     ];
 
     const PERMIT_APP_SECTORS = [
@@ -63,9 +88,21 @@ class DataSourceConfig
         Sectors::class => []
     ];
 
+    const PERMIT_APP_RESTRICTED_COUNTRIES = [
+        PermitAppDataSource::class => [],
+        EcmtConstrainedCountriesDataSource::class => []
+    ];
+
     const PERMIT_APP_CHECK_ANSWERS = [
-        PermitAppDataSource::class => [
-            'mapper' => CheckAnswersMapper::class
+        PermitAppDataSource::class => [],
+        OpenWindows::class => [
+            'passInData' => [
+                'key' => 'type',
+                'value' => RefData::ECMT_PERMIT_TYPE_ID
+            ],
+            'append' => [
+                PermitAppDataSource::DATA_KEY => CheckAnswersMapper::class
+            ]
         ],
     ];
 
@@ -84,7 +121,9 @@ class DataSourceConfig
     const PERMIT_APP_WITH_FEE_LIST = [
         PermitAppDataSource::class => [],
         FeeListDto::class => [
-            'mapper' => FeeListMapper::class
+            'append' => [
+                PermitAppDataSource::DATA_KEY => FeeListMapper::class
+            ]
         ],
     ];
 
@@ -114,6 +153,12 @@ class DataSourceConfig
         IrhpAppDataSource::class => [],
     ];
 
+    const IRHP_APP_FEE = [
+        IrhpAppDataSource::class => [
+            'mapper' => IrhpApplicationFeeSummary::class
+        ],
+    ];
+
     const IRHP_APP_COUNTRIES = [
         IrhpAppDataSource::class => [],
         AvailableCountries::class => [],
@@ -132,5 +177,6 @@ class DataSourceConfig
     const IRHP_APP_WITH_MAX_PERMITS_BY_STOCK = [
         IrhpAppDataSource::class => [],
         IrhpMaxStockPermitsDataSource::class => [],
+        IrhpFeePerPermitDataSource::class => [],
     ];
 }

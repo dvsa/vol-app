@@ -6,10 +6,8 @@ use Common\Form\Form;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Surrender\Create;
 use Dvsa\Olcs\Transfer\Command\Surrender\Delete;
-use Olcs\Controller\Config\DataSource\DataSourceConfig;
 use Olcs\Form\Model\Form\Surrender\InformationChanged;
 use Olcs\Service\Surrender\SurrenderStateService;
-use Zend\Mvc\MvcEvent;
 
 class InformationChangedController extends AbstractSurrenderController
 {

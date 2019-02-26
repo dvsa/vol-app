@@ -14,6 +14,7 @@ use Zend\Form\Annotation as Form;
 class RestrictedCountries
 {
     /**
+     * @Form\Name("restrictedCountries")
      * @Form\Required(true)
      * @Form\Attributes({
      *     "radios_wrapper_attributes": {"class": "govuk-radios--conditional", "data-module":"radios"}
@@ -42,5 +43,4 @@ class RestrictedCountries
      * @Form\ComposedObject("Permits\Form\Model\Fieldset\RestrictedCountriesList")
      */
     public $yesContent = null;
-
 }

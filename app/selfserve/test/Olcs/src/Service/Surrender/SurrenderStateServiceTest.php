@@ -155,7 +155,7 @@ class SurrenderStateServiceTest extends TestCase
     public function getStateProvider()
     {
         return [
-            'application_started' =>[
+            'application_started' => [
                 'surrender' => [
                     'status' => [
                         'id' => RefData::SURRENDER_STATUS_START
@@ -165,8 +165,21 @@ class SurrenderStateServiceTest extends TestCase
                 ],
                 'expected' => SurrenderStateService::STATE_OK
             ],
+            'application_withdrawn' => [
+                'surrender' => [
+                    'status' => [
+                        'id' => RefData::SURRENDER_STATUS_WITHDRAWN
+                    ],
+                    'createdOn' => date(DATE_ATOM, time()),
+                    'lastModifiedOn' => null
+                ],
+                'expected' => SurrenderStateService::STATE_WITHDRAWN
+            ],
             'application_expired' => [
                 'surrender' => [
+                    'status' => [
+                        'id' => RefData::SURRENDER_STATUS_DISCS_COMPLETE
+                    ],
                     'createdOn' => '2019-01-31 14:13:09',
                     'lastModifiedOn' => null
                 ],

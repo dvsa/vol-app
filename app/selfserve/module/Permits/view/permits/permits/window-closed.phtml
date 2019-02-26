@@ -4,12 +4,6 @@
         <h1 class="govuk-heading-xl">
             <?php echo $this->escapeHtml($this->translate('permits.application.window-closed')); ?>
         </h1>
-        <?php echo $this->translateReplace(
-            'markup-permits-window-closed',
-            [
-                $data['irhpPermitType']['name']['description'],
-                date('d F Y', strtotime($data['lastOpenWindow']['lastOpenWindow']['endDate']))
-            ]
-        ); ?>
+        <?php echo $this->translate('markup-permits-window-closed'); ?>
     </div>
 </div>

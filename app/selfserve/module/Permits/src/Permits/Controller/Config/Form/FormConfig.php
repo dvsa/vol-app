@@ -8,7 +8,9 @@ use Permits\Controller\Config\DataSource\PermitApplication as PermitApplicationD
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpApplicationDataSource;
 use Permits\Data\Mapper\AvailableCountries as AvailableCountriesMapper;
 use Permits\Data\Mapper\AvailableTypes as AvailableTypesMapper;
+use Permits\Data\Mapper\EuroEmissions;
 use Permits\Data\Mapper\LicencesAvailable as LicencesAvailableMapper;
+use Permits\Data\Mapper\RestrictedCountries;
 use Permits\Data\Mapper\Sectors as SectorsMapper;
 use Permits\Data\Mapper\NoOfPermits as NoOfPermitsMapper;
 use Permits\Data\Mapper\ChangeLicence as ChangeLicenceMapper;
@@ -83,8 +85,12 @@ class FormConfig
 
     const FORM_EMISSIONS = [
         'emissions' => [
-            'formClass' => 'Euro6EmissionsForm',
+            'formClass' => 'EuroEmissionsForm',
             'dataSource' => PermitApplicationDataSource::DATA_KEY,
+            'mapper' => [
+                'type' => self::FORM_OPTIONS,
+                'class' => EuroEmissions::class
+            ]
         ],
     ];
 
@@ -102,6 +108,17 @@ class FormConfig
             'mapper' => [
                 'type' => self::FORM_OPTIONS,
                 'class' => SectorsMapper::class
+            ]
+        ],
+    ];
+
+    const FORM_RESTRICTED_COUNTRIES = [
+        'restrictedCountries' => [
+            'formClass' => 'RestrictedCountriesForm',
+            'dataSource' => PermitApplicationDataSource::DATA_KEY,
+            'mapper' => [
+                'type' => self::FORM_OPTIONS,
+                'class' => RestrictedCountries::class
             ]
         ],
     ];

@@ -22,6 +22,6 @@ class IrhpApplicationController extends AbstractSelfserveController implements T
     ];
 
     protected $templateConfig = [
-        'generic' => 'permits/irhp-application-overview'
+        'default' => 'permits/irhp-application-overview'
     ];
 }

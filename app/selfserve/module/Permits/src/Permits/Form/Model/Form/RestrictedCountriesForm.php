@@ -11,7 +11,7 @@ use Zend\Form\Annotation as Form;
 class RestrictedCountriesForm
 {
     /**
-     * @Form\Name("Fields")
+     * @Form\Name("fields")
      * @Form\Options({
      *     "label": "permits.page.restricted-countries.question",
      *     "label_attributes": {"class": "visually-hidden"},
@@ -19,6 +19,16 @@ class RestrictedCountriesForm
      * @Form\ComposedObject("Permits\Form\Model\Fieldset\RestrictedCountries")
      */
     public $fields = null;
+
+    /**
+     * @Form\Name("euro5Fields")
+     * @Form\Options({
+     *     "label": "permits.page.restricted-countries.question",
+     *     "label_attributes": {"class": "visually-hidden"},
+     * })
+     * @Form\ComposedObject("Permits\Form\Model\Fieldset\Euro5RestrictedCountries")
+     */
+    public $euro5Fields = null;
 
     /**
      * @Form\Name("Submit")

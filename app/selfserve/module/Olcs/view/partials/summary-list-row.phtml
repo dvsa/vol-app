@@ -3,10 +3,15 @@
         <?php echo $this->escapeHtml($this->translate($this->key)); ?>
     </dt>
     <dd class="govuk-summary-list__value">
-        <?php if (isset($this->disableHtmlEscape) && $this->disableHtmlEscape) { ?>
-            <?php echo $this->translate($this->value); ?>
-        <?php } else { ?>
-            <?php echo $this->escapeHtml($this->translate($this->value)); ?>
-        <?php } ?>
+        <?php
+            /**  @todo move logic to reusable view helper (listValueFormatter?) to encompass common situations */
+            if (isset($this->disableHtmlEscape) && $this->disableHtmlEscape) {
+                echo $this->translate($this->value);
+            } elseif (isset($this->isCurrency)) {
+                echo $this->currencyFormatter($this->value);
+            } else {
+                echo $this->escapeHtml($this->translate($this->value));
+            }
+        ?>
     </dd>
 </div>
