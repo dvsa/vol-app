@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cc4344b5f3833d517d32836c3c65a53d",
-    "content-hash": "4b2b84ecb11b982953c9984bbdd6846d",
+    "hash": "8b7f61e4c0fd37ba750f108460dddab7",
+    "content-hash": "7b9b2fa3cfb7ad12967507c0e84255a4",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1064,11 +1064,11 @@
         },
         {
             "name": "olcs/OlcsCommon",
-            "version": "dev-release/4.200a",
+            "version": "dev-release/4.201",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-common.git",
-                "reference": "8eed0a7fe6d158327b62764fd503c53baf210114"
+                "reference": "79910e866df1527e18d80abcb220ad16eff17cf3"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -1083,10 +1083,10 @@
                 "mikey179/vfsstream": "~1.4.0",
                 "mockery/mockery": "^1.2",
                 "olcs/olcs-devtools": "dev-master",
-                "olcs/olcs-logging": "dev-release/4.200a",
+                "olcs/olcs-logging": "dev-release/4.201",
                 "olcs/olcs-testhelpers": "dev-develop",
-                "olcs/olcs-transfer": "dev-release/4.200a",
-                "olcs/olcs-utils": "dev-release/4.200a",
+                "olcs/olcs-transfer": "dev-release/4.201",
+                "olcs/olcs-utils": "dev-release/4.201",
                 "phpstan/phpstan-mockery": "^0.10.2",
                 "phpstan/phpstan-shim": "^0.10.5",
                 "soflomo/purifier": "~0.1.0"
@@ -1121,20 +1121,20 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2019-02-14 21:23:39"
+            "time": "2019-02-26 07:46:21"
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "dev-release/4.200a",
+            "version": "dev-release/4.201",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-auth.git",
-                "reference": "28574ab5e6d292a3efd1f45c5969ccc78512e796"
+                "reference": "dc37e7032f2d679a0286015a498cd5b990fe223f"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
-                "olcs/olcs-transfer": "dev-release/4.200a",
-                "olcs/olcscommon": "dev-release/4.200a",
+                "olcs/olcs-transfer": "dev-release/4.201",
+                "olcs/olcscommon": "dev-release/4.201",
                 "php": ">=5.4",
                 "zendframework/zendframework": "~2.4.0"
             },
@@ -1172,15 +1172,15 @@
                 ]
             },
             "description": "OLCS Authentication",
-            "time": "2019-02-14 19:57:49"
+            "time": "2019-02-26 06:22:47"
         },
         {
             "name": "olcs/olcs-logging",
-            "version": "dev-release/4.200a",
+            "version": "dev-release/4.201",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-logging.git",
-                "reference": "f8f0b48019b9441dfcc5a47d90b11e89935918ec"
+                "reference": "7ac275854bba7eb1191d3b4288cdf96ede8b9e73"
             },
             "require": {
                 "php": ">=5.4",
@@ -1227,15 +1227,15 @@
                 ]
             },
             "description": "Logging Module for Olcs",
-            "time": "2019-02-14 19:56:50"
+            "time": "2019-02-26 06:21:48"
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "dev-release/4.200a",
+            "version": "dev-release/4.201",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-transfer.git",
-                "reference": "99a254eb8c795218299458c90f4f90903c07b4d3"
+                "reference": "0be9c90a7e6e171f4e65e4bfe2a974e61e1ebe4e"
             },
             "require": {
                 "php": ">=5.4",
@@ -1276,15 +1276,15 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2019-02-14 19:58:49"
+            "time": "2019-02-26 06:23:47"
         },
         {
             "name": "olcs/olcs-utils",
-            "version": "dev-release/4.200a",
+            "version": "dev-release/4.201",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-utils.git",
-                "reference": "26dafd8c9537e8bc55a6c90044d594c6ac109dab"
+                "reference": "afd9d8e01eb9761fc9ea626b318af2746bece16d"
             },
             "require": {
                 "php": ">=5.4",
@@ -1294,7 +1294,7 @@
                 "johnkary/phpunit-speedtrap": "^3.0",
                 "mockery/mockery": "^1.2.0",
                 "olcs/olcs-devtools": "dev-master",
-                "olcs/olcs-logging": "dev-release/4.200a",
+                "olcs/olcs-logging": "dev-release/4.201",
                 "phpstan/phpstan-mockery": "^0.10.2",
                 "phpstan/phpstan-shim": "^0.10.5"
             },
@@ -1325,7 +1325,7 @@
                 ]
             },
             "description": "OLCS Utils",
-            "time": "2019-02-14 19:59:37"
+            "time": "2019-02-26 06:24:37"
         },
         {
             "name": "psr/log",
@@ -1996,21 +1996,21 @@
         },
         {
             "name": "johnkary/phpunit-speedtrap",
-            "version": "v3.0.0",
+            "version": "v3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/johnkary/phpunit-speedtrap.git",
-                "reference": "5f1ede99bd53fd0e5ff72669877420e801256d90"
+                "reference": "dac11b8640d4be7a70f336616947fa84f169835a"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/johnkary-phpunit-speedtrap-5f1ede99bd53fd0e5ff72669877420e801256d90-zip-e29200.tar",
-                "reference": "5f1ede99bd53fd0e5ff72669877420e801256d90",
-                "shasum": "1a6a15a5ff99f56b0abed7f5d552fe8f51ea4e17"
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/johnkary-phpunit-speedtrap-dac11b8640d4be7a70f336616947fa84f169835a-zip-e8a7e1.tar",
+                "reference": "dac11b8640d4be7a70f336616947fa84f169835a",
+                "shasum": "fc144f850549d3730dc35b96306aa65275500af3"
             },
             "require": {
                 "php": ">=7.1",
-                "phpunit/phpunit": "^7.0"
+                "phpunit/phpunit": "^7.0 || ^8.0"
             },
             "type": "library",
             "extra": {
@@ -2040,7 +2040,7 @@
                 "profile",
                 "slow"
             ],
-            "time": "2018-02-24 18:55:28"
+            "time": "2019-02-24 02:40:12"
         },
         {
             "name": "mockery/mockery",
@@ -2208,7 +2208,7 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-testhelpers.git",
-                "reference": "fe55e796259b8297e70ca12234eb872ff58a50da"
+                "reference": "8e94226d234df5ec611d6f2d2438021f9f6ee60f"
             },
             "require": {
                 "php": ">=5.4"
@@ -2225,7 +2225,7 @@
                 }
             },
             "description": "OLCS Test helpers",
-            "time": "2019-01-31 21:06:53"
+            "time": "2019-02-18 08:14:06"
         },
         {
             "name": "pdepend/pdepend",
@@ -2899,17 +2899,17 @@
         },
         {
             "name": "phpunit/php-timer",
-            "version": "2.0.0",
+            "version": "2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-timer.git",
-                "reference": "8b8454ea6958c3dee38453d3bd571e023108c91f"
+                "reference": "8b389aebe1b8b0578430bda0c7c95a829608e059"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/phpunit-php-timer-8b8454ea6958c3dee38453d3bd571e023108c91f-zip-47533e.tar",
-                "reference": "8b8454ea6958c3dee38453d3bd571e023108c91f",
-                "shasum": "302e0e0c1453757214c0d6b4f9868025864a5691"
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/phpunit-php-timer-8b389aebe1b8b0578430bda0c7c95a829608e059-zip-4447e8.tar",
+                "reference": "8b389aebe1b8b0578430bda0c7c95a829608e059",
+                "shasum": "4408d1ae5a47600291f64274e78105ab82bab6db"
             },
             "require": {
                 "php": "^7.1"
@@ -2920,7 +2920,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.0-dev"
+                    "dev-master": "2.1-dev"
                 }
             },
             "autoload": {
@@ -2944,7 +2944,7 @@
             "keywords": [
                 "timer"
             ],
-            "time": "2018-02-01 13:07:23"
+            "time": "2019-02-20 10:12:59"
         },
         {
             "name": "phpunit/php-token-stream",
@@ -3049,17 +3049,17 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "7.5.4",
+            "version": "7.5.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "2896657da5fb237bc316bdfc18c2650efeee0dc0"
+                "reference": "09c85e14994df92e5ff1f5ec0b481bdb7d3d3df9"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/phpunit-phpunit-2896657da5fb237bc316bdfc18c2650efeee0dc0-zip-058a44.tar",
-                "reference": "2896657da5fb237bc316bdfc18c2650efeee0dc0",
-                "shasum": "0133952a3feb122c72ef53f51d9eac212355c56a"
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/phpunit-phpunit-09c85e14994df92e5ff1f5ec0b481bdb7d3d3df9-zip-17cd74.tar",
+                "reference": "09c85e14994df92e5ff1f5ec0b481bdb7d3d3df9",
+                "shasum": "5887884edc71b0b163f73569f71d3f77625d2d2d"
             },
             "require": {
                 "doctrine/instantiator": "^1.1",
@@ -3129,7 +3129,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2019-02-07 14:15:04"
+            "time": "2019-02-18 09:24:50"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",

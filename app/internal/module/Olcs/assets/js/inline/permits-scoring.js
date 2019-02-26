@@ -23,14 +23,15 @@ OLCS.ready(function () {
             var scoringMessage;
             var scoringVisibility;
             if (data.scoringPermitted) {
-                scoringMessage = "Press the <strong>Run</strong> button to start the scoring process.";
+                scoringMessage = "Press the <strong>Run</strong> or <strong>Run with mean deviation</strong> button to start the scoring process.";
                 scoringVisibility = "visible";
             } else {
                 scoringMessage = "The <strong>Run</strong> option is not currently available. " + data.scoringMessage;
                 scoringVisibility = "hidden";
             }
+
             divContent += "<li>" + scoringMessage + "</li>";
-            $("#runButton").css("visibility", scoringVisibility);
+            $("#runButton, #runWithDeviationButton, #deviation").css("visibility", scoringVisibility);
 
             var acceptMessage;
             var acceptVisibility;
@@ -42,14 +43,31 @@ OLCS.ready(function () {
                 acceptVisibility = "hidden";
             }
             divContent += "<li>" + acceptMessage + "</li>";
+
+            if (data['meanDeviation']) {
+                divContent += "<li>The computed mean deviation from the last scoring run is " + data['meanDeviation'] + ".</li>";
+            }
+
             divContent += "</ul>";
             $("#acceptButton").css("visibility", acceptVisibility);
 
             $("#statusContainer").html(divContent);
             setTimeout(function() { updateStatus(statusUrl); }, 2500);
         });
-
     }
+
+    $("#deviation").on("input propertychange paste", function() {
+        var deviationValue = $("#deviation").val();
+        var $runWithDeviationButton = $("#runWithDeviationButton");
+
+        if (deviationValue != "") {
+            var href = $runWithDeviationButton.data('href').replace('deviation', deviationValue);
+            $runWithDeviationButton.attr('href', href);
+            $runWithDeviationButton.css("display", "inline-block");
+        } else {
+            $runWithDeviationButton.css("display", "none");
+        }
+    });
 
     var stockId = $("#statusContainer").data('stock-id');
     var statusUrl = "/admin/permits/stocks/" + stockId + "/scoring/status";

@@ -14,9 +14,12 @@ class Actions
     public $surrender = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large"})
-     * @Form\Options({"label": "Withdraw"})
-     * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
+     * @Form\Attributes({"type":"submit","class":"action--secondary large js-modal-ajax"})
+     * @Form\Options({
+     *     "label": "Withdraw",
+     *     "route": "licence/surrender-details/withdraw/GET"
+     * })
+     * @Form\Type("\Common\Form\Elements\InputFilters\ActionLink")
      */
     public $withdraw = null;
 }

@@ -1,0 +1,17 @@
+<?php
+if (!isset($navigation)) {
+
+    $navigation = $this->navigation('navigation');
+
+    if ($navigation) {
+        $navigation = $navigation->findOneBy('active', true);
+    }
+}
+
+if ($navigation): ?>
+    <h4 class="title"><?php echo $this->translate($navigation->getLabel()); ?></h4>
+    <?php
+    echo $this->navigation($navigation)
+        ->menu()->setPartial('partials/vertical-navigation');
+
+endif;

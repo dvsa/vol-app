@@ -14,6 +14,7 @@ use Dvsa\Olcs\Transfer\Query\Permits\StockOperationsPermitted;
 use Admin\Controller\AbstractIrhpPermitAdminController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
+use Zend\Escaper\Escaper;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 
@@ -90,13 +91,35 @@ class IrhpPermitScoringController extends AbstractIrhpPermitAdminController impl
     /**
      * @return array|mixed|ViewModel
      */
-    public function runAction()
+    public function runStandardAction()
     {
         return parent::confirmCommand(
             new ConfirmItem(['id' => 'stockId']),
             QueueRunScoring::class,
             'Run scoring - are you sure?',
-            'This will run scoring. Are you sure?',
+            'This will run scoring with a computed mean deviation. Are you sure?',
+            'Scoring successfully triggered'
+        );
+    }
+
+    /**
+     * @return array|mixed|ViewModel
+     */
+    public function runWithMeanDeviationAction()
+    {
+        $deviation = $this->params()->fromRoute()['deviation'];
+        $escaper = new Escaper();
+
+        return parent::confirmCommand(
+            new ConfirmItem(
+                [
+                    'id' => 'stockId',
+                    'deviation' => 'deviation',
+                ]
+            ),
+            QueueRunScoring::class,
+            'Run scoring - are you sure?',
+            'This will run scoring with a mean deviation override of ' . $escaper->escapeHtml($deviation) . '. Are you sure?',
             'Scoring successfully triggered'
         );
     }

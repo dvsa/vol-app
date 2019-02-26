@@ -302,7 +302,8 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
                 RefData::LICENCE_STATUS_REVOKED,
                 RefData::LICENCE_STATUS_TERMINATED,
                 RefData::LICENCE_STATUS_SURRENDERED,
-                RefData::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT
+                RefData::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT,
+                RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION,
             ]
         )) {
             $sidebarNav->findById('licence-quick-actions-create-variation')->setVisible(0);
@@ -342,8 +343,12 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
      */
     protected function showHideCurtailRevokeSuspendButtons($licence, $sidebarNav)
     {
+        $licenceStatuses = [
+            RefData::LICENCE_STATUS_VALID,
+            RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION
+        ];
         // Buttons never shown if the licence is not valid
-        if ($licence['status']['id'] !== RefData::LICENCE_STATUS_VALID) {
+        if (!in_array($licence['status']['id'], $licenceStatuses)) {
             $sidebarNav->findById('licence-decisions-curtail')->setVisible(0);
             $sidebarNav->findById('licence-decisions-revoke')->setVisible(0);
             $sidebarNav->findById('licence-decisions-suspend')->setVisible(0);
@@ -395,7 +400,8 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         }
 
         if ($licence['status']['id'] === RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION) {
-            return true;
+            $sidebarNav->findById('licence-decisions-surrender')->setVisible(0);
+            return false;
         }
         // The 'surrender' button is never shown if the licence is not valid
         if ($licence['status']['id'] !== RefData::LICENCE_STATUS_VALID) {
