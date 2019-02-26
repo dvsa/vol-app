@@ -2,6 +2,8 @@
 
 namespace Olcs\Controller\Licence\Surrender;
 
+use Common\Form\Form;
+use Common\Form\GenericConfirmation;
 use Common\Service\Helper\TranslationHelperService;
 use Olcs\Form\Model\Form\Surrender\DeclarationSign;
 
@@ -25,7 +27,7 @@ class DeclarationController extends AbstractSurrenderController
         return $this->renderView($params);
     }
 
-    protected function getSignForm(): \Common\Form\Form
+    protected function getSignForm(): Form
     {
         $form =  $this->getForm(DeclarationSign::class);
         $form->setAttribute(
@@ -40,9 +42,9 @@ class DeclarationController extends AbstractSurrenderController
         return $form;
     }
 
-    protected function getPrintForm(TranslationHelperService $translator): \Common\Form\Form
+    protected function getPrintForm(TranslationHelperService $translator): Form
     {
-        /* @var $form \Common\Form\GenericConfirmation */
+        /* @var $form GenericConfirmation */
         $form = $this->hlpForm->createForm('GenericConfirmation');
         $submitLabel = $translator->translate('lva.section.title.transport-manager-application.print-sign');
         $form->setSubmitLabel($submitLabel);
@@ -66,7 +68,7 @@ class DeclarationController extends AbstractSurrenderController
                 [$this->data['surrender']['licence']['licNo']]
             ),
             'form' => $this->form,
-            'backLink' => $this->getBackLink('lva-licence'),
+            'backLink' => $this->getLink('lva-licence'),
             'bottomLink' => $this->getBottomLinkRouteAndText()['bottomLinkRoute'],
             'bottomText' => $this->getBottomLinkRouteAndText()['bottomLinkText']
         ];
@@ -74,9 +76,9 @@ class DeclarationController extends AbstractSurrenderController
 
     private function getBottomLinkRouteAndText()
     {
-        if ($this->getSurrender()['disableSignatures'] === false) {
+        if ($this->data['surrender']['disableSignatures'] === false) {
             return [
-                'bottomLinkRoute' => $this->url()->fromRoute('licence/surrender/print-sign-return/GET', [], [], true),
+                'bottomLinkRoute' => $this->getLink('licence/surrender/print-sign-return/GET'),
                 'bottomLinkText' => 'lva.section.title.transport-manager-application.print-sign'
             ];
         }

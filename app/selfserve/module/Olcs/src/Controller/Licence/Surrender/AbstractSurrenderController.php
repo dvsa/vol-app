@@ -2,17 +2,17 @@
 
 namespace Olcs\Controller\Licence\Surrender;
 
+use Common\Controller\Interfaces\ToggleAwareInterface;
 use Common\RefData;
-use Dvsa\Olcs\Transfer\Command\Surrender\Update;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
 use Common\Util;
-use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence as SurrenderQuery;
+use Dvsa\Olcs\Transfer\Command\Surrender\Update as UpdateSurrender;
+use Olcs\Controller\AbstractSelfserveController;
 use Olcs\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
-use Common\Controller\Interfaces\ToggleAwareInterface;
-use Olcs\Controller\AbstractSelfserveController;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\ViewModel;
-use Dvsa\Olcs\Transfer\Query\Licence\LicenceWithCorrespondenceCd as LicenceQuery;
 
 abstract class AbstractSurrenderController extends AbstractSelfserveController implements ToggleAwareInterface
 {
@@ -28,23 +28,22 @@ abstract class AbstractSurrenderController extends AbstractSelfserveController i
 
     protected $pageTemplate = 'pages/licence-surrender';
 
-    /** @var  \Common\Service\Helper\FormHelperService */
+    /** @var  FormHelperService */
     protected $hlpForm;
 
-    /** @var  \Common\Service\Helper\FlashMessengerHelperService */
+    /** @var  FlashMessengerHelperService */
     protected $hlpFlashMsgr;
 
+    /**
+     * @var int $licenceId
+     */
     protected $licenceId;
-
-    protected $licence;
 
     public function onDispatch(MvcEvent $e)
     {
         $this->licenceId = (int)$this->params('licence');
-        $this->licence = $this->getLicence();
         $this->hlpForm = $this->getServiceLocator()->get('Helper\Form');
         $this->hlpFlashMsgr = $this->getServiceLocator()->get('Helper\FlashMessenger');
-        $this->data['licence']['isInternationalLicence'] = $this->licence['licenceType']['id'] === RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL;
         return parent::onDispatch($e);
     }
 
@@ -61,40 +60,20 @@ abstract class AbstractSurrenderController extends AbstractSelfserveController i
         return $view;
     }
 
-    protected function getBackLink(string $route): string
+    protected function getLink(string $route): string
     {
         return $this->url()->fromRoute($route, [], [], true);
     }
 
-    private function getLicence()
-    {
-        $response = $this->handleQuery(
-            LicenceQuery::create(['id' => (int)$this->params('licence')])
-        );
-
-        return $response->getResult();
-    }
-
-    protected function getSurrender()
-    {
-        $response = $this->handleQuery(
-            SurrenderQuery::create(['id' => (int)$this->params('licence')])
-        );
-
-        return $response->getResult();
-    }
-
     protected function updateSurrender(string $status, array $extraData = []): bool
     {
-        $surrender = $this->getSurrender();
-
         $dtoData = array_merge([
             'id' => $this->licenceId,
-            'version' => $surrender['version'],
+            'version' => $this->data['surrender']['version'],
             'status' => $status,
         ], $extraData);
 
-        $response = $this->handleCommand(Update::create($dtoData));
+        $response = $this->handleCommand(UpdateSurrender::create($dtoData));
         return $response->isOk();
     }
 
@@ -108,9 +87,9 @@ abstract class AbstractSurrenderController extends AbstractSelfserveController i
     /**
      * @param array $surrender
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return ViewModel
      */
-    protected function createView(): \Zend\View\Model\ViewModel
+    protected function createView(): ViewModel
     {
         $view = $this->genericView();
         $variables = $this->getViewVariables();

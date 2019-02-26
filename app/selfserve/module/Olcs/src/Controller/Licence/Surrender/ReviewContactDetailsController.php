@@ -36,7 +36,7 @@ class ReviewContactDetailsController extends AbstractSurrenderController
             'content' => 'licence.surrender.review_contact_details.content',
             'note' => 'licence.surrender.review_contact_details.note',
             'form' => $this->getConfirmationForm($translator),
-            'backLink' => $this->getBackLink('lva-licence'),
+            'backLink' => $this->getLink('lva-licence'),
             'sections' => ReviewContactDetails::makeSections($this->data['surrender']['licence'], $this->url(), $translator),
         ];
     }

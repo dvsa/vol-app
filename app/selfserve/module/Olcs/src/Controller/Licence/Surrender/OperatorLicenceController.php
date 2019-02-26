@@ -65,9 +65,9 @@ class OperatorLicenceController extends AbstractSurrenderController
         return [
             'pageTitle' => 'licence.surrender.operator_licence.title',
             'licNo' => $this->data['surrender']['licence']['licNo'],
-            'backUrl' => $this->getBackLink('licence/surrender/operator-licence/GET'),
+            'backUrl' => $this->getLink('licence/surrender/operator-licence/GET'),
             'returnLinkText' => 'licence.surrender.operator_licence.return_to_current_discs.link',
-            'returnLink' => $this->getBackLink('licence/surrender/current-discs/GET'),
+            'returnLink' => $this->getLink('licence/surrender/current-discs/GET'),
         ];
     }
 }

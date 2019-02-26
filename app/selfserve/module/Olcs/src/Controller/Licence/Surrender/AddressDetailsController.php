@@ -91,7 +91,7 @@ class AddressDetailsController extends AbstractSurrenderController
             'title' => 'lva.section.title.addresses',
             'licNo' => $this->data['surrender']['licence']['licNo'],
             'form' => $this->form,
-            'backLink' => $this->getBackLink('licence/surrender/review-contact-details/GET'),
+            'backLink' => $this->getLink('licence/surrender/review-contact-details/GET'),
         ];
     }
 }

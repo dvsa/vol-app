@@ -45,7 +45,7 @@ class ReviewController extends AbstractSurrenderController
         return [
             'title' => $translator->translate('licence.surrender.review.heading'),
             'licNo' => $this->data['surrender']['licence']['licNo'],
-            'backLink' => $this->getBackLink('licence/surrender/operator-licence/GET'),
+            'backLink' => $this->getLink('licence/surrender/operator-licence/GET'),
             'sections' => ReviewDetails::makeSections($this->data['surrender']['licence'], $this->url(), $translator, $this->data),
         ];
     }
@@ -57,11 +57,11 @@ class ReviewController extends AbstractSurrenderController
     }
 
 
-    protected function getBackLink(string $route): string
+    protected function getLink(string $route): string
     {
         if ($this->isInternationalLicence()) {
             $route = 'licence/surrender/community-licence/GET';
         }
-        return parent::getBackLink($route);
+        return parent::getLink($route);
     }
 }

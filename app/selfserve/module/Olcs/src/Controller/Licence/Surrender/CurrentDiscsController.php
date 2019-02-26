@@ -114,9 +114,9 @@ class CurrentDiscsController extends AbstractSurrenderController
                 [$numberOfDiscs]
             ),
             'form' => $this->form,
-            'backLink' => $this->getBackLink('licence/surrender/review-contact-details/GET'),
+            'backLink' => $this->getLink('licence/surrender/review-contact-details/GET'),
             'bottomText' => 'common.link.back.label',
-            'bottomLink' => $this->getBackLink('licence/surrender/review-contact-details/GET'),
+            'bottomLink' => $this->getLink('licence/surrender/review-contact-details/GET'),
         ];
     }
 }
