@@ -25,7 +25,7 @@ class IrhpApplicationFeesController extends AbstractIrhpPermitController
     public function feesAction()
     {
         $navigation = $this->getServiceLocator()->get('Navigation');
-        $navigation->findOneBy('id', 'licence_irhp_permits-fees')->setActive();
+        $navigation->findOneBy('id', 'licence_fees')->setActive();
         return $this->traitFeesAction();
     }
 
