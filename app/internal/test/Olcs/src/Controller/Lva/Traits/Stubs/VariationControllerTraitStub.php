@@ -22,7 +22,7 @@ class VariationControllerTraitStub extends AbstractController
     protected $applicationId;
     protected $accessibleSections = [];
 
-    public function setAccessibleSections ($accessibleSections)
+    public function setAccessibleSections($accessibleSections)
     {
         $this->accessibleSections = $accessibleSections;
     }
@@ -45,5 +45,10 @@ class VariationControllerTraitStub extends AbstractController
     public function callGetSectionsForView()
     {
         return $this->getSectionsForView();
+    }
+
+    public function isPsv()
+    {
+        return true;
     }
 }

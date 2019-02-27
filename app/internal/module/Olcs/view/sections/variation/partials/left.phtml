@@ -6,7 +6,14 @@
             <?php if (!$current) : ?>
             <a href="<?php echo $this->url($details['route'], ['application' => $lvaId]); ?>">
                 <?php endif; ?>
-                <?php echo $this->translate('section.name.' . $reference); ?>
+                <?php
+                    $sectionName = $reference;
+                    if (isset($details['alias'])) {
+                        $sectionName = $details['alias'];
+                    }
+
+                    echo $this->translate('section.name.' . $sectionName);
+                ?>
                 <?php if (!$current) : ?>
             </a>
         <?php endif; ?>

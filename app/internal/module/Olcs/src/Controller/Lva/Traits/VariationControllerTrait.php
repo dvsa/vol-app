@@ -13,6 +13,7 @@ use Laminas\Form\Form;
 use Laminas\View\Model\ViewModel;
 use Common\View\Model\Section;
 use Common\Controller\Lva\Traits\CommonVariationControllerTrait;
+use Dvsa\Olcs\Transfer\Query\Licence\Licence;
 
 /**
  * INTERNAL Abstract Variation Controller
@@ -117,6 +118,16 @@ trait VariationControllerTrait
                 $title = $variables['title'];
             } else {
                 $title = 'lva.section.title.' . $content;
+                if ($content == 'community_licences') {
+                    $response = $this->handleQuery(
+                        Licence::create(['id' => $this->getLicenceId()])
+                    );
+                    $licence = $response->getResult();
+
+                    if ($licence['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_PSV) {
+                        $title .= '.psv';
+                    }
+                }
             }
 
             $content = new Section($sectionParams);
@@ -148,9 +159,16 @@ trait VariationControllerTrait
             return $sections;
         }
 
+        $isPsv = $this->isPsv();
+
         $accessibleSections = $this->getAccessibleSections(false);
 
         foreach ($accessibleSections as $section => $settings) {
+            $alias = $section;
+            if ($section == 'community_licences' && $isPsv) {
+                $alias = $section . '.psv';
+            }
+
             $statusIndex = lcfirst($filter->underscoreToCamel($section)) . 'Status';
 
             $class = '';
@@ -165,10 +183,28 @@ trait VariationControllerTrait
 
             $sections[$section] = array_merge(
                 $settings,
-                array('class' => $class, 'route' => 'lva-variation/' . $section)
+                [
+                    'class' => $class,
+                    'route' => 'lva-variation/' . $section,
+                    'alias' => $alias
+                ]
             );
         }
 
         return $sections;
+    }
+
+    /**
+     * Whether this is a PSV licence
+     *
+     * @return bool
+     */
+    protected function isPsv()
+    {
+        $response = $this->handleQuery(
+            Licence::create(['id' => $this->getLicenceId()])
+        );
+        $licence = $response->getResult();
+        return ($licence['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_PSV);
     }
 }

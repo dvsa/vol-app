@@ -39,6 +39,7 @@ class ApplicationOverviewHelperService extends AbstractHelperService
             'licenceType'               => $licence['licenceType']['id'],
             'appLicenceType'            => $application['licenceType']['id'],
             'interimStatus'             => $this->getInterimStatus($application, $lva),
+            'isPsv'                     => $application['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_PSV,
             'outstandingFees'           => $application['feeCount'],
             'licenceStartDate'          => $licence['inForceDate'],
             'licenceGracePeriods'       => $licenceOverviewHelper->getLicenceGracePeriods($licence),
@@ -95,10 +96,7 @@ class ApplicationOverviewHelperService extends AbstractHelperService
         $url = $this->getServiceLocator()->get('Helper\Url')
             ->fromRoute('lva-'.$lva.'/interim', [], [], true);
 
-        if (
-            isset($application['interimStatus']['id'])
-            && !empty($application['interimStatus']['id'])
-        ) {
+        if (isset($application['interimStatus']['id']) && !empty($application['interimStatus']['id'])) {
             $interimStatus = sprintf(
                 '%s (<a href="%s">Interim details</a>)',
                 $application['interimStatus']['description'],

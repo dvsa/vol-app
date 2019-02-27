@@ -181,6 +181,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     'licenceGracePeriods' => 'None (<a href="GRACE_PERIOD_URL">manage</a>)',
                     'outOfOpposition' => '1966-06-21',
                     'outOfRepresentation' => '1996-07-02',
+                    'isPsv' => false,
                 ],
                 // grace period string
                 'None (<a href="GRACE_PERIOD_URL">manage</a>)'
@@ -273,6 +274,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     'licenceGracePeriods' => 'Active (<a href="GRACE_PERIOD_URL">manage</a>)',
                     'outOfOpposition' => 'Not applicable',
                     'outOfRepresentation' => 'Not applicable',
+                    'isPsv' => true,
                 ],
                 // grace period str
                 'Active (<a href="GRACE_PERIOD_URL">manage</a>)',

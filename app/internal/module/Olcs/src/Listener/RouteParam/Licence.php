@@ -181,8 +181,18 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         $this->showHideButtons($licence);
         $this->hideSurrenderMenu($licence);
 
-        if ($licence['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
-            $this->getMainNavigationService()->findOneById('licence_bus')->setVisible(0);
+        $licenceCategoryId = $licence['goodsOrPsv']['id'];
+        $navigationService = $this->getMainNavigationService();
+
+        if ($licenceCategoryId === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
+            $navigationService->findOneById('licence_bus')->setVisible(0);
+        }
+
+        if ($licenceCategoryId === RefData::LICENCE_CATEGORY_PSV) {
+            $communityLicencesNav = $navigationService->findOneById('licence_community_licences');
+            $communityLicencesNav->setLabel(
+                $communityLicencesNav->getLabel() . '.psv'
+            );
         }
 
         if (!$licence['canHaveInspectionRequest']) {

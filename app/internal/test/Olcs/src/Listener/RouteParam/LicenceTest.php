@@ -714,7 +714,6 @@ class LicenceTest extends TestCase
                 m::mock()->shouldReceive('setVisible')->with(0)->once()->getMock()
             )->getMock();
         } else {
-            $mainNav = m::mock();
             if ($type === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
                 $mockLicenceBusMenu = m::mock(AbstractPage::class);
                 $mockLicenceBusMenu->shouldReceive('setVisible')->with(0)->once()->getMock();
@@ -723,6 +722,20 @@ class LicenceTest extends TestCase
                 );
             }
         }
+
+        if ($type === RefData::LICENCE_CATEGORY_PSV) {
+            $communityLicencesPage = m::mock(AbstractPage::class);
+            $communityLicencesPage->shouldReceive('getLabel')
+                ->andReturn('licences.page');
+            $communityLicencesPage->shouldReceive('setLabel')
+                ->with('licences.page.psv')
+                ->once();
+
+            $mainNav->shouldReceive('findOneById')
+                ->with('licence_community_licences')
+                ->andReturn($communityLicencesPage);
+        }
+
         $this->sut->setMainNavigationService($mainNav);
     }
 
