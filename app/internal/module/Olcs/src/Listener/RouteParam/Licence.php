@@ -345,7 +345,6 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
     {
         $licenceStatuses = [
             RefData::LICENCE_STATUS_VALID,
-            RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION
         ];
         // Buttons never shown if the licence is not valid
         if (!in_array($licence['status']['id'], $licenceStatuses)) {
