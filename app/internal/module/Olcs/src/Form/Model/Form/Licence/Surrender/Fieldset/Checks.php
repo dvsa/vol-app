@@ -10,7 +10,7 @@ class Checks
     /**
      * @Form\Type("Checkbox")
      * @Form\Attributes({
-     *     "class":"surrenderChecks__checkbox",
+     *     "class":"surrenderChecks__checkbox js-surrender-checks-openCases",
      *     "disabled": true,
      *     "checked": true,
      * })
@@ -27,7 +27,7 @@ class Checks
     /**
      * @Form\Type("Checkbox")
      * @Form\Attributes({
-     *     "class":"surrenderChecks__checkbox",
+     *     "class":"surrenderChecks__checkbox js-surrender-checks-busRegistrations",
      *     "disabled": true,
      *     "checked": true,
      * })
@@ -44,7 +44,8 @@ class Checks
     /**
      * @Form\Type("Checkbox")
      * @Form\Attributes({
-     *     "class":"surrenderChecks__checkbox",
+     *     "class":"surrenderChecks__checkbox js-surrender-checks-digitalSignature",
+     *     "id": "surrenderChecks__digitalSignature",
      * })
      * @Form\Options({
      *     "label": "Digital signature has been checked",
@@ -68,7 +69,8 @@ class Checks
     /**
      * @Form\Type("Checkbox")
      * @Form\Attributes({
-     *      "class":"surrenderChecks__checkbox",
+     *      "class":"surrenderChecks__checkbox js-surrender-checks-ecms",
+     *      "id": "surrenderChecks__ecms",
      * })
      * @Form\Options({
      *     "label": "ECMS has been checked",
