@@ -66,8 +66,22 @@ class OperatorLicenceController extends AbstractSurrenderController
             'pageTitle' => 'licence.surrender.operator_licence.title',
             'licNo' => $this->data['surrender']['licence']['licNo'],
             'backUrl' => $this->getLink('licence/surrender/operator-licence/GET'),
+            'returnLinkText' => $this->getPreviousStepDetails()['returnLinkText'],
+            'returnLink' => $this->getPreviousStepDetails()['returnLink'],
+        ];
+    }
+
+    private function getPreviousStepDetails(): array
+    {
+        $previousStep = [
             'returnLinkText' => 'licence.surrender.operator_licence.return_to_current_discs.link',
             'returnLink' => $this->getLink('licence/surrender/current-discs/GET'),
         ];
+
+        if ($this->getSurrenderStateService()->getDiscsOnSurrender() === 0) {
+            $previousStep['returnLinkText'] = 'common.link.back.label';
+            $previousStep['returnLink'] = 'licence/surrender/review-contact-details/GET';
+        }
+        return $previousStep;
     }
 }

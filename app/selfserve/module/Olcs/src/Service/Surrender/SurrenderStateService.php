@@ -133,7 +133,7 @@ class SurrenderStateService
         return $this->surrenderData['psvDiscsOnLicence']['discCount'];
     }
 
-    private function getDiscsOnSurrender(): int
+    public function getDiscsOnSurrender(): int
     {
         $discDestroyed = $this->surrenderData['discDestroyed'] ?? 0;
         $discLost = $this->surrenderData['discLost'] ?? 0;

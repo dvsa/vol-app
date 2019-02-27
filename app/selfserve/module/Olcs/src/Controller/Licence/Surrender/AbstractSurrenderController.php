@@ -10,6 +10,7 @@ use Common\Util;
 use Dvsa\Olcs\Transfer\Command\Surrender\Update as UpdateSurrender;
 use Olcs\Controller\AbstractSelfserveController;
 use Olcs\Controller\Config\DataSource\DataSourceConfig;
+use Olcs\Service\Surrender\SurrenderStateService;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\ViewModel;
@@ -78,6 +79,16 @@ abstract class AbstractSurrenderController extends AbstractSelfserveController i
     }
 
     /**
+     * Surrender State service provides information on status but also
+     * other useful util functions for the state of a surrender e.g. number of disks
+     * @return SurrenderStateService
+     */
+    protected function getSurrenderStateService():SurrenderStateService
+    {
+        return new SurrenderStateService($this->data['surrender']);
+    }
+    /**
+     *
      * @return array
      *
      */
