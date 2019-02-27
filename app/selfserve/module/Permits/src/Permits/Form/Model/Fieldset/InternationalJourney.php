@@ -9,7 +9,6 @@ use Zend\Form\Annotation as Form;
  */
 class InternationalJourney
 {
-
     /**
      * @Form\Type("Hidden")
      */
@@ -19,7 +18,6 @@ class InternationalJourney
      * @Form\Name("InternationalJourney")
      * @Form\Attributes({
      *   "class" : "input--international-journey",
-     *   "aria-labelledby" : "InternationalJourney",
      * })
      * @Form\Options({
      *      "fieldset-attributes": {"id": "international-journey"},
