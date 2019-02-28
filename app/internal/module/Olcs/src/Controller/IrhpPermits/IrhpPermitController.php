@@ -53,8 +53,6 @@ class IrhpPermitController extends AbstractInternalController implements
         'indexAction' => ['table-actions']
     );
 
-    protected $totalPermits = 0;
-
     /**
      * Get left view
      *
@@ -83,28 +81,24 @@ class IrhpPermitController extends AbstractInternalController implements
         if ($request->isPost()) {
             $postParams = $this->params()->fromPost();
             if (isset($postParams['action'])) {
-                if ($postParams['action'] === 'Request Replacement') {
-                    return $this->redirect()->toRoute(
-                        'licence/irhp-permits',
-                        [
-                            'action'       => 'requestReplacement',
-                            'irhpPermitId' => $postParams['id']
-                        ],
-                        ['query' => ['irhpPermitId' => $postParams['id']]],
-                        true
-                    );
+                switch ($postParams['action']) {
+                    case 'Terminate':
+                        $action = 'terminatePermit';
+                        break;
+                    case 'Request Replacement':
+                        $action = 'requestReplacement';
+                        break;
                 }
-                if ($postParams['action'] === 'Terminate') {
-                    return $this->redirect()->toRoute(
-                        'licence/irhp-permits',
-                        [
-                            'action'       => 'terminatePermit',
-                            'irhpPermitId' => $postParams['id']
-                        ],
-                        ['query' => ['irhpPermitId' => $postParams['id']]],
-                        true
-                    );
-                }
+
+                return $this->redirect()->toRoute(
+                    'licence/irhp-permits',
+                    [
+                        'action'       => $action,
+                        'irhpPermitId' => $postParams['id']
+                    ],
+                    ['query' => ['irhpPermitId' => $postParams['id']]],
+                    true
+                );
             }
         }
 
@@ -254,30 +248,30 @@ class IrhpPermitController extends AbstractInternalController implements
                 $this->flashMessenger()->addErrorMessage($message);
             }
             return false;
-        } else {
-            $applicationId = $this->params()->fromRoute('permitid');
-            $permitsTotal = $this->handleQuery(ValidEcmtPermitsDto::create([
-                'page' => 1,
-                'limit' => 10,
-                'id' => $applicationId,
-            ]));
-
-            if ($permitsTotal->getResult()['count'] === 0) {
-                $applicationResponse = $this->handleCommand(
-                    ExpireDTO::create(
-                        [
-                            'id' => $applicationId
-                        ]
-                    )
-                );
-                if ($applicationResponse->isOk()) {
-                    $message = 'The selected application is now expired.';
-                    $this->flashMessenger()->addSuccessMessage($message);
-                }
-            }
-            $message = 'The selected permit has been terminated.';
-            $this->flashMessenger()->addSuccessMessage($message);
-            return true;
         }
+
+        $applicationId = $this->params()->fromRoute('permitid');
+        $permitsTotal = $this->handleQuery(ValidEcmtPermitsDto::create([
+            'page' => 1,
+            'limit' => 10,
+            'id' => $applicationId,
+        ]));
+
+        if ($permitsTotal->getResult()['count'] === 0) {
+            $applicationResponse = $this->handleCommand(
+                ExpireDTO::create(
+                    [
+                        'id' => $applicationId
+                    ]
+                )
+            );
+            if ($applicationResponse->isOk()) {
+                $message = 'The selected application is now expired.';
+                $this->flashMessenger()->addSuccessMessage($message);
+            }
+        }
+        $message = 'The selected permit has been terminated.';
+        $this->flashMessenger()->addSuccessMessage($message);
+        return true;
     }
 }
