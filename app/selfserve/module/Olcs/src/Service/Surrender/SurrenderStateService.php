@@ -76,9 +76,14 @@ class SurrenderStateService
         return $now->diff($modified)->days >= 2;
     }
 
-    public function getDiscsOnLicence(): int
+    public function getDiscsOnLicence()
     {
-        return $this->surrenderData['licence']['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_GOODS_VEHICLE ? $this->getGoodsDiscsOnLicence() : $this->getPsvDiscsOnLicence();
+        if ($this->surrenderData['licence']['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
+            return $this->getGoodsDiscsOnLicence();
+        } else {
+            return $this->getPsvDiscsOnLicence();
+        }
+
     }
 
     public function hasBeenWithdrawn(): bool
@@ -128,7 +133,7 @@ class SurrenderStateService
         return $this->surrenderData['goodsDiscsOnLicence']['discCount'];
     }
 
-    private function getPsvDiscsOnLicence(): int
+    private function getPsvDiscsOnLicence()
     {
         return $this->surrenderData['psvDiscsOnLicence']['discCount'];
     }
@@ -141,6 +146,7 @@ class SurrenderStateService
 
         return $discDestroyed + $discLost + $discStolen;
     }
+
 
     private function hasNotEnteredDiscInformation(): bool
     {

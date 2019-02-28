@@ -20,6 +20,7 @@ class CurrentDiscsController extends AbstractSurrenderController
 
     public function indexAction()
     {
+        $this->skip();
         $this->form = $this->getForm(CurrentDiscs::class);
         $formData = CurrentDiscsMapper::mapFromResult($this->data['surrender']);
         $this->form->setData($formData);
@@ -69,15 +70,6 @@ class CurrentDiscsController extends AbstractSurrenderController
         return $this->updateSurrender(RefData::SURRENDER_STATUS_DISCS_COMPLETE, $data);
     }
 
-    protected function getNumberOfDiscs(): int
-    {
-        if ($this->data['surrender']['licence']['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
-            return $this->data['surrender']['goodsDiscsOnLicence']['discCount'];
-        } else {
-            return $this->data['surrender']['psvDiscsOnLicence']['discCount'];
-        }
-    }
-
     protected function checkDiscCount(array $formData): bool
     {
         $expectedDiscCount = $this->getNumberOfDiscs();
@@ -118,5 +110,12 @@ class CurrentDiscsController extends AbstractSurrenderController
             'bottomText' => 'common.link.back.label',
             'bottomLink' => $this->getLink('licence/surrender/review-contact-details/GET'),
         ];
+    }
+
+    private function skip()
+    {
+        if ($this->getNumberOfDiscs() === 0) {
+            $this->nextStep('licence/surrender/operator-licence/GET');
+        }
     }
 }

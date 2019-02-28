@@ -23,6 +23,10 @@ abstract class AbstractSurrenderController extends AbstractSelfserveController i
         'default' => FeatureToggleConfig::SELFSERVE_SURRENDER_ENABLED
     ];
 
+    protected $templateConfig =[
+        'default' =>  'pages/licence-surrender'
+    ];
+
     protected $dataSourceConfig = [
         'default' => DataSourceConfig::SURRENDER
     ];
@@ -61,6 +65,11 @@ abstract class AbstractSurrenderController extends AbstractSelfserveController i
         return $view;
     }
 
+    protected function getNumberOfDiscs(): int
+    {
+        return  $this->getSurrenderStateService()->getDiscsOnLicence();
+    }
+
     protected function getLink(string $route): string
     {
         return $this->url()->fromRoute($route, [], [], true);
@@ -85,7 +94,7 @@ abstract class AbstractSurrenderController extends AbstractSelfserveController i
      */
     protected function getSurrenderStateService():SurrenderStateService
     {
-        return new SurrenderStateService($this->data['surrender']);
+        return (new SurrenderStateService())->setSurrenderData($this->data['surrender']);
     }
     /**
      *
