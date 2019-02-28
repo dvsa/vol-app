@@ -12,7 +12,10 @@ use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\IrhpPermit\GetListByEcmtId as ListDTO;
 use Dvsa\Olcs\Transfer\Query\IrhpPermit\GetListByIrhpId as IrhpListDTO;
 use Dvsa\Olcs\Transfer\Query\IrhpPermit\ById as ItemDTO;
+use Dvsa\Olcs\Transfer\Query\Permits\ValidEcmtPermits as ValidEcmtPermitsDto;
 use Dvsa\Olcs\Transfer\Command\IrhpPermit\Replace as ReplaceDTO;
+use Dvsa\Olcs\Transfer\Command\IrhpPermit\Terminate as TerminateDTO;
+use Dvsa\Olcs\Transfer\Command\Permits\ExpireEcmtPermitApplication as ExpireDTO;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\IrhpPermitApplicationControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -50,6 +53,8 @@ class IrhpPermitController extends AbstractInternalController implements
         'indexAction' => ['table-actions']
     );
 
+    protected $totalPermits = 0;
+
     /**
      * Get left view
      *
@@ -78,15 +83,28 @@ class IrhpPermitController extends AbstractInternalController implements
         if ($request->isPost()) {
             $postParams = $this->params()->fromPost();
             if (isset($postParams['action'])) {
-                return $this->redirect()->toRoute(
-                    'licence/irhp-permits',
-                    [
-                        'action' => 'requestReplacement',
-                        'irhpPermitId' => $postParams['id']
-                    ],
-                    ['query' => ['irhpPermitId' => $postParams['id']]],
-                    true
-                );
+                if ($postParams['action'] === 'Request Replacement') {
+                    return $this->redirect()->toRoute(
+                        'licence/irhp-permits',
+                        [
+                            'action'       => 'requestReplacement',
+                            'irhpPermitId' => $postParams['id']
+                        ],
+                        ['query' => ['irhpPermitId' => $postParams['id']]],
+                        true
+                    );
+                }
+                if ($postParams['action'] === 'Terminate') {
+                    return $this->redirect()->toRoute(
+                        'licence/irhp-permits',
+                        [
+                            'action'       => 'terminatePermit',
+                            'irhpPermitId' => $postParams['id']
+                        ],
+                        ['query' => ['irhpPermitId' => $postParams['id']]],
+                        true
+                    );
+                }
             }
         }
 
@@ -114,6 +132,7 @@ class IrhpPermitController extends AbstractInternalController implements
             $this->defaultTableOrderField = 'ASC';
             $this->listVars = ['ecmtPermitApplication' => 'permitid'];
         }
+
         return parent::indexAction();
     }
 
@@ -177,6 +196,87 @@ class IrhpPermitController extends AbstractInternalController implements
             foreach ($result['messages'] as $message) {
                 $this->flashMessenger()->addSuccessMessage($message);
             }
+            return true;
+        }
+    }
+
+    /**
+     * @return \Zend\Http\Response|ViewModel
+     */
+    public function terminatePermitAction()
+    {
+        if ($this->getRequest()->isPost()) {
+            // If post handle suceeds, redirect to index, else re-render in modal to show errors.
+            if ($this->handleTerminationPost()) {
+                return $this->redirect()->toRouteAjax(
+                    'licence/irhp-permits',
+                    [
+                        'action' => 'index',
+                        'licence' => $this->params()->fromRoute('licence'),
+                        'permitid' => $this->params()->fromRoute('permitid')
+                    ]
+                );
+            }
+        }
+
+        $permitId = $this->params()->fromQuery('irhpPermitId');
+        $irhpPermit = $this->handleQuery(ItemDTO::create(['id' => $permitId]));
+
+        $data = $irhpPermit->getResult();
+        $form = $this->getForm('TerminatePermit');
+
+        $form->setData($data);
+
+        $view = new ViewModel();
+        $view->setTemplate('sections/irhp-permit/pages/replacement');
+        $view->setVariable('form', $form);
+
+        return $view;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function handleTerminationPost()
+    {
+        $postParams = $this->params()->fromPost();
+
+        $response = $this->handleCommand(
+            TerminateDTO::create(
+                [
+                    'id' => $postParams['id']
+                ]
+            )
+        );
+        $result = $response->getResult();
+        if (!$response->isOk()) {
+            foreach ($result['messages'] as $message) {
+                $this->flashMessenger()->addErrorMessage($message);
+            }
+            return false;
+        } else {
+            $applicationId = $this->params()->fromRoute('permitid');
+            $permitsTotal = $this->handleQuery(ValidEcmtPermitsDto::create([
+                'page' => 1,
+                'limit' => 10,
+                'id' => $applicationId,
+            ]));
+
+            if ($permitsTotal->getResult()['count'] === 0) {
+                $applicationResponse = $this->handleCommand(
+                    ExpireDTO::create(
+                        [
+                            'id' => $applicationId
+                        ]
+                    )
+                );
+                if ($applicationResponse->isOk()) {
+                    $message = 'The selected application is now expired.';
+                    $this->flashMessenger()->addSuccessMessage($message);
+                }
+            }
+            $message = 'The selected permit has been terminated.';
+            $this->flashMessenger()->addSuccessMessage($message);
             return true;
         }
     }
