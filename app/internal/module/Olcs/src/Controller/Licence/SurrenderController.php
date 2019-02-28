@@ -44,6 +44,11 @@ class SurrenderController extends AbstractInternalController implements
      */
     protected $navigationId = 'licence_surrender';
 
+    protected $inlineScripts = [
+        'indexAction' => ['forms/surrender'],
+        'surrenderAction' => ['forms/surrender']
+    ];
+
     /**
      * @var array
      */

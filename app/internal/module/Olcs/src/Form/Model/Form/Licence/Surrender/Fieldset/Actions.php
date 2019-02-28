@@ -7,7 +7,7 @@ use Zend\Form\Annotation as Form;
 class Actions
 {
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary large"})
+     * @Form\Attributes({"type":"submit","class":"action--primary large disabled js-approve-surrender"})
      * @Form\Options({"label": "Surrender"})
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
