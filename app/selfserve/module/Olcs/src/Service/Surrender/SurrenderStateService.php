@@ -76,7 +76,7 @@ class SurrenderStateService
         return $now->diff($modified)->days >= 2;
     }
 
-    public function getDiscsOnLicence()
+    public function getDiscsOnLicence(): int
     {
         if ($this->surrenderData['licence']['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
             return $this->getGoodsDiscsOnLicence();
@@ -132,7 +132,7 @@ class SurrenderStateService
         return $this->surrenderData['goodsDiscsOnLicence']['discCount'];
     }
 
-    private function getPsvDiscsOnLicence()
+    private function getPsvDiscsOnLicence(): int
     {
         return $this->surrenderData['psvDiscsOnLicence']['discCount'];
     }
