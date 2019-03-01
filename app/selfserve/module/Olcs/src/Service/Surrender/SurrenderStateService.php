@@ -83,7 +83,6 @@ class SurrenderStateService
         } else {
             return $this->getPsvDiscsOnLicence();
         }
-
     }
 
     public function hasBeenWithdrawn(): bool
