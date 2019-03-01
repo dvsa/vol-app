@@ -72,7 +72,7 @@ class InformationChangedController extends AbstractSurrenderController
             'pageTitle' => 'licence.surrender.information_changed.heading.' . $licenceType,
             'licNo' => $this->data['surrender']['licence']['licNo'],
             'content' => $this->getContent(),
-            'backUrl' => $this->getBackLink('lva-licence')
+            'backUrl' => $this->getLink('lva-licence')
         ];
     }
 

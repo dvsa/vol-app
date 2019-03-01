@@ -23,7 +23,7 @@ class AddressDetailsController extends AbstractSurrenderController
         if ($request->isPost()) {
             $formData = (array)$request->getPost();
         } else {
-            $formData = Mapper\Licence\Surrender\AddressDetails::mapFromResult($this->licence);
+            $formData = Mapper\Licence\Surrender\AddressDetails::mapFromResult($this->data['surrender']['licence']);
         }
 
         $this->form = $this->getForm('Licence\Surrender\Addresses')
@@ -64,7 +64,7 @@ class AddressDetailsController extends AbstractSurrenderController
     {
         $dtoData =
             [
-                'id' => $this->params('licence'),
+                'id' => $this->licenceId,
                 'partial' => false,
             ] +
             Mapper\Lva\Addresses::mapFromForm($formData);
@@ -89,9 +89,9 @@ class AddressDetailsController extends AbstractSurrenderController
     {
         return [
             'title' => 'lva.section.title.addresses',
-            'licNo' => $this->licence['licNo'],
+            'licNo' => $this->data['surrender']['licence']['licNo'],
             'form' => $this->form,
-            'backLink' => $this->getBackLink('licence/surrender/review-contact-details/GET'),
+            'backLink' => $this->getLink('licence/surrender/review-contact-details/GET'),
         ];
     }
 }

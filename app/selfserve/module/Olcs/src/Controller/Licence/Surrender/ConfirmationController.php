@@ -66,7 +66,7 @@ class ConfirmationController extends AbstractSurrenderController
             'content' => $translator->translateReplace(
                 'markup-licence-surrender-confirmation',
                 [
-                    $this->licence['licNo'],
+                    $this->data['surrender']['licence']['licNo'],
                     $this->getSignatureFullName(),
                     $this->getSignatureDate(),
                     $this->returnDashboardLink()

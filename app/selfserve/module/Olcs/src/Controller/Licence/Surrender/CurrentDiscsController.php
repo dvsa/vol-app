@@ -20,9 +20,9 @@ class CurrentDiscsController extends AbstractSurrenderController
 
     public function indexAction()
     {
-        $surrender = $this->getSurrender();
+        $this->skip();
         $this->form = $this->getForm(CurrentDiscs::class);
-        $formData = CurrentDiscsMapper::mapFromResult($surrender);
+        $formData = CurrentDiscsMapper::mapFromResult($this->data['surrender']);
         $this->form->setData($formData);
 
         $params = $this->getViewVariables();
@@ -70,20 +70,6 @@ class CurrentDiscsController extends AbstractSurrenderController
         return $this->updateSurrender(RefData::SURRENDER_STATUS_DISCS_COMPLETE, $data);
     }
 
-    protected function getNumberOfDiscs(): int
-    {
-
-        if ($this->licence['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
-            $query = GoodsDiscCount::create(['id' => (int)$this->params('licence')]);
-        } else {
-            $query = PsvDiscCount::create(['id' => (int)$this->params('licence')]);
-        }
-
-        $response = $this->handleQuery($query);
-        $result = $response->getResult();
-        return $result['discCount'];
-    }
-
     protected function checkDiscCount(array $formData): bool
     {
         $expectedDiscCount = $this->getNumberOfDiscs();
@@ -114,15 +100,22 @@ class CurrentDiscsController extends AbstractSurrenderController
         $numberOfDiscs = $this->getNumberOfDiscs();
         return [
             'title' => 'licence.surrender.current_discs.title',
-            'licNo' => $this->licence['licNo'],
+            'licNo' => $this->data['surrender']['licence']['licNo'],
             'content' => $translator->translateReplace(
                 'licence.surrender.current_discs.content',
                 [$numberOfDiscs]
             ),
             'form' => $this->form,
-            'backLink' => $this->getBackLink('licence/surrender/review-contact-details/GET'),
+            'backLink' => $this->getLink('licence/surrender/review-contact-details/GET'),
             'bottomText' => 'common.link.back.label',
-            'bottomLink' => $this->getBackLink('licence/surrender/review-contact-details/GET'),
+            'bottomLink' => $this->getLink('licence/surrender/review-contact-details/GET'),
         ];
+    }
+
+    private function skip()
+    {
+        if ($this->getNumberOfDiscs() === 0) {
+            $this->nextStep('licence/surrender/operator-licence/GET');
+        }
     }
 }

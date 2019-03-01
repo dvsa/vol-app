@@ -27,11 +27,6 @@ class OperatorLicenceController extends AbstractSurrenderController
         'default' => 'licence/surrender-licence-documents'
     ];
 
-
-    protected $dataSourceConfig = [
-        'default' => DataSourceConfig::SURRENDER
-    ];
-
     public function indexAction()
     {
         return $this->createView();
@@ -46,7 +41,7 @@ class OperatorLicenceController extends AbstractSurrenderController
             $data = Mapper::mapFromForm($formData);
             if ($this->updateSurrender(RefData::SURRENDER_STATUS_LIC_DOCS_COMPLETE, $data)) {
                 $routeName = 'licence/surrender/review/GET';
-                if ($this->data['licence']['isInternationalLicence'] && $this->data['fromReview'] === false) {
+                if ($this->isInternationalLicence() && $this->data['fromReview'] === false) {
                     $routeName = 'licence/surrender/community-licence/GET';
                 }
                 $this->nextStep($routeName);
@@ -70,9 +65,23 @@ class OperatorLicenceController extends AbstractSurrenderController
         return [
             'pageTitle' => 'licence.surrender.operator_licence.title',
             'licNo' => $this->data['surrender']['licence']['licNo'],
-            'backUrl' => $this->getBackLink('licence/surrender/operator-licence/GET'),
-            'returnLinkText' => 'licence.surrender.operator_licence.return_to_current_discs.link',
-            'returnLink' => $this->getBackLink('licence/surrender/current-discs/GET'),
+            'backUrl' => $this->getPreviousStepDetails()['returnLink'],
+            'returnLinkText' => $this->getPreviousStepDetails()['returnLinkText'],
+            'returnLink' => $this->getPreviousStepDetails()['returnLink'],
         ];
+    }
+
+    private function getPreviousStepDetails(): array
+    {
+        $previousStep = [
+            'returnLinkText' => 'licence.surrender.operator_licence.return_to_current_discs.link',
+            'returnLink' => $this->getLink('licence/surrender/current-discs/GET'),
+        ];
+
+        if ($this->getSurrenderStateService()->getDiscsOnSurrender() === 0) {
+            $previousStep['returnLinkText'] = 'common.link.back.label';
+            $previousStep['returnLink'] = $this->getLink('licence/surrender/review-contact-details/GET');
+        }
+        return $previousStep;
     }
 }

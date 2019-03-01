@@ -32,11 +32,6 @@ class CommunityLicenceController extends AbstractSurrenderController
         'default' => 'licence/surrender-licence-documents'
     ];
 
-
-    protected $dataSourceConfig = [
-        'default' => DataSourceConfig::SURRENDER
-    ];
-
     protected $conditionalDisplayConfig = [
         'default' => [
             'licence' => [
@@ -83,9 +78,9 @@ class CommunityLicenceController extends AbstractSurrenderController
         return [
             'pageTitle' => 'licence.surrender.community_licence.heading',
             'licNo' => $this->data['surrender']['licence']['licNo'],
-            'backUrl' => $this->getBackLink('licence/surrender/operator-licence/GET'),
+            'backUrl' => $this->getLink('licence/surrender/operator-licence/GET'),
             'returnLinkText' => 'licence.surrender.community_licence.return_to_operator.licence.link',
-            'returnLink' => $this->getBackLink('licence/surrender/operator-licence/GET'),
+            'returnLink' => $this->getLink('licence/surrender/operator-licence/GET'),
         ];
     }
 }

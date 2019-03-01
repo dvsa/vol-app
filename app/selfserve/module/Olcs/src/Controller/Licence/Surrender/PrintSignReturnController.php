@@ -31,13 +31,13 @@ class PrintSignReturnController extends AbstractSurrenderController
     {
         $translator = $this->getServiceLocator()->get('Helper\Translation');
         $params = [
-            'isNi' => $this->licence['niFlag'] === 'Y',
-            'licNo' => $this->licence['licNo'],
-            'name' => $this->licence['organisation']['name'],
+            'isNi' => $this->data['surrender']['licence']['niFlag'] === 'Y',
+            'licNo' => $this->data['surrender']['licence']['licNo'],
+            'name' => $this->data['surrender']['licence']['organisation']['name'],
             'title' => $this->determineTitle(),
             'undertakings' => $translator->translateReplace(
                 'markup-licence-surrender-declaration',
-                [$this->licence['licNo']]
+                [$this->data['surrender']['licence']['licNo']]
             )
         ];
         $view = new ViewModel($params);
@@ -65,7 +65,7 @@ class PrintSignReturnController extends AbstractSurrenderController
 
     protected function determineTitle()
     {
-        if ($this->licence['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
+        if ($this->data['surrender']['licence']['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
             return "licence.surrender.print-sign-return.form.title.gv";
         }
         return "licence.surrender.print-sign-return.form.title.psv";
@@ -82,8 +82,8 @@ class PrintSignReturnController extends AbstractSurrenderController
             [
                 'pageTitle' => 'licence.surrender.print-sign-return.page.title',
                 'returnLinkText' => 'return-home-button-text',
-                'returnLink' => $this->getBackLink('dashboard'),
-                'printLink' => $this->getBackLink('licence/surrender/print-sign-return-print/GET'),
+                'returnLink' => $this->getLink('dashboard'),
+                'printLink' => $this->getLink('licence/surrender/print-sign-return-print/GET'),
             ];
     }
 }

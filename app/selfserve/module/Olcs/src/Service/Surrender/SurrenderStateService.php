@@ -78,7 +78,11 @@ class SurrenderStateService
 
     public function getDiscsOnLicence(): int
     {
-        return $this->surrenderData['licence']['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_GOODS_VEHICLE ? $this->getGoodsDiscsOnLicence() : $this->getPsvDiscsOnLicence();
+        if ($this->surrenderData['licence']['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
+            return $this->getGoodsDiscsOnLicence();
+        } else {
+            return $this->getPsvDiscsOnLicence();
+        }
     }
 
     public function hasBeenWithdrawn(): bool
@@ -133,7 +137,7 @@ class SurrenderStateService
         return $this->surrenderData['psvDiscsOnLicence']['discCount'];
     }
 
-    private function getDiscsOnSurrender(): int
+    public function getDiscsOnSurrender(): int
     {
         $discDestroyed = $this->surrenderData['discDestroyed'] ?? 0;
         $discLost = $this->surrenderData['discLost'] ?? 0;
