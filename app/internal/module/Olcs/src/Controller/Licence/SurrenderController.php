@@ -108,7 +108,7 @@ class SurrenderController extends AbstractInternalController implements
         $this->form->setData($this->getRequest()->getPost());
 
         $canSurrender = $this->form->isValid();
-        if ($this->counts['openCases'] > 0 | $this->counts['busRegistrations'] > 0) {
+        if ($this->counts['openCases'] > 0 || $this->counts['busRegistrations'] > 0) {
             $this->flashMessenger()->addErrorMessage('licence.surrender.internal.surrender.error.open_case_active_bus');
             $canSurrender = false;
         }
