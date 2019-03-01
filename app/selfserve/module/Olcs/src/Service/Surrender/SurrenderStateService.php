@@ -146,7 +146,6 @@ class SurrenderStateService
         return $discDestroyed + $discLost + $discStolen;
     }
 
-
     private function hasNotEnteredDiscInformation(): bool
     {
         return is_null($this->surrenderData['discDestroyed']) &&
