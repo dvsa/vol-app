@@ -12,10 +12,6 @@ class InternationalJourneyForm
 {
     /**
      * @Form\Name("Fields")
-     * @Form\Options({
-     *     "label": "permits.page.international.journey.question",
-     *     "label_attributes": {"class": "visually-hidden"},
-     * })
      * @Form\ComposedObject("Permits\Form\Model\Fieldset\InternationalJourney")
      */
     public $fields = null;
