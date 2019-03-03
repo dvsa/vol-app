@@ -345,7 +345,7 @@ $routes = [
                     'route' => 'undo-surrender[/]',
                     'defaults' => [
                         'controller' => 'LicenceDecisionsController',
-                        'action' => 'resetToValid',
+                        'action' => 'undoSurrender',
                         'title' => 'licence-status.undo-surrender.title',
                     ]
                 ],

@@ -5,7 +5,10 @@
  */
 namespace Olcs\Controller\Licence;
 
+use Common\Service\Cqrs\Exception\NotFoundException;
 use Common\Service\Entity\LicenceStatusRuleEntityService;
+use Dvsa\Olcs\Transfer\Command\Surrender\Withdraw;
+use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Traits\LicenceControllerTrait;
 use Dvsa\Olcs\Transfer\Query\Licence\LicenceDecisions;
@@ -356,6 +359,58 @@ class LicenceDecisionsController extends AbstractController implements
 
                 if ($response->isOk()) {
                     $this->flashMessenger()->addSuccessMessage('licence-status.reset.message.save.success');
+                    return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
+                }
+            }
+        }
+
+        $view = $this->getView(['form' => $form]);
+        $view->setTemplate('pages/form');
+
+        return $this->renderView($view, $pageTitle);
+    }
+
+    public function undoSurrenderAction()
+    {
+        $pageTitle = $this->params('title') ?: 'Undo surrender';
+
+        $licenceId = $this->fromRoute('licence');
+
+        $form = $this->getDecisionForm('GenericConfirmation');
+        $form->get('messages')
+            ->get('message')
+            ->setValue('Are you sure you want to undo the surrender of this licence?');
+        $form->get('form-actions')
+            ->get('submit')
+            ->setLabel('Undo surrender');
+
+        if ($this->getRequest()->isPost()) {
+            $form->setData((array)$this->getRequest()->getPost());
+
+            if ($form->isValid()) {
+
+                try {
+                    $this->handleQuery(ByLicence::create([
+                        'id' => $licenceId
+                    ]));
+
+                    $response = $this->handleCommand(Withdraw::create([
+                        'id' => $licenceId
+                    ]));
+
+                } catch (NotFoundException $exception) {
+                    $response = $this->handleCommand(
+                        ResetToValid::create(
+                            [
+                                'id' => $licenceId,
+                                'decisions' => []
+                            ]
+                        )
+                    );
+                }
+
+                if ($response->isOk()) {
+                    $this->flashMessenger()->addSuccessMessage('The licence surrender has been undone');
                     return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
                 }
             }

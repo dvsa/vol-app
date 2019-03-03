@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8b7f61e4c0fd37ba750f108460dddab7",
-    "content-hash": "7b9b2fa3cfb7ad12967507c0e84255a4",
+    "hash": "8c47bcc4d5e8f247864a25ed7a2dba95",
+    "content-hash": "012c9ce5fa16d1a2a24ae25e9239875a",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1064,11 +1064,11 @@
         },
         {
             "name": "olcs/OlcsCommon",
-            "version": "dev-release/4.201",
+            "version": "dev-release/4.202",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-common.git",
-                "reference": "79910e866df1527e18d80abcb220ad16eff17cf3"
+                "reference": "1421c00522a0980ba53b5fcc76e713c3dfff0f29"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -1083,10 +1083,10 @@
                 "mikey179/vfsstream": "~1.4.0",
                 "mockery/mockery": "^1.2",
                 "olcs/olcs-devtools": "dev-master",
-                "olcs/olcs-logging": "dev-release/4.201",
+                "olcs/olcs-logging": "dev-release/4.202",
                 "olcs/olcs-testhelpers": "dev-develop",
-                "olcs/olcs-transfer": "dev-release/4.201",
-                "olcs/olcs-utils": "dev-release/4.201",
+                "olcs/olcs-transfer": "dev-release/4.202",
+                "olcs/olcs-utils": "dev-release/4.202",
                 "phpstan/phpstan-mockery": "^0.10.2",
                 "phpstan/phpstan-shim": "^0.10.5",
                 "soflomo/purifier": "~0.1.0"
@@ -1121,20 +1121,20 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2019-02-26 07:46:21"
+            "time": "2019-03-02 21:07:39"
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "dev-release/4.201",
+            "version": "dev-release/4.202",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-auth.git",
-                "reference": "dc37e7032f2d679a0286015a498cd5b990fe223f"
+                "reference": "8b288fa76d7c5d60b05e98ca6ec3d3525e2868ee"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
-                "olcs/olcs-transfer": "dev-release/4.201",
-                "olcs/olcscommon": "dev-release/4.201",
+                "olcs/olcs-transfer": "dev-release/4.202",
+                "olcs/olcscommon": "dev-release/4.202",
                 "php": ">=5.4",
                 "zendframework/zendframework": "~2.4.0"
             },
@@ -1172,15 +1172,15 @@
                 ]
             },
             "description": "OLCS Authentication",
-            "time": "2019-02-26 06:22:47"
+            "time": "2019-03-02 19:45:42"
         },
         {
             "name": "olcs/olcs-logging",
-            "version": "dev-release/4.201",
+            "version": "dev-release/4.202",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-logging.git",
-                "reference": "7ac275854bba7eb1191d3b4288cdf96ede8b9e73"
+                "reference": "7e92dc444883a73e5e3dd553ac0ed3e79fad02c4"
             },
             "require": {
                 "php": ">=5.4",
@@ -1227,15 +1227,15 @@
                 ]
             },
             "description": "Logging Module for Olcs",
-            "time": "2019-02-26 06:21:48"
+            "time": "2019-03-02 19:44:42"
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "dev-release/4.201",
+            "version": "dev-release/4.202",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-transfer.git",
-                "reference": "0be9c90a7e6e171f4e65e4bfe2a974e61e1ebe4e"
+                "reference": "710abb8fdac285704ce7bbdf72a00b1f7a6715dd"
             },
             "require": {
                 "php": ">=5.4",
@@ -1276,15 +1276,15 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2019-02-26 06:23:47"
+            "time": "2019-03-02 19:46:44"
         },
         {
             "name": "olcs/olcs-utils",
-            "version": "dev-release/4.201",
+            "version": "dev-release/4.202",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-utils.git",
-                "reference": "afd9d8e01eb9761fc9ea626b318af2746bece16d"
+                "reference": "e03f0fd2dd2fbdd017e713e8c9e0f3bd2a6b1717"
             },
             "require": {
                 "php": ">=5.4",
@@ -1294,7 +1294,7 @@
                 "johnkary/phpunit-speedtrap": "^3.0",
                 "mockery/mockery": "^1.2.0",
                 "olcs/olcs-devtools": "dev-master",
-                "olcs/olcs-logging": "dev-release/4.201",
+                "olcs/olcs-logging": "dev-release/4.202",
                 "phpstan/phpstan-mockery": "^0.10.2",
                 "phpstan/phpstan-shim": "^0.10.5"
             },
@@ -1325,7 +1325,7 @@
                 ]
             },
             "description": "OLCS Utils",
-            "time": "2019-02-26 06:24:37"
+            "time": "2019-03-02 19:47:34"
         },
         {
             "name": "psr/log",
@@ -2208,7 +2208,7 @@
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-testhelpers.git",
-                "reference": "8e94226d234df5ec611d6f2d2438021f9f6ee60f"
+                "reference": "d68c2a04380a653a6300e8ec3854fb5c0b026c9d"
             },
             "require": {
                 "php": ">=5.4"
@@ -2225,7 +2225,7 @@
                 }
             },
             "description": "OLCS Test helpers",
-            "time": "2019-02-18 08:14:06"
+            "time": "2019-02-26 13:00:23"
         },
         {
             "name": "pdepend/pdepend",
