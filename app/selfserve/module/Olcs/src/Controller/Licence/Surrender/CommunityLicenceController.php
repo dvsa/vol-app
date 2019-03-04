@@ -34,7 +34,7 @@ class CommunityLicenceController extends AbstractSurrenderController
 
     protected $conditionalDisplayConfig = [
         'default' => [
-            'licence' => [
+            'surrender' => [
                 'key' => 'isInternationalLicence',
                 'value' => true,
                 'route' => 'licence/surrender/review/GET'
