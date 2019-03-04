@@ -6,23 +6,17 @@ echo $this->partial(
     ]
 );
 ?>
-
 <div class="row">
-  
+
   <div class="dashboard two-thirds">
     <?php
       echo $this->flashMessengerAll();
-      if ($total === 0) {
-          echo $this->partial('dashboard-empty');
-      } else {
           echo $this->partial(
               'dashboard-tables',
               compact('applications', 'licences', 'variations', 'showVariationTable', 'showApplicationTable')
           );
-      }
     ?>
   </div>
 
   <?php echo $this->partial('partials/dashboard-right-column'); ?>
-
 </div>
