@@ -12,10 +12,8 @@ use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\IrhpPermit\GetListByEcmtId as ListDTO;
 use Dvsa\Olcs\Transfer\Query\IrhpPermit\GetListByIrhpId as IrhpListDTO;
 use Dvsa\Olcs\Transfer\Query\IrhpPermit\ById as ItemDTO;
-use Dvsa\Olcs\Transfer\Query\Permits\ValidEcmtPermits as ValidEcmtPermitsDto;
 use Dvsa\Olcs\Transfer\Command\IrhpPermit\Replace as ReplaceDTO;
 use Dvsa\Olcs\Transfer\Command\IrhpPermit\Terminate as TerminateDTO;
-use Dvsa\Olcs\Transfer\Command\Permits\ExpireEcmtPermitApplication as ExpireDTO;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\IrhpPermitApplicationControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -243,6 +241,7 @@ class IrhpPermitController extends AbstractInternalController implements
             )
         );
         $result = $response->getResult();
+
         if (!$response->isOk()) {
             foreach ($result['messages'] as $message) {
                 $this->flashMessenger()->addErrorMessage($message);
@@ -250,28 +249,7 @@ class IrhpPermitController extends AbstractInternalController implements
             return false;
         }
 
-        $applicationId = $this->params()->fromRoute('permitid');
-        $permitsTotal = $this->handleQuery(ValidEcmtPermitsDto::create([
-            'page' => 1,
-            'limit' => 10,
-            'id' => $applicationId,
-        ]));
-
-        if ($permitsTotal->getResult()['count'] === 0) {
-            $applicationResponse = $this->handleCommand(
-                ExpireDTO::create(
-                    [
-                        'id' => $applicationId
-                    ]
-                )
-            );
-            if ($applicationResponse->isOk()) {
-                $message = 'The selected application is now expired.';
-                $this->flashMessenger()->addSuccessMessage($message);
-            }
-        }
-        $message = 'The selected permit has been terminated.';
-        $this->flashMessenger()->addSuccessMessage($message);
+        $this->flashMessenger()->addSuccessMessage($result['messages'][0]);
         return true;
     }
 }
