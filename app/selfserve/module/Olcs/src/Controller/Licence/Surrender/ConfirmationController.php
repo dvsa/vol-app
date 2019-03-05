@@ -25,19 +25,19 @@ class ConfirmationController extends AbstractSurrenderController
         return $this->renderView($params);
     }
 
-    private function getSignatureFullName()
+    private function getSignatureFullName($surrender)
     {
         $names = [];
-        $attributes = json_decode($this->getSurrender()["digitalSignature"]["attributes"]);
+        $attributes = json_decode($surrender["digitalSignature"]["attributes"]);
         $names[] = $attributes->firstname ?? '';
         $names[] = $attributes->surname ?? '';
 
         return implode(' ', $names);
     }
 
-    private function getSignatureDate()
+    private function getSignatureDate($surrender)
     {
-        $unixTimeStamp = strtotime($this->getSurrender()["digitalSignature"]['createdOn']);
+        $unixTimeStamp = strtotime($surrender["digitalSignature"]['createdOn']);
         return date("j M Y", $unixTimeStamp);
     }
 
@@ -62,13 +62,14 @@ class ConfirmationController extends AbstractSurrenderController
     {
         /** @var $translator TranslationHelperService */
         $translator = $this->getServiceLocator()->get('Helper\Translation');
+        $surrender = $this->getSurrender();
         return [
             'content' => $translator->translateReplace(
                 'markup-licence-surrender-confirmation',
                 [
-                    $this->data['surrender']['licence']['licNo'],
-                    $this->getSignatureFullName(),
-                    $this->getSignatureDate(),
+                    $surrender['licence']['licNo'],
+                    $this->getSignatureFullName($surrender),
+                    $this->getSignatureDate($surrender),
                     $this->returnDashboardLink()
                 ]
             ),
