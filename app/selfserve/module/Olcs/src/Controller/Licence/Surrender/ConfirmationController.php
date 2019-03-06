@@ -68,8 +68,8 @@ class ConfirmationController extends AbstractSurrenderController
                 'markup-licence-surrender-confirmation',
                 [
                     $this->getSurrender()['licence']['licNo'],
-                    $this->getSignatureFullName(),
-                    $this->getSignatureDate(),
+                    $this->getSignatureFullName($surrender),
+                    $this->getSignatureDate($surrender),
                     $this->returnDashboardLink()
                 ]
             ),
