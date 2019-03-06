@@ -32,12 +32,13 @@ class ValidEcmtPermits
         }
 
         $firstPermit = $data['result'][0];
+        // TODO - OLCS-21979 - move to the backend
         $dueDate = '';
         if (!array_key_exists('permitNumber', $firstPermit)) {
             $dueDate = date(
                 \DATE_FORMAT,
                 strtotime(
-                    "+10 days",
+                    "+10 weekdays",
                     strtotime(
                         $firstPermit['irhpPermitApplication']['ecmtPermitApplication']['fees'][0]['invoicedDate']
                     )
