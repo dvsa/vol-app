@@ -23,6 +23,7 @@ class ApplicationFees
                 //return first occurence as there should only be one
                 $data['issueFee'] = $fee['feeType']['displayValue'];
                 $data['totalFee'] = $fee['grossAmount'];
+                // TODO - OLCS-21979 - move to the backend
                 $data['dueDate'] = self::calculateDueDate($fee['invoicedDate']);
 
                 return $data;
@@ -35,13 +36,13 @@ class ApplicationFees
     }
 
     /**
-     * add 10 days to the date
+     * add 9 weekdays to the date
      * @param string $date
      * @return string
      */
     private static function calculateDueDate($date)
     {
-        $dueDate = date(\DATE_FORMAT, strtotime('+10 days', strtotime($date)));
+        $dueDate = date(\DATE_FORMAT, strtotime('+9 weekdays', strtotime($date)));
         return $dueDate;
     }
 }
