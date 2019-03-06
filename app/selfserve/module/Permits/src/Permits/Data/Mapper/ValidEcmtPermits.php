@@ -38,7 +38,7 @@ class ValidEcmtPermits
             $dueDate = date(
                 \DATE_FORMAT,
                 strtotime(
-                    "+10 weekdays",
+                    "+9 weekdays",
                     strtotime(
                         $firstPermit['irhpPermitApplication']['ecmtPermitApplication']['fees'][0]['invoicedDate']
                     )

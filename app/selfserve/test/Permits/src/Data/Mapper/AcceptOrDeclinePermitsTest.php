@@ -77,7 +77,7 @@ class AcceptOrDeclinePermitsTest extends TestCase
                     'feeType' => [
                         'displayValue' => $feeDisplayValue
                     ],
-                    'invoicedDate' => '2018-12-15'
+                    'invoicedDate' => '2019-03-08'
                 ],
                 [
                     'isOutstanding' => true,
@@ -120,7 +120,7 @@ class AcceptOrDeclinePermitsTest extends TestCase
         $outputData['validityPeriod']['toDate'] = '1583798400';
         $outputData = $inputData;
         $outputData['title'] = 'permits.page.fee-part-successful.title';
-        $outputData['dueDate'] = '28 Dec 2018'; //invoiced date +10 weekdays
+        $outputData['dueDate'] = '21 Mar 2019'; //invoiced date +9 weekdays
         $outputData['issueFee'] = $feeDisplayValue;
         $outputData['totalFee'] = $feeGrossAmount;
         $outputData['summaryData'] = [
@@ -147,7 +147,7 @@ class AcceptOrDeclinePermitsTest extends TestCase
             ],
             5 => [
                 'key' => 'permits.page.ecmt.fee-part-successful.payment.due',
-                'value' => '28 Dec 2018'
+                'value' => '21 Mar 2019'
             ]
         ];
         $outputData['guidance'] = [

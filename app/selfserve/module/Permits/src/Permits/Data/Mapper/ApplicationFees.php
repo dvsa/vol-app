@@ -36,13 +36,13 @@ class ApplicationFees
     }
 
     /**
-     * add 10 weekdays to the date
+     * add 9 weekdays to the date
      * @param string $date
      * @return string
      */
     private static function calculateDueDate($date)
     {
-        $dueDate = date(\DATE_FORMAT, strtotime('+10 weekdays', strtotime($date)));
+        $dueDate = date(\DATE_FORMAT, strtotime('+9 weekdays', strtotime($date)));
         return $dueDate;
     }
 }
