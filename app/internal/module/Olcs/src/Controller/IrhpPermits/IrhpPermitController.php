@@ -158,7 +158,7 @@ class IrhpPermitController extends AbstractInternalController implements
         $form->setData($data);
 
         $view = new ViewModel();
-        $view->setTemplate('sections/irhp-permit/pages/replacement');
+        $view->setTemplate('sections/irhp-permit/pages/application-permits-modal');
         $view->setVariable('form', $form);
 
         return $view;
@@ -220,7 +220,7 @@ class IrhpPermitController extends AbstractInternalController implements
         $form->setData($data);
 
         $view = new ViewModel();
-        $view->setTemplate('sections/irhp-permit/pages/replacement');
+        $view->setTemplate('sections/irhp-permit/pages/application-permits-modal');
         $view->setVariable('form', $form);
 
         return $view;
