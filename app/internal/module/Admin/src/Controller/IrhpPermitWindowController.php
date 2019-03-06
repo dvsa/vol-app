@@ -4,8 +4,10 @@ namespace Admin\Controller;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Common\FeatureToggle;
+use Common\Form\Form;
 
 use Olcs\Controller\Interfaces\LeftViewProvider;
+use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\ById as GetIrhpPermitStockByIdDto;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitWindow\ById as ItemDto;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitWindow\GetList as ListDto;
 use Dvsa\Olcs\Transfer\Command\IrhpPermitWindow\Create as CreateDto;
@@ -90,5 +92,77 @@ class IrhpPermitWindowController extends AbstractIrhpPermitAdminController imple
         }
 
         return parent::indexAction();
+    }
+
+    /**
+     * Alter form for add
+     *
+     * @param Form  $form     Form
+     * @param array $formData Form data
+     *
+     * @return Form
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function alterFormForAdd(Form $form, array $formData)
+    {
+        return $this->alterForm($form);
+    }
+
+    /**
+     * Alter form for edit
+     *
+     * @param Form  $form     Form
+     * @param array $formData Form data
+     *
+     * @return Form
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function alterFormForEdit(Form $form, array $formData)
+    {
+        return $this->alterForm($form);
+    }
+
+    /**
+     * Alter form
+     *
+     * @param Form $form Form
+     *
+     * @return Form
+     */
+    private function alterForm(Form $form)
+    {
+        $irhpPermitStock = $this->retrieveIrhpPermitStock($this->params()->fromRoute()['stockId']);
+
+        if (!empty($irhpPermitStock) && !$irhpPermitStock['irhpPermitType']['isEcmtAnnual']) {
+            // emissionsCategory only required for ECMT
+            $form->get('permitWindowDetails')
+                ->remove('emissionsCategory');
+        }
+
+        return $form;
+    }
+
+    /**
+     * Retrieve Irhp Permit Stock data
+     *
+     * @param int $id Irhp Permit Stock id
+     *
+     * @return array
+     */
+    private function retrieveIrhpPermitStock($id)
+    {
+        $data = [];
+
+        $response = $this->handleQuery(
+            GetIrhpPermitStockByIdDto::create(['id' => $id])
+        );
+
+        if ($response->isOk()) {
+            $data = $response->getResult();
+        } else {
+            $this->handleErrors($response->getResult());
+        }
+
+        return $data;
     }
 }
