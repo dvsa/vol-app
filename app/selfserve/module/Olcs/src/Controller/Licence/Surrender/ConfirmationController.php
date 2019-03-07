@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: shaunhare
- * Date: 2018-11-27
- * Time: 10:44
- */
 
 namespace Olcs\Controller\Licence\Surrender;
 
@@ -15,8 +9,7 @@ use Dvsa\Olcs\Transfer\Query\Surrender\GetSignature;
 class ConfirmationController extends AbstractSurrenderController
 {
     protected $pageTemplate = 'pages/confirmation';
-    protected $dataSourceConfig = [
-    ];
+    protected $dataSourceConfig = [];
 
     public function indexAction()
     {
@@ -25,19 +18,19 @@ class ConfirmationController extends AbstractSurrenderController
         return $this->renderView($params);
     }
 
-    private function getSignatureFullName($surrender)
+    private function getSignatureFullName()
     {
         $names = [];
-        $attributes = json_decode($surrender["digitalSignature"]["attributes"]);
+        $attributes = json_decode($this->data['surrender']["digitalSignature"]["attributes"]);
         $names[] = $attributes->firstname ?? '';
         $names[] = $attributes->surname ?? '';
 
         return implode(' ', $names);
     }
 
-    private function getSignatureDate($surrender)
+    private function getSignatureDate()
     {
-        $unixTimeStamp = strtotime($surrender["digitalSignature"]['createdOn']);
+        $unixTimeStamp = strtotime($this->data['surrender']["digitalSignature"]['createdOn']);
         return date("j M Y", $unixTimeStamp);
     }
 
@@ -62,14 +55,14 @@ class ConfirmationController extends AbstractSurrenderController
     {
         /** @var $translator TranslationHelperService */
         $translator = $this->getServiceLocator()->get('Helper\Translation');
-        $surrender = $this->getSurrender();
+        $this->data['surrender'] = $this->getSurrender();
         return [
             'content' => $translator->translateReplace(
                 'markup-licence-surrender-confirmation',
                 [
                     $this->getSurrender()['licence']['licNo'],
-                    $this->getSignatureFullName($surrender),
-                    $this->getSignatureDate($surrender),
+                    $this->getSignatureFullName(),
+                    $this->getSignatureDate(),
                     $this->returnDashboardLink()
                 ]
             ),
