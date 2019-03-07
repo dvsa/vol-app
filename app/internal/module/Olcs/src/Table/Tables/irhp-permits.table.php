@@ -11,6 +11,7 @@ return [
     'settings' => [
         'crud' => [
             'actions' => [
+                'terminate' => ['requireRows' => true, 'class' => 'action--secondary js-require--one'],
                 'request replacement' => ['requireRows' => true, 'class' => 'action--secondary js-require--one']
             ],
         ],
