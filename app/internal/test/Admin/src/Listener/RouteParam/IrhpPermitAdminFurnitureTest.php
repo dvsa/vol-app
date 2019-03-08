@@ -17,7 +17,9 @@ use Admin\Listener\RouteParam\IrhpPermitAdminFurniture;
 use Mockery as m;
 use Olcs\Listener\RouteParams;
 use Common\RefData;
-use Zend\View\Model\ViewModel;
+use Zend\Navigation\Navigation;
+use Zend\View\Helper\Placeholder;
+use Zend\View\HelperPluginManager;
 
 class IrhpPermitAdminFurnitureTest extends TestCase
 {
@@ -183,16 +185,84 @@ class IrhpPermitAdminFurnitureTest extends TestCase
         $this->sut->onIrhpPermitAdminFurniture($event);
     }
 
+    public function testOnIrhpPermitAdminMultilaterallId()
+    {
+        $stockId = 1;
+        $irhpPermitStock = [
+            'id' => $stockId,
+            'validFrom' => '01-01-2018',
+            'validTo' => '31-12-2018',
+            'initialStock' => 100,
+            'irhpPermitType' => [
+                'id' => RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID,
+                'name' => [
+                    'description' => 'Annual Multilateral (EU and EEA)'
+                ]
+            ]
+        ];
+
+        $this->onIrhpPermitAdminSetup($irhpPermitStock);
+
+        $mockPlaceholder = m::mock(Placeholder::class)
+            ->shouldReceive('getContainer')
+            ->once()
+            ->with('pageTitle')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('set')
+                    ->once()
+                    ->with('Permits')
+                    ->getMock()
+            )
+            ->shouldReceive('getContainer')
+            ->once()
+            ->with('pageSubtitle')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('set')
+                    ->once()
+                    ->with('Type: Annual Multilateral (EU and EEA) Validity: 01/01/2018 to 31/12/2018 Quota: 100')
+                    ->getMock()
+            )
+            ->getMock();
+
+        $mockNavigation = m::mock(Navigation::class)
+            ->shouldReceive('findOneBy')->once()->with('id', 'admin-dashboard/admin-permits/sectors')->andReturn(
+                m::mock(Navigation::class)->shouldReceive('setVisible')->once()->with(false)->getMock()
+            )->getMock()
+            ->shouldReceive('findOneBy')->once()->with('id', 'admin-dashboard/admin-permits/scoring')->andReturn(
+                m::mock(Navigation::class)->shouldReceive('setVisible')->once()->with(false)->getMock()
+            )->getMock()
+            ->shouldReceive('findOneBy')->once()->with('id', 'admin-dashboard/admin-permits/jurisdiction')->andReturn(
+                m::mock(Navigation::class)->shouldReceive('setVisible')->once()->with(false)->getMock()
+            )->getMock();
+
+        $this->sut->setNavigationService($mockNavigation);
+
+        $mockViewHelperManager = m::mock(HelperPluginManager::class)
+            ->shouldReceive('get')->once()->with('placeholder')->andReturn($mockPlaceholder)
+            ->getMock();
+
+        $this->sut->setViewHelperManager($mockViewHelperManager);
+
+        $event = new RouteParam();
+        $event->setValue($stockId);
+
+        $this->sut->onIrhpPermitAdminFurniture($event);
+    }
+
     public function testCreateService()
     {
-        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
+        $mockViewHelperManager = m::mock(HelperPluginManager::class);
         $mockQuerySender = m::mock(QuerySender::class);
         $mockCommandSender = m::mock(CommandSender::class);
+        $mockNavigation = m::mock(Navigation::class);
 
         $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('QuerySender')->andReturn($mockQuerySender);
         $mockSl->shouldReceive('get')->with('CommandSender')->andReturn($mockCommandSender);
+        $mockSl->shouldReceive('get')->with('Navigation')->andReturn($mockNavigation);
 
         $sut = new IrhpPermitAdminFurniture();
         $service = $sut->createService($mockSl);
@@ -201,6 +271,7 @@ class IrhpPermitAdminFurnitureTest extends TestCase
         $this->assertSame($mockViewHelperManager, $sut->getViewHelperManager());
         $this->assertSame($mockQuerySender, $sut->getQuerySender());
         $this->assertSame($mockCommandSender, $sut->getCommandSender());
+        $this->assertSame($mockNavigation, $sut->getNavigationService());
     }
 
 
