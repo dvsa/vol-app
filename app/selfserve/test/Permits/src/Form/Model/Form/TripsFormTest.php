@@ -3,6 +3,8 @@
 namespace PermitsTest\Form\Model\Form;
 
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
+use Zend\Form\Element\Submit;
+use Zend\Form\Element\Text;
 
 /**
  * Class TripsFormTest
@@ -18,20 +20,35 @@ class TripsFormTest extends AbstractFormValidationTestCase
 
     public function testTripsAbroad()
     {
-        $this->markTestSkipped();
-        $element = ['Fields','TripsAbroad'];
-
+        $element = ['Fields','tripsAbroad'];
         $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
-        $this->assertFormElementType($element, "Zend\Form\Element\Number");
+        $this->assertFormElementType($element, Text::class);
     }
 
     public function testSubmit()
     {
-        $this->markTestSkipped();
         $element = ['Submit', 'SubmitButton'];
         $this->assertFormElementActionButton($element);
-        $this->assertFormElementType($element, "Zend\Form\Element\Submit");
+        $this->assertFormElementType($element, Submit::class);
     }
 
+    public function testSaveAndReturn()
+    {
+        $element = ['Submit', 'SaveAndReturnButton'];
+        $this->assertFormElementActionButton($element);
+        $this->assertFormElementType($element, Submit::class);
+    }
+
+    public function testIntensityWarning()
+    {
+        $element = ['Fields', 'intensityWarning'];
+        $this->assertFormElementHidden($element);
+    }
+
+    public function testPermitsRequired()
+    {
+        $element = ['Fields', 'permitsRequired'];
+        $this->assertFormElementHidden($element);
+    }
 }

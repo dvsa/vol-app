@@ -2,7 +2,11 @@
 
 namespace PermitsTest\Form\Model\Form;
 
+use Common\Form\Element\DynamicMultiCheckbox;
+use Common\Form\Elements\InputFilters\SingleCheckbox;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
+use Zend\Form\Element\Radio;
+use Zend\Form\Element\Submit;
 
 /**
  * Class UserTest
@@ -22,23 +26,37 @@ class RestrictedCountriesFormTest extends AbstractFormValidationTestCase
 
         $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
-        $this->assertFormElementType($element, "Zend\Form\Element\Radio");
+        $this->assertFormElementType($element, Radio::class);
     }
 
     public function testRestrictedCountriesList()
     {
-        $this->markTestSkipped();
-        $element = ['fields','restrictedCountriesList'];
+        $element = ['fields', 'yesContent', 'restrictedCountriesList'];
 
         $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
-        $this->assertFormElementType($element, "Zend\Form\Element\DynamicMultiCheckbox");
+        $this->assertFormElementType($element, DynamicMultiCheckbox::class);
+    }
+
+    public function testEuro5RestrictedCountriesList()
+    {
+        $element = ['euro5Fields', 'restrictedCountries'];
+        $this->assertFormElementIsRequired($element, true);
+        $this->assertFormElementAllowEmpty($element, false);
+        $this->assertFormElementType($element, SingleCheckbox::class);
     }
 
     public function testSubmit()
     {
         $element = ['Submit', 'SubmitButton'];
         $this->assertFormElementActionButton($element);
-        $this->assertFormElementType($element, "Zend\Form\Element\Submit");
+        $this->assertFormElementType($element, Submit::class);
+    }
+
+    public function testSaveAndReturn()
+    {
+        $element = ['Submit', 'SaveAndReturnButton'];
+        $this->assertFormElementActionButton($element);
+        $this->assertFormElementType($element, Submit::class);
     }
 }
