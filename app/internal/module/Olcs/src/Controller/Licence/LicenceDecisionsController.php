@@ -44,7 +44,6 @@ class LicenceDecisionsController extends AbstractController implements
 
     protected $methodToggles = [
         'withdrawSurrender' => [FeatureToggle::INTERNAL_SURRENDER],
-
     ];
 
     protected $undoCommand;
