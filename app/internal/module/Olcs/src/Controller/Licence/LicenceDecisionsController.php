@@ -5,11 +5,14 @@
  */
 namespace Olcs\Controller\Licence;
 
+use Common\Controller\Interfaces\MethodToggleAwareInterface;
+use Common\FeatureToggle;
 use Common\Service\Cqrs\Exception\NotFoundException;
 use Common\Service\Entity\LicenceStatusRuleEntityService;
 use Dvsa\Olcs\Transfer\Command\Surrender\Withdraw;
 use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence;
 use Olcs\Controller\AbstractController;
+use Common\Controller\Lva\Traits\MethodToggleTrait;
 use Olcs\Controller\Traits\LicenceControllerTrait;
 use Dvsa\Olcs\Transfer\Query\Licence\LicenceDecisions;
 use Dvsa\Olcs\Transfer\Query\LicenceStatusRule\LicenceStatusRule;
@@ -23,6 +26,7 @@ use Dvsa\Olcs\Transfer\Command\Licence\SurrenderLicence;
 use Dvsa\Olcs\Transfer\Command\Licence\ResetToValid;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
 
+
 /**
  * Class LicenceDecisionsController
  *
@@ -32,9 +36,18 @@ use Olcs\Controller\Interfaces\LicenceControllerInterface;
  * @package Olcs\Controller\Licence
  */
 class LicenceDecisionsController extends AbstractController implements
-    LicenceControllerInterface
+    LicenceControllerInterface, MethodToggleAwareInterface
 {
     use LicenceControllerTrait;
+    use MethodToggleTrait;
+
+
+    protected $methodToggles = [
+        'withdrawSurrender' => [FeatureToggle::INTERNAL_SURRENDER],
+
+    ];
+
+    protected $undoCommand;
 
     /**
      * Display messages and enable to user to carry on to a decision if applicable.
@@ -389,26 +402,20 @@ class LicenceDecisionsController extends AbstractController implements
 
             if ($form->isValid()) {
 
-                try {
-                    $this->handleQuery(ByLicence::create([
-                        'id' => $licenceId
-                    ]));
-
-                    $response = $this->handleCommand(Withdraw::create([
-                        'id' => $licenceId
-                    ]));
-
-                } catch (NotFoundException $exception) {
-                    $response = $this->handleCommand(
-                        ResetToValid::create(
-                            [
-                                'id' => $licenceId,
-                                'decisions' => []
-                            ]
-                        )
+                    $data = ['id' => $licenceId];
+                    $this->undoCommand = ResetToValid::create(
+                        [
+                            'id' => $licenceId,
+                            'decisions' => []
+                        ]
                     );
-                }
+                    $this->togglableMethod(
+                        $this,
+                        'withdrawSurrender',
+                        $data
+                    );
 
+                $response = $this->handleCommand($this->undoCommand);
                 if ($response->isOk()) {
                     $this->flashMessenger()->addSuccessMessage('The licence surrender has been undone');
                     return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
@@ -719,5 +726,22 @@ class LicenceDecisionsController extends AbstractController implements
             'licence-decision' => $licenceDecision,
             'licence-decision-legislation' => $decisions
         );
+    }
+
+    /**
+     * @param array $data
+     *
+     * @throws NotFoundException
+     */
+    protected function withdrawSurrender(array $data)
+    {
+        try {
+            $this->handleQuery(ByLicence::create($data));
+        }
+        catch(NotFoundException $exception)
+        {
+           return;
+        }
+        $this->undoCommand = Withdraw::create($data);
     }
 }
