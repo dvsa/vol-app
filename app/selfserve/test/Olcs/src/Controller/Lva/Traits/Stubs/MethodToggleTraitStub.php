@@ -2,7 +2,7 @@
 
 namespace OlcsTest\Controller\Lva\Traits\Stubs;
 
-use Olcs\Controller\Lva\Traits\MethodToggleTrait;
+use Common\Controller\Lva\Traits\MethodToggleTrait;
 
 class MethodToggleTraitStub
 {

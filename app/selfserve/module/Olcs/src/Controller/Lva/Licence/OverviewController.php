@@ -9,7 +9,7 @@ use Common\Service\Cqrs\Exception\NotFoundException;
 use Dvsa\Olcs\Transfer\Command\Licence\PrintLicence;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceQry;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
-use Olcs\Controller\Lva\Traits\MethodToggleTrait;
+use Common\Controller\Lva\Traits\MethodToggleTrait;
 use Olcs\View\Model\Licence\LicenceOverview;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence;
