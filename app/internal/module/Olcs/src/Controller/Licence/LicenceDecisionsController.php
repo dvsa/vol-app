@@ -3,6 +3,7 @@
 /**
  * LicenceDecisionsController.php
  */
+
 namespace Olcs\Controller\Licence;
 
 use Common\Controller\Interfaces\MethodToggleAwareInterface;
@@ -26,7 +27,6 @@ use Dvsa\Olcs\Transfer\Command\Licence\SurrenderLicence;
 use Dvsa\Olcs\Transfer\Command\Licence\ResetToValid;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
 
-
 /**
  * Class LicenceDecisionsController
  *
@@ -36,7 +36,8 @@ use Olcs\Controller\Interfaces\LicenceControllerInterface;
  * @package Olcs\Controller\Licence
  */
 class LicenceDecisionsController extends AbstractController implements
-    LicenceControllerInterface, MethodToggleAwareInterface
+    LicenceControllerInterface,
+    MethodToggleAwareInterface
 {
     use LicenceControllerTrait;
     use MethodToggleTrait;
@@ -72,7 +73,7 @@ class LicenceDecisionsController extends AbstractController implements
         $response = $this->handleQuery($query);
         $result = $response->getResult();
 
-        $pageTitle = ucfirst($decision) ." licence";
+        $pageTitle = ucfirst($decision) . " licence";
         if (!isset($result['suitableForDecisions']) || $this->getRequest()->isPost() ||
             $result['suitableForDecisions'] === true) {
             return $this->redirectToDecision($decision, $licence);
@@ -162,7 +163,6 @@ class LicenceDecisionsController extends AbstractController implements
         $form->get('licence-decision-legislation')->get('decisions')->setValue($licenceStatus['legislationDecisions']);
 
         if ($this->getRequest()->isPost()) {
-
             $form->setData((array)$this->getRequest()->getPost());
 
             if ($form->isValid()) {
@@ -401,19 +401,18 @@ class LicenceDecisionsController extends AbstractController implements
             $form->setData((array)$this->getRequest()->getPost());
 
             if ($form->isValid()) {
-
-                    $data = ['id' => $licenceId];
-                    $this->undoCommand = ResetToValid::create(
-                        [
-                            'id' => $licenceId,
-                            'decisions' => []
-                        ]
-                    );
-                    $this->togglableMethod(
-                        $this,
-                        'withdrawSurrender',
-                        $data
-                    );
+                $data = ['id' => $licenceId];
+                $this->undoCommand = ResetToValid::create(
+                    [
+                        'id' => $licenceId,
+                        'decisions' => []
+                    ]
+                );
+                $this->togglableMethod(
+                    $this,
+                    'withdrawSurrender',
+                    $data
+                );
 
                 $response = $this->handleCommand($this->undoCommand);
                 if ($response->isOk()) {
@@ -737,10 +736,8 @@ class LicenceDecisionsController extends AbstractController implements
     {
         try {
             $this->handleQuery(ByLicence::create($data));
-        }
-        catch(NotFoundException $exception)
-        {
-           return;
+        } catch (NotFoundException $exception) {
+            return;
         }
         $this->undoCommand = Withdraw::create($data);
     }
