@@ -42,7 +42,6 @@ class LicenceDecisionsController extends AbstractController implements
     use LicenceControllerTrait;
     use MethodToggleTrait;
 
-
     protected $methodToggles = [
         'withdrawSurrender' => [FeatureToggle::INTERNAL_SURRENDER],
 
