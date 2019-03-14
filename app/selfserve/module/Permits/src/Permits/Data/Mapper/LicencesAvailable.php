@@ -13,8 +13,6 @@ use Permits\Controller\Config\DataSource\LicencesAvailable as LicencesAvailableD
  */
 class LicencesAvailable
 {
-    const ECMT_PREVIOUSLY_APPLIED_MESSAGE = 'permits.form.ecmt-licence.previously-applied';
-
     /**
      * @param array $data
      * @param       $form
@@ -78,11 +76,6 @@ class LicencesAvailable
                 $data['questionArgs'] = [$valueOptions[$key]['label'] . ' ' . $valueOptions[$key]['hint']];
                 $valueOptions[$key]['selected'] = true;
                 $form->get('fields')->get('licence')->setAttribute('radios_wrapper_attributes', ['class' => 'visually-hidden']);
-            }
-
-            /** Temporary ECMT message - review and/or parameterise in OLCS-23591 */
-            if (count($valueOptions) > 0) {
-                $data['warning'] = self::ECMT_PREVIOUSLY_APPLIED_MESSAGE;
             }
         }
 
