@@ -2,6 +2,8 @@
 
 namespace OlcsTest\Form\Model\Form\Surrender\CurrentDiscs;
 
+use Common\Form\Elements\Custom\OlcsCheckbox;
+use Common\Form\Elements\Types\HtmlTranslated;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 use Olcs\Form\Model\Form\Surrender\CurrentDiscs\CurrentDiscs;
 use Zend\Form\Element\Button;
@@ -16,10 +18,11 @@ class CurrentDiscsTest extends AbstractFormValidationTestCase
      */
     protected $formName = CurrentDiscs::class;
 
-    public function testInPossession()
+    public function testHeaderSection()
     {
-        $element = ['possessionSection', 'inPossession'];
-        $this->assertFormElementType($element, Checkbox::class);
+        $headerSection = ['headerSection', 'header'];
+        $this->assertFormElementType($headerSection, HtmlTranslated::class);
+        $this->assertFormElementHtml($headerSection);
     }
 
     public function testPossessionInfoNumber()
@@ -52,7 +55,8 @@ class CurrentDiscsTest extends AbstractFormValidationTestCase
     public function testStolen()
     {
         $element = ['stolenSection', 'stolen'];
-        $this->assertFormElementType($element, Checkbox::class);
+        $this->assertFormElementAllowEmpty($element, false);
+        $this->assertFormElementType($element, OlcsCheckbox::class);
     }
 
     public function testStolenInfoDetails()
@@ -62,13 +66,19 @@ class CurrentDiscsTest extends AbstractFormValidationTestCase
         $this->assertFormElementType($element, Textarea::class);
     }
 
+    public function testStolenInfoNumber()
+    {
+        $element = ['stolenSection', 'info', 'number'];
+        $this->assertFormElementAllowEmpty($element, true);
+        $this->assertFormElementType($element, Number::class);
+    }
+
     /**
      * @dataProvider dpInfoNumber
      */
     public function testInfoNumberValidation($section, $formData, $expected)
     {
         $form = $this->getForm();
-
 
         $this->setPost($formData);
         $form->setData($formData);
@@ -97,10 +107,26 @@ class CurrentDiscsTest extends AbstractFormValidationTestCase
         $this->clearPost();
     }
 
+
     public function testSubmit()
     {
-        $action = ['submit'];
-        $this->assertFormElementType($action, Button::class);
+        $element = ['submit'];
+        $this->assertFormElementActionButton($element);
+        $this->assertFormElementType($element, Button::class);
+    }
+
+    public function testLostSectionLost()
+    {
+        $element = ['lostSection', 'lost'];
+        $this->assertFormElementAllowEmpty($element, false);
+        $this->assertFormElementType($element, OlcsCheckbox::class);
+    }
+
+    public function testPosessionSectionInPosession()
+    {
+        $element = ['possessionSection', 'inPossession'];
+        $this->assertFormElementAllowEmpty($element, false);
+        $this->assertFormElementType($element, OlcsCheckbox::class);
     }
 
     public function dpInfoNumber()

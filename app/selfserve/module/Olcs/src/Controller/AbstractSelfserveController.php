@@ -184,6 +184,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     {
         $view = new ViewModel();
 
+        $this->setBrowserTitle();
         $view->setVariable('data', $this->data);
         $view->setVariable('form', $this->form);
         $view->setVariable('forms', $this->forms);
@@ -198,11 +199,22 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
         $this->template = isset($this->templateConfig[$this->action]) ? $this->templateConfig[$this->action] : $this->templateConfig['default'];
         $templateVars = $this->configsForAction('templateVarsConfig');
         $this->data = array_merge($this->data, $templateVars);
+    }
 
-        if (isset($templateVars['browserTitle'])) {
+    public function setBrowserTitle()
+    {
+        if (isset($this->data['browserTitle'])) {
             $headTitle = $this->getServiceLocator()->get('ViewHelperManager')->get('headTitle');
             $headTitle->setSeparator(' - ');
-            $headTitle->prepend($templateVars['browserTitle']);
+            $headTitle->prepend($this->data['browserTitle']);
+
+            if ($this->form instanceof Form) {
+                if ($this->form->hasValidated()) {
+                    if (!$this->form->isValid()) {
+                        $headTitle->set('Error: ' . $headTitle->renderTitle());
+                    }
+                }
+            }
         }
     }
 

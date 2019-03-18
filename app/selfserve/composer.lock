@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b9bb55ffaebbb293b0685507fd9f41be",
-    "content-hash": "1ec80d0b4c1586a72cf04eff8c45f8b2",
+    "hash": "fed51a1e864a5dbf7a1640ec7740dd6b",
+    "content-hash": "8c5bd90a72418280a466b71dda2a5191",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1016,12 +1016,59 @@
             "time": "2018-06-14 14:45:07"
         },
         {
+            "name": "ezyang/htmlpurifier",
+            "version": "v4.10.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ezyang/htmlpurifier.git",
+                "reference": "d85d39da4576a6934b72480be6978fb10c860021"
+            },
+            "dist": {
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/ezyang-htmlpurifier-d85d39da4576a6934b72480be6978fb10c860021-zip-68f7aa.tar",
+                "reference": "d85d39da4576a6934b72480be6978fb10c860021",
+                "shasum": "70d5fd91e4d9b583fea8361f7011ef969473ad36"
+            },
+            "require": {
+                "php": ">=5.2"
+            },
+            "require-dev": {
+                "simpletest/simpletest": "^1.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "HTMLPurifier": "library/"
+                },
+                "files": [
+                    "library/HTMLPurifier.composer.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL"
+            ],
+            "authors": [
+                {
+                    "name": "Edward Z. Yang",
+                    "email": "admin@htmlpurifier.org",
+                    "homepage": "http://ezyang.com"
+                }
+            ],
+            "description": "Standards compliant HTML filter written in PHP",
+            "homepage": "http://htmlpurifier.org/",
+            "keywords": [
+                "html"
+            ],
+            "time": "2018-02-23 01:58:20"
+        },
+        {
             "name": "olcs/OlcsCommon",
-            "version": "dev-release/4.202",
+            "version": "dev-release/4.203",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-common.git",
-                "reference": "1421c00522a0980ba53b5fcc76e713c3dfff0f29"
+                "reference": "dd0bd1d3ea1e039b7d377e612bb0efa9a17f0d4d"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -1036,13 +1083,12 @@
                 "mikey179/vfsstream": "~1.4.0",
                 "mockery/mockery": "^1.2",
                 "olcs/olcs-devtools": "dev-master",
-                "olcs/olcs-logging": "dev-release/4.202",
+                "olcs/olcs-logging": "dev-release/4.203",
                 "olcs/olcs-testhelpers": "dev-develop",
-                "olcs/olcs-transfer": "dev-release/4.202",
-                "olcs/olcs-utils": "dev-release/4.202",
+                "olcs/olcs-transfer": "dev-release/4.203",
+                "olcs/olcs-utils": "dev-release/4.203",
                 "phpstan/phpstan-mockery": "^0.10.2",
-                "phpstan/phpstan-shim": "^0.10.5",
-                "soflomo/purifier": "~0.1.0"
+                "phpstan/phpstan-shim": "^0.10.5"
             },
             "type": "library",
             "autoload": {
@@ -1074,20 +1120,20 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2019-03-02 21:07:39"
+            "time": "2019-03-16 16:12:51"
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "dev-release/4.202",
+            "version": "dev-release/4.203",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-auth.git",
-                "reference": "8b288fa76d7c5d60b05e98ca6ec3d3525e2868ee"
+                "reference": "c0c99b8461afcc797997674ec808d207c968732e"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
-                "olcs/olcs-transfer": "dev-release/4.202",
-                "olcs/olcscommon": "dev-release/4.202",
+                "olcs/olcs-transfer": "dev-release/4.203",
+                "olcs/olcscommon": "dev-release/4.203",
                 "php": ">=5.4",
                 "zendframework/zendframework": "~2.4.0"
             },
@@ -1125,15 +1171,15 @@
                 ]
             },
             "description": "OLCS Authentication",
-            "time": "2019-03-02 19:45:42"
+            "time": "2019-03-16 14:46:56"
         },
         {
             "name": "olcs/olcs-logging",
-            "version": "dev-release/4.202",
+            "version": "dev-release/4.203",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-logging.git",
-                "reference": "7e92dc444883a73e5e3dd553ac0ed3e79fad02c4"
+                "reference": "abf8406ec9ccff072e1632b45f9d56afe0d18cd3"
             },
             "require": {
                 "php": ">=5.4",
@@ -1180,18 +1226,19 @@
                 ]
             },
             "description": "Logging Module for Olcs",
-            "time": "2019-03-02 19:44:42"
+            "time": "2019-03-16 14:45:53"
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "dev-release/4.202",
+            "version": "dev-release/4.203",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-transfer.git",
-                "reference": "710abb8fdac285704ce7bbdf72a00b1f7a6715dd"
+                "reference": "af4919b8df1b1cc5ffa649fdd5f6af84974c66ab"
             },
             "require": {
                 "php": ">=5.4",
+                "soflomo/purifier": "~0.1.0",
                 "zendframework/zendframework": "~2.4.0"
             },
             "require-dev": {
@@ -1229,15 +1276,15 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2019-03-02 19:46:44"
+            "time": "2019-03-16 14:47:56"
         },
         {
             "name": "olcs/olcs-utils",
-            "version": "dev-release/4.202",
+            "version": "dev-release/4.203",
             "source": {
                 "type": "git",
                 "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-utils.git",
-                "reference": "e03f0fd2dd2fbdd017e713e8c9e0f3bd2a6b1717"
+                "reference": "7920cffa0f6482ca15c6d457ccb6c87dc588cd81"
             },
             "require": {
                 "php": ">=5.4",
@@ -1247,7 +1294,7 @@
                 "johnkary/phpunit-speedtrap": "^3.0",
                 "mockery/mockery": "^1.2.0",
                 "olcs/olcs-devtools": "dev-master",
-                "olcs/olcs-logging": "dev-release/4.202",
+                "olcs/olcs-logging": "dev-release/4.203",
                 "phpstan/phpstan-mockery": "^0.10.2",
                 "phpstan/phpstan-shim": "^0.10.5"
             },
@@ -1278,7 +1325,7 @@
                 ]
             },
             "description": "OLCS Utils",
-            "time": "2019-03-02 19:47:34"
+            "time": "2019-03-16 14:48:45"
         },
         {
             "name": "psr/log",
@@ -1326,6 +1373,59 @@
                 "psr-3"
             ],
             "time": "2018-11-20 15:27:04"
+        },
+        {
+            "name": "soflomo/purifier",
+            "version": "v0.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/juriansluiman/Soflomo-Purifier.git",
+                "reference": "1f2d85a1b67bdb75bd86eb7a490e1c12280972b9"
+            },
+            "dist": {
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/soflomo-purifier-1f2d85a1b67bdb75bd86eb7a490e1c12280972b9-zip-b8842f.tar",
+                "reference": "1f2d85a1b67bdb75bd86eb7a490e1c12280972b9",
+                "shasum": "ea7937f729e2a464e602c36c580525f9855b395a"
+            },
+            "require": {
+                "ezyang/htmlpurifier": ">=4.5.0",
+                "php": ">=5.3.3.",
+                "zendframework/zendframework": "2.*"
+            },
+            "bin": [
+                "bin/purifier-generate-standalone"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Soflomo\\Purifier": "src/"
+                },
+                "classmap": [
+                    "./Module.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Jurian Sluiman",
+                    "email": "jurian@soflomo.com",
+                    "homepage": "http://soflomo.com"
+                }
+            ],
+            "description": "HTML Purifier as filter and view helper for Zend Framework 2 ",
+            "homepage": "https://github.com/Soflomo/Purifier",
+            "keywords": [
+                "Purifier",
+                "filter",
+                "html",
+                "purify",
+                "zf2"
+            ],
+            "time": "2013-04-23 10:33:41"
         },
         {
             "name": "symfony/console",
@@ -1392,17 +1492,17 @@
         },
         {
             "name": "symfony/debug",
-            "version": "v3.4.22",
+            "version": "v3.4.23",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "667a26c4dd6bc75c67f06bc9bcd015bdecc7cbb8"
+                "reference": "8d8a9e877b3fcdc50ddecf8dcea146059753f782"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/symfony-debug-667a26c4dd6bc75c67f06bc9bcd015bdecc7cbb8-zip-fb44dc.tar",
-                "reference": "667a26c4dd6bc75c67f06bc9bcd015bdecc7cbb8",
-                "shasum": "1c47471f9f7dbf9bb5acdf8b9c95a68f922d26c6"
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/symfony-debug-8d8a9e877b3fcdc50ddecf8dcea146059753f782-zip-4a532f.tar",
+                "reference": "8d8a9e877b3fcdc50ddecf8dcea146059753f782",
+                "shasum": "c55293a9f3d0a54021dd901e2289db737fb5a147"
             },
             "require": {
                 "php": "^5.5.9|>=7.0.8",
@@ -1444,7 +1544,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2019-01-25 10:19:25"
+            "time": "2019-02-24 15:45:11"
         },
         {
             "name": "symfony/filesystem",
@@ -3855,17 +3955,17 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v4.2.3",
+            "version": "v4.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
-                "reference": "ef71816cbb264988bb57fe6a73f610888b9aa70c"
+                "reference": "267b7002c1b70ea80db0833c3afe05f0fbde580a"
             },
             "dist": {
                 "type": "tar",
-                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/symfony-finder-ef71816cbb264988bb57fe6a73f610888b9aa70c-zip-4d4c2f.tar",
-                "reference": "ef71816cbb264988bb57fe6a73f610888b9aa70c",
-                "shasum": "1f2bc45df8d08a447147aacf7a5c1b591286812a"
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/symfony-finder-267b7002c1b70ea80db0833c3afe05f0fbde580a-zip-ff8a33.tar",
+                "reference": "267b7002c1b70ea80db0833c3afe05f0fbde580a",
+                "shasum": "bfac7e2d972dc6f5c0ec56e72408234660e4cd57"
             },
             "require": {
                 "php": "^7.1.3"
@@ -3900,7 +4000,7 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-            "time": "2019-01-16 20:35:37"
+            "time": "2019-02-23 15:42:05"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -3947,7 +4047,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "BackEndTea@gmail.com"
+                    "email": "backendtea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",

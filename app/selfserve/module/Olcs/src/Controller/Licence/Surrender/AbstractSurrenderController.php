@@ -123,6 +123,6 @@ abstract class AbstractSurrenderController extends AbstractSelfserveController i
 
     protected function isInternationalLicence(): bool
     {
-        return $this->data['surrender']['licence']['licenceType']['id'] === RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL;
+        return $this->data['surrender']['isInternationalLicence'];
     }
 }
