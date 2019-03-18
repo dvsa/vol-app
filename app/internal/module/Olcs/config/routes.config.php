@@ -909,7 +909,7 @@ $routes = [
                     'route' => 'permits/:permitid/:permitTypeId/irhp-permits[/:action][/:irhpPermitId][/]',
                     'constraints' => [
                         'permitid' => '[0-9]+',
-                        'action' => 'requestReplacement',
+                        'action' => 'requestReplacement|terminatePermit',
                         'irhpPermitId' => '[0-9]+',
                         'permitTypeId' => '[0-9]+',
                     ],

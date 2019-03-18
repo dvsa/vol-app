@@ -32,9 +32,9 @@ class SurrenderController extends AbstractInternalController implements
     use GenericRenderView, LicenceControllerTrait;
 
     protected $toggleConfig = [
-            'default' => [
-                FeatureToggle::INTERNAL_SURRENDER
-            ],
+        'default' => [
+            FeatureToggle::INTERNAL_SURRENDER
+        ],
     ];
 
     /**
@@ -74,6 +74,11 @@ class SurrenderController extends AbstractInternalController implements
      */
     protected $licence;
 
+    /**
+     * @var array
+     */
+    private $surrender;
+
 
     /**
      * @param MvcEvent $e
@@ -84,7 +89,8 @@ class SurrenderController extends AbstractInternalController implements
     public function onDispatch(MvcEvent $e)
     {
         $this->licenceId = (int)$this->params('licence');
-        $this->licence = $this->getLicence($this->licenceId);
+        $this->surrender = $this->getSurrender($this->licenceId);
+        $this->licence = $this->surrender['licence'];
         $this->licenceType = $this->licence['goodsOrPsv']['id'];
         return parent::onDispatch($e);
     }
@@ -98,7 +104,8 @@ class SurrenderController extends AbstractInternalController implements
     {
         $this->setupData();
         $view = $this->getView();
-        $this->placeholder()->setPlaceholder('openItems', $this->counts['openCases'] + $this->counts['busRegistrations']);
+        $this->placeholder()->setPlaceholder('openItems',
+            $this->counts['openCases'] + $this->counts['busRegistrations']);
         return $view;
     }
 
@@ -167,6 +174,10 @@ class SurrenderController extends AbstractInternalController implements
         }
         if ($this->licenceType === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
             $this->form->get('checks')->remove('busRegistrations');
+        }
+
+        if ($this->surrender['signatureType']['id'] === RefData::SIGNATURE_TYPE_PHYSICAL_SIGNATURE) {
+            $this->form->get('checks')->get('digitalSignature')->setLabel('Physical signature has been checked');
         }
     }
 
@@ -266,5 +277,18 @@ class SurrenderController extends AbstractInternalController implements
 
         $response = $this->handleCommand($command);
         return $response->isOk();
+    }
+
+    private function getSurrender(int $licenceId)
+    {
+        $response = $this->handleQuery(ByLicence::create([
+            'id' => $licenceId
+        ]));
+
+        if (!$response->isOk()) {
+            throw new \RuntimeException('Failed to get Surrender data');
+        }
+
+        return $response->getResult();
     }
 }

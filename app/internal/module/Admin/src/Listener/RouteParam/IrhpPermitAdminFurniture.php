@@ -37,6 +37,11 @@ class IrhpPermitAdminFurniture implements
         CommandSenderAwareTrait;
 
     /**
+     * @var Navigation
+     */
+    protected $navigationService;
+
+    /**
      * Create service
      *
      * @param ServiceLocatorInterface $serviceLocator
@@ -47,7 +52,26 @@ class IrhpPermitAdminFurniture implements
         $this->setQuerySender($serviceLocator->get('QuerySender'));
         $this->setCommandSender($serviceLocator->get('CommandSender'));
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
+        $this->setNavigationService($serviceLocator->get('Navigation'));
 
+        return $this;
+    }
+
+    /**
+     * @return Navigation
+     */
+    public function getNavigationService()
+    {
+        return $this->navigationService;
+    }
+
+    /**
+     * @param Navigation $navigationService
+     * @return $this
+     */
+    public function setNavigationService(Navigation $navigationService)
+    {
+        $this->navigationService = $navigationService;
         return $this;
     }
 
@@ -80,9 +104,17 @@ class IrhpPermitAdminFurniture implements
         $permitStock = $this->getIrhpPermitStock($id);
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
-
         $placeholder->getContainer('pageTitle')->set('Permits');
         $placeholder->getContainer('pageSubtitle')->set($this->setSubtitle($permitStock));
+
+        if ($permitStock['irhpPermitType']['id'] === RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID) {
+            $this->getNavigationService()->findOneBy('id', 'admin-dashboard/admin-permits/jurisdiction')
+                ->setVisible(false);
+            $this->getNavigationService()->findOneBy('id', 'admin-dashboard/admin-permits/sectors')
+                ->setVisible(false);
+            $this->getNavigationService()->findOneBy('id', 'admin-dashboard/admin-permits/scoring')
+                ->setVisible(false);
+        }
     }
 
     /**

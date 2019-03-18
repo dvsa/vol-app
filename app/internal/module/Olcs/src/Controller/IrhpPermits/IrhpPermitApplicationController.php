@@ -279,6 +279,7 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
                     'licence' => $this->params()->fromRoute('licence'),
                     'irhpApplicationStatuses' => [
                         RefData::PERMIT_APP_STATUS_VALID,
+                        RefData::PERMIT_APP_STATUS_EXPIRED,
                     ],
                     'sort' => 'applicationRef',
                     'order' => 'ASC',
