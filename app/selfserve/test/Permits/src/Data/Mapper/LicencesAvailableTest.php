@@ -182,7 +182,6 @@ class LicencesAvailableTest extends TestCase
                             ]
                         ]
                     ],
-                    'warning' => LicencesAvailable::ECMT_PREVIOUSLY_APPLIED_MESSAGE,
                 ],
                 'expectedValueOptions' => [
                     7 => [
