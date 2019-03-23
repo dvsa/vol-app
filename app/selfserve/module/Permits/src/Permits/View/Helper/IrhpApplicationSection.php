@@ -56,6 +56,12 @@ class IrhpApplicationSection extends AbstractHelper
             self::ROUTE_CHECK_ANSWERS => 'checkedAnswers',
             self::ROUTE_DECLARATION => 'declaration',
         ],
+        RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID => [
+            self::ROUTE_LICENCE => 'licence',
+            self::ROUTE_NO_OF_PERMITS => 'permitsRequired',
+            self::ROUTE_CHECK_ANSWERS => 'checkedAnswers',
+            self::ROUTE_DECLARATION => 'declaration',
+        ],
     ];
 
     /**
