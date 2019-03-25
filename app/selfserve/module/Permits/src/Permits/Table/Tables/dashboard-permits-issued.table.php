@@ -16,7 +16,7 @@ return array(
         ),
         array(
             'title' => 'dashboard-table-permit-application-num',
-            'name' => 'permitsRequired',
+            'name' => 'validPermitCount',
             'formatter' => 'NullableNumber'
         ),
         array(
