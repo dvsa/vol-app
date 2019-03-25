@@ -13,7 +13,7 @@ return [
         ],
         [
             'title' => 'dashboard-table-permit-application-num',
-            'name' => 'permitsRequired',
+            'name' => 'validPermitCount',
         ],
         [
             'title' => 'dashboard-table-permit-application-type',
