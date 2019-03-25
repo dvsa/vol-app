@@ -2,6 +2,7 @@
 
 namespace Permits\View\Helper;
 
+use Common\RefData;
 use Zend\View\Helper\AbstractHelper;
 use Zend\View\Model\ViewModel;
 
@@ -18,6 +19,7 @@ class IrhpApplicationSection extends AbstractHelper
     const ROUTE_APPLICATION_OVERVIEW = 'permits/application';
     const ROUTE_LICENCE = 'permits/application/licence';
     const ROUTE_LICENCE_CONFIRM_CHANGE = 'permits/application/licence/change';
+    const ROUTE_EMISSIONS = 'permits/application/emissions';
     const ROUTE_COUNTRIES = 'permits/application/countries';
     const ROUTE_NO_OF_PERMITS = 'permits/application/no-of-permits';
     const ROUTE_CHECK_ANSWERS = 'permits/application/check-answers';
@@ -40,11 +42,26 @@ class IrhpApplicationSection extends AbstractHelper
      * list of overview routes and the field denoting completion status
      */
     const ROUTE_ORDER = [
-        self::ROUTE_LICENCE => 'licence',
-        self::ROUTE_COUNTRIES => 'countries',
-        self::ROUTE_NO_OF_PERMITS => 'permitsRequired',
-        self::ROUTE_CHECK_ANSWERS => 'checkedAnswers',
-        self::ROUTE_DECLARATION => 'declaration',
+        RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID => [
+            self::ROUTE_LICENCE => 'licence',
+            self::ROUTE_EMISSIONS => 'emissions',
+            self::ROUTE_NO_OF_PERMITS => 'permitsRequired',
+            self::ROUTE_CHECK_ANSWERS => 'checkedAnswers',
+            self::ROUTE_DECLARATION => 'declaration',
+        ],
+        RefData::IRHP_BILATERAL_PERMIT_TYPE_ID => [
+            self::ROUTE_LICENCE => 'licence',
+            self::ROUTE_COUNTRIES => 'countries',
+            self::ROUTE_NO_OF_PERMITS => 'permitsRequired',
+            self::ROUTE_CHECK_ANSWERS => 'checkedAnswers',
+            self::ROUTE_DECLARATION => 'declaration',
+        ],
+        RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID => [
+            self::ROUTE_LICENCE => 'licence',
+            self::ROUTE_NO_OF_PERMITS => 'permitsRequired',
+            self::ROUTE_CHECK_ANSWERS => 'checkedAnswers',
+            self::ROUTE_DECLARATION => 'declaration',
+        ],
     ];
 
     /**
@@ -84,10 +101,16 @@ class IrhpApplicationSection extends AbstractHelper
      */
     public function __invoke(array $application): array
     {
+        if (!isset($application['irhpPermitType']['id'])
+            || !isset(self::ROUTE_ORDER[$application['irhpPermitType']['id']])
+        ) {
+            return [];
+        }
+
         $sections = [];
         $appId = $application['id'];
 
-        foreach (self::ROUTE_ORDER as $route => $field) {
+        foreach (self::ROUTE_ORDER[$application['irhpPermitType']['id']] as $route => $field) {
             $sections[] = $this->createSection($route, $application['sectionCompletion'][$field], $appId);
         }
 
