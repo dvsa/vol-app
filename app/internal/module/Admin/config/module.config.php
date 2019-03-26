@@ -102,6 +102,21 @@ return [
                             ]
                         ],
                     ],
+                    'document-templates' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' =>
+                                'document-templates[/:action][/:id][/]',
+                            'constraints' => [
+                                'action' => '(add|edit|delete)',
+                                'id' => '[0-9\,]+',
+                            ],
+                            'defaults' => [
+                                'controller' => Admin\Controller\DocumentTemplateController::class,
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
                     'admin-scanning' => [
                         'type' => 'segment',
                         'options' => [
@@ -770,7 +785,7 @@ return [
                                 'id' => '[0-9\,]+',
                             ],
                             'defaults' => [
-                                'controller' => Admin\Controller\TemplateController::class,
+                                'controller' => Admin\Controller\DocumentTemplateController::class,
                                 'action' => 'index',
                             ]
                         ],
@@ -852,6 +867,7 @@ return [
             Admin\Controller\IrhpPermitPrintController::class =>
                 Admin\Controller\IrhpPermitPrintController::class,
             Admin\Controller\ReportUploadController::class => Admin\Controller\ReportUploadController::class,
+            Admin\Controller\DocumentTemplateController::class => Admin\Controller\DocumentTemplateController::class,
             Admin\Controller\TemplateController::class => Admin\Controller\TemplateController::class,
         ],
     ],
