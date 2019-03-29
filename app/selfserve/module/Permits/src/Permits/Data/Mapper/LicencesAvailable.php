@@ -60,6 +60,11 @@ class LicencesAvailable
                 }
             }
 
+            if ($irhpPermitTypeID === RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID &&
+                !$option['canMakeMultilateralApplication']) {
+                continue;
+            }
+
             $valueOptions[$option['id']] = [
                 'value' => $option['id'],
                 'label' => $option['licNo'],

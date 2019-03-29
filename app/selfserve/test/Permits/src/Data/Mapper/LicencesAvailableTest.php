@@ -77,6 +77,7 @@ class LicencesAvailableTest extends TestCase
                                     'restricted' => false,
                                     'canMakeEcmtApplication' => true,
                                     'canMakeBilateralApplication' => false,
+                                    'canMakeMultilateralApplication' => true,
                                 ],
                                 1 => [
                                     'id' => 70,
@@ -95,6 +96,7 @@ class LicencesAvailableTest extends TestCase
                                     'restricted' => false,
                                     'canMakeEcmtApplication' => true,
                                     'canMakeBilateralApplication' => false,
+                                    'canMakeMultilateralApplication' => true,
                                 ],
                                 2 => [
                                     'id' => 703,
@@ -113,6 +115,7 @@ class LicencesAvailableTest extends TestCase
                                     'restricted' => false,
                                     'canMakeEcmtApplication' => false,
                                     'canMakeBilateralApplication' => false,
+                                    'canMakeMultilateralApplication' => true,
                                 ]
                             ]
                         ]
@@ -142,6 +145,7 @@ class LicencesAvailableTest extends TestCase
                                     'restricted' => false,
                                     'canMakeEcmtApplication' => true,
                                     'canMakeBilateralApplication' => false,
+                                    'canMakeMultilateralApplication' => true,
                                 ],
                                 1 => [
                                     'id' => 70,
@@ -160,6 +164,7 @@ class LicencesAvailableTest extends TestCase
                                     'restricted' => false,
                                     'canMakeEcmtApplication' => true,
                                     'canMakeBilateralApplication' => false,
+                                    'canMakeMultilateralApplication' => true,
                                 ],
                                 2 => [
                                     'id' => 703,
@@ -178,6 +183,7 @@ class LicencesAvailableTest extends TestCase
                                     'restricted' => false,
                                     'canMakeEcmtApplication' => false,
                                     'canMakeBilateralApplication' => false,
+                                    'canMakeMultilateralApplication' => true,
                                 ]
                             ]
                         ]
@@ -203,6 +209,117 @@ class LicencesAvailableTest extends TestCase
                         'selected' => false,
                     ]
                 ],
+            ],
+            'multilateral permits' => [
+                'data' => [
+                    'irhpPermitType' => [
+                        'id' => RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID,
+                    ],
+                    'licencesAvailable' => [
+                        'eligibleLicences' => [
+                            'result' => [
+                                0 => [
+                                    'id' => 7,
+                                    'licNo' => 'OB1234567',
+                                    'trafficArea' => 'North East of England',
+                                    'totAuthVehicles' => 12,
+                                    'licenceType' => [
+                                        'description' => 'Standard International',
+                                        'displayOrder' => null,
+                                        'id' => 'ltyp_si',
+                                        'olbsKey' => 'SI',
+                                        'parent' => null,
+                                        'refDataCategoryId' => 'lic_type',
+                                        'version' => 1,
+                                    ],
+                                    'restricted' => false,
+                                    'canMakeEcmtApplication' => true,
+                                    'canMakeBilateralApplication' => true,
+                                    'canMakeMultilateralApplication' => true,
+                                ],
+                                1 => [
+                                    'id' => 70,
+                                    'licNo' => 'OG7654321',
+                                    'trafficArea' => 'Wales',
+                                    'totAuthVehicles' => 12,
+                                    'licenceType' => [
+                                        'description' => 'Standard International',
+                                        'displayOrder' => null,
+                                        'id' => 'ltyp_si',
+                                        'olbsKey' => 'SI',
+                                        'parent' => null,
+                                        'refDataCategoryId' => 'lic_type',
+                                        'version' => 1,
+                                    ],
+                                    'restricted' => false,
+                                    'canMakeEcmtApplication' => true,
+                                    'canMakeBilateralApplication' => true,
+                                    'canMakeMultilateralApplication' => false,
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                'expected' => [
+                    'irhpPermitType' => [
+                        'id' => RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID,
+                    ],
+                    'licencesAvailable' => [
+                        'eligibleLicences' => [
+                            'result' => [
+                                0 => [
+                                    'id' => 7,
+                                    'licNo' => 'OB1234567',
+                                    'trafficArea' => 'North East of England',
+                                    'totAuthVehicles' => 12,
+                                    'licenceType' => [
+                                        'description' => 'Standard International',
+                                        'displayOrder' => null,
+                                        'id' => 'ltyp_si',
+                                        'olbsKey' => 'SI',
+                                        'parent' => null,
+                                        'refDataCategoryId' => 'lic_type',
+                                        'version' => 1,
+                                    ],
+                                    'restricted' => false,
+                                    'canMakeEcmtApplication' => true,
+                                    'canMakeBilateralApplication' => true,
+                                    'canMakeMultilateralApplication' => true,
+                                ],
+                                1 => [
+                                    'id' => 70,
+                                    'licNo' => 'OG7654321',
+                                    'trafficArea' => 'Wales',
+                                    'totAuthVehicles' => 12,
+                                    'licenceType' => [
+                                        'description' => 'Standard International',
+                                        'displayOrder' => null,
+                                        'id' => 'ltyp_si',
+                                        'olbsKey' => 'SI',
+                                        'parent' => null,
+                                        'refDataCategoryId' => 'lic_type',
+                                        'version' => 1,
+                                    ],
+                                    'restricted' => false,
+                                    'canMakeEcmtApplication' => true,
+                                    'canMakeBilateralApplication' => true,
+                                    'canMakeMultilateralApplication' => false,
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                'expectedValueOptions' => [
+                    7 => [
+                        'value' => 7,
+                        'label' => 'OB1234567',
+                        'label_attributes' => [
+                            'class' => 'govuk-label govuk-radios__label govuk-label--s',
+                        ],
+                        'hint' => 'Standard International (North East of England)',
+                        'selected' => false,
+                    ]
+                ]
             ]
         ];
     }
