@@ -65,11 +65,6 @@ class LicencesAvailable
                 continue;
             }
 
-            if ($irhpPermitTypeID === RefData::IRHP_BILATERAL_PERMIT_TYPE_ID &&
-                !$option['canMakeBilateralApplication']) {
-                continue;
-            }
-
             $valueOptions[$option['id']] = [
                 'value' => $option['id'],
                 'label' => $option['licNo'],

@@ -429,6 +429,15 @@ class LicencesAvailableTest extends TestCase
                         ],
                         'hint' => 'Standard International (North East of England)',
                         'selected' => false,
+                    ],
+                    70 => [
+                        'value' => 70,
+                        'label' => 'OG7654321',
+                        'label_attributes' => [
+                            'class' => 'govuk-label govuk-radios__label govuk-label--s',
+                        ],
+                        'hint' => 'Standard International (Wales)',
+                        'selected' => false,
                     ]
                 ]
             ]
