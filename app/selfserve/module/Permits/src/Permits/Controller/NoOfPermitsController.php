@@ -55,4 +55,15 @@ class NoOfPermitsController extends AbstractSelfserveController implements Toggl
             'saveAndReturnStep' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
         ],
     ];
+
+    public function handlePost()
+    {
+        if (isset($this->postParams['Submit']['SelectOtherCountriesButton'])) {
+            return $this->redirect()->toRoute(IrhpApplicationSection::ROUTE_COUNTRIES, [], [], true);
+        } elseif (isset($this->postParams['Submit']['CancelButton'])) {
+            return $this->redirect()->toRoute(IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW, [], [], true);
+        }
+
+        parent::handlePost();
+    }
 }
