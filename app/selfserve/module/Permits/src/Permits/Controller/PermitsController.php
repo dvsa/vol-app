@@ -127,17 +127,25 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
     {
         $keys = [];
 
+        $typesToGroupByLicence = [
+            RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
+            RefData::IRHP_BILATERAL_PERMIT_TYPE_ID,
+            RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID,
+        ];
+
         foreach ($data as $key => $item) {
-            if ((int)$item['typeId'] === RefData::IRHP_BILATERAL_PERMIT_TYPE_ID) {
+            if (in_array($item['typeId'], $typesToGroupByLicence)) {
                 // group applications into one row per licence
-                if (isset($keys[$item['licenceId']])) {
+                if (isset($keys[$item['licenceId']][$item['typeId']])) {
                     // add number of permits required to the existing row
-                    $data[$keys[$item['licenceId']]]['permitsRequired'] += $item['permitsRequired'];
+                    $existingKey = $keys[$item['licenceId']][$item['typeId']];
+
+                    $data[$existingKey]['validPermitCount'] += $item['validPermitCount'];
 
                     // remove this line altogether
                     unset($data[$key]);
                 } else {
-                    $keys[$item['licenceId']] = $key;
+                    $keys[$item['licenceId']][$item['typeId']] = $key;
                 }
             }
         }
