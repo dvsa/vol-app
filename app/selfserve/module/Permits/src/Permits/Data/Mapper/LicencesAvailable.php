@@ -33,7 +33,7 @@ class LicencesAvailable
         }
 
         // A variable to add future types if required
-        $displayActive = $irhpPermitTypeID === RefData::IRHP_BILATERAL_PERMIT_TYPE_ID;
+        $displayActive = in_array($irhpPermitTypeID, [ RefData::IRHP_BILATERAL_PERMIT_TYPE_ID, RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID ]);
 
         $valueOptions = [];
 
@@ -58,11 +58,6 @@ class LicencesAvailable
                     $data['warning'] = 'permits.irhp.bilateral.already-applied';
                     $selected = true;
                 }
-            }
-
-            if ($irhpPermitTypeID === RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID &&
-                !$option['canMakeMultilateralApplication']) {
-                continue;
             }
 
             $valueOptions[$option['id']] = [

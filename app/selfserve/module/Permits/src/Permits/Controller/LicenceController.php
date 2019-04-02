@@ -121,7 +121,7 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
             $irhpPermitTypeID = $this->data['irhpPermitType']['id'];
         }
 
-        if ($irhpPermitTypeID === RefData::IRHP_BILATERAL_PERMIT_TYPE_ID) {
+        if (in_array($irhpPermitTypeID, [ RefData::IRHP_BILATERAL_PERMIT_TYPE_ID, RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID ])) {
             $activeApplication = $this->handleResponse($this->handleQuery(ActiveApplication::create(
                 [
                     'licence' => $params['licence'],
