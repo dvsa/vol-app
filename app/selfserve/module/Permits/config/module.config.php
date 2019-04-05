@@ -75,13 +75,14 @@ return [
               'valid' => [
                   'type'    => 'segment',
                   'options' => [
-                      'route'    => '/valid/:licence[/]',
+                      'route'    => '/valid/:licence/type/:type[/]',
                       'defaults' => [
                           'controller'    => IrhpValidPermitsController::class,
                           'action'        => 'generic',
                       ],
                       'constraints' => [
                           'licence' => '[0-9]+',
+                          'type' => '[0-9]+',
                       ],
                   ],
                   'may_terminate' => false,

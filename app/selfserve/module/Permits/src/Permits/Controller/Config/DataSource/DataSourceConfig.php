@@ -165,6 +165,8 @@ class DataSourceConfig
     ];
 
     const IRHP_VALID = [
+        Licence::class => [],
+        IrhpPermitType::class => [],
         ValidIrhpPermitsDataSource::class => [],
     ];
 

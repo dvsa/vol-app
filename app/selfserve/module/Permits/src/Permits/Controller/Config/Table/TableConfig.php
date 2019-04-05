@@ -22,9 +22,15 @@ class TableConfig
             'dataSource' => ValidEcmtPermitsDataSource::DATA_KEY
         ]
     ];
-    const VALID_IRHP_OVERVIEW = [
-        'overview-irhp-permits' => [
-            'tableName' => 'overview-irhp-permits',
+    const VALID_IRHP_PERMITS = [
+        'valid-irhp-permits' => [
+            'tableName' => 'valid-irhp-permits',
+            'dataSource' => ValidIrhpPermitsDataSource::DATA_KEY
+        ]
+    ];
+    const VALID_IRHP_PERMITS_BILATERAL = [
+        'valid-irhp-permits' => [
+            'tableName' => 'valid-irhp-permits-bilateral',
             'dataSource' => ValidIrhpPermitsDataSource::DATA_KEY
         ]
     ];
