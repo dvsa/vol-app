@@ -39,6 +39,10 @@ class IrhpApplication implements MapperInterface
             $formData['bottomFields']['declaration'] = $data['declaration'];
         }
 
+        if (isset($data['irhpPermitType']['id'])) {
+            $formData['topFields']['irhpPermitType'] = $data['irhpPermitType']['id'];
+        }
+
         return $formData;
     }
 
@@ -68,7 +72,7 @@ class IrhpApplication implements MapperInterface
     }
 
     /**
-     * Map the list of open windows/stocks/countries into right format for NoOfPermits form generaion method
+     * Map the list of open windows/stocks/countries into right format for NoOfPermits form generation method
      *
      * @param array $irhpWindows
      * @param int $permitTypeId

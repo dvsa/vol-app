@@ -18,18 +18,6 @@ class Top extends \Olcs\Form\Model\Fieldset\Base
     public $id = null;
 
     /**
-     * @Form\Options({
-     *     "label": "<h4>Annual Bilateral Permit Application</h4>",
-     *     "label_options": {
-     *         "disable_html_escape": "true"
-     *     }
-     * })
-     *
-     * @Form\Type("\Common\Form\Elements\Types\Html")
-     */
-    public $title = null;
-
-    /**
      * @Form\Attributes({"id":"dateReceived"})
      * @Form\Options({
      *     "label": "Date received",
