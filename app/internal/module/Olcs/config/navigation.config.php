@@ -668,6 +668,36 @@ $nav = [
                                     ],
                                 ],
                                 [
+                                    'id' => 'licence_irhp_applications-document',
+                                    'label' => 'Docs & Attachments',
+                                    'route' => 'licence/irhp-application/application',
+                                    'use_route_match' => true,
+                                    'params' => [
+                                        'action' => 'documents',
+                                        'id' => null
+                                    ],
+                                ],
+                                [
+                                    'id' => 'licence_irhp_applications-processing',
+                                    'label' => 'Processing',
+                                    'route' => 'licence/irhp-application/application',
+                                    'use_route_match' => true,
+                                    'params' => [
+                                        'action' => 'processing',
+                                        'id' => null
+                                    ],
+                                ],
+                                [
+                                    'id' => 'licence_irhp_applications-fees',
+                                    'label' => 'Fees',
+                                    'route' => 'licence/irhp-application-fees',
+                                    'use_route_match' => true,
+                                    'params' => [
+                                        'action' => 'fees',
+                                        'id' => null
+                                    ],
+                                ],
+                                [
                                     'id' => 'licence_irhp_applications-cancel',
                                     'label' => 'Cancel',
                                     'visible' => 0,
