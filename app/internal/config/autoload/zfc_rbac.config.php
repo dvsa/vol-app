@@ -33,18 +33,19 @@ return [
             'create-translation-csv' => ['*'],
 
             // Admin Module Routes
-            'admin-dashboard/admin-financial-standing*' => [RefData::PERMISSION_INTERNAL_ADMIN],
-            'admin-dashboard/admin-public-holiday*' => [RefData::PERMISSION_INTERNAL_ADMIN],
+            'admin-dashboard/admin-financial-standing*' => [RefData::PERMISSION_SYSTEM_ADMIN],
+            'admin-dashboard/admin-public-holiday*' => [RefData::PERMISSION_SYSTEM_ADMIN],
             'admin-dashboard/admin-team-management*' => [RefData::PERMISSION_INTERNAL_ADMIN],
             'admin-dashboard/admin-partner-management*' => [RefData::PERMISSION_INTERNAL_ADMIN],
             'admin-dashboard/admin-printer-management*' => [ RefData::PERMISSION_INTERNAL_ADMIN],
             'admin-dashboard/admin-user-management*' => [RefData::PERMISSION_CAN_MANAGE_USER_INTERNAL],
-            'admin-dashboard/admin-system-parameters*' => [RefData::PERMISSION_INTERNAL_ADMIN],
-            'admin-dashboard/admin-data-retention*' => [RefData::PERMISSION_INTERNAL_ADMIN],
-            'admin-dashboard/admin-system-info-message*' => [RefData::PERMISSION_INTERNAL_ADMIN],
+            'admin-dashboard/admin-system-parameters*' => [RefData::PERMISSION_SYSTEM_ADMIN],
+            'admin-dashboard/admin-data-retention*' => [RefData::PERMISSION_SYSTEM_ADMIN],
+            'admin-dashboard/admin-system-info-message*' => [RefData::PERMISSION_SYSTEM_ADMIN],
             'admin-dashboard/task-allocation-rules*' => [RefData::PERMISSION_INTERNAL_ADMIN],
-            'admin-dashboard/admin-feature-toggle*' => [RefData::PERMISSION_INTERNAL_ADMIN],
-            'admin-dashboard/admin-permits*' => [RefData::PERMISSION_INTERNAL_ADMIN],
+            'admin-dashboard/admin-feature-toggle*' => [RefData::PERMISSION_SYSTEM_ADMIN],
+            'admin-dashboard/admin-permits*' => [RefData::PERMISSION_SYSTEM_ADMIN],
+            'admin-dashboard/admin-templates*' => [RefData::PERMISSION_SYSTEM_ADMIN],
 
             // All Internal users can see your account, to change their details, password etc
             'admin-dashboard/admin-your-account*' => [RefData::PERMISSION_INTERNAL_VIEW],
