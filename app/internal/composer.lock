@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ce7b25e0b21966d716d655c3acd802c7",
+    "content-hash": "db6b5986100f6452d2f097eeacfbf6c4",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1179,18 +1179,18 @@
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "4.203.1",
+            "version": "4.204.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-auth/4.203.1/olcs-olcs-auth-4.203.1.zip",
-                "reference": "49513a5ae06568c7961a4021dbc5ddd8c282267f",
-                "shasum": "49513a5ae06568c7961a4021dbc5ddd8c282267f"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-auth/4.204.0/olcs-olcs-auth-4.204.0.zip",
+                "reference": "dc46b6e82d9f107749e72d42def31104efb285ce",
+                "shasum": "dc46b6e82d9f107749e72d42def31104efb285ce"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
                 "elendev/nexus-composer-push": "^0.0.4",
+                "olcs/olcs-common": "^4.204",
                 "olcs/olcs-transfer": "^4.203",
-                "olcs/olcscommon": "^4.203",
                 "php": ">=5.4",
                 "zendframework/zendframework": "~2.4.0"
             },
@@ -1240,7 +1240,7 @@
                 ]
             },
             "description": "OLCS Authentication",
-            "time": "2019-04-09T08:58:07+00:00"
+            "time": "2019-04-10T11:14:18+00:00"
         },
         {
             "name": "olcs/olcs-common",
@@ -1504,79 +1504,6 @@
             },
             "description": "OLCS Utils",
             "time": "2019-04-08T15:08:43+00:00"
-        },
-        {
-            "name": "olcs/olcscommon",
-            "version": "4.203.5",
-            "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcscommon/4.203.5/olcs-olcscommon-4.203.5.zip",
-                "reference": "de1179346c56399cf8846036ee63dd46a1697b46",
-                "shasum": "de1179346c56399cf8846036ee63dd46a1697b46"
-            },
-            "require": {
-                "doctrine/annotations": "^1.2.3",
-                "doctrine/doctrine-orm-module": "~0.10.0",
-                "elendev/nexus-composer-push": "^0.0.4",
-                "php": ">=5.4",
-                "symfony/filesystem": "~3.0.0",
-                "zendframework/zendframework": "~2.4.0",
-                "zf-commons/zfc-rbac": "~2.5.0"
-            },
-            "require-dev": {
-                "johnkary/phpunit-speedtrap": "^3.0",
-                "mikey179/vfsstream": "~1.4.0",
-                "mockery/mockery": "^1.2",
-                "olcs/olcs-devtools": "^4.203",
-                "olcs/olcs-logging": "^4.203",
-                "olcs/olcs-testhelpers": "^4.203",
-                "olcs/olcs-transfer": "^4.203",
-                "olcs/olcs-utils": "^4.203",
-                "phpstan/phpstan-mockery": "^0.10.2",
-                "phpstan/phpstan-shim": "^0.10.5"
-            },
-            "type": "library",
-            "extra": {
-                "nexus-push": {
-                    "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/olcs-common",
-                    "ignore-dirs": [
-                        "test"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Common\\": "Common/src/"
-                },
-                "classmap": [
-                    "./Common/Module.php"
-                ]
-            },
-            "scripts": {
-                "ut": [
-                    "vendor/bin/phpunit -c test/phpunit.xml --stop-on-failure"
-                ],
-                "review": [
-                    "vendor/bin/review"
-                ],
-                "cs": [
-                    "vendor/bin/phpcs --severity=1 --standard=vendor/olcs/coding-standards/Profiles/DVSA/CS/ruleset.xml"
-                ],
-                "coverage": [
-                    "vendor/bin/phpunit -c test/phpunit.xml --coverage-html ./test/coverage/html"
-                ],
-                "sonar": [
-                    "vendor/bin/phpunit -c test/phpunit.xml --coverage-clover ./test/coverage/coverage-report.clover --log-junit ./test/coverage/log.junit"
-                ],
-                "update-syms": [
-                    "vendor/bin/composer-update-syms"
-                ],
-                "release": [
-                    "release"
-                ]
-            },
-            "description": "Common library for the OLCS Project",
-            "time": "2019-04-10T07:55:50+00:00"
         },
         {
             "name": "psr/http-message",

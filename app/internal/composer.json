@@ -22,7 +22,7 @@
         "zf-commons/zfc-rbac": "~2.5.0",
         "olcs/olcs-transfer": "^4.203",
         "olcs/olcs-utils": "^4.203",
-        "olcs/olcs-auth": "^4.203",
+        "olcs/olcs-auth": "^4.204",
         "soflomo/purifier": "~0.1.0",
         "olcs/olcs-logging": "^4.203",
         "elendev/nexus-composer-push": "^0.0.4",
