@@ -17,7 +17,7 @@ $config = array(
         'module_paths' => array(
             __DIR__ . '/../module',
             __DIR__ . '/../vendor',
-            __DIR__ . '/../vendor/olcs/OlcsCommon'
+            __DIR__ . '/../vendor/olcs/olcs-common'
         ),
         'config_glob_paths' => array(
             'config/autoload/{,*.}{global,local}.php'
