@@ -20,12 +20,12 @@
         "doctrine/annotations": "^1.2.3",
         "symfony/filesystem": "~3.0.0",
         "zf-commons/zfc-rbac": "~2.5.0",
-        "olcs/olcscommon": "^4.203",
         "olcs/olcs-transfer": "^4.203",
         "olcs/olcs-utils": "^4.203",
-        "olcs/olcs-auth": "^4.203",
+        "olcs/olcs-auth": "^4.204",
         "olcs/olcs-logging": "^4.203",
-        "elendev/nexus-composer-push": "^0.0.4"
+        "elendev/nexus-composer-push": "^0.0.4",
+        "olcs/olcs-common": "^4.204"
     },
     "require-dev": {
         "olcs/olcs-devtools": "^4.203",
@@ -39,10 +39,10 @@
     "autoload": {
         "classmap": [
             "module/Olcs/src",
-            "vendor/olcs/olcscommon/Common/src/Common"
+            "vendor/olcs/olcs-common/Common/src/Common"
         ],
         "psr-4": {
-            "Common\\": "vendor/olcs/OlcsCommon/Common/src/Common"
+            "Common\\": "vendor/olcs/olcs-common/Common/src/Common"
         }
     },
     "config": {
