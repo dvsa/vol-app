@@ -82,7 +82,6 @@ class Bootstrap
                         __NAMESPACE__ => __DIR__ . '/' . __NAMESPACE__,
                         'OlcsTest\\' => __DIR__ . '/Olcs/src',
                         'AdminTest\\' => __DIR__ . '/Admin/src',
-                        'CommonTest\\' => __DIR__ . '/../vendor/olcs/OlcsCommon/test/Common/src/Common',
                         'OlcsComponentTest\\' => __DIR__ . '/Component'
                     ],
                 ],
