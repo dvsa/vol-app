@@ -25,7 +25,7 @@ $config = array(
         'module_paths' => array(
             __DIR__ . '/../module',
             __DIR__ . '/../vendor',
-            __DIR__ . '/../vendor/olcs/OlcsCommon'
+            __DIR__ . '/../vendor/olcs/olcs-common'
         ),
 
         // An array of paths from which to glob configuration files after
