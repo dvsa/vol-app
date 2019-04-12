@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "db6b5986100f6452d2f097eeacfbf6c4",
+    "content-hash": "e2a0e124391454a055a7e5935f4be4ec",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -937,11 +937,11 @@
         },
         {
             "name": "elendev/nexus-composer-push",
-            "version": "v0.0.4",
+            "version": "v0.1.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/elendev/nexus-composer-push/v0.0.4/elendev-nexus-composer-push-v0.0.4.zip",
-                "reference": "c8ca3207e42078521a203410042e3938dc8da9f9",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/elendev/nexus-composer-push/v0.1.0/elendev-nexus-composer-push-v0.1.0.zip",
+                "reference": "4e60c26092fc7bccff94ccc9f86d2047890d26f4",
                 "shasum": ""
             },
             "require": {
@@ -952,6 +952,9 @@
                 "php": "^5.6 || ^7.0",
                 "symfony/filesystem": "^3.0|^4.0",
                 "symfony/finder": "^3.0|^4.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.14"
             },
             "type": "composer-plugin",
             "extra": {
@@ -964,12 +967,12 @@
             },
             "authors": [
                 {
-                    "name": "Jonas Renaudot",
+                    "name": "Elendev",
                     "email": "jonas.renaudot@gmail.com"
                 }
             ],
             "description": "Provide a Push command to composer to push to Nexus repositories",
-            "time": "2019-03-11T10:16:41+00:00"
+            "time": "2019-04-11T13:26:33+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -1179,25 +1182,25 @@
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "4.204.0",
+            "version": "4.205.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-auth/4.204.0/olcs-olcs-auth-4.204.0.zip",
-                "reference": "dc46b6e82d9f107749e72d42def31104efb285ce",
-                "shasum": "dc46b6e82d9f107749e72d42def31104efb285ce"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-auth/4.205.0/olcs-olcs-auth-4.205.0.zip",
+                "reference": "463aaf54546fdd3791d96a2822219feb00f9b477",
+                "shasum": "463aaf54546fdd3791d96a2822219feb00f9b477"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
-                "elendev/nexus-composer-push": "^0.0.4",
-                "olcs/olcs-common": "^4.204",
-                "olcs/olcs-transfer": "^4.203",
+                "elendev/nexus-composer-push": "^0.1",
+                "olcs/olcs-common": "^4.205",
+                "olcs/olcs-transfer": "^4.205",
                 "php": ">=5.4",
                 "zendframework/zendframework": "~2.4.0"
             },
             "require-dev": {
                 "johnkary/phpunit-speedtrap": "^3.0",
                 "mockery/mockery": "^1.2.0",
-                "olcs/olcs-devtools": "^4.203",
+                "olcs/olcs-devtools": "^4.205",
                 "phpstan/phpstan-mockery": "^0.10.2",
                 "phpstan/phpstan-shim": "^0.10.5"
             },
@@ -1205,8 +1208,8 @@
             "extra": {
                 "nexus-push": {
                     "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/olcs-auth",
-                    "ignore-dirs": [
-                        "test",
+                    "ignore": [
+                        "test/",
                         "composer.phar"
                     ]
                 }
@@ -1240,21 +1243,21 @@
                 ]
             },
             "description": "OLCS Authentication",
-            "time": "2019-04-10T11:14:18+00:00"
+            "time": "2019-04-12T16:34:49+00:00"
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.204.0",
+            "version": "4.205.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-common/4.204.0/olcs-olcs-common-4.204.0.zip",
-                "reference": "4aa4c6c0e1991bf3b092968670dd4c3e2bc5bb23",
-                "shasum": "4aa4c6c0e1991bf3b092968670dd4c3e2bc5bb23"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-common/4.205.0/olcs-olcs-common-4.205.0.zip",
+                "reference": "fb853defa9a2acb5655db3cdc5ae3c366e7df073",
+                "shasum": "fb853defa9a2acb5655db3cdc5ae3c366e7df073"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
                 "doctrine/doctrine-orm-module": "~0.10.0",
-                "elendev/nexus-composer-push": "^0.0.4",
+                "elendev/nexus-composer-push": "^0.1",
                 "php": ">=5.4",
                 "symfony/filesystem": "~3.0.0",
                 "zendframework/zendframework": "~2.4.0",
@@ -1264,18 +1267,23 @@
                 "johnkary/phpunit-speedtrap": "^3.0",
                 "mikey179/vfsstream": "~1.4.0",
                 "mockery/mockery": "^1.2",
-                "olcs/olcs-devtools": "^4.203",
-                "olcs/olcs-logging": "^4.203",
-                "olcs/olcs-testhelpers": "^4.203",
-                "olcs/olcs-transfer": "^4.203",
-                "olcs/olcs-utils": "^4.203",
+                "olcs/olcs-devtools": "^4.205",
+                "olcs/olcs-logging": "^4.205",
+                "olcs/olcs-testhelpers": "^4.205",
+                "olcs/olcs-transfer": "^4.205",
+                "olcs/olcs-utils": "^4.205",
                 "phpstan/phpstan-mockery": "^0.10.2",
                 "phpstan/phpstan-shim": "^0.10.5"
             },
             "type": "library",
             "extra": {
                 "nexus-push": {
-                    "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/olcs-common"
+                    "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/olcs-common",
+                    "ignore": [
+                        "composer.phar",
+                        "build.xml",
+                        "composer-update.sh"
+                    ]
                 }
             },
             "autoload": {
@@ -1310,19 +1318,19 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2019-04-10T09:53:28+00:00"
+            "time": "2019-04-12T16:30:36+00:00"
         },
         {
             "name": "olcs/olcs-logging",
-            "version": "4.203.2",
+            "version": "4.205.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-logging/4.203.2/olcs-olcs-logging-4.203.2.zip",
-                "reference": "4ef3308b41c656e20846ecf7bbd5aa805bc1ec2e",
-                "shasum": "4ef3308b41c656e20846ecf7bbd5aa805bc1ec2e"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-logging/4.205.0/olcs-olcs-logging-4.205.0.zip",
+                "reference": "721baa4c2be9c31e3072631ceca56cd128dcef92",
+                "shasum": "721baa4c2be9c31e3072631ceca56cd128dcef92"
             },
             "require": {
-                "elendev/nexus-composer-push": "^0.0.4",
+                "elendev/nexus-composer-push": "^0.1",
                 "php": ">=5.4",
                 "psr/log": "~1.0",
                 "zendframework/zend-console": "~2.4.0",
@@ -1336,7 +1344,7 @@
             "require-dev": {
                 "johnkary/phpunit-speedtrap": "^3.0",
                 "mockery/mockery": "^1.2.0",
-                "olcs/olcs-devtools": "^4.203",
+                "olcs/olcs-devtools": "^4.205",
                 "phpstan/phpstan-mockery": "^0.10.2",
                 "phpstan/phpstan-shim": "^0.10.5"
             },
@@ -1344,8 +1352,9 @@
             "extra": {
                 "nexus-push": {
                     "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/olcs-logging",
-                    "ignore-dirs": [
-                        "test"
+                    "ignore": [
+                        "test/",
+                        "sonar-project.properties"
                     ]
                 }
             },
@@ -1378,19 +1387,19 @@
                 ]
             },
             "description": "Logging Module for Olcs",
-            "time": "2019-04-08T15:04:22+00:00"
+            "time": "2019-04-12T16:04:23+00:00"
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "4.203.3",
+            "version": "4.205.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-transfer/4.203.3/olcs-olcs-transfer-4.203.3.zip",
-                "reference": "50e0efe611ae3119468b85a32c89d5143c61f453",
-                "shasum": "50e0efe611ae3119468b85a32c89d5143c61f453"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-transfer/4.205.0/olcs-olcs-transfer-4.205.0.zip",
+                "reference": "c5c1193c3e39b2aac4445ed32b698c41f997e877",
+                "shasum": "c5c1193c3e39b2aac4445ed32b698c41f997e877"
             },
             "require": {
-                "elendev/nexus-composer-push": "^0.0.4",
+                "elendev/nexus-composer-push": "^0.1",
                 "php": ">=5.4",
                 "soflomo/purifier": "~0.1.0",
                 "zendframework/zendframework": "~2.4.0"
@@ -1399,7 +1408,7 @@
                 "doctrine/annotations": "^1.2.3",
                 "johnkary/phpunit-speedtrap": "^3.0",
                 "mockery/mockery": "^1.2.0",
-                "olcs/olcs-devtools": "^4.203",
+                "olcs/olcs-devtools": "^4.205",
                 "phpstan/phpstan-mockery": "^0.10.2",
                 "phpstan/phpstan-shim": "^0.10.5"
             },
@@ -1407,8 +1416,10 @@
             "extra": {
                 "nexus-push": {
                     "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/olcs-transfer",
-                    "ignore-dirs": [
-                        "test"
+                    "ignore": [
+                        "test/",
+                        "sonar-project.properties",
+                        "build.xml"
                     ]
                 }
             },
@@ -1441,27 +1452,27 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2019-04-09T17:25:39+00:00"
+            "time": "2019-04-12T16:05:44+00:00"
         },
         {
             "name": "olcs/olcs-utils",
-            "version": "4.203.2",
+            "version": "4.205.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-utils/4.203.2/olcs-olcs-utils-4.203.2.zip",
-                "reference": "d88f5d680402a98f80fc3e08f3aaa87430aa3121",
-                "shasum": "d88f5d680402a98f80fc3e08f3aaa87430aa3121"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-utils/4.205.0/olcs-olcs-utils-4.205.0.zip",
+                "reference": "6f8a68e52f4b33771823d0048a134040f4c687c6",
+                "shasum": "6f8a68e52f4b33771823d0048a134040f4c687c6"
             },
             "require": {
-                "elendev/nexus-composer-push": "^0.0.4",
+                "elendev/nexus-composer-push": "^0.1",
                 "php": ">=5.4",
                 "zendframework/zendframework": "~2.4.0"
             },
             "require-dev": {
                 "johnkary/phpunit-speedtrap": "^3.0",
                 "mockery/mockery": "^1.2.0",
-                "olcs/olcs-devtools": "^4.203",
-                "olcs/olcs-logging": "^4.203",
+                "olcs/olcs-devtools": "^4.205",
+                "olcs/olcs-logging": "^4.205",
                 "phpstan/phpstan-mockery": "^0.10.2",
                 "phpstan/phpstan-shim": "^0.10.5"
             },
@@ -1469,8 +1480,9 @@
             "extra": {
                 "nexus-push": {
                     "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/olcs-utils",
-                    "ignore-dirs": [
-                        "test"
+                    "ignore": [
+                        "test/",
+                        "sonar-project.properties"
                     ]
                 }
             },
@@ -1503,7 +1515,7 @@
                 ]
             },
             "description": "OLCS Utils",
-            "time": "2019-04-08T15:08:43+00:00"
+            "time": "2019-04-12T16:21:24+00:00"
         },
         {
             "name": "psr/http-message",
@@ -2338,11 +2350,11 @@
         },
         {
             "name": "myclabs/deep-copy",
-            "version": "1.8.1",
+            "version": "1.9.1",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/myclabs/deep-copy/1.8.1/myclabs-deep-copy-1.8.1.zip",
-                "reference": "3e01bdad3e18354c3dce54466b7fbe33a9f9f7f8",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/myclabs/deep-copy/1.9.1/myclabs-deep-copy-1.9.1.zip",
+                "reference": "e6828efaba2c9b79f4499dae1d66ef8bfa7b2b72",
                 "shasum": ""
             },
             "require": {
@@ -2376,19 +2388,19 @@
                 "object",
                 "object graph"
             ],
-            "time": "2018-06-11T23:09:50+00:00"
+            "time": "2019-04-07T13:18:21+00:00"
         },
         {
             "name": "olcs/coding-standards",
-            "version": "4.203.1",
+            "version": "4.205.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/coding-standards/4.203.1/olcs-coding-standards-4.203.1.zip",
-                "reference": "730554da88c140b2aa4a0455de39c08eec7819bb",
-                "shasum": "730554da88c140b2aa4a0455de39c08eec7819bb"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/coding-standards/4.205.0/olcs-coding-standards-4.205.0.zip",
+                "reference": "bbde1459a0eb5d7c4bd735915ef4340f5739cee3",
+                "shasum": "bbde1459a0eb5d7c4bd735915ef4340f5739cee3"
             },
             "require": {
-                "elendev/nexus-composer-push": "^0.0.4"
+                "elendev/nexus-composer-push": "^0.1"
             },
             "type": "library",
             "extra": {
@@ -2402,20 +2414,20 @@
                 ]
             },
             "description": "OLCS CodeSniffer and MessDetector rule sets",
-            "time": "2019-04-08T15:01:18+00:00"
+            "time": "2019-04-12T15:31:03+00:00"
         },
         {
             "name": "olcs/olcs-devtools",
-            "version": "4.203.3",
+            "version": "4.205.1",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-devtools/4.203.3/olcs-olcs-devtools-4.203.3.zip",
-                "reference": "3cb4be4571992ba32c7e534fa869ea4cdaf2bc21",
-                "shasum": "3cb4be4571992ba32c7e534fa869ea4cdaf2bc21"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-devtools/4.205.1/olcs-olcs-devtools-4.205.1.zip",
+                "reference": "dd97e2670dd2cbad9d9158ef25af605c6ed55271",
+                "shasum": "dd97e2670dd2cbad9d9158ef25af605c6ed55271"
             },
             "require": {
-                "elendev/nexus-composer-push": "^0.0.4",
-                "olcs/coding-standards": "^4.203",
+                "elendev/nexus-composer-push": "^0.1",
+                "olcs/coding-standards": "^4.205",
                 "php": ">=5.4",
                 "phpmd/phpmd": "~2.2",
                 "phpunit/phpcov": "5.*",
@@ -2439,19 +2451,19 @@
                 }
             },
             "description": "Dev tools",
-            "time": "2019-04-08T15:03:31+00:00"
+            "time": "2019-04-12T15:35:43+00:00"
         },
         {
             "name": "olcs/olcs-testhelpers",
-            "version": "4.203.2",
+            "version": "4.205.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-testhelpers/4.203.2/olcs-olcs-testhelpers-4.203.2.zip",
-                "reference": "6c96703b409344bf28f5aff47aba8851857f3fc0",
-                "shasum": "6c96703b409344bf28f5aff47aba8851857f3fc0"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-testhelpers/4.205.0/olcs-olcs-testhelpers-4.205.0.zip",
+                "reference": "19da9fd726eaa38abda3c079301910a08a294910",
+                "shasum": "19da9fd726eaa38abda3c079301910a08a294910"
             },
             "require": {
-                "elendev/nexus-composer-push": "^0.0.4",
+                "elendev/nexus-composer-push": "^0.1",
                 "php": ">=5.4"
             },
             "require-dev": {
@@ -2471,7 +2483,7 @@
                 }
             },
             "description": "OLCS Test helpers",
-            "time": "2019-04-08T15:07:13+00:00"
+            "time": "2019-04-12T15:29:27+00:00"
         },
         {
             "name": "pdepend/pdepend",
@@ -3853,11 +3865,11 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.4.1",
+            "version": "3.4.2",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/squizlabs/php_codesniffer/3.4.1/squizlabs-php_codesniffer-3.4.1.zip",
-                "reference": "5b4333b4010625d29580eb4a41f1e53251be6baa",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/squizlabs/php_codesniffer/3.4.2/squizlabs-php_codesniffer-3.4.2.zip",
+                "reference": "b8a7362af1cc1aadb5bd36c3defc4dda2cf5f0a8",
                 "shasum": ""
             },
             "require": {
@@ -3894,7 +3906,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2019-03-19T03:22:27+00:00"
+            "time": "2019-04-10T23:49:02+00:00"
         },
         {
             "name": "symfony/config",
