@@ -4,6 +4,7 @@ namespace Permits\Controller;
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
+use Permits\Controller\Config\DataSource\IrhpPermitType;
 use Permits\Controller\Config\Table\TableConfig;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 
@@ -18,7 +19,7 @@ class IrhpValidPermitsController extends AbstractSelfserveController implements 
     ];
 
     protected $tableConfig = [
-        'generic' => TableConfig::VALID_IRHP_OVERVIEW,
+        'generic' => TableConfig::VALID_IRHP_PERMITS,
     ];
 
     protected $templateConfig = [
@@ -26,9 +27,27 @@ class IrhpValidPermitsController extends AbstractSelfserveController implements 
     ];
 
     protected $templateVarsConfig = [
-        'generic' => [
-            'browserTitle' => 'permits.irhp.valid.permits.title',
-            'title' => 'permits.irhp.valid.permits.title'
-        ]
+        'generic' => []
     ];
+
+    public function mergeTemplateVars()
+    {
+        // overwrite default page title
+        $title = $this->data[IrhpPermitType::DATA_KEY]['name']['description'];
+
+        $this->templateVarsConfig['generic']['browserTitle'] = $title;
+        $this->templateVarsConfig['generic']['title'] = $title;
+
+        parent::mergeTemplateVars();
+    }
+
+    public function retrieveTables()
+    {
+        if ($this->data[IrhpPermitType::DATA_KEY]['isBilateral']) {
+            $this->tableConfig = [
+                'generic' => TableConfig::VALID_IRHP_PERMITS_BILATERAL,
+            ];
+        }
+        parent::retrieveTables();
+    }
 }

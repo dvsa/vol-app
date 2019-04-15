@@ -6,7 +6,7 @@ use Dvsa\Olcs\Transfer\Query\IrhpPermitType\ById as irhpPermitTypeDto;
 use Olcs\Controller\Config\DataSource\AbstractDataSource;
 
 /**
- * Open windows data source config
+ * Irhp Permit Type data source config
  */
 class IrhpPermitType extends AbstractDataSource
 {

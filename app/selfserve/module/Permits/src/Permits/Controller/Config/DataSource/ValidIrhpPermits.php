@@ -14,6 +14,7 @@ class ValidIrhpPermits extends AbstractDataSource
     protected $dto = ValidIrhpPermitsDto::class;
     protected $paramsMap = [
         'licence' => 'licence',
+        'type' => 'irhpPermitType',
         'page' => 'page',
         'limit' => 'limit',
     ];

@@ -1,7 +1,5 @@
 <?php
 
-use Common\Util\Escape;
-
 return array(
     'variables' => array(),
     'settings' => array(
@@ -14,30 +12,25 @@ return array(
     ),
     'attributes' => array(),
     'columns' => array(
-
         array(
-            'title' => 'permits.irhp.valid.permits.table.permit',
+            'title' => 'permits.irhp.valid.permits.table.permit-no',
             'name' => 'permitNumber',
             'formatter' => 'NullableNumber',
         ),
         array(
-            'title' => 'permits.irhp.valid.permits.table.country',
-            'name' => 'country',
-            'formatter' => function ($row, $column, $sm) {
-                $translator = $sm->get('translator');
-                return Escape::html($translator->translate($row['irhpPermitApplication']['irhpPermitWindow']['irhpPermitStock']['country']['countryDesc']));
-            },
-        ),
-        array(
-            'title' => 'permits.irhp.valid.permits.table.application',
+            'title' => 'permits.irhp.valid.permits.table.application-no',
             'name' => 'irhpPermitApplication',
             'stack' => 'irhpPermitApplication->id',
             'formatter' => 'StackValue',
         ),
-
+        array(
+            'title' => 'permits.irhp.valid.permits.table.issue-date',
+            'name' => 'issueDate',
+            'formatter' => 'Date',
+        ),
         array(
             'title' => 'permits.irhp.valid.permits.table.start-date',
-            'name' => 'issueDate',
+            'name' => 'startDate',
             'formatter' => 'Date',
         ),
         array(
