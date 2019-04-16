@@ -326,7 +326,7 @@ class IrhpApplicationController extends AbstractInternalController implements
         $formData['topFields']['licence'] = $this->params()->fromRoute('licence', null);
 
         // Prepare data structure with open bilateral windows for NoOfPermits form builder
-        $windows = $formData['topFields']['irhpPermitType'] === RefData::IRHP_BILATERAL_PERMIT_TYPE_ID
+        $windows = (int)$formData['topFields']['irhpPermitType'] === RefData::IRHP_BILATERAL_PERMIT_TYPE_ID
             ? $this->getBilateralWindows()['results']
             : $this->getMultilateralWindows()['results'];
 
