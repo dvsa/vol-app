@@ -10,6 +10,7 @@ use Common\RefData;
 use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Command\Surrender\Approve as ApproveSurrender;
 use Dvsa\Olcs\Transfer\Command\Surrender\Withdraw as WithdrawSurrender;
+use Dvsa\Olcs\Transfer\Command\Surrender\Update as UpdateSurrender;
 use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence;
 use Dvsa\Olcs\Transfer\Query\Surrender\OpenBusReg;
 use Dvsa\Olcs\Transfer\Query\Surrender\OpenCases;
@@ -163,6 +164,19 @@ class SurrenderController extends AbstractInternalController implements
         return $this->redirect()->refresh();
     }
 
+    public function surrenderChecksAction()
+    {
+        $checkboxData = $this->getRequest()->getPost();
+        $updateCmdData = [];
+
+        foreach ($checkboxData as $checkboxName => $checkboxValue) {
+            if (!is_null($checkboxValue)) {
+                $updateCmdData[$checkboxName] = $checkboxValue;
+            }
+        }
+        $this->updateSurrender($updateCmdData);
+    }
+
     public function alterLayout()
     {
         foreach ($this->counts as $key => $value) {
@@ -190,11 +204,9 @@ class SurrenderController extends AbstractInternalController implements
 
     public function getLeftView()
     {
-        {
-            $view = new ViewModel();
-            $view->setTemplate('sections/licence/partials/surrender/left');
-            return $view;
-        }
+        $view = new ViewModel();
+        $view->setTemplate('sections/licence/partials/surrender/left');
+        return $view;
     }
 
     private function setupData()
@@ -203,6 +215,17 @@ class SurrenderController extends AbstractInternalController implements
         $this->setupBusRegTable();
 
         $this->form = $this->getForm(Surrender::class);
+        $this->maybeCheckCheckboxes();
+    }
+
+    private function maybeCheckCheckboxes(): void
+    {
+        if ($this->surrender['signatureChecked'] === true) {
+            $this->form->get('checks')->get('digitalSignature')->setAttribute('checked', 'checked');
+        }
+        if ($this->surrender['ecmsChecked'] === true) {
+            $this->form->get('checks')->get('ecms')->setAttribute('checked', 'checked');
+        }
     }
 
     private function getView()
@@ -290,5 +313,21 @@ class SurrenderController extends AbstractInternalController implements
         }
 
         return $response->getResult();
+    }
+
+    private function updateSurrender(array $updateCmdData): bool
+    {
+        $requiredCmdData = [
+            'id' => $this->licenceId,
+            'version' => $this->surrender['version']
+        ];
+
+        $cmdData = array_merge($requiredCmdData, $updateCmdData);
+        $response = $this->handleCommand(UpdateSurrender::create($cmdData));
+
+        if (!$response->isOk()) {
+            throw new \RuntimeException('Failed to update Surrender data');
+        }
+        return $response->isOk();
     }
 }
