@@ -733,26 +733,68 @@ class UserTest extends MockeryTestCase
         ];
     }
 
-
-    public function testMapFromErrors()
+    /**
+    * @dataProvider dpMapFromErrors
+    */
+    public function testMapFromErrors($errors, $expectedFormErrors, $expected)
     {
-        $errors = [
-            'messages' => [
-                'loginId' => ['err'],
-                'general' => 'error'
-            ]
-        ];
-        $expected = [
-            'messages' => [
-                'general' => 'error'
-            ]
-        ];
         $mockForm = m::mock(Form::class)
             ->shouldReceive('setMessages')
-            ->with(['userLoginSecurity' => ['loginId' => ['err']]])
-            ->once()
+            ->with($expectedFormErrors)
+            ->times($expectedFormErrors ? 1 : 0)
             ->getMock();
 
         $this->assertEquals($expected, Sut::mapFromErrors($mockForm, $errors));
+    }
+
+    public function dpMapFromErrors()
+    {
+        return [
+            'username error' => [
+                'errors' => [
+                    'messages' => [
+                        'loginId' => ['err'],
+                        'general' => 'error'
+                    ]
+                ],
+                'expectedFormErrors' => [
+                    'userLoginSecurity' => ['loginId' => ['err']]
+                ],
+                'expected' => [
+                    'messages' => [
+                        'general' => 'error'
+                    ]
+                ],
+            ],
+            'role error' => [
+                'errors' => [
+                    'messages' => [
+                        'role' => ['err'],
+                        'general' => 'error'
+                    ]
+                ],
+                'expectedFormErrors' => [
+                    'userType' => ['role' => ['err']]
+                ],
+                'expected' => [
+                    'messages' => [
+                        'general' => 'error'
+                    ]
+                ],
+            ],
+            'general error' => [
+                'errors' => [
+                    'messages' => [
+                        'general' => 'error'
+                    ]
+                ],
+                'expectedFormErrors' => null,
+                'expected' => [
+                    'messages' => [
+                        'general' => 'error'
+                    ]
+                ],
+            ],
+        ];
     }
 }
