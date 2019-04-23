@@ -170,7 +170,7 @@ class SurrenderController extends AbstractInternalController implements
         $updateCmdData = [];
 
         foreach ($checkboxData as $checkboxName => $checkboxValue) {
-            if (!is_null($checkboxValue)) {
+            if ($checkboxValue === "1" || $checkboxValue === "0") {
                 $updateCmdData[$checkboxName] = $checkboxValue;
             }
         }
