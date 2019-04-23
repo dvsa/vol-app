@@ -174,7 +174,13 @@ class SurrenderController extends AbstractInternalController implements
                 $updateCmdData[$checkboxName] = $checkboxValue;
             }
         }
-        $this->updateSurrender($updateCmdData);
+        if($this->updateSurrender($updateCmdData)){
+            $this->flashMessenger()->clearCurrentMessagesFromContainer();
+            $this->flashMessenger()->addSuccessMessage('licence-status.surrender.message.updated');
+            return $this->redirect()->toRouteAjax('licence/surrender-details/GET', [], [], true);
+
+        };
+
     }
 
     public function alterLayout()
