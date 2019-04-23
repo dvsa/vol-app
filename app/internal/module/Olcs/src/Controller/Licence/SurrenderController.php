@@ -176,9 +176,8 @@ class SurrenderController extends AbstractInternalController implements
         }
         if($this->updateSurrender($updateCmdData)){
             $this->flashMessenger()->clearCurrentMessagesFromContainer();
-            $this->flashMessenger()->addSuccessMessage('licence-status.surrender.message.updated');
+            $this->flashMessenger()->addSuccessMessage('successful-changes');
             return $this->redirect()->toRouteAjax('licence/surrender-details/GET', [], [], true);
-
         };
 
     }
@@ -226,10 +225,12 @@ class SurrenderController extends AbstractInternalController implements
 
     private function maybeCheckCheckboxes(): void
     {
-        if ($this->surrender['signatureChecked'] === true) {
+        $signatureChecked = $this->surrender['signatureChecked'] ?? false;
+        $ecmsChecked = $this->surrender['ecmsChecked'] ?? false;
+        if ($signatureChecked === true) {
             $this->form->get('checks')->get('digitalSignature')->setAttribute('checked', 'checked');
         }
-        if ($this->surrender['ecmsChecked'] === true) {
+        if ($ecmsChecked === true) {
             $this->form->get('checks')->get('ecms')->setAttribute('checked', 'checked');
         }
     }
