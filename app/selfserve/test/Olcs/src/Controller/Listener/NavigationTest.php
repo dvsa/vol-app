@@ -103,7 +103,7 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
 
         //only need to check feature is enabled if the user is eligible in the first place
         $this->mockQuerySender->shouldReceive('featuresEnabled')
-            ->with([FeatureToggle::SELFSERVE_ECMT])
+            ->with([FeatureToggle::SELFSERVE_PERMITS])
             ->times($eligibleForPermits ? 1 : 0)
             ->andReturn($ecmtEnabled);
 
@@ -156,7 +156,7 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
 
         $this->mockQuerySender->shouldReceive('featuresEnabled')
             ->once()
-            ->with([FeatureToggle::SELFSERVE_ECMT])
+            ->with([FeatureToggle::SELFSERVE_PERMITS])
             ->andReturn($ecmtEnabled);
 
         $this->mockNavigation
@@ -212,7 +212,7 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
 
         $this->mockQuerySender->shouldReceive('featuresEnabled')
             ->times($eligibleForPermits ? 1 : 0)
-            ->with([FeatureToggle::SELFSERVE_ECMT])
+            ->with([FeatureToggle::SELFSERVE_PERMITS])
             ->andReturn($ecmtEnabled);
 
         $this->mockNavigation

@@ -9,8 +9,8 @@ use Common\FeatureToggle;
  */
 class FeatureToggleConfig
 {
-    const SELFSERVE_ECMT_ENABLED =  [
-        FeatureToggle::SELFSERVE_ECMT
+    const SELFSERVE_PERMITS_ENABLED =  [
+        FeatureToggle::SELFSERVE_PERMITS
     ];
 
     const SELFSERVE_SURRENDER_ENABLED = [

@@ -48,7 +48,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
     protected $issuedTableName = 'dashboard-permits-issued';
 
     protected $toggleConfig = [
-        'default' => FeatureToggleConfig::SELFSERVE_ECMT_ENABLED,
+        'default' => FeatureToggleConfig::SELFSERVE_PERMITS_ENABLED,
     ];
 
     protected $currentMessages = [];

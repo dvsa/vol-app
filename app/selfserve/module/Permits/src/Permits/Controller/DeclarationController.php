@@ -16,7 +16,7 @@ use Permits\View\Helper\EcmtSection;
 class DeclarationController extends AbstractSelfserveController implements ToggleAwareInterface
 {
     protected $toggleConfig = [
-        'default' => FeatureToggleConfig::SELFSERVE_ECMT_ENABLED,
+        'default' => FeatureToggleConfig::SELFSERVE_PERMITS_ENABLED,
     ];
 
     protected $dataSourceConfig = [
