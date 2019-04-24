@@ -105,8 +105,10 @@ class SurrenderController extends AbstractInternalController implements
     {
         $this->setupData();
         $view = $this->getView();
-        $this->placeholder()->setPlaceholder('openItems',
-            $this->counts['openCases'] + $this->counts['busRegistrations']);
+        $this->placeholder()->setPlaceholder(
+            'openItems',
+            $this->counts['openCases'] + $this->counts['busRegistrations']
+        );
         return $view;
     }
 
@@ -174,12 +176,11 @@ class SurrenderController extends AbstractInternalController implements
                 $updateCmdData[$checkboxName] = $checkboxValue;
             }
         }
-        if($this->updateSurrender($updateCmdData)){
+        if ($this->updateSurrender($updateCmdData)) {
             $this->flashMessenger()->clearCurrentMessagesFromContainer();
             $this->flashMessenger()->addSuccessMessage('successful-changes');
             return $this->redirect()->toRouteAjax('licence/surrender-details/GET', [], [], true);
         };
-
     }
 
     public function alterLayout()
