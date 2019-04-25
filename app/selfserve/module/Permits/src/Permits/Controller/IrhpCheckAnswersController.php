@@ -15,7 +15,7 @@ use Permits\View\Helper\IrhpApplicationSection;
 class IrhpCheckAnswersController extends AbstractSelfserveController implements ToggleAwareInterface
 {
     protected $toggleConfig = [
-        'default' => FeatureToggleConfig::SELFSERVE_ECMT_ENABLED,
+        'default' => FeatureToggleConfig::SELFSERVE_PERMITS_ENABLED,
     ];
 
     protected $dataSourceConfig = [

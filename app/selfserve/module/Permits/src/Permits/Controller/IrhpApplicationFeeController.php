@@ -28,7 +28,7 @@ class IrhpApplicationFeeController extends AbstractSelfserveController implement
     use FlashMessengerTrait;
 
     protected $toggleConfig = [
-        'default' => FeatureToggleConfig::SELFSERVE_ECMT_ENABLED,
+        'default' => FeatureToggleConfig::SELFSERVE_PERMITS_ENABLED,
     ];
 
     protected $dataSourceConfig = [

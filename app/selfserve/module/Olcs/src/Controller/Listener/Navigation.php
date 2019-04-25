@@ -90,24 +90,7 @@ class Navigation implements ListenerAggregateInterface
     public function onDispatch(MvcEvent $e)
     {
         $shouldShowPermitsTab = $this->shouldShowPermitsTab($e);
-        $this->toggleEcmtMenus($shouldShowPermitsTab);
         $this->togglePermitsMenus($shouldShowPermitsTab);
-    }
-
-    /**
-     * Toggle ECMT menus
-     *
-     * @param bool $shouldShowPermitsTab whether to show permits tab
-     *
-     * @return void
-     */
-    private function toggleEcmtMenus(bool $shouldShowPermitsTab): void
-    {
-        if ($shouldShowPermitsTab) {
-            $shouldShowPermitsTab = $this->querySender->featuresEnabled([FeatureToggle::SELFSERVE_ECMT]);
-        }
-
-        $this->navigation->findBy('id', 'dashboard-permits')->setVisible($shouldShowPermitsTab);
     }
 
     /**
@@ -119,8 +102,11 @@ class Navigation implements ListenerAggregateInterface
      */
     private function togglePermitsMenus(bool $shouldShowPermitsTab): void
     {
-        //permits related config will go here once available
-        //$permitsEnabled = $this->querySender->featuresEnabled([FeatureToggle::SELFSERVE_PERMITS]);
+        if ($shouldShowPermitsTab) {
+            $shouldShowPermitsTab = $this->querySender->featuresEnabled([FeatureToggle::SELFSERVE_PERMITS]);
+        }
+
+        $this->navigation->findBy('id', 'dashboard-permits')->setVisible($shouldShowPermitsTab);
     }
 
     /**
