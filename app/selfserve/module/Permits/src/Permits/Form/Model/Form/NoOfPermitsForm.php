@@ -6,7 +6,7 @@ use Zend\Form\Annotation as Form;
 /**
  * @Form\Name("NoOfPermits")
  * @Form\Attributes({"method":"post"})
- * @Form\Type("Common\Form\Form")
+ * @Form\Type("Common\Form\NoOfPermitsForm")
  */
 class NoOfPermitsForm
 {
