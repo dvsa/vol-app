@@ -30,7 +30,7 @@ class IrhpPermitProcessingNoteController extends AbstractInternalController impl
 {
     protected $toggleConfig = [
         'default' => [
-            FeatureToggle::BACKEND_ECMT
+            FeatureToggle::BACKEND_PERMITS
         ],
     ];
 

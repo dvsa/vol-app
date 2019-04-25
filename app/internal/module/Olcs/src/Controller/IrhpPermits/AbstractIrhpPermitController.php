@@ -18,7 +18,7 @@ abstract class AbstractIrhpPermitController extends AbstractController implement
 {
     protected $toggleConfig = [
         'default' => [
-            FeatureToggle::BACKEND_ECMT
+            FeatureToggle::BACKEND_PERMITS
         ],
     ];
 }

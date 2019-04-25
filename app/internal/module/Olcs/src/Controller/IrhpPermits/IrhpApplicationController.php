@@ -40,7 +40,7 @@ class IrhpApplicationController extends AbstractInternalController implements
 {
     protected $toggleConfig = [
         'default' => [
-            FeatureToggle::BACKEND_ECMT
+            FeatureToggle::BACKEND_PERMITS
         ],
     ];
 
@@ -231,7 +231,7 @@ class IrhpApplicationController extends AbstractInternalController implements
     protected function getOutstandingFeeIds(array $fees, array $feeTypes)
     {
         $feeIds = [];
-        foreach ($fees as $key => $fee) {
+        foreach ($fees as $fee) {
             if ($fee['feeStatus']['id'] === RefData::FEE_STATUS_OUTSTANDING
                 && in_array($fee['feeType']['feeType']['id'], $feeTypes)) {
                 $feeIds[] = $fee['id'];
