@@ -3,6 +3,9 @@
 namespace PermitsTest\Data\Mapper;
 
 use Permits\Data\Mapper\IrhpApplicationFeeSummary;
+use Common\Service\Helper\TranslationHelperService;
+use Zend\Mvc\Controller\Plugin\Url;
+use Mockery as m;
 
 /**
  * IrhpApplicationFeeSummaryTest
@@ -18,6 +21,20 @@ class IrhpApplicationFeeSummaryTest extends \PHPUnit\Framework\TestCase
         $permitTypeDesc = 'permit type description';
         $permitsRequired = 999;
         $fee = 123.45;
+        $url = m::mock(Url::class);
+        $translationHelperService = m::mock(TranslationHelperService::class);
+        $translationHelperService
+            ->shouldReceive('translateReplace')
+            ->with(
+                'permits.page.fee.permit.fee.non-refundable',
+                [
+                    $fee
+                ]
+            )
+            ->andReturn(
+                $fee . ' (non-refundable)'
+            )
+            ->once();
 
         $formattedDateReceived = '25 December 2020';
 
@@ -53,7 +70,7 @@ class IrhpApplicationFeeSummaryTest extends \PHPUnit\Framework\TestCase
                 ],
                 [
                     'key' => IrhpApplicationFeeSummary::FEE_TOTAL_HEADING,
-                    'value' => $fee,
+                    'value' => $fee . ' (non-refundable)',
                     'isCurrency' => true
                 ],
             ],
@@ -61,6 +78,6 @@ class IrhpApplicationFeeSummaryTest extends \PHPUnit\Framework\TestCase
 
         $expectedOutput = $inputData + $mappedData;
 
-        self::assertEquals($expectedOutput, IrhpApplicationFeeSummary::mapForDisplay($inputData));
+        self::assertEquals($expectedOutput, IrhpApplicationFeeSummary::mapForDisplay($inputData, $translationHelperService, $url));
     }
 }

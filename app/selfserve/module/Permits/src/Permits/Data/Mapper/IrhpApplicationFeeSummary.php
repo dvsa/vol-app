@@ -2,6 +2,10 @@
 
 namespace Permits\Data\Mapper;
 
+use Common\Service\Helper\TranslationHelperService;
+use Common\View\Helper\CurrencyFormatter;
+use Zend\Mvc\Controller\Plugin\Url;
+
 /**
  * Mapper for the IRHP application fee summary page
  */
@@ -21,9 +25,11 @@ class IrhpApplicationFeeSummary
      * @return array
      * @throws \Exception
      */
-    public static function mapForDisplay(array $data): array
+    public static function mapForDisplay(array $data, TranslationHelperService $translator, Url $url)
     {
         $receivedDate = new \DateTime($data['dateReceived']);
+
+        $currency = new CurrencyFormatter;
 
         $data['mappedFeeData'] = [
             [
@@ -44,7 +50,12 @@ class IrhpApplicationFeeSummary
             ],
             [
                 'key' => self::FEE_TOTAL_HEADING,
-                'value' => $data['outstandingFeeAmount'],
+                'value' => $translator->translateReplace(
+                    'permits.page.fee.permit.fee.non-refundable',
+                    [
+                        $data['outstandingFeeAmount']
+                    ]
+                ),
                 'isCurrency' => true
             ],
         ];
