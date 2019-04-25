@@ -182,14 +182,21 @@ class SurrenderController extends AbstractInternalController implements
             }
         }
 
-        if (!empty($updateCmdData)) {
-            $this->updateSurrender($updateCmdData);
-            $this->flashMessenger()->clearCurrentMessagesFromContainer();
-            $this->flashMessenger()->addSuccessMessage('successful-changes');
-            return $this->redirect()->toRouteAjax('licence/surrender-details/GET', [], [], true);
-
-        }
+        if (empty($updateCmdData)) {
             throw new BadRequestException('No data supplied to command');
+        }
+
+
+        $this->flashMessenger()->clearCurrentMessagesFromContainer();
+        if ($this->updateSurrender($updateCmdData)) {
+            $this->flashMessenger()->addSuccessMessage('successful-changes');
+        } else {
+            $this->flashMessenger()->addErrorMessage('unsuccessful-changes');
+        }
+
+
+        return $this->redirect()->toRouteAjax('licence/surrender-details/GET', [], [], true);
+
     }
 
     public function alterLayout()
