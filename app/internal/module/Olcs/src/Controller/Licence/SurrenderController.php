@@ -3,6 +3,7 @@
 namespace Olcs\Controller\Licence;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
+use Common\Exception\BadRequestException;
 use Common\FeatureToggle;
 use Common\Controller\Traits\GenericRenderView;
 use Common\Form\Form;
@@ -170,17 +171,25 @@ class SurrenderController extends AbstractInternalController implements
     {
         $checkboxData = $this->getRequest()->getPost();
         $updateCmdData = [];
+        $approvedNames = ['signatureChecked', 'ecmsChecked'];
 
         foreach ($checkboxData as $checkboxName => $checkboxValue) {
+            if (!in_array($checkboxName, $approvedNames)) {
+                continue;
+            }
             if ($checkboxValue === "1" || $checkboxValue === "0") {
                 $updateCmdData[$checkboxName] = $checkboxValue;
             }
         }
-        if ($this->updateSurrender($updateCmdData)) {
+
+        if (!empty($updateCmdData)) {
+            $this->updateSurrender($updateCmdData);
             $this->flashMessenger()->clearCurrentMessagesFromContainer();
             $this->flashMessenger()->addSuccessMessage('successful-changes');
             return $this->redirect()->toRouteAjax('licence/surrender-details/GET', [], [], true);
-        };
+
+        }
+            throw new BadRequestException('No data supplied to command');
     }
 
     public function alterLayout()
