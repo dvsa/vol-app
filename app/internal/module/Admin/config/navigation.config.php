@@ -300,6 +300,23 @@ return [
                     'route' => 'admin-dashboard/task-allocation-rules',
                 ],
                 [
+                    'label' => 'Templates',
+                    'id' => 'admin-dashboard/templates',
+                    'route' => 'admin-dashboard/admin-email-templates',
+                    'pages' => [
+                        [
+                            'id' => 'admin-dashboard/templates/email-templates',
+                            'label' => 'Email Templates',
+                            'route' => 'admin-dashboard/admin-email-templates',
+                        ],
+                        [
+                            'id' => 'admin-dashboard/templates/document-templates',
+                            'label' => 'Document Templates',
+                            'route' => 'admin-dashboard/admin-document-templates',
+                        ]
+                    ],
+                ],
+                [
                     'label' => 'Data retention',
                     'id' => 'admin-dashboard/admin-data-retention',
                     'route' => 'admin-dashboard/admin-data-retention',
