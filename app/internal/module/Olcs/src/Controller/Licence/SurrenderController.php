@@ -3,6 +3,7 @@
 namespace Olcs\Controller\Licence;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
+use Common\Exception\BadRequestException;
 use Common\FeatureToggle;
 use Common\Controller\Traits\GenericRenderView;
 use Common\Form\Form;
@@ -10,6 +11,7 @@ use Common\RefData;
 use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Command\Surrender\Approve as ApproveSurrender;
 use Dvsa\Olcs\Transfer\Command\Surrender\Withdraw as WithdrawSurrender;
+use Dvsa\Olcs\Transfer\Command\Surrender\Update as UpdateSurrender;
 use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence;
 use Dvsa\Olcs\Transfer\Query\Surrender\OpenBusReg;
 use Dvsa\Olcs\Transfer\Query\Surrender\OpenCases;
@@ -104,8 +106,10 @@ class SurrenderController extends AbstractInternalController implements
     {
         $this->setupData();
         $view = $this->getView();
-        $this->placeholder()->setPlaceholder('openItems',
-            $this->counts['openCases'] + $this->counts['busRegistrations']);
+        $this->placeholder()->setPlaceholder(
+            'openItems',
+            $this->counts['openCases'] + $this->counts['busRegistrations']
+        );
         return $view;
     }
 
@@ -163,6 +167,38 @@ class SurrenderController extends AbstractInternalController implements
         return $this->redirect()->refresh();
     }
 
+    public function surrenderChecksAction()
+    {
+        $checkboxData = $this->getRequest()->getPost();
+        $updateCmdData = [];
+        $approvedNames = ['signatureChecked', 'ecmsChecked'];
+
+        foreach ($checkboxData as $checkboxName => $checkboxValue) {
+            if (!in_array($checkboxName, $approvedNames)) {
+                continue;
+            }
+            if ($checkboxValue === "1" || $checkboxValue === "0") {
+                $updateCmdData[$checkboxName] = $checkboxValue;
+            }
+        }
+
+        if (empty($updateCmdData)) {
+            throw new BadRequestException('No data supplied to command');
+        }
+
+
+        $this->flashMessenger()->clearCurrentMessagesFromContainer();
+        if ($this->updateSurrender($updateCmdData)) {
+            $this->flashMessenger()->addSuccessMessage('successful-changes');
+        } else {
+            $this->flashMessenger()->addErrorMessage('unsuccessful-changes');
+        }
+
+
+        return $this->redirect()->toRouteAjax('licence/surrender-details/GET', [], [], true);
+
+    }
+
     public function alterLayout()
     {
         foreach ($this->counts as $key => $value) {
@@ -190,11 +226,9 @@ class SurrenderController extends AbstractInternalController implements
 
     public function getLeftView()
     {
-        {
-            $view = new ViewModel();
-            $view->setTemplate('sections/licence/partials/surrender/left');
-            return $view;
-        }
+        $view = new ViewModel();
+        $view->setTemplate('sections/licence/partials/surrender/left');
+        return $view;
     }
 
     private function setupData()
@@ -203,6 +237,19 @@ class SurrenderController extends AbstractInternalController implements
         $this->setupBusRegTable();
 
         $this->form = $this->getForm(Surrender::class);
+        $this->maybeCheckCheckboxes();
+    }
+
+    private function maybeCheckCheckboxes(): void
+    {
+        $signatureChecked = $this->surrender['signatureChecked'] ?? false;
+        $ecmsChecked = $this->surrender['ecmsChecked'] ?? false;
+        if ($signatureChecked === true) {
+            $this->form->get('checks')->get('digitalSignature')->setAttribute('checked', 'checked');
+        }
+        if ($ecmsChecked === true) {
+            $this->form->get('checks')->get('ecms')->setAttribute('checked', 'checked');
+        }
     }
 
     private function getView()
@@ -290,5 +337,21 @@ class SurrenderController extends AbstractInternalController implements
         }
 
         return $response->getResult();
+    }
+
+    private function updateSurrender(array $updateCmdData): bool
+    {
+        $requiredCmdData = [
+            'id' => $this->licenceId,
+            'version' => $this->surrender['version']
+        ];
+
+        $cmdData = array_merge($requiredCmdData, $updateCmdData);
+        $response = $this->handleCommand(UpdateSurrender::create($cmdData));
+
+        if (!$response->isOk()) {
+            throw new \RuntimeException('Failed to update Surrender data');
+        }
+        return $response->isOk();
     }
 }

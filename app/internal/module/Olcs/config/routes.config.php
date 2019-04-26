@@ -315,7 +315,18 @@ $routes = [
                                 ],
                             ]
                         ]
-                    ]
+                    ],
+                    'surrender-checks' => [
+                        'may_terminate' => true,
+                        'type' => \Zend\Mvc\Router\Http\Segment::class,
+                        'options' => [
+                            'route' => 'surrender-checks',
+                            'defaults' => [
+                                'controller' => SurrenderController::class,
+                                'action' => 'surrenderChecks'
+                            ],
+                        ],
+                    ],
                 ]
             ],
 
