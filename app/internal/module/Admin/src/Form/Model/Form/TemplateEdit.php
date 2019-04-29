@@ -12,6 +12,13 @@ use Zend\Form\Annotation as Form;
  */
 class TemplateEdit
 {
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $id = null;
+
     /**
      * @Form\Type("TextArea")
      * @Form\Required(true)
@@ -31,7 +38,7 @@ class TemplateEdit
     /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
-     * @Form\ComposedObject("Common\Form\Model\Form\Lva\Fieldset\FormCrudActionsShort")
+     * @Form\ComposedObject("Admin\Form\Model\Fieldset\FormSaveCancelPreview")
      */
     public $formActions = null;
 }

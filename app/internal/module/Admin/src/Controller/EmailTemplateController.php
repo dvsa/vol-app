@@ -6,9 +6,11 @@ use Common\Controller\Interfaces\ToggleAwareInterface;
 use Common\FeatureToggle;
 use Olcs\Controller\AbstractInternalController;
 use Dvsa\Olcs\Transfer\Query\Template\TemplateSource as ItemDto;
-use Olcs\Controller\Interfaces\LeftViewProvider;
 use Dvsa\Olcs\Transfer\Query\Template\AvailableTemplates as ListDto;
+use Dvsa\Olcs\Transfer\Command\Template\UpdateTemplateSource as UpdateDto;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Admin\Data\Mapper\Template as Mapper;
+use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
 use Admin\Form\Model\Form\TemplateEdit;
 use Admin\Form\Model\Form\TemplateFilter;
@@ -38,6 +40,7 @@ class EmailTemplateController extends AbstractInternalController implements Left
 
     protected $listDto = ListDto::class;
     protected $itemDto = ItemDto::class;
+    protected $updateCommand = UpdateDto::class;
 
     protected $navigationId = 'admin-dashboard/templates';
 
@@ -64,7 +67,7 @@ class EmailTemplateController extends AbstractInternalController implements Left
     }
 
     /**
-     * Override this to make any required changes to parameters prior to creation of $listDto
+     * Set any email template category filter choice from querystring into List DTO params
      *
      * @param array $parameters parameters
      *
@@ -74,5 +77,18 @@ class EmailTemplateController extends AbstractInternalController implements Left
     {
         $parameters['emailTemplateCategory'] = $this->params()->fromQuery('emailTemplateCategory');
         return $parameters;
+    }
+
+    /**
+     * Uses description field from Item response to add title to Edit modal
+     *
+     * @param Form $form
+     * @param array $formData
+     * @return Form
+     */
+    public function alterFormForEdit(Form $form, Array $formData)
+    {
+        $this->placeholder()->setPlaceholder('contentTitle', 'Edit: '.$formData['description']);
+        return $form;
     }
 }
