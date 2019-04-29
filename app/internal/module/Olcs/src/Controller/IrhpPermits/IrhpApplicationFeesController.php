@@ -37,7 +37,7 @@ class IrhpApplicationFeesController extends AbstractIrhpPermitController
      */
     protected function getFeesRoute()
     {
-        return 'licence/irhp-application-fees';
+        return 'licence/permits';
     }
 
     /**
