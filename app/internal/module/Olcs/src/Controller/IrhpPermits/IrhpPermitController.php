@@ -9,7 +9,7 @@
 namespace Olcs\Controller\IrhpPermits;
 
 use Common\RefData;
-use Dvsa\Olcs\Transfer\Query\IrhpPermit\GetListByEcmtId as ListDTO;
+use Dvsa\Olcs\Transfer\Query\IrhpPermit\GetListByEcmtId as EcmtListDTO;
 use Dvsa\Olcs\Transfer\Query\IrhpPermit\GetListByIrhpId as IrhpListDTO;
 use Dvsa\Olcs\Transfer\Query\IrhpPermit\ById as ItemDTO;
 use Dvsa\Olcs\Transfer\Command\IrhpPermit\Replace as ReplaceDTO;
@@ -32,8 +32,8 @@ class IrhpPermitController extends AbstractInternalController implements
     protected $defaultTableSortField = 'permitNumber';
     protected $defaultTableOrderField = 'DESC';
 
-    protected $listVars = ['ecmtPermitApplication' => 'permitid'];
-    protected $listDto = ListDto::class;
+    protected $listVars = ['irhpApplication' => 'permitid'];
+    protected $listDto = IrhpListDTO::class;
     protected $itemDto = ItemDto::class;
 
     protected $hasMultiDelete = false;
@@ -100,15 +100,19 @@ class IrhpPermitController extends AbstractInternalController implements
             }
         }
 
+        $DTOApplicationKey = 'irhpApplication';
+
         // Get Permit Type from route, switch relevant class variables for ecmt/irhp DTOs
         $permitTypeId = intval($this->params()->fromRoute('permitTypeId'));
-        if ($permitTypeId !== RefData::ECMT_PERMIT_TYPE_ID) {
-            $this->listDto = IrhpListDTO::class;
-            $this->listVars = ['irhpApplication' => 'permitid'];
-            $this->tableName = 'irhp-bilateral-permits';
+        $isEcmt = $permitTypeId === RefData::ECMT_PERMIT_TYPE_ID;
+
+        if ($isEcmt) {
+            $this->listDto = EcmtListDTO::class;
+            $this->listVars = ['ecmtPermitApplication' => 'permitid'];
+            $this->tableName = 'irhp-permits-ecmt';
+            $DTOApplicationKey = 'ecmtPermitApplication';
         }
 
-        $DTOApplicationKey = $permitTypeId === RefData::ECMT_PERMIT_TYPE_ID ? 'ecmtPermitApplication' : 'irhpApplication';
         $response = $this->handleQuery($this->listDto::create([
             'page' => 1,
             'sort' => 'id',
@@ -117,15 +121,44 @@ class IrhpPermitController extends AbstractInternalController implements
             $DTOApplicationKey => $this->params()->fromRoute('permitid'),
         ]));
 
-        if ($response->getResult()['count'] === 0) {
+        if ($isEcmt && $response->getResult()['count'] === 0) {
             $this->listDto = CandidateListDTO::class;
-            $this->tableName = 'candidate-permits';
+            $this->tableName = 'irhp-permits-ecmt-candidate';
             $this->defaultTableSortField = 'id';
             $this->defaultTableOrderField = 'ASC';
             $this->listVars = ['ecmtPermitApplication' => 'permitid'];
         }
 
         return parent::indexAction();
+    }
+
+    /**
+     * Alter table
+     *
+     * @param \Common\Service\Table\TableBuilder $table table
+     * @param array                              $data  data
+     *
+     * @return \Common\Service\Table\TableBuilder
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function alterTable($table, $data)
+    {
+        // Get Permit Type from route, switch columns if required
+        $permitTypeId = intval($this->params()->fromRoute('permitTypeId'));
+
+        switch ($permitTypeId) {
+            case RefData::ECMT_PERMIT_TYPE_ID:
+                // do nothing, ECMT has its own table definition
+                break;
+            case RefData::IRHP_BILATERAL_PERMIT_TYPE_ID:
+                // do nothing, Bilateral should display all columns
+                break;
+            default:
+                $table->removeColumn('country');
+                break;
+        }
+
+        return $table;
     }
 
     /**
