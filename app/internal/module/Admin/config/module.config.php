@@ -867,6 +867,7 @@ return [
                 Admin\Controller\IrhpPermitPrintController::class,
             Admin\Controller\ReportUploadController::class => Admin\Controller\ReportUploadController::class,
             Admin\Controller\EmailTemplateController::class => Admin\Controller\EmailTemplateController::class,
+            \Admin\Controller\InterimRefundsController::class =>\Admin\Controller\InterimRefundsController::class
         ],
     ],
     'view_manager' => [

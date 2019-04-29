@@ -5,7 +5,7 @@ namespace Admin\Controller;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\View\Model\ViewModel;
-use Dvsa\Olcs\Transfer\Query\InterimRefunds as ListDto;
+use Dvsa\Olcs\Transfer\Query\Application\InterimRefunds as ListDto;
 
 /**
  * Class InterimRefundsController

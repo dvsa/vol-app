@@ -213,7 +213,7 @@ return [
                         [
                             'id' => 'admin-dashboard/admin-interim-refunds',
                             'label' => 'Interim Refunds',
-                            'route' => 'admin-dashboard/admin-interim-refunds',
+                            'route' => 'admin-dashboard/admin-report/admin-interim-refunds',
                         ],
                         [
                             'id' => 'admin-dashboard/admin-report/cpid-class',
