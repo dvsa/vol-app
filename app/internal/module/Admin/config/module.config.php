@@ -327,6 +327,20 @@ return [
                                     ]
                                 ],
                             ],
+                            'admin-interim-refunds' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => 'interim-refunds[/:action][/:id][/]',
+                                    'constraints' => [
+                                        'action' => '(index)',
+                                        'id' => '[0-9]+',
+                                    ],
+                                    'defaults' => [
+                                        'controller' => \Admin\Controller\InterimRefundsController::class,
+                                        'action' => 'index'
+                                    ]
+                                ]
+                            ],
                             'cpid-class' => [
                                 'type' => 'segment',
                                 'options' => [
