@@ -841,7 +841,7 @@ $routes = [
                     ],
                     'defaults' => [
                         'controller' => 'IrhpPermitFeesController',
-                        'action' => 'fees',
+                        'action' => 'dashRedirect',
                     ]
                 ],
                 'may_terminate' => true,
@@ -849,6 +849,15 @@ $routes = [
                     'fee_action' => $feeActionRoute,
                     'fee_type_ajax' => $feeTypeAjaxRoute,
                     'print-receipt' => $feePrintReceiptRoute,
+                    'table' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'table[/]',
+                            'defaults' => [
+                                'action' => 'fees'
+                            ]
+                        ]
+                    ],
                 ]
             ],
             'irhp-application-fees' => [
@@ -860,7 +869,7 @@ $routes = [
                     ],
                     'defaults' => [
                         'controller' => IrhpApplicationFeesController::class,
-                        'action' => 'fees',
+                        'action' => 'dashRedirect',
                     ]
                 ],
                 'may_terminate' => true,
@@ -868,6 +877,15 @@ $routes = [
                     'fee_action' => $feeActionRoute,
                     'fee_type_ajax' => $feeTypeAjaxRoute,
                     'print-receipt' => $feePrintReceiptRoute,
+                    'table' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'table[/]',
+                            'defaults' => [
+                                'action' => 'fees'
+                            ]
+                        ]
+                    ],
                 ]
             ],
             'permits' => [
