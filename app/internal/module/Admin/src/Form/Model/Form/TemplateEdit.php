@@ -20,6 +20,24 @@ class TemplateEdit
     public $id = null;
 
     /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $format = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $description = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $jsonUrl = null;
+
+    /**
      * @Form\Type("TextArea")
      * @Form\Required(true)
      * @Form\Attributes({
