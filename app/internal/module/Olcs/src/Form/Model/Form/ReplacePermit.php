@@ -38,6 +38,17 @@ class ReplacePermit
     public $restrictedCountries = null;
 
     /**
+     * @Form\Attributes({"id":"country" })
+     * @Form\Options({
+     *     "label": "Country",
+     *      "disable_html_escape": true
+     * })
+     *
+     * @Form\Type("\Common\Form\Elements\Types\Html")
+     */
+    public $country = null;
+
+    /**
      * @Form\Attributes({"id":"replacementIrhpPermit"})
      * @Form\Options({
      *     "label": "Replacement Permit Number",

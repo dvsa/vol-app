@@ -174,7 +174,8 @@ class IrhpPermitController extends AbstractInternalController implements
                     [
                         'action' => 'index',
                         'licence' => $this->params()->fromRoute('licence'),
-                        'permitid' => $this->params()->fromRoute('permitid')
+                        'permitid' => $this->params()->fromRoute('permitid'),
+                        'permitTypeId' => $this->params()->fromRoute('permitTypeId')
                     ]
                 );
             }
@@ -185,9 +186,17 @@ class IrhpPermitController extends AbstractInternalController implements
 
         $data = IrhpPermitMapper::mapFromResult($irhpPermit->getResult());
         $form = $this->getForm('ReplacePermit');
+
         if (isset($data['restrictedCountries'])) {
             $form->get('restrictedCountries')->setAttribute('value', $data['restrictedCountries']);
+            $form->remove('country');
         }
+
+        if (isset($data['irhpPermitRange']['irhpPermitStock']['country'])) {
+            $form->get('country')->setAttribute('value', $data['country']);
+            $form->remove('restrictedCountries');
+        }
+        
         $form->setData($data);
 
         $view = new ViewModel();
