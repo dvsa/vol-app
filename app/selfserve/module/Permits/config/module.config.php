@@ -155,6 +155,30 @@ return [
                           ],
                           'may_terminate' => false,
                       ],
+                      'eligibility' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => 'eligibility[/]',
+                              'defaults' => [
+                                  // TODO - OLCS-24433
+                                  'controller'    => IrhpApplicationController::class,
+                                  'action'        => 'question',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'cabotage' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => 'cabotage[/]',
+                              'defaults' => [
+                                  // TODO - OLCS-22768
+                                  'controller'    => IrhpApplicationController::class,
+                                  'action'        => 'question',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
                       'countries' => [
                           'type'    => 'segment',
                           'options' => [
