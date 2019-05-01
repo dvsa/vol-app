@@ -36,10 +36,14 @@ return array(
             'stack' => 'irhpPermitApplication->id',
             'formatter' => 'StackValue',
         ),
-
+        array(
+            'title' => 'permits.irhp.valid.permits.table.issue-date',
+            'name' => 'issueDate',
+            'formatter' => 'Date',
+        ),
         array(
             'title' => 'permits.irhp.valid.permits.table.start-date',
-            'name' => 'issueDate',
+            'name' => 'startDate',
             'formatter' => 'Date',
         ),
         array(
@@ -50,7 +54,21 @@ return array(
         array(
             'title' => 'status',
             'name' => 'status',
-            'formatter' => 'RefDataStatus',
+            'formatter' => function ($row, $column, $sm) {
+                $translator = $sm->get('translator');
+                return $this->callFormatter(
+                    [
+                        'name' => 'status',
+                        'formatter' => 'RefDataStatus',
+                    ],
+                    [
+                        'status' => [
+                            'id' => 'permit_app_valid',
+                            'description' => $translator->translate('permit_valid')
+                        ],
+                    ]
+                );
+            }
         ),
     )
 );
