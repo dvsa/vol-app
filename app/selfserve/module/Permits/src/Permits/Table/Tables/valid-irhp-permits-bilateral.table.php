@@ -1,6 +1,7 @@
 <?php
 
 use Common\Util\Escape;
+use Common\RefData;
 
 return array(
     'variables' => array(),
@@ -63,8 +64,8 @@ return array(
                     ],
                     [
                         'status' => [
-                            'id' => 'permit_app_valid',
-                            'description' => $translator->translate('permit_valid')
+                            'id' => RefData::PERMIT_APP_STATUS_VALID,
+                            'description' => $translator->translate(RefData::PERMIT_VALID)
                         ],
                     ]
                 );
