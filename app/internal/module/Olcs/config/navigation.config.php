@@ -605,7 +605,7 @@ $nav = [
                                 [
                                     'id' => 'licence_irhp_permits-fees',
                                     'label' => 'Fees',
-                                    'route' => 'licence/irhp-fees',
+                                    'route' => 'licence/irhp-fees/table',
                                     'use_route_match' => true,
                                     'pages' => [
                                         [
@@ -690,12 +690,8 @@ $nav = [
                                 [
                                     'id' => 'licence_irhp_applications-fees',
                                     'label' => 'Fees',
-                                    'route' => 'licence/irhp-application-fees',
+                                    'route' => 'licence/irhp-application-fees/table',
                                     'use_route_match' => true,
-                                    'params' => [
-                                        'action' => 'fees',
-                                        'id' => null
-                                    ],
                                 ],
                                 [
                                     'id' => 'licence_irhp_applications-cancel',

@@ -15,7 +15,7 @@ class IrhpPermitFeesController extends AbstractIrhpPermitController
     use FeesActionTrait {
         feesAction as traitFeesAction;
     }
-    use GenericReceipt;
+    use GenericReceipt, IrhpFeesTrait;
 
     public function feesAction()
     {
@@ -32,7 +32,7 @@ class IrhpPermitFeesController extends AbstractIrhpPermitController
      */
     protected function getFeesRoute()
     {
-        return 'licence/permits';
+        return 'licence/irhp-fees';
     }
 
     /**
