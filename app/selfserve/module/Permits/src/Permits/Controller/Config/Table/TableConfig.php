@@ -2,6 +2,7 @@
 
 namespace Permits\Controller\Config\Table;
 
+use Permits\Controller\Config\DataSource\IrhpFeeBreakdown as IrhpFeeBreakdownDataSource;
 use Permits\Controller\Config\DataSource\ValidEcmtPermits as ValidEcmtPermitsDataSource;
 use Permits\Controller\Config\DataSource\ValidIrhpPermits as ValidIrhpPermitsDataSource;
 
@@ -32,6 +33,12 @@ class TableConfig
         'valid-irhp-permits' => [
             'tableName' => 'valid-irhp-permits-bilateral',
             'dataSource' => ValidIrhpPermitsDataSource::DATA_KEY
+        ]
+    ];
+    const IRHP_FEE_BREAKDOWN = [
+        'irhp-fee-breakdown' => [
+            'tableName' => 'irhp-fee-breakdown',
+            'dataSource' => IrhpFeeBreakdownDataSource::DATA_KEY
         ]
     ];
 }

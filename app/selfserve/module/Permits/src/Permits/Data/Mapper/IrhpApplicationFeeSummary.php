@@ -3,6 +3,7 @@
 namespace Permits\Data\Mapper;
 
 use Common\Service\Helper\TranslationHelperService;
+use Common\View\Helper\CurrencyFormatter;
 use Zend\Mvc\Controller\Plugin\Url;
 
 /**
@@ -14,7 +15,7 @@ class IrhpApplicationFeeSummary
     const APP_DATE_HEADING = 'permits.page.fee.application.date';
     const PERMIT_TYPE_HEADING = 'permits.page.fee.permit.type';
     const NUM_PERMITS_HEADING = 'permits.page.fee.number.permits';
-    const FEE_TOTAL_HEADING = 'permits.page.fee.permit.fee.total';
+    const FEE_TOTAL_HEADING = 'permits.page.irhp-fee.permit.fee.total';
 
     /**
      * Map IRHP application data for use on the fee summary page
@@ -27,7 +28,8 @@ class IrhpApplicationFeeSummary
     public static function mapForDisplay(array $data, TranslationHelperService $translator, Url $url)
     {
         $receivedDate = new \DateTime($data['dateReceived']);
-        
+        $currencyFormatter = new CurrencyFormatter();
+
         $data['mappedFeeData'] = [
             [
                 'key' => self::APP_REFERENCE_HEADING,
@@ -50,10 +52,9 @@ class IrhpApplicationFeeSummary
                 'value' => $translator->translateReplace(
                     'permits.page.fee.permit.fee.non-refundable',
                     [
-                        $data['outstandingFeeAmount']
+                        $currencyFormatter($data['outstandingFeeAmount'])
                     ]
                 ),
-                'isCurrency' => true
             ],
         ];
 

@@ -6,6 +6,7 @@ use Common\RefData;
 use Permits\Controller\Config\DataSource\FeeList as FeeListDto;
 use Permits\Controller\Config\DataSource\PermitApplication as PermitAppDataSource;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
+use Permits\Controller\Config\DataSource\IrhpFeeBreakdown as IrhpFeeBreakdownDataSource;
 use Permits\Controller\Config\DataSource\IrhpFeePerPermit as IrhpFeePerPermitDataSource;
 use Permits\Controller\Config\DataSource\IrhpMaxStockPermits as IrhpMaxStockPermitsDataSource;
 use Permits\Controller\Config\DataSource\ValidEcmtPermits as ValidEcmtPermitsDataSource;
@@ -155,6 +156,7 @@ class DataSourceConfig
         IrhpAppDataSource::class => [
             'mapper' => IrhpApplicationFeeSummary::class
         ],
+        IrhpFeeBreakdownDataSource::class => [],
     ];
 
     const IRHP_APP_COUNTRIES = [

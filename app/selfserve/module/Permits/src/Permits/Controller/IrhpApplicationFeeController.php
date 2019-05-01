@@ -17,6 +17,7 @@ use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
+use Permits\Controller\Config\Table\TableConfig;
 use Permits\View\Helper\IrhpApplicationSection;
 use Zend\Http\Response as HttpResponse;
 use Zend\View\Model\ViewModel;
@@ -33,6 +34,10 @@ class IrhpApplicationFeeController extends AbstractSelfserveController implement
 
     protected $dataSourceConfig = [
         'default' => DataSourceConfig::IRHP_APP_FEE,
+    ];
+
+    protected $tableConfig = [
+        'default' => TableConfig::IRHP_FEE_BREAKDOWN,
     ];
 
     protected $conditionalDisplayConfig = [
