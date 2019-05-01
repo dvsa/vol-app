@@ -64,7 +64,7 @@ return array(
                     ],
                     [
                         'status' => [
-                            'id' => RefData::PERMIT_APP_STATUS_VALID,
+                            'id' => RefData::PERMIT_VALID,
                             'description' => $translator->translate(RefData::PERMIT_VALID)
                         ],
                     ]
