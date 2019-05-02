@@ -190,9 +190,7 @@ class IrhpPermitController extends AbstractInternalController implements
         if (isset($data['restrictedCountries'])) {
             $form->get('restrictedCountries')->setAttribute('value', $data['restrictedCountries']);
             $form->remove('country');
-        }
-
-        if (isset($data['irhpPermitRange']['irhpPermitStock']['country'])) {
+        } elseif (isset($data['irhpPermitRange']['irhpPermitStock']['country'])) {
             $form->get('country')->setAttribute('value', $data['country']);
             $form->remove('restrictedCountries');
         }
