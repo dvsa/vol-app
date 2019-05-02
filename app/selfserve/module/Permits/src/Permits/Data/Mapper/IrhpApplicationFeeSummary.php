@@ -3,7 +3,6 @@
 namespace Permits\Data\Mapper;
 
 use Common\Service\Helper\TranslationHelperService;
-use Common\View\Helper\CurrencyFormatter;
 use Zend\Mvc\Controller\Plugin\Url;
 
 /**
@@ -28,9 +27,7 @@ class IrhpApplicationFeeSummary
     public static function mapForDisplay(array $data, TranslationHelperService $translator, Url $url)
     {
         $receivedDate = new \DateTime($data['dateReceived']);
-
-        $currency = new CurrencyFormatter;
-
+        
         $data['mappedFeeData'] = [
             [
                 'key' => self::APP_REFERENCE_HEADING,
