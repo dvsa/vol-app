@@ -35,10 +35,6 @@ class NoOfPermitsController extends AbstractSelfserveController implements Toggl
 
     protected $templateVarsConfig = [
         'default' => [
-            'additionalGuidance' => [
-                'value' => 'permits.page.bilateral.no-of-permits.additional-guidance',
-                'disableHtmlEscape' => true
-            ],
             'backUri' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
         ]
     ];
