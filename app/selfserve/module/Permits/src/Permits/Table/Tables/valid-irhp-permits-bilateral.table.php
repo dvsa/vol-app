@@ -55,8 +55,7 @@ return array(
         array(
             'title' => 'status',
             'name' => 'status',
-            'formatter' => function ($row, $column, $sm) {
-                $translator = $sm->get('translator');
+            'formatter' => function ($row) {
                 return $this->callFormatter(
                     [
                         'name' => 'status',
@@ -65,7 +64,7 @@ return array(
                     [
                         'status' => [
                             'id' => RefData::PERMIT_VALID,
-                            'description' => $translator->translate(RefData::PERMIT_VALID)
+                            'description' => RefData::PERMIT_VALID
                         ],
                     ]
                 );
