@@ -26,6 +26,11 @@ class IrhpPermit implements MapperInterface
             }
             $str .= '</ul></div>';
             $data['restrictedCountries'] = $str;
+        } elseif (!empty($data['irhpPermitRange']['irhpPermitStock']['country'])) {
+            $str = '<div class="article"><ul>';
+            $str .= "<li>{$data['irhpPermitRange']['irhpPermitStock']['country']['countryDesc']}</li>";
+            $str .= '</ul></div>';
+            $data['country'] = $str;
         }
         return $data;
     }
