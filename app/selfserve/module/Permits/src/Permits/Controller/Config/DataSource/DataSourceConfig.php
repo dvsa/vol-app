@@ -32,7 +32,6 @@ class DataSourceConfig
 
     const PERMIT_APP_TYPE = [
         AvailableTypes::class => [],
-        LastOpenWindow::class => [],
         LicencesAvailable::class => [
             'passInData' => [
                 'key' => 'id',
@@ -43,7 +42,6 @@ class DataSourceConfig
 
     const PERMIT_APP_ADD_LICENCE = [
         OpenWindows::class => [],
-        LastOpenWindow::class => [],
         LicencesAvailable::class => [
             'passInData' => [
                 'key' => 'id',
