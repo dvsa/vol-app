@@ -22,6 +22,9 @@
              if (isset($data['guidance'])) {
                  echo $this->partial('partials/guidance-blue-component', ['guidance' => $data['guidance']]);
              }
+             if (isset($data['banner'])) {
+                 echo $this->partial('partials/banner-component', ['banner' => $data['banner']]);
+             }
              if (isset($data['additionalGuidance'])) {
                  echo $this->partial('partials/additional-guidance-component', ['additionalGuidance' => $data['additionalGuidance']]);
              }
