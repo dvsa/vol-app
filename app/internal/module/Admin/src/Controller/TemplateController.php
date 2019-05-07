@@ -2,8 +2,6 @@
 
 namespace Admin\Controller;
 
-use Common\Controller\Interfaces\ToggleAwareInterface;
-use Common\FeatureToggle;
 use Dvsa\Olcs\Transfer\Query\Template\PreviewTemplateSource;
 use Olcs\Controller\AbstractInternalController;
 use Dvsa\Olcs\Transfer\Query\Template\TemplateSource as ItemDto;
@@ -19,16 +17,9 @@ use Zend\View\Model\JsonModel;
 
 /**
  * Email Template admin controller
- *
  */
-class TemplateController extends AbstractInternalController implements LeftViewProvider, ToggleAwareInterface
+class TemplateController extends AbstractInternalController implements LeftViewProvider
 {
-    protected $toggleConfig = [
-        'default' => [
-            FeatureToggle::ADMIN_PERMITS
-        ],
-    ];
-
     /**
      * @var array
      */
