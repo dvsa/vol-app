@@ -751,11 +751,11 @@ return [
                             'route' =>
                                 'email-templates[/:action][/:id][/]',
                             'constraints' => [
-                                'action' => '(index|add|edit|delete)',
+                                'action' => '(index|add|edit|delete|previewTemplate)',
                                 'id' => '[0-9\,]+',
                             ],
                             'defaults' => [
-                                'controller' => Admin\Controller\EmailTemplateController::class,
+                                'controller' => Admin\Controller\TemplateController::class,
                                 'action' => 'index',
                             ]
                         ],
@@ -770,7 +770,7 @@ return [
                                 'id' => '[0-9\,]+',
                             ],
                             'defaults' => [
-                                'controller' => Admin\Controller\EmailTemplateController::class,
+                                'controller' => Admin\Controller\TemplateController::class,
                                 'action' => 'index',
                             ]
                         ],
@@ -852,7 +852,7 @@ return [
             Admin\Controller\IrhpPermitPrintController::class =>
                 Admin\Controller\IrhpPermitPrintController::class,
             Admin\Controller\ReportUploadController::class => Admin\Controller\ReportUploadController::class,
-            Admin\Controller\EmailTemplateController::class => Admin\Controller\EmailTemplateController::class,
+            Admin\Controller\TemplateController::class => Admin\Controller\TemplateController::class,
         ],
     ],
     'view_manager' => [

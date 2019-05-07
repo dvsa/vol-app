@@ -4,6 +4,7 @@ namespace Admin\Controller;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Common\FeatureToggle;
+use Dvsa\Olcs\Transfer\Query\Template\PreviewTemplateSource;
 use Olcs\Controller\AbstractInternalController;
 use Dvsa\Olcs\Transfer\Query\Template\TemplateSource as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Template\AvailableTemplates as ListDto;
@@ -14,12 +15,13 @@ use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
 use Admin\Form\Model\Form\TemplateEdit;
 use Admin\Form\Model\Form\TemplateFilter;
+use Zend\View\Model\JsonModel;
 
 /**
  * Email Template admin controller
  *
  */
-class EmailTemplateController extends AbstractInternalController implements LeftViewProvider, ToggleAwareInterface
+class TemplateController extends AbstractInternalController implements LeftViewProvider, ToggleAwareInterface
 {
     protected $toggleConfig = [
         'default' => [
@@ -31,7 +33,8 @@ class EmailTemplateController extends AbstractInternalController implements Left
      * @var array
      */
     protected $inlineScripts = [
-        'indexAction' => ['table-actions']
+        'indexAction' => ['table-actions'],
+        'editAction' => ['forms/template-modal'],
     ];
 
     protected $tableName = 'admin-email-templates';
@@ -89,6 +92,41 @@ class EmailTemplateController extends AbstractInternalController implements Left
     public function alterFormForEdit(Form $form, Array $formData)
     {
         $this->placeholder()->setPlaceholder('contentTitle', 'Edit: '.$formData['description']);
+
+        $form->get('jsonUrl')
+            ->setValue(
+                $this->url()->fromRoute(
+                    'admin-dashboard/admin-email-templates',
+                    [
+                        'action' => 'previewTemplate'
+                    ]
+                )
+            );
+
         return $form;
+    }
+
+    public function previewTemplateAction()
+    {
+        $request = $this->getRequest();
+        $postData = $request->getPost();
+
+        $response = $this->handleQuery(
+            PreviewTemplateSource::create(
+                [
+                    'id' => $postData['id'],
+                    'source' => $postData['source']
+                ]
+            )
+        );
+
+        $returnData = $response->getResult();
+
+        if ($returnData['error']) {
+            $this->getResponse()->setStatusCode(422);
+            unset($returnData['error']);
+        }
+
+        return new JsonModel($returnData);
     }
 }

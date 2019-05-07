@@ -38,7 +38,7 @@ class FormSaveCancelPreview
 
     /**
      * @Form\Attributes({
-     *     "type":"submit",
+     *     "type":"button",
      *     "class":"action--secondary large",
      *     "id": "preview"
      * })
