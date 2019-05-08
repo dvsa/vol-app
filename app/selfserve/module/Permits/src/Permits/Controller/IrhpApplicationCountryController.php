@@ -10,6 +10,7 @@ use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
 use Permits\View\Helper\IrhpApplicationSection;
+use Zend\Mvc\MvcEvent;
 
 class IrhpApplicationCountryController extends AbstractSelfserveController implements ToggleAwareInterface
 {
@@ -52,4 +53,29 @@ class IrhpApplicationCountryController extends AbstractSelfserveController imple
             'saveAndReturnStep' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
         ],
     ];
+
+    /**
+     * Fix the issue whereby the country checkboxes selected in the form are not ticked on the postback where none
+     * were ticked on form submission
+     *
+     * @param MvcEvent $e event
+     *
+     * @return array|mixed
+     */
+    public function onDispatch(MvcEvent $e)
+    {
+        if ($this->request->isPost()) {
+            $post = $this->request->getPost();
+
+            $values = $post->get('fields');
+            if (is_null($values)) {
+                $values = [
+                    'countries' => []
+                ];
+                $post->set('fields', $values);
+            }
+        }
+
+        return parent::onDispatch($e);
+    }
 }

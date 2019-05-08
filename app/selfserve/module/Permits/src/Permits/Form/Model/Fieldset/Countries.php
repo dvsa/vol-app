@@ -11,14 +11,19 @@ class Countries
 {
     /**
      * @Form\Name("countries")
-     * @Form\Required(true)
+     * @Form\Required(false)
+     * @Form\ContinueIfEmpty(true)
      * @Form\Attributes({"class":"govuk-checkboxes__item"})
      * @Form\Options({
-     *      "error-message":"error.messages.permits.countries",
      *      "label_attributes": {"class": "form-control form-control--checkbox form-control--confirm"},
      * })
      * @Form\Validator({
-     *      "name": "Zend\Validator\NotEmpty"
+     *      "name": "Zend\Validator\NotEmpty",
+     *      "options": {
+     *          "messages": {
+     *              "isEmpty": "error.messages.permits.countries"
+     *          }
+     *      }
      * })
      * @Form\Type("DynamicMultiCheckbox")
      */
