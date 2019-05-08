@@ -16,32 +16,7 @@ return array(
         array(
             'title' => 'permits.irhp.fee-breakdown.validity-period',
             'name' => 'validityPeriod',
-            'formatter' => function ($row, $column, $sm) {
-                $dateFormatter = $sm->get('ViewHelperManager')->get('DateFormat');
-                $translator = $sm->get('Translator');
-
-                $validFrom = $dateFormatter(
-                    date($row['validFromTimestamp']),
-                    IntlDateFormatter::MEDIUM,
-                    IntlDateFormatter::NONE,
-                    $translator->getLocale()
-                );
-                $validFrom = trim(str_replace($row['year'], '', $validFrom));
-
-                $validTo = $dateFormatter(
-                    date($row['validToTimestamp']),
-                    IntlDateFormatter::MEDIUM,
-                    IntlDateFormatter::NONE,
-                    $translator->getLocale()
-                );
-                $validTo = trim(str_replace($row['year'], '', $validTo));
-
-                return sprintf(
-                    $translator->translate('permits.irhp.fee-breakdown.validity-period.cell'),
-                    $validFrom,
-                    $validTo
-                );
-            }
+            'formatter' => 'ValidityPeriod',
         ),
         array(
             'title' => 'permits.irhp.fee-breakdown.fee-per-permit',
