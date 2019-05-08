@@ -20,7 +20,11 @@ class IrhpApplicationFeeSummaryTest extends \PHPUnit\Framework\TestCase
         $dateReceived = '2020-12-25';
         $permitTypeDesc = 'permit type description';
         $permitsRequired = 999;
+
         $fee = 123.45;
+        $formattedFee = '£123.45';
+        $translatedFormattedFee = '£123.45 (non-refundable)';
+
         $url = m::mock(Url::class);
         $translationHelperService = m::mock(TranslationHelperService::class);
         $translationHelperService
@@ -28,11 +32,11 @@ class IrhpApplicationFeeSummaryTest extends \PHPUnit\Framework\TestCase
             ->with(
                 'permits.page.fee.permit.fee.non-refundable',
                 [
-                    $fee
+                    $formattedFee
                 ]
             )
             ->andReturn(
-                $fee . ' (non-refundable)'
+                $translatedFormattedFee
             )
             ->once();
 
@@ -70,14 +74,16 @@ class IrhpApplicationFeeSummaryTest extends \PHPUnit\Framework\TestCase
                 ],
                 [
                     'key' => IrhpApplicationFeeSummary::FEE_TOTAL_HEADING,
-                    'value' => $fee . ' (non-refundable)',
-                    'isCurrency' => true
+                    'value' => $translatedFormattedFee,
                 ],
             ],
         ];
 
         $expectedOutput = $inputData + $mappedData;
 
-        self::assertEquals($expectedOutput, IrhpApplicationFeeSummary::mapForDisplay($inputData, $translationHelperService, $url));
+        self::assertEquals(
+            $expectedOutput,
+            IrhpApplicationFeeSummary::mapForDisplay($inputData, $translationHelperService, $url)
+        );
     }
 }
