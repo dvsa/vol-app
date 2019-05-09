@@ -600,6 +600,12 @@ $nav = [
                                             'route' => 'licence/irhp-processing/tasks',
                                             'use_route_match' => true,
                                         ],
+                                        [
+                                            'id' => 'licence_irhp_permits_processing_read-history',
+                                            'label' => 'internal-crud-read-history',
+                                            'route' => 'licence/irhp-processing/read-history',
+                                            'use_route_match' => true,
+                                        ],
                                     ]
                                 ],
                                 [

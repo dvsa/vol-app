@@ -12,6 +12,7 @@ use Olcs\Controller\Bus\Processing\BusProcessingNoteController;
 use Olcs\Controller\Operator\OperatorProcessingNoteController;
 use Olcs\Controller\IrhpPermits\IrhpPermitProcessingOverviewController;
 use Olcs\Controller\IrhpPermits\IrhpPermitProcessingNoteController;
+use Olcs\Controller\IrhpPermits\IrhpPermitProcessingReadHistoryController;
 use Olcs\Controller\IrhpPermits\IrhpPermitProcessingTasksController;
 use Olcs\Controller\Bus\Details\BusDetailsController;
 use Olcs\Controller\Bus\Service\BusServiceController;
@@ -1058,6 +1059,16 @@ $routes = [
                                 'action' => 'index'
                             ]
                         ]
+                    ],
+                    'read-history' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'read-history[/]',
+                            'defaults' => [
+                                'controller' => IrhpPermitProcessingReadHistoryController::class,
+                                'action' => 'index',
+                            ]
+                        ],
                     ],
                 ]
             ],
