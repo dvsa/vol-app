@@ -1536,4 +1536,5 @@ return array(
         'datetimesec_format' => 'd M Y H:i:s'
     ],
     'my_account_route' => 'your-account',
+    'local_scripts_path' => [__DIR__ . '/../assets/js/inline/'],
 );
