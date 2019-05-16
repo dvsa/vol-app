@@ -24,6 +24,7 @@ class IrhpApplicationSection extends AbstractHelper
     const ROUTE_NO_OF_PERMITS = 'permits/application/no-of-permits';
     const ROUTE_CHECK_ANSWERS = 'permits/application/check-answers';
     const ROUTE_DECLARATION = 'permits/application/declaration';
+    const ROUTE_QUESTION = 'permits/application/question';
     const ROUTE_FEE = 'permits/application/fee';
     const ROUTE_SUBMITTED = 'permits/application/submitted';
     const ROUTE_PAYMENT_ACTION = 'permits/application/payment';
@@ -95,12 +96,19 @@ class IrhpApplicationSection extends AbstractHelper
      * @todo investigate (do we need) a separate view partial, currently sharing/reusing view from licence applications
      * @todo handle ordering of steps in something dedicated to the job
      *
-     * @param array $application application data
+     * @param array $application    Application data
+     * @param array $questionAnswer Question/Answer
      *
      * @return array
      */
-    public function __invoke(array $application): array
+    public function __invoke(array $application, array $questionAnswer = []): array
     {
+        if (!empty($application['irhpPermitType']['isApplicationPathEnabled'])) {
+            // the Q&A solution
+            return $this->createSectionsForApplicationPath($application, $questionAnswer);
+        }
+
+        // this is kept for backward compatibility only until everything is migrated to the Q&A solution
         if (!isset($application['irhpPermitType']['id'])
             || !isset(self::ROUTE_ORDER[$application['irhpPermitType']['id']])
         ) {
@@ -108,10 +116,66 @@ class IrhpApplicationSection extends AbstractHelper
         }
 
         $sections = [];
-        $appId = $application['id'];
 
         foreach (self::ROUTE_ORDER[$application['irhpPermitType']['id']] as $route => $field) {
-            $sections[] = $this->createSection($route, $application['sectionCompletion'][$field], $appId);
+            $sections[] = $this->createSection(
+                'section.name.' . str_replace('permits/', '', $route),
+                $application['sectionCompletion'][$field],
+                $route,
+                ['id' => $application['id']]
+            );
+        }
+
+        return $sections;
+    }
+
+    /**
+     * Create sections for the application path
+     *
+     * @param array $application    Application
+     * @param array $questionAnswer Question/Answer
+     *
+     * @return array
+     */
+    private function createSectionsForApplicationPath(array $application, array $questionAnswer): array
+    {
+        $sections = [];
+
+        // Q&A sections
+        foreach ($questionAnswer as $data) {
+            $route = self::ROUTE_QUESTION;
+            $routeParams = [
+                'id' => $application['id'],
+                'slug' => $data['slug'],
+            ];
+
+            switch ($data['slug']) {
+                case 'custom-licence':
+                    $route = self::ROUTE_LICENCE;
+                    $routeParams = [
+                        'id' => $application['id'],
+                    ];
+                    break;
+                case 'custom-check-answers':
+                    $route = self::ROUTE_CHECK_ANSWERS;
+                    $routeParams = [
+                        'id' => $application['id'],
+                    ];
+                    break;
+                case 'custom-declaration':
+                    $route = self::ROUTE_DECLARATION;
+                    $routeParams = [
+                        'id' => $application['id'],
+                    ];
+                    break;
+            }
+
+            $sections[] = $this->createSection(
+                $data['question'],
+                $data['status'],
+                $route,
+                $routeParams
+            );
         }
 
         return $sections;
@@ -120,23 +184,23 @@ class IrhpApplicationSection extends AbstractHelper
     /**
      * create a section
      *
-     * @param string $route  route
-     * @param string $status status
-     * @param int    $appId  application id
+     * @param string $name        section name
+     * @param string $status      status
+     * @param string $route       route
+     * @param array  $routeParams route params
      *
      * @return ViewModel
      */
-    private function createSection(string $route, string $status, int $appId): ViewModel
+    private function createSection(string $name, string $status, string $route, array $routeParams): ViewModel
     {
         $section = new ViewModel();
         $section->setTemplate('partials/overview_section');
         $section->setVariable('enabled', $status !== self::SECTION_COMPLETION_CANNOT_START);
         $section->setVariable('status', self::COMPLETION_STATUS[$status]);
         $section->setVariable('statusColour', self::COMPLETION_STATUS_COLOUR[$status]);
-        $section->setVariable('identifier', $appId);
-        $section->setVariable('identifierIndex', 'id');
-        $section->setVariable('name', 'section.name.' . str_replace('permits/', '', $route));
+        $section->setVariable('name', $name);
         $section->setVariable('route', $route);
+        $section->setVariable('routeParams', $routeParams);
 
         return $section;
     }

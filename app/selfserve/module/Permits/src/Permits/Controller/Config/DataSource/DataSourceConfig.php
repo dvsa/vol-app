@@ -148,6 +148,11 @@ class DataSourceConfig
         ],
     ];
 
+    const IRHP_APP_OVERVIEW = [
+        IrhpAppDataSource::class => [],
+        QuestionAnswer::class => [],
+    ];
+
     const IRHP_APP = [
         IrhpAppDataSource::class => [],
     ];

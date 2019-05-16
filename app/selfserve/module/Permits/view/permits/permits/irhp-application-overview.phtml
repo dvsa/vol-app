@@ -1,10 +1,12 @@
 <?php
     use Permits\View\Helper\IrhpApplicationSection as Section;
     use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
+    use Permits\Controller\Config\DataSource\QuestionAnswer as QuestionAnswerDataSource;
 
     $title = $this->translate('permits.irhp-application.overview.title');
     $this->headTitle($title);
     $application = $data[IrhpAppDataSource::DATA_KEY];
+    $questionAnswer = $data[QuestionAnswerDataSource::DATA_KEY];
 ?>
 
 <div class="govuk-grid-row">
@@ -30,7 +32,7 @@
             <div class="table_wrapper">
                 <ol class="overview__list">
                     <?php
-                    $sections = $this->irhpApplicationSection($application);
+                    $sections = $this->irhpApplicationSection($application, $questionAnswer);
 
                     foreach ($sections as $section) {
                         echo $this->render($section);

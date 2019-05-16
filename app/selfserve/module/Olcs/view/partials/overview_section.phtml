@@ -2,7 +2,7 @@
   <?php if ($enabled) : ?>
   <a
    class="overview__link overview__link--large"
-   href="<?php echo $this->url($route, array($identifierIndex => $identifier)); ?>"
+   href="<?php echo $this->url($route, $routeParams ?? array($identifierIndex => $identifier)); ?>"
    <?php if (isset($anchorRef)): ?>
    id="overview-item__<?php echo $anchorRef; ?>"
    <?php endif; ?>

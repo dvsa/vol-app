@@ -104,14 +104,14 @@ return [
                       'question' => [
                           'type'    => 'segment',
                           'options' => [
-                              'route'    => 'question/:question[/]',
+                              'route'    => 'question/:slug[/]',
                               'defaults' => [
                                   // TODO - OLCS-23877 / OLCS-22835 / OLCS-23878
                                   'controller'    => IrhpApplicationController::class,
                                   'action'        => 'question',
                               ],
                               'constraints' => [
-                                  'question' => '[0-9]+',
+                                  'slug' => '[0-9A-Za-z\-]+',
                               ],
                           ],
                           'may_terminate' => true,
