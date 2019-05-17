@@ -1,7 +1,6 @@
 <?php
 namespace Permits\Controller;
 
-use Zend\Http\Response as HttpResponse;
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
@@ -45,10 +44,12 @@ class FeePartSuccessfulController extends AbstractSelfserveController implements
             'params' => ParamsConfig::ID_FROM_ROUTE,
             'step' => EcmtSection::ROUTE_ECMT_PAYMENT_ACTION,
             'conditional' => [
-                'command' => AcceptEcmtPermits::class,
                 'dataKey' => 'application',
                 'params' => 'id',
-                'step' => EcmtSection::ROUTE_ISSUE_SUBMITTED,
+                'step' => [
+                    'command' => AcceptEcmtPermits::class,
+                    'route' => EcmtSection::ROUTE_ISSUE_SUBMITTED,
+                ],
                 'field' => 'hasOutstandingFees',
                 'value' => 0
             ]

@@ -181,7 +181,11 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
 
                     $command = UpdateEcmtCountries::create(['id' => $id, 'countryIds' => $countryIds]);
                     $this->handleCommand($command);
-                    return $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_NO_OF_PERMITS);
+                    return $this->handleSaveAndReturnStep(
+                        $data,
+                        EcmtSection::ROUTE_ECMT_NO_OF_PERMITS,
+                        EcmtSection::ROUTE_APPLICATION_OVERVIEW
+                    );
                 } else {
                     //conditional validation failed, restricted countries list should not be empty
                     $form->get('Fields')
@@ -244,7 +248,11 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                 ) {
                     $form->get('Fields')->get('intensityWarning')->setValue('yes');
                 } else {
-                    return $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_INTERNATIONAL_JOURNEY);
+                    return $this->handleSaveAndReturnStep(
+                        $data,
+                        EcmtSection::ROUTE_ECMT_INTERNATIONAL_JOURNEY,
+                        EcmtSection::ROUTE_APPLICATION_OVERVIEW
+                    );
                 }
             }
         }
@@ -305,7 +313,11 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                 ) {
                     $form->get('Fields')->get('intensityWarning')->setValue('yes');
                 } else {
-                    return $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_SECTORS);
+                    return $this->handleSaveAndReturnStep(
+                        $data,
+                        EcmtSection::ROUTE_ECMT_SECTORS,
+                        EcmtSection::ROUTE_APPLICATION_OVERVIEW
+                    );
                 }
             } else {
                 //Custom Error Message
@@ -354,7 +366,11 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                 );
                 $this->handleCommand($command);
 
-                return $this->handleSaveAndReturnStep($data, EcmtSection::ROUTE_ECMT_TRIPS);
+                return $this->handleSaveAndReturnStep(
+                    $data,
+                    EcmtSection::ROUTE_ECMT_TRIPS,
+                    EcmtSection::ROUTE_APPLICATION_OVERVIEW
+                );
             } else {
                 $setDefaultValues = false;
             }

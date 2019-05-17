@@ -45,6 +45,7 @@ class CabotageController extends AbstractSelfserveController implements ToggleAw
             'command' => UpdateEcmtCabotage::class,
             'params' => ParamsConfig::ID_FROM_ROUTE,
             'step' => EcmtSection::ROUTE_ECMT_COUNTRIES,
+            'saveAndReturnStep' => EcmtSection::ROUTE_APPLICATION_OVERVIEW,
         ],
     ];
 }

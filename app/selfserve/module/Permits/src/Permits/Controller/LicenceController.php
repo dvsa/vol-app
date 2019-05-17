@@ -75,7 +75,12 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
             'conditional' => [
                 'dataKey' => 'application',
                 'value' => 'licence',
-                'step' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
+                'step' => [
+                    'route' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
+                ],
+                'saveAndReturnStep' => [
+                    'route' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
+                ],
                 'field' => ['licence', 'id'],
             ]
         ],
@@ -85,7 +90,12 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
             'conditional' => [
                 'dataKey' => 'application',
                 'value' => 'licence',
-                'step' => EcmtSection::ROUTE_APPLICATION_OVERVIEW,
+                'step' => [
+                    'route' => EcmtSection::ROUTE_APPLICATION_OVERVIEW,
+                ],
+                'saveAndReturnStep' => [
+                    'route' => EcmtSection::ROUTE_APPLICATION_OVERVIEW,
+                ],
                 'field' => ['licence', 'id'],
             ]
         ],
