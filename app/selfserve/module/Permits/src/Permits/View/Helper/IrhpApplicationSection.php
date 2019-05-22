@@ -171,7 +171,7 @@ class IrhpApplicationSection extends AbstractHelper
             }
 
             $sections[] = $this->createSection(
-                $data['question'],
+                $data['questionShort'],
                 $data['status'],
                 $route,
                 $routeParams
