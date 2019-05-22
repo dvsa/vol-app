@@ -44,6 +44,7 @@ class SectorsController extends AbstractSelfserveController implements ToggleAwa
             'command' => UpdateSector::class,
             'params' => ParamsConfig::ID_FROM_ROUTE,
             'step' => EcmtSection::ROUTE_ECMT_CHECK_ANSWERS,
+            'saveAndReturnStep' => EcmtSection::ROUTE_APPLICATION_OVERVIEW,
         ],
     ];
 }

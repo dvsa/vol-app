@@ -50,10 +50,15 @@ class IrhpApplicationDeclarationController extends AbstractSelfserveController i
             'step' => IrhpApplicationSection::ROUTE_FEE,
             'saveAndReturnStep' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
             'conditional' => [
-                'command' => SubmitApplication::class,
                 'dataKey' => 'application',
                 'params' => 'id',
-                'step' => IrhpApplicationSection::ROUTE_SUBMITTED,
+                'step' => [
+                    'command' => SubmitApplication::class,
+                    'route' => IrhpApplicationSection::ROUTE_SUBMITTED,
+                ],
+                'saveAndReturnStep' => [
+                    'route' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
+                ],
                 'field' => 'hasOutstandingFees',
                 'value' => false
             ]

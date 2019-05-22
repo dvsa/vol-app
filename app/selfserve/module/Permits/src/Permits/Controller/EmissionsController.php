@@ -48,6 +48,7 @@ class EmissionsController extends AbstractSelfserveController implements ToggleA
             'command' => UpdateEcmtEmissions::class,
             'params' => ParamsConfig::ID_FROM_ROUTE,
             'step' => EcmtSection::ROUTE_ECMT_CABOTAGE,
+            'saveAndReturnStep' => EcmtSection::ROUTE_APPLICATION_OVERVIEW,
         ],
     ];
 }

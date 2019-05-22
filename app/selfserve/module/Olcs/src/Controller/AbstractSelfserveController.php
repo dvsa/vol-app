@@ -8,10 +8,11 @@ use Common\Data\Mapper\MapperInterface;
 use Common\Form\Form;
 use Common\Service\Cqrs\Response as CqrsResponse;
 use Common\Service\Helper\FormHelperService;
+use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Olcs\Controller\Config\DataSource\DataSourceInterface;
-use Permits\View\Helper\EcmtSection;
+use Olcs\Logging\Log\Logger;
 use ReflectionMethod;
 use Zend\Http\Response as HttpResponse;
 use Zend\Mvc\MvcEvent;
@@ -288,17 +289,14 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
                     $field = $config['conditional']['field'];
                     $value = $config['conditional']['value'];
 
+                    /** @todo I have no idea what this does, but it can surely be simplified */
                     if (is_array($field) && array_search($params[$value], $this->data[$dataKey][$field[0]]) === $field[1]
                         || !is_array($field) && $this->data[$dataKey][$field] === $value) {
                         return $this->redirectConditionalPost($config);
                     }
                 }
 
-                if (isset($config['saveAndReturnStep'])) {
-                    $saveAndReturnStep = $config['saveAndReturnStep'];
-                } else {
-                    $saveAndReturnStep = EcmtSection::ROUTE_APPLICATION_OVERVIEW;
-                }
+                $saveAndReturnStep = isset($config['saveAndReturnStep']) ? $config['saveAndReturnStep'] : '';
 
                 return $this->handleSaveAndReturnStep(
                     $this->postParams,
@@ -598,38 +596,52 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      * ordering, that will automatically "know" the next route - this will also be needed to make this method generic
      * for wider selfserve use. Permits needs to start using VOL standard buttons before this can be truly reusable
      *
-     * @param array $submittedData - an array of the data submitted by the form
-     * @param string $nextStep - the route to be taken if the form was submitted normally
-     * @param string $saveAndReturnStep - the route to be taken is the form was submitted using save and return
-     * @param array $params
-     * @param array $options
+     * @param array  $submittedData     an array of the data submitted by the form
+     * @param string $nextStep          the route to be taken if the form was submitted normally
+     * @param string $saveAndReturnStep the route to be taken is the form was submitted using save and return
+     * @param array  $params            route params
+     * @param array  $options           route options
+     *
      * @return HttpResponse
      */
     protected function handleSaveAndReturnStep(
         array $submittedData,
         string $nextStep,
-        $saveAndReturnStep = EcmtSection::ROUTE_APPLICATION_OVERVIEW,
+        string $saveAndReturnStep,
         array $params = [],
         array $options = []
     ): HttpResponse {
-        if (array_key_exists('SubmitButton', $submittedData['Submit']) || array_key_exists('ChangeButton', $submittedData['Submit'])) {
-            // Form was submitted normally so continue on chosen path
-            $step = $nextStep;
-        } else {
-            // A button other than the primary submit button was clicked so return to overview
+        $step = $nextStep;
+
+        if ($this->isSaveAndReturn($submittedData)) {
             $step = $saveAndReturnStep;
         }
+
+        Logger::debug('Redirecting to route: ' . $step, $this->routeParams);
 
         return $this->nextStep($step, $params, $options);
     }
 
     /**
-     * @todo same as handleSaveAndReturnStep, in that this is currently permits specific, but can easily be made generic
+     * Returns true if this is a save and return post, false if not
+     * (Checks whether a button other than the primary submit or change button was clicked)
      *
-     * @param string $route
+     * @param array $submittedData the post data
      *
-     * @param array $params
-     * @param array $options
+     * @return bool
+     */
+    protected function isSaveAndReturn(array $submittedData): bool
+    {
+        return !isset($submittedData['Submit']['SubmitButton']) && !isset($submittedData['Submit']['ChangeButton']);
+    }
+
+    /**
+     * Redirects to the next step in the journey
+     *
+     * @param string $route   route
+     * @param array  $params  route params
+     * @param array  $options route options
+     *
      * @return HttpResponse
      */
     protected function nextStep(string $route, array $params = [], array $options = []): HttpResponse
@@ -756,29 +768,50 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     }
 
     /**
-     * Redirect by conditional
+     * Allow for different commands and redirects to be triggered based on certain conditions
      *
-     * @param array $config
+     * @param array $config conditional config
+     *
      * @return HttpResponse
      */
     protected function redirectConditionalPost(array $config)
     {
-        if (isset($config['conditional']['command'])) {
-            $conditionalCommand = $config['conditional']['command']::create([
-                $config['conditional']['params'] => $this->data[$config['conditional']['dataKey']][$config['conditional']['params']]
+        /** @note the way this is written, it allows saveAndReturnStep to be omitted from configs if it isn't needed */
+        if ($this->isSaveAndReturn($this->postParams)) {
+            $condition = $config['conditional']['saveAndReturnStep'];
+            $step = '';
+            $saveAndReturnStep = $condition['route'];
+        } else {
+            $condition = $config['conditional']['step'];
+            $step = $condition['route'];
+            $saveAndReturnStep = '';
+        }
+
+        if (isset($condition['command'])) {
+            /** @var CommandInterface $conditionalCommand */
+            $conditionalCommand = $condition['command']::create([
+                $config['conditional']['params'] =>
+                    $this->data[$config['conditional']['dataKey']][$config['conditional']['params']]
             ]);
+
+            Logger::debug(
+                'Sending conditional command: ' . get_class($conditionalCommand),
+                $conditionalCommand->getArrayCopy()
+            );
+
             $conditionalResponse = $this->handleCommand($conditionalCommand);
             $this->handleResponse($conditionalResponse);
         }
 
         $conditionalQueryParams = isset($config['conditional']['query']) ? $config['conditional']['query'] : [];
 
-        return $this->redirect()
-            ->toRoute(
-                $config['conditional']['step'],
-                ['id' => $this->data[$config['conditional']['dataKey']]['id']],
-                ['query' => $conditionalQueryParams]
-            );
+        return $this->handleSaveAndReturnStep(
+            $this->postParams,
+            $step,
+            $saveAndReturnStep,
+            ['id' => $this->data[$config['conditional']['dataKey']]['id']],
+            ['query' => $conditionalQueryParams]
+        );
     }
 
     /**
