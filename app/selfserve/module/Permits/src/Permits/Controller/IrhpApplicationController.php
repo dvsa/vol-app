@@ -14,7 +14,7 @@ class IrhpApplicationController extends AbstractSelfserveController implements T
     ];
 
     protected $dataSourceConfig = [
-        'default' => DataSourceConfig::IRHP_APP,
+        'default' => DataSourceConfig::IRHP_APP_OVERVIEW,
     ];
 
     protected $conditionalDisplayConfig = [

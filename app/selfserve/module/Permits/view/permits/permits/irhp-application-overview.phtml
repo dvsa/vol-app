@@ -1,10 +1,12 @@
 <?php
     use Permits\View\Helper\IrhpApplicationSection as Section;
     use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
+    use Permits\Controller\Config\DataSource\QuestionAnswer as QuestionAnswerDataSource;
 
     $title = $this->translate('permits.irhp-application.overview.title');
     $this->headTitle($title);
     $application = $data[IrhpAppDataSource::DATA_KEY];
+    $questionAnswer = $data[QuestionAnswerDataSource::DATA_KEY];
 ?>
 
 <div class="govuk-grid-row">
@@ -12,7 +14,7 @@
         <div class="page-header">
             <p><a href="<?php echo $this->url('permits'); ?>" class="back-link"> <?php echo $this->escapeHtml($this->translate('common.link.back.label')); ?></a></p>
             <div class="page-header__wrapper">
-                <h3 class="page-header__subtitle"><?php echo $this->escapeHtml($application['applicationRef']); ?></h3>
+                <span class="page-header__subtitle"><?php echo $this->escapeHtml($application['applicationRef']); ?></span>
                 <h1 class="js-title">
                     <?php echo $this->escapeHtml($this->translate('permits.irhp-application.overview.main')); ?>
                 </h1>
@@ -30,7 +32,7 @@
             <div class="table_wrapper">
                 <ol class="overview__list">
                     <?php
-                    $sections = $this->irhpApplicationSection($application);
+                    $sections = $this->irhpApplicationSection($application, $questionAnswer);
 
                     foreach ($sections as $section) {
                         echo $this->render($section);
@@ -57,7 +59,7 @@
         <aside class="sidebar" role="complementary">
 
             <div class="info-box info-box--grey">
-                <h3 class="info-box__heading"><?php echo $this->translate('permits.irhp-application.status.question'); ?></h3>
+                <h2 class="info-box__heading"><?php echo $this->translate('permits.irhp-application.status.question'); ?></h2>
                 <p class="info-box__icon-wrapper"><i class="info-box__icon selfserve-important"></i><?php echo $this->escapeHtml($application['status']['description']); ?></p>
                 <?php
                 if ($application['canBeCancelled']) {
