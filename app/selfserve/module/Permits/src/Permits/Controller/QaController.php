@@ -53,9 +53,6 @@ class QaController extends AbstractOlcsController
 
         $form = $this->formProvider->get($result['form']);
 
-        // TODO: what does this line do and is it necessary?
-        //$this->formHelper->setFormActionFromRequest($form, $this->getRequest());
-
         if ($this->request->isPost()) {
             $postParams = $this->params()->fromPost();
             $form->setData($postParams);
