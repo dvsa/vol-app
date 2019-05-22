@@ -1279,7 +1279,7 @@ return array(
                 \Olcs\Controller\Lva\Factory\Adapter\LicenceTransportManagerAdapterFactory::class,
             'VariationTransportManagerAdapter' =>
                 \Olcs\Controller\Lva\Factory\Adapter\VariationTransportManagerAdapterFactory::class,
-            'QaFormProvider' => FormProviderFactory::class,   
+            'QaFormProvider' => FormProviderFactory::class,
             'QaSingleCheckboxFormTypeProvider' => SingleCheckboxFormTypeProviderFactory::class,
             'QaRadioFormTypeProvider' => RadioFormTypeProviderFactory::class,
             'QaTextFormTypeProvider' => TextFormTypeProviderFactory::class,

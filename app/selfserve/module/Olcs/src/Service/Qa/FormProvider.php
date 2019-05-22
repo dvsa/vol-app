@@ -41,7 +41,7 @@ class FormProvider
         $type = $formData[self::CONTROL_TYPE_INDEX];
         if (!isset($this->formTypeProviderMappings[$type])) {
             throw new RuntimeException('No mapping found for type ' . $type);
-        } 
+        }
 
         $formTypeProvider = $this->formTypeProviderMappings[$type];
         return $formTypeProvider->get($formData[self::DATA_INDEX], $formData[self::VALIDATORS_INDEX]);
