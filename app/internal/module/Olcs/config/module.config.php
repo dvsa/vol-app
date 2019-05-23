@@ -334,6 +334,7 @@ return array(
             'IrhpPermitFeesController' => 'Olcs\Controller\IrhpPermits\IrhpPermitFeesController',
             'IrhpPermitController' => 'Olcs\Controller\IrhpPermits\IrhpPermitController',
             'IrhpDocsController' => 'Olcs\Controller\IrhpPermits\IrhpDocsController',
+            'IrhpApplicationDocsController' => 'Olcs\Controller\IrhpPermits\IrhpApplicationDocsController',
             \Olcs\Controller\IrhpPermits\IrhpPermitProcessingOverviewController::class =>
                 \Olcs\Controller\IrhpPermits\IrhpPermitProcessingOverviewController::class,
             \Olcs\Controller\IrhpPermits\IrhpPermitProcessingNoteController::class =>
@@ -342,6 +343,12 @@ return array(
                 \Olcs\Controller\IrhpPermits\IrhpPermitProcessingTasksController::class,
             \Olcs\Controller\IrhpPermits\ChangeHistoryController::class =>
                 \Olcs\Controller\IrhpPermits\ChangeHistoryController::class,
+            \Olcs\Controller\IrhpPermits\IrhpApplicationProcessingOverviewController::class =>
+                \Olcs\Controller\IrhpPermits\IrhpApplicationProcessingOverviewController::class,
+            \Olcs\Controller\IrhpPermits\IrhpApplicationProcessingNoteController::class =>
+                \Olcs\Controller\IrhpPermits\IrhpApplicationProcessingNoteController::class,
+            \Olcs\Controller\IrhpPermits\IrhpApplicationProcessingTasksController::class =>
+                \Olcs\Controller\IrhpPermits\IrhpApplicationProcessingTasksController::class,
             Olcs\Controller\Licence\SurrenderController::class => Olcs\Controller\Licence\SurrenderController::class
         ),
         'factories' => [

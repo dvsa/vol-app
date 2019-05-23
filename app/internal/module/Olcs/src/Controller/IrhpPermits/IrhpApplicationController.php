@@ -38,6 +38,8 @@ class IrhpApplicationController extends AbstractInternalController implements
     LeftViewProvider,
     ToggleAwareInterface
 {
+    use ShowIrhpApplicationNavigationTrait;
+
     protected $toggleConfig = [
         'default' => [
             FeatureToggle::BACKEND_PERMITS
@@ -124,7 +126,6 @@ class IrhpApplicationController extends AbstractInternalController implements
         if ($request->isPost() && array_key_exists('back', (array)$this->params()->fromPost()['form-actions'])) {
             return $this->permitDashRedirect();
         }
-        $this->setNavigationVisible();
 
         return parent::addAction();
     }
@@ -141,7 +142,6 @@ class IrhpApplicationController extends AbstractInternalController implements
         if ($request->isPost() && array_key_exists('back', (array)$this->params()->fromPost()['form-actions'])) {
             return $this->permitDashRedirect();
         }
-        $this->setNavigationVisible();
 
         return parent::editAction();
     }
@@ -423,14 +423,5 @@ class IrhpApplicationController extends AbstractInternalController implements
         }
 
         return $response->getResult();
-    }
-
-    /**
-     * To avoid duplicate tabs on Licence dashboard the nav for this controller is invisible. Set visible as required.
-     */
-    protected function setNavigationVisible()
-    {
-        $navigation = $this->getServiceLocator()->get('Navigation');
-        $navigation->findOneBy('id', 'licence_irhp_applications')->setVisible(1);
     }
 }
