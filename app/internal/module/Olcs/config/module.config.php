@@ -340,6 +340,8 @@ return array(
                 \Olcs\Controller\IrhpPermits\IrhpPermitProcessingNoteController::class,
             \Olcs\Controller\IrhpPermits\IrhpPermitProcessingTasksController::class =>
                 \Olcs\Controller\IrhpPermits\IrhpPermitProcessingTasksController::class,
+            \Olcs\Controller\IrhpPermits\ChangeHistoryController::class =>
+                \Olcs\Controller\IrhpPermits\ChangeHistoryController::class,
             Olcs\Controller\Licence\SurrenderController::class => Olcs\Controller\Licence\SurrenderController::class
         ),
         'factories' => [
