@@ -14,6 +14,7 @@ use Olcs\Controller\IrhpPermits\IrhpPermitProcessingOverviewController;
 use Olcs\Controller\IrhpPermits\IrhpPermitProcessingNoteController;
 use Olcs\Controller\IrhpPermits\IrhpPermitProcessingReadHistoryController;
 use Olcs\Controller\IrhpPermits\IrhpPermitProcessingTasksController;
+use Olcs\Controller\IrhpPermits\ChangeHistoryController;
 use Olcs\Controller\Bus\Details\BusDetailsController;
 use Olcs\Controller\Bus\Service\BusServiceController;
 use Olcs\Controller\SearchController;
@@ -1059,6 +1060,16 @@ $routes = [
                                 'action' => 'index'
                             ]
                         ]
+                    ],
+                    'change-history' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'change-history[/]',
+                            'defaults' => [
+                                'controller' => ChangeHistoryController::class,
+                                'action' => 'index',
+                            ]
+                        ],
                     ],
                     'read-history' => [
                         'type' => 'segment',

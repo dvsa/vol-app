@@ -601,6 +601,12 @@ $nav = [
                                             'use_route_match' => true,
                                         ],
                                         [
+                                            'id' => 'licence_irhp_permits_processing_change-history',
+                                            'label' => 'Change history',
+                                            'route' => 'licence/irhp-processing/change-history',
+                                            'use_route_match' => true,
+                                        ],
+                                        [
                                             'id' => 'licence_irhp_permits_processing_read-history',
                                             'label' => 'internal-crud-read-history',
                                             'route' => 'licence/irhp-processing/read-history',
