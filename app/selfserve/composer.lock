@@ -1,10 +1,11 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "691311b2fd643e7b8d4932a4960827b2",
+    "hash": "a6573141dc45bdd2bb372e8f12c9e6ba",
+    "content-hash": "22f242c2cd4d898c48bdc00adc4266db",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -12,7 +13,7 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/annotations/v1.6.1/doctrine-annotations-v1.6.1.zip",
-                "reference": "53120e0eb10355388d6ccbe462f1fea34ddadb24",
+                "reference": null,
                 "shasum": ""
             },
             "require": {
@@ -66,7 +67,7 @@
                 "docblock",
                 "parser"
             ],
-            "time": "2019-03-25T19:12:02+00:00"
+            "time": "2019-03-25 19:12:02"
         },
         {
             "name": "doctrine/cache",
@@ -74,7 +75,7 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/cache/v1.8.0/doctrine-cache-v1.8.0.zip",
-                "reference": "d768d58baee9a4862ca783840eca1b9add7a7f57",
+                "reference": null,
                 "shasum": ""
             },
             "require": {
@@ -135,7 +136,7 @@
                 "cache",
                 "caching"
             ],
-            "time": "2018-08-21T18:01:43+00:00"
+            "time": "2018-08-21 18:01:43"
         },
         {
             "name": "doctrine/collections",
@@ -143,7 +144,7 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/collections/v1.6.1/doctrine-collections-v1.6.1.zip",
-                "reference": "d2ae4ef05e25197343b6a39bae1d3c427a2f6956",
+                "reference": null,
                 "shasum": ""
             },
             "require": {
@@ -199,7 +200,7 @@
                 "iterators",
                 "php"
             ],
-            "time": "2019-03-25T19:03:48+00:00"
+            "time": "2019-03-25 19:03:48"
         },
         {
             "name": "doctrine/common",
@@ -207,7 +208,7 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/common/v2.10.0/doctrine-common-v2.10.0.zip",
-                "reference": "30e33f60f64deec87df728c02b107f82cdafad9d",
+                "reference": null,
                 "shasum": ""
             },
             "require": {
@@ -274,7 +275,7 @@
                 "doctrine",
                 "php"
             ],
-            "time": "2018-11-21T01:24:55+00:00"
+            "time": "2018-11-21 01:24:55"
         },
         {
             "name": "doctrine/dbal",
@@ -282,7 +283,7 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/dbal/v2.6.3/doctrine-dbal-v2.6.3.zip",
-                "reference": "e3eed9b1facbb0ced3a0995244843a189e7d1b13",
+                "reference": null,
                 "shasum": ""
             },
             "require": {
@@ -341,7 +342,7 @@
                 "persistence",
                 "queryobject"
             ],
-            "time": "2017-11-19T13:38:54+00:00"
+            "time": "2017-11-19 13:38:54"
         },
         {
             "name": "doctrine/doctrine-module",
@@ -349,7 +350,7 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/doctrine-module/1.0.1/doctrine-doctrine-module-1.0.1.zip",
-                "reference": "ade6c1667283e3d8131d40e79c427b8a8100e7d3",
+                "reference": null,
                 "shasum": ""
             },
             "require": {
@@ -413,7 +414,7 @@
                 "module",
                 "zf2"
             ],
-            "time": "2016-03-21T22:50:01+00:00"
+            "time": "2016-03-21 22:50:01"
         },
         {
             "name": "doctrine/doctrine-orm-module",
@@ -421,7 +422,7 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/doctrine-orm-module/0.10.0/doctrine-doctrine-orm-module-0.10.0.zip",
-                "reference": "50808eb795d00aac6a551023b1bb379de054f9b5",
+                "reference": null,
                 "shasum": ""
             },
             "require": {
@@ -485,7 +486,7 @@
                 "orm",
                 "zf2"
             ],
-            "time": "2016-03-22T00:43:08+00:00"
+            "time": "2016-03-22 00:43:08"
         },
         {
             "name": "doctrine/event-manager",
@@ -493,7 +494,7 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/event-manager/v1.0.0/doctrine-event-manager-v1.0.0.zip",
-                "reference": "a520bc093a0170feeb6b14e9d83f3a14452e64b3",
+                "reference": null,
                 "shasum": ""
             },
             "require": {
@@ -553,7 +554,7 @@
                 "eventdispatcher",
                 "eventmanager"
             ],
-            "time": "2018-06-11T11:59:03+00:00"
+            "time": "2018-06-11 11:59:03"
         },
         {
             "name": "doctrine/inflector",
@@ -561,7 +562,7 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/inflector/v1.3.0/doctrine-inflector-v1.3.0.zip",
-                "reference": "5527a48b7313d15261292c149e55e26eae771b0a",
+                "reference": null,
                 "shasum": ""
             },
             "require": {
@@ -614,7 +615,7 @@
                 "singularize",
                 "string"
             ],
-            "time": "2018-01-09T20:05:19+00:00"
+            "time": "2018-01-09 20:05:19"
         },
         {
             "name": "doctrine/instantiator",
@@ -622,7 +623,7 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/instantiator/1.2.0/doctrine-instantiator-1.2.0.zip",
-                "reference": "a2c590166b2133a4633738648b6b064edae0814a",
+                "reference": null,
                 "shasum": ""
             },
             "require": {
@@ -664,7 +665,7 @@
                 "constructor",
                 "instantiate"
             ],
-            "time": "2019-03-17T17:37:11+00:00"
+            "time": "2019-03-17 17:37:11"
         },
         {
             "name": "doctrine/lexer",
@@ -672,7 +673,7 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/lexer/v1.0.1/doctrine-lexer-v1.0.1.zip",
-                "reference": "83893c552fd2045dd78aef794c31e694c37c0b8c",
+                "reference": null,
                 "shasum": ""
             },
             "require": {
@@ -712,7 +713,7 @@
                 "lexer",
                 "parser"
             ],
-            "time": "2014-09-09T13:34:57+00:00"
+            "time": "2014-09-09 13:34:57"
         },
         {
             "name": "doctrine/orm",
@@ -720,7 +721,7 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/orm/v2.6.3/doctrine-orm-v2.6.3.zip",
-                "reference": "434820973cadf2da2d66e7184be370084cc32ca8",
+                "reference": null,
                 "shasum": ""
             },
             "require": {
@@ -788,7 +789,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2018-11-20T23:46:46+00:00"
+            "time": "2018-11-20 23:46:46"
         },
         {
             "name": "doctrine/persistence",
@@ -796,7 +797,7 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/persistence/v1.1.0/doctrine-persistence-v1.1.0.zip",
-                "reference": "c0f1c17602afc18b4cbd8e1c8125f264c9cf7d38",
+                "reference": null,
                 "shasum": ""
             },
             "require": {
@@ -864,7 +865,7 @@
                 "orm",
                 "persistence"
             ],
-            "time": "2018-11-21T00:33:13+00:00"
+            "time": "2018-11-21 00:33:13"
         },
         {
             "name": "doctrine/reflection",
@@ -872,7 +873,7 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/reflection/v1.0.0/doctrine-reflection-v1.0.0.zip",
-                "reference": "02538d3f95e88eb397a5f86274deb2c6175c2ab6",
+                "reference": null,
                 "shasum": ""
             },
             "require": {
@@ -933,7 +934,7 @@
             "keywords": [
                 "reflection"
             ],
-            "time": "2018-06-14T14:45:07+00:00"
+            "time": "2018-06-14 14:45:07"
         },
         {
             "name": "elendev/nexus-composer-push",
@@ -941,7 +942,7 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/elendev/nexus-composer-push/v0.1.0/elendev-nexus-composer-push-v0.1.0.zip",
-                "reference": "4e60c26092fc7bccff94ccc9f86d2047890d26f4",
+                "reference": null,
                 "shasum": ""
             },
             "require": {
@@ -972,7 +973,7 @@
                 }
             ],
             "description": "Provide a Push command to composer to push to Nexus repositories",
-            "time": "2019-04-11T13:26:33+00:00"
+            "time": "2019-04-11 13:26:33"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -980,7 +981,7 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/ezyang/htmlpurifier/v4.10.0/ezyang-htmlpurifier-v4.10.0.zip",
-                "reference": "d85d39da4576a6934b72480be6978fb10c860021",
+                "reference": null,
                 "shasum": ""
             },
             "require": {
@@ -1013,7 +1014,7 @@
             "keywords": [
                 "html"
             ],
-            "time": "2018-02-23T01:58:20+00:00"
+            "time": "2018-02-23 01:58:20"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -1021,7 +1022,7 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/guzzlehttp/guzzle/6.3.3/guzzlehttp-guzzle-6.3.3.zip",
-                "reference": "407b0cb880ace85c9b63c5f9551db498cb2d50ba",
+                "reference": null,
                 "shasum": ""
             },
             "require": {
@@ -1072,7 +1073,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2018-04-22T15:46:56+00:00"
+            "time": "2018-04-22 15:46:56"
         },
         {
             "name": "guzzlehttp/promises",
@@ -1080,7 +1081,7 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/guzzlehttp/promises/v1.3.1/guzzlehttp-promises-v1.3.1.zip",
-                "reference": "a59da6cf61d80060647ff4d3eb2c03a2bc694646",
+                "reference": null,
                 "shasum": ""
             },
             "require": {
@@ -1117,7 +1118,7 @@
             "keywords": [
                 "promise"
             ],
-            "time": "2016-12-20T10:07:11+00:00"
+            "time": "2016-12-20 10:07:11"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -1125,7 +1126,7 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/guzzlehttp/psr7/1.5.2/guzzlehttp-psr7-1.5.2.zip",
-                "reference": "9f83dded91781a01c63574e387eaa769be769115",
+                "reference": null,
                 "shasum": ""
             },
             "require": {
@@ -1178,29 +1179,29 @@
                 "uri",
                 "url"
             ],
-            "time": "2018-12-04T20:46:45+00:00"
+            "time": "2018-12-04 20:46:45"
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "4.205.0",
+            "version": "4.206.3",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-auth/4.205.0/olcs-olcs-auth-4.205.0.zip",
-                "reference": "463aaf54546fdd3791d96a2822219feb00f9b477",
-                "shasum": "463aaf54546fdd3791d96a2822219feb00f9b477"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-auth/4.206.3/olcs-olcs-auth-4.206.3.zip",
+                "reference": "bfd69f9e2067964e6f24029aa3190f1464650972",
+                "shasum": "bfd69f9e2067964e6f24029aa3190f1464650972"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
                 "elendev/nexus-composer-push": "^0.1",
-                "olcs/olcs-common": "^4.205",
-                "olcs/olcs-transfer": "^4.205",
+                "olcs/olcs-common": "~4.206.0",
+                "olcs/olcs-transfer": "~4.206.0",
                 "php": ">=5.4",
                 "zendframework/zendframework": "~2.4.0"
             },
             "require-dev": {
                 "johnkary/phpunit-speedtrap": "^3.0",
                 "mockery/mockery": "^1.2.0",
-                "olcs/olcs-devtools": "^4.205",
+                "olcs/olcs-devtools": "~4.206.0",
                 "phpstan/phpstan-mockery": "^0.10.2",
                 "phpstan/phpstan-shim": "^0.10.5"
             },
@@ -1243,16 +1244,16 @@
                 ]
             },
             "description": "OLCS Authentication",
-            "time": "2019-04-12T16:34:49+00:00"
+            "time": "2019-05-21 09:54:36"
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.205.0",
+            "version": "4.206.9",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-common/4.205.0/olcs-olcs-common-4.205.0.zip",
-                "reference": "fb853defa9a2acb5655db3cdc5ae3c366e7df073",
-                "shasum": "fb853defa9a2acb5655db3cdc5ae3c366e7df073"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-common/4.206.9/olcs-olcs-common-4.206.9.zip",
+                "reference": "023277058fe9832ededb4ee69ce9ed2f373cc0b8",
+                "shasum": "023277058fe9832ededb4ee69ce9ed2f373cc0b8"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -1267,11 +1268,11 @@
                 "johnkary/phpunit-speedtrap": "^3.0",
                 "mikey179/vfsstream": "~1.4.0",
                 "mockery/mockery": "^1.2",
-                "olcs/olcs-devtools": "^4.205",
-                "olcs/olcs-logging": "^4.205",
-                "olcs/olcs-testhelpers": "^4.205",
-                "olcs/olcs-transfer": "^4.205",
-                "olcs/olcs-utils": "^4.205",
+                "olcs/olcs-devtools": "~4.206.0",
+                "olcs/olcs-logging": "~4.206.0",
+                "olcs/olcs-testhelpers": "~4.206.0",
+                "olcs/olcs-transfer": "~4.206.0",
+                "olcs/olcs-utils": "~4.206.0",
                 "phpstan/phpstan-mockery": "^0.10.2",
                 "phpstan/phpstan-shim": "^0.10.5"
             },
@@ -1318,16 +1319,16 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2019-04-12T16:30:36+00:00"
+            "time": "2019-05-28 12:40:36"
         },
         {
             "name": "olcs/olcs-logging",
-            "version": "4.205.0",
+            "version": "4.206.1",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-logging/4.205.0/olcs-olcs-logging-4.205.0.zip",
-                "reference": "721baa4c2be9c31e3072631ceca56cd128dcef92",
-                "shasum": "721baa4c2be9c31e3072631ceca56cd128dcef92"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-logging/4.206.1/olcs-olcs-logging-4.206.1.zip",
+                "reference": "976537ea9919f43f2f78da366bbe869f1a4fefaa",
+                "shasum": "976537ea9919f43f2f78da366bbe869f1a4fefaa"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -1344,7 +1345,7 @@
             "require-dev": {
                 "johnkary/phpunit-speedtrap": "^3.0",
                 "mockery/mockery": "^1.2.0",
-                "olcs/olcs-devtools": "^4.205",
+                "olcs/olcs-devtools": "~4.206.0",
                 "phpstan/phpstan-mockery": "^0.10.2",
                 "phpstan/phpstan-shim": "^0.10.5"
             },
@@ -1387,16 +1388,16 @@
                 ]
             },
             "description": "Logging Module for Olcs",
-            "time": "2019-04-12T16:04:23+00:00"
+            "time": "2019-05-01 15:47:37"
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "4.205.0",
+            "version": "4.206.8",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-transfer/4.205.0/olcs-olcs-transfer-4.205.0.zip",
-                "reference": "c5c1193c3e39b2aac4445ed32b698c41f997e877",
-                "shasum": "c5c1193c3e39b2aac4445ed32b698c41f997e877"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-transfer/4.206.8/olcs-olcs-transfer-4.206.8.zip",
+                "reference": "df25113985c821e21e72897323cbe2567d2ef359",
+                "shasum": "df25113985c821e21e72897323cbe2567d2ef359"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -1408,7 +1409,7 @@
                 "doctrine/annotations": "^1.2.3",
                 "johnkary/phpunit-speedtrap": "^3.0",
                 "mockery/mockery": "^1.2.0",
-                "olcs/olcs-devtools": "^4.205",
+                "olcs/olcs-devtools": "~4.206.0",
                 "phpstan/phpstan-mockery": "^0.10.2",
                 "phpstan/phpstan-shim": "^0.10.5"
             },
@@ -1452,16 +1453,16 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2019-04-12T16:05:44+00:00"
+            "time": "2019-05-28 12:40:12"
         },
         {
             "name": "olcs/olcs-utils",
-            "version": "4.205.0",
+            "version": "4.206.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-utils/4.205.0/olcs-olcs-utils-4.205.0.zip",
-                "reference": "6f8a68e52f4b33771823d0048a134040f4c687c6",
-                "shasum": "6f8a68e52f4b33771823d0048a134040f4c687c6"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-utils/4.206.0/olcs-olcs-utils-4.206.0.zip",
+                "reference": "40e231af6a2acb23908587c5ea8692ac9d75e2be",
+                "shasum": "40e231af6a2acb23908587c5ea8692ac9d75e2be"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -1471,8 +1472,8 @@
             "require-dev": {
                 "johnkary/phpunit-speedtrap": "^3.0",
                 "mockery/mockery": "^1.2.0",
-                "olcs/olcs-devtools": "^4.205",
-                "olcs/olcs-logging": "^4.205",
+                "olcs/olcs-devtools": "~4.206.0",
+                "olcs/olcs-logging": "~4.206.0",
                 "phpstan/phpstan-mockery": "^0.10.2",
                 "phpstan/phpstan-shim": "^0.10.5"
             },
@@ -1515,7 +1516,7 @@
                 ]
             },
             "description": "OLCS Utils",
-            "time": "2019-04-12T16:21:24+00:00"
+            "time": "2019-05-01 16:06:22"
         },
         {
             "name": "psr/http-message",
@@ -1523,7 +1524,7 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/psr/http-message/1.0.1/psr-http-message-1.0.1.zip",
-                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363",
+                "reference": null,
                 "shasum": ""
             },
             "require": {
@@ -1559,7 +1560,7 @@
                 "request",
                 "response"
             ],
-            "time": "2016-08-06T14:39:51+00:00"
+            "time": "2016-08-06 14:39:51"
         },
         {
             "name": "psr/log",
@@ -1567,7 +1568,7 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/psr/log/1.1.0/psr-log-1.1.0.zip",
-                "reference": "6c001f1daafa3a3ac1d8ff69ee4db8e799a654dd",
+                "reference": null,
                 "shasum": ""
             },
             "require": {
@@ -1600,7 +1601,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2018-11-20T15:27:04+00:00"
+            "time": "2018-11-20 15:27:04"
         },
         {
             "name": "ralouphie/getallheaders",
@@ -1608,7 +1609,7 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/ralouphie/getallheaders/2.0.5/ralouphie-getallheaders-2.0.5.zip",
-                "reference": "5601c8a83fbba7ef674a7369456d12f1e0d0eafa",
+                "reference": null,
                 "shasum": ""
             },
             "require": {
@@ -1634,7 +1635,7 @@
                 }
             ],
             "description": "A polyfill for getallheaders.",
-            "time": "2016-02-11T07:05:27+00:00"
+            "time": "2016-02-11 07:05:27"
         },
         {
             "name": "soflomo/purifier",
@@ -1642,7 +1643,7 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/soflomo/purifier/v0.1.1/soflomo-purifier-v0.1.1.zip",
-                "reference": "1f2d85a1b67bdb75bd86eb7a490e1c12280972b9",
+                "reference": null,
                 "shasum": ""
             },
             "require": {
@@ -1681,7 +1682,7 @@
                 "purify",
                 "zf2"
             ],
-            "time": "2013-04-23T10:33:41+00:00"
+            "time": "2013-04-23 10:33:41"
         },
         {
             "name": "symfony/console",
@@ -1689,7 +1690,7 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/console/v3.4.24/symfony-console-v3.4.24.zip",
-                "reference": "98ae3cdc4bec48fe7ee24afc81dbb4a242186c9e",
+                "reference": null,
                 "shasum": ""
             },
             "require": {
@@ -1747,7 +1748,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2019-03-31T11:33:18+00:00"
+            "time": "2019-03-31 11:33:18"
         },
         {
             "name": "symfony/debug",
@@ -1755,7 +1756,7 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/debug/v4.2.5/symfony-debug-v4.2.5.zip",
-                "reference": "43ce8ab34c734dcc8a4af576cb86711daab964c5",
+                "reference": null,
                 "shasum": ""
             },
             "require": {
@@ -1797,7 +1798,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2019-03-10T17:09:50+00:00"
+            "time": "2019-03-10 17:09:50"
         },
         {
             "name": "symfony/filesystem",
@@ -1805,7 +1806,7 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/filesystem/v3.0.9/symfony-filesystem-v3.0.9.zip",
-                "reference": "b2da5009d9bacbd91d83486aa1f44c793a8c380d",
+                "reference": null,
                 "shasum": ""
             },
             "require": {
@@ -1840,7 +1841,7 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2016-07-20T05:43:46+00:00"
+            "time": "2016-07-20 05:43:46"
         },
         {
             "name": "symfony/finder",
@@ -1848,7 +1849,7 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/finder/v4.2.5/symfony-finder-v4.2.5.zip",
-                "reference": "267b7002c1b70ea80db0833c3afe05f0fbde580a",
+                "reference": null,
                 "shasum": ""
             },
             "require": {
@@ -1883,7 +1884,7 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-            "time": "2019-02-23T15:42:05+00:00"
+            "time": "2019-02-23 15:42:05"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -1891,7 +1892,7 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/polyfill-mbstring/v1.11.0/symfony-polyfill-mbstring-v1.11.0.zip",
-                "reference": "fe5e94c604826c35a32fa832f35bd036b6799609",
+                "reference": null,
                 "shasum": ""
             },
             "require": {
@@ -1936,7 +1937,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2019-02-06T07:57:58+00:00"
+            "time": "2019-02-06 07:57:58"
         },
         {
             "name": "zendframework/zendframework",
@@ -1944,7 +1945,7 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zendframework/2.4.13/zendframework-zendframework-2.4.13.zip",
-                "reference": "06bf809653a51e843b7a84dc380ac1d8a0a6a1ea",
+                "reference": null,
                 "shasum": ""
             },
             "require": {
@@ -2047,7 +2048,7 @@
                 "framework",
                 "zf2"
             ],
-            "time": "2017-07-13T17:23:56+00:00"
+            "time": "2017-07-13 17:23:56"
         },
         {
             "name": "zendframework/zendxml",
@@ -2055,7 +2056,7 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zendxml/1.2.0/zendframework-zendxml-1.2.0.zip",
-                "reference": "eceab37a591c9e140772a1470338258857339e00",
+                "reference": null,
                 "shasum": ""
             },
             "require": {
@@ -2087,7 +2088,7 @@
                 "xml",
                 "zf"
             ],
-            "time": "2019-01-22T19:42:14+00:00"
+            "time": "2019-01-22 19:42:14"
         },
         {
             "name": "zf-commons/zfc-rbac",
@@ -2095,7 +2096,7 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zf-commons/zfc-rbac/v2.5.6/zf-commons-zfc-rbac-v2.5.6.zip",
-                "reference": "62873668fe0c32aaed3f291dd21c2a7ba22248d7",
+                "reference": null,
                 "shasum": ""
             },
             "require": {
@@ -2157,7 +2158,7 @@
                 "rbac",
                 "zf2"
             ],
-            "time": "2016-03-22T12:46:45+00:00"
+            "time": "2016-03-22 12:46:45"
         },
         {
             "name": "zfr/rbac",
@@ -2165,7 +2166,7 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zfr/rbac/1.2.0/zfr-rbac-1.2.0.zip",
-                "reference": "493711bfc2a637fd7c6f23b71b7b55a621c35d9d",
+                "reference": null,
                 "shasum": ""
             },
             "require": {
@@ -2201,7 +2202,7 @@
                 "zf2",
                 "zf3"
             ],
-            "time": "2014-02-06T14:18:34+00:00"
+            "time": "2014-02-06 14:18:34"
         }
     ],
     "packages-dev": [
@@ -2245,7 +2246,7 @@
             "keywords": [
                 "test"
             ],
-            "time": "2016-01-20T08:20:44+00:00"
+            "time": "2016-01-20 08:20:44"
         },
         {
             "name": "johnkary/phpunit-speedtrap",
@@ -2287,7 +2288,7 @@
                 "profile",
                 "slow"
             ],
-            "time": "2019-02-24T02:40:12+00:00"
+            "time": "2019-02-24 02:40:12"
         },
         {
             "name": "mikey179/vfsStream",
@@ -2327,7 +2328,7 @@
             ],
             "description": "Virtual file system to mock the real file system in unit tests.",
             "homepage": "http://vfs.bovigo.org/",
-            "time": "2019-04-08T13:54:32+00:00"
+            "time": "2019-04-08 13:54:32"
         },
         {
             "name": "mockery/mockery",
@@ -2386,7 +2387,7 @@
                 "test double",
                 "testing"
             ],
-            "time": "2019-02-13T09:37:52+00:00"
+            "time": "2019-02-13 09:37:52"
         },
         {
             "name": "myclabs/deep-copy",
@@ -2428,7 +2429,7 @@
                 "object",
                 "object graph"
             ],
-            "time": "2019-04-07T13:18:21+00:00"
+            "time": "2019-04-07 13:18:21"
         },
         {
             "name": "olcs/coding-standards",
@@ -2454,16 +2455,16 @@
                 ]
             },
             "description": "OLCS CodeSniffer and MessDetector rule sets",
-            "time": "2019-04-12T15:31:03+00:00"
+            "time": "2019-04-12 15:31:03"
         },
         {
             "name": "olcs/olcs-devtools",
-            "version": "4.205.1",
+            "version": "4.206.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-devtools/4.205.1/olcs-olcs-devtools-4.205.1.zip",
-                "reference": "dd97e2670dd2cbad9d9158ef25af605c6ed55271",
-                "shasum": "dd97e2670dd2cbad9d9158ef25af605c6ed55271"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-devtools/4.206.0/olcs-olcs-devtools-4.206.0.zip",
+                "reference": "dc4cfb834fd648ab7c69537710fd230d7bdc5d4b",
+                "shasum": "dc4cfb834fd648ab7c69537710fd230d7bdc5d4b"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -2476,6 +2477,7 @@
             },
             "bin": [
                 "bin/review",
+                "bin/composer-install-syms",
                 "bin/composer-update-syms",
                 "bin/release"
             ],
@@ -2491,16 +2493,16 @@
                 }
             },
             "description": "Dev tools",
-            "time": "2019-04-12T15:35:43+00:00"
+            "time": "2019-05-01 11:11:48"
         },
         {
             "name": "olcs/olcs-testhelpers",
-            "version": "4.205.0",
+            "version": "4.206.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-testhelpers/4.205.0/olcs-olcs-testhelpers-4.205.0.zip",
-                "reference": "19da9fd726eaa38abda3c079301910a08a294910",
-                "shasum": "19da9fd726eaa38abda3c079301910a08a294910"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-testhelpers/4.206.0/olcs-olcs-testhelpers-4.206.0.zip",
+                "reference": "83b19c0da79239b029345238f6c35522579123ca",
+                "shasum": "83b19c0da79239b029345238f6c35522579123ca"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -2508,8 +2510,8 @@
             },
             "require-dev": {
                 "mockery/mockery": "^1.2.0",
-                "phpunit/phpunit": "7.*",
-                "squizlabs/php_codesniffer": "~1.5.3"
+                "olcs/olcs-devtools": "~4.206.0",
+                "phpunit/phpunit": "7.*"
             },
             "type": "library",
             "extra": {
@@ -2522,8 +2524,13 @@
                     "Olcs\\TestHelpers\\": "src/TestHelpers/"
                 }
             },
+            "scripts": {
+                "release": [
+                    "release"
+                ]
+            },
             "description": "OLCS Test helpers",
-            "time": "2019-04-12T15:29:27+00:00"
+            "time": "2019-05-01 13:31:23"
         },
         {
             "name": "pdepend/pdepend",
@@ -2557,7 +2564,7 @@
                 "BSD-3-Clause"
             ],
             "description": "Official version of pdepend to be handled with Composer",
-            "time": "2017-12-13T13:21:38+00:00"
+            "time": "2017-12-13 13:21:38"
         },
         {
             "name": "phar-io/manifest",
@@ -2606,7 +2613,7 @@
                 }
             ],
             "description": "Component for reading phar.io manifest information from a PHP Archive (PHAR)",
-            "time": "2018-07-08T19:23:20+00:00"
+            "time": "2018-07-08 19:23:20"
         },
         {
             "name": "phar-io/version",
@@ -2647,7 +2654,7 @@
                 }
             ],
             "description": "Library for handling version information and constraints",
-            "time": "2018-07-08T19:19:57+00:00"
+            "time": "2018-07-08 19:19:57"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -2695,7 +2702,7 @@
                 "reflection",
                 "static analysis"
             ],
-            "time": "2017-09-11T18:02:19+00:00"
+            "time": "2017-09-11 18:02:19"
         },
         {
             "name": "phpdocumentor/reflection-docblock",
@@ -2740,7 +2747,7 @@
                 }
             ],
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
-            "time": "2017-11-30T07:14:17+00:00"
+            "time": "2017-11-30 07:14:17"
         },
         {
             "name": "phpdocumentor/type-resolver",
@@ -2781,7 +2788,7 @@
                     "email": "me@mikevanriel.com"
                 }
             ],
-            "time": "2017-07-14T14:27:02+00:00"
+            "time": "2017-07-14 14:27:02"
         },
         {
             "name": "phpmd/phpmd",
@@ -2841,7 +2848,7 @@
                 "phpmd",
                 "pmd"
             ],
-            "time": "2017-01-20T14:41:10+00:00"
+            "time": "2017-01-20 14:41:10"
         },
         {
             "name": "phpspec/prophecy",
@@ -2898,7 +2905,7 @@
                 "spy",
                 "stub"
             ],
-            "time": "2018-08-05T17:53:17+00:00"
+            "time": "2018-08-05 17:53:17"
         },
         {
             "name": "phpstan/phpstan-mockery",
@@ -2941,7 +2948,7 @@
                 "MIT"
             ],
             "description": "PHPStan Mockery extension",
-            "time": "2018-09-09T15:22:28+00:00"
+            "time": "2018-09-09 15:22:28"
         },
         {
             "name": "phpstan/phpstan-shim",
@@ -2979,7 +2986,7 @@
                 "MIT"
             ],
             "description": "PHPStan Phar distribution",
-            "time": "2019-01-08T10:03:03+00:00"
+            "time": "2019-01-08 10:03:03"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -3036,7 +3043,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2018-10-31T16:06:48+00:00"
+            "time": "2018-10-31 16:06:48"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -3080,7 +3087,7 @@
                 "filesystem",
                 "iterator"
             ],
-            "time": "2018-09-13T20:33:42+00:00"
+            "time": "2018-09-13 20:33:42"
         },
         {
             "name": "phpunit/php-text-template",
@@ -3115,7 +3122,7 @@
             "keywords": [
                 "template"
             ],
-            "time": "2015-06-21T13:50:34+00:00"
+            "time": "2015-06-21 13:50:34"
         },
         {
             "name": "phpunit/php-timer",
@@ -3158,7 +3165,7 @@
             "keywords": [
                 "timer"
             ],
-            "time": "2019-02-20T10:12:59+00:00"
+            "time": "2019-02-20 10:12:59"
         },
         {
             "name": "phpunit/php-token-stream",
@@ -3201,7 +3208,7 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "2018-10-30T05:52:18+00:00"
+            "time": "2018-10-30 05:52:18"
         },
         {
             "name": "phpunit/phpcov",
@@ -3247,7 +3254,7 @@
             ],
             "description": "CLI frontend for php-code-coverage",
             "homepage": "https://github.com/sebastianbergmann/phpcov",
-            "time": "2018-02-04T10:18:50+00:00"
+            "time": "2018-02-04 10:18:50"
         },
         {
             "name": "phpunit/phpunit",
@@ -3325,7 +3332,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2019-03-26T13:23:54+00:00"
+            "time": "2019-03-26 13:23:54"
         },
         {
             "name": "psr/container",
@@ -3368,7 +3375,7 @@
                 "container-interop",
                 "psr"
             ],
-            "time": "2017-02-14T16:28:37+00:00"
+            "time": "2017-02-14 16:28:37"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
@@ -3407,7 +3414,7 @@
             ],
             "description": "Looks up which function or method a line of code belongs to",
             "homepage": "https://github.com/sebastianbergmann/code-unit-reverse-lookup/",
-            "time": "2017-03-04T06:30:41+00:00"
+            "time": "2017-03-04 06:30:41"
         },
         {
             "name": "sebastian/comparator",
@@ -3465,7 +3472,7 @@
                 "compare",
                 "equality"
             ],
-            "time": "2018-07-12T15:12:46+00:00"
+            "time": "2018-07-12 15:12:46"
         },
         {
             "name": "sebastian/diff",
@@ -3515,7 +3522,7 @@
                 "unidiff",
                 "unified diff"
             ],
-            "time": "2019-02-04T06:01:07+00:00"
+            "time": "2019-02-04 06:01:07"
         },
         {
             "name": "sebastian/environment",
@@ -3562,7 +3569,7 @@
                 "environment",
                 "hhvm"
             ],
-            "time": "2019-02-01T05:27:49+00:00"
+            "time": "2019-02-01 05:27:49"
         },
         {
             "name": "sebastian/exporter",
@@ -3623,7 +3630,7 @@
                 "export",
                 "exporter"
             ],
-            "time": "2017-04-03T13:19:02+00:00"
+            "time": "2017-04-03 13:19:02"
         },
         {
             "name": "sebastian/finder-facade",
@@ -3656,7 +3663,7 @@
             ],
             "description": "FinderFacade is a convenience wrapper for Symfony's Finder component.",
             "homepage": "https://github.com/sebastianbergmann/finder-facade",
-            "time": "2017-11-18T17:31:49+00:00"
+            "time": "2017-11-18 17:31:49"
         },
         {
             "name": "sebastian/global-state",
@@ -3701,7 +3708,7 @@
             "keywords": [
                 "global state"
             ],
-            "time": "2017-04-27T15:39:26+00:00"
+            "time": "2017-04-27 15:39:26"
         },
         {
             "name": "sebastian/object-enumerator",
@@ -3742,7 +3749,7 @@
             ],
             "description": "Traverses array structures and object graphs to enumerate all referenced objects",
             "homepage": "https://github.com/sebastianbergmann/object-enumerator/",
-            "time": "2017-08-03T12:35:26+00:00"
+            "time": "2017-08-03 12:35:26"
         },
         {
             "name": "sebastian/object-reflector",
@@ -3781,7 +3788,7 @@
             ],
             "description": "Allows reflection of object attributes, including inherited and non-public ones",
             "homepage": "https://github.com/sebastianbergmann/object-reflector/",
-            "time": "2017-03-29T09:07:27+00:00"
+            "time": "2017-03-29 09:07:27"
         },
         {
             "name": "sebastian/recursion-context",
@@ -3828,7 +3835,7 @@
             ],
             "description": "Provides functionality to recursively process PHP variables",
             "homepage": "http://www.github.com/sebastianbergmann/recursion-context",
-            "time": "2017-03-03T06:23:57+00:00"
+            "time": "2017-03-03 06:23:57"
         },
         {
             "name": "sebastian/resource-operations",
@@ -3864,7 +3871,7 @@
             ],
             "description": "Provides a list of PHP built-in functions that operate on resources",
             "homepage": "https://www.github.com/sebastianbergmann/resource-operations",
-            "time": "2018-10-04T04:07:39+00:00"
+            "time": "2018-10-04 04:07:39"
         },
         {
             "name": "sebastian/version",
@@ -3901,7 +3908,7 @@
             ],
             "description": "Library that helps with managing the version number of Git-hosted PHP projects",
             "homepage": "https://github.com/sebastianbergmann/version",
-            "time": "2016-10-03T07:35:21+00:00"
+            "time": "2016-10-03 07:35:21"
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -3946,7 +3953,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2019-04-10T23:49:02+00:00"
+            "time": "2019-04-10 23:49:02"
         },
         {
             "name": "symfony/config",
@@ -4004,7 +4011,7 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "https://symfony.com",
-            "time": "2019-02-23T15:06:07+00:00"
+            "time": "2019-02-23 15:06:07"
         },
         {
             "name": "symfony/dependency-injection",
@@ -4069,7 +4076,7 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "https://symfony.com",
-            "time": "2018-08-01T08:23:45+00:00"
+            "time": "2018-08-01 08:23:45"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -4110,7 +4117,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "backendtea@gmail.com"
+                    "email": "BackEndTea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
@@ -4121,7 +4128,7 @@
                 "polyfill",
                 "portable"
             ],
-            "time": "2019-02-06T07:57:58+00:00"
+            "time": "2019-02-06 07:57:58"
         },
         {
             "name": "theseer/fdomdocument",
@@ -4155,7 +4162,7 @@
             ],
             "description": "The classes contained within this repository extend the standard DOM to use exceptions at all occasions of errors instead of PHP warnings or notices. They also add various custom methods and shortcuts for convenience and to simplify the usage of DOM.",
             "homepage": "https://github.com/theseer/fDOMDocument",
-            "time": "2017-06-30T11:53:12+00:00"
+            "time": "2017-06-30 11:53:12"
         },
         {
             "name": "theseer/tokenizer",
@@ -4189,7 +4196,7 @@
                 }
             ],
             "description": "A small library for converting tokenized PHP source code into XML and potentially other formats",
-            "time": "2019-04-04T09:56:43+00:00"
+            "time": "2019-04-04 09:56:43"
         },
         {
             "name": "webmozart/assert",
@@ -4234,7 +4241,7 @@
                 "check",
                 "validate"
             ],
-            "time": "2018-12-25T11:19:39+00:00"
+            "time": "2018-12-25 11:19:39"
         }
     ],
     "aliases": [],
