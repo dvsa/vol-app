@@ -2,48 +2,42 @@
 
 namespace Olcs\Service\Qa;
 
-use RuntimeException;
+use Common\Service\Helper\FormHelperService as FormHelper;
+use Common\Service\Qa\FieldsetAdder;
 
 class FormProvider
 {
-    const CONTROL_TYPE_INDEX = 'type';
-    const DATA_INDEX = 'data';
-    const VALIDATORS_INDEX = 'validators';
+    /** @var FormHelper */
+    private $formHelper;
 
-    /** @var array */
-    private $formTypeProviderMappings;
+    /** @var FieldsetAdder */
+    private $fieldsetAdder;
 
     /**
      * Create service instance
      *
-     * @param array $formTypeProviderMappings
+     * @param FormHelper $formHelper
+     * @param FieldsetAdder $fieldsetAdder
      *
      * @return FormProvider
      */
-    public function __construct(array $formTypeProviderMappings)
+    public function __construct(FormHelper $formHelper, FieldsetAdder $fieldsetAdder)
     {
-        $this->formTypeProviderMappings = $formTypeProviderMappings;
+        $this->formHelper = $formHelper;
+        $this->fieldsetAdder = $fieldsetAdder;
     }
 
     /**
      * Get a Form instance corresponding to the supplied form data
      *
-     * @param array $formData
+     * @param array $options
      *
      * @return mixed
      */
-    public function get(array $formData)
+    public function get(array $options)
     {
-        if (!isset($formData[self::CONTROL_TYPE_INDEX])) {
-            throw new RuntimeException('No type attribute found in form data');
-        }
-
-        $type = $formData[self::CONTROL_TYPE_INDEX];
-        if (!isset($this->formTypeProviderMappings[$type])) {
-            throw new RuntimeException('No mapping found for type ' . $type);
-        }
-
-        $formTypeProvider = $this->formTypeProviderMappings[$type];
-        return $formTypeProvider->get($formData[self::DATA_INDEX], $formData[self::VALIDATORS_INDEX]);
+        $form = $this->formHelper->createForm('QaForm');
+        $this->fieldsetAdder->add($form, $options);
+        return $form;
     }
 }

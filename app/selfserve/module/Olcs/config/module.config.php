@@ -12,11 +12,7 @@ use Olcs\Form\Element\SearchFilterFieldsetFactory;
 use Olcs\Form\Element\SearchOrderFieldset;
 use Olcs\Form\Element\SearchOrderFieldsetFactory;
 use Olcs\FormService\Form\Lva as LvaFormService;
-use Olcs\Service\Qa\FormProviderFactory;
-use Olcs\Service\Qa\SingleCheckboxFormTypeProviderFactory;
-use Olcs\Service\Qa\RadioFormTypeProviderFactory;
-use Olcs\Service\Qa\TextFormTypeProviderFactory;
-use Olcs\Service\Qa\ValidatorsAdder;
+use Olcs\Service\Qa as QaService;
 use Zend\Mvc\Router\Http\Segment;
 
 $sectionConfig = new \Common\Service\Data\SectionConfig();
@@ -1265,8 +1261,8 @@ return array(
                 => 'Olcs\Controller\Lva\Adapters\VariationPeopleAdapter',
             'DashboardProcessingService'
                 => 'Olcs\Service\Processing\DashboardProcessingService',
-            'QaValidatorsAdder'
-                => ValidatorsAdder::class,
+            'QaQuestionArrayProvider'
+                => 'Olcs\Service\Qa\QuestionArrayProvider'
         ),
         'factories' => array(
             'CookieBannerListener' => \Olcs\Mvc\CookieBannerListener::class,
@@ -1279,10 +1275,9 @@ return array(
                 \Olcs\Controller\Lva\Factory\Adapter\LicenceTransportManagerAdapterFactory::class,
             'VariationTransportManagerAdapter' =>
                 \Olcs\Controller\Lva\Factory\Adapter\VariationTransportManagerAdapterFactory::class,
-            'QaFormProvider' => FormProviderFactory::class,
-            'QaSingleCheckboxFormTypeProvider' => SingleCheckboxFormTypeProviderFactory::class,
-            'QaRadioFormTypeProvider' => RadioFormTypeProviderFactory::class,
-            'QaTextFormTypeProvider' => TextFormTypeProviderFactory::class,
+            'QaFormProvider' => QaService\FormProviderFactory::class,
+            'QaGuidanceTemplateVarsAdder' => QaService\GuidanceTemplateVarsAdderFactory::class,
+            'QaTemplateVarsGenerator' => QaService\TemplateVarsGeneratorFactory::class,
         )
     ),
     'search' => [

@@ -4,22 +4,16 @@ namespace Permits\Form\Model\Form;
 use Zend\Form\Annotation as Form;
 
 /**
- * @Form\Name("QaRadio")
+ * @Form\Name("Qa")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
  */
-
-class QaRadioForm
+class QaForm
 {
-    /**
-     * @Form\Name("fields")
-     * @Form\ComposedObject("Permits\Form\Model\Fieldset\QaRadio")
-     */
-    public $fields = null;
-
     /**
      * @Form\Name("Submit")
      * @Form\ComposedObject("Permits\Form\Model\Fieldset\Submit")
+     * @Form\Flags({"priority": -1})
      */
     public $submitButton = null;
 }

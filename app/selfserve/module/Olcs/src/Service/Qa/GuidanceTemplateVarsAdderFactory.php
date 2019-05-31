@@ -5,19 +5,19 @@ namespace Olcs\Service\Qa;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class SingleCheckboxFormTypeProviderFactory implements FactoryInterface
+class GuidanceTemplateVarsAdderFactory implements FactoryInterface
 {
     /**
      * Create service
      *
      * @param ServiceLocatorInterface $serviceLocator
      *
-     * @return SingleCheckboxFormTypeProvider
+     * @return GuidanceTemplateVarsAdder
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return new SingleCheckboxFormTypeProvider(
-            $serviceLocator->get('Helper\Form')
+        return new GuidanceTemplateVarsAdder(
+            $serviceLocator->get('QaTranslateableTextHandler')
         );
     }
 }
