@@ -327,7 +327,7 @@ return [
                                     ]
                                 ],
                             ],
-                            'admin-interim-refunds' => [
+                            'interim-refunds' => [
                                 'type' => 'Segment',
                                 'options' => [
                                     'route' => 'interim-refunds[/:action][/:id][/]',
@@ -336,7 +336,7 @@ return [
                                         'id' => '[0-9]+',
                                     ],
                                     'defaults' => [
-                                        'controller' => \Admin\Controller\InterimRefundsController::class,
+                                        'controller' => Admin\Controller\InterimRefundsController::class,
                                         'action' => 'index'
                                     ]
                                 ]
