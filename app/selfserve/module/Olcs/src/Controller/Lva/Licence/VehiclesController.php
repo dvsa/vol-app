@@ -25,6 +25,13 @@ class VehiclesController extends AbstractGoodsVehiclesController
         'application' => Query\Application\GoodsVehiclesExport::class,
     ];
 
+    protected function getScripts()
+    {
+        $scripts  = parent::getScripts();
+        $scripts[] = 'vehicles';
+        return $scripts;
+    }
+
     /**
      * Specific functionality for CRUD actions
      *
