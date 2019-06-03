@@ -1,19 +1,19 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "691311b2fd643e7b8d4932a4960827b2",
+    "content-hash": "22f242c2cd4d898c48bdc00adc4266db",
     "packages": [
         {
             "name": "doctrine/annotations",
             "version": "v1.6.1",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/annotations/v1.6.1/doctrine-annotations-v1.6.1.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-annotations-53120e0eb10355388d6ccbe462f1fea34ddadb24-zip-3b6b7f.tar",
                 "reference": "53120e0eb10355388d6ccbe462f1fea34ddadb24",
-                "shasum": ""
+                "shasum": "ceac9d3d625498c245f80bd453293b63a6f7b21f"
             },
             "require": {
                 "doctrine/lexer": "1.*",
@@ -34,6 +34,7 @@
                     "Doctrine\\Common\\Annotations\\": "lib/Doctrine/Common/Annotations"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -141,10 +142,10 @@
             "name": "doctrine/collections",
             "version": "v1.6.1",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/collections/v1.6.1/doctrine-collections-v1.6.1.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-collections-d2ae4ef05e25197343b6a39bae1d3c427a2f6956-zip-b8f44f.tar",
                 "reference": "d2ae4ef05e25197343b6a39bae1d3c427a2f6956",
-                "shasum": ""
+                "shasum": "c8eac35f9077149b5c9bbfadd429da7464923223"
             },
             "require": {
                 "php": "^7.1.3"
@@ -166,6 +167,7 @@
                     "Doctrine\\Common\\Collections\\": "lib/Doctrine/Common/Collections"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -620,10 +622,10 @@
             "name": "doctrine/instantiator",
             "version": "1.2.0",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/instantiator/1.2.0/doctrine-instantiator-1.2.0.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-instantiator-a2c590166b2133a4633738648b6b064edae0814a-zip-b09b64.tar",
                 "reference": "a2c590166b2133a4633738648b6b064edae0814a",
-                "shasum": ""
+                "shasum": "0e25bdb37a0c265e14449cb5e3be6d116e0663bd"
             },
             "require": {
                 "php": "^7.1"
@@ -648,6 +650,7 @@
                     "Doctrine\\Instantiator\\": "src/Doctrine/Instantiator/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -792,11 +795,11 @@
         },
         {
             "name": "doctrine/persistence",
-            "version": "v1.1.0",
+            "version": "1.1.1",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/persistence/v1.1.0/doctrine-persistence-v1.1.0.zip",
-                "reference": "c0f1c17602afc18b4cbd8e1c8125f264c9cf7d38",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/persistence/1.1.1/doctrine-persistence-1.1.1.zip",
+                "reference": "3da7c9d125591ca83944f477e65ed3d7b4617c48",
                 "shasum": ""
             },
             "require": {
@@ -864,7 +867,7 @@
                 "orm",
                 "persistence"
             ],
-            "time": "2018-11-21T00:33:13+00:00"
+            "time": "2019-04-23T08:28:24+00:00"
         },
         {
             "name": "doctrine/reflection",
@@ -978,10 +981,10 @@
             "name": "ezyang/htmlpurifier",
             "version": "v4.10.0",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/ezyang/htmlpurifier/v4.10.0/ezyang-htmlpurifier-v4.10.0.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/ezyang-htmlpurifier-d85d39da4576a6934b72480be6978fb10c860021-zip-68f7aa.tar",
                 "reference": "d85d39da4576a6934b72480be6978fb10c860021",
-                "shasum": ""
+                "shasum": "70d5fd91e4d9b583fea8361f7011ef969473ad36"
             },
             "require": {
                 "php": ">=5.2"
@@ -998,6 +1001,7 @@
                     "library/HTMLPurifier.composer.php"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "LGPL"
             ],
@@ -1182,25 +1186,25 @@
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "4.205.0",
+            "version": "4.206.3",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-auth/4.205.0/olcs-olcs-auth-4.205.0.zip",
-                "reference": "463aaf54546fdd3791d96a2822219feb00f9b477",
-                "shasum": "463aaf54546fdd3791d96a2822219feb00f9b477"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-auth/4.206.3/olcs-olcs-auth-4.206.3.zip",
+                "reference": "bfd69f9e2067964e6f24029aa3190f1464650972",
+                "shasum": "bfd69f9e2067964e6f24029aa3190f1464650972"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
                 "elendev/nexus-composer-push": "^0.1",
-                "olcs/olcs-common": "^4.205",
-                "olcs/olcs-transfer": "^4.205",
+                "olcs/olcs-common": "~4.206.0",
+                "olcs/olcs-transfer": "~4.206.0",
                 "php": ">=5.4",
                 "zendframework/zendframework": "~2.4.0"
             },
             "require-dev": {
                 "johnkary/phpunit-speedtrap": "^3.0",
                 "mockery/mockery": "^1.2.0",
-                "olcs/olcs-devtools": "^4.205",
+                "olcs/olcs-devtools": "~4.206.0",
                 "phpstan/phpstan-mockery": "^0.10.2",
                 "phpstan/phpstan-shim": "^0.10.5"
             },
@@ -1243,16 +1247,16 @@
                 ]
             },
             "description": "OLCS Authentication",
-            "time": "2019-04-12T16:34:49+00:00"
+            "time": "2019-05-21T09:54:36+00:00"
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.205.0",
+            "version": "4.206.9",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-common/4.205.0/olcs-olcs-common-4.205.0.zip",
-                "reference": "fb853defa9a2acb5655db3cdc5ae3c366e7df073",
-                "shasum": "fb853defa9a2acb5655db3cdc5ae3c366e7df073"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-common/4.206.9/olcs-olcs-common-4.206.9.zip",
+                "reference": "023277058fe9832ededb4ee69ce9ed2f373cc0b8",
+                "shasum": "023277058fe9832ededb4ee69ce9ed2f373cc0b8"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -1267,11 +1271,11 @@
                 "johnkary/phpunit-speedtrap": "^3.0",
                 "mikey179/vfsstream": "~1.4.0",
                 "mockery/mockery": "^1.2",
-                "olcs/olcs-devtools": "^4.205",
-                "olcs/olcs-logging": "^4.205",
-                "olcs/olcs-testhelpers": "^4.205",
-                "olcs/olcs-transfer": "^4.205",
-                "olcs/olcs-utils": "^4.205",
+                "olcs/olcs-devtools": "~4.206.0",
+                "olcs/olcs-logging": "~4.206.0",
+                "olcs/olcs-testhelpers": "~4.206.0",
+                "olcs/olcs-transfer": "~4.206.0",
+                "olcs/olcs-utils": "~4.206.0",
                 "phpstan/phpstan-mockery": "^0.10.2",
                 "phpstan/phpstan-shim": "^0.10.5"
             },
@@ -1318,16 +1322,16 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2019-04-12T16:30:36+00:00"
+            "time": "2019-05-28T12:40:36+00:00"
         },
         {
             "name": "olcs/olcs-logging",
-            "version": "4.205.0",
+            "version": "4.206.1",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-logging/4.205.0/olcs-olcs-logging-4.205.0.zip",
-                "reference": "721baa4c2be9c31e3072631ceca56cd128dcef92",
-                "shasum": "721baa4c2be9c31e3072631ceca56cd128dcef92"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-logging/4.206.1/olcs-olcs-logging-4.206.1.zip",
+                "reference": "976537ea9919f43f2f78da366bbe869f1a4fefaa",
+                "shasum": "976537ea9919f43f2f78da366bbe869f1a4fefaa"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -1344,7 +1348,7 @@
             "require-dev": {
                 "johnkary/phpunit-speedtrap": "^3.0",
                 "mockery/mockery": "^1.2.0",
-                "olcs/olcs-devtools": "^4.205",
+                "olcs/olcs-devtools": "~4.206.0",
                 "phpstan/phpstan-mockery": "^0.10.2",
                 "phpstan/phpstan-shim": "^0.10.5"
             },
@@ -1387,16 +1391,16 @@
                 ]
             },
             "description": "Logging Module for Olcs",
-            "time": "2019-04-12T16:04:23+00:00"
+            "time": "2019-05-01T15:47:37+00:00"
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "4.205.0",
+            "version": "4.206.9",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-transfer/4.205.0/olcs-olcs-transfer-4.205.0.zip",
-                "reference": "c5c1193c3e39b2aac4445ed32b698c41f997e877",
-                "shasum": "c5c1193c3e39b2aac4445ed32b698c41f997e877"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-transfer/4.206.9/olcs-olcs-transfer-4.206.9.zip",
+                "reference": "e37b69e33153145aad66809f6c1aeef52245ee18",
+                "shasum": "e37b69e33153145aad66809f6c1aeef52245ee18"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -1408,7 +1412,7 @@
                 "doctrine/annotations": "^1.2.3",
                 "johnkary/phpunit-speedtrap": "^3.0",
                 "mockery/mockery": "^1.2.0",
-                "olcs/olcs-devtools": "^4.205",
+                "olcs/olcs-devtools": "~4.206.0",
                 "phpstan/phpstan-mockery": "^0.10.2",
                 "phpstan/phpstan-shim": "^0.10.5"
             },
@@ -1452,16 +1456,16 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2019-04-12T16:05:44+00:00"
+            "time": "2019-06-03T09:38:54+00:00"
         },
         {
             "name": "olcs/olcs-utils",
-            "version": "4.205.0",
+            "version": "4.206.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-utils/4.205.0/olcs-olcs-utils-4.205.0.zip",
-                "reference": "6f8a68e52f4b33771823d0048a134040f4c687c6",
-                "shasum": "6f8a68e52f4b33771823d0048a134040f4c687c6"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-utils/4.206.0/olcs-olcs-utils-4.206.0.zip",
+                "reference": "40e231af6a2acb23908587c5ea8692ac9d75e2be",
+                "shasum": "40e231af6a2acb23908587c5ea8692ac9d75e2be"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -1471,8 +1475,8 @@
             "require-dev": {
                 "johnkary/phpunit-speedtrap": "^3.0",
                 "mockery/mockery": "^1.2.0",
-                "olcs/olcs-devtools": "^4.205",
-                "olcs/olcs-logging": "^4.205",
+                "olcs/olcs-devtools": "~4.206.0",
+                "olcs/olcs-logging": "~4.206.0",
                 "phpstan/phpstan-mockery": "^0.10.2",
                 "phpstan/phpstan-shim": "^0.10.5"
             },
@@ -1515,7 +1519,7 @@
                 ]
             },
             "description": "OLCS Utils",
-            "time": "2019-04-12T16:21:24+00:00"
+            "time": "2019-05-01T16:06:22+00:00"
         },
         {
             "name": "psr/http-message",
@@ -1640,10 +1644,10 @@
             "name": "soflomo/purifier",
             "version": "v0.1.1",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/soflomo/purifier/v0.1.1/soflomo-purifier-v0.1.1.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/soflomo-purifier-1f2d85a1b67bdb75bd86eb7a490e1c12280972b9-zip-b8842f.tar",
                 "reference": "1f2d85a1b67bdb75bd86eb7a490e1c12280972b9",
-                "shasum": ""
+                "shasum": "ea7937f729e2a464e602c36c580525f9855b395a"
             },
             "require": {
                 "ezyang/htmlpurifier": ">=4.5.0",
@@ -1662,6 +1666,7 @@
                     "./Module.php"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -1685,11 +1690,11 @@
         },
         {
             "name": "symfony/console",
-            "version": "v3.4.24",
+            "version": "v3.4.28",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/console/v3.4.24/symfony-console-v3.4.24.zip",
-                "reference": "98ae3cdc4bec48fe7ee24afc81dbb4a242186c9e",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/console/v3.4.28/symfony-console-v3.4.28.zip",
+                "reference": "8e1d1e406dd31727fa70cd5a99cda202e9d6a5c6",
                 "shasum": ""
             },
             "require": {
@@ -1747,15 +1752,15 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2019-03-31T11:33:18+00:00"
+            "time": "2019-05-09T08:42:51+00:00"
         },
         {
             "name": "symfony/debug",
-            "version": "v4.2.5",
+            "version": "v4.3.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/debug/v4.2.5/symfony-debug-v4.2.5.zip",
-                "reference": "43ce8ab34c734dcc8a4af576cb86711daab964c5",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/debug/v4.3.0/symfony-debug-v4.3.0.zip",
+                "reference": "97cde06d798f1326857090bc1b7c8f9d225c3dcb",
                 "shasum": ""
             },
             "require": {
@@ -1771,7 +1776,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.2-dev"
+                    "dev-master": "4.3-dev"
                 }
             },
             "autoload": {
@@ -1797,7 +1802,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2019-03-10T17:09:50+00:00"
+            "time": "2019-05-20T16:16:12+00:00"
         },
         {
             "name": "symfony/filesystem",
@@ -1844,11 +1849,11 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v4.2.5",
+            "version": "v4.3.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/finder/v4.2.5/symfony-finder-v4.2.5.zip",
-                "reference": "267b7002c1b70ea80db0833c3afe05f0fbde580a",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/finder/v4.3.0/symfony-finder-v4.3.0.zip",
+                "reference": "b3d4f4c0e4eadfdd8b296af9ca637cfbf51d8176",
                 "shasum": ""
             },
             "require": {
@@ -1857,7 +1862,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.2-dev"
+                    "dev-master": "4.3-dev"
                 }
             },
             "autoload": {
@@ -1883,16 +1888,16 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-            "time": "2019-02-23T15:42:05+00:00"
+            "time": "2019-05-26T20:47:49+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
             "version": "v1.11.0",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/polyfill-mbstring/v1.11.0/symfony-polyfill-mbstring-v1.11.0.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/symfony-polyfill-mbstring-fe5e94c604826c35a32fa832f35bd036b6799609-zip-74a003.tar",
                 "reference": "fe5e94c604826c35a32fa832f35bd036b6799609",
-                "shasum": ""
+                "shasum": "00f68adb76800511c1b1989a09762563e3724517"
             },
             "require": {
                 "php": ">=5.3.3"
@@ -1914,6 +1919,7 @@
                     "bootstrap.php"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -2093,10 +2099,10 @@
             "name": "zf-commons/zfc-rbac",
             "version": "v2.5.6",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zf-commons/zfc-rbac/v2.5.6/zf-commons-zfc-rbac-v2.5.6.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/zf-commons-zfc-rbac-62873668fe0c32aaed3f291dd21c2a7ba22248d7-zip-228e75.tar",
                 "reference": "62873668fe0c32aaed3f291dd21c2a7ba22248d7",
-                "shasum": ""
+                "shasum": "404f5661939edee0dd525acd2b74f97299d9a7d1"
             },
             "require": {
                 "php": ">=5.4",
@@ -2130,6 +2136,7 @@
                     "ZfcRbac\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -2208,6 +2215,11 @@
         {
             "name": "hamcrest/hamcrest-php",
             "version": "v2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hamcrest/hamcrest-php.git",
+                "reference": "776503d3a8e85d4f9a1148614f95b7a608b046ad"
+            },
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/hamcrest/hamcrest-php/v2.0.0/hamcrest-hamcrest-php-v2.0.0.zip",
@@ -2250,6 +2262,11 @@
         {
             "name": "johnkary/phpunit-speedtrap",
             "version": "v3.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/johnkary/phpunit-speedtrap.git",
+                "reference": "dac11b8640d4be7a70f336616947fa84f169835a"
+            },
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/johnkary/phpunit-speedtrap/v3.1.0/johnkary-phpunit-speedtrap-v3.1.0.zip",
@@ -2332,6 +2349,11 @@
         {
             "name": "mockery/mockery",
             "version": "1.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mockery/mockery.git",
+                "reference": "0eb0b48c3f07b3b89f5169ce005b7d05b18cf1d2"
+            },
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/mockery/mockery/1.2.2/mockery-mockery-1.2.2.zip",
@@ -2432,15 +2454,18 @@
         },
         {
             "name": "olcs/coding-standards",
-            "version": "4.205.0",
+            "version": "4.206.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/coding-standards/4.205.0/olcs-coding-standards-4.205.0.zip",
-                "reference": "bbde1459a0eb5d7c4bd735915ef4340f5739cee3",
-                "shasum": "bbde1459a0eb5d7c4bd735915ef4340f5739cee3"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/coding-standards/4.206.0/olcs-coding-standards-4.206.0.zip",
+                "reference": "92e78dd7b6d4e374b44ded6f89f0b63c7dbd51e8",
+                "shasum": "92e78dd7b6d4e374b44ded6f89f0b63c7dbd51e8"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1"
+            },
+            "require-dev": {
+                "olcs/olcs-devtools": "~4.206.0"
             },
             "type": "library",
             "extra": {
@@ -2454,20 +2479,20 @@
                 ]
             },
             "description": "OLCS CodeSniffer and MessDetector rule sets",
-            "time": "2019-04-12T15:31:03+00:00"
+            "time": "2019-05-01T11:24:30+00:00"
         },
         {
             "name": "olcs/olcs-devtools",
-            "version": "4.205.1",
+            "version": "4.206.1",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-devtools/4.205.1/olcs-olcs-devtools-4.205.1.zip",
-                "reference": "dd97e2670dd2cbad9d9158ef25af605c6ed55271",
-                "shasum": "dd97e2670dd2cbad9d9158ef25af605c6ed55271"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-devtools/4.206.1/olcs-olcs-devtools-4.206.1.zip",
+                "reference": "0cd12dc9fe0a420079c7032153e8c9b472224c9b",
+                "shasum": "0cd12dc9fe0a420079c7032153e8c9b472224c9b"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
-                "olcs/coding-standards": "^4.205",
+                "olcs/coding-standards": "~4.206.0",
                 "php": ">=5.4",
                 "phpmd/phpmd": "~2.2",
                 "phpunit/phpcov": "5.*",
@@ -2476,6 +2501,7 @@
             },
             "bin": [
                 "bin/review",
+                "bin/composer-install-syms",
                 "bin/composer-update-syms",
                 "bin/release"
             ],
@@ -2491,16 +2517,16 @@
                 }
             },
             "description": "Dev tools",
-            "time": "2019-04-12T15:35:43+00:00"
+            "time": "2019-05-01T11:17:06+00:00"
         },
         {
             "name": "olcs/olcs-testhelpers",
-            "version": "4.205.0",
+            "version": "4.206.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-testhelpers/4.205.0/olcs-olcs-testhelpers-4.205.0.zip",
-                "reference": "19da9fd726eaa38abda3c079301910a08a294910",
-                "shasum": "19da9fd726eaa38abda3c079301910a08a294910"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-testhelpers/4.206.0/olcs-olcs-testhelpers-4.206.0.zip",
+                "reference": "83b19c0da79239b029345238f6c35522579123ca",
+                "shasum": "83b19c0da79239b029345238f6c35522579123ca"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -2508,8 +2534,8 @@
             },
             "require-dev": {
                 "mockery/mockery": "^1.2.0",
-                "phpunit/phpunit": "7.*",
-                "squizlabs/php_codesniffer": "~1.5.3"
+                "olcs/olcs-devtools": "~4.206.0",
+                "phpunit/phpunit": "7.*"
             },
             "type": "library",
             "extra": {
@@ -2522,12 +2548,22 @@
                     "Olcs\\TestHelpers\\": "src/TestHelpers/"
                 }
             },
+            "scripts": {
+                "release": [
+                    "release"
+                ]
+            },
             "description": "OLCS Test helpers",
-            "time": "2019-04-12T15:29:27+00:00"
+            "time": "2019-05-01T13:31:23+00:00"
         },
         {
             "name": "pdepend/pdepend",
             "version": "2.5.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pdepend/pdepend.git",
+                "reference": "9daf26d0368d4a12bed1cacae1a9f3a6f0adf239"
+            },
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/pdepend/pdepend/2.5.2/pdepend-pdepend-2.5.2.zip",
@@ -2562,6 +2598,11 @@
         {
             "name": "phar-io/manifest",
             "version": "1.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phar-io/manifest.git",
+                "reference": "7761fcacf03b4d4f16e7ccb606d4879ca431fcf4"
+            },
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/phar-io/manifest/1.0.3/phar-io-manifest-1.0.3.zip",
@@ -2611,6 +2652,11 @@
         {
             "name": "phar-io/version",
             "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phar-io/version.git",
+                "reference": "45a2ec53a73c70ce41d55cedef9063630abaf1b6"
+            },
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/phar-io/version/2.0.1/phar-io-version-2.0.1.zip",
@@ -2652,6 +2698,11 @@
         {
             "name": "phpdocumentor/reflection-common",
             "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpDocumentor/ReflectionCommon.git",
+                "reference": "21bdeb5f65d7ebf9f43b1b25d404f87deab5bfb6"
+            },
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/phpdocumentor/reflection-common/1.0.1/phpdocumentor-reflection-common-1.0.1.zip",
@@ -2699,11 +2750,11 @@
         },
         {
             "name": "phpdocumentor/reflection-docblock",
-            "version": "4.3.0",
+            "version": "4.3.1",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/phpdocumentor/reflection-docblock/4.3.0/phpdocumentor-reflection-docblock-4.3.0.zip",
-                "reference": "94fd0001232e47129dd3504189fa1c7225010d08",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/phpdocumentor/reflection-docblock/4.3.1/phpdocumentor-reflection-docblock-4.3.1.zip",
+                "reference": "bdd9f737ebc2a01c06ea7ff4308ec6697db9b53c",
                 "shasum": ""
             },
             "require": {
@@ -2740,11 +2791,16 @@
                 }
             ],
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
-            "time": "2017-11-30T07:14:17+00:00"
+            "time": "2019-04-30T17:48:53+00:00"
         },
         {
             "name": "phpdocumentor/type-resolver",
             "version": "0.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpDocumentor/TypeResolver.git",
+                "reference": "9c977708995954784726e25d0cd1dddf4e65b0f7"
+            },
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/phpdocumentor/type-resolver/0.4.0/phpdocumentor-type-resolver-0.4.0.zip",
@@ -2786,6 +2842,11 @@
         {
             "name": "phpmd/phpmd",
             "version": "2.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpmd/phpmd.git",
+                "reference": "4e9924b2c157a3eb64395460fcf56b31badc8374"
+            },
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/phpmd/phpmd/2.6.0/phpmd-phpmd-2.6.0.zip",
@@ -2846,6 +2907,11 @@
         {
             "name": "phpspec/prophecy",
             "version": "1.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpspec/prophecy.git",
+                "reference": "4ba436b55987b4bf311cb7c6ba82aa528aac0a06"
+            },
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/phpspec/prophecy/1.8.0/phpspec-prophecy-1.8.0.zip",
@@ -2903,6 +2969,11 @@
         {
             "name": "phpstan/phpstan-mockery",
             "version": "0.10.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpstan/phpstan-mockery.git",
+                "reference": "14d568b6b56c957c9ae5330603303a367b21f0e9"
+            },
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/phpstan/phpstan-mockery/0.10.2/phpstan-phpstan-mockery-0.10.2.zip",
@@ -2946,6 +3017,11 @@
         {
             "name": "phpstan/phpstan-shim",
             "version": "0.10.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpstan/phpstan-shim.git",
+                "reference": "7f433a1af3a3e27bea056552e42411c9d9af9c8e"
+            },
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/phpstan/phpstan-shim/0.10.8/phpstan-phpstan-shim-0.10.8.zip",
@@ -2984,6 +3060,11 @@
         {
             "name": "phpunit/php-code-coverage",
             "version": "6.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
+                "reference": "807e6013b00af69b6c5d9ceb4282d0393dbb9d8d"
+            },
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/phpunit/php-code-coverage/6.1.4/phpunit-php-code-coverage-6.1.4.zip",
@@ -3041,6 +3122,11 @@
         {
             "name": "phpunit/php-file-iterator",
             "version": "2.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sebastianbergmann/php-file-iterator.git",
+                "reference": "050bedf145a257b1ff02746c31894800e5122946"
+            },
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/phpunit/php-file-iterator/2.0.2/phpunit-php-file-iterator-2.0.2.zip",
@@ -3085,6 +3171,11 @@
         {
             "name": "phpunit/php-text-template",
             "version": "1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sebastianbergmann/php-text-template.git",
+                "reference": "31f8b717e51d9a2afca6c9f046f5d69fc27c8686"
+            },
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/phpunit/php-text-template/1.2.1/phpunit-php-text-template-1.2.1.zip",
@@ -3120,6 +3211,11 @@
         {
             "name": "phpunit/php-timer",
             "version": "2.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sebastianbergmann/php-timer.git",
+                "reference": "8b389aebe1b8b0578430bda0c7c95a829608e059"
+            },
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/phpunit/php-timer/2.1.1/phpunit-php-timer-2.1.1.zip",
@@ -3163,6 +3259,11 @@
         {
             "name": "phpunit/php-token-stream",
             "version": "3.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sebastianbergmann/php-token-stream.git",
+                "reference": "c99e3be9d3e85f60646f152f9002d46ed7770d18"
+            },
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/phpunit/php-token-stream/3.0.1/phpunit-php-token-stream-3.0.1.zip",
@@ -3206,6 +3307,11 @@
         {
             "name": "phpunit/phpcov",
             "version": "5.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sebastianbergmann/phpcov.git",
+                "reference": "72fb974e6fe9b39d7e0b0d44061d2ba4c49ee0b8"
+            },
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/phpunit/phpcov/5.0.0/phpunit-phpcov-5.0.0.zip",
@@ -3251,11 +3357,11 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "7.5.8",
+            "version": "7.5.12",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/phpunit/phpunit/7.5.8/phpunit-phpunit-7.5.8.zip",
-                "reference": "c29c0525cf4572c11efe1db49a8b8aee9dfac58a",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/phpunit/phpunit/7.5.12/phpunit-phpunit-7.5.12.zip",
+                "reference": "9ba59817745b0fe0c1a5a3032dfd4a6d2994ad1c",
                 "shasum": ""
             },
             "require": {
@@ -3325,7 +3431,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2019-03-26T13:23:54+00:00"
+            "time": "2019-05-28T11:59:40+00:00"
         },
         {
             "name": "psr/container",
@@ -3373,6 +3479,11 @@
         {
             "name": "sebastian/code-unit-reverse-lookup",
             "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sebastianbergmann/code-unit-reverse-lookup.git",
+                "reference": "4419fcdb5eabb9caa61a27c7a1db532a6b55dd18"
+            },
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/sebastian/code-unit-reverse-lookup/1.0.1/sebastian-code-unit-reverse-lookup-1.0.1.zip",
@@ -3412,6 +3523,11 @@
         {
             "name": "sebastian/comparator",
             "version": "3.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sebastianbergmann/comparator.git",
+                "reference": "5de4fc177adf9bce8df98d8d141a7559d7ccf6da"
+            },
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/sebastian/comparator/3.0.2/sebastian-comparator-3.0.2.zip",
@@ -3470,6 +3586,11 @@
         {
             "name": "sebastian/diff",
             "version": "3.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sebastianbergmann/diff.git",
+                "reference": "720fcc7e9b5cf384ea68d9d930d480907a0c1a29"
+            },
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/sebastian/diff/3.0.2/sebastian-diff-3.0.2.zip",
@@ -3519,11 +3640,11 @@
         },
         {
             "name": "sebastian/environment",
-            "version": "4.1.0",
+            "version": "4.2.2",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/sebastian/environment/4.1.0/sebastian-environment-4.1.0.zip",
-                "reference": "6fda8ce1974b62b14935adc02a9ed38252eca656",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/sebastian/environment/4.2.2/sebastian-environment-4.2.2.zip",
+                "reference": "f2a2c8e1c97c11ace607a7a667d73d47c19fe404",
                 "shasum": ""
             },
             "require": {
@@ -3538,7 +3659,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.1-dev"
+                    "dev-master": "4.2-dev"
                 }
             },
             "autoload": {
@@ -3562,11 +3683,16 @@
                 "environment",
                 "hhvm"
             ],
-            "time": "2019-02-01T05:27:49+00:00"
+            "time": "2019-05-05T09:05:15+00:00"
         },
         {
             "name": "sebastian/exporter",
             "version": "3.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sebastianbergmann/exporter.git",
+                "reference": "234199f4528de6d12aaa58b612e98f7d36adb937"
+            },
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/sebastian/exporter/3.1.0/sebastian-exporter-3.1.0.zip",
@@ -3628,6 +3754,11 @@
         {
             "name": "sebastian/finder-facade",
             "version": "1.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sebastianbergmann/finder-facade.git",
+                "reference": "4a3174709c2dc565fe5fb26fcf827f6a1fc7b09f"
+            },
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/sebastian/finder-facade/1.2.2/sebastian-finder-facade-1.2.2.zip",
@@ -3661,6 +3792,11 @@
         {
             "name": "sebastian/global-state",
             "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sebastianbergmann/global-state.git",
+                "reference": "e8ba02eed7bbbb9e59e43dedd3dddeff4a56b0c4"
+            },
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/sebastian/global-state/2.0.0/sebastian-global-state-2.0.0.zip",
@@ -3706,6 +3842,11 @@
         {
             "name": "sebastian/object-enumerator",
             "version": "3.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sebastianbergmann/object-enumerator.git",
+                "reference": "7cfd9e65d11ffb5af41198476395774d4c8a84c5"
+            },
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/sebastian/object-enumerator/3.0.3/sebastian-object-enumerator-3.0.3.zip",
@@ -3747,6 +3888,11 @@
         {
             "name": "sebastian/object-reflector",
             "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sebastianbergmann/object-reflector.git",
+                "reference": "773f97c67f28de00d397be301821b06708fca0be"
+            },
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/sebastian/object-reflector/1.1.1/sebastian-object-reflector-1.1.1.zip",
@@ -3786,6 +3932,11 @@
         {
             "name": "sebastian/recursion-context",
             "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sebastianbergmann/recursion-context.git",
+                "reference": "5b0cd723502bac3b006cbf3dbf7a1e3fcefe4fa8"
+            },
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/sebastian/recursion-context/3.0.0/sebastian-recursion-context-3.0.0.zip",
@@ -3833,6 +3984,11 @@
         {
             "name": "sebastian/resource-operations",
             "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sebastianbergmann/resource-operations.git",
+                "reference": "4d7a795d35b889bf80a0cc04e08d77cedfa917a9"
+            },
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/sebastian/resource-operations/2.0.1/sebastian-resource-operations-2.0.1.zip",
@@ -3869,6 +4025,11 @@
         {
             "name": "sebastian/version",
             "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sebastianbergmann/version.git",
+                "reference": "99732be0ddb3361e16ad77b68ba41efc8e979019"
+            },
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/sebastian/version/2.0.1/sebastian-version-2.0.1.zip",
@@ -3950,10 +4111,10 @@
         },
         {
             "name": "symfony/config",
-            "version": "v3.4.24",
+            "version": "v3.4.28",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/config/v3.4.24/symfony-config-v3.4.24.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/config/v3.4.28/symfony-config-v3.4.28.zip",
                 "reference": "177a276c01575253c95cefe0866e3d1b57637fe0",
                 "shasum": ""
             },
@@ -4074,11 +4235,16 @@
         {
             "name": "symfony/polyfill-ctype",
             "version": "v1.11.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-ctype.git",
+                "reference": "82ebae02209c21113908c229e9883c419720738a"
+            },
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/polyfill-ctype/v1.11.0/symfony-polyfill-ctype-v1.11.0.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/symfony-polyfill-ctype-82ebae02209c21113908c229e9883c419720738a-zip-6b93e8.tar",
                 "reference": "82ebae02209c21113908c229e9883c419720738a",
-                "shasum": ""
+                "shasum": "e6db85383c1aed278f9b476b6915e1a9e2941158"
             },
             "require": {
                 "php": ">=5.3.3"
@@ -4100,6 +4266,7 @@
                     "bootstrap.php"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -4126,6 +4293,11 @@
         {
             "name": "theseer/fdomdocument",
             "version": "1.6.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/theseer/fDOMDocument.git",
+                "reference": "6e8203e40a32a9c770bcb62fe37e68b948da6dca"
+            },
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/theseer/fdomdocument/1.6.6/theseer-fdomdocument-1.6.6.zip",
@@ -4194,6 +4366,11 @@
         {
             "name": "webmozart/assert",
             "version": "1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/webmozart/assert.git",
+                "reference": "83e253c8e0be5b0257b881e1827274667c5c17a9"
+            },
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/webmozart/assert/1.4.0/webmozart-assert-1.4.0.zip",

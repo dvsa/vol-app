@@ -53,7 +53,8 @@ class AbstractSummaryControllerTest extends MockeryTestCase
             'interimStatus' => [
                 'description' => 'In-Force'
             ],
-            'niFlag' => $niFlag
+            'niFlag' => $niFlag,
+            'canWithdraw' =>false
         ];
         $this->sut
             ->shouldReceive('getIdentifier')->with()->once()->andReturn(712)
@@ -118,7 +119,8 @@ class AbstractSummaryControllerTest extends MockeryTestCase
             'isVariation' => $isVariation,
             'goodsOrPsv' => ['id' => $goodsOrPsv],
             'licenceType' => ['id' => $licenceType],
-            'appliedVia' => ['id' => \Common\RefData::APPLIED_VIA_SELFSERVE]
+            'appliedVia' => ['id' => \Common\RefData::APPLIED_VIA_SELFSERVE],
+            'canWithdraw' => false
         ];
         $this->sut
             ->shouldReceive('getIdentifier')->with()->once()->andReturn(712)
