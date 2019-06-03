@@ -202,6 +202,12 @@ trait TaskSearchTrait
                         'typeId' => $this->params('permitid'),
                     ];
                     break;
+                case 'irhpapplication':
+                    $params = [
+                        'type' => 'irhpapplication',
+                        'typeId' => $this->params('irhpAppId'),
+                    ];
+                    break;
                 default:
                     // no type - call from the home page
                     break;

@@ -19,28 +19,28 @@ trait DocumentActionTrait
      *
      * @return string
      */
-    protected abstract function getDocumentRoute();
+    abstract protected function getDocumentRoute();
 
     /**
      * Route params for document action redirects
      *
      * @return array
      */
-    protected abstract function getDocumentRouteParams();
+    abstract protected function getDocumentRouteParams();
 
     /**
      * Get view model for document action
      *
      * @return \Zend\View\Model\ViewModel
      */
-    protected abstract function getDocumentView();
+    abstract protected function getDocumentView();
 
     /**
      * Get configured document form
      *
      * @return \Zend\Form\Form
      */
-    protected abstract function getConfiguredDocumentForm();
+    abstract protected function getConfiguredDocumentForm();
 
     protected $documentIdentifierName = 'doc';
 
@@ -69,7 +69,6 @@ trait DocumentActionTrait
             $params = $this->getDocumentRouteParams();
 
             if ($action === 'split') {
-
                 $id = $this->params()->fromPost('id', []);
                 $id = $id[0];
 
@@ -81,7 +80,10 @@ trait DocumentActionTrait
                 ];
 
                 $currentUrl = $this->url()->fromRoute(
-                    null, [], ['query' => $this->getRequest()->getQuery()->toArray()], true
+                    null,
+                    [],
+                    ['query' => $this->getRequest()->getQuery()->toArray()],
+                    true
                 );
                 $documentUrl = $this->url()->fromRoute('getfile', $docParams, ['query' => ['inline' => 1]]);
 
@@ -97,9 +99,12 @@ trait DocumentActionTrait
                 $ids = $this->params()->fromPost('id', []);
                 $params = array_merge($params, [$this->documentIdentifierName => implode(',', $ids)]);
             }
+
             $route  = $this->getDocumentRoute() . '/' . $action;
             return $this->redirect()->toRoute(
-                $route, $params, ['query' => $this->getRequest()->getQuery()->toArray()]
+                $route,
+                $params,
+                ['query' => $this->getRequest()->getQuery()->toArray()]
             );
         }
 
