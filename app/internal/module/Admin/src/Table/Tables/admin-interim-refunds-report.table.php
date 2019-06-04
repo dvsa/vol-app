@@ -17,7 +17,7 @@ return array(
     'columns' => array(
         array(
             'title' => 'Licence Number',
-            'name' => 'licenceNo'
+            'formatter' => 'InternalLicenceNumberLink',
         ),
         array(
             'title' => 'Operator Name',
@@ -25,11 +25,13 @@ return array(
         ),
         array(
             'title' => 'Date Fee Received',
-            'name' => 'feeDate',
+            'name' => 'invoicedDate',
+            'formatter' => 'Date'
         ),
         array(
             'title' => 'Fee Amount',
             'name' => 'amount',
+            'formatter' => 'FeeAmount'
         ),
 
         array(
@@ -38,7 +40,8 @@ return array(
         ),
         array(
             'title' => 'Refund Status',
-            'name' => 'status',
+            'name' => 'feeStatus',
+            'formatter' => 'RefData'
         ),
     )
 );
