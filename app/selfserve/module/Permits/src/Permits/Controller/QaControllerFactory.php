@@ -19,8 +19,8 @@ class QaControllerFactory implements FactoryInterface
         $mainServiceLocator = $serviceLocator->getServiceLocator();
 
         return new QaController(
-            $mainServiceLocator->get('Helper\Form'),
-            $mainServiceLocator->get('QaFormProvider')
+            $mainServiceLocator->get('QaFormProvider'),
+            $mainServiceLocator->get('QaTemplateVarsGenerator')
         );
     }
 }

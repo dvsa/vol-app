@@ -16,12 +16,9 @@ class FormProviderFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $mappings = [
-            'checkbox' => $serviceLocator->get('QaSingleCheckboxFormTypeProvider'),
-            'radio' => $serviceLocator->get('QaRadioFormTypeProvider'),
-            'text' => $serviceLocator->get('QaTextFormTypeProvider'),
-        ];
-
-        return new FormProvider($mappings);
+        return new FormProvider(
+            $serviceLocator->get('Helper\Form'),
+            $serviceLocator->get('QaFieldsetAdder')
+        );
     }
 }

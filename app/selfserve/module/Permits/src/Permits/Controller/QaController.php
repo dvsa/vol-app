@@ -2,37 +2,44 @@
 
 namespace Permits\Controller;
 
-use Common\Service\Helper\FormHelperService as FormHelper;
 use Common\Controller\AbstractOlcsController;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\SubmitApplicationStep;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\ApplicationStep;
 use Olcs\Service\Qa\FormProvider;
+use Olcs\Service\Qa\TemplateVarsGenerator;
 use Permits\View\Helper\EcmtSection;
 use Permits\View\Helper\IrhpApplicationSection;
 use Zend\View\Model\ViewModel;
 
 class QaController extends AbstractOlcsController
 {
-    /** @var FormHelper */
-    private $formHelper;
-
     /** @var FormProvider */
     private $formProvider;
+
+    /** @var TemplateVarsGenerator */
+    private $templateVarsGenerator;
 
     /**
      * Create service instance
      *
-     * @param FormHelper $formHelper
      * @param FormProvider $formProvider
+     * @param TemplateVarsGenerator $templateVarsGenerator
      *
      * @return QaController
      */
-    public function __construct(FormHelper $formHelper, FormProvider $formProvider)
-    {
-        $this->formHelper = $formHelper;
+    public function __construct(
+        FormProvider $formProvider,
+        TemplateVarsGenerator $templateVarsGenerator
+    ) {
         $this->formProvider = $formProvider;
+        $this->templateVarsGenerator = $templateVarsGenerator;
     }
 
+    /**
+     * Index action
+     *
+     * @return ViewModel
+     */
     public function indexAction()
     {
         $routeParams = $this->params()->fromRoute();
@@ -50,8 +57,7 @@ class QaController extends AbstractOlcsController
         }
 
         $result = $response->getResult();
-
-        $form = $this->formProvider->get($result['form']);
+        $form = $this->formProvider->get($result['applicationStep']);
 
         if ($this->request->isPost()) {
             $postParams = $this->params()->fromPost();
@@ -88,10 +94,13 @@ class QaController extends AbstractOlcsController
         }
 
         $templateVars = array_merge(
-            $result['templateVars'],
+            $this->templateVarsGenerator->generate($result['questionText']),
             [
                 'backUri' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
                 'cancelUrl' => EcmtSection::ROUTE_PERMITS,
+                'application' => [
+                    'applicationRef' => $result['applicationReference']
+                ],
             ]
         );
 
