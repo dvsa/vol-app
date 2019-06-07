@@ -30,7 +30,7 @@ return array(
             }
         ],
         [
-            'title' => 'Date Fee Received',
+            'title' => 'Date Fee Invoiced',
             'name' => 'invoicedDate',
             'formatter' => 'Date'
         ],
@@ -42,7 +42,17 @@ return array(
 
         [
             'title' => 'Date of Refund',
-            'name' => 'refundDate',
+            'formatter' => function ($data) {
+                $lastTransaction = $data['feeTransactions'][count($data['feeTransactions']) - 1];
+                $data = $lastTransaction['amount'] < 0 ? $lastTransaction : [];
+                return $this->callFormatter(
+                    [
+                        'formatter' => 'Date',
+                        'name' => 'createdOn',
+                    ],
+                    $data
+                );
+            }
         ],
         [
             'title' => 'Refund Status',
