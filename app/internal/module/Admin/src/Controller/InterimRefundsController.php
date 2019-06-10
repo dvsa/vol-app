@@ -21,8 +21,18 @@ class InterimRefundsController extends AbstractInternalController implements Lef
     protected $tableName = 'admin-interim-refunds-report';
     protected $tableViewPlaceholderName = 'table';
     protected $tableViewTemplate = 'pages/table-comments';
+    protected $defaultTableSortField = 'ftr.createdOn';
+    protected $defaultTableOrderField = 'DESC';
     protected $listDto = ListDto::class;
     protected $filterForm = FilterForm::class;
+
+    /**
+     * @var array
+     */
+    protected $inlineScripts = [
+        'indexAction' => ['table-actions', 'forms/filter'],
+    ];
+
 
     public function getLeftView()
     {
