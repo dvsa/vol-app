@@ -7,6 +7,8 @@ use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Application\CancelApplication as CancelApplicationCmd;
 use Dvsa\Olcs\Transfer\Command\Application\WithdrawApplication as WithdrawApplicationCmd;
 use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
+use Dvsa\Olcs\Transfer\Query\Application\Summary as WithdrawQry;
+
 use Zend\Mvc\MvcEvent;
 
 /**
@@ -94,10 +96,22 @@ abstract class AbstractOverviewController extends AbstractController
      */
     public function withdrawAction()
     {
+        $id = $this->params()->fromRoute('application');
+
+        $dto = WithdrawQry::create(['id' => $id]);
+        $response = $this->handleQuery($dto);
+        $data = $response->getResult();
+
+        if(!$data['canWithdraw'])
+        {
+            return $this->redirect()->toRoute('lva-' . $this->lva, [], [], true);
+;
+        }
+
         if ($this->getRequest()->isPost() && $this->isButtonPressed('submit')) {
             $dto = WithdrawApplicationCmd::create(
                 [
-                    'id' => $this->params()->fromRoute('application'),
+                    'id' => $id,
                     'reason' => RefData::APPLICATION_WITHDRAW_REASON_WITHDRAWN
                 ]
             );
@@ -111,11 +125,15 @@ abstract class AbstractOverviewController extends AbstractController
             $this->addSuccessMessage('external.withdraw_application.confirm.cancel_message');
             return $this->redirect()->toRouteAjax('dashboard', [], [], true);
         }
+
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
         $form = $formHelper->createForm('GenericConfirmation');
         $form->get('form-actions')->get('submit')->setLabel('external.withdraw_application.confirm.confirm_button');
         $form->get('form-actions')->get('cancel')->setLabel('external.withdraw_application.confirm.back_button');
+
+
         $form->get('messages')->get('message')->setValue('external.withdraw_application.confirm.message');
+
         $formHelper->setFormActionFromRequest($form, $this->getRequest());
         return $this->render('withdraw_application_confirmation', $form);
     }
