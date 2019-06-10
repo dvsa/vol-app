@@ -105,7 +105,6 @@ abstract class AbstractOverviewController extends AbstractController
         if(!$data['canWithdraw'])
         {
             return $this->redirect()->toRoute('lva-' . $this->lva, [], [], true);
-;
         }
 
         if ($this->getRequest()->isPost() && $this->isButtonPressed('submit')) {
