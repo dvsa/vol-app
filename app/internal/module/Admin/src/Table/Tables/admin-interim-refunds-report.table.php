@@ -5,12 +5,7 @@ return array(
         'title' => 'Interim Refunds'
     ],
     'settings' => [
-        'paginate' => [
-            'limit' => [
-                'default' => 25,
-                'options' => [10, 25, 50]
-            ],
-        ]
+        'showTotal' => true
     ],
     'attributes' => [],
     'columns' => [

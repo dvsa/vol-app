@@ -18,11 +18,9 @@ class InterimRefundsController extends AbstractInternalController implements Lef
     protected $navigationId = 'admin-dashboard/admin-report/interim-refunds';
 
     // list
+    protected $tableName = 'admin-interim-refunds-report';
     protected $tableViewPlaceholderName = 'table';
     protected $tableViewTemplate = 'pages/table-comments';
-    protected $defaultTableSortField = 'id';
-    protected $defaultTableOrderField = 'ASC';
-    protected $tableName = 'admin-interim-refunds-report';
     protected $listDto = ListDto::class;
     protected $filterForm = FilterForm::class;
 
