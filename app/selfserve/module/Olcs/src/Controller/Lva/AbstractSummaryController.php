@@ -78,7 +78,7 @@ abstract class AbstractSummaryController extends AbstractController
             'lva' => $this->lva,
             'licence' => $data['licence']['licNo'],
             'application' => $data['id'],
-            'canWithdraw' => ($data['status']['id'] === RefData::APPLICATION_STATUS_UNDER_CONSIDERATION),
+            'canWithdraw' => $data['canWithdraw'],
             'status' => $data['status']['description'],
             'submittedDate' => $data['receivedDate'],
             'completionDate' => $data['targetCompletionDate'],
