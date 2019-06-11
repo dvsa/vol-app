@@ -137,6 +137,10 @@ class DocumentUploadController extends AbstractDocumentController
                 $data['licence'] = $routeParams['licence'];
                 break;
 
+            case 'irhpApplication':
+                $data['licence'] = $routeParams['licence'];
+                break;
+
             default:
                 break;
         }

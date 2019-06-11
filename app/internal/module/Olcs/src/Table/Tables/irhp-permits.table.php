@@ -11,7 +11,6 @@ return [
     'settings' => [
         'crud' => [
             'actions' => [
-                'terminate' => ['requireRows' => true, 'class' => 'action--secondary js-require--one'],
                 'request replacement' => ['requireRows' => true, 'class' => 'action--secondary js-require--one']
             ],
         ],
@@ -32,8 +31,11 @@ return [
             'formatter' => 'DateTime',
         ],
         [
-            'title' => 'Not valid for travel to',
-            'formatter' => 'ConstrainedCountriesList',
+            'title' => 'Country',
+            'name' => 'country',
+            'formatter' => function ($row) {
+                return Escape::html($row['irhpPermitRange']['irhpPermitStock']['country']['countryDesc']);
+            },
         ],
         [
             'title' => 'Ceased Date',

@@ -41,7 +41,21 @@ class PermitStockDetails
     public $country = null;
 
     /**
-     * @Form\Required(true)
+     * @Form\Attributes({"id":"emissionsCategory","placeholder":"","class":"medium", "data-container-class":"stockEmissions js-hidden"})
+     * @Form\Required(false)
+     * @Form\Options({
+     *     "label": "Emissions category question",
+     *     "empty_option": "Please Select",
+     *     "disable_inarray_validator": false,
+     *     "category": "emissions_category"
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $emissionsCategory = null;
+
+    /**
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"validFrom","placeholder":"","class":"medium", "data-container-class":"stockDates"})
      * @Form\Options({
      *     "label": "Validity Period Start",
      *     "create_empty_option": true,
@@ -55,7 +69,8 @@ class PermitStockDetails
     public $validFrom = null;
 
     /**
-     * @Form\Required(true)
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"validTo","placeholder":"","class":"medium", "data-container-class":"stockDates"})
      * @Form\Options({
      *     "label": "Validity Period End",
      *     "create_empty_option": true,
@@ -65,27 +80,6 @@ class PermitStockDetails
      * @Form\Filter({"name":"DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
-     * @Form\Validator({
-     *      "name": "DateCompare",
-     *      "options": {
-     *          "has_time": false,
-     *          "allow_empty": true,
-     *          "compare_to":"validFrom",
-     *          "operator":"gte",
-     *          "messageTemplates": {
-     *              "notGreaterThanOrEqual": "Validity Period End Date must be equal to or later than Validity Period Start Date"
-     *          }
-     *      }
-     * })
-     * @Form\Validator({
-     *      "name": "Dvsa\Olcs\Transfer\Validators\DateInFuture",
-     *      "options": {
-     *          "include_today": true,
-     *          "use_time": false,
-     *          "allow_empty": true,
-     *          "error-message": "Validity Period End must be later than Validity Period Start"
-     *      }
-     * })
      */
     public $validTo = null;
 

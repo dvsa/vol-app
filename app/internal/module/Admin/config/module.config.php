@@ -102,6 +102,21 @@ return [
                             ]
                         ],
                     ],
+                    'document-templates' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' =>
+                                'document-templates[/:action][/:id][/]',
+                            'constraints' => [
+                                'action' => '(add|edit|delete)',
+                                'id' => '[0-9\,]+',
+                            ],
+                            'defaults' => [
+                                'controller' => Admin\Controller\DocumentTemplateController::class,
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
                     'admin-scanning' => [
                         'type' => 'segment',
                         'options' => [
@@ -765,11 +780,11 @@ return [
                             'route' =>
                                 'email-templates[/:action][/:id][/]',
                             'constraints' => [
-                                'action' => '(index|add|edit|delete)',
+                                'action' => '(index|add|edit|delete|previewTemplate)',
                                 'id' => '[0-9\,]+',
                             ],
                             'defaults' => [
-                                'controller' => Admin\Controller\EmailTemplateController::class,
+                                'controller' => Admin\Controller\TemplateController::class,
                                 'action' => 'index',
                             ]
                         ],
@@ -784,7 +799,7 @@ return [
                                 'id' => '[0-9\,]+',
                             ],
                             'defaults' => [
-                                'controller' => Admin\Controller\EmailTemplateController::class,
+                                'controller' => Admin\Controller\DocumentTemplateController::class,
                                 'action' => 'index',
                             ]
                         ],
@@ -866,8 +881,9 @@ return [
             Admin\Controller\IrhpPermitPrintController::class =>
                 Admin\Controller\IrhpPermitPrintController::class,
             Admin\Controller\ReportUploadController::class => Admin\Controller\ReportUploadController::class,
-            Admin\Controller\EmailTemplateController::class => Admin\Controller\EmailTemplateController::class,
-            \Admin\Controller\InterimRefundsController::class =>\Admin\Controller\InterimRefundsController::class
+            Admin\Controller\DocumentTemplateController::class => Admin\Controller\DocumentTemplateController::class,
+            Admin\Controller\TemplateController::class => Admin\Controller\TemplateController::class,
+            Admin\Controller\InterimRefundsController::class =>Admin\Controller\InterimRefundsController::class
         ],
     ],
     'view_manager' => [

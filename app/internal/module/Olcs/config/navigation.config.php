@@ -600,12 +600,24 @@ $nav = [
                                             'route' => 'licence/irhp-processing/tasks',
                                             'use_route_match' => true,
                                         ],
+                                        [
+                                            'id' => 'licence_irhp_permits_processing_change-history',
+                                            'label' => 'Change history',
+                                            'route' => 'licence/irhp-processing/change-history',
+                                            'use_route_match' => true,
+                                        ],
+                                        [
+                                            'id' => 'licence_irhp_permits_processing_read-history',
+                                            'label' => 'internal-crud-read-history',
+                                            'route' => 'licence/irhp-processing/read-history',
+                                            'use_route_match' => true,
+                                        ],
                                     ]
                                 ],
                                 [
                                     'id' => 'licence_irhp_permits-fees',
                                     'label' => 'Fees',
-                                    'route' => 'licence/irhp-fees',
+                                    'route' => 'licence/irhp-fees/table',
                                     'use_route_match' => true,
                                     'pages' => [
                                         [
@@ -651,10 +663,9 @@ $nav = [
                         ],
                         [
                             'id' => 'licence_irhp_applications',
-                            'label' => 'IRHP Applications',
+                            'label' => 'IRHP Permits',
                             'visible' => 0,
-                            'route' => 'licence/irhp-application',
-
+                            'route' => 'licence/permits',
                             'use_route_match' => true,
                             'pages' => [
                                 [
@@ -670,12 +681,8 @@ $nav = [
                                 [
                                     'id' => 'licence_irhp_applications-document',
                                     'label' => 'Docs & Attachments',
-                                    'route' => 'licence/irhp-application/application',
+                                    'route' => 'licence/irhp-application-docs',
                                     'use_route_match' => true,
-                                    'params' => [
-                                        'action' => 'documents',
-                                        'id' => null
-                                    ],
                                 ],
                                 [
                                     'id' => 'licence_irhp_applications-processing',
@@ -686,16 +693,26 @@ $nav = [
                                         'action' => 'processing',
                                         'id' => null
                                     ],
+                                    'pages' => [
+                                        [
+                                            'id' => 'licence_irhp_applications_processing_notes',
+                                            'label' => 'Notes',
+                                            'route' => 'licence/irhp-application-processing/notes',
+                                            'use_route_match' => true,
+                                        ],
+                                        [
+                                            'id' => 'licence_irhp_applications_processing_tasks',
+                                            'label' => 'Tasks',
+                                            'route' => 'licence/irhp-application-processing/tasks',
+                                            'use_route_match' => true,
+                                        ],
+                                    ]
                                 ],
                                 [
                                     'id' => 'licence_irhp_applications-fees',
                                     'label' => 'Fees',
-                                    'route' => 'licence/irhp-application-fees',
+                                    'route' => 'licence/irhp-application-fees/table',
                                     'use_route_match' => true,
-                                    'params' => [
-                                        'action' => 'fees',
-                                        'id' => null
-                                    ],
                                 ],
                                 [
                                     'id' => 'licence_irhp_applications-cancel',

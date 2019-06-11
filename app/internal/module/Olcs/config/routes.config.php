@@ -10,9 +10,14 @@ use Olcs\Controller\Licence\Processing\LicenceProcessingNoteController;
 use Olcs\Controller\Bus\Processing\BusProcessingDecisionController;
 use Olcs\Controller\Bus\Processing\BusProcessingNoteController;
 use Olcs\Controller\Operator\OperatorProcessingNoteController;
+use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingOverviewController;
+use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingNoteController;
+use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingTasksController;
 use Olcs\Controller\IrhpPermits\IrhpPermitProcessingOverviewController;
 use Olcs\Controller\IrhpPermits\IrhpPermitProcessingNoteController;
+use Olcs\Controller\IrhpPermits\IrhpPermitProcessingReadHistoryController;
 use Olcs\Controller\IrhpPermits\IrhpPermitProcessingTasksController;
+use Olcs\Controller\IrhpPermits\ChangeHistoryController;
 use Olcs\Controller\Bus\Details\BusDetailsController;
 use Olcs\Controller\Bus\Service\BusServiceController;
 use Olcs\Controller\SearchController;
@@ -841,7 +846,7 @@ $routes = [
                     ],
                     'defaults' => [
                         'controller' => 'IrhpPermitFeesController',
-                        'action' => 'fees',
+                        'action' => 'dashRedirect',
                     ]
                 ],
                 'may_terminate' => true,
@@ -849,6 +854,15 @@ $routes = [
                     'fee_action' => $feeActionRoute,
                     'fee_type_ajax' => $feeTypeAjaxRoute,
                     'print-receipt' => $feePrintReceiptRoute,
+                    'table' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'table[/]',
+                            'defaults' => [
+                                'action' => 'fees'
+                            ]
+                        ]
+                    ],
                 ]
             ],
             'irhp-application-fees' => [
@@ -860,7 +874,7 @@ $routes = [
                     ],
                     'defaults' => [
                         'controller' => IrhpApplicationFeesController::class,
-                        'action' => 'fees',
+                        'action' => 'dashRedirect',
                     ]
                 ],
                 'may_terminate' => true,
@@ -868,6 +882,15 @@ $routes = [
                     'fee_action' => $feeActionRoute,
                     'fee_type_ajax' => $feeTypeAjaxRoute,
                     'print-receipt' => $feePrintReceiptRoute,
+                    'table' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'table[/]',
+                            'defaults' => [
+                                'action' => 'fees'
+                            ]
+                        ]
+                    ],
                 ]
             ],
             'permits' => [
@@ -1041,6 +1064,26 @@ $routes = [
                             ]
                         ]
                     ],
+                    'change-history' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'change-history[/]',
+                            'defaults' => [
+                                'controller' => ChangeHistoryController::class,
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
+                    'read-history' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'read-history[/]',
+                            'defaults' => [
+                                'controller' => IrhpPermitProcessingReadHistoryController::class,
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
                 ]
             ],
             'irhp-application' => [
@@ -1085,6 +1128,117 @@ $routes = [
                             ],
                             'defaults' => [
                                 'action' => 'edit'
+                            ]
+                        ]
+                    ],
+                ]
+            ],
+            'irhp-application-docs' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'irhp-application/documents/:irhpAppId[/]',
+                    'constraints' => [
+                        'irhpAppId' => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => 'IrhpApplicationDocsController',
+                        'action' => 'documents',
+                    ]
+                ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'generate' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'generate[/:doc][/]',
+                            'defaults' => [
+                                'type' => 'irhpApplication',
+                                'controller' => 'DocumentGenerationController',
+                                'action' => 'generate'
+                            ]
+                        ],
+                    ],
+                    'finalise' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'finalise/:doc[/:action][/]',
+                            'defaults' => [
+                                'type' => 'irhpApplication',
+                                'controller' => 'DocumentFinaliseController',
+                                'action' => 'finalise'
+                            ]
+                        ],
+                    ],
+                    'upload' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'upload[/]',
+                            'defaults' => [
+                                'type' => 'irhpApplication',
+                                'controller' => 'DocumentUploadController',
+                                'action' => 'upload'
+                            ]
+                        ],
+                    ],
+                    'delete' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'delete/:doc[/]',
+                            'defaults' => [
+                                'type' => 'irhpApplication',
+                                'controller' => 'IrhpApplicationDocsController',
+                                'action' => 'delete-document'
+                            ]
+                        ],
+                    ],
+                    'relink' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'relink/:doc[/]',
+                            'defaults' => [
+                                'type' => 'irhpApplication',
+                                'controller' => 'DocumentRelinkController',
+                                'action' => 'relink'
+                            ]
+                        ],
+                    ],
+                ],
+            ],
+            'irhp-application-processing' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'irhp-application/processing/:irhpAppId[/]',
+                    'constraints' => [
+                        'permitid' => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => IrhpApplicationProcessingOverviewController::class,
+                        'action' => 'index',
+                    ]
+                ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'notes' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'notes[/:action[/:id]][/]',
+                            'constraints' => [
+                                'action' => 'index|details|add|edit|delete',
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults' => [
+                                'controller' => IrhpApplicationProcessingNoteController::class,
+                                'action' => 'index'
+                            ]
+                        ],
+                    ],
+                    'tasks' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'tasks[/]',
+                            'defaults' => [
+                                'controller' => IrhpApplicationProcessingTasksController::class,
+                                'action' => 'index'
                             ]
                         ]
                     ],

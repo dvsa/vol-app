@@ -118,6 +118,9 @@ class DocumentGenerationController extends AbstractDocumentController
             case 'ecmtPermitApplication':
                 $queryData['licence'] = $routeParams['licence'];
                 break;
+            case 'irhpApplication':
+                $queryData['licence'] = $routeParams['licence'];
+                break;
             // fixing irfoOrganisation / organisation ambiguity
             case 'irfoOrganisation':
                 $queryData['irfoOrganisation'] = $routeParams['organisation'];

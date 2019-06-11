@@ -270,6 +270,10 @@ class DocumentFinaliseController extends AbstractDocumentController
                 $data['licence'] = $this->params('licence');
                 break;
 
+            case 'irhpApplication':
+                $data['licence'] = $this->params('licence');
+                break;
+
             default:
                 break;
         }

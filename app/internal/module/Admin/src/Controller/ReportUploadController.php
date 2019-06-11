@@ -2,6 +2,7 @@
 
 namespace Admin\Controller;
 
+use Admin\Form\Model\Form\DocumentTemplateUpload;
 use Admin\Form\Model\Form\ReportUpload as ReportUploadForm;
 use Common\Service\AntiVirus\Scan;
 use Common\Util\FileContent;

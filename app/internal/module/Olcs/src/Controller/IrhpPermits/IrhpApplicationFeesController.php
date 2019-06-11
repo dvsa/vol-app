@@ -15,10 +15,10 @@ class IrhpApplicationFeesController extends AbstractIrhpPermitController
     use FeesActionTrait {
         feesAction as traitFeesAction;
     }
-    use GenericReceipt;
+    use GenericReceipt, IrhpFeesTrait;
 
     /**
-     * Overidden trait method to set applicable navigation ids for the irhp fees list page
+     * Overridden trait method to set applicable navigation ids for the irhp fees list page
      *
      * @return mixed
      */

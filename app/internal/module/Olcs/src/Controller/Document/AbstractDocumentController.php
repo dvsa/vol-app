@@ -29,6 +29,7 @@ abstract class AbstractDocumentController extends AbstractController
         'transportManager' => 'transport-manager/documents',
         'irfoOrganisation' => 'operator/documents',
         'ecmtPermitApplication' => 'licence/irhp-docs',
+        'irhpApplication'  => 'licence/irhp-application-docs',
     ];
 
     /**
@@ -37,6 +38,7 @@ abstract class AbstractDocumentController extends AbstractController
     protected $categoryMap = [
         'licence'          => Category::CATEGORY_LICENSING,
         'busReg'           => Category::CATEGORY_BUS_REGISTRATION,
+        'irhpApplication'  => Category::CATEGORY_PERMITS,
         'case'             => null, // complex, depends on caseType
         'application'      => Category::CATEGORY_LICENSING, // Application isn't a document category
         'transportManager' => Category::CATEGORY_TRANSPORT_MANAGER,
@@ -80,7 +82,8 @@ abstract class AbstractDocumentController extends AbstractController
                 return 'organisation';
             case 'ecmtPermitApplication':
                 return 'permitid';
-
+            case 'irhpApplication':
+                return 'irhpAppId';
             default:
                 return $type;
         }
