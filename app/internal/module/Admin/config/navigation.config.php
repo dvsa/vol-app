@@ -211,6 +211,11 @@ return [
                             'route' => 'admin-dashboard/admin-report/cpms'
                         ],
                         [
+                            'id' => 'admin-dashboard/admin-report/interim-refunds',
+                            'label' => 'Interim Refunds',
+                            'route' => 'admin-dashboard/admin-report/interim-refunds',
+                        ],
+                        [
                             'id' => 'admin-dashboard/admin-report/cpid-class',
                             'label' => 'CPID classification',
                             'route' => 'admin-dashboard/admin-report/cpid-class',
