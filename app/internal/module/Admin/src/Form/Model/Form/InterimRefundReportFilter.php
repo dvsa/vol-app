@@ -39,7 +39,7 @@ class InterimRefundReportFilter
      *          "has_time": false,
      *          "compare_to":"startDate",
      *          "operator":"gte",
-     *          "compare_to_label":"PI date from"
+     *          "compare_to_label":"Refunds after"
      *      }
      * })
      */
@@ -48,11 +48,10 @@ class InterimRefundReportFilter
     /**
      * @Form\Attributes({"id":"","placeholder":""})
      * @Form\Options({
-     *     "label": "Venue",
+     *     "label": "Traffic Area",
      *     "disable_inarray_validator": false,
      *     "service_name": "Common\Service\Data\TrafficArea",
      *     "other_option": false,
-     *     "extra_option": {"other": "Other Venue"},
      * })
      * @Form\Type("DynamicMultiCheckbox")
      */
