@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\IrhpPermits;
 
+use Common\Util\IsEcmtId;
 use Olcs\Controller\Traits as ControllerTraits;
 
 /**
@@ -73,13 +74,17 @@ class IrhpDocsController extends AbstractIrhpPermitController
      */
     private function getDocumentFilters()
     {
+        $appId = $this->getFromRoute('permitid');
+        $attrName = IsEcmtId::isEcmtId($appId) ? 'ecmtPermitApplication' : 'irhpApplication';
+
         return $this->mapDocumentFilters(
             [
-                'licence' => $this->getFromRoute('licence'),
-                'permitid' => $this->getFromRoute('permitid'),
+                'showDocs' => 'tsw_self_only',
+                "$attrName" => $appId,
             ]
         );
     }
+
 
     /**
      * Get view model for document action

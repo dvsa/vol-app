@@ -12,6 +12,7 @@ use Common\Controller\Interfaces\ToggleAwareInterface;
 use Common\FeatureToggle;
 use Common\RefData;
 use Common\Service\Cqrs\Exception\NotFoundException;
+use Common\Util\IsEcmtId;
 use Dvsa\Olcs\Transfer\Command\Permits\CancelEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Command\Permits\EcmtSubmitApplication;
 use Dvsa\Olcs\Transfer\Command\Permits\WithdrawEcmtPermitApplication;
@@ -234,6 +235,22 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
      */
     public function editAction()
     {
+        $appId = $this->params()->fromRoute('permitid');
+
+        if (!IsEcmtId::isEcmtId($appId)) {
+            return $this->redirect()
+                ->toRoute(
+                    'licence/irhp-application/application',
+                    [
+                        'licence' => $this->params()->fromRoute('licence'),
+                        'action' => 'edit',
+                        'irhpAppId' => $appId
+                    ],
+                    null,
+                    true
+                );
+        }
+
         $this->setNavigationId('edit');
         $request = $this->getRequest();
         if ($request->isPost() && array_key_exists('back', (array)$this->params()->fromPost()['form-actions'])) {

@@ -4,6 +4,7 @@ namespace Olcs\Controller\IrhpPermits;
 
 use Common\Controller\Traits\GenericReceipt;
 use Olcs\Controller\Traits\FeesActionTrait;
+use Common\Util\IsEcmtId;
 
 /**
  * IRHP Fees Controller
@@ -59,9 +60,12 @@ class IrhpPermitFeesController extends AbstractIrhpPermitController
      */
     protected function getFeesTableParams()
     {
+        $appId = $this->getFromRoute('permitid');
+        $attrName = IsEcmtId::isEcmtId($appId) ? 'ecmtPermitApplication' : 'irhpApplication';
+
         return [
 
-            'ecmtPermitApplication' => $this->getFromRoute('permitid'),
+            "$attrName" => $this->getFromRoute('permitid'),
             'status' => 'current',
         ];
     }
