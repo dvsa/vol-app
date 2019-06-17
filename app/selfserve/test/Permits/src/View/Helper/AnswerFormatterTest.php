@@ -1,0 +1,140 @@
+<?php
+
+namespace PermitsTest\View\Helper;
+
+use Common\RefData;
+use Permits\View\Helper\AnswerFormatter;
+use Mockery as m;
+use Zend\View\Renderer\RendererInterface;
+
+/**
+ * Class AnswerFormatterTest
+ *
+ * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ */
+class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
+{
+    /** @var AnswerFormatter */
+    private $sut;
+
+    /** @var RendererInterface|m\MockInterface */
+    private $view;
+
+    public function setUp()
+    {
+        $this->view = m::mock(RendererInterface::class);
+        $this->sut = new AnswerFormatter();
+        $this->sut->setView($this->view);
+    }
+
+    public function testInvokeBoolean()
+    {
+        $input = [
+            'questionType' => RefData::QUESTION_TYPE_BOOLEAN,
+            'answer' => [
+                true, false, 1, 0,
+            ]
+        ];
+
+        $this->view->shouldReceive('translate')
+            ->twice()
+            ->with('Yes')
+            ->andReturn('translated yes');
+
+        $this->view->shouldReceive('escapeHtml')
+            ->twice()
+            ->with('translated yes')
+            ->andReturn('escaped and translated yes');
+
+        $this->view->shouldReceive('translate')
+            ->twice()
+            ->with('No')
+            ->andReturn('translated no');
+
+        $this->view->shouldReceive('escapeHtml')
+            ->twice()
+            ->with('translated no')
+            ->andReturn('escaped and translated no');
+
+        $expected =
+            'escaped and translated yes' . AnswerFormatter::SEPARATOR .
+            'escaped and translated no' . AnswerFormatter::SEPARATOR .
+            'escaped and translated yes' . AnswerFormatter::SEPARATOR .
+            'escaped and translated no';
+
+        self::assertEquals($expected, $this->sut->__invoke($input));
+    }
+
+    public function testInvokeInteger()
+    {
+        $input = [
+            'questionType' => RefData::QUESTION_TYPE_INTEGER,
+            'answer' => [
+                1, 0, 999,
+            ]
+        ];
+
+        $output = '1' . AnswerFormatter::SEPARATOR . '0' . AnswerFormatter::SEPARATOR . '999';
+
+        self::assertEquals($output, $this->sut->__invoke($input));
+    }
+
+    /**
+     * Tests a single answer is converted to an array containing one answer and is still processed correctly
+     */
+    public function testInvokeWithAnswerNotArray()
+    {
+        $input = [
+            'questionType' => RefData::QUESTION_TYPE_INTEGER,
+            'answer' => 1,
+        ];
+
+        self::assertEquals(1, $this->sut->__invoke($input));
+    }
+
+    /**
+     * Tests answer rendered as expected for string/custom
+     *
+     * @dataProvider dpInvokeOther
+     */
+    public function testInvokeOther($questionType)
+    {
+        $input = [
+            'questionType' => $questionType,
+            'answer' => [
+                1, 0, 'text',
+            ]
+        ];
+
+        $this->view->shouldReceive('translate')
+            ->times(3)
+            ->andReturnUsing(
+                function ($arg) {
+                    return 'translated ' . $arg;
+                }
+            );
+
+        $this->view->shouldReceive('escapeHtml')
+            ->times(3)
+            ->andReturnUsing(
+                function ($arg) {
+                    return 'escaped and ' . $arg;
+                }
+            );
+
+        $expected =
+            'escaped and translated 1' . AnswerFormatter::SEPARATOR .
+            'escaped and translated 0' . AnswerFormatter::SEPARATOR .
+            'escaped and translated text';
+
+        self::assertEquals($expected, $this->sut->__invoke($input));
+    }
+
+    public function dpInvokeOther()
+    {
+        return [
+            [RefData::QUESTION_TYPE_STRING],
+            [RefData::QUESTION_TYPE_CUSTOM],
+        ];
+    }
+}
