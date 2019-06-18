@@ -169,7 +169,8 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
                     ActiveEcmtApplication::create(
                         [
                             'licence' => $params['licence'],
-                            'year' => $this->params()->fromRoute('year')
+                            'year' => $this->params()->fromRoute('year'),
+                            'id' => $this->params()->fromRoute('id'),
                         ]
                     )
                 )
