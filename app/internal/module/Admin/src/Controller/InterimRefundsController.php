@@ -26,14 +26,6 @@ class InterimRefundsController extends AbstractInternalController implements Lef
     protected $listDto = ListDto::class;
     protected $filterForm = FilterForm::class;
 
-    /**
-     * @var array
-     */
-    protected $inlineScripts = [
-        'indexAction' => ['table-actions', 'forms/filter'],
-    ];
-
-
     public function getLeftView()
     {
         $view = new ViewModel(
