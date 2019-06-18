@@ -1261,8 +1261,6 @@ return array(
                 => 'Olcs\Controller\Lva\Adapters\VariationPeopleAdapter',
             'DashboardProcessingService'
                 => 'Olcs\Service\Processing\DashboardProcessingService',
-            'QaQuestionArrayProvider'
-                => 'Olcs\Service\Qa\QuestionArrayProvider'
         ),
         'factories' => array(
             'CookieBannerListener' => \Olcs\Mvc\CookieBannerListener::class,
@@ -1278,6 +1276,7 @@ return array(
             'QaFormProvider' => QaService\FormProviderFactory::class,
             'QaGuidanceTemplateVarsAdder' => QaService\GuidanceTemplateVarsAdderFactory::class,
             'QaTemplateVarsGenerator' => QaService\TemplateVarsGeneratorFactory::class,
+            'QaQuestionArrayProvider' => QaService\QuestionArrayProviderFactory::class,
         )
     ),
     'search' => [

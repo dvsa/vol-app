@@ -2,6 +2,7 @@
 
 namespace OlcsTest\Service\Qa;
 
+use Common\Service\Qa\FormattedTranslateableTextParametersGenerator;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Service\Qa\QuestionArrayProvider;
@@ -9,14 +10,36 @@ use RuntimeException;
 
 class QuestionArrayProviderTest extends MockeryTestCase
 {
+    private $formattedTranslateableTextParametersGenerator;
+
+    private $sut;
+
+    public function setUp()
+    {
+        $this->formattedTranslateableTextParametersGenerator = m::mock(
+            FormattedTranslateableTextParametersGenerator::class
+        );
+
+        $this->sut = new QuestionArrayProvider($this->formattedTranslateableTextParametersGenerator);
+    }
+
     public function testGetWithHtmlEscapeFilter()
     {
         $questionKey = 'questionKey';
 
         $questionParameters = [
-            'questionParameter1',
-            'questionParameter2'
+            [
+                [
+                    'value' => '38.00',
+                    'formatter' => 'currency'
+                ],
+                [
+                    'value' => 'questionParameter2'
+                ]
+            ]
         ];
+
+        $formattedQuestionParameters = ['38', 'questionParameter2'];
 
         $question = [
             'filter' => 'htmlEscape',
@@ -26,16 +49,18 @@ class QuestionArrayProviderTest extends MockeryTestCase
             ]
         ];
 
-        $sut = new QuestionArrayProvider();
+        $this->formattedTranslateableTextParametersGenerator->shouldReceive('generate')
+            ->with($questionParameters)
+            ->andReturn($formattedQuestionParameters);
 
         $expectedArray = [
             'question' => $questionKey,
-            'questionArgs' => $questionParameters
+            'questionArgs' => $formattedQuestionParameters
         ];
 
         $this->assertEquals(
             $expectedArray,
-            $sut->get($question)
+            $this->sut->get($question)
         );
     }
 
@@ -49,13 +74,17 @@ class QuestionArrayProviderTest extends MockeryTestCase
             'translateableText' => [
                 'key' => 'questionKey',
                 'parameters' => [
-                    'questionParameter1',
-                    'questionParameter2'
+                    [
+                        'value' => '38.00',
+                        'formatter' => 'currency'
+                    ],
+                    [
+                        'value' => 'questionParameter2'
+                    ]
                 ]
             ]
         ];
 
-        $sut = new QuestionArrayProvider();
-        $sut->get($question);
+        $this->sut->get($question);
     }
 }
