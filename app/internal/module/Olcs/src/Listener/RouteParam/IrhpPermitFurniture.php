@@ -8,6 +8,7 @@ use Common\Service\Cqrs\Command\CommandSenderAwareTrait;
 use Common\Service\Cqrs\Query\QuerySenderAwareInterface;
 use Common\Service\Cqrs\Query\QuerySenderAwareTrait;
 use Common\Util\Escape;
+use Common\Util\IsEcmtId;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Dvsa\Olcs\Transfer\Query\Permits\ById as EcmtApplicationDto;
@@ -214,7 +215,7 @@ class IrhpPermitFurniture implements
         $routeParams = $this->getApplicationService()->getMvcEvent()->getRouteMatch()->getParams();
         $permitTypeId = array_key_exists('permitTypeId', $routeParams) ? intval($routeParams['permitTypeId']) : RefData::ECMT_PERMIT_TYPE_ID;
 
-        if ($permitTypeId === RefData::ECMT_PERMIT_TYPE_ID) {
+        if ($permitTypeId === RefData::ECMT_PERMIT_TYPE_ID && IsEcmtId::isEcmtId($id)) {
             $response = $this->getQuerySender()->send(
                 EcmtApplicationDto::create(['id' => $id])
             );
