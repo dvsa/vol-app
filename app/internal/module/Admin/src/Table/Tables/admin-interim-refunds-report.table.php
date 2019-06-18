@@ -44,14 +44,16 @@ return array(
             'title' => 'Date of Refund',
             'sort' => 'ftr.createdOn',
             'formatter' => function ($data) {
-                $lastTransaction = $data['feeTransactions'][count($data['feeTransactions']) - 1];
-                $data = $lastTransaction['amount'] < 0 ? $lastTransaction : [];
+                $refundTransaction = array_filter($data['feeTransactions'], function ($transaction) {
+                    return $transaction['amount'] < 0;
+                });
+                $refundTransaction = array_shift($refundTransaction);
                 return $this->callFormatter(
                     [
                         'formatter' => 'Date',
                         'name' => 'createdOn',
                     ],
-                    $data
+                    $refundTransaction
                 );
             }
         ],
