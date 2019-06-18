@@ -47,28 +47,6 @@
     </div>
     <aside class="govuk-grid-column-one-third">
         <div class="info-box info-box--grey">
-            <h2 class="govuk-heading-m">
-                <?php echo $this->escapeHtml($this->translate('permits.application.overview.progress')); ?>
-            </h2>
-            <p class="govuk-body govuk-!-font-weight-bold">
-                <?php echo $this->translateReplace('permits.application.overview.progress.complete', [
-                    $this->escapeHtml($data['application']['sectionCompletion']['totalCompleted']),
-                    $this->escapeHtml($data['application']['sectionCompletion']['totalSections'])
-                ]); ?>
-            </p>
-            <p class="govuk-body">
-                <b><?php echo $this->escapeHtml($this->translate('permits.application.overview.fee-per-permit')); ?></b>
-                <?php echo $this->currencyFormatter($data['application']['appFee']); ?>
-                <br/>
-                <?php echo $this->escapeHtml($this->translate('permits.page.non.refundable')); ?>
-            </p>
-            <p class="govuk-body">
-                <b><?php echo $this->escapeHtml($this->translate('permits.application.overview.total-application-fee')); ?></b>
-                <?php echo $this->currencyFormatter($data['application']['appFee'] * $data['application']['permitsRequired']); ?>
-            </p>
-            <p class="govuk-body"><?php echo $this->escapeHtml($this->translate('permits.application.overview.complete-all-sections-warning')); ?></p>
-        </div>
-        <div class="info-box info-box--grey">
             <h3 class="govuk-heading-m">
                 <?php echo $this->escapeHtml($this->translate('permits.page.ecmt.consideration.application.status')); ?>
             </h3>

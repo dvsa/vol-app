@@ -18,11 +18,17 @@ class PermitsRequiredFormTest extends AbstractFormValidationTestCase
      */
     protected $formName = \Permits\Form\Model\Form\PermitsRequiredForm::class;
 
-    public function testPermitsRequired()
+    public function testRequiredEuro5()
     {
-        $element = ['Fields','permitsRequired', ];
-        $this->assertFormElementIsRequired($element, true);
-        $this->assertFormElementAllowEmpty($element, false);
+        $element = ['Fields','requiredEuro5'];
+        $this->assertElementExists($element);
+        $this->assertFormElementType($element, Text::class);
+    }
+
+    public function testRequiredEuro6()
+    {
+        $element = ['Fields','requiredEuro6'];
+        $this->assertElementExists($element);
         $this->assertFormElementType($element, Text::class);
     }
 

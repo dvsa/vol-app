@@ -115,6 +115,13 @@ class LicencesAvailableTest extends TestCase
             ->with($valueOptions)
             ->once();
 
+        $mockForm->allows('get->add');
+        $mockForm->allows('get->get->setAttribute')
+            ->with(
+                'radios_wrapper_attributes',
+                ['class' => 'visually-hidden']
+            );
+
         self::assertEquals($outputData, LicencesAvailable::mapForFormOptions($inputData, $mockForm));
     }
 
@@ -252,7 +259,12 @@ class LicencesAvailableTest extends TestCase
                 'inputData' => $this->alreadyAppliedInput(RefData::ECMT_REMOVAL_PERMIT_TYPE_ID),
                 'outputData' => $this->alreadyAppliedOutput(RefData::ECMT_REMOVAL_PERMIT_TYPE_ID),
                 'expectedValueOptions' => $this->alreadyAppliedValueOptions(),
-            ]
+            ],
+            'ecmt annual already applied' => [
+                'inputData' => $this->alreadyAppliedInput(RefData::ECMT_PERMIT_TYPE_ID),
+                'outputData' => $this->alreadyAppliedOutputAnnualEcmt(RefData::ECMT_PERMIT_TYPE_ID),
+                'expectedValueOptions' => $this->alreadyAppliedValueOptions(),
+            ],
         ];
     }
 
@@ -367,6 +379,7 @@ class LicencesAvailableTest extends TestCase
                                 'description' => 'Restricted',
                                 'id' => 'ltyp_r',
                             ],
+                            'canMakeEcmtApplication' => true,
                         ],
                     ]
                 ]
@@ -392,12 +405,42 @@ class LicencesAvailableTest extends TestCase
                                 'description' => 'Restricted',
                                 'id' => 'ltyp_r',
                             ],
+                            'canMakeEcmtApplication' => true,
                         ],
                     ]
                 ]
             ],
             'active' => 7,
             'warning' => 'permits.irhp.bilateral.already-applied',
+        ];
+    }
+
+    private function alreadyAppliedOutputAnnualEcmt(int $irhpPermitTypeId): array
+    {
+        return [
+            'irhpPermitType' => [
+                'id' => $irhpPermitTypeId,
+            ],
+            'licencesAvailable' => [
+                'eligibleLicences' => [
+                    'result' => [
+                        0 => [
+                            'id' => 7,
+                            'licNo' => 'OB1234567',
+                            'trafficArea' => 'North East of England',
+                            'licenceType' => [
+                                'description' => 'Restricted',
+                                'id' => 'ltyp_r',
+                            ],
+                            'canMakeEcmtApplication' => true,
+                        ],
+                    ]
+                ]
+            ],
+            'active' => 7,
+            'warning' => 'permits.irhp.bilateral.already-applied',
+            'question' => 'permits.page.licence.question.one.licence',
+            'questionArgs' => ['OB1234567 Restricted (North East of England)']
         ];
     }
 

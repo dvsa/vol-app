@@ -325,13 +325,17 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
 
         if (isset($config['params']['route'])) {
             foreach ($config['params']['route'] as $param) {
-                $params[$param] = $this->routeParams[$param];
+                if (!empty($this->routeParams[$param])) {
+                    $params[$param] = $this->routeParams[$param];
+                }
             }
         }
 
         if (isset($config['params']['query'])) {
             foreach ($config['params']['query'] as $param) {
-                $params[$param] = $this->queryParams[$param];
+                if (!empty($this->queryParams[$param])) {
+                    $params[$param] = $this->queryParams[$param];
+                }
             }
         }
 

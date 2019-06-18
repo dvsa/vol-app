@@ -53,7 +53,12 @@ class TypeController extends AbstractSelfserveController implements ToggleAwareI
      */
     public function handlePostCommand(array &$config, array $params)
     {
-        if ($params['type'] == RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID) {
+        $yearBasedTypes = [
+            RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
+            RefData::ECMT_PERMIT_TYPE_ID,
+        ];
+
+        if (in_array($params['type'], $yearBasedTypes)) {
             $config['step'] = IrhpApplicationSection::ROUTE_YEAR;
         }
 

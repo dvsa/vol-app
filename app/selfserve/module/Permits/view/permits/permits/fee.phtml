@@ -6,17 +6,13 @@
             <?php echo $this->escapeHtml($data['application']['applicationRef']); ?>
         </span>
         <h1 class="govuk-heading-xl">
-            <?php echo $this->escapeHtml($this->translate('permits.page.fee.main')); ?>
+            <?php echo $this->escapeHtml($this->translate('permits.page.irhp-fee.permit.fee')); ?>
         </h1>
-        <?php echo $this->partial('partials/guidance-blue-component', [
-                'guidance' => $this->escapeHtml($this->translate('permits.page.fee.subtitle'))
-        ]); ?>
         <?php echo $this->partial('partials/warning-component', [
-            'translationKey' => sprintf(
-                $this->escapeHtml($this->translate('permits.page.fee.message')),
-                $this->currencyFormatter($data['application']['issueFee'])
-            )
+            'translationKey' => 'permits.page.fee.message',
+            'disableHtmlEscape' => true
         ]); ?>
+        <h3><?php echo $this->translate('permits.page.irhp-fee.fee-summary'); ?></h3>
         <?php echo $this->partial('partials/summary-list', ['data' => $data['application']['summaryData']]); ?>
         <?php echo $this->form($form); ?>
         <?php echo $this->permitsBackLink('permits.button.save-return-to-overview'); ?>

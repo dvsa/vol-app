@@ -6,7 +6,6 @@ use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\Table\TableConfig;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
-use Permits\View\Helper\EcmtSection;
 
 class ValidPermitsController extends AbstractSelfserveController implements ToggleAwareInterface
 {
@@ -24,24 +23,18 @@ class ValidPermitsController extends AbstractSelfserveController implements Togg
         'unpaid' => TableConfig::UNPAID_APP_OVERVIEW,
     ];
 
-
     protected $templateConfig = [
-        'valid' => 'permits/valid-permits-overview',
-        'unpaid' => 'permits/valid-permits-overview',
+        'valid' => 'permits/ecmt-valid-permits',
+        'unpaid' => 'permits/ecmt-unpaid-permits',
     ];
 
     public function validAction()
     {
-        $view = parent::genericAction();
-        $view->setVariable('rightColumn', 'markup-ecmt-permit-valid-permits-right-column');
-        return $view;
+        return parent::genericAction();
     }
 
     public function unpaidAction()
     {
-        $view = parent::genericAction();
-        $view->setVariable('rightColumn', 'markup-ecmt-permit-unpaid-permits-right-column');
-        $view->setVariable('returnLink', EcmtSection::ROUTE_ECMT_AWAITING_FEE);
-        return $view;
+        return parent::genericAction();
     }
 }

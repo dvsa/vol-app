@@ -13,10 +13,9 @@ class ValidEcmtPermits extends AbstractDataSource
     const DATA_KEY = 'validPermits';
     protected $dto = ValidEcmtPermitsDto::class;
     protected $paramsMap = [
-        'id' => 'id',
+        'licence' => 'licence',
         'page' => 'page',
         'limit' => 'limit',
-        'status' => 'status',
     ];
     protected $defaultParamData = [
         'page' => 1,

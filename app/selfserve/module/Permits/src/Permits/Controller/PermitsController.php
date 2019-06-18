@@ -26,6 +26,7 @@ use Common\RefData;
 use Olcs\Controller\AbstractSelfserveController;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
+use Permits\Data\Mapper\EcmtNoOfPermits as EcmtNoOfPermitsMapper;
 use Permits\View\Helper\EcmtSection;
 
 use Zend\Http\Header\Referer as HttpReferer;
@@ -151,77 +152,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         }
 
         return $data;
-    }
-
-    public function restrictedCountriesAction()
-    {
-        $id = $this->params()->fromRoute('id', -1);
-
-        //Create form from annotations
-        $form = $this->getForm('RestrictedCountriesForm');
-        $setDefaultValues = true;
-
-        $data = $this->params()->fromPost();
-
-        if (is_array($data) && array_key_exists('Submit', $data)) {
-            //Validate
-            $form->setData($data);
-            $setDefaultValues = false;
-
-            if ($form->isValid()) {
-                //EXTRA VALIDATION
-                if (($data['Fields']['restrictedCountries'] == 1
-                    && isset($data['Fields']['yesContent']['restrictedCountriesList']))
-                    || ($data['Fields']['restrictedCountries'] == 0)) {
-                    if ($data['Fields']['restrictedCountries'] == 0) {
-                        $countryIds = [];
-                    } else {
-                        $countryIds = $data['Fields']['yesContent']['restrictedCountriesList'];
-                    }
-
-                    $command = UpdateEcmtCountries::create(['id' => $id, 'countryIds' => $countryIds]);
-                    $this->handleCommand($command);
-                    return $this->handleSaveAndReturnStep(
-                        $data,
-                        EcmtSection::ROUTE_ECMT_NO_OF_PERMITS,
-                        EcmtSection::ROUTE_APPLICATION_OVERVIEW
-                    );
-                } else {
-                    //conditional validation failed, restricted countries list should not be empty
-                    $form->get('Fields')
-                        ->get('yesContent')
-                        ->get('restrictedCountriesList')
-                        ->setMessages(['error.messages.restricted.countries.list']);
-                }
-            } else {
-                //Custom Error Message
-                $form->get('Fields')
-                    ->get('restrictedCountries')
-                    ->setMessages(['error.messages.restricted.countries']);
-            }
-        }
-
-        // Read data
-        $application = $this->getApplication($id);
-
-        if ($setDefaultValues) {
-            if (!is_null($application['hasRestrictedCountries'])) {
-                $restrictedCountries = $application['hasRestrictedCountries'] == true ? 1 : 0;
-
-                $form->get('Fields')
-                    ->get('restrictedCountries')
-                    ->setValue($restrictedCountries);
-            }
-
-            if (count($application['countrys']) > 0) {
-                $form->get('Fields')
-                    ->get('yesContent')
-                    ->get('restrictedCountriesList')
-                    ->setValue(array_column($application['countrys'], 'id'));
-            }
-        }
-
-        return array('form' => $form, 'id' => $id, 'ref' => $application['applicationRef']);
     }
 
     public function tripsAction()
@@ -361,7 +291,8 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                 $command = UpdateEcmtPermitsRequired::create(
                     [
                         'id' => $id,
-                        'permitsRequired' => $data['Fields']['permitsRequired']
+                        'requiredEuro5' => $data['Fields']['requiredEuro5'],
+                        'requiredEuro6' => $data['Fields']['requiredEuro6']
                     ]
                 );
                 $this->handleCommand($command);
@@ -377,6 +308,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         }
 
         $application = $this->getApplication($id);
+
         $numberOfVehicles = $application['licence']['totAuthVehicles'];
 
         if ($setDefaultValues) {
@@ -389,12 +321,40 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
             $form->setData($existing);
         }
 
+        $fieldSet = $form->get('Fields');
+
+        $irhpPermitStock = $application['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock'];
+        if (!$irhpPermitStock['hasEuro5Range']) {
+            $fieldSet->remove('requiredEuro5');
+            $fieldSet->add([
+                'type' => 'hidden',
+                'name' => 'requiredEuro5'
+            ]);
+        }
+
+        if (!$irhpPermitStock['hasEuro6Range']) {
+            $fieldSet->remove('requiredEuro6');
+            $fieldSet->add([
+                'type' => 'hidden',
+                'name' => 'requiredEuro6'
+            ]);
+        }
+
+        $fieldSet->get('requiredEuro5')->setValue($application['requiredEuro5']);
+        $fieldSet->get('requiredEuro6')->setValue($application['requiredEuro6']);
+
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
         $totalVehicles = $translationHelper->translateReplace(
-            'permits.form.permits-required.hint',
+            'permits.page.no-of-permits.max.this.year',
             [$numberOfVehicles]
         );
-        $form->get('Fields')->get('permitsRequired')->setOption('hint', $totalVehicles);
+        $fieldSet->get('topLabel')->setOption('hint', $totalVehicles);
+
+        $yearLabel = $translationHelper->translateReplace(
+            'permits.page.no-of-permits.for.year',
+            [date('Y', strtotime($irhpPermitStock['validTo']))]
+        );
+        $fieldSet->get('topLabel')->setLabel($yearLabel);
 
         $ecmtPermitFees = $this->getEcmtPermitFees();
         $ecmtApplicationFee = $ecmtPermitFees['fee'][$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE]['fixedValue'];
@@ -449,33 +409,55 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         /**
          * @var \Common\View\Helper\Status $statusHelper
          */
-        $statusHelper = $this->getServiceLocator()->get('ViewHelperManager')->get('status');
+        $viewHelperManager = $this->getServiceLocator()->get('ViewHelperManager');
+        $statusHelper = $viewHelperManager->get('status');
+        $currencyHelper = $viewHelperManager->get('currencyFormatter');
+
+        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
+
+        $noOfPermitsLines = EcmtNoOfPermitsMapper::mapForDisplay(
+            $application,
+            $translationHelper,
+            $this->url()
+        );
+
+        $irhpPermitStock = $application['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock'];
 
         $summaryData = [
-            0 => [
+            [
                 'key' => 'permits.page.ecmt.consideration.application.status',
-                'value' => $statusHelper->__invoke($application['status']),
+                'value' => $statusHelper($application['status']),
                 'disableHtmlEscape' => true
             ],
-            1 => [
+            [
                 'key' => 'permits.page.ecmt.consideration.permit.type',
                 'value' => $application['permitType']['description']
             ],
-            2 => [
+            [
+                'key' => 'permits.page.ecmt.consideration.permit.year',
+                'value' => date('Y', strtotime($irhpPermitStock['validTo']))
+            ],
+            [
                 'key' => 'permits.page.ecmt.consideration.reference.number',
                 'value' => $application['applicationRef']
             ],
-            3 => [
+            [
                 'key' => 'permits.page.ecmt.consideration.application.date',
                 'value' => date(\DATE_FORMAT, strtotime($application['dateReceived']))
             ],
-            4 => [
+            [
                 'key' => 'permits.page.ecmt.consideration.permits.required',
-                'value' => $application['permitsRequired']
+                'value' => implode('<br/>', $noOfPermitsLines),
+                'disableHtmlEscape' => true
             ],
-            5 => [
+            [
                 'key' => 'permits.page.ecmt.consideration.application.fee',
-                'value' => '£' . $ecmtApplicationFee * $application['permitsRequired']
+                'value' => $translationHelper->translateReplace(
+                    'permits.page.ecmt.consideration.non.refundable',
+                    [
+                        $currencyHelper($ecmtApplicationFee * $application['totalPermitsRequired'])
+                    ]
+                )
             ]
         ];
 
