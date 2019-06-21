@@ -28,8 +28,13 @@
                 ? $this->pageTitle
                 : $this->escapeHtml($this->pageTitle)
             );
-        ?></h1>
-
+        ?>
+        <?php if ($this->hintText !== '') : ?>
+            <span class="govuk-hint">
+               <?php  echo($this->hintText); ?>
+            </span>
+         <?php endif; ?>
+        </h1>
         <?php if ($this->pageHeaderText !== '') : ?>
             <div class="page-header__text">
                 <p><?php
