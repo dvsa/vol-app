@@ -35,7 +35,6 @@ return array(
         ],
         [
             'title' => 'Fee Amount',
-            'sort' => 'amount',
             'name' => 'amount',
             'formatter' => 'FeeAmount'
         ],
