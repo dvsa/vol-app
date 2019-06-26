@@ -38,7 +38,7 @@ class QualificationTest extends AbstractFormValidationTestCase
     {
         $element = ['qualification-details', 'serialNo'];
         $this->assertFormElementRequired($element, false);
-        $this->assertFormElementText($element, 0, 20);
+        $this->assertFormElementText($element, 0, 50);
     }
 
     public function testIssuedDate()

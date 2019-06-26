@@ -46,7 +46,7 @@ class QualificationDetails
      * @Form\Validator({
      *     "name": "Zend\Validator\StringLength",
      *     "options": {
-     *          "max": 20,
+     *          "max": 50,
      *     },
      * })
      */
