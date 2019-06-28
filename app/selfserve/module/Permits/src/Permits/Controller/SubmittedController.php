@@ -36,7 +36,7 @@ class SubmittedController extends AbstractSelfserveController implements ToggleA
             'title' => 'permits.page.confirmation.application-submitted.title',
             'extraContent' => [
                 'title' => 'permits.page.confirmation.bullet.list.title',
-                'list' => 'en_GB/bullets/markup-ecmt-application-submitted-confirmation'
+                'list' => 'markup-ecmt-application-submitted-confirmation'
             ],
             'warning' => 'permits.page.confirmation.submitted.warning',
             'receiptUrl' => ''
@@ -46,7 +46,7 @@ class SubmittedController extends AbstractSelfserveController implements ToggleA
             'title' => 'permits.page.confirmation.issue-submitted.title',
             'extraContent' => [
                 'title' => 'permits.page.confirmation.bullet.list.title',
-                'list' => 'en_GB/bullets/markup-ecmt-issue-submitted-confirmation'
+                'list' => 'markup-ecmt-issue-submitted-confirmation'
             ],
             'warning' => 'permits.page.confirmation.submitted.warning',
             'receiptUrl' => ''
@@ -56,7 +56,7 @@ class SubmittedController extends AbstractSelfserveController implements ToggleA
             'title' => 'permits.page.confirmation.application-submitted.title',
             'extraContent' => [
                 'title' => 'permits.page.confirmation.bullet.list.title',
-                'list' => 'en_GB/bullets/markup-bilateral-submitted-what-happens-next'
+                'list' => 'markup-bilateral-submitted-what-happens-next'
             ],
             'warning' => 'permits.page.confirmation.submitted.warning',
             'receiptUrl' => ''

@@ -42,7 +42,7 @@ class CancelIrhpApplicationController extends AbstractSelfserveController implem
             'question' => 'permits.page.cancel.question',
             'bulletList' => [
                 'title' => 'permits.page.cancel.bullet.list.title',
-                'list' => 'en_GB/bullets/markup-irhp-application-cancel'
+                'list' => 'markup-irhp-application-cancel'
             ],
             'backUri' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW
         ],
@@ -51,7 +51,7 @@ class CancelIrhpApplicationController extends AbstractSelfserveController implem
             'title' => 'permits.page.confirmation.cancel.title',
             'extraContent' => [
                 'title' => 'permits.page.confirmation.bullet.list.title',
-                'list' => 'en_GB/bullets/markup-irhp-cancel-confirmation'
+                'list' => 'markup-irhp-cancel-confirmation'
             ]
         ],
     ];

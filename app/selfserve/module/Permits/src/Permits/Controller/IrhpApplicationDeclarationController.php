@@ -37,7 +37,7 @@ class IrhpApplicationDeclarationController extends AbstractSelfserveController i
             'question' => 'permits.page.declaration.question',
             'bulletList' => [
                 'title' => 'permits.page.declaration.bullet.list.title',
-                'list' => 'en_GB/bullets/markup-bilateral-declaration'
+                'list' => 'markup-bilateral-declaration'
             ],
             'backUri' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
         ]

@@ -37,7 +37,7 @@ class DeclarationController extends AbstractSelfserveController implements Toggl
             'question' => 'permits.page.declaration.question',
             'bulletList' => [
                 'title' => 'permits.page.declaration.bullet.list.title',
-                'list' => 'en_GB/bullets/markup-ecmt-declaration'
+                'list' => 'markup-ecmt-declaration'
             ]
         ]
     ];

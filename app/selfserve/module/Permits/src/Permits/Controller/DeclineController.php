@@ -42,7 +42,7 @@ class DeclineController extends AbstractSelfserveController implements ToggleAwa
             'question' => 'permits.page.decline.question',
             'bulletList' => [
                 'title' => 'permits.page.decline.bullet.list.title',
-                'list' => 'en_GB/bullets/markup-ecmt-application-decline'
+                'list' => 'markup-ecmt-application-decline'
             ],
             'backUri' => EcmtSection::ROUTE_ECMT_AWAITING_FEE
         ],
@@ -51,7 +51,7 @@ class DeclineController extends AbstractSelfserveController implements ToggleAwa
             'title' => 'permits.page.confirmation.decline.title',
             'extraContent' => [
                 'title' => 'permits.page.confirmation.bullet.list.title',
-                'list' => 'en_GB/bullets/markup-ecmt-decline-confirmation'
+                'list' => 'markup-ecmt-decline-confirmation'
             ]
         ],
     ];
