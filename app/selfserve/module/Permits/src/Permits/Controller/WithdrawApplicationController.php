@@ -43,7 +43,7 @@ class WithdrawApplicationController extends AbstractSelfserveController implemen
             'question' => 'permits.page.withdraw.question',
             'bulletList' => [
                 'title' => 'permits.page.withdraw.bullet.list.title',
-                'list' => 'en_GB/bullets/markup-ecmt-application-withdraw'
+                'list' => 'markup-ecmt-application-withdraw'
             ],
             'backUri' => EcmtSection::ROUTE_ECMT_UNDER_CONSIDERATION
         ],
@@ -52,7 +52,7 @@ class WithdrawApplicationController extends AbstractSelfserveController implemen
             'title' => 'permits.page.confirmation.withdraw.title',
             'extraContent' => [
                 'title' => 'permits.page.confirmation.bullet.list.title',
-                'list' => 'en_GB/bullets/markup-ecmt-withdraw-confirmation'
+                'list' => 'markup-ecmt-withdraw-confirmation'
             ]
         ],
     ];

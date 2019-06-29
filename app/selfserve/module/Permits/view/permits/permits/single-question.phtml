@@ -35,7 +35,7 @@
                 <p class="govuk-body-l">
                     <?php echo $this->escapeHtml($this->translate($data['bulletList']['title'])); ?>:
                 </p>
-                <?php echo $this->partial($data['bulletList']['list']); ?>
+                <?php echo $this->translate($data['bulletList']['list']); ?>
             <?php } ?>
             <div class="govuk-form-group">
                 <?php echo $this->form($form); ?>
