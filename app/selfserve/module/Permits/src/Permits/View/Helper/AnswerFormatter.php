@@ -40,13 +40,13 @@ class AnswerFormatter extends AbstractHelper
                         $formatted = 'No';
                     }
 
-                    $answers[] = $this->translateAndEscape($formatted);
+                    $answers[] = $this->translateAndEscape($formatted, $data['escape']);
                     break;
                 case RefData::QUESTION_TYPE_INTEGER:
                     $answers[] = (int)$answer;
                     break;
                 default:
-                    $answers[] = $this->translateAndEscape($answer);
+                    $answers[] = $this->translateAndEscape($answer, $data['escape']);
             }
         }
 
@@ -57,11 +57,18 @@ class AnswerFormatter extends AbstractHelper
      * Translate and escape the answer
      *
      * @param string $answer the answer
+     * @param bool   $escape the answer
      *
      * @return string
      */
-    private function translateAndEscape($answer): string
+    private function translateAndEscape($answer, bool $escape): string
     {
-        return $this->view->escapeHtml($this->view->translate($answer));
+        $translatedAnswer = $this->view->translate($answer);
+
+        if ($escape) {
+            return $this->view->escapeHtml($translatedAnswer);
+        }
+
+        return $translatedAnswer;
     }
 }

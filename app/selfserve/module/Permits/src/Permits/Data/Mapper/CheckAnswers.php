@@ -81,6 +81,7 @@ class CheckAnswers
                 'questionType' => '',
                 'params' => [],
                 'options' => [],
+                'escape' => true,
             ];
         }
 

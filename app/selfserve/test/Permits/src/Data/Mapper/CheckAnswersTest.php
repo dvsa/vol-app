@@ -70,6 +70,7 @@ class CheckAnswersTest extends MockeryTestCase
                     'questionType' => null,
                     'params' => [],
                     'options' => [],
+                    'escape' => true,
                 ],
                 1 => [
                     'question' => 'permits.form.euro5.label',
@@ -78,6 +79,7 @@ class CheckAnswersTest extends MockeryTestCase
                     'questionType' => null,
                     'params' => [],
                     'options' => [],
+                    'escape' => true,
                 ],
                 2 => [
                     'question' => 'permits.form.cabotage.label',
@@ -86,6 +88,7 @@ class CheckAnswersTest extends MockeryTestCase
                     'questionType' => null,
                     'params' => [],
                     'options' => [],
+                    'escape' => true,
                 ],
                 3 => [
                     'question' => 'permits.form.restricted.countries.euro5.label',
@@ -94,6 +97,7 @@ class CheckAnswersTest extends MockeryTestCase
                     'questionType' => null,
                     'params' => [],
                     'options' => [],
+                    'escape' => true,
                 ],
                 4 => [
                     'question' => 'permits.page.permits.required.question',
@@ -102,6 +106,7 @@ class CheckAnswersTest extends MockeryTestCase
                     'questionType' => null,
                     'params' => [],
                     'options' => [],
+                    'escape' => true,
                 ],
                 5 => [
                     'question' => 'permits.page.number-of-trips.question',
@@ -110,6 +115,7 @@ class CheckAnswersTest extends MockeryTestCase
                     'questionType' => null,
                     'params' => [],
                     'options' => [],
+                    'escape' => true,
                 ],
                 6 => [
                     'question' => 'permits.page.international.journey.question',
@@ -118,6 +124,7 @@ class CheckAnswersTest extends MockeryTestCase
                     'questionType' => null,
                     'params' => [],
                     'options' => [],
+                    'escape' => true,
                 ],
                 7 => [
                     'question' => 'permits.page.sectors.question',
@@ -126,6 +133,7 @@ class CheckAnswersTest extends MockeryTestCase
                     'questionType' => null,
                     'params' => [],
                     'options' => [],
+                    'escape' => true,
                 ],
             ],
             'applicationRef' => 'OG4563323 / 4'
@@ -196,6 +204,7 @@ class CheckAnswersTest extends MockeryTestCase
                     'questionType' => null,
                     'params' => [],
                     'options' => [],
+                    'escape' => true,
                 ],
                 1 => [
                     'question' => 'permits.form.euro6.label',
@@ -204,6 +213,7 @@ class CheckAnswersTest extends MockeryTestCase
                     'questionType' => null,
                     'params' => [],
                     'options' => [],
+                    'escape' => true,
                 ],
                 2 => [
                     'question' => 'permits.form.cabotage.label',
@@ -212,6 +222,7 @@ class CheckAnswersTest extends MockeryTestCase
                     'questionType' => null,
                     'params' => [],
                     'options' => [],
+                    'escape' => true,
                 ],
                 3 => [
                     'question' => 'permits.page.restricted-countries.question',
@@ -220,6 +231,7 @@ class CheckAnswersTest extends MockeryTestCase
                     'questionType' => null,
                     'params' => [],
                     'options' => [],
+                    'escape' => true,
                 ],
                 4 => [
                     'question' => 'permits.page.permits.required.question',
@@ -228,6 +240,7 @@ class CheckAnswersTest extends MockeryTestCase
                     'questionType' => null,
                     'params' => [],
                     'options' => [],
+                    'escape' => true,
                 ],
                 5 => [
                     'question' => 'permits.page.number-of-trips.question',
@@ -236,6 +249,7 @@ class CheckAnswersTest extends MockeryTestCase
                     'questionType' => null,
                     'params' => [],
                     'options' => [],
+                    'escape' => true,
                 ],
                 6 => [
                     'question' => 'permits.page.international.journey.question',
@@ -244,6 +258,7 @@ class CheckAnswersTest extends MockeryTestCase
                     'questionType' => null,
                     'params' => [],
                     'options' => [],
+                    'escape' => true,
                 ],
                 7 => [
                     'question' => 'permits.page.sectors.question',
@@ -252,6 +267,7 @@ class CheckAnswersTest extends MockeryTestCase
                     'questionType' => null,
                     'params' => [],
                     'options' => [],
+                    'escape' => true,
                 ],
             ],
             'applicationRef' => 'OG4563323 / 4'
@@ -322,6 +338,7 @@ class CheckAnswersTest extends MockeryTestCase
                     'questionType' => null,
                     'params' => [],
                     'options' => [],
+                    'escape' => true,
                 ],
                 1 => [
                     'question' => 'permits.form.euro6.label',
@@ -330,6 +347,7 @@ class CheckAnswersTest extends MockeryTestCase
                     'questionType' => null,
                     'params' => [],
                     'options' => [],
+                    'escape' => true,
                 ],
                 2 => [
                     'question' => 'permits.form.cabotage.label',
@@ -338,6 +356,7 @@ class CheckAnswersTest extends MockeryTestCase
                     'questionType' => null,
                     'params' => [],
                     'options' => [],
+                    'escape' => true,
                 ],
                 3 => [
                     'question' => 'permits.page.restricted-countries.question',
@@ -346,6 +365,7 @@ class CheckAnswersTest extends MockeryTestCase
                     'questionType' => null,
                     'params' => [],
                     'options' => [],
+                    'escape' => true,
                 ],
                 4 => [
                     'question' => 'permits.page.permits.required.question',
@@ -354,6 +374,7 @@ class CheckAnswersTest extends MockeryTestCase
                     'questionType' => null,
                     'params' => [],
                     'options' => [],
+                    'escape' => true,
                 ],
                 5 => [
                     'question' => 'permits.page.number-of-trips.question',
@@ -362,6 +383,7 @@ class CheckAnswersTest extends MockeryTestCase
                     'questionType' => null,
                     'params' => [],
                     'options' => [],
+                    'escape' => true,
                 ],
                 6 => [
                     'question' => 'permits.page.international.journey.question',
@@ -370,6 +392,7 @@ class CheckAnswersTest extends MockeryTestCase
                     'questionType' => null,
                     'params' => [],
                     'options' => [],
+                    'escape' => true,
                 ],
                 7 => [
                     'question' => 'permits.page.sectors.question',
@@ -378,6 +401,7 @@ class CheckAnswersTest extends MockeryTestCase
                     'questionType' => null,
                     'params' => [],
                     'options' => [],
+                    'escape' => true,
                 ],
             ],
             'applicationRef' => 'OG4563323 / 4'

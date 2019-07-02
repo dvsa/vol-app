@@ -151,6 +151,7 @@ class IrhpCheckAnswersTest extends TestCase
                             'questionType' => null,
                             'params' => [],
                             'options' => [],
+                            'escape' => true,
                         ],
                         [
                             'question' => 'permits.check-answers.page.question.licence',
@@ -162,6 +163,7 @@ class IrhpCheckAnswersTest extends TestCase
                             'questionType' => null,
                             'params' => [],
                             'options' => [],
+                            'escape' => true,
                         ],
                         [
                             'question' => 'permits.irhp.application.question.countries',
@@ -170,6 +172,7 @@ class IrhpCheckAnswersTest extends TestCase
                             'questionType' => null,
                             'params' => [],
                             'options' => [],
+                            'escape' => true,
                         ],
                         [
                             'question' => 'permits.irhp.application.question.no-of-permits',
@@ -182,6 +185,7 @@ class IrhpCheckAnswersTest extends TestCase
                             'questionType' => null,
                             'params' => [],
                             'options' => [],
+                            'escape' => true,
                         ],
                     ],
                     'applicationRef' => 'OB1234567 / 1'
@@ -238,6 +242,7 @@ class IrhpCheckAnswersTest extends TestCase
                             'questionType' => null,
                             'params' => [],
                             'options' => [],
+                            'escape' => true,
                         ],
                         [
                             'question' => 'permits.check-answers.page.question.licence',
@@ -249,6 +254,7 @@ class IrhpCheckAnswersTest extends TestCase
                             'questionType' => null,
                             'params' => [],
                             'options' => [],
+                            'escape' => true,
                         ],
                         [
                             'question' => 'permits.irhp.application.question.no-of-permits',
@@ -260,6 +266,7 @@ class IrhpCheckAnswersTest extends TestCase
                             'questionType' => null,
                             'params' => [],
                             'options' => [],
+                            'escape' => true,
                         ],
                     ],
                     'applicationRef' => 'OG4569803 / 10003'
@@ -297,6 +304,7 @@ class IrhpCheckAnswersTest extends TestCase
                             'questionType' => null,
                             'params' => [],
                             'options' => [],
+                            'escape' => true,
                         ],
                         [
                             'question' => 'permits.check-answers.page.question.licence',
@@ -308,6 +316,7 @@ class IrhpCheckAnswersTest extends TestCase
                             'questionType' => null,
                             'params' => [],
                             'options' => [],
+                            'escape' => true,
                         ],
                         [
                             'question' => 'permits.irhp.application.question.no-of-permits',
@@ -318,6 +327,7 @@ class IrhpCheckAnswersTest extends TestCase
                             'questionType' => null,
                             'params' => ['slug' => 'number-of-permits'],
                             'options' => [],
+                            'escape' => true,
                         ],
                     ],
                     'applicationRef' => 'OG4569803 / 10003',
@@ -400,6 +410,7 @@ class IrhpCheckAnswersTest extends TestCase
                             'questionType' => null,
                             'params' => [],
                             'options' => [],
+                            'escape' => true,
                         ],
                         [
                             'question' => 'permits.check-answers.page.question.licence',
@@ -411,6 +422,7 @@ class IrhpCheckAnswersTest extends TestCase
                             'questionType' => null,
                             'params' => [],
                             'options' => [],
+                            'escape' => true,
                         ],
                         [
                             'question' => 'generic.question.1',
@@ -419,6 +431,7 @@ class IrhpCheckAnswersTest extends TestCase
                             'questionType' => 'generic.questionType.1',
                             'params' => ['slug' => 'generic.slug.1'],
                             'options' => [],
+                            'escape' => true,
                         ],
                         [
                             'question' => 'permits.irhp.application.question.no-of-permits',
@@ -430,6 +443,7 @@ class IrhpCheckAnswersTest extends TestCase
                             'questionType' => null,
                             'params' => ['slug' => 'number-of-permits'],
                             'options' => [],
+                            'escape' => true,
                         ],
                         [
                             'question' => 'generic.question.2',
@@ -438,6 +452,7 @@ class IrhpCheckAnswersTest extends TestCase
                             'questionType' => 'generic.questionType.2',
                             'params' => ['slug' => 'generic.slug.2'],
                             'options' => [],
+                            'escape' => true,
                         ],
                     ],
                     'applicationRef' => 'OG4569803 / 10003',
@@ -540,6 +555,7 @@ class IrhpCheckAnswersTest extends TestCase
                             'questionType' => null,
                             'params' => [],
                             'options' => [],
+                            'escape' => true,
                         ],
                         [
                             'question' => 'permits.check-answers.page.question.licence',
@@ -551,6 +567,7 @@ class IrhpCheckAnswersTest extends TestCase
                             'questionType' => null,
                             'params' => [],
                             'options' => [],
+                            'escape' => true,
                         ],
                         [
                             'question' => 'generic.question.1',
@@ -559,6 +576,7 @@ class IrhpCheckAnswersTest extends TestCase
                             'questionType' => 'generic.questionType.1',
                             'params' => ['slug' => 'generic.slug.1'],
                             'options' => [],
+                            'escape' => true,
                         ],
                         [
                             'question' => 'permits.irhp.application.question.no-of-permits',
@@ -571,6 +589,7 @@ class IrhpCheckAnswersTest extends TestCase
                             'questionType' => null,
                             'params' => ['slug' => 'number-of-permits'],
                             'options' => [],
+                            'escape' => true,
                         ],
                         [
                             'question' => 'generic.question.2',
@@ -579,6 +598,7 @@ class IrhpCheckAnswersTest extends TestCase
                             'questionType' => 'generic.questionType.2',
                             'params' => ['slug' => 'generic.slug.2'],
                             'options' => [],
+                            'escape' => true,
                         ],
                     ],
                     'applicationRef' => 'OG4569803 / 10003',
