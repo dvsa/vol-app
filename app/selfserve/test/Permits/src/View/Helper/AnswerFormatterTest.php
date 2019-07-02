@@ -33,7 +33,8 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
             'questionType' => RefData::QUESTION_TYPE_BOOLEAN,
             'answer' => [
                 true, false, 1, 0,
-            ]
+            ],
+            'escape' => true,
         ];
 
         $this->view->shouldReceive('translate')
@@ -61,6 +62,37 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
             'escaped and translated no' . AnswerFormatter::SEPARATOR .
             'escaped and translated yes' . AnswerFormatter::SEPARATOR .
             'escaped and translated no';
+
+        self::assertEquals($expected, $this->sut->__invoke($input));
+    }
+
+    public function testInvokeBooleanNoEscape()
+    {
+        $input = [
+            'questionType' => RefData::QUESTION_TYPE_BOOLEAN,
+            'answer' => [
+                true, false, 1, 0,
+            ],
+            'escape' => false,
+        ];
+
+        $this->view->shouldReceive('translate')
+            ->twice()
+            ->with('Yes')
+            ->andReturn('translated yes');
+
+        $this->view->shouldReceive('translate')
+            ->twice()
+            ->with('No')
+            ->andReturn('translated no');
+
+        $this->view->shouldReceive('escapeHtml')->never();
+
+        $expected =
+            'translated yes' . AnswerFormatter::SEPARATOR .
+            'translated no' . AnswerFormatter::SEPARATOR .
+            'translated yes' . AnswerFormatter::SEPARATOR .
+            'translated no';
 
         self::assertEquals($expected, $this->sut->__invoke($input));
     }
@@ -103,7 +135,8 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
             'questionType' => $questionType,
             'answer' => [
                 1, 0, 'text',
-            ]
+            ],
+            'escape' => true,
         ];
 
         $this->view->shouldReceive('translate')
@@ -126,6 +159,39 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
             'escaped and translated 1' . AnswerFormatter::SEPARATOR .
             'escaped and translated 0' . AnswerFormatter::SEPARATOR .
             'escaped and translated text';
+
+        self::assertEquals($expected, $this->sut->__invoke($input));
+    }
+
+    /**
+     * Tests answer rendered as expected for string/custom
+     *
+     * @dataProvider dpInvokeOther
+     */
+    public function testInvokeOtherNoEscape($questionType)
+    {
+        $input = [
+            'questionType' => $questionType,
+            'answer' => [
+                1, 0, 'text',
+            ],
+            'escape' => false,
+        ];
+
+        $this->view->shouldReceive('translate')
+            ->times(3)
+            ->andReturnUsing(
+                function ($arg) {
+                    return 'translated ' . $arg;
+                }
+            );
+
+        $this->view->shouldReceive('escapeHtml')->never();
+
+        $expected =
+            'translated 1' . AnswerFormatter::SEPARATOR .
+            'translated 0' . AnswerFormatter::SEPARATOR .
+            'translated text';
 
         self::assertEquals($expected, $this->sut->__invoke($input));
     }

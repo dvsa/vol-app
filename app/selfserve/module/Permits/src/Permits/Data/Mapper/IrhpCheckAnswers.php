@@ -202,6 +202,7 @@ class IrhpCheckAnswers
      * @param string|null $questionType the type of question
      * @param array       $params       route params
      * @param array       $options      route options
+     * @param bool        $escape       whether value should be escaped
      *
      * @return array
      */
@@ -211,7 +212,8 @@ class IrhpCheckAnswers
         string $route = null,
         string $questionType = null,
         array $params = [],
-        array $options = []
+        array $options = [],
+        bool  $escape = true
     ): array {
         return [
             'question' => $question,
@@ -220,6 +222,7 @@ class IrhpCheckAnswers
             'questionType' => $questionType,
             'params' => $params,
             'options' => $options,
+            'escape' => $escape,
         ];
     }
 }
