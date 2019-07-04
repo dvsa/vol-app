@@ -382,7 +382,6 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
         $response = $this->handleQuery(
             OpenWindows::create(
                 [
-                    'currentDateTime' => date('Y-m-d H:i:s'),
                     'permitType' => RefData::ECMT_PERMIT_TYPE_ID
                 ]
             )
