@@ -58,7 +58,7 @@ class LicenceLost
      *     "rows" : "5"
      * })
      * @Form\Options({
-     *     "hint": "licence.surrender.operator_licence_lost.text_area.hint"
+     *     "hint": "licence.surrender.document.lost.details.hint"
      * })
      */
     public $details = null;

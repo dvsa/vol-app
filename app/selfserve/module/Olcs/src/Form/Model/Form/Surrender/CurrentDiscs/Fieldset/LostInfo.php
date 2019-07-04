@@ -59,7 +59,7 @@ class LostInfo
      * @Form\Type("textarea")
      * @Form\Options({
      *     "label": "Please provide details of lost documents",
-     *     "hint": "licence.surrender.current_discs.lost.details.hint"
+     *     "hint": "licence.surrender.document.lost.details.hint"
      * })
      * @Form\Attributes({
      *     "class": "govuk-textarea",
