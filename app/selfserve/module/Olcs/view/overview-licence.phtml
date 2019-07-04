@@ -61,9 +61,10 @@
                 <p class="info-box__icon-wrapper info-box__text"><i class="info-box__icon selfserve-important"></i><?php echo $this->translate($status); ?></p>
                 <?php foreach ($infoBoxLinks as $link): ?>
                 <ul class="info-box__links">
-                    <li>
+                    <li class="govuk-!-margin-top-2">
                         <a href="<?php echo $this->url($link['linkUrl']['route'], $link['linkUrl']['params'], $link['linkUrl']['options'], $link['linkUrl']['reuseMatchedParams']); ?>"
-                        ><?php echo $this->translate($link['linkText']); ?></a>
+                           class="govuk-!-font-size-19">
+                        <?php echo $this->translate($link['linkText']); ?></a>
                     </li>
                 </ul>
                 <?php endforeach; ?>
