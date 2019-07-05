@@ -128,6 +128,7 @@ class DisqualifyController extends AbstractController
             // updating an existing disqualification
             $params['id'] = $disqualificationId;
             $params['version'] = $formData['version'];
+            $params['isDisqualified'] = $formData['isDisqualified'];
             $command = \Dvsa\Olcs\Transfer\Command\Disqualification\Update::create($params);
         }
 
