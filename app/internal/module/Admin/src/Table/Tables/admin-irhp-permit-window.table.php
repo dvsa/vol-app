@@ -31,12 +31,12 @@ return [
         [
             'title' => 'Window Start Date',
             'name' => 'startDate',
-            'formatter' => 'DateTimezoneFix'
+            'formatter' => 'DateTime'
         ],
         [
             'title' => 'Window End Date',
             'name' => 'endDate',
-            'formatter' => 'DateTimezoneFix'
+            'formatter' => 'DateTime'
         ],
         [
             'title' => 'Emissions Question',

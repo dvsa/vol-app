@@ -401,7 +401,6 @@ class IrhpApplicationController extends AbstractInternalController implements
         $windows = $this->handleQuery(OpenByType::create(
             [
                 'irhpPermitType' => RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID,
-                'currentDateTime' => date('Y-m-d H:i:s')
             ]
         ));
 
