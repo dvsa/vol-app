@@ -148,18 +148,6 @@ return [
                               ],
                           ]
                       ],
-                      'emissions' => [
-                          'type'    => 'segment',
-                          'options' => [
-                              'route'    => 'emissions[/]',
-                              'defaults' => [
-                                  // TODO - OLCS-22836
-                                  'controller'    => IrhpApplicationController::class,
-                                  'action'        => 'question',
-                              ],
-                          ],
-                          'may_terminate' => false,
-                      ],
                       'countries' => [
                           'type'    => 'segment',
                           'options' => [
