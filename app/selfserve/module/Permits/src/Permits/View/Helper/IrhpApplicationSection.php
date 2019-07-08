@@ -19,7 +19,6 @@ class IrhpApplicationSection extends AbstractHelper
     const ROUTE_APPLICATION_OVERVIEW = 'permits/application';
     const ROUTE_LICENCE = 'permits/application/licence';
     const ROUTE_LICENCE_CONFIRM_CHANGE = 'permits/application/licence/change';
-    const ROUTE_EMISSIONS = 'permits/application/emissions';
     const ROUTE_COUNTRIES = 'permits/application/countries';
     const ROUTE_NO_OF_PERMITS = 'permits/application/no-of-permits';
     const ROUTE_CHECK_ANSWERS = 'permits/application/check-answers';
@@ -43,13 +42,6 @@ class IrhpApplicationSection extends AbstractHelper
      * list of overview routes and the field denoting completion status
      */
     const ROUTE_ORDER = [
-        RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID => [
-            self::ROUTE_LICENCE => 'licence',
-            self::ROUTE_EMISSIONS => 'emissions',
-            self::ROUTE_NO_OF_PERMITS => 'permitsRequired',
-            self::ROUTE_CHECK_ANSWERS => 'checkedAnswers',
-            self::ROUTE_DECLARATION => 'declaration',
-        ],
         RefData::IRHP_BILATERAL_PERMIT_TYPE_ID => [
             self::ROUTE_LICENCE => 'licence',
             self::ROUTE_COUNTRIES => 'countries',
