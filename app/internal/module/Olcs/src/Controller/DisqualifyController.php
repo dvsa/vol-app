@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller;
 
+use Dvsa\Olcs\Transfer\Command\Disqualification\Delete;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -18,8 +19,8 @@ class DisqualifyController extends AbstractController
      */
     public function indexAction()
     {
-        $organisationId = (int) $this->params()->fromRoute('organisation');
-        $personId = (int) $this->params()->fromRoute('person');
+        $organisationId = (int)$this->params()->fromRoute('organisation');
+        $personId = (int)$this->params()->fromRoute('person');
 
         if ($personId !== 0) {
             $data = $this->getPerson($personId);
@@ -129,13 +130,22 @@ class DisqualifyController extends AbstractController
             $params['id'] = $disqualificationId;
             $params['version'] = $formData['version'];
             $params['isDisqualified'] = $formData['isDisqualified'];
-            $command = \Dvsa\Olcs\Transfer\Command\Disqualification\Update::create($params);
+
+            if ($params['isDisqualified'] === 'N') {
+                $command = Delete::create($params);
+            } else {
+                $params['startDate'] = $formData['startDate'];
+                $params['period'] = $formData['period'];
+                $command = \Dvsa\Olcs\Transfer\Command\Disqualification\Update::create($params);
+            }
+
+
         }
 
         $response = $this->handleCommand($command);
         if ($response->isOk()) {
             $this->getServiceLocator()->get('Helper\FlashMessenger')
-                ->addSuccessMessage('The disqualification details have been saved');
+                ->addSuccessMessage('The disqualification details have been changed');
             return true;
         } else {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
@@ -179,6 +189,7 @@ class DisqualifyController extends AbstractController
 
         return $data;
     }
+
     /**
      * Get Person data
      *
@@ -202,7 +213,7 @@ class DisqualifyController extends AbstractController
             $person['disqualifications'][0] : null;
 
         $data = [
-            'name' => $person['forename'] .' '. $person['familyName'],
+            'name' => $person['forename'] . ' ' . $person['familyName'],
             'id' => null,
         ];
         if ($disqualification !== null) {
