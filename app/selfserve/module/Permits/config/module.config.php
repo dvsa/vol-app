@@ -29,6 +29,7 @@ use Permits\Controller\CancelIrhpApplicationController;
 use Permits\Controller\IrhpValidPermitsController;
 use Permits\Controller\QaController;
 use Permits\Controller\QaControllerFactory;
+use Permits\Controller\YearController;
 
 return [
   'controllers' => [
@@ -59,6 +60,7 @@ return [
         IrhpApplicationFeeController::class => IrhpApplicationFeeController::class,
         IrhpValidPermitsController::class => IrhpValidPermitsController::class,
         RestrictedCountriesController::class => RestrictedCountriesController::class,
+        YearController::class => YearController::class,
     ],
     'factories' => [
         QaController::class => QaControllerFactory::class,
@@ -330,16 +332,31 @@ return [
                   ],
                   'may_terminate' => false,
               ],
+              'year' => [
+                  'type'    => 'segment',
+                  'options' => [
+                      'route'    => '/year/:type[/]',
+                      'defaults' => [
+                          'controller'    => YearController::class,
+                          'action'        => 'question',
+                      ],
+                      'constraints' => [
+                          'type' => '[0-9]+',
+                      ],
+                  ],
+                  'may_terminate' => false,
+              ],
               'add-licence' => [
                   'type'    => 'segment',
                   'options' => [
-                      'route'    => '/type/:type/licence/add[/]',
+                      'route'    => '/type/:type/licence/add[/:year][/]',
                       'defaults' => [
                           'controller'    => LicenceController::class,
                           'action'        => 'add',
                       ],
                       'constraints' => [
                           'type' => '[0-9]+',
+                          'year' => '\d{4}'
                       ],
                   ],
                   'may_terminate' => false,
