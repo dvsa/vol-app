@@ -18,6 +18,20 @@ class PermitRangeDetails
     public $stockId = null;
 
     /**
+     * @Form\Attributes({"id":"emissionsCategory"})
+     * @form\Required(true)
+     * @Form\Options({
+     *     "label": "Emissions category question",
+     *     "empty_option": "Please Select",
+     *     "disable_inarray_validator": false,
+     *     "category": "emissions_category",
+     *     "exclude": {"emissions_cat_na"}
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $emissionsCategory = null;
+
+    /**
      * @Form\Name("prefix")
      * @Form\Attributes({"id": "prefix"})
      * @Form\Options({

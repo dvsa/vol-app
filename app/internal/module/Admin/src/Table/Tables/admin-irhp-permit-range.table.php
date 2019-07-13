@@ -37,6 +37,11 @@ return [
             'formatter' => 'IrhpPermitRangePermitNumber'
         ],
         [
+            'title' => 'Emissions Question',
+            'name' => 'emissionsCategory',
+            'formatter' => 'RefData'
+        ],
+        [
             'title' => 'Restricted countries',
             'name' => 'restrictedCountries',
             'formatter' => 'IrhpPermitRangeRestrictedCountries'
