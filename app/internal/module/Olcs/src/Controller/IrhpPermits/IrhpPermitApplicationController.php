@@ -17,6 +17,7 @@ use Dvsa\Olcs\Transfer\Command\Permits\CancelEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Command\Permits\EcmtSubmitApplication;
 use Dvsa\Olcs\Transfer\Command\Permits\WithdrawEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\GetAllByLicence as ListDTO;
+use Dvsa\Olcs\Transfer\Query\Permits\AvailableYears;
 use Dvsa\Olcs\Transfer\Query\Permits\ById as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceDto;
 use Dvsa\Olcs\Transfer\Query\Permits\OpenWindows;
@@ -31,6 +32,7 @@ use Olcs\Controller\Interfaces\IrhpPermitApplicationControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\IrhpPermitApplication as IrhpPermitApplicationMapper;
 use Olcs\Form\Model\Form\PermitCreate;
+use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
 class IrhpPermitApplicationController extends AbstractInternalController implements
@@ -117,7 +119,8 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
     protected $inlineScripts = [
         'indexAction' => ['table-actions'],
         'editAction' => ['permits'],
-        'addAction' => ['permits']
+        'addAction' => ['permits'],
+        'selectTypeAction' => ['forms/select-type-modal']
     ];
 
     // Override default index action to handle POSTs appropriately and perform the Query for the second table.
@@ -196,7 +199,6 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
     /**
      * Renders modal form, and handles redirect to correct application form for permit type.
      *
-     * @return \Zend\Http\Response
      */
     public function selectTypeAction()
     {
@@ -214,7 +216,20 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
                             ['licence' => $this->params()->fromRoute('licence')],
                             ['query' => ['permitTypeId' => $permitTypeId]]
                         );
-                case RefData::IRHP_BILATERAL_PERMIT_TYPE_ID || RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID:
+                case RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID:
+                    return $this->redirect()
+                        ->toRouteAjax(
+                            'licence/irhp-application/add',
+                            [
+                                'licence' => $this->params()->fromRoute('licence'),
+                                'permitTypeId' => $permitTypeId
+                            ],
+                            [
+                                'query' => ['year' => $this->params()->fromPost()['year']]
+                            ]
+                        );
+                case RefData::IRHP_BILATERAL_PERMIT_TYPE_ID:
+                case RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID:
                     return $this->redirect()
                         ->toRouteAjax(
                             'licence/irhp-application/add',
@@ -228,6 +243,7 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
         $form = $this->getForm('SelectPermitType');
         $this->placeholder()->setPlaceholder('form', $form);
         $this->placeholder()->setPlaceholder('contentTitle', 'Select Permit Type');
+        return $this->viewBuilder()->buildViewFromTemplate('pages/crud-form');
     }
 
     /**
@@ -431,6 +447,24 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
         $form->get('fields')->get('sectors')->setValueOptions($mappedSectors);
 
         return $form;
+    }
+
+    /**
+     * Retrieves available years list and populates Value options for Add and Edit forms
+     *
+     * @return JsonModel
+     */
+    public function availableYearsAction()
+    {
+        $response = $this->handleQuery(AvailableYears::create(['type' => $this->params()->fromPost('permitType')]));
+        $years = [];
+        if ($response->isOk()) {
+            $years = $response->getResult();
+        } else {
+            $this->checkResponse($response);
+        }
+
+        return new JsonModel($years);
     }
 
     /**

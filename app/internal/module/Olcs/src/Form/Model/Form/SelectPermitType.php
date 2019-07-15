@@ -27,6 +27,24 @@ class SelectPermitType
     public $permitType = null;
 
     /**
+     * @Form\Name("year")
+     * @Form\Required(false)
+     * @Form\Attributes({
+     *   "data-container-class":"js-hidden yearSelect",
+     *   "id" : "yearList",
+     * })
+     * @Form\Options({
+     *      "label": "Select a year",
+     *      "fieldset-attributes": {"id": "year-list", "class":"inline"},
+     *      "label_attributes": {"class": "form-control form-control--radio"},
+     *      "disable_inarray_validator" : true,
+     * })
+     * @Form\Type("Select")
+     */
+    public $year = null;
+
+
+    /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ContinueCancelFormActions")
