@@ -41,19 +41,6 @@ class PermitStockDetails
     public $country = null;
 
     /**
-     * @Form\Attributes({"id":"emissionsCategory","placeholder":"","class":"medium", "data-container-class":"stockEmissions js-hidden"})
-     * @Form\Required(false)
-     * @Form\Options({
-     *     "label": "Emissions category question",
-     *     "empty_option": "Please Select",
-     *     "disable_inarray_validator": false,
-     *     "category": "emissions_category"
-     * })
-     * @Form\Type("DynamicSelect")
-     */
-    public $emissionsCategory = null;
-
-    /**
      * @Form\Required(false)
      * @Form\Attributes({"id":"validFrom","placeholder":"","class":"medium", "data-container-class":"stockDates"})
      * @Form\Options({
