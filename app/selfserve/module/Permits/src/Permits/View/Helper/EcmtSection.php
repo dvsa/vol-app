@@ -15,6 +15,7 @@ class EcmtSection extends AbstractHelper
     const ROUTE_PERMITS = 'permits';
     const ROUTE_APPLICATION_OVERVIEW = 'permits/application-overview';
     const ROUTE_TYPE = 'permits/type';
+    const ROUTE_YEAR = 'permits/year';
     const ROUTE_ADD_LICENCE = 'permits/add-licence';
     const ROUTE_LICENCE = 'permits/licence';
     const ROUTE_CONFIRM_CHANGE = 'permits/change-licence';

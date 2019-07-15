@@ -15,6 +15,7 @@ class IrhpApplicationSection extends AbstractHelper
 {
     const ROUTE_PERMITS = 'permits';
     const ROUTE_TYPE = 'permits/type';
+    const ROUTE_YEAR = 'permits/year';
     const ROUTE_ADD_LICENCE = 'permits/add-licence';
     const ROUTE_APPLICATION_OVERVIEW = 'permits/application';
     const ROUTE_LICENCE = 'permits/application/licence';

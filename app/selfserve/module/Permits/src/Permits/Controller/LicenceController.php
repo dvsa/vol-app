@@ -106,6 +106,11 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
      */
     public function addAction()
     {
+        if (!empty($this->params()->fromRoute('year'))) {
+            $this->templateVarsConfig['add']['backUri'] = IrhpApplicationSection::ROUTE_YEAR;
+            $this->mergeTemplateVars();
+        }
+
         return $this->genericAction();
     }
 

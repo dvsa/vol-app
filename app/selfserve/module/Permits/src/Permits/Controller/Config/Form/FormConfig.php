@@ -3,12 +3,14 @@
 namespace Permits\Controller\Config\Form;
 
 use Permits\Controller\Config\DataSource\AvailableTypes as AvailableTypesDataSource;
+use Permits\Controller\Config\DataSource\AvailableYears as AvailableYearsDataSource;
 use Permits\Controller\Config\DataSource\LicencesAvailable as LicencesAvailableDataSource;
 use Permits\Controller\Config\DataSource\PermitApplication as PermitApplicationDataSource;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpApplicationDataSource;
 use Permits\Data\Mapper\AvailableCountries as AvailableCountriesMapper;
 use Permits\Data\Mapper\AvailableTypes as AvailableTypesMapper;
 use Permits\Data\Mapper\EuroEmissions;
+use Permits\Data\Mapper\AvailableYears as AvailableYearsMapper;
 use Permits\Data\Mapper\LicencesAvailable as LicencesAvailableMapper;
 use Permits\Data\Mapper\RestrictedCountries;
 use Permits\Data\Mapper\Sectors as SectorsMapper;
@@ -32,6 +34,17 @@ class FormConfig
             'mapper' => [
                 'type' => self::FORM_OPTIONS,
                 'class' => AvailableTypesMapper::class
+            ]
+        ],
+    ];
+
+    const FORM_YEAR = [
+        'sectors' => [
+            'formClass' => 'YearForm',
+            'dataSource' => AvailableYearsDataSource::DATA_KEY,
+            'mapper' => [
+                'type' => self::FORM_OPTIONS,
+                'class' => AvailableYearsMapper::class
             ]
         ],
     ];

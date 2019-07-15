@@ -41,6 +41,10 @@ class DataSourceConfig
         ]
     ];
 
+    const PERMIT_APP_YEAR = [
+        AvailableYears::class => [],
+    ];
+
     const PERMIT_APP_ADD_LICENCE = [
         OpenWindows::class => [],
         LicencesAvailable::class => [
