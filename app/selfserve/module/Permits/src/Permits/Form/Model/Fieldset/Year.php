@@ -16,11 +16,8 @@ class Year
      *     "radios_wrapper_attributes": {"data-module":"radios"}
      * })
      * @Form\Options({
-     *      "error-message":"permits.page.select.year.must.choose",
-     *      "label_attributes":{"class": "govuk-label govuk-radios__label govuk-label--s"}
-     * })
-     * @Form\Validator({
-     *      "name": "Zend\Validator\NotEmpty"
+     *      "label_attributes":{"class": "govuk-label govuk-radios__label govuk-label--s"},
+     *      "input_class": "Common\Form\Input\YearInput"
      * })
      * @Form\Type("DynamicRadio")
      */
