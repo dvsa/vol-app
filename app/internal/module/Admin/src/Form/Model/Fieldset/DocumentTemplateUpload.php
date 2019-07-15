@@ -87,10 +87,6 @@ class DocumentTemplateUpload
      *          "class":"inline"
      *      }
      * })
-     * @Form\Attributes({
-     *     "value":"N",
-     *     "class":"inline"
-     * })
      */
     public $suppressFromOp = null;
 }

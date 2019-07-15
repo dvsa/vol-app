@@ -17,6 +17,7 @@ use Dvsa\Olcs\Transfer\Command\DocTemplate\Create as CreateDTO;
 use Dvsa\Olcs\Transfer\Command\DocTemplate\Update as UpdateDTO;
 use Dvsa\Olcs\Transfer\Command\DocTemplate\Delete as DeleteDTO;
 use Admin\Data\Mapper\DocumentTemplate as DocumentTemplateMapper;
+
 /**
  * Report Upload Controller
  */
@@ -113,8 +114,8 @@ class DocumentTemplateController extends AbstractInternalController implements L
     /**
      * @return array|Form|Response|ViewModel
      */
-    public function editAction() {
-
+    public function editAction()
+    {
         $request = $this->getRequest();
         $form = $this->getForm(DocumentTemplateUploadForm::class);
         if ($request->isPost()) {
@@ -180,6 +181,7 @@ class DocumentTemplateController extends AbstractInternalController implements L
             'description' => $data['fields']['description'],
             'filename'   => $file['name'],
             'content'    => new FileContent($fileTmpName, $mimeType),
+            'suppressFromOp' => $data['fields']['suppressFromOp']
         ];
 
         $response = $this->handleCommand(
@@ -193,7 +195,7 @@ class DocumentTemplateController extends AbstractInternalController implements L
             return $this->redirectToIndex();
         } elseif ($response->isClientError()) {
             $messages = $response->getResult()['messages'];
-            foreach($messages as $message){
+            foreach ($messages as $message) {
                 $flashMessenger->addErrorMessage($message);
             }
         }
