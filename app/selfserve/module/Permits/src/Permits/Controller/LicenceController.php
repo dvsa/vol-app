@@ -141,7 +141,8 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
             [
                 RefData::ECMT_REMOVAL_PERMIT_TYPE_ID,
                 RefData::IRHP_BILATERAL_PERMIT_TYPE_ID,
-                RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID
+                RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID,
+                RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID
             ]
         )) {
             $activeApplication = $this->handleResponse($this->handleQuery(ActiveApplication::create(
