@@ -26,6 +26,7 @@ class IrhpApplicationSection extends AbstractHelper
     const ROUTE_DECLARATION = 'permits/application/declaration';
     const ROUTE_QUESTION = 'permits/application/question';
     const ROUTE_FEE = 'permits/application/fee';
+    const ROUTE_UNDER_CONSIDERATION = 'permits/application/under-consideration';
     const ROUTE_SUBMITTED = 'permits/application/submitted';
     const ROUTE_PAYMENT_ACTION = 'permits/application/payment';
     const ROUTE_PAYMENT_RESULT_ACTION = 'permits/application/payment-result';
