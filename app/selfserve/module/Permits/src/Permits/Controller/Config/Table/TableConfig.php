@@ -35,6 +35,12 @@ class TableConfig
             'dataSource' => ValidIrhpPermitsDataSource::DATA_KEY
         ]
     ];
+    const VALID_IRHP_PERMITS_ECMT_SHORT_TERM = [
+        'valid-irhp-permits' => [
+            'tableName' => 'valid-irhp-permits-ecmt-short-term',
+            'dataSource' => ValidIrhpPermitsDataSource::DATA_KEY
+        ]
+    ];
     const IRHP_FEE_BREAKDOWN = [
         'irhp-fee-breakdown' => [
             'tableName' => 'irhp-fee-breakdown',
