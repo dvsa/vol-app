@@ -143,6 +143,20 @@ class ConditionalDisplayConfig
         ],
     ];
 
+    const IRHP_APP_CAN_BE_WITHDRAWN = [
+        IrhpAppDataSource::DATA_KEY => [
+            'key' => 'canBeWithdrawn',
+            'value' => true
+        ],
+    ];
+
+    const IRHP_APP_IS_WITHDRAWN = [
+        IrhpAppDataSource::DATA_KEY => [
+            'key' => 'isWithdrawn',
+            'value' => true
+        ],
+    ];
+
     const IRHP_APP_CAN_MAKE_DECLARATION = [
         IrhpAppDataSource::DATA_KEY => [
             'key' => 'canMakeDeclaration',
