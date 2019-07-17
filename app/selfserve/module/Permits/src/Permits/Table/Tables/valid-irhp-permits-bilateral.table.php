@@ -33,8 +33,8 @@ return array(
         ),
         array(
             'title' => 'permits.irhp.valid.permits.table.application',
-            'name' => 'irhpPermitApplication',
-            'stack' => 'irhpPermitApplication->id',
+            'name' => 'irhpApplication',
+            'stack' => 'irhpPermitApplication->relatedApplication->id',
             'formatter' => 'StackValue',
         ),
         array(
