@@ -3,6 +3,7 @@
 namespace PermitsTest\Data\Mapper;
 
 use Common\Form\Form;
+use Common\RefData;
 use Permits\Data\Mapper\AvailableYears;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Mockery as m;
@@ -39,11 +40,13 @@ class AvailableYearsTest extends TestCase
         return [
             'empty list' => [
                 'data' => [
+                    'type' => RefData::ECMT_PERMIT_TYPE_ID,
                     'years' => [
                         'years' => []
                     ]
                 ],
                 'expected' => [
+                    'type' => RefData::ECMT_PERMIT_TYPE_ID,
                     'years' => [
                         'years' => []
                     ]
@@ -52,57 +55,115 @@ class AvailableYearsTest extends TestCase
             ],
             'list with data' => [
                 'data' => [
+                    'type' => RefData::ECMT_PERMIT_TYPE_ID,
                     'years' => [
                         'years' => [
-                            3030, 3031
+                            2019, 2020
                         ],
-
                     ]
                 ],
                 'expected' => [
+                    'type' => RefData::ECMT_PERMIT_TYPE_ID,
                     'years' => [
                         'years' => [
-                            3030, 3031
+                            2019, 2020
                         ],
                     ],
                     'hint' => 'permits.page.year.hint.multiple-years-available'
                 ],
                 'expectedValueOptions' => [
                     [
-                        'value' => 3030,
-                        'label' => 3030,
+                        'value' => 2019,
+                        'label' => 2019,
                         'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s']
-
                     ],
                     [
-                        'value' => 3031,
-                        'label' => 3031,
+                        'value' => 2020,
+                        'label' => 2020,
                         'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s']
                     ],
                 ],
             ],
             'list with one_year' => [
                 'data' => [
+                    'type' => RefData::ECMT_PERMIT_TYPE_ID,
                     'years' => [
                         'years' => [
-                            3030
+                            2019
                         ],
 
                     ]
                 ],
                 'expected' => [
+                    'type' => RefData::ECMT_PERMIT_TYPE_ID,
                     'years' => [
                         'years' => [
-                            3030
+                            2019
                         ],
                     ],
                 ],
                 'expectedValueOptions' => [
                     [
-                        'value' => 3030,
-                        'label' => 3030,
+                        'value' => 2019,
+                        'label' => 2019,
                         'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s']
+                    ]
+                ],
+            ],
+            'ECMT Short-term - list with data' => [
+                'data' => [
+                    'type' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
+                    'years' => [
+                        'years' => [
+                            2019, 2020
+                        ],
+                    ]
+                ],
+                'expected' => [
+                    'type' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
+                    'years' => [
+                        'years' => [
+                            2019, 2020
+                        ],
+                    ],
+                    'hint' => 'permits.page.year.hint.multiple-years-available'
+                ],
+                'expectedValueOptions' => [
+                    [
+                        'value' => 2019,
+                        'label' => 'permits.page.year.ecmt-short-term.label.2019',
+                        'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s']
+                    ],
+                    [
+                        'value' => 2020,
+                        'label' => 2020,
+                        'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s']
+                    ],
+                ],
+            ],
+            'ECMT Short-term - list with one_year' => [
+                'data' => [
+                    'type' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
+                    'years' => [
+                        'years' => [
+                            2019
+                        ],
 
+                    ]
+                ],
+                'expected' => [
+                    'type' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
+                    'years' => [
+                        'years' => [
+                            2019
+                        ],
+                    ],
+                ],
+                'expectedValueOptions' => [
+                    [
+                        'value' => 2019,
+                        'label' => 'permits.page.year.ecmt-short-term.label.2019',
+                        'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s']
                     ]
                 ],
             ],

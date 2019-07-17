@@ -41,6 +41,7 @@ class FormConfig
     const FORM_YEAR = [
         'sectors' => [
             'formClass' => 'YearForm',
+            'dataRouteParam' => 'type',
             'dataSource' => AvailableYearsDataSource::DATA_KEY,
             'mapper' => [
                 'type' => self::FORM_OPTIONS,

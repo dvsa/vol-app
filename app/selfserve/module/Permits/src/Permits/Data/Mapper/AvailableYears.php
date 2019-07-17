@@ -3,6 +3,7 @@
 namespace Permits\Data\Mapper;
 
 use Common\Form\Form;
+use Common\RefData;
 use Permits\Controller\Config\DataSource\AvailableYears as AvailableYearsDataSource;
 
 /**
@@ -21,10 +22,18 @@ class AvailableYears
         $years = $data[AvailableYearsDataSource::DATA_KEY]['years'];
         $valueOptions = [];
 
+        $isEcmtShortTerm = ($data['type'] == RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID);
+
         foreach ($years as $year) {
+            $label = $year;
+
+            if ($isEcmtShortTerm && ($label == 2019)) {
+                $label = 'permits.page.year.ecmt-short-term.label.2019';
+            }
+
             $valueOptions[] = [
                 'value' => $year,
-                'label' => $year,
+                'label' => $label,
                 'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
             ];
         }
