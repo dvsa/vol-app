@@ -150,10 +150,17 @@ class IrhpPermitController extends AbstractInternalController implements
             case RefData::ECMT_PERMIT_TYPE_ID:
                 // do nothing, ECMT has its own table definition
                 break;
+            case RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID:
+                // country is not valid for ECMT Short-term
+                $table->removeColumn('country');
+                break;
             case RefData::IRHP_BILATERAL_PERMIT_TYPE_ID:
-                // do nothing, Bilateral should display all columns
+                // emissionsCategory is not valid for Bilateral
+                $table->removeColumn('emissionsCategory');
                 break;
             default:
+                // remove emissionsCategory and country columns for any other type
+                $table->removeColumn('emissionsCategory');
                 $table->removeColumn('country');
                 break;
         }
