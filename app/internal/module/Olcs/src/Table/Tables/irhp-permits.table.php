@@ -26,6 +26,13 @@ return [
             'name' => 'permitNumber',
         ],
         [
+            'title' => 'Minimum emission standard',
+            'name' => 'emissionsCategory',
+            'formatter' => function ($row) {
+                return Escape::html($row['irhpPermitRange']['emissionsCategory']['description']);
+            },
+        ],
+        [
             'title' => 'Issued date',
             'name' => 'issueDate',
             'formatter' => 'DateTime',
