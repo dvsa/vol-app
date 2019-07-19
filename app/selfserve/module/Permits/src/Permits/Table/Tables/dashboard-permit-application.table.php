@@ -22,6 +22,7 @@ return array(
         array(
             'title' => 'dashboard-table-permit-application-type',
             'name' => 'typeDescription',
+            'formatter' => 'IrhpPermitTypeWithValidityDate',
         ),
         array(
             'title' => 'dashboard-table-permit-application-status',
