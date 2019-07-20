@@ -4,6 +4,7 @@ namespace Permits\Controller;
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
+use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\View\Helper\EcmtSection;
@@ -52,13 +53,13 @@ class SubmittedController extends AbstractSelfserveController implements ToggleA
             'receiptUrl' => ''
         ],
         'irhp-submitted' => [
-            'browserTitle' => 'permits.page.confirmation.application-submitted.browser.title',
-            'title' => 'permits.page.confirmation.application-submitted.title',
+            'browserTitle' => 'permits.page.confirmation.irhp-submitted.browser.title',
+            'title' => 'permits.page.confirmation.irhp-submitted.title',
             'extraContent' => [
-                'title' => 'permits.page.confirmation.bullet.list.title',
-                'list' => 'markup-bilateral-submitted-what-happens-next'
+                'title' => 'permits.page.confirmation.irhp-submitted.bullet.list.title',
+                'list' => 'markup-irhp-submitted-what-happens-next'
             ],
-            'warning' => 'permits.page.confirmation.submitted.warning',
+            'warning' => 'permits.page.confirmation.irhp-submitted.warning',
             'receiptUrl' => ''
         ],
     ];
@@ -82,6 +83,11 @@ class SubmittedController extends AbstractSelfserveController implements ToggleA
      */
     public function irhpSubmittedAction()
     {
+        if ($this->data[IrhpAppDataSource::DATA_KEY]['isSubmittedForConsideration']) {
+            // change content of the submitted page if the application is submitted for consideration
+            $this->data['extraContent']['list'] = 'markup-irhp-submitted-under-consideration-what-happens-next';
+        }
+
         $this->addReceiptUrl(IrhpApplicationSection::ROUTE_PRINT_RECEIPT);
         return parent::genericAction();
     }
