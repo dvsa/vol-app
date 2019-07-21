@@ -9,7 +9,8 @@ class ParamsConfig
 {
     const NEW_APPLICATION = [
         'route' => [
-            'type'
+            'type',
+            'year'
         ],
     ];
 

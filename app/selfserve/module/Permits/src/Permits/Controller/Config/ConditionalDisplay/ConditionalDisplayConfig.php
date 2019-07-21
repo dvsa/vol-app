@@ -4,6 +4,7 @@ namespace Permits\Controller\Config\ConditionalDisplay;
 
 use Permits\Controller\Config\DataSource\LicencesAvailable;
 use Permits\Controller\Config\DataSource\AvailableTypes;
+use Permits\Controller\Config\DataSource\AvailableYears;
 use Permits\Controller\Config\DataSource\OpenWindows;
 use Permits\Controller\Config\DataSource\PermitApplication as PermitAppDataSource;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
@@ -19,7 +20,15 @@ class ConditionalDisplayConfig
         AvailableTypes::DATA_KEY => [
             'view' => [
                 'template' => 'permits/window-closed',
-            ]
+            ],
+        ],
+    ];
+
+    const PERMIT_APP_CAN_SELECT_YEAR = [
+        AvailableYears::DATA_KEY => [
+            'view' => [
+                'template' => 'permits/window-closed',
+            ],
         ],
     ];
 
@@ -130,6 +139,20 @@ class ConditionalDisplayConfig
     const IRHP_APP_IS_CANCELLED = [
         IrhpAppDataSource::DATA_KEY => [
             'key' => 'isCancelled',
+            'value' => true
+        ],
+    ];
+
+    const IRHP_APP_CAN_BE_WITHDRAWN = [
+        IrhpAppDataSource::DATA_KEY => [
+            'key' => 'canBeWithdrawn',
+            'value' => true
+        ],
+    ];
+
+    const IRHP_APP_IS_WITHDRAWN = [
+        IrhpAppDataSource::DATA_KEY => [
+            'key' => 'isWithdrawn',
             'value' => true
         ],
     ];

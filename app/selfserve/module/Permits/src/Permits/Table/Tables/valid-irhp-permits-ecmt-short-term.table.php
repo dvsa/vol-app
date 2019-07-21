@@ -1,7 +1,7 @@
 <?php
 
-use Common\Util\Escape;
 use Common\RefData;
+use Common\Util\Escape;
 
 return array(
     'variables' => array(),
@@ -15,26 +15,23 @@ return array(
     ),
     'attributes' => array(),
     'columns' => array(
-
         array(
-            'title' => 'permits.irhp.valid.permits.table.permit',
+            'title' => 'permits.irhp.valid.permits.table.permit-no',
             'name' => 'permitNumber',
-            'formatter' => 'NullableNumber',
-        ),
-        array(
-            'title' => 'permits.irhp.valid.permits.table.country',
-            'name' => 'country',
-            'formatter' => function ($row, $column, $sm) {
-                $translator = $sm->get('translator');
-                return Escape::html(
-                    $translator->translate($row['irhpPermitRange']['irhpPermitStock']['country']['countryDesc'])
-                );
+            'formatter' => function ($row) {
+                return '<b>' . Escape::html($row['permitNumber']) . '</b>';
             },
         ),
         array(
-            'title' => 'permits.irhp.valid.permits.table.application',
+            'title' => 'permits.irhp.valid.permits.table.application-no',
             'name' => 'irhpApplication',
             'stack' => 'irhpPermitApplication->relatedApplication->id',
+            'formatter' => 'StackValue',
+        ),
+        array(
+            'title' => 'permits.irhp.valid.permits.table.emissions-standard',
+            'name' => 'emissionsCategory',
+            'stack' => 'irhpPermitRange->emissionsCategory->description',
             'formatter' => 'StackValue',
         ),
         array(
@@ -43,14 +40,19 @@ return array(
             'formatter' => 'Date',
         ),
         array(
-            'title' => 'permits.irhp.valid.permits.table.start-date',
-            'name' => 'startDate',
-            'formatter' => 'Date',
-        ),
-        array(
-            'title' => 'permits.irhp.valid.permits.table.expiry-date',
-            'name' => 'expiryDate',
-            'formatter' => 'Date',
+            'title' => 'permits.irhp.valid.permits.table.use-by-date',
+            'name' => 'useByDate',
+            'formatter' => function ($row) {
+                return $this->callFormatter(
+                    [
+                        'name' => 'useByDate',
+                        'formatter' => 'Date',
+                    ],
+                    [
+                        'useByDate' => $row['irhpPermitRange']['irhpPermitStock']['validTo'] ?? null,
+                    ]
+                );
+            }
         ),
         array(
             'title' => 'status',

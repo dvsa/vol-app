@@ -1,4 +1,6 @@
+
 <?php echo $this->permitsBackLink('common.link.back.label', isset($data['backUri']) ? $data['backUri'] : ''); ?>
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <?php echo $this->formErrors($form); ?>
@@ -35,7 +37,7 @@
                 <p class="govuk-body-l">
                     <?php echo $this->escapeHtml($this->translate($data['bulletList']['title'])); ?>:
                 </p>
-                <?php echo $this->partial($data['bulletList']['list']); ?>
+                <?php echo $this->translate($data['bulletList']['list']); ?>
             <?php } ?>
             <div class="govuk-form-group">
                 <?php echo $this->form($form); ?>

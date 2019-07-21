@@ -26,9 +26,11 @@ use Permits\Controller\IrhpApplicationFeeController;
 use Permits\Controller\NoOfPermitsController;
 use Permits\Controller\IrhpCheckAnswersController;
 use Permits\Controller\CancelIrhpApplicationController;
+use Permits\Controller\IrhpWithdrawController;
 use Permits\Controller\IrhpValidPermitsController;
 use Permits\Controller\QaController;
 use Permits\Controller\QaControllerFactory;
+use Permits\Controller\YearController;
 
 return [
   'controllers' => [
@@ -56,9 +58,11 @@ return [
         IrhpApplicationDeclarationController::class => IrhpApplicationDeclarationController::class,
         IrhpCheckAnswersController::class => IrhpCheckAnswersController::class,
         CancelIrhpApplicationController::class => CancelIrhpApplicationController::class,
+        IrhpWithdrawController::class => IrhpWithdrawController::class,
         IrhpApplicationFeeController::class => IrhpApplicationFeeController::class,
         IrhpValidPermitsController::class => IrhpValidPermitsController::class,
         RestrictedCountriesController::class => RestrictedCountriesController::class,
+        YearController::class => YearController::class,
     ],
     'factories' => [
         QaController::class => QaControllerFactory::class,
@@ -148,18 +152,6 @@ return [
                               ],
                           ]
                       ],
-                      'emissions' => [
-                          'type'    => 'segment',
-                          'options' => [
-                              'route'    => 'emissions[/]',
-                              'defaults' => [
-                                  // TODO - OLCS-22836
-                                  'controller'    => IrhpApplicationController::class,
-                                  'action'        => 'question',
-                              ],
-                          ],
-                          'may_terminate' => false,
-                      ],
                       'countries' => [
                           'type'    => 'segment',
                           'options' => [
@@ -248,6 +240,13 @@ return [
                           ],
                           'may_terminate' => false,
                       ],
+                      'under-consideration' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => 'under-consideration[/]',
+                          ],
+                          'may_terminate' => false,
+                      ],
                       'cancel' => [
                           'type'    => 'segment',
                           'options' => [
@@ -276,6 +275,10 @@ return [
                             'type' => 'segment',
                             'options' => [
                                 'route' => 'withdraw[/]',
+                                'defaults' => [
+                                    'controller'    => IrhpWithdrawController::class,
+                                    'action'        => 'withdraw',
+                                ]
                             ],
                             'may_terminate' => true,
                             'child_routes' => [
@@ -283,6 +286,10 @@ return [
                                     'type'    => 'segment',
                                     'options' => [
                                         'route'    => 'confirmation[/]',
+                                        'defaults' => [
+                                            'controller'    => IrhpWithdrawController::class,
+                                            'action'        => 'confirmation',
+                                        ]
                                     ],
                                     'may_terminate' => false,
                                 ],
@@ -342,16 +349,31 @@ return [
                   ],
                   'may_terminate' => false,
               ],
+              'year' => [
+                  'type'    => 'segment',
+                  'options' => [
+                      'route'    => '/year/:type[/]',
+                      'defaults' => [
+                          'controller'    => YearController::class,
+                          'action'        => 'question',
+                      ],
+                      'constraints' => [
+                          'type' => '[0-9]+',
+                      ],
+                  ],
+                  'may_terminate' => false,
+              ],
               'add-licence' => [
                   'type'    => 'segment',
                   'options' => [
-                      'route'    => '/type/:type/licence/add[/]',
+                      'route'    => '/type/:type/licence/add[/:year][/]',
                       'defaults' => [
                           'controller'    => LicenceController::class,
                           'action'        => 'add',
                       ],
                       'constraints' => [
                           'type' => '[0-9]+',
+                          'year' => '\d{4}'
                       ],
                   ],
                   'may_terminate' => false,
@@ -744,8 +766,8 @@ return [
             'permitsBackLink' => \Permits\View\Helper\BackToOverview::class,
             'saveAndReturnLink' => \Permits\View\Helper\BackToOverview::class,
             'permitsDashboardLink' => \Permits\View\Helper\PermitsDashboardLink::class,
-            'changeAnswerLink' => \Permits\View\Helper\ChangeAnswerLink::class,
-            'ecmtLicenceData' => \Permits\View\Helper\EcmtLicenceData::class,
+            'link' => \Permits\View\Helper\Link::class,
+            'answerFormatter' => \Permits\View\Helper\AnswerFormatter::class,
             'underConsiderationLink' => \Permits\View\Helper\UnderConsiderationLink::class,
         ],
     ],

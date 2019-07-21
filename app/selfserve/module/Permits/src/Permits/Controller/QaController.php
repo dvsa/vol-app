@@ -13,6 +13,8 @@ use Zend\View\Model\ViewModel;
 
 class QaController extends AbstractOlcsController
 {
+    const FIELDSET_DATA_PREFIX = 'fieldset';
+
     /** @var FormProvider */
     private $formProvider;
 
@@ -91,6 +93,15 @@ class QaController extends AbstractOlcsController
                     ]
                 );
             }
+
+            // transfer data normalised by input filter back into form, don't touch anything apart from the
+            // Q&A fieldset content to avoid unwanted form breakage
+            $normalisedData = $form->getData();
+            foreach ($normalisedData['qa'] as $key => $value) {
+                $postParams['qa'][$key] = $value;
+            }
+
+            $form->setData($postParams);
         }
 
         $templateVars = array_merge(

@@ -6,6 +6,7 @@ use Dvsa\Olcs\Transfer\Command\IrhpApplication\SubmitApplication;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\UpdateDeclaration;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
+use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Controller\Config\Form\FormConfig;
@@ -37,7 +38,6 @@ class IrhpApplicationDeclarationController extends AbstractSelfserveController i
             'question' => 'permits.page.declaration.question',
             'bulletList' => [
                 'title' => 'permits.page.declaration.bullet.list.title',
-                'list' => 'en_GB/bullets/markup-bilateral-declaration'
             ],
             'backUri' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
         ]
@@ -64,4 +64,14 @@ class IrhpApplicationDeclarationController extends AbstractSelfserveController i
             ]
         ],
     ];
+
+    public function mergeTemplateVars()
+    {
+        // declaration text is permit type specific
+        $irhpPermitTypeId = $this->data[IrhpAppDataSource::DATA_KEY]['irhpPermitType']['id'];
+
+        $this->templateVarsConfig['question']['bulletList']['list'] = 'markup-irhp-declaration-'.$irhpPermitTypeId;
+
+        parent::mergeTemplateVars();
+    }
 }

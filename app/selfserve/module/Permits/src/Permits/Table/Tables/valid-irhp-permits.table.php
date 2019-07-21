@@ -1,6 +1,5 @@
 <?php
 
-use Common\Util\Escape;
 use Common\RefData;
 
 return array(
@@ -22,8 +21,8 @@ return array(
         ),
         array(
             'title' => 'permits.irhp.valid.permits.table.application-no',
-            'name' => 'irhpPermitApplication',
-            'stack' => 'irhpPermitApplication->id',
+            'name' => 'irhpApplication',
+            'stack' => 'irhpPermitApplication->relatedApplication->id',
             'formatter' => 'StackValue',
         ),
         array(

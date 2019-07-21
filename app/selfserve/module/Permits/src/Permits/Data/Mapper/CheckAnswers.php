@@ -77,7 +77,11 @@ class CheckAnswers
             $answers[] = [
                 'question' => $question,
                 'route' => $routes[$index],
-                'answer' => $answersFormatted[$index]
+                'answer' => $answersFormatted[$index],
+                'questionType' => '',
+                'params' => [],
+                'options' => [],
+                'escape' => true,
             ];
         }
 

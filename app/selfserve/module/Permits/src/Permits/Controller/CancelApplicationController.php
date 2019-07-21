@@ -42,7 +42,7 @@ class CancelApplicationController extends AbstractSelfserveController implements
             'question' => 'permits.page.cancel.question',
             'bulletList' => [
                 'title' => 'permits.page.cancel.bullet.list.title',
-                'list' => 'en_GB/bullets/markup-ecmt-application-cancel'
+                'list' => 'markup-ecmt-application-cancel'
             ]
         ],
         'confirmation' => [
@@ -50,7 +50,7 @@ class CancelApplicationController extends AbstractSelfserveController implements
             'title' => 'permits.page.confirmation.cancel.title',
             'extraContent' => [
                 'title' => 'permits.page.confirmation.bullet.list.title',
-                'list' => 'en_GB/bullets/markup-ecmt-cancel-confirmation'
+                'list' => 'markup-ecmt-cancel-confirmation'
             ]
         ],
     ];

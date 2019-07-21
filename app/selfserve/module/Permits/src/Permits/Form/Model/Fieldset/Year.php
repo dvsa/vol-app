@@ -5,21 +5,21 @@ use Zend\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
- * @Form\Name("Type")
+ * @Form\Name("Year")
  */
-class Type
+class Year
 {
     /**
-     * @Form\Name("type")
+     * @Form\Name("year")
      * @Form\Required(true)
      * @Form\Attributes({
      *     "radios_wrapper_attributes": {"data-module":"radios"}
      * })
      * @Form\Options({
      *      "label_attributes":{"class": "govuk-label govuk-radios__label govuk-label--s"},
-     *      "input_class": "Common\Form\Input\TypeInput"
+     *      "input_class": "Common\Form\Input\YearInput"
      * })
      * @Form\Type("DynamicRadio")
      */
-    public $type;
+    public $year;
 }

@@ -3,29 +3,28 @@ namespace Permits\Controller;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Common\RefData;
-use Dvsa\Olcs\Transfer\Command\Permits\WithdrawEcmtPermitApplication;
+use Dvsa\Olcs\Transfer\Command\IrhpApplication\Withdraw;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
+use Permits\View\Helper\IrhpApplicationSection;
 
-use Permits\View\Helper\EcmtSection;
-
-class WithdrawApplicationController extends AbstractSelfserveController implements ToggleAwareInterface
+class IrhpWithdrawController extends AbstractSelfserveController implements ToggleAwareInterface
 {
     protected $toggleConfig = [
         'default' => FeatureToggleConfig::SELFSERVE_PERMITS_ENABLED,
     ];
 
     protected $dataSourceConfig = [
-        'default' => DataSourceConfig::PERMIT_APP,
+        'default' => DataSourceConfig::IRHP_APP,
     ];
 
     protected $conditionalDisplayConfig = [
-        'withdraw' => ConditionalDisplayConfig::PERMIT_APP_CAN_BE_WITHDRAWN,
-        'confirmation' => ConditionalDisplayConfig::PERMIT_APP_IS_WITHDRAWN,
+        'withdraw' => ConditionalDisplayConfig::IRHP_APP_CAN_BE_WITHDRAWN,
+        'confirmation' => ConditionalDisplayConfig::IRHP_APP_IS_WITHDRAWN,
     ];
 
     protected $formConfig = [
@@ -43,30 +42,30 @@ class WithdrawApplicationController extends AbstractSelfserveController implemen
             'question' => 'permits.page.withdraw.question',
             'bulletList' => [
                 'title' => 'permits.page.withdraw.bullet.list.title',
-                'list' => 'markup-ecmt-application-withdraw'
+                'list' => 'markup-ecmt-application-withdraw',
             ],
-            'backUri' => EcmtSection::ROUTE_ECMT_UNDER_CONSIDERATION
+            'backUri' => IrhpApplicationSection::ROUTE_UNDER_CONSIDERATION,
         ],
         'confirmation' => [
             'browserTitle' => 'permits.page.confirmation.withdraw.browser.title',
             'title' => 'permits.page.confirmation.withdraw.title',
             'extraContent' => [
                 'title' => 'permits.page.confirmation.bullet.list.title',
-                'list' => 'markup-ecmt-withdraw-confirmation'
-            ]
+                'list' => 'markup-ecmt-withdraw-confirmation',
+            ],
         ],
     ];
 
     protected $postConfig = [
         'withdraw' => [
-            'retrieveData' => false,
-            'checkConditionalDisplay' => false,
-            'command' => WithdrawEcmtPermitApplication::class,
+            'retrieveData' => true,
+            'checkConditionalDisplay' => true,
+            'command' => Withdraw::class,
             'defaultParams' => [
                 'reason' => RefData::PERMIT_APP_WITHDRAW_REASON_USER,
             ],
             'params' => ParamsConfig::ID_FROM_ROUTE,
-            'step' => EcmtSection::ROUTE_WITHDRAW_CONFIRMATION
+            'step' => IrhpApplicationSection::ROUTE_WITHDRAW_CONFIRMATION,
         ],
     ];
 }

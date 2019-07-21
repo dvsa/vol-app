@@ -15,20 +15,20 @@
                         <?php echo $this->escapeHtml($this->translate($answer['question'])); ?>
                     </dt>
                     <dd class="app-check-your-answers__answer">
-                        <?php if (is_array($answer['answer'])) {
-                            foreach ($answer['answer'] as $answerLine) {
-                                echo $this->escapeHtml($this->translate($answerLine)) . '<br />';
-                            }
-                        } else {
-                            echo $this->escapeHtml($this->translate($answer['answer']));
-                        } ?>
+                        <?php echo $this->answerFormatter($answer); ?>
                     </dd>
                     <dd class="app-check-your-answers__change">
-                        <?php
-                        if(isset($answer['route'])) {
-                            echo $this->changeAnswerLink($answer['route'], $this->escapeHtml($this->translate($answer['question'])));
+                    <?php
+                        if (isset($answer['route'])) {
+                            echo $this->link(
+                                $answer['route'],
+                                'common.link.change.label',
+                                $this->translate($answer['question']),
+                                $answer['params'],
+                                $answer['options']
+                            );
                         }
-                        ?>
+                    ?>
                     </dd>
                 </div>
             <?php } ?>

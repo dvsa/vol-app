@@ -45,7 +45,7 @@ class ConfirmChangeController extends AbstractSelfserveController implements Tog
             'question' => 'permits.page.change-licence.question',
             'bulletList' => [
                 'title' => 'permits.page.change-licence.bullet.list.title',
-                'list' => 'en_GB/bullets/markup-ecmt-licence-change'
+                'list' => 'markup-ecmt-licence-change'
             ],
             'backUri' => EcmtSection::ROUTE_LICENCE
         ],
@@ -54,7 +54,7 @@ class ConfirmChangeController extends AbstractSelfserveController implements Tog
             'question' => 'permits.page.change-licence.question',
             'bulletList' => [
                 'title' => 'permits.page.change-licence.bullet.list.title',
-                'list' => 'en_GB/bullets/markup-ecmt-licence-change'
+                'list' => 'markup-ecmt-licence-change'
             ],
             'backUri' => IrhpApplicationSection::ROUTE_LICENCE
         ]
