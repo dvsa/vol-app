@@ -13,7 +13,7 @@ class LostInfo
      * @Form\ContinueIfEmpty(true)
      * @Form\Type("Number")
      * @Form\Options({
-     *     "label": "Number of discs lost",
+     *     "label": "licence.surrender.current_discs.lost.label",
      * })
      * @Form\Attributes({
      *      "class": "govuk-input govuk-!-width-one-third",

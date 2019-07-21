@@ -32,7 +32,7 @@ class CurrentDiscs
 
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary large"})
-     * @Form\Options({"label":"Continue"})
+     * @Form\Options({"label":"continue.button"})
      * @Form\Type("\Zend\Form\Element\Button")
      */
     public $submit = null;

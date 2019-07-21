@@ -11,7 +11,7 @@ class InPossession
      * @Form\Type("OlcsCheckbox")
      * @Form\Attributes({"class":"govuk-checkboxes__item"})
      * @Form\Options({
-     *     "label":"In your possession",
+     *     "label":"licence.surrender.current_discs.in_possession.label",
      *     "label_attributes": {"class": "form-control form-control--checkbox form-control--confirm"},
      *     "checked_value":"Y",
      *     "unchecked_value":"N",

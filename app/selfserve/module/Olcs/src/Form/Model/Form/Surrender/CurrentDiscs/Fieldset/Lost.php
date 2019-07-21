@@ -11,7 +11,7 @@ class Lost
      * @Form\Type("OlcsCheckbox")
      * @Form\Attributes({"class":"govuk-checkboxes__item"})
      * @Form\Options({
-     *     "label":"Lost",
+     *     "label":"licence.surrender.operator_licence.lost.label",
      *     "label_attributes": {"class": "form-control form-control--checkbox form-control--confirm"},
      *     "checked_value":"Y",
      *     "unchecked_value":"N",
