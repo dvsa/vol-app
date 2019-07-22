@@ -13,7 +13,7 @@ class LostInfo
      * @Form\ContinueIfEmpty(true)
      * @Form\Type("Number")
      * @Form\Options({
-     *     "label": "Number of discs lost",
+     *     "label": "licence.surrender.current_discs.lost.label",
      * })
      * @Form\Attributes({
      *      "class": "govuk-input govuk-!-width-one-third",
@@ -58,8 +58,8 @@ class LostInfo
      * @Form\ContinueIfEmpty(true)
      * @Form\Type("textarea")
      * @Form\Options({
-     *     "label": "Please provide details of lost documents",
-     *     "hint": "licence.surrender.document.lost.details.hint"
+     *     "label": "licence.surrender.current_discs.lost.details.label",
+     *     "hint": "licence.surrender.current_discs.lost.details.hint"
      * })
      * @Form\Attributes({
      *     "class": "govuk-textarea",

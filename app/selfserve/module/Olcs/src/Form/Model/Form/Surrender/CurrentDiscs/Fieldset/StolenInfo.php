@@ -13,7 +13,7 @@ class StolenInfo
      * @Form\ContinueIfEmpty(true)
      * @Form\Type("Number")
      * @Form\Options({
-     *     "label":"Number of discs stolen",
+     *     "label":"licence.surrender.current_discs.stolen.number.label",
      * })
      * @Form\Attributes({
      *      "class":"govuk-input govuk-!-width-one-third",
@@ -58,7 +58,7 @@ class StolenInfo
      * @Form\ContinueIfEmpty(true)
      * @Form\Type("textarea")
      * @Form\Options({
-     *     "label":"Please provide details of stolen documents",
+     *     "label":"licence.surrender.current_discs.stolen.details.label",
      *     "hint":"licence.surrender.current_discs.stolen.details.hint"
      * })
      * @Form\Attributes({

@@ -13,7 +13,7 @@ class InPossessionInfo
      * @Form\ContinueIfEmpty(true)
      * @Form\Type("Number")
      * @Form\Options({
-     *     "label":"Number of discs you will destroy",
+     *     "label":"licence.surrender.current_discs.destroy.number.label",
      * })
      * @Form\Attributes({
      *      "class":"govuk-input govuk-!-width-one-third",

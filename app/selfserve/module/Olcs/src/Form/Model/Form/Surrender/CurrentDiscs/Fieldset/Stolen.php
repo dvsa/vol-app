@@ -10,7 +10,7 @@ class Stolen
      * @Form\Type("OlcsCheckbox")
      * @Form\Attributes({"class":"govuk-checkboxes__item"})
      * @Form\Options({
-     *     "label":"Stolen",
+     *     "label":"licence.surrender.operator_licence.stolen.label",
      *     "label_attributes": {"class": "form-control form-control--checkbox form-control--confirm"},
      *     "checked_value":"Y",
      *     "unchecked_value":"N",
