@@ -10,10 +10,10 @@
             "name": "doctrine/annotations",
             "version": "v1.6.1",
             "dist": {
-                "type": "tar",
-                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-annotations-53120e0eb10355388d6ccbe462f1fea34ddadb24-zip-3b6b7f.tar",
+                "type": "zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/annotations/v1.6.1/doctrine-annotations-v1.6.1.zip",
                 "reference": "53120e0eb10355388d6ccbe462f1fea34ddadb24",
-                "shasum": "ceac9d3d625498c245f80bd453293b63a6f7b21f"
+                "shasum": ""
             },
             "require": {
                 "doctrine/lexer": "1.*",
@@ -34,7 +34,6 @@
                     "Doctrine\\Common\\Annotations\\": "lib/Doctrine/Common/Annotations"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -621,10 +620,10 @@
             "name": "doctrine/instantiator",
             "version": "1.2.0",
             "dist": {
-                "type": "tar",
-                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-instantiator-a2c590166b2133a4633738648b6b064edae0814a-zip-b09b64.tar",
+                "type": "zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/instantiator/1.2.0/doctrine-instantiator-1.2.0.zip",
                 "reference": "a2c590166b2133a4633738648b6b064edae0814a",
-                "shasum": "0e25bdb37a0c265e14449cb5e3be6d116e0663bd"
+                "shasum": ""
             },
             "require": {
                 "php": "^7.1"
@@ -649,7 +648,6 @@
                     "Doctrine\\Instantiator\\": "src/Doctrine/Instantiator/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1259,12 +1257,12 @@
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.33",
+            "version": "4.206.34",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-common/4.206.33/olcs-olcs-common-4.206.33.zip",
-                "reference": "ccd7c847ac5f677216031b6f75a5ade15ceec4e0",
-                "shasum": "ccd7c847ac5f677216031b6f75a5ade15ceec4e0"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-common/4.206.34/olcs-olcs-common-4.206.34.zip",
+                "reference": "a4e129f23739f7ba8905007b4dca68b1662a0730",
+                "shasum": "a4e129f23739f7ba8905007b4dca68b1662a0730"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -1330,7 +1328,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2019-07-19T12:56:15+00:00"
+            "time": "2019-07-22T09:02:46+00:00"
         },
         {
             "name": "olcs/olcs-logging",
@@ -1652,10 +1650,10 @@
             "name": "soflomo/purifier",
             "version": "v0.1.1",
             "dist": {
-                "type": "tar",
-                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/soflomo-purifier-1f2d85a1b67bdb75bd86eb7a490e1c12280972b9-zip-b8842f.tar",
+                "type": "zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/soflomo/purifier/v0.1.1/soflomo-purifier-v0.1.1.zip",
                 "reference": "1f2d85a1b67bdb75bd86eb7a490e1c12280972b9",
-                "shasum": "ea7937f729e2a464e602c36c580525f9855b395a"
+                "shasum": ""
             },
             "require": {
                 "ezyang/htmlpurifier": ">=4.5.0",
@@ -1674,7 +1672,6 @@
                     "./Module.php"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -1902,10 +1899,10 @@
             "name": "symfony/polyfill-mbstring",
             "version": "v1.11.0",
             "dist": {
-                "type": "tar",
-                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/symfony-polyfill-mbstring-fe5e94c604826c35a32fa832f35bd036b6799609-zip-74a003.tar",
+                "type": "zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/polyfill-mbstring/v1.11.0/symfony-polyfill-mbstring-v1.11.0.zip",
                 "reference": "fe5e94c604826c35a32fa832f35bd036b6799609",
-                "shasum": "00f68adb76800511c1b1989a09762563e3724517"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
@@ -1927,7 +1924,6 @@
                     "bootstrap.php"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -2107,10 +2103,10 @@
             "name": "zf-commons/zfc-rbac",
             "version": "v2.5.6",
             "dist": {
-                "type": "tar",
-                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/zf-commons-zfc-rbac-62873668fe0c32aaed3f291dd21c2a7ba22248d7-zip-228e75.tar",
+                "type": "zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zf-commons/zfc-rbac/v2.5.6/zf-commons-zfc-rbac-v2.5.6.zip",
                 "reference": "62873668fe0c32aaed3f291dd21c2a7ba22248d7",
-                "shasum": "404f5661939edee0dd525acd2b74f97299d9a7d1"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.4",
@@ -2144,7 +2140,6 @@
                     "ZfcRbac\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -2305,7 +2300,7 @@
             "time": "2019-02-24T02:40:12+00:00"
         },
         {
-            "name": "mikey179/vfsStream",
+            "name": "mikey179/vfsstream",
             "version": "v1.6.6",
             "dist": {
                 "type": "zip",
@@ -4099,10 +4094,10 @@
             "name": "symfony/polyfill-ctype",
             "version": "v1.11.0",
             "dist": {
-                "type": "tar",
-                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/symfony-polyfill-ctype-82ebae02209c21113908c229e9883c419720738a-zip-6b93e8.tar",
+                "type": "zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/polyfill-ctype/v1.11.0/symfony-polyfill-ctype-v1.11.0.zip",
                 "reference": "82ebae02209c21113908c229e9883c419720738a",
-                "shasum": "e6db85383c1aed278f9b476b6915e1a9e2941158"
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
@@ -4124,7 +4119,6 @@
                     "bootstrap.php"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -4135,7 +4129,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "backendtea@gmail.com"
+                    "email": "BackEndTea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
