@@ -1001,7 +1001,7 @@ $applicationNavigation = array(
                 ),
                 array(
                     'id' => 'dashboard-permits',
-                    'label' => 'Permits',
+                    'label' => 'dashboard-nav-permits',
                     'route' => 'permits',
                 ),
                 array(
