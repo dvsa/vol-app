@@ -150,9 +150,23 @@ class ConditionalDisplayConfig
         ],
     ];
 
+    const IRHP_APP_CAN_BE_DECLINED = [
+        IrhpAppDataSource::DATA_KEY => [
+            'key' => 'canBeDeclined',
+            'value' => true
+        ],
+    ];
+
     const IRHP_APP_IS_WITHDRAWN = [
         IrhpAppDataSource::DATA_KEY => [
             'key' => 'isWithdrawn',
+            'value' => true
+        ],
+    ];
+
+    const IRHP_APP_IS_DECLINED = [
+        IrhpAppDataSource::DATA_KEY => [
+            'key' => 'isDeclined',
             'value' => true
         ],
     ];
