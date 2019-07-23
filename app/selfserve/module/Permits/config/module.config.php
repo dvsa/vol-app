@@ -27,6 +27,7 @@ use Permits\Controller\NoOfPermitsController;
 use Permits\Controller\IrhpCheckAnswersController;
 use Permits\Controller\CancelIrhpApplicationController;
 use Permits\Controller\IrhpWithdrawController;
+use Permits\Controller\IrhpDeclineController;
 use Permits\Controller\IrhpValidPermitsController;
 use Permits\Controller\QaController;
 use Permits\Controller\QaControllerFactory;
@@ -59,6 +60,7 @@ return [
         IrhpCheckAnswersController::class => IrhpCheckAnswersController::class,
         CancelIrhpApplicationController::class => CancelIrhpApplicationController::class,
         IrhpWithdrawController::class => IrhpWithdrawController::class,
+        IrhpDeclineController::class => IrhpDeclineController::class,
         IrhpApplicationFeeController::class => IrhpApplicationFeeController::class,
         IrhpValidPermitsController::class => IrhpValidPermitsController::class,
         RestrictedCountriesController::class => RestrictedCountriesController::class,
@@ -247,6 +249,13 @@ return [
                           ],
                           'may_terminate' => false,
                       ],
+                      'awaiting-fee' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => 'awaiting-fee[/]',
+                          ],
+                          'may_terminate' => false,
+                      ],
                       'cancel' => [
                           'type'    => 'segment',
                           'options' => [
@@ -278,7 +287,7 @@ return [
                                 'defaults' => [
                                     'controller'    => IrhpWithdrawController::class,
                                     'action'        => 'withdraw',
-                                ]
+                                ],
                             ],
                             'may_terminate' => true,
                             'child_routes' => [
@@ -289,7 +298,7 @@ return [
                                         'defaults' => [
                                             'controller'    => IrhpWithdrawController::class,
                                             'action'        => 'confirmation',
-                                        ]
+                                        ],
                                     ],
                                     'may_terminate' => false,
                                 ],
@@ -299,6 +308,10 @@ return [
                           'type'    => 'segment',
                           'options' => [
                               'route'    => 'decline[/]',
+                              'defaults' => [
+                                  'controller'    => IrhpDeclineController::class,
+                                  'action'        => 'withdraw',
+                              ],
                           ],
                           'may_terminate' => true,
                           'child_routes' => [
@@ -306,6 +319,10 @@ return [
                                   'type'    => 'segment',
                                   'options' => [
                                       'route'    => 'confirmation[/]',
+                                      'defaults' => [
+                                          'controller'    => IrhpDeclineController::class,
+                                          'action'        => 'confirmation',
+                                      ],
                                   ],
                                   'may_terminate' => false,
                               ],
