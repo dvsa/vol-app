@@ -149,7 +149,7 @@ class IrhpApplicationController extends AbstractInternalController implements
             QaCreateDTO::create(
                 [
                     'licence' => $this->params()->fromRoute('licence'),
-                    'irhpPermitType' => $this->params()->fromRoute('permitTypeId'),
+                    'type' => $this->params()->fromRoute('permitTypeId'),
                     'year' => $this->params()->fromQuery('year')
                 ]
             )
