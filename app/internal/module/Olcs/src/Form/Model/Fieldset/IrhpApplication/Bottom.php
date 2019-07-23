@@ -1,6 +1,6 @@
 <?php
 
-namespace Olcs\Form\Model\Fieldset\IrhpBilateral;
+namespace Olcs\Form\Model\Fieldset\IrhpApplication;
 
 use Zend\Form\Annotation as Form;
 

@@ -3,6 +3,7 @@
 namespace Olcs\Data\Mapper;
 
 use Common\Data\Mapper\MapperInterface;
+use Common\RefData;
 use Zend\Form\FormInterface;
 
 /**
@@ -54,6 +55,14 @@ class IrhpApplication implements MapperInterface
      */
     public static function mapFromForm(array $data)
     {
+        if ($data['topFields']['irhpPermitType'] == RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID) {
+            $cmdData['id'] = $data['topFields']['id'];
+            $cmdData['dateReceived'] = $data['topFields']['dateReceived'];
+            $cmdData['declaration'] = $data['bottomFields']['declaration'];
+            $cmdData['postData']['qa'] = $data['qa'];
+            return $cmdData;
+        }
+
         return array_merge($data['fields'], $data['bottomFields'], $data['topFields']);
     }
 

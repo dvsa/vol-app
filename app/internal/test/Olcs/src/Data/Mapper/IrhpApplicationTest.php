@@ -190,4 +190,31 @@ class IrhpApplicationTest extends MockeryTestCase
 
         $this->assertSame($expected, $this->sut->mapApplicationData($windowData, 4, $formData));
     }
+
+    public function testMapFromFormShortTerm()
+    {
+        $formData =
+            [
+                'topFields' => [
+                    'id' => 1,
+                    'licence' => 7,
+                    'irhpPermitType' => 2,
+                    'dateReceived' => '2090-01-01'
+                ],
+                'qa' => ['foo' => 'bar'],
+                'bottomFields' => [
+                    'declaration' => 1
+                ]
+            ];
+
+        $expected = [
+            'id' => 1,
+            'dateReceived' => '2090-01-01',
+            'declaration' => 1,
+            'postData' => ['qa' => ['foo' => 'bar']]
+
+        ];
+
+        $this->assertSame($expected, $this->sut->mapFromForm($formData));
+    }
 }

@@ -922,6 +922,15 @@ $routes = [
                             ]
                         ]
                     ],
+                    'availableYears' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'available-years[/]',
+                            'defaults' => [
+                                'action' => 'availableYears'
+                            ]
+                        ]
+                    ],
                     'application' => [
                         'type' => 'segment',
                         'options' => [

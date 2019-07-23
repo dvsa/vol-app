@@ -15,6 +15,7 @@ use Common\RefData;
 use Common\Service\Cqrs\Exception\NotFoundException;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\CancelApplication;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\SubmitApplication;
+use Dvsa\Olcs\Transfer\Query\IrhpApplication\ApplicationPath;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitApplication\GetList as ListDTO;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\AvailableCountries;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitWindow\OpenByCountry;
@@ -24,12 +25,14 @@ use Dvsa\Olcs\Transfer\Query\IrhpPermitWindow\OpenByType;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceDto;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\CreateFull as CreateDTO;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\UpdateFull as UpdateDTO;
+use Dvsa\Olcs\Transfer\Command\IrhpApplication\Create as QaCreateDTO;
 use Olcs\Controller\Interfaces\IrhpApplicationControllerInterface;
-use Olcs\Form\Model\Form\IrhpBilateral;
+use Olcs\Form\Model\Form\IrhpApplication;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\IrhpApplication as IrhpApplicationMapper;
 use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
+use Zend\Form\Form;
 use Zend\Http\Response;
 use Zend\View\Model\ViewModel;
 
@@ -57,8 +60,8 @@ class IrhpApplicationController extends AbstractInternalController implements
     protected $listVars = ['licence'];
     protected $listDto = ListDto::class;
     protected $itemDto = ItemDto::class;
-    protected $formClass = IrhpBilateral::class;
-    protected $addFormClass = IrhpBilateral::class;
+    protected $formClass = IrhpApplication::class;
+    protected $addFormClass = IrhpApplication::class;
     protected $mapperClass = IrhpApplicationMapper::class;
     protected $createCommand = CreateDto::class;
     protected $updateCommand = UpdateDto::class;
@@ -121,6 +124,10 @@ class IrhpApplicationController extends AbstractInternalController implements
      */
     public function addAction()
     {
+        if ($this->params()->fromRoute('permitTypeId') == RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID) {
+            $this->questionAnswerAddApplicationRedirect();
+        }
+
         $this->getServiceLocator()->get('Navigation')->findOneBy('id', 'licence_irhp_applications')->setVisible(0);
         $this->setFormTitle($this->params()->fromRoute('permitTypeId', null));
         $request = $this->getRequest();
@@ -130,6 +137,36 @@ class IrhpApplicationController extends AbstractInternalController implements
 
         return parent::addAction();
     }
+
+    /**
+     * Handles creation of IrhpApplication rows to support QA Application form rendering.
+     *
+     * @return Response
+     */
+    protected function questionAnswerAddApplicationRedirect()
+    {
+        $response = $this->handleCommand(
+            QaCreateDTO::create(
+                [
+                    'licence' => $this->params()->fromRoute('licence'),
+                    'irhpPermitType' => $this->params()->fromRoute('permitTypeId'),
+                    'year' => $this->params()->fromQuery('year')
+                ]
+            )
+        );
+        $result = $response->getResult();
+
+        return $this->redirect()
+            ->toRoute(
+                'licence/irhp-application/application',
+                [
+                    'licence' => $this->params()->fromRoute('licence'),
+                    'action' => 'edit',
+                    'irhpAppId' => $result['id']['irhpApplication']
+                ]
+            );
+    }
+
 
     /**
      * @return mixed|Response
@@ -327,6 +364,32 @@ class IrhpApplicationController extends AbstractInternalController implements
         $formData['topFields']['numVehiclesLabel'] = $licence['totAuthVehicles'];
         $formData['topFields']['licence'] = $this->params()->fromRoute('licence', null);
 
+        switch ($formData['topFields']['irhpPermitType']) {
+            case RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID:
+                $form = $this->questionAnswerFormSetup($this->params()->fromRoute('irhpAppId'), $form);
+                break;
+            case RefData::IRHP_BILATERAL_PERMIT_TYPE_ID:
+            case RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID:
+                $formData = $this->nonQuestionAnswerFormSetup($form, $formData, $licence);
+                break;
+            default:
+                throw new \RuntimeException('Unsupported Permit Type');
+        }
+
+        $form->setData($formData);
+
+        return $form;
+    }
+
+    /**
+     * @param Form $form
+     * @param array $formData
+     * @param array $licence
+     * @return mixed
+     * @throws NotFoundException
+     */
+    protected function nonQuestionAnswerFormSetup(Form $form, array $formData, array $licence)
+    {
         // Prepare data structure with open bilateral windows for NoOfPermits form builder
         $windows = (int)$formData['topFields']['irhpPermitType'] === RefData::IRHP_BILATERAL_PERMIT_TYPE_ID
             ? $this->getBilateralWindows()['results']
@@ -359,8 +422,28 @@ class IrhpApplicationController extends AbstractInternalController implements
             'feePerPermit'
         );
 
-        $form->setData($formData);
+        return $formData;
+    }
 
+    /**
+     * Perform query to obtain application steps for given application ID and populate form.
+     *
+     * @param int $irhpApplicationId
+     * @param Form $form
+     * @return mixed
+     */
+    protected function questionAnswerFormSetup(int $irhpApplicationId, Form $form)
+    {
+        $response = $this->handleQuery(
+            ApplicationPath::create(
+                ['id' => $irhpApplicationId]
+            )
+        );
+
+        $applicationSteps = $response->getResult();
+
+        $fieldsetPopulator = $this->getServiceLocator()->get('QaFieldsetPopulator');
+        $fieldsetPopulator->populate($form, $applicationSteps);
         return $form;
     }
 
