@@ -1,7 +1,7 @@
 <dd class="app-check-your-answers__change">
     <?php if ($this->sectionLink) : ?>
         <a href="<?php echo $this->sectionLink; ?>">
-            Change<span class="govuk-visually-hidden"><?php echo $this->translate($this->backText);?></span>
+            <?php echo $this->translate('Change');?><span class="govuk-visually-hidden"><?php echo $this->translate($this->backText);?></span>
         </a>
     <?php endif; ?>
 </dd>
