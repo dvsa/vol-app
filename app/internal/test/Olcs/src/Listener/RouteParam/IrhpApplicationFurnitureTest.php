@@ -88,6 +88,8 @@ class IrhpApplicationFurnitureTest extends TestCase
             ],
             'canBeCancelled' => true,
             'canBeSubmitted' => true,
+            'canBeWithdrawn' => true,
+            'canBeGranted' => true,
             'hasOutstandingFees' => false,
         ];
 
@@ -160,7 +162,16 @@ class IrhpApplicationFurnitureTest extends TestCase
             )
             ->shouldReceive('findOneBy')->once()->with('id', 'irhp-application-decisions-submit')->andReturn(
                 m::mock()->shouldReceive('setVisible')->once()->with(true)->getMock()
+            )
+            ->shouldReceive('findOneBy')->once()->with('id', 'irhp-application-decisions-grant')->andReturn(
+                m::mock()->shouldReceive('setVisible')->once()->with(true)->getMock()
+            )
+            ->shouldReceive('findOneBy')->once()->with('id', 'irhp-application-decisions-withdraw')->andReturn(
+                m::mock()->shouldReceive('setVisible')->once()->with(true)->getMock()
             );
+
+
+
 
         $this->sut->setNavigationService($mockNavigation);
         $this->sut->setSidebarNavigationService($mockSidebarNavigation);
