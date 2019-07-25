@@ -68,6 +68,13 @@ class ConditionalDisplayConfig
         ],
     ];
 
+    const IRHP_APP_UNDER_CONSIDERATION = [
+        IrhpAppDataSource::DATA_KEY => [
+            'key' => 'isUnderConsideration',
+            'value' => true
+        ],
+    ];
+
     const IRHP_APP_READY_FOR_COUNTRIES =  [
         IrhpAppDataSource::DATA_KEY => [
             'key' => 'canUpdateCountries',

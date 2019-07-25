@@ -5,6 +5,7 @@ namespace Permits\Data\Mapper;
 use Common\RefData;
 use Common\Service\Helper\TranslationHelperService;
 use Common\View\Helper\CurrencyFormatter;
+use Common\View\Helper\Status as StatusFormatter;
 use DateTime;
 use RuntimeException;
 use Zend\Mvc\Controller\Plugin\Url;
@@ -17,11 +18,13 @@ class IrhpApplicationFeeSummary
     const APP_REFERENCE_HEADING = 'permits.page.fee.application.reference';
     const APP_DATE_HEADING = 'permits.page.fee.application.date';
     const APP_FEE_PER_PERMIT_HEADING = 'permits.page.fee.application.fee.per.permit';
+    const PERMIT_STATUS_HEADING = 'permits.page.fee.permit.status';
     const PERMIT_TYPE_HEADING = 'permits.page.fee.permit.type';
     const PERMIT_YEAR_HEADING = 'permits.page.fee.permit.year';
     const NUM_PERMITS_HEADING = 'permits.page.fee.number.permits';
     const FEE_TOTAL_HEADING = 'permits.page.irhp-fee.permit.fee.total';
     const TOTAL_APPLICATION_FEE_HEADING = 'permits.page.fee.permit.fee.total';
+    const TOTAL_APPLICATION_FEE_PAID_HEADING = 'permits.page.fee.permit.fee.paid.total';
     const FEE_NON_REFUNDABLE_HEADING = 'permits.page.fee.permit.fee.non-refundable';
 
     /**
@@ -88,6 +91,19 @@ class IrhpApplicationFeeSummary
      */
     private static function getEcmtShortTermRows(array $data, TranslationHelperService $translator, Url $url)
     {
+        if ($data['isUnderConsideration']) {
+            // under consideration has different content of the table
+            return [
+                self::getPermitStatusRow($data),
+                self::getPermitTypeRow($data),
+                self::getStockValidityYearRow($data),
+                self::getApplicationReferenceRow($data),
+                self::getDateReceivedRow($data),
+                self::getEmissionsCatNoOfPermitsRow($data, $translator, $url),
+                self::getEmissionsCatTotalApplicationFeeRow($data, 'IRHPGVAPP', $translator),
+            ];
+        }
+
         return [
             self::getPermitTypeRow($data),
             self::getStockValidityYearRow($data),
@@ -96,6 +112,24 @@ class IrhpApplicationFeeSummary
             self::getEmissionsCatNoOfPermitsRow($data, $translator, $url),
             self::getApplicationFeePerPermitRow($data, 'IRHPGVAPP'),
             self::getEmissionsCatTotalApplicationFeeRow($data, 'IRHPGVAPP', $translator),
+        ];
+    }
+
+    /**
+     * Get the single table row content for a permit status row
+     *
+     * @param array $data input data
+     *
+     * @return array
+     */
+    private static function getPermitStatusRow(array $data)
+    {
+        $statusFormatter = new StatusFormatter();
+
+        return [
+            'key' => self::PERMIT_STATUS_HEADING,
+            'value' => $statusFormatter($data['status']),
+            'disableHtmlEscape' => true,
         ];
     }
 
@@ -270,7 +304,8 @@ class IrhpApplicationFeeSummary
         );
 
         return [
-            'key' => self::TOTAL_APPLICATION_FEE_HEADING,
+            'key' => $data['isUnderConsideration']
+                ? self::TOTAL_APPLICATION_FEE_PAID_HEADING : self::TOTAL_APPLICATION_FEE_HEADING,
             'value' => $value,
         ];
     }

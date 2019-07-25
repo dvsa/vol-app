@@ -23,6 +23,7 @@ use Permits\Controller\TypeController;
 use Permits\Controller\IrhpApplicationController;
 use Permits\Controller\IrhpApplicationCountryController;
 use Permits\Controller\IrhpApplicationFeeController;
+use Permits\Controller\IrhpUnderConsiderationController;
 use Permits\Controller\NoOfPermitsController;
 use Permits\Controller\IrhpCheckAnswersController;
 use Permits\Controller\CancelIrhpApplicationController;
@@ -62,6 +63,7 @@ return [
         IrhpWithdrawController::class => IrhpWithdrawController::class,
         IrhpDeclineController::class => IrhpDeclineController::class,
         IrhpApplicationFeeController::class => IrhpApplicationFeeController::class,
+        IrhpUnderConsiderationController::class => IrhpUnderConsiderationController::class,
         IrhpValidPermitsController::class => IrhpValidPermitsController::class,
         RestrictedCountriesController::class => RestrictedCountriesController::class,
         YearController::class => YearController::class,
@@ -246,6 +248,10 @@ return [
                           'type'    => 'segment',
                           'options' => [
                               'route'    => 'under-consideration[/]',
+                              'defaults' => [
+                                  'controller'    => IrhpUnderConsiderationController::class,
+                                  'action'        => 'generic',
+                              ],
                           ],
                           'may_terminate' => false,
                       ],

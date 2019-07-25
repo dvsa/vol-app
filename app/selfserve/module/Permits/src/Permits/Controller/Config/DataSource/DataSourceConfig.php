@@ -168,6 +168,12 @@ class DataSourceConfig
         IrhpFeeBreakdownDataSource::class => [],
     ];
 
+    const IRHP_APP_UNDER_CONSIDERATION = [
+        IrhpAppDataSource::class => [
+            'mapper' => IrhpApplicationFeeSummary::class
+        ],
+    ];
+
     const IRHP_APP_COUNTRIES = [
         IrhpAppDataSource::class => [],
         AvailableCountries::class => [],
