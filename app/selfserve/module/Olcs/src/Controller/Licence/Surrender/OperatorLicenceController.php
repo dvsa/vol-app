@@ -52,7 +52,8 @@ class OperatorLicenceController extends AbstractSurrenderController
 
     public function alterForm($form)
     {
-        $form->get('form-actions')->get('submit')->setLabel('Save and Continue');
+        $translator = $this->getServiceLocator()->get('Helper\Translation');
+        $form->get('form-actions')->get('submit')->setLabel($translator->translate('Save and Continue'));
         return $form;
     }
 
