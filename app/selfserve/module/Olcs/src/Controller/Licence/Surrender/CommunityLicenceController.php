@@ -65,7 +65,8 @@ class CommunityLicenceController extends AbstractSurrenderController
 
     public function alterForm($form)
     {
-        $form->get('form-actions')->get('submit')->setLabel('Save and Continue');
+        $translator = $this->getServiceLocator()->get('Helper\Translation');
+        $form->get('form-actions')->get('submit')->setLabel($translator->translate('lva.external.save_and_continue.button'));
         return $form;
     }
 
