@@ -75,7 +75,7 @@ class IrhpApplicationFeeSummaryTest extends \PHPUnit\Framework\TestCase
                     'value' => $permitTypeDesc,
                 ],
                 [
-                    'key' => IrhpApplicationFeeSummary::NUM_PERMITS_HEADING,
+                    'key' => IrhpApplicationFeeSummary::NUM_PERMITS_REQUIRED_HEADING,
                     'value' => $permitsRequired,
                 ],
                 [
@@ -108,6 +108,7 @@ class IrhpApplicationFeeSummaryTest extends \PHPUnit\Framework\TestCase
         $translationHelperService = m::mock(TranslationHelperService::class);
 
         $isUnderConsideration = false;
+        $isAwaitingFee = false;
         $applicationRef = 'OB1234567/1';
         $permitTypeDesc = 'Short-term ECMT';
         $dateReceived = '2020-12-25';
@@ -160,6 +161,7 @@ class IrhpApplicationFeeSummaryTest extends \PHPUnit\Framework\TestCase
 
         $inputData = [
             'isUnderConsideration' => $isUnderConsideration,
+            'isAwaitingFee' => $isAwaitingFee,
             'applicationRef' => $applicationRef,
             'dateReceived' => $dateReceived,
             'irhpPermitType' => [
@@ -192,7 +194,7 @@ class IrhpApplicationFeeSummaryTest extends \PHPUnit\Framework\TestCase
                     'feeType' => [
                         'fixedValue' => $appFeePerPermit,
                         'feeType' => [
-                            'id' => 'IRHPGVAPP'
+                            'id' => RefData::IRHP_GV_APPLICATION_FEE_TYPE,
                         ]
                     ]
                 ],
@@ -228,7 +230,7 @@ class IrhpApplicationFeeSummaryTest extends \PHPUnit\Framework\TestCase
                     'value' => $formattedDateReceived,
                 ],
                 [
-                    'key' => IrhpApplicationFeeSummary::NUM_PERMITS_HEADING,
+                    'key' => IrhpApplicationFeeSummary::NUM_PERMITS_REQUIRED_HEADING,
                     'value' => $formattedNoOfPermitsRequired,
                     'disableHtmlEscape' => true,
                 ],
@@ -258,6 +260,7 @@ class IrhpApplicationFeeSummaryTest extends \PHPUnit\Framework\TestCase
         $translationHelperService = m::mock(TranslationHelperService::class);
 
         $isUnderConsideration = true;
+        $isAwaitingFee = false;
         $status = [
             'id' => RefData::PERMIT_APP_STATUS_UNDER_CONSIDERATION,
             'description' => 'Under Consideration'
@@ -314,6 +317,7 @@ class IrhpApplicationFeeSummaryTest extends \PHPUnit\Framework\TestCase
 
         $inputData = [
             'isUnderConsideration' => $isUnderConsideration,
+            'isAwaitingFee' => $isAwaitingFee,
             'status' => $status,
             'applicationRef' => $applicationRef,
             'dateReceived' => $dateReceived,
@@ -347,7 +351,7 @@ class IrhpApplicationFeeSummaryTest extends \PHPUnit\Framework\TestCase
                     'feeType' => [
                         'fixedValue' => $appFeePerPermit,
                         'feeType' => [
-                            'id' => 'IRHPGVAPP'
+                            'id' => RefData::IRHP_GV_APPLICATION_FEE_TYPE,
                         ]
                     ]
                 ],
@@ -388,13 +392,165 @@ class IrhpApplicationFeeSummaryTest extends \PHPUnit\Framework\TestCase
                     'value' => $formattedDateReceived,
                 ],
                 [
-                    'key' => IrhpApplicationFeeSummary::NUM_PERMITS_HEADING,
+                    'key' => IrhpApplicationFeeSummary::NUM_PERMITS_REQUIRED_HEADING,
                     'value' => $formattedNoOfPermitsRequired,
                     'disableHtmlEscape' => true,
                 ],
                 [
                     'key' => IrhpApplicationFeeSummary::TOTAL_APPLICATION_FEE_PAID_HEADING,
                     'value' => $translatedFormattedTotalApplicationFee,
+                ],
+            ]
+        ];
+
+        $expectedOutput = $inputData + $mappedData;
+
+        self::assertEquals(
+            $expectedOutput,
+            IrhpApplicationFeeSummary::mapForDisplay($inputData, $translationHelperService, $url)
+        );
+    }
+
+    public function testMapForDisplayEcmtShortTermAwaitingFee()
+    {
+        $url = m::mock(Url::class);
+        $translationHelperService = m::mock(TranslationHelperService::class);
+
+        $isUnderConsideration = false;
+        $isAwaitingFee = true;
+        $applicationRef = 'OB1234567/1';
+        $permitTypeDesc = 'Short-term ECMT';
+        $feeDueDate = '2020-12-25';
+        $formattedFeeDueDate = '25 December 2020';
+
+        $stockValidTo = '2022-12-31';
+        $permitYear = 2022;
+
+        $requiredEuro5 = 1;
+        $requiredEuro6 = 5;
+        $formattedNoOfPermitsRequiredLine1 = '1 permit for Euro 5 minimum emission standard';
+        $formattedNoOfPermitsRequiredLine2 = '5 permits for Euro 6 minimum emission standard';
+        $formattedNoOfPermitsRequired = '1 permit for Euro 5 minimum emission standard<br>' .
+            '5 permits for Euro 6 minimum emission standard';
+
+        $euro5CategoryName = 'Euro 5 minimum emission standard';
+        $translationHelperService->shouldReceive('translate')
+            ->with('permits.page.fee.emissions.category.euro5')
+            ->andReturn($euro5CategoryName);
+
+        $euro6CategoryName = 'Euro 6 minimum emission standard';
+        $translationHelperService->shouldReceive('translate')
+            ->with('permits.page.fee.emissions.category.euro6')
+            ->andReturn($euro6CategoryName);
+
+        $translationHelperService->shouldReceive('translateReplace')
+            ->with(
+                'permits.page.fee.number.permits.line.single',
+                [1, $euro5CategoryName]
+            )
+            ->andReturn($formattedNoOfPermitsRequiredLine1);
+        $translationHelperService->shouldReceive('translateReplace')
+            ->with(
+                'permits.page.fee.number.permits.line.multiple',
+                [5, $euro6CategoryName]
+            )
+            ->andReturn($formattedNoOfPermitsRequiredLine2);
+
+        $issueFeePerPermit = 20;
+
+        $formattedTotalApplicationFee = '£120';
+        $translatedFormattedTotalApplicationFee = '£120 (non-refundable)';
+
+        $translationHelperService->shouldReceive('translateReplace')
+            ->with(
+                'permits.page.fee.permit.fee.non-refundable',
+                [$formattedTotalApplicationFee]
+            )
+            ->andReturn($translatedFormattedTotalApplicationFee);
+
+        $inputData = [
+            'isUnderConsideration' => $isUnderConsideration,
+            'isAwaitingFee' => $isAwaitingFee,
+            'applicationRef' => $applicationRef,
+            'irhpPermitType' => [
+                'id' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
+                'name' => [
+                    'description' => $permitTypeDesc
+                ],
+            ],
+            'irhpPermitApplications' => [
+                [
+                    'requiredEuro5' => $requiredEuro5,
+                    'requiredEuro6' => $requiredEuro6,
+                    'irhpPermitWindow' => [
+                        'irhpPermitStock' => [
+                            'validTo' => $stockValidTo
+                        ]
+                    ]
+                ]
+            ],
+            'fees' => [
+                [
+                    'feeType' => [
+                        'fixedValue' => 10,
+                        'feeType' => [
+                            'id' => 'OTHERTYPE1'
+                        ]
+                    ]
+                ],
+                [
+                    'feeType' => [
+                        'fixedValue' => $issueFeePerPermit,
+                        'feeType' => [
+                            'id' => RefData::IRHP_GV_ISSUE_FEE_TYPE,
+                        ]
+                    ],
+                    'dueDate' => $feeDueDate,
+                ],
+                [
+                    'feeType' => [
+                        'fixedValue' => 30,
+                        'feeType' => [
+                            'id' => RefData::IRHP_GV_APPLICATION_FEE_TYPE,
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $mappedData = [
+            'showFeeSummaryTitle' => true,
+            'showWarningMessage' => true,
+            'mappedFeeData' => [
+                [
+                    'key' => IrhpApplicationFeeSummary::PERMIT_TYPE_HEADING,
+                    'value' => $permitTypeDesc,
+                ],
+                [
+                    'key' => IrhpApplicationFeeSummary::PERMIT_YEAR_HEADING,
+                    'value' => $permitYear,
+                ],
+                [
+                    'key' => IrhpApplicationFeeSummary::APP_REFERENCE_HEADING,
+                    'value' => $applicationRef,
+                ],
+                [
+                    'key' => IrhpApplicationFeeSummary::NUM_PERMITS_HEADING,
+                    'value' => $formattedNoOfPermitsRequired,
+                    'disableHtmlEscape' => true,
+                ],
+                [
+                    'key' => IrhpApplicationFeeSummary::ISSUE_FEE_PER_PERMIT_HEADING,
+                    'value' => $issueFeePerPermit,
+                    'isCurrency' => true,
+                ],
+                [
+                    'key' => IrhpApplicationFeeSummary::TOTAL_ISSUE_FEE_HEADING,
+                    'value' => $translatedFormattedTotalApplicationFee,
+                ],
+                [
+                    'key' => IrhpApplicationFeeSummary::PAYMENT_DUE_DATE_HEADING,
+                    'value' => $formattedFeeDueDate,
                 ],
             ]
         ];

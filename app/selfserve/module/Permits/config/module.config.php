@@ -28,6 +28,7 @@ use Permits\Controller\NoOfPermitsController;
 use Permits\Controller\IrhpCheckAnswersController;
 use Permits\Controller\CancelIrhpApplicationController;
 use Permits\Controller\IrhpWithdrawController;
+use Permits\Controller\IrhpAwaitingFeeController;
 use Permits\Controller\IrhpDeclineController;
 use Permits\Controller\IrhpValidPermitsController;
 use Permits\Controller\QaController;
@@ -61,6 +62,7 @@ return [
         IrhpCheckAnswersController::class => IrhpCheckAnswersController::class,
         CancelIrhpApplicationController::class => CancelIrhpApplicationController::class,
         IrhpWithdrawController::class => IrhpWithdrawController::class,
+        IrhpAwaitingFeeController::class => IrhpAwaitingFeeController::class,
         IrhpDeclineController::class => IrhpDeclineController::class,
         IrhpApplicationFeeController::class => IrhpApplicationFeeController::class,
         IrhpUnderConsiderationController::class => IrhpUnderConsiderationController::class,
@@ -259,6 +261,10 @@ return [
                           'type'    => 'segment',
                           'options' => [
                               'route'    => 'awaiting-fee[/]',
+                              'defaults' => [
+                                  'controller'    => IrhpAwaitingFeeController::class,
+                                  'action'        => 'generic',
+                              ],
                           ],
                           'may_terminate' => false,
                       ],

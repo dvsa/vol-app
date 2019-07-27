@@ -174,6 +174,12 @@ class DataSourceConfig
         ],
     ];
 
+    const IRHP_APP_AWAITING_FEE = [
+        IrhpAppDataSource::class => [
+            'mapper' => IrhpApplicationFeeSummary::class
+        ],
+    ];
+
     const IRHP_APP_COUNTRIES = [
         IrhpAppDataSource::class => [],
         AvailableCountries::class => [],
