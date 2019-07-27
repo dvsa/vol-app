@@ -1257,12 +1257,12 @@
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.34",
+            "version": "4.206.40",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-common/4.206.34/olcs-olcs-common-4.206.34.zip",
-                "reference": "a4e129f23739f7ba8905007b4dca68b1662a0730",
-                "shasum": "a4e129f23739f7ba8905007b4dca68b1662a0730"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-common/4.206.40/olcs-olcs-common-4.206.40.zip",
+                "reference": "266450e7f903da874770f989178d21d503cba9d3",
+                "shasum": "266450e7f903da874770f989178d21d503cba9d3"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -1328,7 +1328,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2019-07-22T09:02:46+00:00"
+            "time": "2019-07-27T08:15:37+00:00"
         },
         {
             "name": "olcs/olcs-logging",
@@ -1401,12 +1401,12 @@
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "4.206.22",
+            "version": "4.206.25",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-transfer/4.206.22/olcs-olcs-transfer-4.206.22.zip",
-                "reference": "5c0d3ca97fc7be3d2ebbcf58742021b44ac9c90b",
-                "shasum": "5c0d3ca97fc7be3d2ebbcf58742021b44ac9c90b"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-transfer/4.206.25/olcs-olcs-transfer-4.206.25.zip",
+                "reference": "b8edfb259814b01843970f97ea140ecf7f52779e",
+                "shasum": "b8edfb259814b01843970f97ea140ecf7f52779e"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -1462,7 +1462,7 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2019-07-18T11:03:31+00:00"
+            "time": "2019-07-26T10:58:12+00:00"
         },
         {
             "name": "olcs/olcs-utils",
@@ -3181,11 +3181,11 @@
         },
         {
             "name": "phpunit/php-token-stream",
-            "version": "3.0.2",
+            "version": "3.1.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/phpunit/php-token-stream/3.0.2/phpunit-php-token-stream-3.0.2.zip",
-                "reference": "c4a66b97f040e3e20b3aa2a243230a1c3a9f7c8c",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/phpunit/php-token-stream/3.1.0/phpunit-php-token-stream-3.1.0.zip",
+                "reference": "e899757bb3df5ff6e95089132f32cd59aac2220a",
                 "shasum": ""
             },
             "require": {
@@ -3198,7 +3198,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.0-dev"
+                    "dev-master": "3.1-dev"
                 }
             },
             "autoload": {
@@ -3220,7 +3220,7 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "2019-07-08T05:24:54+00:00"
+            "time": "2019-07-25T05:29:42+00:00"
         },
         {
             "name": "phpunit/phpcov",
