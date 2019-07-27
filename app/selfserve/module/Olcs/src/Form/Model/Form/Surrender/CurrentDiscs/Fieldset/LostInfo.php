@@ -58,8 +58,8 @@ class LostInfo
      * @Form\ContinueIfEmpty(true)
      * @Form\Type("textarea")
      * @Form\Options({
-     *     "label": "licence.surrender.current_discs.lost.details.label",
-     *     "hint": "licence.surrender.current_discs.lost.details.hint"
+     *     "label":"licence.surrender.current_discs.lost.details.label",
+     *     "hint":"licence.surrender.current_discs.lost.details.hint",
      * })
      * @Form\Attributes({
      *     "class": "govuk-textarea",
