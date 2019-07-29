@@ -14,7 +14,10 @@ use Common\FeatureToggle;
 use Common\RefData;
 use Common\Service\Cqrs\Exception\NotFoundException;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\CancelApplication;
+use Dvsa\Olcs\Transfer\Command\IrhpApplication\Grant;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\SubmitApplication;
+use Dvsa\Olcs\Transfer\Command\IrhpApplication\Withdraw;
+use Olcs\Form\Model\Form\IrhpApplicationWithdraw as WithdrawForm;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\ApplicationPath;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitApplication\GetList as ListDTO;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\AvailableCountries;
@@ -27,6 +30,7 @@ use Dvsa\Olcs\Transfer\Command\IrhpApplication\CreateFull as CreateDTO;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\UpdateFull as UpdateDTO;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\Create as QaCreateDTO;
 use Olcs\Controller\Interfaces\IrhpApplicationControllerInterface;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Olcs\Form\Model\Form\IrhpApplication;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -88,6 +92,14 @@ class IrhpApplicationController extends AbstractInternalController implements
             'action' => 'index',
         ],
         'submit' => [
+            'route' => 'licence/permits',
+            'action' => 'index',
+        ],
+        'grant' => [
+            'route' => 'licence/permits',
+            'action' => 'index',
+        ],
+        'withdraw' => [
             'route' => 'licence/permits',
             'action' => 'index',
         ]
@@ -293,6 +305,41 @@ class IrhpApplicationController extends AbstractInternalController implements
             'Are you sure?',
             'Cancel Application. Are you sure?',
             'IRHP Application Cancelled'
+        );
+    }
+
+    /**
+     * withdraw action
+     *
+     * @return ViewModel
+     */
+    public function withdrawAction()
+    {
+        return $this->add(
+            WithdrawForm::class,
+            new AddFormDefaultData(['id' => $this->params()->fromRoute('irhpAppId')]),
+            Withdraw::class,
+            \Olcs\Data\Mapper\IrhpWithdraw::class,
+            'pages/crud-form',
+            'Withdraw Application',
+            'Withdraw Application'
+        );
+    }
+
+    /**
+     * Handles click of the Cancel button on right sidebar
+     *
+     * @return \Zend\Http\Response
+     *
+     */
+    public function grantAction()
+    {
+        return $this->confirmCommand(
+            new ConfirmItem($this->itemParams),
+            Grant::class,
+            'Are you sure?',
+            'Grant Application. Are you sure?',
+            'IRHP Application Granted'
         );
     }
 

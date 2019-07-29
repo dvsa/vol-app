@@ -145,6 +145,10 @@ class IrhpApplicationFurniture implements
         // decisions
         $sidebarNav->findOneBy('id', 'irhp-application-decisions-submit')
             ->setVisible($irhpApplication['canBeSubmitted']);
+        $sidebarNav->findOneBy('id', 'irhp-application-decisions-grant')
+            ->setVisible($irhpApplication['canBeGranted']);
+        $sidebarNav->findOneBy('id', 'irhp-application-decisions-withdraw')
+            ->setVisible($irhpApplication['canBeWithdrawn']);
 
         $right = new ViewModel();
         $right->setTemplate('sections/irhp-application/partials/right');

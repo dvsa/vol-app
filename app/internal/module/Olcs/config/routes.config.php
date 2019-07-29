@@ -1132,7 +1132,7 @@ $routes = [
                         'options' => [
                             'route' => ':action/:irhpAppId[/]',
                             'constraints' => [
-                                'action' => 'edit|submit|accept|decline|cancel|withdraw',
+                                'action' => 'edit|submit|accept|decline|cancel|withdraw|grant',
                                 'irhpAppId' => '[0-9]+',
                             ],
                             'defaults' => [

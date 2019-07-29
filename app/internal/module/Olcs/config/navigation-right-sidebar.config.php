@@ -356,6 +356,26 @@ return [
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
                         ],
+                        [
+                            'id' => 'irhp-application-decisions-grant',
+                            'label' => 'Grant',
+                            'route' => 'licence/irhp-application/application',
+                            'params' => [
+                                'action' => 'grant'
+                            ],
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ],
+                        [
+                            'id' => 'irhp-application-decisions-withdraw',
+                            'label' => 'Withdraw',
+                            'route' => 'licence/irhp-application/application',
+                            'params' => [
+                                'action' => 'withdraw'
+                            ],
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ],
                     ],
                 ],
             ],
