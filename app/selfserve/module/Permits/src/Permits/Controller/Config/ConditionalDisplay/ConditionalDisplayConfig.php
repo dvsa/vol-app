@@ -171,6 +171,13 @@ class ConditionalDisplayConfig
         ],
     ];
 
+    const IRHP_APP_IS_AWAITING_FEE = [
+        IrhpAppDataSource::DATA_KEY => [
+            'key' => 'isAwaitingFee',
+            'value' => true
+        ],
+    ];
+
     const IRHP_APP_IS_DECLINED = [
         IrhpAppDataSource::DATA_KEY => [
             'key' => 'isDeclined',

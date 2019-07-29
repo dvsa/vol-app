@@ -13,6 +13,9 @@ use Zend\Mvc\Controller\Plugin\Url;
  */
 class FeeList
 {
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public static function mapForDisplay(array $data, TranslationHelperService $translator, Url $url)
     {
         $currency = new CurrencyFormatter;
@@ -45,7 +48,7 @@ class FeeList
                 )
             ],
             4 => [
-                'key' => 'permits.page.fee.number.permits',
+                'key' => 'permits.page.fee.number.permits.required',
                 'value' => $translator->translateReplace(
                     'permits.page.fee.number.permits.value',
                     [

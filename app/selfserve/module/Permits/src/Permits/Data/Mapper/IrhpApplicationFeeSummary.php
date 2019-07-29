@@ -18,13 +18,17 @@ class IrhpApplicationFeeSummary
     const APP_REFERENCE_HEADING = 'permits.page.fee.application.reference';
     const APP_DATE_HEADING = 'permits.page.fee.application.date';
     const APP_FEE_PER_PERMIT_HEADING = 'permits.page.fee.application.fee.per.permit';
+    const ISSUE_FEE_PER_PERMIT_HEADING = 'permits.page.fee.issue.fee.per.permit';
     const PERMIT_STATUS_HEADING = 'permits.page.fee.permit.status';
     const PERMIT_TYPE_HEADING = 'permits.page.fee.permit.type';
     const PERMIT_YEAR_HEADING = 'permits.page.fee.permit.year';
     const NUM_PERMITS_HEADING = 'permits.page.fee.number.permits';
+    const NUM_PERMITS_REQUIRED_HEADING = 'permits.page.fee.number.permits.required';
     const FEE_TOTAL_HEADING = 'permits.page.irhp-fee.permit.fee.total';
+    const TOTAL_ISSUE_FEE_HEADING = 'permits.page.fee.permit.fee.issue.total';
     const TOTAL_APPLICATION_FEE_HEADING = 'permits.page.fee.permit.fee.total';
     const TOTAL_APPLICATION_FEE_PAID_HEADING = 'permits.page.fee.permit.fee.paid.total';
+    const PAYMENT_DUE_DATE_HEADING = 'permits.page.fee.payment.due.date';
     const FEE_NON_REFUNDABLE_HEADING = 'permits.page.fee.permit.fee.non-refundable';
 
     /**
@@ -100,7 +104,28 @@ class IrhpApplicationFeeSummary
                 self::getApplicationReferenceRow($data),
                 self::getDateReceivedRow($data),
                 self::getEmissionsCatNoOfPermitsRow($data, $translator, $url),
-                self::getEmissionsCatTotalApplicationFeeRow($data, 'IRHPGVAPP', $translator),
+                self::getTotalFeeRow(
+                    $data,
+                    RefData::IRHP_GV_APPLICATION_FEE_TYPE,
+                    self::TOTAL_APPLICATION_FEE_PAID_HEADING,
+                    $translator
+                ),
+            ];
+        } elseif ($data['isAwaitingFee']) {
+            // accept/decline page has different content of the table
+            return [
+                self::getPermitTypeRow($data),
+                self::getStockValidityYearRow($data),
+                self::getApplicationReferenceRow($data),
+                self::getEmissionsCatNoOfPermitsRow($data, $translator, $url),
+                self::getIssueFeePerPermitRow($data, RefData::IRHP_GV_ISSUE_FEE_TYPE),
+                self::getTotalFeeRow(
+                    $data,
+                    RefData::IRHP_GV_ISSUE_FEE_TYPE,
+                    self::TOTAL_ISSUE_FEE_HEADING,
+                    $translator
+                ),
+                self::getPaymentDueDateRow($data, RefData::IRHP_GV_ISSUE_FEE_TYPE),
             ];
         }
 
@@ -110,8 +135,13 @@ class IrhpApplicationFeeSummary
             self::getApplicationReferenceRow($data),
             self::getDateReceivedRow($data),
             self::getEmissionsCatNoOfPermitsRow($data, $translator, $url),
-            self::getApplicationFeePerPermitRow($data, 'IRHPGVAPP'),
-            self::getEmissionsCatTotalApplicationFeeRow($data, 'IRHPGVAPP', $translator),
+            self::getApplicationFeePerPermitRow($data, RefData::IRHP_GV_APPLICATION_FEE_TYPE),
+            self::getTotalFeeRow(
+                $data,
+                RefData::IRHP_GV_APPLICATION_FEE_TYPE,
+                self::TOTAL_APPLICATION_FEE_HEADING,
+                $translator
+            ),
         ];
     }
 
@@ -199,6 +229,24 @@ class IrhpApplicationFeeSummary
     }
 
     /**
+     * Get the single table row content for a payment due date
+     *
+     * @param array $data input data
+     * @param string $feeType
+     *
+     * @return array
+     */
+    private static function getPaymentDueDateRow(array $data, $feeType)
+    {
+        $fee = self::getFeeByType($data['fees'], $feeType);
+
+        return [
+            'key' => self::PAYMENT_DUE_DATE_HEADING,
+            'value' => !empty($fee['dueDate']) ? (new DateTime($fee['dueDate']))->format('d F Y') : ''
+        ];
+    }
+
+    /**
      * Get the single table row content for a standard number of permits row
      *
      * @param array $data input data
@@ -208,7 +256,7 @@ class IrhpApplicationFeeSummary
     private static function getStandardNoOfPermitsRow(array $data)
     {
         return [
-            'key' => self::NUM_PERMITS_HEADING,
+            'key' => self::NUM_PERMITS_REQUIRED_HEADING,
             'value' => $data['permitsRequired'],
         ];
     }
@@ -228,7 +276,7 @@ class IrhpApplicationFeeSummary
         $lines = EcmtNoOfPermits::mapForDisplay($irhpPermitApplication, $translator, $url);
 
         return [
-            'key' => self::NUM_PERMITS_HEADING,
+            'key' => $data['isAwaitingFee'] ? self::NUM_PERMITS_HEADING : self::NUM_PERMITS_REQUIRED_HEADING,
             'value' => implode('<br>', $lines),
             'disableHtmlEscape' => true,
         ];
@@ -246,6 +294,23 @@ class IrhpApplicationFeeSummary
     {
         return [
             'key' => self::APP_FEE_PER_PERMIT_HEADING,
+            'value' => self::getFeeAmountByType($data['fees'], $feeType),
+            'isCurrency' => true
+        ];
+    }
+
+    /**
+     * Get the single table row content for an issue fee per permit row
+     *
+     * @param array $data input data
+     * @param string $feeType
+     *
+     * @return array
+     */
+    private static function getIssueFeePerPermitRow(array $data, $feeType)
+    {
+        return [
+            'key' => self::ISSUE_FEE_PER_PERMIT_HEADING,
             'value' => self::getFeeAmountByType($data['fees'], $feeType),
             'isCurrency' => true
         ];
@@ -275,17 +340,19 @@ class IrhpApplicationFeeSummary
     }
 
     /**
-     * Get the single table row content for a total application fee per permit row based on emissions categories
+     * Get the single table row content for a total fee per permit row
      *
      * @param array $data input data
      * @param string $feeType
+     * @param string $key
      * @param TranslationHelperService $translator
      *
      * @return array
      */
-    private static function getEmissionsCatTotalApplicationFeeRow(
+    private static function getTotalFeeRow(
         array $data,
         $feeType,
+        $key,
         TranslationHelperService $translator
     ) {
         $feePerPermit = self::getFeeAmountByType($data['fees'], $feeType);
@@ -293,19 +360,18 @@ class IrhpApplicationFeeSummary
         $requiredEuro5 = $irhpPermitApplication['requiredEuro5'];
         $requiredEuro6 = $irhpPermitApplication['requiredEuro6'];
 
-        $totalApplicationFee = ($requiredEuro5 + $requiredEuro6) * $feePerPermit;
+        $totalFee = ($requiredEuro5 + $requiredEuro6) * $feePerPermit;
         $currencyFormatter = new CurrencyFormatter();
 
         $value =  $translator->translateReplace(
             'permits.page.fee.permit.fee.non-refundable',
             [
-                $currencyFormatter($totalApplicationFee)
+                $currencyFormatter($totalFee)
             ]
         );
 
         return [
-            'key' => $data['isUnderConsideration']
-                ? self::TOTAL_APPLICATION_FEE_PAID_HEADING : self::TOTAL_APPLICATION_FEE_HEADING,
+            'key' => $key,
             'value' => $value,
         ];
     }
@@ -320,10 +386,27 @@ class IrhpApplicationFeeSummary
      */
     private static function getFeeAmountByType(array $fees, $feeTypeId)
     {
+        $fee = self::getFeeByType($fees, $feeTypeId);
+
+        if (isset($fee)) {
+            return $fee['feeType']['fixedValue'];
+        }
+    }
+
+    /**
+     * Get the fee corresponding to the specified fee type
+     *
+     * @param array $fees
+     * @param string $feeTypeId
+     *
+     * @return array
+     */
+    private static function getFeeByType(array $fees, $feeTypeId)
+    {
         foreach ($fees as $fee) {
             $feeType = $fee['feeType'];
             if ($feeType['feeType']['id'] == $feeTypeId) {
-                return $feeType['fixedValue'];
+                return $fee;
             }
         }
     }
