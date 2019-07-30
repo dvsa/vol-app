@@ -606,4 +606,222 @@ class IrhpCheckAnswersTest extends TestCase
             ],
         ];
     }
+
+    /**
+     * @dataProvider dpTestMapForDisplayShortTerm
+     */
+    public function testMapForDisplayShortTerm($requiredEuro5, $requiredEuro6, $year, $expected)
+    {
+        $url = m::mock(Url::class);
+        $translationHelperService = m::mock(TranslationHelperService::class);
+
+        $irhpPermitApplications = [
+            0 => [
+                'requiredEuro5' => $requiredEuro5,
+                'requiredEuro6' => $requiredEuro6,
+                'irhpPermitWindow' => [
+                    'irhpPermitStock' => [
+                        'validTo' => $year . '-12-31',
+                    ]
+                ]
+            ],
+        ];
+
+        $input = $this->genericInput($irhpPermitApplications);
+        $output = $this->genericOutput('st-number-of-permits', $expected, false);
+
+        $translationHelperService->shouldReceive('translateReplace')
+            ->once()
+            ->with(
+                'permits.check-your-answers.no-of-permits.year',
+                [$year]
+            )
+            ->andReturn('year heading');
+        $translationHelperService->shouldReceive('translate')
+            ->with('permits.page.fee.emissions.category.euro5')
+            ->times($requiredEuro5 ? 1 : 0)
+            ->andReturn('Euro 5 minimum emission standard');
+        $translationHelperService->shouldReceive('translate')
+            ->with('permits.page.fee.emissions.category.euro6')
+            ->times($requiredEuro6 ? 1 : 0)
+            ->andReturn('Euro 6 minimum emission standard');
+        $translationHelperService->shouldReceive('translateReplace')
+            ->with(
+                'permits.page.fee.number.permits.line.multiple',
+                [$requiredEuro5, 'Euro 5 minimum emission standard']
+            )
+            ->times($requiredEuro5 ? 1 : 0)
+            ->andReturn($requiredEuro5 . ' permits for Euro 5 minimum emission standard');
+        $translationHelperService->shouldReceive('translateReplace')
+            ->with(
+                'permits.page.fee.number.permits.line.multiple',
+                [$requiredEuro6, 'Euro 6 minimum emission standard']
+            )
+            ->times($requiredEuro6 ? 1 : 0)
+            ->andReturn($requiredEuro6 . ' permits for Euro 6 minimum emission standard');
+
+        self::assertEquals($output, IrhpCheckAnswers::mapForDisplay($input, $translationHelperService, $url));
+    }
+
+    public function dpTestMapForDisplayShortTerm()
+    {
+        $requiredEuro5 = 3;
+        $requiredEuro6 = 7;
+
+        $yearHeading = '<strong>year heading</strong>';
+        $euro5Text = $requiredEuro5 . ' permits for Euro 5 minimum emission standard';
+        $euro6Text = $requiredEuro6 . ' permits for Euro 6 minimum emission standard';
+
+        return [
+            [
+                null,
+                $requiredEuro6,
+                2029,
+                [
+                    $yearHeading,
+                    $euro6Text,
+                ],
+            ],
+            [
+                0,
+                $requiredEuro6,
+                2029,
+                [
+                    $yearHeading,
+                    $euro6Text,
+                ],
+            ],
+            [
+                $requiredEuro5,
+                null,
+                2030,
+                [
+                    $yearHeading,
+                    $euro5Text,
+                ],
+            ],
+            [
+                $requiredEuro5,
+                null,
+                2030,
+                [
+                    $yearHeading,
+                    $euro5Text,
+                ],
+            ],
+            [
+                $requiredEuro5,
+                $requiredEuro6,
+                2030,
+                [
+                    $yearHeading,
+                    $euro5Text,
+                    $euro6Text,
+                ],
+            ],
+        ];
+    }
+
+    private function genericInput($irhpPermitApplications)
+    {
+        return [
+            'irhpPermitType' => [
+                'id' => 2,
+                'name' => ['description' => 'ECMT Short Term'],
+            ],
+            'licence' => [
+                'licNo' => 'OB1234567',
+                'trafficArea' => ['name' => 'North East of England'],
+            ],
+            'irhpPermitApplications' => $irhpPermitApplications,
+            'questionAnswerData' => [
+                [
+                    'slug' => 'custom-licence', //ignored
+                ],
+                [
+                    'slug' => 'generic.slug.1',
+                    'question' => 'generic.question.1',
+                    'answer' => 'generic.answer.1',
+                    'questionType' => 'generic.questionType.1',
+                    'route' => IrhpApplicationSection::ROUTE_QUESTION,
+                ],
+                [
+                    'slug' => 'st-number-of-permits', //will compute from irhpPermitApplications
+                ],
+                [
+                    'slug' => 'generic.slug.2',
+                    'question' => 'generic.question.2',
+                    'answer' => 'generic.answer.2',
+                    'questionType' => 'generic.questionType.2',
+                    'route' => IrhpApplicationSection::ROUTE_QUESTION,
+                ],
+                [
+                    'slug' => 'custom-check-answers', //ignored
+                ],
+                [
+                    'slug' => 'custom-declaration', //ignored
+                ],
+            ],
+            'applicationRef' =>'OB1234567 / 10003',
+            'canCheckAnswers' => 1,
+        ];
+    }
+
+    private function genericOutput($numPermitsSlug, $expectedNumPermits, $escapeNumPermits)
+    {
+        return [
+            'canCheckAnswers' => 1,
+            'answers' => [
+                [
+                    'question' => 'permits.page.fee.permit.type',
+                    'route' => null,
+                    'answer' => 'ECMT Short Term',
+                    'questionType' => null,
+                    'params' => [],
+                    'options' => [],
+                    'escape' => true,
+                ],
+                [
+                    'question' => 'permits.check-answers.page.question.licence',
+                    'route' => 'permits/application/licence',
+                    'answer' => [
+                        'OB1234567',
+                        'North East of England'
+                    ],
+                    'questionType' => null,
+                    'params' => [],
+                    'options' => [],
+                    'escape' => true,
+                ],
+                [
+                    'question' => 'generic.question.1',
+                    'route' => IrhpApplicationSection::ROUTE_QUESTION,
+                    'answer' => 'generic.answer.1',
+                    'questionType' => 'generic.questionType.1',
+                    'params' => ['slug' => 'generic.slug.1'],
+                    'options' => [],
+                    'escape' => true,
+                ],
+                [
+                    'question' => 'permits.irhp.application.question.no-of-permits',
+                    'route' => IrhpApplicationSection::ROUTE_QUESTION,
+                    'answer' => $expectedNumPermits,
+                    'questionType' => null,
+                    'params' => ['slug' => $numPermitsSlug],
+                    'options' => [],
+                    'escape' => $escapeNumPermits,
+                ],
+                [
+                    'question' => 'generic.question.2',
+                    'route' => IrhpApplicationSection::ROUTE_QUESTION,
+                    'answer' => 'generic.answer.2',
+                    'questionType' => 'generic.questionType.2',
+                    'params' => ['slug' => 'generic.slug.2'],
+                    'options' => [],
+                    'escape' => true,
+                ],
+            ],
+            'applicationRef' => 'OB1234567 / 10003',
+        ];
+    }
 }

@@ -3,6 +3,7 @@
 namespace Permits\Data\Mapper;
 
 use Common\Exception\ResourceNotFoundException;
+use Common\Util\Escape;
 use Permits\View\Helper\IrhpApplicationSection as Section;
 use Common\RefData;
 use Common\Service\Helper\TranslationHelperService;
@@ -14,6 +15,11 @@ class IrhpCheckAnswers
         'custom-licence',
         'custom-check-answers',
         'custom-declaration',
+    ];
+
+    const REQUIRED_PERMITS_SLUG = [
+        'st-number-of-permits',
+        'number-of-permits',
     ];
 
     /**
@@ -40,6 +46,24 @@ class IrhpCheckAnswers
         switch ($data['irhpPermitType']['id']) {
             case RefData::ECMT_REMOVAL_PERMIT_TYPE_ID:
                 $noOfPermits = [$data['permitsRequired']];
+                break;
+            case RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID:
+                $validToYear = date(
+                    'Y',
+                    strtotime($data['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock']['validTo'])
+                );
+
+                $permitsRequiredYearHeading = '<strong>' . Escape::html(
+                    $translator->translateReplace(
+                        'permits.check-your-answers.no-of-permits.year',
+                        [$validToYear]
+                    )
+                ) . '</strong>';
+
+                $noOfPermits = array_merge(
+                    [$permitsRequiredYearHeading],
+                    EcmtNoOfPermits::mapForDisplay($data['irhpPermitApplications'][0], $translator, $url)
+                );
                 break;
             default:
                 foreach ($data['irhpPermitApplications'] as $application) {
@@ -103,9 +127,21 @@ class IrhpCheckAnswers
 
                     $params = ['slug' => $answerData['slug']];
 
-                    //a special case is made for number of permits - sometimes there may be multiple countries/years
-                    if ($answerData['slug'] === 'number-of-permits') {
-                        $extraAnswers[] = static::permitsRequiredAnswer($noOfPermits, Section::ROUTE_QUESTION, $params);
+                    //special case for number of permits - sometimes there may be multiple countries/years/emissions
+                    if (in_array($answerData['slug'], self::REQUIRED_PERMITS_SLUG)) {
+                        //permits required for short terms is pre-escaped due to containing HTML tags
+                        $escape = true;
+
+                        if ($data['irhpPermitType']['id'] === RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID) {
+                            $escape = false;
+                        }
+
+                        $extraAnswers[] = static::permitsRequiredAnswer(
+                            $noOfPermits,
+                            Section::ROUTE_QUESTION,
+                            $params,
+                            $escape
+                        );
                         continue;
                     }
 
@@ -132,20 +168,24 @@ class IrhpCheckAnswers
      * @param array  $noOfPermits number of permits required (sometimes multiple years/countries so multiple lines)
      * @param string $route       route used to change the answer
      * @param array  $params      route params
+     * @param bool   $escape      whether value should be escaped by the answer formatter
      *
      * @return array
      */
     private static function permitsRequiredAnswer(
         array $noOfPermits,
         string $route = Section::ROUTE_NO_OF_PERMITS,
-        array $params = []
+        array $params = [],
+        bool $escape = true
     ) {
         return static::answer(
             'permits.irhp.application.question.no-of-permits',
             $noOfPermits,
             $route,
             null,
-            $params
+            $params,
+            [],
+            $escape
         );
     }
 
