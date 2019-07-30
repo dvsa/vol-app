@@ -31,6 +31,12 @@ return [
             'name' => 'permitNumberWithPrefix'
         ],
         [
+            'title' => 'Emissions Category',
+            'name' => 'emissionsCategory',
+            'stack' => 'irhpPermitRange->emissionsCategory->description',
+            'formatter' => 'StackValue',
+        ],
+        [
             'title' => 'Operator Name',
             'formatter' => 'IrhpPermitOrganisationName'
         ],
