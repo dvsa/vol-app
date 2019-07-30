@@ -171,6 +171,13 @@ class ConditionalDisplayConfig
         ],
     ];
 
+    const IRHP_APP_HAS_OUTSTANDING_FEES = [
+        IrhpAppDataSource::DATA_KEY => [
+            'key' => 'hasOutstandingFees',
+            'value' => true
+        ],
+    ];
+
     const IRHP_APP_IS_AWAITING_FEE = [
         IrhpAppDataSource::DATA_KEY => [
             'key' => 'isAwaitingFee',

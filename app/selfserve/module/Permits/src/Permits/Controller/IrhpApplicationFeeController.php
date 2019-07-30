@@ -13,6 +13,7 @@ use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
 use Olcs\Controller\AbstractSelfserveController;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
+use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Controller\Config\Form\FormConfig;
@@ -42,7 +43,8 @@ class IrhpApplicationFeeController extends AbstractSelfserveController implement
 
     protected $conditionalDisplayConfig = [
         'default' => ConditionalDisplayConfig::IRHP_APP_NOT_SUBMITTED,
-        'payment-result' => ConditionalDisplayConfig::IRHP_APP_SUBMITTED,
+        'payment' => ConditionalDisplayConfig::IRHP_APP_HAS_OUTSTANDING_FEES,
+        'payment-result' => ConditionalDisplayConfig::IRHP_APP_HAS_OUTSTANDING_FEES,
     ];
 
     protected $formConfig = [
@@ -103,10 +105,10 @@ class IrhpApplicationFeeController extends AbstractSelfserveController implement
         $dto = PayOutstandingFees::create($dtoData);
         $response = $this->handleCommand($dto);
 
+        $errorMessage = !$response->isOk() ? 'feeNotPaidError' : '';
         $messages = $response->getResult()['messages'];
 
         $translateHelper = $this->getServiceLocator()->get('Helper\Translation');
-        $errorMessage = '';
         foreach ($messages as $message) {
             if (is_array($message) && array_key_exists(RefData::ERR_WAIT, $message)) {
                 $errorMessage = $translateHelper->translate('payment.error.15sec');
@@ -118,14 +120,7 @@ class IrhpApplicationFeeController extends AbstractSelfserveController implement
         }
         if ($errorMessage !== '') {
             $this->addErrorMessage($errorMessage);
-            return $this->redirect()
-                ->toRoute(IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $id]);
-        }
-
-        if (!$response->isOk()) {
-            $this->addErrorMessage('feeNotPaidError');
-            return $this->redirect()
-                ->toRoute(IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $id]);
+            return $this->redirectOnError();
         }
 
         // Look up the new payment in order to get the redirect data
@@ -181,17 +176,14 @@ class IrhpApplicationFeeController extends AbstractSelfserveController implement
                         ['query' => ['receipt_reference' => $this->params()->fromQuery('receipt_reference')]]
                     );
             case RefData::TRANSACTION_STATUS_CANCELLED:
-                return $this->redirect()
-                    ->toRoute(IrhpApplicationSection::ROUTE_FEE, ['id' => $id]);
             case RefData::TRANSACTION_STATUS_FAILED:
-                return $this->redirect()
-                    ->toRoute(IrhpApplicationSection::ROUTE_FEE, ['id' => $id]);
+                return $this->redirectOnError();
             default:
                 break;
         }
 
         return $this->redirect()
-            ->toRoute(IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $id]);
+            ->toRoute(IrhpApplicationSection::ROUTE_PERMIT);
     }
 
     /**
@@ -202,5 +194,15 @@ class IrhpApplicationFeeController extends AbstractSelfserveController implement
         if (!$response->isOk()) {
             $this->addErrorMessage('payment-failed');
         }
+    }
+
+    protected function redirectOnError()
+    {
+        $irhpAppData = $this->data[IrhpAppDataSource::DATA_KEY];
+
+        $route = $irhpAppData['isAwaitingFee']
+            ? IrhpApplicationSection::ROUTE_AWAITING_FEE : IrhpApplicationSection::ROUTE_FEE;
+
+        return $this->redirect()->toRoute($route, ['id' => $irhpAppData['id']]);
     }
 }
