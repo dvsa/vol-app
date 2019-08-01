@@ -7,6 +7,7 @@ use Permits\Controller\Config\DataSource\AvailableTypes;
 use Permits\Controller\Config\DataSource\AvailableYears;
 use Permits\Controller\Config\DataSource\OpenWindows;
 use Permits\Controller\Config\DataSource\PermitApplication as PermitAppDataSource;
+use Permits\Controller\Config\DataSource\PermitsAvailable;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
 use Permits\View\Helper\EcmtSection;
 use Permits\View\Helper\IrhpApplicationSection;
@@ -58,6 +59,18 @@ class ConditionalDisplayConfig
         IrhpAppDataSource::DATA_KEY => [
             'key' => 'isNotYetSubmitted',
             'value' => true
+        ],
+    ];
+
+    const IRHP_APP_CAN_PAY_APP_FEE =  [
+        IrhpAppDataSource::DATA_KEY => [
+            'key' => 'isNotYetSubmitted',
+            'value' => true
+        ],
+        PermitsAvailable::DATA_KEY => [
+            'key' => 'permitsAvailable',
+            'value' => true,
+            'route' => IrhpApplicationSection::ROUTE_WINDOW_CLOSED,
         ],
     ];
 
@@ -134,6 +147,11 @@ class ConditionalDisplayConfig
             'value' => true,
             'route' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
         ],
+        PermitsAvailable::DATA_KEY => [
+            'key' => 'permitsAvailable',
+            'value' => true,
+            'route' => IrhpApplicationSection::ROUTE_WINDOW_CLOSED,
+        ],
     ];
 
     const IRHP_APP_CAN_BE_CANCELLED = [
@@ -196,6 +214,11 @@ class ConditionalDisplayConfig
         IrhpAppDataSource::DATA_KEY => [
             'key' => 'canMakeDeclaration',
             'value' => true
+        ],
+        PermitsAvailable::DATA_KEY => [
+            'key' => 'permitsAvailable',
+            'value' => true,
+            'route' => IrhpApplicationSection::ROUTE_WINDOW_CLOSED,
         ],
     ];
 

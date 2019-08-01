@@ -12,9 +12,9 @@ use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees;
 use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
 use Olcs\Controller\AbstractSelfserveController;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
+use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
-use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
@@ -42,7 +42,7 @@ class IrhpApplicationFeeController extends AbstractSelfserveController implement
     ];
 
     protected $conditionalDisplayConfig = [
-        'default' => ConditionalDisplayConfig::IRHP_APP_NOT_SUBMITTED,
+        'default' => ConditionalDisplayConfig::IRHP_APP_CAN_PAY_APP_FEE,
         'payment' => ConditionalDisplayConfig::IRHP_APP_HAS_OUTSTANDING_FEES,
         'payment-result' => ConditionalDisplayConfig::IRHP_APP_HAS_OUTSTANDING_FEES,
     ];

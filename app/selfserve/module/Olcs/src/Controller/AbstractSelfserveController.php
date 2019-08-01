@@ -14,6 +14,7 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Olcs\Controller\Config\DataSource\DataSourceInterface;
 use Olcs\Logging\Log\Logger;
 use ReflectionMethod;
+use Zend\Http\PhpEnvironment\Response as PhpEnvironmentResponse;
 use Zend\Http\Response as HttpResponse;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\ViewModel;
@@ -173,7 +174,12 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
 
         /** @todo find a better place for these */
         $this->retrieveData();
-        $this->checkConditionalDisplay();
+
+        $response = $this->checkConditionalDisplay();
+        if ($response instanceof PhpEnvironmentResponse) {
+            return $response;
+        }
+
         $this->mergeTemplateVars();
         $this->retrieveForms();
         $this->retrieveTables();

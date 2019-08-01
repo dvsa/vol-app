@@ -12,6 +12,7 @@ use Permits\Controller\Config\DataSource\IrhpMaxStockPermits as IrhpMaxStockPerm
 use Permits\Controller\Config\DataSource\ValidEcmtPermits as ValidEcmtPermitsDataSource;
 use Permits\Controller\Config\DataSource\UnpaidEcmtPermits as UnpaidEcmtPermitsDataSource;
 use Permits\Controller\Config\DataSource\ValidIrhpPermits as ValidIrhpPermitsDataSource;
+use Permits\Controller\Config\DataSource\PermitsAvailable as PermitsAvailableDataSource;
 use Permits\Data\Mapper\FeeList as FeeListMapper;
 use Permits\Data\Mapper\ApplicationFees as ApplicationFeesMapper;
 use Permits\Data\Mapper\AcceptOrDeclinePermits as AcceptOrDeclineMapper;
@@ -166,6 +167,7 @@ class DataSourceConfig
             'mapper' => IrhpApplicationFeeSummary::class
         ],
         IrhpFeeBreakdownDataSource::class => [],
+        PermitsAvailableDataSource::class => [],
     ];
 
     const IRHP_APP_UNDER_CONSIDERATION = [
@@ -195,6 +197,12 @@ class DataSourceConfig
         IrhpAppDataSource::class => [
             'mapper' => IrhpCheckAnswersMapper::class
         ],
+        PermitsAvailableDataSource::class => [],
+    ];
+
+    const IRHP_APP_DECLARATION = [
+        IrhpAppDataSource::class => [],
+        PermitsAvailableDataSource::class => [],
     ];
 
     const IRHP_APP_WITH_MAX_PERMITS_BY_STOCK = [
