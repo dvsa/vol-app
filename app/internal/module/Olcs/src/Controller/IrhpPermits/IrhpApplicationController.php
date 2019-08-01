@@ -188,7 +188,6 @@ class IrhpApplicationController extends AbstractInternalController implements
      */
     public function editAction()
     {
-        $this->getServiceLocator()->get('Navigation')->findOneBy('id', 'licence_irhp_applications-fees')->setVisible(0);
         $request = $this->getRequest();
         if ($request->isPost() && array_key_exists('back', (array)$this->params()->fromPost()['form-actions'])) {
             return $this->permitDashRedirect();

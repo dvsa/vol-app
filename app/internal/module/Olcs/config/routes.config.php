@@ -870,7 +870,7 @@ $routes = [
                 'options' => [
                     'route' => 'irhp-application/:irhpAppId/fees[/]',
                     'constraints' => [
-                        'permitid' => '[0-9]+',
+                        'irhpAppId' => '[0-9]+',
                     ],
                     'defaults' => [
                         'controller' => IrhpApplicationFeesController::class,

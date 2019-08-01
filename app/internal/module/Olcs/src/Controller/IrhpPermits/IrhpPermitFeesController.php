@@ -13,17 +13,9 @@ use Common\Util\IsEcmtId;
  */
 class IrhpPermitFeesController extends AbstractIrhpPermitController
 {
-    use FeesActionTrait {
-        feesAction as traitFeesAction;
-    }
-    use GenericReceipt, IrhpFeesTrait;
-
-    public function feesAction()
-    {
-        $navigation = $this->getServiceLocator()->get('Navigation');
-        $navigation->findOneBy('id', 'licence_irhp_permits-fees')->setActive();
-        return $this->traitFeesAction();
-    }
+    use FeesActionTrait,
+        GenericReceipt,
+        IrhpFeesTrait;
 
     /**
      * Route (prefix) for fees action redirects

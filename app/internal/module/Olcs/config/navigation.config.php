@@ -702,11 +702,8 @@ $nav = [
                                 [
                                     'id' => 'licence_irhp_applications-fees',
                                     'label' => 'Fees',
-                                    'route' => 'licence/irhp-fees/table',
+                                    'route' => 'licence/irhp-application-fees/table',
                                     'use_route_match' => true,
-                                    'params' => [
-                                        'permitid' => null
-                                    ],
                                 ],
                                 [
                                     'id' => 'licence_irhp_applications-cancel',
