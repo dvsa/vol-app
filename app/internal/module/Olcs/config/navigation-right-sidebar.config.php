@@ -358,7 +358,7 @@ return [
                         ],
                         [
                             'id' => 'irhp-application-decisions-grant',
-                            'label' => 'Grant',
+                            'label' => 'Grant application',
                             'route' => 'licence/irhp-application/application',
                             'params' => [
                                 'action' => 'grant'
@@ -368,7 +368,7 @@ return [
                         ],
                         [
                             'id' => 'irhp-application-decisions-withdraw',
-                            'label' => 'Withdraw',
+                            'label' => 'Withdraw application',
                             'route' => 'licence/irhp-application/application',
                             'params' => [
                                 'action' => 'withdraw'

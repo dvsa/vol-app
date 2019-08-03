@@ -65,10 +65,13 @@ class IrhpApplicationFurnitureTest extends TestCase
         }
     }
 
-    public function testOnIrhpPermit()
+    /**
+     * @dataProvider dpOnIrhpApplicationFurniture
+     */
+    public function testOnIrhpApplicationFurniture($data, $expected)
     {
         $irhpApplicationId = 2;
-        $irhpApplication = [
+        $irhpAppData = [
             'id' => $irhpApplicationId,
             'status' => [
                 'id' => RefData::PERMIT_APP_STATUS_NOT_YET_SUBMITTED
@@ -86,12 +89,9 @@ class IrhpApplicationFurnitureTest extends TestCase
                     'description' => 'Annual Bilateral'
                 ]
             ],
-            'canBeCancelled' => true,
-            'canBeSubmitted' => true,
-            'canBeWithdrawn' => true,
-            'canBeGranted' => true,
-            'hasOutstandingFees' => false,
         ];
+
+        $irhpApplication = array_merge($irhpAppData, $data);
 
         $mockUrl = m::mock(UrlHelperService::class);
         $mockUrl->shouldReceive('__invoke');
@@ -158,20 +158,17 @@ class IrhpApplicationFurnitureTest extends TestCase
         $mockSidebarNavigation = m::mock('Zend\Navigation\Navigation');
         $mockSidebarNavigation
             ->shouldReceive('findOneBy')->once()->with('id', 'irhp-application-quick-actions-cancel')->andReturn(
-                m::mock()->shouldReceive('setVisible')->once()->with(true)->getMock()
+                m::mock()->shouldReceive('setVisible')->once()->with($expected['isCancelVisible'])->getMock()
             )
             ->shouldReceive('findOneBy')->once()->with('id', 'irhp-application-decisions-submit')->andReturn(
-                m::mock()->shouldReceive('setVisible')->once()->with(true)->getMock()
+                m::mock()->shouldReceive('setVisible')->once()->with($expected['isSubmitVisible'])->getMock()
             )
             ->shouldReceive('findOneBy')->once()->with('id', 'irhp-application-decisions-grant')->andReturn(
-                m::mock()->shouldReceive('setVisible')->once()->with(true)->getMock()
+                m::mock()->shouldReceive('setVisible')->once()->with($expected['isGrantVisible'])->getMock()
             )
             ->shouldReceive('findOneBy')->once()->with('id', 'irhp-application-decisions-withdraw')->andReturn(
-                m::mock()->shouldReceive('setVisible')->once()->with(true)->getMock()
+                m::mock()->shouldReceive('setVisible')->once()->with($expected['isWithdrawVisible'])->getMock()
             );
-
-
-
 
         $this->sut->setNavigationService($mockNavigation);
         $this->sut->setSidebarNavigationService($mockSidebarNavigation);
@@ -185,6 +182,72 @@ class IrhpApplicationFurnitureTest extends TestCase
         $event->setValue($irhpApplicationId);
 
         $this->sut->onIrhpApplicationFurniture($event);
+    }
+
+    public function dpOnIrhpApplicationFurniture()
+    {
+        return [
+            [
+                [
+                    'canBeCancelled' => false,
+                    'canBeSubmitted' => false,
+                    'canBeWithdrawn' => false,
+                    'canBeDeclined' => false,
+                    'canBeGranted' => false,
+                ],
+                [
+                    'isCancelVisible' => false,
+                    'isSubmitVisible' => false,
+                    'isWithdrawVisible' => false,
+                    'isGrantVisible' => false,
+                ]
+            ],
+            [
+                [
+                    'canBeCancelled' => false,
+                    'canBeSubmitted' => false,
+                    'canBeWithdrawn' => true,
+                    'canBeDeclined' => false,
+                    'canBeGranted' => false,
+                ],
+                [
+                    'isCancelVisible' => false,
+                    'isSubmitVisible' => false,
+                    'isWithdrawVisible' => true,
+                    'isGrantVisible' => false,
+                ]
+            ],
+            [
+                [
+                    'canBeCancelled' => false,
+                    'canBeSubmitted' => false,
+                    'canBeWithdrawn' => false,
+                    'canBeDeclined' => true,
+                    'canBeGranted' => false,
+                ],
+                [
+                    'isCancelVisible' => false,
+                    'isSubmitVisible' => false,
+                    'isWithdrawVisible' => true,
+                    'isGrantVisible' => false,
+                ]
+            ],
+            [
+                [
+                    'canBeCancelled' => true,
+                    'canBeSubmitted' => true,
+                    'canBeWithdrawn' => true,
+                    'canBeDeclined' => true,
+                    'canBeGranted' => true,
+                ],
+                [
+                    'isCancelVisible' => true,
+                    'isSubmitVisible' => true,
+                    'isWithdrawVisible' => true,
+                    'isGrantVisible' => true,
+                ]
+            ],
+        ];
     }
 
     public function testCreateService()

@@ -26,7 +26,7 @@ class IrhpApplicationWithdraw
     /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
-     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ConfirmFormActions")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\WithdrawFormActions")
      */
     public $formActions = null;
 }
