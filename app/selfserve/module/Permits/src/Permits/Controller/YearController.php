@@ -34,9 +34,13 @@ class YearController extends AbstractSelfserveController implements ToggleAwareI
 
     protected $templateVarsConfig = [
         'question' => [
-            'browserTitle' => 'permits.page.year.browser.title',
-            'question' => 'permits.page.year.question',
+            'browserTitle' => 'permits.page.year.browser.title.one-year-available',
+            'question' => 'permits.page.year.question.one-year-available',
             'hint' => 'permits.page.year.hint.one-year-available',
+            'guidance' => [
+                'value' => 'permits.page.year.ecmt-short-term.guidance',
+                'disableHtmlEscape' => true,
+            ],
             'backUri' => IrhpApplicationSection::ROUTE_TYPE,
             'cancelUri' => IrhpApplicationSection::ROUTE_PERMITS,
         ]

@@ -4,9 +4,11 @@ namespace PermitsTest\Data\Mapper;
 
 use Common\Form\Form;
 use Common\RefData;
+use Common\Service\Helper\TranslationHelperService;
 use Permits\Data\Mapper\AvailableYears;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Mockery as m;
+use RuntimeException;
 
 /**
  * AvailableYearsTest
@@ -14,13 +16,67 @@ use Mockery as m;
 class AvailableYearsTest extends TestCase
 {
     /**
-     * @dataProvider dpTestMapForFormOptions
+     * @dataProvider dpTestExceptionNotEcmtShortTerm
      */
-    public function testMapForFormOptions($data, $expected, $expectedValueOptions)
+    public function testExceptionNotEcmtShortTerm($typeId)
     {
-        $mockForm = m::mock(Form::class);
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage(AvailableYears::ERR_UNSUPPORTED);
 
-        $mockForm->shouldReceive('get')
+        $data = [
+            'type' => $typeId
+        ];
+
+        AvailableYears::mapForFormOptions(
+            $data,
+            m::mock(Form::class),
+            m::mock(TranslationHelperService::class)
+        );
+    }
+
+    public function dpTestExceptionNotEcmtShortTerm()
+    {
+        return [
+            [RefData::ECMT_PERMIT_TYPE_ID],
+            [RefData::ECMT_REMOVAL_PERMIT_TYPE_ID],
+            [RefData::IRHP_BILATERAL_PERMIT_TYPE_ID],
+            [RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID],
+        ];
+    }
+
+    /**
+     * @dataProvider dpTestSingleOption
+     */
+    public function testSingleOption($year, $optionHintTranslationKey)
+    {
+        $data = [
+            'type' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
+            'years' => [
+                'years' => [$year]
+            ],
+            'hint' => 'permits.page.year.hint.single-year-available',
+            'question' => 'permits.page.year.question.single-year-available',
+            'browserTitle' => 'permits.page.year.browser.title.single-year-available',
+        ];
+
+        $translatedHint = 'Translated hint';
+
+        $translator = m::mock(TranslationHelperService::class);
+        $translator->shouldReceive('translateReplace')
+            ->with($optionHintTranslationKey, [$year])
+            ->andReturn($translatedHint);
+
+        $expectedValueOptions = [
+            [
+                'value' => $year,
+                'label' => $year,
+                'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
+                'hint' => $translatedHint,
+            ]
+        ];
+
+        $form = m::mock(Form::class);
+        $form->shouldReceive('get')
             ->with('fields')
             ->once()
             ->andReturnSelf()
@@ -32,141 +88,93 @@ class AvailableYearsTest extends TestCase
             ->with($expectedValueOptions)
             ->once();
 
-        self::assertEquals($expected, AvailableYears::mapForFormOptions($data, $mockForm));
+        $returnedData = AvailableYears::mapForFormOptions($data, $form, $translator);
+
+        $this->assertEquals($returnedData, $data);
     }
 
-    public function dpTestMapForFormOptions()
+    public function dpTestSingleOption()
     {
         return [
-            'empty list' => [
-                'data' => [
-                    'type' => RefData::ECMT_PERMIT_TYPE_ID,
-                    'years' => [
-                        'years' => []
-                    ]
-                ],
-                'expected' => [
-                    'type' => RefData::ECMT_PERMIT_TYPE_ID,
-                    'years' => [
-                        'years' => []
-                    ]
-                ],
-                'expectedValueOptions' => [],
-            ],
-            'list with data' => [
-                'data' => [
-                    'type' => RefData::ECMT_PERMIT_TYPE_ID,
-                    'years' => [
-                        'years' => [
-                            2019, 2020
-                        ],
-                    ]
-                ],
-                'expected' => [
-                    'type' => RefData::ECMT_PERMIT_TYPE_ID,
-                    'years' => [
-                        'years' => [
-                            2019, 2020
-                        ],
-                    ],
-                    'hint' => 'permits.page.year.hint.multiple-years-available'
-                ],
-                'expectedValueOptions' => [
-                    [
-                        'value' => 2019,
-                        'label' => 2019,
-                        'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s']
-                    ],
-                    [
-                        'value' => 2020,
-                        'label' => 2020,
-                        'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s']
-                    ],
-                ],
-            ],
-            'list with one_year' => [
-                'data' => [
-                    'type' => RefData::ECMT_PERMIT_TYPE_ID,
-                    'years' => [
-                        'years' => [
-                            2019
-                        ],
+            [2018, 'permits.page.year.ecmt-short-term.option.hint.not-2019'],
+            [2019, 'permits.page.year.ecmt-short-term.option.hint.2019'],
+            [2020, 'permits.page.year.ecmt-short-term.option.hint.not-2019'],
+        ];
+    }
 
-                    ]
-                ],
-                'expected' => [
-                    'type' => RefData::ECMT_PERMIT_TYPE_ID,
-                    'years' => [
-                        'years' => [
-                            2019
-                        ],
-                    ],
-                ],
-                'expectedValueOptions' => [
-                    [
-                        'value' => 2019,
-                        'label' => 2019,
-                        'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s']
-                    ]
-                ],
+    public function testMultipleOptions()
+    {
+        $data = [
+            'type' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
+            'years' => [
+                'years' => [2018, 2019, 2020]
             ],
-            'ECMT Short-term - list with data' => [
-                'data' => [
-                    'type' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
-                    'years' => [
-                        'years' => [
-                            2019, 2020
-                        ],
-                    ]
-                ],
-                'expected' => [
-                    'type' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
-                    'years' => [
-                        'years' => [
-                            2019, 2020
-                        ],
-                    ],
-                    'hint' => 'permits.page.year.hint.multiple-years-available'
-                ],
-                'expectedValueOptions' => [
-                    [
-                        'value' => 2019,
-                        'label' => 'permits.page.year.ecmt-short-term.label.2019',
-                        'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s']
-                    ],
-                    [
-                        'value' => 2020,
-                        'label' => 2020,
-                        'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s']
-                    ],
-                ],
-            ],
-            'ECMT Short-term - list with one_year' => [
-                'data' => [
-                    'type' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
-                    'years' => [
-                        'years' => [
-                            2019
-                        ],
+            'hint' => 'permits.page.year.hint.single-year-available',
+            'question' => 'permits.page.year.question.single-year-available',
+            'browserTitle' => 'permits.page.year.browser.title.single-year-available',
+        ];
 
-                    ]
-                ],
-                'expected' => [
-                    'type' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
-                    'years' => [
-                        'years' => [
-                            2019
-                        ],
-                    ],
-                ],
-                'expectedValueOptions' => [
-                    [
-                        'value' => 2019,
-                        'label' => 'permits.page.year.ecmt-short-term.label.2019',
-                        'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s']
-                    ]
-                ],
+        $translatedHint2018 = 'Translated hint 2018';
+        $translatedHint2019 = 'Translated hint 2019';
+        $translatedHint2020 = 'Translated hint 2020';
+
+        $translator = m::mock(TranslationHelperService::class);
+        $translator->shouldReceive('translateReplace')
+            ->with('permits.page.year.ecmt-short-term.option.hint.not-2019', [2018])
+            ->andReturn($translatedHint2018);
+        $translator->shouldReceive('translateReplace')
+            ->with('permits.page.year.ecmt-short-term.option.hint.2019', [2019])
+            ->andReturn($translatedHint2019);
+        $translator->shouldReceive('translateReplace')
+            ->with('permits.page.year.ecmt-short-term.option.hint.not-2019', [2020])
+            ->andReturn($translatedHint2020);
+
+        $expectedValueOptions = [
+            [
+                'value' => 2018,
+                'label' => 2018,
+                'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
+                'hint' => $translatedHint2018,
+            ],
+            [
+                'value' => 2019,
+                'label' => 2019,
+                'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
+                'hint' => $translatedHint2019,
+            ],
+            [
+                'value' => 2020,
+                'label' => 2020,
+                'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
+                'hint' => $translatedHint2020,
             ],
         ];
+
+        $form = m::mock(Form::class);
+        $form->shouldReceive('get')
+            ->with('fields')
+            ->once()
+            ->andReturnSelf()
+            ->shouldReceive('get')
+            ->with('year')
+            ->once()
+            ->andReturnSelf()
+            ->shouldReceive('setValueOptions')
+            ->with($expectedValueOptions)
+            ->once();
+
+        $expectedData = [
+            'type' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
+            'years' => [
+                'years' => [2018, 2019, 2020]
+            ],
+            'hint' => 'permits.page.year.hint.multiple-years-available',
+            'question' => 'permits.page.year.question.multiple-years-available',
+            'browserTitle' => 'permits.page.year.browser.title.multiple-years-available',
+        ];
+
+        $returnedData = AvailableYears::mapForFormOptions($data, $form, $translator);
+
+        $this->assertEquals($expectedData, $returnedData);
     }
 }
