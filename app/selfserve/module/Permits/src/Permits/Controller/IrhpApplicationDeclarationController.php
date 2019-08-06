@@ -11,7 +11,6 @@ use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
-
 use Permits\View\Helper\IrhpApplicationSection;
 
 class IrhpApplicationDeclarationController extends AbstractSelfserveController implements ToggleAwareInterface
@@ -21,7 +20,7 @@ class IrhpApplicationDeclarationController extends AbstractSelfserveController i
     ];
 
     protected $dataSourceConfig = [
-        'default' => DataSourceConfig::IRHP_APP
+        'default' => DataSourceConfig::IRHP_APP_DECLARATION
     ];
 
     protected $conditionalDisplayConfig = [

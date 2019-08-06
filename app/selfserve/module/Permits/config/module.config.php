@@ -31,6 +31,7 @@ use Permits\Controller\IrhpWithdrawController;
 use Permits\Controller\IrhpAwaitingFeeController;
 use Permits\Controller\IrhpDeclineController;
 use Permits\Controller\IrhpValidPermitsController;
+use Permits\Controller\IrhpWindowClosedController;
 use Permits\Controller\QaController;
 use Permits\Controller\QaControllerFactory;
 use Permits\Controller\YearController;
@@ -67,6 +68,7 @@ return [
         IrhpApplicationFeeController::class => IrhpApplicationFeeController::class,
         IrhpUnderConsiderationController::class => IrhpUnderConsiderationController::class,
         IrhpValidPermitsController::class => IrhpValidPermitsController::class,
+        IrhpWindowClosedController::class => IrhpWindowClosedController::class,
         RestrictedCountriesController::class => RestrictedCountriesController::class,
         YearController::class => YearController::class,
     ],
@@ -388,6 +390,17 @@ return [
                       ],
                       'constraints' => [
                           'type' => '[0-9]+',
+                      ],
+                  ],
+                  'may_terminate' => false,
+              ],
+              'window-closed' => [
+                  'type'    => 'segment',
+                  'options' => [
+                      'route'    => '/window-closed[/]',
+                      'defaults' => [
+                          'controller'    => IrhpWindowClosedController::class,
+                          'action'        => 'generic',
                       ],
                   ],
                   'may_terminate' => false,
