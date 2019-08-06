@@ -34,6 +34,7 @@ return [
         [
             'title' => 'Description',
             'name' => 'description',
+            'sort' => 'description',
             'formatter' => function ($row) {
                 $column['formatter'] = 'DocumentDescription';
                 return $this->callFormatter(
@@ -45,23 +46,35 @@ return [
         [
             'title' => 'Category',
             'name' => 'category',
+            'sort' => 'category',
             'formatter' => function ($row) {
-                return empty($row['category']['description']) ? '' : Escape::html($row['category']['description']);
+                return empty($row['categoryName']) ? '' : Escape::html($row['categoryName']);
             },
         ],
         [
             'title' => 'Subcategory',
             'name' => 'subCategory',
+            'sort' => 'subCategory',
             'formatter' => function ($row) {
-                return empty($row['subCategory']['subCategoryName']) ? '' : Escape::html($row['subCategory']['subCategoryName']);
+                return empty($row['subCategoryName']) ? '' : Escape::html($row['subCategoryName']);
             },
         ],
         [
-        'title' => 'Identifier',
-        'name' => 'filename',
-        'formatter' => function ($row) {
-            return Escape::html($row['document']['identifier']);
-        },
+            'title' => 'Identifier',
+            'name' => 'filename',
+            'sort' => 'filename',
+            'formatter' => function ($row) {
+                return Escape::html($row['filename']);
+            },
+        ],
+        [
+            'title' => 'Edited date',
+            'name' => 'lastModifiedOn',
+            'sort' => 'lastModifiedOn',
+            'formatter' => function ($row, $column) {
+                $column['formatter'] = 'Date';
+                return empty($row['lastModifiedOn']) ? 'N/A' : $this->callFormatter($column, $row);
+            }
         ],
         [
             'title' => '',

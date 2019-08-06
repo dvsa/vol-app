@@ -8,6 +8,7 @@ use Common\Service\AntiVirus\Scan;
 use Common\Util\FileContent;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
+use Admin\Form\Model\Form\DocTemplateFilter;
 use Zend\Form\Form;
 use Zend\Http\Response;
 use Zend\View\Model\ViewModel;
@@ -35,6 +36,7 @@ class DocumentTemplateController extends AbstractInternalController implements L
     protected $formClass = DocumentTemplateUploadForm::class;
     protected $addFormClass = DocumentTemplateUploadForm::class;
     protected $mapperClass = DocumentTemplateMapper::class;
+    protected $filterForm = DocTemplateFilter::class;
 
     protected $createCommand = CreateDto::class;
     protected $updateCommand = UpdateDto::class;
