@@ -12,22 +12,10 @@ use Olcs\Controller\Traits\FeesActionTrait;
  */
 class IrhpApplicationFeesController extends AbstractIrhpPermitController
 {
-    use FeesActionTrait {
-        feesAction as traitFeesAction;
-    }
-    use GenericReceipt, IrhpFeesTrait;
-
-    /**
-     * Overridden trait method to set applicable navigation ids for the irhp fees list page
-     *
-     * @return mixed
-     */
-    public function feesAction()
-    {
-        $navigation = $this->getServiceLocator()->get('Navigation');
-        $navigation->findOneBy('id', 'licence_fees')->setActive();
-        return $this->traitFeesAction();
-    }
+    use FeesActionTrait,
+        GenericReceipt,
+        IrhpFeesTrait,
+        ShowIrhpApplicationNavigationTrait;
 
     /**
      * Route (prefix) for fees action redirects
