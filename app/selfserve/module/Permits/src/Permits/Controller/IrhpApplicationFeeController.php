@@ -44,7 +44,7 @@ class IrhpApplicationFeeController extends AbstractSelfserveController implement
     protected $conditionalDisplayConfig = [
         'default' => ConditionalDisplayConfig::IRHP_APP_CAN_PAY_APP_FEE,
         'payment' => ConditionalDisplayConfig::IRHP_APP_HAS_OUTSTANDING_FEES,
-        'payment-result' => ConditionalDisplayConfig::IRHP_APP_HAS_OUTSTANDING_FEES,
+        'paymentresult' => ConditionalDisplayConfig::IRHP_APP_HAS_OUTSTANDING_FEES,
     ];
 
     protected $formConfig = [
