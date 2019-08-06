@@ -6,6 +6,7 @@ use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\Create;
 use Dvsa\Olcs\Transfer\Command\Permits\CreateEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\ActiveApplication;
+use Dvsa\Olcs\Transfer\Query\IrhpApplication\PermitsAvailable;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\PermitsAvailableByYear;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
@@ -147,10 +148,16 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
             ]
         )) {
             if ($irhpPermitTypeID == RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID) {
+                if (isset($this->routeParams['id'])) {
+                    $irhpApplicationId = $this->routeParams['id'];
+                    $permitsAvailableCommand = PermitsAvailable::create(['id' => $irhpApplicationId]);
+                } else {
+                    $year = $params['year'];
+                    $permitsAvailableCommand = PermitsAvailableByYear::create(['year' => $year]);
+                }
+
                 $permitsAvailable = $this->handleResponse(
-                    $this->handleQuery(
-                        PermitsAvailableByYear::create(['year' => $params['year']])
-                    )
+                    $this->handleQuery($permitsAvailableCommand)
                 );
 
                 if (!$permitsAvailable['permitsAvailable']) {
