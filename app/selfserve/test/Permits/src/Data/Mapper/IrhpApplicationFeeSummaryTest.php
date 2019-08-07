@@ -98,8 +98,115 @@ class IrhpApplicationFeeSummaryTest extends \PHPUnit\Framework\TestCase
         return [
             [RefData::IRHP_BILATERAL_PERMIT_TYPE_ID],
             [RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID],
-            [RefData::ECMT_REMOVAL_PERMIT_TYPE_ID],
         ];
+    }
+
+    public function testMapForDisplayEcmtRemoval()
+    {
+        $applicationRef = 'OB1234567/1';
+        $dateReceived = '2020-12-25';
+        $permitTypeId = RefData::ECMT_REMOVAL_PERMIT_TYPE_ID;
+        $permitTypeDesc = 'ECMT International Removal';
+        $permitsRequired = 5;
+        $irfoFeePerPermit = 18;
+
+        $fee = 90.00;
+        $formattedFee = '£90';
+        $translatedFormattedFee = '£90 (non-refundable)';
+
+        $url = m::mock(Url::class);
+        $translationHelperService = m::mock(TranslationHelperService::class);
+        $translationHelperService
+            ->shouldReceive('translateReplace')
+            ->with(
+                'permits.page.fee.permit.fee.non-refundable',
+                [
+                    $formattedFee
+                ]
+            )
+            ->andReturn(
+                $translatedFormattedFee
+            )
+            ->once();
+
+        $formattedDateReceived = '25 December 2020';
+
+        $inputData = [
+            'applicationRef' => $applicationRef,
+            'dateReceived' => $dateReceived,
+            'irhpPermitType' => [
+                'id' => $permitTypeId,
+                'name' => [
+                    'description' => $permitTypeDesc,
+                ],
+            ],
+            'permitsRequired' => $permitsRequired,
+            'outstandingFeeAmount' => $fee,
+            'fees' => [
+                [
+                    'feeType' => [
+                        'fixedValue' => 10,
+                        'feeType' => [
+                            'id' => 'OTHERTYPE1'
+                        ]
+                    ]
+                ],
+                [
+                    'feeType' => [
+                        'fixedValue' => $irfoFeePerPermit,
+                        'feeType' => [
+                            'id' => RefData::IRFO_GV_FEE_TYPE,
+                        ]
+                    ]
+                ],
+                [
+                    'feeType' => [
+                        'fixedValue' => 30,
+                        'feeType' => [
+                            'id' => 'OTHERTYPE1'
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $mappedData = [
+            'showFeeSummaryTitle' => true,
+            'mappedFeeData' => [
+                [
+                    'key' => IrhpApplicationFeeSummary::APP_REFERENCE_HEADING,
+                    'value' => $applicationRef,
+                ],
+                [
+                    'key' => IrhpApplicationFeeSummary::APP_DATE_HEADING,
+                    'value' => $formattedDateReceived,
+                ],
+                [
+                    'key' => IrhpApplicationFeeSummary::PERMIT_TYPE_HEADING,
+                    'value' => $permitTypeDesc,
+                ],
+                [
+                    'key' => IrhpApplicationFeeSummary::FEE_PER_PERMIT_HEADING,
+                    'value' => $irfoFeePerPermit,
+                    'isCurrency' => true,
+                ],
+                [
+                    'key' => IrhpApplicationFeeSummary::NUM_PERMITS_REQUIRED_HEADING,
+                    'value' => $permitsRequired,
+                ],
+                [
+                    'key' => IrhpApplicationFeeSummary::FEE_TOTAL_HEADING,
+                    'value' => $translatedFormattedFee,
+                ],
+            ],
+        ];
+
+        $expectedOutput = $inputData + $mappedData;
+
+        self::assertEquals(
+            $expectedOutput,
+            IrhpApplicationFeeSummary::mapForDisplay($inputData, $translationHelperService, $url)
+        );
     }
 
     public function testMapForDisplayEcmtShortTerm()

@@ -17,6 +17,7 @@ class IrhpApplicationFeeSummary
 {
     const APP_REFERENCE_HEADING = 'permits.page.fee.application.reference';
     const APP_DATE_HEADING = 'permits.page.fee.application.date';
+    const FEE_PER_PERMIT_HEADING = 'permits.irhp.fee-breakdown.fee-per-permit';
     const APP_FEE_PER_PERMIT_HEADING = 'permits.page.fee.application.fee.per.permit';
     const ISSUE_FEE_PER_PERMIT_HEADING = 'permits.page.fee.issue.fee.per.permit';
     const PERMIT_STATUS_HEADING = 'permits.page.fee.permit.status';
@@ -48,8 +49,11 @@ class IrhpApplicationFeeSummary
         switch ($irhpPermitTypeId) {
             case RefData::IRHP_BILATERAL_PERMIT_TYPE_ID:
             case RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID:
+                $mappedFeeData = self::getBilateralMultilateralRows($data, $translator);
+                break;
             case RefData::ECMT_REMOVAL_PERMIT_TYPE_ID:
-                $mappedFeeData = self::getBilateralMultilateralRemovalRows($data, $translator);
+                $data['showFeeSummaryTitle'] = true;
+                $mappedFeeData = self::getEcmtRemovalRows($data, $translator);
                 break;
             case RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID:
                 $data['showFeeSummaryTitle'] = true;
@@ -66,19 +70,43 @@ class IrhpApplicationFeeSummary
     }
 
     /**
-     * Get the fee summary table content for bilateral/multilateral/removal types
+     * Get the fee summary table content for bilateral/multilateral types
      *
      * @param array $data input data
      * @param TranslationHelperService $translator
      *
      * @return array
      */
-    private static function getBilateralMultilateralRemovalRows(array $data, TranslationHelperService $translator)
+    private static function getBilateralMultilateralRows(array $data, TranslationHelperService $translator)
     {
         return [
             self::getApplicationReferenceRow($data),
             self::getDateReceivedRow($data),
             self::getPermitTypeRow($data),
+            self::getStandardNoOfPermitsRow($data),
+            self::getOutstandingFeeAmountRow($data, $translator),
+        ];
+    }
+
+    /**
+     * Get the fee summary table content for ecmt removal type
+     *
+     * @param array $data input data
+     * @param TranslationHelperService $translator
+     *
+     * @return array
+     */
+    private static function getEcmtRemovalRows(array $data, TranslationHelperService $translator)
+    {
+        return [
+            self::getApplicationReferenceRow($data),
+            self::getDateReceivedRow($data),
+            self::getPermitTypeRow($data),
+            self::getFeePerPermitRow(
+                $data,
+                self::FEE_PER_PERMIT_HEADING,
+                RefData::IRFO_GV_FEE_TYPE
+            ),
             self::getStandardNoOfPermitsRow($data),
             self::getOutstandingFeeAmountRow($data, $translator),
         ];
@@ -292,11 +320,7 @@ class IrhpApplicationFeeSummary
      */
     private static function getApplicationFeePerPermitRow(array $data, $feeType)
     {
-        return [
-            'key' => self::APP_FEE_PER_PERMIT_HEADING,
-            'value' => self::getFeeAmountByType($data['fees'], $feeType),
-            'isCurrency' => true
-        ];
+        return self::getFeePerPermitRow($data, self::APP_FEE_PER_PERMIT_HEADING, $feeType);
     }
 
     /**
@@ -309,8 +333,22 @@ class IrhpApplicationFeeSummary
      */
     private static function getIssueFeePerPermitRow(array $data, $feeType)
     {
+        return self::getFeePerPermitRow($data, self::ISSUE_FEE_PER_PERMIT_HEADING, $feeType);
+    }
+
+    /**
+     * Get the single table row content for a fee per permit row
+     *
+     * @param array $data input data
+     * @param string $key
+     * @param string $feeType
+     *
+     * @return array
+     */
+    private static function getFeePerPermitRow(array $data, $key, $feeType)
+    {
         return [
-            'key' => self::ISSUE_FEE_PER_PERMIT_HEADING,
+            'key' => $key,
             'value' => self::getFeeAmountByType($data['fees'], $feeType),
             'isCurrency' => true
         ];
