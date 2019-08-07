@@ -252,7 +252,8 @@ class IrhpPermitController extends AbstractInternalController implements
                     [
                         'action' => 'index',
                         'licence' => $this->params()->fromRoute('licence'),
-                        'permitid' => $this->params()->fromRoute('permitid')
+                        'permitid' => $this->params()->fromRoute('permitid'),
+                        'permitTypeId' => $this->params()->fromRoute('permitTypeId'),
                     ]
                 );
             }
