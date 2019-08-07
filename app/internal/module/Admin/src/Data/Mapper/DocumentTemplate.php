@@ -16,7 +16,8 @@ class DocumentTemplate implements MapperInterface
         'templates' => 'root',
         'templates/NI' => 'ni',
         'templates/GB' => 'gb',
-        'templates/Image' => 'image'
+        'templates/Image' => 'image',
+        'guides' => 'guides'
     ];
 
     /**
@@ -30,8 +31,8 @@ class DocumentTemplate implements MapperInterface
     {
         $formData = [];
         $formData['fields'] = $data;
-        if(!empty($data)){
-            $formData['fields']['category'] = $data['subCategory']['category']['id'];
+        if (!empty($data)) {
+            $formData['fields']['category'] = $data['category']['id'];
             $formData['fields']['subCategory'] = $data['subCategory']['id'];
 
             $pathParts = pathinfo($data['document']['identifier']);
@@ -69,5 +70,4 @@ class DocumentTemplate implements MapperInterface
     {
         return $errors;
     }
-
 }

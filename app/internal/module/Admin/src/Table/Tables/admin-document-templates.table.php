@@ -64,7 +64,7 @@ return [
             'name' => 'filename',
             'sort' => 'filename',
             'formatter' => function ($row) {
-                return Escape::html($row['filename']);
+                return Escape::html(ltrim($row['filename'], '/'));
             },
         ],
         [
