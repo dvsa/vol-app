@@ -25,6 +25,7 @@ return [
         ],
         [
             'title' => 'dashboard-table-permit-application-type',
+            'formatter' => 'IrhpPermitTypeWithValidityDate',
             'name' => 'typeDescription',
         ],
         [

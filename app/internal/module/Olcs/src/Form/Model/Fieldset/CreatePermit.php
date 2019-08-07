@@ -39,45 +39,13 @@ class CreatePermit extends Base
     public $dateReceived = null;
 
     /**
-     * @Form\Required(false)
-     * @Form\Attributes({
-     *   "class" : "input--permits-required",
-     *   "id" : "permitsRequired",
-     *   "step" : "any"
-     * })
-     * @Form\Options({
-     *     "label": "Number of permits required (Cannot exceed total authorized vehicles)",
-     *     "hint": "",
-     *     "short-label": "",
-     *     "allow_empty" : true,
-     * })
-     * @Form\Validator({"name":"Zend\Validator\Digits"})
-     * @Form\Validator({
-     *      "name":"Zend\Validator\GreaterThan",
-     *      "options": {
-     *          "min": 0,
-     *          "breakchainonfailure": true
-     *      }
-     * })
-     * @Form\Validator({
-     *     "name": "NumberCompare",
-     *     "options": {
-     *          "compare_to":"numVehicles",
-     *          "operator":"lte",
-     *          "compare_to_label":"Your number of authorised vehicles",
-     *     }
-     * })
-     * @Form\Type("Zend\Form\Element\Number")
-     */
-    public $permitsRequired = null;
-
-    /**
      * @Form\Type("Zend\Form\Element\Hidden")
+     * @Form\Attributes({
+     *    "id" : "numVehicles",
+     * })
      *
      */
     public $numVehicles;
-
-
 
     /**
      * @Form\Type("Zend\Form\Element\Hidden")
@@ -90,33 +58,31 @@ class CreatePermit extends Base
     public $numVehiclesLabel;
 
     /**
-     * @Form\Type("\Common\Form\Elements\Types\Readonly")
+     * @Form\Name("yearRadios")
+     * @Form\Required(false)
+     * @Form\Attributes({
+     *   "class" : "input--trips",
+     *    "id" : "EcmtYearList",
+     * })
      * @Form\Options({
-     *     "label": "The minimum Euro emissions standard for the window is "
+     *      "label": "Select a year",
+     *      "fieldset-attributes": {"id": "year-list", "class":"inline"},
+     *      "fieldset-data-group": "sector-list",
+     *      "label_attributes": {"class": "form-control form-control--radio"},
+     *      "disable_inarray_validator" : true,
+     * })
+     * @Form\Type("Radio")
+     */
+    public $yearRadios = null;
+
+    /**
+     * @Form\Type("Zend\Form\Element\Hidden")
+     * @Form\Attributes({
+     *    "id" : "year",
      * })
      *
      */
-    public $euroEmissionsLabel;
-
-    /**
-     * @Form\Name("emissions")
-     * @Form\Required(false)
-     * @Form\Attributes({
-     *   "class" : "input--euro6",
-     *    "id" : "emissions",
-     * })
-     * @Form\Options({
-     *   "checked_value": "1",
-     *   "unchecked_value": "0",
-     *   "label": "ECMT permits will only be used by vehicles that are environmentally compliant with the emissions standard above as a minimum",
-     *   "label_attributes": {"class": "form-control form-control--checkbox form-control--advanced"},
-     *   "must_be_value": "Yes",
-     *   "error-message": "error.messages.euro6"
-     * })
-     * @Form\Type("\Common\Form\Elements\InputFilters\SingleCheckbox")
-     */
-
-    public $emissions = null;
+    public $year = null;
 
     /**
      * @Form\Name("cabotage")
@@ -124,17 +90,37 @@ class CreatePermit extends Base
      * @Form\Attributes({
      *   "class" : "input--cabotage",
      *   "id" : "cabotage",
+     *   "data-container-class":"yearDependent js-hidden"
      * })
      * @Form\Options({
      *   "checked_value": "1",
      *     "unchecked_value": "0",
-     *     "label": "Cabotage will not be performed",
+     *     "label": "I confirm that I will not undertake any cabotage journeys using an ECMT permit.",
      *     "label_attributes": {"class": "form-control form-control--checkbox form-control--advanced"},
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\SingleCheckbox")
      */
 
     public $cabotage = null;
+
+    /**
+     * @Form\Name("roadworthiness")
+     * @Form\Required(false)
+     * @Form\Attributes({
+     *   "class" : "input--roadworthiness",
+     *   "id" : "cabotage",
+     *   "data-container-class":"yearDependent js-hidden"
+     * })
+     * @Form\Options({
+     *   "checked_value": "1",
+     *     "unchecked_value": "0",
+     *     "label": "I understand that I must obtain and carry the appropriate ECMT Certificate of Compliance and Certificate of Roadworthiness for each vehicle and trailer I intend to use with this permit",
+     *     "label_attributes": {"class": "form-control form-control--checkbox form-control--advanced"},
+     * })
+     * @Form\Type("\Common\Form\Elements\InputFilters\SingleCheckbox")
+     */
+
+    public $roadworthiness = null;
 
     /**
      * @Form\Name("countrys")
@@ -154,26 +140,92 @@ class CreatePermit extends Base
      *     "allowWrap":true,
      *     "multiple":"multiple",
      *     "empty": "Select options if applicable",
-     *     "data-container-class": "form-control__container",
+     *     "data-container-class": "form-control__container yearDependent js-hidden",
      * })
      * @Form\Type("DynamicSelect")
      * @Form\Filter({"name":"Common\Filter\NullToArray"})
      */
     public $countrys = null;
 
+
+    /**
+     * @Form\Name("emissions")
+     * @Form\Required(false)
+     * @Form\Attributes({
+     *   "class" : "input--euro6",
+     *    "id" : "emissions",
+     *    "data-container-class": "yearDependent js-hidden",
+     * })
+     * @Form\Options({
+     *   "checked_value": "1",
+     *   "unchecked_value": "0",
+     *   "label": "I confirm that I will only use my ECMT permits with vehicles that are environmentally compliant with the minimum Euro emissions standards that the permit allows",
+     *   "label_attributes": {"class": "form-control form-control--checkbox form-control--advanced"},
+     *   "must_be_value": "Yes",
+     *   "error-message": "error.messages.euro6",
+     * })
+     * @Form\Type("\Common\Form\Elements\InputFilters\SingleCheckbox")
+     */
+
+    public $emissions = null;
+
+
+    /**
+     * @Form\Required(false)
+     * @Form\Attributes({
+     *   "class" : "input--permits-requiredEuro5",
+     *   "id" : "requiredEuro5",
+     *   "step" : "any",
+     *   "data-container-class":"emission5Dependent js-hidden"
+     * })
+     * @Form\Options({
+     *     "label": "Number of permits required for <strong>Euro5</strong> Emissions Standard",
+     *     "hint": "",
+     *     "short-label": "",
+     *     "allow_empty" : true,
+     *     "label_options": {
+     *         "disable_html_escape": "true"
+     *     }
+     * })
+     * @Form\Type("Zend\Form\Element\Number")
+     */
+    public $requiredEuro5 = 0;
+
+    /**
+     * @Form\Required(false)
+     * @Form\Attributes({
+     *   "class" : "input--permits-requiredEuro6",
+     *   "id" : "requiredEuro6",
+     *   "step" : "any",
+     *   "data-container-class":"emission6Dependent js-hidden"
+     * })
+     * @Form\Options({
+     *     "label": "Number of permits required for <strong>Euro6</strong> Emissions Standard",
+     *     "hint": "",
+     *     "short-label": "",
+     *     "allow_empty" : true,
+     *     "label_options": {
+     *         "disable_html_escape": "true"
+     *     }
+     * })
+     * @Form\Type("Zend\Form\Element\Number")
+     */
+    public $requiredEuro6 = 0;
+
+
+
     /**
      * @Form\Required(false)
      * @Form\Attributes({
      *   "class" : "input--trips",
      *   "id" : "trips",
-     *   "step" : "any"
+     *   "step" : "any",
+     *   "data-container-class":"yearDependent js-hidden"
      * })
      * @Form\Options({
      *     "label": "Number of trips abroad in the last 12 months",
      *     "short-label": "",
      * })
-     * @Form\Validator({"name":"Zend\Validator\Digits"})
-     * @Form\Validator({"name":"Zend\Validator\Between", "options": {"min": -1, "max": 999999}})
      * @Form\Type("Zend\Form\Element\Number")
      */
     public $trips = null;
@@ -184,10 +236,11 @@ class CreatePermit extends Base
      * @Form\Attributes({
      *   "class" : "input--international-journey",
      *    "id" : "internationalJourneys",
+     *    "data-container-class":"yearDependent js-hidden"
      * })
      * @Form\Options({
      *      "label": "International Journeys",
-     *      "fieldset-attributes": {"id": "international-journey"},
+     *      "fieldset-attributes": {"id": "international-journey", "class":"yearDependent js-hidden"},
      *      "fieldset-data-group": "percentage-type",
      *      "label_attributes": {"class": "form-control form-control--radio"},
      *      "category": "inter_journey_percentage",
@@ -208,7 +261,7 @@ class CreatePermit extends Base
      * })
      * @Form\Options({
      *      "label": "markup-ecmt-sector-list-label",
-     *      "fieldset-attributes": {"id": "sector-list", "class":"inline"},
+     *      "fieldset-attributes": {"id": "sector-list", "class":"inline yearDependent js-hidden"},
      *      "fieldset-data-group": "sector-list",
      *      "label_attributes": {"class": "form-control form-control--radio"},
      *      "disable_inarray_validator" : true,
@@ -222,6 +275,7 @@ class CreatePermit extends Base
      * @Form\Attributes({
      *   "class" : "input--declaration",
      *   "id" : "declaration",
+     *   "data-container-class":"yearDependent js-hidden"
      * })
      * @Form\Options({
      *     "checked_value": "1",
@@ -260,6 +314,9 @@ class CreatePermit extends Base
 
     /**
      * @Form\Type("Zend\Form\Element\Hidden")
+     * @Form\Attributes({
+     *    "id" : "licenceId",
+     * })
      *
      */
     public $licence;
