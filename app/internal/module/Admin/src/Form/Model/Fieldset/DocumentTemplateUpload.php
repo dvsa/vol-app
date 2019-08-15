@@ -21,10 +21,11 @@ class DocumentTemplateUpload
      * @Form\Options({
      *     "label": "Template Folder",
      *     "value_options": {
-     *          "root":"/",
-     *          "gb":"/GB",
-     *          "ni":"/NI",
-     *          "image":"/Image"
+     *          "root":"templates/",
+     *          "gb":"templates/GB",
+     *          "ni":"templates/NI",
+     *          "image":"templates/Image",
+     *          "guides":"guides/"
      *     },
      *     "empty_option": "Please select",
      *     "disable_inarray_validator": false
@@ -53,7 +54,8 @@ class DocumentTemplateUpload
      *     "service_name": "Olcs\Service\Data\SubCategory"
      * })
      * @Form\Type("DynamicSelect")
-     * @Form\Required(true)
+     * @Form\Required(false)
+     *
      */
     public $subCategory = null;
 
@@ -67,6 +69,16 @@ class DocumentTemplateUpload
      */
     public $description = null;
 
+    /**
+     * @Form\Name("templateSlug")
+     * @Form\Options({
+     *     "label": "Template Slug Identifier (optional)",
+     * })
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":100}})
+     * @Form\Type("Text")
+     * @Form\Required(false)
+     */
+    public $templateSlug = null;
 
     /**
      * @Form\Options({"label":"File Upload"})
@@ -89,4 +101,20 @@ class DocumentTemplateUpload
      * })
      */
     public $suppressFromOp = null;
+
+    /**
+     * @Form\Required(true)
+     * @Form\Type("Radio")
+     * @Form\Options({
+     *      "label": "Is this a Northern Ireland template?",
+     *      "value_options":{
+     *          "N":"No",
+     *          "Y":"Yes"
+     *      },
+     *      "fieldset-attributes" : {
+     *          "class":"inline"
+     *      }
+     * })
+     */
+    public $isNi = null;
 }

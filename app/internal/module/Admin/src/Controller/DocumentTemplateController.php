@@ -183,7 +183,9 @@ class DocumentTemplateController extends AbstractInternalController implements L
             'description' => $data['fields']['description'],
             'filename'   => $file['name'],
             'content'    => new FileContent($fileTmpName, $mimeType),
-            'suppressFromOp' => $data['fields']['suppressFromOp']
+            'suppressFromOp' => $data['fields']['suppressFromOp'],
+            'isNi' => $data['fields']['isNi'],
+            'templateSlug' => $data['fields']['templateSlug']
         ];
 
         $response = $this->handleCommand(
@@ -236,6 +238,8 @@ class DocumentTemplateController extends AbstractInternalController implements L
 
         $this->getServiceLocator()->get(\Olcs\Service\Data\SubCategory::class)
             ->setCategory($defaultCategory);
+
+        $form->get('fields')->get('templateSlug')->setAttributes(['disabled' => true]);
 
         return $form;
     }
