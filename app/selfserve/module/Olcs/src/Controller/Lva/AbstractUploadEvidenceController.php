@@ -114,7 +114,10 @@ abstract class AbstractUploadEvidenceController extends AbstractController
         $data = $this->getData();
         foreach ($data['operatingCentres'] as $aocData) {
             if ($aocData['operatingCentre']['id'] === $this->operatingCentreId) {
-                return $aocData['operatingCentre']['adDocuments'];
+                $documents = $aocData['operatingCentre']['adDocuments'];
+                return array_filter($documents, function ($document) {
+                    return $document['postSubmissionUpload'];
+                });
             }
         }
 
@@ -137,7 +140,8 @@ abstract class AbstractUploadEvidenceController extends AbstractController
             'isExternal'  => $this->isExternal(),
             'licence' => $this->getLicenceId(),
             'application' => $this->getIdentifier(),
-            'operatingCentre' => $this->operatingCentreId
+            'operatingCentre' => $this->operatingCentreId,
+            'postSubmissionUpload' => true
         ];
 
         $this->uploadFile($file, $data);
@@ -220,6 +224,7 @@ abstract class AbstractUploadEvidenceController extends AbstractController
             'subCategory' => \Common\Category::DOC_SUB_CATEGORY_FINANCIAL_EVIDENCE_DIGITAL,
             'licence'     => $applicationData['licence']['id'],
             'isExternal'  => true,
+            'postSubmissionUpload' => true
         ];
 
         $this->uploadFile($file, $data);
