@@ -128,7 +128,7 @@ abstract class AbstractUploadEvidenceController extends AbstractController
      * Process a file upload to an operating centre
      *
      * @param array $file Uploaded file data
-     * 
+     *
      * @return void
      */
     public function operatingCentreProcessFileUpload($file)
