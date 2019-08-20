@@ -2,7 +2,10 @@
 namespace Permits\Controller;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
+use Common\Preference\Language;
+use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\UpdateCheckAnswers;
+use Dvsa\Olcs\Transfer\Query\IrhpApplication\AnswersSummary;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
@@ -32,7 +35,7 @@ class IrhpCheckAnswersController extends AbstractSelfserveController implements 
     ];
 
     protected $templateConfig = [
-        'generic' => 'permits/check-answers'
+        'generic' => 'permits/irhp-check-answers'
     ];
 
     protected $templateVarsConfig = [
@@ -54,4 +57,30 @@ class IrhpCheckAnswersController extends AbstractSelfserveController implements 
             'saveAndReturnStep' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
         ],
     ];
+
+    public function retrieveData()
+    {
+        parent::retrieveData();
+
+        $irhpApplicationId = $this->data[IrhpAppDataSource::DATA_KEY]['id'];
+
+        $languagePreference = $this->getServiceLocator()
+            ->get('LanguagePreference')
+            ->getPreference();
+
+        $translateToWelsh = $languagePreference == Language::OPTION_CY ? 'Y' : 'N';
+
+        $answersSummaryParams = [
+            'id' => $irhpApplicationId,
+            'translateToWelsh' => $translateToWelsh
+        ];
+
+        $response = $this->handleQuery(
+            AnswersSummary::create($answersSummaryParams)
+        );
+
+        $result = $response->getResult();
+
+        $this->data['rows'] = $result['rows'];
+    }
 }

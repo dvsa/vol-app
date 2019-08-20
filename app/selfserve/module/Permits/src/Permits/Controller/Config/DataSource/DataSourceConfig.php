@@ -26,7 +26,6 @@ use Permits\Data\Mapper\ValidEcmtPermits as ValidEcmtPermitsMapper;
 use Permits\Data\Mapper\CheckAnswers as CheckAnswersMapper;
 use Permits\Controller\Config\DataSource\EcmtConstrainedCountriesList as EcmtConstrainedCountriesDataSource;
 use Permits\Data\Mapper\ValidEcmtPermitConstrainedCountries as EcmtConstrainedCountriesMapper;
-use Permits\Data\Mapper\IrhpCheckAnswers as IrhpCheckAnswersMapper;
 
 /**
  * Holds data source configs that are used regularly
@@ -184,9 +183,7 @@ class DataSourceConfig
     ];
 
     const IRHP_APP_CHECK_ANSWERS = [
-        IrhpAppDataSource::class => [
-            'mapper' => IrhpCheckAnswersMapper::class
-        ],
+        IrhpAppDataSource::class => [],
         PermitsAvailableDataSource::class => [],
     ];
 
