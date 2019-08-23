@@ -21,8 +21,7 @@ use Zend\View\Model\ViewModel;
  */
 class DashboardController extends AbstractController
 {
-    use Lva\Traits\ExternalControllerTrait,
-        Lva\Traits\DashboardNavigationTrait;
+    use Lva\Traits\ExternalControllerTrait;
 
     protected $lva = "application";
 
@@ -85,12 +84,6 @@ class DashboardController extends AbstractController
         $view->setVariable('numberOfLicences', count($dashboardData['licences']));
         $view->setVariable('numberOfApplications', count($dashboardData['applications']));
         $view->setVariable('niFlag', $this->isNiFlagTrue($dashboardData));
-
-        // populate the navigation tabs with correct counts got fees and correspondence
-        $this->populateTabCounts(
-            $dashboardData['feeCount'],
-            $dashboardData['correspondenceCount']
-        );
 
         return $view;
     }
