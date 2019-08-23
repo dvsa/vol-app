@@ -141,7 +141,7 @@ abstract class AbstractUploadEvidenceController extends AbstractController
             'licence' => $this->getLicenceId(),
             'application' => $this->getIdentifier(),
             'operatingCentre' => $this->operatingCentreId,
-            'postSubmissionUpload' => true
+            'isPostSubmissionUpload' => true
         ];
 
         $this->uploadFile($file, $data);
@@ -224,7 +224,7 @@ abstract class AbstractUploadEvidenceController extends AbstractController
             'subCategory' => \Common\Category::DOC_SUB_CATEGORY_FINANCIAL_EVIDENCE_DIGITAL,
             'licence'     => $applicationData['licence']['id'],
             'isExternal'  => true,
-            'postSubmissionUpload' => true
+            'isPostSubmissionUpload' => true
         ];
 
         $this->uploadFile($file, $data);
