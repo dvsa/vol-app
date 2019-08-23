@@ -116,7 +116,7 @@ abstract class AbstractUploadEvidenceController extends AbstractController
             if ($aocData['operatingCentre']['id'] === $this->operatingCentreId) {
                 $documents = $aocData['operatingCentre']['adDocuments'];
                 return array_filter($documents, function ($document) {
-                    return $document['postSubmissionUpload'];
+                    return $document['isPostSubmissionUpload'];
                 });
             }
         }
