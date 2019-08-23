@@ -82,9 +82,6 @@ class DashboardControllerTest extends MockeryTestCase
         $mockDashboardProcessingService = m::mock();
         $this->sm->setService('DashboardProcessingService', $mockDashboardProcessingService);
 
-        $mockNavigation = m::mock();
-        $this->sm->setService('navigation', $mockNavigation);
-
         $this->sut->shouldReceive('isGranted')
             ->with(RefData::PERMISSION_SELFSERVE_TM_DASHBOARD)
             ->once()
@@ -101,8 +98,6 @@ class DashboardControllerTest extends MockeryTestCase
             'licences' => [],
             'applications' => [],
             'variations' => [],
-            'feeCount' => 99,
-            'correspondenceCount' => 123,
         ];
         $this->expectQuery(
             DashboardQry::class,
@@ -117,24 +112,6 @@ class DashboardControllerTest extends MockeryTestCase
             ->with($dashboardData)
             ->once()
             ->andReturn(['applications' => ['apps'], 'variations' => ['vars'], 'licences' => ['lics']]);
-
-        $mockNavigation
-            ->shouldReceive('findOneById')
-            ->with('dashboard-fees')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('set')
-                    ->with('count', 99)
-                    ->getMock()
-            )
-            ->shouldReceive('findOneById')
-            ->with('dashboard-correspondence')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('set')
-                    ->with('count', 123)
-                    ->getMock()
-            );
 
         $view = $this->sut->indexAction();
 

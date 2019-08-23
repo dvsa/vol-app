@@ -19,8 +19,7 @@ use Zend\View\Model\ViewModel;
  */
 class CorrespondenceController extends AbstractController
 {
-    use Lva\Traits\ExternalControllerTrait,
-        Lva\Traits\DashboardNavigationTrait;
+    use Lva\Traits\ExternalControllerTrait;
 
     /**
      * Display the table and all the correspondence for the given organisation.
@@ -55,16 +54,6 @@ class CorrespondenceController extends AbstractController
 
         $view = new ViewModel(['table' => $table]);
         $view->setTemplate('correspondence');
-
-        $count = 0;
-        array_walk(
-            $docs['results'],
-            function ($record) use (&$count) {
-                $count += ($record['accessed'] === 'N' ? 1 : 0);
-            }
-        );
-
-        $this->populateTabCounts($docs['extra']['feeCount'], $count);
 
         return $view;
     }

@@ -27,7 +27,6 @@ use Common\Controller\Traits\StoredCardsTrait;
 class FeesController extends AbstractController
 {
     use Lva\Traits\ExternalControllerTrait,
-        Lva\Traits\DashboardNavigationTrait,
         StoredCardsTrait,
         GenericReceipt;
 
@@ -60,9 +59,6 @@ class FeesController extends AbstractController
 
         $view = new ViewModel(['table' => $table]);
         $view->setTemplate('pages/fees/home');
-
-        // populate the navigation tabs with correct counts
-        $this->populateTabCounts(count($fees), $this->getCorrespondenceCount($organisationId));
 
         $this->getServiceLocator()->get('Script')->loadFile('dashboard-fees');
 
@@ -193,12 +189,6 @@ class FeesController extends AbstractController
     {
         $result = $this->getOutstandingFeeDataForOrganisation($organisationId);
         return $result['outstandingFees'];
-    }
-
-    protected function getCorrespondenceCount($organisationId)
-    {
-        $data = $this->getOutstandingFeeDataForOrganisation($organisationId);
-        return $data['correspondenceCount'];
     }
 
     /**
