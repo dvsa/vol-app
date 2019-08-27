@@ -43,6 +43,12 @@ class Top extends \Olcs\Form\Model\Fieldset\Base
      * @Form\Type("Zend\Form\Element\Hidden")
      *
      */
+    public $isApplicationPathEnabled;
+
+    /**
+     * @Form\Type("Zend\Form\Element\Hidden")
+     *
+     */
     public $licence;
 
     /**
