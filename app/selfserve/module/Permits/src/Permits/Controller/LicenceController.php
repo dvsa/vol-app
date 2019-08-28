@@ -147,6 +147,11 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
                 RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID
             ]
         )) {
+            $activeApplicationParams = [
+                'licence' => $params['licence'],
+                'irhpPermitType' => $irhpPermitTypeID
+            ];
+
             if ($irhpPermitTypeID == RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID) {
                 if (isset($this->routeParams['id'])) {
                     $irhpApplicationId = $this->routeParams['id'];
@@ -164,14 +169,15 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
                     $config['step'] = IrhpApplicationSection::ROUTE_WINDOW_CLOSED;
                     return;
                 }
+
+                $activeApplicationParams['year'] = $params['year'];
             }
 
-            $activeApplication = $this->handleResponse($this->handleQuery(ActiveApplication::create(
-                [
-                    'licence' => $params['licence'],
-                    'irhpPermitType' => $irhpPermitTypeID
-                ]
-            )));
+            $activeApplication = $this->handleResponse(
+                $this->handleQuery(
+                    ActiveApplication::create($activeApplicationParams)
+                )
+            );
 
             if (isset($activeApplication['id'])) {
                 // We have an application already
