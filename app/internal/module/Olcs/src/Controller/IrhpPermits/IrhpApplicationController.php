@@ -25,6 +25,7 @@ use Dvsa\Olcs\Transfer\Query\IrhpPermitWindow\OpenByCountry;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\ById as ItemDto;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\MaxStockPermits;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitWindow\OpenByType;
+use Dvsa\Olcs\Transfer\Query\IrhpPermitType\ById as PermitTypeQry;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceDto;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\CreateFull as CreateDTO;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\UpdateFull as UpdateDTO;
@@ -136,7 +137,9 @@ class IrhpApplicationController extends AbstractInternalController implements
      */
     public function addAction()
     {
-        if ($this->params()->fromRoute('permitTypeId') == RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID) {
+        $typeResponse = $this->handleQuery(PermitTypeQry::create(['id' => $this->params()->fromRoute('permitTypeId')]));
+        $irhpPermit = $typeResponse->getResult();
+        if ($irhpPermit['isApplicationPathEnabled']) {
             $this->questionAnswerAddApplicationRedirect();
         }
 
@@ -240,7 +243,8 @@ class IrhpApplicationController extends AbstractInternalController implements
             $irhpPermit['fees'],
             [
                 RefData::IRHP_GV_APPLICATION_FEE_TYPE,
-                RefData::IRHP_GV_ISSUE_FEE_TYPE
+                RefData::IRHP_GV_ISSUE_FEE_TYPE,
+                RefData::IRFO_GV_FEE_TYPE
             ]
         );
 
@@ -410,16 +414,22 @@ class IrhpApplicationController extends AbstractInternalController implements
         $formData['topFields']['numVehiclesLabel'] = $licence['totAuthVehicles'];
         $formData['topFields']['licence'] = $this->params()->fromRoute('licence', null);
 
-        switch ($formData['topFields']['irhpPermitType']) {
-            case RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID:
-                $form = $this->questionAnswerFormSetup($this->params()->fromRoute('irhpAppId'), $form);
-                break;
-            case RefData::IRHP_BILATERAL_PERMIT_TYPE_ID:
-            case RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID:
-                $formData = $this->nonQuestionAnswerFormSetup($form, $formData, $licence);
-                break;
-            default:
-                throw new \RuntimeException('Unsupported Permit Type');
+        if (!in_array(
+            $formData['topFields']['irhpPermitType'],
+            [
+                RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
+                RefData::ECMT_REMOVAL_PERMIT_TYPE_ID,
+                RefData::IRHP_BILATERAL_PERMIT_TYPE_ID,
+                RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID
+            ]
+        )) {
+            throw new \RuntimeException('Unsupported Permit Type');
+        }
+
+        if ($formData['topFields']['isApplicationPathEnabled']) {
+            $form = $this->questionAnswerFormSetup($this->params()->fromRoute('irhpAppId'), $form);
+        } else {
+            $formData = $this->nonQuestionAnswerFormSetup($form, $formData, $licence);
         }
 
         $form->setData($formData);

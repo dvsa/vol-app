@@ -41,6 +41,7 @@ class IrhpApplication implements MapperInterface
         }
 
         if (isset($data['irhpPermitType']['id'])) {
+            $formData['topFields']['isApplicationPathEnabled'] = $data['irhpPermitType']['isApplicationPathEnabled'];
             $formData['topFields']['irhpPermitType'] = $data['irhpPermitType']['id'];
         }
 
@@ -55,7 +56,7 @@ class IrhpApplication implements MapperInterface
      */
     public static function mapFromForm(array $data)
     {
-        if ($data['topFields']['irhpPermitType'] == RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID) {
+        if ($data['topFields']['isApplicationPathEnabled']) {
             $cmdData['id'] = $data['topFields']['id'];
             $cmdData['dateReceived'] = $data['topFields']['dateReceived'];
             $cmdData['declaration'] = $data['bottomFields']['declaration'];
