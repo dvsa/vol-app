@@ -196,6 +196,7 @@ class IrhpApplicationTest extends MockeryTestCase
         $formData =
             [
                 'topFields' => [
+                    'isApplicationPathEnabled' => true,
                     'id' => 1,
                     'licence' => 7,
                     'irhpPermitType' => 2,
