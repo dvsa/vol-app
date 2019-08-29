@@ -14,25 +14,49 @@ use Zend\Mvc\Controller\Plugin\Url;
  */
 class FeeList
 {
+    /** @var TranslationHelperService */
+    private $translator;
+
+    /** @var CurrencyFormatter */
+    private $currencyFormatter;
+
+    /** @var EcmtNoOfPermits */
+    private $ecmtNoOfPermits;
+
     /**
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * Create service instance
      *
-     * @param array $data
      * @param TranslationHelperService $translator
-     * @param Url $url
+     * @param CurrencyFormatter $currencyFormatter
+     * @param EcmtNoOfPermits $ecmtNoOfPermits
+     *
+     * @return FeeList
+     */
+    public function __construct(
+        TranslationHelperService $translator,
+        CurrencyFormatter $currencyFormatter,
+        EcmtNoOfPermits $ecmtNoOfPermits
+    ) {
+        $this->translator = $translator;
+        $this->currencyFormatter = $currencyFormatter;
+        $this->ecmtNoOfPermits = $ecmtNoOfPermits;
+    }
+
+    /**
+     * @param array $data
      *
      * @return array
      */
-    public static function mapForDisplay(array $data, TranslationHelperService $translator, Url $url)
+    public function mapForDisplay(array $data)
     {
         if ($data['application']['permitType']['id'] == RefData::PERMIT_TYPE_ECMT) {
-            $additionalSummaryData = self::getEcmtAnnualSummaryData($data, $translator, $url);
+            $additionalSummaryData = $this->getEcmtAnnualSummaryData($data);
         } else {
-            $additionalSummaryData = self::getOtherSummaryData($data, $translator);
+            $additionalSummaryData = $this->getOtherSummaryData($data);
         }
 
         $data['application']['summaryData'] = array_merge(
-            self::getBaseSummaryData($data),
+            $this->getBaseSummaryData($data),
             $additionalSummaryData
         );
 
@@ -46,7 +70,7 @@ class FeeList
      *
      * @return array
      */
-    private static function getBaseSummaryData($data)
+    private function getBaseSummaryData($data)
     {
         return [
             [
@@ -68,20 +92,18 @@ class FeeList
      * Get the additional summary data specific to ecmt annual
      *
      * @param array $data
-     * @param TranslationHelperService $translator
-     * @param Url $url
      *
      * @return array
      */
-    private static function getEcmtAnnualSummaryData(array $data, TranslationHelperService $translator, Url $url)
+    private function getEcmtAnnualSummaryData(array $data)
     {
-        $currency = new CurrencyFormatter();
+        $currencyFormatter = $this->currencyFormatter;
 
         $irhpPermitStock = $data['application']['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock'];
 
         $totalPermitsRequired = $data['application']['totalPermitsRequired'];
         $applicationFeePerPermit = $data['irhpFeeList']['fee']['IRHP_GV_APP_ECMT']['fixedValue'];
-        $permitsRequiredLines = EcmtNoOfPermits::mapForDisplay($data['application'], $translator, $url);
+        $permitsRequiredLines = $this->ecmtNoOfPermits->mapForDisplay($data['application']);
 
         return [
             [
@@ -100,9 +122,9 @@ class FeeList
             ],
             [
                 'key' => 'permits.page.fee.permit.fee.total',
-                'value' => $translator->translateReplace(
+                'value' => $this->translator->translateReplace(
                     'permits.page.fee.permit.fee.non-refundable',
-                    [$currency($applicationFeePerPermit * $totalPermitsRequired)]
+                    [$currencyFormatter($applicationFeePerPermit * $totalPermitsRequired)]
                 )
             ]
         ];
@@ -115,9 +137,9 @@ class FeeList
      *
      * @return array
      */
-    private static function getOtherSummaryData(array $data, TranslationHelperService $translator)
+    private function getOtherSummaryData(array $data)
     {
-        $currency = new CurrencyFormatter;
+        $currencyFormatter = $this->currencyFormatter;
 
         $irhpPermitStock = $data['application']['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock'];
         $data['application']['appFee'] = $data['irhpFeeList']['fee']['IRHP_GV_APP_ECMT']['fixedValue'];
@@ -126,7 +148,7 @@ class FeeList
         return [
             [
                 'key' => 'permits.page.fee.permit.validity',
-                'value' => $translator->translateReplace(
+                'value' => $this->translator->translateReplace(
                     'permits.page.fee.permit.validity.dates',
                     [
                         date(\DATE_FORMAT, strtotime($irhpPermitStock['validFrom'])),
@@ -136,20 +158,20 @@ class FeeList
             ],
             [
                 'key' => 'permits.page.fee.number.permits.required',
-                'value' => $translator->translateReplace(
+                'value' => $this->translator->translateReplace(
                     'permits.page.fee.number.permits.value',
                     [
                         $data['application']['permitsRequired'],
-                        $currency($data['application']['appFee'])
+                        $currencyFormatter($data['application']['appFee'])
                     ]
                 )
             ],
             [
                 'key' => 'permits.page.fee.permit.fee.total',
-                'value' => $translator->translateReplace(
+                'value' => $this->translator->translateReplace(
                     'permits.page.fee.permit.fee.non-refundable',
                     [
-                        $currency($data['application']['appFee'] * $data['application']['permitsRequired'])
+                        $currencyFormatter($data['application']['appFee'] * $data['application']['permitsRequired'])
                     ]
                 )
             ]

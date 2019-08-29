@@ -19,7 +19,12 @@ class ValidEcmtPermitConstrainedCountriesTest extends \PHPUnit\Framework\TestCas
      */
     public function testMapForDisplay($input, $expected)
     {
-        self::assertEquals($expected, ValidEcmtPermitConstrainedCountries::mapForDisplay($input));
+        $validEcmtPermitConstrainedCountries = new ValidEcmtPermitConstrainedCountries();
+
+        self::assertEquals(
+            $expected,
+            $validEcmtPermitConstrainedCountries->mapForDisplay($input)
+        );
     }
 
     public function dpTestMapForDisplay()

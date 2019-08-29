@@ -18,7 +18,7 @@ class AvailableCountries
      *
      * @return array
      */
-    public static function mapForFormOptions(array $data, $form)
+    public function mapForFormOptions(array $data, $form)
     {
         // set all available options
         $mapData = $data[AvailableCountriesDataSource::DATA_KEY];

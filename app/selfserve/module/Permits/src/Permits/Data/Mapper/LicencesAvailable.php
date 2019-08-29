@@ -20,10 +20,9 @@ class LicencesAvailable
      * @param array $data
      * @param       $form
      *
-     * @param TranslationHelperService $translator
      * @return array
      */
-    public static function mapForFormOptions(array $data, $form)
+    public function mapForFormOptions(array $data, $form)
     {
         $mapData = $data[LicencesAvailableDataSource::DATA_KEY];
         $isNew = !isset($data['application']['licence']);

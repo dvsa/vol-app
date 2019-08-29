@@ -18,7 +18,7 @@ class ValidEcmtPermitConstrainedCountries
      *
      * @return array
      */
-    public static function mapForDisplay(array $data): array
+    public function mapForDisplay(array $data): array
     {
         if (empty($data)) {
             return $data;

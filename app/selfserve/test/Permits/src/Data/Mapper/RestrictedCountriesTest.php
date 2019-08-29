@@ -10,6 +10,13 @@ use Zend\Form\Form;
 
 class RestrictedCountriesTest extends TestCase
 {
+    private $restrictedCountries;
+
+    public function setUp()
+    {
+        $this->restrictedCountries = new RestrictedCountries();
+    }
+
     public function testMapFromForm()
     {
         $data = [
@@ -35,7 +42,10 @@ class RestrictedCountriesTest extends TestCase
             ]
         ];
 
-        self::assertEquals($expected, RestrictedCountries::mapFromForm($data));
+        self::assertEquals(
+            $expected,
+            $this->restrictedCountries->mapFromForm($data)
+        );
     }
 
     public function testPreprocessFormData()
@@ -57,7 +67,10 @@ class RestrictedCountriesTest extends TestCase
 
         $mockForm = m::mock(Form::class);
 
-        self::assertEquals($expected, RestrictedCountries::preprocessFormData($data, $mockForm));
+        self::assertEquals(
+            $expected,
+            $this->restrictedCountries->preprocessFormData($data, $mockForm)
+        );
     }
 
     public function testPreprocessFormDataYesNoCountries()
@@ -91,7 +104,10 @@ class RestrictedCountriesTest extends TestCase
             ->shouldReceive('setMessages')
             ->with(['error.messages.restricted.countries.list']);
 
-        self::assertEquals($expected, RestrictedCountries::preprocessFormData($data, $mockForm));
+        self::assertEquals(
+            $expected,
+            $this->restrictedCountries->preprocessFormData($data, $mockForm)
+        );
     }
 
     public function testMapFormOptions()
@@ -164,7 +180,10 @@ class RestrictedCountriesTest extends TestCase
             ->once()
             ->with($valueOpts);
 
-        self::assertEquals($outputData, RestrictedCountries::mapForFormOptions($inputData, $mockForm));
+        $this->assertEquals(
+            $outputData,
+            $this->restrictedCountries->mapForFormOptions($inputData, $mockForm)
+        );
     }
 
     public function testMapFormOptionsHasCountries()
@@ -248,6 +267,9 @@ class RestrictedCountriesTest extends TestCase
             ->shouldReceive('setValue')
             ->with(1);
 
-        self::assertEquals($outputData, RestrictedCountries::mapForFormOptions($inputData, $mockForm));
+        $this->assertEquals(
+            $outputData,
+            $this->restrictedCountries->mapForFormOptions($inputData, $mockForm)
+        );
     }
 }

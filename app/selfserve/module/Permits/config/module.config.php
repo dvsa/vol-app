@@ -36,6 +36,7 @@ use Permits\Controller\IrhpWindowClosedController;
 use Permits\Controller\QaController;
 use Permits\Controller\QaControllerFactory;
 use Permits\Controller\YearController;
+use Permits\Data\Mapper;
 
 return [
   'controllers' => [
@@ -814,6 +815,29 @@ return [
           ],
       ],
     ],
+  ],
+  'service_manager' => [
+      'invokables' => [
+          Mapper\ApplicationFees::class => Mapper\ApplicationFees::class,
+          Mapper\ValidEcmtPermitConstrainedCountries::class => Mapper\ValidEcmtPermitConstrainedCountries::class,
+          Mapper\ValidEcmtPermits::class => Mapper\ValidEcmtPermits::class,
+          Mapper\AvailableCountries::class => Mapper\AvailableCountries::class,
+          Mapper\AvailableTypes::class => Mapper\AvailableTypes::class,
+          Mapper\LicencesAvailable::class => Mapper\LicencesAvailable::class,
+          Mapper\RestrictedCountries::class => Mapper\RestrictedCountries::class,
+          Mapper\Sectors::class => Mapper\Sectors::class,
+      ],
+      'factories' => [
+          Mapper\AcceptOrDeclinePermits::class => Mapper\AcceptOrDeclinePermitsFactory::class,
+          Mapper\CheckAnswers::class => Mapper\CheckAnswersFactory::class,
+          Mapper\EcmtNoOfPermits::class => Mapper\EcmtNoOfPermitsFactory::class,
+          Mapper\FeeList::class => Mapper\FeeListFactory::class,
+          Mapper\IrhpApplicationFeeSummary::class => Mapper\IrhpApplicationFeeSummaryFactory::class,
+          Mapper\IrhpCheckAnswers::class => Mapper\IrhpCheckAnswersFactory::class,
+          Mapper\AvailableYears::class => Mapper\AvailableYearsFactory::class,
+          Mapper\ChangeLicence::class => Mapper\ChangeLicenceFactory::class,
+          Mapper\NoOfPermits::class => Mapper\NoOfPermitsFactory::class,
+      ],
   ],
     /** @todo we don't need all of these different link helpers! OLCS-21512 */
     'view_helpers' => [

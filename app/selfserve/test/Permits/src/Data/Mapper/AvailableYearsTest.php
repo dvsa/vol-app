@@ -15,6 +15,17 @@ use RuntimeException;
  */
 class AvailableYearsTest extends TestCase
 {
+    private $translator;
+
+    private $availableYears;
+
+    public function setUp()
+    {
+        $this->translator = m::mock(TranslationHelperService::class);
+
+        $this->availableYears = new AvailableYears($this->translator);
+    }
+
     /**
      * @dataProvider dpTestExceptionNotSupported
      */
@@ -27,7 +38,7 @@ class AvailableYearsTest extends TestCase
             'type' => $typeId
         ];
 
-        AvailableYears::mapForFormOptions(
+        $this->availableYears->mapForFormOptions(
             $data,
             m::mock(Form::class),
             m::mock(TranslationHelperService::class)
@@ -57,8 +68,7 @@ class AvailableYearsTest extends TestCase
 
         $translatedHint = 'Translated hint';
 
-        $translator = m::mock(TranslationHelperService::class);
-        $translator->shouldReceive('translateReplace')
+        $this->translator->shouldReceive('translateReplace')
             ->with($optionHintTranslationKey, [$year])
             ->andReturn($translatedHint);
 
@@ -98,7 +108,7 @@ class AvailableYearsTest extends TestCase
             ],
         ];
 
-        $returnedData = AvailableYears::mapForFormOptions($data, $form, $translator);
+        $returnedData = $this->availableYears->mapForFormOptions($data, $form);
 
         $this->assertEquals($expectedData, $returnedData);
     }
@@ -125,14 +135,13 @@ class AvailableYearsTest extends TestCase
         $translatedHint2019 = 'Translated hint 2019';
         $translatedHint2020 = 'Translated hint 2020';
 
-        $translator = m::mock(TranslationHelperService::class);
-        $translator->shouldReceive('translateReplace')
+        $this->translator->shouldReceive('translateReplace')
             ->with('permits.page.year.ecmt-short-term.option.hint.not-2019', [2018])
             ->andReturn($translatedHint2018);
-        $translator->shouldReceive('translateReplace')
+        $this->translator->shouldReceive('translateReplace')
             ->with('permits.page.year.ecmt-short-term.option.hint.2019', [2019])
             ->andReturn($translatedHint2019);
-        $translator->shouldReceive('translateReplace')
+        $this->translator->shouldReceive('translateReplace')
             ->with('permits.page.year.ecmt-short-term.option.hint.not-2019', [2020])
             ->andReturn($translatedHint2020);
 
@@ -184,7 +193,7 @@ class AvailableYearsTest extends TestCase
             ],
         ];
 
-        $returnedData = AvailableYears::mapForFormOptions($data, $form, $translator);
+        $returnedData = $this->availableYears->mapForFormOptions($data, $form);
 
         $this->assertEquals($expectedData, $returnedData);
     }
@@ -208,9 +217,10 @@ class AvailableYearsTest extends TestCase
             ->with($expectedValueOptions)
             ->once();
 
-        $mockTranslator = m::mock(TranslationHelperService::class);
-
-        self::assertEquals($expected, AvailableYears::mapForFormOptions($data, $mockForm, $mockTranslator));
+        $this->assertEquals(
+            $expected,
+            $this->availableYears->mapForFormOptions($data, $mockForm)
+        );
     }
 
     public function dpTestEcmtAnnual()

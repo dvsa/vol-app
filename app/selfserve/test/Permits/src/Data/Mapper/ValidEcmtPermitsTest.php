@@ -14,7 +14,12 @@ class ValidEcmtPermitsTest extends \PHPUnit\Framework\TestCase
      */
     public function testMapForDisplay($input, $expected)
     {
-        self::assertEquals($expected, ValidEcmtPermits::mapForDisplay($input));
+        $validEcmtPermits = new ValidEcmtPermits();
+
+        $this->assertEquals(
+            $expected,
+            $validEcmtPermits->mapForDisplay($input)
+        );
     }
 
     public function dpTestMapForDisplay()

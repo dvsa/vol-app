@@ -30,7 +30,12 @@ class AvailableTypesTest extends TestCase
             ->with($expectedValueOptions)
             ->once();
 
-        self::assertEquals($expected, AvailableTypes::mapForFormOptions($data, $mockForm));
+        $availableTypes = new AvailableTypes();
+
+        self::assertEquals(
+            $expected,
+            $availableTypes->mapForFormOptions($data, $mockForm)
+        );
     }
 
     public function dpTestMapForFormOptions()

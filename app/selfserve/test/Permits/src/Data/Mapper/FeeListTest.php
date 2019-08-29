@@ -4,36 +4,62 @@ namespace PermitsTest\Data\Mapper;
 
 use Common\RefData;
 use Common\Service\Helper\TranslationHelperService;
+use Common\View\Helper\CurrencyFormatter;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
+use Permits\Data\Mapper\EcmtNoOfPermits;
 use Permits\Data\Mapper\FeeList;
-use Zend\Mvc\Controller\Plugin\Url;
 
 class FeeListTest extends MockeryTestCase
 {
-    public function testMapForDisplay()
+    private $translator;
+
+    private $currencyFormatter;
+
+    private $ecmtNoOfPermits;
+
+    private $feeList;
+
+    public function setUp()
     {
-        $inputData = [
-            'application' => [
-                'applicationRef' => 'OG4563323 / 4',
-                'dateReceived' => '2019-05-23 14:23:23+00:00',
-                'irhpPermitApplications' => [
-                    [
-                        'irhpPermitWindow' => [
-                            'irhpPermitStock' => [
-                                'validTo' => '2023-12-31 23:59:59+00:00'
-                            ]
+        $this->translator = m::mock(TranslationHelperService::class);
+
+        $this->currencyFormatter = m::mock(CurrencyFormatter::class);
+
+        $this->ecmtNoOfPermits = m::mock(EcmtNoOfPermits::class);
+
+        $this->feeList = new FeeList(
+            $this->translator,
+            $this->currencyFormatter,
+            $this->ecmtNoOfPermits
+        );
+    }
+
+    public function testMapForDisplayEcmtAnnual()
+    {
+        $application = [
+            'applicationRef' => 'OG4563323 / 4',
+            'dateReceived' => '2019-05-23 14:23:23+00:00',
+            'irhpPermitApplications' => [
+                [
+                    'irhpPermitWindow' => [
+                        'irhpPermitStock' => [
+                            'validTo' => '2023-12-31 23:59:59+00:00'
                         ]
                     ]
-                ],
-                'permitType' => [
-                    'id' => RefData::PERMIT_TYPE_ECMT,
-                    'description' => 'Annual ECMT'
-                ],
-                'requiredEuro5' => 4,
-                'requiredEuro6' => 7,
-                'totalPermitsRequired' => 11
+                ]
             ],
+            'permitType' => [
+                'id' => RefData::PERMIT_TYPE_ECMT,
+                'description' => 'Annual ECMT'
+            ],
+            'requiredEuro5' => 4,
+            'requiredEuro6' => 7,
+            'totalPermitsRequired' => 11
+        ];
+
+        $inputData = [
+            'application' => $application,
             'irhpFeeList' => [
                 'fee' => [
                     'IRHP_GV_APP_ECMT' => [
@@ -62,7 +88,7 @@ class FeeListTest extends MockeryTestCase
             ],
             [
                 'key' => 'permits.page.fee.number.permits',
-                'value' => '4 permits for Euro 5 minimum emission standard<br/>7 permits for Euro 6 minimum emission standard',
+                'value' => 'no of permits line 1<br/>no of permits line 2',
                 'disableHtmlEscape' => true
             ],
             [
@@ -76,69 +102,60 @@ class FeeListTest extends MockeryTestCase
             ]
         ];
 
-        $translator = m::mock(TranslationHelperService::class);
-        $translator->shouldReceive('translateReplace')
+        $this->currencyFormatter->shouldReceive('__invoke')
+            ->with('110')
+            ->andReturn('£110');
+
+        $this->translator->shouldReceive('translateReplace')
             ->with(
                 'permits.page.fee.permit.fee.non-refundable',
                 ['£110']
             )
             ->andReturn('£110 (non-refundable)');
-        $translator->shouldReceive('translate')
-            ->with('permits.page.fee.emissions.category.euro5')
-            ->andReturn('Euro 5 minimum emission standard');
-        $translator->shouldReceive('translate')
-            ->with('permits.page.fee.emissions.category.euro6')
-            ->andReturn('Euro 6 minimum emission standard');
-        $translator->shouldReceive('translateReplace')
-            ->with(
-                'permits.page.fee.number.permits.line.multiple',
-                [4, 'Euro 5 minimum emission standard']
-            )
-            ->andReturn('4 permits for Euro 5 minimum emission standard');
-        $translator->shouldReceive('translateReplace')
-            ->with(
-                'permits.page.fee.number.permits.line.multiple',
-                [7, 'Euro 6 minimum emission standard']
-            )
-            ->andReturn('7 permits for Euro 6 minimum emission standard');
+ 
+        $this->ecmtNoOfPermits->shouldReceive('mapForDisplay')
+            ->with($application)
+            ->andReturn(['no of permits line 1', 'no of permits line 2']);
 
-        $url = m::mock(Url::class);
+        $returnedData = $this->feeList->mapForDisplay($inputData);
 
-        $returnedData = FeeList::mapForDisplay($inputData, $translator, $url);
-
-        self::assertEquals(
+        $this->assertEquals(
             $expectedSummaryData,
             $returnedData['summaryData']
         );
     }
 
-    public function testMapForDisplaySingleAndZeroPermitCount()
+    public function testMapForDisplayOther()
     {
-        $inputData = [
-            'application' => [
-                'applicationRef' => 'OG4563323 / 4',
-                'dateReceived' => '2019-05-23 14:23:23+00:00',
-                'irhpPermitApplications' => [
-                    [
-                        'irhpPermitWindow' => [
-                            'irhpPermitStock' => [
-                                'validTo' => '2023-12-31 23:59:59+00:00'
-                            ]
+        $application = [
+            'applicationRef' => 'OG4563323 / 4',
+            'dateReceived' => '2019-05-23 14:23:23+00:00',
+            'irhpPermitApplications' => [
+                [
+                    'irhpPermitWindow' => [
+                        'irhpPermitStock' => [
+                            'validFrom' => '2023-01-01 00:00:00+00:00',
+                            'validTo' => '2023-12-31 23:59:59+00:00'
                         ]
                     ]
-                ],
-                'permitType' => [
-                    'id' => RefData::PERMIT_TYPE_ECMT,
-                    'description' => 'Annual ECMT'
-                ],
-                'requiredEuro5' => 1,
-                'requiredEuro6' => 0,
-                'totalPermitsRequired' => 1
+                ]
             ],
+            'permitType' => [
+                'id' => 'permit_type_other',
+                'description' => 'Other permit type'
+            ],
+            'permitsRequired' => 5
+        ];
+
+        $inputData = [
+            'application' => $application,
             'irhpFeeList' => [
                 'fee' => [
                     'IRHP_GV_APP_ECMT' => [
                         'fixedValue' => '10'
+                    ],
+                    'IRHP_GV_ECMT_100_PERMIT_FEE' => [
+                        'fixedValue' => '15'
                     ]
                 ]
             ]
@@ -155,50 +172,58 @@ class FeeListTest extends MockeryTestCase
             ],
             [
                 'key' => 'permits.page.fee.permit.type',
-                'value' => 'Annual ECMT'
+                'value' => 'Other permit type'
             ],
             [
-                'key' => 'permits.page.fee.permit.year',
-                'value' => '2023'
+                'key' => 'permits.page.fee.permit.validity',
+                'value' => '01 Jan 2023 to 31 Dec 2023'
             ],
             [
-                'key' => 'permits.page.fee.number.permits',
-                'value' => '1 permit for Euro 5 minimum emission standard',
-                'disableHtmlEscape' => true
-            ],
-            [
-                'key' => 'permits.page.fee.application.fee.per.permit',
-                'value' => '10',
-                'isCurrency' => true
+                'key' => 'permits.page.fee.number.permits.required',
+                'value' => '5 x £10 (per permit)'
             ],
             [
                 'key' => 'permits.page.fee.permit.fee.total',
-                'value' => '£10 (non-refundable)'
+                'value' => '£50 (non-refundable)'
             ]
         ];
 
-        $translator = m::mock(TranslationHelperService::class);
-        $translator->shouldReceive('translateReplace')
+        $this->currencyFormatter->shouldReceive('__invoke')
+            ->with('10')
+            ->andReturn('£10');
+
+        $this->currencyFormatter->shouldReceive('__invoke')
+            ->with('50')
+            ->andReturn('£50');
+
+        $this->translator->shouldReceive('translateReplace')
+            ->with(
+                'permits.page.fee.permit.validity.dates',
+                ['01 Jan 2023', '31 Dec 2023']
+            )
+            ->andReturn('01 Jan 2023 to 31 Dec 2023');
+
+        $this->translator->shouldReceive('translateReplace')
+            ->with(
+                'permits.page.fee.number.permits.value',
+                [5, '£10']
+            )
+            ->andReturn('5 x £10 (per permit)');
+
+        $this->translator->shouldReceive('translateReplace')
             ->with(
                 'permits.page.fee.permit.fee.non-refundable',
-                ['£10']
+                ['£50']
             )
-            ->andReturn('£10 (non-refundable)');
-        $translator->shouldReceive('translate')
-            ->with('permits.page.fee.emissions.category.euro5')
-            ->andReturn('Euro 5 minimum emission standard');
-        $translator->shouldReceive('translateReplace')
-            ->with(
-                'permits.page.fee.number.permits.line.single',
-                [1, 'Euro 5 minimum emission standard']
-            )
-            ->andReturn('1 permit for Euro 5 minimum emission standard');
+            ->andReturn('£50 (non-refundable)');
+ 
+        $this->ecmtNoOfPermits->shouldReceive('mapForDisplay')
+            ->with($application)
+            ->andReturn(['no of permits line 1', 'no of permits line 2']);
 
-        $url = m::mock(Url::class);
+        $returnedData = $this->feeList->mapForDisplay($inputData);
 
-        $returnedData = FeeList::mapForDisplay($inputData, $translator, $url);
-
-        self::assertEquals(
+        $this->assertEquals(
             $expectedSummaryData,
             $returnedData['summaryData']
         );

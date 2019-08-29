@@ -3,11 +3,14 @@
 namespace PermitsTest\Data\Mapper;
 
 use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Helper\UrlHelperService;
+use Common\View\Helper\CurrencyFormatter;
 use Permits\Data\Mapper\AcceptOrDeclinePermits;
+use Permits\Data\Mapper\ApplicationFees;
+use Permits\Data\Mapper\EcmtNoOfPermits;
 use Permits\View\Helper\EcmtSection;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
-use Zend\Mvc\Controller\Plugin\Url;
 
 /**
  * AcceptOrDeclinePermitsTest
@@ -16,31 +19,41 @@ use Zend\Mvc\Controller\Plugin\Url;
  */
 class AcceptOrDeclinePermitsTest extends MockeryTestCase
 {
-    private $url;
-
     private $translator;
+
+    private $urlHelperService;
+
+    private $applicationFees;
+
+    private $currencyFormatter;
+
+    private $ecmtNoOfPermits;
+
+    private $acceptOrDeclinePermits;
 
     public function setUp()
     {
-        $this->url = m::mock(Url::class);
-
-        $this->url->shouldReceive('fromRoute')
-            ->with(EcmtSection::ROUTE_ECMT_UNPAID_PERMITS, [], [], true)
-            ->andReturn('/permits/3003/ecmt-unpaid-permits/');
-
         $this->translator = m::mock(TranslationHelperService::class);
-
-        $this->translator->shouldReceive('translate')
-            ->with('permits.page.fee.emissions.category.euro5')
-            ->andReturn('Euro 5 minimum emission standard');
-
-        $this->translator->shouldReceive('translate')
-            ->with('permits.page.fee.emissions.category.euro6')
-            ->andReturn('Euro 6 minimum emission standard');
 
         $this->translator->shouldReceive('translate')
             ->with('permits.page.ecmt.fee-part-successful.view.permit.restrictions')
             ->andReturn('View permit restrictions');
+
+        $this->urlHelperService = m::mock(UrlHelperService::class);
+
+        $this->applicationFees = m::mock(ApplicationFees::class);
+
+        $this->currencyFormatter = m::mock(CurrencyFormatter::class);
+
+        $this->ecmtNoOfPermits = m::mock(EcmtNoOfPermits::class);
+
+        $this->acceptOrDeclinePermits = new AcceptOrDeclinePermits(
+            $this->translator,
+            $this->urlHelperService,
+            $this->applicationFees,
+            $this->currencyFormatter,
+            $this->ecmtNoOfPermits
+        );
     }
 
     /**
@@ -93,19 +106,24 @@ class AcceptOrDeclinePermitsTest extends MockeryTestCase
             'totalPermitsRequired' => $permitsRequired,
         ];
 
-        $this->translator->shouldReceive('translateReplace')
-            ->with(
-                'permits.page.fee.number.permits.line.multiple',
-                [$euro5PermitsAwarded, 'Euro 5 minimum emission standard']
-            )
-            ->andReturn('2 permits for Euro 5 minimum emission standard');
+        $mappedApplicationFees = [
+            'issueFee' => $feePerPermit,
+            'totalFee' => $grossAmount,
+            'dueDate' => '2019-07-23',
+        ];
 
-        $this->translator->shouldReceive('translateReplace')
-            ->with(
-                'permits.page.fee.number.permits.line.multiple',
-                [$euro6PermitsAwarded, 'Euro 6 minimum emission standard']
-            )
-            ->andReturn('3 permits for Euro 6 minimum emission standard');
+        $dataWithMappedApplicationFees = array_merge(
+            $data,
+            $mappedApplicationFees
+        );
+
+        $this->applicationFees->shouldReceive('mapForDisplay')
+            ->with($data)
+            ->andReturn($dataWithMappedApplicationFees);
+
+        $this->ecmtNoOfPermits->shouldReceive('mapForDisplay')
+            ->with(['requiredEuro5' => $euro5PermitsAwarded, 'requiredEuro6' => $euro6PermitsAwarded])
+            ->andReturn(['ecmt no of permits line 1', 'ecmt no of permits line 2']);
 
         $this->translator->shouldReceive('translateReplace')
             ->with(
@@ -120,6 +138,14 @@ class AcceptOrDeclinePermitsTest extends MockeryTestCase
                 [$permitsAwarded, $permitsRequired]
             )
             ->andReturn($translatedGuidance);
+
+        $this->urlHelperService->shouldReceive('fromRoute')
+            ->with(EcmtSection::ROUTE_ECMT_UNPAID_PERMITS, [], [], true)
+            ->andReturn('/permits/3003/ecmt-unpaid-permits/');
+
+        $this->currencyFormatter->shouldReceive('__invoke')
+            ->with($grossAmount)
+            ->andReturn($formattedGrossAmount);
 
         $expectedSummaryData = [
             [
@@ -136,8 +162,8 @@ class AcceptOrDeclinePermitsTest extends MockeryTestCase
             ],
             [
                 'key' => 'permits.page.fee.number.permits',
-                'value' => '2 permits for Euro 5 minimum emission standard<br>' .
-                    '3 permits for Euro 6 minimum emission standard<br>' .
+                'value' => 'ecmt no of permits line 1<br>' .
+                    'ecmt no of permits line 2<br>' .
                     '<a href="/permits/3003/ecmt-unpaid-permits/">View permit restrictions</a>',
                 'disableHtmlEscape' => true,
             ],
@@ -161,7 +187,7 @@ class AcceptOrDeclinePermitsTest extends MockeryTestCase
             'disableHtmlEscape' => true,
         ];
 
-        $mappedData = AcceptOrDeclinePermits::mapForDisplay($data, $this->translator, $this->url);
+        $mappedData = $this->acceptOrDeclinePermits->mapForDisplay($data);
 
         $this->assertEquals(
             'permits.page.fee-part-successful.title',
@@ -226,19 +252,24 @@ class AcceptOrDeclinePermitsTest extends MockeryTestCase
             'totalPermitsRequired' => $permitsRequired,
         ];
 
-        $this->translator->shouldReceive('translateReplace')
-            ->with(
-                'permits.page.fee.number.permits.line.multiple',
-                [$euro5PermitsAwarded, 'Euro 5 minimum emission standard']
-            )
-            ->andReturn('2 permits for Euro 5 minimum emission standard');
+        $mappedApplicationFees = [
+            'issueFee' => $feePerPermit,
+            'totalFee' => '400.00',
+            'dueDate' => '2019-07-23',
+        ];
 
-        $this->translator->shouldReceive('translateReplace')
-            ->with(
-                'permits.page.fee.number.permits.line.multiple',
-                [$euro6PermitsAwarded, 'Euro 6 minimum emission standard']
-            )
-            ->andReturn('3 permits for Euro 6 minimum emission standard');
+        $dataWithMappedApplicationFees = array_merge(
+            $data,
+            $mappedApplicationFees
+        );
+
+        $this->applicationFees->shouldReceive('mapForDisplay')
+            ->with($data)
+            ->andReturn($dataWithMappedApplicationFees);
+
+        $this->ecmtNoOfPermits->shouldReceive('mapForDisplay')
+            ->with(['requiredEuro5' => $euro5PermitsAwarded, 'requiredEuro6' => $euro6PermitsAwarded])
+            ->andReturn(['ecmt no of permits line 1', 'ecmt no of permits line 2']);
 
         $this->translator->shouldReceive('translateReplace')
             ->with(
@@ -246,6 +277,10 @@ class AcceptOrDeclinePermitsTest extends MockeryTestCase
                 [$permitsAwarded, $permitsRequired]
             )
             ->andReturn($translatedGuidance);
+
+        $this->urlHelperService->shouldReceive('fromRoute')
+            ->with(EcmtSection::ROUTE_ECMT_UNPAID_PERMITS, [], [], true)
+            ->andReturn('/permits/3003/ecmt-unpaid-permits/');
 
         $expectedSummaryData = [
             [
@@ -262,8 +297,8 @@ class AcceptOrDeclinePermitsTest extends MockeryTestCase
             ],
             [
                 'key' => 'permits.page.fee.number.permits',
-                'value' => '2 permits for Euro 5 minimum emission standard<br>' .
-                    '3 permits for Euro 6 minimum emission standard<br>' .
+                'value' => 'ecmt no of permits line 1<br>' .
+                    'ecmt no of permits line 2<br>' .
                     '<a href="/permits/3003/ecmt-unpaid-permits/">View permit restrictions</a>',
                 'disableHtmlEscape' => true,
             ],
@@ -278,7 +313,7 @@ class AcceptOrDeclinePermitsTest extends MockeryTestCase
             'disableHtmlEscape' => true,
         ];
 
-        $mappedData = AcceptOrDeclinePermits::mapForDisplay($data, $this->translator, $this->url);
+        $mappedData = $this->acceptOrDeclinePermits->mapForDisplay($data);
 
         $this->assertEquals(
             'waived-paid-permits.page.fee-part-successful.title',

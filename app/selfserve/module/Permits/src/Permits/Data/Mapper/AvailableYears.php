@@ -13,20 +13,34 @@ use RuntimeException;
  */
 class AvailableYears
 {
+    /** @var TranslationHelperService */
+    private $translator;
+
+    /**
+     * Create service instance
+     *
+     * @param TranslationHelperService $translator
+     *
+     * @return AvailableYears
+     */
+    public function __construct(TranslationHelperService $translator)
+    {
+        $this->translator = $translator;
+    }
+
     /**
      * @param array $data
      * @param Form  $form
-     * @param TranslationHelperService $translator
      *
      * @return array
      */
-    public static function mapForFormOptions(array $data, $form, TranslationHelperService $translator)
+    public function mapForFormOptions(array $data, $form)
     {
         switch ($data['type']) {
             case RefData::ECMT_PERMIT_TYPE_ID:
-                return self::mapForEcmtAnnual($data, $form);
+                return $this->mapForEcmtAnnual($data, $form);
             case RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID:
-                return self::mapForEcmtShortTerm($data, $form, $translator);
+                return $this->mapForEcmtShortTerm($data, $form);
             default:
                 throw new RuntimeException('This mapper does not support permit type ' . $data['type']);
         }
@@ -40,7 +54,7 @@ class AvailableYears
      *
      * @return array
      */
-    private static function mapForEcmtAnnual(array $data, $form)
+    private function mapForEcmtAnnual(array $data, $form)
     {
         $years = $data[AvailableYearsDataSource::DATA_KEY]['years'];
         $valueOptions = [];
@@ -71,11 +85,10 @@ class AvailableYears
      *
      * @param array $data
      * @param Form  $form
-     * @param TranslationHelperService $translator
      *
      * @return array
      */
-    private static function mapForEcmtShortTerm(array $data, $form, TranslationHelperService $translator)
+    private function mapForEcmtShortTerm(array $data, $form)
     {
         $years = $data[AvailableYearsDataSource::DATA_KEY]['years'];
         $valueOptions = [];
@@ -90,7 +103,7 @@ class AvailableYears
                 'value' => $year,
                 'label' => $year,
                 'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
-                'hint' => $translator->translateReplace($hint, [$year]),
+                'hint' => $this->translator->translateReplace($hint, [$year]),
             ];
         }
 
