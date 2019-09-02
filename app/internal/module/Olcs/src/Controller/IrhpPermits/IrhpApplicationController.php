@@ -381,13 +381,13 @@ class IrhpApplicationController extends AbstractInternalController implements
             $windows,
             $permitTypeId
         );
-        $formData['application']['licence']['totAuthVehicles'] = $licence['totAuthVehicles'];
 
         // Build the dynamic NoOfPermits per country per year form from Common
-        NoOfPermits::mapForFormOptions(
+        $formData['application']['licence']['totAuthVehicles'] = $licence['totAuthVehicles'];
+
+        $this->getServiceLocator()->get(NoOfPermits::class)->mapForFormOptions(
             $formData,
             $form,
-            $this->getServiceLocator()->get('Helper\Translation'),
             'application',
             'maxStockPermits',
             'feePerPermit'
@@ -469,10 +469,9 @@ class IrhpApplicationController extends AbstractInternalController implements
         // Build the dynamic NoOfPermits per country per year form from Common
         $formData['application']['licence']['totAuthVehicles'] = $licence['totAuthVehicles'];
 
-        NoOfPermits::mapForFormOptions(
+        $this->getServiceLocator()->get(NoOfPermits::class)->mapForFormOptions(
             $formData,
             $form,
-            $this->getServiceLocator()->get('Helper\Translation'),
             'application',
             'maxStockPermits',
             'feePerPermit'
