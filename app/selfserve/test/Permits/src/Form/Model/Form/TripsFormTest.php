@@ -46,9 +46,15 @@ class TripsFormTest extends AbstractFormValidationTestCase
         $this->assertFormElementHidden($element);
     }
 
-    public function testPermitsRequired()
+    public function testRequiredEuro5()
     {
-        $element = ['Fields', 'permitsRequired'];
+        $element = ['Fields', 'requiredEuro5'];
+        $this->assertFormElementHidden($element);
+    }
+
+    public function testRequiredEuro6()
+    {
+        $element = ['Fields', 'requiredEuro6'];
         $this->assertFormElementHidden($element);
     }
 }

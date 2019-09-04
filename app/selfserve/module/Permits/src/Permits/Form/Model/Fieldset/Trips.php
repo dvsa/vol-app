@@ -9,7 +9,6 @@ use Zend\Form\Annotation as Form;
  */
 class Trips
 {
-
     /**
      * @Form\Type("Hidden")
      */
@@ -61,5 +60,10 @@ class Trips
     /**
      * @Form\Type("Zend\Form\Element\Hidden")
      */
-    public $permitsRequired;
+    public $requiredEuro5;
+
+    /**
+     * @Form\Type("Zend\Form\Element\Hidden")
+     */
+    public $requiredEuro6;
 }

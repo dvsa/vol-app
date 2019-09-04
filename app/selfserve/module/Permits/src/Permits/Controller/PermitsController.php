@@ -170,12 +170,15 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
             $setDefaultValues = false;
 
             if ($form->isValid()) {
-                $command = UpdateEcmtTrips::create(['id' => $id, 'ecmtTrips' => $data['Fields']['tripsAbroad']]);
+                $fieldsData = $data['Fields'];
+                $tripsAbroad = $fieldsData['tripsAbroad'];
+                $euro5IsHighIntensity = $this->isHighIntensity($fieldsData['requiredEuro5'], $tripsAbroad);
+                $euro6IsHighIntensity = $this->isHighIntensity($fieldsData['requiredEuro6'], $tripsAbroad);
+
+                $command = UpdateEcmtTrips::create(['id' => $id, 'ecmtTrips' => $tripsAbroad]);
                 $this->handleCommand($command);
 
-                if ($data['Fields']['intensityWarning'] === 'no'
-                    && $this->isHighIntensity($data['Fields']['permitsRequired'], $data['Fields']['tripsAbroad'])
-                ) {
+                if ($fieldsData['intensityWarning'] === 'no' && ($euro5IsHighIntensity || $euro6IsHighIntensity)) {
                     $form->get('Fields')->get('intensityWarning')->setValue('yes');
                 } else {
                     return $this->handleSaveAndReturnStep(
@@ -192,7 +195,8 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         if ($setDefaultValues) {
             $existing = [
                 'Fields' => [
-                    'permitsRequired' => $application['permitsRequired'],
+                    'requiredEuro5' => $application['requiredEuro5'],
+                    'requiredEuro6' => $application['requiredEuro6'],
                     'tripsAbroad' => $application['trips'],
                     'intensityWarning' => 'no',
                 ]
