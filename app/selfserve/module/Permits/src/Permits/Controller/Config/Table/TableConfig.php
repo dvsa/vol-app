@@ -3,6 +3,7 @@
 namespace Permits\Controller\Config\Table;
 
 use Permits\Controller\Config\DataSource\IrhpFeeBreakdown as IrhpFeeBreakdownDataSource;
+use Permits\Controller\Config\DataSource\UnpaidEcmtPermits as UnpaidEcmtPermitsDataSource;
 use Permits\Controller\Config\DataSource\ValidEcmtPermits as ValidEcmtPermitsDataSource;
 use Permits\Controller\Config\DataSource\ValidIrhpPermits as ValidIrhpPermitsDataSource;
 
@@ -18,9 +19,9 @@ class TableConfig
         ]
     ];
     const UNPAID_APP_OVERVIEW = [
-        'overview-valid-permits' => [
+        'overview-unpaid-permits' => [
             'tableName' => 'overview-unpaid-permits',
-            'dataSource' => ValidEcmtPermitsDataSource::DATA_KEY
+            'dataSource' => UnpaidEcmtPermitsDataSource::DATA_KEY
         ]
     ];
     const VALID_IRHP_PERMITS = [

@@ -31,10 +31,13 @@ class RestrictedCountriesController extends AbstractSelfserveController implemen
         'default' => FormConfig::FORM_RESTRICTED_COUNTRIES,
     ];
 
-    // Other translation keys set in RestrictedCountries Mapper to handle euro5/6 switch.
     protected $templateVarsConfig = [
         'question' => [
             'browserTitle' => 'permits.page.restricted-countries.title',
+            'question' => 'permits.page.restricted-countries.question',
+            'guidance' => [
+                'permits.page.restricted-countries.guidance.line.1',
+            ],
         ],
     ];
 
@@ -46,7 +49,7 @@ class RestrictedCountriesController extends AbstractSelfserveController implemen
             'mapperClass' => RestrictedCountries::class,
             'preprocessMethod' => 'preprocessFormData',
             'params' => ParamsConfig::ID_FROM_ROUTE,
-            'step' => EcmtSection::ROUTE_ECMT_NO_OF_PERMITS,
+            'step' => EcmtSection::ROUTE_ECMT_EURO_EMISSIONS,
             'saveAndReturnStep' => EcmtSection::ROUTE_APPLICATION_OVERVIEW,
         ],
     ];

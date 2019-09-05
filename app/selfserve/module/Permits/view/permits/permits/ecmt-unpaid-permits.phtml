@@ -1,0 +1,23 @@
+<?php
+use Permits\Controller\Config\DataSource\PermitApplication as PermitAppDataSource;
+use Permits\View\Helper\EcmtSection;
+
+$this->headTitle($this->translate('permits.ecmt.page.unpaid.browser.title'));
+?>
+<?php echo $this->permitsBackLink('common.link.back.label', 'permits'); ?>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <span class="govuk-caption-xl">
+            <?php echo $this->escapeHtml($data[PermitAppDataSource::DATA_KEY]['applicationRef']); ?>
+        </span>
+        <h1 class="govuk-heading-xl">
+            <?php echo $this->escapeHtml($this->translate('permits.ecmt.page.unpaid.title')); ?>
+        </h1>
+        <?php echo $tables['overview-unpaid-permits']; ?>
+        <p>
+        <a href="<?php echo $this->url(EcmtSection::ROUTE_ECMT_AWAITING_FEE, [], [], true) ?>" class="return-overview">
+            <?php echo $this->translate('permits.link.return.to.fee.overview'); ?>
+        </a>
+        </p>
+    </div>
+</div>

@@ -7,17 +7,16 @@ use Olcs\Controller\Config\DataSource\AbstractDataSource;
 use Common\RefData;
 
 /**
- * Unpaod ECMT permits data source config
+ * Unpaid ECMT permits data source config
  */
 class UnpaidEcmtPermits extends AbstractDataSource
 {
-    const DATA_KEY = 'validPermits';
+    const DATA_KEY = 'unpaidPermits';
     protected $dto = UnpaidEcmtPermitsDto::class;
     protected $paramsMap = [
         'id' => 'id',
         'page' => 'page',
         'limit' => 'limit',
-        'status' => 'status',
     ];
     protected $defaultParamData = [
         'page' => 1,

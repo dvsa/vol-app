@@ -1,6 +1,7 @@
 <?php
 
 use Common\Util\Escape;
+use Common\RefData;
 
 return array(
     'variables' => array(),
@@ -15,16 +16,22 @@ return array(
     'attributes' => array(),
     'columns' => array(
         array(
-                'title' => 'permits.ecmt.page.valid.tableheader.ref',
+                'title' => 'permits.ecmt.page.valid.tableheader.permit-no',
                 'name' => 'permitNumber',
                 'formatter' => function ($row) {
                     return '<b>' . Escape::html($row['permitNumber']) . '</b>';
                 },
             ),
         array(
-            'title' => 'Status',
-            'name' => 'status',
-            'formatter' => 'RefDataStatus',
+            'title' => 'permits.ecmt.page.valid.tableheader.application-no',
+            'name' => 'irhpPermitApplication',
+            'stack' => 'irhpPermitApplication->relatedApplication->id',
+            'formatter' => 'StackValue',
+        ),
+        array(
+            'title' => 'permits.ecmt.page.valid.tableheader.min-emission',
+            'name' => 'emissionsCategory',
+            'formatter' => 'RefData',
         ),
         array(
             'title' => 'permits.ecmt.page.valid.tableheader.countries',
@@ -32,7 +39,7 @@ return array(
             'formatter' => function ($row, $column, $sm) {
                 $translator = $sm->get('translator');
                 if (count($row['countries']) === 0) {
-                    return $translator->translate('permits.ecmt.page.valid.tableheader.no.countries');
+                    return $translator->translate('permits.ecmt.page.valid.no.countries');
                 }
                 $rc = [];
                 foreach ($row['countries'] as $country) {
@@ -42,9 +49,32 @@ return array(
             }
         ),
         array(
-            'title' => 'Issue date',
-            'name' => 'issueDate',
+            'title' => 'permits.ecmt.page.valid.tableheader.start-date',
+            'name' => 'startDate',
             'formatter' => 'Date',
+        ),
+        array(
+            'title' => 'permits.ecmt.page.valid.tableheader.expiry-date',
+            'name' => 'expiryDate',
+            'formatter' => 'Date',
+        ),
+        array(
+            'title' => 'permits.ecmt.page.valid.tableheader.status',
+            'name' => 'status',
+            'formatter' => function ($row) {
+                return $this->callFormatter(
+                    [
+                        'name' => 'status',
+                        'formatter' => 'RefDataStatus',
+                    ],
+                    [
+                        'status' => [
+                            'id' => RefData::PERMIT_VALID,
+                            'description' => RefData::PERMIT_VALID
+                        ],
+                    ]
+                );
+            }
         ),
     )
 );

@@ -3,7 +3,6 @@
 namespace PermitsTest\Data\Mapper;
 
 use Mockery as m;
-use Common\RefData;
 use Permits\Controller\Config\DataSource\PermitApplication as PermitAppDataSource;
 use Permits\Data\Mapper\RestrictedCountries;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
@@ -39,7 +38,7 @@ class RestrictedCountriesTest extends TestCase
         self::assertEquals($expected, RestrictedCountries::mapFromForm($data));
     }
 
-    public function testPreprocessFormDataEuro6()
+    public function testPreprocessFormData()
     {
         $data = [
             'fields' => [
@@ -61,33 +60,7 @@ class RestrictedCountriesTest extends TestCase
         self::assertEquals($expected, RestrictedCountries::preprocessFormData($data, $mockForm));
     }
 
-    public function testPreprocessFormDataEuro5()
-    {
-        $data = [
-            'euro5Fields' => [
-                'restrictedCountries' => 1,
-            ],
-        ];
-
-        $expected = [
-            'formData' => [
-                'euro5Fields' => [
-                    'restrictedCountries' => 1,
-                ],
-                'fields' => [
-                    'restrictedCountries' => 1,
-                    'yesContent' => [
-                        'restrictedCountriesList' => []
-                    ]
-                ]
-            ]
-        ];
-
-        $mockForm = m::mock(Form::class);
-        self::assertEquals($expected, RestrictedCountries::preprocessFormData($data, $mockForm));
-    }
-
-    public function testPreprocessFormDataEuro6YesNoCountries()
+    public function testPreprocessFormDataYesNoCountries()
     {
         $data = [
             'fields' => [
@@ -121,63 +94,11 @@ class RestrictedCountriesTest extends TestCase
         self::assertEquals($expected, RestrictedCountries::preprocessFormData($data, $mockForm));
     }
 
-    public function testMapFormOptionsEuro5()
+    public function testMapFormOptions()
     {
         $inputData = [
             PermitAppDataSource::DATA_KEY => [
                 'id' => 9,
-                'windowEmissionsCategory' => RefData::EMISSIONS_CATEGORY_EURO5,
-                'hasRestrictedCountries' => null
-            ]
-        ];
-
-        $outputData[PermitAppDataSource::DATA_KEY] = $inputData[PermitAppDataSource::DATA_KEY];
-        $outputData['guidance'] = 'permits.page.restricted-countries.guidance.euro5';
-        $outputData['question'] = 'permits.page.restricted-countries.title.euro5';
-
-        $mockForm = m::mock(Form::class);
-        $mockForm->shouldReceive('remove')->with('fields')->once();
-
-        self::assertEquals($outputData, RestrictedCountries::mapForFormOptions($inputData, $mockForm));
-    }
-
-    public function testMapFormOptionsEuro5HasCountries()
-    {
-        $inputData = [
-            PermitAppDataSource::DATA_KEY => [
-                'id' => 9,
-                'windowEmissionsCategory' => RefData::EMISSIONS_CATEGORY_EURO5,
-                'hasRestrictedCountries' => 0
-            ]
-        ];
-
-        $outputData[PermitAppDataSource::DATA_KEY] = $inputData[PermitAppDataSource::DATA_KEY];
-        $outputData['guidance'] = 'permits.page.restricted-countries.guidance.euro5';
-        $outputData['question'] = 'permits.page.restricted-countries.title.euro5';
-
-        $mockForm = m::mock(Form::class);
-        $mockForm->shouldReceive('remove')->with('fields')->once();
-
-        $mockForm->shouldReceive('get')
-            ->with('euro5Fields')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('get')
-            ->with('restrictedCountries')
-            ->once()
-            ->andReturnSelf()
-            ->shouldReceive('setValue')
-            ->with(1);
-
-        self::assertEquals($outputData, RestrictedCountries::mapForFormOptions($inputData, $mockForm));
-    }
-
-    public function testMapFormOptionsEuro6()
-    {
-        $inputData = [
-            PermitAppDataSource::DATA_KEY => [
-                'id' => 9,
-                'windowEmissionsCategory' => RefData::EMISSIONS_CATEGORY_EURO6,
                 'countrys' => [
                     ['id' => 'AT']
                 ],
@@ -198,11 +119,7 @@ class RestrictedCountriesTest extends TestCase
         ];
 
         $outputData[PermitAppDataSource::DATA_KEY] = $inputData[PermitAppDataSource::DATA_KEY];
-        $outputData['guidance'] = [
-            'permits.page.restricted-countries.guidance.line.1',
-            'permits.page.restricted-countries.guidance.line.2'
-        ];
-        $outputData['question'] = 'permits.page.restricted-countries.question';
+
         $outputData['ecmtConstrainedCountries'] = [
             'results' => [
                 [
@@ -217,7 +134,6 @@ class RestrictedCountriesTest extends TestCase
         ];
 
         $mockForm = m::mock(Form::class);
-        $mockForm->shouldReceive('remove')->with('euro5Fields')->once();
 
         $valueOpts = [
             [
@@ -251,13 +167,11 @@ class RestrictedCountriesTest extends TestCase
         self::assertEquals($outputData, RestrictedCountries::mapForFormOptions($inputData, $mockForm));
     }
 
-
-    public function testMapFormOptionsEuro6HasCountries()
+    public function testMapFormOptionsHasCountries()
     {
         $inputData = [
             PermitAppDataSource::DATA_KEY => [
                 'id' => 9,
-                'windowEmissionsCategory' => RefData::EMISSIONS_CATEGORY_EURO6,
                 'countrys' => [
                     ['id' => 'AT']
                 ],
@@ -278,11 +192,7 @@ class RestrictedCountriesTest extends TestCase
         ];
 
         $outputData[PermitAppDataSource::DATA_KEY] = $inputData[PermitAppDataSource::DATA_KEY];
-        $outputData['guidance'] = [
-            'permits.page.restricted-countries.guidance.line.1',
-            'permits.page.restricted-countries.guidance.line.2'
-        ];
-        $outputData['question'] = 'permits.page.restricted-countries.question';
+
         $outputData['ecmtConstrainedCountries'] = [
             'results' => [
                 [
@@ -297,7 +207,6 @@ class RestrictedCountriesTest extends TestCase
         ];
 
         $mockForm = m::mock(Form::class);
-        $mockForm->shouldReceive('remove')->with('euro5Fields')->once();
 
         $valueOpts = [
             [

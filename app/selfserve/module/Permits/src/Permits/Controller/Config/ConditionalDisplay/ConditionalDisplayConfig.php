@@ -30,6 +30,8 @@ class ConditionalDisplayConfig
             'view' => [
                 'template' => 'permits/window-closed',
             ],
+            'key' => 'hasYears',
+            'value' => true
         ],
     ];
 

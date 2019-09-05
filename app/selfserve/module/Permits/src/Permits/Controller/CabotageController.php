@@ -44,7 +44,7 @@ class CabotageController extends AbstractSelfserveController implements ToggleAw
             'checkConditionalDisplay' => false,
             'command' => UpdateEcmtCabotage::class,
             'params' => ParamsConfig::ID_FROM_ROUTE,
-            'step' => EcmtSection::ROUTE_ECMT_COUNTRIES,
+            'step' => EcmtSection::ROUTE_ECMT_ROADWORTHINESS,
             'saveAndReturnStep' => EcmtSection::ROUTE_APPLICATION_OVERVIEW,
         ],
     ];

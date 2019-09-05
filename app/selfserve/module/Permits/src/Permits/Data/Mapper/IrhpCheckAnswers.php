@@ -196,7 +196,7 @@ class IrhpCheckAnswers
      *
      * @return array
      */
-    private static function permitTypeAnswer(string $permitType): array
+    public static function permitTypeAnswer(string $permitType): array
     {
         return static::answer('permits.page.fee.permit.type', $permitType);
     }
@@ -204,18 +204,19 @@ class IrhpCheckAnswers
     /**
      * Answer data for a licence row on check answers page
      *
-     * @param array $licence licence data
+     * @param array  $licence licence data
+     * @param string $route   licence page route (allows override for legacy ECMT)
      *
      * @return array
      */
-    private static function licenceAnswer(array $licence): array
+    public static function licenceAnswer(array $licence, string $route = Section::ROUTE_LICENCE): array
     {
         $answer = [
             $licence['licNo'],
             $licence['trafficArea']['name']
         ];
 
-        return static::answer('permits.check-answers.page.question.licence', $answer, Section::ROUTE_LICENCE);
+        return static::answer('permits.check-answers.page.question.licence', $answer, $route);
     }
 
     /**
@@ -242,11 +243,11 @@ class IrhpCheckAnswers
      * @param string|null $questionType the type of question
      * @param array       $params       route params
      * @param array       $options      route options
-     * @param bool        $escape       whether value should be escaped
+     * @param bool        $escape       whether the value should be escaped by the answer formatter
      *
      * @return array
      */
-    private static function answer(
+    public static function answer(
         string $question,
         $answer,
         string $route = null,

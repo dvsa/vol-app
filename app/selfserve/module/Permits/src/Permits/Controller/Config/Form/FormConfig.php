@@ -77,6 +77,7 @@ class FormConfig
     const FORM_ECMT_LICENCE = [
         'licence' => [
             'formClass' => 'LicenceForm',
+            'dataParam' => 'active',
             'dataSource' => PermitApplicationDataSource::DATA_KEY,
             'mapper' => [
                 'type' => self::FORM_OPTIONS,
@@ -101,16 +102,19 @@ class FormConfig
         'emissions' => [
             'formClass' => 'EuroEmissionsForm',
             'dataSource' => PermitApplicationDataSource::DATA_KEY,
-            'mapper' => [
-                'type' => self::FORM_OPTIONS,
-                'class' => EuroEmissions::class
-            ]
         ],
     ];
 
     const FORM_CABOTAGE = [
         'cabotage' => [
             'formClass' => 'CabotageForm',
+            'dataSource' => PermitApplicationDataSource::DATA_KEY,
+        ],
+    ];
+
+    const FORM_ROADWORTHINESS = [
+        'roadworthiness' => [
+            'formClass' => 'RoadworthinessForm',
             'dataSource' => PermitApplicationDataSource::DATA_KEY,
         ],
     ];

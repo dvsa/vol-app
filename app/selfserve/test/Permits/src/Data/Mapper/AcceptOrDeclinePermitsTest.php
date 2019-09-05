@@ -4,7 +4,8 @@ namespace PermitsTest\Data\Mapper;
 
 use Common\Service\Helper\TranslationHelperService;
 use Permits\Data\Mapper\AcceptOrDeclinePermits;
-use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
+use Permits\View\Helper\EcmtSection;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Zend\Mvc\Controller\Plugin\Url;
 
@@ -13,148 +14,306 @@ use Zend\Mvc\Controller\Plugin\Url;
  *
  * @author Jason de Jonge <jason.de-jonge@capgemini.com>
  */
-class AcceptOrDeclinePermitsTest extends TestCase
+class AcceptOrDeclinePermitsTest extends MockeryTestCase
 {
-    public function testMapForDisplay()
+    private $url;
+
+    private $translator;
+
+    public function setUp()
     {
-        $feeDisplayValue = '100';
-        $feeGrossAmount = '200';
-        $permitsAwarded = 5;
+        $this->url = m::mock(Url::class);
 
-        $url = m::mock(Url::class);
-        $url->shouldReceive('fromRoute')
-        ->andReturn('/permits/2/ecmt-unpaid-permits/');
+        $this->url->shouldReceive('fromRoute')
+            ->with(EcmtSection::ROUTE_ECMT_UNPAID_PERMITS, [], [], true)
+            ->andReturn('/permits/3003/ecmt-unpaid-permits/');
 
-        $translationHelperService = m::mock(TranslationHelperService::class);
-        $translationHelperService
-            ->shouldReceive('translateReplace')
-            ->with(
-                'permits.page.fee.per-permit',
-                [
-                    5,
-                    '£100',
-                    '/permits/2/ecmt-unpaid-permits/'
-                ]
-            )
-            ->once()
-            ->andReturn('6 x £123 (per permit) <a class="govuk-link govuk-!-display-block" href="/permits/2/ecmt-unpaid-permits/">View Permits</a>')
-            ->shouldReceive('translateReplace')
-            ->with(
-                'permits.page.ecmt.fee-part-successful.fee.total.value',
-                [
-                    '£200'
-                ]
-            )
-            ->once()
-            ->andReturn('£123 (non-refundable)')
-            ->shouldReceive('translateReplace')
-            ->with(
-                'permits.page.fee.permit.validity.dates',
-                [
-                    '01 Jan 2029',
-                    '31 Dec 2029'
-                ]
-            )
-            ->once()
-            ->andReturn('01 Jan 2029 to 31 Dec 2029')
-            ->shouldReceive('translateReplace')
-            ->with(
-                'markup-ecmt-fee-part-successful-hint',
-                [
-                    5,
-                    8
-                ]
-            )
-            ->andReturn('Due to very high numbers of applications you have been awarded with <b>6 permits</b> out of 8 you applied for.')
-            ->once();
+        $this->translator = m::mock(TranslationHelperService::class);
 
-        $inputData = [
-            'fees' => [
-                [
-                    'isOutstanding' => false,
-                    'isEcmtIssuingFee' => true,
-                    'grossAmount' => $feeGrossAmount,
-                    'feeType' => [
-                        'displayValue' => $feeDisplayValue
-                    ],
-                    'invoicedDate' => '2019-03-08'
-                ],
-                [
-                    'isOutstanding' => true,
-                    'isEcmtIssuingFee' => false
-                ],
-                [
-                    'isOutstanding' => false,
-                    'isEcmtIssuingFee' => false
-                ],
-                [
-                    //Only fee that should be used
-                    'isOutstanding' => true,
-                    'isEcmtIssuingFee' => true,
-                    'grossAmount' => $feeGrossAmount,
-                    'feeType' => [
-                        'displayValue' => $feeDisplayValue
-                    ],
-                    'invoicedDate' => '2018-03-10'
-                ]
+        $this->translator->shouldReceive('translate')
+            ->with('permits.page.fee.emissions.category.euro5')
+            ->andReturn('Euro 5 minimum emission standard');
+
+        $this->translator->shouldReceive('translate')
+            ->with('permits.page.fee.emissions.category.euro6')
+            ->andReturn('Euro 6 minimum emission standard');
+
+        $this->translator->shouldReceive('translate')
+            ->with('permits.page.ecmt.fee-part-successful.view.permit.restrictions')
+            ->andReturn('View permit restrictions');
+    }
+
+    /**
+     * @dataProvider dpTestMapForDisplay
+     */
+    public function testMapForDisplay(
+        $permitsAwarded,
+        $euro5PermitsAwarded,
+        $euro6PermitsAwarded,
+        $guidanceKey,
+        $translatedGuidance
+    ) {
+        $applicationReference = 'OB1234567 / 3003';
+        $permitTypeDescription = 'Annual ECMT';
+        $feePerPermit = '62.00';
+        $grossAmount = '310.00';
+        $formattedGrossAmount = '£310';
+        $formattedGrossAmountTranslated = '£310 (non-refundable)';
+        $permitsRequired = 9;
+
+        $data = [
+            'applicationRef' => $applicationReference,
+            'permitType' => [
+                'description' => $permitTypeDescription
             ],
-            'hasOutstandingFees' => true,
+            'hasOutstandingFees' => 1,
             'irhpPermitApplications' => [
                 [
                     'permitsAwarded' => $permitsAwarded,
+                    'euro5PermitsAwarded' => $euro5PermitsAwarded,
+                    'euro6PermitsAwarded' => $euro6PermitsAwarded,
                     'irhpPermitWindow' => [
                         'irhpPermitStock' => [
-                           'validFrom' => '2029-01-01',
-                           'validTo' => '2029-12-31'
+                            'validityYear' => '2023'
                         ]
                     ]
                 ]
             ],
-            'applicationRef' => 'OG7654321 / 2',
-            'permitType' => [
-                'description' => 'Annual ECMT'
+            'fees' => [
+                [
+                    'isOutstanding' => true,
+                    'isEcmtIssuingFee' => true,
+                    'feeType' => [
+                        'displayValue' => $feePerPermit,
+                    ],
+                    'grossAmount' => $grossAmount,
+                    'invoicedDate' => '2019-07-10T00:00:00+0000'
+                ]
             ],
-            'permitsRequired' => 8
+            'totalPermitsRequired' => $permitsRequired,
         ];
-        $outputData['validityPeriod']['fromDate'] = '921024000';
-        $outputData['validityPeriod']['toDate'] = '1583798400';
-        $outputData = $inputData;
-        $outputData['title'] = 'permits.page.fee-part-successful.title';
-        $outputData['dueDate'] = '21 Mar 2019'; //invoiced date +9 weekdays
-        $outputData['issueFee'] = $feeDisplayValue;
-        $outputData['totalFee'] = $feeGrossAmount;
-        $outputData['summaryData'] = [
-            0 => [
-                'key' => 'permits.page.ecmt.consideration.reference.number',
-                'value' => 'OG7654321 / 2'
+
+        $this->translator->shouldReceive('translateReplace')
+            ->with(
+                'permits.page.fee.number.permits.line.multiple',
+                [$euro5PermitsAwarded, 'Euro 5 minimum emission standard']
+            )
+            ->andReturn('2 permits for Euro 5 minimum emission standard');
+
+        $this->translator->shouldReceive('translateReplace')
+            ->with(
+                'permits.page.fee.number.permits.line.multiple',
+                [$euro6PermitsAwarded, 'Euro 6 minimum emission standard']
+            )
+            ->andReturn('3 permits for Euro 6 minimum emission standard');
+
+        $this->translator->shouldReceive('translateReplace')
+            ->with(
+                'permits.page.ecmt.fee-part-successful.fee.total.value',
+                [$formattedGrossAmount]
+            )
+            ->andReturn($formattedGrossAmountTranslated);
+
+        $this->translator->shouldReceive('translateReplace')
+            ->with(
+                $guidanceKey,
+                [$permitsAwarded, $permitsRequired]
+            )
+            ->andReturn($translatedGuidance);
+
+        $expectedSummaryData = [
+            [
+                'key' => 'permits.page.fee.application.reference',
+                'value' => $applicationReference,
             ],
-            1 => [
+            [
                 'key' => 'permits.page.ecmt.consideration.permit.type',
-                'value' => 'Annual ECMT'
+                'value' => $permitTypeDescription,
             ],
-            2 => [
-                'key' => 'permits.page.ecmt.fee-part-successful.permit.validity',
-                'value' => '01 Jan 2029 to 31 Dec 2029'
+            [
+                'key' => 'permits.page.ecmt.consideration.permit.year',
+                'value' => '2023',
             ],
-            3 => [
+            [
+                'key' => 'permits.page.fee.number.permits',
+                'value' => '2 permits for Euro 5 minimum emission standard<br>' .
+                    '3 permits for Euro 6 minimum emission standard<br>' .
+                    '<a href="/permits/3003/ecmt-unpaid-permits/">View permit restrictions</a>',
+                'disableHtmlEscape' => true,
+            ],
+            [
                 'key' => 'permits.page.ecmt.fee-part-successful.issuing.fee',
-                'value' => '6 x £123 (per permit) <a class="govuk-link govuk-!-display-block" href="/permits/2/ecmt-unpaid-permits/">View Permits</a>',
-                'disableHtmlEscape' => true
+                'value' => '62.00',
+                'isCurrency' => true,
             ],
-            4 => [
+            [
                 'key' => 'permits.page.ecmt.fee-part-successful.issuing.fee.total',
-                'value' => '£123 (non-refundable)'
+                'value' => $formattedGrossAmountTranslated,
             ],
-            5 => [
+            [
                 'key' => 'permits.page.ecmt.fee-part-successful.payment.due',
-                'value' => '21 Mar 2019'
+                'value' => '23 Jul 2019',
             ]
         ];
-        $outputData['guidance'] = [
-            'value' => 'Due to very high numbers of applications you have been awarded with <b>6 permits</b> out of 8 you applied for.',
+
+        $expectedGuidanceData = [
+            'value' => $translatedGuidance,
             'disableHtmlEscape' => true,
         ];
 
-        self::assertEquals($outputData, AcceptOrDeclinePermits::mapForDisplay($inputData, $translationHelperService, $url));
+        $mappedData = AcceptOrDeclinePermits::mapForDisplay($data, $this->translator, $this->url);
+
+        $this->assertEquals(
+            'permits.page.fee-part-successful.title',
+            $mappedData['title']
+        );
+
+        $this->assertEquals(
+            $expectedSummaryData,
+            $mappedData['summaryData']
+        );
+
+        $this->assertEquals(
+            $expectedGuidanceData,
+            $mappedData['guidance']
+        );
+    }
+
+    /**
+     * @dataProvider dpTestMapForDisplay
+     */
+    public function testMapForDisplayNoOutstandingFee(
+        $permitsAwarded,
+        $euro5PermitsAwarded,
+        $euro6PermitsAwarded,
+        $guidanceKey,
+        $translatedGuidance
+    ) {
+        $applicationReference = 'OB1234567 / 3003';
+        $permitTypeDescription = 'Annual ECMT';
+        $feePerPermit = '62.00';
+        $permitsRequired = 9;
+
+        $data = [
+            'applicationRef' => $applicationReference,
+            'permitType' => [
+                'description' => $permitTypeDescription
+            ],
+            'hasOutstandingFees' => 0,
+            'irhpPermitApplications' => [
+                [
+                    'permitsAwarded' => $permitsAwarded,
+                    'euro5PermitsAwarded' => $euro5PermitsAwarded,
+                    'euro6PermitsAwarded' => $euro6PermitsAwarded,
+                    'irhpPermitWindow' => [
+                        'irhpPermitStock' => [
+                            'validityYear' => '2023'
+                        ]
+                    ]
+                ]
+            ],
+            'fees' => [
+                [
+                    'isOutstanding' => false,
+                    'isEcmtIssuingFee' => true,
+                    'feeType' => [
+                        'displayValue' => $feePerPermit,
+                    ],
+                    'grossAmount' => '400.00',
+                    'invoicedDate' => '2019-07-10T00:00:00+0000'
+                ]
+            ],
+            'totalPermitsRequired' => $permitsRequired,
+        ];
+
+        $this->translator->shouldReceive('translateReplace')
+            ->with(
+                'permits.page.fee.number.permits.line.multiple',
+                [$euro5PermitsAwarded, 'Euro 5 minimum emission standard']
+            )
+            ->andReturn('2 permits for Euro 5 minimum emission standard');
+
+        $this->translator->shouldReceive('translateReplace')
+            ->with(
+                'permits.page.fee.number.permits.line.multiple',
+                [$euro6PermitsAwarded, 'Euro 6 minimum emission standard']
+            )
+            ->andReturn('3 permits for Euro 6 minimum emission standard');
+
+        $this->translator->shouldReceive('translateReplace')
+            ->with(
+                $guidanceKey,
+                [$permitsAwarded, $permitsRequired]
+            )
+            ->andReturn($translatedGuidance);
+
+        $expectedSummaryData = [
+            [
+                'key' => 'permits.page.fee.application.reference',
+                'value' => $applicationReference,
+            ],
+            [
+                'key' => 'permits.page.ecmt.consideration.permit.type',
+                'value' => $permitTypeDescription,
+            ],
+            [
+                'key' => 'permits.page.ecmt.consideration.permit.year',
+                'value' => '2023',
+            ],
+            [
+                'key' => 'permits.page.fee.number.permits',
+                'value' => '2 permits for Euro 5 minimum emission standard<br>' .
+                    '3 permits for Euro 6 minimum emission standard<br>' .
+                    '<a href="/permits/3003/ecmt-unpaid-permits/">View permit restrictions</a>',
+                'disableHtmlEscape' => true,
+            ],
+            [
+                'key' => 'waived.paid.permits.page.ecmt.fee-part-successful.payment.due',
+                'value' => '23 Jul 2019',
+            ]
+        ];
+
+        $expectedGuidanceData = [
+            'value' => $translatedGuidance,
+            'disableHtmlEscape' => true,
+        ];
+
+        $mappedData = AcceptOrDeclinePermits::mapForDisplay($data, $this->translator, $this->url);
+
+        $this->assertEquals(
+            'waived-paid-permits.page.fee-part-successful.title',
+            $mappedData['title']
+        );
+
+        $this->assertEquals(
+            $expectedSummaryData,
+            $mappedData['summaryData']
+        );
+
+        $this->assertEquals(
+            $expectedGuidanceData,
+            $mappedData['guidance']
+        );
+    }
+
+    public function dpTestMapForDisplay()
+    {
+        return [
+            [
+                5,
+                2,
+                3,
+                'markup-ecmt-fee-part-successful-hint',
+                'Due to very high numbers of applications you have been awarded '.
+                'with <b>5 permits</b> out of 9 you applied for.',
+            ],
+            [
+                9,
+                4,
+                5,
+                'markup-ecmt-fee-successful-hint',
+                'You have been awarded with <b>9 permits</b> out of 9 you applied for.',
+            ],
+        ];
     }
 }

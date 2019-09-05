@@ -21,6 +21,7 @@ class EcmtSection extends AbstractHelper
     const ROUTE_CONFIRM_CHANGE = 'permits/change-licence';
     const ROUTE_ECMT_EURO_EMISSIONS = 'permits/ecmt-emissions';
     const ROUTE_ECMT_CABOTAGE = 'permits/ecmt-cabotage';
+    const ROUTE_ECMT_ROADWORTHINESS = 'permits/ecmt-roadworthiness';
     const ROUTE_ECMT_COUNTRIES = 'permits/ecmt-countries';
     const ROUTE_ECMT_TRIPS = 'permits/ecmt-trips';
     const ROUTE_ECMT_INTERNATIONAL_JOURNEY = 'permits/ecmt-international-journey';
@@ -52,9 +53,10 @@ class EcmtSection extends AbstractHelper
      */
     const ROUTE_ORDER = [
         self::ROUTE_LICENCE => 'licence',
-        self::ROUTE_ECMT_EURO_EMISSIONS => 'emissions',
         self::ROUTE_ECMT_CABOTAGE => 'cabotage',
+        self::ROUTE_ECMT_ROADWORTHINESS => 'roadworthiness',
         self::ROUTE_ECMT_COUNTRIES => 'countrys',
+        self::ROUTE_ECMT_EURO_EMISSIONS => 'emissions',
         self::ROUTE_ECMT_NO_OF_PERMITS => 'permitsRequired',
         self::ROUTE_ECMT_TRIPS => 'trips',
         self::ROUTE_ECMT_INTERNATIONAL_JOURNEY => 'internationalJourneys',

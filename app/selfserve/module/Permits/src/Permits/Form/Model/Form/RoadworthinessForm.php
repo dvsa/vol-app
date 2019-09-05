@@ -4,19 +4,16 @@ namespace Permits\Form\Model\Form;
 use Zend\Form\Annotation as Form;
 
 /**
- * @Form\Name("restrictedCountries")
+ * @Form\Name("Roadworthiness")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
  */
-class RestrictedCountriesForm
+
+class RoadworthinessForm
 {
     /**
      * @Form\Name("fields")
-     * @Form\Options({
-     *     "label": "permits.page.restricted-countries.question",
-     *     "label_attributes": {"class": "visually-hidden"},
-     * })
-     * @Form\ComposedObject("Permits\Form\Model\Fieldset\RestrictedCountries")
+     * @Form\ComposedObject("Permits\Form\Model\Fieldset\Roadworthiness")
      */
     public $fields = null;
 

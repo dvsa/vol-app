@@ -1,0 +1,18 @@
+<?php
+use Permits\Controller\Config\DataSource\Licence as LicenceDataSource;
+
+$this->headTitle($this->translate('permits.ecmt.page.valid.browser.title'));
+?>
+<?php echo $this->permitsBackLink('common.link.back.label', 'permits'); ?>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <span class="govuk-caption-xl">
+            <?php echo $this->escapeHtml($data[LicenceDataSource::DATA_KEY]['licNo']); ?>
+        </span>
+        <h1 class="govuk-heading-xl">
+            <?php echo $this->escapeHtml($this->translate('permits.ecmt.page.valid.title')); ?>
+        </h1>
+        <?php echo $tables['overview-valid-permits']; ?>
+        <p><?php echo $this->permitsDashboardLink('permits.link.return.to.dashboard'); ?></p>
+    </div>
+</div>

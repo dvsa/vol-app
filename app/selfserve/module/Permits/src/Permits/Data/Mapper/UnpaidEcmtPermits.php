@@ -4,24 +4,24 @@ namespace Permits\Data\Mapper;
 
 /**
  *
- * Valid ECMT permits list mapper
+ * Unpaid ECMT permits list mapper
  */
-class ValidEcmtPermits
+class UnpaidEcmtPermits
 {
     public static function mapForDisplay(array $data)
     {
         $permits = [];
 
-        foreach ($data['results'] as $permit) {
+        $cnt = 0;
+        foreach ($data['result'] as $permit) {
+            $cnt++;
             $permits[] = [
-                'permitNumber' => $permit['permitNumber'],
+                'permitNumber' => $cnt,
                 'emissionsCategory' => $permit['irhpPermitRange']['emissionsCategory'],
                 'countries' => $permit['irhpPermitRange']['countrys'],
-                'irhpPermitApplication' => $permit['irhpPermitApplication'],
-                'startDate' => $permit['startDate'],
-                'expiryDate' => $permit['irhpPermitRange']['irhpPermitStock']['validTo'],
             ];
         }
+
         return [
             'results' => $permits,
             'count' => $data['count'],

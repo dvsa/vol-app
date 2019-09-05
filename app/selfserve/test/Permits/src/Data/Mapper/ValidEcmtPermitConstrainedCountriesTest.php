@@ -2,6 +2,9 @@
 
 namespace PermitsTest\Data\Mapper;
 
+use Permits\Controller\Config\DataSource\EcmtConstrainedCountriesList as EcmtConstrainedCountriesListDataSource;
+use Permits\Controller\Config\DataSource\ValidEcmtPermits as ValidEcmtPermitsDataSource;
+use Permits\Controller\Config\DataSource\UnpaidEcmtPermits as UnpaidEcmtPermitsDataSource;
 use Permits\Data\Mapper\ValidEcmtPermitConstrainedCountries;
 
 /**
@@ -11,129 +14,273 @@ use Permits\Data\Mapper\ValidEcmtPermitConstrainedCountries;
  */
 class ValidEcmtPermitConstrainedCountriesTest extends \PHPUnit\Framework\TestCase
 {
-    public function testMapForDisplayEmptyData()
+    /**
+     * @dataProvider dpTestMapForDisplay
+     */
+    public function testMapForDisplay($input, $expected)
     {
-        self::assertEquals([], ValidEcmtPermitConstrainedCountries::mapForDisplay([]));
+        self::assertEquals($expected, ValidEcmtPermitConstrainedCountries::mapForDisplay($input));
     }
 
-    public function testMapForDisplay()
+    public function dpTestMapForDisplay()
     {
-        $inputData = [
-            'ecmtConstrainedCountries' => [
-                'results' => [
-                    0 => [
-                        'id' => 'AA',
-                    ],
-                    1 => [
-                        'id' => 'BB',
-                    ],
-                    2 => [
-                        'id' => 'CC',
-                    ],
-                ]
+        return [
+            'empty input' => [
+                'input' => [],
+                'expected' => [],
             ],
-            'validPermits' => [
-                'results' => [
-                    0 => [
-                        'permitNumber' => 111,
-                        'status' => ['id' => 'permit_app_valid', 'description' => 'Valid' ],
-                        'issueDate' => '2018-10-11 16:40:17',
-                        'countries' => [
-                            0 => [
+            'unpaid ecmt permits input' => [
+                'input' => [
+                    EcmtConstrainedCountriesListDataSource::DATA_KEY => [
+                        'results' => [
+                            [
                                 'id' => 'AA',
                             ],
-                            1 => [
+                            [
                                 'id' => 'BB',
                             ],
-                            2 => [
+                            [
                                 'id' => 'CC',
                             ],
+                        ]
+                    ],
+                    UnpaidEcmtPermitsDataSource::DATA_KEY => [
+                        'results' => [
+                            [
+                                'permitNumber' => 111,
+                                'emissionsCategory' => 'Euro 5',
+                                'countries' => [
+                                    [
+                                        'id' => 'AA',
+                                    ],
+                                    [
+                                        'id' => 'BB',
+                                    ],
+                                    [
+                                        'id' => 'CC',
+                                    ],
 
+                                ],
+                            ],
+                            [
+                                'permitNumber' => 222,
+                                'emissionsCategory' => 'Euro 5',
+                                'countries' => [
+                                    [
+                                        'id' => 'AA',
+                                    ],
+                                    [
+                                        'id' => 'BB',
+                                    ],
+                                ],
+                            ],
+                            [
+                                'permitNumber' => 333,
+                                'emissionsCategory' => 'Euro 5',
+                                'countries' => [
+                                    [
+                                        'id' => 'AA',
+                                    ],
+                                ],
+                            ],
+                            [
+                                'permitNumber' => 444,
+                                'emissionsCategory' => 'Euro 5',
+                                'countries' => [],
+                            ],
                         ],
                     ],
-                    1 => [
-                        'permitNumber' => 222,
-                        'status' => ['id' => 'permit_app_valid', 'description' => 'Valid' ],
-                        'issueDate' => '2018-10-11 16:40:17',
-                        'countries' => [
-                            0 => [
+                ],
+                'expected' => [
+                    'results' => [
+                        [
+                            'permitNumber' => 111,
+                            'emissionsCategory' => 'Euro 5',
+                            'countries' => [], //no exceptions
+                            'irhpPermitApplication' => null,
+                            'startDate' => null,
+                            'expiryDate' => null,
+                        ],
+                        [
+                            'permitNumber' => 222,
+                            'emissionsCategory' => 'Euro 5',
+                            'countries' => [
+                                [
+                                    'id' => 'CC',
+                                ],
+                            ], //countries "AA" and "BB" were matched
+                            'irhpPermitApplication' => null,
+                            'startDate' => null,
+                            'expiryDate' => null,
+                        ],
+                        [
+                            'permitNumber' => 333,
+                            'emissionsCategory' => 'Euro 5',
+                            'countries' => [
+                                [
+                                    'id' => 'BB',
+                                ],
+                                [
+                                    'id' => 'CC',
+                                ], //country "AA" was matched
+                            ],
+                            'irhpPermitApplication' => null,
+                            'startDate' => null,
+                            'expiryDate' => null,
+                        ],
+                        [
+                            'permitNumber' => 444,
+                            'emissionsCategory' => 'Euro 5',
+                            'countries' => [
+                                [
+                                    'id' => 'AA',
+                                ],
+                                [
+                                    'id' => 'BB',
+                                ],
+                                [
+                                    'id' => 'CC',
+                                ], //all countries matched
+                            ],
+                            'irhpPermitApplication' => null,
+                            'startDate' => null,
+                            'expiryDate' => null,
+                        ],
+                    ],
+                ],
+            ],
+            'valid ecmt permits input' => [
+                'input' => [
+                    EcmtConstrainedCountriesListDataSource::DATA_KEY => [
+                        'results' => [
+                            [
                                 'id' => 'AA',
                             ],
-                            1 => [
+                            [
                                 'id' => 'BB',
                             ],
-                        ],
+                            [
+                                'id' => 'CC',
+                            ],
+                        ]
                     ],
-                    2 => [
-                        'permitNumber' => 333,
-                        'status' => ['id' => 'permit_app_valid', 'description' => 'Valid' ],
-                        'issueDate' => '2018-10-11 16:40:17',
-                        'countries' => [
-                            0 => [
-                                'id' => 'AA',
+                    ValidEcmtPermitsDataSource::DATA_KEY => [
+                        'results' => [
+                            [
+                                'permitNumber' => 111,
+                                'emissionsCategory' => 'Euro 5',
+                                'countries' => [
+                                    [
+                                        'id' => 'AA',
+                                    ],
+                                    [
+                                        'id' => 'BB',
+                                    ],
+                                    [
+                                        'id' => 'CC',
+                                    ],
+
+                                ],
+                                'irhpPermitApplication' => ['id' => 500],
+                                'startDate' => '2018-10-11 16:40:17',
+                                'expiryDate' => '2019-10-11 16:40:17',
+                            ],
+                            [
+                                'permitNumber' => 222,
+                                'emissionsCategory' => 'Euro 5',
+                                'countries' => [
+                                    [
+                                        'id' => 'AA',
+                                    ],
+                                    [
+                                        'id' => 'BB',
+                                    ],
+                                ],
+                                'irhpPermitApplication' => ['id' => 500],
+                                'startDate' => '2018-10-11 16:40:17',
+                                'expiryDate' => '2019-10-11 16:40:17',
+                            ],
+                            [
+                                'permitNumber' => 333,
+                                'emissionsCategory' => 'Euro 5',
+                                'countries' => [
+                                    [
+                                        'id' => 'AA',
+                                    ],
+                                ],
+                                'irhpPermitApplication' => ['id' => 500],
+                                'startDate' => '2018-10-11 16:40:17',
+                                'expiryDate' => '2019-10-11 16:40:17',
+                            ],
+                            [
+                                'permitNumber' => 444,
+                                'emissionsCategory' => 'Euro 5',
+                                'countries' => [],
+                                'irhpPermitApplication' => ['id' => 500],
+                                'startDate' => '2018-10-11 16:40:17',
+                                'expiryDate' => '2019-10-11 16:40:17',
                             ],
                         ],
                     ],
-                    3 => [
-                        'permitNumber' => 444,
-                        'status' => ['id' => 'permit_app_valid', 'description' => 'Valid' ],
-                        'issueDate' => '2018-10-11 16:40:17',
-                        'countries' => [],
+                ],
+                'expected' => [
+                    'results' => [
+                        [
+                            'permitNumber' => 111,
+                            'emissionsCategory' => 'Euro 5',
+                            'countries' => [], //no exceptions
+                            'irhpPermitApplication' => ['id' => 500],
+                            'startDate' => '2018-10-11 16:40:17',
+                            'expiryDate' => '2019-10-11 16:40:17',
+                        ],
+                        [
+                            'permitNumber' => 222,
+                            'emissionsCategory' => 'Euro 5',
+                            'countries' => [
+                                [
+                                    'id' => 'CC',
+                                ],
+                            ], //countries "AA" and "BB" were matched
+                            'irhpPermitApplication' => ['id' => 500],
+                            'startDate' => '2018-10-11 16:40:17',
+                            'expiryDate' => '2019-10-11 16:40:17',
+                        ],
+                        [
+                            'permitNumber' => 333,
+                            'emissionsCategory' => 'Euro 5',
+                            'countries' => [
+                                [
+                                    'id' => 'BB',
+                                ],
+                                [
+                                    'id' => 'CC',
+                                ], //country "AA" was matched
+                            ],
+                            'irhpPermitApplication' => ['id' => 500],
+                            'startDate' => '2018-10-11 16:40:17',
+                            'expiryDate' => '2019-10-11 16:40:17',
+                        ],
+                        [
+                            'permitNumber' => 444,
+                            'emissionsCategory' => 'Euro 5',
+                            'countries' => [
+                                [
+                                    'id' => 'AA',
+                                ],
+                                [
+                                    'id' => 'BB',
+                                ],
+                                [
+                                    'id' => 'CC',
+                                ], //all countries matched
+                            ],
+                            'irhpPermitApplication' => ['id' => 500],
+                            'startDate' => '2018-10-11 16:40:17',
+                            'expiryDate' => '2019-10-11 16:40:17',
+                        ],
                     ],
                 ],
             ],
         ];
-
-        $outputData = [
-            'results' => [
-                0 => [
-                    'permitNumber' => 111,
-                    'status' => ['id' => 'permit_app_valid', 'description' => 'Valid' ],
-                    'issueDate' => '2018-10-11 16:40:17',
-                    'countries' => [], //no exceptions
-                ],
-                1 => [
-                    'permitNumber' => 222,
-                    'status' => ['id' => 'permit_app_valid', 'description' => 'Valid' ],
-                    'issueDate' => '2018-10-11 16:40:17',
-                    'countries' => [
-                        0 => [
-                            'id' => 'CC',
-                        ],
-                    ], //countries "AA" and "BB" were matched
-                ],
-                2 => [
-                    'permitNumber' => 333,
-                    'status' => ['id' => 'permit_app_valid', 'description' => 'Valid' ],
-                    'issueDate' => '2018-10-11 16:40:17',
-                    'countries' => [
-                        0 => [
-                            'id' => 'BB',
-                        ],
-                        1 => [
-                            'id' => 'CC',
-                        ], //country "AA" was matched
-                    ],
-                ],
-                3 => [
-                    'permitNumber' => 444,
-                    'status' => ['id' => 'permit_app_valid', 'description' => 'Valid' ],
-                    'issueDate' => '2018-10-11 16:40:17',
-                    'countries' => [
-                        0 => [
-                            'id' => 'AA',
-                        ],
-                        1 => [
-                            'id' => 'BB',
-                        ],
-                        2 => [
-                            'id' => 'CC',
-                        ], //all countries matched
-                    ],
-                ],
-            ],
-        ];
-
-        self::assertEquals($outputData, ValidEcmtPermitConstrainedCountries::mapForDisplay($inputData));
     }
 }

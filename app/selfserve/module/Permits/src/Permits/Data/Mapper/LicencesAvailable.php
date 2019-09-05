@@ -42,7 +42,8 @@ class LicencesAvailable
                 RefData::IRHP_BILATERAL_PERMIT_TYPE_ID,
                 RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID,
                 RefData::ECMT_REMOVAL_PERMIT_TYPE_ID,
-                RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID
+                RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
+                RefData::ECMT_PERMIT_TYPE_ID
             ]
         );
 
@@ -63,7 +64,9 @@ class LicencesAvailable
                     $content->setValue(self::ECMT_RESTRICTED_HINT);
                     $form->get('fields')->add($content);
                 }
-            } elseif ($displayAlreadyApplied && isset($data['active']) && $option['id'] == $data['active']) {
+            }
+
+            if ($displayAlreadyApplied && isset($data['active']) && $option['id'] == $data['active']) {
                 $data['warning'] = 'permits.irhp.bilateral.already-applied';
                 $selected = true;
             }

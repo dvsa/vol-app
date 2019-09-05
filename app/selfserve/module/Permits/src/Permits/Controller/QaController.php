@@ -118,6 +118,7 @@ class QaController extends AbstractOlcsController
         $view = new ViewModel();
         $view->setVariable('data', $templateVars);
         $view->setVariable('form', $form);
+
         $view->setTemplate('permits/single-question');
 
         return $view;
