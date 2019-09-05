@@ -904,6 +904,17 @@ $routes = [
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
+                    // Permit Scoring
+                    'addEmissions' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => 'add/emissions[/]',
+                            'defaults' => [
+                                'controller' => 'IrhpPermitApplicationController',
+                                'action' => 'emissions',
+                            ],
+                        ],
+                    ],
                     'add' => [
                         'type' => 'segment',
                         'options' => [

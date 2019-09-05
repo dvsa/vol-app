@@ -27,6 +27,12 @@ return [
             'name' => 'permitNumber',
         ],
         [
+            'title' => 'Minimum emission standard',
+            'name' => 'emissionsCategory',
+            'stack' => 'irhpPermitRange->emissionsCategory->description',
+            'formatter' => 'StackValue',
+        ],
+        [
             'title' => 'Issued date',
             'name' => 'issueDate',
             'formatter' => 'DateTime',

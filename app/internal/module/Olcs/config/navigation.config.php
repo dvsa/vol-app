@@ -578,7 +578,7 @@ $nav = [
                                 ],
                                 [
                                     'id' => 'licence_irhp_permits-add',
-                                    'label' => 'ECMT Permit Application',
+                                    'label' => 'ECMT Annual Permit Application',
                                     'route' => 'licence/permits/add',
                                     'use_route_match' => true,
                                 ],

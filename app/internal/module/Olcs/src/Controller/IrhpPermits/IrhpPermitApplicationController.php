@@ -20,10 +20,10 @@ use Dvsa\Olcs\Transfer\Query\IrhpApplication\GetAllByLicence as ListDTO;
 use Dvsa\Olcs\Transfer\Query\Permits\AvailableYears;
 use Dvsa\Olcs\Transfer\Query\Permits\ById as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceDto;
-use Dvsa\Olcs\Transfer\Query\Permits\OpenWindows;
+use Dvsa\Olcs\Transfer\Query\Permits\EmissionsByYear;
 use Dvsa\Olcs\Transfer\Query\Permits\Sectors as SectorsDto;
-use Dvsa\Olcs\Transfer\Command\Permits\CreateFullPermitApplication as CreateDTO;
-use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtPermitApplication as UpdateDTO;
+use Dvsa\Olcs\Transfer\Command\Permits\CreateFullPermitApplication as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtPermitApplication as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\Permits\DeclineEcmtPermits as DeclineDTO;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
@@ -32,8 +32,8 @@ use Olcs\Controller\Interfaces\IrhpPermitApplicationControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\IrhpPermitApplication as IrhpPermitApplicationMapper;
 use Olcs\Form\Model\Form\PermitCreate;
-use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
+use Zend\View\Model\JsonModel;
 
 class IrhpPermitApplicationController extends AbstractInternalController implements
     IrhpPermitApplicationControllerInterface,
@@ -118,8 +118,8 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
     // Scripts to include when rendering actions.
     protected $inlineScripts = [
         'indexAction' => ['table-actions'],
-        'editAction' => ['permits'],
-        'addAction' => ['permits'],
+        'editAction' => ['permits', 'forms/ecmt-form'],
+        'addAction' => ['permits', 'forms/ecmt-form'],
         'selectTypeAction' => ['forms/select-type-modal']
     ];
 
@@ -360,8 +360,15 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
         $licence = $this->getLicence();
         $formData['fields']['numVehicles'] = $licence['totAuthVehicles'];
         $formData['fields']['numVehiclesLabel'] = $licence['totAuthVehicles'];
-        $formData['fields']['euroEmissionsLabel'] = $this->getExistingEmissionsCategoryLabel($formData['fields']);
         $form = $this->getSectors($form, $formData['fields']['sectors']);
+        // When editing and saving with validation errors this if/else is necessary to properly set year.
+        if (array_key_exists('irhpPermitApplications', $formData['fields'])) {
+            $year = date('Y', strtotime($formData['fields']['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock']['validTo']));
+            $form->get('fields')->get('year')->setValue($year);
+        } else {
+            $year = $formData['fields']['year'];
+        }
+        $form = $this->getAvailableYears($form, $year);
         $form->setData($formData);
         return $form;
     }
@@ -376,55 +383,15 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
      */
     protected function alterFormForAdd($form, $formData)
     {
-
         $licence = $this->getLicence();
         $formData['fields']['licence'] = $licence['id'];
         $formData['fields']['numVehicles'] = $licence['totAuthVehicles'];
         $formData['fields']['numVehiclesLabel'] = $licence['totAuthVehicles'];
-        $formData['fields']['euroEmissionsLabel'] = $this->getCurrentEmissionsCategoryLabel();
         $formData['fields']['dateReceived'] = date('Y-m-d');
         $form = $this->getSectors($form);
+        $form = $this->getAvailableYears($form);
         $form->setData($formData);
         return $form;
-    }
-
-    /**
-     * Gets the emissions category label for the currently open ECMT Annual Window
-     *
-     * @return string
-     * @throws NotFoundException
-     */
-    protected function getCurrentEmissionsCategoryLabel()
-    {
-        $response = $this->handleQuery(
-            OpenWindows::create(
-                [
-                    'permitType' => RefData::ECMT_PERMIT_TYPE_ID
-                ]
-            )
-        );
-        $windowData = $response->getResult();
-
-        if (empty($windowData['windows'])) {
-            throw new NotFoundException('No open ECMT Annual window found.');
-        }
-
-        return $windowData['windows'][0]['emissionsCategory']['description'];
-    }
-
-    /**
-     * Get emissions category label for an existing/historic ECMT Annual window
-     *
-     * @param array $ecmtPermitApplication Existing ECMT Permit Application
-     * @return string
-     */
-    protected function getExistingEmissionsCategoryLabel(array $ecmtPermitApplication)
-    {
-        if (isset($ecmtPermitApplication['irhpPermitApplications'][0]['irhpPermitWindow']['emissionsCategory']['description'])) {
-            return $ecmtPermitApplication['irhpPermitApplications'][0]['irhpPermitWindow']['emissionsCategory']['description'];
-        } else {
-            return 'No Emissions Category Found';
-        }
     }
 
     /**
@@ -453,6 +420,30 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
     /**
      * Retrieves available years list and populates Value options for Add and Edit forms
      *
+     * @param $form
+     * @param int $selectedSector
+     * @return mixed
+     */
+    protected function getAvailableYears($form, $selectedYear = null)
+    {
+        $response = $this->handleQuery(AvailableYears::create(['type' => RefData::ECMT_PERMIT_TYPE_ID]));
+        $years = [];
+        if ($response->isOk()) {
+            $years = $response->getResult();
+        } else {
+            $this->checkResponse($response);
+        }
+
+        $mappedYears = IrhpPermitApplicationMapper::mapYears($years, $selectedYear);
+        $form->get('fields')->get('yearRadios')->setValueOptions($mappedYears);
+
+        return $form;
+    }
+
+
+    /**
+     * Retrieves available years list and populates Value options for Add and Edit forms
+     *
      * @return JsonModel
      */
     public function availableYearsAction()
@@ -467,6 +458,24 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
 
         return new JsonModel($years);
     }
+
+    /**
+     * Handles AJAX request for emissions/ranges and returns values as JSON
+     *
+     * @return JsonModel
+     */
+    public function emissionsAction()
+    {
+        $response = $this->handleQuery(EmissionsByYear::create(['irhpPermitType' => RefData::ECMT_PERMIT_TYPE_ID, 'year' => $this->params()->fromQuery('year')]));
+        $years = [];
+        if ($response->isOk()) {
+            $years = $response->getResult();
+        } else {
+            $this->checkResponse($response);
+        }
+        return new JsonModel($years);
+    }
+
 
     /**
      * Handles click of the Submit button on right-sidebar
