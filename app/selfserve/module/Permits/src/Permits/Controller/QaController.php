@@ -9,6 +9,7 @@ use Olcs\Service\Qa\FormProvider;
 use Olcs\Service\Qa\TemplateVarsGenerator;
 use Permits\View\Helper\EcmtSection;
 use Permits\View\Helper\IrhpApplicationSection;
+use Zend\View\Helper\HeadTitle;
 use Zend\View\Model\ViewModel;
 
 class QaController extends AbstractOlcsController
@@ -21,20 +22,26 @@ class QaController extends AbstractOlcsController
     /** @var TemplateVarsGenerator */
     private $templateVarsGenerator;
 
+    /** @var HeadTitle */
+    private $headTitle;
+
     /**
      * Create service instance
      *
      * @param FormProvider $formProvider
      * @param TemplateVarsGenerator $templateVarsGenerator
+     * @param HeadTitle
      *
      * @return QaController
      */
     public function __construct(
         FormProvider $formProvider,
-        TemplateVarsGenerator $templateVarsGenerator
+        TemplateVarsGenerator $templateVarsGenerator,
+        HeadTitle $headTitle
     ) {
         $this->formProvider = $formProvider;
         $this->templateVarsGenerator = $templateVarsGenerator;
+        $this->headTitle = $headTitle;
     }
 
     /**
@@ -60,6 +67,7 @@ class QaController extends AbstractOlcsController
 
         $result = $response->getResult();
         $form = $this->formProvider->get($result['applicationStep']);
+        $showErrorInBrowserTitle = false;
 
         if ($this->request->isPost()) {
             $postParams = $this->params()->fromPost();
@@ -94,6 +102,8 @@ class QaController extends AbstractOlcsController
                 );
             }
 
+            $showErrorInBrowserTitle = true;
+
             // transfer data normalised by input filter back into form, don't touch anything apart from the
             // Q&A fieldset content to avoid unwanted form breakage
             $normalisedData = $form->getData();
@@ -114,6 +124,17 @@ class QaController extends AbstractOlcsController
                 ],
             ]
         );
+
+        $this->headTitle->setSeparator(' - ');
+        $this->headTitle->prepend($result['title']);
+
+        if ($showErrorInBrowserTitle) {
+            $this->headTitle->set($this->headTitle->renderTitle());
+            $this->headTitle->setSeparator(': ');
+            $this->headTitle->prepend('permits.application.browser.title.error');
+            $this->headTitle->set($this->headTitle->renderTitle());
+            $this->headTitle->setSeparator(' - ');
+        }
 
         $view = new ViewModel();
         $view->setVariable('data', $templateVars);

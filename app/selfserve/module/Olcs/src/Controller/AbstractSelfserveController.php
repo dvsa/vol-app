@@ -218,7 +218,9 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
             if ($this->form instanceof Form) {
                 if ($this->form->hasValidated()) {
                     if (!$this->form->isValid()) {
-                        $headTitle->set('Error: ' . $headTitle->renderTitle());
+                        $translator = $this->getServiceLocator()->get('Helper\Translation');
+                        $errorCaption = $translator->translate('permits.application.browser.title.error');
+                        $headTitle->set($errorCaption . ': ' . $headTitle->renderTitle());
                     }
                 }
             }
