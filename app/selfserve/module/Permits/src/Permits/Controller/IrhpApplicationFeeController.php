@@ -57,6 +57,7 @@ class IrhpApplicationFeeController extends AbstractSelfserveController implement
 
     protected $templateVarsConfig = [
         'generic' => [
+            'browserTitle' => 'permits.page.fee.browser.title',
             'backUri' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
         ]
     ];
