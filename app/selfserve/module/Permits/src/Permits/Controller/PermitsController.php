@@ -6,6 +6,7 @@ use Common\Controller\Interfaces\ToggleAwareInterface;
 
 use Common\Controller\Traits\GenericReceipt;
 use Common\Controller\Traits\StoredCardsTrait;
+use Common\Form\Elements\Custom\EcmtAnnualNoOfPermitsElement;
 use Dvsa\Olcs\Transfer\Query\ContactDetail\CountrySelectList;
 use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
 use Common\Util\FlashMessengerTrait;
@@ -280,23 +281,45 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
     {
         $id = $this->params()->fromRoute('id', -1);
 
-        //Create form from annotations
         $form = $this->getForm('PermitsRequiredForm');
+        $fieldset = $form->get('Fields');
 
-        $setDefaultValues = true;
+        $application = $this->getApplication($id);
+        $irhpPermitStock = $application['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock'];
+        $totAuthVehicles = $application['licence']['totAuthVehicles'];
 
-        $data = $this->params()->fromPost();
+        $fieldset->get('combinedTotalChecker')->setOption('maxPermitted', $totAuthVehicles);
 
-        if (!empty($data)) {
-            //Validate
+        $emissionTypes = ['Euro5', 'Euro6'];
+        foreach ($emissionTypes as $emissionType) {
+            if ($irhpPermitStock['has' . $emissionType . 'Range']) {
+                $fieldset->add(
+                    [
+                        'type' => EcmtAnnualNoOfPermitsElement::class,
+                        'name' => 'required' . $emissionType,
+                        'options' => [
+                            'label' => 'permits.page.no-of-permits.for.' . strtolower($emissionType) . '.vehicles',
+                        ],
+                        'attributes' => [
+                            'value' => $application['required' . $emissionType]
+                        ]
+                    ]
+                );
+            }
+        }
+
+        if ($this->request->isPost()) {
+            $data = $this->params()->fromPost();
             $form->setData($data);
 
             if ($form->isValid()) {
+                $dataFields = $data['Fields'];
+
                 $command = UpdateEcmtPermitsRequired::create(
                     [
                         'id' => $id,
-                        'requiredEuro5' => $data['Fields']['requiredEuro5'],
-                        'requiredEuro6' => $data['Fields']['requiredEuro6']
+                        'requiredEuro5' => isset($dataFields['requiredEuro5']) ? $dataFields['requiredEuro5'] : 0,
+                        'requiredEuro6' => isset($dataFields['requiredEuro6']) ? $dataFields['requiredEuro6'] : 0,
                     ]
                 );
                 $this->handleCommand($command);
@@ -306,59 +329,25 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                     EcmtSection::ROUTE_ECMT_TRIPS,
                     EcmtSection::ROUTE_APPLICATION_OVERVIEW
                 );
-            } else {
-                $setDefaultValues = false;
             }
+
+            $form->setData($form->getData());
         }
 
-        $application = $this->getApplication($id);
-
-        $numberOfVehicles = $application['licence']['totAuthVehicles'];
-
-        if ($setDefaultValues) {
-            $existing = [
-                'Fields' => [
-                    'permitsRequired' => $application['permitsRequired'],
-                    'numVehicles' => $numberOfVehicles,
-                ]
-            ];
-            $form->setData($existing);
-        }
-
-        $fieldSet = $form->get('Fields');
-
-        $irhpPermitStock = $application['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock'];
-        if (!$irhpPermitStock['hasEuro5Range']) {
-            $fieldSet->remove('requiredEuro5');
-            $fieldSet->add([
-                'type' => 'hidden',
-                'name' => 'requiredEuro5'
-            ]);
-        }
-
-        if (!$irhpPermitStock['hasEuro6Range']) {
-            $fieldSet->remove('requiredEuro6');
-            $fieldSet->add([
-                'type' => 'hidden',
-                'name' => 'requiredEuro6'
-            ]);
-        }
-
-        $fieldSet->get('requiredEuro5')->setValue($application['requiredEuro5']);
-        $fieldSet->get('requiredEuro6')->setValue($application['requiredEuro6']);
-
+        $topLabel = $fieldset->get('topLabel');
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
+
         $totalVehicles = $translationHelper->translateReplace(
             'permits.page.no-of-permits.max.this.year',
-            [$numberOfVehicles]
+            [$totAuthVehicles]
         );
-        $fieldSet->get('topLabel')->setOption('hint', $totalVehicles);
+        $topLabel->setOption('hint', $totalVehicles);
 
         $yearLabel = $translationHelper->translateReplace(
             'permits.page.no-of-permits.for.year',
             [date('Y', strtotime($irhpPermitStock['validTo']))]
         );
-        $fieldSet->get('topLabel')->setLabel($yearLabel);
+        $topLabel->setLabel($yearLabel);
 
         $ecmtPermitFees = $this->getEcmtPermitFees();
         $ecmtApplicationFee = $ecmtPermitFees['fee'][$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE]['fixedValue'];
