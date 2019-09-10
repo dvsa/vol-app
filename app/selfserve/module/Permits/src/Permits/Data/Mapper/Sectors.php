@@ -5,7 +5,6 @@ namespace Permits\Data\Mapper;
 use Permits\Controller\Config\DataSource\Sectors as SectorsDataSource;
 
 /**
- *
  * Sectors mapper
  */
 class Sectors
@@ -16,7 +15,7 @@ class Sectors
      *
      * @return array
      */
-    public static function mapForFormOptions(array $data, $form)
+    public function mapForFormOptions(array $data, $form)
     {
         $mapData = $data[SectorsDataSource::DATA_KEY];
         $valueOptions = [];

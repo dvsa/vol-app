@@ -3,45 +3,83 @@
 namespace Permits\Data\Mapper;
 
 use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Helper\UrlHelperService;
 use Common\View\Helper\CurrencyFormatter;
 use Permits\View\Helper\EcmtSection;
-use Zend\Mvc\Controller\Plugin\Url;
 
 /**
  * Mapper for the FeePartSuccessful / Accept or Decline page
  */
 class AcceptOrDeclinePermits
 {
+    /** @var TranslationHelperService */
+    private $translator;
+
+    /** @var UrlHelperService */
+    private $urlHelperService;
+
+    /** @var ApplicationFees */
+    private $applicationFees;
+
+    /** @var CurrencyFormatter */
+    private $currencyFormatter;
+
+    /** @var EcmtNoOfPermits */
+    private $ecmtNoOfPermits;
+
+    /**
+     * Create service instance
+     *
+     * @param TranslationHelperService $translator
+     * @param UrlHelperService $urlHelperService
+     * @param ApplicationFees $applicationFees
+     * @param CurrencyFormatter $currencyFormatter
+     * @param EcmtNoOfPermits $ecmtNoOfPermits
+     *
+     * @return AcceptOrDeclinePermits
+     */
+    public function __construct(
+        TranslationHelperService $translator,
+        UrlHelperService $urlHelperService,
+        ApplicationFees $applicationFees,
+        CurrencyFormatter $currencyFormatter,
+        EcmtNoOfPermits $ecmtNoOfPermits
+    ) {
+        $this->translator = $translator;
+        $this->urlHelperService = $urlHelperService;
+        $this->applicationFees = $applicationFees;
+        $this->currencyFormatter = $currencyFormatter;
+        $this->ecmtNoOfPermits = $ecmtNoOfPermits;
+    }
+
     /**
      * Maps data appropriately for the Definition List on the FeePartSuccessful page
      *
      * @param array $data an array of data retrieved from the backend
-     * @param TranslationHelperService $translator
-     * @param Url $url
      *
      * @return array
      */
-    public static function mapForDisplay(array $data, TranslationHelperService $translator, Url $url)
+    public function mapForDisplay(array $data)
     {
-        $data = ApplicationFees::mapForDisplay($data, $translator, $url);
+        $data = $this->applicationFees->mapForDisplay($data);
 
         $summaryData = [
-            self::getApplicationReferenceRow($data),
-            self::getPermitTypeRow($data),
-            self::getPermitYearRow($data),
-            self::getNoOfPermitsRow($data, $translator, $url),
+            $this->getApplicationReferenceRow($data),
+            $this->getPermitTypeRow($data),
+            $this->getPermitYearRow($data),
+            $this->getNoOfPermitsRow($data),
         ];
 
         if ($data['hasOutstandingFees']) {
-            $summaryData[] = self::getFeePerPermitRow($data);
-            $summaryData[] = self::getTotalFeeRow($data, $translator);
+            $summaryData[] = $this->getFeePerPermitRow($data);
+            $summaryData[] = $this->getTotalFeeRow($data);
         }
 
-        $summaryData[] = self::getDueDateRow($data);
+        $summaryData[] = $this->getDueDateRow($data);
 
-        $data['title'] = self::getTitleKey($data);
+        $data['title'] = $this->getTitleKey($data);
         $data['summaryData'] = $summaryData;
-        $data['guidance'] = self::getGuidanceData($data, $translator);
+        $data['guidance'] = $this->getGuidanceData($data);
 
         return $data;
     }
@@ -53,7 +91,7 @@ class AcceptOrDeclinePermits
      *
      * @return array
      */
-    private static function getApplicationReferenceRow(array $data)
+    private function getApplicationReferenceRow(array $data)
     {
         return [
             'key' => 'permits.page.fee.application.reference',
@@ -68,7 +106,7 @@ class AcceptOrDeclinePermits
      *
      * @return array
      */
-    private static function getPermitTypeRow(array $data)
+    private function getPermitTypeRow(array $data)
     {
         return [
             'key' => 'permits.page.ecmt.consideration.permit.type',
@@ -83,7 +121,7 @@ class AcceptOrDeclinePermits
      *
      * @return array
      */
-    private static function getPermitYearRow(array $data)
+    private function getPermitYearRow(array $data)
     {
         $firstIrhpPermitApplication = $data['irhpPermitApplications'][0];
         $irhpPermitStock = $firstIrhpPermitApplication['irhpPermitWindow']['irhpPermitStock'];
@@ -98,18 +136,16 @@ class AcceptOrDeclinePermits
      * Get the table row data corresponding to a number of permits row
      *
      * @param array $data
-     * @param TranslationHelperService $translator
-     * @param Url $url
      *
      * @return array
      */
-    private static function getNoOfPermitsRow(array $data, TranslationHelperService $translator, Url $url)
+    private function getNoOfPermitsRow(array $data)
     {
         $firstIrhpPermitApplication = $data['irhpPermitApplications'][0];
 
         return [
             'key' => 'permits.page.fee.number.permits',
-            'value' => self::getNoOfPermitsValue($firstIrhpPermitApplication, $translator, $url),
+            'value' => $this->getNoOfPermitsValue($firstIrhpPermitApplication),
             'disableHtmlEscape' => true
         ];
     }
@@ -121,7 +157,7 @@ class AcceptOrDeclinePermits
      *
      * @return array
      */
-    private static function getFeePerPermitRow(array $data)
+    private function getFeePerPermitRow(array $data)
     {
         return [
             'key' => 'permits.page.ecmt.fee-part-successful.issuing.fee',
@@ -134,20 +170,19 @@ class AcceptOrDeclinePermits
      * Get the table row data corresponding to a total fee row
      *
      * @param array $data
-     * @param TranslationHelperService $translator
      *
      * @return array
      */
-    private static function getTotalFeeRow(array $data, TranslationHelperService $translator)
+    private function getTotalFeeRow(array $data)
     {
-        $currency = new CurrencyFormatter();
+        $currencyFormatter = $this->currencyFormatter;
 
         return [
             'key' => 'permits.page.ecmt.fee-part-successful.issuing.fee.total',
-            'value' => $translator->translateReplace(
+            'value' => $this->translator->translateReplace(
                 'permits.page.ecmt.fee-part-successful.fee.total.value',
                 [
-                    $currency($data['totalFee'])
+                    $currencyFormatter($data['totalFee'])
                 ]
             )
         ];
@@ -160,7 +195,7 @@ class AcceptOrDeclinePermits
      *
      * @return array
      */
-    private static function getDueDateRow(array $data)
+    private function getDueDateRow(array $data)
     {
         $dueDateKey = 'waived.paid.permits.page.ecmt.fee-part-successful.payment.due';
         if ($data['hasOutstandingFees']) {
@@ -177,27 +212,22 @@ class AcceptOrDeclinePermits
      * Get the html representing the number of permits
      *
      * @param array $firstIrhpPermitApplication
-     * @param TranslationHelperService $translator
-     * @param Url $url
      *
      * @return array
      */
-    private static function getNoOfPermitsValue(
-        array $firstIrhpPermitApplication,
-        TranslationHelperService $translator,
-        Url $url
-    ) {
+    private function getNoOfPermitsValue(array $firstIrhpPermitApplication)
+    {
         $ecmtNoOfPermitsData = [
             'requiredEuro5' => $firstIrhpPermitApplication['euro5PermitsAwarded'],
             'requiredEuro6' => $firstIrhpPermitApplication['euro6PermitsAwarded']
         ];
 
-        $permitsRequiredLines = EcmtNoOfPermits::mapForDisplay($ecmtNoOfPermitsData, $translator, $url);
+        $permitsRequiredLines = $this->ecmtNoOfPermits->mapForDisplay($ecmtNoOfPermitsData);
 
         $permitsRequiredLines[] = sprintf(
             '<a href="%s">%s</a>',
-            $url->fromRoute(EcmtSection::ROUTE_ECMT_UNPAID_PERMITS, [], [], true),
-            $translator->translate('permits.page.ecmt.fee-part-successful.view.permit.restrictions')
+            $this->urlHelperService->fromRoute(EcmtSection::ROUTE_ECMT_UNPAID_PERMITS, [], [], true),
+            $this->translator->translate('permits.page.ecmt.fee-part-successful.view.permit.restrictions')
         );
 
         return implode('<br>', $permitsRequiredLines);
@@ -210,7 +240,7 @@ class AcceptOrDeclinePermits
      *
      * @return string
      */
-    private static function getTitleKey(array $data)
+    private function getTitleKey(array $data)
     {
         $titleKey = 'waived-paid-permits.page.fee-part-successful.title';
         if ($data['hasOutstandingFees']) {
@@ -224,11 +254,10 @@ class AcceptOrDeclinePermits
      * Get the html representing the guidance area of the page
      *
      * @param array $data
-     * @param TranslationHelperService $translator
      *
      * @return array
      */
-    private static function getGuidanceData(array $data, TranslationHelperService $translator)
+    private function getGuidanceData(array $data)
     {
         $permitsAwarded = $data['irhpPermitApplications'][0]['permitsAwarded'];
         $permitsRequired = $data['totalPermitsRequired'];
@@ -239,7 +268,7 @@ class AcceptOrDeclinePermits
         }
 
         return [
-            'value' => $translator->translateReplace(
+            'value' => $this->translator->translateReplace(
                 $guidanceKey,
                 [$permitsAwarded, $permitsRequired]
             ),

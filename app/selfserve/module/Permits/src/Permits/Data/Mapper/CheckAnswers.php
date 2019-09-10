@@ -14,7 +14,35 @@ use Zend\Mvc\Controller\Plugin\Url;
  */
 class CheckAnswers
 {
-    public static function mapForDisplay(array $data, TranslationHelperService $translator, Url $url)
+    /** @var TranslationHelperService */
+    private $translator;
+
+    /** @var EcmtNoOfPermits */
+    private $ecmtNoOfPermits;
+
+    /** @var IrhpCheckAnswers */
+    private $irhpCheckAnswers;
+
+    /**
+     * Create service instance
+     *
+     * @param TranslationHelperService $translator
+     * @param EcmtNoOfPermits $ecmtNoOfPermits
+     * @param IrhpCheckAnswers $irhpCheckAnswers
+     *
+     * @return CheckAnswers
+     */
+    public function __construct(
+        TranslationHelperService $translator,
+        EcmtNoOfPermits $ecmtNoOfPermits,
+        IrhpCheckAnswers $irhpCheckAnswers
+    ) {
+        $this->translator = $translator;
+        $this->ecmtNoOfPermits = $ecmtNoOfPermits;
+        $this->irhpCheckAnswers = $irhpCheckAnswers;
+    }
+
+    public function mapForDisplay(array $data)
     {
         $restrictedCountries = 'No';
 
@@ -36,7 +64,7 @@ class CheckAnswers
         );
 
         $permitsRequiredYearHeading = '<strong>' . Escape::html(
-            $translator->translateReplace(
+            $this->translator->translateReplace(
                 'permits.check-your-answers.no-of-permits.year',
                 [$year]
             )
@@ -44,37 +72,37 @@ class CheckAnswers
 
         $permitsRequired = array_merge(
             [$permitsRequiredYearHeading],
-            EcmtNoOfPermits::mapForDisplay($data['application'], $translator, $url)
+            $this->ecmtNoOfPermits->mapForDisplay($data['application'])
         );
 
         $answers = [
-            IrhpCheckAnswers::permitTypeAnswer($data['application']['permitType']['description']),
-            IrhpCheckAnswers::licenceAnswer($data['application']['licence'], EcmtSection::ROUTE_LICENCE),
-            IrhpCheckAnswers::answer(
+            $this->irhpCheckAnswers->permitTypeAnswer($data['application']['permitType']['description']),
+            $this->irhpCheckAnswers->licenceAnswer($data['application']['licence'], EcmtSection::ROUTE_LICENCE),
+            $this->irhpCheckAnswers->answer(
                 'permits.form.cabotage.label',
                 $data['application']['cabotage'],
                 EcmtSection::ROUTE_ECMT_CABOTAGE,
                 RefData::QUESTION_TYPE_BOOLEAN
             ),
-            IrhpCheckAnswers::answer(
+            $this->irhpCheckAnswers->answer(
                 'permits.page.roadworthiness.question',
                 $data['application']['roadworthiness'],
                 EcmtSection::ROUTE_ECMT_ROADWORTHINESS,
                 RefData::QUESTION_TYPE_BOOLEAN
             ),
-            IrhpCheckAnswers::answer(
+            $this->irhpCheckAnswers->answer(
                 'permits.page.restricted-countries.question',
                 $restrictedCountries,
                 EcmtSection::ROUTE_ECMT_COUNTRIES,
                 RefData::QUESTION_TYPE_STRING
             ),
-            IrhpCheckAnswers::answer(
+            $this->irhpCheckAnswers->answer(
                 'permits.form.euro-emissions.label',
                 $data['application']['emissions'],
                 EcmtSection::ROUTE_ECMT_EURO_EMISSIONS,
                 RefData::QUESTION_TYPE_BOOLEAN
             ),
-            IrhpCheckAnswers::answer(
+            $this->irhpCheckAnswers->answer(
                 'permits.page.permits.required.question',
                 $permitsRequired,
                 EcmtSection::ROUTE_ECMT_NO_OF_PERMITS,
@@ -83,19 +111,19 @@ class CheckAnswers
                 [],
                 false
             ),
-            IrhpCheckAnswers::answer(
+            $this->irhpCheckAnswers->answer(
                 'permits.page.number-of-trips.question',
                 $data['application']['trips'],
                 EcmtSection::ROUTE_ECMT_TRIPS,
                 RefData::QUESTION_TYPE_INTEGER
             ),
-            IrhpCheckAnswers::answer(
+            $this->irhpCheckAnswers->answer(
                 'permits.page.international.journey.question',
                 $data['application']['internationalJourneys']['description'],
                 EcmtSection::ROUTE_ECMT_INTERNATIONAL_JOURNEY,
                 RefData::QUESTION_TYPE_STRING
             ),
-            IrhpCheckAnswers::answer(
+            $this->irhpCheckAnswers->answer(
                 'permits.page.sectors.question',
                 $data['application']['sectors']['name'],
                 EcmtSection::ROUTE_ECMT_SECTORS,

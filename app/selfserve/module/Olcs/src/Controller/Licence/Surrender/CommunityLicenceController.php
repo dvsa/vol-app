@@ -54,7 +54,7 @@ class CommunityLicenceController extends AbstractSurrenderController
         $this->form->setData($formData);
         $validForm = $this->form->isValid();
         if ($validForm) {
-            $data = Mapper::mapFromForm($formData);
+            $data = $this->getServiceLocator()->get(Mapper::class)->mapFromForm($formData);
             if ($this->updateSurrender(RefData::SURRENDER_STATUS_COMM_LIC_DOCS_COMPLETE, $data)) {
                 $routeName = 'licence/surrender/review/GET';
                 $this->nextStep($routeName);

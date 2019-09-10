@@ -3,7 +3,6 @@
 namespace Permits\Data\Mapper;
 
 use Common\Data\Mapper\Permits\NoOfPermits as CommonNoOfPermitsMapper;
-use Common\Service\Helper\TranslationHelperService;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpApplicationDataSource;
 use Permits\Controller\Config\DataSource\IrhpFeePerPermit as IrhpFeePerPermitDataSource;
 use Permits\Controller\Config\DataSource\IrhpMaxStockPermits as IrhpMaxStockPermitsDataSource;
@@ -13,19 +12,32 @@ use Permits\Controller\Config\DataSource\IrhpMaxStockPermits as IrhpMaxStockPerm
  */
 class NoOfPermits
 {
+    /** @var CommonNoOfPermitsMapper */
+    private $commonNoOfPermitsMapper;
+
+    /**
+     * Create service instance
+     *
+     * @param CommonNoOfPermitsMapper $commonNoOfPermitsMapper
+     *
+     * @return NoOfPermits
+     */
+    public function __construct(CommonNoOfPermitsMapper $commonNoOfPermitsMapper)
+    {
+        $this->commonNoOfPermitsMapper = $commonNoOfPermitsMapper;
+    }
+
     /**
      * @param array $data
-     * @param $form
-     * @param TranslationHelperService $translator
+     * @param mixed $form
      *
      * @return array
      */
-    public static function mapForFormOptions(array $data, $form, TranslationHelperService $translator)
+    public function mapForFormOptions(array $data, $form)
     {
-        return CommonNoOfPermitsMapper::mapForFormOptions(
+        return $this->commonNoOfPermitsMapper->mapForFormOptions(
             $data,
             $form,
-            $translator,
             IrhpApplicationDataSource::DATA_KEY,
             IrhpMaxStockPermitsDataSource::DATA_KEY,
             IrhpFeePerPermitDataSource::DATA_KEY

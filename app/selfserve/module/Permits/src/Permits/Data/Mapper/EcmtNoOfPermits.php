@@ -3,28 +3,39 @@
 namespace Permits\Data\Mapper;
 
 use Common\Service\Helper\TranslationHelperService;
-use Zend\Mvc\Controller\Plugin\Url;
 
 /**
  * ECMT No of permits mapper
  */
 class EcmtNoOfPermits
 {
+    /** @var TranslationHelperService */
+    private $translator;
+
+    /**
+     * Create service instance
+     *
+     * @param TranslationHelperService $translator
+     *
+     * @return EcmtNoOfPermits
+     */
+    public function __construct(TranslationHelperService $translator)
+    {
+        $this->translator = $translator;
+    }
+
     /**
      * @param array $data
-     * @param TranslationHelperService $translator
-     * @param Url $url
      *
      * @return array
      */
-    public static function mapForDisplay(array $data, TranslationHelperService $translator, Url $url)
+    public function mapForDisplay(array $data)
     {
-        return self::createPermitsRequiredLines(
+        return $this->createPermitsRequiredLines(
             [
                 'permits.page.fee.emissions.category.euro5' => $data['requiredEuro5'],
                 'permits.page.fee.emissions.category.euro6' => $data['requiredEuro6']
-            ],
-            $translator
+            ]
         );
     }
 
@@ -32,11 +43,10 @@ class EcmtNoOfPermits
      * Return an array with each element representing the number of permits required for a given emissions category
      *
      * @param array $lineSources
-     * @param TranslationHelperService $translator
      *
      * @return array
      */
-    private static function createPermitsRequiredLines(array $lineSources, TranslationHelperService $translator)
+    private function createPermitsRequiredLines(array $lineSources)
     {
         $lines = [];
 
@@ -49,9 +59,9 @@ class EcmtNoOfPermits
             }
 
             if (is_string($lineTranslationKey)) {
-                $categoryName = $translator->translate($categoryNameTranslationKey);
+                $categoryName = $this->translator->translate($categoryNameTranslationKey);
 
-                $lines[] = $translator->translateReplace(
+                $lines[] = $this->translator->translateReplace(
                     $lineTranslationKey,
                     [$permitsRequiredCount, $categoryName]
                 );

@@ -415,11 +415,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
 
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
 
-        $noOfPermitsLines = EcmtNoOfPermitsMapper::mapForDisplay(
-            $application,
-            $translationHelper,
-            $this->url()
-        );
+        $noOfPermitsLines = $this->getServiceLocator()->get(EcmtNoOfPermitsMapper::class)->mapForDisplay($application);
 
         $irhpPermitStock = $application['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock'];
 

@@ -3,10 +3,13 @@
 namespace PermitsTest\Data\Mapper;
 
 use Common\RefData;
-use Permits\Data\Mapper\IrhpApplicationFeeSummary;
 use Common\Service\Helper\TranslationHelperService;
-use Zend\Mvc\Controller\Plugin\Url;
+use Common\View\Helper\CurrencyFormatter;
+use Common\View\Helper\Status as StatusFormatter;
 use Mockery as m;
+use Permits\Data\Mapper\EcmtNoOfPermits;
+use Permits\Data\Mapper\IrhpApplicationFeeSummary;
+use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
@@ -14,8 +17,36 @@ use RuntimeException;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class IrhpApplicationFeeSummaryTest extends \PHPUnit\Framework\TestCase
+class IrhpApplicationFeeSummaryTest extends TestCase
 {
+    private $translationHelperService;
+
+    private $ecmtNoOfPermits;
+
+    private $statusFormatter;
+
+    private $currencyFormatter;
+
+    private $irhpApplicationFeeSummary;
+
+    public function setUp()
+    {
+        $this->translationHelperService = m::mock(TranslationHelperService::class);
+
+        $this->ecmtNoOfPermits = m::mock(EcmtNoOfPermits::class);
+
+        $this->statusFormatter = m::mock(StatusFormatter::class);
+
+        $this->currencyFormatter = m::mock(CurrencyFormatter::class);
+
+        $this->irhpApplicationFeeSummary = new IrhpApplicationFeeSummary(
+            $this->translationHelperService,
+            $this->ecmtNoOfPermits,
+            $this->statusFormatter,
+            $this->currencyFormatter
+        );
+    }
+
     /**
      * @dataProvider dpTestMapForDisplayBilateralMultilateral
      */
@@ -30,10 +61,11 @@ class IrhpApplicationFeeSummaryTest extends \PHPUnit\Framework\TestCase
         $formattedFee = '£123.45';
         $translatedFormattedFee = '£123.45 (non-refundable)';
 
-        $url = m::mock(Url::class);
-        $translationHelperService = m::mock(TranslationHelperService::class);
-        $translationHelperService
-            ->shouldReceive('translateReplace')
+        $this->currencyFormatter->shouldReceive('__invoke')
+            ->with($fee)
+            ->andReturn($formattedFee);
+
+        $this->translationHelperService->shouldReceive('translateReplace')
             ->with(
                 'permits.page.fee.permit.fee.non-refundable',
                 [
@@ -87,9 +119,9 @@ class IrhpApplicationFeeSummaryTest extends \PHPUnit\Framework\TestCase
 
         $expectedOutput = $inputData + $mappedData;
 
-        self::assertEquals(
+        $this->assertEquals(
             $expectedOutput,
-            IrhpApplicationFeeSummary::mapForDisplay($inputData, $translationHelperService, $url)
+            $this->irhpApplicationFeeSummary->mapForDisplay($inputData)
         );
     }
 
@@ -114,10 +146,11 @@ class IrhpApplicationFeeSummaryTest extends \PHPUnit\Framework\TestCase
         $formattedFee = '£90';
         $translatedFormattedFee = '£90 (non-refundable)';
 
-        $url = m::mock(Url::class);
-        $translationHelperService = m::mock(TranslationHelperService::class);
-        $translationHelperService
-            ->shouldReceive('translateReplace')
+        $this->currencyFormatter->shouldReceive('__invoke')
+            ->with($fee)
+            ->andReturn($formattedFee);
+
+        $this->translationHelperService->shouldReceive('translateReplace')
             ->with(
                 'permits.page.fee.permit.fee.non-refundable',
                 [
@@ -203,17 +236,14 @@ class IrhpApplicationFeeSummaryTest extends \PHPUnit\Framework\TestCase
 
         $expectedOutput = $inputData + $mappedData;
 
-        self::assertEquals(
+        $this->assertEquals(
             $expectedOutput,
-            IrhpApplicationFeeSummary::mapForDisplay($inputData, $translationHelperService, $url)
+            $this->irhpApplicationFeeSummary->mapForDisplay($inputData)
         );
     }
 
     public function testMapForDisplayEcmtShortTerm()
     {
-        $url = m::mock(Url::class);
-        $translationHelperService = m::mock(TranslationHelperService::class);
-
         $isUnderConsideration = false;
         $isAwaitingFee = false;
         $applicationRef = 'OB1234567/1';
@@ -224,42 +254,35 @@ class IrhpApplicationFeeSummaryTest extends \PHPUnit\Framework\TestCase
         $stockValidTo = '2022-12-31';
         $permitYear = 2022;
 
-        $requiredEuro5 = 1;
-        $requiredEuro6 = 5;
         $formattedNoOfPermitsRequiredLine1 = '1 permit for Euro 5 minimum emission standard';
         $formattedNoOfPermitsRequiredLine2 = '5 permits for Euro 6 minimum emission standard';
         $formattedNoOfPermitsRequired = '1 permit for Euro 5 minimum emission standard<br>' .
             '5 permits for Euro 6 minimum emission standard';
 
-        $euro5CategoryName = 'Euro 5 minimum emission standard';
-        $translationHelperService->shouldReceive('translate')
-            ->with('permits.page.fee.emissions.category.euro5')
-            ->andReturn($euro5CategoryName);
+        $irhpPermitApplicationInputData = [
+            'requiredEuro5' => 1,
+            'requiredEuro6' => 5,
+            'irhpPermitWindow' => [
+                'irhpPermitStock' => [
+                    'validTo' => $stockValidTo
+                ]
+            ]
+        ];
 
-        $euro6CategoryName = 'Euro 6 minimum emission standard';
-        $translationHelperService->shouldReceive('translate')
-            ->with('permits.page.fee.emissions.category.euro6')
-            ->andReturn($euro6CategoryName);
-
-        $translationHelperService->shouldReceive('translateReplace')
-            ->with(
-                'permits.page.fee.number.permits.line.single',
-                [1, $euro5CategoryName]
-            )
-            ->andReturn($formattedNoOfPermitsRequiredLine1);
-        $translationHelperService->shouldReceive('translateReplace')
-            ->with(
-                'permits.page.fee.number.permits.line.multiple',
-                [5, $euro6CategoryName]
-            )
-            ->andReturn($formattedNoOfPermitsRequiredLine2);
+        $this->ecmtNoOfPermits->shouldReceive('mapForDisplay')
+            ->with($irhpPermitApplicationInputData)
+            ->andReturn([$formattedNoOfPermitsRequiredLine1, $formattedNoOfPermitsRequiredLine2]);
 
         $appFeePerPermit = 20;
-
+        $totalApplicationFee = '120';
         $formattedTotalApplicationFee = '£120';
         $translatedFormattedTotalApplicationFee = '£120 (non-refundable)';
 
-        $translationHelperService->shouldReceive('translateReplace')
+        $this->currencyFormatter->shouldReceive('__invoke')
+            ->with($totalApplicationFee)
+            ->andReturn($formattedTotalApplicationFee);
+
+        $this->translationHelperService->shouldReceive('translateReplace')
             ->with(
                 'permits.page.fee.permit.fee.non-refundable',
                 [$formattedTotalApplicationFee]
@@ -277,17 +300,7 @@ class IrhpApplicationFeeSummaryTest extends \PHPUnit\Framework\TestCase
                     'description' => $permitTypeDesc
                 ],
             ],
-            'irhpPermitApplications' => [
-                [
-                    'requiredEuro5' => $requiredEuro5,
-                    'requiredEuro6' => $requiredEuro6,
-                    'irhpPermitWindow' => [
-                        'irhpPermitStock' => [
-                            'validTo' => $stockValidTo
-                        ]
-                    ]
-                ]
-            ],
+            'irhpPermitApplications' => [$irhpPermitApplicationInputData],
             'fees' => [
                 [
                     'feeType' => [
@@ -355,17 +368,14 @@ class IrhpApplicationFeeSummaryTest extends \PHPUnit\Framework\TestCase
 
         $expectedOutput = $inputData + $mappedData;
 
-        self::assertEquals(
+        $this->assertEquals(
             $expectedOutput,
-            IrhpApplicationFeeSummary::mapForDisplay($inputData, $translationHelperService, $url)
+            $this->irhpApplicationFeeSummary->mapForDisplay($inputData)
         );
     }
 
     public function testMapForDisplayEcmtShortTermUnderConsideration()
     {
-        $url = m::mock(Url::class);
-        $translationHelperService = m::mock(TranslationHelperService::class);
-
         $isUnderConsideration = true;
         $isAwaitingFee = false;
         $status = [
@@ -380,47 +390,46 @@ class IrhpApplicationFeeSummaryTest extends \PHPUnit\Framework\TestCase
         $stockValidTo = '2022-12-31';
         $permitYear = 2022;
 
-        $requiredEuro5 = 1;
-        $requiredEuro6 = 5;
         $formattedNoOfPermitsRequiredLine1 = '1 permit for Euro 5 minimum emission standard';
         $formattedNoOfPermitsRequiredLine2 = '5 permits for Euro 6 minimum emission standard';
         $formattedNoOfPermitsRequired = '1 permit for Euro 5 minimum emission standard<br>' .
             '5 permits for Euro 6 minimum emission standard';
 
-        $euro5CategoryName = 'Euro 5 minimum emission standard';
-        $translationHelperService->shouldReceive('translate')
-            ->with('permits.page.fee.emissions.category.euro5')
-            ->andReturn($euro5CategoryName);
+        $irhpPermitApplicationInputData = [
+            'requiredEuro5' => 1,
+            'requiredEuro6' => 5,
+            'irhpPermitWindow' => [
+                'irhpPermitStock' => [
+                    'validTo' => $stockValidTo
+                ]
+            ]
+        ];
 
-        $euro6CategoryName = 'Euro 6 minimum emission standard';
-        $translationHelperService->shouldReceive('translate')
-            ->with('permits.page.fee.emissions.category.euro6')
-            ->andReturn($euro6CategoryName);
-
-        $translationHelperService->shouldReceive('translateReplace')
-            ->with(
-                'permits.page.fee.number.permits.line.single',
-                [1, $euro5CategoryName]
-            )
-            ->andReturn($formattedNoOfPermitsRequiredLine1);
-        $translationHelperService->shouldReceive('translateReplace')
-            ->with(
-                'permits.page.fee.number.permits.line.multiple',
-                [5, $euro6CategoryName]
-            )
-            ->andReturn($formattedNoOfPermitsRequiredLine2);
+        $this->ecmtNoOfPermits->shouldReceive('mapForDisplay')
+            ->with($irhpPermitApplicationInputData)
+            ->andReturn([$formattedNoOfPermitsRequiredLine1, $formattedNoOfPermitsRequiredLine2]);
 
         $appFeePerPermit = 20;
 
+        $totalApplicationFee = '120';
         $formattedTotalApplicationFee = '£120';
         $translatedFormattedTotalApplicationFee = '£120 (non-refundable)';
 
-        $translationHelperService->shouldReceive('translateReplace')
+        $this->currencyFormatter->shouldReceive('__invoke')
+            ->with($totalApplicationFee)
+            ->andReturn($formattedTotalApplicationFee);
+
+        $this->translationHelperService->shouldReceive('translateReplace')
             ->with(
                 'permits.page.fee.permit.fee.non-refundable',
                 [$formattedTotalApplicationFee]
             )
             ->andReturn($translatedFormattedTotalApplicationFee);
+
+        $formattedStatus = '<span class="status orange">Under Consideration</span>';
+        $this->statusFormatter->shouldReceive('__invoke')
+            ->with($status)
+            ->andReturn($formattedStatus);
 
         $inputData = [
             'isUnderConsideration' => $isUnderConsideration,
@@ -434,17 +443,7 @@ class IrhpApplicationFeeSummaryTest extends \PHPUnit\Framework\TestCase
                     'description' => $permitTypeDesc
                 ],
             ],
-            'irhpPermitApplications' => [
-                [
-                    'requiredEuro5' => $requiredEuro5,
-                    'requiredEuro6' => $requiredEuro6,
-                    'irhpPermitWindow' => [
-                        'irhpPermitStock' => [
-                            'validTo' => $stockValidTo
-                        ]
-                    ]
-                ]
-            ],
+            'irhpPermitApplications' => [$irhpPermitApplicationInputData],
             'fees' => [
                 [
                     'feeType' => [
@@ -479,7 +478,7 @@ class IrhpApplicationFeeSummaryTest extends \PHPUnit\Framework\TestCase
             'mappedFeeData' => [
                 [
                     'key' => IrhpApplicationFeeSummary::PERMIT_STATUS_HEADING,
-                    'value' => '<span class="status orange">Under Consideration</span>',
+                    'value' => $formattedStatus,
                     'disableHtmlEscape' => true,
                 ],
                 [
@@ -512,17 +511,14 @@ class IrhpApplicationFeeSummaryTest extends \PHPUnit\Framework\TestCase
 
         $expectedOutput = $inputData + $mappedData;
 
-        self::assertEquals(
+        $this->assertEquals(
             $expectedOutput,
-            IrhpApplicationFeeSummary::mapForDisplay($inputData, $translationHelperService, $url)
+            $this->irhpApplicationFeeSummary->mapForDisplay($inputData)
         );
     }
 
     public function testMapForDisplayEcmtShortTermAwaitingFee()
     {
-        $url = m::mock(Url::class);
-        $translationHelperService = m::mock(TranslationHelperService::class);
-
         $isUnderConsideration = false;
         $isAwaitingFee = true;
         $applicationRef = 'OB1234567/1';
@@ -533,42 +529,35 @@ class IrhpApplicationFeeSummaryTest extends \PHPUnit\Framework\TestCase
         $stockValidTo = '2022-12-31';
         $permitYear = 2022;
 
-        $requiredEuro5 = 1;
-        $requiredEuro6 = 5;
         $formattedNoOfPermitsRequiredLine1 = '1 permit for Euro 5 minimum emission standard';
         $formattedNoOfPermitsRequiredLine2 = '5 permits for Euro 6 minimum emission standard';
         $formattedNoOfPermitsRequired = '1 permit for Euro 5 minimum emission standard<br>' .
             '5 permits for Euro 6 minimum emission standard';
 
-        $euro5CategoryName = 'Euro 5 minimum emission standard';
-        $translationHelperService->shouldReceive('translate')
-            ->with('permits.page.fee.emissions.category.euro5')
-            ->andReturn($euro5CategoryName);
+        $irhpPermitApplicationInputData = [
+            'requiredEuro5' => 1,
+            'requiredEuro6' => 5,
+            'irhpPermitWindow' => [
+                'irhpPermitStock' => [
+                    'validTo' => $stockValidTo
+                ]
+            ]
+        ];
 
-        $euro6CategoryName = 'Euro 6 minimum emission standard';
-        $translationHelperService->shouldReceive('translate')
-            ->with('permits.page.fee.emissions.category.euro6')
-            ->andReturn($euro6CategoryName);
-
-        $translationHelperService->shouldReceive('translateReplace')
-            ->with(
-                'permits.page.fee.number.permits.line.single',
-                [1, $euro5CategoryName]
-            )
-            ->andReturn($formattedNoOfPermitsRequiredLine1);
-        $translationHelperService->shouldReceive('translateReplace')
-            ->with(
-                'permits.page.fee.number.permits.line.multiple',
-                [5, $euro6CategoryName]
-            )
-            ->andReturn($formattedNoOfPermitsRequiredLine2);
+        $this->ecmtNoOfPermits->shouldReceive('mapForDisplay')
+            ->with($irhpPermitApplicationInputData)
+            ->andReturn([$formattedNoOfPermitsRequiredLine1, $formattedNoOfPermitsRequiredLine2]);
 
         $issueFeePerPermit = 20;
-
+        $totalApplicationFee = '120';
         $formattedTotalApplicationFee = '£120';
         $translatedFormattedTotalApplicationFee = '£120 (non-refundable)';
 
-        $translationHelperService->shouldReceive('translateReplace')
+        $this->currencyFormatter->shouldReceive('__invoke')
+            ->with($totalApplicationFee)
+            ->andReturn($formattedTotalApplicationFee);
+
+        $this->translationHelperService->shouldReceive('translateReplace')
             ->with(
                 'permits.page.fee.permit.fee.non-refundable',
                 [$formattedTotalApplicationFee]
@@ -585,17 +574,7 @@ class IrhpApplicationFeeSummaryTest extends \PHPUnit\Framework\TestCase
                     'description' => $permitTypeDesc
                 ],
             ],
-            'irhpPermitApplications' => [
-                [
-                    'requiredEuro5' => $requiredEuro5,
-                    'requiredEuro6' => $requiredEuro6,
-                    'irhpPermitWindow' => [
-                        'irhpPermitStock' => [
-                            'validTo' => $stockValidTo
-                        ]
-                    ]
-                ]
-            ],
+            'irhpPermitApplications' => [$irhpPermitApplicationInputData],
             'fees' => [
                 [
                     'feeType' => [
@@ -664,9 +643,9 @@ class IrhpApplicationFeeSummaryTest extends \PHPUnit\Framework\TestCase
 
         $expectedOutput = $inputData + $mappedData;
 
-        self::assertEquals(
+        $this->assertEquals(
             $expectedOutput,
-            IrhpApplicationFeeSummary::mapForDisplay($inputData, $translationHelperService, $url)
+            $this->irhpApplicationFeeSummary->mapForDisplay($inputData)
         );
     }
 
@@ -681,8 +660,6 @@ class IrhpApplicationFeeSummaryTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $translationHelperService = m::mock(TranslationHelperService::class);
-        $url = m::mock(Url::class);
-        IrhpApplicationFeeSummary::mapForDisplay($inputData, $translationHelperService, $url);
+        $this->irhpApplicationFeeSummary->mapForDisplay($inputData);
     }
 }

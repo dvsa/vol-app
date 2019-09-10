@@ -34,7 +34,12 @@ class AvailableCountriesTest extends TestCase
             ->with($expectedValue)
             ->once();
 
-        self::assertEquals($expected, AvailableCountries::mapForFormOptions($data, $mockForm));
+        $availableCountries = new AvailableCountries();
+
+        self::assertEquals(
+            $expected,
+            $availableCountries->mapForFormOptions($data, $mockForm)
+        );
     }
 
     public function dpTestMapForFormOptions()

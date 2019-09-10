@@ -3,24 +3,39 @@
 namespace PermitsTest\Data\Mapper;
 
 use Common\Exception\ResourceNotFoundException;
-use Permits\Data\Mapper\IrhpCheckAnswers;
-use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Common\Service\Helper\TranslationHelperService;
-use Permits\View\Helper\IrhpApplicationSection;
-use Zend\Mvc\Controller\Plugin\Url;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
+use Permits\Data\Mapper\EcmtNoOfPermits;
+use Permits\Data\Mapper\IrhpCheckAnswers;
+use Permits\View\Helper\IrhpApplicationSection;
 
 class IrhpCheckAnswersTest extends TestCase
 {
+    private $translationHelperService;
+
+    private $ecmtNoOfPermits;
+
+    private $irhpCheckAnswers;
+
+    public function setUp()
+    {
+        $this->translationHelperService = m::mock(TranslationHelperService::class);
+
+        $this->ecmtNoOfPermits = m::mock(EcmtNoOfPermits::class);
+
+        $this->irhpCheckAnswers = new IrhpCheckAnswers(
+            $this->translationHelperService,
+            $this->ecmtNoOfPermits
+        );
+    }
+
     public function testMapForDisplayError()
     {
-        $url = m::mock(Url::class);
-        $translationHelperService = m::mock(TranslationHelperService::class);
-
         $this->expectException(ResourceNotFoundException::class);
         $this->expectExceptionMessage('No IRHP answers found');
-        $inputData = [];
-        IrhpCheckAnswers::mapForDisplay($inputData, $translationHelperService, $url);
+
+        $this->irhpCheckAnswers->mapForDisplay([]);
     }
 
     /**
@@ -28,18 +43,15 @@ class IrhpCheckAnswersTest extends TestCase
      */
     public function testMapForDisplay($data, $expected)
     {
-        $url = m::mock(Url::class);
-        $translationHelperService = m::mock(TranslationHelperService::class);
-
         foreach ($data['irhpPermitApplications'] as $application) {
             if (isset($application['irhpPermitWindow']['irhpPermitStock']['country'])) {
-                $translationHelperService
+                $this->translationHelperService
                     ->shouldReceive('translate')
                     ->with($application['irhpPermitWindow']['irhpPermitStock']['country']['countryDesc'])
                     ->andReturn($application['irhpPermitWindow']['irhpPermitStock']['country']['countryDesc'])
                     ->once();
 
-                $translationHelperService
+                $this->translationHelperService
                     ->shouldReceive('translateReplace')
                     ->with(
                         'permits.check-your-answers.countries',
@@ -57,7 +69,7 @@ class IrhpCheckAnswersTest extends TestCase
                         date('Y', strtotime($application['irhpPermitWindow']['irhpPermitStock']['validTo']))
                     );
             } else {
-                $translationHelperService
+                $this->translationHelperService
                     ->shouldReceive('translateReplace')
                     ->with(
                         'permits.check-your-answers.no-of-permits',
@@ -74,7 +86,10 @@ class IrhpCheckAnswersTest extends TestCase
             }
         }
 
-        self::assertEquals($expected, IrhpCheckAnswers::mapForDisplay($data, $translationHelperService, $url));
+        $this->assertEquals(
+            $expected,
+            $this->irhpCheckAnswers->mapForDisplay($data)
+        );
     }
 
     public function dpTestMapForDisplay()
@@ -610,115 +625,61 @@ class IrhpCheckAnswersTest extends TestCase
     /**
      * @dataProvider dpTestMapForDisplayShortTerm
      */
-    public function testMapForDisplayShortTerm($requiredEuro5, $requiredEuro6, $year, $expected)
+    public function testMapForDisplayShortTerm($year)
     {
-        $url = m::mock(Url::class);
-        $translationHelperService = m::mock(TranslationHelperService::class);
-
-        $irhpPermitApplications = [
-            0 => [
-                'requiredEuro5' => $requiredEuro5,
-                'requiredEuro6' => $requiredEuro6,
-                'irhpPermitWindow' => [
-                    'irhpPermitStock' => [
-                        'validTo' => $year . '-12-31',
-                    ]
+        $irhpPermitApplication = [
+            'requiredEuro5' => 4,
+            'requiredEuro6' => 6,
+            'irhpPermitWindow' => [
+                'irhpPermitStock' => [
+                    'validTo' => $year . '-12-31',
                 ]
-            ],
+            ]
         ];
 
+        $irhpPermitApplications = [$irhpPermitApplication];
+
         $input = $this->genericInput($irhpPermitApplications);
+
+        $ecmtNoOfPermitsLine1 = 'ecmt no of permits line 1';
+        $ecmtNoOfPermitsLine2 = 'ecmt no of permits line 2';
+
+        $ecmtNoOfPermitsLines = [
+            $ecmtNoOfPermitsLine1,
+            $ecmtNoOfPermitsLine2,
+        ];
+
+        $expected = [
+            '<strong>year heading</strong>',
+            $ecmtNoOfPermitsLine1,
+            $ecmtNoOfPermitsLine2,
+        ];
+
         $output = $this->genericOutput('st-number-of-permits', $expected, false);
 
-        $translationHelperService->shouldReceive('translateReplace')
+        $this->translationHelperService->shouldReceive('translateReplace')
             ->once()
             ->with(
                 'permits.check-your-answers.no-of-permits.year',
                 [$year]
             )
             ->andReturn('year heading');
-        $translationHelperService->shouldReceive('translate')
-            ->with('permits.page.fee.emissions.category.euro5')
-            ->times($requiredEuro5 ? 1 : 0)
-            ->andReturn('Euro 5 minimum emission standard');
-        $translationHelperService->shouldReceive('translate')
-            ->with('permits.page.fee.emissions.category.euro6')
-            ->times($requiredEuro6 ? 1 : 0)
-            ->andReturn('Euro 6 minimum emission standard');
-        $translationHelperService->shouldReceive('translateReplace')
-            ->with(
-                'permits.page.fee.number.permits.line.multiple',
-                [$requiredEuro5, 'Euro 5 minimum emission standard']
-            )
-            ->times($requiredEuro5 ? 1 : 0)
-            ->andReturn($requiredEuro5 . ' permits for Euro 5 minimum emission standard');
-        $translationHelperService->shouldReceive('translateReplace')
-            ->with(
-                'permits.page.fee.number.permits.line.multiple',
-                [$requiredEuro6, 'Euro 6 minimum emission standard']
-            )
-            ->times($requiredEuro6 ? 1 : 0)
-            ->andReturn($requiredEuro6 . ' permits for Euro 6 minimum emission standard');
 
-        self::assertEquals($output, IrhpCheckAnswers::mapForDisplay($input, $translationHelperService, $url));
+        $this->ecmtNoOfPermits->shouldReceive('mapForDisplay')
+            ->with($irhpPermitApplication)
+            ->andReturn($ecmtNoOfPermitsLines);
+
+        $this->assertEquals(
+            $output,
+            $this->irhpCheckAnswers->mapForDisplay($input)
+        );
     }
 
     public function dpTestMapForDisplayShortTerm()
     {
-        $requiredEuro5 = 3;
-        $requiredEuro6 = 7;
-
-        $yearHeading = '<strong>year heading</strong>';
-        $euro5Text = $requiredEuro5 . ' permits for Euro 5 minimum emission standard';
-        $euro6Text = $requiredEuro6 . ' permits for Euro 6 minimum emission standard';
-
         return [
-            [
-                null,
-                $requiredEuro6,
-                2029,
-                [
-                    $yearHeading,
-                    $euro6Text,
-                ],
-            ],
-            [
-                0,
-                $requiredEuro6,
-                2029,
-                [
-                    $yearHeading,
-                    $euro6Text,
-                ],
-            ],
-            [
-                $requiredEuro5,
-                null,
-                2030,
-                [
-                    $yearHeading,
-                    $euro5Text,
-                ],
-            ],
-            [
-                $requiredEuro5,
-                null,
-                2030,
-                [
-                    $yearHeading,
-                    $euro5Text,
-                ],
-            ],
-            [
-                $requiredEuro5,
-                $requiredEuro6,
-                2030,
-                [
-                    $yearHeading,
-                    $euro5Text,
-                    $euro6Text,
-                ],
-            ],
+            [2029],
+            [2030],
         ];
     }
 

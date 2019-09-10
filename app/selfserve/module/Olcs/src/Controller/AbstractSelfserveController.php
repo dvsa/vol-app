@@ -13,7 +13,6 @@ use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Olcs\Controller\Config\DataSource\DataSourceInterface;
 use Olcs\Logging\Log\Logger;
-use ReflectionMethod;
 use Zend\Http\PhpEnvironment\Response as PhpEnvironmentResponse;
 use Zend\Http\Response as HttpResponse;
 use Zend\Mvc\MvcEvent;
@@ -264,15 +263,18 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
         if (!empty($this->postParams)) {
             $config = $this->configsForAction('postConfig');
             // If controller has specified a mapper class, use it instead of default.
-            $mapper = DefaultMapper::class;
+            $mapperClass = DefaultMapper::class;
             if (isset($config['mapperClass'])) {
-                $mapper = $config['mapperClass'];
+                $mapperClass = $config['mapperClass'];
             }
+
+            $mapper = $this->getServiceLocator()->get($mapperClass);
 
             $formData = $this->postParams;
             // If controller specified a pre-process mapper method, invoke it before setting data to form.
             if (isset($config['preprocessMethod']) && method_exists($mapper, $config['preprocessMethod'])) {
-                $preProcess = $mapper::{$config['preprocessMethod']}($this->postParams, $this->form);
+                $methodName = $config['preprocessMethod'];
+                $preProcess = $mapper->$methodName($this->postParams, $this->form);
                 $formData = $preProcess['formData'];
             }
 
@@ -281,7 +283,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
                 $saveData = [];
 
                 if (isset($formData['fields'])) {
-                    $saveData = $mapper::mapFromForm($formData);
+                    $saveData = $mapper->mapFromForm($formData);
                 }
 
                 $params = array_merge($this->fetchHandlePostParams(), $saveData);
@@ -376,13 +378,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
 
             if (isset($config['mapper'])) {
                 $mapper = isset($config['mapper']) ? $config['mapper'] : DefaultMapper::class;
-                $reflection = new ReflectionMethod($mapper, 'mapForDisplay');
-
-                if ($reflection->getNumberOfRequiredParameters() > 2) {
-                    $data = $mapper::mapForDisplay($data, $this->getServiceLocator()->get('Helper\Translation'), $this->url());
-                } else {
-                    $data = $mapper::mapForDisplay($data);
-                }
+                $data = $this->getServiceLocator()->get($mapper)->mapForDisplay($data);
             }
 
             $this->data[$source::DATA_KEY] = $data;
@@ -394,13 +390,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
                         $source::DATA_KEY => $data
                     ];
 
-                    $reflection = new ReflectionMethod($mapper, 'mapForDisplay');
-
-                    if ($reflection->getNumberOfRequiredParameters() > 2) {
-                        $this->data[$appendTo] = $mapper::mapForDisplay($combinedData, $this->getServiceLocator()->get('Helper\Translation'), $this->url());
-                    } else {
-                        $this->data[$appendTo] = $mapper::mapForDisplay($combinedData);
-                    }
+                    $this->data[$appendTo] = $this->getServiceLocator()->get($mapper)->mapForDisplay($combinedData);
                 }
             }
         }
@@ -431,10 +421,12 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
                 $this->data[$config['dataRouteParam']] = $this->params()->fromRoute($config['dataRouteParam']);
             }
 
+            $mapper = $this->getServiceLocator()->get($mapperClass);
             if (isset($config['mapper']['type'])) {
-                $this->data = call_user_func_array([$mapperClass, $config['mapper']['type']], [$this->data, $form, $this->getServiceLocator()->get('Helper\Translation')]);
+                $methodName = $config['mapper']['type'];
+                $this->data = $mapper->$methodName($this->data, $form);
             } elseif (isset($config['dataSource'])) {
-                $formData = $mapperClass::mapFromResult($this->data[$config['dataSource']]);
+                $formData = $mapper->mapFromResult($this->data[$config['dataSource']]);
             }
 
             $form->setData($formData);

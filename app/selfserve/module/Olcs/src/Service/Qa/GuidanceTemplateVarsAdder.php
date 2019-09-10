@@ -7,6 +7,9 @@ use RuntimeException;
 
 class GuidanceTemplateVarsAdder
 {
+    /** @var TranslateableTextHandler */
+    private $translateableTextHandler;
+
     /**
      * Create service instance
      *

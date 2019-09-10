@@ -6,7 +6,6 @@ use Common\Form\Form;
 use Permits\Controller\Config\DataSource\AvailableTypes as AvailableTypesDataSource;
 
 /**
- *
  * Available types mapper
  */
 class AvailableTypes
@@ -17,7 +16,7 @@ class AvailableTypes
      *
      * @return array
      */
-    public static function mapForFormOptions(array $data, $form)
+    public function mapForFormOptions(array $data, $form)
     {
         $mapData = $data[AvailableTypesDataSource::DATA_KEY];
 

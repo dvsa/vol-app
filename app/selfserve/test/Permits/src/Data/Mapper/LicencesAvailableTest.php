@@ -11,6 +11,13 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
 class LicencesAvailableTest extends TestCase
 {
+    private $licencesAvailable;
+
+    public function setUp()
+    {
+        $this->licencesAvailable = new LicencesAvailable();
+    }
+
     public function testMapForFormOptionsOneEcmtRestricted()
     {
         $inputData = [
@@ -100,7 +107,10 @@ class LicencesAvailableTest extends TestCase
                 }
             );
 
-        self::assertEquals($outputData, LicencesAvailable::mapForFormOptions($inputData, $mockForm));
+        $this->assertEquals(
+            $outputData,
+            $this->licencesAvailable->mapForFormOptions($inputData, $mockForm)
+        );
     }
 
     /**
@@ -122,7 +132,10 @@ class LicencesAvailableTest extends TestCase
                 ['class' => 'visually-hidden']
             );
 
-        self::assertEquals($outputData, LicencesAvailable::mapForFormOptions($inputData, $mockForm));
+        $this->assertEquals(
+            $outputData,
+            $this->licencesAvailable->mapForFormOptions($inputData, $mockForm)
+        );
     }
 
     public function dpTestMapForFormOptions()

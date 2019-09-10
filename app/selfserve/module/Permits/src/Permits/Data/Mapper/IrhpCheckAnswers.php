@@ -3,11 +3,10 @@
 namespace Permits\Data\Mapper;
 
 use Common\Exception\ResourceNotFoundException;
-use Common\Util\Escape;
-use Permits\View\Helper\IrhpApplicationSection as Section;
 use Common\RefData;
 use Common\Service\Helper\TranslationHelperService;
-use Zend\Mvc\Controller\Plugin\Url;
+use Common\Util\Escape;
+use Permits\View\Helper\IrhpApplicationSection as Section;
 
 class IrhpCheckAnswers
 {
@@ -22,19 +21,36 @@ class IrhpCheckAnswers
         'number-of-permits',
     ];
 
+    /** @var TranslationHelperService */
+    private $translator;
+
+    /** @var EcmtNoOfPermits */
+    private $ecmtNoOfPermits;
+
+    /**
+     * Create service instance
+     *
+     * @param TranslationHelperService $translator
+     * @param EcmtNoOfPermits $ecmtNoOfPermits
+     *
+     * @return IrhpCheckAnswers
+     */
+    public function __construct(TranslationHelperService $translator, EcmtNoOfPermits $ecmtNoOfPermits)
+    {
+        $this->translator = $translator;
+        $this->ecmtNoOfPermits = $ecmtNoOfPermits;
+    }
+
     /**
      * Maps data
      *
-     * @param array                    $data       Array of data retrieved from the backend
-     * @param TranslationHelperService $translator Translation service
-     * @param Url                      $url        Url plugin
+     * @param array $data Array of data retrieved from the backend
      *
      * @return array
+     *
      * @throws ResourceNotFoundException
-     * @throws \RuntimeException
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public static function mapForDisplay(array $data, TranslationHelperService $translator, Url $url)
+    public function mapForDisplay(array $data)
     {
         if (empty($data)) {
             throw new ResourceNotFoundException('No IRHP answers found');
@@ -54,7 +70,7 @@ class IrhpCheckAnswers
                 );
 
                 $permitsRequiredYearHeading = '<strong>' . Escape::html(
-                    $translator->translateReplace(
+                    $this->translator->translateReplace(
                         'permits.check-your-answers.no-of-permits.year',
                         [$validToYear]
                     )
@@ -62,7 +78,7 @@ class IrhpCheckAnswers
 
                 $noOfPermits = array_merge(
                     [$permitsRequiredYearHeading],
-                    EcmtNoOfPermits::mapForDisplay($data['irhpPermitApplications'][0], $translator, $url)
+                    $this->ecmtNoOfPermits->mapForDisplay($data['irhpPermitApplications'][0])
                 );
                 break;
             default:
@@ -71,13 +87,13 @@ class IrhpCheckAnswers
                     $validToYear = date('Y', strtotime($application['irhpPermitWindow']['irhpPermitStock']['validTo']));
 
                     if (isset($application['irhpPermitWindow']['irhpPermitStock']['country'])) {
-                        $countryDesc = $translator->translate(
+                        $countryDesc = $this->translator->translate(
                             $application['irhpPermitWindow']['irhpPermitStock']['country']['countryDesc']
                         );
 
                         $countries[] = $countryDesc;
 
-                        $noOfPermits[] = $translator->translateReplace(
+                        $noOfPermits[] = $this->translator->translateReplace(
                             'permits.check-your-answers.countries',
                             [
                                 $permitsRequired,
@@ -86,7 +102,7 @@ class IrhpCheckAnswers
                             ]
                         );
                     } else {
-                        $noOfPermits[] = $translator->translateReplace(
+                        $noOfPermits[] = $this->translator->translateReplace(
                             'permits.check-your-answers.no-of-permits',
                             [
                                 $permitsRequired,
@@ -97,31 +113,31 @@ class IrhpCheckAnswers
                 }
         }
 
-        $openingAnswers = static::openingAnswers($data);
+        $openingAnswers = $this->openingAnswers($data);
         $extraAnswers = [];
 
         switch ($data['irhpPermitType']['id']) {
             case RefData::IRHP_BILATERAL_PERMIT_TYPE_ID:
                 // populate $answers with bilateral variation
                 $extraAnswers = [
-                    static::answer(
+                    $this->answer(
                         'permits.irhp.application.question.countries',
                         implode(array_unique($countries), ', '),
                         Section::ROUTE_COUNTRIES
                     ),
-                    static::permitsRequiredAnswer($noOfPermits),
+                    $this->permitsRequiredAnswer($noOfPermits),
                 ];
                 break;
             case RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID:
                 // populate $answers with multilateral variation
                 $extraAnswers = [
-                    static::permitsRequiredAnswer($noOfPermits),
+                    $this->permitsRequiredAnswer($noOfPermits),
                 ];
                 break;
             default:
                 foreach ($data['questionAnswerData'] as $answerData) {
                     //licence, check answers, declaration and so on are skipped
-                    if (in_array($answerData['slug'], static::SKIPPED_QUESTIONS)) {
+                    if (in_array($answerData['slug'], self::SKIPPED_QUESTIONS)) {
                         continue;
                     }
 
@@ -136,7 +152,7 @@ class IrhpCheckAnswers
                             $escape = false;
                         }
 
-                        $extraAnswers[] = static::permitsRequiredAnswer(
+                        $extraAnswers[] = $this->permitsRequiredAnswer(
                             $noOfPermits,
                             Section::ROUTE_QUESTION,
                             $params,
@@ -145,7 +161,7 @@ class IrhpCheckAnswers
                         continue;
                     }
 
-                    $extraAnswers[] = static::answer(
+                    $extraAnswers[] = $this->answer(
                         $answerData['question'],
                         $answerData['answer'],
                         Section::ROUTE_QUESTION,
@@ -172,13 +188,13 @@ class IrhpCheckAnswers
      *
      * @return array
      */
-    private static function permitsRequiredAnswer(
+    private function permitsRequiredAnswer(
         array $noOfPermits,
         string $route = Section::ROUTE_NO_OF_PERMITS,
         array $params = [],
         bool $escape = true
     ) {
-        return static::answer(
+        return $this->answer(
             'permits.irhp.application.question.no-of-permits',
             $noOfPermits,
             $route,
@@ -196,9 +212,9 @@ class IrhpCheckAnswers
      *
      * @return array
      */
-    public static function permitTypeAnswer(string $permitType): array
+    public function permitTypeAnswer(string $permitType): array
     {
-        return static::answer('permits.page.fee.permit.type', $permitType);
+        return $this->answer('permits.page.fee.permit.type', $permitType);
     }
 
     /**
@@ -209,14 +225,14 @@ class IrhpCheckAnswers
      *
      * @return array
      */
-    public static function licenceAnswer(array $licence, string $route = Section::ROUTE_LICENCE): array
+    public function licenceAnswer(array $licence, string $route = Section::ROUTE_LICENCE): array
     {
         $answer = [
             $licence['licNo'],
             $licence['trafficArea']['name']
         ];
 
-        return static::answer('permits.check-answers.page.question.licence', $answer, $route);
+        return $this->answer('permits.check-answers.page.question.licence', $answer, $route);
     }
 
     /**
@@ -226,11 +242,11 @@ class IrhpCheckAnswers
      *
      * @return array
      */
-    private static function openingAnswers(array $data): array
+    private function openingAnswers(array $data): array
     {
         return [
-            static::permitTypeAnswer($data['irhpPermitType']['name']['description']),
-            static::licenceAnswer($data['licence'])
+            $this->permitTypeAnswer($data['irhpPermitType']['name']['description']),
+            $this->licenceAnswer($data['licence'])
         ];
     }
 
@@ -247,7 +263,7 @@ class IrhpCheckAnswers
      *
      * @return array
      */
-    public static function answer(
+    public function answer(
         string $question,
         $answer,
         string $route = null,

@@ -17,7 +17,7 @@ class RestrictedCountries
      *
      * @return array
      */
-    public static function mapForFormOptions(array $data, Form $form)
+    public function mapForFormOptions(array $data, Form $form)
     {
         $mapData = $data[EcmtConstrainedCountriesDataSource::DATA_KEY];
         $valueOptions = [];
@@ -52,7 +52,7 @@ class RestrictedCountries
      * @param array $data Data from form
      * @return array
      */
-    public static function mapFromForm(array $data): array
+    public function mapFromForm(array $data): array
     {
         $data['fields']['countryIds'] =
             (int)$data['fields']['restrictedCountries'] === 1 && isset($data['fields']['yesContent']['restrictedCountriesList'])
@@ -68,7 +68,7 @@ class RestrictedCountries
      * @param Form $form
      * @return array
      */
-    public static function preprocessFormData(array $data, Form $form): array
+    public function preprocessFormData(array $data, Form $form): array
     {
         $preProcess = [];
         if (isset($data['fields'])) {
