@@ -135,7 +135,7 @@ class CreatePermit extends Base
      *     "disable_inarray_validator" : true,
      * })
      * @Form\Attributes({
-     *     "class" : "chosen-select-large",
+     *     "class" : "chosen-select-large-ecmt",
      *     "id" : "countrys",
      *     "allowWrap":true,
      *     "multiple":"multiple",
