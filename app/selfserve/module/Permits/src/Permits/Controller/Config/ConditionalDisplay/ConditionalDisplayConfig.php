@@ -259,13 +259,6 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const PERMIT_APP_CAN_BE_SUBMITTED = [
-        PermitAppDataSource::DATA_KEY => [
-            'key' => 'canBeSubmitted',
-            'value' => true
-        ],
-    ];
-
     const PERMIT_APP_UNDER_CONSIDERATION = [
         PermitAppDataSource::DATA_KEY => [
             'key' => 'isUnderConsideration',
@@ -290,6 +283,20 @@ class ConditionalDisplayConfig
     const PERMIT_APP_IS_VALID = [
         PermitAppDataSource::DATA_KEY => [
             'key' => 'isValid',
+            'value' => true
+        ],
+    ];
+
+    const PERMIT_APP_ISSUING = [
+        PermitAppDataSource::DATA_KEY => [
+            'key' => 'isIssueInProgress',
+            'value' => true
+        ],
+    ];
+
+    const ECMT_APP_HAS_OUTSTANDING_FEES = [
+        PermitAppDataSource::DATA_KEY => [
+            'key' => 'hasOutstandingFees',
             'value' => true
         ],
     ];
