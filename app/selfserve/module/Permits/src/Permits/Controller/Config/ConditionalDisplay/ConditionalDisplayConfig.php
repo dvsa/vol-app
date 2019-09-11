@@ -259,13 +259,6 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const PERMIT_APP_CAN_BE_SUBMITTED = [
-        PermitAppDataSource::DATA_KEY => [
-            'key' => 'canBeSubmitted',
-            'value' => true
-        ],
-    ];
-
     const PERMIT_APP_UNDER_CONSIDERATION = [
         PermitAppDataSource::DATA_KEY => [
             'key' => 'isUnderConsideration',
