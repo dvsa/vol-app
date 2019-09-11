@@ -293,4 +293,18 @@ class ConditionalDisplayConfig
             'value' => true
         ],
     ];
+
+    const PERMIT_APP_ISSUING = [
+        PermitAppDataSource::DATA_KEY => [
+            'key' => 'isIssueInProgress',
+            'value' => true
+        ],
+    ];
+
+    const ECMT_APP_HAS_OUTSTANDING_FEES = [
+        PermitAppDataSource::DATA_KEY => [
+            'key' => 'hasOutstandingFees',
+            'value' => true
+        ],
+    ];
 }

@@ -23,7 +23,7 @@ class SubmittedController extends AbstractSelfserveController implements ToggleA
 
     protected $conditionalDisplayConfig = [
         'application-submitted' => ConditionalDisplayConfig::PERMIT_APP_UNDER_CONSIDERATION,
-        'issue-submitted' => ConditionalDisplayConfig::PERMIT_APP_PAID,
+        'issue-submitted' => ConditionalDisplayConfig::PERMIT_APP_ISSUING,
         'irhp-submitted' => ConditionalDisplayConfig::IRHP_APP_SUBMITTED,
     ];
 

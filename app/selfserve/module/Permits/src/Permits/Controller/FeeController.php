@@ -34,7 +34,7 @@ class FeeController extends AbstractSelfserveController implements ToggleAwareIn
     ];
 
     protected $conditionalDisplayConfig = [
-        'default' => ConditionalDisplayConfig::PERMIT_APP_CAN_BE_SUBMITTED,
+        'default' => ConditionalDisplayConfig::ECMT_APP_HAS_OUTSTANDING_FEES,
     ];
 
     protected $formConfig = [
