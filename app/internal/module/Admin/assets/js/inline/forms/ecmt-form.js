@@ -41,6 +41,13 @@ OLCS.ready(function () {
             if (data.yearEmissions[year].euro6) {
                 $(".emission6Dependent").removeClass("js-hidden");
             }
+
+            // OLCS-25498 - only convert the country selection to a Chosen component once the select element is
+            // actually visible, to prevent incorrect display of Chosen component
+            $(".chosen-select-large-ecmt").chosen({
+                width: "97%"
+            });
+
             OLCS.preloader.hide();
         });
     }
