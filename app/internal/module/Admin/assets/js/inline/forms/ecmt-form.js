@@ -78,8 +78,8 @@ OLCS.ready(function () {
         }
 
         // Compare total permits required with total vehicle authorization
-        var euro5Val = parseInt(euro5.val(), 10);
-        var euro6Val = parseInt(euro6.val(), 10);
+        var euro5Val = parseInt(euro5.val(), 10) || 0;
+        var euro6Val = parseInt(euro6.val(), 10) || 0;
         var numVehicles = parseInt($("#numVehicles").val(), 10);
         if (euro5Val + euro6Val > numVehicles) {
             wrapError(euro6, "Total Euro5 and Euro6 values cannot exceed " + numVehicles, clickEvent);
