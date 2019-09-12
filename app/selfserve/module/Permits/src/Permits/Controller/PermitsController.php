@@ -331,7 +331,9 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                 );
             }
 
-            $form->setData($form->getData());
+            $normalisedData = $form->getData();
+            $data['Fields'] = $normalisedData['Fields'];
+            $form->setData($data);
         }
 
         $topLabel = $fieldset->get('topLabel');
