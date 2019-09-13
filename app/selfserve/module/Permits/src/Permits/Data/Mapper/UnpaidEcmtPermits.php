@@ -8,7 +8,7 @@ namespace Permits\Data\Mapper;
  */
 class UnpaidEcmtPermits
 {
-    public static function mapForDisplay(array $data)
+    public function mapForDisplay(array $data)
     {
         $permits = [];
 

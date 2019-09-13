@@ -14,7 +14,12 @@ class UnpaidEcmtPermitsTest extends \PHPUnit\Framework\TestCase
      */
     public function testMapForDisplay($input, $expected)
     {
-        self::assertEquals($expected, UnpaidEcmtPermits::mapForDisplay($input));
+        $unpaidEcmtPermits = new UnpaidEcmtPermits();
+
+        $this->assertEquals(
+            $expected,
+            $unpaidEcmtPermits->mapForDisplay($input)
+        );
     }
 
     public function dpTestMapForDisplay()
