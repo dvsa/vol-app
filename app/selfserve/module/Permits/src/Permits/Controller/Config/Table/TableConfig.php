@@ -42,6 +42,12 @@ class TableConfig
             'dataSource' => ValidIrhpPermitsDataSource::DATA_KEY
         ]
     ];
+    const VALID_IRHP_PERMITS_ECMT_REMOVAL = [
+        'valid-irhp-permits' => [
+            'tableName' => 'valid-irhp-permits-ecmt-removal',
+            'dataSource' => ValidIrhpPermitsDataSource::DATA_KEY
+        ]
+    ];
     const IRHP_FEE_BREAKDOWN = [
         'irhp-fee-breakdown' => [
             'tableName' => 'irhp-fee-breakdown',

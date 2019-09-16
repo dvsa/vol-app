@@ -51,6 +51,10 @@ class IrhpValidPermitsController extends AbstractSelfserveController implements 
             $this->tableConfig = [
                 'generic' => TableConfig::VALID_IRHP_PERMITS_ECMT_SHORT_TERM,
             ];
+        } elseif ($this->data[IrhpPermitType::DATA_KEY]['isEcmtRemoval']) {
+            $this->tableConfig = [
+                'generic' => TableConfig::VALID_IRHP_PERMITS_ECMT_REMOVAL,
+            ];
         }
         parent::retrieveTables();
     }
