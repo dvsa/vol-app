@@ -75,6 +75,9 @@ class LicencesAvailableTest extends TestCase
                 ],
                 'hint' => 'Restricted (North East of England)',
                 'selected' => true,
+                'attributes' => [
+                    'id' => 'licence'
+                ]
             ],
         ];
 
@@ -362,6 +365,9 @@ class LicencesAvailableTest extends TestCase
                 ],
                 'hint' => 'Standard International (North East of England)',
                 'selected' => false,
+                'attributes' => [
+                    'id' => 'licence'
+                ],
             ],
             70 => [
                 'value' => 70,
@@ -468,6 +474,9 @@ class LicencesAvailableTest extends TestCase
                 ],
                 'hint' => 'Restricted (North East of England)',
                 'selected' => true,
+                'attributes' => [
+                    'id' => 'licence'
+                ],
             ],
         ];
     }

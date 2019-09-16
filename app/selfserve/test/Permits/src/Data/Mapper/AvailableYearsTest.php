@@ -78,6 +78,9 @@ class AvailableYearsTest extends TestCase
                 'label' => $year,
                 'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
                 'hint' => $translatedHint,
+                'attributes' => [
+                    'id' => 'year'
+                ]
             ]
         ];
 
@@ -151,6 +154,9 @@ class AvailableYearsTest extends TestCase
                 'label' => 2018,
                 'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
                 'hint' => $translatedHint2018,
+                'attributes' => [
+                    'id' => 'year'
+                ]
             ],
             [
                 'value' => 2019,
@@ -269,8 +275,10 @@ class AvailableYearsTest extends TestCase
                     [
                         'value' => 3030,
                         'label' => 3030,
-                        'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s']
-
+                        'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
+                        'attributes' => [
+                            'id' => 'year'
+                        ]
                     ],
                     [
                         'value' => 3031,
@@ -304,8 +312,10 @@ class AvailableYearsTest extends TestCase
                     [
                         'value' => 3030,
                         'label' => 3030,
-                        'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s']
-
+                        'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
+                        'attributes' => [
+                            'id' => 'year'
+                        ]
                     ]
                 ],
             ],

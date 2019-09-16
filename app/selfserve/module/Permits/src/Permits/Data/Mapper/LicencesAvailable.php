@@ -79,6 +79,13 @@ class LicencesAvailable
             ];
         }
 
+        if (count($valueOptions)) {
+            $key = array_keys($valueOptions)[0];
+            $valueOptions[$key]['attributes'] = [
+                'id' => 'licence'
+            ];
+        }
+
         if ($irhpPermitTypeID === RefData::ECMT_PERMIT_TYPE_ID && count($valueOptions) === 1) {
             $key = array_keys($valueOptions)[0];
             $data['question'] = self::ECMT_QUESTION_ONE_LICENCE;

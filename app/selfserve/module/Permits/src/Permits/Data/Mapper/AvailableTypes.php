@@ -31,6 +31,12 @@ class AvailableTypes
             ];
         }
 
+        if (count($valueOptions)) {
+            $valueOptions[0]['attributes'] = [
+                'id' => 'type'
+            ];
+        }
+
         $form->get('fields')->get('type')->setValueOptions($valueOptions);
 
         $data['guidance'] = [
