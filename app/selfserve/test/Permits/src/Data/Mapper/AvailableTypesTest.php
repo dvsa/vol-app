@@ -109,6 +109,9 @@ class AvailableTypesTest extends TestCase
                         'label' => 'name 1',
                         'hint' => 'desc 1',
                         'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
+                        'attributes' => [
+                            'id' => 'type'
+                        ]
                     ],
                     [
                         'value' => 2,

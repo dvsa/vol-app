@@ -67,7 +67,9 @@ class AvailableYears
             ];
         }
 
-        $form->get('fields')->get('year')->setValueOptions($valueOptions);
+        $form->get('fields')->get('year')->setValueOptions(
+            $this->transformValueOptions($valueOptions)
+        );
 
         $data['browserTitle'] = 'permits.page.year.browser.title';
         $data['question'] = 'permits.page.year.question';
@@ -107,7 +109,9 @@ class AvailableYears
             ];
         }
 
-        $form->get('fields')->get('year')->setValueOptions($valueOptions);
+        $form->get('fields')->get('year')->setValueOptions(
+            $this->transformValueOptions($valueOptions)
+        );
 
         $suffix = 'one-year-available';
         if (count($years) > 1) {
@@ -124,5 +128,23 @@ class AvailableYears
         ];
 
         return $data;
+    }
+
+    /**
+     * Set the id of the first radio button in the list for validation accessibility purposes
+     *
+     * @param array $valueOptions
+     *
+     * @return array
+     */
+    private function transformValueOptions(array $valueOptions)
+    {
+        if (count($valueOptions)) {
+            $valueOptions[0]['attributes'] = [
+                'id' => 'year'
+            ];
+        }
+
+        return $valueOptions;
     }
 }

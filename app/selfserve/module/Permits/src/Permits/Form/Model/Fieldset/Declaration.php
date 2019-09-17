@@ -11,6 +11,7 @@ class Declaration
     /**
      * @Form\Name("declaration")
      * @Form\Attributes({
+     *   "id": "declaration",
      *   "class" : "input--declaration",
      * })
      * @Form\Options({
