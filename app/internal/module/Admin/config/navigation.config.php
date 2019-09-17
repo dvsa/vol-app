@@ -350,6 +350,18 @@ return [
                         ],
                     ],
                 ],
+                [
+                    'id' => 'admin-dashboard/admin-fee-rates',
+                    'label' => 'Fee rates',
+                    'route' => 'admin-dashboard/admin-fee-rates',
+                    'pages' => [
+                        [
+                            'id' => 'admin-dashboard/admin-fee-rates',
+                            'label' => 'Fee Rates',
+                            'route' => 'admin-dashboard/admin-fee-rates',
+                        ],
+                    ],
+                ],
             ]
         ]
     ]

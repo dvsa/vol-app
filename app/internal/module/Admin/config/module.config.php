@@ -804,6 +804,21 @@ return [
                             ]
                         ],
                     ],
+                    'admin-fee-rates' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' =>
+                                'fee-rates[/:action][/:id][/]',
+                            'constraints' => [
+                                'action' => '(index|edit)',
+                                'id' => '[0-9\,]+',
+                            ],
+                            'defaults' => [
+                                'controller' => Admin\Controller\FeeRateController::class,
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
                 ],
             ],
         ],
@@ -883,7 +898,8 @@ return [
             Admin\Controller\ReportUploadController::class => Admin\Controller\ReportUploadController::class,
             Admin\Controller\DocumentTemplateController::class => Admin\Controller\DocumentTemplateController::class,
             Admin\Controller\TemplateController::class => Admin\Controller\TemplateController::class,
-            Admin\Controller\InterimRefundsController::class =>Admin\Controller\InterimRefundsController::class
+            Admin\Controller\InterimRefundsController::class =>Admin\Controller\InterimRefundsController::class,
+            Admin\Controller\FeeRateController::class => Admin\Controller\FeeRateController::class,
         ],
     ],
     'view_manager' => [
