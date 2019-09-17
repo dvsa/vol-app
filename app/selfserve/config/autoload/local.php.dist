@@ -93,4 +93,26 @@ return [
     // Google Tag Manager id. If empty or not exists (commented out), then no Google Tag Manager code will be rendered
     'google-tag' => '',
 
-];
+    'caches' => [
+        \Zend\Cache\Storage\Adapter\Redis::class => [
+            'adapter' => [
+                'name' => 'redis',
+                'options' => [
+                    'server' => [
+                        'host' => '127.0.0.1',
+                        'port' => 6379,
+                    ],
+                    'lib_options' => [
+                        \Redis::OPT_SERIALIZER => \Redis::SERIALIZER_IGBINARY
+                    ],
+                    'ttl' => 3600, //one hour, likely to be overridden based on use case
+                    'namespace' => 'ssweb', //otherwise zend will default to "zfcache", but usually overridden anyway
+                ],
+                'plugins' => [
+                    'exception_handler' => [
+                        'throw_exceptions' => false,
+                    ],
+                ],
+            ],
+        ],
+    ],
