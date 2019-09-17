@@ -92,6 +92,8 @@ class SubmittedController extends AbstractSelfserveController implements ToggleA
             // Short term ECMT confirmation page after user pays issue fee successfully
             $this->data['browserTitle'] = 'permits.page.confirmation.irhp-payment-successful.browser.title';
             $this->data['title'] = 'permits.page.confirmation.irhp-payment-successful.title';
+        } elseif ($irhpAppData['irhpPermitType']['isEcmtRemoval']) {
+            $this->data['extraContent']['list'] = 'markup-irhp-submitted-ecmt-removal-what-happens-next';
         }
 
         $this->addReceiptUrl(IrhpApplicationSection::ROUTE_PRINT_RECEIPT);
