@@ -71,7 +71,7 @@ class BusRegActionTest extends MockeryTestCase
         $backendResponseKeysByButtonId = [
             'bus-registration-quick-actions-create-cancellation' => 'canCreateCancellation',
             'bus-registration-quick-actions-create-variation' => 'canCreateVariation',
-            'bus-registration-quick-actions-print-reg-letter' => 'canPrintLetter',
+            'bus-registration-quick-actions-print-reg-letter' => 'canPrint',
             'bus-registration-quick-actions-request-new-route-map' => 'canRequestNewRouteMap',
             'bus-registration-quick-actions-request-withdrawn' => 'canWithdraw',
             'bus-registration-quick-actions-republish' => 'canRepublish',

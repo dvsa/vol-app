@@ -155,7 +155,7 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
         $sidebarNav->findOneBy('id', 'bus-registration-quick-actions-create-variation')
             ->setVisible($busReg['canCreateVariation']);
         $sidebarNav->findOneBy('id', 'bus-registration-quick-actions-print-reg-letter')
-            ->setVisible($busReg['canPrintLetter']);
+            ->setVisible($busReg['canPrint']);
         $sidebarNav->findOneBy('id', 'bus-registration-quick-actions-request-new-route-map')
             ->setVisible($busReg['canRequestNewRouteMap']);
         $sidebarNav->findOneBy('id', 'bus-registration-quick-actions-request-withdrawn')
