@@ -124,8 +124,8 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
      */
     public function questionEcmtAction()
     {
-        $this->templateVarsConfig['add']['question'] = $this->data['question'];
-        $this->templateVarsConfig['add']['questionArgs'] = $this->data['questionArgs'];
+        $this->templateVarsConfig['question-ecmt']['question'] = $this->data['question'];
+        $this->templateVarsConfig['question-ecmt']['questionArgs'] = $this->data['questionArgs'];
         $this->mergeTemplateVars();
         return $this->genericAction();
     }
