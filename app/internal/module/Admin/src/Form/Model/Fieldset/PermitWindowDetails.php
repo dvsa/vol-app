@@ -28,6 +28,7 @@ class PermitWindowDetails
      *     "create_empty_option": true,
      *     "max_year_delta": "+1",
      *     "min_year_delta": "0",
+     *     "display_every_minute": true,
      *     "pattern": "d MMMM y '</fieldset><fieldset><div class=""field""><label for=""startDate"">Time</label>'HH:mm:ss'</div>'",
      *     "render_delimiters": false
      * })
