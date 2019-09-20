@@ -82,11 +82,11 @@ class IrhpPermitPrintStock extends AbstractDataService implements ListDataInterf
         $optionData = [];
 
         foreach ($data as $datum) {
-            $optionData[$datum['id']] = sprintf(
-                '%s to %s',
-                $datum['validFrom'],
-                $datum['validTo']
-            );
+            $label = (!empty($datum['validFrom']) && !empty($datum['validTo']))
+                ? sprintf('%s to %s', $datum['validFrom'], $datum['validTo'])
+                : sprintf('Stock %s', $datum['id']);
+
+            $optionData[$datum['id']] = $label;
         }
 
         return $optionData;
