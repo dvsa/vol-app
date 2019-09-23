@@ -59,7 +59,7 @@ class DeclarationController extends AbstractSelfserveController implements Toggl
                     'route' => EcmtSection::ROUTE_APPLICATION_OVERVIEW,
                 ],
                 'field' => 'hasOutstandingFees',
-                'value' => 0
+                'value' => false,
             ]
         ],
     ];
