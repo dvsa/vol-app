@@ -41,6 +41,48 @@ class PermitStockDetails
     public $country = null;
 
     /**
+     * @Form\Type("DynamicSelect")
+     * @Form\Name("applicationPathGroup")
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"applicationPathGroup","placeholder":"","class":"medium", "data-container-class":"pathProcess js-hidden"})
+     * @Form\Options({
+     *     "label": "Application Path",
+     *     "disable_inarray_validator": false,
+     *     "empty_option": "Please Select",
+     *     "service_name": "Common\Service\Data\ApplicationPathGroup",
+     *     "required": false
+     * })
+     */
+    public $applicationPathGroup = null;
+
+    /**
+     * @Form\Type("DynamicSelect")
+     * @Form\Name("businessProcess")
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"businessProcess","placeholder":"","class":"medium"})
+     * @Form\Options({
+     *     "label": "Business Process",
+     *     "disable_inarray_validator": false,
+     *     "empty_option": "Please Select",
+     *     "category": "app_business_process",
+     *     "required": false
+     * })
+     */
+    public $businessProcess = null;
+
+    /**
+     * @Form\Name("periodNameKey")
+     * @Form\Attributes({"id": "periodNameKey"})
+     * @Form\Options({
+     *      "label": "Period selection translation key "
+     * })
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":255}})
+     * @Form\Type("Text")
+     * @Form\Required(false)
+     */
+    public $periodNameKey = null;
+
+    /**
      * @Form\Required(false)
      * @Form\Attributes({"id":"validFrom","placeholder":"","class":"medium", "data-container-class":"stockDates"})
      * @Form\Options({
