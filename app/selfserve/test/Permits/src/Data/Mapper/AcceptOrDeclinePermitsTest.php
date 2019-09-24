@@ -79,7 +79,7 @@ class AcceptOrDeclinePermitsTest extends MockeryTestCase
             'permitType' => [
                 'description' => $permitTypeDescription
             ],
-            'hasOutstandingFees' => 1,
+            'hasOutstandingFees' => true,
             'irhpPermitApplications' => [
                 [
                     'permitsAwarded' => $permitsAwarded,
@@ -225,7 +225,7 @@ class AcceptOrDeclinePermitsTest extends MockeryTestCase
             'permitType' => [
                 'description' => $permitTypeDescription
             ],
-            'hasOutstandingFees' => 0,
+            'hasOutstandingFees' => false,
             'irhpPermitApplications' => [
                 [
                     'permitsAwarded' => $permitsAwarded,

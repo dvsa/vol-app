@@ -51,7 +51,7 @@ class FeePartSuccessfulController extends AbstractSelfserveController implements
                     'route' => EcmtSection::ROUTE_ISSUE_SUBMITTED,
                 ],
                 'field' => 'hasOutstandingFees',
-                'value' => 0
+                'value' => false,
             ]
         ],
     ];
