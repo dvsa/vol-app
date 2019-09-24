@@ -128,6 +128,12 @@ class IrhpPermitStockController extends AbstractInternalController implements Le
      */
     protected function alterFormForEdit($form, $formData)
     {
+        $form->get('permitStockDetails')
+            ->get('applicationPathGroup')
+            ->setAttribute('disabled', true);
+        $form->get('permitStockDetails')
+            ->get('businessProcess')
+            ->setAttribute('disabled', true);
         return $this->retrieveEeaCountries($form);
     }
 
