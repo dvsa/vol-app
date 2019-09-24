@@ -56,7 +56,7 @@ class IrhpPermitPrintStockTest extends AbstractDataServiceTestCase
     public function dpTestFetchListOptions()
     {
         return [
-            'with data' => [
+            'with validity dates' => [
                 'results' => [
                     'results' => [
                         [
@@ -80,6 +80,26 @@ class IrhpPermitPrintStockTest extends AbstractDataServiceTestCase
                     1 => '2019-01-01 to 2019-12-31',
                     2 => '2019-07-01 to 2020-06-30',
                     3 => '2020-01-01 to 2020-12-31',
+                ]
+            ],
+            'without validity dates' => [
+                'results' => [
+                    'results' => [
+                        [
+                            'id' => 1,
+                        ],
+                        [
+                            'id' => 2,
+                        ],
+                        [
+                            'id' => 3,
+                        ],
+                    ]
+                ],
+                'expected' => [
+                    1 => 'Stock 1',
+                    2 => 'Stock 2',
+                    3 => 'Stock 3',
                 ]
             ],
             'no data' => [

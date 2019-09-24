@@ -48,7 +48,7 @@ class IrhpPermitPrint
     /**
      * @Form\Attributes({"id":"irhpPermitStock","placeholder":""})
      * @Form\Options({
-     *     "label": "Validity dates",
+     *     "label": "Validity dates / Stock",
      *     "empty_option": "Please select",
      *     "disable_inarray_validator": true
      * })
