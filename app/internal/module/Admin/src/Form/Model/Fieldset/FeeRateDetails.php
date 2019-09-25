@@ -64,12 +64,11 @@ class FeeRateDetails
      * @Form\Options({
      *      "label":"Fixed Value",
      * })
-     * @Form\Validator({"name":"Zend\Validator\Digits"})
      * @Form\Type("Zend\Form\Element\Number")
-     * @Transfer\Validator({
-     *      "name": "Zend\Validator\GreaterThan",
+     * @Form\Validator({
+     *      "name": "Zend\Validator\Between",
      *      "options": {
-     *          "min": "-1",
+     *          "min": "0",
      *          "max": "9999"
      *      }
      * })
@@ -84,10 +83,10 @@ class FeeRateDetails
      * })
      * @Form\Validator({"name":"Zend\Validator\Digits"})
      * @Form\Type("Zend\Form\Element\Number")
-     * @Transfer\Validator({
-     *      "name": "Zend\Validator\GreaterThan",
+     * @Form\Validator({
+     *      "name": "Zend\Validator\Between",
      *      "options": {
-     *          "min": "-1",
+     *          "min": "0",
      *          "max": "9999"
      *      }
      * })
@@ -102,10 +101,10 @@ class FeeRateDetails
      * })
      * @Form\Validator({"name":"Zend\Validator\Digits"})
      * @Form\Type("Zend\Form\Element\Number")
-     * @Transfer\Validator({
-     *      "name": "Zend\Validator\GreaterThan",
+     * @Form\Validator({
+     *      "name": "Zend\Validator\Between",
      *      "options": {
-     *          "min": "-1",
+     *          "min": "0",
      *          "max": "9999"
      *      }
      * })
