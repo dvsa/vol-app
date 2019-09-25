@@ -6,19 +6,20 @@ use Common\Controller\Interfaces\ToggleAwareInterface;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 
-class IrhpWindowClosedController extends AbstractSelfserveController implements ToggleAwareInterface
+class IrhpNoLicencesController extends AbstractSelfserveController implements ToggleAwareInterface
 {
     protected $toggleConfig = [
         'default' => FeatureToggleConfig::SELFSERVE_PERMITS_ENABLED,
     ];
 
     protected $templateConfig = [
-        'generic' => 'permits/irhp-window-closed'
+        'generic' => 'permits/no-licences'
     ];
 
     protected $templateVarsConfig = [
         'generic' => [
-            'browserTitle' => 'permits.page.irhp-window-closed.browser.title',
+            'title' => 'permits.page.irhp-no-licences.title',
+            'browserTitle' => 'permits.page.irhp-no-licences.browser.title',
         ]
     ];
 }

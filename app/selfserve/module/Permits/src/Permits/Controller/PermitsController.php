@@ -30,6 +30,7 @@ use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Data\Mapper\EcmtNoOfPermits as EcmtNoOfPermitsMapper;
 use Permits\View\Helper\EcmtSection;
 
+use Permits\View\Helper\IrhpApplicationSection;
 use Zend\Http\Header\Referer as HttpReferer;
 use Zend\Http\PhpEnvironment\Request as HttpRequest;
 use Zend\Mvc\MvcEvent;
@@ -69,7 +70,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $view = new ViewModel();
         if (!$eligibleForPermits) {
             if (!$this->referredFromGovUkPermits($this->getEvent())) {
-                return $this->notFoundAction();
+                return $this->nextStep(IrhpApplicationSection::ROUTE_NOT_ELIGIBLE);
             }
             return $view;
         }
@@ -395,7 +396,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $application = $this->getApplication($id);
 
         if (!$application['isUnderConsideration']) {
-            return $this->conditionalDisplayNotMet();
+            return $this->conditionalDisplayNotMet(EcmtSection::ROUTE_PERMITS);
         }
 
         $ecmtPermitFees = $this->getEcmtPermitFees();
