@@ -58,14 +58,14 @@ class PermitStockDetails
     /**
      * @Form\Type("DynamicSelect")
      * @Form\Name("businessProcess")
-     * @Form\Required(false)
+     * @Form\Required(true)
      * @Form\Attributes({"id":"businessProcess","placeholder":"","class":"medium"})
      * @Form\Options({
      *     "label": "Business Process",
      *     "disable_inarray_validator": false,
      *     "empty_option": "Please Select",
      *     "category": "app_business_process",
-     *     "required": false
+     *     "required": true
      * })
      */
     public $businessProcess = null;
