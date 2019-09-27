@@ -36,6 +36,7 @@ use Permits\Controller\IrhpWindowClosedController;
 use Permits\Controller\QaController;
 use Permits\Controller\QaControllerFactory;
 use Permits\Controller\YearController;
+use Permits\Controller\IrhpStockController;
 use Permits\Data\Mapper;
 
 return [
@@ -74,6 +75,7 @@ return [
         IrhpWindowClosedController::class => IrhpWindowClosedController::class,
         RestrictedCountriesController::class => RestrictedCountriesController::class,
         YearController::class => YearController::class,
+        IrhpStockController::class => IrhpStockController::class,
     ],
     'factories' => [
         QaController::class => QaControllerFactory::class,
@@ -386,13 +388,28 @@ return [
               'year' => [
                   'type'    => 'segment',
                   'options' => [
-                      'route'    => '/year/:type[/]',
+                      'route'    => '/type/:type[/]',
                       'defaults' => [
                           'controller'    => YearController::class,
                           'action'        => 'question',
                       ],
                       'constraints' => [
                           'type' => '[0-9]+',
+                      ],
+                  ],
+                  'may_terminate' => false,
+              ],
+              'stock' => [
+                  'type'    => 'segment',
+                  'options' => [
+                      'route'    => '/type/:type/year/:year[/]',
+                      'defaults' => [
+                          'controller'    => IrhpStockController::class,
+                          'action'        => 'question',
+                      ],
+                      'constraints' => [
+                          'type' => '[0-9]+',
+                          'year' => '\d{4}',
                       ],
                   ],
                   'may_terminate' => false,
@@ -823,6 +840,7 @@ return [
           Mapper\ValidEcmtPermits::class => Mapper\ValidEcmtPermits::class,
           Mapper\AvailableCountries::class => Mapper\AvailableCountries::class,
           Mapper\AvailableTypes::class => Mapper\AvailableTypes::class,
+          Mapper\AvailableStocks::class => Mapper\AvailableStocks::class,
           Mapper\LicencesAvailable::class => Mapper\LicencesAvailable::class,
           Mapper\RestrictedCountries::class => Mapper\RestrictedCountries::class,
           Mapper\Sectors::class => Mapper\Sectors::class,
