@@ -5,6 +5,7 @@ namespace Permits\Controller\Config\ConditionalDisplay;
 use Permits\Controller\Config\DataSource\LicencesAvailable;
 use Permits\Controller\Config\DataSource\AvailableTypes;
 use Permits\Controller\Config\DataSource\AvailableYears;
+use Permits\Controller\Config\DataSource\AvailableStocks;
 use Permits\Controller\Config\DataSource\OpenWindows;
 use Permits\Controller\Config\DataSource\PermitApplication as PermitAppDataSource;
 use Permits\Controller\Config\DataSource\PermitsAvailable;
@@ -32,6 +33,14 @@ class ConditionalDisplayConfig
             ],
             'key' => 'hasYears',
             'value' => true
+        ],
+    ];
+
+    const PERMIT_APP_CAN_SELECT_STOCK = [
+        AvailableStocks::DATA_KEY => [
+            'view' => [
+                'template' => 'permits/window-closed',
+            ],
         ],
     ];
 

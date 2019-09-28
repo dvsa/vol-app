@@ -47,6 +47,10 @@ class DataSourceConfig
         AvailableYears::class => [],
     ];
 
+    const PERMIT_APP_STOCK = [
+        AvailableStocks::class => [],
+    ];
+
     const PERMIT_APP_ADD_LICENCE = [
         OpenWindows::class => [],
         LicencesAvailable::class => [
