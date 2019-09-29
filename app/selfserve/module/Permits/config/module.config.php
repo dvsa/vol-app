@@ -428,14 +428,14 @@ return [
               'add-licence' => [
                   'type'    => 'segment',
                   'options' => [
-                      'route'    => '/type/:type/licence/add[/:year][/]',
+                      'route'    => '/licence/add/:type[/:stock][/]',
                       'defaults' => [
                           'controller'    => LicenceController::class,
                           'action'        => 'add',
                       ],
                       'constraints' => [
                           'type' => '[0-9]+',
-                          'year' => '\d{4}'
+                          'stock' => '[0-9]+'
                       ],
                   ],
                   'may_terminate' => false,
@@ -841,6 +841,7 @@ return [
           Mapper\AvailableCountries::class => Mapper\AvailableCountries::class,
           Mapper\AvailableTypes::class => Mapper\AvailableTypes::class,
           Mapper\AvailableStocks::class => Mapper\AvailableStocks::class,
+          Mapper\AvailableYears::class => Mapper\AvailableYears::class,
           Mapper\LicencesAvailable::class => Mapper\LicencesAvailable::class,
           Mapper\RestrictedCountries::class => Mapper\RestrictedCountries::class,
           Mapper\Sectors::class => Mapper\Sectors::class,
@@ -853,7 +854,6 @@ return [
           Mapper\FeeList::class => Mapper\FeeListFactory::class,
           Mapper\IrhpApplicationFeeSummary::class => Mapper\IrhpApplicationFeeSummaryFactory::class,
           Mapper\IrhpCheckAnswers::class => Mapper\IrhpCheckAnswersFactory::class,
-          Mapper\AvailableYears::class => Mapper\AvailableYearsFactory::class,
           Mapper\ChangeLicence::class => Mapper\ChangeLicenceFactory::class,
           Mapper\NoOfPermits::class => Mapper\NoOfPermitsFactory::class,
       ],
