@@ -17,7 +17,17 @@
             <?php echo $this->escapeHtml($this->translate('permits.irhp.under-consideration.title')); ?>
         </h2>
         <?php echo $this->partial('partials/summary-list', ['data' => $data[IrhpApplication::DATA_KEY]['mappedFeeData']]); ?>
-        <?php echo $this->partial('partials/guidance-blue-component', ['guidance' => 'permits.irhp.under-consideration.response-date']); ?>
+        <?php
+        if (!empty($data[IrhpApplication::DATA_KEY]['businessProcess']['id'])) {
+            echo $this->partial(
+                'partials/guidance-blue-component',
+                [
+                    'guidance' => 'permits.irhp.under-consideration.response-date.'
+                        .$data[IrhpApplication::DATA_KEY]['businessProcess']['id']
+                ]
+            );
+        }
+        ?>
         <a class="govuk-button" href="<?php echo $this->url(IrhpApplicationSection::ROUTE_WITHDRAW_APPLICATION, [], [], true); ?>">
             <?php echo $this->translate('application.withdraw'); ?>
         </a>
