@@ -17,6 +17,7 @@ use Dvsa\Olcs\Transfer\Command\Permits\CancelEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Command\Permits\EcmtSubmitApplication;
 use Dvsa\Olcs\Transfer\Command\Permits\WithdrawEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\GetAllByLicence as ListDTO;
+use Dvsa\Olcs\Transfer\Query\Permits\AvailableStocks;
 use Dvsa\Olcs\Transfer\Query\Permits\AvailableYears;
 use Dvsa\Olcs\Transfer\Query\Permits\ById as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceDto;
@@ -225,7 +226,10 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
                                 'permitTypeId' => $permitTypeId
                             ],
                             [
-                                'query' => ['year' => $this->params()->fromPost()['year']]
+                                'query' => [
+                                    'year' => $this->params()->fromPost()['year'],
+                                    'irhpPermitStock' => $this->params()->fromPost()['stock']
+                                ],
                             ]
                         );
                 case RefData::IRHP_BILATERAL_PERMIT_TYPE_ID:
@@ -457,6 +461,33 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
         }
 
         return new JsonModel($years);
+    }
+
+    /**
+     * Retrieves available years list and populates Value options for Add and Edit forms
+     *
+     * @return JsonModel
+     */
+    public function availableStocksAction()
+    {
+        $response = $this->handleQuery(AvailableStocks::create(
+            [
+                'irhpPermitType' => $this->params()->fromPost('permitType'),
+                'year' => $this->params()->fromPost('year'),
+            ]
+        ));
+        $stocks = [];
+        if ($response->isOk()) {
+            $translator = $this->getServiceLocator()->get('Helper\Translation');
+            $stocks = $response->getResult();
+            foreach ($stocks['stocks'] as $key => $stock) {
+                $stocks['stocks'][$key]['periodName'] = $translator->translate($stock['periodNameKey']);
+            }
+        } else {
+            $this->checkResponse($response);
+        }
+
+        return new JsonModel($stocks);
     }
 
     /**
