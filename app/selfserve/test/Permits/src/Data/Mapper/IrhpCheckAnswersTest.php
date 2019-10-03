@@ -622,17 +622,14 @@ class IrhpCheckAnswersTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dpTestMapForDisplayShortTerm
-     */
-    public function testMapForDisplayShortTerm($year)
+    public function testMapForDisplayShortTerm2019()
     {
         $irhpPermitApplication = [
             'requiredEuro5' => 4,
             'requiredEuro6' => 6,
             'irhpPermitWindow' => [
                 'irhpPermitStock' => [
-                    'validTo' => $year . '-12-31',
+                    'validityYear' => 2019,
                 ]
             ]
         ];
@@ -661,7 +658,7 @@ class IrhpCheckAnswersTest extends TestCase
             ->once()
             ->with(
                 'permits.check-your-answers.no-of-permits.year',
-                [$year]
+                [2019]
             )
             ->andReturn('year heading');
 
@@ -675,11 +672,64 @@ class IrhpCheckAnswersTest extends TestCase
         );
     }
 
-    public function dpTestMapForDisplayShortTerm()
+    /**
+     * @dataProvider dpTestMapForDisplayShortTerm2020Onwards
+     */
+    public function testMapForDisplayShortTerm2020Onwards($year)
+    {
+        $periodNameKey = 'period.name.key';
+
+        $irhpPermitApplication = [
+            'requiredEuro5' => 4,
+            'requiredEuro6' => 6,
+            'irhpPermitWindow' => [
+                'irhpPermitStock' => [
+                    'validityYear' => $year,
+                    'periodNameKey' => $periodNameKey,
+                ]
+            ]
+        ];
+
+        $irhpPermitApplications = [$irhpPermitApplication];
+
+        $input = $this->genericInput($irhpPermitApplications);
+
+        $ecmtNoOfPermitsLine1 = 'ecmt no of permits line 1';
+        $ecmtNoOfPermitsLine2 = 'ecmt no of permits line 2';
+
+        $ecmtNoOfPermitsLines = [
+            $ecmtNoOfPermitsLine1,
+            $ecmtNoOfPermitsLine2,
+        ];
+
+        $expected = [
+            '<strong>period name</strong>',
+            $ecmtNoOfPermitsLine1,
+            $ecmtNoOfPermitsLine2,
+        ];
+
+        $output = $this->genericOutput('st-number-of-permits', $expected, false);
+
+        $this->translationHelperService->shouldReceive('translate')
+            ->once()
+            ->with($periodNameKey)
+            ->andReturn('period name');
+
+        $this->ecmtNoOfPermits->shouldReceive('mapForDisplay')
+            ->with($irhpPermitApplication)
+            ->andReturn($ecmtNoOfPermitsLines);
+
+        $this->assertEquals(
+            $output,
+            $this->irhpCheckAnswers->mapForDisplay($input)
+        );
+    }
+
+    public function dpTestMapForDisplayShortTerm2020Onwards()
     {
         return [
-            [2029],
-            [2030],
+            [2020],
+            [2021],
         ];
     }
 
