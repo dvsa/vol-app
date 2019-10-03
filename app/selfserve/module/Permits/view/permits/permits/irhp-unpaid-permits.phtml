@@ -1,0 +1,21 @@
+<?php
+use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
+use Permits\View\Helper\IrhpApplicationSection;
+?>
+<?php echo $this->permitsBackLink('common.link.back.label', 'permits'); ?>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <span class="govuk-caption-xl">
+            <?php echo $this->escapeHtml($data[IrhpAppDataSource::DATA_KEY]['applicationRef']); ?>
+        </span>
+        <h1 class="govuk-heading-xl">
+            <?php echo $this->escapeHtml($data['title']); ?>
+        </h1>
+        <?php echo $tables['unpaid-irhp-permits']; ?>
+        <p>
+        <a href="<?php echo $this->url(IrhpApplicationSection::ROUTE_AWAITING_FEE, [], [], true) ?>" class="return-overview">
+            <?php echo $this->translate('permits.link.return.to.fee.overview'); ?>
+        </a>
+        </p>
+    </div>
+</div>
