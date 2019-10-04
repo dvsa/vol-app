@@ -64,20 +64,22 @@ class IrhpCheckAnswers
                 $noOfPermits = [$data['permitsRequired']];
                 break;
             case RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID:
-                $validToYear = date(
-                    'Y',
-                    strtotime($data['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock']['validTo'])
-                );
+                $irhpPermitStock = $data['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock'];
+                $validityYear = $irhpPermitStock['validityYear'];
 
-                $permitsRequiredYearHeading = '<strong>' . Escape::html(
-                    $this->translator->translateReplace(
+                if ($validityYear == 2019) {
+                    $permitsRequiredYearContent = $this->translator->translateReplace(
                         'permits.check-your-answers.no-of-permits.year',
-                        [$validToYear]
-                    )
-                ) . '</strong>';
+                        [$validityYear]
+                    );
+                } else {
+                    $permitsRequiredYearContent = $this->translator->translate($irhpPermitStock['periodNameKey']);
+                }
+
+                $permitsRequiredYearMarkup = '<strong>' . Escape::html($permitsRequiredYearContent) . '</strong>';
 
                 $noOfPermits = array_merge(
-                    [$permitsRequiredYearHeading],
+                    [$permitsRequiredYearMarkup],
                     $this->ecmtNoOfPermits->mapForDisplay($data['irhpPermitApplications'][0])
                 );
                 break;
