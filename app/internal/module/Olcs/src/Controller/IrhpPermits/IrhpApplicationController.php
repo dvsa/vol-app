@@ -165,7 +165,8 @@ class IrhpApplicationController extends AbstractInternalController implements
                 [
                     'licence' => $this->params()->fromRoute('licence'),
                     'type' => $this->params()->fromRoute('permitTypeId'),
-                    'year' => $this->params()->fromQuery('year')
+                    'year' => $this->params()->fromQuery('year'),
+                    'irhpPermitStock' => $this->params()->fromQuery('irhpPermitStock'),
                 ]
             )
         );

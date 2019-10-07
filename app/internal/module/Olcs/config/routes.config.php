@@ -942,6 +942,15 @@ $routes = [
                             ]
                         ]
                     ],
+                    'availableStocks' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'available-stocks[/]',
+                            'defaults' => [
+                                'action' => 'availableStocks'
+                            ]
+                        ]
+                    ],
                     'application' => [
                         'type' => 'segment',
                         'options' => [
