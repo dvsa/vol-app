@@ -31,6 +31,7 @@ use Permits\Controller\CancelIrhpApplicationController;
 use Permits\Controller\IrhpWithdrawController;
 use Permits\Controller\IrhpAwaitingFeeController;
 use Permits\Controller\IrhpDeclineController;
+use Permits\Controller\IrhpUnpaidPermitsController;
 use Permits\Controller\IrhpValidPermitsController;
 use Permits\Controller\IrhpWindowClosedController;
 use Permits\Controller\QaController;
@@ -71,6 +72,7 @@ return [
         IrhpDeclineController::class => IrhpDeclineController::class,
         IrhpApplicationFeeController::class => IrhpApplicationFeeController::class,
         IrhpUnderConsiderationController::class => IrhpUnderConsiderationController::class,
+        IrhpUnpaidPermitsController::class => IrhpUnpaidPermitsController::class,
         IrhpValidPermitsController::class => IrhpValidPermitsController::class,
         IrhpWindowClosedController::class => IrhpWindowClosedController::class,
         RestrictedCountriesController::class => RestrictedCountriesController::class,
@@ -270,6 +272,17 @@ return [
                               'route'    => 'awaiting-fee[/]',
                               'defaults' => [
                                   'controller'    => IrhpAwaitingFeeController::class,
+                                  'action'        => 'generic',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'unpaid-permits' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => 'unpaid-permits[/]',
+                              'defaults' => [
+                                  'controller'    => IrhpUnpaidPermitsController::class,
                                   'action'        => 'generic',
                               ],
                           ],

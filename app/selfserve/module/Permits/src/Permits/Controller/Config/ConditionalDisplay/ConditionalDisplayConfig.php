@@ -214,6 +214,13 @@ class ConditionalDisplayConfig
         ],
     ];
 
+    const IRHP_APP_CAN_VIEW_CANDIDATE_PERMITS = [
+        IrhpAppDataSource::DATA_KEY => [
+            'key' => 'canViewCandidatePermits',
+            'value' => true
+        ],
+    ];
+
     const IRHP_APP_IS_DECLINED = [
         IrhpAppDataSource::DATA_KEY => [
             'key' => 'isDeclined',
