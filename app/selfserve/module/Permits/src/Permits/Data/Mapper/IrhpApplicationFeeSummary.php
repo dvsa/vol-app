@@ -4,9 +4,11 @@ namespace Permits\Data\Mapper;
 
 use Common\RefData;
 use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Helper\UrlHelperService;
 use Common\View\Helper\CurrencyFormatter;
 use Common\View\Helper\Status as StatusFormatter;
 use DateTime;
+use Permits\View\Helper\IrhpApplicationSection;
 use RuntimeException;
 
 /**
@@ -43,6 +45,9 @@ class IrhpApplicationFeeSummary
     /** @var CurrencyFormatter */
     private $currencyFormatter;
 
+    /** @var UrlHelperService */
+    private $urlHelperService;
+
     /**
      * Create service instance
      *
@@ -50,6 +55,7 @@ class IrhpApplicationFeeSummary
      * @param EcmtNoOfPermits $ecmtNoOfPermits
      * @param StatusFormatter $statusFormatter
      * @param CurrencyFormatter $currencyFormatter
+     * @param UrlHelperService $urlHelperService
      *
      * @return IrhpApplicationFeeSummary
      */
@@ -57,12 +63,14 @@ class IrhpApplicationFeeSummary
         TranslationHelperService $translator,
         EcmtNoOfPermits $ecmtNoOfPermits,
         StatusFormatter $statusFormatter,
-        CurrencyFormatter $currencyFormatter
+        CurrencyFormatter $currencyFormatter,
+        UrlHelperService $urlHelperService
     ) {
         $this->translator = $translator;
         $this->ecmtNoOfPermits = $ecmtNoOfPermits;
         $this->statusFormatter = $statusFormatter;
         $this->currencyFormatter = $currencyFormatter;
+        $this->urlHelperService = $urlHelperService;
     }
 
     /**
@@ -89,6 +97,8 @@ class IrhpApplicationFeeSummary
             case RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID:
                 $data['showFeeSummaryTitle'] = true;
                 $data['showWarningMessage'] = true;
+                $data['guidance'] = $this->getGuidanceData($data);
+
                 $mappedFeeData = $this->getEcmtShortTermRows($data);
                 break;
             default:
@@ -98,6 +108,36 @@ class IrhpApplicationFeeSummary
         $data['mappedFeeData'] = $mappedFeeData;
 
         return $data;
+    }
+
+    /**
+     * Get the html representing the guidance area of the page
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    private function getGuidanceData(array $data)
+    {
+        if (!$data['canViewCandidatePermits'] || !isset($data['totalPermitsRequired'])
+            || !isset($data['totalPermitsAwarded'])
+        ) {
+            return [];
+        }
+
+        $permitsRequired = $data['totalPermitsRequired'];
+        $permitsAwarded = $data['totalPermitsAwarded'];
+
+        $guidanceKey = ($permitsAwarded == $permitsRequired)
+            ? 'markup-ecmt-fee-successful-hint' : 'markup-ecmt-fee-part-successful-hint';
+
+        return [
+            'value' => $this->translator->translateReplace(
+                $guidanceKey,
+                [$permitsAwarded, $permitsRequired]
+            ),
+            'disableHtmlEscape' => true
+        ];
     }
 
     /**
@@ -324,6 +364,14 @@ class IrhpApplicationFeeSummary
     {
         $irhpPermitApplication = $data['irhpPermitApplications'][0];
         $lines = $this->ecmtNoOfPermits->mapForDisplay($irhpPermitApplication);
+
+        if ($data['canViewCandidatePermits']) {
+            $lines[] = sprintf(
+                '<a href="%s">%s</a>',
+                $this->urlHelperService->fromRoute(IrhpApplicationSection::ROUTE_UNPAID_PERMITS, [], [], true),
+                $this->translator->translate('permits.page.view.permit.restrictions')
+            );
+        }
 
         return [
             'key' => $data['isAwaitingFee'] ? self::NUM_PERMITS_HEADING : self::NUM_PERMITS_REQUIRED_HEADING,

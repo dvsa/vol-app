@@ -227,7 +227,7 @@ class AcceptOrDeclinePermits
         $permitsRequiredLines[] = sprintf(
             '<a href="%s">%s</a>',
             $this->urlHelperService->fromRoute(EcmtSection::ROUTE_ECMT_UNPAID_PERMITS, [], [], true),
-            $this->translator->translate('permits.page.ecmt.fee-part-successful.view.permit.restrictions')
+            $this->translator->translate('permits.page.view.permit.restrictions')
         );
 
         return implode('<br>', $permitsRequiredLines);
