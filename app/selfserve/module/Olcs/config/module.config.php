@@ -1274,6 +1274,7 @@ return array(
             'VariationTransportManagerAdapter' =>
                 \Olcs\Controller\Lva\Factory\Adapter\VariationTransportManagerAdapterFactory::class,
             'QaFormProvider' => QaService\FormProviderFactory::class,
+            'QaFormFactory' => QaService\FormFactoryFactory::class,
             'QaGuidanceTemplateVarsAdder' => QaService\GuidanceTemplateVarsAdderFactory::class,
             'QaTemplateVarsGenerator' => QaService\TemplateVarsGeneratorFactory::class,
             'QaQuestionArrayProvider' => QaService\QuestionArrayProviderFactory::class,

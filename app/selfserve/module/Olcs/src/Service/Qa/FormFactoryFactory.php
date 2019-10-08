@@ -5,20 +5,17 @@ namespace Olcs\Service\Qa;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class FormProviderFactory implements FactoryInterface
+class FormFactoryFactory implements FactoryInterface
 {
     /**
      * Create service
      *
      * @param ServiceLocatorInterface $serviceLocator
      *
-     * @return FormProvider
+     * @return FormFactory
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return new FormProvider(
-            $serviceLocator->get('QaFormFactory'),
-            $serviceLocator->get('QaFieldsetAdder')
-        );
+        return new FormFactory($serviceLocator);
     }
 }
