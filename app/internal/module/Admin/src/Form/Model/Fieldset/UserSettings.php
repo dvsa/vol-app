@@ -21,4 +21,17 @@ class UserSettings
      * @Form\Type("OlcsCheckbox")
      */
     public $translateToWelsh = null;
+
+    /**
+     * @Form\Attributes({"id":"osType"})
+     * @Form\Options({
+     *     "label": "Operating System",
+     *     "value_options": {
+     *         "os_type_windows_7": "Windows 7",
+     *         "os_type_windows_10": "Windows 10"
+     *     }
+     * })
+     * @Form\Type("Select")
+     */
+    public $osType = null;
 }
