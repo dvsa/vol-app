@@ -21,6 +21,10 @@ class IrhpCheckAnswers
         'number-of-permits',
     ];
 
+    const SECTORS_SLUG = [
+        'st-sectors',
+    ];
+
     /** @var TranslationHelperService */
     private $translator;
 
@@ -159,6 +163,15 @@ class IrhpCheckAnswers
                             Section::ROUTE_QUESTION,
                             $params,
                             $escape
+                        );
+                        continue;
+                    } elseif (in_array($answerData['slug'], self::SECTORS_SLUG)) {
+                        $extraAnswers[] = $this->answer(
+                            $answerData['question'],
+                            $data['sectors']['name'],
+                            Section::ROUTE_QUESTION,
+                            $answerData['questionType'],
+                            $params
                         );
                         continue;
                     }
