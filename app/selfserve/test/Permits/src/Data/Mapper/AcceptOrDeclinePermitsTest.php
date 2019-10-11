@@ -36,7 +36,7 @@ class AcceptOrDeclinePermitsTest extends MockeryTestCase
         $this->translator = m::mock(TranslationHelperService::class);
 
         $this->translator->shouldReceive('translate')
-            ->with('permits.page.ecmt.fee-part-successful.view.permit.restrictions')
+            ->with('permits.page.view.permit.restrictions')
             ->andReturn('View permit restrictions');
 
         $this->urlHelperService = m::mock(UrlHelperService::class);

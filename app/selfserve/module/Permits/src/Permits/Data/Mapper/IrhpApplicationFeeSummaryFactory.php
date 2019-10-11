@@ -22,7 +22,8 @@ class IrhpApplicationFeeSummaryFactory implements FactoryInterface
             $serviceLocator->get('Helper\Translation'),
             $serviceLocator->get(EcmtNoOfPermits::class),
             $viewHelperManager->get('status'),
-            $viewHelperManager->get('currencyFormatter')
+            $viewHelperManager->get('currencyFormatter'),
+            $serviceLocator->get('Helper\Url')
         );
     }
 }

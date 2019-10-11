@@ -31,6 +31,7 @@ class IrhpApplicationSection extends AbstractHelper
     const ROUTE_UNDER_CONSIDERATION = 'permits/application/under-consideration';
     const ROUTE_SUBMITTED = 'permits/application/submitted';
     const ROUTE_AWAITING_FEE = 'permits/application/awaiting-fee';
+    const ROUTE_UNPAID_PERMITS = 'permits/application/unpaid-permits';
     const ROUTE_PAYMENT_ACTION = 'permits/application/payment';
     const ROUTE_PAYMENT_RESULT_ACTION = 'permits/application/payment-result';
 

@@ -11,6 +11,16 @@
         <h1 class="govuk-heading-xl">
             <?php echo $this->escapeHtml($this->translate('permits.page.irhp.awaiting-fee.title')); ?>
         </h1>
+        <?php
+            if (!empty($data[IrhpApplication::DATA_KEY]['guidance'])) {
+                echo $this->partial(
+                    'partials/guidance-blue-component',
+                    [
+                        'guidance' => $data[IrhpApplication::DATA_KEY]['guidance'],
+                    ]
+                );
+            }
+        ?>
         <h3><?php echo $this->escapeHtml($this->translate('permits.page.irhp.awaiting-fee.fee-summary')); ?></h3>
         <?php echo $this->partial('partials/summary-list', ['data' => $data[IrhpApplication::DATA_KEY]['mappedFeeData']]); ?>
         <?php echo $this->form($form); ?>
