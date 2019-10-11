@@ -21,4 +21,16 @@ class UserSettings
      * @Form\Type("OlcsCheckbox")
      */
     public $translateToWelsh = null;
+
+    /**
+     * @Form\Attributes({"id":"osType"})
+     * @Form\Options({
+     *     "label": "Operating System",
+     *     "disable_inarray_validator": false,
+     *     "service_name": "Common\Service\Data\RefData",
+     *     "category": "user_os"
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $osType = null;
 }
