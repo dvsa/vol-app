@@ -68,6 +68,7 @@ class User implements MapperInterface
             switch ($data['userType']) {
                 case 'internal':
                     $formData['userType']['team'] = $data['team']['id'];
+                    $formData['userSettings']['osType'] = $data['osType'];
                     break;
                 case 'transport-manager':
                     $formData['userType']['currentTransportManager'] = $data['transportManager']['id'];
@@ -100,7 +101,6 @@ class User implements MapperInterface
             $formData['address'] = $data['contactDetails']['address'];
 
             $formData['userSettings']['translateToWelsh'] = $data['translateToWelsh'];
-            $formData['userSettings']['osType'] = $data['osType'];
         }
 
         return $formData;
@@ -134,6 +134,7 @@ class User implements MapperInterface
         switch ($data['userType']['userType']) {
             case 'internal':
                 $commandData['team'] = $data['userType']['team'];
+                $commandData['osType'] = $data['userSettings']['osType'];
                 break;
             case 'transport-manager':
                 $commandData['application'] = $data['userType']['applicationTransportManagers']['application'];
@@ -156,7 +157,6 @@ class User implements MapperInterface
         $commandData['contactDetails']['address'] = $data['address'];
 
         $commandData['translateToWelsh'] = $data['userSettings']['translateToWelsh'];
-        $commandData['osType'] = $data['userSettings']['osType'];
 
         return $commandData;
     }
