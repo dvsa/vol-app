@@ -2,13 +2,12 @@
 
 namespace Olcs\Service\Qa;
 
-use Common\Service\Helper\FormHelperService as FormHelper;
 use Common\Service\Qa\FieldsetAdder;
 
 class FormProvider
 {
-    /** @var FormHelper */
-    private $formHelper;
+    /** @var FormFactory */
+    private $formFactory;
 
     /** @var FieldsetAdder */
     private $fieldsetAdder;
@@ -16,14 +15,14 @@ class FormProvider
     /**
      * Create service instance
      *
-     * @param FormHelper $formHelper
+     * @param FormFactory $formFactory
      * @param FieldsetAdder $fieldsetAdder
      *
      * @return FormProvider
      */
-    public function __construct(FormHelper $formHelper, FieldsetAdder $fieldsetAdder)
+    public function __construct(FormFactory $formFactory, FieldsetAdder $fieldsetAdder)
     {
-        $this->formHelper = $formHelper;
+        $this->formFactory = $formFactory;
         $this->fieldsetAdder = $fieldsetAdder;
     }
 
@@ -36,7 +35,8 @@ class FormProvider
      */
     public function get(array $options)
     {
-        $form = $this->formHelper->createForm('QaForm');
+        $form = $this->formFactory->create();
+        $form->setApplicationStep($options);
         $this->fieldsetAdder->add($form, $options);
         return $form;
     }

@@ -2,11 +2,11 @@
 
 namespace OlcsTest\Service\Qa;
 
-use Common\Service\Helper\FormHelperService;
 use Common\Service\Qa\FieldsetAdder;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Service\Qa\FormProvider;
+use Olcs\Service\Qa\FormFactory;
 use Zend\Form\Form;
 
 class FormProviderTest extends MockeryTestCase
@@ -19,10 +19,13 @@ class FormProviderTest extends MockeryTestCase
         ];
 
         $form = m::mock(Form::class);
+        $form->shouldReceive('setApplicationStep')
+            ->with($options)
+            ->once();
 
-        $formHelperService = m::mock(FormHelperService::class);
-        $formHelperService->shouldReceive('createForm')
-            ->with('QaForm')
+        $formFactory = m::mock(FormFactory::class);
+        $formFactory->shouldReceive('create')
+            ->withNoArgs()
             ->once()
             ->andReturn($form);
 
@@ -31,7 +34,7 @@ class FormProviderTest extends MockeryTestCase
             ->with($form, $options)
             ->once();
 
-        $sut = new FormProvider($formHelperService, $fieldsetAdder);
+        $sut = new FormProvider($formFactory, $fieldsetAdder);
 
         $this->assertSame(
             $form,

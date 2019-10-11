@@ -111,7 +111,7 @@ class QaController extends AbstractOlcsController
                 $postParams['qa'][$key] = $value;
             }
 
-            $form->setData($postParams);
+            $form->setDataForRedisplay($postParams);
         }
 
         $templateVars = array_merge(
