@@ -100,6 +100,7 @@ class User implements MapperInterface
             $formData['address'] = $data['contactDetails']['address'];
 
             $formData['userSettings']['translateToWelsh'] = $data['translateToWelsh'];
+            $formData['userSettings']['osType'] = $data['osType'];
         }
 
         return $formData;
@@ -155,6 +156,7 @@ class User implements MapperInterface
         $commandData['contactDetails']['address'] = $data['address'];
 
         $commandData['translateToWelsh'] = $data['userSettings']['translateToWelsh'];
+        $commandData['osType'] = $data['userSettings']['osType'];
 
         return $commandData;
     }
