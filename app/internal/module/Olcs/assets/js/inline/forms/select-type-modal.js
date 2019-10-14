@@ -1,27 +1,43 @@
 $(function () {
     "use strict";
 
-    const ECMT_SHORT_ID = 2;
+    const ECMT_ANNUAL_ID = "1";
+    const ECMT_SHORT_ID = "2";
+    const HAS_YEAR_SELECTION = [ECMT_ANNUAL_ID, ECMT_SHORT_ID];
+    const HAS_STOCK_SELECTION = [ECMT_SHORT_ID];
+
     var typeSelect = $("#permitType");
     var yearSelect = $("#yearList");
+    var stockSelect = $("#stock");
+    var submitBtn = $("#form-actions\\[submit\\]");
+    var csrfToken = $("#security");
+
+    submitBtn.hide();
 
     typeSelect.change(function () {
-        if($(this).val() == ECMT_SHORT_ID){
+        submitBtn.hide();
+        yearSelect.empty();
+        stockSelect.empty();
+        $(".yearSelect").addClass("js-hidden");
+        $(".stock").addClass("js-hidden")
+        if(HAS_YEAR_SELECTION.includes(typeSelect.val())){
             fetchYears();
+        } else {
+            submitBtn.show();
         }
     });
 
     yearSelect.change(function () {
-        if($(this).val() !== "2019") {
-            fetchStocks();
-        } else {
-            clearStocks();
+        stockSelect.empty();
+        if( yearSelect.val() == "2019") {
+            $(".stock").addClass("js-hidden");
         }
+        fetchStocks();
     });
 
     function fetchYears() {
         OLCS.preloader.show("modal");
-        $.post("available-years", {permitType: typeSelect.val()}, function (data) {
+        $.post("available-years", {permitType: typeSelect.val(), security: csrfToken.val()}, function (data) {
             yearSelect.append($("<option>", {
                 value: "",
                 text : "Please Select"
@@ -41,22 +57,24 @@ $(function () {
         OLCS.preloader.show("modal");
         $.post("available-stocks", {
             permitType: typeSelect.val(),
-            year: yearSelect.val()
+            year: yearSelect.val(),
+            security: csrfToken.val()
         }, function (data) {
             $.each(data.stocks, function (i, item) {
-                $("#stock").append($("<option>", {
+                stockSelect.append($("<option>", {
                     value: item.id,
                     text : item.periodName
                 }));
             });
-            $(".stock").removeClass("js-hidden");
+            if(
+                HAS_STOCK_SELECTION.includes(typeSelect.val())
+                && yearSelect.val() !== "2019"
+            ) {
+                $(".stock").removeClass("js-hidden");
+            }
+            submitBtn.show();
             OLCS.preloader.hide();
         });
-    }
-
-    function clearStocks(){
-        $('#stock').empty();
-        $(".stock").addClass("js-hidden");
     }
 });
 

@@ -58,24 +58,6 @@ class CreatePermit extends Base
     public $numVehiclesLabel;
 
     /**
-     * @Form\Name("yearRadios")
-     * @Form\Required(false)
-     * @Form\Attributes({
-     *   "class" : "input--trips",
-     *    "id" : "EcmtYearList",
-     * })
-     * @Form\Options({
-     *      "label": "Select a year",
-     *      "fieldset-attributes": {"id": "year-list", "class":"inline"},
-     *      "fieldset-data-group": "sector-list",
-     *      "label_attributes": {"class": "form-control form-control--radio"},
-     *      "disable_inarray_validator" : true,
-     * })
-     * @Form\Type("Radio")
-     */
-    public $yearRadios = null;
-
-    /**
      * @Form\Type("Zend\Form\Element\Hidden")
      * @Form\Attributes({
      *    "id" : "year",
@@ -90,7 +72,6 @@ class CreatePermit extends Base
      * @Form\Attributes({
      *   "class" : "input--cabotage",
      *   "id" : "cabotage",
-     *   "data-container-class":"yearDependent js-hidden"
      * })
      * @Form\Options({
      *   "checked_value": "1",
@@ -109,7 +90,6 @@ class CreatePermit extends Base
      * @Form\Attributes({
      *   "class" : "input--roadworthiness",
      *   "id" : "cabotage",
-     *   "data-container-class":"yearDependent js-hidden"
      * })
      * @Form\Options({
      *   "checked_value": "1",
@@ -140,7 +120,7 @@ class CreatePermit extends Base
      *     "allowWrap":true,
      *     "multiple":"multiple",
      *     "empty": "Select options if applicable",
-     *     "data-container-class": "form-control__container yearDependent js-hidden",
+     *     "data-container-class": "form-control__container",
      * })
      * @Form\Type("DynamicSelect")
      * @Form\Filter({"name":"Common\Filter\NullToArray"})
@@ -154,7 +134,6 @@ class CreatePermit extends Base
      * @Form\Attributes({
      *   "class" : "input--euro6",
      *    "id" : "emissions",
-     *    "data-container-class": "yearDependent js-hidden",
      * })
      * @Form\Options({
      *   "checked_value": "1",
@@ -176,7 +155,7 @@ class CreatePermit extends Base
      *   "class" : "input--permits-requiredEuro5",
      *   "id" : "requiredEuro5",
      *   "step" : "any",
-     *   "data-container-class":"emission5Dependent js-hidden"
+     *   "data-container-class": "js-hidden",
      * })
      * @Form\Options({
      *     "label": "Number of permits required for <strong>Euro5</strong> Emissions Standard",
@@ -185,6 +164,16 @@ class CreatePermit extends Base
      *     "allow_empty" : true,
      *     "label_options": {
      *         "disable_html_escape": "true"
+     *     }
+     * })
+     * @Form\Validator({
+     *     "name": "SumCompare",
+     *     "options": {
+     *          "compare_to":"numVehicles",
+     *          "operator":"lte",
+     *          "sumWith" : "requiredEuro6",
+     *          "allowEmpty" : true,
+     *          "compare_to_label":"Your number of authorised vehicles",
      *     }
      * })
      * @Form\Type("Zend\Form\Element\Number")
@@ -197,7 +186,7 @@ class CreatePermit extends Base
      *   "class" : "input--permits-requiredEuro6",
      *   "id" : "requiredEuro6",
      *   "step" : "any",
-     *   "data-container-class":"emission6Dependent js-hidden"
+     *   "data-container-class": "js-hidden",
      * })
      * @Form\Options({
      *     "label": "Number of permits required for <strong>Euro6</strong> Emissions Standard",
@@ -208,11 +197,19 @@ class CreatePermit extends Base
      *         "disable_html_escape": "true"
      *     }
      * })
+     * @Form\Validator({
+     *     "name": "SumCompare",
+     *     "options": {
+     *          "compare_to":"numVehicles",
+     *          "operator":"lte",
+     *          "sumWith" : "requiredEuro5",
+     *          "allowEmpty" : true,
+     *          "compare_to_label":"Your number of authorised vehicles",
+     *     }
+     * })
      * @Form\Type("Zend\Form\Element\Number")
      */
     public $requiredEuro6 = 0;
-
-
 
     /**
      * @Form\Required(false)
@@ -220,7 +217,6 @@ class CreatePermit extends Base
      *   "class" : "input--trips",
      *   "id" : "trips",
      *   "step" : "any",
-     *   "data-container-class":"yearDependent js-hidden"
      * })
      * @Form\Options({
      *     "label": "Number of trips abroad in the last 12 months",
@@ -236,11 +232,10 @@ class CreatePermit extends Base
      * @Form\Attributes({
      *   "class" : "input--international-journey",
      *    "id" : "internationalJourneys",
-     *    "data-container-class":"yearDependent js-hidden"
      * })
      * @Form\Options({
      *      "label": "International Journeys",
-     *      "fieldset-attributes": {"id": "international-journey", "class":"yearDependent js-hidden"},
+     *      "fieldset-attributes": {"id": "international-journey"},
      *      "fieldset-data-group": "percentage-type",
      *      "label_attributes": {"class": "form-control form-control--radio"},
      *      "category": "inter_journey_percentage",
@@ -261,7 +256,7 @@ class CreatePermit extends Base
      * })
      * @Form\Options({
      *      "label": "markup-ecmt-sector-list-label",
-     *      "fieldset-attributes": {"id": "sector-list", "class":"inline yearDependent js-hidden"},
+     *      "fieldset-attributes": {"id": "sector-list", "class":"inline"},
      *      "fieldset-data-group": "sector-list",
      *      "label_attributes": {"class": "form-control form-control--radio"},
      *      "disable_inarray_validator" : true,
@@ -275,7 +270,6 @@ class CreatePermit extends Base
      * @Form\Attributes({
      *   "class" : "input--declaration",
      *   "id" : "declaration",
-     *   "data-container-class":"yearDependent js-hidden"
      * })
      * @Form\Options({
      *     "checked_value": "1",
@@ -311,6 +305,17 @@ class CreatePermit extends Base
      *
      */
     public $canBeCancelled;
+
+    /**
+     * @Form\Required(false)
+     * @Form\Attributes({
+     *   "id" : "irhpPermitStock",
+     * })
+     *
+     * @Form\Type("Zend\Form\Element\Hidden")
+     *
+     */
+    public $irhpPermitStock;
 
     /**
      * @Form\Type("Zend\Form\Element\Hidden")
