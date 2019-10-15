@@ -18,7 +18,7 @@ class FormProviderFactory implements FactoryInterface
     {
         return new FormProvider(
             $serviceLocator->get('QaFormFactory'),
-            $serviceLocator->get('QaFieldsetAdder')
+            $serviceLocator->get('QaFieldsetPopulator')
         );
     }
 }

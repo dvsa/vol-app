@@ -2,7 +2,7 @@
 
 namespace OlcsTest\Service\Qa;
 
-use Common\Service\Qa\FieldsetAdder;
+use Common\Service\Qa\FieldsetPopulator;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Service\Qa\FormProvider;
@@ -29,12 +29,12 @@ class FormProviderTest extends MockeryTestCase
             ->once()
             ->andReturn($form);
 
-        $fieldsetAdder = m::mock(FieldsetAdder::class);
-        $fieldsetAdder->shouldReceive('add')
-            ->with($form, $options)
+        $fieldsetPopulator = m::mock(FieldsetPopulator::class);
+        $fieldsetPopulator->shouldReceive('populate')
+            ->with($form, [$options])
             ->once();
 
-        $sut = new FormProvider($formFactory, $fieldsetAdder);
+        $sut = new FormProvider($formFactory, $fieldsetPopulator);
 
         $this->assertSame(
             $form,
