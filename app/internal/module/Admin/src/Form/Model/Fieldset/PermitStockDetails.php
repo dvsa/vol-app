@@ -56,9 +56,18 @@ class PermitStockDetails
     public $applicationPathGroup = null;
 
     /**
+     * @Form\Name("applicationPathGroupHtml")
+     * @Form\Attributes({"id":"applicationPathGroupHtml", "data-container-class":"pathProcess js-hidden"})
+     * @Form\Options({
+     *     "label": "Application Path"
+     * })
+     * @Form\Type("Common\Form\Elements\Types\Html")
+     */
+    public $applicationPathGroupHtml = null;
+
+    /**
      * @Form\Type("DynamicSelect")
      * @Form\Name("businessProcess")
-     * @Form\Required(true)
      * @Form\Attributes({"id":"businessProcess","placeholder":"","class":"medium"})
      * @Form\Options({
      *     "label": "Business Process",
@@ -69,6 +78,15 @@ class PermitStockDetails
      * })
      */
     public $businessProcess = null;
+
+    /**
+     * @Form\Name("businessProcessHtml")
+     * @Form\Options({
+     *     "label": "Business Process"
+     * })
+     * @Form\Type("Common\Form\Elements\Types\Html")
+     */
+    public $businessProcessHtml = null;
 
     /**
      * @Form\Name("periodNameKey")

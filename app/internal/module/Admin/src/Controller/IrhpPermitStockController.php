@@ -111,10 +111,14 @@ class IrhpPermitStockController extends AbstractInternalController implements Le
      * @param $form
      * @param $formData
      * @return mixed
-     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function alterFormForAdd($form, $formData)
     {
+        $fieldset = $form->get('permitStockDetails');
+        $fieldset->remove('applicationPathGroupHtml');
+        $fieldset->remove('businessProcessHtml');
+
         return $this->retrieveEeaCountries($form);
     }
 
@@ -128,12 +132,15 @@ class IrhpPermitStockController extends AbstractInternalController implements Le
      */
     protected function alterFormForEdit($form, $formData)
     {
-        $form->get('permitStockDetails')
-            ->get('applicationPathGroup')
-            ->setAttribute('disabled', true);
-        $form->get('permitStockDetails')
-            ->get('businessProcess')
-            ->setAttribute('disabled', true);
+        $fieldset = $form->get('permitStockDetails');
+        $fieldset->remove('applicationPathGroup');
+        $fieldset->remove('businessProcess');
+
+        $fieldset->get('applicationPathGroupHtml')
+            ->setValue($formData['permitStockDetails']['applicationPathGroup']['name'] ?? '');
+        $fieldset->get('businessProcessHtml')
+            ->setValue($formData['permitStockDetails']['businessProcess']['description'] ?? '');
+
         return $this->retrieveEeaCountries($form);
     }
 
