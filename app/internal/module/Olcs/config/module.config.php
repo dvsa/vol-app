@@ -36,8 +36,6 @@ use Olcs\Service\Marker;
 
 use Olcs\FormService\Form\Lva as LvaFormService;
 
-use Olcs\Service\Qa as QaSrv;
-
 return array(
     'router' => [
         'routes' => include __DIR__ . '/routes.config.php'
@@ -512,7 +510,6 @@ return array(
             'Olcs\Listener\HeaderSearch' => 'Olcs\Listener\HeaderSearch',
             'Olcs\Listener\NavigationToggle' => 'Olcs\Listener\NavigationToggle',
             'Olcs\Service\Data\SubmissionActionTypes' => 'Olcs\Service\Data\SubmissionActionTypes',
-            'QaFieldsetPopulator' => QaSrv\FieldsetPopulatorFactory::class,
         )
     ),
     'form_elements' => [
