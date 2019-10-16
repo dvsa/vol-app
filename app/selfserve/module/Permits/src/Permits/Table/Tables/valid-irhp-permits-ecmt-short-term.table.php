@@ -35,6 +35,11 @@ return array(
             'formatter' => 'StackValue',
         ),
         array(
+            'title' => 'permits.irhp.valid.permits.table.constrained.countries',
+            'name' => 'constrainedCountries',
+            'formatter' => 'ConstrainedCountriesList',
+        ),
+        array(
             'title' => 'permits.irhp.valid.permits.table.issue-date',
             'name' => 'issueDate',
             'formatter' => 'Date',
