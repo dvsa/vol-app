@@ -745,6 +745,9 @@ class IrhpCheckAnswersTest extends TestCase
                 'trafficArea' => ['name' => 'North East of England'],
             ],
             'irhpPermitApplications' => $irhpPermitApplications,
+            'sectors' => [
+                'name' => 'Wood'
+            ],
             'questionAnswerData' => [
                 [
                     'slug' => 'custom-licence', //ignored
@@ -758,6 +761,13 @@ class IrhpCheckAnswersTest extends TestCase
                 ],
                 [
                     'slug' => 'st-number-of-permits', //will compute from irhpPermitApplications
+                ],
+                [
+                    'slug' => 'st-sectors',
+                    'question' => 'sectors.question',
+                    'answer' => 7,
+                    'questionType' => 'sectors.questionType',
+                    'route' => IrhpApplicationSection::ROUTE_QUESTION,
                 ],
                 [
                     'slug' => 'generic.slug.2',
@@ -821,6 +831,15 @@ class IrhpCheckAnswersTest extends TestCase
                     'params' => ['slug' => $numPermitsSlug],
                     'options' => [],
                     'escape' => $escapeNumPermits,
+                ],
+                [
+                    'question' => 'sectors.question',
+                    'route' => IrhpApplicationSection::ROUTE_QUESTION,
+                    'answer' => 'Wood',
+                    'questionType' => 'sectors.questionType',
+                    'params' => ['slug' => 'st-sectors'],
+                    'options' => [],
+                    'escape' => true,
                 ],
                 [
                     'question' => 'generic.question.2',
