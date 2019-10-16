@@ -155,12 +155,12 @@ class IrhpPermitController extends AbstractInternalController implements
                 $table->removeColumn('country');
                 break;
             case RefData::IRHP_BILATERAL_PERMIT_TYPE_ID:
-                // emissionsCategory is not valid for Bilateral
                 $table->removeColumn('emissionsCategory');
+                $table->removeColumn('constrainedCountries');
                 break;
             default:
-                // remove emissionsCategory and country columns for any other type
                 $table->removeColumn('emissionsCategory');
+                $table->removeColumn('constrainedCountries');
                 $table->removeColumn('country');
                 break;
         }

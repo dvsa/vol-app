@@ -34,6 +34,11 @@ return [
             },
         ],
         [
+            'title' => 'Not valid to travel to',
+            'name' => 'constrainedCountries',
+            'formatter' => 'ConstrainedCountriesList',
+        ],
+        [
             'title' => 'Issued date',
             'name' => 'issueDate',
             'formatter' => 'DateTime',
