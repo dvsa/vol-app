@@ -297,11 +297,11 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
                 if (isset($config['conditional'])) {
                     $dataKey = $config['conditional']['dataKey'];
                     $field = $config['conditional']['field'];
-                    $value = $config['conditional']['value'];
+                    $value = isset($config['conditional']['value'])
+                        ? $config['conditional']['value']
+                        : $params[$config['conditional']['compareParam']];
 
-                    /** @todo I have no idea what this does, but it can surely be simplified */
-                    if (is_array($field) && array_search($params[$value], $this->data[$dataKey][$field[0]]) === $field[1]
-                        || !is_array($field) && $this->data[$dataKey][$field] === $value) {
+                    if ($this->data[$dataKey][$field] === $value) {
                         return $this->redirectConditionalPost($config);
                     }
                 }
@@ -482,39 +482,31 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
         }
 
         $conditionalDisplayConfig = $this->configsForAction('conditionalDisplayConfig');
-        foreach ($conditionalDisplayConfig as $source => $criteria) {
-            $data = $this->data[$source];
+        foreach ($conditionalDisplayConfig as $criteria) {
+            $data = $this->data[$criteria['source']];
 
-            // Validate result if a key/value condition is defined or if a key is defined
-            if (isset($criteria['key']) && isset($criteria['value']) && $data[$criteria['key']] === $criteria['value']) {
-                continue;
-            } elseif (isset($criteria['view']) && !empty($data[$source]) && !isset($criteria['key'])) {
+            //if checking a specific key enter the first block, if no key being checked, verify the data isn't empty
+            if (isset($data[$criteria['key']])) {
+                if ($data[$criteria['key']] === $criteria['value']) {
+                    continue;
+                }
+            } elseif (!empty($data)) {
                 continue;
             }
 
-            $route = isset($criteria['route']) ? $criteria['route'] : null;
-            $view = isset($criteria['view']) ? $criteria['view'] : null;
-            return $this->conditionalDisplayNotMet($view, $route);
+            return $this->conditionalDisplayNotMet($criteria['route']);
         }
     }
 
     /**
+     * Redirect to the specified route if the conditional display isn't met
+     *
+     * @param string $route the new route
      *
      * @return \Zend\Http\Response
      */
-    protected function conditionalDisplayNotMet($view = null, $route = null)
+    protected function conditionalDisplayNotMet(string $route)
     {
-        if (!is_null($view)) {
-            $this->templateConfig[$this->action] = $view['template'];
-
-            if (isset($view['data'])) {
-                array_merge($this->templateVarsConfig[$this->action], $view['data']);
-            }
-
-            return $this->genericView();
-        }
-
-        $route = $route ? $route : 'permits';
         return $this->redirect()->toRoute($route, [], [], true);
     }
 

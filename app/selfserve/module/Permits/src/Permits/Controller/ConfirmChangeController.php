@@ -23,7 +23,7 @@ class ConfirmChangeController extends AbstractSelfserveController implements Tog
 
     protected $dataSourceConfig = [
         'ecmt' => DataSourceConfig::PERMIT_APP_ECMT_LICENCE,
-        'question' => DataSourceConfig::PERMIT_APP_LICENCE,
+        'question' => DataSourceConfig::PERMIT_APP_CHANGE_LICENCE,
     ];
 
     protected $conditionalDisplayConfig = [

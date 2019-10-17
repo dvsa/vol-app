@@ -69,7 +69,7 @@ class YearController extends AbstractSelfserveController implements ToggleAwareI
 
             $this->redirectParams = [
                 'year' => $params['year'],
-                'type' => $params['type']
+                'irhpPermitType' => $params['type']
             ];
         } else {
             // find a stock id

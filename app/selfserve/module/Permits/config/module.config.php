@@ -33,6 +33,8 @@ use Permits\Controller\IrhpAwaitingFeeController;
 use Permits\Controller\IrhpDeclineController;
 use Permits\Controller\IrhpValidPermitsController;
 use Permits\Controller\IrhpWindowClosedController;
+use Permits\Controller\IrhpNotEligibleController;
+use Permits\Controller\IrhpNoLicencesController;
 use Permits\Controller\QaController;
 use Permits\Controller\QaControllerFactory;
 use Permits\Controller\YearController;
@@ -73,6 +75,8 @@ return [
         IrhpUnderConsiderationController::class => IrhpUnderConsiderationController::class,
         IrhpValidPermitsController::class => IrhpValidPermitsController::class,
         IrhpWindowClosedController::class => IrhpWindowClosedController::class,
+        IrhpNotEligibleController::class => IrhpNotEligibleController::class,
+        IrhpNoLicencesController::class => IrhpNoLicencesController::class,
         RestrictedCountriesController::class => RestrictedCountriesController::class,
         YearController::class => YearController::class,
         IrhpStockController::class => IrhpStockController::class,
@@ -420,6 +424,28 @@ return [
                       'route'    => '/window-closed[/]',
                       'defaults' => [
                           'controller'    => IrhpWindowClosedController::class,
+                          'action'        => 'generic',
+                      ],
+                  ],
+                  'may_terminate' => false,
+              ],
+              'not-eligible' => [
+                  'type'    => 'segment',
+                  'options' => [
+                      'route'    => '/not-eligible[/]',
+                      'defaults' => [
+                          'controller'    => IrhpNotEligibleController::class,
+                          'action'        => 'generic',
+                      ],
+                  ],
+                  'may_terminate' => false,
+              ],
+              'no-licences' => [
+                  'type'    => 'segment',
+                  'options' => [
+                      'route'    => '/no-licences[/]',
+                      'defaults' => [
+                          'controller'    => IrhpNoLicencesController::class,
                           'action'        => 'generic',
                       ],
                   ],

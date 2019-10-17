@@ -2,12 +2,15 @@
 
 namespace PermitsTest\Data\Mapper;
 
+use Common\Form\Elements\InputFilters\SingleCheckbox;
 use Common\Form\Elements\Types\HtmlTranslated;
+use Common\Form\Elements\Types\Radio;
+use Common\Form\Elements\Types\RadioVertical;
 use Common\Form\Form;
-use Common\RefData;
 use Mockery as m;
 use Permits\Data\Mapper\LicencesAvailable;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
+use Zend\Form\Fieldset;
 
 class LicencesAvailableTest extends TestCase
 {
@@ -18,52 +21,24 @@ class LicencesAvailableTest extends TestCase
         $this->licencesAvailable = new LicencesAvailable();
     }
 
-    public function testMapForFormOptionsOneEcmtRestricted()
+    public function testMapForFormOptionsEcmtRestricted()
     {
         $inputData = [
-            'irhpPermitType' => [
-                'id' => RefData::ECMT_PERMIT_TYPE_ID,
-            ],
             'licencesAvailable' => [
                 'eligibleLicences' => [
-                    'result' => [
-                        0 => [
-                            'id' => 7,
-                            'licNo' => 'OB1234567',
-                            'trafficArea' => 'North East of England',
-                            'licenceType' => [
-                                'description' => 'Restricted',
-                                'id' => 'ltyp_r',
-                            ],
-                            'canMakeEcmtApplication' => true,
-                        ],
-                    ]
-                ]
+                    7 => [
+                        'id' => 7,
+                        'licNo' => 'OB1234567',
+                        'trafficArea' => 'North East of England',
+                        'isRestricted' => true,
+                        'licenceTypeDesc' => 'Restricted',
+                        'canMakeApplication' => true,
+                        'activeApplicationId' => null,
+                    ],
+                ],
+                'selectedLicence' => 7,
+                'isEcmtAnnual' => true,
             ]
-        ];
-
-        $outputData = [
-            'irhpPermitType' => [
-                'id' => RefData::ECMT_PERMIT_TYPE_ID,
-            ],
-            'licencesAvailable' => [
-                'eligibleLicences' => [
-                    'result' => [
-                        0 => [
-                            'id' => 7,
-                            'licNo' => 'OB1234567',
-                            'trafficArea' => 'North East of England',
-                            'licenceType' => [
-                                'description' => 'Restricted',
-                                'id' => 'ltyp_r',
-                            ],
-                            'canMakeEcmtApplication' => true,
-                        ],
-                    ]
-                ]
-            ],
-            'question' => LicencesAvailable::ECMT_QUESTION_ONE_LICENCE,
-            'questionArgs' => ['OB1234567 Restricted (North East of England)'],
         ];
 
         $valueOptions = [
@@ -81,21 +56,14 @@ class LicencesAvailableTest extends TestCase
             ],
         ];
 
-        $mockForm = m::mock(Form::class);
+        $mockRadio = m::mock(Radio::class);
+        $mockRadio->shouldReceive('setValueOptions')->once()->with($valueOptions);
 
-        $mockForm
-            ->shouldReceive('get->get->setValueOptions')
-            ->with($valueOptions)
-            ->once();
-        $mockForm
-            ->shouldReceive('get->get->setAttribute')
-            ->once()
-            ->with(
-                'radios_wrapper_attributes',
-                ['class' => 'visually-hidden']
-            );
-        $mockForm
-            ->shouldReceive('get->add')
+        $mockRadioVertical = m::mock(Fieldset::class);
+        $mockRadioVertical->shouldReceive('get')->once()->with('licence')->andReturn($mockRadio);
+
+        $mockRadioVertical
+            ->shouldReceive('add')
             ->once()
             ->with(m::type(HtmlTranslated::class))
             ->andReturnUsing(
@@ -110,374 +78,152 @@ class LicencesAvailableTest extends TestCase
                 }
             );
 
-        $this->assertEquals(
-            $outputData,
-            $this->licencesAvailable->mapForFormOptions($inputData, $mockForm)
-        );
-    }
-
-    /**
-     * @dataProvider dpTestMapForFormOptions
-     */
-    public function testMapForFormOptions($inputData, $outputData, $valueOptions)
-    {
         $mockForm = m::mock(Form::class);
-
-        $mockForm
-            ->shouldReceive('get->get->setValueOptions')
-            ->with($valueOptions)
-            ->once();
-
-        $mockForm->allows('get->add');
-        $mockForm->allows('get->get->setAttribute')
-            ->with(
-                'radios_wrapper_attributes',
-                ['class' => 'visually-hidden']
-            );
+        $mockForm->shouldReceive('get')->once()->with('fields')->andReturn($mockRadioVertical);
 
         $this->assertEquals(
-            $outputData,
+            $inputData,
             $this->licencesAvailable->mapForFormOptions($inputData, $mockForm)
         );
     }
 
-    public function dpTestMapForFormOptions()
+    public function testMultiLicence()
     {
-        return [
-            'empty list' => [
-                'inputData' => [
-                    'licencesAvailable' => [
-                        'eligibleLicences' => [
-                            'result' => []
-                        ]
-                    ]
-                ],
-                'outputData' => [
-                    'licencesAvailable' => [
-                        'eligibleLicences' => [
-                            'result' => []
-                        ]
-                    ]
-                ],
-                'expectedValueOptions' => [],
-            ],
-            '2 licences available for selection' => [
-                'inputData' => [
-                    'irhpPermitType' => [
-                        'id' => RefData::ECMT_PERMIT_TYPE_ID,
-                    ],
-                    'licencesAvailable' => [
-                        'eligibleLicences' => [
-                            'result' => [
-                                0 => [
-                                    'id' => 7,
-                                    'licNo' => 'OB1234567',
-                                    'trafficArea' => 'North East of England',
-                                    'licenceType' => [
-                                        'description' => 'Standard International',
-                                        'id' => 'ltyp_si',
-                                    ],
-                                    'canMakeEcmtApplication' => true,
-                                ],
-                                1 => [
-                                    'id' => 70,
-                                    'licNo' => 'OG7654321',
-                                    'trafficArea' => 'Wales',
-                                    'licenceType' => [
-                                        'description' => 'Standard International',
-                                        'id' => 'ltyp_si',
-                                    ],
-                                    'canMakeEcmtApplication' => true,
-                                ],
-                                2 => [
-                                    'id' => 703,
-                                    'licNo' => 'OG9654321',
-                                    'trafficArea' => 'Wales',
-                                    'licenceType' => [
-                                        'description' => 'Standard International',
-                                        'id' => 'ltyp_si',
-                                    ],
-                                    'canMakeEcmtApplication' => false,
-                                ]
-                            ]
-                        ]
-                    ]
-                ],
-                'outputData' => [
-                    'irhpPermitType' => [
-                        'id' => RefData::ECMT_PERMIT_TYPE_ID,
-                    ],
-                    'licencesAvailable' => [
-                        'eligibleLicences' => [
-                            'result' => [
-                                0 => [
-                                    'id' => 7,
-                                    'licNo' => 'OB1234567',
-                                    'trafficArea' => 'North East of England',
-                                    'licenceType' => [
-                                        'description' => 'Standard International',
-                                        'id' => 'ltyp_si',
-                                    ],
-                                    'canMakeEcmtApplication' => true,
-                                ],
-                                1 => [
-                                    'id' => 70,
-                                    'licNo' => 'OG7654321',
-                                    'trafficArea' => 'Wales',
-                                    'licenceType' => [
-                                        'description' => 'Standard International',
-                                        'id' => 'ltyp_si',
-                                    ],
-                                    'canMakeEcmtApplication' => true,
-                                ],
-                                2 => [
-                                    'id' => 703,
-                                    'licNo' => 'OG9654321',
-                                    'trafficArea' => 'Wales',
-                                    'licenceType' => [
-                                        'description' => 'Standard International',
-                                        'id' => 'ltyp_si',
-                                    ],
-                                    'canMakeEcmtApplication' => false,
-                                ]
-                            ]
-                        ]
-                    ],
-                ],
-                'expectedValueOptions' => $this->standardValueOptions(),
-            ],
-            'multilateral permits standard' => [
-                'inputData' => $this->standardInput(RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID),
-                'outputData' => $this->standardOutput(RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID),
-                'expectedValueOptions' => $this->standardValueOptions(),
-            ],
-            'bilateral permits standard' => [
-                'inputData' => $this->standardInput(RefData::IRHP_BILATERAL_PERMIT_TYPE_ID),
-                'outputData' => $this->standardOutput(RefData::IRHP_BILATERAL_PERMIT_TYPE_ID),
-                'expectedValueOptions' => $this->standardValueOptions(),
-            ],
-            'ecmt removals standard' => [
-                'inputData' => $this->standardInput(RefData::ECMT_REMOVAL_PERMIT_TYPE_ID),
-                'outputData' => $this->standardOutput(RefData::ECMT_REMOVAL_PERMIT_TYPE_ID),
-                'expectedValueOptions' => $this->standardValueOptions(),
-            ],
-            'multilateral permits already applied' => [
-                'inputData' => $this->alreadyAppliedInput(RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID),
-                'outputData' => $this->alreadyAppliedOutput(RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID),
-                'expectedValueOptions' => $this->alreadyAppliedValueOptions(),
-            ],
-            'bilateral permits already applied' => [
-                'inputData' => $this->alreadyAppliedInput(RefData::IRHP_BILATERAL_PERMIT_TYPE_ID),
-                'outputData' => $this->alreadyAppliedOutput(RefData::IRHP_BILATERAL_PERMIT_TYPE_ID),
-                'expectedValueOptions' => $this->alreadyAppliedValueOptions(),
-            ],
-            'ecmt removals already applied' => [
-                'inputData' => $this->alreadyAppliedInput(RefData::ECMT_REMOVAL_PERMIT_TYPE_ID),
-                'outputData' => $this->alreadyAppliedOutput(RefData::ECMT_REMOVAL_PERMIT_TYPE_ID),
-                'expectedValueOptions' => $this->alreadyAppliedValueOptions(),
-            ],
-            'ecmt annual already applied' => [
-                'inputData' => $this->alreadyAppliedInput(RefData::ECMT_PERMIT_TYPE_ID),
-                'outputData' => $this->alreadyAppliedOutputAnnualEcmt(RefData::ECMT_PERMIT_TYPE_ID),
-                'expectedValueOptions' => $this->alreadyAppliedValueOptions(),
-            ],
-        ];
-    }
-
-    private function standardInput(int $permitTypeId): array
-    {
-        return [
-            'irhpPermitType' => [
-                'id' => $permitTypeId,
-            ],
+        $inputData = [
             'licencesAvailable' => [
                 'eligibleLicences' => [
-                    'result' => [
-                        0 => [
-                            'id' => 7,
-                            'licNo' => 'OB1234567',
-                            'trafficArea' => 'North East of England',
-                            'licenceType' => [
-                                'description' => 'Standard International',
-                                'id' => 'ltyp_si',
-                            ],
-                            'canMakeEcmtApplication' => true,
-                        ],
-                        1 => [
-                            'id' => 70,
-                            'licNo' => 'OG7654321',
-                            'trafficArea' => 'Wales',
-                            'licenceType' => [
-                                'description' => 'Standard International',
-                                'id' => 'ltyp_si',
-                            ],
-                            'canMakeEcmtApplication' => true,
-                        ]
-                    ]
-                ]
+                    7 => [
+                        'id' => 7,
+                        'licNo' => 'OB1234567',
+                        'trafficArea' => 'North East of England',
+                        'isRestricted' => false,
+                        'licenceTypeDesc' => 'Standard National',
+                        'canMakeApplication' => true,
+                        'activeApplicationId' => null,
+                    ],
+                    406 => [
+                        'id' => 406,
+                        'licNo' => 'OB7654321',
+                        'trafficArea' => 'Scotland',
+                        'isRestricted' => false,
+                        'licenceTypeDesc' => 'Standard International',
+                        'canMakeApplication' => true,
+                        'activeApplicationId' => null,
+                    ],
+                ],
+                'selectedLicence' => 7,
+                'isEcmtAnnual' => false,
             ]
         ];
-    }
 
-    private function standardOutput(int $permitTypeId): array
-    {
-        return [
-            'irhpPermitType' => [
-                'id' => $permitTypeId,
-            ],
-            'licencesAvailable' => [
-                'eligibleLicences' => [
-                    'result' => [
-                        0 => [
-                            'id' => 7,
-                            'licNo' => 'OB1234567',
-                            'trafficArea' => 'North East of England',
-                            'licenceType' => [
-                                'description' => 'Standard International',
-                                'id' => 'ltyp_si',
-                            ],
-                            'canMakeEcmtApplication' => true,
-                        ],
-                        1 => [
-                            'id' => 70,
-                            'licNo' => 'OG7654321',
-                            'trafficArea' => 'Wales',
-                            'licenceType' => [
-                                'description' => 'Standard International',
-                                'id' => 'ltyp_si',
-                            ],
-                            'canMakeEcmtApplication' => true,
-                        ]
-                    ]
-                ]
-            ]
-        ];
-    }
-
-    private function standardValueOptions(): array
-    {
-        return [
+        $valueOptions = [
             7 => [
                 'value' => 7,
                 'label' => 'OB1234567',
                 'label_attributes' => [
                     'class' => 'govuk-label govuk-radios__label govuk-label--s',
                 ],
-                'hint' => 'Standard International (North East of England)',
-                'selected' => false,
-                'attributes' => [
-                    'id' => 'licence'
-                ],
-            ],
-            70 => [
-                'value' => 70,
-                'label' => 'OG7654321',
-                'label_attributes' => [
-                    'class' => 'govuk-label govuk-radios__label govuk-label--s',
-                ],
-                'hint' => 'Standard International (Wales)',
-                'selected' => false,
-            ]
-        ];
-    }
-
-    private function alreadyAppliedInput(int $irhpPermitTypeId): array
-    {
-        return [
-            'irhpPermitType' => [
-                'id' => $irhpPermitTypeId,
-            ],
-            'licencesAvailable' => [
-                'eligibleLicences' => [
-                    'result' => [
-                        0 => [
-                            'id' => 7,
-                            'licNo' => 'OB1234567',
-                            'trafficArea' => 'North East of England',
-                            'licenceType' => [
-                                'description' => 'Restricted',
-                                'id' => 'ltyp_r',
-                            ],
-                            'canMakeEcmtApplication' => true,
-                        ],
-                    ]
-                ]
-            ],
-            'active' => 7,
-        ];
-    }
-
-    private function alreadyAppliedOutput(int $irhpPermitTypeId): array
-    {
-        return [
-            'irhpPermitType' => [
-                'id' => $irhpPermitTypeId,
-            ],
-            'licencesAvailable' => [
-                'eligibleLicences' => [
-                    'result' => [
-                        0 => [
-                            'id' => 7,
-                            'licNo' => 'OB1234567',
-                            'trafficArea' => 'North East of England',
-                            'licenceType' => [
-                                'description' => 'Restricted',
-                                'id' => 'ltyp_r',
-                            ],
-                            'canMakeEcmtApplication' => true,
-                        ],
-                    ]
-                ]
-            ],
-            'active' => 7,
-            'warning' => 'permits.irhp.bilateral.already-applied',
-        ];
-    }
-
-    private function alreadyAppliedOutputAnnualEcmt(int $irhpPermitTypeId): array
-    {
-        return [
-            'irhpPermitType' => [
-                'id' => $irhpPermitTypeId,
-            ],
-            'licencesAvailable' => [
-                'eligibleLicences' => [
-                    'result' => [
-                        0 => [
-                            'id' => 7,
-                            'licNo' => 'OB1234567',
-                            'trafficArea' => 'North East of England',
-                            'licenceType' => [
-                                'description' => 'Restricted',
-                                'id' => 'ltyp_r',
-                            ],
-                            'canMakeEcmtApplication' => true,
-                        ],
-                    ]
-                ]
-            ],
-            'active' => 7,
-            'warning' => 'permits.irhp.bilateral.already-applied',
-            'question' => 'permits.page.licence.question.one.licence',
-            'questionArgs' => ['OB1234567 Restricted (North East of England)']
-        ];
-    }
-
-    private function alreadyAppliedValueOptions(): array
-    {
-        return [
-            7 => [
-                'value' => 7,
-                'label' => 'OB1234567',
-                'label_attributes' => [
-                    'class' => 'govuk-label govuk-radios__label govuk-label--s',
-                ],
-                'hint' => 'Restricted (North East of England)',
+                'hint' => 'Standard National (North East of England)',
                 'selected' => true,
                 'attributes' => [
                     'id' => 'licence'
+                ]
+            ],
+            406 => [
+                'value' => 406,
+                'label' => 'OB7654321',
+                'label_attributes' => [
+                    'class' => 'govuk-label govuk-radios__label govuk-label--s',
                 ],
+                'hint' => 'Standard International (Scotland)',
+                'selected' => false,
             ],
         ];
+
+        $mockRadio = m::mock(Radio::class);
+        $mockRadio->shouldReceive('setValueOptions')->once()->with($valueOptions);
+
+        $mockRadioVertical = m::mock(Fieldset::class);
+        $mockRadioVertical->shouldReceive('get')->once()->with('licence')->andReturn($mockRadio);
+
+        $mockForm = m::mock(Form::class);
+        $mockForm->shouldReceive('get')->once()->with('fields')->andReturn($mockRadioVertical);
+
+        $this->assertEquals(
+            $inputData,
+            $this->licencesAvailable->mapForFormOptions($inputData, $mockForm)
+        );
+    }
+
+    public function testActiveWarning()
+    {
+        $inputData = [
+            'licencesAvailable' => [
+                'eligibleLicences' => [
+                    7 => [
+                        'id' => 7,
+                        'licNo' => 'OB1234567',
+                        'trafficArea' => 'North East of England',
+                        'isRestricted' => false,
+                        'licenceTypeDesc' => 'Standard National',
+                        'canMakeApplication' => true,
+                        'activeApplicationId' => 12345,
+                    ],
+                    406 => [
+                        'id' => 406,
+                        'licNo' => 'OB7654321',
+                        'trafficArea' => 'Scotland',
+                        'isRestricted' => false,
+                        'licenceTypeDesc' => 'Standard International',
+                        'canMakeApplication' => true,
+                        'activeApplicationId' => null,
+                    ],
+                ],
+                'selectedLicence' => 7,
+                'isEcmtAnnual' => false,
+            ],
+            'active' => 7
+        ];
+
+        $valueOptions = [
+            7 => [
+                'value' => 7,
+                'label' => 'OB1234567',
+                'label_attributes' => [
+                    'class' => 'govuk-label govuk-radios__label govuk-label--s',
+                ],
+                'hint' => 'Standard National (North East of England)',
+                'selected' => true,
+                'attributes' => [
+                    'id' => 'licence'
+                ]
+            ],
+            406 => [
+                'value' => 406,
+                'label' => 'OB7654321',
+                'label_attributes' => [
+                    'class' => 'govuk-label govuk-radios__label govuk-label--s',
+                ],
+                'hint' => 'Standard International (Scotland)',
+                'selected' => false,
+            ],
+        ];
+
+        $outputData = $inputData;
+        $outputData['warning'] = 'permits.irhp.bilateral.already-applied';
+
+        $mockRadio = m::mock(Radio::class);
+        $mockRadio->shouldReceive('setValueOptions')->once()->with($valueOptions);
+
+        $mockRadioVertical = m::mock(Fieldset::class);
+        $mockRadioVertical->shouldReceive('get')->once()->with('licence')->andReturn($mockRadio);
+
+        $mockForm = m::mock(Form::class);
+        $mockForm->shouldReceive('get')->once()->with('fields')->andReturn($mockRadioVertical);
+
+        $this->assertEquals(
+            $outputData,
+            $this->licencesAvailable->mapForFormOptions($inputData, $mockForm)
+        );
     }
 }
