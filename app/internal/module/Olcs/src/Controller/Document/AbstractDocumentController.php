@@ -263,6 +263,4 @@ abstract class AbstractDocumentController extends AbstractController
 
         return $response['osType'] ?? "windows_7";
     }
-
-
 }

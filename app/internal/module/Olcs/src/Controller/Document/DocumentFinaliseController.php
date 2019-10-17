@@ -317,5 +317,4 @@ class DocumentFinaliseController extends AbstractDocumentController
 
         return $this->redirectToDocumentRoute($type, null, $routeParams, $ajax);
     }
-
 }
