@@ -18,6 +18,8 @@ class IrhpApplicationSection extends AbstractHelper
     const ROUTE_YEAR = 'permits/year';
     const ROUTE_STOCK = 'permits/stock';
     const ROUTE_WINDOW_CLOSED = 'permits/window-closed';
+    const ROUTE_NOT_ELIGIBLE = 'permits/not-eligible';
+    const ROUTE_NO_LICENCES = 'permits/no-licences';
     const ROUTE_ADD_LICENCE = 'permits/add-licence';
     const ROUTE_APPLICATION_OVERVIEW = 'permits/application';
     const ROUTE_LICENCE = 'permits/application/licence';

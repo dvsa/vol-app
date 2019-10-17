@@ -34,6 +34,8 @@ use Permits\Controller\IrhpDeclineController;
 use Permits\Controller\IrhpUnpaidPermitsController;
 use Permits\Controller\IrhpValidPermitsController;
 use Permits\Controller\IrhpWindowClosedController;
+use Permits\Controller\IrhpNotEligibleController;
+use Permits\Controller\IrhpNoLicencesController;
 use Permits\Controller\QaController;
 use Permits\Controller\QaControllerFactory;
 use Permits\Controller\YearController;
@@ -75,6 +77,8 @@ return [
         IrhpUnpaidPermitsController::class => IrhpUnpaidPermitsController::class,
         IrhpValidPermitsController::class => IrhpValidPermitsController::class,
         IrhpWindowClosedController::class => IrhpWindowClosedController::class,
+        IrhpNotEligibleController::class => IrhpNotEligibleController::class,
+        IrhpNoLicencesController::class => IrhpNoLicencesController::class,
         RestrictedCountriesController::class => RestrictedCountriesController::class,
         YearController::class => YearController::class,
         IrhpStockController::class => IrhpStockController::class,
@@ -438,17 +442,39 @@ return [
                   ],
                   'may_terminate' => false,
               ],
+              'not-eligible' => [
+                  'type'    => 'segment',
+                  'options' => [
+                      'route'    => '/not-eligible[/]',
+                      'defaults' => [
+                          'controller'    => IrhpNotEligibleController::class,
+                          'action'        => 'generic',
+                      ],
+                  ],
+                  'may_terminate' => false,
+              ],
+              'no-licences' => [
+                  'type'    => 'segment',
+                  'options' => [
+                      'route'    => '/no-licences[/]',
+                      'defaults' => [
+                          'controller'    => IrhpNoLicencesController::class,
+                          'action'        => 'generic',
+                      ],
+                  ],
+                  'may_terminate' => false,
+              ],
               'add-licence' => [
                   'type'    => 'segment',
                   'options' => [
-                      'route'    => '/type/:type/licence/add[/:year][/]',
+                      'route'    => '/licence/add/:type[/:stock][/]',
                       'defaults' => [
                           'controller'    => LicenceController::class,
                           'action'        => 'add',
                       ],
                       'constraints' => [
                           'type' => '[0-9]+',
-                          'year' => '\d{4}'
+                          'stock' => '[0-9]+'
                       ],
                   ],
                   'may_terminate' => false,
@@ -854,6 +880,7 @@ return [
           Mapper\AvailableCountries::class => Mapper\AvailableCountries::class,
           Mapper\AvailableTypes::class => Mapper\AvailableTypes::class,
           Mapper\AvailableStocks::class => Mapper\AvailableStocks::class,
+          Mapper\AvailableYears::class => Mapper\AvailableYears::class,
           Mapper\LicencesAvailable::class => Mapper\LicencesAvailable::class,
           Mapper\RestrictedCountries::class => Mapper\RestrictedCountries::class,
           Mapper\Sectors::class => Mapper\Sectors::class,
@@ -866,7 +893,6 @@ return [
           Mapper\FeeList::class => Mapper\FeeListFactory::class,
           Mapper\IrhpApplicationFeeSummary::class => Mapper\IrhpApplicationFeeSummaryFactory::class,
           Mapper\IrhpCheckAnswers::class => Mapper\IrhpCheckAnswersFactory::class,
-          Mapper\AvailableYears::class => Mapper\AvailableYearsFactory::class,
           Mapper\ChangeLicence::class => Mapper\ChangeLicenceFactory::class,
           Mapper\NoOfPermits::class => Mapper\NoOfPermitsFactory::class,
       ],

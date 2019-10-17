@@ -4,7 +4,6 @@ namespace Permits\Data\Mapper;
 
 use Common\Form\Form;
 use Common\RefData;
-use Common\Service\Helper\TranslationHelperService;
 use Permits\Controller\Config\DataSource\AvailableYears as AvailableYearsDataSource;
 use RuntimeException;
 
@@ -13,21 +12,6 @@ use RuntimeException;
  */
 class AvailableYears
 {
-    /** @var TranslationHelperService */
-    private $translator;
-
-    /**
-     * Create service instance
-     *
-     * @param TranslationHelperService $translator
-     *
-     * @return AvailableYears
-     */
-    public function __construct(TranslationHelperService $translator)
-    {
-        $this->translator = $translator;
-    }
-
     /**
      * @param array $data
      * @param Form  $form
@@ -96,16 +80,10 @@ class AvailableYears
         $valueOptions = [];
 
         foreach ($years as $year) {
-            $hint = 'permits.page.year.ecmt-short-term.option.hint.not-2019';
-            if ($year == 2019) {
-                $hint = 'permits.page.year.ecmt-short-term.option.hint.2019';
-            }
-
             $valueOptions[] = [
                 'value' => $year,
                 'label' => $year,
                 'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
-                'hint' => $this->translator->translateReplace($hint, [$year]),
             ];
         }
 

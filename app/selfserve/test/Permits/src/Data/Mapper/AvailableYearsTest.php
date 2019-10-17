@@ -4,7 +4,6 @@ namespace PermitsTest\Data\Mapper;
 
 use Common\Form\Form;
 use Common\RefData;
-use Common\Service\Helper\TranslationHelperService;
 use Permits\Data\Mapper\AvailableYears;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Mockery as m;
@@ -15,15 +14,11 @@ use RuntimeException;
  */
 class AvailableYearsTest extends TestCase
 {
-    private $translator;
-
     private $availableYears;
 
     public function setUp()
     {
-        $this->translator = m::mock(TranslationHelperService::class);
-
-        $this->availableYears = new AvailableYears($this->translator);
+        $this->availableYears = new AvailableYears();
     }
 
     /**
@@ -40,8 +35,7 @@ class AvailableYearsTest extends TestCase
 
         $this->availableYears->mapForFormOptions(
             $data,
-            m::mock(Form::class),
-            m::mock(TranslationHelperService::class)
+            m::mock(Form::class)
         );
     }
 
@@ -54,11 +48,9 @@ class AvailableYearsTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dpTestEcmtShortTermSingleOption
-     */
-    public function testEcmtShortTermSingleOption($year, $optionHintTranslationKey)
+    public function testEcmtShortTermSingleOption()
     {
+        $year = 2019;
         $data = [
             'type' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
             'years' => [
@@ -66,18 +58,11 @@ class AvailableYearsTest extends TestCase
             ],
         ];
 
-        $translatedHint = 'Translated hint';
-
-        $this->translator->shouldReceive('translateReplace')
-            ->with($optionHintTranslationKey, [$year])
-            ->andReturn($translatedHint);
-
         $expectedValueOptions = [
             [
                 'value' => $year,
                 'label' => $year,
                 'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
-                'hint' => $translatedHint,
                 'attributes' => [
                     'id' => 'year'
                 ]
@@ -116,15 +101,6 @@ class AvailableYearsTest extends TestCase
         $this->assertEquals($expectedData, $returnedData);
     }
 
-    public function dpTestEcmtShortTermSingleOption()
-    {
-        return [
-            [2018, 'permits.page.year.ecmt-short-term.option.hint.not-2019'],
-            [2019, 'permits.page.year.ecmt-short-term.option.hint.2019'],
-            [2020, 'permits.page.year.ecmt-short-term.option.hint.not-2019'],
-        ];
-    }
-
     public function testEcmtShortTermMultipleOptions()
     {
         $data = [
@@ -134,26 +110,11 @@ class AvailableYearsTest extends TestCase
             ],
         ];
 
-        $translatedHint2018 = 'Translated hint 2018';
-        $translatedHint2019 = 'Translated hint 2019';
-        $translatedHint2020 = 'Translated hint 2020';
-
-        $this->translator->shouldReceive('translateReplace')
-            ->with('permits.page.year.ecmt-short-term.option.hint.not-2019', [2018])
-            ->andReturn($translatedHint2018);
-        $this->translator->shouldReceive('translateReplace')
-            ->with('permits.page.year.ecmt-short-term.option.hint.2019', [2019])
-            ->andReturn($translatedHint2019);
-        $this->translator->shouldReceive('translateReplace')
-            ->with('permits.page.year.ecmt-short-term.option.hint.not-2019', [2020])
-            ->andReturn($translatedHint2020);
-
         $expectedValueOptions = [
             [
                 'value' => 2018,
                 'label' => 2018,
                 'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
-                'hint' => $translatedHint2018,
                 'attributes' => [
                     'id' => 'year'
                 ]
@@ -162,13 +123,11 @@ class AvailableYearsTest extends TestCase
                 'value' => 2019,
                 'label' => 2019,
                 'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
-                'hint' => $translatedHint2019,
             ],
             [
                 'value' => 2020,
                 'label' => 2020,
                 'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
-                'hint' => $translatedHint2020,
             ],
         ];
 
