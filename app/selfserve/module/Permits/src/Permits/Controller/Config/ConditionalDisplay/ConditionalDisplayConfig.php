@@ -274,7 +274,9 @@ class ConditionalDisplayConfig
     ];
 
     const IRHP_APP_CAN_VIEW_CANDIDATE_PERMITS = [
-        IrhpAppDataSource::DATA_KEY => [
+        [
+            'source' => IrhpAppDataSource::DATA_KEY,
+            'route' => IrhpApplicationSection::ROUTE_PERMITS,
             'key' => 'canViewCandidatePermits',
             'value' => true
         ],
