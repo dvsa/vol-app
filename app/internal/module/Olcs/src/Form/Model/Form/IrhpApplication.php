@@ -8,7 +8,7 @@ use Zend\Form\Annotation as Form;
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("irhpApplication")
  * @Form\Attributes({"method":"post"})
- * @Form\Type("Common\Form\Form")
+ * @Form\Type("Common\Form\BaseQaForm")
  * @Form\Options({"prefer_form_input_filter": true})
  */
 class IrhpApplication
