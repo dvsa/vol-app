@@ -17,13 +17,13 @@ use Dvsa\Olcs\Transfer\Command\Permits\CancelEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Command\Permits\EcmtSubmitApplication;
 use Dvsa\Olcs\Transfer\Command\Permits\WithdrawEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\GetAllByLicence as ListDTO;
+use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\ById as StockById;
 use Dvsa\Olcs\Transfer\Query\Permits\AvailableStocks;
 use Dvsa\Olcs\Transfer\Query\Permits\AvailableYears;
 use Dvsa\Olcs\Transfer\Query\Permits\ById as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceDto;
-use Dvsa\Olcs\Transfer\Query\Permits\EmissionsByYear;
 use Dvsa\Olcs\Transfer\Query\Permits\Sectors as SectorsDto;
-use Dvsa\Olcs\Transfer\Command\Permits\CreateFullPermitApplication as CreateDto;
+use Dvsa\Olcs\Transfer\Command\IrhpApplication\Create as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtPermitApplication as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\Permits\DeclineEcmtPermits as DeclineDTO;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
@@ -33,6 +33,7 @@ use Olcs\Controller\Interfaces\IrhpPermitApplicationControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\IrhpPermitApplication as IrhpPermitApplicationMapper;
 use Olcs\Form\Model\Form\PermitCreate;
+use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 
@@ -119,8 +120,8 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
     // Scripts to include when rendering actions.
     protected $inlineScripts = [
         'indexAction' => ['table-actions'],
-        'editAction' => ['permits', 'forms/ecmt-form'],
-        'addAction' => ['permits', 'forms/ecmt-form'],
+        'editAction' => ['permits'],
+        'addAction' => ['permits'],
         'selectTypeAction' => ['forms/select-type-modal']
     ];
 
@@ -215,7 +216,12 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
                         ->toRouteAjax(
                             'licence/permits/add',
                             ['licence' => $this->params()->fromRoute('licence')],
-                            ['query' => ['permitTypeId' => $permitTypeId]]
+                            [
+                                'query' => [
+                                    'permitTypeId' => $permitTypeId,
+                                    'irhpPermitStock' => $this->params()->fromPost()['stock']
+                                ]
+                            ]
                         );
                 case RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID:
                     return $this->redirect()
@@ -364,6 +370,10 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
         $licence = $this->getLicence();
         $formData['fields']['numVehicles'] = $licence['totAuthVehicles'];
         $formData['fields']['numVehiclesLabel'] = $licence['totAuthVehicles'];
+        if (!empty($formData['fields']['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock']['id'])) {
+            $formData['fields']['irhpPermitStock'] = $formData['fields']['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock']['id'];
+        }
+        $form = $this->getRangeEmissions($form, $formData['fields']['irhpPermitStock']);
         $form = $this->getSectors($form, $formData['fields']['sectors']);
         // When editing and saving with validation errors this if/else is necessary to properly set year.
         if (array_key_exists('irhpPermitApplications', $formData['fields'])) {
@@ -372,7 +382,7 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
         } else {
             $year = $formData['fields']['year'];
         }
-        $form = $this->getAvailableYears($form, $year);
+
         $form->setData($formData);
         return $form;
     }
@@ -388,14 +398,43 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
     protected function alterFormForAdd($form, $formData)
     {
         $licence = $this->getLicence();
+        $formData['fields']['year'] = $this->params()->fromPost('year');
         $formData['fields']['licence'] = $licence['id'];
         $formData['fields']['numVehicles'] = $licence['totAuthVehicles'];
         $formData['fields']['numVehiclesLabel'] = $licence['totAuthVehicles'];
         $formData['fields']['dateReceived'] = date('Y-m-d');
+        $formData['fields']['irhpPermitStock'] = $this->params()->fromQuery('irhpPermitStock');
+        $form = $this->getRangeEmissions($form, $this->params()->fromQuery('irhpPermitStock'));
         $form = $this->getSectors($form);
-        $form = $this->getAvailableYears($form);
         $form->setData($formData);
         return $form;
+    }
+
+    /**
+     * @param Form $form
+     * @param int $irhpPermitStockId
+     *
+     * @return Form
+     */
+    protected function getRangeEmissions($form, $irhpPermitStockId)
+    {
+        $stockResponse = $this->handleQuery(
+            StockById::create(['id' => $irhpPermitStockId])
+        );
+        if ($stockResponse->isOk()) {
+            $irhpPermitStock = $stockResponse->getResult();
+
+            if($irhpPermitStock['hasEuro5Range']) {
+                $form->get('fields')->get('requiredEuro5')->setAttribute('data-container-class', '');
+            }
+            if($irhpPermitStock['hasEuro6Range']) {
+                $form->get('fields')->get('requiredEuro6')->setAttribute('data-container-class', '');
+            }
+        } else {
+            $this->checkResponse($stockResponse);
+        }
+
+        return($form);
     }
 
     /**
@@ -438,12 +477,8 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
             $this->checkResponse($response);
         }
 
-        $mappedYears = IrhpPermitApplicationMapper::mapYears($years, $selectedYear);
-        $form->get('fields')->get('yearRadios')->setValueOptions($mappedYears);
-
         return $form;
     }
-
 
     /**
      * Retrieves available years list and populates Value options for Add and Edit forms
@@ -489,24 +524,6 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
 
         return new JsonModel($stocks);
     }
-
-    /**
-     * Handles AJAX request for emissions/ranges and returns values as JSON
-     *
-     * @return JsonModel
-     */
-    public function emissionsAction()
-    {
-        $response = $this->handleQuery(EmissionsByYear::create(['irhpPermitType' => RefData::ECMT_PERMIT_TYPE_ID, 'year' => $this->params()->fromQuery('year')]));
-        $years = [];
-        if ($response->isOk()) {
-            $years = $response->getResult();
-        } else {
-            $this->checkResponse($response);
-        }
-        return new JsonModel($years);
-    }
-
 
     /**
      * Handles click of the Submit button on right-sidebar

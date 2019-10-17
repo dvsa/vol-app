@@ -16,6 +16,7 @@ class SelectPermitType
     /**
      * @Form\Attributes({"id":"permitType"})
      * @Form\Options({
+     *     "empty_option": "Please Select",
      *     "label": "Select Permit Type",
      *     "short-label": "Permit Type",
      *     "label_attributes": {"id": "label-permit-type"},
