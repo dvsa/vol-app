@@ -3,6 +3,7 @@
 namespace Olcs\Data\Mapper;
 
 use Common\Data\Mapper\MapperInterface;
+use Common\RefData;
 use Zend\Form\FormInterface;
 
 /**
@@ -39,6 +40,8 @@ class IrhpPermitApplication implements MapperInterface
     public static function mapFromForm(array $data)
     {
         $data['fields']['countryIds'] = $data['fields']['countrys'];
+        $data['fields']['irhpPermitType'] = RefData::ECMT_PERMIT_TYPE_ID;
+        $data['fields']['fromInternal'] = 1;
         unset($data['fields']['countrys']);
         return $data['fields'];
     }
@@ -73,28 +76,6 @@ class IrhpPermitApplication implements MapperInterface
                 'value' => $option['id'],
                 'label' => $option['name'],
                 'selected' => (!empty($selectedSector) && $option['id'] === $selectedSector)
-            ];
-        }
-
-        return $valueOptions;
-    }
-
-
-    /**
-     * Map retrieved sectors list for form field and set selected value if exists
-     *
-     * @param array $mapData
-     * @param $selectedOption
-     * @return array
-     */
-    public static function mapYears(array $mapData, $selectedOption)
-    {
-        $valueOptions = [];
-        foreach ($mapData['years'] as $option) {
-            $valueOptions[] = [
-                'value' => $option,
-                'label' => $option,
-                'selected' => (!empty($selectedOption) && $option === $selectedOption)
             ];
         }
 

@@ -16,6 +16,7 @@ class SelectPermitType
     /**
      * @Form\Attributes({"id":"permitType"})
      * @Form\Options({
+     *     "empty_option": "Please Select",
      *     "label": "Select Permit Type",
      *     "short-label": "Permit Type",
      *     "label_attributes": {"id": "label-permit-type"},
@@ -43,6 +44,22 @@ class SelectPermitType
      */
     public $year = null;
 
+    /**
+     * @Form\Name("stock")
+     * @Form\Required(false)
+     * @Form\Attributes({
+     *   "data-container-class":"js-hidden stock",
+     *   "id" : "stock",
+     * })
+     * @Form\Options({
+     *      "label": "Select a stock",
+     *      "fieldset-attributes": {"id": "year-list", "class":"inline"},
+     *      "label_attributes": {"class": "form-control form-control--radio"},
+     *      "disable_inarray_validator" : true,
+     * })
+     * @Form\Type("Select")
+     */
+    public $stock = null;
 
     /**
      * @Form\Name("form-actions")
