@@ -261,7 +261,7 @@ abstract class AbstractDocumentController extends AbstractController
         $query = MyAccount::create([]);
         $response = $this->querySender->send($query)->getResult();
 
-        return $response['osType'] ?? "";
+        return $response['osType'] ?? "windows_7";
     }
 
 
