@@ -9,6 +9,7 @@ use Dvsa\Olcs\Transfer\Query\Application\Application;
 use Dvsa\Olcs\Transfer\Query\Cases\Cases;
 use Dvsa\Olcs\Transfer\Query\Document\Letter;
 use Dvsa\Olcs\Transfer\Query as TransferQry;
+use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 use Olcs\Controller\AbstractController;
 use Common\Category;
 
@@ -243,4 +244,25 @@ abstract class AbstractDocumentController extends AbstractController
 
         return $data;
     }
+
+    /**
+     * @return mixed
+     */
+    protected function getUriPattern()
+    {
+        $prefix = $this->getOsType();
+        $uriPattern = $this->getServiceLocator()->get('Config')[$prefix . 'document_share']['uri_pattern'];
+        return $uriPattern;
+    }
+
+    private function getOsType():string
+    {
+        //check which ostype
+        $query = MyAccount::create([]);
+        $response = $this->querySender->send($query)->getResult();
+
+        return $response['osType'] ?? "";
+    }
+
+
 }
