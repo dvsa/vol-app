@@ -429,6 +429,9 @@ class IrhpApplicationController extends AbstractInternalController implements
 
         if ($formData['topFields']['isApplicationPathEnabled']) {
             $form = $this->questionAnswerFormSetup($this->params()->fromRoute('irhpAppId'), $form);
+            if ($this->request->isPost()) {
+                $formData = $form->updateDataForQa($formData);
+            }
         } else {
             $formData = $this->nonQuestionAnswerFormSetup($form, $formData, $licence);
         }
