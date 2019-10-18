@@ -23,6 +23,8 @@ class ConditionalDisplayConfig
         [
             'source' => AvailableTypes::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_WINDOW_CLOSED,
+            'key' => 'hasTypes',
+            'value' => true
         ],
     ];
 
@@ -39,6 +41,8 @@ class ConditionalDisplayConfig
         [
             'source' => AvailableStocks::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_WINDOW_CLOSED,
+            'key' => 'hasStocks',
+            'value' => true
         ],
     ];
 

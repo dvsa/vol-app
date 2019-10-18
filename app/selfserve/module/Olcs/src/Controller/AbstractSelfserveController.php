@@ -486,11 +486,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
             $data = $this->data[$criteria['source']];
 
             //if checking a specific key enter the first block, if no key being checked, verify the data isn't empty
-            if (isset($data[$criteria['key']])) {
-                if ($data[$criteria['key']] === $criteria['value']) {
-                    continue;
-                }
-            } elseif (!empty($data)) {
+            if ($data[$criteria['key']] === $criteria['value']) {
                 continue;
             }
 
