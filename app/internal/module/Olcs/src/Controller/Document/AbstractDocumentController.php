@@ -251,16 +251,16 @@ abstract class AbstractDocumentController extends AbstractController
     protected function getUriPattern()
     {
         $prefix = $this->getOsType();
-        $uriPattern = $this->getServiceLocator()->get('Config')[$prefix . 'document_share']['uri_pattern'];
+        $uriPattern = $this->getServiceLocator()->get('Config')[$prefix . '_document_share']['uri_pattern'];
         return $uriPattern;
     }
 
-    private function getOsType():string
+    private function getOsType(): string
     {
         //check which ostype
         $query = MyAccount::create([]);
-        $response = $this->querySender->send($query)->getResult();
+        $response = $this->handleQuery($query)->getResult();
 
-        return $response['osType'] ?? "windows_7";
+        return $response['osType']['id'] ?? "windows_7";
     }
 }
