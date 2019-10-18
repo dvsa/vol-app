@@ -24,6 +24,7 @@ class IrhpApplicationFeeSummary
     const PERMIT_STATUS_HEADING = 'permits.page.fee.permit.status';
     const PERMIT_TYPE_HEADING = 'permits.page.fee.permit.type';
     const PERMIT_YEAR_HEADING = 'permits.page.fee.permit.year';
+    const PERMIT_PERIOD_HEADING = 'permits.page.fee.permit.period';
     const NUM_PERMITS_HEADING = 'permits.page.fee.number.permits';
     const NUM_PERMITS_REQUIRED_HEADING = 'permits.page.fee.number.permits.required';
     const FEE_TOTAL_HEADING = 'permits.page.irhp-fee.permit.fee.total';
@@ -195,7 +196,7 @@ class IrhpApplicationFeeSummary
             return [
                 $this->getPermitStatusRow($data),
                 $this->getPermitTypeRow($data),
-                $this->getStockValidityYearRow($data),
+                $this->getStockValidityPeriodRow($data),
                 $this->getApplicationReferenceRow($data),
                 $this->getDateReceivedRow($data),
                 $this->getEmissionsCatNoOfPermitsRow($data),
@@ -209,7 +210,7 @@ class IrhpApplicationFeeSummary
             // accept/decline page has different content of the table
             return [
                 $this->getPermitTypeRow($data),
-                $this->getStockValidityYearRow($data),
+                $this->getStockValidityPeriodRow($data),
                 $this->getApplicationReferenceRow($data),
                 $this->getEmissionsCatNoOfPermitsRow($data),
                 $this->getIssueFeePerPermitRow($data, RefData::IRHP_GV_ISSUE_FEE_TYPE),
@@ -224,7 +225,7 @@ class IrhpApplicationFeeSummary
 
         return [
             $this->getPermitTypeRow($data),
-            $this->getStockValidityYearRow($data),
+            $this->getStockValidityPeriodRow($data),
             $this->getApplicationReferenceRow($data),
             $this->getDateReceivedRow($data),
             $this->getEmissionsCatNoOfPermitsRow($data),
@@ -277,14 +278,20 @@ class IrhpApplicationFeeSummary
      *
      * @return array
      */
-    private function getStockValidityYearRow(array $data)
+    private function getStockValidityPeriodRow(array $data)
     {
-        $stockValidTo = $data['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock']['validTo'];
-        $validityYear = (new DateTime($stockValidTo))->format('Y');
+        $stock = $data['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock'];
+
+        if (!empty($stock['periodNameKey'])) {
+            return [
+                'key' => self::PERMIT_PERIOD_HEADING,
+                'value' => $stock['periodNameKey']
+            ];
+        }
 
         return [
             'key' => self::PERMIT_YEAR_HEADING,
-            'value' => $validityYear
+            'value' => $stock['validityYear']
         ];
     }
 

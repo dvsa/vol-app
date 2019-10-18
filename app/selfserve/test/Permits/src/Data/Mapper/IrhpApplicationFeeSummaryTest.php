@@ -259,7 +259,7 @@ class IrhpApplicationFeeSummaryTest extends TestCase
         $formattedDateReceived = '25 December 2020';
 
         $stockValidTo = '2022-12-31';
-        $permitYear = 2022;
+        $permitPeriod = 'period.value';
 
         $formattedNoOfPermitsRequiredLine1 = '1 permit for Euro 5 minimum emission standard';
         $formattedNoOfPermitsRequiredLine2 = '5 permits for Euro 6 minimum emission standard';
@@ -271,6 +271,7 @@ class IrhpApplicationFeeSummaryTest extends TestCase
             'requiredEuro6' => 5,
             'irhpPermitWindow' => [
                 'irhpPermitStock' => [
+                    'periodNameKey' => $permitPeriod,
                     'validTo' => $stockValidTo
                 ]
             ]
@@ -347,8 +348,8 @@ class IrhpApplicationFeeSummaryTest extends TestCase
                     'value' => $permitTypeDesc,
                 ],
                 [
-                    'key' => IrhpApplicationFeeSummary::PERMIT_YEAR_HEADING,
-                    'value' => $permitYear,
+                    'key' => IrhpApplicationFeeSummary::PERMIT_PERIOD_HEADING,
+                    'value' => $permitPeriod,
                 ],
                 [
                     'key' => IrhpApplicationFeeSummary::APP_REFERENCE_HEADING,
@@ -396,7 +397,6 @@ class IrhpApplicationFeeSummaryTest extends TestCase
         $dateReceived = '2020-12-25';
         $formattedDateReceived = '25 December 2020';
 
-        $stockValidTo = '2022-12-31';
         $permitYear = 2022;
 
         $formattedNoOfPermitsRequiredLine1 = '1 permit for Euro 5 minimum emission standard';
@@ -409,7 +409,7 @@ class IrhpApplicationFeeSummaryTest extends TestCase
             'requiredEuro6' => 5,
             'irhpPermitWindow' => [
                 'irhpPermitStock' => [
-                    'validTo' => $stockValidTo
+                    'validityYear' => $permitYear
                 ]
             ]
         ];
@@ -537,7 +537,6 @@ class IrhpApplicationFeeSummaryTest extends TestCase
         $feeDueDate = '2020-12-25';
         $formattedFeeDueDate = '25 December 2020';
 
-        $stockValidTo = '2022-12-31';
         $permitYear = 2022;
 
         $formattedNoOfPermitsRequiredLine1 = '1 permit for Euro 5 minimum emission standard';
@@ -550,7 +549,7 @@ class IrhpApplicationFeeSummaryTest extends TestCase
             'requiredEuro6' => 5,
             'irhpPermitWindow' => [
                 'irhpPermitStock' => [
-                    'validTo' => $stockValidTo
+                    'validityYear' => $permitYear
                 ]
             ]
         ];
@@ -673,7 +672,6 @@ class IrhpApplicationFeeSummaryTest extends TestCase
         $totalPermitsRequired = 10;
         $totalPermitsAwarded = 10;
 
-        $stockValidTo = '2022-12-31';
         $permitYear = 2022;
 
         $formattedNoOfPermitsRequiredLine1 = '1 permit for Euro 5 minimum emission standard';
@@ -687,7 +685,7 @@ class IrhpApplicationFeeSummaryTest extends TestCase
             'requiredEuro6' => 5,
             'irhpPermitWindow' => [
                 'irhpPermitStock' => [
-                    'validTo' => $stockValidTo
+                    'validityYear' => $permitYear
                 ]
             ]
         ];
