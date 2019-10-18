@@ -395,6 +395,8 @@ class IrhpApplicationController extends AbstractInternalController implements
         );
         $form->setData($formData);
 
+        $form->get('topFields')->remove('stockHtml');
+
         return $form;
     }
 
@@ -431,6 +433,22 @@ class IrhpApplicationController extends AbstractInternalController implements
             $form = $this->questionAnswerFormSetup($this->params()->fromRoute('irhpAppId'), $form);
         } else {
             $formData = $this->nonQuestionAnswerFormSetup($form, $formData, $licence);
+        }
+
+        if (!empty($formData['topFields']['stockText'])) {
+            $formData['topFields']['stockHtml'] = $formData['topFields']['stockText'];
+        } elseif (!empty($formData['fields']['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock'])) {
+            $irhpPermitStock = $formData['fields']['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock'];
+
+            $translator = $this->getServiceLocator()->get('Helper\Translation');
+            $stockText = sprintf(
+                '%s %s',
+                $irhpPermitStock['irhpPermitType']['name']['description'],
+                !empty($irhpPermitStock['periodNameKey'])
+                    ? $translator->translate($irhpPermitStock['periodNameKey'])
+                    : $irhpPermitStock['validityYear']
+            );
+            $formData['topFields']['stockText'] = $formData['topFields']['stockHtml'] = $stockText;
         }
 
         $form->setData($formData);
