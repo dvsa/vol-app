@@ -12,11 +12,9 @@ class UnpaidEcmtPermits
     {
         $permits = [];
 
-        $cnt = 0;
         foreach ($data['result'] as $permit) {
-            $cnt++;
             $permits[] = [
-                'permitNumber' => $cnt,
+                'permitNumber' => $permit['permitNumber'],
                 'emissionsCategory' => $permit['irhpPermitRange']['emissionsCategory'],
                 'countries' => $permit['irhpPermitRange']['countrys'],
             ];

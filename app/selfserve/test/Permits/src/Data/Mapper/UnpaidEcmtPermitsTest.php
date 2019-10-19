@@ -29,7 +29,7 @@ class UnpaidEcmtPermitsTest extends \PHPUnit\Framework\TestCase
                 'input' => [
                     'result' => [
                         [
-                            'permitNumber' => null,
+                            'permitNumber' => 1,
                             'irhpPermitRange' => [
                                 'emissionsCategory' => [
                                     'id' => 'EURO5'
@@ -48,7 +48,7 @@ class UnpaidEcmtPermitsTest extends \PHPUnit\Framework\TestCase
                             ],
                         ],
                         [
-                            'permitNumber' => null,
+                            'permitNumber' => 2,
                             'irhpPermitRange' => [
                                 'emissionsCategory' => [
                                     'id' => 'EURO5'
@@ -64,7 +64,7 @@ class UnpaidEcmtPermitsTest extends \PHPUnit\Framework\TestCase
                             ],
                         ],
                         [
-                            'permitNumber' => null,
+                            'permitNumber' => 3,
                             'irhpPermitRange' => [
                                 'emissionsCategory' => [
                                     'id' => 'EURO5'
@@ -77,7 +77,7 @@ class UnpaidEcmtPermitsTest extends \PHPUnit\Framework\TestCase
                             ],
                         ],
                         [
-                            'permitNumber' => null,
+                            'permitNumber' => 4,
                             'irhpPermitRange' => [
                                 'emissionsCategory' => [
                                     'id' => 'EURO5'
