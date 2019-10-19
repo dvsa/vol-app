@@ -3,6 +3,7 @@
 namespace Olcs\Service\Qa;
 
 use Common\Service\Qa\FieldsetPopulator;
+use Common\Service\Qa\UsageContext;
 
 class FormProvider
 {
@@ -37,7 +38,7 @@ class FormProvider
     {
         $form = $this->formFactory->create();
         $form->setApplicationStep($options);
-        $this->fieldsetPopulator->populate($form, [$options]);
+        $this->fieldsetPopulator->populate($form, [$options], UsageContext::CONTEXT_SELFSERVE);
         return $form;
     }
 }

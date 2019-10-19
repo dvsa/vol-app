@@ -3,6 +3,7 @@
 namespace OlcsTest\Service\Qa;
 
 use Common\Service\Qa\FieldsetPopulator;
+use Common\Service\Qa\UsageContext;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Service\Qa\FormProvider;
@@ -31,7 +32,7 @@ class FormProviderTest extends MockeryTestCase
 
         $fieldsetPopulator = m::mock(FieldsetPopulator::class);
         $fieldsetPopulator->shouldReceive('populate')
-            ->with($form, [$options])
+            ->with($form, [$options], UsageContext::CONTEXT_SELFSERVE)
             ->once();
 
         $sut = new FormProvider($formFactory, $fieldsetPopulator);
