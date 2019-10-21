@@ -94,4 +94,11 @@ class MyDetailsController extends AbstractInternalController implements LeftView
             true
         );
     }
+
+    protected function alterFormForEdit($form, $formData)
+    {
+        /* @var $form \Common\Form\Form */
+        $form->get('userSettings')->remove('osType');
+        return $form;
+    }
 }
