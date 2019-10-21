@@ -45,14 +45,11 @@ return array(
         ]
     ],
 
-   // Document service
-       'windows_7_document_share' => [
-           // File hyperlink to document
-           'uri_pattern' => 'file://///<host>/OLCS/olcs/%s',
-       ],
-       'windows_10_document_share' => [
-           'uri_pattern' => 'http://<url>/OLCS/olcs/%s',
-       ],
+    // Document service
+    'document_share' => [
+        // File hyperlink to document
+        'uri_pattern' => 'file://///fs01.olcs.mgt.mtpdvsa/OLCS/olcs/%s',
+    ],
 
     // Asset path, URI to olcs-static (CSS, JS, etc) *Environment specific*
     'asset_path' => 'https://iuap1.olcs.dev.nonprod.dvsa.aws/static/public',
