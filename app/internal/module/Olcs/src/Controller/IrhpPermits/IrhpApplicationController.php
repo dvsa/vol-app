@@ -13,6 +13,7 @@ use Common\Data\Mapper\Permits\NoOfPermits;
 use Common\FeatureToggle;
 use Common\RefData;
 use Common\Service\Cqrs\Exception\NotFoundException;
+use Common\Service\Qa\UsageContext;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\CancelApplication;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\Grant;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\SubmitApplication;
@@ -502,7 +503,7 @@ class IrhpApplicationController extends AbstractInternalController implements
         $applicationSteps = $response->getResult();
 
         $fieldsetPopulator = $this->getServiceLocator()->get('QaFieldsetPopulator');
-        $fieldsetPopulator->populate($form, $applicationSteps);
+        $fieldsetPopulator->populate($form, $applicationSteps, UsageContext::CONTEXT_INTERNAL);
         return $form;
     }
 
