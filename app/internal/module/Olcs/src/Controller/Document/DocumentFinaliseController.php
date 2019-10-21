@@ -75,7 +75,7 @@ class DocumentFinaliseController extends AbstractDocumentController
         $documentSubCategory = $data['data']['subCategory']['subCategoryName'];
         $templateName = $data['data']['template']['description'];
 
-        $uriPattern = $this->getUriPattern();
+        $uriPattern = $this->getServiceLocator()->get('Config')['document_share']['uri_pattern'];
 
         $url = sprintf($uriPattern, $data['data']['identifier']);
 
