@@ -11,6 +11,19 @@ use Zend\Form\Annotation as Form;
 class Top extends \Olcs\Form\Model\Fieldset\Base
 {
     /**
+     * @Form\Type("\Common\Form\Elements\Types\Readonly")
+     * @Form\Options({
+     *     "label": "Stock"
+     * })
+     */
+    public $stockHtml = null;
+
+    /**
+     * @Form\Type("Zend\Form\Element\Hidden")
+     */
+    public $stockText = null;
+
+    /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
      * @Form\Required(false)

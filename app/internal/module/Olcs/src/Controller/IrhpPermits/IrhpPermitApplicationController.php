@@ -373,7 +373,7 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
         if (!empty($formData['fields']['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock']['id'])) {
             $formData['fields']['irhpPermitStock'] = $formData['fields']['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock']['id'];
         }
-        $form = $this->getRangeEmissions($form, $formData['fields']['irhpPermitStock']);
+        $form = $this->getStock($form, $formData['fields']['irhpPermitStock']);
         $form = $this->getSectors($form, $formData['fields']['sectors']);
         // When editing and saving with validation errors this if/else is necessary to properly set year.
         if (array_key_exists('irhpPermitApplications', $formData['fields'])) {
@@ -404,7 +404,7 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
         $formData['fields']['numVehiclesLabel'] = $licence['totAuthVehicles'];
         $formData['fields']['dateReceived'] = date('Y-m-d');
         $formData['fields']['irhpPermitStock'] = $this->params()->fromQuery('irhpPermitStock');
-        $form = $this->getRangeEmissions($form, $this->params()->fromQuery('irhpPermitStock'));
+        $form = $this->getStock($form, $this->params()->fromQuery('irhpPermitStock'));
         $form = $this->getSectors($form);
         $form->setData($formData);
         return $form;
@@ -416,7 +416,7 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
      *
      * @return Form
      */
-    protected function getRangeEmissions($form, $irhpPermitStockId)
+    protected function getStock($form, $irhpPermitStockId)
     {
         $stockResponse = $this->handleQuery(
             StockById::create(['id' => $irhpPermitStockId])
@@ -424,12 +424,20 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
         if ($stockResponse->isOk()) {
             $irhpPermitStock = $stockResponse->getResult();
 
-            if($irhpPermitStock['hasEuro5Range']) {
+            if ($irhpPermitStock['hasEuro5Range']) {
                 $form->get('fields')->get('requiredEuro5')->setAttribute('data-container-class', '');
             }
-            if($irhpPermitStock['hasEuro6Range']) {
+            if ($irhpPermitStock['hasEuro6Range']) {
                 $form->get('fields')->get('requiredEuro6')->setAttribute('data-container-class', '');
             }
+
+            $form->get('fields')->get('stockHtml')->setValue(
+                sprintf(
+                    '%s %s',
+                    $irhpPermitStock['irhpPermitType']['name']['description'],
+                    $irhpPermitStock['validityYear']
+                )
+            );
         } else {
             $this->checkResponse($stockResponse);
         }
@@ -466,6 +474,7 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
      * @param $form
      * @param int $selectedSector
      * @return mixed
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function getAvailableYears($form, $selectedYear = null)
     {

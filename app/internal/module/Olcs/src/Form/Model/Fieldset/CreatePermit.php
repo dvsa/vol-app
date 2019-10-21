@@ -23,6 +23,14 @@ class CreatePermit extends Base
     public $title = null;
 
     /**
+     * @Form\Type("\Common\Form\Elements\Types\Readonly")
+     * @Form\Options({
+     *     "label": "Stock"
+     * })
+     */
+    public $stockHtml = null;
+
+    /**
      * @Form\Attributes({"id":"dateReceived"})
      * @Form\Options({
      *     "label": "Date received",
