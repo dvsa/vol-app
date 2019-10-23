@@ -33,12 +33,13 @@ use Permits\Controller\IrhpAwaitingFeeController;
 use Permits\Controller\IrhpDeclineController;
 use Permits\Controller\IrhpUnpaidPermitsController;
 use Permits\Controller\IrhpValidPermitsController;
-use Permits\Controller\IrhpWindowClosedController;
+use Permits\Controller\IrhpPermitsExhaustedController;
 use Permits\Controller\IrhpNotEligibleController;
 use Permits\Controller\IrhpNoLicencesController;
 use Permits\Controller\QaController;
 use Permits\Controller\QaControllerFactory;
 use Permits\Controller\YearController;
+use Permits\Controller\WindowClosedController;
 use Permits\Controller\IrhpStockController;
 use Permits\Data\Mapper;
 
@@ -76,11 +77,12 @@ return [
         IrhpUnderConsiderationController::class => IrhpUnderConsiderationController::class,
         IrhpUnpaidPermitsController::class => IrhpUnpaidPermitsController::class,
         IrhpValidPermitsController::class => IrhpValidPermitsController::class,
-        IrhpWindowClosedController::class => IrhpWindowClosedController::class,
+        IrhpPermitsExhaustedController::class => IrhpPermitsExhaustedController::class,
         IrhpNotEligibleController::class => IrhpNotEligibleController::class,
         IrhpNoLicencesController::class => IrhpNoLicencesController::class,
         RestrictedCountriesController::class => RestrictedCountriesController::class,
         YearController::class => YearController::class,
+        WindowClosedController::class => WindowClosedController::class,
         IrhpStockController::class => IrhpStockController::class,
     ],
     'factories' => [
@@ -436,7 +438,18 @@ return [
                   'options' => [
                       'route'    => '/window-closed[/]',
                       'defaults' => [
-                          'controller'    => IrhpWindowClosedController::class,
+                          'controller'    => WindowClosedController::class,
+                          'action'        => 'generic',
+                      ],
+                  ],
+                  'may_terminate' => false,
+              ],
+              'exhausted' => [
+                  'type'    => 'segment',
+                  'options' => [
+                      'route'    => '/exhausted[/]',
+                      'defaults' => [
+                          'controller'    => IrhpPermitsExhaustedController::class,
                           'action'        => 'generic',
                       ],
                   ],

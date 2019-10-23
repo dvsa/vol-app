@@ -57,7 +57,7 @@ class ConditionalDisplayConfig
             'source' => LicencesAvailable::DATA_KEY,
             'key' => 'permitsAvailable',
             'value' => true,
-            'route' => IrhpApplicationSection::ROUTE_WINDOW_CLOSED,
+            'route' => IrhpApplicationSection::ROUTE_PERMITS_EXHAUSTED,
         ],
         [
             'source' => LicencesAvailable::DATA_KEY,
@@ -78,7 +78,7 @@ class ConditionalDisplayConfig
             'source' => LicencesAvailable::DATA_KEY,
             'key' => 'permitsAvailable',
             'value' => true,
-            'route' => IrhpApplicationSection::ROUTE_WINDOW_CLOSED,
+            'route' => IrhpApplicationSection::ROUTE_PERMITS_EXHAUSTED,
         ],
         [
             'source' => LicencesAvailable::DATA_KEY,
@@ -123,7 +123,7 @@ class ConditionalDisplayConfig
             'source' => PermitsAvailable::DATA_KEY,
             'key' => 'permitsAvailable',
             'value' => true,
-            'route' => IrhpApplicationSection::ROUTE_WINDOW_CLOSED,
+            'route' => IrhpApplicationSection::ROUTE_PERMITS_EXHAUSTED,
         ],
     ];
 
@@ -210,7 +210,7 @@ class ConditionalDisplayConfig
             'source' => PermitsAvailable::DATA_KEY,
             'key' => 'permitsAvailable',
             'value' => true,
-            'route' => IrhpApplicationSection::ROUTE_WINDOW_CLOSED,
+            'route' => IrhpApplicationSection::ROUTE_PERMITS_EXHAUSTED,
         ],
     ];
 
@@ -306,7 +306,7 @@ class ConditionalDisplayConfig
             'source' => PermitsAvailable::DATA_KEY,
             'key' => 'permitsAvailable',
             'value' => true,
-            'route' => IrhpApplicationSection::ROUTE_WINDOW_CLOSED,
+            'route' => IrhpApplicationSection::ROUTE_PERMITS_EXHAUSTED,
         ],
     ];
 
