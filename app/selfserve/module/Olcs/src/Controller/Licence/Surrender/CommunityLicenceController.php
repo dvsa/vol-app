@@ -3,7 +3,7 @@
 namespace Olcs\Controller\Licence\Surrender;
 
 use Common\RefData;
-use Olcs\Controller\Config\DataSource\DataSourceConfig;
+use Olcs\Controller\Config\DataSource\Surrender;
 use Olcs\Form\Model\Form\Surrender\CommunityLicence;
 use Common\Data\Mapper\Licence\Surrender\CommunityLicence as Mapper;
 
@@ -34,7 +34,8 @@ class CommunityLicenceController extends AbstractSurrenderController
 
     protected $conditionalDisplayConfig = [
         'default' => [
-            'surrender' => [
+            [
+                'source' => Surrender::DATA_KEY,
                 'key' => 'isInternationalLicence',
                 'value' => true,
                 'route' => 'licence/surrender/review/GET'

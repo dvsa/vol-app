@@ -26,6 +26,8 @@ use Zend\View\Model\ViewModel;
  */
 abstract class AbstractSelfserveController extends AbstractOlcsController
 {
+    const CONDITIONAL_REDIRECT_MSG = 'Key %s from source %s is not equal to %s - redirecting to route %s';
+
     /**
      * The current controller action
      *
@@ -489,6 +491,16 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
             if ($data[$criteria['key']] === $criteria['value']) {
                 continue;
             }
+
+            $message = sprintf(
+                self::CONDITIONAL_REDIRECT_MSG,
+                $criteria['key'],
+                $criteria['source'],
+                $criteria['value'],
+                $criteria['route']
+            );
+
+            Logger::info($message);
 
             return $this->conditionalDisplayNotMet($criteria['route']);
         }
