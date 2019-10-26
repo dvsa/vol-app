@@ -71,6 +71,12 @@ class PublicInquiryHearingTest extends AbstractFormValidationTestCase
         $this->assertFormElementIsRequired(['fields', 'witnesses'], true);
     }
 
+    public function testDrivers()
+    {
+        $element = ['fields', 'drivers'];
+        $this->assertFormElementNumber($element, 0, 99);
+    }
+
     public function testIsCancelled()
     {
         $this->assertFormElementIsRequired(['fields', 'isCancelled'], true);
