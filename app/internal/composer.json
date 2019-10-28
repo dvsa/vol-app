@@ -20,7 +20,7 @@
         "doctrine/annotations": "^1.2.3",
         "symfony/filesystem": "~3.0.0",
         "zf-commons/zfc-rbac": "~2.5.0",
-        "olcs/olcs-transfer": "1.2",
+        "olcs/olcs-transfer": "~4.206.0",
         "olcs/olcs-utils": "~4.206.0",
         "olcs/olcs-auth": "~4.206.0",
         "soflomo/purifier": "~0.1.0",
