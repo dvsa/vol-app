@@ -85,4 +85,9 @@ class UpdateContinuationTest extends AbstractFormValidationTestCase
             ['form-actions', 'printSeperator']
         );
     }
+
+    public function testViewContinuation()
+    {
+        $this->assertFormElementActionLink(['form-actions', 'viewContinuation']);
+    }
 }

@@ -16,6 +16,33 @@ class TmPreviousHistoryTest extends AbstractFormValidationTestCase
      */
     protected $formName = \Olcs\Form\Model\Form\TmPreviousHistory::class;
 
+    public function testPreviousHistoryHasConvictions()
+    {
+        $element = ['previousHistory', 'hasConvictions'];
+        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementAllowEmpty($element, false);
+        $this->assertFormElementValid($element, 'N');
+        $this->assertFormElementNotValid($element, 'Y', 'error');
+
+        $this->assertFormElementValid(
+            ['previousHistory'],
+            [
+                'hasConvictions' => 'Y',
+                'convictions' => ['rows' => 1],
+                'hasPreviousLicences' => 'N',
+            ]
+        );
+        $this->assertFormElementNotValid(
+            ['previousHistory'],
+            [
+                'hasConvictions' => 'Y',
+                'convictions' => ['rows' => 0],
+                'hasPreviousLicences' => 'N',
+            ],
+            'hasConvictions'
+        );
+    }
+
     public function testPreviousHistoryTable()
     {
         $element = ['previousHistory', 'convictions', 'table'];
@@ -42,6 +69,43 @@ class TmPreviousHistoryTest extends AbstractFormValidationTestCase
     {
         $this->assertFormElementNoRender(
             ['previousHistory', 'convictions', 'id']
+        );
+    }
+
+    public function testPreviousHistoryHasPreviousLicences()
+    {
+        $element = ['previousHistory', 'hasPreviousLicences'];
+        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementAllowEmpty($element, false);
+        $this->assertFormElementValid($element, 'N');
+        $this->assertFormElementNotValid($element, 'Y', 'error');
+
+        $this->assertFormElementValid(
+            ['previousHistory'],
+            [
+                'hasConvictions' => 'N',
+                'hasPreviousLicences' => 'Y',
+                'previousLicences' => ['rows' => 1],
+            ]
+        );
+        $this->assertFormElementNotValid(
+            ['previousHistory'],
+            [
+                'hasConvictions' => 'N',
+                'hasPreviousLicences' => 'Y',
+                'previousLicences' => ['rows' => 0],
+            ],
+            ['hasConvictions', 'hasPreviousLicences']
+        );
+        $this->assertFormElementNotValid(
+            ['previousHistory'],
+            [
+                'hasConvictions' => 'Y',
+                'convictions' => ['rows' => 1],
+                'hasPreviousLicences' => 'Y',
+                'previousLicences' => ['rows' => 0],
+            ],
+            ['hasConvictions', 'hasPreviousLicences']
         );
     }
 

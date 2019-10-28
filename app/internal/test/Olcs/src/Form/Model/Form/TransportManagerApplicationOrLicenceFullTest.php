@@ -63,17 +63,8 @@ class TransportManagerApplicationOrLicenceFullTest extends AbstractFormValidatio
 
     public function testFileUpload()
     {
-        $element = ['details', 'file', 'file'];
-        $this->assertFormElementRequired($element, false);
-        $this->assertFormElementAllowEmpty($element, true);
-        $this->assertFormElementType($element, AttachFilesButton::class);
-
-        $element = ['details', 'file', '__messages__'];
-        $this->assertFormElementHidden($element);
-
-        $element = ['details', 'file', 'upload'];
-        $this->assertFormElementType($element, ActionButton::class);
-        $this->assertFormElementRequired($element, false);
+        $element = ['details', 'file'];
+        $this->assertFormElementMultipleFileUpload($element);
     }
 
     public function testId()

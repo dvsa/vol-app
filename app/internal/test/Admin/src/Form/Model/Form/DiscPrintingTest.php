@@ -6,7 +6,7 @@ use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 use Zend\Form\Element\Radio;
 use Zend\Form\Element\Select;
 use Zend\Validator\InArray;
-use Zend\Form\Element\Button;
+use Zend\Validator\GreaterThan;
 
 /**
  * Class DiscPrintingTest
@@ -75,6 +75,17 @@ class DiscPrintingTest extends AbstractFormValidationTestCase
     {
         $element = ['discs-numbering', 'startNumber'];
         $this->assertFormElementText($element);
+    }
+
+    public function testDiscNumberingMaxPages()
+    {
+        $element = ['discs-numbering', 'maxPages'];
+        $this->assertFormElementNumber(
+            $element,
+            1,
+            null,
+            [GreaterThan::NOT_GREATER]
+        );
     }
 
     public function testDiscNumberingEnd()

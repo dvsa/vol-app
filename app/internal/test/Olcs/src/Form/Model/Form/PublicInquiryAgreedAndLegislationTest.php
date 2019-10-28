@@ -2,78 +2,138 @@
 
 namespace OlcsTest\Form\Model\Form;
 
-use Olcs\TestHelpers\FormTester\Data\Object as F;
+use Common\Form\Elements\Validators\DateNotInFuture;
+use Olcs\Form\Model\Form\PublicInquiryAgreedAndLegislation;
+use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
+use Olcs\Validator\TypeOfPI;
 
-/**
- * Class PublicInquiryAgreedAndLegislationTest
- * @package OlcsTest\FormTest
- * @group ComponentTests
- * @group FormTests
- */
-class PublicInquiryAgreedAndLegislationTest extends AbstractFormTest
+class PublicInquiryAgreedAndLegislationTest extends AbstractFormValidationTestCase
 {
-    protected $formName = '\Olcs\Form\Model\Form\PublicInquiryAgreedAndLegislation';
+    /**
+     * @var string The class name of the form being tested
+     */
+    protected $formName = PublicInquiryAgreedAndLegislation::class;
 
-    protected function getDynamicSelectData()
+    public function testFieldsAgreedDate()
     {
-        return [
+        $element = ['fields', 'agreedDate'];
+        $this->assertFormElementIsRequired($element, true);
+        $this->assertFormElementAllowEmpty($element, false);
+        $this->assertFormElementNotValid(
+            $element,
             [
-                ['fields', 'agreedByTc'],
-                ['tc1' => 'TC 1', 'tc2' => 'TC 2']
+                'day' => '15',
+                'month' => '06',
+                'year' => '2060'
             ],
-            [
-                ['fields', 'agreedByTcRole'],
-                ['tcrole1' => 'TC 1', 'tcrole2' => 'TC 2']
-            ],
-            [
-                ['fields', 'piTypes'],
-                ['pi_t_tm_only' => 'TM only', 'type2' => 'Type 2', 'type3' => 'Type 3']
-            ],
-            [
-                ['fields', 'reasons'],
-                ['reason1' => 'Reason 1', 'reason2' => 'Reason 2', 'reason3' => 'Reason 3']
-            ]
-        ];
+            [DateNotInFuture::IN_FUTURE]
+        );
+        $this->assertFormElementDate($element);
     }
 
-    protected function getFormData()
+    public function testFieldsAgreedByTc()
     {
-        return [
-            new F\Test(
-                new F\Stack(['fields', 'agreedDate']),
-                new F\Value(F\Value::VALID, ['day'=>'26', 'month'=>'09', 'year'=>'2013']),
-                new F\Value(F\Value::INVALID, null),
-                new F\Value(F\Value::INVALID, ['day'=>'26', 'month'=>'09', 'year'=>'2500'])
-            ),
-            new F\Test(
-                new F\Stack(['fields', 'agreedByTc']),
-                new F\Value(F\Value::VALID, 'tc1'),
-                new F\Value(F\Value::INVALID, null)
-            ),
-            new F\Test(
-                new F\Stack(['fields', 'agreedByTcRole']),
-                new F\Value(F\Value::VALID, 'tcrole1'),
-                new F\Value(F\Value::INVALID, null)
-            ),
-            new F\Test(
-                new F\Stack(['fields', 'piTypes']),
-                new F\Value(F\Value::VALID, ['pi_t_tm_only']),
-                new F\Value(F\Value::VALID, ['type2', 'type3']),
-                new F\Value(F\Value::INVALID, ['pi_t_tm_only', 'type2']),
-                new F\Value(F\Value::INVALID, null)
-            ),
-            new F\Test(
-                new F\Stack(['fields', 'reasons']),
-                new F\Value(F\Value::VALID, ['reason1']),
-                new F\Value(F\Value::VALID, ['reason2', 'reason3']),
-                new F\Value(F\Value::INVALID, null)
-            ),
-            new F\Test(
-                new F\Stack(['fields', 'comment']),
-                new F\Value(F\Value::VALID, ''),
-                new F\Value(F\Value::VALID, 'sdfjksdfjhksjdhksdjhfksdjfh'),
-                new F\Value(F\Value::INVALID, str_pad('', 4001, '+'))
-            )
-        ];
+        $element = ['fields', 'agreedByTc'];
+        $this->assertFormElementIsRequired($element, true);
+        $this->assertFormElementAllowEmpty($element, false);
+        $this->assertFormElementDynamicSelect($element);
+    }
+
+    public function testFieldsAgreedByTcRole()
+    {
+        $element = ['fields', 'agreedByTcRole'];
+        $this->assertFormElementIsRequired($element, true);
+        $this->assertFormElementAllowEmpty($element, false);
+        $this->assertFormElementDynamicSelect($element);
+    }
+
+    public function testFieldsAssignedCaseworker()
+    {
+        $element = ['fields', 'assignedCaseworker'];
+        $this->assertFormElementIsRequired($element, false);
+        $this->assertFormElementAllowEmpty($element, true);
+        $this->assertFormElementDynamicSelect($element, false);
+    }
+
+    public function testFieldsIsEcmsCase()
+    {
+        $element = ['fields', 'isEcmsCase'];
+        $this->assertFormElementIsRequired($element, true);
+        $this->assertFormElementAllowEmpty($element, false);
+        $this->assertFormElementDynamicSelect($element);
+    }
+
+    public function testFieldsEcmsFirstReceivedDate()
+    {
+        $element = ['fields', 'ecmsFirstReceivedDate'];
+        $this->assertFormElementIsRequired($element, false);
+        $this->assertFormElementAllowEmpty($element, true);
+        $this->assertFormElementNotValid(
+            $element,
+            [
+                'day' => '15',
+                'month' => '06',
+                'year' => '2060'
+            ],
+            [DateNotInFuture::IN_FUTURE]
+        );
+        $this->assertFormElementDate($element, false);
+    }
+
+    public function testFieldsPiTypes()
+    {
+        $element = ['fields', 'piTypes'];
+        $this->assertFormElementIsRequired($element, true);
+        $this->assertFormElementAllowEmpty($element, false);
+
+        $this->assertFormElementValid($element, ['pi_t_tm_only']);
+        $this->assertFormElementValid($element, ['type2', 'type3']);
+        $this->assertFormElementNotValid($element, ['pi_t_tm_only', 'type2'], TypeOfPI::TM_ONLY);
+    }
+
+    public function testFieldsReasons()
+    {
+        $element = ['fields', 'reasons'];
+        $this->assertFormElementIsRequired($element, true);
+        $this->assertFormElementAllowEmpty($element, false);
+        $this->assertFormElementDynamicSelect($element);
+    }
+
+    public function testFieldsComment()
+    {
+        $element = ['fields', 'comment'];
+        $this->assertFormElementIsRequired($element, false);
+        $this->assertFormElementAllowEmpty($element, true);
+        $this->assertFormElementText($element, 5, 4000);
+    }
+
+    public function testFieldsCase()
+    {
+        $element = ['fields', 'case'];
+        $this->assertFormElementHidden($element);
+    }
+
+    public function testFieldsId()
+    {
+        $element = ['fields', 'id'];
+        $this->assertFormElementHidden($element);
+    }
+
+    public function testFieldsVersion()
+    {
+        $element = ['fields', 'version'];
+        $this->assertFormElementHidden($element);
+    }
+
+    public function testFormActionsSubmit()
+    {
+        $element = ['form-actions', 'submit'];
+        $this->assertFormElementActionButton($element);
+    }
+
+    public function testFormActionsCancel()
+    {
+        $element = ['form-actions', 'cancel'];
+        $this->assertFormElementActionButton($element);
     }
 }

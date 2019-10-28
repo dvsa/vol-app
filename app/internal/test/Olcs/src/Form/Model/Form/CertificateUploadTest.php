@@ -3,7 +3,6 @@
 namespace OlcsTest\Form\Model\Form;
 
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
-use Common\Form\Elements\Types\AttachFilesButton;
 
 /**
  * Class CertificateUploadTest
@@ -19,20 +18,7 @@ class CertificateUploadTest extends AbstractFormValidationTestCase
 
     public function testFileUpload()
     {
-        $element = ['file','file'];
-        $this->assertFormElementType($element, AttachFilesButton::class);
-        $this->assertFormElementRequired($element, false);
-    }
-
-    public function testMessage()
-    {
-        $element = ['file', '__messages__'];
-        $this->assertFormElementHidden($element);
-    }
-
-    public function testUploadButton()
-    {
-        $element = ['file', 'upload'];
-        $this->assertFormElementActionButton($element);
+        $element = ['file'];
+        $this->assertFormElementMultipleFileUpload($element);
     }
 }
