@@ -4,6 +4,7 @@ namespace OlcsTest\Form\Model\Form;
 
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 use Zend\Form\Element\Radio;
+use Zend\Validator;
 
 /**
  * Class PublicInquiryHearingTest
@@ -74,7 +75,14 @@ class PublicInquiryHearingTest extends AbstractFormValidationTestCase
     public function testDrivers()
     {
         $element = ['fields', 'drivers'];
-        $this->assertFormElementNumber($element, 0, 99);
+
+        $this->assertFormElementValid($element, 0);
+        $this->assertFormElementValid($element, 1);
+
+        $this->assertFormElementValid($element, 99);
+        $this->assertFormElementNotValid($element, 100, Validator\Between::NOT_BETWEEN);
+
+        $this->assertFormElementNotValid($element, 'X', Validator\Digits::NOT_DIGITS);
     }
 
     public function testIsCancelled()

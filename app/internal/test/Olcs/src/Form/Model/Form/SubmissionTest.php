@@ -24,6 +24,8 @@ class SubmissionTest extends AbstractFormValidationTestCase
      */
     public function setUp()
     {
+        $this->markTestSkipped('TODO - OLCS-26047');
+
         $this->serviceManager = \OlcsTest\Bootstrap::getRealServiceManager();
 
         // We are doing this solely for the internal application.  This service

@@ -84,6 +84,7 @@ class SubmissionSectionsFactory implements FactoryInterface
      */
     private function getCase($serviceLocator)
     {
+        // TODO - OLCS-26047
         $cpm = $serviceLocator->get('ControllerPluginManager');
         $params = $cpm->get('params');
         $caseId = $params->fromRoute('case');
