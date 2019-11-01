@@ -32,6 +32,7 @@ OLCS.ready(function() {
       var fileUrl = $(this).data('file-url');
 
       var body = template.replace('%s', fileUrl);
+      body = body.replace('%l', fileUrl);
       var title = 'Open document';
 
       OLCS.modal.show(body, title);
