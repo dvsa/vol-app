@@ -9,6 +9,7 @@ $(function () {
     var stockDates = $(".stockDates");
     var typeSelect = $("#irhpPermitType");
     var pathProcessFields = $(".pathProcess");
+    var appPathGrp = $("#applicationPathGroup");
 
     function toggle(typeId) {
         if (typeId === BILATERAL_ID) {
@@ -35,4 +36,19 @@ $(function () {
     });
 
     toggle(parseInt(typeSelect.val(), 10));
+
+    $("#IrhpPermitStock").submit(function (e) {
+        if (
+            IS_QA_PROCESS.includes(parseInt(typeSelect.val(), 10))
+            && appPathGrp.val() == ""
+        ) {
+            e.preventDefault(e);
+            var closestEl = appPathGrp.closest($("div.field"));
+            if (!closestEl.hasClass("hasErrors")) {
+                closestEl.addClass("hasErrors").wrap("<div class='validation-wrapper'></div>")
+                    .prepend("<p class='error__text'>You must select an Application Path for this type.</p>");
+            }
+            return false;
+        }
+    });
 });
