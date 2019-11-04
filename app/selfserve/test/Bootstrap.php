@@ -8,7 +8,7 @@ use Zend\ServiceManager\ServiceManager;
 use Zend\Di\Di;
 use Mockery as m;
 
-error_reporting(E_ALL | E_STRICT);
+error_reporting(E_ALL & ~E_USER_DEPRECATED);
 chdir(dirname(__DIR__));
 //ini_set("display_errors", 1);
 ini_set('intl.default_locale', 'en_GB');
@@ -56,7 +56,6 @@ class Bootstrap
         self::$di = $di;
 
         self::setupLogger();
-
     }
 
     public static function setupLogger()
