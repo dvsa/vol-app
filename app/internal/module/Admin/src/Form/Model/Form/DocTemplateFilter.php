@@ -16,7 +16,7 @@ class DocTemplateFilter
      * @Form\Options({
      *     "label": "Category",
      *     "disable_inarray_validator": false,
-     *     "service_name": "Olcs\Service\Data\DocumentCategory",
+     *     "service_name": "Olcs\Service\Data\Category",
      *     "empty_option": "All",
      * })
      * @Form\Type("DynamicSelect")
