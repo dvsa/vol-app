@@ -120,9 +120,7 @@ class IrhpApplicationFeeSummary
      */
     private function getGuidanceData(array $data)
     {
-        if (!$data['canViewCandidatePermits'] || !isset($data['totalPermitsRequired'])
-            || !isset($data['totalPermitsAwarded'])
-        ) {
+        if ($data['businessProcess']['id'] != RefData::BUSINESS_PROCESS_APSG) {
             return [];
         }
 
@@ -199,8 +197,8 @@ class IrhpApplicationFeeSummary
                 $this->getStockValidityPeriodRow($data),
                 $this->getApplicationReferenceRow($data),
                 $this->getDateReceivedRow($data),
-                $this->getEmissionsCatNoOfPermitsRow($data),
-                $this->getTotalFeeRow(
+                $this->getEmissionsCatNoOfPermitsRequiredRow($data),
+                $this->getTotalFeeRowUsingPermitsRequired(
                     $data,
                     RefData::IRHP_GV_APPLICATION_FEE_TYPE,
                     self::TOTAL_APPLICATION_FEE_PAID_HEADING
@@ -208,13 +206,14 @@ class IrhpApplicationFeeSummary
             ];
         } elseif ($data['isAwaitingFee']) {
             // accept/decline page has different content of the table
+
             return [
                 $this->getPermitTypeRow($data),
                 $this->getStockValidityPeriodRow($data),
                 $this->getApplicationReferenceRow($data),
-                $this->getEmissionsCatNoOfPermitsRow($data),
+                $this->getEmissionsCatNoOfPermitsAwardedRow($data),
                 $this->getIssueFeePerPermitRow($data, RefData::IRHP_GV_ISSUE_FEE_TYPE),
-                $this->getTotalFeeRow(
+                $this->getTotalFeeRowUsingPermitsAwarded(
                     $data,
                     RefData::IRHP_GV_ISSUE_FEE_TYPE,
                     self::TOTAL_ISSUE_FEE_HEADING
@@ -228,9 +227,9 @@ class IrhpApplicationFeeSummary
             $this->getStockValidityPeriodRow($data),
             $this->getApplicationReferenceRow($data),
             $this->getDateReceivedRow($data),
-            $this->getEmissionsCatNoOfPermitsRow($data),
+            $this->getEmissionsCatNoOfPermitsRequiredRow($data),
             $this->getApplicationFeePerPermitRow($data, RefData::IRHP_GV_APPLICATION_FEE_TYPE),
-            $this->getTotalFeeRow(
+            $this->getTotalFeeRowUsingPermitsRequired(
                 $data,
                 RefData::IRHP_GV_APPLICATION_FEE_TYPE,
                 self::TOTAL_APPLICATION_FEE_HEADING
@@ -361,16 +360,50 @@ class IrhpApplicationFeeSummary
     }
 
     /**
-     * Get the single table row content for a number of permits row that uses emissions categories
+     * Get the single table row content for a number of permits required row that uses emissions categories
      *
      * @param array $data input data
      *
      * @return array
      */
-    private function getEmissionsCatNoOfPermitsRow(array $data)
+    private function getEmissionsCatNoOfPermitsRequiredRow(array $data)
+    {
+        return $this->getEmissionsCatNoOfPermitsRow(
+            $data,
+            $data['irhpPermitApplications'][0]
+        );
+    }
+
+    /**
+     * Get the single table row content for a number of permits awarded row that uses emissions categories
+     *
+     * @param array $data input data
+     *
+     * @return array
+     */
+    private function getEmissionsCatNoOfPermitsAwardedRow(array $data)
     {
         $irhpPermitApplication = $data['irhpPermitApplications'][0];
-        $lines = $this->ecmtNoOfPermits->mapForDisplay($irhpPermitApplication);
+
+        $ecmtNoOfPermitsData = [
+            'requiredEuro5' => $irhpPermitApplication['euro5PermitsAwarded'],
+            'requiredEuro6' => $irhpPermitApplication['euro6PermitsAwarded']
+        ];
+
+        return $this->getEmissionsCatNoOfPermitsRow($data, $ecmtNoOfPermitsData);
+    }
+
+    /**
+     * Get the single table row content for a number of permits row, using the supplied ecmtNoOfPermits data as input
+     * into the mapper
+     *
+     * @param array $data input data
+     *
+     * @return array
+     */
+    private function getEmissionsCatNoOfPermitsRow(array $data, array $ecmtNoOfPermitsData)
+    {
+        $lines = $this->ecmtNoOfPermits->mapForDisplay($ecmtNoOfPermitsData);
 
         if ($data['canViewCandidatePermits']) {
             $lines[] = sprintf(
@@ -454,7 +487,8 @@ class IrhpApplicationFeeSummary
     }
 
     /**
-     * Get the single table row content for a total fee per permit row
+     * Get the single table row content for a total fee per permit row, calculating the total based on permits
+     * required
      *
      * @param array $data input data
      * @param string $feeType
@@ -462,12 +496,44 @@ class IrhpApplicationFeeSummary
      *
      * @return array
      */
-    private function getTotalFeeRow(array $data, $feeType, $key)
+    private function getTotalFeeRowUsingPermitsRequired(array $data, $feeType, $key)
+    {
+        return $this->getTotalFeeRow($data, $feeType, $key, 'requiredEuro5', 'requiredEuro6');
+    }
+
+    /**
+     * Get the single table row content for a total fee per permit row, calculating the total based on permits
+     * awarded
+     *
+     * @param array $data input data
+     * @param string $feeType
+     * @param string $key
+     *
+     * @return array
+     */
+    private function getTotalFeeRowUsingPermitsAwarded(array $data, $feeType, $key)
+    {
+        return $this->getTotalFeeRow($data, $feeType, $key, 'euro5PermitsAwarded', 'euro6PermitsAwarded');
+    }
+
+    /**
+     * Get the single table row content for a total fee per permit row, calculating the total using the supplied
+     * array keys for each emissions category
+     *
+     * @param array $data input data
+     * @param string $feeType
+     * @param string $key
+     * @param string $euro5Key
+     * @param string $euro6Key
+     *
+     * @return array
+     */
+    private function getTotalFeeRow(array $data, $feeType, $key, $euro5Key, $euro6Key)
     {
         $feePerPermit = $this->getFeeAmountByType($data['fees'], $feeType);
         $irhpPermitApplication = $data['irhpPermitApplications'][0];
-        $requiredEuro5 = $irhpPermitApplication['requiredEuro5'];
-        $requiredEuro6 = $irhpPermitApplication['requiredEuro6'];
+        $requiredEuro5 = $irhpPermitApplication[$euro5Key];
+        $requiredEuro6 = $irhpPermitApplication[$euro6Key];
 
         $totalFee = ($requiredEuro5 + $requiredEuro6) * $feePerPermit;
 

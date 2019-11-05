@@ -298,6 +298,9 @@ class IrhpApplicationFeeSummaryTest extends TestCase
             ->andReturn($translatedFormattedTotalApplicationFee);
 
         $inputData = [
+            'businessProcess' => [
+                'id' => RefData::BUSINESS_PROCESS_APGG
+            ],
             'canViewCandidatePermits' => false,
             'isUnderConsideration' => $isUnderConsideration,
             'isAwaitingFee' => $isAwaitingFee,
@@ -441,6 +444,9 @@ class IrhpApplicationFeeSummaryTest extends TestCase
             ->andReturn($formattedStatus);
 
         $inputData = [
+            'businessProcess' => [
+                'id' => RefData::BUSINESS_PROCESS_APGG
+            ],
             'canViewCandidatePermits' => false,
             'isUnderConsideration' => $isUnderConsideration,
             'isAwaitingFee' => $isAwaitingFee,
@@ -545,8 +551,8 @@ class IrhpApplicationFeeSummaryTest extends TestCase
             '5 permits for Euro 6 minimum emission standard';
 
         $irhpPermitApplicationInputData = [
-            'requiredEuro5' => 1,
-            'requiredEuro6' => 5,
+            'euro5PermitsAwarded' => 1,
+            'euro6PermitsAwarded' => 5,
             'irhpPermitWindow' => [
                 'irhpPermitStock' => [
                     'validityYear' => $permitYear
@@ -554,8 +560,13 @@ class IrhpApplicationFeeSummaryTest extends TestCase
             ]
         ];
 
+        $ecmtNoOfPermitsInputData = [
+            'requiredEuro5' => 1,
+            'requiredEuro6' => 5
+        ];
+
         $this->ecmtNoOfPermits->shouldReceive('mapForDisplay')
-            ->with($irhpPermitApplicationInputData)
+            ->with($ecmtNoOfPermitsInputData)
             ->andReturn([$formattedNoOfPermitsRequiredLine1, $formattedNoOfPermitsRequiredLine2]);
 
         $issueFeePerPermit = 20;
@@ -575,6 +586,9 @@ class IrhpApplicationFeeSummaryTest extends TestCase
             ->andReturn($translatedFormattedTotalApplicationFee);
 
         $inputData = [
+            'businessProcess' => [
+                'id' => RefData::BUSINESS_PROCESS_APGG
+            ],
             'canViewCandidatePermits' => false,
             'isUnderConsideration' => $isUnderConsideration,
             'isAwaitingFee' => $isAwaitingFee,
@@ -681,8 +695,8 @@ class IrhpApplicationFeeSummaryTest extends TestCase
             . '<a href="UNPAID_PERMITS_URL">UNPAID_PERMITS_LABEL</a>';
 
         $irhpPermitApplicationInputData = [
-            'requiredEuro5' => 1,
-            'requiredEuro6' => 5,
+            'euro5PermitsAwarded' => 1,
+            'euro6PermitsAwarded' => 5,
             'irhpPermitWindow' => [
                 'irhpPermitStock' => [
                     'validityYear' => $permitYear
@@ -690,8 +704,13 @@ class IrhpApplicationFeeSummaryTest extends TestCase
             ]
         ];
 
+        $ecmtNoOfPermitsInputData = [
+            'requiredEuro5' => 1,
+            'requiredEuro6' => 5
+        ];
+
         $this->ecmtNoOfPermits->shouldReceive('mapForDisplay')
-            ->with($irhpPermitApplicationInputData)
+            ->with($ecmtNoOfPermitsInputData)
             ->andReturn([$formattedNoOfPermitsRequiredLine1, $formattedNoOfPermitsRequiredLine2]);
 
         $issueFeePerPermit = 20;
@@ -724,6 +743,9 @@ class IrhpApplicationFeeSummaryTest extends TestCase
             ->andReturn('UNPAID_PERMITS_URL');
 
         $inputData = [
+            'businessProcess' => [
+                'id' => RefData::BUSINESS_PROCESS_APSG
+            ],
             'canViewCandidatePermits' => true,
             'totalPermitsRequired' => $totalPermitsRequired,
             'totalPermitsAwarded' => $totalPermitsAwarded,
