@@ -333,6 +333,7 @@ return array(
             \Olcs\Controller\IrhpPermits\IrhpApplicationFeesController::class => \Olcs\Controller\IrhpPermits\IrhpApplicationFeesController::class,
             'IrhpPermitFeesController' => 'Olcs\Controller\IrhpPermits\IrhpPermitFeesController',
             'IrhpPermitController' => 'Olcs\Controller\IrhpPermits\IrhpPermitController',
+            'IrhpCandidatePermitController' => 'Olcs\Controller\IrhpPermits\IrhpCandidatePermitController',
             'IrhpDocsController' => 'Olcs\Controller\IrhpPermits\IrhpDocsController',
             'IrhpApplicationDocsController' => 'Olcs\Controller\IrhpPermits\IrhpApplicationDocsController',
             \Olcs\Controller\IrhpPermits\IrhpPermitProcessingOverviewController::class =>

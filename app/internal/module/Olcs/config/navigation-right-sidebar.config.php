@@ -337,7 +337,18 @@ return [
                             ],
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
-                        ]
+                        ],
+                        [
+                            'id' => 'irhp-application-quick-actions-pre-grant',
+                            'label' => 'Pre Grant Actions',
+                            'route' => 'licence/irhp-application/application',
+                            'params' => [
+                                'action' => 'preGrant'
+                            ],
+                            'use_route_match' => true,
+                            'class' => 'action--secondary',
+                            'visible' => false
+                        ],
                     ],
                 ],
                 [
