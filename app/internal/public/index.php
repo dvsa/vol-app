@@ -1,7 +1,7 @@
 <?php
 $startTime = microtime(true);
 
-error_reporting(-1);
+error_reporting(E_ALL & ~E_USER_DEPRECATED);
 ini_set('intl.default_locale', 'en_GB');
 date_default_timezone_set('Europe/London');
 
