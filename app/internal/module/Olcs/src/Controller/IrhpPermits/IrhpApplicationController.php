@@ -398,6 +398,10 @@ class IrhpApplicationController extends AbstractInternalController implements
 
         $form->get('topFields')->remove('stockHtml');
 
+        if (!$formData['fields']['requiresPreAllocationCheck']) {
+            $form->get('bottomFields')->remove('checked');
+        }
+
         return $form;
     }
 
@@ -456,6 +460,10 @@ class IrhpApplicationController extends AbstractInternalController implements
         }
 
         $form->setData($formData);
+
+        if (!$formData['fields']['requiresPreAllocationCheck']) {
+            $form->get('bottomFields')->remove('checked');
+        }
 
         return $form;
     }
