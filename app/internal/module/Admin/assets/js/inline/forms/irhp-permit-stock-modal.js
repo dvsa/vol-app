@@ -9,6 +9,8 @@ $(function () {
     var stockDates = $(".stockDates");
     var typeSelect = $("#irhpPermitType");
     var pathProcessFields = $(".pathProcess");
+    var appPathGrp = $("#applicationPathGroup");
+    var selectedTypeId = parseInt(typeSelect.val(), 10);
 
     function toggle(typeId) {
         if (typeId === BILATERAL_ID) {
@@ -31,8 +33,24 @@ $(function () {
     }
 
     typeSelect.change(function () {
-        toggle(parseInt(typeSelect.val(), 10));
+        selectedTypeId = parseInt(typeSelect.val(), 10);
+        toggle(selectedTypeId);
     });
 
-    toggle(parseInt(typeSelect.val(), 10));
+    toggle(selectedTypeId);
+
+    $("#IrhpPermitStock").submit(function (e) {
+        if (
+            IS_QA_PROCESS.includes(selectedTypeId)
+            && appPathGrp.val() == ""
+        ) {
+            e.preventDefault();
+            var closestEl = appPathGrp.closest($("div.field"));
+            if (!closestEl.hasClass("hasErrors")) {
+                closestEl.addClass("hasErrors").wrap("<div class='validation-wrapper'></div>")
+                    .prepend("<p class='error__text'>You must select an Application Path for this type.</p>");
+            }
+            return false;
+        }
+    });
 });
