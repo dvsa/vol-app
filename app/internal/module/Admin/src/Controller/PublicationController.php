@@ -40,7 +40,7 @@ class PublicationController extends AbstractInternalController implements LeftVi
      */
     protected function alterData(array $data)
      {
-         $data['osType'] = $this->$this->getOsType();
+         $data['document']['osType'] = $this->getOsType();
          return parent::alterData($data);
      }
 
