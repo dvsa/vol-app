@@ -5,6 +5,7 @@
  */
 namespace Admin\Controller;
 
+use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 use Olcs\Controller\AbstractInternalController;
 use Dvsa\Olcs\Transfer\Query\Publication\PendingList;
 use Dvsa\Olcs\Transfer\Command\Publication\Publish as PublishCmd;
@@ -29,6 +30,19 @@ class PublicationController extends AbstractInternalController implements LeftVi
         'generate' => ['requireRows' => true],
         'publish' => ['requireRows' => true],
     ];
+
+
+    /**
+     * @param array $table
+     * @param       $data
+     *
+     * @return array
+     */
+    protected function alterData(array $data)
+     {
+         $data['osType'] = $this->$this->getOsType();
+         return parent::alterData($data);
+     }
 
     /**
      * Specifically for navigation. For jumping us into the pending.
@@ -77,5 +91,15 @@ class PublicationController extends AbstractInternalController implements LeftVi
     public function publishAction()
     {
         return $this->processCommand(new GenericItem(['id' => 'id']), PublishCmd::class);
+    }
+
+
+    private function getOsType(): string
+    {
+        //check which ostype
+        $query = MyAccount::create([]);
+        $response = $this->handleQuery($query)->getResult();
+
+        return $response['osType']['id'] ?? "windows_7";
     }
 }
