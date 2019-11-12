@@ -432,8 +432,6 @@ abstract class AbstractInternalController extends AbstractOlcsController
             $data = $response->getResult();
             $this->listData = $data;
 
-            $data = $this->alterData($data);
-
             $table = $this->table()->buildTable($tableName, $data, $providedParameters);
 
             $table = $this->alterTable($table, $data);
@@ -442,6 +440,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
              * @todo in some cases we only care about putting the table into this placeholder, we then don't care
              * about constructing a view, so maybe we need a wa
              */
+            $renderedTable = $table->render();
             $this->placeholder()->setPlaceholder(
                 $tableViewPlaceholderName,
                 $table->render()
@@ -1105,10 +1104,5 @@ abstract class AbstractInternalController extends AbstractOlcsController
             $action .= '?' . $query;
             $table->setVariable('action', $action);
         }
-    }
-
-    protected function alterData(array $data)
-    {
-        return $data;
     }
 }
