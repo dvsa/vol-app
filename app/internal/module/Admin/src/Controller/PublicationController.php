@@ -3,6 +3,7 @@
 /**
  * Publication Controller
  */
+
 namespace Admin\Controller;
 
 use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
@@ -39,10 +40,10 @@ class PublicationController extends AbstractInternalController implements LeftVi
      * @return array
      */
     protected function alterData(array $data)
-     {
-         $data['document']['osType'] = $this->getOsType();
-         return parent::alterData($data);
-     }
+    {
+        $data['osType'] = $this->getOsType();
+        return parent::alterData($data);
+    }
 
     /**
      * Specifically for navigation. For jumping us into the pending.
