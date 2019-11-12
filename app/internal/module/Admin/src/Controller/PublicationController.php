@@ -6,6 +6,7 @@
 
 namespace Admin\Controller;
 
+use Common\Service\Table\TableBuilder;
 use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 use Olcs\Controller\AbstractInternalController;
 use Dvsa\Olcs\Transfer\Query\Publication\PendingList;
@@ -34,15 +35,16 @@ class PublicationController extends AbstractInternalController implements LeftVi
 
 
     /**
-     * @param array $table
-     * @param       $data
+     * @param TableBuilder $table
+     * @param              $data
      *
      * @return array
      */
-    protected function alterData(array $data)
+    protected function alterTable($table, $data)
     {
-        $data['osType'] = $this->getOsType();
-        return parent::alterData($data);
+        $data = $this->mergeOsType($data);
+        $table->loadData($data);
+        return $table;
     }
 
     /**
@@ -53,7 +55,9 @@ class PublicationController extends AbstractInternalController implements LeftVi
     public function jumpAction()
     {
         return $this->redirect()->toRoute(
-            'admin-dashboard/admin-publication/pending', [], ['code' => 303]
+            'admin-dashboard/admin-publication/pending',
+            [],
+            ['code' => 303]
         );
     }
 
@@ -95,12 +99,11 @@ class PublicationController extends AbstractInternalController implements LeftVi
     }
 
 
-    private function getOsType(): string
+    private function mergeOsType($data): array
     {
-        //check which ostype
-        $query = MyAccount::create([]);
-        $response = $this->handleQuery($query)->getResult();
-
-        return $response['osType']['id'] ?? "windows_7";
+        foreach ($data['results'] as $result => $value) {
+            $data['results'][$result]['userOsType'] = $data['extra']['userOsType'];
+        }
+        return $data;
     }
 }
