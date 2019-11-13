@@ -3,8 +3,11 @@
 /**
  * Publication Controller
  */
+
 namespace Admin\Controller;
 
+use Common\Service\Table\TableBuilder;
+use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 use Olcs\Controller\AbstractInternalController;
 use Dvsa\Olcs\Transfer\Query\Publication\PendingList;
 use Dvsa\Olcs\Transfer\Command\Publication\Publish as PublishCmd;
@@ -30,6 +33,20 @@ class PublicationController extends AbstractInternalController implements LeftVi
         'publish' => ['requireRows' => true],
     ];
 
+
+    /**
+     * @param TableBuilder $table
+     * @param  array       $data
+     *
+     * @return TableBuilder
+     */
+    protected function alterTable(TableBuilder $table, array $data): TableBuilder
+    {
+        $data = $this->mergeOsType($data);
+        $table->loadData($data);
+        return $table;
+    }
+
     /**
      * Specifically for navigation. For jumping us into the pending.
      *
@@ -38,7 +55,9 @@ class PublicationController extends AbstractInternalController implements LeftVi
     public function jumpAction()
     {
         return $this->redirect()->toRoute(
-            'admin-dashboard/admin-publication/pending', [], ['code' => 303]
+            'admin-dashboard/admin-publication/pending',
+            [],
+            ['code' => 303]
         );
     }
 
@@ -77,5 +96,14 @@ class PublicationController extends AbstractInternalController implements LeftVi
     public function publishAction()
     {
         return $this->processCommand(new GenericItem(['id' => 'id']), PublishCmd::class);
+    }
+
+
+    private function mergeOsType($data): array
+    {
+        foreach ($data['results'] as $result => $value) {
+            $data['results'][$result]['userOsType'] = $data['extra']['userOsType'];
+        }
+        return $data;
     }
 }

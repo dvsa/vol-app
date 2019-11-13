@@ -427,6 +427,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
         $paramProvider->setParams($this->plugin('params'));
         $providedParameters = $this->modifyListQueryParameters($paramProvider->provideParameters());
         $response = $this->handleQuery($listDto::create($providedParameters));
+
         if ($response->isOk()) {
             $data = $response->getResult();
             $this->listData = $data;
@@ -439,6 +440,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
              * @todo in some cases we only care about putting the table into this placeholder, we then don't care
              * about constructing a view, so maybe we need a wa
              */
+            $renderedTable = $table->render();
             $this->placeholder()->setPlaceholder(
                 $tableViewPlaceholderName,
                 $table->render()
