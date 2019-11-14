@@ -32,7 +32,7 @@ class UserTest extends MockeryTestCase
             ],
             // edit - internal
             [
-                [
+                "inData" => [
                     'id' => 987,
                     'version' => 1,
                     'loginId' => 'testuser',
@@ -83,8 +83,9 @@ class UserTest extends MockeryTestCase
                         ],
                     ],
                     'translateToWelsh' => 'Y',
+                    'osType' => 'windows_10'
                 ],
-                [
+                "expected" => [
                     'id' => 987,
                     'version' => 1,
                     'userLoginSecurity' => [
@@ -124,12 +125,13 @@ class UserTest extends MockeryTestCase
                     ],
                     'userSettings' => [
                         'translateToWelsh' => 'Y',
+                        'osType' => 'windows_10'
                     ],
                 ]
             ],
             // edit - transport-manager
             [
-                [
+                "inData" => [
                     'id' => 987,
                     'version' => 1,
                     'loginId' => 'testuser',
@@ -167,7 +169,7 @@ class UserTest extends MockeryTestCase
                     ],
                     'translateToWelsh' => 'N',
                 ],
-                [
+                "expected" => [
                     'id' => 987,
                     'version' => 1,
                     'userLoginSecurity' => [
@@ -205,7 +207,7 @@ class UserTest extends MockeryTestCase
             ],
             // edit - partner
             [
-                [
+                "inData" => [
                     'id' => 987,
                     'version' => 1,
                     'loginId' => 'testuser',
@@ -237,7 +239,7 @@ class UserTest extends MockeryTestCase
                     ],
                     'translateToWelsh' => 'N',
                 ],
-                [
+                "expected" => [
                     'id' => 987,
                     'version' => 1,
                     'userLoginSecurity' => [
@@ -274,7 +276,7 @@ class UserTest extends MockeryTestCase
             ],
             // edit - local-authority
             [
-                [
+                "inData" => [
                     'id' => 987,
                     'version' => 1,
                     'loginId' => 'testuser',
@@ -306,7 +308,7 @@ class UserTest extends MockeryTestCase
                     ],
                     'translateToWelsh' => 'N',
                 ],
-                [
+                "expected" => [
                     'id' => 987,
                     'version' => 1,
                     'userLoginSecurity' => [
@@ -360,7 +362,7 @@ class UserTest extends MockeryTestCase
         return [
             // edit - internal
             [
-                [
+                "inData" => [
                     'id' => 987,
                     'version' => 1,
                     'userLoginSecurity' => [
@@ -393,9 +395,10 @@ class UserTest extends MockeryTestCase
                     ],
                     'userSettings' => [
                         'translateToWelsh' => 'Y',
+                        'osType' => 'windows_10'
                     ],
                 ],
-                [
+                "expected" => [
                     'id' => 987,
                     'version' => 1,
                     'loginId' => 'testuser',
@@ -430,11 +433,12 @@ class UserTest extends MockeryTestCase
                         ],
                     ],
                     'translateToWelsh' => 'Y',
+                    'osType' => 'windows_10'
                 ],
             ],
             // edit - transport-manager
             [
-                [
+                "inData" => [
                     'id' => 987,
                     'version' => 1,
                     'userLoginSecurity' => [
@@ -470,7 +474,7 @@ class UserTest extends MockeryTestCase
                         'translateToWelsh' => 'N',
                     ],
                 ],
-                [
+                "expected" => [
                     'id' => 987,
                     'version' => 1,
                     'loginId' => 'testuser',
@@ -510,7 +514,7 @@ class UserTest extends MockeryTestCase
             ],
             // edit - partner
             [
-                [
+                "inData" => [
                     'id' => 987,
                     'version' => 1,
                     'userLoginSecurity' => [
@@ -545,7 +549,7 @@ class UserTest extends MockeryTestCase
                         'translateToWelsh' => 'N',
                     ],
                 ],
-                [
+                "expected" => [
                     'id' => 987,
                     'version' => 1,
                     'loginId' => 'testuser',
@@ -584,7 +588,7 @@ class UserTest extends MockeryTestCase
             ],
             // edit - local-authority
             [
-                [
+                "inData" => [
                     'id' => 987,
                     'version' => 1,
                     'userLoginSecurity' => [
@@ -619,7 +623,7 @@ class UserTest extends MockeryTestCase
                         'translateToWelsh' => 'N',
                     ],
                 ],
-                [
+                "expected" => [
                     'id' => 987,
                     'version' => 1,
                     'loginId' => 'testuser',
@@ -658,7 +662,7 @@ class UserTest extends MockeryTestCase
             ],
             // edit - operator
             [
-                [
+                "inData" => [
                     'id' => 987,
                     'version' => 1,
                     'userLoginSecurity' => [
@@ -693,7 +697,7 @@ class UserTest extends MockeryTestCase
                         'translateToWelsh' => 'N',
                     ],
                 ],
-                [
+                "expected" => [
                     'id' => 987,
                     'version' => 1,
                     'loginId' => 'testuser',
