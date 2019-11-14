@@ -31,7 +31,7 @@ class UserSettings
      *         "os_type_windows_10": "Windows 10"
      *     }
      * })
-     * @Form\Type("Select")
+     * @Form\Type("DynamicSelect")
      */
     public $osType = null;
 }
