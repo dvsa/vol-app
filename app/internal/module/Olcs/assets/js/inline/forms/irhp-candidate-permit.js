@@ -16,7 +16,7 @@ $(function () {
                 rangeCountries = item.countrys.length > 0 ? `(${rangeCountries.join()})` : "";
                 rangeSelect.append($("<option>", {
                     value: item.id,
-                    text : item.prefix+" "+item.fromNo+"-"+item.toNo+" "+rangeCountries,
+                    text : item.prefix+" "+item.fromNo+"-"+item.toNo+" "+rangeCountries+" | "+item.remainingPermits+" Remaining",
                     selected: selectedRange == item.id
                 }));
             });
