@@ -586,4 +586,24 @@ class IrhpApplicationController extends AbstractInternalController implements
 
         return $response->getResult();
     }
+
+    /**
+     * @return Response
+     *
+     * Redirect to IrhpCandidatePermitController to handle pre-grant tasks.
+     *
+     */
+    public function preGrantAction()
+    {
+        return $this->redirect()
+            ->toRoute(
+                'licence/irhp-application/irhp-candidate-permits',
+                [
+                    'licence' => $this->params()->fromRoute('licence'),
+                    'action' => 'index',
+                    'irhpAppId' => $this->params()->fromRoute('irhpAppId'),
+                    'irhpPermitType' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID
+                ]
+            );
+    }
 }

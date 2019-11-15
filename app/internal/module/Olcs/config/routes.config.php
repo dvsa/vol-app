@@ -1,5 +1,6 @@
 <?php
 
+use Common\RefData;
 use Olcs\Controller\IrhpPermits\IrhpApplicationController;
 use Olcs\Controller\IrhpPermits\IrhpApplicationFeesController;
 use Olcs\Controller\Licence\SurrenderController;
@@ -1141,7 +1142,7 @@ $routes = [
                         'options' => [
                             'route' => ':action/:irhpAppId[/]',
                             'constraints' => [
-                                'action' => 'edit|submit|accept|decline|cancel|withdraw|grant',
+                                'action' => 'edit|submit|accept|decline|cancel|withdraw|grant|preGrant',
                                 'irhpAppId' => '[0-9]+',
                             ],
                             'defaults' => [
@@ -1149,7 +1150,26 @@ $routes = [
                             ]
                         ]
                     ],
-                ]
+                    'irhp-candidate-permits' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'candidate-permits/:irhpAppId/:permitTypeId[/:action][/:id][/]',
+                            'constraints' => [
+                                'irhpAppId' => '[0-9]+',
+                                'action' => 'index|add|edit|delete|ranges',
+                                'id' => '[0-9]+',
+                                'permitTypeId' => '[0-9]+',
+                            ],
+                            'defaults' => [
+                                'controller' => 'IrhpCandidatePermitController',
+                                'action' => 'index',
+                                'permitTypeId' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
+                            ]
+                        ],
+                        'may_terminate' => true,
+                    ]
+                ],
+
             ],
             'irhp-application-docs' => [
                 'type' => 'segment',

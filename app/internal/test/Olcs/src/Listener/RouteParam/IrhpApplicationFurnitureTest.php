@@ -29,7 +29,9 @@ class IrhpApplicationFurnitureTest extends TestCase
 
     public function setUp()
     {
-        $this->sut = new IrhpApplicationFurniture();
+        $this->sut = m::mock(IrhpApplicationFurniture::class)
+            ->makePartial()
+            ->shouldAllowMockingProtectedMethods();
     }
 
     public function testAttach()
@@ -74,7 +76,7 @@ class IrhpApplicationFurnitureTest extends TestCase
         $irhpAppData = [
             'id' => $irhpApplicationId,
             'status' => [
-                'id' => RefData::PERMIT_APP_STATUS_NOT_YET_SUBMITTED
+                'id' => RefData::PERMIT_APP_STATUS_UNDER_CONSIDERATION
             ],
             'licence' => [
                 'id' => 7,
@@ -84,11 +86,12 @@ class IrhpApplicationFurnitureTest extends TestCase
                 ],
             ],
             'irhpPermitType' => [
-                'id' => 4,
+                'id' => 2,
                 'name' => [
                     'description' => 'Annual Bilateral'
                 ]
             ],
+            'businessProcess' => ['id' => RefData::BUSINESS_PROCESS_APGG]
         ];
 
         $irhpApplication = array_merge($irhpAppData, $data);
@@ -153,6 +156,9 @@ class IrhpApplicationFurnitureTest extends TestCase
             )
             ->getMock();
 
+        $this->sut->shouldReceive('getGrantability')->with($irhpApplication)
+            ->andReturn(['grantable' => $data['isGrantable']]);
+
         $mockNavigation = m::mock('Zend\Navigation\Navigation');
 
         $mockSidebarNavigation = m::mock('Zend\Navigation\Navigation');
@@ -163,8 +169,11 @@ class IrhpApplicationFurnitureTest extends TestCase
             ->shouldReceive('findOneBy')->once()->with('id', 'irhp-application-decisions-submit')->andReturn(
                 m::mock()->shouldReceive('setVisible')->once()->with($expected['isSubmitVisible'])->getMock()
             )
+            ->shouldReceive('findOneBy')->once()->with('id', 'irhp-application-quick-actions-pre-grant')->andReturn(
+                m::mock()->shouldReceive('setVisible')->once()->with($data['canPreGrant'])->getMock()
+            )
             ->shouldReceive('findOneBy')->once()->with('id', 'irhp-application-decisions-grant')->andReturn(
-                m::mock()->shouldReceive('setVisible')->once()->with($expected['isGrantVisible'])->getMock()
+                m::mock()->shouldReceive('setVisible')->once()->with($data['isGrantable'])->getMock()
             )
             ->shouldReceive('findOneBy')->once()->with('id', 'irhp-application-decisions-withdraw')->andReturn(
                 m::mock()->shouldReceive('setVisible')->once()->with($expected['isWithdrawVisible'])->getMock()
@@ -194,6 +203,9 @@ class IrhpApplicationFurnitureTest extends TestCase
                     'canBeWithdrawn' => false,
                     'canBeDeclined' => false,
                     'canBeGranted' => false,
+                    'canPreGrant' => true,
+                    'isGrantable' => false,
+
                 ],
                 [
                     'isCancelVisible' => false,
@@ -209,6 +221,8 @@ class IrhpApplicationFurnitureTest extends TestCase
                     'canBeWithdrawn' => true,
                     'canBeDeclined' => false,
                     'canBeGranted' => false,
+                    'canPreGrant' => true,
+                    'isGrantable' => false,
                 ],
                 [
                     'isCancelVisible' => false,
@@ -224,6 +238,8 @@ class IrhpApplicationFurnitureTest extends TestCase
                     'canBeWithdrawn' => false,
                     'canBeDeclined' => true,
                     'canBeGranted' => false,
+                    'canPreGrant' => true,
+                    'isGrantable' => false,
                 ],
                 [
                     'isCancelVisible' => false,
@@ -239,6 +255,8 @@ class IrhpApplicationFurnitureTest extends TestCase
                     'canBeWithdrawn' => true,
                     'canBeDeclined' => true,
                     'canBeGranted' => true,
+                    'canPreGrant' => true,
+                    'isGrantable' => true,
                 ],
                 [
                     'isCancelVisible' => true,

@@ -2,6 +2,7 @@
 
 namespace Olcs\Listener\RouteParam;
 
+use Common\RefData;
 use Common\Service\Cqrs\Command\CommandSenderAwareInterface;
 use Common\Service\Cqrs\Command\CommandSenderAwareTrait;
 use Common\Service\Cqrs\Query\QuerySenderAwareInterface;
@@ -9,6 +10,7 @@ use Common\Service\Cqrs\Query\QuerySenderAwareTrait;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\ById as ItemDto;
+use Dvsa\Olcs\Transfer\Query\IrhpApplication\GetGrantability as GrantabilityDto;
 use Zend\Escaper\Escaper;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
@@ -142,11 +144,24 @@ class IrhpApplicationFurniture implements
         // quick actions
         $sidebarNav->findOneBy('id', 'irhp-application-quick-actions-cancel')
             ->setVisible($irhpApplication['canBeCancelled']);
+
+        if ($irhpApplication['irhpPermitType']['id'] == RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID
+            && $irhpApplication['status']['id'] == RefData::PERMIT_APP_STATUS_UNDER_CONSIDERATION
+            && $irhpApplication['businessProcess']['id'] == RefData::BUSINESS_PROCESS_APGG) {
+            $sidebarNav->findOneBy('id', 'irhp-application-quick-actions-pre-grant')
+                ->setVisible(true);
+        }
+
         // decisions
         $sidebarNav->findOneBy('id', 'irhp-application-decisions-submit')
             ->setVisible($irhpApplication['canBeSubmitted']);
-        $sidebarNav->findOneBy('id', 'irhp-application-decisions-grant')
-            ->setVisible($irhpApplication['canBeGranted']);
+
+        if ($irhpApplication['status']['id'] == RefData::PERMIT_APP_STATUS_UNDER_CONSIDERATION
+            && $irhpApplication['businessProcess']['id'] == RefData::BUSINESS_PROCESS_APGG) {
+            $grantability = $this->getGrantability($irhpApplication);
+            $sidebarNav->findOneBy('id', 'irhp-application-decisions-grant')
+                ->setVisible($grantability['grantable']);
+        }
 
         // decline is also done via the withdraw action
         $withdrawVisible = $irhpApplication['canBeWithdrawn'] || $irhpApplication['canBeDeclined'];
@@ -176,6 +191,25 @@ class IrhpApplicationFurniture implements
             throw new ResourceNotFoundException("Irhp Permit id [$id] not found");
         }
 
+        return $response->getResult();
+    }
+
+    /**
+     * Retrieves grantability information to show/hide grant button
+     *
+     * @param array $irhpApplication
+     * @return array|mixed
+     * @throws ResourceNotFoundException
+     */
+    protected function getGrantability($irhpApplication)
+    {
+        $response = $this->getQuerySender()->send(
+            GrantabilityDto::create(['id' => $irhpApplication['id']])
+        );
+
+        if (!$response->isOk()) {
+            throw new ResourceNotFoundException("Grantability check failed");
+        }
         return $response->getResult();
     }
 

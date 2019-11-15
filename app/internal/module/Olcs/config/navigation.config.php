@@ -738,7 +738,7 @@ $nav = [
                                         'action' => 'submit',
                                         'id' => null
                                     ],
-                                ]
+                                ],
                             ]
                         ],
                         [

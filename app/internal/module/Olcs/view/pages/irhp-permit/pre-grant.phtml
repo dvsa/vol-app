@@ -1,0 +1,15 @@
+<?php
+$applicationData = $this->placeholder('applicationData')->getValue();
+echo '<h5>Requested Euro5: '.$applicationData['requiredEuro5'].' | Requested Euro6: '.$applicationData['requiredEuro6'].'</h5>';
+echo '<h5>Requested Countries: '.$applicationData['countries'].'</h5>';
+if (!isset($table)) {
+    $table = $this->placeholder('table')->getValue();
+}
+
+if (!empty($table)) {
+    if (!empty($readonly)) {
+        $table->setDisabled(true);
+    }
+
+    echo $table;
+}
