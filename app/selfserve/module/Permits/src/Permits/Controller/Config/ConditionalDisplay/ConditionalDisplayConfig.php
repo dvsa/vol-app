@@ -116,7 +116,7 @@ class ConditionalDisplayConfig
         [
             'source' => IrhpAppDataSource::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_PERMITS,
-            'key' => 'isNotYetSubmitted',
+            'key' => 'canBeSubmitted',
             'value' => true
         ],
         [
