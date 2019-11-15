@@ -40,6 +40,10 @@ class IrhpApplication implements MapperInterface
             $formData['bottomFields']['declaration'] = $data['declaration'];
         }
 
+        if (isset($data['checked'])) {
+            $formData['bottomFields']['checked'] = $data['checked'];
+        }
+
         if (isset($data['irhpPermitType']['id'])) {
             $formData['topFields']['isApplicationPathEnabled'] = $data['irhpPermitType']['isApplicationPathEnabled'];
             $formData['topFields']['irhpPermitType'] = $data['irhpPermitType']['id'];
@@ -61,6 +65,11 @@ class IrhpApplication implements MapperInterface
             $cmdData['dateReceived'] = $data['topFields']['dateReceived'];
             $cmdData['declaration'] = $data['bottomFields']['declaration'];
             $cmdData['postData']['qa'] = $data['qa'];
+
+            if (isset($data['bottomFields']['checked'])) {
+                $cmdData['checked'] = $data['bottomFields']['checked'];
+            }
+
             return $cmdData;
         }
 

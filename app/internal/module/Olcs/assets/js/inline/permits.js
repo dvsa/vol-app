@@ -21,7 +21,7 @@ OLCS.ready(function () {
         }
     });
 
-    if ($.inArray($(".permitApplicationStatus").val(), ["permit_app_withdrawn", "permit_app_cancelled", "permit_app_valid", "permit_app_uc"]) > -1) {
+    if ($.inArray($(".permitApplicationStatus").val(), ["permit_app_withdrawn", "permit_app_cancelled", "permit_app_valid"]) > -1) {
         $("#saveIrhpPermitApplication").addClass("visually-hidden");
     }
 
