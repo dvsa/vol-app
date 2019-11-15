@@ -26,10 +26,9 @@ class UserSettings
      * @Form\Attributes({"id":"osType"})
      * @Form\Options({
      *     "label": "Operating System",
-     *     "value_options": {
-     *         "os_type_windows_7": "Windows 7",
-     *         "os_type_windows_10": "Windows 10"
-     *     }
+     *     "disable_inarray_validator": false,
+     *     "service_name": "Common\Service\Data\RefData",
+     *     "category": "user_os"
      * })
      * @Form\Type("DynamicSelect")
      */
