@@ -168,6 +168,9 @@ class IrhpApplicationFurniture implements
         $sidebarNav->findOneBy('id', 'irhp-application-decisions-withdraw')
             ->setVisible($withdrawVisible);
 
+        $sidebarNav->findOneBy('id', 'irhp-application-decisions-revive-from-withdrawn')
+            ->setVisible($irhpApplication['canBeRevivedFromWithdrawn']);
+
         $right = new ViewModel();
         $right->setTemplate('sections/irhp-application/partials/right');
 

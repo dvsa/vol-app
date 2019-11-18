@@ -946,7 +946,7 @@ $routes = [
                         'options' => [
                             'route' => ':action/:permitid[/]',
                             'constraints' => [
-                                'action' => 'edit|submit|accept|decline|cancel|withdraw',
+                                'action' => 'edit|submit|accept|decline|cancel|withdraw|reviveFromWithdrawn',
                                 'permitid' => '[0-9]+',
                             ],
                             'defaults' => [
@@ -1142,7 +1142,7 @@ $routes = [
                         'options' => [
                             'route' => ':action/:irhpAppId[/]',
                             'constraints' => [
-                                'action' => 'edit|submit|accept|decline|cancel|withdraw|grant|preGrant',
+                                'action' => 'edit|submit|accept|decline|cancel|withdraw|grant|preGrant|reviveFromWithdrawn',
                                 'irhpAppId' => '[0-9]+',
                             ],
                             'defaults' => [
