@@ -37,7 +37,7 @@ class SubmissionSectionsFactoryTest extends MockeryTestCase
 
         $mockFormElementManager = m::mock('\Zend\Form\FormElementManager');
 
-        $mockServiceLocator = m::mock('\Zend\Service\ServiceManager');
+        $mockServiceLocator = m::mock('\Zend\ServiceManager\ServiceLocatorInterface');
         $mockServiceLocator->shouldReceive('get')->with('ControllerPluginManager')
             ->andReturnSelf();
         $mockServiceLocator->shouldReceive('get')->with('DataServiceManager')
