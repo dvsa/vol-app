@@ -375,7 +375,8 @@ return [
                                 'action' => 'grant'
                             ],
                             'use_route_match' => true,
-                            'class' => 'action--secondary js-modal-ajax'
+                            'class' => 'action--secondary js-modal-ajax',
+                            'visible' => false
                         ],
                         [
                             'id' => 'irhp-application-decisions-withdraw',
