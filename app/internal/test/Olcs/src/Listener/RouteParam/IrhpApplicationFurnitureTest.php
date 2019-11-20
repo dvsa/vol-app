@@ -177,6 +177,9 @@ class IrhpApplicationFurnitureTest extends TestCase
             )
             ->shouldReceive('findOneBy')->once()->with('id', 'irhp-application-decisions-withdraw')->andReturn(
                 m::mock()->shouldReceive('setVisible')->once()->with($expected['isWithdrawVisible'])->getMock()
+            )
+            ->shouldReceive('findOneBy')->once()->with('id', 'irhp-application-decisions-revive-from-withdrawn')->andReturn(
+                m::mock()->shouldReceive('setVisible')->once()->with($data['canBeRevivedFromWithdrawn'])->getMock()
             );
 
         $this->sut->setNavigationService($mockNavigation);
@@ -205,7 +208,7 @@ class IrhpApplicationFurnitureTest extends TestCase
                     'canBeGranted' => false,
                     'canPreGrant' => true,
                     'isGrantable' => false,
-
+                    'canBeRevivedFromWithdrawn' => false,
                 ],
                 [
                     'isCancelVisible' => false,
@@ -223,6 +226,7 @@ class IrhpApplicationFurnitureTest extends TestCase
                     'canBeGranted' => false,
                     'canPreGrant' => true,
                     'isGrantable' => false,
+                    'canBeRevivedFromWithdrawn' => false,
                 ],
                 [
                     'isCancelVisible' => false,
@@ -240,6 +244,7 @@ class IrhpApplicationFurnitureTest extends TestCase
                     'canBeGranted' => false,
                     'canPreGrant' => true,
                     'isGrantable' => false,
+                    'canBeRevivedFromWithdrawn' => false,
                 ],
                 [
                     'isCancelVisible' => false,
@@ -257,6 +262,7 @@ class IrhpApplicationFurnitureTest extends TestCase
                     'canBeGranted' => true,
                     'canPreGrant' => true,
                     'isGrantable' => true,
+                    'canBeRevivedFromWithdrawn' => true,
                 ],
                 [
                     'isCancelVisible' => true,

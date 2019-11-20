@@ -15,6 +15,7 @@ use Common\Service\Cqrs\Exception\NotFoundException;
 use Common\Util\IsEcmtId;
 use Dvsa\Olcs\Transfer\Command\Permits\CancelEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Command\Permits\EcmtSubmitApplication;
+use Dvsa\Olcs\Transfer\Command\Permits\ReviveEcmtPermitApplicationFromWithdrawn;
 use Dvsa\Olcs\Transfer\Command\Permits\WithdrawEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\GetAllByLicence as ListDTO;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\ById as StockById;
@@ -104,6 +105,10 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
             'route' => 'licence/permits',
             'action' => 'index',
         ],
+        'revivefromwithdrawn' => [
+            'route' => 'licence/permits',
+            'action' => 'index',
+        ],
         'cancel' => [
             'route' => 'licence/permits',
             'action' => 'index',
@@ -111,8 +116,7 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
         'submit' => [
             'route' => 'licence/permits',
             'action' => 'index',
-        ]
-
+        ],
     ];
 
     // Maps to ID in navgiation-config file to underline correct item in horizontal nav menu
@@ -590,6 +594,22 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
             'Are you sure?',
             'Withdraw Application. Are you sure?',
             'Permit Application withdrawn'
+        );
+    }
+
+    /**
+     * Handles click of the Revive application button on right sidebar
+     *
+     * @return \Zend\Http\Response
+     */
+    public function reviveFromWithdrawnAction()
+    {
+        return $this->confirmCommand(
+            new ConfirmItem($this->itemParams),
+            ReviveEcmtPermitApplicationFromWithdrawn::class,
+            'Are you sure?',
+            'Revive Application from withdrawn state. Are you sure?',
+            'Permit Application revived from withdrawn state'
         );
     }
 
