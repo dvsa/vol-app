@@ -33,6 +33,7 @@ class IrhpApplicationDeclarationController extends AbstractSelfserveController i
 
     protected $templateVarsConfig = [
         'question' => [
+            'prependTitleDataKey' => IrhpAppDataSource::DATA_KEY,
             'browserTitle' => 'permits.page.declaration.browser.title',
             'question' => 'permits.page.declaration.question',
             'bulletList' => [

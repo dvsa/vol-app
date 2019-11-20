@@ -203,7 +203,8 @@ class IrhpCheckAnswersTest extends TestCase
                             'escape' => true,
                         ],
                     ],
-                    'applicationRef' => 'OB1234567 / 1'
+                    'applicationRef' => 'OB1234567 / 1',
+                    'prependTitle' => 'Annual Bilateral (EU and EEA)'
                 ],
             ],
             'multilateral' => [
@@ -284,7 +285,8 @@ class IrhpCheckAnswersTest extends TestCase
                             'escape' => true,
                         ],
                     ],
-                    'applicationRef' => 'OG4569803 / 10003'
+                    'applicationRef' => 'OG4569803 / 10003',
+                    'prependTitle' => 'Annual Multilateral (EU and EEA)'
                 ],
             ],
             'ECMT International removals' => [
@@ -346,6 +348,7 @@ class IrhpCheckAnswersTest extends TestCase
                         ],
                     ],
                     'applicationRef' => 'OG4569803 / 10003',
+                    'prependTitle' => 'ECMT International Removals'
                 ],
             ],
             'Generic permit type with year for permits required' => [
@@ -471,6 +474,7 @@ class IrhpCheckAnswersTest extends TestCase
                         ],
                     ],
                     'applicationRef' => 'OG4569803 / 10003',
+                    'prependTitle' => 'Generic permit type'
                 ],
             ],
             'Generic permit type with year and country for permits required' => [
@@ -617,6 +621,7 @@ class IrhpCheckAnswersTest extends TestCase
                         ],
                     ],
                     'applicationRef' => 'OG4569803 / 10003',
+                    'prependTitle' => 'Generic permit type'
                 ],
             ],
         ];
@@ -852,6 +857,7 @@ class IrhpCheckAnswersTest extends TestCase
                 ],
             ],
             'applicationRef' => 'OB1234567 / 10003',
+            'prependTitle' => 'ECMT Short Term'
         ];
     }
 }

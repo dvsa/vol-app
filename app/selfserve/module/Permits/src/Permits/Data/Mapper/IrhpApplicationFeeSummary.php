@@ -107,6 +107,7 @@ class IrhpApplicationFeeSummary
         }
 
         $data['mappedFeeData'] = $mappedFeeData;
+        $data['prependTitle'] = $data['irhpPermitType']['name']['description'];
 
         return $data;
     }

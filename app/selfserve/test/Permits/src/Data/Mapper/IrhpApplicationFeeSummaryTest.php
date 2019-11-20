@@ -122,6 +122,7 @@ class IrhpApplicationFeeSummaryTest extends TestCase
                     'value' => $translatedFormattedFee,
                 ],
             ],
+            'prependTitle' => $permitTypeDesc
         ];
 
         $expectedOutput = $inputData + $mappedData;
@@ -239,6 +240,7 @@ class IrhpApplicationFeeSummaryTest extends TestCase
                     'value' => $translatedFormattedFee,
                 ],
             ],
+            'prependTitle' => $permitTypeDesc
         ];
 
         $expectedOutput = $inputData + $mappedData;
@@ -376,7 +378,8 @@ class IrhpApplicationFeeSummaryTest extends TestCase
                     'key' => IrhpApplicationFeeSummary::TOTAL_APPLICATION_FEE_HEADING,
                     'value' => $translatedFormattedTotalApplicationFee,
                 ],
-            ]
+            ],
+            'prependTitle' => $permitTypeDesc
         ];
 
         $expectedOutput = $inputData + $mappedData;
@@ -523,7 +526,8 @@ class IrhpApplicationFeeSummaryTest extends TestCase
                     'key' => IrhpApplicationFeeSummary::TOTAL_APPLICATION_FEE_PAID_HEADING,
                     'value' => $translatedFormattedTotalApplicationFee,
                 ],
-            ]
+            ],
+            'prependTitle' => $permitTypeDesc
         ];
 
         $expectedOutput = $inputData + $mappedData;
@@ -664,7 +668,8 @@ class IrhpApplicationFeeSummaryTest extends TestCase
                     'key' => IrhpApplicationFeeSummary::PAYMENT_DUE_DATE_HEADING,
                     'value' => $formattedFeeDueDate,
                 ],
-            ]
+            ],
+            'prependTitle' => $permitTypeDesc
         ];
 
         $expectedOutput = $inputData + $mappedData;
@@ -785,7 +790,8 @@ class IrhpApplicationFeeSummaryTest extends TestCase
                         ]
                     ]
                 ]
-            ]
+            ],
+            'prependTitle' => $permitTypeDesc
         ];
 
         $mappedData = [
@@ -826,7 +832,8 @@ class IrhpApplicationFeeSummaryTest extends TestCase
                     'key' => IrhpApplicationFeeSummary::PAYMENT_DUE_DATE_HEADING,
                     'value' => $formattedFeeDueDate,
                 ],
-            ]
+            ],
+            'prependTitle' => $permitTypeDesc
         ];
 
         $expectedOutput = $inputData + $mappedData;

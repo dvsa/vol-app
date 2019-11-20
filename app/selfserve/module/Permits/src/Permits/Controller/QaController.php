@@ -3,13 +3,13 @@
 namespace Permits\Controller;
 
 use Common\Controller\AbstractOlcsController;
+use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\SubmitApplicationStep;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\ApplicationStep;
 use Olcs\Service\Qa\FormProvider;
 use Olcs\Service\Qa\TemplateVarsGenerator;
 use Permits\View\Helper\EcmtSection;
 use Permits\View\Helper\IrhpApplicationSection;
-use Zend\View\Helper\HeadTitle;
 use Zend\View\Model\ViewModel;
 
 class QaController extends AbstractOlcsController
@@ -22,26 +22,25 @@ class QaController extends AbstractOlcsController
     /** @var TemplateVarsGenerator */
     private $templateVarsGenerator;
 
-    /** @var HeadTitle */
-    private $headTitle;
+    /** @var TranslationHelperService */
+    private $translationHelperService;
 
     /**
      * Create service instance
      *
      * @param FormProvider $formProvider
      * @param TemplateVarsGenerator $templateVarsGenerator
-     * @param HeadTitle
      *
      * @return QaController
      */
     public function __construct(
         FormProvider $formProvider,
         TemplateVarsGenerator $templateVarsGenerator,
-        HeadTitle $headTitle
+        TranslationHelperService $translationHelperService
     ) {
         $this->formProvider = $formProvider;
         $this->templateVarsGenerator = $templateVarsGenerator;
-        $this->headTitle = $headTitle;
+        $this->translationHelperService = $translationHelperService;
     }
 
     /**
@@ -125,15 +124,13 @@ class QaController extends AbstractOlcsController
             ]
         );
 
-        $this->headTitle->setSeparator(' - ');
-        $this->headTitle->prepend($result['title']);
-
+        $pageTitle = $this->translationHelperService->translate($result['title']);
+        $this->placeholder()->setPlaceholder('pageTitle', $pageTitle);
         if ($showErrorInBrowserTitle) {
-            $this->headTitle->set($this->headTitle->renderTitle());
-            $this->headTitle->setSeparator(': ');
-            $this->headTitle->prepend('permits.application.browser.title.error');
-            $this->headTitle->set($this->headTitle->renderTitle());
-            $this->headTitle->setSeparator(' - ');
+            $this->placeholder()->setPlaceholder(
+                'pageTitle',
+                $this->translationHelperService->translate('permits.application.browser.title.error').': '.$pageTitle
+            );
         }
 
         $view = new ViewModel();

@@ -110,6 +110,8 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $issuedTable = $table->prepareTable($this->issuedTableName, $this->alterDataForTable($issuedData));
         $applicationsTable = $table->prepareTable($this->applicationsTableName, $applicationData);
 
+        $this->placeholder()->setPlaceholder('pageTitle', 'permits.page.dashboard.browser.title');
+
         $view->setVariable('isEligible', $eligibleForPermits);
         $view->setVariable('issuedNo', count($issuedData));
         $view->setVariable('issuedTable', $issuedTable);

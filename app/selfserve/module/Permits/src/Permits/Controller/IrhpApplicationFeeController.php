@@ -57,8 +57,13 @@ class IrhpApplicationFeeController extends AbstractSelfserveController implement
 
     protected $templateVarsConfig = [
         'generic' => [
+            'prependTitleDataKey' => IrhpAppDataSource::DATA_KEY,
             'browserTitle' => 'permits.page.fee.browser.title',
             'backUri' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
+        ],
+        'payment' => [
+            'browserTitle' => 'permits.page.fee.browser.title',
+            'prependTitleDataKey' => IrhpAppDataSource::DATA_KEY,
         ]
     ];
 

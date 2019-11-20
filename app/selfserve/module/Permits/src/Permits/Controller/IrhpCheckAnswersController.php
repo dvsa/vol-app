@@ -6,6 +6,7 @@ use Dvsa\Olcs\Transfer\Command\IrhpApplication\UpdateCheckAnswers;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
+use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
@@ -36,6 +37,7 @@ class IrhpCheckAnswersController extends AbstractSelfserveController implements 
 
     protected $templateVarsConfig = [
         'generic' => [
+            'prependTitleDataKey' => IrhpAppDataSource::DATA_KEY,
             'browserTitle' => 'permits.page.check-answers.browser.title',
             'title' => 'permits.page.check-answers.title',
             'backUri' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,

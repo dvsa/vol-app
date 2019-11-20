@@ -35,6 +35,7 @@ class OverviewController extends AbstractOverviewController
      */
     protected function getOverviewView($data, $sections, $form)
     {
+        $this->placeholder()->setPlaceholder('pageTitle', 'application.apply-to-change-licence.title');
         return new VariationOverview($data, $sections, $form);
     }
 

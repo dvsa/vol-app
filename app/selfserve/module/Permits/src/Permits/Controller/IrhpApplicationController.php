@@ -5,6 +5,7 @@ use Common\Controller\Interfaces\ToggleAwareInterface;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
+use Permits\Controller\Config\DataSource\IrhpApplication;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 
 class IrhpApplicationController extends AbstractSelfserveController implements ToggleAwareInterface
@@ -23,5 +24,12 @@ class IrhpApplicationController extends AbstractSelfserveController implements T
 
     protected $templateConfig = [
         'default' => 'permits/irhp-application-overview'
+    ];
+
+    protected $templateVarsConfig = [
+        'default' => [
+            'browserTitle' => 'permits.application.overview.browser.title',
+            'prependTitleDataKey' => IrhpApplication::DATA_KEY,
+        ]
     ];
 }

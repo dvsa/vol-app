@@ -3,8 +3,6 @@
     use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
     use Permits\Controller\Config\DataSource\QuestionAnswer as QuestionAnswerDataSource;
 
-    $title = $this->translate('permits.irhp-application.overview.title');
-    $this->headTitle($title);
     $application = $data[IrhpAppDataSource::DATA_KEY];
     $questionAnswer = $data[QuestionAnswerDataSource::DATA_KEY];
 ?>

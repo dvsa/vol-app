@@ -187,6 +187,7 @@ class IrhpCheckAnswers
         }
 
         return [
+            'prependTitle' => $data['irhpPermitType']['name']['description'],
             'canCheckAnswers' => $data['canCheckAnswers'],
             'answers' => array_merge($openingAnswers, $extraAnswers),
             'applicationRef' => $data['applicationRef']
