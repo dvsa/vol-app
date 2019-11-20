@@ -34,18 +34,21 @@ class AnswerFormatter extends AbstractHelper
         foreach ($data['answer'] as $answer) {
             switch ($data['questionType']) {
                 case RefData::QUESTION_TYPE_BOOLEAN:
-                    $formatted = 'Yes';
-
-                    if (!$answer) {
-                        $formatted = 'No';
-                    }
-
-                    $answers[] = $this->translateAndEscape($formatted, $data['escape']);
+                    $answers[] = $this->translateAndEscape(
+                        $this->formatBoolean($answer),
+                        $data['escape']
+                    );
                     break;
                 case RefData::QUESTION_TYPE_INTEGER:
                     $answers[] = (int)$answer;
                     break;
                 default:
+                    // TODO: this isn't ideal but will be resolved by the upcoming check answers and
+                    // snapshot refactor
+                    if ($data['question'] == 'qanda.common.certificates.question') {
+                        $answer = $this->formatBoolean($answer);
+                    }
+
                     $answers[] = $this->translateAndEscape($answer, $data['escape']);
             }
         }
@@ -70,5 +73,21 @@ class AnswerFormatter extends AbstractHelper
         }
 
         return $translatedAnswer;
+    }
+
+    /**
+     * Format a truthy/falsy value as a string value of Yes or No
+     *
+     * @param mixed $answer
+     *
+     * @return string
+     */
+    private function formatBoolean($answer)
+    {
+        if (!$answer) {
+            return 'No';
+        }
+
+        return 'Yes';
     }
 }
