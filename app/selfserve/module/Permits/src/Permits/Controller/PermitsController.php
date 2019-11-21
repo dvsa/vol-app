@@ -6,7 +6,7 @@ use Common\Controller\Interfaces\ToggleAwareInterface;
 
 use Common\Controller\Traits\GenericReceipt;
 use Common\Controller\Traits\StoredCardsTrait;
-use Common\Form\Elements\Custom\EcmtAnnualNoOfPermitsElement;
+use Common\Form\Elements\Custom\EcmtNoOfPermitsElement;
 use Dvsa\Olcs\Transfer\Query\ContactDetail\CountrySelectList;
 use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
 use Common\Util\FlashMessengerTrait;
@@ -14,6 +14,7 @@ use Common\Util\FlashMessengerTrait;
 use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees;
 use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 use Dvsa\Olcs\Transfer\Query\Permits\ById;
+use Dvsa\Olcs\Transfer\Query\Permits\EcmtApplicationIssueFeePerPermit;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\GetAllByOrganisation;
 
 use Dvsa\Olcs\Transfer\Command\Permits\UpdateEcmtCountries;
@@ -289,23 +290,28 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         $irhpPermitStock = $application['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock'];
         $totAuthVehicles = $application['licence']['totAuthVehicles'];
 
-        $fieldset->get('combinedTotalChecker')->setOption('maxPermitted', $totAuthVehicles);
-
+        $emissionTypesCount = 0;
         $emissionTypes = ['Euro5', 'Euro6'];
         foreach ($emissionTypes as $emissionType) {
             if ($irhpPermitStock['has' . $emissionType . 'Range']) {
+                $fieldName = 'required' . $emissionType;
+
                 $fieldset->add(
                     [
-                        'type' => EcmtAnnualNoOfPermitsElement::class,
-                        'name' => 'required' . $emissionType,
+                        'type' => EcmtNoOfPermitsElement::class,
+                        'name' => $fieldName,
                         'options' => [
                             'label' => 'permits.page.no-of-permits.for.' . strtolower($emissionType) . '.vehicles',
+                            'max' => $totAuthVehicles,
+                            'maxExceededErrorMessage' => 'permits.page.no-of-permits.error.authorisation-max-exceeded',
                         ],
                         'attributes' => [
-                            'value' => $application['required' . $emissionType]
+                            'value' => $application[$fieldName]
                         ]
                     ]
                 );
+
+                $emissionTypesCount++;
             }
         }
 
@@ -346,20 +352,24 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         );
         $topLabel->setOption('hint', $totalVehicles);
 
-        $yearLabel = $translationHelper->translateReplace(
-            'permits.page.no-of-permits.for.year',
-            [date('Y', strtotime($irhpPermitStock['validTo']))]
-        );
-        $topLabel->setLabel($yearLabel);
-
         $ecmtPermitFees = $this->getEcmtPermitFees();
         $ecmtApplicationFee = $ecmtPermitFees['fee'][$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE]['fixedValue'];
+
+        $response = $this->handleQuery(
+            EcmtApplicationIssueFeePerPermit::create(['id' => $id])
+        );
+        $result = $response->getResult();
+        $ecmtIssueFee = $result['feePerPermit'];
+
+        $showConditionalText = $emissionTypesCount > 1;
 
         return array(
             'form' => $form,
             'id' => $id,
             'ecmtApplicationFee' => $ecmtApplicationFee,
-            'ref' => $application['applicationRef']
+            'ecmtIssueFee' => $ecmtIssueFee,
+            'ref' => $application['applicationRef'],
+            'showConditionalText' => $showConditionalText,
         );
     }
 

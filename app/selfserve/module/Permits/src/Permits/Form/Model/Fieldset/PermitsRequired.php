@@ -18,11 +18,8 @@ class PermitsRequired
     public $topLabel;
 
     /**
-     * @Form\Type("Common\Form\Elements\Custom\EcmtAnnualNoOfPermitsCombinedTotalElement")
+     * @Form\Type("Common\Form\Elements\Custom\EcmtNoOfPermitsCombinedTotalElement")
      * @Form\Name("combinedTotalChecker")
-     * @Form\Options({
-     *     "maxPermitted": 0,
-     * })
      */
     public $combinedTotalChecker;
 }

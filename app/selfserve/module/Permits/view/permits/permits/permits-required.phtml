@@ -16,9 +16,21 @@ $this->headTitle($title);
                     <?php echo $this->escapeHtml($this->translate('permits.page.permits.required.question')); ?>
                 </h1>
             </legend>
-            <div class="guidance-blue">
-                <?php echo $this->translateReplace('permits.form.permits-required.fee.guidance', [$this->currencyFormatter($ecmtApplicationFee)]); ?>
-            </div>
+            <?php
+                $translationParams = [
+                    $this->currencyFormatter($ecmtApplicationFee),
+                    $this->currencyFormatter($ecmtIssueFee),
+                ];
+
+                echo $this->translateReplace('permits.form.permits-required.fee.guidance', $translationParams);
+            ?>
+            <?php
+                if ($showConditionalText) {
+                    ?><div class="govuk-inset-text"><?php
+                    echo $this->translate('permits.page.no-of-permits.inset');
+                    ?></div><?php
+                }
+            ?>
             <div class="govuk-form-group">
                 <?php echo $this->form($form); ?>
             </div>
