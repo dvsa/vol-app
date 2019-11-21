@@ -30,6 +30,7 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
     public function testInvokeBoolean()
     {
         $input = [
+            'question' => 'qanda.question',
             'questionType' => RefData::QUESTION_TYPE_BOOLEAN,
             'answer' => [
                 true, false, 1, 0,
@@ -69,6 +70,7 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
     public function testInvokeBooleanNoEscape()
     {
         $input = [
+            'question' => 'qanda.question',
             'questionType' => RefData::QUESTION_TYPE_BOOLEAN,
             'answer' => [
                 true, false, 1, 0,
@@ -100,6 +102,7 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
     public function testInvokeInteger()
     {
         $input = [
+            'question' => 'qanda.question',
             'questionType' => RefData::QUESTION_TYPE_INTEGER,
             'answer' => [
                 1, 0, 999,
@@ -117,6 +120,7 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
     public function testInvokeWithAnswerNotArray()
     {
         $input = [
+            'question' => 'qanda.question',
             'questionType' => RefData::QUESTION_TYPE_INTEGER,
             'answer' => 1,
         ];
@@ -132,6 +136,7 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
     public function testInvokeOther($questionType)
     {
         $input = [
+            'question' => 'qanda.question',
             'questionType' => $questionType,
             'answer' => [
                 1, 0, 'text',
@@ -171,6 +176,7 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
     public function testInvokeOtherNoEscape($questionType)
     {
         $input = [
+            'question' => 'qanda.question',
             'questionType' => $questionType,
             'answer' => [
                 1, 0, 'text',
