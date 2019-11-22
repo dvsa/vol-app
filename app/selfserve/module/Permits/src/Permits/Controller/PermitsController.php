@@ -308,6 +308,7 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
                             'maxExceededErrorMessage' => 'permits.page.no-of-permits.error.authorisation-max-exceeded',
                         ],
                         'attributes' => [
+                            'id' => $fieldName,
                             'value' => $application[$fieldName]
                         ]
                     ]
