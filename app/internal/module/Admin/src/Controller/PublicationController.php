@@ -40,7 +40,7 @@ class PublicationController extends AbstractInternalController implements LeftVi
      *
      * @return TableBuilder
      */
-    protected function alterTable(TableBuilder $table, array $data): TableBuilder
+    protected function alterTable($table, $data): TableBuilder
     {
         $data = $this->mergeOsType($data);
         $table->loadData($data);
