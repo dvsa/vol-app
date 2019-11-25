@@ -31,7 +31,7 @@
     "require-dev": {
         "olcs/olcs-devtools": "~4.206.0",
         "olcs/olcs-testhelpers": "~4.206.0",
-        "mockery/mockery": "^1.2",
+        "mockery/mockery": "1.2.4",
         "phpstan/phpstan-shim": "^0.10.5",
         "phpstan/phpstan-mockery": "^0.10.2",
         "johnkary/phpunit-speedtrap": "^3.0"
