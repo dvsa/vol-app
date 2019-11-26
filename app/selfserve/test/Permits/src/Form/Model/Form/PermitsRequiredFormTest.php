@@ -2,7 +2,7 @@
 
 namespace PermitsTest\Form\Model\Form;
 
-use Common\Form\Elements\Custom\EcmtAnnualNoOfPermitsCombinedTotalElement;
+use Common\Form\Elements\Custom\EcmtNoOfPermitsCombinedTotalElement;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 use Zend\Form\Element\Submit;
 
@@ -22,7 +22,7 @@ class PermitsRequiredFormTest extends AbstractFormValidationTestCase
     {
         $element = ['Fields','combinedTotalChecker'];
         $this->assertElementExists($element);
-        $this->assertFormElementType($element, EcmtAnnualNoOfPermitsCombinedTotalElement::class);
+        $this->assertFormElementType($element, EcmtNoOfPermitsCombinedTotalElement::class);
     }
 
     public function testSubmit()
