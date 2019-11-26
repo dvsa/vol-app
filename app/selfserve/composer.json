@@ -33,7 +33,7 @@
         "olcs/olcs-testhelpers": "~4.206.0",
         "phpstan/phpstan-shim": "^0.10.5",
         "phpstan/phpstan-mockery": "^0.10.2",
-        "mockery/mockery": "^1.2.0",
+        "mockery/mockery": "1.2.4",
         "johnkary/phpunit-speedtrap": "^3.0"
     },
     "autoload": {
