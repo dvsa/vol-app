@@ -65,7 +65,7 @@
         "olcs/olcs-auth": "dev-project/zf2.5",
         "olcs/olcs-logging": "dev-project/zf2.5",
         "elendev/nexus-composer-push": "^0.1",
-        "olcs/OlcsCommon": "dev-project/zf2.5"
+        "olcs/olcs-common": "dev-project/zf2.5"
     },
     "require-dev": {
         "olcs/olcs-devtools": "~4.206.0",
