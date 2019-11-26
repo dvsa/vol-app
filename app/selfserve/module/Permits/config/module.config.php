@@ -898,6 +898,7 @@ return [
           Mapper\RestrictedCountries::class => Mapper\RestrictedCountries::class,
           Mapper\Sectors::class => Mapper\Sectors::class,
           Mapper\UnpaidEcmtPermits::class => Mapper\UnpaidEcmtPermits::class,
+          Mapper\PermitTypeTitle::class => Mapper\PermitTypeTitle::class,
       ],
       'factories' => [
           Mapper\AcceptOrDeclinePermits::class => Mapper\AcceptOrDeclinePermitsFactory::class,

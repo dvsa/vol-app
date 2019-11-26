@@ -212,19 +212,19 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     public function setBrowserTitle()
     {
         if (isset($this->data['browserTitle'])) {
-            $headTitle = $this->getServiceLocator()->get('ViewHelperManager')->get('headTitle');
-            $headTitle->setSeparator(' - ');
-            $headTitle->prepend($this->data['browserTitle']);
-
+            $translator = $this->getServiceLocator()->get('Helper\Translation');
+            $prepend = '';
             if ($this->form instanceof Form) {
                 if ($this->form->hasValidated()) {
                     if (!$this->form->isValid()) {
-                        $translator = $this->getServiceLocator()->get('Helper\Translation');
-                        $errorCaption = $translator->translate('permits.application.browser.title.error');
-                        $headTitle->set($errorCaption . ': ' . $headTitle->renderTitle());
+                        $prepend = $translator->translate('permits.application.browser.title.error').': ';
                     }
                 }
             }
+
+            $tVarConfig = $this->configsForAction('templateVarsConfig');
+            $prepend = isset($this->data[$tVarConfig['prependTitleDataKey']]) ? $this->data[$tVarConfig['prependTitleDataKey']]['prependTitle'].' - ' : $prepend;
+            $this->placeholder()->setPlaceholder('pageTitle', $prepend.$translator->translate($this->data['browserTitle']));
         }
     }
 

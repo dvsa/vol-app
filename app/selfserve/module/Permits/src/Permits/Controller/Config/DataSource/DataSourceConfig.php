@@ -20,6 +20,7 @@ use Permits\Data\Mapper\FeeList as FeeListMapper;
 use Permits\Data\Mapper\ApplicationFees as ApplicationFeesMapper;
 use Permits\Data\Mapper\AcceptOrDeclinePermits as AcceptOrDeclineMapper;
 use Permits\Data\Mapper\IrhpApplicationFeeSummary;
+use Permits\Data\Mapper\PermitTypeTitle as PermitTypeTitleMapper;
 use Permits\Data\Mapper\UnpaidEcmtPermits as UnpaidEcmtPermitsMapper;
 use Permits\Data\Mapper\ValidEcmtPermits as ValidEcmtPermitsMapper;
 use Permits\Data\Mapper\CheckAnswers as CheckAnswersMapper;
@@ -134,7 +135,9 @@ class DataSourceConfig
     ];
 
     const IRHP_APP_OVERVIEW = [
-        IrhpAppDataSource::class => [],
+        IrhpAppDataSource::class => [
+            'mapper' => PermitTypeTitleMapper::class
+        ],
         QuestionAnswer::class => [],
     ];
 
@@ -186,7 +189,9 @@ class DataSourceConfig
     ];
 
     const IRHP_APP_DECLARATION = [
-        IrhpAppDataSource::class => [],
+        IrhpAppDataSource::class => [
+            'mapper' => PermitTypeTitleMapper::class
+        ],
         PermitsAvailableDataSource::class => [],
     ];
 

@@ -36,6 +36,7 @@ class IrhpAwaitingFeeController extends AbstractSelfserveController implements T
 
     protected $templateVarsConfig = [
         'default' => [
+            'prependTitleDataKey' => IrhpAppDataSource::DATA_KEY,
             'browserTitle' => 'permits.page.irhp.awaiting-fee.browser.title',
             'backUri' => IrhpApplicationSection::ROUTE_PERMITS,
         ]
