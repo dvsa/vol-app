@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "421b5e830dbcc98e6699ff69c8edd4e5",
+    "content-hash": "370585c562303176c7dda0ac81610884",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -70,11 +70,11 @@
         },
         {
             "name": "doctrine/cache",
-            "version": "1.9.0",
+            "version": "1.9.1",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/cache/1.9.0/doctrine-cache-1.9.0.zip",
-                "reference": "c15dcd24b756f9e52ea7c3ae8227354f3628f11a",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/cache/1.9.1/doctrine-cache-1.9.1.zip",
+                "reference": "89a5c76c39c292f7798f964ab3c836c3f8192a55",
                 "shasum": ""
             },
             "require": {
@@ -143,15 +143,15 @@
                 "riak",
                 "xcache"
             ],
-            "time": "2019-11-11T10:31:52+00:00"
+            "time": "2019-11-15T14:31:57+00:00"
         },
         {
             "name": "doctrine/collections",
-            "version": "1.6.3",
+            "version": "1.6.4",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/collections/1.6.3/doctrine-collections-1.6.3.zip",
-                "reference": "037ccc5b1c249275f8f6bb48e35f140fd52fd577",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/collections/1.6.4/doctrine-collections-1.6.4.zip",
+                "reference": "6b1e4b2b66f6d6e49983cebfe23a21b7ccc5b0d7",
                 "shasum": ""
             },
             "require": {
@@ -207,7 +207,7 @@
                 "iterators",
                 "php"
             ],
-            "time": "2019-11-04T15:26:07+00:00"
+            "time": "2019-11-13T13:07:11+00:00"
         },
         {
             "name": "doctrine/common",
@@ -290,10 +290,10 @@
             "name": "doctrine/dbal",
             "version": "v2.6.3",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/dbal/v2.6.3/doctrine-dbal-v2.6.3.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-dbal-e3eed9b1facbb0ced3a0995244843a189e7d1b13-zip-121991.tar",
                 "reference": "e3eed9b1facbb0ced3a0995244843a189e7d1b13",
-                "shasum": ""
+                "shasum": "292e18d5bdc1015c30395ee85d703a919b045bc8"
             },
             "require": {
                 "doctrine/common": "^2.7.1",
@@ -322,6 +322,7 @@
                     "Doctrine\\DBAL\\": "lib/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -357,10 +358,10 @@
             "name": "doctrine/doctrine-module",
             "version": "1.0.1",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/doctrine-module/1.0.1/doctrine-doctrine-module-1.0.1.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-doctrine-module-ade6c1667283e3d8131d40e79c427b8a8100e7d3-zip-8be3ea.tar",
                 "reference": "ade6c1667283e3d8131d40e79c427b8a8100e7d3",
-                "shasum": ""
+                "shasum": "681970aec0a753256a2e114f6221ea0ac1cf8185"
             },
             "require": {
                 "doctrine/cache": "~1.5",
@@ -392,6 +393,7 @@
                     "DoctrineModule\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -429,10 +431,10 @@
             "name": "doctrine/doctrine-orm-module",
             "version": "0.10.0",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/doctrine-orm-module/0.10.0/doctrine-doctrine-orm-module-0.10.0.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-doctrine-orm-module-50808eb795d00aac6a551023b1bb379de054f9b5-zip-e91d1b.tar",
                 "reference": "50808eb795d00aac6a551023b1bb379de054f9b5",
-                "shasum": ""
+                "shasum": "d57749559fe5eb19419e19eb60e882423d223461"
             },
             "require": {
                 "doctrine/dbal": ">=2.4,<2.7",
@@ -463,6 +465,7 @@
                     "DoctrineORMModule\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -734,11 +737,11 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "v2.6.4",
+            "version": "v2.6.6",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/orm/v2.6.4/doctrine-orm-v2.6.4.zip",
-                "reference": "b52ef5a1002f99ab506a5a2d6dba5a2c236c5f43",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/orm/v2.6.6/doctrine-orm-v2.6.6.zip",
+                "reference": "2d9b9351831d1230881c52f006011cbf72fe944e",
                 "shasum": ""
             },
             "require": {
@@ -805,7 +808,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2019-09-20T14:30:26+00:00"
+            "time": "2019-11-18T22:01:21+00:00"
         },
         {
             "name": "doctrine/persistence",
@@ -887,10 +890,10 @@
             "name": "doctrine/reflection",
             "version": "v1.0.0",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/reflection/v1.0.0/doctrine-reflection-v1.0.0.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/doctrine-reflection-02538d3f95e88eb397a5f86274deb2c6175c2ab6-zip-5a5077.tar",
                 "reference": "02538d3f95e88eb397a5f86274deb2c6175c2ab6",
-                "shasum": ""
+                "shasum": "e51fd380ab385bbff0b7697a93bf1d30c5241332"
             },
             "require": {
                 "doctrine/annotations": "^1.0",
@@ -916,6 +919,7 @@
                     "Doctrine\\Common\\": "lib/Doctrine/Common"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1269,12 +1273,12 @@
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.97",
+            "version": "4.206.101",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-common/4.206.97/olcs-olcs-common-4.206.97.zip",
-                "reference": "8b65d7c1142b24606e5f0db99879a23c121453bd",
-                "shasum": "8b65d7c1142b24606e5f0db99879a23c121453bd"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-common/4.206.101/olcs-olcs-common-4.206.101.zip",
+                "reference": "cdb62a85d08bbd014cea53536b4b9c8da5be28ce",
+                "shasum": "cdb62a85d08bbd014cea53536b4b9c8da5be28ce"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -1340,7 +1344,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2019-11-12T12:03:16+00:00"
+            "time": "2019-11-21T17:03:23+00:00"
         },
         {
             "name": "olcs/olcs-logging",
@@ -1413,12 +1417,12 @@
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "4.206.45",
+            "version": "4.206.47",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-transfer/4.206.45/olcs-olcs-transfer-4.206.45.zip",
-                "reference": "b8fd92d38ffa0a96f27d8d77a30d93679349e236",
-                "shasum": "b8fd92d38ffa0a96f27d8d77a30d93679349e236"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-transfer/4.206.47/olcs-olcs-transfer-4.206.47.zip",
+                "reference": "6a5897f342ebc4edbcb8d8706141b0cb5a6c5a25",
+                "shasum": "6a5897f342ebc4edbcb8d8706141b0cb5a6c5a25"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -1474,7 +1478,7 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2019-11-11T14:35:00+00:00"
+            "time": "2019-11-20T12:05:56+00:00"
         },
         {
             "name": "olcs/olcs-utils",
@@ -1662,10 +1666,10 @@
             "name": "soflomo/purifier",
             "version": "v0.1.1",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/soflomo/purifier/v0.1.1/soflomo-purifier-v0.1.1.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/soflomo-purifier-1f2d85a1b67bdb75bd86eb7a490e1c12280972b9-zip-b8842f.tar",
                 "reference": "1f2d85a1b67bdb75bd86eb7a490e1c12280972b9",
-                "shasum": ""
+                "shasum": "ea7937f729e2a464e602c36c580525f9855b395a"
             },
             "require": {
                 "ezyang/htmlpurifier": ">=4.5.0",
@@ -1684,6 +1688,7 @@
                     "./Module.php"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -1707,11 +1712,11 @@
         },
         {
             "name": "symfony/console",
-            "version": "v3.4.34",
+            "version": "v3.4.35",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/console/v3.4.34/symfony-console-v3.4.34.zip",
-                "reference": "c7edffb26b29cae972ca4afccb610a38ce8d0ccf",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/console/v3.4.35/symfony-console-v3.4.35.zip",
+                "reference": "17b154f932c5874cdbda6d05796b6490eec9f9f7",
                 "shasum": ""
             },
             "require": {
@@ -1769,15 +1774,15 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2019-10-24T15:33:53+00:00"
+            "time": "2019-11-13T07:12:39+00:00"
         },
         {
             "name": "symfony/debug",
-            "version": "v4.3.7",
+            "version": "v4.4.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/debug/v4.3.7/symfony-debug-v4.3.7.zip",
-                "reference": "5ea9c3e01989a86ceaa0283f21234b12deadf5e2",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/debug/v4.4.0/symfony-debug-v4.4.0.zip",
+                "reference": "b24b791f817116b29e52a63e8544884cf9a40757",
                 "shasum": ""
             },
             "require": {
@@ -1788,12 +1793,12 @@
                 "symfony/http-kernel": "<3.4"
             },
             "require-dev": {
-                "symfony/http-kernel": "~3.4|~4.0"
+                "symfony/http-kernel": "^3.4|^4.0|^5.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.3-dev"
+                    "dev-master": "4.4-dev"
                 }
             },
             "autoload": {
@@ -1819,7 +1824,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2019-10-28T17:07:32+00:00"
+            "time": "2019-11-10T17:54:30+00:00"
         },
         {
             "name": "symfony/filesystem",
@@ -1866,11 +1871,11 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v4.3.7",
+            "version": "v4.4.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/finder/v4.3.7/symfony-finder-v4.3.7.zip",
-                "reference": "72a068f77e317ae77c0a0495236ad292cfb5ce6f",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/finder/v4.4.0/symfony-finder-v4.4.0.zip",
+                "reference": "ce8743441da64c41e2a667b8eb66070444ed911e",
                 "shasum": ""
             },
             "require": {
@@ -1879,7 +1884,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.3-dev"
+                    "dev-master": "4.4-dev"
                 }
             },
             "autoload": {
@@ -1905,7 +1910,7 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-            "time": "2019-10-30T12:53:54+00:00"
+            "time": "2019-11-17T21:56:56+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -1964,10 +1969,10 @@
             "name": "zendframework/zendframework",
             "version": "2.4.13",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zendframework/2.4.13/zendframework-zendframework-2.4.13.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/zendframework-zendframework-06bf809653a51e843b7a84dc380ac1d8a0a6a1ea-zip-4d29b5.tar",
                 "reference": "06bf809653a51e843b7a84dc380ac1d8a0a6a1ea",
-                "shasum": ""
+                "shasum": "96f1587ee52bb424370175e742cc0269e9d7057c"
             },
             "require": {
                 "php": ">=5.3.23",
@@ -2060,6 +2065,7 @@
                     "Zend\\": "library/Zend/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -2075,10 +2081,10 @@
             "name": "zendframework/zendxml",
             "version": "1.2.0",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zendxml/1.2.0/zendframework-zendxml-1.2.0.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/zendframework-zendxml-eceab37a591c9e140772a1470338258857339e00-zip-020fc8.tar",
                 "reference": "eceab37a591c9e140772a1470338258857339e00",
-                "shasum": ""
+                "shasum": "565d5fa1244393a09481e72cd6cda9c6b173cecf"
             },
             "require": {
                 "php": "^5.6 || ^7.0"
@@ -2099,6 +2105,7 @@
                     "ZendXml\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -2115,10 +2122,10 @@
             "name": "zf-commons/zfc-rbac",
             "version": "v2.5.6",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zf-commons/zfc-rbac/v2.5.6/zf-commons-zfc-rbac-v2.5.6.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/zf-commons-zfc-rbac-62873668fe0c32aaed3f291dd21c2a7ba22248d7-zip-228e75.tar",
                 "reference": "62873668fe0c32aaed3f291dd21c2a7ba22248d7",
-                "shasum": ""
+                "shasum": "404f5661939edee0dd525acd2b74f97299d9a7d1"
             },
             "require": {
                 "php": ">=5.4",
@@ -2152,6 +2159,7 @@
                     "ZfcRbac\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -2185,10 +2193,10 @@
             "name": "zfr/rbac",
             "version": "1.2.0",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zfr/rbac/1.2.0/zfr-rbac-1.2.0.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/zfr-rbac-493711bfc2a637fd7c6f23b71b7b55a621c35d9d-zip-85e76c.tar",
                 "reference": "493711bfc2a637fd7c6f23b71b7b55a621c35d9d",
-                "shasum": ""
+                "shasum": "95d923e0294efd055fdd8e381a9ea9d46e05e4f9"
             },
             "require": {
                 "php": ">=5.4"
@@ -2205,6 +2213,7 @@
                     "Rbac\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -2231,10 +2240,10 @@
             "name": "hamcrest/hamcrest-php",
             "version": "v2.0.0",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/hamcrest/hamcrest-php/v2.0.0/hamcrest-hamcrest-php-v2.0.0.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/hamcrest-hamcrest-php-776503d3a8e85d4f9a1148614f95b7a608b046ad-zip-a48af8.tar",
                 "reference": "776503d3a8e85d4f9a1148614f95b7a608b046ad",
-                "shasum": ""
+                "shasum": "9532f8ec8017b20d8512b766a83782dcbbfbc5af"
             },
             "require": {
                 "php": "^5.3|^7.0"
@@ -2260,6 +2269,7 @@
                     "hamcrest"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD"
             ],
@@ -2273,10 +2283,10 @@
             "name": "johnkary/phpunit-speedtrap",
             "version": "v3.1.0",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/johnkary/phpunit-speedtrap/v3.1.0/johnkary-phpunit-speedtrap-v3.1.0.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/johnkary-phpunit-speedtrap-dac11b8640d4be7a70f336616947fa84f169835a-zip-e8a7e1.tar",
                 "reference": "dac11b8640d4be7a70f336616947fa84f169835a",
-                "shasum": ""
+                "shasum": "fc144f850549d3730dc35b96306aa65275500af3"
             },
             "require": {
                 "php": ">=7.1",
@@ -2293,6 +2303,7 @@
                     "JohnKary\\PHPUnit\\Listener\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -2520,10 +2531,10 @@
             "name": "pdepend/pdepend",
             "version": "2.5.2",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/pdepend/pdepend/2.5.2/pdepend-pdepend-2.5.2.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/pdepend-pdepend-9daf26d0368d4a12bed1cacae1a9f3a6f0adf239-zip-0d45b9.tar",
                 "reference": "9daf26d0368d4a12bed1cacae1a9f3a6f0adf239",
-                "shasum": ""
+                "shasum": "cb40c12deca280570a2501336b24257d9bc36b36"
             },
             "require": {
                 "php": ">=5.3.7",
@@ -2544,6 +2555,7 @@
                     "PDepend\\": "src/main/php/PDepend"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -2554,10 +2566,10 @@
             "name": "phar-io/manifest",
             "version": "1.0.3",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/phar-io/manifest/1.0.3/phar-io-manifest-1.0.3.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/phar-io-manifest-7761fcacf03b4d4f16e7ccb606d4879ca431fcf4-zip-16fcd4.tar",
                 "reference": "7761fcacf03b4d4f16e7ccb606d4879ca431fcf4",
-                "shasum": ""
+                "shasum": "b04bb9f406aea7e628487de22097d6862ffdcff8"
             },
             "require": {
                 "ext-dom": "*",
@@ -2576,6 +2588,7 @@
                     "src/"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -2603,10 +2616,10 @@
             "name": "phar-io/version",
             "version": "2.0.1",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/phar-io/version/2.0.1/phar-io-version-2.0.1.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/phar-io-version-45a2ec53a73c70ce41d55cedef9063630abaf1b6-zip-8d9b61.tar",
                 "reference": "45a2ec53a73c70ce41d55cedef9063630abaf1b6",
-                "shasum": ""
+                "shasum": "26f48d68e5d2b26166805e7b5710067e4512b892"
             },
             "require": {
                 "php": "^5.6 || ^7.0"
@@ -2617,24 +2630,25 @@
                     "src/"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
             "authors": [
                 {
                     "name": "Arne Blankerts",
-                    "role": "Developer",
-                    "email": "arne@blankerts.de"
+                    "email": "arne@blankerts.de",
+                    "role": "Developer"
                 },
                 {
                     "name": "Sebastian Heuer",
-                    "role": "Developer",
-                    "email": "sebastian@phpeople.de"
+                    "email": "sebastian@phpeople.de",
+                    "role": "Developer"
                 },
                 {
                     "name": "Sebastian Bergmann",
-                    "role": "Developer",
-                    "email": "sebastian@phpunit.de"
+                    "email": "sebastian@phpunit.de",
+                    "role": "Developer"
                 }
             ],
             "description": "Library for handling version information and constraints",
@@ -2895,10 +2909,10 @@
             "name": "phpstan/phpstan-mockery",
             "version": "0.10.2",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/phpstan/phpstan-mockery/0.10.2/phpstan-phpstan-mockery-0.10.2.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/phpstan-phpstan-mockery-14d568b6b56c957c9ae5330603303a367b21f0e9-zip-2bda4d.tar",
                 "reference": "14d568b6b56c957c9ae5330603303a367b21f0e9",
-                "shasum": ""
+                "shasum": "d7b547e34a20713202ea90edab4152f9f8c50e2a"
             },
             "require": {
                 "nikic/php-parser": "^4.0",
@@ -2928,6 +2942,7 @@
                     "PHPStan\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -2938,10 +2953,10 @@
             "name": "phpstan/phpstan-shim",
             "version": "0.10.8",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/phpstan/phpstan-shim/0.10.8/phpstan-phpstan-shim-0.10.8.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/phpstan-phpstan-shim-7f433a1af3a3e27bea056552e42411c9d9af9c8e-zip-5dcf31.tar",
                 "reference": "7f433a1af3a3e27bea056552e42411c9d9af9c8e",
-                "shasum": ""
+                "shasum": "2b5185ba73461e13a766fb9d454cfa05b94c2dd2"
             },
             "require": {
                 "php": "~7.1"
@@ -2966,6 +2981,7 @@
                     "bootstrap.php"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -2976,10 +2992,10 @@
             "name": "phpunit/php-code-coverage",
             "version": "6.1.4",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/phpunit/php-code-coverage/6.1.4/phpunit-php-code-coverage-6.1.4.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/phpunit-php-code-coverage-807e6013b00af69b6c5d9ceb4282d0393dbb9d8d-zip-afe961.tar",
                 "reference": "807e6013b00af69b6c5d9ceb4282d0393dbb9d8d",
-                "shasum": ""
+                "shasum": "902289ccc668712eae1c1263953139e21be8c269"
             },
             "require": {
                 "ext-dom": "*",
@@ -3010,14 +3026,15 @@
                     "src/"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
             "authors": [
                 {
                     "name": "Sebastian Bergmann",
-                    "role": "lead",
-                    "email": "sebastian@phpunit.de"
+                    "email": "sebastian@phpunit.de",
+                    "role": "lead"
                 }
             ],
             "description": "Library that provides collection, processing, and rendering functionality for PHP code coverage information.",
@@ -3033,10 +3050,10 @@
             "name": "phpunit/php-file-iterator",
             "version": "2.0.2",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/phpunit/php-file-iterator/2.0.2/phpunit-php-file-iterator-2.0.2.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/phpunit-php-file-iterator-050bedf145a257b1ff02746c31894800e5122946-zip-f3c112.tar",
                 "reference": "050bedf145a257b1ff02746c31894800e5122946",
-                "shasum": ""
+                "shasum": "052df4075c47af43df2040e5407b7439d420df6b"
             },
             "require": {
                 "php": "^7.1"
@@ -3055,14 +3072,15 @@
                     "src/"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
             "authors": [
                 {
                     "name": "Sebastian Bergmann",
-                    "role": "lead",
-                    "email": "sebastian@phpunit.de"
+                    "email": "sebastian@phpunit.de",
+                    "role": "lead"
                 }
             ],
             "description": "FilterIterator implementation that filters files based on a list of suffixes.",
@@ -3077,10 +3095,10 @@
             "name": "phpunit/php-text-template",
             "version": "1.2.1",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/phpunit/php-text-template/1.2.1/phpunit-php-text-template-1.2.1.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/phpunit-php-text-template-31f8b717e51d9a2afca6c9f046f5d69fc27c8686-zip-c6bcbd.tar",
                 "reference": "31f8b717e51d9a2afca6c9f046f5d69fc27c8686",
-                "shasum": ""
+                "shasum": "d2c6b195850427df82a2abb760dad89a8bfc7e88"
             },
             "require": {
                 "php": ">=5.3.3"
@@ -3091,14 +3109,15 @@
                     "src/"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
             "authors": [
                 {
                     "name": "Sebastian Bergmann",
-                    "role": "lead",
-                    "email": "sebastian@phpunit.de"
+                    "email": "sebastian@phpunit.de",
+                    "role": "lead"
                 }
             ],
             "description": "Simple template engine.",
@@ -3140,8 +3159,8 @@
             "authors": [
                 {
                     "name": "Sebastian Bergmann",
-                    "role": "lead",
-                    "email": "sebastian@phpunit.de"
+                    "email": "sebastian@phpunit.de",
+                    "role": "lead"
                 }
             ],
             "description": "Utility class for timing",
@@ -3198,10 +3217,10 @@
             "name": "phpunit/phpcov",
             "version": "5.0.0",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/phpunit/phpcov/5.0.0/phpunit-phpcov-5.0.0.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/phpunit-phpcov-72fb974e6fe9b39d7e0b0d44061d2ba4c49ee0b8-zip-9684c7.tar",
                 "reference": "72fb974e6fe9b39d7e0b0d44061d2ba4c49ee0b8",
-                "shasum": ""
+                "shasum": "9e9d18ebbe1fddfe4e2b759eeb0228f80a25a834"
             },
             "require": {
                 "php": "^7.1",
@@ -3226,14 +3245,15 @@
                     "src/"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
             "authors": [
                 {
                     "name": "Sebastian Bergmann",
-                    "role": "lead",
-                    "email": "sebastian@phpunit.de"
+                    "email": "sebastian@phpunit.de",
+                    "role": "lead"
                 }
             ],
             "description": "CLI frontend for php-code-coverage",
@@ -3365,10 +3385,10 @@
             "name": "sebastian/code-unit-reverse-lookup",
             "version": "1.0.1",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/sebastian/code-unit-reverse-lookup/1.0.1/sebastian-code-unit-reverse-lookup-1.0.1.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/sebastian-code-unit-reverse-lookup-4419fcdb5eabb9caa61a27c7a1db532a6b55dd18-zip-2b8d33.tar",
                 "reference": "4419fcdb5eabb9caa61a27c7a1db532a6b55dd18",
-                "shasum": ""
+                "shasum": "8f04e2a21f021b1d02b1300f7e5f36f82cf4912c"
             },
             "require": {
                 "php": "^5.6 || ^7.0"
@@ -3387,6 +3407,7 @@
                     "src/"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -3404,10 +3425,10 @@
             "name": "sebastian/comparator",
             "version": "3.0.2",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/sebastian/comparator/3.0.2/sebastian-comparator-3.0.2.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/sebastian-comparator-5de4fc177adf9bce8df98d8d141a7559d7ccf6da-zip-bbaa6e.tar",
                 "reference": "5de4fc177adf9bce8df98d8d141a7559d7ccf6da",
-                "shasum": ""
+                "shasum": "09aa0065bc298b5da9eb82e80494bd2679fb6be3"
             },
             "require": {
                 "php": "^7.1",
@@ -3428,6 +3449,7 @@
                     "src/"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -3462,10 +3484,10 @@
             "name": "sebastian/diff",
             "version": "3.0.2",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/sebastian/diff/3.0.2/sebastian-diff-3.0.2.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/sebastian-diff-720fcc7e9b5cf384ea68d9d930d480907a0c1a29-zip-e6ed91.tar",
                 "reference": "720fcc7e9b5cf384ea68d9d930d480907a0c1a29",
-                "shasum": ""
+                "shasum": "61a5a468d18477ecd105011abb24f4c6a79d1e02"
             },
             "require": {
                 "php": "^7.1"
@@ -3485,6 +3507,7 @@
                     "src/"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -3510,11 +3533,11 @@
         },
         {
             "name": "sebastian/environment",
-            "version": "4.2.2",
+            "version": "4.2.3",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/sebastian/environment/4.2.2/sebastian-environment-4.2.2.zip",
-                "reference": "f2a2c8e1c97c11ace607a7a667d73d47c19fe404",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/sebastian/environment/4.2.3/sebastian-environment-4.2.3.zip",
+                "reference": "464c90d7bdf5ad4e8a6aea15c091fec0603d4368",
                 "shasum": ""
             },
             "require": {
@@ -3553,7 +3576,7 @@
                 "environment",
                 "hhvm"
             ],
-            "time": "2019-05-05T09:05:15+00:00"
+            "time": "2019-11-20T08:46:58+00:00"
         },
         {
             "name": "sebastian/exporter",
@@ -3620,10 +3643,10 @@
             "name": "sebastian/finder-facade",
             "version": "1.2.2",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/sebastian/finder-facade/1.2.2/sebastian-finder-facade-1.2.2.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/sebastian-finder-facade-4a3174709c2dc565fe5fb26fcf827f6a1fc7b09f-zip-ba105e.tar",
                 "reference": "4a3174709c2dc565fe5fb26fcf827f6a1fc7b09f",
-                "shasum": ""
+                "shasum": "3acdd788b26d240344f79e5bc9088d875d1c6a68"
             },
             "require": {
                 "symfony/finder": "~2.3|~3.0|~4.0",
@@ -3635,14 +3658,15 @@
                     "src/"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
             "authors": [
                 {
                     "name": "Sebastian Bergmann",
-                    "role": "lead",
-                    "email": "sebastian@phpunit.de"
+                    "email": "sebastian@phpunit.de",
+                    "role": "lead"
                 }
             ],
             "description": "FinderFacade is a convenience wrapper for Symfony's Finder component.",
@@ -3653,10 +3677,10 @@
             "name": "sebastian/global-state",
             "version": "2.0.0",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/sebastian/global-state/2.0.0/sebastian-global-state-2.0.0.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/sebastian-global-state-e8ba02eed7bbbb9e59e43dedd3dddeff4a56b0c4-zip-51dbeb.tar",
                 "reference": "e8ba02eed7bbbb9e59e43dedd3dddeff4a56b0c4",
-                "shasum": ""
+                "shasum": "473a86a3da213c61a6d801c8f08d49d2e8b664de"
             },
             "require": {
                 "php": "^7.0"
@@ -3678,6 +3702,7 @@
                     "src/"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -3698,10 +3723,10 @@
             "name": "sebastian/object-enumerator",
             "version": "3.0.3",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/sebastian/object-enumerator/3.0.3/sebastian-object-enumerator-3.0.3.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/sebastian-object-enumerator-7cfd9e65d11ffb5af41198476395774d4c8a84c5-zip-360ba9.tar",
                 "reference": "7cfd9e65d11ffb5af41198476395774d4c8a84c5",
-                "shasum": ""
+                "shasum": "f8c6919af6a54475a4bc7f1319ddf5afec957962"
             },
             "require": {
                 "php": "^7.0",
@@ -3722,6 +3747,7 @@
                     "src/"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -3739,10 +3765,10 @@
             "name": "sebastian/object-reflector",
             "version": "1.1.1",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/sebastian/object-reflector/1.1.1/sebastian-object-reflector-1.1.1.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/sebastian-object-reflector-773f97c67f28de00d397be301821b06708fca0be-zip-56c4ab.tar",
                 "reference": "773f97c67f28de00d397be301821b06708fca0be",
-                "shasum": ""
+                "shasum": "81cbc529fd751fa894f1c5c64e284d2ffb56afd1"
             },
             "require": {
                 "php": "^7.0"
@@ -3761,6 +3787,7 @@
                     "src/"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -3778,10 +3805,10 @@
             "name": "sebastian/recursion-context",
             "version": "3.0.0",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/sebastian/recursion-context/3.0.0/sebastian-recursion-context-3.0.0.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/sebastian-recursion-context-5b0cd723502bac3b006cbf3dbf7a1e3fcefe4fa8-zip-ab6a2f.tar",
                 "reference": "5b0cd723502bac3b006cbf3dbf7a1e3fcefe4fa8",
-                "shasum": ""
+                "shasum": "e77f91f00a369888fabfb1994117c6075fb18222"
             },
             "require": {
                 "php": "^7.0"
@@ -3800,6 +3827,7 @@
                     "src/"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -3825,10 +3853,10 @@
             "name": "sebastian/resource-operations",
             "version": "2.0.1",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/sebastian/resource-operations/2.0.1/sebastian-resource-operations-2.0.1.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/sebastian-resource-operations-4d7a795d35b889bf80a0cc04e08d77cedfa917a9-zip-41a624.tar",
                 "reference": "4d7a795d35b889bf80a0cc04e08d77cedfa917a9",
-                "shasum": ""
+                "shasum": "47fb9286a6177b77703b69ced675bf286b034274"
             },
             "require": {
                 "php": "^7.1"
@@ -3844,6 +3872,7 @@
                     "src/"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -3861,10 +3890,10 @@
             "name": "sebastian/version",
             "version": "2.0.1",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/sebastian/version/2.0.1/sebastian-version-2.0.1.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/sebastian-version-99732be0ddb3361e16ad77b68ba41efc8e979019-zip-0eee83.tar",
                 "reference": "99732be0ddb3361e16ad77b68ba41efc8e979019",
-                "shasum": ""
+                "shasum": "7b1b82cade360200ab79aad08a846540f1db95cd"
             },
             "require": {
                 "php": ">=5.6"
@@ -3880,14 +3909,15 @@
                     "src/"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
             "authors": [
                 {
                     "name": "Sebastian Bergmann",
-                    "role": "lead",
-                    "email": "sebastian@phpunit.de"
+                    "email": "sebastian@phpunit.de",
+                    "role": "lead"
                 }
             ],
             "description": "Library that helps with managing the version number of Git-hosted PHP projects",
@@ -3941,10 +3971,10 @@
         },
         {
             "name": "symfony/config",
-            "version": "v3.4.34",
+            "version": "v3.4.35",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/config/v3.4.34/symfony-config-v3.4.34.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/config/v3.4.35/symfony-config-v3.4.35.zip",
                 "reference": "c3a30587de97263d2813a3c81b74126c58b67a4f",
                 "shasum": ""
             },
@@ -4118,10 +4148,10 @@
             "name": "theseer/fdomdocument",
             "version": "1.6.6",
             "dist": {
-                "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/theseer/fdomdocument/1.6.6/theseer-fdomdocument-1.6.6.zip",
+                "type": "tar",
+                "url": "http://devrepo.shd.ci.nonprod.dvsa.aws/dist/theseer-fdomdocument-6e8203e40a32a9c770bcb62fe37e68b948da6dca-zip-e35ff2.tar",
                 "reference": "6e8203e40a32a9c770bcb62fe37e68b948da6dca",
-                "shasum": ""
+                "shasum": "8065850cf7b237d920e53218957510bc4f542b23"
             },
             "require": {
                 "ext-dom": "*",
@@ -4134,14 +4164,15 @@
                     "src/"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
             "authors": [
                 {
                     "name": "Arne Blankerts",
-                    "role": "lead",
-                    "email": "arne@blankerts.de"
+                    "email": "arne@blankerts.de",
+                    "role": "lead"
                 }
             ],
             "description": "The classes contained within this repository extend the standard DOM to use exceptions at all occasions of errors instead of PHP warnings or notices. They also add various custom methods and shortcuts for convenience and to simplify the usage of DOM.",
@@ -4184,26 +4215,24 @@
         },
         {
             "name": "webmozart/assert",
-            "version": "1.5.0",
+            "version": "1.6.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/webmozart/assert/1.5.0/webmozart-assert-1.5.0.zip",
-                "reference": "88e6d84706d09a236046d686bbea96f07b3a34f4",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/webmozart/assert/1.6.0/webmozart-assert-1.6.0.zip",
+                "reference": "573381c0a64f155a0d9a23f4b0c797194805b925",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.3.3 || ^7.0",
                 "symfony/polyfill-ctype": "^1.8"
             },
+            "conflict": {
+                "vimeo/psalm": "<3.6.0"
+            },
             "require-dev": {
                 "phpunit/phpunit": "^4.8.36 || ^7.5.13"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.3-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Webmozart\\Assert\\": "src/"
@@ -4224,7 +4253,7 @@
                 "check",
                 "validate"
             ],
-            "time": "2019-08-24T08:43:50+00:00"
+            "time": "2019-11-24T13:36:37+00:00"
         }
     ],
     "aliases": [],
