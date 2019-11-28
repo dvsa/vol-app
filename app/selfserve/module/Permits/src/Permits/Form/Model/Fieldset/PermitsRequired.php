@@ -6,6 +6,9 @@ use Zend\Form\Annotation as Form;
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("PermitsRequired")
+ * @Form\Attributes({
+ *   "id" : "ecmt-number-of-permits",
+ * })
  */
 class PermitsRequired
 {
