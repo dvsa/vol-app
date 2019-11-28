@@ -6,6 +6,7 @@ use Dvsa\Olcs\Transfer\Command\IrhpApplication\CancelApplication;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
+use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
@@ -39,6 +40,7 @@ class CancelIrhpApplicationController extends AbstractSelfserveController implem
     protected $templateVarsConfig = [
         'cancel' => [
             'browserTitle' => 'permits.page.cancel.browser.title',
+            'prependTitleDataKey' => IrhpAppDataSource::DATA_KEY,
             'question' => 'permits.page.cancel.question',
             'bulletList' => [
                 'title' => 'permits.page.cancel.bullet.list.title',
@@ -48,6 +50,7 @@ class CancelIrhpApplicationController extends AbstractSelfserveController implem
         ],
         'confirmation' => [
             'browserTitle' => 'permits.page.confirmation.cancel.browser.title',
+            'prependTitleDataKey' => IrhpAppDataSource::DATA_KEY,
             'title' => 'permits.page.confirmation.cancel.title',
             'extraContent' => [
                 'title' => 'permits.page.confirmation.bullet.list.title',

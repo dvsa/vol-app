@@ -44,6 +44,7 @@ class SubmittedController extends AbstractSelfserveController implements ToggleA
         ],
         'issue-submitted' => [
             'browserTitle' => 'permits.page.confirmation.issue-submitted.browser.title',
+            'prependTitleDataKey' => IrhpAppDataSource::DATA_KEY,
             'title' => 'permits.page.confirmation.issue-submitted.title',
             'extraContent' => [
                 'title' => 'permits.page.confirmation.bullet.list.title',
@@ -54,6 +55,7 @@ class SubmittedController extends AbstractSelfserveController implements ToggleA
         ],
         'irhp-submitted' => [
             'browserTitle' => 'permits.page.confirmation.irhp-submitted.browser.title',
+            'prependTitleDataKey' => IrhpAppDataSource::DATA_KEY,
             'title' => 'permits.page.confirmation.irhp-submitted.title',
             'extraContent' => [
                 'title' => 'permits.page.confirmation.irhp-submitted.bullet.list.title',

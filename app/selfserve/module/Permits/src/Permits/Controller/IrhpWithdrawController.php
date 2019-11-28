@@ -7,6 +7,7 @@ use Dvsa\Olcs\Transfer\Command\IrhpApplication\Withdraw;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
+use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
@@ -39,6 +40,7 @@ class IrhpWithdrawController extends AbstractSelfserveController implements Togg
     protected $templateVarsConfig = [
         'withdraw' => [
             'browserTitle' => 'permits.page.withdraw.browser.title',
+            'prependTitleDataKey' => IrhpAppDataSource::DATA_KEY,
             'question' => 'permits.page.withdraw.question',
             'bulletList' => [
                 'title' => 'permits.page.withdraw.bullet.list.title',
@@ -48,6 +50,7 @@ class IrhpWithdrawController extends AbstractSelfserveController implements Togg
         ],
         'confirmation' => [
             'browserTitle' => 'permits.page.confirmation.withdraw.browser.title',
+            'prependTitleDataKey' => IrhpAppDataSource::DATA_KEY,
             'title' => 'permits.page.confirmation.withdraw.title',
             'extraContent' => [
                 'title' => 'permits.page.confirmation.bullet.list.title',
