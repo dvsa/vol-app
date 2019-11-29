@@ -412,6 +412,8 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
             return $this->conditionalDisplayNotMet(EcmtSection::ROUTE_PERMITS);
         }
 
+        $this->placeholder()->setPlaceholder('pageTitle', 'permits.page.ecmt.consideration.browser.title');
+
         $ecmtPermitFees = $this->getEcmtPermitFees();
         $ecmtApplicationFee = $ecmtPermitFees['fee'][$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE]['fixedValue'];
 

@@ -142,7 +142,9 @@ class DataSourceConfig
     ];
 
     const IRHP_APP = [
-        IrhpAppDataSource::class => [],
+        IrhpAppDataSource::class => [
+            'mapper' => PermitTypeTitleMapper::class
+        ],
     ];
 
     const IRHP_APP_FEE = [

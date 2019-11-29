@@ -6,6 +6,7 @@ use Common\Controller\Interfaces\ToggleAwareInterface;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
+use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\View\Helper\IrhpApplicationSection;
 
@@ -30,6 +31,8 @@ class IrhpUnderConsiderationController extends AbstractSelfserveController imple
     protected $templateVarsConfig = [
         'generic' => [
             'backUri' => IrhpApplicationSection::ROUTE_PERMITS,
+            'browserTitle' => 'permits.irhp.under-consideration.browser.title',
+            'prependTitleDataKey' => IrhpAppDataSource::DATA_KEY,
         ]
     ];
 }
