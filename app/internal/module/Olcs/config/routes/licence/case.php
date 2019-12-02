@@ -465,7 +465,7 @@ return [
             'repute-not-lost' => [
                 'type' => 'segment',
                 'options' => [
-                    'route' => '/repute-not-lost/:action[/:id][/]',
+                    'route' => 'repute-not-lost/:action[/:id][/]',
                     'constraints' => [
                         'action' => '(add|edit|delete)',
                         'id' => '[0-9]+'
@@ -478,7 +478,7 @@ return [
             'declare-unfit' => [
                 'type' => 'segment',
                 'options' => [
-                    'route' => '/declare-unfit/:action[/:id][/]',
+                    'route' => 'declare-unfit/:action[/:id][/]',
                     'constraints' => [
                         'action' => '(add|edit|delete)',
                         'id' => '[0-9]+'
@@ -491,7 +491,7 @@ return [
             'no-further-action' => [
                 'type' => 'segment',
                 'options' => [
-                    'route' => '/no-further-action/:action[/:id][/]',
+                    'route' => 'no-further-action/:action[/:id][/]',
                     'constraints' => [
                         'action' => '(add|edit|delete)',
                         'id' => '[0-9]+'
