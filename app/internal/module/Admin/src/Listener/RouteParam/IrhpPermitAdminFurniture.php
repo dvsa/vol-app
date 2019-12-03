@@ -107,7 +107,14 @@ class IrhpPermitAdminFurniture implements
         $placeholder->getContainer('pageTitle')->set('Permits');
         $placeholder->getContainer('pageSubtitle')->set($this->setSubtitle($permitStock));
 
-        if (in_array($permitStock['irhpPermitType']['id'], [RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID, RefData::ECMT_REMOVAL_PERMIT_TYPE_ID])) {
+        $nonScoringTypes = [
+            RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID,
+            RefData::ECMT_REMOVAL_PERMIT_TYPE_ID,
+            RefData::CERT_ROADWORTHINESS_VEHICLE_PERMIT_TYPE_ID,
+            RefData::CERT_ROADWORTHINESS_TRAILER_PERMIT_TYPE_ID,
+        ];
+
+        if (in_array($permitStock['irhpPermitType']['id'], $nonScoringTypes)) {
             $this->getNavigationService()->findOneBy('id', 'admin-dashboard/admin-permits/jurisdiction')
                 ->setVisible(false);
             $this->getNavigationService()->findOneBy('id', 'admin-dashboard/admin-permits/sectors')

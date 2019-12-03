@@ -3,7 +3,15 @@ $(function () {
     const ECMT_SHORT_TERM_ID = 2;
     const ECMT_REMOVAL_ID = 3;
     const BILATERAL_ID = 4;
-    const IS_QA_PROCESS = [ECMT_SHORT_TERM_ID, ECMT_REMOVAL_ID];
+    const CERT_ROADWORTHINESS_VEHICLE_ID = 6;
+    const CERT_ROADWORTHINESS_TRAILER_ID = 7;
+
+    const IS_QA_PROCESS = [
+        ECMT_SHORT_TERM_ID,
+        ECMT_REMOVAL_ID,
+        CERT_ROADWORTHINESS_VEHICLE_ID,
+        CERT_ROADWORTHINESS_TRAILER_ID
+    ];
 
     var stockCountry = $(".stockCountry");
     var stockDates = $(".stockDates");
@@ -19,7 +27,7 @@ $(function () {
             stockCountry.addClass("js-hidden");
         }
 
-        if (typeId === ECMT_REMOVAL_ID) {
+        if (typeId === ECMT_REMOVAL_ID || typeId === CERT_ROADWORTHINESS_VEHICLE_ID || CERT_ROADWORTHINESS_TRAILER_ID) {
             stockDates.addClass("js-hidden");
         } else {
             stockDates.removeClass("js-hidden");
