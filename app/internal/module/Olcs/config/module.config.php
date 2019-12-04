@@ -479,6 +479,9 @@ return array(
             Olcs\Service\Data\Licence::class => Olcs\Service\Data\Licence::class,
             Olcs\Service\Data\ApplicationStatus::class => \Olcs\Service\Data\ApplicationStatus::class,
         ],
+        'abstract_factories' => [
+            \Zend\Cache\Service\StorageCacheAbstractServiceFactory::class,
+        ],
         'factories' => array(
             \Olcs\Service\Marker\MarkerService::class => \Olcs\Service\Marker\MarkerService::class,
             \Olcs\Service\Marker\MarkerPluginManager::class =>
