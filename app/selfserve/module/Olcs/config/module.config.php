@@ -1262,6 +1262,9 @@ return array(
             'DashboardProcessingService'
                 => 'Olcs\Service\Processing\DashboardProcessingService',
         ),
+        'abstract_factories' => [
+            \Zend\Cache\Service\StorageCacheAbstractServiceFactory::class,
+        ],
         'factories' => array(
             'CookieBannerListener' => \Olcs\Mvc\CookieBannerListener::class,
             'CookieBanner' => \Olcs\Mvc\CookieBanner::class,
