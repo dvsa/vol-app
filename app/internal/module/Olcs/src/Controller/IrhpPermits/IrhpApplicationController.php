@@ -145,6 +145,7 @@ class IrhpApplicationController extends AbstractInternalController implements
     {
         $typeResponse = $this->handleQuery(PermitTypeQry::create(['id' => $this->params()->fromRoute('permitTypeId')]));
         $irhpPermit = $typeResponse->getResult();
+
         if ($irhpPermit['isApplicationPathEnabled']) {
             $this->questionAnswerAddApplicationRedirect();
         }
@@ -449,7 +450,9 @@ class IrhpApplicationController extends AbstractInternalController implements
                 RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
                 RefData::ECMT_REMOVAL_PERMIT_TYPE_ID,
                 RefData::IRHP_BILATERAL_PERMIT_TYPE_ID,
-                RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID
+                RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID,
+                RefData::CERT_ROADWORTHINESS_VEHICLE_PERMIT_TYPE_ID,
+                RefData::CERT_ROADWORTHINESS_TRAILER_PERMIT_TYPE_ID
             ]
         )) {
             throw new \RuntimeException('Unsupported Permit Type');
