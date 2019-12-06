@@ -97,6 +97,9 @@ class SubmittedController extends AbstractSelfserveController implements ToggleA
             $this->data['title'] = 'permits.page.confirmation.irhp-payment-successful.title';
         } elseif ($irhpAppData['irhpPermitType']['isEcmtRemoval']) {
             $this->data['extraContent']['list'] = 'markup-irhp-submitted-ecmt-removal-what-happens-next';
+        } elseif ($irhpAppData['irhpPermitType']['isCertificateOfRoadworthiness']) {
+            $this->data['extraContent']['list'] = 'markup-irhp-submitted-certificate';
+            $this->data['warning'] = 'permits.page.confirmation.irhp-submitted.certificate.warning';
         }
 
         $this->addReceiptUrl(IrhpApplicationSection::ROUTE_PRINT_RECEIPT);
