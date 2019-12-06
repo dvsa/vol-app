@@ -73,11 +73,14 @@ class QaController extends AbstractOlcsController
             $form->setData($postParams);
 
             if ($form->isValid()) {
+                $formData = $form->getData();
+                $commandData = ['qa' => $formData['qa']];
+
                 $command = SubmitApplicationStep::create(
                     [
                         'id' => $routeParams['id'],
                         'slug' => $routeParams['slug'],
-                        'postData' => $postParams
+                        'postData' => $commandData
                     ]
                 );
 
