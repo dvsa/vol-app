@@ -137,10 +137,25 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
             RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
             RefData::IRHP_BILATERAL_PERMIT_TYPE_ID,
             RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID,
+            RefData::CERT_ROADWORTHINESS_VEHICLE_PERMIT_TYPE_ID,
+            RefData::CERT_ROADWORTHINESS_TRAILER_PERMIT_TYPE_ID,
         ];
 
         foreach ($data as $key => $item) {
             if (in_array($item['typeId'], $typesToGroupByLicence)) {
+                if (in_array(
+                    $item['typeId'],
+                    [
+                        RefData::CERT_ROADWORTHINESS_VEHICLE_PERMIT_TYPE_ID,
+                        RefData::CERT_ROADWORTHINESS_TRAILER_PERMIT_TYPE_ID,
+                    ]
+                )) {
+                    // TODO - OLCS-25382
+                    // Certificate of Roadworthiness doesn't have valid permit count
+                    // set the value here for now
+                    $data[$key]['validPermitCount'] = $item['validPermitCount'] = 1;
+                }
+
                 // group applications into one row per licence
                 if (isset($keys[$item['licenceId']][$item['typeId']])) {
                     // add number of permits required to the existing row
