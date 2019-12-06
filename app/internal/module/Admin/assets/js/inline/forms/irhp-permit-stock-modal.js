@@ -27,7 +27,7 @@ $(function () {
             stockCountry.addClass("js-hidden");
         }
 
-        if (typeId === ECMT_REMOVAL_ID || typeId === CERT_ROADWORTHINESS_VEHICLE_ID || CERT_ROADWORTHINESS_TRAILER_ID) {
+        if (typeId === ECMT_REMOVAL_ID || typeId === CERT_ROADWORTHINESS_VEHICLE_ID || typeId === CERT_ROADWORTHINESS_TRAILER_ID) {
             stockDates.addClass("js-hidden");
         } else {
             stockDates.removeClass("js-hidden");
