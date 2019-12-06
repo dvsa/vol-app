@@ -46,9 +46,15 @@ class AnswerFormatter extends AbstractHelper
                 default:
                     // TODO: this isn't ideal but will be resolved by the upcoming check answers and
                     // snapshot refactor
+                    $dateQuestions = [
+                        'qanda.ecmt-removal.permit-start-date.question',
+                        'qanda.certificate-of-roadworthiness.vehicle.mot-expiry-date.question',
+                        'qanda.certificate-of-roadworthiness.trailer.mot-expiry-date.question',
+                    ];
+
                     if ($data['question'] == 'qanda.common.certificates.question') {
                         $answer = $this->formatBoolean($answer);
-                    } elseif ($data['question'] == 'qanda.ecmt-removal.permit-start-date.question') {
+                    } elseif (in_array($data['question'], $dateQuestions)) {
                         $answer = $this->formatDate($answer);
                     }
 
