@@ -14,6 +14,7 @@ return [
         [
             'title' => 'dashboard-table-permit-application-num',
             'name' => 'validPermitCount',
+            'formatter' => 'ValidPermitCount'
         ],
         [
             'title' => 'dashboard-table-permit-application-type',
