@@ -20,6 +20,7 @@ class IrhpCandidatePermit implements MapperInterface
     public static function mapFromResult(array $data)
     {
         $form['fields']['irhpPermitRangeSelected'] = $data['irhpPermitRange']['id'];
+        $form['fields']['irhpPermitApplication'] = $data['irhpPermitApplication']['id'];
         if (isset($data['id'])) {
             $form['fields']['id'] = $data['id'];
         }
@@ -50,6 +51,8 @@ class IrhpCandidatePermit implements MapperInterface
      */
     public static function mapFromForm(array $data)
     {
+        $data['fields']['irhpApplication'] = $data['fields']['irhpAppId'];
+        $data['fields']['irhpPermitApplication'] = $data['fields']['permitAppId'];
         return $data['fields'];
     }
 

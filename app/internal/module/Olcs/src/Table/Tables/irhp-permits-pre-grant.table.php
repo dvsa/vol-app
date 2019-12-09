@@ -11,9 +11,9 @@ return [
     'settings' => [
         'crud' => [
             'actions' => [
-                'add' => ['requireRows' => false, 'class' => 'action--primary'],
-                'delete' => ['requireRows' => true, 'class' => 'action--secondary js-require--one'],
-                'edit' => ['requireRows' => true, 'class' => 'action--secondary js-require--one']
+                'preGrantAdd' => ['requireRows' => false, 'class' => 'action--primary', 'label' => 'Add', 'value' => 'preGrantAdd'],
+                'preGrantDelete' => ['requireRows' => true, 'class' => 'action--secondary js-require--one', 'label' => 'Delete', 'value' => 'preGrantDelete'],
+                'preGrantEdit' => ['requireRows' => true, 'class' => 'action--secondary js-require--one', 'label' => 'Edit', 'value' => 'preGrantEdit']
             ],
         ],
         'paginate' => [
@@ -28,6 +28,13 @@ return [
             'name' => 'permitNumber',
             'formatter' => function ($row) {
                 return 'Not known';
+            },
+        ],
+        [
+            'title' => 'Emissions',
+            'name' => 'emissions',
+            'formatter' => function ($row) {
+                return $row['assignedEmissionsCategory']['description'];
             },
         ],
         [
