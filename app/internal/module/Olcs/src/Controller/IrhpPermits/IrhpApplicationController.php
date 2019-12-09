@@ -388,41 +388,46 @@ class IrhpApplicationController extends AbstractInternalController implements
         $formData['topFields']['irhpPermitType'] = $permitTypeId;
         $formData['topFields']['licence'] = $this->params()->fromRoute('licence', null);
 
-        $maxStockPermits = $this->handleQuery(
-            MaxStockPermits::create(['licence' => $this->params()->fromRoute('licence', null)])
-        );
-        if (!$maxStockPermits->isOk()) {
-            throw new NotFoundException('Could not retrieve max permits data');
+        $nonQaPermitTypes = [
+            RefData::IRHP_BILATERAL_PERMIT_TYPE_ID,
+            RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID,
+        ];
+
+        if (in_array($permitTypeId, $nonQaPermitTypes)) {
+            $maxStockPermits = $this->handleQuery(
+                MaxStockPermits::create(['licence' => $this->params()->fromRoute('licence', null)])
+            );
+            if (!$maxStockPermits->isOk()) {
+                throw new NotFoundException('Could not retrieve max permits data');
+            }
+            $formData['maxStockPermits']['result'] = $maxStockPermits->getResult()['results'];
+
+            $windows = (int)$formData['topFields']['irhpPermitType'] === (int)RefData::IRHP_BILATERAL_PERMIT_TYPE_ID
+                ? $this->getBilateralWindows()['results']
+                : $this->getMultilateralWindows()['results'];
+
+            // Prepare data structure with open bilateral windows for NoOfPermits form builder
+            $formData['application'] = IrhpApplicationMapper::mapApplicationData(
+                $windows,
+                $permitTypeId
+            );
+
+            // Build the dynamic NoOfPermits per country per year form from Common
+            $formData['application']['licence']['totAuthVehicles'] = $licence['totAuthVehicles'];
+
+            $this->getServiceLocator()->get(NoOfPermits::class)->mapForFormOptions(
+                $formData,
+                $form,
+                'application',
+                'maxStockPermits',
+                'feePerPermit'
+            );
         }
-        $formData['maxStockPermits']['result'] = $maxStockPermits->getResult()['results'];
 
-        $windows = (int)$formData['topFields']['irhpPermitType'] === (int)RefData::IRHP_BILATERAL_PERMIT_TYPE_ID
-            ? $this->getBilateralWindows()['results']
-            : $this->getMultilateralWindows()['results'];
-
-        // Prepare data structure with open bilateral windows for NoOfPermits form builder
-        $formData['application'] = IrhpApplicationMapper::mapApplicationData(
-            $windows,
-            $permitTypeId
-        );
-
-        // Build the dynamic NoOfPermits per country per year form from Common
-        $formData['application']['licence']['totAuthVehicles'] = $licence['totAuthVehicles'];
-
-        $this->getServiceLocator()->get(NoOfPermits::class)->mapForFormOptions(
-            $formData,
-            $form,
-            'application',
-            'maxStockPermits',
-            'feePerPermit'
-        );
         $form->setData($formData);
 
         $form->get('topFields')->remove('stockHtml');
-
-        if (!$formData['fields']['requiresPreAllocationCheck']) {
-            $form->get('bottomFields')->remove('checked');
-        }
+        $form->get('bottomFields')->remove('checked');
 
         return $form;
     }
@@ -485,7 +490,7 @@ class IrhpApplicationController extends AbstractInternalController implements
 
         $form->setData($formData);
 
-        if (!$formData['fields']['requiresPreAllocationCheck']) {
+        if (!$formData['topFields']['requiresPreAllocationCheck']) {
             $form->get('bottomFields')->remove('checked');
         }
 
