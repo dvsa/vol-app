@@ -15,7 +15,30 @@ use Olcs\Controller\Traits as ControllerTraits;
 class IrhpDocsController extends AbstractIrhpPermitController
 {
     use ControllerTraits\DocumentActionTrait,
-        ControllerTraits\DocumentSearchTrait;
+        ControllerTraits\DocumentSearchTrait {
+            ControllerTraits\DocumentActionTrait::documentsAction as traitDocumentsAction;
+    }
+
+    /**
+     * Documents action
+     *
+     * @return \Zend\Http\Response
+     */
+    public function documentsAction()
+    {
+        $appId = $this->getFromRoute('permitid');
+
+        if (!IsEcmtId::isEcmtId($appId)) {
+            return $this->redirect()->toRoute(
+                'licence/irhp-application-docs',
+                ['irhpAppId' => $appId],
+                [],
+                true
+            );
+        }
+
+        return $this->traitDocumentsAction();
+    }
 
     /**
      * Get configured document form
