@@ -45,6 +45,7 @@ class IrhpApplication implements MapperInterface
         }
 
         if (isset($data['irhpPermitType']['id'])) {
+            $formData['topFields']['requiresPreAllocationCheck'] = $data['requiresPreAllocationCheck'];
             $formData['topFields']['isApplicationPathEnabled'] = $data['irhpPermitType']['isApplicationPathEnabled'];
             $formData['topFields']['irhpPermitType'] = $data['irhpPermitType']['id'];
         }
