@@ -180,6 +180,9 @@ class IrhpApplicationFurnitureTest extends TestCase
             )
             ->shouldReceive('findOneBy')->once()->with('id', 'irhp-application-decisions-revive-from-withdrawn')->andReturn(
                 m::mock()->shouldReceive('setVisible')->once()->with($data['canBeRevivedFromWithdrawn'])->getMock()
+            )
+            ->shouldReceive('findOneBy')->once()->with('id', 'irhp-application-decisions-revive-from-unsuccessful')->andReturn(
+                m::mock()->shouldReceive('setVisible')->once()->with($data['canBeRevivedFromUnsuccessful'])->getMock()
             );
 
         $this->sut->setNavigationService($mockNavigation);
@@ -209,6 +212,7 @@ class IrhpApplicationFurnitureTest extends TestCase
                     'canPreGrant' => true,
                     'isGrantable' => false,
                     'canBeRevivedFromWithdrawn' => false,
+                    'canBeRevivedFromUnsuccessful' => false,
                 ],
                 [
                     'isCancelVisible' => false,
@@ -227,6 +231,7 @@ class IrhpApplicationFurnitureTest extends TestCase
                     'canPreGrant' => true,
                     'isGrantable' => false,
                     'canBeRevivedFromWithdrawn' => false,
+                    'canBeRevivedFromUnsuccessful' => false,
                 ],
                 [
                     'isCancelVisible' => false,
@@ -245,6 +250,7 @@ class IrhpApplicationFurnitureTest extends TestCase
                     'canPreGrant' => true,
                     'isGrantable' => false,
                     'canBeRevivedFromWithdrawn' => false,
+                    'canBeRevivedFromUnsuccessful' => false,
                 ],
                 [
                     'isCancelVisible' => false,
@@ -263,6 +269,7 @@ class IrhpApplicationFurnitureTest extends TestCase
                     'canPreGrant' => true,
                     'isGrantable' => true,
                     'canBeRevivedFromWithdrawn' => true,
+                    'canBeRevivedFromUnsuccessful' => false,
                 ],
                 [
                     'isCancelVisible' => true,
