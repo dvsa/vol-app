@@ -223,7 +223,11 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
             }
 
             $tVarConfig = $this->configsForAction('templateVarsConfig');
-            $prepend = isset($this->data[$tVarConfig['prependTitleDataKey']]) ? $this->data[$tVarConfig['prependTitleDataKey']]['prependTitle'].' - ' : $prepend;
+
+            if (array_key_exists('prependTitleDataKey', $tVarConfig) && isset($this->data[$tVarConfig['prependTitleDataKey']])) {
+                $prepend = $this->data[$tVarConfig['prependTitleDataKey']]['prependTitle'] . ' - ';
+            }
+
             $this->placeholder()->setPlaceholder('pageTitle', $prepend.$translator->translate($this->data['browserTitle']));
         }
     }
