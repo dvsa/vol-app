@@ -50,6 +50,7 @@ class AnswerFormatter extends AbstractHelper
                         'qanda.ecmt-removal.permit-start-date.question',
                         'qanda.certificate-of-roadworthiness.vehicle.mot-expiry-date.question',
                         'qanda.certificate-of-roadworthiness.trailer.mot-expiry-date.question',
+                        'qanda.ecmt-short-term.earliest-permit-date.question',
                     ];
 
                     if ($data['question'] == 'qanda.common.certificates.question') {
