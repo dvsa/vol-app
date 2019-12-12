@@ -16,6 +16,7 @@ use Common\Service\Cqrs\Exception\NotFoundException;
 use Common\Service\Qa\UsageContext;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\CancelApplication;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\Grant;
+use Dvsa\Olcs\Transfer\Command\IrhpApplication\ReviveFromUnsuccessful;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\ReviveFromWithdrawn;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\SubmitApplication;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\Withdraw;
@@ -107,6 +108,10 @@ class IrhpApplicationController extends AbstractInternalController implements
             'action' => 'index',
         ],
         'revivefromwithdrawn' => [
+            'route' => 'licence/permits',
+            'action' => 'index',
+        ],
+        'revivefromunsuccessful' => [
             'route' => 'licence/permits',
             'action' => 'index',
         ],
@@ -350,6 +355,22 @@ class IrhpApplicationController extends AbstractInternalController implements
             'Are you sure?',
             'Revive Application from withdrawn state. Are you sure?',
             'IRHP Application revived from withdrawn state'
+        );
+    }
+
+    /**
+     * Handles click of the Revive Application button on right sidebar
+     *
+     * @return \Zend\Http\Response
+     */
+    public function reviveFromUnsuccessfulAction()
+    {
+        return $this->confirmCommand(
+            new ConfirmItem($this->itemParams),
+            ReviveFromUnsuccessful::class,
+            'Are you sure?',
+            'Revive Application from unsuccessful state. Are you sure?',
+            'IRHP Application revived from unsuccessful state'
         );
     }
 

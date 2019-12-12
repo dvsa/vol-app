@@ -16,6 +16,7 @@ use Common\Util\IsEcmtId;
 use Dvsa\Olcs\Transfer\Command\Permits\CancelEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Command\Permits\EcmtSubmitApplication;
 use Dvsa\Olcs\Transfer\Command\Permits\ReviveEcmtPermitApplicationFromWithdrawn;
+use Dvsa\Olcs\Transfer\Command\Permits\ReviveEcmtPermitApplicationFromUnsuccessful;
 use Dvsa\Olcs\Transfer\Command\Permits\WithdrawEcmtPermitApplication;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\GetAllByLicence as ListDTO;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\ById as StockById;
@@ -106,6 +107,10 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
             'action' => 'index',
         ],
         'revivefromwithdrawn' => [
+            'route' => 'licence/permits',
+            'action' => 'index',
+        ],
+        'revivefromunsuccessful' => [
             'route' => 'licence/permits',
             'action' => 'index',
         ],
@@ -612,6 +617,22 @@ class IrhpPermitApplicationController extends AbstractInternalController impleme
             'Are you sure?',
             'Revive Application from withdrawn state. Are you sure?',
             'Permit Application revived from withdrawn state'
+        );
+    }
+
+    /**
+     * Handles click of the Revive application button on right sidebar
+     *
+     * @return \Zend\Http\Response
+     */
+    public function reviveFromUnsuccessfulAction()
+    {
+        return $this->confirmCommand(
+            new ConfirmItem($this->itemParams),
+            ReviveEcmtPermitApplicationFromUnsuccessful::class,
+            'Are you sure?',
+            'Revive Application from unsuccessful state. Are you sure?',
+            'Permit Application revived from unsuccessful state'
         );
     }
 

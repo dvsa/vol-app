@@ -84,6 +84,7 @@ class IrhpPermitFurnitureTest extends TestCase
             'isAwaitingFee' => false,
             'canBeDeclined' => false,
             'canBeRevivedFromWithdrawn' => false,
+            'canBeRevivedFromUnsuccessful' => false,
         ];
 
         $mockApplicationService = m::mock('Zend\Mvc\Application')
@@ -193,6 +194,9 @@ class IrhpPermitFurnitureTest extends TestCase
             )
             ->shouldReceive('findOneBy')->once()->with('id', 'irhp-permit-decisions-revive-from-withdrawn')->andReturn(
                 m::mock()->shouldReceive('setVisible')->once()->with(false)->getMock()
+            )
+            ->shouldReceive('findOneBy')->once()->with('id', 'irhp-permit-decisions-revive-from-unsuccessful')->andReturn(
+                m::mock()->shouldReceive('setVisible')->once()->with(false)->getMock()
             )->getMock();
 
         $this->sut->setNavigationService($mockNavigation);
@@ -232,6 +236,7 @@ class IrhpPermitFurnitureTest extends TestCase
             'canBeWithdrawn' => false,
             'isAwaitingFee' => false,
             'canBeRevivedFromWithdrawn' => false,
+            'canBeRevivedFromUnsuccessful' => false,
         ];
 
         $mockApplicationService = m::mock('Zend\Mvc\Application')
@@ -334,6 +339,9 @@ class IrhpPermitFurnitureTest extends TestCase
                 m::mock()->shouldReceive('setVisible')->once()->with(false)->getMock()
             )
             ->shouldReceive('findOneBy')->once()->with('id', 'irhp-permit-decisions-revive-from-withdrawn')->andReturn(
+                m::mock()->shouldReceive('setVisible')->once()->with(false)->getMock()
+            )
+            ->shouldReceive('findOneBy')->once()->with('id', 'irhp-permit-decisions-revive-from-unsuccessful')->andReturn(
                 m::mock()->shouldReceive('setVisible')->once()->with(false)->getMock()
             )->getMock();
 

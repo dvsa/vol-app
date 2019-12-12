@@ -200,6 +200,9 @@ class IrhpPermitFurniture implements
         $sidebarNav->findOneBy('id', 'irhp-permit-decisions-revive-from-withdrawn')
             ->setVisible($irhpPermit['canBeRevivedFromWithdrawn']);
 
+        $sidebarNav->findOneBy('id', 'irhp-permit-decisions-revive-from-unsuccessful')
+            ->setVisible($irhpPermit['canBeRevivedFromUnsuccessful']);
+
         $right = new ViewModel();
         $right->setTemplate('sections/irhp-permit/partials/right');
 
