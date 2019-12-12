@@ -47,6 +47,10 @@ class IrhpValidPermitsController extends AbstractSelfserveController implements 
             $this->tableConfig = [
                 'generic' => TableConfig::VALID_IRHP_PERMITS_BILATERAL,
             ];
+        } elseif ($this->data[IrhpPermitType::DATA_KEY]['isMultilateral']) {
+            $this->tableConfig = [
+                'generic' => TableConfig::VALID_IRHP_PERMITS_MULTILATERAL,
+            ];
         } elseif ($this->data[IrhpPermitType::DATA_KEY]['isEcmtShortTerm']) {
             $this->tableConfig = [
                 'generic' => TableConfig::VALID_IRHP_PERMITS_ECMT_SHORT_TERM,

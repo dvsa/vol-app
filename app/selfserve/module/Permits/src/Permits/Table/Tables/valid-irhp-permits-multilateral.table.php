@@ -1,6 +1,5 @@
 <?php
 
-use Common\Util\Escape;
 use Common\RefData;
 
 return array(
@@ -15,24 +14,13 @@ return array(
     ),
     'attributes' => array(),
     'columns' => array(
-
         array(
-            'title' => 'permits.irhp.valid.permits.table.permit',
+            'title' => 'permits.irhp.valid.permits.table.permit-no',
             'name' => 'permitNumber',
             'formatter' => 'NullableNumber',
         ),
         array(
-            'title' => 'permits.irhp.valid.permits.table.country',
-            'name' => 'country',
-            'formatter' => function ($row, $column, $sm) {
-                $translator = $sm->get('translator');
-                return Escape::html(
-                    $translator->translate($row['irhpPermitRange']['irhpPermitStock']['country']['countryDesc'])
-                );
-            },
-        ),
-        array(
-            'title' => 'permits.irhp.valid.permits.table.application',
+            'title' => 'permits.irhp.valid.permits.table.application-no',
             'name' => 'irhpApplication',
             'stack' => 'irhpPermitApplication->relatedApplication->id',
             'formatter' => 'StackValue',
