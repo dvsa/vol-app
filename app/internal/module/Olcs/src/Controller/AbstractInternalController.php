@@ -440,7 +440,6 @@ abstract class AbstractInternalController extends AbstractOlcsController
              * @todo in some cases we only care about putting the table into this placeholder, we then don't care
              * about constructing a view, so maybe we need a wa
              */
-            $renderedTable = $table->render();
             $this->placeholder()->setPlaceholder(
                 $tableViewPlaceholderName,
                 $table->render()
