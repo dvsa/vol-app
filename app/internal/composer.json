@@ -20,13 +20,13 @@
         "doctrine/annotations": "^1.2.3",
         "symfony/filesystem": "~3.0.0",
         "zf-commons/zfc-rbac": "~2.5.0",
-        "olcs/olcs-transfer": "~4.206.0",
+        "olcs/olcs-transfer": "dev-project/ecmt-migration",
         "olcs/olcs-utils": "~4.206.0",
-        "olcs/olcs-auth": "~4.206.0",
+        "olcs/olcs-auth": "dev-project/ecmt-migration",
         "soflomo/purifier": "~0.1.0",
         "olcs/olcs-logging": "~4.206.0",
         "elendev/nexus-composer-push": "^0.1",
-        "olcs/olcs-common": "~4.206.0"
+        "olcs/olcs-common": "dev-project/ecmt-migration"
     },
     "require-dev": {
         "olcs/olcs-devtools": "~4.206.0",
