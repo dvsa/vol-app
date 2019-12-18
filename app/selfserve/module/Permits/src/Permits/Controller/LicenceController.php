@@ -23,19 +23,16 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
     protected $dataSourceConfig = [
         'add' => DataSourceConfig::PERMIT_APP_ADD_LICENCE,
         'question' => DataSourceConfig::PERMIT_APP_CHANGE_LICENCE,
-        'question-ecmt' => DataSourceConfig::PERMIT_APP_ECMT_LICENCE,
     ];
 
     protected $conditionalDisplayConfig = [
         'add' => ConditionalDisplayConfig::PERMIT_APP_CAN_APPLY_LICENCE,
         'question' => ConditionalDisplayConfig::PERMIT_APP_CAN_APPLY_LICENCE_EXISTING_APP,
-        'question-ecmt' => ConditionalDisplayConfig::PERMIT_APP_CAN_APPLY_LICENCE_EXISTING_APP,
     ];
 
     protected $formConfig = [
         'add' => FormConfig::FORM_ADD_LICENCE,
         'question' => FormConfig::FORM_LICENCE,
-        'question-ecmt' => FormConfig::FORM_LICENCE,
     ];
 
     protected $templateConfig = [
@@ -52,11 +49,6 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
             'browserTitle' => 'permits.page.licence.browser.title',
             'question' => 'permits.page.licence.question',
             'backUri' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW
-        ],
-        'question-ecmt' => [
-            'browserTitle' => 'permits.page.licence.browser.title',
-            'question' => 'permits.page.licence.question',
-            'backUri' => EcmtSection::ROUTE_APPLICATION_OVERVIEW
         ],
     ];
 
@@ -81,35 +73,12 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
                 ],
             ]
         ],
-        'question-ecmt' => [
-            'params' => ParamsConfig::CONFIRM_CHANGE,
-            'step' => EcmtSection::ROUTE_CONFIRM_CHANGE,
-            'conditional' => [
-                'dataKey' => 'licencesAvailable',
-                'field' => 'selectedLicence',
-                'compareParam' => 'licence',
-                'step' => [
-                    'route' => EcmtSection::ROUTE_APPLICATION_OVERVIEW,
-                ],
-                'saveAndReturnStep' => [
-                    'route' => EcmtSection::ROUTE_APPLICATION_OVERVIEW,
-                ],
-            ]
-        ],
     ];
 
     /**
      * @return \Zend\View\Model\ViewModel
      */
     public function addAction()
-    {
-        return $this->genericAction();
-    }
-
-    /**
-     * @return \Zend\Http\Response|\Zend\View\Model\ViewModel
-     */
-    public function questionEcmtAction()
     {
         return $this->genericAction();
     }
@@ -123,27 +92,15 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
         $licenceData = $this->data[LicencesAvailable::DATA_KEY]['eligibleLicences'][$params['licence']];
 
         if (isset($licenceData['activeApplicationId'])) {
-            $isEcmtAnnual = $this->data[LicencesAvailable::DATA_KEY]['isEcmtAnnual'];
-
-            $overviewRoute = IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW;
-            $addRoute = IrhpApplicationSection::ROUTE_ADD_LICENCE;
-            $changeRoute = IrhpApplicationSection::ROUTE_LICENCE;
-
-            if ($isEcmtAnnual) {
-                $overviewRoute = EcmtSection::ROUTE_APPLICATION_OVERVIEW;
-                $addRoute = EcmtSection::ROUTE_ADD_LICENCE;
-                $changeRoute = EcmtSection::ROUTE_LICENCE;
-            }
-
             $config = $this->handleActiveApplicationResponse(
                 $config,
                 [
                     'id' => $licenceData['activeApplicationId'],
                     'licence' => $params['licence'],
                 ],
-                $overviewRoute,
-                $addRoute,
-                $changeRoute
+                IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
+                IrhpApplicationSection::ROUTE_ADD_LICENCE,
+                IrhpApplicationSection::ROUTE_LICENCE
             );
 
             return;
@@ -161,14 +118,7 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
             $responseDump = $this->handleResponse($response);
 
             if ($config['params'] === ParamsConfig::NEW_APPLICATION) {
-                $field = 'irhpApplication';
-
-                if (isset($responseDump['id']['ecmtPermitApplication'])) {
-                    $field = 'ecmtPermitApplication';
-                    $config['step'] = EcmtSection::ROUTE_APPLICATION_OVERVIEW;
-                }
-
-                $this->redirectParams = ['id' => $responseDump['id'][$field]];
+                $this->redirectParams = ['id' => $responseDump['id']['irhpApplication']];
             }
         } else {
             if (isset($config['params'])) {

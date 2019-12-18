@@ -6,7 +6,6 @@ use Permits\Controller\Config\DataSource\LicencesAvailable;
 use Permits\Controller\Config\DataSource\AvailableTypes;
 use Permits\Controller\Config\DataSource\AvailableYears;
 use Permits\Controller\Config\DataSource\AvailableStocks;
-use Permits\Controller\Config\DataSource\EcmtPermitApplicationWithLicences;
 use Permits\Controller\Config\DataSource\PermitApplication as PermitAppDataSource;
 use Permits\Controller\Config\DataSource\PermitsAvailable;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
@@ -166,15 +165,6 @@ class ConditionalDisplayConfig
     const PERMIT_APP_CONFIRM_CHANGE_LICENCE = [
         [
             'source' => IrhpApplicationWithLicences::DATA_KEY,
-            'route' => IrhpApplicationSection::ROUTE_PERMITS,
-            'key' => 'isNotYetSubmitted',
-            'value' => true
-        ],
-    ];
-
-    const PERMIT_APP_CONFIRM_CHANGE_LICENCE_ECMT = [
-        [
-            'source' => EcmtPermitApplicationWithLicences::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_PERMITS,
             'key' => 'isNotYetSubmitted',
             'value' => true

@@ -7,7 +7,6 @@ use Permits\Controller\Config\DataSource\FeeList as FeeListDto;
 use Permits\Controller\Config\DataSource\PermitApplication as PermitAppDataSource;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
 use Permits\Controller\Config\DataSource\IrhpApplicationWithLicences as IrhpApplicationWithLicencesDataSource;
-use Permits\Controller\Config\DataSource\EcmtPermitApplicationWithLicences as EcmtPermitApplicationWithLicencesDataSource;
 use Permits\Controller\Config\DataSource\IrhpFeeBreakdown as IrhpFeeBreakdownDataSource;
 use Permits\Controller\Config\DataSource\IrhpFeePerPermit as IrhpFeePerPermitDataSource;
 use Permits\Controller\Config\DataSource\IrhpMaxStockPermits as IrhpMaxStockPermitsDataSource;
@@ -59,10 +58,6 @@ class DataSourceConfig
 
     const PERMIT_APP_CHANGE_LICENCE = [
         IrhpApplicationWithLicencesDataSource::class => [],
-    ];
-
-    const PERMIT_APP_ECMT_LICENCE = [
-        EcmtPermitApplicationWithLicencesDataSource::class => []
     ];
 
     const PERMIT_APP_SECTORS = [
