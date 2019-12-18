@@ -7,7 +7,7 @@ use Olcs\Controller\Bus\Processing\BusProcessingNoteController;
 use Olcs\Controller\Licence\Processing\LicenceProcessingNoteController;
 use Olcs\Controller\Operator\OperatorProcessingNoteController;
 use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController as TMProcessingNoteController;
-use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingChangeHistoryController;
+use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingHistoryController;
 use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingReadHistoryController;
 use Olcs\Controller\IrhpPermits\IrhpPermitProcessingReadHistoryController;
 
@@ -345,7 +345,7 @@ return array(
                 \Olcs\Controller\IrhpPermits\IrhpPermitProcessingNoteController::class,
             \Olcs\Controller\IrhpPermits\IrhpPermitProcessingTasksController::class =>
                 \Olcs\Controller\IrhpPermits\IrhpPermitProcessingTasksController::class,
-            IrhpApplicationProcessingChangeHistoryController::class => IrhpApplicationProcessingChangeHistoryController::class,
+            IrhpApplicationProcessingHistoryController::class => IrhpApplicationProcessingHistoryController::class,
             \Olcs\Controller\IrhpPermits\ChangeHistoryController::class =>
                 \Olcs\Controller\IrhpPermits\ChangeHistoryController::class,
             \Olcs\Controller\IrhpPermits\IrhpApplicationProcessingOverviewController::class =>
