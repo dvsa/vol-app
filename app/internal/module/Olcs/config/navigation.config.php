@@ -697,6 +697,18 @@ $nav = [
                                             'route' => 'licence/irhp-application-processing/tasks',
                                             'use_route_match' => true,
                                         ],
+                                        [
+                                            'id' => 'licence_irhp_applications_processing_change-history',
+                                            'label' => 'Change history',
+                                            'route' => 'licence/irhp-application-processing/change-history',
+                                            'use_route_match' => true,
+                                        ],
+                                        [
+                                            'id' => 'licence_irhp_applications_processing_read-history',
+                                            'label' => 'internal-crud-read-history',
+                                            'route' => 'licence/irhp-application-processing/read-history',
+                                            'use_route_match' => true,
+                                        ],
                                     ]
                                 ],
                                 [

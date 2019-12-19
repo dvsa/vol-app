@@ -14,6 +14,8 @@ use Olcs\Controller\Operator\OperatorProcessingNoteController;
 use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingOverviewController;
 use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingNoteController;
 use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingTasksController;
+use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingChangeHistoryController;
+use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingReadHistoryController;
 use Olcs\Controller\IrhpPermits\IrhpPermitProcessingOverviewController;
 use Olcs\Controller\IrhpPermits\IrhpPermitProcessingNoteController;
 use Olcs\Controller\IrhpPermits\IrhpPermitProcessingReadHistoryController;
@@ -1279,6 +1281,26 @@ $routes = [
                                 'action' => 'index'
                             ]
                         ]
+                    ],
+                    'change-history' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'change-history[/]',
+                            'defaults' => [
+                                'controller' => IrhpApplicationProcessingChangeHistoryController::class,
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
+                    'read-history' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'read-history[/]',
+                            'defaults' => [
+                                'controller' => IrhpApplicationProcessingReadHistoryController::class,
+                                'action' => 'index',
+                            ]
+                        ],
                     ],
                 ]
             ],

@@ -7,6 +7,8 @@ use Olcs\Controller\Bus\Processing\BusProcessingNoteController;
 use Olcs\Controller\Licence\Processing\LicenceProcessingNoteController;
 use Olcs\Controller\Operator\OperatorProcessingNoteController;
 use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController as TMProcessingNoteController;
+use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingChangeHistoryController;
+use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingReadHistoryController;
 use Olcs\Controller\IrhpPermits\IrhpPermitProcessingReadHistoryController;
 
 use Olcs\Controller\Licence\BusRegistrationController as LicenceBusController;
@@ -316,6 +318,7 @@ return array(
             'LicenceHistoryController' => 'Olcs\Controller\Licence\Processing\HistoryController',
             'LicenceReadHistoryController' => 'Olcs\Controller\Licence\Processing\ReadHistoryController',
             'TransportManagerHistoryController' => 'Olcs\Controller\TransportManager\Processing\HistoryController',
+            IrhpApplicationProcessingReadHistoryController::class => IrhpApplicationProcessingReadHistoryController::class,
             IrhpPermitProcessingReadHistoryController::class => IrhpPermitProcessingReadHistoryController::class,
             'TransportManagerReadHistoryController'
                 => 'Olcs\Controller\TransportManager\Processing\ReadHistoryController',
@@ -342,6 +345,7 @@ return array(
                 \Olcs\Controller\IrhpPermits\IrhpPermitProcessingNoteController::class,
             \Olcs\Controller\IrhpPermits\IrhpPermitProcessingTasksController::class =>
                 \Olcs\Controller\IrhpPermits\IrhpPermitProcessingTasksController::class,
+            IrhpApplicationProcessingChangeHistoryController::class => IrhpApplicationProcessingChangeHistoryController::class,
             \Olcs\Controller\IrhpPermits\ChangeHistoryController::class =>
                 \Olcs\Controller\IrhpPermits\ChangeHistoryController::class,
             \Olcs\Controller\IrhpPermits\IrhpApplicationProcessingOverviewController::class =>
