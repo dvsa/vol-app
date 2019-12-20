@@ -6,6 +6,18 @@
             "packagist": false
         },
         {
+            "type": "vcs",
+            "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-transfer.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-common.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-auth.git"
+        },
+        {
             "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS",
             "type": "composer"
         },
