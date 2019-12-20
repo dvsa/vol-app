@@ -698,9 +698,9 @@ $nav = [
                                             'use_route_match' => true,
                                         ],
                                         [
-                                            'id' => 'licence_irhp_applications_processing_change-history',
+                                            'id' => 'licence_irhp_applications_processing_event-history',
                                             'label' => 'Change history',
-                                            'route' => 'licence/irhp-application-processing/change-history',
+                                            'route' => 'licence/irhp-application-processing/event-history',
                                             'use_route_match' => true,
                                         ],
                                         [

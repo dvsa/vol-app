@@ -14,7 +14,7 @@ use Olcs\Controller\Operator\OperatorProcessingNoteController;
 use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingOverviewController;
 use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingNoteController;
 use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingTasksController;
-use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingChangeHistoryController;
+use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingHistoryController;
 use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingReadHistoryController;
 use Olcs\Controller\IrhpPermits\IrhpPermitProcessingOverviewController;
 use Olcs\Controller\IrhpPermits\IrhpPermitProcessingNoteController;
@@ -1249,7 +1249,7 @@ $routes = [
                 'options' => [
                     'route' => 'irhp-application/processing/:irhpAppId[/]',
                     'constraints' => [
-                        'permitid' => '[0-9]+',
+                        'irhpAppId' => '[0-9]+',
                     ],
                     'defaults' => [
                         'controller' => IrhpApplicationProcessingOverviewController::class,
@@ -1282,12 +1282,16 @@ $routes = [
                             ]
                         ]
                     ],
-                    'change-history' => [
+                    'event-history' => [
                         'type' => 'segment',
                         'options' => [
-                            'route' => 'change-history[/]',
+                            'route' => 'event-history[/:action[/:id]][/]',
+                            'constraints' => [
+                                'action' => 'edit',
+                                'id' => '[0-9]+',
+                            ],
                             'defaults' => [
-                                'controller' => IrhpApplicationProcessingChangeHistoryController::class,
+                                'controller' => IrhpApplicationProcessingHistoryController::class,
                                 'action' => 'index',
                             ]
                         ],
