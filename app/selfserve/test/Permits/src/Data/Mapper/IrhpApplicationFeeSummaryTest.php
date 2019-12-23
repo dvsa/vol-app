@@ -251,12 +251,15 @@ class IrhpApplicationFeeSummaryTest extends TestCase
         );
     }
 
-    public function testMapForDisplayEcmtShortTerm()
+    /**
+     * @dataProvider dpTestMapForDisplayEcmtAnnualAndShortTerm
+     */
+    public function testMapForDisplayEcmtAnnualAndShortTerm($permitTypeId)
     {
         $isUnderConsideration = false;
         $isAwaitingFee = false;
         $applicationRef = 'OB1234567/1';
-        $permitTypeDesc = 'Short-term ECMT';
+        $permitTypeDesc = 'Permit type description';
         $dateReceived = '2020-12-25';
         $formattedDateReceived = '25 December 2020';
 
@@ -309,7 +312,7 @@ class IrhpApplicationFeeSummaryTest extends TestCase
             'applicationRef' => $applicationRef,
             'dateReceived' => $dateReceived,
             'irhpPermitType' => [
-                'id' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
+                'id' => $permitTypeId,
                 'name' => [
                     'description' => $permitTypeDesc
                 ],
@@ -388,6 +391,14 @@ class IrhpApplicationFeeSummaryTest extends TestCase
             $expectedOutput,
             $this->irhpApplicationFeeSummary->mapForDisplay($inputData)
         );
+    }
+
+    public function dpTestMapForDisplayEcmtAnnualAndShortTerm()
+    {
+        return [
+            [RefData::ECMT_PERMIT_TYPE_ID],
+            [RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID],
+        ];
     }
 
     public function testMapForDisplayEcmtShortTermUnderConsideration()

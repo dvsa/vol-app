@@ -95,6 +95,7 @@ class IrhpApplicationFeeSummary
                 $data['showFeeSummaryTitle'] = true;
                 $mappedFeeData = $this->getEcmtRemovalRows($data);
                 break;
+            case RefData::ECMT_PERMIT_TYPE_ID:
             case RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID:
                 $data['showFeeSummaryTitle'] = true;
                 $data['showWarningMessage'] = true;
