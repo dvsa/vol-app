@@ -52,7 +52,7 @@ return [
         ],
         [
             'title' => 'Ceased Date',
-            'name' => 'expiryDate',
+            'name' => 'ceasedDate',
             'formatter' => 'DateTime',
         ],
         [
