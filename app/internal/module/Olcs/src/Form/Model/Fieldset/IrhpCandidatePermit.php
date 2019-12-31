@@ -28,13 +28,23 @@ class IrhpCandidatePermit extends Base
 
     /**
      * @Form\Attributes({
-     *   "id" : "irhpPermitApplication",
+     *   "id" : "permitAppId",
      * })
      *
      * @Form\Type("Zend\Form\Element\Hidden")
      *
      */
-    public $irhpPermitApplication;
+    public $permitAppId;
+
+    /**
+     * @Form\Attributes({
+     *   "id" : "rangesUrl",
+     * })
+     *
+     * @Form\Type("Zend\Form\Element\Hidden")
+     *
+     */
+    public $rangesUrl;
 
     /**
      * @Form\Attributes({

@@ -21,11 +21,14 @@ use Dvsa\Olcs\Transfer\Command\IrhpApplication\ReviveFromWithdrawn;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\SubmitApplication;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\Withdraw;
 use Olcs\Form\Model\Form\IrhpApplicationWithdraw as WithdrawForm;
+use Olcs\Form\Model\Form\IrhpCandidatePermit as IrhpCandidatePermitForm;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\ApplicationPath;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitApplication\GetList as ListDTO;
+use Dvsa\Olcs\Transfer\Query\IrhpCandidatePermit\GetListByIrhpApplication as CandidateListDTO;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\AvailableCountries;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitWindow\OpenByCountry;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\ById as ItemDto;
+use Dvsa\Olcs\Transfer\Query\IrhpCandidatePermit\ById as CandidatePermitItemDTO;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\MaxStockPermits;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitWindow\OpenByType;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitType\ById as PermitTypeQry;
@@ -33,15 +36,23 @@ use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceDto;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\CreateFull as CreateDTO;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\UpdateFull as UpdateDTO;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\Create as QaCreateDTO;
+use Dvsa\Olcs\Transfer\Command\IrhpCandidatePermit\Delete as CandidatePermitDeleteCmd;
+use Dvsa\Olcs\Transfer\Command\IrhpCandidatePermit\Update as CandidatePermitUpdateCmd;
+use Dvsa\Olcs\Transfer\Command\IrhpCandidatePermit\Create as CandidatePermitCreateCmd;
+use Dvsa\Olcs\Transfer\Query\IrhpApplication\RangesByIrhpApplication as RangesDTO;
 use Olcs\Controller\Interfaces\IrhpApplicationControllerInterface;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Olcs\Form\Model\Form\IrhpApplication;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\IrhpApplication as IrhpApplicationMapper;
+use Olcs\Data\Mapper\IrhpCandidatePermit as IrhpCandidatePermitMapper;
 use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
+use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
+use Olcs\Mvc\Controller\ParameterProvider\GenericList;
 use Zend\Form\Form;
 use Zend\Http\Response;
+use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
 class IrhpApplicationController extends AbstractInternalController implements
@@ -59,7 +70,7 @@ class IrhpApplicationController extends AbstractInternalController implements
 
     protected $routeIdentifier = 'irhp-application';
 
-    protected $navigationId = 'licence_irhp_applications-edit';
+    protected $navigationId = 'licence_irhp_applications';
 
     // Maps the route parameter irhpPermitId to the "id" parameter in the the ById (ItemDTO) query.
     protected $itemParams = ['id' => 'irhpAppId'];
@@ -115,11 +126,26 @@ class IrhpApplicationController extends AbstractInternalController implements
             'route' => 'licence/permits',
             'action' => 'index',
         ],
+        'pregrantedit' => [
+            'route' => 'licence/irhp-application/application',
+            'action' => 'preGrant',
+        ],
+        'pregrantadd' => [
+            'route' => 'licence/irhp-application/application',
+            'action' => 'preGrant',
+        ],
+        'pregrantdelete' => [
+            'route' => 'licence/irhp-application/application',
+            'action' => 'preGrant',
+        ],
     ];
 
     // Scripts to include when rendering actions.
     protected $inlineScripts = [
         'indexAction' => ['table-actions'],
+        'preGrantAction' => ['table-actions'],
+        'preGrantEditAction' => ['forms/irhp-candidate-permit'],
+        'preGrantAddAction' => ['forms/irhp-candidate-permit'],
     ];
 
     /**
@@ -131,7 +157,7 @@ class IrhpApplicationController extends AbstractInternalController implements
     {
         $view = new ViewModel(
             [
-                'navigationId' => 'irhp_permits',
+                'navigationId' => 'licence_irhp_applications-edit',
                 'navigationTitle' => 'Application details'
             ]
         );
@@ -646,22 +672,197 @@ class IrhpApplicationController extends AbstractInternalController implements
     }
 
     /**
-     * @return Response
      *
-     * Redirect to IrhpCandidatePermitController to handle pre-grant tasks.
+     * Redirect to relevant action, or return index table of candidate permits
      *
      */
     public function preGrantAction()
     {
-        return $this->redirect()
-            ->toRoute(
-                'licence/irhp-application/irhp-candidate-permits',
-                [
-                    'licence' => $this->params()->fromRoute('licence'),
-                    'action' => 'index',
-                    'irhpAppId' => $this->params()->fromRoute('irhpAppId'),
-                    'irhpPermitType' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID
-                ]
-            );
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $postData = (array)$this->params()->fromPost();
+            switch ($postData['action']) {
+                case 'preGrantEdit':
+                    return $this->redirect()
+                        ->toRoute(
+                            'licence/irhp-application/application',
+                            [
+                                'action' => 'preGrantEdit',
+                                'permitId' => $postData['id']
+                            ],
+                            [],
+                            true
+                        );
+                case 'preGrantDelete':
+                    return $this->redirect()
+                        ->toRoute(
+                            'licence/irhp-application/application',
+                            [
+                                'action' => 'preGrantDelete',
+                                'permitId' => $postData['id']
+                            ],
+                            [],
+                            true
+                        );
+                case 'preGrantAdd':
+                    return $this->redirect()
+                        ->toRoute(
+                            'licence/irhp-application/application',
+                            [ 'action' => 'preGrantAdd'],
+                            [],
+                            true
+                        );
+            }
+        }
+
+        $this->placeholder()->setPlaceholder('applicationData', IrhpCandidatePermitMapper::mapApplicationData($this->getIrhpApplication()));
+
+        $this->mapperClass = IrhpCandidatePermitMapper::class;
+
+        return $this->index(
+            CandidateListDTO::class,
+            (new GenericList(['irhpApplication' => 'irhpAppId'], $this->defaultTableSortField, $this->defaultTableOrderField))
+                ->setDefaultLimit($this->defaultTableLimit),
+            $this->tableViewPlaceholderName,
+            'irhp-permits-pre-grant',
+            'pages/irhp-permit/pre-grant',
+            $this->filterForm
+        );
+    }
+
+    /**
+     * @return array|ViewModel
+     */
+    public function preGrantEditAction()
+    {
+        return $this->edit(
+            IrhpCandidatePermitForm::class,
+            CandidatePermitItemDTO::class,
+            new GenericItem(['id' => 'permitId']),
+            CandidatePermitUpdateCmd::class,
+            IrhpCandidatePermitMapper::class,
+            $this->editViewTemplate,
+            $this->editSuccessMessage,
+            $this->editContentTitle
+        );
+    }
+
+    /**
+     * @return array|mixed|ViewModel
+     */
+    public function preGrantDeleteAction()
+    {
+        return $this->confirmCommand(
+            new ConfirmItem(['id' => 'permitId']),
+            CandidatePermitDeleteCmd::class,
+            $this->deleteModalTitle,
+            $this->deleteConfirmMessage,
+            $this->deleteSuccessMessage
+        );
+    }
+
+    /**
+     * @return mixed|ViewModel
+     */
+    public function preGrantAddAction()
+    {
+        return $this->add(
+            IrhpCandidatePermitForm::Class,
+            new AddFormDefaultData(['irhpPermitApplication' => 34252354]),
+            CandidatePermitCreateCmd::class,
+            IrhpCandidatePermitMapper::class,
+            $this->editViewTemplate,
+            $this->addSuccessMessage,
+            $this->addContentTitle
+        );
+    }
+
+
+    /**
+     * Add required parameter to list DTO query
+     *
+     * @param array $parameters
+     * @return array
+     */
+    protected function modifyListQueryParameters($parameters)
+    {
+        $parameters['isPreGrant'] = true;
+        return $parameters;
+    }
+
+    /**
+     * Utility function to get IrhpApplication relating to ID in the path.
+     *
+     * @return array|mixed
+     * @throws \RuntimeException
+     */
+    protected function getIrhpApplication()
+    {
+        $applicationQry = $this->handleQuery(ItemDto::create(['id' => $this->params()->fromRoute('irhpAppId')]));
+        if (!$applicationQry->isOk()) {
+            throw new \RuntimeException('Error getting application data');
+        }
+        return $applicationQry->getResult();
+    }
+
+    /**
+     * AJAX endpoint to return ranges for a given IrhpApplication's stock
+     *
+     * @return JsonModel
+     * @throws \RuntimeException
+     */
+    public function rangesAction()
+    {
+        $rangesQry = $this->handleQuery(RangesDTO::create(['irhpApplication' => $this->params()->fromRoute('irhpAppId')]));
+        if (!$rangesQry->isOk()) {
+            throw new \RuntimeException('Error getting application data');
+        }
+        return new JsonModel($rangesQry->getResult());
+    }
+
+    /**
+     * Generate URL for use on Add/Edit pre-grant form
+     *
+     * @return string
+     */
+    protected function getRangesUrl(){
+        return $this->url()->fromRoute(
+            'licence/irhp-application/application',
+            [
+                'action' => 'ranges',
+            ],
+            [],
+            true
+        );
+    }
+
+    /**
+     * Get existing application and populate some required fields on Edit form.
+     *
+     * @param Form $form
+     * @param array $formData
+     * @return mixed
+     */
+    protected function alterFormForPreGrantAdd($form, $formData)
+    {
+        $irhpApplication = $this->getIrhpApplication();
+        $form->get('fields')->get('permitAppId')->setValue($irhpApplication['irhpPermitApplications'][0]['id']);
+        $form->get('fields')->get('rangesUrl')->setValue($this->getRangesUrl());
+
+        return $form;
+    }
+
+    /**
+     * Get existing application and populate some required fields on Add form.
+     *
+     * @param Form $form
+     * @param array $formData
+     * @return mixed
+     */
+    protected function alterFormForPreGrantEdit($form, $formData)
+    {
+        $form->get('fields')->get('rangesUrl')->setValue($this->getRangesUrl());
+        $form->setData($formData);
+        return $form;
     }
 }

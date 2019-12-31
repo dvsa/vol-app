@@ -21,6 +21,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Common\Exception\ResourceNotFoundException;
 use Zend\View\Model\ViewModel;
+use Zend\Mvc\Application;
 
 /**
  * IRHP Application Furniture
@@ -49,11 +50,34 @@ class IrhpApplicationFurniture implements
     protected $sidebarNavigationService;
 
     /**
+     * @var Application
+     */
+    protected $applicationService;
+
+    /**
      * @return \Zend\Navigation\Navigation
      */
     public function getNavigationService()
     {
         return $this->navigationService;
+    }
+
+    /**
+     * @return Application
+     */
+    public function getApplicationService()
+    {
+        return $this->applicationService;
+    }
+
+    /**
+     * @param Application $applicationService
+     * @return $this
+     */
+    public function setApplicationService(Application $applicationService)
+    {
+        $this->applicationService = $applicationService;
+        return $this;
     }
 
     /**
@@ -102,6 +126,7 @@ class IrhpApplicationFurniture implements
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
         $this->setNavigationService($serviceLocator->get('Navigation'));
         $this->setSidebarNavigationService($serviceLocator->get('right-sidebar'));
+        $this->setApplicationService($serviceLocator->get('Application'));
 
         return $this;
     }
@@ -141,15 +166,25 @@ class IrhpApplicationFurniture implements
         $placeholder->getContainer('horizontalNavigationId')->set('licence_irhp_applications');
 
         $sidebarNav = $this->getSidebarNavigationService();
+        $mainNav = $this->getNavigationService();
         // quick actions
         $sidebarNav->findOneBy('id', 'irhp-application-quick-actions-cancel')
             ->setVisible($irhpApplication['canBeCancelled']);
 
+        $routeParams = $this->getApplicationService()->getMvcEvent()->getRouteMatch()->getParams();
+
+        // Link to view candidate permits is currently only for Short Terms in certain conditions..
         if ($irhpApplication['irhpPermitType']['id'] == RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID
             && $irhpApplication['status']['id'] == RefData::PERMIT_APP_STATUS_UNDER_CONSIDERATION
-            && $irhpApplication['businessProcess']['id'] == RefData::BUSINESS_PROCESS_APGG) {
-            $sidebarNav->findOneBy('id', 'irhp-application-quick-actions-pre-grant')
+            && $irhpApplication['businessProcess']['id'] == RefData::BUSINESS_PROCESS_APGG
+        ) {
+            $mainNav->findOneBy('id', 'licence_irhp_applications-pregrant')
                 ->setVisible(true);
+
+            if ($routeParams['action'] === 'preGrant') {
+                $mainNav->findOneBy('id', 'licence_irhp_applications-pregrant')
+                    ->setActive(true);
+            }
         }
 
         // decisions

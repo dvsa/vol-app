@@ -650,6 +650,15 @@ $nav = [
                                     ],
                                     'use_route_match' => true,
                                 ],
+                                [
+                                    'id' => 'irhp_permits-permits',
+                                    'label' => 'Permits',
+                                    'route' => 'licence/irhp-permits',
+                                    'params' => [
+                                        'action' => 'index',
+                                    ],
+                                    'use_route_match' => true,
+                                ],
                             ]
                         ],
                         [
@@ -728,6 +737,17 @@ $nav = [
                                             'route' => 'licence/irhp-application-fees/fee_action/transaction',
                                         ],
                                     ]
+                                ],
+                                [
+                                    'id' => 'licence_irhp_applications-pregrant',
+                                    'label' => 'Permits',
+                                    'route' => 'licence/irhp-application/application',
+                                    'visible' => 0,
+                                    'use_route_match' => true,
+                                    'params' => [
+                                        'action' => 'preGrant',
+                                        'id' => null
+                                    ],
                                 ],
                                 [
                                     'id' => 'licence_irhp_applications-cancel',
