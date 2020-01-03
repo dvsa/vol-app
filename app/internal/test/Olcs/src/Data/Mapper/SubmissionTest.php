@@ -16,7 +16,7 @@ class SubmissionTest extends MockeryTestCase
     public function testReadOnlyFields($expected, $inData)
     {
         $actual = Sut::mapFromResult($inData);
-        $this->assertEquals($expected, $actual);
+        $this->assertEquals($expected, $actual['readOnlyFields']);
     }
 
     public function testDefaultDateSet()
@@ -27,7 +27,7 @@ class SubmissionTest extends MockeryTestCase
             ['assignedDate' => null, 'informationCompleteDate' => null]
         ];
         $actual = Sut::mapFromResult($inData);
-        $this->assertInstanceOf(\DateTime::class, $actual['fields']['assignedDate']);
+        $this->assertEquals((new \DateTime('now'))->format('Y-m-d'), $actual['fields']['assignedDate']);
     }
 
 
@@ -37,10 +37,10 @@ class SubmissionTest extends MockeryTestCase
         return [
             [
                 [
-                    'fields' => ['assignedDate' => 'TEST', 'informationCompleteDate' => 'TEST'],
-                    'readOnlyFields' => ['assignedDate', 'informationCompleteDate']
+                    'assignedDate',
+                    'informationCompleteDate'
                 ],
-                ['assignedDate' => 'TEST', 'informationCompleteDate' => 'TEST']
+                ['assignedDate' => null, 'informationCompleteDate' => 'TEST']
             ]
         ];
     }
