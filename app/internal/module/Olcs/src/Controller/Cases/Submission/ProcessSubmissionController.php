@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Cases\Submission;
 
+use Common\Form\Elements\Custom\DateSelect;
 use Dvsa\Olcs\Transfer\Command\Submission\AssignSubmission as AssignUpdateDto;
 use Dvsa\Olcs\Transfer\Command\Submission\InformationCompleteSubmission as InformationCompleteDto;
 use Dvsa\Olcs\Transfer\Query\Submission\Submission as ItemDto;
@@ -67,6 +68,23 @@ class ProcessSubmissionController extends AbstractInternalController implements 
         $this->editContentTitle = 'Assign submission';
 
         return $this->editAction();
+    }
+
+    protected function alterFormForAssign($form, $initialData)
+    {
+        if (isset($initialData['readOnlyFields']) && !empty($initialData['readOnlyFields'])) {
+            foreach ($initialData['readOnlyFields'] as $field) {
+                $readOnlyField = $form->get('fields')->get($field);
+                if ($readOnlyField instanceof DateSelect) {
+                    foreach ($readOnlyField->getElements() as $element) {
+                        $element->setAttribute('readonly', true);
+                    }
+                } else {
+                    $readOnlyField->setAttribute('readonly', true);
+                }
+            }
+        }
+        return $form;
     }
 
     /**
