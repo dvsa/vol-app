@@ -22,7 +22,6 @@ class SubmittedController extends AbstractSelfserveController implements ToggleA
     ];
 
     protected $conditionalDisplayConfig = [
-        'application-submitted' => ConditionalDisplayConfig::PERMIT_APP_UNDER_CONSIDERATION,
         'issue-submitted' => ConditionalDisplayConfig::PERMIT_APP_ISSUING,
         'irhp-submitted' => ConditionalDisplayConfig::IRHP_APP_SUBMITTED,
     ];
@@ -32,16 +31,6 @@ class SubmittedController extends AbstractSelfserveController implements ToggleA
     ];
 
     protected $templateVarsConfig = [
-        'application-submitted' => [
-            'browserTitle' => 'permits.page.confirmation.application-submitted.browser.title',
-            'title' => 'permits.page.confirmation.application-submitted.title',
-            'extraContent' => [
-                'title' => 'permits.page.confirmation.bullet.list.title',
-                'list' => 'markup-ecmt-application-submitted-confirmation'
-            ],
-            'warning' => 'permits.page.confirmation.submitted.warning',
-            'receiptUrl' => ''
-        ],
         'issue-submitted' => [
             'browserTitle' => 'permits.page.confirmation.issue-submitted.browser.title',
             'prependTitleDataKey' => IrhpAppDataSource::DATA_KEY,
@@ -65,12 +54,6 @@ class SubmittedController extends AbstractSelfserveController implements ToggleA
             'receiptUrl' => ''
         ],
     ];
-
-    public function applicationSubmittedAction()
-    {
-        $this->addReceiptUrl(EcmtSection::ROUTE_PRINT_RECEIPT);
-        return parent::genericAction();
-    }
 
     public function issueSubmittedAction()
     {

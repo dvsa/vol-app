@@ -345,15 +345,6 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const PERMIT_APP_UNDER_CONSIDERATION = [
-        [
-            'source' => PermitAppDataSource::DATA_KEY,
-            'route' => IrhpApplicationSection::ROUTE_PERMITS,
-            'key' => 'isUnderConsideration',
-            'value' => true
-        ],
-    ];
-
     const PERMIT_APP_AWAITING_FEE = [
         [
             'source' => PermitAppDataSource::DATA_KEY,

@@ -14,8 +14,6 @@ use Permits\Controller\SectorsController;
 use Permits\Controller\ValidPermitsController;
 use Permits\Controller\WithdrawApplicationController;
 use Permits\Controller\CheckAnswersController;
-use Permits\Controller\DeclarationController;
-use Permits\Controller\FeeController;
 use Permits\Controller\OverviewController;
 use Permits\Controller\DeclineController;
 use Permits\Controller\SubmittedController;
@@ -55,10 +53,8 @@ return [
         RoadworthinessController::class => RoadworthinessController::class,
         SectorsController::class => SectorsController::class,
         CheckAnswersController::class => CheckAnswersController::class,
-        DeclarationController::class => DeclarationController::class,
         OverviewController::class => OverviewController::class,
         ValidPermitsController::class => ValidPermitsController::class,
-        FeeController::class => FeeController::class,
         FeePartSuccessfulController::class => FeePartSuccessfulController::class,
         DeclineController::class => DeclineController::class,
         SubmittedController::class => SubmittedController::class,
@@ -636,34 +632,6 @@ return [
                   ],
                   'may_terminate' => false,
               ],
-              'ecmt-declaration' => [
-                  'type'    => 'segment',
-                  'options' => [
-                      'route'    => '/:id/ecmt-declaration[/]',
-                      'defaults' => [
-                          'controller'    => DeclarationController::class,
-                          'action'        => 'question',
-                      ],
-                      'constraints' => [
-                          'id' => '[0-9]+',
-                      ],
-                  ],
-                  'may_terminate' => false,
-              ],
-              'ecmt-fee' => [
-                  'type'    => 'segment',
-                  'options' => [
-                      'route'    => '/:id/ecmt-fee[/]',
-                      'defaults' => [
-                          'controller'    => FeeController::class,
-                          'action'        => 'generic',
-                      ],
-                      'constraints' => [
-                          'id' => '[0-9]+',
-                      ],
-                  ],
-                  'may_terminate' => false,
-              ],
               'payment-result' => [
                   'type'    => 'segment',
                   'options' => [
@@ -699,20 +667,6 @@ return [
                       'defaults' => [
                           'controller'    => PermitsController::class,
                           'action'        => 'print',
-                      ],
-                      'constraints' => [
-                          'id' => '[0-9]+',
-                      ],
-                  ],
-                  'may_terminate' => false,
-              ],
-              'application-submitted' => [
-                  'type' => 'segment',
-                  'options' => [
-                      'route' => '/:id/application-submitted',
-                      'defaults' => [
-                          'controller' => SubmittedController::class,
-                          'action' => 'application-submitted',
                       ],
                       'constraints' => [
                           'id' => '[0-9]+',
