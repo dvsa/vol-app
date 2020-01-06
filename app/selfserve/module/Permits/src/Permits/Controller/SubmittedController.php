@@ -74,8 +74,8 @@ class SubmittedController extends AbstractSelfserveController implements ToggleA
             // change content of the submitted page if the application is submitted for consideration
             $this->data['extraContent']['list']
                 = 'markup-irhp-submitted-uc-what-happens-next-'.$irhpAppData['businessProcess']['id'];
-        } elseif ($irhpAppData['irhpPermitType']['isEcmtShortTerm']) {
-            // Short term ECMT confirmation page after user pays issue fee successfully
+        } elseif ($irhpAppData['irhpPermitType']['isEcmtShortTerm'] || $irhpAppData['irhpPermitType']['isEcmtAnnual']) {
+            // Short term ECMT/Annual ECMT confirmation page after user pays issue fee successfully
             $this->data['browserTitle'] = 'permits.page.confirmation.irhp-payment-successful.browser.title';
             $this->data['title'] = 'permits.page.confirmation.irhp-payment-successful.title';
         } elseif ($irhpAppData['irhpPermitType']['isEcmtRemoval']) {
