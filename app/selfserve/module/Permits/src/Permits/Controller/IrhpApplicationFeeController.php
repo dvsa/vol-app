@@ -189,7 +189,7 @@ class IrhpApplicationFeeController extends AbstractSelfserveController implement
         }
 
         return $this->redirect()
-            ->toRoute(IrhpApplicationSection::ROUTE_PERMIT);
+            ->toRoute(IrhpApplicationSection::ROUTE_PERMITS);
     }
 
     /**

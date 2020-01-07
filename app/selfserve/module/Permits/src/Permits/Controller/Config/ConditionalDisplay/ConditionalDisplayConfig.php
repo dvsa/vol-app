@@ -93,15 +93,6 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const PERMIT_APP_NOT_SUBMITTED = [
-        [
-            'source' => PermitAppDataSource::DATA_KEY,
-            'route' => IrhpApplicationSection::ROUTE_PERMITS,
-            'key' => 'isNotYetSubmitted',
-            'value' => true,
-        ],
-    ];
-
     const IRHP_APP_NOT_SUBMITTED = [
         [
             'source' => IrhpAppDataSource::DATA_KEY,
@@ -167,24 +158,6 @@ class ConditionalDisplayConfig
             'source' => IrhpApplicationWithLicences::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_PERMITS,
             'key' => 'isNotYetSubmitted',
-            'value' => true
-        ],
-    ];
-
-    const PERMIT_APP_CAN_CHECK_ANSWERS = [
-        [
-            'source' => PermitAppDataSource::DATA_KEY,
-            'key' => 'canCheckAnswers',
-            'value' => true,
-            'route' => EcmtSection::ROUTE_APPLICATION_OVERVIEW,
-        ],
-    ];
-
-    const PERMIT_APP_CAN_MAKE_DECLARATION = [
-        [
-            'source' => PermitAppDataSource::DATA_KEY,
-            'route' => IrhpApplicationSection::ROUTE_PERMITS,
-            'key' => 'canMakeDeclaration',
             'value' => true
         ],
     ];
@@ -300,74 +273,11 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const PERMIT_APP_CAN_DECLINE = [
-        [
-            'source' => PermitAppDataSource::DATA_KEY,
-            'route' => IrhpApplicationSection::ROUTE_PERMITS,
-            'key' => 'canBeDeclined',
-            'value' => true
-        ],
-    ];
-
-    const PERMIT_APP_CAN_BE_CANCELLED = [
-        [
-            'source' => PermitAppDataSource::DATA_KEY,
-            'route' => IrhpApplicationSection::ROUTE_PERMITS,
-            'key' => 'canBeCancelled',
-            'value' => true
-        ],
-    ];
-
-    const PERMIT_APP_IS_CANCELLED = [
-        [
-            'source' => PermitAppDataSource::DATA_KEY,
-            'route' => IrhpApplicationSection::ROUTE_PERMITS,
-            'key' => 'isCancelled',
-            'value' => true
-        ],
-    ];
-
-    const PERMIT_APP_CAN_BE_WITHDRAWN = [
-        [
-            'source' => PermitAppDataSource::DATA_KEY,
-            'route' => IrhpApplicationSection::ROUTE_PERMITS,
-            'key' => 'canBeWithdrawn',
-            'value' => true
-        ],
-    ];
-
-    const PERMIT_APP_IS_WITHDRAWN = [
-        [
-            'source' => PermitAppDataSource::DATA_KEY,
-            'route' => IrhpApplicationSection::ROUTE_PERMITS,
-            'key' => 'isWithdrawn',
-            'value' => true
-        ],
-    ];
-
-    const PERMIT_APP_AWAITING_FEE = [
-        [
-            'source' => PermitAppDataSource::DATA_KEY,
-            'route' => IrhpApplicationSection::ROUTE_PERMITS,
-            'key' => 'isAwaitingFee',
-            'value' => true
-        ],
-    ];
-
     const PERMIT_APP_ISSUING = [
         [
             'source' => PermitAppDataSource::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_PERMITS,
             'key' => 'isIssueInProgress',
-            'value' => true
-        ],
-    ];
-
-    const ECMT_APP_HAS_OUTSTANDING_FEES = [
-        [
-            'source' => PermitAppDataSource::DATA_KEY,
-            'route' => IrhpApplicationSection::ROUTE_PERMITS,
-            'key' => 'hasOutstandingFees',
             'value' => true
         ],
     ];

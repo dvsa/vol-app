@@ -6,15 +6,12 @@ use Permits\Controller\Config\DataSource\AvailableTypes as AvailableTypesDataSou
 use Permits\Controller\Config\DataSource\AvailableYears as AvailableYearsDataSource;
 use Permits\Controller\Config\DataSource\AvailableStocks as AvailableStocksDataSource;
 use Permits\Controller\Config\DataSource\LicencesAvailable as LicencesAvailableDataSource;
-use Permits\Controller\Config\DataSource\PermitApplication as PermitApplicationDataSource;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpApplicationDataSource;
 use Permits\Data\Mapper\AvailableCountries as AvailableCountriesMapper;
 use Permits\Data\Mapper\AvailableTypes as AvailableTypesMapper;
 use Permits\Data\Mapper\AvailableYears as AvailableYearsMapper;
 use Permits\Data\Mapper\AvailableStocks as AvailableStocksMapper;
 use Permits\Data\Mapper\LicencesAvailable as LicencesAvailableMapper;
-use Permits\Data\Mapper\RestrictedCountries;
-use Permits\Data\Mapper\Sectors as SectorsMapper;
 use Permits\Data\Mapper\NoOfPermits as NoOfPermitsMapper;
 use Permits\Data\Mapper\ChangeLicence as ChangeLicenceMapper;
 
@@ -96,63 +93,6 @@ class FormConfig
                 'type' => self::FORM_OPTIONS,
                 'class' => ChangeLicenceMapper::class
             ]
-        ],
-    ];
-
-    const FORM_EMISSIONS = [
-        'emissions' => [
-            'formClass' => 'EuroEmissionsForm',
-            'dataSource' => PermitApplicationDataSource::DATA_KEY,
-        ],
-    ];
-
-    const FORM_CABOTAGE = [
-        'cabotage' => [
-            'formClass' => 'CabotageForm',
-            'dataSource' => PermitApplicationDataSource::DATA_KEY,
-        ],
-    ];
-
-    const FORM_ROADWORTHINESS = [
-        'roadworthiness' => [
-            'formClass' => 'RoadworthinessForm',
-            'dataSource' => PermitApplicationDataSource::DATA_KEY,
-        ],
-    ];
-
-    const FORM_SECTORS = [
-        'sectors' => [
-            'formClass' => 'SectorsForm',
-            'dataSource' => PermitApplicationDataSource::DATA_KEY,
-            'mapper' => [
-                'type' => self::FORM_OPTIONS,
-                'class' => SectorsMapper::class
-            ]
-        ],
-    ];
-
-    const FORM_RESTRICTED_COUNTRIES = [
-        'restrictedCountries' => [
-            'formClass' => 'RestrictedCountriesForm',
-            'dataSource' => PermitApplicationDataSource::DATA_KEY,
-            'mapper' => [
-                'type' => self::FORM_OPTIONS,
-                'class' => RestrictedCountries::class
-            ]
-        ],
-    ];
-
-    const FORM_CHECK_ANSWERS = [
-        'checkAnswers' => [
-            'formClass' => 'CheckAnswersForm',
-            'dataSource' => PermitApplicationDataSource::DATA_KEY,
-        ],
-    ];
-
-    const FORM_DECLARATION = [
-        'declaration' => [
-            'formClass' => 'DeclarationForm',
-            'dataSource' => PermitApplicationDataSource::DATA_KEY,
         ],
     ];
 
