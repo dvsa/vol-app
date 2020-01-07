@@ -496,20 +496,6 @@ class IrhpApplicationController extends AbstractInternalController implements
         $formData['topFields']['numVehiclesLabel'] = $licence['totAuthVehicles'];
         $formData['topFields']['licence'] = $this->params()->fromRoute('licence', null);
 
-        if (!in_array(
-            $formData['topFields']['irhpPermitType'],
-            [
-                RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
-                RefData::ECMT_REMOVAL_PERMIT_TYPE_ID,
-                RefData::IRHP_BILATERAL_PERMIT_TYPE_ID,
-                RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID,
-                RefData::CERT_ROADWORTHINESS_VEHICLE_PERMIT_TYPE_ID,
-                RefData::CERT_ROADWORTHINESS_TRAILER_PERMIT_TYPE_ID
-            ]
-        )) {
-            throw new \RuntimeException('Unsupported Permit Type');
-        }
-
         if ($formData['topFields']['isApplicationPathEnabled']) {
             $form = $this->questionAnswerFormSetup($this->params()->fromRoute('irhpAppId'), $form);
             if ($this->request->isPost()) {
