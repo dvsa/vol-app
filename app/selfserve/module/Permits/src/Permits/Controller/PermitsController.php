@@ -165,65 +165,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
     }
 
     /**
-     * @return \Zend\Http\Response|ViewModel
-     */
-    public function paymentAction()
-    {
-        $id = $this->params()->fromRoute('id', -1);
-        $redirectUrl = $this->url()->fromRoute('permits/payment-result', ['id' => $id], ['force_canonical' => true]);
-
-        $dtoData = [
-            'cpmsRedirectUrl' => $redirectUrl,
-            'ecmtPermitApplicationId' => $id,
-            'paymentMethod' => RefData::FEE_PAYMENT_METHOD_CARD_ONLINE
-        ];
-        $dto = PayOutstandingFees::create($dtoData);
-        $response = $this->handleCommand($dto);
-
-        $messages = $response->getResult()['messages'];
-
-        $translateHelper = $this->getServiceLocator()->get('Helper\Translation');
-        $errorMessage = '';
-        foreach ($messages as $message) {
-            if (is_array($message) && array_key_exists(RefData::ERR_WAIT, $message)) {
-                $errorMessage = $translateHelper->translate('payment.error.15sec');
-                break;
-            } elseif (is_array($message) && array_key_exists(RefData::ERR_NO_FEES, $message)) {
-                $errorMessage = $translateHelper->translate('payment.error.feepaid');
-                break;
-            }
-        }
-        if ($errorMessage !== '') {
-            $this->addErrorMessage($errorMessage);
-            return $this->redirect()
-                ->toRoute(EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $id]);
-        }
-
-        if (!$response->isOk()) {
-            $this->addErrorMessage('feeNotPaidError');
-            return $this->redirect()
-                ->toRoute(EcmtSection::ROUTE_APPLICATION_OVERVIEW, ['id' => $id]);
-        }
-
-        // Look up the new payment in order to get the redirect data
-        $paymentId = $response->getResult()['id']['transaction'];
-        $response = $this->handleQuery(PaymentByIdQry::create(['id' => $paymentId]));
-        $payment = $response->getResult();
-
-        $view = new ViewModel(
-            [
-                'gateway' => $payment['gatewayUrl'],
-                'data' => [
-                    'receipt_reference' => $payment['reference']
-                ]
-            ]
-        );
-        // render the gateway redirect
-        $view->setTemplate('cpms/payment');
-        return $this->render($view);
-    }
-
-    /**
      * Attach messages to display in the current response
      *
      * @return void
