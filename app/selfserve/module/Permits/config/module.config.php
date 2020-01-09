@@ -906,7 +906,6 @@ return [
           Mapper\EcmtNoOfPermits::class => Mapper\EcmtNoOfPermitsFactory::class,
           Mapper\FeeList::class => Mapper\FeeListFactory::class,
           Mapper\IrhpApplicationFeeSummary::class => Mapper\IrhpApplicationFeeSummaryFactory::class,
-          Mapper\IrhpCheckAnswers::class => Mapper\IrhpCheckAnswersFactory::class,
           Mapper\ChangeLicence::class => Mapper\ChangeLicenceFactory::class,
           Mapper\NoOfPermits::class => Mapper\NoOfPermitsFactory::class,
       ],

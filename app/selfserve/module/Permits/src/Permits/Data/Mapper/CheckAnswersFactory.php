@@ -18,8 +18,7 @@ class CheckAnswersFactory implements FactoryInterface
     {
         return new CheckAnswers(
             $serviceLocator->get('Helper\Translation'),
-            $serviceLocator->get(EcmtNoOfPermits::class),
-            $serviceLocator->get(IrhpCheckAnswers::class)
+            $serviceLocator->get(EcmtNoOfPermits::class)
         );
     }
 }

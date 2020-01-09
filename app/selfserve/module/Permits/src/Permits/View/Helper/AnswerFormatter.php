@@ -10,6 +10,8 @@ use Zend\View\Helper\AbstractHelper;
  * Format data passed in q&a format
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
+ *
+ * TODO: this is expected to be redundant following the EMCT->IRHP migration
  */
 class AnswerFormatter extends AbstractHelper
 {
@@ -44,21 +46,6 @@ class AnswerFormatter extends AbstractHelper
                     $answers[] = (int)$answer;
                     break;
                 default:
-                    // TODO: this isn't ideal but will be resolved by the upcoming check answers and
-                    // snapshot refactor
-                    $dateQuestions = [
-                        'qanda.ecmt-removal.permit-start-date.question',
-                        'qanda.certificate-of-roadworthiness.vehicle.mot-expiry-date.question',
-                        'qanda.certificate-of-roadworthiness.trailer.mot-expiry-date.question',
-                        'qanda.ecmt-short-term.earliest-permit-date.question',
-                    ];
-
-                    if ($data['question'] == 'qanda.common.certificates.question') {
-                        $answer = $this->formatBoolean($answer);
-                    } elseif (in_array($data['question'], $dateQuestions)) {
-                        $answer = $this->formatDate($answer);
-                    }
-
                     $answers[] = $this->translateAndEscape($answer, $data['escape']);
             }
         }
@@ -99,19 +86,5 @@ class AnswerFormatter extends AbstractHelper
         }
 
         return 'Yes';
-    }
-
-    /**
-     * Format a date value
-     *
-     * @param string $answer
-     *
-     * @return string
-     */
-    private function formatDate($answer)
-    {
-        $dateTime = new DateTime($answer);
-
-        return $dateTime->format('d/m/Y');
     }
 }
