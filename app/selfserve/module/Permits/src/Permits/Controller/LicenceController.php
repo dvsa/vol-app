@@ -11,7 +11,6 @@ use Permits\Controller\Config\DataSource\LicencesAvailable;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
-use Permits\View\Helper\EcmtSection;
 use Permits\View\Helper\IrhpApplicationSection;
 
 class LicenceController extends AbstractSelfserveController implements ToggleAwareInterface
@@ -21,18 +20,15 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
     ];
 
     protected $dataSourceConfig = [
-        'add' => DataSourceConfig::PERMIT_APP_ADD_LICENCE,
-        'question' => DataSourceConfig::PERMIT_APP_CHANGE_LICENCE,
+        'question' => DataSourceConfig::PERMIT_APP_ADD_LICENCE,
     ];
 
     protected $conditionalDisplayConfig = [
-        'add' => ConditionalDisplayConfig::PERMIT_APP_CAN_APPLY_LICENCE,
-        'question' => ConditionalDisplayConfig::PERMIT_APP_CAN_APPLY_LICENCE_EXISTING_APP,
+        'question' => ConditionalDisplayConfig::PERMIT_APP_CAN_APPLY_LICENCE,
     ];
 
     protected $formConfig = [
-        'add' => FormConfig::FORM_ADD_LICENCE,
-        'question' => FormConfig::FORM_LICENCE,
+        'question' => FormConfig::FORM_ADD_LICENCE,
     ];
 
     protected $templateConfig = [
@@ -40,38 +36,18 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
     ];
 
     protected $templateVarsConfig = [
-        'add' => [
+        'question' => [
             'browserTitle' => 'permits.page.licence.browser.title',
             'question' => 'permits.page.licence.question',
             'backUri' => IrhpApplicationSection::ROUTE_TYPE
         ],
-        'question' => [
-            'browserTitle' => 'permits.page.licence.browser.title',
-            'question' => 'permits.page.licence.question',
-            'backUri' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW
-        ],
     ];
 
     protected $postConfig = [
-        'add' => [
+        'question' => [
             'command' => Create::class,
             'params' => ParamsConfig::NEW_APPLICATION,
             'step' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
-        ],
-        'question' => [
-            'params' => ParamsConfig::CONFIRM_CHANGE,
-            'step' => IrhpApplicationSection::ROUTE_LICENCE_CONFIRM_CHANGE,
-            'conditional' => [
-                'dataKey' => 'licencesAvailable',
-                'field' => 'selectedLicence',
-                'compareParam' => 'licence',
-                'step' => [
-                    'route' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
-                ],
-                'saveAndReturnStep' => [
-                    'route' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
-                ],
-            ]
         ],
     ];
 
@@ -99,36 +75,22 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
                     'licence' => $params['licence'],
                 ],
                 IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
-                IrhpApplicationSection::ROUTE_ADD_LICENCE,
-                IrhpApplicationSection::ROUTE_LICENCE
+                IrhpApplicationSection::ROUTE_ADD_LICENCE
             );
 
             return;
         }
 
-        if (isset($config['command'])) {
-            //quick fix for mismatched route params
-            $params['irhpPermitType'] = $params['type'];
-            $params['irhpPermitStock'] = $this->routeParams['stock'] ?? null;
+        //quick fix for mismatched route params
+        $params['irhpPermitType'] = $params['type'];
+        $params['irhpPermitStock'] = $this->routeParams['stock'] ?? null;
 
-            /** @var CommandInterface $command */
-            $command = $config['command']::create($params);
+        /** @var CommandInterface $command */
+        $command = $config['command']::create($params);
 
-            $response = $this->handleCommand($command);
-            $responseDump = $this->handleResponse($response);
-
-            if ($config['params'] === ParamsConfig::NEW_APPLICATION) {
-                $this->redirectParams = ['id' => $responseDump['id']['irhpApplication']];
-            }
-        } else {
-            if (isset($config['params'])) {
-                if ($config['params'] === ParamsConfig::CONFIRM_CHANGE) {
-                    $this->redirectParams = [
-                        'licence' => $params['licence']
-                    ];
-                }
-            }
-        }
+        $response = $this->handleCommand($command);
+        $responseDump = $this->handleResponse($response);
+        $this->redirectParams = ['id' => $responseDump['id']['irhpApplication']];
     }
 
     /**
@@ -138,19 +100,15 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
      * @param array $activeApplication
      * @param string $overviewRoute
      * @param string $addRoute
-     * @param string $changeRoute
      * @return array
      */
-    protected function handleActiveApplicationResponse(array $config, array $activeApplication, string $overviewRoute, string $addRoute, string $changeRoute)
+    protected function handleActiveApplicationResponse(array $config, array $activeApplication, string $overviewRoute, string $addRoute)
     {
-        if ($config['params'] === ParamsConfig::CONFIRM_CHANGE) {
-            $config['step'] = $overviewRoute;
-            unset($config['command']);
-        } elseif (isset($this->queryParams['active']) && ($activeApplication['licence'] == $this->queryParams['active'])) {
+        if (isset($this->queryParams['active']) && ($activeApplication['licence'] == $this->queryParams['active'])) {
             $config['step'] = $overviewRoute;
             $this->redirectParams = ['id' => $activeApplication['id']];
         } else {
-            $config['step'] = isset($config['command']) ? $addRoute : $changeRoute;
+            $config['step'] = $addRoute;
             $this->redirectOptions = [
                 'query' => ['active' => $activeApplication['licence']]
             ];
