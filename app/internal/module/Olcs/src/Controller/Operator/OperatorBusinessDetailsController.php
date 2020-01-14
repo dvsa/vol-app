@@ -8,8 +8,10 @@
 namespace Olcs\Controller\Operator;
 
 use Common\RefData;
+use Common\Service\Cqrs\Exception\NotFoundException;
 use Dvsa\Olcs\Transfer\Command\Operator\Create as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Operator\Update as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\CompaniesHouse\ByNumber;
 use Dvsa\Olcs\Transfer\Query\Operator\BusinessDetails as BusinessDetailsDto;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\OperatorBusinessDetails as Mapper;
@@ -116,11 +118,29 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
             $form->setData($originalData);
         }
 
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+
         // process company lookup
         if (isset($post['operator-details']['companyNumber']['submit_lookup_company'])) {
             $form->setData($post);
-            $this->getServiceLocator()->get('Helper\Form')
-                ->processCompanyNumberLookupForm($form, $post, 'operator-details', 'registeredAddress');
+            $companyNumber = $post['operator-details']['companyNumber']['company_number'];
+            $detailsFieldset = 'operator-details';
+            try {
+                $response = $this->handleQuery(ByNumber::create(['companyNumber' => $companyNumber]));
+            } catch (NotFoundException $exception) {
+                $formHelper->setCompanyNotFoundError($form, $detailsFieldset);
+                return $this->renderForm($form);
+            }
+            if ($response->isOk()) {
+                $formHelper->processCompanyNumberLookupForm(
+                    $form,
+                    $response->getResult(),
+                    $detailsFieldset,
+                    'registeredAddress'
+                );
+            } else {
+                $formHelper->setCompanyNotFoundError($form, $detailsFieldset);
+            }
             $validateAndSave = false;
         }
 
