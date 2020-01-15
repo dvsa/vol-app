@@ -30,7 +30,6 @@ use Olcs\Listener\RouteParam\BusRegFurniture;
 use Olcs\Listener\RouteParam\CasesFurniture;
 use Olcs\Listener\RouteParam\SubmissionsFurniture;
 use Olcs\Listener\RouteParam\TransportManagerFurniture;
-use Olcs\Listener\RouteParam\IrhpPermitFurniture;
 use Olcs\Listener\RouteParam;
 
 use Common\Data\Object\Search\Licence as LicenceSearch;
@@ -321,7 +320,6 @@ return array(
             'LicenceReadHistoryController' => 'Olcs\Controller\Licence\Processing\ReadHistoryController',
             'TransportManagerHistoryController' => 'Olcs\Controller\TransportManager\Processing\HistoryController',
             IrhpApplicationProcessingReadHistoryController::class => IrhpApplicationProcessingReadHistoryController::class,
-            IrhpPermitProcessingReadHistoryController::class => IrhpPermitProcessingReadHistoryController::class,
             'TransportManagerReadHistoryController'
                 => 'Olcs\Controller\TransportManager\Processing\ReadHistoryController',
             'ApplicationHistoryController' => 'Olcs\Controller\Application\Processing\HistoryController',
@@ -333,19 +331,11 @@ return array(
             Olcs\Controller\DisqualifyController::class => Olcs\Controller\DisqualifyController::class,
             'CaseDocumentSlaTargetDateController' => 'Olcs\Controller\Sla\CaseDocumentSlaTargetDateController',
             'LicenceDocumentSlaTargetDateController' => 'Olcs\Controller\Sla\LicenceDocumentSlaTargetDateController',
-            'IrhpPermitApplicationController' => 'Olcs\Controller\IrhpPermits\IrhpPermitApplicationController',
             \Olcs\Controller\IrhpPermits\IrhpApplicationController::class => \Olcs\Controller\IrhpPermits\IrhpApplicationController::class,
             \Olcs\Controller\IrhpPermits\IrhpApplicationFeesController::class => \Olcs\Controller\IrhpPermits\IrhpApplicationFeesController::class,
-            'IrhpPermitFeesController' => 'Olcs\Controller\IrhpPermits\IrhpPermitFeesController',
             'IrhpPermitController' => 'Olcs\Controller\IrhpPermits\IrhpPermitController',
             'IrhpDocsController' => 'Olcs\Controller\IrhpPermits\IrhpDocsController',
             'IrhpApplicationDocsController' => 'Olcs\Controller\IrhpPermits\IrhpApplicationDocsController',
-            \Olcs\Controller\IrhpPermits\IrhpPermitProcessingOverviewController::class =>
-                \Olcs\Controller\IrhpPermits\IrhpPermitProcessingOverviewController::class,
-            \Olcs\Controller\IrhpPermits\IrhpPermitProcessingNoteController::class =>
-                \Olcs\Controller\IrhpPermits\IrhpPermitProcessingNoteController::class,
-            \Olcs\Controller\IrhpPermits\IrhpPermitProcessingTasksController::class =>
-                \Olcs\Controller\IrhpPermits\IrhpPermitProcessingTasksController::class,
             IrhpApplicationProcessingHistoryController::class => IrhpApplicationProcessingHistoryController::class,
             \Olcs\Controller\IrhpPermits\ChangeHistoryController::class =>
                 \Olcs\Controller\IrhpPermits\ChangeHistoryController::class,
@@ -506,7 +496,6 @@ return array(
             CasesFurniture::class => CasesFurniture::class,
             SubmissionsFurniture::class => SubmissionsFurniture::class,
             TransportManagerFurniture::class => TransportManagerFurniture::class,
-            IrhpPermitFurniture::class => IrhpPermitFurniture::class,
             IrhpApplicationFurniture::class => IrhpApplicationFurniture::class,
             'Olcs\Listener\RouteParam\Cases' => 'Olcs\Listener\RouteParam\Cases',
             LicenceListener::class => LicenceListener::class,
@@ -605,11 +594,6 @@ return array(
         \Olcs\Controller\Interfaces\OperatorControllerInterface::class => [
             RouteParam\Organisation::class,
             RouteParam\OrganisationFurniture::class,
-        ],
-        \Olcs\Controller\Interfaces\IrhpPermitApplicationControllerInterface::class => [
-            RouteParam\IrhpPermitFurniture::class,
-            RouteParam\LicenceFurniture::class,
-            RouteParam\Licence::class,
         ],
         \Olcs\Controller\Interfaces\IrhpApplicationControllerInterface::class => [
             RouteParam\IrhpApplicationFurniture::class,

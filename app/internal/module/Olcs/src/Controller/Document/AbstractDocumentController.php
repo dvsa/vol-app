@@ -29,7 +29,6 @@ abstract class AbstractDocumentController extends AbstractController
         'busReg'           => 'licence/bus-docs',
         'transportManager' => 'transport-manager/documents',
         'irfoOrganisation' => 'operator/documents',
-        'ecmtPermitApplication' => 'licence/irhp-docs',
         'irhpApplication'  => 'licence/irhp-application-docs',
     ];
 
@@ -81,8 +80,6 @@ abstract class AbstractDocumentController extends AbstractController
                 return 'busRegId';
             case 'irfoOrganisation':
                 return 'organisation';
-            case 'ecmtPermitApplication':
-                return 'permitid';
             case 'irhpApplication':
                 return 'irhpAppId';
             default:

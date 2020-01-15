@@ -9,20 +9,18 @@
 namespace Olcs\Controller\IrhpPermits;
 
 use Common\RefData;
-use Dvsa\Olcs\Transfer\Query\IrhpPermit\GetListByEcmtId as EcmtListDTO;
 use Dvsa\Olcs\Transfer\Query\IrhpPermit\GetListByIrhpId as IrhpListDTO;
 use Dvsa\Olcs\Transfer\Query\IrhpPermit\ById as ItemDTO;
 use Dvsa\Olcs\Transfer\Command\IrhpPermit\Replace as ReplaceDTO;
 use Dvsa\Olcs\Transfer\Command\IrhpPermit\Terminate as TerminateDTO;
 use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\IrhpPermitApplicationControllerInterface;
+use Olcs\Controller\Interfaces\IrhpApplicationControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\IrhpPermit as IrhpPermitMapper;
-use Dvsa\Olcs\Transfer\Query\IrhpCandidatePermit\GetList as CandidateListDTO;
 use Zend\View\Model\ViewModel;
 
 class IrhpPermitController extends AbstractInternalController implements
-    IrhpPermitApplicationControllerInterface,
+    IrhpApplicationControllerInterface,
     LeftViewProvider
 {
     protected $itemParams = ['id' => 'irhppermitid'];
@@ -32,7 +30,7 @@ class IrhpPermitController extends AbstractInternalController implements
     protected $defaultTableSortField = 'permitNumber';
     protected $defaultTableOrderField = 'DESC';
 
-    protected $listVars = ['irhpApplication' => 'permitid'];
+    protected $listVars = ['irhpApplication' => 'irhpAppId'];
     protected $listDto = IrhpListDTO::class;
     protected $itemDto = ItemDto::class;
 
@@ -41,6 +39,8 @@ class IrhpPermitController extends AbstractInternalController implements
 
     // After Adding and Editing we want users taken back to index dashboard
     protected $redirectConfig = [];
+
+    protected $navigationId = 'irhp_permits-permits';
 
     /**
      * Any inline scripts needed in this section
@@ -89,7 +89,7 @@ class IrhpPermitController extends AbstractInternalController implements
                 }
 
                 return $this->redirect()->toRoute(
-                    'licence/irhp-permits',
+                    'licence/irhp-application/irhp-permits',
                     [
                         'action'       => $action,
                         'irhpPermitId' => $postParams['id']
@@ -98,35 +98,6 @@ class IrhpPermitController extends AbstractInternalController implements
                     true
                 );
             }
-        }
-
-        $DTOApplicationKey = 'irhpApplication';
-
-        // Get Permit Type from route, switch relevant class variables for ecmt/irhp DTOs
-        $permitTypeId = intval($this->params()->fromRoute('permitTypeId'));
-        $isEcmt = $permitTypeId === RefData::ECMT_PERMIT_TYPE_ID;
-
-        if ($isEcmt) {
-            $this->listDto = EcmtListDTO::class;
-            $this->listVars = ['ecmtPermitApplication' => 'permitid'];
-            $this->tableName = 'irhp-permits-ecmt';
-            $DTOApplicationKey = 'ecmtPermitApplication';
-        }
-
-        $response = $this->handleQuery($this->listDto::create([
-            'page' => 1,
-            'sort' => 'id',
-            'order' => 'ASC',
-            'limit' => 10,
-            $DTOApplicationKey => $this->params()->fromRoute('permitid'),
-        ]));
-
-        if ($isEcmt && $response->getResult()['count'] === 0) {
-            $this->listDto = CandidateListDTO::class;
-            $this->tableName = 'irhp-permits-ecmt-candidate';
-            $this->defaultTableSortField = 'id';
-            $this->defaultTableOrderField = 'ASC';
-            $this->listVars = ['ecmtPermitApplication' => 'permitid'];
         }
 
         return parent::indexAction();
@@ -177,11 +148,11 @@ class IrhpPermitController extends AbstractInternalController implements
             // If post handle suceeds, redirect to index, else re-render in modal to show errors.
             if ($this->handleReplacementPost()) {
                 return $this->redirect()->toRouteAjax(
-                    'licence/irhp-permits',
+                    'licence/irhp-application/irhp-permits',
                     [
                         'action' => 'index',
                         'licence' => $this->params()->fromRoute('licence'),
-                        'permitid' => $this->params()->fromRoute('permitid'),
+                        'irhpAppId' => $this->params()->fromRoute('irhpAppId'),
                         'permitTypeId' => $this->params()->fromRoute('permitTypeId')
                     ]
                 );
@@ -201,7 +172,7 @@ class IrhpPermitController extends AbstractInternalController implements
             $form->get('country')->setAttribute('value', $data['country']);
             $form->remove('restrictedCountries');
         }
-        
+
         $form->setData($data);
 
         $view = new ViewModel();
@@ -248,11 +219,11 @@ class IrhpPermitController extends AbstractInternalController implements
             // If post handle suceeds, redirect to index, else re-render in modal to show errors.
             if ($this->handleTerminationPost()) {
                 return $this->redirect()->toRouteAjax(
-                    'licence/irhp-permits',
+                    'licence/irhp-application/irhp-permits',
                     [
                         'action' => 'index',
                         'licence' => $this->params()->fromRoute('licence'),
-                        'permitid' => $this->params()->fromRoute('permitid'),
+                        'irhpAppId' => $this->params()->fromRoute('irhpAppId'),
                         'permitTypeId' => $this->params()->fromRoute('permitTypeId'),
                     ]
                 );

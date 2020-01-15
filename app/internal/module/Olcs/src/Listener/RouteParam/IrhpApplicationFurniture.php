@@ -173,6 +173,12 @@ class IrhpApplicationFurniture implements
 
         $routeParams = $this->getApplicationService()->getMvcEvent()->getRouteMatch()->getParams();
 
+        // Enable Link to view full permits if app is in Valid status
+        if ($irhpApplication['status']['id'] == RefData::PERMIT_APP_STATUS_VALID) {
+            $mainNav->findOneBy('id', 'irhp_permits-permits')
+                ->setVisible(true);
+        }
+
         // Link to view candidate permits is currently only for Short Terms in certain conditions..
         if ($irhpApplication['irhpPermitType']['id'] == RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID
             && $irhpApplication['status']['id'] == RefData::PERMIT_APP_STATUS_UNDER_CONSIDERATION
@@ -262,7 +268,7 @@ class IrhpApplicationFurniture implements
     {
         $urlPlugin = $this->getViewHelperManager()->get('Url');
         $escaper = new Escaper;
-        $licUrl = $urlPlugin->__invoke('licence/permits', ['licence' => $irhpApplication['licence']['id']], [], false);
+        $licUrl = $urlPlugin->__invoke('licence/irhp-application', ['licence' => $irhpApplication['licence']['id']], [], false);
         return '<a href="' . $licUrl . '">' . $escaper->escapeHtml($irhpApplication['licence']['licNo']) . '</a>' . '/' . $escaper->escapeHtml($irhpApplication['id']);
     }
 

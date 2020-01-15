@@ -1,6 +1,5 @@
 <?php
 
-use Common\RefData;
 use Olcs\Controller\IrhpPermits\IrhpApplicationController;
 use Olcs\Controller\IrhpPermits\IrhpApplicationFeesController;
 use Olcs\Controller\Licence\SurrenderController;
@@ -16,11 +15,6 @@ use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingNoteController;
 use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingTasksController;
 use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingHistoryController;
 use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingReadHistoryController;
-use Olcs\Controller\IrhpPermits\IrhpPermitProcessingOverviewController;
-use Olcs\Controller\IrhpPermits\IrhpPermitProcessingNoteController;
-use Olcs\Controller\IrhpPermits\IrhpPermitProcessingReadHistoryController;
-use Olcs\Controller\IrhpPermits\IrhpPermitProcessingTasksController;
-use Olcs\Controller\IrhpPermits\ChangeHistoryController;
 use Olcs\Controller\Bus\Details\BusDetailsController;
 use Olcs\Controller\Bus\Service\BusServiceController;
 use Olcs\Controller\SearchController;
@@ -840,34 +834,6 @@ $routes = [
                     ],
                 ],
             ],
-            'irhp-fees' => [
-                'type' => 'segment',
-                'options' => [
-                    'route' => 'permits/:permitid/fees[/]',
-                    'constraints' => [
-                        'permitid' => '[0-9]+',
-                    ],
-                    'defaults' => [
-                        'controller' => 'IrhpPermitFeesController',
-                        'action' => 'dashRedirect',
-                    ]
-                ],
-                'may_terminate' => true,
-                'child_routes' => [
-                    'fee_action' => $feeActionRoute,
-                    'fee_type_ajax' => $feeTypeAjaxRoute,
-                    'print-receipt' => $feePrintReceiptRoute,
-                    'table' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => 'table[/]',
-                            'defaults' => [
-                                'action' => 'fees'
-                            ]
-                        ]
-                    ],
-                ]
-            ],
             'irhp-application-fees' => [
                 'type' => 'segment',
                 'options' => [
@@ -893,217 +859,6 @@ $routes = [
                                 'action' => 'fees'
                             ]
                         ]
-                    ],
-                ]
-            ],
-            'permits' => [
-                'type' => 'segment',
-                'options' => [
-                    'route' => 'permits[/]',
-                    'defaults' => [
-                        'controller' => 'IrhpPermitApplicationController',
-                        'action' => 'index',
-                    ]
-                ],
-                'may_terminate' => true,
-                'child_routes' => [
-                    'add' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => 'add[/]',
-                            'defaults' => [
-                                'action' => 'add'
-                            ]
-                        ]
-                    ],
-                    'selectType' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => 'type[/]',
-                            'defaults' => [
-                                'action' => 'selectType'
-                            ]
-                        ]
-                    ],
-                    'availableYears' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => 'available-years[/]',
-                            'defaults' => [
-                                'action' => 'availableYears'
-                            ]
-                        ]
-                    ],
-                    'availableStocks' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => 'available-stocks[/]',
-                            'defaults' => [
-                                'action' => 'availableStocks'
-                            ]
-                        ]
-                    ],
-                    'application' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => ':action/:permitid[/]',
-                            'constraints' => [
-                                'action' => 'edit|submit|accept|decline|cancel|withdraw|reviveFromWithdrawn|reviveFromUnsuccessful',
-                                'permitid' => '[0-9]+',
-                            ],
-                            'defaults' => [
-                                'action' => 'edit'
-                            ]
-                        ]
-                    ],
-                ]
-            ],
-            'irhp-permits' => [
-                'type' => 'segment',
-                'options' => [
-                    'route' => 'permits/:permitid/:permitTypeId/irhp-permits[/:action][/:irhpPermitId][/]',
-                    'constraints' => [
-                        'permitid' => '[0-9]+',
-                        'action' => 'requestReplacement|terminatePermit',
-                        'irhpPermitId' => '[0-9]+',
-                        'permitTypeId' => '[0-9]+',
-                    ],
-                    'defaults' => [
-                        'controller' => 'IrhpPermitController',
-                        'action' => 'index',
-                        'permitTypeId' => 1,
-                    ]
-                ],
-                'may_terminate' => true,
-            ],
-            'irhp-docs' => [
-                'type' => 'segment',
-                'options' => [
-                    'route' => 'permits/:permitid/docs[/]',
-                    'constraints' => [
-                        'permitid' => '[0-9]+',
-                    ],
-                    'defaults' => [
-                        'controller' => 'IrhpDocsController',
-                        'action' => 'documents',
-                    ]
-                ],
-                'may_terminate' => true,
-                'child_routes' => [
-                    'generate' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => 'generate[/:doc][/]',
-                            'defaults' => [
-                                'type' => 'ecmtPermitApplication',
-                                'controller' => 'DocumentGenerationController',
-                                'action' => 'generate'
-                            ]
-                        ],
-                    ],
-                    'finalise' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => 'finalise/:doc[/:action][/]',
-                            'defaults' => [
-                                'type' => 'ecmtPermitApplication',
-                                'controller' => 'DocumentFinaliseController',
-                                'action' => 'finalise'
-                            ]
-                        ],
-                    ],
-                    'upload' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => 'upload[/]',
-                            'defaults' => [
-                                'type' => 'ecmtPermitApplication',
-                                'controller' => 'DocumentUploadController',
-                                'action' => 'upload'
-                            ]
-                        ],
-                    ],
-                    'delete' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => 'delete/:doc[/]',
-                            'defaults' => [
-                                'type' => 'ecmtPermitApplication',
-                                'controller' => 'IrhpDocsController',
-                                'action' => 'delete-document'
-                            ]
-                        ],
-                    ],
-                    'relink' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => 'relink/:doc[/]',
-                            'defaults' => [
-                                'type' => 'ecmtPermitApplication',
-                                'controller' => 'DocumentRelinkController',
-                                'action' => 'relink'
-                            ]
-                        ],
-                    ],
-                ],
-            ],
-            'irhp-processing' => [
-                'type' => 'segment',
-                'options' => [
-                    'route' => 'permits/:permitid/processing[/]',
-                    'constraints' => [
-                        'permitid' => '[0-9]+',
-                    ],
-                    'defaults' => [
-                        'controller' => IrhpPermitProcessingOverviewController::class,
-                        'action' => 'index',
-                    ]
-                ],
-                'may_terminate' => true,
-                'child_routes' => [
-                    'notes' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => 'notes[/:action[/:id]][/]',
-                            'constraints' => [
-                                'action' => 'index|details|add|edit|delete',
-                                'id' => '[0-9]+',
-                            ],
-                            'defaults' => [
-                                'controller' => IrhpPermitProcessingNoteController::class,
-                                'action' => 'index'
-                            ]
-                        ],
-                    ],
-                    'tasks' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => 'tasks[/]',
-                            'defaults' => [
-                                'controller' => IrhpPermitProcessingTasksController::class,
-                                'action' => 'index'
-                            ]
-                        ]
-                    ],
-                    'change-history' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => 'change-history[/]',
-                            'defaults' => [
-                                'controller' => ChangeHistoryController::class,
-                                'action' => 'index',
-                            ]
-                        ],
-                    ],
-                    'read-history' => [
-                        'type' => 'segment',
-                        'options' => [
-                            'route' => 'read-history[/]',
-                            'defaults' => [
-                                'controller' => IrhpPermitProcessingReadHistoryController::class,
-                                'action' => 'index',
-                            ]
-                        ],
                     ],
                 ]
             ],
@@ -1139,12 +894,30 @@ $routes = [
                             ]
                         ]
                     ],
+                    'availableYears' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'available-years[/]',
+                            'defaults' => [
+                                'action' => 'availableYears'
+                            ]
+                        ]
+                    ],
+                    'availableStocks' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'available-stocks[/]',
+                            'defaults' => [
+                                'action' => 'availableStocks'
+                            ]
+                        ]
+                    ],
                     'application' => [
                         'type' => 'segment',
                         'options' => [
                             'route' => ':action/:irhpAppId[/][:permitId]',
                             'constraints' => [
-                                'action' => 'edit|submit|accept|decline|cancel|withdraw|grant|preGrant|preGrantEdit|preGrantAdd|preGrantDelete|ranges|reviveFromWithdrawn|reviveFromUnsuccessful',
+                                'action' => 'edit|submit|accept|decline|cancel|withdraw|grant|preGrant|preGrantEdit|preGrantAdd|preGrantDelete|ranges|reviveFromWithdrawn|reviveFromUnsuccessful|viewpermits',
                                 'irhpAppId' => '[0-9]+',
                                 'permitId' => '[0-9]+',
                             ],
@@ -1152,6 +925,23 @@ $routes = [
                                 'action' => 'edit'
                             ]
                         ]
+                    ],
+                    'irhp-permits' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => ':irhpAppId[/]:permitTypeId[/]irhp-permits[/:action][/:irhpPermitId][/]',
+                            'constraints' => [
+                                'irhpAppId' => '[0-9]+',
+                                'action' => 'requestReplacement|terminatePermit',
+                                'irhpPermitId' => '[0-9]+',
+                                'permitTypeId' => '[0-9]+',
+                            ],
+                            'defaults' => [
+                                'controller' => 'IrhpPermitController',
+                                'action' => 'index',
+                            ]
+                        ],
+                        'may_terminate' => true,
                     ],
                 ],
 
