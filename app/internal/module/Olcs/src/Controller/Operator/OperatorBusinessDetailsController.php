@@ -7,11 +7,10 @@
  */
 namespace Olcs\Controller\Operator;
 
+use Common\Controller\Traits\CompanySearch;
 use Common\RefData;
-use Common\Service\Cqrs\Exception\NotFoundException;
 use Dvsa\Olcs\Transfer\Command\Operator\Create as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Operator\Update as UpdateDto;
-use Dvsa\Olcs\Transfer\Query\CompaniesHouse\ByNumber;
 use Dvsa\Olcs\Transfer\Query\Operator\BusinessDetails as BusinessDetailsDto;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\OperatorBusinessDetails as Mapper;
@@ -24,6 +23,8 @@ use Zend\View\Model\ViewModel;
  */
 class OperatorBusinessDetailsController extends OperatorController implements LeftViewProvider
 {
+    use CompanySearch;
+
     /**
      * @var string
      */
@@ -125,21 +126,13 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
             $form->setData($post);
             $companyNumber = $post['operator-details']['companyNumber']['company_number'];
             $detailsFieldset = 'operator-details';
-            try {
-                $response = $this->handleQuery(ByNumber::create(['companyNumber' => $companyNumber]));
-            } catch (NotFoundException $exception) {
-                $formHelper->setCompanyNotFoundError($form, $detailsFieldset);
-                return $this->renderForm($form);
+            $addressFieldset = 'registeredAddress';
+            if($this->isValidCompanyNumber($companyNumber)) {
+                $form = $this->populateCompanyDetails($formHelper, $form, $detailsFieldset, $addressFieldset, $companyNumber);
             }
-            if ($response->isOk()) {
-                $formHelper->processCompanyNumberLookupForm(
-                    $form,
-                    $response->getResult(),
-                    $detailsFieldset,
-                    'registeredAddress'
-                );
-            } else {
-                $formHelper->setCompanyNotFoundError($form, $detailsFieldset);
+            else
+            {
+                $formHelper->setInvalidCompanyNumberErrors($form, $detailsFieldset);
             }
             $validateAndSave = false;
         }
