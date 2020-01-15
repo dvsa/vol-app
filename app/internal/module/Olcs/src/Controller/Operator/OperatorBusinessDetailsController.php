@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller\Operator;
 
+use Common\Controller\Traits\CompanySearch;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Operator\Create as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Operator\Update as UpdateDto;
@@ -22,6 +23,8 @@ use Zend\View\Model\ViewModel;
  */
 class OperatorBusinessDetailsController extends OperatorController implements LeftViewProvider
 {
+    use CompanySearch;
+
     /**
      * @var string
      */
@@ -116,11 +119,21 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
             $form->setData($originalData);
         }
 
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+
         // process company lookup
         if (isset($post['operator-details']['companyNumber']['submit_lookup_company'])) {
             $form->setData($post);
-            $this->getServiceLocator()->get('Helper\Form')
-                ->processCompanyNumberLookupForm($form, $post, 'operator-details', 'registeredAddress');
+            $companyNumber = $post['operator-details']['companyNumber']['company_number'];
+            $detailsFieldset = 'operator-details';
+            $addressFieldset = 'registeredAddress';
+            if($this->isValidCompanyNumber($companyNumber)) {
+                $form = $this->populateCompanyDetails($formHelper, $form, $detailsFieldset, $addressFieldset, $companyNumber);
+            }
+            else
+            {
+                $formHelper->setInvalidCompanyNumberErrors($form, $detailsFieldset);
+            }
             $validateAndSave = false;
         }
 
