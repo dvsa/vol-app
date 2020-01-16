@@ -60,7 +60,7 @@ class IrhpPermitController extends AbstractInternalController implements
     {
         $view = new ViewModel(
             [
-                'navigationId' => 'irhp_permits',
+                'navigationId' => 'licence_irhp_applications-edit',
                 'navigationTitle' => 'Application details'
             ]
         );
