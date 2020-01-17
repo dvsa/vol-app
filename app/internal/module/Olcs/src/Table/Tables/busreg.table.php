@@ -21,13 +21,7 @@ return array(
     'columns' => array(
         array(
             'title' => 'Reg No.',
-            'formatter' => function ($data) {
-                return '<a href="' . $this->generateUrl(
-                    array('action' => 'index', 'busRegId' => $data['id']),
-                    'licence/bus-details/service',
-                    true
-                ) . '">' . $data['regNo'] . '</a>';
-            },
+            'formatter' => 'BusRegNumberLink',
             'sort' => 'routeNo',
         ),
         array(
@@ -57,7 +51,8 @@ return array(
         ),
         array(
             'title' => 'Status',
-            'name' => 'busRegStatusDesc'
+            'name' => 'busRegStatusDesc',
+            'sort' => 'busRegStatusDesc',
         ),
         array(
             'title' => '',
