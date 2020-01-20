@@ -391,24 +391,6 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         );
     }
 
-    public function ecmtGuidanceAction()
-    {
-        $query = CountrySelectList::create(['isEcmtState' => 1]);
-        $response = $this->handleQuery($query);
-        $ecmtCountries = $response->getResult();
-
-        // Get Fee Data
-        $ecmtPermitFees = $this->getEcmtPermitFees();
-        $ecmtApplicationFee = $ecmtPermitFees['fee'][$this::ECMT_APPLICATION_FEE_PRODUCT_REFENCE]['fixedValue'];
-        $ecmtIssuingFee = $ecmtPermitFees['fee'][$this::ECMT_ISSUING_FEE_PRODUCT_REFENCE]['fixedValue'];
-
-        $view = new ViewModel();
-        $view->setVariable('ecmtCountries', $ecmtCountries['results']);
-        $view->setVariable('applicationFee', $ecmtApplicationFee);
-        $view->setVariable('issueFee', $ecmtIssuingFee);
-        return $view;
-    }
-
     /**
      * Page displayed when from the Permit Dashboard
      * the user clicks the Reference of an application

@@ -368,17 +368,6 @@ return [
                       ],
                   ],
               ],
-              'ecmt-guidance' => [
-                  'type'    => 'segment',
-                  'options' => [
-                      'route'    => '/ecmt-guidance[/]',
-                      'defaults' => [
-                          'controller'    => PermitsController::class,
-                          'action'        => 'ecmtGuidance',
-                      ],
-                  ],
-                  'may_terminate' => false,
-              ],
               'application-overview' => [
                   'type'    => 'segment',
                   'options' => [
