@@ -1204,12 +1204,12 @@
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "4.206.3",
+            "version": "4.206.4",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-auth/4.206.3/olcs-olcs-auth-4.206.3.zip",
-                "reference": "bfd69f9e2067964e6f24029aa3190f1464650972",
-                "shasum": "bfd69f9e2067964e6f24029aa3190f1464650972"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-auth/4.206.4/olcs-olcs-auth-4.206.4.zip",
+                "reference": "c79fcd855997199ba8a20d72e2681d111073b302",
+                "shasum": "c79fcd855997199ba8a20d72e2681d111073b302"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -1265,16 +1265,16 @@
                 ]
             },
             "description": "OLCS Authentication",
-            "time": "2019-05-21T09:54:36+00:00"
+            "time": "2019-11-28T10:00:28+00:00"
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.101",
+            "version": "4.206.125",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-common/4.206.101/olcs-olcs-common-4.206.101.zip",
-                "reference": "cdb62a85d08bbd014cea53536b4b9c8da5be28ce",
-                "shasum": "cdb62a85d08bbd014cea53536b4b9c8da5be28ce"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-common/4.206.125/olcs-olcs-common-4.206.125.zip",
+                "reference": "13cb58d92fe2c30a11bed56a5e4928808ca99b68",
+                "shasum": "13cb58d92fe2c30a11bed56a5e4928808ca99b68"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -1340,16 +1340,16 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2019-11-21T17:03:23+00:00"
+            "time": "2020-01-16T11:36:59+00:00"
         },
         {
             "name": "olcs/olcs-logging",
-            "version": "4.206.1",
+            "version": "4.206.2",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-logging/4.206.1/olcs-olcs-logging-4.206.1.zip",
-                "reference": "976537ea9919f43f2f78da366bbe869f1a4fefaa",
-                "shasum": "976537ea9919f43f2f78da366bbe869f1a4fefaa"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-logging/4.206.2/olcs-olcs-logging-4.206.2.zip",
+                "reference": "77e86c18c220a03c62ed577b8486c5198d2d42de",
+                "shasum": "77e86c18c220a03c62ed577b8486c5198d2d42de"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -1409,16 +1409,16 @@
                 ]
             },
             "description": "Logging Module for Olcs",
-            "time": "2019-05-01T15:47:37+00:00"
+            "time": "2019-11-27T18:32:21+00:00"
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "4.206.47",
+            "version": "4.206.55",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-transfer/4.206.47/olcs-olcs-transfer-4.206.47.zip",
-                "reference": "6a5897f342ebc4edbcb8d8706141b0cb5a6c5a25",
-                "shasum": "6a5897f342ebc4edbcb8d8706141b0cb5a6c5a25"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-transfer/4.206.55/olcs-olcs-transfer-4.206.55.zip",
+                "reference": "866d85f286f182078f1e6ff9be5c9de24302799e",
+                "shasum": "866d85f286f182078f1e6ff9be5c9de24302799e"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -1474,16 +1474,16 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2019-11-20T12:05:56+00:00"
+            "time": "2020-01-10T09:45:35+00:00"
         },
         {
             "name": "olcs/olcs-utils",
-            "version": "4.206.0",
+            "version": "4.206.1",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-utils/4.206.0/olcs-olcs-utils-4.206.0.zip",
-                "reference": "40e231af6a2acb23908587c5ea8692ac9d75e2be",
-                "shasum": "40e231af6a2acb23908587c5ea8692ac9d75e2be"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-utils/4.206.1/olcs-olcs-utils-4.206.1.zip",
+                "reference": "ecdea2626fd1a64c813bb8fdaa34a6e9b8f7ebe1",
+                "shasum": "ecdea2626fd1a64c813bb8fdaa34a6e9b8f7ebe1"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -1537,7 +1537,7 @@
                 ]
             },
             "description": "OLCS Utils",
-            "time": "2019-05-01T16:06:22+00:00"
+            "time": "2019-11-27T18:27:36+00:00"
         },
         {
             "name": "psr/http-message",
@@ -2069,6 +2069,7 @@
                 "framework",
                 "zf2"
             ],
+            "abandoned": "laminas/laminas-mvc-skeleton",
             "time": "2017-07-13T17:23:56+00:00"
         },
         {
@@ -2109,6 +2110,7 @@
                 "xml",
                 "zf"
             ],
+            "abandoned": "laminas/laminas-xml",
             "time": "2019-01-22T19:42:14+00:00"
         },
         {
@@ -2521,12 +2523,12 @@
         },
         {
             "name": "olcs/olcs-testhelpers",
-            "version": "4.206.2",
+            "version": "4.206.3",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-testhelpers/4.206.2/olcs-olcs-testhelpers-4.206.2.zip",
-                "reference": "947cf83a23bb67595c62b0b17b5029a36849c434",
-                "shasum": "947cf83a23bb67595c62b0b17b5029a36849c434"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-testhelpers/4.206.3/olcs-olcs-testhelpers-4.206.3.zip",
+                "reference": "f9e7b21db2ae2d30833efa3a8acbf97130eba3e0",
+                "shasum": "f9e7b21db2ae2d30833efa3a8acbf97130eba3e0"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -2554,7 +2556,7 @@
                 ]
             },
             "description": "OLCS Test helpers",
-            "time": "2019-10-28T10:43:14+00:00"
+            "time": "2019-11-27T18:30:49+00:00"
         },
         {
             "name": "pdepend/pdepend",
@@ -3010,6 +3012,7 @@
                 "MIT"
             ],
             "description": "PHPStan Phar distribution",
+            "abandoned": "phpstan/phpstan",
             "time": "2019-01-08T10:03:03+00:00"
         },
         {
