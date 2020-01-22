@@ -58,7 +58,7 @@
 
         <div class="proposition" role="navigation">
 
-          <h2 class="proposition__title">
+          <span class="proposition__title">
             <?php
             /** @var \Common\View\Helper\CurrentUser $currentUser */
                 $currentUser = $this->currentUser();
@@ -68,7 +68,7 @@
                     ? $this->pageTitle()
                     : $this->translate('header-vehicle-operator-licensing');
             ?>
-          </h2>
+          </span>
 
           <a class="proposition__toggle" href="#">Menu</a>
 
