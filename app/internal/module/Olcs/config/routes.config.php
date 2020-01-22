@@ -1458,6 +1458,16 @@ $routes = [
                     ]
                 ]
             ],
+            'users' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'users[/]',
+                    'defaults' => [
+                        'controller' => Olcs\Controller\Operator\OperatorUsersController::class,
+                        'action' => 'index',
+                    ]
+                ]
+            ],
             'new-application' => [
                 'type' => 'segment',
                 'options' => [

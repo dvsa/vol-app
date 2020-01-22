@@ -288,6 +288,8 @@ return array(
             'OperatorProcessingTasksController'
                 => 'Olcs\Controller\Operator\OperatorProcessingTasksController',
             'OperatorFeesController' => 'Olcs\Controller\Operator\OperatorFeesController',
+            Olcs\Controller\Operator\OperatorUsersController::class =>
+                Olcs\Controller\Operator\OperatorUsersController::class,
             'TMController' => TransportManagerController::class,
             'HistoricTmController'
                 => Olcs\Controller\TransportManager\HistoricTm\HistoricTmController::class,

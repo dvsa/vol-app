@@ -1057,6 +1057,12 @@ $nav = [
                                     'route' => 'operator-unlicensed/vehicles',
                                     'use_route_match' => true,
                                 ],
+                                [
+                                    'id' => 'operator_users',
+                                    'label' => 'internal-navigation-operator-users',
+                                    'route' => 'operator/users',
+                                    'use_route_match' => true,
+                                ],
                             ]
                         ],
                         [
