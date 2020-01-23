@@ -38,7 +38,17 @@ return array(
         array(
             'title' => 'permits.irhp.valid.permits.table.expiry-date',
             'name' => 'expiryDate',
-            'formatter' => 'Date',
+            'formatter' => function ($row) {
+                return $this->callFormatter(
+                    [
+                        'name' => 'useByDate',
+                        'formatter' => 'Date',
+                    ],
+                    [
+                        'useByDate' => $row['irhpPermitRange']['irhpPermitStock']['validTo'] ?? null,
+                    ]
+                );
+            }
         ),
         array(
             'title' => 'status',
