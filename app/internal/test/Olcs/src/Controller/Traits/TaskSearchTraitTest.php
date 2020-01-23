@@ -282,11 +282,11 @@ class TaskSearchTraitTest extends MockeryTestCase
                 'expected' => ['type' => 'case', 'typeId' => 200, 'action' => 'add']
             ],
             [
-                'type' => 'ecmtpermitapplication',
+                'type' => 'irhpapplication',
                 'action' => 'add',
                 'id' => null,
-                'paramName' => 'permitid',
-                'expected' => ['type' => 'ecmtpermitapplication', 'typeId' => 200, 'action' => 'add']
+                'paramName' => 'irhpAppId',
+                'expected' => ['type' => 'irhpapplication', 'typeId' => 200, 'action' => 'add']
             ],
         ];
     }

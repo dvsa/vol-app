@@ -196,12 +196,6 @@ trait TaskSearchTrait
                         'typeId' => $this->params('case'),
                     ];
                     break;
-                case 'ecmtpermitapplication':
-                    $params = [
-                        'type' => 'ecmtpermitapplication',
-                        'typeId' => $this->params('permitid'),
-                    ];
-                    break;
                 case 'irhpapplication':
                     $params = [
                         'type' => 'irhpapplication',

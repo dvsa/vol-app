@@ -133,10 +133,6 @@ class DocumentUploadController extends AbstractDocumentController
                 $data['licence'] = $routeParams['licence'];
                 break;
 
-            case 'ecmtPermitApplication':
-                $data['licence'] = $routeParams['licence'];
-                break;
-
             case 'irhpApplication':
                 $data['licence'] = $routeParams['licence'];
                 break;

@@ -170,7 +170,7 @@ class IrhpApplicationFurnitureTest extends TestCase
                 m::mock(Url::class)
                     ->shouldReceive('__invoke')
                     ->once()
-                    ->with('licence/permits', ['licence' => $irhpApplication['licence']['id']], [], false)
+                    ->with('licence/irhp-application', ['licence' => $irhpApplication['licence']['id']], [], false)
                     ->andReturn('app')
                     ->getMock()
             )

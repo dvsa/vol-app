@@ -20,10 +20,13 @@ use Dvsa\Olcs\Transfer\Command\IrhpApplication\ReviveFromUnsuccessful;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\ReviveFromWithdrawn;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\SubmitApplication;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\Withdraw;
+use Dvsa\Olcs\Transfer\Command\Permits\AcceptEcmtPermits;
+use Dvsa\Olcs\Transfer\Query\Permits\AvailableStocks;
+use Dvsa\Olcs\Transfer\Query\Permits\AvailableYears;
 use Olcs\Form\Model\Form\IrhpApplicationWithdraw as WithdrawForm;
 use Olcs\Form\Model\Form\IrhpCandidatePermit as IrhpCandidatePermitForm;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\ApplicationPath;
-use Dvsa\Olcs\Transfer\Query\IrhpPermitApplication\GetList as ListDTO;
+use Dvsa\Olcs\Transfer\Query\IrhpApplication\GetAllByLicence as ListDTO;
 use Dvsa\Olcs\Transfer\Query\IrhpCandidatePermit\GetListByIrhpApplication as CandidateListDTO;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\AvailableCountries;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitWindow\OpenByCountry;
@@ -85,6 +88,9 @@ class IrhpApplicationController extends AbstractInternalController implements
     protected $createCommand = CreateDto::class;
     protected $updateCommand = UpdateDto::class;
 
+    protected $tableName = 'permit-applications';
+    protected $tableViewTemplate = 'pages/irhp-permit/two-tables';
+
     protected $addContentTitle = 'Add Irhp Application';
 
     const PERMIT_TYPE_LABELS = [
@@ -95,35 +101,35 @@ class IrhpApplicationController extends AbstractInternalController implements
     // After Adding and Editing we want users taken back to index dashboard
     protected $redirectConfig = [
         'add' => [
-            'route' => 'licence/permits',
+            'route' => 'licence/irhp-application',
             'action' => 'index',
         ],
         'edit' => [
-            'route' => 'licence/permits',
+            'route' => 'licence/irhp-application',
             'action' => 'index',
         ],
         'cancel' => [
-            'route' => 'licence/permits',
+            'route' => 'licence/irhp-application',
             'action' => 'index',
         ],
         'submit' => [
-            'route' => 'licence/permits',
+            'route' => 'licence/irhp-application',
             'action' => 'index',
         ],
         'grant' => [
-            'route' => 'licence/permits',
+            'route' => 'licence/irhp-application',
             'action' => 'index',
         ],
         'withdraw' => [
-            'route' => 'licence/permits',
+            'route' => 'licence/irhp-application',
             'action' => 'index',
         ],
         'revivefromwithdrawn' => [
-            'route' => 'licence/permits',
+            'route' => 'licence/irhp-application',
             'action' => 'index',
         ],
         'revivefromunsuccessful' => [
-            'route' => 'licence/permits',
+            'route' => 'licence/irhp-application',
             'action' => 'index',
         ],
         'pregrantedit' => [
@@ -146,6 +152,7 @@ class IrhpApplicationController extends AbstractInternalController implements
         'preGrantAction' => ['table-actions'],
         'preGrantEditAction' => ['forms/irhp-candidate-permit'],
         'preGrantAddAction' => ['forms/irhp-candidate-permit'],
+        'selectTypeAction' => ['forms/select-type-modal']
     ];
 
     /**
@@ -164,6 +171,152 @@ class IrhpApplicationController extends AbstractInternalController implements
         $view->setTemplate('admin/sections/admin/partials/generic-left');
 
         return $view;
+    }
+
+
+    /**
+     * @return \Zend\Http\Response|ViewModel
+     */
+    public function indexAction()
+    {
+        $navigation = $this->getServiceLocator()->get('Navigation');
+        $navigation->findOneBy('id', 'licence_irhp_applications')->setActive();
+
+        $this->indexIssuedTable();
+        $this->handleIndexPost();
+
+        return parent::indexAction();
+    }
+
+    /**
+     *
+     * Helper method to perform the query and setup table for Issued Permits table on dash.
+     *
+     */
+    protected function indexIssuedTable()
+    {
+        $response = $this->handleQuery(
+            ListDTO::create(
+                [
+                    'licence' => $this->params()->fromRoute('licence'),
+                    'irhpApplicationStatuses' => [
+                        RefData::PERMIT_APP_STATUS_VALID,
+                        RefData::PERMIT_APP_STATUS_EXPIRED,
+                    ],
+                    'sort' => 'applicationRef',
+                    'order' => 'ASC',
+                ]
+            )
+        );
+
+        $data = [];
+        if ($response->isOk()) {
+            $data = $response->getResult();
+        } else {
+            $this->checkResponse($response);
+        }
+
+        $issuedTable = $this->getServiceLocator()
+            ->get('Table')
+            ->prepareTable('issued-permits', $data);
+        $this->placeholder()->setPlaceholder('issuedTable', $issuedTable);
+    }
+
+    /**
+     * @return \Zend\Http\Response
+     *
+     * Override to handle the Table from POST when Apply clicked and redirect to the Add form.
+     *
+     */
+    protected function handleIndexPost()
+    {
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $postData = (array)$this->params()->fromPost();
+            if ($postData['action'] === 'Apply') {
+                return $this->redirect()
+                    ->toRoute(
+                        'licence/irhp-application/selectType',
+                        [
+                            'licence' => $this->params()->fromRoute('licence')
+                        ]
+                    );
+            }
+        }
+    }
+
+
+    /**
+     * Renders modal form, and handles redirect to correct application form for permit type.
+     *
+     */
+    public function selectTypeAction()
+    {
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $permitTypeId = $this->params()->fromPost()['permitType'];
+
+            switch ($permitTypeId) {
+                case RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID:
+                case RefData::ECMT_PERMIT_TYPE_ID:
+                    return $this->redirect()
+                        ->toRouteAjax(
+                            'licence/irhp-application/add',
+                            [
+                                'licence' => $this->params()->fromRoute('licence'),
+                                'permitTypeId' => $permitTypeId
+                            ],
+                            [
+                                'query' => [
+                                    'year' => $this->params()->fromPost()['year'],
+                                    'irhpPermitStock' => $this->params()->fromPost()['stock']
+                                ],
+                            ]
+                        );
+                case RefData::IRHP_BILATERAL_PERMIT_TYPE_ID:
+                case RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID:
+                case RefData::ECMT_REMOVAL_PERMIT_TYPE_ID:
+                case RefData::CERT_ROADWORTHINESS_VEHICLE_PERMIT_TYPE_ID:
+                case RefData::CERT_ROADWORTHINESS_TRAILER_PERMIT_TYPE_ID:
+                    return $this->redirect()
+                        ->toRouteAjax(
+                            'licence/irhp-application/add',
+                            [   'licence' => $this->params()->fromRoute('licence'),
+                                'permitTypeId' => $permitTypeId
+                            ]
+                        );
+            }
+        }
+
+        $form = $this->getForm('SelectPermitType');
+        $this->placeholder()->setPlaceholder('form', $form);
+        $this->placeholder()->setPlaceholder('contentTitle', 'Select Permit Type');
+        return $this->viewBuilder()->buildViewFromTemplate('pages/crud-form');
+    }
+
+    /**
+     * Extra parameters
+     *
+     * @param array $parameters parameters
+     *
+     * @return array
+     */
+    protected function modifyListQueryParameters($parameters)
+    {
+        $parameters['isPreGrant'] = true;
+
+        $parameters['irhpApplicationStatuses'] = [
+            RefData::PERMIT_APP_STATUS_NOT_YET_SUBMITTED,
+            RefData::PERMIT_APP_STATUS_UNDER_CONSIDERATION,
+            RefData::PERMIT_APP_STATUS_AWAITING_FEE,
+            RefData::PERMIT_APP_STATUS_FEE_PAID,
+            RefData::PERMIT_APP_STATUS_ISSUING,
+            RefData::PERMIT_APP_STATUS_CANCELLED,
+            RefData::PERMIT_APP_STATUS_WITHDRAWN,
+            RefData::PERMIT_APP_STATUS_UNSUCCESSFUL,
+        ];
+
+        return $parameters;
     }
 
     /**
@@ -262,7 +415,7 @@ class IrhpApplicationController extends AbstractInternalController implements
     {
         return $this->redirect()
             ->toRoute(
-                'licence/permits',
+                'licence/irhp-application',
                 ['licence' => $this->params()->fromRoute('licence')]
             );
     }
@@ -367,6 +520,62 @@ class IrhpApplicationController extends AbstractInternalController implements
             'Withdraw Application'
         );
     }
+
+
+    /**
+     * Handles click of the Decline button on right sidebar
+     *
+     * @return \Zend\Http\Response
+     *
+     */
+    public function declineAction()
+    {
+        return $this->confirmCommand(
+            new ConfirmItem($this->deleteParams),
+            DeclineDTO::class,
+            'Are you sure?',
+            'Decline Permits. Are you sure?',
+            'Offer of permits successfully declined.'
+        );
+    }
+
+
+
+    /**
+     * Handles click of the Accept button on right sidebar
+     *
+     * @return \Zend\Http\Response
+     *
+     */
+    public function acceptAction()
+    {
+        $response = $this->handleQuery(ItemDto::create(['id' => $this->params()->fromRoute('irhpAppId')]));
+        $irhpPermit = $response->getResult();
+        $fee = $this->getOutstandingFee($irhpPermit['fees'], RefData::IRHP_GV_ISSUE_FEE_TYPE);
+        if ($fee) {
+            return $this->redirect()
+                ->toRoute(
+                    'licence/irhp-fees/fee_action',
+                    [
+                        'action' => 'pay-fees',
+                        'fee' => $fee['id']
+                    ],
+                    [],
+                    true
+                );
+        } elseif ($irhpPermit['isAwaitingFee']) {
+            // There was no outstanding fees for this application (already been paid) so they have been
+            // paid or waived, so allow acceptance to progress.
+            return $this->confirmCommand(
+                new ConfirmItem($this->deleteParams),
+                AcceptEcmtPermits::class,
+                'Are you sure?',
+                'Accept ECMT Permit Offer. Are you sure?',
+                'Permit Application Accepted'
+            );
+        }
+    }
+
 
     /**
      * Handles click of the Revive Application button on right sidebar
@@ -495,20 +704,6 @@ class IrhpApplicationController extends AbstractInternalController implements
         $formData['topFields']['numVehicles'] = $licence['totAuthVehicles'];
         $formData['topFields']['numVehiclesLabel'] = $licence['totAuthVehicles'];
         $formData['topFields']['licence'] = $this->params()->fromRoute('licence', null);
-
-        if (!in_array(
-            $formData['topFields']['irhpPermitType'],
-            [
-                RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
-                RefData::ECMT_REMOVAL_PERMIT_TYPE_ID,
-                RefData::IRHP_BILATERAL_PERMIT_TYPE_ID,
-                RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID,
-                RefData::CERT_ROADWORTHINESS_VEHICLE_PERMIT_TYPE_ID,
-                RefData::CERT_ROADWORTHINESS_TRAILER_PERMIT_TYPE_ID
-            ]
-        )) {
-            throw new \RuntimeException('Unsupported Permit Type');
-        }
 
         if ($formData['topFields']['isApplicationPathEnabled']) {
             $form = $this->questionAnswerFormSetup($this->params()->fromRoute('irhpAppId'), $form);
@@ -777,19 +972,6 @@ class IrhpApplicationController extends AbstractInternalController implements
         );
     }
 
-
-    /**
-     * Add required parameter to list DTO query
-     *
-     * @param array $parameters
-     * @return array
-     */
-    protected function modifyListQueryParameters($parameters)
-    {
-        $parameters['isPreGrant'] = true;
-        return $parameters;
-    }
-
     /**
      * Utility function to get IrhpApplication relating to ID in the path.
      *
@@ -825,7 +1007,8 @@ class IrhpApplicationController extends AbstractInternalController implements
      *
      * @return string
      */
-    protected function getRangesUrl(){
+    protected function getRangesUrl()
+    {
         return $this->url()->fromRoute(
             'licence/irhp-application/application',
             [
@@ -864,5 +1047,65 @@ class IrhpApplicationController extends AbstractInternalController implements
         $form->get('fields')->get('rangesUrl')->setValue($this->getRangesUrl());
         $form->setData($formData);
         return $form;
+    }
+
+    /**
+     * Retrieves available years list and populates Value options for Add and Edit forms
+     *
+     * @return JsonModel
+     */
+    public function availableYearsAction()
+    {
+        $response = $this->handleQuery(AvailableYears::create(['type' => $this->params()->fromPost('permitType')]));
+        $years = [];
+        if ($response->isOk()) {
+            $years = $response->getResult();
+        } else {
+            $this->checkResponse($response);
+        }
+
+        return new JsonModel($years);
+    }
+
+    /**
+     * Retrieves available years list and populates Value options for Add and Edit forms
+     *
+     * @return JsonModel
+     */
+    public function availableStocksAction()
+    {
+        $response = $this->handleQuery(AvailableStocks::create(
+            [
+                'irhpPermitType' => $this->params()->fromPost('permitType'),
+                'year' => $this->params()->fromPost('year'),
+            ]
+        ));
+        $stocks = [];
+        if ($response->isOk()) {
+            $translator = $this->getServiceLocator()->get('Helper\Translation');
+            $stocks = $response->getResult();
+            foreach ($stocks['stocks'] as $key => $stock) {
+                $stocks['stocks'][$key]['periodName'] = $translator->translate($stock['periodNameKey']);
+            }
+        } else {
+            $this->checkResponse($response);
+        }
+
+        return new JsonModel($stocks);
+    }
+
+    public function viewpermitsAction()
+    {
+        $application = $this->getIrhpApplication();
+        return $this->redirect()
+            ->toRoute(
+                'licence/irhp-application/irhp-permits',
+                [
+                    'licence' => $this->params()->fromRoute('licence'),
+                    'action' => 'index',
+                    'permitTypeId' => $application['irhpPermitType']['id'],
+                    'irhpAppId' => $this->params()->fromRoute('irhpAppId')
+                ]
+            );
     }
 }

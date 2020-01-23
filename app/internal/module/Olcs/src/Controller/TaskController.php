@@ -11,7 +11,7 @@ use Dvsa\Olcs\Transfer\Query\Application\Application;
 use Dvsa\Olcs\Transfer\Query\Cases\Cases;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence;
 use Dvsa\Olcs\Transfer\Query\Task\Task;
-use Dvsa\Olcs\Transfer\Query\Permits\ById as EcmtPermitApplicationById;
+use Dvsa\Olcs\Transfer\Query\IrhpApplication\ById as IrhpApplicationById;
 use Olcs\Controller\Traits as ControllerTraits;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\ViewModel;
@@ -225,7 +225,7 @@ class TaskController extends AbstractController
 
         $form = $this->getForm('Task');
         $assignedToUserOptions = $form->get('assignment')->get('assignedToUser')->getOptions();
-        
+
         // Set up the data services so that dynamic selects populate correctly if we already have data
         $teamId = (int)$data['assignedToTeam'];
         if ($teamId > 0) {
@@ -424,11 +424,11 @@ class TaskController extends AbstractController
                 $route = 'operator/processing/tasks';
                 $params = ['organisation' => $taskTypeId];
                 break;
-            case 'ecmtpermitapplication':
-                $route = 'licence/irhp-processing/tasks';
+            case 'irhpapplication':
+                $route = 'licence/irhp-application-processing/tasks';
                 $params = [
-                    'permitid' => $taskTypeId,
-                    'licence' => $this->getLicenceIdForEcmtPermitApplication($taskTypeId),
+                    'irhpAppId' => $taskTypeId,
+                    'licence' => $this->getLicenceIdForIrhpApplication($taskTypeId),
                 ];
                 break;
             default:
@@ -539,17 +539,17 @@ class TaskController extends AbstractController
     }
 
     /**
-     * Flatten data for Ecmt Permit Application
+     * Flatten data for Irhp Permit Application
      *
      * @param array $data       Data
      * @param int   $taskTypeId Task type id
      *
      * @return array
      */
-    protected function flattenDataForEcmtpermitapplication($data, $taskTypeId)
+    protected function flattenDataForIrhpapplication($data, $taskTypeId)
     {
-        $data['ecmtPermitApplication'] = $taskTypeId;
-        $data['licence'] = $this->getLicenceIdForEcmtPermitApplication($taskTypeId);
+        $data['irhpApplication'] = $taskTypeId;
+        $data['licence'] = $this->getLicenceIdForIrhpApplication($taskTypeId);
         return $data;
     }
 
@@ -696,8 +696,8 @@ class TaskController extends AbstractController
                 return ['organisation', $taskDetails['linkId'], $taskDetails['linkDisplay'], null];
             case 'submission':
                 return ['submission', $taskDetails['linkId'], $taskDetails['linkDisplay'], $taskDetails['caseId']];
-            case 'ecmt permit application':
-                return ['ecmtpermitapplication', $taskDetails['linkId'], $taskDetails['linkDisplay'], null];
+            case 'irhp application':
+                return ['irhpapplication', $taskDetails['linkId'], $taskDetails['linkDisplay'], null];
             default:
                 return [$taskType, $taskDetails['linkId'], $taskDetails['linkDisplay'], null];
         }
@@ -740,27 +740,27 @@ class TaskController extends AbstractController
     }
 
     /**
-     * Get link to display in add / edit form for Ecmt Permit Application
+     * Get link to display in add / edit form for Irhp Permit Application
      *
      * @param int    $taskTypeId  Task type id
      * @param string $linkDisplay Text to display
      *
      * @return string
      */
-    protected function getLinkForTaskFormForEcmtpermitapplication($taskTypeId, $linkDisplay)
+    protected function getLinkForTaskFormForIrhpapplication($taskTypeId, $linkDisplay)
     {
-        $ecmtPermitApplication = $this->getEcmtPermitApplication($taskTypeId);
+        $irhpApplication = $this->getIrhpApplication($taskTypeId);
 
         if (!$linkDisplay) {
-            $linkDisplay = sprintf('%s/%d', $ecmtPermitApplication['licence']['licNo'], $taskTypeId);
+            $linkDisplay = sprintf('%s/%d', $irhpApplication['licence']['licNo'], $taskTypeId);
         }
 
         $url = $this->url()->fromRoute(
-            'licence/permits/application',
+            'licence/irhp-application/application',
             [
                 'action' => 'edit',
-                'licence' => $ecmtPermitApplication['licence']['id'],
-                'permitid' => $taskTypeId,
+                'licence' => $irhpApplication['licence']['id'],
+                'irhpAppId' => $taskTypeId,
             ]
         );
 
@@ -934,26 +934,26 @@ class TaskController extends AbstractController
     }
 
     /**
-     * Get licence id for Ecmt Permit Application
+     * Get licence id for Irhp Permit Application
      *
      * @param int $id Id
      *
      * @return int
      */
-    protected function getLicenceIdForEcmtPermitApplication($id)
+    protected function getLicenceIdForIrhpApplication($id)
     {
-        return $this->getEcmtPermitApplication($id)['licence']['id'];
+        return $this->getIrhpApplication($id)['licence']['id'];
     }
 
     /**
-     * Get Ecmt Permit Application
+     * Get Irhp Permit Application
      *
      * @param int $id Id
      *
      * @return array
      */
-    protected function getEcmtPermitApplication($id)
+    protected function getIrhpApplication($id)
     {
-        return $this->handleQuery(EcmtPermitApplicationById::create(['id' => $id]))->getResult();
+        return $this->handleQuery(IrhpApplicationById::create(['id' => $id]))->getResult();
     }
 }

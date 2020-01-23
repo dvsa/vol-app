@@ -99,7 +99,7 @@ class NavigationToggle implements ListenerAggregateInterface, FactoryInterface
                 $irhpPermitsTabEnabled = $this->goodsLicenceAndFeatureToggle($params);
             }
 
-            $this->navigation->findBy('id', 'licence_irhp_permits')->setVisible($irhpPermitsTabEnabled);
+            $this->navigation->findBy('id', 'licence_irhp_applications')->setVisible($irhpPermitsTabEnabled);
         }
     }
 

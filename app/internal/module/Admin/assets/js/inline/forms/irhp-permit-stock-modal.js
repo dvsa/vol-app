@@ -1,5 +1,6 @@
 $(function () {
     "use strict";
+    const ECMT_ANNUAL_ID = 1;
     const ECMT_SHORT_TERM_ID = 2;
     const ECMT_REMOVAL_ID = 3;
     const BILATERAL_ID = 4;
@@ -7,6 +8,7 @@ $(function () {
     const CERT_ROADWORTHINESS_TRAILER_ID = 7;
 
     const IS_QA_PROCESS = [
+        ECMT_ANNUAL_ID,
         ECMT_SHORT_TERM_ID,
         ECMT_REMOVAL_ID,
         CERT_ROADWORTHINESS_VEHICLE_ID,

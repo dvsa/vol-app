@@ -6,7 +6,6 @@ use Common\Controller\Interfaces\ToggleAwareInterface;
 use Common\FeatureToggle;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\IrhpApplicationControllerInterface;
-use Olcs\Controller\Interfaces\IrhpPermitApplicationControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 
 /**
@@ -14,7 +13,6 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
  */
 abstract class AbstractIrhpPermitController extends AbstractController implements
     IrhpApplicationControllerInterface,
-    IrhpPermitApplicationControllerInterface,
     LeftViewProvider,
     ToggleAwareInterface
 {

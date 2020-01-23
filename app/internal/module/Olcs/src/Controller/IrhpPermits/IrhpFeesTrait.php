@@ -17,7 +17,7 @@ trait IrhpFeesTrait
     public function dashRedirectAction()
     {
         return $this->redirect()->toRoute(
-            'licence/permits',
+            'licence/irhp-application',
             ['licence' => $this->getFromRoute('licence')]
         );
     }

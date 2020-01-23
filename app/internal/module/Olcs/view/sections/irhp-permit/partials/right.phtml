@@ -61,6 +61,6 @@ $nav = $this->navigation('right-sidebar')
         <div class="latest-note__<?php echo ($isPriorityNote ? "priority" : "details"); ?>">
             <?php echo substr($note, 0, 100); ?>
         </div>
-        <a class="latest-note__link" href="<?php echo $this->url('licence/irhp-processing/notes', ['licence' => $irhpPermit['licence']['id'], 'permitid' => $irhpPermit['id']]); ?>">View all notes</a>
+        <a class="latest-note__link" href="<?php echo $this->url('licence/irhp-application-processing/notes', ['licence' => $irhpPermit['licence']['id'], 'irhpAppId' => $irhpPermit['id']]); ?>">View all notes</a>
     </div>
 <?php endif; ?>
