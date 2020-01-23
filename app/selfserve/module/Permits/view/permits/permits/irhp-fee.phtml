@@ -25,13 +25,13 @@
             }
 
             if ($feeBreakdownTable->hasRows() || isset($data[IrhpApplication::DATA_KEY]['showFeeSummaryTitle'])) {
-                ?><h3><?php echo $this->escapeHtml($this->translate('permits.page.irhp-fee.fee-summary')); ?></h3><?php
+                ?><h2 class="govuk-heading-m"><?php echo $this->escapeHtml($this->translate('permits.page.irhp-fee.fee-summary')); ?></h2><?php
             }
 
             echo $this->partial('partials/summary-list', ['data' => $data[IrhpApplication::DATA_KEY]['mappedFeeData']]);
 
             if ($feeBreakdownTable->hasRows()) {
-                ?><h3><?php echo $this->escapeHtml($this->translate('permits.page.irhp-fee.fee-breakdown')); ?></h3><?php
+                ?><h2 class="govuk-heading-m"><?php echo $this->escapeHtml($this->translate('permits.page.irhp-fee.fee-breakdown')); ?></h2><?php
                 echo($feeBreakdownTable);
             }
 
