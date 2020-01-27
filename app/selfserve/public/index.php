@@ -7,7 +7,7 @@ if ($profile) {
     xhprof_enable(XHPROF_FLAGS_CPU + XHPROF_FLAGS_MEMORY);
 }
 
-error_reporting(-1);
+error_reporting(E_ALL & ~E_USER_DEPRECATED);
 ini_set('intl.default_locale', 'en_GB');
 date_default_timezone_set('Europe/London');
 
