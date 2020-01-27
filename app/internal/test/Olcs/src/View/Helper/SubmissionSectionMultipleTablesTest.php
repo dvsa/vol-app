@@ -24,7 +24,7 @@ class SubmissionSectionMultipleTablesTest extends TestCase
     {
         $sut = new SubmissionSectionMultipleTables();
 
-        $translatorMock = m::mock('\Zend\i18n\Translator\Translator');
+        $translatorMock = m::mock('\Zend\I18n\Translator\Translator');
         $translatorMock->shouldReceive('translate')->with(m::type('string'))->andReturn('foo');
 
         $sut->setTranslator($translatorMock);

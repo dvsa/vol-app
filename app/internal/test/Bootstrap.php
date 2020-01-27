@@ -7,7 +7,7 @@ use Zend\Loader\AutoloaderFactory;
 use RuntimeException;
 
 date_default_timezone_set('Europe/London');
-error_reporting(E_ALL | E_STRICT);
+error_reporting(E_ALL & ~E_USER_DEPRECATED);
 chdir(__DIR__);
 
 /**

@@ -24,14 +24,11 @@ class SubmissionTest extends AbstractFormValidationTestCase
      */
     public function setUp()
     {
-        $this->serviceManager = \OlcsTest\Bootstrap::getRealServiceManager();
-
-        // We are doing this solely for the internal application.  This service
-        // is only registered there.  So we check if the element exists first.
-        $element = new \Olcs\Form\Element\SubmissionSections();
-        $this->serviceManager->setService(
+        $this->getServiceManager()->get('FormElementManager')->setFactory(
             'SubmissionSections',
-            $element
+            function () {
+                return new \Olcs\Form\Element\SubmissionSections();
+            }
         );
 
         parent::setUp();
@@ -53,15 +50,11 @@ class SubmissionTest extends AbstractFormValidationTestCase
         unset($element);
     }
 
-    /**
-     * This doesn't perform any assertions as per the documentation for
-     * $testedElements on line 30 of AbstractFormValidationTestCase.
-     *
-     * @doesNotPerformAssertions
-     */
     public function testSubmissionsSections()
     {
         $element = ['fields', 'submissionSections'];
+        $this->assertElementExists($element);
+        $this->assertFormElementType($element, \Olcs\Form\Element\SubmissionSections::class);
         self::$testedElements[implode($element, '.')] = true;
     }
 
