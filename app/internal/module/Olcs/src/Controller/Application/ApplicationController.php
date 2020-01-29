@@ -7,18 +7,19 @@
  */
 namespace Olcs\Controller\Application;
 
+use Common\Controller\Traits\CheckForCrudAction;
 use Dvsa\Olcs\Transfer\Command\Application\UndoGrant;
-use Dvsa\Olcs\Transfer\Query\Application\Application;
-use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\CreateChangeOfEntity as CreateChangeOfEntityCmd;
 use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\DeleteChangeOfEntity as DeleteChangeOfEntityCmd;
 use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\UpdateChangeOfEntity as UpdateChangeOfEntityCmd;
+use Dvsa\Olcs\Transfer\Query\Application\Application;
+use Dvsa\Olcs\Transfer\Query\Cases\ByApplication as CasesByApplication;
 use Dvsa\Olcs\Transfer\Query\ChangeOfEntity\ChangeOfEntity as ChangeOfEntityQry;
 use Olcs\Controller\AbstractController;
+use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Olcs\Controller\Traits;
+use Zend\Http\Response;
 use Zend\View\Model\ViewModel;
-use Common\Controller\Traits\CheckForCrudAction;
-use Dvsa\Olcs\Transfer\Query\Cases\ByApplication as CasesByApplication;
 
 /**
  * Application Controller
@@ -38,7 +39,10 @@ class ApplicationController extends AbstractController implements ApplicationCon
      */
     public function caseAction()
     {
-        $this->checkForCrudAction('case', [], 'case');
+        $httpResponse = $this->checkForCrudAction('case', [], 'case');
+        if ($httpResponse instanceof Response) {
+            return $httpResponse;
+        }
 
         $applicationId = $this->params()->fromRoute('application', null);
 
@@ -174,9 +178,7 @@ class ApplicationController extends AbstractController implements ApplicationCon
         $id = $this->params('application');
 
         if ($request->isPost()) {
-
             if (!$this->isButtonPressed('cancel')) {
-
                 $response = $this->handleCommand(UndoGrant::create(['id' => $id]));
 
                 if ($response->isOk()) {
@@ -267,7 +269,6 @@ class ApplicationController extends AbstractController implements ApplicationCon
             $form->setData((array)$request->getPost());
 
             if ($form->isValid()) {
-
                 $details = $form->getData()['change-details'];
                 if ($changeOfEntity) {
                     $dto = UpdateChangeOfEntityCmd::create(

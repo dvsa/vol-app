@@ -2,13 +2,14 @@
 
 namespace Olcs\Controller\Licence;
 
+use Common\Controller\Traits\CheckForCrudAction;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Cases\ByLicence as CasesByLicenceQry;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Olcs\Controller\Lva;
+use Zend\Http\Response;
 use Zend\View\Model\ViewModel;
-use Common\Controller\Traits\CheckForCrudAction;
 
 /**
  * Licence Controller
@@ -27,7 +28,11 @@ class LicenceController extends AbstractController implements LicenceControllerI
      */
     public function casesAction()
     {
-        $this->checkForCrudAction('case', [], 'case');
+        $httpResponse = $this->checkForCrudAction('case', [], 'case');
+        if ($httpResponse instanceof Response) {
+            return $httpResponse;
+        }
+
         $view = $this->getViewWithLicence();
 
         $params = [
