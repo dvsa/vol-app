@@ -14,7 +14,7 @@ return array(
             'formName' => 'imposed-penalties',
             'actions' => array(
                 'refresh-table' => array('label' => 'Refresh table', 'class' => 'action--secondary', 'requireRows' => false),
-                'delete-row' => array('label' => 'Delete row', 'class' => 'action--secondary', 'requireRows' => true)
+                'delete-row' => array('label' => 'Delete row', 'class' => 'action--secondary js-require--multiple', 'requireRows' => true)
             ),
             'action_field_name' => 'formAction'
         ),
