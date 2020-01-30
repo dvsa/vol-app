@@ -16,6 +16,7 @@
     ],
     "require": {
         "php": ">=7.1",
+        "ext-intl": "*",
         "zendframework/zend-db": "^2.5",
         "zendframework/zend-di": "^2.5",
         "zendframework/zend-eventmanager": "^2.5",
