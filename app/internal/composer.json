@@ -16,6 +16,7 @@
     ],
     "require": {
         "php": ">=7.0",
+        "ext-intl": "*",
         "zendframework/zend-authentication": "^2.5",
         "zendframework/zend-di": "^2.5",
         "zendframework/zend-escaper": "^2.5",
