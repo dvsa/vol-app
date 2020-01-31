@@ -11,6 +11,7 @@ use Dvsa\Olcs\Transfer\Query\Organisation\UnlicensedCases as OrganisationWithCas
 use Olcs\Controller\Operator\OperatorController;
 use Zend\View\Model\ViewModel;
 use Common\Controller\Traits\CheckForCrudAction;
+use Zend\Http\Response;
 
 /**
  * Unlicensed Cases Operator Controller
@@ -52,7 +53,11 @@ class UnlicensedCasesOperatorController extends OperatorController
 
         $licenceId = $result['licenceId'];
 
-        $this->checkForCrudAction('case', ['licence' => $licenceId], 'case');
+        $httpResponse = $this->checkForCrudAction('case', ['licence' => $licenceId], 'case');
+        if ($httpResponse instanceof Response) {
+            return $httpResponse;
+        }
+
         $view = $this->getViewWithOrganisation();
 
         $cases = $result['cases']['result'];
