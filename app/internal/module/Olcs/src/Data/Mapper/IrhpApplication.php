@@ -109,12 +109,14 @@ class IrhpApplication implements MapperInterface
         // If $formData is set we are editing, so populate an array of Country/Year/PermitsRequired to use in next step
         if ($formData) {
             $yearArr = [];
-            foreach ($formData['fields']['irhpPermitApplications'] as $irhpPermitApplication) {
-                $irhpPermitStock = $irhpPermitApplication['irhpPermitWindow']['irhpPermitStock'];
-                $validFromYear = date('Y', strtotime($irhpPermitStock['validFrom']));
-                $countryId = $irhpPermitStock['country']['id'];
+            if (isset($formData['fields']['irhpPermitApplications']) && is_array($formData['fields']['irhpPermitApplications'])) {
+                foreach ($formData['fields']['irhpPermitApplications'] as $irhpPermitApplication) {
+                    $irhpPermitStock = $irhpPermitApplication['irhpPermitWindow']['irhpPermitStock'];
+                    $validFromYear = date('Y', strtotime($irhpPermitStock['validFrom']));
+                    $countryId = $irhpPermitStock['country']['id'];
 
-                $yearArr[$countryId][$validFromYear] = $irhpPermitApplication['permitsRequired'];
+                    $yearArr[$countryId][$validFromYear] = $irhpPermitApplication['permitsRequired'];
+                }
             }
         }
 
