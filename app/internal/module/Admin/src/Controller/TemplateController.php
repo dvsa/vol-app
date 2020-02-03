@@ -113,7 +113,7 @@ class TemplateController extends AbstractInternalController implements LeftViewP
 
         $returnData = $response->getResult();
 
-        if ($returnData['error']) {
+        if (isset($returnData['error'])) {
             $this->getResponse()->setStatusCode(422);
             unset($returnData['error']);
         }
