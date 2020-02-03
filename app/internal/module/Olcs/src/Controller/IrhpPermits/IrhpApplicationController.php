@@ -334,7 +334,6 @@ class IrhpApplicationController extends AbstractInternalController implements
             $this->questionAnswerAddApplicationRedirect();
         }
 
-        $this->getServiceLocator()->get('Navigation')->findOneBy('id', 'licence_irhp_applications')->setVisible(0);
         $this->setFormTitle($this->params()->fromRoute('permitTypeId', null));
         $request = $this->getRequest();
         if ($request->isPost() && array_key_exists('back', (array)$this->params()->fromPost()['form-actions'])) {
