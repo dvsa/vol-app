@@ -18,7 +18,7 @@ class PrintSignReturnController extends AbstractSurrenderController
     use FlashMessengerTrait;
 
     protected $templateConfig = [
-        'index' => 'licence/surrender-print-sign-return'
+        'default' => 'licence/surrender-print-sign-return'
     ];
 
     public function indexAction()
