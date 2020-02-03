@@ -98,7 +98,9 @@ class DataSourceConfig
     ];
 
     const IRHP_APP_CHECK_ANSWERS = [
-        IrhpAppDataSource::class => [],
+        IrhpAppDataSource::class => [
+            'mapper' => PermitTypeTitleMapper::class
+        ],
         PermitsAvailableDataSource::class => [],
     ];
 
