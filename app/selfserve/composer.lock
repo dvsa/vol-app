@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1396e78909804eaee4ab3b4f2fa99f0c",
+    "content-hash": "7f448e98491afc1845f747e8d6bc2470",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -1324,15 +1324,15 @@
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.138",
+            "version": "4.206.140",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-common/4.206.138/olcs-olcs-common-4.206.138.zip",
-                "reference": "54bc73fc7dc43f34777c7cf4ece393cae8c00ffd",
-                "shasum": "54bc73fc7dc43f34777c7cf4ece393cae8c00ffd"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-common/4.206.140/olcs-olcs-common-4.206.140.zip",
+                "reference": "ebc32e2be3eff4adb86017b93f3cb6278b5b882a",
+                "shasum": "ebc32e2be3eff4adb86017b93f3cb6278b5b882a"
             },
             "require": {
-                "doctrine/annotations": "^1.8",
+                "doctrine/annotations": "^1.2.3",
                 "doctrine/doctrine-orm-module": "~0.10.0",
                 "elendev/nexus-composer-push": "^0.1.3",
                 "php": "^5.5 || ^7.0",
@@ -1343,7 +1343,7 @@
                 "zendframework/zend-escaper": "^2.5",
                 "zendframework/zend-eventmanager": "^2.5",
                 "zendframework/zend-filter": "^2.5",
-                "zendframework/zend-form": "2.10.0",
+                "zendframework/zend-form": "^2.5",
                 "zendframework/zend-http": "^2.5",
                 "zendframework/zend-i18n": "^2.5",
                 "zendframework/zend-inputfilter": "^2.5",
@@ -1418,7 +1418,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2020-01-31T16:39:16+00:00"
+            "time": "2020-02-03T17:40:47+00:00"
         },
         {
             "name": "olcs/olcs-logging",
@@ -3796,7 +3796,6 @@
                 "stdlib",
                 "zf2"
             ],
-            "abandoned": "laminas/laminas-stdlib",
             "time": "2016-04-12T21:17:31+00:00"
         },
         {
@@ -6253,7 +6252,8 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.1"
+        "php": ">=7.1",
+        "ext-intl": "*"
     },
     "platform-dev": [],
     "platform-overrides": {
