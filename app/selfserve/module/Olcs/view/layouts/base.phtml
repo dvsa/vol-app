@@ -3,6 +3,18 @@
 
   <head>
     <meta charset="utf-8">
+    <?php
+
+    $cookieBannerMode = $this->placeholder('cookieBannerMode')->toString();
+    if ($cookieBannerMode == 'confirmation') {
+
+    ?>
+    <meta name="robots" content="noindex">
+    <?php
+
+    }
+
+    ?>
     <?php echo $this->headLink(['rel' => 'icon', 'href' => $this->assetPath('/images/bitmap/favicon.ico'), 'type' => 'image/x-icon'], 'PREPEND'); ?>
     <?php echo $this->headTitle(strip_tags($this->pageTitle())); ?>
     <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0')->appendHttpEquiv('X-UA-Compatible', 'IE=edge'); ?>
@@ -47,6 +59,80 @@
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
 
     <a href="#main" class="govuk-skip-link"><?php echo $this->translate('skip-content'); ?></a>
+
+    <?php
+            
+    if ($cookieBannerMode != '') {
+    ?>
+
+    <div id="global-cookie-message" class="gem-c-cookie-banner govuk-clearfix" data-module="cookie-banner" role="region" aria-label="cookie banner" data-nosnippet>
+
+    <?php
+    if ($cookieBannerMode == 'banner') {
+    ?>
+
+      <form>
+        <div class="gem-c-cookie-banner__wrapper govuk-width-container">
+          <div class="govuk-grid-row">
+            <div class=" govuk-grid-column-two-thirds">
+              <div class="gem-c-cookie-banner__message">
+                <span class="govuk-heading-m"><?php echo($this->translate('cookie-banner.tell-us')); ?></span>
+                <p class="govuk-body">
+                <?php
+
+                    $blurb = sprintf(
+                        $this->translate('cookie-banner.blurb'),
+                        $this->url('cookies')
+                    );
+
+                    echo($blurb);
+
+                ?>
+                </p>
+              </div>
+              <div class="gem-c-cookie-banner__buttons">
+                <div class="gem-c-cookie-banner__button gem-c-cookie-banner__button-accept govuk-grid-column-full govuk-grid-column-one-half-from-desktop">
+                    <button class="gem-c-button govuk-button gem-c-button--inline" type="submit" data-module="track-click" data-accept-cookies="true" data-track-category="cookieBanner" data-track-action="Cookie banner accepted"><?php echo($this->translate('cookie-banner.accept-all')); ?></button>
+                </div>
+                <div class="gem-c-cookie-banner__button gem-c-cookie-banner__button-settings govuk-grid-column-full govuk-grid-column-one-half-from-desktop">
+                    <a class="gem-c-button govuk-button gem-c-button--inline" role="button" data-module="track-click" data-track-category="cookieBanner" data-track-action="Cookie banner settings clicked" href="<?php echo $this->url('cookies/settings');?>"><?php echo($this->translate('cookie-banner.set-prefs')); ?></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <input type="hidden" name="acceptAllCookies" value="true">
+      </form>
+
+    <?php
+    } elseif ($cookieBannerMode == 'confirmation') {
+    ?>
+
+      <form>
+        <div class="gem-c-cookie-banner__confirmation govuk-width-container" tabindex="-1">
+          <p class="gem-c-cookie-banner__confirmation-message">
+            <?php
+                $blurb = sprintf(
+                    $this->translate('cookie-confirmation.blurb'),
+                    $this->url('cookies/settings')
+                );
+
+                echo($blurb);
+            ?>
+          </p>
+          <button class="gem-c-cookie-banner__hide-button" data-hide-cookie-banner="true" data-module="track-click" data-track-category="cookieBanner" data-track-action="Hide cookie banner"><?php echo($this->translate('cookie-confirmation.hide')); ?></button>
+        </div>
+      </form>
+
+    <?php 
+    }
+    ?>
+
+    </div>
+
+    <?php 
+    }
+    ?>
 
     <header role="banner" class="global-header">
       <div class="global-header__wrapper">
@@ -105,19 +191,7 @@
     if (! $this->currentUser()->isLoggedIn()) :
         echo $this->systemInfoMessages(false);
     endif;
-
-    //  use cookie notification
-    $showCookieBanner = $this->getPlaceholder('showCookieBanner')->asBool();
-    if ($showCookieBanner === true) { ?>
-      <div class="cookie-banner">
-        <div class="cookie-banner__wrapper">
-            <p>
-              <?php echo $this->translate('cookie-banner'); ?>
-              <a href="<?php echo $this->url('cookies'); ?>"><?php echo $this->translate('Find out more'); ?></a>
-            </p>
-        </div>
-      </div>
-    <?php } ?>
+    ?>
 
     <div class="page-wrapper">
         <div class="user-header">

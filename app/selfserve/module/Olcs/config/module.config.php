@@ -14,6 +14,7 @@ use Olcs\Form\Element\SearchFilterFieldsetFactory;
 use Olcs\Form\Element\SearchOrderFieldset;
 use Olcs\Form\Element\SearchOrderFieldsetFactory;
 use Olcs\FormService\Form\Lva as LvaFormService;
+use Olcs\Service\Cookie as CookieService;
 use Olcs\Service\Qa as QaService;
 use Zend\Mvc\Router\Http\Segment;
 
@@ -1278,13 +1279,21 @@ return array(
                 => 'Olcs\Controller\Lva\Adapters\VariationPeopleAdapter',
             'DashboardProcessingService'
                 => 'Olcs\Service\Processing\DashboardProcessingService',
+            'CookieCookieStateFactory' => CookieService\CookieStateFactory::class,
+            'CookiePreferencesFactory' => CookieService\PreferencesFactory::class,
+            'CookieSetCookieFactory' => CookieService\SetCookieFactory::class,
+            'CookieCookieExpiryGenerator' => CookieService\CookieExpiryGenerator::class,
         ),
         'abstract_factories' => [
             \Zend\Cache\Service\StorageCacheAbstractServiceFactory::class,
         ],
         'factories' => array(
-            'CookieBannerListener' => \Olcs\Mvc\CookieBannerListener::class,
-            'CookieBanner' => \Olcs\Mvc\CookieBanner::class,
+            'CookieBannerListener' => \Olcs\Mvc\CookieBannerListenerFactory::class,
+            'CookieAcceptAllSetCookieGenerator' => CookieService\AcceptAllSetCookieGeneratorFactory::class,
+            'CookieBannerVisibilityProvider' => CookieService\BannerVisibilityProviderFactory::class,
+            'CookieCookieReader' => CookieService\CookieReaderFactory::class,
+            'CookieCurrentPreferencesProvider' => CookieService\CurrentPreferencesProviderFactory::class,
+            'CookieSetCookieGenerator' => CookieService\SetCookieGeneratorFactory::class,
             'Olcs\InputFilter\EbsrPackInput' => 'Olcs\InputFilter\EbsrPackFactory',
             'navigation' => Zend\Navigation\Service\DefaultNavigationFactory::class,
             'Olcs\Navigation\DashboardNavigation' => Olcs\Navigation\DashboardNavigationFactory::class,
