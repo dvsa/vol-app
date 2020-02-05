@@ -1,5 +1,7 @@
 <?php
 
+use Olcs\Controller\Cookie\DetailsController as CookieDetailsController;
+use Olcs\Controller\Cookie\SettingsController as CookieSettingsController;
 use Olcs\Controller\IndexController;
 use Olcs\Controller\MyDetailsController;
 use Olcs\Controller\Search\SearchController;
@@ -65,11 +67,24 @@ $routes = array(
         'options' =>  array(
             'route' => '/cookies[/]',
             'defaults' => array(
-                'controller' => \Common\Controller\GuidesController::class,
-                'action' => 'index',
-                'guide' => 'cookies',
+                'controller' => CookieDetailsController::class,
+                'action' => 'generic',
             )
-        )
+        ),
+        'may_terminate' => true,
+        'child_routes' => [
+            'settings' => [
+                'type' => Segment::class,
+                'options' =>  [
+                    'route' => 'settings[/]',
+                    'defaults' => [
+                        'controller' => CookieSettingsController::class,
+                        'action' => 'generic',
+                    ],
+
+                ],
+            ],
+        ],
     ),
     'privacy-notice' => array(
         'type' => 'segment',
@@ -1218,6 +1233,8 @@ return array(
                 Olcs\Controller\BusReg\BusRegRegistrationsController::class,
             Olcs\Controller\BusReg\BusRegBrowseController::class =>
                 Olcs\Controller\BusReg\BusRegBrowseController::class,
+            \Olcs\Controller\Cookie\DetailsController::class => \Olcs\Controller\Cookie\DetailsController::class,
+            \Olcs\Controller\Cookie\SettingsController::class => \Olcs\Controller\Cookie\SettingsController::class,
             'Dashboard' => Olcs\Controller\DashboardController::class,
             Olcs\Controller\FeesController::class => Olcs\Controller\FeesController::class,
             Olcs\Controller\CorrespondenceController::class => Olcs\Controller\CorrespondenceController::class,
@@ -1530,7 +1547,7 @@ return array(
                 'index' => ['*'],
                 'user-registration' => ['*'],
                 'user-forgot-username' => ['*'],
-                'cookies' => ['*'],
+                'cookies*' => ['*'],
                 'privacy-notice' => ['*'],
                 'terms-and-conditions' => ['*'],
                 'not-found' => ['*'],
