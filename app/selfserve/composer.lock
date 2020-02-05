@@ -1324,17 +1324,17 @@
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.140",
+            "version": "4.206.142",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-common/4.206.140/olcs-olcs-common-4.206.140.zip",
-                "reference": "ebc32e2be3eff4adb86017b93f3cb6278b5b882a",
-                "shasum": "ebc32e2be3eff4adb86017b93f3cb6278b5b882a"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-common/4.206.142/olcs-olcs-common-4.206.142.zip",
+                "reference": "bc931ae1b8eebe4a7a711ea9d169e4d69a41bccb",
+                "shasum": "bc931ae1b8eebe4a7a711ea9d169e4d69a41bccb"
             },
             "require": {
-                "doctrine/annotations": "^1.2.3",
+                "doctrine/annotations": "^1.8",
                 "doctrine/doctrine-orm-module": "~0.10.0",
-                "elendev/nexus-composer-push": "^0.1.3",
+                "elendev/nexus-composer-push": "^0.1",
                 "php": "^5.5 || ^7.0",
                 "symfony/filesystem": "~3.0.0",
                 "zendframework/zend-cache": "^2.5",
@@ -1343,7 +1343,7 @@
                 "zendframework/zend-escaper": "^2.5",
                 "zendframework/zend-eventmanager": "^2.5",
                 "zendframework/zend-filter": "^2.5",
-                "zendframework/zend-form": "^2.5",
+                "zendframework/zend-form": "2.10.0",
                 "zendframework/zend-http": "^2.5",
                 "zendframework/zend-i18n": "^2.5",
                 "zendframework/zend-inputfilter": "^2.5",
@@ -1418,7 +1418,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2020-02-03T17:40:47+00:00"
+            "time": "2020-02-05T13:16:45+00:00"
         },
         {
             "name": "olcs/olcs-logging",
@@ -2017,11 +2017,11 @@
         },
         {
             "name": "symfony/debug",
-            "version": "v4.4.3",
+            "version": "v4.4.4",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/debug/v4.4.3/symfony-debug-v4.4.3.zip",
-                "reference": "89c3fd5c299b940333bc6fe9f1b8db1b0912c759",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/debug/v4.4.4/symfony-debug-v4.4.4.zip",
+                "reference": "20236471058bbaa9907382500fc14005c84601f0",
                 "shasum": ""
             },
             "require": {
@@ -2063,7 +2063,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2020-01-08T17:29:02+00:00"
+            "time": "2020-01-25T12:44:29+00:00"
         },
         {
             "name": "symfony/filesystem",
@@ -2110,10 +2110,10 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v4.4.3",
+            "version": "v4.4.4",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/finder/v4.4.3/symfony-finder-v4.4.3.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/finder/v4.4.4/symfony-finder-v4.4.4.zip",
                 "reference": "3a50be43515590faf812fbd7708200aabc327ec3",
                 "shasum": ""
             },
