@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8be8692239987d7a8e1b4c982ed5947f",
+    "content-hash": "34d9daef7891647e7ded042a1c08599e",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -1324,17 +1324,17 @@
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.142",
+            "version": "4.206.143",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-common/4.206.142/olcs-olcs-common-4.206.142.zip",
-                "reference": "bc931ae1b8eebe4a7a711ea9d169e4d69a41bccb",
-                "shasum": "bc931ae1b8eebe4a7a711ea9d169e4d69a41bccb"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-common/4.206.143/olcs-olcs-common-4.206.143.zip",
+                "reference": "3c2d6a6a9baa5e49ceca8ae840ec102b6611d0c7",
+                "shasum": "3c2d6a6a9baa5e49ceca8ae840ec102b6611d0c7"
             },
             "require": {
                 "doctrine/annotations": "^1.8",
                 "doctrine/doctrine-orm-module": "~0.10.0",
-                "elendev/nexus-composer-push": "^0.1",
+                "elendev/nexus-composer-push": "^0.1.3",
                 "php": "^5.5 || ^7.0",
                 "symfony/filesystem": "~3.0.0",
                 "zendframework/zend-cache": "^2.5",
@@ -1418,7 +1418,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2020-02-05T13:16:45+00:00"
+            "time": "2020-02-05T17:40:36+00:00"
         },
         {
             "name": "olcs/olcs-logging",
@@ -3900,17 +3900,17 @@
         },
         {
             "name": "zendframework/zend-view",
-            "version": "2.11.4",
+            "version": "2.10.1",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-view/2.11.4/zendframework-zend-view-2.11.4.zip",
-                "reference": "a8b1b2d9b52e191539be861a6529f8c8a0c06b9d",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-view/2.10.1/zendframework-zend-view-2.10.1.zip",
+                "reference": "c1a3f2043fb75b5983ab9adfc369ae396601be7e",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.6 || ^7.0",
                 "zendframework/zend-eventmanager": "^2.6.2 || ^3.0",
-                "zendframework/zend-json": "^2.6.1 || ^3.0",
+                "zendframework/zend-json": "^2.6.1",
                 "zendframework/zend-loader": "^2.5",
                 "zendframework/zend-stdlib": "^2.7 || ^3.0"
             },
@@ -3959,8 +3959,8 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.11.x-dev",
-                    "dev-develop": "2.12.x-dev"
+                    "dev-master": "2.10.x-dev",
+                    "dev-develop": "2.11.x-dev"
                 }
             },
             "autoload": {
@@ -3971,14 +3971,14 @@
             "license": [
                 "BSD-3-Clause"
             ],
-            "description": "Flexible view layer supporting and providing multiple view layers, helpers, and more",
+            "description": "provides a system of helpers, output filters, and variable escaping",
+            "homepage": "https://github.com/zendframework/zend-view",
             "keywords": [
-                "ZendFramework",
                 "view",
-                "zf"
+                "zf2"
             ],
             "abandoned": "laminas/laminas-view",
-            "time": "2019-12-04T08:40:50+00:00"
+            "time": "2018-12-06T21:20:01+00:00"
         },
         {
             "name": "zendframework/zendxml",
