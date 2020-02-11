@@ -34,7 +34,7 @@
         "zendframework/zend-session": "^2.5",
         "zendframework/zend-stdlib": "^2.5",
         "zendframework/zend-validator": "^2.5",
-        "zendframework/zend-view": "^2.5",
+        "zendframework/zend-view": "2.10.1",
         "doctrine/annotations": "^1.8",
         "symfony/filesystem": "~3.0.0",
         "zf-commons/zfc-rbac": "~2.5.0",
