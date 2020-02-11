@@ -61,6 +61,9 @@ class Module
         $cookieBannerListener = $sm->get('CookieBannerListener');
         $cookieBannerListener->attach($eventManager, 1);
 
+        $cookieListener = $sm->get('CookieListener');
+        $cookieListener->attach($eventManager, 2);
+
         $this->initSession(
             [
                 'remember_me_seconds' => 86400,

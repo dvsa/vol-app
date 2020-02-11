@@ -1288,6 +1288,7 @@ return array(
             \Zend\Cache\Service\StorageCacheAbstractServiceFactory::class,
         ],
         'factories' => array(
+            'CookieListener' => \Olcs\Mvc\CookieListenerFactory::class,
             'CookieBannerListener' => \Olcs\Mvc\CookieBannerListenerFactory::class,
             'CookieAcceptAllSetCookieGenerator' => CookieService\AcceptAllSetCookieGeneratorFactory::class,
             'CookieBannerVisibilityProvider' => CookieService\BannerVisibilityProviderFactory::class,

@@ -112,4 +112,17 @@ class PreferencesTest extends MockeryTestCase
             ],
         ];
     }
+
+    public function testIsActive()
+    {
+        $sut = new Preferences(
+            [
+                Preferences::KEY_ANALYTICS => true,
+                Preferences::KEY_SETTINGS => false,
+            ]
+        );
+
+        $this->assertTrue($sut->isActive(Preferences::KEY_ANALYTICS));
+        $this->assertFalse($sut->isActive(Preferences::KEY_SETTINGS));
+    }
 }

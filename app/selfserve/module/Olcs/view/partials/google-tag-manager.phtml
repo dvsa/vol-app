@@ -1,4 +1,9 @@
 <?php
+$cookieAnalytics = $this->placeholder('cookieAnalytics')->getValue();
+if (!$cookieAnalytics) {
+    return;
+}
+
 $cfg = $this->config();
 
 $googleTag = (isset($cfg['google-tag']) ? $cfg['google-tag'] : null);

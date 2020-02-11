@@ -57,4 +57,16 @@ class Preferences
     {
         return $this->preferences;
     }
+
+    /**
+     * Is cookie preference active for a given key
+     *
+     * @param string $key Cookie key
+     *
+     * @return bool
+     */
+    public function isActive($key)
+    {
+        return $this->preferences[$key];
+    }
 }

@@ -51,4 +51,37 @@ class CookieStateTest extends MockeryTestCase
 
         $sut->getPreferences();
     }
+
+    public function testIsActiveWhenIsValid()
+    {
+        $preferences = m::mock(Preferences::class);
+        $preferences->shouldReceive('isActive')
+            ->with(Preferences::KEY_ANALYTICS)
+            ->once()
+            ->andReturn(true);
+        $preferences->shouldReceive('isActive')
+            ->with(Preferences::KEY_SETTINGS)
+            ->once()
+            ->andReturn(false);
+
+        $sut = new CookieState(true, $preferences);
+
+        $this->assertTrue($sut->isActive(Preferences::KEY_ANALYTICS));
+        $this->assertFalse($sut->isActive(Preferences::KEY_SETTINGS));
+    }
+
+    public function testIsActiveWhenIsNotValid()
+    {
+        $sut = new CookieState(false);
+
+        $this->assertEquals(
+            Preferences::DEFAULT_PREFERENCE_VALUE,
+            $sut->isActive(Preferences::KEY_ANALYTICS)
+        );
+
+        $this->assertEquals(
+            Preferences::DEFAULT_PREFERENCE_VALUE,
+            $sut->isActive(Preferences::KEY_SETTINGS)
+        );
+    }
 }

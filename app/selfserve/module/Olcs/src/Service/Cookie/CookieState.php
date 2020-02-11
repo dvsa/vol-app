@@ -2,6 +2,7 @@
 
 namespace Olcs\Service\Cookie;
 
+use Exception;
 use RuntimeException;
 
 class CookieState
@@ -44,5 +45,24 @@ class CookieState
         }
 
         return $this->preferences;
+    }
+
+    /**
+     * Is cookie preference active for a given key
+     *
+     * @param string $key Cookie key
+     *
+     * @return bool
+     */
+    public function isActive($key)
+    {
+        try {
+            return $this->getPreferences()->isActive($key);
+        } catch (Exception $e) {
+            // swallow any exception
+        }
+
+        // return default preference value
+        return Preferences::DEFAULT_PREFERENCE_VALUE;
     }
 }
