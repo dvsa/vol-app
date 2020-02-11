@@ -2,6 +2,7 @@
 
 use Olcs\Controller\Cookie\DetailsController as CookieDetailsController;
 use Olcs\Controller\Cookie\SettingsController as CookieSettingsController;
+use Olcs\Controller\Cookie\SettingsControllerFactory as CookieSettingsControllerFactory;
 use Olcs\Controller\IndexController;
 use Olcs\Controller\MyDetailsController;
 use Olcs\Controller\Search\SearchController;
@@ -1234,8 +1235,7 @@ return array(
                 Olcs\Controller\BusReg\BusRegRegistrationsController::class,
             Olcs\Controller\BusReg\BusRegBrowseController::class =>
                 Olcs\Controller\BusReg\BusRegBrowseController::class,
-            \Olcs\Controller\Cookie\DetailsController::class => \Olcs\Controller\Cookie\DetailsController::class,
-            \Olcs\Controller\Cookie\SettingsController::class => \Olcs\Controller\Cookie\SettingsController::class,
+            CookieDetailsController::class => CookieDetailsController::class,
             'Dashboard' => Olcs\Controller\DashboardController::class,
             Olcs\Controller\FeesController::class => Olcs\Controller\FeesController::class,
             Olcs\Controller\CorrespondenceController::class => Olcs\Controller\CorrespondenceController::class,
@@ -1261,7 +1261,10 @@ return array(
             Olcs\Controller\Licence\Surrender\DestroyController::class => Olcs\Controller\Licence\Surrender\DestroyController::class,
             Olcs\Controller\Licence\Surrender\PrintSignReturnController::class => Olcs\Controller\Licence\Surrender\PrintSignReturnController::class,
             \Olcs\Controller\Licence\Surrender\InformationChangedController::class => \Olcs\Controller\Licence\Surrender\InformationChangedController::class,
-        )
+        ),
+        'factories' => array(
+            CookieSettingsController::class => CookieSettingsControllerFactory::class,
+        ),
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
     'tables' => array(
