@@ -5,18 +5,18 @@ namespace Olcs\Service\Cookie;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class SetCookieGeneratorFactory implements FactoryInterface
+class PreferencesSetCookieGeneratorFactory implements FactoryInterface
 {
     /**
      * Create service
      *
      * @param ServiceLocatorInterface $serviceLocator
      *
-     * @return SetCookieGenerator
+     * @return PreferencesSetCookieGenerator
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return new SetCookieGenerator(
+        return new PreferencesSetCookieGenerator(
             $serviceLocator->get('CookieSetCookieFactory'),
             $serviceLocator->get('CookieCookieExpiryGenerator')
         );

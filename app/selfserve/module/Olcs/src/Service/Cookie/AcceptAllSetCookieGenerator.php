@@ -6,8 +6,8 @@ use Zend\Http\Header\SetCookie;
 
 class AcceptAllSetCookieGenerator
 {
-    /** @var SetCookieGenerator */
-    private $setCookieGenerator;
+    /** @var PreferencesSetCookieGenerator */
+    private $preferencesSetCookieGenerator;
 
     /** @var PreferencesFactory */
     private $preferencesFactory;
@@ -15,14 +15,16 @@ class AcceptAllSetCookieGenerator
     /**
      * Create service instance
      *
-     * @param SetCookieGenerator $setCookieGenerator
+     * @param PreferencesSetCookieGenerator $preferencesSetCookieGenerator
      * @param PreferencesFactory $preferencesFactory
      *
      * @return AcceptAllSetCookieGenerator
      */
-    public function __construct(SetCookieGenerator $setCookieGenerator, PreferencesFactory $preferencesFactory)
-    {
-        $this->setCookieGenerator = $setCookieGenerator;
+    public function __construct(
+        PreferencesSetCookieGenerator $preferencesSetCookieGenerator,
+        PreferencesFactory $preferencesFactory
+    ) {
+        $this->preferencesSetCookieGenerator = $preferencesSetCookieGenerator;
         $this->preferencesFactory = $preferencesFactory;
     }
 
@@ -33,7 +35,7 @@ class AcceptAllSetCookieGenerator
      */
     public function generate()
     {
-        return $this->setCookieGenerator->generate(
+        return $this->preferencesSetCookieGenerator->generate(
             $this->preferencesFactory->create()
         );
     }

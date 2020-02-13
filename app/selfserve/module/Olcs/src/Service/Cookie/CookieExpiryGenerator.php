@@ -4,15 +4,15 @@ namespace Olcs\Service\Cookie;
 
 class CookieExpiryGenerator
 {
-    const COOKIE_EXPIRY = '+1 year';
-
     /**
      * Get a timestamp representing the expiry time of the cookie
      *
+     * @param string $expiry
+     *
      * @return int
      */
-    public function generate()
+    public function generate($expiry)
     {
-        return strtotime(self::COOKIE_EXPIRY);
+        return strtotime($expiry);
     }
 }

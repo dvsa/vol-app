@@ -6,7 +6,7 @@ use Common\Controller\AbstractOlcsController;
 use Olcs\Service\Cookie\CurrentPreferencesProvider;
 use Olcs\Service\Cookie\Preferences;
 use Olcs\Service\Cookie\PreferencesFactory;
-use Olcs\Service\Cookie\SetCookieGenerator;
+use Olcs\Service\Cookie\SetCookieArrayGenerator;
 use RuntimeException;
 use Zend\Validator\Csrf as CsrfValidator;
 use Zend\View\Model\ViewModel;
@@ -20,7 +20,7 @@ class SettingsController extends AbstractOlcsController
     private $currentPreferencesProvider;
 
     /** @var SetCookieGenerator */
-    private $setCookieGenerator;
+    private $setCookieArrayGenerator;
 
     /** @var PreferencesFactory */
     private $preferencesFactory;
@@ -29,18 +29,18 @@ class SettingsController extends AbstractOlcsController
      * Create service instance
      *
      * @param CurrentPreferencesProvider $currentPreferencesProvider
-     * @param SetCookieGenerator $setCookieGenerator
+     * @param SetCookieArrayGenerator $setCookieArrayGenerator
      * @param PreferencesFactory $preferencesFactory
      *
      * @return SettingsController
      */
     public function __construct(
         CurrentPreferencesProvider $currentPreferencesProvider,
-        SetCookieGenerator $setCookieGenerator,
+        SetCookieArrayGenerator $setCookieArrayGenerator,
         PreferencesFactory $preferencesFactory
     ) {
         $this->currentPreferencesProvider = $currentPreferencesProvider;
-        $this->setCookieGenerator = $setCookieGenerator;
+        $this->setCookieArrayGenerator = $setCookieArrayGenerator;
         $this->preferencesFactory = $preferencesFactory;
     }
 
@@ -57,9 +57,15 @@ class SettingsController extends AbstractOlcsController
             try {
                 $preferences = $this->preferencesFactory->create($parsedPreferences);
 
-                $this->getResponse()->getHeaders()->addHeader(
-                    $this->setCookieGenerator->generate($preferences)
+                $cookies = $this->setCookieArrayGenerator->generate(
+                    $preferences,
+                    $this->request->getCookie()
                 );
+
+                $headers = $this->getResponse()->getHeaders();
+                foreach ($cookies as $cookie) {
+                    $headers->addHeader($cookie);
+                }
             } catch (RuntimeException $e) {
             }
 

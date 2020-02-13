@@ -4,7 +4,7 @@ namespace Olcs\Service\Cookie;
 
 use Zend\Http\Header\SetCookie;
 
-class SetCookieGenerator
+class PreferencesSetCookieGenerator
 {
     const COOKIE_PATH = '/';
 
@@ -20,7 +20,7 @@ class SetCookieGenerator
      * @param SetCookieFactory $setCookieFactory
      * @param CookieExpiryGenerator $cookieExpiryGenerator
      *
-     * @return SetCookieGenerator
+     * @return PreferencesSetCookieGenerator
      */
     public function __construct(
         SetCookieFactory $setCookieFactory,
@@ -44,7 +44,7 @@ class SetCookieGenerator
             json_encode(
                 $preferences->asArray()
             ),
-            $this->cookieExpiryGenerator->generate(),
+            $this->cookieExpiryGenerator->generate('+1 year'),
             self::COOKIE_PATH
         );
     }

@@ -13,11 +13,12 @@ class SetCookieFactory
      * @param string $value
      * @param int $expires
      * @param string $path
+     * @param string|null $domain
      *
      * @return SetCookie
      */
-    public function create($name, $value, $expires, $path)
+    public function create($name, $value, $expires, $path, $domain = null)
     {
-        return new SetCookie($name, $value, $expires, $path);
+        return new SetCookie($name, $value, $expires, $path, $domain);
     }
 }

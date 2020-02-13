@@ -7,7 +7,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Service\Cookie\AcceptAllSetCookieGenerator;
 use Olcs\Service\Cookie\Preferences;
 use Olcs\Service\Cookie\PreferencesFactory;
-use Olcs\Service\Cookie\SetCookieGenerator;
+use Olcs\Service\Cookie\PreferencesSetCookieGenerator;
 use Zend\Http\Header\SetCookie;
 
 class AcceptAllSetCookieGeneratorTest extends MockeryTestCase
@@ -18,8 +18,8 @@ class AcceptAllSetCookieGeneratorTest extends MockeryTestCase
 
         $preferences = m::mock(Preferences::class);
 
-        $setCookieGenerator = m::mock(SetCookieGenerator::class);
-        $setCookieGenerator->shouldReceive('generate')
+        $preferencesSetCookieGenerator = m::mock(PreferencesSetCookieGenerator::class);
+        $preferencesSetCookieGenerator->shouldReceive('generate')
             ->with($preferences)
             ->once()
             ->andReturn($setCookie);
@@ -30,7 +30,7 @@ class AcceptAllSetCookieGeneratorTest extends MockeryTestCase
             ->once()
             ->andReturn($preferences);
 
-        $sut = new AcceptAllSetCookieGenerator($setCookieGenerator, $preferencesFactory);
+        $sut = new AcceptAllSetCookieGenerator($preferencesSetCookieGenerator, $preferencesFactory);
 
         $this->assertSame(
             $setCookie,

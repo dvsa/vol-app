@@ -20,7 +20,7 @@ class SettingsControllerFactory implements FactoryInterface
 
         return new SettingsController(
             $mainServiceLocator->get('CookieCurrentPreferencesProvider'),
-            $mainServiceLocator->get('CookieSetCookieGenerator'),
+            $mainServiceLocator->get('CookieSetCookieArrayGenerator'),
             $mainServiceLocator->get('CookiePreferencesFactory')
         );
     }
