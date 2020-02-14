@@ -66,7 +66,7 @@ class DocumentTemplateController extends AbstractInternalController implements L
     {
         $view = new ViewModel(
             [
-                'navigationId' => 'admin-dashboard/templates',
+                'navigationId' => 'admin-dashboard/content-management',
                 'navigationTitle' => 'Templates'
             ]
         );

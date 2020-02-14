@@ -36,7 +36,7 @@ class TemplateController extends AbstractInternalController implements LeftViewP
     protected $itemDto = ItemDto::class;
     protected $updateCommand = UpdateDto::class;
 
-    protected $navigationId = 'admin-dashboard/templates';
+    protected $navigationId = 'admin-dashboard/content-management';
 
     protected $filterForm = TemplateFilter::class;
     protected $formClass = TemplateEdit::class;
@@ -51,7 +51,7 @@ class TemplateController extends AbstractInternalController implements LeftViewP
     {
         $view = new ViewModel(
             [
-                'navigationId' => 'admin-dashboard/templates',
+                'navigationId' => 'admin-dashboard/content-management',
                 'navigationTitle' => 'Templates'
             ]
         );
