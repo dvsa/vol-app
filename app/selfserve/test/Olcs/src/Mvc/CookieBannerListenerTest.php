@@ -7,13 +7,21 @@
  */
 namespace OlcsTest\Mvc;
 
+use Common\Service\Helper\UrlHelperService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Mvc\CookieBannerListener;
+use Olcs\Service\Cookie\AcceptAllSetCookieGenerator;
+use Olcs\Service\Cookie\BannerVisibilityProvider;
 use Zend\EventManager\EventManagerInterface;
+use Zend\Http\Header\SetCookie;
+use Zend\Http\Headers;
 use Zend\Http\Request;
+use Zend\Http\Response;
 use Zend\Mvc\MvcEvent;
-use Zend\ServiceManager\ServiceManager;
+use Zend\Mvc\Router\Http\RouteMatch;
+use Zend\View\Helper\Placeholder;
+use Zend\View\Helper\Placeholder\Container\AbstractContainer;
 
 /**
  * Cookie Banner Listener Test
@@ -22,23 +30,35 @@ use Zend\ServiceManager\ServiceManager;
  */
 class CookieBannerListenerTest extends MockeryTestCase
 {
+    private $acceptAllSetCookieGenerator;
+
+    private $bannerVisibilityProvider;
+
+    private $placeholder;
+
+    private $urlHelper;
+
     /**
      * @var CookieBannerListener
      */
     protected $sut;
 
-    protected $cookieBanner;
-
     public function setUp()
     {
-        $this->cookieBanner = m::mock();
+        $this->acceptAllSetCookieGenerator = m::mock(AcceptAllSetCookieGenerator::class);
 
-        $sm = m::mock(ServiceManager::class)->makePartial();
-        $sm->setService('CookieBanner', $this->cookieBanner);
+        $this->bannerVisibilityProvider = m::mock(BannerVisibilityProvider::class);
 
-        $this->sut = new CookieBannerListener();
+        $this->placeholder = m::mock(Placeholder::class);
 
-        $this->sut->createService($sm);
+        $this->urlHelper = m::mock(UrlHelperService::class);
+
+        $this->sut = new CookieBannerListener(
+            $this->acceptAllSetCookieGenerator,
+            $this->bannerVisibilityProvider,
+            $this->placeholder,
+            $this->urlHelper
+        );
     }
 
     public function testAttach()
@@ -59,15 +79,153 @@ class CookieBannerListenerTest extends MockeryTestCase
         $this->sut->onRoute($event);
     }
 
-    public function testOnRoute()
+    public function testOnRouteAcceptAllCookiesRedirect()
     {
-        $this->cookieBanner->shouldReceive('toSeeOrNotToSee')->once();
+        $redirectUrl = '/redirect/url?param1Name=param1Value&param2Name=param2Value';
+
+        $routeName = 'route/name';
+        $routeParams = [
+            'param1Name' => 'param1Value',
+            'param2Name' => 'param2Value'
+        ];
+
+        $expectedRedirectOptions = [
+            'query' => [
+                'acceptedAllCookiesConfirmation' => 'true'
+            ]
+        ];
+
+        $routeMatch = m::mock(RouteMatch::class);
+        $routeMatch->shouldReceive('getMatchedRouteName')
+            ->withNoArgs()
+            ->andReturn($routeName);
+        $routeMatch->shouldReceive('getParams')
+            ->withNoArgs()
+            ->andReturn($routeParams);
+
+        $this->urlHelper->shouldReceive('fromRoute')
+            ->with($routeName, $routeParams, $expectedRedirectOptions)
+            ->once()
+            ->andReturn($redirectUrl);
 
         $request = m::mock(Request::class);
+        $request->shouldReceive('getQuery')
+            ->with('acceptAllCookies')
+            ->andReturn('true');
+
+        $setCookie = m::mock(SetCookie::class);
+
+        $this->acceptAllSetCookieGenerator->shouldReceive('generate')
+            ->withNoArgs()
+            ->andReturn($setCookie);
+
+        $responseHeaders = m::mock(Headers::class);
+        $responseHeaders->shouldReceive('addHeaderLine')
+            ->with('Location', $redirectUrl)
+            ->once()
+            ->globally()
+            ->ordered();
+        $responseHeaders->shouldReceive('addHeader')
+            ->with($setCookie)
+            ->once()
+            ->globally()
+            ->ordered();
+
+        $response = m::mock(Response::class);
+        $response->shouldReceive('getHeaders')
+            ->withNoArgs()
+            ->andReturn($responseHeaders);
+        $response->shouldReceive('setStatusCode')
+            ->with(302)
+            ->once()
+            ->globally()
+            ->ordered();
+        $response->shouldReceive('sendHeaders')
+            ->withNoArgs()
+            ->once()
+            ->globally()
+            ->ordered();
 
         $event = m::mock(MvcEvent::class);
-        $event->shouldReceive('getRequest')->andReturn($request);
+        $event->shouldReceive('getRequest')
+            ->withNoArgs()
+            ->andReturn($request);
+        $event->shouldReceive('getResponse')
+            ->withNoArgs()
+            ->andReturn($response);
+        $event->shouldReceive('getRouteMatch')
+            ->withNoArgs()
+            ->andReturn($routeMatch);
 
         $this->sut->onRoute($event);
+    }
+
+    public function testOnRouteDisplayConfirmation()
+    {
+        $request = m::mock(Request::class);
+        $request->shouldReceive('getQuery')
+            ->with('acceptAllCookies')
+            ->andReturn(null);
+        $request->shouldReceive('getQuery')
+            ->with('acceptedAllCookiesConfirmation')
+            ->andReturn('true');
+
+        $container = m::mock(AbstractContainer::class);
+        $container->shouldReceive('set')
+            ->with('confirmation')
+            ->once();
+
+        $this->placeholder->shouldReceive('getContainer')
+            ->with('cookieBannerMode')
+            ->andReturn($container);
+
+        $event = m::mock(MvcEvent::class);
+        $event->shouldReceive('getRequest')
+            ->withNoArgs()
+            ->andReturn($request);
+
+        $this->sut->onRoute($event);
+    }
+
+    /**
+     * @dataProvider dpOnRouteDisplayBanner
+     */
+    public function testOnRouteDisplayBanner($bannerVisible, $expectedCookieBannerMode)
+    {
+        $request = m::mock(Request::class);
+        $request->shouldReceive('getQuery')
+            ->with('acceptAllCookies')
+            ->andReturn(null);
+        $request->shouldReceive('getQuery')
+            ->with('acceptedAllCookiesConfirmation')
+            ->andReturn(null);
+
+        $event = m::mock(MvcEvent::class);
+        $event->shouldReceive('getRequest')
+            ->withNoArgs()
+            ->andReturn($request);
+
+        $this->bannerVisibilityProvider->shouldReceive('shouldDisplay')
+            ->with($event)
+            ->andReturn($bannerVisible);
+
+        $container = m::mock(AbstractContainer::class);
+        $container->shouldReceive('set')
+            ->with($expectedCookieBannerMode)
+            ->once();
+
+        $this->placeholder->shouldReceive('getContainer')
+            ->with('cookieBannerMode')
+            ->andReturn($container);
+
+        $this->sut->onRoute($event);
+    }
+
+    public function dpOnRouteDisplayBanner()
+    {
+        return [
+            [true, 'banner'],
+            [false, ''],
+        ];
     }
 }
