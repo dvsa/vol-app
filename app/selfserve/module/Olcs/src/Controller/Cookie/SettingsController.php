@@ -110,7 +110,7 @@ class SettingsController extends AbstractOlcsController
         $parsedPreferences = [];
 
         foreach (Preferences::KEYS as $key) {
-            $parsedValue = isset($preferences[$key]) && ($preferences[$key] == 'true');
+            $parsedValue = isset($preferences[$key]) && ($preferences[$key] === 'true');
             $parsedPreferences[$key] = $parsedValue;
         }
 
