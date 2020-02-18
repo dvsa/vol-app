@@ -10,66 +10,126 @@ use Zend\Http\Header\Cookie;
 class AnalyticsCookieNamesProviderTest extends MockeryTestCase
 {
     const HOSTNAME = 'host.name';
-    const AUGMENTED_HOSTNAME = '.host.name';
 
     const GID_KEY = '_gid';
-    const GID_VALUE = 'abcd1234';
-
     const GAT_KEY = '_gat';
-    const GAT_VALUE = 'mnop2345';
-
     const GA_KEY = '_ga';
-    const GA_VALUE = 'wxyz6666';
-
     const GAT_1_KEY = '_gat_xyz';
-    const GAT_1_VALUE = 'mnbv0000';
     const GAT_2_KEY = '_gat_boo';
-    const GAT_2_VALUE = 'aaaabbbb';
 
-    public function testGetNames()
+    private $cookieContents = [
+        self::GID_KEY => 'abcd1234',
+        self::GAT_KEY => 'mnop2345',
+        'langPref' => 'en_GB',
+        self::GA_KEY => 'wxyz6666',
+        self::GAT_1_KEY => 'mnvb0000',
+        self::GAT_2_KEY => 'aaaabbb',
+        'foo' => 'bar',
+    ];
+
+    public function setUp()
     {
-        $cookieContents = [
-            self::GID_KEY => 'abcd1234',
-            self::GAT_KEY => 'mnop2345',
-            'langPref' => 'en_GB',
-            self::GA_KEY => 'wxyz6666',
-            self::GAT_1_KEY => 'mnvb0000',
-            self::GAT_2_KEY => 'aaaabbb',
-            'foo' => 'bar',
-        ];
+        $this->cookie = m::mock(Cookie::class);
+        $this->cookie->shouldReceive('getArrayCopy')
+            ->andReturn($this->cookieContents);
+    }
 
-        $cookie = m::mock(Cookie::class);
-        $cookie->shouldReceive('getArrayCopy')
-            ->andReturn($cookieContents);
+    public function testGetNamesForNonProd()
+    {
+        $domain = 'host.name';
 
         $expected = [
             [
                 'name' => self::GID_KEY,
-                'domain' => self::AUGMENTED_HOSTNAME,
+                'domain' => $domain,
             ],
             [
                 'name' => self::GAT_KEY,
-                'domain' => self::AUGMENTED_HOSTNAME,
+                'domain' => $domain,
             ],
             [
                 'name' => self::GA_KEY,
-                'domain' => self::AUGMENTED_HOSTNAME,
+                'domain' => $domain,
             ],
             [
                 'name' => self::GAT_1_KEY,
-                'domain' => self::AUGMENTED_HOSTNAME,
+                'domain' => $domain,
             ],
             [
                 'name' => self::GAT_2_KEY,
-                'domain' => self::AUGMENTED_HOSTNAME,
+                'domain' => $domain,
             ],
         ];
 
-        $sut = new AnalyticsCookieNamesProvider(self::HOSTNAME);
+        $sut = new AnalyticsCookieNamesProvider('host.name');
 
         $this->assertEquals(
             $expected,
-            $sut->getNames($cookie)
+            $sut->getNames($this->cookie)
         );
+    }
+
+    /**
+     * @dataProvider dpGetNamesForProd
+     */
+    public function testGetNamesForProd($domain)
+    {
+        $expected = [
+            [
+                'name' => self::GID_KEY,
+                'domain' => $domain,
+            ],
+            [
+                'name' => self::GID_KEY,
+                'domain' => AnalyticsCookieNamesProvider::LEGACY_COOKIE_DOMAIN,
+            ],
+            [
+                'name' => self::GAT_KEY,
+                'domain' => $domain,
+            ],
+            [
+                'name' => self::GAT_KEY,
+                'domain' => AnalyticsCookieNamesProvider::LEGACY_COOKIE_DOMAIN,
+            ],
+            [
+                'name' => self::GA_KEY,
+                'domain' => $domain,
+            ],
+            [
+                'name' => self::GA_KEY,
+                'domain' => AnalyticsCookieNamesProvider::LEGACY_COOKIE_DOMAIN,
+            ],
+            [
+                'name' => self::GAT_1_KEY,
+                'domain' => $domain,
+            ],
+            [
+                'name' => self::GAT_1_KEY,
+                'domain' => AnalyticsCookieNamesProvider::LEGACY_COOKIE_DOMAIN,
+            ],
+            [
+                'name' => self::GAT_2_KEY,
+                'domain' => $domain,
+            ],
+            [
+                'name' => self::GAT_2_KEY,
+                'domain' => AnalyticsCookieNamesProvider::LEGACY_COOKIE_DOMAIN,
+            ],
+        ];
+
+        $sut = new AnalyticsCookieNamesProvider($domain);
+
+        $this->assertEquals(
+            $expected,
+            $sut->getNames($this->cookie)
+        );
+    }
+
+    public function dpGetNamesForProd()
+    {
+        return [
+            ['.www.preview.vehicle-operator-licensing.service.gov.uk'],
+            ['.www.vehicle-operator-licensing.service.gov.uk'],
+        ];
     }
 }

@@ -16,13 +16,8 @@ class AnalyticsCookieNamesProviderFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $httpHost = $_SERVER['HTTP_HOST'];
+        $config = $serviceLocator->get('Config');
 
-        // modify hostname for vagrant
-        if ($httpHost == 'olcs-selfserve') {
-            $httpHost .= '.olcs.gov.uk';
-        }
-
-        return new AnalyticsCookieNamesProvider($httpHost);
+        return new AnalyticsCookieNamesProvider($config['google-ga-domain']);
     }
 }
