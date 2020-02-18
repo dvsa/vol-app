@@ -8,19 +8,21 @@ class AnalyticsCookieNamesProvider implements CookieNamesProviderInterface
 {
     const GAT_PREFIX = '_gat_';
 
+    const LEGACY_COOKIE_DOMAIN = '.vehicle-operator-licensing.service.gov.uk';
+
     /** @var string */
-    private $hostname;
+    private $domain;
 
     /**
      * Create service instance
      *
-     * @param string $hostname
+     * @param string $domain
      *
      * @return AnalyticsCookieNamesProvider
      */
-    public function __construct($hostname)
+    public function __construct($domain)
     {
-        $this->hostname = $hostname;
+        $this->domain = $domain;
     }
 
     /**
@@ -45,8 +47,15 @@ class AnalyticsCookieNamesProvider implements CookieNamesProviderInterface
         foreach ($names as $name) {
             $augmentedNames[] = [
                 'name' => $name,
-                'domain' => '.' . $this->hostname
+                'domain' => $this->domain
             ];
+
+            if (strpos($this->domain, self::LEGACY_COOKIE_DOMAIN) !== false) {
+                $augmentedNames[] = [
+                    'name' => $name,
+                    'domain' => self::LEGACY_COOKIE_DOMAIN
+                ];
+            }
         }
 
         return $augmentedNames;
