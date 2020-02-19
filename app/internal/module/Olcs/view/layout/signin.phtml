@@ -1,4 +1,9 @@
-<?php $this->doctype(); ?>
+<?php
+    $this->doctype();
+
+    // OLCS-26896 - make sure X-UA-Compatible value is not escaped on the internal login screen
+    $this->headMeta()->setAutoEscape(false);
+?>
 <html lang="en">
   <head>
     <?php echo $this->partial('partials/head', ['title' => $this->pageTitle()]); ?>
