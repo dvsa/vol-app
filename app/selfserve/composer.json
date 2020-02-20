@@ -21,7 +21,7 @@
         "zendframework/zend-di": "^2.5",
         "zendframework/zend-eventmanager": "^2.5",
         "zendframework/zend-filter": "^2.5",
-        "zendframework/zend-form": "2.10.0",
+        "zendframework/zend-form": "^2.5",
         "zendframework/zend-http": "^2.5",
         "zendframework/zend-i18n": "^2.5",
         "zendframework/zend-inputfilter": "^2.5",
