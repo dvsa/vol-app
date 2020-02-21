@@ -1248,16 +1248,16 @@
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "4.206.5",
+            "version": "4.206.6",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-auth/4.206.5/olcs-olcs-auth-4.206.5.zip",
-                "reference": "230c2ecaf089d87d7ce04d16a4881cd4079dc931",
-                "shasum": "230c2ecaf089d87d7ce04d16a4881cd4079dc931"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-auth/4.206.6/olcs-olcs-auth-4.206.6.zip",
+                "reference": "be2a10a895188a7fa64aa8f251fc5a41f741e61e",
+                "shasum": "be2a10a895188a7fa64aa8f251fc5a41f741e61e"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
-                "elendev/nexus-composer-push": "^0.1",
+                "elendev/nexus-composer-push": "^0.1.3",
                 "olcs/olcs-common": "~4.206.0",
                 "olcs/olcs-transfer": "~4.206.0",
                 "php": "^5.5 || ^7.0",
@@ -1320,19 +1320,19 @@
                 ]
             },
             "description": "OLCS Authentication",
-            "time": "2020-01-27T16:56:50+00:00"
+            "time": "2020-02-21T09:30:09+00:00"
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.140",
+            "version": "4.206.148",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-common/4.206.140/olcs-olcs-common-4.206.140.zip",
-                "reference": "ebc32e2be3eff4adb86017b93f3cb6278b5b882a",
-                "shasum": "ebc32e2be3eff4adb86017b93f3cb6278b5b882a"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-common/4.206.148/olcs-olcs-common-4.206.148.zip",
+                "reference": "d154a8f0d10ff58d23b47726c34cc269a8e6c02a",
+                "shasum": "d154a8f0d10ff58d23b47726c34cc269a8e6c02a"
             },
             "require": {
-                "doctrine/annotations": "^1.2.3",
+                "doctrine/annotations": "^1.8",
                 "doctrine/doctrine-orm-module": "~0.10.0",
                 "elendev/nexus-composer-push": "^0.1.3",
                 "php": "^5.5 || ^7.0",
@@ -1418,7 +1418,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2020-02-03T17:40:47+00:00"
+            "time": "2020-02-21T13:59:48+00:00"
         },
         {
             "name": "olcs/olcs-logging",
