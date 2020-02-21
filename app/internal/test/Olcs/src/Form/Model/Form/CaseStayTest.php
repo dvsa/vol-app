@@ -34,11 +34,6 @@ class CaseStayTest extends AbstractFormValidationTestCase
                 'year' => '2017',
                 'month' => '10',
                 'day' => '10'
-            ],
-            [
-                'fields' => [
-                    'requestDate' => '2016-10-10',
-                ],
             ]
         );
     }
@@ -50,10 +45,18 @@ class CaseStayTest extends AbstractFormValidationTestCase
 
         $this->assertFormElementValid(
             $element,
-            '2017-01-01',
+            [
+                'year' => '2017',
+                'month' => '1',
+                'day' => '1'
+            ],
             [
                 'fields' => [
-                    'requestDate' => '2016-10-10',
+                    'requestDate' => [
+                        'year' => '2016',
+                        'month' => '10',
+                        'day' => '10'
+                    ],
                 ],
             ]
         );
@@ -83,7 +86,7 @@ class CaseStayTest extends AbstractFormValidationTestCase
             '2017-01-01',
             [
                 'fields' => [
-                    'requestDate' => '2016-10-10',
+                    'isWithdrawn' => 'Y',
                 ],
             ]
         );
