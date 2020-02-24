@@ -16,7 +16,10 @@ class Preferences
         self::KEY_SETTINGS,
     ];
 
-    const DEFAULT_PREFERENCE_VALUE = true;
+    const DEFAULT_PREFERENCE_VALUE = false;
+
+    /** @var array */
+    private $preferences;
 
     /**
      * Create instance - provide empty array to obtain default settings
@@ -30,9 +33,7 @@ class Preferences
     public function __construct(array $preferencesArray)
     {
         if (empty($preferencesArray)) {
-            foreach (self::KEYS as $key) {
-                $this->preferences[$key] = self::DEFAULT_PREFERENCE_VALUE;
-            }
+            $this->preferences = array_fill_keys(self::KEYS, self::DEFAULT_PREFERENCE_VALUE);
         } else {
             foreach (self::KEYS as $key) {
                 if (!array_key_exists($key, $preferencesArray)) {
