@@ -804,6 +804,20 @@ return [
                             ]
                         ],
                     ],
+                    'admin-editable-translations' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' =>
+                                'editable-translations[/:action][/:id][/]',
+                            'constraints' => [
+                                'action' => '(index|add|edit|delete|search|details)'
+                            ],
+                            'defaults' => [
+                                'controller' => Admin\Controller\EditableTranslationsController::class,
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
                     'admin-fee-rates' => [
                         'type' => 'Segment',
                         'options' => [
@@ -900,6 +914,7 @@ return [
             Admin\Controller\TemplateController::class => Admin\Controller\TemplateController::class,
             Admin\Controller\InterimRefundsController::class =>Admin\Controller\InterimRefundsController::class,
             Admin\Controller\FeeRateController::class => Admin\Controller\FeeRateController::class,
+            Admin\Controller\EditableTranslationsController::class => Admin\Controller\EditableTranslationsController::class,
         ],
     ],
     'view_manager' => [

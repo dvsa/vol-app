@@ -305,19 +305,27 @@ return [
                     'route' => 'admin-dashboard/task-allocation-rules',
                 ],
                 [
-                    'label' => 'Templates',
-                    'id' => 'admin-dashboard/templates',
+                    'label' => 'Content Management',
+                    'id' => 'admin-dashboard/content-management',
                     'route' => 'admin-dashboard/admin-email-templates',
                     'pages' => [
                         [
-                            'id' => 'admin-dashboard/templates/email-templates',
+                            'id' => 'admin-dashboard/content-management/email-templates',
                             'label' => 'Email Templates',
                             'route' => 'admin-dashboard/admin-email-templates',
                         ],
                         [
-                            'id' => 'admin-dashboard/templates/document-templates',
+                            'id' => 'admin-dashboard/content-management/document-templates',
                             'label' => 'Document Templates',
                             'route' => 'admin-dashboard/admin-document-templates',
+                        ],
+                        [
+                            'id' => 'admin-dashboard/content-management/editable-translations',
+                            'label' => 'Editable Translations',
+                            'route' => 'admin-dashboard/admin-editable-translations',
+                            'params' => [
+                                'action' => 'search',
+                            ],
                         ]
                     ],
                 ],
