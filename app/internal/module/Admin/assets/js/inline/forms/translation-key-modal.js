@@ -1,0 +1,53 @@
+$(function () {
+    "use strict";
+
+    // Attach event listener for tab element clicks inserted below after XHR call
+    $(".modal__wrapper").on("click", ".transKeyTab", function () {
+        // Set underline on clicked tab
+        $(".transKeyTab").removeClass("current");
+        $(this).addClass("current");
+        // make relevant text-area visible
+        $(".langFields").addClass("js-hidden");
+        $("#input-" + $(this).attr("data-lang")).closest("div").removeClass("js-hidden");
+    });
+
+    var fieldset = $("*[data-group=\"fields\"]");
+    var jsonBaseUrl = $("#jsonUrl").val();
+
+    getLanguages();
+
+    function getLanguages() {
+        $.get(jsonBaseUrl + "languages", function (result) {
+            var current = " current";
+            $.each(result.languages, function (idx, lang) {
+                    var hideClass = (idx === "en_GB") ? "" : " js-hidden";
+                    var tabTemplate =
+                        `<li id="tab{idx}" class="horizontal-navigation__item transKeyTab${current}" data-lang="${idx}" style="padding: 0px; margin: 0px;">
+                            <a id="transKeyEnGB" href="#">${lang.label}</a>
+                       </li>`;
+                    var textAreaTemplate =
+                        `<div class="langFields field ${hideClass}">
+                                <textarea name="fields[translationsArray][${idx}]" id="input-${idx}" class="extra-long"></textarea>
+                        </div>`;
+                    $("#languageTabs").append(tabTemplate);
+                    fieldset.append(textAreaTemplate);
+                    current = "";
+                }
+            );
+            fieldset.removeClass("hidden");
+            getTranslatedText();
+        });
+    }
+
+    function getTranslatedText() {
+        $.get(jsonBaseUrl + "gettext/" + $("#id").val(),
+            function (response) {
+                $.each(response.translationKeyTexts, function (ix, text) {
+                    $("#input-" + text.language.isoCode).val(text.translatedText);
+                });
+                $("#mainForm").removeClass("js-hidden");
+                $("#loading").addClass("js-hidden");
+            }
+        );
+    }
+});

@@ -3,12 +3,16 @@
 namespace Admin\Controller;
 
 use Admin\Form\Model\Form\EditableTranslationSearch as EditableTranslationSearchForm;
+use Admin\Form\Model\Form\TranslationKey;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\Http\Response;
+use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 use Dvsa\Olcs\Transfer\Query\TranslationKey\GetList as ListDTO;
 use Dvsa\Olcs\Transfer\Query\TranslationKey\ById as ItemDTO;
+use Dvsa\Olcs\Transfer\Query\Language\GetList as GetSupportedLanguages;
+use Dvsa\Olcs\Transfer\Command\TranslationKey\Update as UpdateCommand;
 use Admin\Data\Mapper\EditableTranslation as EditableTranslationMapper;
 
 /**
@@ -26,6 +30,9 @@ class EditableTranslationsController extends AbstractInternalController implemen
     protected $itemDto = ItemDto::class;
     protected $itemParams = ['id'];
 
+    protected $updateCommand = UpdateCommand::class;
+    protected $formClass = TranslationKey::class;
+
     protected $searchFormClass = EditableTranslationSearchForm::class;
     protected $mapperClass = EditableTranslationMapper::class;
 
@@ -41,7 +48,18 @@ class EditableTranslationsController extends AbstractInternalController implemen
      * @var array
      */
     protected $inlineScripts = [
-        'indexAction' => ['table-actions'],
+        'detailsAction' => ['table-actions'],
+        'editkeyAction' => ['forms/translation-key-modal']
+    ];
+
+    protected $redirectConfig = [
+        'editkey' => [
+            'action' => 'details',
+            'routeMap' => [
+                'id' => 'id'
+            ],
+            'reUseParams' => true
+        ],
     ];
 
     /**
@@ -119,12 +137,81 @@ class EditableTranslationsController extends AbstractInternalController implemen
     }
 
     /**
-     * Custom details action to set dual tables
+     *  Display modal form, or consume POST data for edit translation key form
      *
      * @return array|ViewModel
      */
+    public function editkeyAction()
+    {
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $commandData = $this->mapperClass::mapFromForm((array)$request->getPost());
+            $response = $this->handleCommand(UpdateCommand::create($commandData));
+            if ($response->isOk()) {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($this->editSuccessMessage);
+                return $this->redirectTo($response->getResult());
+            } else {
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('Error saving translations');
+            }
+        }
+
+        $form = $this->getForm(TranslationKey::class);
+        $view = new ViewModel(
+            [
+                'form' => $form
+            ]
+        );
+
+        $response = $this->handleQuery(
+            ItemDTO::create(
+                [
+                    'id' => $this->params()->fromRoute('id'),
+                ]
+            )
+        );
+
+        $returnData = $response->getResult();
+        if (isset($returnData['error'])) {
+            $this->getResponse()->setStatusCode(422);
+            unset($returnData['error']);
+        }
+
+        $form->get('fields')->get('id')->setValue($this->params()->fromRoute('id'));
+
+        $form->get('jsonUrl')
+            ->setValue(
+                $this->url()->fromRoute(
+                    'admin-dashboard/admin-editable-translations'
+                )
+            );
+
+        $this->placeholder()->setPlaceholder('pageTitle', 'Edit Translation Key');
+        $view->setTemplate('pages/editable-translations/edit-translation-key-form');
+
+        return $this->viewBuilder()->buildView($view);
+    }
+
+    /**
+     * Custom details action to set dual tables
+     *
+     * @return Response|ViewModel
+     */
     public function detailsAction()
     {
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $postData = (array)$request->getPost();
+            if ($postData['action'] == 'Edittexts') {
+                return $this->redirect()->toRoute(
+                    'admin-dashboard/admin-editable-translations',
+                    [
+                        'action' => 'editkey',
+                        'id' => $this->params()->fromRoute('id')
+                    ]
+                );
+            }
+        }
+
         $this->placeholder()->setPlaceholder('contentTitle', $this->detailsContentTitle);
         $query = $this->itemDto::create(['id' => $this->params()->fromRoute('id')]);
 
@@ -155,5 +242,32 @@ class EditableTranslationsController extends AbstractInternalController implemen
         }
 
         return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);
+    }
+
+    /**
+     * @return JsonModel
+     */
+    public function gettextAction()
+    {
+        $response = $this->handleQuery(
+            ItemDTO::create(
+                [
+                    'id' => $this->params()->fromRoute('id'),
+                ]
+            )
+        );
+        return new JsonModel($response->getResult());
+    }
+
+    /**
+     * @return JsonModel
+     */
+    public function languagesAction()
+    {
+        $supportedLanguages = $this->handleQuery(
+            GetSupportedLanguages::create([])
+        );
+
+        return new JsonModel($supportedLanguages->getResult());
     }
 }
