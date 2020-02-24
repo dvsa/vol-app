@@ -24,9 +24,15 @@ class AcceptAllSetCookieGeneratorTest extends MockeryTestCase
             ->once()
             ->andReturn($setCookie);
 
+
+        $expectedPreferencesArray = [
+            Preferences::KEY_ANALYTICS => true,
+            Preferences::KEY_SETTINGS => true,
+        ];
+
         $preferencesFactory = m::mock(PreferencesFactory::class);
         $preferencesFactory->shouldReceive('create')
-            ->withNoArgs()
+            ->with($expectedPreferencesArray)
             ->once()
             ->andReturn($preferences);
 

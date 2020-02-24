@@ -36,7 +36,9 @@ class AcceptAllSetCookieGenerator
     public function generate()
     {
         return $this->preferencesSetCookieGenerator->generate(
-            $this->preferencesFactory->create()
+            $this->preferencesFactory->create(
+                array_fill_keys(Preferences::KEYS, true)
+            )
         );
     }
 }

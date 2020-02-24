@@ -13,8 +13,8 @@ class PreferencesTest extends MockeryTestCase
         $sut = new Preferences([]);
 
         $expected = [
-            Preferences::KEY_ANALYTICS => true,
-            Preferences::KEY_SETTINGS => true
+            Preferences::KEY_ANALYTICS => false,
+            Preferences::KEY_SETTINGS => false
         ];
 
         $this->assertEquals(
