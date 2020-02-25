@@ -2,7 +2,7 @@
 
 namespace OlcsTest\Service\Data;
 
-use Common\Service\Entity\Exceptions\UnexpectedResponseException;
+use Common\Exception\DataServiceException;
 use CommonTest\Service\Data\AbstractDataServiceTestCase;
 use Mockery as m;
 use Olcs\Service\Data\SubCategoryDescription;
@@ -59,7 +59,7 @@ class SubCategoryDescriptionTest extends AbstractDataServiceTestCase
 
     public function testFetchListDataWithException()
     {
-        $this->expectException(UnexpectedResponseException::class);
+        $this->expectException(DataServiceException::class);
         $subCategory = 'subCategory';
         $mockTransferAnnotationBuilder = m::mock()
             ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();

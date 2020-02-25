@@ -2,7 +2,7 @@
 
 namespace OlcsTest\Service\Data;
 
-use Common\Service\Entity\Exceptions\UnexpectedResponseException;
+use Common\Exception\DataServiceException;
 use CommonTest\Service\Data\AbstractDataServiceTestCase;
 use Mockery as m;
 use Olcs\Service\Data\ApplicationStatus;
@@ -68,7 +68,7 @@ class ApplicationStatusTest extends AbstractDataServiceTestCase
 
     public function testFetchListDataWithException()
     {
-        $this->expectException(UnexpectedResponseException::class);
+        $this->expectException(DataServiceException::class);
 
         $this->mockTransferAnnotationBuilder->shouldReceive('createQuery')->once()->andReturn('query');
         $this->mockResp->shouldReceive('isOk')->once()->andReturn(false);

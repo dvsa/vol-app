@@ -2,9 +2,9 @@
 
 namespace Olcs\Service\Data;
 
+use Common\Exception\DataServiceException;
 use Common\Service\Data\AbstractDataService;
 use Common\Service\Data\ListDataInterface;
-use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintType;
 
 /**
@@ -56,7 +56,7 @@ class IrhpPermitPrintType extends AbstractDataService implements ListDataInterfa
      * Fetch list data
      *
      * @return array
-     * @throw UnexpectedResponseException
+     * @throw DataServiceException
      */
     public function fetchListData()
     {
@@ -65,7 +65,7 @@ class IrhpPermitPrintType extends AbstractDataService implements ListDataInterfa
             $response = $this->handleQuery($dtoData);
 
             if (!$response->isOk()) {
-                throw new UnexpectedResponseException('unknown-error');
+                throw new DataServiceException('unknown-error');
             }
 
             $this->setData('IrhpPermitPrintType', $response->getResult()['results']);

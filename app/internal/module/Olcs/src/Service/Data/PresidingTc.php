@@ -2,7 +2,7 @@
 
 namespace Olcs\Service\Data;
 
-use Common\Service\Entity\Exceptions\UnexpectedResponseException;
+use Common\Exception\DataServiceException;
 use Dvsa\Olcs\Transfer\Query\Cases\PresidingTc\GetList;
 
 /**
@@ -23,7 +23,7 @@ class PresidingTc extends User
      * @param array $context Context
      *
      * @return array
-     * @throw UnexpectedResponseException
+     * @throw DataServiceException
      */
     public function fetchUserListData($context = [])
     {
@@ -37,7 +37,7 @@ class PresidingTc extends User
             $response = $this->handleQuery($dtoData);
 
             if (!$response->isOk()) {
-                throw new UnexpectedResponseException('unknown-error');
+                throw new DataServiceException('unknown-error');
             }
 
             $this->setData('presiding-tc', false);

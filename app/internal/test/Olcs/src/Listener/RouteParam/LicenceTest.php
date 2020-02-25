@@ -2,8 +2,8 @@
 
 namespace OlcsTest\Listener\RouteParam;
 
+use Common\Exception\DataServiceException;
 use Common\Service\Data\Surrender;
-use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParam\Licence;
@@ -779,7 +779,7 @@ class LicenceTest extends TestCase
 
         $mockSurrenderService = m::mock(Surrender::class);
         $mockSurrenderService->shouldReceive('fetchSurrenderData')->with(4)->times(1)->andThrow(
-            new UnexpectedResponseException('TEST')
+            new DataServiceException('TEST')
         );
         $this->sut->setSurrenderService($mockSurrenderService);
 

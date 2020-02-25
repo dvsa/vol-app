@@ -2,10 +2,10 @@
 
 namespace OlcsTest\Service\Data;
 
+use Common\Exception\DataServiceException;
 use Olcs\Service\Data\UserListInternal;
 use Mockery as m;
 use Dvsa\Olcs\Transfer\Query\User\UserListInternal as Qry;
-use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 use CommonTest\Service\Data\AbstractDataServiceTestCase;
 
 /**
@@ -111,7 +111,7 @@ class UserListInternalTest extends AbstractDataServiceTestCase
      */
     public function testFetchListDataWithException()
     {
-        $this->expectException(UnexpectedResponseException::class);
+        $this->expectException(DataServiceException::class);
         $mockTransferAnnotationBuilder = m::mock()
             ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();
 

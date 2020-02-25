@@ -7,10 +7,10 @@
  */
 namespace OlcsTest\Service\Data;
 
+use Common\Exception\DataServiceException;
 use Olcs\Service\Data\LicenceDecisionLegislation;
 use Mockery as m;
 use Dvsa\Olcs\Transfer\Query\Decision\DecisionList as Qry;
-use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 use CommonTest\Service\Data\AbstractDataServiceTestCase;
 
 /**
@@ -151,7 +151,7 @@ class LicenceDecisionLegislationTest extends AbstractDataServiceTestCase
      */
     public function testFetchListDataWithException()
     {
-        $this->expectException(UnexpectedResponseException::class);
+        $this->expectException(DataServiceException::class);
         $mockTransferAnnotationBuilder = m::mock()
             ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();
 

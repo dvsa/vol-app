@@ -2,7 +2,7 @@
 
 namespace Olcs\Service\Data;
 
-use Common\Service\Entity\Exceptions\UnexpectedResponseException;
+use Common\Exception\DataServiceException;
 use Common\Service\Data\RefData;
 
 /**
@@ -18,7 +18,7 @@ class ActionToBeTaken extends RefData
      * @param array $category Category
      *
      * @return array
-     * @throws UnexpectedResponseException
+     * @throws DataServiceException
      */
     public function fetchListData($category = null)
     {

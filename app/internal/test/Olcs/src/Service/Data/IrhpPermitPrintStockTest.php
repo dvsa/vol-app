@@ -2,9 +2,9 @@
 
 namespace OlcsTest\Service\Data;
 
+use Common\Exception\DataServiceException;
 use Common\RefData;
 use Common\Service\Cqrs\Response;
-use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 use CommonTest\Service\Data\AbstractDataServiceTestCase;
 use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintStock;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder as TransferAnnotationBuilder;
@@ -111,7 +111,7 @@ class IrhpPermitPrintStockTest extends AbstractDataServiceTestCase
 
     public function testFetchListOptionsWithException()
     {
-        $this->expectException(UnexpectedResponseException::class);
+        $this->expectException(DataServiceException::class);
 
         $mockTransferAnnotationBuilder = m::mock(TransferAnnotationBuilder::class)
             ->shouldReceive('createQuery')
