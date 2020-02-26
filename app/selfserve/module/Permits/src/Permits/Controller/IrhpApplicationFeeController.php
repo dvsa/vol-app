@@ -62,8 +62,7 @@ class IrhpApplicationFeeController extends AbstractSelfserveController implement
             'backUri' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
         ],
         'payment' => [
-            'browserTitle' => 'permits.page.fee.browser.title',
-            'prependTitleDataKey' => IrhpAppDataSource::DATA_KEY,
+            'browserTitle' => 'permits.page.fee.browser.title'
         ]
     ];
 
@@ -142,6 +141,14 @@ class IrhpApplicationFeeController extends AbstractSelfserveController implement
                 ]
             ]
         );
+
+        $translator = $this->getServiceLocator()->get('Helper\Translation');
+        $this->placeholder()
+            ->setPlaceholder(
+                'pageTitle',
+                $translator->translate($this->templateVarsConfig['payment']['browserTitle'])
+            );
+
         // render the gateway redirect
         $view->setTemplate('cpms/payment');
         return $this->render($view);
