@@ -2,11 +2,11 @@
 
 namespace OlcsTest\Service\Data;
 
+use Common\Exception\DataServiceException;
 use Olcs\Service\Data\AssignedToList;
 use Mockery as m;
 use Dvsa\Olcs\Transfer\Query\User\UserListInternal as Qry;
 use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount as MyAccount;
-use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 use CommonTest\Service\Data\AbstractDataServiceTestCase;
 
 class AssignedToListTest extends AbstractDataServiceTestCase
@@ -264,7 +264,6 @@ class AssignedToListTest extends AbstractDataServiceTestCase
      */
     public function testFetchListOptionsWithExceptionOnGetCurrentUser()
     {
-
         $mockTransferAnnotationBuilder = $this->mockTransferAnnotationBuilder();
 
         $mockUserListResponse = $this->mockUserListResponse();
@@ -274,12 +273,11 @@ class AssignedToListTest extends AbstractDataServiceTestCase
         $sut = new AssignedToList();
         $sut->setTeamId(1);
         $sut->setData('userList', $this->userList);
-        $this->expectException(UnexpectedResponseException::class);
+        $this->expectException(DataServiceException::class);
         $this->setupQuerySender($sut, $mockTransferAnnotationBuilder);
         $this->mockHandleSingleQuery($mockUserListResponse, 'queryA');
         $this->mockHandleSingleQuery($mockCurrentUserResponseIsOkFalse, 'queryB');
 
         $sut->fetchListOptions();
-
     }
 }

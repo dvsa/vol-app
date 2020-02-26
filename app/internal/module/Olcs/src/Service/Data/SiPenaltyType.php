@@ -2,9 +2,9 @@
 
 namespace Olcs\Service\Data;
 
+use Common\Exception\DataServiceException;
 use Common\Service\Data\AbstractDataService;
 use Common\Service\Data\ListDataInterface;
-use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 use Dvsa\Olcs\Transfer\Query\Si\SiPenaltyTypeListData;
 
 /**
@@ -64,7 +64,7 @@ class SiPenaltyType extends AbstractDataService implements ListDataInterface
             );
 
             if (!$response->isOk()) {
-                throw new UnexpectedResponseException('unknown-error');
+                throw new DataServiceException('unknown-error');
             }
 
             $this->setData('SiPenaltyType', false);

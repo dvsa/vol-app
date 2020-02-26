@@ -2,10 +2,10 @@
 
 namespace Olcs\Service\Data;
 
+use Common\Exception\DataServiceException;
 use Common\Service\Data\AbstractDataService;
 use Common\Service\Data\LicenceServiceTrait;
 use Common\Service\Data\ListDataInterface;
-use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 use Dvsa\Olcs\Transfer\Query\Decision\DecisionList as DecisionListDto;
 use Zend\ServiceManager\FactoryInterface;
 
@@ -61,7 +61,7 @@ class LicenceDecisionLegislation extends AbstractDataService implements ListData
      * @param array $context Context
      *
      * @return array
-     * @throw UnexpectedResponseException
+     * @throw DataServiceException
      */
     public function fetchListData($context)
     {
@@ -78,7 +78,7 @@ class LicenceDecisionLegislation extends AbstractDataService implements ListData
             $response = $this->handleQuery($dtoData);
 
             if (!$response->isOk()) {
-                throw new UnexpectedResponseException('unknown-error');
+                throw new DataServiceException('unknown-error');
             }
 
             $this->setData('licenceDecisionLegislation', false);

@@ -2,9 +2,9 @@
 
 namespace Olcs\Service\Data;
 
+use Common\Exception\DataServiceException;
 use Common\Service\Data\AbstractDataService;
 use Common\Service\Data\ListDataInterface;
-use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 use Dvsa\Olcs\Transfer\Query\Printer\PrinterList;
 
 /**
@@ -55,7 +55,7 @@ class Printer extends AbstractDataService implements ListDataInterface
      * Fetch list data
      *
      * @return array
-     * @throw UnexpectedResponseException
+     * @throw DataServiceException
      */
     public function fetchListData()
     {
@@ -64,7 +64,7 @@ class Printer extends AbstractDataService implements ListDataInterface
             $response = $this->handleQuery($dtoData);
 
             if (!$response->isOk()) {
-                throw new UnexpectedResponseException('unknown-error');
+                throw new DataServiceException('unknown-error');
             }
 
             $this->setData('Printer', false);

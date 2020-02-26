@@ -2,8 +2,8 @@
 
 namespace Olcs\Service\Data;
 
+use Common\Exception\DataServiceException;
 use Common\Service\Data\AbstractListDataService;
-use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 use Dvsa\Olcs\Transfer\Query as TransferQry;
 
 /**
@@ -22,7 +22,7 @@ class EmailTemplateCategory extends AbstractListDataService
      * @param array $context Parameters
      *
      * @return array
-     * @throw UnexpectedResponseException
+     * @throw DataServiceException
      */
     public function fetchListData($context = null)
     {
@@ -44,7 +44,7 @@ class EmailTemplateCategory extends AbstractListDataService
         );
 
         if (!$response->isOk()) {
-            throw new UnexpectedResponseException('unknown-error');
+            throw new DataServiceException('unknown-error');
         }
 
         $result = $response->getResult();

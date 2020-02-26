@@ -2,9 +2,9 @@
 
 namespace Olcs\Service\Data;
 
+use Common\Exception\DataServiceException;
 use Common\Service\Data\AbstractDataService;
 use Common\Service\Data\ListDataInterface;
-use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 use Dvsa\Olcs\Transfer\Query\Bus\BusServiceTypeList;
 
 /**
@@ -55,17 +55,16 @@ class BusServiceType extends AbstractDataService implements ListDataInterface
      * Fetch list data
      *
      * @return array
-     * @throw UnexpectedResponseException
+     * @throw DataServiceException
      */
     public function fetchListData()
     {
         if (is_null($this->getData('BusServiceType'))) {
-
             $dtoData = BusServiceTypeList::create([]);
             $response = $this->handleQuery($dtoData);
 
             if (!$response->isOk()) {
-                throw new UnexpectedResponseException('unknown-error');
+                throw new DataServiceException('unknown-error');
             }
 
             $this->setData('BusServiceType', false);

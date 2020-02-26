@@ -2,11 +2,11 @@
 
 namespace Olcs\Service\Data;
 
+use Common\Exception\DataServiceException;
 use Common\Service\Data\AbstractDataService;
 use Common\Service\Data\ApplicationServiceTrait;
 use Common\Service\Data\LicenceServiceTrait;
 use Common\Service\Data\ListDataInterface;
-use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -46,7 +46,6 @@ abstract class AbstractPublicInquiryData extends AbstractDataService implements 
 
         if ($licenceId === null) {
             $params['goodsOrPsv'] = 'NULL';
-
         } elseif (empty($params['goodsOrPsv'])) {
             //  if application not loaded
             if ($this->getApplicationService()->getId() === null) {
@@ -88,7 +87,6 @@ abstract class AbstractPublicInquiryData extends AbstractDataService implements 
     public function fetchPublicInquiryData($params)
     {
         if (is_null($this->getData('pid'))) {
-
             $result = $this->fetchListData($params);
 
             if (isset($result['results'])) {
@@ -105,7 +103,7 @@ abstract class AbstractPublicInquiryData extends AbstractDataService implements 
      * @param array $params Params
      *
      * @return array
-     * @throws UnexpectedResponseException
+     * @throws DataServiceException
      */
     public function fetchListData(array $params)
     {
@@ -125,7 +123,7 @@ abstract class AbstractPublicInquiryData extends AbstractDataService implements 
         $response = $this->handleQuery($dtoData);
 
         if (!$response->isOk()) {
-            throw new UnexpectedResponseException('unknown-error');
+            throw new DataServiceException('unknown-error');
         }
 
         return $response->getResult();

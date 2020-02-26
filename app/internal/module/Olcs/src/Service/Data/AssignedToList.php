@@ -2,8 +2,8 @@
 
 namespace Olcs\Service\Data;
 
+use Common\Exception\DataServiceException;
 use Dvsa\Olcs\Transfer\Query as TransferQry;
-use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 
 /**
  * Internal User data service with current user on top of the list
@@ -59,7 +59,7 @@ class AssignedToList extends UserListInternal
         );
 
         if (!$response->isOk()) {
-            throw new UnexpectedResponseException('unknown-error');
+            throw new DataServiceException('unknown-error');
         }
 
         return $response->getResult();

@@ -2,10 +2,10 @@
 
 namespace OlcsTest\Service\Data;
 
+use Common\Exception\DataServiceException;
 use Olcs\Service\Data\IrfoGvPermitType;
 use Mockery as m;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoGvPermitTypeList as Qry;
-use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 use CommonTest\Service\Data\AbstractDataServiceTestCase;
 
 /**
@@ -71,7 +71,7 @@ class IrfoGvPermitTypeTest extends AbstractDataServiceTestCase
 
     public function testFetchLicenceDataWithException()
     {
-        $this->expectException(UnexpectedResponseException::class);
+        $this->expectException(DataServiceException::class);
         $mockTransferAnnotationBuilder = m::mock()
             ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();
 

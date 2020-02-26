@@ -2,9 +2,9 @@
 
 namespace Olcs\Listener\RouteParam;
 
+use Common\Exception\DataServiceException;
 use Common\RefData;
 use Common\Service\Data\Surrender;
-use Common\Service\Entity\Exceptions\UnexpectedResponseException;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Zend\EventManager\EventManagerInterface;
@@ -507,7 +507,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         if ($licence['status']['id'] === RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION) {
             try {
                 $surrender = $this->getSurrenderService()->fetchSurrenderData($licence['id']);
-            } catch (UnexpectedResponseException $responseException) {
+            } catch (DataServiceException $responseException) {
                 //unable to get data fail gracefully
                 return false;
             }

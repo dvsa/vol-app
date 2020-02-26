@@ -2,7 +2,7 @@
 
 namespace Olcs\Service\Data;
 
-use Common\Service\Entity\Exceptions\UnexpectedResponseException;
+use Common\Exception\DataServiceException;
 use Dvsa\Olcs\Transfer\Query as TransferQry;
 
 /**
@@ -46,7 +46,7 @@ class SubCategory extends Category
      * @param array $context Parameters
      *
      * @return array
-     * @throw UnexpectedResponseException
+     * @throw DataServiceException
      */
     public function fetchListData($context = null)
     {
@@ -78,7 +78,7 @@ class SubCategory extends Category
         );
 
         if (!$response->isOk()) {
-            throw new UnexpectedResponseException('unknown-error');
+            throw new DataServiceException('unknown-error');
         }
 
         //  store to cache
