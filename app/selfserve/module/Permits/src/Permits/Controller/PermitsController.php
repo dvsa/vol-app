@@ -12,7 +12,8 @@ use Common\Util\FlashMessengerTrait;
 
 use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees;
 use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
-use Dvsa\Olcs\Transfer\Query\IrhpApplication\GetAllByOrganisation;
+use Dvsa\Olcs\Transfer\Query\IrhpApplication\SelfserveApplicationsSummary;
+use Dvsa\Olcs\Transfer\Query\IrhpApplication\SelfserveIssuedPermitsSummary;
 
 use Common\RefData;
 
@@ -66,36 +67,21 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
             return $view;
         }
 
-        // Get IRHP Applications and ECMT Permit Applications
         $response = $this->handleQuery(
-            GetAllByOrganisation::create(
-                [
-                    'organisation' => $this->getCurrentOrganisationId(),
-                    'irhpApplicationStatuses' => [
-                        RefData::PERMIT_APP_STATUS_NOT_YET_SUBMITTED,
-                        RefData::PERMIT_APP_STATUS_UNDER_CONSIDERATION,
-                        RefData::PERMIT_APP_STATUS_AWAITING_FEE,
-                        RefData::PERMIT_APP_STATUS_FEE_PAID,
-                        RefData::PERMIT_APP_STATUS_ISSUING,
-                        RefData::PERMIT_APP_STATUS_VALID,
-                    ],
-                    'sort' => 'licNo, typeDescription, id',
-                    'order' => 'ASC, ASC, ASC',
-                ]
+            SelfserveApplicationsSummary::create(
+                ['organisation' => $this->getCurrentOrganisationId()]
             )
         );
-        $data = $response->getResult();
-        $results = isset($data['results']) ? $data['results'] : [];
 
-        $applicationData = $issuedData = [];
+        $applicationData = $response->getResult();
 
-        foreach ($results as $item) {
-            if ($item['statusId'] === RefData::PERMIT_APP_STATUS_VALID) {
-                $issuedData[] = $item;
-            } else {
-                $applicationData[] = $item;
-            }
-        }
+        $response = $this->handleQuery(
+            SelfserveIssuedPermitsSummary::create(
+                ['organisation' => $this->getCurrentOrganisationId()]
+            )
+        );
+
+        $issuedData = $response->getResult();
 
         $table = $this->getServiceLocator()->get('Table');
         $issuedTable = $table->prepareTable($this->issuedTableName, $this->alterDataForTable($issuedData));
