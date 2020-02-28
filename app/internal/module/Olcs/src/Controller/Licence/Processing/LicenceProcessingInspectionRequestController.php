@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller\Licence\Processing;
 
+use Common\RefData;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits\InspectionRequestTrait;
 use Dvsa\Olcs\Transfer\Query\Licence\EnforcementArea as LicEnforcementAreaQry;
@@ -16,7 +17,6 @@ use Dvsa\Olcs\Transfer\Query\InspectionRequest\LicenceInspectionRequestList as L
 use Dvsa\Olcs\Transfer\Query\InspectionRequest\InspectionRequest as InspectionRequestQry;
 use Dvsa\Olcs\Transfer\Command\InspectionRequest\Delete as DeleteDto;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
-use Common\Service\Entity\InspectionRequestEntityService;
 use Dvsa\Olcs\Transfer\Command\InspectionRequest\Create as CreateDto;
 use Dvsa\Olcs\Transfer\Command\InspectionRequest\Update as UpdateDto;
 use Olcs\Form\Model\Form\InspectionRequest;
@@ -64,8 +64,8 @@ class LicenceProcessingInspectionRequestController extends AbstractInternalContr
     protected $deleteCommand = DeleteDto::class;
 
     protected $defaultData = [
-        'reportType' => InspectionRequestEntityService::REPORT_TYPE_MAINTENANCE_REQUEST,
-        'resultType' => InspectionRequestEntityService::RESULT_TYPE_NEW,
+        'reportType' => RefData::INSPECTION_REPORT_TYPE_MAINTENANCE_REQUEST,
+        'resultType' => RefData::INSPECTION_RESULT_TYPE_NEW,
         'licence'    => 'route',
         'type'       => 'licence'
     ];
@@ -108,7 +108,7 @@ class LicenceProcessingInspectionRequestController extends AbstractInternalContr
 
     /**
      * Get current licence
-     * 
+     *
      * @return int
      */
     protected function getIdentifier()

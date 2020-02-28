@@ -16,8 +16,8 @@ class WithdrawDetails
      * @Form\Options({
      *      "label": "Withdraw reason",
      *      "value_options":{
-     *          \Common\Service\Entity\ApplicationEntityService::WITHDRAWN_REASON_WITHDRAWN: "Withdrawn",
-     *          \Common\Service\Entity\ApplicationEntityService::WITHDRAWN_REASON_REG_IN_ERROR: "Registered in error"
+     *          \Common\RefData::WITHDRAWN_REASON_WITHDRAWN: "Withdrawn",
+     *          \Common\RefData::WITHDRAWN_REASON_REG_IN_ERROR: "Registered in error"
      *      },
      *      "fieldset-attributes" : {
      *          "class":"checkbox inline"

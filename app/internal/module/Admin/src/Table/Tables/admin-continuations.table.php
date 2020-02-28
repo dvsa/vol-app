@@ -1,7 +1,7 @@
 <?php
 
+use Common\RefData;
 use Common\Service\Entity\ContinuationDetailEntityService;
-use Common\Service\Entity\LicenceEntityService;
 
 return array(
     'variables' => array(
@@ -18,9 +18,9 @@ return array(
         ),
         'row-disabled-callback' => function ($row) {
             $enabledLicenceStatuses = [
-                LicenceEntityService::LICENCE_STATUS_VALID,
-                LicenceEntityService::LICENCE_STATUS_CURTAILED,
-                LicenceEntityService::LICENCE_STATUS_SUSPENDED
+                RefData::LICENCE_STATUS_VALID,
+                RefData::LICENCE_STATUS_CURTAILED,
+                RefData::LICENCE_STATUS_SUSPENDED
             ];
 
             $enabledStatuses = [

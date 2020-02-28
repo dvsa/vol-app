@@ -2,8 +2,8 @@
 
 namespace Admin\Controller;
 
+use Common\RefData;
 use Zend\View\Model\ViewModel;
-use Common\Service\Entity\LicenceEntityService;
 use Common\Controller\Lva\Traits\CrudActionTrait;
 use Dvsa\Olcs\Transfer\Query\ContinuationDetail\GetList as GetListQry;
 use Dvsa\Olcs\Transfer\Command\Continuation\Create as CreateCmd;
@@ -22,12 +22,12 @@ class ContinuationController extends AbstractController
 
     protected $defaultFilters = [
         'licenceStatus' => [
-            LicenceEntityService::LICENCE_STATUS_VALID,
-            LicenceEntityService::LICENCE_STATUS_SUSPENDED,
-            LicenceEntityService::LICENCE_STATUS_CURTAILED,
-            LicenceEntityService::LICENCE_STATUS_REVOKED,
-            LicenceEntityService::LICENCE_STATUS_SURRENDERED,
-            LicenceEntityService::LICENCE_STATUS_TERMINATED
+            RefData::LICENCE_STATUS_VALID,
+            RefData::LICENCE_STATUS_SUSPENDED,
+            RefData::LICENCE_STATUS_CURTAILED,
+            RefData::LICENCE_STATUS_REVOKED,
+            RefData::LICENCE_STATUS_SURRENDERED,
+            RefData::LICENCE_STATUS_TERMINATED
         ]
     ];
 
@@ -45,7 +45,6 @@ class ContinuationController extends AbstractController
         $form = $this->getContinuationForm();
 
         if ($request->isPost()) {
-
             $data = (array)$request->getPost();
 
             $form->setData($data);
@@ -113,7 +112,6 @@ class ContinuationController extends AbstractController
         $request = $this->getRequest();
 
         if ($request->isPost()) {
-
             $data = (array)$request->getPost();
 
             $crudAction = $this->getCrudAction([$data]);
@@ -171,7 +169,6 @@ class ContinuationController extends AbstractController
         $request = $this->getRequest();
 
         if ($request->isPost()) {
-
             $data = (array)$request->getPost();
 
             if (isset($data['form-actions']['cancel'])) {

@@ -7,6 +7,7 @@
  */
 namespace Olcs\Controller\Application\Processing;
 
+use Common\RefData;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits\InspectionRequestTrait;
 use Dvsa\Olcs\Transfer\Query\Application\EnforcementArea as AppEnforcementAreaQry;
@@ -16,7 +17,6 @@ use Dvsa\Olcs\Transfer\Query\InspectionRequest\ApplicationInspectionRequestList 
 use Dvsa\Olcs\Transfer\Query\InspectionRequest\InspectionRequest as InspectionRequestQry;
 use Dvsa\Olcs\Transfer\Command\InspectionRequest\Delete as DeleteDto;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
-use Common\Service\Entity\InspectionRequestEntityService;
 use Dvsa\Olcs\Transfer\Command\InspectionRequest\Create as CreateDto;
 use Dvsa\Olcs\Transfer\Command\InspectionRequest\Update as UpdateDto;
 use Olcs\Form\Model\Form\InspectionRequest;
@@ -64,8 +64,8 @@ class ApplicationProcessingInspectionRequestController extends AbstractInternalC
     protected $deleteCommand = DeleteDto::class;
 
     protected $defaultData = [
-        'reportType'  => InspectionRequestEntityService::REPORT_TYPE_MAINTENANCE_REQUEST,
-        'resultType'  => InspectionRequestEntityService::RESULT_TYPE_NEW,
+        'reportType'  => RefData::INSPECTION_REPORT_TYPE_MAINTENANCE_REQUEST,
+        'resultType'  => RefData::INSPECTION_RESULT_TYPE_NEW,
         'application' => 'route',
         'type'        => 'application'
     ];
@@ -122,7 +122,6 @@ class ApplicationProcessingInspectionRequestController extends AbstractInternalC
     protected function getEnforcementAreaName()
     {
         if (!$this->enforcementAreaName) {
-
             $queryToSend = $this->getServiceLocator()
                 ->get('TransferAnnotationBuilder')
                 ->createQuery(

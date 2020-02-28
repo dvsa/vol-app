@@ -2,8 +2,8 @@
 
 namespace Olcs\Controller\Traits;
 
+use Common\RefData;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Common\Service\Entity\LicenceEntityService;
 
 /**
  * Application Controller Trait
@@ -99,7 +99,7 @@ trait ApplicationControllerTrait
     {
         $application = $this->getApplication();
 
-        if ($application['licence']['goodsOrPsv']['id'] == LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE) {
+        if ($application['licence']['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
             $this->getServiceLocator()->get('Navigation')->findOneBy('id', 'licence_bus')->setVisible(0);
         }
 

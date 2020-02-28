@@ -7,8 +7,8 @@
  */
 namespace OlcsTest\Service\Utility;
 
+use Common\RefData;
 use Olcs\Service\Utility\ApplicationUtility;
-use Common\Service\Entity\ApplicationEntityService;
 
 /**
  * Application Utility Test
@@ -33,7 +33,7 @@ class ApplicationUtilityTest extends \PHPUnit\Framework\TestCase
 
         $expectedData = [
             'foo' => 'bar',
-            'status' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION
+            'status' => RefData::APPLICATION_STATUS_UNDER_CONSIDERATION
         ];
 
         $this->assertEquals($expectedData, $this->sut->alterCreateApplicationData($data));

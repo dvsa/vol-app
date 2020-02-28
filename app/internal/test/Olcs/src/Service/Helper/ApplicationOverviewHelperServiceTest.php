@@ -7,11 +7,11 @@
  */
 namespace OlcsTest\Service\Helper;
 
+use Common\RefData;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Service\Helper\ApplicationOverviewHelperService as Sut;
 use OlcsTest\Bootstrap;
-use Common\Service\Entity\LicenceEntityService as Licence;
 use Common\Service\Entity\ApplicationEntityService as Application;
 
 /**
@@ -101,8 +101,8 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                 [
                     'id' => 69,
                     'createdOn' => '2015-04-08',
-                    'goodsOrPsv' => ['id' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE],
-                    'licenceType'  => ['id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL],
+                    'goodsOrPsv' => ['id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE],
+                    'licenceType'  => ['id' => RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL],
                     'totAuthVehicles' => 12,
                     'totAuthTrailers' => 13,
                     'isVariation' => false,
@@ -119,8 +119,8 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                         'id'           => 123,
                         'expiryDate'   => '2017-06-05',
                         'inForceDate'  => '2014-03-02',
-                        'status'       => ['id' => Licence::LICENCE_STATUS_VALID],
-                        'licenceType'  => ['id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL],
+                        'status'       => ['id' => RefData::LICENCE_STATUS_VALID],
+                        'licenceType'  => ['id' => RefData::LICENCE_TYPE_STANDARD_NATIONAL],
                         'totAuthVehicles' => null,
                         'totAuthTrailers' => null,
                         // 'totCommunityLicences' => null,
@@ -155,9 +155,9 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     'currentApplications' => 100,
                     'applicationCreated' => '2015-04-08',
                     'oppositionCount' => 2,
-                    'licenceStatus' => ['id' => Licence::LICENCE_STATUS_VALID],
-                    'licenceType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                    'appLicenceType' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                    'licenceStatus' => ['id' => RefData::LICENCE_STATUS_VALID],
+                    'licenceType' => RefData::LICENCE_TYPE_STANDARD_NATIONAL,
+                    'appLicenceType' => RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL,
                     'interimStatus' => 'Requested (<a href="INTERIM_URL">Interim details</a>)',
                     'outstandingFees' => 2,
                     'licenceStartDate' => '2014-03-02',
@@ -191,8 +191,8 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                 [
                     'id' => 69,
                     'createdOn' => '2015-04-08',
-                    'goodsOrPsv' => ['id' => Licence::LICENCE_CATEGORY_PSV],
-                    'licenceType'  => ['id' => Licence::LICENCE_TYPE_SPECIAL_RESTRICTED],
+                    'goodsOrPsv' => ['id' => RefData::LICENCE_CATEGORY_PSV],
+                    'licenceType'  => ['id' => RefData::LICENCE_TYPE_SPECIAL_RESTRICTED],
                     'totAuthVehicles' => 5,
                     'isVariation' => false,
                     'licenceVehicles' => [],
@@ -207,9 +207,9 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                         'expiryDate'   => '2017-06-05',
                         'inForceDate'  => '2014-03-02',
                         'surrenderedDate' => '2015-02-11',
-                        'licenceType'  => ['id' => Licence::LICENCE_TYPE_SPECIAL_RESTRICTED],
-                        'status'       => ['id' => Licence::LICENCE_STATUS_VALID],
-                        'goodsOrPsv'   => ['id' => Licence::LICENCE_CATEGORY_PSV],
+                        'licenceType'  => ['id' => RefData::LICENCE_TYPE_SPECIAL_RESTRICTED],
+                        'status'       => ['id' => RefData::LICENCE_STATUS_VALID],
+                        'goodsOrPsv'   => ['id' => RefData::LICENCE_CATEGORY_PSV],
                         'totAuthVehicles' => 2,
                         'totAuthTrailers' => 0,
                         'totCommunityLicences' => 0,
@@ -247,9 +247,9 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     'currentApplications' => 100,
                     'applicationCreated' => '2015-04-08',
                     'oppositionCount' => 2,
-                    'licenceStatus' => ['id' => Licence::LICENCE_STATUS_VALID],
-                    'licenceType' => Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
-                    'appLicenceType' => Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
+                    'licenceStatus' => ['id' => RefData::LICENCE_STATUS_VALID],
+                    'licenceType' => RefData::LICENCE_TYPE_SPECIAL_RESTRICTED,
+                    'appLicenceType' => RefData::LICENCE_TYPE_SPECIAL_RESTRICTED,
                     'interimStatus' => null,
                     'outstandingFees' => 2,
                     'licenceStartDate' => '2014-03-02',
@@ -309,7 +309,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                         'id' => 1,
                         'description' => 'Requested',
                     ],
-                    'goodsOrPsv' => ['id' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE],
+                    'goodsOrPsv' => ['id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE],
                 ],
                 'Requested (<a href="INTERIM_URL">Interim details</a>)'
             ],

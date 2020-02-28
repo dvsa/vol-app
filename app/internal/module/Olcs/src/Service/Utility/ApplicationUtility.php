@@ -7,7 +7,7 @@
  */
 namespace Olcs\Service\Utility;
 
-use Common\Service\Entity\ApplicationEntityService;
+use Common\RefData;
 use Common\Service\Utility\ApplicationUtilityInterface;
 
 /**
@@ -25,7 +25,7 @@ class ApplicationUtility implements ApplicationUtilityInterface
      */
     public function alterCreateApplicationData(array $data)
     {
-        $data['status'] = ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION;
+        $data['status'] = RefData::APPLICATION_STATUS_UNDER_CONSIDERATION;
 
         return $data;
     }
