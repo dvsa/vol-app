@@ -7,6 +7,7 @@
  */
 namespace OlcsTest\View\Model\Variation;
 
+use Common\RefData;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\View\Model\Variation\VariationOverviewSection;
 
@@ -19,7 +20,7 @@ class VariationOverviewSectionTest extends MockeryTestCase
 {
     public function testViewWithRequiresAttention()
     {
-        $sectionDetails = ['status' => 1]; // VariationCompletionEntityService::STATUS_REQUIRES_ATTENTION
+        $sectionDetails = ['status' => RefData::VARIATION_STATUS_REQUIRES_ATTENTION];
         $ref = 'people';
         $data = [
             'id' => 1,
@@ -43,12 +44,11 @@ class VariationOverviewSectionTest extends MockeryTestCase
 
         // variation sections should NOT be visibly numbered
         $this->assertNull($viewModel->getVariable('sectionNumber')); // OLCS-7016;
-
     }
 
     public function testViewWithUpdated()
     {
-        $sectionDetails = ['status' => 2]; // VariationCompletionEntityService::STATUS_UPDATED
+        $sectionDetails = ['status' => RefData::VARIATION_STATUS_UPDATED];
         $ref = 'type_of_licence';
         $data = [
             'id' => 1,
@@ -75,7 +75,7 @@ class VariationOverviewSectionTest extends MockeryTestCase
 
     public function testViewWithUnchanged()
     {
-        $sectionDetails = ['status' => 0]; // VariationCompletionEntityService::STATUS_UNCHANGED
+        $sectionDetails = ['status' => RefData::VARIATION_STATUS_UNCHANGED];
         $ref = 'type_of_licence';
         $data = [
             'id' => 1,
@@ -102,7 +102,7 @@ class VariationOverviewSectionTest extends MockeryTestCase
 
     public function testViewWithNotEnabled()
     {
-        $sectionDetails = ['status' => 0, 'enabled' => 0];
+        $sectionDetails = ['status' => RefData::VARIATION_STATUS_UNCHANGED, 'enabled' => 0];
         $ref = 'type_of_licence';
         $data = [
             'id' => 1,

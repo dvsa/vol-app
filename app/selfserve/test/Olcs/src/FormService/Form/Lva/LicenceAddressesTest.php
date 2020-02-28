@@ -2,10 +2,10 @@
 
 namespace OlcsTest\FormService\Form\Lva;
 
+use Common\RefData;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\Addresses\LicenceAddresses;
-use Common\Service\Entity\LicenceEntityService;
 use Zend\Form\Form;
 
 /**
@@ -64,7 +64,7 @@ class LicenceAddressesTest extends MockeryTestCase
             ->getMock();
 
         $this->sut->getForm(
-            ['typeOfLicence' => ['licenceType' => LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL]]
+            ['typeOfLicence' => ['licenceType' => RefData::LICENCE_TYPE_STANDARD_NATIONAL]]
         );
     }
 }

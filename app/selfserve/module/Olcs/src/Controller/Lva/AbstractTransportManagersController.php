@@ -6,7 +6,6 @@ use Common\Controller\Lva\AbstractTransportManagersController as CommonAbstractT
 use Common\Controller\Traits\GenericUpload;
 use Common\RefData;
 use Common\Service\Entity\TransportManagerApplicationEntityService;
-use Common\Service\Entity\ApplicationEntityService;
 use Dvsa\Olcs\Transfer\Command;
 
 /**
@@ -1073,8 +1072,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $tma = $this->getTmaDetails($tmApplicationId);
 
         $preGrantedStatuses = [
-            ApplicationEntityService::APPLICATION_STATUS_NOT_SUBMITTED,
-            ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
+            RefData::APPLICATION_STATUS_NOT_SUBMITTED,
+            RefData::APPLICATION_STATUS_UNDER_CONSIDERATION,
         ];
         if (!in_array($tma['application']['status']['id'], $preGrantedStatuses)) {
             return new \Zend\View\Model\ViewModel(['translateMessage' => 'markup-tma-edit-error']);

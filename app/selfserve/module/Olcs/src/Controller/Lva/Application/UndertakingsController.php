@@ -5,7 +5,6 @@ namespace Olcs\Controller\Lva\Application;
 use Olcs\Controller\Lva\AbstractUndertakingsController;
 use Common\RefData;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
-use Common\Service\Entity\LicenceEntityService as Licence;
 use Common\Form\Form;
 
 /**
@@ -192,7 +191,7 @@ class UndertakingsController extends AbstractUndertakingsController
         }
         $goodsOrPsv  = $applicationData['goodsOrPsv']['id'];
 
-        if ($goodsOrPsv !== Licence::LICENCE_CATEGORY_GOODS_VEHICLE) {
+        if ($goodsOrPsv !== RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
             $this->getServiceLocator()->get('Helper\Form')->remove($form, 'interim');
         }
     }
@@ -258,8 +257,7 @@ class UndertakingsController extends AbstractUndertakingsController
         } else {
             $formHelper->remove($form, 'declarationsAndUndertakings->disabledReview');
             $data = (array) $this->getRequest()->getPost();
-            if (
-                isset($data['declarationsAndUndertakings']['signatureOptions'])
+            if (isset($data['declarationsAndUndertakings']['signatureOptions'])
                 && $data['declarationsAndUndertakings']['signatureOptions'] === 'N'
             ) {
                 $formHelper->remove($form, 'declarationsAndUndertakings->declarationForVerify');
