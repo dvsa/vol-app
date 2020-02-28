@@ -2,10 +2,10 @@
 
 namespace OlcsTest\FormService\Form\Lva;
 
+use Common\RefData;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\LicenceBusinessDetails;
-use Common\Service\Entity\OrganisationEntityService;
 use Common\Service\Helper\FormHelperService;
 use Common\FormService\FormServiceManager;
 
@@ -36,7 +36,7 @@ class LicenceBusinessDetailsTest extends MockeryTestCase
         $form = m::mock();
         $params = [
             'orgId' => 111,
-            'orgType' => OrganisationEntityService::ORG_TYPE_LLP
+            'orgType' => RefData::ORG_TYPE_LLP
         ];
 
         // Mocks
