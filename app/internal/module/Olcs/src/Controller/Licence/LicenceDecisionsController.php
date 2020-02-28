@@ -8,8 +8,8 @@ namespace Olcs\Controller\Licence;
 
 use Common\Controller\Interfaces\MethodToggleAwareInterface;
 use Common\FeatureToggle;
+use Common\RefData;
 use Common\Service\Cqrs\Exception\NotFoundException;
-use Common\Service\Entity\LicenceStatusRuleEntityService;
 use Dvsa\Olcs\Transfer\Command\Surrender\Withdraw;
 use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence;
 use Olcs\Controller\AbstractController;
@@ -169,7 +169,7 @@ class LicenceDecisionsController extends AbstractController implements
                 $response = $this->saveDecisionForLicence(
                     $licenceId,
                     array(
-                        'status' => LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_CURTAILED,
+                        'status' => RefData::LICENCE_STATUS_RULE_CURTAILED,
                         'startDate' => $formData['licence-decision']['curtailFrom'],
                         'endDate' => $formData['licence-decision']['curtailTo'],
                         'decisions' => $formData['licence-decision-legislation']['decisions']
@@ -244,7 +244,7 @@ class LicenceDecisionsController extends AbstractController implements
                 $response = $this->saveDecisionForLicence(
                     $licenceId,
                     array(
-                        'status' => LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_REVOKED,
+                        'status' => RefData::LICENCE_STATUS_RULE_REVOKED,
                         'startDate' => $formData['licence-decision']['revokeFrom'],
                         'decisions' => $formData['licence-decision-legislation']['decisions']
                     ),
@@ -318,7 +318,7 @@ class LicenceDecisionsController extends AbstractController implements
                 $response = $this->saveDecisionForLicence(
                     $licenceId,
                     array(
-                        'status' => LicenceStatusRuleEntityService::LICENCE_STATUS_RULE_SUSPENDED,
+                        'status' => RefData::LICENCE_STATUS_RULE_SUSPENDED,
                         'startDate' => $formData['licence-decision']['suspendFrom'],
                         'endDate' => $formData['licence-decision']['suspendTo'],
                         'decisions' => $formData['licence-decision-legislation']['decisions']

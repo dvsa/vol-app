@@ -2,9 +2,9 @@
 
 namespace Admin\Controller;
 
+use Common\RefData;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
-use Common\Service\Entity\LicenceEntityService;
 use Dvsa\Olcs\Transfer\Command\GoodsDisc\PrintDiscs as PrintDiscsGoodsDto;
 use Dvsa\Olcs\Transfer\Command\PsvDisc\PrintDiscs as PrintDiscsPsvDto;
 use Dvsa\Olcs\Transfer\Command\GoodsDisc\ConfirmPrinting as ConfirmPrintingGoodsDto;
@@ -100,7 +100,7 @@ class DiscPrintingController extends ZendAbstractActionController implements Lef
 
         $this->hasDiscsToPrint = false;
         // get discs to print
-        if ($params['operatorType'] === LicenceEntityService::LICENCE_CATEGORY_PSV) {
+        if ($params['operatorType'] === RefData::LICENCE_CATEGORY_PSV) {
             $dataToSend = [
                 'licenceType'  => $params['licenceType'],
                 'startNumber'  => $params['startNumber'],
@@ -340,7 +340,7 @@ class DiscPrintingController extends ZendAbstractActionController implements Lef
         $params = $this->getFlattenParams();
         $retv = [];
 
-        if ($params['operatorType'] === LicenceEntityService::LICENCE_CATEGORY_PSV) {
+        if ($params['operatorType'] === RefData::LICENCE_CATEGORY_PSV) {
             $dtoClass = ConfirmPrintingPsvDto::class;
             $data = [
                 'licenceType' => $params['licenceType'],

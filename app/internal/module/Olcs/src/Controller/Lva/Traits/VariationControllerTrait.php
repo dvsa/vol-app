@@ -7,12 +7,12 @@
  */
 namespace Olcs\Controller\Lva\Traits;
 
+use Common\RefData;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
 use Common\View\Model\Section;
 use Common\Controller\Lva\Traits\CommonVariationControllerTrait;
-use Common\Service\Entity\VariationCompletionEntityService;
 
 /**
  * INTERNAL Abstract Variation Controller
@@ -21,12 +21,11 @@ use Common\Service\Entity\VariationCompletionEntityService;
  */
 trait VariationControllerTrait
 {
-    use ApplicationControllerTrait,
-        CommonVariationControllerTrait {
-            CommonVariationControllerTrait::preDispatch insteadof ApplicationControllerTrait;
-            CommonVariationControllerTrait::postSave insteadof ApplicationControllerTrait;
-            CommonVariationControllerTrait::goToNextSection insteadof ApplicationControllerTrait;
-        }
+    use ApplicationControllerTrait, CommonVariationControllerTrait {
+        CommonVariationControllerTrait::preDispatch insteadof ApplicationControllerTrait;
+        CommonVariationControllerTrait::postSave insteadof ApplicationControllerTrait;
+        CommonVariationControllerTrait::goToNextSection insteadof ApplicationControllerTrait;
+    }
 
     /**
      * render page
@@ -153,15 +152,14 @@ trait VariationControllerTrait
         $accessibleSections = $this->getAccessibleSections(false);
 
         foreach ($accessibleSections as $section => $settings) {
-
             $statusIndex = lcfirst($filter->underscoreToCamel($section)) . 'Status';
 
             $class = '';
             switch ($variationStatuses[$statusIndex]) {
-                case VariationCompletionEntityService::STATUS_UPDATED:
+                case RefData::VARIATION_STATUS_UPDATED:
                     $class = 'edited';
                     break;
-                case VariationCompletionEntityService::STATUS_REQUIRES_ATTENTION:
+                case RefData::VARIATION_STATUS_REQUIRES_ATTENTION:
                     $class = 'incomplete';
                     break;
             }

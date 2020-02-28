@@ -7,10 +7,10 @@
  */
 namespace OlcsTest\Controller\Lva\Traits;
 
+use Common\RefData;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use OlcsTest\Bootstrap;
-use Common\Service\Entity\VariationCompletionEntityService;
 
 /**
  * Variation Controller Trait Test
@@ -71,9 +71,9 @@ class VariationControllerTraitTest extends MockeryTestCase
 
         $applicationData = [
             'applicationCompletion' => [
-                'typeOfLicenceStatus' => VariationCompletionEntityService::STATUS_UPDATED,
-                'businessTypeStatus' => VariationCompletionEntityService::STATUS_UNCHANGED,
-                'businessDetailsStatus' => VariationCompletionEntityService::STATUS_REQUIRES_ATTENTION,
+                'typeOfLicenceStatus' => RefData::VARIATION_STATUS_UPDATED,
+                'businessTypeStatus' => RefData::VARIATION_STATUS_UNCHANGED,
+                'businessDetailsStatus' => RefData::VARIATION_STATUS_REQUIRES_ATTENTION,
             ],
             'status' => [
                 'id' => 'XXX'
@@ -116,9 +116,9 @@ class VariationControllerTraitTest extends MockeryTestCase
 
         $applicationData = [
             'applicationCompletion' => [
-                'typeOfLicenceStatus' => VariationCompletionEntityService::STATUS_UPDATED,
-                'businessTypeStatus' => VariationCompletionEntityService::STATUS_UNCHANGED,
-                'businessDetailsStatus' => VariationCompletionEntityService::STATUS_REQUIRES_ATTENTION,
+                'typeOfLicenceStatus' => RefData::VARIATION_STATUS_UPDATED,
+                'businessTypeStatus' => RefData::VARIATION_STATUS_UNCHANGED,
+                'businessDetailsStatus' => RefData::VARIATION_STATUS_REQUIRES_ATTENTION,
             ],
             'status' => [
                 'id' => \Common\RefData::APPLICATION_STATUS_VALID

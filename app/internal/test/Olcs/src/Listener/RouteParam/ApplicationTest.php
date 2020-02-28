@@ -9,8 +9,6 @@ use Mockery as m;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Olcs\Listener\RouteParam\Application;
-use Common\Service\Entity\LicenceEntityService;
-use Common\Service\Entity\ApplicationEntityService;
 
 /**
  * Class ApplicationTest
@@ -102,7 +100,7 @@ class ApplicationTest extends MockeryTestCase
             'canHaveInspectionRequest' => false,
         ];
 
-        $quickViewActionsVisible = ($status !== ApplicationEntityService::APPLICATION_STATUS_VALID);
+        $quickViewActionsVisible = ($status !== RefData::APPLICATION_STATUS_VALID);
 
         $event = new RouteParam();
         $event->setValue($applicationId);
@@ -172,37 +170,37 @@ class ApplicationTest extends MockeryTestCase
     {
         return [
             [
-                ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION,
-                LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE,
-                ApplicationEntityService::APPLICATION_TYPE_NEW,
+                RefData::APPLICATION_STATUS_UNDER_CONSIDERATION,
+                RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
+                RefData::APPLICATION_TYPE_NEW,
                 true,
                 0
             ],
             [
-                ApplicationEntityService::APPLICATION_STATUS_GRANTED,
-                LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE,
-                ApplicationEntityService::APPLICATION_TYPE_NEW,
+                RefData::APPLICATION_STATUS_GRANTED,
+                RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
+                RefData::APPLICATION_TYPE_NEW,
                 false,
                 1
             ],
             [
-                ApplicationEntityService::APPLICATION_STATUS_GRANTED,
-                LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE,
-                ApplicationEntityService::APPLICATION_TYPE_VARIATION,
+                RefData::APPLICATION_STATUS_GRANTED,
+                RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
+                RefData::APPLICATION_TYPE_VARIATION,
                 false,
                 1
             ],
             [
-                ApplicationEntityService::APPLICATION_STATUS_VALID,
-                LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE,
-                ApplicationEntityService::APPLICATION_TYPE_VARIATION,
+                RefData::APPLICATION_STATUS_VALID,
+                RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
+                RefData::APPLICATION_TYPE_VARIATION,
                 false,
                 1
             ],
             [
-                ApplicationEntityService::APPLICATION_STATUS_NOT_SUBMITTED,
-                LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE,
-                ApplicationEntityService::APPLICATION_TYPE_NEW,
+                RefData::APPLICATION_STATUS_NOT_SUBMITTED,
+                RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
+                RefData::APPLICATION_TYPE_NEW,
                 true,
                 0
             ],

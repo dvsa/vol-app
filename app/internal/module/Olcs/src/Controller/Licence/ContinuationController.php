@@ -2,8 +2,8 @@
 
 namespace Olcs\Controller\Licence;
 
+use Common\RefData;
 use Common\Service\Entity\ContinuationDetailEntityService;
-use Common\Service\Entity\LicenceEntityService;
 use Olcs\Controller\AbstractController;
 use Olcs\Data\Mapper\Continuation as ContinuationMapper;
 use Zend\View\Model\ViewModel;
@@ -228,7 +228,7 @@ class ContinuationController extends AbstractController
             $data['fields']['numberOfCommunityLicences'] = $licence['totCommunityLicences'];
         }
         if ($data['fields']['numberOfDiscs'] == null) {
-            if ($licence['goodsOrPsv']['id'] === LicenceEntityService::LICENCE_CATEGORY_PSV) {
+            if ($licence['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_PSV) {
                 $data['fields']['numberOfDiscs'] = $numNotCeasedDiscs;
             }
         }
@@ -266,7 +266,10 @@ class ContinuationController extends AbstractController
 
         $form->get('form-actions')->get('viewContinuation')->setValue(
             $this->url()->fromRoute(
-                'continuation/review', ['continuationDetailId' => $continuationDetail['id']], [], true
+                'continuation/review',
+                ['continuationDetailId' => $continuationDetail['id']],
+                [],
+                true
             )
         );
     }
@@ -382,10 +385,10 @@ class ContinuationController extends AbstractController
     protected function alterFormTotalVehicleAuthorisation($form, $continuationDetail)
     {
         $licence = $continuationDetail['licence'];
-        if ($licence['goodsOrPsv']['id'] === LicenceEntityService::LICENCE_CATEGORY_PSV
-            && ($licence['licenceType']['id'] === LicenceEntityService::LICENCE_TYPE_RESTRICTED
-            || $licence['licenceType']['id'] === LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL
-            || $licence['licenceType']['id'] === LicenceEntityService::LICENCE_TYPE_STANDARD_INTERNATIONAL)) {
+        if ($licence['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_PSV
+            && ($licence['licenceType']['id'] === RefData::LICENCE_TYPE_RESTRICTED
+            || $licence['licenceType']['id'] === RefData::LICENCE_TYPE_STANDARD_NATIONAL
+            || $licence['licenceType']['id'] === RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL)) {
             // Displayed by default
             if (!$this->isAllowedContinuationStatuses($continuationDetail['status']['id'])) {
                 $this->getServiceLocator()->get('Helper\Form')
@@ -408,10 +411,10 @@ class ContinuationController extends AbstractController
     protected function alterFormNumberOfDiscs($form, $continuationDetail, $postData)
     {
         $licence = $continuationDetail['licence'];
-        if ($licence['goodsOrPsv']['id'] === LicenceEntityService::LICENCE_CATEGORY_PSV
-            && ($licence['licenceType']['id'] === LicenceEntityService::LICENCE_TYPE_RESTRICTED
-            || $licence['licenceType']['id'] === LicenceEntityService::LICENCE_TYPE_STANDARD_NATIONAL
-            || $licence['licenceType']['id'] === LicenceEntityService::LICENCE_TYPE_STANDARD_INTERNATIONAL)) {
+        if ($licence['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_PSV
+            && ($licence['licenceType']['id'] === RefData::LICENCE_TYPE_RESTRICTED
+            || $licence['licenceType']['id'] === RefData::LICENCE_TYPE_STANDARD_NATIONAL
+            || $licence['licenceType']['id'] === RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL)) {
             // Displayed by default
             $totalVehicles = $licence['totAuthVehicles'];
             if (isset($postData['fields']['totalVehicleAuthorisation'])) {
@@ -449,10 +452,10 @@ class ContinuationController extends AbstractController
     protected function displayCommunityLicenceElement($licence)
     {
         $displayFor = [
-            LicenceEntityService::LICENCE_CATEGORY_GOODS_VEHICLE .'-'.
-                LicenceEntityService::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-            LicenceEntityService::LICENCE_CATEGORY_PSV .'-'. LicenceEntityService::LICENCE_TYPE_RESTRICTED,
-            LicenceEntityService::LICENCE_CATEGORY_PSV .'-'. LicenceEntityService::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            RefData::LICENCE_CATEGORY_GOODS_VEHICLE .'-'.
+                RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            RefData::LICENCE_CATEGORY_PSV .'-'. RefData::LICENCE_TYPE_RESTRICTED,
+            RefData::LICENCE_CATEGORY_PSV .'-'. RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL,
         ];
         $type = $licence['goodsOrPsv']['id'] .'-'. $licence['licenceType']['id'];
 
@@ -474,7 +477,7 @@ class ContinuationController extends AbstractController
         if ($this->displayCommunityLicenceElement($licence)) {
             // Displayed by default
             $totalVehicles = $licence['totAuthVehicles'];
-            if ($licence['goodsOrPsv']['id'] === LicenceEntityService::LICENCE_CATEGORY_PSV &&
+            if ($licence['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_PSV &&
                 isset($postData['fields']['totalVehicleAuthorisation'])) {
                 $totalVehicles = $postData['fields']['totalVehicleAuthorisation'];
             }

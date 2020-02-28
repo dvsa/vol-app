@@ -7,8 +7,8 @@
  */
 namespace OlcsTest\Controller\Licence;
 
+use Common\RefData;
 use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
-use Common\Service\Entity\LicenceEntityService as Les;
 use Common\Service\Entity\ContinuationDetailEntityService as Cdes;
 
 /**
@@ -219,14 +219,14 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
     public function dataProviderFormNumberOfDiscs()
     {
         return [
-            [false, Les::LICENCE_CATEGORY_GOODS_VEHICLE, Les::LICENCE_TYPE_RESTRICTED],
-            [false, Les::LICENCE_CATEGORY_GOODS_VEHICLE, Les::LICENCE_TYPE_SPECIAL_RESTRICTED],
-            [false, Les::LICENCE_CATEGORY_GOODS_VEHICLE, Les::LICENCE_TYPE_STANDARD_INTERNATIONAL],
-            [false, Les::LICENCE_CATEGORY_GOODS_VEHICLE, Les::LICENCE_TYPE_STANDARD_NATIONAL],
-            [true, Les::LICENCE_CATEGORY_PSV, Les::LICENCE_TYPE_RESTRICTED],
-            [false, Les::LICENCE_CATEGORY_PSV, Les::LICENCE_TYPE_SPECIAL_RESTRICTED],
-            [true, Les::LICENCE_CATEGORY_PSV, Les::LICENCE_TYPE_STANDARD_INTERNATIONAL],
-            [true, Les::LICENCE_CATEGORY_PSV, Les::LICENCE_TYPE_STANDARD_NATIONAL],
+            [false, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_RESTRICTED],
+            [false, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_SPECIAL_RESTRICTED],
+            [false, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL],
+            [false, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_STANDARD_NATIONAL],
+            [true, RefData::LICENCE_CATEGORY_PSV, RefData::LICENCE_TYPE_RESTRICTED],
+            [false, RefData::LICENCE_CATEGORY_PSV, RefData::LICENCE_TYPE_SPECIAL_RESTRICTED],
+            [true, RefData::LICENCE_CATEGORY_PSV, RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL],
+            [true, RefData::LICENCE_CATEGORY_PSV, RefData::LICENCE_TYPE_STANDARD_NATIONAL],
         ];
     }
 
@@ -307,14 +307,14 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
     public function dataProviderAlterFormNumberOfCommunityLicences()
     {
         return [
-            [false, Les::LICENCE_CATEGORY_GOODS_VEHICLE, Les::LICENCE_TYPE_RESTRICTED],
-            [false, Les::LICENCE_CATEGORY_GOODS_VEHICLE, Les::LICENCE_TYPE_SPECIAL_RESTRICTED],
-            [true, Les::LICENCE_CATEGORY_GOODS_VEHICLE, Les::LICENCE_TYPE_STANDARD_INTERNATIONAL],
-            [false, Les::LICENCE_CATEGORY_GOODS_VEHICLE, Les::LICENCE_TYPE_STANDARD_NATIONAL],
-            [true, Les::LICENCE_CATEGORY_PSV, Les::LICENCE_TYPE_RESTRICTED],
-            [false, Les::LICENCE_CATEGORY_PSV, Les::LICENCE_TYPE_SPECIAL_RESTRICTED],
-            [true, Les::LICENCE_CATEGORY_PSV, Les::LICENCE_TYPE_STANDARD_INTERNATIONAL],
-            [false, Les::LICENCE_CATEGORY_PSV, Les::LICENCE_TYPE_STANDARD_NATIONAL],
+            [false, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_RESTRICTED],
+            [false, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_SPECIAL_RESTRICTED],
+            [true, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL],
+            [false, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_STANDARD_NATIONAL],
+            [true, RefData::LICENCE_CATEGORY_PSV, RefData::LICENCE_TYPE_RESTRICTED],
+            [false, RefData::LICENCE_CATEGORY_PSV, RefData::LICENCE_TYPE_SPECIAL_RESTRICTED],
+            [true, RefData::LICENCE_CATEGORY_PSV, RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL],
+            [false, RefData::LICENCE_CATEGORY_PSV, RefData::LICENCE_TYPE_STANDARD_NATIONAL],
         ];
     }
 
