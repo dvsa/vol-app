@@ -7,16 +7,12 @@ $translationsTable = $this->placeholder('translationsTable')->getValue();
 <div class="govuk-details">
     <p><strong>Content ID:</strong> <?php echo $details['id'] ?></p>
     <p><strong>Description:</strong> <?php echo $details['description'] ?></p>
-    <p><strong>Last Modified:</strong> <?php echo is_null($details['lastModifiedOn']) ? date('d/m/Y', strtotime($details['createdOn'])) : date('d/m/Y', strtotime($details['lastModifiedOn'])) ?></p>
 </div>
 <div class="govuk-details">
     <?php echo $translationsTable ?>
 </div>
 <div class="govuk-details">
     <?php echo $locationsTable ?>
-</div>
-<div class="govuk-details">
-    <button type="submit" name="filter" class="action--primary" id="filter" value="">Edit translation key</button>
 </div>
 <div class="govuk-details">
     <a class="action--tertiary" href="<?php echo $this->url('admin-dashboard/admin-editable-translations', ['action' => 'search']); ?>">

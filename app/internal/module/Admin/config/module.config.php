@@ -810,7 +810,7 @@ return [
                             'route' =>
                                 'editable-translations[/:action][/:id][/]',
                             'constraints' => [
-                                'action' => '(index|add|edit|delete|search|details)'
+                                'action' => '(index|add|editkey|delete|search|details|languages|gettext)'
                             ],
                             'defaults' => [
                                 'controller' => Admin\Controller\EditableTranslationsController::class,
