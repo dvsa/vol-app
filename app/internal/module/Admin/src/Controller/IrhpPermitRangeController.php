@@ -139,12 +139,23 @@ class IrhpPermitRangeController extends AbstractIrhpPermitAdminController implem
     {
         $irhpPermitStock = $this->retrieveIrhpPermitStock($this->params()->fromRoute()['stockId']);
 
-        if (!empty($irhpPermitStock) &&
-            !$irhpPermitStock['irhpPermitType']['isEcmtShortTerm'] &&
+        if (empty($irhpPermitStock)) {
+            return $form;
+        }
+
+        $permitRangeDetails = $form->get('permitRangeDetails');
+
+        if (!$irhpPermitStock['irhpPermitType']['isEcmtShortTerm'] &&
             !$irhpPermitStock['irhpPermitType']['isEcmtAnnual']
         ) {
             // emissionsCategory only required for Short-term or annual ECMT
-            $form->get('permitRangeDetails')->remove('emissionsCategory');
+            $permitRangeDetails->remove('emissionsCategory');
+        }
+
+        if (!$irhpPermitStock['irhpPermitType']['isBilateral']) {
+            // journey and cabotage only required for Bilateral
+            $permitRangeDetails->remove('journey');
+            $permitRangeDetails->remove('cabotage');
         }
 
         return $form;
