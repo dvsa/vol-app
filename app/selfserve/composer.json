@@ -10,6 +10,14 @@
             "type": "composer"
         },
         {
+            "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-transfer.git",
+            "type": "vcs"
+        },
+        {
+            "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-common.git",
+            "type": "vcs"
+        },
+        {
             "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy",
             "type": "composer"
         }
@@ -37,12 +45,12 @@
         "doctrine/annotations": "^1.8",
         "symfony/filesystem": "~3.0.0",
         "zf-commons/zfc-rbac": "~2.5.0",
-        "olcs/olcs-transfer": "~4.206.0",
+        "olcs/olcs-transfer": "dev-project/bilaterals",
         "olcs/olcs-utils": "~4.206.0",
         "olcs/olcs-auth": "~4.206.0",
         "olcs/olcs-logging": "~4.206.0",
         "elendev/nexus-composer-push": "^0.1",
-        "olcs/olcs-common": "~4.206.0"
+        "olcs/olcs-common": "dev-project/bilaterals"
     },
     "require-dev": {
         "olcs/olcs-devtools": "~4.206.0",
