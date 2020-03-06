@@ -1287,6 +1287,8 @@ return array(
             'CookieSetCookieFactory' => CookieService\SetCookieFactory::class,
             'CookieCookieExpiryGenerator' => CookieService\CookieExpiryGenerator::class,
             'CookieSettingsCookieNamesProvider' => CookieService\SettingsCookieNamesProvider::class,
+            'QaIrhpApplicationViewGenerator' => QaService\ViewGenerator\IrhpApplicationViewGenerator::class,
+            'QaIrhpPermitApplicationViewGenerator' => QaService\ViewGenerator\IrhpPermitApplicationViewGenerator::class,
         ),
         'abstract_factories' => [
             \Zend\Cache\Service\StorageCacheAbstractServiceFactory::class,
@@ -1316,6 +1318,7 @@ return array(
             'QaGuidanceTemplateVarsAdder' => QaService\GuidanceTemplateVarsAdderFactory::class,
             'QaTemplateVarsGenerator' => QaService\TemplateVarsGeneratorFactory::class,
             'QaQuestionArrayProvider' => QaService\QuestionArrayProviderFactory::class,
+            'QaViewGeneratorProvider' => QaService\ViewGeneratorProviderFactory::class,
         )
     ),
     'search' => [

@@ -122,6 +122,22 @@ return [
                           'may_terminate' => true,
                           'priority' => -1,
                       ],
+                      'ipa-question' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => 'ipa/:irhpPermitApplicationId/:slug[/]',
+                              'defaults' => [
+                                  'controller'    => QaController::class,
+                                  'action'        => 'index',
+                              ],
+                              'constraints' => [
+                                  'irhpPermitApplicationId' => '[0-9]+',
+                                  'slug' => '[0-9A-Za-z\-]+',
+                              ],
+                          ],
+                          'may_terminate' => true,
+                          'priority' => -1,
+                      ],
                       'licence' => [
                           'type'    => 'segment',
                           'options' => [
