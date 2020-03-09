@@ -26,7 +26,8 @@ use Dvsa\Olcs\Transfer\Query\Permits\AvailableYears;
 use Olcs\Form\Model\Form\IrhpApplicationWithdraw as WithdrawForm;
 use Olcs\Form\Model\Form\IrhpCandidatePermit as IrhpCandidatePermitForm;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\ApplicationPath;
-use Dvsa\Olcs\Transfer\Query\IrhpApplication\GetAllByLicence as ListDTO;
+use Dvsa\Olcs\Transfer\Query\IrhpApplication\InternalApplicationsSummary;
+use Dvsa\Olcs\Transfer\Query\IrhpApplication\InternalIssuedPermitsSummary;
 use Dvsa\Olcs\Transfer\Query\IrhpCandidatePermit\GetListByIrhpApplication as CandidateListDTO;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\AvailableCountries;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitWindow\OpenByCountry;
@@ -80,7 +81,7 @@ class IrhpApplicationController extends AbstractInternalController implements
 
     // Maps the licence route parameter into the ListDTO as licence => value
     protected $listVars = ['licence'];
-    protected $listDto = ListDto::class;
+    protected $listDto = InternalApplicationsSummary::class;
     protected $itemDto = ItemDto::class;
     protected $formClass = IrhpApplication::class;
     protected $addFormClass = IrhpApplication::class;
@@ -196,16 +197,8 @@ class IrhpApplicationController extends AbstractInternalController implements
     protected function indexIssuedTable()
     {
         $response = $this->handleQuery(
-            ListDTO::create(
-                [
-                    'licence' => $this->params()->fromRoute('licence'),
-                    'irhpApplicationStatuses' => [
-                        RefData::PERMIT_APP_STATUS_VALID,
-                        RefData::PERMIT_APP_STATUS_EXPIRED,
-                    ],
-                    'sort' => 'applicationRef',
-                    'order' => 'ASC',
-                ]
+            InternalIssuedPermitsSummary::create(
+                ['licence' => $this->params()->fromRoute('licence')]
             )
         );
 
@@ -304,17 +297,6 @@ class IrhpApplicationController extends AbstractInternalController implements
     protected function modifyListQueryParameters($parameters)
     {
         $parameters['isPreGrant'] = true;
-
-        $parameters['irhpApplicationStatuses'] = [
-            RefData::PERMIT_APP_STATUS_NOT_YET_SUBMITTED,
-            RefData::PERMIT_APP_STATUS_UNDER_CONSIDERATION,
-            RefData::PERMIT_APP_STATUS_AWAITING_FEE,
-            RefData::PERMIT_APP_STATUS_FEE_PAID,
-            RefData::PERMIT_APP_STATUS_ISSUING,
-            RefData::PERMIT_APP_STATUS_CANCELLED,
-            RefData::PERMIT_APP_STATUS_WITHDRAWN,
-            RefData::PERMIT_APP_STATUS_UNSUCCESSFUL,
-        ];
 
         return $parameters;
     }
