@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Document;
 
+use Common\Category;
 use Common\Form\Elements\InputFilters\MultiCheckboxEmpty;
 use Dvsa\Olcs\Transfer\Command\Document\CreateLetter;
 use Dvsa\Olcs\Transfer\Query\Document\TemplateParagraphs;
@@ -143,6 +144,7 @@ class DocumentGenerationController extends AbstractDocumentController
                 'template' => $data['details']['documentTemplate'],
                 'data' => $queryData,
                 'meta' => json_encode(['details' => $data['details'], 'bookmarks' => $data['bookmarks']]),
+                'disableBookmarks' => $this->isProposeToRevoke($data)
             ]
         );
         $response = $this->handleCommand($dto);
@@ -269,5 +271,15 @@ class DocumentGenerationController extends AbstractDocumentController
 
             $fieldset->add($element);
         }
+    }
+
+    protected function isProposeToRevoke($data): bool
+    {
+        if ($data['details']['category'] === (string) Category::CATEGORY_COMPLIANCE &&
+            $data['details']['documentSubCategory'] === (string) Category::DOC_SUB_CATEGORY_IN_OFFICE_REVOCATION
+        ) {
+            return true;
+        }
+        return false;
     }
 }
