@@ -2,9 +2,11 @@
 
 namespace Olcs\Controller\Document;
 
+use Common\Category;
 use Dvsa\Olcs\Transfer\Command as TransferCmd;
 use Dvsa\Olcs\Transfer\Command\Document\PrintLetter as PrintLetterCmd;
 use Dvsa\Olcs\Transfer\Query as TransferQry;
+use Zend\Http\Response;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\ViewModel;
 
@@ -19,6 +21,7 @@ class DocumentFinaliseController extends AbstractDocumentController
         'close' => 'The document has been saved',
         PrintLetterCmd::METHOD_EMAIL => 'The document has been saved and sent by email',
         PrintLetterCmd::METHOD_PRINT_AND_POST => 'The document has been saved, printed and sent by post',
+        'proposeToRevoke' => 'The document has been saved and sent by post and email'
     ];
 
     private $redirect;
@@ -132,6 +135,8 @@ class DocumentFinaliseController extends AbstractDocumentController
                 $method = PrintLetterCmd::METHOD_EMAIL;
             } elseif ($this->isButtonPressed('printAndPost')) {
                 $method = PrintLetterCmd::METHOD_PRINT_AND_POST;
+            } elseif ($this->isButtonPressed('proposeToRevoke')) {
+                return $this->processProposeToRevoke();
             } else {
                 $this->hlpFlashMsgr->addSuccessMessage(self::PRINT_MSGS_SUCCESS['close']);
 
@@ -191,10 +196,20 @@ class DocumentFinaliseController extends AbstractDocumentController
             $this->hlpForm->disableElement($form, 'form-actions->printAndPost');
         }
 
+        $labelText = 'Would you like to send this letter?';
+        $subText = '';
+
+        if ($this->isProposeToRevoke()) {
+            $this->modifyFormForProposeToRevoke($form);
+            $labelText = 'Select \'Propose to revoke\' to send this letter to all known postal and email addresses.';
+            $subText = 'Select \'Close\' to save the letter without sending.';
+        }
+
         $view = new ViewModel(
             [
                 'form' => $form,
-                'label' => 'Would you like to send this letter?',
+                'label' => $labelText,
+                'subText' => $subText
             ]
         );
         $view->setTemplate('pages/confirm');
@@ -312,5 +327,54 @@ class DocumentFinaliseController extends AbstractDocumentController
         $type = $routeParams['type'];
 
         return $this->redirectToDocumentRoute($type, null, $routeParams, $ajax);
+    }
+
+    private function modifyFormForProposeToRevoke(\Common\Form\Form $form): void
+    {
+        $this->hlpForm->remove($form, 'form-actions->email');
+        $form->get('form-actions')->get('printAndPost')->removeAttribute('disabled');
+        $form->get('form-actions')->get('printAndPost')->setLabel('Propose to revoke');
+        $form->get('form-actions')->get('printAndPost')->setName('proposeToRevoke');
+    }
+
+    private function isProposeToRevoke(): bool
+    {
+        $docData = $this->fetchDocData();
+
+        return $docData["details"]["category"] === Category::CATEGORY_COMPLIANCE
+            && $docData["details"]["documentSubCategory"] === Category::DOC_SUB_CATEGORY_IN_OFFICE_REVOCATION;
+    }
+
+    private function processProposeToRevoke(): Response
+    {
+        $documentData = $this->fetchDocData();
+
+        $proposeToRevokeCmdData = [
+            'licence' => $this->getLicenceIdFromRouteParams(),
+            'document' => $documentData['data']['id']
+        ];
+
+        $response = $this->handleCommand(
+            TransferCmd\Licence\ProposeToRevoke::create($proposeToRevokeCmdData)
+        );
+
+        if ($response->isOk()) {
+            $this->hlpFlashMsgr->addSuccessMessage(self::PRINT_MSGS_SUCCESS['proposeToRevoke']);
+        } else {
+            $this->hlpFlashMsgr->addUnknownError();
+        }
+
+        return $this->handleRedirectToDocumentRoute(true);
+    }
+
+    private function getLicenceIdFromRouteParams(): int
+    {
+        $routeParams = $this->params()->fromRoute();
+        $type = $routeParams['type'];
+
+        if ($type === 'application') {
+            return $this->getLicenceIdForApplication();
+        }
+        return $this->params('licence');
     }
 }
