@@ -3,7 +3,6 @@
 namespace Olcs\Controller\Lva\Variation;
 
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
-use Common\Service\Entity\LicenceEntityService as Licence;
 use Olcs\Controller\Lva\AbstractUndertakingsController;
 use Common\RefData;
 use Common\Form\Form;
@@ -61,9 +60,9 @@ class UndertakingsController extends AbstractUndertakingsController
         );
 
         // if interimFee is null
-        if(!$applicationData['interimFee']) {
+        if (!$applicationData['interimFee']) {
             // remove the block that displays it
-            if(!$applicationData['interimFee']) {
+            if (!$applicationData['interimFee']) {
                 $form->get('interim')->remove('interimFee');
             }
             // change the option label

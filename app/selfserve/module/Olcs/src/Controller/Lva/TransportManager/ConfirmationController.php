@@ -6,7 +6,6 @@ use Common\Controller\Lva\AbstractController;
 use Common\RefData;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 use Olcs\Controller\Lva\Traits\TransportManagerApplicationTrait;
-use Common\Service\Entity\TransportManagerApplicationEntityService;
 
 class ConfirmationController extends AbstractController
 {
@@ -125,14 +124,14 @@ class ConfirmationController extends AbstractController
     protected function isUserPermitted()
     {
         if ($this->tma['isTmLoggedInUser'] &&
-            ($this->tma['tmApplicationStatus']['id'] === TransportManagerApplicationEntityService::STATUS_TM_SIGNED ||
-                $this->tma['tmApplicationStatus']['id'] === TransportManagerApplicationEntityService::STATUS_RECEIVED) &&
+            ($this->tma['tmApplicationStatus']['id'] === RefData::TMA_STATUS_TM_SIGNED ||
+                $this->tma['tmApplicationStatus']['id'] === RefData::TMA_STATUS_RECEIVED) &&
             !is_null($this->tma['tmDigitalSignature'])) {
             return true;
         }
 
         if ((!$this->tma['isTmLoggedInUser']) &&
-            $this->tma['tmApplicationStatus']['id'] === TransportManagerApplicationEntityService::STATUS_RECEIVED &&
+            $this->tma['tmApplicationStatus']['id'] === RefData::TMA_STATUS_RECEIVED &&
             !is_null($this->tma['opDigitalSignature'])) {
             return true;
         }

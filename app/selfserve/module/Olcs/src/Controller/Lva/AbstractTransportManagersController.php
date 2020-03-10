@@ -5,7 +5,6 @@ namespace Olcs\Controller\Lva;
 use Common\Controller\Lva\AbstractTransportManagersController as CommonAbstractTmController;
 use Common\Controller\Traits\GenericUpload;
 use Common\RefData;
-use Common\Service\Entity\TransportManagerApplicationEntityService;
 use Dvsa\Olcs\Transfer\Command;
 
 /**
@@ -54,7 +53,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     {
         // move status back to incomplete
         $tmaId = (int)$this->params('child_id');
-        if ($this->updateTmaStatus($tmaId, TransportManagerApplicationEntityService::STATUS_INCOMPLETE)) {
+        if ($this->updateTmaStatus($tmaId, RefData::TMA_STATUS_INCOMPLETE)) {
             return $this->redirect()->toRouteAjax("lva-{$this->lva}/transport_manager_details", [], [], true);
         } else {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
@@ -82,36 +81,36 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     {
         $isUserTm = $tma['isTmLoggedInUser'];
         switch ($tma['tmApplicationStatus']['id']) {
-            case TransportManagerApplicationEntityService::STATUS_POSTAL_APPLICATION:
+            case RefData::TMA_STATUS_POSTAL_APPLICATION:
                 return $this->pagePostal($tma);
 
-            case TransportManagerApplicationEntityService::STATUS_DETAILS_SUBMITTED:
-            case TransportManagerApplicationEntityService::STATUS_DETAILS_CHECKED:
+            case RefData::TMA_STATUS_DETAILS_SUBMITTED:
+            case RefData::TMA_STATUS_DETAILS_CHECKED:
                 $tma = $this->changeToCorrectTmaStatus(
                     $tma,
-                    TransportManagerApplicationEntityService::STATUS_INCOMPLETE
+                    RefData::TMA_STATUS_INCOMPLETE
                 );
                 return $this->callActionByStatus($tma);
-            case TransportManagerApplicationEntityService::STATUS_INCOMPLETE:
+            case RefData::TMA_STATUS_INCOMPLETE:
                 if ($isUserTm) {
                     return $this->page1Point1($tma);
                 } else {
                     return $this->page1Point3($tma);
                 }
-            case TransportManagerApplicationEntityService::STATUS_TM_SIGNED:
-            case TransportManagerApplicationEntityService::STATUS_OPERATOR_APPROVED:
+            case RefData::TMA_STATUS_TM_SIGNED:
+            case RefData::TMA_STATUS_OPERATOR_APPROVED:
                 if ($isUserTm) {
                     return $this->page2Point1($tma);
                 } else {
                     $tma = $this->changeToCorrectTmaStatus(
                         $tma,
-                        TransportManagerApplicationEntityService::STATUS_TM_SIGNED
+                        RefData::TMA_STATUS_TM_SIGNED
                     );
                     return $this->page2Point2($tma);
                 }
-            case TransportManagerApplicationEntityService::STATUS_OPERATOR_SIGNED:
+            case RefData::TMA_STATUS_OPERATOR_SIGNED:
                 return $this->page3($tma, $isUserTm);
-            case TransportManagerApplicationEntityService::STATUS_RECEIVED:
+            case RefData::TMA_STATUS_RECEIVED:
                 return $this->page4($tma, $isUserTm);
         }
     }
@@ -228,7 +227,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
                 $this->updateTmaStatus(
                     $transportManagerApplicationData['id'],
-                    TransportManagerApplicationEntityService::STATUS_DETAILS_SUBMITTED
+                    RefData::TMA_STATUS_DETAILS_SUBMITTED
                 );
                 return $this->redirectToCheckAnswersPage($transportManagerApplicationData);
             }
@@ -1245,7 +1244,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         } elseif (isset($confirmTmDetailsRequest)) {
             $tma = $this->changeToCorrectTmaStatus(
                 $tma,
-                TransportManagerApplicationEntityService::STATUS_OPERATOR_APPROVED
+                RefData::TMA_STATUS_OPERATOR_APPROVED
             );
             return $this->redirectToOperatorDeclarationPage($tma);
         }
@@ -1506,7 +1505,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     private function updateTmaStatusAndSendAmendTmApplicationEmail(): void
     {
         $tmaId = (int)$this->params('child_id');
-        if ($this->updateTmaStatus($tmaId, TransportManagerApplicationEntityService::STATUS_INCOMPLETE)) {
+        if ($this->updateTmaStatus($tmaId, RefData::TMA_STATUS_INCOMPLETE)) {
             $this->sendTmApplicationEmail(self::TM_APPLICATION_AMEND_EMAIL);
         } else {
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
