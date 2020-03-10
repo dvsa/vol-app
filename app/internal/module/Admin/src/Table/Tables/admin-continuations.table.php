@@ -1,7 +1,6 @@
 <?php
 
 use Common\RefData;
-use Common\Service\Entity\ContinuationDetailEntityService;
 
 return array(
     'variables' => array(
@@ -24,10 +23,10 @@ return array(
             ];
 
             $enabledStatuses = [
-                ContinuationDetailEntityService::STATUS_PREPARED,
-                ContinuationDetailEntityService::STATUS_PRINTING,
-                ContinuationDetailEntityService::STATUS_PRINTED,
-                ContinuationDetailEntityService::STATUS_ERROR
+                RefData::CONTINUATION_DETAIL_STATUS_PREPARED,
+                RefData::CONTINUATION_DETAIL_STATUS_PRINTING,
+                RefData::CONTINUATION_DETAIL_STATUS_PRINTED,
+                RefData::CONTINUATION_DETAIL_STATUS_ERROR
             ];
 
             return !(

@@ -2,10 +2,10 @@
 
 namespace OlcsTest\Data\Mapper;
 
+use Common\RefData;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Data\Mapper\TransportManagerApplication as Sut;
-use Common\Service\Entity\TransportManagerApplicationEntityService;
 
 /**
  * @covers \Olcs\Data\Mapper\TransportManagerApplication
@@ -75,16 +75,16 @@ class TransportManagerApplicationTest extends MockeryTestCase
     {
         return [
             [
-                'inputStatus' => TransportManagerApplicationEntityService::STATUS_DETAILS_CHECKED,
-                'outputStatus' => TransportManagerApplicationEntityService::STATUS_INCOMPLETE,
+                'inputStatus' => RefData::TMA_STATUS_DETAILS_CHECKED,
+                'outputStatus' => RefData::TMA_STATUS_INCOMPLETE,
             ],
             [
-                'inputStatus' => TransportManagerApplicationEntityService::STATUS_DETAILS_SUBMITTED,
-                'outputStatus' => TransportManagerApplicationEntityService::STATUS_INCOMPLETE,
+                'inputStatus' => RefData::TMA_STATUS_DETAILS_SUBMITTED,
+                'outputStatus' => RefData::TMA_STATUS_INCOMPLETE,
             ],
             [
-                'inputStatus' => TransportManagerApplicationEntityService::STATUS_OPERATOR_APPROVED,
-                'outputStatus' => TransportManagerApplicationEntityService::STATUS_TM_SIGNED,
+                'inputStatus' => RefData::TMA_STATUS_OPERATOR_APPROVED,
+                'outputStatus' => RefData::TMA_STATUS_TM_SIGNED,
             ],
         ];
     }

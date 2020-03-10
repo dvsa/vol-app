@@ -9,7 +9,6 @@ namespace OlcsTest\Controller\Licence;
 
 use Common\RefData;
 use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
-use Common\Service\Entity\ContinuationDetailEntityService as Cdes;
 
 /**
  * Continuation Controller Test
@@ -30,7 +29,7 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
         $mockForm = \Mockery::mock();
         $continuationDetail = [
             'status' => [
-                'id' => Cdes::STATUS_COMPLETE
+                'id' => RefData::CONTINUATION_DETAIL_STATUS_COMPLETE
             ]
         ];
 
@@ -47,7 +46,7 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
         $mockForm = \Mockery::mock();
         $continuationDetail = [
             'status' => [
-                'id' => Cdes::STATUS_PRINTED
+                'id' => RefData::CONTINUATION_DETAIL_STATUS_PRINTED
             ]
         ];
 
@@ -57,18 +56,18 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
     public function dataProviderAlterFormReceived()
     {
         return [
-            [true, Cdes::STATUS_ACCEPTABLE, 'N'],
-            [true, Cdes::STATUS_COMPLETE, 'N'],
-            [true, Cdes::STATUS_PREPARED, 'N'],
-            [true, Cdes::STATUS_PRINTED, 'N'],
-            [true, Cdes::STATUS_PRINTING, 'N'],
-            [true, Cdes::STATUS_UNACCEPTABLE, 'N'],
-            [false, Cdes::STATUS_ACCEPTABLE, 'Y'],
-            [false, Cdes::STATUS_COMPLETE, 'Y'],
-            [false, Cdes::STATUS_PREPARED, 'Y'],
-            [true, Cdes::STATUS_PRINTED, 'Y'],
-            [false, Cdes::STATUS_PRINTING, 'Y'],
-            [false, Cdes::STATUS_UNACCEPTABLE, 'Y'],
+            [true, RefData::CONTINUATION_DETAIL_STATUS_ACCEPTABLE, 'N'],
+            [true, RefData::CONTINUATION_DETAIL_STATUS_COMPLETE, 'N'],
+            [true, RefData::CONTINUATION_DETAIL_STATUS_PREPARED, 'N'],
+            [true, RefData::CONTINUATION_DETAIL_STATUS_PRINTED, 'N'],
+            [true, RefData::CONTINUATION_DETAIL_STATUS_PRINTING, 'N'],
+            [true, RefData::CONTINUATION_DETAIL_STATUS_UNACCEPTABLE, 'N'],
+            [false, RefData::CONTINUATION_DETAIL_STATUS_ACCEPTABLE, 'Y'],
+            [false, RefData::CONTINUATION_DETAIL_STATUS_COMPLETE, 'Y'],
+            [false, RefData::CONTINUATION_DETAIL_STATUS_PREPARED, 'Y'],
+            [true, RefData::CONTINUATION_DETAIL_STATUS_PRINTED, 'Y'],
+            [false, RefData::CONTINUATION_DETAIL_STATUS_PRINTING, 'Y'],
+            [false, RefData::CONTINUATION_DETAIL_STATUS_UNACCEPTABLE, 'Y'],
         ];
     }
 
@@ -99,17 +98,17 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
     public function dataProviderAlterFormChecklistStatus()
     {
         return [
-            [true, Cdes::STATUS_ACCEPTABLE, true],
-            [false, Cdes::STATUS_COMPLETE, true],
-            [false, Cdes::STATUS_PREPARED, true],
-            [true, Cdes::STATUS_PRINTED, true],
-            [false, Cdes::STATUS_PRINTING, true],
-            [true, Cdes::STATUS_UNACCEPTABLE, false],
-            [false, Cdes::STATUS_COMPLETE, false],
-            [false, Cdes::STATUS_PREPARED, false],
-            [true, Cdes::STATUS_PRINTED, false],
-            [false, Cdes::STATUS_PRINTING, false],
-            [true, Cdes::STATUS_UNACCEPTABLE, false],
+            [true, RefData::CONTINUATION_DETAIL_STATUS_ACCEPTABLE, true],
+            [false, RefData::CONTINUATION_DETAIL_STATUS_COMPLETE, true],
+            [false, RefData::CONTINUATION_DETAIL_STATUS_PREPARED, true],
+            [true, RefData::CONTINUATION_DETAIL_STATUS_PRINTED, true],
+            [false, RefData::CONTINUATION_DETAIL_STATUS_PRINTING, true],
+            [true, RefData::CONTINUATION_DETAIL_STATUS_UNACCEPTABLE, false],
+            [false, RefData::CONTINUATION_DETAIL_STATUS_COMPLETE, false],
+            [false, RefData::CONTINUATION_DETAIL_STATUS_PREPARED, false],
+            [true, RefData::CONTINUATION_DETAIL_STATUS_PRINTED, false],
+            [false, RefData::CONTINUATION_DETAIL_STATUS_PRINTING, false],
+            [true, RefData::CONTINUATION_DETAIL_STATUS_UNACCEPTABLE, false],
         ];
     }
 
@@ -124,13 +123,13 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
         $mockElement = \Mockery::mock();
 
         $valueOptions = [
-            Cdes::STATUS_ACCEPTABLE => 'A',
-            Cdes::STATUS_COMPLETE => 'B',
-            Cdes::STATUS_ERROR => 'C',
-            Cdes::STATUS_PREPARED => 'D',
-            Cdes::STATUS_PRINTED => 'E',
-            Cdes::STATUS_PRINTING => 'F',
-            Cdes::STATUS_UNACCEPTABLE => 'G',
+            RefData::CONTINUATION_DETAIL_STATUS_ACCEPTABLE => 'A',
+            RefData::CONTINUATION_DETAIL_STATUS_COMPLETE => 'B',
+            RefData::CONTINUATION_DETAIL_STATUS_ERROR => 'C',
+            RefData::CONTINUATION_DETAIL_STATUS_PREPARED => 'D',
+            RefData::CONTINUATION_DETAIL_STATUS_PRINTED => 'E',
+            RefData::CONTINUATION_DETAIL_STATUS_PRINTING => 'F',
+            RefData::CONTINUATION_DETAIL_STATUS_UNACCEPTABLE => 'G',
         ];
 
         $mockForm = \Mockery::mock();
@@ -147,14 +146,14 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
             }
             $mockElement->shouldReceive('setValueOptions')->once()->with(
                 [
-                    Cdes::STATUS_ACCEPTABLE => 'A',
-                    Cdes::STATUS_PRINTED => 'E (not continued)',
-                    Cdes::STATUS_UNACCEPTABLE => 'G',
+                    RefData::CONTINUATION_DETAIL_STATUS_ACCEPTABLE => 'A',
+                    RefData::CONTINUATION_DETAIL_STATUS_PRINTED => 'E (not continued)',
+                    RefData::CONTINUATION_DETAIL_STATUS_UNACCEPTABLE => 'G',
                 ]
             )->andReturn();
         } else {
             $mockFormHelper->shouldReceive('disableElement')->with($mockForm, 'fields->checklistStatus')->once();
-            $valueOptions[Cdes::STATUS_PRINTED] = 'E (not continued)';
+            $valueOptions[RefData::CONTINUATION_DETAIL_STATUS_PRINTED] = 'E (not continued)';
             $mockElement->shouldReceive('setValueOptions')->with($valueOptions)->once();
             $mockElement->shouldReceive('setAttribute');
         }
@@ -404,13 +403,13 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
     public function dataProviderContinuationDetailStatusElementsEnabled()
     {
         return [
-            [true, Cdes::STATUS_ACCEPTABLE],
-            [false, Cdes::STATUS_COMPLETE],
-            [false, Cdes::STATUS_ERROR],
-            [false, Cdes::STATUS_PREPARED],
-            [true, Cdes::STATUS_PRINTED],
-            [false, Cdes::STATUS_PRINTING],
-            [true, Cdes::STATUS_UNACCEPTABLE],
+            [true, RefData::CONTINUATION_DETAIL_STATUS_ACCEPTABLE],
+            [false, RefData::CONTINUATION_DETAIL_STATUS_COMPLETE],
+            [false, RefData::CONTINUATION_DETAIL_STATUS_ERROR],
+            [false, RefData::CONTINUATION_DETAIL_STATUS_PREPARED],
+            [true, RefData::CONTINUATION_DETAIL_STATUS_PRINTED],
+            [false, RefData::CONTINUATION_DETAIL_STATUS_PRINTING],
+            [true, RefData::CONTINUATION_DETAIL_STATUS_UNACCEPTABLE],
         ];
     }
 }

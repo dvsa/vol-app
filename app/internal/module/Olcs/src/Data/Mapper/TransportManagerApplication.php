@@ -2,7 +2,7 @@
 
 namespace Olcs\Data\Mapper;
 
-use Common\Service\Entity\TransportManagerApplicationEntityService;
+use Common\RefData;
 
 /**
  * Transport Manager Application mapper
@@ -133,12 +133,11 @@ class TransportManagerApplication
     {
         $status = $data['tmApplicationStatus']['id'];
 
-        if ($data['tmApplicationStatus']['id'] === TransportManagerApplicationEntityService::STATUS_DETAILS_CHECKED ||
-            $data['tmApplicationStatus']['id'] === TransportManagerApplicationEntityService::STATUS_DETAILS_SUBMITTED) {
-            $status = TransportManagerApplicationEntityService::STATUS_INCOMPLETE;
-        } elseif ($data['tmApplicationStatus']['id'] ===
-            TransportManagerApplicationEntityService::STATUS_OPERATOR_APPROVED) {
-            $status = TransportManagerApplicationEntityService::STATUS_TM_SIGNED;
+        if ($data['tmApplicationStatus']['id'] === RefData::TMA_STATUS_DETAILS_CHECKED ||
+            $data['tmApplicationStatus']['id'] === RefData::TMA_STATUS_DETAILS_SUBMITTED) {
+            $status = RefData::TMA_STATUS_INCOMPLETE;
+        } elseif ($data['tmApplicationStatus']['id'] === RefData::TMA_STATUS_OPERATOR_APPROVED) {
+            $status = RefData::TMA_STATUS_TM_SIGNED;
         }
 
         return $status;

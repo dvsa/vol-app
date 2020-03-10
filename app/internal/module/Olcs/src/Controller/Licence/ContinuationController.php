@@ -3,7 +3,6 @@
 namespace Olcs\Controller\Licence;
 
 use Common\RefData;
-use Common\Service\Entity\ContinuationDetailEntityService;
 use Olcs\Controller\AbstractController;
 use Olcs\Data\Mapper\Continuation as ContinuationMapper;
 use Zend\View\Model\ViewModel;
@@ -286,7 +285,7 @@ class ContinuationController extends AbstractController
     public function alterFormActions($form, $hasOutstandingContinuationFee, $continuationDetail)
     {
         if ($hasOutstandingContinuationFee
-            || $continuationDetail['status']['id'] === ContinuationDetailEntityService::STATUS_COMPLETE
+            || $continuationDetail['status']['id'] === RefData::CONTINUATION_DETAIL_STATUS_COMPLETE
             ) {
             $this->getServiceLocator()->get('Helper\Form')->remove($form, 'form-actions->continueLicence');
         }
@@ -302,8 +301,8 @@ class ContinuationController extends AbstractController
      */
     protected function alterFormReceived($form, $continuationDetail)
     {
-        if ($continuationDetail['status']['id'] === ContinuationDetailEntityService::STATUS_PRINTED
-            || ($continuationDetail['status']['id'] !== ContinuationDetailEntityService::STATUS_PRINTED
+        if ($continuationDetail['status']['id'] === RefData::CONTINUATION_DETAIL_STATUS_PRINTED
+            || ($continuationDetail['status']['id'] !== RefData::CONTINUATION_DETAIL_STATUS_PRINTED
             && $continuationDetail['received'] === 'N')) {
             // Enabled by default
         } else {
@@ -319,9 +318,9 @@ class ContinuationController extends AbstractController
     protected function getAllowedContinuationStatuses()
     {
         return [
-            ContinuationDetailEntityService::STATUS_ACCEPTABLE,
-            ContinuationDetailEntityService::STATUS_UNACCEPTABLE,
-            ContinuationDetailEntityService::STATUS_PRINTED
+            RefData::CONTINUATION_DETAIL_STATUS_ACCEPTABLE,
+            RefData::CONTINUATION_DETAIL_STATUS_UNACCEPTABLE,
+            RefData::CONTINUATION_DETAIL_STATUS_PRINTED
         ];
     }
 
@@ -368,8 +367,8 @@ class ContinuationController extends AbstractController
             $e->setAttribute('data-always-disabled', 'true');
         }
 
-        if (isset($valueOptions[ContinuationDetailEntityService::STATUS_PRINTED])) {
-            $valueOptions[ContinuationDetailEntityService::STATUS_PRINTED] .= ' (not continued)';
+        if (isset($valueOptions[RefData::CONTINUATION_DETAIL_STATUS_PRINTED])) {
+            $valueOptions[RefData::CONTINUATION_DETAIL_STATUS_PRINTED] .= ' (not continued)';
         }
         $form->get('fields')->get('checklistStatus')->setValueOptions($valueOptions);
     }

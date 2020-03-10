@@ -12,7 +12,6 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Service\Helper\ApplicationOverviewHelperService as Sut;
 use OlcsTest\Bootstrap;
-use Common\Service\Entity\ApplicationEntityService as Application;
 
 /**
  * Application Overview Helper Service Test
