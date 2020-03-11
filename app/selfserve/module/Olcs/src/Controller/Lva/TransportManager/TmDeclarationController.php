@@ -4,7 +4,6 @@ namespace OLCS\Controller\Lva\TransportManager;
 
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Command;
-use Common\Service\Entity\TransportManagerApplicationEntityService;
 
 class TmDeclarationController extends AbstractDeclarationController
 {
@@ -65,8 +64,7 @@ class TmDeclarationController extends AbstractDeclarationController
     protected function isUserPermitted()
     {
         if ($this->tma['isTmLoggedInUser'] &&
-            $this->tma['tmApplicationStatus']['id'] ===
-            TransportManagerApplicationEntityService::STATUS_DETAILS_CHECKED) {
+            $this->tma['tmApplicationStatus']['id'] === RefData::TMA_STATUS_DETAILS_CHECKED) {
             return true;
         }
         return false;
