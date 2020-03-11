@@ -19,7 +19,7 @@ class IrhpApplicationController extends AbstractSelfserveController implements T
     ];
 
     protected $conditionalDisplayConfig = [
-        'default' => ConditionalDisplayConfig::IRHP_APP_NOT_SUBMITTED,
+        'default' => ConditionalDisplayConfig::IRHP_APP_OVERVIEW_ACCESSIBLE,
     ];
 
     protected $templateConfig = [
@@ -32,4 +32,17 @@ class IrhpApplicationController extends AbstractSelfserveController implements T
             'prependTitleDataKey' => IrhpApplication::DATA_KEY,
         ]
     ];
+
+    /**
+     * Retrieve data for the specified DTOs
+     */
+    public function retrieveData()
+    {
+        parent::retrieveData();
+
+        if (isset($this->data['questionAnswer']['countries'])) {
+            $this->data['fromDashboard'] = isset($this->queryParams['fromDashboard']);
+            $this->templateConfig['default'] = 'permits/irhp-application-overview-bilateral';
+        }
+    }
 }

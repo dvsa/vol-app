@@ -28,6 +28,7 @@ use Permits\Controller\QaControllerFactory;
 use Permits\Controller\YearController;
 use Permits\Controller\WindowClosedController;
 use Permits\Controller\IrhpStockController;
+use Permits\Controller\EssentialInformationController;
 use Permits\Data\Mapper;
 
 return [
@@ -58,6 +59,7 @@ return [
         YearController::class => YearController::class,
         WindowClosedController::class => WindowClosedController::class,
         IrhpStockController::class => IrhpStockController::class,
+        EssentialInformationController::class => EssentialInformationController::class,
     ],
     'factories' => [
         QaController::class => QaControllerFactory::class,
@@ -153,6 +155,17 @@ return [
                               'route'    => 'countries[/]',
                               'defaults' => [
                                   'controller'    => IrhpApplicationCountryController::class,
+                                  'action'        => 'question',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'essential-information' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => 'country/:country/essential-information[/]',
+                              'defaults' => [
+                                  'controller'    => EssentialInformationController::class,
                                   'action'        => 'question',
                               ],
                           ],

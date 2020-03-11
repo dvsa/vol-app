@@ -102,6 +102,21 @@ class ConditionalDisplayConfig
         ],
     ];
 
+    const IRHP_APP_OVERVIEW_ACCESSIBLE = [
+        [
+            'source' => IrhpAppDataSource::DATA_KEY,
+            'route' => IrhpApplicationSection::ROUTE_PERMITS,
+            'key' => 'isNotYetSubmitted',
+            'value' => true
+        ],
+        [
+            'source' => IrhpAppDataSource::DATA_KEY,
+            'route' => IrhpApplicationSection::ROUTE_COUNTRIES,
+            'key' => 'isOverviewAccessible',
+            'value' => true
+        ],
+    ];
+
     const IRHP_APP_CAN_PAY_APP_FEE = [
         [
             'source' => IrhpAppDataSource::DATA_KEY,
