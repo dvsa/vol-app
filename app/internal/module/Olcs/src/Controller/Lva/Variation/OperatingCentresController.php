@@ -11,8 +11,6 @@ use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 use Common\Controller\Lva\Traits\VariationOperatingCentresControllerTrait;
 use Olcs\Controller\Interfaces\VariationControllerInterface;
-use Common\Service\Entity\LicenceEntityService;
-use Common\Service\Entity\ApplicationEntityService;
 
 /**
  * Internal Operating Centres Variation Controller

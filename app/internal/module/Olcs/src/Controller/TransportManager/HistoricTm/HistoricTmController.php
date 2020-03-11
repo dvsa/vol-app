@@ -10,7 +10,6 @@ namespace Olcs\Controller\TransportManager\HistoricTm;
 use Dvsa\Olcs\Transfer\Query\Tm\HistoricTm as HistoricTmQry;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\TransportManager as Mapper;
-use Common\Service\Entity\TransportManagerEntityService;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
 use Olcs\Form\Model\Form\TransportManager as TransportManagerForm;

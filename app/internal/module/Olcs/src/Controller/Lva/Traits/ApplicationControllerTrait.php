@@ -7,10 +7,10 @@
  */
 namespace Olcs\Controller\Lva\Traits;
 
+use Common\RefData;
 use Zend\Form\Form;
 use Zend\View\Model\ViewModel;
 use Common\Controller\Lva\Traits\CommonApplicationControllerTrait;
-use Common\Service\Entity\ApplicationCompletionEntityService;
 use Olcs\Controller\Traits\ApplicationControllerTrait as GenericInternalApplicationControllerTrait;
 
 /**
@@ -20,11 +20,9 @@ use Olcs\Controller\Traits\ApplicationControllerTrait as GenericInternalApplicat
  */
 trait ApplicationControllerTrait
 {
-    use InternalControllerTrait,
-        CommonApplicationControllerTrait,
-        GenericInternalApplicationControllerTrait {
-            GenericInternalApplicationControllerTrait::render as genericRender;
-        }
+    use InternalControllerTrait, CommonApplicationControllerTrait, GenericInternalApplicationControllerTrait {
+        GenericInternalApplicationControllerTrait::render as genericRender;
+    }
 
     /**
      * Hook into the dispatch before the controller action is executed
@@ -130,15 +128,14 @@ trait ApplicationControllerTrait
         );
 
         foreach ($accessibleSections as $section => $settings) {
-
             $statusIndex = lcfirst($filter->underscoreToCamel($section)) . 'Status';
 
             $class = '';
             switch ($applicationStatuses[$statusIndex]) {
-                case ApplicationCompletionEntityService::STATUS_COMPLETE:
+                case RefData::APPLICATION_COMPLETION_STATUS_COMPLETE:
                     $class = 'complete';
                     break;
-                case ApplicationCompletionEntityService::STATUS_INCOMPLETE:
+                case RefData::APPLICATION_COMPLETION_STATUS_INCOMPLETE:
                     $class = 'incomplete';
                     break;
             }

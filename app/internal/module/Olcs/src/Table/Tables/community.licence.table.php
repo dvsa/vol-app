@@ -22,9 +22,9 @@ return array(
             return in_array(
                 $row['status']['id'],
                 [
-                    Common\Service\Entity\CommunityLicEntityService::STATUS_EXPIRED,
-                    Common\Service\Entity\CommunityLicEntityService::STATUS_VOID,
-                    Common\Service\Entity\CommunityLicEntityService::STATUS_RETURNDED
+                    Common\RefData::COMMUNITY_LICENCE_STATUS_EXPIRED,
+                    Common\RefData::COMMUNITY_LICENCE_STATUS_VOID,
+                    Common\RefData::COMMUNITY_LICENCE_STATUS_RETURNDED
                 ]
             );
         },
