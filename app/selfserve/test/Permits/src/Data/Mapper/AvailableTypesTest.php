@@ -51,10 +51,6 @@ class AvailableTypesTest extends TestCase
                     'types' => [
                         'types' => []
                     ],
-                    'guidance' => [
-                        'disableHtmlEscape' => true,
-                        'value' => 'permits.page.type.hint'
-                    ]
                 ],
                 'expectedValueOptions' => [],
             ],
@@ -98,10 +94,6 @@ class AvailableTypesTest extends TestCase
                             ],
                         ]
                     ],
-                    'guidance' => [
-                        'disableHtmlEscape' => true,
-                        'value' => 'permits.page.type.hint'
-                    ]
                 ],
                 'expectedValueOptions' => [
                     [

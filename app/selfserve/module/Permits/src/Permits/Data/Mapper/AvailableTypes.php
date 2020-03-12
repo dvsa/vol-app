@@ -39,11 +39,6 @@ class AvailableTypes
 
         $form->get('fields')->get('type')->setValueOptions($valueOptions);
 
-        $data['guidance'] = [
-            'disableHtmlEscape' => true,
-            'value' => 'permits.page.type.hint',
-        ];
-
         return $data;
     }
 }
