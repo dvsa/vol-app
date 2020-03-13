@@ -40,8 +40,8 @@ class AvailableCountries
 
         $values = [];
 
-        foreach ($irhpApplication['irhpPermitApplications'] as $irhpPermitApplication) {
-            $countryId = $irhpPermitApplication['irhpPermitWindow']['irhpPermitStock']['country']['id'];
+        foreach ($irhpApplication['countrys'] as $country) {
+            $countryId = $country['id'];
 
             if (!in_array($countryId, $values)) {
                 $values[] = $countryId;

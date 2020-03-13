@@ -5,6 +5,7 @@ use Common\Controller\Interfaces\ToggleAwareInterface;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\UpdateCountries;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
+use Permits\Controller\Config\DataSource\IrhpApplication;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Controller\Config\Form\FormConfig;
@@ -38,7 +39,6 @@ class IrhpApplicationCountryController extends AbstractSelfserveController imple
         'default' => [
             'browserTitle' => 'permits.page.bilateral.countries.browser.title',
             'question' => 'permits.page.bilateral.countries.question',
-            'hint' => 'permits.page.bilateral.countries.hint',
             'backUri' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
         ]
     ];
@@ -49,7 +49,7 @@ class IrhpApplicationCountryController extends AbstractSelfserveController imple
             'checkConditionalDisplay' => true,
             'command' => UpdateCountries::class,
             'params' => ParamsConfig::ID_FROM_ROUTE,
-            'step' => IrhpApplicationSection::ROUTE_NO_OF_PERMITS,
+            'step' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
             'saveAndReturnStep' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
         ],
     ];
@@ -77,5 +77,19 @@ class IrhpApplicationCountryController extends AbstractSelfserveController imple
         }
 
         return parent::onDispatch($e);
+    }
+
+    public function mergeTemplateVars()
+    {
+        if (!isset($this->queryParams['fromOverview'])) {
+            // overwrite default backUri
+            // to be removed by OLCS-25956 when a generic solution is found
+            $this->templateVarsConfig['default']['backUri'] = IrhpApplicationSection::ROUTE_ADD_LICENCE;
+            $this->templateVarsConfig['default']['backUriParams'] = [
+                'type' => $this->data[IrhpApplication::DATA_KEY]['irhpPermitType']['id']
+            ];
+        }
+
+        parent::mergeTemplateVars();
     }
 }

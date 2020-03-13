@@ -1,5 +1,5 @@
 
-<?php echo $this->permitsBackLink('common.link.back.label', isset($data['backUri']) ? $data['backUri'] : ''); ?>
+<?php echo $this->permitsBackLink('common.link.back.label', isset($data['backUri']) ? $data['backUri'] : '', $data['backUriParams'] ?? []); ?>
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
