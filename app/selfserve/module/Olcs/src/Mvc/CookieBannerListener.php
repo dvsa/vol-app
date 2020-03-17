@@ -7,39 +7,71 @@
  */
 namespace Olcs\Mvc;
 
+use Common\Service\Helper\UrlHelperService;
+use Olcs\Service\Cookie\AcceptAllSetCookieGenerator;
+use Olcs\Service\Cookie\BannerVisibilityProvider;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;
-use Zend\Mvc\MvcEvent;
 use Zend\Http\Request as HttpRequest;
-use Zend\ServiceManager\FactoryInterface;
+use Zend\Mvc\MvcEvent;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\View\Helper\Placeholder;
 
 /**
  * Cookie Banner Listener
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CookieBannerListener implements ListenerAggregateInterface, FactoryInterface
+class CookieBannerListener implements ListenerAggregateInterface
 {
     use ListenerAggregateTrait;
 
-    /**
-     * @var CookieBanner
-     */
-    protected $cookieBanner;
+    /** @var AcceptAllSetCookieGenerator */
+    private $acceptAllSetCookieGenerator;
 
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->cookieBanner = $serviceLocator->get('CookieBanner');
-        return $this;
+    /** @var BannerVisibilityProvider */
+    private $bannerVisibilityProvider;
+
+    /** @var Placeholder */
+    private $placeholder;
+
+    /** @var UrlHelperService */
+    private $urlHelper;
+
+    /**
+     * Create service instance
+     *
+     * @param AcceptAllSetCookieGenerator $acceptAllSetCookieGenerator
+     * @param BannerVisibilityProvider $bannerVisibilityProvider
+     * @param Placeholder $placeholder
+     * @param UrlHelperService $urlHelper
+     *
+     * @return CookieBannerListener
+     */
+    public function __construct(
+        AcceptAllSetCookieGenerator $acceptAllSetCookieGenerator,
+        BannerVisibilityProvider $bannerVisibilityProvider,
+        Placeholder $placeholder,
+        UrlHelperService $urlHelper
+    ) {
+        $this->acceptAllSetCookieGenerator = $acceptAllSetCookieGenerator;
+        $this->bannerVisibilityProvider = $bannerVisibilityProvider;
+        $this->placeholder = $placeholder;
+        $this->urlHelper = $urlHelper;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function attach(EventManagerInterface $events, $priority = 1)
     {
         $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, [$this, 'onRoute'], $priority);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function onRoute(MvcEvent $e)
     {
         $request = $e->getRequest();
@@ -48,6 +80,40 @@ class CookieBannerListener implements ListenerAggregateInterface, FactoryInterfa
             return;
         }
 
-        $this->cookieBanner->toSeeOrNotToSee();
+        if ($request->getQuery('acceptAllCookies') === 'true') {
+            $routeMatch = $e->getRouteMatch();
+            $redirectUrl = $this->urlHelper->fromRoute(
+                $routeMatch->getMatchedRouteName(),
+                $routeMatch->getParams(),
+                [
+                    'query' => [
+                        'acceptedAllCookiesConfirmation' => 'true'
+                    ]
+                ]
+            );
+
+            $response = $e->getResponse();
+            $responseHeaders = $response->getHeaders();
+
+            $responseHeaders->addHeaderLine('Location', $redirectUrl);
+            $responseHeaders->addHeader(
+                $this->acceptAllSetCookieGenerator->generate()
+            );
+
+            $response->setStatusCode(302);
+            $response->sendHeaders();
+
+            return;
+        }
+
+        $cookieBannerMode = '';
+
+        if ($request->getQuery('acceptedAllCookiesConfirmation') === 'true') {
+            $cookieBannerMode = 'confirmation';
+        } elseif ($this->bannerVisibilityProvider->shouldDisplay($e)) {
+            $cookieBannerMode = 'banner';
+        }
+
+        $this->placeholder->getContainer('cookieBannerMode')->set($cookieBannerMode);
     }
 }

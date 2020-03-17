@@ -6,7 +6,6 @@ use Common\Form\Form;
 use Common\RefData;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 use Dvsa\Olcs\Transfer\Command;
-use Common\Service\Entity\TransportManagerApplicationEntityService;
 
 class OperatorDeclarationController extends AbstractDeclarationController
 {
@@ -70,7 +69,7 @@ class OperatorDeclarationController extends AbstractDeclarationController
     {
         if (!$this->tma['isTmLoggedInUser'] &&
             $this->tma['tmApplicationStatus']['id'] ===
-            TransportManagerApplicationEntityService::STATUS_OPERATOR_APPROVED) {
+            RefData::TMA_STATUS_OPERATOR_APPROVED) {
             return true;
         }
         return false;

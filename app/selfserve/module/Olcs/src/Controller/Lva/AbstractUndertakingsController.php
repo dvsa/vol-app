@@ -2,7 +2,6 @@
 
 namespace Olcs\Controller\Lva;
 
-use Common\Service\Entity\LicenceEntityService as Licence;
 use Common\RefData;
 use Common\Controller\Lva\Traits\EnabledSectionTrait;
 use Common\Controller\Lva\AbstractController;
@@ -196,7 +195,7 @@ abstract class AbstractUndertakingsController extends AbstractController
             )
         );
 
-        if ($goodsOrPsv === Licence::LICENCE_CATEGORY_GOODS_VEHICLE) {
+        if ($goodsOrPsv === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
             $interim = array();
             if (!is_null($applicationData['interimReason'])) {
                 $interim['goodsApplicationInterim'] = "Y";

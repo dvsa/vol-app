@@ -93,6 +93,9 @@ return [
     // Google Tag Manager id. If empty or not exists (commented out), then no Google Tag Manager code will be rendered
     'google-tag' => '',
 
+    // The domain value needed to delete GA cookies
+    'google-ga-domain' => '.olcs-selfserve.olcs.gov.uk',
+
     'caches' => [
         \Zend\Cache\Storage\Adapter\Redis::class => [
             'adapter' => [
@@ -116,4 +119,54 @@ return [
             ],
         ],
     ],
+    'cookie-manager' => [
+            'delete-undefined-cookies' => true,
+            'user-preference-cookie-name' => 'cookie_policy',
+            'user-preference-cookie-secure' => true,
+            'user-preference-cookie-expiry-days' => 365,
+            'user-preference-configuration-form-id' => 'olcs-cookie-settings',
+            'cookie-banner-id' => 'olcs-cookie-banner',
+            'user-preference-saved-callback' => false,
+            'cookie-banner-visibility-class' => 'hidden',
+            'cookie-banner-visible-on-page-with-preference-form' => false,
+            'cookie-manifest' =>
+                [
+                    [
+                        'category-name' => 'essential',
+                        'optional' => false,
+                        'cookies' =>
+                            [
+                                'PHPSESSID',
+                                'secureToken',
+                                'incap_ses',
+                                'nlbi_',
+                                'visid_incap',
+                                '_utmvm',
+                                '_ utmva',
+                                '__utmvb',
+                                '__utmvc'
+                            ],
+                    ],
+                    [
+                        'category-name' => 'analytics',
+                        'optional' => true,
+                        'cookies' =>
+                            [
+                                '_ga',
+                                '_gtm',
+                                '_gid',
+                                '_gat',
+                                '__utmt'
+                            ],
+                    ],
+                    [
+                        'category-name' => 'settings',
+                        'optional' => true,
+                        'cookies' =>
+                            [
+                                'langPref',
+                            ],
+                    ],
+                ],
+        ],
 ];

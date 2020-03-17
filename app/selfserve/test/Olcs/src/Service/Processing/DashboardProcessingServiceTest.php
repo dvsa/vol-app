@@ -8,10 +8,9 @@
  */
 namespace OlcsTest\View\Model;
 
+use Common\RefData;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
-use Common\Service\Entity\LicenceEntityService;
-use Common\Service\Entity\ApplicationEntityService;
 
 /**
  * DashboardProcessingServiceTest
@@ -82,7 +81,7 @@ class DashboardProcessingServiceTest extends MockeryTestCase
                     'licences' => [
                         [
                             'id' => 1,
-                            'status' => ['id' => LicenceEntityService::LICENCE_STATUS_VALID],
+                            'status' => ['id' => RefData::LICENCE_STATUS_VALID],
                             'licenceType' => ['id' => 'type'],
                             'licNo' => '123',
                             'trafficArea' => ['name' => 'foo']
@@ -91,7 +90,7 @@ class DashboardProcessingServiceTest extends MockeryTestCase
                     'applications' => [
                         [
                             'status' => [
-                                'id' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION
+                                'id' => RefData::APPLICATION_STATUS_UNDER_CONSIDERATION
                             ],
                             'isVariation' => false,
                             'id' => 1,
@@ -104,7 +103,7 @@ class DashboardProcessingServiceTest extends MockeryTestCase
                     'variations' => [
                         [
                             'status' => [
-                                'id' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION
+                                'id' => RefData::APPLICATION_STATUS_UNDER_CONSIDERATION
                             ],
                             'isVariation' => true,
                             'id' => 2,
@@ -121,7 +120,7 @@ class DashboardProcessingServiceTest extends MockeryTestCase
                         'id' => 1,
                         'licenceType' => ['id' => 'type'],
                         'licNo' => '123',
-                        'status' => ['id' => LicenceEntityService::LICENCE_STATUS_VALID],
+                        'status' => ['id' => RefData::LICENCE_STATUS_VALID],
                         'type' => 'type',
                         'trafficArea' => 'foo'
                     ]
@@ -132,7 +131,7 @@ class DashboardProcessingServiceTest extends MockeryTestCase
                         'isVariation' => true,
                         'id' => 2,
                         'licNo' => '123',
-                        'status' => ['id' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION],
+                        'status' => ['id' => RefData::APPLICATION_STATUS_UNDER_CONSIDERATION],
                         'licence' => [
                                 'licNo' => '123',
                         ],
@@ -146,7 +145,7 @@ class DashboardProcessingServiceTest extends MockeryTestCase
                         'isVariation' => false,
                         'id' => 1,
                         'licNo' => '123',
-                        'status' => ['id' => ApplicationEntityService::APPLICATION_STATUS_UNDER_CONSIDERATION],
+                        'status' => ['id' => RefData::APPLICATION_STATUS_UNDER_CONSIDERATION],
                         'licence' => [
                                 'licNo' => '123',
                         ],

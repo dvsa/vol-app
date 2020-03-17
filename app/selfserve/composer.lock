@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b2a9827c1d88e9c69e83285ef0e6a4ae",
+    "content-hash": "9311d18c2b2efacfaf34145b499b7cf3",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -1248,16 +1248,16 @@
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "4.206.5",
+            "version": "4.206.6",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-auth/4.206.5/olcs-olcs-auth-4.206.5.zip",
-                "reference": "230c2ecaf089d87d7ce04d16a4881cd4079dc931",
-                "shasum": "230c2ecaf089d87d7ce04d16a4881cd4079dc931"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-auth/4.206.6/olcs-olcs-auth-4.206.6.zip",
+                "reference": "be2a10a895188a7fa64aa8f251fc5a41f741e61e",
+                "shasum": "be2a10a895188a7fa64aa8f251fc5a41f741e61e"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
-                "elendev/nexus-composer-push": "^0.1",
+                "elendev/nexus-composer-push": "^0.1.3",
                 "olcs/olcs-common": "~4.206.0",
                 "olcs/olcs-transfer": "~4.206.0",
                 "php": "^5.5 || ^7.0",
@@ -1320,21 +1320,21 @@
                 ]
             },
             "description": "OLCS Authentication",
-            "time": "2020-01-27T16:56:50+00:00"
+            "time": "2020-02-21T09:30:09+00:00"
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.134",
+            "version": "4.206.157",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-common/4.206.134/olcs-olcs-common-4.206.134.zip",
-                "reference": "d7c18ecf5d07f0c809c8ed14b5403984299d343a",
-                "shasum": "d7c18ecf5d07f0c809c8ed14b5403984299d343a"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-common/4.206.157/olcs-olcs-common-4.206.157.zip",
+                "reference": "a62ac74e187dfeeeaed3ae81dfaae3f675e873f9",
+                "shasum": "a62ac74e187dfeeeaed3ae81dfaae3f675e873f9"
             },
             "require": {
-                "doctrine/annotations": "^1.2.3",
+                "doctrine/annotations": "^1.8",
                 "doctrine/doctrine-orm-module": "~0.10.0",
-                "elendev/nexus-composer-push": "^0.1",
+                "elendev/nexus-composer-push": "^0.1.3",
                 "php": "^5.5 || ^7.0",
                 "symfony/filesystem": "~3.0.0",
                 "zendframework/zend-cache": "^2.5",
@@ -1418,7 +1418,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2020-01-27T16:57:48+00:00"
+            "time": "2020-03-11T14:29:08+00:00"
         },
         {
             "name": "olcs/olcs-logging",
@@ -1491,12 +1491,12 @@
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "4.206.58",
+            "version": "4.206.64",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-transfer/4.206.58/olcs-olcs-transfer-4.206.58.zip",
-                "reference": "d939dd3aeba16d85254d1a8ac6016d6af1328ad9",
-                "shasum": "d939dd3aeba16d85254d1a8ac6016d6af1328ad9"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-transfer/4.206.64/olcs-olcs-transfer-4.206.64.zip",
+                "reference": "d7cf328269612131669e71550c662459bea1c0d4",
+                "shasum": "d7cf328269612131669e71550c662459bea1c0d4"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1.3",
@@ -1560,7 +1560,7 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2020-01-27T16:45:49+00:00"
+            "time": "2020-03-09T17:15:53+00:00"
         },
         {
             "name": "olcs/olcs-utils",
@@ -1951,11 +1951,11 @@
         },
         {
             "name": "symfony/console",
-            "version": "v3.4.37",
+            "version": "v3.4.38",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/console/v3.4.37/symfony-console-v3.4.37.zip",
-                "reference": "7c5bdd346f9d90a2d22d4e1fe61e02dc19b98f12",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/console/v3.4.38/symfony-console-v3.4.38.zip",
+                "reference": "6827023c5872bea44b29d145de693b21981cf4cd",
                 "shasum": ""
             },
             "require": {
@@ -2013,15 +2013,15 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2020-01-10T07:52:48+00:00"
+            "time": "2020-02-15T13:27:16+00:00"
         },
         {
             "name": "symfony/debug",
-            "version": "v4.4.3",
+            "version": "v4.4.5",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/debug/v4.4.3/symfony-debug-v4.4.3.zip",
-                "reference": "89c3fd5c299b940333bc6fe9f1b8db1b0912c759",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/debug/v4.4.5/symfony-debug-v4.4.5.zip",
+                "reference": "a980d87a659648980d89193fd8b7a7ca89d97d21",
                 "shasum": ""
             },
             "require": {
@@ -2063,7 +2063,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2020-01-08T17:29:02+00:00"
+            "time": "2020-02-23T14:41:43+00:00"
         },
         {
             "name": "symfony/filesystem",
@@ -2110,11 +2110,11 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v4.4.3",
+            "version": "v4.4.5",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/finder/v4.4.3/symfony-finder-v4.4.3.zip",
-                "reference": "3a50be43515590faf812fbd7708200aabc327ec3",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/finder/v4.4.5/symfony-finder-v4.4.5.zip",
+                "reference": "ea69c129aed9fdeca781d4b77eb20b62cf5d5357",
                 "shasum": ""
             },
             "require": {
@@ -2149,15 +2149,15 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-            "time": "2020-01-04T13:00:46+00:00"
+            "time": "2020-02-14T07:42:58+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.13.1",
+            "version": "v1.14.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/polyfill-mbstring/v1.13.1/symfony-polyfill-mbstring-v1.13.1.zip",
-                "reference": "7b4aab9743c30be783b73de055d24a39cf4b954f",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/polyfill-mbstring/v1.14.0/symfony-polyfill-mbstring-v1.14.0.zip",
+                "reference": "34094cfa9abe1f0f14f48f490772db7a775559f2",
                 "shasum": ""
             },
             "require": {
@@ -2169,7 +2169,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.13-dev"
+                    "dev-master": "1.14-dev"
                 }
             },
             "autoload": {
@@ -2202,7 +2202,7 @@
                 "portable",
                 "shim"
             ],
-            "time": "2019-11-27T14:18:11+00:00"
+            "time": "2020-01-13T11:15:53+00:00"
         },
         {
             "name": "zendframework/zend-authentication",
@@ -3800,7 +3800,6 @@
                 "stdlib",
                 "zf2"
             ],
-            "abandoned": "laminas/laminas-stdlib",
             "time": "2016-04-12T21:17:31+00:00"
         },
         {
@@ -4197,11 +4196,11 @@
     "packages-dev": [
         {
             "name": "composer/xdebug-handler",
-            "version": "1.4.0",
+            "version": "1.4.1",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/composer/xdebug-handler/1.4.0/composer-xdebug-handler-1.4.0.zip",
-                "reference": "cbe23383749496fe0f373345208b79568e4bc248",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/composer/xdebug-handler/1.4.1/composer-xdebug-handler-1.4.1.zip",
+                "reference": "1ab9842d69e64fb3a01be6b656501032d1b78cb7",
                 "shasum": ""
             },
             "require": {
@@ -4231,7 +4230,7 @@
                 "Xdebug",
                 "performance"
             ],
-            "time": "2019-11-06T16:40:04+00:00"
+            "time": "2020-03-01T12:26:26+00:00"
         },
         {
             "name": "hamcrest/hamcrest-php",
@@ -4277,21 +4276,21 @@
         },
         {
             "name": "johnkary/phpunit-speedtrap",
-            "version": "v3.1.0",
+            "version": "v3.2.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/johnkary/phpunit-speedtrap/v3.1.0/johnkary-phpunit-speedtrap-v3.1.0.zip",
-                "reference": "dac11b8640d4be7a70f336616947fa84f169835a",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/johnkary/phpunit-speedtrap/v3.2.0/johnkary-phpunit-speedtrap-v3.2.0.zip",
+                "reference": "8c0e149b80c6e86c33315f05699512678655c158",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.1",
-                "phpunit/phpunit": "^7.0 || ^8.0"
+                "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.0-dev"
+                    "dev-master": "3.2-dev"
                 }
             },
             "autoload": {
@@ -4308,14 +4307,14 @@
                     "email": "john@johnkary.net"
                 }
             ],
-            "description": "Find slow tests in your PHPUnit test suite",
+            "description": "Find and report on slow tests in your PHPUnit test suite",
             "homepage": "https://github.com/johnkary/phpunit-speedtrap",
             "keywords": [
                 "phpunit",
                 "profile",
                 "slow"
             ],
-            "time": "2019-02-24T02:40:12+00:00"
+            "time": "2020-02-12T16:19:51+00:00"
         },
         {
             "name": "mikey179/vfsstream",
@@ -4572,11 +4571,11 @@
         },
         {
             "name": "pdepend/pdepend",
-            "version": "2.7.0",
+            "version": "2.7.1",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/pdepend/pdepend/2.7.0/pdepend-pdepend-2.7.0.zip",
-                "reference": "cba74e118ce806f97fcb108c00d61ebf2a5a936e",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/pdepend/pdepend/2.7.1/pdepend-pdepend-2.7.1.zip",
+                "reference": "daba1cf0a6edaf172fa02a17807ae29f4c1c7471",
                 "shasum": ""
             },
             "require": {
@@ -4609,7 +4608,7 @@
                 "BSD-3-Clause"
             ],
             "description": "Official version of pdepend to be handled with Composer",
-            "time": "2020-01-24T08:09:26+00:00"
+            "time": "2020-02-08T12:06:13+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -4836,17 +4835,17 @@
         },
         {
             "name": "phpmd/phpmd",
-            "version": "2.8.1",
+            "version": "2.8.2",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/phpmd/phpmd/2.8.1/phpmd-phpmd-2.8.1.zip",
-                "reference": "5664b95d484797582f5af9536238deb9ecde58a1",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/phpmd/phpmd/2.8.2/phpmd-phpmd-2.8.2.zip",
+                "reference": "714629ed782537f638fe23c4346637659b779a77",
                 "shasum": ""
             },
             "require": {
                 "composer/xdebug-handler": "^1.0",
                 "ext-xml": "*",
-                "pdepend/pdepend": "^2.6",
+                "pdepend/pdepend": "^2.7.1",
                 "php": ">=5.3.9"
             },
             "require-dev": {
@@ -4896,15 +4895,15 @@
                 "phpmd",
                 "pmd"
             ],
-            "time": "2019-12-27T11:09:06+00:00"
+            "time": "2020-02-16T20:15:50+00:00"
         },
         {
             "name": "phpspec/prophecy",
-            "version": "v1.10.2",
+            "version": "v1.10.3",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/phpspec/prophecy/v1.10.2/phpspec-prophecy-v1.10.2.zip",
-                "reference": "b4400efc9d206e83138e2bb97ed7f5b14b831cd9",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/phpspec/prophecy/v1.10.3/phpspec-prophecy-v1.10.3.zip",
+                "reference": "451c3cd1418cf640de218914901e51b064abb093",
                 "shasum": ""
             },
             "require": {
@@ -4953,7 +4952,7 @@
                 "spy",
                 "stub"
             ],
-            "time": "2020-01-20T15:57:02+00:00"
+            "time": "2020-03-05T15:02:03+00:00"
         },
         {
             "name": "phpstan/phpstan-mockery",
@@ -5034,6 +5033,7 @@
                 "MIT"
             ],
             "description": "PHPStan Phar distribution",
+            "abandoned": "phpstan/phpstan",
             "time": "2019-01-08T10:03:03+00:00"
         },
         {
@@ -5921,11 +5921,11 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.5.3",
+            "version": "3.5.4",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/squizlabs/php_codesniffer/3.5.3/squizlabs-php_codesniffer-3.5.3.zip",
-                "reference": "557a1fc7ac702c66b0bbfe16ab3d55839ef724cb",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/squizlabs/php_codesniffer/3.5.4/squizlabs-php_codesniffer-3.5.4.zip",
+                "reference": "dceec07328401de6211037abbb18bda423677e26",
                 "shasum": ""
             },
             "require": {
@@ -5962,15 +5962,15 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2019-12-04T04:46:47+00:00"
+            "time": "2020-01-30T22:20:29+00:00"
         },
         {
             "name": "symfony/config",
-            "version": "v3.4.37",
+            "version": "v3.4.38",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/config/v3.4.37/symfony-config-v3.4.37.zip",
-                "reference": "6abc18b2a97f63508d23929bbb2ae65aaa07bace",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/config/v3.4.38/symfony-config-v3.4.38.zip",
+                "reference": "03328d6e172ec7384341c622d4c28d350040d021",
                 "shasum": ""
             },
             "require": {
@@ -6020,7 +6020,7 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "https://symfony.com",
-            "time": "2020-01-04T12:05:51+00:00"
+            "time": "2020-02-03T08:11:57+00:00"
         },
         {
             "name": "symfony/dependency-injection",
@@ -6089,11 +6089,11 @@
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.13.1",
+            "version": "v1.14.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/polyfill-ctype/v1.13.1/symfony-polyfill-ctype-v1.13.1.zip",
-                "reference": "f8f0b461be3385e56d6de3dbb5a0df24c0c275e3",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/polyfill-ctype/v1.14.0/symfony-polyfill-ctype-v1.14.0.zip",
+                "reference": "fbdeaec0df06cf3d51c93de80c7eb76e271f5a38",
                 "shasum": ""
             },
             "require": {
@@ -6105,7 +6105,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.13-dev"
+                    "dev-master": "1.14-dev"
                 }
             },
             "autoload": {
@@ -6137,7 +6137,7 @@
                 "polyfill",
                 "portable"
             ],
-            "time": "2019-11-27T13:56:44+00:00"
+            "time": "2020-01-13T11:15:53+00:00"
         },
         {
             "name": "theseer/fdomdocument",
@@ -6209,11 +6209,11 @@
         },
         {
             "name": "webmozart/assert",
-            "version": "1.6.0",
+            "version": "1.7.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/webmozart/assert/1.6.0/webmozart-assert-1.6.0.zip",
-                "reference": "573381c0a64f155a0d9a23f4b0c797194805b925",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/webmozart/assert/1.7.0/webmozart-assert-1.7.0.zip",
+                "reference": "aed98a490f9a8f78468232db345ab9cf606cf598",
                 "shasum": ""
             },
             "require": {
@@ -6247,7 +6247,7 @@
                 "check",
                 "validate"
             ],
-            "time": "2019-11-24T13:36:37+00:00"
+            "time": "2020-02-14T12:15:55+00:00"
         }
     ],
     "aliases": [],
@@ -6256,7 +6256,8 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.1"
+        "php": ">=7.1",
+        "ext-intl": "*"
     },
     "platform-dev": [],
     "platform-overrides": {

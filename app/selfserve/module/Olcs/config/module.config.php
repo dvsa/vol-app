@@ -1,5 +1,8 @@
 <?php
 
+use Olcs\Controller\Cookie\DetailsController as CookieDetailsController;
+use Olcs\Controller\Cookie\SettingsController as CookieSettingsController;
+use Olcs\Controller\Cookie\SettingsControllerFactory as CookieSettingsControllerFactory;
 use Olcs\Controller\IndexController;
 use Olcs\Controller\MyDetailsController;
 use Olcs\Controller\Search\SearchController;
@@ -12,6 +15,7 @@ use Olcs\Form\Element\SearchFilterFieldsetFactory;
 use Olcs\Form\Element\SearchOrderFieldset;
 use Olcs\Form\Element\SearchOrderFieldsetFactory;
 use Olcs\FormService\Form\Lva as LvaFormService;
+use Olcs\Service\Cookie as CookieService;
 use Olcs\Service\Qa as QaService;
 use Zend\Mvc\Router\Http\Segment;
 
@@ -65,11 +69,24 @@ $routes = array(
         'options' =>  array(
             'route' => '/cookies[/]',
             'defaults' => array(
-                'controller' => \Common\Controller\GuidesController::class,
-                'action' => 'index',
-                'guide' => 'cookies',
+                'controller' => CookieDetailsController::class,
+                'action' => 'generic',
             )
-        )
+        ),
+        'may_terminate' => true,
+        'child_routes' => [
+            'settings' => [
+                'type' => Segment::class,
+                'options' =>  [
+                    'route' => 'settings[/]',
+                    'defaults' => [
+                        'controller' => CookieSettingsController::class,
+                        'action' => 'generic',
+                    ],
+
+                ],
+            ],
+        ],
     ),
     'privacy-notice' => array(
         'type' => 'segment',
@@ -1218,6 +1235,7 @@ return array(
                 Olcs\Controller\BusReg\BusRegRegistrationsController::class,
             Olcs\Controller\BusReg\BusRegBrowseController::class =>
                 Olcs\Controller\BusReg\BusRegBrowseController::class,
+            CookieDetailsController::class => CookieDetailsController::class,
             'Dashboard' => Olcs\Controller\DashboardController::class,
             Olcs\Controller\FeesController::class => Olcs\Controller\FeesController::class,
             Olcs\Controller\CorrespondenceController::class => Olcs\Controller\CorrespondenceController::class,
@@ -1243,7 +1261,10 @@ return array(
             Olcs\Controller\Licence\Surrender\DestroyController::class => Olcs\Controller\Licence\Surrender\DestroyController::class,
             Olcs\Controller\Licence\Surrender\PrintSignReturnController::class => Olcs\Controller\Licence\Surrender\PrintSignReturnController::class,
             \Olcs\Controller\Licence\Surrender\InformationChangedController::class => \Olcs\Controller\Licence\Surrender\InformationChangedController::class,
-        )
+        ),
+        'factories' => array(
+            CookieSettingsController::class => CookieSettingsControllerFactory::class,
+        ),
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
     'tables' => array(
@@ -1261,13 +1282,27 @@ return array(
                 => 'Olcs\Controller\Lva\Adapters\VariationPeopleAdapter',
             'DashboardProcessingService'
                 => 'Olcs\Service\Processing\DashboardProcessingService',
+            'CookieCookieStateFactory' => CookieService\CookieStateFactory::class,
+            'CookiePreferencesFactory' => CookieService\PreferencesFactory::class,
+            'CookieSetCookieFactory' => CookieService\SetCookieFactory::class,
+            'CookieCookieExpiryGenerator' => CookieService\CookieExpiryGenerator::class,
+            'CookieSettingsCookieNamesProvider' => CookieService\SettingsCookieNamesProvider::class,
         ),
         'abstract_factories' => [
             \Zend\Cache\Service\StorageCacheAbstractServiceFactory::class,
         ],
         'factories' => array(
-            'CookieBannerListener' => \Olcs\Mvc\CookieBannerListener::class,
-            'CookieBanner' => \Olcs\Mvc\CookieBanner::class,
+            'CookieListener' => \Olcs\Mvc\CookieListenerFactory::class,
+            'CookieBannerListener' => \Olcs\Mvc\CookieBannerListenerFactory::class,
+            'CookieAcceptAllSetCookieGenerator' => CookieService\AcceptAllSetCookieGeneratorFactory::class,
+            'CookieBannerVisibilityProvider' => CookieService\BannerVisibilityProviderFactory::class,
+            'CookieCookieReader' => CookieService\CookieReaderFactory::class,
+            'CookieCurrentPreferencesProvider' => CookieService\CurrentPreferencesProviderFactory::class,
+            'CookiePreferencesSetCookieGenerator' => CookieService\PreferencesSetCookieGeneratorFactory::class,
+            'CookieDeleteSetCookieGenerator' => CookieService\DeleteSetCookieGeneratorFactory::class,
+            'CookieSetCookieArrayGenerator' => CookieService\SetCookieArrayGeneratorFactory::class,
+            'CookieAnalyticsCookieNamesProvider' => CookieService\AnalyticsCookieNamesProviderFactory::class,
+            'CookieDeleteCookieNamesProvider' => CookieService\DeleteCookieNamesProviderFactory::class,
             'Olcs\InputFilter\EbsrPackInput' => 'Olcs\InputFilter\EbsrPackFactory',
             'navigation' => Zend\Navigation\Service\DefaultNavigationFactory::class,
             'Olcs\Navigation\DashboardNavigation' => Olcs\Navigation\DashboardNavigationFactory::class,
@@ -1321,7 +1356,8 @@ return array(
     'view_helpers' => array(
         'invokables' => array(
             'generatePeopleList' => \Olcs\View\Helper\GeneratePeopleList::class,
-            'tmCheckAnswersChangeLink' => \Olcs\View\Helper\TmCheckAnswersChangeLink::class
+            'tmCheckAnswersChangeLink' => \Olcs\View\Helper\TmCheckAnswersChangeLink::class,
+            'cookieManager' => \Olcs\View\Helper\CookieManager::class
         )
     ),
     'view_manager' => array(
@@ -1530,7 +1566,7 @@ return array(
                 'index' => ['*'],
                 'user-registration' => ['*'],
                 'user-forgot-username' => ['*'],
-                'cookies' => ['*'],
+                'cookies*' => ['*'],
                 'privacy-notice' => ['*'],
                 'terms-and-conditions' => ['*'],
                 'not-found' => ['*'],
