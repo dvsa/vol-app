@@ -50,6 +50,11 @@ form#surrender-start, form#surrender-information-changed {
   }
 }
 
+button[type="submit"].govuk-button#addUser {
+  @extend.govuk-button;
+  text-decoration: none
+}
+
 fieldset[data-group=fields\[permitsRequired\]] {
   input {
     width: 215px;
