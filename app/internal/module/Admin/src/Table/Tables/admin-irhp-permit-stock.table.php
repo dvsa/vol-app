@@ -50,6 +50,13 @@ return [
             'name' => 'initialStock',
         ],
         [
+            'title' => 'SS Visibility',
+            'name' => 'hiddenSS',
+            'formatter' => function ($row) {
+                return $row['hiddenSs'] ? 'Hidden' : 'Visible';
+            },
+        ],
+        [
             'title' => '',
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}'
