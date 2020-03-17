@@ -153,7 +153,8 @@ class IrhpApplicationController extends AbstractInternalController implements
         'preGrantAction' => ['table-actions'],
         'preGrantEditAction' => ['forms/irhp-candidate-permit'],
         'preGrantAddAction' => ['forms/irhp-candidate-permit'],
-        'selectTypeAction' => ['forms/select-type-modal']
+        'selectTypeAction' => ['forms/select-type-modal'],
+        'editAction' => ['forms/irhp-application']
     ];
 
     /**
