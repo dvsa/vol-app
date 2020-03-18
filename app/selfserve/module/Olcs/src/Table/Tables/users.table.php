@@ -7,7 +7,11 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'add' => array(),
+                'add' => [
+                    'label' => 'add-a-user',
+                    'class' => 'govuk-button',
+                    'id' => 'addUser'
+                ],
             )
         ),
         'paginate' => array(
@@ -42,7 +46,7 @@ return array(
                     array_map(
                         function ($role) use ($sm) {
                             return $sm->get('translator')
-                                ->translate('role.'.$role['role']);
+                                ->translate('role.' . $role['role']);
                         },
                         $row['roles']
                     )
@@ -50,6 +54,7 @@ return array(
             }
         ],
         [
+            'title' => 'action',
             'type' => 'ActionLinks',
             'isRemoveVisible' => function ($row) {
                 /** $var TableBuilder $this */
@@ -57,6 +62,7 @@ return array(
             },
             'deleteInputName' => 'action[delete][%d]',
             'dontUseModal' => true,
+            'actionClasses' => 'left-aligned action--secondary'
         ],
     ]
 );
