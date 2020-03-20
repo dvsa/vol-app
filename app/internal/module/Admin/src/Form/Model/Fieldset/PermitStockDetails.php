@@ -148,4 +148,21 @@ class PermitStockDetails
      * @Form\Required(false)
      */
     public $initialStock = null;
+
+    /**
+     * @Form\Required(false)
+     * @Form\Attributes({
+     *   "class" : "input--hiddenss",
+     *   "id" : "hiddenss",
+     * })
+     * @Form\Options({
+     *     "checked_value": "1",
+     *     "unchecked_value": "0",
+     *     "label": "Hidden from Self Serve?",
+     *     "label_attributes": {"class": "form-control form-control--checkbox form-control--advanced"},
+     *     "must_be_value": "1"
+     * })
+     * @Form\Type("\Common\Form\Elements\InputFilters\SingleCheckbox")
+     */
+    public $hiddenSs = null;
 }
