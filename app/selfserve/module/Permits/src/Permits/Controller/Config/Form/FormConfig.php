@@ -2,6 +2,7 @@
 
 namespace Permits\Controller\Config\Form;
 
+use Permits\Controller\Config\DataSource\AvailableBilateralStocks as AvailableBilateralStocksDataSource;
 use Permits\Controller\Config\DataSource\AvailableTypes as AvailableTypesDataSource;
 use Permits\Controller\Config\DataSource\AvailableYears as AvailableYearsDataSource;
 use Permits\Controller\Config\DataSource\AvailableStocks as AvailableStocksDataSource;
@@ -11,6 +12,7 @@ use Permits\Data\Mapper\AvailableCountries as AvailableCountriesMapper;
 use Permits\Data\Mapper\AvailableTypes as AvailableTypesMapper;
 use Permits\Data\Mapper\AvailableYears as AvailableYearsMapper;
 use Permits\Data\Mapper\AvailableStocks as AvailableStocksMapper;
+use Permits\Data\Mapper\AvailableBilateralStocks as AvailableBilateralStocksMapper;
 use Permits\Data\Mapper\LicencesAvailable as LicencesAvailableMapper;
 use Permits\Data\Mapper\NoOfPermits as NoOfPermitsMapper;
 use Permits\Data\Mapper\ChangeLicence as ChangeLicenceMapper;
@@ -56,6 +58,18 @@ class FormConfig
             'mapper' => [
                 'type' => self::FORM_OPTIONS,
                 'class' => AvailableStocksMapper::class
+            ]
+        ],
+    ];
+
+    const FORM_BILATERAL_STOCK = [
+        'stocks' => [
+            'formClass' => 'PeriodSelect',
+            'dataRouteParam' => 'type',
+            'dataSource' => AvailableBilateralStocksDataSource::DATA_KEY,
+            'mapper' => [
+                'type' => self::FORM_OPTIONS,
+                'class' => AvailableBilateralStocksMapper::class
             ]
         ],
     ];

@@ -3,6 +3,7 @@ namespace Permits;
 
 use Permits\Controller\IrhpApplicationDeclarationController;
 use Permits\Controller\ConfirmChangeController;
+use Permits\Controller\IrhpApplicationPeriodController;
 use Permits\Controller\LicenceController;
 use Permits\Controller\ChangeLicenceController;
 use Permits\Controller\SubmittedController;
@@ -60,6 +61,7 @@ return [
         WindowClosedController::class => WindowClosedController::class,
         IrhpStockController::class => IrhpStockController::class,
         EssentialInformationController::class => EssentialInformationController::class,
+        IrhpApplicationPeriodController::class => IrhpApplicationPeriodController::class
     ],
     'factories' => [
         QaController::class => QaControllerFactory::class,
@@ -527,6 +529,7 @@ return [
           Mapper\IrhpApplicationFeeSummary::class => Mapper\IrhpApplicationFeeSummaryFactory::class,
           Mapper\ChangeLicence::class => Mapper\ChangeLicenceFactory::class,
           Mapper\NoOfPermits::class => Mapper\NoOfPermitsFactory::class,
+          Mapper\AvailableBilateralStocks::class => Mapper\AvailableBilateralStocksFactory::class,
       ],
   ],
     /** @todo we don't need all of these different link helpers! OLCS-21512 */

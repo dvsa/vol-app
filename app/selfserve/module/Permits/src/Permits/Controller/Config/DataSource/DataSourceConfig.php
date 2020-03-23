@@ -2,6 +2,7 @@
 
 namespace Permits\Controller\Config\DataSource;
 
+use Permits\Controller\Config\DataSource\AvailableBilateralStocks as AvailableBilateralStocksDataSource;
 use Permits\Controller\Config\DataSource\PermitApplication as PermitAppDataSource;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
 use Permits\Controller\Config\DataSource\IrhpApplicationWithLicences as IrhpApplicationWithLicencesDataSource;
@@ -84,6 +85,11 @@ class DataSourceConfig
     const IRHP_APP_COUNTRIES = [
         IrhpAppDataSource::class => [],
         AvailableCountries::class => [],
+    ];
+
+    const IRHP_APP_PERIODS = [
+        IrhpAppDataSource::class => [],
+        AvailableBilateralStocksDataSource::class => [],
     ];
 
     const IRHP_UNPAID_PERMITS = [

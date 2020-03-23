@@ -298,7 +298,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
                 $this->redirectParams = [];
                 $this->redirectOptions = [];
 
-                $this->handlePostCommand($config, $params);
+                $postResponse = $this->handlePostCommand($config, $params);
 
                 if (isset($config['conditional'])) {
                     $dataKey = $config['conditional']['dataKey'];
@@ -313,6 +313,11 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
                 }
 
                 $saveAndReturnStep = isset($config['saveAndReturnStep']) ? $config['saveAndReturnStep'] : '';
+
+                // If mapper implements this method use it to set redirect params.
+                if (method_exists($mapper, 'processRedirectParams')) {
+                    $this->redirectParams = $mapper->processRedirectParams($postResponse, $this->routeParams, $formData);
+                }
 
                 return $this->handleSaveAndReturnStep(
                     $this->postParams,
@@ -402,6 +407,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
                 }
             }
         }
+        $this->data['routeParams'] = $this->routeParams;
     }
 
     /**
@@ -834,7 +840,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
             $command = $config['command']::create($params);
             $response = $this->handleCommand($command);
 
-            $this->handleResponse($response);
+            return $this->handleResponse($response);
         }
     }
 }
