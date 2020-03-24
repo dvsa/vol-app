@@ -2,6 +2,7 @@
 
 namespace Permits\Controller\Config\ConditionalDisplay;
 
+use Permits\Controller\Config\DataSource\BilateralFeesByCountry;
 use Permits\Controller\Config\DataSource\LicencesAvailable;
 use Permits\Controller\Config\DataSource\AvailableTypes;
 use Permits\Controller\Config\DataSource\AvailableYears;
@@ -10,7 +11,6 @@ use Permits\Controller\Config\DataSource\PermitApplication as PermitAppDataSourc
 use Permits\Controller\Config\DataSource\PermitsAvailable;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
 use Permits\Controller\Config\DataSource\IrhpApplicationWithLicences;
-use Permits\View\Helper\EcmtSection;
 use Permits\View\Helper\IrhpApplicationSection;
 
 /**
@@ -102,6 +102,21 @@ class ConditionalDisplayConfig
         ],
     ];
 
+    const IRHP_BILATERAL_APP_NOT_SUBMITTED = [
+        [
+            'source' => IrhpAppDataSource::DATA_KEY,
+            'route' => IrhpApplicationSection::ROUTE_PERMITS,
+            'key' => 'isBilateral',
+            'value' => true
+        ],
+        [
+            'source' => IrhpAppDataSource::DATA_KEY,
+            'route' => IrhpApplicationSection::ROUTE_PERMITS,
+            'key' => 'isNotYetSubmitted',
+            'value' => true
+        ],
+    ];
+
     const IRHP_APP_OVERVIEW_ACCESSIBLE = [
         [
             'source' => IrhpAppDataSource::DATA_KEY,
@@ -113,6 +128,27 @@ class ConditionalDisplayConfig
             'source' => IrhpAppDataSource::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_COUNTRIES,
             'key' => 'isOverviewAccessible',
+            'value' => true
+        ],
+    ];
+
+    const IRHP_APP_CAN_VIEW_ESSENTIAL_INFORMATION = [
+        [
+            'source' => IrhpAppDataSource::DATA_KEY,
+            'route' => IrhpApplicationSection::ROUTE_PERMITS,
+            'key' => 'isBilateral',
+            'value' => true
+        ],
+        [
+            'source' => IrhpAppDataSource::DATA_KEY,
+            'route' => IrhpApplicationSection::ROUTE_PERMITS,
+            'key' => 'isNotYetSubmitted',
+            'value' => true
+        ],
+        [
+            'source' => BilateralFeesByCountry::DATA_KEY,
+            'route' => IrhpApplicationSection::ROUTE_PERMITS,
+            'key' => 'hasFees',
             'value' => true
         ],
     ];

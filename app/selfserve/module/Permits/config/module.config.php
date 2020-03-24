@@ -184,7 +184,10 @@ return [
                               'route'    => 'country/:country/essential-information[/]',
                               'defaults' => [
                                   'controller'    => EssentialInformationController::class,
-                                  'action'        => 'question',
+                                  'action'        => 'generic',
+                              ],
+                              'constraints' => [
+                                  'country' => '[A-Z]{2}',
                               ],
                           ],
                           'may_terminate' => false,
@@ -196,6 +199,9 @@ return [
                               'defaults' => [
                                   'controller'    => IrhpApplicationPeriodController::class,
                                   'action'        => 'question',
+                              ],
+                              'constraints' => [
+                                  'country' => '[A-Z]{2}',
                               ],
                           ],
                           'may_terminate' => false,

@@ -26,6 +26,10 @@ class IrhpApplicationPeriodController extends AbstractSelfserveController implem
         'default' => FormConfig::FORM_BILATERAL_STOCK,
     ];
 
+    protected $conditionalDisplayConfig = [
+        'default' => ConditionalDisplayConfig::IRHP_BILATERAL_APP_NOT_SUBMITTED,
+    ];
+
     protected $templateConfig = [
         'default' => 'permits/single-question-bilateral'
     ];

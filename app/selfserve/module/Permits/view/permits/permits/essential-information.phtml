@@ -1,0 +1,22 @@
+<?php $countryCode = strtolower($this->data['routeParams']['country']); ?>
+<?php echo $this->permitsBackLink('common.link.back.label', $data['backUri']); ?>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-form-group">
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                <span class="govuk-caption-xl"><?php echo $this->escapeHtml($this->translate('country-' . $countryCode)); ?></span>
+                <h1 class="govuk-heading-xl govuk-!-margin-bottom-3"><?php echo $this->escapeHtml($this->translate('permits.page.bilateral.countries.essential.heading')); ?></h1>
+            </legend>
+            <?php echo $this->translate('markup-irhp-country-' . $countryCode); ?>
+            <?php echo $this->partial('partials/irhp-bilateral-fee-table'); ?>
+            <p><?php echo $this->escapeHtml($this->translate('permits.further.guidance')); ?> <a href="<?php echo $this->translate('permits.link.ecmt.guidance'); ?>">GOV.UK.</a></p>
+            <div class="form-steps">
+                <p>
+                    <a class="button govuk-button" role="button" href="<?php echo $this->url($data['continueUri'], [], [], true); ?>">
+                        <?php echo $this->escapeHtml($this->translate($data['continueUriLabel'])); ?>
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

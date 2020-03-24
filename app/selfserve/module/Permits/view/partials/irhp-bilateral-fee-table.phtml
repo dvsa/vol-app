@@ -1,0 +1,30 @@
+<p><?php echo $this->translate('permits.page.bilateral.countries.fee.table.heading'); ?></p>
+
+<table class="govuk-table">
+    <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+        <th class="govuk-table__header" scope="col"><?php echo $this->escapeHtml($this->translate('permits.page.fee.permit.type')); ?></th>
+        <th class="govuk-table__header" scope="col"><?php echo $this->escapeHtml($this->translate('permits.page.fee.application.fee.per.permit')); ?></th>
+        <th class="govuk-table__header" scope="col"><?php echo $this->escapeHtml($this->translate('permits.page.fee.grant.fee.per.permit')); ?></th>
+    </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+    <tr class="govuk-table__row">
+        <td class="govuk-table__cell"><?php echo $this->escapeHtml($this->translate('permits.irhp.bilateral.multi.journey')); ?></td>
+        <td class="govuk-table__cell"><?php echo $this->currencyFormatter($this->data['countryFee']['multi']['application']); ?></td>
+        <td class="govuk-table__cell"><?php echo $this->currencyFormatter($this->data['countryFee']['multi']['grant']); ?></td>
+    </tr>
+    <tr class="govuk-table__row">
+        <td class="govuk-table__cell"><?php echo $this->escapeHtml($this->translate('permits.irhp.bilateral.single.journey')); ?></td>
+        <td class="govuk-table__cell"><?php echo $this->currencyFormatter($this->data['countryFee']['single']['application']); ?></td>
+        <td class="govuk-table__cell"><?php echo $this->currencyFormatter($this->data['countryFee']['single']['grant']); ?></td>
+    </tr>
+    <tr class="govuk-table__row">
+        <td class="govuk-table__cell"><?php echo $this->escapeHtml($this->translate('permits.irhp.bilateral.cabotage.journey')); ?></td>
+        <td class="govuk-table__cell"><?php echo $this->currencyFormatter($this->data['countryFee']['cabotage']['application']); ?></td>
+        <td class="govuk-table__cell"><?php echo $this->currencyFormatter($this->data['countryFee']['cabotage']['grant']); ?></td>
+    </tr>
+    </tbody>
+</table>
+
+<p><?php echo $this->translate('permits.page.bilateral.countries.essential.separate.cabotage'); ?></p>

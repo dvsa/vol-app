@@ -87,6 +87,11 @@ class DataSourceConfig
         AvailableCountries::class => [],
     ];
 
+    const IRHP_APP_ESSENTIAL_INFORMATION = [
+        IrhpAppDataSource::class => [],
+        BilateralFeesByCountry::class => [],
+    ];
+
     const IRHP_APP_PERIODS = [
         IrhpAppDataSource::class => [],
         AvailableBilateralStocksDataSource::class => [],
