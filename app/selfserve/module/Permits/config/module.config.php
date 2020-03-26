@@ -187,6 +187,17 @@ return [
                           ],
                           'may_terminate' => false,
                       ],
+                      'period' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => 'country/:country/period[/]',
+                              'defaults' => [
+                                  'controller'    => IrhpApplicationPeriodController::class,
+                                  'action'        => 'question',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
                       'no-of-permits' => [
                           'type'    => 'segment',
                           'options' => [

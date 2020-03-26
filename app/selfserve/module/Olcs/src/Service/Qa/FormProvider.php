@@ -31,12 +31,13 @@ class FormProvider
      * Get a Form instance corresponding to the supplied form data
      *
      * @param array $options
+     * @param string $formName
      *
      * @return mixed
      */
-    public function get(array $options)
+    public function get(array $options, $formName)
     {
-        $form = $this->formFactory->create();
+        $form = $this->formFactory->create($formName);
         $form->setApplicationStep($options);
         $this->fieldsetPopulator->populate($form, [$options], UsageContext::CONTEXT_SELFSERVE);
         return $form;

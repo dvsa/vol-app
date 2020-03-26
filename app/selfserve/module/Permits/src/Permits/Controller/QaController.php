@@ -83,7 +83,11 @@ class QaController extends AbstractOlcsController
 
         $result = $response->getResult();
 
-        $form = $this->formProvider->get($result['applicationStep']);
+        $form = $this->formProvider->get(
+            $result['applicationStep'],
+            $viewGenerator->getFormName()
+        );
+
         $showErrorInBrowserTitle = false;
 
         if ($this->request->isPost()) {
@@ -100,7 +104,22 @@ class QaController extends AbstractOlcsController
                 );
 
                 $command = SubmitApplicationStep::create($submitApplicationStepParams);
-                $this->handleCommand($command);
+                $response = $this->handleCommand($command);
+
+                $submitApplicationStepResult = $response->getResult();
+                $resultMessages = $submitApplicationStepResult['messages'];
+
+                if (count($resultMessages) != 1) {
+                    throw new RuntimeException('SubmitApplicationStep must return exactly one message');
+                }
+
+                $destinationName = $resultMessages[0];
+                if ($destinationName != 'NEXT_STEP') {
+                    return $viewGenerator->handleRedirectionRequest(
+                        $this->redirect(),
+                        $destinationName
+                    );
+                }
 
                 if (isset($postParams['Submit']['SaveAndReturnButton'])) {
                     return $this->redirect()->toRoute(
@@ -134,7 +153,7 @@ class QaController extends AbstractOlcsController
 
         $templateVars = array_merge(
             $this->templateVarsGenerator->generate($result['questionText']),
-            $viewGenerator->getAdditionalViewVariables($result)
+            $viewGenerator->getAdditionalViewVariables($this->event, $result)
         );
 
         $pageTitle = $this->translationHelperService->translate($result['title']);

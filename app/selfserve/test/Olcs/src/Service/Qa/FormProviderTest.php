@@ -14,6 +14,8 @@ class FormProviderTest extends MockeryTestCase
 {
     public function testGet()
     {
+        $formName = 'FormName';
+
         $options = [
             'option1Key' => 'option1Value',
             'option2Key' => 'option2Value'
@@ -26,7 +28,7 @@ class FormProviderTest extends MockeryTestCase
 
         $formFactory = m::mock(FormFactory::class);
         $formFactory->shouldReceive('create')
-            ->withNoArgs()
+            ->with($formName)
             ->once()
             ->andReturn($form);
 
@@ -39,7 +41,7 @@ class FormProviderTest extends MockeryTestCase
 
         $this->assertSame(
             $form,
-            $sut->get($options)
+            $sut->get($options, $formName)
         );
     }
 }

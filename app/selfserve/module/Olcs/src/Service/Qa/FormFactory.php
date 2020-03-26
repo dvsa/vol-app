@@ -25,11 +25,13 @@ class FormFactory
     /**
      * Create an instance of QaForm
      *
+     * @param string $formName
+     *
      * @return QaForm
      */
-    public function create()
+    public function create($formName)
     {
-        $form = $this->serviceLocator->get('Helper\Form')->createForm('QaForm');
+        $form = $this->serviceLocator->get('Helper\Form')->createForm($formName);
 
         $dataHandlerMappings = [
             'ecmt_st_international_journeys' => 'QaEcmtShortTermInternationalJourneysDataHandler',
