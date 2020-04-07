@@ -79,6 +79,7 @@ class UnlicensedBusinessDetailsController extends OperatorBusinessDetailsControl
             // we are in edit mode, need to fetch original data
             $mapper = $this->mapperClass;
             $originalData = $mapper::mapFromResult($this->getOrganisation($operator));
+            $form->remove('isExempt');
             $form->setData($originalData);
         }
 

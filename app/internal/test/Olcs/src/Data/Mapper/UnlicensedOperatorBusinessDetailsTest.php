@@ -158,6 +158,7 @@ class UnlicensedOperatorBusinessDetailsTest extends TestCase
                 'phone_secondary_version' => '2',
                 'email' => 'foo@bar.com',
             ),
+            'isExempt' => false
         );
 
         $output = Sut::mapFromForm($input);
@@ -197,6 +198,7 @@ class UnlicensedOperatorBusinessDetailsTest extends TestCase
                 ),
                 'emailAddress' => 'foo@bar.com',
             ),
+            'isExempt' => false
         );
 
         $this->assertEquals($expected, $output);

@@ -74,6 +74,7 @@ class UnlicensedOperatorBusinessDetails implements MapperInterface
                 'id' => self::getFromDataIfSet($data['operator-details'], 'contactDetailsId'),
                 'version' => self::getFromDataIfSet($data['operator-details'], 'contactDetailsVersion'),
             ],
+            'isExempt' => self::getFromDataIfSet($data, 'isExempt')
         ];
 
         if (isset($data['correspondenceAddress'])) {

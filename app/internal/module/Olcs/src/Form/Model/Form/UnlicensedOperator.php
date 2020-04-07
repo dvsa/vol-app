@@ -31,6 +31,18 @@ class UnlicensedOperator
     public $contact = null;
 
     /**
+     * @Form\Id("is-exempt)
+     * @Form\Options({
+     *     "checked_value": "Y",
+     *     "unchecked_value": "N",
+     *     "label": "This is an Exemption approved by the Traffic Commissioner",
+     *     "label_attributes": {"class": "form-control form-control--checkbox form-control--advanced"},
+     * })
+     * @Form\Type("\Common\Form\Elements\InputFilters\SingleCheckbox")
+     */
+    public $isExempt = null;
+
+    /**
      * @Form\Name("form-actions")
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\OperatorActions")
      */
