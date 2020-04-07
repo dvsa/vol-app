@@ -60,6 +60,10 @@ class UnlicensedBusinessDetailsController extends OperatorBusinessDetailsControl
         /** @var \Zend\Http\Request $request */
         $request = $this->getRequest();
 
+        if ($operator) {
+            $form->remove('isExempt');
+        }
+
         if ($request->isPost()) {
             $postData = $request->getPost();
 
@@ -79,7 +83,6 @@ class UnlicensedBusinessDetailsController extends OperatorBusinessDetailsControl
             // we are in edit mode, need to fetch original data
             $mapper = $this->mapperClass;
             $originalData = $mapper::mapFromResult($this->getOrganisation($operator));
-            $form->remove('isExempt');
             $form->setData($originalData);
         }
 
