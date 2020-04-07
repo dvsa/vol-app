@@ -126,40 +126,37 @@ class AvailableBilateralStocksTest extends \Mockery\Adapter\Phpunit\MockeryTestC
         $mockFieldSet = m::mock(Fieldset::class);
         $mockForm = m::mock(Form::class);
 
-        $mockForm->shouldReceive('get')->twice()->with('fields')->andReturn($mockFieldSet);
+        $valueOptions = [
+            [
+                'value' => 12,
+                'label' => 'i.am.a.key',
+                'label_attributes' => [
+                    'class' => 'govuk-label govuk-radios__label govuk-label--s',
+                ],
+                'selected' => true,
+                'attributes' => [
+                    'id' => 'stock'
+                ]
+            ],
+            [
+                'value' => 13,
+                'label' => 'i.am.another.key',
+                'label_attributes' => [
+                    'class' => 'govuk-label govuk-radios__label govuk-label--s',
+                ],
+                'selected' => null
+            ]
+        ];
+
+        $mockForm->expects('get')->with('fields')->andReturn($mockFieldSet);
 
         $mockFieldSet->shouldReceive('add')->once()->with([
             'name' => 'irhpPermitStock',
             'type' => DynamicRadio::class,
+            'options' => [
+                'value_options' => $valueOptions
+            ],
         ]);
-
-        $mockRadio = m::mock(DynamicRadio::class);
-        $mockFieldSet->shouldReceive()->get()->once()->with('irhpPermitStock')->andReturn($mockRadio);
-
-        $valueOptiopns =
-            [
-                [
-                    'value' => 12,
-                    'label' => 'i.am.a.key',
-                    'label_attributes' => [
-                        'class' => 'govuk-label govuk-radios__label govuk-label--s',
-                    ],
-                    'selected' => true,
-                    'attributes' => [
-                        'id' => 'stock'
-                    ]
-                ],
-                [
-                    'value' => 13,
-                    'label' => 'i.am.another.key',
-                    'label_attributes' => [
-                        'class' => 'govuk-label govuk-radios__label govuk-label--s',
-                    ],
-                    'selected' => null
-                ]];
-
-
-        $mockRadio->shouldReceive('setValueOptions')->once()->with($valueOptiopns);
 
         $outputData = $inputData;
         $outputData[IrhpApplicationDataSource::DATA_KEY]['countryName'] = 'Norway';
