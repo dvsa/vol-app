@@ -12,6 +12,7 @@ use Permits\Data\Mapper\AvailableCountries as AvailableCountriesMapper;
 use Permits\Data\Mapper\AvailableTypes as AvailableTypesMapper;
 use Permits\Data\Mapper\AvailableYears as AvailableYearsMapper;
 use Permits\Data\Mapper\AvailableStocks as AvailableStocksMapper;
+use Permits\Data\Mapper\IrhpDeclaration as IrhpDeclarationMapper;
 use Permits\Data\Mapper\AvailableBilateralStocks as AvailableBilateralStocksMapper;
 use Permits\Data\Mapper\LicencesAvailable as LicencesAvailableMapper;
 use Permits\Data\Mapper\NoOfPermits as NoOfPermitsMapper;
@@ -114,6 +115,10 @@ class FormConfig
         'declaration' => [
             'formClass' => 'DeclarationForm',
             'dataSource' => IrhpApplicationDataSource::DATA_KEY,
+            'mapper' => [
+                'type' => self::FORM_OPTIONS,
+                'class' => IrhpDeclarationMapper::class
+            ]
         ],
     ];
 
