@@ -1,66 +1,70 @@
 <?php
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'title' => 'Data Retention Records',
         'titleSingular' => 'Data retention record',
         'titlePlural' => 'Data retention records',
-    ),
-    'settings' => array(
-        'crud' => array(
-            'actions' => array(
-                'assign' => array(
+    ],
+    'settings' => [
+        'crud' => [
+            'actions' => [
+                'assign' => [
                     'label' => 'Assign',
                     'requireRows' => true,
                     'class' => 'action--primary js-require--multiple'
-                ),
-                'delay' => array(
+                ],
+                'delay' => [
                     'label' => 'Delay',
                     'requireRows' => true,
                     'class' => 'action--primary js-require--multiple'
-                ),
-                'review' => array(
+                ],
+                'review' => [
                     'label' => 'Mark for Review',
                     'requireRows' => true,
                     'class' => 'action--primary js-require--multiple'
-                ),
-                'delete' => array(
+                ],
+                'delete' => [
                     'label' => 'Mark as Delete',
                     'requireRows' => true,
                     'class' => 'action--delete js-require--multiple'
-                ),
-            )
-        ),
-        'paginate' => array(
-            'limit' => array(
+                ],
+            ]
+        ],
+        'paginate' => [
+            'limit' => [
                 'default' => 25,
-                'options' => array(10, 25, 50)
-            ),
-        )
-    ),
-    'columns' => array(
-        array(
+                'options' => [10, 25, 50]
+            ],
+        ]
+    ],
+    'columns' => [
+        [
             'title' => 'Description',
             'formatter' => 'DataRetentionRecordLink',
-        ),
-        array(
+            'sort' => 'id',
+        ],
+        [
             'title' => 'Date added',
             'name' => 'createdOn',
-            'formatter' => 'Date'
-        ),
-        array(
+            'formatter' => 'Date',
+            'sort' => 'createdOn',
+        ],
+        [
             'title' => 'Next review date',
             'name' => 'nextReviewDate',
             'formatter' => 'Date',
-        ),
-        array(
+            'sort' => 'nextReviewDate'
+        ],
+        [
             'title' => 'Assigned to',
             'formatter' => 'DataRetentionAssignedTo',
-        ),
-        array(
+            'sort' => 'assignedTo'
+        ],
+        [
             'title' => 'Select',
             'width' => 'checkbox',
             'type' => 'Checkbox'
-        ),
-    ),
-);
+        ],
+    ],
+];
