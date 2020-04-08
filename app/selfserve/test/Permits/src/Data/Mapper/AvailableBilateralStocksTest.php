@@ -125,6 +125,7 @@ class AvailableBilateralStocksTest extends \Mockery\Adapter\Phpunit\MockeryTestC
 
         $mockFieldSet = m::mock(Fieldset::class);
         $mockForm = m::mock(Form::class);
+        $mockField = m::mock(DynamicRadio::class);
 
         $valueOptions = [
             [
@@ -149,14 +150,8 @@ class AvailableBilateralStocksTest extends \Mockery\Adapter\Phpunit\MockeryTestC
         ];
 
         $mockForm->expects('get')->with('fields')->andReturn($mockFieldSet);
-
-        $mockFieldSet->shouldReceive('add')->once()->with([
-            'name' => 'irhpPermitStock',
-            'type' => DynamicRadio::class,
-            'options' => [
-                'value_options' => $valueOptions
-            ],
-        ]);
+        $mockFieldSet->shouldReceive('get')->once()->with('irhpPermitStock')->andReturn($mockField);
+        $mockField->shouldReceive('setValueOptions')->with($valueOptions);
 
         $outputData = $inputData;
         $outputData[IrhpApplicationDataSource::DATA_KEY]['countryName'] = 'Norway';

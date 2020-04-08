@@ -75,16 +75,9 @@ class AvailableBilateralStocks
             ];
         }
 
-        // add hidden field
-        $form->get('fields')->add(
-            [
-                'name' => 'irhpPermitStock',
-                'type' => DynamicRadio::class,
-                'options' => [
-                    'value_options' => $this->transformValueOptions($valueOptions)
-                ],
-            ]
-        );
+        $form->get('fields')
+            ->get('irhpPermitStock')
+            ->setValueOptions($this->transformValueOptions($valueOptions));
     }
 
     /**
