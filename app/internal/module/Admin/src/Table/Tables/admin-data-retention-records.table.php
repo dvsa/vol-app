@@ -59,7 +59,7 @@ return [
         [
             'title' => 'Assigned to',
             'formatter' => 'DataRetentionAssignedTo',
-            'sort' => 'assignedTo'
+            'sort' => 'p.forename'
         ],
         [
             'title' => 'Select',
