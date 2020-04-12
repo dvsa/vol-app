@@ -24,7 +24,7 @@ class ViewGeneratorProviderFactory implements FactoryInterface
         );
 
         $viewGeneratorProvider->registerViewGenerator(
-            'permits/application/ipa-question',
+            'permits/application/ipa/question',
             $serviceLocator->get('QaIrhpPermitApplicationViewGenerator')
         );
 

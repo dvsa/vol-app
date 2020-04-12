@@ -181,6 +181,13 @@ class FormConfig
         ],
     ];
 
+    const FORM_IRHP_IPA_CHECK_ANSWERS = [
+        'checkAnswers' => [
+            'formClass' => 'IpaCheckAnswersForm',
+            'dataSource' => IrhpApplicationDataSource::DATA_KEY,
+        ],
+    ];
+
     const FORM_CANCEL_IRHP_APP = [
         self::FORM_CANCEL_PERMIT_APP_KEY => [
             'formClass' => 'CancelApplicationForm',

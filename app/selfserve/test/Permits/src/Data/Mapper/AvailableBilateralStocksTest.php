@@ -176,7 +176,7 @@ class AvailableBilateralStocksTest extends \Mockery\Adapter\Phpunit\MockeryTestC
         $this->assertEquals(
             [
                 'id' => $routeParams['id'],
-                'irhpPermitApplicationId' => $response['id']['irhpPermitApplication'],
+                'irhpPermitApplication' => $response['id']['irhpPermitApplication'],
                 'slug' => RefData::BILATERAL_PERMIT_USAGE
             ],
             $this->sut->processRedirectParams($response, $routeParams, $formData)

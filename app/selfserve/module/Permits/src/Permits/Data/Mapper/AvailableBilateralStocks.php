@@ -137,7 +137,7 @@ class AvailableBilateralStocks
     {
         return [
             'id' => $routeParams['id'],
-            'irhpPermitApplicationId' => $response['id']['irhpPermitApplication'],
+            'irhpPermitApplication' => $response['id']['irhpPermitApplication'],
             'slug' => RefData::BILATERAL_PERMIT_USAGE
         ];
     }

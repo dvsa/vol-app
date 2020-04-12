@@ -15,6 +15,7 @@ use Permits\Controller\IrhpApplicationFeeController;
 use Permits\Controller\IrhpUnderConsiderationController;
 use Permits\Controller\NoOfPermitsController;
 use Permits\Controller\IrhpCheckAnswersController;
+use Permits\Controller\IrhpPermitAppCheckAnswersController;
 use Permits\Controller\CancelIrhpApplicationController;
 use Permits\Controller\IrhpWithdrawController;
 use Permits\Controller\IrhpAwaitingFeeController;
@@ -46,6 +47,7 @@ return [
         NoOfPermitsController::class => NoOfPermitsController::class,
         IrhpApplicationDeclarationController::class => IrhpApplicationDeclarationController::class,
         IrhpCheckAnswersController::class => IrhpCheckAnswersController::class,
+        IrhpPermitAppCheckAnswersController::class => IrhpPermitAppCheckAnswersController::class,
         CancelIrhpApplicationController::class => CancelIrhpApplicationController::class,
         IrhpWithdrawController::class => IrhpWithdrawController::class,
         IrhpAwaitingFeeController::class => IrhpAwaitingFeeController::class,
@@ -124,21 +126,44 @@ return [
                           'may_terminate' => true,
                           'priority' => -1,
                       ],
-                      'ipa-question' => [
+                      'ipa' => [
                           'type'    => 'segment',
                           'options' => [
-                              'route'    => 'ipa/:irhpPermitApplicationId/:slug[/]',
-                              'defaults' => [
-                                  'controller'    => QaController::class,
-                                  'action'        => 'index',
-                              ],
-                              'constraints' => [
-                                  'irhpPermitApplicationId' => '[0-9]+',
-                                  'slug' => '[0-9A-Za-z\-]+',
+                              'route'    => 'ipa/:irhpPermitApplication[/]',
+                               'constraints' => [
+                                  'irhpPermitApplication' => '[0-9]+',
                               ],
                           ],
                           'may_terminate' => true,
-                          'priority' => -1,
+                          'child_routes' => [
+                              'question' => [
+                                  'type'    => 'segment',
+                                  'options' => [
+                                      'route'    => ':slug[/]',
+                                      'defaults' => [
+                                          'controller'    => QaController::class,
+                                          'action'        => 'index',
+                                      ],
+                                      'constraints' => [
+                                          'slug' => '[0-9A-Za-z\-]+',
+                                      ],
+                                  ],
+                                  'may_terminate' => true,
+                                  'priority' => -1,
+                              ],
+                              'check-answers' => [
+                                  'type'    => 'segment',
+                                  'options' => [
+                                      'route'    => 'check-answers[/]',
+                                      'defaults' => [
+                                          'controller'    => IrhpPermitAppCheckAnswersController::class,
+                                          'action'        => 'generic',
+                                      ],
+                                  ],
+                                  'may_terminate' => true,
+                              ],
+
+                          ]
                       ],
                       'licence' => [
                           'type'    => 'segment',

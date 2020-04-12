@@ -64,8 +64,8 @@ class QaController extends AbstractOlcsController
         $routeParams = $this->params()->fromRoute();
 
         $irhpPermitApplicationId = null;
-        if (isset($routeParams['irhpPermitApplicationId'])) {
-            $irhpPermitApplicationId = $routeParams['irhpPermitApplicationId'];
+        if (isset($routeParams['irhpPermitApplication'])) {
+            $irhpPermitApplicationId = $routeParams['irhpPermitApplication'];
         }
 
         $applicationStepParams = [

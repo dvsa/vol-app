@@ -228,6 +228,15 @@ class ConditionalDisplayConfig
         ],
     ];
 
+    const IRHP_IPA_CAN_CHECK_ANSWERS = [
+        [
+            'source' => IrhpAppDataSource::DATA_KEY,
+            'route' => IrhpApplicationSection::ROUTE_PERMITS,
+            'key' => 'isNotYetSubmitted',
+            'value' => true
+        ],
+    ];
+
     const IRHP_APP_CAN_BE_CANCELLED = [
         [
             'source' => IrhpAppDataSource::DATA_KEY,
