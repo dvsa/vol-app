@@ -1491,12 +1491,12 @@
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "4.206.65",
+            "version": "4.206.66",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-transfer/4.206.65/olcs-olcs-transfer-4.206.65.zip",
-                "reference": "32214aefdfde79969273242d66602a4c1edf7c10",
-                "shasum": "32214aefdfde79969273242d66602a4c1edf7c10"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-transfer/4.206.66/olcs-olcs-transfer-4.206.66.zip",
+                "reference": "301e6772c3fd9870910aa79a185012fcdb9fed12",
+                "shasum": "301e6772c3fd9870910aa79a185012fcdb9fed12"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1.3",
@@ -1560,7 +1560,7 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2020-03-24T12:01:37+00:00"
+            "time": "2020-04-07T13:02:08+00:00"
         },
         {
             "name": "olcs/olcs-utils",
@@ -3747,6 +3747,7 @@
                 "stdlib",
                 "zf2"
             ],
+            "abandoned": "laminas/laminas-stdlib",
             "time": "2016-04-12T21:17:31+00:00"
         },
         {
