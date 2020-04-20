@@ -63,9 +63,7 @@ class DataSourceConfig
     ];
 
     const IRHP_APP_FEE = [
-        IrhpAppDataSource::class => [
-            'mapper' => IrhpApplicationFeeSummary::class
-        ],
+        IrhpAppDataSource::class => [],
         IrhpFeeBreakdownDataSource::class => [],
         PermitsAvailableDataSource::class => [],
     ];

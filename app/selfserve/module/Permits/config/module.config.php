@@ -554,7 +554,7 @@ return [
           Mapper\AvailableYears::class => Mapper\AvailableYears::class,
           Mapper\LicencesAvailable::class => Mapper\LicencesAvailable::class,
           Mapper\PermitTypeTitle::class => Mapper\PermitTypeTitle::class,
-          Mapper\IrhpDeclaration::class => Mapper\IrhpDeclaration::class
+          Mapper\IrhpFee::class => Mapper\IrhpFee::class,
       ],
       'factories' => [
           Mapper\EcmtNoOfPermits::class => Mapper\EcmtNoOfPermitsFactory::class,

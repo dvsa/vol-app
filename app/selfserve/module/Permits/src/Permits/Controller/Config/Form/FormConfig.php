@@ -12,7 +12,7 @@ use Permits\Data\Mapper\AvailableCountries as AvailableCountriesMapper;
 use Permits\Data\Mapper\AvailableTypes as AvailableTypesMapper;
 use Permits\Data\Mapper\AvailableYears as AvailableYearsMapper;
 use Permits\Data\Mapper\AvailableStocks as AvailableStocksMapper;
-use Permits\Data\Mapper\IrhpDeclaration as IrhpDeclarationMapper;
+use Permits\Data\Mapper\IrhpFee as IrhpFeeMapper;
 use Permits\Data\Mapper\AvailableBilateralStocks as AvailableBilateralStocksMapper;
 use Permits\Data\Mapper\LicencesAvailable as LicencesAvailableMapper;
 use Permits\Data\Mapper\NoOfPermits as NoOfPermitsMapper;
@@ -115,16 +115,17 @@ class FormConfig
         'declaration' => [
             'formClass' => 'DeclarationForm',
             'dataSource' => IrhpApplicationDataSource::DATA_KEY,
-            'mapper' => [
-                'type' => self::FORM_OPTIONS,
-                'class' => IrhpDeclarationMapper::class
-            ]
         ],
     ];
 
     const FORM_FEE = [
         'fee' => [
             'formClass' => 'FeesForm',
+            'dataSource' => IrhpApplicationDataSource::DATA_KEY,
+            'mapper' => [
+                'type' => self::FORM_OPTIONS,
+                'class' => IrhpFeeMapper::class
+            ]
         ],
     ];
 
@@ -192,5 +193,11 @@ class FormConfig
         self::FORM_CANCEL_PERMIT_APP_KEY => [
             'formClass' => 'CancelApplicationForm',
         ],
+    ];
+
+    const FORM_IRHP_OVERVIEW_SUBMIT = [
+        'irhpOverviewSubmit' => [
+            'formClass' => 'IrhpOverviewSubmitForm',
+        ]
     ];
 }

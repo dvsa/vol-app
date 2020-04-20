@@ -3,6 +3,11 @@
         <?php echo $this->escapeHtml($this->translate($this->key)); ?>
     </dt>
     <dd class="govuk-summary-list__value">
+        <?php if (isset($this->status)) { ?>
+            <span style="float: right" class="overview__status <?php echo $this->status['colour']; ?>">
+                <?php echo $this->escapeHtml($this->translate($this->status['caption'])); ?>
+            </span>
+        <?php } ?>
         <?php
             /**  @todo move logic to reusable view helper (listValueFormatter?) to encompass common situations */
             if (isset($this->disableHtmlEscape) && $this->disableHtmlEscape) {

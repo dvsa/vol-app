@@ -10,6 +10,6 @@ use Olcs\Controller\Config\DataSource\AbstractDataSource;
  */
 class IrhpFeeBreakdown extends AbstractDataSource
 {
-    const DATA_KEY = 'FeeBreakdown';
+    const DATA_KEY = 'feeBreakdown';
     protected $dto = FeeBreakdownDto::class;
 }
