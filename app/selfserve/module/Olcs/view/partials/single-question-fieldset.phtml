@@ -1,9 +1,12 @@
+<?php
+
+if (!isset($data['headingType'])) {
+    $data['headingType'] = 'standard';
+}
+
+?>
 <fieldset class="govuk-fieldset">
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-        <h1 class="govuk-fieldset__heading">
-            <?php echo $this->translateReplace($data['question'], isset($data['questionArgs']) ? $data['questionArgs'] : []); ?>
-        </h1>
-    </legend>
+    <?php echo $this->render('partials/single-question-fieldset-h1-' . $data['headingType']); ?>
     <?php if (isset($data['warning'])) {
          echo $this->partial('partials/warning-component', ['translationKey' => $data['warning']]);
      }

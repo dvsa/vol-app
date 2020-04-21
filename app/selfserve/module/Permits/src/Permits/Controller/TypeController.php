@@ -4,8 +4,8 @@ namespace Permits\Controller;
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Common\RefData;
 use Olcs\Controller\AbstractSelfserveController;
-use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
+use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Controller\Config\Form\FormConfig;
 use Permits\View\Helper\IrhpApplicationSection;
@@ -38,6 +38,7 @@ class TypeController extends AbstractSelfserveController implements ToggleAwareI
             'question' => 'permits.page.type.question',
             'backUri' => IrhpApplicationSection::ROUTE_PERMITS,
             'cancelUri' => IrhpApplicationSection::ROUTE_PERMITS,
+            'headingType' => 'permit-type',
         ],
     ];
 
