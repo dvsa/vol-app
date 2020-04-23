@@ -26,6 +26,15 @@ class MyDetailsController extends AbstractController
         /** @var Form $form */
         $form = $formHelper->createFormWithRequest('MyDetails', $this->getRequest());
 
+        $response = $this->handleQuery(ItemDto::create([]));
+
+        if ($response->isOk()) {
+            $data = $this->formatLoadData($response->getResult());
+            $form->setData($data);
+        } else {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
+
         if ($this->getRequest()->isPost()) {
             if ($this->isButtonPressed('cancel')) {
                 return $this->redirectToIndex();
@@ -57,15 +66,6 @@ class MyDetailsController extends AbstractController
                         $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
                     }
                 }
-            }
-        } else {
-            $response = $this->handleQuery(ItemDto::create([]));
-
-            if ($response->isOk()) {
-                $data = $this->formatLoadData($response->getResult());
-                $form->setData($data);
-            } else {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
             }
         }
 
