@@ -27,7 +27,7 @@ class MyDetails extends Base
     /**
      * @Form\Attributes({"id":"forename","placeholder":"","class":"medium", "required":false, "disabled":"disabled"})
      * @Form\Options({
-     *     "label":"my-details.first-name"
+     *     "label":"user-details.first-name"
      * })
      * @Form\Type("Text")
      * @Form\Required(false)

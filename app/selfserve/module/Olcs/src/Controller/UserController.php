@@ -4,6 +4,8 @@ namespace Olcs\Controller;
 
 use Common\Controller\Lva\AbstractController;
 use Common\Controller\Lva\Traits\CrudTableTrait;
+use Common\Form\Form;
+use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Transfer\Command\User\CreateUserSelfserve as CreateDto;
 use Dvsa\Olcs\Transfer\Command\User\DeleteUserSelfserve as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\User\UpdateUserSelfserve as UpdateDto;
@@ -75,10 +77,30 @@ class UserController extends AbstractController
         /** @var \Zend\Http\PhpEnvironment\Request $request */
         $request = $this->getRequest();
         /** @var \Zend\Form\FormInterface $form */
-        $form = $this->getServiceLocator()->get('Helper\Form')->createFormWithRequest('User', $request);
+        $form = $this->getFormHelper()->createFormWithRequest('User', $request);
 
         $id = $this->params()->fromRoute('id', null);
         $data = [];
+
+        if ($id) {
+
+            if ($this->isCurrentUser($id)) {
+                $this->lockNameFields($form);
+            }
+
+            $response = $this->handleQuery(
+                ItemDto::create(
+                    ['id' => $id]
+                )
+            );
+            if (!$response->isOk()) {
+                $this->getFlashMessenger()->addUnknownError();
+                return $this->redirectToIndex();
+            }
+
+            $data = $this->formatLoadData($response->getResult());
+            $form->setData($data);
+        }
 
         if ($request->isPost()) {
             if ($this->isButtonPressed('cancel')) {
@@ -117,19 +139,6 @@ class UserController extends AbstractController
                     $this->getFlashMessenger()->addUnknownError();
                 }
             }
-        } elseif ($id) {
-            $response = $this->handleQuery(
-                ItemDto::create(
-                    ['id' => $id]
-                )
-            );
-            if (!$response->isOk()) {
-                $this->getFlashMessenger()->addUnknownError();
-                return $this->redirectToIndex();
-            }
-
-            $data = $this->formatLoadData($response->getResult());
-            $form->setData($data);
         }
 
         $view = new ViewModel(
@@ -180,7 +189,7 @@ class UserController extends AbstractController
         $request = $this->getRequest();
 
         /** @var \Zend\Form\FormInterface $form */
-        $form = $this->getServiceLocator()->get('Helper\Form')
+        $form = $this->getFormHelper()
             ->createFormWithRequest('GenericDeleteConfirmation', $request);
 
         if ($request->isPost()) {
@@ -267,8 +276,10 @@ class UserController extends AbstractController
 
         $output['contactDetails']['emailAddress'] = $data['main']['emailAddress'];
 
-        $output['contactDetails']['person']['familyName'] = $data['main']['familyName'];
-        $output['contactDetails']['person']['forename']   = $data['main']['forename'];
+        if (!$this->isCurrentUser($data['main']['id'])) {
+            $output['contactDetails']['person']['familyName'] = $data['main']['familyName'];
+            $output['contactDetails']['person']['forename'] = $data['main']['forename'];
+        }
 
         return $output;
     }
@@ -337,5 +348,41 @@ class UserController extends AbstractController
     private function redirectToIndex()
     {
         return $this->redirect()->toRouteAjax('manage-user', ['action' => 'index'], [], false);
+    }
+
+    /**
+     * @param Form $form
+     */
+    protected function lockNameFields(Form $form)
+    {
+        $fieldSet = $form->get('main');
+
+        $this->getFormHelper()->lockElement($fieldSet->get('forename'), 'name-change.locked.tooltip.message');
+        $this->getFormHelper()->disableElement($form, 'main->forename');
+
+        $this->getFormHelper()->lockElement($fieldSet->get('familyName'), 'name-change.locked.tooltip.message');
+        $this->getFormHelper()->disableElement($form, 'main->familyName');
+
+        $message = $this->getServiceLocator()->get('Helper\Translation')->translate('name-change.locked.guidance.message');
+        $this->getServiceLocator()->get('Helper\Guidance')->append($message);
+    }
+
+    /**
+     * @return FormHelperService
+     */
+    protected function getFormHelper()
+    {
+        return $this->getServiceLocator()->get('Helper\Form');
+    }
+
+    /**
+     * @param $id
+     * @return bool
+     */
+    protected function isCurrentUser($id)
+    {
+        $currentUser = $this->getCurrentUser();
+
+        return (isset($currentUser['id']) && $currentUser['id'] == $id);
     }
 }

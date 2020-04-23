@@ -154,7 +154,7 @@ class MyDetailsController extends AbstractController
     {
         $fieldSet = $form->get('main');
 
-        $this->getFormHelper()->lockElement($fieldSet->get('forename'), 'my-details.name-change.locked.tooltip.message');
-        $this->getFormHelper()->lockElement($fieldSet->get('familyName'), 'my-details.name-change.locked.tooltip.message');
+        $this->getFormHelper()->lockElement($fieldSet->get('forename'), 'name-change.locked.tooltip.message');
+        $this->getFormHelper()->lockElement($fieldSet->get('familyName'), 'name-change.locked.tooltip.message');
     }
 }
