@@ -25,20 +25,22 @@ class MyDetails extends Base
     public $loginId = null;
 
     /**
-     * @Form\Attributes({"id":"forename","placeholder":"","class":"medium", "required":false})
+     * @Form\Attributes({"id":"forename","placeholder":"","class":"medium", "required":false, "disabled":"disabled"})
      * @Form\Options({
-     *     "label":"first-name"
+     *     "label":"my-details.first-name"
      * })
      * @Form\Type("Text")
+     * @Form\Required(false)
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":35}})
      */
     public $forename = null;
 
     /**
-     * @Form\Attributes({"id":"familyName","placeholder":"","class":"medium", "required":false})
+     * @Form\Attributes({"id":"familyName","placeholder":"","class":"medium", "required":false, "disabled":"disabled"})
      * @Form\Options({"label":"last-name"})
      * @Form\Type("Text")
+     * @Form\Required(false)
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
      * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":35}})
      */
