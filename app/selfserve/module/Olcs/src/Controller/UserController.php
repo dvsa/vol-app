@@ -83,10 +83,6 @@ class UserController extends AbstractController
         $data = [];
 
         if ($id) {
-            if ($this->isCurrentUser($id)) {
-                $this->lockNameFields($form);
-            }
-
             $response = $this->handleQuery(
                 ItemDto::create(
                     ['id' => $id]
@@ -99,6 +95,10 @@ class UserController extends AbstractController
 
             $data = $this->formatLoadData($response->getResult());
             $form->setData($data);
+
+            if (!$this->isNameChangeAllowed($data)) {
+                $this->lockNameFields($form);
+            }
         }
 
         if ($request->isPost()) {
@@ -275,7 +275,7 @@ class UserController extends AbstractController
 
         $output['contactDetails']['emailAddress'] = $data['main']['emailAddress'];
 
-        if (!$this->isCurrentUser($data['main']['id'])) {
+        if ($this->isNameChangeAllowed($data)) {
             $output['contactDetails']['person']['familyName'] = $data['main']['familyName'];
             $output['contactDetails']['person']['forename'] = $data['main']['forename'];
         }
@@ -378,10 +378,26 @@ class UserController extends AbstractController
      * @param $id
      * @return bool
      */
-    protected function isCurrentUser($id)
+    protected function isCurrentUser($data)
     {
         $currentUser = $this->getCurrentUser();
 
-        return (isset($currentUser['id']) && $currentUser['id'] == $id);
+        return (isset($currentUser['id']) && $currentUser['id'] == $data['main']['id']);
+    }
+
+    protected function isUserTm(array $data)
+    {
+        return isset($data['main']['permission']) && $data['main']['permission'] == 'tm';
+    }
+
+    /**
+     * Name change is not allowed if user details page is for current user or for a Traffic Manager
+     *
+     * @param array $data
+     * @return bool
+     */
+    protected function isNameChangeAllowed(array $data)
+    {
+        return !$this->isCurrentUser($data) && !$this->isUserTm($data);
     }
 }
