@@ -358,29 +358,44 @@ class UserControllerTest extends MockeryTestCase
         $this->assertInstanceOf(\Common\Form\Form::class, $view->getVariable('form'));
     }
 
-    public function testSaveGetsInvalidResponseAndRedirectsToIndex()
+    public function testSaveExistingRecordForTransportManagerLocksNameFields()
     {
+        $rawEditData = array(
+            'id' => 3,
+            'version' => 1,
+            'loginId' => 'stevefox',
+            'contactDetails' => array(
+                'emailAddress' => 'steve@example.com',
+                'id' => 106,
+                'version' => 1,
+                'person' => array(
+                    'familyName' => 'Fox',
+                    'forename' => 'Steve',
+                    'id' => 82,
+                    'version' => 1,
+                ),
+            ),
+            'permission' => 'tm',
+            'translateToWelsh' => 'Y',
+        );
+
         $id = 3;
 
         $this->mockResponse
-            ->shouldReceive('isOk')->andReturn(false);
+            ->shouldReceive('isOk')->andReturn(true)
+            ->shouldReceive('getResult')->andReturn($rawEditData);
 
         $this->sut->shouldReceive('handleQuery')
             ->with(m::type(TransferQry\User\UserSelfserve::class))
             ->andReturn($this->mockResponse);
 
-        $this->mockFlashMsgr->shouldReceive('addUnknownError')->once();
+        $this->sut->shouldReceive('getCurrentUser')->once()->andReturn(['id' => 1111]);
 
-        $mockRedirect = m::mock(Redirect::class);
-        $mockRedirect
-            ->shouldReceive('toRouteAjax')
-            ->with('manage-user', ['action' => 'index'], [], false)
-            ->andReturn('EXPECT');
-        $this->sut->shouldReceive('redirect')->andReturn($mockRedirect);
-
-        $this->sut->shouldReceive('getCurrentUser')->once()->andReturn(['id' => $id]);
+        $this->mockRequest->shouldReceive('isPost')->andReturn(false); // false NOT to simulate form submission
 
         $this->mockParams->shouldReceive('fromRoute')->with('id', null)->andReturn($id);
+
+        $this->mockFlashMsgr->shouldReceive('addSuccessMessage')->andReturnNull();
 
         $mockFieldSet = m::mock();
         $mockElementForename = m::mock();
@@ -389,6 +404,7 @@ class UserControllerTest extends MockeryTestCase
         $mockFieldSet->shouldReceive('get')->with('familyName')->once()->andReturn($mockElementFamilyName);
 
         $this->mockForm
+            ->shouldReceive('setData')->with($this->sut->formatLoadData($rawEditData))// happy path.
             ->shouldReceive('get')->with('main')->andReturn($mockFieldSet);
 
         $this->mockFormHelper
@@ -411,6 +427,38 @@ class UserControllerTest extends MockeryTestCase
             ->shouldReceive('disableElement')
             ->with($this->mockForm, 'main->familyName')
             ->once();
+
+        $view = $this->sut->editAction();
+
+        $this->assertInstanceOf(\Common\Form\Form::class, $view->getVariable('form'));
+    }
+
+    public function testSaveGetsInvalidResponseAndRedirectsToIndex()
+    {
+        $id = 3;
+
+        $this->mockResponse
+            ->shouldReceive('isOk')->andReturn(false);
+
+        $this->sut->shouldReceive('handleQuery')
+            ->with(m::type(TransferQry\User\UserSelfserve::class))
+            ->andReturn($this->mockResponse);
+
+        $this->mockFlashMsgr->shouldReceive('addUnknownError')->once();
+
+        $mockRedirect = m::mock(Redirect::class);
+        $mockRedirect
+            ->shouldReceive('toRouteAjax')
+            ->with('manage-user', ['action' => 'index'], [], false)
+            ->andReturn('EXPECT');
+        $this->sut->shouldReceive('redirect')->andReturn($mockRedirect);
+
+        $this->mockParams->shouldReceive('fromRoute')->with('id', null)->andReturn($id);
+
+        $this->mockFormHelper
+            ->shouldReceive('createFormWithRequest')
+            ->with('User', $this->mockRequest)
+            ->andReturn($this->mockForm);
 
         $this->assertEquals('EXPECT', $this->sut->editAction());
     }

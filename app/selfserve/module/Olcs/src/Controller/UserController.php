@@ -387,7 +387,7 @@ class UserController extends AbstractController
 
     protected function isUserTm(array $data)
     {
-        return isset($data['main']['permission']) && $data['main']['permission'] == 'tm';
+        return isset($data['main']['currentPermission']) && $data['main']['currentPermission'] == 'tm';
     }
 
     /**
