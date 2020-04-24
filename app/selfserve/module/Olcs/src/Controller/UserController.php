@@ -83,7 +83,6 @@ class UserController extends AbstractController
         $data = [];
 
         if ($id) {
-
             if ($this->isCurrentUser($id)) {
                 $this->lockNameFields($form);
             }
@@ -189,7 +188,7 @@ class UserController extends AbstractController
         $request = $this->getRequest();
 
         /** @var \Zend\Form\FormInterface $form */
-        $form = $this->getFormHelper()
+        $form = $this->getServiceLocator()->get('Helper\Form')
             ->createFormWithRequest('GenericDeleteConfirmation', $request);
 
         if ($request->isPost()) {
