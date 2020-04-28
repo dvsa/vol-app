@@ -27,6 +27,7 @@ class IrhpApplicationSection extends AbstractHelper
     const ROUTE_LICENCE_CONFIRM_CHANGE = 'permits/application/licence/change';
     const ROUTE_COUNTRIES = 'permits/application/countries';
     const ROUTE_IPA_QUESTION = 'permits/application/ipa/question';
+    const ROUTE_IPA_CHECK_ANSWERS = 'permits/application/ipa/check-answers';
     const ROUTE_NO_OF_PERMITS = 'permits/application/no-of-permits';
     const ROUTE_CHECK_ANSWERS = 'permits/application/check-answers';
     const ROUTE_DECLARATION = 'permits/application/declaration';

@@ -62,10 +62,18 @@ class IrhpPermitAppCheckAnswersController extends AbstractSelfserveController im
 
     public function mergeTemplateVars()
     {
-        $this->templateVarsConfig['default']['backUri'] = IrhpApplicationSection::ROUTE_IPA_QUESTION;
-        $this->templateVarsConfig['default']['backUriParams'] = [
+        $backUri = IrhpApplicationSection::ROUTE_IPA_QUESTION;
+        $backUriParams = [
             'slug' => RefData::BILATERAL_NUMBER_OF_PERMITS,
         ];
+
+        if (isset($this->queryParams['fromOverview'])) {
+            $backUri = IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW;
+            $backUriParams = [];
+        }
+
+        $this->templateVarsConfig['default']['backUri'] = $backUri;
+        $this->templateVarsConfig['default']['backUriParams'] = $backUriParams;
 
         parent::mergeTemplateVars();
     }
