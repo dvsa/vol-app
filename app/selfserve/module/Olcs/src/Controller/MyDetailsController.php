@@ -6,7 +6,7 @@ use Common\Controller\Lva\AbstractController;
 use Common\Form\Form;
 use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Transfer\Command\MyAccount\UpdateMyAccountSelfserve as UpdateDto;
-use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount as ItemDto;
+use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount as MyAccountQuery;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -26,7 +26,7 @@ class MyDetailsController extends AbstractController
         /** @var Form $form */
         $form = $formHelper->createFormWithRequest('MyDetails', $this->getRequest());
 
-        $response = $this->handleQuery(ItemDto::create([]));
+        $response = $this->handleQuery(MyAccountQuery::create([]));
 
         if ($response->isOk()) {
             $data = $this->formatLoadData($response->getResult());
