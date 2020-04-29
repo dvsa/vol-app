@@ -10,15 +10,15 @@
             "type": "composer"
         },
         {
-            "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-transfer.git",
+            "url": "git@repo.olcs.dev-dvsacloud.uk:olcs/olcs-transfer.git",
             "type": "vcs"
         },
         {
-            "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-common.git",
+            "url": "git@repo.olcs.dev-dvsacloud.uk:olcs/olcs-common.git",
             "type": "vcs"
         },
         {
-            "url": "git@repo.shd.ci.nonprod.dvsa.aws:olcs/olcs-auth.git",
+            "url": "git@repo.olcs.dev-dvsacloud.uk:olcs/olcs-auth.git",
             "type": "vcs"
         },
         {
