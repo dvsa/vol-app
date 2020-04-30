@@ -375,17 +375,17 @@ class UserController extends AbstractController
     }
 
     /**
-     * @param $id
+     * @param $data
      * @return bool
      */
-    protected function isCurrentUser($data)
+    protected function isCurrentUser(array $data): bool
     {
         $currentUser = $this->getCurrentUser();
 
         return (isset($currentUser['id']) && $currentUser['id'] == $data['main']['id']);
     }
 
-    protected function isUserTm(array $data)
+    protected function isUserTm(array $data): bool
     {
         return isset($data['main']['currentPermission']) && $data['main']['currentPermission'] == 'tm';
     }
@@ -396,7 +396,7 @@ class UserController extends AbstractController
      * @param array $data
      * @return bool
      */
-    protected function isNameChangeAllowed(array $data)
+    protected function isNameChangeAllowed(array $data): bool
     {
         return !$this->isCurrentUser($data) && !$this->isUserTm($data);
     }
