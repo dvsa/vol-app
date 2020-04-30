@@ -10,6 +10,7 @@ use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
+use Permits\Data\Mapper\IrhpApplicationFeeSummary;
 use Permits\View\Helper\IrhpApplicationSection;
 
 class IrhpAwaitingFeeController extends AbstractSelfserveController implements ToggleAwareInterface
@@ -80,5 +81,17 @@ class IrhpAwaitingFeeController extends AbstractSelfserveController implements T
         }
 
         return $form;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function retrieveData()
+    {
+        parent::retrieveData();
+
+        $this->data = $this->getServiceLocator()
+            ->get(IrhpApplicationFeeSummary::class)
+            ->mapForDisplay($this->data);
     }
 }

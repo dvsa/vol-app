@@ -11,6 +11,7 @@ use Olcs\Service\Qa\TemplateVarsGenerator;
 use Olcs\Service\Qa\ViewGeneratorProvider;
 use Permits\View\Helper\EcmtSection;
 use Permits\View\Helper\IrhpApplicationSection;
+use RuntimeException;
 use Zend\View\Model\ViewModel;
 
 class QaController extends AbstractOlcsController

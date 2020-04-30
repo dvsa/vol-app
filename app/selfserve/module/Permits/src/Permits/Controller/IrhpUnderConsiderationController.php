@@ -8,6 +8,7 @@ use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
+use Permits\Data\Mapper\IrhpApplicationFeeSummary;
 use Permits\View\Helper\IrhpApplicationSection;
 
 class IrhpUnderConsiderationController extends AbstractSelfserveController implements ToggleAwareInterface
@@ -35,4 +36,16 @@ class IrhpUnderConsiderationController extends AbstractSelfserveController imple
             'prependTitleDataKey' => IrhpAppDataSource::DATA_KEY,
         ]
     ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public function retrieveData()
+    {
+        parent::retrieveData();
+
+        $this->data = $this->getServiceLocator()
+            ->get(IrhpApplicationFeeSummary::class)
+            ->mapForDisplay($this->data);
+    }
 }
