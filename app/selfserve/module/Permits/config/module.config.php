@@ -11,6 +11,7 @@ use Permits\Controller\PermitsController;
 use Permits\Controller\TypeController;
 use Permits\Controller\IrhpApplicationController;
 use Permits\Controller\IrhpApplicationCountryController;
+use Permits\Controller\IrhpApplicationCountryConfirmationController;
 use Permits\Controller\IrhpApplicationFeeController;
 use Permits\Controller\IrhpUnderConsiderationController;
 use Permits\Controller\NoOfPermitsController;
@@ -44,6 +45,7 @@ return [
         SubmittedController::class => SubmittedController::class,
         IrhpApplicationController::class => IrhpApplicationController::class,
         IrhpApplicationCountryController::class => IrhpApplicationCountryController::class,
+        IrhpApplicationCountryConfirmationController::class => IrhpApplicationCountryConfirmationController::class,
         NoOfPermitsController::class => NoOfPermitsController::class,
         IrhpApplicationDeclarationController::class => IrhpApplicationDeclarationController::class,
         IrhpCheckAnswersController::class => IrhpCheckAnswersController::class,
@@ -198,6 +200,17 @@ return [
                               'route'    => 'countries[/]',
                               'defaults' => [
                                   'controller'    => IrhpApplicationCountryController::class,
+                                  'action'        => 'question',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'countries-confirmation' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => 'countries-confirmation[/]',
+                              'defaults' => [
+                                  'controller'    => IrhpApplicationCountryConfirmationController::class,
                                   'action'        => 'question',
                               ],
                           ],
@@ -555,6 +568,8 @@ return [
           Mapper\LicencesAvailable::class => Mapper\LicencesAvailable::class,
           Mapper\PermitTypeTitle::class => Mapper\PermitTypeTitle::class,
           Mapper\IrhpFee::class => Mapper\IrhpFee::class,
+          Mapper\ConfirmedUpdatedCountries::class => Mapper\ConfirmedUpdatedCountries::class,
+          Mapper\RemovedCountries::class => Mapper\RemovedCountries::class,
       ],
       'factories' => [
           Mapper\EcmtNoOfPermits::class => Mapper\EcmtNoOfPermitsFactory::class,

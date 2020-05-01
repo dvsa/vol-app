@@ -4,6 +4,7 @@ namespace Permits\Controller;
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\UpdateCountries;
 use Olcs\Controller\AbstractSelfserveController;
+use Permits\Controller\Config\DataSource\AvailableCountries;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\DataSource\IrhpApplication;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
@@ -91,5 +92,77 @@ class IrhpApplicationCountryController extends AbstractSelfserveController imple
         }
 
         parent::mergeTemplateVars();
+    }
+
+    /**
+     * Extend method to allow the selected checkboxes to be determined by a list of country codes specified on the
+     * querystring. Used by back button and cancel button on countries confirmation page
+     */
+    public function retrieveForms()
+    {
+        if (empty($this->postParams) &&
+            isset($this->queryParams['countries']) &&
+            is_string($this->queryParams['countries'])
+        ) {
+            $countryCodeIndexMap = [];
+            foreach ($this->data[AvailableCountries::DATA_KEY]['countries'] as $index => $country) {
+                $countryCode = $country['id'];
+                $countryCodeIndexMap[$countryCode] = $index;
+            }
+
+            $this->data[IrhpApplication::DATA_KEY]['countrys'] = [];
+            $selectedCountryCodes = explode(',', $this->queryParams['countries']);
+            foreach ($selectedCountryCodes as $countryCode) {
+                if (isset($countryCodeIndexMap[$countryCode])) {
+                    $index = $countryCodeIndexMap[$countryCode];
+                    $country = $this->data[AvailableCountries::DATA_KEY]['countries'][$index];
+                    $this->data[IrhpApplication::DATA_KEY]['countrys'][] = $country;
+                }
+            }
+        }
+
+        parent::retrieveForms();
+    }
+
+    /**
+     * Extend method to redirect to countries confirmation page when one or more of the currently selected countries
+     * are unselected
+     */
+    public function handlePost()
+    {
+        if (isset($this->postParams['Submit']['CancelButton'])) {
+            return $this->redirect()->toRoute(IrhpApplicationSection::ROUTE_CANCEL_APPLICATION, [], [], true);
+        }
+
+        if (isset($this->postParams['fields']['countries']) &&
+            is_array($this->postParams['fields']['countries']) &&
+            !empty($this->postParams['fields']['countries'])
+        ) {
+            $availableCountryCodes = array_column(
+                $this->data[AvailableCountries::DATA_KEY]['countries'],
+                'id'
+            );
+            $selectedCountryCodes = $this->postParams['fields']['countries'];
+            $validatedSelectedCountryCodes = array_intersect($availableCountryCodes, $selectedCountryCodes);
+            $linkedCountryCodes = array_column($this->data[IrhpApplication::DATA_KEY]['countrys'], 'id');
+            $removedCountryCodes = array_diff($linkedCountryCodes, $validatedSelectedCountryCodes);
+
+            if (!empty($removedCountryCodes)) {
+                $selectedCountryCodesCsv = implode(',', $selectedCountryCodes);
+
+                return $this->redirect()->toRoute(
+                    IrhpApplicationSection::ROUTE_COUNTRIES_CONFIRMATION,
+                    [],
+                    [
+                        'query' => [
+                            'countries' => $selectedCountryCodesCsv
+                        ]
+                    ],
+                    true
+                );
+            }
+        }
+
+        return parent::handlePost();
     }
 }

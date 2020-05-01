@@ -17,6 +17,7 @@ use Permits\Data\Mapper\AvailableBilateralStocks as AvailableBilateralStocksMapp
 use Permits\Data\Mapper\LicencesAvailable as LicencesAvailableMapper;
 use Permits\Data\Mapper\NoOfPermits as NoOfPermitsMapper;
 use Permits\Data\Mapper\ChangeLicence as ChangeLicenceMapper;
+use Permits\Data\Mapper\RemovedCountries as RemovedCountriesMapper;
 
 /**
  * Holds conditional display configs that are used regularly - eventually it'd be nice to have ::class in here
@@ -160,6 +161,16 @@ class FormConfig
             'mapper' => [
                 'type' => self::FORM_OPTIONS,
                 'class' => AvailableCountriesMapper::class
+            ]
+        ],
+    ];
+
+    const FORM_COUNTRIES_CONFIRMATION = [
+        'countries' => [
+            'formClass' => 'CountriesConfirmationForm',
+            'mapper' => [
+                'type' => self::FORM_OPTIONS,
+                'class' => RemovedCountriesMapper::class
             ]
         ],
     ];
