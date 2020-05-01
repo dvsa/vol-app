@@ -3,8 +3,10 @@
 namespace Olcs\Controller;
 
 use Common\Controller\Lva\AbstractController;
+use Common\Form\Form;
+use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Transfer\Command\MyAccount\UpdateMyAccountSelfserve as UpdateDto;
-use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount as ItemDto;
+use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount as MyAccountQuery;
 use Zend\View\Model\ViewModel;
 
 /**
@@ -19,8 +21,19 @@ class MyDetailsController extends AbstractController
      */
     public function editAction()
     {
-        /** @var \Common\Form\Form $form */
-        $form = $this->getServiceLocator()->get('Helper\Form')->createFormWithRequest('MyDetails', $this->getRequest());
+        $formHelper = $this->getFormHelper();
+
+        /** @var Form $form */
+        $form = $formHelper->createFormWithRequest('MyDetails', $this->getRequest());
+
+        $response = $this->handleQuery(MyAccountQuery::create([]));
+
+        if ($response->isOk()) {
+            $data = $this->formatLoadData($response->getResult());
+            $form->setData($data);
+        } else {
+            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        }
 
         if ($this->getRequest()->isPost()) {
             if ($this->isButtonPressed('cancel')) {
@@ -54,16 +67,9 @@ class MyDetailsController extends AbstractController
                     }
                 }
             }
-        } else {
-            $response = $this->handleQuery(ItemDto::create([]));
-
-            if ($response->isOk()) {
-                $data = $this->formatLoadData($response->getResult());
-                $form->setData($data);
-            } else {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-            }
         }
+
+        $this->lockNameFields($form);
 
         $view = new ViewModel(
             [
@@ -116,11 +122,7 @@ class MyDetailsController extends AbstractController
             'loginId' => $data['main']['loginId'],
             'translateToWelsh' => $data['main']['translateToWelsh'],
             'contactDetails' => [
-                'emailAddress' => $data['main']['emailAddress'],
-                'person' => [
-                    'familyName' => $data['main']['familyName'],
-                    'forename' => $data['main']['forename'],
-                ]
+                'emailAddress' => $data['main']['emailAddress']
             ]
         ];
     }
@@ -133,5 +135,26 @@ class MyDetailsController extends AbstractController
     private function redirectToIndex()
     {
         return $this->redirect()->toRoute('your-account', ['action' => 'edit'], array(), false);
+    }
+
+    /**
+     * @return FormHelperService
+     */
+    private function getFormHelper()
+    {
+        /** @var FormHelperService $formHelper */
+        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        return $formHelper;
+    }
+
+    /**
+     * @param Form $form
+     */
+    private function lockNameFields(Form $form)
+    {
+        $fieldSet = $form->get('main');
+
+        $this->getFormHelper()->lockElement($fieldSet->get('forename'), 'name-change.locked.tooltip.message');
+        $this->getFormHelper()->lockElement($fieldSet->get('familyName'), 'name-change.locked.tooltip.message');
     }
 }
