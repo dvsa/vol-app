@@ -129,10 +129,7 @@ class IrhpPermitApplicationViewGeneratorTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpHandleRedirectionRequest
-     */
-    public function testHandleRedirectionRequest($destinationName, $routeName)
+    public function testHandleRedirectionRequestOverview()
     {
         $routeParams = ['id' => 100007];
 
@@ -143,21 +140,53 @@ class IrhpPermitApplicationViewGeneratorTest extends MockeryTestCase
             ->withNoArgs()
             ->andReturn($routeParams);
         $redirect->shouldReceive('toRoute')
-            ->with($routeName, $routeParams)
+            ->with(IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW, $routeParams, [])
             ->andReturn($response);
 
         $this->assertSame(
             $response,
-            $this->irhpPermitApplicationViewGenerator->handleRedirectionRequest($redirect, $destinationName)
+            $this->irhpPermitApplicationViewGenerator->handleRedirectionRequest($redirect, 'OVERVIEW')
         );
     }
 
-    public function dpHandleRedirectionRequest()
+    public function testHandleRedirectionRequestCancel()
     {
-        return [
-            ['OVERVIEW', IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW],
-            ['CANCEL', IrhpApplicationSection::ROUTE_CANCEL_APPLICATION],
+        $id = 100007;
+        $slug = 'page-slug';
+        $irhpPermitApplication = 2144;
+
+        $routeParams = [
+            'id' => $id,
+            'slug' => $slug,
+            'irhpPermitApplication' => $irhpPermitApplication
         ];
+
+        $expectedRouteParams = [
+            'id' => $id
+        ];
+
+        $expectedRouteOptions = [
+            'query' => [
+                'fromBilateralCabotage' => '1',
+                'slug' => $slug,
+                'ipa' => $irhpPermitApplication
+            ]
+        ];
+
+        $response = m::mock(Response::class);
+
+        $redirect = m::mock(Redirect::class);
+        $redirect->shouldReceive('getController->params->fromRoute')
+            ->withNoArgs()
+            ->andReturn($routeParams);
+        $redirect->shouldReceive('toRoute')
+            ->with(IrhpApplicationSection::ROUTE_CANCEL_APPLICATION, $expectedRouteParams, $expectedRouteOptions)
+            ->andReturn($response);
+
+        $this->assertSame(
+            $response,
+            $this->irhpPermitApplicationViewGenerator->handleRedirectionRequest($redirect, 'CANCEL')
+        );
     }
 
     public function testHandleRedirectionRequestException()

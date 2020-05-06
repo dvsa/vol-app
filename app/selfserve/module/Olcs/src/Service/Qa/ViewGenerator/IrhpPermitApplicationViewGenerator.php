@@ -78,11 +78,23 @@ class IrhpPermitApplicationViewGenerator implements ViewGeneratorInterface
 
         $routeParams = $redirect->getController()->params()->fromRoute();
 
+        $routeOptions = [];
+        if ($destinationName == 'CANCEL') {
+            $routeOptions = [
+                'query' => [
+                    'fromBilateralCabotage' => '1',
+                    'ipa' => $routeParams['irhpPermitApplication'],
+                    'slug' => $routeParams['slug']
+                ]
+            ];
+        }
+
         return $redirect->toRoute(
             $mappings[$destinationName],
             [
                 'id' => $routeParams['id']
-            ]
+            ],
+            $routeOptions
         );
     }
 }

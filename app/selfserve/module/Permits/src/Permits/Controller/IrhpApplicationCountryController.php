@@ -131,7 +131,16 @@ class IrhpApplicationCountryController extends AbstractSelfserveController imple
     public function handlePost()
     {
         if (isset($this->postParams['Submit']['CancelButton'])) {
-            return $this->redirect()->toRoute(IrhpApplicationSection::ROUTE_CANCEL_APPLICATION, [], [], true);
+            return $this->redirect()->toRoute(
+                IrhpApplicationSection::ROUTE_CANCEL_APPLICATION,
+                [],
+                [
+                    'query' => [
+                        'fromCountries' => '1'
+                    ]
+                ],
+                true
+            );
         }
 
         if (isset($this->postParams['fields']['countries']) &&
