@@ -15,6 +15,7 @@ class ValidIrhpPermits extends AbstractDataSource
     protected $paramsMap = [
         'licence' => 'licence',
         'type' => 'irhpPermitType',
+        'country' => 'country',
         'page' => 'page',
         'limit' => 'limit',
     ];

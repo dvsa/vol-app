@@ -11,6 +11,7 @@ use Permits\Controller\Config\DataSource\IrhpFeePerPermit as IrhpFeePerPermitDat
 use Permits\Controller\Config\DataSource\IrhpMaxStockPermits as IrhpMaxStockPermitsDataSource;
 use Permits\Controller\Config\DataSource\UnpaidIrhpPermits as UnpaidIrhpPermitsDataSource;
 use Permits\Controller\Config\DataSource\ValidIrhpPermits as ValidIrhpPermitsDataSource;
+use Permits\Controller\Config\DataSource\ValidIrhpPermitsUniqueCountries as ValidIrhpPermitsUniqueCountriesDataSource;
 use Permits\Controller\Config\DataSource\PermitsAvailable as PermitsAvailableDataSource;
 use Permits\Data\Mapper\IrhpApplicationFeeSummary;
 use Permits\Data\Mapper\PermitTypeTitle as PermitTypeTitleMapper;
@@ -102,6 +103,7 @@ class DataSourceConfig
         Licence::class => [],
         IrhpPermitType::class => [],
         ValidIrhpPermitsDataSource::class => [],
+        ValidIrhpPermitsUniqueCountriesDataSource::class => [],
     ];
 
     const IRHP_APP_CHECK_ANSWERS = [

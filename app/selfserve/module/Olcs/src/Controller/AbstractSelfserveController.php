@@ -582,9 +582,14 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      */
     protected function getTable(string $tableName, array $data)
     {
+        $params = array_merge(
+            $this->queryParams,
+            ['query' => $this->queryParams]
+        );
+
         return $this->getServiceLocator()
             ->get('Table')
-            ->prepareTable($tableName, $data, $this->queryParams);
+            ->prepareTable($tableName, $data, $params);
     }
 
     /**
