@@ -84,11 +84,13 @@ class DataSourceConfig
     const IRHP_APP_ESSENTIAL_INFORMATION = [
         IrhpAppDataSource::class => [],
         BilateralFeesByCountry::class => [],
+        BilateralCountryAccessible::class => [],
     ];
 
     const IRHP_APP_PERIODS = [
         IrhpAppDataSource::class => [],
         AvailableBilateralStocksDataSource::class => [],
+        BilateralCountryAccessible::class => [],
     ];
 
     const IRHP_UNPAID_PERMITS = [

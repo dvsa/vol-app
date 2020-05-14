@@ -4,8 +4,8 @@ namespace Permits\Controller;
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\UpdatePeriod;
 use Olcs\Controller\AbstractSelfserveController;
-use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
+use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
@@ -27,7 +27,7 @@ class IrhpApplicationPeriodController extends AbstractSelfserveController implem
     ];
 
     protected $conditionalDisplayConfig = [
-        'default' => ConditionalDisplayConfig::IRHP_BILATERAL_APP_NOT_SUBMITTED,
+        'default' => ConditionalDisplayConfig::IRHP_APP_CAN_SELECT_BILATERAL_PERIOD,
     ];
 
     protected $templateConfig = [
