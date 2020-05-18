@@ -19,6 +19,7 @@ use Dvsa\Olcs\Transfer\Command\IrhpApplication\Grant;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\ReviveFromUnsuccessful;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\ReviveFromWithdrawn;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\SubmitApplication;
+use Dvsa\Olcs\Transfer\Command\IrhpApplication\Terminate;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\Withdraw;
 use Dvsa\Olcs\Transfer\Command\Permits\AcceptEcmtPermits;
 use Dvsa\Olcs\Transfer\Query\Permits\AvailableStocks;
@@ -110,6 +111,10 @@ class IrhpApplicationController extends AbstractInternalController implements
             'action' => 'index',
         ],
         'cancel' => [
+            'route' => 'licence/irhp-application',
+            'action' => 'index',
+        ],
+        'terminate' => [
             'route' => 'licence/irhp-application',
             'action' => 'index',
         ],
@@ -482,6 +487,22 @@ class IrhpApplicationController extends AbstractInternalController implements
             'Are you sure?',
             'Cancel Application. Are you sure?',
             'IRHP Application Cancelled'
+        );
+    }
+
+    /**
+     * Handles click of the Terminate button on right sidebar
+     *
+     * @return \Zend\Http\Response
+     */
+    public function terminateAction()
+    {
+        return $this->confirmCommand(
+            new ConfirmItem($this->itemParams),
+            Terminate::class,
+            'Are you sure?',
+            'You are about to terminate the selected certificate. Are you sure?',
+            'The selected certificate has been terminated'
         );
     }
 

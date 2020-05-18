@@ -264,6 +264,16 @@ return [
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
                         ],
+                        [
+                            'id' => 'irhp-application-quick-actions-terminate',
+                            'label' => 'Terminate',
+                            'route' => 'licence/irhp-application/application',
+                            'params' => [
+                                'action' => 'terminate',
+                            ],
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ],
                     ],
                 ],
                 [
