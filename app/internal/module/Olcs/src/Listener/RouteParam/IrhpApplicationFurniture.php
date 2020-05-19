@@ -170,6 +170,8 @@ class IrhpApplicationFurniture implements
         // quick actions
         $sidebarNav->findOneBy('id', 'irhp-application-quick-actions-cancel')
             ->setVisible($irhpApplication['canBeCancelled']);
+        $sidebarNav->findOneBy('id', 'irhp-application-quick-actions-terminate')
+            ->setVisible($irhpApplication['canBeTerminated']);
 
         $routeParams = $this->getApplicationService()->getMvcEvent()->getRouteMatch()->getParams();
 

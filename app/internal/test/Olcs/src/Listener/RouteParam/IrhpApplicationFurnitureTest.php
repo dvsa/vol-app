@@ -186,6 +186,9 @@ class IrhpApplicationFurnitureTest extends TestCase
             ->shouldReceive('findOneBy')->once()->with('id', 'irhp-application-quick-actions-cancel')->andReturn(
                 m::mock()->shouldReceive('setVisible')->once()->with($expected['isCancelVisible'])->getMock()
             )
+            ->shouldReceive('findOneBy')->once()->with('id', 'irhp-application-quick-actions-terminate')->andReturn(
+                m::mock()->shouldReceive('setVisible')->once()->with($expected['isTerminateVisible'])->getMock()
+            )
             ->shouldReceive('findOneBy')->once()->with('id', 'irhp-application-decisions-submit')->andReturn(
                 m::mock()->shouldReceive('setVisible')->once()->with($expected['isSubmitVisible'])->getMock()
             )
@@ -226,6 +229,7 @@ class IrhpApplicationFurnitureTest extends TestCase
             [
                 [
                     'canBeCancelled' => false,
+                    'canBeTerminated' => false,
                     'canBeSubmitted' => false,
                     'canBeWithdrawn' => false,
                     'canBeDeclined' => false,
@@ -237,6 +241,7 @@ class IrhpApplicationFurnitureTest extends TestCase
                 ],
                 [
                     'isCancelVisible' => false,
+                    'isTerminateVisible' => false,
                     'isSubmitVisible' => false,
                     'isWithdrawVisible' => false,
                     'isGrantVisible' => false,
@@ -245,6 +250,7 @@ class IrhpApplicationFurnitureTest extends TestCase
             [
                 [
                     'canBeCancelled' => false,
+                    'canBeTerminated' => false,
                     'canBeSubmitted' => false,
                     'canBeWithdrawn' => true,
                     'canBeDeclined' => false,
@@ -256,6 +262,7 @@ class IrhpApplicationFurnitureTest extends TestCase
                 ],
                 [
                     'isCancelVisible' => false,
+                    'isTerminateVisible' => false,
                     'isSubmitVisible' => false,
                     'isWithdrawVisible' => true,
                     'isGrantVisible' => false,
@@ -264,6 +271,7 @@ class IrhpApplicationFurnitureTest extends TestCase
             [
                 [
                     'canBeCancelled' => false,
+                    'canBeTerminated' => false,
                     'canBeSubmitted' => false,
                     'canBeWithdrawn' => false,
                     'canBeDeclined' => true,
@@ -275,6 +283,7 @@ class IrhpApplicationFurnitureTest extends TestCase
                 ],
                 [
                     'isCancelVisible' => false,
+                    'isTerminateVisible' => false,
                     'isSubmitVisible' => false,
                     'isWithdrawVisible' => true,
                     'isGrantVisible' => false,
@@ -283,6 +292,7 @@ class IrhpApplicationFurnitureTest extends TestCase
             [
                 [
                     'canBeCancelled' => true,
+                    'canBeTerminated' => true,
                     'canBeSubmitted' => true,
                     'canBeWithdrawn' => true,
                     'canBeDeclined' => true,
@@ -294,6 +304,7 @@ class IrhpApplicationFurnitureTest extends TestCase
                 ],
                 [
                     'isCancelVisible' => true,
+                    'isTerminateVisible' => true,
                     'isSubmitVisible' => true,
                     'isWithdrawVisible' => true,
                     'isGrantVisible' => true,
