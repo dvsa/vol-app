@@ -98,6 +98,18 @@ return array(
     'debug' => [
         'showApiMessages' => false
     ],
+    'cache-encryption' => [
+        'node_suffix' => 'iuweb',
+        'adapter' => 'openssl',
+        'options' => [
+            'algo' => 'aes',
+            'mode' => 'gcm',
+        ],
+        'secrets' => [
+            'node' => 'nonprod/redis-iu',
+            'shared' => 'nonprod/redis-shared',
+        ],
+    ],
     'caches' => [
         \Zend\Cache\Storage\Adapter\Redis::class => [
             'adapter' => [
@@ -111,7 +123,7 @@ return array(
                         \Redis::OPT_SERIALIZER => \Redis::SERIALIZER_IGBINARY
                     ],
                     'ttl' => 3600, //one hour, likely to be overridden based on use case
-                    'namespace' => 'iuweb', //otherwise zend will default to "zfcache", but usually overridden anyway
+                    'namespace' => 'zfcache',
                 ],
                 'plugins' => [
                     'exception_handler' => [
