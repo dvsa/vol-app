@@ -27,8 +27,6 @@ use Dvsa\Olcs\Transfer\Query\Permits\AvailableYears;
 use Olcs\Form\Model\Form\IrhpApplicationWithdraw as WithdrawForm;
 use Olcs\Form\Model\Form\IrhpCandidatePermit as IrhpCandidatePermitForm;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\ApplicationPath;
-use Dvsa\Olcs\Transfer\Query\IrhpApplication\InternalApplicationsSummary;
-use Dvsa\Olcs\Transfer\Query\IrhpApplication\InternalIssuedPermitsSummary;
 use Dvsa\Olcs\Transfer\Query\IrhpCandidatePermit\GetListByIrhpApplication as CandidateListDTO;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\AvailableCountries;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitWindow\OpenByCountry;
@@ -65,8 +63,6 @@ class IrhpApplicationController extends AbstractInternalController implements
     LeftViewProvider,
     ToggleAwareInterface
 {
-    use ShowIrhpApplicationNavigationTrait;
-
     protected $toggleConfig = [
         'default' => [
             FeatureToggle::BACKEND_PERMITS
@@ -81,17 +77,12 @@ class IrhpApplicationController extends AbstractInternalController implements
     protected $itemParams = ['id' => 'irhpAppId'];
 
     // Maps the licence route parameter into the ListDTO as licence => value
-    protected $listVars = ['licence'];
-    protected $listDto = InternalApplicationsSummary::class;
     protected $itemDto = ItemDto::class;
     protected $formClass = IrhpApplication::class;
     protected $addFormClass = IrhpApplication::class;
     protected $mapperClass = IrhpApplicationMapper::class;
     protected $createCommand = CreateDto::class;
     protected $updateCommand = UpdateDto::class;
-
-    protected $tableName = 'permit-applications';
-    protected $tableViewTemplate = 'pages/irhp-permit/two-tables';
 
     protected $addContentTitle = 'Add Irhp Application';
 
@@ -154,7 +145,6 @@ class IrhpApplicationController extends AbstractInternalController implements
 
     // Scripts to include when rendering actions.
     protected $inlineScripts = [
-        'indexAction' => ['table-actions'],
         'preGrantAction' => ['table-actions'],
         'preGrantEditAction' => ['forms/irhp-candidate-permit'],
         'preGrantAddAction' => ['forms/irhp-candidate-permit'],
@@ -169,81 +159,26 @@ class IrhpApplicationController extends AbstractInternalController implements
      */
     public function getLeftView()
     {
-        $view = new ViewModel(
-            [
-                'navigationId' => 'licence_irhp_applications-edit',
-                'navigationTitle' => 'Application details'
-            ]
-        );
-        $view->setTemplate('admin/sections/admin/partials/generic-left');
+        $view = new ViewModel();
+
+        $view->setTemplate('sections/irhp-application/partials/left');
 
         return $view;
     }
-
 
     /**
      * @return \Zend\Http\Response|ViewModel
      */
     public function indexAction()
     {
-        $navigation = $this->getServiceLocator()->get('Navigation');
-        $navigation->findOneBy('id', 'licence_irhp_applications')->setActive();
-
-        $this->indexIssuedTable();
-        $this->handleIndexPost();
-
-        return parent::indexAction();
+        return $this->redirect()
+            ->toRoute(
+                'licence/irhp-permits/application',
+                [
+                    'licence' => $this->params()->fromRoute('licence')
+                ]
+            );
     }
-
-    /**
-     *
-     * Helper method to perform the query and setup table for Issued Permits table on dash.
-     *
-     */
-    protected function indexIssuedTable()
-    {
-        $response = $this->handleQuery(
-            InternalIssuedPermitsSummary::create(
-                ['licence' => $this->params()->fromRoute('licence')]
-            )
-        );
-
-        $data = [];
-        if ($response->isOk()) {
-            $data = $response->getResult();
-        } else {
-            $this->checkResponse($response);
-        }
-
-        $issuedTable = $this->getServiceLocator()
-            ->get('Table')
-            ->prepareTable('issued-permits', $data);
-        $this->placeholder()->setPlaceholder('issuedTable', $issuedTable);
-    }
-
-    /**
-     * @return \Zend\Http\Response
-     *
-     * Override to handle the Table from POST when Apply clicked and redirect to the Add form.
-     *
-     */
-    protected function handleIndexPost()
-    {
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            $postData = (array)$this->params()->fromPost();
-            if ($postData['action'] === 'Apply') {
-                return $this->redirect()
-                    ->toRoute(
-                        'licence/irhp-application/selectType',
-                        [
-                            'licence' => $this->params()->fromRoute('licence')
-                        ]
-                    );
-            }
-        }
-    }
-
 
     /**
      * Renders modal form, and handles redirect to correct application form for permit type.
@@ -1028,6 +963,7 @@ class IrhpApplicationController extends AbstractInternalController implements
      * @param Form $form
      * @param array $formData
      * @return mixed
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function alterFormForPreGrantAdd($form, $formData)
     {

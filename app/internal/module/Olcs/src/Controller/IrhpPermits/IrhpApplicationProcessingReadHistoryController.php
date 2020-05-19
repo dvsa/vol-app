@@ -18,8 +18,6 @@ class IrhpApplicationProcessingReadHistoryController extends AbstractInternalCon
     LeftViewProvider,
     ToggleAwareInterface
 {
-    use ShowIrhpApplicationNavigationTrait;
-
     protected $toggleConfig = [
         'default' => [
             FeatureToggle::BACKEND_PERMITS

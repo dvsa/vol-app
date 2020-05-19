@@ -14,8 +14,7 @@ class IrhpApplicationFeesController extends AbstractIrhpPermitController
 {
     use FeesActionTrait,
         GenericReceipt,
-        IrhpFeesTrait,
-        ShowIrhpApplicationNavigationTrait;
+        IrhpFeesTrait;
 
     /**
      * Route (prefix) for fees action redirects

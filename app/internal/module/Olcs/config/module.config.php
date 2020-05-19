@@ -331,6 +331,8 @@ return array(
             Olcs\Controller\DisqualifyController::class => Olcs\Controller\DisqualifyController::class,
             'CaseDocumentSlaTargetDateController' => 'Olcs\Controller\Sla\CaseDocumentSlaTargetDateController',
             'LicenceDocumentSlaTargetDateController' => 'Olcs\Controller\Sla\LicenceDocumentSlaTargetDateController',
+            \Olcs\Controller\IrhpPermits\ApplicationController::class => \Olcs\Controller\IrhpPermits\ApplicationController::class,
+            \Olcs\Controller\IrhpPermits\PermitController::class => \Olcs\Controller\IrhpPermits\PermitController::class,
             \Olcs\Controller\IrhpPermits\IrhpApplicationController::class => \Olcs\Controller\IrhpPermits\IrhpApplicationController::class,
             \Olcs\Controller\IrhpPermits\IrhpApplicationFeesController::class => \Olcs\Controller\IrhpPermits\IrhpApplicationFeesController::class,
             'IrhpPermitController' => 'Olcs\Controller\IrhpPermits\IrhpPermitController',

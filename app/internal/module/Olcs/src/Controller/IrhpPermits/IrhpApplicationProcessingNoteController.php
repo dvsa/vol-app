@@ -28,8 +28,6 @@ class IrhpApplicationProcessingNoteController extends AbstractInternalController
     LeftViewProvider,
     ToggleAwareInterface
 {
-    use ShowIrhpApplicationNavigationTrait;
-
     protected $toggleConfig = [
         'default' => [
             FeatureToggle::BACKEND_PERMITS

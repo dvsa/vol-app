@@ -556,9 +556,29 @@ $nav = [
                             'use_route_match' => true
                         ],
                         [
+                            'id' => 'licence_irhp_permits',
+                            'label' => 'IRHP Permits',
+                            'route' => 'licence/irhp-permits',
+                            'use_route_match' => true,
+                            'pages' => [
+                                [
+                                    'id' => 'licence_irhp_permits-application',
+                                    'label' => 'Permit Applications',
+                                    'route' => 'licence/irhp-permits/application',
+                                    'use_route_match' => true,
+                                ],
+                                [
+                                    'id' => 'licence_irhp_permits-permit',
+                                    'label' => 'Issued Permits',
+                                    'route' => 'licence/irhp-permits/permit',
+                                    'use_route_match' => true,
+                                ],
+                            ]
+                        ],
+                        [
                             'id' => 'licence_irhp_applications',
                             'label' => 'IRHP Permits',
-                            'visible' => 1,
+                            'visible' => 0,
                             'route' => 'licence/irhp-application',
                             'use_route_match' => true,
                             'pages' => [

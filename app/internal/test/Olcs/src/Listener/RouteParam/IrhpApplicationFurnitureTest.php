@@ -205,6 +205,9 @@ class IrhpApplicationFurnitureTest extends TestCase
                 m::mock()->shouldReceive('setVisible')->once()->with($data['canBeRevivedFromUnsuccessful'])->getMock()
             );
 
+        $mockNavigation->shouldReceive('findOneBy')->once()->with('id', 'licence_irhp_applications')->andReturn(
+            m::mock()->shouldReceive('setVisible')->once()->with(true)->getMock()
+        );
         $mockNavigation->shouldReceive('findOneBy')->once()->with('id', 'licence_irhp_applications-pregrant')->andReturn(
             m::mock()->shouldReceive('setVisible')->once()->with(true)->getMock()
         );

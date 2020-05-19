@@ -15,8 +15,6 @@ class IrhpApplicationProcessingTasksController extends AbstractIrhpPermitProcess
         Traits\TaskActionTrait::getTaskForm as traitGetTaskForm;
     }
 
-    use ShowIrhpApplicationNavigationTrait;
-
     /**
      * Get task action type
      *
