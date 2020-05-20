@@ -37,12 +37,12 @@
         "doctrine/annotations": "^1.8",
         "symfony/filesystem": "~3.0.0",
         "zf-commons/zfc-rbac": "~2.5.0",
-        "olcs/olcs-transfer": "dev-olcs-26516",
+        "olcs/olcs-transfer": "~4.206.0",
         "olcs/olcs-utils": "~4.206.0",
-        "olcs/olcs-auth": "dev-olcs-26516",
+        "olcs/olcs-auth": "~4.206.0",
         "olcs/olcs-logging": "~4.206.0",
         "elendev/nexus-composer-push": "^0.1",
-        "olcs/olcs-common": "dev-olcs-26516"
+        "olcs/olcs-common": "~4.206.0"
     },
     "require-dev": {
         "olcs/olcs-devtools": "~4.206.0",
