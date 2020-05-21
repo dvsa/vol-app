@@ -95,10 +95,7 @@ class UserController extends AbstractController
 
             $data = $this->formatLoadData($response->getResult());
             $form->setData($data);
-
-            if (!$this->isNameChangeAllowed($data)) {
-                $this->lockNameFields($form);
-            }
+            $this->lockNameFields($form);
         }
 
         if ($request->isPost()) {
@@ -110,12 +107,12 @@ class UserController extends AbstractController
             $form->setData($data);
 
             if ($form->isValid()) {
-                $data = $this->formatSaveData($form->getData());
-
-                if ((!empty($data['id']))) {
+                if (!empty($data['main']['id'])) {
+                    $data = $this->formatSaveData($form->getData());
                     $command = UpdateDto::create($data);
                     $successMessage = 'manage-users.update.success';
                 } else {
+                    $data = $this->formatSaveDataForCreate($form->getData());
                     $command = CreateDto::create($data);
                     $successMessage = 'manage-users.create.success';
                 }
@@ -266,19 +263,26 @@ class UserController extends AbstractController
     {
         $output = [];
 
-        $output['id']      = $data['main']['id'];
+        $output['id'] = $data['main']['id'] ?? '';
         $output['version'] = $data['main']['version'];
-
         $output['loginId'] = $data['main']['loginId'];
         $output['permission'] = $data['main']['permission'];
         $output['translateToWelsh'] = $data['main']['translateToWelsh'];
-
         $output['contactDetails']['emailAddress'] = $data['main']['emailAddress'];
 
-        if ($this->isNameChangeAllowed($data)) {
-            $output['contactDetails']['person']['familyName'] = $data['main']['familyName'];
-            $output['contactDetails']['person']['forename'] = $data['main']['forename'];
-        }
+        return $output;
+    }
+
+    /**
+     * @param $data
+     * @return array
+     */
+    public function formatSaveDataForCreate($data)
+    {
+        $output = $this->formatSaveData($data);
+
+        $output['contactDetails']['person']['familyName'] = $data['main']['familyName'];
+        $output['contactDetails']['person']['forename'] = $data['main']['forename'];
 
         return $output;
     }
@@ -372,32 +376,5 @@ class UserController extends AbstractController
     protected function getFormHelper()
     {
         return $this->getServiceLocator()->get('Helper\Form');
-    }
-
-    /**
-     * @param $data
-     * @return bool
-     */
-    protected function isCurrentUser(array $data): bool
-    {
-        $currentUser = $this->getCurrentUser();
-
-        return (isset($currentUser['id']) && $currentUser['id'] == $data['main']['id']);
-    }
-
-    protected function isUserTm(array $data): bool
-    {
-        return isset($data['main']['currentPermission']) && $data['main']['currentPermission'] == 'tm';
-    }
-
-    /**
-     * Name change is not allowed if user details page is for current user or for a Traffic Manager
-     *
-     * @param array $data
-     * @return bool
-     */
-    protected function isNameChangeAllowed(array $data): bool
-    {
-        return !$this->isCurrentUser($data) && !$this->isUserTm($data);
     }
 }
