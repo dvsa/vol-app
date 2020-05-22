@@ -511,6 +511,18 @@ return array(
             'Olcs\Listener\NavigationToggle' => 'Olcs\Listener\NavigationToggle',
             'Olcs\Service\Data\SubmissionActionTypes' => 'Olcs\Service\Data\SubmissionActionTypes',
             Olcs\Service\Data\IrhpPermitPrintRangeType::class => Olcs\Service\Data\IrhpPermitPrintRangeType::class,
+
+            Olcs\Data\Mapper\BilateralApplicationValidationModifier::class =>
+                Olcs\Data\Mapper\BilateralApplicationValidationModifierFactory::class,
+    
+            Olcs\Service\Permits\Bilateral\ApplicationFormPopulator::class =>
+                Olcs\Service\Permits\Bilateral\ApplicationFormPopulatorFactory::class,
+            Olcs\Service\Permits\Bilateral\CountryFieldsetGenerator::class =>
+                Olcs\Service\Permits\Bilateral\CountryFieldsetGeneratorFactory::class,
+            Olcs\Service\Permits\Bilateral\PeriodFieldsetGenerator::class =>
+                Olcs\Service\Permits\Bilateral\PeriodFieldsetGeneratorFactory::class,
+            Olcs\Service\Permits\Bilateral\NoOfPermitsElementGenerator::class =>
+                Olcs\Service\Permits\Bilateral\NoOfPermitsElementGeneratorFactory::class,
         )
     ),
     'form_elements' => [

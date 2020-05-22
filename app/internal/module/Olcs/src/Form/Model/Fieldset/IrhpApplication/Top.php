@@ -31,6 +31,12 @@ class Top extends \Olcs\Form\Model\Fieldset\Base
     public $id = null;
 
     /**
+     * @Form\Type("Common\Form\Elements\Types\Html")
+     * @Form\Attributes({"value":"<a id=""addOrRemoveCountriesButton"" class=""action--secondary"">Add or remove countries</a>"})
+     */
+    public $addOrRemoveCountriesButton = null;
+
+    /**
      * @Form\Attributes({"id":"dateReceived"})
      * @Form\Options({
      *     "label": "Date received",

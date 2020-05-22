@@ -947,6 +947,15 @@ $routes = [
                             ]
                         ]
                     ],
+                    'availableCountries' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'available-countries[/]',
+                            'defaults' => [
+                                'action' => 'availableCountries'
+                            ]
+                        ]
+                    ],
                     'application' => [
                         'type' => 'segment',
                         'options' => [

@@ -27,6 +27,7 @@ use Dvsa\Olcs\Transfer\Query\Permits\AvailableYears;
 use Olcs\Form\Model\Form\IrhpApplicationWithdraw as WithdrawForm;
 use Olcs\Form\Model\Form\IrhpCandidatePermit as IrhpCandidatePermitForm;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\ApplicationPath;
+use Dvsa\Olcs\Transfer\Query\IrhpApplication\BilateralMetadata;
 use Dvsa\Olcs\Transfer\Query\IrhpCandidatePermit\GetListByIrhpApplication as CandidateListDTO;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\AvailableCountries;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitWindow\OpenByCountry;
@@ -48,13 +49,16 @@ use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Olcs\Form\Model\Form\IrhpApplication;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Data\Mapper\BilateralApplicationValidationModifier as BilateralApplicationValidationModifierMapper;
 use Olcs\Data\Mapper\IrhpApplication as IrhpApplicationMapper;
 use Olcs\Data\Mapper\IrhpCandidatePermit as IrhpCandidatePermitMapper;
 use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericList;
+use RuntimeException;
 use Zend\Form\Form;
 use Zend\Http\Response;
+use Zend\Validator\ValidatorChain;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
@@ -149,7 +153,8 @@ class IrhpApplicationController extends AbstractInternalController implements
         'preGrantEditAction' => ['forms/irhp-candidate-permit'],
         'preGrantAddAction' => ['forms/irhp-candidate-permit'],
         'selectTypeAction' => ['forms/select-type-modal'],
-        'editAction' => ['forms/irhp-application']
+        'addAction' => ['forms/irhp-bilateral-application'],
+        'editAction' => ['forms/irhp-application', 'forms/irhp-bilateral-application'],
     ];
 
     /**
@@ -190,16 +195,18 @@ class IrhpApplicationController extends AbstractInternalController implements
         if ($request->isPost()) {
             $permitTypeId = $this->params()->fromPost()['permitType'];
 
+            $routeParams = [
+                'licence' => $this->params()->fromRoute('licence'),
+                'permitTypeId' => $permitTypeId
+            ];
+
             switch ($permitTypeId) {
                 case RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID:
                 case RefData::ECMT_PERMIT_TYPE_ID:
                     return $this->redirect()
                         ->toRouteAjax(
                             'licence/irhp-application/add',
-                            [
-                                'licence' => $this->params()->fromRoute('licence'),
-                                'permitTypeId' => $permitTypeId
-                            ],
+                            $routeParams,
                             [
                                 'query' => [
                                     'year' => $this->params()->fromPost()['year'],
@@ -208,17 +215,21 @@ class IrhpApplicationController extends AbstractInternalController implements
                             ]
                         );
                 case RefData::IRHP_BILATERAL_PERMIT_TYPE_ID:
+                    return $this->redirect()
+                        ->toRouteAjax(
+                            'licence/irhp-application/add',
+                            $routeParams,
+                            [
+                                'query' => [
+                                    'countries' => implode(',', $this->params()->fromPost()['countries'])
+                                ],
+                            ]
+                        );
                 case RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID:
                 case RefData::ECMT_REMOVAL_PERMIT_TYPE_ID:
                 case RefData::CERT_ROADWORTHINESS_VEHICLE_PERMIT_TYPE_ID:
                 case RefData::CERT_ROADWORTHINESS_TRAILER_PERMIT_TYPE_ID:
-                    return $this->redirect()
-                        ->toRouteAjax(
-                            'licence/irhp-application/add',
-                            [   'licence' => $this->params()->fromRoute('licence'),
-                                'permitTypeId' => $permitTypeId
-                            ]
-                        );
+                    return $this->redirect()->toRouteAjax('licence/irhp-application/add', $routeParams);
             }
         }
 
@@ -582,12 +593,9 @@ class IrhpApplicationController extends AbstractInternalController implements
         $formData['topFields']['irhpPermitType'] = $permitTypeId;
         $formData['topFields']['licence'] = $this->params()->fromRoute('licence', null);
 
-        $nonQaPermitTypes = [
-            RefData::IRHP_BILATERAL_PERMIT_TYPE_ID,
-            RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID,
-        ];
+        if ($permitTypeId == RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID) {
+            $form->get('topFields')->remove('addOrRemoveCountriesButton');
 
-        if (in_array($permitTypeId, $nonQaPermitTypes)) {
             $maxStockPermits = $this->handleQuery(
                 MaxStockPermits::create(['licence' => $this->params()->fromRoute('licence', null)])
             );
@@ -596,11 +604,9 @@ class IrhpApplicationController extends AbstractInternalController implements
             }
             $formData['maxStockPermits']['result'] = $maxStockPermits->getResult()['results'];
 
-            $windows = (int)$formData['topFields']['irhpPermitType'] === (int)RefData::IRHP_BILATERAL_PERMIT_TYPE_ID
-                ? $this->getBilateralWindows()['results']
-                : $this->getMultilateralWindows()['results'];
+            $windows = $this->getMultilateralWindows()['results'];
 
-            // Prepare data structure with open bilateral windows for NoOfPermits form builder
+            // Prepare data structure with open multilateral windows for NoOfPermits form builder
             $formData['application'] = IrhpApplicationMapper::mapApplicationData(
                 $windows,
                 $permitTypeId
@@ -616,6 +622,28 @@ class IrhpApplicationController extends AbstractInternalController implements
                 'maxStockPermits',
                 'feePerPermit'
             );
+        } elseif ($permitTypeId == RefData::IRHP_BILATERAL_PERMIT_TYPE_ID) {
+            $formData = array_merge(
+                $formData,
+                $this->params()->fromPost()
+            );
+
+            $response = $this->handleQuery(
+                BilateralMetadata::create([])
+            );
+
+            if ($this->request->isPost()) {
+                $selectedCountryIds = explode(',', $formData['fields']['selectedCountriesCsv']);
+            } else {
+                // selected countries need to come from querystring
+                $selectedCountryIds = explode(',', $this->params()->fromQuery('countries'));
+            }
+            $formData['selectedCountryIds'] = $selectedCountryIds;
+
+            $formData['bilateralMetadata'] = $response->getResult();
+            $this->getServiceLocator()
+                ->get(BilateralApplicationValidationModifierMapper::class)
+                ->mapForFormOptions($formData, $form);
         }
 
         $form->setData($formData);
@@ -649,10 +677,21 @@ class IrhpApplicationController extends AbstractInternalController implements
                 $formData = $form->updateDataForQa($formData);
             }
         } else {
-            $formData = $this->nonQuestionAnswerFormSetup($form, $formData, $licence);
+            $formData = $this->nonQuestionAnswerFormSetup(
+                $this->params()->fromRoute('irhpAppId'),
+                $form,
+                $formData,
+                $licence
+            );
         }
 
-        if (!empty($formData['topFields']['stockText'])) {
+        if ($formData['topFields']['irhpPermitType'] != RefData::IRHP_BILATERAL_PERMIT_TYPE_ID) {
+            $form->get('topFields')->remove('addOrRemoveCountriesButton');
+        }
+
+        if ($formData['topFields']['irhpPermitType'] == RefData::IRHP_BILATERAL_PERMIT_TYPE_ID) {
+            $formData['topFields']['stockText'] = $formData['topFields']['stockHtml'] = 'Bilateral permits';
+        } elseif (!empty($formData['topFields']['stockText'])) {
             $formData['topFields']['stockHtml'] = $formData['topFields']['stockText'];
         } elseif (!empty($formData['fields']['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock'])) {
             $irhpPermitStock = $formData['fields']['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock'];
@@ -665,7 +704,7 @@ class IrhpApplicationController extends AbstractInternalController implements
                     ? $translator->translate($irhpPermitStock['periodNameKey'])
                     : $irhpPermitStock['validityYear']
             );
-            $formData['topFields']['stockText'] = $formData['topFields']['stockHtml'] = $stockText;
+            $formData['topFields']['stockHtml'] = $stockText;
         }
 
         $form->setData($formData);
@@ -678,44 +717,69 @@ class IrhpApplicationController extends AbstractInternalController implements
     }
 
     /**
+     * @param int $irhpApplicationId
      * @param Form $form
      * @param array $formData
      * @param array $licence
      * @return mixed
      * @throws NotFoundException
      */
-    protected function nonQuestionAnswerFormSetup(Form $form, array $formData, array $licence)
+    protected function nonQuestionAnswerFormSetup($irhpApplicationId, Form $form, array $formData, array $licence)
     {
-        // Prepare data structure with open bilateral windows for NoOfPermits form builder
-        $windows = (int)$formData['topFields']['irhpPermitType'] === RefData::IRHP_BILATERAL_PERMIT_TYPE_ID
-            ? $this->getBilateralWindows()['results']
-            : $this->getMultilateralWindows()['results'];
+        $irhpPermitTypeId = $formData['topFields']['irhpPermitType'];
 
-        $formData['application'] = IrhpApplicationMapper::mapApplicationData(
-            $windows,
-            $formData['topFields']['irhpPermitType'],
-            $formData
-        );
+        if ($irhpPermitTypeId == RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID) {
+            $windows = $this->getMultilateralWindows()['results'];
 
-        $maxStockPermits = $this->handleQuery(
-            MaxStockPermits::create(['licence' => $this->params()->fromRoute('licence', null)])
-        );
+            $formData['application'] = IrhpApplicationMapper::mapApplicationData(
+                $windows,
+                $formData['topFields']['irhpPermitType'],
+                $formData
+            );
 
-        if (!$maxStockPermits->isOk()) {
-            throw new NotFoundException('Could not retrieve max permits data');
+            $maxStockPermits = $this->handleQuery(
+                MaxStockPermits::create(['licence' => $this->params()->fromRoute('licence', null)])
+            );
+
+            if (!$maxStockPermits->isOk()) {
+                throw new NotFoundException('Could not retrieve max permits data');
+            }
+            $formData['maxStockPermits']['result'] = $maxStockPermits->getResult()['results'];
+
+            // Build the dynamic NoOfPermits per country per year form from Common
+            $formData['application']['licence']['totAuthVehicles'] = $licence['totAuthVehicles'];
+
+            $this->getServiceLocator()->get(NoOfPermits::class)->mapForFormOptions(
+                $formData,
+                $form,
+                'application',
+                'maxStockPermits',
+                'feePerPermit'
+            );
+        } elseif ($irhpPermitTypeId == RefData::IRHP_BILATERAL_PERMIT_TYPE_ID) {
+            $response = $this->handleQuery(
+                BilateralMetadata::create(['irhpApplication' => $irhpApplicationId])
+            );
+            $formData['bilateralMetadata'] = $response->getResult();
+
+            if ($this->request->isPost()) {
+                $postParams = $this->params()->fromPost();
+                $selectedCountryIds = explode(',', $postParams['fields']['selectedCountriesCsv']);
+            } else {
+                foreach ($formData['bilateralMetadata']['countries'] as $country) {
+                    if ($country['visible']) {
+                        $selectedCountryIds[] = $country['id'];
+                    }
+                }
+            }
+            $formData['selectedCountryIds'] = $selectedCountryIds;
+
+            $this->getServiceLocator()
+                 ->get(BilateralApplicationValidationModifierMapper::class)
+                 ->mapForFormOptions($formData, $form);
+        } else {
+            throw new RuntimeException('Unsupported permit type ' . $irhpPermitTypeId);
         }
-        $formData['maxStockPermits']['result'] = $maxStockPermits->getResult()['results'];
-
-        // Build the dynamic NoOfPermits per country per year form from Common
-        $formData['application']['licence']['totAuthVehicles'] = $licence['totAuthVehicles'];
-
-        $this->getServiceLocator()->get(NoOfPermits::class)->mapForFormOptions(
-            $formData,
-            $form,
-            'application',
-            'maxStockPermits',
-            'feePerPermit'
-        );
 
         return $formData;
     }
@@ -740,34 +804,6 @@ class IrhpApplicationController extends AbstractInternalController implements
         $fieldsetPopulator = $this->getServiceLocator()->get('QaFieldsetPopulator');
         $fieldsetPopulator->populate($form, $applicationSteps, UsageContext::CONTEXT_INTERNAL);
         return $form;
-    }
-
-    /**
-     * @return array|mixed
-     * @throws NotFoundException
-     */
-    protected function getBilateralWindows()
-    {
-        //Get list of countries that BiLaterals are applicable to
-        $countries = $this->handleQuery(AvailableCountries::create([]));
-        if (!$countries->isOk()) {
-            throw new NotFoundException('Could not retrieve available countries');
-        }
-
-        // We just want the IDs for the next Query
-        $countryIds = array_column($countries->getResult()['countries'], 'id');
-
-        if (empty($countryIds)) {
-            throw new NotFoundException('No countries are available for this type of application');
-        }
-
-        //Query open windows for the country IDs retrieved above
-        $windows = $this->handleQuery(OpenByCountry::create(['countries' => $countryIds]));
-        if (!$windows->isOk()) {
-            throw new NotFoundException('Could not retrieve open windows');
-        }
-
-        return $windows->getResult();
     }
 
     /**
@@ -1031,6 +1067,27 @@ class IrhpApplicationController extends AbstractInternalController implements
         }
 
         return new JsonModel($stocks);
+    }
+
+    public function availableCountriesAction()
+    {
+        $response = $this->handleQuery(AvailableCountries::create([]));
+
+        $jsonCountries = [];
+        if ($response->isOk()) {
+            $countries = $response->getResult();
+
+            foreach ($countries['countries'] as $country) {
+                $jsonCountries[] = [
+                    'id' => $country['id'],
+                    'name' => $country['countryDesc']
+                ];
+            }
+        } else {
+            $this->checkResponse($response);
+        }
+
+        return new JsonModel(['countries' => $jsonCountries]);
     }
 
     public function viewpermitsAction()

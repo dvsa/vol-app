@@ -2,6 +2,7 @@
 
 namespace OlcsTest\Data\Mapper;
 
+use Common\RefData;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 /**
@@ -217,5 +218,98 @@ class IrhpApplicationTest extends MockeryTestCase
         ];
 
         $this->assertSame($expected, $this->sut->mapFromForm($formData));
+    }
+
+    public function testMapFromFormBilateral()
+    {
+        $topFields = [
+            'irhpPermitType' => RefData::IRHP_BILATERAL_PERMIT_TYPE_ID,
+            'isApplicationPathEnabled' => false
+        ];
+
+        $bottomFields = [
+            'key1' => 'value1',
+            'key2' => 'value2'
+        ];
+
+        $fields = [
+            'selectedCountriesCsv' => 'FR,NO',
+            'countries' => [
+                'FR' => [
+                    'selectedPeriodId' => 11,
+                    'periods' => [
+                        'period11' => [
+                            'standard-journey_single' => '',
+                            'cabotage-journey_single' => '8'
+                        ],
+                        'period12' => [
+                            'standard-journey_multiple' => '4',
+                            'cabotage-journey_multiple' => '11'
+                        ]
+                    ]
+                ],
+                'NO' => [
+                    'selectedPeriodId' => 25,
+                    'periods' => [
+                        'period23' => [
+                            'standard-journey_multiple' => '5',
+                            'cabotage-journey_multiple' => '15'
+                        ],
+                        'period25' => [
+                            'standard-journey_single' => '18',
+                            'cabotage-journey_single' => '0',
+                            'standard-journey_multiple' => '14',
+                            'cabotage-journey_single' => '12'
+                        ]
+                    ]
+                ],
+                'CH' => [
+                    'selectedPeriodId' => 20,
+                    'periods' => [
+                        'period20' => [
+                            'cabotage-journey_single' => '2'
+                        ],
+                        'period12' => [
+                            'standard-journey_multiple' => '10',
+                        ]
+                    ]
+                ]
+            ]
+        ];
+ 
+        $data = [
+            'topFields' => $topFields,
+            'bottomFields' => $bottomFields,
+            'fields' => $fields
+        ];
+
+        $expected = array_merge(
+            $topFields,
+            $bottomFields,
+            $fields,
+            [
+                'permitsRequired' => [
+                    'FR' => [
+                        'periodId' => 11,
+                        'permitsRequired' => [
+                            'cabotage-journey_single' => '8'
+                        ]
+                    ],
+                    'NO' => [
+                        'periodId' => 25,
+                        'permitsRequired' => [
+                            'standard-journey_single' => '18',
+                            'standard-journey_multiple' => '14',
+                            'cabotage-journey_single' => '12'
+                        ]
+                    ]
+                ]
+            ]
+        );
+        
+        $this->assertEquals(
+            $expected,
+            $this->sut->mapFromForm($data)
+        );
     }
 }
