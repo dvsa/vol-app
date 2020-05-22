@@ -274,7 +274,9 @@ class UserController extends AbstractController
     }
 
     /**
-     * @param $data
+     * Formats data for create user command
+     *
+     * @param array $data
      * @return array
      */
     public function formatSaveDataForCreate($data)
