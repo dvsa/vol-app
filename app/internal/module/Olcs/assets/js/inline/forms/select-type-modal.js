@@ -37,7 +37,7 @@ $(function () {
 
     function fetchYears() {
         OLCS.preloader.show("modal");
-        $.post("available-years", {permitType: typeSelect.val(), security: csrfToken.val()}, function (data) {
+        $.post("../../irhp-application/available-years", {permitType: typeSelect.val(), security: csrfToken.val()}, function (data) {
             yearSelect.append($("<option>", {
                 value: "",
                 text : "Please Select"
@@ -55,7 +55,7 @@ $(function () {
 
     function fetchStocks() {
         OLCS.preloader.show("modal");
-        $.post("available-stocks", {
+        $.post("../../irhp-application/available-stocks", {
             permitType: typeSelect.val(),
             year: yearSelect.val(),
             security: csrfToken.val()
