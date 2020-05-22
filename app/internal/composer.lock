@@ -1492,15 +1492,15 @@
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "4.206.66",
+            "version": "4.206.67",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-transfer/4.206.66/olcs-olcs-transfer-4.206.66.zip",
-                "reference": "301e6772c3fd9870910aa79a185012fcdb9fed12",
-                "shasum": "301e6772c3fd9870910aa79a185012fcdb9fed12"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-transfer/4.206.67/olcs-olcs-transfer-4.206.67.zip",
+                "reference": "47ea0f54ec5c33351c7e752053b2512fd3c2dc10",
+                "shasum": "47ea0f54ec5c33351c7e752053b2512fd3c2dc10"
             },
             "require": {
-                "elendev/nexus-composer-push": "^0.1.3",
+                "elendev/nexus-composer-push": "^0.1.5",
                 "php": "^5.5 || ^7.0",
                 "soflomo/purifier": "^1.0",
                 "zendframework/zend-filter": "^2.5",
@@ -1561,7 +1561,7 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2020-04-07T13:02:08+00:00"
+            "time": "2020-05-19T22:40:27+00:00"
         },
         {
             "name": "olcs/olcs-utils",
