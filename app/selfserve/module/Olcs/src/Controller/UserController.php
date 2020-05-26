@@ -259,7 +259,7 @@ class UserController extends AbstractController
      *
      * @return array
      */
-    public function formatSaveData($data)
+    public function formatSaveData(array $data)
     {
         $output = [];
 
@@ -279,7 +279,7 @@ class UserController extends AbstractController
      * @param array $data
      * @return array
      */
-    public function formatSaveDataForCreate($data)
+    public function formatSaveDataForCreate(array $data)
     {
         $output = $this->formatSaveData($data);
 
