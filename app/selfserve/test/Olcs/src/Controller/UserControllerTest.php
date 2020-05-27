@@ -2,6 +2,8 @@
 
 namespace OlcsTest\Controller;
 
+use Dvsa\Olcs\Transfer\Command\User\CreateUserSelfserve;
+use Dvsa\Olcs\Transfer\Command\User\UpdateUserSelfserve;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Dvsa\Olcs\Transfer\Query as TransferQry;
@@ -198,7 +200,7 @@ class UserControllerTest extends MockeryTestCase
             ->with(m::type(TransferQry\User\UserSelfserve::class))
             ->andReturn($this->mockResponse);
 
-        $this->sut->shouldReceive('getCurrentUser')->once()->andReturn(['id' => 123]);
+        $this->sut->shouldReceive('lockNameFields')->once();
 
         $this->mockRequest->shouldReceive('isPost')->andReturn(false); // false NOT to simulate form submission
 
@@ -236,6 +238,10 @@ class UserControllerTest extends MockeryTestCase
 
         $this->mockResponse->shouldReceive('isOk')->andReturn(true);
 
+        $this->sut->shouldReceive('handleQuery')
+            ->with(m::type(UpdateUserSelfserve::class))
+            ->andReturn($this->mockResponse);
+
         $this->mockRequest->shouldReceive('isPost')->andReturn(true); // true to simulate form submission
         $this->mockRequest->shouldReceive('getPost')->andReturn($rawEditData);
 
@@ -248,7 +254,6 @@ class UserControllerTest extends MockeryTestCase
             ->with('manage-user', ['action' => 'index'], [], false)
             ->andReturn('EXPECT');
         $this->sut->shouldReceive('redirect')->andReturn($mockRedirect);
-        $this->sut->shouldReceive('getCurrentUser')->once()->andReturn(['id' => 123]);
 
         $this->mockFlashMsgr->shouldReceive('addSuccessMessage')->andReturnNull();
 
@@ -259,6 +264,51 @@ class UserControllerTest extends MockeryTestCase
         $this->mockFormHelper->shouldReceive('createFormWithRequest')->with('User', $this->mockRequest)->andReturn($this->mockForm);
 
         $this->assertEquals('EXPECT', $this->sut->editAction());
+    }
+
+    public function testAddAction()
+    {
+        $rawEditData = array(
+            'main' => array(
+                'loginId' => 'stevefox',
+                'forename' => 'Steve',
+                'familyName' => 'Fox',
+                'emailAddress' => 'steve@example.com',
+                'emailConfirm' => 'steve@example.com',
+                'permission' => 'admin',
+                'version' => '1',
+                'translateToWelsh' => 'Y',
+            ),
+        );
+
+        $this->mockResponse->shouldReceive('isOk')->andReturn(true);
+
+        $this->sut->shouldReceive('handleQuery')
+            ->with(m::type(CreateUserSelfserve::class))
+            ->andReturn($this->mockResponse);
+
+        $this->mockRequest->shouldReceive('isPost')->andReturn(true); // true to simulate form submission
+        $this->mockRequest->shouldReceive('getPost')->andReturn($rawEditData);
+
+        $this->mockParams->shouldReceive('fromPost')->withNoArgs()->andReturn($rawEditData);
+        $this->mockParams->shouldReceive('fromRoute')->andReturnNull();
+
+        $mockRedirect = m::mock(Redirect::class);
+        $mockRedirect
+            ->shouldReceive('toRouteAjax')
+            ->with('manage-user', ['action' => 'index'], [], false)
+            ->andReturn('EXPECT');
+        $this->sut->shouldReceive('redirect')->andReturn($mockRedirect);
+
+        $this->mockFlashMsgr->shouldReceive('addSuccessMessage')->andReturnNull();
+
+        $this->mockForm->shouldReceive('isValid')->andReturn(true);
+        $this->mockForm->shouldReceive('setData')->with($rawEditData);
+        $this->mockForm->shouldReceive('getData')->andReturn($rawEditData);
+
+        $this->mockFormHelper->shouldReceive('createFormWithRequest')->with('User', $this->mockRequest)->andReturn($this->mockForm);
+
+        $this->assertEquals('EXPECT', $this->sut->addAction());
     }
 
     public function testDeleteActionCheckHimself()
@@ -279,7 +329,7 @@ class UserControllerTest extends MockeryTestCase
         $this->assertEquals('EXPECT', $this->sut->deleteAction());
     }
 
-    public function testSaveExistingRecordForCurrentUserLocksNameFields()
+    public function testSaveExistingRecordLocksNameFields()
     {
         $rawEditData = array(
             'id' => 3,
@@ -310,8 +360,6 @@ class UserControllerTest extends MockeryTestCase
             ->with(m::type(TransferQry\User\UserSelfserve::class))
             ->andReturn($this->mockResponse);
 
-        $this->sut->shouldReceive('getCurrentUser')->once()->andReturn(['id' => $id]);
-
         $this->mockRequest->shouldReceive('isPost')->andReturn(false); // false NOT to simulate form submission
 
         $this->mockParams->shouldReceive('fromRoute')->with('id', null)->andReturn($id);
@@ -331,81 +379,6 @@ class UserControllerTest extends MockeryTestCase
             ->shouldReceive('setData')->with($this->sut->formatLoadData($rawEditData))// happy path.
             ->shouldReceive('get')->with('main')->andReturn($mockFieldSet)
             ->shouldReceive('get')->with('permission')->andReturn(null);
-
-        $this->mockFormHelper
-            ->shouldReceive('createFormWithRequest')
-            ->with('User', $this->mockRequest)
-            ->andReturn($this->mockForm);
-        $this->mockFormHelper
-            ->shouldReceive('lockElement')
-            ->with($mockElementForename, 'name-change.locked.tooltip.message')
-            ->once();
-        $this->mockFormHelper
-            ->shouldReceive('lockElement')
-            ->with($mockElementFamilyName, 'name-change.locked.tooltip.message')
-            ->once();
-        $this->mockFormHelper
-            ->shouldReceive('disableElement')
-            ->with($this->mockForm, 'main->forename')
-            ->once();
-        $this->mockFormHelper
-            ->shouldReceive('disableElement')
-            ->with($this->mockForm, 'main->familyName')
-            ->once();
-
-        $view = $this->sut->editAction();
-
-        $this->assertInstanceOf(\Common\Form\Form::class, $view->getVariable('form'));
-    }
-
-    public function testSaveExistingRecordForTransportManagerLocksNameFields()
-    {
-        $rawEditData = array(
-            'id' => 3,
-            'version' => 1,
-            'loginId' => 'stevefox',
-            'contactDetails' => array(
-                'emailAddress' => 'steve@example.com',
-                'id' => 106,
-                'version' => 1,
-                'person' => array(
-                    'familyName' => 'Fox',
-                    'forename' => 'Steve',
-                    'id' => 82,
-                    'version' => 1,
-                ),
-            ),
-            'permission' => 'tm',
-            'translateToWelsh' => 'Y',
-        );
-
-        $id = 3;
-
-        $this->mockResponse
-            ->shouldReceive('isOk')->andReturn(true)
-            ->shouldReceive('getResult')->andReturn($rawEditData);
-
-        $this->sut->shouldReceive('handleQuery')
-            ->with(m::type(TransferQry\User\UserSelfserve::class))
-            ->andReturn($this->mockResponse);
-
-        $this->sut->shouldReceive('getCurrentUser')->once()->andReturn(['id' => 1111]);
-
-        $this->mockRequest->shouldReceive('isPost')->andReturn(false); // false NOT to simulate form submission
-
-        $this->mockParams->shouldReceive('fromRoute')->with('id', null)->andReturn($id);
-
-        $this->mockFlashMsgr->shouldReceive('addSuccessMessage')->andReturnNull();
-
-        $mockFieldSet = m::mock();
-        $mockElementForename = m::mock();
-        $mockFieldSet->shouldReceive('get')->with('forename')->once()->andReturn($mockElementForename);
-        $mockElementFamilyName = m::mock();
-        $mockFieldSet->shouldReceive('get')->with('familyName')->once()->andReturn($mockElementFamilyName);
-
-        $this->mockForm
-            ->shouldReceive('setData')->with($this->sut->formatLoadData($rawEditData))// happy path.
-            ->shouldReceive('get')->with('main')->andReturn($mockFieldSet);
 
         $this->mockFormHelper
             ->shouldReceive('createFormWithRequest')
