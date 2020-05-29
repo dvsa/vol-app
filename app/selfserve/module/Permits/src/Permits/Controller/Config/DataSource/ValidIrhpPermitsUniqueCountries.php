@@ -16,4 +16,7 @@ class ValidIrhpPermitsUniqueCountries extends AbstractDataSource
         'licence' => 'licence',
         'type' => 'irhpPermitType',
     ];
+    protected $defaultParamData = [
+        'validOnly' => true,
+    ];
 }

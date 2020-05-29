@@ -22,5 +22,6 @@ class ValidIrhpPermits extends AbstractDataSource
     protected $defaultParamData = [
         'page' => 1,
         'limit' => 10,
+        'validOnly' => true,
     ];
 }
