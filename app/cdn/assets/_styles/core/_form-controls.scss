@@ -19,7 +19,7 @@ $advanced-top-size: 5px; //extra padding for advanced form control
       }
     }
     @extend %clearfix;
-  } 
+  }
 
   // cache the parent selector so it can be reused without duplicating
   $component: &;
@@ -44,6 +44,7 @@ $advanced-top-size: 5px; //extra padding for advanced form control
       width: $form-control-size;
       height: $form-control-size;
       margin-right: $gutter-one-third;
+      float: left;
     }
   }
 
@@ -123,7 +124,7 @@ $advanced-top-size: 5px; //extra padding for advanced form control
       }
     }
   }
-  
+
   &--confirm {
     display: block;
     float: none;
