@@ -86,3 +86,7 @@ form#irhpApplication fieldset legend {
     font-weight: bold;
     border-bottom: 1px solid #ccc;
 }
+
+fieldset#bilateralContainer input[type="text"]:disabled {
+    background-color: #bfc1c3;
+}
