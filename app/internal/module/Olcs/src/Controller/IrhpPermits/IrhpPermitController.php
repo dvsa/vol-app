@@ -119,10 +119,10 @@ class IrhpPermitController extends AbstractInternalController implements
 
         switch ($permitTypeId) {
             case RefData::ECMT_PERMIT_TYPE_ID:
-                // do nothing, ECMT has its own table definition
+                $table->removeColumn('type');
                 break;
             case RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID:
-                // country is not valid for ECMT Short-term
+                $table->removeColumn('type');
                 $table->removeColumn('country');
                 break;
             case RefData::IRHP_BILATERAL_PERMIT_TYPE_ID:
@@ -130,6 +130,7 @@ class IrhpPermitController extends AbstractInternalController implements
                 $table->removeColumn('constrainedCountries');
                 break;
             default:
+                $table->removeColumn('type');
                 $table->removeColumn('emissionsCategory');
                 $table->removeColumn('constrainedCountries');
                 $table->removeColumn('country');
