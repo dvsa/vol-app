@@ -143,37 +143,6 @@ trait ApplicationControllerTrait
     }
 
     /**
-     * Method called post saving
-     *
-     * @param string $section Section being saved
-     *
-     * @return void
-     */
-    protected function postSave($section)
-    {
-        $applicationId = $this->getApplicationId();
-
-        if ($section !== 'undertakings') {
-            $this->resetUndertakings($applicationId);
-        }
-
-        $this->updateCompletionStatuses($applicationId, $section);
-    }
-
-    /**
-     * Reset undertakings
-     *
-     * @param integer $applicationId Application Id
-     *
-     * @return void
-     */
-    protected function resetUndertakings($applicationId)
-    {
-        $this->getServiceLocator()->get('Entity\Application')
-            ->forceUpdate($applicationId, ['declarationConfirmation' => 'N']);
-    }
-
-    /**
      * Get application data from database
      *
      * @param integer $applicationId Application ID
