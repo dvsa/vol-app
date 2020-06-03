@@ -34,19 +34,6 @@ class AbstractPublicInquiryDataTest extends MockeryTestCase
 
     public function testFetchListOptionsLicGoodsOrPsvIsNullAndAppIdIsNull()
     {
-        $mockAppEntitySrv = m::mock(\Common\Service\Entity\ApplicationEntityService::class)
-            ->shouldReceive('getApplicationsForLicence')->with(self::LIC_ID)->andReturn(
-                [
-                    'Results' => [
-                        'lastItem' => [
-                            'id' => self::APP_ID,
-                        ],
-                    ],
-                ]
-            )
-            ->getMock();
-        $this->mockSl->shouldReceive('get')->with('Entity\Application')->andReturn($mockAppEntitySrv);
-
         $this->sut->shouldReceive('getLicenceContext')
             ->once()
             ->andReturn(
@@ -54,7 +41,20 @@ class AbstractPublicInquiryDataTest extends MockeryTestCase
                     'unit_LicCtxKey' => 'unit_LicCtxVal',
                 ]
             );
+
+        $licData = [
+            'applications' => [
+                0 => [
+                    'id'=> self::APP_ID,
+                ],
+            ],
+        ];
+
         $this->sut->shouldReceive('getLicenceService->getId')->once()->andReturn(self::LIC_ID);
+        $this->sut->shouldReceive('getLicenceService->fetchLicenceData')
+            ->once()
+            ->with(self::LIC_ID)
+            ->andReturn($licData);
         $this->sut->shouldReceive('getApplicationService->getId')->once()->andReturnNull();
         $this->sut->shouldReceive('getApplicationService->setId')->once()->with(self::APP_ID);
         $this->sut->shouldReceive('getApplicationContext')

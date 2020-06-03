@@ -468,9 +468,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             'B' => 'Traffic area B',
         ];
 
-        $this->mockEntity('TrafficArea', 'getValueOptions')
-            ->andReturn($tcAreaOptions);
-
         $form->shouldReceive('get')->with('details')->andReturn(
             m::mock()
                 ->shouldReceive('get')

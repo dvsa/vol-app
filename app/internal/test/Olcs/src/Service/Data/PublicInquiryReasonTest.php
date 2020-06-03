@@ -82,6 +82,7 @@ class PublicInquiryReasonTest extends AbstractDataServiceTestCase
             ->once()
             ->andReturn(7)
             ->shouldReceive('fetchLicenceData')
+            ->withNoArgs()
             ->andReturn(
                 [
                     'id' => 7,
@@ -90,8 +91,7 @@ class PublicInquiryReasonTest extends AbstractDataServiceTestCase
                     'trafficArea' => ['id'=> 'B']
                 ]
             )
-            ->once()
-            ->getMock();
+            ->once();
 
         $results = ['results' => $expectedList];
         $params = [

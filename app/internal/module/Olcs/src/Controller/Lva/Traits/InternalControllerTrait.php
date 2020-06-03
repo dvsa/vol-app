@@ -7,6 +7,9 @@
  */
 namespace Olcs\Controller\Lva\Traits;
 
+use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicQry;
+use Dvsa\Olcs\Transfer\Query\Application\Application as AppQry;
+
 /**
  * Abstract Internal Controller
  *
@@ -30,12 +33,23 @@ trait InternalControllerTrait
 
     /**
      * Get the current organisation id
+     * NOTE: this ony works for LVA controllers, don't try to use elsewhere
      *
      * @return int
      */
     protected function getCurrentOrganisationId()
     {
-        return $this->getLvaEntityService()->getOrganisation($this->getIdentifier())['id'];
+        if ($this->lva === 'licence') {
+            $query = LicQry::create(['id' => $this->getIdentifier()]);
+            $licence = $this->handleQuery($query)->getResult();
+
+            return $licence['organisation']['id'];
+        }
+
+        $query = AppQry::create(['id' => $this->getIdentifier()]);
+        $application = $this->handleQuery($query)->getResult();
+
+        return $application['licence']['organisation']['id'];
     }
 
     /**
