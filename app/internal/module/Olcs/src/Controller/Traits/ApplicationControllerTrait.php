@@ -4,6 +4,7 @@ namespace Olcs\Controller\Traits;
 
 use Common\RefData;
 use Olcs\Controller\Interfaces\LeftViewProvider;
+use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
 
 /**
  * Application Controller Trait
@@ -63,7 +64,7 @@ trait ApplicationControllerTrait
      */
     protected function getHeaderParams()
     {
-        $data = $this->getServiceLocator()->get('Entity\Application')->getHeaderData($this->params('application'));
+        $data = $this->getApplication($this->params('application'));
 
         return array(
             'applicationId' => $data['id'],
@@ -85,8 +86,9 @@ trait ApplicationControllerTrait
             $id = $this->params('application');
         }
 
-        return $this->getServiceLocator()->get('Entity\Application')
-            ->getDataForProcessing($id);
+        $query = ApplicationQry::create(['id' => $id]);
+        $response = $this->handleQuery($query);
+        return $response->getResult();
     }
 
     /**

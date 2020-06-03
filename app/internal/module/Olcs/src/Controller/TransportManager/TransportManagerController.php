@@ -65,16 +65,6 @@ class TransportManagerController extends AbstractController implements Transport
         return $this->getView($variables);
     }
 
-    public function getTmDetails($tmId, $bypassCache = false)
-    {
-        if ($bypassCache || !isset($this->tmDetailsCache[$tmId])) {
-             $this->tmDetailsCache[$tmId] = $this->getServiceLocator()
-                ->get('Entity\TransportManager')
-                ->getTmDetails($tmId);
-        }
-        return $this->tmDetailsCache[$tmId];
-    }
-
     /**
      * Merge a transport manager
      */
@@ -126,7 +116,8 @@ class TransportManagerController extends AbstractController implements Transport
                     $this->getServiceLocator()->get('Helper\FlashMessenger')
                         ->addSuccessMessage('form.tm-merge.success');
                     return $this->redirect()->toRouteAjax(
-                        'transport-manager/details', ['transportManager' => $transportManagerId]
+                        'transport-manager/details',
+                        ['transportManager' => $transportManagerId]
                     );
                 }
 
@@ -229,7 +220,8 @@ class TransportManagerController extends AbstractController implements Transport
                 $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('form.tm-unmerge.success');
 
                 return $this->redirect()->toRouteAjax(
-                    'transport-manager/details', ['transportManager' => $transportManagerId]
+                    'transport-manager/details',
+                    ['transportManager' => $transportManagerId]
                 );
             } else {
                 $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');

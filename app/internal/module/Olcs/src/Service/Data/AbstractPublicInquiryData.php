@@ -49,14 +49,10 @@ abstract class AbstractPublicInquiryData extends AbstractDataService implements 
         } elseif (empty($params['goodsOrPsv'])) {
             //  if application not loaded
             if ($this->getApplicationService()->getId() === null) {
-                // find an application linked to the licence
-                $applicationsForLicence = $this->getServiceLocator()
-                    ->get('Entity\Application')
-                    ->getApplicationsForLicence($licenceId);
+                $licenceData = $this->getLicenceService()->fetchLicenceData($licenceId);
 
-                if (!empty($applicationsForLicence['Results'])) {
-                    $app = array_pop($applicationsForLicence['Results']);
-                    $this->getApplicationService()->setId($app['id']);
+                if (!empty($licenceData['applications'])) {
+                    $this->getApplicationService()->setId($licenceData['applications'][0]['id']);
                 }
             }
 
