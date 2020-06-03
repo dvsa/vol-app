@@ -20,9 +20,7 @@ use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
  */
 class PeopleController extends Lva\AbstractPeopleController
 {
-    use ApplicationControllerTrait {
-        ApplicationControllerTrait::postSave as commonPostSave;
-    }
+    use ApplicationControllerTrait;
 
     protected $lva = 'application';
     protected $location = 'external';
