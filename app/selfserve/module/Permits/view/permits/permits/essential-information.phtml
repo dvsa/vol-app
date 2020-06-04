@@ -8,8 +8,8 @@
                 <h1 class="govuk-heading-xl govuk-!-margin-bottom-3"><?php echo $this->escapeHtml($this->translate('permits.page.bilateral.countries.essential.heading')); ?></h1>
             </legend>
             <?php echo $this->translate('markup-irhp-country-' . $countryCode); ?>
+            <?php echo $this->translate('markup-irhp-essential-information-cabotage'); ?>
             <?php echo $this->partial('partials/irhp-bilateral-fee-table'); ?>
-            <p><?php echo $this->escapeHtml($this->translate('permits.further.guidance')); ?> <a href="<?php echo $this->translate('permits.link.ecmt.guidance'); ?>" target="_blank">GOV.UK.</a></p>
             <div class="form-steps">
                 <p>
                     <a class="button govuk-button" role="button" href="<?php echo $this->url($data['continueUri'], [], [], true); ?>">
