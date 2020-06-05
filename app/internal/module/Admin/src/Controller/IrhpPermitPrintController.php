@@ -91,13 +91,18 @@ class IrhpPermitPrintController extends AbstractInternalController implements Le
             if ($form->isValid()) {
                 $data = $form->getData();
 
+                $options = [];
+                if (!empty($data['fields']['irhpPermitRangeType'])) {
+                    $options['query'] = ['irhpPermitRangeType' => $data['fields']['irhpPermitRangeType']];
+                }
+
                 return $this->redirect()->toRouteAjax(
                     'admin-dashboard/admin-printing/irhp-permits',
                     [
                         'action' => 'list',
                         'id' => $data['fields']['irhpPermitStock']
                     ],
-                    [],
+                    $options,
                     true
                 );
             }

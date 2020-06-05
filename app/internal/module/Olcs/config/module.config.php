@@ -510,6 +510,7 @@ return array(
             'Olcs\Listener\HeaderSearch' => 'Olcs\Listener\HeaderSearch',
             'Olcs\Listener\NavigationToggle' => 'Olcs\Listener\NavigationToggle',
             'Olcs\Service\Data\SubmissionActionTypes' => 'Olcs\Service\Data\SubmissionActionTypes',
+            Olcs\Service\Data\IrhpPermitPrintRangeType::class => Olcs\Service\Data\IrhpPermitPrintRangeType::class,
         )
     ),
     'form_elements' => [

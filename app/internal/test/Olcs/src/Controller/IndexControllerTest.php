@@ -7,6 +7,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\IndexController;
 use Olcs\Service\Data\IrhpPermitPrintCountry;
+use Olcs\Service\Data\IrhpPermitPrintRangeType;
 use Olcs\Service\Data\IrhpPermitPrintStock;
 use OlcsTest\Bootstrap;
 use Zend\View\Model\JsonModel;
@@ -67,6 +68,9 @@ class IndexControllerTest extends MockeryTestCase
         $irhpPermitPrintStockByType = m::mock(IrhpPermitPrintStock::class);
         $irhpPermitPrintStockByType->shouldReceive('setIrhpPermitType')->with($value)->andReturnSelf();
 
+        $irhpPermitPrintRangeType = m::mock(IrhpPermitPrintRangeType::class);
+        $irhpPermitPrintRangeType->shouldReceive('setIrhpPermitStock')->with($value)->andReturnSelf();
+
         return [
             'irhp-permit-print-country' => [
                 'type' => 'irhp-permit-print-country',
@@ -92,6 +96,15 @@ class IndexControllerTest extends MockeryTestCase
                 'expected'
                     => '[{"value":"","label":"Please select"},{"value":11,"label":"ABC"},{"value":12,"label":"DEF"}]',
             ],
+            'irhp-permit-print-range-type-by-stock' => [
+                'type' => 'irhp-permit-print-range-type-by-stock',
+                'value' => $value,
+                'dataService' => IrhpPermitPrintRangeType::class,
+                'mockDataService' => $irhpPermitPrintRangeType,
+                'expected'
+                    => '[{"value":"","label":"Please select"},{"value":11,"label":"ABC"},{"value":12,"label":"DEF"}]',
+            ],
+
         ];
     }
 }

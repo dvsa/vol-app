@@ -55,4 +55,22 @@ class IrhpPermitPrint
      * @Form\Type("Select")
      */
     public $irhpPermitStock = null;
+
+    /**
+     * @Form\Attributes({"id":"irhpPermitStockForRangeType","placeholder":""})
+     * @Form\Type("Hidden")
+     */
+    public $irhpPermitStockForRangeType = null;
+
+    /**
+     * @Form\Attributes({"id":"irhpPermitRangeType","placeholder":""})
+     * @Form\Options({
+     *     "label": "Bilateral permit category",
+     *     "empty_option": "Please select",
+     *     "disable_inarray_validator": true
+     * })
+     * @Form\Required(false)
+     * @Form\Type("Select")
+     */
+    public $irhpPermitRangeType = null;
 }

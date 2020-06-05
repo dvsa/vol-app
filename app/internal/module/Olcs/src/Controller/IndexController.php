@@ -216,6 +216,13 @@ class IndexController extends AbstractController implements LeftViewProvider
 
                 $results = ['' => 'Please select'] + $srv->fetchListOptions();
                 break;
+            case 'irhp-permit-print-range-type-by-stock':
+                /** @var \Olcs\Service\Data\IrhpPermitPrintRangeType $srv */
+                $srv = $sm->get(\Olcs\Service\Data\IrhpPermitPrintRangeType::class)
+                    ->setIrhpPermitStock($value);
+
+                $results = ['' => 'Please select'] + $srv->fetchListOptions();
+                break;
             default:
                 throw new \Exception('Invalid entity filter key: ' . $key);
         }
