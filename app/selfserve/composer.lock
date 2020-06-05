@@ -1300,16 +1300,16 @@
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "4.206.6",
+            "version": "4.206.7",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-auth/4.206.6/olcs-olcs-auth-4.206.6.zip",
-                "reference": "be2a10a895188a7fa64aa8f251fc5a41f741e61e",
-                "shasum": "be2a10a895188a7fa64aa8f251fc5a41f741e61e"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-auth/4.206.7/olcs-olcs-auth-4.206.7.zip",
+                "reference": "0be171d6ab4df8592a3a9a994025982698cc6224",
+                "shasum": "0be171d6ab4df8592a3a9a994025982698cc6224"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
-                "elendev/nexus-composer-push": "^0.1.3",
+                "elendev/nexus-composer-push": "^0.1.7",
                 "olcs/olcs-common": "~4.206.0",
                 "olcs/olcs-transfer": "~4.206.0",
                 "php": "^5.5 || ^7.0",
@@ -1372,16 +1372,16 @@
                 ]
             },
             "description": "OLCS Authentication",
-            "time": "2020-02-21T09:30:09+00:00"
+            "time": "2020-06-01T13:30:42+00:00"
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.171",
+            "version": "4.206.174",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-common/4.206.171/olcs-olcs-common-4.206.171.zip",
-                "reference": "da3d03c7cc10afc59876e7931391fe6f452ca3a4",
-                "shasum": "da3d03c7cc10afc59876e7931391fe6f452ca3a4"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-common/4.206.174/olcs-olcs-common-4.206.174.zip",
+                "reference": "19d28658309a3aff5dc7e796ba867019a31ddcdd",
+                "shasum": "19d28658309a3aff5dc7e796ba867019a31ddcdd"
             },
             "require": {
                 "doctrine/annotations": "^1.8",
@@ -1470,7 +1470,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2020-05-29T14:19:48+00:00"
+            "time": "2020-06-04T08:28:05+00:00"
         },
         {
             "name": "olcs/olcs-logging",
@@ -1543,15 +1543,15 @@
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "4.206.68",
+            "version": "4.206.70",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-transfer/4.206.68/olcs-olcs-transfer-4.206.68.zip",
-                "reference": "f9636164c27e8fba88570e0982cb8a113cedd8a9",
-                "shasum": "f9636164c27e8fba88570e0982cb8a113cedd8a9"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-transfer/4.206.70/olcs-olcs-transfer-4.206.70.zip",
+                "reference": "47a3d5e9f92e612257eaafb577a7f1529a97fce6",
+                "shasum": "47a3d5e9f92e612257eaafb577a7f1529a97fce6"
             },
             "require": {
-                "elendev/nexus-composer-push": "^0.1.5",
+                "elendev/nexus-composer-push": "^0.1.7",
                 "ext-openssl": "*",
                 "php": "^5.5 || ^7.0",
                 "soflomo/purifier": "^1.0",
@@ -1614,7 +1614,7 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2020-05-19T23:25:55+00:00"
+            "time": "2020-06-03T17:15:37+00:00"
         },
         {
             "name": "olcs/olcs-utils",
@@ -4590,6 +4590,12 @@
                 "Xdebug",
                 "performance"
             ],
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                }
+            ],
             "time": "2020-03-01T12:26:26+00:00"
         },
         {
@@ -4886,15 +4892,15 @@
         },
         {
             "name": "olcs/olcs-testhelpers",
-            "version": "4.206.4",
+            "version": "4.206.5",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-testhelpers/4.206.4/olcs-olcs-testhelpers-4.206.4.zip",
-                "reference": "d7a997f37169b81d908e17a3ea09ced05ca8d943",
-                "shasum": "d7a997f37169b81d908e17a3ea09ced05ca8d943"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-testhelpers/4.206.5/olcs-olcs-testhelpers-4.206.5.zip",
+                "reference": "1d09e49a484524e8bccdd24f395f9cee3474b079",
+                "shasum": "1d09e49a484524e8bccdd24f395f9cee3474b079"
             },
             "require": {
-                "elendev/nexus-composer-push": "^0.1.3",
+                "elendev/nexus-composer-push": "^0.1.7",
                 "php": "^5.5 || ^7.0",
                 "zendframework/zend-form": "^2.5",
                 "zendframework/zend-http": "^2.5",
@@ -4927,7 +4933,7 @@
                 ]
             },
             "description": "OLCS Test helpers",
-            "time": "2020-01-27T16:43:09+00:00"
+            "time": "2020-06-03T17:15:11+00:00"
         },
         {
             "name": "pdepend/pdepend",
@@ -6507,6 +6513,20 @@
                 "ctype",
                 "polyfill",
                 "portable"
+            ],
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
             ],
             "time": "2020-05-12T16:14:59+00:00"
         },
