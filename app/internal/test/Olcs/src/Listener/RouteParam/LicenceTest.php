@@ -559,7 +559,6 @@ class LicenceTest extends TestCase
         $this->assertSame($mainNav, $sut->getMainNavigationService());
     }
 
-
     public function testOnLicenceSurrenderDigitallySigned()
     {
         $licenceId = 4;

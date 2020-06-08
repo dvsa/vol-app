@@ -75,7 +75,6 @@ class DisqualificationMarkerTest extends TestCase
         $this->assertSame('HTML1', $this->sut->render());
     }
 
-
     public function testRenderNotActiveWithOutEndDate()
     {
         $data = [

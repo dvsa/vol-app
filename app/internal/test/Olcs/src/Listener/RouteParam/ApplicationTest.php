@@ -419,11 +419,10 @@ class ApplicationTest extends MockeryTestCase
         $this->assertSame($mockMarkerService, $sut->getMarkerService());
     }
 
-    /**
-     * @expectedException \Common\Exception\ResourceNotFoundException
-     */
     public function testOnApplicationNotFound()
     {
+        $this->expectException(\Common\Exception\ResourceNotFoundException::class);
+
         $applicationId = 69;
 
         $event = new RouteParam();

@@ -39,7 +39,6 @@ class VariationTypeOfLicenceTest extends AbstractLvaFormServiceTestCase
         $this->sut->setFormServiceLocator($this->fsm);
     }
 
-
     public function testGetForm()
     {
         // Mocks

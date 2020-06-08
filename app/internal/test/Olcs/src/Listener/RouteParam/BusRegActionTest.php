@@ -147,11 +147,10 @@ class BusRegActionTest extends MockeryTestCase
         $this->assertSame($mockQueryService, $this->sut->getQueryService());
     }
 
-    /**
-     * @expectedException \Common\Exception\ResourceNotFoundException
-     */
     public function testOnBusRegActionNotFound()
     {
+        $this->expectException(\Common\Exception\ResourceNotFoundException::class);
+
         $id = 69;
 
         $event = new RouteParam();

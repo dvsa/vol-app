@@ -30,7 +30,6 @@ class TmCaseNoFurtherActionTest extends AbstractFormValidationTestCase
         $this->assertFormElementDate(['fields', 'decisionDate']);
     }
 
-
     public function testNotifiedDate()
     {
         $element = ['fields', 'notifiedDate'];

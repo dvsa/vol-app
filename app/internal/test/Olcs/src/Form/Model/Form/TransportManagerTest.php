@@ -74,7 +74,6 @@ class TransportManagerTest extends AbstractFormValidationTestCase
         );
     }
 
-
     public function testTransportManagerDateOfBirth()
     {
         $element = ['transport-manager-details', 'birthDate'];

@@ -163,11 +163,10 @@ class CasesFurnitureTest extends MockeryTestCase
         $this->assertSame($mockCommandSender, $this->sut->getCommandSender());
     }
 
-    /**
-     * @expectedException \Common\Exception\ResourceNotFoundException
-     */
     public function testOnCaseNotFound()
     {
+        $this->expectException(\Common\Exception\ResourceNotFoundException::class);
+
         $id = 69;
 
         $event = new RouteParam();
