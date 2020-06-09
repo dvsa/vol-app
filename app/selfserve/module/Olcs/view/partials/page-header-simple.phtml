@@ -12,7 +12,7 @@
     ?>
 
     <div class="page-header__wrapper">
-        <?php if ($this->pageSubTitle !== '') : ?>
+        <?php if (!empty($this->pageSubTitle)) : ?>
             <h3 class="page-header__subtitle"><?php
                 echo (
                     $this->pageSubTitleEscape === false
@@ -29,13 +29,13 @@
                 : $this->escapeHtml($this->pageTitle)
             );
         ?>
-        <?php if ($this->hintText !== '') : ?>
+        <?php if (!empty($this->hintText)) : ?>
             <span class="govuk-hint">
                <?php  echo($this->hintText); ?>
             </span>
          <?php endif; ?>
         </h1>
-        <?php if ($this->pageHeaderText !== '') : ?>
+        <?php if (!empty($this->pageHeaderText)) : ?>
             <div class="page-header__text">
                 <p><?php
                     echo (

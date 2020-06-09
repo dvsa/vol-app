@@ -69,8 +69,15 @@ class MyDetailsControllerTest extends TestCase
         $response->shouldReceive('getResult')->andReturn($rawEditData);
         $this->sut->shouldReceive('handleQuery')->with(m::type(ItemDto::class))->andReturn($response);
 
+        $mockFieldSet = m::mock();
+        $mockElementForename = m::mock();
+        $mockFieldSet->shouldReceive('get')->with('forename')->once()->andReturn($mockElementForename);
+        $mockElementFamilyName = m::mock();
+        $mockFieldSet->shouldReceive('get')->with('familyName')->once()->andReturn($mockElementFamilyName);
+
         $mockForm = m::mock('Common\Form\Form');
         $mockForm->shouldReceive('setData')->with($formattedData)->once();
+        $mockForm->shouldReceive('get')->with('main')->andReturn($mockFieldSet)->once();
 
         $mockFormHelper = m::mock();
         $mockFormHelper
@@ -78,6 +85,15 @@ class MyDetailsControllerTest extends TestCase
             ->with('MyDetails', $mockRequest)
             ->once()
             ->andReturn($mockForm);
+        $mockFormHelper
+            ->shouldReceive('lockElement')
+            ->with($mockElementForename, 'name-change.locked.tooltip.message')
+            ->once();
+        $mockFormHelper
+            ->shouldReceive('lockElement')
+            ->with($mockElementFamilyName, 'name-change.locked.tooltip.message')
+            ->once();
+
         $this->sm->setService('Helper\Form', $mockFormHelper);
 
         $mockScript = m::mock();
@@ -102,8 +118,15 @@ class MyDetailsControllerTest extends TestCase
         $response->shouldReceive('isOk')->andReturn(false);
         $this->sut->shouldReceive('handleQuery')->with(m::type(ItemDto::class))->andReturn($response);
 
+        $mockFieldSet = m::mock();
+        $mockElementForename = m::mock();
+        $mockFieldSet->shouldReceive('get')->with('forename')->once()->andReturn($mockElementForename);
+        $mockElementFamilyName = m::mock();
+        $mockFieldSet->shouldReceive('get')->with('familyName')->once()->andReturn($mockElementFamilyName);
+
         $mockForm = m::mock('Common\Form\Form');
         $mockForm->shouldReceive('setData')->never();
+        $mockForm->shouldReceive('get')->with('main')->andReturn($mockFieldSet)->once();
 
         $mockFormHelper = m::mock();
         $mockFormHelper
@@ -111,6 +134,15 @@ class MyDetailsControllerTest extends TestCase
             ->with('MyDetails', $mockRequest)
             ->once()
             ->andReturn($mockForm);
+        $mockFormHelper
+            ->shouldReceive('lockElement')
+            ->with($mockElementForename, 'name-change.locked.tooltip.message')
+            ->once();
+        $mockFormHelper
+            ->shouldReceive('lockElement')
+            ->with($mockElementFamilyName, 'name-change.locked.tooltip.message')
+            ->once();
+
         $this->sm->setService('Helper\Form', $mockFormHelper);
 
         $mockFlashMessengerHelper = m::mock();
@@ -134,6 +166,24 @@ class MyDetailsControllerTest extends TestCase
 
     public function testEditActionForPost()
     {
+        $rawEditData = array(
+            'id' => 3,
+            'version' => 1,
+            'loginId' => 'stevefox',
+            'contactDetails' => array(
+                'emailAddress' => 'steve@example.com',
+                'id' => 106,
+                'version' => 1,
+                'person' => array(
+                    'familyName' => 'Fox',
+                    'forename' => 'Steve',
+                    'id' => 82,
+                    'version' => 1,
+                ),
+            ),
+            'translateToWelsh' => 'Y',
+        );
+
         $postData = [
             'main' => [
                 'id' => 3,
@@ -151,8 +201,13 @@ class MyDetailsControllerTest extends TestCase
         $mockRequest->shouldReceive('isPost')->andReturn(true);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
+        $response = m::mock('stdClass');
+        $response->shouldReceive('isOk')->andReturn(true);
+        $response->shouldReceive('getResult')->andReturn($rawEditData);
+        $this->sut->shouldReceive('handleQuery')->with(m::type(ItemDto::class))->andReturn($response);
+
         $mockForm = m::mock('Common\Form\Form');
-        $mockForm->shouldReceive('setData')->once()->with($postData);
+        $mockForm->shouldReceive('setData')->twice()->with($postData);
         $mockForm->shouldReceive('isValid')->once()->andReturn(true);
         $mockForm->shouldReceive('getData')->once()->andReturn($postData);
 
@@ -191,6 +246,24 @@ class MyDetailsControllerTest extends TestCase
 
     public function testEditActionForPostWithError()
     {
+        $rawEditData = array(
+            'id' => 3,
+            'version' => 1,
+            'loginId' => 'stevefox',
+            'contactDetails' => array(
+                'emailAddress' => 'steve@example.com',
+                'id' => 106,
+                'version' => 1,
+                'person' => array(
+                    'familyName' => 'Fox',
+                    'forename' => 'Steve',
+                    'id' => 82,
+                    'version' => 1,
+                ),
+            ),
+            'translateToWelsh' => 'Y',
+        );
+
         $postData = [
             'main' => [
                 'id' => 3,
@@ -208,11 +281,23 @@ class MyDetailsControllerTest extends TestCase
         $mockRequest->shouldReceive('isPost')->andReturn(true);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
+        $response = m::mock('stdClass');
+        $response->shouldReceive('isOk')->andReturn(true);
+        $response->shouldReceive('getResult')->andReturn($rawEditData);
+        $this->sut->shouldReceive('handleQuery')->with(m::type(ItemDto::class))->andReturn($response);
+
+        $mockFieldSet = m::mock();
+        $mockElementForename = m::mock();
+        $mockFieldSet->shouldReceive('get')->with('forename')->once()->andReturn($mockElementForename);
+        $mockElementFamilyName = m::mock();
+        $mockFieldSet->shouldReceive('get')->with('familyName')->once()->andReturn($mockElementFamilyName);
+
         $mockForm = m::mock('Common\Form\Form');
-        $mockForm->shouldReceive('setData')->once()->with($postData);
+        $mockForm->shouldReceive('setData')->twice()->with($postData);
         $mockForm->shouldReceive('isValid')->once()->andReturn(true);
         $mockForm->shouldReceive('getData')->once()->andReturn($postData);
         $mockForm->shouldReceive('setMessages')->once()->with(m::type('array'));
+        $mockForm->shouldReceive('get')->with('main')->andReturn($mockFieldSet)->once();
 
         $mockFormHelper = m::mock();
         $mockFormHelper
@@ -220,6 +305,15 @@ class MyDetailsControllerTest extends TestCase
             ->with('MyDetails', $mockRequest)
             ->once()
             ->andReturn($mockForm);
+        $mockFormHelper
+            ->shouldReceive('lockElement')
+            ->with($mockElementForename, 'name-change.locked.tooltip.message')
+            ->once();
+        $mockFormHelper
+            ->shouldReceive('lockElement')
+            ->with($mockElementFamilyName, 'name-change.locked.tooltip.message')
+            ->once();
+
         $this->sm->setService('Helper\Form', $mockFormHelper);
 
         $this->sut->shouldReceive('isButtonPressed')->with('cancel')->once()->andReturn(false);
@@ -251,12 +345,48 @@ class MyDetailsControllerTest extends TestCase
 
     public function testEditActionForPostWithCancel()
     {
+        $rawEditData = array(
+            'id' => 3,
+            'version' => 1,
+            'loginId' => 'stevefox',
+            'contactDetails' => array(
+                'emailAddress' => 'steve@example.com',
+                'id' => 106,
+                'version' => 1,
+                'person' => array(
+                    'familyName' => 'Fox',
+                    'forename' => 'Steve',
+                    'id' => 82,
+                    'version' => 1,
+                ),
+            ),
+            'translateToWelsh' => 'Y',
+        );
+
+        $responseData = [
+            'main' => [
+                'id' => 3,
+                'version' => 1,
+                'loginId' => 'stevefox',
+                'emailAddress' => 'steve@example.com',
+                'emailConfirm' => 'steve@example.com',
+                'familyName' => 'Fox',
+                'forename' => 'Steve',
+                'translateToWelsh' => 'Y',
+            ]
+        ];
+
         $mockRequest = m::mock();
         $mockRequest->shouldReceive('isPost')->andReturn(true);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
+        $response = m::mock('stdClass');
+        $response->shouldReceive('isOk')->andReturn(true);
+        $response->shouldReceive('getResult')->andReturn($rawEditData);
+        $this->sut->shouldReceive('handleQuery')->with(m::type(ItemDto::class))->andReturn($response);
+
         $mockForm = m::mock('Common\Form\Form');
-        $mockForm->shouldReceive('setData')->never();
+        $mockForm->shouldReceive('setData')->once()->with($responseData);
 
         $mockFormHelper = m::mock();
         $mockFormHelper

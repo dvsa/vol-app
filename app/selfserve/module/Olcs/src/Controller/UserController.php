@@ -4,6 +4,8 @@ namespace Olcs\Controller;
 
 use Common\Controller\Lva\AbstractController;
 use Common\Controller\Lva\Traits\CrudTableTrait;
+use Common\Form\Form;
+use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Transfer\Command\User\CreateUserSelfserve as CreateDto;
 use Dvsa\Olcs\Transfer\Command\User\DeleteUserSelfserve as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\User\UpdateUserSelfserve as UpdateDto;
@@ -75,10 +77,26 @@ class UserController extends AbstractController
         /** @var \Zend\Http\PhpEnvironment\Request $request */
         $request = $this->getRequest();
         /** @var \Zend\Form\FormInterface $form */
-        $form = $this->getServiceLocator()->get('Helper\Form')->createFormWithRequest('User', $request);
+        $form = $this->getFormHelper()->createFormWithRequest('User', $request);
 
         $id = $this->params()->fromRoute('id', null);
         $data = [];
+
+        if ($id) {
+            $response = $this->handleQuery(
+                ItemDto::create(
+                    ['id' => $id]
+                )
+            );
+            if (!$response->isOk()) {
+                $this->getFlashMessenger()->addUnknownError();
+                return $this->redirectToIndex();
+            }
+
+            $data = $this->formatLoadData($response->getResult());
+            $form->setData($data);
+            $this->lockNameFields($form);
+        }
 
         if ($request->isPost()) {
             if ($this->isButtonPressed('cancel')) {
@@ -89,12 +107,12 @@ class UserController extends AbstractController
             $form->setData($data);
 
             if ($form->isValid()) {
-                $data = $this->formatSaveData($form->getData());
-
-                if ((!empty($data['id']))) {
+                if (!empty($data['main']['id'])) {
+                    $data = $this->formatSaveData($form->getData());
                     $command = UpdateDto::create($data);
                     $successMessage = 'manage-users.update.success';
                 } else {
+                    $data = $this->formatSaveDataForCreate($form->getData());
                     $command = CreateDto::create($data);
                     $successMessage = 'manage-users.create.success';
                 }
@@ -117,19 +135,6 @@ class UserController extends AbstractController
                     $this->getFlashMessenger()->addUnknownError();
                 }
             }
-        } elseif ($id) {
-            $response = $this->handleQuery(
-                ItemDto::create(
-                    ['id' => $id]
-                )
-            );
-            if (!$response->isOk()) {
-                $this->getFlashMessenger()->addUnknownError();
-                return $this->redirectToIndex();
-            }
-
-            $data = $this->formatLoadData($response->getResult());
-            $form->setData($data);
         }
 
         $view = new ViewModel(
@@ -254,21 +259,32 @@ class UserController extends AbstractController
      *
      * @return array
      */
-    public function formatSaveData($data)
+    public function formatSaveData(array $data)
     {
         $output = [];
 
-        $output['id']      = $data['main']['id'];
+        $output['id'] = $data['main']['id'] ?? '';
         $output['version'] = $data['main']['version'];
-
         $output['loginId'] = $data['main']['loginId'];
         $output['permission'] = $data['main']['permission'];
         $output['translateToWelsh'] = $data['main']['translateToWelsh'];
-
         $output['contactDetails']['emailAddress'] = $data['main']['emailAddress'];
 
+        return $output;
+    }
+
+    /**
+     * Formats data for create user command
+     *
+     * @param array $data
+     * @return array
+     */
+    public function formatSaveDataForCreate(array $data)
+    {
+        $output = $this->formatSaveData($data);
+
         $output['contactDetails']['person']['familyName'] = $data['main']['familyName'];
-        $output['contactDetails']['person']['forename']   = $data['main']['forename'];
+        $output['contactDetails']['person']['forename'] = $data['main']['forename'];
 
         return $output;
     }
@@ -337,5 +353,30 @@ class UserController extends AbstractController
     private function redirectToIndex()
     {
         return $this->redirect()->toRouteAjax('manage-user', ['action' => 'index'], [], false);
+    }
+
+    /**
+     * @param Form $form
+     */
+    protected function lockNameFields(Form $form)
+    {
+        $fieldSet = $form->get('main');
+
+        $this->getFormHelper()->lockElement($fieldSet->get('forename'), 'name-change.locked.tooltip.message');
+        $this->getFormHelper()->disableElement($form, 'main->forename');
+
+        $this->getFormHelper()->lockElement($fieldSet->get('familyName'), 'name-change.locked.tooltip.message');
+        $this->getFormHelper()->disableElement($form, 'main->familyName');
+
+        $message = $this->getServiceLocator()->get('Helper\Translation')->translate('name-change.locked.guidance.message');
+        $this->getServiceLocator()->get('Helper\Guidance')->append($message);
+    }
+
+    /**
+     * @return FormHelperService
+     */
+    protected function getFormHelper()
+    {
+        return $this->getServiceLocator()->get('Helper\Form');
     }
 }

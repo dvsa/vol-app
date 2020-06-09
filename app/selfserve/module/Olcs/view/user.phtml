@@ -8,9 +8,17 @@ echo $this->partial(
 ?>
 
 <div class="row">
-
-  <div class="full-width">
-      <?php echo $users->render(); ?>
-  </div>
-
+    <div class="full-width">
+        <div class="govuk-inset-text">
+            <?php echo $this->translate('manage-users.inset-text-message'); ?>
+        </div>
+        <div class="govuk-warning-text">
+            <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+            <strong class="govuk-warning-text__text">
+                <span class="govuk-warning-text__assistive">Warning</span>
+                <?php echo $this->translate('manage-users.warning-message'); ?>
+            </strong>
+        </div>
+        <?php echo $users->render(); ?>
+    </div>
 </div>
