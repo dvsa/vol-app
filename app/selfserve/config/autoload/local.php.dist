@@ -109,7 +109,7 @@ return [
                         \Redis::OPT_SERIALIZER => \Redis::SERIALIZER_IGBINARY
                     ],
                     'ttl' => 3600, //one hour, likely to be overridden based on use case
-                    'namespace' => 'ssweb', //otherwise zend will default to "zfcache", but usually overridden anyway
+                    'namespace' => 'zfcache',
                 ],
                 'plugins' => [
                     'exception_handler' => [
@@ -117,6 +117,18 @@ return [
                     ],
                 ],
             ],
+        ],
+    ],
+    'cache-encryption' => [
+        'node_suffix' => 'ssweb',
+        'adapter' => 'openssl',
+        'options' => [
+            'algo' => 'aes',
+            'mode' => 'gcm',
+        ],
+        'secrets' => [
+            'node' => 'redis-ss',
+            'shared' => 'redis-shared',
         ],
     ],
     'cookie-manager' => [

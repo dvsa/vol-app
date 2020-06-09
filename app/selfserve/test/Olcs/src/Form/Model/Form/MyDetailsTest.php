@@ -27,16 +27,16 @@ class MyDetailsTest extends AbstractFormValidationTestCase
     public function testForename()
     {
         $element = ['main', 'forename'];
-        $this->assertFormElementRequired($element, true);
-        $this->assertFormElementAllowEmpty($element, false);
+        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementText($element, 0, 35);
     }
 
     public function testFamilyName()
     {
         $element = ['main', 'familyName'];
-        $this->assertFormElementRequired($element, true);
-        $this->assertFormElementAllowEmpty($element, false);
+        $this->assertFormElementRequired($element, false);
+        $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementText($element, 0, 35);
     }
 

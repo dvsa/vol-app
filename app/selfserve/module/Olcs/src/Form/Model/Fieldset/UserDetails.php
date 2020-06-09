@@ -27,7 +27,7 @@ class UserDetails extends Base
     /**
      * @Form\Attributes({"id":"forename","placeholder":"","class":"medium", "required":false})
      * @Form\Options({
-     *     "label":"first-name"
+     *     "label":"user-details.first-name"
      * })
      * @Form\Type("Text")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
