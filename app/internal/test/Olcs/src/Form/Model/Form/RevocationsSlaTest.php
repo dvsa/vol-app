@@ -126,7 +126,6 @@ class RevocationsSlaTest extends AbstractFormValidationTestCase
         $this->assertFormElementDate($elementHierarchy);
     }
 
-
     public function testNfaLetterIssuedDate()
     {
         $elementHierarchy = ['fields', 'nfaLetterIssuedDate'];

@@ -42,7 +42,6 @@ class PublicInquiryReasonTest extends AbstractDataServiceTestCase
         $this->assertEquals($results, $sut->fetchListData([]));
     }
 
-
     public function testFetchPublicInquiryReasonDataFailure()
     {
         $results = [];

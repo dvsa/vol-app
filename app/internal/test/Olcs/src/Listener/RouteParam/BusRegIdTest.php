@@ -154,11 +154,10 @@ class BusRegIdTest extends MockeryTestCase
         $this->assertSame($mockNavigation, $this->sut->getNavigationService());
     }
 
-    /**
-     * @expectedException \Common\Exception\ResourceNotFoundException
-     */
     public function testOnBusRegIdNotFound()
     {
+        $this->expectException(\Common\Exception\ResourceNotFoundException::class);
+
         $id = 69;
 
         $event = new RouteParam();

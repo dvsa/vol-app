@@ -30,7 +30,6 @@ class SubmissionTest extends MockeryTestCase
         $this->assertEquals((new \DateTime('now'))->format('Y-m-d'), $actual['fields']['assignedDate']);
     }
 
-
     public function assignedDateDataProvider()
     {
 

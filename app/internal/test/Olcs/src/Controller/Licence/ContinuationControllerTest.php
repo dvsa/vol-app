@@ -214,7 +214,6 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
         $this->sut->alterFormTotalVehicleAuthorisation($mockForm, $continuationDetail);
     }
 
-
     public function dataProviderFormNumberOfDiscs()
     {
         return [

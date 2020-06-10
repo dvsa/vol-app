@@ -289,7 +289,6 @@ class DisqualifyControllerTest extends MockeryTestCase
         $this->sut->getPerson(512);
     }
 
-
     public function testGetPersonWithDisqualification()
     {
         $person = [

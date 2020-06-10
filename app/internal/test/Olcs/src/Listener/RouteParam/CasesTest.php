@@ -158,11 +158,10 @@ class CasesTest extends MockeryTestCase
         $this->assertSame($mockSidebar, $this->sut->getSidebarNavigationService());
     }
 
-    /**
-     * @expectedException \Common\Exception\ResourceNotFoundException
-     */
     public function testOnCaseNotFound()
     {
+        $this->expectException(\Common\Exception\ResourceNotFoundException::class);
+
         $id = 69;
 
         $event = new RouteParam();

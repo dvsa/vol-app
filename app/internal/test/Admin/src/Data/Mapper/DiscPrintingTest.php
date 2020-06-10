@@ -146,7 +146,6 @@ class DiscPrintingTest extends MockeryTestCase
         ];
     }
 
-
     public function testMapFromErrors()
     {
         $errors = [

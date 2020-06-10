@@ -274,7 +274,6 @@ class IrhpPermitAdminFurnitureTest extends TestCase
         $this->assertSame($mockNavigation, $sut->getNavigationService());
     }
 
-
     public function testGetPageTitle()
     {
         $mockUrl = m::mock(UrlHelperService::class);
