@@ -13,7 +13,7 @@ use Zend\View\Model\ViewModel;
 class EcmtSection extends AbstractHelper
 {
     const ROUTE_PERMITS = 'permits';
-    const ROUTE_APPLICATION_OVERVIEW = 'permits/application-overview';
+    const ROUTE_APPLICATION_OVERVIEW = 'permits/application';
     const ROUTE_TYPE = 'permits/type';
     const ROUTE_YEAR = 'permits/year';
     const ROUTE_ADD_LICENCE = 'permits/add-licence';

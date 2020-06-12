@@ -1,0 +1,38 @@
+<?php
+
+if (!isset($data['headingType'])) {
+    $data['headingType'] = 'standard';
+}
+
+?>
+<fieldset class="govuk-fieldset">
+    <?php echo $this->render('partials/single-question-fieldset-h1-' . $data['headingType']); ?>
+    <?php if (isset($data['warning'])) {
+         echo $this->partial('partials/warning-component', ['translationKey' => $data['warning']]);
+     }
+     if (isset($data['details'])) {
+         echo $this->partial('partials/details-component', ['details' => $data['details']]);
+     }
+     if (isset($data['guidance'])) {
+         echo $this->partial('partials/guidance-blue-component', ['guidance' => $data['guidance']]);
+     }
+     if (isset($data['banner'])) {
+         echo $this->partial('partials/banner-component', ['banner' => $data['banner']]);
+     }
+     if (isset($data['additionalGuidance'])) {
+         echo $this->partial('partials/additional-guidance-component', ['additionalGuidance' => $data['additionalGuidance']]);
+     }
+     if (isset($data['hint'])) {
+         echo $this->partial('partials/hint', ['hint' => $data['hint']]);
+     }
+     if (isset($data['bulletList'])) { ?>
+        <p class="govuk-body-l">
+            <?php echo $this->escapeHtml($this->translate($data['bulletList']['title'])); ?>:
+        </p>
+        <?php echo $this->translate($data['bulletList']['list']); ?>
+    <?php } ?>
+    <div class="govuk-form-group">
+        <?php echo $this->form($form); ?>
+    </div>
+</fieldset>
+

@@ -1,12 +1,56 @@
 <?php echo $this->permitsBackLink('common.link.back.label', 'permits'); ?>
+
+<?php
+
+$uniqueCountries = $data['validIrhpPermitsUniqueCountries'];
+
+?>
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <span class="govuk-caption-xl">
             <?php echo $this->escapeHtml($data['licence']['licNo']); ?>
         </span>
-        <h1 class="govuk-heading-xl">
+        <h1 class="govuk-heading-l">
             <?php echo $this->escapeHtml($data['title']); ?>
         </h1>
+<?php
+
+if (!empty($uniqueCountries)) {
+
+?>
+        <form>
+            <div class="govuk-form-group">
+                <label class="govuk-label" for="country">
+                    <?php echo $this->escapeHtml($this->translate('permits.irhp.valid.permits.filter-by-country')); ?>
+                </label>
+                <select class="govuk-select" id="country" name="country" style="width: 200px;">
+                    <option value=""><?php echo $this->escapeHtml($this->translate('permits.irhp.valid.permits.all')); ?></option>
+<?php
+
+    foreach ($uniqueCountries as $countryId => $countryName) {
+
+?>
+                    <option<?php if ($countryId == $data['selectedCountryId']) { ?> selected="selected"<?php } ?> value="<?php echo $countryId; ?>">
+                        <?php echo $this->escapeHtml($countryName); ?>
+                    </option>
+<?php
+
+    }
+
+?>
+                </select>
+                <input type="hidden" name="limit" value="<?php echo($this->escapeHtmlAttr($data['selectedLimit'])); ?>"/>
+                <button class="govuk-button">
+                    <?php echo $this->escapeHtml($this->translate('permits.irhp.valid.permits.apply-filter')); ?>
+                </button>
+            </div>
+        </form>
+<?php
+
+}
+
+?>
         <?php echo $tables['valid-irhp-permits']; ?>
         <?php echo $this->permitsDashboardLink('permits.link.return.to.dashboard'); ?>
     </div>

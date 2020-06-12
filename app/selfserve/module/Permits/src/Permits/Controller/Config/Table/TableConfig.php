@@ -49,7 +49,7 @@ class TableConfig
     ];
     const IRHP_FEE_BREAKDOWN = [
         'irhp-fee-breakdown' => [
-            'tableName' => 'irhp-fee-breakdown',
+            'tableName' => 'changeMe',
             'dataSource' => IrhpFeeBreakdownDataSource::DATA_KEY
         ]
     ];

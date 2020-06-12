@@ -54,10 +54,318 @@ class IrhpApplicationFeeSummaryTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider dpTestMapForDisplayBilateralMultilateral
-     */
-    public function testMapForDisplayBilateralMultilateral($permitTypeId)
+    public function testMapForDisplayBilateralNothingPaid()
+    {
+        $applicationRef = 'OB1234567/1';
+        $dateReceived = '2020-12-25';
+        $permitTypeDesc = 'permit type description';
+        $permitsRequired = 99;
+
+        $fee = 87;
+        $formattedFee = '£87';
+        $translatedFormattedFee = '£87 (non-refundable)';
+
+        $this->currencyFormatter->shouldReceive('__invoke')
+            ->with($fee)
+            ->andReturn($formattedFee);
+
+        $this->translationHelperService->shouldReceive('translateReplace')
+            ->with(
+                'permits.page.fee.permit.fee.non-refundable',
+                [
+                    $formattedFee
+                ]
+            )
+            ->andReturn(
+                $translatedFormattedFee
+            )
+            ->once();
+
+        $formattedDateReceived = '25 December 2020';
+
+        $inputData = [
+            'application' => [
+                'applicationRef' => $applicationRef,
+                'dateReceived' => $dateReceived,
+                'irhpPermitType' => [
+                    'id' => RefData::IRHP_BILATERAL_PERMIT_TYPE_ID,
+                    'name' => [
+                        'description' => 'permit type description',
+                    ],
+                ],
+                'permitsRequired' => $permitsRequired,
+                'outstandingFeeAmount' => $fee
+            ],
+            'feeBreakdown' => [
+                [
+                    'total' => 50
+                ],
+                [
+                    'total' => 12
+                ],
+                [
+                    'total' => 25
+                ]
+            ],
+        ];
+
+        $mappedData = [
+            'application' => [
+                'mappedFeeData' => [
+                    [
+                        'key' => IrhpApplicationFeeSummary::APP_REFERENCE_HEADING,
+                        'value' => $applicationRef,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::APP_DATE_HEADING,
+                        'value' => $formattedDateReceived,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::PERMIT_TYPE_HEADING,
+                        'value' => $permitTypeDesc,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::NUM_PERMITS_REQUIRED_HEADING,
+                        'value' => $permitsRequired,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::FEE_TOTAL_HEADING,
+                        'value' => $translatedFormattedFee,
+                    ],
+                ],
+                'prependTitle' => $permitTypeDesc
+            ]
+        ];
+
+        $expectedOutput = array_merge_recursive($inputData, $mappedData);
+
+        $this->assertEquals(
+            $expectedOutput,
+            $this->irhpApplicationFeeSummary->mapForDisplay($inputData)
+        );
+    }
+
+    public function testMapForDisplayBilateralPartiallyPaid()
+    {
+        $applicationRef = 'OB1234567/1';
+        $dateReceived = '2020-12-25';
+        $permitTypeDesc = 'permit type description';
+        $permitsRequired = 99;
+
+        $paidFee = 37;
+        $formattedPaidFee = '£37';
+        $translatedFormattedPaidFee = '£37 (non-refundable)';
+
+        $this->currencyFormatter->shouldReceive('__invoke')
+            ->with($paidFee)
+            ->andReturn($formattedPaidFee);
+
+        $this->translationHelperService->shouldReceive('translateReplace')
+            ->with(
+                'permits.page.fee.permit.fee.non-refundable',
+                [
+                    $formattedPaidFee
+                ]
+            )
+            ->andReturn(
+                $translatedFormattedPaidFee
+            )
+            ->once();
+
+        $remainingFee = 50;
+        $formattedRemainingFee = '£50';
+        $translatedFormattedRemainingFee = '£50 (non-refundable)';
+
+        $this->currencyFormatter->shouldReceive('__invoke')
+            ->with($remainingFee)
+            ->andReturn($formattedRemainingFee);
+
+        $this->translationHelperService->shouldReceive('translateReplace')
+            ->with(
+                'permits.page.fee.permit.fee.non-refundable',
+                [
+                    $formattedRemainingFee
+                ]
+            )
+            ->andReturn(
+                $translatedFormattedRemainingFee
+            )
+            ->once();
+
+        $formattedDateReceived = '25 December 2020';
+
+        $inputData = [
+            'application' => [
+                'applicationRef' => $applicationRef,
+                'dateReceived' => $dateReceived,
+                'irhpPermitType' => [
+                    'id' => RefData::IRHP_BILATERAL_PERMIT_TYPE_ID,
+                    'name' => [
+                        'description' => 'permit type description',
+                    ],
+                ],
+                'permitsRequired' => $permitsRequired,
+                'outstandingFeeAmount' => $remainingFee
+            ],
+            'feeBreakdown' => [
+                [
+                    'total' => 50
+                ],
+                [
+                    'total' => 12
+                ],
+                [
+                    'total' => 25
+                ]
+            ],
+        ];
+
+        $mappedData = [
+            'application' => [
+                'mappedFeeData' => [
+                    [
+                        'key' => IrhpApplicationFeeSummary::APP_REFERENCE_HEADING,
+                        'value' => $applicationRef,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::APP_DATE_HEADING,
+                        'value' => $formattedDateReceived,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::PERMIT_TYPE_HEADING,
+                        'value' => $permitTypeDesc,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::NUM_PERMITS_REQUIRED_HEADING,
+                        'value' => $permitsRequired,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::AMOUNT_PAID_HEADING,
+                        'value' => $translatedFormattedPaidFee,
+                        'status' => [
+                            'caption' => IrhpApplicationFeeSummary::ALREADY_PAID_STATUS,
+                            'colour' => 'green'
+                        ]
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::AMOUNT_REMAINING_HEADING,
+                        'value' => $translatedFormattedRemainingFee,
+                        'status' => [
+                            'caption' => IrhpApplicationFeeSummary::TO_BE_PAID_STATUS,
+                            'colour' => 'orange'
+                        ]
+                    ],
+                ],
+                'prependTitle' => $permitTypeDesc,
+                'warningMessage' => 'permits.page.irhp-fee.message.part-paid',
+            ]
+        ];
+
+        $expectedOutput = array_merge_recursive($inputData, $mappedData);
+
+        $this->assertEquals(
+            $expectedOutput,
+            $this->irhpApplicationFeeSummary->mapForDisplay($inputData)
+        );
+    }
+
+    public function testMapForDisplayBilateralFullyPaid()
+    {
+        $applicationRef = 'OB1234567/1';
+        $dateReceived = '2020-12-25';
+        $permitTypeDesc = 'permit type description';
+        $permitsRequired = 99;
+
+        $paidFee = 87;
+        $formattedPaidFee = '£87';
+        $translatedFormattedPaidFee = '£87 (non-refundable)';
+
+        $this->currencyFormatter->shouldReceive('__invoke')
+            ->with($paidFee)
+            ->andReturn($formattedPaidFee);
+
+        $this->translationHelperService->shouldReceive('translateReplace')
+            ->with(
+                'permits.page.fee.permit.fee.non-refundable',
+                [
+                    $formattedPaidFee
+                ]
+            )
+            ->andReturn(
+                $translatedFormattedPaidFee
+            )
+            ->once();
+
+        $formattedDateReceived = '25 December 2020';
+
+        $inputData = [
+            'application' => [
+                'applicationRef' => $applicationRef,
+                'dateReceived' => $dateReceived,
+                'irhpPermitType' => [
+                    'id' => RefData::IRHP_BILATERAL_PERMIT_TYPE_ID,
+                    'name' => [
+                        'description' => 'permit type description',
+                    ],
+                ],
+                'permitsRequired' => $permitsRequired,
+                'outstandingFeeAmount' => 0,
+            ],
+            'feeBreakdown' => [
+                [
+                    'total' => 50
+                ],
+                [
+                    'total' => 12
+                ],
+                [
+                    'total' => 25
+                ]
+            ],
+        ];
+
+        $mappedData = [
+            'application' => [
+                'mappedFeeData' => [
+                    [
+                        'key' => IrhpApplicationFeeSummary::APP_REFERENCE_HEADING,
+                        'value' => $applicationRef,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::APP_DATE_HEADING,
+                        'value' => $formattedDateReceived,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::PERMIT_TYPE_HEADING,
+                        'value' => $permitTypeDesc,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::NUM_PERMITS_REQUIRED_HEADING,
+                        'value' => $permitsRequired,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::AMOUNT_PAID_HEADING,
+                        'value' => $translatedFormattedPaidFee,
+                        'status' => [
+                            'caption' => IrhpApplicationFeeSummary::ALREADY_PAID_STATUS,
+                            'colour' => 'green'
+                        ]
+                    ],
+                ],
+                'prependTitle' => $permitTypeDesc,
+                'warningMessage' => 'permits.page.irhp-fee.message.total-already-paid',
+            ]
+        ];
+
+        $expectedOutput = array_merge_recursive($inputData, $mappedData);
+
+        $this->assertEquals(
+            $expectedOutput,
+            $this->irhpApplicationFeeSummary->mapForDisplay($inputData)
+        );
+    }
+
+    public function testMapForDisplayMultilateral()
     {
         $applicationRef = 'OB1234567/1';
         $dateReceived = '2020-12-25';
@@ -87,58 +395,54 @@ class IrhpApplicationFeeSummaryTest extends TestCase
         $formattedDateReceived = '25 December 2020';
 
         $inputData = [
-            'applicationRef' => $applicationRef,
-            'dateReceived' => $dateReceived,
-            'irhpPermitType' => [
-                'id' => $permitTypeId,
-                'name' => [
-                    'description' => $permitTypeDesc,
+            'application' => [
+                'applicationRef' => $applicationRef,
+                'dateReceived' => $dateReceived,
+                'irhpPermitType' => [
+                    'id' => RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID,
+                    'name' => [
+                        'description' => 'permit type description',
+                    ],
                 ],
-            ],
-            'permitsRequired' => $permitsRequired,
-            'outstandingFeeAmount' => $fee
+                'permitsRequired' => $permitsRequired,
+                'outstandingFeeAmount' => $fee
+            ]
         ];
 
         $mappedData = [
-            'mappedFeeData' => [
-                [
-                    'key' => IrhpApplicationFeeSummary::APP_REFERENCE_HEADING,
-                    'value' => $applicationRef,
+            'application' => [
+                'mappedFeeData' => [
+                    [
+                        'key' => IrhpApplicationFeeSummary::APP_REFERENCE_HEADING,
+                        'value' => $applicationRef,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::APP_DATE_HEADING,
+                        'value' => $formattedDateReceived,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::PERMIT_TYPE_HEADING,
+                        'value' => $permitTypeDesc,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::NUM_PERMITS_REQUIRED_HEADING,
+                        'value' => $permitsRequired,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::FEE_TOTAL_HEADING,
+                        'value' => $translatedFormattedFee,
+                    ],
                 ],
-                [
-                    'key' => IrhpApplicationFeeSummary::APP_DATE_HEADING,
-                    'value' => $formattedDateReceived,
-                ],
-                [
-                    'key' => IrhpApplicationFeeSummary::PERMIT_TYPE_HEADING,
-                    'value' => $permitTypeDesc,
-                ],
-                [
-                    'key' => IrhpApplicationFeeSummary::NUM_PERMITS_REQUIRED_HEADING,
-                    'value' => $permitsRequired,
-                ],
-                [
-                    'key' => IrhpApplicationFeeSummary::FEE_TOTAL_HEADING,
-                    'value' => $translatedFormattedFee,
-                ],
-            ],
-            'prependTitle' => $permitTypeDesc
+                'prependTitle' => $permitTypeDesc
+            ]
         ];
 
-        $expectedOutput = $inputData + $mappedData;
+        $expectedOutput = array_merge_recursive($inputData, $mappedData);
 
         $this->assertEquals(
             $expectedOutput,
             $this->irhpApplicationFeeSummary->mapForDisplay($inputData)
         );
-    }
-
-    public function dpTestMapForDisplayBilateralMultilateral()
-    {
-        return [
-            [RefData::IRHP_BILATERAL_PERMIT_TYPE_ID],
-            [RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID],
-        ];
     }
 
     public function testMapForDisplayEcmtRemoval()
@@ -173,38 +477,40 @@ class IrhpApplicationFeeSummaryTest extends TestCase
         $formattedDateReceived = '25 December 2020';
 
         $inputData = [
-            'applicationRef' => $applicationRef,
-            'dateReceived' => $dateReceived,
-            'irhpPermitType' => [
-                'id' => $permitTypeId,
-                'name' => [
-                    'description' => $permitTypeDesc,
+            'application' => [
+                'applicationRef' => $applicationRef,
+                'dateReceived' => $dateReceived,
+                'irhpPermitType' => [
+                    'id' => $permitTypeId,
+                    'name' => [
+                        'description' => $permitTypeDesc,
+                    ],
                 ],
-            ],
-            'permitsRequired' => $permitsRequired,
-            'outstandingFeeAmount' => $fee,
-            'fees' => [
-                [
-                    'feeType' => [
-                        'fixedValue' => 10,
+                'permitsRequired' => $permitsRequired,
+                'outstandingFeeAmount' => $fee,
+                'fees' => [
+                    [
                         'feeType' => [
-                            'id' => 'OTHERTYPE1'
+                            'fixedValue' => 10,
+                            'feeType' => [
+                                'id' => 'OTHERTYPE1'
+                            ]
                         ]
-                    ]
-                ],
-                [
-                    'feeType' => [
-                        'fixedValue' => $irfoFeePerPermit,
+                    ],
+                    [
                         'feeType' => [
-                            'id' => RefData::IRFO_GV_FEE_TYPE,
+                            'fixedValue' => $irfoFeePerPermit,
+                            'feeType' => [
+                                'id' => RefData::IRFO_GV_FEE_TYPE,
+                            ]
                         ]
-                    ]
-                ],
-                [
-                    'feeType' => [
-                        'fixedValue' => 30,
+                    ],
+                    [
                         'feeType' => [
-                            'id' => 'OTHERTYPE1'
+                            'fixedValue' => 30,
+                            'feeType' => [
+                                'id' => 'OTHERTYPE1'
+                            ]
                         ]
                     ]
                 ]
@@ -212,38 +518,40 @@ class IrhpApplicationFeeSummaryTest extends TestCase
         ];
 
         $mappedData = [
-            'showFeeSummaryTitle' => true,
-            'mappedFeeData' => [
-                [
-                    'key' => IrhpApplicationFeeSummary::APP_REFERENCE_HEADING,
-                    'value' => $applicationRef,
+            'application' => [
+                'showFeeSummaryTitle' => true,
+                'mappedFeeData' => [
+                    [
+                        'key' => IrhpApplicationFeeSummary::APP_REFERENCE_HEADING,
+                        'value' => $applicationRef,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::APP_DATE_HEADING,
+                        'value' => $formattedDateReceived,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::PERMIT_TYPE_HEADING,
+                        'value' => $permitTypeDesc,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::FEE_PER_PERMIT_HEADING,
+                        'value' => $irfoFeePerPermit,
+                        'isCurrency' => true,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::NUM_PERMITS_REQUIRED_HEADING,
+                        'value' => $permitsRequired,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::FEE_TOTAL_HEADING,
+                        'value' => $translatedFormattedFee,
+                    ],
                 ],
-                [
-                    'key' => IrhpApplicationFeeSummary::APP_DATE_HEADING,
-                    'value' => $formattedDateReceived,
-                ],
-                [
-                    'key' => IrhpApplicationFeeSummary::PERMIT_TYPE_HEADING,
-                    'value' => $permitTypeDesc,
-                ],
-                [
-                    'key' => IrhpApplicationFeeSummary::FEE_PER_PERMIT_HEADING,
-                    'value' => $irfoFeePerPermit,
-                    'isCurrency' => true,
-                ],
-                [
-                    'key' => IrhpApplicationFeeSummary::NUM_PERMITS_REQUIRED_HEADING,
-                    'value' => $permitsRequired,
-                ],
-                [
-                    'key' => IrhpApplicationFeeSummary::FEE_TOTAL_HEADING,
-                    'value' => $translatedFormattedFee,
-                ],
-            ],
-            'prependTitle' => $permitTypeDesc
+                'prependTitle' => $permitTypeDesc
+            ]
         ];
 
-        $expectedOutput = $inputData + $mappedData;
+        $expectedOutput = array_merge_recursive($inputData, $mappedData);
 
         $this->assertEquals(
             $expectedOutput,
@@ -303,43 +611,45 @@ class IrhpApplicationFeeSummaryTest extends TestCase
             ->andReturn($translatedFormattedTotalApplicationFee);
 
         $inputData = [
-            'businessProcess' => [
-                'id' => RefData::BUSINESS_PROCESS_APGG
-            ],
-            'canViewCandidatePermits' => false,
-            'isUnderConsideration' => $isUnderConsideration,
-            'isAwaitingFee' => $isAwaitingFee,
-            'applicationRef' => $applicationRef,
-            'dateReceived' => $dateReceived,
-            'irhpPermitType' => [
-                'id' => $permitTypeId,
-                'name' => [
-                    'description' => $permitTypeDesc
+            'application' => [
+                'businessProcess' => [
+                    'id' => RefData::BUSINESS_PROCESS_APGG
                 ],
-            ],
-            'irhpPermitApplications' => [$irhpPermitApplicationInputData],
-            'fees' => [
-                [
-                    'feeType' => [
-                        'fixedValue' => 10,
+                'canViewCandidatePermits' => false,
+                'isUnderConsideration' => $isUnderConsideration,
+                'isAwaitingFee' => $isAwaitingFee,
+                'applicationRef' => $applicationRef,
+                'dateReceived' => $dateReceived,
+                'irhpPermitType' => [
+                    'id' => $permitTypeId,
+                    'name' => [
+                        'description' => $permitTypeDesc
+                    ],
+                ],
+                'irhpPermitApplications' => [$irhpPermitApplicationInputData],
+                'fees' => [
+                    [
                         'feeType' => [
-                            'id' => 'OTHERTYPE1'
+                            'fixedValue' => 10,
+                            'feeType' => [
+                                'id' => 'OTHERTYPE1'
+                            ]
                         ]
-                    ]
-                ],
-                [
-                    'feeType' => [
-                        'fixedValue' => $appFeePerPermit,
+                    ],
+                    [
                         'feeType' => [
-                            'id' => RefData::IRHP_GV_APPLICATION_FEE_TYPE,
+                            'fixedValue' => $appFeePerPermit,
+                            'feeType' => [
+                                'id' => RefData::IRHP_GV_APPLICATION_FEE_TYPE,
+                            ]
                         ]
-                    ]
-                ],
-                [
-                    'feeType' => [
-                        'fixedValue' => 30,
+                    ],
+                    [
                         'feeType' => [
-                            'id' => 'OTHERTYPE1'
+                            'fixedValue' => 30,
+                            'feeType' => [
+                                'id' => 'OTHERTYPE1'
+                            ]
                         ]
                     ]
                 ]
@@ -347,45 +657,47 @@ class IrhpApplicationFeeSummaryTest extends TestCase
         ];
 
         $mappedData = [
-            'showFeeSummaryTitle' => true,
-            'showWarningMessage' => true,
-            'guidance' => [],
-            'mappedFeeData' => [
-                [
-                    'key' => IrhpApplicationFeeSummary::PERMIT_TYPE_HEADING,
-                    'value' => $permitTypeDesc,
+            'application' => [
+                'showFeeSummaryTitle' => true,
+                'warningMessage' => 'permits.page.irhp-fee.message',
+                'guidance' => [],
+                'mappedFeeData' => [
+                    [
+                        'key' => IrhpApplicationFeeSummary::PERMIT_TYPE_HEADING,
+                        'value' => $permitTypeDesc,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::PERMIT_PERIOD_HEADING,
+                        'value' => $permitPeriod,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::APP_REFERENCE_HEADING,
+                        'value' => $applicationRef,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::APP_DATE_HEADING,
+                        'value' => $formattedDateReceived,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::NUM_PERMITS_REQUIRED_HEADING,
+                        'value' => $formattedNoOfPermitsRequired,
+                        'disableHtmlEscape' => true,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::APP_FEE_PER_PERMIT_HEADING,
+                        'value' => $appFeePerPermit,
+                        'isCurrency' => true,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::TOTAL_APPLICATION_FEE_HEADING,
+                        'value' => $translatedFormattedTotalApplicationFee,
+                    ],
                 ],
-                [
-                    'key' => IrhpApplicationFeeSummary::PERMIT_PERIOD_HEADING,
-                    'value' => $permitPeriod,
-                ],
-                [
-                    'key' => IrhpApplicationFeeSummary::APP_REFERENCE_HEADING,
-                    'value' => $applicationRef,
-                ],
-                [
-                    'key' => IrhpApplicationFeeSummary::APP_DATE_HEADING,
-                    'value' => $formattedDateReceived,
-                ],
-                [
-                    'key' => IrhpApplicationFeeSummary::NUM_PERMITS_REQUIRED_HEADING,
-                    'value' => $formattedNoOfPermitsRequired,
-                    'disableHtmlEscape' => true,
-                ],
-                [
-                    'key' => IrhpApplicationFeeSummary::APP_FEE_PER_PERMIT_HEADING,
-                    'value' => $appFeePerPermit,
-                    'isCurrency' => true,
-                ],
-                [
-                    'key' => IrhpApplicationFeeSummary::TOTAL_APPLICATION_FEE_HEADING,
-                    'value' => $translatedFormattedTotalApplicationFee,
-                ],
-            ],
-            'prependTitle' => $permitTypeDesc
+                'prependTitle' => $permitTypeDesc
+            ]
         ];
 
-        $expectedOutput = $inputData + $mappedData;
+        $expectedOutput = array_merge_recursive($inputData, $mappedData);
 
         $this->assertEquals(
             $expectedOutput,
@@ -458,44 +770,46 @@ class IrhpApplicationFeeSummaryTest extends TestCase
             ->andReturn($formattedStatus);
 
         $inputData = [
-            'businessProcess' => [
-                'id' => RefData::BUSINESS_PROCESS_APGG
-            ],
-            'canViewCandidatePermits' => false,
-            'isUnderConsideration' => $isUnderConsideration,
-            'isAwaitingFee' => $isAwaitingFee,
-            'status' => $status,
-            'applicationRef' => $applicationRef,
-            'dateReceived' => $dateReceived,
-            'irhpPermitType' => [
-                'id' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
-                'name' => [
-                    'description' => $permitTypeDesc
+            'application' => [
+                'businessProcess' => [
+                    'id' => RefData::BUSINESS_PROCESS_APGG
                 ],
-            ],
-            'irhpPermitApplications' => [$irhpPermitApplicationInputData],
-            'fees' => [
-                [
-                    'feeType' => [
-                        'fixedValue' => 10,
+                'canViewCandidatePermits' => false,
+                'isUnderConsideration' => $isUnderConsideration,
+                'isAwaitingFee' => $isAwaitingFee,
+                'status' => $status,
+                'applicationRef' => $applicationRef,
+                'dateReceived' => $dateReceived,
+                'irhpPermitType' => [
+                    'id' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
+                    'name' => [
+                        'description' => $permitTypeDesc
+                    ],
+                ],
+                'irhpPermitApplications' => [$irhpPermitApplicationInputData],
+                'fees' => [
+                    [
                         'feeType' => [
-                            'id' => 'OTHERTYPE1'
+                            'fixedValue' => 10,
+                            'feeType' => [
+                                'id' => 'OTHERTYPE1'
+                            ]
                         ]
-                    ]
-                ],
-                [
-                    'feeType' => [
-                        'fixedValue' => $appFeePerPermit,
+                    ],
+                    [
                         'feeType' => [
-                            'id' => RefData::IRHP_GV_APPLICATION_FEE_TYPE,
+                            'fixedValue' => $appFeePerPermit,
+                            'feeType' => [
+                                'id' => RefData::IRHP_GV_APPLICATION_FEE_TYPE,
+                            ]
                         ]
-                    ]
-                ],
-                [
-                    'feeType' => [
-                        'fixedValue' => 30,
+                    ],
+                    [
                         'feeType' => [
-                            'id' => 'OTHERTYPE1'
+                            'fixedValue' => 30,
+                            'feeType' => [
+                                'id' => 'OTHERTYPE1'
+                            ]
                         ]
                     ]
                 ]
@@ -503,45 +817,47 @@ class IrhpApplicationFeeSummaryTest extends TestCase
         ];
 
         $mappedData = [
-            'showFeeSummaryTitle' => true,
-            'showWarningMessage' => true,
-            'guidance' => [],
-            'mappedFeeData' => [
-                [
-                    'key' => IrhpApplicationFeeSummary::PERMIT_STATUS_HEADING,
-                    'value' => $formattedStatus,
-                    'disableHtmlEscape' => true,
+            'application' => [
+                'showFeeSummaryTitle' => true,
+                'warningMessage' => 'permits.page.irhp-fee.message',
+                'guidance' => [],
+                'mappedFeeData' => [
+                    [
+                        'key' => IrhpApplicationFeeSummary::PERMIT_STATUS_HEADING,
+                        'value' => $formattedStatus,
+                        'disableHtmlEscape' => true,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::PERMIT_TYPE_HEADING,
+                        'value' => $permitTypeDesc,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::PERMIT_YEAR_HEADING,
+                        'value' => $permitYear,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::APP_REFERENCE_HEADING,
+                        'value' => $applicationRef,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::APP_DATE_HEADING,
+                        'value' => $formattedDateReceived,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::NUM_PERMITS_REQUIRED_HEADING,
+                        'value' => $formattedNoOfPermitsRequired,
+                        'disableHtmlEscape' => true,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::TOTAL_APPLICATION_FEE_PAID_HEADING,
+                        'value' => $translatedFormattedTotalApplicationFee,
+                    ],
                 ],
-                [
-                    'key' => IrhpApplicationFeeSummary::PERMIT_TYPE_HEADING,
-                    'value' => $permitTypeDesc,
-                ],
-                [
-                    'key' => IrhpApplicationFeeSummary::PERMIT_YEAR_HEADING,
-                    'value' => $permitYear,
-                ],
-                [
-                    'key' => IrhpApplicationFeeSummary::APP_REFERENCE_HEADING,
-                    'value' => $applicationRef,
-                ],
-                [
-                    'key' => IrhpApplicationFeeSummary::APP_DATE_HEADING,
-                    'value' => $formattedDateReceived,
-                ],
-                [
-                    'key' => IrhpApplicationFeeSummary::NUM_PERMITS_REQUIRED_HEADING,
-                    'value' => $formattedNoOfPermitsRequired,
-                    'disableHtmlEscape' => true,
-                ],
-                [
-                    'key' => IrhpApplicationFeeSummary::TOTAL_APPLICATION_FEE_PAID_HEADING,
-                    'value' => $translatedFormattedTotalApplicationFee,
-                ],
-            ],
-            'prependTitle' => $permitTypeDesc
+                'prependTitle' => $permitTypeDesc
+            ]
         ];
 
-        $expectedOutput = $inputData + $mappedData;
+        $expectedOutput = array_merge_recursive($inputData, $mappedData);
 
         $this->assertEquals(
             $expectedOutput,
@@ -601,43 +917,45 @@ class IrhpApplicationFeeSummaryTest extends TestCase
             ->andReturn($translatedFormattedTotalApplicationFee);
 
         $inputData = [
-            'businessProcess' => [
-                'id' => RefData::BUSINESS_PROCESS_APGG
-            ],
-            'canViewCandidatePermits' => false,
-            'isUnderConsideration' => $isUnderConsideration,
-            'isAwaitingFee' => $isAwaitingFee,
-            'applicationRef' => $applicationRef,
-            'irhpPermitType' => [
-                'id' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
-                'name' => [
-                    'description' => $permitTypeDesc
+            'application' => [
+                'businessProcess' => [
+                    'id' => RefData::BUSINESS_PROCESS_APGG
                 ],
-            ],
-            'irhpPermitApplications' => [$irhpPermitApplicationInputData],
-            'fees' => [
-                [
-                    'feeType' => [
-                        'fixedValue' => 10,
-                        'feeType' => [
-                            'id' => 'OTHERTYPE1'
-                        ]
-                    ]
+                'canViewCandidatePermits' => false,
+                'isUnderConsideration' => $isUnderConsideration,
+                'isAwaitingFee' => $isAwaitingFee,
+                'applicationRef' => $applicationRef,
+                'irhpPermitType' => [
+                    'id' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
+                    'name' => [
+                        'description' => $permitTypeDesc
+                    ],
                 ],
-                [
-                    'feeType' => [
-                        'fixedValue' => $issueFeePerPermit,
+                'irhpPermitApplications' => [$irhpPermitApplicationInputData],
+                'fees' => [
+                    [
                         'feeType' => [
-                            'id' => RefData::IRHP_GV_ISSUE_FEE_TYPE,
+                            'fixedValue' => 10,
+                            'feeType' => [
+                                'id' => 'OTHERTYPE1'
+                            ]
                         ]
                     ],
-                    'dueDate' => $feeDueDate,
-                ],
-                [
-                    'feeType' => [
-                        'fixedValue' => 30,
+                    [
                         'feeType' => [
-                            'id' => RefData::IRHP_GV_APPLICATION_FEE_TYPE,
+                            'fixedValue' => $issueFeePerPermit,
+                            'feeType' => [
+                                'id' => RefData::IRHP_GV_ISSUE_FEE_TYPE,
+                            ]
+                        ],
+                        'dueDate' => $feeDueDate,
+                    ],
+                    [
+                        'feeType' => [
+                            'fixedValue' => 30,
+                            'feeType' => [
+                                'id' => RefData::IRHP_GV_APPLICATION_FEE_TYPE,
+                            ]
                         ]
                     ]
                 ]
@@ -645,45 +963,47 @@ class IrhpApplicationFeeSummaryTest extends TestCase
         ];
 
         $mappedData = [
-            'showFeeSummaryTitle' => true,
-            'showWarningMessage' => true,
-            'guidance' => [],
-            'mappedFeeData' => [
-                [
-                    'key' => IrhpApplicationFeeSummary::PERMIT_TYPE_HEADING,
-                    'value' => $permitTypeDesc,
+            'application' => [
+                'showFeeSummaryTitle' => true,
+                'warningMessage' => 'permits.page.irhp-fee.message',
+                'guidance' => [],
+                'mappedFeeData' => [
+                    [
+                        'key' => IrhpApplicationFeeSummary::PERMIT_TYPE_HEADING,
+                        'value' => $permitTypeDesc,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::PERMIT_YEAR_HEADING,
+                        'value' => $permitYear,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::APP_REFERENCE_HEADING,
+                        'value' => $applicationRef,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::NUM_PERMITS_HEADING,
+                        'value' => $formattedNoOfPermitsRequired,
+                        'disableHtmlEscape' => true,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::ISSUE_FEE_PER_PERMIT_HEADING,
+                        'value' => $issueFeePerPermit,
+                        'isCurrency' => true,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::TOTAL_ISSUE_FEE_HEADING,
+                        'value' => $translatedFormattedTotalApplicationFee,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::PAYMENT_DUE_DATE_HEADING,
+                        'value' => $formattedFeeDueDate,
+                    ],
                 ],
-                [
-                    'key' => IrhpApplicationFeeSummary::PERMIT_YEAR_HEADING,
-                    'value' => $permitYear,
-                ],
-                [
-                    'key' => IrhpApplicationFeeSummary::APP_REFERENCE_HEADING,
-                    'value' => $applicationRef,
-                ],
-                [
-                    'key' => IrhpApplicationFeeSummary::NUM_PERMITS_HEADING,
-                    'value' => $formattedNoOfPermitsRequired,
-                    'disableHtmlEscape' => true,
-                ],
-                [
-                    'key' => IrhpApplicationFeeSummary::ISSUE_FEE_PER_PERMIT_HEADING,
-                    'value' => $issueFeePerPermit,
-                    'isCurrency' => true,
-                ],
-                [
-                    'key' => IrhpApplicationFeeSummary::TOTAL_ISSUE_FEE_HEADING,
-                    'value' => $translatedFormattedTotalApplicationFee,
-                ],
-                [
-                    'key' => IrhpApplicationFeeSummary::PAYMENT_DUE_DATE_HEADING,
-                    'value' => $formattedFeeDueDate,
-                ],
-            ],
-            'prependTitle' => $permitTypeDesc
+                'prependTitle' => $permitTypeDesc
+            ]
         ];
 
-        $expectedOutput = $inputData + $mappedData;
+        $expectedOutput = array_merge_recursive($inputData, $mappedData);
 
         $this->assertEquals(
             $expectedOutput,
@@ -759,95 +1079,99 @@ class IrhpApplicationFeeSummaryTest extends TestCase
             ->andReturn('UNPAID_PERMITS_URL');
 
         $inputData = [
-            'businessProcess' => [
-                'id' => RefData::BUSINESS_PROCESS_APSG
-            ],
-            'canViewCandidatePermits' => true,
-            'totalPermitsRequired' => $totalPermitsRequired,
-            'totalPermitsAwarded' => $totalPermitsAwarded,
-            'isUnderConsideration' => $isUnderConsideration,
-            'isAwaitingFee' => $isAwaitingFee,
-            'applicationRef' => $applicationRef,
-            'irhpPermitType' => [
-                'id' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
-                'name' => [
-                    'description' => $permitTypeDesc
+            'application' => [
+                'businessProcess' => [
+                    'id' => RefData::BUSINESS_PROCESS_APSG
                 ],
-            ],
-            'irhpPermitApplications' => [$irhpPermitApplicationInputData],
-            'fees' => [
-                [
-                    'feeType' => [
-                        'fixedValue' => 10,
-                        'feeType' => [
-                            'id' => 'OTHERTYPE1'
-                        ]
-                    ]
+                'canViewCandidatePermits' => true,
+                'totalPermitsRequired' => $totalPermitsRequired,
+                'totalPermitsAwarded' => $totalPermitsAwarded,
+                'isUnderConsideration' => $isUnderConsideration,
+                'isAwaitingFee' => $isAwaitingFee,
+                'applicationRef' => $applicationRef,
+                'irhpPermitType' => [
+                    'id' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
+                    'name' => [
+                        'description' => $permitTypeDesc
+                    ],
                 ],
-                [
-                    'feeType' => [
-                        'fixedValue' => $issueFeePerPermit,
+                'irhpPermitApplications' => [$irhpPermitApplicationInputData],
+                'fees' => [
+                    [
                         'feeType' => [
-                            'id' => RefData::IRHP_GV_ISSUE_FEE_TYPE,
+                            'fixedValue' => 10,
+                            'feeType' => [
+                                'id' => 'OTHERTYPE1'
+                            ]
                         ]
                     ],
-                    'dueDate' => $feeDueDate,
-                ],
-                [
-                    'feeType' => [
-                        'fixedValue' => 30,
+                    [
                         'feeType' => [
-                            'id' => RefData::IRHP_GV_APPLICATION_FEE_TYPE,
+                            'fixedValue' => $issueFeePerPermit,
+                            'feeType' => [
+                                'id' => RefData::IRHP_GV_ISSUE_FEE_TYPE,
+                            ]
+                        ],
+                        'dueDate' => $feeDueDate,
+                    ],
+                    [
+                        'feeType' => [
+                            'fixedValue' => 30,
+                            'feeType' => [
+                                'id' => RefData::IRHP_GV_APPLICATION_FEE_TYPE,
+                            ]
                         ]
                     ]
-                ]
+                ],
             ],
             'prependTitle' => $permitTypeDesc
         ];
 
         $mappedData = [
-            'showFeeSummaryTitle' => true,
-            'showWarningMessage' => true,
-            'guidance' => [
-                'value' => 'translated-markup-ecmt-fee-successful-hint',
-                'disableHtmlEscape' => true,
-            ],
-            'mappedFeeData' => [
-                [
-                    'key' => IrhpApplicationFeeSummary::PERMIT_TYPE_HEADING,
-                    'value' => $permitTypeDesc,
-                ],
-                [
-                    'key' => IrhpApplicationFeeSummary::PERMIT_YEAR_HEADING,
-                    'value' => $permitYear,
-                ],
-                [
-                    'key' => IrhpApplicationFeeSummary::APP_REFERENCE_HEADING,
-                    'value' => $applicationRef,
-                ],
-                [
-                    'key' => IrhpApplicationFeeSummary::NUM_PERMITS_HEADING,
-                    'value' => $formattedNoOfPermitsRequired,
+            'application' => [
+                'showFeeSummaryTitle' => true,
+                'warningMessage' => 'permits.page.irhp-fee.message',
+                'guidance' => [
+                    'value' => 'translated-markup-ecmt-fee-successful-hint',
                     'disableHtmlEscape' => true,
                 ],
-                [
-                    'key' => IrhpApplicationFeeSummary::ISSUE_FEE_PER_PERMIT_HEADING,
-                    'value' => $issueFeePerPermit,
-                    'isCurrency' => true,
+                'mappedFeeData' => [
+                    [
+                        'key' => IrhpApplicationFeeSummary::PERMIT_TYPE_HEADING,
+                        'value' => $permitTypeDesc,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::PERMIT_YEAR_HEADING,
+                        'value' => $permitYear,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::APP_REFERENCE_HEADING,
+                        'value' => $applicationRef,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::NUM_PERMITS_HEADING,
+                        'value' => $formattedNoOfPermitsRequired,
+                        'disableHtmlEscape' => true,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::ISSUE_FEE_PER_PERMIT_HEADING,
+                        'value' => $issueFeePerPermit,
+                        'isCurrency' => true,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::TOTAL_ISSUE_FEE_HEADING,
+                        'value' => $translatedFormattedTotalApplicationFee,
+                    ],
+                    [
+                        'key' => IrhpApplicationFeeSummary::PAYMENT_DUE_DATE_HEADING,
+                        'value' => $formattedFeeDueDate,
+                    ],
                 ],
-                [
-                    'key' => IrhpApplicationFeeSummary::TOTAL_ISSUE_FEE_HEADING,
-                    'value' => $translatedFormattedTotalApplicationFee,
-                ],
-                [
-                    'key' => IrhpApplicationFeeSummary::PAYMENT_DUE_DATE_HEADING,
-                    'value' => $formattedFeeDueDate,
-                ],
-            ],
-            'prependTitle' => $permitTypeDesc
+                'prependTitle' => $permitTypeDesc
+            ]
         ];
 
-        $expectedOutput = $inputData + $mappedData;
+        $expectedOutput = array_merge_recursive($inputData, $mappedData);
 
         $this->assertEquals(
             $expectedOutput,
@@ -861,8 +1185,10 @@ class IrhpApplicationFeeSummaryTest extends TestCase
         $this->expectExceptionMessage('Unsupported permit type id 57');
 
         $inputData = [
-            'irhpPermitType' => [
-                'id' => 57
+            'application' => [
+                'irhpPermitType' => [
+                    'id' => 57
+                ]
             ]
         ];
 

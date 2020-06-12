@@ -47,7 +47,6 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
         'question' => [
             'command' => Create::class,
             'params' => ParamsConfig::NEW_APPLICATION,
-            'step' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
         ],
     ];
 
@@ -65,7 +64,15 @@ class LicenceController extends AbstractSelfserveController implements ToggleAwa
      */
     public function handlePostCommand(array &$config, array $params)
     {
-        $licenceData = $this->data[LicencesAvailable::DATA_KEY]['eligibleLicences'][$params['licence']];
+        $licencesAvailable = $this->data[LicencesAvailable::DATA_KEY];
+
+        $nextStep = $licencesAvailable['isBilateral']
+            ? IrhpApplicationSection::ROUTE_COUNTRIES
+            : IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW;
+
+        $config['step'] = $nextStep;
+
+        $licenceData = $licencesAvailable['eligibleLicences'][$params['licence']];
 
         if (isset($licenceData['activeApplicationId'])) {
             $config = $this->handleActiveApplicationResponse(

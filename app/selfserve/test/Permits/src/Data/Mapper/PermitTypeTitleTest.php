@@ -25,13 +25,13 @@ class PermitTypeTitleTest extends TestCase
             'irhpPermitType' =>
                 [
                     'id' => 4,
-                    'name' => ['description' => 'Annual Bilateral (EU and EEA)']
+                    'name' => ['description' => 'Annual Bilateral']
                 ]
         ];
 
         $expectedData = array_merge(
             $data,
-            ['prependTitle' => 'Annual Bilateral (EU and EEA)']
+            ['prependTitle' => 'Annual Bilateral']
         );
 
         $this->assertEquals(

@@ -2,11 +2,15 @@
 namespace Permits\Controller;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
+use Dvsa\Olcs\Transfer\Command\IrhpApplication\SubmitApplication;
 use Olcs\Controller\AbstractSelfserveController;
-use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
+use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\DataSource\IrhpApplication;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
+use Permits\Controller\Config\Form\FormConfig;
+use Permits\Controller\Config\Params\ParamsConfig;
+use Permits\View\Helper\IrhpApplicationSection;
 
 class IrhpApplicationController extends AbstractSelfserveController implements ToggleAwareInterface
 {
@@ -19,7 +23,11 @@ class IrhpApplicationController extends AbstractSelfserveController implements T
     ];
 
     protected $conditionalDisplayConfig = [
-        'default' => ConditionalDisplayConfig::IRHP_APP_NOT_SUBMITTED,
+        'default' => ConditionalDisplayConfig::IRHP_APP_OVERVIEW_ACCESSIBLE,
+    ];
+
+    protected $formConfig = [
+        'default' => FormConfig::FORM_IRHP_OVERVIEW_SUBMIT,
     ];
 
     protected $templateConfig = [
@@ -32,4 +40,50 @@ class IrhpApplicationController extends AbstractSelfserveController implements T
             'prependTitleDataKey' => IrhpApplication::DATA_KEY,
         ]
     ];
+
+    protected $postConfig = [
+        'default' => [
+            'params' => ParamsConfig::ID_FROM_ROUTE,
+            'step' => IrhpApplicationSection::ROUTE_PERMITS,
+            'conditional' => [
+                'dataKey' => 'application',
+                'params' => 'id',
+                'step' => [
+                    'command' => SubmitApplication::class,
+                    'route' => IrhpApplicationSection::ROUTE_SUBMITTED,
+                ],
+                'field' => 'hasOutstandingFees',
+                'value' => false
+            ]
+        ],
+    ];
+
+    /**
+     * Retrieve data for the specified DTOs
+     */
+    public function retrieveData()
+    {
+        parent::retrieveData();
+
+        if (isset($this->data['questionAnswer']['countries'])) {
+            $this->data['fromDashboard'] = isset($this->queryParams['fromDashboard']);
+            $this->templateConfig['default'] = 'permits/irhp-application-overview-bilateral';
+
+            // If the declaration has been completed, the status of the submitAndPay section also needs to be specified
+            // by the backend as 'completed' so that the conditional display requirements of the fee page are met.
+            // However, we need to display the status of the submitAndPay section on the overview page as 'not started'
+            // if the fee is not fully paid. This seems like a sensible way to do this without drastic changes
+            // elsewhere.
+            $this->data['displaySubmitApplicationButton'] = false;
+            $submitAndPayStatus = $this->data['questionAnswer']['reviewAndSubmit']['submitAndPay'];
+            if ($submitAndPayStatus == IrhpApplicationSection::SECTION_COMPLETION_COMPLETED) {
+                if ($this->data['application']['hasOutstandingFees']) {
+                    $submitAndPayStatus = IrhpApplicationSection::SECTION_COMPLETION_NOT_STARTED;
+                    $this->data['questionAnswer']['reviewAndSubmit']['submitAndPay'] = $submitAndPayStatus;
+                } else {
+                    $this->data['displaySubmitApplicationButton'] = true;
+                }
+            }
+        }
+    }
 }

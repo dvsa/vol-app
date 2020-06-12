@@ -1,7 +1,11 @@
 <?php
     use Permits\Controller\Config\DataSource\IrhpApplication;
 
-    $feeBreakdownTable = $tables['irhp-fee-breakdown'];
+    $feeBreakdownTableExists = isset($tables['irhp-fee-breakdown']);
+    if ($feeBreakdownTableExists) {
+        $feeBreakdownTable = $tables['irhp-fee-breakdown'];
+    }
+
 ?>
 
 <?php echo $this->permitsBackLink('common.link.back.label', $data['backUri']); ?>
@@ -14,31 +18,34 @@
         </h1>
         <?php 
 
-            if (isset($data[IrhpApplication::DATA_KEY]['showWarningMessage'])) {
+            if (isset($data[IrhpApplication::DATA_KEY]['warningMessage'])) {
                 echo $this->partial(
                     'partials/warning-component',
                     [
-                        'translationKey' => 'permits.page.irhp-fee.message',
+                        'translationKey' => $data[IrhpApplication::DATA_KEY]['warningMessage'],
                         'disableHtmlEscape' => true
                     ]
                 );
             }
 
-            if ($feeBreakdownTable->hasRows() || isset($data[IrhpApplication::DATA_KEY]['showFeeSummaryTitle'])) {
+            if ($feeBreakdownTableExists || isset($data[IrhpApplication::DATA_KEY]['showFeeSummaryTitle'])) {
                 ?><h2 class="govuk-heading-m"><?php echo $this->escapeHtml($this->translate('permits.page.irhp-fee.fee-summary')); ?></h2><?php
             }
 
             echo $this->partial('partials/summary-list', ['data' => $data[IrhpApplication::DATA_KEY]['mappedFeeData']]);
 
-            if ($feeBreakdownTable->hasRows()) {
+            if ($feeBreakdownTableExists) {
                 ?><h2 class="govuk-heading-m"><?php echo $this->escapeHtml($this->translate('permits.page.irhp-fee.fee-breakdown')); ?></h2><?php
                 echo($feeBreakdownTable);
             }
 
             echo($this->form($form));
     
-            echo $this->permitsBackLink('permits.button.save-return-to-overview', $data['backUri']);
         ?>
+        <a class="govuk-link govuk-body" href="<?php echo($this->url($data['backUri'], [], [], true)); ?>">
+            <?php echo $this->escapeHtml($this->translate('permits.button.return-to-overview')); ?>
+        </a>
+
     </div>
 
 </div>

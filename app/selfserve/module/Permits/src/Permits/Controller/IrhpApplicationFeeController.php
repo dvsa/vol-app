@@ -7,6 +7,7 @@ use Common\Controller\Traits\GenericReceipt;
 use Common\RefData;
 use Common\Service\Cqrs\Response as CqrsResponse;
 use Common\Util\FlashMessengerTrait;
+use Dvsa\Olcs\Transfer\Command\IrhpApplication\SubmitApplication;
 use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePaymentCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees;
 use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
@@ -15,10 +16,12 @@ use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
+use Permits\Controller\Config\DataSource\IrhpFeeBreakdown as IrhpFeeBreakdownDataSource;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
 use Permits\Controller\Config\Table\TableConfig;
+use Permits\Data\Mapper\IrhpApplicationFeeSummary;
 use Permits\View\Helper\IrhpApplicationSection;
 use Zend\Http\Response as HttpResponse;
 use Zend\View\Model\ViewModel;
@@ -28,6 +31,11 @@ class IrhpApplicationFeeController extends AbstractSelfserveController implement
     use ExternalControllerTrait;
     use GenericReceipt;
     use FlashMessengerTrait;
+
+    private const FEE_BREAKDOWN_TABLES = [
+        RefData::IRHP_BILATERAL_PERMIT_TYPE_ID => 'irhp-fee-breakdown-bilateral',
+        RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID => 'irhp-fee-breakdown-multilateral',
+    ];
 
     protected $toggleConfig = [
         'default' => FeatureToggleConfig::SELFSERVE_PERMITS_ENABLED,
@@ -57,7 +65,6 @@ class IrhpApplicationFeeController extends AbstractSelfserveController implement
 
     protected $templateVarsConfig = [
         'generic' => [
-            'prependTitleDataKey' => IrhpAppDataSource::DATA_KEY,
             'browserTitle' => 'permits.page.fee.browser.title',
             'backUri' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
         ],
@@ -70,6 +77,16 @@ class IrhpApplicationFeeController extends AbstractSelfserveController implement
         'default' => [
             'params' => ParamsConfig::ID_FROM_ROUTE,
             'step' => IrhpApplicationSection::ROUTE_PAYMENT_ACTION,
+            'conditional' => [
+                'dataKey' => 'application',
+                'params' => 'id',
+                'step' => [
+                    'command' => SubmitApplication::class,
+                    'route' => IrhpApplicationSection::ROUTE_SUBMITTED,
+                ],
+                'field' => 'hasOutstandingFees',
+                'value' => false
+            ]
         ],
     ];
 
@@ -217,5 +234,34 @@ class IrhpApplicationFeeController extends AbstractSelfserveController implement
             ? IrhpApplicationSection::ROUTE_AWAITING_FEE : IrhpApplicationSection::ROUTE_FEE;
 
         return $this->redirect()->toRoute($route, ['id' => $irhpAppData['id']]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function retrieveTables()
+    {
+        $feeBreakdownRows = $this->data[IrhpFeeBreakdownDataSource::DATA_KEY];
+
+        if (empty($feeBreakdownRows)) {
+            $this->tableConfig['default'] = [];
+        } else {
+            $irhpPermitTypeId =  $this->data[IrhpAppDataSource::DATA_KEY]['irhpPermitType']['id'];
+            $this->tableConfig['default']['irhp-fee-breakdown']['tableName'] = self::FEE_BREAKDOWN_TABLES[$irhpPermitTypeId];
+        }
+
+        parent::retrieveTables();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function retrieveData()
+    {
+        parent::retrieveData();
+
+        $this->data = $this->getServiceLocator()
+            ->get(IrhpApplicationFeeSummary::class)
+            ->mapForDisplay($this->data);
     }
 }

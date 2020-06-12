@@ -4,7 +4,9 @@ namespace Permits\Controller;
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\UpdateCountries;
 use Olcs\Controller\AbstractSelfserveController;
+use Permits\Controller\Config\DataSource\AvailableCountries;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
+use Permits\Controller\Config\DataSource\IrhpApplication;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Controller\Config\Form\FormConfig;
@@ -38,7 +40,6 @@ class IrhpApplicationCountryController extends AbstractSelfserveController imple
         'default' => [
             'browserTitle' => 'permits.page.bilateral.countries.browser.title',
             'question' => 'permits.page.bilateral.countries.question',
-            'hint' => 'permits.page.bilateral.countries.hint',
             'backUri' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
         ]
     ];
@@ -49,7 +50,7 @@ class IrhpApplicationCountryController extends AbstractSelfserveController imple
             'checkConditionalDisplay' => true,
             'command' => UpdateCountries::class,
             'params' => ParamsConfig::ID_FROM_ROUTE,
-            'step' => IrhpApplicationSection::ROUTE_NO_OF_PERMITS,
+            'step' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
             'saveAndReturnStep' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
         ],
     ];
@@ -77,5 +78,100 @@ class IrhpApplicationCountryController extends AbstractSelfserveController imple
         }
 
         return parent::onDispatch($e);
+    }
+
+    public function mergeTemplateVars()
+    {
+        if (!isset($this->queryParams['fromOverview'])) {
+            // overwrite default backUri
+            // to be removed by OLCS-25956 when a generic solution is found
+            $this->templateVarsConfig['default']['backUri'] = IrhpApplicationSection::ROUTE_ADD_LICENCE;
+            $this->templateVarsConfig['default']['backUriParams'] = [
+                'type' => $this->data[IrhpApplication::DATA_KEY]['irhpPermitType']['id']
+            ];
+        }
+
+        parent::mergeTemplateVars();
+    }
+
+    /**
+     * Extend method to allow the selected checkboxes to be determined by a list of country codes specified on the
+     * querystring. Used by back button and cancel button on countries confirmation page
+     */
+    public function retrieveForms()
+    {
+        if (empty($this->postParams) &&
+            isset($this->queryParams['countries']) &&
+            is_string($this->queryParams['countries'])
+        ) {
+            $countryCodeIndexMap = [];
+            foreach ($this->data[AvailableCountries::DATA_KEY]['countries'] as $index => $country) {
+                $countryCode = $country['id'];
+                $countryCodeIndexMap[$countryCode] = $index;
+            }
+
+            $this->data[IrhpApplication::DATA_KEY]['countrys'] = [];
+            $selectedCountryCodes = explode(',', $this->queryParams['countries']);
+            foreach ($selectedCountryCodes as $countryCode) {
+                if (isset($countryCodeIndexMap[$countryCode])) {
+                    $index = $countryCodeIndexMap[$countryCode];
+                    $country = $this->data[AvailableCountries::DATA_KEY]['countries'][$index];
+                    $this->data[IrhpApplication::DATA_KEY]['countrys'][] = $country;
+                }
+            }
+        }
+
+        parent::retrieveForms();
+    }
+
+    /**
+     * Extend method to redirect to countries confirmation page when one or more of the currently selected countries
+     * are unselected
+     */
+    public function handlePost()
+    {
+        if (isset($this->postParams['Submit']['CancelButton'])) {
+            return $this->redirect()->toRoute(
+                IrhpApplicationSection::ROUTE_CANCEL_APPLICATION,
+                [],
+                [
+                    'query' => [
+                        'fromCountries' => '1'
+                    ]
+                ],
+                true
+            );
+        }
+
+        if (isset($this->postParams['fields']['countries']) &&
+            is_array($this->postParams['fields']['countries']) &&
+            !empty($this->postParams['fields']['countries'])
+        ) {
+            $availableCountryCodes = array_column(
+                $this->data[AvailableCountries::DATA_KEY]['countries'],
+                'id'
+            );
+            $selectedCountryCodes = $this->postParams['fields']['countries'];
+            $validatedSelectedCountryCodes = array_intersect($availableCountryCodes, $selectedCountryCodes);
+            $linkedCountryCodes = array_column($this->data[IrhpApplication::DATA_KEY]['countrys'], 'id');
+            $removedCountryCodes = array_diff($linkedCountryCodes, $validatedSelectedCountryCodes);
+
+            if (!empty($removedCountryCodes)) {
+                $selectedCountryCodesCsv = implode(',', $selectedCountryCodes);
+
+                return $this->redirect()->toRoute(
+                    IrhpApplicationSection::ROUTE_COUNTRIES_CONFIRMATION,
+                    [],
+                    [
+                        'query' => [
+                            'countries' => $selectedCountryCodesCsv
+                        ]
+                    ],
+                    true
+                );
+            }
+        }
+
+        return parent::handlePost();
     }
 }

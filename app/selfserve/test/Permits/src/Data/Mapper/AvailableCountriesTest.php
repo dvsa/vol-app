@@ -51,7 +51,7 @@ class AvailableCountriesTest extends TestCase
                         'countries' => []
                     ],
                     IrhpApplicationDataSource::DATA_KEY => [
-                        'irhpPermitApplications' => []
+                        'countrys' => []
                     ],
                 ],
                 'expected' => [
@@ -59,7 +59,7 @@ class AvailableCountriesTest extends TestCase
                         'countries' => []
                     ],
                     IrhpApplicationDataSource::DATA_KEY => [
-                        'irhpPermitApplications' => []
+                        'countrys' => []
                     ],
                 ],
                 'expectedValueOptions' => [],
@@ -88,7 +88,7 @@ class AvailableCountriesTest extends TestCase
                         ]
                     ],
                     IrhpApplicationDataSource::DATA_KEY => [
-                        'irhpPermitApplications' => []
+                        'countrys' => []
                     ],
                 ],
                 'expected' => [
@@ -113,7 +113,7 @@ class AvailableCountriesTest extends TestCase
                         ]
                     ],
                     IrhpApplicationDataSource::DATA_KEY => [
-                        'irhpPermitApplications' => []
+                        'countrys' => []
                     ],
                 ],
                 'expectedValueOptions' => [
@@ -163,24 +163,12 @@ class AvailableCountriesTest extends TestCase
                         ]
                     ],
                     IrhpApplicationDataSource::DATA_KEY => [
-                        'irhpPermitApplications' => [
+                        'countrys' => [
                             [
-                                'irhpPermitWindow' => [
-                                    'irhpPermitStock' => [
-                                        'country' => [
-                                            'id' => 'NL',
-                                        ],
-                                    ],
-                                ],
+                                'id' => 'NL',
                             ],
                             [
-                                'irhpPermitWindow' => [
-                                    'irhpPermitStock' => [
-                                        'country' => [
-                                            'id' => 'DE',
-                                        ],
-                                    ],
-                                ],
+                                'id' => 'DE',
                             ],
                         ]
                     ],
@@ -207,24 +195,12 @@ class AvailableCountriesTest extends TestCase
                         ]
                     ],
                     IrhpApplicationDataSource::DATA_KEY => [
-                        'irhpPermitApplications' => [
+                        'countrys' => [
                             [
-                                'irhpPermitWindow' => [
-                                    'irhpPermitStock' => [
-                                        'country' => [
-                                            'id' => 'NL',
-                                        ],
-                                    ],
-                                ],
+                                'id' => 'NL',
                             ],
                             [
-                                'irhpPermitWindow' => [
-                                    'irhpPermitStock' => [
-                                        'country' => [
-                                            'id' => 'DE',
-                                        ],
-                                    ],
-                                ],
+                                'id' => 'DE',
                             ],
                         ]
                     ],

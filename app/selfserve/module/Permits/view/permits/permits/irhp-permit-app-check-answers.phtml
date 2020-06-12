@@ -1,0 +1,52 @@
+<?php
+    echo $this->permitsBackLink(
+        'common.link.back.label',
+        isset($data['backUri']) ? $data['backUri'] : '',
+        isset($data['backUriParams']) ? $data['backUriParams'] : []
+    );
+?>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-caption-xl"><?php echo $this->escapeHtml($data['application']['countryName']); ?></div>
+        <h1 class="govuk-heading-xl">
+            <?php echo $this->escapeHtml($this->translate($data['title'])); ?>
+        </h1>
+        <dl class="app-check-your-answers app-check-your-answers--long">
+            <?php foreach ($data['rows'] as $row) { ?>
+                <div class="app-check-your-answers__contents">
+                    <dt class="app-check-your-answers__question">
+                        <?php echo $this->escapeHtml($this->translate($row['question'])); ?>
+                    </dt>
+                    <dd class="app-check-your-answers__answer">
+                        <?php echo $row['answer']; ?>
+                    </dd>
+                    <dd class="app-check-your-answers__change">
+                    <?php
+                        if (isset($row['slug'])) {
+                            $route = 'permits/application/ipa/question';
+                            $params = [
+                                'slug' => $row['slug']
+                            ];
+
+                            if ($row['slug'] === 'period') {
+                                $route = 'permits/application/period';
+                                $params = [
+                                    'country' => $data['application']['countryId']
+                                ];
+                            }
+
+                            echo $this->link(
+                                $route,
+                                'common.link.change.label',
+                                $this->translate($row['question']),
+                                $params
+                            );
+                        }
+                    ?>
+                    </dd>
+                </div>
+            <?php } ?>
+        </dl>
+        <?php echo $this->form($form); ?>
+    </div>
+</div>

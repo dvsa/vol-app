@@ -3,6 +3,7 @@ namespace Permits;
 
 use Permits\Controller\IrhpApplicationDeclarationController;
 use Permits\Controller\ConfirmChangeController;
+use Permits\Controller\IrhpApplicationPeriodController;
 use Permits\Controller\LicenceController;
 use Permits\Controller\ChangeLicenceController;
 use Permits\Controller\SubmittedController;
@@ -10,10 +11,12 @@ use Permits\Controller\PermitsController;
 use Permits\Controller\TypeController;
 use Permits\Controller\IrhpApplicationController;
 use Permits\Controller\IrhpApplicationCountryController;
+use Permits\Controller\IrhpApplicationCountryConfirmationController;
 use Permits\Controller\IrhpApplicationFeeController;
 use Permits\Controller\IrhpUnderConsiderationController;
 use Permits\Controller\NoOfPermitsController;
 use Permits\Controller\IrhpCheckAnswersController;
+use Permits\Controller\IrhpPermitAppCheckAnswersController;
 use Permits\Controller\CancelIrhpApplicationController;
 use Permits\Controller\IrhpWithdrawController;
 use Permits\Controller\IrhpAwaitingFeeController;
@@ -28,6 +31,7 @@ use Permits\Controller\QaControllerFactory;
 use Permits\Controller\YearController;
 use Permits\Controller\WindowClosedController;
 use Permits\Controller\IrhpStockController;
+use Permits\Controller\EssentialInformationController;
 use Permits\Data\Mapper;
 
 return [
@@ -41,9 +45,11 @@ return [
         SubmittedController::class => SubmittedController::class,
         IrhpApplicationController::class => IrhpApplicationController::class,
         IrhpApplicationCountryController::class => IrhpApplicationCountryController::class,
+        IrhpApplicationCountryConfirmationController::class => IrhpApplicationCountryConfirmationController::class,
         NoOfPermitsController::class => NoOfPermitsController::class,
         IrhpApplicationDeclarationController::class => IrhpApplicationDeclarationController::class,
         IrhpCheckAnswersController::class => IrhpCheckAnswersController::class,
+        IrhpPermitAppCheckAnswersController::class => IrhpPermitAppCheckAnswersController::class,
         CancelIrhpApplicationController::class => CancelIrhpApplicationController::class,
         IrhpWithdrawController::class => IrhpWithdrawController::class,
         IrhpAwaitingFeeController::class => IrhpAwaitingFeeController::class,
@@ -58,6 +64,8 @@ return [
         YearController::class => YearController::class,
         WindowClosedController::class => WindowClosedController::class,
         IrhpStockController::class => IrhpStockController::class,
+        EssentialInformationController::class => EssentialInformationController::class,
+        IrhpApplicationPeriodController::class => IrhpApplicationPeriodController::class
     ],
     'factories' => [
         QaController::class => QaControllerFactory::class,
@@ -120,6 +128,45 @@ return [
                           'may_terminate' => true,
                           'priority' => -1,
                       ],
+                      'ipa' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => 'ipa/:irhpPermitApplication[/]',
+                               'constraints' => [
+                                  'irhpPermitApplication' => '[0-9]+',
+                              ],
+                          ],
+                          'may_terminate' => true,
+                          'child_routes' => [
+                              'question' => [
+                                  'type'    => 'segment',
+                                  'options' => [
+                                      'route'    => ':slug[/]',
+                                      'defaults' => [
+                                          'controller'    => QaController::class,
+                                          'action'        => 'index',
+                                      ],
+                                      'constraints' => [
+                                          'slug' => '[0-9A-Za-z\-]+',
+                                      ],
+                                  ],
+                                  'may_terminate' => true,
+                                  'priority' => -1,
+                              ],
+                              'check-answers' => [
+                                  'type'    => 'segment',
+                                  'options' => [
+                                      'route'    => 'check-answers[/]',
+                                      'defaults' => [
+                                          'controller'    => IrhpPermitAppCheckAnswersController::class,
+                                          'action'        => 'generic',
+                                      ],
+                                  ],
+                                  'may_terminate' => true,
+                              ],
+
+                          ]
+                      ],
                       'licence' => [
                           'type'    => 'segment',
                           'options' => [
@@ -154,6 +201,45 @@ return [
                               'defaults' => [
                                   'controller'    => IrhpApplicationCountryController::class,
                                   'action'        => 'question',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'countries-confirmation' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => 'countries-confirmation[/]',
+                              'defaults' => [
+                                  'controller'    => IrhpApplicationCountryConfirmationController::class,
+                                  'action'        => 'question',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'essential-information' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => 'country/:country/essential-information[/]',
+                              'defaults' => [
+                                  'controller'    => EssentialInformationController::class,
+                                  'action'        => 'generic',
+                              ],
+                              'constraints' => [
+                                  'country' => '[A-Z]{2}',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
+                      'period' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => 'country/:country/period[/]',
+                              'defaults' => [
+                                  'controller'    => IrhpApplicationPeriodController::class,
+                                  'action'        => 'question',
+                              ],
+                              'constraints' => [
+                                  'country' => '[A-Z]{2}',
                               ],
                           ],
                           'may_terminate' => false,
@@ -481,12 +567,16 @@ return [
           Mapper\AvailableYears::class => Mapper\AvailableYears::class,
           Mapper\LicencesAvailable::class => Mapper\LicencesAvailable::class,
           Mapper\PermitTypeTitle::class => Mapper\PermitTypeTitle::class,
+          Mapper\IrhpFee::class => Mapper\IrhpFee::class,
+          Mapper\ConfirmedUpdatedCountries::class => Mapper\ConfirmedUpdatedCountries::class,
+          Mapper\RemovedCountries::class => Mapper\RemovedCountries::class,
       ],
       'factories' => [
           Mapper\EcmtNoOfPermits::class => Mapper\EcmtNoOfPermitsFactory::class,
           Mapper\IrhpApplicationFeeSummary::class => Mapper\IrhpApplicationFeeSummaryFactory::class,
           Mapper\ChangeLicence::class => Mapper\ChangeLicenceFactory::class,
           Mapper\NoOfPermits::class => Mapper\NoOfPermitsFactory::class,
+          Mapper\AvailableBilateralStocks::class => Mapper\AvailableBilateralStocksFactory::class,
       ],
   ],
     /** @todo we don't need all of these different link helpers! OLCS-21512 */

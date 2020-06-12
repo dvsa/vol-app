@@ -2,6 +2,7 @@
 
 namespace Permits\Controller\Config\Form;
 
+use Permits\Controller\Config\DataSource\AvailableBilateralStocks as AvailableBilateralStocksDataSource;
 use Permits\Controller\Config\DataSource\AvailableTypes as AvailableTypesDataSource;
 use Permits\Controller\Config\DataSource\AvailableYears as AvailableYearsDataSource;
 use Permits\Controller\Config\DataSource\AvailableStocks as AvailableStocksDataSource;
@@ -11,9 +12,12 @@ use Permits\Data\Mapper\AvailableCountries as AvailableCountriesMapper;
 use Permits\Data\Mapper\AvailableTypes as AvailableTypesMapper;
 use Permits\Data\Mapper\AvailableYears as AvailableYearsMapper;
 use Permits\Data\Mapper\AvailableStocks as AvailableStocksMapper;
+use Permits\Data\Mapper\IrhpFee as IrhpFeeMapper;
+use Permits\Data\Mapper\AvailableBilateralStocks as AvailableBilateralStocksMapper;
 use Permits\Data\Mapper\LicencesAvailable as LicencesAvailableMapper;
 use Permits\Data\Mapper\NoOfPermits as NoOfPermitsMapper;
 use Permits\Data\Mapper\ChangeLicence as ChangeLicenceMapper;
+use Permits\Data\Mapper\RemovedCountries as RemovedCountriesMapper;
 
 /**
  * Holds conditional display configs that are used regularly - eventually it'd be nice to have ::class in here
@@ -56,6 +60,18 @@ class FormConfig
             'mapper' => [
                 'type' => self::FORM_OPTIONS,
                 'class' => AvailableStocksMapper::class
+            ]
+        ],
+    ];
+
+    const FORM_BILATERAL_STOCK = [
+        'stocks' => [
+            'formClass' => 'PeriodSelect',
+            'dataRouteParam' => 'type',
+            'dataSource' => AvailableBilateralStocksDataSource::DATA_KEY,
+            'mapper' => [
+                'type' => self::FORM_OPTIONS,
+                'class' => AvailableBilateralStocksMapper::class
             ]
         ],
     ];
@@ -106,6 +122,11 @@ class FormConfig
     const FORM_FEE = [
         'fee' => [
             'formClass' => 'FeesForm',
+            'dataSource' => IrhpApplicationDataSource::DATA_KEY,
+            'mapper' => [
+                'type' => self::FORM_OPTIONS,
+                'class' => IrhpFeeMapper::class
+            ]
         ],
     ];
 
@@ -144,6 +165,16 @@ class FormConfig
         ],
     ];
 
+    const FORM_COUNTRIES_CONFIRMATION = [
+        'countries' => [
+            'formClass' => 'CountriesConfirmationForm',
+            'mapper' => [
+                'type' => self::FORM_OPTIONS,
+                'class' => RemovedCountriesMapper::class
+            ]
+        ],
+    ];
+
     const FORM_NO_OF_PERMITS = [
         'noOfPermits' => [
             'formClass' => 'NoOfPermitsForm',
@@ -162,9 +193,22 @@ class FormConfig
         ],
     ];
 
+    const FORM_IRHP_IPA_CHECK_ANSWERS = [
+        'checkAnswers' => [
+            'formClass' => 'IpaCheckAnswersForm',
+            'dataSource' => IrhpApplicationDataSource::DATA_KEY,
+        ],
+    ];
+
     const FORM_CANCEL_IRHP_APP = [
         self::FORM_CANCEL_PERMIT_APP_KEY => [
             'formClass' => 'CancelApplicationForm',
         ],
+    ];
+
+    const FORM_IRHP_OVERVIEW_SUBMIT = [
+        'irhpOverviewSubmit' => [
+            'formClass' => 'IrhpOverviewSubmitForm',
+        ]
     ];
 }

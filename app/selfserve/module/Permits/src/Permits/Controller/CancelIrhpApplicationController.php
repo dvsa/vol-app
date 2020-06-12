@@ -10,11 +10,13 @@ use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
-
 use Permits\View\Helper\IrhpApplicationSection;
 
 class CancelIrhpApplicationController extends AbstractSelfserveController implements ToggleAwareInterface
 {
+    const CABOTAGE_SLUG_WHITELIST = ['bi-cabotage-only', 'bi-standard-and-cabotage'];
+    const MAX_IPA_LENGTH = 8;
+
     protected $toggleConfig = [
         'default' => FeatureToggleConfig::SELFSERVE_PERMITS_ENABLED,
     ];
@@ -68,4 +70,33 @@ class CancelIrhpApplicationController extends AbstractSelfserveController implem
             'step' => IrhpApplicationSection::ROUTE_CANCEL_CONFIRMATION,
         ],
     ];
+
+    public function mergeTemplateVars()
+    {
+        if (isset($this->queryParams['fromBilateralCabotage'])) {
+            $this->handleCabotageBacklink();
+        } elseif (isset($this->queryParams['fromCountries'])) {
+            $this->templateVarsConfig['cancel']['backUri'] = IrhpApplicationSection::ROUTE_COUNTRIES;
+        }
+
+        parent::mergeTemplateVars();
+    }
+
+    private function handleCabotageBacklink()
+    {
+        if (!isset($this->queryParams['slug']) || !isset($this->queryParams['ipa'])) {
+            return;
+        }
+
+        $slug = $this->queryParams['slug'];
+        if (!in_array($slug, self::CABOTAGE_SLUG_WHITELIST)) {
+            return;
+        }
+
+        $this->templateVarsConfig['cancel']['backUri'] = IrhpApplicationSection::ROUTE_IPA_QUESTION;
+        $this->templateVarsConfig['cancel']['backUriParams'] = [
+            'irhpPermitApplication' => $this->queryParams['ipa'],
+            'slug' => $slug
+        ];
+    }
 }

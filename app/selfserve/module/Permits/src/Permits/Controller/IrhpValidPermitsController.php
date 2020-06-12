@@ -38,6 +38,9 @@ class IrhpValidPermitsController extends AbstractSelfserveController implements 
         $this->templateVarsConfig['generic']['browserTitle'] = $title;
         $this->templateVarsConfig['generic']['title'] = $title;
 
+        $selectedCountryId = isset($this->queryParams['country']) ? $this->queryParams['country'] : null;
+        $this->data['selectedCountryId'] = $selectedCountryId;
+
         parent::mergeTemplateVars();
     }
 
@@ -60,6 +63,9 @@ class IrhpValidPermitsController extends AbstractSelfserveController implements 
                 'generic' => TableConfig::VALID_IRHP_PERMITS_ECMT_REMOVAL,
             ];
         }
+
         parent::retrieveTables();
+
+        $this->data['selectedLimit'] = $this->tables['valid-irhp-permits']->getLimit();
     }
 }

@@ -18,7 +18,7 @@ class CountriesForm
 
     /**
      * @Form\Name("Submit")
-     * @Form\ComposedObject("Permits\Form\Model\Fieldset\Submit")
+     * @Form\ComposedObject("Permits\Form\Model\Fieldset\SaveAndContinueOrCancelApplication")
      */
     public $submitButton = null;
 }

@@ -2,6 +2,7 @@
 
 namespace Permits\Controller\Config\DataSource;
 
+use Permits\Controller\Config\DataSource\AvailableBilateralStocks as AvailableBilateralStocksDataSource;
 use Permits\Controller\Config\DataSource\PermitApplication as PermitAppDataSource;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
 use Permits\Controller\Config\DataSource\IrhpApplicationWithLicences as IrhpApplicationWithLicencesDataSource;
@@ -10,6 +11,7 @@ use Permits\Controller\Config\DataSource\IrhpFeePerPermit as IrhpFeePerPermitDat
 use Permits\Controller\Config\DataSource\IrhpMaxStockPermits as IrhpMaxStockPermitsDataSource;
 use Permits\Controller\Config\DataSource\UnpaidIrhpPermits as UnpaidIrhpPermitsDataSource;
 use Permits\Controller\Config\DataSource\ValidIrhpPermits as ValidIrhpPermitsDataSource;
+use Permits\Controller\Config\DataSource\ValidIrhpPermitsUniqueCountries as ValidIrhpPermitsUniqueCountriesDataSource;
 use Permits\Controller\Config\DataSource\PermitsAvailable as PermitsAvailableDataSource;
 use Permits\Data\Mapper\IrhpApplicationFeeSummary;
 use Permits\Data\Mapper\PermitTypeTitle as PermitTypeTitleMapper;
@@ -62,28 +64,34 @@ class DataSourceConfig
     ];
 
     const IRHP_APP_FEE = [
-        IrhpAppDataSource::class => [
-            'mapper' => IrhpApplicationFeeSummary::class
-        ],
+        IrhpAppDataSource::class => [],
         IrhpFeeBreakdownDataSource::class => [],
         PermitsAvailableDataSource::class => [],
     ];
 
     const IRHP_APP_UNDER_CONSIDERATION = [
-        IrhpAppDataSource::class => [
-            'mapper' => IrhpApplicationFeeSummary::class
-        ],
+        IrhpAppDataSource::class => [],
     ];
 
     const IRHP_APP_AWAITING_FEE = [
-        IrhpAppDataSource::class => [
-            'mapper' => IrhpApplicationFeeSummary::class
-        ],
+        IrhpAppDataSource::class => [],
     ];
 
     const IRHP_APP_COUNTRIES = [
         IrhpAppDataSource::class => [],
         AvailableCountries::class => [],
+    ];
+
+    const IRHP_APP_ESSENTIAL_INFORMATION = [
+        IrhpAppDataSource::class => [],
+        BilateralFeesByCountry::class => [],
+        BilateralCountryAccessible::class => [],
+    ];
+
+    const IRHP_APP_PERIODS = [
+        IrhpAppDataSource::class => [],
+        AvailableBilateralStocksDataSource::class => [],
+        BilateralCountryAccessible::class => [],
     ];
 
     const IRHP_UNPAID_PERMITS = [
@@ -95,6 +103,7 @@ class DataSourceConfig
         Licence::class => [],
         IrhpPermitType::class => [],
         ValidIrhpPermitsDataSource::class => [],
+        ValidIrhpPermitsUniqueCountriesDataSource::class => [],
     ];
 
     const IRHP_APP_CHECK_ANSWERS = [

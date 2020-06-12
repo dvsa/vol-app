@@ -15,9 +15,14 @@ return array(
     ),
     'attributes' => array(),
     'columns' => array(
-
         array(
-            'title' => 'permits.irhp.valid.permits.table.permit',
+            'title' => 'permits.irhp.valid.permits.table.application-no',
+            'name' => 'irhpApplication',
+            'stack' => 'irhpPermitApplication->relatedApplication->id',
+            'formatter' => 'StackValue',
+        ),
+        array(
+            'title' => 'permits.irhp.valid.permits.table.permit-no',
             'name' => 'permitNumber',
             'formatter' => 'NullableNumber',
         ),
@@ -32,13 +37,20 @@ return array(
             },
         ),
         array(
-            'title' => 'permits.irhp.valid.permits.table.application',
-            'name' => 'irhpApplication',
-            'stack' => 'irhpPermitApplication->relatedApplication->id',
-            'formatter' => 'StackValue',
+            'title' => 'permits.irhp.valid.permits.table.type',
+            'name' => 'type',
+            'formatter' => function ($row) {
+                return $this->callFormatter(
+                    [
+                        'name' => 'irhpPermitRangeType',
+                        'formatter' => 'IrhpPermitRangeType',
+                    ],
+                    $row['irhpPermitRange']
+                );
+            }
         ),
         array(
-            'title' => 'permits.irhp.valid.permits.table.issue-date',
+            'title' => 'permits.irhp.valid.permits.table.issued-date',
             'name' => 'issueDate',
             'formatter' => 'Date',
         ),

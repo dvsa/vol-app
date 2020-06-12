@@ -1,0 +1,163 @@
+<?php
+    use Permits\View\Helper\IrhpApplicationSection as Section;
+    use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
+    use Permits\Controller\Config\DataSource\QuestionAnswer as QuestionAnswerDataSource;
+
+    $application = $data[IrhpAppDataSource::DATA_KEY];
+    $questionAnswer = $data[QuestionAnswerDataSource::DATA_KEY];
+
+    $countriesPageUrlOptions = [
+        'query' => ['fromOverview' => 1]
+    ];
+    $countriesPageUrl = $this->url(Section::ROUTE_COUNTRIES, [], $countriesPageUrlOptions, true);
+
+    $backUrl = $countriesPageUrl;
+    if ($data['fromDashboard']) {
+        $backUrl = $this->url('permits');
+    }
+
+?>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <div class="page-header">
+            <p><a href="<?php echo $backUrl; ?>" class="back-link"> <?php echo $this->escapeHtml($this->translate('common.link.back.label')); ?></a></p>
+            <div class="page-header__wrapper">
+                <span class="govuk-caption-xl">
+                    <span class="visually-hidden"><?php echo($this->escapeHtml($this->translate('permits.application.overview.application.number'))); ?></span>
+                    <?php echo $this->escapeHtml($application['applicationRef']); ?>
+                </span>
+                <h1 class="js-title">
+                    <?php echo $this->escapeHtml($this->translate('permits.application.overview.browser.title')); ?>
+                </h1>
+            </div>
+        </div>
+
+     <ol class="app-task-list">
+        <li>
+          <h2 class="app-task-list__section">
+            <span class="app-task-list__section-number">1. </span> <?php echo $this->escapeHtml($this->translate('permits.application.overview.start-your-application')); ?>
+          </h2>
+          <ul class="app-task-list__items">
+            <li class="app-task-list__item">
+              <span class="app-task-list__task-name">
+                <a href="<?php echo $countriesPageUrl ?>">
+                  <?php echo $this->escapeHtml($this->translate('permits.application.overview.select-countries')); ?>
+                </a>
+              </span>
+              <span class="overview__status <?php echo Section::COMPLETION_STATUS_COLOUR[Section::SECTION_COMPLETION_COMPLETED]; ?>"><?php echo $this->escapeHtml($this->translate(Section::COMPLETION_STATUS[Section::SECTION_COMPLETION_COMPLETED])); ?></span>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <h2 class="app-task-list__section">
+            <span class="app-task-list__section-number">2. </span> <?php echo $this->escapeHtml($this->translate('permits.application.overview.answer-country-questions')); ?>
+          </h2>
+          <ul class="app-task-list__items">
+            <?php
+    
+            foreach ($questionAnswer['countries'] as $country) {
+                $countryCode = $country['countryCode'];
+                $countryName = $country['countryName'];
+                $status = $country['status'];
+                $statusCaption = Section::COMPLETION_STATUS[$status];
+                $statusColour = Section::COMPLETION_STATUS_COLOUR[$status];
+                $countryUrl = ($status === Section::SECTION_COMPLETION_COMPLETED)
+                    ? $this->url(Section::ROUTE_IPA_CHECK_ANSWERS, ['irhpPermitApplication' => $country['irhpPermitApplication']], ['query' => ['fromOverview' => 1]], true)
+                    : $this->url(Section::ROUTE_ESSENTIAL_INFORMATION, ['country' => $countryCode], [], true);
+            ?>
+
+            <li class="app-task-list__item">
+              <span class="app-task-list__task-name">
+                <a href="<?php echo $countryUrl; ?>">
+                  <?php echo($country['countryName']); ?>
+                </a>
+              </span>
+              <span class="overview__status <?php echo $statusColour; ?>"><?php echo $this->escapeHtml($this->translate($statusCaption)); ?></span>
+            </li>
+
+            <?php 
+            
+            }
+
+            ?>
+          </ul>
+          <a class="govuk-button govuk-button--secondary" href="<?php echo $countriesPageUrl; ?>">
+            <?php echo $this->escapeHtml($this->translate('permits.application.overview.edit-country-selection')); ?>
+          </a>
+        </li>
+        <li>
+          <h2 class="app-task-list__section">
+            <span class="app-task-list__section-number">3. </span> <?php echo $this->escapeHtml($this->translate('permits.application.overview.review-and-submit')); ?>
+          </h2>
+          <ul class="app-task-list__items">
+            <li class="app-task-list__item">
+              <?php
+
+                $status = $questionAnswer['reviewAndSubmit']['declaration'];
+                $statusCaption = Section::COMPLETION_STATUS[$status];
+                $statusColour = Section::COMPLETION_STATUS_COLOUR[$status];
+                $linkActive = $status != Section::SECTION_COMPLETION_CANNOT_START;
+
+              ?>
+              <span class="app-task-list__task-name">
+                <?php if ($linkActive) { ?><a href="<?php echo $this->url(Section::ROUTE_DECLARATION, [], [], true); ?>"><?php } ?>
+                  <?php echo $this->escapeHtml($this->translate('permits.application.overview.read-declaration')); ?>
+                <?php if ($linkActive) { ?></a><?php } ?>
+              </span>
+              <span class="overview__status <?php echo $statusColour; ?>"><?php echo $this->escapeHtml($this->translate($statusCaption)); ?></span>
+            </li>
+            <li class="app-task-list__item">
+              <?php
+
+                $status = $questionAnswer['reviewAndSubmit']['submitAndPay'];
+                $statusCaption = Section::COMPLETION_STATUS[$status];
+                $statusColour = Section::COMPLETION_STATUS_COLOUR[$status];
+                $linkActive = $status != Section::SECTION_COMPLETION_CANNOT_START;
+
+              ?>
+              <span class="app-task-list__task-name">
+                <?php if ($linkActive) { ?><a href="<?php echo $this->url(Section::ROUTE_FEE, [], [], true); ?>"><?php } ?>
+                  <?php echo $this->escapeHtml($this->translate('permits.application.overview.submit-and-pay')); ?>
+                <?php if ($linkActive) { ?></a><?php } ?>
+              </span>
+              <span class="overview__status <?php echo $statusColour; ?>"><?php echo $this->escapeHtml($this->translate($statusCaption)); ?></span>
+            </li>
+          </ul>
+        </li>
+      </ol>
+
+    <?php
+
+    if ($data['displaySubmitApplicationButton']) {
+        echo $this->form($form);
+    }
+
+    ?>
+
+    </div>
+    <!-- SIDE PANEL -->
+    <div class="govuk-grid-column-one-third">
+        <aside class="sidebar" role="complementary">
+
+            <div class="info-box info-box--grey">
+                <h2 class="info-box__heading"><?php echo $this->escapeHtml($this->translate('permits.irhp-application.status.question')); ?></h2>
+                <p class="info-box__icon-wrapper"><i class="info-box__icon selfserve-important"></i><?php echo $this->escapeHtml($application['status']['description']); ?></p>
+                <?php
+                if ($application['canBeCancelled']) {
+                    ?>
+                    <ul class="info-box__links">
+                        <li>
+                            <a href="<?php echo $this->url(Section::ROUTE_CANCEL_APPLICATION, [], [], true); ?>">
+                                <?php echo $this->escapeHtml($this->translate('permits.irhp-application.cancel.question')); ?>
+                            </a>
+                        </li>
+                    </ul>
+                    <?php
+                }
+                ?>
+            </div>
+
+        </aside>
+    </div>
+</div>

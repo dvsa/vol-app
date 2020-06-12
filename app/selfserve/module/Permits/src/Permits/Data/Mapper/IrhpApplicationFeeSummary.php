@@ -33,6 +33,11 @@ class IrhpApplicationFeeSummary
     const TOTAL_APPLICATION_FEE_PAID_HEADING = 'permits.page.fee.permit.fee.paid.total';
     const PAYMENT_DUE_DATE_HEADING = 'permits.page.fee.payment.due.date';
     const FEE_NON_REFUNDABLE_HEADING = 'permits.page.fee.permit.fee.non-refundable';
+    const AMOUNT_PAID_HEADING = 'permits.page.fee.permit.fee.amount-paid';
+    const AMOUNT_REMAINING_HEADING = 'permits.page.fee.permit.fee.amount-remaining';
+
+    const ALREADY_PAID_STATUS = 'permits.page.fee.permit.fee.already-paid';
+    const TO_BE_PAID_STATUS = 'permits.page.fee.permit.fee.to-be-paid';
 
     /** @var TranslationHelperService */
     private $translator;
@@ -85,30 +90,43 @@ class IrhpApplicationFeeSummary
      */
     public function mapForDisplay(array $data)
     {
-        $irhpPermitTypeId = $data['irhpPermitType']['id'];
+        $applicationData = $data['application'];
+        $irhpPermitTypeId = $applicationData['irhpPermitType']['id'];
+
         switch ($irhpPermitTypeId) {
             case RefData::IRHP_BILATERAL_PERMIT_TYPE_ID:
+                $applicationData = $data['application'];
+                $totalFeeAmount = $this->getTotalFeeAmount($data['feeBreakdown']);
+                $outstandingFeeAmount = $applicationData['outstandingFeeAmount'];
+
+                if ($outstandingFeeAmount == 0) {
+                    $data['application']['warningMessage'] = 'permits.page.irhp-fee.message.total-already-paid';
+                } elseif ($totalFeeAmount != $outstandingFeeAmount) {
+                    $data['application']['warningMessage'] = 'permits.page.irhp-fee.message.part-paid';
+                }
+                $mappedFeeData = $this->getBilateralRows($applicationData, $totalFeeAmount, $outstandingFeeAmount);
+                break;
             case RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID:
-                $mappedFeeData = $this->getBilateralMultilateralRows($data);
+                $mappedFeeData = $this->getMultilateralRows($applicationData);
                 break;
             case RefData::ECMT_REMOVAL_PERMIT_TYPE_ID:
-                $data['showFeeSummaryTitle'] = true;
-                $mappedFeeData = $this->getEcmtRemovalRows($data);
+                $data['application']['showFeeSummaryTitle'] = true;
+                $mappedFeeData = $this->getEcmtRemovalRows($applicationData);
                 break;
             case RefData::ECMT_PERMIT_TYPE_ID:
             case RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID:
-                $data['showFeeSummaryTitle'] = true;
-                $data['showWarningMessage'] = true;
-                $data['guidance'] = $this->getGuidanceData($data);
+                $data['application']['showFeeSummaryTitle'] = true;
+                $data['application']['warningMessage'] = 'permits.page.irhp-fee.message';
+                $data['application']['guidance'] = $this->getGuidanceData($applicationData);
 
-                $mappedFeeData = $this->getEcmtShortTermRows($data);
+                $mappedFeeData = $this->getEcmtShortTermRows($applicationData);
                 break;
             default:
                 throw new RuntimeException('Unsupported permit type id ' . $irhpPermitTypeId);
         }
 
-        $data['mappedFeeData'] = $mappedFeeData;
-        $data['prependTitle'] = $data['irhpPermitType']['name']['description'];
+        $data['application']['mappedFeeData'] = $mappedFeeData;
+        $data['application']['prependTitle'] = $applicationData['irhpPermitType']['name']['description'];
 
         return $data;
     }
@@ -142,13 +160,44 @@ class IrhpApplicationFeeSummary
     }
 
     /**
-     * Get the fee summary table content for bilateral/multilateral types
+     * Get the fee summary table content for bilateral type
+     *
+     * @param array $applicationData input data
+     * @param int $totalFeeAmount
+     * @param int $outstandingFeeAmount
+     *
+     * @return array
+     */
+    private function getBilateralRows(array $applicationData, $totalFeeAmount, $outstandingFeeAmount)
+    {
+        $rows = [
+            $this->getApplicationReferenceRow($applicationData),
+            $this->getDateReceivedRow($applicationData),
+            $this->getPermitTypeRow($applicationData),
+            $this->getStandardNoOfPermitsRow($applicationData),
+        ];
+
+        if ($totalFeeAmount == $outstandingFeeAmount) {
+            $rows[] = $this->getOutstandingFeeAmountRow($applicationData);
+        } elseif ($outstandingFeeAmount == 0) {
+            $rows[] = $this->getAmountPaidRow($totalFeeAmount);
+        } else {
+            $amountPaid = $totalFeeAmount - $outstandingFeeAmount;
+            $rows[] = $this->getAmountPaidRow($amountPaid);
+            $rows[] = $this->getAmountRemainingRow($outstandingFeeAmount);
+        }
+
+        return $rows;
+    }
+
+    /**
+     * Get the fee summary table content for multilateral type
      *
      * @param array $data input data
      *
      * @return array
      */
-    private function getBilateralMultilateralRows(array $data)
+    private function getMultilateralRows(array $data)
     {
         return [
             $this->getApplicationReferenceRow($data),
@@ -554,6 +603,69 @@ class IrhpApplicationFeeSummary
     }
 
     /**
+     * Get the single table row content for an amount paid row
+     *
+     * @param int $amountPaid
+     *
+     * @return array
+     */
+    private function getAmountPaidRow($amountPaid)
+    {
+        return $this->getAmountRow(
+            self::AMOUNT_PAID_HEADING,
+            $amountPaid,
+            [
+                'caption' => self::ALREADY_PAID_STATUS,
+                'colour' => 'green'
+            ]
+        );
+    }
+
+    /**
+     * Get the single table row content for an amount remaining row
+     *
+     * @param int $amountRemaining
+     *
+     * @return array
+     */
+    private function getAmountRemainingRow($amountRemaining)
+    {
+        return $this->getAmountRow(
+            self::AMOUNT_REMAINING_HEADING,
+            $amountRemaining,
+            [
+                'caption' => self::TO_BE_PAID_STATUS,
+                'colour' => 'orange'
+            ]
+        );
+    }
+
+    /**
+     * Get the single table row content for an amount-related row
+     *
+     * @param string $key
+     * @param int $amount
+     * @param array $status
+     *
+     * @return array
+     */
+    private function getAmountRow($key, $amount, array $status)
+    {
+        $currencyFormatter = $this->currencyFormatter;
+
+        return [
+            'key' => $key,
+            'value' => $this->translator->translateReplace(
+                'permits.page.fee.permit.fee.non-refundable',
+                [
+                    $currencyFormatter($amount)
+                ]
+            ),
+            'status' => $status
+        ];
+    }
+
+    /**
      * Get the fee amount corresponding to the specified fee type
      *
      * @param array $fees
@@ -586,5 +698,23 @@ class IrhpApplicationFeeSummary
                 return $fee;
             }
         }
+    }
+
+    /**
+     * Get the full amount payable using the fee breakdown data
+     *
+     * @param array $feeBreakdownData
+     *
+     * @return int
+     */
+    private function getTotalFeeAmount(array $feeBreakdownData)
+    {
+        $total = 0;
+
+        foreach ($feeBreakdownData as $row) {
+            $total += $row['total'];
+        }
+
+        return $total;
     }
 }

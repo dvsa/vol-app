@@ -26,6 +26,9 @@ class IrhpApplicationSection extends AbstractHelper
     const ROUTE_LICENCE = 'permits/application/licence';
     const ROUTE_LICENCE_CONFIRM_CHANGE = 'permits/application/licence/change';
     const ROUTE_COUNTRIES = 'permits/application/countries';
+    const ROUTE_COUNTRIES_CONFIRMATION = 'permits/application/countries-confirmation';
+    const ROUTE_IPA_QUESTION = 'permits/application/ipa/question';
+    const ROUTE_IPA_CHECK_ANSWERS = 'permits/application/ipa/check-answers';
     const ROUTE_NO_OF_PERMITS = 'permits/application/no-of-permits';
     const ROUTE_CHECK_ANSWERS = 'permits/application/check-answers';
     const ROUTE_DECLARATION = 'permits/application/declaration';
@@ -37,6 +40,8 @@ class IrhpApplicationSection extends AbstractHelper
     const ROUTE_UNPAID_PERMITS = 'permits/application/unpaid-permits';
     const ROUTE_PAYMENT_ACTION = 'permits/application/payment';
     const ROUTE_PAYMENT_RESULT_ACTION = 'permits/application/payment-result';
+    const ROUTE_ESSENTIAL_INFORMATION = 'permits/application/essential-information';
+    const ROUTE_PERIOD = 'permits/application/period';
 
     const ROUTE_CANCEL_APPLICATION = 'permits/application/cancel';
     const ROUTE_CANCEL_CONFIRMATION = self::ROUTE_CANCEL_APPLICATION . '/confirmation';
@@ -71,6 +76,7 @@ class IrhpApplicationSection extends AbstractHelper
      */
     const SECTION_COMPLETION_CANNOT_START = 'section_sts_csy';
     const SECTION_COMPLETION_NOT_STARTED = 'section_sts_nys';
+    const SECTION_COMPLETION_INCOMPLETE = 'section_sts_inc';
     const SECTION_COMPLETION_COMPLETED = 'section_sts_com';
 
     /**
@@ -79,6 +85,7 @@ class IrhpApplicationSection extends AbstractHelper
     const COMPLETION_STATUS = [
         self::SECTION_COMPLETION_CANNOT_START => 'Can\'t start yet',
         self::SECTION_COMPLETION_NOT_STARTED => 'Not started yet',
+        self::SECTION_COMPLETION_INCOMPLETE => 'Incomplete',
         self::SECTION_COMPLETION_COMPLETED => 'Completed',
     ];
 
@@ -88,6 +95,7 @@ class IrhpApplicationSection extends AbstractHelper
     const COMPLETION_STATUS_COLOUR = [
         self::SECTION_COMPLETION_CANNOT_START => 'grey',
         self::SECTION_COMPLETION_NOT_STARTED => 'grey',
+        self::SECTION_COMPLETION_INCOMPLETE => 'orange',
         self::SECTION_COMPLETION_COMPLETED => 'green',
     ];
 
