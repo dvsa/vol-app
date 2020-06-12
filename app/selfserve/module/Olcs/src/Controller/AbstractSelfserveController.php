@@ -216,7 +216,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
             $prepend = '';
             if ($this->form instanceof Form) {
                 if ($this->form->hasValidated()) {
-                    if (!$this->form->isValid()) {
+                    if (!$this->formIsValid()) {
                         $prepend = $translator->translate('permits.application.browser.title.error').': ';
                     }
                 }
@@ -269,25 +269,19 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     public function handlePost()
     {
         if (!empty($this->postParams)) {
-            $config = $this->configsForAction('postConfig');
-            // If controller has specified a mapper class, use it instead of default.
-            $mapperClass = DefaultMapper::class;
-            if (isset($config['mapperClass'])) {
-                $mapperClass = $config['mapperClass'];
-            }
-
-            $mapper = $this->getServiceLocator()->get($mapperClass);
-
             $formData = $this->postParams;
-            // If controller specified a pre-process mapper method, invoke it before setting data to form.
-            if (isset($config['preprocessMethod']) && method_exists($mapper, $config['preprocessMethod'])) {
-                $methodName = $config['preprocessMethod'];
-                $preProcess = $mapper->$methodName($this->postParams, $this->form);
-                $formData = $preProcess['formData'];
-            }
-
             $this->form->setData($formData);
-            if ($this->form->isValid() && !isset($preProcess['invalidForm'])) {
+
+            if ($this->formIsValid()) {
+                $config = $this->configsForAction('postConfig');
+                // If controller has specified a mapper class, use it instead of default.
+                $mapperClass = DefaultMapper::class;
+                if (isset($config['mapperClass'])) {
+                    $mapperClass = $config['mapperClass'];
+                }
+
+                $mapper = $this->getServiceLocator()->get($mapperClass);
+
                 $saveData = [];
 
                 if (isset($formData['fields'])) {
@@ -847,5 +841,15 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
 
             return $this->handleResponse($response);
         }
+    }
+
+    /**
+     * Whether the form is valid
+     *
+     * @return bool
+     */
+    protected function formIsValid()
+    {
+        return $this->form->isValid();
     }
 }

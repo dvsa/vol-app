@@ -44,7 +44,13 @@ class AvailableBilateralStocks
         if (count($stocks) == 1) {
             $this->singleStockOption($form, $stocks[0]);
         } else {
-            $selectedCountryStock = $this->getStockIdForCurrentCountrySelection($data['application']['irhpPermitApplications'], $data['routeParams']['country']);
+            $selectedCountryStock = $this->getStockIdForCurrentCountrySelection(
+                $data['application']['irhpPermitApplications'],
+                $data['routeParams']['country']
+            );
+
+            $data['application']['selectedStockId'] = $selectedCountryStock;
+
             $this->multipleStockOptions($form, $stocks, $selectedCountryStock);
         }
 
@@ -71,13 +77,12 @@ class AvailableBilateralStocks
                 'value' => $stock['id'],
                 'label' => $stock['periodNameKey'],
                 'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
-                'selected' => $selectedCountryStock == $stock['id']
             ];
         }
 
-        $form->get('fields')
-            ->get('irhpPermitStock')
-            ->setValueOptions($this->transformValueOptions($valueOptions));
+        $irhpPermitStock = $form->get('fields')->get('irhpPermitStock');
+        $irhpPermitStock->setValueOptions($this->transformValueOptions($valueOptions));
+        $irhpPermitStock->setValue($selectedCountryStock);
     }
 
     /**

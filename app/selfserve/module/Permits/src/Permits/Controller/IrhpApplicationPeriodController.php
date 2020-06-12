@@ -1,4 +1,5 @@
 <?php
+
 namespace Permits\Controller;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
@@ -6,6 +7,7 @@ use Dvsa\Olcs\Transfer\Command\IrhpApplication\UpdatePeriod;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
+use Permits\Controller\Config\DataSource\IrhpApplication as IrhpApplicationDataSource;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
@@ -14,6 +16,8 @@ use Permits\View\Helper\IrhpApplicationSection;
 
 class IrhpApplicationPeriodController extends AbstractSelfserveController implements ToggleAwareInterface
 {
+    const SELECTION_CHANGED_WARNING_KEY = 'permits.page.bilateral.which-period-required.warning';
+
     protected $toggleConfig = [
         'default' => FeatureToggleConfig::SELFSERVE_PERMITS_ENABLED,
     ];
@@ -51,4 +55,42 @@ class IrhpApplicationPeriodController extends AbstractSelfserveController implem
             'step' => IrhpApplicationSection::ROUTE_IPA_QUESTION
         ],
     ];
+
+    /** @var bool */
+    private $allowFormValidationSuccess = true;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function handlePost()
+    {
+        if (isset($this->data[IrhpApplicationDataSource::DATA_KEY]['selectedStockId']) &&
+            isset($this->postParams['fields']['irhpPermitStock']) &&
+            isset($this->postParams['fields']['previousIrhpPermitStock'])
+        ) {
+            $previouslySubmittedStockId = $this->postParams['fields']['previousIrhpPermitStock'];
+            $submittedStockId = $this->postParams['fields']['irhpPermitStock'];
+            $storedStockId = $this->data[IrhpApplicationDataSource::DATA_KEY]['selectedStockId'];
+
+            $this->postParams['fields']['previousIrhpPermitStock'] = $this->postParams['fields']['irhpPermitStock'];
+
+            if ($storedStockId != $submittedStockId && $submittedStockId != $previouslySubmittedStockId) {
+                $this->templateVarsConfig['question']['warning'] = self::SELECTION_CHANGED_WARNING_KEY;
+                $this->mergeTemplateVars();
+
+                $this->postParams['fields']['warningVisible'] = 1;
+                $this->allowFormValidationSuccess = false;
+            }
+        }
+
+        parent::handlePost();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function formIsValid()
+    {
+        return parent::formIsValid() && $this->allowFormValidationSuccess;
+    }
 }

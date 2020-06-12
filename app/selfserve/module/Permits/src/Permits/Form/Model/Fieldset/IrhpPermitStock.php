@@ -22,4 +22,10 @@ class IrhpPermitStock
      * @Form\Type("DynamicRadio")
      */
     public $irhpPermitStock;
+
+    /**
+     * @Form\Name("previousIrhpPermitStock")
+     * @Form\Type("Hidden")
+     */
+    public $previousIrhpPermitStock = null;
 }
