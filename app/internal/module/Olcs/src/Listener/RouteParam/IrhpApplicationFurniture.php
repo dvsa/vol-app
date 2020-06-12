@@ -175,6 +175,9 @@ class IrhpApplicationFurniture implements
 
         $routeParams = $this->getApplicationService()->getMvcEvent()->getRouteMatch()->getParams();
 
+        $mainNav->findOneBy('id', 'licence_irhp_applications')
+            ->setVisible(true);
+
         // Enable Link to view full permits if app is in Valid status
         if ($irhpApplication['status']['id'] == RefData::PERMIT_APP_STATUS_VALID) {
             $mainNav->findOneBy('id', 'irhp_permits-permits')

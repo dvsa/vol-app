@@ -14,8 +14,7 @@ use Olcs\Controller\Traits as ControllerTraits;
 class IrhpApplicationDocsController extends AbstractIrhpPermitController implements IrhpApplicationControllerInterface
 {
     use ControllerTraits\DocumentActionTrait,
-        ControllerTraits\DocumentSearchTrait,
-        ShowIrhpApplicationNavigationTrait;
+        ControllerTraits\DocumentSearchTrait;
 
     /**
      * Get configured document form

@@ -104,7 +104,7 @@ class NavigationToggleTest extends TestCase
         }
 
         $permitsKey = 'admin-dashboard/admin-permits';
-        $irhpPermitsKey = 'licence_irhp_applications';
+        $irhpPermitsKey = 'licence_irhp_permits';
         $userData = [
             'id' => 'usr123',
             'disableDataRetentionRecords' => false

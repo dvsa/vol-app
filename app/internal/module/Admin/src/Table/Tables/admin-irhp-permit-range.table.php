@@ -42,6 +42,11 @@ return [
             'formatter' => 'RefData'
         ],
         [
+            'title' => 'Type',
+            'name' => 'permitRangeType',
+            'formatter' => 'IrhpPermitRangeType'
+        ],
+        [
             'title' => 'Restricted countries',
             'name' => 'restrictedCountries',
             'formatter' => 'IrhpPermitRangeRestrictedCountries'

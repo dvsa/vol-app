@@ -18,6 +18,19 @@ class PermitRangeDetails
     public $stockId = null;
 
     /**
+     * @Form\Attributes({"id":"journey"})
+     * @form\Required(true)
+     * @Form\Options({
+     *     "label": "Journey type",
+     *     "empty_option": "Please Select",
+     *     "disable_inarray_validator": false,
+     *     "category": "journey"
+     * })
+     * @Form\Type("DynamicSelect")
+     */
+    public $journey = null;
+
+    /**
      * @Form\Attributes({"id":"emissionsCategory"})
      * @form\Required(true)
      * @Form\Options({
@@ -78,6 +91,23 @@ class PermitRangeDetails
      * })
      */
     public $toNo = null;
+
+    /**
+     * @Form\Name("cabotage")
+     * @Form\Attributes({
+     *    "id" : "cabotage",
+     * })
+     * @Form\Options({
+     *   "checked_value": "1",
+     *   "unchecked_value": "0",
+     *   "label": "Cabotage",
+     *   "label_attributes": {"class": "form-control form-control--checkbox form-control--advanced"},
+     *   "must_be_value": "Yes"
+     * })
+     * @Form\Type("\Common\Form\Elements\InputFilters\SingleCheckbox")
+     * @Form\Required(false)
+     */
+    public $cabotage = null;
 
     /**
      * @Form\Name("ssReserve")

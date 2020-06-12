@@ -10,8 +10,6 @@ use Olcs\Controller\Interfaces\IrhpApplicationControllerInterface;
  */
 class IrhpApplicationProcessingHistoryController extends AbstractHistoryController implements IrhpApplicationControllerInterface
 {
-    use ShowIrhpApplicationNavigationTrait;
-
     protected $navigationId = 'licence_irhp_applications_processing_event-history';
     protected $listVars = ['irhpApplication' => 'irhpAppId'];
     protected $itemParams = ['irhpAppId', 'id' => 'id'];

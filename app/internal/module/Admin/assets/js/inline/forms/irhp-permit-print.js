@@ -22,10 +22,29 @@ OLCS.ready(function() {
     return parseInt(F.findInput("fields", "irhpPermitStock").val(), 10);
   }
 
+  function isRangeTypeSelected() {
+    var rangeType = F.findInput("fields", "irhpPermitRangeType").val();
+    return rangeType.length && rangeType != 'Loading...';
+  }
+
+  function isSubmitVisible() {
+    return isStockSelected() && (!isBilateral() || isBilateral() && isRangeTypeSelected());
+  }
+
   $(document).on("change", "#irhpPermitType", function() {
     var field = isBilateral() ? 'irhpPermitTypeForCountry' : 'irhpPermitTypeForStock';
 
     F.findInput("fields", field).val(F.findInput("fields", "irhpPermitType").val());
+    F.findInput("fields", field).trigger("change");
+  });
+
+  $(document).on("change", "#irhpPermitStock", function() {
+    if (!isBilateral()) {
+      return;
+    }
+    var field = 'irhpPermitStockForRangeType';
+
+    F.findInput("fields", field).val(F.findInput("fields", "irhpPermitStock").val());
     F.findInput("fields", field).trigger("change");
   });
 
@@ -53,6 +72,14 @@ OLCS.ready(function() {
     clearWhenEmpty: true
   });
 
+  OLCS.cascadeInput({
+    source: "#irhpPermitStockForRangeType",
+    dest: "#irhpPermitRangeType",
+    url: "/list/irhp-permit-print-range-type-by-stock",
+    emptyLabel: "Please select",
+    clearWhenEmpty: true
+  });
+
   OLCS.cascadeForm({
     form: form,
     rulesets: {
@@ -63,10 +90,13 @@ OLCS.ready(function() {
         },
         "irhpPermitStock": function() {
           return isTypeSelected() && (!isBilateral() || isBilateral() && isCountrySelected());
-        }
+        },
+        "irhpPermitRangeType": function() {
+          return isTypeSelected() && isBilateral() && isStockSelected();
+        },
       },
       "form-actions": function() {
-        return isStockSelected();
+        return isSubmitVisible();
       }
     }
   });

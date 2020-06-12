@@ -11,6 +11,7 @@ $(function () {
         ECMT_ANNUAL_ID,
         ECMT_SHORT_TERM_ID,
         ECMT_REMOVAL_ID,
+        BILATERAL_ID,
         CERT_ROADWORTHINESS_VEHICLE_ID,
         CERT_ROADWORTHINESS_TRAILER_ID
     ];

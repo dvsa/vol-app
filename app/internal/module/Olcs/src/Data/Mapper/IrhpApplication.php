@@ -61,6 +61,8 @@ class IrhpApplication implements MapperInterface
      */
     public static function mapFromForm(array $data)
     {
+        $additionalData = [];
+
         if ($data['topFields']['isApplicationPathEnabled']) {
             $cmdData['id'] = $data['topFields']['id'];
             $cmdData['dateReceived'] = $data['topFields']['dateReceived'];
@@ -72,9 +74,31 @@ class IrhpApplication implements MapperInterface
             }
 
             return $cmdData;
+        } elseif ($data['topFields']['irhpPermitType'] == RefData::IRHP_BILATERAL_PERMIT_TYPE_ID) {
+            $selectedCountryIds = explode(',', $data['fields']['selectedCountriesCsv']);
+
+            $countries = $data['fields']['countries'];
+            $permitsRequired = [];
+
+            foreach ($countries as $countryId => $periodData) {
+                if (in_array($countryId, $selectedCountryIds)) {
+                    $selectedPeriodId = $periodData['selectedPeriodId'];
+                    $periods = $periodData['periods'];
+                    $selectedPeriodKey = 'period' . $selectedPeriodId;
+
+                    if (array_key_exists($selectedPeriodKey, $periods)) {
+                        $permitsRequired[$countryId] = [
+                            'periodId' => $selectedPeriodId,
+                            'permitsRequired' => array_filter($periods[$selectedPeriodKey]),
+                        ];
+                    }
+                }
+            }
+
+            $additionalData = ['permitsRequired' => $permitsRequired];
         }
 
-        return array_merge($data['fields'], $data['bottomFields'], $data['topFields']);
+        return array_merge($data['fields'], $data['bottomFields'], $data['topFields'], $additionalData);
     }
 
     /**

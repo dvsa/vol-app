@@ -62,6 +62,15 @@ class SelectPermitType
     public $stock = null;
 
     /**
+     * @Form\Name("bilateralCountries")
+     * @Form\Attributes({
+     *   "value":"<div id=""bilateralCountries""></div>",
+     * })
+     * @Form\Type("Common\Form\Elements\Types\Html")
+     */
+    public $bilateralCountries = null;
+
+    /**
      * @Form\Name("form-actions")
      * @Form\Attributes({"class":"actions-container"})
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\ContinueCancelFormActions")

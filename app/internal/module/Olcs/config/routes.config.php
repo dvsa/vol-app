@@ -10,6 +10,8 @@ use Olcs\Controller\Licence\Processing\LicenceProcessingNoteController;
 use Olcs\Controller\Bus\Processing\BusProcessingDecisionController;
 use Olcs\Controller\Bus\Processing\BusProcessingNoteController;
 use Olcs\Controller\Operator\OperatorProcessingNoteController;
+use Olcs\Controller\IrhpPermits\ApplicationController as IrhpPermitsApplicationController;
+use Olcs\Controller\IrhpPermits\PermitController as IrhpPermitsPermitController;
 use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingOverviewController;
 use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingNoteController;
 use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingTasksController;
@@ -862,6 +864,39 @@ $routes = [
                     ],
                 ]
             ],
+            'irhp-permits' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'irhp-permits[/]',
+                    'defaults' => [
+                        'controller' => IrhpPermitsApplicationController::class,
+                        'action' => 'redirect'
+                    ]
+                ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'application' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'application[/]',
+                            'defaults' => [
+                                'controller' => IrhpPermitsApplicationController::class,
+                                'action' => 'index'
+                            ],
+                        ]
+                    ],
+                    'permit' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'permit[/]',
+                            'defaults' => [
+                                'controller' => IrhpPermitsPermitController::class,
+                                'action' => 'index'
+                            ],
+                        ]
+                    ],
+                ],
+            ],
             'irhp-application' => [
                 'type' => 'segment',
                 'options' => [
@@ -909,6 +944,15 @@ $routes = [
                             'route' => 'available-stocks[/]',
                             'defaults' => [
                                 'action' => 'availableStocks'
+                            ]
+                        ]
+                    ],
+                    'availableCountries' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'available-countries[/]',
+                            'defaults' => [
+                                'action' => 'availableCountries'
                             ]
                         ]
                     ],

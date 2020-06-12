@@ -25,6 +25,7 @@ return [
         [
             'title' => 'Permit No.',
             'name' => 'permitNumber',
+            'formatter' => 'IrhpPermitNumberInternal',
         ],
         [
             'title' => 'Minimum emission standard',
@@ -42,6 +43,19 @@ return [
             'title' => 'Issued date',
             'name' => 'issueDate',
             'formatter' => 'DateTime',
+        ],
+        [
+            'title' => 'Type',
+            'name' => 'type',
+            'formatter' => function ($row) {
+                return $this->callFormatter(
+                    [
+                        'name' => 'irhpPermitRangeType',
+                        'formatter' => 'IrhpPermitRangeType',
+                    ],
+                    $row['irhpPermitRange']
+                );
+            },
         ],
         [
             'title' => 'Country',
