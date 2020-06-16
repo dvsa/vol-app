@@ -113,7 +113,7 @@
                 $status = $questionAnswer['reviewAndSubmit']['submitAndPay'];
                 $statusCaption = Section::COMPLETION_STATUS[$status];
                 $statusColour = Section::COMPLETION_STATUS_COLOUR[$status];
-                $linkActive = $status != Section::SECTION_COMPLETION_CANNOT_START;
+                $linkActive = $status == Section::SECTION_COMPLETION_NOT_STARTED;
 
               ?>
               <span class="app-task-list__task-name">
