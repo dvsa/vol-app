@@ -74,15 +74,35 @@ class IrhpApplicationController extends AbstractSelfserveController implements T
             // However, we need to display the status of the submitAndPay section on the overview page as 'not started'
             // if the fee is not fully paid. This seems like a sensible way to do this without drastic changes
             // elsewhere.
-            $this->data['displaySubmitApplicationButton'] = false;
-            $submitAndPayStatus = $this->data['questionAnswer']['reviewAndSubmit']['submitAndPay'];
-            if ($submitAndPayStatus == IrhpApplicationSection::SECTION_COMPLETION_COMPLETED) {
-                if ($this->data['application']['hasOutstandingFees']) {
+            $reviewAndSubmit = $this->data['questionAnswer']['reviewAndSubmit'];
+            $countriesStatus = $reviewAndSubmit['countries'];
+            $declarationStatus = $reviewAndSubmit['declaration'];
+            $submitAndPayStatus = $reviewAndSubmit['submitAndPay'];
+            $hasOutstandingFees = $this->data['application']['hasOutstandingFees'];
+
+            if ($hasOutstandingFees) {
+                // outstanding fees
+                if ($submitAndPayStatus == IrhpApplicationSection::SECTION_COMPLETION_COMPLETED) {
+                    // declaration completed
                     $submitAndPayStatus = IrhpApplicationSection::SECTION_COMPLETION_NOT_STARTED;
-                    $this->data['questionAnswer']['reviewAndSubmit']['submitAndPay'] = $submitAndPayStatus;
-                } else {
-                    $this->data['displaySubmitApplicationButton'] = true;
                 }
+            } else {
+                // no outstanding fees
+                if ($countriesStatus == IrhpApplicationSection::SECTION_COMPLETION_COMPLETED) {
+                    // all countries completed
+                    $submitAndPayStatus = IrhpApplicationSection::SECTION_COMPLETION_COMPLETED;
+                }
+            }
+
+            $this->data['questionAnswer']['reviewAndSubmit']['submitAndPay'] = $submitAndPayStatus;
+
+            // possibly display SubmitApplication button
+            $this->data['displaySubmitApplicationButton'] = false;
+
+            if ($declarationStatus == IrhpApplicationSection::SECTION_COMPLETION_COMPLETED
+                && $submitAndPayStatus == IrhpApplicationSection::SECTION_COMPLETION_COMPLETED
+            ) {
+                $this->data['displaySubmitApplicationButton'] = true;
             }
         }
     }
