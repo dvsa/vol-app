@@ -16,7 +16,7 @@
 
     ?>
     <?php echo $this->headLink(['rel' => 'icon', 'href' => $this->assetPath('/images/bitmap/favicon.ico'), 'type' => 'image/x-icon'], 'PREPEND'); ?>
-    <?php echo $this->headTitle(strip_tags($this->pageTitle())); ?>
+    <?php echo $this->headTitle(strip_tags($this->pageTitle()))->append('header-vehicle-operator-licensing')->append('header-gov.uk')->setSeparator(' - '); ?>
     <?php echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0')->appendHttpEquiv('X-UA-Compatible', 'IE=edge'); ?>
     <?php echo $this->headLink(['rel' => 'icon', 'href' => $this->assetPath('/images/bitmap/favicon.ico'), 'type' => 'image/x-icon'], 'PREPEND'); ?>
     <?php $this->headLink()->deleteContainer(); ?>

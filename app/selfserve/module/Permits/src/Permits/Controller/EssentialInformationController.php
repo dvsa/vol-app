@@ -29,7 +29,7 @@ class EssentialInformationController extends AbstractSelfserveController impleme
 
     protected $templateVarsConfig = [
         'default' => [
-            'browserTitle' => 'permits.page.bilateral.which-period-required',
+            'browserTitle' => 'permits.page.bilateral.countries.essential.heading',
             'continueUri' => IrhpApplicationSection::ROUTE_PERIOD,
             'continueUriLabel' => 'permits.button.continue',
             'backUri' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
