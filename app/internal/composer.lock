@@ -1390,12 +1390,12 @@
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.174",
+            "version": "4.206.178",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-common/4.206.174/olcs-olcs-common-4.206.174.zip",
-                "reference": "19d28658309a3aff5dc7e796ba867019a31ddcdd",
-                "shasum": "19d28658309a3aff5dc7e796ba867019a31ddcdd"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-common/4.206.178/olcs-olcs-common-4.206.178.zip",
+                "reference": "5133b2e5de2e801ea735c7526c7187bceec702d6",
+                "shasum": "5133b2e5de2e801ea735c7526c7187bceec702d6"
             },
             "require": {
                 "doctrine/annotations": "^1.8",
@@ -1484,7 +1484,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2020-06-04T08:28:05+00:00"
+            "time": "2020-06-18T07:50:29+00:00"
         },
         {
             "name": "olcs/olcs-logging",
@@ -1557,12 +1557,12 @@
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "4.206.70",
+            "version": "4.206.71",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-transfer/4.206.70/olcs-olcs-transfer-4.206.70.zip",
-                "reference": "47a3d5e9f92e612257eaafb577a7f1529a97fce6",
-                "shasum": "47a3d5e9f92e612257eaafb577a7f1529a97fce6"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-transfer/4.206.71/olcs-olcs-transfer-4.206.71.zip",
+                "reference": "a6959d7eff7a6dbec56b9feb3b407315b3dc69fe",
+                "shasum": "a6959d7eff7a6dbec56b9feb3b407315b3dc69fe"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1.7",
@@ -1628,7 +1628,7 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2020-06-03T17:15:37+00:00"
+            "time": "2020-06-12T12:47:28+00:00"
         },
         {
             "name": "olcs/olcs-utils",
