@@ -24,7 +24,7 @@ class CreateVariationProcessingServiceTest extends MockeryTestCase
     protected $sm;
     protected $sut;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->sm = Bootstrap::getServiceManager();
 

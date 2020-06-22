@@ -30,7 +30,7 @@ class ViewControllerTest extends MockeryTestCase
     /** @var  m\MockInterface */
     private $mockIsGrantedPlgn;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->mockSl = m::mock(\Zend\ServiceManager\ServiceLocatorInterface::class)->makePartial();
         $this->mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
@@ -59,7 +59,7 @@ class ViewControllerTest extends MockeryTestCase
         $this->sut->setPluginManager($this->mockPluginManager);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         m::close();
     }

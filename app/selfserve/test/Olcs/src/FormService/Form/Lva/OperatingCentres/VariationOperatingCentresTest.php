@@ -35,7 +35,7 @@ class VariationOperatingCentresTest extends MockeryTestCase
 
     protected $translator;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->tableBuilder = m::mock();
 

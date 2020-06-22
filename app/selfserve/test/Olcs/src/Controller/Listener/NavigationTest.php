@@ -33,7 +33,7 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
     /** @var RbacUser|m\MockInterface */
     private $mockIdentity;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->mockNavigation = m::mock(Navigation::class);
         $this->mockQuerySender = m::mock(QuerySender::class);

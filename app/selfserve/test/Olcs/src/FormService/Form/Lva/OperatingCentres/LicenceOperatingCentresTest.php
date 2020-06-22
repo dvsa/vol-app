@@ -33,7 +33,7 @@ class LicenceOperatingCentresTest extends MockeryTestCase
 
     protected $tableBuilder;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->tableBuilder = m::mock();
 

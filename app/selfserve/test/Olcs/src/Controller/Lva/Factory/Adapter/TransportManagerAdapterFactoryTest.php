@@ -19,7 +19,7 @@ class TransportManagerAdapterFactoryTest extends MockeryTestCase
     /** @var ServiceLocatorInterface|\Mockery\MockInterface */
     protected $sm;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->sm = m::mock(ServiceLocatorInterface::class);
 

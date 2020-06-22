@@ -34,7 +34,7 @@ class ApplicationConvictionsPenaltiesTest extends MockeryTestCase
 
     protected $formName = 'Lva\ConvictionsPenalties';
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->fh = m::mock(FormHelperService::class)->makePartial();
         $this->sut = new ApplicationConvictionsPenalties();

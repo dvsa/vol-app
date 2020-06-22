@@ -12,7 +12,7 @@ class PermitTypeTitleTest extends TestCase
 {
     private $pageTypeTitle;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->pageTypeTitle = new PermitTypeTitle();
     }

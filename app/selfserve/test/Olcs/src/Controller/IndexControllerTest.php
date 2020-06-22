@@ -16,7 +16,7 @@ class IndexControllerTest extends MockeryTestCase
     /** @var IndexController|\Mockery\MockInterface  */
     protected $sut;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->sut = m::mock(IndexController::class)
             ->makePartial();

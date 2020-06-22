@@ -16,7 +16,7 @@ class AvailableYearsTest extends TestCase
 {
     private $availableYears;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->availableYears = new AvailableYears();
     }

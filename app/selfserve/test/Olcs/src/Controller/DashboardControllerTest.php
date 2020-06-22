@@ -28,7 +28,7 @@ class DashboardControllerTest extends MockeryTestCase
         return m::mock('\Zend\ServiceManager\ServiceManager')->makePartial();
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->sut = m::mock('\Olcs\Controller\DashboardController')
             ->makePartial()

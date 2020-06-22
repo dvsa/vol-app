@@ -37,7 +37,7 @@ class LicencePeopleAdapterTest extends MockeryTestCase
     /** @var  PeopleLvaService|m\Mock */
     protected $mockPplSrv;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->mockForm = m::mock(Form::class);
         $this->mockTbl = m::mock(TableBuilder::class);

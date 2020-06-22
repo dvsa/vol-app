@@ -33,7 +33,7 @@ class IrhpApplicationFeeSummaryTest extends TestCase
 
     private $irhpApplicationFeeSummary;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->translationHelperService = m::mock(TranslationHelperService::class);
 

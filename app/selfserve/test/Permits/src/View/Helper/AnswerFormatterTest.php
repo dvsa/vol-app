@@ -20,7 +20,7 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
     /** @var RendererInterface|m\MockInterface */
     private $view;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->view = m::mock(RendererInterface::class);
         $this->sut = new AnswerFormatter();

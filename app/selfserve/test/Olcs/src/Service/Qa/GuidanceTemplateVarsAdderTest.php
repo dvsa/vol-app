@@ -22,7 +22,7 @@ class GuidanceTemplateVarsAdderTest extends MockeryTestCase
 
     private $questionText;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->translateableTextHandler = m::mock(TranslateableTextHandler::class);
 

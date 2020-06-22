@@ -16,7 +16,7 @@ class IrhpPermitApplicationViewGeneratorTest extends MockeryTestCase
 {
     private $irhpPermitApplicationViewGenerator;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->irhpPermitApplicationViewGenerator = new IrhpPermitApplicationViewGenerator();
     }

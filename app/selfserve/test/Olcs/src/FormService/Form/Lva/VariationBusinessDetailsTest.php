@@ -20,7 +20,7 @@ class VariationBusinessDetailsTest extends MockeryTestCase
 
     protected $fh;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
 

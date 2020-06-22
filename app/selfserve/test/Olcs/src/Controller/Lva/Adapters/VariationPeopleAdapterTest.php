@@ -31,7 +31,7 @@ class VariationPeopleAdapterTest extends MockeryTestCase
     /** @var  \Zend\Http\Response | m\MockInterface */
     protected $mockResp;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->mockForm = m::mock(\Zend\Form\Form::class);
         $this->mockTbl = m::mock(\Common\Service\Table\TableBuilder::class);

@@ -14,7 +14,7 @@ class QuestionArrayProviderTest extends MockeryTestCase
 
     private $sut;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->formattedTranslateableTextParametersGenerator = m::mock(
             FormattedTranslateableTextParametersGenerator::class

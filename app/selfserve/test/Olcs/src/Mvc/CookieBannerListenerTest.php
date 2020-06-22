@@ -43,7 +43,7 @@ class CookieBannerListenerTest extends MockeryTestCase
      */
     protected $sut;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->acceptAllSetCookieGenerator = m::mock(AcceptAllSetCookieGenerator::class);
 

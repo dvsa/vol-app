@@ -81,9 +81,6 @@ class LicenceOverview extends LvaOverview
         $this->addInfoBoxLinks($surrenderLink);
     }
 
-
-
-
     /**
      * @param $surrender
      *
@@ -91,7 +88,6 @@ class LicenceOverview extends LvaOverview
      */
     private function returnSurrenderLinkText($surrender): array
     {
-
         $route = 'licence/surrender/start/GET';
         $linkText = 'licence.apply-to-surrender';
         if (empty($surrender)) {
@@ -122,6 +118,16 @@ class LicenceOverview extends LvaOverview
     public function setInfoBoxLinks(): void
     {
         $this->setVariable('infoBoxLinks', $this->infoBoxLinks);
+    }
+
+    /**
+     * Get info box links
+     *
+     * @return array|array[]
+     */
+    public function getInfoBoxLinks(): array
+    {
+        return $this->infoBoxLinks;
     }
 
     public function returnDefaultInfoBoxLinks(): array

@@ -27,7 +27,7 @@ class AnalyticsCookieNamesProviderTest extends MockeryTestCase
         'foo' => 'bar',
     ];
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->cookie = m::mock(Cookie::class);
         $this->cookie->shouldReceive('getArrayCopy')

@@ -18,7 +18,7 @@ class BannerVisibilityProviderTest extends MockeryTestCase
 
     private $sut;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->cookieReader = m::mock(CookieReader::class);
 
