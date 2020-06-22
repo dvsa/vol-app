@@ -134,7 +134,6 @@ class AvailableBilateralStocksTest extends \Mockery\Adapter\Phpunit\MockeryTestC
                 'label_attributes' => [
                     'class' => 'govuk-label govuk-radios__label govuk-label--s',
                 ],
-                'selected' => true,
                 'attributes' => [
                     'id' => 'stock'
                 ]
@@ -145,16 +144,18 @@ class AvailableBilateralStocksTest extends \Mockery\Adapter\Phpunit\MockeryTestC
                 'label_attributes' => [
                     'class' => 'govuk-label govuk-radios__label govuk-label--s',
                 ],
-                'selected' => null
             ]
         ];
 
         $mockForm->expects('get')->with('fields')->andReturn($mockFieldSet);
         $mockFieldSet->shouldReceive('get')->once()->with('irhpPermitStock')->andReturn($mockField);
-        $mockField->shouldReceive('setValueOptions')->with($valueOptions);
+        $mockField->shouldReceive('setValueOptions')->with($valueOptions)->once();
+        $mockField->shouldReceive('setValue')->with(12)->once();
 
         $outputData = $inputData;
         $outputData[IrhpApplicationDataSource::DATA_KEY]['countryName'] = 'Norway';
+        $outputData[IrhpApplicationDataSource::DATA_KEY]['selectedStockId'] = 12;
+
         $this->assertEquals(
             $outputData,
             $this->sut->mapForFormOptions($inputData, $mockForm)
