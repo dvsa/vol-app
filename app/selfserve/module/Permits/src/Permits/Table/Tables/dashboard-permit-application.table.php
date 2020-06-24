@@ -10,7 +10,7 @@ return array(
     'attributes' => array(),
     'columns' => array(
         array(
-            'title' => 'dashboard-table-permit-application-ref',
+            'title' => 'dashboard-table-permit-application-number',
             'name' => 'id',
             'formatter' => 'LicencePermitReference',
         ),
