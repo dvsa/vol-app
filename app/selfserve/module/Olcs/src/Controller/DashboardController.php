@@ -131,6 +131,8 @@ class DashboardController extends AbstractController
         $view->setTemplate('dashboard-tm');
         $view->setVariable('applicationsTable', $table);
 
+        $this->placeholder()->setPlaceholder('pageTitle', 'dashboard.tm.title');
+
         return $view;
     }
 }

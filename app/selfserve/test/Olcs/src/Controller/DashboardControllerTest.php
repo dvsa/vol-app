@@ -12,6 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Organisation\Dashboard as DashboardQry;
 use Olcs\TestHelpers\Controller\Traits\ControllerTestTrait;
+use Olcs\Mvc\Controller\Plugin\Placeholder;
 
 /**
  * Dashboard Controller Test
@@ -148,6 +149,12 @@ class DashboardControllerTest extends MockeryTestCase
         $this->sut->shouldReceive('handleQuery')->once()->andReturn($mockResult);
 
         $mockResult->shouldReceive('getResult')->with()->once()->andReturn(['results' => ['service data']]);
+
+        $placeholder = m::mock(Placeholder::class);
+        $placeholder->shouldReceive('setPlaceholder')
+            ->with('pageTitle', 'dashboard.tm.title')
+            ->once();
+        $this->sut->shouldReceive('placeholder')->andReturn($placeholder);
 
         $mockDataMapper->shouldReceive('map')
             ->with(['service data'])
