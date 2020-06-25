@@ -2,7 +2,6 @@
 
 namespace OlcsTest\FormService\Form\Lva;
 
-use Common\Data\Object\Bundle\Licence;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Table\TableBuilder;
 use Mockery as m;
@@ -93,4 +92,3 @@ class LicenceTrailersTest extends MockeryTestCase
         $this->assertSame($mockForm, $form);
     }
 }
-
