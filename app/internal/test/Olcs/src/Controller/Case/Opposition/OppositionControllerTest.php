@@ -25,7 +25,7 @@ class OppositionControllerTest extends MockeryTestCase
      */
     protected $pluginManagerHelper;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->sut = new \Olcs\Controller\Cases\Opposition\OppositionController();
         $this->pluginManagerHelper = new ControllerPluginManagerHelper();

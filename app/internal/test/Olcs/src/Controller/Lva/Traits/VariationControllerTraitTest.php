@@ -22,7 +22,7 @@ class VariationControllerTraitTest extends MockeryTestCase
     protected $sut;
     protected $sm;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->sm = Bootstrap::getServiceManager();
 

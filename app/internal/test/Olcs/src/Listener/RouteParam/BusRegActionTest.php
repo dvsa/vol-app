@@ -25,7 +25,7 @@ class BusRegActionTest extends MockeryTestCase
     /** @var  BusRegAction */
     private $sut;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->sut = new BusRegAction();
 

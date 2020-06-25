@@ -26,13 +26,13 @@ class LicenceTest extends TestCase
     protected $sut;
     protected $signatureType;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setup();
         $this->sut = new Licence();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->signatureType = null;
     }

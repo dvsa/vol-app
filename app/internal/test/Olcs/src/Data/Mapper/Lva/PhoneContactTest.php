@@ -16,7 +16,7 @@ class PhoneContactTest extends MockeryTestCase
     /** @var  array */
     private $formData;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->formData = [
             PhoneContact::DETAILS => [

@@ -18,7 +18,7 @@ class GenericListTest extends TestCase
     /** @var  Params | m\MockInterface */
     private $mockParams;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->mockParams = m::mock(Params::class)->makePartial();
     }

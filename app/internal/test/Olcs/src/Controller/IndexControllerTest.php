@@ -21,7 +21,7 @@ class IndexControllerTest extends MockeryTestCase
 
     protected $sm;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->sm = Bootstrap::getServiceManager();
 

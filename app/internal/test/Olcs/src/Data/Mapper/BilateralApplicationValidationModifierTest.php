@@ -21,7 +21,7 @@ class BilateralApplicationValidationModifierTest extends MockeryTestCase
 
     private $bilateralApplicationValidationModifier;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->form = m::mock(Form::class);
 

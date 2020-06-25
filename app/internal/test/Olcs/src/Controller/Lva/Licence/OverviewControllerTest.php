@@ -22,7 +22,7 @@ use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
  */
 class OverviewControllerTest extends AbstractLvaControllerTestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

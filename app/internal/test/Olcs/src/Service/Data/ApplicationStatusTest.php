@@ -22,7 +22,7 @@ class ApplicationStatusTest extends AbstractDataServiceTestCase
     /** @var  \Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder | m\MockInterface */
     protected $mockTransferAnnotationBuilder;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->sut = new ApplicationStatus;
 

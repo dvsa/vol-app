@@ -11,7 +11,7 @@ use Zend\Form\Form;
  */
 class OperatorPeopleTest extends MockeryTestCase
 {
-    public function setup()
+    public function setUp(): void
     {
         $this->sut = new \Olcs\Data\Mapper\OperatorPeople();
     }

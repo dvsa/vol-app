@@ -21,7 +21,7 @@ class AbstractPublicInquiryDataTest extends MockeryTestCase
     /** @var  m\MockInterface | ServiceLocatorInterface */
     private $mockSl;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->mockSl = m::mock(ServiceLocatorInterface::class);
 

@@ -25,7 +25,7 @@ class FeesActionTraitTest extends MockeryTestCase
     private $mockSm;
 
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->mockForm = m::mock(\Zend\Form\FormInterface::class);
         $this->mockReq = m::mock(\Zend\Http\Request::class);

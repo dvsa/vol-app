@@ -17,7 +17,7 @@ use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
  */
 class ContinuationControllerTest extends AbstractLvaControllerTestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

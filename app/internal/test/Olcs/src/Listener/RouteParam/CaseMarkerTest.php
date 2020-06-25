@@ -14,7 +14,7 @@ use Olcs\Listener\RouteParams;
  */
 class CaseMarkerTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         $this->sut = new CaseMarker();
 

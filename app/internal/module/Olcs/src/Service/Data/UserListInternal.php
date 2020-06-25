@@ -79,7 +79,7 @@ class UserListInternal extends AbstractListDataService
     {
         $data = $this->getData('userlist');
 
-        if (count($data) !== 0) {
+        if ($data !== null) {
             return $data;
         }
 

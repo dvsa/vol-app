@@ -38,7 +38,7 @@ class OrganisationTest extends MockeryTestCase
     /** @var  Organisation */
     protected $sut;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->mockMarkerSrv = m::mock(MarkerService::class);
 

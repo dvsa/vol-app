@@ -18,7 +18,7 @@ class ApplicationTypeOfLicenceTest extends AbstractLvaFormServiceTestCase
     /** @var  m\MockInterface|\Common\FormService\FormServiceManager */
     protected $fsm;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
         $this->fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
