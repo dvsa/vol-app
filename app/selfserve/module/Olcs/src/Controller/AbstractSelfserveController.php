@@ -132,6 +132,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      * @var array
      */
     protected $templateConfig = [
+        'default' => '',
         'generic' => '',
         'question' => 'permits/single-question',
         'cancel' => '',
