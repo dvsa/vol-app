@@ -21,7 +21,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <div class="page-header">
-            <p><a href="<?php echo $backUrl; ?>" class="back-link"> <?php echo $this->escapeHtml($this->translate('common.link.back.label')); ?></a></p>
+            <p><a href="<?php echo $backUrl; ?>" class="govuk-back-link"> <?php echo $this->escapeHtml($this->translate('common.link.back.label')); ?></a></p>
             <div class="page-header__wrapper">
                 <span class="govuk-caption-xl">
                     <span class="visually-hidden"><?php echo($this->escapeHtml($this->translate('permits.application.overview.application.number'))); ?></span>
@@ -147,7 +147,7 @@
                 if ($application['canBeCancelled']) {
                     ?>
                     <ul class="info-box__links">
-                        <li>
+                        <li class="govuk-body">
                             <a href="<?php echo $this->url(Section::ROUTE_CANCEL_APPLICATION, [], [], true); ?>">
                                 <?php echo $this->escapeHtml($this->translate('permits.irhp-application.cancel.question')); ?>
                             </a>
