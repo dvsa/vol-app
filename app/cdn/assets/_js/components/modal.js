@@ -35,12 +35,12 @@ OLCS.modal = (function(document, $, undefined) {
   var template = [
     '<div class="overlay" style="display:none;"></div>',
     '<div class="modal__wrapper" style="display:none;">',
-      '<div class="modal" role="dialog" aria-labelledby="modal-title" tabindex="1">',
+      '<div class="modal" role="dialog" aria-labelledby="modal-title" tabindex="1">', 
         '<div class="modal__header">',
-          '<h1 class="modal__title" id="modal-title"></h1>',
+          '<h2 class="modal__title" id="modal-title"></h2>',
         '</div>',
         '<div class="modal__content"></div>',
-        '<a href="#" class="modal__close" aria-label="close">Close</a>',
+        '<a href="#" class="modal__close" aria-label="close modal">Close</a>',
       '</div>',
     '</div>'
   ].join('\n');
