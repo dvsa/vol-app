@@ -18,7 +18,7 @@ OLCS.notices = (function(document, $, undefined) {
   return function init() {
 
     function addCloseButton(element) {
-      element.prepend('<a href="" class="' + closeLinkClass + '">Close</a>');
+      element.prepend('<a href="" aria-label="Close notification" class="' + closeLinkClass + '">Close</a>');  
     }
 
     function remove(element) {
