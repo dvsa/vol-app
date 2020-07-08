@@ -36,11 +36,13 @@ class FormFactory
         $dataHandlerMappings = [
             'ecmt_st_international_journeys' => 'QaEcmtShortTermInternationalJourneysDataHandler',
             'ecmt_st_annual_trips_abroad' => 'QaEcmtShortTermAnnualTripsAbroadDataHandler',
+            'bilateral_permit_usage' => 'QaBilateralPermitUsageDataHandler',
         ];
 
         $isValidHandlerMappings = [
             'ecmt_st_international_journeys' => 'QaEcmtShortTermInternationalJourneysIsValidHandler',
             'ecmt_st_annual_trips_abroad' => 'QaEcmtShortTermAnnualTripsAbroadIsValidHandler',
+            'bilateral_permit_usage' => 'QaBilateralPermitusageIsValidHandler',
         ];
 
         foreach ($dataHandlerMappings as $type => $serviceName) {
