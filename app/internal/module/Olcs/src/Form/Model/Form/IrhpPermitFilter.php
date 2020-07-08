@@ -32,6 +32,7 @@ class IrhpPermitFilter
      *     "label": "permits.irhp.permit.filter.country",
      *     "disable_inarray_validator": false,
      *     "service_name": "Common\Service\Data\Country",
+     *     "category": "isPermitState",
      *     "extra_option": {"": "All"},
      * })
      * @Form\Type("DynamicSelect")

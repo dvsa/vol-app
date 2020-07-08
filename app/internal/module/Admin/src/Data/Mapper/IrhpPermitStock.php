@@ -44,26 +44,10 @@ class IrhpPermitStock implements MapperInterface
      * @param array         $errors array response from errors
      *
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public static function mapFromErrors(FormInterface $form, array $errors): array
     {
         return $errors;
-    }
-
-    /**
-     * Map country data into array for select form element
-     *
-     * @param array $countries
-     * @return array
-     */
-    public static function mapCountryOptions(array $countries): array
-    {
-        $optionData = [];
-
-        foreach ($countries as $country) {
-            $optionData[$country['id']] = $country['countryDesc'];
-        }
-
-        return $optionData;
     }
 }
