@@ -29,11 +29,12 @@ class PermitStockDetails
     /**
      * @Form\Type("DynamicSelect")
      * @Form\Name("country")
-     *
      * @Form\Attributes({"id":"country","placeholder":"","class":"medium", "data-container-class":"stockCountry js-hidden"})
      * @Form\Options({
      *     "label": "Country",
      *     "disable_inarray_validator": false,
+     *     "service_name": "Common\Service\Data\Country",
+     *     "category": "isPermitState",
      *     "empty_option": "Please Select",
      * })
      * @Form\Required(false)

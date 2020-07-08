@@ -13,7 +13,6 @@ use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\GetList as ListDto;
 use Dvsa\Olcs\Transfer\Command\IrhpPermitStock\Create as CreateDto;
 use Dvsa\Olcs\Transfer\Command\IrhpPermitStock\Update as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\IrhpPermitStock\Delete as DeleteDto;
-use Dvsa\Olcs\Transfer\Query\ContactDetail\CountrySelectList as CountrySelectListDTO;
 use Admin\Form\Model\Form\IrhpPermitStock as PermitStockForm;
 use Admin\Data\Mapper\IrhpPermitStock as PermitStockMapper;
 
@@ -119,7 +118,7 @@ class IrhpPermitStockController extends AbstractInternalController implements Le
         $fieldset->remove('applicationPathGroupHtml');
         $fieldset->remove('businessProcessHtml');
 
-        return $this->retrieveEeaCountries($form);
+        return $form;
     }
 
     /**
@@ -140,34 +139,6 @@ class IrhpPermitStockController extends AbstractInternalController implements Le
             ->setValue($formData['permitStockDetails']['applicationPathGroup']['name'] ?? '');
         $fieldset->get('businessProcessHtml')
             ->setValue($formData['permitStockDetails']['businessProcess']['description'] ?? '');
-
-        return $this->retrieveEeaCountries($form);
-    }
-
-    /**
-     * Perform query to retrieve EEA country list for dropdown on add/edit
-     *
-     * @param $form
-     * @return mixed
-     */
-    protected function retrieveEeaCountries($form)
-    {
-        $response = $this->handleQuery(CountrySelectListDTO::create([
-            'isEeaState' => 1,
-        ]));
-
-        if ($response->isOk()) {
-            $data = $response->getResult();
-        } else {
-            $this->handleErrors($response->getResult());
-            $data['results'] = [];
-        }
-
-        $form->get('permitStockDetails')
-            ->get('country')
-            ->setValueOptions(
-                PermitStockMapper::mapCountryOptions($data['results'])
-            );
 
         return $form;
     }
