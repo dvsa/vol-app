@@ -18,7 +18,7 @@ class IrhpFeeTest extends TestCase
 
     private $form;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->irhpFee = new IrhpFee();
 

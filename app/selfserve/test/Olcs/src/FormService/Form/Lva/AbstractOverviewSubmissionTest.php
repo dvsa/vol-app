@@ -22,7 +22,7 @@ class AbstractOverviewSubmissionTest extends MockeryTestCase
     /** @var  m\MockInterface | \Common\Service\Helper\FormHelperService */
     private $mockFormHlp;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->mockForm = m::mock(\Zend\Form\FormInterface::class);
 

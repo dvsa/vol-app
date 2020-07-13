@@ -19,7 +19,7 @@ class AvailableBilateralStocksTest extends \Mockery\Adapter\Phpunit\MockeryTestC
 
     public $sut;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->translationHelperService = m::mock(TranslationHelperService::class);
         $this->sut = new AvailableBilateralStocks($this->translationHelperService);

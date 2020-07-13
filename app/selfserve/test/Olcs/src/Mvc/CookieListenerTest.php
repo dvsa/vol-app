@@ -29,7 +29,7 @@ class CookieListenerTest extends MockeryTestCase
 
     protected $placeholder;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->cookieReader = m::mock(CookieReader::class);
         $this->placeholder = m::mock(Placeholder::class);

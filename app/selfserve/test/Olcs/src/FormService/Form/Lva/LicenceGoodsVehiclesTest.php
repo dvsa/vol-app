@@ -27,7 +27,7 @@ class LicenceGoodsVehiclesTest extends MockeryTestCase
 
     protected $fsm;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->fh = m::mock(FormHelperService::class)->makePartial();
         $this->fsm = m::mock(FormServiceManager::class)->makePartial();

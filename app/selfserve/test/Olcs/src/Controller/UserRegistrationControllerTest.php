@@ -19,7 +19,7 @@ class UserRegistrationControllerTest extends TestCase
     protected $sut;
     protected $sm;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->sut = m::mock(Sut::class)
             ->makePartial()

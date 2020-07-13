@@ -14,7 +14,7 @@ class IrhpApplicationViewGeneratorTest extends MockeryTestCase
 {
     private $irhpApplicationViewGenerator;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->irhpApplicationViewGenerator = new IrhpApplicationViewGenerator();
     }

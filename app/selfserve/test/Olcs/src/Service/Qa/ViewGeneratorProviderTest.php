@@ -16,7 +16,7 @@ class ViewGeneratorProviderTest extends MockeryTestCase
 
     private $viewGeneratorProvider;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->irhpApplicationViewGenerator = m::mock(ViewGeneratorInterface::class);
 

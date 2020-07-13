@@ -16,7 +16,7 @@ class LicencesAvailableTest extends TestCase
 {
     private $licencesAvailable;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->licencesAvailable = new LicencesAvailable();
     }

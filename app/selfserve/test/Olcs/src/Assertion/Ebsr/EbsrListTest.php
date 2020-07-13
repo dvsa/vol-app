@@ -17,7 +17,7 @@ class EbsrListTest extends MockeryTestCase
 
     protected $auth;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->sut = new Sut();
         $this->auth = m::mock(AuthorizationService::class);

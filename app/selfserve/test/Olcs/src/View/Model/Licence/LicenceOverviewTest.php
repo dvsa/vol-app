@@ -92,7 +92,7 @@ class LicenceOverviewTest extends \PHPUnit\Framework\TestCase
         ];
         $overview = new LicenceOverview($data);
         $this->assertEquals($overview->continuationDetailId, 12345);
-        $this->assertAttributeEquals($this->returnExpectedInfoBoxLinks(), 'infoBoxLinks', $overview);
+        $this->assertEquals($this->returnExpectedInfoBoxLinks(), $overview->getInfoBoxLinks());
     }
 
     /**
@@ -113,7 +113,7 @@ class LicenceOverviewTest extends \PHPUnit\Framework\TestCase
 
         $overview = new LicenceOverview($data);
         $overview->addInfoBoxLinks($additionalLinks);
-        $this->assertAttributeEquals($expectedLinks, 'infoBoxLinks', $overview);
+        $this->assertEquals($expectedLinks, $overview->getInfoBoxLinks());
     }
 
     public function testSetInfoBoxLinks()

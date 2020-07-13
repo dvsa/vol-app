@@ -33,7 +33,7 @@ class ApplicationTaxiPhvTest extends MockeryTestCase
      */
     private $formHelper;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->formHelper = m::mock(FormHelperService::class);
 

@@ -8,16 +8,11 @@
         {
             "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS",
             "type": "composer"
-        },
-        {
-            "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy",
-            "type": "composer"
         }
     ],
     "require": {
-        "php": ">=7.1",
+        "php": ">=7.2",
         "ext-intl": "*",
-        "zendframework/zend-db": "^2.5",
         "zendframework/zend-di": "^2.5",
         "zendframework/zend-eventmanager": "^2.5",
         "zendframework/zend-filter": "^2.5",
@@ -35,7 +30,6 @@
         "zendframework/zend-validator": "^2.5",
         "zendframework/zend-view": "^2.5",
         "doctrine/annotations": "^1.8",
-        "symfony/filesystem": "~3.0.0",
         "zf-commons/zfc-rbac": "~2.5.0",
         "olcs/olcs-transfer": "~4.206.0",
         "olcs/olcs-utils": "~4.206.0",
@@ -46,12 +40,7 @@
     },
     "require-dev": {
         "olcs/olcs-devtools": "~4.206.0",
-        "mikey179/vfsstream": "^1.4.0",
-        "olcs/olcs-testhelpers": "~4.206.0",
-        "phpstan/phpstan-shim": "^0.10.5",
-        "phpstan/phpstan-mockery": "^0.10.2",
-        "mockery/mockery": "1.2.4",
-        "johnkary/phpunit-speedtrap": "^3.0"
+        "olcs/olcs-testhelpers": "~4.206.0"
     },
     "autoload": {
         "classmap": [
@@ -66,7 +55,7 @@
         "preferred-install": "dist",
         "secure-http": false,
         "platform": {
-            "php": "7.1.16"
+            "php": "7.2.31"
         }
     },
     "scripts": {

@@ -43,7 +43,7 @@ class UserControllerTest extends MockeryTestCase
     /** @var  m\MockInterface */
     private $mockGuidanceHelper;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->sut = m::mock(\Olcs\Controller\UserController::class)
             ->makePartial()
@@ -83,7 +83,7 @@ class UserControllerTest extends MockeryTestCase
         $this->mockSl->shouldReceive('get')->with('Helper\Guidance')->andReturn($this->mockGuidanceHelper);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         m::close();
     }

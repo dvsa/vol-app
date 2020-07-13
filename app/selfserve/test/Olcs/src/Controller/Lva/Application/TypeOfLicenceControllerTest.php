@@ -12,7 +12,7 @@ use Mockery as m;
  */
 class TypeOfLicenceControllerTest extends AbstractLvaControllerTestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -24,7 +24,7 @@ class PlaceholderTest extends MockeryTestCase
      */
     private $viewPlaceholder;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->viewPlaceholder = new ViewPlaceholder();
 

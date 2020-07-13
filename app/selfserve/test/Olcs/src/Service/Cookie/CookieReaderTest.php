@@ -22,7 +22,7 @@ class CookieReaderTest extends MockeryTestCase
 
     private $sut;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->cookieState = m::mock(CookieState::class);
 

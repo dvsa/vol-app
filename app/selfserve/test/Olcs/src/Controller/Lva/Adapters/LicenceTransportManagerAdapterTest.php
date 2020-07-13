@@ -26,7 +26,7 @@ class LicenceTransportManagerAdapterTest extends MockeryTestCase
     /** @var  VariationLvaService|\Mockery\MockInterface */
     protected $mockLvaVariationSrv;
 
-    public function setUp()
+    public function setUp(): void
     {
         /** @var TransferAnnotationBuilder $mockAnnotationBuilder */
         $mockAnnotationBuilder = m::mock(TransferAnnotationBuilder::class);
