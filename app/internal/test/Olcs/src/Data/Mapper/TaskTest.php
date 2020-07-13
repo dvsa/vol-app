@@ -16,7 +16,7 @@ class TaskTest extends MockeryTestCase
     /** @var  m\MockInterface | FlashMessengerHelperService */
     private $mockFlashMsg;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->mockFlashMsg = m::mock(FlashMessengerHelperService::class);
     }

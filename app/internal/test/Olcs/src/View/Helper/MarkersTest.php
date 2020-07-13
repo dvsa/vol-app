@@ -38,7 +38,7 @@ class MarkersTest extends MockeryTestCase
         }
 
         if (isset($expected['contains'])) {
-            $this->assertContains($expected['contains'], $result);
+            $this->assertStringContainsString($expected['contains'], $result);
         }
     }
 

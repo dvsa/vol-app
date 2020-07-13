@@ -17,7 +17,7 @@ class ListDataTraitTest extends MockeryTestCase
     /** @var  m\MockInterface */
     private $mockResponse;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->mockResponse = m::mock(\Common\Service\Cqrs\Response::class);
 

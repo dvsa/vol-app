@@ -21,11 +21,10 @@ class SubmissionSectionsTest extends TestCase
     public function testGetInputSpecification()
     {
         $sut = new SubmissionSections();
-        $this->assertInternalType('array', $sut->getInputSpecification());
+        $this->assertIsArray($sut->getInputSpecification());
         $this->assertArrayHasKey('name', $sut->getInputSpecification());
         $this->assertArrayHasKey('filters', $sut->getInputSpecification());
     }
-
 
     /**
      * @dataProvider getSubmissionSectionsProvider

@@ -23,7 +23,7 @@ class ImpoundingLegislation extends RefData implements FactoryInterface
      *
      * @return array
      */
-    public function fetchListOptions($context, $useGroups = false)
+    public function fetchListOptions($context = null, $useGroups = false)
     {
         $params = empty($context)? $this->getLicenceContext() : $context;
 

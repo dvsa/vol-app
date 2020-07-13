@@ -18,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class BusProcessingRegistrationHistoryControllerTest extends MockeryTestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         $this->pluginManagerHelper = new ControllerPluginManagerHelper();
 

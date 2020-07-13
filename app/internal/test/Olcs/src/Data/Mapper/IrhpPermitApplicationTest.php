@@ -9,7 +9,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 class IrhpPermitApplicationTest extends MockeryTestCase
 {
-    public function setup()
+    public function setUp(): void
     {
         $this->sut = new \Olcs\Data\Mapper\IrhpPermitApplication();
     }

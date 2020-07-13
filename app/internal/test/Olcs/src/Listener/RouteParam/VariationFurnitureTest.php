@@ -38,7 +38,7 @@ class VariationFurnitureTest extends TestCase
     protected $mockQuerySender;
     protected $mockRouter;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->mockViewHelperManager = m::mock(HelperPluginManager::class);
         $this->mockQuerySender = m::mock(QuerySender::class);

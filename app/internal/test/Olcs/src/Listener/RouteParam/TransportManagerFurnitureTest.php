@@ -37,7 +37,7 @@ class TransportManagerFurnitureTest extends TestCase
     protected $mockQuerySender;
     protected $mockCommandSender;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->mockViewHelperManager = m::mock(HelperPluginManager::class);
         $this->mockQuerySender = m::mock(QuerySender::class);

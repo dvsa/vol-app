@@ -32,7 +32,7 @@ class HeaderSearchTest extends TestCase
     /** @var  \Zend\View\HelperPluginManager | m\MockInterface  */
     private $mockViewHlprMngr;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->mockFormHlp = m::mock(\Common\Service\Helper\FormHelperService::class);
         $this->mockSearchSrv = m::mock(\Common\Service\Data\Search\Search::class);

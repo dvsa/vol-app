@@ -28,7 +28,7 @@ class TransportManagerMarkerTest extends MockeryTestCase
     /** @var m\MockInterface|\Olcs\Service\Marker\MarkerService  */
     private $mockMarkerService;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->sut = new TransportManagerMarker();
 

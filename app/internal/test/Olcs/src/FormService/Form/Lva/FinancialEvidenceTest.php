@@ -24,7 +24,7 @@ class FinancialEvidenceTest extends MockeryTestCase
     /** @var  m\MockInterface */
     protected $translator;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
         $this->fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();

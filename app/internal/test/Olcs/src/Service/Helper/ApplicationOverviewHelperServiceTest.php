@@ -24,7 +24,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
 
     protected $sm;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

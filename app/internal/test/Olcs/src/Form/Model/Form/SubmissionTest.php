@@ -22,7 +22,7 @@ class SubmissionTest extends AbstractFormValidationTestCase
      * powered by Javascript.  It's dynamic and also dynamically populated.
      * See this link for example: http://olcs-internal.olcs.gov.uk/case/28/submission/add/
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->getServiceManager()->get('FormElementManager')->setFactory(
             'SubmissionSections',

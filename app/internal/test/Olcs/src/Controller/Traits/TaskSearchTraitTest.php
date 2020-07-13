@@ -19,7 +19,7 @@ class TaskSearchTraitTest extends MockeryTestCase
     /** @var \OlcsTest\Controller\Traits\Stub\StubTaskSearchTrait */
     private $sut;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->sut = m::mock(\OlcsTest\Controller\Traits\Stub\StubTaskSearchTrait::class)
             ->makePartial()

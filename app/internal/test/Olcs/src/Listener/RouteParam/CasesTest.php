@@ -14,7 +14,7 @@ use Mockery as m;
  */
 class CasesTest extends MockeryTestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         $this->sut = new Cases();
 

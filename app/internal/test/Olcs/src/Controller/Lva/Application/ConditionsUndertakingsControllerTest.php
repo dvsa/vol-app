@@ -17,7 +17,7 @@ class ConditionsUndertakingsControllerTest extends AbstractLvaControllerTestCase
 {
     protected $sut;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

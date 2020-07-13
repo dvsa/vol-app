@@ -32,7 +32,7 @@ class NavigationToggleTest extends TestCase
     /** @var  IdentityProvider | m\MockInterface */
     private $mockIdentityProvider;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->mockIdentityProvider = m::mock(IdentityProvider::class);
         $this->mockNavigation = m::mock(Navigation::class);

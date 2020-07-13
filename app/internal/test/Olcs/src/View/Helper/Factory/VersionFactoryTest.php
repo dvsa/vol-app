@@ -25,7 +25,7 @@ class VersionFactoryTest extends TestCase
      */
     protected $config = [];
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->serviceManager = Bootstrap::getRealServiceManager();
         $this->config = $this->serviceManager->get('config');
