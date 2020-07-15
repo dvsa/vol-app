@@ -3,7 +3,6 @@
 namespace Permits\Controller\Config\ConditionalDisplay;
 
 use Permits\Controller\Config\DataSource\BilateralCountryAccessible;
-use Permits\Controller\Config\DataSource\BilateralFeesByCountry;
 use Permits\Controller\Config\DataSource\LicencesAvailable;
 use Permits\Controller\Config\DataSource\AvailableTypes;
 use Permits\Controller\Config\DataSource\AvailableYears;
@@ -144,12 +143,6 @@ class ConditionalDisplayConfig
             'source' => IrhpAppDataSource::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_PERMITS,
             'key' => 'isNotYetSubmitted',
-            'value' => true
-        ],
-        [
-            'source' => BilateralFeesByCountry::DATA_KEY,
-            'route' => IrhpApplicationSection::ROUTE_PERMITS,
-            'key' => 'hasFees',
             'value' => true
         ],
         [

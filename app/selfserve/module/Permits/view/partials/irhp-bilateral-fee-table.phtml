@@ -16,15 +16,15 @@
     <tbody class="govuk-table__body">
     <tr class="govuk-table__row">
         <td class="govuk-table__cell"><?php echo $this->escapeHtml($this->translate('permits.irhp.bilateral.cabotage.journey')); ?></td>
-        <td class="govuk-table__cell"><?php echo $this->currencyFormatter($this->data['countryFee']['cabotage']['total']); ?></td>
+        <td class="govuk-table__cell"><?php echo $this->currencyFormatter(8); ?></td>
     </tr>
     <tr class="govuk-table__row">
         <td class="govuk-table__cell"><?php echo $this->escapeHtml($this->translate('permits.irhp.bilateral.multi.journey')); ?></td>
-        <td class="govuk-table__cell"><?php echo $this->currencyFormatter($this->data['countryFee']['multi']['total']); ?></td>
+        <td class="govuk-table__cell"><?php echo $this->currencyFormatter(50); ?></td>
     </tr>
     <tr class="govuk-table__row">
         <td class="govuk-table__cell"><?php echo $this->escapeHtml($this->translate('permits.irhp.bilateral.single.journey')); ?></td>
-        <td class="govuk-table__cell"><?php echo $this->currencyFormatter($this->data['countryFee']['single']['total']); ?></td>
+        <td class="govuk-table__cell"><?php echo $this->currencyFormatter(8); ?></td>
     </tr>
     </tbody>
 </table>

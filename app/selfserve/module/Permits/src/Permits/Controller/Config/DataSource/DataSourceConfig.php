@@ -84,7 +84,6 @@ class DataSourceConfig
 
     const IRHP_APP_ESSENTIAL_INFORMATION = [
         IrhpAppDataSource::class => [],
-        BilateralFeesByCountry::class => [],
         BilateralCountryAccessible::class => [],
     ];
 
