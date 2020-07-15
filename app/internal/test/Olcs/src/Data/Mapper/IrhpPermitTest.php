@@ -67,11 +67,11 @@ class IrhpPermitTest extends MockeryTestCase
                     'irhpPermitRange' => [
                         'countrys' => [
                             [
-                                'countryDesc' => 'Austria' ,
+                                'countryDesc' => 'Austria',
                                 'id' => 'AT'
                             ],
                             [
-                                'countryDesc' => 'Russian Federation' ,
+                                'countryDesc' => 'Russia',
                                 'id' => 'RU'
                             ]
                         ],
@@ -91,11 +91,11 @@ class IrhpPermitTest extends MockeryTestCase
                     'irhpPermitRange' => [
                         'countrys' => [
                             [
-                                'countryDesc' => 'Austria' ,
+                                'countryDesc' => 'Austria',
                                 'id' => 'AT'
                             ],
                             [
-                                'countryDesc' => 'Russian Federation' ,
+                                'countryDesc' => 'Russia',
                                 'id' => 'RU'
                             ]
                         ],
@@ -109,7 +109,7 @@ class IrhpPermitTest extends MockeryTestCase
                             'date' => '2019-04-01 00:00:00.000000'
                         ]
                     ],
-                    'restrictedCountries' => '<div class="article"><ul><li>Austria</li><li>Russian Federation</li></ul></div>'
+                    'restrictedCountries' => '<div class="article"><ul><li>Austria</li><li>Russia</li></ul></div>'
                 ]
             ]
         ];
