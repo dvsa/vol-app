@@ -6,7 +6,11 @@
             </h1>
             <div class="govuk-panel__body">
                 <?php echo $this->escapeHtml($this->translate('permits.page.confirmation.reference')); ?>
-                <br/><strong><?php echo $this->escapeHtml($data['application']['applicationRef']); ?></strong>
+                <br/>
+                <span class="visually-hidden">
+                    <?php echo($this->escapeHtml($this->translate('permits.application.overview.application.reference'))); ?>
+                </span>
+                <strong><?php echo $this->escapeHtml($data['application']['applicationRef']); ?></strong>
             </div>
         </div>
         <?php if (!empty($data['receiptUrl'])) { ?>
