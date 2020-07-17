@@ -21,6 +21,6 @@
 
         <?php echo $this->partial('partials/single-question-fieldset', ['data' => $data, 'form' => $form]); ?>
 
-        <?php echo isset($data['cancelUri']) ? $this->permitsBackLink('cancel.button', $data['cancelUri']) : ''; ?>
+        <p><?php echo isset($data['cancelUri']) ? $this->permitsBackLink('cancel.button', $data['cancelUri']) : ''; ?></p>
     </div>
 </div>
