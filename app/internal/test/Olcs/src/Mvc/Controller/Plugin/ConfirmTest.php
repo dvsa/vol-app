@@ -15,31 +15,51 @@ class ConfirmTest extends TestCase
 
     /**
      * @group confirmPlugin
+     * @dataProvider dpTestInvokeGenerateForm
      */
-    public function testInvokeGenerateForm()
+    public function testInvokeGenerateForm($confirmLabel, $cancelLabel, $defaultLabelParams)
     {
         $plugin = new \Olcs\Mvc\Controller\Plugin\Confirm();
 
-        $mockForm = m::mock('Zend\Form\Form')
+        $mockFormCustomLabels = m::mock('Zend\Form\Form')
             ->shouldReceive('getAttribute')
             ->with('action')
+            ->twice()
             ->andReturn('action')
             ->shouldReceive('setAttribute')
             ->with('action', 'action?foo=bar')
             ->shouldReceive('get')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('setValue')
-                ->with('custom')
-                ->getMock()
-            )
+            ->with('custom')
+            ->once()
+            ->andReturnSelf()
+            ->shouldReceive('setValue')
+            ->with('custom')
+            ->shouldReceive('get')
+            ->with('form-actions')
+            ->twice()
+            ->andReturnSelf()
+            ->shouldReceive('get')
+            ->with('confirm')
+            ->once()
+            ->andReturnSelf()
+            ->shouldReceive('setLabel')
+            ->with($confirmLabel)
+            ->once()
+            ->andReturnSelf()
+            ->shouldReceive('get')
+            ->with('cancel')
+            ->once()
+            ->andReturnSelf()
+            ->shouldReceive('setLabel')
+            ->with($cancelLabel)
+            ->once()
             ->getMock();
 
         $controller = m::mock('\Olcs\Controller\Cases\Submission\SubmissionController[getForm]');
         $controller
             ->shouldReceive('getForm')
             ->with('Confirm')
-            ->andReturn($mockForm)
+            ->andReturn($mockFormCustomLabels)
             ->shouldReceive('params')
             ->andReturn(
                 m::mock()
@@ -51,9 +71,21 @@ class ConfirmTest extends TestCase
             );
 
         $plugin->setController($controller);
-        $result = $plugin->__invoke('some message', true, 'custom');
+        if ($defaultLabelParams) {
+            $result = $plugin->__invoke('some message', true, 'custom');
+        } else {
+            $result = $plugin->__invoke('some message', true, 'custom', $confirmLabel, $cancelLabel);
+        }
 
         $this->assertInstanceOf('\Zend\View\Model\ViewModel', $result);
+    }
+
+    public function dpTestInvokeGenerateForm()
+    {
+        return [
+            ['Continue', 'Cancel', true],
+            ['customConfirm', 'customCancel', false],
+        ];
     }
 
     /**
@@ -108,6 +140,25 @@ class ConfirmTest extends TestCase
         $mockForm = m::mock('Zend\Form\Form');
         $mockForm->shouldReceive('setData')->withAnyArgs()->andReturn($mockForm);
         $mockForm->shouldReceive('isValid')->andReturn(false);
+        $mockForm->shouldReceive('get')
+            ->with('form-actions')
+            ->twice()
+            ->andReturnSelf()
+            ->shouldReceive('get')
+            ->with('confirm')
+            ->once()
+            ->andReturnSelf()
+            ->shouldReceive('setLabel')
+            ->with('Continue')
+            ->once()
+            ->andReturnSelf()
+            ->shouldReceive('get')
+            ->with('cancel')
+            ->once()
+            ->andReturnSelf()
+            ->shouldReceive('setLabel')
+            ->with('Cancel')
+            ->once();
 
         $mockParams = m::mock('\StdClass[fromPost]');
         $mockParams

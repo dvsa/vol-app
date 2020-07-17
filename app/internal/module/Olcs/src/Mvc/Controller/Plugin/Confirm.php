@@ -11,7 +11,7 @@ use Zend\View\Model\ViewModel;
  */
 class Confirm extends AbstractPlugin
 {
-    public function __invoke($label, $setTerminal = false, $custom = '')
+    public function __invoke($label, $setTerminal = false, $custom = '', string $confirmBtnLabel = 'Continue', string $cancelBtnLabel = 'Cancel')
     {
         $form = $this->getController()->getForm('Confirm');
 
@@ -37,6 +37,9 @@ class Confirm extends AbstractPlugin
             $form->get('custom')->setValue($custom);
         }
         $view = new ViewModel();
+
+        $form->get('form-actions')->get('confirm')->setLabel($confirmBtnLabel);
+        $form->get('form-actions')->get('cancel')->setLabel($cancelBtnLabel);
 
         $view->setVariable('form', $form);
         $view->setVariable('label', $label);
