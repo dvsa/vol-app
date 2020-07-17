@@ -24,6 +24,6 @@
         <h3><?php echo $this->escapeHtml($this->translate('permits.page.irhp.awaiting-fee.fee-summary')); ?></h3>
         <?php echo $this->partial('partials/summary-list', ['data' => $data[IrhpApplication::DATA_KEY]['mappedFeeData']]); ?>
         <?php echo $this->form($form); ?>
-        <?php echo $this->permitsBackLink('permits.link.cancel.return.to.dashboard', IrhpApplicationSection::ROUTE_PERMITS); ?>
+        <p><?php echo $this->permitsBackLink('permits.link.cancel.return.to.dashboard', IrhpApplicationSection::ROUTE_PERMITS); ?></p>
     </div>
 </div>
