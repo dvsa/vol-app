@@ -131,9 +131,6 @@ class AvailableBilateralStocksTest extends \Mockery\Adapter\Phpunit\MockeryTestC
             [
                 'value' => 12,
                 'label' => 'i.am.a.key',
-                'label_attributes' => [
-                    'class' => 'govuk-label govuk-radios__label govuk-label--s',
-                ],
                 'attributes' => [
                     'id' => 'stock'
                 ]
@@ -141,9 +138,6 @@ class AvailableBilateralStocksTest extends \Mockery\Adapter\Phpunit\MockeryTestC
             [
                 'value' => 13,
                 'label' => 'i.am.another.key',
-                'label_attributes' => [
-                    'class' => 'govuk-label govuk-radios__label govuk-label--s',
-                ],
             ]
         ];
 
