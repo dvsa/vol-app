@@ -76,7 +76,6 @@ class AvailableBilateralStocks
             $valueOptions[] = [
                 'value' => $stock['id'],
                 'label' => $stock['periodNameKey'],
-                'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
             ];
         }
 
@@ -137,6 +136,7 @@ class AvailableBilateralStocks
      * @param array $routeParams
      * @param array $formData
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function processRedirectParams(array $response, array $routeParams, array $formData)
     {
