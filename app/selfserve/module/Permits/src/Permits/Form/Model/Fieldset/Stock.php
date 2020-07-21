@@ -11,7 +11,6 @@ class Stock
 {
     /**
      * @Form\Name("stock")
-     * @Form\Required(true)
      * @Form\Attributes({
      *     "radios_wrapper_attributes": {"data-module":"radios"}
      * })
