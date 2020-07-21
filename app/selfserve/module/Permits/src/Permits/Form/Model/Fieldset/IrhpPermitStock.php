@@ -11,7 +11,6 @@ class IrhpPermitStock
 {
     /**
      * @Form\Name("irhpPermitStock")
-     * @Form\Required(true)
      * @Form\Attributes({
      *     "radios_wrapper_attributes": {"data-module":"radios"}
      * })

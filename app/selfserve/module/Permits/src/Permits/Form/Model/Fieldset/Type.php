@@ -11,7 +11,6 @@ class Type
 {
     /**
      * @Form\Name("type")
-     * @Form\Required(true)
      * @Form\Attributes({
      *     "radios_wrapper_attributes": {"data-module":"radios"}
      * })
