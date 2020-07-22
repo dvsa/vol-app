@@ -6,26 +6,17 @@
  */
 namespace Admin\Controller;
 
-use Common\Controller\Interfaces\ToggleAwareInterface;
-use Common\FeatureToggle;
 use Dvsa\Olcs\Transfer\Command\Permits\QueueAcceptScoring;
 use Dvsa\Olcs\Transfer\Command\Permits\QueueRunScoring;
 use Dvsa\Olcs\Transfer\Query\Permits\StockOperationsPermitted;
-use Admin\Controller\AbstractIrhpPermitAdminController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
 use Zend\Escaper\Escaper;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 
-class IrhpPermitScoringController extends AbstractIrhpPermitAdminController implements LeftViewProvider, ToggleAwareInterface
+class IrhpPermitScoringController extends AbstractIrhpPermitAdminController implements LeftViewProvider
 {
-    protected $toggleConfig = [
-        'default' => [
-            FeatureToggle::ADMIN_PERMITS
-        ],
-    ];
-
     protected $navigationId = 'admin-dashboard/admin-permits';
     protected $tableViewTemplate = 'pages/irhp-permit-scoring/index';
 

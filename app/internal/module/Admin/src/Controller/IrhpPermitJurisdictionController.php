@@ -2,10 +2,6 @@
 
 namespace Admin\Controller;
 
-use Common\Controller\Interfaces\ToggleAwareInterface;
-use Common\FeatureToggle;
-
-use Admin\Controller\AbstractIrhpPermitAdminController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitJurisdiction\GetList as ListDto;
 use Dvsa\Olcs\Transfer\Command\IrhpPermitJurisdiction\Update as Update;
@@ -15,16 +11,8 @@ use Zend\Http\Response;
 /**
  * IRHP Permits Jurisdiction Controller
  */
-class IrhpPermitJurisdictionController extends AbstractIrhpPermitAdminController implements
-    LeftViewProvider,
-    ToggleAwareInterface
+class IrhpPermitJurisdictionController extends AbstractIrhpPermitAdminController implements LeftViewProvider
 {
-    protected $toggleConfig = [
-        'default' => [
-            FeatureToggle::ADMIN_PERMITS
-        ],
-    ];
-
     protected $tableName = 'admin-irhp-permit-jurisdiction';
 
     protected $listVars = ['irhpPermitStock' => 'stockId'];
