@@ -10,7 +10,6 @@ use Zend\Http\PhpEnvironment\Request as HttpRequest;
 use Zend\Mvc\MvcEvent;
 use Zend\Navigation\Navigation as ZendNavigation;
 use Common\Service\Cqrs\Query\QuerySender;
-use Common\FeatureToggle;
 use Common\Rbac\User as RbacUser;
 use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 
@@ -102,10 +101,6 @@ class Navigation implements ListenerAggregateInterface
      */
     private function togglePermitsMenus(bool $shouldShowPermitsTab): void
     {
-        if ($shouldShowPermitsTab) {
-            $shouldShowPermitsTab = $this->querySender->featuresEnabled([FeatureToggle::SELFSERVE_PERMITS]);
-        }
-
         $this->navigation->findBy('id', 'dashboard-permits')->setVisible($shouldShowPermitsTab);
     }
 

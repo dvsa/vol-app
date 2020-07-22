@@ -2,23 +2,17 @@
 
 namespace Permits\Controller;
 
-use Common\Controller\Interfaces\ToggleAwareInterface;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\Withdraw;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
-use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
 use Permits\View\Helper\IrhpApplicationSection;
 
-class IrhpDeclineController extends AbstractSelfserveController implements ToggleAwareInterface
+class IrhpDeclineController extends AbstractSelfserveController
 {
-    protected $toggleConfig = [
-        'default' => FeatureToggleConfig::SELFSERVE_PERMITS_ENABLED,
-    ];
-
     protected $dataSourceConfig = [
         'default' => DataSourceConfig::IRHP_APP,
     ];

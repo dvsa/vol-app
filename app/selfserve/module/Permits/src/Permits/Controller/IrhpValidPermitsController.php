@@ -1,19 +1,13 @@
 <?php
 namespace Permits\Controller;
 
-use Common\Controller\Interfaces\ToggleAwareInterface;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\DataSource\IrhpPermitType;
 use Permits\Controller\Config\Table\TableConfig;
-use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 
-class IrhpValidPermitsController extends AbstractSelfserveController implements ToggleAwareInterface
+class IrhpValidPermitsController extends AbstractSelfserveController
 {
-    protected $toggleConfig = [
-        'default' => FeatureToggleConfig::SELFSERVE_PERMITS_ENABLED,
-    ];
-
     protected $dataSourceConfig = [
         'generic' => DataSourceConfig::IRHP_VALID,
     ];

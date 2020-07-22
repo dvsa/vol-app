@@ -2,21 +2,15 @@
 
 namespace Permits\Controller;
 
-use Common\Controller\Interfaces\ToggleAwareInterface;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
-use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Data\Mapper\IrhpApplicationFeeSummary;
 use Permits\View\Helper\IrhpApplicationSection;
 
-class IrhpUnderConsiderationController extends AbstractSelfserveController implements ToggleAwareInterface
+class IrhpUnderConsiderationController extends AbstractSelfserveController
 {
-    protected $toggleConfig = [
-        'default' => FeatureToggleConfig::SELFSERVE_PERMITS_ENABLED,
-    ];
-
     protected $dataSourceConfig = [
         'default' => DataSourceConfig::IRHP_APP_UNDER_CONSIDERATION,
     ];

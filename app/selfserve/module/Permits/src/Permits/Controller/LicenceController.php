@@ -1,24 +1,18 @@
 <?php
 namespace Permits\Controller;
 
-use Common\Controller\Interfaces\ToggleAwareInterface;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\Create;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\DataSource\LicencesAvailable;
-use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
 use Permits\View\Helper\IrhpApplicationSection;
 
-class LicenceController extends AbstractSelfserveController implements ToggleAwareInterface
+class LicenceController extends AbstractSelfserveController
 {
-    protected $toggleConfig = [
-        'default' => FeatureToggleConfig::SELFSERVE_PERMITS_ENABLED,
-    ];
-
     protected $dataSourceConfig = [
         'question' => DataSourceConfig::PERMIT_APP_ADD_LICENCE,
     ];

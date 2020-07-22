@@ -2,7 +2,6 @@
 
 namespace Permits\Controller;
 
-use Common\Controller\Interfaces\ToggleAwareInterface;
 use Common\Controller\Traits\GenericReceipt;
 use Common\RefData;
 use Common\Service\Cqrs\Response as CqrsResponse;
@@ -17,7 +16,6 @@ use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
 use Permits\Controller\Config\DataSource\IrhpFeeBreakdown as IrhpFeeBreakdownDataSource;
-use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
 use Permits\Controller\Config\Table\TableConfig;
@@ -26,7 +24,7 @@ use Permits\View\Helper\IrhpApplicationSection;
 use Zend\Http\Response as HttpResponse;
 use Zend\View\Model\ViewModel;
 
-class IrhpApplicationFeeController extends AbstractSelfserveController implements ToggleAwareInterface
+class IrhpApplicationFeeController extends AbstractSelfserveController
 {
     use ExternalControllerTrait;
     use GenericReceipt;
@@ -35,10 +33,6 @@ class IrhpApplicationFeeController extends AbstractSelfserveController implement
     private const FEE_BREAKDOWN_TABLES = [
         RefData::IRHP_BILATERAL_PERMIT_TYPE_ID => 'irhp-fee-breakdown-bilateral',
         RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID => 'irhp-fee-breakdown-multilateral',
-    ];
-
-    protected $toggleConfig = [
-        'default' => FeatureToggleConfig::SELFSERVE_PERMITS_ENABLED,
     ];
 
     protected $dataSourceConfig = [

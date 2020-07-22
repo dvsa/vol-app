@@ -1,20 +1,14 @@
 <?php
 namespace Permits\Controller;
 
-use Common\Controller\Interfaces\ToggleAwareInterface;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
-use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\View\Helper\BackToOverview;
 use Permits\View\Helper\IrhpApplicationSection;
 
-class EssentialInformationController extends AbstractSelfserveController implements ToggleAwareInterface
+class EssentialInformationController extends AbstractSelfserveController
 {
-    protected $toggleConfig = [
-        'default' => FeatureToggleConfig::SELFSERVE_PERMITS_ENABLED,
-    ];
-
     protected $dataSourceConfig = [
         'default' => DataSourceConfig::IRHP_APP_ESSENTIAL_INFORMATION,
     ];

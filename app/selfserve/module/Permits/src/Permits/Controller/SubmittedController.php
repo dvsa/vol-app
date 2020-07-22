@@ -1,21 +1,15 @@
 <?php
 namespace Permits\Controller;
 
-use Common\Controller\Interfaces\ToggleAwareInterface;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
-use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\View\Helper\EcmtSection;
 use Permits\View\Helper\IrhpApplicationSection;
 
-class SubmittedController extends AbstractSelfserveController implements ToggleAwareInterface
+class SubmittedController extends AbstractSelfserveController
 {
-    protected $toggleConfig = [
-        'default' => FeatureToggleConfig::SELFSERVE_PERMITS_ENABLED,
-    ];
-
     protected $dataSourceConfig = [
         'default' => DataSourceConfig::PERMIT_APP,
         'irhp-submitted' => DataSourceConfig::IRHP_APP,

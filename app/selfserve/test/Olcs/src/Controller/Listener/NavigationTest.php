@@ -2,7 +2,6 @@
 
 namespace OlcsTest\Listener;
 
-use Common\FeatureToggle;
 use Common\Rbac\User as RbacUser;
 use Common\Service\Cqrs\Query\QuerySender;
 use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
@@ -82,7 +81,7 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
     /**
      * @dataProvider dpDispatchNoReferer
      */
-    public function testOnDispatchWithNoReferal($ecmtEnabled, $eligibleForPermits, $tabDisplayed)
+    public function testOnDispatchWithNoReferal($eligibleForPermits)
     {
         $dashboardPermitsKey = 'dashboard-permits';
         $dashboardPermitsPage = new Uri();
@@ -101,12 +100,6 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
             ->once()
             ->andReturn($httpResponse);
 
-        //only need to check feature is enabled if the user is eligible in the first place
-        $this->mockQuerySender->shouldReceive('featuresEnabled')
-            ->with([FeatureToggle::SELFSERVE_PERMITS])
-            ->times($eligibleForPermits ? 1 : 0)
-            ->andReturn($ecmtEnabled);
-
         $this->mockNavigation
             ->shouldReceive('findBy')
             ->with('id', $dashboardPermitsKey)
@@ -123,7 +116,7 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->sut->onDispatch($mockEvent);
 
         $this->assertEquals(
-            $tabDisplayed,
+            $eligibleForPermits,
             $this->mockNavigation->findBy('id', $dashboardPermitsKey)->getVisible()
         );
     }
@@ -131,17 +124,12 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
     public function dpDispatchNoReferer()
     {
         return [
-            [true, true, true],
-            [false, false, false],
-            [true, false, false],
-            [false, true, false]
+            [true],
+            [false],
         ];
     }
 
-    /**
-     * @dataProvider dpDispatchWithMatchedReferer
-     */
-    public function testOnDispatchWithGovUkReferalMatch($ecmtEnabled, $tabDisplayed)
+    public function testOnDispatchWithGovUkReferalMatch()
     {
         $dashboardPermitsKey = 'dashboard-permits';
         $dashboardPermitsPage = new Uri();
@@ -153,11 +141,6 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
         $referer->shouldReceive('getUri')->once()->withNoArgs()->andReturn($uri);
         $request = m::mock(HttpRequest::class);
         $request->shouldReceive('getHeader')->once()->with('referer')->andReturn($referer);
-
-        $this->mockQuerySender->shouldReceive('featuresEnabled')
-            ->once()
-            ->with([FeatureToggle::SELFSERVE_PERMITS])
-            ->andReturn($ecmtEnabled);
 
         $this->mockNavigation
             ->shouldReceive('findBy')
@@ -171,24 +154,15 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
 
         $this->sut->onDispatch($mockEvent);
 
-        $this->assertEquals(
-            $tabDisplayed,
+        $this->assertTrue(
             $this->mockNavigation->findBy('id', $dashboardPermitsKey)->getVisible()
         );
-    }
-
-    public function dpDispatchWithMatchedReferer()
-    {
-        return [
-            [true, true],
-            [false, false],
-        ];
     }
 
     /**
      * @dataProvider dpDispatchWithoutMatchedReferer
      */
-    public function testOnDispatchWithNoGovUkReferal($ecmtEnabled, $eligibleForPermits, $tabDisplayed)
+    public function testOnDispatchWithNoGovUkReferal($eligibleForPermits)
     {
         $dashboardPermitsKey = 'dashboard-permits';
         $dashboardPermitsPage = new Uri();
@@ -210,11 +184,6 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
             ->once()
             ->andReturn($httpResponse);
 
-        $this->mockQuerySender->shouldReceive('featuresEnabled')
-            ->times($eligibleForPermits ? 1 : 0)
-            ->with([FeatureToggle::SELFSERVE_PERMITS])
-            ->andReturn($ecmtEnabled);
-
         $this->mockNavigation
             ->shouldReceive('findBy')
             ->twice()
@@ -234,7 +203,7 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->sut->onDispatch($mockEvent);
 
         $this->assertEquals(
-            $tabDisplayed,
+            $eligibleForPermits,
             $this->mockNavigation->findBy('id', $dashboardPermitsKey)->getVisible()
         );
     }
@@ -242,10 +211,8 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
     public function dpDispatchWithoutMatchedReferer()
     {
         return [
-            [true, true, true],
-            [false, false, false],
-            [true, false, false],
-            [false, true, false]
+            [true],
+            [false],
         ];
     }
 }
