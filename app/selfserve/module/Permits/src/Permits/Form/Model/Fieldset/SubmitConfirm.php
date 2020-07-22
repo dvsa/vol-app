@@ -13,7 +13,7 @@ class SubmitConfirm
      * @Form\Name("SubmitButton")
      * @Form\Attributes({
      *     "type":"submit",
-     *     "class":"govuk-button",
+     *     "class":"action--primary large",
      *     "role":"button"
      * })
      * @Form\Options({
