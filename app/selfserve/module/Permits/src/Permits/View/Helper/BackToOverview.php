@@ -33,7 +33,7 @@ class BackToOverview extends AbstractHelper
         /**
          * @todo temporary to stop "return to overview" links losing their styling - can be removed following olcs-21034
          */
-        $linkClass = ($label === self::BACK_LINK_LABEL ? 'govuk-back-link' : 'govuk-link');
+        $linkClass = ($label === self::BACK_LINK_LABEL ? 'govuk-back-link govuk-!-margin-bottom-7' : 'govuk-link govuk-!-margin-bottom-7');
 
         $label = $this->view->escapeHtml($this->view->translate($label));
         $url = $this->view->url(
