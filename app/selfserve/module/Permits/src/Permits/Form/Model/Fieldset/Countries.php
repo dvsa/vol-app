@@ -13,7 +13,7 @@ class Countries
      * @Form\Name("countries")
      * @Form\Required(false)
      * @Form\ContinueIfEmpty(true)
-     * @Form\Attributes({"class":"govuk-checkboxes__item"})
+     * @Form\Attributes({"id":"countries", "class":"govuk-checkboxes__item"})
      * @Form\Options({
      *      "label_attributes": {"class": "form-control form-control--checkbox form-control--confirm"},
      * })

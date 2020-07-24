@@ -12,10 +12,11 @@ class IrhpPermitStock
     /**
      * @Form\Name("irhpPermitStock")
      * @Form\Attributes({
+     *     "id": "stock",
      *     "radios_wrapper_attributes": {"data-module":"radios"}
      * })
      * @Form\Options({
-     *      "input_class": "Common\Form\Input\StockInput"
+     *     "input_class": "Common\Form\Input\StockInput"
      * })
      * @Form\Type("DynamicRadio")
      */
