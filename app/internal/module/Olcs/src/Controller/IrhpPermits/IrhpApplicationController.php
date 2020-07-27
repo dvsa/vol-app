@@ -448,7 +448,8 @@ class IrhpApplicationController extends AbstractInternalController implements
             Terminate::class,
             'Are you sure?',
             'You are about to terminate the selected certificate. Are you sure?',
-            'The selected certificate has been terminated'
+            'The selected certificate has been terminated',
+            'Confirm'
         );
     }
 

@@ -40,7 +40,7 @@ use Zend\View\Model\ViewModel;
  * @method Response handleQuery(QueryInterface $query)
  * @method Response handleCommand(CommandInterface $query)
  * @method \Common\Controller\Plugin\Redirect redirect()
- * @method Plugin\Confirm confirm($string)
+ * @method Plugin\Confirm confirm(string $string, bool $setTerminal, string|null $custom, string $customConfirmBtn , string $customCancelBtn)
  */
 abstract class AbstractInternalController extends AbstractOlcsController
 {
@@ -687,11 +687,13 @@ abstract class AbstractInternalController extends AbstractOlcsController
     /**
      * Handle single delete and multiple delete as well
      *
-     * @param ParameterProviderInterface $paramProvider  paramProvider
-     * @param string|CommandInterface    $confirmCommand confirmCommand
-     * @param string                     $modalTitle     modalTile
-     * @param string                     $confirmMessage confirmMessage
-     * @param string                     $successMessage successMessage
+     * @param ParameterProviderInterface $paramProvider paramProvider
+     * @param string|CommandInterface $confirmCommand confirmCommand
+     * @param string $modalTitle modalTile
+     * @param string $confirmMessage confirmMessage
+     * @param string $successMessage successMessage
+     * @param string $confirmBtnLabel custom Confirm label
+     * @param string $cancelBtnLabel custom Cancel label
      *
      * @return array|mixed|ViewModel
      */
@@ -700,7 +702,9 @@ abstract class AbstractInternalController extends AbstractOlcsController
         $confirmCommand,
         $modalTitle,
         $confirmMessage,
-        $successMessage
+        $successMessage,
+        ?string $confirmBtnLabel = null,
+        ?string $cancelBtnLabel = null
     ) {
         Logger::debug(__FILE__);
         Logger::debug(__METHOD__);
@@ -708,7 +712,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
         $paramProvider->setParams($this->plugin('params'));
         $params = $paramProvider->provideParameters();
 
-        $confirm = $this->confirm($confirmMessage);
+        $confirm = $this->confirm($confirmMessage, false, '', $confirmBtnLabel, $cancelBtnLabel);
 
         if ($confirm instanceof ViewModel) {
             $this->placeholder()->setPlaceholder('pageTitle', $modalTitle);
