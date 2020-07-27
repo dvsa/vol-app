@@ -24,7 +24,7 @@ class Licence
      *     },
      *     "input_class": "Common\Form\Input\LicenceInput"
      * })
-     * @Form\Type("\Common\Form\Elements\Types\Radio")
+     * @Form\Type("DynamicRadio")
      */
     public $licence = null;
 }

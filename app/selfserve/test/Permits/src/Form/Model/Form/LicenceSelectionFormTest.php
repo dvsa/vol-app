@@ -2,7 +2,7 @@
 
 namespace PermitsTest\Form\Model\Form;
 
-use Common\Form\Elements\Types\Radio;
+use Common\Form\Element\DynamicRadio;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 
 /**
@@ -21,7 +21,7 @@ class LicenceSelectionFormTest extends AbstractFormValidationTestCase
     {
         $element = ['fields', 'licence'];
         $this->assertFormElementAllowEmpty($element, false);
-        $this->assertFormElementType($element, Radio::class);
+        $this->assertFormElementType($element, DynamicRadio::class);
     }
 
     public function testSubmit()
