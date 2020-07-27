@@ -47,7 +47,6 @@ class AvailableYears
             $valueOptions[] = [
                 'value' => $year,
                 'label' => $year,
-                'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
             ];
         }
 
@@ -83,7 +82,6 @@ class AvailableYears
             $valueOptions[] = [
                 'value' => $year,
                 'label' => $year,
-                'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
             ];
         }
 

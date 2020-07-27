@@ -62,7 +62,6 @@ class AvailableYearsTest extends TestCase
             [
                 'value' => $year,
                 'label' => $year,
-                'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
                 'attributes' => [
                     'id' => 'year'
                 ]
@@ -114,7 +113,6 @@ class AvailableYearsTest extends TestCase
             [
                 'value' => 2018,
                 'label' => 2018,
-                'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
                 'attributes' => [
                     'id' => 'year'
                 ]
@@ -122,12 +120,10 @@ class AvailableYearsTest extends TestCase
             [
                 'value' => 2019,
                 'label' => 2019,
-                'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
             ],
             [
                 'value' => 2020,
                 'label' => 2020,
-                'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
             ],
         ];
 
@@ -234,7 +230,6 @@ class AvailableYearsTest extends TestCase
                     [
                         'value' => 3030,
                         'label' => 3030,
-                        'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
                         'attributes' => [
                             'id' => 'year'
                         ]
@@ -242,7 +237,6 @@ class AvailableYearsTest extends TestCase
                     [
                         'value' => 3031,
                         'label' => 3031,
-                        'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s']
                     ],
                 ],
             ],
@@ -271,7 +265,6 @@ class AvailableYearsTest extends TestCase
                     [
                         'value' => 3030,
                         'label' => 3030,
-                        'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
                         'attributes' => [
                             'id' => 'year'
                         ]

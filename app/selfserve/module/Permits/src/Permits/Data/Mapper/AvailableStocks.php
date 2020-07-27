@@ -47,7 +47,6 @@ class AvailableStocks
             $valueOptions[] = [
                 'value' => $stock['id'],
                 'label' => $stock['periodNameKey'],
-                'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
             ];
         }
 

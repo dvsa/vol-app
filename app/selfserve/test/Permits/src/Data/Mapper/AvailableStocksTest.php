@@ -67,7 +67,6 @@ class AvailableStocksTest extends TestCase
             [
                 'value' => 1,
                 'label' => 'period.name.key.1',
-                'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
                 'attributes' => [
                     'id' => 'stock'
                 ]
@@ -130,7 +129,6 @@ class AvailableStocksTest extends TestCase
             [
                 'value' => 1,
                 'label' => 'period.name.key.1',
-                'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
                 'attributes' => [
                     'id' => 'stock'
                 ]
@@ -138,7 +136,6 @@ class AvailableStocksTest extends TestCase
             [
                 'value' => 2,
                 'label' => 'period.name.key.2',
-                'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
             ],
         ];
 
