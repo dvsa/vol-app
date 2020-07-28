@@ -2,10 +2,6 @@
 
 namespace Admin\Controller;
 
-use Common\Controller\Interfaces\ToggleAwareInterface;
-use Common\FeatureToggle;
-
-use Admin\Controller\AbstractIrhpPermitAdminController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Dvsa\Olcs\Transfer\Command\IrhpPermitSector\Update as Update;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitSector\GetList as ListDto;
@@ -15,16 +11,8 @@ use Zend\Http\Response;
 /**
  * IRHP Permits Sector controller
  */
-class IrhpPermitSectorController extends AbstractIrhpPermitAdminController implements
-    LeftViewProvider,
-    ToggleAwareInterface
+class IrhpPermitSectorController extends AbstractIrhpPermitAdminController implements LeftViewProvider
 {
-    protected $toggleConfig = [
-        'default' => [
-            FeatureToggle::ADMIN_PERMITS
-        ],
-    ];
-
     protected $tableName = 'admin-irhp-permit-sector';
 
     protected $listVars = ['irhpPermitStock' => 'stockId'];

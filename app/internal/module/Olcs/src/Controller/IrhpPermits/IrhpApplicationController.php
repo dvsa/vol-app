@@ -8,9 +8,7 @@
 
 namespace Olcs\Controller\IrhpPermits;
 
-use Common\Controller\Interfaces\ToggleAwareInterface;
 use Common\Data\Mapper\Permits\NoOfPermits;
-use Common\FeatureToggle;
 use Common\RefData;
 use Common\Service\Cqrs\Exception\NotFoundException;
 use Common\Service\Qa\UsageContext;
@@ -64,15 +62,8 @@ use Zend\View\Model\ViewModel;
 
 class IrhpApplicationController extends AbstractInternalController implements
     IrhpApplicationControllerInterface,
-    LeftViewProvider,
-    ToggleAwareInterface
+    LeftViewProvider
 {
-    protected $toggleConfig = [
-        'default' => [
-            FeatureToggle::BACKEND_PERMITS
-        ],
-    ];
-
     protected $routeIdentifier = 'irhp-application';
 
     protected $navigationId = 'licence_irhp_applications';

@@ -4,10 +4,6 @@ namespace Admin\Controller;
 
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-
-use Common\Controller\Interfaces\ToggleAwareInterface;
-use Common\FeatureToggle;
-
 use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\ById as ItemDto;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\GetList as ListDto;
 use Dvsa\Olcs\Transfer\Command\IrhpPermitStock\Create as CreateDto;
@@ -21,7 +17,7 @@ use Zend\View\Model\ViewModel;
 /**
  * IRHP Permits Admin Controller
  */
-class IrhpPermitStockController extends AbstractInternalController implements LeftViewProvider, ToggleAwareInterface
+class IrhpPermitStockController extends AbstractInternalController implements LeftViewProvider
 {
     /**
      * Holds the navigation ID,
@@ -29,12 +25,6 @@ class IrhpPermitStockController extends AbstractInternalController implements Le
      * represented by a single navigation id.
      */
     protected $navigationId = 'admin-dashboard/admin-permits';
-
-    protected $toggleConfig = [
-        'default' => [
-            FeatureToggle::ADMIN_PERMITS
-        ],
-    ];
 
     /**
      * @var array

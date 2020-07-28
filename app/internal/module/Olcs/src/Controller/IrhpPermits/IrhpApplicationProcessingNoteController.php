@@ -2,8 +2,6 @@
 
 namespace Olcs\Controller\IrhpPermits;
 
-use Common\Controller\Interfaces\ToggleAwareInterface;
-use Common\FeatureToggle;
 use Dvsa\Olcs\Transfer\Command\Processing\Note\Create as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Processing\Note\Delete as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\Processing\Note\Update as UpdateDto;
@@ -25,15 +23,8 @@ use Zend\View\Model\ViewModel;
  */
 class IrhpApplicationProcessingNoteController extends AbstractInternalController implements
     IrhpApplicationControllerInterface,
-    LeftViewProvider,
-    ToggleAwareInterface
+    LeftViewProvider
 {
-    protected $toggleConfig = [
-        'default' => [
-            FeatureToggle::BACKEND_PERMITS
-        ],
-    ];
-
     use NotesProcessingTrait;
 
     /**

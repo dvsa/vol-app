@@ -2,10 +2,7 @@
 
 namespace Admin\Controller;
 
-use Common\Controller\Interfaces\ToggleAwareInterface;
-use Common\FeatureToggle;
 use Common\Form\Form;
-
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\ById as GetIrhpPermitStockByIdDto;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitWindow\ById as ItemDto;
@@ -20,16 +17,8 @@ use Zend\View\Model\ViewModel;
 /**
  * IRHP Permits Admin Controller
  */
-class IrhpPermitWindowController extends AbstractIrhpPermitAdminController implements
-    LeftViewProvider,
-    ToggleAwareInterface
+class IrhpPermitWindowController extends AbstractIrhpPermitAdminController implements LeftViewProvider
 {
-    protected $toggleConfig = [
-        'default' => [
-            FeatureToggle::ADMIN_PERMITS
-        ],
-    ];
-
     protected $tableName = 'admin-irhp-permit-window';
     protected $defaultTableSortField = 'startDate';
     protected $defaultTableOrderField = 'DESC';

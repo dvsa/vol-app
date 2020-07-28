@@ -14,7 +14,6 @@ use Zend\Navigation\Navigation;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Common\Service\Cqrs\Query\QuerySender;
-use Common\FeatureToggle;
 
 /**
  * Class NavigationToggle
@@ -85,11 +84,6 @@ class NavigationToggle implements ListenerAggregateInterface, FactoryInterface
 
         //prevent this from running if the user is not logged in
         if (isset($userData['id'])) {
-            $permitsMenuEnabled = $this->querySender->featuresEnabled([FeatureToggle::ADMIN_PERMITS]);
-
-            // Permits Navigation
-            $this->navigation->findBy('id', 'admin-dashboard/admin-permits')->setVisible($permitsMenuEnabled);
-
             // IRHP Permits Navigation
             // Get request params and perform queries only if in licence context
             $irhpPermitsTabEnabled = false;
@@ -112,11 +106,10 @@ class NavigationToggle implements ListenerAggregateInterface, FactoryInterface
      */
     protected function goodsLicenceAndFeatureToggle($params)
     {
-        $internalPermitsEnabled = $this->querySender->featuresEnabled([FeatureToggle::INTERNAL_PERMITS]);
         $licenceQuery = $this->querySender->send(Licence::create(['id' => $params['licence']]));
         $licence = $licenceQuery->getResult();
 
-        return ($licence['goodsOrPsv']['id'] == 'lcat_gv' && $internalPermitsEnabled);
+        return $licence['goodsOrPsv']['id'] == 'lcat_gv';
     }
 
     /**

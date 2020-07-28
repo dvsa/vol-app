@@ -2,8 +2,6 @@
 
 namespace Olcs\Controller\IrhpPermits;
 
-use Common\Controller\Interfaces\ToggleAwareInterface;
-use Common\FeatureToggle;
 use Dvsa\Olcs\Transfer\Query\Audit\ReadIrhpApplication;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -15,15 +13,8 @@ use Zend\View\Model\ViewModel;
  */
 class IrhpApplicationProcessingReadHistoryController extends AbstractInternalController implements
     IrhpApplicationControllerInterface,
-    LeftViewProvider,
-    ToggleAwareInterface
+    LeftViewProvider
 {
-    protected $toggleConfig = [
-        'default' => [
-            FeatureToggle::BACKEND_PERMITS
-        ],
-    ];
-
     /**
      * Holds the navigation ID,
      * required when an entire controller is
