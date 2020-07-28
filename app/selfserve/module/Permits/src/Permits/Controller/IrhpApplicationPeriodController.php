@@ -2,25 +2,19 @@
 
 namespace Permits\Controller;
 
-use Common\Controller\Interfaces\ToggleAwareInterface;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\UpdatePeriod;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpApplicationDataSource;
-use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
 use Permits\Data\Mapper\AvailableBilateralStocks;
 use Permits\View\Helper\IrhpApplicationSection;
 
-class IrhpApplicationPeriodController extends AbstractSelfserveController implements ToggleAwareInterface
+class IrhpApplicationPeriodController extends AbstractSelfserveController
 {
     const SELECTION_CHANGED_WARNING_KEY = 'permits.page.bilateral.which-period-required.warning';
-
-    protected $toggleConfig = [
-        'default' => FeatureToggleConfig::SELFSERVE_PERMITS_ENABLED,
-    ];
 
     protected $dataSourceConfig = [
         'default' => DataSourceConfig::IRHP_APP_PERIODS,

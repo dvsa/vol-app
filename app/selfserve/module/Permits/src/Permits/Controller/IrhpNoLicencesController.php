@@ -2,16 +2,10 @@
 
 namespace Permits\Controller;
 
-use Common\Controller\Interfaces\ToggleAwareInterface;
 use Olcs\Controller\AbstractSelfserveController;
-use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 
-class IrhpNoLicencesController extends AbstractSelfserveController implements ToggleAwareInterface
+class IrhpNoLicencesController extends AbstractSelfserveController
 {
-    protected $toggleConfig = [
-        'default' => FeatureToggleConfig::SELFSERVE_PERMITS_ENABLED,
-    ];
-
     protected $templateConfig = [
         'generic' => 'permits/no-licences'
     ];

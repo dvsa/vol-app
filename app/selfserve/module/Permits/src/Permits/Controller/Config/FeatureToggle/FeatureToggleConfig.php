@@ -9,10 +9,6 @@ use Common\FeatureToggle;
  */
 class FeatureToggleConfig
 {
-    const SELFSERVE_PERMITS_ENABLED =  [
-        FeatureToggle::SELFSERVE_PERMITS
-    ];
-
     const SELFSERVE_SURRENDER_ENABLED = [
         FeatureToggle::SELFSERVE_SURRENDER
     ];

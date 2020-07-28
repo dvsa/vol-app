@@ -1,27 +1,20 @@
 <?php
 namespace Permits\Controller;
 
-use Common\Controller\Interfaces\ToggleAwareInterface;
 use Common\Preference\Language;
-use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\UpdateCheckAnswers;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\AnswersSummary;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
-use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
 
 use Permits\View\Helper\IrhpApplicationSection;
 
-class IrhpCheckAnswersController extends AbstractSelfserveController implements ToggleAwareInterface
+class IrhpCheckAnswersController extends AbstractSelfserveController
 {
-    protected $toggleConfig = [
-        'default' => FeatureToggleConfig::SELFSERVE_PERMITS_ENABLED,
-    ];
-
     protected $dataSourceConfig = [
         'default' => DataSourceConfig::IRHP_APP_CHECK_ANSWERS,
     ];

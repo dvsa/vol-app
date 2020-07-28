@@ -2,49 +2,30 @@
 
 namespace Permits\Controller;
 
-use Common\Controller\Interfaces\ToggleAwareInterface;
-
 use Common\Controller\Traits\GenericReceipt;
 use Common\Controller\Traits\StoredCardsTrait;
-use Dvsa\Olcs\Transfer\Query\ContactDetail\CountrySelectList;
-use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
 use Common\Util\FlashMessengerTrait;
-
-use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees;
 use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\SelfserveApplicationsSummary;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\SelfserveIssuedPermitsSummary;
-
 use Common\RefData;
-
 use Olcs\Controller\AbstractSelfserveController;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
-use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
-use Permits\View\Helper\EcmtSection;
-
 use Permits\View\Helper\IrhpApplicationSection;
 use Zend\Http\Header\Referer as HttpReferer;
 use Zend\Http\PhpEnvironment\Request as HttpRequest;
 use Zend\Mvc\MvcEvent;
-use Dvsa\Olcs\Transfer\Query\Permits\EcmtPermitFees;
 use Zend\View\Model\ViewModel;
 
-class PermitsController extends AbstractSelfserveController implements ToggleAwareInterface
+class PermitsController extends AbstractSelfserveController
 {
     use ExternalControllerTrait;
     use GenericReceipt;
     use StoredCardsTrait;
     use FlashMessengerTrait;
 
-    const ECMT_APPLICATION_FEE_PRODUCT_REFENCE = 'IRHP_GV_APP_ECMT';
-    const ECMT_ISSUING_FEE_PRODUCT_REFENCE = 'IRHP_GV_ECMT_100_PERMIT_FEE';
-
     protected $applicationsTableName = 'dashboard-permit-application';
     protected $issuedTableName = 'dashboard-permits-issued';
-
-    protected $toggleConfig = [
-        'default' => FeatureToggleConfig::SELFSERVE_PERMITS_ENABLED,
-    ];
 
     protected $currentMessages = [];
 
@@ -199,24 +180,5 @@ class PermitsController extends AbstractSelfserveController implements ToggleAwa
         }
 
         return in_array($referer->getUri(), $this->govUkReferrers);
-    }
-
-    /**
-     * Returns Issuing application fees
-     *
-     * @return array
-     */
-    private function getEcmtPermitFees()
-    {
-        $query = EcmtPermitFees::create(
-            [
-                'productReferences' => [
-                    self::ECMT_APPLICATION_FEE_PRODUCT_REFENCE,
-                    self::ECMT_ISSUING_FEE_PRODUCT_REFENCE
-                ]
-            ]
-        );
-        $response = $this->handleQuery($query);
-        return $response->getResult();
     }
 }

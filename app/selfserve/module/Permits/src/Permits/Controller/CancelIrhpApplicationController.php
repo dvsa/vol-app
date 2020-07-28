@@ -1,25 +1,19 @@
 <?php
 namespace Permits\Controller;
 
-use Common\Controller\Interfaces\ToggleAwareInterface;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\CancelApplication;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
-use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
 use Permits\View\Helper\IrhpApplicationSection;
 
-class CancelIrhpApplicationController extends AbstractSelfserveController implements ToggleAwareInterface
+class CancelIrhpApplicationController extends AbstractSelfserveController
 {
     const CABOTAGE_SLUG_WHITELIST = ['bi-cabotage-only', 'bi-standard-and-cabotage'];
     const MAX_IPA_LENGTH = 8;
-
-    protected $toggleConfig = [
-        'default' => FeatureToggleConfig::SELFSERVE_PERMITS_ENABLED,
-    ];
 
     protected $dataSourceConfig = [
         'default' => DataSourceConfig::IRHP_APP,
