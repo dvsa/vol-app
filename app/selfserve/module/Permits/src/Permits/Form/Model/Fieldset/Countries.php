@@ -15,7 +15,7 @@ class Countries
      * @Form\ContinueIfEmpty(true)
      * @Form\Attributes({"id":"countries", "class":"govuk-checkboxes__item"})
      * @Form\Options({
-     *      "label_attributes": {"class": "form-control form-control--checkbox form-control--confirm"},
+     *      "label_attributes": {"class": "form-control form-control--checkbox form-control--confirm govuk-!-padding-bottom-2"},
      * })
      * @Form\Validator({
      *      "name": "Zend\Validator\NotEmpty",
