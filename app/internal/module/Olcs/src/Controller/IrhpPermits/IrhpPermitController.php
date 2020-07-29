@@ -35,7 +35,6 @@ class IrhpPermitController extends AbstractInternalController implements
     protected $itemDto = ItemDto::class;
 
     protected $hasMultiDelete = false;
-    protected $indexPageTitle = 'IRHP Permits';
 
     // After Adding and Editing we want users taken back to index dashboard
     protected $redirectConfig = [];

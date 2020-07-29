@@ -589,9 +589,27 @@ $nav = [
                                     'use_route_match' => true,
                                     'params' => [
                                         'action' => 'edit',
-                                        'id' => null
                                     ],
                                     'pages' => [
+                                        [
+                                            'id' => 'licence_irhp_applications_processing_tasks',
+                                            'label' => 'Application',
+                                            'route' => 'licence/irhp-application/application',
+                                            'use_route_match' => true,
+                                            'params' => [
+                                                'action' => 'edit',
+                                            ],
+                                        ],
+                                        [
+                                            'id' => 'irhp_permits-permits',
+                                            'label' => 'Permits',
+                                            'route' => 'licence/irhp-application/application',
+                                            'visible' => 1,
+                                            'params' => [
+                                                'action' => 'viewpermits',
+                                            ],
+                                            'use_route_match' => true,
+                                        ],
                                         [
                                             'id' => 'licence_irhp_applications-pregrant',
                                             'label' => 'Permits',
@@ -602,16 +620,6 @@ $nav = [
                                                 'action' => 'preGrant',
                                                 'id' => null
                                             ],
-                                        ],
-                                        [
-                                            'id' => 'irhp_permits-permits',
-                                            'label' => 'Permits',
-                                            'route' => 'licence/irhp-application/application',
-                                            'visible' => 0,
-                                            'params' => [
-                                                'action' => 'viewpermits',
-                                            ],
-                                            'use_route_match' => true,
                                         ],
                                     ]
                                 ],

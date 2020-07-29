@@ -1,10 +1,6 @@
-<h4 class="title"><?php echo $this->translate('application-details-nav'); ?></h4>
-
-<div class="filters">
-    <?php
-    $tableFilters = $this->placeholder('tableFilters')->getValue();
-    if ($tableFilters instanceof \Zend\Form\Form) {
-        echo $this->form($tableFilters);
-    }
-    ?>
-</div>
+<?php
+    $currentSection = $this->navigation('navigation')->findById('licence_irhp_applications-edit');
+?>
+    <h4 class="title">Application Details</h4>
+<?php
+echo $this->navigation($currentSection)->menu()->setPartial('partials/vertical-navigation');
