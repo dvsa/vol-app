@@ -16,6 +16,7 @@ class Licence
 {
     /**
      * @Form\Attributes({
+     *     "id": "licence",
      *     "radios_wrapper_attributes": {"class": "govuk-radios--conditional", "data-module":"radios"}
      * })
      * @Form\Options({
