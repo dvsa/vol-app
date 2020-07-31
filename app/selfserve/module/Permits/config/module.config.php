@@ -2,10 +2,8 @@
 namespace Permits;
 
 use Permits\Controller\IrhpApplicationDeclarationController;
-use Permits\Controller\ConfirmChangeController;
 use Permits\Controller\IrhpApplicationPeriodController;
 use Permits\Controller\LicenceController;
-use Permits\Controller\ChangeLicenceController;
 use Permits\Controller\SubmittedController;
 use Permits\Controller\PermitsController;
 use Permits\Controller\TypeController;
@@ -38,9 +36,7 @@ return [
   'controllers' => [
     'invokables' => [
         PermitsController::class => PermitsController::class,
-        ConfirmChangeController::class => ConfirmChangeController::class,
         LicenceController::class => LicenceController::class,
-        ChangeLicenceController::class => ChangeLicenceController::class,
         TypeController::class => TypeController::class,
         SubmittedController::class => SubmittedController::class,
         IrhpApplicationController::class => IrhpApplicationController::class,
@@ -165,33 +161,6 @@ return [
                                   'may_terminate' => true,
                               ],
 
-                          ]
-                      ],
-                      'licence' => [
-                          'type'    => 'segment',
-                          'options' => [
-                              'route'    => 'licence[/]',
-                              'defaults' => [
-                                  'controller'    => ChangeLicenceController::class,
-                                  'action'        => 'question',
-                              ],
-                          ],
-                          'may_terminate' => true,
-                          'child_routes' => [
-                              'change' => [
-                                  'type'    => 'segment',
-                                  'options' => [
-                                      'route'    => 'change[/[:licence]]',
-                                      'defaults' => [
-                                          'controller'    => ConfirmChangeController::class,
-                                          'action'        => 'question',
-                                      ],
-                                      'constraints' => [
-                                          'licence' => '[0-9]+',
-                                      ],
-                                  ],
-                                  'may_terminate' => true,
-                              ],
                           ]
                       ],
                       'countries' => [
@@ -574,7 +543,6 @@ return [
       'factories' => [
           Mapper\EcmtNoOfPermits::class => Mapper\EcmtNoOfPermitsFactory::class,
           Mapper\IrhpApplicationFeeSummary::class => Mapper\IrhpApplicationFeeSummaryFactory::class,
-          Mapper\ChangeLicence::class => Mapper\ChangeLicenceFactory::class,
           Mapper\NoOfPermits::class => Mapper\NoOfPermitsFactory::class,
           Mapper\AvailableBilateralStocks::class => Mapper\AvailableBilateralStocksFactory::class,
       ],

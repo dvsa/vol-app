@@ -23,8 +23,6 @@ class IrhpApplicationSection extends AbstractHelper
     const ROUTE_NO_LICENCES = 'permits/no-licences';
     const ROUTE_ADD_LICENCE = 'permits/add-licence';
     const ROUTE_APPLICATION_OVERVIEW = 'permits/application';
-    const ROUTE_LICENCE = 'permits/application/licence';
-    const ROUTE_LICENCE_CONFIRM_CHANGE = 'permits/application/licence/change';
     const ROUTE_COUNTRIES = 'permits/application/countries';
     const ROUTE_COUNTRIES_CONFIRMATION = 'permits/application/countries-confirmation';
     const ROUTE_IPA_QUESTION = 'permits/application/ipa/question';
@@ -56,15 +54,7 @@ class IrhpApplicationSection extends AbstractHelper
      * list of overview routes and the field denoting completion status
      */
     const ROUTE_ORDER = [
-        RefData::IRHP_BILATERAL_PERMIT_TYPE_ID => [
-            self::ROUTE_LICENCE => 'licence',
-            self::ROUTE_COUNTRIES => 'countries',
-            self::ROUTE_NO_OF_PERMITS => 'permitsRequired',
-            self::ROUTE_CHECK_ANSWERS => 'checkedAnswers',
-            self::ROUTE_DECLARATION => 'declaration',
-        ],
         RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID => [
-            self::ROUTE_LICENCE => 'licence',
             self::ROUTE_NO_OF_PERMITS => 'permitsRequired',
             self::ROUTE_CHECK_ANSWERS => 'checkedAnswers',
             self::ROUTE_DECLARATION => 'declaration',
@@ -159,12 +149,6 @@ class IrhpApplicationSection extends AbstractHelper
             ];
 
             switch ($data['slug']) {
-                case 'custom-licence':
-                    $route = self::ROUTE_LICENCE;
-                    $routeParams = [
-                        'id' => $application['id'],
-                    ];
-                    break;
                 case 'custom-check-answers':
                     $route = self::ROUTE_CHECK_ANSWERS;
                     $routeParams = [

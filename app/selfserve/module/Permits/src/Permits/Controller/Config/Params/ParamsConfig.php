@@ -14,8 +14,6 @@ class ParamsConfig
         ],
     ];
 
-    const CONFIRM_CHANGE = 'confirm-change';
-
     const ID_FROM_ROUTE = [
         'route' => [
             'id'
