@@ -323,9 +323,6 @@ return [
                             'id' => 'admin-dashboard/content-management/editable-translations',
                             'label' => 'Editable Translations',
                             'route' => 'admin-dashboard/admin-editable-translations',
-                            'params' => [
-                                'action' => 'search',
-                            ],
                         ]
                     ],
                 ],

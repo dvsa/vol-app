@@ -2,8 +2,8 @@
 
 namespace Admin\Controller;
 
-use Admin\Form\Model\Form\EditableTranslationSearch as EditableTranslationSearchForm;
 use Admin\Form\Model\Form\TranslationKey;
+use Admin\Form\Model\Form\TranslationsFilter;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\Http\Response;
@@ -32,8 +32,8 @@ class EditableTranslationsController extends AbstractInternalController implemen
 
     protected $updateCommand = UpdateCommand::class;
     protected $formClass = TranslationKey::class;
+    protected $filterForm = TranslationsFilter::class;
 
-    protected $searchFormClass = EditableTranslationSearchForm::class;
     protected $mapperClass = EditableTranslationMapper::class;
 
     protected $detailsViewTemplate = 'pages/editable-translations/translation-key-details';
@@ -48,6 +48,7 @@ class EditableTranslationsController extends AbstractInternalController implemen
      * @var array
      */
     protected $inlineScripts = [
+        'indexAction' => ['editable-translation-search'],
         'detailsAction' => ['table-actions'],
         'editkeyAction' => ['forms/translation-key-modal']
     ];
@@ -69,42 +70,27 @@ class EditableTranslationsController extends AbstractInternalController implemen
      */
     public function indexAction()
     {
-        $this->placeholder()->setPlaceholder('translatedText', urldecode($this->params()->fromQuery('translatedText')));
+        $this->placeholder()->setPlaceholder('translationSearch', urldecode($this->params()->fromQuery('translationSearch')));
         return parent::indexAction();
     }
 
     /**
-     * Search action - display form, and redirect to index action on POST
-     *
-     * @return ViewModel|Response
+     * @return JsonModel
      */
-    public function searchAction()
+    public function xhrsearchAction()
     {
-        $request = $this->getRequest();
-        if ($request->isPost()) {
-            $postData = (array)$request->getPost();
-            return $this->redirect()->toRoute(
-                'admin-dashboard/admin-editable-translations',
+        $response = $this->handleQuery(
+            ListDTO::create(
                 [
-                    'action' => 'index'
-                ],
-                [
-                    'query' => [
-                        'translatedText' => urlencode($postData['fields']['translatedText'])
-                    ]
+                    'limit' => 10,
+                    'order' => 'asc',
+                    'page' => 1,
+                    'sort' => 'id',
+                    'translationSearch' => $this->params()->fromQuery('translationSearch')
                 ]
-            );
-        }
-
-        $form = $this->getForm($this->searchFormClass);
-        $view = new ViewModel(
-            [
-                'form' => $form
-            ]
+            )
         );
-        $this->placeholder()->setPlaceholder('pageTitle', $this->detailsContentTitle);
-        $view->setTemplate('pages/editable-translations/search-content-form');
-        return $this->viewBuilder()->buildView($view);
+        return new JsonModel($response->getResult());
     }
 
     /**
@@ -132,7 +118,7 @@ class EditableTranslationsController extends AbstractInternalController implemen
      */
     protected function modifyListQueryParameters($parameters)
     {
-        $parameters['translatedText'] = urldecode($this->params()->fromQuery('translatedText'));
+        $parameters['translationSearch'] = urldecode($this->params()->fromQuery('translationSearch'));
         return $parameters;
     }
 

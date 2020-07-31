@@ -16,10 +16,12 @@ return [
         [
             'title' => 'Content Key',
             'name' => 'id',
+            'sort' => 'id',
         ],
         [
             'title' => 'Description',
             'name' => 'description',
+            'sort' => 'description',
         ],
         [
             'title' => '',

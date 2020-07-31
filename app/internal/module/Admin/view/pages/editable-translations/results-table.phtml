@@ -1,6 +1,10 @@
 <h4 class="title">Editable Translations</h4>
-<div class="govuk-details">
-    <strong>Results for:</strong> <?php echo $this->placeholder('translatedText')->getValue(); ?>
+<div class="card">
+    <form id="translationSearchForm">
+        <input type="text" id="translationSearch" class="search__input" style="width: 450px;" placeholder="Search (type then pause for autocomplete)" autocomplete="off">
+        <input type="submit" id="searchBtn" name="submit" class="search__button" value="">
+    </form>
+
 </div>
 <div class="govuk-details">
     <?php
@@ -11,8 +15,7 @@
 
     ?>
 </div>
-<div class="govuk-details">
-    <a href="<?php echo $this->url('admin-dashboard/admin-editable-translations', ['action' => 'search']); ?>">
-        <button  name="filter" class="action--primary" id="filter" value="">Edit search</button>
-    </a>
+<div id="keyAutocomplete" class="translationKeyACResults">
+    <strong>Autocomplete results</strong><br>(Enter to search, Esc to close, Click a result to load directly)
+    <div id="keySearchResults"></div>
 </div>
