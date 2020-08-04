@@ -9,7 +9,6 @@ use Dvsa\Olcs\Transfer\Query\IrhpApplication\ApplicationStep;
 use Olcs\Service\Qa\FormProvider;
 use Olcs\Service\Qa\TemplateVarsGenerator;
 use Olcs\Service\Qa\ViewGeneratorProvider;
-use Permits\View\Helper\EcmtSection;
 use Permits\View\Helper\IrhpApplicationSection;
 use RuntimeException;
 use Zend\View\Model\ViewModel;

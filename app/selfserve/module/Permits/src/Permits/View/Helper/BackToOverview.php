@@ -37,7 +37,7 @@ class BackToOverview extends AbstractHelper
 
         $label = $this->view->escapeHtml($this->view->translate($label));
         $url = $this->view->url(
-            empty($uri) ? EcmtSection::ROUTE_APPLICATION_OVERVIEW : $uri,
+            empty($uri) ? IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW : $uri,
             $params ?? [],
             $options ?? [],
             true

@@ -5,7 +5,6 @@ use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
-use Permits\View\Helper\EcmtSection;
 use Permits\View\Helper\IrhpApplicationSection;
 
 class SubmittedController extends AbstractSelfserveController
@@ -51,7 +50,7 @@ class SubmittedController extends AbstractSelfserveController
 
     public function issueSubmittedAction()
     {
-        $this->addReceiptUrl(EcmtSection::ROUTE_PRINT_RECEIPT);
+        $this->addReceiptUrl(IrhpApplicationSection::ROUTE_PRINT_RECEIPT);
         return parent::genericAction();
     }
 
