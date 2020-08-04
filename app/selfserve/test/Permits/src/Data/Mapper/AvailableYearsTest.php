@@ -2,12 +2,15 @@
 
 namespace PermitsTest\Data\Mapper;
 
+use Common\Form\Elements\Types\Html;
 use Common\Form\Form;
 use Common\RefData;
+use Common\Service\Helper\TranslationHelperService;
 use Permits\Data\Mapper\AvailableYears;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Mockery as m;
 use RuntimeException;
+use Zend\Form\Element\Hidden;
 
 /**
  * AvailableYearsTest
@@ -18,7 +21,8 @@ class AvailableYearsTest extends TestCase
 
     public function setUp(): void
     {
-        $this->availableYears = new AvailableYears();
+        $this->translationHelperService = m::mock(TranslationHelperService::class);
+        $this->availableYears = new AvailableYears($this->translationHelperService);
     }
 
     /**
@@ -58,27 +62,33 @@ class AvailableYearsTest extends TestCase
             ],
         ];
 
-        $expectedValueOptions = [
-            [
-                'value' => $year,
-                'label' => $year,
-                'attributes' => [
-                    'id' => 'year'
-                ]
-            ]
-        ];
-
         $form = m::mock(Form::class);
         $form->shouldReceive('get')
             ->with('fields')
             ->once()
             ->andReturnSelf()
-            ->shouldReceive('get')
-            ->with('year')
+            ->shouldReceive('add')
+            ->with(
+                [
+                    'name' => 'yearLabel',
+                    'type' => Html::class,
+                    'attributes' => [
+                        'value' => '<p class="govuk-body-l">translated-text-with-year</p>',
+                    ]
+                ]
+            )
             ->once()
             ->andReturnSelf()
-            ->shouldReceive('setValueOptions')
-            ->with($expectedValueOptions)
+            ->shouldReceive('add')
+            ->with(
+                [
+                    'name' => 'year',
+                    'type' => Hidden::class,
+                    'attributes' => [
+                        'value' => $year,
+                    ]
+                ]
+            )
             ->once();
 
         $expectedData = [
@@ -86,7 +96,6 @@ class AvailableYearsTest extends TestCase
             'years' => [
                 'years' => [$year]
             ],
-            'hint' => 'permits.page.year.hint.one-year-available',
             'question' => 'permits.page.year.question.one-year-available',
             'browserTitle' => 'permits.page.year.browser.title.one-year-available',
             'guidance' => [
@@ -94,6 +103,11 @@ class AvailableYearsTest extends TestCase
                 'disableHtmlEscape' => true,
             ],
         ];
+
+        $this->translationHelperService->shouldReceive('translateReplace')
+            ->once()
+            ->with('permits.page.year.hint.one-year-available', [$year])
+            ->andReturn('translated-text-with-year');
 
         $returnedData = $this->availableYears->mapForFormOptions($data, $form);
 
@@ -159,10 +173,68 @@ class AvailableYearsTest extends TestCase
         $this->assertEquals($expectedData, $returnedData);
     }
 
+    public function testEcmtAnnualSingleOption()
+    {
+        $year = 2019;
+        $data = [
+            'type' => RefData::ECMT_PERMIT_TYPE_ID,
+            'years' => [
+                'years' => [$year]
+            ],
+        ];
+
+        $form = m::mock(Form::class);
+        $form->shouldReceive('get')
+            ->with('fields')
+            ->once()
+            ->andReturnSelf()
+            ->shouldReceive('add')
+            ->with(
+                [
+                    'name' => 'yearLabel',
+                    'type' => Html::class,
+                    'attributes' => [
+                        'value' => '<p class="govuk-body-l">translated-text-with-year</p>',
+                    ]
+                ]
+            )
+            ->once()
+            ->andReturnSelf()
+            ->shouldReceive('add')
+            ->with(
+                [
+                    'name' => 'year',
+                    'type' => Hidden::class,
+                    'attributes' => [
+                        'value' => $year,
+                    ]
+                ]
+            )
+            ->once();
+
+        $expectedData = [
+            'type' => RefData::ECMT_PERMIT_TYPE_ID,
+            'years' => [
+                'years' => [$year]
+            ],
+            'question' => 'permits.page.year.question.one-year-available',
+            'browserTitle' => 'permits.page.year.browser.title.one-year-available',
+        ];
+
+        $this->translationHelperService->shouldReceive('translateReplace')
+            ->once()
+            ->with('permits.page.year.hint.one-year-available', [$year])
+            ->andReturn('translated-text-with-year');
+
+        $returnedData = $this->availableYears->mapForFormOptions($data, $form);
+
+        $this->assertEquals($expectedData, $returnedData);
+    }
+
     /**
-     * @dataProvider dpTestEcmtAnnual
+     * @dataProvider dpTestEcmtAnnualMultipleOptions
      */
-    public function testEcmtAnnual($data, $expected, $expectedValueOptions)
+    public function testEcmtAnnualMultipleOptions($data, $expected, $expectedValueOptions)
     {
         $mockForm = m::mock(Form::class);
 
@@ -184,7 +256,7 @@ class AvailableYearsTest extends TestCase
         );
     }
 
-    public function dpTestEcmtAnnual()
+    public function dpTestEcmtAnnualMultipleOptions()
     {
         return [
             'empty list' => [
@@ -199,9 +271,9 @@ class AvailableYearsTest extends TestCase
                     'years' => [
                         'years' => []
                     ],
-                    'browserTitle' => 'permits.page.year.browser.title',
-                    'question' => 'permits.page.year.question',
-                    'hint' => 'permits.page.year.hint.one-year-available',
+                    'browserTitle' => 'permits.page.year.browser.title.multiple-years-available',
+                    'question' => 'permits.page.year.question.multiple-years-available',
+                    'hint' => 'permits.page.year.hint.multiple-years-available',
                 ],
                 'expectedValueOptions' => [],
             ],
@@ -222,8 +294,8 @@ class AvailableYearsTest extends TestCase
                             3030, 3031
                         ],
                     ],
-                    'browserTitle' => 'permits.page.year.browser.title',
-                    'question' => 'permits.page.year.question',
+                    'browserTitle' => 'permits.page.year.browser.title.multiple-years-available',
+                    'question' => 'permits.page.year.question.multiple-years-available',
                     'hint' => 'permits.page.year.hint.multiple-years-available',
                 ],
                 'expectedValueOptions' => [
@@ -238,37 +310,6 @@ class AvailableYearsTest extends TestCase
                         'value' => 3031,
                         'label' => 3031,
                     ],
-                ],
-            ],
-            'list with one_year' => [
-                'data' => [
-                    'type' => RefData::ECMT_PERMIT_TYPE_ID,
-                    'years' => [
-                        'years' => [
-                            3030
-                        ],
-
-                    ]
-                ],
-                'expected' => [
-                    'type' => RefData::ECMT_PERMIT_TYPE_ID,
-                    'years' => [
-                        'years' => [
-                            3030
-                        ],
-                    ],
-                    'browserTitle' => 'permits.page.year.browser.title',
-                    'question' => 'permits.page.year.question',
-                    'hint' => 'permits.page.year.hint.one-year-available',
-                ],
-                'expectedValueOptions' => [
-                    [
-                        'value' => 3030,
-                        'label' => 3030,
-                        'attributes' => [
-                            'id' => 'year'
-                        ]
-                    ]
                 ],
             ],
         ];
