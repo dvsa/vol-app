@@ -2,16 +2,34 @@
 
 namespace Permits\Data\Mapper;
 
+use Common\Form\Elements\Types\Html;
 use Common\Form\Form;
 use Common\RefData;
+use Common\Service\Helper\TranslationHelperService;
 use Permits\Controller\Config\DataSource\AvailableYears as AvailableYearsDataSource;
 use RuntimeException;
+use Zend\Form\Element\Hidden;
 
 /**
  * Available years mapper
  */
 class AvailableYears
 {
+    /** @var TranslationHelperService */
+    private $translator;
+
+    /**
+     * Create service instance
+     *
+     * @param TranslationHelperService $translator
+     *
+     * @return AvailableYears
+     */
+    public function __construct(TranslationHelperService $translator)
+    {
+        $this->translator = $translator;
+    }
+
     /**
      * @param array $data
      * @param Form  $form
@@ -40,29 +58,7 @@ class AvailableYears
      */
     private function mapForEcmtAnnual(array $data, $form)
     {
-        $years = $data[AvailableYearsDataSource::DATA_KEY]['years'];
-        $valueOptions = [];
-
-        foreach ($years as $year) {
-            $valueOptions[] = [
-                'value' => $year,
-                'label' => $year,
-            ];
-        }
-
-        $form->get('fields')->get('year')->setValueOptions(
-            $this->transformValueOptions($valueOptions)
-        );
-
-        $data['browserTitle'] = 'permits.page.year.browser.title';
-        $data['question'] = 'permits.page.year.question';
-
-        $data['hint'] = 'permits.page.year.hint.one-year-available';
-        if (count($years) > 1) {
-            $data['hint'] = 'permits.page.year.hint.multiple-years-available';
-        }
-
-        return $data;
+        return $this->mapAvailableYears($data, $form);
     }
 
     /**
@@ -75,7 +71,89 @@ class AvailableYears
      */
     private function mapForEcmtShortTerm(array $data, $form)
     {
+        $data = $this->mapAvailableYears($data, $form);
+
+        $data['guidance'] = [
+            'value' => 'permits.page.year.ecmt-short-term.guidance',
+            'disableHtmlEscape' => true,
+        ];
+
+        return $data;
+    }
+
+    /**
+     * Map available year options
+     *
+     * @param array $data
+     * @param Form  $form
+     *
+     * @return array
+     */
+    private function mapAvailableYears(array $data, $form)
+    {
         $years = $data[AvailableYearsDataSource::DATA_KEY]['years'];
+        $suffix = 'one-year-available';
+
+        if (count($years) == 1) {
+            $this->singleOption($form, $years[0]);
+        } else {
+            $this->multipleOptions($form, $years);
+
+            $suffix = 'multiple-years-available';
+            $data['hint'] = 'permits.page.year.hint.' . $suffix;
+        }
+
+        $data['question'] = 'permits.page.year.question.' . $suffix;
+        $data['browserTitle'] = 'permits.page.year.browser.title.' . $suffix;
+
+        return $data;
+    }
+
+    /**
+     * @param Form $form
+     * @param int $year
+     */
+    private function singleOption(Form $form, $year)
+    {
+        $markup = sprintf(
+            '<p class="govuk-body-l">%s</p>',
+            $this->translator->translateReplace(
+                'permits.page.year.hint.one-year-available',
+                [$year]
+            )
+        );
+
+        $fields = $form->get('fields');
+
+        // Add label for single option
+        $fields->add(
+            [
+                'name' => 'yearLabel',
+                'type' => Html::class,
+                'attributes' => [
+                    'value' => $markup,
+                ]
+            ]
+        );
+
+        // add hidden field with id
+        $fields->add(
+            [
+                'name' => 'year',
+                'type' => Hidden::class,
+                'attributes' => [
+                    'value' => $year,
+                ]
+            ]
+        );
+    }
+
+    /**
+     * @param Form $form
+     * @param array $years
+     */
+    private function multipleOptions(Form $form, $years)
+    {
         $valueOptions = [];
 
         foreach ($years as $year) {
@@ -88,22 +166,6 @@ class AvailableYears
         $form->get('fields')->get('year')->setValueOptions(
             $this->transformValueOptions($valueOptions)
         );
-
-        $suffix = 'one-year-available';
-        if (count($years) > 1) {
-            $suffix = 'multiple-years-available';
-        }
-
-        $data['hint'] = 'permits.page.year.hint.' . $suffix;
-        $data['question'] = 'permits.page.year.question.' . $suffix;
-        $data['browserTitle'] = 'permits.page.year.browser.title.' . $suffix;
-
-        $data['guidance'] = [
-            'value' => 'permits.page.year.ecmt-short-term.guidance',
-            'disableHtmlEscape' => true,
-        ];
-
-        return $data;
     }
 
     /**

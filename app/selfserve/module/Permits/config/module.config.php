@@ -533,7 +533,6 @@ return [
           Mapper\AvailableCountries::class => Mapper\AvailableCountries::class,
           Mapper\AvailableTypes::class => Mapper\AvailableTypes::class,
           Mapper\AvailableStocks::class => Mapper\AvailableStocks::class,
-          Mapper\AvailableYears::class => Mapper\AvailableYears::class,
           Mapper\LicencesAvailable::class => Mapper\LicencesAvailable::class,
           Mapper\PermitTypeTitle::class => Mapper\PermitTypeTitle::class,
           Mapper\IrhpFee::class => Mapper\IrhpFee::class,
@@ -545,6 +544,7 @@ return [
           Mapper\IrhpApplicationFeeSummary::class => Mapper\IrhpApplicationFeeSummaryFactory::class,
           Mapper\NoOfPermits::class => Mapper\NoOfPermitsFactory::class,
           Mapper\AvailableBilateralStocks::class => Mapper\AvailableBilateralStocksFactory::class,
+          Mapper\AvailableYears::class => Mapper\AvailableYearsFactory::class,
       ],
   ],
     /** @todo we don't need all of these different link helpers! OLCS-21512 */
