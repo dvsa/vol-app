@@ -16,7 +16,6 @@ use Permits\Data\Mapper\IrhpFee as IrhpFeeMapper;
 use Permits\Data\Mapper\AvailableBilateralStocks as AvailableBilateralStocksMapper;
 use Permits\Data\Mapper\LicencesAvailable as LicencesAvailableMapper;
 use Permits\Data\Mapper\NoOfPermits as NoOfPermitsMapper;
-use Permits\Data\Mapper\ChangeLicence as ChangeLicenceMapper;
 use Permits\Data\Mapper\RemovedCountries as RemovedCountriesMapper;
 
 /**
@@ -84,30 +83,6 @@ class FormConfig
             'mapper' => [
                 'type' => self::FORM_OPTIONS,
                 'class' => LicencesAvailableMapper::class
-            ]
-        ],
-    ];
-
-    const FORM_LICENCE = [
-        'licence' => [
-            'formClass' => 'LicenceForm',
-            'dataParam' => 'active',
-            'dataSource' => LicencesAvailableDataSource::DATA_KEY,
-            'mapper' => [
-                'type' => self::FORM_OPTIONS,
-                'class' => LicencesAvailableMapper::class
-            ]
-        ],
-    ];
-
-    const FORM_CONFIRM_CHANGE_LICENCE = [
-        'licence' => [
-            'formClass' => 'ChangeLicenceForm',
-            'dataRouteParam' => 'licence',
-            'dataSource' => LicencesAvailableDataSource::DATA_KEY,
-            'mapper' => [
-                'type' => self::FORM_OPTIONS,
-                'class' => ChangeLicenceMapper::class
             ]
         ],
     ];

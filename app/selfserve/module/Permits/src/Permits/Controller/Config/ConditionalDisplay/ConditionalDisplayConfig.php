@@ -10,7 +10,6 @@ use Permits\Controller\Config\DataSource\AvailableStocks;
 use Permits\Controller\Config\DataSource\PermitApplication as PermitAppDataSource;
 use Permits\Controller\Config\DataSource\PermitsAvailable;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
-use Permits\Controller\Config\DataSource\IrhpApplicationWithLicences;
 use Permits\View\Helper\IrhpApplicationSection;
 
 /**
@@ -63,33 +62,6 @@ class ConditionalDisplayConfig
             'key' => 'hasEligibleLicences',
             'value' => true,
             'route' => IrhpApplicationSection::ROUTE_NO_LICENCES,
-        ],
-    ];
-
-    const PERMIT_APP_CAN_APPLY_LICENCE_EXISTING_APP = [
-        [
-            'source' => LicencesAvailable::DATA_KEY,
-            'key' => 'hasOpenWindow',
-            'value' => true,
-            'route' => IrhpApplicationSection::ROUTE_WINDOW_CLOSED,
-        ],
-        [
-            'source' => LicencesAvailable::DATA_KEY,
-            'key' => 'permitsAvailable',
-            'value' => true,
-            'route' => IrhpApplicationSection::ROUTE_PERMITS_EXHAUSTED,
-        ],
-        [
-            'source' => LicencesAvailable::DATA_KEY,
-            'key' => 'hasEligibleLicences',
-            'value' => true,
-            'route' => IrhpApplicationSection::ROUTE_NO_LICENCES,
-        ],
-        [
-            'source' => LicencesAvailable::DATA_KEY,
-            'key' => 'isNotYetSubmitted',
-            'value' => true,
-            'route' => IrhpApplicationSection::ROUTE_PERMITS,
         ],
     ];
 
@@ -221,15 +193,6 @@ class ConditionalDisplayConfig
             'source' => IrhpAppDataSource::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_PERMITS,
             'key' => 'isReadyForNoOfPermits',
-            'value' => true
-        ],
-    ];
-
-    const PERMIT_APP_CONFIRM_CHANGE_LICENCE = [
-        [
-            'source' => IrhpApplicationWithLicences::DATA_KEY,
-            'route' => IrhpApplicationSection::ROUTE_PERMITS,
-            'key' => 'isNotYetSubmitted',
             'value' => true
         ],
     ];

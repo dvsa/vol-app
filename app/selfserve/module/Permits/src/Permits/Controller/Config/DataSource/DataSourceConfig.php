@@ -5,7 +5,6 @@ namespace Permits\Controller\Config\DataSource;
 use Permits\Controller\Config\DataSource\AvailableBilateralStocks as AvailableBilateralStocksDataSource;
 use Permits\Controller\Config\DataSource\PermitApplication as PermitAppDataSource;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
-use Permits\Controller\Config\DataSource\IrhpApplicationWithLicences as IrhpApplicationWithLicencesDataSource;
 use Permits\Controller\Config\DataSource\IrhpFeeBreakdown as IrhpFeeBreakdownDataSource;
 use Permits\Controller\Config\DataSource\IrhpFeePerPermit as IrhpFeePerPermitDataSource;
 use Permits\Controller\Config\DataSource\IrhpMaxStockPermits as IrhpMaxStockPermitsDataSource;
@@ -44,10 +43,6 @@ class DataSourceConfig
                 'func' => 'getCurrentOrganisationId'
             ]
         ],
-    ];
-
-    const PERMIT_APP_CHANGE_LICENCE = [
-        IrhpApplicationWithLicencesDataSource::class => [],
     ];
 
     const IRHP_APP_OVERVIEW = [
