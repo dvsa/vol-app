@@ -1,8 +1,6 @@
 <?php
 
 use Permits\View\Helper\IrhpApplicationSection;
-
-$translator = $this->getHelperPluginManager()->getServiceLocator()->get('Helper\Translation');
 ?>
 
 <div class="page-header__wrapper">
@@ -26,7 +24,6 @@ $translator = $this->getHelperPluginManager()->getServiceLocator()->get('Helper\
 
         <?php if ($isEligible): ?>
             <?php if ($issuedNo != 0 || $applicationsNo != 0) : ?>
-                <?php echo $translator->translateReplace('markup-ecmt-permit-guidance', ['']); ?>
                     <?php if ($issuedNo > 0): ?>
                         <?php echo $issuedTable; ?>
                         <p>&nbsp;</p>
@@ -35,7 +32,7 @@ $translator = $this->getHelperPluginManager()->getServiceLocator()->get('Helper\
                         <?php echo $applicationsTable; ?>
                     <?php endif; ?>
             <?php else: ?>
-                <?php echo $translator->translateReplace('markup-ecmt-permit-guidance', ['open']); ?>
+                <p><?php echo $this->escapeHtml($this->translate('dashboard.permits.empty')); ?></p>
             <?php endif; ?>
             <a href="<?php echo $this->url(IrhpApplicationSection::ROUTE_TYPE, [], [], true); ?>" role="button" draggable="false" class="govuk-button govuk-!-margin-top-8">
                 <?php echo $this->translate('permits.application.overview.button'); ?>
