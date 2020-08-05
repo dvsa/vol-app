@@ -34,14 +34,14 @@ class FormFactory
         $form = $this->serviceLocator->get('Helper\Form')->createForm($formName);
 
         $dataHandlerMappings = [
-            'ecmt_st_international_journeys' => 'QaEcmtShortTermInternationalJourneysDataHandler',
-            'ecmt_st_annual_trips_abroad' => 'QaEcmtShortTermAnnualTripsAbroadDataHandler',
+            'ecmt_st_international_journeys' => 'QaEcmtInternationalJourneysDataHandler',
+            'ecmt_st_annual_trips_abroad' => 'QaEcmtAnnualTripsAbroadDataHandler',
             'bilateral_permit_usage' => 'QaBilateralPermitUsageDataHandler',
         ];
 
         $isValidHandlerMappings = [
-            'ecmt_st_international_journeys' => 'QaEcmtShortTermInternationalJourneysIsValidHandler',
-            'ecmt_st_annual_trips_abroad' => 'QaEcmtShortTermAnnualTripsAbroadIsValidHandler',
+            'ecmt_st_international_journeys' => 'QaEcmtInternationalJourneysIsValidHandler',
+            'ecmt_st_annual_trips_abroad' => 'QaEcmtAnnualTripsAbroadIsValidHandler',
             'bilateral_permit_usage' => 'QaBilateralPermitusageIsValidHandler',
         ];
 
