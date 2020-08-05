@@ -33,6 +33,7 @@ class LicenceController extends AbstractSelfserveController
         'question' => [
             'browserTitle' => 'permits.page.licence.browser.title',
             'question' => 'permits.page.licence.question',
+            'cancelUri' => IrhpApplicationSection::ROUTE_PERMITS,
             'backUri' => IrhpApplicationSection::ROUTE_TYPE
         ],
     ];
