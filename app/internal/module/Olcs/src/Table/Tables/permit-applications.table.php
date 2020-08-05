@@ -1,5 +1,7 @@
 <?php
 
+use Common\Service\Table\Formatter\IrhpPermitsRequired;
+
 return [
     'variables' => [
         'title' => 'Permit Applications',
@@ -21,6 +23,7 @@ return [
         ],
         [
             'title' => 'dashboard-table-permit-application-num',
+            'formatter' => IrhpPermitsRequired::NAME,
             'name' => 'permitsRequired',
         ],
         [
