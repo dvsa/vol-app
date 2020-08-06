@@ -1,5 +1,7 @@
 <?php
 
+use Common\Util\Escape;
+
 return [
     'settings' => [
         'crud' => [
@@ -35,22 +37,67 @@ return [
     ],
     'columns' => [
         [
-            'title' => 'Permit Number',
+            'title' => 'Permit No',
             'name' => 'permitNumberWithPrefix'
         ],
         [
-            'title' => 'Emissions Category',
+            'title' => 'Application number',
+            'name' => 'id',
+            'formatter' => function ($row) {
+                $relatedApplication = $row['irhpPermitApplication']['relatedApplication'];
+
+                return $this->callFormatter(
+                    [
+                        'name' => 'id',
+                        'formatter' => 'IssuedPermitLicencePermitReference',
+                    ],
+                    [
+                        'id' => $relatedApplication['id'],
+                        'typeId' => $row['irhpPermitRange']['irhpPermitStock']['irhpPermitType']['id'],
+                        'licenceId' => $relatedApplication['licence']['id'],
+                        'applicationRef' => $relatedApplication['id'],
+                    ]
+                );
+            }
+        ],
+        [
+            'title' => 'Type',
+            'name' => 'type',
+            'formatter' => function ($row) {
+                return Escape::html($row['irhpPermitRange']['irhpPermitStock']['irhpPermitType']['name']['description']);
+            },
+        ],
+        [
+            'title' => 'Minimum emission standard',
             'name' => 'emissionsCategory',
-            'stack' => 'irhpPermitRange->emissionsCategory->description',
-            'formatter' => 'StackValue',
+            'formatter' => function ($row) {
+                return Escape::html($row['irhpPermitRange']['emissionsCategory']['description']);
+            },
         ],
         [
-            'title' => 'Operator Name',
-            'formatter' => 'IrhpPermitOrganisationName'
+            'title' => 'Issued date',
+            'name' => 'issueDate',
+            'formatter' => 'DateTime',
         ],
         [
-            'title' => 'Application Ref',
-            'formatter' => 'IrhpPermitApplicationRefLink'
+            'title' => 'Country',
+            'name' => 'country',
+            'formatter' => function ($row) {
+                return Escape::html($row['irhpPermitRange']['irhpPermitStock']['country']['countryDesc']);
+            },
+        ],
+        [
+            'title' => 'Usage',
+            'name' => 'usage',
+            'formatter' => function ($row) {
+                return $this->callFormatter(
+                    [
+                        'name' => 'irhpPermitRangeType',
+                        'formatter' => 'IrhpPermitRangeType',
+                    ],
+                    $row['irhpPermitRange']
+                );
+            }
         ],
         [
             'title' => 'Status',
