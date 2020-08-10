@@ -10,7 +10,6 @@ namespace AdminTest\Listener\RouteParam;
 use Common\Exception\ResourceNotFoundException;
 use Common\Service\Cqrs\Command\CommandSender;
 use Common\Service\Cqrs\Query\QuerySender;
-use Common\Service\Helper\UrlHelperService;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Event\RouteParam;
 use Admin\Listener\RouteParam\IrhpPermitAdminFurniture;
@@ -18,6 +17,7 @@ use Mockery as m;
 use Olcs\Listener\RouteParams;
 use Common\RefData;
 use Zend\Navigation\Navigation;
+use Zend\Navigation\Page\Mvc as NavigationPage;
 use Zend\View\Helper\Placeholder;
 use Zend\View\HelperPluginManager;
 
@@ -73,55 +73,31 @@ class IrhpPermitAdminFurnitureTest extends TestCase
         $this->sut->onIrhpPermitAdminFurniture($event);
     }
 
-    public function testOnIrhpPermitAdmin()
+    /**
+     * @dataProvider dpNoAdditionalNavProvider
+     */
+    public function testOnIrhpPermitAdminNoAdditionalNav($permitTypeId)
     {
         $stockId = 1;
+        $subTitle = 'Type: permit type description Validity: 01/01/2018 to 31/12/2018 Quota: 100';
+
         $irhpPermitStock = [
             'id' => $stockId,
             'validFrom' => '01-01-2018',
             'validTo' => '31-12-2018',
             'initialStock' => 100,
             'irhpPermitType' => [
-                'id' => '2',
+                'id' => $permitTypeId,
+                'isEcmtRemoval' => false,
                 'name' => [
-                    'description' => 'ECMT'
+                    'description' => 'permit type description'
                 ]
             ]
         ];
 
         $this->onIrhpPermitAdminSetup($irhpPermitStock);
 
-        $mockPlaceholder = m::mock()
-            ->shouldReceive('getContainer')
-            ->once()
-            ->with('pageTitle')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('set')
-                    ->once()
-                    ->with('Permits')
-                    ->getMock()
-            )
-            ->shouldReceive('getContainer')
-            ->once()
-            ->with('pageSubtitle')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('set')
-                    ->once()
-                    ->with("Type: ECMT Validity: 01/01/2018 to 31/12/2018 Quota: 100")
-                    ->getMock()
-            )
-            ->getMock();
-
-        $mockViewHelperManager = m::mock('\Zend\View\HelperPluginManager')
-            ->shouldReceive('get')->once()->with('placeholder')->andReturn($mockPlaceholder)
-            ->getMock();
-
-        $mockViewHelperManager->shouldReceive('get')
-            ->with('Url');
-
-        $this->sut->setViewHelperManager($mockViewHelperManager);
+        $this->getViewHelperManager($subTitle);
 
         $event = new RouteParam();
         $event->setValue($stockId);
@@ -129,55 +105,41 @@ class IrhpPermitAdminFurnitureTest extends TestCase
         $this->sut->onIrhpPermitAdminFurniture($event);
     }
 
-    public function testOnIrhpPermitAdminBilateralId()
+    public function dpNoAdditionalNavProvider()
+    {
+        return [
+            [Refdata::ECMT_PERMIT_TYPE_ID],
+            [Refdata::IRHP_BILATERAL_PERMIT_TYPE_ID],
+            [Refdata::ECMT_SHORT_TERM_PERMIT_TYPE_ID],
+        ];
+    }
+
+    /**
+     * @dataProvider dpWithAdditionalNavProvider
+     */
+    public function testOnIrhpPermitAdminWithAdditionalNav($permitTypeId)
     {
         $stockId = 1;
+        $subTitle = 'Type: permit type description Validity: 01/01/2018 to 31/12/2018 Quota: 100';
+
         $irhpPermitStock = [
             'id' => $stockId,
             'validFrom' => '01-01-2018',
             'validTo' => '31-12-2018',
             'initialStock' => 100,
             'irhpPermitType' => [
-                'id' => '4',
+                'id' => $permitTypeId,
+                'isEcmtRemoval' => false,
                 'name' => [
-                    'description' => 'Annual Bilateral permits (EU and EEA)'
+                    'description' => 'permit type description'
                 ]
             ]
         ];
 
         $this->onIrhpPermitAdminSetup($irhpPermitStock);
 
-        $mockPlaceholder = m::mock()
-            ->shouldReceive('getContainer')
-            ->once()
-            ->with('pageTitle')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('set')
-                    ->once()
-                    ->with('Permits')
-                    ->getMock()
-            )
-            ->shouldReceive('getContainer')
-            ->once()
-            ->with('pageSubtitle')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('set')
-                    ->once()
-                    ->with("Type: Annual Bilateral permits (EU and EEA) Validity: 01/01/2018 to 31/12/2018 Quota: 100")
-                    ->getMock()
-            )
-            ->getMock();
-
-        $mockViewHelperManager = m::mock('\Zend\View\HelperPluginManager')
-            ->shouldReceive('get')->once()->with('placeholder')->andReturn($mockPlaceholder)
-            ->getMock();
-
-        $mockViewHelperManager->shouldReceive('get')
-            ->with('Url');
-
-        $this->sut->setViewHelperManager($mockViewHelperManager);
+        $this->getViewHelperManager($subTitle);
+        $this->getMockNavigation();
 
         $event = new RouteParam();
         $event->setValue($stockId);
@@ -185,65 +147,36 @@ class IrhpPermitAdminFurnitureTest extends TestCase
         $this->sut->onIrhpPermitAdminFurniture($event);
     }
 
-    public function testOnIrhpPermitAdminMultilaterallId()
+    public function dpWithAdditionalNavProvider()
     {
-        $stockId = 1;
+        return [
+            [Refdata::IRHP_MULTILATERAL_PERMIT_TYPE_ID],
+            [Refdata::CERT_ROADWORTHINESS_TRAILER_PERMIT_TYPE_ID],
+            [Refdata::CERT_ROADWORTHINESS_VEHICLE_PERMIT_TYPE_ID],
+        ];
+    }
+
+    public function testOnIrhpPermitAdminRemovals()
+    {
+        $stockId = 10;
+        $subTitle = 'Type: Removals permit Stock: 10 Quota: 100';
+
         $irhpPermitStock = [
             'id' => $stockId,
-            'validFrom' => '01-01-2018',
-            'validTo' => '31-12-2018',
             'initialStock' => 100,
             'irhpPermitType' => [
-                'id' => RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID,
+                'id' => '3',
+                'isEcmtRemoval' => true,
                 'name' => [
-                    'description' => 'Annual Multilateral (EU and EEA)'
+                    'description' => 'Removals permit'
                 ]
             ]
         ];
 
         $this->onIrhpPermitAdminSetup($irhpPermitStock);
 
-        $mockPlaceholder = m::mock(Placeholder::class)
-            ->shouldReceive('getContainer')
-            ->once()
-            ->with('pageTitle')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('set')
-                    ->once()
-                    ->with('Permits')
-                    ->getMock()
-            )
-            ->shouldReceive('getContainer')
-            ->once()
-            ->with('pageSubtitle')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('set')
-                    ->once()
-                    ->with('Type: Annual Multilateral (EU and EEA) Validity: 01/01/2018 to 31/12/2018 Quota: 100')
-                    ->getMock()
-            )
-            ->getMock();
-
-        $mockNavigation = m::mock(Navigation::class)
-            ->shouldReceive('findOneBy')->once()->with('id', 'admin-dashboard/admin-permits/sectors')->andReturn(
-                m::mock(Navigation::class)->shouldReceive('setVisible')->once()->with(false)->getMock()
-            )->getMock()
-            ->shouldReceive('findOneBy')->once()->with('id', 'admin-dashboard/admin-permits/scoring')->andReturn(
-                m::mock(Navigation::class)->shouldReceive('setVisible')->once()->with(false)->getMock()
-            )->getMock()
-            ->shouldReceive('findOneBy')->once()->with('id', 'admin-dashboard/admin-permits/jurisdiction')->andReturn(
-                m::mock(Navigation::class)->shouldReceive('setVisible')->once()->with(false)->getMock()
-            )->getMock();
-
-        $this->sut->setNavigationService($mockNavigation);
-
-        $mockViewHelperManager = m::mock(HelperPluginManager::class)
-            ->shouldReceive('get')->once()->with('placeholder')->andReturn($mockPlaceholder)
-            ->getMock();
-
-        $this->sut->setViewHelperManager($mockViewHelperManager);
+        $this->getViewHelperManager($subTitle);
+        $this->getMockNavigation();
 
         $event = new RouteParam();
         $event->setValue($stockId);
@@ -274,9 +207,46 @@ class IrhpPermitAdminFurnitureTest extends TestCase
         $this->assertSame($mockNavigation, $sut->getNavigationService());
     }
 
-    public function testGetPageTitle()
+    private function getViewHelperManager($subTitle)
     {
-        $mockUrl = m::mock(UrlHelperService::class);
-        $mockUrl->shouldReceive('__invoke');
+        $titleContainer = m::mock(Placeholder\Container::class);
+        $titleContainer->expects('set')->with('Permits');
+
+        $subTitleContainer = m::mock(Placeholder\Container::class);
+        $subTitleContainer->expects('set')->with($subTitle);
+
+        $mockPlaceholder = m::mock(Placeholder::class);
+        $mockPlaceholder->expects('getContainer')->with('pageTitle')->andReturn($titleContainer);
+        $mockPlaceholder->expects('getContainer')->with('pageSubtitle')->andReturn($subTitleContainer);
+
+        $mockViewHelperManager = m::mock(HelperPluginManager::class);
+        $mockViewHelperManager->expects('get')->with('placeholder')->andReturn($mockPlaceholder);
+
+        $this->sut->setViewHelperManager($mockViewHelperManager);
+    }
+
+    private function getMockNavigation()
+    {
+        $sectorsPage = m::mock(NavigationPage::class);
+        $sectorsPage->expects('setVisible')->with(false);
+
+        $scoringPage = m::mock(NavigationPage::class);
+        $scoringPage->expects('setVisible')->with(false);
+
+        $jurisdictionPage = m::mock(NavigationPage::class);
+        $jurisdictionPage->expects('setVisible')->with(false);
+
+        $mockNavigation = m::mock(Navigation::class);
+        $mockNavigation->expects('findOneBy')
+            ->with('id', 'admin-dashboard/admin-permits/sectors')
+            ->andReturn($sectorsPage);
+        $mockNavigation->expects('findOneBy')
+            ->with('id', 'admin-dashboard/admin-permits/scoring')
+            ->andReturn($scoringPage);
+        $mockNavigation->expects('findOneBy')
+            ->with('id', 'admin-dashboard/admin-permits/jurisdiction')
+            ->andReturn($jurisdictionPage);
+
+        $this->sut->setNavigationService($mockNavigation);
     }
 }
