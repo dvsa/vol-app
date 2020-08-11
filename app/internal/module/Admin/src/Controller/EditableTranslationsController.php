@@ -86,7 +86,9 @@ class EditableTranslationsController extends AbstractInternalController implemen
                     'order' => 'asc',
                     'page' => 1,
                     'sort' => 'id',
-                    'translationSearch' => $this->params()->fromQuery('translationSearch')
+                    'translationSearch' => $this->params()->fromQuery('translationSearch'),
+                    'category' => $this->params()->fromQuery('category'),
+                    'subCategory' => $this->params()->fromQuery('subCategory'),
                 ]
             )
         );

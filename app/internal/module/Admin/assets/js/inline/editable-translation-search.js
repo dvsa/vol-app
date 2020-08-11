@@ -46,7 +46,9 @@ $(function () {
     searchBox.keypress(function (event) {
         if (searchBox.val().length > 2) {
             delayAjax(function(){
-                $.get("/admin/editable-translations/xhrsearch", {translationSearch: searchBox.val()}).done(function (data) {
+                $.get("/admin/editable-translations/xhrsearch",
+                    {translationSearch: searchBox.val(), category: urlParams.get("category"), subCategory: urlParams.get("subCategory")}
+                    ).done(function (data) {
                     searchResults.empty();
                     $.each(data.results, function (index, result) {
                         searchResults.append("<div class=\"translationAcRow\"><strong><a href=\"/admin/editable-translations/details/" + result.id + "\">" + result.id + "</a></strong><br>" + result.description + "</div>");
