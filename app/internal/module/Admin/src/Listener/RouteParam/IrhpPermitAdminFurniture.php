@@ -10,6 +10,7 @@ use Common\Service\Cqrs\Query\QuerySenderAwareTrait;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\ById as ItemDto;
+use Zend\View\Helper\Placeholder;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\EventManager\ListenerAggregateTrait;
@@ -18,7 +19,6 @@ use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Common\Exception\ResourceNotFoundException;
-use Zend\View\Model\ViewModel;
 
 /**
  * IRHP Permit Admin Furniture
@@ -103,6 +103,7 @@ class IrhpPermitAdminFurniture implements
 
         $permitStock = $this->getIrhpPermitStock($id);
 
+        /** @var Placeholder $placeholder */
         $placeholder = $this->getViewHelperManager()->get('placeholder');
         $placeholder->getContainer('pageTitle')->set('Permits');
         $placeholder->getContainer('pageSubtitle')->set($this->setSubtitle($permitStock));
@@ -146,6 +147,16 @@ class IrhpPermitAdminFurniture implements
 
     private function setSubtitle($permitStock)
     {
+        //the format for international removals is different to other permit types
+        if ($permitStock['irhpPermitType']['isEcmtRemoval']) {
+            return sprintf(
+                "Type: %s Stock: %s Quota: %s",
+                $permitStock['irhpPermitType']['name']['description'],
+                $permitStock['id'],
+                $permitStock['initialStock']
+            );
+        }
+
         $validFrom = date('d/m/Y', strtotime($permitStock['validFrom']));
         $validTo = date('d/m/Y', strtotime($permitStock['validTo']));
         $initialStock = $permitStock['initialStock'];
