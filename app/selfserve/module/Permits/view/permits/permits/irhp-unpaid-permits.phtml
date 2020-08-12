@@ -14,7 +14,17 @@ use Permits\View\Helper\IrhpApplicationSection;
         <h1 class="govuk-heading-xl">
             <?php echo $this->escapeHtml($data['title']); ?>
         </h1>
-        <?php echo $tables['unpaid-irhp-permits']; ?>
+        <?php
+
+        if ($data[IrhpAppDataSource::DATA_KEY]['irhpPermitType']['isEcmtShortTerm']) {
+            ?><div class="govuk-inset-text"><?php
+            echo $this->escapeHtml($this->translate('permits.irhp.unpaid.ecmt-short-term.inset'));
+            ?></div><?php
+        }
+
+        echo $tables['unpaid-irhp-permits'];
+
+        ?>
         <p>
         <a href="<?php echo $this->url(IrhpApplicationSection::ROUTE_AWAITING_FEE, [], [], true) ?>" class="return-overview">
             <?php echo $this->translate('permits.link.return.to.fee.overview'); ?>
