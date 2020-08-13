@@ -24,10 +24,10 @@ class SystemParameterDetails
     /**
      * @Form\Attributes({"placeholder":"","class":"medium"})
      * @Form\Options({"label":"Param value"})
-     * @Form\Type("Text")
+     * @Form\Type("TextArea")
      * @Form\Required(true)
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":255}})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":1024}})
      */
     public $paramValue = null;
 
