@@ -1,6 +1,12 @@
 $(function () {
     "use strict";
 
+    OLCS.cascadeInput({
+        source: "#category",
+        dest: "#subCategory",
+        url: "/list/sub-categories"
+    });
+
     var searchForm = $("#translationSearchForm");
     var searchBox = $("#translationSearch");
     var searchResults = $("#keySearchResults");
