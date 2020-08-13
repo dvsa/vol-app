@@ -110,6 +110,17 @@ $routes = array(
             )
         )
     ),
+    'accessibility-statement' => [
+        'type' => 'segment',
+        'options' =>  [
+            'route' => '/accessibility-statement[/]',
+            'defaults' => [
+                'controller' => \Common\Controller\GuidesController::class,
+                'action' => 'index',
+                'guide' => 'accessibility-statement',
+            ]
+        ]
+    ],
     //  search result page with filter and table of results
     'search' => array(
         'type' => 'segment',
@@ -1572,6 +1583,7 @@ return array(
                 'cookies*' => ['*'],
                 'privacy-notice' => ['*'],
                 'terms-and-conditions' => ['*'],
+                'accessibility-statement' => ['*'],
                 'not-found' => ['*'],
                 'server-error' => ['*'],
                 '*' => ['selfserve-user'],
