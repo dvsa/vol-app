@@ -1,5 +1,7 @@
 <?php
 
+use Common\Util\Escape;
+
 return [
     'settings' => [
         'paginate' => [
@@ -31,6 +33,10 @@ return [
             'title' => 'Placeholder',
             'name' => 'placeholder',
             'sort' => 'placeholder',
+            'formatter' => function ($row) {
+                // Replaces standard curly braces with html entity codes to avoid table helper variable replacement
+                return str_replace(['{', '}'], ['&#123;', '&#125;'], Escape::html($row['placeholder']));
+            },
         ],
         [
             'title' => 'Replacement Text',
