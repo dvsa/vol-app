@@ -48,7 +48,7 @@ class EditableTranslationsController extends AbstractInternalController implemen
      * @var array
      */
     protected $inlineScripts = [
-        'indexAction' => ['editable-translation-search'],
+        'indexAction' => ['editable-translation-search', 'forms/filter'],
         'detailsAction' => ['table-actions'],
         'editkeyAction' => ['forms/translation-key-modal']
     ];
