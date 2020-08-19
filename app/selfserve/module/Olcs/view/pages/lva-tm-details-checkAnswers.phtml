@@ -1,3 +1,7 @@
+<?php
+use Common\Util\Escape;
+?>
+
 <div class="js-body">
     <?php
         echo $this->partial(
@@ -34,16 +38,21 @@
           <?php endif; ?>
   
           <?php if (isset($resendForm)): ?>
-              <details class="help">
-                  <summary class="help__summary">Resend link to Transport Manager</summary>
+              <details class="govuk-details" data-module="govuk-details">
+                  <summary class="govuk-details__summary">
+                      <span class="govuk-details__summary-text">
+                          <?php echo Escape::html($this->translate('lva-tmverify-details-checkanswer-resend-tm-link')); ?>
+                      </span>
+                  </summary>
+                  <div class="govuk-details__text">
                   <?php
                   $resendForm->prepare();
                   echo $this->formErrors($resendForm);
                   echo $this->form($resendForm);
                   ?>
+                  </div>
               </details>
           <?php endif; ?>
-
 
           <?php
           if (isset($this->backLink)): ?>
