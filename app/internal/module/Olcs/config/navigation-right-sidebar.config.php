@@ -333,6 +333,16 @@ return [
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
                         ],
+                        [
+                            'id' => 'irhp-application-decisions-reset-to-not-yet-submitted',
+                            'label' => 'Reset to Not Yet Submitted',
+                            'route' => 'licence/irhp-application/application',
+                            'params' => [
+                                'action' => 'resetToNotYetSubmitted'
+                            ],
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ],
                     ],
                 ],
             ],

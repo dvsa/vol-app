@@ -14,6 +14,7 @@ use Common\Service\Cqrs\Exception\NotFoundException;
 use Common\Service\Qa\UsageContext;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\CancelApplication;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\Grant;
+use Dvsa\Olcs\Transfer\Command\IrhpApplication\ResetToNotYetSubmitted;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\ReviveFromUnsuccessful;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\ReviveFromWithdrawn;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\SubmitApplication;
@@ -113,6 +114,10 @@ class IrhpApplicationController extends AbstractInternalController implements
             'action' => 'index',
         ],
         'withdraw' => [
+            'route' => 'licence/irhp-application',
+            'action' => 'index',
+        ],
+        'resettonotyetsubmitted' => [
             'route' => 'licence/irhp-application',
             'action' => 'index',
         ],
@@ -564,6 +569,23 @@ class IrhpApplicationController extends AbstractInternalController implements
             'Are you sure?',
             'Grant Application. Are you sure?',
             'IRHP Application Granted'
+        );
+    }
+
+    /**
+     * Handles click of the Reset to Not Yet Submitted button on right sidebar
+     *
+     * @return \Zend\Http\Response
+     *
+     */
+    public function resetToNotYetSubmittedAction()
+    {
+        return $this->confirmCommand(
+            new ConfirmItem($this->itemParams),
+            ResetToNotYetSubmitted::class,
+            'Are you sure?',
+            'Are you sure you want to reset to Not Yet Submitted?',
+            'IRHP Application status updated'
         );
     }
 

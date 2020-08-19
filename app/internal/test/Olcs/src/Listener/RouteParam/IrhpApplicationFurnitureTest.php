@@ -203,6 +203,9 @@ class IrhpApplicationFurnitureTest extends TestCase
             )
             ->shouldReceive('findOneBy')->once()->with('id', 'irhp-application-decisions-revive-from-unsuccessful')->andReturn(
                 m::mock()->shouldReceive('setVisible')->once()->with($data['canBeRevivedFromUnsuccessful'])->getMock()
+            )
+            ->shouldReceive('findOneBy')->once()->with('id', 'irhp-application-decisions-reset-to-not-yet-submitted')->andReturn(
+                m::mock()->shouldReceive('setVisible')->once()->with($data['canBeResetToNotYetSubmitted'])->getMock()
             );
 
         $mockNavigation->shouldReceive('findOneBy')->once()->with('id', 'licence_irhp_applications')->andReturn(
@@ -241,6 +244,7 @@ class IrhpApplicationFurnitureTest extends TestCase
                     'isGrantable' => false,
                     'canBeRevivedFromWithdrawn' => false,
                     'canBeRevivedFromUnsuccessful' => false,
+                    'canBeResetToNotYetSubmitted' => false,
                 ],
                 [
                     'isCancelVisible' => false,
@@ -262,6 +266,7 @@ class IrhpApplicationFurnitureTest extends TestCase
                     'isGrantable' => false,
                     'canBeRevivedFromWithdrawn' => false,
                     'canBeRevivedFromUnsuccessful' => false,
+                    'canBeResetToNotYetSubmitted' => true,
                 ],
                 [
                     'isCancelVisible' => false,
@@ -283,6 +288,7 @@ class IrhpApplicationFurnitureTest extends TestCase
                     'isGrantable' => false,
                     'canBeRevivedFromWithdrawn' => false,
                     'canBeRevivedFromUnsuccessful' => false,
+                    'canBeResetToNotYetSubmitted' => false,
                 ],
                 [
                     'isCancelVisible' => false,
@@ -304,6 +310,7 @@ class IrhpApplicationFurnitureTest extends TestCase
                     'isGrantable' => true,
                     'canBeRevivedFromWithdrawn' => true,
                     'canBeRevivedFromUnsuccessful' => false,
+                    'canBeResetToNotYetSubmitted' => false,
                 ],
                 [
                     'isCancelVisible' => true,
