@@ -43,6 +43,22 @@ class PermitStockDetails
 
     /**
      * @Form\Type("DynamicSelect")
+     * @Form\Name("permitCategory")
+     * @Form\Required(false)
+     * @Form\Attributes({"id":"permitCategory","placeholder":"","class":"medium", "data-container-class":"permitCategoryFields js-hidden"})
+     * @Form\Options({
+     *     "label": "Permit Category",
+     *     "disable_inarray_validator": false,
+     *     "empty_option": "Please Select",
+     *     "service_name": "Common\Service\Data\RefData",
+     *     "context": "permit_cat",
+     *     "required": false
+     * })
+     */
+    public $permitCategory = null;
+
+    /**
+     * @Form\Type("DynamicSelect")
      * @Form\Name("applicationPathGroup")
      * @Form\Required(false)
      * @Form\Attributes({"id":"applicationPathGroup","placeholder":"","class":"medium", "data-container-class":"pathProcess js-hidden"})
