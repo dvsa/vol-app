@@ -10,18 +10,12 @@
         'query' => ['fromOverview' => 1]
     ];
     $countriesPageUrl = $this->url(Section::ROUTE_COUNTRIES, [], $countriesPageUrlOptions, true);
-
-    $backUrl = $countriesPageUrl;
-    if ($data['fromDashboard']) {
-        $backUrl = $this->url('permits');
-    }
-
 ?>
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <div class="page-header">
-            <p><a href="<?php echo $backUrl; ?>" class="govuk-back-link"> <?php echo $this->escapeHtml($this->translate('common.link.back.label')); ?></a></p>
+            <p><a href="<?php echo $this->url('permits'); ?>" class="govuk-back-link"> <?php echo $this->escapeHtml($this->translate('common.link.back-to-permits.label')); ?></a></p>
             <div class="page-header__wrapper">
                 <span class="govuk-caption-xl">
                     <span class="visually-hidden"><?php echo($this->escapeHtml($this->translate('permits.application.overview.application.reference'))); ?></span>

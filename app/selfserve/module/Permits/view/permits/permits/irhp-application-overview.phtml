@@ -10,7 +10,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <div class="page-header">
-            <p><a href="<?php echo $this->url('permits'); ?>" class="govuk-back-link"> <?php echo $this->escapeHtml($this->translate('common.link.back.label')); ?></a></p>
+            <p><a href="<?php echo $this->url('permits'); ?>" class="govuk-back-link"> <?php echo $this->escapeHtml($this->translate('common.link.back-to-permits.label')); ?></a></p>
             <div class="page-header__wrapper">
                 <span class="govuk-caption-xl">
                     <span class="visually-hidden"><?php echo($this->escapeHtml($this->translate('permits.application.overview.application.reference'))); ?></span>
@@ -22,12 +22,6 @@
             </div>
         </div>
         <?php echo $this->flashMessengerAll(); ?>
-
-        <p class="govuk-body">
-            <?php echo $this->translate('permits.irhp-application.overview.complete-all-sections'); ?>
-            <br>
-            <?php echo $this->translate('permits.irhp-application.overview.further-guidance'); ?>
-        </p>
 
         <div class="field">
             <div class="table_wrapper">
