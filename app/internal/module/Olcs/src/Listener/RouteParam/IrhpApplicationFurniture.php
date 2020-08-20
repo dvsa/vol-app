@@ -220,6 +220,9 @@ class IrhpApplicationFurniture implements
         $sidebarNav->findOneBy('id', 'irhp-application-decisions-revive-from-unsuccessful')
             ->setVisible($irhpApplication['canBeRevivedFromUnsuccessful']);
 
+        $sidebarNav->findOneBy('id', 'irhp-application-decisions-reset-to-not-yet-submitted')
+            ->setVisible($irhpApplication['canBeResetToNotYetSubmitted']);
+
         $right = new ViewModel();
         $right->setTemplate('sections/irhp-application/partials/right');
 

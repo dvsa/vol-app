@@ -961,7 +961,7 @@ $routes = [
                         'options' => [
                             'route' => ':action/:irhpAppId[/][:permitId]',
                             'constraints' => [
-                                'action' => 'edit|submit|accept|decline|cancel|terminate|withdraw|grant|preGrant|preGrantEdit|preGrantAdd|preGrantDelete|ranges|reviveFromWithdrawn|reviveFromUnsuccessful|viewpermits',
+                                'action' => 'edit|submit|accept|decline|cancel|terminate|withdraw|grant|preGrant|preGrantEdit|preGrantAdd|preGrantDelete|ranges|reviveFromWithdrawn|reviveFromUnsuccessful|viewpermits|resetToNotYetSubmitted',
                                 'irhpAppId' => '[0-9]+',
                                 'permitId' => '[0-9]+',
                             ],
