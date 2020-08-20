@@ -60,7 +60,6 @@ class IrhpApplicationController extends AbstractSelfserveController
         parent::retrieveData();
 
         if (isset($this->data['questionAnswer']['countries'])) {
-            $this->data['fromDashboard'] = isset($this->queryParams['fromDashboard']);
             $this->templateConfig['default'] = 'permits/irhp-application-overview-bilateral';
 
             // If the declaration has been completed, the status of the submitAndPay section also needs to be specified
