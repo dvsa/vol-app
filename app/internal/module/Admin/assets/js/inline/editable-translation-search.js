@@ -11,7 +11,9 @@ $(function () {
     var searchBox = $("#translationSearch");
     var searchResults = $("#keySearchResults");
     var autcompleteDiv = $("#keyAutocomplete");
+    var jsonBaseUrl = $("#jsonBaseUrl").val();
     const urlParams = new URLSearchParams(window.location.search);
+    var resDisplayField = jsonBaseUrl.includes("partial") ?  "partialKey" : "description";
 
     var delayAjax = (function(){
         var timer = 0;
@@ -52,12 +54,12 @@ $(function () {
     searchBox.keypress(function (event) {
         if (searchBox.val().length > 2) {
             delayAjax(function(){
-                $.get("/admin/editable-translations/xhrsearch",
+                $.get(jsonBaseUrl+"xhrsearch",
                     {translationSearch: searchBox.val(), category: urlParams.get("category"), subCategory: urlParams.get("subCategory")}
                     ).done(function (data) {
                     searchResults.empty();
                     $.each(data.results, function (index, result) {
-                        searchResults.append("<div class=\"translationAcRow\"><strong><a href=\"/admin/editable-translations/details/" + result.id + "\">" + result.id + "</a></strong><br>" + result.description + "</div>");
+                        searchResults.append("<div class=\"translationAcRow\"><strong><a href=\""+jsonBaseUrl+"details/" + result.id + "\">" + result.id + "</a></strong><br>" + result[resDisplayField] + "</div>");
                     });
                     showAutocomplete();
                 });

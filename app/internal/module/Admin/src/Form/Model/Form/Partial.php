@@ -3,21 +3,21 @@
 namespace Admin\Form\Model\Form;
 
 use Zend\Form\Annotation as Form;
+use Olcs\Form\Model\Fieldset\Base;
 
 /**
- * @Form\Name("translationKey")
+ * @Form\Name("Partial")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
- * @Form\Options({"label": "Edit translation key"})
+ * @Form\Options({"prefer_form_input_filter": true})
  */
-class TranslationKey
+class Partial extends Base
 {
     /**
      * @Form\Name("fields")
      * @Form\ComposedObject("Admin\Form\Model\Fieldset\TranslationKey")
      */
     public $fields = null;
-
 
     /**
      * @Form\Attributes({"value":""})

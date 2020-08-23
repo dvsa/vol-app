@@ -71,6 +71,8 @@ class EditableTranslationsController extends AbstractInternalController implemen
     public function indexAction()
     {
         $this->placeholder()->setPlaceholder('translationSearch', urldecode($this->params()->fromQuery('translationSearch')));
+        $this->placeholder()->setPlaceholder('resultsTableTitle', 'Editable Translations');
+        $this->placeholder()->setPlaceholder('jsonBaseUrl', $this->url()->fromRoute('admin-dashboard/admin-editable-translations'));
         return parent::indexAction();
     }
 
@@ -172,6 +174,9 @@ class EditableTranslationsController extends AbstractInternalController implemen
                     'admin-dashboard/admin-editable-translations'
                 )
             );
+
+        $form->get('resultsKey')->setValue('translationKeyTexts');
+        $form->get('translationVar')->setValue('translatedText');
 
         $this->placeholder()->setPlaceholder('pageTitle', 'Edit Translation Key');
         $view->setTemplate('pages/editable-translations/edit-translation-key-form');
