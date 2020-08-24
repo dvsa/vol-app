@@ -238,7 +238,7 @@ var sass = require('node-sass');
                         dest: 'public/images/'
                     }, {
                         expand: true,
-                        cwd: 'node_modules/govuk-frontend/assets/images/',
+                        cwd: 'node_modules/govuk-frontend/govuk/assets/images/',
                         src: ['**/*.{png,jpg,gif,svg,ico}'],
                         dest: 'public/assets/images/'
                     }]

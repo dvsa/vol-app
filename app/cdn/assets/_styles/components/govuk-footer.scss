@@ -1,0 +1,20 @@
+/**
+ * GOV.UK footer overrides
+ */
+
+.govuk-footer {
+
+  &__support {
+    margin-bottom: $gutter;
+    list-style-type: none;
+  }
+
+  &__inline-list-item {
+    margin-bottom: 0px;
+    // 'Built by...' link
+    &:last-child {
+      display: block;
+    }
+  }
+
+}
