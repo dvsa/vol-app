@@ -26,7 +26,6 @@ class IrhpApplicationFeeSummary
     const PERMIT_YEAR_HEADING = 'permits.page.fee.permit.year';
     const PERMIT_PERIOD_HEADING = 'permits.page.fee.permit.period';
     const NUM_PERMITS_HEADING = 'permits.page.fee.number.permits';
-    const NUM_PERMITS_REQUIRED_HEADING = 'permits.page.fee.number.permits.required';
     const FEE_TOTAL_HEADING = 'permits.page.irhp-fee.permit.fee.total';
     const TOTAL_ISSUE_FEE_HEADING = 'permits.page.fee.permit.fee.issue.total';
     const TOTAL_APPLICATION_FEE_HEADING = 'permits.page.fee.permit.fee.total';
@@ -405,7 +404,7 @@ class IrhpApplicationFeeSummary
     private function getStandardNoOfPermitsRow(array $data)
     {
         return [
-            'key' => self::NUM_PERMITS_REQUIRED_HEADING,
+            'key' => self::NUM_PERMITS_HEADING,
             'value' => $data['permitsRequired'],
         ];
     }
@@ -465,7 +464,7 @@ class IrhpApplicationFeeSummary
         }
 
         return [
-            'key' => $data['isAwaitingFee'] ? self::NUM_PERMITS_HEADING : self::NUM_PERMITS_REQUIRED_HEADING,
+            'key' => self::NUM_PERMITS_HEADING,
             'value' => implode('<br>', $lines),
             'disableHtmlEscape' => true,
         ];

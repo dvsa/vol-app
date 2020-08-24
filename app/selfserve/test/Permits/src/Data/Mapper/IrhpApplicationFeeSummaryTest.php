@@ -125,7 +125,7 @@ class IrhpApplicationFeeSummaryTest extends TestCase
                         'value' => $permitTypeDesc,
                     ],
                     [
-                        'key' => IrhpApplicationFeeSummary::NUM_PERMITS_REQUIRED_HEADING,
+                        'key' => IrhpApplicationFeeSummary::NUM_PERMITS_HEADING,
                         'value' => $permitsRequired,
                     ],
                     [
@@ -236,7 +236,7 @@ class IrhpApplicationFeeSummaryTest extends TestCase
                         'value' => $permitTypeDesc,
                     ],
                     [
-                        'key' => IrhpApplicationFeeSummary::NUM_PERMITS_REQUIRED_HEADING,
+                        'key' => IrhpApplicationFeeSummary::NUM_PERMITS_HEADING,
                         'value' => $permitsRequired,
                     ],
                     [
@@ -340,7 +340,7 @@ class IrhpApplicationFeeSummaryTest extends TestCase
                         'value' => $permitTypeDesc,
                     ],
                     [
-                        'key' => IrhpApplicationFeeSummary::NUM_PERMITS_REQUIRED_HEADING,
+                        'key' => IrhpApplicationFeeSummary::NUM_PERMITS_HEADING,
                         'value' => $permitsRequired,
                     ],
                     [
@@ -425,7 +425,7 @@ class IrhpApplicationFeeSummaryTest extends TestCase
                         'value' => $permitTypeDesc,
                     ],
                     [
-                        'key' => IrhpApplicationFeeSummary::NUM_PERMITS_REQUIRED_HEADING,
+                        'key' => IrhpApplicationFeeSummary::NUM_PERMITS_HEADING,
                         'value' => $permitsRequired,
                     ],
                     [
@@ -539,7 +539,7 @@ class IrhpApplicationFeeSummaryTest extends TestCase
                         'isCurrency' => true,
                     ],
                     [
-                        'key' => IrhpApplicationFeeSummary::NUM_PERMITS_REQUIRED_HEADING,
+                        'key' => IrhpApplicationFeeSummary::NUM_PERMITS_HEADING,
                         'value' => $permitsRequired,
                     ],
                     [
@@ -679,7 +679,7 @@ class IrhpApplicationFeeSummaryTest extends TestCase
                         'value' => $formattedDateReceived,
                     ],
                     [
-                        'key' => IrhpApplicationFeeSummary::NUM_PERMITS_REQUIRED_HEADING,
+                        'key' => IrhpApplicationFeeSummary::NUM_PERMITS_HEADING,
                         'value' => $formattedNoOfPermitsRequired,
                         'disableHtmlEscape' => true,
                     ],
@@ -844,7 +844,7 @@ class IrhpApplicationFeeSummaryTest extends TestCase
                         'value' => $formattedDateReceived,
                     ],
                     [
-                        'key' => IrhpApplicationFeeSummary::NUM_PERMITS_REQUIRED_HEADING,
+                        'key' => IrhpApplicationFeeSummary::NUM_PERMITS_HEADING,
                         'value' => $formattedNoOfPermitsRequired,
                         'disableHtmlEscape' => true,
                     ],
