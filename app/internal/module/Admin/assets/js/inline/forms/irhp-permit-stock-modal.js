@@ -6,6 +6,7 @@ $(function () {
     const BILATERAL_ID = 4;
     const CERT_ROADWORTHINESS_VEHICLE_ID = 6;
     const CERT_ROADWORTHINESS_TRAILER_ID = 7;
+    const COUNTRY_ID_MOROCCO = 'MA';
 
     const IS_QA_PROCESS = [
         ECMT_ANNUAL_ID,
@@ -16,18 +17,35 @@ $(function () {
         CERT_ROADWORTHINESS_TRAILER_ID
     ];
 
+    var country = $("#country");
     var stockCountry = $(".stockCountry");
     var stockDates = $(".stockDates");
     var typeSelect = $("#irhpPermitType");
     var pathProcessFields = $(".pathProcess");
     var appPathGrp = $("#applicationPathGroup");
-    var selectedTypeId = parseInt(typeSelect.val(), 10);
+    var permitCategory = $("#permitCategory");
+    var permitCategoryFields = $(".permitCategoryFields");
 
-    function toggle(typeId) {
+    function getSelectedTypeId() {
+        return parseInt(typeSelect.val(), 10);
+    }
+
+    function toggle() {
+        var typeId = getSelectedTypeId();
+
         if (typeId === BILATERAL_ID) {
+            if (country.val() == COUNTRY_ID_MOROCCO) {
+                permitCategoryFields.removeClass("js-hidden");
+            } else {
+                permitCategoryFields.addClass("js-hidden");
+                permitCategory.val("");
+            }
             stockCountry.removeClass("js-hidden");
         } else {
             stockCountry.addClass("js-hidden");
+            permitCategoryFields.addClass("js-hidden");
+            permitCategory.val("");
+            country.val("");
         }
 
         if (typeId === ECMT_REMOVAL_ID || typeId === CERT_ROADWORTHINESS_VEHICLE_ID || typeId === CERT_ROADWORTHINESS_TRAILER_ID) {
@@ -44,13 +62,18 @@ $(function () {
     }
 
     typeSelect.change(function () {
-        selectedTypeId = parseInt(typeSelect.val(), 10);
-        toggle(selectedTypeId);
+        toggle();
     });
 
-    toggle(selectedTypeId);
+    country.change(function() {
+        toggle();
+    });
+
+    toggle();
 
     $("#IrhpPermitStock").submit(function (e) {
+        var selectedTypeId = getSelectedTypeId();
+
         if (
             IS_QA_PROCESS.includes(selectedTypeId)
             && appPathGrp.val() == ""
