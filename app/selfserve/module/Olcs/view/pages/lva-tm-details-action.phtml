@@ -56,12 +56,12 @@ use Common\Util\Escape;
   
           <?php if (isset($resendForm)): ?>
               <details class="govuk-details" data-module="govuk-details">
-                  <summary class="govuk-details__summary">
+                  <summary class="govuk-details__summary" aria-controls="details-content-resend-link">
                       <span class="govuk-details__summary-text">
                           <?php echo Escape::html($this->translate('lva-tmverify-details-checkanswer-resend-tm-link')); ?>
                       </span>
                   </summary>
-                  <div class="govuk-details__text">
+                  <div class="govuk-details__text" id="details-content-resend-link">
                   <?php
                   $resendForm->prepare();
                   echo $this->formErrors($resendForm);
