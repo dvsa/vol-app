@@ -130,7 +130,7 @@ class IrhpApplicationFurnitureTest extends TestCase
             ->shouldReceive('getContainer')->once()
             ->with('horizontalNavigationId')
             ->andReturn(
-                m::mock()->shouldReceive('set')->once()->with('licence_irhp_applications')->getMock()
+                m::mock()->shouldReceive('set')->once()->with('licence_irhp_permits-application')->getMock()
             )
             ->shouldReceive('getContainer')->once()
             ->with('irhpPermit')
@@ -208,9 +208,6 @@ class IrhpApplicationFurnitureTest extends TestCase
                 m::mock()->shouldReceive('setVisible')->once()->with($data['canBeResetToNotYetSubmitted'])->getMock()
             );
 
-        $mockNavigation->shouldReceive('findOneBy')->once()->with('id', 'licence_irhp_applications')->andReturn(
-            m::mock()->shouldReceive('setVisible')->once()->with(true)->getMock()
-        );
         $mockNavigation->shouldReceive('findOneBy')->once()->with('id', 'licence_irhp_applications-pregrant')->andReturn(
             m::mock()->shouldReceive('setVisible')->once()->with(true)->getMock()
         );
