@@ -16,8 +16,6 @@ OLCS.ready(function() {
 
   OLCS.searchFilter();
 
-  OLCS.singleActivePermitsRequiredTextbox();
-
   //load govuk frontend
   window.GOVUKFrontend.initAll();
   module.exports = window.cookieManager;
