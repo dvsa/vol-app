@@ -13,6 +13,8 @@ $(function () {
 
     var fieldset = $("*[data-group=\"fields\"]");
     var jsonBaseUrl = $("#jsonUrl").val();
+    var resultsKey = $("#resultsKey").val();
+    var translationVar = $("#translationVar").val();
 
     getLanguages();
 
@@ -42,8 +44,8 @@ $(function () {
     function getTranslatedText() {
         $.get(jsonBaseUrl + "gettext/" + $("#id").val(),
             function (response) {
-                $.each(response.translationKeyTexts, function (ix, text) {
-                    $("#input-" + text.language.isoCode).val(text.translatedText);
+                $.each(response[resultsKey], function (ix, text) {
+                    $("#input-" + text.language.isoCode).val(text[translationVar]);
                 });
                 $("#mainForm").removeClass("js-hidden");
                 $("#loading").addClass("js-hidden");

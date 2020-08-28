@@ -328,6 +328,11 @@ return [
                             'id' => 'admin-dashboard/content-management/replacements',
                             'label' => 'Replacements',
                             'route' => 'admin-dashboard/admin-replacements',
+                        ],
+                        [
+                            'id' => 'admin-dashboard/content-management/partials',
+                            'label' => 'Partials',
+                            'route' => 'admin-dashboard/admin-partials',
                         ]
                     ],
                 ],
