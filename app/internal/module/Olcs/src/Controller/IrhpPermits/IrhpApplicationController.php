@@ -877,6 +877,9 @@ class IrhpApplicationController extends AbstractInternalController implements
      */
     public function preGrantAction()
     {
+        $this->navigationId = 'licence_irhp_applications-pregrant';
+        $this->setNavigationCurrentLocation();
+
         $request = $this->getRequest();
         if ($request->isPost()) {
             $postData = (array)$this->params()->fromPost();

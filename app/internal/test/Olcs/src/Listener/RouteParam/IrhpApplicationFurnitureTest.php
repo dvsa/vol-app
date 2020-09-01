@@ -94,26 +94,6 @@ class IrhpApplicationFurnitureTest extends TestCase
             'businessProcess' => ['id' => RefData::BUSINESS_PROCESS_APGG]
         ];
 
-        $mockApplicationService = m::mock('Zend\Mvc\Application')
-            ->shouldReceive('getMvcEvent')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('getRouteMatch')
-                    ->andReturn(
-                        m::mock()
-                            ->shouldReceive('getParams')
-                            ->andReturn(['action' => 'edit'])
-                            ->once()
-                            ->getMock()
-                    )
-                    ->once()
-                    ->getMock()
-            )
-            ->once()
-            ->getMock();
-
-        $this->sut->setApplicationService($mockApplicationService);
-
         $irhpApplication = array_merge($irhpAppData, $data);
 
         $mockUrl = m::mock(UrlHelperService::class);
@@ -210,6 +190,9 @@ class IrhpApplicationFurnitureTest extends TestCase
 
         $mockNavigation->shouldReceive('findOneBy')->once()->with('id', 'licence_irhp_applications-pregrant')->andReturn(
             m::mock()->shouldReceive('setVisible')->once()->with(true)->getMock()
+        );
+        $mockNavigation->shouldReceive('findOneBy')->once()->with('id', 'irhp_permits-permits')->andReturn(
+            m::mock()->shouldReceive('setVisible')->once()->with(false)->getMock()
         );
 
         $this->sut->setNavigationService($mockNavigation);

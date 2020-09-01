@@ -173,8 +173,6 @@ class IrhpApplicationFurniture implements
         $sidebarNav->findOneBy('id', 'irhp-application-quick-actions-terminate')
             ->setVisible($irhpApplication['canBeTerminated']);
 
-        $routeParams = $this->getApplicationService()->getMvcEvent()->getRouteMatch()->getParams();
-
         // Enable Link to view full permits if app is in Valid status
         if ($irhpApplication['status']['id'] == RefData::PERMIT_APP_STATUS_VALID) {
             $mainNav->findOneBy('id', 'irhp_permits-permits')
@@ -189,10 +187,8 @@ class IrhpApplicationFurniture implements
             $mainNav->findOneBy('id', 'licence_irhp_applications-pregrant')
                 ->setVisible(true);
 
-            if ($routeParams['action'] === 'preGrant') {
-                $mainNav->findOneBy('id', 'licence_irhp_applications-pregrant')
-                    ->setActive(true);
-            }
+            $mainNav->findOneBy('id', 'irhp_permits-permits')
+                ->setVisible(false);
         }
 
         // decisions
