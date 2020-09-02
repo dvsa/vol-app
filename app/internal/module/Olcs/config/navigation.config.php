@@ -566,6 +566,130 @@ $nav = [
                                     'label' => 'Permit Applications',
                                     'route' => 'licence/irhp-permits/application',
                                     'use_route_match' => true,
+                                    'pages' => [
+                                        [
+                                            'id' => 'licence_irhp_permits-application-details',
+                                            'label' => 'Application details',
+                                            'route' => 'licence/irhp-application/application',
+                                            'use_route_match' => true,
+                                            'params' => [
+                                                'action' => 'details',
+                                            ],
+                                            'pages' => [
+                                                [
+                                                    'id' => 'licence_irhp_applications-edit',
+                                                    'label' => 'Application',
+                                                    'route' => 'licence/irhp-application/application',
+                                                    'use_route_match' => true,
+                                                    'params' => [
+                                                        'action' => 'edit',
+                                                    ],
+                                                ],
+                                                [
+                                                    'id' => 'irhp_permits-permits',
+                                                    'label' => 'Permits',
+                                                    'route' => 'licence/irhp-application/application',
+                                                    'params' => [
+                                                        'action' => 'viewpermits',
+                                                    ],
+                                                    'use_route_match' => true,
+                                                ],
+                                                [
+                                                    'id' => 'licence_irhp_applications-pregrant',
+                                                    'label' => 'Permits',
+                                                    'route' => 'licence/irhp-application/application',
+                                                    'visible' => 0,
+                                                    'use_route_match' => true,
+                                                    'params' => [
+                                                        'action' => 'preGrant',
+                                                        'id' => null
+                                                    ],
+                                                ],
+                                            ]
+                                        ],
+                                        [
+                                            'id' => 'licence_irhp_applications-document',
+                                            'label' => 'Docs & Attachments',
+                                            'route' => 'licence/irhp-application-docs',
+                                            'use_route_match' => true,
+                                        ],
+                                        [
+                                            'id' => 'licence_irhp_applications-processing',
+                                            'label' => 'Processing',
+                                            'route' => 'licence/irhp-application/application',
+                                            'use_route_match' => true,
+                                            'params' => [
+                                                'action' => 'processing',
+                                                'id' => null
+                                            ],
+                                            'pages' => [
+                                                [
+                                                    'id' => 'licence_irhp_applications_processing_notes',
+                                                    'label' => 'Notes',
+                                                    'route' => 'licence/irhp-application-processing/notes',
+                                                    'use_route_match' => true,
+                                                ],
+                                                [
+                                                    'id' => 'licence_irhp_applications_processing_tasks',
+                                                    'label' => 'Tasks',
+                                                    'route' => 'licence/irhp-application-processing/tasks',
+                                                    'use_route_match' => true,
+                                                ],
+                                                [
+                                                    'id' => 'licence_irhp_applications_processing_event-history',
+                                                    'label' => 'Change history',
+                                                    'route' => 'licence/irhp-application-processing/event-history',
+                                                    'use_route_match' => true,
+                                                ],
+                                                [
+                                                    'id' => 'licence_irhp_applications_processing_read-history',
+                                                    'label' => 'internal-crud-read-history',
+                                                    'route' => 'licence/irhp-application-processing/read-history',
+                                                    'use_route_match' => true,
+                                                ],
+                                            ]
+                                        ],
+                                        [
+                                            'id' => 'licence_irhp_applications-fees',
+                                            'label' => 'Fees',
+                                            'route' => 'licence/irhp-application-fees/table',
+                                            'use_route_match' => true,
+                                            'pages' => [
+                                                [
+                                                    'id' => 'licence_irhp_applications-fees_details',
+                                                    'label' => 'Fee details',
+                                                    'route' => 'licence/irhp-application-fees/fee_action',
+                                                ],
+                                                [
+                                                    'id' => 'licence_irhp_applications-fees_transaction',
+                                                    'label' => 'Transaction details',
+                                                    'route' => 'licence/irhp-application-fees/fee_action/transaction',
+                                                ],
+                                            ]
+                                        ],
+                                        [
+                                            'id' => 'licence_irhp_applications-cancel',
+                                            'label' => 'Cancel',
+                                            'visible' => 0,
+                                            'route' => 'licence/irhp-application/application',
+                                            'use_route_match' => true,
+                                            'params' => [
+                                                'action' => 'cancel',
+                                                'id' => null
+                                            ],
+                                        ],
+                                        [
+                                            'id' => 'licence_irhp_applications-submit',
+                                            'label' => 'Submit',
+                                            'visible' => 0,
+                                            'route' => 'licence/irhp-application/application',
+                                            'use_route_match' => true,
+                                            'params' => [
+                                                'action' => 'submit',
+                                                'id' => null
+                                            ],
+                                        ],
+                                    ],
                                 ],
                                 [
                                     'id' => 'licence_irhp_permits-permit',
@@ -574,138 +698,6 @@ $nav = [
                                     'use_route_match' => true,
                                 ],
                             ]
-                        ],
-                        [
-                            'id' => 'licence_irhp_applications',
-                            'label' => 'IRHP Permits',
-                            'visible' => 0,
-                            'route' => 'licence/irhp-application',
-                            'use_route_match' => true,
-                            'pages' => [
-                                [
-                                    'id' => 'licence_irhp_applications-edit',
-                                    'label' => 'Application details',
-                                    'route' => 'licence/irhp-application/application',
-                                    'use_route_match' => true,
-                                    'params' => [
-                                        'action' => 'edit',
-                                    ],
-                                    'pages' => [
-                                        [
-                                            'id' => 'licence_irhp_applications_processing_tasks',
-                                            'label' => 'Application',
-                                            'route' => 'licence/irhp-application/application',
-                                            'use_route_match' => true,
-                                            'params' => [
-                                                'action' => 'edit',
-                                            ],
-                                        ],
-                                        [
-                                            'id' => 'irhp_permits-permits',
-                                            'label' => 'Permits',
-                                            'route' => 'licence/irhp-application/application',
-                                            'visible' => 1,
-                                            'params' => [
-                                                'action' => 'viewpermits',
-                                            ],
-                                            'use_route_match' => true,
-                                        ],
-                                        [
-                                            'id' => 'licence_irhp_applications-pregrant',
-                                            'label' => 'Permits',
-                                            'route' => 'licence/irhp-application/application',
-                                            'visible' => 0,
-                                            'use_route_match' => true,
-                                            'params' => [
-                                                'action' => 'preGrant',
-                                                'id' => null
-                                            ],
-                                        ],
-                                    ]
-                                ],
-                                [
-                                    'id' => 'licence_irhp_applications-document',
-                                    'label' => 'Docs & Attachments',
-                                    'route' => 'licence/irhp-application-docs',
-                                    'use_route_match' => true,
-                                ],
-                                [
-                                    'id' => 'licence_irhp_applications-processing',
-                                    'label' => 'Processing',
-                                    'route' => 'licence/irhp-application/application',
-                                    'use_route_match' => true,
-                                    'params' => [
-                                        'action' => 'processing',
-                                        'id' => null
-                                    ],
-                                    'pages' => [
-                                        [
-                                            'id' => 'licence_irhp_applications_processing_notes',
-                                            'label' => 'Notes',
-                                            'route' => 'licence/irhp-application-processing/notes',
-                                            'use_route_match' => true,
-                                        ],
-                                        [
-                                            'id' => 'licence_irhp_applications_processing_tasks',
-                                            'label' => 'Tasks',
-                                            'route' => 'licence/irhp-application-processing/tasks',
-                                            'use_route_match' => true,
-                                        ],
-                                        [
-                                            'id' => 'licence_irhp_applications_processing_event-history',
-                                            'label' => 'Change history',
-                                            'route' => 'licence/irhp-application-processing/event-history',
-                                            'use_route_match' => true,
-                                        ],
-                                        [
-                                            'id' => 'licence_irhp_applications_processing_read-history',
-                                            'label' => 'internal-crud-read-history',
-                                            'route' => 'licence/irhp-application-processing/read-history',
-                                            'use_route_match' => true,
-                                        ],
-                                    ]
-                                ],
-                                [
-                                    'id' => 'licence_irhp_applications-fees',
-                                    'label' => 'Fees',
-                                    'route' => 'licence/irhp-application-fees/table',
-                                    'use_route_match' => true,
-                                    'pages' => [
-                                        [
-                                            'id' => 'licence_irhp_applications-fees_details',
-                                            'label' => 'Fee details',
-                                            'route' => 'licence/irhp-application-fees/fee_action',
-                                        ],
-                                        [
-                                            'id' => 'licence_irhp_applications-fees_transaction',
-                                            'label' => 'Transaction details',
-                                            'route' => 'licence/irhp-application-fees/fee_action/transaction',
-                                        ],
-                                    ]
-                                ],
-                                [
-                                    'id' => 'licence_irhp_applications-cancel',
-                                    'label' => 'Cancel',
-                                    'visible' => 0,
-                                    'route' => 'licence/irhp-application/application',
-                                    'use_route_match' => true,
-                                    'params' => [
-                                        'action' => 'cancel',
-                                        'id' => null
-                                    ],
-                                ],
-                                [
-                                    'id' => 'licence_irhp_applications-submit',
-                                    'label' => 'Submit',
-                                    'visible' => 0,
-                                    'route' => 'licence/irhp-application/application',
-                                    'use_route_match' => true,
-                                    'params' => [
-                                        'action' => 'submit',
-                                        'id' => null
-                                    ],
-                                ],
-                            ],
                         ],
                         [
                             'id' => 'licence_documents',

@@ -163,7 +163,7 @@ class IrhpApplicationFurniture implements
         $placeholder->getContainer('status')->set($irhpApplication['status']);
         $placeholder->getContainer('pageTitle')->set($this->getPageTitle($irhpApplication));
         $placeholder->getContainer('pageSubtitle')->set($this->getSubTitle($irhpApplication));
-        $placeholder->getContainer('horizontalNavigationId')->set('licence_irhp_applications');
+        $placeholder->getContainer('horizontalNavigationId')->set('licence_irhp_permits-application');
 
         $sidebarNav = $this->getSidebarNavigationService();
         $mainNav = $this->getNavigationService();
@@ -172,11 +172,6 @@ class IrhpApplicationFurniture implements
             ->setVisible($irhpApplication['canBeCancelled']);
         $sidebarNav->findOneBy('id', 'irhp-application-quick-actions-terminate')
             ->setVisible($irhpApplication['canBeTerminated']);
-
-        $routeParams = $this->getApplicationService()->getMvcEvent()->getRouteMatch()->getParams();
-
-        $mainNav->findOneBy('id', 'licence_irhp_applications')
-            ->setVisible(true);
 
         // Enable Link to view full permits if app is in Valid status
         if ($irhpApplication['status']['id'] == RefData::PERMIT_APP_STATUS_VALID) {
@@ -192,10 +187,8 @@ class IrhpApplicationFurniture implements
             $mainNav->findOneBy('id', 'licence_irhp_applications-pregrant')
                 ->setVisible(true);
 
-            if ($routeParams['action'] === 'preGrant') {
-                $mainNav->findOneBy('id', 'licence_irhp_applications-pregrant')
-                    ->setActive(true);
-            }
+            $mainNav->findOneBy('id', 'irhp_permits-permits')
+                ->setVisible(false);
         }
 
         // decisions

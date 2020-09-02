@@ -67,7 +67,7 @@ class IrhpApplicationController extends AbstractInternalController implements
 {
     protected $routeIdentifier = 'irhp-application';
 
-    protected $navigationId = 'licence_irhp_applications';
+    protected $navigationId = 'licence_irhp_permits-application-details';
 
     // Maps the route parameter irhpPermitId to the "id" parameter in the the ById (ItemDTO) query.
     protected $itemParams = ['id' => 'irhpAppId'];
@@ -178,6 +178,22 @@ class IrhpApplicationController extends AbstractInternalController implements
                 [
                     'licence' => $this->params()->fromRoute('licence')
                 ]
+            );
+    }
+
+    /**
+     * @return \Zend\Http\Response|ViewModel
+     */
+    public function detailsAction()
+    {
+        return $this->redirect()
+            ->toRoute(
+                'licence/irhp-application/application',
+                [
+                    'action' => 'edit',
+                ],
+                [],
+                true
             );
     }
 
@@ -861,6 +877,9 @@ class IrhpApplicationController extends AbstractInternalController implements
      */
     public function preGrantAction()
     {
+        $this->navigationId = 'licence_irhp_applications-pregrant';
+        $this->setNavigationCurrentLocation();
+
         $request = $this->getRequest();
         if ($request->isPost()) {
             $postData = (array)$this->params()->fromPost();

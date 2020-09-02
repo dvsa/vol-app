@@ -57,14 +57,9 @@ class IrhpPermitController extends AbstractInternalController implements
      */
     public function getLeftView()
     {
-        $view = new ViewModel(
-            [
-                'navigationId' => 'licence_irhp_applications-edit',
-                'navigationTitle' => 'Application details'
-            ]
-        );
+        $view = new ViewModel();
 
-        $view->setTemplate('admin/sections/admin/partials/generic-left');
+        $view->setTemplate('sections/irhp-application/partials/left');
 
         return $view;
     }
