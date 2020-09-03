@@ -34,6 +34,7 @@ class IrhpApplicationDeclarationController extends AbstractSelfserveController
                 'title' => 'permits.page.declaration.bullet.list.title',
                 'type' => 'declaration',
             ],
+            'additionalWarning' => 'permits.page.declaration.additional.warning',
             'backUri' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
         ]
     ];
