@@ -6,12 +6,11 @@
 <?php echo $this->permitsBackLink('common.link.back.label', $data['backUri']); ?>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <div class="heading-box-grey govuk-!-margin-top-0">
-            <span class="govuk-caption-xl"><?php echo $this->escapeHtml($this->translate('permits.irhp.under-consideration.header')); ?></span>
-            <h1 class="govuk-heading-xl"><?php echo $this->escapeHtml($data[IrhpApplication::DATA_KEY]['licence']['licNo']); ?></h1>
-        </div>
-        <h2 class="govuk-heading-l">
+        <h1 class="govuk-heading-xl">
             <?php echo $this->escapeHtml($this->translate('permits.irhp.under-consideration.title')); ?>
+        </h1>
+        <h2 class="govuk-heading-m">
+            <?php echo $this->escapeHtml($this->translate('permits.irhp.under-consideration.application-details')); ?>
         </h2>
         <?php echo $this->partial('partials/summary-list', ['data' => $data[IrhpApplication::DATA_KEY]['mappedFeeData']]); ?>
         <?php
