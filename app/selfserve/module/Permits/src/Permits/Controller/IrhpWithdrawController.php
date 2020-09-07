@@ -38,6 +38,7 @@ class IrhpWithdrawController extends AbstractSelfserveController
             'question' => 'permits.page.withdraw.question',
             'bulletList' => [
                 'title' => 'permits.page.withdraw.bullet.list.title',
+                'type' => 'medium',
                 'list' => 'markup-ecmt-application-withdraw',
             ],
             'backUri' => IrhpApplicationSection::ROUTE_UNDER_CONSIDERATION,
@@ -47,7 +48,7 @@ class IrhpWithdrawController extends AbstractSelfserveController
             'prependTitleDataKey' => IrhpAppDataSource::DATA_KEY,
             'title' => 'permits.page.confirmation.withdraw.title',
             'extraContent' => [
-                'title' => 'permits.page.confirmation.bullet.list.title',
+                'title' => 'permits.page.confirmation.bullet.list.title.now',
                 'list' => 'markup-ecmt-withdraw-confirmation',
             ],
         ],
