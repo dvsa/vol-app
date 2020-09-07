@@ -75,7 +75,6 @@ class SubmittedController extends AbstractSelfserveController
             $this->data['extraContent']['list'] = 'markup-irhp-submitted-ecmt-removal-what-happens-next';
         } elseif ($irhpAppData['irhpPermitType']['isCertificateOfRoadworthiness']) {
             $this->data['extraContent']['list'] = 'markup-irhp-submitted-certificate';
-            $this->data['warning'] = 'permits.page.confirmation.irhp-submitted.certificate.warning';
         } elseif ($irhpAppData['irhpPermitType']['isBilateral']) {
             $this->data['extraContent']['list'] = 'markup-irhp-submitted-bilateral-what-happens-next';
         }
