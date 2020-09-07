@@ -82,6 +82,9 @@ class IrhpApplicationController extends AbstractInternalController implements
 
     protected $addContentTitle = 'Add Irhp Application';
 
+    // Stores the application steps array retrieved from Q&A
+    protected $applicationSteps;
+
     const PERMIT_TYPE_LABELS = [
         RefData::IRHP_BILATERAL_PERMIT_TYPE_ID => 'Bilateral',
         RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID => 'Multilateral',
@@ -829,10 +832,10 @@ class IrhpApplicationController extends AbstractInternalController implements
             )
         );
 
-        $applicationSteps = $response->getResult();
+        $this->applicationSteps = $response->getResult();
 
         $fieldsetPopulator = $this->getServiceLocator()->get('QaFieldsetPopulator');
-        $fieldsetPopulator->populate($form, $applicationSteps, UsageContext::CONTEXT_INTERNAL);
+        $fieldsetPopulator->populate($form, $this->applicationSteps, UsageContext::CONTEXT_INTERNAL);
         return $form;
     }
 
@@ -1136,5 +1139,18 @@ class IrhpApplicationController extends AbstractInternalController implements
                     'irhpAppId' => $this->params()->fromRoute('irhpAppId')
                 ]
             );
+    }
+
+    /**
+     * Map from form
+     *
+     * @param string $mapperClass
+     * @param array $data
+     *
+     * @return array
+     */
+    protected function mapFromForm($mapperClass, array $data)
+    {
+        return $this->getServiceLocator()->get($mapperClass)->mapFromForm($data, $this->applicationSteps);
     }
 }

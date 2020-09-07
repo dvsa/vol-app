@@ -514,6 +514,8 @@ return array(
 
             Olcs\Data\Mapper\BilateralApplicationValidationModifier::class =>
                 Olcs\Data\Mapper\BilateralApplicationValidationModifierFactory::class,
+            Olcs\Data\Mapper\IrhpApplication::class =>
+                Olcs\Data\Mapper\IrhpApplicationFactory::class,
     
             Olcs\Service\Permits\Bilateral\ApplicationFormPopulator::class =>
                 Olcs\Service\Permits\Bilateral\ApplicationFormPopulatorFactory::class,

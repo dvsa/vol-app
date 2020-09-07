@@ -3,16 +3,22 @@
 namespace OlcsTest\Data\Mapper;
 
 use Common\RefData;
+use Common\Service\Qa\DataTransformer\ApplicationStepsPostDataTransformer;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Mockery as m;
 
 /**
  * IrhpApplicationTest
  */
 class IrhpApplicationTest extends MockeryTestCase
 {
+    private $applicationStepsPostDataTransformer;
+
     public function setUp(): void
     {
-        $this->sut = new \Olcs\Data\Mapper\IrhpApplication();
+        $this->applicationStepsPostDataTransformer = m::mock(ApplicationStepsPostDataTransformer::class);
+
+        $this->sut = new \Olcs\Data\Mapper\IrhpApplication($this->applicationStepsPostDataTransformer);
     }
 
     public function testMapApplicationData()
@@ -194,6 +200,24 @@ class IrhpApplicationTest extends MockeryTestCase
 
     public function testMapFromFormShortTerm()
     {
+        $preTransformedQaData = ['foo' => 'bar'];
+        $postTransformedQaData = ['transformedFoo' => 'transformedBar'];
+
+        $applicationSteps = [
+            [
+                'fieldsetName' => 'fieldset72',
+                'slug' => 'no-of-permits'
+            ],
+            [
+                'fieldsetName' => 'fieldset43',
+                'slug' => 'restricted-countries'
+            ]
+        ];
+
+        $this->applicationStepsPostDataTransformer->shouldReceive('getTransformed')
+            ->with($applicationSteps, $preTransformedQaData)
+            ->andReturn($postTransformedQaData);
+
         $formData =
             [
                 'topFields' => [
@@ -203,7 +227,7 @@ class IrhpApplicationTest extends MockeryTestCase
                     'irhpPermitType' => 2,
                     'dateReceived' => '2090-01-01'
                 ],
-                'qa' => ['foo' => 'bar'],
+                'qa' => $preTransformedQaData,
                 'bottomFields' => [
                     'declaration' => 1
                 ]
@@ -213,11 +237,11 @@ class IrhpApplicationTest extends MockeryTestCase
             'id' => 1,
             'dateReceived' => '2090-01-01',
             'declaration' => 1,
-            'postData' => ['qa' => ['foo' => 'bar']]
+            'postData' => ['qa' => $postTransformedQaData]
 
         ];
 
-        $this->assertSame($expected, $this->sut->mapFromForm($formData));
+        $this->assertSame($expected, $this->sut->mapFromForm($formData, $applicationSteps));
     }
 
     public function testMapFromFormBilateral()
