@@ -1432,12 +1432,12 @@
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.240",
+            "version": "4.206.248",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-common/4.206.240/olcs-olcs-common-4.206.240.zip",
-                "reference": "015620e8e43b730652a91bb6974872d872a57f32",
-                "shasum": "015620e8e43b730652a91bb6974872d872a57f32"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-common/4.206.248/olcs-olcs-common-4.206.248.zip",
+                "reference": "545d35e9df652947b93f6177fc375cee05347cd9",
+                "shasum": "545d35e9df652947b93f6177fc375cee05347cd9"
             },
             "require": {
                 "doctrine/annotations": "^1.8",
@@ -1522,7 +1522,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2020-08-25T14:52:24+00:00"
+            "time": "2020-09-07T17:44:26+00:00"
         },
         {
             "name": "olcs/olcs-logging",
@@ -1591,12 +1591,12 @@
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "4.206.81",
+            "version": "4.206.83",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-transfer/4.206.81/olcs-olcs-transfer-4.206.81.zip",
-                "reference": "1b11ff467092bd730a4ed7adc8bcbcbbd3f65ef4",
-                "shasum": "1b11ff467092bd730a4ed7adc8bcbcbbd3f65ef4"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-transfer/4.206.83/olcs-olcs-transfer-4.206.83.zip",
+                "reference": "2f191e38493f6fab1019999349d8f27725006bfd",
+                "shasum": "2f191e38493f6fab1019999349d8f27725006bfd"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -1658,7 +1658,7 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2020-08-24T09:04:04+00:00"
+            "time": "2020-09-01T06:51:57+00:00"
         },
         {
             "name": "olcs/olcs-utils",
@@ -4865,6 +4865,7 @@
                 "rbac",
                 "zf2"
             ],
+            "abandoned": true,
             "time": "2016-03-22T12:46:45+00:00"
         },
         {
