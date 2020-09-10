@@ -38,8 +38,9 @@ class IrhpCandidatePermit implements MapperInterface
         $applicationData = [];
         $applicationData['requiredEuro5'] = $data['irhpPermitApplications'][0]['requiredEuro5'];
         $applicationData['requiredEuro6'] = $data['irhpPermitApplications'][0]['requiredEuro6'];
-        // Comma separated string containing answers to requested countries is in this array, element 1
-        $applicationData['countries'] = $data['questionAnswerData']['st-restricted-countries']['answer'][1];
+        $applicationData['countries'] = isset($data['countrys']) && is_array($data['countrys']) ?
+            implode(', ', array_column($data['countrys'], 'countryDesc')) : '';
+
         return $applicationData;
     }
 

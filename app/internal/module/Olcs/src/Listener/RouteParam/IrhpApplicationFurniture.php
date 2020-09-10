@@ -179,11 +179,14 @@ class IrhpApplicationFurniture implements
                 ->setVisible(true);
         }
 
-        // Link to view candidate permits is currently only for Short Terms in certain conditions..
-        if ($irhpApplication['irhpPermitType']['id'] == RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID
-            && $irhpApplication['status']['id'] == RefData::PERMIT_APP_STATUS_UNDER_CONSIDERATION
+        if ($irhpApplication['status']['id'] == RefData::PERMIT_APP_STATUS_UNDER_CONSIDERATION
             && $irhpApplication['businessProcess']['id'] == RefData::BUSINESS_PROCESS_APGG
         ) {
+            $grantability = $this->getGrantability($irhpApplication);
+            $sidebarNav->findOneBy('id', 'irhp-application-decisions-grant')
+                ->setVisible($grantability['grantable']);
+
+            // Link to view candidate permits
             $mainNav->findOneBy('id', 'licence_irhp_applications-pregrant')
                 ->setVisible(true);
 
@@ -194,13 +197,6 @@ class IrhpApplicationFurniture implements
         // decisions
         $sidebarNav->findOneBy('id', 'irhp-application-decisions-submit')
             ->setVisible($irhpApplication['canBeSubmitted']);
-
-        if ($irhpApplication['status']['id'] == RefData::PERMIT_APP_STATUS_UNDER_CONSIDERATION
-            && $irhpApplication['businessProcess']['id'] == RefData::BUSINESS_PROCESS_APGG) {
-            $grantability = $this->getGrantability($irhpApplication);
-            $sidebarNav->findOneBy('id', 'irhp-application-decisions-grant')
-                ->setVisible($grantability['grantable']);
-        }
 
         // decline is also done via the withdraw action
         $withdrawVisible = $irhpApplication['canBeWithdrawn'] || $irhpApplication['canBeDeclined'];
