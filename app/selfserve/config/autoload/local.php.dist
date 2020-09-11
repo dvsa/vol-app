@@ -131,6 +131,13 @@ return [
             'shared' => 'redis-shared',
         ],
     ],
+    'query_cache' => [
+        //sets the ttl for cqrs cache - note that these caches are also used by internal
+        'ttl' => [
+            \Dvsa\Olcs\Transfer\Query\CacheableMediumTermQueryInterface::class => 600, //10 minutes
+            \Dvsa\Olcs\Transfer\Query\CacheableLongTermQueryInterface::class => 43200, //12 hours
+        ],
+    ],
     'cookie-manager' => [
             'delete-undefined-cookies' => true,
             'user-preference-cookie-name' => 'cookie_policy',
