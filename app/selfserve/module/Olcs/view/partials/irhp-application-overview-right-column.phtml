@@ -1,0 +1,19 @@
+<?php
+    use Permits\View\Helper\IrhpApplicationSection as Section;
+?>
+
+<aside class="sidebar" role="complementary">
+    <div class="info-box info-box--grey">
+        <h2 class="info-box__heading"><?php echo $this->escapeHtml($this->translate('permits.irhp-application.status.question')); ?></h2>
+        <p class="info-box__icon-wrapper info-box__text"><i class="info-box__icon selfserve-important"></i><?php echo $this->escapeHtml($this->translate($application['status']['description'])); ?></p>
+        <?php if ($application['canBeCancelled']) : ?>
+            <ul class="info-box__links">
+                <li class="govuk-!-margin-top-2">
+                    <a href="<?php echo $this->url(Section::ROUTE_CANCEL_APPLICATION, [], [], true); ?>" class="govuk-!-font-size-19">
+                        <?php echo $this->escapeHtml($this->translate('permits.irhp-application.cancel.question')); ?>
+                    </a>
+                </li>
+            </ul>
+        <?php endif; ?>
+    </div>
+</aside>

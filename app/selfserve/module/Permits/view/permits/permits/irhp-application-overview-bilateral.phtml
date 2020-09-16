@@ -132,26 +132,6 @@
     </div>
     <!-- SIDE PANEL -->
     <div class="govuk-grid-column-one-third">
-        <aside class="sidebar" role="complementary">
-
-            <div class="info-box info-box--grey">
-                <h2 class="info-box__heading"><?php echo $this->escapeHtml($this->translate('permits.irhp-application.status.question')); ?></h2>
-                <p class="info-box__icon-wrapper"><i class="info-box__icon selfserve-important"></i><?php echo $this->escapeHtml($this->translate($application['status']['description'])); ?></p>
-                <?php
-                if ($application['canBeCancelled']) {
-                    ?>
-                    <ul class="info-box__links">
-                        <li class="govuk-body">
-                            <a href="<?php echo $this->url(Section::ROUTE_CANCEL_APPLICATION, [], [], true); ?>">
-                                <?php echo $this->escapeHtml($this->translate('permits.irhp-application.cancel.question')); ?>
-                            </a>
-                        </li>
-                    </ul>
-                    <?php
-                }
-                ?>
-            </div>
-
-        </aside>
+        <?php echo $this->partial('partials/irhp-application-overview-right-column', ['application' => $application]); ?>
     </div>
 </div>
