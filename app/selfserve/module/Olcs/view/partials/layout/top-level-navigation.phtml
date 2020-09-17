@@ -1,7 +1,7 @@
 <ul id="navigation" class="govuk-header__navigation" aria-label="<?php echo $this->escapeHtml($this->translate('top.level.navigation')); ?>"><?php
 
 foreach ($this->container as $page) {
-  if ($page->isVisible()) {
+  if ($page->isVisible() && $this->navigation()->menu()->accept($page)) {
     ?>
     <li class="govuk-header__navigation-item">
       <a href="<?php echo $page->getHref(); ?>" class="govuk-header__link">
