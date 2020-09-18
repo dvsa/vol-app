@@ -45,6 +45,16 @@ class DataSourceConfig
         ],
     ];
 
+    const PERMIT_APP_MAX_PERMITTED_REACHED = [
+        LicencesAvailable::class => [
+            'passInData' => [
+                'key' => 'id',
+                'func' => 'getCurrentOrganisationId'
+            ]
+        ],
+        MaxPermittedReached::class => [],
+    ];
+
     const IRHP_APP_OVERVIEW = [
         IrhpAppDataSource::class => [
             'mapper' => PermitTypeTitleMapper::class
