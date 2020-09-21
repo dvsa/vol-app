@@ -1,0 +1,36 @@
+<div class="govuk-phase-banner govuk-!-margin-bottom-6">
+    <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
+        <?php echo $this->translateReplace('licence.vehicle.add.result.header', [$vehicleDetails['registrationNumber']]) ?>
+    </h2>
+</div>
+<div class="govuk-inset-text"><?php echo $this->translate('licence.vehicle.add.result.note');?></div>
+
+<table class="govuk-table">
+    <caption class="govuk-table__caption govuk-heading-s">Vehicle summary</caption>
+    <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header">Vehicle information</th>
+        <th scope="col" class="govuk-table__header">Result</th>
+    </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+    <tr class="govuk-table__row">
+        <th scope="row" class="govuk-table__header"><?php echo $this->translate('licence.vehicle.add.result.vrm');?>:</th>
+        <td class="govuk-table__cell">
+            <?php echo $this->escapeHtml($vehicleDetails['registrationNumber']) ?>
+        </td>
+    </tr>
+    <tr class="govuk-table__row">
+        <th scope="row" class="govuk-table__header"><?php echo $this->translate('licence.vehicle.add.result.weight');?>:</th>
+        <td class="govuk-table__cell">
+            <?php echo $this->escapeHtml($vehicleDetails['revenueWeight']) ?>
+        </td>
+    </tr>
+    <tr class="govuk-table__row">
+        <th scope="row" class="govuk-table__header"><?php echo $this->translate('licence.vehicle.add.result.make');?>:</th>
+        <td class="govuk-table__cell">
+            <?php echo $this->escapeHtml($vehicleDetails['make']) ?>
+        </td>
+    </tr>
+    </tbody>
+</table>
