@@ -1259,6 +1259,8 @@ return array(
             'Search\Result' => 'Olcs\Controller\Search\ResultController',
             Olcs\Controller\Entity\ViewController::class => Olcs\Controller\Entity\ViewController::class,
             Olcs\Controller\GdsVerifyController::class => Olcs\Controller\GdsVerifyController::class,
+
+            // License - Surrender
             Olcs\Controller\Licence\Surrender\ReviewContactDetailsController::class => Olcs\Controller\Licence\Surrender\ReviewContactDetailsController::class,
             Olcs\Controller\Licence\Surrender\AddressDetailsController::class =>
             Olcs\Controller\Licence\Surrender\AddressDetailsController::class,
@@ -1272,6 +1274,9 @@ return array(
             Olcs\Controller\Licence\Surrender\DestroyController::class => Olcs\Controller\Licence\Surrender\DestroyController::class,
             Olcs\Controller\Licence\Surrender\PrintSignReturnController::class => Olcs\Controller\Licence\Surrender\PrintSignReturnController::class,
             \Olcs\Controller\Licence\Surrender\InformationChangedController::class => \Olcs\Controller\Licence\Surrender\InformationChangedController::class,
+
+            // Licence - Vehicles
+            \Olcs\Controller\Licence\Vehicle\AddVehicleSearchController::class => \Olcs\Controller\Licence\Vehicle\AddVehicleSearchController::class,
         ),
         'factories' => array(
             CookieSettingsController::class => CookieSettingsControllerFactory::class,

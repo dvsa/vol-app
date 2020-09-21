@@ -5,6 +5,8 @@ use Olcs\Controller\Licence\Surrender\InformationChangedController;
 use Olcs\Controller\Licence\Surrender\PrintSignReturnController;
 use Olcs\Controller\Licence\Surrender\ReviewContactDetailsController;
 use Olcs\Controller\Licence\Surrender\StartController;
+use Olcs\Controller\Licence\Vehicle\AddVehicleSearchController;
+use Zend\Mvc\Router\Http\Method;
 use Zend\Mvc\Router\Http\Segment;
 
 return [
@@ -35,7 +37,7 @@ return [
                             'child_routes' => [
                                 'GET' => [
                                     'may_terminate' => true,
-                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'type' => Method::class,
                                     'options' => [
                                         'verb' => 'GET',
                                         'defaults' => [
@@ -46,7 +48,7 @@ return [
                                 ],
                                 'POST' => [
                                     'may_terminate' => true,
-                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'type' => Method::class,
                                     'options' => [
                                         'verb' => 'POST',
                                         'defaults' => [
@@ -66,7 +68,7 @@ return [
                             'child_routes' => [
                                 'GET' => [
                                     'may_terminate' => true,
-                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'type' => Method::class,
                                     'options' => [
                                         'verb' => 'GET',
                                         'defaults' => [
@@ -77,7 +79,7 @@ return [
                                 ],
                                 'POST' => [
                                     'may_terminate' => true,
-                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'type' => Method::class,
                                     'options' => [
                                         'verb' => 'POST',
                                         'defaults' => [
@@ -108,7 +110,7 @@ return [
                             'child_routes' => [
                                 'GET' => [
                                     'may_terminate' => true,
-                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'type' => Method::class,
                                     'options' => [
                                         'verb' => 'GET',
                                         'defaults' => [
@@ -120,7 +122,7 @@ return [
 
                                 'POST' => [
                                     'may_terminate' => true,
-                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'type' => Method::class,
                                     'options' => [
                                         'verb' => 'POST',
                                         'defaults' => [
@@ -138,7 +140,7 @@ return [
                                     'child_routes' => [
                                         'GET' => [
                                             'may_terminate' => true,
-                                            'type' => \Zend\Mvc\Router\Http\Method::class,
+                                            'type' => Method::class,
                                             'options' => [
                                                 'verb' => 'GET',
                                                 'defaults' => [
@@ -150,7 +152,7 @@ return [
                                         ],
                                         'POST' => [
                                             'may_terminate' => true,
-                                            'type' => \Zend\Mvc\Router\Http\Method::class,
+                                            'type' => Method::class,
                                             'options' => [
                                                 'verb' => 'POST',
                                                 'defaults' => [
@@ -184,7 +186,7 @@ return [
                             'child_routes' => [
                                 'GET' => [
                                     'may_terminate' => true,
-                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'type' => Method::class,
                                     'options' => [
                                         'verb' => 'GET',
                                         'defaults' => [
@@ -195,7 +197,7 @@ return [
                                 ],
                                 'POST' => [
                                     'may_terminate' => true,
-                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'type' => Method::class,
                                     'options' => [
                                         'verb' => 'POST',
                                         'defaults' => [
@@ -215,7 +217,7 @@ return [
                             'child_routes' => [
                                 'GET' => [
                                     'may_terminate' => true,
-                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'type' => Method::class,
                                     'options' => [
                                         'verb' => 'GET',
                                         'defaults' => [
@@ -226,7 +228,7 @@ return [
                                 ],
                                 'POST' => [
                                     'may_terminate' => true,
-                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'type' => Method::class,
                                     'options' => [
                                         'verb' => 'POST',
                                         'defaults' => [
@@ -244,7 +246,7 @@ return [
                                     'child_routes' => [
                                         'GET' => [
                                             'may_terminate' => true,
-                                            'type' => \Zend\Mvc\Router\Http\Method::class,
+                                            'type' => Method::class,
                                             'options' => [
                                                 'verb' => 'GET',
                                                 'defaults' => [
@@ -256,7 +258,7 @@ return [
                                         ],
                                         'POST' => [
                                             'may_terminate' => true,
-                                            'type' => \Zend\Mvc\Router\Http\Method::class,
+                                            'type' => Method::class,
                                             'options' => [
                                                 'verb' => 'POST',
                                                 'defaults' => [
@@ -279,7 +281,7 @@ return [
                             'child_routes' => [
                                 'GET' => [
                                     'may_terminate' => true,
-                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'type' => Method::class,
                                     'options' => [
                                         'verb' => 'GET',
                                         'defaults' => [
@@ -290,7 +292,7 @@ return [
                                 ],
                                 'POST' => [
                                     'may_terminate' => true,
-                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'type' => Method::class,
                                     'options' => [
                                         'verb' => 'POST',
                                         'defaults' => [
@@ -308,7 +310,7 @@ return [
                                     'child_routes' => [
                                         'GET' => [
                                             'may_terminate' => true,
-                                            'type' => \Zend\Mvc\Router\Http\Method::class,
+                                            'type' => Method::class,
                                             'options' => [
                                                 'verb' => 'GET',
                                                 'defaults' => [
@@ -320,7 +322,7 @@ return [
                                         ],
                                         'POST' => [
                                             'may_terminate' => true,
-                                            'type' => \Zend\Mvc\Router\Http\Method::class,
+                                            'type' => Method::class,
                                             'options' => [
                                                 'verb' => 'POST',
                                                 'defaults' => [
@@ -343,7 +345,7 @@ return [
                             'child_routes' => [
                                 'GET' => [
                                     'may_terminate' => true,
-                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'type' => Method::class,
                                     'options' => [
                                         'verb' => 'GET',
                                         'defaults' => [
@@ -354,7 +356,7 @@ return [
                                 ],
                                 'POST' => [
                                     'may_terminate' => true,
-                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'type' => Method::class,
                                     'options' => [
                                         'verb' => 'POST',
                                         'defaults' => [
@@ -374,7 +376,7 @@ return [
                             'child_routes' => [
                                 'GET' => [
                                     'may_terminate' => true,
-                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'type' => Method::class,
                                     'options' => [
                                         'verb' => 'GET',
                                         'defaults' => [
@@ -385,7 +387,7 @@ return [
                                 ],
                                 'POST' => [
                                     'may_terminate' => true,
-                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'type' => Method::class,
                                     'options' => [
                                         'verb' => 'POST',
                                         'defaults' => [
@@ -407,7 +409,7 @@ return [
                             'child_routes' => [
                                 'GET' => [
                                     'may_terminate' => true,
-                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'type' => Method::class,
                                     'options' => [
                                         'verb' => 'GET',
                                         'defaults' => [
@@ -429,7 +431,7 @@ return [
                             'child_routes' => [
                                 'GET' => [
                                     'may_terminate' => true,
-                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'type' => Method::class,
                                     'options' => [
                                         'verb' => 'GET',
                                         'defaults' => [
@@ -449,7 +451,7 @@ return [
                             'child_routes' => [
                                 'GET' => [
                                     'may_terminate' => true,
-                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'type' => Method::class,
                                     'options' => [
                                         'verb' => 'GET',
                                         'defaults' => [
@@ -460,7 +462,7 @@ return [
                                 ],
                                 'POST' => [
                                     'may_terminate' => true,
-                                    'type' => \Zend\Mvc\Router\Http\Method::class,
+                                    'type' => Method::class,
                                     'options' => [
                                         'verb' => 'POST',
                                         'defaults' => [
@@ -471,6 +473,58 @@ return [
                                 ],
                             ],
                         ],
+                    ]
+                ],
+                'vehicle' => [
+                    'type' => Segment::class,
+                    'options' => [
+                        'route' => 'vehicle[/]',
+                    ],
+                    'may_terminate' => false,
+                    'child_routes' => [
+                        'add' => [
+                            'may_terminate' => false,
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => 'add[/]',
+                                'defaults' => [
+                                    'controller' => AddVehicleSearchController::class,
+                                ]
+                            ],
+                            'child_routes' => [
+                                'GET' => [
+                                    'may_terminate' => true,
+                                    'type' => Method::class,
+                                    'options' => [
+                                        'verb' => 'GET',
+                                        'defaults' => [
+                                            'action' => 'index',
+                                        ],
+                                    ],
+                                ],
+                                'POST' => [
+                                    'may_terminate' => true,
+                                    'type' => Method::class,
+                                    'options' => [
+                                        'verb' => 'POST',
+                                        'defaults' => [
+                                            'action' => 'post',
+                                        ],
+                                    ],
+                                ],
+                                'confirmation' =>  [
+                                    'may_terminate' => true,
+                                    'type' => Segment::class,
+                                    'options' => [
+                                        'route' => 'confirmation[/]',
+                                        'defaults' => [
+                                            'action' => 'confirmation',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+
                     ]
                 ],
             ],
