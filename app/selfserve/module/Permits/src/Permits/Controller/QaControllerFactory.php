@@ -22,7 +22,8 @@ class QaControllerFactory implements FactoryInterface
             $mainServiceLocator->get('QaFormProvider'),
             $mainServiceLocator->get('QaTemplateVarsGenerator'),
             $mainServiceLocator->get('Helper\Translation'),
-            $mainServiceLocator->get('QaViewGeneratorProvider')
+            $mainServiceLocator->get('QaViewGeneratorProvider'),
+            $mainServiceLocator->get('QaApplicationStepsPostDataTransformer')
         );
     }
 }

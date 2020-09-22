@@ -4,6 +4,7 @@ namespace Permits\Controller;
 
 use Common\Controller\AbstractOlcsController;
 use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Qa\DataTransformer\ApplicationStepsPostDataTransformer;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\SubmitApplicationStep;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\ApplicationStep;
 use Olcs\Service\Qa\FormProvider;
@@ -29,6 +30,9 @@ class QaController extends AbstractOlcsController
     /** @var ViewGeneratorProvider */
     private $viewGeneratorProvider;
 
+    /** @var ApplicationStepsPostDataTransformer */
+    private $applicationStepsPostDataTransformer;
+
     /**
      * Create service instance
      *
@@ -36,6 +40,7 @@ class QaController extends AbstractOlcsController
      * @param TemplateVarsGenerator $templateVarsGenerator
      * @param TranslationHelperService $translationHelperService
      * @param ViewGeneratorProvider $viewGeneratorProvider
+     * @param ApplicationStepsPostDataTransformer $applicationStepsPostDataTransformer
      *
      * @return QaController
      */
@@ -43,12 +48,14 @@ class QaController extends AbstractOlcsController
         FormProvider $formProvider,
         TemplateVarsGenerator $templateVarsGenerator,
         TranslationHelperService $translationHelperService,
-        ViewGeneratorProvider $viewGeneratorProvider
+        ViewGeneratorProvider $viewGeneratorProvider,
+        ApplicationStepsPostDataTransformer $applicationStepsPostDataTransformer
     ) {
         $this->formProvider = $formProvider;
         $this->templateVarsGenerator = $templateVarsGenerator;
         $this->translationHelperService = $translationHelperService;
         $this->viewGeneratorProvider = $viewGeneratorProvider;
+        $this->applicationStepsPostDataTransformer = $applicationStepsPostDataTransformer;
     }
 
     /**
@@ -83,8 +90,9 @@ class QaController extends AbstractOlcsController
 
         $result = $response->getResult();
 
+        $applicationStep = $result['applicationStep'];
         $form = $this->formProvider->get(
-            $result['applicationStep'],
+            $applicationStep,
             $viewGenerator->getFormName()
         );
 
@@ -96,7 +104,13 @@ class QaController extends AbstractOlcsController
 
             if ($form->isValid()) {
                 $formData = $form->getData();
-                $commandData = ['qa' => $formData['qa']];
+
+                $transformedFieldsetContent = $this->applicationStepsPostDataTransformer->getTransformed(
+                    [$applicationStep],
+                    $formData['qa']
+                );
+
+                $commandData = ['qa' => $transformedFieldsetContent];
 
                 $submitApplicationStepParams = array_merge(
                     $applicationStepParams,
