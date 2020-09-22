@@ -571,7 +571,8 @@ abstract class AbstractInternalController extends AbstractOlcsController
 
         if (!$hasProcessed && $this->persist && $request->isPost() && $form->isValid()) {
             $data = ArrayUtils::merge($initialData, $form->getData());
-            $commandData = $mapperClass::mapFromForm($data);
+            $commandData = $this->mapFromForm($mapperClass, $data);
+
             $response = $this->handleCommand($createCommand::create($commandData));
 
             if ($response->isOk()) {
@@ -643,7 +644,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
             $this->getServiceLocator()->get('Helper\Form')->processAddressLookupForm($form, $this->getRequest());
 
         if (!$hasProcessed && $this->persist && $request->isPost() && $form->isValid()) {
-            $commandData = $mapperClass::mapFromForm($form->getData());
+            $commandData = $this->mapFromForm($mapperClass, $form->getData());
             $response = $this->handleCommand($updateCommand::create($commandData));
 
             if ($response->isOk()) {
@@ -682,6 +683,19 @@ abstract class AbstractInternalController extends AbstractOlcsController
         }
 
         return $this->viewBuilder()->buildViewFromTemplate($editViewTemplate);
+    }
+
+    /**
+     * Map from form
+     *
+     * @param string $mapperClass
+     * @param array $data
+     *
+     * @return array
+     */
+    protected function mapFromForm($mapperClass, array $data)
+    {
+        return $mapperClass::mapFromForm($data);
     }
 
     /**

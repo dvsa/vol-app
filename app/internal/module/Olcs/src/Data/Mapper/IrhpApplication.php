@@ -4,6 +4,7 @@ namespace Olcs\Data\Mapper;
 
 use Common\Data\Mapper\MapperInterface;
 use Common\RefData;
+use Common\Service\Qa\DataTransformer\ApplicationStepsPostDataTransformer;
 use Zend\Form\FormInterface;
 
 /**
@@ -12,6 +13,21 @@ use Zend\Form\FormInterface;
  */
 class IrhpApplication implements MapperInterface
 {
+    /** @var ApplicationStepsPostDataTransformer */
+    private $applicationStepsPostDataTransformer;
+
+    /**
+     * Create service instance
+     *
+     * @param ApplicationStepsPostDataTransformer $applicationStepsPostDataTransformer
+     *
+     * @return IrhpApplication
+     */
+    public function __construct(ApplicationStepsPostDataTransformer $applicationStepsPostDataTransformer)
+    {
+        $this->applicationStepsPostDataTransformer = $applicationStepsPostDataTransformer;
+    }
+
     /**
      * Should map data from a result array into an array suitable for a form
      *
@@ -57,9 +73,11 @@ class IrhpApplication implements MapperInterface
      * Should map form data back into a command data structure
      *
      * @param array $data
+     * @param array $applicationSteps|null
+     *
      * @return array
      */
-    public static function mapFromForm(array $data)
+    public function mapFromForm(array $data, array $applicationSteps = null)
     {
         $additionalData = [];
 
@@ -67,7 +85,13 @@ class IrhpApplication implements MapperInterface
             $cmdData['id'] = $data['topFields']['id'];
             $cmdData['dateReceived'] = $data['topFields']['dateReceived'];
             $cmdData['declaration'] = $data['bottomFields']['declaration'];
-            $cmdData['postData']['qa'] = $data['qa'];
+
+            $transformedQaData = $this->applicationStepsPostDataTransformer->getTransformed(
+                $applicationSteps,
+                $data['qa']
+            );
+
+            $cmdData['postData']['qa'] = $transformedQaData;
 
             if (isset($data['bottomFields']['checked'])) {
                 $cmdData['checked'] = $data['bottomFields']['checked'];
