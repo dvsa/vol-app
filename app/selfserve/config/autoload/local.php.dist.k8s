@@ -64,7 +64,7 @@ return [
             'writers' => [
                 'full' => [
                     'options' => [
-                        'stream' => '/var/log/dvsa/selfserve.log'
+                        'stream' => '/var/log/dvsa/app.log'
                     ],
                 ]
             ]
@@ -73,7 +73,7 @@ return [
             'writers' => [
                 'full' => [
                     'options' => [
-                        'stream' => '/var/log/dvsa/selfserve.log'
+                        'stream' => '/var/log/dvsa/app.log'
                     ],
                 ]
             ]
