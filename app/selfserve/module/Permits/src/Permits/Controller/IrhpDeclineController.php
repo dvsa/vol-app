@@ -45,7 +45,7 @@ class IrhpDeclineController extends AbstractSelfserveController
             'browserTitle' => 'permits.page.confirmation.decline.browser.title',
             'title' => 'permits.page.confirmation.decline.title',
             'extraContent' => [
-                'title' => 'permits.page.confirmation.bullet.list.title',
+                'title' => 'permits.page.confirmation.bullet.list.title.now',
                 'list' => 'markup-ecmt-decline-confirmation',
             ],
         ],
