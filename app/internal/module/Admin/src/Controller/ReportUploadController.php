@@ -2,11 +2,14 @@
 
 namespace Admin\Controller;
 
-use Admin\Form\Model\Form\DocumentTemplateUpload;
+use Admin\Data\Mapper\ReportUpload;
 use Admin\Form\Model\Form\ReportUpload as ReportUploadForm;
 use Common\Service\AntiVirus\Scan;
+use Common\Service\Data\CategoryDataService;
 use Common\Util\FileContent;
 use Dvsa\Olcs\Transfer\Command\Report\Upload;
+use Dvsa\Olcs\Transfer\Query\DocTemplate\GetList;
+use Dvsa\Olcs\Transfer\Query\Template\AvailableTemplates;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Zend\Form\Form;
@@ -20,6 +23,15 @@ class ReportUploadController extends AbstractInternalController implements LeftV
 {
     const ERR_UPLOAD_DEF = '4';
     const FILE_UPLOAD_ERR_PREFIX = 'message.file-upload-error.';
+
+    protected $mapperClass = ReportUpload::class;
+
+    /**
+     * @var array
+     */
+    protected $inlineScripts = [
+        'indexAction' => ['forms/report-upload'],
+    ];
 
     /**
      * Left View setting
@@ -50,6 +62,16 @@ class ReportUploadController extends AbstractInternalController implements LeftV
         $request = $this->getRequest();
 
         $form = $this->getForm(ReportUploadForm::class);
+
+        $query = GetList::create(['category' => CategoryDataService::CATEGORY_REPORT, 'subCategory' => CategoryDataService::DOC_SUB_CATEGORY_LETTER]);
+        $response = $this->handleQuery($query);
+        $letterTemplates = $response->getResult();
+        $form->get('fields')->get('docTemplate')->setValueOptions($this->mapperClass::mapLetterTemplateOptions($letterTemplates));
+
+        $query = AvailableTemplates::create(['emailTemplateCategory' => CategoryDataService::CATEGORY_REPORT, 'page' => 1, 'limit' => 100, 'sort' => 'name', 'order' => 'ASC']);
+        $response = $this->handleQuery($query);
+        $emailTemplates = $response->getResult();
+        $form->get('fields')->get('emailTemplate')->setValueOptions($this->mapperClass::mapEmailTemplateOptions($emailTemplates));
 
         if ($request->isPost()) {
             $form->setData((array)$request->getPost());
@@ -143,9 +165,11 @@ class ReportUploadController extends AbstractInternalController implements LeftV
         $response = $this->handleCommand(
             Upload::create(
                 [
-                    'reportType' => $data['fields']['reportType'],
-                    'filename'   => $file['name'],
-                    'content'    => new FileContent($fileTmpName, $mimeType),
+                    'reportType'    => $data['fields']['reportType'],
+                    'filename'      => $file['name'],
+                    'content'       => new FileContent($fileTmpName, $mimeType),
+                    'name'          => $data['fields']['emailTemplate'],
+                    'templateSlug'  => $data['fields']['docTemplate'],
                 ]
             )
         );
