@@ -49,7 +49,7 @@ class CancelIrhpApplicationController extends AbstractSelfserveController
             'prependTitleDataKey' => IrhpAppDataSource::DATA_KEY,
             'title' => 'permits.page.confirmation.cancel.title',
             'extraContent' => [
-                'title' => 'permits.page.confirmation.bullet.list.title',
+                'title' => 'permits.page.confirmation.bullet.list.title.now',
                 'list' => 'markup-irhp-cancel-confirmation'
             ]
         ],
