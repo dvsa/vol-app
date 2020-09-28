@@ -455,14 +455,6 @@ class IrhpApplicationFeeSummary
     {
         $lines = $this->ecmtNoOfPermits->mapForDisplay($ecmtNoOfPermitsData);
 
-        if ($data['canViewCandidatePermits']) {
-            $lines[] = sprintf(
-                '<a href="%s">%s</a>',
-                $this->urlHelperService->fromRoute(IrhpApplicationSection::ROUTE_UNPAID_PERMITS, [], [], true),
-                $this->translator->translate('permits.page.view.permit.restrictions')
-            );
-        }
-
         return [
             'key' => self::NUM_PERMITS_HEADING,
             'value' => implode('<br>', $lines),
