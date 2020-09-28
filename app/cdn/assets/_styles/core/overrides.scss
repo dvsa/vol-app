@@ -141,3 +141,9 @@ div#global-cookie-message {
         width: 100%;
     }
 }
+
+.govuk-panel {
+  h1.govuk-panel__title {
+    max-width: none;
+  }
+}
