@@ -189,10 +189,6 @@ td {
 th {
   font-weight: 600;
   border-top: 1px solid $grey-2;
-  &[scope="row"] {
-    font-weight: 400;
-    padding-right: 2em;
-  }
   &.right-aligned {
     float: none;
   }
