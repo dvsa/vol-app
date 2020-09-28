@@ -3,9 +3,10 @@ namespace Permits\Controller;
 
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\Create;
+use Dvsa\Olcs\Transfer\Query\Permits\MaxPermittedReached;
 use Olcs\Controller\AbstractSelfserveController;
-use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
+use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\DataSource\LicencesAvailable;
 use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
@@ -81,6 +82,29 @@ class LicenceController extends AbstractSelfserveController
             );
 
             return;
+        }
+
+        if ($licencesAvailable['isEcmtAnnual']) {
+            $response = $this->handleQuery(
+                MaxPermittedReached::create([
+                    'irhpPermitStock' => $this->routeParams['stock'],
+                    'licence' => $params['licence']
+                ])
+            );
+
+            $result = $response->getResult();
+
+            if ($result['maxPermittedReached']) {
+                $config['step'] = IrhpApplicationSection::ROUTE_MAX_PERMITTED_REACHED;
+
+                $this->redirectParams = [
+                    'id' => $this->getCurrentOrganisationId(),
+                    'irhpPermitStock' => $params['irhpPermitStock'],
+                    'licence' => $params['licence']
+                ];
+
+                return;
+            }
         }
 
         //quick fix for mismatched route params

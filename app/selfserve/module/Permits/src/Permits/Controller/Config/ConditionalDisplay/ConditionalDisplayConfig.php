@@ -7,6 +7,7 @@ use Permits\Controller\Config\DataSource\LicencesAvailable;
 use Permits\Controller\Config\DataSource\AvailableTypes;
 use Permits\Controller\Config\DataSource\AvailableYears;
 use Permits\Controller\Config\DataSource\AvailableStocks;
+use Permits\Controller\Config\DataSource\MaxPermittedReached;
 use Permits\Controller\Config\DataSource\PermitApplication as PermitAppDataSource;
 use Permits\Controller\Config\DataSource\PermitsAvailable;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
@@ -62,6 +63,33 @@ class ConditionalDisplayConfig
             'key' => 'hasEligibleLicences',
             'value' => true,
             'route' => IrhpApplicationSection::ROUTE_NO_LICENCES,
+        ],
+    ];
+
+    const PERMIT_APP_CAN_SHOW_MAX_PERMITTED_REACHED = [
+        [
+            'source' => LicencesAvailable::DATA_KEY,
+            'key' => 'hasOpenWindow',
+            'value' => true,
+            'route' => IrhpApplicationSection::ROUTE_WINDOW_CLOSED,
+        ],
+        [
+            'source' => LicencesAvailable::DATA_KEY,
+            'key' => 'permitsAvailable',
+            'value' => true,
+            'route' => IrhpApplicationSection::ROUTE_PERMITS_EXHAUSTED,
+        ],
+        [
+            'source' => LicencesAvailable::DATA_KEY,
+            'key' => 'hasEligibleLicences',
+            'value' => true,
+            'route' => IrhpApplicationSection::ROUTE_NO_LICENCES,
+        ],
+        [
+            'source' => MaxPermittedReached::DATA_KEY,
+            'key' => 'maxPermittedReached',
+            'value' => true,
+            'route' => IrhpApplicationSection::ROUTE_PERMITS,
         ],
     ];
 

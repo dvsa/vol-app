@@ -6,7 +6,7 @@ use Dvsa\Olcs\Transfer\Query\Organisation\OrganisationAvailableLicences as Organ
 use Olcs\Controller\Config\DataSource\AbstractDataSource;
 
 /**
- * Open windows data source config
+ * Licences available data source config
  */
 class LicencesAvailable extends AbstractDataSource
 {
