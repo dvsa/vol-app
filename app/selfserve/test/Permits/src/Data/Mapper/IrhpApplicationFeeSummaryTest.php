@@ -1027,8 +1027,7 @@ class IrhpApplicationFeeSummaryTest extends TestCase
         $formattedNoOfPermitsRequiredLine1 = '1 permit for Euro 5 minimum emission standard';
         $formattedNoOfPermitsRequiredLine2 = '5 permits for Euro 6 minimum emission standard';
         $formattedNoOfPermitsRequired = '1 permit for Euro 5 minimum emission standard<br>'
-            . '5 permits for Euro 6 minimum emission standard<br>'
-            . '<a href="UNPAID_PERMITS_URL">UNPAID_PERMITS_LABEL</a>';
+            . '5 permits for Euro 6 minimum emission standard';
 
         $irhpPermitApplicationInputData = [
             'euro5PermitsAwarded' => 1,
