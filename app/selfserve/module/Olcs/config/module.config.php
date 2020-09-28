@@ -1276,6 +1276,7 @@ return array(
             \Olcs\Controller\Licence\Surrender\InformationChangedController::class => \Olcs\Controller\Licence\Surrender\InformationChangedController::class,
 
             // Licence - Vehicles
+            \Olcs\Controller\Licence\Vehicle\SwitchBoardController::class => \Olcs\Controller\Licence\Vehicle\SwitchBoardController::class,
             \Olcs\Controller\Licence\Vehicle\AddVehicleSearchController::class => \Olcs\Controller\Licence\Vehicle\AddVehicleSearchController::class,
         ),
         'factories' => array(

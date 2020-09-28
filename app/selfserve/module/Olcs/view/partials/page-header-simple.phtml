@@ -11,6 +11,13 @@
     }
     ?>
 
+    <?php
+        if(!empty($this->panel)) {
+            echo $this->panel($this->panel['theme'], $this->panel['title'], $this->panel['body'] ?? '');
+        }
+    ?>
+
+
     <div class="page-header__wrapper">
         <?php if (!empty($this->pageSubTitle)) : ?>
             <h3 class="page-header__subtitle"><?php

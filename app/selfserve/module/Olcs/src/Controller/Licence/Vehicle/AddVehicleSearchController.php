@@ -28,19 +28,8 @@ class AddVehicleSearchController extends AbstractVehicleController
 
     protected $pageTemplate = 'pages/licence/vehicle/add';
 
-    /**
-     * @var TranslationHelperService
-     */
-    private $translator;
-
     const SEARCH_TITLE = 'licence.vehicle.add.search.title';
     const RESULTS_TITLE = 'licence.vehicle.add.result.title';
-
-    public function onDispatch(MvcEvent $e)
-    {
-        $this->translator = $this->getServiceLocator()->get('Helper\Translation');
-        return parent::onDispatch($e);
-    }
 
     public function indexAction()
     {
@@ -102,8 +91,7 @@ class AddVehicleSearchController extends AbstractVehicleController
 
         if ($response->isOk()) {
             $this->hlpFlashMsgr->addSuccessMessage("Vehicle {$vrm} has been added");
-            //TODO: Update this route to the switchboard once it's available
-            return $this->redirect()->toRoute('licence/vehicle/add/GET', [], [], true);
+            return $this->redirect()->toRoute('licence/vehicle/GET', [], [], true);
         }
 
         $message = array_values($response->getResult()['messages']['vrm'])[0];
@@ -122,7 +110,7 @@ class AddVehicleSearchController extends AbstractVehicleController
             'licNo' => $this->data['licence']['licNo'],
             'content' => '',
             'form' => $this->form,
-            'backLink' => $this->url()->fromRoute('lva-licence', [], [], true),
+            'backLink' => $this->url()->fromRoute('licence/vehicle/GET', [], [], true),
             'bottomLink' => $this->url()->fromRoute('licence/vehicle/add/GET', [], [], true),
             'bottomText' => 'licence.vehicle.add.bottom-text'
         ];

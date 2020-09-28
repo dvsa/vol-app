@@ -8,6 +8,7 @@ use Common\RefData;
 use Common\Service\Cqrs\Exception\NotFoundException;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
 use Common\Util;
 use Dvsa\Olcs\Transfer\Query\DvlaSearch\Vehicle;
 use Exception;
@@ -41,6 +42,11 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
     protected $hlpFlashMsgr;
 
     /**
+     * @var TranslationHelperService
+     */
+    protected $translator;
+
+    /**
      * @var int $licenceId
      */
     protected $licenceId;
@@ -54,6 +60,7 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
         $this->licenceId = (int)$this->params('licence');
         $this->hlpForm = $this->getServiceLocator()->get('Helper\Form');
         $this->hlpFlashMsgr = $this->getServiceLocator()->get('Helper\FlashMessenger');
+        $this->translator = $this->getServiceLocator()->get('Helper\Translation');
         return parent::onDispatch($e);
     }
 
