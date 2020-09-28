@@ -1151,6 +1151,10 @@ class IrhpApplicationController extends AbstractInternalController implements
      */
     protected function mapFromForm($mapperClass, array $data)
     {
-        return $this->getServiceLocator()->get($mapperClass)->mapFromForm($data, $this->applicationSteps);
+        if ($mapperClass === IrhpApplicationMapper::class) {
+            return $this->getServiceLocator()->get($mapperClass)->mapFromForm($data, $this->applicationSteps);
+        }
+
+        return parent::mapFromForm($mapperClass, $data);
     }
 }
