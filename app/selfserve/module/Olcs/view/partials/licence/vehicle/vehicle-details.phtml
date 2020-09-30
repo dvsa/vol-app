@@ -23,7 +23,7 @@
     <tr class="govuk-table__row">
         <th scope="row" class="govuk-table__header"><?php echo $this->translate('licence.vehicle.add.result.weight');?>:</th>
         <td class="govuk-table__cell">
-            <?php echo $this->escapeHtml($vehicleDetails['revenueWeight']) ?>
+            <?php echo $this->escapeHtml(number_format($vehicleDetails['revenueWeight'])) ?>
         </td>
     </tr>
     <tr class="govuk-table__row">
