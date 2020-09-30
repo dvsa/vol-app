@@ -71,6 +71,7 @@ class IndexControllerTest extends MockeryTestCase
     {
         $mockIdentity = new User();
         $mockIdentity->setUserType(User::USER_TYPE_OPERATOR);
+        $mockIdentity->setUserData(['eligibleForPrompt' => false]);
 
         $this->sut->shouldReceive('currentUser->getIdentity')
             ->once()
@@ -82,6 +83,28 @@ class IndexControllerTest extends MockeryTestCase
 
         $this->sut->shouldReceive('redirect->toRoute')
             ->with('dashboard', [], ['code' => 303])
+            ->once()
+            ->andReturn('REDIRECT');
+
+        static::assertEquals('REDIRECT', $this->sut->indexAction());
+    }
+
+    public function testIndexPrompt()
+    {
+        $mockIdentity = new User();
+        $mockIdentity->setUserType(User::USER_TYPE_OPERATOR);
+        $mockIdentity->setUserData(['eligibleForPrompt' => true]);
+
+        $this->sut->shouldReceive('currentUser->getIdentity')
+            ->once()
+            ->andReturn($mockIdentity);
+
+        $this->sut->shouldReceive('isGranted')
+            ->with(RefData::PERMISSION_SELFSERVE_DASHBOARD)
+            ->andReturn(true);
+
+        $this->sut->shouldReceive('redirect->toRoute')
+            ->with('prompt', [], ['code' => 303])
             ->once()
             ->andReturn('REDIRECT');
 

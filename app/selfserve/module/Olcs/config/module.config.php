@@ -5,6 +5,7 @@ use Olcs\Controller\Cookie\SettingsController as CookieSettingsController;
 use Olcs\Controller\Cookie\SettingsControllerFactory as CookieSettingsControllerFactory;
 use Olcs\Controller\IndexController;
 use Olcs\Controller\MyDetailsController;
+use Olcs\Controller\PromptController;
 use Olcs\Controller\Search\SearchController;
 use Olcs\Controller\UserForgotUsernameController;
 use Olcs\Controller\UserRegistrationController;
@@ -280,6 +281,16 @@ $routes = array(
             )
         )
     ),
+    'prompt' => [
+        'type' => 'segment',
+        'options' =>  [
+            'route' => '/prompt[/]',
+            'defaults' => [
+                'controller' => PromptController::class,
+                'action' => 'generic',
+            ],
+        ],
+    ],
     'fees' => array(
         'type' => 'segment',
         'options' => array(
@@ -1248,6 +1259,7 @@ return array(
                 Olcs\Controller\BusReg\BusRegBrowseController::class,
             CookieDetailsController::class => CookieDetailsController::class,
             'Dashboard' => Olcs\Controller\DashboardController::class,
+            PromptController::class => PromptController::class,
             Olcs\Controller\FeesController::class => Olcs\Controller\FeesController::class,
             Olcs\Controller\CorrespondenceController::class => Olcs\Controller\CorrespondenceController::class,
             Olcs\Controller\UserController::class => Olcs\Controller\UserController::class,
