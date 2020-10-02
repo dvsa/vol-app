@@ -23,31 +23,31 @@ abstract class AbstractDocumentController extends AbstractController
      * For redirects
      */
     protected $documentRouteMap = [
-        'licence'          => 'licence/documents',
-        'application'      => 'lva-application/documents',
-        'case'             => 'case_licence_docs_attachments',
-        'busReg'           => 'licence/bus-docs',
+        'licence' => 'licence/documents',
+        'application' => 'lva-application/documents',
+        'case' => 'case_licence_docs_attachments',
+        'busReg' => 'licence/bus-docs',
         'transportManager' => 'transport-manager/documents',
         'irfoOrganisation' => 'operator/documents',
-        'irhpApplication'  => 'licence/irhp-application-docs',
+        'irhpApplication' => 'licence/irhp-application-docs',
     ];
 
     /**
      * How to map route param types to category IDs (see category db table)
      */
     protected $categoryMap = [
-        'licence'          => Category::CATEGORY_LICENSING,
-        'busReg'           => Category::CATEGORY_BUS_REGISTRATION,
-        'irhpApplication'  => Category::CATEGORY_PERMITS,
-        'case'             => null, // complex, depends on caseType
-        'application'      => Category::CATEGORY_LICENSING, // Application isn't a document category
+        'licence' => Category::CATEGORY_LICENSING,
+        'busReg' => Category::CATEGORY_BUS_REGISTRATION,
+        'irhpApplication' => Category::CATEGORY_PERMITS,
+        'case' => null, // complex, depends on caseType
+        'application' => Category::CATEGORY_LICENSING, // Application isn't a document category
         'transportManager' => Category::CATEGORY_TRANSPORT_MANAGER,
-        'statement'        => Category::CATEGORY_COMPLIANCE,
-        'hearing'          => Category::CATEGORY_COMPLIANCE,
-        'opposition'       => Category::CATEGORY_ENVIRONMENTAL,
-        'complaint'        => Category::CATEGORY_LICENSING,
+        'statement' => Category::CATEGORY_COMPLIANCE,
+        'hearing' => Category::CATEGORY_COMPLIANCE,
+        'opposition' => Category::CATEGORY_ENVIRONMENTAL,
+        'complaint' => Category::CATEGORY_LICENSING,
         'irfoOrganisation' => Category::CATEGORY_IRFO,
-        'impounding'       => Category::CATEGORY_COMPLIANCE,
+        'impounding' => Category::CATEGORY_COMPLIANCE,
     ];
 
     /**
@@ -56,7 +56,7 @@ abstract class AbstractDocumentController extends AbstractController
     protected $caseCategoryMap = [
         RefData::CASE_TYPE_LICENCE => Category::CATEGORY_LICENSING,
         RefData::CASE_TYPE_APPLICATION => Category::CATEGORY_LICENSING,
-        RefData::CASE_TYPE_TM  => Category::CATEGORY_TRANSPORT_MANAGER,
+        RefData::CASE_TYPE_TM => Category::CATEGORY_TRANSPORT_MANAGER,
         RefData::CASE_TYPE_IMPOUNDING => Category::CATEGORY_LICENSING
     ];
 
@@ -243,13 +243,13 @@ abstract class AbstractDocumentController extends AbstractController
     }
 
     /**
-     * @return mixed
+     *
+     * @return string
      */
-    protected function getUriPattern()
+    protected function getUriPattern(): string
     {
         $prefix = $this->getOsType();
-        $uriPattern = $this->getServiceLocator()->get('Config')[$prefix . '_document_share']['uri_pattern'];
-        return $uriPattern;
+        return (string) $this->getServiceLocator()->get('Config')[$prefix . '_document_share']['uri_pattern'];
     }
 
     private function getOsType(): string
@@ -257,7 +257,6 @@ abstract class AbstractDocumentController extends AbstractController
         //check which ostype
         $query = MyAccount::create([]);
         $response = $this->handleQuery($query)->getResult();
-
         return $response['osType']['id'] ?? "windows_7";
     }
 }

@@ -53,6 +53,9 @@ return array(
        'windows_10_document_share' => [
            'uri_pattern' => 'http://<url>/OLCS/olcs/%s',
        ],
+       'northern_i_document_share' => [
+               'uri_pattern' => 'webdav://///fs01.olcs.mgt.mtpdvsa/OLCS/olcs/%s',
+        ],
 
     // Asset path, URI to olcs-static (CSS, JS, etc) *Environment specific*
     'asset_path' => 'https://iuap1.olcs.dev.nonprod.dvsa.aws/static/public',

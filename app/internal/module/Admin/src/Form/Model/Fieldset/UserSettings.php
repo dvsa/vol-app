@@ -25,7 +25,7 @@ class UserSettings
     /**
      * @Form\Attributes({"id":"osType"})
      * @Form\Options({
-     *     "label": "Operating System",
+     *     "label": "User type",
      *     "disable_inarray_validator": false,
      *     "service_name": "Common\Service\Data\RefData",
      *     "category": "user_os"
