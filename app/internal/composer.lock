@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4ae965a96d8ca3ee280c47c15e33a372",
+    "content-hash": "b64f800d79ff6b444a9ac5f34228a64e",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -1360,17 +1360,18 @@
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "dev-feature/OLCS-27754-citrix-exit",
-            "source": {
-                "type": "git",
-                "url": "git@repo.olcs.dev-dvsacloud.uk:olcs/olcs-auth.git",
-                "reference": "1702ec101fb6b76908feef85615353f93196d628"
+            "version": "4.206.9",
+            "dist": {
+                "type": "zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-auth/4.206.9/olcs-olcs-auth-4.206.9.zip",
+                "reference": "f22aa9eb19f74ab83041d18c802a1face3e88526",
+                "shasum": "f22aa9eb19f74ab83041d18c802a1face3e88526"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
                 "elendev/nexus-composer-push": "^0.1",
                 "olcs/olcs-common": "~4.206.0",
-                "olcs/olcs-transfer": "dev-feature/OLCS-27754-citrix-exit",
+                "olcs/olcs-transfer": "~4.206.0",
                 "php": ">=7.2",
                 "zendframework/zend-console": "^2.5",
                 "zendframework/zend-di": "^2.5",
@@ -1427,7 +1428,7 @@
                 ]
             },
             "description": "OLCS Authentication",
-            "time": "2020-10-02T10:35:25+00:00"
+            "time": "2020-08-04T06:13:49+00:00"
         },
         {
             "name": "olcs/olcs-common",
@@ -1590,11 +1591,12 @@
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "dev-feature/OLCS-27754-citrix-exit",
-            "source": {
-                "type": "git",
-                "url": "git@repo.olcs.dev-dvsacloud.uk:olcs/olcs-transfer.git",
-                "reference": "9d196faaa602fb3247cff88e91629a4124f0667c"
+            "version": "4.206.87",
+            "dist": {
+                "type": "zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-transfer/4.206.87/olcs-olcs-transfer-4.206.87.zip",
+                "reference": "ed0c4b13ae5d7a4e1e8ee5e96d55e76772341b72",
+                "shasum": "ed0c4b13ae5d7a4e1e8ee5e96d55e76772341b72"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -1656,7 +1658,7 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2020-10-02T08:52:39+00:00"
+            "time": "2020-10-02T11:01:19+00:00"
         },
         {
             "name": "olcs/olcs-utils",
@@ -6364,6 +6366,7 @@
             "keywords": [
                 "tokenizer"
             ],
+            "abandoned": true,
             "time": "2019-09-17T06:23:10+00:00"
         },
         {
@@ -6789,6 +6792,7 @@
             ],
             "description": "FinderFacade is a convenience wrapper for Symfony's Finder component.",
             "homepage": "https://github.com/sebastianbergmann/finder-facade",
+            "abandoned": true,
             "time": "2020-01-16T08:08:45+00:00"
         },
         {
@@ -7587,10 +7591,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "olcs/olcs-transfer": 20,
-        "olcs/olcs-auth": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
