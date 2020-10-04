@@ -2167,10 +2167,10 @@
         },
         {
             "name": "symfony/debug",
-            "version": "v4.4.14",
+            "version": "v4.4.15",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/debug/v4.4.14/symfony-debug-v4.4.14.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/debug/v4.4.15/symfony-debug-v4.4.15.zip",
                 "reference": "726b85e69342e767d60e3853b98559a68ff74183",
                 "shasum": ""
             },
@@ -2232,11 +2232,11 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "v5.1.6",
+            "version": "v5.1.7",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/filesystem/v5.1.6/symfony-filesystem-v5.1.6.zip",
-                "reference": "f3194303d3077829dbbc1d18f50288b2a01146f2",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/filesystem/v5.1.7/symfony-filesystem-v5.1.7.zip",
+                "reference": "1a8697545a8d87b9f2f6b1d32414199cc5e20aae",
                 "shasum": ""
             },
             "require": {
@@ -2286,14 +2286,14 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-09-02T16:23:27+00:00"
+            "time": "2020-09-27T14:02:37+00:00"
         },
         {
             "name": "symfony/finder",
-            "version": "v5.1.6",
+            "version": "v5.1.7",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/finder/v5.1.6/symfony-finder-v5.1.6.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/finder/v5.1.7/symfony-finder-v5.1.7.zip",
                 "reference": "2c3ba7ad6884e6c4451ce2340e2dc23f6fa3e0d8",
                 "shasum": ""
             },
@@ -2347,11 +2347,11 @@
         },
         {
             "name": "symfony/lock",
-            "version": "v5.1.6",
+            "version": "v5.1.7",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/lock/v5.1.6/symfony-lock-v5.1.6.zip",
-                "reference": "b714b8347bfe5f8c5081cb1061d80797f62fe367",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/lock/v5.1.7/symfony-lock-v5.1.7.zip",
+                "reference": "c20c51121f24b627c866150c53b072b1b361737b",
                 "shasum": ""
             },
             "require": {
@@ -2418,7 +2418,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-09-24T07:56:38+00:00"
+            "time": "2020-10-03T13:58:17+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -7130,10 +7130,10 @@
         },
         {
             "name": "symfony/config",
-            "version": "v5.1.6",
+            "version": "v5.1.7",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/config/v5.1.6/symfony-config-v5.1.6.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/config/v5.1.7/symfony-config-v5.1.7.zip",
                 "reference": "6ad8be6e1280f6734150d8a04a9160dd34ceb191",
                 "shasum": ""
             },
@@ -7204,11 +7204,11 @@
         },
         {
             "name": "symfony/dependency-injection",
-            "version": "v5.1.6",
+            "version": "v5.1.7",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/dependency-injection/v5.1.6/symfony-dependency-injection-v5.1.6.zip",
-                "reference": "61e9e7be2c30a779deb26e555243eaca9d26b0f3",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/dependency-injection/v5.1.7/symfony-dependency-injection-v5.1.7.zip",
+                "reference": "2dea4a3ef2eb79138354c1d49e9372cc921af20b",
                 "shasum": ""
             },
             "require": {
@@ -7283,7 +7283,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-09-11T11:43:06+00:00"
+            "time": "2020-10-01T12:14:45+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -7345,10 +7345,10 @@
         },
         {
             "name": "symfony/process",
-            "version": "v5.1.6",
+            "version": "v5.1.7",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/process/v5.1.6/symfony-process-v5.1.6.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/process/v5.1.7/symfony-process-v5.1.7.zip",
                 "reference": "d3a2e64866169586502f0cd9cab69135ad12cee9",
                 "shasum": ""
             },
