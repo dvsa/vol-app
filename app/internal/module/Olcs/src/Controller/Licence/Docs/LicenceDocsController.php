@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Licence\Docs;
 
+use Dvsa\Olcs\Utils\Constants\FilterOptions;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Licence\LicenceController;
 use Olcs\Controller\Traits;
@@ -51,16 +52,39 @@ class LicenceDocsController extends LicenceController implements LeftViewProvide
     }
 
     /**
+     * Get document filters
+     *
+     * @return array
+     */
+    private function getDocumentFilters()
+    {
+        return $this->mapDocumentFilters(
+            [
+                'licence' => $this->getFromRoute('licence'),
+                'showDocs' => FilterOptions::EXCLUDE_IRHP,
+            ]
+        );
+    }
+
+    /**
      * Get Form
      *
      * @return \Zend\Form\FieldsetInterface
      */
     protected function getConfiguredDocumentForm()
     {
-        $filters = $this->mapDocumentFilters(['licence' => $this->getFromRoute('licence')]);
+        $filters = $this->getDocumentFilters();
 
-        return $this->getDocumentForm($filters)
-            ->remove('showDocs');
+        $form = $this->getDocumentForm($filters);
+
+        $this->updateSelectValueOptions(
+            $form->get('showDocs'),
+            [
+                FilterOptions::EXCLUDE_IRHP => 'documents.filter.option.exclude-irhp',
+            ]
+        );
+
+        return $form;
     }
 
     /**
@@ -71,7 +95,8 @@ class LicenceDocsController extends LicenceController implements LeftViewProvide
      */
     protected function getDocumentView()
     {
-        $filters = $this->mapDocumentFilters(['licence' => $this->getFromRoute('licence')]);
+        $filters = $this->getDocumentFilters();
+
         $table = $this->getDocumentsTable($filters);
 
         return $this->getViewWithLicence(['table' => $table]);
