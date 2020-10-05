@@ -5,6 +5,7 @@ namespace Olcs\Controller\Lva;
 use Common\Controller\Lva\AbstractController;
 use Common\Controller\Traits\GenericUpload;
 use Common\Form\Form;
+use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Application\UploadEvidence;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 
@@ -23,6 +24,11 @@ abstract class AbstractUploadEvidenceController extends AbstractController
      * @var array
      */
     private $data;
+
+    /**
+     * @var array|null
+     */
+    private $application;
 
     /**
      * Index action
@@ -106,13 +112,17 @@ abstract class AbstractUploadEvidenceController extends AbstractController
             $form->remove('operatingCentres');
         }
 
-        $this->processFiles(
-            $form,
-            'supportingEvidence->files',
-            [$this, 'supportingEvidenceProcessFileUpload'],
-            [$this, 'deleteFile'],
-            [$this, 'supportingEvidenceLoadFileUpload']
-        );
+        if ($this->shouldShowSupportingEvidence()) {
+            $this->processFiles(
+                $form,
+                'supportingEvidence->files',
+                [$this, 'supportingEvidenceProcessFileUpload'],
+                [$this, 'deleteFile'],
+                [$this, 'supportingEvidenceLoadFileUpload']
+            );
+        } elseif ($form->has('supportingEvidence')) {
+            $form->remove('supportingEvidence');
+        }
 
         return $form;
     }
@@ -205,8 +215,10 @@ abstract class AbstractUploadEvidenceController extends AbstractController
      */
     private function shouldShowOperatingCentre()
     {
-        $application = $this->getApplicationData($this->getIdentifier());
-        return $application['goodsOrPsv']['id'] == 'lcat_psv' ? false : true;
+        if (is_null($this->application)) {
+            $this->application = $this->getApplicationData($this->getIdentifier());
+        }
+        return $this->application['goodsOrPsv']['id'] == 'lcat_psv' ? false : true;
     }
 
     /**
@@ -291,5 +303,18 @@ abstract class AbstractUploadEvidenceController extends AbstractController
     public function supportingEvidenceLoadFileUpload()
     {
         return $this->getData()['supportingEvidence'];
+    }
+
+    /**
+     * Should we show the supporting evidence form?
+     * 
+     * @return bool
+     */
+    private function shouldShowSupportingEvidence()
+    {
+        if (is_null($this->application)){
+            $this->application = $this->getApplicationData($this->getIdentifier());
+        }
+        return $this->application['status']['id'] === RefData::APPLICATION_STATUS_UNDER_CONSIDERATION;
     }
 }
