@@ -54,9 +54,10 @@
               </div>
           <?php endif; ?>
 
-          <?php if (array_key_exists('SUPPLY_SUPPORTING_EVIDENCE', $actions) && !$hideContent): ?>
-              <div class="incomplete-section">
-                  <h3><?php echo $this->translate('supply-supporting-evidence'); ?></h3>
+          <div class="incomplete-section">
+              <h3><?php echo $this->translate('supply-supporting-evidence'); ?></h3>
+              <p><?php echo $this->translate('supply-supporting-evidence-text-hint'); ?></p>
+              <?php if (!empty($actions['SUPPLY_SUPPORTING_EVIDENCE'])): ?>
                   <p><?php echo $this->translate('supply-supporting-evidence-text-1'); ?></p>
                   <ul>
                       <?php
@@ -67,14 +68,12 @@
                       }
                       ?>
                   </ul>
-                  <p>
-                      <div class="actions-container">
-                          <a class="action--secondary large" href="<?php echo $this->url('lva-' . $lva . '/upload-evidence', [], [], true); ?>"><?php echo $this->translate('upload-evidence-button'); ?></a>
-                      </div>
-                  </p>
-                  <p><?php echo $this->translate('supply-supporting-evidence-text-2' . ($isNi ? '-ni' : '')); ?> (<?php echo $this->escapeHtml($licence) . '/' . $this->escapeHtml($application); ?>).</p>
+              <?php endif; ?>
+              <div class="actions-container">
+                  <a class="action--secondary large" href="<?php echo $this->url('lva-' . $lva . '/upload-evidence', [], [], true); ?>"><?php echo $this->translate('upload-evidence-button'); ?></a>
               </div>
-          <?php endif; ?>
+              <p><?php echo $this->translate('supply-supporting-evidence-text-2' . ($isNi ? '-ni' : '')); ?> (<?php echo $this->escapeHtml($licence) . '/' . $this->escapeHtml($application); ?>).</p>
+          </div>
 
           <?php if (array_key_exists('APPROVE_TM', $actions) && !$hideContent): ?>
               <div class="incomplete-section">
@@ -163,7 +162,7 @@
               </li>
             <?php endif; ?>
           </ul>
-        
+
       </div>
 
       <div class="info-box info-box--blue">
@@ -177,7 +176,7 @@
       </div>
 
 
-      
+
     </aside>
   </div>
 

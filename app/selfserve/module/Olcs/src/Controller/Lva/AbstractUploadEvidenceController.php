@@ -57,7 +57,11 @@ abstract class AbstractUploadEvidenceController extends AbstractController
             }
         }
 
-        return $this->render('upload-evidence', $form);
+        $variables = [
+            'warningText' => 'supply-supporting-evidence-warning'
+        ];
+
+        return $this->render('upload-evidence', $form, $variables);
     }
 
     /**
@@ -101,6 +105,15 @@ abstract class AbstractUploadEvidenceController extends AbstractController
         } elseif ($form->has('operatingCentres')) {
             $form->remove('operatingCentres');
         }
+
+        $this->processFiles(
+            $form,
+            'supportingEvidence->files',
+            [$this, 'supportingEvidenceProcessFileUpload'],
+            [$this, 'deleteFile'],
+            [$this, 'supportingEvidenceLoadFileUpload']
+        );
+
         return $form;
     }
 
@@ -242,5 +255,41 @@ abstract class AbstractUploadEvidenceController extends AbstractController
     {
         $financialEvidenceData = $this->getFinancialEvidenceData();
         return $financialEvidenceData['documents'];
+    }
+
+    /**
+     * Process/upload a new supporting evidence document
+     *
+     * @param array $file Data for the uploaded file
+     *
+     * @return void
+     */
+    public function supportingEvidenceProcessFileUpload($file)
+    {
+        $applicationData = $this->getApplicationData($this->getIdentifier());
+        $data = [
+            'application' => $applicationData['id'],
+            'description' => $file['name'],
+            'category'    => \Common\Category::CATEGORY_APPLICATION,
+            'subCategory' => \Common\Category::DOC_SUB_CATEGORY_SUPPORTING_EVIDENCE,
+            'licence'     => $applicationData['licence']['id'],
+            'isExternal'  => true,
+            'isPostSubmissionUpload' => true
+        ];
+
+        $this->uploadFile($file, $data);
+
+        // force refresh of data
+        $this->getData(true);
+    }
+
+    /**
+     * Get list of supporting evidence documents
+     *
+     * @return array
+     */
+    public function supportingEvidenceLoadFileUpload()
+    {
+        return $this->getData()['supportingEvidence'];
     }
 }

@@ -72,7 +72,15 @@ echo $this->partial(
   <div class="<?php echo $this->mainWrapperCssClass ?: 'three-quarters' ?> lva-details">
     <div class="js-body">
 
-      <?php
+        <?php if (isset($warningText)): ?>
+          <p class="important">
+              <strong>
+                  <?php echo $this->translate($warningText); ?>
+              </strong>
+          </p>
+        <?php endif; ?>
+
+    <?php
       $guidanceMessage = $this->placeholder('guidance');
       if (!empty($guidanceMessage)) {
           foreach ($guidanceMessage as $message): ?>
