@@ -65,6 +65,7 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
             [
                 'licence' => $licence,
                 'application' => $this->getFromRoute('application'),
+                'showDocs' => FilterOptions::EXCLUDE_IRHP,
             ]
         );
     }
@@ -99,6 +100,7 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
             $form->get('showDocs'),
             [
                 FilterOptions::SHOW_SELF_ONLY => 'documents.filter.option.this-app-only',
+                FilterOptions::EXCLUDE_IRHP => 'documents.filter.option.exclude-irhp',
             ]
         );
 

@@ -78,6 +78,7 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
 
         $filters = [
             'case' => $case['id'],
+            'showDocs' => FilterOptions::EXCLUDE_IRHP,
         ];
 
         switch ($case['caseType']['id']) {
@@ -108,6 +109,7 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
             $form->get('showDocs'),
             [
                 FilterOptions::SHOW_SELF_ONLY => 'documents.filter.option.this-case-only',
+                FilterOptions::EXCLUDE_IRHP => 'documents.filter.option.exclude-irhp',
             ]
         );
 
