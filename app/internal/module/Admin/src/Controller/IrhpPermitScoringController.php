@@ -6,12 +6,15 @@
  */
 namespace Admin\Controller;
 
+use DateTime;
 use Dvsa\Olcs\Transfer\Command\Permits\QueueAcceptScoring;
 use Dvsa\Olcs\Transfer\Command\Permits\QueueRunScoring;
+use Dvsa\Olcs\Transfer\Query\Permits\PostScoringReport;
 use Dvsa\Olcs\Transfer\Query\Permits\StockOperationsPermitted;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
 use Zend\Escaper\Escaper;
+use Zend\Http\Response;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
 
@@ -51,7 +54,7 @@ class IrhpPermitScoringController extends AbstractIrhpPermitAdminController impl
     }
 
     /**
-     * @return \Zend\Http\Response|ViewModel
+     * @return Response|ViewModel
      */
     public function indexAction()
     {
@@ -113,6 +116,40 @@ class IrhpPermitScoringController extends AbstractIrhpPermitAdminController impl
             'This will run scoring with a mean deviation override of ' . $escaper->escapeHtml($deviation) . '. Are you sure?',
             'Scoring successfully triggered'
         );
+    }
+
+    /**
+     * @return Response
+     */
+    public function postScoringReportAction()
+    {
+        $stockId = $this->params()->fromRoute('stockId');
+
+        $response = $this->handleQuery(
+            PostScoringReport::create([ 'id' => $stockId ])
+        );
+
+        $result = $response->getResult();
+
+        $commaSeparatedRows = [];
+        foreach ($result['rows'] as $row) {
+            $commaSeparatedRows[] = implode($row);
+        }
+
+        $content = implode("\n", $commaSeparatedRows);
+        $formattedDateTime = (new DateTime())->format('Ymd');
+        $filename = sprintf('post-scoring-report-stock%s-%s.csv', $stockId, $formattedDateTime);
+
+        $response = new Response();
+        $response->setStatusCode(Response::STATUS_CODE_200);
+        $response->getHeaders()->addHeaders([
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+            'Content-Length' => strlen($content)
+        ]);
+        $response->setContent($content);
+
+        return $response;
     }
 
     /**

@@ -35,14 +35,25 @@ OLCS.ready(function () {
 
             var acceptMessage;
             var acceptVisibility;
-            if (data.acceptPermitted) {
+            if (data.acceptAndPostScoringReportPermitted) {
                 acceptMessage = "Press the <strong>Accept</strong> button to start the acceptance process.";
                 acceptVisibility = "visible";
             } else {
-                acceptMessage = "The <strong>Accept</strong> option is not currently available. " + data.acceptMessage;
+                acceptMessage = "The <strong>Accept</strong> option is not currently available. " + data.acceptAndPostScoringReportMessage;
                 acceptVisibility = "hidden";
             }
             divContent += "<li>" + acceptMessage + "</li>";
+
+            var postScoringReportMessage;
+            var postScoringReportVisibility;
+            if (data.acceptAndPostScoringReportPermitted) {
+                postScoringReportMessage = "Press the <strong>Report</strong> button to download the post scoring report.";
+                postScoringReportVisibility = "visible";
+            } else {
+                postScoringReportMessage = "The <strong>Report</strong> option is not currently available. " + data.acceptAndPostScoringReportMessage;
+                postScoringReportVisibility = "hidden";
+            }
+            divContent += "<li>" + postScoringReportMessage + "</li>";
 
             if (data['meanDeviation']) {
                 divContent += "<li>The computed mean deviation from the last scoring run is " + data['meanDeviation'] + ".</li>";
@@ -50,6 +61,7 @@ OLCS.ready(function () {
 
             divContent += "</ul>";
             $("#acceptButton").css("visibility", acceptVisibility);
+            $("#postScoringReportButton").css("visibility", postScoringReportVisibility);
 
             $("#statusContainer").html(divContent);
             setTimeout(function() { updateStatus(statusUrl); }, 2500);
