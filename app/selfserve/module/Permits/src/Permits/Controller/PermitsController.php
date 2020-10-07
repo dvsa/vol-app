@@ -90,42 +90,31 @@ class PermitsController extends AbstractSelfserveController
     {
         $keys = [];
 
-        $typesToGroupByLicence = [
-            RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
-            RefData::IRHP_BILATERAL_PERMIT_TYPE_ID,
-            RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID,
-            RefData::ECMT_REMOVAL_PERMIT_TYPE_ID,
-            RefData::CERT_ROADWORTHINESS_VEHICLE_PERMIT_TYPE_ID,
-            RefData::CERT_ROADWORTHINESS_TRAILER_PERMIT_TYPE_ID,
-        ];
-
         foreach ($data as $key => $item) {
-            if (in_array($item['typeId'], $typesToGroupByLicence)) {
-                if (in_array(
-                    $item['typeId'],
-                    [
-                        RefData::CERT_ROADWORTHINESS_VEHICLE_PERMIT_TYPE_ID,
-                        RefData::CERT_ROADWORTHINESS_TRAILER_PERMIT_TYPE_ID,
-                    ]
-                )) {
-                    // TODO - OLCS-25382
-                    // Certificate of Roadworthiness doesn't have valid permit count
-                    // set the value here for now
-                    $data[$key]['validPermitCount'] = $item['validPermitCount'] = 1;
-                }
+            if (in_array(
+                $item['typeId'],
+                [
+                    RefData::CERT_ROADWORTHINESS_VEHICLE_PERMIT_TYPE_ID,
+                    RefData::CERT_ROADWORTHINESS_TRAILER_PERMIT_TYPE_ID,
+                ]
+            )) {
+                // TODO - OLCS-25382
+                // Certificate of Roadworthiness doesn't have valid permit count
+                // set the value here for now
+                $data[$key]['validPermitCount'] = $item['validPermitCount'] = 1;
+            }
 
-                // group applications into one row per licence
-                if (isset($keys[$item['licenceId']][$item['typeId']])) {
-                    // add number of permits required to the existing row
-                    $existingKey = $keys[$item['licenceId']][$item['typeId']];
+            // group applications into one row per licence
+            if (isset($keys[$item['licenceId']][$item['typeId']])) {
+                // add number of permits required to the existing row
+                $existingKey = $keys[$item['licenceId']][$item['typeId']];
 
-                    $data[$existingKey]['validPermitCount'] += $item['validPermitCount'];
+                $data[$existingKey]['validPermitCount'] += $item['validPermitCount'];
 
-                    // remove this line altogether
-                    unset($data[$key]);
-                } else {
-                    $keys[$item['licenceId']][$item['typeId']] = $key;
-                }
+                // remove this line altogether
+                unset($data[$key]);
+            } else {
+                $keys[$item['licenceId']][$item['typeId']] = $key;
             }
         }
 
@@ -170,7 +159,7 @@ class PermitsController extends AbstractSelfserveController
     private function referredFromGovUkPermits(MvcEvent $e): bool
     {
         /**
-         * @var HttpRequest      $request
+         * @var HttpRequest $request
          * @var HttpReferer|bool $referer
          */
         $request = $e->getRequest();
