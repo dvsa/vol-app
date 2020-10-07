@@ -311,7 +311,12 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
 
                 // If mapper implements this method use it to set redirect params.
                 if (method_exists($mapper, 'processRedirectParams')) {
-                    $this->redirectParams = $mapper->processRedirectParams($postResponse, $this->routeParams, $formData);
+                    $this->redirectParams = $mapper->processRedirectParams(
+                        $postResponse,
+                        $this->routeParams,
+                        $formData,
+                        $this->data
+                    );
                 }
 
                 return $this->handleSaveAndReturnStep(

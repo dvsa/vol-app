@@ -36,7 +36,7 @@ class IrhpApplicationPeriodController extends AbstractSelfserveController
         'question' => [
             'browserTitle' => 'permits.page.bilateral.which-period-required',
             'question' => 'permits.page.bilateral.which-period-required',
-            'backUri' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
+            'backUri' => IrhpApplicationSection::ROUTE_ESSENTIAL_INFORMATION,
         ]
     ];
 

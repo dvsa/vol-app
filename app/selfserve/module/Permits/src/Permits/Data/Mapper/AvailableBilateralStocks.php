@@ -5,6 +5,7 @@ namespace Permits\Data\Mapper;
 use Common\Form\Element\DynamicRadio;
 use Common\Form\Elements\Types\Html;
 use Common\Form\Form;
+use Common\Form\Input\StockInputMorocco;
 use Common\RefData;
 use Common\Service\Helper\TranslationHelperService;
 use Zend\Form\Element\Hidden;
@@ -14,6 +15,8 @@ use Zend\Form\Element\Hidden;
  */
 class AvailableBilateralStocks
 {
+    const MOROCCO_CODE = 'MA';
+
     /** @var TranslationHelperService */
     private $translator;
 
@@ -44,14 +47,26 @@ class AvailableBilateralStocks
         if (count($stocks) == 1) {
             $this->singleStockOption($form, $stocks[0]);
         } else {
+            $countryId = $data['routeParams']['country'];
+
             $selectedCountryStock = $this->getStockIdForCurrentCountrySelection(
                 $data['application']['irhpPermitApplications'],
-                $data['routeParams']['country']
+                $countryId
             );
 
             $data['application']['selectedStockId'] = $selectedCountryStock;
 
-            $this->multipleStockOptions($form, $stocks, $selectedCountryStock);
+            $isMorocco = $countryId == self::MOROCCO_CODE;
+
+            if ($isMorocco) {
+                $data['question'] = 'permits.page.bilateral.which-period-required.morocco';
+                $data['browserTitle'] = 'permits.page.bilateral.which-period-required.morocco';
+                $form->get('fields')->get('irhpPermitStock')->setOption('input_class', StockInputMorocco::class);
+            }
+
+            $form->get('Submit')->get('SubmitButton')->setValue('Save and continue');
+
+            $this->multipleStockOptions($form, $stocks, $selectedCountryStock, $isMorocco);
         }
 
         foreach ($data['application']['countrys'] as $country) {
@@ -67,16 +82,25 @@ class AvailableBilateralStocks
      * @param Form $form
      * @param array $stocks
      * @param string|null $selectedCountryStock
+     * @param bool $isMorocco
      */
-    private function multipleStockOptions(Form $form, array $stocks, ?string $selectedCountryStock)
+    private function multipleStockOptions(Form $form, array $stocks, ?string $selectedCountryStock, $isMorocco)
     {
         $valueOptions = [];
 
         foreach ($stocks as $stock) {
-            $valueOptions[] = [
+            $periodNameKey = $stock['periodNameKey'];
+
+            $valueOption = [
                 'value' => $stock['id'],
-                'label' => $stock['periodNameKey'],
+                'label' => $periodNameKey,
             ];
+
+            if ($isMorocco) {
+                $valueOption['hint'] = str_replace('label', 'hint', $periodNameKey);
+            }
+
+            $valueOptions[] = $valueOption;
         }
 
         $irhpPermitStock = $form->get('fields')->get('irhpPermitStock');
@@ -135,15 +159,28 @@ class AvailableBilateralStocks
      * @param array $response
      * @param array $routeParams
      * @param array $formData
+     * @param array $data
+     *
      * @return array
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function processRedirectParams(array $response, array $routeParams, array $formData)
+    public function processRedirectParams(array $response, array $routeParams, array $formData, array $data)
     {
+        $stocks = $data['stocks'];
+        $stockToSlugLookup = [];
+
+        foreach ($stocks as $stock) {
+            $stockToSlugLookup[$stock['id']] = $stock['first_step_slug'];
+        }
+
+        $selectedStockId = $formData['fields']['irhpPermitStock'];
+        $slug = $stockToSlugLookup[$selectedStockId];
+
         return [
             'id' => $routeParams['id'],
             'irhpPermitApplication' => $response['id']['irhpPermitApplication'],
-            'slug' => RefData::BILATERAL_PERMIT_USAGE
+            'slug' => $slug
         ];
     }
 
