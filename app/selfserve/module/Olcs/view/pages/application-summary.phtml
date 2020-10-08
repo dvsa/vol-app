@@ -72,7 +72,9 @@
               <div class="actions-container">
                   <a class="action--secondary large" href="<?php echo $this->url('lva-' . $lva . '/upload-evidence', [], [], true); ?>"><?php echo $this->translate('upload-evidence-button'); ?></a>
               </div>
-              <p><?php echo $this->translate('supply-supporting-evidence-text-2' . ($isNi ? '-ni' : '')); ?> (<?php echo $this->escapeHtml($licence) . '/' . $this->escapeHtml($application); ?>).</p>
+              <div class="actions-container">
+                <p class="govuk-body"><?php echo $this->translate('supply-supporting-evidence-text-2' . ($isNi ? '-ni' : '')); ?> (<?php echo $this->escapeHtml($licence) . '/' . $this->escapeHtml($application); ?>).</p>
+              </div>
           </div>
 
           <?php if (array_key_exists('APPROVE_TM', $actions) && !$hideContent): ?>
