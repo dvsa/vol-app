@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller;
 
+use Olcs\Logging\Log\Logger;
 use Olcs\View\Model\Dashboard;
 use Common\Controller\Lva\AbstractController;
 
@@ -45,6 +46,9 @@ class GdsVerifyController extends AbstractController
     public function processResponseAction()
     {
         $session = new \Olcs\Session\DigitalSignature();
+
+        Logger::debug("DigitalSignature retrieved:", $session->getArrayCopy());
+
         $applicationId = $session->hasApplicationId() ? $session->getApplicationId() : false;
         $continuationDetailId = $session->hasContinuationDetailId() ? $session->getContinuationDetailId() : false;
         $transportManagerApplicationId = $session->hasTransportManagerApplicationId() ? $session->getTransportManagerApplicationId() : false;
@@ -115,7 +119,6 @@ class GdsVerifyController extends AbstractController
             );
         }
 
-
         throw new \RuntimeException('There was an error processing the signature response');
     }
 
@@ -141,6 +144,8 @@ class GdsVerifyController extends AbstractController
                 call_user_func([$session, $methodName], $value);
             }
         }
+
+        Logger::debug("DigitalSignature created:", $session->getArrayCopy());
     }
 
     private function getTypeOfRequest($params): array
