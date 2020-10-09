@@ -1432,12 +1432,12 @@
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.273",
+            "version": "4.206.277",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-common/4.206.273/olcs-olcs-common-4.206.273.zip",
-                "reference": "c04497e760fbf03d27f1f8afe1b2877eff778f89",
-                "shasum": "c04497e760fbf03d27f1f8afe1b2877eff778f89"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-common/4.206.277/olcs-olcs-common-4.206.277.zip",
+                "reference": "fd8d6045c42bafbc554182dfe51cfc8dce6efac3",
+                "shasum": "fd8d6045c42bafbc554182dfe51cfc8dce6efac3"
             },
             "require": {
                 "doctrine/annotations": "^1.8",
@@ -1522,7 +1522,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2020-10-02T10:03:30+00:00"
+            "time": "2020-10-07T12:09:27+00:00"
         },
         {
             "name": "olcs/olcs-logging",
@@ -1591,12 +1591,12 @@
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "4.206.87",
+            "version": "4.206.89",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-transfer/4.206.87/olcs-olcs-transfer-4.206.87.zip",
-                "reference": "ed0c4b13ae5d7a4e1e8ee5e96d55e76772341b72",
-                "shasum": "ed0c4b13ae5d7a4e1e8ee5e96d55e76772341b72"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-transfer/4.206.89/olcs-olcs-transfer-4.206.89.zip",
+                "reference": "6ac7d05b2a7db16eaec85d2ff3842864d03efcb0",
+                "shasum": "6ac7d05b2a7db16eaec85d2ff3842864d03efcb0"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -1658,20 +1658,20 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2020-10-02T11:01:19+00:00"
+            "time": "2020-10-07T15:16:26+00:00"
         },
         {
             "name": "olcs/olcs-utils",
-            "version": "4.206.3",
+            "version": "4.206.4",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-utils/4.206.3/olcs-olcs-utils-4.206.3.zip",
-                "reference": "ebf3f9ff9e062b834d4ff2b7803aefe3c406dbbf",
-                "shasum": "ebf3f9ff9e062b834d4ff2b7803aefe3c406dbbf"
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-utils/4.206.4/olcs-olcs-utils-4.206.4.zip",
+                "reference": "495f48ce2ce3c8833522967486386f3da649f9e2",
+                "shasum": "495f48ce2ce3c8833522967486386f3da649f9e2"
             },
             "require": {
-                "elendev/nexus-composer-push": "^0.1.7",
-                "php": "^5.5 || ^7.0",
+                "elendev/nexus-composer-push": "^0.1",
+                "php": ">=7.2",
                 "zendframework/zend-eventmanager": "^2.5",
                 "zendframework/zend-http": "^2.5",
                 "zendframework/zend-i18n": "^2.5",
@@ -1681,12 +1681,8 @@
                 "zendframework/zend-view": "^2.5"
             },
             "require-dev": {
-                "johnkary/phpunit-speedtrap": "^3.0",
-                "mockery/mockery": "^1.2.0",
                 "olcs/olcs-devtools": "~4.206.0",
-                "olcs/olcs-logging": "~4.206.0",
-                "phpstan/phpstan-mockery": "^0.10.2",
-                "phpstan/phpstan-shim": "^0.10.5"
+                "olcs/olcs-logging": "~4.206.0"
             },
             "type": "library",
             "extra": {
@@ -1727,7 +1723,7 @@
                 ]
             },
             "description": "OLCS Utils",
-            "time": "2020-06-30T11:58:56+00:00"
+            "time": "2020-10-06T10:05:19+00:00"
         },
         {
             "name": "paragonie/random_compat",
