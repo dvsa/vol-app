@@ -5,12 +5,14 @@ namespace PermitsTest\Data\Mapper;
 use Common\Form\Element\DynamicRadio;
 use Common\Form\Elements\Types\Html;
 use Common\Form\Form;
+use Common\Form\Input\StockInputMorocco;
 use Common\RefData;
 use Common\Service\Helper\TranslationHelperService;
 use Mockery as m;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpApplicationDataSource;
 use Permits\Data\Mapper\AvailableBilateralStocks;
 use Zend\Form\Element\Hidden;
+use Zend\Form\Element\Submit;
 use Zend\Form\Fieldset;
 
 class AvailableBilateralStocksTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
@@ -81,7 +83,7 @@ class AvailableBilateralStocksTest extends \Mockery\Adapter\Phpunit\MockeryTestC
         );
     }
 
-    public function testMapForFormOptionsMultiple()
+    public function testMapForFormOptionsMultipleNotMorocco()
     {
         $inputData = [
             IrhpApplicationDataSource::DATA_KEY => [
@@ -127,6 +129,20 @@ class AvailableBilateralStocksTest extends \Mockery\Adapter\Phpunit\MockeryTestC
         $mockForm = m::mock(Form::class);
         $mockField = m::mock(DynamicRadio::class);
 
+        $mockSubmitButtonField = m::mock(Submit::class);
+        $mockSubmitButtonField->shouldReceive('setValue')
+            ->with('Save and continue')
+            ->once();
+
+        $mockSubmitFieldset = m::mock(Fieldset::class);
+        $mockSubmitFieldset->shouldReceive('get')
+            ->with('SubmitButton')
+            ->andReturn($mockSubmitButtonField);
+
+        $mockForm->shouldReceive('get')
+            ->with('Submit')
+            ->andReturn($mockSubmitFieldset);
+
         $valueOptions = [
             [
                 'value' => 12,
@@ -156,25 +172,146 @@ class AvailableBilateralStocksTest extends \Mockery\Adapter\Phpunit\MockeryTestC
         );
     }
 
+    public function testMapForFormOptionsMultipleMorocco()
+    {
+        $inputData = [
+            IrhpApplicationDataSource::DATA_KEY => [
+                'countrys' => [
+                    [
+                        'id' => 'MA',
+                        'countryDesc' => 'Morocco'
+                    ],
+                    [
+                        'id' => 'DE',
+                        'countryDesc' => 'Germany'
+                    ],
+                ],
+                'irhpPermitApplications' => [
+                    [
+                        'irhpPermitWindow' => [
+                            'irhpPermitStock' => [
+                                'id' => 12,
+                                'country' => [
+                                    'id' => 'MA'
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+            ],
+            'stocks' => [
+                [
+                    'id' => 12,
+                    'periodNameKey' => 'period.12.label'
+                ],
+                [
+                    'id' => 13,
+                    'periodNameKey' => 'period.13.label'
+                ]
+            ],
+            'routeParams' => [
+                'country' => 'MA'
+            ]
+        ];
+
+        $mockFieldSet = m::mock(Fieldset::class);
+        $mockForm = m::mock(Form::class);
+        $mockField = m::mock(DynamicRadio::class);
+
+        $mockSubmitButtonField = m::mock(Submit::class);
+        $mockSubmitButtonField->shouldReceive('setValue')
+            ->with('Save and continue')
+            ->once();
+
+        $mockSubmitFieldset = m::mock(Fieldset::class);
+        $mockSubmitFieldset->shouldReceive('get')
+            ->with('SubmitButton')
+            ->andReturn($mockSubmitButtonField);
+
+        $mockForm->shouldReceive('get')
+            ->with('Submit')
+            ->andReturn($mockSubmitFieldset);
+
+        $valueOptions = [
+            [
+                'value' => 12,
+                'label' => 'period.12.label',
+                'hint' => 'period.12.hint',
+                'attributes' => [
+                    'id' => 'stock'
+                ]
+            ],
+            [
+                'value' => 13,
+                'label' => 'period.13.label',
+                'hint' => 'period.13.hint'
+            ]
+        ];
+
+        $mockForm->shouldReceive('get')->with('fields')->andReturn($mockFieldSet);
+        $mockFieldSet->shouldReceive('get')->with('irhpPermitStock')->andReturn($mockField);
+        $mockField->shouldReceive('setValueOptions')->with($valueOptions)->once();
+        $mockField->shouldReceive('setValue')->with(12)->once();
+        $mockField->shouldReceive('setOption')
+            ->with('input_class', StockInputMorocco::class)
+            ->once();
+
+        $outputData = $inputData;
+        $outputData[IrhpApplicationDataSource::DATA_KEY]['countryName'] = 'Morocco';
+        $outputData[IrhpApplicationDataSource::DATA_KEY]['selectedStockId'] = 12;
+        $outputData['question'] = 'permits.page.bilateral.which-period-required.morocco';
+        $outputData['browserTitle'] = 'permits.page.bilateral.which-period-required.morocco';
+
+        $this->assertEquals(
+            $outputData,
+            $this->sut->mapForFormOptions($inputData, $mockForm)
+        );
+    }
+
     public function testProcessRedirectParams()
     {
+        $stockId7Slug = 'slug-seven';
+
         $response = [
             'id' => [
                 'irhpPermitApplication' => 4545,
             ]
         ];
+
         $routeParams = [
             'id' => 12
         ];
-        $formData = [];
+
+        $formData = [
+            'fields' => [
+                'irhpPermitStock' => '7'
+            ]
+        ];
+
+        $data = [
+            'stocks' => [
+                [
+                    'id' => 1,
+                    'first_step_slug' => 'slug-one'
+                ],
+                [
+                    'id' => 7,
+                    'first_step_slug' => $stockId7Slug
+                ],
+                [
+                    'id' => 13,
+                    'first_step_slug' => 'slug-thirteen'
+                ],
+            ]
+        ];
 
         $this->assertEquals(
             [
                 'id' => $routeParams['id'],
                 'irhpPermitApplication' => $response['id']['irhpPermitApplication'],
-                'slug' => RefData::BILATERAL_PERMIT_USAGE
+                'slug' => $stockId7Slug
             ],
-            $this->sut->processRedirectParams($response, $routeParams, $formData)
+            $this->sut->processRedirectParams($response, $routeParams, $formData, $data)
         );
     }
 }
