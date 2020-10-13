@@ -69,8 +69,7 @@ class IrhpApplicationPeriodController extends AbstractSelfserveController
             $this->postParams['fields']['previousIrhpPermitStock'] = $this->postParams['fields']['irhpPermitStock'];
 
             if ($storedStockId != $submittedStockId && $submittedStockId != $previouslySubmittedStockId) {
-                $this->templateVarsConfig['question']['warning'] = self::SELECTION_CHANGED_WARNING_KEY;
-                $this->mergeTemplateVars();
+                $this->data['warning'] = self::SELECTION_CHANGED_WARNING_KEY;
 
                 $this->postParams['fields']['warningVisible'] = 1;
                 $this->allowFormValidationSuccess = false;
