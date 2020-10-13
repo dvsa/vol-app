@@ -14,6 +14,7 @@ use Dvsa\Olcs\Transfer\Query\DvlaSearch\Vehicle;
 use Exception;
 use Olcs\Controller\AbstractSelfserveController;
 use Olcs\Controller\Config\DataSource\DataSourceConfig;
+use Olcs\Session\LicenceVehicleManagement;
 use Zend\Mvc\MvcEvent;
 use Zend\View\Model\ViewModel;
 
@@ -41,6 +42,9 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
     /** @var  FlashMessengerHelperService */
     protected $hlpFlashMsgr;
 
+    /** @var LicenceVehicleManagement */
+    protected $session;
+
     /**
      * @var TranslationHelperService
      */
@@ -61,6 +65,7 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
         $this->hlpForm = $this->getServiceLocator()->get('Helper\Form');
         $this->hlpFlashMsgr = $this->getServiceLocator()->get('Helper\FlashMessenger');
         $this->translator = $this->getServiceLocator()->get('Helper\Translation');
+        $this->session = new LicenceVehicleManagement();
         return parent::onDispatch($e);
     }
 
