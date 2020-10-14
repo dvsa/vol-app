@@ -6,22 +6,18 @@ namespace Olcs\Form\Model\Form\Vehicle;
 use Zend\Form\Annotation as Form;
 
 /**
- * @Form\Name("switch-board-form")
+ * @Form\Name("add-duplicate-vehicle-confirmation-form")
+ *
  * @Form\Type("\Common\Form\Form")
  */
-class SwitchBoard
+class AddDuplicateVehicleConfirmation
 {
     const FIELD_OPTIONS_FIELDSET_NAME = 'optionsFieldset';
     const FIELD_OPTIONS_NAME = 'options';
-    const FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_ADD = 'add';
-    const FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_REMOVE = 'remove';
-    const FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_TRANSFER = 'transfer';
-    const FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_REPRINT = 'reprint';
-    const FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW = 'view';
 
     /**
      * @Form\Name("optionsFieldset")
-     * @Form\ComposedObject("Olcs\Form\Model\Form\Vehicle\Fieldset\SwitchBoard")
+     * @Form\ComposedObject("Olcs\Form\Model\Form\Vehicle\Fieldset\YesNo")
      */
     public $optionsFieldset = null;
     

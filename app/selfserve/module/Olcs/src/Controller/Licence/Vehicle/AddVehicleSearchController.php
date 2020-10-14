@@ -5,9 +5,6 @@ namespace Olcs\Controller\Licence\Vehicle;
 use Common\Form\Elements\Types\AbstractInputSearch;
 use Common\Form\Form;
 use Common\Service\Cqrs\Exception\NotFoundException;
-use Common\Service\Helper\TranslationHelperService;
-use Dvsa\Olcs\Transfer\Command\Licence\CreateGoodsVehicle;
-use Dvsa\Olcs\Transfer\Command\Licence\CreatePsvVehicle;
 use Exception;
 use Olcs\Form\Model\Form\Vehicle\AddVehicleSearch;
 use Olcs\Form\Model\Form\Vehicle\ConfirmVehicle;
@@ -15,6 +12,8 @@ use Zend\Mvc\MvcEvent;
 
 class AddVehicleSearchController extends AbstractVehicleController
 {
+    use AddVehicleTrait;
+
     protected $formConfig = [
         'default' => [
             'confirmationForm' => [
@@ -31,13 +30,30 @@ class AddVehicleSearchController extends AbstractVehicleController
     const SEARCH_TITLE = 'licence.vehicle.add.search.title';
     const RESULTS_TITLE = 'licence.vehicle.add.result.title';
 
+    /**
+     * @return \Zend\View\Model\ViewModel
+     */
     public function indexAction()
     {
-        $params = $this->getViewVariables();
+        $vehicleData = $this->session->getVehicleData();
 
-        return $this->renderView($params);
+        if ($vehicleData) {
+            $this->form->setData([
+                'vehicle-search' => [
+                    'search-value' => $vehicleData['registrationNumber']
+                ]
+            ]);
+            $this->alterConfirmationForm();
+        }
+
+        return $this->renderView(
+            $this->createViewParametersForConfirmation($vehicleData)
+        );
     }
 
+    /**
+     * @return \Zend\View\Model\ViewModel
+     */
     public function postAction()
     {
         $formData = (array)$this->getRequest()->getPost();
@@ -47,51 +63,67 @@ class AddVehicleSearchController extends AbstractVehicleController
 
         if ($this->form->isValid()) {
             $vehicleData = $this->getVehicleData($vrm);
+            $this->alterConfirmationForm();
+
+            if (!empty($vehicleData)) {
+                $this->session->setVehicleData($vehicleData);
+            }
         }
 
-        $params = array_merge(
-            $this->getViewVariables(),
-            [
-                'vehicleData' => $vehicleData ?? null,
-                'vrm' => $vrm,
-                'title' => $vehicleData ? static::RESULTS_TITLE : static::SEARCH_TITLE,
-                'confirmationForm' => $this->forms['confirmationForm']
-            ]
+        return $this->renderView(
+            $this->createViewParametersForConfirmation($vehicleData, $vrm)
         );
-
-        return $this->renderView($params);
     }
 
+    /**
+     * @return \Zend\Http\Response
+     */
+    public function clearAction()
+    {
+        $this->session->destroy();
+        return $this->redirect()->toRoute('licence/vehicle/add/GET', [], [], true);
+    }
+
+    /**
+     * @return \Zend\Http\Response|\Zend\View\Model\ViewModel
+     */
     public function confirmationAction()
     {
-        $vrm = $this->getRequest()->getPost('vrm');
-        $vehicleData = $this->getVehicleData($vrm);
+        // Redirect to add action if vehicleData is not in session.
+        if (!$this->session->hasVehicleData()) {
+            $this->hlpFlashMsgr->addErrorMessage('LicenceVehicleManagement does not contain vehicleData');
+            return $this->redirect()->toRoute('licence/vehicle/add/GET', [], [], true);
+        }
+
+        $vehicleData = $this->session->getVehicleData();
 
         if (empty($vehicleData)) {
             $this->hlpFlashMsgr->addErrorMessage("licence.vehicle.add.unable-to-add");
             return $this->redirect()->toRoute('licence/vehicle/add/GET', [], [], true);
         }
 
-        if ($this->isGoods()) {
-            $command = CreateGoodsVehicle::create([
-                'id' => $this->licenceId,
-                'vrm' => $vehicleData['registrationNumber'],
-                'platedWeight' => $vehicleData['revenueWeight'],
-                'makeModel' => $vehicleData['make']
-            ]);
-        } else {
-            $command = CreatePsvVehicle::create([
-                'id' => $this->licenceId,
-                'vrm' => $vehicleData['registrationNumber'],
-                'makeModel' => $vehicleData['make']
-            ]);
-        }
-
-        $response = $this->handleCommand($command);
+        $response = $this->handleCommand(
+            $this->generateCreateVehicleCommand(
+                $vehicleData['registrationNumber'],
+                $vehicleData['make'],
+                false,
+                $vehicleData['revenueWeight'] ?? 0
+            )
+        );
 
         if ($response->isOk()) {
-            $this->hlpFlashMsgr->addSuccessMessage("Vehicle {$vrm} has been added");
+            $this->hlpFlashMsgr->addSuccessMessage(
+                $this->translator->translateReplace(
+                    'licence.vehicle.add.success',
+                    [$vehicleData['registrationNumber']]
+                )
+            );
             return $this->redirect()->toRoute('licence/vehicle/GET', [], [], true);
+        }
+
+        // Is the VRM already defined on a licence?
+        if (isset($response->getResult()['messages']['VE-VRM-2'])) {
+            return $this->redirect()->toRoute('licence/vehicle/add/duplicate-confirmation/GET', [], [], true);
         }
 
         $message = array_values($response->getResult()['messages']['vrm'])[0];
@@ -111,17 +143,15 @@ class AddVehicleSearchController extends AbstractVehicleController
             'content' => '',
             'form' => $this->form,
             'backLink' => $this->url()->fromRoute('licence/vehicle/GET', [], [], true),
-            'bottomLink' => $this->url()->fromRoute('licence/vehicle/add/GET', [], [], true),
+            'bottomLink' => $this->url()->fromRoute('licence/vehicle/add/clear', [], [], true),
             'bottomText' => 'licence.vehicle.add.bottom-text'
         ];
     }
 
     /**
      * Alter the confirmation route to add the form action and set the vrm
-     *
-     * @param string $vrm
      */
-    private function alterConfirmationForm(string $vrm): void
+    private function alterConfirmationForm(): void
     {
         /** @var Form $form */
         $form = $this->forms['confirmationForm'];
@@ -130,13 +160,35 @@ class AddVehicleSearchController extends AbstractVehicleController
             'action',
             $this->url()->fromRoute(
                 'licence/vehicle/add/confirmation',
-                ['licence' => $this->licenceId]
+                [],
+                [],
+                true
             )
         );
-
-        $form->get('vrm')->setValue($vrm);
     }
 
+    /**
+     * @param $vehicleData
+     * @param null $searchedVrm
+     * @return array
+     */
+    private function createViewParametersForConfirmation($vehicleData, $searchedVrm = null): array
+    {
+        return array_merge(
+            $this->getViewVariables(),
+            [
+                'vehicleData' => $vehicleData ?? null,
+                'vrm' => $searchedVrm,
+                'title' => $vehicleData ? static::RESULTS_TITLE : static::SEARCH_TITLE,
+                'confirmationForm' => $this->forms['confirmationForm']
+            ]
+        );
+    }
+
+    /**
+     * @param string $message
+     * @param string $type
+     */
     protected function setFormErrorMessage(string $message, string $type): void
     {
         $this->form->get('vehicle-search')->setMessages([
@@ -154,7 +206,6 @@ class AddVehicleSearchController extends AbstractVehicleController
     {
         try {
             $vehicleData = $this->fetchVehicleData($vrm);
-            $this->alterConfirmationForm($vrm);
         } catch (NotFoundException $exception) {
             $this->setFormErrorMessage('licence.vehicle.add.search.vrm-not-found', 'vrm_not_found');
         } catch (Exception $exception) {

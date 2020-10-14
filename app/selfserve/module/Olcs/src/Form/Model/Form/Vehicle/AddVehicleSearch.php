@@ -14,7 +14,7 @@ class AddVehicleSearch
     /**
      * @Form\Name("vehicle-search")
      * @Form\Options({
-     *     "label": "Vehicle Registration Mark (VRM)",
+     *     "label": "vrm.full",
      * })
      * @Form\Type("\Common\Form\Elements\Types\VrmSearch")
      */

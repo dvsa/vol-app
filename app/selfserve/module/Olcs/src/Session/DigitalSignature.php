@@ -11,6 +11,8 @@ class DigitalSignature extends \Zend\Session\Container
 {
     const SESSION_NAME = 'DigitalSignature';
 
+
+
     
     /**
      * DigitalSignature constructor.
