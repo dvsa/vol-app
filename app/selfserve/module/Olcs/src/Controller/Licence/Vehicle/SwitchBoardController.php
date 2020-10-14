@@ -7,6 +7,7 @@ namespace Olcs\Controller\Licence\Vehicle;
 use Common\Form\Elements\Types\Radio;
 use Common\View\Helper\Panel;
 use Olcs\Form\Model\Form\Vehicle\SwitchBoard as SwitchBoardForm;
+use Olcs\Session\LicenceVehicleManagement;
 
 class SwitchBoardController extends AbstractVehicleController
 {
@@ -23,6 +24,8 @@ class SwitchBoardController extends AbstractVehicleController
      */
     public function indexAction()
     {
+        $this->session->getManager()->getStorage()->clear(LicenceVehicleManagement::SESSION_NAME);
+
         $view = $this->genericView();
         $view->setVariables($this->getViewVariables());
 
@@ -30,7 +33,7 @@ class SwitchBoardController extends AbstractVehicleController
     }
 
     /**
-     * @return \Zend\Http\Response
+     * @return \Zend\Http\Response|\Zend\View\Model\ViewModel
      * @throws \Exception
      */
     public function decisionAction()

@@ -11,15 +11,6 @@ use Zend\Form\Annotation as Form;
  */
 class ConfirmVehicle
 {
-
-    /**
-     * @Form\Attributes({
-     *     "value":""
-     * })
-     * @Form\Type("Hidden")
-     */
-    public $vrm = null;
-
     /**
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      * @Form\Options({"label": "Add vehicle"})

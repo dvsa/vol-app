@@ -3,7 +3,6 @@
 
 namespace Olcs\Session;
 
-
 class LicenceVehicleManagement extends \Zend\Session\Container
 {
     const SESSION_NAME = 'LicenceVehicleManagement';
@@ -66,6 +65,32 @@ class LicenceVehicleManagement extends \Zend\Session\Container
     public function setVrms(array $vrm): LicenceVehicleManagement
     {
         $this->offsetSet('vrms', $vrm);
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasVehicleData(): bool
+    {
+        return $this->offsetExists('vehicleData');
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getVehicleData()
+    {
+        return $this->offsetGet('vehicleData');
+    }
+
+    /**
+     * @param array $vehicleData
+     * @return $this
+     */
+    public function setVehicleData(array $vehicleData): LicenceVehicleManagement
+    {
+        $this->offsetSet('vehicleData', $vehicleData);
         return $this;
     }
 

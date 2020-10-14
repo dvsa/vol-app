@@ -1290,6 +1290,7 @@ return array(
             // Licence - Vehicles
             \Olcs\Controller\Licence\Vehicle\SwitchBoardController::class => \Olcs\Controller\Licence\Vehicle\SwitchBoardController::class,
             \Olcs\Controller\Licence\Vehicle\AddVehicleSearchController::class => \Olcs\Controller\Licence\Vehicle\AddVehicleSearchController::class,
+            \Olcs\Controller\Licence\Vehicle\AddDuplicateVehicleController::class => \Olcs\Controller\Licence\Vehicle\AddDuplicateVehicleController::class,
         ),
         'factories' => array(
             CookieSettingsController::class => CookieSettingsControllerFactory::class,

@@ -6,6 +6,7 @@ use Olcs\Controller\Licence\Surrender\InformationChangedController;
 use Olcs\Controller\Licence\Surrender\PrintSignReturnController;
 use Olcs\Controller\Licence\Surrender\ReviewContactDetailsController;
 use Olcs\Controller\Licence\Surrender\StartController;
+use Olcs\Controller\Licence\Vehicle\AddDuplicateVehicleController;
 use Olcs\Controller\Licence\Vehicle\SwitchBoardController;
 use Olcs\Controller\Licence\Vehicle\AddVehicleSearchController;
 use Zend\Mvc\Router\Http\Method;
@@ -537,6 +538,16 @@ return [
                                         ],
                                     ],
                                 ],
+                                'clear' =>  [
+                                    'may_terminate' => true,
+                                    'type' => Segment::class,
+                                    'options' => [
+                                        'route' => 'clear[/]',
+                                        'defaults' => [
+                                            'action' => 'clear',
+                                        ],
+                                    ],
+                                ],
                                 'confirmation' =>  [
                                     'may_terminate' => true,
                                     'type' => Segment::class,
@@ -544,6 +555,38 @@ return [
                                         'route' => 'confirmation[/]',
                                         'defaults' => [
                                             'action' => 'confirmation',
+                                        ],
+                                    ],
+                                ],
+                                'duplicate-confirmation' =>  [
+                                    'may_terminate' => false,
+                                    'type' => Segment::class,
+                                    'options' => [
+                                        'route' => 'duplicate-confirmation[/]',
+                                        'defaults' => [
+                                            'controller' => AddDuplicateVehicleController::class,
+                                        ],
+                                    ],
+                                    'child_routes' => [
+                                        'GET' => [
+                                            'may_terminate' => true,
+                                            'type' => Method::class,
+                                            'options' => [
+                                                'verb' => 'GET',
+                                                'defaults' => [
+                                                    'action' => 'index',
+                                                ],
+                                            ],
+                                        ],
+                                        'POST' => [
+                                            'may_terminate' => true,
+                                            'type' => Method::class,
+                                            'options' => [
+                                                'verb' => 'POST',
+                                                'defaults' => [
+                                                    'action' => 'post',
+                                                ],
+                                            ],
                                         ],
                                     ],
                                 ],
