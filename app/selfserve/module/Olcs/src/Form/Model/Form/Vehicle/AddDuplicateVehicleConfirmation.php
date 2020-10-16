@@ -20,14 +20,9 @@ class AddDuplicateVehicleConfirmation
      * @Form\ComposedObject("Olcs\Form\Model\Form\Vehicle\Fieldset\YesNo")
      */
     public $optionsFieldset = null;
-    
+
     /**
-     * @Form\Attributes({
-     *     "id": "next",
-     *     "value": "Next",
-     *     "class": "action--primary large"
-     * })
-     * @Form\Type("Submit")
+     * @Form\ComposedObject("Olcs\Form\Model\Form\Vehicle\Fieldset\ConfirmFormActions")
      */
     public $formActions = null;
 }
