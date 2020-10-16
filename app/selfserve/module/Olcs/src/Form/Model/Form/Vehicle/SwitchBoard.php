@@ -24,12 +24,13 @@ class SwitchBoard
      * @Form\ComposedObject("Olcs\Form\Model\Form\Vehicle\Fieldset\SwitchBoard")
      */
     public $optionsFieldset = null;
-    
+
     /**
      * @Form\Attributes({
      *     "id": "next",
      *     "value": "Next",
-     *     "class": "action--primary large"
+     *     "class": "action--primary large",
+     *     "title": "licence.vehicle.switchboard.form.next.title"
      * })
      * @Form\Type("Submit")
      */
