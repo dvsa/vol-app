@@ -4,8 +4,8 @@ namespace Permits\Controller;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
-use Permits\Controller\Config\DataSource\IrhpApplication;
 use Permits\Controller\Config\Table\TableConfig;
+use Permits\View\Helper\IrhpApplicationSection;
 
 class IrhpUnpaidPermitsController extends AbstractSelfserveController
 {
@@ -26,17 +26,10 @@ class IrhpUnpaidPermitsController extends AbstractSelfserveController
     ];
 
     protected $templateVarsConfig = [
-        'generic' => []
+        'generic' => [
+            'backUri' => IrhpApplicationSection::ROUTE_AWAITING_FEE,
+            'browserTitle' => 'permits.irhp.unpaid.permits.browser.title',
+            'title' => 'permits.irhp.unpaid.permits.title',
+        ]
     ];
-
-    public function mergeTemplateVars()
-    {
-        // overwrite default page title
-        $title = $this->data[IrhpApplication::DATA_KEY]['irhpPermitType']['name']['description'];
-
-        $this->templateVarsConfig['generic']['browserTitle'] = $title;
-        $this->templateVarsConfig['generic']['title'] = $title;
-
-        parent::mergeTemplateVars();
-    }
 }
