@@ -1,6 +1,9 @@
 <?php
 namespace OlcsTest;
 
+use Common\Service\Translator\TranslationLoader;
+use Mockery as m;
+use Zend\I18n\Translator\LoaderPluginManager;
 use Zend\Mvc\Service\ServiceManagerConfig;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Loader\AutoloaderFactory;
@@ -40,6 +43,15 @@ class Bootstrap
 
         // If we want to a mock a service, we can.  But default services apply.
         $serviceManager->setAllowOverride(true);
+
+        $mockTranslationLoader = m::mock(TranslationLoader::class);
+        $mockTranslationLoader->shouldReceive('load')->andReturn(['default' => ['en_GB' => []]]);
+        $pluginManager = new LoaderPluginManager($serviceManager);
+        $pluginManager->setService(TranslationLoader::class, $mockTranslationLoader);
+        $translator = $serviceManager->get('translator');
+        $translator->setPluginManager($pluginManager);
+
+        $serviceManager->setService('translator', $translator);
 
         static::$serviceManager = $serviceManager;
     }
