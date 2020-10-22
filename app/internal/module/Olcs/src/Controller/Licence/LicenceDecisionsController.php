@@ -94,6 +94,12 @@ class LicenceDecisionsController extends AbstractController implements
                     case 'activeVariations':
                         $messages[$key] = 'There are applications still under consideration';
                         break;
+                    case 'activePermits':
+                        $messages[$key] = 'There are active permits on this licence';
+                        break;
+                    case 'ongoingPermitApplications':
+                        $messages[$key] = 'There are ongoing permit applications on this licence';
+                        break;
                 }
             }
             $form->get('messages')->get('message')->setValue(implode('<br>', $messages));
