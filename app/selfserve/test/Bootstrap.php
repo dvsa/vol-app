@@ -2,7 +2,9 @@
 
 namespace OlcsTest;
 
+use Common\Service\Translator\TranslationLoader;
 use Olcs\Logging\Log\Logger;
+use Zend\I18n\Translator\LoaderPluginManager;
 use Zend\Mvc\Service\ServiceManagerConfig;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Di\Di;
@@ -95,6 +97,15 @@ class Bootstrap
         $serviceManager->setService('ApplicationConfig', self::$config);
         $serviceManager->get('ModuleManager')->loadModules();
         $serviceManager->setAllowOverride(true);
+
+        $mockTranslationLoader = m::mock(TranslationLoader::class);
+        $mockTranslationLoader->shouldReceive('load')->andReturn(['default' => ['en_GB' => []]]);
+        $pluginManager = new LoaderPluginManager($serviceManager);
+        $pluginManager->setService(TranslationLoader::class, $mockTranslationLoader);
+        $translator = $serviceManager->get('translator');
+        $translator->setPluginManager($pluginManager);
+
+        $serviceManager->setService('translator', $translator);
 
         // Mess up the backend, so any real rest calls will fail
         $config = $serviceManager->get('Config');
