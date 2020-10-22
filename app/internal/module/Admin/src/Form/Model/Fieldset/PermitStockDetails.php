@@ -111,7 +111,7 @@ class PermitStockDetails
      * @Form\Options({
      *      "label": "Period selection translation key "
      * })
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":255}})
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":512}})
      * @Form\Type("Text")
      * @Form\Required(false)
      */
