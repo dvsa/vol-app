@@ -9,8 +9,10 @@ use Common\Service\Cqrs\Exception\NotFoundException;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableBuilder;
 use Common\Util;
 use Dvsa\Olcs\Transfer\Query\DvlaSearch\Vehicle;
+use Dvsa\Olcs\Transfer\Query\Licence\Vehicles;
 use Exception;
 use Olcs\Controller\AbstractSelfserveController;
 use Olcs\Controller\Config\DataSource\DataSourceConfig;
@@ -22,12 +24,18 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
 {
     use Util\FlashMessengerTrait;
 
+    public const DEFAULT_TABLE_SORT_ORDER = 'DESC';
+    public const DEFAULT_TABLE_SORT_COLUMN = 'createdOn';
+    public const DEFAULT_TABLE_ROW_LIMIT = 10;
+    public const TABLE_TITLE_SINGULAR = 'licence.vehicle.table.title.singular';
+    public const TABLE_TITLE_PLURAL = 'licence.vehicle.table.title.plural';
+
     protected $toggleConfig = [
         'default' => [FeatureToggle::DVLA_INTEGRATION]
     ];
 
-    protected $templateConfig =[
-        'default' =>  'pages/licence-vehicle'
+    protected $templateConfig = [
+        'default' => 'pages/licence-vehicle'
     ];
 
     protected $dataSourceConfig = [
@@ -132,5 +140,66 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
         }
 
         return $response->getResult()['results'][0];
+    }
+
+    /**
+     * Format filters (query/route parameters)
+     *
+     * @param array $query parameters
+     *
+     * @return array
+     */
+    protected function formatTableFilters($query)
+    {
+        $filters = [
+            'page' => (isset($query['page']) ? $query['page'] : 1),
+            'limit' => (isset($query['limit']) ? $query['limit'] : static::DEFAULT_TABLE_ROW_LIMIT),
+            'sort' => isset($query['sort']) ? $query['sort'] : static::DEFAULT_TABLE_SORT_COLUMN,
+            'order' => isset($query['order']) ? $query['order'] : static::DEFAULT_TABLE_SORT_ORDER,
+        ];
+
+        return $filters;
+    }
+
+    /**
+     * Define filters (query/route parameters)
+     *
+     * @return array
+     */
+    protected function getTableFilters()
+    {
+        /** @var \Zend\Http\Request $request */
+        $request = $this->getRequest();
+
+        if ($request->isPost()) {
+            $query = $request->getPost('query');
+        } else {
+            $query = $request->getQuery();
+        }
+
+        return $this->formatTableFilters((array)$query);
+    }
+
+    /**
+     * Get an instance of the licence-vehicles table
+     *
+     * @return TableBuilder
+     */
+    protected function createVehicleTable(): TableBuilder
+    {
+        $dtoData = $this->getTableFilters();
+        $dtoData['id'] = $this->licenceId;
+        $vehicleData = $this->handleQuery(Vehicles::create($dtoData))->getResult();
+
+        /** @var TableBuilder $table */
+        $table = $this->getServiceLocator()->get('Table');
+        $table = $table->prepareTable('licence-vehicles', $vehicleData, $dtoData);
+
+        $totalVehicles = $vehicleData['count'];
+        $titleKey = $totalVehicles > 1 ? static::TABLE_TITLE_PLURAL : static::TABLE_TITLE_SINGULAR;
+        $title = $this->translator->translateReplace($titleKey, [$totalVehicles]);
+        $table->setVariable('title', $title);
+
+        return $table;
     }
 }
