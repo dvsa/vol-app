@@ -1,5 +1,5 @@
 <?php
-    
+
 /** @var \Common\View\Helper\CurrentUser $currentUser */
 $currentUser = $this->currentUser();
 $isLoggedIn = $currentUser->isLoggedIn();
@@ -28,6 +28,7 @@ $isLoggedIn = $currentUser->isLoggedIn();
   <?php echo $this->headMeta()->appendName('theme-color', 'blue'); ?>
   <?php echo $this->headLink()->appendStylesheet($this->assetPath('/styles/' . $this->applicationName() . '.css'), ['media' => 'screen,print']); ?>
   <?php echo $this->headScript(); ?>
+  <script type='text/javascript' src='//static.queue-it.net/script/queueclient.min.js'></script>
 
   <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="<?php echo $this->assetPath('/assets/images/favicon.ico'); ?>" type="image/x-icon">
   <link rel="mask-icon" href="<?php echo $this->assetPath('/assets/images/govuk-mask-icon.svg'); ?>" color="blue">
@@ -75,19 +76,20 @@ $isLoggedIn = $currentUser->isLoggedIn();
   <script>
     document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
   </script>
+  <script data-queueit-c='dvsavol' type='text/javascript' src='//static.queue-it.net/script/queueconfigloader.min.js'></script>
 
   <a href="#main-content" class="govuk-skip-link"><?php echo $this->escapeHtml($this->translate('skip-content')); ?></a>
 
   <?php
   if ($cookieBannerMode != '') {
-  ?>      
-    
+  ?>
+
   <div id="global-cookie-message" class="gem-c-cookie-banner govuk-clearfix" data-module="cookie-banner" role="region" aria-label="cookie banner" data-nosnippet>
 
   <?php
   if ($cookieBannerMode == 'banner') {
   ?>
-    
+
     <form>
       <div class="gem-c-cookie-banner__wrapper govuk-width-container">
         <div class="govuk-grid-row">
@@ -96,12 +98,12 @@ $isLoggedIn = $currentUser->isLoggedIn();
               <span class="govuk-heading-m"><?php echo $this->escapeHtml($this->translate('cookie-banner.tell-us')); ?></span>
               <p class="govuk-body">
               <?php
-                
+
                   $blurb = sprintf(
                       $this->translate('cookie-banner.blurb'),
                       $this->url('cookies/settings')
                   );
-         
+
                   echo($blurb);
 
               ?>
