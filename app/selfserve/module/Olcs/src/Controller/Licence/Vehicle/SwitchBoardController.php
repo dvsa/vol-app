@@ -55,14 +55,9 @@ class SwitchBoardController extends AbstractVehicleController
 
         switch ($selectedOption) {
             case SwitchBoardForm::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_ADD:
-                return $this->redirect()->toRoute(
-                    'licence/vehicle/add/GET',
-                    [],
-                    [],
-                    true
-                );
+                return $this->nextStep('licence/vehicle/add/GET');
             case SwitchBoardForm::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_REMOVE:
-                throw new \Exception('Not Implemented: Remove Vehicle');
+                return $this->nextStep('licence/vehicle/remove/GET');
             case SwitchBoardForm::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_REPRINT:
                 throw new \Exception('Not Implemented: Reprint Vehicle Disc');
             case SwitchBoardForm::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_TRANSFER:

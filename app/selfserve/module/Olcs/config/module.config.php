@@ -1291,6 +1291,8 @@ return array(
             \Olcs\Controller\Licence\Vehicle\SwitchBoardController::class => \Olcs\Controller\Licence\Vehicle\SwitchBoardController::class,
             \Olcs\Controller\Licence\Vehicle\AddVehicleSearchController::class => \Olcs\Controller\Licence\Vehicle\AddVehicleSearchController::class,
             \Olcs\Controller\Licence\Vehicle\AddDuplicateVehicleController::class => \Olcs\Controller\Licence\Vehicle\AddDuplicateVehicleController::class,
+            \Olcs\Controller\Licence\Vehicle\RemoveVehicleController::class => \Olcs\Controller\Licence\Vehicle\RemoveVehicleController::class,
+            \Olcs\Controller\Licence\Vehicle\ViewVehicleController::class => \Olcs\Controller\Licence\Vehicle\ViewVehicleController::class,
         ),
         'factories' => array(
             CookieSettingsController::class => CookieSettingsControllerFactory::class,

@@ -7,8 +7,10 @@ use Olcs\Controller\Licence\Surrender\PrintSignReturnController;
 use Olcs\Controller\Licence\Surrender\ReviewContactDetailsController;
 use Olcs\Controller\Licence\Surrender\StartController;
 use Olcs\Controller\Licence\Vehicle\AddDuplicateVehicleController;
-use Olcs\Controller\Licence\Vehicle\SwitchBoardController;
 use Olcs\Controller\Licence\Vehicle\AddVehicleSearchController;
+use Olcs\Controller\Licence\Vehicle\RemoveVehicleController;
+use Olcs\Controller\Licence\Vehicle\SwitchBoardController;
+use Olcs\Controller\Licence\Vehicle\ViewVehicleController;
 use Zend\Mvc\Router\Http\Method;
 use Zend\Mvc\Router\Http\Segment;
 
@@ -592,7 +594,60 @@ return [
                                 ],
                             ],
                         ],
-
+                        'remove' => [
+                            'may_terminate' => false,
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => 'remove[/]',
+                                'defaults' => [
+                                    'controller' => RemoveVehicleController::class,
+                                ]
+                            ],
+                            'child_routes' => [
+                                'GET' => [
+                                    'may_terminate' => true,
+                                    'type' => Method::class,
+                                    'options' => [
+                                        'verb' => 'GET',
+                                        'defaults' => [
+                                            'action' => 'index',
+                                        ],
+                                    ],
+                                ],
+                                'POST' => [
+                                    'may_terminate' => true,
+                                    'type' => Method::class,
+                                    'options' => [
+                                        'verb' => 'POST',
+                                        'defaults' => [
+                                            'action' => 'post',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'view' => [
+                            'may_terminate' => false,
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => 'view/:vehicle[/]',
+                                'defaults' => [
+                                    'controller' => ViewVehicleController::class,
+                                ]
+                            ],
+                            'child_routes' => [
+                                'GET' => [
+                                    'may_terminate' => true,
+                                    'type' => Method::class,
+                                    'options' => [
+                                        'verb' => 'GET',
+                                        'defaults' => [
+                                            'action' => 'index',
+                                        ],
+                                    ],
+                                ]
+                            ],
+                        ],
                     ]
                 ],
             ],
