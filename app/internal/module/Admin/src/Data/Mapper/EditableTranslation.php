@@ -34,8 +34,10 @@ class EditableTranslation implements MapperInterface
     public static function mapFromForm(array $data): array
     {
         foreach ($data['fields']['translationsArray'] as $isoCode => $translation) {
-            if(empty($translation)) {
+            if (empty($translation)) {
                 unset($data['fields']['translationsArray'][$isoCode]);
+            } else {
+                $data['fields']['translationsArray'][$isoCode] = base64_encode($data['fields']['translationsArray'][$isoCode]);
             }
         }
         return $data['fields'];
