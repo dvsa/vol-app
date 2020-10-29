@@ -18,6 +18,19 @@
                 <?php if (!empty($this->content)): ?>
                     <p class="govuk-body"><?php echo $this->translate($this->content); ?></p>
                 <?php endif; ?>
+                <?php if ($this->vrmList): ?>
+                    <p class="govuk-body-l govuk-!-margin-top-3"><?php echo $this->translate('licence.vehicle.remove.confirm.selected-vehicles'); ?></p>
+                    <ul role="list" class="govuk-list govuk-list--bullet govuk-body-l two-column">
+                        <?php
+                            $count = 0;
+                        ?>
+                        <?php foreach ($this->vrmList as $vrm): ?>
+                            <?php $count++; ?>
+                            <li><span aria-label="<?php echo $this->translateReplace('licence.vehicle.remove.confirm.selected-vehicles.list.item.aria', [$count, $vrm]); ?>"><?php echo $vrm; ?></span></li>
+                        <?php endforeach; ?>
+                    </ul>
+                    <div class="govuk-clearfix"></div>
+                <?php endif; ?>
                 <?php if ($this->note): ?>
                     <div class="govuk-inset-text">
                         <?php echo $this->translate($this->note); ?>

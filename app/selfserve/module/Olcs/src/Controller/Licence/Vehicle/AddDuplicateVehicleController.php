@@ -2,7 +2,7 @@
 
 namespace Olcs\Controller\Licence\Vehicle;
 
-use Olcs\Form\Model\Form\Vehicle\AddDuplicateVehicleConfirmation;
+use Olcs\Form\Model\Form\Vehicle\AddDuplicateVehicleConfirmation as AddDuplicateVehicleConfirmationForm;
 
 class AddDuplicateVehicleController extends AbstractVehicleController
 {
@@ -13,7 +13,7 @@ class AddDuplicateVehicleController extends AbstractVehicleController
     protected $formConfig = [
         'default' => [
             'confirmationForm' => [
-                'formClass' => AddDuplicateVehicleConfirmation::class,
+                'formClass' => AddDuplicateVehicleConfirmationForm::class,
             ]
         ]
     ];
@@ -26,7 +26,7 @@ class AddDuplicateVehicleController extends AbstractVehicleController
         // Redirect to add action if VRM is not in session.
         if (!$this->session->hasVehicleData()) {
             $this->hlpFlashMsgr->addErrorMessage('LicenceVehicleManagement does not contain vehicleData');
-            return $this->redirect()->toRoute('licence/vehicle/add/GET', [], [], true);
+            return $this->nextStep('licence/vehicle/add/GET');
         }
 
         $params = $this->getViewVariables();
@@ -48,19 +48,25 @@ class AddDuplicateVehicleController extends AbstractVehicleController
         // Redirect to add action if VRM is not in session.
         if (!$this->session->hasVehicleData()) {
             $this->hlpFlashMsgr->addErrorMessage('LicenceVehicleManagement does not contain vehicleData');
-            return $this->redirect()->toRoute('licence/vehicle/add/GET', [], [], true);
+            return $this->nextStep('licence/vehicle/add/GET');
         }
 
         $vehicleData = $this->session->getVehicleData();
 
         $formData = (array)$this->getRequest()->getPost();
-        $selectedOption = $formData[AddDuplicateVehicleConfirmation::FIELD_OPTIONS_FIELDSET_NAME]
-            [AddDuplicateVehicleConfirmation::FIELD_OPTIONS_NAME]
+        $this->form->setData($formData);
+
+        if (!$this->form->isValid()) {
+            return $this->indexAction();
+        }
+
+        $selectedOption = $formData[AddDuplicateVehicleConfirmationForm::FIELD_OPTIONS_FIELDSET_NAME]
+            [AddDuplicateVehicleConfirmationForm::FIELD_OPTIONS_NAME]
             ?? '';
 
         // Has the user selected no?
         if ($selectedOption != 'yes') {
-            return $this->redirect()->toRoute('licence/vehicle/add/POST', [], [], true);
+            return $this->nextStep('licence/vehicle/add/POST');
         }
 
         // User selected yes
@@ -80,7 +86,7 @@ class AddDuplicateVehicleController extends AbstractVehicleController
                     [$vehicleData['registrationNumber']]
                 )
             );
-            return $this->redirect()->toRoute('licence/vehicle/GET', [], [], true);
+            return $this->nextStep('licence/vehicle/GET');
         }
     }
 
@@ -94,13 +100,8 @@ class AddDuplicateVehicleController extends AbstractVehicleController
             'licNo' => $this->data['licence']['licNo'],
             'content' => '',
             'form' => $this->form,
-            'backLink' => $this->url()->fromRoute('licence/vehicle/GET', [], [], true),
-            'bottomContent' => $this->translator->translateReplace(
-                'licence.vehicle.generic.choose-different-action',
-                [
-                    $this->url()->fromRoute('licence/vehicle/GET', [], [], true)
-                ]
-            )
+            'backLink' => $this->getLink('licence/vehicle/GET'),
+            'bottomContent' => $this->getChooseDifferentActionMarkup()
         ];
     }
 }

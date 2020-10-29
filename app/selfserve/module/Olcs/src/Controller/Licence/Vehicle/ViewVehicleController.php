@@ -23,7 +23,7 @@ class ViewVehicleController extends AbstractVehicleController
             'licNo' => $this->data['licence']['licNo'],
             'content' => '',
             'form' => $this->form,
-            'backLink' => $this->url()->fromRoute('licence/vehicle/GET', [], [], true)
+            'backLink' => $this->getLink('licence/vehicle/GET')
         ];
     }
 }

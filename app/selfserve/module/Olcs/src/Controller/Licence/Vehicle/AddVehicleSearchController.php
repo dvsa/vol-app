@@ -81,7 +81,7 @@ class AddVehicleSearchController extends AbstractVehicleController
     public function clearAction()
     {
         $this->session->destroy();
-        return $this->redirect()->toRoute('licence/vehicle/add/GET', [], [], true);
+        return $this->nextStep('licence/vehicle/add/GET');
     }
 
     /**
@@ -92,14 +92,14 @@ class AddVehicleSearchController extends AbstractVehicleController
         // Redirect to add action if vehicleData is not in session.
         if (!$this->session->hasVehicleData()) {
             $this->hlpFlashMsgr->addErrorMessage('LicenceVehicleManagement does not contain vehicleData');
-            return $this->redirect()->toRoute('licence/vehicle/add/GET', [], [], true);
+            return $this->nextStep('licence/vehicle/add/GET');
         }
 
         $vehicleData = $this->session->getVehicleData();
 
         if (empty($vehicleData)) {
             $this->hlpFlashMsgr->addErrorMessage("licence.vehicle.add.unable-to-add");
-            return $this->redirect()->toRoute('licence/vehicle/add/GET', [], [], true);
+            return $this->nextStep('licence/vehicle/add/GET');
         }
 
         $response = $this->handleCommand(
@@ -118,18 +118,18 @@ class AddVehicleSearchController extends AbstractVehicleController
                     [$vehicleData['registrationNumber']]
                 )
             );
-            return $this->redirect()->toRoute('licence/vehicle/GET', [], [], true);
+            return $this->nextStep('licence/vehicle/GET');
         }
 
         // Is the VRM already defined on a licence?
         if (isset($response->getResult()['messages']['VE-VRM-2'])) {
-            return $this->redirect()->toRoute('licence/vehicle/add/duplicate-confirmation/GET', [], [], true);
+            return $this->nextStep('licence/vehicle/add/duplicate-confirmation/GET');
         }
 
         $message = array_values($response->getResult()['messages']['vrm'])[0];
         $this->hlpFlashMsgr->addErrorMessage($message);
 
-        return $this->redirect()->toRoute('licence/vehicle/add/GET', [], [], true);
+        return $this->nextStep('licence/vehicle/add/GET');
     }
 
     /**
@@ -142,8 +142,8 @@ class AddVehicleSearchController extends AbstractVehicleController
             'licNo' => $this->data['licence']['licNo'],
             'content' => '',
             'form' => $this->form,
-            'backLink' => $this->url()->fromRoute('licence/vehicle/GET', [], [], true),
-            'bottomLink' => $this->url()->fromRoute('licence/vehicle/add/clear', [], [], true),
+            'backLink' => $this->getLink('licence/vehicle/GET'),
+            'bottomLink' => $this->getLink('licence/vehicle/add/clear'),
             'bottomText' => 'licence.vehicle.add.bottom-text'
         ];
     }
@@ -158,12 +158,7 @@ class AddVehicleSearchController extends AbstractVehicleController
 
         $form->setAttribute(
             'action',
-            $this->url()->fromRoute(
-                'licence/vehicle/add/confirmation',
-                [],
-                [],
-                true
-            )
+            $this->getLink('licence/vehicle/add/confirmation')
         );
     }
 

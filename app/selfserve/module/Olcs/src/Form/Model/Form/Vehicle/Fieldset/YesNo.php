@@ -37,14 +37,7 @@ class YesNo
      * })
      * @Form\Type("\Common\Form\Elements\Types\Radio")
      * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({
-     *     "name":"Zend\Validator\NotEmpty",
-     *     "options":{
-     *         "messages": {
-     *             "isEmpty": "licence.vehicle.switchboard.form.error.select-option"
-     *         }
-     *     }
-     * })
+     * @Form\Required(false)
      */
     public $options = null;
 }
