@@ -44,8 +44,7 @@ class RemoveVehicleController extends AbstractVehicleController
         }
 
         $this->session->setVrms($selectedVehicles);
-        // TODO: Update to correct route in VOL-85
-        return $this->nextStep('licence/vehicle/remove/GET');
+        return $this->nextStep('licence/vehicle/remove/confirm/GET');
     }
 
     /**
@@ -59,12 +58,7 @@ class RemoveVehicleController extends AbstractVehicleController
             'content' => '',
             'form' => $this->form,
             'backLink' => $this->getLink('licence/vehicle/GET'),
-            'bottomContent' => $this->translator->translateReplace(
-                'licence.vehicle.generic.choose-different-action',
-                [
-                    $this->getLink('licence/vehicle/GET')
-                ]
-            )
+            'bottomContent' => $this->getChooseDifferentActionMarkup()
         ];
     }
 

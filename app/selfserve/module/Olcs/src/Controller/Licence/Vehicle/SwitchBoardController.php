@@ -131,7 +131,7 @@ class SwitchBoardController extends AbstractVehicleController
             'licNo' => $this->data['licence']['licNo'],
             'content' => '',
             'form' => $this->form,
-            'backLink' => $this->url()->fromRoute('lva-licence', [], [], true)
+            'backLink' => $this->getLink('lva-licence')
         ];
 
         $successMessages = $this->getFlashMessenger()->getMessages('success');
@@ -139,6 +139,7 @@ class SwitchBoardController extends AbstractVehicleController
             $viewVariables['title'] = 'licence.vehicle.switchboard.header.after-journey';
             $viewVariables['panel'] = [
                 'title' => $successMessages[0],
+                'body' => $successMessages[1] ?? '',
                 'theme' => Panel::TYPE_SUCCESS,
             ];
         }
