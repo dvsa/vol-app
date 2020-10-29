@@ -23,4 +23,11 @@ require 'init_autoloader.php';
 Zend\Mvc\Application::init(require 'config/application.config.php')->run();
 
 $time = round(microtime(true) - $startTime, 5);
-\Olcs\Logging\Log\Logger::debug('Internal complete', ['time' => $time, 'url' => $_SERVER['REQUEST_URI']]);
+\Olcs\Logging\Log\Logger::debug(
+    'Internal complete',
+    [
+        'time' => $time,
+        'url' => $_SERVER['REQUEST_URI'],
+        'peak-memory-usage-MB' => (int)(memory_get_peak_usage() / 1024 / 1024),
+    ]
+);
