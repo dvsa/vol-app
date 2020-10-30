@@ -1595,8 +1595,8 @@
             "dist": {
                 "type": "zip",
                 "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/OLCS/olcs/olcs-transfer/4.206.92/olcs-olcs-transfer-4.206.92.zip",
-                "reference": "97801b7e120b6558b11bb6b3ec5d94408a022a5c",
-                "shasum": "97801b7e120b6558b11bb6b3ec5d94408a022a5c"
+                "reference": "ec2b441077010a300af1975d11239b398c6d763c",
+                "shasum": "ec2b441077010a300af1975d11239b398c6d763c"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
