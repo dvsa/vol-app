@@ -3,15 +3,24 @@ declare(strict_types=1);
 
 namespace Olcs\Controller\Licence\Vehicle;
 
+use Common\Form\Form;
+use Olcs\Form\Model\Form\Vehicle\ListVehicleSearch;
 use Olcs\Form\Model\Form\Vehicle\Vehicles as VehiclesForm;
+use Zend\View\Model\ViewModel;
 
 class RemoveVehicleController extends AbstractVehicleController
 {
     public const VEHICLE_REMOVE_LIMIT = 20;
     public const VEHICLE_WARNING_LIMIT = 10;
 
+    protected const LICENCE_VEHICLE_REMOVE_HEADER = 'licence.vehicle.remove.header';
+    protected const LICENCE_VEHICLE_REMOVE_SEARCH_HEADER = 'licence.vehicle.remove.search.header';
+
     protected $formConfig = [
         'default' => [
+            'searchForm' => [
+                'formClass' => ListVehicleSearch::class
+            ],
             'goodsVehicleForm' => [
                 'formClass' => VehiclesForm::class,
             ]
@@ -53,29 +62,47 @@ class RemoveVehicleController extends AbstractVehicleController
     protected function getViewVariables(): array
     {
         return [
-            'title' => 'licence.vehicle.remove.header',
+            'title' => $this->isSearchResultsPage() ? static::LICENCE_VEHICLE_REMOVE_SEARCH_HEADER : static::LICENCE_VEHICLE_REMOVE_HEADER,
             'licNo' => $this->data['licence']['licNo'],
             'content' => '',
+            'clearUrl' => $this->getLink('licence/vehicle/remove/GET'),
             'form' => $this->form,
             'backLink' => $this->getLink('licence/vehicle/GET'),
             'bottomContent' => $this->getChooseDifferentActionMarkup()
         ];
     }
 
-    public function alterForm($form)
+    protected function alterVehicleForm()
     {
-        $form->get('formActions')
+        $this->form->get('formActions')
             ->get('action')
             ->setLabel('licence.vehicle.remove.button');
+    }
 
-        return $form;
+    protected function alterSearchForm()
+    {
+        /** @var Form $form */
+        $form = $this->forms['searchForm'];
+        $form->get('vehicleSearch')
+            ->setOption('legend', 'licence.vehicle.table.search.remove.legend');
+
+        $formData = $this->getRequest()->getQuery();
+        $form->setData($formData);
+
+        if (array_key_exists('vehicleSearch', $formData)) {
+            $form->isValid();
+        }
+
+        $form->remove('security');
     }
 
     /**
-     * @return \Zend\View\Model\ViewModel
+     * @return ViewModel
      */
-    protected function createView(): \Zend\View\Model\ViewModel
+    protected function createView(): ViewModel
     {
+        $this->alterVehicleForm();
+
         $vehicleTable = $this->createVehicleTable();
         $tableFieldset = $this->form->get('table');
         $tableFieldset->get('table')->setTable($vehicleTable);
@@ -85,6 +112,8 @@ class RemoveVehicleController extends AbstractVehicleController
         $view->setVariables($this->getViewVariables());
 
         if ($vehicleTable->getTotal() > static::VEHICLE_WARNING_LIMIT) {
+            $this->alterSearchForm();
+            $view->setVariable('searchForm', $this->forms['searchForm']);
             $view->setVariable('note', $this->translator->translate('licence.vehicle.remove.note'));
         }
 

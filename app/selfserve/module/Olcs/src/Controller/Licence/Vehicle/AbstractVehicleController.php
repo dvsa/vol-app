@@ -4,13 +4,14 @@ namespace Olcs\Controller\Licence\Vehicle;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Common\FeatureToggle;
+use Common\Form\Elements\Types\AbstractInputSearch;
 use Common\RefData;
 use Common\Service\Cqrs\Exception\NotFoundException;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableBuilder;
-use Common\Util;
+use Common\Util\FlashMessengerTrait;
 use Dvsa\Olcs\Transfer\Query\DvlaSearch\Vehicle;
 use Dvsa\Olcs\Transfer\Query\Licence\Vehicles;
 use Exception;
@@ -22,13 +23,16 @@ use Zend\View\Model\ViewModel;
 
 abstract class AbstractVehicleController extends AbstractSelfserveController implements ToggleAwareInterface
 {
-    use Util\FlashMessengerTrait;
+    use FlashMessengerTrait;
 
     public const DEFAULT_TABLE_SORT_ORDER = 'DESC';
     public const DEFAULT_TABLE_SORT_COLUMN = 'createdOn';
     public const DEFAULT_TABLE_ROW_LIMIT = 10;
     public const TABLE_TITLE_SINGULAR = 'licence.vehicle.table.title.singular';
     public const TABLE_TITLE_PLURAL = 'licence.vehicle.table.title.plural';
+    protected const TABLE_SEARCH_TITLE_SINGULAR = 'licence.vehicle.table.search.title.singular';
+    protected const TABLE_SEARCH_TITLE_PLURAL = 'licence.vehicle.table.search.title.plural';
+    protected const TABLE_SEARCH_TITLE_EMPTY = 'licence.vehicle.table.search.title.empty';
 
     protected $toggleConfig = [
         'default' => [FeatureToggle::DVLA_INTEGRATION]
@@ -125,7 +129,7 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
      * @throws Exception
      * @throws NotFoundException
      */
-    protected function fetchVehicleData(string $vrm): array
+    protected function fetchDvlaVehicleData(string $vrm): array
     {
         $response = $this->handleQuery(Vehicle::create([
             'vrm' => $vrm
@@ -143,41 +147,21 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
     }
 
     /**
-     * Format filters (query/route parameters)
-     *
-     * @param array $query parameters
-     *
-     * @return array
-     */
-    protected function formatTableFilters($query)
-    {
-        $filters = [
-            'page' => (isset($query['page']) ? $query['page'] : 1),
-            'limit' => (isset($query['limit']) ? $query['limit'] : static::DEFAULT_TABLE_ROW_LIMIT),
-            'sort' => isset($query['sort']) ? $query['sort'] : static::DEFAULT_TABLE_SORT_COLUMN,
-            'order' => isset($query['order']) ? $query['order'] : static::DEFAULT_TABLE_SORT_ORDER,
-        ];
-
-        return $filters;
-    }
-
-    /**
-     * Define filters (query/route parameters)
+     * Get filters for the vehicle table
      *
      * @return array
      */
     protected function getTableFilters()
     {
-        /** @var \Zend\Http\Request $request */
-        $request = $this->getRequest();
+        $query = $this->getRequest()->getQuery()->toArray();
 
-        if ($request->isPost()) {
-            $query = $request->getPost('query');
-        } else {
-            $query = $request->getQuery();
-        }
-
-        return $this->formatTableFilters((array)$query);
+        return [
+            'page' => $query['page'] ?: 1,
+            'limit' => $query['limit'] ?: static::DEFAULT_TABLE_ROW_LIMIT,
+            'sort' => $query['sort'] ?: static::DEFAULT_TABLE_SORT_COLUMN,
+            'order' => $query['order'] ?: static::DEFAULT_TABLE_SORT_ORDER,
+            'vrm' => $query['vehicleSearch'][AbstractInputSearch::ELEMENT_INPUT_NAME] ?? null
+        ];
     }
 
     /**
@@ -190,17 +174,21 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
         $dtoData = $this->getTableFilters();
         $dtoData['id'] = $this->licenceId;
         $vehicleData = $this->handleQuery(Vehicles::create($dtoData))->getResult();
+        $totalVehicles = $vehicleData['count'];
+
+        $query = $this->filterSearchQuery($this->getRequest()->getQuery()->toArray());
+        $params = array_merge($dtoData, ['query' => $query]);
 
         /** @var TableBuilder $table */
         $table = $this->getServiceLocator()->get('Table');
-        $table = $table->prepareTable('licence-vehicles', $vehicleData, $dtoData);
+        $table = $table->prepareTable('licence-vehicles', $vehicleData, $params);
 
-        $totalVehicles = $vehicleData['count'];
-        $titleKey = $totalVehicles > 1 ? static::TABLE_TITLE_PLURAL : static::TABLE_TITLE_SINGULAR;
-        $title = $this->translator->translateReplace($titleKey, [$totalVehicles]);
-        $table->setVariable('title', $title);
+        if ($this->isSearchResultsPage()) {
+            return $this->alterTableForSearchView($table, $totalVehicles);
+        }
 
-        return $table;
+        return $this->alterTableForDefaultView($table, $totalVehicles);
+
     }
 
     /**
@@ -214,5 +202,76 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
                 $this->getLink('licence/vehicle/GET')
             ]
         );
+    }
+
+    /**
+     * Checks the request for presence of vehicle search data to decide if the page
+     * to show should be search results
+     *
+     * @return bool
+     */
+    protected function isSearchResultsPage(): bool
+    {
+        $request = $this->filterSearchQuery($this->getRequest()->getQuery()->toArray());
+
+        return array_key_exists('vehicleSearch', $request);
+    }
+
+    /**
+     * Filter out unneeded variables from the vehicle search query if present
+     *
+     * @param array $query
+     * @return array
+     */
+    protected function filterSearchQuery(array $query): array
+    {
+        if (empty($query['vehicleSearch'][AbstractInputSearch::ELEMENT_INPUT_NAME])) {
+            unset($query['vehicleSearch']);
+        } else {
+            unset($query['vehicleSearch'][AbstractInputSearch::ELEMENT_SUBMIT_NAME]);
+        }
+
+        return $query;
+    }
+
+    /**
+     * Alter the vehicle table for search results view
+     *
+     * @param TableBuilder $table
+     * @param $totalVehicles
+     */
+    protected function alterTableForSearchView(TableBuilder $table, $totalVehicles): TableBuilder
+    {
+        switch ($totalVehicles) {
+            case 0:
+                $title = static::TABLE_SEARCH_TITLE_EMPTY;
+                break;
+            case 1:
+                $title = static::TABLE_SEARCH_TITLE_SINGULAR;
+                break;
+            default:
+                $title = static::TABLE_SEARCH_TITLE_PLURAL;
+        }
+        $table->setVariable('title', $this->translator->translate($title));
+        $table->setSetting('overrideTotal', false);
+        return $table;
+    }
+
+    /**
+     * Alter vehicle table to default view
+     *
+     * @param TableBuilder $table
+     * @param $totalVehicles
+     */
+    protected function alterTableForDefaultView(TableBuilder $table, $totalVehicles): TableBuilder
+    {
+        $title = $totalVehicles == 1 ? static::TABLE_TITLE_SINGULAR : static::TABLE_TITLE_PLURAL;
+
+        $table->setVariable(
+            'title',
+            $this->translator->translateReplace($title, [$totalVehicles])
+        );
+
+        return $table;
     }
 }

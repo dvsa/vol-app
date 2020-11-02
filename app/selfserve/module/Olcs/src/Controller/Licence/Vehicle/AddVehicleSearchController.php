@@ -144,7 +144,7 @@ class AddVehicleSearchController extends AbstractVehicleController
             'form' => $this->form,
             'backLink' => $this->getLink('licence/vehicle/GET'),
             'bottomLink' => $this->getLink('licence/vehicle/add/clear'),
-            'bottomText' => 'licence.vehicle.add.bottom-text'
+            'bottomText' => 'licence.vehicle.clear-search'
         ];
     }
 
@@ -200,7 +200,7 @@ class AddVehicleSearchController extends AbstractVehicleController
     protected function getVehicleData($vrm): ?array
     {
         try {
-            $vehicleData = $this->fetchVehicleData($vrm);
+            $vehicleData = $this->fetchDvlaVehicleData($vrm);
         } catch (NotFoundException $exception) {
             $this->setFormErrorMessage('licence.vehicle.add.search.vrm-not-found', 'vrm_not_found');
         } catch (Exception $exception) {
