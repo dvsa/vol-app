@@ -28,7 +28,7 @@
                     <p class="govuk-body"><?php echo $this->translate($this->content); ?></p>
                 <?php endif; ?>
                 <?php if ($this->vrmList): ?>
-                    <p class="govuk-body-l govuk-!-margin-top-3"><?php echo $this->translate('licence.vehicle.remove.confirm.selected-vehicles'); ?></p>
+                    <p class="govuk-body-l govuk-!-margin-top-3"><?php echo $this->translate($this->vrmListInfoText); ?></p>
                     <ul role="list" class="govuk-list govuk-list--bullet govuk-body-l two-column">
                         <?php
                         $count = 0;
