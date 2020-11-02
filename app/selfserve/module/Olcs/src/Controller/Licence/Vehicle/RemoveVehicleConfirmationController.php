@@ -100,9 +100,14 @@ class RemoveVehicleConfirmationController extends AbstractVehicleController
             'id' => $this->licenceId
         ]));
 
+        $successMessageKey = 'licence.vehicle.remove.confirm.success.singular';
+        if (count($vehicleIds) > 1) {
+            $successMessageKey = 'licence.vehicle.remove.confirm.success.plural';
+        }
+
         $this->hlpFlashMsgr->addSuccessMessage(
             $this->translator->translateReplace(
-                'licence.vehicle.remove.confirm.success',
+                $successMessageKey,
                 [count($vehicleIds)]
             )
         );
@@ -124,7 +129,7 @@ class RemoveVehicleConfirmationController extends AbstractVehicleController
     protected function getViewVariables(): array
     {
         return [
-            'title' => 'licence.vehicle.remove.confirm.header',
+            'title' => 'licence.vehicle.remove.confirm.header.singular',
             'licNo' => $this->data['licence']['licNo'],
             'content' => '',
             'form' => $this->form,
@@ -139,12 +144,20 @@ class RemoveVehicleConfirmationController extends AbstractVehicleController
      */
     private function createViewParametersForConfirmation(array $vrms): array
     {
-        return array_merge(
+        $viewParams = array_merge(
             $this->getViewVariables(),
             [
                 'vrmList' => $vrms,
+                'vrmListInfoText' => 'licence.vehicle.remove.confirm.list.hint.singular'
             ]
         );
+
+        if (count($vrms) > 1) {
+            $viewParams['title'] = 'licence.vehicle.remove.confirm.header.plural';
+            $viewParams['vrmListInfoText'] = 'licence.vehicle.remove.confirm.list.hint.plural';
+        }
+
+        return $viewParams;
     }
 
     /**

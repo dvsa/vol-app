@@ -156,10 +156,10 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
         $query = $this->getRequest()->getQuery()->toArray();
 
         return [
-            'page' => $query['page'] ?: 1,
-            'limit' => $query['limit'] ?: static::DEFAULT_TABLE_ROW_LIMIT,
-            'sort' => $query['sort'] ?: static::DEFAULT_TABLE_SORT_COLUMN,
-            'order' => $query['order'] ?: static::DEFAULT_TABLE_SORT_ORDER,
+            'page' => $query['page'] ?? 1,
+            'limit' => $query['limit'] ?? static::DEFAULT_TABLE_ROW_LIMIT,
+            'sort' => $query['sort'] ?? static::DEFAULT_TABLE_SORT_COLUMN,
+            'order' => $query['order'] ?? static::DEFAULT_TABLE_SORT_ORDER,
             'vrm' => $query['vehicleSearch'][AbstractInputSearch::ELEMENT_INPUT_NAME] ?? null
         ];
     }
