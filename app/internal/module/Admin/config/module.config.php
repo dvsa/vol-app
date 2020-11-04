@@ -627,7 +627,7 @@ return [
                                     'route' => 'stocks/:stockId/scoring[/:action][/:deviation]',
                                     'constraints' => [
                                         'stockId' =>'[0-9\,]+',
-                                        'action' => '(index|accept|runStandard|runWithMeanDeviation|postScoringReport|status)',
+                                        'action' => '(index|accept|runStandard|runWithMeanDeviation|postScoringReport|alignStock|status)',
                                         'deviation' =>'[0-9\.]+'
                                     ],
                                     'defaults' => [

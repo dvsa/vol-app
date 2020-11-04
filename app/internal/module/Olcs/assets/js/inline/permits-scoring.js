@@ -44,6 +44,17 @@ OLCS.ready(function () {
             }
             divContent += "<li>" + acceptMessage + "</li>";
 
+            var alignStockMessage;
+            var alignStockVisibility;
+            if (data.acceptAndPostScoringReportPermitted) {
+                alignStockMessage = "Press the <strong>Align stock</strong> button to download the stock alignment report.";
+                alignStockVisibility = "visible";
+            } else {
+                alignStockMessage = "The <strong>Align stock</strong> option is not currently available. " + data.acceptAndPostScoringReportMessage;
+                alignStockVisibility = "hidden";
+            }
+            divContent += "<li>" + alignStockMessage + "</li>";
+
             var postScoringReportMessage;
             var postScoringReportVisibility;
             if (data.acceptAndPostScoringReportPermitted) {
@@ -61,6 +72,7 @@ OLCS.ready(function () {
 
             divContent += "</ul>";
             $("#acceptButton").css("visibility", acceptVisibility);
+            $("#alignStockButton").css("visibility", alignStockVisibility);
             $("#postScoringReportButton").css("visibility", postScoringReportVisibility);
 
             $("#statusContainer").html(divContent);

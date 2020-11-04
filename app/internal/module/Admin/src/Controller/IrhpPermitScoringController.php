@@ -9,6 +9,7 @@ namespace Admin\Controller;
 use DateTime;
 use Dvsa\Olcs\Transfer\Command\Permits\QueueAcceptScoring;
 use Dvsa\Olcs\Transfer\Command\Permits\QueueRunScoring;
+use Dvsa\Olcs\Transfer\Query\Permits\StockAlignmentReport;
 use Dvsa\Olcs\Transfer\Query\Permits\PostScoringReport;
 use Dvsa\Olcs\Transfer\Query\Permits\StockOperationsPermitted;
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -121,6 +122,31 @@ class IrhpPermitScoringController extends AbstractIrhpPermitAdminController impl
     /**
      * @return Response
      */
+    public function alignStockAction()
+    {
+        $stockId = $this->params()->fromRoute('stockId');
+
+        $response = $this->handleQuery(
+            StockAlignmentReport::create(['id' => $stockId])
+        );
+
+        $result = $response->getResult();
+
+        $commaSeparatedRows = [];
+        foreach ($result['rows'] as $row) {
+            $commaSeparatedRows[] = '"'.implode('","', $row).'"';
+        }
+
+        $content = implode("\n", $commaSeparatedRows);
+        $formattedDateTime = (new DateTime())->format('Ymd');
+        $filename = sprintf('stock-alignment-report-stock%s-%s.csv', $stockId, $formattedDateTime);
+
+        return $this->csvResponse($filename, $content);
+    }
+
+    /**
+     * @return Response
+     */
     public function postScoringReportAction()
     {
         $stockId = $this->params()->fromRoute('stockId');
@@ -140,6 +166,14 @@ class IrhpPermitScoringController extends AbstractIrhpPermitAdminController impl
         $formattedDateTime = (new DateTime())->format('Ymd');
         $filename = sprintf('post-scoring-report-stock%s-%s.csv', $stockId, $formattedDateTime);
 
+        return $this->csvResponse($filename, $content);
+    }
+
+    /**
+     * @return Response
+     */
+    private function csvResponse($filename, $content)
+    {
         $response = new Response();
         $response->setStatusCode(Response::STATUS_CODE_200);
         $response->getHeaders()->addHeaders([
