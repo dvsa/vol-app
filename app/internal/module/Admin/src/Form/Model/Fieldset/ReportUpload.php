@@ -28,10 +28,11 @@ class ReportUpload
      *     "label": "Letter Template",
      *     "empty_option": "Please select",
      *     "disable_inarray_validator": false,
+     *     "service_name": "Olcs\Service\Data\ReportLetterTemplate"
      *
      * })
      * @Form\Required(false)
-     * @Form\Type("Select")
+     * @Form\Type("DynamicSelect")
      */
     public $docTemplate = null;
 
@@ -41,10 +42,11 @@ class ReportUpload
      *     "label": "Email Template",
      *     "empty_option": "Please select",
      *     "disable_inarray_validator": false,
+     *     "service_name": "Olcs\Service\Data\ReportEmailTemplate"
      *
      * })
      * @Form\Required(false)
-     * @Form\Type("Select")
+     * @Form\Type("DynamicSelect")
      */
     public $emailTemplate = null;
 
