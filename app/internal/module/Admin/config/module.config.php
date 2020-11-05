@@ -808,9 +808,9 @@ return [
                         'type' => 'Segment',
                         'options' => [
                             'route' =>
-                                'editable-translations[/:action][/:id][/]',
+                                'editable-translations[/:action][/:id][/][:subid]',
                             'constraints' => [
-                                'action' => '(index|add|editkey|delete|details|languages|gettext|xhrsearch)'
+                                'action' => '(index|add|editkey|subdelete|delete|details|languages|gettext|xhrsearch)'
                             ],
                             'defaults' => [
                                 'controller' => Admin\Controller\EditableTranslationsController::class,

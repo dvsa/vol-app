@@ -11,6 +11,18 @@ return [
                 'options' => [10, 25, 50]
             ]
         ],
+        'crud' => [
+            'actions' => [
+                'add' => [
+                    'class' => 'action--primary',
+                    'requireRows' => false
+                ],
+                'delete' => [
+                    'requireRows' => false,
+                    'class' => 'action--secondary js-require--one'
+                ]
+            ]
+        ]
     ],
     'columns' => [
         [
@@ -40,6 +52,11 @@ return [
                     $sm->get('translator')->translate('view')
                 );
             }
+        ],
+        [
+            'title' => '',
+            'width' => 'checkbox',
+            'format' => '{{[elements/radio]}}'
         ],
     ]
 ];

@@ -12,6 +12,7 @@ $(function () {
     });
 
     var fieldset = $("*[data-group=\"fields\"]");
+    var addedit = $("#addedit").val();
     var jsonBaseUrl = $("#jsonUrl").val();
     var resultsKey = $("#resultsKey").val();
     var translationVar = $("#translationVar").val();
@@ -32,12 +33,18 @@ $(function () {
                                 <textarea name="fields[translationsArray][${idx}]" id="input-${idx}" class="extra-long"></textarea>
                         </div>`;
                     $("#languageTabs").append(tabTemplate);
-                    fieldset.append(textAreaTemplate);
+                    fieldset.prepend(textAreaTemplate);
                     current = "";
                 }
             );
             fieldset.removeClass("hidden");
-            getTranslatedText();
+            if (addedit == "edit") {
+                getTranslatedText();
+            } else {
+                $("#mainForm").removeClass("js-hidden");
+                $(".translationKeyContainer").removeClass("js-hidden");
+                $("#loading").addClass("js-hidden");
+            }
         });
     }
 
