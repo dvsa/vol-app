@@ -12,6 +12,7 @@ class RemoveVehicleController extends AbstractVehicleController
 {
     public const VEHICLE_REMOVE_LIMIT = 20;
     public const VEHICLE_WARNING_LIMIT = 10;
+    public const VEHICLE_SEARCH_FORM_THRESHOLD = 10;
 
     protected const LICENCE_VEHICLE_REMOVE_HEADER = 'licence.vehicle.remove.header';
     protected const LICENCE_VEHICLE_REMOVE_SEARCH_HEADER = 'licence.vehicle.remove.search.header';
@@ -112,9 +113,12 @@ class RemoveVehicleController extends AbstractVehicleController
         $view->setVariables($this->getViewVariables());
 
         if ($vehicleTable->getTotal() > static::VEHICLE_WARNING_LIMIT) {
+            $view->setVariable('note', $this->translator->translate('licence.vehicle.remove.note'));
+        }
+
+        if ($vehicleTable->getTotal() > static::VEHICLE_SEARCH_FORM_THRESHOLD || $this->isSearchResultsPage()) {
             $this->alterSearchForm();
             $view->setVariable('searchForm', $this->forms['searchForm']);
-            $view->setVariable('note', $this->translator->translate('licence.vehicle.remove.note'));
         }
 
         return $view;
