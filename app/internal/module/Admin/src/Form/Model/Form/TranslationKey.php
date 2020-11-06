@@ -5,7 +5,7 @@ namespace Admin\Form\Model\Form;
 use Zend\Form\Annotation as Form;
 
 /**
- * @Form\Name("translationKey")
+ * @Form\Name("translationKeyForm")
  * @Form\Attributes({"method":"post"})
  * @Form\Type("Common\Form\Form")
  * @Form\Options({"label": "Edit translation key"})
@@ -36,6 +36,12 @@ class TranslationKey
      * @Form\Type("Hidden")
      */
     public $translationVar = null;
+
+    /**
+     * @Form\Attributes({"value":""})
+     * @Form\Type("Hidden")
+     */
+    public $addedit = null;
 
     /**
      * @Form\Name("form-actions")

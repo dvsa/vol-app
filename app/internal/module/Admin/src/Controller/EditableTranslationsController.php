@@ -12,7 +12,10 @@ use Zend\View\Model\ViewModel;
 use Dvsa\Olcs\Transfer\Query\TranslationKey\GetList as ListDTO;
 use Dvsa\Olcs\Transfer\Query\TranslationKey\ById as ItemDTO;
 use Dvsa\Olcs\Transfer\Query\Language\GetList as GetSupportedLanguages;
+use Dvsa\Olcs\Transfer\Command\TranslationKey\Delete as DeleteCommand;
+use Dvsa\Olcs\Transfer\Command\TranslationKeyText\Delete as DeleteTranslatedTextCommand;
 use Dvsa\Olcs\Transfer\Command\TranslationKey\Update as UpdateCommand;
+use Dvsa\Olcs\Transfer\Command\TranslationKey\Create as CreateCommand;
 use Admin\Data\Mapper\EditableTranslation as EditableTranslationMapper;
 
 /**
@@ -31,6 +34,8 @@ class EditableTranslationsController extends AbstractInternalController implemen
     protected $itemParams = ['id'];
 
     protected $updateCommand = UpdateCommand::class;
+    protected $createCommand = CreateCommand::class;
+    protected $deleteCommand = DeleteCommand::class;
     protected $formClass = TranslationKey::class;
     protected $filterForm = TranslationsFilter::class;
 
@@ -48,9 +53,10 @@ class EditableTranslationsController extends AbstractInternalController implemen
      * @var array
      */
     protected $inlineScripts = [
-        'indexAction' => ['editable-translation-search', 'forms/filter'],
-        'detailsAction' => ['table-actions'],
-        'editkeyAction' => ['forms/translation-key-modal']
+        'indexAction' =>    ['editable-translation-search', 'forms/filter', 'table-actions'],
+        'detailsAction' =>  ['table-actions'],
+        'editkeyAction' =>  ['forms/translation-key-modal'],
+        'addAction' =>      ['forms/translation-key-modal']
     ];
 
     protected $redirectConfig = [
@@ -131,42 +137,49 @@ class EditableTranslationsController extends AbstractInternalController implemen
      *
      * @return array|ViewModel
      */
-    public function editkeyAction()
+    public function editkeyAction($addedit = 'edit')
     {
         $request = $this->getRequest();
         if ($request->isPost()) {
             $commandData = $this->mapperClass::mapFromForm((array)$request->getPost());
-            $response = $this->handleCommand(UpdateCommand::create($commandData));
+            $cmdHandler = $addedit == 'edit' ? UpdateCommand::class : CreateCommand::class;
+
+            $response = $this->handleCommand($cmdHandler::create($commandData));
+
+            $result = $response->getResult();
             if ($response->isOk()) {
                 $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($this->editSuccessMessage);
                 return $this->redirectTo($response->getResult());
             } else {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('Error saving translations');
+                $message = isset($result['messages']) ? implode('<br />', $result['messages']) : 'Error saving translations';
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($message);
             }
         }
 
-        $form = $this->getForm(TranslationKey::class);
+        $form = $this->setupAddEditForm($addedit);
+
         $view = new ViewModel(
             [
                 'form' => $form
             ]
         );
+        $view->setTemplate('pages/editable-translations/edit-translation-key-form');
 
-        $response = $this->handleQuery(
-            ItemDTO::create(
-                [
-                    'id' => $this->params()->fromRoute('id'),
-                ]
-            )
-        );
+        return $this->viewBuilder()->buildView($view);
+    }
 
-        $returnData = $response->getResult();
-        if (isset($returnData['error'])) {
-            $this->getResponse()->setStatusCode(422);
-            unset($returnData['error']);
+    /**
+     * Setup form for add/edit dialog
+     *
+     * @param $addEdit
+     * @return mixed
+     */
+    private function setupAddEditForm($addEdit)
+    {
+        $form = $this->getForm(TranslationKey::class);
+        if ($addEdit == 'edit') {
+            $form->get('fields')->get('id')->setValue($this->params()->fromRoute('id'));
         }
-
-        $form->get('fields')->get('id')->setValue($this->params()->fromRoute('id'));
 
         $form->get('jsonUrl')
             ->setValue(
@@ -177,11 +190,47 @@ class EditableTranslationsController extends AbstractInternalController implemen
 
         $form->get('resultsKey')->setValue('translationKeyTexts');
         $form->get('translationVar')->setValue('translatedText');
+        $form->get('addedit')->setValue($addEdit);
 
-        $this->placeholder()->setPlaceholder('pageTitle', 'Edit Translation Key');
-        $view->setTemplate('pages/editable-translations/edit-translation-key-form');
+        $this->placeholder()->setPlaceholder('pageTitle', ucfirst($addEdit).' Translation Key');
 
-        return $this->viewBuilder()->buildView($view);
+        return $form;
+    }
+
+    public function addAction()
+    {
+        return $this->editkeyAction('add');
+    }
+
+
+    /**
+     * @return \Olcs\Mvc\Controller\Plugin\Confirm|Response|ViewModel
+     */
+    public function subdeleteAction()
+    {
+        $confirm = $this->confirm($this->deleteConfirmMessage, false, $this->params()->fromRoute('subid'), null, null);
+        if ($confirm instanceof ViewModel) {
+            $this->placeholder()->setPlaceholder('pageTitle', "Delete Translation Key Text?");
+            return $this->viewBuilder()->buildView($confirm);
+        }
+
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $postData = (array)$request->getPost();
+            $response = $this->handleCommand(DeleteTranslatedTextCommand::create(['id' => $postData['custom']]));
+            if (!$response->isOk()) {
+                $this->handleErrors($response->getResult());
+            }
+            return $this->redirect()->toRouteAjax(
+                'admin-dashboard/admin-editable-translations',
+                [
+                    'action' => 'details',
+                    'id' => $this->params()->fromRoute('id')
+                ]
+            );
+        }
+
+        return $confirm;
     }
 
     /**
@@ -200,6 +249,15 @@ class EditableTranslationsController extends AbstractInternalController implemen
                     [
                         'action' => 'editkey',
                         'id' => $this->params()->fromRoute('id')
+                    ]
+                );
+            } elseif ($postData['action'] == 'DeleteText') {
+                return $this->redirect()->toRoute(
+                    'admin-dashboard/admin-editable-translations',
+                    [
+                        'action' => 'subdelete',
+                        'id' => $this->params()->fromRoute('id'),
+                        'subid' => $postData['id']
                     ]
                 );
             }

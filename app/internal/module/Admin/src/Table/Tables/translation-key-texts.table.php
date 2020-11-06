@@ -20,6 +20,11 @@ return [
                     'requireRows' => false,
                     'label' => 'Edit Translation Key',
                 ],
+                'deleteText' => [
+                    'label' => 'Delete Text',
+                    'requireRows' => false,
+                    'class' => 'action--secondary js-require--one'
+                ]
             ],
         ],
     ],
@@ -44,6 +49,11 @@ return [
                     ? date('d/m/Y', strtotime($row['createdOn']))
                     : date('d/m/Y', strtotime($row['lastModifiedOn']));
             }
+        ],
+        [
+            'title' => '',
+            'width' => 'checkbox',
+            'format' => '{{[elements/radio]}}'
         ],
     ]
 ];

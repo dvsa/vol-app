@@ -18,4 +18,28 @@ class TranslationKey
      * @Form\Type("Hidden")
      */
     public $id = null;
+
+    /**
+     * @Form\Name("translationKey")
+     * @Form\Attributes({"id": "translationKey", "data-container-class":"translationKeyContainer js-hidden"})
+     * @Form\Options({
+     *      "label": "New Translation Key"
+     * })
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":512}})
+     * @Form\Type("Text")
+     * @Form\Required(false)
+     */
+    public $translationKey = null;
+
+    /**
+     * @Form\Name("description")
+     * @Form\Attributes({"id": "translationKey", "data-container-class":"translationKeyContainer js-hidden"})
+     * @Form\Options({
+     *      "label": "Description"
+     * })
+     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":512}})
+     * @Form\Type("Text")
+     * @Form\Required(false)
+     */
+    public $description = null;
 }
