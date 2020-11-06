@@ -14,6 +14,7 @@ use Permits\Data\Mapper\AvailableYears as AvailableYearsMapper;
 use Permits\Data\Mapper\AvailableStocks as AvailableStocksMapper;
 use Permits\Data\Mapper\IrhpFee as IrhpFeeMapper;
 use Permits\Data\Mapper\AvailableBilateralStocks as AvailableBilateralStocksMapper;
+use Permits\Data\Mapper\CandidatePermitSelection as CandidatePermitSelectionMapper;
 use Permits\Data\Mapper\LicencesAvailable as LicencesAvailableMapper;
 use Permits\Data\Mapper\NoOfPermits as NoOfPermitsMapper;
 use Permits\Data\Mapper\RemovedCountries as RemovedCountriesMapper;
@@ -185,5 +186,16 @@ class FormConfig
         'irhpOverviewSubmit' => [
             'formClass' => 'IrhpOverviewSubmitForm',
         ]
+    ];
+
+    const FORM_CANDIDATE_PERMIT_SELECTION = [
+        'candidatePermitSelection' => [
+            'formClass' => 'CandidatePermitSelectionForm',
+            'dataSource' => IrhpApplicationDataSource::DATA_KEY,
+            'mapper' => [
+                'type' => self::FORM_OPTIONS,
+                'class' => CandidatePermitSelectionMapper::class
+            ]
+        ],
     ];
 }

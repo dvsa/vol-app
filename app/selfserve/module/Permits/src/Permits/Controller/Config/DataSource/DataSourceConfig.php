@@ -9,6 +9,8 @@ use Permits\Controller\Config\DataSource\IrhpFeeBreakdown as IrhpFeeBreakdownDat
 use Permits\Controller\Config\DataSource\IrhpFeePerPermit as IrhpFeePerPermitDataSource;
 use Permits\Controller\Config\DataSource\IrhpMaxStockPermits as IrhpMaxStockPermitsDataSource;
 use Permits\Controller\Config\DataSource\UnpaidIrhpPermits as UnpaidIrhpPermitsDataSource;
+use Permits\Controller\Config\DataSource\UnpaginatedUnpaidIrhpPermits as UnpaginatedUnpaidIrhpPermitsDataSource;
+use Permits\Controller\Config\DataSource\WantedUnpaidIrhpPermits as WantedUnpaidIrhpPermitsDataSource;
 use Permits\Controller\Config\DataSource\ValidIrhpPermits as ValidIrhpPermitsDataSource;
 use Permits\Controller\Config\DataSource\ValidIrhpPermitsUniqueCountries as ValidIrhpPermitsUniqueCountriesDataSource;
 use Permits\Controller\Config\DataSource\PermitsAvailable as PermitsAvailableDataSource;
@@ -80,6 +82,7 @@ class DataSourceConfig
 
     const IRHP_APP_AWAITING_FEE = [
         IrhpAppDataSource::class => [],
+        WantedUnpaidIrhpPermitsDataSource::class => [],
     ];
 
     const IRHP_APP_COUNTRIES = [
@@ -101,6 +104,11 @@ class DataSourceConfig
     const IRHP_UNPAID_PERMITS = [
         IrhpAppDataSource::class => [],
         UnpaidIrhpPermitsDataSource::class => [],
+    ];
+
+    const IRHP_UNPAGINATED_UNPAID_PERMITS = [
+        IrhpAppDataSource::class => [],
+        UnpaginatedUnpaidIrhpPermitsDataSource::class => [],
     ];
 
     const IRHP_VALID = [

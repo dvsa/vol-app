@@ -882,8 +882,8 @@ class IrhpApplicationFeeSummaryTest extends TestCase
             '5 permits for Euro 6 minimum emission standard';
 
         $irhpPermitApplicationInputData = [
-            'euro5PermitsAwarded' => 1,
-            'euro6PermitsAwarded' => 5,
+            'euro5PermitsWanted' => 1,
+            'euro6PermitsWanted' => 5,
             'irhpPermitWindow' => [
                 'irhpPermitStock' => [
                     'validityYear' => $permitYear
@@ -939,6 +939,9 @@ class IrhpApplicationFeeSummaryTest extends TestCase
                             'feeType' => [
                                 'id' => 'OTHERTYPE1'
                             ]
+                        ],
+                        'feeStatus' => [
+                            'id' => RefData::FEE_STATUS_PAID
                         ]
                     ],
                     [
@@ -948,7 +951,22 @@ class IrhpApplicationFeeSummaryTest extends TestCase
                                 'id' => RefData::IRHP_GV_ISSUE_FEE_TYPE,
                             ]
                         ],
+                        'feeStatus' => [
+                            'id' => RefData::FEE_STATUS_OUTSTANDING
+                        ],
                         'dueDate' => $feeDueDate,
+                    ],
+                    [
+                        'feeType' => [
+                            'fixedValue' => $issueFeePerPermit,
+                            'feeType' => [
+                                'id' => RefData::IRHP_GV_ISSUE_FEE_TYPE,
+                            ]
+                        ],
+                        'feeStatus' => [
+                            'id' => RefData::FEE_STATUS_CANCELLED
+                        ],
+                        'dueDate' => null,
                     ],
                     [
                         'feeType' => [
@@ -1030,8 +1048,8 @@ class IrhpApplicationFeeSummaryTest extends TestCase
             . '5 permits for Euro 6 minimum emission standard';
 
         $irhpPermitApplicationInputData = [
-            'euro5PermitsAwarded' => 1,
-            'euro6PermitsAwarded' => 5,
+            'euro5PermitsWanted' => 1,
+            'euro6PermitsWanted' => 5,
             'irhpPermitWindow' => [
                 'irhpPermitStock' => [
                     'validityYear' => $permitYear
@@ -1102,6 +1120,9 @@ class IrhpApplicationFeeSummaryTest extends TestCase
                             'feeType' => [
                                 'id' => 'OTHERTYPE1'
                             ]
+                        ],
+                        'feeStatus' => [
+                            'id' => RefData::FEE_STATUS_PAID
                         ]
                     ],
                     [
@@ -1111,7 +1132,22 @@ class IrhpApplicationFeeSummaryTest extends TestCase
                                 'id' => RefData::IRHP_GV_ISSUE_FEE_TYPE,
                             ]
                         ],
+                        'feeStatus' => [
+                            'id' => RefData::FEE_STATUS_OUTSTANDING
+                        ],
                         'dueDate' => $feeDueDate,
+                    ],
+                    [
+                        'feeType' => [
+                            'fixedValue' => $issueFeePerPermit,
+                            'feeType' => [
+                                'id' => RefData::IRHP_GV_ISSUE_FEE_TYPE,
+                            ]
+                        ],
+                        'feeStatus' => [
+                            'id' => RefData::FEE_STATUS_CANCELLED
+                        ],
+                        'dueDate' => null,
                     ],
                     [
                         'feeType' => [

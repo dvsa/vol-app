@@ -261,9 +261,9 @@ class IrhpApplicationFeeSummary
                 $this->getPermitTypeRow($data),
                 $this->getStockValidityPeriodRow($data),
                 $this->getApplicationReferenceRow($data),
-                $this->getEmissionsCatNoOfPermitsAwardedRow($data),
+                $this->getEmissionsCatNoOfPermitsWantedRow($data),
                 $this->getIssueFeePerPermitRow($data, RefData::IRHP_GV_ISSUE_FEE_TYPE),
-                $this->getTotalFeeRowUsingPermitsAwarded(
+                $this->getTotalFeeRowUsingPermitsWanted(
                     $data,
                     RefData::IRHP_GV_ISSUE_FEE_TYPE,
                     self::TOTAL_ISSUE_FEE_HEADING
@@ -386,7 +386,7 @@ class IrhpApplicationFeeSummary
      */
     private function getPaymentDueDateRow(array $data, $feeType)
     {
-        $fee = $this->getFeeByType($data['fees'], $feeType);
+        $fee = $this->getFeeByTypeAndOptionalStatus($data['fees'], $feeType, RefData::FEE_STATUS_OUTSTANDING);
 
         return [
             'key' => self::PAYMENT_DUE_DATE_HEADING,
@@ -418,40 +418,37 @@ class IrhpApplicationFeeSummary
      */
     private function getEmissionsCatNoOfPermitsRequiredRow(array $data)
     {
-        return $this->getEmissionsCatNoOfPermitsRow(
-            $data,
-            $data['irhpPermitApplications'][0]
-        );
+        return $this->getEmissionsCatNoOfPermitsRow($data['irhpPermitApplications'][0]);
     }
 
     /**
-     * Get the single table row content for a number of permits awarded row that uses emissions categories
+     * Get the single table row content for a number of permits wanted row that uses emissions categories
      *
      * @param array $data input data
      *
      * @return array
      */
-    private function getEmissionsCatNoOfPermitsAwardedRow(array $data)
+    private function getEmissionsCatNoOfPermitsWantedRow(array $data)
     {
         $irhpPermitApplication = $data['irhpPermitApplications'][0];
 
         $ecmtNoOfPermitsData = [
-            'requiredEuro5' => $irhpPermitApplication['euro5PermitsAwarded'],
-            'requiredEuro6' => $irhpPermitApplication['euro6PermitsAwarded']
+            'requiredEuro5' => $irhpPermitApplication['euro5PermitsWanted'],
+            'requiredEuro6' => $irhpPermitApplication['euro6PermitsWanted']
         ];
 
-        return $this->getEmissionsCatNoOfPermitsRow($data, $ecmtNoOfPermitsData);
+        return $this->getEmissionsCatNoOfPermitsRow($ecmtNoOfPermitsData);
     }
 
     /**
      * Get the single table row content for a number of permits row, using the supplied ecmtNoOfPermits data as input
      * into the mapper
      *
-     * @param array $data input data
+     * @param array $ecmtNoOfPermitsData
      *
      * @return array
      */
-    private function getEmissionsCatNoOfPermitsRow(array $data, array $ecmtNoOfPermitsData)
+    private function getEmissionsCatNoOfPermitsRow(array $ecmtNoOfPermitsData)
     {
         $lines = $this->ecmtNoOfPermits->mapForDisplay($ecmtNoOfPermitsData);
 
@@ -545,7 +542,7 @@ class IrhpApplicationFeeSummary
 
     /**
      * Get the single table row content for a total fee per permit row, calculating the total based on permits
-     * awarded
+     * wanted
      *
      * @param array $data input data
      * @param string $feeType
@@ -553,9 +550,9 @@ class IrhpApplicationFeeSummary
      *
      * @return array
      */
-    private function getTotalFeeRowUsingPermitsAwarded(array $data, $feeType, $key)
+    private function getTotalFeeRowUsingPermitsWanted(array $data, $feeType, $key)
     {
-        return $this->getTotalFeeRow($data, $feeType, $key, 'euro5PermitsAwarded', 'euro6PermitsAwarded');
+        return $this->getTotalFeeRow($data, $feeType, $key, 'euro5PermitsWanted', 'euro6PermitsWanted');
     }
 
     /**
@@ -666,7 +663,7 @@ class IrhpApplicationFeeSummary
      */
     private function getFeeAmountByType(array $fees, $feeTypeId)
     {
-        $fee = $this->getFeeByType($fees, $feeTypeId);
+        $fee = $this->getFeeByTypeAndOptionalStatus($fees, $feeTypeId);
 
         if (isset($fee)) {
             return $fee['feeType']['fixedValue'];
@@ -678,14 +675,20 @@ class IrhpApplicationFeeSummary
      *
      * @param array $fees
      * @param string $feeTypeId
+     * @param string $statusId (optional)
      *
      * @return array
      */
-    private function getFeeByType(array $fees, $feeTypeId)
+    private function getFeeByTypeAndOptionalStatus(array $fees, $feeTypeId, $statusId = null)
     {
         foreach ($fees as $fee) {
+            $statusMatches = true;
+            if (!is_null($statusId)) {
+                $statusMatches = $fee['feeStatus']['id'] == $statusId;
+            }
+
             $feeType = $fee['feeType'];
-            if ($feeType['feeType']['id'] == $feeTypeId) {
+            if ($feeType['feeType']['id'] == $feeTypeId && $statusMatches) {
                 return $fee;
             }
         }

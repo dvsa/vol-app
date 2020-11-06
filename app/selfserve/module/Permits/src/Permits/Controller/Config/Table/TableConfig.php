@@ -4,6 +4,7 @@ namespace Permits\Controller\Config\Table;
 
 use Permits\Controller\Config\DataSource\IrhpFeeBreakdown as IrhpFeeBreakdownDataSource;
 use Permits\Controller\Config\DataSource\UnpaidIrhpPermits as UnpaidIrhpPermitsDataSource;
+use Permits\Controller\Config\DataSource\WantedUnpaidIrhpPermits as WantedUnpaidIrhpPermitsDataSource;
 use Permits\Controller\Config\DataSource\ValidIrhpPermits as ValidIrhpPermitsDataSource;
 
 /**
@@ -15,6 +16,12 @@ class TableConfig
         'unpaid-irhp-permits' => [
             'tableName' => 'unpaid-irhp-permits',
             'dataSource' => UnpaidIrhpPermitsDataSource::DATA_KEY
+        ]
+    ];
+    const WANTED_UNPAID_IRHP_PERMITS = [
+        'unpaid-irhp-permits' => [
+            'tableName' => 'wanted-unpaid-irhp-permits',
+            'dataSource' => WantedUnpaidIrhpPermitsDataSource::DATA_KEY
         ]
     ];
     const VALID_IRHP_PERMITS = [

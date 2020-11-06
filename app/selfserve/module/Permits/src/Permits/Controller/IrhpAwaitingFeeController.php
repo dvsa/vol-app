@@ -8,6 +8,7 @@ use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
+use Permits\Controller\Config\Table\TableConfig;
 use Permits\Data\Mapper\IrhpApplicationFeeSummary;
 use Permits\View\Helper\IrhpApplicationSection;
 
@@ -19,6 +20,10 @@ class IrhpAwaitingFeeController extends AbstractSelfserveController
 
     protected $conditionalDisplayConfig = [
         'default' => ConditionalDisplayConfig::IRHP_APP_IS_AWAITING_FEE,
+    ];
+
+    protected $tableConfig = [
+        'generic' => TableConfig::WANTED_UNPAID_IRHP_PERMITS,
     ];
 
     protected $formConfig = [
@@ -33,6 +38,7 @@ class IrhpAwaitingFeeController extends AbstractSelfserveController
         'default' => [
             'prependTitleDataKey' => IrhpAppDataSource::DATA_KEY,
             'browserTitle' => 'permits.page.irhp.awaiting-fee.browser.title',
+            'heading' => 'permits.page.irhp.awaiting-fee.title',
             'backUri' => IrhpApplicationSection::ROUTE_PERMITS,
         ]
     ];
@@ -58,6 +64,8 @@ class IrhpAwaitingFeeController extends AbstractSelfserveController
     {
         if (isset($this->postParams['Submit']['DeclineButton'])) {
             return $this->nextStep(IrhpApplicationSection::ROUTE_DECLINE_APPLICATION);
+        } elseif (isset($this->postParams['Submit']['RemoveUnwantedPermitButton'])) {
+            return $this->nextStep(IrhpApplicationSection::ROUTE_CANDIDATE_SELECTION);
         }
 
         return parent::handlePost();
@@ -74,6 +82,10 @@ class IrhpAwaitingFeeController extends AbstractSelfserveController
             $form->get('Submit')->get('SubmitButton')->setLabel('permits.page.accept');
         }
 
+        if (!$this->data[IrhpAppDataSource::DATA_KEY]['canSelectCandidatePermits']) {
+            $form->get('Submit')->remove('RemoveUnwantedPermitButton');
+        }
+
         return $form;
     }
 
@@ -87,5 +99,9 @@ class IrhpAwaitingFeeController extends AbstractSelfserveController
         $this->data = $this->getServiceLocator()
             ->get(IrhpApplicationFeeSummary::class)
             ->mapForDisplay($this->data);
+
+        if ($this->data[IrhpAppDataSource::DATA_KEY]['canSelectCandidatePermits']) {
+            $this->templateVarsConfig['default']['heading'] = 'permits.page.irhp.awaiting-fee.select-candidate-permits.title';
+        }
     }
 }

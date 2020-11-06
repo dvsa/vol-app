@@ -321,6 +321,15 @@ class ConditionalDisplayConfig
         ],
     ];
 
+    const IRHP_APP_CAN_SELECT_CANDIDATE_PERMITS = [
+        [
+            'source' => IrhpAppDataSource::DATA_KEY,
+            'route' => IrhpApplicationSection::ROUTE_PERMITS,
+            'key' => 'canSelectCandidatePermits',
+            'value' => true
+        ],
+    ];
+
     const IRHP_APP_IS_DECLINED = [
         [
             'source' => IrhpAppDataSource::DATA_KEY,

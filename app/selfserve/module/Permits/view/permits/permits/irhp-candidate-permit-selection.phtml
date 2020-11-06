@@ -1,0 +1,21 @@
+<?php
+    use Permits\View\Helper\IrhpApplicationSection;
+?>
+
+<?php echo $this->permitsBackLink('common.link.back.label', IrhpApplicationSection::ROUTE_AWAITING_FEE); ?>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <?php echo $this->formErrors($form); ?>
+        <span class="govuk-caption-xl">
+            <span class="visually-hidden">
+                <?php echo($this->escapeHtml($this->translate('permits.application.overview.application.reference'))); ?>
+            </span>
+            <?php echo $this->escapeHtml($data['application']['applicationRef']); ?>
+        </span>
+
+        <?php echo $this->translate('markup-irhp-candidate-permit-selection-intro'); ?>
+
+        <?php echo $this->form($form); ?>
+        <p><?php echo $this->permitsBackLink('permits.page.irhp.candidate-permit-selection.return-link', IrhpApplicationSection::ROUTE_AWAITING_FEE); ?></p>
+    </div>
+</div>

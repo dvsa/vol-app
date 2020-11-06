@@ -18,6 +18,14 @@ class AcceptAndPay
     public $submit = null;
 
     /**
+     * @Form\Name("RemoveUnwantedPermitButton")
+     * @Form\Attributes({"id":"remove-unwanted-permit-button","type":"submit","class":"govuk-button govuk-!-margin-right-1"})
+     * @Form\Options({"label": "permits.page.remove.unwanted.permit"})
+     * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
+     */
+    public $choosePermits = null;
+
+    /**
      * @Form\Name("DeclineButton")
      *
      * @Form\Attributes({"id":"submit-decline-button","type":"submit","class":"govuk-button govuk-button--secondary"})
