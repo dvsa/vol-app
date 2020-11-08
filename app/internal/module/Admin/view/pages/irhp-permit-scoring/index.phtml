@@ -5,6 +5,7 @@
     $runHref = $this->url($operationBaseUrl, ['stockId' => $stockId, 'action' => 'runStandard']);
     $acceptHref = $this->url($operationBaseUrl, ['stockId' => $stockId, 'action' => 'accept']);
     $postScoringReportHref = $this->url($operationBaseUrl, ['stockId' => $stockId, 'action' => 'postScoringReport']);
+    $alignStockHref = $this->url($operationBaseUrl, ['stockId' => $stockId, 'action' => 'alignStock']);
 ?>
 <div style="float: right;">
     <a id="runWithDeviationButton" style="display: none;" class="action--primary large js-modal-ajax" data-href="<?php echo($runWithDeviationHref); ?>">
@@ -17,7 +18,10 @@
     <a id="acceptButton" style="margin-left: 10px; visibility: hidden;" class="action--primary large js-modal-ajax" href="<?php echo($acceptHref); ?>">
         Accept
     </a>
-    <a id="postScoringReportButton" style="margin-left: 40px; visibility: hidden;" class="action--primary large" href="<?php echo($postScoringReportHref); ?>">
+    <a id="alignStockButton" style="margin-left: 40px; visibility: hidden;" class="action--primary large" href="<?php echo($alignStockHref); ?>">
+        Align stock
+    </a>
+    <a id="postScoringReportButton" style="margin-left: 10px; visibility: hidden;" class="action--primary large" href="<?php echo($postScoringReportHref); ?>">
         Report
     </a>
 </div>
