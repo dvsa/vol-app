@@ -1,0 +1,12 @@
+<?php
+    echo $this->flashMessengerAll();
+?>
+<h2 class="govuk-heading-m">Deselect unwanted permits</h2>
+<div>
+    <p class="govuk-body">You can untick the permits you do not want from the list below and save your selection.</p>
+    <p class="govuk-body">Unwanted permits will be reallocated to other operators.</p>
+    <p class="govuk-body">If the operator does not want any of their permits the application must be withdrawn using the button on the right sidebar of this page</p>
+</div>
+<?php
+    echo $this->placeholder('table')->getValue();
+?>
