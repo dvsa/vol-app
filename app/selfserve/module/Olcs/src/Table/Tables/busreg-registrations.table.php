@@ -36,7 +36,7 @@ return array(
             }
         ),
         array(
-            'title' => '1st registered / cancelled',
+            'title' => '1st-registered-cancelled',
             'name' => 'date1stReg',
             'formatter' => function ($data, $column) {
                 $column['formatter'] = 'Date';
