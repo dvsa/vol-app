@@ -1,0 +1,23 @@
+/**
+ * Candidate Permit Selection Table
+ */
+
+table.candidate-permit-selection {
+  th:last-child {
+    text-align: right;
+  }
+  tbody {
+    tr {
+      line-height: 21px;
+      height: 42px;
+      td {
+        padding-bottom: 0px;
+        padding-top: 0px;
+        .govuk-checkboxes__item{
+          float: right;
+          padding-top: 13px;
+        }
+      }
+    }
+  }
+}
