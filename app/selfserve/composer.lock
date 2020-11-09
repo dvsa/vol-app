@@ -11,7 +11,7 @@
             "version": "1.2.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/container-interop/container-interop/1.2.0/container-interop-container-interop-1.2.0.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/container-interop/container-interop/1.2.0/container-interop-container-interop-1.2.0.zip",
                 "reference": "79cbf1341c22ec75643d841642dd5d6acd83bdb8",
                 "shasum": ""
             },
@@ -37,7 +37,7 @@
             "version": "1.11.1",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/doctrine/annotations/1.11.1/doctrine-annotations-1.11.1.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/annotations/1.11.1/doctrine-annotations-1.11.1.zip",
                 "reference": "ce77a7ba1770462cd705a91a151b6c3746f9c6ad",
                 "shasum": ""
             },
@@ -102,7 +102,7 @@
             "version": "1.10.2",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/doctrine/cache/1.10.2/doctrine-cache-1.10.2.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/cache/1.10.2/doctrine-cache-1.10.2.zip",
                 "reference": "13e3381b25847283a91948d04640543941309727",
                 "shasum": ""
             },
@@ -192,7 +192,7 @@
             "version": "1.6.7",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/doctrine/collections/1.6.7/doctrine-collections-1.6.7.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/collections/1.6.7/doctrine-collections-1.6.7.zip",
                 "reference": "55f8b799269a1a472457bd1a41b4f379d4cfba4a",
                 "shasum": ""
             },
@@ -251,7 +251,7 @@
             "version": "2.13.3",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/doctrine/common/2.13.3/doctrine-common-2.13.3.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/common/2.13.3/doctrine-common-2.13.3.zip",
                 "reference": "f3812c026e557892c34ef37f6ab808a6b567da7f",
                 "shasum": ""
             },
@@ -342,7 +342,7 @@
             "version": "v2.6.3",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/doctrine/dbal/v2.6.3/doctrine-dbal-v2.6.3.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/dbal/v2.6.3/doctrine-dbal-v2.6.3.zip",
                 "reference": "e3eed9b1facbb0ced3a0995244843a189e7d1b13",
                 "shasum": ""
             },
@@ -409,7 +409,7 @@
             "version": "1.2.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/doctrine/doctrine-module/1.2.0/doctrine-doctrine-module-1.2.0.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/doctrine-module/1.2.0/doctrine-doctrine-module-1.2.0.zip",
                 "reference": "9407d04d0b08e7071dab05c9d068cefda9dc5a6f",
                 "shasum": ""
             },
@@ -495,7 +495,7 @@
             "version": "0.10.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/doctrine/doctrine-orm-module/0.10.0/doctrine-doctrine-orm-module-0.10.0.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/doctrine-orm-module/0.10.0/doctrine-doctrine-orm-module-0.10.0.zip",
                 "reference": "50808eb795d00aac6a551023b1bb379de054f9b5",
                 "shasum": ""
             },
@@ -567,7 +567,7 @@
             "version": "1.1.1",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/doctrine/event-manager/1.1.1/doctrine-event-manager-1.1.1.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/event-manager/1.1.1/doctrine-event-manager-1.1.1.zip",
                 "reference": "41370af6a30faa9dc0368c4a6814d596e81aba7f",
                 "shasum": ""
             },
@@ -651,7 +651,7 @@
             "version": "1.4.3",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/doctrine/inflector/1.4.3/doctrine-inflector-1.4.3.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/inflector/1.4.3/doctrine-inflector-1.4.3.zip",
                 "reference": "4650c8b30c753a76bf44fb2ed00117d6f367490c",
                 "shasum": ""
             },
@@ -737,7 +737,7 @@
             "version": "1.3.1",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/doctrine/instantiator/1.3.1/doctrine-instantiator-1.3.1.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/instantiator/1.3.1/doctrine-instantiator-1.3.1.zip",
                 "reference": "f350df0268e904597e3bd9c4685c53e0e333feea",
                 "shasum": ""
             },
@@ -801,7 +801,7 @@
             "version": "1.2.1",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/doctrine/lexer/1.2.1/doctrine-lexer-1.2.1.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/lexer/1.2.1/doctrine-lexer-1.2.1.zip",
                 "reference": "e864bbf5904cb8f5bb334f99209b48018522f042",
                 "shasum": ""
             },
@@ -871,7 +871,7 @@
             "version": "v2.6.6",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/doctrine/orm/v2.6.6/doctrine-orm-v2.6.6.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/orm/v2.6.6/doctrine-orm-v2.6.6.zip",
                 "reference": "2d9b9351831d1230881c52f006011cbf72fe944e",
                 "shasum": ""
             },
@@ -946,7 +946,7 @@
             "version": "1.3.8",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/doctrine/persistence/1.3.8/doctrine-persistence-1.3.8.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/persistence/1.3.8/doctrine-persistence-1.3.8.zip",
                 "reference": "7a6eac9fb6f61bba91328f15aa7547f4806ca288",
                 "shasum": ""
             },
@@ -1038,7 +1038,7 @@
             "version": "1.2.2",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/doctrine/reflection/1.2.2/doctrine-reflection-1.2.2.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/doctrine/reflection/1.2.2/doctrine-reflection-1.2.2.zip",
                 "reference": "fa587178be682efe90d005e3a322590d6ebb59a5",
                 "shasum": ""
             },
@@ -1111,7 +1111,7 @@
             "version": "0.1.7",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/elendev/nexus-composer-push/0.1.7/elendev-nexus-composer-push-0.1.7.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/elendev/nexus-composer-push/0.1.7/elendev-nexus-composer-push-0.1.7.zip",
                 "reference": "1af0a4ccb4e7c5e703f9e8b7fc13e61c7185d942",
                 "shasum": ""
             },
@@ -1150,7 +1150,7 @@
             "version": "v4.13.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/ezyang/htmlpurifier/v4.13.0/ezyang-htmlpurifier-v4.13.0.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/ezyang/htmlpurifier/v4.13.0/ezyang-htmlpurifier-v4.13.0.zip",
                 "reference": "08e27c97e4c6ed02f37c5b2b20488046c8d90d75",
                 "shasum": ""
             },
@@ -1194,7 +1194,7 @@
             "version": "6.5.5",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/guzzlehttp/guzzle/6.5.5/guzzlehttp-guzzle-6.5.5.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/guzzlehttp/guzzle/6.5.5/guzzlehttp-guzzle-6.5.5.zip",
                 "reference": "9d4290de1cfd701f38099ef7e183b64b4b7b0c5e",
                 "shasum": ""
             },
@@ -1255,7 +1255,7 @@
             "version": "1.4.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/guzzlehttp/promises/1.4.0/guzzlehttp-promises-1.4.0.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/guzzlehttp/promises/1.4.0/guzzlehttp-promises-1.4.0.zip",
                 "reference": "60d379c243457e073cff02bc323a2a86cb355631",
                 "shasum": ""
             },
@@ -1300,7 +1300,7 @@
             "version": "1.7.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/guzzlehttp/psr7/1.7.0/guzzlehttp-psr7-1.7.0.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/guzzlehttp/psr7/1.7.0/guzzlehttp-psr7-1.7.0.zip",
                 "reference": "53330f47520498c0ae1f61f7e2c90f55690c06a3",
                 "shasum": ""
             },
@@ -1732,7 +1732,7 @@
             "version": "v9.99.99",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/paragonie/random_compat/v9.99.99/paragonie-random_compat-v9.99.99.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/paragonie/random_compat/v9.99.99/paragonie-random_compat-v9.99.99.zip",
                 "reference": "84b4dfb120c6f9b4ff7b3685f9b8f1aa365a0c95",
                 "shasum": ""
             },
@@ -1771,7 +1771,7 @@
             "version": "1.0.1",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/psr/cache/1.0.1/psr-cache-1.0.1.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/psr/cache/1.0.1/psr-cache-1.0.1.zip",
                 "reference": "d11b50ad223250cf17b86e38383413f5a6764bf8",
                 "shasum": ""
             },
@@ -1811,7 +1811,7 @@
             "version": "1.0.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/psr/container/1.0.0/psr-container-1.0.0.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/psr/container/1.0.0/psr-container-1.0.0.zip",
                 "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f",
                 "shasum": ""
             },
@@ -1854,7 +1854,7 @@
             "version": "1.0.1",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/psr/http-message/1.0.1/psr-http-message-1.0.1.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/psr/http-message/1.0.1/psr-http-message-1.0.1.zip",
                 "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363",
                 "shasum": ""
             },
@@ -1898,7 +1898,7 @@
             "version": "1.1.3",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/psr/log/1.1.3/psr-log-1.1.3.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/psr/log/1.1.3/psr-log-1.1.3.zip",
                 "reference": "0f73288fd15629204f9d42b7055f72dacbe811fc",
                 "shasum": ""
             },
@@ -1939,7 +1939,7 @@
             "version": "1.0.1",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/psr/simple-cache/1.0.1/psr-simple-cache-1.0.1.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/psr/simple-cache/1.0.1/psr-simple-cache-1.0.1.zip",
                 "reference": "408d5eafb83c57f6365a3ca330ff23aa4a5fa39b",
                 "shasum": ""
             },
@@ -1981,7 +1981,7 @@
             "version": "3.0.3",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/ralouphie/getallheaders/3.0.3/ralouphie-getallheaders-3.0.3.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/ralouphie/getallheaders/3.0.3/ralouphie-getallheaders-3.0.3.zip",
                 "reference": "120b605dfeb996808c31b6477290a714d356e822",
                 "shasum": ""
             },
@@ -2015,7 +2015,7 @@
             "version": "1.0.2",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/soflomo/purifier/1.0.2/soflomo-purifier-1.0.2.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/soflomo/purifier/1.0.2/soflomo-purifier-1.0.2.zip",
                 "reference": "9302c64d0f2853e3486ff6b619a90083674136b4",
                 "shasum": ""
             },
@@ -2088,7 +2088,7 @@
             "version": "v3.4.46",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/console/v3.4.46/symfony-console-v3.4.46.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/console/v3.4.46/symfony-console-v3.4.46.zip",
                 "reference": "a10b1da6fc93080c180bba7219b5ff5b7518fe81",
                 "shasum": ""
             },
@@ -2163,7 +2163,7 @@
             "version": "v4.4.16",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/debug/v4.4.16/symfony-debug-v4.4.16.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/debug/v4.4.16/symfony-debug-v4.4.16.zip",
                 "reference": "c87adf3fc1cd0bf4758316a3a150d50a8f957ef4",
                 "shasum": ""
             },
@@ -2223,7 +2223,7 @@
             "version": "v5.1.8",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/filesystem/v5.1.8/symfony-filesystem-v5.1.8.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/filesystem/v5.1.8/symfony-filesystem-v5.1.8.zip",
                 "reference": "df08650ea7aee2d925380069c131a66124d79177",
                 "shasum": ""
             },
@@ -2276,7 +2276,7 @@
             "version": "v5.1.8",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/finder/v5.1.8/symfony-finder-v5.1.8.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/finder/v5.1.8/symfony-finder-v5.1.8.zip",
                 "reference": "e70eb5a69c2ff61ea135a13d2266e8914a67b3a0",
                 "shasum": ""
             },
@@ -2328,7 +2328,7 @@
             "version": "v5.1.8",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/lock/v5.1.8/symfony-lock-v5.1.8.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/lock/v5.1.8/symfony-lock-v5.1.8.zip",
                 "reference": "9ff3c3bfc08da89d307464276aa206514a8c97e5",
                 "shasum": ""
             },
@@ -2398,7 +2398,7 @@
             "version": "v1.20.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/polyfill-ctype/v1.20.0/symfony-polyfill-ctype-v1.20.0.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/polyfill-ctype/v1.20.0/symfony-polyfill-ctype-v1.20.0.zip",
                 "reference": "f4ba089a5b6366e453971d3aad5fe8e897b37f41",
                 "shasum": ""
             },
@@ -2468,7 +2468,7 @@
             "version": "v1.20.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/polyfill-intl-idn/v1.20.0/symfony-polyfill-intl-idn-v1.20.0.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/polyfill-intl-idn/v1.20.0/symfony-polyfill-intl-idn-v1.20.0.zip",
                 "reference": "3b75acd829741c768bc8b1f84eb33265e7cc5117",
                 "shasum": ""
             },
@@ -2546,7 +2546,7 @@
             "version": "v1.20.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/polyfill-intl-normalizer/v1.20.0/symfony-polyfill-intl-normalizer-v1.20.0.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/polyfill-intl-normalizer/v1.20.0/symfony-polyfill-intl-normalizer-v1.20.0.zip",
                 "reference": "727d1096295d807c309fb01a851577302394c897",
                 "shasum": ""
             },
@@ -2621,7 +2621,7 @@
             "version": "v1.20.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/polyfill-mbstring/v1.20.0/symfony-polyfill-mbstring-v1.20.0.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/polyfill-mbstring/v1.20.0/symfony-polyfill-mbstring-v1.20.0.zip",
                 "reference": "39d483bdf39be819deabf04ec872eb0b2410b531",
                 "shasum": ""
             },
@@ -2692,7 +2692,7 @@
             "version": "v1.20.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/polyfill-php72/v1.20.0/symfony-polyfill-php72-v1.20.0.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/polyfill-php72/v1.20.0/symfony-polyfill-php72-v1.20.0.zip",
                 "reference": "cede45fcdfabdd6043b3592e83678e42ec69e930",
                 "shasum": ""
             },
@@ -2759,7 +2759,7 @@
             "version": "v1.20.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/polyfill-php80/v1.20.0/symfony-polyfill-php80-v1.20.0.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/symfony/polyfill-php80/v1.20.0/symfony-polyfill-php80-v1.20.0.zip",
                 "reference": "e70aa8b064c5b72d3df2abd5ab1e90464ad009de",
                 "shasum": ""
             },
@@ -2833,7 +2833,7 @@
             "version": "2.6.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-authentication/2.6.0/zendframework-zend-authentication-2.6.0.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-authentication/2.6.0/zendframework-zend-authentication-2.6.0.zip",
                 "reference": "ebc9464c11a5203e5256439f1079a7d6efe89eec",
                 "shasum": ""
             },
@@ -2890,7 +2890,7 @@
             "version": "2.8.3",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-cache/2.8.3/zendframework-zend-cache-2.8.3.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-cache/2.8.3/zendframework-zend-cache-2.8.3.zip",
                 "reference": "edde41f1ee5c28e01701a032f434d03751b65df4",
                 "shasum": ""
             },
@@ -2968,7 +2968,7 @@
             "version": "2.6.3",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-code/2.6.3/zendframework-zend-code-2.6.3.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-code/2.6.3/zendframework-zend-code-2.6.3.zip",
                 "reference": "95033f061b083e16cdee60530ec260d7d628b887",
                 "shasum": ""
             },
@@ -3015,7 +3015,7 @@
             "version": "3.3.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-config/3.3.0/zendframework-zend-config-3.3.0.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-config/3.3.0/zendframework-zend-config-3.3.0.zip",
                 "reference": "012341361ae3cc97a99959e7cb7c9ebd04d49572",
                 "shasum": ""
             },
@@ -3070,7 +3070,7 @@
             "version": "2.7.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-console/2.7.0/zendframework-zend-console-2.7.0.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-console/2.7.0/zendframework-zend-console-2.7.0.zip",
                 "reference": "e8aa08da83de3d265256c40ba45cd649115f0e18",
                 "shasum": ""
             },
@@ -3118,7 +3118,7 @@
             "version": "3.3.1",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-crypt/3.3.1/zendframework-zend-crypt-3.3.1.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-crypt/3.3.1/zendframework-zend-crypt-3.3.1.zip",
                 "reference": "cf23da2731dabdbb916cf888f611fc0f123bd36b",
                 "shasum": ""
             },
@@ -3165,7 +3165,7 @@
             "version": "2.6.1",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-di/2.6.1/zendframework-zend-di-2.6.1.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-di/2.6.1/zendframework-zend-di-2.6.1.zip",
                 "reference": "1fd1ba85660b5a2718741b38639dc7c4c3194b37",
                 "shasum": ""
             },
@@ -3207,7 +3207,7 @@
             "version": "1.8.7",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-diactoros/1.8.7/zendframework-zend-diactoros-1.8.7.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-diactoros/1.8.7/zendframework-zend-diactoros-1.8.7.zip",
                 "reference": "a85e67b86e9b8520d07e6415fcbcb8391b44a75b",
                 "shasum": ""
             },
@@ -3264,7 +3264,7 @@
             "version": "2.6.1",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-escaper/2.6.1/zendframework-zend-escaper-2.6.1.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-escaper/2.6.1/zendframework-zend-escaper-2.6.1.zip",
                 "reference": "3801caa21b0ca6aca57fa1c42b08d35c395ebd5f",
                 "shasum": ""
             },
@@ -3304,7 +3304,7 @@
             "version": "2.6.4",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-eventmanager/2.6.4/zendframework-zend-eventmanager-2.6.4.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-eventmanager/2.6.4/zendframework-zend-eventmanager-2.6.4.zip",
                 "reference": "d238c443220dce4b6396579c8ab2200ec25f9108",
                 "shasum": ""
             },
@@ -3346,7 +3346,7 @@
             "version": "2.9.2",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-filter/2.9.2/zendframework-zend-filter-2.9.2.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-filter/2.9.2/zendframework-zend-filter-2.9.2.zip",
                 "reference": "d78f2cdde1c31975e18b2a0753381ed7b61118ef",
                 "shasum": ""
             },
@@ -3406,7 +3406,7 @@
             "version": "2.13.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-form/2.13.0/zendframework-zend-form-2.13.0.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-form/2.13.0/zendframework-zend-form-2.13.0.zip",
                 "reference": "c713a12ccbd43148b71c9339e171ca11e3f8a1da",
                 "shasum": ""
             },
@@ -3479,7 +3479,7 @@
             "version": "2.8.4",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-http/2.8.4/zendframework-zend-http-2.8.4.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-http/2.8.4/zendframework-zend-http-2.8.4.zip",
                 "reference": "d160aedc096be230af0fe9c31151b2b33ad4e807",
                 "shasum": ""
             },
@@ -3529,7 +3529,7 @@
             "version": "1.1.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-hydrator/1.1.0/zendframework-zend-hydrator-1.1.0.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-hydrator/1.1.0/zendframework-zend-hydrator-1.1.0.zip",
                 "reference": "22652e1661a5a10b3f564cf7824a2206cf5a4a65",
                 "shasum": ""
             },
@@ -3582,7 +3582,7 @@
             "version": "2.10.1",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-i18n/2.10.1/zendframework-zend-i18n-2.10.1.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-i18n/2.10.1/zendframework-zend-i18n-2.10.1.zip",
                 "reference": "84038e6a1838b611dcc491b1c40321fa4c3a123c",
                 "shasum": ""
             },
@@ -3648,7 +3648,7 @@
             "version": "2.10.1",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-inputfilter/2.10.1/zendframework-zend-inputfilter-2.10.1.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-inputfilter/2.10.1/zendframework-zend-inputfilter-2.10.1.zip",
                 "reference": "1f44a2e9bc394a71638b43bc7024b572fa65410e",
                 "shasum": ""
             },
@@ -3700,7 +3700,7 @@
             "version": "2.6.1",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-json/2.6.1/zendframework-zend-json-2.6.1.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-json/2.6.1/zendframework-zend-json-2.6.1.zip",
                 "reference": "4c8705dbe4ad7d7e51b2876c5b9eea0ef916ba28",
                 "shasum": ""
             },
@@ -3750,7 +3750,7 @@
             "version": "2.6.1",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-loader/2.6.1/zendframework-zend-loader-2.6.1.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-loader/2.6.1/zendframework-zend-loader-2.6.1.zip",
                 "reference": "91da574d29b58547385b2298c020b257310898c6",
                 "shasum": ""
             },
@@ -3790,7 +3790,7 @@
             "version": "2.12.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-log/2.12.0/zendframework-zend-log-2.12.0.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-log/2.12.0/zendframework-zend-log-2.12.0.zip",
                 "reference": "e5ec088dc8a7b4d96a3a6627761f720a738a36b8",
                 "shasum": ""
             },
@@ -3855,7 +3855,7 @@
             "version": "3.2.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-math/3.2.0/zendframework-zend-math-3.2.0.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-math/3.2.0/zendframework-zend-math-3.2.0.zip",
                 "reference": "07e43d87fd5c7edc4f54121b9a4625eb10e4b726",
                 "shasum": ""
             },
@@ -3901,7 +3901,7 @@
             "version": "2.8.4",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-modulemanager/2.8.4/zendframework-zend-modulemanager-2.8.4.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-modulemanager/2.8.4/zendframework-zend-modulemanager-2.8.4.zip",
                 "reference": "b2596d24b9a4e36a3cd114d35d3ad0918db9a243",
                 "shasum": ""
             },
@@ -3955,7 +3955,7 @@
             "version": "2.7.15",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-mvc/2.7.15/zendframework-zend-mvc-2.7.15.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-mvc/2.7.15/zendframework-zend-mvc-2.7.15.zip",
                 "reference": "a8d45689d37a9e4ff4b75ea0b7478fa3d4f9c089",
                 "shasum": ""
             },
@@ -4045,7 +4045,7 @@
             "version": "2.9.1",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-navigation/2.9.1/zendframework-zend-navigation-2.9.1.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-navigation/2.9.1/zendframework-zend-navigation-2.9.1.zip",
                 "reference": "fd3c60b83e816cfb67b53c2193372ac19469a609",
                 "shasum": ""
             },
@@ -4108,7 +4108,7 @@
             "version": "2.8.2",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-paginator/2.8.2/zendframework-zend-paginator-2.8.2.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-paginator/2.8.2/zendframework-zend-paginator-2.8.2.zip",
                 "reference": "2b4d07d9475ed581278a28d065b238a0941402e2",
                 "shasum": ""
             },
@@ -4168,7 +4168,7 @@
             "version": "0.2.2",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-psr7bridge/0.2.2/zendframework-zend-psr7bridge-0.2.2.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-psr7bridge/0.2.2/zendframework-zend-psr7bridge-0.2.2.zip",
                 "reference": "86c0b53b0c6381391c4add4a93a56e51d5c74605",
                 "shasum": ""
             },
@@ -4212,7 +4212,7 @@
             "version": "2.9.1",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-serializer/2.9.1/zendframework-zend-serializer-2.9.1.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-serializer/2.9.1/zendframework-zend-serializer-2.9.1.zip",
                 "reference": "6fb7ae016cfdf0cfcdfa2b989e6a65f351170e21",
                 "shasum": ""
             },
@@ -4264,7 +4264,7 @@
             "version": "2.7.11",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-servicemanager/2.7.11/zendframework-zend-servicemanager-2.7.11.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-servicemanager/2.7.11/zendframework-zend-servicemanager-2.7.11.zip",
                 "reference": "99ec9ed5d0f15aed9876433c74c2709eb933d4c7",
                 "shasum": ""
             },
@@ -4311,7 +4311,7 @@
             "version": "2.8.7",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-session/2.8.7/zendframework-zend-session-2.8.7.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-session/2.8.7/zendframework-zend-session-2.8.7.zip",
                 "reference": "8fd50220888167d08cf0113ced5b023f6da06923",
                 "shasum": ""
             },
@@ -4373,7 +4373,7 @@
             "version": "2.7.7",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-stdlib/2.7.7/zendframework-zend-stdlib-2.7.7.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-stdlib/2.7.7/zendframework-zend-stdlib-2.7.7.zip",
                 "reference": "0e44eb46788f65e09e077eb7f44d2659143bcc1f",
                 "shasum": ""
             },
@@ -4427,7 +4427,7 @@
             "version": "2.7.1",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-text/2.7.1/zendframework-zend-text-2.7.1.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-text/2.7.1/zendframework-zend-text-2.7.1.zip",
                 "reference": "41e32dafa4015e160e2f95a7039554385c71624d",
                 "shasum": ""
             },
@@ -4470,7 +4470,7 @@
             "version": "2.7.1",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-uri/2.7.1/zendframework-zend-uri-2.7.1.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-uri/2.7.1/zendframework-zend-uri-2.7.1.zip",
                 "reference": "bfc4a5b9a309711e968d7c72afae4ac50c650083",
                 "shasum": ""
             },
@@ -4512,7 +4512,7 @@
             "version": "2.11.1",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-validator/2.11.1/zendframework-zend-validator-2.11.1.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-validator/2.11.1/zendframework-zend-validator-2.11.1.zip",
                 "reference": "3c28dfe4e5951ba38059cea895244d9d206190b3",
                 "shasum": ""
             },
@@ -4580,7 +4580,7 @@
             "version": "2.11.4",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zend-view/2.11.4/zendframework-zend-view-2.11.4.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zend-view/2.11.4/zendframework-zend-view-2.11.4.zip",
                 "reference": "a8b1b2d9b52e191539be861a6529f8c8a0c06b9d",
                 "shasum": ""
             },
@@ -4662,7 +4662,7 @@
             "version": "1.2.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zendframework/zendxml/1.2.0/zendframework-zendxml-1.2.0.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zendframework/zendxml/1.2.0/zendframework-zendxml-1.2.0.zip",
                 "reference": "eceab37a591c9e140772a1470338258857339e00",
                 "shasum": ""
             },
@@ -4703,7 +4703,7 @@
             "version": "v2.5.6",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zf-commons/zfc-rbac/v2.5.6/zf-commons-zfc-rbac-v2.5.6.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zf-commons/zfc-rbac/v2.5.6/zf-commons-zfc-rbac-v2.5.6.zip",
                 "reference": "62873668fe0c32aaed3f291dd21c2a7ba22248d7",
                 "shasum": ""
             },
@@ -4774,7 +4774,7 @@
             "version": "1.2.0",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/zfr/rbac/1.2.0/zfr-rbac-1.2.0.zip",
+                "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/Packagist-Proxy/zfr/rbac/1.2.0/zfr-rbac-1.2.0.zip",
                 "reference": "493711bfc2a637fd7c6f23b71b7b55a621c35d9d",
                 "shasum": ""
             },
