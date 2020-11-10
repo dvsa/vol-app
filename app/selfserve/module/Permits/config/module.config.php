@@ -11,6 +11,7 @@ use Permits\Controller\IrhpApplicationController;
 use Permits\Controller\IrhpApplicationCountryController;
 use Permits\Controller\IrhpApplicationCountryConfirmationController;
 use Permits\Controller\IrhpApplicationFeeController;
+use Permits\Controller\IrhpCandidatePermitSelectionController;
 use Permits\Controller\IrhpUnderConsiderationController;
 use Permits\Controller\NoOfPermitsController;
 use Permits\Controller\IrhpCheckAnswersController;
@@ -63,7 +64,8 @@ return [
         WindowClosedController::class => WindowClosedController::class,
         IrhpStockController::class => IrhpStockController::class,
         EssentialInformationController::class => EssentialInformationController::class,
-        IrhpApplicationPeriodController::class => IrhpApplicationPeriodController::class
+        IrhpApplicationPeriodController::class => IrhpApplicationPeriodController::class,
+        IrhpCandidatePermitSelectionController::class => IrhpCandidatePermitSelectionController::class,
     ],
     'factories' => [
         QaController::class => QaControllerFactory::class,
@@ -325,6 +327,17 @@ return [
                           ],
                           'may_terminate' => false,
                       ],
+                      'candidate-selection' => [
+                          'type'    => 'segment',
+                          'options' => [
+                              'route'    => 'candidate-selection[/]',
+                              'defaults' => [
+                                  'controller'    => IrhpCandidatePermitSelectionController::class,
+                                  'action'        => 'generic',
+                              ],
+                          ],
+                          'may_terminate' => false,
+                      ],
                       'cancel' => [
                           'type'    => 'segment',
                           'options' => [
@@ -556,6 +569,7 @@ return [
           Mapper\IrhpFee::class => Mapper\IrhpFee::class,
           Mapper\ConfirmedUpdatedCountries::class => Mapper\ConfirmedUpdatedCountries::class,
           Mapper\RemovedCountries::class => Mapper\RemovedCountries::class,
+          Mapper\SelectedCandidatePermits::class => Mapper\SelectedCandidatePermits::class,
       ],
       'factories' => [
           Mapper\EcmtNoOfPermits::class => Mapper\EcmtNoOfPermitsFactory::class,
@@ -563,6 +577,7 @@ return [
           Mapper\NoOfPermits::class => Mapper\NoOfPermitsFactory::class,
           Mapper\AvailableBilateralStocks::class => Mapper\AvailableBilateralStocksFactory::class,
           Mapper\AvailableYears::class => Mapper\AvailableYearsFactory::class,
+          Mapper\CandidatePermitSelection::class => Mapper\CandidatePermitSelectionFactory::class,
       ],
   ],
     /** @todo we don't need all of these different link helpers! OLCS-21512 */

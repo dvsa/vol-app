@@ -9,7 +9,7 @@
         <?php echo $this->flashMessengerAll(); ?>
         <?php echo $this->formErrors($form); ?>
         <h1 class="govuk-heading-xl">
-            <?php echo $this->escapeHtml($this->translate('permits.page.irhp.awaiting-fee.title')); ?>
+            <?php echo $this->escapeHtml($this->translate($data['heading'])); ?>
         </h1>
         <?php
             if (!empty($data[IrhpApplication::DATA_KEY]['guidance'])) {
@@ -37,7 +37,22 @@
                     ]
                 );
             }
+
+            if ($data['application']['canSelectCandidatePermits']) {
+                $permitTypeName = $data[IrhpApplication::DATA_KEY]['irhpPermitType']['name']['description'];
+                $stockValidTo = $data[IrhpApplication::DATA_KEY]['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock']['validTo'];
+                $stockEndYear = (new \DateTime($stockValidTo))->format('Y');
+
+                echo $this->translateReplace(
+                    'markup-irhp-candidate-permit-selection-header',
+                    [$permitTypeName, $stockEndYear]
+                );
+
+                echo $tables['unpaid-irhp-permits'];
+            }
+
         ?>
+
         <?php echo $this->form($form); ?>
         <p><?php echo $this->permitsBackLink('permits.link.cancel.return.to.dashboard', IrhpApplicationSection::ROUTE_PERMITS); ?></p>
     </div>
