@@ -9,10 +9,13 @@
 namespace Olcs\Controller\IrhpPermits;
 
 use Common\RefData;
-use Dvsa\Olcs\Transfer\Query\IrhpPermit\GetListByIrhpId as IrhpListDTO;
-use Dvsa\Olcs\Transfer\Query\IrhpPermit\ById as ItemDTO;
+use Dvsa\Olcs\Transfer\Command\IrhpApplication\UpdateCandidatePermitSelection;
 use Dvsa\Olcs\Transfer\Command\IrhpPermit\Replace as ReplaceDTO;
 use Dvsa\Olcs\Transfer\Command\IrhpPermit\Terminate as TerminateDTO;
+use Dvsa\Olcs\Transfer\Query\IrhpApplication\ById;
+use Dvsa\Olcs\Transfer\Query\IrhpCandidatePermit\GetListByIrhpApplicationUnpaged as UnpaidPermitsDto;
+use Dvsa\Olcs\Transfer\Query\IrhpPermit\ById as ItemDTO;
+use Dvsa\Olcs\Transfer\Query\IrhpPermit\GetListByIrhpId as IrhpListDTO;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\IrhpApplicationControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -80,12 +83,14 @@ class IrhpPermitController extends AbstractInternalController implements
                     case 'Request Replacement':
                         $action = 'requestReplacement';
                         break;
+                    case 'Save':
+                        return $this->handleCandidateChoices($postParams);
                 }
 
                 return $this->redirect()->toRoute(
                     'licence/irhp-application/irhp-permits',
                     [
-                        'action'       => $action,
+                        'action' => $action,
                         'irhpPermitId' => $postParams['id']
                     ],
                     ['query' => ['irhpPermitId' => $postParams['id']]],
@@ -94,14 +99,62 @@ class IrhpPermitController extends AbstractInternalController implements
             }
         }
 
+        $appQuery = $this->handleQuery(ById::create(['id' => $this->params()->fromRoute('irhpAppId')]));
+        $irhpApplication = $appQuery->getResult();
+
+        if ($irhpApplication['canSelectCandidatePermits']) {
+            $this->tableName = 'irhp-permits-ecmt-candidate-partial-select';
+            $this->listDto = UnpaidPermitsDto::class;
+            $this->tableViewTemplate = 'pages/irhp-permit/choose-candidate-permits';
+            $this->defaultTableSortField = 'id';
+        }
+
         return parent::indexAction();
+    }
+
+    /**
+     * Handles POST from candidate deselection index page variant
+     *
+     * @param array $postParams
+     *
+     * @return \Zend\Http\Response
+     */
+    private function handleCandidateChoices(array $postParams)
+    {
+        $updateCandidateChoicesCmd = $this->handleCommand(
+            UpdateCandidatePermitSelection::create(
+                [
+                    'id' => $this->params()->fromRoute('irhpAppId'),
+                    'selectedCandidatePermitIds' => $postParams['id']
+                ]
+            )
+        );
+
+        if (!$updateCandidateChoicesCmd->isOk()) {
+            $this->flashMessenger()->addErrorMessage('An error occurred saving permit selections.');
+            foreach ($updateCandidateChoicesCmd['messages'] as $message) {
+                $this->flashMessenger()->addErrorMessage($message);
+            }
+        } else {
+            $this->flashMessenger()->addSuccessMessage('Permit selections saved successfully.');
+        }
+
+        return $this->redirect()->toRouteAjax(
+            'licence/irhp-application/irhp-permits',
+            [
+                'action' => 'index',
+                'irhpAppId' => $this->params()->fromRoute('irhpAppId')
+            ],
+            [],
+            true
+        );
     }
 
     /**
      * Alter table
      *
      * @param \Common\Service\Table\TableBuilder $table table
-     * @param array                              $data  data
+     * @param array $data data
      *
      * @return \Common\Service\Table\TableBuilder
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
