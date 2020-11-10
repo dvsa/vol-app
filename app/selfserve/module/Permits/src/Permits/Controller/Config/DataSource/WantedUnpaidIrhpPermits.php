@@ -2,7 +2,7 @@
 
 namespace Permits\Controller\Config\DataSource;
 
-use Dvsa\Olcs\Transfer\Query\IrhpCandidatePermit\GetListByIrhpApplication as UnpaidPermitsDto;
+use Dvsa\Olcs\Transfer\Query\IrhpCandidatePermit\GetListByIrhpApplicationUnpaged;
 use Olcs\Controller\Config\DataSource\AbstractDataSource;
 
 /**
@@ -11,13 +11,11 @@ use Olcs\Controller\Config\DataSource\AbstractDataSource;
 class WantedUnpaidIrhpPermits extends AbstractDataSource
 {
     const DATA_KEY = 'wantedUnpaidPermits';
-    protected $dto = UnpaidPermitsDto::class;
+    protected $dto = GetListByIrhpApplicationUnpaged::class;
     protected $paramsMap = [
         'id' => 'irhpApplication',
     ];
     protected $defaultParamData = [
-        'page' => 1,
-        'limit' => 100,
         'sort' => 'id',
         'order' => 'ASC',
         'wantedOnly' => true
