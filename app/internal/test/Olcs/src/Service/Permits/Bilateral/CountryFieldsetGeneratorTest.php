@@ -27,6 +27,8 @@ class CountryFieldsetGeneratorTest extends TestCase
     {
         $countryId = 'NO';
         $countryName = 'Norway';
+        $countryType = 'country.type';
+        $countryPeriodLabel = 'country.period.label';
         $selectedPeriodId = 44;
 
         $period44Id = 44;
@@ -48,6 +50,8 @@ class CountryFieldsetGeneratorTest extends TestCase
         $countryData = [
             'id' => $countryId,
             'name' => $countryName,
+            'type' => $countryType,
+            'periodLabel' => $countryPeriodLabel,
             'periods' => [
                 $period44Data,
                 $period45Data
@@ -70,9 +74,9 @@ class CountryFieldsetGeneratorTest extends TestCase
             'type' => Select::class,
             'name' => 'selectedPeriodId',
             'options' => [
-                'label' => 'Select period',
+                'label' => $countryPeriodLabel,
                 'value_options' => [
-                    '' => 'Select period',
+                    '' => $countryPeriodLabel,
                     $period44Id => $period44Name,
                     $period45Id => $period45Name
                 ]
@@ -118,6 +122,7 @@ class CountryFieldsetGeneratorTest extends TestCase
             ],
             'attributes' => [
                 'data-role' => 'country',
+                'data-type' => $countryType,
                 'data-id' => $countryId,
                 'data-name' => $countryName
             ]
@@ -135,10 +140,10 @@ class CountryFieldsetGeneratorTest extends TestCase
 
         $periodFieldsetGenerator = m::mock(PeriodFieldsetGenerator::class);
         $periodFieldsetGenerator->shouldReceive('generate')
-            ->with($period44Data)
+            ->with($period44Data, $countryType)
             ->andReturn($period44Fieldset);
         $periodFieldsetGenerator->shouldReceive('generate')
-            ->with($period45Data)
+            ->with($period45Data, $countryType)
             ->andReturn($period45Fieldset);
 
         $countryFieldsetGenerator = new CountryFieldsetGenerator($translator, $formFactory, $periodFieldsetGenerator);

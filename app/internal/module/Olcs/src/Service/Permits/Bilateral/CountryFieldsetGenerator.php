@@ -58,6 +58,7 @@ class CountryFieldsetGenerator
                 ],
                 'attributes' => [
                     'data-role' => 'country',
+                    'data-type' => $country['type'],
                     'data-id' => $country['id'],
                     'data-name' => $country['name']
                 ]
@@ -67,7 +68,7 @@ class CountryFieldsetGenerator
         $periods = $country['periods'];
 
         $countryFieldset->add(
-            $this->generatePeriodSelector($periods, $country['selectedPeriodId'])
+            $this->generatePeriodSelector($periods, $country['periodLabel'], $country['selectedPeriodId'])
         );
 
         $periodsFieldset = $this->formFactory->create(
@@ -79,7 +80,7 @@ class CountryFieldsetGenerator
 
         foreach ($periods as $period) {
             $periodsFieldset->add(
-                $this->periodFieldsetGenerator->generate($period)
+                $this->periodFieldsetGenerator->generate($period, $country['type'])
             );
         }
 
@@ -92,13 +93,14 @@ class CountryFieldsetGenerator
      * Return a zend Select element corresponding to the provided list of periods
      *.
      * @param array $periods
+     * @param string $periodLabel
      * @param int|null $selectedPeriodId
      *
      * @return Select
      */
-    private function generatePeriodSelector(array $periods, $selectedPeriodId)
+    private function generatePeriodSelector(array $periods, $periodLabel, $selectedPeriodId)
     {
-        $valueOptions = ['' => 'Select period'];
+        $valueOptions = ['' => $periodLabel];
         foreach ($periods as $period) {
             $valueOptions[$period['id']] = $this->translator->translate($period['key']);
         }
@@ -108,7 +110,7 @@ class CountryFieldsetGenerator
                 'type' => Select::class,
                 'name' => 'selectedPeriodId',
                 'options' => [
-                    'label' => 'Select period',
+                    'label' => $periodLabel,
                     'value_options' => $valueOptions
                 ],
                 'attributes' => [

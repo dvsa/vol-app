@@ -475,6 +475,8 @@ return array(
             \Olcs\Service\Data\Cases::class => \Olcs\Service\Data\Cases::class,
             Olcs\Service\Data\Licence::class => Olcs\Service\Data\Licence::class,
             Olcs\Service\Data\ApplicationStatus::class => \Olcs\Service\Data\ApplicationStatus::class,
+            Olcs\Service\Permits\Bilateral\MoroccoFieldsetPopulator::class =>
+                Olcs\Service\Permits\Bilateral\MoroccoFieldsetPopulator::class,
         ],
         'abstract_factories' => [
             \Zend\Cache\Service\StorageCacheAbstractServiceFactory::class,
@@ -523,6 +525,8 @@ return array(
                 Olcs\Service\Permits\Bilateral\CountryFieldsetGeneratorFactory::class,
             Olcs\Service\Permits\Bilateral\PeriodFieldsetGenerator::class =>
                 Olcs\Service\Permits\Bilateral\PeriodFieldsetGeneratorFactory::class,
+            Olcs\Service\Permits\Bilateral\StandardFieldsetPopulator::class =>
+                Olcs\Service\Permits\Bilateral\StandardFieldsetPopulatorFactory::class,
             Olcs\Service\Permits\Bilateral\NoOfPermitsElementGenerator::class =>
                 Olcs\Service\Permits\Bilateral\NoOfPermitsElementGeneratorFactory::class,
         )

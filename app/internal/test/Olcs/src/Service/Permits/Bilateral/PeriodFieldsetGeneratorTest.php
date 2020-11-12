@@ -7,12 +7,11 @@
  */
 namespace OlcsTest\Service\Permits\Bilateral;
 
-use Olcs\Form\Element\Permits\BilateralNoOfPermitsCombinedTotalElement;
-use Olcs\Form\Element\Permits\BilateralNoOfPermitsElement;
+use Olcs\Service\Permits\Bilateral\FieldsetPopulatorInterface;
 use Olcs\Service\Permits\Bilateral\PeriodFieldsetGenerator;
-use Olcs\Service\Permits\Bilateral\NoOfPermitsElementGenerator;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
+use RuntimeException;
 use Zend\Form\Factory as FormFactory;
 use Zend\Form\Fieldset;
 
@@ -23,27 +22,53 @@ use Zend\Form\Fieldset;
  */
 class PeriodFieldsetGeneratorTest extends TestCase
 {
+    const FIELDSET_POPULATOR_TYPE_2_NAME = 'populatorType2';
+
+    const PERIOD_ID = 45;
+
+    const PERIOD_FIELDS = [
+        'fieldData1',
+        'fieldData2'
+    ];
+
+    const PERIOD_DATA = [
+        'id' => self::PERIOD_ID,
+        'fields' => self::PERIOD_FIELDS,
+    ];
+
+    private $formFactory;
+
+    private $periodFieldsetGenerator;
+    
+    private $fieldsetPopulatorType2;
+
+    public function setUp(): void
+    {
+        $this->formFactory = m::mock(FormFactory::class);
+
+        $this->periodFieldsetGenerator = new PeriodFieldsetGenerator($this->formFactory);
+
+        $this->periodFieldsetGenerator->registerFieldsetPopulator(
+            'populatorType1',
+            m::mock(FieldsetPopulatorInterface::class)
+        );
+
+        $this->fieldsetPopulatorType2 = m::mock(FieldsetPopulatorInterface::class);
+
+        $this->periodFieldsetGenerator->registerFieldsetPopulator(
+            self::FIELDSET_POPULATOR_TYPE_2_NAME,
+            $this->fieldsetPopulatorType2
+        );
+
+        $this->periodFieldsetGenerator->registerFieldsetPopulator(
+            'populatorType3',
+            m::mock(FieldsetPopulatorInterface::class)
+        );
+    }
+
     public function testGenerate()
     {
-        $field1 = [
-            'cabotage' => 'field1cabotage',
-            'journey' => 'field1journey',
-            'value' => 'field1value'
-        ];
-
-        $field2 = [
-            'cabotage' => 'field2cabotage',
-            'journey' => 'field2journey',
-            'value' => 'field2value'
-        ];
-
-        $periodData = [
-            'id' => 45,
-            'fields' => [
-                $field1,
-                $field2
-            ]
-        ];
+        $periodFieldset = m::mock(Fieldset::class);
 
         $periodFieldsetParams = [
             'type' => Fieldset::class,
@@ -54,46 +79,25 @@ class PeriodFieldsetGeneratorTest extends TestCase
             ]
         ];
 
-        $bilateralNoOfPermitsCombinedTotalElementParams = [
-            'type' => BilateralNoOfPermitsCombinedTotalElement::class,
-            'name' => 'combinedTotal'
-        ];
-
-        $periodFieldset = m::mock(Fieldset::class);
-        $noOfPermitsElement1 = m::mock(BilateralNoOfPermitsElement::class);
-        $noOfPermitsElement2 = m::mock(BilateralNoOfPermitsElement::class);
-
-        $periodFieldset->shouldReceive('add')
-            ->with($bilateralNoOfPermitsCombinedTotalElementParams)
-            ->once()
-            ->ordered();
-        $periodFieldset->shouldReceive('add')
-            ->with($noOfPermitsElement1)
-            ->once()
-            ->ordered();
-        $periodFieldset->shouldReceive('add')
-            ->with($noOfPermitsElement2)
-            ->once()
-            ->ordered();
-
-        $formFactory = m::mock(FormFactory::class);
-        $formFactory->shouldReceive('create')
+        $this->formFactory->shouldReceive('create')
             ->with($periodFieldsetParams)
             ->andReturn($periodFieldset);
 
-        $noOfPermitsElementGenerator = m::mock(NoOfPermitsElementGenerator::class);
-        $noOfPermitsElementGenerator->shouldReceive('generate')
-            ->with($field1)
-            ->andReturn($noOfPermitsElement1);
-        $noOfPermitsElementGenerator->shouldReceive('generate')
-            ->with($field2)
-            ->andReturn($noOfPermitsElement2);
-
-        $periodFieldsetGenerator = new PeriodFieldsetGenerator($formFactory, $noOfPermitsElementGenerator);
+        $this->fieldsetPopulatorType2->shouldReceive('populate')
+            ->with($periodFieldset, self::PERIOD_FIELDS)
+            ->once();
 
         $this->assertSame(
             $periodFieldset,
-            $periodFieldsetGenerator->generate($periodData)
+            $this->periodFieldsetGenerator->generate(self::PERIOD_DATA, self::FIELDSET_POPULATOR_TYPE_2_NAME)
         );
+    }
+
+    public function testGenerateExceptionPopulatorNotFound()
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Fieldset populator not found for type unknownType');
+
+        $this->periodFieldsetGenerator->generate(self::PERIOD_DATA, 'unknownType');
     }
 }
