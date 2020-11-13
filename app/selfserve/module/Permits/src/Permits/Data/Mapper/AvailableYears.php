@@ -58,7 +58,7 @@ class AvailableYears
      */
     private function mapForEcmtAnnual(array $data, $form)
     {
-        return $this->mapAvailableYears($data, $form);
+        return $this->mapAvailableYears($data, $form, 'permits.page.year.ecmt-annual');
     }
 
     /**
@@ -71,10 +71,12 @@ class AvailableYears
      */
     private function mapForEcmtShortTerm(array $data, $form)
     {
-        $data = $this->mapAvailableYears($data, $form);
+        $translationPrefix = 'permits.page.year.ecmt-short-term';
+
+        $data = $this->mapAvailableYears($data, $form, $translationPrefix);
 
         $data['guidance'] = [
-            'value' => 'permits.page.year.ecmt-short-term.guidance',
+            'value' => sprintf('%s.guidance', $translationPrefix),
             'disableHtmlEscape' => true,
         ];
 
@@ -86,25 +88,27 @@ class AvailableYears
      *
      * @param array $data
      * @param Form  $form
+     * @param string $translationPrefix
      *
      * @return array
      */
-    private function mapAvailableYears(array $data, $form)
+    private function mapAvailableYears(array $data, $form, $translationPrefix)
     {
         $years = $data[AvailableYearsDataSource::DATA_KEY]['years'];
-        $suffix = 'one-year-available';
 
         if (count($years) == 1) {
-            $this->singleOption($form, $years[0]);
+            $this->singleOption($form, $years[0], $translationPrefix);
+
+            $data['question'] = sprintf('%s.question.one-year-available', $translationPrefix);
         } else {
             $this->multipleOptions($form, $years);
 
-            $suffix = 'multiple-years-available';
-            $data['hint'] = 'permits.page.year.hint.' . $suffix;
+            $data['question'] = sprintf('%s.question.multiple-years-available', $translationPrefix);
+            $data['hint'] = sprintf('%s.hint.multiple-years-available', $translationPrefix);
         }
 
-        $data['question'] = 'permits.page.year.question.' . $suffix;
-        $data['browserTitle'] = 'permits.page.year.browser.title.' . $suffix;
+        // make title the same as question
+        $data['browserTitle'] = $data['question'];
 
         return $data;
     }
@@ -112,13 +116,14 @@ class AvailableYears
     /**
      * @param Form $form
      * @param int $year
+     * @param string $translationPrefix
      */
-    private function singleOption(Form $form, $year)
+    private function singleOption(Form $form, $year, $translationPrefix)
     {
         $markup = sprintf(
             '<p class="govuk-body-l">%s</p>',
             $this->translator->translateReplace(
-                'permits.page.year.hint.one-year-available',
+                sprintf('%s.hint.one-year-available', $translationPrefix),
                 [$year]
             )
         );

@@ -96,8 +96,8 @@ class AvailableYearsTest extends TestCase
             'years' => [
                 'years' => [$year]
             ],
-            'question' => 'permits.page.year.question.one-year-available',
-            'browserTitle' => 'permits.page.year.browser.title.one-year-available',
+            'question' => 'permits.page.year.ecmt-short-term.question.one-year-available',
+            'browserTitle' => 'permits.page.year.ecmt-short-term.question.one-year-available',
             'guidance' => [
                 'value' => 'permits.page.year.ecmt-short-term.guidance',
                 'disableHtmlEscape' => true,
@@ -106,7 +106,7 @@ class AvailableYearsTest extends TestCase
 
         $this->translationHelperService->shouldReceive('translateReplace')
             ->once()
-            ->with('permits.page.year.hint.one-year-available', [$year])
+            ->with('permits.page.year.ecmt-short-term.hint.one-year-available', [$year])
             ->andReturn('translated-text-with-year');
 
         $returnedData = $this->availableYears->mapForFormOptions($data, $form);
@@ -159,9 +159,9 @@ class AvailableYearsTest extends TestCase
             'years' => [
                 'years' => [2018, 2019, 2020]
             ],
-            'hint' => 'permits.page.year.hint.multiple-years-available',
-            'question' => 'permits.page.year.question.multiple-years-available',
-            'browserTitle' => 'permits.page.year.browser.title.multiple-years-available',
+            'hint' => 'permits.page.year.ecmt-short-term.hint.multiple-years-available',
+            'question' => 'permits.page.year.ecmt-short-term.question.multiple-years-available',
+            'browserTitle' => 'permits.page.year.ecmt-short-term.question.multiple-years-available',
             'guidance' => [
                 'value' => 'permits.page.year.ecmt-short-term.guidance',
                 'disableHtmlEscape' => true,
@@ -217,13 +217,13 @@ class AvailableYearsTest extends TestCase
             'years' => [
                 'years' => [$year]
             ],
-            'question' => 'permits.page.year.question.one-year-available',
-            'browserTitle' => 'permits.page.year.browser.title.one-year-available',
+            'question' => 'permits.page.year.ecmt-annual.question.one-year-available',
+            'browserTitle' => 'permits.page.year.ecmt-annual.question.one-year-available',
         ];
 
         $this->translationHelperService->shouldReceive('translateReplace')
             ->once()
-            ->with('permits.page.year.hint.one-year-available', [$year])
+            ->with('permits.page.year.ecmt-annual.hint.one-year-available', [$year])
             ->andReturn('translated-text-with-year');
 
         $returnedData = $this->availableYears->mapForFormOptions($data, $form);
@@ -271,9 +271,9 @@ class AvailableYearsTest extends TestCase
                     'years' => [
                         'years' => []
                     ],
-                    'browserTitle' => 'permits.page.year.browser.title.multiple-years-available',
-                    'question' => 'permits.page.year.question.multiple-years-available',
-                    'hint' => 'permits.page.year.hint.multiple-years-available',
+                    'browserTitle' => 'permits.page.year.ecmt-annual.question.multiple-years-available',
+                    'question' => 'permits.page.year.ecmt-annual.question.multiple-years-available',
+                    'hint' => 'permits.page.year.ecmt-annual.hint.multiple-years-available',
                 ],
                 'expectedValueOptions' => [],
             ],
@@ -294,9 +294,9 @@ class AvailableYearsTest extends TestCase
                             3030, 3031
                         ],
                     ],
-                    'browserTitle' => 'permits.page.year.browser.title.multiple-years-available',
-                    'question' => 'permits.page.year.question.multiple-years-available',
-                    'hint' => 'permits.page.year.hint.multiple-years-available',
+                    'browserTitle' => 'permits.page.year.ecmt-annual.question.multiple-years-available',
+                    'question' => 'permits.page.year.ecmt-annual.question.multiple-years-available',
+                    'hint' => 'permits.page.year.ecmt-annual.hint.multiple-years-available',
                 ],
                 'expectedValueOptions' => [
                     [
