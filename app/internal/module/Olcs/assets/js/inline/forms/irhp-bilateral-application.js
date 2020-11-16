@@ -125,6 +125,11 @@ $(function () {
     }
 
     function setTextboxDisability($periodElement) {
+        var $standardCountryContainer = $periodElement.closest("fieldset[data-role='country'][data-type='standard']");
+        if ($standardCountryContainer.length == 0) {
+            return;
+        }
+
         var $siblingTextboxes = $periodElement.find("input[type='text']");
         var enabledFieldNameSegment = "periods";
 

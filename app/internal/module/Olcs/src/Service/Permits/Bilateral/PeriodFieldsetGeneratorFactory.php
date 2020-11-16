@@ -17,9 +17,20 @@ class PeriodFieldsetGeneratorFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return new PeriodFieldsetGenerator(
-            new FormFactory(),
-            $serviceLocator->get(NoOfPermitsElementGenerator::class)
+        $periodFieldsetGenerator = new PeriodFieldsetGenerator(
+            new FormFactory()
         );
+
+        $periodFieldsetGenerator->registerFieldsetPopulator(
+            'standard',
+            $serviceLocator->get(StandardFieldsetPopulator::class)
+        );
+
+        $periodFieldsetGenerator->registerFieldsetPopulator(
+            'morocco',
+            $serviceLocator->get(MoroccoFieldsetPopulator::class)
+        );
+
+        return $periodFieldsetGenerator;
     }
 }
