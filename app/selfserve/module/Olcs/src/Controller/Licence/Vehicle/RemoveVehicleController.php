@@ -77,7 +77,11 @@ class RemoveVehicleController extends AbstractVehicleController
     {
         $this->form->get('formActions')
             ->get('action')
-            ->setLabel('licence.vehicle.remove.button');
+            ->setLabel('licence.vehicle.remove.button.action.label')
+            ->setAttribute('title', 'licence.vehicle.remove.button.action.title');
+        $this->form->get('formActions')
+            ->get('cancel')
+            ->setAttribute('title', 'licence.vehicle.remove.button.cancel.title');
     }
 
     protected function alterSearchForm()

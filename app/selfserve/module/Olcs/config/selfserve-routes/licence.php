@@ -11,6 +11,7 @@ use Olcs\Controller\Licence\Vehicle\AddVehicleSearchController;
 use Olcs\Controller\Licence\Vehicle\RemoveVehicleConfirmationController;
 use Olcs\Controller\Licence\Vehicle\RemoveVehicleController;
 use Olcs\Controller\Licence\Vehicle\SwitchBoardController;
+use Olcs\Controller\Licence\Vehicle\TransferVehicleController;
 use Olcs\Controller\Licence\Vehicle\ViewVehicleController;
 use Zend\Mvc\Router\Http\Method;
 use Zend\Mvc\Router\Http\Segment;
@@ -632,6 +633,70 @@ return [
                                         'route' => 'confirm[/]',
                                         'defaults' => [
                                             'controller' => RemoveVehicleConfirmationController::class,
+                                        ]
+                                    ],
+                                    'child_routes' => [
+                                        'GET' => [
+                                            'may_terminate' => true,
+                                            'type' => Method::class,
+                                            'options' => [
+                                                'verb' => 'GET',
+                                                'defaults' => [
+                                                    'action' => 'index',
+                                                ],
+                                            ],
+                                        ],
+                                        'POST' => [
+                                            'may_terminate' => true,
+                                            'type' => Method::class,
+                                            'options' => [
+                                                'verb' => 'POST',
+                                                'defaults' => [
+                                                    'action' => 'post',
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'transfer' => [
+                            'may_terminate' => false,
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => 'transfer[/]',
+                                'defaults' => [
+                                    'controller' => TransferVehicleController::class,
+                                ]
+                            ],
+                            'child_routes' => [
+                                'GET' => [
+                                    'may_terminate' => true,
+                                    'type' => Method::class,
+                                    'options' => [
+                                        'verb' => 'GET',
+                                        'defaults' => [
+                                            'action' => 'index',
+                                        ],
+                                    ],
+                                ],
+                                'POST' => [
+                                    'may_terminate' => true,
+                                    'type' => Method::class,
+                                    'options' => [
+                                        'verb' => 'POST',
+                                        'defaults' => [
+                                            'action' => 'post',
+                                        ],
+                                    ],
+                                ],
+                                'confirm' => [
+                                    'may_terminate' => false,
+                                    'type' => Segment::class,
+                                    'options' => [
+                                        'route' => 'confirm[/]',
+                                        'defaults' => [
+                                            'controller' => TransferVehicleController::class,
                                         ]
                                     ],
                                     'child_routes' => [
