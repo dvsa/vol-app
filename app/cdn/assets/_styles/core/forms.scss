@@ -267,7 +267,7 @@ select {
   }
 }
 
-[type="submit"] {
+[type="submit"]:not(.govuk-button) {
   background: none;
   border: 0;
   padding: 0;
