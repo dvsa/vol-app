@@ -61,7 +61,7 @@ class SwitchBoardController extends AbstractVehicleController
             case SwitchBoardForm::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_REPRINT:
                 throw new \Exception('Not Implemented: Reprint Vehicle Disc');
             case SwitchBoardForm::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_TRANSFER:
-                throw new \Exception('Not Implemented: Transfer Vehicle');
+                return $this->nextStep('licence/vehicle/transfer/GET');
             case SwitchBoardForm::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW:
                 throw new \Exception('Not Implemented: View Vehicles');
             default:

@@ -11,14 +11,22 @@ use Zend\Form\Annotation as Form;
 class VehicleFormActions
 {
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary large"})
-     * @Form\Options({"label": ""})
+     * @Form\Attributes({
+     *     "id": "action-button",
+     *     "type":"submit",
+     *     "class":"govuk-button govuk-!-margin-right-1",
+     *     "data-module": "govuk-button"
+     * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
     public $action = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large"})
+     * @Form\Attributes({
+     *     "id": "cancel-button",
+     *     "type": "submit",
+     *     "class": "govuk-button govuk-button--secondary"
+     * })
      * @Form\Options({"label": "cancel.button"})
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
