@@ -97,7 +97,7 @@ class SwitchBoardController extends AbstractVehicleController
                 $radioFieldOptions->unsetValueOption(SwitchBoardForm::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW);
             } else {
                 $valueOptions = $radioFieldOptions->getValueOptions();
-                $valueOptions['view']['label'] = "View the vehicles you have removed from your licence";
+                $valueOptions['view']['label'] = "licence.vehicle.switchboard.form.view.label-removed";
                 $radioFieldOptions->setValueOptions($valueOptions);
             }
         }

@@ -4,14 +4,12 @@ declare(strict_types=1);
 namespace Olcs\Controller\Licence\Vehicle;
 
 use Common\Form\Form;
-use Common\Service\Cqrs\Response;
 use Dvsa\Olcs\Transfer\Query\Licence\OtherActiveLicences;
 use Olcs\Form\Model\Form\Vehicle\Fieldset\VehicleTransferFormActions;
 use Olcs\Form\Model\Form\Vehicle\ListVehicleSearch;
 use Olcs\Form\Model\Form\Vehicle\VehicleTransferForm;
-use Zend\Form\Element\Select;
 use Zend\View\Model\ViewModel;
-use Olcs\Exception\Licence\Vehicle\NoLicencesFoundException;
+use Olcs\Exception\Licence\Vehicle\NoOtherLicencesFoundException;
 
 class TransferVehicleController extends AbstractVehicleController
 {
@@ -42,7 +40,7 @@ class TransferVehicleController extends AbstractVehicleController
     {
         try {
             $this->alterVehicleForm();
-        } catch (NoLicencesFoundException $ex) {
+        } catch (NoOtherLicencesFoundException $ex) {
             // If a user has no licences, redirect them to the switchboard.
             return $this->nextStep('licence/vehicle/GET');
         }
@@ -89,9 +87,11 @@ class TransferVehicleController extends AbstractVehicleController
             $validationErrors[] = 'licence.vehicle.transfer.error.too-many-vehicles-selected';
         }
 
-        $licence = $input['formActions'][VehicleTransferFormActions::LICENCE_FIELD] ?? null;
-        if (empty($licence)) {
+        $licenceId = $input['formActions'][VehicleTransferFormActions::LICENCE_FIELD] ?? null;
+        if (empty($licenceId)) {
             $validationErrors[] = 'licence.vehicle.transfer.error.no-licence-selected';
+        } else {
+            $licenceId = (int) $licenceId;
         }
 
         if (count($validationErrors) > 0) {
@@ -100,10 +100,8 @@ class TransferVehicleController extends AbstractVehicleController
         }
 
         $this->session->setVrms($selectedVehicles);
-        $this->hlpFlashMsgr->addSuccessMessage(
-            $this->translator->translate('If this was real it would have sent you to the confirm page')
-        );
-        return $this->nextStep('licence/vehicle/GET');
+        $this->session->setDestinationLicenceId($licenceId);
+        return $this->nextStep('licence/vehicle/transfer/confirm/GET');
     }
 
     /**
@@ -123,7 +121,7 @@ class TransferVehicleController extends AbstractVehicleController
     }
 
     /**
-     * @throws NoLicencesFoundException
+     * @throws NoOtherLicencesFoundException
      */
     protected function alterVehicleForm()
     {
@@ -143,13 +141,13 @@ class TransferVehicleController extends AbstractVehicleController
      *
      * @param Form $form
      * @param int $licenceId
-     * @throws NoLicencesFoundException
+     * @throws NoOtherLicencesFoundException
      */
     protected function setFormLicenceOptions(Form $form, int $licenceId)
     {
         $otherActiveLicenceOptions = $this->getOtherActiveLicenceOptions($licenceId);
         if (count($otherActiveLicenceOptions) < 1) {
-            throw new NoLicencesFoundException();
+            throw new NoOtherLicencesFoundException();
         }
         $selectFormElement = $form->get('formActions')->get(VehicleTransferFormActions::LICENCE_FIELD);
         $selectFormElement->setValueOptions($otherActiveLicenceOptions);

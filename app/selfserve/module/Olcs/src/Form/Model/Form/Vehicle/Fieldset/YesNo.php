@@ -13,6 +13,9 @@ use Zend\Form\Annotation as Form;
  */
 class YesNo
 {
+    const OPTION_YES = 'yes';
+    const OPTION_NO = 'no';
+
     /**
      * @Form\Options({
      *     "label_attributes": {

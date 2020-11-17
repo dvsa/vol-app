@@ -4,6 +4,6 @@ namespace Olcs\Exception\Licence\Vehicle;
 
 use Exception;
 
-class NoLicencesFoundException extends Exception
+class NoOtherLicencesFoundException extends Exception
 {
 }

@@ -27,7 +27,7 @@ class RemoveVehicleConfirmationController extends AbstractVehicleController
     {
         // Redirect to add action if VRMs are not in session.
         if (!$this->session->hasVrms()) {
-            $this->hlpFlashMsgr->addErrorMessage('LicenceVehicleManagement does not contain vrms');
+            $this->hlpFlashMsgr->addErrorMessage('licence.vehicle.remove.confirm.error.no-vehicles');
             return $this->nextStep('licence/vehicle/remove/GET');
         }
 
@@ -47,7 +47,7 @@ class RemoveVehicleConfirmationController extends AbstractVehicleController
     {
         // Redirect to remove action if VRMs are not in session.
         if (!$this->session->hasVrms()) {
-            $this->hlpFlashMsgr->addErrorMessage('LicenceVehicleManagement does not contain vrms');
+            $this->hlpFlashMsgr->addErrorMessage('licence.vehicle.remove.confirm.error.no-vehicles');
             return $this->nextStep('licence/vehicle/remove/GET');
         }
 

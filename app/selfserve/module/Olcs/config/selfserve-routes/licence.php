@@ -11,6 +11,7 @@ use Olcs\Controller\Licence\Vehicle\AddVehicleSearchController;
 use Olcs\Controller\Licence\Vehicle\RemoveVehicleConfirmationController;
 use Olcs\Controller\Licence\Vehicle\RemoveVehicleController;
 use Olcs\Controller\Licence\Vehicle\SwitchBoardController;
+use Olcs\Controller\Licence\Vehicle\TransferVehicleConfirmationController;
 use Olcs\Controller\Licence\Vehicle\TransferVehicleController;
 use Olcs\Controller\Licence\Vehicle\ViewVehicleController;
 use Zend\Mvc\Router\Http\Method;
@@ -696,7 +697,7 @@ return [
                                     'options' => [
                                         'route' => 'confirm[/]',
                                         'defaults' => [
-                                            'controller' => TransferVehicleController::class,
+                                            'controller' => TransferVehicleConfirmationController::class,
                                         ]
                                     ],
                                     'child_routes' => [
