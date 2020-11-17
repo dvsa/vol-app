@@ -6,7 +6,7 @@ namespace Olcs\Session;
 class LicenceVehicleManagement extends \Zend\Session\Container
 {
     const SESSION_NAME = 'LicenceVehicleManagement';
-
+    protected const TRANSFER_TO_LICENSE_ID = 'transferToLicenceId';
 
     /**
      * LicenceVehicleManagement constructor.
@@ -91,6 +91,38 @@ class LicenceVehicleManagement extends \Zend\Session\Container
     public function setVehicleData(array $vehicleData): LicenceVehicleManagement
     {
         $this->offsetSet('vehicleData', $vehicleData);
+        return $this;
+    }
+
+    /**
+     * Determines whether a session has a licence id set for which a related set of vehicles should be transferred to.
+     *
+     * @return bool
+     */
+    public function hasDestinationLicenceId(): bool
+    {
+        return $this->offsetExists(static::TRANSFER_TO_LICENSE_ID);
+    }
+
+    /**
+     * Gets a licence id for which a related set of vehicles should be transferred to.
+     *
+     * @return int|null
+     */
+    public function getDestinationLicenceId(): ?int
+    {
+        return $this->offsetGet(static::TRANSFER_TO_LICENSE_ID) ?: null;
+    }
+
+    /**
+     * Sets a licence id for which a related set of vehicles should be transferred to.
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setDestinationLicenceId(int $id)
+    {
+        $this->offsetSet(static::TRANSFER_TO_LICENSE_ID, $id);
         return $this;
     }
 

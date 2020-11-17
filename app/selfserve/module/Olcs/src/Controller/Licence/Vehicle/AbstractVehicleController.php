@@ -110,12 +110,6 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
     }
 
     /**
-     * @return array
-     */
-    abstract protected function getViewVariables(): array;
-
-
-    /**
      * @return bool
      */
     protected function isGoods(): bool
@@ -188,7 +182,6 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
         }
 
         return $this->alterTableForDefaultView($table, $totalVehicles);
-
     }
 
     /**
