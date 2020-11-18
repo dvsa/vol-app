@@ -5,19 +5,43 @@ namespace Olcs\Service\Data;
 use Common\Exception\DataServiceException;
 use Common\Service\Data\AbstractDataService;
 use Common\Service\Data\ListDataInterface;
+use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintStock;
+use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class IrhpPermitPrintStock
  *
  * @package Olcs\Service\Data
  */
-class IrhpPermitPrintStock extends AbstractDataService implements ListDataInterface
+class IrhpPermitPrintStock extends AbstractDataService implements FactoryInterface, ListDataInterface
 {
+    const COUNTRY_ID_MOROCCO = 'MA';
+
+    /**
+     * @var TranslationHelperService
+     */
+    private $translator;
+
     /**
      * @var int
      */
     private $irhpPermitType;
+
+    /**
+     * Create the service
+     *
+     * @param ServiceLocatorInterface $serviceLocator Service locator
+     *
+     * @return IrhpPermitPrintStock
+     */
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        $this->translator = $serviceLocator->get('Helper\Translation');
+
+        return $this;
+    }
 
     /**
      * @var string
@@ -82,14 +106,28 @@ class IrhpPermitPrintStock extends AbstractDataService implements ListDataInterf
         $optionData = [];
 
         foreach ($data as $datum) {
-            $label = (!empty($datum['validFrom']) && !empty($datum['validTo']))
-                ? sprintf('%s to %s', $datum['validFrom'], $datum['validTo'])
-                : sprintf('Stock %s', $datum['id']);
-
-            $optionData[$datum['id']] = $label;
+            $optionData[$datum['id']] = $this->generateLabel($datum);
         }
 
         return $optionData;
+    }
+
+    /**
+     * Generate a label for an item in the returned data
+     *
+     * @param array $datum
+     *
+     * @return string
+     */
+    private function generateLabel(array $datum)
+    {
+        if ($this->getCountry() == self::COUNTRY_ID_MOROCCO) {
+            return $this->translator->translate($datum['periodNameKey']);
+        }
+
+        return (!empty($datum['validFrom']) && !empty($datum['validTo']))
+            ? sprintf('%s to %s', $datum['validFrom'], $datum['validTo'])
+            : sprintf('Stock %s', $datum['id']);
     }
 
     /**

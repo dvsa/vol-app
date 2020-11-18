@@ -5,11 +5,13 @@ namespace OlcsTest\Service\Data;
 use Common\Exception\DataServiceException;
 use Common\RefData;
 use Common\Service\Cqrs\Response;
+use Common\Service\Helper\TranslationHelperService;
 use CommonTest\Service\Data\AbstractDataServiceTestCase;
 use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintStock;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder as TransferAnnotationBuilder;
 use Olcs\Service\Data\IrhpPermitPrintStock;
 use Mockery as m;
+use Zend\ServiceManager\ServiceManager;
 
 /**
  * Class IrhpPermitPrintStock Test
@@ -19,15 +21,29 @@ class IrhpPermitPrintStockTest extends AbstractDataServiceTestCase
     /**
      * @dataProvider dpTestFetchListOptions
      */
-    public function testFetchListOptions($results, $expected)
+    public function testFetchListOptions($country, $results, $expected)
     {
+        $this->translationHelper = m::mock(TranslationHelperService::class);
+        $this->translationHelper->shouldReceive('translate')
+            ->andReturnUsing(
+                function ($text) {
+                    return $text . '-translated';
+                }
+            );
+
+        $serviceLocator = m::mock(ServiceManager::class);
+        $serviceLocator->shouldReceive('get')
+            ->with('Helper\Translation')
+            ->once()
+            ->andReturn($this->translationHelper);
+
         $mockTransferAnnotationBuilder = m::mock(TransferAnnotationBuilder::class)
             ->shouldReceive('createQuery')
             ->once()
             ->andReturnUsing(
-                function (ReadyToPrintStock $dto) {
+                function (ReadyToPrintStock $dto) use ($country) {
                     $this->assertEquals(RefData::IRHP_BILATERAL_PERMIT_TYPE_ID, $dto->getIrhpPermitType());
-                    $this->assertEquals('DE', $dto->getCountry());
+                    $this->assertEquals($country, $dto->getCountry());
                     return 'query';
                 }
             )
@@ -42,21 +58,22 @@ class IrhpPermitPrintStockTest extends AbstractDataServiceTestCase
             ->andReturn($results)
             ->getMock();
 
-        $sut = new IrhpPermitPrintStock();
+        $sut = (new IrhpPermitPrintStock())->createService($serviceLocator);
         $sut->setIrhpPermitType(RefData::IRHP_BILATERAL_PERMIT_TYPE_ID);
-        $sut->setCountry('DE');
+        $sut->setCountry($country);
 
         $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
 
         $this->assertEquals($expected, $sut->fetchListOptions(null));
         $this->assertEquals(RefData::IRHP_BILATERAL_PERMIT_TYPE_ID, $sut->getIrhpPermitType());
-        $this->assertEquals('DE', $sut->getCountry());
+        $this->assertEquals($country, $sut->getCountry());
     }
 
     public function dpTestFetchListOptions()
     {
         return [
             'with validity dates' => [
+                'country' => 'DE',
                 'results' => [
                     'results' => [
                         [
@@ -83,6 +100,7 @@ class IrhpPermitPrintStockTest extends AbstractDataServiceTestCase
                 ]
             ],
             'without validity dates' => [
+                'country' => 'DE',
                 'results' => [
                     'results' => [
                         [
@@ -102,7 +120,32 @@ class IrhpPermitPrintStockTest extends AbstractDataServiceTestCase
                     3 => 'Stock 3',
                 ]
             ],
+            'morocco specific behaviour' => [
+                'country' => 'MA',
+                'results' => [
+                    'results' => [
+                        [
+                            'id' => 1,
+                            'periodNameKey' => 'stock.one.period.name.key',
+                        ],
+                        [
+                            'id' => 2,
+                            'periodNameKey' => 'stock.two.period.name.key',
+                        ],
+                        [
+                            'id' => 3,
+                            'periodNameKey' => 'stock.three.period.name.key',
+                        ],
+                    ]
+                ],
+                'expected' => [
+                    1 => 'stock.one.period.name.key-translated',
+                    2 => 'stock.two.period.name.key-translated',
+                    3 => 'stock.three.period.name.key-translated',
+                ]
+            ],
             'no data' => [
+                'country' => 'DE',
                 'results' => null,
                 'expected' => []
             ]
