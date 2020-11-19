@@ -4974,11 +4974,11 @@
         },
         {
             "name": "composer/xdebug-handler",
-            "version": "1.4.4",
+            "version": "1.4.5",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/composer/xdebug-handler/1.4.4/composer-xdebug-handler-1.4.4.zip",
-                "reference": "6e076a124f7ee146f2487554a94b6a19a74887ba",
+                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/composer/xdebug-handler/1.4.5/composer-xdebug-handler-1.4.5.zip",
+                "reference": "f28d44c286812c714741478d968104c5e604a1d4",
                 "shasum": ""
             },
             "require": {
@@ -5022,7 +5022,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-24T12:39:10+00:00"
+            "time": "2020-11-13T08:04:11+00:00"
         },
         {
             "name": "dms/phpunit-arraysubset-asserts",
@@ -5235,11 +5235,11 @@
         },
         {
             "name": "myclabs/deep-copy",
-            "version": "1.10.1",
+            "version": "1.10.2",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/myclabs/deep-copy/1.10.1/myclabs-deep-copy-1.10.1.zip",
-                "reference": "969b211f9a51aa1f6c01d1d2aef56d3bd91598e5",
+                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/myclabs/deep-copy/1.10.2/myclabs-deep-copy-1.10.2.zip",
+                "reference": "776f831124e9c62e1a2c601ecc52e776d8bb7220",
                 "shasum": ""
             },
             "require": {
@@ -5279,7 +5279,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-06-29T13:22:24+00:00"
+            "time": "2020-11-13T09:40:50+00:00"
         },
         {
             "name": "olcs/coding-standards",
@@ -5836,11 +5836,11 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.54",
+            "version": "0.12.56",
             "dist": {
                 "type": "zip",
-                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/phpstan/phpstan/0.12.54/phpstan-phpstan-0.12.54.zip",
-                "reference": "45c7b999a4b7dd9ac5558bdaaf23dcebbef88223",
+                "url": "http://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/phpstan/phpstan/0.12.56/phpstan-phpstan-0.12.56.zip",
+                "reference": "007fd5d700c41e1bb27795fae15a2383f8fa4ba1",
                 "shasum": ""
             },
             "require": {
@@ -5882,7 +5882,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-11-05T13:36:26+00:00"
+            "time": "2020-11-16T22:59:18+00:00"
         },
         {
             "name": "phpstan/phpstan-doctrine",
