@@ -2,11 +2,15 @@
 
 namespace Permits\Controller;
 
+use Common\Category;
 use Common\Controller\AbstractOlcsController;
+use Common\Controller\Traits\GenericUpload;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Qa\DataTransformer\ApplicationStepsPostDataTransformer;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\SubmitApplicationStep;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\ApplicationStep;
+use Dvsa\Olcs\Transfer\Query\IrhpApplication\ById;
+use Dvsa\Olcs\Transfer\Query\IrhpApplication\Documents;
 use Olcs\Service\Qa\FormProvider;
 use Olcs\Service\Qa\TemplateVarsGenerator;
 use Olcs\Service\Qa\ViewGeneratorProvider;
@@ -17,6 +21,11 @@ use Zend\View\Model\ViewModel;
 class QaController extends AbstractOlcsController
 {
     const FIELDSET_DATA_PREFIX = 'fieldset';
+
+    const UPLOADED_FILE_CATEGORY = Category::CATEGORY_PERMITS;
+    const UPLOADED_FILE_SUBCATEGORY = Category::DOC_SUB_CATEGORY_MOT_CERTIFICATE;
+
+    use GenericUpload;
 
     /** @var FormProvider */
     private $formProvider;
@@ -32,6 +41,12 @@ class QaController extends AbstractOlcsController
 
     /** @var ApplicationStepsPostDataTransformer */
     private $applicationStepsPostDataTransformer;
+
+    /** @var array */
+    protected $documents;
+
+    /** @var int */
+    protected $irhpApplicationId;
 
     /**
      * Create service instance
@@ -69,6 +84,7 @@ class QaController extends AbstractOlcsController
         $viewGenerator = $this->viewGeneratorProvider->getByRouteName($routeName);
 
         $routeParams = $this->params()->fromRoute();
+        $this->irhpApplicationId = $routeParams['id'];
 
         $irhpPermitApplicationId = null;
         if (isset($routeParams['irhpPermitApplication'])) {
@@ -76,7 +92,7 @@ class QaController extends AbstractOlcsController
         }
 
         $applicationStepParams = [
-            'id' => $routeParams['id'],
+            'id' => $this->irhpApplicationId,
             'irhpPermitApplication' => $irhpPermitApplicationId,
             'slug' => $routeParams['slug'],
         ];
@@ -96,13 +112,28 @@ class QaController extends AbstractOlcsController
             $viewGenerator->getFormName()
         );
 
+        $hasProcessedFiles = false;
+        if ($form->has('MultipleFileUpload')) {
+            $hasProcessedFiles = $this->processFiles(
+                $form,
+                'MultipleFileUpload',
+                [$this, 'processFileUpload'],
+                [$this, 'deleteFile'],
+                [$this, 'getDocuments']
+            );
+
+            if (!empty($form->getMessages())) {
+                $form->preventSuccessfulValidation();
+            }
+        }
+
         $showErrorInBrowserTitle = false;
 
         if ($this->request->isPost()) {
             $postParams = $this->params()->fromPost();
             $form->setData($postParams);
 
-            if ($form->isValid()) {
+            if ($form->isValid() && !$hasProcessedFiles) {
                 $formData = $form->getData();
 
                 $transformedFieldsetContent = $this->applicationStepsPostDataTransformer->getTransformed(
@@ -188,5 +219,53 @@ class QaController extends AbstractOlcsController
         );
 
         return $view;
+    }
+
+    /**
+     * Handle the file upload
+     *
+     * @param array $file File
+     */
+    public function processFileUpload(array $file)
+    {
+        $this->documents = null;
+
+        $query = ById::create(['id' => $this->irhpApplicationId]);
+        $response = $this->handleQuery($query);
+        $result = $response->getResult();
+
+        $licenceId = $result['licence']['id'];
+
+        $data = [
+            'description' => $file['name'],
+            'category' => self::UPLOADED_FILE_CATEGORY,
+            'subCategory' => self::UPLOADED_FILE_SUBCATEGORY,
+            'isExternal'  => true,
+            'licence' => $licenceId,
+            'irhpApplication' => $this->irhpApplicationId,
+        ];
+
+        $this->uploadFile($file, $data);
+    }
+
+    /**
+     * Get documents relating to the application
+     *
+     * @return array
+     */
+    public function getDocuments()
+    {
+        if ($this->documents === null) {
+            $params = [
+                'id' => $this->irhpApplicationId,
+                'category' => self::UPLOADED_FILE_CATEGORY,
+                'subCategory' => self::UPLOADED_FILE_SUBCATEGORY,
+            ];
+
+            $response = $this->handleQuery(Documents::create($params));
+            $this->documents = $response->getResult();
+        }
+
+        return $this->documents;
     }
 }
