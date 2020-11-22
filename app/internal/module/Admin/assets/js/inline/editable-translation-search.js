@@ -13,7 +13,6 @@ $(function () {
     var autcompleteDiv = $("#keyAutocomplete");
     var jsonBaseUrl = $("#jsonBaseUrl").val();
     const urlParams = new URLSearchParams(window.location.search);
-    var resDisplayField = jsonBaseUrl.includes("partial") ?  "partialKey" : "description";
 
     var delayAjax = (function(){
         var timer = 0;
@@ -59,7 +58,7 @@ $(function () {
                     ).done(function (data) {
                     searchResults.empty();
                     $.each(data.results, function (index, result) {
-                        searchResults.append("<div class=\"translationAcRow\"><strong><a href=\""+jsonBaseUrl+"details/" + result.id + "\">" + result.id + "</a></strong><br>" + result[resDisplayField] + "</div>");
+                        searchResults.append("<div class=\"translationAcRow\"><strong><a href=\""+jsonBaseUrl+"details/" + result.id + "\">" + result.id + "</a></strong><br>" + result.description + "</div>");
                     });
                     showAutocomplete();
                 });
