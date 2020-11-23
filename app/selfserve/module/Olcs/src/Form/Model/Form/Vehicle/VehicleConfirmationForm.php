@@ -10,7 +10,7 @@ use Zend\Form\Annotation as Form;
  *
  * @Form\Type("\Common\Form\Form")
  */
-class RemoveVehicleConfirmation
+class VehicleConfirmationForm
 {
     const FIELD_OPTIONS_FIELDSET_NAME = 'optionsFieldset';
     const FIELD_OPTIONS_NAME = 'options';

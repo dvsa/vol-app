@@ -7,10 +7,10 @@ use Olcs\DTO\DataTransferObject;
 class LicenceVehicleDTO extends DataTransferObject
 {
     /**
-     * @return Vehicle
+     * @return VehicleDTO
      */
-    public function getVehicle(): Vehicle
+    public function getVehicle(): VehicleDTO
     {
-        return new Vehicle($this->data['vehicle']);
+        return new VehicleDTO($this->data['vehicle']);
     }
 }
