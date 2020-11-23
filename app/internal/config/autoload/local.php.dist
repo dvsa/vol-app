@@ -145,4 +145,5 @@ return array(
             ],
         ],
     ],
+    'html-purifier-cache-dir' => '/var/tmp/htmlPurifierCache',
 );
