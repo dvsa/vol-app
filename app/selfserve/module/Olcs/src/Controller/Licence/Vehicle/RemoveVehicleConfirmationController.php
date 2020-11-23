@@ -6,7 +6,7 @@ namespace Olcs\Controller\Licence\Vehicle;
 use Dvsa\Olcs\Transfer\Command\Vehicle\DeleteLicenceVehicle;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence;
 use Dvsa\Olcs\Transfer\Query\LicenceVehicle\LicenceVehiclesById;
-use Olcs\Form\Model\Form\Vehicle\RemoveVehicleConfirmation as RemoveVehicleConfirmationForm;
+use Olcs\Form\Model\Form\Vehicle\VehicleConfirmationForm as RemoveVehicleConfirmationForm;
 use Olcs\Logging\Log\Logger;
 
 class RemoveVehicleConfirmationController extends AbstractVehicleController

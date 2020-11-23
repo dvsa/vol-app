@@ -1,6 +1,6 @@
 <?php
 
-namespace Olcs\Exception\Licence\Vehicle;
+namespace Olcs\Exception\Licence;
 
 use Exception;
 

@@ -6,6 +6,21 @@ use Olcs\DTO\DataTransferObject;
 
 class LicenceDTO extends DataTransferObject
 {
+    protected const ATTRIBUTE_ID = 'id';
+    protected const ATTRIBUTE_LICENCE_NUMBER = 'licNo';
+    protected const ATTRIBUTE_ACTIVE_VEHICLE_COUNT = 'activeVehicleCount';
+
+    /**
+     * Gets the id of a licence.
+     *
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        $id = $this->data[static::ATTRIBUTE_ID] ?? null;
+        return null === $id ? null : (int) $id;
+    }
+
     /**
      * Gets the licence number for a licence.
      *
@@ -13,16 +28,18 @@ class LicenceDTO extends DataTransferObject
      */
     public function getLicenceNumber(): ?string
     {
-        return $this->data['licNo'] ?? null;
+        $id = $this->data[static::ATTRIBUTE_LICENCE_NUMBER] ?? null;
+        return null === $id ? null : (string) $id;
     }
 
     /**
      * Gets the number of active vehicles that a licence is associated with.
      *
-     * @return int
+     * @return int|null
      */
-    public function getActiveVehicleCount(): int
+    public function getActiveVehicleCount(): ?int
     {
-        return (int) ($this->data['activeVehicleCount'] ?? 0);
+        $count = $this->data[static::ATTRIBUTE_ACTIVE_VEHICLE_COUNT] ?? null;
+        return null === $count ? $count : (int) $count;
     }
 }

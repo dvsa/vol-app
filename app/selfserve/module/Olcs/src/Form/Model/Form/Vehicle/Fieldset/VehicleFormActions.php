@@ -14,7 +14,7 @@ class VehicleFormActions
      * @Form\Attributes({
      *     "id": "action-button",
      *     "type":"submit",
-     *     "class":"govuk-button govuk-!-margin-right-1",
+     *     "class":"action--primary",
      *     "data-module": "govuk-button"
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
@@ -25,7 +25,7 @@ class VehicleFormActions
      * @Form\Attributes({
      *     "id": "cancel-button",
      *     "type": "submit",
-     *     "class": "govuk-button govuk-button--secondary"
+     *     "class": "action--secondary"
      * })
      * @Form\Options({"label": "cancel.button"})
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
