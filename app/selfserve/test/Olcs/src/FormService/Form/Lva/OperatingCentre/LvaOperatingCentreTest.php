@@ -17,6 +17,15 @@ use Common\Service\Helper\FormHelperService;
  */
 class LvaOperatingCentreTest extends MockeryTestCase
 {
+    protected const TEMPLATE_FILE_NI_VAR = 'advertising-your-operating-centre-ni-var';
+    protected const TEMPLATE_FILE_NI_NEW = 'advertising-your-operating-centre-ni-new';
+    protected const TEMPLATE_FILE_GB_NEW = 'default-guide-oc-advert-gb-new';
+    protected const TEMPLATE_FILE_GB_VAR = 'advertising-your-operating-centre-gb-var';
+
+    protected const GUIDE_NI_VAR = 'advertising-your-operating-centre-ni-var';
+    protected const GUIDE_NI_NEW = 'advertising-your-operating-centre-ni-new';
+    protected const GUIDE_GB_NEW = 'advertising-your-operating-centre-gb-new';
+    protected const GUIDE_GB_VAR = 'advertising-your-operating-centre-gb-var';
     protected $sut;
 
     protected $formHelper;
@@ -124,8 +133,10 @@ class LvaOperatingCentreTest extends MockeryTestCase
                             ->shouldReceive('setValue')
                             ->with(
                                 'translated-markup-lva-oc-ad-placed-label-selfserve'
-                                . '-guides/guide'
-                                . '-advertising-your-operating-centre-ni-new'
+                                . '-getfile-'
+                                . $params['templateFile']
+                                . '-guides/guide-'
+                                . $params['guide']
                             )
                             ->once()
                             ->getMock()
@@ -226,8 +237,10 @@ class LvaOperatingCentreTest extends MockeryTestCase
                             ->shouldReceive('setValue')
                             ->with(
                                 'translated-markup-lva-oc-ad-placed-label-selfserve'
-                                . '-guides/guide'
-                                . '-advertising-your-operating-centre-gb-new'
+                                . '-getfile-'
+                                . $params['templateFile']
+                                . '-guides/guide-'
+                                . $params['guide']
                             )
                             ->once()
                             ->getMock()
@@ -327,7 +340,9 @@ class LvaOperatingCentreTest extends MockeryTestCase
                     'niFlag' => 'Y',
                     'licNo' => 'AB12345',
                     'applicationId' => 111,
-                    'isVariation' => false
+                    'isVariation' => false,
+                    'templateFile' => base64_encode(static::TEMPLATE_FILE_NI_NEW),
+                    'guide' => static::GUIDE_NI_NEW
                 ]
             ],
             [
@@ -342,7 +357,9 @@ class LvaOperatingCentreTest extends MockeryTestCase
                     ],
                     'licNo' => 'AB12345',
                     'applicationId' => 111,
-                    'isVariation' => false
+                    'isVariation' => false,
+                    'templateFile' => base64_encode(static::TEMPLATE_FILE_NI_NEW),
+                    'guide' => static::GUIDE_NI_NEW
                 ]
             ],
             [
@@ -359,7 +376,28 @@ class LvaOperatingCentreTest extends MockeryTestCase
                     ],
                     'licNo' => 'AB12345',
                     'applicationId' => 111,
-                    'isVariation' => false
+                    'isVariation' => false,
+                    'templateFile' => base64_encode(static::TEMPLATE_FILE_NI_NEW),
+                    'guide' => static::GUIDE_NI_NEW
+                ]
+            ],
+            [
+                [
+                    'id' => 124,
+                    'isPsv' => false,
+                    'canAddAnother' => true,
+                    'canUpdateAddress' => true,
+                    'wouldIncreaseRequireAdditionalAdvertisement' => false,
+                    'licence' => [
+                        'trafficArea' => [
+                            'isNi' => 1
+                        ],
+                    ],
+                    'licNo' => 'AB12345',
+                    'applicationId' => 111,
+                    'isVariation' => true,
+                    'templateFile' => base64_encode(static::TEMPLATE_FILE_NI_VAR),
+                    'guide' => static::GUIDE_NI_VAR
                 ]
             ]
         ];
@@ -378,7 +416,9 @@ class LvaOperatingCentreTest extends MockeryTestCase
                     'niFlag' => 'N',
                     'licNo' => 'AB12345',
                     'applicationId' => 111,
-                    'isVariation' => false
+                    'isVariation' => false,
+                    'templateFile' => base64_encode(static::TEMPLATE_FILE_GB_NEW),
+                    'guide' => static::GUIDE_GB_NEW
                 ]
             ],
             [
@@ -393,7 +433,9 @@ class LvaOperatingCentreTest extends MockeryTestCase
                     ],
                     'licNo' => 'AB12345',
                     'applicationId' => 111,
-                    'isVariation' => false
+                    'isVariation' => false,
+                    'templateFile' => base64_encode(static::TEMPLATE_FILE_GB_NEW),
+                    'guide' => static::GUIDE_GB_NEW
                 ]
             ],
             [
@@ -410,7 +452,9 @@ class LvaOperatingCentreTest extends MockeryTestCase
                     ],
                     'licNo' => 'AB12345',
                     'applicationId' => 111,
-                    'isVariation' => false
+                    'isVariation' => false,
+                    'templateFile' => base64_encode(static::TEMPLATE_FILE_GB_NEW),
+                    'guide' => static::GUIDE_GB_NEW
                 ]
             ],
             [
@@ -422,7 +466,23 @@ class LvaOperatingCentreTest extends MockeryTestCase
                     'wouldIncreaseRequireAdditionalAdvertisement' => false,
                     'licNo' => 'AB12345',
                     'applicationId' => 111,
-                    'isVariation' => false
+                    'isVariation' => false,
+                    'templateFile' => base64_encode(static::TEMPLATE_FILE_GB_NEW),
+                    'guide' => static::GUIDE_GB_NEW
+                ]
+            ],
+            [
+                [
+                    'id' => 124,
+                    'isPsv' => false,
+                    'canAddAnother' => true,
+                    'canUpdateAddress' => true,
+                    'wouldIncreaseRequireAdditionalAdvertisement' => false,
+                    'licNo' => 'AB12345',
+                    'applicationId' => 111,
+                    'isVariation' => true,
+                    'templateFile' => base64_encode(static::TEMPLATE_FILE_GB_VAR),
+                    'guide' => static::GUIDE_GB_VAR
                 ]
             ]
         ];

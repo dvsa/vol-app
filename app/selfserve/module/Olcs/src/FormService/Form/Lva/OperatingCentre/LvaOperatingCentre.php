@@ -20,10 +20,12 @@ class LvaOperatingCentre extends CommonOperatingCentre
     /** @var \Common\Service\Helper\UrlHelperService */
     protected $url;
 
+    const DEFAULT_ADVERT_TEMPLATE = 'default-guide-oc-advert-gb-new';
+
     /**
      * Alter form
      *
-     * @param Form  $form   Form
+     * @param Form $form Form
      * @param array $params Lva object data
      *
      * @return void
@@ -44,8 +46,8 @@ class LvaOperatingCentre extends CommonOperatingCentre
     /**
      * Set label text in depend from parameters
      *
-     * @param Form    $form        Form
-     * @param boolean $isNi        Is NI
+     * @param Form $form Form
+     * @param boolean $isNi Is NI
      * @param boolean $isVariation Is Variation
      *
      * @return void
@@ -71,12 +73,25 @@ class LvaOperatingCentre extends CommonOperatingCentre
             $guideName .= '-new';
         }
 
+        $templateIdentifier = !$isVariation && !$isNi ? static::DEFAULT_ADVERT_TEMPLATE : $guideName;
+        $templateUrl = $this->getUrl()->fromRoute(
+            'getfile',
+            [
+                'identifier' => base64_encode($templateIdentifier)
+            ],
+            [
+                'query' => [
+                    'slug' => 1
+                ]
+            ]
+        );
         $advertisements->setLabel('lva-operating-centre-radio-label');
         $advertisements->setOption('hint', 'lva-operating-centre-radio-hint');
 
         $guidance = $this->getTranslator()->translateReplace(
             'markup-lva-oc-ad-placed-label-selfserve',
             [
+                $templateUrl,
                 $this->getUrl()->fromRoute('guides/guide', ['guide' => $guideName])
             ]
         );
@@ -94,9 +109,9 @@ class LvaOperatingCentre extends CommonOperatingCentre
     /**
      * Set Send By Post address in depend from parameters
      *
-     * @param Form    $form   Form
-     * @param boolean $isNi   Is NI
-     * @param array   $params Lva object data
+     * @param Form $form Form
+     * @param boolean $isNi Is NI
+     * @param array $params Lva object data
      *
      * @return void
      */
