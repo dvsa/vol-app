@@ -2,9 +2,14 @@ OLCS.ready(function() {
   "use strict";
 
   const BILATERAL_ID = 4;
+  const MOROCCO_ID = 'MA';
 
   var form = "form[name=IrhpPermitPrint]";
   var F = OLCS.formHelper;
+
+  function getCountryValue() {
+    return F.findInput("fields", "country").val();
+  }
 
   function isBilateral() {
     return (parseInt(F.findInput("fields", "irhpPermitType").val(), 10) === BILATERAL_ID);
@@ -15,7 +20,11 @@ OLCS.ready(function() {
   }
 
   function isCountrySelected() {
-    return F.findInput("fields", "country").val().length === 2;
+    return getCountryValue().length === 2;
+  }
+
+  function isMoroccoSelected() {
+    return getCountryValue() === MOROCCO_ID;
   }
 
   function isStockSelected() {
@@ -28,7 +37,7 @@ OLCS.ready(function() {
   }
 
   function isSubmitVisible() {
-    return isStockSelected() && (!isBilateral() || isBilateral() && isRangeTypeSelected());
+    return isStockSelected() && (!isBilateral() || isBilateral() && (isRangeTypeSelected() || isMoroccoSelected()));
   }
 
   $(document).on("change", "#irhpPermitType", function() {
@@ -92,7 +101,7 @@ OLCS.ready(function() {
           return isTypeSelected() && (!isBilateral() || isBilateral() && isCountrySelected());
         },
         "irhpPermitRangeType": function() {
-          return isTypeSelected() && isBilateral() && isStockSelected();
+          return isTypeSelected() && isBilateral() && isStockSelected() && !isMoroccoSelected();
         },
       },
       "form-actions": function() {
