@@ -832,20 +832,6 @@ return [
                             ]
                         ],
                     ],
-                    'admin-partials' => [
-                        'type' => 'Segment',
-                        'options' => [
-                            'route' =>
-                                'partials[/:action][/:id][/]',
-                            'constraints' => [
-                                'action' => '(index|edit|gettext|languages|xhrsearch|details)'
-                            ],
-                            'defaults' => [
-                                'controller' => Admin\Controller\PartialsController::class,
-                                'action' => 'index',
-                            ]
-                        ],
-                    ],
                     'admin-fee-rates' => [
                         'type' => 'Segment',
                         'options' => [
@@ -943,8 +929,7 @@ return [
             Admin\Controller\InterimRefundsController::class =>Admin\Controller\InterimRefundsController::class,
             Admin\Controller\FeeRateController::class => Admin\Controller\FeeRateController::class,
             Admin\Controller\EditableTranslationsController::class => Admin\Controller\EditableTranslationsController::class,
-            Admin\Controller\ReplacementsController::class => Admin\Controller\ReplacementsController::class,
-            Admin\Controller\PartialsController::class => Admin\Controller\PartialsController::class,
+            Admin\Controller\ReplacementsController::class => Admin\Controller\ReplacementsController::class
         ],
     ],
     'view_manager' => [
