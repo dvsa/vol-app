@@ -164,7 +164,17 @@ class DocumentGenerationController extends AbstractDocumentController
 
         $redirectParams['action'] = null;
 
-        return $this->redirectToDocumentRoute($routeParams['type'], 'finalise', $redirectParams);
+        $additionalQueryParams = [
+            'taskId' => $response->getResult()['id']['task']
+        ];
+
+        return $this->redirectToDocumentRoute(
+            $routeParams['type'],
+            'finalise',
+            $redirectParams,
+            false,
+            $additionalQueryParams
+        );
     }
 
     /**

@@ -225,15 +225,20 @@ class DocumentFinaliseController extends AbstractDocumentController
     public function cancelAction()
     {
         if ($this->getRequest()->isPost()) {
+            $queryParams = $this->getRequest()->getQuery()->toArray();
             if ($this->isButtonPressed('yes')) {
                 $this->removeDocument($this->params('doc'));
+                $taskId = $queryParams['taskId'] ?? null;
+                if (! is_null($queryParams['taskId'])) {
+                    $this->closeTask($taskId);
+                }
                 return $this->handleRedirectToDocumentRoute(true);
             }
 
             return $this->redirect()->toRoute(
                 null,
                 ['action' => null],
-                ['query' => $this->getRequest()->getQuery()->toArray()],
+                ['query' => $queryParams],
                 true
             );
         }
