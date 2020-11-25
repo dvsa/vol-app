@@ -5,6 +5,7 @@ namespace Olcs\Controller\Document;
 use Common\Data\Mapper\LetterGenerationDocument;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Document\DeleteDocument;
+use Dvsa\Olcs\Transfer\Command\Task\CloseTasks;
 use Dvsa\Olcs\Transfer\Query\Application\Application;
 use Dvsa\Olcs\Transfer\Query\Cases\Cases;
 use Dvsa\Olcs\Transfer\Query\Document\Letter;
@@ -12,6 +13,7 @@ use Dvsa\Olcs\Transfer\Query as TransferQry;
 use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 use Olcs\Controller\AbstractController;
 use Common\Category;
+use Common\Service\Cqrs\Response;
 
 /**
  * @author Nick Payne <nick.payne@valtech.co.uk>
@@ -107,7 +109,6 @@ abstract class AbstractDocumentController extends AbstractController
      * Deletes a document by id
      *
      * @param int $id Document id
-     *
      * @return \Common\Service\Cqrs\Response
      */
     protected function removeDocument($id)
@@ -116,16 +117,27 @@ abstract class AbstractDocumentController extends AbstractController
     }
 
     /**
+     * Closes a task by id.
+     *
+     * @param int $taskId
+     * @return Response
+     */
+    protected function closeTask(int $taskId): Response
+    {
+        return $this->handleCommand(CloseTasks::create(['ids' => [$taskId]]));
+    }
+
+    /**
      * Redirects to the document route
      *
-     * @param string $type        Type of document
-     * @param string $action      Action to redirect to
-     * @param array  $routeParams Route params
-     * @param bool   $ajax        Whether it's an ajax redirect
-     *
+     * @param string $type Type of document
+     * @param string $action Action to redirect to
+     * @param array $routeParams Route params
+     * @param bool $ajax Whether it's an ajax redirect
+     * @param array $additionaQueryParams Appends additional query params to the ajax request
      * @return \Zend\Http\Response
      */
-    protected function redirectToDocumentRoute($type, $action, $routeParams, $ajax = false)
+    protected function redirectToDocumentRoute($type, $action, $routeParams, $ajax = false, array $additionaQueryParams = [])
     {
         $route = $this->documentRouteMap[$type];
 
@@ -142,13 +154,13 @@ abstract class AbstractDocumentController extends AbstractController
             return $this->redirect()->toRouteAjax(
                 $route,
                 $routeParams,
-                ['query' => $this->getRequest()->getQuery()->toArray()]
+                ['query' => array_merge($this->getRequest()->getQuery()->toArray(), $additionaQueryParams)]
             );
         }
         return $this->redirect()->toRoute(
             $route,
             $routeParams,
-            ['query' => $this->getRequest()->getQuery()->toArray()]
+            ['query' => array_merge($this->getRequest()->getQuery()->toArray(), $additionaQueryParams)]
         );
     }
 
