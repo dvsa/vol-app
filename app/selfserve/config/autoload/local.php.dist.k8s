@@ -108,7 +108,9 @@ return [
     ],
 
     'query_cache' => [
-        //sets the ttl for cqrs cache - note that these caches are also used by internal
+        // whether the cqrs cache is enabled
+        'enabled' => true,
+        // sets the ttl for cqrs cache - note that these caches are also used by internal
         'ttl' => [
             \Dvsa\Olcs\Transfer\Query\CacheableMediumTermQueryInterface::class => 600, //10 minutes
             \Dvsa\Olcs\Transfer\Query\CacheableLongTermQueryInterface::class => 43200, //12 hours
