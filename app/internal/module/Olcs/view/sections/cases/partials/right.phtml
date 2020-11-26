@@ -75,7 +75,7 @@ echo $this->showMarkers(
 
 <?php if (!empty($note) && !$this->isGranted(Common\RefData::PERMISSION_INTERNAL_LIMITED_READ_ONLY)): ?>
     <div class="latest-note">
-        <div class="latest-note__details"><?php echo substr($note, 0, 100); ?></div>
+        <div class="latest-note__details"><?php echo $this->escapeHtml(substr($note, 0, 100)); ?></div>
             <a
                 class="latest-note__link"
                 href="<?php echo $this->url('case_processing_notes', ['case' => $case['id']]); ?>"
