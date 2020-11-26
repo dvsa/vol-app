@@ -55,3 +55,12 @@ $nav = $this->navigation('right-sidebar')
         <?php echo $nav; ?>
     </div>
 <?php endif; ?>
+
+<?php if (!empty($note) && !$this->isGranted(Common\RefData::PERMISSION_INTERNAL_LIMITED_READ_ONLY)): ?>
+    <div class="latest-note">
+        <div class="latest-note__<?php echo ($isPriorityNote ? "priority" : "details"); ?>">
+            <?php echo $this->escapeHtml(substr($note, 0, 100)); ?>
+        </div>
+        <a class="latest-note__link" href="<?php echo $this->url('licence/irhp-application-processing/notes', ['licence' => $irhpPermit['licence']['id'], 'irhpAppId' => $irhpPermit['id']]); ?>">View all notes</a>
+    </div>
+<?php endif; ?>
