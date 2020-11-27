@@ -168,6 +168,15 @@ class UnlicensedOperatorTest extends AbstractFormValidationTestCase
         );
     }
 
+    public function testIsExempt()
+    {
+        $element = ['isExempt'];
+        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementAllowEmpty($element, false);
+        $this->assertFormElementValid($element, 'Y');
+        $this->assertFormElementValid($element, 'N');
+    }
+
     public function testSave()
     {
         $this->assertFormElementActionButton(['form-actions', 'save']);

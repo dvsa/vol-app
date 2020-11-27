@@ -324,6 +324,14 @@ class UserTest extends AbstractFormValidationTestCase
         $this->assertFormElementType($element, OlcsCheckbox::class);
     }
 
+    public function testOsType()
+    {
+        $element = ['userSettings', 'osType'];
+        $this->assertFormElementIsRequired($element, true);
+        $this->assertFormElementAllowEmpty($element, false);
+        $this->assertFormElementDynamicSelect($element);
+    }
+
     public function testUserLoginId()
     {
         $this->assertFormElementIsRequired(
