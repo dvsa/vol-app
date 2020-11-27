@@ -227,6 +227,14 @@ class MyDetailsTest extends AbstractFormValidationTestCase
         $this->assertFormElementCheckbox($element);
     }
 
+    public function testOsType()
+    {
+        $element = ['userSettings', 'osType'];
+        $this->assertFormElementIsRequired($element, true);
+        $this->assertFormElementAllowEmpty($element, false);
+        $this->assertFormElementDynamicSelect($element);
+    }
+
     public function testId()
     {
         $element = ['id'];
