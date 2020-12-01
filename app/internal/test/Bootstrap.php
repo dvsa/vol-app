@@ -46,12 +46,12 @@ class Bootstrap
 
         $mockTranslationLoader = m::mock(TranslationLoader::class);
         $mockTranslationLoader->shouldReceive('load')->andReturn(['default' => ['en_GB' => []]]);
+        $mockTranslationLoader->shouldReceive('loadReplacements')->andReturn([]);
+        $serviceManager->setService(TranslationLoader::class, $mockTranslationLoader);
+
         $pluginManager = new LoaderPluginManager($serviceManager);
         $pluginManager->setService(TranslationLoader::class, $mockTranslationLoader);
-        $translator = $serviceManager->get('translator');
-        $translator->setPluginManager($pluginManager);
-
-        $serviceManager->setService('translator', $translator);
+        $serviceManager->setService('TranslatorPluginManager', $pluginManager);
 
         static::$serviceManager = $serviceManager;
     }
