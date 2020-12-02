@@ -3,7 +3,7 @@ namespace Permits\Controller;
 
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\Create;
-use Dvsa\Olcs\Transfer\Query\Permits\MaxPermittedReached;
+use Dvsa\Olcs\Transfer\Query\Permits\MaxPermittedReachedByStockAndLicence;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
@@ -86,7 +86,7 @@ class LicenceController extends AbstractSelfserveController
 
         if ($licencesAvailable['isEcmtAnnual']) {
             $response = $this->handleQuery(
-                MaxPermittedReached::create([
+                MaxPermittedReachedByStockAndLicence::create([
                     'irhpPermitStock' => $this->routeParams['stock'],
                     'licence' => $params['licence']
                 ])
@@ -95,7 +95,7 @@ class LicenceController extends AbstractSelfserveController
             $result = $response->getResult();
 
             if ($result['maxPermittedReached']) {
-                $config['step'] = IrhpApplicationSection::ROUTE_MAX_PERMITTED_REACHED;
+                $config['step'] = IrhpApplicationSection::ROUTE_MAX_PERMITTED_REACHED_FOR_STOCK;
 
                 $this->redirectParams = [
                     'id' => $this->getCurrentOrganisationId(),

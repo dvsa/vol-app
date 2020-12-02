@@ -25,7 +25,8 @@ use Permits\Controller\IrhpValidPermitsController;
 use Permits\Controller\IrhpPermitsExhaustedController;
 use Permits\Controller\IrhpNotEligibleController;
 use Permits\Controller\IrhpNoLicencesController;
-use Permits\Controller\MaxPermittedReachedController;
+use Permits\Controller\MaxPermittedReachedForStockController;
+use Permits\Controller\MaxPermittedReachedForTypeController;
 use Permits\Controller\QaController;
 use Permits\Controller\QaControllerFactory;
 use Permits\Controller\YearController;
@@ -59,7 +60,8 @@ return [
         IrhpPermitsExhaustedController::class => IrhpPermitsExhaustedController::class,
         IrhpNotEligibleController::class => IrhpNotEligibleController::class,
         IrhpNoLicencesController::class => IrhpNoLicencesController::class,
-        MaxPermittedReachedController::class => MaxPermittedReachedController::class,
+        MaxPermittedReachedForStockController::class => MaxPermittedReachedForStockController::class,
+        MaxPermittedReachedForTypeController::class => MaxPermittedReachedForTypeController::class,
         YearController::class => YearController::class,
         WindowClosedController::class => WindowClosedController::class,
         IrhpStockController::class => IrhpStockController::class,
@@ -496,6 +498,20 @@ return [
                   ],
                   'may_terminate' => false,
               ],
+              'max-permitted-reached-for-type' => [
+                  'type'    => 'segment',
+                  'options' => [
+                      'route'    => '/licence/add/:type/max-permitted-reached',
+                      'defaults' => [
+                          'controller'    => MaxPermittedReachedForTypeController::class,
+                          'action'        => 'generic',
+                      ],
+                      'constraints' => [
+                          'type' => '[0-9]+',
+                      ],
+                  ],
+                  'may_terminate' => true,
+              ],
               'add-licence' => [
                   'type'    => 'segment',
                   'options' => [
@@ -511,12 +527,12 @@ return [
                   ],
                   'may_terminate' => false,
               ],
-              'max-permitted-reached' => [
+              'max-permitted-reached-for-stock' => [
                   'type'    => 'segment',
                   'options' => [
                       'route'    => '/licence/:licence/max-permitted-reached/:type/:stock[/]',
                       'defaults' => [
-                          'controller'    => MaxPermittedReachedController::class,
+                          'controller'    => MaxPermittedReachedForStockController::class,
                           'action'        => 'generic',
                       ],
                       'constraints' => [
