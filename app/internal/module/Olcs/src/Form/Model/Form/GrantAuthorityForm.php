@@ -32,9 +32,15 @@ class GrantAuthorityForm
      *         \Common\RefData::GRANT_AUTHORITY_TR
      *     },
      *     "messages": {
-     *          Zend\Validator\InArray::NOT_IN_ARRAY: "Value selected is invalid"
+     *          Zend\Validator\InArray::NOT_IN_ARRAY: "internal.application.decisions.grant.authority.validation.invalid"
      *     }
      * }})
+     * @Form\Validator({
+     *      "name": "Zend\Validator\NotEmpty",
+     *      "options": {
+     *          "messages":{Zend\Validator\NotEmpty::IS_EMPTY:"internal.application.decisions.grant.authority.validation.invalid"}
+     *      }
+     * })
      */
     public $grantAuthority;
 
