@@ -11,6 +11,8 @@ use Zend\Form\Annotation as Form;
  */
 class Grant
 {
+    const FIELD_GRANT_AUTHORITY = 'grant-authority';
+
     /**
      * @Form\Name("messages")
      * @Form\ComposedObject("Common\Form\Model\Fieldset\Messages")
@@ -28,6 +30,13 @@ class Grant
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\InspectionRequestGrantDetails")
      */
     public $inspectionRequestGrantDetails;
+
+    /**
+     * @Form\Name(\Olcs\Form\Model\Form\Grant::FIELD_GRANT_AUTHORITY)
+     * @Form\Required(true)
+     * @Form\Type("Hidden")
+     */
+    public $grantAuthority;
 
     /**
      * @Form\Name("form-actions")

@@ -1,18 +1,20 @@
 <?php
 
-/**
- * Abstract Internal Grant Controller
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractController;
+use Common\RefData;
+use Common\Service\Helper\FormHelperService;
+use Common\View\Model\Section;
 use Dvsa\Olcs\Transfer\Query\Application\Grant;
+use Olcs\Form\Model\Form\GrantAuthorityForm;
+use Zend\Form\Element\Radio;
 use Zend\Form\Form;
-use Zend\View\Model\ViewModel;
 use Dvsa\Olcs\Transfer\Command\Application\Grant as AppGrantCmd;
 use Dvsa\Olcs\Transfer\Command\Variation\Grant as VarGrantCmd;
+use Olcs\Form\Model\Form\Grant as GrantApplicationForm;
+use Zend\Http\Response;
+use Zend\View\Model\ViewModel;
 
 /**
  * Abstract Internal Grant Controller
@@ -29,9 +31,9 @@ abstract class AbstractGrantController extends AbstractController
     ];
 
     /**
-     * grantAction
+     * Handles requests from users to perform operations related to granting an application.
      *
-     * @return \Common\View\Model\Section|\Zend\Http\Response
+     * @return ViewModel|Response
      */
     public function grantAction()
     {
@@ -41,37 +43,52 @@ abstract class AbstractGrantController extends AbstractController
             $this->getServiceLocator()->get('Helper\FlashMessenger')->addWarningMessage('application-not-granted');
             return $this->redirectToOverview($id);
         }
+        $request = $this->getRequest();
 
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
-        $form = $formHelper->createFormWithRequest('Grant', $this->getRequest());
+        assert($formHelper instanceof FormHelperService, 'Expected instance of FormHelperService');
+        $form = $formHelper->createFormWithRequest(GrantApplicationForm::class, $request);
 
-        $result = $this->handleQuery(Grant::create(['id' => $id]))->getResult();
+        $grantData = $this->handleQuery(Grant::create(['id' => $id]))->getResult();
 
-        if (!$result['canHaveInspectionRequest']) {
+        if (!$grantData['canHaveInspectionRequest']) {
             $formHelper->remove($form, 'inspection-request-details');
             $formHelper->remove($form, 'inspection-request-confirm');
 
-            if ($result['canGrant']) {
+            if ($grantData['canGrant']) {
                 $form->get('messages')->get('message')->setValue('confirm-grant-application');
             }
         }
 
-        if (!$result['canGrant']) {
+        if (!$grantData['canGrant']) {
             $formHelper->remove($form, 'form-actions->grant');
-            $this->addMessages($form, $result['reasons']);
-            return $this->renderForm($form);
+            $this->addMessages($form, $grantData['reasons']);
+            return $this->renderGrantApplicationForm($form);
         }
 
-        if (!$this->getRequest()->isPost()) {
-            return $this->renderForm($form);
+        if (! $request->isPost()) {
+            $form = $formHelper->createFormWithRequest(GrantAuthorityForm::class, $request);
+            return $this->renderGrantAuthorityForm($form, $grantData);
         }
 
-        $postData = (array)$this->getRequest()->getPost();
+        $postData = (array) $request->getPost();
+        if (isset($postData['form-actions']['continue-to-grant'])) {
+            $grantAuthorityForm = $formHelper->createFormWithRequest(GrantAuthorityForm::class, $request);
+            $grantAuthorityForm->setData($postData);
+            if (! $grantAuthorityForm->isValid()) {
+                return $this->renderGrantAuthorityForm($grantAuthorityForm, $grantData);
+            }
+
+            $form->setData([GrantApplicationForm::FIELD_GRANT_AUTHORITY => $postData[GrantAuthorityForm::FIELD_GRANT_AUTHORITY]]);
+            return $this->renderGrantApplicationForm($form);
+        }
 
         $form->setData($postData);
-
         $dtoClass = $this->grantCommandMap[$this->lva];
-        $dtoData = ['id' => $id];
+        $dtoData = [
+            'id' => $id,
+            'grantAuthority' => $postData[GrantApplicationForm::FIELD_GRANT_AUTHORITY],
+        ];
 
         if (isset($postData['inspection-request-confirm']['createInspectionRequest'])) {
             $value = $postData['inspection-request-confirm']['createInspectionRequest'];
@@ -97,12 +114,12 @@ abstract class AbstractGrantController extends AbstractController
 
         if ($response->isClientError()) {
             $this->mapErrors($form, $response->getResult()['messages']);
-            return $this->renderForm($form);
+            return $this->renderGrantApplicationForm($form);
         }
 
         $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentErrorMessage('unknown-error');
 
-        return $this->renderForm($form);
+        return $this->renderGrantApplicationForm($form);
     }
 
     /**
@@ -160,36 +177,58 @@ abstract class AbstractGrantController extends AbstractController
     }
 
     /**
-     * renderForm
+     * Render a grant application form.
      *
      * @param Form $form form
-     *
-     * @return \Common\View\Model\Section
+     * @return Section
      */
-    protected function renderForm($form)
+    protected function renderGrantApplicationForm($form): ViewModel
     {
-        $id = $this->params('application');
-
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
-
         $message = $form->get('messages')->get('message')->getValue();
-
         if (empty($message)) {
-            $formHelper->remove($form, 'messages');
+            $form->remove('messages');
         }
+        return $this->renderForm($form);
+    }
 
-        $formHelper->remove($form, 'form-actions->overview');
-
+    /**
+     * Renders a form.
+     *
+     * @param Form $form
+     * @return ViewModel
+     */
+    protected function renderForm(Form $form): ViewModel
+    {
+        $form->get('form-actions')->remove('overview');
+        $applicationId = $this->params('application');
         $this->getServiceLocator()->get('Script')->loadFiles(['forms/confirm-grant']);
+        $variables = [
+            'route' => 'lva-' . $this->lva,
+            'routeParams' => ['application' => $applicationId],
+        ];
+        return $this->render('grant_application', $form, $variables);
+    }
 
-        return $this->render(
-            'grant_application',
-            $form,
-            [
-                'route' => 'lva-'.$this->lva,
-                'routeParams' => ['application' => $id],
-            ]
-        );
+    /**
+     * Renders a grant authority form.
+     *
+     * @param Form $form
+     * @param array $grantData
+     * @return ViewModel
+     */
+    protected function renderGrantAuthorityForm(Form $form, array $grantData): ViewModel
+    {
+        $radio = $form->get(GrantAuthorityForm::FIELD_GRANT_AUTHORITY);
+        assert($radio instanceof Radio);
+        $valueOptions = $radio->getValueOptions();
+
+        if ('Y' === ($grantData['niFlag'] ?? null)) {
+            unset($valueOptions[RefData::GRANT_AUTHORITY_TC]);
+        } else {
+            unset($valueOptions[RefData::GRANT_AUTHORITY_TR]);
+        }
+        $radio->setValueOptions($valueOptions);
+        return $this->renderForm($form);
     }
 
     /**
