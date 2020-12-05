@@ -2,6 +2,7 @@
 
 namespace OlcsTest\Form\Model\Form;
 
+use Olcs\Form\Model\Form\Grant;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 
 /**
@@ -47,6 +48,14 @@ class GrantTest extends AbstractFormValidationTestCase
             ['inspection-request-grant-details', 'caseworkerNotes'],
             false
         );
+    }
+
+    public function testGrantAuthority()
+    {
+        $element = [Grant::FIELD_GRANT_AUTHORITY];
+        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementAllowEmpty($element, false);
+        $this->assertFormElementValid($element, 'X');
     }
 
     public function testGrant()
