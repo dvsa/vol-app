@@ -7,7 +7,8 @@ use Permits\Controller\Config\DataSource\LicencesAvailable;
 use Permits\Controller\Config\DataSource\AvailableTypes;
 use Permits\Controller\Config\DataSource\AvailableYears;
 use Permits\Controller\Config\DataSource\AvailableStocks;
-use Permits\Controller\Config\DataSource\MaxPermittedReached;
+use Permits\Controller\Config\DataSource\MaxPermittedReachedForStock;
+use Permits\Controller\Config\DataSource\MaxPermittedReachedForType;
 use Permits\Controller\Config\DataSource\PermitApplication as PermitAppDataSource;
 use Permits\Controller\Config\DataSource\PermitsAvailable;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
@@ -33,6 +34,12 @@ class ConditionalDisplayConfig
             'route' => IrhpApplicationSection::ROUTE_WINDOW_CLOSED,
             'key' => 'hasYears',
             'value' => true
+        ],
+        [
+            'source' => MaxPermittedReachedForType::DATA_KEY,
+            'route' => IrhpApplicationSection::ROUTE_MAX_PERMITTED_REACHED_FOR_TYPE,
+            'key' => 'maxPermittedReached',
+            'value' => false
         ],
     ];
 
@@ -66,7 +73,16 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const PERMIT_APP_CAN_SHOW_MAX_PERMITTED_REACHED = [
+    const PERMIT_APP_CAN_SHOW_MAX_PERMITTED_REACHED_FOR_TYPE = [
+        [
+            'source' => MaxPermittedReachedForType::DATA_KEY,
+            'key' => 'maxPermittedReached',
+            'value' => true,
+            'route' => IrhpApplicationSection::ROUTE_PERMITS,
+        ],
+    ];
+
+    const PERMIT_APP_CAN_SHOW_MAX_PERMITTED_REACHED_FOR_STOCK = [
         [
             'source' => LicencesAvailable::DATA_KEY,
             'key' => 'hasOpenWindow',
@@ -86,7 +102,7 @@ class ConditionalDisplayConfig
             'route' => IrhpApplicationSection::ROUTE_NO_LICENCES,
         ],
         [
-            'source' => MaxPermittedReached::DATA_KEY,
+            'source' => MaxPermittedReachedForStock::DATA_KEY,
             'key' => 'maxPermittedReached',
             'value' => true,
             'route' => IrhpApplicationSection::ROUTE_PERMITS,

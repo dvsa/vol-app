@@ -1,0 +1,28 @@
+<?php
+
+namespace Permits\Controller;
+
+use Olcs\Controller\AbstractSelfserveController;
+use Permits\Controller\Config\DataSource\DataSourceConfig;
+use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
+
+class MaxPermittedReachedForTypeController extends AbstractSelfserveController
+{
+    protected $dataSourceConfig = [
+        'generic' => DataSourceConfig::PERMIT_APP_MAX_PERMITTED_REACHED_FOR_TYPE,
+    ];
+
+    protected $conditionalDisplayConfig = [
+        'generic' => ConditionalDisplayConfig::PERMIT_APP_CAN_SHOW_MAX_PERMITTED_REACHED_FOR_TYPE,
+    ];
+
+    protected $templateConfig = [
+        'generic' => 'permits/max-permitted-reached-for-type'
+    ];
+
+    protected $templateVarsConfig = [
+        'generic' => [
+            'browserTitle' => 'permits.page.max-permitted-reached-for-type.browser.title',
+        ]
+    ];
+}

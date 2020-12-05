@@ -32,6 +32,12 @@ class DataSourceConfig
 
     const PERMIT_APP_YEAR = [
         AvailableYears::class => [],
+        MaxPermittedReachedForType::class => [
+            'passInData' => [
+                'key' => 'organisation',
+                'func' => 'getCurrentOrganisationId'
+            ]
+        ],
     ];
 
     const PERMIT_APP_STOCK = [
@@ -47,14 +53,23 @@ class DataSourceConfig
         ],
     ];
 
-    const PERMIT_APP_MAX_PERMITTED_REACHED = [
+    const PERMIT_APP_MAX_PERMITTED_REACHED_FOR_TYPE = [
+        MaxPermittedReachedForType::class => [
+            'passInData' => [
+                'key' => 'organisation',
+                'func' => 'getCurrentOrganisationId'
+            ]
+        ],
+    ];
+
+    const PERMIT_APP_MAX_PERMITTED_REACHED_FOR_STOCK = [
         LicencesAvailable::class => [
             'passInData' => [
                 'key' => 'id',
                 'func' => 'getCurrentOrganisationId'
             ]
         ],
-        MaxPermittedReached::class => [],
+        MaxPermittedReachedForStock::class => [],
     ];
 
     const IRHP_APP_OVERVIEW = [

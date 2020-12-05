@@ -1,0 +1,37 @@
+<?php
+
+use Permits\View\Helper\IrhpApplicationSection;
+
+?>
+<?php echo $this->permitsBackLink('common.link.back.label', IrhpApplicationSection::ROUTE_TYPE); ?>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">
+            <?php echo $this->escapeHtml($this->translate('permits.page.max-permitted-reached-for-type.title')); ?>
+        </h1>
+        <p class="govuk-body"><?php echo $this->escapeHtml($this->translate('permits.page.max-permitted-reached-for-type.paragraph-1')); ?></p>
+        <p><?php
+
+        echo $this->escapeHtml($this->translate('permits.page.max-permitted-reached-for-type.paragraph-2'));
+
+        ?></p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li><?php
+
+            echo sprintf(
+                $this->escapeHtml($this->translate('permits.page.max-permitted-reached-for-type.paragraph-2-bullet')),
+                $this->url(IrhpApplicationSection::ROUTE_TYPE)
+            );
+
+            ?></li>
+        </ul>
+        <p class="govuk-body"><?php
+
+        echo sprintf(
+            $this->escapeHtml($this->translate('permits.page.max-permitted-reached-for-type.paragraph-3')),
+            $this->url(IrhpApplicationSection::ROUTE_PERMITS)
+        );
+
+        ?></p>
+    </div>
+</div>
