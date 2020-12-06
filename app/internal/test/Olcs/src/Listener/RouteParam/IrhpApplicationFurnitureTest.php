@@ -169,6 +169,9 @@ class IrhpApplicationFurnitureTest extends TestCase
             ->shouldReceive('findOneBy')->once()->with('id', 'irhp-application-quick-actions-terminate')->andReturn(
                 m::mock()->shouldReceive('setVisible')->once()->with($expected['isTerminateVisible'])->getMock()
             )
+            ->shouldReceive('findOneBy')->once()->with('id', 'irhp-application-quick-actions-reset-to-not-yet-submitted-from-cancelled')->andReturn(
+                m::mock()->shouldReceive('setVisible')->once()->with($data['canBeResetToNotYetSubmittedFromCancelled'])->getMock()
+            )
             ->shouldReceive('findOneBy')->once()->with('id', 'irhp-application-decisions-submit')->andReturn(
                 m::mock()->shouldReceive('setVisible')->once()->with($expected['isSubmitVisible'])->getMock()
             )
@@ -184,8 +187,8 @@ class IrhpApplicationFurnitureTest extends TestCase
             ->shouldReceive('findOneBy')->once()->with('id', 'irhp-application-decisions-revive-from-unsuccessful')->andReturn(
                 m::mock()->shouldReceive('setVisible')->once()->with($data['canBeRevivedFromUnsuccessful'])->getMock()
             )
-            ->shouldReceive('findOneBy')->once()->with('id', 'irhp-application-decisions-reset-to-not-yet-submitted')->andReturn(
-                m::mock()->shouldReceive('setVisible')->once()->with($data['canBeResetToNotYetSubmitted'])->getMock()
+            ->shouldReceive('findOneBy')->once()->with('id', 'irhp-application-decisions-reset-to-not-yet-submitted-from-valid')->andReturn(
+                m::mock()->shouldReceive('setVisible')->once()->with($data['canBeResetToNotYetSubmittedFromValid'])->getMock()
             );
 
         $mockNavigation->shouldReceive('findOneBy')->once()->with('id', 'licence_irhp_applications-pregrant')->andReturn(
@@ -224,7 +227,8 @@ class IrhpApplicationFurnitureTest extends TestCase
                     'isGrantable' => false,
                     'canBeRevivedFromWithdrawn' => false,
                     'canBeRevivedFromUnsuccessful' => false,
-                    'canBeResetToNotYetSubmitted' => false,
+                    'canBeResetToNotYetSubmittedFromValid' => false,
+                    'canBeResetToNotYetSubmittedFromCancelled' => false,
                 ],
                 [
                     'isCancelVisible' => false,
@@ -246,7 +250,8 @@ class IrhpApplicationFurnitureTest extends TestCase
                     'isGrantable' => false,
                     'canBeRevivedFromWithdrawn' => false,
                     'canBeRevivedFromUnsuccessful' => false,
-                    'canBeResetToNotYetSubmitted' => true,
+                    'canBeResetToNotYetSubmittedFromValid' => true,
+                    'canBeResetToNotYetSubmittedFromCancelled' => true,
                 ],
                 [
                     'isCancelVisible' => false,
@@ -268,7 +273,8 @@ class IrhpApplicationFurnitureTest extends TestCase
                     'isGrantable' => false,
                     'canBeRevivedFromWithdrawn' => false,
                     'canBeRevivedFromUnsuccessful' => false,
-                    'canBeResetToNotYetSubmitted' => false,
+                    'canBeResetToNotYetSubmittedFromValid' => false,
+                    'canBeResetToNotYetSubmittedFromCancelled' => false,
                 ],
                 [
                     'isCancelVisible' => false,
@@ -290,7 +296,8 @@ class IrhpApplicationFurnitureTest extends TestCase
                     'isGrantable' => true,
                     'canBeRevivedFromWithdrawn' => true,
                     'canBeRevivedFromUnsuccessful' => false,
-                    'canBeResetToNotYetSubmitted' => false,
+                    'canBeResetToNotYetSubmittedFromValid' => false,
+                    'canBeResetToNotYetSubmittedFromCancelled' => false,
                 ],
                 [
                     'isCancelVisible' => true,

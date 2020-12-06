@@ -274,6 +274,16 @@ return [
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'
                         ],
+                        [
+                            'id' => 'irhp-application-quick-actions-reset-to-not-yet-submitted-from-cancelled',
+                            'label' => 'Reset',
+                            'route' => 'licence/irhp-application/application',
+                            'params' => [
+                                'action' => 'resetToNotYetSubmittedFromCancelled',
+                            ],
+                            'use_route_match' => true,
+                            'class' => 'action--secondary js-modal-ajax'
+                        ],
                     ],
                 ],
                 [
@@ -334,11 +344,11 @@ return [
                             'class' => 'action--secondary js-modal-ajax'
                         ],
                         [
-                            'id' => 'irhp-application-decisions-reset-to-not-yet-submitted',
+                            'id' => 'irhp-application-decisions-reset-to-not-yet-submitted-from-valid',
                             'label' => 'Reset to Not Yet Submitted',
                             'route' => 'licence/irhp-application/application',
                             'params' => [
-                                'action' => 'resetToNotYetSubmitted'
+                                'action' => 'resetToNotYetSubmittedFromValid'
                             ],
                             'use_route_match' => true,
                             'class' => 'action--secondary js-modal-ajax'

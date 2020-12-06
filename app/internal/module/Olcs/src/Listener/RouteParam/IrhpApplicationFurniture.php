@@ -172,6 +172,8 @@ class IrhpApplicationFurniture implements
             ->setVisible($irhpApplication['canBeCancelled']);
         $sidebarNav->findOneBy('id', 'irhp-application-quick-actions-terminate')
             ->setVisible($irhpApplication['canBeTerminated']);
+        $sidebarNav->findOneBy('id', 'irhp-application-quick-actions-reset-to-not-yet-submitted-from-cancelled')
+            ->setVisible($irhpApplication['canBeResetToNotYetSubmittedFromCancelled']);
 
         // Enable Link to view full permits if app is in Valid status
         if ($irhpApplication['status']['id'] == RefData::PERMIT_APP_STATUS_VALID) {
@@ -209,8 +211,8 @@ class IrhpApplicationFurniture implements
         $sidebarNav->findOneBy('id', 'irhp-application-decisions-revive-from-unsuccessful')
             ->setVisible($irhpApplication['canBeRevivedFromUnsuccessful']);
 
-        $sidebarNav->findOneBy('id', 'irhp-application-decisions-reset-to-not-yet-submitted')
-            ->setVisible($irhpApplication['canBeResetToNotYetSubmitted']);
+        $sidebarNav->findOneBy('id', 'irhp-application-decisions-reset-to-not-yet-submitted-from-valid')
+            ->setVisible($irhpApplication['canBeResetToNotYetSubmittedFromValid']);
 
         $right = new ViewModel();
         $right->setTemplate('sections/irhp-application/partials/right');
