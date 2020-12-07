@@ -19,10 +19,10 @@ use Olcs\Mvc\Controller\ParameterProvider\ParameterProviderInterface;
 use Olcs\Mvc\Controller\Plugin;
 use Common\Controller\Plugin\FeaturesEnabled as FeaturesEnabledPlugin;
 use Olcs\View\Builder\BuilderInterface as ViewBuilderInterface;
-use Zend\Http\Response as HttpResponse;
-use Zend\Mvc\MvcEvent;
-use Zend\Stdlib\ArrayUtils;
-use Zend\View\Model\ViewModel;
+use Laminas\Http\Response as HttpResponse;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Stdlib\ArrayUtils;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Abstract class to extend for BASIC list/edit/delete functions
@@ -559,7 +559,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
         $this->placeholder()->setPlaceholder('form', $form);
         $this->placeholder()->setPlaceholder('contentTitle', $contentTitle);
 
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
 
         if ($request->isPost()) {
@@ -625,7 +625,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
         Logger::debug(__FILE__);
         Logger::debug(__METHOD__);
 
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         $action = ucfirst($this->params()->fromRoute('action'));
         $form = $this->getForm($formClass);
@@ -993,7 +993,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
      */
     private function hasCancelledForm()
     {
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
 
         if (!$request->isPost()) {
@@ -1096,7 +1096,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
      */
     public function isButtonPressed($button, $data = null)
     {
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
 
         if (is_null($data)) {

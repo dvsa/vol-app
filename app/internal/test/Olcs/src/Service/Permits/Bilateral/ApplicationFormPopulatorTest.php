@@ -11,10 +11,10 @@ use Olcs\Service\Permits\Bilateral\ApplicationFormPopulator;
 use Olcs\Service\Permits\Bilateral\CountryFieldsetGenerator;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
-use Zend\Form\Element\Hidden;
-use Zend\Form\Factory as FormFactory;
-use Zend\Form\Fieldset;
-use Zend\Form\Form;
+use Laminas\Form\Element\Hidden;
+use Laminas\Form\Factory as FormFactory;
+use Laminas\Form\Fieldset;
+use Laminas\Form\Form;
 
 /**
  * ApplicationFormPopulator Test

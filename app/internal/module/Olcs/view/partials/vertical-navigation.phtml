@@ -1,6 +1,6 @@
 <ul class="vertical-navigation" role="menu">
     <?php
-    /** @var \Zend\Navigation\Page\AbstractPage $page */
+    /** @var \Laminas\Navigation\Page\AbstractPage $page */
     foreach ($this->container as $page) : ?>
         <?php
 
@@ -21,7 +21,7 @@
                     <?php
                         $tableFilters = $this->placeholder('tableFilters')->getValue();
 
-                        if($tableFilters instanceof \Zend\Form\Form) {
+                        if($tableFilters instanceof \Laminas\Form\Form) {
                             echo $this->form($tableFilters);
                         }
                     ?>

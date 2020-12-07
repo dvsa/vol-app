@@ -14,12 +14,12 @@ class Addresses extends CommonAddresses
     /**
      * Alter Form
      *
-     * @param \Zend\Form\Form $form   Form
+     * @param \Laminas\Form\Form $form   Form
      * @param array           $params Params
      *
      * @return void
      */
-    protected function alterForm(\Zend\Form\Form $form, array $params)
+    protected function alterForm(\Laminas\Form\Form $form, array $params)
     {
         $form->get('form-actions')->get('save')->setLabel('internal.save.button');
 
@@ -28,7 +28,7 @@ class Addresses extends CommonAddresses
         $contact = $form->getInputFilter()->get('contact');
 
         //  change email settings
-        /** @var \Zend\InputFilter\Input $emailElm */
+        /** @var \Laminas\InputFilter\Input $emailElm */
         $emailElm = $contact->get('email');
         $emailElm->setRequired(false);
 

@@ -55,7 +55,7 @@ class DisqualifyControllerTest extends MockeryTestCase
         $mockFormHelper->shouldReceive('createForm')->with('Disqualify')->once()->andReturn($mockForm);
         $mockFormHelper->shouldReceive('setFormActionFromRequest')->with($mockForm, $mockRequest)->once();
         $mockFormHelper->shouldReceive('attachValidator')
-            ->with($mockForm, 'isDisqualified', m::type(\Zend\Validator\Identical::class))->once();
+            ->with($mockForm, 'isDisqualified', m::type(\Laminas\Validator\Identical::class))->once();
 
         $this->sut->shouldReceive('getServiceLocator->get')->with('Helper\Form')->once()->andReturn($mockFormHelper);
 
@@ -172,7 +172,7 @@ class DisqualifyControllerTest extends MockeryTestCase
         $mockFormHelper->shouldReceive('createForm')->with('Disqualify')->once()->andReturn($mockForm);
         $mockFormHelper->shouldReceive('setFormActionFromRequest')->with($mockForm, $mockRequest)->once();
         $mockFormHelper->shouldReceive('attachValidator')
-            ->with($mockForm, 'isDisqualified', m::type(\Zend\Validator\Identical::class))->once();
+            ->with($mockForm, 'isDisqualified', m::type(\Laminas\Validator\Identical::class))->once();
 
         $this->sut->shouldReceive('getServiceLocator->get')->with('Helper\Form')->once()->andReturn($mockFormHelper);
 

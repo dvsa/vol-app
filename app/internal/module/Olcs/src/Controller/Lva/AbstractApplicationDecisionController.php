@@ -4,7 +4,7 @@ namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractController;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Abstract Internal Application Decsision Controller
@@ -21,17 +21,17 @@ abstract class AbstractApplicationDecisionController extends AbstractController 
     /**
      * indexAction
      *
-     * @return \Common\View\Model\Section|\Zend\Http\Response
+     * @return \Common\View\Model\Section|\Laminas\Http\Response
      */
     public function indexAction()
     {
         $helperFlashMsgr = $this->getServiceLocator()->get('Helper\FlashMessenger');
 
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         $id      = $this->params('application');
 
-        /** @var \Zend\Form\FormInterface $form */
+        /** @var \Laminas\Form\FormInterface $form */
         $form    = $this->getForm();
 
         if ($request->isPost()) {
@@ -81,7 +81,7 @@ abstract class AbstractApplicationDecisionController extends AbstractController 
     /**
      * getForm
      *
-     * @return \Zend\Form\FormInterface
+     * @return \Laminas\Form\FormInterface
      */
     abstract protected function getForm();
 
@@ -90,7 +90,7 @@ abstract class AbstractApplicationDecisionController extends AbstractController 
      *
      * @param string $applicationId applicationId
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     protected function redirectToOverview($applicationId)
     {

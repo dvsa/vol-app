@@ -4,7 +4,7 @@ namespace AdminTest\Form\Model\Form;
 
 use Admin\Form\Model\Form\PublishedPublicationFilter;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
-use Zend\Form\Element\Select;
+use Laminas\Form\Element\Select;
 
 class PublishedPublicationFilterTest extends AbstractFormValidationTestCase
 {

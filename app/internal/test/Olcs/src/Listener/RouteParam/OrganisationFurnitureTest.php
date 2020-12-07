@@ -14,7 +14,7 @@ use Olcs\Event\RouteParam;
 use Mockery as m;
 use Olcs\Listener\RouteParam\OrganisationFurniture;
 use Olcs\Listener\RouteParams;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Organisation Furniture Test
@@ -46,7 +46,7 @@ class OrganisationFurnitureTest extends MockeryTestCase
 
     public function testAttach()
     {
-        $mockEventManager = m::mock('Zend\EventManager\EventManagerInterface');
+        $mockEventManager = m::mock('Laminas\EventManager\EventManagerInterface');
         $mockEventManager->shouldReceive('attach')->once()
             ->with(RouteParams::EVENT_PARAM . 'organisation', [$this->sut, 'onOrganisation'], 1);
 
@@ -127,7 +127,7 @@ class OrganisationFurnitureTest extends MockeryTestCase
             )
             ->getMock();
 
-        $mockViewHelperManager = m::mock('\Zend\View\HelperPluginManager')
+        $mockViewHelperManager = m::mock('\Laminas\View\HelperPluginManager')
             ->shouldReceive('get')->once()->with('placeholder')->andReturn($mockPlaceholder)
             ->getMock();
 
@@ -207,7 +207,7 @@ class OrganisationFurnitureTest extends MockeryTestCase
             )
             ->getMock();
 
-        $mockViewHelperManager = m::mock('\Zend\View\HelperPluginManager')
+        $mockViewHelperManager = m::mock('\Laminas\View\HelperPluginManager')
             ->shouldReceive('get')->once()->with('placeholder')->andReturn($mockPlaceholder)
             ->getMock();
 
@@ -223,11 +223,11 @@ class OrganisationFurnitureTest extends MockeryTestCase
 
     public function testCreateService()
     {
-        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
+        $mockViewHelperManager = m::mock('Laminas\View\HelperPluginManager');
         $mockQuerySender = m::mock(QuerySender::class);
         $mockCommandSender = m::mock(CommandSender::class);
 
-        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockSl = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('QuerySender')->andReturn($mockQuerySender);
         $mockSl->shouldReceive('get')->with('CommandSender')->andReturn($mockCommandSender);

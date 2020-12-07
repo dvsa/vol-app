@@ -17,7 +17,7 @@ use Olcs\Data\Mapper\NonPi as MapperClass;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Form\Model\Form\NonPi as FormClass;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Case Conviction Controller

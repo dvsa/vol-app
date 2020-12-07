@@ -2,12 +2,12 @@
 
 namespace Olcs\Form\Model\Form;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("search")
  * @Form\Attributes({"method":"GET", "action": "/search"})
- * @Form\Hydrator("Zend\Stdlib\Hydrator\ArraySerializable")
+ * @Form\Hydrator("Laminas\Stdlib\Hydrator\ArraySerializable")
  */
 class HeaderSearch
 {

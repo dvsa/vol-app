@@ -4,7 +4,7 @@ namespace OlcsTest\Form\Model\Form;
 
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 use Common\Validator\Date as CommonDateValidation;
-use Zend\Validator\Date as ZendDateValidation;
+use Laminas\Validator\Date as ZendDateValidation;
 
 /**
  * Class EnvironmentalComplaintTest

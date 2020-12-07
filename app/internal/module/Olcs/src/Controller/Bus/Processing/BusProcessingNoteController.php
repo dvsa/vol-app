@@ -17,7 +17,7 @@ use Olcs\Form\Model\Form\NoteEdit as EditForm;
 use Olcs\Form\Model\Form\NoteFilter as FilterForm;
 use Olcs\Data\Mapper\BusRegNotes as Mapper;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\Traits\NotesProcessingTrait;
 
 /**

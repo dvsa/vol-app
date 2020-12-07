@@ -11,7 +11,7 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
 use Olcs\Data\Mapper\OperatorPeople as Mapper;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * OperatorPeopleController
@@ -85,7 +85,7 @@ class OperatorPeopleController extends AbstractInternalController implements
      *
      * @param array $data Organisation Data
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     private function soleTrader($data)
     {
@@ -103,7 +103,7 @@ class OperatorPeopleController extends AbstractInternalController implements
      *
      * @param array $data Organisation Data
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     private function notSoleTrader($data)
     {
@@ -184,9 +184,9 @@ class OperatorPeopleController extends AbstractInternalController implements
     /**
      * Alter the Add form
      *
-     * @param \Zend\Form\Form $form Form
+     * @param \Laminas\Form\Form $form Form
      *
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     protected function alterFormForAdd($form)
     {
@@ -196,9 +196,9 @@ class OperatorPeopleController extends AbstractInternalController implements
     /**
      * Alter the Edit form
      *
-     * @param \Zend\Form\Form $form Form
+     * @param \Laminas\Form\Form $form Form
      *
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     protected function alterFormForEdit($form)
     {
@@ -208,9 +208,9 @@ class OperatorPeopleController extends AbstractInternalController implements
     /**
      * Alter the Edit form, when called from IndexAction ie if org is a sole trader
      *
-     * @param \Zend\Form\Form $form Form
+     * @param \Laminas\Form\Form $form Form
      *
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     protected function alterFormForIndex($form)
     {
@@ -220,10 +220,10 @@ class OperatorPeopleController extends AbstractInternalController implements
     /**
      * Alter the add/edit form
      *
-     * @param \Zend\Form\Form $form                 Form
+     * @param \Laminas\Form\Form $form                 Form
      * @param bool            $showAddAnotherButton is Show Add Another button
      *
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     protected function alterForm($form, $showAddAnotherButton = false)
     {

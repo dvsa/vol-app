@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Form\Filter;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("operator-application-filters")
@@ -37,7 +37,7 @@ class OperatorApplication
      *     "label": "tasks.submit.filter",
      *     "empty_option": "ch_alert_reason.all"
      * })
-     * @Form\Type("\Zend\Form\Element\Button")
+     * @Form\Type("\Laminas\Form\Element\Button")
      */
     public $filter = null;
 }

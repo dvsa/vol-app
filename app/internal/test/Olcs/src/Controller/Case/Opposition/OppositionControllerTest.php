@@ -51,17 +51,17 @@ class OppositionControllerTest extends MockeryTestCase
 
         $sut->shouldReceive('getCaseWithOppositionDates')->andReturn($data);
 
-        $form = new \Zend\Form\Form();
+        $form = new \Laminas\Form\Form();
 
-        $fieldset = new \Zend\Form\Fieldset('fields');
+        $fieldset = new \Laminas\Form\Fieldset('fields');
 
-        $appOcList = new \Zend\Form\Element\Select('applicationOperatingCentres');
+        $appOcList = new \Laminas\Form\Element\Select('applicationOperatingCentres');
         $fieldset->add($appOcList);
 
-        $licOcList = new \Zend\Form\Element\Select('licenceOperatingCentres');
+        $licOcList = new \Laminas\Form\Element\Select('licenceOperatingCentres');
         $fieldset->add($licOcList);
 
-        $oppositonType = new \Zend\Form\Element\Select('oppositionType');
+        $oppositonType = new \Laminas\Form\Element\Select('oppositionType');
         $oppositonType->setValueOptions(
             [
                 'otf_eob' => 'Environmental objection',

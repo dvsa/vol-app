@@ -22,9 +22,9 @@ use Olcs\Form\Model\Form\BusRegUpdateStatus as UpdateStatusForm;
 use Olcs\Form\Model\Form\BusRegVariationReason as VariationReasonForm;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Common\RefData;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
-use \Zend\Http\Response;
+use \Laminas\Http\Response;
 
 /**
  * Bus Processing Decision Controller

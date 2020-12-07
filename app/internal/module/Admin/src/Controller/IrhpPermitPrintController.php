@@ -8,7 +8,7 @@ use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Dvsa\Olcs\Transfer\Command\Permits\PrintPermits as PrintPermitsDto;
 use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrint as ListDto;
 use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintConfirm as ConfirmListDto;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * IRHP Permits Stock Print Controller
@@ -68,11 +68,11 @@ class IrhpPermitPrintController extends AbstractInternalController implements Le
     /**
      * Action: index
      *
-     * @return \Zend\Http\Response|ViewModel
+     * @return \Laminas\Http\Response|ViewModel
      */
     public function indexAction()
     {
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
 
         $form = $this->getForm('IrhpPermitPrint');
@@ -110,7 +110,7 @@ class IrhpPermitPrintController extends AbstractInternalController implements Le
     /**
      * List Action
      *
-     * @return ViewModel | \Zend\Http\Response
+     * @return ViewModel | \Laminas\Http\Response
      */
     public function listAction()
     {
@@ -122,7 +122,7 @@ class IrhpPermitPrintController extends AbstractInternalController implements Le
     /**
      * Confirm Action
      *
-     * @return ViewModel | \Zend\Http\Response
+     * @return ViewModel | \Laminas\Http\Response
      */
     public function confirmAction()
     {
@@ -164,7 +164,7 @@ class IrhpPermitPrintController extends AbstractInternalController implements Le
     /**
      * Print Action
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function printAction()
     {
@@ -178,7 +178,7 @@ class IrhpPermitPrintController extends AbstractInternalController implements Le
     /**
      * Cancel Action
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function cancelAction()
     {

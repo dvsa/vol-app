@@ -3,7 +3,7 @@
 namespace OlcsTest\Form\Model\Form;
 
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
-use Zend\Validator\GreaterThan;
+use Laminas\Validator\GreaterThan;
 
 /**
  * Class GracePeriodTest

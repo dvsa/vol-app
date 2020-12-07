@@ -3,7 +3,7 @@
 namespace Admin\Form\Model\Fieldset;
 
 use Common\Form\Model\Form\Traits\IdTrait;
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore No methods
@@ -15,7 +15,7 @@ class SystemInfoMessageDetails
     use IdTrait;
 
     /**
-     * @Form\Type("Zend\Form\Element\Radio")
+     * @Form\Type("Laminas\Form\Element\Radio")
      * @form\Required(true)
      * @Form\Options({
      *     "label": "Display to:",
@@ -47,8 +47,8 @@ class SystemInfoMessageDetails
      * @Form\Options({
      *     "label":"Message",
      * })
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength", "options":{"max":1024}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength", "options":{"max":1024}})
      */
     public $description;
 

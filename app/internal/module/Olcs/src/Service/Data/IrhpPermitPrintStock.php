@@ -7,8 +7,8 @@ use Common\Service\Data\AbstractDataService;
 use Common\Service\Data\ListDataInterface;
 use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintStock;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class IrhpPermitPrintStock

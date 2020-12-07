@@ -20,9 +20,9 @@ class LicenceTrailers extends CommonLicenceTrailers
     /**
      * Make form alterations
      *
-     * @param \Zend\Form\Form $form
+     * @param \Laminas\Form\Form $form
      * @param TableBuilder $table
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     protected function alterForm($form, $table)
     {

@@ -14,8 +14,8 @@ use Olcs\Listener\RouteParam\CasesFurniture;
 use Olcs\Listener\RouteParams;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
-use Zend\View\Helper\Url;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Helper\Url;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Cases Furniture Test
@@ -49,7 +49,7 @@ class CasesFurnitureTest extends MockeryTestCase
 
     public function testAttach()
     {
-        $mockEventManager = m::mock('Zend\EventManager\EventManagerInterface');
+        $mockEventManager = m::mock('Laminas\EventManager\EventManagerInterface');
         $mockEventManager->shouldReceive('attach')->once()
             ->with(RouteParams::EVENT_PARAM . 'case', [$this->sut, 'onCase'], 1);
 
@@ -119,7 +119,7 @@ class CasesFurnitureTest extends MockeryTestCase
             )
             ->getMock();
 
-        $mockViewHelperManager = m::mock('\Zend\View\HelperPluginManager')
+        $mockViewHelperManager = m::mock('\Laminas\View\HelperPluginManager')
             ->shouldReceive('get')->once()->with('placeholder')->andReturn($mockPlaceholder)
             ->shouldReceive('get')->once()->with('url')->andReturn(
                 m::mock(Url::class)
@@ -146,11 +146,11 @@ class CasesFurnitureTest extends MockeryTestCase
 
     public function testCreateService()
     {
-        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
+        $mockViewHelperManager = m::mock('Laminas\View\HelperPluginManager');
         $mockQuerySender = m::mock(QuerySender::class);
         $mockCommandSender = m::mock(CommandSender::class);
 
-        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockSl = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('QuerySender')->andReturn($mockQuerySender);
         $mockSl->shouldReceive('get')->with('CommandSender')->andReturn($mockCommandSender);

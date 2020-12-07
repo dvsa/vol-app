@@ -8,7 +8,7 @@
 namespace Olcs\Controller\Traits;
 
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 
 /**

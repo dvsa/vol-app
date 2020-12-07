@@ -2,7 +2,7 @@
 
 namespace Admin\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 use Common\Form\Model\Form\Traits\IdTrait;
 use Common\Form\Model\Form\Traits\VersionTrait;
 
@@ -20,8 +20,8 @@ class TeamDetails
      * @Form\Attributes({"placeholder":"","class":"medium"})
      * @Form\Options({"label":"Name"})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":70}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":70}})
      */
     public $name = null;
 
@@ -29,8 +29,8 @@ class TeamDetails
      * @Form\Attributes({"placeholder":"","class":"medium"})
      * @Form\Options({"label":"Description"})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":255}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":255}})
      */
     public $description = null;
 

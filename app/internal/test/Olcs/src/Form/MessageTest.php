@@ -19,13 +19,13 @@ class MessageTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $this->sut = new \Olcs\Form\Message();
 
         $messageElement = new \Common\Form\Elements\Types\HtmlTranslated('message');
-        $okButtonElement = new \Zend\Form\Element('ok');
+        $okButtonElement = new \Laminas\Form\Element('ok');
 
-        $messageFieldSet = new \Zend\Form\Fieldset('messages');
+        $messageFieldSet = new \Laminas\Form\Fieldset('messages');
         $messageFieldSet->add($messageElement);
         $this->sut->add($messageFieldSet);
 
-        $formActionsFieldSet = new \Zend\Form\Fieldset('form-actions');
+        $formActionsFieldSet = new \Laminas\Form\Fieldset('form-actions');
         $formActionsFieldSet->add($okButtonElement);
         $this->sut->add($formActionsFieldSet);
 

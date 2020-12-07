@@ -14,7 +14,7 @@ use Dvsa\Olcs\Transfer\Command\Operator\Update as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Operator\BusinessDetails as BusinessDetailsDto;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\OperatorBusinessDetails as Mapper;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Operator Business Details Controller
@@ -45,7 +45,7 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
     /**
      * Index action
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function indexAction()
     {
@@ -127,18 +127,15 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
             $companyNumber = $post['operator-details']['companyNumber']['company_number'];
             $detailsFieldset = 'operator-details';
             $addressFieldset = 'registeredAddress';
-            if($this->isValidCompanyNumber($companyNumber)) {
+            if ($this->isValidCompanyNumber($companyNumber)) {
                 $form = $this->populateCompanyDetails($formHelper, $form, $detailsFieldset, $addressFieldset, $companyNumber);
-            }
-            else
-            {
+            } else {
                 $formHelper->setInvalidCompanyNumberErrors($form, $detailsFieldset);
             }
             $validateAndSave = false;
         }
 
         if ($this->getRequest()->isPost() && $validateAndSave) {
-
             $action = $operator ? 'edit' : 'add';
             $response = $this->saveForm($form, $action);
 
@@ -183,7 +180,7 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
     /**
      * saveConfirmForm
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     protected function saveConfirmForm()
     {
@@ -211,7 +208,7 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
     /**
      * Save form
      *
-     * @param \Zend\Form\Form $form        form
+     * @param \Laminas\Form\Form $form        form
      * @param string          $action      action
      * @param string          $routePrefix routePrefix
      *
@@ -222,13 +219,11 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
         $postData = (array)$this->getRequest()->getPost();
 
         if ($action === 'edit' && isset($postData['custom'])) {
-
             $dtoData = json_decode($postData['custom'], true);
             $dtoData['confirm'] = true;
 
             $commandClass = $this->updateDtoClass;
             $dto = $commandClass::create($dtoData);
-
         } else {
             $form->setData($postData);
 
@@ -314,10 +309,10 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
      * Make form alterations
      *
      * @param string          $businessType businessType
-     * @param \Zend\Form\Form $form         form
+     * @param \Laminas\Form\Form $form         form
      * @param int             $operatorId   operatorId
      *
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     private function makeFormAlterations($businessType, $form, $operatorId)
     {
@@ -390,7 +385,7 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
      * @param int    $orgId       orgId
      * @param string $routePrefix routePrefix
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     protected function redirectToBusinessDetails($orgId, $routePrefix = 'operator')
     {

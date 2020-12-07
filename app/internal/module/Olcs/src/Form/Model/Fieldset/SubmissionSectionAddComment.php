@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
@@ -32,9 +32,9 @@ class SubmissionSectionAddComment extends Base
      *     }
      * })
      * @Form\Type("TextArea")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Filter({"name":"htmlpurifier"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5}})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":5}})
      */
     public $comment = null;
 }

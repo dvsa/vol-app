@@ -4,8 +4,8 @@ namespace Olcs\Controller\Document;
 
 use Common\Util\FileContent;
 use Dvsa\Olcs\Transfer\Command\Document\Upload;
-use Zend\Form\Form;
-use Zend\View\Model\ViewModel;
+use Laminas\Form\Form;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Document Generation Controller
@@ -26,7 +26,7 @@ class DocumentUploadController extends AbstractDocumentController
      */
     public function uploadAction()
     {
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
 
         if ($request->isPost()) {
@@ -62,7 +62,7 @@ class DocumentUploadController extends AbstractDocumentController
      * @param array $data Form data
      * @param Form  $form Form to display messages
      *
-     * @return Form|\Zend\Http\Response
+     * @return Form|\Laminas\Http\Response
      */
     public function processUpload($data, Form $form)
     {

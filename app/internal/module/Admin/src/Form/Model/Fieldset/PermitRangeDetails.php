@@ -2,7 +2,7 @@
 
 namespace Admin\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 use Common\Form\Model\Form\Traits\IdTrait;
 
 /**
@@ -52,8 +52,8 @@ class PermitRangeDetails
      *      "required": "false"
      * })
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":7}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":7}})
      * @Form\Required(false)
      */
     public $prefix = null;
@@ -64,10 +64,10 @@ class PermitRangeDetails
      * @Form\Options({
      *      "label":"Permit Number Range From",
      * })
-     * @Form\Validator({"name":"Zend\Validator\Digits"})
-     * @Form\Type("Zend\Form\Element\Number")
+     * @Form\Validator({"name":"Laminas\Validator\Digits"})
+     * @Form\Type("Laminas\Form\Element\Number")
      * @Transfer\Validator({
-     *      "name": "Zend\Validator\GreaterThan",
+     *      "name": "Laminas\Validator\GreaterThan",
      *      "options": {
      *          "min": "0"
      *      }
@@ -81,10 +81,10 @@ class PermitRangeDetails
      * @Form\Options({
      *      "label":"Permit Number Range To",
      * })
-     * @Form\Validator({"name":"Zend\Validator\Digits"})
-     * @Form\Type("Zend\Form\Element\Number")
+     * @Form\Validator({"name":"Laminas\Validator\Digits"})
+     * @Form\Type("Laminas\Form\Element\Number")
      * @Transfer\Validator({
-     *      "name": "Zend\Validator\GreaterThan",
+     *      "name": "Laminas\Validator\GreaterThan",
      *      "options": {
      *          "min": "0"
      *      }

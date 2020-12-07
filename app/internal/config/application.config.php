@@ -71,12 +71,12 @@ $config = array(
     // )
 
     // Initial configuration with which to seed the ServiceManager.
-    // Should be compatible with Zend\ServiceManager\Config.
+    // Should be compatible with Laminas\ServiceManager\Config.
     // 'service_manager' => array(),
 );
 
-if (file_exists(__DIR__ . '/../vendor/zendframework/zend-developer-tools/Module.php')) {
-    array_unshift($config['modules'], 'ZendDeveloperTools');
+if (file_exists(__DIR__ . '/../vendor/laminas/laminas-developer-tools/Module.php')) {
+    array_unshift($config['modules'], 'Laminas\DeveloperTools');
 }
 
 return $config;

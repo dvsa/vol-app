@@ -9,7 +9,7 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
 use Olcs\Controller\Traits;
 use Olcs\Data\Mapper\OperatorTransfer as OperatorTransferMapper;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Operator Controller
@@ -47,7 +47,7 @@ class OperatorController extends AbstractController implements OperatorControlle
     /**
      * Redirect to the first menu section
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function indexJumpAction()
     {
@@ -57,11 +57,11 @@ class OperatorController extends AbstractController implements OperatorControlle
     /**
      * Process action - Application
      *
-     * @return \Zend\Http\Response|ViewModel
+     * @return \Laminas\Http\Response|ViewModel
      */
     public function newApplicationAction()
     {
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
 
         if ($request->isPost()) {
@@ -72,7 +72,7 @@ class OperatorController extends AbstractController implements OperatorControlle
 
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
-        /** @var \Zend\Form\FormInterface $form */
+        /** @var \Laminas\Form\FormInterface $form */
         $form = $formHelper->createForm('NewApplication');
         $form->setData($data);
         $this->alterForm($form, $data);
@@ -124,7 +124,7 @@ class OperatorController extends AbstractController implements OperatorControlle
     /**
      * Alter form
      *
-     * @param \Zend\Form\FormInterface $form Form
+     * @param \Laminas\Form\FormInterface $form Form
      * @param array                    $data Api/Form Data
      *
      * @return void
@@ -141,8 +141,7 @@ class OperatorController extends AbstractController implements OperatorControlle
                 ->setValueOptions($organisationData['taValueOptions']);
         }
 
-        if (
-            isset($data['details']['trafficArea'])
+        if (isset($data['details']['trafficArea'])
             && $data['details']['trafficArea'] === RefData::NORTHERN_IRELAND_TRAFFIC_AREA_CODE
         ) {
             $form->getInputFilter()->get('type-of-licence')->get('operator-type')->setRequired(false);
@@ -177,7 +176,7 @@ class OperatorController extends AbstractController implements OperatorControlle
     /**
      * Transfer associated entities from one Operator to another
      *
-     * @return \Zend\Http\Response|ViewModel
+     * @return \Laminas\Http\Response|ViewModel
      */
     public function mergeAction()
     {
@@ -186,7 +185,7 @@ class OperatorController extends AbstractController implements OperatorControlle
         $sl = $this->getServiceLocator();
         $sl->get(\Olcs\Service\Data\Licence::class)->setOrganisationId($organisationId);
 
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $data = (array)$request->getPost();
@@ -262,12 +261,12 @@ class OperatorController extends AbstractController implements OperatorControlle
     /**
      * Ajax lookup of organisation name
      *
-     * @return \Zend\View\Model\JsonModel
+     * @return \Laminas\View\Model\JsonModel
      */
     public function lookupAction()
     {
         $organisationId = (int) $this->params()->fromQuery('organisation');
-        $view = new \Zend\View\Model\JsonModel();
+        $view = new \Laminas\View\Model\JsonModel();
 
         $data = $this->getOrganisation($organisationId);
         if (!$data) {

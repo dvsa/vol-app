@@ -24,7 +24,7 @@ class SubmissionSectionTableTest extends TestCase
     {
         $sut = new SubmissionSectionTable();
 
-        $mockView = m::mock('\Zend\View\Renderer\PhpRenderer');
+        $mockView = m::mock('\Laminas\View\Renderer\PhpRenderer');
 
         $mockViewHelper = m::mock('Olcs\View\Helper\SubmissionSectionTable');
 
@@ -63,8 +63,8 @@ class SubmissionSectionTableTest extends TestCase
     {
         $mockTableBuilder = m::mock('\Common\Service\Table\TableFactory');
 
-        $mockSm = m::mock('\Zend\ServiceManager\ServiceManager');
-        $mockSl = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockSm = m::mock('\Laminas\ServiceManager\ServiceManager');
+        $mockSl = m::mock('\Laminas\ServiceManager\ServiceManager');
 
         $mockSm->shouldReceive('getServiceLocator')
             ->andReturn($mockSl);

@@ -2,10 +2,10 @@
 
 namespace Olcs\View\Helper;
 
-use Zend\I18n\Translator\TranslatorInterface as Translator;
-use Zend\I18n\Translator\TranslatorAwareInterface;
-use Zend\View\Helper\AbstractHelper;
-use Zend\Form\Exception;
+use Laminas\I18n\Translator\TranslatorInterface as Translator;
+use Laminas\I18n\Translator\TranslatorAwareInterface;
+use Laminas\View\Helper\AbstractHelper;
+use Laminas\Form\Exception;
 use Olcs\View\Helper\SubmissionSectionOverview;
 
 /**
@@ -121,14 +121,17 @@ class SubmissionSectionDetails extends AbstractHelper
         }
         $markup = '';
         if (isset($this->typeMap[$submissionSection])) {
-
             if (is_array($this->typeMap[$submissionSection])) {
                 foreach ($this->typeMap[$submissionSection] as $type) {
                     $markup .= $this->renderHelper($type, $submissionSection, $data, $readonly, $submissionVersion);
                 }
             } else {
                 $markup .= $this->renderHelper(
-                    $this->typeMap[$submissionSection], $submissionSection, $data, $readonly, $submissionVersion
+                    $this->typeMap[$submissionSection],
+                    $submissionSection,
+                    $data,
+                    $readonly,
+                    $submissionVersion
                 );
             }
             return $markup;

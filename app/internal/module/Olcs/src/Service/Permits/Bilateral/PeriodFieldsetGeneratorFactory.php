@@ -2,9 +2,9 @@
 
 namespace Olcs\Service\Permits\Bilateral;
 
-use Zend\Form\Factory as FormFactory;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\Form\Factory as FormFactory;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class PeriodFieldsetGeneratorFactory implements FactoryInterface
 {

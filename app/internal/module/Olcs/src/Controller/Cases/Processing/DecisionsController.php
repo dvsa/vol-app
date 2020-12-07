@@ -11,8 +11,8 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Common\Exception\ResourceNotFoundException;
-use Zend\View\Model\ConsoleModel;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ConsoleModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Case Decisions Controller
@@ -51,7 +51,7 @@ class DecisionsController extends AbstractInternalController implements CaseCont
     /**
      * index Action
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function indexAction()
     {
@@ -73,7 +73,7 @@ class DecisionsController extends AbstractInternalController implements CaseCont
     /**
      * Add Action
      *
-     * @return Zend  \Zend\Http\Response
+     * @return Zend  \Laminas\Http\Response
      */
     public function addAction()
     {
@@ -83,7 +83,7 @@ class DecisionsController extends AbstractInternalController implements CaseCont
     /**
      * edit action
      *
-     * @return Zend  \Zend\Http\Response
+     * @return Zend  \Laminas\Http\Response
      */
     public function editAction()
     {
@@ -93,7 +93,7 @@ class DecisionsController extends AbstractInternalController implements CaseCont
     /**
      * delete Action
      *
-     * @return Zend  \Zend\Http\Response
+     * @return Zend  \Laminas\Http\Response
      */
     public function deleteAction()
     {

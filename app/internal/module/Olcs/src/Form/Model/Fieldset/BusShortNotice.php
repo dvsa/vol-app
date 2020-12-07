@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
@@ -55,9 +55,9 @@ class BusShortNotice extends Base
      * })
      *
      * @Form\Required(false)
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator({
-     *      "name":"Zend\Validator\StringLength",
+     *      "name":"Laminas\Validator\StringLength",
      *      "options":{
      *          "max":255
      *      }
@@ -94,9 +94,9 @@ class BusShortNotice extends Base
      * })
      *
      * @Form\Required(false)
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator({
-     *      "name":"Zend\Validator\StringLength",
+     *      "name":"Laminas\Validator\StringLength",
      *      "options":{
      *          "max":255
      *      }
@@ -133,9 +133,9 @@ class BusShortNotice extends Base
      * })
      *
      * @Form\Required(false)
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator({
-     *      "name":"Zend\Validator\StringLength",
+     *      "name":"Laminas\Validator\StringLength",
      *      "options":{
      *          "max":255
      *      }
@@ -172,9 +172,9 @@ class BusShortNotice extends Base
      * })
      *
      * @Form\Required(false)
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator({
-     *      "name":"Zend\Validator\StringLength",
+     *      "name":"Laminas\Validator\StringLength",
      *      "options":{
      *          "max":255
      *      }
@@ -211,9 +211,9 @@ class BusShortNotice extends Base
      * })
      *
      * @Form\Required(false)
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator({
-     *      "name":"Zend\Validator\StringLength",
+     *      "name":"Laminas\Validator\StringLength",
      *      "options":{
      *          "max":255
      *      }
@@ -250,9 +250,9 @@ class BusShortNotice extends Base
      * })
      *
      * @Form\Required(false)
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator({
-     *      "name":"Zend\Validator\StringLength",
+     *      "name":"Laminas\Validator\StringLength",
      *      "options":{
      *          "max":255
      *      }
@@ -289,9 +289,9 @@ class BusShortNotice extends Base
      * })
      *
      * @Form\Required(false)
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator({
-     *      "name":"Zend\Validator\StringLength",
+     *      "name":"Laminas\Validator\StringLength",
      *      "options":{
      *          "max":255
      *      }
@@ -328,9 +328,9 @@ class BusShortNotice extends Base
      * })
      *
      * @Form\Required(false)
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator({
-     *      "name":"Zend\Validator\StringLength",
+     *      "name":"Laminas\Validator\StringLength",
      *      "options":{
      *          "max":255
      *      }
@@ -367,9 +367,9 @@ class BusShortNotice extends Base
      * })
      *
      * @Form\Required(false)
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator({
-     *      "name":"Zend\Validator\StringLength",
+     *      "name":"Laminas\Validator\StringLength",
      *      "options":{
      *          "max":255
      *      }

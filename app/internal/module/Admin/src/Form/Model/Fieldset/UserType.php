@@ -2,11 +2,11 @@
 
 namespace Admin\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Attributes({"id":"userType"})
- * @Form\Type("Zend\Form\Fieldset")
+ * @Form\Type("Laminas\Form\Fieldset")
  * @Form\Name("user-type")
  */
 class UserType
@@ -44,7 +44,7 @@ class UserType
      *          "context_values": {"internal"},
      *          "allow_empty": false,
      *          "validators": {
-     *              {"name": "\Zend\Validator\NotEmpty"},
+     *              {"name": "\Laminas\Validator\NotEmpty"},
      *          }
      *      }
      * })
@@ -91,7 +91,7 @@ class UserType
      *      "use_groups": "false"
      * })
      * @Form\Type("Select")
-     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
+     * @Form\Validator({"name":"Laminas\Validator\NotEmpty","options":{"null"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "userType",
@@ -105,7 +105,7 @@ class UserType
      *                      "context_values": {""},
      *                      "allow_empty": false,
      *                      "validators": {
-     *                          {"name": "\Zend\Validator\NotEmpty"},
+     *                          {"name": "\Laminas\Validator\NotEmpty"},
      *                      }
      *                  }
      *              }
@@ -127,14 +127,14 @@ class UserType
      *      "use_groups": "false"
      * })
      * @Form\Type("DynamicSelect")
-     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
+     * @Form\Validator({"name":"Laminas\Validator\NotEmpty","options":{"null"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "userType",
      *          "context_values": {"local-authority"},
      *          "allow_empty": false,
      *          "validators": {
-     *              {"name": "\Zend\Validator\NotEmpty"},
+     *              {"name": "\Laminas\Validator\NotEmpty"},
      *          }
      *      }
      * })
@@ -153,7 +153,7 @@ class UserType
      *      "use_groups": false,
      * })
      * @Form\Type("DynamicSelect")
-     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
+     * @Form\Validator({"name":"Laminas\Validator\NotEmpty","options":{"null"}})
      * @Form\Validator({
      *     "name": "ValidateIf",
      *     "options":{
@@ -161,7 +161,7 @@ class UserType
      *          "context_values": {"partner"},
      *          "allow_empty": false,
      *          "validators": {
-     *              {"name": "\Zend\Validator\NotEmpty"},
+     *              {"name": "\Laminas\Validator\NotEmpty"},
      *          }
      *      }
      * })
@@ -179,7 +179,7 @@ class UserType
      * @Form\Attributes({"class":"medium","id":"licenceNumber","required":false})
      * @Form\Options({"label":"Licence number"})
      * @Form\Type("Text")
-     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
+     * @Form\Validator({"name":"Laminas\Validator\NotEmpty","options":{"null"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "userType",
@@ -193,7 +193,7 @@ class UserType
      *                      "context_values": {""},
      *                      "allow_empty": false,
      *                      "validators": {
-     *                          {"name": "\Zend\Validator\NotEmpty"},
+     *                          {"name": "\Laminas\Validator\NotEmpty"},
      *                      }
      *                  }
      *              }

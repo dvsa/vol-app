@@ -1,7 +1,7 @@
 <?php
 namespace Admin\Navigation;
 
-use Zend\Navigation\Service\AbstractNavigationFactory;
+use Laminas\Navigation\Service\AbstractNavigationFactory;
 
 /**
  * User details navigation factory.

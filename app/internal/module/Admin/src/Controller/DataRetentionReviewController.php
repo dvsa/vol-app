@@ -5,7 +5,7 @@ namespace Admin\Controller;
 use Dvsa\Olcs\Transfer\Query\DataRetention\RuleList as ListDto;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\AbstractInternalController;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Data retention review controller

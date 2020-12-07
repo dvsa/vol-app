@@ -27,7 +27,7 @@ echo $this->showMarkers();
 /**
  * Application quick actions
  *
- * @var \Zend\Navigation\Navigation
+ * @var \Laminas\Navigation\Navigation
  */
 $nav = $this->navigation('right-sidebar')
     ->menu($this->navigation()->findOneBy('id', 'application-quick-actions'))
@@ -43,7 +43,7 @@ if ($nav->getContainer()->hasPages(true) && $nav->getContainer()->isVisible()): 
 /**
  * Decisions quick actions
  *
- * @var \Zend\Navigation\Navigation
+ * @var \Laminas\Navigation\Navigation
  */
 $nav = $this->navigation('right-sidebar')
     ->menu($this->navigation()->findOneBy('id', 'application-decisions'))

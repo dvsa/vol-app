@@ -8,8 +8,8 @@
 
 namespace Olcs\Form\Element;
 
-use Zend\Form\Fieldset;
-use Zend\Form\Element\Select;
+use Laminas\Form\Fieldset;
+use Laminas\Form\Element\Select;
 use Common\Service\Data\Search\Search as SearchService;
 use Common\Service\Data\Search\SearchAwareTrait as SearchAwareTrait;
 
@@ -30,7 +30,7 @@ class SearchFilterFieldset extends Fieldset
         /** @var \Common\Data\Object\Search\Aggregations\Terms\TermsAbstract $filterClass */
         foreach ($this->getSearchService()->getFilters() as $filterClass) {
 
-            /** @var \Zend\Form\Element\Select $select */
+            /** @var \Laminas\Form\Element\Select $select */
             $select = new Select;
             $select->setName($filterClass->getKey());
             $select->setLabel($filterClass->getTitle());

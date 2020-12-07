@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * Application Overview Details fieldset
@@ -18,7 +18,7 @@ class ApplicationOverviewDetails
      *     "empty_option": "Not set",
      *     "disable_inarray_validator": false,
      * })
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Type("\Laminas\Form\Element\Select")
      * @Form\Required(false)
      */
     public $leadTcArea = null;
@@ -38,7 +38,7 @@ class ApplicationOverviewDetails
      * @Form\Filter({"name": "\Common\Filter\DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name": "Date", "options":{"format":"Y-m-d"}})
-     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
+     * @Form\Validator({"name":"Laminas\Validator\NotEmpty","options":{"null"}})
      */
     public $receivedDate = null;
 
@@ -57,7 +57,7 @@ class ApplicationOverviewDetails
      * @Form\Filter({"name": "\Common\Filter\DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name": "Date", "options":{"format":"Y-m-d"}})
-     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
+     * @Form\Validator({"name":"Laminas\Validator\NotEmpty","options":{"null"}})
      */
     public $targetCompletionDate = null;
 

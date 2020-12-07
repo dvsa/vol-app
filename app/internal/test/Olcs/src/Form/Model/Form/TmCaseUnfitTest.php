@@ -4,7 +4,7 @@ namespace OlcsTest\Form\Model\Form;
 
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 use Common\Validator\DateCompare;
-use Zend\Form\Element\Radio;
+use Laminas\Form\Element\Radio;
 
 /**
  * Class TmCaseUnfitTest

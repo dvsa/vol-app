@@ -27,7 +27,7 @@ class CaseMarkerTest extends TestCase
 
     public function testAttach()
     {
-        $mockEventManager = m::mock('Zend\EventManager\EventManagerInterface');
+        $mockEventManager = m::mock('Laminas\EventManager\EventManagerInterface');
         $mockEventManager->shouldReceive('attach')->once()
             ->with(RouteParams::EVENT_PARAM . 'case', [$this->sut, 'onCase'], 1);
 
@@ -94,7 +94,7 @@ class CaseMarkerTest extends TestCase
 
     public function testCreateService()
     {
-        $mockSl = m::mock(\Zend\ServiceManager\ServiceLocatorInterface::class);
+        $mockSl = m::mock(\Laminas\ServiceManager\ServiceLocatorInterface::class);
         $mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
         $mockQueryService = m::mock();
         $mockAnnotationBuilderService = m::mock();

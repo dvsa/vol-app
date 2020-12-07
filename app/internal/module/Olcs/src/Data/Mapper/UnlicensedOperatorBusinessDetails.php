@@ -4,7 +4,7 @@ namespace Olcs\Data\Mapper;
 
 use Common\Data\Mapper\MapperInterface;
 use Olcs\Data\Mapper\Traits as MapperTraits;
-use Zend\Form\FormInterface;
+use Laminas\Form\FormInterface;
 
 /**
  * Class UnlicensedOperator Business Details Mapper

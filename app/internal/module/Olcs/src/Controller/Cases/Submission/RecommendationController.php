@@ -9,7 +9,7 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Data\Mapper\SubmissionAction as Mapper;
 use Olcs\Form\Model\Form\SubmissionRecommendation as Form;
-use Zend\Form\FormInterface;
+use Laminas\Form\FormInterface;
 
 /**
  * Submission Recommendation Controller
@@ -94,7 +94,7 @@ class RecommendationController extends AbstractInternalController implements Cas
     /**
      * Process action - Index
      *
-     * @return \Zend\View\Model\ConsoleModel|\Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ConsoleModel|\Laminas\View\Model\ViewModel
      */
     public function indexAction()
     {
@@ -104,7 +104,7 @@ class RecommendationController extends AbstractInternalController implements Cas
     /**
      * Process action - Details
      *
-     * @return \Zend\View\Model\ConsoleModel|\Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ConsoleModel|\Laminas\View\Model\ViewModel
      */
     public function detailsAction()
     {
@@ -114,7 +114,7 @@ class RecommendationController extends AbstractInternalController implements Cas
     /**
      * Process action - Delete
      *
-     * @return \Zend\View\Model\ConsoleModel|\Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ConsoleModel|\Laminas\View\Model\ViewModel
      */
     public function deleteAction()
     {

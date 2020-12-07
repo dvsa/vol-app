@@ -17,7 +17,7 @@ use Dvsa\Olcs\Transfer\Command\Bus\UpdateStops as UpdateStopCmd;
 use Olcs\Form\Model\Form\BusRegQuality as QualityForm;
 use Dvsa\Olcs\Transfer\Command\Bus\UpdateQualitySchemes as UpdateQualityCmd;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Bus Details Controller
@@ -58,7 +58,7 @@ class BusDetailsController extends AbstractInternalController implements
     /**
      * Get left view
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function getLeftView()
     {
@@ -71,7 +71,7 @@ class BusDetailsController extends AbstractInternalController implements
     /**
      * Service page
      *
-     * @return array|\Zend\View\Model\ViewModel
+     * @return array|\Laminas\View\Model\ViewModel
      */
     public function serviceAction()
     {
@@ -90,7 +90,7 @@ class BusDetailsController extends AbstractInternalController implements
     /**
      * TA page
      *
-     * @return array|\Zend\View\Model\ViewModel
+     * @return array|\Laminas\View\Model\ViewModel
      */
     public function taAction()
     {
@@ -109,7 +109,7 @@ class BusDetailsController extends AbstractInternalController implements
     /**
      * Stop page
      *
-     * @return array|\Zend\View\Model\ViewModel
+     * @return array|\Laminas\View\Model\ViewModel
      */
     public function stopAction()
     {
@@ -128,7 +128,7 @@ class BusDetailsController extends AbstractInternalController implements
     /**
      * Quality page
      *
-     * @return array|\Zend\View\Model\ViewModel
+     * @return array|\Laminas\View\Model\ViewModel
      */
     public function qualityAction()
     {

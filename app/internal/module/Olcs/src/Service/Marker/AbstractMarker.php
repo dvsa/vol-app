@@ -10,7 +10,7 @@ namespace Olcs\Service\Marker;
 abstract class AbstractMarker implements MarkerInterface
 {
     /**
-     * @var \Zend\View\Helper\Partial
+     * @var \Laminas\View\Helper\Partial
      */
     private $partialHelper;
 
@@ -35,7 +35,7 @@ abstract class AbstractMarker implements MarkerInterface
     }
 
     /**
-     * @return \Zend\View\Helper\Partial
+     * @return \Laminas\View\Helper\Partial
      */
     protected function getPartialHelper()
     {
@@ -43,11 +43,11 @@ abstract class AbstractMarker implements MarkerInterface
     }
 
     /**
-     * @param \Zend\View\Helper\Partial $partialHelper
+     * @param \Laminas\View\Helper\Partial $partialHelper
      *
      * @return AbstractMarker
      */
-    public function setPartialHelper(\Zend\View\Helper\Partial $partialHelper)
+    public function setPartialHelper(\Laminas\View\Helper\Partial $partialHelper)
     {
         $this->partialHelper = $partialHelper;
         return $this;

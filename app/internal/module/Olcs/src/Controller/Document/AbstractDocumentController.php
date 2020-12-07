@@ -135,7 +135,7 @@ abstract class AbstractDocumentController extends AbstractController
      * @param array $routeParams Route params
      * @param bool $ajax Whether it's an ajax redirect
      * @param array $additionaQueryParams Appends additional query params to the ajax request
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     protected function redirectToDocumentRoute($type, $action, $routeParams, $ajax = false, array $additionaQueryParams = [])
     {

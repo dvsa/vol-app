@@ -5,7 +5,7 @@ namespace Olcs\Data\Mapper;
 use Common\Data\Mapper\MapperInterface;
 use Common\RefData;
 use Common\Service\Qa\DataTransformer\ApplicationStepsPostDataTransformer;
-use Zend\Form\FormInterface;
+use Laminas\Form\FormInterface;
 
 /**
  * Class IrhpApplication

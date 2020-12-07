@@ -5,8 +5,8 @@ namespace Admin\Controller;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitJurisdiction\GetList as ListDto;
 use Dvsa\Olcs\Transfer\Command\IrhpPermitJurisdiction\Update as Update;
-use Zend\View\Model\ViewModel;
-use Zend\Http\Response;
+use Laminas\View\Model\ViewModel;
+use Laminas\Http\Response;
 
 /**
  * IRHP Permits Jurisdiction Controller

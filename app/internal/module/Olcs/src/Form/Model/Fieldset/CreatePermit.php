@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
@@ -47,7 +47,7 @@ class CreatePermit extends Base
     public $dateReceived = null;
 
     /**
-     * @Form\Type("Zend\Form\Element\Hidden")
+     * @Form\Type("Laminas\Form\Element\Hidden")
      * @Form\Attributes({
      *    "id" : "numVehicles",
      * })
@@ -56,7 +56,7 @@ class CreatePermit extends Base
     public $numVehicles;
 
     /**
-     * @Form\Type("Zend\Form\Element\Hidden")
+     * @Form\Type("Laminas\Form\Element\Hidden")
      * @Form\Type("\Common\Form\Elements\Types\Readonly")
      * @Form\Options({
      *     "label": "Current total vehicle authorization"
@@ -66,7 +66,7 @@ class CreatePermit extends Base
     public $numVehiclesLabel;
 
     /**
-     * @Form\Type("Zend\Form\Element\Hidden")
+     * @Form\Type("Laminas\Form\Element\Hidden")
      * @Form\Attributes({
      *    "id" : "year",
      * })
@@ -184,7 +184,7 @@ class CreatePermit extends Base
      *          "compare_to_label":"Your number of authorised vehicles",
      *     }
      * })
-     * @Form\Type("Zend\Form\Element\Number")
+     * @Form\Type("Laminas\Form\Element\Number")
      */
     public $requiredEuro5 = 0;
 
@@ -215,7 +215,7 @@ class CreatePermit extends Base
      *          "compare_to_label":"Your number of authorised vehicles",
      *     }
      * })
-     * @Form\Type("Zend\Form\Element\Number")
+     * @Form\Type("Laminas\Form\Element\Number")
      */
     public $requiredEuro6 = 0;
 
@@ -230,7 +230,7 @@ class CreatePermit extends Base
      *     "label": "Number of trips abroad in the last 12 months",
      *     "short-label": "",
      * })
-     * @Form\Type("Zend\Form\Element\Number")
+     * @Form\Type("Laminas\Form\Element\Number")
      */
     public $trips = null;
 
@@ -314,7 +314,7 @@ class CreatePermit extends Base
      *   "class": "permitApplicationStatus"
      * })
      *
-     * @Form\Type("Zend\Form\Element\Hidden")
+     * @Form\Type("Laminas\Form\Element\Hidden")
      *
      */
     public $status;
@@ -326,7 +326,7 @@ class CreatePermit extends Base
      *   "class": "permitApplicationCanBeCancelled"
      * })
      *
-     * @Form\Type("Zend\Form\Element\Hidden")
+     * @Form\Type("Laminas\Form\Element\Hidden")
      *
      */
     public $canBeCancelled;
@@ -337,13 +337,13 @@ class CreatePermit extends Base
      *   "id" : "irhpPermitStock",
      * })
      *
-     * @Form\Type("Zend\Form\Element\Hidden")
+     * @Form\Type("Laminas\Form\Element\Hidden")
      *
      */
     public $irhpPermitStock;
 
     /**
-     * @Form\Type("Zend\Form\Element\Hidden")
+     * @Form\Type("Laminas\Form\Element\Hidden")
      * @Form\Attributes({
      *    "id" : "licenceId",
      * })

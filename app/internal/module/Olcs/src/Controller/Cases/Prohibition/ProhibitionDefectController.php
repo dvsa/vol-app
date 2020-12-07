@@ -19,7 +19,7 @@ use Olcs\Form\Model\Form\ProhibitionDefect as Form;
 use Olcs\Data\Mapper\GenericFields as Mapper;
 use Dvsa\Olcs\Transfer\Query\Cases\Prohibition\Prohibition as ProhibitionDto;
 use Olcs\Mvc\Controller\ParameterProvider\GenericList;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Case Prohibition Controller

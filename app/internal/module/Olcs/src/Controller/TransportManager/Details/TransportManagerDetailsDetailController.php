@@ -17,7 +17,7 @@ use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
 use Olcs\Form\Model\Form\TransportManager as TransportManagerForm;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Common\RefData;
 
 /**

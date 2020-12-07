@@ -23,7 +23,7 @@ class SubmissionTest extends TestCase
     {
         $mockRefDataService = $this->createMock('Common\Service\Data\RefData');
 
-        $mockSl = $this->createMock('\Zend\ServiceManager\ServiceManager');
+        $mockSl = $this->createMock('\Laminas\ServiceManager\ServiceManager');
         $mockSl->expects($this->any())
             ->method('get')
             ->willReturnMap(

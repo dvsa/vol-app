@@ -3,8 +3,8 @@
 namespace Olcs\View\Helper\Factory;
 
 use Olcs\View\Helper\Version;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class VersionFactory

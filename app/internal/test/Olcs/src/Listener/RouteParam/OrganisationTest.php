@@ -11,10 +11,10 @@ use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParam\Organisation;
 use Olcs\Listener\RouteParams;
 use Olcs\Service\Marker\MarkerService;
-use Zend\EventManager\EventManagerInterface;
-use Zend\Navigation\AbstractContainer;
-use Zend\Navigation\Navigation;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\Navigation\AbstractContainer;
+use Laminas\Navigation\Navigation;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class OrganisationTest
@@ -60,8 +60,8 @@ class OrganisationTest extends MockeryTestCase
             ->andReturn($this->mockResponse);
 
         //  mock Navigation
-        $this->mockSideBar = m::mock(\Zend\Navigation\AbstractContainer::class);
-        $this->mocNavMenu = m::mock(\Zend\Navigation\AbstractContainer::class);
+        $this->mockSideBar = m::mock(\Laminas\Navigation\AbstractContainer::class);
+        $this->mocNavMenu = m::mock(\Laminas\Navigation\AbstractContainer::class);
 
         $mockNavPlugin = m::mock(Navigation::class)
             ->shouldReceive('__invoke')
@@ -69,7 +69,7 @@ class OrganisationTest extends MockeryTestCase
             ->andReturn($this->mocNavMenu)
             ->getMock();
 
-        $helperMngr = m::mock(\Zend\View\HelperPluginManager::class)
+        $helperMngr = m::mock(\Laminas\View\HelperPluginManager::class)
             ->shouldReceive('get')
             ->once()
             ->with('Navigation')

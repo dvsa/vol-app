@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * Licence Overview Details fieldset
@@ -52,7 +52,7 @@ class LicenceOverviewDetails
      *     "empty_option": "Not set",
      *     "disable_inarray_validator": false,
      * })
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Type("\Laminas\Form\Element\Select")
      * @Form\Required(false)
      */
     public $leadTcArea = null;

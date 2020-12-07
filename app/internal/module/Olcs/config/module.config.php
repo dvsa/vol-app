@@ -478,7 +478,7 @@ return array(
                 Olcs\Service\Permits\Bilateral\MoroccoFieldsetPopulator::class,
         ],
         'abstract_factories' => [
-            \Zend\Cache\Service\StorageCacheAbstractServiceFactory::class,
+            \Laminas\Cache\Service\StorageCacheAbstractServiceFactory::class,
         ],
         'factories' => array(
             \Olcs\Service\Marker\MarkerService::class => \Olcs\Service\Marker\MarkerService::class,

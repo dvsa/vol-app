@@ -9,7 +9,7 @@ namespace Admin\Controller;
 
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Dvsa\Olcs\Transfer\Command\SystemParameter\CreateSystemParameter as CreateDto;
 use Dvsa\Olcs\Transfer\Command\SystemParameter\UpdateSystemParameter as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\SystemParameter\DeleteSystemParameter as DeleteDto;

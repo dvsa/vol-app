@@ -2,7 +2,7 @@
 
 namespace Admin\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 use Common\Form\Model\Form\Traits\IdTrait;
 
 /**
@@ -64,9 +64,9 @@ class FeeRateDetails
      * @Form\Options({
      *      "label":"Fixed Value",
      * })
-     * @Form\Type("Zend\Form\Element\Number")
+     * @Form\Type("Laminas\Form\Element\Number")
      * @Form\Validator({
-     *      "name": "Zend\Validator\Between",
+     *      "name": "Laminas\Validator\Between",
      *      "options": {
      *          "min": "0",
      *          "max": "9999"
@@ -81,10 +81,10 @@ class FeeRateDetails
      * @Form\Options({
      *      "label":"Annual Value",
      * })
-     * @Form\Validator({"name":"Zend\Validator\Digits"})
-     * @Form\Type("Zend\Form\Element\Number")
+     * @Form\Validator({"name":"Laminas\Validator\Digits"})
+     * @Form\Type("Laminas\Form\Element\Number")
      * @Form\Validator({
-     *      "name": "Zend\Validator\Between",
+     *      "name": "Laminas\Validator\Between",
      *      "options": {
      *          "min": "0",
      *          "max": "9999"
@@ -99,10 +99,10 @@ class FeeRateDetails
      * @Form\Options({
      *      "label":"Five Year Value",
      * })
-     * @Form\Validator({"name":"Zend\Validator\Digits"})
-     * @Form\Type("Zend\Form\Element\Number")
+     * @Form\Validator({"name":"Laminas\Validator\Digits"})
+     * @Form\Type("Laminas\Form\Element\Number")
      * @Form\Validator({
-     *      "name": "Zend\Validator\Between",
+     *      "name": "Laminas\Validator\Between",
      *      "options": {
      *          "min": "0",
      *          "max": "9999"

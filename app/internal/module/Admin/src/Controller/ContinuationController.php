@@ -3,7 +3,7 @@
 namespace Admin\Controller;
 
 use Common\RefData;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Common\Controller\Lva\Traits\CrudActionTrait;
 use Dvsa\Olcs\Transfer\Query\ContinuationDetail\GetList as GetListQry;
 use Dvsa\Olcs\Transfer\Command\Continuation\Create as CreateCmd;
@@ -36,11 +36,11 @@ class ContinuationController extends AbstractController
     /**
      * Action: index
      *
-     * @return \Zend\Http\Response|ViewModel
+     * @return \Laminas\Http\Response|ViewModel
      */
     public function indexAction()
     {
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         $form = $this->getContinuationForm();
 
@@ -104,11 +104,11 @@ class ContinuationController extends AbstractController
     /**
      * Action: detail
      *
-     * @return ViewModel | \Zend\Http\Response
+     * @return ViewModel | \Laminas\Http\Response
      */
     public function detailAction()
     {
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
 
         if ($request->isPost()) {
@@ -161,11 +161,11 @@ class ContinuationController extends AbstractController
     /**
      * Action: generate
      *
-     * @return \Zend\Http\Response|ViewModel
+     * @return \Laminas\Http\Response|ViewModel
      */
     public function generateAction()
     {
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
 
         if ($request->isPost()) {
@@ -213,7 +213,7 @@ class ContinuationController extends AbstractController
     /**
      * Get Detail Filter Form
      *
-     * @return \Zend\Form\FormInterface
+     * @return \Laminas\Form\FormInterface
      */
     protected function getDetailFilterForm()
     {
@@ -261,7 +261,7 @@ class ContinuationController extends AbstractController
     /**
      * Get Continuation Form
      *
-     * @return \Zend\Form\FormInterface
+     * @return \Laminas\Form\FormInterface
      */
     protected function getContinuationForm()
     {

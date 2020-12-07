@@ -25,14 +25,14 @@ class Task implements MapperInterface
      * Map Errors from API to form
      *
      * @param array                       $errors       Errors
-     * @param \Zend\Form\FormInterface    $form         Form
+     * @param \Laminas\Form\FormInterface    $form         Form
      * @param FlashMessengerHelperService $flashMsgsSrv Flash messenger
      *
      * @return void
      */
     public static function mapFormErrors(
         array $errors,
-        \Zend\Form\FormInterface $form,
+        \Laminas\Form\FormInterface $form,
         FlashMessengerHelperService $flashMsgsSrv
     ) {
         $formMessages = [];

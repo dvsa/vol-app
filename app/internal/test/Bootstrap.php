@@ -3,10 +3,10 @@ namespace OlcsTest;
 
 use Common\Service\Translator\TranslationLoader;
 use Mockery as m;
-use Zend\I18n\Translator\LoaderPluginManager;
-use Zend\Mvc\Service\ServiceManagerConfig;
-use Zend\ServiceManager\ServiceManager;
-use Zend\Loader\AutoloaderFactory;
+use Laminas\I18n\Translator\LoaderPluginManager;
+use Laminas\Mvc\Service\ServiceManagerConfig;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\Loader\AutoloaderFactory;
 use RuntimeException;
 
 date_default_timezone_set('Europe/London');
@@ -80,7 +80,7 @@ class Bootstrap
             include $vendorPath . '/autoload.php';
         }
 
-        if (! class_exists('Zend\Loader\AutoloaderFactory')) {
+        if (! class_exists('Laminas\Loader\AutoloaderFactory')) {
             throw new RuntimeException(
                 'Unable to load ZF2. Run `php composer.phar install`'
             );
@@ -88,7 +88,7 @@ class Bootstrap
 
         AutoloaderFactory::factory(
             [
-                'Zend\Loader\StandardAutoloader' => [
+                'Laminas\Loader\StandardAutoloader' => [
                     'autoregister_zf' => true,
                     'namespaces' => [
                         __NAMESPACE__ => __DIR__ . '/' . __NAMESPACE__,

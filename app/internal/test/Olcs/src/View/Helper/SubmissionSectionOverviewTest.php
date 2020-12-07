@@ -22,7 +22,7 @@ class SubmissionSectionOverviewTest extends TestCase
     {
         $sut = new SubmissionSectionOverview();
 
-        $mockView = m::mock('\Zend\View\Renderer\PhpRenderer');
+        $mockView = m::mock('\Laminas\View\Renderer\PhpRenderer');
 
         $mockViewHelper = m::mock('Olcs\View\Helper\SubmissionSectionOverview');
 
@@ -50,7 +50,7 @@ class SubmissionSectionOverviewTest extends TestCase
     {
         $sut = new SubmissionSectionOverview();
 
-        $mockView = m::mock('\Zend\View\Renderer\RendererInterface');
+        $mockView = m::mock('\Laminas\View\Renderer\RendererInterface');
 
         $mockView->shouldReceive('render');
 

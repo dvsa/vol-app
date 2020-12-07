@@ -12,8 +12,8 @@ use Olcs\Service\Permits\Bilateral\PeriodFieldsetGenerator;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use RuntimeException;
-use Zend\Form\Factory as FormFactory;
-use Zend\Form\Fieldset;
+use Laminas\Form\Factory as FormFactory;
+use Laminas\Form\Fieldset;
 
 /**
  * PeriodFieldsetGenerator Test

@@ -11,17 +11,17 @@ use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\ById as ItemDto;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\GetGrantability as GrantabilityDto;
-use Zend\Escaper\Escaper;
-use Zend\EventManager\EventManagerInterface;
-use Zend\EventManager\ListenerAggregateInterface;
-use Zend\EventManager\ListenerAggregateTrait;
-use Zend\Navigation\Navigation;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\Escaper\Escaper;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\EventManager\ListenerAggregateInterface;
+use Laminas\EventManager\ListenerAggregateTrait;
+use Laminas\Navigation\Navigation;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Common\Exception\ResourceNotFoundException;
-use Zend\View\Model\ViewModel;
-use Zend\Mvc\Application;
+use Laminas\View\Model\ViewModel;
+use Laminas\Mvc\Application;
 
 /**
  * IRHP Application Furniture
@@ -55,7 +55,7 @@ class IrhpApplicationFurniture implements
     protected $applicationService;
 
     /**
-     * @return \Zend\Navigation\Navigation
+     * @return \Laminas\Navigation\Navigation
      */
     public function getNavigationService()
     {

@@ -2,7 +2,7 @@
 
 namespace Olcs\Controller\Traits;
 
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Task Action Trait
@@ -16,19 +16,19 @@ trait TaskActionTrait
      *
      * @return string
      */
-    protected abstract function getTaskActionType();
+    abstract protected function getTaskActionType();
 
     /**
      * Get task action filters
      *
      * @return array
      */
-    protected abstract function getTaskActionFilters();
+    abstract protected function getTaskActionFilters();
 
     /**
      * Render the tasks list or redirect if processing
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function indexAction()
     {

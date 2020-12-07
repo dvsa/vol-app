@@ -3,7 +3,7 @@
 namespace Olcs\Service\Permits\Bilateral;
 
 use Common\Service\Qa\Custom\Bilateral\NoOfPermitsElement;
-use Zend\Form\Fieldset;
+use Laminas\Form\Fieldset;
 
 /**
  * Morocco fieldset populator

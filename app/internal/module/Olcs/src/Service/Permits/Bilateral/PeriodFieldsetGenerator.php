@@ -2,8 +2,8 @@
 
 namespace Olcs\Service\Permits\Bilateral;
 
-use Zend\Form\Factory as FormFactory;
-use Zend\Form\Fieldset;
+use Laminas\Form\Factory as FormFactory;
+use Laminas\Form\Fieldset;
 use RuntimeException;
 
 /**

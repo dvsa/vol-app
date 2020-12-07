@@ -25,7 +25,7 @@ $isPriorityNote = $this->placeholder('isPriorityNote')->getValue();
 /**
  * Case quick actions
  *
- * @var \Zend\Navigation\Navigation
+ * @var \Laminas\Navigation\Navigation
  */
 $nav = $this->navigation('right-sidebar')
     ->menu($this->navigation()->findOneBy('id', 'irhp-permit-quick-actions'))
@@ -43,7 +43,7 @@ $nav = $this->navigation('right-sidebar')
 /**
  * Permit Decisions
  *
- * @var \Zend\Navigation\Navigation
+ * @var \Laminas\Navigation\Navigation
  */
 $nav = $this->navigation('right-sidebar')
     ->menu($this->navigation()->findOneBy('id', 'irhp-permit-decisions'))

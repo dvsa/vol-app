@@ -2,10 +2,10 @@
 
 namespace Olcs\Service\Permits\Bilateral;
 
-use Zend\Form\Element\Hidden;
-use Zend\Form\Factory as FormFactory;
-use Zend\Form\Fieldset;
-use Zend\Form\Form;
+use Laminas\Form\Element\Hidden;
+use Laminas\Form\Factory as FormFactory;
+use Laminas\Form\Fieldset;
+use Laminas\Form\Form;
 
 /**
  * Application form populator

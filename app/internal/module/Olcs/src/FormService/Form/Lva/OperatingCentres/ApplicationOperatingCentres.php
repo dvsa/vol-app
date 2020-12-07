@@ -9,7 +9,7 @@ namespace Olcs\FormService\Form\Lva\OperatingCentres;
 
 use Common\FormService\Form\Lva\OperatingCentres\AbstractOperatingCentres;
 use Common\RefData;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 
 /**
  * Application Operating Centres

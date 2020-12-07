@@ -10,7 +10,7 @@ namespace Olcs\Controller\Cases\Penalty;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Common\Service\Table\TableBuilder;
 use Olcs\Data\Mapper\GenericFields;
 use Dvsa\Olcs\Transfer\Command\Cases\Si\Applied\Delete as DeleteDto;
@@ -77,7 +77,7 @@ class PenaltyController extends AbstractInternalController implements CaseContro
     /**
      * Loads the tables and read only data
      *
-     * @return array|\Zend\View\Model\ViewModel
+     * @return array|\Laminas\View\Model\ViewModel
      */
     public function indexAction()
     {

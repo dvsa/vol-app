@@ -4,7 +4,6 @@ namespace Olcs\Controller\Lva;
 
 use Dvsa\Olcs\Transfer\Command\Application\RefuseApplication;
 
-
 /**
  * Abstract Internal Refuse Controller
  *
@@ -19,7 +18,7 @@ abstract class AbstractRefuseController extends AbstractApplicationDecisionContr
     /**
      * get method form
      *
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     protected function getForm()
     {

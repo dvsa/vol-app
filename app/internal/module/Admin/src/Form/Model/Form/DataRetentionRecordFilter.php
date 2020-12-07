@@ -2,7 +2,7 @@
 
 namespace Admin\Form\Model\Form;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("data-retention-record-filter")
@@ -28,7 +28,7 @@ class DataRetentionRecordFilter
      *     },
      *     "disable_inarray_validator": false
      * })
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Type("\Laminas\Form\Element\Select")
      */
     public $nextReview = null;
 
@@ -43,7 +43,7 @@ class DataRetentionRecordFilter
      *     },
      *     "disable_inarray_validator": false
      * })
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Type("\Laminas\Form\Element\Select")
      */
     public $markedForDeletion = null;
 
@@ -65,7 +65,7 @@ class DataRetentionRecordFilter
      * @Form\Options({
      *     "label": "filter-button"
      * })
-     * @Form\Type("\Zend\Form\Element\Button")
+     * @Form\Type("\Laminas\Form\Element\Button")
      */
     public $filter = null;
 }

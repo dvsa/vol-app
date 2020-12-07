@@ -20,10 +20,10 @@ class ConvictionsPenalties extends CommonConvictionsPenalties
     /**
      * Make form alterations
      *
-     * @param \Zend\Form\Form $form   form
+     * @param \Laminas\Form\Form $form   form
      * @param array           $params params
      *
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     protected function alterForm($form, array $params)
     {

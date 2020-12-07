@@ -2,7 +2,7 @@
 
 namespace Admin\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 use Olcs\Form\Model\Fieldset\Base;
 
 /**
@@ -31,8 +31,8 @@ class Recipient extends Base
      * @Form\Attributes({"id":"contactName","placeholder":"","class":"medium", "required":false})
      * @Form\Options({"label":"Contact Name"})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":100}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":100}})
      */
     public $contactName = null;
 
@@ -41,7 +41,7 @@ class Recipient extends Base
      * @Form\Attributes({"id":"email","placeholder":"","class":"medium", "required":false})
      * @Form\Options({"label":"Email"})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\EmailAddress"})
      */
     public $emailAddress = null;

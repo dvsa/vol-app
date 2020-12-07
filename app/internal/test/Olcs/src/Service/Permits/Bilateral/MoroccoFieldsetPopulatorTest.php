@@ -11,7 +11,7 @@ use Common\Service\Qa\Custom\Bilateral\NoOfPermitsElement;
 use Olcs\Service\Permits\Bilateral\MoroccoFieldsetPopulator;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
-use Zend\Form\Fieldset;
+use Laminas\Form\Fieldset;
 
 /**
  * MoroccoFieldsetPopulator Test

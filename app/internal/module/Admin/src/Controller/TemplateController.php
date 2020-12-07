@@ -9,11 +9,11 @@ use Dvsa\Olcs\Transfer\Query\Template\AvailableTemplates as ListDto;
 use Dvsa\Olcs\Transfer\Command\Template\UpdateTemplateSource as UpdateDto;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Admin\Data\Mapper\Template as Mapper;
-use Zend\Form\Form;
-use Zend\View\Model\ViewModel;
+use Laminas\Form\Form;
+use Laminas\View\Model\ViewModel;
 use Admin\Form\Model\Form\TemplateEdit;
 use Admin\Form\Model\Form\TemplateFilter;
-use Zend\View\Model\JsonModel;
+use Laminas\View\Model\JsonModel;
 
 /**
  * Email Template admin controller

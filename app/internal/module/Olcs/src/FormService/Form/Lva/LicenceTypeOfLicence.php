@@ -2,7 +2,7 @@
 
 namespace Olcs\FormService\Form\Lva;
 
-use Zend\Form\Form;
+use Laminas\Form\Form;
 use Common\FormService\Form\Lva\TypeOfLicence\LicenceTypeOfLicence as CommonLicenceTypeOfLicence;
 
 /**
@@ -13,9 +13,9 @@ class LicenceTypeOfLicence extends CommonLicenceTypeOfLicence
     /**
      * Make form alterations
      *
-     * @param \Zend\Form\Form $form
+     * @param \Laminas\Form\Form $form
      * @param array $params
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     protected function alterForm(Form $form, $params = [])
     {

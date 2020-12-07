@@ -3,7 +3,7 @@
 namespace Olcs\Data\Mapper\Lva;
 
 use Common\Data\Mapper\MapperInterface;
-use Zend\Form\FormInterface;
+use Laminas\Form\FormInterface;
 
 /**
  * @author Dmitry Golubev <dmitrij.golubev@valtech.co.uk>
@@ -60,10 +60,10 @@ class PhoneContact implements MapperInterface
             return [];
         }
 
-        /** @var \Zend\Form\Fieldset $formFields */
+        /** @var \Laminas\Form\Fieldset $formFields */
         $formFields = $form->get(self::DETAILS);
 
-        /** @var \Zend\Form\Element $field */
+        /** @var \Laminas\Form\Element $field */
         foreach ($formFields as $field) {
             $fldName = $field->getName();
             if (!isset($errMsgs[$fldName])) {

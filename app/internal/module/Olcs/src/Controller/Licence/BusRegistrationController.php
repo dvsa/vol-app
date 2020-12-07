@@ -7,7 +7,7 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Dvsa\Olcs\Transfer\Query\Bus\SearchViewList as ListDto;
 use Olcs\Form\Model\Form\BusRegList as FilterForm;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Licence Bus Reg Controller

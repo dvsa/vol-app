@@ -31,7 +31,7 @@ class SubmissionLegislationTest extends \PHPUnit\Framework\TestCase
     {
         $mockLicenceService = $this->createMock('\Common\Service\Data\Licence');
 
-        $mockSl = $this->createMock('\Zend\ServiceManager\ServiceManager');
+        $mockSl = $this->createMock('\Laminas\ServiceManager\ServiceManager');
         $mockSl->expects($this->at(0))
             ->method('get')
             ->with('\Common\Service\Data\Licence')

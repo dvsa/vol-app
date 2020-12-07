@@ -4,9 +4,9 @@ namespace Olcs\Controller\TransportManager\Details;
 
 use Olcs\Controller\TransportManager\TransportManagerController;
 use Common\Controller\Traits\GenericUpload;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\View\Model\ViewModel;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Abstract Transport Manager Details Controller
@@ -25,7 +25,7 @@ abstract class AbstractTransportManagerDetailsController extends TransportManage
     /**
      * Create service
      *
-     * @param \Zend\Mvc\Controller\ControllerManager $serviceLocator Service Manager
+     * @param \Laminas\Mvc\Controller\ControllerManager $serviceLocator Service Manager
      *
      * @return $this
      */
@@ -42,7 +42,7 @@ abstract class AbstractTransportManagerDetailsController extends TransportManage
     /**
      * Redirect to index
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function redirectToIndex()
     {

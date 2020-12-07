@@ -4,7 +4,7 @@ namespace Admin\Form\Model\Fieldset;
 
 use Common\Form\Model\Form\Traits\IdTrait;
 use Common\Form\Model\Form\Traits\VersionTrait;
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore No methods
@@ -35,10 +35,10 @@ class TaskAlphaSplit
      *      "label":"Assign operator tasks starting with these letters"
      * })
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":50}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":50}})
      * @Form\Validator({
-     *     "name": "Zend\Validator\Regex",
+     *     "name": "Laminas\Validator\Regex",
      *     "options": {
      *         "pattern": "/^[a-zA-Z]+$/",
      *         "messages": {

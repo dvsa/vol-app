@@ -3,10 +3,10 @@
 namespace AdminTest\Form\Model\Form;
 
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
-use Zend\Form\Element\Radio;
-use Zend\Form\Element\Select;
-use Zend\Validator\InArray;
-use Zend\Validator\GreaterThan;
+use Laminas\Form\Element\Radio;
+use Laminas\Form\Element\Select;
+use Laminas\Validator\InArray;
+use Laminas\Validator\GreaterThan;
 
 /**
  * Class DiscPrintingTest

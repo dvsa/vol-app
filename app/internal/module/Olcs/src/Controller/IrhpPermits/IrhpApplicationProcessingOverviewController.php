@@ -10,7 +10,7 @@ class IrhpApplicationProcessingOverviewController extends AbstractIrhpPermitProc
     /**
      * index Action
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function indexAction()
     {

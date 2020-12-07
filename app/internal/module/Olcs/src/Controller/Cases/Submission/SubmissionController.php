@@ -20,9 +20,9 @@ use Olcs\Data\Mapper\Submission as SubmissionMapper;
 use Olcs\Form\Model\Form\Submission as SubmissionForm;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
-use Zend\Mvc\MvcEvent;
-use Zend\Stdlib\ArrayUtils;
-use Zend\View\Model\ViewModel;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Stdlib\ArrayUtils;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Cases Submission Controller
@@ -182,7 +182,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
      *
      * @param MvcEvent $e Event
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function onDispatch(MvcEvent $e)
     {
@@ -194,7 +194,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
     /**
      * Add Action
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function addAction()
     {
@@ -202,7 +202,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
 
         $defaultDataProvider->setParams($this->plugin('params'));
 
-        /** @var \Zend\Form\Form $form */
+        /** @var \Laminas\Form\Form $form */
         $form = $this->getForm($this->formClass);
         $initialData = SubmissionMapper::mapFromResult($defaultDataProvider->provideParameters());
 
@@ -244,7 +244,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
     /**
      * Edit action
      *
-     * @return array|\Zend\View\Model\ViewModel
+     * @return array|\Laminas\View\Model\ViewModel
      */
     public function editAction()
     {
@@ -359,7 +359,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
     /**
      * Store a snapshot of the submission print page
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function snapshotAction()
     {
@@ -367,7 +367,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
         $paramProvider->setParams($this->plugin('params'));
         $params = $paramProvider->provideParameters();
 
-        /** @var \Zend\View\Renderer\PhpRenderer $viewRenderer */
+        /** @var \Laminas\View\Renderer\PhpRenderer $viewRenderer */
         $viewRenderer = $this->getServiceLocator()->get('ViewRenderer');
         $layout = $this->printAction();
         $layout->setVariable('content', $viewRenderer->render($layout->getChildrenByCaptureTo('content')[0]));
@@ -435,11 +435,11 @@ class SubmissionController extends AbstractInternalController implements Submiss
     /**
      * Updates a section table, to either refresh the data or delete rows
      *
-     * @return array|\Zend\Http\Response
+     * @return array|\Laminas\Http\Response
      */
     public function updateTableAction()
     {
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
 
         $params['submission'] = $this->params()->fromRoute('submission');

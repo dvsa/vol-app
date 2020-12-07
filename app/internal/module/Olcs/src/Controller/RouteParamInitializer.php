@@ -2,9 +2,9 @@
 namespace Olcs\Controller;
 
 use Olcs\Controller\Interfaces\CaseControllerInterface;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\ServiceManager\InitializerInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\ServiceManager\InitializerInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class RouteParamInitializer

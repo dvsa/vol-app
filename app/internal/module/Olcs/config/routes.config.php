@@ -20,7 +20,7 @@ use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingReadHistoryController;
 use Olcs\Controller\Bus\Details\BusDetailsController;
 use Olcs\Controller\Bus\Service\BusServiceController;
 use Olcs\Controller\SearchController;
-use Zend\Mvc\Router\Http\Segment;
+use Laminas\Mvc\Router\Http\Segment;
 use Olcs\Controller\TransportManager as TmCntr;
 
 $feeActionRoute = [
@@ -269,7 +269,7 @@ $routes = [
                 'child_routes' => [
                     'GET' => [
                         'may_terminate' => true,
-                        'type' => \Zend\Mvc\Router\Http\Method::class,
+                        'type' => \Laminas\Mvc\Router\Http\Method::class,
                         'options' => [
                             'verb' => 'GET',
                             'defaults' => [
@@ -280,7 +280,7 @@ $routes = [
                     ],
                     'POST' => [
                         'may_terminate' => true,
-                        'type' => \Zend\Mvc\Router\Http\Method::class,
+                        'type' => \Laminas\Mvc\Router\Http\Method::class,
                         'options' => [
                             'verb' => 'POST',
                             'defaults' => [
@@ -291,14 +291,14 @@ $routes = [
                     ],
                     'withdraw' => [
                         'may_terminate' => false,
-                        'type' => \Zend\Mvc\Router\Http\Segment::class,
+                        'type' => \Laminas\Mvc\Router\Http\Segment::class,
                         'options' => [
                             'route' => 'withdraw[/]',
                         ],
                         'child_routes' => [
                             'GET' => [
                                 'may_terminate' => true,
-                                'type' => \Zend\Mvc\Router\Http\Method::class,
+                                'type' => \Laminas\Mvc\Router\Http\Method::class,
                                 'options' => [
                                     'verb' => 'GET',
                                     'defaults' => [
@@ -309,7 +309,7 @@ $routes = [
                             ],
                             'POST' => [
                                 'may_terminate' => true,
-                                'type' => \Zend\Mvc\Router\Http\Method::class,
+                                'type' => \Laminas\Mvc\Router\Http\Method::class,
                                 'options' => [
                                     'verb' => 'POST',
                                     'defaults' => [
@@ -322,7 +322,7 @@ $routes = [
                     ],
                     'surrender-checks' => [
                         'may_terminate' => true,
-                        'type' => \Zend\Mvc\Router\Http\Segment::class,
+                        'type' => \Laminas\Mvc\Router\Http\Segment::class,
                         'options' => [
                             'route' => 'surrender-checks',
                             'defaults' => [
@@ -2570,7 +2570,7 @@ $routeConfigs = [
 
 // Merge all module config options
 foreach ($routeConfigs as $routeConfig) {
-    $routes = \Zend\Stdlib\ArrayUtils::merge($routes, include $routeConfig);
+    $routes = \Laminas\Stdlib\ArrayUtils::merge($routes, include $routeConfig);
 }
 
 return $routes;

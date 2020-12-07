@@ -20,7 +20,7 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\IrhpApplicationControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\IrhpPermit as IrhpPermitMapper;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 class IrhpPermitController extends AbstractInternalController implements
     IrhpApplicationControllerInterface,
@@ -56,7 +56,7 @@ class IrhpPermitController extends AbstractInternalController implements
     /**
      * Get left view
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function getLeftView()
     {
@@ -68,7 +68,7 @@ class IrhpPermitController extends AbstractInternalController implements
     }
 
     /**
-     * @return \Zend\Http\Response|ViewModel
+     * @return \Laminas\Http\Response|ViewModel
      */
     public function indexAction()
     {
@@ -117,7 +117,7 @@ class IrhpPermitController extends AbstractInternalController implements
      *
      * @param array $postParams
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     private function handleCandidateChoices(array $postParams)
     {
@@ -188,7 +188,7 @@ class IrhpPermitController extends AbstractInternalController implements
     }
 
     /**
-     * @return \Zend\Http\Response|ViewModel
+     * @return \Laminas\Http\Response|ViewModel
      */
     public function requestReplacementAction()
     {
@@ -259,7 +259,7 @@ class IrhpPermitController extends AbstractInternalController implements
     }
 
     /**
-     * @return \Zend\Http\Response|ViewModel
+     * @return \Laminas\Http\Response|ViewModel
      */
     public function terminatePermitAction()
     {

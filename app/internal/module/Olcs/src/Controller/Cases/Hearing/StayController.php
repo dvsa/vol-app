@@ -16,7 +16,7 @@ use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Form\Model\Form\CaseStay as FormClass;
 use Olcs\Data\Mapper\Stay as Mapper;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Stay Controller
@@ -119,7 +119,7 @@ class StayController extends AbstractInternalController implements CaseControlle
     /**
      * Ensure index action redirects to details action
      *
-     * @return array|mixed|\Zend\Http\Response|\Zend\View\Model\ViewModel
+     * @return array|mixed|\Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */
     public function indexAction()
     {

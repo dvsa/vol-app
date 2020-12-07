@@ -4,8 +4,8 @@ namespace OlcsTest\Form\Model\Form\Licence\Surrender;
 
 use Olcs\Form\Model\Form\Licence\Surrender\Surrender;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
-use Zend\Form\Element\Checkbox;
-use Zend\Validator;
+use Laminas\Form\Element\Checkbox;
+use Laminas\Validator;
 
 class SurrenderTest extends AbstractFormValidationTestCase
 {

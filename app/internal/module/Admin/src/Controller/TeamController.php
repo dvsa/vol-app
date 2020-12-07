@@ -23,7 +23,7 @@ use Olcs\Data\Mapper\Team as TeamMapper;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Team management controller
@@ -148,7 +148,7 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
     /**
      * Delete action
      *
-     * @return array|mixed|\Zend\Http\Response|ViewModel
+     * @return array|mixed|\Laminas\Http\Response|ViewModel
      */
     public function deleteAction()
     {
@@ -196,7 +196,7 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
      *
      * @param int $noOfTasks No of tasks
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     protected function processRemoveTeamForm($noOfTasks)
     {
@@ -248,10 +248,10 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
     /**
      * Render view
      *
-     * @param \Zend\Form\Form $form      Form
+     * @param \Laminas\Form\Form $form      Form
      * @param int             $noOfTasks No of tasks
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     protected function renderView($form, $noOfTasks)
     {
@@ -270,9 +270,9 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
     /**
      * Alter teams form
      *
-     * @param \Zend\Form\Form $form Form
+     * @param \Laminas\Form\Form $form Form
      *
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     protected function alterTeamsForm($form)
     {
@@ -286,9 +286,9 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
     /**
      * Alter form for add action - remove the printers exceptions table
      *
-     * @param \Zend\Form\Form $form Form
+     * @param \Laminas\Form\Form $form Form
      *
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     protected function alterFormForAdd($form)
     {
@@ -300,10 +300,10 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
     /**
      * Alter form for editRule action, set default values for listboxes
      *
-     * @param \Zend\Form\Form $form     Form
+     * @param \Laminas\Form\Form $form     Form
      * @param array           $formData Form data
      *
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     protected function alterFormForEditRule($form, $formData)
     {
@@ -328,10 +328,10 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
     /**
      * Alter form for addRule action, set default values for listboxes
      *
-     * @param \Zend\Form\Form $form     Form
+     * @param \Laminas\Form\Form $form     Form
      * @param array           $formData Form data
      *
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     protected function alterFormForAddRule($form, $formData)
     {
@@ -351,7 +351,7 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
      *
      * @param string $name Name
      *
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     public function getForm($name)
     {
@@ -361,7 +361,8 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
         $formHelper->setFormActionFromRequest($form, $this->getRequest());
         if ($name === 'Admin\Form\Model\Form\Team') {
             $formHelper->populateFormTable(
-                $form->get('team-details')->get('printerExceptions'), $this->getExceptionsTable()
+                $form->get('team-details')->get('printerExceptions'),
+                $this->getExceptionsTable()
             );
         } elseif ($name === 'Admin\Form\Model\Form\PrinterException') {
             $teamId = $this->params()->fromRoute('team');
@@ -412,7 +413,7 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
     /**
      * Edit action
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     public function editAction()
     {
@@ -448,7 +449,7 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
     /**
      * Add rule action
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     public function addRuleAction()
     {
@@ -466,7 +467,7 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
     /**
      * Edit rule action
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     public function editRuleAction()
     {
@@ -485,7 +486,7 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
     /**
      * Delete rule action
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     public function deleteRuleAction()
     {

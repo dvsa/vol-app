@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
@@ -97,16 +97,16 @@ class IrfoGvPermit extends OrganisationBase
      * @Form\Type("TextArea")
      * @Form\Options({"label":"Exemption reason"})
      * @Form\Attributes({"class":"extra-long","id":"exemptionDetails", "required":false})
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\NotEmpty","options":{"null"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "isFeeExempt",
      *          "context_values": {"Y"},
      *          "allow_empty": false,
      *          "validators": {
-     *              {"name":"Zend\Validator\NotEmpty"},
-     *              {"name":"Zend\Validator\StringLength","options":{"max":255}}
+     *              {"name":"Laminas\Validator\NotEmpty"},
+     *              {"name":"Laminas\Validator\StringLength","options":{"max":255}}
      *          }
      *      }
      * })

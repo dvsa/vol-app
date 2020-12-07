@@ -3,7 +3,7 @@ namespace OlcsTest\Data\Mapper;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Data\Mapper\DataRetentionRule as Sut;
-use Zend\Form\FormInterface;
+use Laminas\Form\FormInterface;
 use Mockery as m;
 
 /**

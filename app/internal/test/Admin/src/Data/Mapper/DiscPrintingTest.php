@@ -5,7 +5,7 @@ namespace AdminTest\Data\Mapper;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Admin\Data\Mapper\DiscPrinting as Sut;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 
 /**
  * Disc Printing Mapper Test

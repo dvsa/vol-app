@@ -14,7 +14,7 @@ use Dvsa\Olcs\Transfer\Query\System\FinancialStandingRateList as ListDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\FinancialStandingRate as Mapper;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Financial Standing Rate Controller

@@ -2,7 +2,7 @@
 
 namespace OlcsTest\Form\Model\Form;
 
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 
 /**

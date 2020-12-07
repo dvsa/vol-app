@@ -15,7 +15,7 @@ use Dvsa\Olcs\Transfer\Command\Application\GrantInterim;
 use Dvsa\Olcs\Transfer\Command\Application\PrintInterimDocument;
 use Dvsa\Olcs\Transfer\Command\Application\RefuseInterim;
 use Dvsa\Olcs\Transfer\Query\Application\Interim;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Common\Data\Mapper\Lva\Interim as Mapper;
 use Common\RefData;
 
@@ -36,7 +36,7 @@ abstract class AbstractInterimController extends AbstractController
     /**
      * Index Action
      *
-     * @return \Common\View\Model\Section|\Zend\Http\Response
+     * @return \Common\View\Model\Section|\Laminas\Http\Response
      */
     public function indexAction()
     {
@@ -111,7 +111,7 @@ abstract class AbstractInterimController extends AbstractController
     /**
      * grantAction
      *
-     * @return \Common\View\Model\Section|\Zend\Http\Response
+     * @return \Common\View\Model\Section|\Laminas\Http\Response
      */
     public function grantAction()
     {
@@ -204,7 +204,7 @@ abstract class AbstractInterimController extends AbstractController
      *
      * @param array $interimData interimData
      *
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     protected function getInterimForm($interimData)
     {
@@ -241,10 +241,10 @@ abstract class AbstractInterimController extends AbstractController
     /**
      * Alter form
      *
-     * @param \Zend\Form\Form $form        form
+     * @param \Laminas\Form\Form $form        form
      * @param array           $application application
      *
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     protected function alterInterimForm($form, $application)
     {
@@ -307,7 +307,7 @@ abstract class AbstractInterimController extends AbstractController
     /**
      * Redirect To Overview
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     protected function redirectToOverview()
     {
@@ -319,7 +319,7 @@ abstract class AbstractInterimController extends AbstractController
     /**
      * redirect To index
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     protected function redirectToIndex()
     {
@@ -329,7 +329,7 @@ abstract class AbstractInterimController extends AbstractController
     /**
      * post Save Redirect
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     protected function postSaveRedirect()
     {
@@ -350,7 +350,7 @@ abstract class AbstractInterimController extends AbstractController
     /**
      * printInterim
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     protected function printInterim()
     {

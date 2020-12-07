@@ -12,7 +12,7 @@ use Dvsa\Olcs\Transfer\Command\IrhpPermitWindow\Update as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\IrhpPermitWindow\Delete as DeleteDto;
 use Admin\Form\Model\Form\IrhpPermitWindow as PermitWindowForm;
 use Admin\Data\Mapper\IrhpPermitWindow as PermitWindowMapper;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * IRHP Permits Admin Controller

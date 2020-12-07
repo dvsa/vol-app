@@ -2,7 +2,7 @@
 
 namespace Admin\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Options({"label":"scanning.details"})
@@ -46,7 +46,7 @@ class ScanningDetails
      *     "label": "scanning.data.description"
      * })
      * @Form\Type("Text")
-     * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
+     * @Form\Validator({"name": "Laminas\Validator\NotEmpty"})
      */
     public $otherDescription = null;
 
@@ -56,7 +56,7 @@ class ScanningDetails
      *     "label": "scanning.data.entity"
      * })
      * @Form\Type("Text")
-     * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
+     * @Form\Validator({"name": "Laminas\Validator\NotEmpty"})
      */
     public $entityIdentifier = null;
 }

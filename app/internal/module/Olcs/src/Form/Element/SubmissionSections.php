@@ -8,11 +8,11 @@
  */
 namespace Olcs\Form\Element;
 
-use Zend\Form\Element as ZendElement;
-use Zend\ModuleManager\Feature\ViewHelperProviderInterface;
-use Zend\Form\ElementPrepareAwareInterface;
-use Zend\Form\FormInterface;
-use Zend\InputFilter\InputProviderInterface;
+use Laminas\Form\Element as ZendElement;
+use Laminas\ModuleManager\Feature\ViewHelperProviderInterface;
+use Laminas\Form\ElementPrepareAwareInterface;
+use Laminas\Form\FormInterface;
+use Laminas\InputFilter\InputProviderInterface;
 
 /**
  * SubmissionSections
@@ -25,7 +25,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     /**
      * Select form element that contains values for submission type
      *
-     * @var \Zend\Form\Element\Select
+     * @var \Laminas\Form\Element\Select
      */
     protected $submissionType;
 
@@ -40,21 +40,21 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
      * Select button to submit the submission type, which dictates what
      * checkboxes are required.
      *
-     * @var \Zend\Form\Element\Button
+     * @var \Laminas\Form\Element\Button
      */
     protected $submissionTypeSubmit;
 
     /**
      * Hidden form element that contains transportManager Id
      *
-     * @var \Zend\Form\Element\Text
+     * @var \Laminas\Form\Element\Text
      */
     protected $transportManager;
 
     /**
      * Set transport manager
      *
-     * @param \Zend\Form\Element\Text $transportManager Transport Manager text element
+     * @param \Laminas\Form\Element\Text $transportManager Transport Manager text element
      *
      * @return SubmissionSections
      */
@@ -67,7 +67,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     /**
      * Get transport manager
      *
-     * @return \Zend\Form\Element\Text
+     * @return \Laminas\Form\Element\Text
      */
     public function getTransportManager()
     {
@@ -90,7 +90,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     /**
      * Get submission type
      *
-     * @return \Zend\Form\Element\Select
+     * @return \Laminas\Form\Element\Select
      */
     public function getSubmissionType()
     {
@@ -135,7 +135,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
     /**
      * Get submission type submit button
      *
-     * @return \Zend\Form\Element\Button
+     * @return \Laminas\Form\Element\Button
      */
     public function getSubmissionTypeSubmit()
     {
@@ -220,7 +220,6 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
                 if (isset($value['submissionTypeSubmit'])) {
                     $sections = $this->getPreselectedSectionsForType($value['submissionType']);
                     $this->addCssToDifference($value['sections'], $sections);
-
                 } else {
                     // type not submitted
                     $sections = $value['sections'];
@@ -256,7 +255,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
 
     /**
      * Should return an array specification compatible with
-     * {@link Zend\InputFilter\Factory::createInput()}.
+     * {@link Laminas\InputFilter\Factory::createInput()}.
      *
      * @return array
      */
@@ -299,7 +298,7 @@ class SubmissionSections extends ZendElement implements ElementPrepareAwareInter
      */
     private function getPreselectedSectionsForType($submissionType)
     {
-        switch($submissionType) {
+        switch ($submissionType) {
             case 'submission_type_o_bus_reg':
                 $sections = [
                     'case-outline',

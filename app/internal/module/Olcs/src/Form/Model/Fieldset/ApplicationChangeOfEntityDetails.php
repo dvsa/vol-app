@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("change-details")
@@ -14,7 +14,7 @@ class ApplicationChangeOfEntityDetails
      * @Form\Required(true)
      * @Form\Attributes({"required":false})
      * @Form\Options({"label":"application.change-of-entity.details.old-licence-no"})
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      */
     public $oldLicenceNo = null;
 
@@ -23,7 +23,7 @@ class ApplicationChangeOfEntityDetails
      * @Form\Required(true)
      * @Form\Attributes({"required":false})
      * @Form\Options({"label":"application.change-of-entity.details.previous-operator-name"})
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      */
     public $oldOrganisationName = null;
 }

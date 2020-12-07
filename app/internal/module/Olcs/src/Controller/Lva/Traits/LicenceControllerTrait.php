@@ -9,12 +9,12 @@
 namespace Olcs\Controller\Lva\Traits;
 
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Zend\Form\Form;
-use Zend\View\Model\ViewModel;
+use Laminas\Form\Form;
+use Laminas\View\Model\ViewModel;
 use Common\RefData;
 use Olcs\Controller\Traits;
-use Zend\Session\Container;
-use Zend\Http\Response;
+use Laminas\Session\Container;
+use Laminas\Http\Response;
 
 /**
  * Internal Abstract Licence Controller
@@ -33,7 +33,7 @@ trait LicenceControllerTrait
     /**
      * Hook into the dispatch before the controller action is executed
      *
-     * @return null|Zend\Http\Response
+     * @return null|Laminas\Http\Response
      */
     protected function preDispatch()
     {
@@ -112,10 +112,10 @@ trait LicenceControllerTrait
      * Render the section
      *
      * @param string|ViewModel $content   content
-     * @param \Zend\Form\Form  $form      form
+     * @param \Laminas\Form\Form  $form      form
      * @param array            $variables variables
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     protected function render($content, Form $form = null, $variables = [])
     {
@@ -153,7 +153,7 @@ trait LicenceControllerTrait
     /**
      * Gets the search form for the header, it is cached on the object so that the search query is maintained
      *
-     * @return Zend\Session\Container
+     * @return Laminas\Session\Container
      */
     public function getSearchForm()
     {
@@ -181,7 +181,6 @@ trait LicenceControllerTrait
         );
 
         foreach ($this->getAccessibleSections() as $section) {
-
             $sections[$section] = array('route' => 'lva-licence/' . $section);
         }
 
@@ -194,7 +193,7 @@ trait LicenceControllerTrait
      *
      * @param string $section section
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     protected function completeSection($section)
     {

@@ -12,7 +12,7 @@ use Dvsa\Olcs\Transfer\Command\IrhpPermitStock\Delete as DeleteDto;
 use Admin\Form\Model\Form\IrhpPermitStock as PermitStockForm;
 use Admin\Data\Mapper\IrhpPermitStock as PermitStockMapper;
 
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * IRHP Permits Admin Controller
@@ -84,7 +84,7 @@ class IrhpPermitStockController extends AbstractInternalController implements Le
     /**
      * Permit Stock Index View
      *
-     * @return \Zend\Http\Response|ViewModel
+     * @return \Laminas\Http\Response|ViewModel
      */
     public function indexAction()
     {

@@ -2,7 +2,7 @@
 
 namespace Olcs\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
+use Laminas\View\Helper\AbstractHelper;
 use Common\Service\Table\Formatter\Address as AddressFormatter;
 
 /**

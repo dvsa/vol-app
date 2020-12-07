@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("details")
@@ -36,14 +36,14 @@ class Details
      * @Form\Attributes({"class":"long","id":""})
      * @Form\Options({"label":"documents.data.description"})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":255}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":2,"max":255}})
      */
     public $description = null;
 
     /**
      * @Form\Options({"label":"documents.data.file"})
-     * @Form\Type("\Zend\Form\Element\File")
+     * @Form\Type("\Laminas\Form\Element\File")
      */
     public $file = null;
 }

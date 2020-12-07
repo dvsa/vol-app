@@ -8,9 +8,9 @@ use Common\Util\FileContent;
 use Dvsa\Olcs\Transfer\Command\Report\Upload;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Zend\Form\Form;
-use Zend\Http\Response;
-use Zend\View\Model\ViewModel;
+use Laminas\Form\Form;
+use Laminas\Http\Response;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Report Upload Controller
@@ -52,7 +52,7 @@ class ReportUploadController extends AbstractInternalController implements LeftV
      */
     public function indexAction()
     {
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
 
         $form = $this->getForm(ReportUploadForm::class);

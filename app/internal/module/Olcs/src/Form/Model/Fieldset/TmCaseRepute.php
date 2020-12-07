@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
@@ -77,8 +77,8 @@ class TmCaseRepute extends CaseBase
      * @Form\Attributes({"class":"extra-long"})
      * @Form\Options({"label":"Reason why loss of good repute is disproportionate response"})
      * @Form\Type("Textarea")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":500}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":500}})
      */
     public $reputeNotLostReason = null;
 

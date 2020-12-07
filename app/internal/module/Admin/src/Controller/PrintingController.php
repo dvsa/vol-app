@@ -17,7 +17,7 @@ use Dvsa\Olcs\Transfer\Query\Printer\PrinterList as ListDto;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\Printer as PrinterMapper;
 use Admin\Form\Model\Form\Printer as PrinterForm;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
 
 /**
@@ -98,12 +98,14 @@ class PrintingController extends AbstractInternalController implements LeftViewP
     /**
      * Specifically for navigation.
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function jumpAction()
     {
         return $this->redirect()->toRoute(
-            'admin-dashboard/admin-printing/admin-printer-management', [], ['code' => 303]
+            'admin-dashboard/admin-printing/admin-printer-management',
+            [],
+            ['code' => 303]
         );
     }
 

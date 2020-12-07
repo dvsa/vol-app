@@ -17,7 +17,7 @@ class ApplicationStatusTest extends AbstractDataServiceTestCase
 
     /** @var  ApplicationStatus */
     private $sut;
-    /** @var  \Zend\Http\Response | m\MockInterface */
+    /** @var  \Laminas\Http\Response | m\MockInterface */
     private $mockResp;
     /** @var  \Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder | m\MockInterface */
     protected $mockTransferAnnotationBuilder;
@@ -26,7 +26,7 @@ class ApplicationStatusTest extends AbstractDataServiceTestCase
     {
         $this->sut = new ApplicationStatus;
 
-        $this->mockResp = m::mock(\Zend\Http\Response::class);
+        $this->mockResp = m::mock(\Laminas\Http\Response::class);
         $this->mockTransferAnnotationBuilder = m::mock(\Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder::class);
 
         parent::setUp();

@@ -6,7 +6,7 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
 use Olcs\Form\Model\Form;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * OperatorLicencesApplicationsController Controller
@@ -55,11 +55,11 @@ class OperatorLicencesApplicationsController extends AbstractInternalController 
     /**
      * Create a table of Licences
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     private function setupLicencesTable()
     {
-        /* @var $request \Zend\Http\Request */
+        /* @var $request \Laminas\Http\Request */
         $request = $this->getRequest();
         // exclude certain licence statuses
         $request->getQuery()->set(
@@ -81,11 +81,11 @@ class OperatorLicencesApplicationsController extends AbstractInternalController 
     /**
      * Create a table of Applications
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     private function setupApplicationsTable()
     {
-        /* @var $request \Zend\Http\Request */
+        /* @var $request \Laminas\Http\Request */
         $request = $this->getRequest();
 
         // order by created date

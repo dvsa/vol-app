@@ -36,8 +36,8 @@ class TransportManagerApplicationOrLicenceFullTest extends AbstractFormValidatio
                 $element,
                 'abc',
                 [
-                    \Zend\I18n\Validator\IsFloat::NOT_FLOAT,
-                    \Zend\Validator\Between::VALUE_NOT_NUMERIC,
+                    \Laminas\I18n\Validator\IsFloat::NOT_FLOAT,
+                    \Laminas\Validator\Between::VALUE_NOT_NUMERIC,
                 ]
             );
 

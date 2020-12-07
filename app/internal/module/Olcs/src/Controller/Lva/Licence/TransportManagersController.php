@@ -60,7 +60,7 @@ class TransportManagersController extends Lva\AbstractTransportManagersControlle
             return parent::delete();
         }
 
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
 
         $formHelper = $this->getServiceLocator()->get('Helper\Form');

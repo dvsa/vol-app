@@ -4,9 +4,9 @@ namespace Olcs\Controller\TransportManager\Details;
 
 use Common\Controller\Lva\Traits\CrudActionTrait;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Zend\Form\FormInterface;
-use Zend\Http\Response;
-use Zend\View\Model\ViewModel;
+use Laminas\Form\FormInterface;
+use Laminas\Http\Response;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Transport Manager Details Previous History Controller
@@ -35,7 +35,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
      */
     public function indexAction()
     {
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
 
         if ($request->isPost()) {
@@ -73,7 +73,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
     {
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
-        /** @var \Zend\Form\FormInterface $form */
+        /** @var \Laminas\Form\FormInterface $form */
         $form = $formHelper->createForm('TmPreviousHistory');
 
         $this->getServiceLocator()->get('Helper\TransportManager')

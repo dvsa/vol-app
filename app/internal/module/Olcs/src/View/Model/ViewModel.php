@@ -7,14 +7,14 @@
  */
 namespace Olcs\View\Model;
 
-use Zend\View\Model\ViewModel as ZendViewModel;
+use Laminas\View\Model\ViewModel as LaminasViewModel;
 
 /**
  * View Model
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ViewModel extends ZendViewModel
+class ViewModel extends LaminasViewModel
 {
     protected $terminate = true;
 
@@ -32,17 +32,17 @@ class ViewModel extends ZendViewModel
         $this->horizontalNavigationId = $id;
     }
 
-    public function setContent(ZendViewModel $content)
+    public function setContent(LaminasViewModel $content)
     {
         $this->addChild($content, 'content');
     }
 
-    public function setRight(ZendViewModel $right)
+    public function setRight(LaminasViewModel $right)
     {
         $this->addChild($right, 'right');
     }
 
-    public function setLeft(ZendViewModel $left)
+    public function setLeft(LaminasViewModel $left)
     {
         $this->addChild($left, 'left');
     }
@@ -51,7 +51,7 @@ class ViewModel extends ZendViewModel
     {
         $children = $this->getChildrenByCaptureTo('left');
 
-        /** @var ZendViewModel $child */
+        /** @var LaminasViewModel $child */
         foreach ($children as $child) {
             $child->setCaptureTo('void');
         }

@@ -18,7 +18,7 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Common\Exception\DataServiceException;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Case ConditionUndertaking Controller
@@ -179,7 +179,7 @@ class ConditionUndertakingController extends AbstractInternalController implemen
                     'label' => 'Licence',
                     'options' => [
                         RefData::ATTACHED_TO_LICENCE => 'Licence (' . $caseData['licence']['licNo'] . ')'
-                   ]
+                    ]
                 ],
                 'OC' => [
                     'label' => 'OC Address',

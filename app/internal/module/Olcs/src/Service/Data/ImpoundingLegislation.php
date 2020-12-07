@@ -4,7 +4,7 @@ namespace Olcs\Service\Data;
 
 use Common\Service\Data\LicenceServiceTrait;
 use Common\Service\Data\RefData;
-use Zend\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\FactoryInterface;
 
 /**
  * Class ImpoundingLegislation

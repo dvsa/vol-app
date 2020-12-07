@@ -55,11 +55,11 @@ use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericList;
 use RuntimeException;
-use Zend\Form\Form;
-use Zend\Http\Response;
-use Zend\Validator\ValidatorChain;
-use Zend\View\Model\JsonModel;
-use Zend\View\Model\ViewModel;
+use Laminas\Form\Form;
+use Laminas\Http\Response;
+use Laminas\Validator\ValidatorChain;
+use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
 
 class IrhpApplicationController extends AbstractInternalController implements
     IrhpApplicationControllerInterface,
@@ -159,7 +159,7 @@ class IrhpApplicationController extends AbstractInternalController implements
     /**
      * Get left view
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function getLeftView()
     {
@@ -171,7 +171,7 @@ class IrhpApplicationController extends AbstractInternalController implements
     }
 
     /**
-     * @return \Zend\Http\Response|ViewModel
+     * @return \Laminas\Http\Response|ViewModel
      */
     public function indexAction()
     {
@@ -185,7 +185,7 @@ class IrhpApplicationController extends AbstractInternalController implements
     }
 
     /**
-     * @return \Zend\Http\Response|ViewModel
+     * @return \Laminas\Http\Response|ViewModel
      */
     public function detailsAction()
     {
@@ -371,7 +371,7 @@ class IrhpApplicationController extends AbstractInternalController implements
     /**
      * Handles click of the Submit button on right-sidebar
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      *
      */
     public function submitAction()
@@ -437,7 +437,7 @@ class IrhpApplicationController extends AbstractInternalController implements
     /**
      * Handles click of the Cancel button on right sidebar
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      *
      */
     public function cancelAction()
@@ -454,7 +454,7 @@ class IrhpApplicationController extends AbstractInternalController implements
     /**
      * Handles click of the Terminate button on right sidebar
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function terminateAction()
     {
@@ -490,7 +490,7 @@ class IrhpApplicationController extends AbstractInternalController implements
     /**
      * Handles click of the Decline button on right sidebar
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      *
      */
     public function declineAction()
@@ -509,7 +509,7 @@ class IrhpApplicationController extends AbstractInternalController implements
     /**
      * Handles click of the Accept button on right sidebar
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      *
      */
     public function acceptAction()
@@ -545,7 +545,7 @@ class IrhpApplicationController extends AbstractInternalController implements
     /**
      * Handles click of the Revive Application button on right sidebar
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function reviveFromWithdrawnAction()
     {
@@ -561,7 +561,7 @@ class IrhpApplicationController extends AbstractInternalController implements
     /**
      * Handles click of the Revive Application button on right sidebar
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function reviveFromUnsuccessfulAction()
     {
@@ -577,7 +577,7 @@ class IrhpApplicationController extends AbstractInternalController implements
     /**
      * Handles click of the Grant button on right sidebar
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      *
      */
     public function grantAction()
@@ -594,7 +594,7 @@ class IrhpApplicationController extends AbstractInternalController implements
     /**
      * Handles click of the Reset to Not Yet Submitted button on right sidebar
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      *
      */
     public function resetToNotYetSubmittedAction()

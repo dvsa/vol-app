@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Form;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("documents-home")
@@ -52,7 +52,7 @@ class DocumentsHome
      *     },
      *     "disable_inarray_validator": false
      * })
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Type("\Laminas\Form\Element\Select")
      */
     public $showDocs = null;
 
@@ -64,7 +64,7 @@ class DocumentsHome
      *     },
      *     "disable_inarray_validator": false
      * })
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Type("\Laminas\Form\Element\Select")
      */
     public $format = null;
 
@@ -73,7 +73,7 @@ class DocumentsHome
      * @Form\Options({
      *     "label": "documents-home.submit.filter"
      * })
-     * @Form\Type("\Zend\Form\Element\Button")
+     * @Form\Type("\Laminas\Form\Element\Button")
      */
     public $filter = null;
 }

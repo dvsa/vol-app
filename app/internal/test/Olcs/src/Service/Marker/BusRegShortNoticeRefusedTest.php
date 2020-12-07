@@ -56,7 +56,7 @@ class BusRegShortNoticeRefusedTest extends TestCase
             'busReg' => ['shortNoticeRefused' => 'Y']
         ];
 
-        $mockPartialHelper = m::mock(\Zend\View\Helper\Partial::class);
+        $mockPartialHelper = m::mock(\Laminas\View\Helper\Partial::class);
 
         $mockPartialHelper->shouldReceive('__invoke')
             ->with('marker/busreg-notice-refused', [])->once()->andReturn('HTML1');

@@ -8,8 +8,8 @@
 namespace Olcs\Controller\Lva\Traits;
 
 use Common\RefData;
-use Zend\Form\Form;
-use Zend\View\Model\ViewModel;
+use Laminas\Form\Form;
+use Laminas\View\Model\ViewModel;
 use Common\Controller\Lva\Traits\CommonApplicationControllerTrait;
 use Olcs\Controller\Traits\ApplicationControllerTrait as GenericInternalApplicationControllerTrait;
 
@@ -45,10 +45,10 @@ trait ApplicationControllerTrait
      * Render the section
      *
      * @param string|ViewModel $content   content
-     * @param \Zend\Form\Form  $form      form
+     * @param \Laminas\Form\Form  $form      form
      * @param array            $variables variables
      *
-     * @return \Zend\View\Model\ViewModel|null
+     * @return \Laminas\View\Model\ViewModel|null
      */
     protected function render($content, Form $form = null, $variables = array())
     {

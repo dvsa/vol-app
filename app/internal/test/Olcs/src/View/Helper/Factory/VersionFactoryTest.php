@@ -6,7 +6,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use OlcsTest\Bootstrap;
 use Olcs\View\Helper\Factory\VersionFactory;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class VersionFactoryTest
@@ -41,7 +41,7 @@ class VersionFactoryTest extends TestCase
      */
     private function getMockViewServiceLocator()
     {
-        $serviceLocator = m::mock(\Zend\ServiceManager\ServiceLocatorInterface::class);
+        $serviceLocator = m::mock(\Laminas\ServiceManager\ServiceLocatorInterface::class);
         $serviceLocator->shouldReceive('getServiceLocator->get')
             ->with('config')
             ->once()

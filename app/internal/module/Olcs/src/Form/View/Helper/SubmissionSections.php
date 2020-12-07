@@ -2,11 +2,11 @@
 
 namespace Olcs\Form\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
-use Zend\Form\ElementInterface;
-use Zend\I18n\Translator\TranslatorInterface as Translator;
-use Zend\I18n\Translator\TranslatorAwareInterface;
-use Zend\Form\Exception;
+use Laminas\View\Helper\AbstractHelper;
+use Laminas\Form\ElementInterface;
+use Laminas\I18n\Translator\TranslatorInterface as Translator;
+use Laminas\I18n\Translator\TranslatorAwareInterface;
+use Laminas\Form\Exception;
 use Olcs\Form\Element\SubmissionSections  as SubmissionSectionsElement;
 
 /**
@@ -50,6 +50,5 @@ class SubmissionSections extends AbstractHelper
         $multiCheckboxPlugin->setSeparator('');
 
         return $markup;
-
     }
 }

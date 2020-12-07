@@ -11,7 +11,7 @@ use Dvsa\Olcs\Transfer\Query\Audit\ReadTransportManager;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Read History Controller

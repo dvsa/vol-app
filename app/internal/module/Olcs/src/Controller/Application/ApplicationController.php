@@ -18,8 +18,8 @@ use Dvsa\Olcs\Transfer\Query\ChangeOfEntity\ChangeOfEntity as ChangeOfEntityQry;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Olcs\Controller\Traits;
-use Zend\Http\Response;
-use Zend\View\Model\ViewModel;
+use Laminas\Http\Response;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Application Controller
@@ -95,11 +95,11 @@ class ApplicationController extends AbstractController implements ApplicationCon
     /**
      * Set method for request
      *
-     * @param \Zend\Http\Request $request Zend
+     * @param \Laminas\Http\Request $request Zend
      *
      * @return void
      */
-    public function setRequest(\Zend\Http\Request $request)
+    public function setRequest(\Laminas\Http\Request $request)
     {
         $this->request = $request;
         return $this;
@@ -170,7 +170,7 @@ class ApplicationController extends AbstractController implements ApplicationCon
     /**
      * undo grant action
      *
-     * @return \Zend\Http\Response|ViewModel
+     * @return \Laminas\Http\Response|ViewModel
      */
     public function undoGrantAction()
     {
@@ -227,7 +227,7 @@ class ApplicationController extends AbstractController implements ApplicationCon
     /**
      * Action to handle an application change of entity request.
      *
-     * @return string|\Zend\Http\Response|ViewModel
+     * @return string|\Laminas\Http\Response|ViewModel
      */
     public function changeOfEntityAction()
     {

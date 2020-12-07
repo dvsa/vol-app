@@ -1,7 +1,7 @@
 <?php
 
 use Admin\Controller\PublishedPublicationController;
-use Zend\Mvc\Router\Http\Segment;
+use Laminas\Mvc\Router\Http\Segment;
 
 use Admin\Listener\RouteParam\IrhpPermitAdminFurniture;
 use Admin\Listener\RouteParam;

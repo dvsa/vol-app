@@ -4,7 +4,7 @@ namespace Olcs\Controller\Traits;
 
 use Dvsa\Olcs\Transfer\Query\Document\DocumentList;
 use Dvsa\Olcs\Utils\Constants\FilterOptions;
-use Zend\Form\Element\Select;
+use Laminas\Form\Element\Select;
 
 /**
  * Document Search Trait
@@ -16,7 +16,7 @@ trait DocumentSearchTrait
      *
      * @return string
      */
-    protected abstract function getDocumentTableName();
+    abstract protected function getDocumentTableName();
 
     /**
      * Inspect the request to see if we have any filters set, and if necessary, filter them down to a valid subset
@@ -65,11 +65,11 @@ trait DocumentSearchTrait
      *
      * @param array $filters Filters data
      *
-     * @return \Zend\Form\FormInterface
+     * @return \Laminas\Form\FormInterface
      */
     protected function getDocumentForm($filters = [])
     {
-        /** @var \Zend\Di\ServiceLocator $sm */
+        /** @var \Laminas\Di\ServiceLocator $sm */
         $sm = $this->getServiceLocator();
 
         /** @var \Common\Service\Helper\FormHelperService $formHelper */
@@ -95,7 +95,7 @@ trait DocumentSearchTrait
         );
 
         // Populate the "Format" filter select element with values
-        /** @var \Zend\Form\Element\Select $formatSelectElement */
+        /** @var \Laminas\Form\Element\Select $formatSelectElement */
         $formatSelectElement = $form->get('format');
         $formatSelectElement->setValueOptions(array_merge(['' => 'All'], $this->getDocumentsExtensionList($filters)));
 

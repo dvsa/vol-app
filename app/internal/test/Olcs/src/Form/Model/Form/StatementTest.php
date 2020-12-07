@@ -4,7 +4,7 @@ namespace OlcsTest\Form\Model\Form;
 
 use Olcs\Form\Model\Form\Statement;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
-use Zend\Validator\Date;
+use Laminas\Validator\Date;
 use Common\Validator\Date as CommonDateValidator;
 
 /**

@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
@@ -44,8 +44,8 @@ class ImpoundingFields
      * })
      *
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":1,"max":20}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":1,"max":20}})
      */
     public $vrm = null;
 
@@ -72,7 +72,7 @@ class ImpoundingFields
      *     "render_delimiters": true,
      *     "pattern": "d MMMM y '</fieldset><fieldset><div class=""field""><label for=hearingDate>Hearing time</label>'HH:mm:ss'</div>'"
      * })
-     * @Form\Filter({"name":"Zend\Filter\DateTimeSelect", "options":{"null_on_empty":true}})
+     * @Form\Filter({"name":"Laminas\Filter\DateTimeSelect", "options":{"null_on_empty":true}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "impoundingType",
@@ -116,8 +116,8 @@ class ImpoundingFields
      * @Form\Type("Text")
      * @Form\Options({"label":"Other hearing location"})
      * @Form\Attributes({"class":"medium","id":"venueOther"})
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\NotEmpty","options":{"null"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "impoundingType",
@@ -130,8 +130,8 @@ class ImpoundingFields
      *                          "context_field": "venue",
      *                          "context_values": {"other"},
      *                          "validators": {
-     *                              {"name":"Zend\Validator\StringLength","options":{"max":255}},
-     *                              {"name":"Zend\Validator\NotEmpty"}
+     *                              {"name":"Laminas\Validator\StringLength","options":{"max":255}},
+     *                              {"name":"Laminas\Validator\NotEmpty"}
      *                          }
      *                      }
      *              }
@@ -190,8 +190,8 @@ class ImpoundingFields
      * @Form\Options({"label":"Notes/ECMS number"})
      * @Form\Required(false)
      * @Form\Type("TextArea")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":4000}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":5,"max":4000}})
      */
     public $notes = null;
 }

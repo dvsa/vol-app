@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("withdraw-details")
@@ -25,10 +25,10 @@ class WithdrawDetails
      *      "disable_inarray_validator": true,
      * })
      * @Form\Validator({
-     *      "name": "Zend\Validator\NotEmpty",
+     *      "name": "Laminas\Validator\NotEmpty",
      *      "options": {
      *          "messages": {
-     *              Zend\Validator\NotEmpty::IS_EMPTY: "Please select a reason for withdrawing the application"
+     *              Laminas\Validator\NotEmpty::IS_EMPTY: "Please select a reason for withdrawing the application"
      *          }
      *      }
      * })

@@ -4,7 +4,7 @@ namespace OlcsTest\Data\Mapper;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Data\Mapper\InspectionRequest as Sut;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 
 /**
  * Inspection Request Mapper Test

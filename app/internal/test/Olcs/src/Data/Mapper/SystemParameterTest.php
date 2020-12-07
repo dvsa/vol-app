@@ -10,7 +10,7 @@ namespace OlcsTest\Data\Mapper;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Data\Mapper\SystemParameter as Sut;
-use Zend\Form\FormInterface;
+use Laminas\Form\FormInterface;
 
 /**
  * SystemParameter mapper test

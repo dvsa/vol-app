@@ -5,9 +5,9 @@ namespace OlcsTest\FormService\Form\Lva;
 use Common\Service\Table\TableBuilder;
 use Mockery as m;
 use Olcs\FormService\Form\Lva\Addresses;
-use Zend\InputFilter\InputFilter;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\InputFilter\Input;
+use Laminas\InputFilter\InputFilter;
+use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\InputFilter\Input;
 
 /**
  * @covers Olcs\FormService\Form\Lva\Addresses
@@ -22,16 +22,16 @@ class AddressesTest extends AbstractLvaFormServiceTestCase
     public function testGetForm()
     {
         // Mocks
-        $mockForm = m::mock(\Zend\Form\Form::class);
+        $mockForm = m::mock(\Laminas\Form\Form::class);
 
         $this->formHelper
             ->shouldReceive('createForm')->andReturn($mockForm);
 
         //  check set label
-        $mockElmSaveBtn = m::mock(\Zend\Form\ElementInterface::class);
+        $mockElmSaveBtn = m::mock(\Laminas\Form\ElementInterface::class);
         $mockElmSaveBtn->shouldReceive('setLabel')->with('internal.save.button')->once();
 
-        $mockFsActions = m::mock(\Zend\Form\FieldsetInterface::class);
+        $mockFsActions = m::mock(\Laminas\Form\FieldsetInterface::class);
         $mockFsActions->shouldReceive('get')->once()->andReturn($mockElmSaveBtn);
 
         $mockForm->shouldReceive('get')->with('form-actions')->once()->andReturn($mockFsActions);

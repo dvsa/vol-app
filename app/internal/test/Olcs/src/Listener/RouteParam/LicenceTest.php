@@ -10,8 +10,8 @@ use Olcs\Listener\RouteParam\Licence;
 use Mockery as m;
 use Olcs\Listener\RouteParams;
 use Common\RefData;
-use Zend\Navigation\Page\AbstractPage;
-use Zend\View\Helper\Container;
+use Laminas\Navigation\Page\AbstractPage;
+use Laminas\View\Helper\Container;
 
 /**
  * Class LicenceTest
@@ -39,7 +39,7 @@ class LicenceTest extends TestCase
 
     public function testAttach()
     {
-        $mockEventManager = m::mock('Zend\EventManager\EventManagerInterface');
+        $mockEventManager = m::mock('Laminas\EventManager\EventManagerInterface');
         $mockEventManager->shouldReceive('attach')->once()
             ->with(RouteParams::EVENT_PARAM . 'licence', [$this->sut, 'onLicence'], 1);
 
@@ -63,7 +63,7 @@ class LicenceTest extends TestCase
         $this->sut->setLicenceService($mockLicenceService);
 
 
-        $mockViewHelperManager = m::mock(\Zend\View\HelperPluginManager::class);
+        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
         $this->sut->setViewHelperManager($mockViewHelperManager);
 
         $mockAnnotationBuilder->shouldReceive('createQuery')->once()->andReturnUsing(
@@ -526,7 +526,7 @@ class LicenceTest extends TestCase
 
     public function testCreateService()
     {
-        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
+        $mockViewHelperManager = m::mock('Laminas\View\HelperPluginManager');
         $mockLicenceService = m::mock('Common\Service\Data\Licence');
         $mockSurrenderService = m::mock(Surrender::class);
         $mockNavigation = m::mock(); // 'right-sidebar'
@@ -535,7 +535,7 @@ class LicenceTest extends TestCase
         $mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
         $mainNav = m::mock();
 
-        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockSl = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
         $mockSl->shouldReceive('get')->with('Common\Service\Data\Licence')->andReturn($mockLicenceService);

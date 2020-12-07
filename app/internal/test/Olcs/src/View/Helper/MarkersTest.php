@@ -3,7 +3,7 @@
 namespace OlcsTest\View\Helper;
 
 use Olcs\View\Helper\Markers;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
@@ -22,8 +22,8 @@ class MarkersTest extends MockeryTestCase
     {
         $sut = new Markers();
 
-        $mockView = m::mock('\Zend\View\Renderer\PhpRenderer');
-        $mockViewHelper = m::mock('\Zend\View\Helper\Url');
+        $mockView = m::mock('\Laminas\View\Renderer\PhpRenderer');
+        $mockViewHelper = m::mock('\Laminas\View\Helper\Url');
         $mockViewHelper->shouldReceive('__invoke');
         $mockView->shouldReceive('plugin')->andReturn($mockViewHelper);
 

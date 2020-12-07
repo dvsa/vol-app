@@ -9,7 +9,7 @@ use Dvsa\Olcs\Transfer\Query\Audit\ReadApplication;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Read History Controller

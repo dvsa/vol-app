@@ -41,7 +41,7 @@ class DocumentSearchTraitTest extends MockeryTestCase
                 'new3' => null,
             ];
 
-        $mockEl = m::mock(\Zend\Form\Element\Select::class);
+        $mockEl = m::mock(\Laminas\Form\Element\Select::class);
         $mockEl->shouldReceive('getValueOptions')->once()->andReturn($options);
         $mockEl->shouldReceive('setValueOptions')
             ->once()
@@ -69,7 +69,7 @@ class DocumentSearchTraitTest extends MockeryTestCase
      */
     public function testMapDocumentFilters($extra, $expect)
     {
-        $mockRequest = m::mock(\Zend\Http\Request::class);
+        $mockRequest = m::mock(\Laminas\Http\Request::class);
         $mockRequest->shouldReceive('getQuery->toArray')->once()->andReturn(['query' => 'unit_Query']);
 
         $this->sut->shouldReceive('getRequest')->once()->andReturn($mockRequest);
@@ -138,15 +138,15 @@ class DocumentSearchTraitTest extends MockeryTestCase
             'category' => $expectCategory,
         ];
 
-        $mockRequest = m::mock(\Zend\Http\Request::class);
+        $mockRequest = m::mock(\Laminas\Http\Request::class);
 
-        $mockField = m::mock(\Zend\Form\Element::class)->makePartial()
+        $mockField = m::mock(\Laminas\Form\Element::class)->makePartial()
             ->shouldReceive('setValueOptions')->once()->with(m::hasKey(FilterOptions::SHOW_ALL))
             ->getMock();
-        $mockFormatSelect = m::mock(\Zend\Form\Element\Select::class);
+        $mockFormatSelect = m::mock(\Laminas\Form\Element\Select::class);
         $mockFormatSelect->shouldReceive('setValueOptions')->with(['' => 'All', 'RTF' => 'RTF', 'D' => 'D'])->once();
 
-        $mockForm = m::mock(\Zend\Form\FormInterface::class)->makePartial()
+        $mockForm = m::mock(\Laminas\Form\FormInterface::class)->makePartial()
             ->shouldReceive('setData')->once()->with($filters)
             ->shouldReceive('get')->once()->with('showDocs')->andReturn($mockField)
             ->shouldReceive('get')->once()->with('format')->andReturn($mockFormatSelect)
@@ -161,7 +161,7 @@ class DocumentSearchTraitTest extends MockeryTestCase
             ->shouldReceive('setCategory')->once()->with($expectCategory)
             ->getMock();
 
-        $mockSm = m::mock(\Zend\Di\ServiceLocatorInterface::class)
+        $mockSm = m::mock(\Laminas\Di\ServiceLocatorInterface::class)
             ->shouldReceive('get')->with('Helper\Form')->once()->andReturn($mockFormHelper)
             ->shouldReceive('get')->with(DocumentSubCategoryDS::class)->once()->andReturn($mockDocSubCatDs)
             ->getMock();

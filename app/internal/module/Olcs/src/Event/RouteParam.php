@@ -2,7 +2,7 @@
 
 namespace Olcs\Event;
 
-use Zend\EventManager\Event;
+use Laminas\EventManager\Event;
 
 /**
  * Class RouteParam

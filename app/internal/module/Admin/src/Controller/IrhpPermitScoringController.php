@@ -14,10 +14,10 @@ use Dvsa\Olcs\Transfer\Query\Permits\PostScoringReport;
 use Dvsa\Olcs\Transfer\Query\Permits\StockOperationsPermitted;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
-use Zend\Escaper\Escaper;
-use Zend\Http\Response;
-use Zend\View\Model\ViewModel;
-use Zend\View\Model\JsonModel;
+use Laminas\Escaper\Escaper;
+use Laminas\Http\Response;
+use Laminas\View\Model\ViewModel;
+use Laminas\View\Model\JsonModel;
 
 class IrhpPermitScoringController extends AbstractIrhpPermitAdminController implements LeftViewProvider
 {

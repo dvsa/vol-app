@@ -16,7 +16,7 @@ use Admin\Form\Model\Form\IrfoStockControl as Form;
 use Admin\Form\Model\Form\IrfoStockControlFilter as FilterForm;
 use Admin\Form\Model\Form\IrfoStockControlIssued as IssuedForm;
 use Common\RefData;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 
 /**
@@ -94,7 +94,7 @@ class IrfoStockControlController extends AbstractInternalController implements L
 
     private function setFilterDefaults()
     {
-        /* @var $request \Zend\Http\Request */
+        /* @var $request \Laminas\Http\Request */
         $request = $this->getRequest();
 
         $filters = array_merge(

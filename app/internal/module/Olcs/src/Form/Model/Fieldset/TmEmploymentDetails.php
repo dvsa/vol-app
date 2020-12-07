@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Attributes({"class":""})
@@ -27,9 +27,9 @@ class TmEmploymentDetails
      * @Form\Options({"label":"transport-manager.employment.form.position"})
      * @Form\Required(false)
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator({
-     *     "name": "Zend\Validator\StringLength",
+     *     "name": "Laminas\Validator\StringLength",
      *     "options": {
      *          "max": 45,
      *     },
@@ -42,9 +42,9 @@ class TmEmploymentDetails
      * @Form\Options({"label":"transport-manager.employment.form.hoursPerWeek"})
      * @Form\Required(false)
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator({
-     *     "name": "Zend\Validator\StringLength",
+     *     "name": "Laminas\Validator\StringLength",
      *     "options": {
      *          "max": 100,
      *     },

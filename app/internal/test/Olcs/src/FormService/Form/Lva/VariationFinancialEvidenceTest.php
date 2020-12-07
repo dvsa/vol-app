@@ -58,8 +58,8 @@ class VariationFinancialEvidenceTest extends MockeryTestCase
             ->once()
             ->getMock();
 
-        /** @var \Zend\Http\Request $request */
-        $request = m::mock(\Zend\Http\Request::class);
+        /** @var \Laminas\Http\Request $request */
+        $request = m::mock(\Laminas\Http\Request::class);
 
         // Mocks
         $mockForm = m::mock();

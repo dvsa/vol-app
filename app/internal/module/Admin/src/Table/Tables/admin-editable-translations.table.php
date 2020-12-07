@@ -1,7 +1,7 @@
 <?php
 
 use Common\Util\Escape;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 return [
     'settings' => [

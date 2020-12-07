@@ -25,7 +25,7 @@ class UnlicensedBusinessDetailsController extends OperatorBusinessDetailsControl
     /**
      * Redirect to the first menu section
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function indexJumpAction()
     {
@@ -35,7 +35,7 @@ class UnlicensedBusinessDetailsController extends OperatorBusinessDetailsControl
     /**
      * Index action
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function indexAction()
     {
@@ -53,11 +53,11 @@ class UnlicensedBusinessDetailsController extends OperatorBusinessDetailsControl
             }
         }
 
-        /** @var \Zend\Form\FormInterface $form */
+        /** @var \Laminas\Form\FormInterface $form */
         $form = $this->getForm('UnlicensedOperator');
         $this->pageTitle = 'internal-operator-create-new-unlicensed-operator';
 
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
 
         if ($operator) {

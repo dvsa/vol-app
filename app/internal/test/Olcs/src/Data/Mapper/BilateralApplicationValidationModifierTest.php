@@ -6,9 +6,9 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Data\Mapper\BilateralApplicationValidationModifier;
 use Olcs\Service\Permits\Bilateral\ApplicationFormPopulator;
-use Zend\Form\Form;
-use Zend\InputFilter\Input;
-use Zend\InputFilter\InputFilter;
+use Laminas\Form\Form;
+use Laminas\InputFilter\Input;
+use Laminas\InputFilter\InputFilter;
 
 /**
  * BilateralApplicationValidationModifier Mapper Test

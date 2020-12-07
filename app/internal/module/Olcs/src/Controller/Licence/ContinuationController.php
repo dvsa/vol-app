@@ -5,7 +5,7 @@ namespace Olcs\Controller\Licence;
 use Common\RefData;
 use Olcs\Controller\AbstractController;
 use Olcs\Data\Mapper\Continuation as ContinuationMapper;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Continuation Controller
@@ -17,7 +17,7 @@ class ContinuationController extends AbstractController
     /**
      * Process action - updateContinuation
      *
-     * @return \Zend\Http\Response|ViewModel
+     * @return \Laminas\Http\Response|ViewModel
      */
     public function updateContinuationAction()
     {
@@ -34,7 +34,7 @@ class ContinuationController extends AbstractController
         $this->alterForm($form, $continuationDetail, $hasOutstandingContinuationFee);
         $this->populateFormDefaultValues($form, $continuationDetail, $numNotCeasedDiscs);
 
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
 
         if ($request->isPost()) {
@@ -82,7 +82,7 @@ class ContinuationController extends AbstractController
     protected function postSetFormData(\Common\Form\Form $form)
     {
         if ($form->getName() === 'UpdateContinuation') {
-            /** @var \Zend\Form\Fieldset $fields */
+            /** @var \Laminas\Form\Fieldset $fields */
             $fields = $form->get('fields');
 
             if ($fields->get('received')->getValue() === 'N') {
@@ -201,7 +201,7 @@ class ContinuationController extends AbstractController
     /**
      * Populate the values of the form
      *
-     * @param \Zend\Form\Form $form               form
+     * @param \Laminas\Form\Form $form               form
      * @param array           $continuationDetail Entity data
      * @param int             $numNotCeasedDiscs  numNotCeasedDiscs
      *
@@ -238,7 +238,7 @@ class ContinuationController extends AbstractController
     /**
      * Alter the update continuation form dependant on licence and continuation details
      *
-     * @param \Zend\Form\Form $form                          form
+     * @param \Laminas\Form\Form $form                          form
      * @param array           $continuationDetail            Entity data
      * @param bool            $hasOutstandingContinuationFee hasOutstandingContinuationFee
      *
@@ -276,7 +276,7 @@ class ContinuationController extends AbstractController
     /**
      * Alter form action buttons
      *
-     * @param \Zend\Form\Form $form                          form
+     * @param \Laminas\Form\Form $form                          form
      * @param bool            $hasOutstandingContinuationFee hasoutstandingContinuationFee
      * @param array           $continuationDetail            Entity data
      *
@@ -294,7 +294,7 @@ class ContinuationController extends AbstractController
     /**
      * Only enable the Received element for certain continuation statuses
      *
-     * @param \Zend\Form\Form $form               form
+     * @param \Laminas\Form\Form $form               form
      * @param array           $continuationDetail continuationDetail
      *
      * @return void
@@ -339,7 +339,7 @@ class ContinuationController extends AbstractController
     /**
      * Only enable the ChecklistStatus element for certain continuation statuses
      *
-     * @param \Zend\Form\Form $form               form
+     * @param \Laminas\Form\Form $form               form
      * @param array           $continuationDetail continuationDetail
      *
      * @return void
@@ -361,7 +361,7 @@ class ContinuationController extends AbstractController
             }
         } else {
             $this->getServiceLocator()->get('Helper\Form')->disableElement($form, 'fields->checklistStatus');
-            /* @var $e \Zend\Form\Element */
+            /* @var $e \Laminas\Form\Element */
             $e = $form->get('fields')->get('checklistStatus');
             // force element to always disabled, eg JS will not re-enable it
             $e->setAttribute('data-always-disabled', 'true');
@@ -376,7 +376,7 @@ class ContinuationController extends AbstractController
     /**
      * Only show the TotalVehicleAuthorisation element for certain licence types
      *
-     * @param \Zend\Form\Form $form               form
+     * @param \Laminas\Form\Form $form               form
      * @param array           $continuationDetail continuationDetail
      *
      * @return void
@@ -401,7 +401,7 @@ class ContinuationController extends AbstractController
     /**
      * Only show the NumberOfDiscs element for certain licence types
      *
-     * @param \Zend\Form\Form $form               form
+     * @param \Laminas\Form\Form $form               form
      * @param array           $continuationDetail continuationDetail
      * @param array           $postData           postData
      *
@@ -424,7 +424,7 @@ class ContinuationController extends AbstractController
                 $this->getServiceLocator()->get('Helper\Form')->attachValidator(
                     $form,
                     'fields->numberOfDiscs',
-                    new \Zend\Validator\LessThan(
+                    new \Laminas\Validator\LessThan(
                         [
                         'max' => $totalVehicles,
                         'inclusive' => true,
@@ -464,7 +464,7 @@ class ContinuationController extends AbstractController
     /**
      * Only show the NumberOfCommunityLicences element for certain licence types
      *
-     * @param \Zend\Form\Form $form               form
+     * @param \Laminas\Form\Form $form               form
      * @param array           $continuationDetail continationDetail
      * @param array           $postData           postData
      *
@@ -485,7 +485,7 @@ class ContinuationController extends AbstractController
                 $this->getServiceLocator()->get('Helper\Form')->attachValidator(
                     $form,
                     'fields->numberOfCommunityLicences',
-                    new \Zend\Validator\LessThan(
+                    new \Laminas\Validator\LessThan(
                         [
                         'max' => $totalVehicles,
                         'inclusive' => true,

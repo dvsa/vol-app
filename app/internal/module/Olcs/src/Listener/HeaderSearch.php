@@ -5,14 +5,14 @@ namespace Olcs\Listener;
 use Common\Service\Data\Search\Search as SearchService;
 use Olcs\Controller\SearchController;
 use Olcs\Form\Element\SearchOrderFieldset;
-use Zend\EventManager\EventManagerInterface;
-use Zend\EventManager\ListenerAggregateInterface;
-use Zend\EventManager\ListenerAggregateTrait;
-use Zend\Form\FormElementManager;
-use Zend\Mvc\MvcEvent;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\Session\Container;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\EventManager\ListenerAggregateInterface;
+use Laminas\EventManager\ListenerAggregateTrait;
+use Laminas\Form\FormElementManager;
+use Laminas\Mvc\MvcEvent;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\Session\Container;
 
 /**
  * Class HeaderSearch

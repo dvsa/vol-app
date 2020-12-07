@@ -9,9 +9,9 @@ namespace Olcs\Controller\Operator\Cases;
 
 use Dvsa\Olcs\Transfer\Query\Organisation\UnlicensedCases as OrganisationWithCases;
 use Olcs\Controller\Operator\OperatorController;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Common\Controller\Traits\CheckForCrudAction;
-use Zend\Http\Response;
+use Laminas\Http\Response;
 
 /**
  * Unlicensed Cases Operator Controller

@@ -28,7 +28,7 @@ class MarkerServiceTest extends TestCase
     {
         $mockMarkerPlugin = m::mock(\Olcs\Service\Marker\MarkerPluginManager::class);
 
-        $mockSl = m::mock(\Zend\ServiceManager\ServiceLocatorInterface::class);
+        $mockSl = m::mock(\Laminas\ServiceManager\ServiceLocatorInterface::class);
         $mockSl->shouldReceive('get')->with(\Olcs\Service\Marker\MarkerPluginManager::class)->once()
             ->andReturn($mockMarkerPlugin);
 

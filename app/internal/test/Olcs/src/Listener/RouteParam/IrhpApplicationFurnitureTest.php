@@ -17,8 +17,8 @@ use Olcs\Listener\RouteParam\IrhpApplicationFurniture;
 use Mockery as m;
 use Olcs\Listener\RouteParams;
 use Common\RefData;
-use Zend\View\Model\ViewModel;
-use Zend\View\Helper\Url;
+use Laminas\View\Model\ViewModel;
+use Laminas\View\Helper\Url;
 
 class IrhpApplicationFurnitureTest extends TestCase
 {
@@ -36,7 +36,7 @@ class IrhpApplicationFurnitureTest extends TestCase
 
     public function testAttach()
     {
-        $mockEventManager = m::mock('Zend\EventManager\EventManagerInterface');
+        $mockEventManager = m::mock('Laminas\EventManager\EventManagerInterface');
         $mockEventManager->shouldReceive('attach')->once()
             ->with(
                 RouteParams::EVENT_PARAM . 'irhpAppId',
@@ -54,7 +54,7 @@ class IrhpApplicationFurnitureTest extends TestCase
 
         $mockResult = m::mock();
 
-        $mockViewHelperManager = m::mock(\Zend\View\HelperPluginManager::class);
+        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
         $this->sut->setViewHelperManager($mockViewHelperManager);
 
         $mockQuerySender->shouldReceive('send')->andReturn($mockResult);
@@ -144,7 +144,7 @@ class IrhpApplicationFurnitureTest extends TestCase
             )
             ->getMock();
 
-        $mockViewHelperManager = m::mock('\Zend\View\HelperPluginManager')
+        $mockViewHelperManager = m::mock('\Laminas\View\HelperPluginManager')
             ->shouldReceive('get')->once()->with('placeholder')->andReturn($mockPlaceholder)
             ->shouldReceive('get')->once()->with('Url')->andReturn(
                 m::mock(Url::class)
@@ -159,9 +159,9 @@ class IrhpApplicationFurnitureTest extends TestCase
         $this->sut->shouldReceive('getGrantability')->with($irhpApplication)
             ->andReturn(['grantable' => $data['isGrantable']]);
 
-        $mockNavigation = m::mock('Zend\Navigation\Navigation');
+        $mockNavigation = m::mock('Laminas\Navigation\Navigation');
 
-        $mockSidebarNavigation = m::mock('Zend\Navigation\Navigation');
+        $mockSidebarNavigation = m::mock('Laminas\Navigation\Navigation');
         $mockSidebarNavigation
             ->shouldReceive('findOneBy')->once()->with('id', 'irhp-application-quick-actions-cancel')->andReturn(
                 m::mock()->shouldReceive('setVisible')->once()->with($expected['isCancelVisible'])->getMock()
@@ -305,14 +305,14 @@ class IrhpApplicationFurnitureTest extends TestCase
 
     public function testCreateService()
     {
-        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
-        $mockNavigation = m::mock('Zend\Navigation\Navigation');
+        $mockViewHelperManager = m::mock('Laminas\View\HelperPluginManager');
+        $mockNavigation = m::mock('Laminas\Navigation\Navigation');
         $mockQuerySender = m::mock(QuerySender::class);
         $mockCommandSender = m::mock(CommandSender::class);
-        $mockSidebar = m::mock('Zend\Navigation\Navigation');
-        $mockApplication = m::mock('Zend\Mvc\Application');
+        $mockSidebar = m::mock('Laminas\Navigation\Navigation');
+        $mockApplication = m::mock('Laminas\Mvc\Application');
 
-        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockSl = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('QuerySender')->andReturn($mockQuerySender);
         $mockSl->shouldReceive('get')->with('CommandSender')->andReturn($mockCommandSender);

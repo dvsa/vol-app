@@ -3,8 +3,8 @@
 namespace AdminTest\Form\Model\Form;
 
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
-use Zend\Validator\Date;
-use Zend\Validator\InArray;
+use Laminas\Validator\Date;
+use Laminas\Validator\InArray;
 
 /**
  * Class PublicHolidayTest

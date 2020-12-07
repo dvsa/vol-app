@@ -7,7 +7,7 @@ namespace Olcs\Form;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class Message extends \Zend\Form\Form
+class Message extends \Laminas\Form\Form
 {
     /**
      * Set the message

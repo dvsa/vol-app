@@ -3,7 +3,7 @@
 namespace Olcs\Controller;
 
 use Dvsa\Olcs\Transfer\Command\Disqualification\Delete;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * DisqualifyController
@@ -45,7 +45,7 @@ class DisqualifyController extends AbstractController
 
         // Must be ticked if no disqualification record exists
         if ($existingDisqualification === false) {
-            $validator = new \Zend\Validator\Identical('Y');
+            $validator = new \Laminas\Validator\Identical('Y');
             $validator->setMessage('form.disqualify.is-disqualified.validation');
             $formHelper->attachValidator($form, 'isDisqualified', $validator);
         }
@@ -68,7 +68,7 @@ class DisqualifyController extends AbstractController
     /**
      * Generate the response, to return to the correct place
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     protected function closeAjax()
     {
@@ -138,8 +138,6 @@ class DisqualifyController extends AbstractController
                 $params['period'] = $formData['period'];
                 $command = \Dvsa\Olcs\Transfer\Command\Disqualification\Update::create($params);
             }
-
-
         }
 
         $response = $this->handleCommand($command);

@@ -6,7 +6,7 @@ use Dvsa\Olcs\Transfer\Query\Audit\ReadIrhpApplication;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\IrhpApplicationControllerInterface;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Irhp Application Processing Read History Controller

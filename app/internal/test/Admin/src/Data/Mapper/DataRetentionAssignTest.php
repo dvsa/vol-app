@@ -4,7 +4,7 @@ namespace AdminTest\Data\Mapper;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Admin\Data\Mapper\DataRetentionAssign as Sut;
-use Zend\Form\FormInterface;
+use Laminas\Form\FormInterface;
 
 /**
  * Data Retention Assign Test

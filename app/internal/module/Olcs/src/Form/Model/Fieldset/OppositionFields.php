@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
@@ -40,8 +40,8 @@ class OppositionFields extends CaseBase
      * @Form\Type("Text")
      * @Form\Attributes({"id":"contactDetailsDescription","placeholder":"","class":"extra-long"})
      * @Form\Options({"label":"Objector body"})
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min": 5, "max":255}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min": 5, "max":255}})
      */
     public $contactDetailsDescription = null;
 
@@ -86,7 +86,7 @@ class OppositionFields extends CaseBase
      * })
      * @Form\Attributes({"id":"opposerType","placeholder":"", "required":false})
      * @Form\Filter({"name":"Common\Filter\NullToArray"})
-     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"array"}})
+     * @Form\Validator({"name":"Laminas\Validator\NotEmpty","options":{"array"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "oppositionType",
@@ -116,8 +116,8 @@ class OppositionFields extends CaseBase
      * @Form\Type("TextArea")
      * @Form\Attributes({"class":"extra-long","id":"validNotes"})
      * @Form\Options({"label":"Valid details"})
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":4000}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":4000}})
      */
     public $validNotes;
 
@@ -208,8 +208,8 @@ class OppositionFields extends CaseBase
      * @Form\Type("TextArea")
      * @Form\Attributes({"class":"extra-long","id":""})
      * @Form\Options({"label":"Notes"})
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":4000}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":4000}})
      */
     public $notes = null;
 }

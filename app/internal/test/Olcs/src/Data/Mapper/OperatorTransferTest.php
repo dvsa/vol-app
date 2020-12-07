@@ -4,7 +4,7 @@ namespace OlcsTest\Data\Mapper;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Data\Mapper\OperatorTransfer as Sut;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 
 /**
  * OperatorTransfer Mapper Test
@@ -18,7 +18,7 @@ class OperatorTransferTest extends MockeryTestCase
     public function testFromErrors($messages, $expected)
     {
 
-        $mockForm = m::mock(\Zend\Form\FormInterface::class)
+        $mockForm = m::mock(\Laminas\Form\FormInterface::class)
             ->shouldReceive('setMessages')
             ->with($expected)
             ->once()

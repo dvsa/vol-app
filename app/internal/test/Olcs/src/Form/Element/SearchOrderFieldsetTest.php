@@ -45,7 +45,7 @@ class SearchOrderFieldsetTest extends TestCase
         $sut->init();
 
         $order = $sut->get('order');
-        $this->assertInstanceOf(\Zend\Form\Element\Select::class, $order);
+        $this->assertInstanceOf(\Laminas\Form\Element\Select::class, $order);
         $this->assertSame(
             [
                 'field_1-desc' => 'label 1',

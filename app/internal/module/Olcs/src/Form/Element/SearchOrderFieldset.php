@@ -3,8 +3,8 @@
 namespace Olcs\Form\Element;
 
 use Common\Service\Data\Search\SearchAwareTrait as SearchAwareTrait;
-use Zend\Form\Element\Select;
-use Zend\Form\Fieldset;
+use Laminas\Form\Element\Select;
+use Laminas\Form\Fieldset;
 
 /**
  * Class SearchOrderFieldset
@@ -26,7 +26,7 @@ class SearchOrderFieldset extends Fieldset
         $orderOptions = $this->getSearchService()->getOrderOptions();
 
         if (!empty($orderOptions)) {
-            /** @var \Zend\Form\Element\Select $select */
+            /** @var \Laminas\Form\Element\Select $select */
             $select = new Select();
             $select->setName('order');
             $select->setLabel('Order by');

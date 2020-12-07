@@ -12,8 +12,8 @@ use Dvsa\Olcs\Transfer\Command\EnvironmentalComplaint\CreateEnvironmentalComplai
 use Dvsa\Olcs\Transfer\Command\EnvironmentalComplaint\UpdateEnvironmentalComplaint as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\EnvironmentalComplaint\DeleteEnvironmentalComplaint as DeleteDto;
 use Dvsa\Olcs\Transfer\Query\EnvironmentalComplaint\EnvironmentalComplaint as ItemDto;
-use Zend\View\Model\ConsoleModel;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ConsoleModel;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Data\Mapper\EnvironmentalComplaint as Mapper;
@@ -132,7 +132,7 @@ class EnvironmentalComplaintController extends AbstractInternalController implem
     /**
      * Generate action.
      *
-     * @return \Zend\Http\Response\
+     * @return \Laminas\Http\Response\
      */
     public function generateAction()
     {

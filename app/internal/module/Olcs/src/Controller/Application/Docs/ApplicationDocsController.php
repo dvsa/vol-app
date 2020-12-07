@@ -6,7 +6,7 @@ use Dvsa\Olcs\Utils\Constants\FilterOptions;
 use Olcs\Controller\Application\ApplicationController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Application Controller
@@ -88,7 +88,7 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
     /**
      * Get Customized Document Form
      *
-     * @return \Zend\Form\FormInterface
+     * @return \Laminas\Form\FormInterface
      */
     protected function getConfiguredDocumentForm()
     {

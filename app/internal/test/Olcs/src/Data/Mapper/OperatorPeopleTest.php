@@ -4,7 +4,7 @@ namespace OlcsTest\Data\Mapper;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Data\Mapper\OperatorBusinessDetails as Sut;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 
 /**
  * OperatorPeopleTest
@@ -123,7 +123,7 @@ class OperatorPeopleTest extends MockeryTestCase
 
     public function testMapFromErrors()
     {
-        $mockForm = m::mock(\Zend\Form\FormInterface::class);
+        $mockForm = m::mock(\Laminas\Form\FormInterface::class);
         $this->assertSame(['ERRORS'], $this->sut->mapFromErrors($mockForm, ['ERRORS']));
     }
 }

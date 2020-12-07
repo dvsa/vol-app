@@ -33,8 +33,8 @@ class FinancialHistoryTest extends MockeryTestCase
 
     public function testGetForm()
     {
-        /** @var \Zend\Http\Request $request */
-        $request = m::mock(\Zend\Http\Request::class);
+        /** @var \Laminas\Http\Request $request */
+        $request = m::mock(\Laminas\Http\Request::class);
 
         // Mocks
         $mockForm = m::mock(Form::class);

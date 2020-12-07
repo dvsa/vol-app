@@ -23,7 +23,7 @@ class SubmissionActionTypesTest extends TestCase
     {
         $mockRefDataService = $this->createMock('\Common\Service\Data\RefData');
 
-        $mockSl = $this->createMock('\Zend\ServiceManager\ServiceManager');
+        $mockSl = $this->createMock('\Laminas\ServiceManager\ServiceManager');
         $mockSl->expects($this->any())
             ->method('get')
             ->willReturnMap(
@@ -58,7 +58,7 @@ class SubmissionActionTypesTest extends TestCase
         $mockRefDataService->shouldReceive('fetchListData')->with('sub_st_rec')
             ->andReturn($mockRefData);
 
-        $mockSl = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockSl = m::mock('\Laminas\ServiceManager\ServiceManager');
         $mockSl->shouldReceive('get')->with('\Common\Service\Data\RefData')->andReturn($mockRefDataService);
 
         $sut = $this->sut->createService($mockSl);
@@ -88,7 +88,7 @@ class SubmissionActionTypesTest extends TestCase
         $mockRefDataService->shouldReceive('fetchListData')->with('sub_st_rec')
             ->andReturn($mockRefData);
 
-        $mockSl = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockSl = m::mock('\Laminas\ServiceManager\ServiceManager');
         $mockSl->shouldReceive('get')->with('\Common\Service\Data\RefData')->andReturn($mockRefDataService);
 
         $sut = $this->sut->createService($mockSl);
@@ -109,7 +109,7 @@ class SubmissionActionTypesTest extends TestCase
         $mockRefDataService->shouldReceive('fetchListData')->with('sub_st_rec')
             ->andReturn($mockRefData);
 
-        $mockSl = m::mock('\Zend\ServiceManager\ServiceManager');
+        $mockSl = m::mock('\Laminas\ServiceManager\ServiceManager');
         $mockSl->shouldReceive('get')->with('\Common\Service\Data\RefData')->andReturn($mockRefDataService);
 
         $sut = $this->sut->createService($mockSl);

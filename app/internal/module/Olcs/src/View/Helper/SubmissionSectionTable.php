@@ -2,10 +2,10 @@
 
 namespace Olcs\View\Helper;
 
-use Zend\I18n\Translator\TranslatorInterface as Translator;
-use Zend\I18n\Translator\TranslatorAwareInterface;
-use Zend\View\Helper\AbstractHelper;
-use Zend\Form\Exception;
+use Laminas\I18n\Translator\TranslatorInterface as Translator;
+use Laminas\I18n\Translator\TranslatorAwareInterface;
+use Laminas\View\Helper\AbstractHelper;
+use Laminas\Form\Exception;
 use Common\Service\Table\TableFactory;
 
 /**

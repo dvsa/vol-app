@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("opposerContact")
@@ -51,7 +51,7 @@ class OpposerContact
      * @Form\Type("Text")
      * @Form\Attributes({"id":"email","placeholder":"","class":"medium", "required":false})
      * @Form\Options({"label":"Email"})
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\EmailAddress"})
      */
     public $emailAddress = null;

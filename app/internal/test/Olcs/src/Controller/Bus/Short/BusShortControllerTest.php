@@ -55,7 +55,7 @@ class BusShortControllerTest extends MockeryTestCase
             ->once()
             ->andReturn($params);
 
-        $mockForm = m::mock('\Zend\Form\Form');
+        $mockForm = m::mock('\Laminas\Form\Form');
         $mockForm->shouldReceive('setOption')
             ->times($readonly ? 1 : 0)
             ->with('readonly', true);

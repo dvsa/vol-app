@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
@@ -31,7 +31,7 @@ class IrhpCandidatePermit extends Base
      *   "id" : "permitAppId",
      * })
      *
-     * @Form\Type("Zend\Form\Element\Hidden")
+     * @Form\Type("Laminas\Form\Element\Hidden")
      *
      */
     public $permitAppId;
@@ -41,7 +41,7 @@ class IrhpCandidatePermit extends Base
      *   "id" : "rangesUrl",
      * })
      *
-     * @Form\Type("Zend\Form\Element\Hidden")
+     * @Form\Type("Laminas\Form\Element\Hidden")
      *
      */
     public $rangesUrl;
@@ -51,7 +51,7 @@ class IrhpCandidatePermit extends Base
      *   "id" : "irhpPermitRangeSelected",
      * })
      *
-     * @Form\Type("Zend\Form\Element\Hidden")
+     * @Form\Type("Laminas\Form\Element\Hidden")
      *
      */
     public $irhpPermitRangeSelected = null;

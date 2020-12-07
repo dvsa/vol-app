@@ -1,8 +1,8 @@
 <?php
 namespace Olcs\Mvc\Controller\Plugin;
 
-use Zend\Mvc\Controller\Plugin\AbstractPlugin;
-use Zend\View\Model\ViewModel;
+use Laminas\Mvc\Controller\Plugin\AbstractPlugin;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Class Confirm - Generates validates and processes the confirm form

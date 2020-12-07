@@ -9,7 +9,7 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Data\Mapper\SubmissionAction as Mapper;
 use Olcs\Form\Model\Form\SubmissionDecision as Form;
-use Zend\Form\Form as ZendForm;
+use Laminas\Form\Form as LaminasForm;
 
 /**
  * Submission Decision Controller
@@ -124,12 +124,12 @@ class DecisionController extends AbstractInternalController implements CaseContr
     /**
      * Alter form for Add
      *
-     * @param ZendForm $form     form
+     * @param LaminasForm $form     form
      * @param array    $formData formData
      *
-     * @return ZendForm|array
+     * @return LaminasForm|array
      */
-    protected function alterFormForAdd(ZendForm $form, $formData)
+    protected function alterFormForAdd(LaminasForm $form, $formData)
     {
         return $this->alterForm($form, !empty($formData['id']) ? $formData['id'] : '');
     }
@@ -137,12 +137,12 @@ class DecisionController extends AbstractInternalController implements CaseContr
     /**
      *alter Form for Edit
      *
-     * @param ZendForm $form     form
+     * @param LaminasForm $form     form
      * @param array    $formData formData
      *
-     * @return ZendForm|array
+     * @return LaminasForm|array
      */
-    protected function alterFormForEdit(ZendForm $form, $formData)
+    protected function alterFormForEdit(LaminasForm $form, $formData)
     {
         return $this->alterForm($form, $formData['fields']['id']);
     }
@@ -150,12 +150,12 @@ class DecisionController extends AbstractInternalController implements CaseContr
     /**
      * Change the id of the text area to be unique (avoid DOM clashes with multiple TinyMCE instances)
      *
-     * @param ZendForm $form form
+     * @param LaminasForm $form form
      * @param int      $id   id
      *
-     * @return ZendForm
+     * @return LaminasForm
      */
-    private function alterForm(ZendForm $form, $id)
+    private function alterForm(LaminasForm $form, $id)
     {
         $form->get('fields')->get('comment')->setAttribute('id', $id . time());
         return $form;

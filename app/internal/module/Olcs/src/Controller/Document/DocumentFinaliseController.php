@@ -6,9 +6,9 @@ use Common\Category;
 use Dvsa\Olcs\Transfer\Command as TransferCmd;
 use Dvsa\Olcs\Transfer\Command\Document\PrintLetter as PrintLetterCmd;
 use Dvsa\Olcs\Transfer\Query as TransferQry;
-use Zend\Http\Response;
-use Zend\Mvc\MvcEvent;
-use Zend\View\Model\ViewModel;
+use Laminas\Http\Response;
+use Laminas\Mvc\MvcEvent;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Document Upload Controller
@@ -53,7 +53,7 @@ class DocumentFinaliseController extends AbstractDocumentController
     /**
      * finalise Action
      *
-     * @return \Zend\Http\Response|ViewModel
+     * @return \Laminas\Http\Response|ViewModel
      */
     public function finaliseAction()
     {
@@ -115,14 +115,14 @@ class DocumentFinaliseController extends AbstractDocumentController
     /**
      * print Action
      *
-     * @return \Zend\Http\Response|ViewModel
+     * @return \Laminas\Http\Response|ViewModel
      */
     public function printAction()
     {
         $docId = $this->params('doc');
 
         /**
-         * @var \Zend\Http\Request $request
+         * @var \Laminas\Http\Request $request
          */
         $request = $this->getRequest();
 
@@ -220,7 +220,7 @@ class DocumentFinaliseController extends AbstractDocumentController
     /**
      * Cancel Action
      *
-     * @return \Zend\Http\Response|ViewModel
+     * @return \Laminas\Http\Response|ViewModel
      */
     public function cancelAction()
     {
@@ -260,7 +260,7 @@ class DocumentFinaliseController extends AbstractDocumentController
      *
      * @param array $data data
      *
-     * @return \Zend\Http\Response | null
+     * @return \Laminas\Http\Response | null
      */
     public function processSaveLetter($data)
     {
@@ -324,7 +324,7 @@ class DocumentFinaliseController extends AbstractDocumentController
      *
      * @param bool $ajax ajax
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     protected function handleRedirectToDocumentRoute($ajax = false)
     {

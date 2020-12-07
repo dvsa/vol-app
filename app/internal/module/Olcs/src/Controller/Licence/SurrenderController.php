@@ -23,8 +23,8 @@ use Olcs\Form\Model\Form\Licence\Surrender\Confirmation;
 use Olcs\Form\Model\Form\Licence\Surrender\Surrender;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericList;
-use Zend\Mvc\MvcEvent;
-use Zend\View\Model\ViewModel;
+use Laminas\Mvc\MvcEvent;
+use Laminas\View\Model\ViewModel;
 
 class SurrenderController extends AbstractInternalController implements
     ToggleAwareInterface,
@@ -100,7 +100,7 @@ class SurrenderController extends AbstractInternalController implements
     /**
      * index Action
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function indexAction()
     {
@@ -186,7 +186,6 @@ class SurrenderController extends AbstractInternalController implements
             throw new BadRequestException('No data supplied to command');
         }
 
-
         $this->flashMessenger()->clearCurrentMessagesFromContainer();
         if ($this->updateSurrender($updateCmdData)) {
             $this->flashMessenger()->addSuccessMessage('successful-changes');
@@ -194,9 +193,7 @@ class SurrenderController extends AbstractInternalController implements
             $this->flashMessenger()->addErrorMessage('unsuccessful-changes');
         }
 
-
         return $this->redirect()->toRouteAjax('licence/surrender-details/GET', [], [], true);
-
     }
 
     public function alterLayout()

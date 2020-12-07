@@ -13,8 +13,8 @@ use Dvsa\Olcs\Transfer\Query\Licence\Licence;
 use Dvsa\Olcs\Transfer\Query\Task\Task;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\ById as IrhpApplicationById;
 use Olcs\Controller\Traits as ControllerTraits;
-use Zend\Mvc\MvcEvent;
-use Zend\View\Model\ViewModel;
+use Laminas\Mvc\MvcEvent;
+use Laminas\View\Model\ViewModel;
 use \Olcs\Data\Mapper;
 
 /**
@@ -72,7 +72,7 @@ class TaskController extends AbstractController
     /**
      * Re-assign one or several tasks to a different team/user
      *
-     * @return \Zend\Stdlib\ResponseInterface|ViewModel
+     * @return \Laminas\Stdlib\ResponseInterface|ViewModel
      */
     public function reassignAction()
     {
@@ -121,7 +121,7 @@ class TaskController extends AbstractController
     /**
      * Close one or several tasks to a different team/user
      *
-     * @return \Zend\Stdlib\ResponseInterface|ViewModel
+     * @return \Laminas\Stdlib\ResponseInterface|ViewModel
      */
     public function closeAction()
     {
@@ -153,7 +153,7 @@ class TaskController extends AbstractController
      *
      * @param array $data Data
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function processCloseTask($data)
     {
@@ -174,9 +174,9 @@ class TaskController extends AbstractController
      * Callback invoked when the form is valid
      *
      * @param array                    $data Data
-     * @param \Zend\Form\FormInterface $form Form
+     * @param \Laminas\Form\FormInterface $form Form
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function processAssignTask($data, $form)
     {
@@ -212,7 +212,7 @@ class TaskController extends AbstractController
      *
      * @param string $method Method
      *
-     * @return \Zend\Stdlib\ResponseInterface|ViewModel
+     * @return \Laminas\Stdlib\ResponseInterface|ViewModel
      */
     private function formAction($method)
     {
@@ -263,7 +263,7 @@ class TaskController extends AbstractController
             $this->getServiceLocator()->get('Helper\Form')->remove($form, 'taskHistory->table');
         }
 
-        /** @var \Zend\Form\Fieldset $details */
+        /** @var \Laminas\Form\Fieldset $details */
         $details = $form->get('details');
         $details->get('link')->setValue($this->getLinkForTaskForm());
         $details->get('status')->setValue('<b>' . $textStatus . '</b>');
@@ -324,9 +324,9 @@ class TaskController extends AbstractController
      * Callback invoked when the form is valid
      *
      * @param array                    $data Data
-     * @param \Zend\Form\FormInterface $form Form
+     * @param \Laminas\Form\FormInterface $form Form
      *
-     * @return null|\Zend\Http\Response
+     * @return null|\Laminas\Http\Response
      */
     public function processAddTask($data, $form)
     {
@@ -337,9 +337,9 @@ class TaskController extends AbstractController
      * Callback invoked when the form is valid
      *
      * @param array                    $data Data
-     * @param \Zend\Form\FormInterface $form Form
+     * @param \Laminas\Form\FormInterface $form Form
      *
-     * @return null|\Zend\Http\Response
+     * @return null|\Laminas\Http\Response
      */
     public function processEditTask($data, $form)
     {
@@ -351,9 +351,9 @@ class TaskController extends AbstractController
      *
      * @param string                   $method Method
      * @param array                    $data   Data
-     * @param \Zend\Form\FormInterface $form   Form
+     * @param \Laminas\Form\FormInterface $form   Form
      *
-     * @return null|\Zend\Http\Response
+     * @return null|\Laminas\Http\Response
      */
     private function processAddEditTask($method, $data, $form)
     {
@@ -389,7 +389,7 @@ class TaskController extends AbstractController
     /**
      * Redirect back to list of tasks
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function redirectToList()
     {

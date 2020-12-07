@@ -13,7 +13,7 @@ use Dvsa\Olcs\Transfer\Command\IrhpPermitRange\Delete as DeleteDto;
 use Admin\Form\Model\Form\IrhpPermitRange as PermitRangeForm;
 use Admin\Data\Mapper\IrhpPermitRange as PermitRangeMapper;
 
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * IRHP Permits Stock Range Controller

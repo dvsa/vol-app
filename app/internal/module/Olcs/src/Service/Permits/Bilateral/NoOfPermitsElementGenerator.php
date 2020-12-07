@@ -4,8 +4,8 @@ namespace Olcs\Service\Permits\Bilateral;
 
 use Common\Service\Helper\TranslationHelperService;
 use Olcs\Form\Element\Permits\BilateralNoOfPermitsElement;
-use Zend\Form\Factory as FormFactory;
-use Zend\Form\Fieldset;
+use Laminas\Form\Factory as FormFactory;
+use Laminas\Form\Fieldset;
 
 /**
  * No of permits element generator

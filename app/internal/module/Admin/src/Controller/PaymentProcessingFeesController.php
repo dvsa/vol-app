@@ -8,8 +8,8 @@ namespace Admin\Controller;
 use Common\Controller\Traits\GenericReceipt;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits\FeesActionTrait;
-use Zend\View\Model\ViewModel;
-use \Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
+use Laminas\View\Model\ViewModel;
+use \Laminas\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
 use Common\Controller\Traits\GenericRenderView;
 use Common\Controller\Traits\GenericMethods;
 use Common\Util\FlashMessengerTrait;
@@ -89,7 +89,7 @@ class PaymentProcessingFeesController extends ZendAbstractActionController imple
     /**
      * Index action
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function indexAction()
     {
@@ -135,7 +135,7 @@ class PaymentProcessingFeesController extends ZendAbstractActionController imple
     /**
      * Redirect action
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function redirectAction()
     {

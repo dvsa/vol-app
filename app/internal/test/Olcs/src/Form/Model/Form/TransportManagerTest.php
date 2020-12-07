@@ -4,7 +4,7 @@ namespace OlcsTest\Form\Model\Form;
 
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 use Common\Form\Elements\Validators\DateNotInFuture;
-use Zend\Validator\Date;
+use Laminas\Validator\Date;
 use Common\Validator\Date as DateValidator;
 
 /**

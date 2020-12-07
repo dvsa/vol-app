@@ -17,7 +17,7 @@ abstract class AbstractDeclarationsInternalController extends AbstractController
     /**
      * indexAction
      *
-     * @return \Common\View\Model\Section|\Zend\Http\Response
+     * @return \Common\View\Model\Section|\Laminas\Http\Response
      */
     public function indexAction()
     {
@@ -45,7 +45,6 @@ abstract class AbstractDeclarationsInternalController extends AbstractController
                 } else {
                     $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
                 }
-
             }
         } else {
             $applicationData = $this->getApplicationData($this->getApplicationId());
@@ -64,7 +63,7 @@ abstract class AbstractDeclarationsInternalController extends AbstractController
     /**
      * Get the Form
      *
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     protected function getForm()
     {

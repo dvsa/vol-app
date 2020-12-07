@@ -2,7 +2,7 @@
 
 namespace Olcs\Data\Mapper;
 
-use Zend\Form\FormInterface;
+use Laminas\Form\FormInterface;
 
 /**
  * Operator transfer mapper

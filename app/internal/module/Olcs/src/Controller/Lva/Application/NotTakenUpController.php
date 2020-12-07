@@ -24,14 +24,14 @@ class NotTakenUpController extends AbstractApplicationDecisionController
     /**
      * get from
      *
-     * @return \Zend\Form\FormInterface
+     * @return \Laminas\Form\FormInterface
      */
     protected function getForm()
     {
         $request  = $this->getRequest();
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
-        /** @var \Zend\Form\FormInterface $form */
+        /** @var \Laminas\Form\FormInterface $form */
         $form = $formHelper->createFormWithRequest('GenericConfirmation', $request);
 
         // override default label on confirm action button

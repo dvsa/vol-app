@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Attributes({"class":""})
@@ -49,7 +49,7 @@ class CreateFeeDetails
      *     "empty_option": "Please select"
      * })
      * @Form\Type("Select")
-     * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
+     * @Form\Validator({"name": "Laminas\Validator\NotEmpty"})
      */
     public $feeType = null;
 
@@ -62,7 +62,7 @@ class CreateFeeDetails
      *     "label_attributes": {"id": "label-type"},
      *     "empty_option": "Please select"
      * })
-     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
+     * @Form\Validator({"name":"Laminas\Validator\NotEmpty","options":{"null"}})
      * @Form\Type("Select")
      * @Form\Validator({
      *      "name": "ValidateIf",
@@ -73,7 +73,7 @@ class CreateFeeDetails
      *          "allow_empty" : false,
      *          "validators": {
      *              {
-     *                  "name": "Zend\Validator\NotEmpty",
+     *                  "name": "Laminas\Validator\NotEmpty",
      *                  "options": {"messages": {"isEmpty": "internal.create-fee.irfo-required"}}
      *              }
      *          }
@@ -91,7 +91,7 @@ class CreateFeeDetails
      *     "label_attributes": {"id": "label-type"},
      *     "empty_option": "Please select"
      * })
-     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
+     * @Form\Validator({"name":"Laminas\Validator\NotEmpty","options":{"null"}})
      * @Form\Type("Select")
      * @Form\Validator({
      *      "name": "ValidateIf",
@@ -102,7 +102,7 @@ class CreateFeeDetails
      *          "allow_empty" : false,
      *          "validators": {
      *              {
-     *                  "name": "Zend\Validator\NotEmpty",
+     *                  "name": "Laminas\Validator\NotEmpty",
      *                  "options": {"messages": {"isEmpty": "internal.create-fee.irfo-required"}}
      *              }
      *          }
@@ -117,7 +117,7 @@ class CreateFeeDetails
      * @Form\Attributes({"id":"quantity"})
      * @Form\Validator(
      *  {
-     *      "name": "Zend\Validator\GreaterThan",
+     *      "name": "Laminas\Validator\GreaterThan",
      *      "options": {
      *          "min": 1,
      *          "inclusive": true,

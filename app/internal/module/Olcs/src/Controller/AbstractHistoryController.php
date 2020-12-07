@@ -4,7 +4,7 @@ namespace Olcs\Controller;
 
 use Dvsa\Olcs\Transfer\Query\Processing\History;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Olcs\Form\Model\Form\EventHistory as EventHistorytForm;
 use Olcs\Data\Mapper\EventHistory as Mapper;
 use Dvsa\Olcs\Transfer\Query\EventHistory\EventHistory as ItemDto;
@@ -57,7 +57,6 @@ class AbstractHistoryController extends AbstractInternalController implements Le
             $this->getServiceLocator()->get('Helper\Form')->remove($form, 'event-history-details->table');
         }
         return $form;
-
     }
 
     /**

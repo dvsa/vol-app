@@ -4,11 +4,11 @@ namespace Olcs\Listener\RouteParam;
 
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
-use Zend\EventManager\EventManagerInterface;
-use Zend\EventManager\ListenerAggregateInterface;
-use Zend\EventManager\ListenerAggregateTrait;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\EventManager\ListenerAggregateInterface;
+use Laminas\EventManager\ListenerAggregateTrait;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 
 /**
@@ -33,7 +33,9 @@ class Action implements ListenerAggregateInterface, FactoryInterface
     public function attach(EventManagerInterface $events)
     {
         $this->listeners[] = $events->attach(
-            RouteParams::EVENT_PARAM . 'action', [$this, 'onAction'], 1
+            RouteParams::EVENT_PARAM . 'action',
+            [$this, 'onAction'],
+            1
         );
     }
 

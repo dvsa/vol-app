@@ -3,7 +3,7 @@
 namespace Olcs\View\Helper;
 
 use Common\RefData;
-use Zend\View\Helper\AbstractHelper;
+use Laminas\View\Helper\AbstractHelper;
 
 class SurrenderDetails extends AbstractHelper
 {

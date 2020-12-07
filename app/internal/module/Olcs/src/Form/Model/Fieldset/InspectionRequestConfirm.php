@@ -2,11 +2,11 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * Inspection Reauest Confirm
- * 
+ *
  * @Form\Attributes({"class":""})
  * @Form\Name("inspection-request-confirm")
  */

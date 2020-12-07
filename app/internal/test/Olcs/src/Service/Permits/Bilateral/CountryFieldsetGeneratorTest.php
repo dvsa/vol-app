@@ -12,9 +12,9 @@ use Olcs\Service\Permits\Bilateral\CountryFieldsetGenerator;
 use Olcs\Service\Permits\Bilateral\PeriodFieldsetGenerator;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
-use Zend\Form\Element\Select;
-use Zend\Form\Factory as FormFactory;
-use Zend\Form\Fieldset;
+use Laminas\Form\Element\Select;
+use Laminas\Form\Factory as FormFactory;
+use Laminas\Form\Fieldset;
 
 /**
  * CountryFieldsetGenerator Test

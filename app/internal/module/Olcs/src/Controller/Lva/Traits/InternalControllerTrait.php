@@ -22,7 +22,7 @@ trait InternalControllerTrait
      *
      * @param int $lvaId lvaId
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     protected function handleCancelRedirect($lvaId)
     {
@@ -57,7 +57,7 @@ trait InternalControllerTrait
      *
      * @param int $lvaId lvaId
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     protected function goToOverviewAfterSave($lvaId = null)
     {

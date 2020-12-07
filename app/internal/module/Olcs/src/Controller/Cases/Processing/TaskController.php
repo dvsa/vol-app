@@ -17,10 +17,10 @@ use Olcs\Controller\Traits as ControllerTraits;
 class TaskController extends AbstractController implements CaseControllerInterface, LeftViewProvider
 {
     use ControllerTraits\CaseControllerTrait,
-        ControllerTraits\ProcessingControllerTrait,
-        ControllerTraits\TaskActionTrait {
-            ControllerTraits\TaskActionTrait::getTaskForm as traitGetTaskForm;
-        }
+    ControllerTraits\ProcessingControllerTrait,
+    ControllerTraits\TaskActionTrait {
+        ControllerTraits\TaskActionTrait::getTaskForm as traitGetTaskForm;
+    }
 
     /**
      * Get task action type
@@ -84,7 +84,7 @@ class TaskController extends AbstractController implements CaseControllerInterfa
      *
      * @param array $filters Field values
      *
-     * @return \Zend\Form\FormInterface
+     * @return \Laminas\Form\FormInterface
      */
     protected function getTaskForm(array $filters = [])
     {

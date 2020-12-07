@@ -43,7 +43,7 @@ class TaskSearchTraitTest extends MockeryTestCase
                 'new3' => null,
             ];
 
-        $mockEl = m::mock(\Zend\Form\Element\Select::class);
+        $mockEl = m::mock(\Laminas\Form\Element\Select::class);
         $mockEl->shouldReceive('getValueOptions')->once()->andReturn($options);
         $mockEl->shouldReceive('setValueOptions')
             ->once()
@@ -78,11 +78,11 @@ class TaskSearchTraitTest extends MockeryTestCase
             ],
         ];
 
-        $mockUser = m::mock(\Zend\Http\Request::class)
+        $mockUser = m::mock(\Laminas\Http\Request::class)
             ->shouldReceive('getUserData')->once()->andReturn($userData)
             ->getMock();
 
-        $mockRequest = m::mock(\Zend\Http\Request::class);
+        $mockRequest = m::mock(\Laminas\Http\Request::class);
         $mockRequest->shouldReceive('getQuery->toArray')->once()->andReturn(['query' => 'unit_Query']);
 
         $this->sut
@@ -136,22 +136,22 @@ class TaskSearchTraitTest extends MockeryTestCase
             'assignedToUser' => ['unit_ListDataUser'],
         ];
 
-        $mockShowField = m::mock(\Zend\Form\Element::class);
+        $mockShowField = m::mock(\Laminas\Form\Element::class);
         $mockShowField->shouldReceive('setValueOptions')->once()->with(m::hasKey(FilterOptions::SHOW_ALL));
 
-        $mockTeamField = m::mock(\Zend\Form\Element\Select::class);
+        $mockTeamField = m::mock(\Laminas\Form\Element\Select::class);
         $mockTeamField->shouldReceive('setValueOptions')->once()->with($listData['assignedToTeam']);
-        $mockUserField = m::mock(\Zend\Form\Element\Select::class);
+        $mockUserField = m::mock(\Laminas\Form\Element\Select::class);
         $mockUserField->shouldReceive('setValueOptions')->once()->with($listData['assignedToUser']);
 
-        $mockForm = m::mock(\Zend\Form\FormInterface::class)->makePartial()
+        $mockForm = m::mock(\Laminas\Form\FormInterface::class)->makePartial()
             ->shouldReceive('setData')->once()->with($filters)
             ->shouldReceive('get')->once()->with('assignedToTeam')->andReturn($mockTeamField)
             ->shouldReceive('get')->once()->with('assignedToUser')->andReturn($mockUserField)
             ->shouldReceive('get')->once()->with('showTasks')->andReturn($mockShowField)
             ->getMock();
 
-        $mockReq = m::mock(\Zend\Http\Request::class);
+        $mockReq = m::mock(\Laminas\Http\Request::class);
 
         $mockSubCatDs = m::mock(SubCategoryDS::class)
             ->shouldReceive('setCategory')->once()->with($expectCategory)
@@ -162,7 +162,7 @@ class TaskSearchTraitTest extends MockeryTestCase
             ->shouldReceive('setFormActionFromRequest')->once()->with($mockForm, $mockReq)->andReturnSelf()
             ->getMock();
 
-        $mockSm = m::mock(\Zend\Di\ServiceLocatorInterface::class)
+        $mockSm = m::mock(\Laminas\Di\ServiceLocatorInterface::class)
             ->shouldReceive('get')->with(SubCategoryDS::class)->once()->andReturn($mockSubCatDs)
             ->shouldReceive('get')->with('Helper\Form')->once()->andReturn($mockFormHlpr)
             ->getMock();
@@ -186,7 +186,7 @@ class TaskSearchTraitTest extends MockeryTestCase
     {
         $query = ['query' => 'unit_Query'];
 
-        $mockRequest = m::mock(\Zend\Http\Request::class);
+        $mockRequest = m::mock(\Laminas\Http\Request::class);
         $mockRequest->shouldReceive('isPost')->once()->andReturn(true);
         $mockRequest->shouldReceive('getQuery->toArray')->once()->andReturn($query);
 

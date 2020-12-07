@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
@@ -23,7 +23,7 @@ class BusRegUpdateWithdrawn extends Base
      * })
      * @Form\Type("DynamicRadio")
      * @Form\Validator({
-     *      "name":"Zend\Validator\NotEmpty"
+     *      "name":"Laminas\Validator\NotEmpty"
      * })
      */
     public $reason = null;

@@ -7,7 +7,7 @@ use Common\Service\Data\AbstractDataService;
 use Common\Service\Data\LicenceServiceTrait;
 use Common\Service\Data\ListDataInterface;
 use Dvsa\Olcs\Transfer\Query\Decision\DecisionList as DecisionListDto;
-use Zend\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\FactoryInterface;
 
 /**
  * Class LicenceDecisionLegislation

@@ -2,9 +2,9 @@
 
 namespace Olcs\Form\Element\Permits;
 
-use Zend\Filter\StringTrim;
-use Zend\Form\Element\Text;
-use Zend\InputFilter\InputProviderInterface;
+use Laminas\Filter\StringTrim;
+use Laminas\Form\Element\Text;
+use Laminas\InputFilter\InputProviderInterface;
 
 class BilateralNoOfPermitsElement extends Text implements InputProviderInterface
 {

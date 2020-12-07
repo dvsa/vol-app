@@ -2,7 +2,7 @@
 
 namespace Admin\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 use Common\Form\Model\Form\Traits\IdTrait;
 
 /**
@@ -111,7 +111,7 @@ class PermitStockDetails
      * @Form\Options({
      *      "label": "Period selection translation key "
      * })
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":512}})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":512}})
      * @Form\Type("Text")
      * @Form\Required(false)
      */
@@ -153,10 +153,10 @@ class PermitStockDetails
      * @Form\Options({
      *      "label": "Quota"
      * })
-     * @Form\Validator({"name":"Zend\Validator\Digits"})
-     * @Form\Type("Zend\Form\Element\Number")
+     * @Form\Validator({"name":"Laminas\Validator\Digits"})
+     * @Form\Type("Laminas\Form\Element\Number")
      * @Transfer\Validator({
-     *      "name":"Zend\Validator\Between",
+     *      "name":"Laminas\Validator\Between",
      *      "options": {
      *          "min": -1,
      *          "max": 9999999

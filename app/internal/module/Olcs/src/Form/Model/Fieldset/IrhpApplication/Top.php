@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset\IrhpApplication;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
@@ -19,7 +19,7 @@ class Top extends \Olcs\Form\Model\Fieldset\Base
     public $stockHtml = null;
 
     /**
-     * @Form\Type("Zend\Form\Element\Hidden")
+     * @Form\Type("Laminas\Form\Element\Hidden")
      */
     public $stockText = null;
 
@@ -53,31 +53,31 @@ class Top extends \Olcs\Form\Model\Fieldset\Base
     public $dateReceived = null;
 
     /**
-     * @Form\Type("Zend\Form\Element\Hidden")
+     * @Form\Type("Laminas\Form\Element\Hidden")
      *
      */
     public $irhpPermitType;
 
     /**
-     * @Form\Type("Zend\Form\Element\Hidden")
+     * @Form\Type("Laminas\Form\Element\Hidden")
      *
      */
     public $isApplicationPathEnabled;
 
     /**
-     * @Form\Type("Zend\Form\Element\Hidden")
+     * @Form\Type("Laminas\Form\Element\Hidden")
      *
      */
     public $requiresPreAllocationCheck;
 
     /**
-     * @Form\Type("Zend\Form\Element\Hidden")
+     * @Form\Type("Laminas\Form\Element\Hidden")
      *
      */
     public $licence;
 
     /**
-     * @Form\Type("Zend\Form\Element\Hidden")
+     * @Form\Type("Laminas\Form\Element\Hidden")
      * @Form\Type("\Common\Form\Elements\Types\Readonly")
      * @Form\Options({
      *     "label": "Current total vehicle authorization"
@@ -87,7 +87,7 @@ class Top extends \Olcs\Form\Model\Fieldset\Base
     public $numVehiclesLabel;
 
     /**
-     * @Form\Type("Zend\Form\Element\Hidden")
+     * @Form\Type("Laminas\Form\Element\Hidden")
      * @Form\Attributes({"id":"numVehicles"})
      *
      */

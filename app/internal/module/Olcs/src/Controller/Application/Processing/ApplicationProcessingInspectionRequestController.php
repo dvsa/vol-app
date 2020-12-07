@@ -20,7 +20,7 @@ use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Dvsa\Olcs\Transfer\Command\InspectionRequest\Create as CreateDto;
 use Dvsa\Olcs\Transfer\Command\InspectionRequest\Update as UpdateDto;
 use Olcs\Form\Model\Form\InspectionRequest;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Application Processing Inspection Request Controller

@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
@@ -36,7 +36,7 @@ class IrfoPsvAuth extends OrganisationBase
      *          "5":"5 years"
      *      },
      * })
-     * @Form\Type("Zend\Form\Element\Select")
+     * @Form\Type("Laminas\Form\Element\Select")
      */
     public $validityPeriod = null;
 
@@ -78,7 +78,7 @@ class IrfoPsvAuth extends OrganisationBase
      *     "target_object":"Olcs\Form\Model\Fieldset\IrfoPsvAuthNumber",
      *     "is_collection":true,
      *     "options":{
-     *         "count":1, 
+     *         "count":1,
      *         "label":"Authorisation number",
      *         "hint":"markup-authorisation-number-hint",
      *         "hint_at_bottom":true
@@ -170,8 +170,8 @@ class IrfoPsvAuth extends OrganisationBase
      * @Form\Attributes({"id":""})
      * @Form\Options({"label":"Service route from"})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":1,"max":30}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":1,"max":30}})
      */
     public $serviceRouteFrom = null;
 
@@ -179,8 +179,8 @@ class IrfoPsvAuth extends OrganisationBase
      * @Form\Attributes({"id":""})
      * @Form\Options({"label":"Service route to"})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":1,"max":30}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":1,"max":30}})
      */
     public $serviceRouteTo = null;
 
@@ -228,8 +228,8 @@ class IrfoPsvAuth extends OrganisationBase
      * @Form\Attributes({"class":"extra-long","id":"exemptionDetails", "required":false})
      * @Form\Options({"label":"Exemption reason"})
      * @Form\Type("TextArea")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":255}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":255}})
      */
     public $exemptionDetails;
 

@@ -8,13 +8,13 @@ use Common\Service\Helper\FormHelperService;
 use Common\View\Model\Section;
 use Dvsa\Olcs\Transfer\Query\Application\Grant;
 use Olcs\Form\Model\Form\GrantAuthorityForm;
-use Zend\Form\Element\Radio;
-use Zend\Form\Form;
+use Laminas\Form\Element\Radio;
+use Laminas\Form\Form;
 use Dvsa\Olcs\Transfer\Command\Application\Grant as AppGrantCmd;
 use Dvsa\Olcs\Transfer\Command\Variation\Grant as VarGrantCmd;
 use Olcs\Form\Model\Form\Grant as GrantApplicationForm;
-use Zend\Http\Response;
-use Zend\View\Model\ViewModel;
+use Laminas\Http\Response;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Abstract Internal Grant Controller
@@ -135,7 +135,6 @@ abstract class AbstractGrantController extends AbstractController
         $formMessages = [];
 
         if (isset($errors['shouldCreateInspectionRequest'])) {
-
             foreach ($errors['shouldCreateInspectionRequest'] as $key => $message) {
                 $formMessages['inspection-request-confirm']['createInspectionRequest'][] = $message;
             }
@@ -144,7 +143,6 @@ abstract class AbstractGrantController extends AbstractController
         }
 
         if (isset($errors['dueDate'])) {
-
             foreach ($errors['dueDate'][0] as $key => $message) {
                 $formMessages['inspection-request-grant-details']['dueDate'][] = $message;
             }
@@ -248,7 +246,6 @@ abstract class AbstractGrantController extends AbstractController
 
         foreach ($reasons as $reason => $info) {
             if (in_array($reason, ['application-grant-error-sections', 'variation-grant-error-sections'])) {
-
                 $sections = [];
                 foreach ($info as $section) {
                     $sections[] = $translator->translate('lva.section.title.' . $section);
@@ -268,7 +265,7 @@ abstract class AbstractGrantController extends AbstractController
      *
      * @param int $lvaId lvaId
      *
-     * @return null|\Zend\Http\Response
+     * @return null|\Laminas\Http\Response
      */
     protected function checkForRedirect($lvaId)
     {
@@ -280,7 +277,7 @@ abstract class AbstractGrantController extends AbstractController
      *
      * @param int $id id
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     protected function redirectToOverview($id)
     {

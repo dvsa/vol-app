@@ -3,8 +3,8 @@
 namespace Olcs\Controller;
 
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Zend\Session\Container;
-use Zend\View\Model\ViewModel;
+use Laminas\Session\Container;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Main search controller
@@ -26,7 +26,7 @@ class SearchController extends AbstractController implements LeftViewProvider
      * At first glance this seems a little unnecessary, but we need to intercept the post
      * and turn it into a get. This way the search URL contains the search params.
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function postAction()
     {
@@ -55,7 +55,7 @@ class SearchController extends AbstractController implements LeftViewProvider
     /**
      * Back action
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function backAction()
     {
@@ -78,7 +78,7 @@ class SearchController extends AbstractController implements LeftViewProvider
     /**
      * Index action
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function indexAction()
     {
@@ -88,7 +88,7 @@ class SearchController extends AbstractController implements LeftViewProvider
     /**
      * Search action
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     public function searchAction()
     {
@@ -109,13 +109,13 @@ class SearchController extends AbstractController implements LeftViewProvider
 
         // make all elements not required
         foreach ($form->getInputFilter()->get('filter')->getInputs() as $input) {
-            /* @var $input \Zend\InputFilter\Input */
+            /* @var $input \Laminas\InputFilter\Input */
             $input->setRequired(false);
         }
 
         // make all elements not required
         foreach ($form->getInputFilter()->get('sort')->getInputs() as $input) {
-            /* @var $input \Zend\InputFilter\Input */
+            /* @var $input \Laminas\InputFilter\Input */
             $input->setRequired(false);
         }
 
@@ -131,7 +131,7 @@ class SearchController extends AbstractController implements LeftViewProvider
     /**
      * Reset action
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function resetAction()
     {
@@ -166,7 +166,7 @@ class SearchController extends AbstractController implements LeftViewProvider
     /**
      * Remove Vehicle Section 26 marker
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     protected function vehicleremove26Action()
     {
@@ -199,7 +199,7 @@ class SearchController extends AbstractController implements LeftViewProvider
     /**
      * Set Vehicle Section 26 marker
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     protected function vehicleset26Action()
     {
@@ -234,7 +234,7 @@ class SearchController extends AbstractController implements LeftViewProvider
      *
      * @param array $data Data
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function processSearch($data)
     {

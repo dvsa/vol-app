@@ -9,7 +9,7 @@ use Dvsa\Olcs\Transfer\Query\DataRetention\RuleList;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\DataRetentionExport as Mapper;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Cpms Report Controller
@@ -39,7 +39,7 @@ class ExportController extends AbstractInternalController implements LeftViewPro
     /**
      * Process action - Index
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function indexAction()
     {
@@ -50,7 +50,7 @@ class ExportController extends AbstractInternalController implements LeftViewPro
 
         $this->placeholder()->setPlaceholder('form', $form);
 
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $dataFromPost = (array) $this->params()->fromPost();
@@ -104,7 +104,7 @@ class ExportController extends AbstractInternalController implements LeftViewPro
             foreach ($response->getResult()['results'] as $dataRetentionRule) {
                 $options[$dataRetentionRule['id']] = $dataRetentionRule['description'];
             }
-            /* @var $select \Zend\Form\Element\Select */
+            /* @var $select \Laminas\Form\Element\Select */
             $select->setValueOptions($options);
         }
     }

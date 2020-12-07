@@ -4,8 +4,8 @@ namespace AdminTest\Form\Model\Form;
 
 use Dvsa\Olcs\Transfer\Validators\Money;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
-use Zend\Validator\InArray;
-use Zend\Form\Element\Radio;
+use Laminas\Validator\InArray;
+use Laminas\Form\Element\Radio;
 
 /**
  * Class FinancialStandingRateTest

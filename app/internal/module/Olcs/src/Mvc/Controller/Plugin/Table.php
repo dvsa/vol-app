@@ -3,7 +3,7 @@
 namespace Olcs\Mvc\Controller\Plugin;
 
 use Common\Service\Table\TableBuilder;
-use Zend\Mvc\Controller\Plugin\AbstractPlugin;
+use Laminas\Mvc\Controller\Plugin\AbstractPlugin;
 
 /**
  * Class Table
@@ -57,7 +57,7 @@ class Table extends AbstractPlugin
     }
 
     /**
-     * @return \Zend\Mvc\Controller\AbstractActionController
+     * @return \Laminas\Mvc\Controller\AbstractActionController
      */
     public function getController()
     {

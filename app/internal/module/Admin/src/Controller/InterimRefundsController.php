@@ -6,7 +6,7 @@ use Admin\Form\Model\Form\InterimRefundReportFilter as FilterForm;
 use Dvsa\Olcs\Transfer\Query\Fee\InterimRefunds as ListDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Class InterimRefundsController
@@ -46,7 +46,7 @@ class InterimRefundsController extends AbstractInternalController implements Lef
      */
     private function setFilterDefaults()
     {
-        /* @var $request \Zend\Http\Request */
+        /* @var $request \Laminas\Http\Request */
         $request = $this->getRequest();
 
         $eomDate = $this->getServiceLocator()->get('Helper\Date')->getDate('Y-m-t');

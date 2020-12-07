@@ -21,7 +21,7 @@ use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateSla as UpdateSlaCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\Close as CloseCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\Reopen as ReopenCmd;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Class PiController
@@ -110,7 +110,7 @@ class PiController extends AbstractInternalController implements CaseControllerI
     /**
      * Ensure index action redirects to details action
      *
-     * @return array|mixed|\Zend\Http\Response|\Zend\View\Model\ViewModel
+     * @return array|mixed|\Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */
     public function detailsAction()
     {
@@ -120,7 +120,7 @@ class PiController extends AbstractInternalController implements CaseControllerI
     /**
      * Index action
      *
-     * @return \Zend\Http\Response|\Zend\View\Model\ViewModel
+     * @return \Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */
     public function indexAction()
     {
@@ -186,7 +186,7 @@ class PiController extends AbstractInternalController implements CaseControllerI
     /**
      * Deal with Pi decisions
      *
-     * @return array|\Zend\View\Model\ViewModel
+     * @return array|\Laminas\View\Model\ViewModel
      */
     public function decisionAction()
     {
@@ -217,7 +217,7 @@ class PiController extends AbstractInternalController implements CaseControllerI
     /**
      * Deal with Pi Sla
      *
-     * @return array|\Zend\View\Model\ViewModel
+     * @return array|\Laminas\View\Model\ViewModel
      */
     public function slaAction()
     {
@@ -236,19 +236,19 @@ class PiController extends AbstractInternalController implements CaseControllerI
     /**
      * Alter form for edit set SLAs
      *
-     * @param \Zend\Form\FormInterface $form Form
+     * @param \Laminas\Form\FormInterface $form Form
      *
-     * @return \Zend\Form\FormInterface
+     * @return \Laminas\Form\FormInterface
      */
     public function alterFormForSla($form)
     {
         $data = $this->getPi();
 
         // set SLAs
-        /** @var \Zend\Form\Fieldset $fields */
+        /** @var \Laminas\Form\Fieldset $fields */
         $fields = $form->get('fields');
 
-        /** @var \Zend\Form\ElementInterface $element */
+        /** @var \Laminas\Form\ElementInterface $element */
         foreach ($fields as $element) {
             if (in_array($element->getName(), $this->slaFields)) {
                 $form = $this->setSlaTargetHint($form, $element, $data);
@@ -261,11 +261,11 @@ class PiController extends AbstractInternalController implements CaseControllerI
     /**
      * Sets the target date hint on an element from data provided by the query handler
      *
-     * @param \Zend\Form\FormInterface    $form    Form
-     * @param \Zend\Form\ElementInterface $element Element
+     * @param \Laminas\Form\FormInterface    $form    Form
+     * @param \Laminas\Form\ElementInterface $element Element
      * @param array                       $data    Data
      *
-     * @return \Zend\Form\FormInterface
+     * @return \Laminas\Form\FormInterface
      */
     private function setSlaTargetHint($form, $element, $data)
     {

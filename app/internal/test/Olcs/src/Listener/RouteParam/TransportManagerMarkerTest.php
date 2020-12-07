@@ -9,7 +9,7 @@ use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParam\TransportManagerMarker;
 use Olcs\Listener\RouteParams;
 use OlcsTest\Bootstrap;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Transport Manager Markers Service Test
@@ -50,8 +50,8 @@ class TransportManagerMarkerTest extends MockeryTestCase
      */
     public function testAttach()
     {
-        /** @var \Zend\EventManager\EventManagerInterface $mockEventManager */
-        $mockEventManager = m::mock(\Zend\EventManager\EventManagerInterface::class)
+        /** @var \Laminas\EventManager\EventManagerInterface $mockEventManager */
+        $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class)
             ->shouldReceive('attach')
             ->with(RouteParams::EVENT_PARAM . 'transportManager', [$this->sut, 'onTransportManagerMarker'], 1)
             ->once()

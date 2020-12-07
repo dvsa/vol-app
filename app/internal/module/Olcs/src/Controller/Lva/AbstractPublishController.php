@@ -12,7 +12,7 @@ abstract class AbstractPublishController extends \Common\Controller\Lva\Abstract
     /**
      * indexAction
      *
-     * @return \Zend\Http\Response|\Zend\View\Model\ViewModel
+     * @return \Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */
     public function indexAction()
     {
@@ -41,7 +41,7 @@ abstract class AbstractPublishController extends \Common\Controller\Lva\Abstract
      *
      * @param array $errors errors
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     protected function cannotPublish($errors)
     {
@@ -60,7 +60,7 @@ abstract class AbstractPublishController extends \Common\Controller\Lva\Abstract
      *
      * @param string $hasActiveS4 hasActiveS4
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     protected function publish($hasActiveS4)
     {
@@ -81,7 +81,7 @@ abstract class AbstractPublishController extends \Common\Controller\Lva\Abstract
      *
      * @param string $hasActiveS4 hasActiveS4
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     protected function republish($hasActiveS4)
     {

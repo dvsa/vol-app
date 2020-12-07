@@ -10,7 +10,7 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\AbstractInternalController;
 use Dvsa\Olcs\Transfer\Command\DataRetention\UpdateRule as UpdateDto;
 use Olcs\Data\Mapper\DataRetentionRule as Mapper;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Admin\Form\Model\Form\DataRetentionAdmin as FormClass;
 use Dvsa\Olcs\Transfer\Query\DataRetention\GetRule as ItemDto;
 
@@ -70,7 +70,7 @@ class RuleAdminController extends AbstractInternalController implements LeftView
     /**
      * Index action
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function indexAction()
     {

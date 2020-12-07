@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Form;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("companies-house-alert-filters")
@@ -27,7 +27,7 @@ class CompaniesHouseAlertFilters
      *     "label": "companies-house-alert.filters.type-of-change",
      *     "disable_inarray_validator": false
      * })
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Type("\Laminas\Form\Element\Select")
      */
     public $typeOfChange = null;
 
@@ -37,7 +37,7 @@ class CompaniesHouseAlertFilters
      *     "label": "tasks.submit.filter",
      *     "empty_option": "ch_alert_reason.all"
      * })
-     * @Form\Type("\Zend\Form\Element\Button")
+     * @Form\Type("\Laminas\Form\Element\Button")
      */
     public $filter = null;
 

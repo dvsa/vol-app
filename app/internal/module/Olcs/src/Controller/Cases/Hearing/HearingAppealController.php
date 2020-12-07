@@ -9,7 +9,7 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Logging\Log\Logger;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Hearing Appeal Controller
@@ -57,7 +57,7 @@ class HearingAppealController extends AbstractInternalController implements Case
     /**
      * Ensure index action redirects to details action
      *
-     * @return array|mixed|\Zend\Http\Response|\Zend\View\Model\ViewModel
+     * @return array|mixed|\Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */
     public function indexAction()
     {

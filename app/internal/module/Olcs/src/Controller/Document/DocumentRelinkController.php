@@ -7,8 +7,8 @@
  */
 namespace Olcs\Controller\Document;
 
-use Zend\View\Model\ViewModel;
-use Zend\Http\Response;
+use Laminas\View\Model\ViewModel;
+use Laminas\Http\Response;
 use Dvsa\Olcs\Transfer\Command\Document\CopyDocument;
 use Dvsa\Olcs\Transfer\Command\Document\MoveDocument;
 use Olcs\Data\Mapper\DocumentRelink as DocumentRelinkMapper;
@@ -48,7 +48,6 @@ class DocumentRelinkController extends AbstractDocumentController
         $this->alterForm($form);
 
         if ($this->getRequest()->isPost() && $form->isValid()) {
-
             $res = $this->processRelink($post, $form);
             if ($res instanceof Response) {
                 return $res;
@@ -83,7 +82,7 @@ class DocumentRelinkController extends AbstractDocumentController
      * @param string $type type
      * @param int    $ids  ids
      *
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     protected function getRelinkForm($type, $ids)
     {
@@ -100,7 +99,7 @@ class DocumentRelinkController extends AbstractDocumentController
      * process relink
      *
      * @param array           $post post
-     * @param \Zend\Form\Form $form form
+     * @param \Laminas\Form\Form $form form
      *
      * @return Response
      */
@@ -143,7 +142,7 @@ class DocumentRelinkController extends AbstractDocumentController
     /**
      * alterForm
      *
-     * @param \Zend\Form\Form $form form
+     * @param \Laminas\Form\Form $form form
      *
      * @return void
      */

@@ -3,11 +3,11 @@
 namespace Olcs\Data\Mapper\TransportManager;
 
 use Common\Data\Mapper\MapperInterface;
-use Zend\Form\FormInterface;
+use Laminas\Form\FormInterface;
 
 /**
  * EmploymentHistory Mapper
- * 
+ *
  * @package Olcs\Data\Mapper
  */
 class EmploymentHistory implements MapperInterface

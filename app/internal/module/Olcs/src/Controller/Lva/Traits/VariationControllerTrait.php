@@ -9,8 +9,8 @@ namespace Olcs\Controller\Lva\Traits;
 
 use Common\RefData;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Zend\Form\Form;
-use Zend\View\Model\ViewModel;
+use Laminas\Form\Form;
+use Laminas\View\Model\ViewModel;
 use Common\View\Model\Section;
 use Common\Controller\Lva\Traits\CommonVariationControllerTrait;
 
@@ -98,10 +98,10 @@ trait VariationControllerTrait
      * Render the section
      *
      * @param string|ViewModel $content   content
-     * @param \Zend\Form\Form  $form      form
+     * @param \Laminas\Form\Form  $form      form
      * @param array            $variables variables
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     protected function render($content, Form $form = null, $variables = [])
     {

@@ -11,7 +11,7 @@ use Common\FormService\FormServiceManager;
 use Common\Service\Helper\FormHelperService;
 use Mockery as m;
 use Olcs\FormService\Form\Lva\VariationTypeOfLicence;
-use Zend\Form\Element;
+use Laminas\Form\Element;
 
 /**
  * Variation Type Of Licence Form Service Test

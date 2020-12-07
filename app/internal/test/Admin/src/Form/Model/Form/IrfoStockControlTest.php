@@ -3,7 +3,7 @@
 namespace AdminTest\Form\Model\Form;
 
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
-use Zend\Validator\Between;
+use Laminas\Validator\Between;
 
 /**
  * Class IrfoStockControlTest

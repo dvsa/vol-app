@@ -39,7 +39,7 @@ class IsRemovedMarkerTest extends TestCase
     {
         $this->sut->setData(['transportManager' => ['removedDate' => '1990-2-10 10:00']]);
 
-        $mockPartialHelper = m::mock(\Zend\View\Helper\Partial::class);
+        $mockPartialHelper = m::mock(\Laminas\View\Helper\Partial::class);
         $mockPartialHelper->shouldReceive('__invoke')
             ->with(
                 'marker/transport-manager/is-removed',

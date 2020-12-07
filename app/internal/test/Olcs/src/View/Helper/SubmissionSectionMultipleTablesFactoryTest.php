@@ -5,8 +5,8 @@ namespace OlcsTest\View\Helper;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\View\Helper\SubmissionSectionMultipleTablesFactory;
 use Mockery as m;
-use Zend\Mvc\Service\ServiceManagerConfig;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\Mvc\Service\ServiceManagerConfig;
+use Laminas\ServiceManager\ServiceManager;
 use \Olcs\TestHelpers\ControllerPluginManagerHelper;
 
 /**
@@ -17,9 +17,9 @@ class SubmissionSectionMultipleTablesFactoryTest extends MockeryTestCase
 {
     public function testCreateService()
     {
-        $mockTranslator = m::mock('\Zend\I18n\Translator\Translator');
+        $mockTranslator = m::mock('\Laminas\I18n\Translator\Translator');
 
-        $mockServiceLocator = m::mock('\Zend\ServiceManager\ServiceLocatorInterface');
+        $mockServiceLocator = m::mock('\Laminas\ServiceManager\ServiceLocatorInterface');
         $mockServiceLocator->shouldReceive('getServiceLocator')->andReturnSelf();
         $mockServiceLocator->shouldReceive('get')->with('Translator')
             ->andReturn($mockTranslator);

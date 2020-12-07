@@ -10,7 +10,7 @@ use Olcs\Service\Data\IrhpPermitPrintCountry;
 use Olcs\Service\Data\IrhpPermitPrintRangeType;
 use Olcs\Service\Data\IrhpPermitPrintStock;
 use OlcsTest\Bootstrap;
-use Zend\View\Model\JsonModel;
+use Laminas\View\Model\JsonModel;
 
 /**
  * Index Controller Test

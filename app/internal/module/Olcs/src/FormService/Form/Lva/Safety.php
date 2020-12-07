@@ -14,7 +14,7 @@ class Safety extends CommonSafety
     /**
      * Make form alterations
      *
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     public function getForm()
     {

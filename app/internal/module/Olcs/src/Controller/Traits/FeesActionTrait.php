@@ -19,9 +19,9 @@ use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeType as FeeTypeQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeTypeList as FeeTypeListQry;
 use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
-use Zend\View\Model\JsonModel;
-use Zend\View\Model\ViewModel;
-use Zend\Form\Form;
+use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
+use Laminas\Form\Form;
 
 /**
  * Fees action trait
@@ -39,17 +39,17 @@ trait FeesActionTrait
     /**
      * Defines the controller specific fees route
      */
-    protected abstract function getFeesRoute();
+    abstract protected function getFeesRoute();
 
     /**
      * Defines the controller specific fees route params
      */
-    protected abstract function getFeesRouteParams();
+    abstract protected function getFeesRouteParams();
 
     /**
      * Defines the controller specific fees table params
      */
-    protected abstract function getFeesTableParams();
+    abstract protected function getFeesTableParams();
 
     /**
      * Shows fees table
@@ -782,9 +782,9 @@ trait FeesActionTrait
     /**
      * Alter fee form
      *
-     * @param \Zend\Form\Form $form
+     * @param \Laminas\Form\Form $form
      * @param array $fee
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     protected function alterFeeForm($form, $fee)
     {
@@ -821,11 +821,11 @@ trait FeesActionTrait
     /**
      * Alter fee payment form
      *
-     * @param \Zend\Form\Form $form
+     * @param \Laminas\Form\Form $form
      * @param array $feeData from FeeList query
      * @param boolean $backToFee whether to populate 'backToFee' field which
      * controls the final redirect
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     protected function alterPaymentForm($form, $feeData, $backToFee = false)
     {
@@ -1050,7 +1050,7 @@ trait FeesActionTrait
      * @param string                                       $message        message
      * @param bool                                         $redirectToList redirect to list
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     protected function updateFeeAndRedirectToList($command, $message = '', $redirectToList = true)
     {
@@ -1073,8 +1073,8 @@ trait FeesActionTrait
      * Set data
      *
      * @param array $fee
-     * @param \Zend\Form\Form $form
-     * @return \Zend\Form\Form
+     * @param \Laminas\Form\Form $form
+     * @return \Laminas\Form\Form
      */
     protected function setDataFeeForm($fee, $form)
     {
@@ -1119,7 +1119,7 @@ trait FeesActionTrait
      * @param boolean $backToFee back to fee
      * @param array   $address   address
      *
-     * @return \Zend\Http\Response | ViewModel
+     * @return \Laminas\Http\Response | ViewModel
      */
     private function initiatePaymentRequest($feeIds, $details, $backToFee, $address = null)
     {
