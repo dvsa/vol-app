@@ -6,7 +6,7 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Data\Mapper;
-use Zend\Form\FormInterface;
+use Laminas\Form\FormInterface;
 
 /**
  * @covers \Olcs\Data\Mapper\Task

@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Attributes({"class":""})
@@ -42,9 +42,9 @@ class QualificationDetails
      * @Form\Options({"label":"transport-manager.competences.form.serial"})
      * @Form\Type("Text")
      * @Form\Required(false)
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator({
-     *     "name": "Zend\Validator\StringLength",
+     *     "name": "Laminas\Validator\StringLength",
      *     "options": {
      *          "max": 50,
      *     },
@@ -64,7 +64,7 @@ class QualificationDetails
      * @Form\Filter({"name":"DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
-     * @Form\Validator({"name": "\Zend\Validator\NotEmpty"})
+     * @Form\Validator({"name": "\Laminas\Validator\NotEmpty"})
      * @Form\Validator({"name":"\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $issuedDate = null;

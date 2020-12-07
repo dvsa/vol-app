@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Attributes({"class":""})
@@ -15,9 +15,9 @@ class TmEmployerNameDetails
      * @Form\Options({"label":"transport-manager.employment.form.employerName"})
      * @Form\Required(true)
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator({
-     *     "name": "Zend\Validator\StringLength",
+     *     "name": "Laminas\Validator\StringLength",
      *     "options": {
      *          "max": 90,
      *     },

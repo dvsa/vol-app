@@ -5,7 +5,7 @@
  */
 namespace Olcs\Controller\Licence\Processing;
 
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Licence Processing Overview Controller
@@ -19,7 +19,7 @@ class LicenceProcessingOverviewController extends AbstractLicenceProcessingContr
     /**
      * index Action
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function indexAction()
     {

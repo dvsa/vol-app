@@ -56,7 +56,7 @@ class BusRefEbsrMarkerTest extends TestCase
             'busReg' => ['isTxcApp' => 'Y']
         ];
 
-        $mockPartialHelper = m::mock(\Zend\View\Helper\Partial::class);
+        $mockPartialHelper = m::mock(\Laminas\View\Helper\Partial::class);
 
         $mockPartialHelper->shouldReceive('__invoke')
             ->with('marker/busreg-ebsr', ['busReg' => $data['busReg']])->once()->andReturn('HTML1');

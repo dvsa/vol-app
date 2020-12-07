@@ -2,7 +2,7 @@
 
 namespace Admin\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore No methods
@@ -28,7 +28,7 @@ class UserDetails
      * @Form\Attributes({"placeholder":"","class":"medium"})
      * @Form\Options({"label":"Username"})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\Username"})
      */
     public $loginId = null;

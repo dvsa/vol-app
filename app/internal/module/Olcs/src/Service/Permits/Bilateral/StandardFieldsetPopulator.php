@@ -3,7 +3,7 @@
 namespace Olcs\Service\Permits\Bilateral;
 
 use Olcs\Form\Element\Permits\BilateralNoOfPermitsCombinedTotalElement;
-use Zend\Form\Fieldset;
+use Laminas\Form\Fieldset;
 
 /**
  * Standard fieldset populator

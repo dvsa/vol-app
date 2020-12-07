@@ -9,9 +9,9 @@ use Common\Util\FileContent;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Admin\Form\Model\Form\DocTemplateFilter;
-use Zend\Form\Form;
-use Zend\Http\Response;
-use Zend\View\Model\ViewModel;
+use Laminas\Form\Form;
+use Laminas\Http\Response;
+use Laminas\View\Model\ViewModel;
 use Dvsa\Olcs\Transfer\Query\DocTemplate\FullList as ListDTO;
 use Dvsa\Olcs\Transfer\Query\DocTemplate\ById as ItemDTO;
 use Dvsa\Olcs\Transfer\Command\DocTemplate\Create as CreateDTO;
@@ -210,10 +210,10 @@ class DocumentTemplateController extends AbstractInternalController implements L
     /**
      * Alter form for editRule action, set default values for listboxes
      *
-     * @param \Zend\Form\Form $form     Form
+     * @param \Laminas\Form\Form $form     Form
      * @param array           $formData Form data
      *
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     protected function alterFormForAdd($form, $formData)
     {
@@ -226,10 +226,10 @@ class DocumentTemplateController extends AbstractInternalController implements L
     /**
      * Alter form for editRule action, set default values for listboxes
      *
-     * @param \Zend\Form\Form $form     Form
+     * @param \Laminas\Form\Form $form     Form
      * @param array           $formData Form data
      *
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     protected function alterFormForEdit($form, $formData)
     {

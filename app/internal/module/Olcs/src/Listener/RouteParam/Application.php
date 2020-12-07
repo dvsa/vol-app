@@ -5,11 +5,11 @@ namespace Olcs\Listener\RouteParam;
 use Common\RefData;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
-use Zend\EventManager\EventManagerInterface;
-use Zend\EventManager\ListenerAggregateInterface;
-use Zend\EventManager\ListenerAggregateTrait;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\EventManager\ListenerAggregateInterface;
+use Laminas\EventManager\ListenerAggregateTrait;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Common\Exception\ResourceNotFoundException;
 
@@ -28,12 +28,12 @@ class Application implements ListenerAggregateInterface, FactoryInterface
     protected $markerService;
 
     /**
-     * @var \Zend\Navigation\Navigation
+     * @var \Laminas\Navigation\Navigation
      */
     protected $navigationService;
 
     /**
-     * @var \Zend\Navigation\Navigation
+     * @var \Laminas\Navigation\Navigation
      */
     protected $sidebarNavigationService;
 
@@ -74,7 +74,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @return \Zend\Navigation\Navigation
+     * @return \Laminas\Navigation\Navigation
      */
     public function getNavigationService()
     {
@@ -82,7 +82,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @param \Zend\Navigation\Navigation $navigationService
+     * @param \Laminas\Navigation\Navigation $navigationService
      * @return $this
      */
     public function setNavigationService($navigationService)
@@ -92,7 +92,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @return \Zend\Navigation\Navigation
+     * @return \Laminas\Navigation\Navigation
      */
     public function getSidebarNavigationService()
     {
@@ -100,7 +100,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @param \Zend\Navigation\Navigation $sidebarNavigationService
+     * @param \Laminas\Navigation\Navigation $sidebarNavigationService
      * @return $this
      */
     public function setSidebarNavigationService($sidebarNavigationService)
@@ -291,8 +291,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
     protected function shouldShowApproveSchedule41Button($application)
     {
         foreach ($application['s4s'] as $s4) {
-            if (
-                is_null($s4['outcome']) &&
+            if (is_null($s4['outcome']) &&
                 $application['status']['id'] == \Common\RefData::APPLICATION_STATUS_UNDER_CONSIDERATION
             ) {
                 return true;
@@ -305,8 +304,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
     protected function shouldShowResetSchedule41Button($application)
     {
         foreach ($application['s4s'] as $s4) {
-            if (
-                $application['status']['id'] == \Common\RefData::APPLICATION_STATUS_UNDER_CONSIDERATION &&
+            if ($application['status']['id'] == \Common\RefData::APPLICATION_STATUS_UNDER_CONSIDERATION &&
                 $s4['outcome']['id'] === RefData::S4_STATUS_APPROVED
             ) {
                 return true;
@@ -319,8 +317,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
     protected function shouldShowRefuseSchedule41Button($application)
     {
         foreach ($application['s4s'] as $s4) {
-            if (
-                is_null($s4['outcome']) &&
+            if (is_null($s4['outcome']) &&
                 $application['status']['id'] == \Common\RefData::APPLICATION_STATUS_UNDER_CONSIDERATION
             ) {
                 return true;
@@ -353,7 +350,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
      */
     protected function setupPublishApplicationButton($applicationData)
     {
-        /* @var $button \Zend\Navigation\Page\Mvc */
+        /* @var $button \Laminas\Navigation\Page\Mvc */
         $button = $this->getSidebarNavigationService()->findById('application-quick-actions-publish-application');
 
         if ($applicationData['isVariation']) {
@@ -365,7 +362,6 @@ class Application implements ListenerAggregateInterface, FactoryInterface
                 $applicationData['isPublishable'] &&
                 // It is NOT a PSV Variation; AND
                 $applicationData['goodsOrPsv']['id'] !== RefData::LICENCE_CATEGORY_PSV;
-
         } else {
             // New application record; AND
             $showButton =

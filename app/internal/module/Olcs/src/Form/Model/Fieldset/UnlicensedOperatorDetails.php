@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore No methods
@@ -29,7 +29,7 @@ class UnlicensedOperatorDetails
      *      "label":"internal-operator-profile-name",
      *      "short-label":"internal-operator-profile-name"
      * })
-     * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
+     * @Form\Validator({"name": "Laminas\Validator\NotEmpty"})
      * @Form\Name("name")
      * @Form\Type("Text")
      */

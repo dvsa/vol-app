@@ -8,7 +8,7 @@
 namespace Olcs\Data\Mapper;
 
 use Common\Data\Mapper\MapperInterface;
-use Zend\Form\FormInterface;
+use Laminas\Form\FormInterface;
 
 /**
  * Team mapper

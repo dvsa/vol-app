@@ -3,7 +3,7 @@
 namespace Admin\Data\Mapper;
 
 use Common\Data\Mapper\MapperInterface;
-use Zend\Form\FormInterface;
+use Laminas\Form\FormInterface;
 
 /**
  * Fee Rate mapper

@@ -3,8 +3,8 @@
 namespace AdminTest\Form\Model\Form;
 
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
-use Zend\InputFilter\Date;
-use Zend\Form\Element\Select;
+use Laminas\InputFilter\Date;
+use Laminas\Form\Element\Select;
 
 /**
  * Class CpmsReportTest

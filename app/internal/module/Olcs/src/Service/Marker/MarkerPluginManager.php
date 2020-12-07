@@ -2,15 +2,15 @@
 
 namespace Olcs\Service\Marker;
 
-use Zend\ServiceManager\AbstractPluginManager;
-use Zend\ServiceManager\Exception;
+use Laminas\ServiceManager\AbstractPluginManager;
+use Laminas\ServiceManager\Exception;
 
 /**
  * Class MarkerPluginManager
  */
 class MarkerPluginManager extends AbstractPluginManager
 {
-    public function __construct(\Zend\ServiceManager\ConfigInterface $configuration = null)
+    public function __construct(\Laminas\ServiceManager\ConfigInterface $configuration = null)
     {
         parent::__construct($configuration);
 

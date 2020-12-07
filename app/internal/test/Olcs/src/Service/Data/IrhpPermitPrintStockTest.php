@@ -11,7 +11,7 @@ use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintStock;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder as TransferAnnotationBuilder;
 use Olcs\Service\Data\IrhpPermitPrintStock;
 use Mockery as m;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 
 /**
  * Class IrhpPermitPrintStock Test

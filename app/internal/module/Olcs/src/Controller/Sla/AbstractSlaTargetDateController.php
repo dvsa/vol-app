@@ -14,7 +14,7 @@ use Dvsa\Olcs\Transfer\Query\System\SlaTargetDate as ItemDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Data\Mapper\SlaTargetDate as Mapper;
 use Olcs\Form\Model\Form\SlaTargetDate as Form;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Abstract SLA Date Controller

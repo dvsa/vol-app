@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Form;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("permits-home")
@@ -48,7 +48,7 @@ class PermitsHome
      * @Form\Options({
      *     "label": "Filter"
      * })
-     * @Form\Type("\Zend\Form\Element\Button")
+     * @Form\Type("\Laminas\Form\Element\Button")
      */
     public $filter = null;
 }

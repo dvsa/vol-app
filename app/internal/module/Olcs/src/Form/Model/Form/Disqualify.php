@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Form;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("disqualify")
@@ -65,7 +65,7 @@ class Disqualify
      * @Form\Options({
      *     "label": "form.disqualify.period",
      * })
-     * @Form\Validator({"name":"Zend\Validator\Digits"})
+     * @Form\Validator({"name":"Laminas\Validator\Digits"})
      * @Form\Required(false)
      */
     public $period = null;
@@ -76,8 +76,8 @@ class Disqualify
      * @Form\Options({
      *     "label": "form.disqualify.notes",
      * })
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":4000}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":4000}})
      * @Form\Required(false)
      */
     public $notes = null;

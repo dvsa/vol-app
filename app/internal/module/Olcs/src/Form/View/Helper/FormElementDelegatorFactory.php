@@ -1,8 +1,8 @@
 <?php
 namespace Olcs\Form\View\Helper;
 
-use Zend\ServiceManager\DelegatorFactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\DelegatorFactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class FormElementDelegatorFactory
@@ -18,11 +18,11 @@ class FormElementDelegatorFactory implements DelegatorFactoryInterface
      * @param string $name
      * @param string $requestedName
      * @param callable $callback
-     * @return mixed|\Zend\Form\View\Helper\FormElement
+     * @return mixed|\Laminas\Form\View\Helper\FormElement
      */
     public function createDelegatorWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName, $callback)
     {
-        /** @var \Zend\Form\View\Helper\FormElement $viewHelper */
+        /** @var \Laminas\Form\View\Helper\FormElement $viewHelper */
         $viewHelper = call_user_func($callback);
 
         $viewHelper->addClass('\Olcs\Form\Element\SubmissionSections', 'formSubmissionSections');

@@ -3,8 +3,8 @@
 namespace Admin\Form\Model\Form;
 
 use Olcs\Form\Model\Fieldset\Base;
-use Zend\Form\Annotation as Form;
-use Zend\Form\FormInterface;
+use Laminas\Form\Annotation as Form;
+use Laminas\Form\FormInterface;
 
 /**
  * @Form\Name("system-info-message")

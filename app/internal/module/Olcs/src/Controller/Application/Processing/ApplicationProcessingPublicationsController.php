@@ -15,7 +15,7 @@ use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Olcs\Data\Mapper\PublicationLink as PublicationLinkMapper;
 use Olcs\Form\Model\Form\Publication as PublicationForm;
 use Olcs\Form\Model\Form\PublicationNotNew as PublicationNotNewForm;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Application Processing Publication Controller
@@ -54,7 +54,7 @@ class ApplicationProcessingPublicationsController extends AbstractInternalContro
     /**
      * Edit Action
      *
-     * @return array|\Zend\View\Model\ViewModel
+     * @return array|\Laminas\View\Model\ViewModel
      */
     public function editAction()
     {

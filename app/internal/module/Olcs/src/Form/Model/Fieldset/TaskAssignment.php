@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("assignment")
@@ -30,7 +30,7 @@ class TaskAssignment
      *          "context_values": {""},
      *          "validators": {
      *              {
-     *                  "name":"Zend\Validator\NotEmpty",
+     *                  "name":"Laminas\Validator\NotEmpty",
      *              },
      *          },
      *      }

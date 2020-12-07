@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * Cases form.
@@ -43,8 +43,8 @@ class Cases extends Base
      * })
      * @Form\Required(false)
      * @Form\Type("TextArea")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":1024}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":5,"max":1024}})
      */
     public $description = null;
 
@@ -53,8 +53,8 @@ class Cases extends Base
      * @Form\Options({"label":"ECMS Number"})
      * @Form\Required(false)
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":45}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":2,"max":45}})
      */
     public $ecmsNo = null;
 

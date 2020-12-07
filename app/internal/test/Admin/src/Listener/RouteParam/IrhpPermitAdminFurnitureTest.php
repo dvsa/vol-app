@@ -16,10 +16,10 @@ use Admin\Listener\RouteParam\IrhpPermitAdminFurniture;
 use Mockery as m;
 use Olcs\Listener\RouteParams;
 use Common\RefData;
-use Zend\Navigation\Navigation;
-use Zend\Navigation\Page\Mvc as NavigationPage;
-use Zend\View\Helper\Placeholder;
-use Zend\View\HelperPluginManager;
+use Laminas\Navigation\Navigation;
+use Laminas\Navigation\Page\Mvc as NavigationPage;
+use Laminas\View\Helper\Placeholder;
+use Laminas\View\HelperPluginManager;
 
 class IrhpPermitAdminFurnitureTest extends TestCase
 {
@@ -35,7 +35,7 @@ class IrhpPermitAdminFurnitureTest extends TestCase
 
     public function testAttach()
     {
-        $mockEventManager = m::mock('Zend\EventManager\EventManagerInterface');
+        $mockEventManager = m::mock('Laminas\EventManager\EventManagerInterface');
         $mockEventManager->shouldReceive('attach')->once()
             ->with(RouteParams::EVENT_PARAM . 'stockId', [$this->sut, 'onIrhpPermitAdminFurniture'], 1);
 
@@ -49,7 +49,7 @@ class IrhpPermitAdminFurnitureTest extends TestCase
 
         $mockResult = m::mock();
 
-        $mockViewHelperManager = m::mock(\Zend\View\HelperPluginManager::class);
+        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
         $this->sut->setViewHelperManager($mockViewHelperManager);
 
         $mockQuerySender->shouldReceive('send')->once()->andReturn($mockResult);
@@ -191,7 +191,7 @@ class IrhpPermitAdminFurnitureTest extends TestCase
         $mockCommandSender = m::mock(CommandSender::class);
         $mockNavigation = m::mock(Navigation::class);
 
-        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockSl = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('QuerySender')->andReturn($mockQuerySender);
         $mockSl->shouldReceive('get')->with('CommandSender')->andReturn($mockCommandSender);

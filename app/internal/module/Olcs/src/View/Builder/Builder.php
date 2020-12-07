@@ -2,7 +2,7 @@
 
 namespace Olcs\View\Builder;
 
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Olcs\View\Model\ViewModel as OlcsViewModel;
 
 /**
@@ -34,10 +34,10 @@ final class Builder extends AbstractBuilder
     /**
      * Extend the render view method
      *
-     * @param string|\Zend\View\Model\ViewModel $view
+     * @param string|\Laminas\View\Model\ViewModel $view
      * @param string|null $pageTitle
      * @param string|null $pageSubTitle
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     protected function decorateView(ViewModel $view)
     {

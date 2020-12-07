@@ -148,7 +148,7 @@ class VariationControllerTraitTest extends MockeryTestCase
         $mockResponse->shouldReceive('isOk')->andReturn(true);
         $mockResponse->shouldReceive('getResult')->andReturn($applicationData);
 
-        $mockPluginManager = m::mock(\Zend\Mvc\Controller\PluginManager::class)->makePartial();
+        $mockPluginManager = m::mock(\Laminas\Mvc\Controller\PluginManager::class)->makePartial();
         $this->sut->setPluginManager($mockPluginManager);
         $mockPluginManager->shouldReceive('get')->with('handleQuery', null)->andReturn($mockResponse);
     }

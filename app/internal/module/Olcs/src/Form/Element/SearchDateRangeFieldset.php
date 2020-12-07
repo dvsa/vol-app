@@ -8,7 +8,7 @@
 
 namespace Olcs\Form\Element;
 
-use Zend\Form\Fieldset;
+use Laminas\Form\Fieldset;
 use Common\Service\Data\Search\SearchAwareTrait as SearchAwareTrait;
 
 /**
@@ -27,7 +27,6 @@ class SearchDateRangeFieldset extends Fieldset
 
         /** @var \Common\Data\Object\Search\Aggregations\DateRange\DateRangeAbstract $class */
         foreach ($this->getSearchService()->getDateRanges() as $class) {
-
             $date = new \Common\Form\Elements\Custom\DateSelect();
             $date->setName($class->getKey());
             $date->setLabel($class->getTitle());

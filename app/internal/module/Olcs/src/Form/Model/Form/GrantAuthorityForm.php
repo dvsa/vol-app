@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Form;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("GrantAuthority")
@@ -25,20 +25,20 @@ class GrantAuthorityForm
      *      },
      *     "category": "application_grant_authority",
      * })
-     * @Form\Validator({"name":"Zend\Validator\InArray", "options": {
+     * @Form\Validator({"name":"Laminas\Validator\InArray", "options": {
      *     "haystack": {
      *         \Common\RefData::GRANT_AUTHORITY_DELEGATED,
      *         \Common\RefData::GRANT_AUTHORITY_TC,
      *         \Common\RefData::GRANT_AUTHORITY_TR
      *     },
      *     "messages": {
-     *          Zend\Validator\InArray::NOT_IN_ARRAY: "internal.application.decisions.grant.authority.validation.invalid"
+     *          Laminas\Validator\InArray::NOT_IN_ARRAY: "internal.application.decisions.grant.authority.validation.invalid"
      *     }
      * }})
      * @Form\Validator({
-     *      "name": "Zend\Validator\NotEmpty",
+     *      "name": "Laminas\Validator\NotEmpty",
      *      "options": {
-     *          "messages":{Zend\Validator\NotEmpty::IS_EMPTY:"internal.application.decisions.grant.authority.validation.invalid"}
+     *          "messages":{Laminas\Validator\NotEmpty::IS_EMPTY:"internal.application.decisions.grant.authority.validation.invalid"}
      *      }
      * })
      */

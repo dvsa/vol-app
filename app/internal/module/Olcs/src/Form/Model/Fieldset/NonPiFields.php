@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
@@ -74,14 +74,14 @@ class NonPiFields extends CaseBase
      * @Form\Type("Text")
      * @Form\Attributes({"class":"medium","id":"venueOther", "required":false})
      * @Form\Options({"label":"Meeting venue other"})
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "venue",
      *          "context_values": {"other"},
      *          "allow_empty": true,
      *          "validators": {
-     *              {"name":"Zend\Validator\StringLength","options":{"max":255}}
+     *              {"name":"Laminas\Validator\StringLength","options":{"max":255}}
      *          }
      *      }
      * })
@@ -94,8 +94,8 @@ class NonPiFields extends CaseBase
      * @Form\Attributes({"id":"","placeholder":"","class":"small"})
      * @Form\Options({"label": "Number of witnesses"})
      * @Form\Filter({"name":"Digits"})
-     * @Form\Validator({"name":"Zend\Validator\Digits"})
-     * @Form\Validator({"name":"Zend\Validator\Between","options":{"min":0,"max":99,"inclusive":true}})
+     * @Form\Validator({"name":"Laminas\Validator\Digits"})
+     * @Form\Validator({"name":"Laminas\Validator\Between","options":{"min":0,"max":99,"inclusive":true}})
      */
     public $witnessCount;
 
@@ -104,8 +104,8 @@ class NonPiFields extends CaseBase
      * @Form\Attributes({"class":"long","id":""})
      * @Form\Options({"label":"Name of presiding staff member"})
      * @Form\Required(false)
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":0,"max":255}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":0,"max":255}})
      */
     public $presidingStaffName = null;
 

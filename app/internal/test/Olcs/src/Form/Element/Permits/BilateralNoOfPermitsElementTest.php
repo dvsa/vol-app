@@ -9,7 +9,7 @@ namespace OlcsTest\Form\Element\Permits;
 
 use Olcs\Form\Element\Permits\BilateralNoOfPermitsElement;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
-use Zend\Filter\StringTrim;
+use Laminas\Filter\StringTrim;
 
 /**
  * BilateralNoOfPermitsElement Test

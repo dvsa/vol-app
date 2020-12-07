@@ -8,7 +8,7 @@ namespace Olcs\Controller\Licence\Processing;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Licence\LicenceController;
 use Olcs\Controller\Traits\ProcessingControllerTrait;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Abstract Licence Processing Controller

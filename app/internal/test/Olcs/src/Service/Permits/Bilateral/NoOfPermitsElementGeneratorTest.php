@@ -12,7 +12,7 @@ use Olcs\Form\Element\Permits\BilateralNoOfPermitsElement;
 use Olcs\Service\Permits\Bilateral\NoOfPermitsElementGenerator;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
-use Zend\Form\Factory as FormFactory;
+use Laminas\Form\Factory as FormFactory;
 
 /**
  * NoOfPermitsElementGenerator Test

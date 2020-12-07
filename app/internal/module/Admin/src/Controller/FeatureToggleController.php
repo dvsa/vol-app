@@ -4,7 +4,7 @@ namespace Admin\Controller;
 
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Dvsa\Olcs\Transfer\Command\FeatureToggle\Create as CreateDto;
 use Dvsa\Olcs\Transfer\Command\FeatureToggle\Update as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\FeatureToggle\Delete as DeleteDto;

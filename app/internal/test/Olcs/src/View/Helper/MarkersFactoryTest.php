@@ -16,7 +16,7 @@ class MarkersFactoryTest extends TestCase
     {
         $mockMarkersService = m::mock(\Olcs\Service\Marker\MarkerService::class);
 
-        $mockSl = m::mock(\Zend\ServiceManager\ServiceLocatorInterface::class);
+        $mockSl = m::mock(\Laminas\ServiceManager\ServiceLocatorInterface::class);
         $mockSl->shouldReceive('getServiceLocator->get')->with(\Olcs\Service\Marker\MarkerService::class)->once()
             ->andReturn($mockMarkersService);
 

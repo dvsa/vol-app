@@ -2,7 +2,7 @@
 
 namespace Olcs\Validator;
 
-use Zend\Validator\AbstractValidator;
+use Laminas\Validator\AbstractValidator;
 
 /**
  * Class SubmissionSection

@@ -10,7 +10,7 @@ use Dvsa\Olcs\Transfer\Query\Replacement\GetList as ListDTO;
 use Dvsa\Olcs\Transfer\Query\Replacement\ById as ItemDTO;
 use Dvsa\Olcs\Transfer\Command\Replacement\Create as CreateDTO;
 use Dvsa\Olcs\Transfer\Command\Replacement\Update as UpdateDTO;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Editable Translations Controller

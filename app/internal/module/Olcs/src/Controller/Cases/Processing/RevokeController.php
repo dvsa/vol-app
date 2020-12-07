@@ -10,7 +10,7 @@ use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\Revoke as Mapper;
 use Olcs\Form\Model\Form\Revoke as Form;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Revoke Controller
@@ -68,7 +68,7 @@ class RevokeController extends AbstractInternalController implements CaseControl
     /**
      * Lock unused actions
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function indexAction()
     {
@@ -88,7 +88,7 @@ class RevokeController extends AbstractInternalController implements CaseControl
     /**
      * Redirect to index
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function redirectToIndex()
     {

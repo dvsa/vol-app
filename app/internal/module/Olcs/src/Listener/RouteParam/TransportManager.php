@@ -5,11 +5,11 @@ namespace Olcs\Listener\RouteParam;
 use Olcs\Controller\TransportManager\Details\TransportManagerDetailsResponsibilityController;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
-use Zend\EventManager\EventManagerInterface;
-use Zend\EventManager\ListenerAggregateInterface;
-use Zend\EventManager\ListenerAggregateTrait;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\EventManager\ListenerAggregateInterface;
+use Laminas\EventManager\ListenerAggregateTrait;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Dvsa\Olcs\Transfer\Query\Nr\ReputeUrl as ReputeUrlQry;
 use Common\RefData;
@@ -34,7 +34,7 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
     protected $queryService;
 
     /**
-     * @var \Zend\Navigation\Navigation
+     * @var \Laminas\Navigation\Navigation
      */
     protected $sidebarNavigation;
 
@@ -78,7 +78,7 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @return \Zend\Navigation\Navigation
+     * @return \Laminas\Navigation\Navigation
      */
     public function getSidebarNavigation()
     {
@@ -86,7 +86,7 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @param \Zend\Navigation\Navigation $sidebarNavigation
+     * @param \Laminas\Navigation\Navigation $sidebarNavigation
      */
     public function setSidebarNavigation($sidebarNavigation)
     {
@@ -116,7 +116,9 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
     public function attach(EventManagerInterface $events)
     {
         $this->listeners[] = $events->attach(
-            RouteParams::EVENT_PARAM . 'transportManager', [$this, 'onTransportManager'], 1
+            RouteParams::EVENT_PARAM . 'transportManager',
+            [$this, 'onTransportManager'],
+            1
         );
     }
 

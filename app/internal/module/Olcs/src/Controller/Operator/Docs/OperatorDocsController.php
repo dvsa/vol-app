@@ -4,7 +4,7 @@ namespace Olcs\Controller\Operator\Docs;
 
 use Olcs\Controller\Operator\OperatorController;
 use Olcs\Controller\Traits;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Operator Docs Controller
@@ -70,7 +70,7 @@ class OperatorDocsController extends OperatorController
     /**
      * Get Form
      *
-     * @return \Zend\Form\FieldsetInterface
+     * @return \Laminas\Form\FieldsetInterface
      */
     protected function getConfiguredDocumentForm()
     {

@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
@@ -49,8 +49,8 @@ class StatementDetails extends CaseBase
      * @Form\Attributes({"placeholder":""})
      * @Form\Options({"label":"Requestors first name"})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":35}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":2,"max":35}})
      */
     public $requestorsForename = null;
 
@@ -58,8 +58,8 @@ class StatementDetails extends CaseBase
      * @Form\Attributes({"placeholder":""})
      * @Form\Options({"label":"Requestors last name"})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":35}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":2,"max":35}})
      */
     public $requestorsFamilyName = null;
 
@@ -67,8 +67,8 @@ class StatementDetails extends CaseBase
      * @Form\Attributes({"class":"","id":""})
      * @Form\Options({"label":"Requestor body"})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":40}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":2,"max":40}})
      */
     public $requestorsBody = null;
 
@@ -173,8 +173,8 @@ class StatementDetails extends CaseBase
      *     }
      * })
      * @Form\Type("TextArea")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":4000}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":5,"max":4000}})
      */
     public $authorisersDecision = null;
 }

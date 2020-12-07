@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
@@ -36,7 +36,7 @@ class PublicInquiryHearingFields extends Base
      *          "allow_empty": false,
      *          "validators": {
      *              {"name": "NotEmpty"},
-     *              {"name":"Zend\Validator\StringLength","options":{"max":255}}
+     *              {"name":"Laminas\Validator\StringLength","options":{"max":255}}
      *          }
      *      }
      * })
@@ -132,7 +132,7 @@ class PublicInquiryHearingFields extends Base
      *                      "break_chain_on_failure": true,
      *                  }
      *              })
-     * @Form\Validator({"name":"Zend\Validator\Between",
+     * @Form\Validator({"name":"Laminas\Validator\Between",
      *                  "options":{
      *                      "min":0,
      *                      "max":99,
@@ -181,7 +181,7 @@ class PublicInquiryHearingFields extends Base
      * @Form\Type("TextArea")
      * @Form\Attributes({"class":"extra-long","id":"cancelledReason", "required":false})
      * @Form\Options({"label":"Cancelled reason"})
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator({"name": "NotEmpty", "options":{"null"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
@@ -190,7 +190,7 @@ class PublicInquiryHearingFields extends Base
      *          "allow_empty": false,
      *          "validators": {
      *              {"name":"NotEmpty"},
-     *              {"name":"Zend\Validator\StringLength","options":{"max":1000}}
+     *              {"name":"Laminas\Validator\StringLength","options":{"max":1000}}
      *          }
      *      }
      * })
@@ -244,7 +244,7 @@ class PublicInquiryHearingFields extends Base
      *          "allow_empty": false,
      *          "validators": {
      *              {"name":"NotEmpty"},
-     *              {"name":"Zend\Validator\StringLength","options":{"max":1000}}
+     *              {"name":"Laminas\Validator\StringLength","options":{"max":1000}}
      *          }
      *      }
      * })
@@ -271,8 +271,8 @@ class PublicInquiryHearingFields extends Base
      * @Form\Type("TextArea")
      * @Form\Attributes({"class":"extra-long    js-definition-target","id":""})
      * @Form\Options({"label":"Details to be published"})
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5, "max":4000}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":5, "max":4000}})
      */
     public $details = null;
 

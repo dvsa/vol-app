@@ -11,7 +11,7 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Olcs\Form\Model\Form\IrhpPermitFilter as FilterForm;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 class PermitController extends AbstractInternalController implements LeftViewProvider, LicenceControllerInterface
 {

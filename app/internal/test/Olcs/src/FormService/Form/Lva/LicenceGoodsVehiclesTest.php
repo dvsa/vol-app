@@ -48,7 +48,7 @@ class LicenceGoodsVehiclesTest extends MockeryTestCase
 
         // Mocks
         $mockForm = m::mock();
-        $mockTableElement = m::mock('\Zend\Form\Fieldset');
+        $mockTableElement = m::mock('\Laminas\Form\Fieldset');
         $mockValidator = m::mock();
 
         $this->sm->setService('oneRowInTablesRequired', $mockValidator);

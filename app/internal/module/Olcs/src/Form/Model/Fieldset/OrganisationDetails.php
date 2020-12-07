@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
@@ -27,7 +27,7 @@ class OrganisationDetails
      * @Form\Attributes({"class":"medium"})
      * @Form\Options({"label":"Operator name"})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      */
     public $name = null;
 }

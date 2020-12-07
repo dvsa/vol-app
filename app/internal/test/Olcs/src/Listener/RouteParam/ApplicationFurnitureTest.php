@@ -17,12 +17,12 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParam\ApplicationFurniture;
 use Mockery as m;
-use Zend\EventManager\EventManagerInterface;
-use Zend\Mvc\Router\RouteStackInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\View\Helper\Url;
-use Zend\View\HelperPluginManager;
-use Zend\View\Model\ViewModel;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\Mvc\Router\RouteStackInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\View\Helper\Url;
+use Laminas\View\HelperPluginManager;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Application Furniture Test

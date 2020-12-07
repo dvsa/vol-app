@@ -5,8 +5,8 @@ namespace Admin\Controller;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Dvsa\Olcs\Transfer\Command\IrhpPermitSector\Update as Update;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitSector\GetList as ListDto;
-use Zend\View\Model\ViewModel;
-use Zend\Http\Response;
+use Laminas\View\Model\ViewModel;
+use Laminas\Http\Response;
 
 /**
  * IRHP Permits Sector controller

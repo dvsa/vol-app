@@ -2,7 +2,7 @@
 
 namespace Admin\Form\Model\Form;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("DocTemplateFilter")
@@ -28,7 +28,7 @@ class DocTemplateFilter
      * @Form\Options({
      *     "label": "documents-home.submit.filter"
      * })
-     * @Form\Type("\Zend\Form\Element\Button")
+     * @Form\Type("\Laminas\Form\Element\Button")
      */
     public $filter = null;
 }

@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore No methods
@@ -48,9 +48,9 @@ class TransportManagerDetails
      * @Form\Attributes({"class":"medium"})
      * @Form\Options({"label":"transport-manager-details-first-name"})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name": "\Zend\Validator\NotEmpty"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":35}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name": "\Laminas\Validator\NotEmpty"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":2,"max":35}})
      */
     public $firstName = null;
 
@@ -58,9 +58,9 @@ class TransportManagerDetails
      * @Form\Attributes({"class":"medium"})
      * @Form\Options({"label":"transport-manager-details-last-name"})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name": "\Zend\Validator\NotEmpty"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":35}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name": "\Laminas\Validator\NotEmpty"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":2,"max":35}})
      */
     public $lastName = null;
 
@@ -69,7 +69,7 @@ class TransportManagerDetails
      * @Form\Options({"label":"transport-manager-details-email"})
      * @Form\Required(false)
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\EmailAddress"})
      */
     public $emailAddress = null;
@@ -86,7 +86,7 @@ class TransportManagerDetails
      * @Form\Filter({"name":"DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
-     * @Form\Validator({"name": "\Zend\Validator\NotEmpty"})
+     * @Form\Validator({"name": "\Laminas\Validator\NotEmpty"})
      * @Form\Validator({"name":"\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $birthDate = null;
@@ -94,7 +94,7 @@ class TransportManagerDetails
     /**
      * @Form\Attributes({"id":"","class":"medium"})
      * @Form\Options({"label":"transport-manager-details-place-of-birth"})
-     * @Form\Validator({"name": "\Zend\Validator\NotEmpty"})
+     * @Form\Validator({"name": "\Laminas\Validator\NotEmpty"})
      * @Form\Type("Text")
      */
     public $birthPlace = null;

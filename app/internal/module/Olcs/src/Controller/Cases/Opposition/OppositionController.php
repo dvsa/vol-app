@@ -15,8 +15,8 @@ use Olcs\Data\Mapper\Opposition as Mapper;
 use Olcs\Form\Model\Form\Opposition as Form;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericList;
-use Zend\View\Model\ConsoleModel;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ConsoleModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Case Opposition Controller
@@ -99,7 +99,7 @@ class OppositionController extends AbstractInternalController implements CaseCon
     /**
      * index Action
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function indexAction()
     {

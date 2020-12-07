@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Form\Lva;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Options({"prefer_form_input_filter":true})

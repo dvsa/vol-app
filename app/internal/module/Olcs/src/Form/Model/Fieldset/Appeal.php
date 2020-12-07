@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
@@ -44,8 +44,8 @@ class Appeal extends CaseBase
      * @Form\Options({"label":"Appeal number"})
      * @Form\Required(false)
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":20}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":2,"max":20}})
      */
     public $appealNo = null;
 
@@ -74,8 +74,8 @@ class Appeal extends CaseBase
      * @Form\Options({"label":"Outline ground"})
      * @Form\Required(false)
      * @Form\Type("TextArea")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":4000}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":5,"max":4000}})
      */
     public $outlineGround = null;
 
@@ -188,8 +188,8 @@ class Appeal extends CaseBase
      * @Form\Options({"label":"Comments"})
      * @Form\Required(false)
      * @Form\Type("TextArea")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":4000}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":5,"max":4000}})
      */
     public $comment = null;
 

@@ -14,7 +14,7 @@ use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
 trait ApplicationControllerTrait
 {
     /**
-     * @param \Zend\View\Model\ViewModel $view
+     * @param \Laminas\View\Model\ViewModel $view
      * @param string|null  $title
      * @param array $variables
      *
@@ -95,7 +95,7 @@ trait ApplicationControllerTrait
      * Get view with application
      *
      * @param array $variables
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     protected function getViewWithApplication($variables = array())
     {

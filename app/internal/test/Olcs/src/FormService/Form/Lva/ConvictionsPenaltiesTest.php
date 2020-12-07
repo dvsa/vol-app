@@ -12,7 +12,7 @@ use Common\Form\Model\Form\Lva\Fieldset\ConvictionsPenaltiesReadMoreLink;
 use Common\Service\Helper\TranslationHelperService;
 use Olcs\FormService\Form\Lva\ConvictionsPenalties;
 use Mockery as m;
-use Zend\Di\ServiceLocator;
+use Laminas\Di\ServiceLocator;
 
 /**
  * Convictions & Penalties Form Service Test

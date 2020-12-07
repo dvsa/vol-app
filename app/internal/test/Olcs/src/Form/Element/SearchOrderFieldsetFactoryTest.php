@@ -7,7 +7,7 @@ use Olcs\Form\Element\SearchOrderFieldset;
 use Olcs\Form\Element\SearchOrderFieldsetFactory;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * SearchOrderFieldsetFactory Test

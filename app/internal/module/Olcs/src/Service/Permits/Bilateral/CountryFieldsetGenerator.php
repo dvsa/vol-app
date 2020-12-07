@@ -3,9 +3,9 @@
 namespace Olcs\Service\Permits\Bilateral;
 
 use Common\Service\Helper\TranslationHelperService;
-use Zend\Form\Element\Select;
-use Zend\Form\Factory as FormFactory;
-use Zend\Form\Fieldset;
+use Laminas\Form\Element\Select;
+use Laminas\Form\Factory as FormFactory;
+use Laminas\Form\Fieldset;
 
 /**
  * Country fieldset generator

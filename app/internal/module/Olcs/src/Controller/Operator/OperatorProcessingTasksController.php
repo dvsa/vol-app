@@ -54,7 +54,7 @@ class OperatorProcessingTasksController extends OperatorController
      *
      * @param array $filters Field values
      *
-     * @return \Zend\Form\FormInterface
+     * @return \Laminas\Form\FormInterface
      */
     protected function getTaskForm(array $filters = [])
     {

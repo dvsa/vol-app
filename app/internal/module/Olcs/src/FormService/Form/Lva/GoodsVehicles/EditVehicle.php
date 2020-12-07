@@ -25,7 +25,7 @@ class EditVehicle extends AbstractFormService
         return $form;
     }
 
-    protected function alterForm(\Zend\Form\Form $form, $params)
+    protected function alterForm(\Laminas\Form\Form $form, $params)
     {
         if ($params['isRemoved']) {
             $this->getFormHelper()->disableElements($form->get('data'));

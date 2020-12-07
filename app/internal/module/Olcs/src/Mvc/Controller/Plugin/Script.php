@@ -3,7 +3,7 @@
 namespace Olcs\Mvc\Controller\Plugin;
 
 use Common\Service\Script\ScriptFactory as CommonScriptFactory;
-use Zend\Mvc\Controller\Plugin\AbstractPlugin;
+use Laminas\Mvc\Controller\Plugin\AbstractPlugin;
 
 /**
  * Class Script

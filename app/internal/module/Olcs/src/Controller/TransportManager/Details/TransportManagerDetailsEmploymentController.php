@@ -12,7 +12,7 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\TransportManager\EmploymentHistory as Mapper;
 use Olcs\Form\Model\Form\TmEmployment as Form;
 use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 
 /**
@@ -87,7 +87,7 @@ class TransportManagerDetailsEmploymentController extends AbstractInternalContro
     protected $deleteCommand = DeleteDto::class;
     protected $hasMultiDelete = true;
 
-    protected function alterFormForEdit(\Zend\Form\Form $form, $data)
+    protected function alterFormForEdit(\Laminas\Form\Form $form, $data)
     {
         $this->getServiceLocator()->get('Helper\Form')->remove($form, 'form-actions->addAnother');
 

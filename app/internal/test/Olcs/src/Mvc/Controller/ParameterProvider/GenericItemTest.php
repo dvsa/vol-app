@@ -6,7 +6,7 @@ namespace OlcsTest\Mvc\Controller\ParameterProvider;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Mockery as m;
-use Zend\Mvc\Controller\Plugin\Params;
+use Laminas\Mvc\Controller\Plugin\Params;
 
 /**
  * Class GenericItemTest

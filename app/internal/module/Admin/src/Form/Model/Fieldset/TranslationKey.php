@@ -3,12 +3,12 @@
 namespace Admin\Form\Model\Fieldset;
 
 use Common\Form\Model\Form\Traits\IdTrait;
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * ID only fieldset for Javascript population of related Keys
  *
- * @Form\Type("Zend\Form\Fieldset")
+ * @Form\Type("Laminas\Form\Fieldset")
  * @Form\Attributes({"class":"translation-keys"})
  */
 class TranslationKey
@@ -25,7 +25,7 @@ class TranslationKey
      * @Form\Options({
      *      "label": "New Translation Key"
      * })
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":512}})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":512}})
      * @Form\Type("Text")
      * @Form\Required(false)
      */
@@ -37,7 +37,7 @@ class TranslationKey
      * @Form\Options({
      *      "label": "Description"
      * })
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":512}})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":512}})
      * @Form\Type("Text")
      * @Form\Required(false)
      */

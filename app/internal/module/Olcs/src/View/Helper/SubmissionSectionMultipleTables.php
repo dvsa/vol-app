@@ -2,7 +2,7 @@
 
 namespace Olcs\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
+use Laminas\View\Helper\AbstractHelper;
 
 /**
  * View helper to render the submission section
@@ -20,7 +20,7 @@ class SubmissionSectionMultipleTables extends AbstractHelper
     protected $viewMap = array();
 
     /**
-     * @var \Zend\I18n\Translator\Translator
+     * @var \Laminas\I18n\Translator\Translator
      */
     protected $translator;
 
@@ -88,11 +88,10 @@ class SubmissionSectionMultipleTables extends AbstractHelper
         }
 
         return $this->getView()->render($viewTemplate, ['data' => $data]);
-
     }
 
     /**
-     * @param \Zend\I18n\Translator\Translator $translator
+     * @param \Laminas\I18n\Translator\Translator $translator
      */
     public function setTranslator($translator)
     {
@@ -100,7 +99,7 @@ class SubmissionSectionMultipleTables extends AbstractHelper
     }
 
     /**
-     * @return \Zend\I18n\Translator\Translator
+     * @return \Laminas\I18n\Translator\Translator
      */
     public function getTranslator()
     {

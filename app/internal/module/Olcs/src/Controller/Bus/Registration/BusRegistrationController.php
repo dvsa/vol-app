@@ -5,10 +5,10 @@ namespace Olcs\Controller\Bus\Registration;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Dvsa\Olcs\Transfer\Command as TransferCmd;
 use Olcs\View\Model\ViewModel;
-use Zend\Http\Response;
-use Zend\Mvc\Controller\AbstractActionController;
+use Laminas\Http\Response;
+use Laminas\Mvc\Controller\AbstractActionController;
 use Olcs\Controller\Interfaces\BusRegControllerInterface;
-use Zend\Mvc\MvcEvent;
+use Laminas\Mvc\MvcEvent;
 
 /**
  * Bus Registration Controller
@@ -43,7 +43,7 @@ class BusRegistrationController extends AbstractActionController implements BusR
     /**
      * index action
      *
-     * @return \Zend\View\Model\ConsoleModel|ViewModel
+     * @return \Laminas\View\Model\ConsoleModel|ViewModel
      */
     public function indexAction()
     {
@@ -101,7 +101,7 @@ class BusRegistrationController extends AbstractActionController implements BusR
      *
      * @param string $id $id
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     private function redirectToDetails($id)
     {
@@ -113,7 +113,7 @@ class BusRegistrationController extends AbstractActionController implements BusR
      *
      * @param TransferCmd\CommandInterface $command commmand
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     private function process($command)
     {
@@ -131,7 +131,7 @@ class BusRegistrationController extends AbstractActionController implements BusR
     /**
      * print letter action
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function printLetterAction()
     {

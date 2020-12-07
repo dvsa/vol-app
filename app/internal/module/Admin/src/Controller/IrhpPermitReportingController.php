@@ -3,7 +3,7 @@
 namespace Admin\Controller;
 
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Common\Category;
 use Dvsa\Olcs\Transfer\Query\Document\DocumentList;
 

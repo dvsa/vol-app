@@ -68,9 +68,9 @@ class OperatorFeesController extends OperatorController
     /**
      * Render layout
      *
-     * @param \Zend\View\Model\ViewModel $view view
+     * @param \Laminas\View\Model\ViewModel $view view
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     protected function renderLayout($view)
     {
@@ -90,9 +90,9 @@ class OperatorFeesController extends OperatorController
     /**
      * Alter create fee form
      *
-     * @param \Zend\Form\Form $form form
+     * @param \Laminas\Form\Form $form form
      *
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     protected function alterCreateFeeForm($form)
     {

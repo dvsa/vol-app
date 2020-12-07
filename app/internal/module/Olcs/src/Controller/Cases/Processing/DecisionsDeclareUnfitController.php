@@ -14,7 +14,7 @@ use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\TmCaseDecision as Mapper;
 use Olcs\Form\Model\Form\TmCaseUnfit as Form;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Case Decisions DeclareUnfit Controller
@@ -103,7 +103,7 @@ class DecisionsDeclareUnfitController extends AbstractInternalController impleme
     /**
      * indexAction
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function indexAction()
     {
@@ -123,7 +123,7 @@ class DecisionsDeclareUnfitController extends AbstractInternalController impleme
     /**
      *redirect to details
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function redirectToDetails()
     {

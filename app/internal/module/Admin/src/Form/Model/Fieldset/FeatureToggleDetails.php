@@ -2,7 +2,7 @@
 
 namespace Admin\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 use Common\Form\Model\Form\Traits\IdTrait;
 
 /**
@@ -17,8 +17,8 @@ class FeatureToggleDetails
      * @Form\Options({"label":"Name of toggle"})
      * @Form\Type("Text")
      * @Form\Required(true)
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":32}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":32}})
      */
     public $friendlyName = null;
 
@@ -27,8 +27,8 @@ class FeatureToggleDetails
      * @Form\Options({"label":"Config name (usually/ideally the FQDN of a handler)"})
      * @Form\Type("Text")
      * @Form\Required(true)
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":255}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":255}})
      */
     public $configName = null;
 
@@ -40,7 +40,7 @@ class FeatureToggleDetails
      * })
      * @Form\Type("DynamicRadio")
      * @Form\Validator({
-     *      "name":"Zend\Validator\NotEmpty"
+     *      "name":"Laminas\Validator\NotEmpty"
      * })
      */
     public $status = null;

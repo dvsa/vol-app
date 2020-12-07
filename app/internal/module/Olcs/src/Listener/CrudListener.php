@@ -7,10 +7,10 @@
  */
 namespace Olcs\Listener;
 
-use Zend\Mvc\MvcEvent;
-use Zend\EventManager\EventManagerInterface;
-use Zend\EventManager\ListenerAggregateTrait;
-use Zend\EventManager\ListenerAggregateInterface;
+use Laminas\Mvc\MvcEvent;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\EventManager\ListenerAggregateTrait;
+use Laminas\EventManager\ListenerAggregateInterface;
 
 /**
  * Listener
@@ -44,7 +44,7 @@ class CrudListener implements ListenerAggregateInterface
     /**
      * Pass the controller in
      *
-     * @param \Zend\Mvc\Controller\AbstractActionController $controller
+     * @param \Laminas\Mvc\Controller\AbstractActionController $controller
      */
     public function __construct($controller, $identifier = 'id', array $crudConfig = [])
     {

@@ -5,7 +5,7 @@ namespace Olcs\Controller\TransportManager;
 use Common\Service\Cqrs\Exception\NotFoundException;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
-use Zend\Mvc\MvcEvent;
+use Laminas\Mvc\MvcEvent;
 
 /**
  * Transport Manager Controller
@@ -29,7 +29,7 @@ class TransportManagerController extends AbstractController implements Transport
      * Redirect to the first menu section
      *
      * @codeCoverageIgnore
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function indexJumpAction()
     {
@@ -40,7 +40,7 @@ class TransportManagerController extends AbstractController implements Transport
      * Redirect to the first menu section
      *
      * @codeCoverageIgnore
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function indexProcessingJumpAction()
     {
@@ -58,7 +58,7 @@ class TransportManagerController extends AbstractController implements Transport
      * @todo this can probably be removed now
      *
      * @param array $variables
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     protected function getViewWithTm($variables = [])
     {
@@ -72,7 +72,7 @@ class TransportManagerController extends AbstractController implements Transport
     {
         $transportManagerId = (int) $this->params()->fromRoute('transportManager');
 
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $data = (array)$request->getPost();
@@ -130,7 +130,7 @@ class TransportManagerController extends AbstractController implements Transport
 
         $this->getServiceLocator()->get('Script')->loadFile('tm-merge');
 
-        $view = new \Zend\View\Model\ViewModel(['form' => $form]);
+        $view = new \Laminas\View\Model\ViewModel(['form' => $form]);
         $view->setTemplate('pages/form');
 
         return $this->renderView($view, 'Merge transport manager');
@@ -140,7 +140,7 @@ class TransportManagerController extends AbstractController implements Transport
      * Process TM merge form messages
      *
      * @param \Common\Service\Cqrs\Response $response
-     * @param \Zend\Form\FormInterface $form
+     * @param \Laminas\Form\FormInterface $form
      * @param int $toTmId
      *
      * return Form
@@ -168,7 +168,7 @@ class TransportManagerController extends AbstractController implements Transport
      * Setup TM merge confirmation form
      *
      * @param $toTmId
-     * @return \Zend\Form\FormInterface
+     * @return \Laminas\Form\FormInterface
      */
     protected function setupMergeConfirmationForm($toTmId)
     {
@@ -193,7 +193,7 @@ class TransportManagerController extends AbstractController implements Transport
             return $this->notFoundAction();
         }
 
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
         /* @var $form \Common\Form\Form */
@@ -228,7 +228,7 @@ class TransportManagerController extends AbstractController implements Transport
             }
         }
 
-        $view = new \Zend\View\Model\ViewModel(['form' => $form]);
+        $view = new \Laminas\View\Model\ViewModel(['form' => $form]);
         $view->setTemplate('pages/form');
 
         return $this->renderView($view, 'Unmerge transport manager');
@@ -258,17 +258,17 @@ class TransportManagerController extends AbstractController implements Transport
     /**
      * Ajax lookup of transport manager name
      *
-     * @return \Zend\View\Model\JsonModel
+     * @return \Laminas\View\Model\JsonModel
      */
     public function lookupAction()
     {
         $transportManagerId = (int) $this->params()->fromQuery('transportManager');
         if (!$transportManagerId) {
-            $response = new \Zend\Http\Response();
+            $response = new \Laminas\Http\Response();
             $response->setStatusCode(422);
             return $response;
         }
-        $view = new \Zend\View\Model\JsonModel();
+        $view = new \Laminas\View\Model\JsonModel();
 
         $tmData = $this->getTransportManager($transportManagerId);
         if (!$tmData) {
@@ -341,7 +341,7 @@ class TransportManagerController extends AbstractController implements Transport
 
     public function removeAction()
     {
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
 
         $form = $this->getServiceLocator()
@@ -380,7 +380,7 @@ class TransportManagerController extends AbstractController implements Transport
 
     public function undoDisqualificationAction()
     {
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         $form = $this->getServiceLocator()
             ->get('Helper\Form')

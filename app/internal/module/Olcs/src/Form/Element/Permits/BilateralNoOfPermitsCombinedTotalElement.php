@@ -2,9 +2,9 @@
 
 namespace Olcs\Form\Element\Permits;
 
-use Zend\Form\Element\Hidden;
-use Zend\InputFilter\InputProviderInterface;
-use Zend\Validator\Callback;
+use Laminas\Form\Element\Hidden;
+use Laminas\InputFilter\InputProviderInterface;
+use Laminas\Validator\Callback;
 
 class BilateralNoOfPermitsCombinedTotalElement extends Hidden implements InputProviderInterface
 {

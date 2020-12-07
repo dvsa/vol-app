@@ -6,7 +6,7 @@ use Common\RefData;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Data\Mapper\Lva\PhoneContact;
-use Zend\Form\FormInterface;
+use Laminas\Form\FormInterface;
 
 /**
  * @covers Olcs\Data\Mapper\Lva\PhoneContact
@@ -60,7 +60,7 @@ class PhoneContactTest extends MockeryTestCase
 
     public function testMapFromErrorsNull()
     {
-        /** @var \Zend\Form\FormInterface $mockForm */
+        /** @var \Laminas\Form\FormInterface $mockForm */
         $mockForm = m::mock(FormInterface::class);
 
         static::assertEquals([], PhoneContact::mapFromErrors($mockForm, ['messages'=> []]));
@@ -79,16 +79,16 @@ class PhoneContactTest extends MockeryTestCase
             ],
         ];
 
-        $mockField = m::mock(\Zend\Form\ElementInterface::class)
+        $mockField = m::mock(\Laminas\Form\ElementInterface::class)
             ->shouldReceive('getName')->once()->andReturn('unit_Field')
             ->shouldReceive('setMessages')->once()->with(['unit_Field_ErrMsg'])
             ->getMock();
 
-        $mockField2 = m::mock(\Zend\Form\ElementInterface::class)
+        $mockField2 = m::mock(\Laminas\Form\ElementInterface::class)
             ->shouldReceive('getName')->once()->andReturn('unit_Field2')
             ->getMock();
 
-        /** @var \Zend\Form\Form $mockForm */
+        /** @var \Laminas\Form\Form $mockForm */
         $mockForm = m::mock(FormInterface::class)
             ->shouldReceive('get')->once()->with(PhoneContact::DETAILS)->andReturn([$mockField, $mockField2])
             ->getMock();

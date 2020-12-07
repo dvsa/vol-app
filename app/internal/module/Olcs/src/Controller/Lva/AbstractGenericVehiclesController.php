@@ -34,7 +34,7 @@ abstract class AbstractGenericVehiclesController extends AbstractGoodsVehiclesCo
     /**
      * Print vehicles action
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function printVehiclesAction()
     {
@@ -55,11 +55,11 @@ abstract class AbstractGenericVehiclesController extends AbstractGoodsVehiclesCo
     /**
      * Export vehicles action
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function exportAction()
     {
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
 
         $query = $request->getPost('query');

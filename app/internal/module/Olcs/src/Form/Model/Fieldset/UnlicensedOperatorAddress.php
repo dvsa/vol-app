@@ -2,11 +2,11 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("registered-address")
- * @Form\Type("\Zend\Form\Fieldset")
+ * @Form\Type("\Laminas\Form\Fieldset")
  * @Form\Options({"label":"Registered address"})
  * @Form\Attributes({
  *      "class": "address",
@@ -31,7 +31,7 @@ class UnlicensedOperatorAddress
      * @Form\Options({"label":"Address lines"})
      * @Form\Type("Text")
      * @Form\Required(false)
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      */
     public $addressLine1 = null;
 
@@ -40,7 +40,7 @@ class UnlicensedOperatorAddress
      * @Form\Options({"label":"Address line 2","label_attributes":{"class":"visually-hidden"}})
      * @Form\Type("Text")
      * @Form\Required(false)
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      */
     public $addressLine2 = null;
 
@@ -49,7 +49,7 @@ class UnlicensedOperatorAddress
      * @Form\Options({"label":"Address line 3","label_attributes":{"class":"visually-hidden"}})
      * @Form\Type("Text")
      * @Form\Required(false)
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      */
     public $addressLine3 = null;
 
@@ -58,7 +58,7 @@ class UnlicensedOperatorAddress
      * @Form\Options({"label":"Address line 4","label_attributes":{"class":"visually-hidden"}})
      * @Form\Type("Text")
      * @Form\Required(false)
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      */
     public $addressLine4 = null;
 
@@ -67,7 +67,7 @@ class UnlicensedOperatorAddress
      * @Form\Options({"label":"Town/City","label_attributes":{"class":"visually-hidden"}})
      * @Form\Type("Text")
      * @Form\Required(false)
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      */
     public $town = null;
 

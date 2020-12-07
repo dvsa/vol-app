@@ -245,7 +245,7 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
         if ($displayed) {
             $mockFormHelper->shouldReceive('remove')->never();
 
-            $this->sm->setService('Translator', \Mockery::mock('Zend\Mvc\I18n\Translator'));
+            $this->sm->setService('Translator', \Mockery::mock('Laminas\Mvc\I18n\Translator'));
 
             $mockFormHelper->shouldReceive('attachValidator')->once();
         } else {
@@ -281,7 +281,7 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
         $this->sm->setService('Helper\Form', $mockFormHelper);
 
         if ($enabled) {
-            $this->sm->setService('Translator', \Mockery::mock('Zend\Mvc\I18n\Translator'));
+            $this->sm->setService('Translator', \Mockery::mock('Laminas\Mvc\I18n\Translator'));
             $mockFormHelper->shouldReceive('attachValidator')->once();
         } else {
             $mockFormHelper->shouldReceive('disableElement')->with($mockForm, 'fields->numberOfDiscs')->once();
@@ -333,7 +333,7 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
         if ($displayed) {
             $mockFormHelper->shouldReceive('remove')->never();
 
-            $this->sm->setService('Translator', \Mockery::mock('Zend\Mvc\I18n\Translator'));
+            $this->sm->setService('Translator', \Mockery::mock('Laminas\Mvc\I18n\Translator'));
 
             $mockFormHelper->shouldReceive('attachValidator')->once();
         } else {
@@ -370,7 +370,7 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
 
         $mockFormHelper->shouldReceive('remove')->never();
 
-        $this->sm->setService('Translator', \Mockery::mock('Zend\Mvc\I18n\Translator'));
+        $this->sm->setService('Translator', \Mockery::mock('Laminas\Mvc\I18n\Translator'));
 
         if ($enabled) {
             $mockFormHelper->shouldReceive('attachValidator')->once();

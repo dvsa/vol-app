@@ -230,7 +230,7 @@ class UnlicensedOperatorBusinessDetailsTest extends TestCase
         // @note the method returns the input, not the formErrors, so we
         // get a reference via andReturnUsing
         $formErrors = null;
-        $form = m::mock(\Zend\Form\FormInterface::class);
+        $form = m::mock(\Laminas\Form\FormInterface::class);
         $form
             ->shouldReceive('setMessages')
             ->andReturnUsing(

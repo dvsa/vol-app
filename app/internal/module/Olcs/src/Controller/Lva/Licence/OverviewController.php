@@ -14,7 +14,7 @@ use Dvsa\Olcs\Transfer\Query\Licence\Overview as LicenceQry;
 use Dvsa\Olcs\Transfer\Command\Licence\Overview as OverviewCmd;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Internal Licence Overview Controller
@@ -179,7 +179,7 @@ class OverviewController extends AbstractController implements LicenceController
     /**
      * print action
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function printAction()
     {
@@ -192,7 +192,10 @@ class OverviewController extends AbstractController implements LicenceController
         }
 
         return $this->redirect()->toRouteAjax(
-            'licence', ['lva-licence/overview' => $this->getLicenceId()], [], true
+            'licence',
+            ['lva-licence/overview' => $this->getLicenceId()],
+            [],
+            true
         );
     }
 

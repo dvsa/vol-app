@@ -3,7 +3,7 @@
 
 namespace Olcs\Mvc\Controller\ParameterProvider;
 
-use Zend\Mvc\Controller\Plugin\Params;
+use Laminas\Mvc\Controller\Plugin\Params;
 
 /**
  * Interface ParameterProviderInterface

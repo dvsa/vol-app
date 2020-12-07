@@ -61,10 +61,10 @@ class BusFeesController extends AbstractController implements BusRegControllerIn
     /**
      * Render layout
      *
-     * @param string|\Zend\View\Model\ViewModel $view View
+     * @param string|\Laminas\View\Model\ViewModel $view View
      *
      * @see Olcs\Controller\Traits\FeesActionTrait
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     protected function renderLayout($view)
     {

@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Form;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore No methods
@@ -24,7 +24,7 @@ class FeeFilter
      *     },
      *     "disable_inarray_validator": false
      * })
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Type("\Laminas\Form\Element\Select")
      */
     public $status = null;
 
@@ -33,7 +33,7 @@ class FeeFilter
      * @Form\Options({
      *     "label": "tasks.submit.filter"
      * })
-     * @Form\Type("\Zend\Form\Element\Button")
+     * @Form\Type("\Laminas\Form\Element\Button")
      */
     public $filter = null;
 }

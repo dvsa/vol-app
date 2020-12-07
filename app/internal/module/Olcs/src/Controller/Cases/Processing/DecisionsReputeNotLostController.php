@@ -14,7 +14,7 @@ use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\TmCaseDecision as Mapper;
 use Olcs\Form\Model\Form\TmCaseRepute as Form;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Case Decisions ReputeNotLost Controller
@@ -103,7 +103,7 @@ class DecisionsReputeNotLostController extends AbstractInternalController implem
     /**
      * index action
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function indexAction()
     {
@@ -113,7 +113,7 @@ class DecisionsReputeNotLostController extends AbstractInternalController implem
     /**
      * details Action
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function detailsAction()
     {
@@ -123,7 +123,7 @@ class DecisionsReputeNotLostController extends AbstractInternalController implem
     /**
      * redirct to details
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function redirectToDetails()
     {

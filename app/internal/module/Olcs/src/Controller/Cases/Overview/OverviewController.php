@@ -19,7 +19,7 @@ use Olcs\Data\Mapper\GenericFields as GenericMapper;
 use Olcs\Form\Model\Form\Cases as CaseForm;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Overview Controller, also deals with add and edit of cases
@@ -233,7 +233,7 @@ class OverviewController extends AbstractInternalController implements
     /**
      * redirectAction
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function redirectAction()
     {

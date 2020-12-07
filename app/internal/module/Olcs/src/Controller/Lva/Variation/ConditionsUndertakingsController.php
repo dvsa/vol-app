@@ -24,7 +24,7 @@ class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertaking
      *
      * @NOTE At the moment this method can only be called from variation
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function restoreAction()
     {

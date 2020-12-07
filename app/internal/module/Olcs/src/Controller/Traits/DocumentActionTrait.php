@@ -5,7 +5,7 @@ namespace Olcs\Controller\Traits;
 use Common\Controller\Traits\GenericUpload;
 use Dvsa\Olcs\Transfer\Command\Document\DeleteDocuments;
 use Dvsa\Olcs\Transfer\Query\Document\Document;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Document Action Trait
@@ -31,14 +31,14 @@ trait DocumentActionTrait
     /**
      * Get view model for document action
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     abstract protected function getDocumentView();
 
     /**
      * Get configured document form
      *
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     abstract protected function getConfiguredDocumentForm();
 
@@ -47,7 +47,7 @@ trait DocumentActionTrait
     /**
      * Get left view
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function getLeftView()
     {
@@ -60,7 +60,7 @@ trait DocumentActionTrait
     /**
      * Documents action
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function documentsAction()
     {
@@ -120,7 +120,7 @@ trait DocumentActionTrait
     /**
      * Performs a delete document action and redirects to the index
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function deleteDocumentAction()
     {

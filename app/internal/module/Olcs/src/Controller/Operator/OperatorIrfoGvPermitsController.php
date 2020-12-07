@@ -15,7 +15,7 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
 use Olcs\Data\Mapper\IrfoGvPermit as Mapper;
 use Olcs\Form\Model\Form\IrfoGvPermit as Form;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 
 /**
@@ -125,7 +125,7 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
     /**
      * reset action
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function resetAction()
     {
@@ -135,7 +135,7 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
     /**
      * approve action
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function approveAction()
     {
@@ -145,7 +145,7 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
     /**
      * withdraw action
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function withdrawAction()
     {
@@ -155,7 +155,7 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
     /**
      * refuse action
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function refuseAction()
     {
@@ -165,7 +165,7 @@ class OperatorIrfoGvPermitsController extends AbstractInternalController impleme
     /**
      * generate action
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function generateAction()
     {

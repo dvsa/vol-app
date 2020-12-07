@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Form;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("tm-merge")
@@ -26,7 +26,7 @@ class TransportManagerMerge
      *     "label": "form.tm-merge.to-tm-id",
      *     "short-label":"form.tm-merge.to-tm-id",
      * })
-     * @Form\Validator({"name":"Zend\Validator\Digits"})
+     * @Form\Validator({"name":"Laminas\Validator\Digits"})
      */
     public $toTmId = null;
 

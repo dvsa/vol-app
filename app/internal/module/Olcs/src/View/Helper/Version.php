@@ -1,7 +1,7 @@
 <?php
 namespace Olcs\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
+use Laminas\View\Helper\AbstractHelper;
 
 /**
  * Class Version

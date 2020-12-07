@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
@@ -36,8 +36,8 @@ class EnvironmentalComplaint extends CaseBase
      * @Form\Type("TextArea")
      * @Form\Required(true)
      * @Form\Attributes({"id":"description","class":"extra-long","name":"description", "required":false})
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":4000}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":5,"max":4000}})
      */
     public $description = null;
 
@@ -72,8 +72,8 @@ class EnvironmentalComplaint extends CaseBase
      * @Form\Attributes({"id":"complainantForename","class":"medium","name":"complainantForename"})
      * @Form\Options({"label":"Complainant first name"})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":35}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":2,"max":35}})
      */
     public $complainantForename = null;
 
@@ -81,8 +81,8 @@ class EnvironmentalComplaint extends CaseBase
      * @Form\Attributes({"id":"complainantFamilyName","class":"medium","name":"complainantFamilyName"})
      * @Form\Options({"label":"Complainant family name"})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":35}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":2,"max":35}})
      */
     public $complainantFamilyName = null;
 }

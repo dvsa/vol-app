@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
@@ -41,15 +41,15 @@ class BusRegQuality extends BusRegDetails
      *     }
      * })
      *
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      *
      * @Form\Type("Textarea")
      * @Form\Required(false)
      *
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      *
      * @Form\Validator({
-     *      "name": "Zend\Validator\StringLength",
+     *      "name": "Laminas\Validator\StringLength",
      *      "options": {
      *          "max":4000
      *      }
@@ -110,10 +110,10 @@ class BusRegQuality extends BusRegDetails
      * @Form\Type("Textarea")
      * @Form\Required(false)
      *
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      *
      * @Form\Validator({
-     *      "name": "Zend\Validator\StringLength",
+     *      "name": "Laminas\Validator\StringLength",
      *      "options": {
      *          "max":4000
      *      }

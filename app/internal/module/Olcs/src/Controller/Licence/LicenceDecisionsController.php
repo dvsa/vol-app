@@ -51,7 +51,7 @@ class LicenceDecisionsController extends AbstractController implements
     /**
      * Display messages and enable to user to carry on to a decision if applicable.
      *
-     * @return string|\Zend\Http\Response|\Zend\View\Model\ViewModel
+     * @return string|\Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */
     public function activeLicenceCheckAction()
     {
@@ -119,7 +119,7 @@ class LicenceDecisionsController extends AbstractController implements
     /**
      * Curtail a licence.
      *
-     * @return string|\Zend\Http\Response|\Zend\View\Model\ViewModel
+     * @return string|\Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */
     public function curtailAction()
     {
@@ -196,7 +196,7 @@ class LicenceDecisionsController extends AbstractController implements
     /**
      * Revoke a licence.
      *
-     * @return string|\Zend\Http\Response|\Zend\View\Model\ViewModel
+     * @return string|\Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */
     public function revokeAction()
     {
@@ -270,7 +270,7 @@ class LicenceDecisionsController extends AbstractController implements
     /**
      * Suspend a licence.
      *
-     * @return string|\Zend\Http\Response|\Zend\View\Model\ViewModel
+     * @return string|\Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */
     public function suspendAction()
     {
@@ -345,7 +345,7 @@ class LicenceDecisionsController extends AbstractController implements
     /**
      * Reset the licence back to a valid state.
      *
-     * @return string|\Zend\View\Model\ViewModel
+     * @return string|\Laminas\View\Model\ViewModel
      */
     public function resetToValidAction()
     {
@@ -435,7 +435,7 @@ class LicenceDecisionsController extends AbstractController implements
     /**
      * Surrender a licence.
      *
-     * @return string|\Zend\Http\Response|\Zend\View\Model\ViewModel
+     * @return string|\Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */
     public function surrenderAction()
     {
@@ -478,7 +478,7 @@ class LicenceDecisionsController extends AbstractController implements
     /**
      * Terminate a licence.
      *
-     * @return string|\Zend\Http\Response|\Zend\View\Model\ViewModel
+     * @return string|\Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */
     public function terminateAction()
     {
@@ -524,7 +524,7 @@ class LicenceDecisionsController extends AbstractController implements
      * @param null|string $command The command to use.
      * @param null|string $message The message to display
      *
-     * @return \Zend\Http\Response A redirection response.
+     * @return \Laminas\Http\Response A redirection response.
      */
     private function affectImmediate($data = [], $command = null, $message = null)
     {
@@ -620,7 +620,7 @@ class LicenceDecisionsController extends AbstractController implements
      * @param null|\Common\Form\Form $form      The form to render.
      * @param bool                   $pageTitle Whether tp load the script files.
      *
-     * @return string|\Zend\View\Model\ViewModel
+     * @return string|\Laminas\View\Model\ViewModel
      */
     private function renderDecisionView($form = null, $pageTitle = null)
     {
@@ -639,7 +639,7 @@ class LicenceDecisionsController extends AbstractController implements
      * @param null|string $decision The decision.
      * @param null|int    $licence  The licence id.
      *
-     * @return \Zend\Http\Response The redirection
+     * @return \Laminas\Http\Response The redirection
      */
     private function redirectToDecision($decision = null, $licence = null)
     {

@@ -12,7 +12,7 @@ use OlcsTest\Bootstrap;
 abstract class AbstractFormTest extends BaseAbstract
 {
     /**
-     * @return \Zend\ServiceManager\ServiceManager
+     * @return \Laminas\ServiceManager\ServiceManager
      */
     protected function getServiceManager()
     {

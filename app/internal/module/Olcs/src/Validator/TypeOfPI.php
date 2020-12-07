@@ -2,7 +2,7 @@
 
 namespace Olcs\Validator;
 
-use Zend\Validator\AbstractValidator;
+use Laminas\Validator\AbstractValidator;
 
 /**
  * Class TypeOfPI
@@ -15,7 +15,7 @@ class TypeOfPI extends AbstractValidator
     /**
      * Digits filter used for validation
      *
-     * @var \Zend\Filter\Digits
+     * @var \Laminas\Filter\Digits
      */
     protected static $filter = null;
 

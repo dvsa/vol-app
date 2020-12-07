@@ -17,7 +17,7 @@ use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits as ControllerTraits;
 use Olcs\Form\Model\Form\Impounding;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Common\RefData as RefData;
 
 /**

@@ -5,7 +5,7 @@ namespace Olcs\Data\Mapper;
 use Common\Data\Mapper\MapperInterface;
 use Dvsa\Olcs\Utils\Helper\DateTimeHelper;
 use Olcs\Data\Mapper\Traits as MapperTraits;
-use Zend\Form\FormInterface;
+use Laminas\Form\FormInterface;
 
 /**
  * Class User Mapper

@@ -12,7 +12,7 @@ use DateTimeImmutable;
 use Dvsa\Olcs\Transfer\Query\Publication\PublishedList;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Published Publication Controller

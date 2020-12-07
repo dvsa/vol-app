@@ -11,7 +11,7 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Form\Model\Form\CompaniesHouseAlertFilters as FilterForm;
 use Olcs\Logging\Log\Logger;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Companies House Alert Controller
@@ -77,7 +77,7 @@ class CompaniesHouseAlertController extends AbstractInternalController implement
     /**
      * Companies house alert list view
      *
-     * @return \Zend\Http\Response|ViewModel
+     * @return \Laminas\Http\Response|ViewModel
      */
     public function indexAction()
     {

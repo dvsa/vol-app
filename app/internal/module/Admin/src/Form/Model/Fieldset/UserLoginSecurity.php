@@ -2,10 +2,10 @@
 
 namespace Admin\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
- * @Form\Type("Zend\Form\Fieldset")
+ * @Form\Type("Laminas\Form\Fieldset")
  * @Form\Name("user-login-security")
  * @Form\Options({"label":"Login"})
  */
@@ -16,7 +16,7 @@ class UserLoginSecurity
      * @Form\Required(true)
      * @Form\Attributes({"id":"username","placeholder":"","class":"medium", "required":false})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\Username"})
      */
     public $loginId = null;

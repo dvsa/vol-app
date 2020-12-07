@@ -8,7 +8,7 @@
 namespace Olcs\Controller\Sla;
 
 use Olcs\Controller\Sla\AbstractSlaTargetDateController;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Abstract SLA Date Controller - Licence documents

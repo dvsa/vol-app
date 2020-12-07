@@ -7,10 +7,10 @@
  */
 namespace Olcs;
 
-use Zend\Mvc\ModuleRouteListener;
-use Zend\Mvc\MvcEvent;
-use Zend\View\Helper\Placeholder\Container\AbstractContainer;
-use Zend\View\Model\ViewModel;
+use Laminas\Mvc\ModuleRouteListener;
+use Laminas\Mvc\MvcEvent;
+use Laminas\View\Helper\Placeholder\Container\AbstractContainer;
+use Laminas\View\Model\ViewModel;
 use Common\Exception\ResourceNotFoundException;
 
 /**
@@ -52,7 +52,7 @@ class Module
                 // If something throws an uncaught ResourceNotFoundException in
                 // an HTTP context, return a 404
                 if ($exception instanceof ResourceNotFoundException
-                    && $e->getResponse() instanceof \Zend\Http\Response
+                    && $e->getResponse() instanceof \Laminas\Http\Response
                 ) {
                     $model = new ViewModel(
                         [
@@ -89,7 +89,7 @@ class Module
     public function getAutoloaderConfig()
     {
         return array(
-            'Zend\Loader\StandardAutoloader' => array(
+            'Laminas\Loader\StandardAutoloader' => array(
                 'namespaces' => array(
                     __NAMESPACE__ => __DIR__ . '/src/',
                 ),

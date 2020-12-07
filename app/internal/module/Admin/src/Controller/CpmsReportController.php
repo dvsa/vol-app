@@ -7,7 +7,7 @@ use Dvsa\Olcs\Transfer\Command\Cpms\RequestReport as GenerateCmd;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\CpmsReport as Mapper;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Cpms Report Controller
@@ -42,7 +42,7 @@ class CpmsReportController extends AbstractInternalController implements LeftVie
     /**
      * Process action - Index
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function indexAction()
     {
@@ -61,7 +61,7 @@ class CpmsReportController extends AbstractInternalController implements LeftVie
 
         $this->placeholder()->setPlaceholder('pageTitle', 'CPMS Financial report');
 
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         $form = $this->getForm(Form::class);
         $this->setSelectReportList($form);
@@ -116,7 +116,7 @@ class CpmsReportController extends AbstractInternalController implements LeftVie
             foreach ($response->getResult()['results'] as $reportData) {
                 $options[$reportData['code']] = $reportData['title'];
             }
-            /* @var $select \Zend\Form\Element\Select */
+            /* @var $select \Laminas\Form\Element\Select */
             $select->setValueOptions($options);
             $this->reports = $options;
         }
@@ -141,7 +141,7 @@ class CpmsReportController extends AbstractInternalController implements LeftVie
     /**
      * Redirect to generate
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function redirectToGenerate()
     {

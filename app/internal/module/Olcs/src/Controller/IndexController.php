@@ -4,8 +4,8 @@ namespace Olcs\Controller;
 
 use Common\RefData;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Zend\View\Model\ViewModel;
-use Zend\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
+use Laminas\View\Model\JsonModel;
 use Olcs\Controller\Traits\TaskSearchTrait;
 
 /**
@@ -23,7 +23,7 @@ class IndexController extends AbstractController implements LeftViewProvider
     /**
      * Process action - Index
      *
-     * @return bool|\Zend\Http\Response|ViewModel
+     * @return bool|\Laminas\Http\Response|ViewModel
      * @throws \Exception
      */
     public function indexAction()

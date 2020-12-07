@@ -3,7 +3,7 @@
 namespace OlcsTest\Form\Model\Form;
 
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
-use Zend\Validator\InArray;
+use Laminas\Validator\InArray;
 
 /**
  * Class CreateVariationTest

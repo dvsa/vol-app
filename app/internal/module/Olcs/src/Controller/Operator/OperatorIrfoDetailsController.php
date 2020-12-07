@@ -12,8 +12,8 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
 use Olcs\Data\Mapper\IrfoDetails as Mapper;
 use Olcs\Form\Model\Form\IrfoDetails as Form;
-use Zend\Http\Response;
-use Zend\View\Model\ViewModel;
+use Laminas\Http\Response;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Operator Irfo Details Controller
@@ -78,7 +78,7 @@ class OperatorIrfoDetailsController extends AbstractInternalController implement
     /**
      * indexAction
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function indexAction()
     {

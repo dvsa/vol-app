@@ -6,7 +6,7 @@ use Dvsa\Olcs\Utils\Constants\FilterOptions;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Licence\LicenceController;
 use Olcs\Controller\Traits;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Licence Docs Controller
@@ -69,7 +69,7 @@ class LicenceDocsController extends LicenceController implements LeftViewProvide
     /**
      * Get Form
      *
-     * @return \Zend\Form\FieldsetInterface
+     * @return \Laminas\Form\FieldsetInterface
      */
     protected function getConfiguredDocumentForm()
     {

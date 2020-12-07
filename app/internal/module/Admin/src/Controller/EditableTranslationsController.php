@@ -6,9 +6,9 @@ use Admin\Form\Model\Form\TranslationKey;
 use Admin\Form\Model\Form\TranslationsFilter;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Zend\Http\Response;
-use Zend\View\Model\JsonModel;
-use Zend\View\Model\ViewModel;
+use Laminas\Http\Response;
+use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
 use Dvsa\Olcs\Transfer\Query\TranslationKey\GetList as ListDTO;
 use Dvsa\Olcs\Transfer\Query\TranslationKey\ById as ItemDTO;
 use Dvsa\Olcs\Transfer\Query\Language\GetList as GetSupportedLanguages;
@@ -72,7 +72,7 @@ class EditableTranslationsController extends AbstractInternalController implemen
     /**
      * Index override to set search term placeholder
      *
-     * @return \Zend\Http\Response|ViewModel
+     * @return \Laminas\Http\Response|ViewModel
      */
     public function indexAction()
     {

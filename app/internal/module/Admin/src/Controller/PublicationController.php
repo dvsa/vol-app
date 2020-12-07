@@ -13,7 +13,7 @@ use Dvsa\Olcs\Transfer\Query\Publication\PendingList;
 use Dvsa\Olcs\Transfer\Command\Publication\Publish as PublishCmd;
 use Dvsa\Olcs\Transfer\Command\Publication\Generate as GenerateCmd;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 
 /**
@@ -50,7 +50,7 @@ class PublicationController extends AbstractInternalController implements LeftVi
     /**
      * Specifically for navigation. For jumping us into the pending.
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function jumpAction()
     {
@@ -77,7 +77,7 @@ class PublicationController extends AbstractInternalController implements LeftVi
     /**
      * Generate action
      *
-     * @return mixed|\Zend\Http\Response
+     * @return mixed|\Laminas\Http\Response
      */
     public function generateAction()
     {
@@ -91,7 +91,7 @@ class PublicationController extends AbstractInternalController implements LeftVi
     /**
      * Publish action
      *
-     * @return mixed|\Zend\Http\Response
+     * @return mixed|\Laminas\Http\Response
      */
     public function publishAction()
     {

@@ -2,13 +2,13 @@
 
 namespace Olcs\View\Helper;
 
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class MarkersFactory
  * @package Olcs\View\Helper
  */
-class MarkersFactory implements \Zend\ServiceManager\FactoryInterface
+class MarkersFactory implements \Laminas\ServiceManager\FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {

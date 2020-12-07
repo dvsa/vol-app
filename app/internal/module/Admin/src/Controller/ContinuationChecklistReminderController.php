@@ -2,7 +2,7 @@
 
 namespace Admin\Controller;
 
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Common\Controller\Lva\Traits\CrudActionTrait;
 use Dvsa\Olcs\Transfer\Query\ContinuationDetail\ChecklistReminders as ChecklistRemindersQry;
 use Dvsa\Olcs\Transfer\Command\ContinuationDetail\Queue as QueueCmd;
@@ -22,11 +22,11 @@ class ContinuationChecklistReminderController extends AbstractController
     /**
      * Display a list of Continuation checklist reminders
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     public function indexAction()
     {
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $data = (array) $request->getPost();
@@ -85,7 +85,7 @@ class ContinuationChecklistReminderController extends AbstractController
      * @param int $defaultMonth Default month
      * @param int $defaultYear  Default year
      *
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     protected function getChecklistReminderFilterForm($defaultMonth, $defaultYear)
     {
@@ -115,7 +115,7 @@ class ContinuationChecklistReminderController extends AbstractController
     /**
      * Generate Continuation checklist reminder letters
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function generateLettersAction()
     {
@@ -144,7 +144,7 @@ class ContinuationChecklistReminderController extends AbstractController
     /**
      * Export table as CSV action
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function exportAction()
     {

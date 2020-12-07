@@ -18,7 +18,7 @@ class FinancialHistory extends CommonFinancialHistory
      * @param Form  $form Form
      * @param array $data Parameters for form
      *
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     protected function alterForm(Form $form, array $data = [])
     {

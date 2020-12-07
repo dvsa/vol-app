@@ -4,7 +4,7 @@ namespace OlcsTest\Data\Mapper;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Data\Mapper\SlaTargetDate as Sut;
-use Zend\Form\FormInterface;
+use Laminas\Form\FormInterface;
 
 /**
  * SlaTargetDate Mapper Test

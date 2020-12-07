@@ -10,10 +10,10 @@ use Olcs\Listener\RouteParams;
 use Olcs\Listener\RouteParam\BusRegAction;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
-use Zend\EventManager\EventManagerInterface;
-use Zend\Navigation\Navigation;
-use Zend\Navigation\Page\AbstractPage;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\Navigation\Navigation;
+use Laminas\Navigation\Page\AbstractPage;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class BusRegActionTest
@@ -127,7 +127,7 @@ class BusRegActionTest extends MockeryTestCase
 
     public function testCreateService()
     {
-        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
+        $mockViewHelperManager = m::mock('Laminas\View\HelperPluginManager');
         $mockSidebar = m::mock();
         $mockTransferAnnotationBuilder = m::mock();
         $mockQueryService = m::mock();

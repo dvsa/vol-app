@@ -6,14 +6,14 @@
 namespace Admin\Controller;
 
 use Common\Category;
-use \Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
+use \Laminas\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Organisation\CpidOrganisationExport;
 use Dvsa\Olcs\Transfer\Query\Document\DocumentList;
 use Dvsa\Olcs\Transfer\Query\Organisation\CpidOrganisation;
 use Dvsa\Olcs\Transfer\Query\Organisation\Organisation;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Common\Controller\Traits\GenericMethods;
 use Common\Controller\Traits\GenericRenderView;
 use Common\Controller\Traits\ViewHelperManagerAware;
@@ -68,7 +68,7 @@ class ReportController extends ZendAbstractActionController implements LeftViewP
     /**
      * index action
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function indexAction()
     {
@@ -78,7 +78,7 @@ class ReportController extends ZendAbstractActionController implements LeftViewP
     /**
      * Export and list the organsations by CPID.
      *
-     * @return \Zend\Http\Response|ViewModel
+     * @return \Laminas\Http\Response|ViewModel
      */
     public function cpidClassificationAction()
     {

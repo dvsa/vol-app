@@ -3,7 +3,7 @@
 namespace Admin\Form\Model\Form;
 
 use Olcs\Form\Model\Fieldset\Base;
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("DelayItem")

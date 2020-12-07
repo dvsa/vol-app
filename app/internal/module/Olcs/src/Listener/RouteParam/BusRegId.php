@@ -5,11 +5,11 @@ namespace Olcs\Listener\RouteParam;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use \Dvsa\Olcs\Transfer\Query\Bus\BusReg as ItemDto;
-use Zend\EventManager\EventManagerInterface;
-use Zend\EventManager\ListenerAggregateInterface;
-use Zend\EventManager\ListenerAggregateTrait;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\EventManager\ListenerAggregateInterface;
+use Laminas\EventManager\ListenerAggregateTrait;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Common\Exception\ResourceNotFoundException;
 
@@ -23,7 +23,7 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
     use ViewHelperManagerAwareTrait;
 
     /**
-     * @var \Zend\Navigation\Navigation
+     * @var \Laminas\Navigation\Navigation
      */
     protected $navigationService;
 
@@ -52,7 +52,7 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @return \Zend\Navigation\Navigation
+     * @return \Laminas\Navigation\Navigation
      */
     public function getNavigationService()
     {
@@ -60,7 +60,7 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @param \Zend\Navigation\Navigation $navigationService
+     * @param \Laminas\Navigation\Navigation $navigationService
      * @return $this
      */
     public function setNavigationService($navigationService)

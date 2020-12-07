@@ -56,7 +56,7 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
      * Get view model for document action
      *
      * @see \Olcs\Controller\Traits\DocumentActionTrait
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     protected function getDocumentView()
     {
@@ -97,7 +97,7 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
      * Get configured document form
      *
      * @see \Olcs\Controller\Traits\DocumentActionTrait
-     * @return \Zend\Form\FormInterface
+     * @return \Laminas\Form\FormInterface
      */
     protected function getConfiguredDocumentForm()
     {

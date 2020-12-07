@@ -3,8 +3,8 @@
 namespace Olcs\FormService\Form\Lva\OperatingCentre;
 
 use Common\FormService\Form\Lva\OperatingCentre\CommonOperatingCentre;
-use Zend\Form\Form;
-use Zend\Validator\Identical as ValidatorIdentical;
+use Laminas\Form\Form;
+use Laminas\Validator\Identical as ValidatorIdentical;
 use Common\Validator\ValidateIf;
 use Common\RefData;
 use Common\Data\Mapper\Lva\OperatingCentre as OperatingCentreMapper;

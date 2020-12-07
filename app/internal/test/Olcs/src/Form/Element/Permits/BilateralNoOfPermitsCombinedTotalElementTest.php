@@ -10,7 +10,7 @@ namespace OlcsTest\Form\Element\Permits;
 use Olcs\Form\Element\Permits\BilateralNoOfPermitsCombinedTotalElement;
 use Olcs\Form\Element\Permits\BilateralNoOfPermitsCombinedTotalValidator;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
-use Zend\Validator\Callback;
+use Laminas\Validator\Callback;
 
 /**
  * BilateralNoOfPermitsCombinedTotalElement Test

@@ -12,7 +12,7 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Data\Mapper\DelayItems;
 use Admin\Data\Mapper\DataRetentionAssign as AssignItemMapper;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
 
@@ -116,7 +116,7 @@ class DataRetentionController extends AbstractInternalController implements Left
     /**
      * Review action
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function reviewAction()
     {
@@ -132,7 +132,7 @@ class DataRetentionController extends AbstractInternalController implements Left
     /**
      * Index action
      *
-     * @return \Zend\Http\Response|ViewModel
+     * @return \Laminas\Http\Response|ViewModel
      */
     public function indexAction()
     {

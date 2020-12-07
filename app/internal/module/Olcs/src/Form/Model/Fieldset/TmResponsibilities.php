@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Attributes({"class":"table__form"})
@@ -33,7 +33,7 @@ class TmResponsibilities
      * @Form\Type("DynamicRadio")
      * @Form\Required(false)
      * @Form\Validator({
-     *      "name":"Zend\Validator\NotEmpty"
+     *      "name":"Laminas\Validator\NotEmpty"
      * })
      */
     public $tmType = null;
@@ -92,9 +92,9 @@ class TmResponsibilities
      * })
      *
      * @Form\Required(false)
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator({
-     *      "name":"Zend\Validator\StringLength",
+     *      "name":"Laminas\Validator\StringLength",
      *      "options":{
      *          "max":4000
      *      }

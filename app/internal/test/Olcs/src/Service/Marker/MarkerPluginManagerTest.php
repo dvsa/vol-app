@@ -25,7 +25,7 @@ class MarkerPluginManagerTest extends TestCase
 
     public function testConstructor()
     {
-        $mockConfig = m::mock(\Zend\ServiceManager\ConfigInterface::class);
+        $mockConfig = m::mock(\Laminas\ServiceManager\ConfigInterface::class);
 
         $mockConfig->shouldReceive('configureServiceManager')->twice();
 
@@ -52,7 +52,7 @@ class MarkerPluginManagerTest extends TestCase
 
     public function testInjectPartialHelper()
     {
-        $mockSl = m::mock(\Zend\ServiceManager\ServiceLocatorInterface::class);
+        $mockSl = m::mock(\Laminas\ServiceManager\ServiceLocatorInterface::class);
         $mockService = m::mock();
 
         $this->sut->setServiceLocator($mockSl);

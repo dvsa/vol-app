@@ -13,8 +13,8 @@ use Olcs\Controller\Traits;
 class ApplicationProcessingTasksController extends AbstractApplicationProcessingController
 {
     use Traits\TaskActionTrait {
-            Traits\TaskActionTrait::getTaskForm as traitGetTaskForm;
-        }
+        Traits\TaskActionTrait::getTaskForm as traitGetTaskForm;
+    }
 
     /**
      * @var string
@@ -55,7 +55,7 @@ class ApplicationProcessingTasksController extends AbstractApplicationProcessing
      *
      * @param array $filters Field values
      *
-     * @return \Zend\Form\FormInterface
+     * @return \Laminas\Form\FormInterface
      */
     protected function getTaskForm(array $filters = [])
     {

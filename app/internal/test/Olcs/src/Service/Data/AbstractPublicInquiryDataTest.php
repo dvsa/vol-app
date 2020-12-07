@@ -5,7 +5,7 @@ namespace OlcsTest\Service\Data;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Service\Data\AbstractPublicInquiryData;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * @covers Olcs\Service\Data\AbstractPublicInquiryData

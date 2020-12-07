@@ -17,8 +17,7 @@ use Dvsa\Olcs\Transfer\Command\GracePeriod\CreateGracePeriod;
 use Dvsa\Olcs\Transfer\Command\GracePeriod\UpdateGracePeriod;
 use Dvsa\Olcs\Transfer\Command\GracePeriod\DeleteGracePeriod;
 
-use Zend\Form\FormInterface;
-
+use Laminas\Form\FormInterface;
 
 /**
  * Class LicenceGracePeriodController
@@ -42,7 +41,7 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
     /**
      * List the grace periods for this licence.
      *
-     * @return \Zend\Http\Response|\Zend\View\Model\ViewModel
+     * @return \Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */
     public function indexAction()
     {
@@ -86,7 +85,7 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
     /**
      * Add a grace period.
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function addAction()
     {
@@ -128,7 +127,7 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
     /**
      * Update a grace period.
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function editAction()
     {
@@ -223,7 +222,7 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
      *
      * @param array $gracePeriods gracePeriods
      *
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     protected function getForm(array $gracePeriods)
     {

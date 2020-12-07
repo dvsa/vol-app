@@ -4,7 +4,7 @@ namespace Admin\Form\Model\Fieldset;
 
 use Common\Form\Model\Form\Traits\IdTrait;
 use Common\Form\Model\Form\Traits\VersionTrait;
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * Financial Standing Fieldset

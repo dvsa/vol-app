@@ -2,7 +2,7 @@
 
 namespace Olcs\Service\Permits\Bilateral;
 
-use Zend\Form\Fieldset;
+use Laminas\Form\Fieldset;
 
 /**
  * Fieldset populator interface

@@ -8,7 +8,7 @@ use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount as ItemDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\MyDetails as Mapper;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * My Details Controller
@@ -61,7 +61,7 @@ class MyDetailsController extends AbstractInternalController implements LeftView
     /**
      * Index action
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function indexAction()
     {
@@ -71,7 +71,7 @@ class MyDetailsController extends AbstractInternalController implements LeftView
     /**
      * Edit action
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     public function editAction()
     {
@@ -83,7 +83,7 @@ class MyDetailsController extends AbstractInternalController implements LeftView
     /**
      * Redirect to index
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     private function redirectToIndex()
     {

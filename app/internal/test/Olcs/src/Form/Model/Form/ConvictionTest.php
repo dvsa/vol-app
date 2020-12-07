@@ -8,8 +8,8 @@ use Common\Validator\Date as DateValidator;
 use Common\Validator\DateCompare;
 use DateTime;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
-use Zend\Validator\StringLength;
-use Zend\Form\Element\Select;
+use Laminas\Validator\StringLength;
+use Laminas\Form\Element\Select;
 use Common\Form\Elements\Custom\OlcsCheckbox;
 
 /**

@@ -2,7 +2,7 @@
 
 namespace Olcs\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
+use Laminas\View\Helper\AbstractHelper;
 
 /**
  * Class Markers
@@ -55,11 +55,8 @@ class Markers extends AbstractHelper
                     array_push(
                         $contentPlaceholders,
                         '<a ' .
-                            (isset($data['class']) ? 'class="'. $data['class'] . '" ' : '') .
-                            'href="' . $urlHelper(
-                            $data['route'],
-                            $data['params']
-                        ) . '">' . $data['linkText'] .
+                        (isset($data['class']) ? 'class="'. $data['class'] . '" ' : '') .
+                        'href="' . $urlHelper($data['route'], $data['params']) . '">' . $data['linkText'] .
                         '</a>' . "\n"
                     );
                 }

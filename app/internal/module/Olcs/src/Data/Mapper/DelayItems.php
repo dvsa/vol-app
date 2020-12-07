@@ -3,7 +3,7 @@
 namespace Olcs\Data\Mapper;
 
 use Common\Data\Mapper\MapperInterface;
-use Zend\Form\FormInterface;
+use Laminas\Form\FormInterface;
 
 /**
  * Class Delay Items for forms with Fields field set

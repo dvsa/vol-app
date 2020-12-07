@@ -3,8 +3,8 @@
 namespace Admin\Controller;
 
 use Common\RefData;
-use Zend\View\Model\ViewModel;
-use Zend\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
+use Laminas\View\Model\JsonModel;
 use Dvsa\Olcs\Transfer\Command\GoodsDisc\PrintDiscs as PrintDiscsGoodsDto;
 use Dvsa\Olcs\Transfer\Command\PsvDisc\PrintDiscs as PrintDiscsPsvDto;
 use Dvsa\Olcs\Transfer\Command\GoodsDisc\ConfirmPrinting as ConfirmPrintingGoodsDto;
@@ -12,7 +12,7 @@ use Dvsa\Olcs\Transfer\Command\PsvDisc\ConfirmPrinting as ConfirmPrintingPsvDto;
 use Dvsa\Olcs\Transfer\Query\DiscSequence\DiscPrefixes as DiscPrefixesQry;
 use Dvsa\Olcs\Transfer\Query\DiscSequence\DiscsNumbering as DiscsNumberingQry;
 use Admin\Data\Mapper\DiscPrinting as DiscPrintingMapper;
-use \Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
+use \Laminas\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
 use Common\Controller\Traits\GenericRenderView;
 use Common\Controller\Traits\GenericMethods;
 use Olcs\Controller\Interfaces\LeftViewProvider;

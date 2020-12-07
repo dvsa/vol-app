@@ -4,7 +4,7 @@ namespace Olcs\Controller\Cases\PublicInquiry;
 
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\AbstractInternalController;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Data\Mapper\PiHearing as PiHearingMapper;
 use Olcs\Form\Model\Form\PublicInquiryHearing as HearingForm;
@@ -15,7 +15,7 @@ use Dvsa\Olcs\Transfer\Query\Cases\Pi\HearingList as PiHearingListDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Pi as PiDto;
 use Olcs\Mvc\Controller\ParameterProvider\PreviousPiHearingData;
 use Olcs\Mvc\Controller\ParameterProvider\GenericList;
-use Zend\Form\Form as ZendForm;
+use Laminas\Form\Form as LaminasForm;
 
 /**
  * Class HearingController
@@ -98,7 +98,7 @@ class HearingController extends AbstractInternalController implements CaseContro
     /**
      * Adds a Pi Hearing, redirects to the Pi index page with a message if the Pi is closed
      *
-     * @return ViewModel|\Zend\Http\Response
+     * @return ViewModel|\Laminas\Http\Response
      */
     public function addAction()
     {
@@ -124,7 +124,7 @@ class HearingController extends AbstractInternalController implements CaseContro
     /**
      * Link to generate a hearing letter, redirects to the Pi index page with a message if the Pi is closed
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function generateAction()
     {
@@ -231,7 +231,6 @@ class HearingController extends AbstractInternalController implements CaseContro
                 // if cancelled or adjourned remove the publish button (OLCS-11222)
                 $form->get('form-actions')->remove('publish');
             } else {
-
                 // set the label to republish if *any* publication has NOT been printed
                 if (!empty($data['pi']['publicationLinks'])) {
                     foreach ($data['pi']['publicationLinks'] as $pl) {
@@ -259,12 +258,12 @@ class HearingController extends AbstractInternalController implements CaseContro
     /**
      * Sets the SLA target date as a hint on the form elements
      *
-     * @param ZendForm $form from
+     * @param LaminasForm $form from
      * @param String   $data data
      *
-     * @return ZendForm
+     * @return LaminasForm
      */
-    private function setSlaTargetHint(ZendForm $form, $data)
+    private function setSlaTargetHint(LaminasForm $form, $data)
     {
         $date = $data['hearingDateTarget'];
         if (empty($date)) {

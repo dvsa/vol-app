@@ -3,7 +3,7 @@
 namespace AdminTest\Form\Model\Form;
 
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
-use Zend\Validator\Regex;
+use Laminas\Validator\Regex;
 
 /**
  * Class TaskAlphaSplitTest

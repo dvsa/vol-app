@@ -18,7 +18,7 @@ class ActionTest extends TestCase
     {
         $sut = new Action();
 
-        $mockEventManager = m::mock('Zend\EventManager\EventManagerInterface');
+        $mockEventManager = m::mock('Laminas\EventManager\EventManagerInterface');
         $mockEventManager->shouldReceive('attach')->once()
             ->with(RouteParams::EVENT_PARAM . 'action', [$sut, 'onAction'], 1);
 
@@ -32,18 +32,18 @@ class ActionTest extends TestCase
         $event = new RouteParam();
         $event->setValue($action);
 
-        $mockRouter = m::mock('Zend\Mvc\Router\RouteStackInterface');
+        $mockRouter = m::mock('Laminas\Mvc\Router\RouteStackInterface');
         $mockRouter->shouldReceive('assemble')
             ->with(['action' => $action])
             ->andReturn('http://anything/');
 
-        $mockContainer = m::mock('Zend\View\Helper\Placeholder\Container');
+        $mockContainer = m::mock('Laminas\View\Helper\Placeholder\Container');
         $mockContainer->shouldReceive('set')->with($action);
 
-        $mockPlaceholder = m::mock('Zend\View\Helper\Placeholder');
+        $mockPlaceholder = m::mock('Laminas\View\Helper\Placeholder');
         $mockPlaceholder->shouldReceive('getContainer')->with('action')->andReturn($mockContainer);
 
-        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
+        $mockViewHelperManager = m::mock('Laminas\View\HelperPluginManager');
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
 
         $sut = new Action();
@@ -54,9 +54,9 @@ class ActionTest extends TestCase
 
     public function testCreateService()
     {
-        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
+        $mockViewHelperManager = m::mock('Laminas\View\HelperPluginManager');
 
-        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockSl = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
 
         $sut = new Action();

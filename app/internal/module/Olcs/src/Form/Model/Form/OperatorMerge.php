@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Form;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("merge")
@@ -26,7 +26,7 @@ class OperatorMerge
      *     "label": "form.operator-merge.to-operator-id",
      *     "short-label":"form.operator-merge.to-operator-id",
      * })
-     * @Form\Validator({"name":"Zend\Validator\Digits"})
+     * @Form\Validator({"name":"Laminas\Validator\Digits"})
      */
     public $toOperatorId = null;
 
@@ -54,7 +54,7 @@ class OperatorMerge
      *     "short-label":"form.operator-merge.confirm",
      *  })
      * @Form\Type("OlcsCheckbox")
-     * @Form\Validator({"name":"Zend\Validator\Identical","options": {
+     * @Form\Validator({"name":"Laminas\Validator\Identical","options": {
      *  "token":"Y",
      *  "message":"form.operator-merge.confirm.validation"
      * }})

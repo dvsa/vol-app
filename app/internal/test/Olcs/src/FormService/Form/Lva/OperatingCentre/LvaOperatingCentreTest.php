@@ -4,10 +4,10 @@ namespace OlcsTest\FormService\Form\Lva\OperatingCentre;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Zend\Form\Fieldset;
-use Zend\Form\Form;
+use Laminas\Form\Fieldset;
+use Laminas\Form\Form;
 use Olcs\FormService\Form\Lva\OperatingCentre\LvaOperatingCentre;
-use Zend\Validator\Identical as ValidatorIdentical;
+use Laminas\Validator\Identical as ValidatorIdentical;
 use Common\RefData;
 use Common\Data\Mapper\Lva\OperatingCentre as OperatingCentreMapper;
 

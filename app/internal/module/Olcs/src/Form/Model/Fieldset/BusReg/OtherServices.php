@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset\BusReg;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
@@ -14,8 +14,8 @@ class OtherServices extends \Olcs\Form\Model\Fieldset\Base
      * @Form\Attributes({"class":"","id":"serviceNo"})
      * @Form\Required(false)
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":1,"max":70}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":1,"max":70}})
      */
     public $serviceNo = null;
 }

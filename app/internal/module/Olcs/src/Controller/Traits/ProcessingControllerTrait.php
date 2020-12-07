@@ -2,8 +2,8 @@
 
 namespace Olcs\Controller\Traits;
 
-use Zend\Navigation\Navigation;
-use Zend\View\Model\ViewModel;
+use Laminas\Navigation\Navigation;
+use Laminas\View\Model\ViewModel;
 
 /**
  * ProcessingControllerTrait
@@ -69,7 +69,7 @@ trait ProcessingControllerTrait
     /**
      * Get sub navigation
      *
-     * @return \Zend\Navigation\Navigation
+     * @return \Laminas\Navigation\Navigation
      */
     protected function getSubNavigation()
     {

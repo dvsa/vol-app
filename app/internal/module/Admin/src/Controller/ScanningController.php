@@ -2,9 +2,9 @@
 
 namespace Admin\Controller;
 
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Common\Service\Data\CategoryDataService;
-use Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
+use Laminas\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
 use Common\Controller\Traits\GenericRenderView;
 
 /**
@@ -23,14 +23,14 @@ class ScanningController extends ZendAbstractActionController
     /**
      * Index page
      *
-     * @return array|\Zend\Http\Response|ViewModel
+     * @return array|\Laminas\Http\Response|ViewModel
      */
     public function indexAction()
     {
         $prg = $this->prg();
 
         // If have posted, and need to redirect to get
-        if ($prg instanceof \Zend\Http\Response) {
+        if ($prg instanceof \Laminas\Http\Response) {
             return $prg;
         }
 

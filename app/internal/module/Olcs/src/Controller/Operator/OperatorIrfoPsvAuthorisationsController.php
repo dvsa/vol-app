@@ -21,10 +21,10 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
 use Olcs\Data\Mapper\IrfoPsvAuth as Mapper;
 use Olcs\Form\Model\Form\IrfoPsvAuth as Form;
-use Zend\Form\Element\Hidden;
-use Zend\View\Model\ViewModel;
+use Laminas\Form\Element\Hidden;
+use Laminas\View\Model\ViewModel;
 use Common\RefData;
-use Zend\Form\Form as ZendForm;
+use Laminas\Form\Form as LaminasForm;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
 
@@ -134,8 +134,7 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
     {
         foreach ($this->allActions as $action) {
             if ($this->isButtonPressed($action)) {
-                switch ($action)
-                {
+                switch ($action) {
                     case 'generate':
                         return GenerateDto::class;
                     case 'grant':
@@ -215,7 +214,7 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
     /**
      * Method to alter the form based on status
      *
-     * @param ZendForm $form     form
+     * @param LaminasForm $form     form
      * @param array    $formData formData
      *
      * @return  \Common\Form\Form
@@ -234,7 +233,7 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
     /**
      * Method to alter the form based on status
      *
-     * @param ZendForm $form     form
+     * @param LaminasForm $form     form
      * @param array    $formData formData
      *
      * @return  \Common\Form\Form
@@ -251,12 +250,12 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
     /**
      * Removes action buttons not possible from the form on GET only
      *
-     * @param ZendForm $form     form
+     * @param LaminasForm $form     form
      * @param array    $formData formData
      *
-     * @return ZendForm
+     * @return LaminasForm
      */
-    private function setActionButtons(ZendForm $form, $formData)
+    private function setActionButtons(LaminasForm $form, $formData)
     {
         if ($this->params('action') !== 'add') {
             foreach ($this->allActions as $action) {
@@ -270,13 +269,13 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
     /**
      * Removes buttons if action cannot be performed on the entity
      *
-     * @param ZendForm $form     form
+     * @param LaminasForm $form     form
      * @param array    $formData formData
      * @param array    $action   action
      *
-     * @return ZendForm
+     * @return LaminasForm
      */
-    private function determineFormButton(ZendForm $form, $formData, $action)
+    private function determineFormButton(LaminasForm $form, $formData, $action)
     {
         $actionToFlag = [
             'generate' => 'isGeneratable',
@@ -301,16 +300,16 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
      * Depending on the status, we disable certain fields from editing, add a hidden field with the same value to
      * ensure data is not lost during validation.
      *
-     * @param ZendForm $form     form
+     * @param LaminasForm $form     form
      * @param array    $formData formData
      *
-     * @return ZendForm
+     * @return LaminasForm
      */
-    private function setReadonlyFields(ZendForm $form, $formData)
+    private function setReadonlyFields(LaminasForm $form, $formData)
     {
         $readonlyFields = [];
 
-        switch($formData['fields']['status']) {
+        switch ($formData['fields']['status']) {
             case RefData::IRFO_PSV_AUTH_STATUS_PENDING:
                 $readonlyFields = ['irfoPsvAuthType', 'isFeeExemptApplication'];
                 break;

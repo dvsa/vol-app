@@ -18,7 +18,7 @@ use Olcs\Data\Mapper\PenaltyCommentBox as CommentMapper;
 use Olcs\Form\Model\Form\Comment as CommentForm;
 use Olcs\Form\Model\Form\Si as Form;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Si Controller

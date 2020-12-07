@@ -4,7 +4,7 @@ namespace Olcs\Controller\Lva\Traits;
 
 use Common\Form\Elements\InputFilters\SelectEmpty as SelectElement;
 use Common\Service\Cqrs\Response;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Dvsa\Olcs\Transfer\Query\Application\Overview as OverviewQry;
 use Dvsa\Olcs\Transfer\Command\Application\Overview as OverviewCmd;
 
@@ -21,7 +21,7 @@ trait ApplicationOverviewTrait
      */
     public function indexAction()
     {
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
 
         if ($request->isPost() && $this->isButtonPressed('cancel')) {
@@ -91,7 +91,7 @@ trait ApplicationOverviewTrait
     /**
      * get method Overview Form
      *
-     * @return \Zend\Form\FormInterface
+     * @return \Laminas\Form\FormInterface
      */
     protected function getOverviewForm()
     {
@@ -140,7 +140,7 @@ trait ApplicationOverviewTrait
     /**
      * alter form
      *
-     * @param \Zend\Form\FormInterface $form        form
+     * @param \Laminas\Form\FormInterface $form        form
      * @param array                    $licence     licence overview data
      * @param array                    $application application overview data
      *

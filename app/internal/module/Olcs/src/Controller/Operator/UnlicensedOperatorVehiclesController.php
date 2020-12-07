@@ -17,7 +17,7 @@ use Olcs\Data\Mapper\UnlicensedOperatorLicenceVehicle as Mapper;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericList;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Unlicensed Operator Vehicles Controller

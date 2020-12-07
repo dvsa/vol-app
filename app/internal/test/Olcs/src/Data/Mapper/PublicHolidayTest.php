@@ -4,7 +4,7 @@ namespace OlcsTest\Data\Mapper;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Data\Mapper\PublicHoliday;
-use Zend\Form\FormInterface;
+use Laminas\Form\FormInterface;
 
 /**
  * @covers Olcs\Data\Mapper\PublicHoliday

@@ -2,8 +2,8 @@
 
 namespace Olcs\Form\Element;
 
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class SubmissionSectionsFactory
@@ -20,7 +20,7 @@ class SubmissionSectionsFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $formElementManager)
     {
-        /** @var \Zend\Form\FormElementManager $formElementManager */
+        /** @var \Laminas\Form\FormElementManager $formElementManager */
         $serviceLocator = $formElementManager->getServiceLocator();
 
         $element = new SubmissionSections();

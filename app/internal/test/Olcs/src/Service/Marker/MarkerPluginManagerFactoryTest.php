@@ -25,7 +25,7 @@ class MarkerPluginManagerFactoryTest extends TestCase
 
     public function testCreateServiceEmptyConfig()
     {
-        $mockSl = m::mock(\Zend\ServiceManager\ServiceLocatorInterface::class);
+        $mockSl = m::mock(\Laminas\ServiceManager\ServiceLocatorInterface::class);
 
         $mockSl->shouldReceive('get')->with('Config')->once()->andReturn(['marker_plugins' => []]);
 
@@ -34,7 +34,7 @@ class MarkerPluginManagerFactoryTest extends TestCase
 
     public function testCreateServiceWithConfig()
     {
-        $mockSl = m::mock(\Zend\ServiceManager\ServiceLocatorInterface::class);
+        $mockSl = m::mock(\Laminas\ServiceManager\ServiceLocatorInterface::class);
 
         $mockSl->shouldReceive('get')->with('Config')->once()->andReturn(['marker_plugins' => ['XXX']]);
 

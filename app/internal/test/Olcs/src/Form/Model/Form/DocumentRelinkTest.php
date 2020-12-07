@@ -3,8 +3,8 @@
 namespace OlcsTest\Form\Model\Form;
 
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
-use Zend\Form\Element\Select;
-use Zend\Validator\InArray;
+use Laminas\Form\Element\Select;
+use Laminas\Validator\InArray;
 
 /**
  * Class DocumentRelinkTest

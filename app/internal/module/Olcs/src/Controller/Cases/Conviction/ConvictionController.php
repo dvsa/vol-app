@@ -20,7 +20,7 @@ use Dvsa\Olcs\Transfer\Query\Cases\Cases as CommentItemDto;
 use Dvsa\Olcs\Transfer\Command\Cases\UpdateConvictionNote as CommentUpdateDto;
 use Olcs\Form\Model\Form\Comment as CommentForm;
 use Olcs\Data\Mapper\ConvictionCommentBox as CommentMapper;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Case Conviction Controller

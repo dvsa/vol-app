@@ -3,8 +3,8 @@
 namespace OlcsTest\Form\Model\Form;
 
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
-use Zend\Form\Element\Radio;
-use Zend\Validator;
+use Laminas\Form\Element\Radio;
+use Laminas\Validator;
 
 /**
  * Class PublicInquiryHearingTest

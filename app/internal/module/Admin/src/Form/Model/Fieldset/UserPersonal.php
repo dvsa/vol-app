@@ -2,10 +2,10 @@
 
 namespace Admin\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
- * @Form\Type("Zend\Form\Fieldset")
+ * @Form\Type("Laminas\Form\Fieldset")
  * @Form\Name("user-login")
  * @Form\Options({"label":"Personal"})
  */
@@ -15,8 +15,8 @@ class UserPersonal
      * @Form\Attributes({"id":"forename","placeholder":"","class":"medium", "required":false})
      * @Form\Options({"label":"First name"})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":35}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":35}})
      */
     public $forename = null;
 
@@ -24,8 +24,8 @@ class UserPersonal
      * @Form\Attributes({"id":"familyName","placeholder":"","class":"medium", "required":false})
      * @Form\Options({"label":"Last name"})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":35}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":35}})
      */
     public $familyName = null;
 

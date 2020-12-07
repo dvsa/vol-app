@@ -7,7 +7,7 @@ use Common\Controller\Traits\GenericMethods;
 use Common\Controller\Traits\GenericRenderView;
 use Common\Util\FlashMessengerTrait;
 use Olcs\Controller\Traits as OlcsTraits;
-use Zend\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
+use Laminas\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
 
 /**
  * Abstract Controller

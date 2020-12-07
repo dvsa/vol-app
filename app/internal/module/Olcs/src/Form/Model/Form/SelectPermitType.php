@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Form;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
@@ -23,7 +23,7 @@ class SelectPermitType
      *     "service_name": "Common\Service\Data\IrhpPermitType",
      * })
      * @Form\Type("DynamicSelect")
-     * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
+     * @Form\Validator({"name": "Laminas\Validator\NotEmpty"})
      */
     public $permitType = null;
 

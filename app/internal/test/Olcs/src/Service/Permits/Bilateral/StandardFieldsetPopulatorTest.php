@@ -13,7 +13,7 @@ use Olcs\Service\Permits\Bilateral\StandardFieldsetPopulator;
 use Olcs\Service\Permits\Bilateral\NoOfPermitsElementGenerator;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
-use Zend\Form\Fieldset;
+use Laminas\Form\Fieldset;
 
 /**
  * StandardFieldsetPopulator Test

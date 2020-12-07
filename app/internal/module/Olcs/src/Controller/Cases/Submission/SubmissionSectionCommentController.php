@@ -13,7 +13,7 @@ use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Data\Mapper\SubmissionSectionComment as Mapper;
 use Olcs\Form\Model\Form\SubmissionSectionAddComment as AddForm;
 use Olcs\Form\Model\Form\SubmissionSectionEditComment as EditForm;
-use \Zend\Form\Form as ZendForm;
+use \Laminas\Form\Form as LaminasForm;
 
 /**
  * Submission Section Comment Controller
@@ -90,7 +90,7 @@ class SubmissionSectionCommentController extends AbstractInternalController impl
     /**
      * Swaps the default add form for the edit form
      *
-     * @return array|\Zend\View\Model\ViewModel
+     * @return array|\Laminas\View\Model\ViewModel
      */
     public function editAction()
     {
@@ -102,12 +102,12 @@ class SubmissionSectionCommentController extends AbstractInternalController impl
     /**
      * Alters the edit form at runtime
      *
-     * @param ZendForm $form     the form
+     * @param LaminasForm $form     the form
      * @param array    $formData form data
      *
-     * @return ZendForm
+     * @return LaminasForm
      */
-    protected function alterFormForEdit(ZendForm $form, $formData)
+    protected function alterFormForEdit(LaminasForm $form, $formData)
     {
         return $this->alterForm($form, $formData['fields']['id']);
     }
@@ -115,12 +115,12 @@ class SubmissionSectionCommentController extends AbstractInternalController impl
     /**
      * Change the id of the text area to be unique (avoid DOM clashes with multiple TinyMCE instances
      *
-     * @param ZendForm $form the form
+     * @param LaminasForm $form the form
      * @param int      $id   the id
      *
-     * @return ZendForm
+     * @return LaminasForm
      */
-    private function alterForm(ZendForm $form, $id)
+    private function alterForm(LaminasForm $form, $id)
     {
         $form->get('fields')->get('comment')->setAttribute('id', $id);
         return $form;

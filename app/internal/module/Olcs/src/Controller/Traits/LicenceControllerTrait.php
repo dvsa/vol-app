@@ -20,7 +20,7 @@ trait LicenceControllerTrait
      * Get view with licence
      *
      * @param array $variables
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     protected function getViewWithLicence($variables = array())
     {

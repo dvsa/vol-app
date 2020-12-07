@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("details")
@@ -38,7 +38,7 @@ class GenerateDocumentDetails
      *     "label": "documents.data.template",
      *     "disable_inarray_validator": false
      * })
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Type("\Laminas\Form\Element\Select")
      */
     public $documentTemplate = null;
 }

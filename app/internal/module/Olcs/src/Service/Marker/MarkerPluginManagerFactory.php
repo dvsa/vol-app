@@ -2,9 +2,9 @@
 
 namespace Olcs\Service\Marker;
 
-use Zend\ServiceManager\Config;
-use Zend\Mvc\Service\AbstractPluginManagerFactory;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Config;
+use Laminas\Mvc\Service\AbstractPluginManagerFactory;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * MarkerPluginManagerFactory

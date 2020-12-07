@@ -128,7 +128,7 @@ class LicenceStatusRuleMarkerTest extends TestCase
             ],
         ];
 
-        $mockPartialHelper = m::mock(\Zend\View\Helper\Partial::class);
+        $mockPartialHelper = m::mock(\Laminas\View\Helper\Partial::class);
 
         $mockPartialHelper->shouldReceive('__invoke')
             ->with(
@@ -171,7 +171,7 @@ class LicenceStatusRuleMarkerTest extends TestCase
             ],
         ];
 
-        $mockPartialHelper = m::mock(\Zend\View\Helper\Partial::class);
+        $mockPartialHelper = m::mock(\Laminas\View\Helper\Partial::class);
 
         $mockPartialHelper->shouldReceive('__invoke')
             ->with(

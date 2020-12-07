@@ -5,14 +5,14 @@ namespace Olcs\Listener;
 use Common\Rbac\IdentityProvider;
 use Common\Rbac\User;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence;
-use Zend\Authentication\AuthenticationService;
-use Zend\EventManager\EventManagerInterface;
-use Zend\EventManager\ListenerAggregateInterface;
-use Zend\EventManager\ListenerAggregateTrait;
-use Zend\Mvc\MvcEvent;
-use Zend\Navigation\Navigation;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\Authentication\AuthenticationService;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\EventManager\ListenerAggregateInterface;
+use Laminas\EventManager\ListenerAggregateTrait;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Navigation\Navigation;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Common\Service\Cqrs\Query\QuerySender;
 
 /**

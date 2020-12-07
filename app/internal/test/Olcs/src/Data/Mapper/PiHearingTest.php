@@ -4,7 +4,7 @@ namespace OlcsTest\Data\Mapper;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Data\Mapper\PiHearing as Sut;
-use Zend\Form\FormInterface;
+use Laminas\Form\FormInterface;
 
 /**
  * Pi Hearing Mapper Test

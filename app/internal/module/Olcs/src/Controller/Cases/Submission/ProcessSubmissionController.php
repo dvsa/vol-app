@@ -59,7 +59,7 @@ class ProcessSubmissionController extends AbstractInternalController implements 
     /**
      * Generate form action to update submission, setting assigned_date, sender/recipient_user_ids
      *
-     * @return array|\Zend\View\Model\ViewModel
+     * @return array|\Laminas\View\Model\ViewModel
      */
     public function assignAction()
     {
@@ -90,7 +90,7 @@ class ProcessSubmissionController extends AbstractInternalController implements 
     /**
      * Generate form action to update submission, setting information_complete_date
      *
-     * @return array|\Zend\View\Model\ViewModel
+     * @return array|\Laminas\View\Model\ViewModel
      */
     public function informationCompleteAction()
     {

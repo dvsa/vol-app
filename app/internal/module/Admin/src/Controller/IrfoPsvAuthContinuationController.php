@@ -11,7 +11,7 @@ use Dvsa\Olcs\Transfer\Command\Irfo\RenewIrfoPsvAuth as RenewDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * IRFO PSV Auth Continuation Controller

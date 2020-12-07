@@ -106,7 +106,7 @@ class TaskAllocationRulesController extends AbstractInternalController
      *
      * @param string $name Form name
      *
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     public function getForm($name)
     {
@@ -114,7 +114,8 @@ class TaskAllocationRulesController extends AbstractInternalController
 
         if ($name === 'Admin\Form\Model\Form\TaskAllocationRule') {
             $this->getServiceLocator()->get('Helper\Form')->populateFormTable(
-                $form->get('details')->get('taskAlphaSplit'), $this->getAlphaSplitTable()
+                $form->get('details')->get('taskAlphaSplit'),
+                $this->getAlphaSplitTable()
             );
         }
 

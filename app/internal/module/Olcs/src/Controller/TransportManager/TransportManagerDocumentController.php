@@ -36,7 +36,7 @@ class TransportManagerDocumentController extends TransportManagerController impl
     /**
      * Process action - Index
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function indexAction()
     {
@@ -70,7 +70,7 @@ class TransportManagerDocumentController extends TransportManagerController impl
      * Get view model for document action
      *
      * @see \Olcs\Controller\Traits\DocumentActionTrait
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     protected function getDocumentView()
     {
@@ -86,7 +86,7 @@ class TransportManagerDocumentController extends TransportManagerController impl
     /**
      * Get Form
      *
-     * @return \Zend\Form\FieldsetInterface
+     * @return \Laminas\Form\FieldsetInterface
      */
     protected function getConfiguredDocumentForm()
     {

@@ -4,7 +4,7 @@ namespace OlcsTest\Form\Model\Form;
 
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 use Common\Form\Elements\InputFilters\Checkbox;
-use Zend\Form\Element\Select;
+use Laminas\Form\Element\Select;
 
 /**
  * Class CompaniesHouseAlertFiltersTest

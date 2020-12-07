@@ -3,7 +3,7 @@
 namespace Admin\Form\Model\Fieldset;
 
 use Common\Form\Model\Form\Traits\IdTrait;
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("DocumentTemplateUpload")
@@ -31,7 +31,7 @@ class DocumentTemplateUpload
      *     "disable_inarray_validator": false
      * })
      * @Form\Required(true)
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Type("\Laminas\Form\Element\Select")
      */
     public $templateFolder = null;
 
@@ -64,7 +64,7 @@ class DocumentTemplateUpload
      * @Form\Options({
      *     "label": "Description"
      * })
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":255}})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":255}})
      * @Form\Type("Text")
      */
     public $description = null;
@@ -74,7 +74,7 @@ class DocumentTemplateUpload
      * @Form\Options({
      *     "label": "Template Slug Identifier (optional)",
      * })
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":100}})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":100}})
      * @Form\Type("Text")
      * @Form\Required(false)
      */
@@ -82,7 +82,7 @@ class DocumentTemplateUpload
 
     /**
      * @Form\Options({"label":"File Upload"})
-     * @Form\Type("\Zend\Form\Element\File")
+     * @Form\Type("\Laminas\Form\Element\File")
      */
     public $file = null;
 

@@ -51,7 +51,7 @@ class BusRegIdTest extends MockeryTestCase
 
     public function testAttach()
     {
-        $mockEventManager = m::mock('Zend\EventManager\EventManagerInterface');
+        $mockEventManager = m::mock('Laminas\EventManager\EventManagerInterface');
         $mockEventManager->shouldReceive('attach')->once()
             ->with(RouteParams::EVENT_PARAM . 'busRegId', [$this->sut, 'onBusRegId'], 1);
 
@@ -105,7 +105,7 @@ class BusRegIdTest extends MockeryTestCase
             )
             ->getMock();
 
-        $mockViewHelperManager = m::mock('\Zend\View\HelperPluginManager')
+        $mockViewHelperManager = m::mock('\Laminas\View\HelperPluginManager')
             ->shouldReceive('get')
             ->once()
             ->with('placeholder')
@@ -134,12 +134,12 @@ class BusRegIdTest extends MockeryTestCase
 
     public function testCreateService()
     {
-        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
+        $mockViewHelperManager = m::mock('Laminas\View\HelperPluginManager');
         $mockNavigation = m::mock();
         $mockTransferAnnotationBuilder = m::mock();
         $mockQueryService = m::mock();
 
-        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockSl = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('Navigation')->andReturn($mockNavigation);
         $mockSl->shouldReceive('get')->with('TransferAnnotationBuilder')->andReturn($mockTransferAnnotationBuilder);

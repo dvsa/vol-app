@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
@@ -26,7 +26,7 @@ class IrfoDetails extends Base
      *      "target_object":"Common\Form\Model\Form\Lva\Fieldset\TradingNames",
      *      "is_collection":true,
      *      "options":{
-     *          "count":1, 
+     *          "count":1,
      *          "label":"Trading names",
      *          "hint":"markup-trading-name-hint",
      *          "hint_at_bottom":true
@@ -56,7 +56,7 @@ class IrfoDetails extends Base
      *      "target_object":"Olcs\Form\Model\Fieldset\IrfoPartner",
      *      "is_collection":true,
      *      "options":{
-     *          "count":1, 
+     *          "count":1,
      *          "label":"Partner details",
      *          "hint":"markup-partner-detail-hint",
      *          "hint_at_bottom":true

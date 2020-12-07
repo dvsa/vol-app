@@ -17,8 +17,8 @@ use Olcs\Data\Mapper\TmQualification as Mapper;
 use Olcs\Form\Model\Form\Qualification as TmQualificationForm;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericList;
-use Zend\Form\FormInterface;
-use Zend\View\Model\ViewModel;
+use Laminas\Form\FormInterface;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Transport Manager Details Competence Controller
@@ -77,7 +77,7 @@ class TransportManagerDetailsCompetenceController extends AbstractInternalContro
     /**
      * Index action
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function indexAction()
     {

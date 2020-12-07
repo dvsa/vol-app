@@ -17,9 +17,9 @@ use Olcs\Controller\Traits;
 class BusProcessingTaskController extends AbstractController implements BusRegControllerInterface, LeftViewProvider
 {
     use Traits\ProcessingControllerTrait,
-        Traits\TaskActionTrait {
-            Traits\TaskActionTrait::getTaskForm as traitGetTaskForm;
-        }
+    Traits\TaskActionTrait {
+        Traits\TaskActionTrait::getTaskForm as traitGetTaskForm;
+    }
 
     /**
      * Get task action type
@@ -55,13 +55,13 @@ class BusProcessingTaskController extends AbstractController implements BusRegCo
      *
      * @param array $filters Field values
      *
-     * @return \Zend\Form\FormInterface
+     * @return \Laminas\Form\FormInterface
      */
     protected function getTaskForm(array $filters = [])
     {
         $form = $this->traitGetTaskForm($filters);
 
-        /** @var \Zend\Form\Element\Select $option */
+        /** @var \Laminas\Form\Element\Select $option */
         $this->updateSelectValueOptions(
             $form->get('showTasks'),
             [

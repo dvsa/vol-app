@@ -3,9 +3,9 @@
 namespace OlcsTest\Form\Model\Form;
 
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
-use Zend\Form\Element\Select;
-use Zend\Validator\GreaterThan;
-use Zend\Validator\NotEmpty;
+use Laminas\Form\Element\Select;
+use Laminas\Validator\GreaterThan;
+use Laminas\Validator\NotEmpty;
 
 /**
  * Class CreateFeeTest

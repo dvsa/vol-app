@@ -16,7 +16,7 @@ use Olcs\Listener\RouteParam\BusRegFurniture;
 use Olcs\Listener\RouteParams;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Bus Reg Furniture Test
@@ -48,7 +48,7 @@ class BusRegFurnitureTest extends MockeryTestCase
 
     public function testAttach()
     {
-        $mockEventManager = m::mock('Zend\EventManager\EventManagerInterface');
+        $mockEventManager = m::mock('Laminas\EventManager\EventManagerInterface');
         $mockEventManager->shouldReceive('attach')->once()
             ->with(RouteParams::EVENT_PARAM . 'busRegId', [$this->sut, 'onBusRegFurniture'], 1);
 
@@ -142,7 +142,7 @@ class BusRegFurnitureTest extends MockeryTestCase
             )
             ->getMock();
 
-        $mockViewHelperManager = m::mock('\Zend\View\HelperPluginManager')
+        $mockViewHelperManager = m::mock('\Laminas\View\HelperPluginManager')
             ->shouldReceive('get')
             ->once()
             ->with('placeholder')
@@ -166,11 +166,11 @@ class BusRegFurnitureTest extends MockeryTestCase
 
     public function testCreateService()
     {
-        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
+        $mockViewHelperManager = m::mock('Laminas\View\HelperPluginManager');
         $mockQuerySender = m::mock(QuerySender::class);
         $mockCommandSender = m::mock(CommandSender::class);
 
-        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockSl = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('QuerySender')->andReturn($mockQuerySender);
         $mockSl->shouldReceive('get')->with('CommandSender')->andReturn($mockCommandSender);

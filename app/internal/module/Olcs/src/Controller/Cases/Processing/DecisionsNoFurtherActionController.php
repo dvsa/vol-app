@@ -14,7 +14,7 @@ use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\TmCaseDecision as Mapper;
 use Olcs\Form\Model\Form\TmCaseNoFurtherAction as Form;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Case Decisions NoFurtherAction Controller
@@ -103,7 +103,7 @@ class DecisionsNoFurtherActionController extends AbstractInternalController impl
     /**
      * index Action
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function indexAction()
     {
@@ -113,7 +113,7 @@ class DecisionsNoFurtherActionController extends AbstractInternalController impl
     /**
      * details Action
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function detailsAction()
     {
@@ -123,7 +123,7 @@ class DecisionsNoFurtherActionController extends AbstractInternalController impl
     /**
      * redirect to Details
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function redirectToDetails()
     {

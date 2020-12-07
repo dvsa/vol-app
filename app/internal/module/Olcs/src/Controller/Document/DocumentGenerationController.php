@@ -7,9 +7,9 @@ use Common\Form\Elements\InputFilters\MultiCheckboxEmpty;
 use Dvsa\Olcs\Transfer\Command\Document\CreateLetter;
 use Dvsa\Olcs\Transfer\Query\Document\TemplateParagraphs;
 use Olcs\Logging\Log\Logger;
-use Zend\Form\Fieldset;
-use Zend\Form\Form;
-use Zend\View\Model\ViewModel;
+use Laminas\Form\Fieldset;
+use Laminas\Form\Form;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Document Generation Controller
@@ -70,7 +70,7 @@ class DocumentGenerationController extends AbstractDocumentController
      *
      * @param array $data Form Data
      *
-     * @return null|\Zend\Http\Response
+     * @return null|\Laminas\Http\Response
      */
     public function processGenerate($data)
     {
@@ -90,7 +90,7 @@ class DocumentGenerationController extends AbstractDocumentController
      *
      * @param array $data Form Data
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      * @throws \ErrorException
      */
     protected function processGenerateDocument($data)
@@ -180,7 +180,7 @@ class DocumentGenerationController extends AbstractDocumentController
     /**
      * Make changes in form in depend form selected options
      *
-     * @param \Zend\Form\FormInterface $form Form
+     * @param \Laminas\Form\FormInterface $form Form
      *
      * @return mixed
      */
@@ -196,7 +196,7 @@ class DocumentGenerationController extends AbstractDocumentController
 
         $data = [];
 
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
 
         if ($request->isPost()) {
@@ -237,7 +237,7 @@ class DocumentGenerationController extends AbstractDocumentController
      * Add template bookmarks
      *
      * @param int                          $id       Template Id
-     * @param \Zend\Form\FieldsetInterface $fieldset Target container element
+     * @param \Laminas\Form\FieldsetInterface $fieldset Target container element
      *
      * @return void
      */

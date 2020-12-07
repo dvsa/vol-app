@@ -7,7 +7,7 @@ use Olcs\Controller\Interfaces\NavigationIdProvider;
 use Olcs\Controller\Interfaces\RightViewProvider;
 use Olcs\View\Builder\Builder;
 use Olcs\View\Model\ViewModel;
-use Zend\Mvc\Controller\Plugin\AbstractPlugin;
+use Laminas\Mvc\Controller\Plugin\AbstractPlugin;
 
 /**
  * Class ViewBuilder
@@ -34,7 +34,6 @@ class ViewBuilder extends AbstractPlugin
         $layout->setIsAjax($controller->getRequest()->isXmlHttpRequest());
 
         if ($controller instanceof LeftViewProvider) {
-
             $left = $controller->getLeftView();
 
             if ($left !== null) {
@@ -43,7 +42,6 @@ class ViewBuilder extends AbstractPlugin
         }
 
         if ($controller instanceof RightViewProvider) {
-
             $right = $controller->getRightView();
 
             if ($right !== null) {
@@ -52,7 +50,6 @@ class ViewBuilder extends AbstractPlugin
         }
 
         if ($controller instanceof NavigationIdProvider) {
-
             $navigationId = $controller->getNavigationId();
 
             if ($navigationId !== null) {

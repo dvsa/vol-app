@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore No methods
@@ -32,7 +32,7 @@ class OperatorDetails
     /**
      * @Form\Attributes({"class":"extra-long","id":""})
      * @Form\Options({"label":"internal-operator-profile-name"})
-     * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
+     * @Form\Validator({"name": "Laminas\Validator\NotEmpty"})
      * @Form\Name("name")
      * @Form\Type("Text")
      */
@@ -43,7 +43,7 @@ class OperatorDetails
      * @Form\Options({
      *     "label": "Nature of Business"
      * })
-     * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
+     * @Form\Validator({"name": "Laminas\Validator\NotEmpty"})
      */
     public $natureOfBusiness = null;
 
@@ -66,7 +66,7 @@ class OperatorDetails
     /**
      * @Form\Attributes({"class":"long","id":""})
      * @Form\Options({"label":"internal-operator-profile-last-name"})
-     * @Form\Validator({"name": "Zend\Validator\NotEmpty"})
+     * @Form\Validator({"name": "Laminas\Validator\NotEmpty"})
      * @Form\Type("Text")
      */
     public $lastName = null;

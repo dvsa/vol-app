@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
@@ -15,8 +15,8 @@ class BusServiceNumberAndType extends BusRegDetails
      * @Form\Options({"label":"Service number"})
      * @Form\Required(false)
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":1,"max":70}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":1,"max":70}})
      */
     public $serviceNo = null;
 
@@ -26,7 +26,7 @@ class BusServiceNumberAndType extends BusRegDetails
      *     "target_object":"Olcs\Form\Model\Fieldset\BusReg\OtherServices",
      *     "is_collection":true,
      *     "options":{
-     *         "count":1, 
+     *         "count":1,
      *         "label":"Other Service numbers",
      *          "hint":"markup-other-service-numbers-hint",
      *          "hint_at_bottom":true
@@ -40,8 +40,8 @@ class BusServiceNumberAndType extends BusRegDetails
      * @Form\Options({"label":"Start point"})
      * @Form\Required(false)
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":1,"max":100}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":1,"max":100}})
      */
     public $startPoint = null;
 
@@ -50,8 +50,8 @@ class BusServiceNumberAndType extends BusRegDetails
      * @Form\Options({"label":"Finish point"})
      * @Form\Required(false)
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":1,"max":100}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":1,"max":100}})
      */
     public $finishPoint = null;
 
@@ -60,8 +60,8 @@ class BusServiceNumberAndType extends BusRegDetails
      * @Form\Options({"label":"Via"})
      * @Form\Required(false)
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":1,"max":255}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":1,"max":255}})
      */
     public $via = null;
 
@@ -89,8 +89,8 @@ class BusServiceNumberAndType extends BusRegDetails
      * @Form\Options({"label":"Other N&P details"})
      * @Form\Required(false)
      * @Form\Type("TextArea")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":800}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":800}})
      */
     public $otherDetails = null;
 

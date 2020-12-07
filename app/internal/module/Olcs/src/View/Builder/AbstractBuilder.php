@@ -2,7 +2,7 @@
 
 namespace Olcs\View\Builder;
 
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Class AbstractBuilder

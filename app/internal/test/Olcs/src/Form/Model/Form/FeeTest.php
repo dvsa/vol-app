@@ -4,8 +4,8 @@ namespace OlcsTest\Form\Model\Form;
 
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 use Common\Form\Elements\Custom\OlcsCheckbox;
-use Zend\Validator\NotEmpty;
-use Zend\Validator\StringLength;
+use Laminas\Validator\NotEmpty;
+use Laminas\Validator\StringLength;
 
 /**
  * Class FeeTest

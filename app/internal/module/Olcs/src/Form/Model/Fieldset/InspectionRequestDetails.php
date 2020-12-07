@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore No methods
@@ -56,7 +56,7 @@ class InspectionRequestDetails
      * @Form\Options({"label":"Inspector name"})
      * @Form\Required(false)
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      */
     public $inspectorName = null;
 
@@ -167,7 +167,7 @@ class InspectionRequestDetails
      * @Form\Options({"label":"Vehicles"})
      * @Form\Required(false)
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      */
     public $vehiclesExaminedNo = null;
 
@@ -176,7 +176,7 @@ class InspectionRequestDetails
      * @Form\Options({"label":"Trailers"})
      * @Form\Required(false)
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      */
     public $trailersExaminedNo = null;
 
@@ -185,7 +185,7 @@ class InspectionRequestDetails
      * @Form\Options({"label":"Caseworker comments"})
      * @Form\Required(false)
      * @Form\Type("TextArea")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      */
     public $requestorNotes = null;
 
@@ -194,7 +194,7 @@ class InspectionRequestDetails
      * @Form\Options({"label":"Examiner comments"})
      * @Form\Required(false)
      * @Form\Type("TextArea")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      */
     public $inspectorNotes = null;
 }

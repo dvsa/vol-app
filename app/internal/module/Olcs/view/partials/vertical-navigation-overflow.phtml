@@ -1,6 +1,6 @@
 <ul class="vertical-navigation overflow" role="menu">
     <?php
-    /** @var \Zend\Navigation\Page\AbstractPage $page */
+    /** @var \Laminas\Navigation\Page\AbstractPage $page */
     foreach ($this->container as $page) : ?>
         <?php
         if (! $this->navigation()->accept($page, false)) {
@@ -18,7 +18,7 @@
                     <span><?php echo htmlspecialchars($this->translate($page->getLabel())); ?></span>
                     <?php
                     $tableFilters = $this->placeholder('tableFilters')->getValue();
-                    if($tableFilters instanceof \Zend\Form\Form) {
+                    if($tableFilters instanceof \Laminas\Form\Form) {
                       echo $this->form($tableFilters);
                     }
                     ?>

@@ -7,7 +7,7 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
 use Dvsa\Olcs\Transfer\Query\User\UserList as ListDTO;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * OperatorUsersController

@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore No methods
@@ -33,7 +33,7 @@ class DocumentRelinkDetails
      *          "transportManager":"Transport Manager"
      *      },
      * })
-     * @Form\Type("Zend\Form\Element\Select")
+     * @Form\Type("Laminas\Form\Element\Select")
      */
     public $type = null;
 
@@ -41,8 +41,8 @@ class DocumentRelinkDetails
      * @Form\Attributes({"id":"targetId","class":"medium","name":"targetId"})
      * @Form\Options({"label":"Application ID"})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":1,"max":255}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":1,"max":255}})
      */
     public $targetId = null;
 

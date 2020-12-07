@@ -164,7 +164,7 @@ class CaseStayMarkerTest extends TestCase
             ]
         ];
 
-        $mockPartialHelper = m::mock(\Zend\View\Helper\Partial::class);
+        $mockPartialHelper = m::mock(\Laminas\View\Helper\Partial::class);
 
         $mockPartialHelper->shouldReceive('__invoke')
             ->with('marker/case-stay', ['caseId' => 99, 'stay' => 'STAY1', 'hideCaseLink' => false])
@@ -194,7 +194,7 @@ class CaseStayMarkerTest extends TestCase
             ]
         ];
 
-        $mockPartialHelper = m::mock(\Zend\View\Helper\Partial::class);
+        $mockPartialHelper = m::mock(\Laminas\View\Helper\Partial::class);
 
         $mockPartialHelper->shouldReceive('__invoke')
             ->with('marker/case-stay', ['caseId' => 99, 'stay' => 'STAY2', 'hideCaseLink' => false])

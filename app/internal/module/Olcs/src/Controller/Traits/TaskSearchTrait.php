@@ -5,7 +5,7 @@ namespace Olcs\Controller\Traits;
 use Dvsa\Olcs\Transfer\Query\Task\TaskList;
 use Dvsa\Olcs\Transfer\Query\Task\TaskDetails;
 use Dvsa\Olcs\Utils\Constants\FilterOptions;
-use Zend\Form\Element\Select;
+use Laminas\Form\Element\Select;
 
 /**
  * Task Search Trait
@@ -55,11 +55,11 @@ trait TaskSearchTrait
      *
      * @param array $filters Filters
      *
-     * @return \Zend\Form\FormInterface
+     * @return \Laminas\Form\FormInterface
      */
     protected function getTaskForm(array $filters = [])
     {
-        /** @var \Zend\Di\ServiceLocator $sm */
+        /** @var \Laminas\Di\ServiceLocator $sm */
         $sm = $this->getServiceLocator();
 
         /** @var \Common\Service\Helper\FormHelperService $formHelper */
@@ -88,7 +88,7 @@ trait TaskSearchTrait
         }
 
         //  show task fiels
-        /** @var \Zend\Form\Element\Select $option */
+        /** @var \Laminas\Form\Element\Select $option */
         $option = $form->get('showTasks');
         $option->setValueOptions(
             [
@@ -128,7 +128,7 @@ trait TaskSearchTrait
      *
      * @param string $type Type
      *
-     * @return bool|\Zend\Http\Response
+     * @return bool|\Laminas\Http\Response
      */
     protected function processTasksActions($type = '')
     {

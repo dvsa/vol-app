@@ -4,9 +4,9 @@ namespace OlcsTest\Form\Model\Form;
 
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 use Common\Form\Elements\Validators\DateNotInFuture;
-use Zend\Validator\NotEmpty;
-use Zend\Validator\Digits;
-use Zend\Validator\Date;
+use Laminas\Validator\NotEmpty;
+use Laminas\Validator\Digits;
+use Laminas\Validator\Date;
 
 /**
  * Class FeePaymentTest

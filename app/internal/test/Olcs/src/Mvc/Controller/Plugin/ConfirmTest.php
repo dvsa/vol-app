@@ -21,7 +21,7 @@ class ConfirmTest extends TestCase
     {
         $plugin = new \Olcs\Mvc\Controller\Plugin\Confirm();
 
-        $mockFormCustomLabels = m::mock('Zend\Form\Form')
+        $mockFormCustomLabels = m::mock('Laminas\Form\Form')
             ->shouldReceive('getAttribute')
             ->with('action')
             ->twice()
@@ -77,7 +77,7 @@ class ConfirmTest extends TestCase
             $result = $plugin->__invoke('some message', true, 'custom', $confirmLabel, $cancelLabel);
         }
 
-        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $result);
+        $this->assertInstanceOf('\Laminas\View\Model\ViewModel', $result);
     }
 
     public function dpTestInvokeGenerateForm()
@@ -95,7 +95,7 @@ class ConfirmTest extends TestCase
     {
         $plugin = new \Olcs\Mvc\Controller\Plugin\Confirm();
 
-        $mockForm = m::mock('Zend\Form\Form');
+        $mockForm = m::mock('Laminas\Form\Form');
         $mockForm->shouldReceive('setData')->withAnyArgs()->andReturn($mockForm);
         $mockForm->shouldReceive('isValid')->andReturn(true);
         $mockForm
@@ -115,7 +115,7 @@ class ConfirmTest extends TestCase
             ->andReturn([])
             ->getMock();
 
-        $mockRequest = m::mock('Zend\Http\Request');
+        $mockRequest = m::mock('Laminas\Http\Request');
         $mockRequest->shouldReceive('isPost')->andReturn(true);
 
         $controller = m::mock('\Olcs\Controller\Cases\Submission\SubmissionController[getForm, getRequest, params]');
@@ -137,7 +137,7 @@ class ConfirmTest extends TestCase
     {
         $plugin = new \Olcs\Mvc\Controller\Plugin\Confirm();
 
-        $mockForm = m::mock('Zend\Form\Form');
+        $mockForm = m::mock('Laminas\Form\Form');
         $mockForm->shouldReceive('setData')->withAnyArgs()->andReturn($mockForm);
         $mockForm->shouldReceive('isValid')->andReturn(false);
         $mockForm->shouldReceive('get')
@@ -168,7 +168,7 @@ class ConfirmTest extends TestCase
             ->andReturn([])
             ->getMock();
 
-        $mockRequest = m::mock('Zend\Http\Request');
+        $mockRequest = m::mock('Laminas\Http\Request');
         $mockRequest->shouldReceive('isPost')->andReturn(true);
 
         $controller = m::mock('\Olcs\Controller\Cases\Submission\SubmissionController[getForm, getRequest, params]');
@@ -179,6 +179,6 @@ class ConfirmTest extends TestCase
         $plugin->setController($controller);
         $result = $plugin->__invoke('some message');
 
-        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $result);
+        $this->assertInstanceOf('\Laminas\View\Model\ViewModel', $result);
     }
 }

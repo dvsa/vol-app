@@ -3,7 +3,7 @@
 namespace Admin\Controller;
 
 use Olcs\Controller\AbstractInternalController;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Common\Controller\Traits\GenericMethods;
 
 /**
@@ -34,7 +34,7 @@ class PermitsController extends AbstractInternalController
     /**
      * index action
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function indexAction()
     {

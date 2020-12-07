@@ -7,9 +7,9 @@ use Common\Service\Cqrs\Query\QuerySender;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Listener\NavigationToggle;
 use Common\Rbac\IdentityProvider;
-use Zend\Navigation\Navigation;
-use Zend\Navigation\Page\Uri;
-use Zend\Mvc\MvcEvent;
+use Laminas\Navigation\Navigation;
+use Laminas\Navigation\Page\Uri;
+use Laminas\Mvc\MvcEvent;
 use Common\Rbac\User;
 use Mockery as m;
 
@@ -37,7 +37,7 @@ class NavigationToggleTest extends TestCase
         $this->mockNavigation = m::mock(Navigation::class);
         $this->mockQuerySender = m::mock(QuerySender::class);
 
-        $this->mockSm = m::mock(\Zend\ServiceManager\ServiceLocatorInterface::class);
+        $this->mockSm = m::mock(\Laminas\ServiceManager\ServiceLocatorInterface::class);
         $this->mockSm
             ->shouldReceive('get')->with('navigation')->andReturn($this->mockNavigation)
             ->shouldReceive('get')->with('QuerySender')->andReturn($this->mockQuerySender)
@@ -48,8 +48,8 @@ class NavigationToggleTest extends TestCase
 
     public function testAttach()
     {
-        /** @var \Zend\EventManager\EventManagerInterface | m\MockInterface $mockEventManager */
-        $mockEventManager = m::mock(\Zend\EventManager\EventManagerInterface::class);
+        /** @var \Laminas\EventManager\EventManagerInterface | m\MockInterface $mockEventManager */
+        $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
         $mockEventManager->shouldReceive('attach')->once()
             ->with(MvcEvent::EVENT_DISPATCH, [$this->sut, 'onDispatch'], 20);
 
@@ -79,8 +79,8 @@ class NavigationToggleTest extends TestCase
             ->with('id', 'admin-dashboard/admin-data-retention')
             ->andReturn($page);
 
-        /** @var \Zend\Mvc\MvcEvent | m\MockInterface $mockEvent */
-        $mockEvent = m::mock(\Zend\Mvc\MvcEvent::class);
+        /** @var \Laminas\Mvc\MvcEvent | m\MockInterface $mockEvent */
+        $mockEvent = m::mock(\Laminas\Mvc\MvcEvent::class);
 
         $this->sut->createService($this->mockSm);
         $this->sut->onDispatch($mockEvent);
@@ -134,8 +134,8 @@ class NavigationToggleTest extends TestCase
             ->with('id', $irhpPermitsKey)
             ->andReturn($ihrpPermitsPage);
 
-        /** @var \Zend\Mvc\MvcEvent | m\MockInterface $mockEvent */
-        $mockEvent = m::mock(\Zend\Mvc\MvcEvent::class);
+        /** @var \Laminas\Mvc\MvcEvent | m\MockInterface $mockEvent */
+        $mockEvent = m::mock(\Laminas\Mvc\MvcEvent::class);
 
         $mockEvent->shouldReceive('getRouteMatch->getParams')
             ->andReturn($params);

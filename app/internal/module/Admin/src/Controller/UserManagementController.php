@@ -14,15 +14,15 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\User as Mapper;
 use Admin\Form\Model\Form\User as Form;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Common\RefData;
-use Zend\Form\Fieldset as FormFieldset;
-use Zend\Form\Element\Radio as RadioElement;
+use Laminas\Form\Fieldset as FormFieldset;
+use Laminas\Form\Element\Radio as RadioElement;
 
 /**
  * User Management Controller
  *
- * @method redirect Zend\Mvc\Controller\Plugin\Redirect
+ * @method redirect Laminas\Mvc\Controller\Plugin\Redirect
  */
 class UserManagementController extends AbstractInternalController implements LeftViewProvider
 {
@@ -118,7 +118,7 @@ class UserManagementController extends AbstractInternalController implements Lef
     /**
      * Index action
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function indexAction()
     {
@@ -130,7 +130,7 @@ class UserManagementController extends AbstractInternalController implements Lef
      *
      * @param string $type form type
      *
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     public function getForm($type)
     {
@@ -153,10 +153,10 @@ class UserManagementController extends AbstractInternalController implements Lef
     /**
      * Alters the form for add
      *
-     * @param \Zend\Form\Form $form The form to alter
+     * @param \Laminas\Form\Form $form The form to alter
      * @param array           $data Form data
      *
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     protected function alterFormForAdd($form, $data)
     {
@@ -172,10 +172,10 @@ class UserManagementController extends AbstractInternalController implements Lef
     /**
      * Alters the form for edit
      *
-     * @param \Zend\Form\Form $form The form to alter
+     * @param \Laminas\Form\Form $form The form to alter
      * @param array           $data Form data
      *
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     protected function alterFormForEdit($form, $data)
     {
@@ -231,9 +231,9 @@ class UserManagementController extends AbstractInternalController implements Lef
     /**
      * Presentation logic to process an application look up
      *
-     * @param \Zend\Form\Form $form the form
+     * @param \Laminas\Form\Form $form the form
      *
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     protected function processApplicationTransportManagerLookup($form)
     {

@@ -55,7 +55,7 @@ class ViewModelTest extends \PHPUnit\Framework\TestCase
 
     public function testSetContent()
     {
-        $content = new \Zend\View\Model\ViewModel();
+        $content = new \Laminas\View\Model\ViewModel();
 
         $this->sut->setContent($content);
 
@@ -66,7 +66,7 @@ class ViewModelTest extends \PHPUnit\Framework\TestCase
 
     public function testSetLeft()
     {
-        $content = new \Zend\View\Model\ViewModel();
+        $content = new \Laminas\View\Model\ViewModel();
 
         $this->sut->setLeft($content);
 
@@ -77,7 +77,7 @@ class ViewModelTest extends \PHPUnit\Framework\TestCase
 
     public function testSetRight()
     {
-        $content = new \Zend\View\Model\ViewModel();
+        $content = new \Laminas\View\Model\ViewModel();
 
         $this->sut->setRight($content);
 
@@ -88,7 +88,7 @@ class ViewModelTest extends \PHPUnit\Framework\TestCase
 
     public function testClearLeft()
     {
-        $content = new \Zend\View\Model\ViewModel();
+        $content = new \Laminas\View\Model\ViewModel();
 
         $this->sut->setLeft($content);
 

@@ -10,7 +10,7 @@ use Dvsa\Olcs\Transfer\Query\System\InfoMessage\Get as ItemQry;
 use Dvsa\Olcs\Transfer\Query\System\InfoMessage\GetList as ListQry;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Data\Mapper\SystemInfoMessage as AddEditFormMapper;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * System Info Messages Controller

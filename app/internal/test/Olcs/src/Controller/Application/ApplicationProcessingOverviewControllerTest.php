@@ -3,16 +3,16 @@
 namespace OlcsTest\Controller\Application\Processing;
 
 use Olcs\Controller\Application\Processing\ApplicationProcessingOverviewController;
-use Zend\Mvc\Controller\Plugin\FlashMessenger;
-use Zend\Mvc\Controller\Plugin\PluginInterface;
-use Zend\Mvc\Controller\Plugin\Redirect;
-use Zend\Mvc\Controller\PluginManager;
-use Zend\Mvc\Controller\Plugin\Params;
-use Zend\Mvc\Router\RouteMatch;
-use Zend\View\Model\ViewModel;
+use Laminas\Mvc\Controller\Plugin\FlashMessenger;
+use Laminas\Mvc\Controller\Plugin\PluginInterface;
+use Laminas\Mvc\Controller\Plugin\Redirect;
+use Laminas\Mvc\Controller\PluginManager;
+use Laminas\Mvc\Controller\Plugin\Params;
+use Laminas\Mvc\Router\RouteMatch;
+use Laminas\View\Model\ViewModel;
 use OlcsTest\Bootstrap;
-use Zend\Http\Response;
-use Zend\Mvc\MvcEvent;
+use Laminas\Http\Response;
+use Laminas\Mvc\MvcEvent;
 
 /**
  * Class ApplicationProcessingOverviewControllerTest
@@ -40,7 +40,7 @@ class ApplicationProcessingOverviewControllerTest extends \PHPUnit\Framework\Tes
 
         $serviceManager = Bootstrap::getServiceManager();
 
-        /** @var \Zend\Mvc\Router\Http\TreeRouteStack $router */
+        /** @var \Laminas\Mvc\Router\Http\TreeRouteStack $router */
         $router = $serviceManager->get('HttpRouter');
         $routeMatch = new RouteMatch(
             [

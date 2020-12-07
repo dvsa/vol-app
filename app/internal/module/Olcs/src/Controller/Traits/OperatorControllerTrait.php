@@ -16,7 +16,7 @@ trait OperatorControllerTrait
      * Get view with Operator
      *
      * @param array $variables
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     protected function getViewWithOrganisation($variables = [])
     {
@@ -63,7 +63,7 @@ trait OperatorControllerTrait
     /**
      * Gets the main navigation
      *
-     * @return \Zend\Navigation\Navigation
+     * @return \Laminas\Navigation\Navigation
      */
     public function getNavigation()
     {
@@ -73,7 +73,7 @@ trait OperatorControllerTrait
     /**
      * Gets the sub navigation
      *
-     * @return \Zend\Navigation\Page\Mvc
+     * @return \Laminas\Navigation\Page\Mvc
      */
     public function getSubNavigation()
     {

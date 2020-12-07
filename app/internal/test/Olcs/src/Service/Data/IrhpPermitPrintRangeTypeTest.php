@@ -10,7 +10,7 @@ use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintRangeType;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder as TransferAnnotationBuilder;
 use Olcs\Service\Data\IrhpPermitPrintRangeType;
 use Mockery as m;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 
 /**
  * Class IrhpPermitPrintRangeType Test

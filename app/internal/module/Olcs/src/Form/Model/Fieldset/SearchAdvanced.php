@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
@@ -17,10 +17,10 @@ class SearchAdvanced
      *     "label": "Address"
      * })
      * @Form\Required(false)
-     * @Form\Type("\Zend\Form\Element\Textarea")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Filter({"name":"Zend\Filter\StringToLower"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":10,"max":100}})
+     * @Form\Type("\Laminas\Form\Element\Textarea")
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringToLower"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":10,"max":100}})
      */
     public $address = null;
 

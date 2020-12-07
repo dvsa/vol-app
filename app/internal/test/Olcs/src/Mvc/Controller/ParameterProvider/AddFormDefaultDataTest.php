@@ -6,7 +6,7 @@ namespace OlcsTest\Mvc\Controller\ParameterProvider;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Mockery as m;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
-use Zend\Mvc\Controller\Plugin\Params;
+use Laminas\Mvc\Controller\Plugin\Params;
 
 /**
  * Class AddFormDefaultDataTest

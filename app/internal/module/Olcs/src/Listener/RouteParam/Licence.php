@@ -7,11 +7,11 @@ use Common\RefData;
 use Common\Service\Data\Surrender;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
-use Zend\EventManager\EventManagerInterface;
-use Zend\EventManager\ListenerAggregateInterface;
-use Zend\EventManager\ListenerAggregateTrait;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\EventManager\ListenerAggregateInterface;
+use Laminas\EventManager\ListenerAggregateTrait;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 
 /**
@@ -45,12 +45,12 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
     protected $surrenderService;
 
     /**
-     * @var \Zend\Navigation\Navigation
+     * @var \Laminas\Navigation\Navigation
      */
     protected $navigationService;
 
     /**
-     * @var \Zend\Navigation\Navigation
+     * @var \Laminas\Navigation\Navigation
      */
     protected $mainNavigationService;
 
@@ -100,7 +100,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @param \Zend\Navigation\Navigation $navigationService
+     * @param \Laminas\Navigation\Navigation $navigationService
      *
      * @return $this
      */
@@ -111,7 +111,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @return \Zend\Navigation\Navigation
+     * @return \Laminas\Navigation\Navigation
      */
     public function getNavigationService()
     {
@@ -119,7 +119,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @param \Zend\Navigation\Navigation $navigationService
+     * @param \Laminas\Navigation\Navigation $navigationService
      *
      * @return $this
      */
@@ -130,7 +130,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @return \Zend\Navigation\Navigation
+     * @return \Laminas\Navigation\Navigation
      */
     public function getMainNavigationService()
     {
@@ -266,7 +266,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
      */
     protected function showHideButtons($licence)
     {
-        /** @var Zend\Navigation\Navigation */
+        /** @var Laminas\Navigation\Navigation */
         $sidebarNav = $this->getNavigationService();
 
         // 'Quick actions' buttons
@@ -284,7 +284,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * @param array                      $licence    licence data
-     * @param Zend\Navigation\Navigation $sidebarNav side bar navigation object
+     * @param Laminas\Navigation\Navigation $sidebarNav side bar navigation object
      *
      * @return boolean whether 'Create variation' button is shown or not
      */
@@ -315,7 +315,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * @param array                      $licence    licence data
-     * @param Zend\Navigation\Navigation $sidebarNav side bar navigation object
+     * @param Laminas\Navigation\Navigation $sidebarNav side bar navigation object
      *
      * @return boolean whether 'Print' button is shown or not
      */
@@ -337,7 +337,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * @param array                      $licence    licence data
-     * @param Zend\Navigation\Navigation $sidebarNav side bar navigation object
+     * @param Laminas\Navigation\Navigation $sidebarNav side bar navigation object
      *
      * @return boolean whether 'Curtail' 'Revoke' and 'Suspend' buttons are shown or not
      */
@@ -367,7 +367,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * @param array                      $licence    licence data
-     * @param Zend\Navigation\Navigation $sidebarNav side bar navigation object
+     * @param Laminas\Navigation\Navigation $sidebarNav side bar navigation object
      *
      * @return boolean whether 'Reset to valid' button is shown or not
      */
@@ -387,7 +387,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * @param array                      $licence    licence data
-     * @param Zend\Navigation\Navigation $sidebarNav side bar navigation object
+     * @param Laminas\Navigation\Navigation $sidebarNav side bar navigation object
      *
      * @return boolean whether 'Surrender' button is shown or not
      */
@@ -419,7 +419,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * @param array                      $licence    licence data
-     * @param Zend\Navigation\Navigation $sidebarNav side bar navigation object
+     * @param Laminas\Navigation\Navigation $sidebarNav side bar navigation object
      *
      * @return boolean whether 'Terminate' button is shown or not
      */
@@ -449,7 +449,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * @param array                      $licence    licence data
-     * @param Zend\Navigation\Navigation $sidebarNav side bar navigation object
+     * @param Laminas\Navigation\Navigation $sidebarNav side bar navigation object
      *
      * @return boolean whether 'Undo termination' button is shown or not
      */
@@ -466,7 +466,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * @param array                      $licence    licence data
-     * @param Zend\Navigation\Navigation $sidebarNav side bar navigation object
+     * @param Laminas\Navigation\Navigation $sidebarNav side bar navigation object
      *
      * @return boolean whether 'Undo surrender' button is shown or not
      */

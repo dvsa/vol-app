@@ -11,7 +11,7 @@ use Common\Controller\Traits\GenericReceipt;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Licence\LicenceController;
 use Olcs\Controller\Traits\FeesActionTrait;
-use \Zend\View\Model\ViewModel;
+use \Laminas\View\Model\ViewModel;
 
 /**
  * Licence Fees Controller

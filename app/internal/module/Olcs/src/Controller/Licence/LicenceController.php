@@ -8,8 +8,8 @@ use Dvsa\Olcs\Transfer\Query\Cases\ByLicence as CasesByLicenceQry;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Olcs\Controller\Lva;
-use Zend\Http\Response;
-use Zend\View\Model\ViewModel;
+use Laminas\Http\Response;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Licence Controller
@@ -133,7 +133,7 @@ class LicenceController extends AbstractController implements LicenceControllerI
      * navigation when parent pages need to also be siblings
      * from a breadcrumb and navigation point of view.
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function indexJumpAction()
     {
@@ -143,7 +143,7 @@ class LicenceController extends AbstractController implements LicenceControllerI
     /**
      * Redirect to licence overview page by a licNo
      *
-     * @return \Zend\View\Helper\ViewModel
+     * @return \Laminas\View\Helper\ViewModel
      */
     public function licNoAction()
     {

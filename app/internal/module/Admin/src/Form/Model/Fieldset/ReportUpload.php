@@ -2,7 +2,7 @@
 
 namespace Admin\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("ReportUpload")
@@ -52,7 +52,7 @@ class ReportUpload
 
     /**
      * @Form\Options({"label":"File Upload"})
-     * @Form\Type("\Zend\Form\Element\File")
+     * @Form\Type("\Laminas\Form\Element\File")
      */
     public $file = null;
 }

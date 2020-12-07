@@ -40,12 +40,12 @@ class BusServiceControllerTest extends MockeryTestCase
 
         $type = 'foo';
 
-        $mockTableFieldset = m::mock('\Zend\Form\Fieldset');
+        $mockTableFieldset = m::mock('\Laminas\Form\Fieldset');
 
-        $mockConditionsFieldset = m::mock('\Zend\Form\Fieldset');
+        $mockConditionsFieldset = m::mock('\Laminas\Form\Fieldset');
         $mockConditionsFieldset->shouldReceive('get')->with('table')->andReturn($mockTableFieldset);
 
-        $mockForm = m::mock('\Zend\Form\Form');
+        $mockForm = m::mock('\Laminas\Form\Form');
         $mockForm->shouldReceive('get')->with('conditions')->andReturn($mockConditionsFieldset);
         $mockForm->shouldReceive('hasAttribute')->with('action')->andReturnNull();
         $mockForm->shouldReceive('setAttribute')->with('action', '');
@@ -88,7 +88,7 @@ class BusServiceControllerTest extends MockeryTestCase
             ->once()
             ->andReturn($response);
 
-        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockSl = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('Helper\Form')->andReturn($mockFormHelper);
         $mockSl->shouldReceive('get')->with('Table')->andReturn($mockTableService);
 
@@ -138,7 +138,7 @@ class BusServiceControllerTest extends MockeryTestCase
             ->once()
             ->andReturn($params);
 
-        $mockFieldset = m::mock('\Zend\Form\Element');
+        $mockFieldset = m::mock('\Laminas\Form\Element');
         $mockFieldset->shouldReceive('get')->with('fields')->andReturn($mockFieldset);
         $mockFieldset->shouldReceive('remove')
             ->times($opNotifiedLaPteRemoved ? 1 : 0)
@@ -147,7 +147,7 @@ class BusServiceControllerTest extends MockeryTestCase
             ->times($laShortNoteRemoved ? 1 : 0)
             ->with('laShortNote');
 
-        $mockTimetableFieldset = m::mock(\Zend\Form\Fieldset::class);
+        $mockTimetableFieldset = m::mock(\Laminas\Form\Fieldset::class);
         $mockTimetableFieldset->shouldReceive('remove')
             ->with('timetableAcceptable')
             ->times($timetableRemoved ? 1 : 0)
@@ -157,7 +157,7 @@ class BusServiceControllerTest extends MockeryTestCase
             ->times($timetableRemoved ? 1 : 0)
             ->andReturnSelf();
 
-        $mockForm = m::mock('\Zend\Form\Form');
+        $mockForm = m::mock('\Laminas\Form\Form');
         $mockForm->shouldReceive('get')->with('fields')->andReturn($mockFieldset);
         $mockForm->shouldReceive('get')
             ->with('timetable')

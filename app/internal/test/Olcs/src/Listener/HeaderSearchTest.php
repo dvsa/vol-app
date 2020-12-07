@@ -9,8 +9,8 @@ use Olcs\Form\Element\SearchFilterFieldset;
 use Olcs\Form\Element\SearchOrderFieldset;
 use Olcs\Form\Model\Form;
 use Olcs\Listener\HeaderSearch;
-use Zend\Mvc\MvcEvent;
-use Zend\View\Helper\Placeholder;
+use Laminas\Mvc\MvcEvent;
+use Laminas\View\Helper\Placeholder;
 
 /**
  * Class HeaderSearchTest
@@ -23,23 +23,23 @@ class HeaderSearchTest extends TestCase
 
     /** @var  m\MockInterface */
     private $mockFormHlp;
-    /** @var  m\MockInterface | \Zend\ServiceManager\ServiceLocatorInterface */
+    /** @var  m\MockInterface | \Laminas\ServiceManager\ServiceLocatorInterface */
     private $mockSm;
     /** @var  \Common\Service\Data\Search\Search | m\MockInterface  */
     private $mockSearchSrv;
-    /** @var  \Zend\Form\FormElementManager | m\MockInterface  */
+    /** @var  \Laminas\Form\FormElementManager | m\MockInterface  */
     private $mockFormElmMngr;
-    /** @var  \Zend\View\HelperPluginManager | m\MockInterface  */
+    /** @var  \Laminas\View\HelperPluginManager | m\MockInterface  */
     private $mockViewHlprMngr;
 
     public function setUp(): void
     {
         $this->mockFormHlp = m::mock(\Common\Service\Helper\FormHelperService::class);
         $this->mockSearchSrv = m::mock(\Common\Service\Data\Search\Search::class);
-        $this->mockFormElmMngr = m::mock(\Zend\Form\FormElementManager::class);
-        $this->mockViewHlprMngr = m::mock(\Zend\View\HelperPluginManager::class);
+        $this->mockFormElmMngr = m::mock(\Laminas\Form\FormElementManager::class);
+        $this->mockViewHlprMngr = m::mock(\Laminas\View\HelperPluginManager::class);
 
-        $this->mockSm = m::mock(\Zend\ServiceManager\ServiceLocatorInterface::class);
+        $this->mockSm = m::mock(\Laminas\ServiceManager\ServiceLocatorInterface::class);
         $this->mockSm
             ->shouldReceive('get')->with('DataServiceManager')->andReturnSelf()
             ->shouldReceive('get')->with('Helper\Form')->andReturn($this->mockFormHlp)
@@ -52,8 +52,8 @@ class HeaderSearchTest extends TestCase
 
     public function testAttach()
     {
-        /** @var \Zend\EventManager\EventManagerInterface | m\MockInterface $mockEventManager */
-        $mockEventManager = m::mock(\Zend\EventManager\EventManagerInterface::class);
+        /** @var \Laminas\EventManager\EventManagerInterface | m\MockInterface $mockEventManager */
+        $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
         $mockEventManager->shouldReceive('attach')->once()
             ->with(MvcEvent::EVENT_DISPATCH, [$this->sut, 'onDispatch'], 20);
 
@@ -66,7 +66,7 @@ class HeaderSearchTest extends TestCase
 
         $params = ['test' => 'value'];
 
-        $mockForm = new \Zend\Form\Form();
+        $mockForm = new \Laminas\Form\Form();
 
         $this->mockSearchSrv
             ->shouldReceive('setIndex')->with($index)
@@ -102,8 +102,8 @@ class HeaderSearchTest extends TestCase
 
         $this->mockViewHlprMngr->shouldReceive('get')->with('placeholder')->andReturn($placeholder);
 
-        /** @var \Zend\Mvc\MvcEvent | m\MockInterface $mockEvent */
-        $mockEvent = m::mock(\Zend\Mvc\MvcEvent::class);
+        /** @var \Laminas\Mvc\MvcEvent | m\MockInterface $mockEvent */
+        $mockEvent = m::mock(\Laminas\Mvc\MvcEvent::class);
         $mockEvent->shouldReceive('getRouteMatch')->andReturnSelf();
         $mockEvent->shouldReceive('getParams')->andReturn($params);
         $mockEvent->shouldReceive('getParam')->with('index')->andReturn($index);

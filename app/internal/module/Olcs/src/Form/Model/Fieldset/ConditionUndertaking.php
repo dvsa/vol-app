@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("condition-undertaking")
@@ -45,8 +45,8 @@ class ConditionUndertaking extends CaseBase
      *     "label": "Description"
      * })
      * @Form\Type("TextArea")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":5,"max":"8000"}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":5,"max":"8000"}})
      */
     public $notes = null;
 
@@ -72,7 +72,7 @@ class ConditionUndertaking extends CaseBase
      *     "empty_option": "Please Select",
      *     "disable_inarray_validator": true
      * })
-     * @Form\Type("\Zend\Form\Element\Select")
+     * @Form\Type("\Laminas\Form\Element\Select")
      */
     public $attachedTo = null;
 }

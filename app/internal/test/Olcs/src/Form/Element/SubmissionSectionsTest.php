@@ -38,11 +38,11 @@ class SubmissionSectionsTest extends TestCase
         ];
         $sut = new SubmissionSections();
 
-        $mockSelect = m::mock('Zend\Form\Element\Select');
+        $mockSelect = m::mock('Laminas\Form\Element\Select');
         $mockSelect->shouldReceive('setValue')->with($data['submissionType']);
         $sut->setSubmissionType($mockSelect);
 
-        $mockMultiCheckbox = m::mock('Zend\Form\Element\MultiCheckbox');
+        $mockMultiCheckbox = m::mock('Laminas\Form\Element\MultiCheckbox');
         $mockMultiCheckbox->shouldReceive('setValue')->with(m::type('array'));
         $mockMultiCheckbox->shouldReceive('getValueOptions')->andReturn(['operating-centres' => 'Operating centres']);
         $mockMultiCheckbox->shouldReceive('setValueOptions');
@@ -66,18 +66,18 @@ class SubmissionSectionsTest extends TestCase
 
         $sut = new SubmissionSections();
 
-        $mockSelect = m::mock('Zend\Form\Element\Select');
+        $mockSelect = m::mock('Laminas\Form\Element\Select');
         $mockSelect->shouldReceive('setName')->with($name . '[submissionType]');
 
         $sut->setSubmissionType($mockSelect);
 
-        $mockTm = m::mock('Zend\Form\Element\Hidden');
+        $mockTm = m::mock('Laminas\Form\Element\Hidden');
         $mockTm->shouldReceive('setName')->with($name . '[transportManager]');
         $mockTm->shouldReceive('getValue')->andReturnNull();
 
         $sut->setTransportManager($mockTm);
 
-        $mockMultiCheckbox = m::mock('Zend\Form\Element\MultiCheckbox');
+        $mockMultiCheckbox = m::mock('Laminas\Form\Element\MultiCheckbox');
         $mockMultiCheckbox->shouldReceive(
             'getValueOptions'
         )->andReturn(
@@ -96,14 +96,14 @@ class SubmissionSectionsTest extends TestCase
 
         $sut->setSections($mockMultiCheckbox);
 
-        $mockSubmitButton = m::mock('Zend\Form\Element\Button');
+        $mockSubmitButton = m::mock('Laminas\Form\Element\Button');
         $mockSubmitButton->shouldReceive('setName')->with($name . '[submissionTypeSubmit]');
 
         $sut->setSubmissionTypeSubmit($mockSubmitButton);
 
         $sut->setName($name);
 
-        $mockForm = new \Zend\Form\Form();
+        $mockForm = new \Laminas\Form\Form();
 
         $sut->prepareElement($mockForm);
 
@@ -121,18 +121,18 @@ class SubmissionSectionsTest extends TestCase
 
         $sut = new SubmissionSections();
 
-        $mockSelect = m::mock('Zend\Form\Element\Select');
+        $mockSelect = m::mock('Laminas\Form\Element\Select');
         $mockSelect->shouldReceive('setName')->with($name . '[submissionType]');
 
         $sut->setSubmissionType($mockSelect);
 
-        $mockTm = m::mock('Zend\Form\Element\Hidden');
+        $mockTm = m::mock('Laminas\Form\Element\Hidden');
         $mockTm->shouldReceive('setName')->with($name . '[transportManager]');
         $mockTm->shouldReceive('getValue')->andReturn($transportManagerId);
 
         $sut->setTransportManager($mockTm);
 
-        $mockMultiCheckbox = m::mock('Zend\Form\Element\MultiCheckbox');
+        $mockMultiCheckbox = m::mock('Laminas\Form\Element\MultiCheckbox');
         $mockMultiCheckbox->shouldReceive(
             'getValueOptions'
         )->andReturn(
@@ -150,14 +150,14 @@ class SubmissionSectionsTest extends TestCase
 
         $sut->setSections($mockMultiCheckbox);
 
-        $mockSubmitButton = m::mock('Zend\Form\Element\Button');
+        $mockSubmitButton = m::mock('Laminas\Form\Element\Button');
         $mockSubmitButton->shouldReceive('setName')->with($name . '[submissionTypeSubmit]');
 
         $sut->setSubmissionTypeSubmit($mockSubmitButton);
 
         $sut->setName($name);
 
-        $mockForm = new \Zend\Form\Form();
+        $mockForm = new \Laminas\Form\Form();
 
         $sut->prepareElement($mockForm);
 

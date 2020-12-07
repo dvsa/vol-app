@@ -9,7 +9,7 @@ use Dvsa\Olcs\Transfer\Query\Cases\Pi\ReportList as ListDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Admin\Form\Model\Form\PiReportFilter as FilterForm;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * PI Report Controller
@@ -71,7 +71,7 @@ class PiReportController extends AbstractInternalController implements LeftViewP
      */
     private function setFilterDefaults()
     {
-        /* @var $request \Zend\Http\Request */
+        /* @var $request \Laminas\Http\Request */
         $request = $this->getRequest();
 
         $eomDate = $this->getServiceLocator()->get('Helper\Date')->getDate('Y-m-t');

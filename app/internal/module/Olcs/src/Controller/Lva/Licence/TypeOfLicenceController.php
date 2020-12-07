@@ -26,7 +26,7 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController implements
     /**
      * indexAction
      *
-     * @return \Zend\Http\Response|\Common\View\Model\Section
+     * @return \Laminas\Http\Response|\Common\View\Model\Section
      */
     public function indexAction()
     {

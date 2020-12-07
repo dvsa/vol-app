@@ -3,7 +3,7 @@
 namespace Olcs\Data\Mapper;
 
 use Common\Data\Mapper\MapperInterface;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 
 /**
  * Class IrhpWithdraw

@@ -119,7 +119,7 @@ class BusServiceController extends AbstractInternalController implements BusRegC
         }
 
         if ($busReg['isCancelled'] || $busReg['isCancellation']) {
-            /** @var \Zend\Form\Fieldset $timetable */
+            /** @var \Laminas\Form\Fieldset $timetable */
             $timetable = $form->get('timetable');
             $timetable->remove('timetableAcceptable');
             $timetable->remove('mapSupplied');
