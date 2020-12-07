@@ -3,7 +3,7 @@ var OLCS = OLCS || {};
 /**
  * Add multiple
  *
- * Uses the Zend method for form collections, using the template generated instead of
+ * Uses the Laminas method for form collections, using the template generated instead of
  * just duplicating the fieldset as 'addAnother' does
  */
 OLCS.addMultiple = (function (document, $) {
