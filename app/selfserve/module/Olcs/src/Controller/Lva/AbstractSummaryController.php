@@ -8,7 +8,7 @@
 namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractController;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Application\Summary as Qry;
 

@@ -6,15 +6,15 @@ use Common\Service\Helper\FormHelperService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\ApplicationConvictionsPenalties;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 use Common\Form\Model\Form\Lva\Fieldset\ConvictionsPenaltiesData;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Form\Model\Form\Lva\Fieldset\ConvictionsPenaltiesReadMoreLink;
 use Common\Form\Elements\InputFilters\ActionLink;
 use Common\FormService\FormServiceManager;
-use Zend\Form\Element;
-use Zend\Di\ServiceLocator;
+use Laminas\Form\Element;
+use Laminas\Di\ServiceLocator;
 
 /**
  * Application Convictions and Penalties Form Test

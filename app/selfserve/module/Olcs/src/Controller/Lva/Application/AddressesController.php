@@ -4,7 +4,7 @@ namespace Olcs\Controller\Lva\Application;
 
 use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 
 /**
  * External Application Addresses Controller

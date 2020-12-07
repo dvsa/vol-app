@@ -10,8 +10,8 @@ use Dvsa\Olcs\Transfer\Query\Application\People;
 use Olcs\Controller\Lva\Adapters\VariationPeopleAdapter;
 use Olcs\Controller\Lva\Traits\VariationWizardPageFormActionsTrait;
 use Olcs\Controller\Lva\Traits\VariationWizardPageWithSubsequentPageControllerTrait;
-use Zend\Http\Request;
-use Zend\Http\Response;
+use Laminas\Http\Request;
+use Laminas\Http\Response;
 
 /**
  * Director Change Variation People Controller
@@ -99,7 +99,7 @@ class PeopleController extends AbstractController implements AdapterAwareInterfa
     /**
      * Handle addition of People to a director change variation
      *
-     * @return array|Response|\Zend\View\Model\ViewModel
+     * @return array|Response|\Laminas\View\Model\ViewModel
      */
     public function indexAction()
     {

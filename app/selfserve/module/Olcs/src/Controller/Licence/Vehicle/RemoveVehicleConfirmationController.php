@@ -21,7 +21,7 @@ class RemoveVehicleConfirmationController extends AbstractVehicleController
     ];
 
     /**
-     * @return \Zend\Http\Response|\Zend\View\Model\ViewModel
+     * @return \Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */
     public function indexAction()
     {
@@ -40,7 +40,7 @@ class RemoveVehicleConfirmationController extends AbstractVehicleController
     }
 
     /**
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      * @throws \Exception
      */
     public function postAction()

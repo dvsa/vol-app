@@ -21,8 +21,8 @@ use Permits\Controller\Config\Params\ParamsConfig;
 use Permits\Controller\Config\Table\TableConfig;
 use Permits\Data\Mapper\IrhpApplicationFeeSummary;
 use Permits\View\Helper\IrhpApplicationSection;
-use Zend\Http\Response as HttpResponse;
-use Zend\View\Model\ViewModel;
+use Laminas\Http\Response as HttpResponse;
+use Laminas\View\Model\ViewModel;
 
 class IrhpApplicationFeeController extends AbstractSelfserveController
 {
@@ -101,7 +101,7 @@ class IrhpApplicationFeeController extends AbstractSelfserveController
     }
 
     /**
-     * @return \Zend\Http\Response|ViewModel
+     * @return \Laminas\Http\Response|ViewModel
      */
     public function paymentAction()
     {

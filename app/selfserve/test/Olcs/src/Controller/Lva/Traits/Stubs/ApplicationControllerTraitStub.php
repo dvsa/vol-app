@@ -3,7 +3,7 @@
 namespace OlcsTest\Controller\Lva\Traits\Stubs;
 
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
-use Zend\Mvc\Controller\AbstractActionController;
+use Laminas\Mvc\Controller\AbstractActionController;
 
 /**
  * Application Controller Trait Stub

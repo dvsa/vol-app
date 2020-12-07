@@ -7,10 +7,10 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Service\Qa\ViewGenerator\IrhpPermitApplicationViewGenerator;
 use Permits\View\Helper\IrhpApplicationSection;
 use RuntimeException;
-use Zend\Http\Response;
-use Zend\Mvc\Controller\Plugin\Redirect;
-use Zend\Mvc\MvcEvent;
-use Zend\Mvc\Router\Http\RouteMatch;
+use Laminas\Http\Response;
+use Laminas\Mvc\Controller\Plugin\Redirect;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Mvc\Router\Http\RouteMatch;
 
 class IrhpPermitApplicationViewGeneratorTest extends MockeryTestCase
 {

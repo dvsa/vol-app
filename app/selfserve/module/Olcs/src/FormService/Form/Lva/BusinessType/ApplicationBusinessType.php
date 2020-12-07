@@ -3,7 +3,7 @@
 namespace Olcs\FormService\Form\Lva\BusinessType;
 
 use Common\FormService\Form\Lva\BusinessType\ApplicationBusinessType as CommonApplicationBusinessType;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
 
 /**

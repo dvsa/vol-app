@@ -2,13 +2,13 @@
 
 namespace Olcs\Controller\Listener;
 
-use Zend\EventManager\EventManagerInterface;
-use Zend\EventManager\ListenerAggregateInterface;
-use Zend\EventManager\ListenerAggregateTrait;
-use Zend\Http\Header\Referer as HttpReferer;
-use Zend\Http\PhpEnvironment\Request as HttpRequest;
-use Zend\Mvc\MvcEvent;
-use Zend\Navigation\Navigation as ZendNavigation;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\EventManager\ListenerAggregateInterface;
+use Laminas\EventManager\ListenerAggregateTrait;
+use Laminas\Http\Header\Referer as HttpReferer;
+use Laminas\Http\PhpEnvironment\Request as HttpRequest;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Navigation\Navigation as ZendNavigation;
 use Common\Service\Cqrs\Query\QuerySender;
 use Common\Rbac\User as RbacUser;
 use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;

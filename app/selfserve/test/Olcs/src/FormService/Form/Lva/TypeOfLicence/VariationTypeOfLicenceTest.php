@@ -6,9 +6,9 @@ use Common\Service\Helper\FormHelperService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\TypeOfLicence\VariationTypeOfLicence;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 use Common\FormService\FormServiceManager;
-use Zend\Form\Element;
+use Laminas\Form\Element;
 use Common\RefData;
 use Common\Form\Elements\InputFilters\Lva\BackToVariationActionLink;
 
@@ -215,4 +215,3 @@ class VariationTypeOfLicenceTest extends MockeryTestCase
         }
     }
 }
-

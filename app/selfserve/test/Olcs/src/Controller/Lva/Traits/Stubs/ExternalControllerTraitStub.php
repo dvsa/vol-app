@@ -8,7 +8,7 @@
 namespace OlcsTest\Controller\Lva\Traits\Stubs;
 
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
-use Zend\Mvc\Controller\AbstractActionController;
+use Laminas\Mvc\Controller\AbstractActionController;
 
 /**
  * External Controller Trait Stub

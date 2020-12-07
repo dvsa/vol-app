@@ -8,7 +8,7 @@ use Olcs\Service\Cookie\AcceptAllSetCookieGenerator;
 use Olcs\Service\Cookie\Preferences;
 use Olcs\Service\Cookie\PreferencesFactory;
 use Olcs\Service\Cookie\PreferencesSetCookieGenerator;
-use Zend\Http\Header\SetCookie;
+use Laminas\Http\Header\SetCookie;
 
 class AcceptAllSetCookieGeneratorTest extends MockeryTestCase
 {

@@ -3,7 +3,7 @@
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\CommonLicenceTrailers as CommonLicenceTrailers;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 use Common\Service\Table\TableBuilder;
 
 /**

@@ -13,15 +13,15 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Mvc\CookieBannerListener;
 use Olcs\Service\Cookie\AcceptAllSetCookieGenerator;
 use Olcs\Service\Cookie\BannerVisibilityProvider;
-use Zend\EventManager\EventManagerInterface;
-use Zend\Http\Header\SetCookie;
-use Zend\Http\Headers;
-use Zend\Http\Request;
-use Zend\Http\Response;
-use Zend\Mvc\MvcEvent;
-use Zend\Mvc\Router\Http\RouteMatch;
-use Zend\View\Helper\Placeholder;
-use Zend\View\Helper\Placeholder\Container\AbstractContainer;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\Http\Header\SetCookie;
+use Laminas\Http\Headers;
+use Laminas\Http\Request;
+use Laminas\Http\Response;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Mvc\Router\Http\RouteMatch;
+use Laminas\View\Helper\Placeholder;
+use Laminas\View\Helper\Placeholder\Container\AbstractContainer;
 
 /**
  * Cookie Banner Listener Test

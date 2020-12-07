@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Form\Surrender\CurrentDiscs\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 class LostInfo
 {
@@ -65,7 +65,7 @@ class LostInfo
      *     "class": "govuk-textarea",
      *     "rows": "5"
      * })
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator({
      *      "name": "ValidateIf",
      *      "options": {
@@ -74,7 +74,7 @@ class LostInfo
      *          "inject_post_data": "lostSection->lost",
      *          "validators": {
      *              {
-     *                  "name": "Zend\Validator\StringLength",
+     *                  "name": "Laminas\Validator\StringLength",
      *                  "options": {
      *                      "min": 1,
      *                      "max": 500,

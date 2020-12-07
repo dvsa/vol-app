@@ -9,10 +9,10 @@ use Common\Service\Table\TableBuilder;
 use OlcsTest\Bootstrap;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Zend\Form\Element;
-use Zend\Form\Fieldset;
-use Zend\Form\Form;
-use Zend\Http\Request;
+use Laminas\Form\Element;
+use Laminas\Form\Fieldset;
+use Laminas\Form\Form;
+use Laminas\Http\Request;
 use Common\Service\Helper\FormHelperService;
 
 /**

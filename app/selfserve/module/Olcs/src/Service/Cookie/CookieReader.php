@@ -3,7 +3,7 @@
 namespace Olcs\Service\Cookie;
 
 use RuntimeException;
-use Zend\Http\Header\Cookie;
+use Laminas\Http\Header\Cookie;
 
 class CookieReader
 {

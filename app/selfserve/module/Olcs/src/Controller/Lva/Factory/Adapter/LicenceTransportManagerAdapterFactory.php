@@ -3,12 +3,12 @@
 namespace Olcs\Controller\Lva\Factory\Adapter;
 
 use Olcs\Controller\Lva\Adapters\LicenceTransportManagerAdapter;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Factory for creation Licence Transport Manager Adapter
- * 
+ *
  * @author Dmitry Golubev <dmitrij.golubev@valtech.co.uk>
  */
 class LicenceTransportManagerAdapterFactory implements FactoryInterface

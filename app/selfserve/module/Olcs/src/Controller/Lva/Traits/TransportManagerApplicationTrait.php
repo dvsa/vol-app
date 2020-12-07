@@ -3,7 +3,7 @@
 namespace Olcs\Controller\Lva\Traits;
 
 use Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetDetails;
-use Zend\Mvc\MvcEvent;
+use Laminas\Mvc\MvcEvent;
 use Dvsa\Olcs\Transfer\Command;
 use Common\RefData;
 

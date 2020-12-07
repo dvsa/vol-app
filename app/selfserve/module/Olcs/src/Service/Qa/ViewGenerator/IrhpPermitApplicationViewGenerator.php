@@ -4,8 +4,8 @@ namespace Olcs\Service\Qa\ViewGenerator;
 
 use Permits\View\Helper\IrhpApplicationSection;
 use RuntimeException;
-use Zend\Mvc\Controller\Plugin\Redirect;
-use Zend\Mvc\MvcEvent;
+use Laminas\Mvc\Controller\Plugin\Redirect;
+use Laminas\Mvc\MvcEvent;
 
 class IrhpPermitApplicationViewGenerator implements ViewGeneratorInterface
 {

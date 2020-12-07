@@ -5,7 +5,7 @@ namespace Olcs\Controller\BusReg;
 use Common\Controller\Lva\AbstractController;
 use Common\Rbac\User;
 use Dvsa\Olcs\Transfer\Query\BusRegSearchView\BusRegSearchViewList as ListDto;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Class BusRegRegistrationsController
@@ -15,11 +15,11 @@ class BusRegRegistrationsController extends AbstractController
     /**
      * Lists all Bus Reg's with filter search form
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function indexAction()
     {
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $postData = $request->getPost();
@@ -108,7 +108,7 @@ class BusRegRegistrationsController extends AbstractController
     /**
      * Process the search, simply sets up the GET params and redirects
      * @param $data
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     private function processSearch($data)
     {
@@ -130,11 +130,11 @@ class BusRegRegistrationsController extends AbstractController
      *
      * @param null $title
      * @param null $subtitle
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     private function generateLayout($data = [])
     {
-        $layout = new \Zend\View\Model\ViewModel(
+        $layout = new \Laminas\View\Model\ViewModel(
             $data
         );
 

@@ -1,7 +1,7 @@
 <?php
 namespace Permits\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
@@ -16,7 +16,7 @@ class CancelButton
      *     "id":"cancelbutton",
      *     "value":"permits.form.cancel_application.button",
      * })
-     * @Form\Type("Zend\Form\Element\Submit")
+     * @Form\Type("Laminas\Form\Element\Submit")
      */
     public $cancel = null;
 }

@@ -7,8 +7,8 @@ use Common\Service\Cqrs\Query\QuerySender;
 use Mockery as m;
 use Olcs\Controller\Listener\Navigation as NavigationListener;
 use Olcs\Controller\Listener\NavigationFactory;
-use Zend\Navigation\Navigation as ZendNavigation;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\Navigation\Navigation as ZendNavigation;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use ZfcRbac\Service\AuthorizationService;
 
 /**

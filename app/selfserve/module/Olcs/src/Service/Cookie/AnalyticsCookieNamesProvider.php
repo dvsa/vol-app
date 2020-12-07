@@ -2,7 +2,7 @@
 
 namespace Olcs\Service\Cookie;
 
-use Zend\Http\Header\Cookie;
+use Laminas\Http\Header\Cookie;
 
 class AnalyticsCookieNamesProvider implements CookieNamesProviderInterface
 {

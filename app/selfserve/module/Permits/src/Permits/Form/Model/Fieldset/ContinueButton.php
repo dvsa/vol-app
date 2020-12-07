@@ -1,7 +1,7 @@
 <?php
 namespace Permits\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
@@ -16,7 +16,7 @@ class ContinueButton
      *     "id":"submit-continue-button",
      *     "value":"permits.button.continue"
      * })
-     * @Form\Type("Zend\Form\Element\Submit")
+     * @Form\Type("Laminas\Form\Element\Submit")
      */
     public $submit = null;
 }

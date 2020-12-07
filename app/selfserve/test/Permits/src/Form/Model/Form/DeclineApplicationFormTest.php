@@ -3,7 +3,7 @@
 namespace PermitsTest\Form\Model\Form;
 
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
-use Zend\Validator;
+use Laminas\Validator;
 
 /**
  * Class DeclineApplicationFormTest
@@ -34,6 +34,6 @@ class DeclineApplicationFormTest extends AbstractFormValidationTestCase
     {
         $element = ['Submit', 'SubmitButton'];
         $this->assertFormElementActionButton($element);
-        $this->assertFormElementType($element, "Zend\Form\Element\Submit");
+        $this->assertFormElementType($element, "Laminas\Form\Element\Submit");
     }
 }

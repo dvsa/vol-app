@@ -7,7 +7,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Service\Cookie\CookieNamesProviderInterface;
 use Olcs\Service\Cookie\DeleteCookieNamesProvider;
 use Olcs\Service\Cookie\Preferences;
-use Zend\Http\Header\Cookie;
+use Laminas\Http\Header\Cookie;
 
 class DeleteCookieNamesProviderTest extends MockeryTestCase
 {

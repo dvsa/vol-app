@@ -2,7 +2,7 @@
 
 namespace Olcs\Service\Cookie;
 
-use Zend\Http\Header\SetCookie;
+use Laminas\Http\Header\SetCookie;
 
 class DeleteSetCookieGenerator
 {

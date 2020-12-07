@@ -4,10 +4,10 @@ namespace OlcsTest;
 
 use Common\Service\Translator\TranslationLoader;
 use Olcs\Logging\Log\Logger;
-use Zend\I18n\Translator\LoaderPluginManager;
-use Zend\Mvc\Service\ServiceManagerConfig;
-use Zend\ServiceManager\ServiceManager;
-use Zend\Di\Di;
+use Laminas\I18n\Translator\LoaderPluginManager;
+use Laminas\Mvc\Service\ServiceManagerConfig;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\Di\Di;
 use Mockery as m;
 
 error_reporting(E_ALL & ~E_USER_DEPRECATED);
@@ -43,16 +43,16 @@ class Bootstrap
         $di = new Di();
 
         $di->instanceManager()->addTypePreference(
-            'Zend\ServiceManager\ServiceLocatorInterface',
-            'Zend\ServiceManager\ServiceManager'
+            'Laminas\ServiceManager\ServiceLocatorInterface',
+            'Laminas\ServiceManager\ServiceManager'
         );
         $di->instanceManager()->addTypePreference(
-            'Zend\EventManager\EventManagerInterface',
-            'Zend\EventManager\EventManager'
+            'Laminas\EventManager\EventManagerInterface',
+            'Laminas\EventManager\EventManager'
         );
         $di->instanceManager()->addTypePreference(
-            'Zend\EventManager\SharedEventManagerInterface',
-            'Zend\EventManager\SharedEventManager'
+            'Laminas\EventManager\SharedEventManagerInterface',
+            'Laminas\EventManager\SharedEventManager'
         );
 
         self::$di = $di;
@@ -62,8 +62,8 @@ class Bootstrap
 
     public static function setupLogger()
     {
-        $logWriter = new \Zend\Log\Writer\Mock();
-        $logger = new \Zend\Log\Logger();
+        $logWriter = new \Laminas\Log\Writer\Mock();
+        $logger = new \Laminas\Log\Logger();
         $logger->addWriter($logWriter);
 
         Logger::setLogger($logger);
@@ -72,11 +72,11 @@ class Bootstrap
     /**
      * Changed this method to return a mock
      *
-     * @return \Zend\ServiceManager\ServiceManager
+     * @return \Laminas\ServiceManager\ServiceManager
      */
     public static function getServiceManager()
     {
-        $sm = m::mock('\Zend\ServiceManager\ServiceManager')
+        $sm = m::mock('\Laminas\ServiceManager\ServiceManager')
             ->makePartial()
             ->setAllowOverride(true);
 
@@ -89,7 +89,7 @@ class Bootstrap
     /**
      * Added this method for backwards compatibility
      *
-     * @return \Zend\ServiceManager\ServiceManager
+     * @return \Laminas\ServiceManager\ServiceManager
      */
     public static function getRealServiceManager()
     {

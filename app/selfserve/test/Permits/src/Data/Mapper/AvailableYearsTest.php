@@ -10,7 +10,7 @@ use Permits\Data\Mapper\AvailableYears;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Mockery as m;
 use RuntimeException;
-use Zend\Form\Element\Hidden;
+use Laminas\Form\Element\Hidden;
 
 /**
  * AvailableYearsTest

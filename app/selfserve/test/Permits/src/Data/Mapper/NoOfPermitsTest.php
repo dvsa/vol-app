@@ -9,7 +9,7 @@ use Permits\Controller\Config\DataSource\IrhpApplication as IrhpApplicationDataS
 use Permits\Controller\Config\DataSource\IrhpFeePerPermit as IrhpFeePerPermitDataSource;
 use Permits\Controller\Config\DataSource\IrhpMaxStockPermits as IrhpMaxStockPermitsDataSource;
 use Permits\Data\Mapper\NoOfPermits;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 
 /**
  * NoOfPermitsTest

@@ -24,7 +24,7 @@ abstract class AbstractUndertakingsController extends AbstractController
     /**
      * Index action
      *
-     * @return \Common\View\Model\Section|\Zend\Http\Response
+     * @return \Common\View\Model\Section|\Laminas\Http\Response
      */
     public function indexAction()
     {
@@ -101,7 +101,7 @@ abstract class AbstractUndertakingsController extends AbstractController
     /**
      * Go to the next step
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     protected function goToNextStep()
     {

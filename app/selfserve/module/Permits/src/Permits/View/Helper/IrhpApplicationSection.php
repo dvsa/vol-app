@@ -3,8 +3,8 @@
 namespace Permits\View\Helper;
 
 use Common\RefData;
-use Zend\View\Helper\AbstractHelper;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Helper\AbstractHelper;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Generate an IRHP application section list

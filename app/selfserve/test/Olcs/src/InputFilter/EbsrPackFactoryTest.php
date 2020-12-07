@@ -14,15 +14,15 @@ class EbsrPackFactoryTest extends MockeryTestCase
 {
     public function testCreateService()
     {
-        $mockValidator = m::mock('\Zend\Validator\AbstractValidator');
+        $mockValidator = m::mock('\Laminas\Validator\AbstractValidator');
         $mockValidator->shouldReceive('setOptions');
-        $mockSL = m::mock('\Zend\ServiceManager\ServiceLocatorInterface');
+        $mockSL = m::mock('\Laminas\ServiceManager\ServiceLocatorInterface');
         $mockSL->shouldReceive('get->get')->andReturn($mockValidator);
 
         $sut = new EbsrPackFactory();
 
         $service = $sut->createService($mockSL);
 
-        $this->assertInstanceOf('\Zend\InputFilter\Input', $service);
+        $this->assertInstanceOf('\Laminas\InputFilter\Input', $service);
     }
 }

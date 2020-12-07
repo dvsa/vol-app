@@ -2,7 +2,7 @@
 
 namespace Olcs\FormService\Form\Lva;
 
-use Zend\Form\Form;
+use Laminas\Form\Form;
 use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
 use Common\FormService\Form\Lva\ApplicationGoodsVehicles as CommonGoodsVehicles;
 

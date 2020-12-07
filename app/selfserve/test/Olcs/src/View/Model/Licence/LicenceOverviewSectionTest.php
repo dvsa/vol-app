@@ -33,7 +33,7 @@ class LicenceOverviewSectionTest extends MockeryTestCase
 
         $viewModel = new LicenceOverviewSection($ref, $data);
         $this->assertEquals('section.name.people.org_t_llp', $viewModel->getVariable('name'));
-        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $viewModel);
+        $this->assertInstanceOf('\Laminas\View\Model\ViewModel', $viewModel);
         $this->assertEquals($ref, $viewModel->getVariable('anchorRef'));
     }
 }

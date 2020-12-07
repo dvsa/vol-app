@@ -3,7 +3,7 @@
 namespace Olcs\Service\Qa;
 
 use Common\Form\QaForm;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class FormFactory
 {

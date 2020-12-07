@@ -2,9 +2,9 @@
 
 namespace Olcs\Form\Element;
 
-use Zend\Form\Element\Radio;
-use Zend\Form\Fieldset;
-use Zend\Form\Element\Select;
+use Laminas\Form\Element\Radio;
+use Laminas\Form\Fieldset;
+use Laminas\Form\Element\Select;
 use Common\Service\Data\Search\Search as SearchService;
 use Common\Service\Data\Search\SearchAwareTrait as SearchAwareTrait;
 
@@ -26,7 +26,7 @@ class SearchOrderFieldset extends Fieldset
         $orderOptions = $this->getSearchService()->getOrderOptions();
 
         if (!empty($orderOptions)) {
-            /** @var \Zend\Form\Element\Select $select */
+            /** @var \Laminas\Form\Element\Select $select */
             $select = new Select();
             $select->setName('order');
             $select->setLabel('Order by');

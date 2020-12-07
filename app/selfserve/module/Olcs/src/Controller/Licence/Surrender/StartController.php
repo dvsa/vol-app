@@ -9,10 +9,10 @@ use Dvsa\Olcs\Transfer\Command\Surrender\Create;
 use Olcs\Controller\AbstractSelfserveController;
 use Olcs\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
-use Zend\Http\Response;
-use Zend\I18n\Translator\Translator;
-use Zend\Mvc\MvcEvent;
-use Zend\View\Helper\FlashMessenger;
+use Laminas\Http\Response;
+use Laminas\I18n\Translator\Translator;
+use Laminas\Mvc\MvcEvent;
+use Laminas\View\Helper\FlashMessenger;
 
 class StartController extends AbstractSelfserveController implements ToggleAwareInterface
 {
@@ -47,7 +47,7 @@ class StartController extends AbstractSelfserveController implements ToggleAware
     /**
      * IndexAction
      *
-     * @return array|\Zend\View\Model\ViewModel
+     * @return array|\Laminas\View\Model\ViewModel
      */
     public function indexAction()
     {
@@ -58,7 +58,7 @@ class StartController extends AbstractSelfserveController implements ToggleAware
     /**
      * startAction
      *
-     * @return \Zend\View\Model\ViewModel | Response
+     * @return \Laminas\View\Model\ViewModel | Response
      */
     public function startAction()
     {
@@ -110,9 +110,9 @@ class StartController extends AbstractSelfserveController implements ToggleAware
      * @param Licence    $licence
      * @param Translator $translateService
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
-    private function getView($licence, $translateService): \Zend\View\Model\ViewModel
+    private function getView($licence, $translateService): \Laminas\View\Model\ViewModel
     {
         $view = $this->genericView();
 

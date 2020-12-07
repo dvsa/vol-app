@@ -8,7 +8,7 @@ use Common\RefData;
 use Common\Service\Helper\TranslationHelperService;
 use Permits\Controller\Config\DataSource\AvailableYears as AvailableYearsDataSource;
 use RuntimeException;
-use Zend\Form\Element\Hidden;
+use Laminas\Form\Element\Hidden;
 
 /**
  * Available years mapper

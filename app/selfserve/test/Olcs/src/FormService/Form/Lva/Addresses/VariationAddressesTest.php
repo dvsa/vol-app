@@ -6,7 +6,7 @@ use Common\Service\Helper\FormHelperService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\Addresses\VariationAddresses;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 
 /**

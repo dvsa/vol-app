@@ -7,8 +7,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Service\Cookie\BannerVisibilityProvider;
 use Olcs\Service\Cookie\CookieReader;
 use Olcs\Service\Cookie\CookieState;
-use Zend\Http\Header\Cookie;
-use Zend\Mvc\MvcEvent;
+use Laminas\Http\Header\Cookie;
+use Laminas\Mvc\MvcEvent;
 
 class BannerVisibilityProviderTest extends MockeryTestCase
 {

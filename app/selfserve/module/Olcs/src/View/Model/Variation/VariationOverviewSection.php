@@ -21,7 +21,7 @@ class VariationOverviewSection extends LvaOverviewSection
     public function __construct($ref, $data, $sectionDetails)
     {
         // @NOTE Can we replace this with UnderscoreToCamelCase
-        $filter = new \Zend\Filter\Word\DashToCamelCase();
+        $filter = new \Laminas\Filter\Word\DashToCamelCase();
         $index = lcfirst($filter->filter(str_replace('_', '-', $ref)));
 
         switch ($sectionDetails['status']) {

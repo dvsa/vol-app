@@ -2,9 +2,9 @@
 
 namespace Olcs\Service\Qa\ViewGenerator;
 
-use Zend\Http\Response;
-use Zend\Mvc\Controller\Plugin\Redirect;
-use Zend\Mvc\MvcEvent;
+use Laminas\Http\Response;
+use Laminas\Mvc\Controller\Plugin\Redirect;
+use Laminas\Mvc\MvcEvent;
 
 interface ViewGeneratorInterface
 {

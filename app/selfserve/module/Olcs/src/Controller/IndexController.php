@@ -17,7 +17,7 @@ class IndexController extends AbstractController
     /**
      * Index action
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function indexAction()
     {

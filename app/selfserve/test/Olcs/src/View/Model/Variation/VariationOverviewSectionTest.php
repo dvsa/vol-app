@@ -37,7 +37,7 @@ class VariationOverviewSectionTest extends MockeryTestCase
 
         $viewModel = new VariationOverviewSection($ref, $data, $sectionDetails);
 
-        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $viewModel);
+        $this->assertInstanceOf('\Laminas\View\Model\ViewModel', $viewModel);
         $this->assertEquals('section.name.people.org_t_llp', $viewModel->getVariable('name'));
         $this->assertEquals('orange', $viewModel->getVariable('statusColour'));
         $this->assertEquals('REQUIRES ATTENTION', $viewModel->getVariable('status'));
@@ -65,7 +65,7 @@ class VariationOverviewSectionTest extends MockeryTestCase
 
         $viewModel = new VariationOverviewSection($ref, $data, $sectionDetails);
 
-        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $viewModel);
+        $this->assertInstanceOf('\Laminas\View\Model\ViewModel', $viewModel);
 
         $this->assertEquals('green', $viewModel->getVariable('statusColour'));
         $this->assertEquals('UPDATED', $viewModel->getVariable('status'));
@@ -92,7 +92,7 @@ class VariationOverviewSectionTest extends MockeryTestCase
 
         $viewModel = new VariationOverviewSection($ref, $data, $sectionDetails);
 
-        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $viewModel);
+        $this->assertInstanceOf('\Laminas\View\Model\ViewModel', $viewModel);
 
         $this->assertEquals('', $viewModel->getVariable('statusColour'));
         $this->assertEquals('', $viewModel->getVariable('status'));
@@ -119,7 +119,7 @@ class VariationOverviewSectionTest extends MockeryTestCase
 
         $viewModel = new VariationOverviewSection($ref, $data, $sectionDetails);
 
-        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $viewModel);
+        $this->assertInstanceOf('\Laminas\View\Model\ViewModel', $viewModel);
 
         $this->assertEquals('', $viewModel->getVariable('statusColour'));
         $this->assertEquals('', $viewModel->getVariable('status'));

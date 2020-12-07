@@ -10,13 +10,13 @@ namespace Olcs\Mvc;
 use Common\Service\Helper\UrlHelperService;
 use Olcs\Service\Cookie\AcceptAllSetCookieGenerator;
 use Olcs\Service\Cookie\BannerVisibilityProvider;
-use Zend\EventManager\EventManagerInterface;
-use Zend\EventManager\ListenerAggregateInterface;
-use Zend\EventManager\ListenerAggregateTrait;
-use Zend\Http\Request as HttpRequest;
-use Zend\Mvc\MvcEvent;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\View\Helper\Placeholder;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\EventManager\ListenerAggregateInterface;
+use Laminas\EventManager\ListenerAggregateTrait;
+use Laminas\Http\Request as HttpRequest;
+use Laminas\Mvc\MvcEvent;
+use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\View\Helper\Placeholder;
 
 /**
  * Cookie Banner Listener

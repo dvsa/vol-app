@@ -9,8 +9,8 @@ use Olcs\Service\Cookie\DeleteSetCookieGenerator;
 use Olcs\Service\Cookie\Preferences;
 use Olcs\Service\Cookie\PreferencesSetCookieGenerator;
 use Olcs\Service\Cookie\SetCookieArrayGenerator;
-use Zend\Http\Header\Cookie;
-use Zend\Http\Header\SetCookie;
+use Laminas\Http\Header\Cookie;
+use Laminas\Http\Header\SetCookie;
 
 class SetCookieArrayGeneratorTest extends MockeryTestCase
 {

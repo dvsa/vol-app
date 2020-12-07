@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Form\Surrender\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("licence-in-possession")

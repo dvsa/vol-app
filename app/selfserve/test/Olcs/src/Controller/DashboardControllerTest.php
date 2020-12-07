@@ -25,7 +25,7 @@ class DashboardControllerTest extends MockeryTestCase
 
     protected function getServiceManager()
     {
-        return m::mock('\Zend\ServiceManager\ServiceManager')->makePartial();
+        return m::mock('\Laminas\ServiceManager\ServiceManager')->makePartial();
     }
 
     public function setUp(): void
@@ -116,7 +116,7 @@ class DashboardControllerTest extends MockeryTestCase
 
         $view = $this->sut->indexAction();
 
-        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $view);
+        $this->assertInstanceOf('\Laminas\View\Model\ViewModel', $view);
         $this->assertEquals('dashboard', $view->getTemplate());
         $this->assertEquals(['apps'], $view->getVariable('applications'));
         $this->assertEquals(['vars'], $view->getVariable('variations'));
@@ -168,7 +168,7 @@ class DashboardControllerTest extends MockeryTestCase
 
         $view = $this->sut->indexAction();
 
-        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $view);
+        $this->assertInstanceOf('\Laminas\View\Model\ViewModel', $view);
         $this->assertEquals('dashboard-tm', $view->getTemplate());
         $this->assertEquals('TABLE', $view->getVariable('applicationsTable'));
     }

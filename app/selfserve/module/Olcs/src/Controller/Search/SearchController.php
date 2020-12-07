@@ -16,8 +16,8 @@ use Olcs\Form\Element\SearchOrderFieldset;
 use Olcs\Form\Model\Form\SearchFilter as SearchFilterForm;
 use Olcs\Form\Model\Form\SearchOperator;
 use Olcs\Form\Model\Form\SimpleSearch;
-use Zend\Session\Container;
-use Zend\View\Model\ViewModel;
+use Laminas\Session\Container;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Search Controller
@@ -31,7 +31,7 @@ class SearchController extends AbstractController
      *
      * There should probably be a search box on this page I expect.
      *
-     * @return \Zend\Http\Response|ViewModel
+     * @return \Laminas\Http\Response|ViewModel
      */
     public function indexAction()
     {
@@ -44,7 +44,7 @@ class SearchController extends AbstractController
             return $view;
         }
 
-        /** @var \Zend\Form\Form $form */
+        /** @var \Laminas\Form\Form $form */
         $form = $this->getFormForIndex($index);
 
         if ($this->getRequest()->isPost()) {
@@ -181,7 +181,7 @@ class SearchController extends AbstractController
     {
         $indexPrm = $this->params()->fromRoute('index');
 
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
 
         //  get search criteria
@@ -220,7 +220,7 @@ class SearchController extends AbstractController
             $formData = $request->getQuery()->toArray();
             /** Set all filter elements not required */
             foreach ($form->getInputFilter()->get('filter')->getInputs() as $input) {
-                /* @var $input \Zend\InputFilter\Input */
+                /* @var $input \Laminas\InputFilter\Input */
                 $input->setRequired(false);
             }
             if (!empty($formData)) {
@@ -274,7 +274,7 @@ class SearchController extends AbstractController
 
         $serviceLocator = $this->getServiceLocator();
 
-        /** @var \Zend\Form\Form $form */
+        /** @var \Laminas\Form\Form $form */
         $form = $serviceLocator->get('Helper\Form')->createForm($formName);
         $serviceLocator->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
 

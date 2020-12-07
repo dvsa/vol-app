@@ -36,7 +36,7 @@ class UserRegistrationControllerTest extends TestCase
         $mockRequest->shouldReceive('isPost')->andReturn(false);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
-        $termsAgreedElement = new \Zend\Form\Element;
+        $termsAgreedElement = new \Laminas\Form\Element;
         $termsAgreedElement->setLabel('termsAgreedLabel');
 
         $mockForm = m::mock('Common\Form\Form');
@@ -82,7 +82,7 @@ class UserRegistrationControllerTest extends TestCase
 
         $view = $this->sut->addAction();
 
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $view);
+        $this->assertInstanceOf('Laminas\View\Model\ViewModel', $view);
     }
 
     public function testAddActionForPostWithCancel()
@@ -163,7 +163,7 @@ class UserRegistrationControllerTest extends TestCase
 
         $view = $this->sut->addAction();
 
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $view);
+        $this->assertInstanceOf('Laminas\View\Model\ViewModel', $view);
         $this->assertEquals('olcs/user-registration/check-email', $view->getTemplate());
     }
 
@@ -187,7 +187,7 @@ class UserRegistrationControllerTest extends TestCase
         $mockRequest->shouldReceive('isPost')->andReturn(true);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
-        $termsAgreedElement = new \Zend\Form\Element;
+        $termsAgreedElement = new \Laminas\Form\Element;
         $termsAgreedElement->setLabel('termsAgreedLabel');
 
         $mockForm = m::mock('Common\Form\Form');
@@ -248,7 +248,7 @@ class UserRegistrationControllerTest extends TestCase
 
         $view = $this->sut->addAction();
 
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $view);
+        $this->assertInstanceOf('Laminas\View\Model\ViewModel', $view);
     }
 
     public function testAddActionForPostWithLic()
@@ -333,7 +333,7 @@ class UserRegistrationControllerTest extends TestCase
 
         $view = $this->sut->addAction();
 
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $view);
+        $this->assertInstanceOf('Laminas\View\Model\ViewModel', $view);
         $this->assertEquals('olcs/user-registration/check-details', $view->getTemplate());
     }
 
@@ -370,7 +370,7 @@ class UserRegistrationControllerTest extends TestCase
         $mockRequest->shouldReceive('isPost')->andReturn(true);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
-        $termsAgreedElement = new \Zend\Form\Element;
+        $termsAgreedElement = new \Laminas\Form\Element;
         $termsAgreedElement->setLabel('termsAgreedLabel');
 
         $mockForm = m::mock('Common\Form\Form');
@@ -426,7 +426,7 @@ class UserRegistrationControllerTest extends TestCase
 
         $view = $this->sut->addAction();
 
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $view);
+        $this->assertInstanceOf('Laminas\View\Model\ViewModel', $view);
     }
 
     public function testAddActionForPostWithLicConfirmed()
@@ -494,7 +494,7 @@ class UserRegistrationControllerTest extends TestCase
 
         $view = $this->sut->addAction();
 
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $view);
+        $this->assertInstanceOf('Laminas\View\Model\ViewModel', $view);
         $this->assertEquals('olcs/user-registration/account-created', $view->getTemplate());
     }
 
@@ -531,7 +531,7 @@ class UserRegistrationControllerTest extends TestCase
         $mockRequest->shouldReceive('isPost')->andReturn(true);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
-        $termsAgreedElement = new \Zend\Form\Element;
+        $termsAgreedElement = new \Laminas\Form\Element;
         $termsAgreedElement->setLabel('termsAgreedLabel');
 
         $mockForm = m::mock('Common\Form\Form');
@@ -586,6 +586,6 @@ class UserRegistrationControllerTest extends TestCase
 
         $view = $this->sut->addAction();
 
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $view);
+        $this->assertInstanceOf('Laminas\View\Model\ViewModel', $view);
     }
 }

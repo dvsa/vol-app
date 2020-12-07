@@ -2,8 +2,8 @@
 
 namespace Olcs\Mvc\Controller\Plugin;
 
-use Zend\Mvc\Controller\Plugin\AbstractPlugin;
-use Zend\View\Helper\Placeholder as ViewPlaceholder;
+use Laminas\Mvc\Controller\Plugin\AbstractPlugin;
+use Laminas\View\Helper\Placeholder as ViewPlaceholder;
 
 /**
  * Class Placeholder

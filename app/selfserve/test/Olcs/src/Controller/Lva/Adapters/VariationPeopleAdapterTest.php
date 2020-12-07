@@ -20,25 +20,25 @@ class VariationPeopleAdapterTest extends MockeryTestCase
     /** @var  VariationPeopleAdapter | m\MockInterface */
     protected $sut;
 
-    /** @var  \Zend\Form\Form | m\MockInterface */
+    /** @var  \Laminas\Form\Form | m\MockInterface */
     protected $mockForm;
     /** @var  \Common\Service\Table\TableBuilder | m\MockInterface */
     protected $mockTbl;
-    /** @var  \Zend\ServiceManager\ServiceManager | m\MockInterface */
+    /** @var  \Laminas\ServiceManager\ServiceManager | m\MockInterface */
     protected $mockSm;
     /** @var  PeopleLvaService | m\MockInterface */
     protected $mockPplSrv;
-    /** @var  \Zend\Http\Response | m\MockInterface */
+    /** @var  \Laminas\Http\Response | m\MockInterface */
     protected $mockResp;
 
     public function setUp(): void
     {
-        $this->mockForm = m::mock(\Zend\Form\Form::class);
+        $this->mockForm = m::mock(\Laminas\Form\Form::class);
         $this->mockTbl = m::mock(\Common\Service\Table\TableBuilder::class);
 
         $this->mockPplSrv = m::mock(PeopleLvaService::class);
 
-        $this->mockSm = m::mock(\Zend\ServiceManager\ServiceManager::class)->makePartial();
+        $this->mockSm = m::mock(\Laminas\ServiceManager\ServiceManager::class)->makePartial();
         $this->mockSm
             ->setAllowOverride(true)
             ->setService('Table', $this->mockTbl)
@@ -49,7 +49,7 @@ class VariationPeopleAdapterTest extends MockeryTestCase
             ->shouldAllowMockingProtectedMethods();
         $this->sut->setServiceLocator($this->mockSm);
 
-        $this->mockResp = m::mock(\Zend\Http\Response::class);
+        $this->mockResp = m::mock(\Laminas\Http\Response::class);
         $this->mockResp->shouldReceive('isOk')->andReturn(true);
     }
 

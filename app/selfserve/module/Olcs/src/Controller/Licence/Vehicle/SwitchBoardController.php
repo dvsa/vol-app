@@ -20,7 +20,7 @@ class SwitchBoardController extends AbstractVehicleController
     ];
 
     /**
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function indexAction()
     {
@@ -33,7 +33,7 @@ class SwitchBoardController extends AbstractVehicleController
     }
 
     /**
-     * @return \Zend\Http\Response|\Zend\View\Model\ViewModel
+     * @return \Laminas\Http\Response|\Laminas\View\Model\ViewModel
      * @throws \Exception
      */
     public function decisionAction()

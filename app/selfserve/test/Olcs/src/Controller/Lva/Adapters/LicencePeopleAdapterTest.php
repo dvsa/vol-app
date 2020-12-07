@@ -16,8 +16,8 @@ use Dvsa\Olcs\Transfer\Command\Licence\DeletePeopleViaVariation;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\Lva\Adapters\LicencePeopleAdapter;
-use Zend\Form\Form;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\Form\Form;
+use Laminas\ServiceManager\ServiceManager;
 
 /**
  * Internal / Common Licence People Adapter Test

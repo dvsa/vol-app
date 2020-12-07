@@ -7,7 +7,7 @@
  */
 namespace Olcs\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
+use Laminas\View\Helper\AbstractHelper;
 
 /**
  * Generate People List. Takes a label and array of people and returns array structure compatible with readonly

@@ -7,7 +7,7 @@ namespace OlcsTest\Mvc\Controller\Plugin;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Mvc\Controller\Plugin\Placeholder;
-use Zend\View\Helper\Placeholder as ViewPlaceholder;
+use Laminas\View\Helper\Placeholder as ViewPlaceholder;
 
 /**
  * Placeholder Test

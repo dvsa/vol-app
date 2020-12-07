@@ -3,7 +3,7 @@
 
 namespace Olcs\Controller\Lva\Traits;
 
-use Zend\Http\Response;
+use Laminas\Http\Response;
 
 /**
  * Trait for use in an AbstractController that forms the final part of a variation wizard

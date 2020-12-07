@@ -2,8 +2,8 @@
 
 namespace Olcs\Service\Cookie;
 
-use Zend\Http\Header\Cookie;
-use Zend\Http\Header\SetCookie;
+use Laminas\Http\Header\Cookie;
+use Laminas\Http\Header\SetCookie;
 
 class SetCookieArrayGenerator
 {

@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Form\Vehicle\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("form-actions")
@@ -10,7 +10,6 @@ use Zend\Form\Annotation as Form;
  */
 class ConfirmFormActions
 {
-
     /**
      * @Form\Attributes({
      *     "id": "next",
@@ -21,5 +20,4 @@ class ConfirmFormActions
      * @Form\Type("Submit")
      */
     public $formActions = null;
-
 }

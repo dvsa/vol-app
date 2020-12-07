@@ -1,7 +1,7 @@
 <?php
 namespace Permits\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
@@ -13,7 +13,7 @@ use Zend\Form\Annotation as Form;
 class PermitsRequired
 {
     /**
-     * @Form\Type("Zend\Form\Element\Hidden")
+     * @Form\Type("Laminas\Form\Element\Hidden")
      * @Form\Options({
      *     "label": "permits.page.no-of-permits.for.year",
      * })

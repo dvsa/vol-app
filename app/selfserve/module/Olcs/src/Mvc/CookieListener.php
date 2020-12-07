@@ -7,12 +7,12 @@ namespace Olcs\Mvc;
 
 use Olcs\Service\Cookie\CookieReader;
 use Olcs\Service\Cookie\Preferences;
-use Zend\EventManager\EventManagerInterface;
-use Zend\EventManager\ListenerAggregateInterface;
-use Zend\EventManager\ListenerAggregateTrait;
-use Zend\Http\Request as HttpRequest;
-use Zend\Mvc\MvcEvent;
-use Zend\View\Helper\Placeholder;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\EventManager\ListenerAggregateInterface;
+use Laminas\EventManager\ListenerAggregateTrait;
+use Laminas\Http\Request as HttpRequest;
+use Laminas\Mvc\MvcEvent;
+use Laminas\View\Helper\Placeholder;
 
 class CookieListener implements ListenerAggregateInterface
 {

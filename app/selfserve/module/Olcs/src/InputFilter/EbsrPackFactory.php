@@ -2,9 +2,9 @@
 
 namespace Olcs\InputFilter;
 
-use Zend\InputFilter\Input;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\InputFilter\Input;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class EbsrPackFactory

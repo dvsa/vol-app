@@ -7,8 +7,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Service\Qa\ViewGenerator\IrhpApplicationViewGenerator;
 use Permits\View\Helper\IrhpApplicationSection;
 use RuntimeException;
-use Zend\Mvc\Controller\Plugin\Redirect;
-use Zend\Mvc\MvcEvent;
+use Laminas\Mvc\Controller\Plugin\Redirect;
+use Laminas\Mvc\MvcEvent;
 
 class IrhpApplicationViewGeneratorTest extends MockeryTestCase
 {

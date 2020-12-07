@@ -7,11 +7,11 @@ use Common\Controller\Plugin\Redirect;
 use Common\Service\Cqrs\Response as CqrsResponse;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Transfer\Command\Variation\DeleteVariation;
-use Zend\Form\Form;
-use Zend\Http\Request;
-use Zend\Http\Response;
-use Zend\Mvc\Controller\Plugin\Params;
-use Zend\Mvc\Controller\Plugin\Url;
+use Laminas\Form\Form;
+use Laminas\Http\Request;
+use Laminas\Http\Response;
+use Laminas\Mvc\Controller\Plugin\Params;
+use Laminas\Mvc\Controller\Plugin\Url;
 
 /**
  * Trait for use in an AbstractController that forms part of a variation wizard

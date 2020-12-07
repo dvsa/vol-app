@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Olcs\Form\Model\Form\Vehicle;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("vehicle-search")

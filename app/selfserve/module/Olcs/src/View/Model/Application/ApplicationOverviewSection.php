@@ -27,7 +27,7 @@ class ApplicationOverviewSection extends LvaOverviewSection
      */
     public function __construct($ref, $data, $sectionDetails)
     {
-        $filter = new \Zend\Filter\Word\DashToCamelCase();
+        $filter = new \Laminas\Filter\Word\DashToCamelCase();
         $index = lcfirst($filter->filter(str_replace('_', '-', $ref)));
 
         $status = isset($data['applicationCompletion'][$index . 'Status'])

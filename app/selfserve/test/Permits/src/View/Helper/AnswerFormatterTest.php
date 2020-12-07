@@ -5,7 +5,7 @@ namespace PermitsTest\View\Helper;
 use Common\RefData;
 use Permits\View\Helper\AnswerFormatter;
 use Mockery as m;
-use Zend\View\Renderer\RendererInterface;
+use Laminas\View\Renderer\RendererInterface;
 
 /**
  * Class AnswerFormatterTest

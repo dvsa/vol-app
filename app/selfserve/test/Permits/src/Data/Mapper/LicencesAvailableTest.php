@@ -10,7 +10,7 @@ use Common\Form\Form;
 use Mockery as m;
 use Permits\Data\Mapper\LicencesAvailable;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
-use Zend\Form\Fieldset;
+use Laminas\Form\Fieldset;
 
 class LicencesAvailableTest extends TestCase
 {

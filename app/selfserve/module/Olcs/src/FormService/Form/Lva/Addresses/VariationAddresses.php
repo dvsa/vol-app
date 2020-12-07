@@ -3,7 +3,7 @@
 namespace Olcs\FormService\Form\Lva\Addresses;
 
 use Common\FormService\Form\Lva\Addresses as CommonAddress;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 
 /**
  * Variation address

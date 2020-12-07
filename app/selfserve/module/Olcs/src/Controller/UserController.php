@@ -12,7 +12,7 @@ use Dvsa\Olcs\Transfer\Command\User\UpdateUserSelfserve as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\User\UserListSelfserve as ListDto;
 use Dvsa\Olcs\Transfer\Query\User\UserSelfserve as ItemDto;
 use Olcs\View\Model\User;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * User Controller
@@ -27,7 +27,7 @@ class UserController extends AbstractController
     /**
      * Dashboard index action
      *
-     * @return User|\Zend\Http\Response
+     * @return User|\Laminas\Http\Response
      */
     public function indexAction()
     {
@@ -70,13 +70,13 @@ class UserController extends AbstractController
     /**
      * Save
      *
-     * @return \Zend\Http\Response|ViewModel
+     * @return \Laminas\Http\Response|ViewModel
      */
     protected function save()
     {
-        /** @var \Zend\Http\PhpEnvironment\Request $request */
+        /** @var \Laminas\Http\PhpEnvironment\Request $request */
         $request = $this->getRequest();
-        /** @var \Zend\Form\FormInterface $form */
+        /** @var \Laminas\Form\FormInterface $form */
         $form = $this->getFormHelper()->createFormWithRequest('User', $request);
 
         $id = $this->params()->fromRoute('id', null);
@@ -150,10 +150,10 @@ class UserController extends AbstractController
     /**
      * Alter form
      *
-     * @param \Zend\Form\FormInterface $form Form
+     * @param \Laminas\Form\FormInterface $form Form
      * @param array                    $data Data
      *
-     * @return \Zend\Form\FormInterface
+     * @return \Laminas\Form\FormInterface
      */
     public function alterForm($form, $data)
     {
@@ -170,7 +170,7 @@ class UserController extends AbstractController
     /**
      * Delete action
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     public function deleteAction()
     {
@@ -181,10 +181,10 @@ class UserController extends AbstractController
             return $this->redirectToIndex();
         }
 
-        /** @var \Zend\Http\PhpEnvironment\Request $request */
+        /** @var \Laminas\Http\PhpEnvironment\Request $request */
         $request = $this->getRequest();
 
-        /** @var \Zend\Form\FormInterface $form */
+        /** @var \Laminas\Form\FormInterface $form */
         $form = $this->getServiceLocator()->get('Helper\Form')
             ->createFormWithRequest('GenericDeleteConfirmation', $request);
 
@@ -302,11 +302,11 @@ class UserController extends AbstractController
     /**
      * Checks for crud actions.
      *
-     * @return \Zend\Http\Response|null
+     * @return \Laminas\Http\Response|null
      */
     public function checkForCrudAction()
     {
-        /** @var \Zend\Http\PhpEnvironment\Request $request */
+        /** @var \Laminas\Http\PhpEnvironment\Request $request */
         $request = $this->getRequest();
 
         if ($request->isPost()) {
@@ -328,7 +328,7 @@ class UserController extends AbstractController
     /**
      * Add action - proxy method.
      *
-     * @return \Olcs\View\Model\Form|\Zend\Http\Response
+     * @return \Olcs\View\Model\Form|\Laminas\Http\Response
      */
     public function addAction()
     {
@@ -338,7 +338,7 @@ class UserController extends AbstractController
     /**
      * Add action - proxy method.
      *
-     * @return \Olcs\View\Model\Form|\Zend\Http\Response
+     * @return \Olcs\View\Model\Form|\Laminas\Http\Response
      */
     public function editAction()
     {
@@ -348,7 +348,7 @@ class UserController extends AbstractController
     /**
      * Redirects to index
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     private function redirectToIndex()
     {

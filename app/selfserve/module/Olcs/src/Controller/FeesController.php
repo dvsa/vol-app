@@ -9,7 +9,7 @@ namespace Olcs\Controller;
 
 use Common\Controller\Lva\AbstractController;
 use Common\RefData;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Common\Exception\ResourceNotFoundException;
 use Dvsa\Olcs\Transfer\Query\Organisation\OutstandingFees;
 use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentById;

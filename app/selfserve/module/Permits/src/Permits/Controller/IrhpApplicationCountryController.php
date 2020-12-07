@@ -10,7 +10,7 @@ use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
 use Permits\View\Helper\IrhpApplicationSection;
-use Zend\Mvc\MvcEvent;
+use Laminas\Mvc\MvcEvent;
 
 class IrhpApplicationCountryController extends AbstractSelfserveController
 {

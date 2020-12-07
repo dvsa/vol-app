@@ -4,7 +4,7 @@ namespace Olcs\FormService\Form\Lva\People\SoleTrader;
 
 use Common\FormService\Form\Lva\People\SoleTrader\ApplicationSoleTrader as CommonApplicationSoleTrader;
 use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 
 /**
  * Application Sole Trader
@@ -32,7 +32,6 @@ class ApplicationSoleTrader extends CommonApplicationSoleTrader
             $form->get('form-actions')->get('save')->setLabel('lva.external.return.link');
             $form->get('form-actions')->get('save')->removeAttribute('class');
             $form->get('form-actions')->get('save')->setAttribute('class', 'action--tertiary large');
-
         } else {
             $this->alterButtons($form);
         }

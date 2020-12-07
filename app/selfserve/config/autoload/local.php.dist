@@ -30,7 +30,7 @@ return [
             'backend' => [
                 'url' => 'http://olcs-backend.olcs.gov.uk/',
                 'options' => [
-                    'adapter' => \Zend\Http\Client\Adapter\Curl::class,
+                    'adapter' => \Laminas\Http\Client\Adapter\Curl::class,
                     'timeout' => 60,
                 ]
             ],
@@ -38,7 +38,7 @@ return [
             'postcode' => [
                 'url' => 'http://postcode.cit.olcs.mgt.mtpdvsa/',
                 'options' => [
-                    'adapter' => \Zend\Http\Client\Adapter\Curl::class,
+                    'adapter' => \Laminas\Http\Client\Adapter\Curl::class,
                     'timeout' => 60,
                 ]
             ],
@@ -97,7 +97,7 @@ return [
     'google-ga-domain' => '.olcs-selfserve.olcs.gov.uk',
 
     'caches' => [
-        \Zend\Cache\Storage\Adapter\Redis::class => [
+        \Laminas\Cache\Storage\Adapter\Redis::class => [
             'adapter' => [
                 'name' => 'redis',
                 'options' => [

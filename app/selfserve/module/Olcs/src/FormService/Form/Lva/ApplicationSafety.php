@@ -17,7 +17,7 @@ class ApplicationSafety extends Safety
     /**
      * Returns form
      *
-     * @return \Zend\Form\FormInterface
+     * @return \Laminas\Form\FormInterface
      */
     public function getForm()
     {

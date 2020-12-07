@@ -25,8 +25,8 @@ $config = array(
     )
 );
 
-if (file_exists(__DIR__ . '/../vendor/zendframework/zend-developer-tools/Module.php')) {
-    array_unshift($config['modules'], 'ZendDeveloperTools');
+if (file_exists(__DIR__ . '/../vendor/laminas/laminas-developer-tools/Module.php')) {
+    array_unshift($config['modules'], 'Laminas\DeveloperTools');
 }
 
 return $config;

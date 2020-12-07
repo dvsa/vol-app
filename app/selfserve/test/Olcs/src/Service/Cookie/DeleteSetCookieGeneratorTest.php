@@ -7,7 +7,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Service\Cookie\CookieExpiryGenerator;
 use Olcs\Service\Cookie\SetCookieFactory;
 use Olcs\Service\Cookie\DeleteSetCookieGenerator;
-use Zend\Http\Header\SetCookie;
+use Laminas\Http\Header\SetCookie;
 
 class DeleteSetCookieGeneratorTest extends MockeryTestCase
 {

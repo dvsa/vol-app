@@ -3,11 +3,11 @@
 namespace Olcs\Controller\Ebsr;
 
 use Common\Controller\Traits\GenericMethods;
-use Zend\Http\Request as HttpRequest;
+use Laminas\Http\Request as HttpRequest;
 use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\OrganisationUnprocessedList;
 use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\EbsrSubmission as EbsrSubmissionQry;
 use Dvsa\Olcs\Transfer\Command\Bus\Ebsr\QueuePacks as QueuePacksCmd;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Common\Util\FlashMessengerTrait;
 use Common\Controller\Lva\AbstractController;
 use Common\Category;

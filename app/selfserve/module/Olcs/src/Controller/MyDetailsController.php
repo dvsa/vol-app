@@ -7,7 +7,7 @@ use Common\Form\Form;
 use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Transfer\Command\MyAccount\UpdateMyAccountSelfserve as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount as MyAccountQuery;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * My Details Controller
@@ -17,7 +17,7 @@ class MyDetailsController extends AbstractController
     /**
      * Edit action
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     public function editAction()
     {
@@ -130,7 +130,7 @@ class MyDetailsController extends AbstractController
     /**
      * Redirects to index
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     private function redirectToIndex()
     {

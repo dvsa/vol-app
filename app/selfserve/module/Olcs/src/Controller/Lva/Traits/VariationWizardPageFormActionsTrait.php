@@ -3,8 +3,8 @@
 namespace Olcs\Controller\Lva\Traits;
 
 use Common\Form\Model\Form\Lva\Fieldset\FormActions;
-use Zend\Form\FieldsetInterface;
-use Zend\Form\Form;
+use Laminas\Form\FieldsetInterface;
+use Laminas\Form\Form;
 
 /**
  * Trait for use in an AbstractController that forms part of a variation wizard whose form uses a the standard set of

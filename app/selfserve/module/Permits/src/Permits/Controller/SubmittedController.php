@@ -57,7 +57,7 @@ class SubmittedController extends AbstractSelfserveController
     /**
      * IRHP submitted action
      *
-     * @return \Zend\Http\Response|\Zend\View\Model\ViewModel
+     * @return \Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */
     public function irhpSubmittedAction()
     {

@@ -2,8 +2,8 @@
 
 namespace Olcs\Controller\Lva\Traits;
 
-use Zend\Http\Response;
-use Zend\Mvc\Controller\Plugin\Redirect;
+use Laminas\Http\Response;
+use Laminas\Mvc\Controller\Plugin\Redirect;
 
 /**
  * Trait for use in an AbstractController that forms part of a variation wizard but is NOT the final page of a wizard

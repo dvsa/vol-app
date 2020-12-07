@@ -131,7 +131,7 @@ class UserRegistrationTest extends AbstractFormValidationTestCase
         $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementValid($element, 'Y');
-        $this->assertFormElementNotValid($element, 'N', \Zend\Validator\Identical::NOT_SAME);
+        $this->assertFormElementNotValid($element, 'N', \Laminas\Validator\Identical::NOT_SAME);
     }
 
     public function testSubmit()

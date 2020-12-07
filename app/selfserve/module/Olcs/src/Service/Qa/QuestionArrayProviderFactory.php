@@ -2,8 +2,8 @@
 
 namespace Olcs\Service\Qa;
 
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class QuestionArrayProviderFactory implements FactoryInterface
 {

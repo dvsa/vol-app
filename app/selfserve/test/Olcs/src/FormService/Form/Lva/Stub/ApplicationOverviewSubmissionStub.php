@@ -9,7 +9,7 @@ use Olcs\FormService\Form\Lva\ApplicationOverviewSubmission;
  */
 class ApplicationOverviewSubmissionStub extends ApplicationOverviewSubmission
 {
-    public function alterForm(\Zend\Form\FormInterface $form, array $data, array $params)
+    public function alterForm(\Laminas\Form\FormInterface $form, array $data, array $params)
     {
         parent::alterForm($form, $data, $params);
     }

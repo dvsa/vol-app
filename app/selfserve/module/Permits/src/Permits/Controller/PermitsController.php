@@ -12,10 +12,10 @@ use Common\RefData;
 use Olcs\Controller\AbstractSelfserveController;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 use Permits\View\Helper\IrhpApplicationSection;
-use Zend\Http\Header\Referer as HttpReferer;
-use Zend\Http\PhpEnvironment\Request as HttpRequest;
-use Zend\Mvc\MvcEvent;
-use Zend\View\Model\ViewModel;
+use Laminas\Http\Header\Referer as HttpReferer;
+use Laminas\Http\PhpEnvironment\Request as HttpRequest;
+use Laminas\Mvc\MvcEvent;
+use Laminas\View\Model\ViewModel;
 
 class PermitsController extends AbstractSelfserveController
 {

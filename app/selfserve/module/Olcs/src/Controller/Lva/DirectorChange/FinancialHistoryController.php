@@ -10,7 +10,7 @@ use Common\Controller\Lva\AbstractFinancialHistoryController;
 use Common\RefData;
 use Olcs\Controller\Lva\Traits\VariationWizardPageFormActionsTrait;
 use Olcs\Controller\Lva\Traits\VariationWizardPageWithSubsequentPageControllerTrait;
-use Zend\Form\FormInterface;
+use Laminas\Form\FormInterface;
 
 /**
  * External Director Change Variation Financial History Controller

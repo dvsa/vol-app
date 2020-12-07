@@ -3,7 +3,7 @@
 
 namespace Olcs\Form\Model\Form\Vehicle\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("options")
@@ -58,9 +58,9 @@ class SwitchBoard
      *      }
      * })
      * @Form\Type("\Common\Form\Elements\Types\Radio")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator({
-     *     "name":"Zend\Validator\NotEmpty",
+     *     "name":"Laminas\Validator\NotEmpty",
      *     "options":{
      *         "messages": {
      *             "isEmpty": "licence.vehicle.switchboard.form.error.select-option"

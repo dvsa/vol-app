@@ -10,8 +10,8 @@ use Common\Service\Table\TableFactory;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Permits\Data\Mapper\CandidatePermitSelection;
-use Zend\Form\Fieldset;
-use Zend\Form\Form;
+use Laminas\Form\Fieldset;
+use Laminas\Form\Form;
 
 /**
  * CandidatePermitSelectionTest

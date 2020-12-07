@@ -6,7 +6,7 @@ use Common\Controller\Lva\AbstractController;
 use Dvsa\Olcs\Transfer\Command\Correspondence\AccessCorrespondence;
 use Dvsa\Olcs\Transfer\Query\Correspondence\Correspondence;
 use Dvsa\Olcs\Transfer\Query\Correspondence\Correspondences;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Class CorrespondenceController
@@ -62,7 +62,7 @@ class CorrespondenceController extends AbstractController
      * A gateway method for accessing a document with method sets the accessed
      * parameter on the correspondence record.
      *
-     * @return \Zend\Http\Response|ViewModel
+     * @return \Laminas\Http\Response|ViewModel
      */
     public function accessCorrespondenceAction()
     {

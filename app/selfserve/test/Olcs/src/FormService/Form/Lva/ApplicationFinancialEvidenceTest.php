@@ -6,8 +6,8 @@ use Common\Service\Helper\FormHelperService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\ApplicationFinancialEvidence;
-use Zend\Form\Form;
-use Zend\Http\Request;
+use Laminas\Form\Form;
+use Laminas\Http\Request;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 use OlcsTest\Bootstrap;
 

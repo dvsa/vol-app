@@ -8,8 +8,8 @@ use Olcs\Service\Cookie\Preferences;
 use Olcs\Service\Cookie\PreferencesFactory;
 use Olcs\Service\Cookie\SetCookieArrayGenerator;
 use RuntimeException;
-use Zend\Validator\Csrf as CsrfValidator;
-use Zend\View\Model\ViewModel;
+use Laminas\Validator\Csrf as CsrfValidator;
+use Laminas\View\Model\ViewModel;
 
 class SettingsController extends AbstractOlcsController
 {

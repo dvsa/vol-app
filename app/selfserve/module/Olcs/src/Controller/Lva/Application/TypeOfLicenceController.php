@@ -4,10 +4,10 @@ namespace Olcs\Controller\Lva\Application;
 
 use Common\Controller\Lva\Application\AbstractTypeOfLicenceController;
 use Dvsa\Olcs\Transfer\Command\Application\CreateApplication;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 use Common\View\Model\Section;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
-use Zend\Http\Response;
+use Laminas\Http\Response;
 
 /**
  * External Type Of Licence Controller
@@ -25,7 +25,7 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController
      * Render the section
      *
      * @param string $titleSuffix
-     * @param \Zend\Form\Form $form
+     * @param \Laminas\Form\Form $form
      * @return \Common\View\Model\Section
      */
     protected function renderCreateApplication($titleSuffix, Form $form = null)
@@ -49,7 +49,7 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController
             return $this->redirect()->toRouteAjax('dashboard');
         }
 
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
 
         /** @var \Common\FormService\Form\Lva\TypeOfLicence\ApplicationTypeOfLicence $tolFormManagerService */

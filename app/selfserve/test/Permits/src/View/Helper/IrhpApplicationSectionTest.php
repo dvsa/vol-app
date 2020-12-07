@@ -5,7 +5,7 @@ namespace PermitsTest\View\Helper;
 use Common\RefData;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Permits\View\Helper\IrhpApplicationSection;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Irhp Application Section Test

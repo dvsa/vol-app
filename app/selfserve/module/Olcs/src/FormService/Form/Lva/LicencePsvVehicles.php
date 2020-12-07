@@ -2,7 +2,7 @@
 
 namespace Olcs\FormService\Form\Lva;
 
-use Zend\Form\Form;
+use Laminas\Form\Form;
 
 /**
  * Licence Psv Vehicles

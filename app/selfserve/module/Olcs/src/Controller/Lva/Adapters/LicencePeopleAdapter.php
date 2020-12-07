@@ -12,7 +12,7 @@ use Common\Controller\Lva\Adapters\AbstractPeopleAdapter;
 use Common\Service\Table\TableBuilder;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\Command\Licence\DeletePeopleViaVariation;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 
 /**
  * External Licence People Adapter
@@ -42,7 +42,7 @@ class LicencePeopleAdapter extends AbstractPeopleAdapter
     /**
      * Change the Add/Edit buttons based on organisation
      *
-     * @param \Zend\Form\Form $form form
+     * @param \Laminas\Form\Form $form form
      *
      * @return mixed
      */

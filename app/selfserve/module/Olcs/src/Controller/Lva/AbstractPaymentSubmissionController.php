@@ -4,7 +4,7 @@ namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractController;
 use Common\RefData;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Common\Exception\BadRequestException;
 use Common\Exception\ResourceNotFoundException;
 use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees as PayOutstandingFeesCmd;
@@ -36,7 +36,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
     /**
      * Index action
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     public function indexAction()
     {
@@ -116,7 +116,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
      * @param int $applicationId Application id
      * @param int $version       Version
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     protected function submitApplication($applicationId, $version)
     {
@@ -140,7 +140,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
     /**
      * Handle response from third-party payment gateway
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function paymentResultAction()
     {
@@ -186,7 +186,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
      *
      * @param string $ref Reference
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     protected function redirectToSummary($ref = null)
     {
@@ -202,7 +202,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
     /**
      * Redirect to overview
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     protected function redirectToOverview()
     {
@@ -215,7 +215,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
     /**
      * Display stored cards form
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     public function payAndSubmitAction()
     {
@@ -229,7 +229,8 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
             $back = $this->params()->fromRoute('redirect-back', 'overview');
             if ($back === 'undertakings') {
                 return $this->redirect()->toRouteAjax(
-                    'lva-' . $this->lva . '/undertakings', [$this->getIdentifierIndex() => $applicationId]
+                    'lva-' . $this->lva . '/undertakings',
+                    [$this->getIdentifierIndex() => $applicationId]
                 );
             }
             return $this->gotoOverview();

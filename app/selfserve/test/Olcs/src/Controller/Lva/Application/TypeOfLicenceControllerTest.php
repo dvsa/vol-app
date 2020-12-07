@@ -24,7 +24,7 @@ class TypeOfLicenceControllerTest extends AbstractLvaControllerTestCase
      */
     public function testRenderCreateSetsDefaultStepNumber()
     {
-        $form = m::mock('Zend\Form\Form');
+        $form = m::mock('Laminas\Form\Form');
         $view = $this->sut->renderCreateApplication('my_page', $form);
         $this->assertInstanceOf('Common\View\Model\Section', $view);
 

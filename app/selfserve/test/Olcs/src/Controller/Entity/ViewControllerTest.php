@@ -8,10 +8,10 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\Entity\ViewController;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\ServiceManager\ServiceManager;
-use Zend\Session\Container;
-use Zend\View\Model\ViewModel;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\ServiceManager\ServiceManager;
+use Laminas\Session\Container;
+use Laminas\View\Model\ViewModel;
 use ZfcRbac\Mvc\Controller\Plugin\IsGranted;
 
 /**
@@ -23,16 +23,16 @@ class ViewControllerTest extends MockeryTestCase
 {
     /** @var  ViewController|m\MockInterface */
     private $sut;
-    /** @var  \Zend\ServiceManager\ServiceLocatorInterface|m\MockInterface */
+    /** @var  \Laminas\ServiceManager\ServiceLocatorInterface|m\MockInterface */
     private $mockSl;
-    /** @var  \Zend\Mvc\Controller\PluginManager|m\MockInterface */
+    /** @var  \Laminas\Mvc\Controller\PluginManager|m\MockInterface */
     private $mockPluginManager;
     /** @var  m\MockInterface */
     private $mockIsGrantedPlgn;
 
     public function setUp(): void
     {
-        $this->mockSl = m::mock(\Zend\ServiceManager\ServiceLocatorInterface::class)->makePartial();
+        $this->mockSl = m::mock(\Laminas\ServiceManager\ServiceLocatorInterface::class)->makePartial();
         $this->mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
 
         //  mock plugins

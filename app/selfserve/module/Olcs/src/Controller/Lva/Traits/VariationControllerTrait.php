@@ -28,7 +28,7 @@ trait VariationControllerTrait
      * @param string $section Section
      * @param array  $prg     Prg
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     protected function completeSection($section, $prg = [])
     {

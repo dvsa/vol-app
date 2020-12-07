@@ -5,9 +5,9 @@ namespace PermitsTest\Data\Mapper;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Mockery as m;
 use Permits\Data\Mapper\IrhpFee;
-use Zend\Form\Element\Submit;
-use Zend\Form\Fieldset;
-use Zend\Form\Form;
+use Laminas\Form\Element\Submit;
+use Laminas\Form\Fieldset;
+use Laminas\Form\Form;
 
 /**
  * IrhpFeeTest

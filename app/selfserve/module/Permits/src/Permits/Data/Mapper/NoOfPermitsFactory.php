@@ -3,8 +3,8 @@
 namespace Permits\Data\Mapper;
 
 use Common\Data\Mapper\Permits\NoOfPermits as CommonNoOfPermits;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class NoOfPermitsFactory implements FactoryInterface
 {

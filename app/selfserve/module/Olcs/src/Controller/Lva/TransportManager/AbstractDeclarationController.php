@@ -7,7 +7,7 @@ use Common\RefData;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 use Common\Controller\Lva\AbstractController;
 use Olcs\Controller\Lva\Traits\TransportManagerApplicationTrait;
-use \Zend\View\Model\ViewModel as ZendViewModel;
+use \Laminas\View\Model\ViewModel as LaminasViewModel;
 
 abstract class AbstractDeclarationController extends AbstractController
 {
@@ -24,9 +24,9 @@ abstract class AbstractDeclarationController extends AbstractController
     /**
      * Index action for the lva-transport_manager/tm_declaration and lva-transport_manager/declaration routes
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
-    public function indexAction(): ZendViewModel
+    public function indexAction(): LaminasViewModel
     {
         if ($this->getRequest()->isPost()) {
             if ($this->params()->fromPost('content')['isDigitallySigned'] === 'Y') {
@@ -41,9 +41,9 @@ abstract class AbstractDeclarationController extends AbstractController
     /**
      * @param array $tma
      *
-     * @return ZendViewModel
+     * @return LaminasViewModel
      */
-    private function renderDeclarationPage(): ZendViewModel
+    private function renderDeclarationPage(): LaminasViewModel
     {
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
 
@@ -63,7 +63,7 @@ abstract class AbstractDeclarationController extends AbstractController
         $this->getServiceLocator()->get('Script')->loadFiles(['tm-lva-declaration']);
 
         $layout = $this->render('transport-manager-application.declaration', $form, $params);
-        /* @var $layout \Zend\View\Model\ViewModel */
+        /* @var $layout \Laminas\View\Model\ViewModel */
 
         $content = $layout->getChildrenByCaptureTo('content')[0];
         $content->setTemplate('pages/lva-tm-details-action');
@@ -88,7 +88,7 @@ abstract class AbstractDeclarationController extends AbstractController
      *
      * @param array $tma
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     private function physicalSignatureAction()
     {

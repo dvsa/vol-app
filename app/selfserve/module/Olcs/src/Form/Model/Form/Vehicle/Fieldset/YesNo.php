@@ -3,7 +3,7 @@
 
 namespace Olcs\Form\Model\Form\Vehicle\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("options")
@@ -39,7 +39,7 @@ class YesNo
      *      }
      * })
      * @Form\Type("\Common\Form\Elements\Types\Radio")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Required(false)
      */
     public $options = null;

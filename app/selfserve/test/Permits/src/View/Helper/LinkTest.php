@@ -4,7 +4,7 @@ namespace PermitsTest\View\Helper;
 
 use Permits\View\Helper\Link;
 use Mockery as m;
-use Zend\View\Renderer\RendererInterface;
+use Laminas\View\Renderer\RendererInterface;
 
 /**
  * Class LinkTest

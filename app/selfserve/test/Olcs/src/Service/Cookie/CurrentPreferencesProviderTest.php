@@ -9,7 +9,7 @@ use Olcs\Service\Cookie\CookieReader;
 use Olcs\Service\Cookie\CookieState;
 use Olcs\Service\Cookie\Preferences;
 use Olcs\Service\Cookie\PreferencesFactory;
-use Zend\Http\Header\Cookie;
+use Laminas\Http\Header\Cookie;
 
 class CurrentPreferencesProviderTest extends MockeryTestCase
 {

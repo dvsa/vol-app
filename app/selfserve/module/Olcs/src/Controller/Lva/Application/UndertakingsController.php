@@ -23,7 +23,7 @@ class UndertakingsController extends AbstractUndertakingsController
     /**
      * View Declarations page
      *
-     * @return \Common\View\Model\Section|\Zend\Http\Response
+     * @return \Common\View\Model\Section|\Laminas\Http\Response
      */
     public function indexAction()
     {
@@ -41,7 +41,7 @@ class UndertakingsController extends AbstractUndertakingsController
     /**
      * Shows Declaration page after being signed by GDS Verify
      *
-     * @return \Zend\Http\Response|\Zend\View\Model\ViewModel
+     * @return \Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */
     public function signedAction()
     {
@@ -115,7 +115,7 @@ class UndertakingsController extends AbstractUndertakingsController
      * Update review fieldset
      *
      * @param array                                           $applicationData application data
-     * @param \Zend\Form\Fieldset                             $fieldset        fieldset
+     * @param \Laminas\Form\Fieldset                             $fieldset        fieldset
      * @param \Common\Service\Helper\TranslationHelperService $translator      translator
      *
      * @return void
@@ -155,7 +155,7 @@ class UndertakingsController extends AbstractUndertakingsController
     /**
      * Update declaration element
      *
-     * @param \Zend\Form\Fieldset                             $fieldset   fieldset
+     * @param \Laminas\Form\Fieldset                             $fieldset   fieldset
      * @param \Common\Service\Helper\TranslationHelperService $translator translator
      *
      * @return void

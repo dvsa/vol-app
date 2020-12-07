@@ -7,7 +7,7 @@ use Dvsa\Olcs\Transfer\Command\User\UpdateUserSelfserve;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Dvsa\Olcs\Transfer\Query as TransferQry;
-use Zend\Mvc\Controller\Plugin\Redirect;
+use Laminas\Mvc\Controller\Plugin\Redirect;
 
 /**
  * Class User Controller Test
@@ -49,16 +49,16 @@ class UserControllerTest extends MockeryTestCase
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
 
-        $this->mockRequest = m::mock(\Zend\Http\Request::class);
+        $this->mockRequest = m::mock(\Laminas\Http\Request::class);
         $this->sut->shouldReceive('getRequest')->andReturn($this->mockRequest);
 
         $this->mockResponse = m::mock('stdClass');
         $this->sut->shouldReceive('handleCommand')->andReturn($this->mockResponse);
 
-        $this->mockParams = m::mock(\Zend\Mvc\Controller\Plugin\Params::class);
+        $this->mockParams = m::mock(\Laminas\Mvc\Controller\Plugin\Params::class);
         $this->sut->shouldReceive('params')->andReturn($this->mockParams);
 
-        $this->mockSl = m::mock(\Zend\ServiceManager\ServiceManager::class);
+        $this->mockSl = m::mock(\Laminas\ServiceManager\ServiceManager::class);
         $this->sut->shouldReceive('getServiceLocator')->andReturn($this->mockSl);
 
         $this->mockForm = m::mock(\Common\Form\Form::class);

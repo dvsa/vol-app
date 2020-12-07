@@ -6,7 +6,7 @@ use Common\Controller\Lva\AbstractController;
 use Common\Exception\ResourceNotFoundException;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Search\Licence as SearchLicence;
-use Zend\Session\Container;
+use Laminas\Session\Container;
 
 /**
  * Entity View Controller
@@ -28,7 +28,7 @@ class ViewController extends AbstractController
     /**
      * Wrapper method to call appropriate entity action
      *
-     * @return \Zend\View\Model\ConsoleModel|\Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ConsoleModel|\Laminas\View\Model\ViewModel
      */
     public function detailsAction()
     {
@@ -47,7 +47,7 @@ class ViewController extends AbstractController
     /**
      * licence action
      *
-     * @return \Zend\View\Model\ConsoleModel|\Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ConsoleModel|\Laminas\View\Model\ViewModel
      * @throws ResourceNotFoundException
      */
     public function licenceAction()
@@ -98,11 +98,11 @@ class ViewController extends AbstractController
      * @param string $title    Title
      * @param string $subtitle SubTitle
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     private function generateLayout($title = null, $subtitle = null)
     {
-        $layout = new \Zend\View\Model\ViewModel(
+        $layout = new \Laminas\View\Model\ViewModel(
             [
                 'pageTitle' => $title,
                 'pageSubtitle' => $subtitle,
@@ -120,11 +120,11 @@ class ViewController extends AbstractController
      *
      * @param array $result Api Data
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     private function generateContent($result)
     {
-        $content = new \Zend\View\Model\ViewModel(
+        $content = new \Laminas\View\Model\ViewModel(
             array_merge(
                 [
                     'result' => $result,
