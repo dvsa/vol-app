@@ -8,7 +8,7 @@ namespace Olcs\Controller\Lva\Licence;
 
 use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
-use Zend\Mvc\MvcEvent;
+use Laminas\Mvc\MvcEvent;
 
 /**
  * Class TrailersController
@@ -31,7 +31,7 @@ class TrailersController extends Lva\AbstractTrailersController
      *
      * @param MvcEvent $e event
      *
-     * @return array|null|\Zend\Http\Response
+     * @return array|null|\Laminas\Http\Response
      */
     public function onDispatch(MvcEvent $e)
     {

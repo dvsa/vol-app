@@ -47,7 +47,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * Revert to editing the form
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     public function editAction()
     {
@@ -63,7 +63,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * Display details of the Transport Manager Application process
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     public function detailsAction()
     {
@@ -75,7 +75,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * @param array $tma
      *
-     * @return \Zend\Http\Response|\Zend\View\Model\ViewModel
+     * @return \Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */
     private function callActionByStatus($tma)
     {
@@ -120,11 +120,11 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @param array $transportManagerApplicationData TM application data
      *
-     * @return \Common\View\Model\Section|\Zend\Http\Response
+     * @return \Common\View\Model\Section|\Laminas\Http\Response
      */
     protected function page1Point1(array $transportManagerApplicationData)
     {
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
 
         $postData = (array)$request->getPost();
@@ -262,7 +262,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * Add other licence applications action
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     public function addOtherLicenceApplicationsAction()
     {
@@ -272,7 +272,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * Edit other licence applications action
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     public function editOtherLicenceApplicationsAction()
     {
@@ -284,7 +284,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * Add previous conviction action
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     public function addPreviousConvictionAction()
     {
@@ -294,7 +294,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * Edit previous conviction action
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     public function editPreviousConvictionAction()
     {
@@ -306,7 +306,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * Add previous licence action
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     public function addPreviousLicenceAction()
     {
@@ -316,7 +316,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * Edit previous licence action
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     public function editPreviousLicenceAction()
     {
@@ -328,7 +328,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * Add employment action
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     public function addEmploymentAction()
     {
@@ -343,7 +343,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * Edit employment action
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     public function editEmploymentAction()
     {
@@ -355,7 +355,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * Delete other licence applications action
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     public function deleteOtherLicenceApplicationsAction()
     {
@@ -365,7 +365,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * Delete previous conviction action
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     public function deletePreviousConvictionAction()
     {
@@ -375,7 +375,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * Delete previous licence action
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     public function deletePreviousLicenceAction()
     {
@@ -385,7 +385,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * Delete employment action
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     public function deleteEmploymentAction()
     {
@@ -397,7 +397,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @param string $type (Contant used to lookup services)
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     public function genericDelete($type = null)
     {
@@ -438,7 +438,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      * @param int    $id        Id
      * @param array  $variables Variables
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     protected function addOrEdit($type, $mode, $id = null, $variables = [])
     {
@@ -972,11 +972,11 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
         $this->hlpForm->remove($form, 'responsibilities->tmApplicationStatus');
 
-        /** @var \Zend\Form\Fieldset $formActions */
+        /** @var \Laminas\Form\Fieldset $formActions */
         $formActions = $form->get('form-actions');
         $formActions->get('submit')->setLabel('lva.external.save_and_continue.button');
 
-        /** @var \Zend\Form\Element $saveButton */
+        /** @var \Laminas\Form\Element $saveButton */
         $saveButton = $formActions->get('save');
         $saveButton->setLabel('lva.external.save_and_return_to_tm.link');
         $saveButton->removeAttribute('class');
@@ -1004,7 +1004,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @param int $lvaId LVA id
      *
-     * @return \Common\Service\Cqrs\Response|\Zend\Http\Response
+     * @return \Common\Service\Cqrs\Response|\Laminas\Http\Response
      */
     protected function checkForRedirect($lvaId)
     {
@@ -1026,7 +1026,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @param string $which Which section has just been completed
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     protected function backToDetails($which = null)
     {
@@ -1063,7 +1063,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      * Redirect to TM Application details page or display a message if application is not pre-granted
      * This action is reached from an email sent to TM's
      *
-     * @return \Zend\View\Model\ViewModel|\Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
      */
     public function editDetailsAction()
     {
@@ -1075,7 +1075,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             RefData::APPLICATION_STATUS_UNDER_CONSIDERATION,
         ];
         if (!in_array($tma['application']['status']['id'], $preGrantedStatuses)) {
-            return new \Zend\View\Model\ViewModel(['translateMessage' => 'markup-tma-edit-error']);
+            return new \Laminas\View\Model\ViewModel(['translateMessage' => 'markup-tma-edit-error']);
         }
 
         // redirect to TM details page
@@ -1090,7 +1090,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * Redirect a user to ether the dashboard or transport managers page depending on permissions
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     protected function redirectTmToHome()
     {
@@ -1155,7 +1155,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @param array $tma TM application
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     private function page1Point3(array $tma)
     {
@@ -1186,7 +1186,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @param array $tma TM application
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     private function page2Point1(array $tma)
     {
@@ -1203,7 +1203,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @param array $tma TM application
      *
-     * @return \Zend\View\Model\ViewModel | \Zend\Http\Response
+     * @return \Laminas\View\Model\ViewModel | \Laminas\Http\Response
      */
     private function page2Point2(array $tma)
     {
@@ -1258,7 +1258,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      * @param array $tma      TM application
      * @param bool  $isUserTm Is user TM
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     private function page3(array $tma, $isUserTm)
     {
@@ -1288,7 +1288,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @param array $tma TM application
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     private function page4(array $tma)
     {
@@ -1303,7 +1303,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @param array $tma TM application
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     private function pagePostal(array $tma)
     {
@@ -1324,7 +1324,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      * @param array             $tma    TM application
      * @param array             $params Params
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     private function renderTmAction($title, $form, $tma, $params)
     {
@@ -1341,7 +1341,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $params = array_merge($defaultParams, $params);
 
         $layout = $this->render($title, $form, $params);
-        /* @var $layout \Zend\View\Model\ViewModel */
+        /* @var $layout \Laminas\View\Model\ViewModel */
 
         $content = $layout->getChildrenByCaptureTo('content')[0];
         $content->setTemplate('pages/lva-tm-details-action');
@@ -1457,9 +1457,9 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * @param array $tma
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
-    private function redirectToOperatorDeclarationPage(array $tma): \Zend\Http\Response
+    private function redirectToOperatorDeclarationPage(array $tma): \Laminas\Http\Response
     {
         return $this->redirect()->toRoute(
             'lva-' . $this->lva . '/transport_manager_operator_declaration',
@@ -1512,7 +1512,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         }
     }
 
-    private function redirectToTransportManagersPage(): \Zend\Http\Response
+    private function redirectToTransportManagersPage(): \Laminas\Http\Response
     {
         return $this->redirect()->toRoute(
             "lva-{$this->lva}/transport_managers",
@@ -1523,9 +1523,9 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     /**
      * @param array $tma
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
-    protected function redirectToCheckAnswersPage(array $tma): \Zend\Http\Response
+    protected function redirectToCheckAnswersPage(array $tma): \Laminas\Http\Response
     {
         return $this->redirect()->toRoute(
             'lva-' . $this->lva . '/transport_manager_check_answer',

@@ -6,8 +6,8 @@ use Common\Service\Helper\FormHelperService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\LicenceGoodsVehicles;
-use Zend\Form\Form;
-use Zend\Form\Fieldset;
+use Laminas\Form\Form;
+use Laminas\Form\Fieldset;
 use Common\FormService\FormServiceManager;
 use Common\Service\Table\TableBuilder;
 
@@ -103,4 +103,3 @@ class LicenceGoodsVehiclesTest extends MockeryTestCase
         $this->assertSame($mockForm, $form);
     }
 }
-

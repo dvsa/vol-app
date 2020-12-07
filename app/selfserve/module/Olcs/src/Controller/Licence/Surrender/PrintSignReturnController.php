@@ -5,7 +5,7 @@ namespace Olcs\Controller\Licence\Surrender;
 use Common\RefData;
 use Common\Util\FlashMessengerTrait;
 use Dvsa\Olcs\Transfer\Command\Surrender\SubmitForm;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Class PrintSignReturnController

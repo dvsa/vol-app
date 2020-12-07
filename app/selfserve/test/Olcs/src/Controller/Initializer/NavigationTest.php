@@ -5,9 +5,9 @@ use Common\Controller\AbstractOlcsController;
 use Dvsa\Olcs\Auth\Controller\LoginController;
 use Olcs\Controller\Initializer\Navigation as NavigationInitializer;
 use Olcs\Controller\Listener\Navigation as NavigationListener;
-use Zend\EventManager\EventManager as ZendEventManager;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\EventManager\EventManager as ZendEventManager;
+use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceManager;
 use Mockery as m;
 
 /**

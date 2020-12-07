@@ -37,11 +37,11 @@ class VehiclesController extends AbstractGoodsVehiclesController
      *
      * @param string $action Crud Action
      *
-     * @return \Zend\Http\Response|null
+     * @return \Laminas\Http\Response|null
      */
     protected function checkForAlternativeCrudAction($action)
     {
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
 
         if ($action === 'export') {

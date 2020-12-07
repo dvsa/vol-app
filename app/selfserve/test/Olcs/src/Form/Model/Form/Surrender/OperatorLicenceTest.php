@@ -6,8 +6,8 @@ use Common\Form\Elements\InputFilters\ActionButton;
 use Common\Form\Elements\Types\Radio;
 use Common\Form\Elements\Types\HtmlTranslated;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
-use Zend\Form\Element\Button;
-use Zend\Form\Element\Textarea;
+use Laminas\Form\Element\Button;
+use Laminas\Form\Element\Textarea;
 
 class OperatorLicenceTest extends AbstractFormValidationTestCase
 {

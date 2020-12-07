@@ -9,7 +9,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Mvc\Controller\Plugin\Placeholder;
 use Olcs\Mvc\Controller\Plugin\PlaceholderFactory;
-use Zend\View\Helper\Placeholder as ViewPlaceholder;
+use Laminas\View\Helper\Placeholder as ViewPlaceholder;
 
 /**
  * PlaceholderFactory Test
@@ -20,7 +20,7 @@ class PlaceholderFactoryTest extends MockeryTestCase
     {
         $viewPlaceholder = new ViewPlaceholder();
 
-        $mockSl = m::mock(\Zend\ServiceManager\ServiceLocatorInterface::class);
+        $mockSl = m::mock(\Laminas\ServiceManager\ServiceLocatorInterface::class);
         $mockSl->shouldReceive('getServiceLocator->get')->with('ViewHelperManager')->once()->andReturnSelf()
             ->shouldReceive('get')->with('placeholder')->once()->andReturn($viewPlaceholder);
 

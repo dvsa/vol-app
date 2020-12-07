@@ -47,7 +47,7 @@ class LicenceController extends AbstractSelfserveController
     ];
 
     /**
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function addAction()
     {

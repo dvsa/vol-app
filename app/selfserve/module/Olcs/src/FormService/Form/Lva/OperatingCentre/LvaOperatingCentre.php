@@ -5,7 +5,7 @@ namespace Olcs\FormService\Form\Lva\OperatingCentre;
 use Common\FormService\Form\Lva\OperatingCentre\CommonOperatingCentre;
 use Common\View\Helper\ReturnToAddress;
 use Dvsa\Olcs\Utils\Helper\ValueHelper;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 
 /**
  * Lva Operating Centre
@@ -56,7 +56,7 @@ class LvaOperatingCentre extends CommonOperatingCentre
     {
         $advertisements = $form->get('advertisements');
 
-        /** @var \Zend\Form\Element\Radio $radio */
+        /** @var \Laminas\Form\Element\Radio $radio */
         $radio = $advertisements->get('radio');
 
         $guideName = 'advertising-your-operating-centre';

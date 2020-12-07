@@ -2,7 +2,7 @@
 
 namespace Olcs\Controller\Licence\Surrender;
 
-use Zend\Mvc\MvcEvent;
+use Laminas\Mvc\MvcEvent;
 
 trait ReviewRedirect
 {

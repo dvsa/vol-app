@@ -8,10 +8,10 @@
 namespace Olcs\Service\Processing;
 
 use Dvsa\Olcs\Transfer\Command\Licence\CreateVariation;
-use Zend\Form\Form;
-use Zend\Http\Request;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Laminas\Form\Form;
+use Laminas\Http\Request;
+use Laminas\ServiceManager\ServiceLocatorAwareTrait;
+use Laminas\ServiceManager\ServiceLocatorAwareInterface;
 
 /**
  * Create Variation Processing Service

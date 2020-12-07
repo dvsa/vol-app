@@ -3,7 +3,7 @@
 namespace Olcs\FormService\Form\Lva\TypeOfLicence;
 
 use Common\FormService\Form\Lva\TypeOfLicence\ApplicationTypeOfLicence as CommonLicenceTypeOfLicence;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 
 /**
  * Application Type Of Licence Form

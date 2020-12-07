@@ -9,8 +9,8 @@ namespace Olcs\Controller\Lva;
 
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Application\DeclarationUndertakings;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Declaration Form Controller

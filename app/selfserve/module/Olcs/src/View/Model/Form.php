@@ -8,7 +8,7 @@
 namespace Olcs\View\Model;
 
 use Common\View\AbstractViewModel;
-use Zend\Form\Form as ZendForm;
+use Laminas\Form\Form as LaminasForm;
 
 /**
  * Form View Model
@@ -27,10 +27,10 @@ class Form extends AbstractViewModel
     /**
      * Set the form into the view.
      *
-     * @param ZendForm $form
+     * @param LaminasForm $form
      * @return void
      */
-    public function setForm(ZendForm $form)
+    public function setForm(LaminasForm $form)
     {
         $this->setVariable('form', $form);
     }

@@ -190,7 +190,7 @@ $isLoggedIn = $currentUser->isLoggedIn();
                   $navigation->findOneById('selfserve-topnav-search')->setVisible(true);
               }
 
-              /* @var \Zend\View\Helper\Navigation\Menu $menu */
+              /* @var \Laminas\View\Helper\Navigation\Menu $menu */
               $menu = $this->navigation($navigation)->menu();
 
               // We need to use a dedicated partial because the template requires classes to be set of the <a> tags

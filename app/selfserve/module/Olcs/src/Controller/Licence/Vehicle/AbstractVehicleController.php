@@ -18,8 +18,8 @@ use Exception;
 use Olcs\Controller\AbstractSelfserveController;
 use Olcs\Controller\Config\DataSource\DataSourceConfig;
 use Olcs\Session\LicenceVehicleManagement;
-use Zend\Mvc\MvcEvent;
-use Zend\View\Model\ViewModel;
+use Laminas\Mvc\MvcEvent;
+use Laminas\View\Model\ViewModel;
 
 abstract class AbstractVehicleController extends AbstractSelfserveController implements ToggleAwareInterface
 {
@@ -69,7 +69,7 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
 
     /**
      * @param MvcEvent $e
-     * @return array|mixed|\Zend\Http\PhpEnvironment\Response|\Zend\Http\Response
+     * @return array|mixed|\Laminas\Http\PhpEnvironment\Response|\Laminas\Http\Response
      */
     public function onDispatch(MvcEvent $e)
     {

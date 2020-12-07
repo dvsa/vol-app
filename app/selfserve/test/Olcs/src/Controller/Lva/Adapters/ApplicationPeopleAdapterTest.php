@@ -23,7 +23,7 @@ class ApplicationPeopleAdapterTest extends MockeryTestCase
             'isExceptionalType' => $isExcOrg,
         ];
 
-        $mockResp = m::mock(\Zend\Http\Response::class);
+        $mockResp = m::mock(\Laminas\Http\Response::class);
         $mockResp
             ->shouldReceive('isOk')->andReturn(true)
             ->shouldReceive('getResult')->andReturn($data);

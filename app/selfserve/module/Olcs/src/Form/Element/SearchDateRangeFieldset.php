@@ -9,7 +9,7 @@
 namespace Olcs\Form\Element;
 
 use Common\Form\Elements\Custom\DateSelect;
-use Zend\Form\Fieldset;
+use Laminas\Form\Fieldset;
 use Common\Service\Data\Search\SearchAwareTrait as SearchAwareTrait;
 
 /**

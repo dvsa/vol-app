@@ -1,7 +1,7 @@
 <?php
 namespace Permits\Form\Model\Form;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("CheckAnswers")
@@ -18,7 +18,7 @@ class IpaCheckAnswersForm
      *     "id":"submitbutton",
      *     "value":"confirm-and-return-to-overview",
      * })
-     * @Form\Type("Zend\Form\Element\Submit")
+     * @Form\Type("Laminas\Form\Element\Submit")
      */
     public $submit = null;
 }

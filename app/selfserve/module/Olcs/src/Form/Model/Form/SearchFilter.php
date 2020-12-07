@@ -2,13 +2,13 @@
 
 namespace Olcs\Form\Model\Form;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("search-filter")
  * @Form\Attributes({
- *     "method":"post", 
+ *     "method":"post",
  *     "class": "filters form__filter",
  *     "id": "filterContent"
  * })
@@ -39,7 +39,6 @@ class SearchFilter
     /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
-     * 
      */
     public $searchBy = null;
 
@@ -48,7 +47,7 @@ class SearchFilter
      * @Form\Options({
      *     "label": "search.form.filter.update_button"
      * })
-     * @Form\Type("\Zend\Form\Element\Button")
+     * @Form\Type("\Laminas\Form\Element\Button")
      */
     public $submit = null;
 }

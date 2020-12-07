@@ -8,7 +8,7 @@ use Common\Form\Form;
 use Common\Form\Input\StockInputMorocco;
 use Common\RefData;
 use Common\Service\Helper\TranslationHelperService;
-use Zend\Form\Element\Hidden;
+use Laminas\Form\Element\Hidden;
 
 /**
  * Available stocks mapper

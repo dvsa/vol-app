@@ -7,7 +7,7 @@ namespace Olcs\Session;
  *
  *
  */
-class DigitalSignature extends \Zend\Session\Container
+class DigitalSignature extends \Laminas\Session\Container
 {
     const SESSION_NAME = 'DigitalSignature';
 

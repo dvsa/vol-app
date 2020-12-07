@@ -6,8 +6,8 @@ use Common\Controller\Lva\AbstractController;
 use Common\Service\Cqrs\Exception\NotFoundException;
 use Dvsa\Olcs\Transfer\Command\User\RegisterUserSelfserve as RegisterDto;
 use Dvsa\Olcs\Transfer\Query\Licence\LicenceRegisteredAddress as LicenceByNumberDto;
-use Zend\Form\Form;
-use Zend\View\Model\ViewModel;
+use Laminas\Form\Form;
+use Laminas\View\Model\ViewModel;
 
 /**
  * User Registration Controller
@@ -17,7 +17,7 @@ class UserRegistrationController extends AbstractController
     /**
      * Method used for the registration form page
      *
-     * @return \Zend\Http\Response|ViewModel
+     * @return \Laminas\Http\Response|ViewModel
      */
     public function addAction()
     {
@@ -328,7 +328,7 @@ class UserRegistrationController extends AbstractController
     /**
      * Redirects to home
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     private function redirectToHome()
     {

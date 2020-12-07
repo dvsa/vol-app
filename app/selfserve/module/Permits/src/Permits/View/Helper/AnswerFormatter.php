@@ -4,7 +4,7 @@ namespace Permits\View\Helper;
 
 use Common\RefData;
 use DateTime;
-use Zend\View\Helper\AbstractHelper;
+use Laminas\View\Helper\AbstractHelper;
 
 /**
  * Format data passed in q&a format

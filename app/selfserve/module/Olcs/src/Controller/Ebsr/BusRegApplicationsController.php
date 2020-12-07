@@ -11,9 +11,9 @@ use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\EbsrSubmissionList;
 use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\TxcInboxList;
 use Dvsa\Olcs\Transfer\Query\Bus\RegistrationHistoryList as BusRegVariationHistoryDto;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
-use Zend\Http\Response;
-use Zend\Session\Container;
-use Zend\View\Model\ViewModel;
+use Laminas\Http\Response;
+use Laminas\Session\Container;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Class BusRegApplicationsController
@@ -55,7 +55,7 @@ class BusRegApplicationsController extends AbstractController
      */
     public function indexAction()
     {
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
 
         if ($request->isPost()) {
@@ -412,11 +412,11 @@ class BusRegApplicationsController extends AbstractController
      * @param array  $params   array of parameters
      * @param string $formName name of the form
      *
-     * @return \Zend\Form\FormInterface
+     * @return \Laminas\Form\FormInterface
      */
     private function getFilterForm($params, $formName)
     {
-        /** @var \Zend\Form\FormInterface $filterForm */
+        /** @var \Laminas\Form\FormInterface $filterForm */
         $filterForm = $this->getServiceLocator()->get('Helper\Form')->createForm($formName);
 
         $filterForm->setData(

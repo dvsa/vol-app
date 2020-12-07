@@ -25,7 +25,7 @@ class ConfirmationController extends AbstractController
     /**
      * index action for /transport-manager/:TmaId/confirmation route
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function indexAction()
     {
@@ -57,7 +57,7 @@ class ConfirmationController extends AbstractController
      * @param \Common\Form\Form $form   Form
      * @param array             $params Params
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     private function renderTmAction($title, $form, $params)
     {
@@ -69,7 +69,7 @@ class ConfirmationController extends AbstractController
         $params = array_merge($defaultParams, $params);
 
         $layout = $this->render($title, $form, $params);
-        /* @var $layout \Zend\View\Model\ViewModel */
+        /* @var $layout \Laminas\View\Model\ViewModel */
 
         $content = $layout->getChildrenByCaptureTo('content')[0];
         $content->setTemplate('pages/confirmation');

@@ -6,7 +6,7 @@ use Common\Service\Helper\FormHelperService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\ApplicationSafety;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 
 /**
@@ -49,4 +49,3 @@ class ApplicationSafetyTest extends MockeryTestCase
         $this->assertSame($mockForm, $form);
     }
 }
-

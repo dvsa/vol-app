@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("UserForgotUsername")
@@ -20,8 +20,8 @@ class UserForgotUsername
      *     }
      * })
      * @Form\Attributes({"class":"medium"})
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"min":2,"max":18}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":2,"max":18}})
      */
     public $licenceNumber = null;
 
@@ -34,7 +34,7 @@ class UserForgotUsername
      *     }
      * })
      * @Form\Attributes({"class":"long"})
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\EmailAddress"})
      */
     public $emailAddress = null;

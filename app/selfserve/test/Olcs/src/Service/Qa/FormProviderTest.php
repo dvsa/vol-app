@@ -8,7 +8,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Service\Qa\FormProvider;
 use Olcs\Service\Qa\FormFactory;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 
 class FormProviderTest extends MockeryTestCase
 {

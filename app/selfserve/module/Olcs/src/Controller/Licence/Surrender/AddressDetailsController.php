@@ -17,7 +17,7 @@ class AddressDetailsController extends AbstractSurrenderController
 
     public function indexAction()
     {
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
 
         if ($request->isPost()) {

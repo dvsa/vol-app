@@ -7,12 +7,12 @@ use Common\Service\Cqrs\Query\QuerySender;
 use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 use Olcs\Controller\Listener\Navigation as NavigationListener;
 use Mockery as m;
-use Zend\Http\Header\Referer as HttpReferer;
-use Zend\Http\Response as HttpResponse;
-use Zend\Http\PhpEnvironment\Request as HttpRequest;
-use Zend\Navigation\Navigation;
-use Zend\Navigation\Page\Uri;
-use Zend\Mvc\MvcEvent;
+use Laminas\Http\Header\Referer as HttpReferer;
+use Laminas\Http\Response as HttpResponse;
+use Laminas\Http\PhpEnvironment\Request as HttpRequest;
+use Laminas\Navigation\Navigation;
+use Laminas\Navigation\Page\Uri;
+use Laminas\Mvc\MvcEvent;
 
 /**
  * Class NavigationToggleTest
@@ -42,8 +42,8 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
 
     public function testAttach()
     {
-        /** @var \Zend\EventManager\EventManagerInterface | m\MockInterface $mockEventManager */
-        $mockEventManager = m::mock(\Zend\EventManager\EventManagerInterface::class);
+        /** @var \Laminas\EventManager\EventManagerInterface | m\MockInterface $mockEventManager */
+        $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
         $mockEventManager->shouldReceive('attach')->once()
             ->with(MvcEvent::EVENT_DISPATCH, [$this->sut, 'onDispatch'], 20);
 
@@ -66,8 +66,8 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
         $request = m::mock(HttpRequest::class);
         $request->shouldReceive('getHeader')->once()->with('referer')->andReturn(false);
 
-        /** @var \Zend\Mvc\MvcEvent | m\MockInterface $mockEvent */
-        $mockEvent = m::mock(\Zend\Mvc\MvcEvent::class);
+        /** @var \Laminas\Mvc\MvcEvent | m\MockInterface $mockEvent */
+        $mockEvent = m::mock(\Laminas\Mvc\MvcEvent::class);
         $mockEvent->shouldReceive('getRequest')->once()->withNoArgs()->andReturn($request);
 
         $this->sut->onDispatch($mockEvent);
@@ -109,8 +109,8 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
         $request = m::mock(HttpRequest::class);
         $request->shouldReceive('getHeader')->once()->with('referer')->andReturn(false);
 
-        /** @var \Zend\Mvc\MvcEvent | m\MockInterface $mockEvent */
-        $mockEvent = m::mock(\Zend\Mvc\MvcEvent::class);
+        /** @var \Laminas\Mvc\MvcEvent | m\MockInterface $mockEvent */
+        $mockEvent = m::mock(\Laminas\Mvc\MvcEvent::class);
         $mockEvent->shouldReceive('getRequest')->once()->withNoArgs()->andReturn($request);
 
         $this->sut->onDispatch($mockEvent);
@@ -148,8 +148,8 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
             ->with('id', $dashboardPermitsKey)
             ->andReturn($dashboardPermitsPage);
 
-        /** @var \Zend\Mvc\MvcEvent | m\MockInterface $mockEvent */
-        $mockEvent = m::mock(\Zend\Mvc\MvcEvent::class);
+        /** @var \Laminas\Mvc\MvcEvent | m\MockInterface $mockEvent */
+        $mockEvent = m::mock(\Laminas\Mvc\MvcEvent::class);
         $mockEvent->shouldReceive('getRequest')->once()->withNoArgs()->andReturn($request);
 
         $this->sut->onDispatch($mockEvent);
@@ -196,8 +196,8 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
         $request = m::mock(HttpRequest::class);
         $request->shouldReceive('getHeader')->once()->with('referer')->andReturn($referer);
 
-        /** @var \Zend\Mvc\MvcEvent | m\MockInterface $mockEvent */
-        $mockEvent = m::mock(\Zend\Mvc\MvcEvent::class);
+        /** @var \Laminas\Mvc\MvcEvent | m\MockInterface $mockEvent */
+        $mockEvent = m::mock(\Laminas\Mvc\MvcEvent::class);
         $mockEvent->shouldReceive('getRequest')->once()->withNoArgs()->andReturn($request);
 
         $this->sut->onDispatch($mockEvent);

@@ -2,7 +2,7 @@
 
 namespace Olcs\Controller\Lva\Traits;
 
-use Zend\Form\Form;
+use Laminas\Form\Form;
 
 /**
  * Abstract Licence Controller
@@ -17,7 +17,7 @@ trait LicenceControllerTrait
     /**
      * Hook into the dispatch before the controller action is executed
      *
-     * @return null|\Zend\Http\Response
+     * @return null|\Laminas\Http\Response
      */
     protected function preDispatch()
     {
@@ -45,7 +45,7 @@ trait LicenceControllerTrait
      *
      * @param string $section Section
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     protected function completeSection($section)
     {

@@ -9,7 +9,7 @@ use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder as TransferAnnotationBu
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\Lva\Adapters\LicenceTransportManagerAdapter;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 
 /**
  * External Transport Managers Adapter Test
@@ -38,7 +38,10 @@ class LicenceTransportManagerAdapterTest extends MockeryTestCase
         $this->mockLvaVariationSrv = m::mock(VariationLvaService::class);
 
         $this->sut = new LicenceTransportManagerAdapter(
-            $mockAnnotationBuilder, $mockQuerySrv, $mockCommandSrv, $this->mockLvaVariationSrv
+            $mockAnnotationBuilder,
+            $mockQuerySrv,
+            $mockCommandSrv,
+            $this->mockLvaVariationSrv
         );
     }
 

@@ -2,7 +2,7 @@
 
 namespace Olcs\Controller\Lva\Adapters;
 
-use Zend\Form\Form;
+use Laminas\Form\Form;
 use Common\Controller\Lva\Adapters\AbstractPeopleAdapter;
 
 /**
@@ -40,7 +40,7 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
     /**
      * Alter Form For Organisation
      *
-     * @param \Zend\Form\FormInterface           $form  Form
+     * @param \Laminas\Form\FormInterface           $form  Form
      * @param \Common\Service\Table\TableBuilder $table Table
      *
      * @return void

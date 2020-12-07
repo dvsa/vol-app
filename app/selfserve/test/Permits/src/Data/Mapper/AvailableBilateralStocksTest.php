@@ -11,9 +11,9 @@ use Common\Service\Helper\TranslationHelperService;
 use Mockery as m;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpApplicationDataSource;
 use Permits\Data\Mapper\AvailableBilateralStocks;
-use Zend\Form\Element\Hidden;
-use Zend\Form\Element\Submit;
-use Zend\Form\Fieldset;
+use Laminas\Form\Element\Hidden;
+use Laminas\Form\Element\Submit;
+use Laminas\Form\Fieldset;
 
 class AvailableBilateralStocksTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {

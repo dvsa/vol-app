@@ -8,7 +8,7 @@
 
 namespace Olcs\Form\Model\Form\Surrender;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("community-licence")

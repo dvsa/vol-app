@@ -1,7 +1,7 @@
 <?php
 namespace Permits\Form\Model\Form;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("Qa")
@@ -12,7 +12,7 @@ class QaBilateralForm
 {
     /**
      * @Form\Name("qa")
-     * @Form\Type("Zend\Form\Fieldset")
+     * @Form\Type("Laminas\Form\Fieldset")
      */
     public $fieldset = null;
 

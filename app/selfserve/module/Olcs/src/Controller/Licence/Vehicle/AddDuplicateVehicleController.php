@@ -19,7 +19,7 @@ class AddDuplicateVehicleController extends AbstractVehicleController
     ];
 
     /**
-     * @return \Zend\Http\Response|\Zend\View\Model\ViewModel
+     * @return \Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */
     public function indexAction()
     {
@@ -41,7 +41,7 @@ class AddDuplicateVehicleController extends AbstractVehicleController
     }
 
     /**
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function postAction()
     {

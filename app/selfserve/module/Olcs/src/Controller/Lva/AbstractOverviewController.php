@@ -9,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\Application\WithdrawApplication as WithdrawApplic
 use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
 use Dvsa\Olcs\Transfer\Query\Application\Summary as WithdrawQry;
 
-use Zend\Mvc\MvcEvent;
+use Laminas\Mvc\MvcEvent;
 
 /**
  * Abstract External Overview Controller
@@ -64,7 +64,7 @@ abstract class AbstractOverviewController extends AbstractController
     /**
      * Process action : Cancel
      *
-     * @return \Common\View\Model\Section|\Zend\Http\Response
+     * @return \Common\View\Model\Section|\Laminas\Http\Response
      */
     public function cancelAction()
     {
@@ -92,7 +92,7 @@ abstract class AbstractOverviewController extends AbstractController
     /**
      * Process action : Withdraw
      *
-     * @return \Common\View\Model\Section|\Zend\Http\Response
+     * @return \Common\View\Model\Section|\Laminas\Http\Response
      */
     public function withdrawAction()
     {
@@ -102,8 +102,7 @@ abstract class AbstractOverviewController extends AbstractController
         $response = $this->handleQuery($dto);
         $data = $response->getResult();
 
-        if(!$data['canWithdraw'])
-        {
+        if (!$data['canWithdraw']) {
             return $this->redirect()->toRoute('lva-' . $this->lva, [], [], true);
         }
 
@@ -142,7 +141,7 @@ abstract class AbstractOverviewController extends AbstractController
      *
      * @param int $lvaId LVA identifier
      *
-     * @return null|\Zend\Http\Response
+     * @return null|\Laminas\Http\Response
      */
     protected function checkForRedirect($lvaId)
     {
@@ -173,7 +172,7 @@ abstract class AbstractOverviewController extends AbstractController
      *
      * @param array                    $data     Api/Form Data
      * @param array                    $sections Sections
-     * @param \Zend\Form\FormInterface $form     Form
+     * @param \Laminas\Form\FormInterface $form     Form
      *
      * @return \Olcs\View\Model\LvaOverview
      */

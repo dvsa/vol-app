@@ -3,7 +3,7 @@
 namespace Olcs\FormService\Form\Lva\BusinessType;
 
 use Common\FormService\Form\Lva\BusinessType\LicenceBusinessType as CommonLicenceBusinessType;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 
 /**
  * Licence Business Type Form

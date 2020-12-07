@@ -14,14 +14,14 @@ class VariationOverviewSubmission extends AbstractOverviewSubmission
     /**
      * Make changes in form
      *
-     * @param \Zend\Form\FormInterface $form   Form
+     * @param \Laminas\Form\FormInterface $form   Form
      * @param array                    $data   Api data
      * @param array                    $params Parameters
      *
      * @return void
      * @inheritdoc
      */
-    protected function alterForm(\Zend\Form\FormInterface $form, array $data, array $params)
+    protected function alterForm(\Laminas\Form\FormInterface $form, array $data, array $params)
     {
         parent::alterForm($form, $data, $params);
 
@@ -29,7 +29,6 @@ class VariationOverviewSubmission extends AbstractOverviewSubmission
 
         if ($this->hasSectionsWithStatus(RefData::VARIATION_STATUS_REQUIRES_ATTENTION)) {
             $descText = 'variation.overview.submission.desc.req-attention';
-
         } elseif ($this->hasSectionsWithStatus(RefData::VARIATION_STATUS_UPDATED)) {
             $descText = 'variation.overview.submission.desc.must-submit';
         }

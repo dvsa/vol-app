@@ -13,8 +13,8 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\BusinessType\LicenceBusinessType;
 use Common\FormService\FormServiceInterface;
-use Zend\Form\Form;
-use Zend\Form\Element;
+use Laminas\Form\Form;
+use Laminas\Form\Element;
 
 /**
  * Licence Business Type Form Test
@@ -38,7 +38,7 @@ class LicenceBusinessTypeTest extends MockeryTestCase
     {
         $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
         $this->fh = m::mock(FormHelperService::class)->makePartial();
-        $this->sm = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $this->sm = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
 
         $this->sut = new LicenceBusinessType();
         $this->sut->setFormServiceLocator($this->fsm);

@@ -13,10 +13,10 @@ use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Olcs\Controller\Config\DataSource\DataSourceInterface;
 use Olcs\Logging\Log\Logger;
-use Zend\Http\PhpEnvironment\Response as PhpEnvironmentResponse;
-use Zend\Http\Response as HttpResponse;
-use Zend\Mvc\MvcEvent;
-use Zend\View\Model\ViewModel;
+use Laminas\Http\PhpEnvironment\Response as PhpEnvironmentResponse;
+use Laminas\Http\Response as HttpResponse;
+use Laminas\Mvc\MvcEvent;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Abstract selfserve controller
@@ -236,7 +236,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     public function genericAction()
     {
         $response = $this->handlePost();
-        if ($response instanceof \Zend\Http\Response) {
+        if ($response instanceof \Laminas\Http\Response) {
             return $response;
         }
 
@@ -521,7 +521,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      *
      * @param string $route the new route
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     protected function conditionalDisplayNotMet(string $route)
     {

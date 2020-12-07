@@ -5,7 +5,7 @@ namespace OlcsTest\Service\Qa;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Service\Cookie\AnalyticsCookieNamesProvider;
-use Zend\Http\Header\Cookie;
+use Laminas\Http\Header\Cookie;
 
 class AnalyticsCookieNamesProviderTest extends MockeryTestCase
 {

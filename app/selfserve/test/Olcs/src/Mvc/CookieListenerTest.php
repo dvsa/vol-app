@@ -11,12 +11,12 @@ use Olcs\Mvc\CookieListener;
 use Olcs\Service\Cookie\CookieReader;
 use Olcs\Service\Cookie\CookieState;
 use Olcs\Service\Cookie\Preferences;
-use Zend\EventManager\EventManagerInterface;
-use Zend\Http\Header\Cookie;
-use Zend\Http\Request;
-use Zend\Mvc\MvcEvent;
-use Zend\View\Helper\Placeholder;
-use Zend\View\Helper\Placeholder\Container;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\Http\Header\Cookie;
+use Laminas\Http\Request;
+use Laminas\Mvc\MvcEvent;
+use Laminas\View\Helper\Placeholder;
+use Laminas\View\Helper\Placeholder\Container;
 
 class CookieListenerTest extends MockeryTestCase
 {

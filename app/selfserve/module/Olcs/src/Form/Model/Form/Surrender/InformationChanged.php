@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Form\Surrender;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Attributes({"id":"surrender-information-changed"})
@@ -13,7 +13,7 @@ class InformationChanged
     /**
      * @Form\Attributes({"type":"submit","class":"govuk-button govuk-button--start"})
      * @Form\Options({"label":"licence.surrender.information_changed.start_again"})
-     * @Form\Type("\Zend\Form\Element\Button")
+     * @Form\Type("\Laminas\Form\Element\Button")
      */
     public $startAgain = null;
 

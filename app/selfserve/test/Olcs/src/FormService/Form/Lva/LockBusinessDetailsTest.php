@@ -59,7 +59,7 @@ class LockBusinessDetailsTest extends MockeryTestCase
         // Params
         $form = m::mock();
         $fieldset = m::mock();
-        $companyNumber = m::mock('\Zend\Form\Element');
+        $companyNumber = m::mock('\Laminas\Form\Element');
 
         // Expectations
         $form->shouldReceive('get')
@@ -98,7 +98,7 @@ class LockBusinessDetailsTest extends MockeryTestCase
         // Params
         $form = m::mock();
         $fieldset = m::mock();
-        $name = m::mock('\Zend\Form\Element');
+        $name = m::mock('\Laminas\Form\Element');
 
         // Expectations
         $form->shouldReceive('get')
@@ -134,8 +134,8 @@ class LockBusinessDetailsTest extends MockeryTestCase
         // Params
         $form = m::mock();
         $fieldset = m::mock();
-        $name = m::mock('\Zend\Form\Element');
-        $companyNumber = m::mock('\Zend\Form\Element');
+        $name = m::mock('\Laminas\Form\Element');
+        $companyNumber = m::mock('\Laminas\Form\Element');
 
         // Expectations
         $form->shouldReceive('get')

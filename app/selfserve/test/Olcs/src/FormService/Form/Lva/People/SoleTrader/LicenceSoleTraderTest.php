@@ -9,7 +9,7 @@ use OlcsTest\Bootstrap;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\People\SoleTrader\LicenceSoleTrader as Sut;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 
 /**
  * Licence Sole Trader Test

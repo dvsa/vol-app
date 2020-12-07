@@ -6,7 +6,7 @@ namespace Olcs\Controller\Licence\Vehicle;
 use Common\Form\Form;
 use Olcs\Form\Model\Form\Vehicle\ListVehicleSearch;
 use Olcs\Form\Model\Form\Vehicle\Vehicles as VehiclesForm;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 class RemoveVehicleController extends AbstractVehicleController
 {

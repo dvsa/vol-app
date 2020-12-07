@@ -3,7 +3,7 @@
 namespace Olcs\FormService\Form\Lva\OperatingCentres;
 
 use Common\FormService\Form\Lva\OperatingCentres\AbstractOperatingCentres;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 use Common\Service\Helper\FormHelperService;
 use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
 

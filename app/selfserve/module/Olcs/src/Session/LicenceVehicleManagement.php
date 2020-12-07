@@ -3,7 +3,7 @@
 
 namespace Olcs\Session;
 
-class LicenceVehicleManagement extends \Zend\Session\Container
+class LicenceVehicleManagement extends \Laminas\Session\Container
 {
     const SESSION_NAME = 'LicenceVehicleManagement';
     protected const TRANSFER_TO_LICENSE_ID = 'transferToLicenceId';

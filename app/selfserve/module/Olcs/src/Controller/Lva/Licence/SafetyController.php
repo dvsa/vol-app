@@ -8,7 +8,7 @@
  */
 namespace Olcs\Controller\Lva\Licence;
 
-use Zend\Form\Form;
+use Laminas\Form\Form;
 use Common\Controller\Lva;
 use Common\Controller\Lva\Traits\LicenceSafetyControllerTrait;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;

@@ -7,8 +7,8 @@ use Common\Service\Table\TableBuilder;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\LicenceTrailers;
-use Zend\Form\Form;
-use Zend\Http\Request;
+use Laminas\Form\Form;
+use Laminas\Http\Request;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 
 /**

@@ -9,8 +9,8 @@ use Common\RefData;
 use Common\Service\Table\TableBuilder;
 use Dvsa\Olcs\Transfer\Command\Variation\GrantDirectorChange;
 use Olcs\Controller\Lva\Traits\VariationWizardFinalPageControllerTrait;
-use Zend\Http\Response;
-use Zend\Mvc\Controller\Plugin\FlashMessenger;
+use Laminas\Http\Response;
+use Laminas\Mvc\Controller\Plugin\FlashMessenger;
 
 /**
  * Class ConvictionsPenaltiesController

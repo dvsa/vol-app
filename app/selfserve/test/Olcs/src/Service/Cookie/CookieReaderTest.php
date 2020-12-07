@@ -10,7 +10,7 @@ use Olcs\Service\Cookie\CookieStateFactory;
 use Olcs\Service\Cookie\Preferences;
 use Olcs\Service\Cookie\PreferencesFactory;
 use RuntimeException;
-use Zend\Http\Header\Cookie;
+use Laminas\Http\Header\Cookie;
 
 class CookieReaderTest extends MockeryTestCase
 {

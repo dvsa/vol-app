@@ -14,7 +14,7 @@ class LicenceSafety extends CommonSafety
     /**
      * Returns form
      *
-     * @return \Zend\Form\FormInterface
+     * @return \Laminas\Form\FormInterface
      */
     public function getForm()
     {

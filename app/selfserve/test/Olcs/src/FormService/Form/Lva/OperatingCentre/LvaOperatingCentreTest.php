@@ -5,9 +5,9 @@ namespace OlcsTest\FormService\Form\Lva\OperatingCentre;
 use Common\FormService\FormServiceManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 use Olcs\FormService\Form\Lva\OperatingCentre\LvaOperatingCentre;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 use Common\Service\Helper\FormHelperService;
 
 /**

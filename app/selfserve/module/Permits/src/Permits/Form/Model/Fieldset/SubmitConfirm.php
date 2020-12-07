@@ -1,7 +1,7 @@
 <?php
 namespace Permits\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
@@ -19,7 +19,7 @@ class SubmitConfirm
      * @Form\Options({
      *     "label":"permits.button.confirm-and-continue",
      * })
-     * @Form\Type("Zend\Form\Element\Button")
+     * @Form\Type("Laminas\Form\Element\Button")
      */
     public $submit = null;
 
@@ -30,7 +30,7 @@ class SubmitConfirm
      *     "value":"permits.button.save-return-to-overview",
      *     "role":"link"
      * })
-     * @Form\Type("Zend\Form\Element\Submit")
+     * @Form\Type("Laminas\Form\Element\Submit")
      */
     public $save = null;
 }

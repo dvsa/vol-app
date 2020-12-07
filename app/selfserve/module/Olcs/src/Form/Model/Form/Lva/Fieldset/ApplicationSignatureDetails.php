@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Form\Lva\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * Class ApplicationSignatureDetails

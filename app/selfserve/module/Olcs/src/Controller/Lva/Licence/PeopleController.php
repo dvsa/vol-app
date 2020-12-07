@@ -7,9 +7,9 @@ use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Licence\CreateVariation;
 use Olcs\Controller\Lva\Adapters\LicencePeopleAdapter;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
-use Zend\Form\Form;
-use Zend\Http\Request;
-use Zend\Http\Response;
+use Laminas\Form\Form;
+use Laminas\Http\Request;
+use Laminas\Http\Response;
 
 /**
  * External Licence People Controller

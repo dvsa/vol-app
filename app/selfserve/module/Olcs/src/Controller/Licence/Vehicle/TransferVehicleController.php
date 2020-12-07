@@ -9,9 +9,9 @@ use Olcs\DTO\Licence\OtherActiveLicenceListDTO;
 use Olcs\Form\Model\Form\Vehicle\Fieldset\VehicleTransferFormActions;
 use Olcs\Form\Model\Form\Vehicle\ListVehicleSearch;
 use Olcs\Form\Model\Form\Vehicle\VehicleTransferForm;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 use Olcs\Exception\Licence\NoOtherLicencesFoundException;
-use Zend\Http\Response;
+use Laminas\Http\Response;
 
 class TransferVehicleController extends AbstractVehicleController
 {

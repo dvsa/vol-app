@@ -39,7 +39,7 @@ class ApplicationOverviewSectionTest extends MockeryTestCase
 
         $viewModel = new ApplicationOverviewSection($ref, $data, $sectionDetails);
 
-        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $viewModel);
+        $this->assertInstanceOf('\Laminas\View\Model\ViewModel', $viewModel);
         $this->assertEquals('section.name.people.org_t_llp', $viewModel->getVariable('name'));
         $this->assertEquals('orange', $viewModel->getVariable('statusColour'));
         $this->assertEquals('INCOMPLETE', $viewModel->getVariable('status'));
@@ -69,7 +69,7 @@ class ApplicationOverviewSectionTest extends MockeryTestCase
 
         $viewModel = new ApplicationOverviewSection($ref, $data, $sectionDetails);
 
-        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $viewModel);
+        $this->assertInstanceOf('\Laminas\View\Model\ViewModel', $viewModel);
 
         $this->assertEquals('green', $viewModel->getVariable('statusColour'));
         $this->assertEquals('COMPLETE', $viewModel->getVariable('status'));
@@ -99,7 +99,7 @@ class ApplicationOverviewSectionTest extends MockeryTestCase
 
         $viewModel = new ApplicationOverviewSection($ref, $data, $sectionDetails);
 
-        $this->assertInstanceOf('\Zend\View\Model\ViewModel', $viewModel);
+        $this->assertInstanceOf('\Laminas\View\Model\ViewModel', $viewModel);
 
         $this->assertEquals('grey', $viewModel->getVariable('statusColour'));
         $this->assertEquals('NOT STARTED', $viewModel->getVariable('status'));

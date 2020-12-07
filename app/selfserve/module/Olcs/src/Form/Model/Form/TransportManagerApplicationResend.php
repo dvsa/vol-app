@@ -2,12 +2,12 @@
 
 namespace Olcs\Form\Model\Form;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("transport-manager-application-resend")
  * @Form\Attributes({"method":"post", "action":""})
- * @Form\Hydrator("Zend\Stdlib\Hydrator\ArraySerializable")
+ * @Form\Hydrator("Laminas\Stdlib\Hydrator\ArraySerializable")
  */
 class TransportManagerApplicationResend
 {
@@ -20,7 +20,7 @@ class TransportManagerApplicationResend
      *     }
      * })
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\EmailAddress"})
      */
     protected $emailAddress;

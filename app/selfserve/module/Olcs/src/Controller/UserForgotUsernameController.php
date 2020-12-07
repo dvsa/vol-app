@@ -4,8 +4,8 @@ namespace Olcs\Controller;
 
 use Common\Controller\Lva\AbstractController;
 use Dvsa\Olcs\Transfer\Command\User\RemindUsernameSelfserve as RemindUsernameDto;
-use Zend\Form\Form;
-use Zend\View\Model\ViewModel;
+use Laminas\Form\Form;
+use Laminas\View\Model\ViewModel;
 
 /**
  * User Forgot Username Controller
@@ -118,7 +118,7 @@ class UserForgotUsernameController extends AbstractController
     /**
      * Redirects to home
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     private function redirectToHome()
     {

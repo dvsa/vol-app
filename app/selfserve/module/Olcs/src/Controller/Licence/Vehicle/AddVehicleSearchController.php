@@ -8,7 +8,7 @@ use Common\Service\Cqrs\Exception\NotFoundException;
 use Exception;
 use Olcs\Form\Model\Form\Vehicle\AddVehicleSearch;
 use Olcs\Form\Model\Form\Vehicle\ConfirmVehicle;
-use Zend\Mvc\MvcEvent;
+use Laminas\Mvc\MvcEvent;
 
 class AddVehicleSearchController extends AbstractVehicleController
 {
@@ -31,7 +31,7 @@ class AddVehicleSearchController extends AbstractVehicleController
     const RESULTS_TITLE = 'licence.vehicle.add.result.title';
 
     /**
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function indexAction()
     {
@@ -52,7 +52,7 @@ class AddVehicleSearchController extends AbstractVehicleController
     }
 
     /**
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function postAction()
     {
@@ -76,7 +76,7 @@ class AddVehicleSearchController extends AbstractVehicleController
     }
 
     /**
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function clearAction()
     {
@@ -85,7 +85,7 @@ class AddVehicleSearchController extends AbstractVehicleController
     }
 
     /**
-     * @return \Zend\Http\Response|\Zend\View\Model\ViewModel
+     * @return \Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */
     public function confirmationAction()
     {

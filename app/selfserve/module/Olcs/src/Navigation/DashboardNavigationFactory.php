@@ -1,7 +1,7 @@
 <?php
 namespace Olcs\Navigation;
 
-use Zend\Navigation\Service\AbstractNavigationFactory;
+use Laminas\Navigation\Service\AbstractNavigationFactory;
 
 /**
  * Dashboard navigation factory.

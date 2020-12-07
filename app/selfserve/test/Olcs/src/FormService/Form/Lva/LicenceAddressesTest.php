@@ -6,7 +6,7 @@ use Common\RefData;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\Addresses\LicenceAddresses;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 
 /**
  * Licence Addresses Test

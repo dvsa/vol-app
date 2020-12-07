@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Form\Surrender;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Attributes({"method":"post", "class":"form"})
@@ -25,7 +25,7 @@ class DeclarationSign
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary large"})
      * @Form\Options({"label":"licence.surrender.declaration.sign"})
-     * @Form\Type("\Zend\Form\Element\Button")
+     * @Form\Type("\Laminas\Form\Element\Button")
      */
     public $sign = null;
 }

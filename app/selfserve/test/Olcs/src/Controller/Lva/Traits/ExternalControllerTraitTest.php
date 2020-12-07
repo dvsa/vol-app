@@ -30,7 +30,7 @@ class ExternalControllerTraitTest extends MockeryTestCase
     {
         $this->sut->shouldReceive('attachCurrentMessages');
 
-        $view = new \Zend\View\Model\ViewModel();
+        $view = new \Laminas\View\Model\ViewModel();
 
         $this->assertEquals(
             $view,

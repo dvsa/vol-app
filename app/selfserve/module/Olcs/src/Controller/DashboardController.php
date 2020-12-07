@@ -12,7 +12,7 @@ use Olcs\View\Model\Dashboard;
 use Common\Controller\Lva\AbstractController;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Organisation\Dashboard as DashboardQry;
-use Zend\View\Model\ViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Dashboard Controller
@@ -79,7 +79,7 @@ class DashboardController extends AbstractController
         $params['showApplicationTable'] = count($dashboardData['applications']) > 0;
 
         // setup view
-        $view = new \Zend\View\Model\ViewModel($params);
+        $view = new \Laminas\View\Model\ViewModel($params);
         $view->setTemplate('dashboard');
         $view->setVariable('numberOfLicences', count($dashboardData['licences']));
         $view->setVariable('numberOfApplications', count($dashboardData['applications']));
@@ -127,7 +127,7 @@ class DashboardController extends AbstractController
         $table = $this->getServiceLocator()->get('Table')->buildTable('dashboard-tm-applications', $data);
 
         // setup view
-        $view = new \Zend\View\Model\ViewModel();
+        $view = new \Laminas\View\Model\ViewModel();
         $view->setTemplate('dashboard-tm');
         $view->setVariable('applicationsTable', $table);
 

@@ -33,7 +33,7 @@ class CheckAnswersController extends AbstractController
             $sections = $this->addChangeSectionLink($sections, $this->tma);
         }
         $params = array_merge(["sections" => $sections], $defaultParams);
-        /* @var $layout \Zend\View\Model\ViewModel */
+        /* @var $layout \Laminas\View\Model\ViewModel */
         $layout = $this->render($title, $form, $params);
         $content = $layout->getChildrenByCaptureTo('content')[0];
         $content->setTemplate('pages/lva-tm-details-checkAnswers');
@@ -44,7 +44,7 @@ class CheckAnswersController extends AbstractController
     /**
      * confirmAction
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function confirmAction()
     {
@@ -124,7 +124,7 @@ class CheckAnswersController extends AbstractController
         return array($title, $defaultParams, $form);
     }
 
-    private function redirectToTmDeclarationPage(): \Zend\Http\Response
+    private function redirectToTmDeclarationPage(): \Laminas\Http\Response
     {
         return $this->redirect()->toRoute(
             'lva-' . $this->lva . '/transport_manager_tm_declaration',

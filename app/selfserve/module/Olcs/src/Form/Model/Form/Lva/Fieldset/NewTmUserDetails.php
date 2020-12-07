@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Form\Lva\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("NewTmUserDetails")
@@ -18,8 +18,8 @@ class NewTmUserDetails
      *     "short-label":"tm-add-user-forename"
      * })
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":35}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":35}})
      */
     public $forename = null;
 
@@ -30,8 +30,8 @@ class NewTmUserDetails
      *     "short-label":"tm-add-user-familyName"
      * })
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":35}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":35}})
      */
     public $familyName = null;
 
@@ -61,7 +61,7 @@ class NewTmUserDetails
      *     "value_options": {"Y": "Yes", "N": "No"}
      * })
      * @Form\Required(false)
-     * @Form\Type("\Zend\Form\Element\Radio")
+     * @Form\Type("\Laminas\Form\Element\Radio")
      */
     public $hasEmail = null;
 
@@ -73,7 +73,7 @@ class NewTmUserDetails
      *     "hint":"tm-add-user-username.hint"
      * })
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\Username"})
      * @Form\Required(false)
      */
@@ -87,7 +87,7 @@ class NewTmUserDetails
      * })
      * @Form\Type("Text")
      * @Form\Required(false)
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\EmailAddress"})
      * @Form\Validator({"name":"Common\Form\Elements\Validators\EmailConfirm","options":{"token":"emailConfirm"}})
      */
@@ -101,7 +101,7 @@ class NewTmUserDetails
      * })
      * @Form\Type("Text")
      * @Form\Required(false)
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      */
     public $emailConfirm = null;
 

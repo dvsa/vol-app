@@ -7,8 +7,8 @@ use Common\Service\Cqrs\Exception\NotFoundException;
 use Dvsa\Olcs\Transfer\Query\Bus\BusRegBrowseList;
 use Dvsa\Olcs\Transfer\Query\Bus\BusRegBrowseExport;
 use Olcs\Form\Model\Form\BusRegBrowseForm as Form;
-use Zend\View\Model\ViewModel;
-use Zend\Session\Container;
+use Laminas\View\Model\ViewModel;
+use Laminas\Session\Container;
 
 /**
  * Class BusRegBrowseController
@@ -18,14 +18,14 @@ class BusRegBrowseController extends AbstractController
     /**
      * Index action
      *
-     * @return \Zend\Http\Response|ViewModel
+     * @return \Laminas\Http\Response|ViewModel
      */
     public function indexAction()
     {
-        /** @var \Zend\Form\Form $form */
+        /** @var \Laminas\Form\Form $form */
         $form = $this->getServiceLocator()->get('Helper\Form')->createForm(Form::class);
 
-        /** @var \Zend\Http\Request $request */
+        /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
 
         if ($request->isPost()) {
@@ -63,7 +63,7 @@ class BusRegBrowseController extends AbstractController
      *
      * @param array $criteria Criteria
      *
-     * @return \Zend\Http\Response|null
+     * @return \Laminas\Http\Response|null
      */
     private function handleExport($criteria)
     {
@@ -82,7 +82,7 @@ class BusRegBrowseController extends AbstractController
                 $httpResponse = $response->getHttpResponse();
 
                 // but make sure we only return allowed headers
-                $headers = new \Zend\Http\Headers();
+                $headers = new \Laminas\Http\Headers();
                 $allowedHeaders = ['Content-Disposition', 'Content-Encoding', 'Content-Type', 'Content-Length'];
 
                 foreach ($httpResponse->getHeaders() as $header) {

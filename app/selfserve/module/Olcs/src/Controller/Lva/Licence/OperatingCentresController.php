@@ -10,7 +10,7 @@ namespace Olcs\Controller\Lva\Licence;
 
 use Common\Controller\Lva;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 
 /**
  * External Licencing Operating Centres Controller

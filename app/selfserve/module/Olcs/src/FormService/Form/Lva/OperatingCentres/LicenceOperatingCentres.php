@@ -3,7 +3,7 @@
 namespace Olcs\FormService\Form\Lva\OperatingCentres;
 
 use Common\FormService\Form\Lva\OperatingCentres\LicenceOperatingCentres as CommonLicenceOperatingCentres;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 
 /**
  * Licence Operating Centres

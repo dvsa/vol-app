@@ -1,7 +1,7 @@
 <?php
 namespace Permits\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
@@ -18,7 +18,7 @@ class Countries
      *      "label_attributes": {"class": "form-control form-control--checkbox form-control--confirm govuk-!-padding-bottom-2"},
      * })
      * @Form\Validator({
-     *      "name": "Zend\Validator\NotEmpty",
+     *      "name": "Laminas\Validator\NotEmpty",
      *      "options": {
      *          "messages": {
      *              "isEmpty": "error.messages.permits.countries"

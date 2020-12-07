@@ -2,7 +2,7 @@
 
 namespace Permits\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
+use Laminas\View\Helper\AbstractHelper;
 
 /**
  * Link back to the permits overview page for that id

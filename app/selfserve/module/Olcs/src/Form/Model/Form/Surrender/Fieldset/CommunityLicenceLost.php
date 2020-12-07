@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Form\Surrender\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("community-licence-lost")
@@ -52,8 +52,8 @@ class CommunityLicenceLost
      *
      *      }
      * })
-     * @Form\Type("\Zend\Form\Element\Textarea")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Type("\Laminas\Form\Element\Textarea")
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Attributes({
      *     "class" : "govuk-textarea",
      *     "rows" : "5"

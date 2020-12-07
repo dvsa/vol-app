@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Form\Lva;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * Form to show signature information from GDS Verify and continue to pay application fees

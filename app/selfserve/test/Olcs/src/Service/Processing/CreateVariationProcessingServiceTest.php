@@ -34,7 +34,7 @@ class CreateVariationProcessingServiceTest extends MockeryTestCase
 
     public function testGetDataFromForm()
     {
-        $form = m::mock('\Zend\Form\Form');
+        $form = m::mock('\Laminas\Form\Form');
 
         $this->assertEquals([], $this->sut->getDataFromForm($form));
     }
@@ -82,7 +82,7 @@ class CreateVariationProcessingServiceTest extends MockeryTestCase
     public function testGetForm()
     {
         // Params
-        $mockRequest = m::mock('\Zend\Http\Request');
+        $mockRequest = m::mock('\Laminas\Http\Request');
 
         // Mocks
         $mockFormHelper = m::mock();
@@ -117,7 +117,7 @@ class CreateVariationProcessingServiceTest extends MockeryTestCase
     public function testGetFormWithPost()
     {
         // Params
-        $mockRequest = m::mock('\Zend\Http\Request');
+        $mockRequest = m::mock('\Laminas\Http\Request');
         $postData = ['foo' => 'bar'];
 
         // Mocks

@@ -2,7 +2,7 @@
 
 namespace Permits\View\Helper;
 
-use Zend\View\Helper\AbstractHelper;
+use Laminas\View\Helper\AbstractHelper;
 
 /**
  * Generate a link within a HTML anchor tag, and include a context value for accessibility

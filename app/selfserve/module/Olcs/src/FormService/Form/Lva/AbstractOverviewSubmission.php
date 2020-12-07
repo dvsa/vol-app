@@ -3,9 +3,9 @@
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\AbstractFormService;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorAwareInterface;
+use Laminas\ServiceManager\ServiceLocatorAwareTrait;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Abstract class to create submission form at LVA Overview page
@@ -25,7 +25,7 @@ class AbstractOverviewSubmission extends AbstractFormService implements ServiceL
      * @param array $data   Api/Form data
      * @param array $params Form parameters
      *
-     * @return \Zend\Form\Form
+     * @return \Laminas\Form\Form
      */
     public function getForm($data, $params)
     {
@@ -40,13 +40,13 @@ class AbstractOverviewSubmission extends AbstractFormService implements ServiceL
     /**
      * Make changes in Submit and Payment form
      *
-     * @param \Zend\Form\FormInterface $form   Form
+     * @param \Laminas\Form\FormInterface $form   Form
      * @param array                    $data   Api data
      * @param array                    $params Parameters
      *
      * @return void
      */
-    protected function alterForm(\Zend\Form\FormInterface $form, array $data, array $params)
+    protected function alterForm(\Laminas\Form\FormInterface $form, array $data, array $params)
     {
         /** @var \Common\Service\Helper\FormHelperService $formHelper */
         $formHelper = $this->getFormHelper();

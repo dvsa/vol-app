@@ -47,7 +47,7 @@ class UserForgotUsernameControllerTest extends TestCase
 
         $view = $this->sut->indexAction();
 
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $view);
+        $this->assertInstanceOf('Laminas\View\Model\ViewModel', $view);
         $this->assertEquals('olcs/user-forgot-username/index', $view->getTemplate());
     }
 
@@ -126,7 +126,7 @@ class UserForgotUsernameControllerTest extends TestCase
 
         $view = $this->sut->indexAction();
 
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $view);
+        $this->assertInstanceOf('Laminas\View\Model\ViewModel', $view);
         $this->assertEquals('olcs/user-forgot-username/check-email', $view->getTemplate());
     }
 
@@ -179,7 +179,7 @@ class UserForgotUsernameControllerTest extends TestCase
 
         $view = $this->sut->indexAction();
 
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $view);
+        $this->assertInstanceOf('Laminas\View\Model\ViewModel', $view);
         $this->assertEquals('olcs/user-forgot-username/ask-admin', $view->getTemplate());
     }
 
@@ -229,7 +229,7 @@ class UserForgotUsernameControllerTest extends TestCase
 
         $view = $this->sut->indexAction();
 
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $view);
+        $this->assertInstanceOf('Laminas\View\Model\ViewModel', $view);
         $this->assertEquals('olcs/user-forgot-username/index', $view->getTemplate());
     }
 
@@ -278,7 +278,7 @@ class UserForgotUsernameControllerTest extends TestCase
 
         $view = $this->sut->indexAction();
 
-        $this->assertInstanceOf('Zend\View\Model\ViewModel', $view);
+        $this->assertInstanceOf('Laminas\View\Model\ViewModel', $view);
         $this->assertEquals('olcs/user-forgot-username/index', $view->getTemplate());
     }
 }

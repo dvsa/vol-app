@@ -1,29 +1,30 @@
 <?php
+
 namespace Permits;
 
 //all used for getServiceConfig (db services like factories and dat)
 use Permits\Model\Product;
-use Zend\Db\ResultSet\ResultSet;
-use Zend\Db\TableGateway\TableGateway;
+use Laminas\Db\ResultSet\ResultSet;
+use Laminas\Db\TableGateway\TableGateway;
 
-class Module {
-	public function getAutoloaderConfig(){
-		return array(
-			'Zend\Loader\ClassMapAutoloader' => array(
-				__DIR__ . '/autoload_classmap.php',
-			),
-			'Zend\Loader\StandardAutoloader' => array(
-				'namespaces' => array(
-					__NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
-					),
-			),
-		);
-	}
-	
-	public function getConfig(){
-		return include __DIR__ . '/config/module.config.php';
-	}
+class Module
+{
+    public function getAutoloaderConfig()
+    {
+        return array(
+            'Laminas\Loader\ClassMapAutoloader' => array(
+                __DIR__ . '/autoload_classmap.php',
+            ),
+            'Laminas\Loader\StandardAutoloader' => array(
+                'namespaces' => array(
+                    __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
+                ),
+            ),
+        );
+    }
 
+    public function getConfig()
+    {
+        return include __DIR__ . '/config/module.config.php';
+    }
 }
-
-?>

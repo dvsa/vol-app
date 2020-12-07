@@ -28,7 +28,7 @@ class DashboardProcessingServiceTest extends MockeryTestCase
      */
     public function testGetTables($data, $licences, $variations, $applications)
     {
-        $mockSl = m::mock('Zend\ServiceManager\ServiceLocatorInterface');
+        $mockSl = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')
             ->with('Table')
             ->andReturn(

@@ -15,14 +15,14 @@ class ApplicationOverviewSubmissionTest extends MockeryTestCase
     /** @var  ApplicationOverviewSubmissionStub */
     private $sut;
 
-    /** @var  m\MockInterface | \Zend\Form\FormInterface */
+    /** @var  m\MockInterface | \Laminas\Form\FormInterface */
     private $mockForm;
     /** @var  m\MockInterface | \Common\Service\Helper\FormHelperService */
     private $mockFormHlp;
 
     public function setUp(): void
     {
-        $this->mockForm = m::mock(\Zend\Form\FormInterface::class);
+        $this->mockForm = m::mock(\Laminas\Form\FormInterface::class);
 
         $this->mockFormHlp = m::mock(\Common\Service\Helper\FormHelperService::class);
 
@@ -62,7 +62,7 @@ class ApplicationOverviewSubmissionTest extends MockeryTestCase
         $this->mockParentCall();
 
         //  expect
-        $mockDescElm = m::mock(\Zend\Form\ElementInterface::class)
+        $mockDescElm = m::mock(\Laminas\Form\ElementInterface::class)
             ->shouldReceive('setLabel')->once()->with('application.overview.submission.desc.notcomplete')
             ->getMock();
 
@@ -79,7 +79,7 @@ class ApplicationOverviewSubmissionTest extends MockeryTestCase
     private function mockParentCall()
     {
         //  mock expected parent call
-        $mockElm = m::mock(\Zend\Form\Element::class)->makePartial();
+        $mockElm = m::mock(\Laminas\Form\Element::class)->makePartial();
 
         $this->mockForm
             ->shouldReceive('get')->with('submitPay')->zeroOrMoreTimes()->andReturn($mockElm)
@@ -88,6 +88,5 @@ class ApplicationOverviewSubmissionTest extends MockeryTestCase
         $this->mockFormHlp
             ->shouldReceive('remove')->with($this->mockForm, 'amount')->once()
             ->shouldReceive('remove')->zeroOrMoreTimes();
-
     }
 }

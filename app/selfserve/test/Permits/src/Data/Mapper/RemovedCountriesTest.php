@@ -7,9 +7,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Mockery as m;
 use Permits\Controller\Config\DataSource\AvailableCountries;
 use Permits\Data\Mapper\RemovedCountries;
-use Zend\Form\Element\Hidden;
-use Zend\Form\Fieldset;
-use Zend\Form\Form;
+use Laminas\Form\Element\Hidden;
+use Laminas\Form\Fieldset;
+use Laminas\Form\Form;
 
 /**
  * RemovedCountriesTest

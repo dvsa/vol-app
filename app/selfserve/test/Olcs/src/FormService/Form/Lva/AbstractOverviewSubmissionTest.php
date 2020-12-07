@@ -17,14 +17,14 @@ class AbstractOverviewSubmissionTest extends MockeryTestCase
 
     /** @var  m\MockInterface */
     private $mockSm;
-    /** @var  m\MockInterface | \Zend\Form\FormInterface */
+    /** @var  m\MockInterface | \Laminas\Form\FormInterface */
     private $mockForm;
     /** @var  m\MockInterface | \Common\Service\Helper\FormHelperService */
     private $mockFormHlp;
 
     public function setUp(): void
     {
-        $this->mockForm = m::mock(\Zend\Form\FormInterface::class);
+        $this->mockForm = m::mock(\Laminas\Form\FormInterface::class);
 
         $this->mockSm = Bootstrap::getServiceManager();
         $this->mockSm
@@ -75,11 +75,11 @@ class AbstractOverviewSubmissionTest extends MockeryTestCase
         ];
 
         //  expect
-        $mockAmountElm = m::mock(\Zend\Form\ElementInterface::class)
+        $mockAmountElm = m::mock(\Laminas\Form\ElementInterface::class)
             ->shouldReceive('setValue')->once()->with('_TRLTD_application.payment-submission.amount.value[999.00]')
             ->getMock();
 
-        $mocksubmitPayElm = m::mock(\Zend\Form\ElementInterface::class)
+        $mocksubmitPayElm = m::mock(\Laminas\Form\ElementInterface::class)
             ->shouldReceive('setLabel')->once()->with('submit-application.button')
             ->getMock();
 
@@ -103,7 +103,7 @@ class AbstractOverviewSubmissionTest extends MockeryTestCase
         ];
 
         //  expect
-        $mocksubmitPayElm = m::mock(\Zend\Form\ElementInterface::class)
+        $mocksubmitPayElm = m::mock(\Laminas\Form\ElementInterface::class)
             ->shouldReceive('setLabel')->once()->with('submit-application.button')
             ->getMock();
 

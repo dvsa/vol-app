@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Form\Surrender\CurrentDiscs;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Attributes({"method":"post", "class":"form", "id":"surrender-current-discs"})
@@ -33,7 +33,7 @@ class CurrentDiscs
     /**
      * @Form\Attributes({"type":"submit","class":"action--primary large"})
      * @Form\Options({"label":"continue.button"})
-     * @Form\Type("\Zend\Form\Element\Button")
+     * @Form\Type("\Laminas\Form\Element\Button")
      */
     public $submit = null;
 }

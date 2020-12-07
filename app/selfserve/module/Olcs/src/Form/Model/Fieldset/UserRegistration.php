@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Model\Fieldset;
 
-use Zend\Form\Annotation as Form;
+use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("UserRegistration")
@@ -19,7 +19,7 @@ class UserRegistration
      * @Form\Required(true)
      * @Form\Attributes({"id":"username","placeholder":"","class":"medium", "required":false})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\Username"})
      */
     public $loginId = null;
@@ -28,8 +28,8 @@ class UserRegistration
      * @Form\Attributes({"id":"forename","placeholder":"","class":"medium", "required":false})
      * @Form\Options({"label":"first-name"})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":35}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":35}})
      */
     public $forename = null;
 
@@ -37,8 +37,8 @@ class UserRegistration
      * @Form\Attributes({"id":"familyName","placeholder":"","class":"medium", "required":false})
      * @Form\Options({"label":"last-name"})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\StringLength","options":{"max":35}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":35}})
      */
     public $familyName = null;
 
@@ -46,7 +46,7 @@ class UserRegistration
      * @Form\Attributes({"class":"long"})
      * @Form\Options({"label":"email-address"})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\EmailAddress"})
      * @Form\Validator({"name":"Common\Form\Elements\Validators\EmailConfirm","options":{"token":"emailConfirm"}})
      */
@@ -56,7 +56,7 @@ class UserRegistration
      * @Form\Attributes({"class":"long"})
      * @Form\Options({"label":"confirm-email-address"})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      */
     public $emailConfirm = null;
 
@@ -79,14 +79,14 @@ class UserRegistration
      * @Form\Options({
      *     "label": "user-registration.field.licenceNumber.label",
      * })
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
-     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\NotEmpty","options":{"null"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "isLicenceHolder",
      *          "context_values": {"Y"},
      *          "validators": {
-     *              {"name": "Zend\Validator\StringLength", "options": {"min": 2, "max": 35}}
+     *              {"name": "Laminas\Validator\StringLength", "options": {"min": 2, "max": 35}}
      *          }
      *      }
      * })
@@ -98,14 +98,14 @@ class UserRegistration
      * @Form\Type("Text")
      * @Form\Attributes({"class":"medium"})
      * @Form\Options({"label":"user-registration.field.organisationName.label"})
-     * @Form\Validator({"name":"Zend\Validator\NotEmpty","options":{"null"}})
-     * @Form\Filter({"name":"Zend\Filter\StringTrim"})
+     * @Form\Validator({"name":"Laminas\Validator\NotEmpty","options":{"null"}})
+     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "isLicenceHolder",
      *          "context_values": {"N"},
      *          "validators": {
-     *              {"name": "Zend\Validator\NotEmpty"}
+     *              {"name": "Laminas\Validator\NotEmpty"}
      *          }
      *      }
      * })
@@ -123,13 +123,13 @@ class UserRegistration
      *     "category": "org_type",
      *     "exclude": {"org_t_ir"}
      * })
-     * @Form\Validator({"name": "Zend\Validator\NotEmpty", "options": {"string"}})
+     * @Form\Validator({"name": "Laminas\Validator\NotEmpty", "options": {"string"}})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "isLicenceHolder",
      *          "context_values": {"N"},
      *          "validators": {
-     *              {"name": "Zend\Validator\NotEmpty"}
+     *              {"name": "Laminas\Validator\NotEmpty"}
      *          }
      *      }
      * })

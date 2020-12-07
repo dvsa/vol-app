@@ -14,8 +14,8 @@ use Olcs\Controller\Licence\Vehicle\SwitchBoardController;
 use Olcs\Controller\Licence\Vehicle\TransferVehicleConfirmationController;
 use Olcs\Controller\Licence\Vehicle\TransferVehicleController;
 use Olcs\Controller\Licence\Vehicle\ViewVehicleController;
-use Zend\Mvc\Router\Http\Method;
-use Zend\Mvc\Router\Http\Segment;
+use Laminas\Mvc\Router\Http\Method;
+use Laminas\Mvc\Router\Http\Segment;
 
 return [
     [

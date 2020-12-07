@@ -3,7 +3,7 @@
 namespace Olcs\FormService\Form\Lva\OperatingCentres;
 
 use Common\FormService\Form\Lva\OperatingCentres\VariationOperatingCentres as CommonVariationOperatingCentres;
-use Zend\Form\Form;
+use Laminas\Form\Form;
 
 /**
  * Variation Operating Centres

@@ -8,8 +8,8 @@
 namespace Olcs\Controller\Lva\Traits;
 
 use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
-use Zend\Form\Form;
-use Zend\View\Model\ViewModel;
+use Laminas\Form\Form;
+use Laminas\View\Model\ViewModel;
 use Common\View\Model\Section;
 use Dvsa\Olcs\Transfer\Query\User\UserSelfserve as UserQry;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceQry;
@@ -26,7 +26,7 @@ trait ExternalControllerTrait
      *
      * @param int $lvaId Lva id
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     protected function handleCancelRedirect($lvaId)
     {
@@ -84,12 +84,11 @@ trait ExternalControllerTrait
      *
      * @param int $lvaId Lva id
      *
-     * @return null|\Zend\Http\Response
+     * @return null|\Laminas\Http\Response
      */
     protected function checkForRedirect($lvaId)
     {
         if ($this->lva === 'application' || $this->lva === 'variation') {
-
             $summaryRouteName = 'lva-' . $this->lva . '/summary';
             $submissionRouteName = 'lva-' . $this->lva . '/submission-summary';
             $allowedRoutes = [

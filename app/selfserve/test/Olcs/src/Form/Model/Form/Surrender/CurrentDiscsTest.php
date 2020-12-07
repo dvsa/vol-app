@@ -6,10 +6,10 @@ use Common\Form\Elements\Custom\OlcsCheckbox;
 use Common\Form\Elements\Types\HtmlTranslated;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 use Olcs\Form\Model\Form\Surrender\CurrentDiscs\CurrentDiscs;
-use Zend\Form\Element\Button;
-use Zend\Form\Element\Checkbox;
-use Zend\Form\Element\Number;
-use Zend\Form\Element\Textarea;
+use Laminas\Form\Element\Button;
+use Laminas\Form\Element\Checkbox;
+use Laminas\Form\Element\Number;
+use Laminas\Form\Element\Textarea;
 
 class CurrentDiscsTest extends AbstractFormValidationTestCase
 {

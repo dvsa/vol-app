@@ -57,13 +57,13 @@
     <?php if (!empty($this->actionsElms)) { ?>
         <ul class="page-header__actions one-third">
             <?php
-            /** @var \Zend\Form\ElementInterface|string $element */
+            /** @var \Laminas\Form\ElementInterface|string $element */
             foreach ($this->actionsElms as $element) :
                 if (empty($element)) {
                     continue;
                 }
 
-                if (!$element instanceof \Zend\Form\ElementInterface) {
+                if (!$element instanceof \Laminas\Form\ElementInterface) {
                     echo '<li>' . $element . '</li>';
 
                     continue;

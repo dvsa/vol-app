@@ -12,8 +12,8 @@ use Olcs\Controller\AbstractSelfserveController;
 use Olcs\Controller\Config\DataSource\DataSourceConfig;
 use Olcs\Service\Surrender\SurrenderStateService;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
-use Zend\Mvc\MvcEvent;
-use Zend\View\Model\ViewModel;
+use Laminas\Mvc\MvcEvent;
+use Laminas\View\Model\ViewModel;
 
 abstract class AbstractSurrenderController extends AbstractSelfserveController implements ToggleAwareInterface
 {

@@ -14,7 +14,7 @@ class GdsVerifyController extends AbstractController
     /**
      * Display Form to initaite the GDS Verify identification process
      *
-     * @return \Zend\View\Model\ViewModel
+     * @return \Laminas\View\Model\ViewModel
      */
     public function initiateRequestAction()
     {
@@ -35,13 +35,13 @@ class GdsVerifyController extends AbstractController
 
         $this->getServiceLocator()->get('Script')->loadFile('verify-request');
 
-        return new \Zend\View\Model\ViewModel(array('form' => $form));
+        return new \Laminas\View\Model\ViewModel(array('form' => $form));
     }
 
     /**
      * Process the GDS Verify SAML response
      *
-     * @return \Zend\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function processResponseAction()
     {

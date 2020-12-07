@@ -6,12 +6,12 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\Lva\Adapters;
 use Olcs\Controller\Lva\Factory\Adapter as AdapterFactory;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * @covers Olcs\Controller\Lva\Factory\Adapter\VariationTransportManagerAdapterFactory
  * @covers Olcs\Controller\Lva\Factory\Adapter\LicenceTransportManagerAdapterFactory
- * 
+ *
  * @author Dmitry Golubev <dmitrij.golubev@valtech.co.uk>
  */
 class TransportManagerAdapterFactoryTest extends MockeryTestCase

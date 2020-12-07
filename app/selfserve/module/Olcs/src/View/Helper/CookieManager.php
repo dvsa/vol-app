@@ -2,10 +2,10 @@
 
 namespace Olcs\View\Helper;
 
-use Zend\ServiceManager\ServiceLocatorAwareTrait;
-use Zend\View\Helper\HelperInterface;
-use Zend\View\Helper\AbstractHelper;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Laminas\ServiceManager\ServiceLocatorAwareTrait;
+use Laminas\View\Helper\HelperInterface;
+use Laminas\View\Helper\AbstractHelper;
+use Laminas\ServiceManager\ServiceLocatorAwareInterface;
 
 /**
  * Class CookieManagerHelper
