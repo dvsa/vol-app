@@ -64,6 +64,16 @@ class AddDuplicateVehicleController extends AbstractVehicleController
             [AddDuplicateVehicleConfirmationForm::FIELD_OPTIONS_NAME]
             ?? '';
 
+        if (empty($selectedOption)) {
+            $this->form
+                ->get(AddDuplicateVehicleConfirmationForm::FIELD_OPTIONS_FIELDSET_NAME)
+                ->get(AddDuplicateVehicleConfirmationForm::FIELD_OPTIONS_NAME)
+                ->setMessages([
+                    'licence.vehicle.add.duplicate.validation.select-an-option'
+                ]);
+            return $this->indexAction();
+        }
+
         // Has the user selected no?
         if ($selectedOption != 'yes') {
             return $this->nextStep('licence/vehicle/add/POST');
