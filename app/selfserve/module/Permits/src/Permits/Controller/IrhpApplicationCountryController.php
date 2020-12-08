@@ -78,11 +78,9 @@ class IrhpApplicationCountryController extends AbstractSelfserveController
     {
         if (!isset($this->queryParams['fromOverview'])) {
             // overwrite default backUri
-            // to be removed by OLCS-25956 when a generic solution is found
-            $this->templateVarsConfig['default']['backUri'] = IrhpApplicationSection::ROUTE_ADD_LICENCE;
-            $this->templateVarsConfig['default']['backUriParams'] = [
-                'type' => $this->data[IrhpApplication::DATA_KEY]['irhpPermitType']['id']
-            ];
+            // to be removed by a future ticket when/if a generic solution is found
+            $this->templateVarsConfig['default']['backUri'] = IrhpApplicationSection::ROUTE_PERMITS;
+            $this->templateVarsConfig['default']['backLabel'] = 'common.link.back-to-permits.label';
         }
 
         parent::mergeTemplateVars();

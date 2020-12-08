@@ -3,6 +3,7 @@
 namespace Permits\Controller;
 
 use Olcs\Controller\AbstractSelfserveController;
+use Permits\Controller\Config\DataSource\AvailableStocks;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\Form\FormConfig;
@@ -43,6 +44,35 @@ class IrhpStockController extends AbstractSelfserveController
             'step' => IrhpApplicationSection::ROUTE_ADD_LICENCE,
         ],
     ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public function retrieveData()
+    {
+        parent::retrieveData();
+
+        $selectedStockId = '';
+        if (isset($this->queryParams['selected'])) {
+            $selectedStockId = $this->queryParams['selected'];
+        }
+
+        $this->data[AvailableStocks::DATA_KEY]['selectedStock'] = $selectedStockId;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function mergeTemplateVars()
+    {
+        $this->templateVarsConfig['question']['backUriOptions'] = [
+            'query' => [
+                'selected' => $this->routeParams['year']
+            ]
+        ];
+
+        parent::mergeTemplateVars();
+    }
 
     /**
      * @param array $config

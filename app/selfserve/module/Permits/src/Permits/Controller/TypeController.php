@@ -4,6 +4,7 @@ namespace Permits\Controller;
 use Common\RefData;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
+use Permits\Controller\Config\DataSource\AvailableTypes;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\Form\FormConfig;
 use Permits\View\Helper\IrhpApplicationSection;
@@ -41,6 +42,21 @@ class TypeController extends AbstractSelfserveController
             'step' => IrhpApplicationSection::ROUTE_ADD_LICENCE,
         ],
     ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public function retrieveData()
+    {
+        parent::retrieveData();
+
+        $selectedType = '';
+        if (isset($this->queryParams['selected'])) {
+            $selectedType = $this->queryParams['selected'];
+        }
+
+        $this->data[AvailableTypes::DATA_KEY]['selectedType'] = $selectedType;
+    }
 
     /**
      * @param array $config

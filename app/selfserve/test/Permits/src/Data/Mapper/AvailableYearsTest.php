@@ -58,7 +58,8 @@ class AvailableYearsTest extends TestCase
         $data = [
             'type' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
             'years' => [
-                'years' => [$year]
+                'years' => [$year],
+                'selectedYear' => ''
             ],
         ];
 
@@ -94,7 +95,8 @@ class AvailableYearsTest extends TestCase
         $expectedData = [
             'type' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
             'years' => [
-                'years' => [$year]
+                'years' => [$year],
+                'selectedYear' => ''
             ],
             'question' => 'permits.page.year.ecmt-short-term.question.one-year-available',
             'browserTitle' => 'permits.page.year.ecmt-short-term.question.one-year-available',
@@ -119,7 +121,8 @@ class AvailableYearsTest extends TestCase
         $data = [
             'type' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
             'years' => [
-                'years' => [2018, 2019, 2020]
+                'years' => [2018, 2019, 2020],
+                'selectedYear' => 2019
             ],
         ];
 
@@ -129,15 +132,18 @@ class AvailableYearsTest extends TestCase
                 'label' => 2018,
                 'attributes' => [
                     'id' => 'year'
-                ]
+                ],
+                'selected' => false
             ],
             [
                 'value' => 2019,
                 'label' => 2019,
+                'selected' => true
             ],
             [
                 'value' => 2020,
                 'label' => 2020,
+                'selected' => false
             ],
         ];
 
@@ -157,7 +163,8 @@ class AvailableYearsTest extends TestCase
         $expectedData = [
             'type' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
             'years' => [
-                'years' => [2018, 2019, 2020]
+                'years' => [2018, 2019, 2020],
+                'selectedYear' => 2019
             ],
             'hint' => 'permits.page.year.ecmt-short-term.hint.multiple-years-available',
             'question' => 'permits.page.year.ecmt-short-term.question.multiple-years-available',
@@ -179,8 +186,9 @@ class AvailableYearsTest extends TestCase
         $data = [
             'type' => RefData::ECMT_PERMIT_TYPE_ID,
             'years' => [
-                'years' => [$year]
-            ],
+                'years' => [$year],
+                'selectedYear' => ''
+            ]
         ];
 
         $form = m::mock(Form::class);
@@ -215,7 +223,8 @@ class AvailableYearsTest extends TestCase
         $expectedData = [
             'type' => RefData::ECMT_PERMIT_TYPE_ID,
             'years' => [
-                'years' => [$year]
+                'years' => [$year],
+                'selectedYear' => ''
             ],
             'question' => 'permits.page.year.ecmt-annual.question.one-year-available',
             'browserTitle' => 'permits.page.year.ecmt-annual.question.one-year-available',
@@ -263,13 +272,15 @@ class AvailableYearsTest extends TestCase
                 'data' => [
                     'type' => RefData::ECMT_PERMIT_TYPE_ID,
                     'years' => [
-                        'years' => []
+                        'years' => [],
+                        'selectedYear' => ''
                     ]
                 ],
                 'expected' => [
                     'type' => RefData::ECMT_PERMIT_TYPE_ID,
                     'years' => [
-                        'years' => []
+                        'years' => [],
+                        'selectedYear' => ''
                     ],
                     'browserTitle' => 'permits.page.year.ecmt-annual.question.multiple-years-available',
                     'question' => 'permits.page.year.ecmt-annual.question.multiple-years-available',
@@ -284,7 +295,7 @@ class AvailableYearsTest extends TestCase
                         'years' => [
                             3030, 3031
                         ],
-
+                        'selectedYear' => 3031
                     ]
                 ],
                 'expected' => [
@@ -293,6 +304,7 @@ class AvailableYearsTest extends TestCase
                         'years' => [
                             3030, 3031
                         ],
+                        'selectedYear' => 3031
                     ],
                     'browserTitle' => 'permits.page.year.ecmt-annual.question.multiple-years-available',
                     'question' => 'permits.page.year.ecmt-annual.question.multiple-years-available',
@@ -304,11 +316,13 @@ class AvailableYearsTest extends TestCase
                         'label' => 3030,
                         'attributes' => [
                             'id' => 'year'
-                        ]
+                        ],
+                        'selected' => false
                     ],
                     [
                         'value' => 3031,
                         'label' => 3031,
+                        'selected' => true
                     ],
                 ],
             ],

@@ -94,14 +94,19 @@ class AvailableYears
      */
     private function mapAvailableYears(array $data, $form, $translationPrefix)
     {
-        $years = $data[AvailableYearsDataSource::DATA_KEY]['years'];
+        $availableYearsData = $data[AvailableYearsDataSource::DATA_KEY];
+        $years = $availableYearsData['years'];
+        $selectedYear = $availableYearsData['selectedYear'];
 
         if (count($years) == 1) {
-            $this->singleOption($form, $years[0], $translationPrefix);
+            $yearsKeys = array_keys($years);
+            $firstOptionKey = $yearsKeys[0];
+
+            $this->singleOption($form, $years[$firstOptionKey], $translationPrefix);
 
             $data['question'] = sprintf('%s.question.one-year-available', $translationPrefix);
         } else {
-            $this->multipleOptions($form, $years);
+            $this->multipleOptions($form, $years, $selectedYear);
 
             $data['question'] = sprintf('%s.question.multiple-years-available', $translationPrefix);
             $data['hint'] = sprintf('%s.hint.multiple-years-available', $translationPrefix);
@@ -156,8 +161,9 @@ class AvailableYears
     /**
      * @param Form $form
      * @param array $years
+     * @param string $selectedYear
      */
-    private function multipleOptions(Form $form, $years)
+    private function multipleOptions(Form $form, $years, $selectedYear)
     {
         $valueOptions = [];
 
@@ -165,6 +171,7 @@ class AvailableYears
             $valueOptions[] = [
                 'value' => $year,
                 'label' => $year,
+                'selected' => $year == $selectedYear
             ];
         }
 

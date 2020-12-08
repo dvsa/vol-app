@@ -1,6 +1,6 @@
 <?php
     echo $this->permitsBackLink(
-        'common.link.back.label',
+        isset($data['backLabel']) ? $data['backLabel'] : 'common.link.back.label',
         isset($data['backUri']) ? $data['backUri'] : '',
         isset($data['backUriParams']) ? $data['backUriParams'] : [],
         isset($data['backUriOptions']) ? $data['backUriOptions'] : []
