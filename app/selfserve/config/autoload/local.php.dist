@@ -190,4 +190,5 @@ return [
                     ],
                 ],
         ],
+    'html-purifier-cache-dir' => '/var/tmp/htmlPurifierCache',
 ];
