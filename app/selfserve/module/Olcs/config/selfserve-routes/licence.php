@@ -725,6 +725,70 @@ return [
                                 ],
                             ],
                         ],
+                        'reprint' => [
+                            'may_terminate' => false,
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => 'reprint[/]',
+                                'defaults' => [
+                                    'controller' => \Olcs\Controller\Licence\Vehicle\Reprint\ReprintLicenceVehicleDiscController::class,
+                                ]
+                            ],
+                            'child_routes' => [
+                                'GET' => [
+                                    'may_terminate' => true,
+                                    'type' => Method::class,
+                                    'options' => [
+                                        'verb' => 'GET',
+                                        'defaults' => [
+                                            'action' => 'index',
+                                        ],
+                                    ],
+                                ],
+                                'POST' => [
+                                    'may_terminate' => true,
+                                    'type' => Method::class,
+                                    'options' => [
+                                        'verb' => 'POST',
+                                        'defaults' => [
+                                            'action' => 'post',
+                                        ],
+                                    ],
+                                ],
+                                'confirm' => [
+                                    'may_terminate' => false,
+                                    'type' => Segment::class,
+                                    'options' => [
+                                        'route' => 'confirm[/]',
+                                        'defaults' => [
+                                            'controller' => \Olcs\Controller\Licence\Vehicle\Reprint\ReprintLicenceVehicleDiscConfirmationController::class,
+                                        ]
+                                    ],
+                                    'child_routes' => [
+                                        'GET' => [
+                                            'may_terminate' => true,
+                                            'type' => Method::class,
+                                            'options' => [
+                                                'verb' => 'GET',
+                                                'defaults' => [
+                                                    'action' => 'index',
+                                                ],
+                                            ],
+                                        ],
+                                        'POST' => [
+                                            'may_terminate' => true,
+                                            'type' => Method::class,
+                                            'options' => [
+                                                'verb' => 'POST',
+                                                'defaults' => [
+                                                    'action' => 'post',
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
                         'view' => [
                             'may_terminate' => false,
                             'type' => Segment::class,

@@ -6,7 +6,7 @@ namespace Olcs\Controller\Licence\Vehicle;
 use Dvsa\Olcs\Transfer\Command\Vehicle\DeleteLicenceVehicle;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence;
 use Dvsa\Olcs\Transfer\Query\LicenceVehicle\LicenceVehiclesById;
-use Olcs\Form\Model\Form\Vehicle\VehicleConfirmationForm as RemoveVehicleConfirmationForm;
+use Olcs\Form\Model\Form\Vehicle\VehicleConfirmationForm;
 use Olcs\Logging\Log\Logger;
 
 class RemoveVehicleConfirmationController extends AbstractVehicleController
@@ -15,7 +15,7 @@ class RemoveVehicleConfirmationController extends AbstractVehicleController
     protected $formConfig = [
         'default' => [
             'confirmationForm' => [
-                'formClass' => RemoveVehicleConfirmationForm::class,
+                'formClass' => VehicleConfirmationForm::class,
             ]
         ]
     ];
@@ -58,14 +58,14 @@ class RemoveVehicleConfirmationController extends AbstractVehicleController
             return $this->indexAction();
         }
 
-        $selectedOption = $formData[RemoveVehicleConfirmationForm::FIELD_OPTIONS_FIELDSET_NAME]
-            [RemoveVehicleConfirmationForm::FIELD_OPTIONS_NAME]
+        $selectedOption = $formData[VehicleConfirmationForm::FIELD_OPTIONS_FIELDSET_NAME]
+            [VehicleConfirmationForm::FIELD_OPTIONS_NAME]
             ?? '';
 
         if (empty($selectedOption)) {
             $this->form
-                ->get(RemoveVehicleConfirmationForm::FIELD_OPTIONS_FIELDSET_NAME)
-                ->get(RemoveVehicleConfirmationForm::FIELD_OPTIONS_NAME)
+                ->get(VehicleConfirmationForm::FIELD_OPTIONS_FIELDSET_NAME)
+                ->get(VehicleConfirmationForm::FIELD_OPTIONS_NAME)
                 ->setMessages([
                     'licence.vehicle.remove.confirm.validation.select-an-option'
                 ]);
