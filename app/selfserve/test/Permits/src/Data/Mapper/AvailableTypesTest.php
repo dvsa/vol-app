@@ -44,12 +44,14 @@ class AvailableTypesTest extends TestCase
             'empty list' => [
                 'data' => [
                     'types' => [
-                        'types' => []
-                    ]
+                        'types' => [],
+                        'selectedType' => ''
+                    ],
                 ],
                 'expected' => [
                     'types' => [
-                        'types' => []
+                        'types' => [],
+                        'selectedType' => ''
                     ],
                 ],
                 'expectedValueOptions' => [],
@@ -72,7 +74,8 @@ class AvailableTypesTest extends TestCase
                                     'description' => 'name 2'
                                 ]
                             ],
-                        ]
+                        ],
+                        'selectedType' => 2
                     ]
                 ],
                 'expected' => [
@@ -92,7 +95,8 @@ class AvailableTypesTest extends TestCase
                                     'description' => 'name 2'
                                 ]
                             ],
-                        ]
+                        ],
+                        'selectedType' => 2
                     ],
                 ],
                 'expectedValueOptions' => [
@@ -103,13 +107,15 @@ class AvailableTypesTest extends TestCase
                         'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
                         'attributes' => [
                             'id' => 'type'
-                        ]
+                        ],
+                        'selected' => false
                     ],
                     [
                         'value' => 2,
                         'label' => 'name 2',
                         'hint' => 'desc 2',
                         'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
+                        'selected' => true
                     ],
                 ],
             ],

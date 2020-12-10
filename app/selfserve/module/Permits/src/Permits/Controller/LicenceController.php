@@ -1,8 +1,12 @@
 <?php
+
 namespace Permits\Controller;
 
+use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\Create;
+use Dvsa\Olcs\Transfer\Query\Permits\AvailableStocks;
+use Dvsa\Olcs\Transfer\Query\Permits\AvailableYears;
 use Dvsa\Olcs\Transfer\Query\Permits\MaxPermittedReachedByStockAndLicence;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
@@ -52,6 +56,101 @@ class LicenceController extends AbstractSelfserveController
     public function addAction()
     {
         return $this->genericAction();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function mergeTemplateVars()
+    {
+        $permitTypeId = $this->data[LicencesAvailable::DATA_KEY]['permitTypeId'];
+
+        switch ($permitTypeId) {
+            case RefData::ECMT_PERMIT_TYPE_ID:
+                $this->templateVarsConfig['question']['backUri'] = IrhpApplicationSection::ROUTE_YEAR;
+                $this->templateVarsConfig['question']['backUriOptions'] = [
+                    'query' => [
+                        'selected' => $this->getEcmtAnnualSelectedYear()
+                    ]
+                ];
+                break;
+            case RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID:
+                $this->templateVarsConfig['question']['backUri'] = IrhpApplicationSection::ROUTE_STOCK;
+                $this->templateVarsConfig['question']['backUriParams'] = [
+                    'type' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
+                    'year' => $this->getEcmtShortTermSelectedYear()
+                ];
+                $this->templateVarsConfig['question']['backUriOptions'] = [
+                    'query' => [
+                        'selected' => $this->routeParams['stock']
+                    ]
+                ];
+                break;
+            case RefData::ECMT_REMOVAL_PERMIT_TYPE_ID:
+            case RefData::IRHP_BILATERAL_PERMIT_TYPE_ID:
+            case RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID:
+            case RefData::CERT_ROADWORTHINESS_VEHICLE_PERMIT_TYPE_ID:
+            case RefData::CERT_ROADWORTHINESS_TRAILER_PERMIT_TYPE_ID:
+                $this->templateVarsConfig['question']['backUri'] = IrhpApplicationSection::ROUTE_TYPE;
+                $this->templateVarsConfig['question']['backUriOptions'] = [
+                    'query' => [
+                        'selected' => $permitTypeId
+                    ]
+                ];
+                break;
+            default:
+                throw new RuntimeException('No back uri defined for permit type ' . $permitTypeId);
+        }
+
+        parent::mergeTemplateVars();
+    }
+
+    /**
+     * Derive and return the selected year for ecmt annual using the stock id provided in the route params
+     *
+     * @return string
+     */
+    private function getEcmtAnnualSelectedYear()
+    {
+        $response = $this->handleQuery(
+            AvailableYears::create(
+                [
+                    'type' => RefData::ECMT_PERMIT_TYPE_ID
+                ]
+            )
+        );
+        $result = $response->getResult();
+
+        $stockId = $this->routeParams['stock'];
+        if (isset($result['years'][$stockId])) {
+            return $result['years'][$stockId];
+        }
+
+        return '';
+    }
+
+    /**
+     * Derive and return the selected year for ecmt short term using the stock id provided in the route params
+     *
+     * @return string
+     */
+    private function getEcmtShortTermSelectedYear()
+    {
+        $response = $this->handleQuery(
+            AvailableStocks::create(
+                [
+                    'irhpPermitType' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID
+                ]
+            )
+        );
+        $result = $response->getResult();
+
+        $stockId = $this->routeParams['stock'];
+        if (isset($result['stocks'][$stockId]['year'])) {
+            return $result['stocks'][$stockId]['year'];
+        }
+
+        return '';
     }
 
     /**

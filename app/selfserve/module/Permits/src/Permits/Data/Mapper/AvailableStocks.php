@@ -40,13 +40,16 @@ class AvailableStocks
      */
     private function mapForEcmtShortTerm(array $data, $form)
     {
-        $stocks = $data[AvailableStocksDataSource::DATA_KEY]['stocks'];
+        $availableStocksData = $data[AvailableStocksDataSource::DATA_KEY];
+        $stocks = $availableStocksData['stocks'];
+        $selectedStockId = $availableStocksData['selectedStock'];
         $valueOptions = [];
 
         foreach ($stocks as $stock) {
             $valueOptions[] = [
                 'value' => $stock['id'],
                 'label' => $stock['periodNameKey'],
+                'selected' => $stock['id'] == $selectedStockId,
             ];
         }
 

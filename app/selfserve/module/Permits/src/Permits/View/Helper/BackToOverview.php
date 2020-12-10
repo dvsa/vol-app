@@ -11,7 +11,10 @@ use Laminas\View\Helper\AbstractHelper;
  */
 class BackToOverview extends AbstractHelper
 {
-    const BACK_LINK_LABEL = 'common.link.back.label';
+    const BACK_LINK_LABELS = [
+        'common.link.back.label',
+        'common.link.back-to-permits.label',
+    ];
 
     private $linkTemplate = '<a href="%s" class="%s">%s</a>';
 
@@ -33,7 +36,10 @@ class BackToOverview extends AbstractHelper
         /**
          * @todo temporary to stop "return to overview" links losing their styling - can be removed following olcs-21034
          */
-        $linkClass = ($label === self::BACK_LINK_LABEL ? 'govuk-back-link govuk-!-margin-bottom-7' : 'govuk-link govuk-!-margin-bottom-7');
+        $linkClass = 'govuk-link govuk-!-margin-bottom-7';
+        if (in_array($label, self::BACK_LINK_LABELS)) {
+            $linkClass = 'govuk-back-link govuk-!-margin-bottom-7';
+        }
 
         $label = $this->view->escapeHtml($this->view->translate($label));
         $url = $this->view->url(

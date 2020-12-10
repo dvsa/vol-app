@@ -5,6 +5,7 @@ namespace Permits\Controller;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Permits\AvailableStocks;
 use Olcs\Controller\AbstractSelfserveController;
+use Permits\Controller\Config\DataSource\AvailableYears;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\Form\FormConfig;
@@ -48,6 +49,35 @@ class YearController extends AbstractSelfserveController
             'step' => IrhpApplicationSection::ROUTE_ADD_LICENCE,
         ],
     ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public function retrieveData()
+    {
+        parent::retrieveData();
+
+        $selectedYear = '';
+        if (isset($this->queryParams['selected'])) {
+            $selectedYear = $this->queryParams['selected'];
+        }
+
+        $this->data[AvailableYears::DATA_KEY]['selectedYear'] = $selectedYear;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function mergeTemplateVars()
+    {
+        $this->templateVarsConfig['question']['backUriOptions'] = [
+            'query' => [
+                'selected' => $this->routeParams['type']
+            ]
+        ];
+
+        parent::mergeTemplateVars();
+    }
 
     /**
      * @param array $config

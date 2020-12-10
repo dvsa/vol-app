@@ -21,13 +21,17 @@ class AvailableTypes
         $mapData = $data[AvailableTypesDataSource::DATA_KEY];
 
         $valueOptions = [];
+        $selectedId = $mapData['selectedType'];
 
         foreach ($mapData['types'] as $option) {
+            $optionId = $option['id'];
+
             $valueOptions[] = [
-                'value' => $option['id'],
+                'value' => $optionId,
                 'label' => $option['name']['description'],
                 'label_attributes' => ['class' => 'govuk-label govuk-radios__label govuk-label--s'],
                 'hint' => $option['description'],
+                'selected' => $optionId == $selectedId
             ];
         }
 

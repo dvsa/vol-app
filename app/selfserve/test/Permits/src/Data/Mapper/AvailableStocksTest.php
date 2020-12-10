@@ -59,7 +59,8 @@ class AvailableStocksTest extends TestCase
                         'id' => 1,
                         'periodNameKey' => 'period.name.key.1',
                     ],
-                ]
+                ],
+                'selectedStock' => 1
             ],
         ];
 
@@ -69,7 +70,8 @@ class AvailableStocksTest extends TestCase
                 'label' => 'period.name.key.1',
                 'attributes' => [
                     'id' => 'stock'
-                ]
+                ],
+                'selected' => true
             ]
         ];
 
@@ -94,7 +96,8 @@ class AvailableStocksTest extends TestCase
                         'id' => 1,
                         'periodNameKey' => 'period.name.key.1',
                     ],
-                ]
+                ],
+                'selectedStock' => 1
             ],
             'guidance' => [
                 'value' => 'permits.page.stock.guidance.one-available',
@@ -121,7 +124,8 @@ class AvailableStocksTest extends TestCase
                         'id' => 2,
                         'periodNameKey' => 'period.name.key.2',
                     ],
-                ]
+                ],
+                'selectedStock' => 2
             ],
         ];
 
@@ -131,11 +135,13 @@ class AvailableStocksTest extends TestCase
                 'label' => 'period.name.key.1',
                 'attributes' => [
                     'id' => 'stock'
-                ]
+                ],
+                'selected' => false
             ],
             [
                 'value' => 2,
                 'label' => 'period.name.key.2',
+                'selected' => true
             ],
         ];
 
@@ -164,7 +170,8 @@ class AvailableStocksTest extends TestCase
                         'id' => 2,
                         'periodNameKey' => 'period.name.key.2',
                     ],
-                ]
+                ],
+                'selectedStock' => 2
             ],
             'guidance' => [
                 'value' => 'permits.page.stock.guidance.multiple-available',
