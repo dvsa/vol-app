@@ -13,6 +13,7 @@ use Olcs\Controller\Licence\Vehicle\RemoveVehicleController;
 use Olcs\Controller\Licence\Vehicle\SwitchBoardController;
 use Olcs\Controller\Licence\Vehicle\TransferVehicleConfirmationController;
 use Olcs\Controller\Licence\Vehicle\TransferVehicleController;
+use Olcs\Controller\Licence\Vehicle\ListVehicleController;
 use Olcs\Controller\Licence\Vehicle\ViewVehicleController;
 use Laminas\Mvc\Router\Http\Method;
 use Laminas\Mvc\Router\Http\Segment;
@@ -720,6 +721,28 @@ return [
                                                     'action' => 'post',
                                                 ],
                                             ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'list' => [
+                            'may_terminate' => false,
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => 'list[/]',
+                                'defaults' => [
+                                    'controller' => ListVehicleController::class,
+                                ]
+                            ],
+                            'child_routes' => [
+                                'GET' => [
+                                    'may_terminate' => true,
+                                    'type' => Method::class,
+                                    'options' => [
+                                        'verb' => 'GET',
+                                        'defaults' => [
+                                            'action' => 'index',
                                         ],
                                     ],
                                 ],

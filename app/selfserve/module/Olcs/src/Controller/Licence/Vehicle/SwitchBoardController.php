@@ -63,7 +63,7 @@ class SwitchBoardController extends AbstractVehicleController
             case SwitchBoardForm::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_TRANSFER:
                 return $this->nextStep('licence/vehicle/transfer/GET');
             case SwitchBoardForm::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW:
-                throw new \Exception('Not Implemented: View Vehicles');
+                return $this->nextStep('licence/vehicle/list/GET');
             default:
                 throw new \Exception('Unexpected value');
         }
