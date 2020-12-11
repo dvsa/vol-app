@@ -27,7 +27,7 @@ class EssentialInformationController extends AbstractSelfserveController
             'continueUri' => IrhpApplicationSection::ROUTE_PERIOD,
             'continueUriLabel' => 'permits.button.continue',
             'backUri' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
-            'backUriLabel' => BackToOverview::BACK_LINK_LABEL,
+            'backUriLabel' => BackToOverview::STANDARD_BACK_LINK_LABEL,
         ],
     ];
 }
