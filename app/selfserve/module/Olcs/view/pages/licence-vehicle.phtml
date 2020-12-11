@@ -56,8 +56,12 @@
                 <?php endif; ?>
                 <?php if (isset($this->form)): ?>
                     <?php
-                    echo $this->form($this->form);
+                        echo $this->form($this->form);
                     ?>
+                <?php endif; ?>
+
+                <?php if (isset($this->table)): ?>
+                    <?php echo $this->table; ?>
                 <?php endif; ?>
 
                 <?php if (isset($this->bottomContent)): ?>
