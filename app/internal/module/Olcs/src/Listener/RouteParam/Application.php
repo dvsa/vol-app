@@ -195,6 +195,14 @@ class Application implements ListenerAggregateInterface, FactoryInterface
 
         $sidebarNav->findById('application-quick-actions')->setVisible($this->shouldShowQuickActions($status));
 
+        $licenceCategoryId = $application['goodsOrPsv']['id'];
+        if ($licenceCategoryId === RefData::LICENCE_CATEGORY_PSV) {
+            $communityLicencesNav = $this->getNavigationService()->findOneById('variation_community_licences');
+            $communityLicencesNav->setLabel(
+                $communityLicencesNav->getLabel() . '.psv'
+            );
+        }
+
         if (!$application['canCreateCase']) {
             // hide application case link in the navigation
             $this->getNavigationService()->findOneById('application_case')->setVisible(false);
@@ -291,9 +299,8 @@ class Application implements ListenerAggregateInterface, FactoryInterface
     protected function shouldShowApproveSchedule41Button($application)
     {
         foreach ($application['s4s'] as $s4) {
-            if (is_null($s4['outcome']) &&
-                $application['status']['id'] == \Common\RefData::APPLICATION_STATUS_UNDER_CONSIDERATION
-            ) {
+            $isUnderConsideration = ($application['status']['id'] == RefData::APPLICATION_STATUS_UNDER_CONSIDERATION);
+            if (is_null($s4['outcome']) && $isUnderConsideration) {
                 return true;
             }
         }
@@ -304,9 +311,8 @@ class Application implements ListenerAggregateInterface, FactoryInterface
     protected function shouldShowResetSchedule41Button($application)
     {
         foreach ($application['s4s'] as $s4) {
-            if ($application['status']['id'] == \Common\RefData::APPLICATION_STATUS_UNDER_CONSIDERATION &&
-                $s4['outcome']['id'] === RefData::S4_STATUS_APPROVED
-            ) {
+            $isUnderConsideration = ($application['status']['id'] == RefData::APPLICATION_STATUS_UNDER_CONSIDERATION);
+            if ($isUnderConsideration && ($s4['outcome']['id'] === RefData::S4_STATUS_APPROVED)) {
                 return true;
             }
         }
@@ -317,9 +323,8 @@ class Application implements ListenerAggregateInterface, FactoryInterface
     protected function shouldShowRefuseSchedule41Button($application)
     {
         foreach ($application['s4s'] as $s4) {
-            if (is_null($s4['outcome']) &&
-                $application['status']['id'] == \Common\RefData::APPLICATION_STATUS_UNDER_CONSIDERATION
-            ) {
+            $isUnderConsideration = ($application['status']['id'] == RefData::APPLICATION_STATUS_UNDER_CONSIDERATION);
+            if (is_null($s4['outcome']) && $isUnderConsideration) {
                 return true;
             }
         }

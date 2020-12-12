@@ -139,6 +139,13 @@ trait LicenceControllerTrait
                 $title = $variables['title'];
             } else {
                 $title = 'lva.section.title.' . $content;
+
+                if ($content == 'community_licences') {
+                    $licence = $this->getLicence();
+                    if ($licence['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_PSV) {
+                        $title .= '.psv';
+                    }
+                }
             }
 
             $content = new ViewModel($sectionParams);
@@ -180,8 +187,16 @@ trait LicenceControllerTrait
             'overview' => array('route' => 'lva-licence')
         );
 
+        $licence = $this->getLicence();
+        $isPsv = ($licence['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_PSV);
+
         foreach ($this->getAccessibleSections() as $section) {
-            $sections[$section] = array('route' => 'lva-licence/' . $section);
+            $sectionKey = $section;
+            if ($isPsv && $sectionKey == 'community_licences') {
+                $sectionKey = 'community_licences.psv';
+            }
+
+            $sections[$sectionKey] = array('route' => 'lva-licence/' . $section);
         }
 
         return $sections;

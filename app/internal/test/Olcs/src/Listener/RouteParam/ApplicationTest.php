@@ -9,6 +9,7 @@ use Mockery as m;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Olcs\Listener\RouteParam\Application;
+use Zend\Navigation\Page\AbstractPage;
 
 /**
  * Class ApplicationTest
@@ -166,6 +167,117 @@ class ApplicationTest extends MockeryTestCase
         $this->sut->onApplication($event);
     }
 
+    public function testModifyCommunityLicenceNav()
+    {
+        $status = RefData::APPLICATION_STATUS_UNDER_CONSIDERATION;
+        $category = RefData::LICENCE_CATEGORY_PSV;
+        $type = RefData::APPLICATION_TYPE_NEW;
+        $canHaveCases = true;
+        $expectedCallsNo = 0;
+
+        $applicationId = 69;
+        $application = [
+            'id' => $applicationId,
+            'status' => [
+                'id' => $status
+            ],
+            's4s' => [
+                [
+                    'outcome' => null
+                ],
+                [
+                    'outcome' => ['id' => RefData::S4_STATUS_APPROVED]
+                ]
+            ],
+            'canCreateCase' => $canHaveCases,
+            'goodsOrPsv' => ['id' => $category],
+            'isVariation' => $type,
+            'licence' => [
+                'organisation' => 'ORGANISATION',
+                'id' => 101,
+            ],
+            'licenceType' => ['id' => 'foo'],
+            'existingPublication' => false,
+            'latestNote' => ['comment' => 'latest note'],
+            'canHaveInspectionRequest' => false,
+        ];
+
+        $quickViewActionsVisible = ($status !== RefData::APPLICATION_STATUS_VALID);
+
+        $event = new RouteParam();
+        $event->setValue($applicationId);
+        $event->setTarget(
+            m::mock()
+            ->shouldReceive('trigger')->once()->with('licence', 101)
+            ->getMock()
+        );
+
+        $mockApplicationCaseNavigationService = m::mock('\StdClass');
+        $mockApplicationCaseNavigationService->shouldReceive('setVisible')->times($expectedCallsNo)->with(false);
+
+        $mockNavigationService = m::mock('Zend\Navigation\Navigation');
+        $mockNavigationService->shouldReceive('findOneById')
+            ->with('application_case')
+            ->andReturn($mockApplicationCaseNavigationService);
+        $mockNavigationService->shouldReceive('findOneById')
+            ->with('application_processing_inspection_request')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setVisible')
+                    ->with(false)
+                    ->once()
+                    ->getMock()
+            )
+            ->once();
+
+        $variationCommunityLicencesPage = m::mock(AbstractPage::class);
+        $variationCommunityLicencesPage->shouldReceive('getLabel')
+            ->andReturn('page.label');
+        $variationCommunityLicencesPage->shouldReceive('setLabel')
+            ->with('page.label.psv')
+            ->once();
+
+        $mockNavigationService->shouldReceive('findOneById')
+            ->with('variation_community_licences')
+            ->andReturn($variationCommunityLicencesPage);
+
+        $this->setupMockApplication($applicationId, $application);
+
+        $mockContainer = m::mock('Zend\View\Helper\Placeholder\Container');
+        $mockContainer->shouldReceive('set')->with($application)->once();
+        $mockContainer->shouldReceive('set')->with('latest note')->once();
+
+        $mockPlaceholder = m::mock('Zend\View\Helper\Placeholder');
+        $mockPlaceholder->shouldReceive('getContainer')->with('application')->andReturn($mockContainer)->once();
+        $mockPlaceholder->shouldReceive('getContainer')->with('note')->andReturn($mockContainer)->once();
+
+        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
+        $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
+
+        $mockSidebar = m::mock()
+            ->shouldReceive('findById')
+            ->with('application-quick-actions')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('setVisible')
+                ->with($quickViewActionsVisible)
+                ->getMock()
+            )
+            ->shouldReceive('findById')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('setVisible')
+                ->getMock()
+            )
+            ->getMock();
+
+        $this->sut->setViewHelperManager($mockViewHelperManager);
+        $this->sut->setNavigationService($mockNavigationService);
+        $this->sut->setSidebarNavigationService($mockSidebar);
+
+        $this->sut->onApplication($event);
+    }
+
     public function onApplicationProvider()
     {
         return [
@@ -219,6 +331,7 @@ class ApplicationTest extends MockeryTestCase
             's4s' => [],
             'isVariation' => false,
             'canCreateCase' => false,
+            'goodsOrPsv' => ['id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE],
             'licenceType' => ['id' => 'xx'],
             'existingPublication' => true,
             'latestNote' => ['comment' => 'latest note'],
@@ -274,6 +387,7 @@ class ApplicationTest extends MockeryTestCase
             's4s' => [],
             'isVariation' => false,
             'canCreateCase' => false,
+            'goodsOrPsv' => ['id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE],
             'licenceType' => ['id' => 'xx'],
             'existingPublication' => false,
             'latestNote' => ['comment' => 'latest note'],
@@ -328,6 +442,7 @@ class ApplicationTest extends MockeryTestCase
             's4s' => [],
             'isVariation' => false,
             'canCreateCase' => false,
+            'goodsOrPsv' => ['id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE],
             'licenceType' => ['id' => 'xx'],
             'existingPublication' => false,
             'latestNote' => ['comment' => 'latest note'],

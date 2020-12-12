@@ -44,7 +44,10 @@ class VariationControllerTraitTest extends MockeryTestCase
             ],
             'business_details' => [
                 'foo' => '789'
-            ]
+            ],
+            'community_licences' => [
+                'foo' => '1011'
+            ],
         ];
 
         $expected = [
@@ -55,17 +58,26 @@ class VariationControllerTraitTest extends MockeryTestCase
             'type_of_licence' => [
                 'foo' => '123',
                 'class' => 'edited',
-                'route' => 'lva-variation/type_of_licence'
+                'route' => 'lva-variation/type_of_licence',
+                'alias' => 'type_of_licence',
             ],
             'business_type' => [
                 'foo' => '456',
                 'class' => '',
-                'route' => 'lva-variation/business_type'
+                'route' => 'lva-variation/business_type',
+                'alias' => 'business_type',
             ],
             'business_details' => [
                 'foo' => '789',
                 'class' => 'incomplete',
-                'route' => 'lva-variation/business_details'
+                'route' => 'lva-variation/business_details',
+                'alias' => 'business_details',
+            ],
+            'community_licences' => [
+                'foo' => '1011',
+                'class' => 'incomplete',
+                'route' => 'lva-variation/community_licences',
+                'alias' => 'community_licences.psv',
             ]
         ];
 
@@ -74,6 +86,7 @@ class VariationControllerTraitTest extends MockeryTestCase
                 'typeOfLicenceStatus' => RefData::VARIATION_STATUS_UPDATED,
                 'businessTypeStatus' => RefData::VARIATION_STATUS_UNCHANGED,
                 'businessDetailsStatus' => RefData::VARIATION_STATUS_REQUIRES_ATTENTION,
+                'communityLicencesStatus' => RefData::VARIATION_STATUS_REQUIRES_ATTENTION,
             ],
             'status' => [
                 'id' => 'XXX'
@@ -104,7 +117,7 @@ class VariationControllerTraitTest extends MockeryTestCase
             ],
             'business_details' => [
                 'foo' => '789'
-            ]
+            ],
         ];
 
         $expected = [
