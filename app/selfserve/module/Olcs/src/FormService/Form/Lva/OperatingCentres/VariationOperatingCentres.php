@@ -27,16 +27,39 @@ class VariationOperatingCentres extends CommonVariationOperatingCentres
         $table = $form->get('table')->get('table')->getTable();
         $table->removeColumn('noOfComplaints');
 
-        if ($form->get('data')->has('totCommunityLicences')) {
-            $this->getFormHelper()->lockElement(
-                $form->get('data')->get('totCommunityLicences'),
-                'community-licence-changes-contact-office'
-            );
-        }
-
         if ($form->has('dataTrafficArea')) {
             $form->get('dataTrafficArea')->remove('enforcementArea');
         }
         $this->getFormHelper()->remove($form, 'form-actions->cancel');
+    }
+
+    protected function alterFormForPsvLicences(Form $form, array $params)
+    {
+        parent::alterFormForPsvLicences($form, $params);
+        $this->alterFormWithTranslationKey($form, 'community-licence-changes-contact-office.psv');
+    }
+
+    protected function alterFormForGoodsLicences(Form $form)
+    {
+        parent::alterFormForGoodsLicences($form);
+        $this->alterFormWithTranslationKey($form, 'community-licence-changes-contact-office');
+    }
+
+    /**
+     * Apply a padlock to the totCommunityLicences field using the specified translation key as a tooltip
+     *
+     * @param Form $form
+     * @param string $translationKey
+     *
+     * @return void
+     */
+    protected function alterFormWithTranslationKey(Form $form, $translationKey)
+    {
+        if ($form->get('data')->has('totCommunityLicences')) {
+            $this->getFormHelper()->lockElement(
+                $form->get('data')->get('totCommunityLicences'),
+                $translationKey
+            );
+        }
     }
 }
