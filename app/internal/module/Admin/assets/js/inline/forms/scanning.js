@@ -5,6 +5,7 @@ OLCS.ready(function() {
     1: "Licence No",
     2: "Case ID",
     3: "Bus registration No",
+    4: "IRHP application id",
     5: "Transport manager",
     7: "Licence No",
     8: "IRFO ID",
@@ -17,8 +18,23 @@ OLCS.ready(function() {
     $("label[for=entity_identifier]").text(label);
   }
 
+  function setReceivedDateVisibility() {
+    var checkbox = $("#back_scan"); 
+    var fieldset = $("fieldset.received_date");
+
+    if (checkbox.is(':checked')) {
+      fieldset.show();
+    } else {
+      fieldset.hide();
+    }
+  }
+
   $(document).on("change", "#category", function() {
     renderLabel($(this));
+  });
+
+  $(document).on("change", "#back_scan", function() {
+    setReceivedDateVisibility();
   });
 
   OLCS.cascadeInput({
@@ -64,4 +80,5 @@ OLCS.ready(function() {
   });
 
   renderLabel($("#category"));
+  setReceivedDateVisibility();
 });
