@@ -38,11 +38,13 @@ return [
     'columns' => [
         [
             'title' => 'Permit No',
-            'name' => 'permitNumberWithPrefix'
+            'name' => 'permitNumberWithPrefix',
+            'sort' => 'permitNumber',
         ],
         [
             'title' => 'Application number',
             'name' => 'id',
+            'sort' => 'ia.id',
             'formatter' => function ($row) {
                 $relatedApplication = $row['irhpPermitApplication']['relatedApplication'];
 
@@ -77,6 +79,7 @@ return [
         [
             'title' => 'Issued date',
             'name' => 'issueDate',
+            'sort' => 'issueDate',
             'formatter' => 'DateTime',
         ],
         [
