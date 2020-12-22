@@ -4,7 +4,7 @@ namespace OlcsTest\Form\Model\Form;
 
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 use Common\Validator\Date as CommonDateValidation;
-use Laminas\Validator\Date as ZendDateValidation;
+use Laminas\Validator\Date as LaminasDateValidation;
 
 /**
  * Class EnvironmentalComplaintTest
@@ -32,7 +32,7 @@ class EnvironmentalComplaintTest extends AbstractFormValidationTestCase
             [
                 CommonDateValidation::DATE_ERR_CONTAINS_STRING,
                 CommonDateValidation::DATE_ERR_YEAR_LENGTH,
-                ZendDateValidation::INVALID_DATE,
+                LaminasDateValidation::INVALID_DATE,
             ]
         );
 

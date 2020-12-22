@@ -12,7 +12,7 @@ use Dvsa\Olcs\Transfer\Command\PsvDisc\ConfirmPrinting as ConfirmPrintingPsvDto;
 use Dvsa\Olcs\Transfer\Query\DiscSequence\DiscPrefixes as DiscPrefixesQry;
 use Dvsa\Olcs\Transfer\Query\DiscSequence\DiscsNumbering as DiscsNumberingQry;
 use Admin\Data\Mapper\DiscPrinting as DiscPrintingMapper;
-use \Laminas\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
+use \Laminas\Mvc\Controller\AbstractActionController as LaminasAbstractActionController;
 use Common\Controller\Traits\GenericRenderView;
 use Common\Controller\Traits\GenericMethods;
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -26,7 +26,7 @@ use Common\Util\FlashMessengerTrait;
  * @method \Common\Service\Cqrs\Response handleQuery(\Dvsa\Olcs\Transfer\Query\QueryInterface $query)
  * @method \Common\Service\Cqrs\Response handleCommand(\Dvsa\Olcs\Transfer\Command\CommandInterface $query)
  */
-class DiscPrintingController extends ZendAbstractActionController implements LeftViewProvider
+class DiscPrintingController extends LaminasAbstractActionController implements LeftViewProvider
 {
     use GenericRenderView,
         GenericMethods,

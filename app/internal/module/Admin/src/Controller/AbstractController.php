@@ -3,7 +3,7 @@
 namespace Admin\Controller;
 
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Laminas\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
+use Laminas\Mvc\Controller\AbstractActionController as LaminasAbstractActionController;
 use Common\Controller\Traits\GenericRenderView;
 use Laminas\View\Model\ViewModel;
 
@@ -16,7 +16,7 @@ use Laminas\View\Model\ViewModel;
  * @method \Common\Service\Cqrs\Response handleCommand(\Dvsa\Olcs\Transfer\Command\CommandInterface $query)
  * @method \Common\Controller\Plugin\Redirect redirect()
  */
-abstract class AbstractController extends ZendAbstractActionController implements LeftViewProvider
+abstract class AbstractController extends LaminasAbstractActionController implements LeftViewProvider
 {
     use GenericRenderView;
 

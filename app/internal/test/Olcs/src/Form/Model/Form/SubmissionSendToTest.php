@@ -4,7 +4,7 @@ namespace OlcsTest\Form\Model\Form;
 
 use Common\Validator\Date as CommonDateValidator;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
-use Laminas\Validator\Date as ZendDateValidator;
+use Laminas\Validator\Date as LaminasDateValidator;
 
 /**
  * Class SubmissionSendToTest
@@ -42,21 +42,21 @@ class SubmissionSendToTest extends AbstractFormValidationTestCase
             $element,
             ['day' => 'X', 'month' => '2', 'year' => 1999],
             [
-                ZendDateValidator::INVALID_DATE,
+                LaminasDateValidator::INVALID_DATE,
             ]
         );
         $this->assertFormElementNotValid(
             $element,
             ['day' => '1', 'month' => 'X', 'year' => 1999],
             [
-                ZendDateValidator::INVALID_DATE,
+                LaminasDateValidator::INVALID_DATE,
             ]
         );
         $this->assertFormElementNotValid(
             $element,
             ['day' => 1, 'month' => 3, 'year' => 'XXXX'],
             [
-                ZendDateValidator::INVALID_DATE,
+                LaminasDateValidator::INVALID_DATE,
             ]
         );
     }
@@ -79,7 +79,7 @@ class SubmissionSendToTest extends AbstractFormValidationTestCase
             ['day' => 'X', 'month' => '2', 'year' => '1999'],
             [
                 CommonDateValidator::DATE_ERR_CONTAINS_STRING,
-                ZendDateValidator::INVALID_DATE,
+                LaminasDateValidator::INVALID_DATE,
             ]
         );
         $this->assertFormElementNotValid(
@@ -87,7 +87,7 @@ class SubmissionSendToTest extends AbstractFormValidationTestCase
             ['day' => '1', 'month' => 'X', 'year' => '1999'],
             [
                 CommonDateValidator::DATE_ERR_CONTAINS_STRING,
-                ZendDateValidator::INVALID_DATE,
+                LaminasDateValidator::INVALID_DATE,
             ]
         );
         $this->assertFormElementNotValid(
@@ -96,7 +96,7 @@ class SubmissionSendToTest extends AbstractFormValidationTestCase
             [
                 CommonDateValidator::DATE_ERR_CONTAINS_STRING,
                 CommonDateValidator::DATE_ERR_YEAR_LENGTH,
-                ZendDateValidator::INVALID_DATE,
+                LaminasDateValidator::INVALID_DATE,
             ]
         );
         $this->assertFormElementValid(

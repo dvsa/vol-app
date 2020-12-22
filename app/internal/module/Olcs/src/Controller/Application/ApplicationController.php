@@ -95,7 +95,7 @@ class ApplicationController extends AbstractController implements ApplicationCon
     /**
      * Set method for request
      *
-     * @param \Laminas\Http\Request $request Zend
+     * @param \Laminas\Http\Request $request Laminas
      *
      * @return void
      */

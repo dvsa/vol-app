@@ -33,7 +33,7 @@ class NoOfPermitsElementGenerator
     }
 
     /**
-     * Return a zend text element corresponding to the provided field data
+     * Return a Laminas text element corresponding to the provided field data
      *
      * @param array $field
      *

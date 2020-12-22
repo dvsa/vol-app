@@ -6,7 +6,7 @@
 namespace Admin\Controller;
 
 use Common\Category;
-use \Laminas\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
+use \Laminas\Mvc\Controller\AbstractActionController as LaminasAbstractActionController;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Organisation\CpidOrganisationExport;
 use Dvsa\Olcs\Transfer\Query\Document\DocumentList;
@@ -24,7 +24,7 @@ use Common\Controller\Traits\ViewHelperManagerAware;
  * @author Dan Eggleston <dan@stolenegg.com>
  */
 
-class ReportController extends ZendAbstractActionController implements LeftViewProvider
+class ReportController extends LaminasAbstractActionController implements LeftViewProvider
 {
     use GenericMethods,
         GenericRenderView,

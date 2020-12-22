@@ -8,7 +8,7 @@
  */
 namespace Olcs\Form\Element;
 
-use Laminas\Form\Element as ZendElement;
+use Laminas\Form\Element as LaminasElement;
 use Laminas\ModuleManager\Feature\ViewHelperProviderInterface;
 use Laminas\Form\ElementPrepareAwareInterface;
 use Laminas\Form\FormInterface;
@@ -19,7 +19,7 @@ use Laminas\InputFilter\InputProviderInterface;
  *
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class SubmissionSections extends ZendElement implements ElementPrepareAwareInterface, InputProviderInterface
+class SubmissionSections extends LaminasElement implements ElementPrepareAwareInterface, InputProviderInterface
 {
 
     /**

@@ -9,7 +9,7 @@ use Mockery as m;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Olcs\Listener\RouteParam\Application;
-use Zend\Navigation\Page\AbstractPage;
+use Laminas\Navigation\Page\AbstractPage;
 
 /**
  * Class ApplicationTest
@@ -215,7 +215,7 @@ class ApplicationTest extends MockeryTestCase
         $mockApplicationCaseNavigationService = m::mock('\StdClass');
         $mockApplicationCaseNavigationService->shouldReceive('setVisible')->times($expectedCallsNo)->with(false);
 
-        $mockNavigationService = m::mock('Zend\Navigation\Navigation');
+        $mockNavigationService = m::mock('Laminas\Navigation\Navigation');
         $mockNavigationService->shouldReceive('findOneById')
             ->with('application_case')
             ->andReturn($mockApplicationCaseNavigationService);
@@ -243,15 +243,15 @@ class ApplicationTest extends MockeryTestCase
 
         $this->setupMockApplication($applicationId, $application);
 
-        $mockContainer = m::mock('Zend\View\Helper\Placeholder\Container');
+        $mockContainer = m::mock('Laminas\View\Helper\Placeholder\Container');
         $mockContainer->shouldReceive('set')->with($application)->once();
         $mockContainer->shouldReceive('set')->with('latest note')->once();
 
-        $mockPlaceholder = m::mock('Zend\View\Helper\Placeholder');
+        $mockPlaceholder = m::mock('Laminas\View\Helper\Placeholder');
         $mockPlaceholder->shouldReceive('getContainer')->with('application')->andReturn($mockContainer)->once();
         $mockPlaceholder->shouldReceive('getContainer')->with('note')->andReturn($mockContainer)->once();
 
-        $mockViewHelperManager = m::mock('Zend\View\HelperPluginManager');
+        $mockViewHelperManager = m::mock('Laminas\View\HelperPluginManager');
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
 
         $mockSidebar = m::mock()

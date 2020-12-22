@@ -129,7 +129,7 @@ class LicenceController extends AbstractController implements LicenceControllerI
     }
 
     /**
-     * This method is to assist the hierarchical nature of zend
+     * This method is to assist the hierarchical nature of Laminas
      * navigation when parent pages need to also be siblings
      * from a breadcrumb and navigation point of view.
      *

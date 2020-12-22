@@ -4,7 +4,7 @@ namespace Admin\Controller;
 
 use Laminas\View\Model\ViewModel;
 use Common\Service\Data\CategoryDataService;
-use Laminas\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
+use Laminas\Mvc\Controller\AbstractActionController as LaminasAbstractActionController;
 use Common\Controller\Traits\GenericRenderView;
 
 /**
@@ -12,7 +12,7 @@ use Common\Controller\Traits\GenericRenderView;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class ScanningController extends ZendAbstractActionController
+class ScanningController extends LaminasAbstractActionController
 {
     const ERR_NO_ENTITY_FOR_CATEGORY = 'ERR_NO_ENTITY_FOR_CATEGORY';
     const ERR_ENTITY_NAME_NOT_SETUP = 'ERR_ENTITY_NAME_NOT_SETUP';
