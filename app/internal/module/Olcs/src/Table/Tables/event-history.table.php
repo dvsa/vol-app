@@ -25,6 +25,17 @@ return array(
         array(
             'title' => 'Info',
             'name' => 'eventData',
+            'formatter' => function ($row) {
+                $eventData = $row['eventData'];
+
+                // if the eventData represents a document store path, extract the filename
+                if (strpos($eventData, 'documents/') === 0) {
+                    $eventDataComponents = explode('/', $eventData);
+                    return $eventDataComponents[count($eventDataComponents) - 1];
+                }
+
+                return $eventData;
+            }
         ),
         array(
             'title' => 'App. Id',
