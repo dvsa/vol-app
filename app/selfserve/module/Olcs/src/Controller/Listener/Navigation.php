@@ -8,7 +8,7 @@ use Laminas\EventManager\ListenerAggregateTrait;
 use Laminas\Http\Header\Referer as HttpReferer;
 use Laminas\Http\PhpEnvironment\Request as HttpRequest;
 use Laminas\Mvc\MvcEvent;
-use Laminas\Navigation\Navigation as ZendNavigation;
+use Laminas\Navigation\Navigation as LaminasNavigation;
 use Common\Service\Cqrs\Query\QuerySender;
 use Common\Rbac\User as RbacUser;
 use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
@@ -22,7 +22,7 @@ class Navigation implements ListenerAggregateInterface
     use ListenerAggregateTrait;
 
     /**
-     * @var ZendNavigation
+     * @var LaminasNavigation
      */
     protected $navigation;
 
@@ -51,13 +51,13 @@ class Navigation implements ListenerAggregateInterface
     /**
      * Navigation constructor
      *
-     * @param ZendNavigation $navigation
+     * @param LaminasNavigation $navigation
      * @param QuerySender    $querySender
      * @param RbacUser       $identity
      *
      * @return void
      */
-    public function __construct(ZendNavigation $navigation, QuerySender $querySender, RbacUser $identity)
+    public function __construct(LaminasNavigation $navigation, QuerySender $querySender, RbacUser $identity)
     {
         $this->navigation = $navigation;
         $this->querySender = $querySender;
