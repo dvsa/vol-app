@@ -2,6 +2,7 @@
 
 namespace AdminTest\Form\Model\Form;
 
+use Common\Form\Elements\InputFilters\SingleCheckbox;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 
 /**
@@ -43,6 +44,20 @@ class ScanningTest extends AbstractFormValidationTestCase
     public function testScanningDetailsEntityIdentifier()
     {
         $element = ['details', 'entityIdentifier'];
+        $this->assertFormElementRequired($element, true);
+    }
+
+    public function testScanningDetailsBackScan()
+    {
+        $element = ['details', 'backScan'];
+        $this->assertFormElementType($element, SingleCheckbox::class);
+        $this->assertFormElementRequired($element, false);
+    }
+
+    public function testScanningDetailsDateReceived()
+    {
+        $element = ['details', 'dateReceived'];
+        $this->assertFormElementDate($element);
         $this->assertFormElementRequired($element, true);
     }
 

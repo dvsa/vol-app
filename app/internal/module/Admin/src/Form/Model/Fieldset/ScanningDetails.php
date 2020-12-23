@@ -59,4 +59,34 @@ class ScanningDetails
      * @Form\Validator({"name": "Laminas\Validator\NotEmpty"})
      */
     public $entityIdentifier = null;
+
+    /**
+     * @Form\Attributes({"id" : "back_scan"})
+     * @Form\Options({
+     *   "checked_value": "1",
+     *   "unchecked_value": "0",
+     *   "label": "scanning.data.back_scan",
+     *   "must_be_value": "Yes"
+     * })
+     * @Form\Type("\Common\Form\Elements\InputFilters\SingleCheckbox")
+     * @Form\Required(false)
+     */
+    public $backScan = null;
+
+    /**
+     * @Form\Required(true)
+     * @Form\Attributes({"id":"received_date"})
+     * @Form\Options({
+     *     "label": "scanning.data.received_date",
+     *     "create_empty_option": true,
+     *     "render_delimiters": false,
+     *     "fieldsetClass": "received_date"
+     * })
+     * @Form\Type("DateSelect")
+     * @Form\Filter({"name":"DateSelectNullifier"})
+     * @Form\Validator({"name": "\Common\Validator\Date"})
+     * @Form\Validator({"name": "Date","options":{"format":"Y-m-d"}})
+     * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
+     */
+    public $dateReceived = null;
 }

@@ -74,7 +74,19 @@ class ScanningController extends LaminasAbstractActionController
                 $sm->get('Helper\Form')->remove($form, 'details->otherDescription');
             }
 
+            // received date not applicable and shouldn't be validated if not a back scan
+            $isBackScan = $details['backScan'] == true;
+            if (!$isBackScan) {
+                $inputs = $form->getInputFilter()->get('details');
+                $inputs->remove('dateReceived');
+            }
+
             if ($form->isValid()) {
+                $dateReceived = null;
+                if ($isBackScan) {
+                    $dateReceived = $form->get('details')->get('dateReceived')->getValue();
+                }
+
                 /* @var $response \Common\Service\Cqrs\Response */
                 $response = $this->handleCommand(
                     \Dvsa\Olcs\Transfer\Command\Scan\CreateSeparatorSheet::create(
@@ -85,6 +97,7 @@ class ScanningController extends LaminasAbstractActionController
                             'descriptionId' => (isset($details['description'])) ? $details['description'] : null,
                             'description' => (isset($details['otherDescription'])) ?
                                 $details['otherDescription'] : null,
+                            'dateReceived' => $dateReceived,
                         ]
                     )
                 );
