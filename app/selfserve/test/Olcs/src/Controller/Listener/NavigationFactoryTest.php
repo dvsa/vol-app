@@ -7,7 +7,7 @@ use Common\Service\Cqrs\Query\QuerySender;
 use Mockery as m;
 use Olcs\Controller\Listener\Navigation as NavigationListener;
 use Olcs\Controller\Listener\NavigationFactory;
-use Laminas\Navigation\Navigation as ZendNavigation;
+use Laminas\Navigation\Navigation as LaminasNavigation;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use ZfcRbac\Service\AuthorizationService;
 
@@ -20,7 +20,7 @@ class NavigationFactoryTest extends m\Adapter\Phpunit\MockeryTestCase
     public function testCreateService()
     {
         $identity = m::mock(RbacUser::class);
-        $navigation = m::mock(ZendNavigation::class);
+        $navigation = m::mock(LaminasNavigation::class);
         $querySender = m::mock(QuerySender::class);
         $authService = m::mock(AuthorizationService::class);
         $authService->shouldReceive('getIdentity')->once()->withNoArgs()->andReturn($identity);

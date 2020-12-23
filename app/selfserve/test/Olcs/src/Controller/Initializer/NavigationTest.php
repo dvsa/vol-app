@@ -5,7 +5,7 @@ use Common\Controller\AbstractOlcsController;
 use Dvsa\Olcs\Auth\Controller\LoginController;
 use Olcs\Controller\Initializer\Navigation as NavigationInitializer;
 use Olcs\Controller\Listener\Navigation as NavigationListener;
-use Laminas\EventManager\EventManager as ZendEventManager;
+use Laminas\EventManager\EventManager as LaminasEventManager;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\ServiceManager\ServiceManager;
 use Mockery as m;
@@ -18,7 +18,7 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
     public function testInitialize()
     {
         $navListener = m::mock(NavigationListener::class);
-        $mockEventManager = m::mock(ZendEventManager::class);
+        $mockEventManager = m::mock(LaminasEventManager::class);
         $mockEventManager->shouldReceive('attach')->once()->with($navListener);
 
         /** @var ServiceManager|m\mock $sl */
