@@ -157,7 +157,7 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
     /**
      * Edit action - determines a varying command prior to execution of parent
      *
-     * @return ViewModel|Zend/Http/Response
+     * @return ViewModel|Laminas/Http/Response
      */
     public function editAction()
     {
@@ -178,7 +178,7 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
     /**
      * reset Model
      *
-     * @return Zend/Http/Response|ViewModel
+     * @return Laminas/Http/Response|ViewModel
      */
     public function resetAction()
     {

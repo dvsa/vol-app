@@ -73,7 +73,7 @@ class DecisionsController extends AbstractInternalController implements CaseCont
     /**
      * Add Action
      *
-     * @return Zend  \Laminas\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function addAction()
     {
@@ -83,7 +83,7 @@ class DecisionsController extends AbstractInternalController implements CaseCont
     /**
      * edit action
      *
-     * @return Zend  \Laminas\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function editAction()
     {
@@ -93,7 +93,7 @@ class DecisionsController extends AbstractInternalController implements CaseCont
     /**
      * delete Action
      *
-     * @return Zend  \Laminas\Http\Response
+     * @return \Laminas\Http\Response
      */
     public function deleteAction()
     {

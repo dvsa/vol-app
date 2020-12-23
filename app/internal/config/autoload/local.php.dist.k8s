@@ -143,7 +143,7 @@ return [
                         \Redis::OPT_SERIALIZER => \Redis::SERIALIZER_IGBINARY
                     ],
                     'ttl' => 3600, //one hour, likely to be overridden based on use case
-                    'namespace' => 'zfcache', //otherwise zend will default to "zfcache", but usually overridden anyway
+                    'namespace' => 'zfcache', //otherwise laminas will default to "zfcache", but usually overridden anyway
                 ],
                 'plugins' => [
                     'exception_handler' => [

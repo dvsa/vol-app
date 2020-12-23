@@ -104,7 +104,7 @@ class OverviewController extends AbstractController implements LicenceController
      *
      * @param int $licenceId licenceID
      *
-     * @return array|Zend/Http/Response
+     * @return array|Laminas/Http/Response
      */
     protected function getOverviewData($licenceId)
     {

@@ -9,7 +9,7 @@ use Common\Controller\Traits\GenericReceipt;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits\FeesActionTrait;
 use Laminas\View\Model\ViewModel;
-use \Laminas\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
+use \Laminas\Mvc\Controller\AbstractActionController as LaminasAbstractActionController;
 use Common\Controller\Traits\GenericRenderView;
 use Common\Controller\Traits\GenericMethods;
 use Common\Util\FlashMessengerTrait;
@@ -17,7 +17,7 @@ use Common\Util\FlashMessengerTrait;
 /**
  * Payment Processing Fees Controller
  */
-class PaymentProcessingFeesController extends ZendAbstractActionController implements LeftViewProvider
+class PaymentProcessingFeesController extends LaminasAbstractActionController implements LeftViewProvider
 {
     use FeesActionTrait,
         GenericReceipt,

@@ -145,7 +145,7 @@ trait ApplicationOverviewTrait
      * @param array                    $licence     licence overview data
      * @param array                    $application application overview data
      *
-     * @return Zend/Form/FormInterface
+     * @return Laminas/Form/FormInterface
      */
     protected function alterForm($form, $licence, $application)
     {

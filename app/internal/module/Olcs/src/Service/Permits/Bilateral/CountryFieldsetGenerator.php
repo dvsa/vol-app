@@ -90,7 +90,7 @@ class CountryFieldsetGenerator
     }
 
     /**
-     * Return a zend Select element corresponding to the provided list of periods
+     * Return a Laminas Select element corresponding to the provided list of periods
      *.
      * @param array $periods
      * @param string $periodLabel

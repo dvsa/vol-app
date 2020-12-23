@@ -94,7 +94,7 @@ class DecisionController extends AbstractInternalController implements CaseContr
     /**
      * index Action
      *
-     * @return Zend/Http/Response
+     * @return Laminas/Http/Response
      */
     public function indexAction()
     {
@@ -104,7 +104,7 @@ class DecisionController extends AbstractInternalController implements CaseContr
     /**
      * details action
      *
-     * @return Zend/Http/Response
+     * @return Laminas/Http/Response
      */
     public function detailsAction()
     {
@@ -114,7 +114,7 @@ class DecisionController extends AbstractInternalController implements CaseContr
     /**
      * delete Action
      *
-     * @return Zend/Http/Response
+     * @return Laminas/Http/Response
      */
     public function deleteAction()
     {

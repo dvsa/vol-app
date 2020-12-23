@@ -7,7 +7,7 @@ use Common\Controller\Traits\GenericMethods;
 use Common\Controller\Traits\GenericRenderView;
 use Common\Util\FlashMessengerTrait;
 use Olcs\Controller\Traits as OlcsTraits;
-use Laminas\Mvc\Controller\AbstractActionController as ZendAbstractActionController;
+use Laminas\Mvc\Controller\AbstractActionController as LaminasAbstractActionController;
 
 /**
  * Abstract Controller
@@ -19,7 +19,7 @@ use Laminas\Mvc\Controller\AbstractActionController as ZendAbstractActionControl
  * @method \Common\Service\Cqrs\Response handleCommand(\Dvsa\Olcs\Transfer\Command\CommandInterface $query)
  * @method \Common\Controller\Plugin\Redirect redirect()
  */
-class AbstractController extends ZendAbstractActionController
+class AbstractController extends LaminasAbstractActionController
 {
     use CommonTraits\ViewHelperManagerAware,
         OlcsTraits\ListDataTrait,
