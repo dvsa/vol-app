@@ -34,7 +34,7 @@
         "laminas/laminas-validator": "^2.5",
         "laminas/laminas-view": "^2.5",
         "doctrine/annotations": "^1.8",
-        "zf-commons/zfc-rbac": "~2.5.0",
+        "lm-commons/lmc-rbac-mvc": "^2.6",
         "olcs/olcs-transfer": "~4.206.0",
         "olcs/olcs-utils": "~4.206.0",
         "olcs/olcs-auth": "~4.206.0",
