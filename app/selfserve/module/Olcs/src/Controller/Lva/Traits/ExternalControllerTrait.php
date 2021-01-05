@@ -54,16 +54,7 @@ trait ExternalControllerTrait
      */
     protected function getCurrentOrganisation()
     {
-        $dto = MyAccount::create([]);
-
-        $response = $this->handleQuery($dto);
-
-        if (!$response->isOk()) {
-            return null;
-        }
-
-        $data = $response->getResult();
-
+        $data = $this->getCurrentUser();
         return $data['organisationUsers'][0]['organisation'];
     }
 

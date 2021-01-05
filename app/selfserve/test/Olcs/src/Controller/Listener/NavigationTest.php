@@ -4,11 +4,9 @@ namespace OlcsTest\Listener;
 
 use Common\Rbac\User as RbacUser;
 use Common\Service\Cqrs\Query\QuerySender;
-use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 use Olcs\Controller\Listener\Navigation as NavigationListener;
 use Mockery as m;
 use Laminas\Http\Header\Referer as HttpReferer;
-use Laminas\Http\Response as HttpResponse;
 use Laminas\Http\PhpEnvironment\Request as HttpRequest;
 use Laminas\Navigation\Navigation;
 use Laminas\Navigation\Page\Uri;
@@ -86,19 +84,9 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
         $dashboardPermitsKey = 'dashboard-permits';
         $dashboardPermitsPage = new Uri();
 
-        $httpResponse = m::mock(HttpResponse::class);
-
         $this->mockIdentity->shouldReceive('isAnonymous')->once()->withNoArgs()->andReturn(false);
-
-        $httpResponse->shouldReceive('getResult')
-            ->withNoArgs()
-            ->once()
+        $this->mockIdentity->expects('getUserData')
             ->andReturn(['eligibleForPermits' => $eligibleForPermits]);
-
-        $this->mockQuerySender->shouldReceive('send')
-            ->with(m::type(MyAccount::class))
-            ->once()
-            ->andReturn($httpResponse);
 
         $this->mockNavigation
             ->shouldReceive('findBy')
@@ -167,22 +155,13 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
         $dashboardPermitsKey = 'dashboard-permits';
         $dashboardPermitsPage = new Uri();
 
-        $httpResponse = m::mock(HttpResponse::class);
-
         $this->mockIdentity->shouldReceive('isAnonymous')
             ->once()
             ->withNoArgs()
             ->andReturn(false);
 
-        $httpResponse->shouldReceive('getResult')
-            ->withNoArgs()
-            ->once()
+        $this->mockIdentity->expects('getUserData')
             ->andReturn(['eligibleForPermits' => $eligibleForPermits]);
-
-        $this->mockQuerySender->shouldReceive('send')
-            ->with(m::type(MyAccount::class))
-            ->once()
-            ->andReturn($httpResponse);
 
         $this->mockNavigation
             ->shouldReceive('findBy')

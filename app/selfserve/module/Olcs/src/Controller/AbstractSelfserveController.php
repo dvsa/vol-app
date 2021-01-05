@@ -9,7 +9,6 @@ use Common\Form\Form;
 use Common\Service\Cqrs\Response as CqrsResponse;
 use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
-use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Olcs\Controller\Config\DataSource\DataSourceInterface;
 use Olcs\Logging\Log\Logger;
@@ -761,16 +760,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      */
     protected function getCurrentOrganisation()
     {
-        $dto = MyAccount::create([]);
-
-        $response = $this->handleQuery($dto);
-
-        if (!$response->isOk()) {
-            return null;
-        }
-
-        $data = $response->getResult();
-
+        $data = $this->getCurrentUser();
         return $data['organisationUsers'][0]['organisation'];
     }
 

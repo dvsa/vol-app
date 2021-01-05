@@ -48,9 +48,11 @@ class PermitsController extends AbstractSelfserveController
             return $view;
         }
 
+        $orgId = $this->getCurrentOrganisationId();
+
         $response = $this->handleQuery(
             SelfserveApplicationsSummary::create(
-                ['organisation' => $this->getCurrentOrganisationId()]
+                ['organisation' => $orgId]
             )
         );
 
@@ -58,7 +60,7 @@ class PermitsController extends AbstractSelfserveController
 
         $response = $this->handleQuery(
             SelfserveIssuedPermitsSummary::create(
-                ['organisation' => $this->getCurrentOrganisationId()]
+                ['organisation' => $orgId]
             )
         );
 
@@ -143,9 +145,7 @@ class PermitsController extends AbstractSelfserveController
      */
     private function isEligibleForPermits(): bool
     {
-        $query = MyAccount::create([]);
-        $response = $this->handleQuery($query)->getResult();
-
+        $response = $this->getCurrentUser();
         return $response['eligibleForPermits'];
     }
 
