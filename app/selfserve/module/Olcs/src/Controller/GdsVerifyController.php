@@ -2,9 +2,10 @@
 
 namespace Olcs\Controller;
 
+use Common\Controller\Lva\AbstractController;
 use Olcs\Logging\Log\Logger;
 use Olcs\View\Model\Dashboard;
-use Common\Controller\Lva\AbstractController;
+use ZfcRbac\Exception\UnauthorizedException;
 
 /**
  * GdsVerifyController Controller
@@ -39,11 +40,36 @@ class GdsVerifyController extends AbstractController
     }
 
     /**
+     * Process the request from GDS Verify and forwards to Process Signature Action.
+     *
+     * This is required due to SameSite Cookies and not compromising by converting our cookies to third-party.
+     *
+     * @return \Laminas\Http\Response
+     * @throws \UnauthorizedException
+     */
+    public function processResponseAction()
+    {
+        $originHeader = $this->getRequest()->getHeader('origin', null);
+        if (is_null($originHeader)) {
+            throw new UnauthorizedException('Origin header required');
+        }
+
+        $origin = $originHeader->getFieldValue();
+        $validOrigin = $this->getServiceLocator()->get('Config')['verify']['forwarder']['valid-origin'];
+
+        if ($origin !== $validOrigin) {
+            throw new UnauthorizedException('Unauthorized origin');
+        }
+
+        return $this->redirect()->toRoute('verify.process-signature');
+    }
+
+    /**
      * Process the GDS Verify SAML response
      *
      * @return \Laminas\Http\Response
      */
-    public function processResponseAction()
+    public function processSignatureAction()
     {
         $session = new \Olcs\Session\DigitalSignature();
 
