@@ -40,9 +40,7 @@ class EditableTranslation implements MapperInterface
                 $data['fields']['translationsArray'][$isoCode] = base64_encode($data['fields']['translationsArray'][$isoCode]);
             }
         }
-        if (!empty($data['fields']['translationKey'])) {
-            $data['fields']['id'] = $data['fields']['translationKey'];
-        }
+
         return $data['fields'];
     }
 

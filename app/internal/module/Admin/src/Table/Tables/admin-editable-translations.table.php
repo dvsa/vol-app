@@ -26,9 +26,17 @@ return [
     ],
     'columns' => [
         [
-            'title' => 'Content Key',
+            'title' => 'Id',
             'name' => 'id',
             'sort' => 'id',
+        ],
+        [
+            'title' => 'Content Key',
+            'name' => 'translationKey',
+            'sort' => 'translationKey',
+            'formatter' => function ($row) {
+                return Escape::html($row['translationKey']);
+            },
         ],
         [
             'title' => 'Description',

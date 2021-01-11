@@ -5,8 +5,9 @@ $translationsTable = $this->placeholder('translationsTable')->getValue();
 
  ?>
 <div class="govuk-details">
-    <p><strong>Content ID:</strong> <?php echo $details['id'] ?></p>
-    <p><strong>Description:</strong> <?php echo $details['description'] ?></p>
+    <p><strong>Database ID:</strong> <?php echo $details['id'] ?></p>
+    <p><strong>Content ID:</strong> <?php echo $this->escapeHtml($details['translationKey']) ?></p>
+    <p><strong>Description:</strong> <?php echo $this->escapeHtml($details['description']) ?></p>
 </div>
 <div class="govuk-details">
     <?php echo $translationsTable ?>
