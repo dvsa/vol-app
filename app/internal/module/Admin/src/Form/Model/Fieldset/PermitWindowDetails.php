@@ -117,16 +117,4 @@ class PermitWindowDetails
      * })
      */
     public $endDate = null;
-
-    /**
-     * @Form\Name("daysForPayment")
-     * @Form\Attributes({"id": "daysForPayment"})
-     * @Form\Options({
-     *      "label": "Days for Payment",
-     *      "required": false
-     * })
-     * @Form\Type("Number")
-     * @Form\Required(true)
-     */
-    public $daysForPayment = null;
 }

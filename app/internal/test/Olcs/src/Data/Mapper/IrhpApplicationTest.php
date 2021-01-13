@@ -72,7 +72,6 @@ class IrhpApplicationTest extends MockeryTestCase
                                 ],
                                 'startDate' => '2019-01-01 00:00:00',
                                 'endDate' => '2019-09-29 00:00:00',
-                                'daysForPayment' => '14',
                             ]
                         ],
                         [
@@ -126,7 +125,6 @@ class IrhpApplicationTest extends MockeryTestCase
                     ],
                     'startDate' => '2019-01-01 00:00:00',
                     'endDate' => '2019-09-29 00:00:00',
-                    'daysForPayment' => '14',
                 ],
                 [
                     'id' => '13',
