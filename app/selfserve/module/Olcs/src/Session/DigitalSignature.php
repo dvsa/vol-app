@@ -13,7 +13,7 @@ class DigitalSignature extends \Laminas\Session\Container
 
 
 
-    
+
     /**
      * DigitalSignature constructor.
      */
@@ -170,5 +170,20 @@ class DigitalSignature extends \Laminas\Session\Container
     public function getLicenceId():int
     {
         return (int) $this->licenceId;
+    }
+
+    public function hasVerifyId()
+    {
+        return $this->offsetExists('verifyId');
+    }
+
+    public function setVerifyId(string $verifyId)
+    {
+        $this->verifyId = $verifyId;
+    }
+
+    public function getVerifyId(): string
+    {
+        return $this->verifyId;
     }
 }
