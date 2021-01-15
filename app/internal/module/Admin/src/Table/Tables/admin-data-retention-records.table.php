@@ -42,7 +42,7 @@ return [
         [
             'title' => 'Description',
             'formatter' => 'DataRetentionRecordLink',
-            'sort' => 'licNo',
+            'sort' => 'id',
         ],
         [
             'title' => 'Date added',
