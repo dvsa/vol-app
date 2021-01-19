@@ -15,6 +15,41 @@ use Mockery as m;
  */
 class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
 {
+    public function testInvoke()
+    {
+        $navListener = m::mock(NavigationListener::class);
+        $mockEventManager = m::mock(LaminasEventManager::class);
+        $mockEventManager->shouldReceive('attach')->once()->with($navListener);
+
+        /** @var ServiceManager|m\mock $sl */
+        $sl = m::mock(ServiceLocatorInterface::class);
+        $sl->shouldReceive('getServiceLocator->get')->with(NavigationListener::class)->andReturn($navListener);
+
+        //this could be any controller or controller interface
+        $instance = m::mock(AbstractOlcsController::class);
+        $instance->shouldReceive('getEventManager')->andReturn($mockEventManager);
+
+        $initializer = new NavigationInitializer();
+        $initializer($sl, $instance);
+    }
+
+    /**
+     * Check the initializer doesn't try to attach the nav listener on the login page
+     */
+    public function testInvokeFromLoginPage()
+    {
+        $instance = m::mock(LoginController::class);
+        $instance->shouldNotReceive('getEventManager->attach');
+        $sl = m::mock(ServiceLocatorInterface::class);
+        $sl->shouldNotReceive('getServiceLocator->get')->with(NavigationListener::class);
+
+        $initializer = new NavigationInitializer();
+        $initializer($sl, $instance);
+    }
+
+    /**
+     * @todo OLCS-28149
+     */
     public function testInitialize()
     {
         $navListener = m::mock(NavigationListener::class);
@@ -35,6 +70,7 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
 
     /**
      * Check the initializer doesn't try to attach the nav listener on the login page
+     * @todo OLCS-28149
      */
     public function testInitializerFromLoginPage()
     {

@@ -1,10 +1,11 @@
 <?php
 namespace Olcs\Controller\Initializer;
 
-use Olcs\Controller\Listener\Navigation as NavigationListener;
+use Dvsa\Olcs\Auth\Controller\LoginController;
+use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\InitializerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
-use Dvsa\Olcs\Auth\Controller\LoginController;
+use Olcs\Controller\Listener\Navigation as NavigationListener;
 
 /**
  * Class Navigation
@@ -13,21 +14,25 @@ use Dvsa\Olcs\Auth\Controller\LoginController;
 class Navigation implements InitializerInterface
 {
     /**
-     * attach the navigation listener
-     *
-     * @param mixed                   $instance
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return void
+     * {@inheritdoc}
      */
-    public function initialize($instance, ServiceLocatorInterface $serviceLocator): void
+    public function __invoke(ContainerInterface $container, $instance)
     {
         /**
          * don't need the navigation listener on the login page (and also need to prevent unauthenticated requests)
          */
         if (!$instance instanceof LoginController) {
-            $navigationListener = $serviceLocator->getServiceLocator()->get(NavigationListener::class);
+            $navigationListener = $container->getServiceLocator()->get(NavigationListener::class);
             $instance->getEventManager()->attach($navigationListener);
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     * @todo OLCS-28149
+     */
+    public function initialize($instance, ServiceLocatorInterface $serviceLocator)
+    {
+        return $this($serviceLocator, $instance);
     }
 }
