@@ -1612,6 +1612,7 @@ return array(
                 'lva-application/transport_manager*' => ['selfserve-tm'],
                 'lva-variation/transport_manager*' => ['selfserve-tm'],
                 'lva-*' => ['selfserve-lva'],
+                'verify/process-response' => ['*'],
                 'search*' => ['*'],
                 'index' => ['*'],
                 'user-registration' => ['*'],

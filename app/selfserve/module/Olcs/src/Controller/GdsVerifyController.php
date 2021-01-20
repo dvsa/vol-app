@@ -76,18 +76,6 @@ class GdsVerifyController extends AbstractController
      */
     public function processResponseAction()
     {
-        $originHeader = $this->getRequest()->getHeader('origin', null);
-        if (is_null($originHeader)) {
-            throw new UnauthorizedException('Origin header required');
-        }
-
-        $origin = $originHeader->getFieldValue();
-        $validOrigin = $this->getServiceLocator()->get('Config')['verify']['forwarder']['valid-origin'];
-
-        if ($origin !== $validOrigin) {
-            throw new UnauthorizedException('Unauthorized origin');
-        }
-
         $samlResponse = $this->getRequest()->getPost('SAMLResponse', null);
         if (is_null($samlResponse)) {
             throw new UnauthorizedException('Missing samlResponse');
