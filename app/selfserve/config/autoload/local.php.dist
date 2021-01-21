@@ -191,9 +191,4 @@ return [
                 ],
         ],
     'html-purifier-cache-dir' => '/var/tmp/htmlPurifierCache',
-    'verify' => [
-        'forwarder' => [
-            'valid-origin' => 'https://www.integration.signin.service.gov.uk'
-        ]
-    ]
 ];
