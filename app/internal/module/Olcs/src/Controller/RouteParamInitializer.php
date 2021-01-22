@@ -1,8 +1,7 @@
 <?php
 namespace Olcs\Controller;
 
-use Olcs\Controller\Interfaces\CaseControllerInterface;
-use Laminas\Mvc\Controller\AbstractActionController;
+use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\InitializerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
@@ -13,16 +12,11 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
 class RouteParamInitializer implements InitializerInterface
 {
     /**
-     * Initialize
-     *
-     * @param AbstractActionController $instance       Controller
-     * @param ServiceLocatorInterface  $serviceLocator Service locator
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
-    public function initialize($instance, ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $instance)
     {
-        $serviceLocator = $serviceLocator->getServiceLocator();
+        $serviceLocator = $container->getServiceLocator();
 
         $config =  $serviceLocator->get('Config');
 
@@ -43,5 +37,14 @@ class RouteParamInitializer implements InitializerInterface
                 }
             }
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     * @todo OLCS-28149
+     */
+    public function initialize($instance, ServiceLocatorInterface $serviceLocator)
+    {
+        return $this($serviceLocator, $instance);
     }
 }
