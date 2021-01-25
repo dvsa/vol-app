@@ -109,6 +109,7 @@ class QaController extends AbstractOlcsController
         $applicationStep = $result['applicationStep'];
         $form = $this->formProvider->get(
             $applicationStep,
+            $result['submitOptions'],
             $viewGenerator->getFormName()
         );
 
@@ -131,6 +132,20 @@ class QaController extends AbstractOlcsController
 
         if ($this->request->isPost()) {
             $postParams = $this->params()->fromPost();
+            if (isset($postParams['Submit']['CancelButton'])) {
+                return $this->redirect()->toRoute(
+                    IrhpApplicationSection::ROUTE_CANCEL_APPLICATION,
+                    [
+                        'id' => $routeParams['id'],
+                    ],
+                    [
+                        'query' => [
+                            'fromIrhpApplication' => $routeParams['slug']
+                        ]
+                    ]
+                );
+            }
+
             $form->setData($postParams);
 
             if ($form->isValid() && !$hasProcessedFiles) {

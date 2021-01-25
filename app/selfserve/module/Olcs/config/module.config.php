@@ -1634,4 +1634,10 @@ return array(
     ],
     'my_account_route' => 'your-account',
     'local_scripts_path' => [__DIR__ . '/../assets/js/inline/'],
+    'qa' => [
+        'submit_options' => [
+            'options_default' => \Permits\Form\Model\Fieldset\Submit::class,
+            'options_default_plus_cancel' => \Permits\Form\Model\Fieldset\SubmitOrCancelApplication::class,
+        ]
+    ]
 );
