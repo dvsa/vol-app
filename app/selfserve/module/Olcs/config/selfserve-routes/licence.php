@@ -514,6 +514,41 @@ return [
                                 ],
                             ],
                         ],
+                        'view' => [
+                            'may_terminate' => false,
+                            'type' => Segment::class,
+                            'options' => [
+                                'route' => ':vehicle[/]',
+                                'constraints' => [
+                                    'vehicle' => '[0-9]+',
+                                ],
+                                'defaults' => [
+                                    'controller' => ViewVehicleController::class,
+                                ],
+                            ],
+                            'child_routes' => [
+                                'GET' => [
+                                    'may_terminate' => true,
+                                    'type' => Method::class,
+                                    'options' => [
+                                        'verb' => 'GET',
+                                        'defaults' => [
+                                            'action' => 'index',
+                                        ],
+                                    ],
+                                ],
+                                'POST' => [
+                                    'may_terminate' => true,
+                                    'type' => Method::class,
+                                    'options' => [
+                                        'verb' => 'POST',
+                                        'defaults' => [
+                                            'action' => 'submit',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
                         'add' => [
                             'may_terminate' => false,
                             'type' => Segment::class,
@@ -810,28 +845,6 @@ return [
                                         ],
                                     ],
                                 ],
-                            ],
-                        ],
-                        'view' => [
-                            'may_terminate' => false,
-                            'type' => Segment::class,
-                            'options' => [
-                                'route' => 'view/:vehicle[/]',
-                                'defaults' => [
-                                    'controller' => ViewVehicleController::class,
-                                ]
-                            ],
-                            'child_routes' => [
-                                'GET' => [
-                                    'may_terminate' => true,
-                                    'type' => Method::class,
-                                    'options' => [
-                                        'verb' => 'GET',
-                                        'defaults' => [
-                                            'action' => 'index',
-                                        ],
-                                    ],
-                                ]
                             ],
                         ],
                     ]
