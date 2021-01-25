@@ -514,15 +514,24 @@ $routes = array(
                     ],
                 )
             ],
-            'process-response' => array(
+            'process-response' => [
                 'type' => Segment::class,
-                'options' => array(
+                'options' => [
                     'route' => '/process-response[/]',
-                    'defaults' => array(
+                    'defaults' => [
                         'action' => 'process-response',
-                    ),
-                )
-            )
+                    ],
+                ],
+            ],
+            'process-signature' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/process-signature[/]',
+                    'defaults' => [
+                        'action' => 'process-signature',
+                    ],
+                ]
+            ],
         )
     ),
 );
