@@ -99,7 +99,7 @@ class GdsVerifyController extends AbstractController
             [],
             [
                 'query' => [
-                    'ref' => explode(':', $key)[1]
+                    'ref' => explode(':', $key)[2]
                 ]
             ]
         );
