@@ -1,33 +1,26 @@
-<div class="govuk-phase-banner govuk-!-margin-bottom-6">
-    <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
-        <?php echo $this->translateReplace('licence.vehicle.add.result.header', [$vehicleDetails['registrationNumber']]) ?>
-    </h2>
-</div>
-<div class="govuk-inset-text"><?php echo $this->translate('licence.vehicle.add.result.note');?></div>
-
 <table class="govuk-table">
-    <caption class="govuk-table__caption govuk-heading-s">Vehicle summary</caption>
+    <caption class="govuk-table__caption govuk-heading-s"><?php echo $copy['title'] ?? $this->translate('licence.vehicle.partial.summary-table.title'); ?></caption>
     <thead class="govuk-table__head">
     <tr class="govuk-table__row">
-        <th scope="col" class="govuk-table__header">Vehicle information</th>
-        <th scope="col" class="govuk-table__header">Result</th>
+        <th scope="col" class="govuk-table__header"><?php echo $copy['attributesColumnHeading'] ?? $this->translate('licence.vehicle.partial.summary-table.attributesColumnHeading'); ?></th>
+        <th scope="col" class="govuk-table__header"><?php echo $copy['valuesColumnHeading'] ?? $this->translate('licence.vehicle.partial.summary-table.valuesColumnHeading'); ?></th>
     </tr>
     </thead>
     <tbody class="govuk-table__body">
     <tr class="govuk-table__row">
-        <th scope="row" class="govuk-table__header"><?php echo $this->translate('licence.vehicle.add.result.vrm');?>:</th>
+        <th scope="row" class="govuk-table__header"><?php echo $copy['registrationNumberRowHeading'] ?? $this->translate('licence.vehicle.partial.summary-table.registrationNumberRowHeading'); ?>:</th>
         <td class="govuk-table__cell">
             <?php echo $this->escapeHtml($vehicleDetails['registrationNumber']) ?>
         </td>
     </tr>
     <tr class="govuk-table__row">
-        <th scope="row" class="govuk-table__header"><?php echo $this->translate('licence.vehicle.add.result.weight');?>:</th>
+        <th scope="row" class="govuk-table__header"><?php echo $copy['revenueWeightRowHeading'] ?? $this->translate('licence.vehicle.partial.summary-table.revenueWeightRowHeading'); ?>:</th>
         <td class="govuk-table__cell">
             <?php echo $this->escapeHtml(number_format($vehicleDetails['revenueWeight'])) ?>
         </td>
     </tr>
     <tr class="govuk-table__row">
-        <th scope="row" class="govuk-table__header"><?php echo $this->translate('licence.vehicle.add.result.make');?>:</th>
+        <th scope="row" class="govuk-table__header"><?php echo $copy['makeRowHeading'] ?? $this->translate('licence.vehicle.partial.summary-table.makeRowHeading'); ?>:</th>
         <td class="govuk-table__cell">
             <?php echo $this->escapeHtml($vehicleDetails['make']) ?>
         </td>

@@ -2,10 +2,10 @@
 
 namespace Olcs\Exception\Licence\Vehicle;
 
-use Exception;
+use Common\Exception\ResourceNotFoundException;
 use Throwable;
 
-class VehiclesNotFoundWithIdsException extends Exception
+class VehiclesNotFoundWithIdsException extends ResourceNotFoundException
 {
     /**
      * @var int

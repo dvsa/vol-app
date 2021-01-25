@@ -28,18 +28,26 @@
                     ?>
                 <?php endif; ?>
 
-                <?php if (isset($this->vehicleData)):
-                    echo $this->partial(
-                        'partials/licence/vehicle/vehicle-details',
-                        [
-                            'vehicleDetails' => $this->vehicleData
-                        ]
-                    );
-
-                    $this->confirmationForm->prepare();
-                    echo $this->form($this->confirmationForm);
-
-                endif; ?>
+                <?php if (isset($this->vehicleData)): ?>
+                    <div class="govuk-phase-banner govuk-!-margin-bottom-6">
+                        <h2 class="govuk-heading-m govuk-!-margin-bottom-0">
+                            <?php echo $this->translateReplace('licence.vehicle.add.result.header', [$this->vehicleData['registrationNumber']]) ?>
+                        </h2>
+                    </div>
+                    <div class="govuk-inset-text">
+                        <?php echo $this->translate('licence.vehicle.add.result.note');?>
+                    </div>
+                    <?php echo $this->partial('partials/licence/vehicle/vehicle-details', [
+                        'vehicleDetails' => $this->vehicleData,
+                        'copy' => [
+                            'registrationNumberRowHeading' => $this->translate('licence.vehicle.add.result.vrm'),
+                            'revenueWeightRowHeading' => $this->translate('licence.vehicle.add.result.weight'),
+                            'makeRowHeading' => $this->translate('licence.vehicle.add.result.make'),
+                        ],
+                    ]); ?>
+                    <?php $this->confirmationForm->prepare(); ?>
+                    <?php echo $this->form($this->confirmationForm); ?>
+                <?php endif; ?>
 
                 <?php
                 if (isset($this->bottomLink)): ?>

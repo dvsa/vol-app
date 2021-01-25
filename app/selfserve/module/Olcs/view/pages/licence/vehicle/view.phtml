@@ -1,0 +1,25 @@
+<?php echo $this->linkBack(['url' => $this->backLink]); ?>
+
+<div>
+    <?php echo $this->formErrors($this->form); ?>
+
+    <?php echo $this->partial('partials/page-header-simple', [
+        'pageTitle' => $this->translate('licence.vehicle.view.header.page'),
+        'pageSubTitle' => $this->licNo,
+        'panel' => $this->panel,
+    ]);?>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            <?php echo $this->partial('partials/licence/vehicle/vehicle-details', ['vehicleDetails' => $this->vehicleDetails]); ?>
+
+            <a title="<?php echo $this->translate("licence.vehicle.view.action.return-to-table.label"); ?>" id="close-button" href="<?php echo $this->backLink; ?>" class="govuk-button govuk-!-margin-bottom-0" data-module="govuk-button"><?php echo $this->translate("licence.vehicle.view.action.return-to-table.label"); ?></a>
+
+            <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+
+            <?php echo $this->form($this->form); ?>
+
+            <p><?php echo $this->translate('licence.vehicle.view.action.alternative.description'); ?><a title="<?php echo $this->translate('licence.vehicle.view.action-alternative.title'); ?>" href="<?php echo $this->manageVehiclesLink?>" class="govuk-link govuk-!-margin-left-1"><?php echo $this->translate('licence.vehicle.view.action.alternative.label'); ?></a></p>
+        </div>
+    </div>
+</div>
