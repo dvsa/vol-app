@@ -227,7 +227,7 @@ class GdsVerifyController extends AbstractController
                 . ' to return to after completing Verify'
             );
         }
-
+        $types = $this->normaliseTypesOfRequest($types);
         $types[DigitalSignature::KEY_VERIFY_ID] = $verifyId;
         $digitalSignature = new DigitalSignature($types);
         $this->cache->setItem($this->buildDigitalSignatureKey($verifyId), $digitalSignature->toArray());
@@ -242,6 +242,20 @@ class GdsVerifyController extends AbstractController
     {
         // remove controller and action keys from params
         return array_diff_assoc($params, ['controller' => self::class, 'action' => 'initiate-request']);
+    }
+
+    /**
+     * @param array $types
+     * @return array
+     */
+    private function normaliseTypesOfRequest(array $types): array
+    {
+        if (array_key_exists('application', $types)) {
+            $types[DigitalSignature::KEY_APPLICATION_ID] = $types['application'];
+            unset($types['application']);
+        }
+
+        return $types;
     }
 
     /**
