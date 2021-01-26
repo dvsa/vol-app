@@ -1,6 +1,7 @@
 <?php
 namespace Olcs\Form\View\Helper;
 
+use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\DelegatorFactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
@@ -12,15 +13,9 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
 class FormElementDelegatorFactory implements DelegatorFactoryInterface
 {
     /**
-     * Declare view helper delegator for submissionSections
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @param string $name
-     * @param string $requestedName
-     * @param callable $callback
-     * @return mixed|\Laminas\Form\View\Helper\FormElement
+     * {@inheritdoc}
      */
-    public function createDelegatorWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName, $callback)
+    public function __invoke(ContainerInterface $container, $requestedName, callable $callback, array $options = null)
     {
         /** @var \Laminas\Form\View\Helper\FormElement $viewHelper */
         $viewHelper = call_user_func($callback);
@@ -28,5 +23,14 @@ class FormElementDelegatorFactory implements DelegatorFactoryInterface
         $viewHelper->addClass('\Olcs\Form\Element\SubmissionSections', 'formSubmissionSections');
 
         return $viewHelper;
+    }
+
+    /**
+     * {@inheritdoc}
+     * @todo OLCS-28149
+     */
+    public function createDelegatorWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName, $callback)
+    {
+        return $this($serviceLocator, $requestedName, $callback);
     }
 }
