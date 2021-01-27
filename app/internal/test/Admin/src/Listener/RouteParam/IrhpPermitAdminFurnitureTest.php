@@ -165,7 +165,7 @@ class IrhpPermitAdminFurnitureTest extends TestCase
             'id' => $stockId,
             'initialStock' => 100,
             'irhpPermitType' => [
-                'id' => '3',
+                'id' => RefData::ECMT_REMOVAL_PERMIT_TYPE_ID,
                 'isEcmtRemoval' => true,
                 'name' => [
                     'description' => 'Removals permit'
@@ -177,6 +177,73 @@ class IrhpPermitAdminFurnitureTest extends TestCase
 
         $this->getViewHelperManager($subTitle);
         $this->getMockNavigation();
+
+        $event = new RouteParam();
+        $event->setValue($stockId);
+
+        $this->sut->onIrhpPermitAdminFurniture($event);
+    }
+
+    public function testOnIrhpPermitAdminBilateral()
+    {
+        $stockId = 20;
+        $subTitle = 'Type: Bilateral permits (Norway) Validity: 01/01/2019 to 31/12/2019 Quota: 200';
+
+        $irhpPermitStock = [
+            'id' => $stockId,
+            'validFrom' => '01-01-2019',
+            'validTo' => '31-12-2019',
+            'initialStock' => 200,
+            'irhpPermitType' => [
+                'id' => RefData::IRHP_BILATERAL_PERMIT_TYPE_ID,
+                'isEcmtRemoval' => false,
+                'name' => [
+                    'description' => 'Bilateral permits'
+                ]
+            ],
+            'country' => [
+                'countryDesc' => 'Norway'
+            ],
+        ];
+
+        $this->onIrhpPermitAdminSetup($irhpPermitStock);
+
+        $this->getViewHelperManager($subTitle);
+
+        $event = new RouteParam();
+        $event->setValue($stockId);
+
+        $this->sut->onIrhpPermitAdminFurniture($event);
+    }
+
+    public function testOnIrhpPermitAdminBilateralWithPermitCategory()
+    {
+        $stockId = 20;
+        $subTitle = 'Type: Bilateral permits (Morocco - Permit category description) Validity: 01/01/2019 to 31/12/2019 Quota: 200';
+
+        $irhpPermitStock = [
+            'id' => $stockId,
+            'validFrom' => '01-01-2019',
+            'validTo' => '31-12-2019',
+            'initialStock' => 200,
+            'irhpPermitType' => [
+                'id' => RefData::IRHP_BILATERAL_PERMIT_TYPE_ID,
+                'isEcmtRemoval' => false,
+                'name' => [
+                    'description' => 'Bilateral permits'
+                ]
+            ],
+            'country' => [
+                'countryDesc' => 'Morocco'
+            ],
+            'permitCategory' => [
+                'description' => 'Permit category description'
+            ],
+        ];
+
+        $this->onIrhpPermitAdminSetup($irhpPermitStock);
+
+        $this->getViewHelperManager($subTitle);
 
         $event = new RouteParam();
         $event->setValue($stockId);
