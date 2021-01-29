@@ -36,9 +36,7 @@ return [
         [
             'title' => 'Country',
             'name' => 'country',
-            'formatter' => function ($row) {
-                return empty($row['country']['countryDesc']) ? 'N/A' : $row['country']['countryDesc'];
-            },
+            'formatter' => 'IrhpPermitStockCountry'
         ],
         [
             'title' => 'Validity Period',

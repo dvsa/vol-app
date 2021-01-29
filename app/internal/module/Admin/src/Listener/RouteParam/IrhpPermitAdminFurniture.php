@@ -161,8 +161,15 @@ class IrhpPermitAdminFurniture implements
         $validTo = date('d/m/Y', strtotime($permitStock['validTo']));
         $initialStock = $permitStock['initialStock'];
         $name = $permitStock['irhpPermitType']['name']['description'];
+
         if ($permitStock['irhpPermitType']['id'] === RefData::IRHP_BILATERAL_PERMIT_TYPE_ID && !empty($permitStock['country']['countryDesc'])) {
-            $name .= ' ('.$permitStock['country']['countryDesc'].') ';
+            $countryDescription = $permitStock['country']['countryDesc'];
+
+            if (isset($permitStock['permitCategory'])) {
+                $countryDescription .= ' - ' . $permitStock['permitCategory']['description'];
+            }
+
+            $name .= ' (' . $countryDescription . ')';
         }
 
         return sprintf(
