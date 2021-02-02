@@ -15,11 +15,4 @@ class QaForm
      * @Form\Type("Laminas\Form\Fieldset")
      */
     public $fieldset = null;
-
-    /**
-     * @Form\Name("Submit")
-     * @Form\ComposedObject("Permits\Form\Model\Fieldset\Submit")
-     * @Form\Flags({"priority": -1})
-     */
-    public $submitButton = null;
 }

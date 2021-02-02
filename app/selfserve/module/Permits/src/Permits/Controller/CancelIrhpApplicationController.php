@@ -13,7 +13,7 @@ use Permits\View\Helper\IrhpApplicationSection;
 class CancelIrhpApplicationController extends AbstractSelfserveController
 {
     const CABOTAGE_SLUG_WHITELIST = ['bi-cabotage-only', 'bi-standard-and-cabotage'];
-    const MAX_IPA_LENGTH = 8;
+    const IRHP_APPLICATION_SLUG_WHITELIST = ['check-ecmt-needed'];
 
     protected $dataSourceConfig = [
         'default' => DataSourceConfig::IRHP_APP,
@@ -71,6 +71,8 @@ class CancelIrhpApplicationController extends AbstractSelfserveController
             $this->handleCabotageBacklink();
         } elseif (isset($this->queryParams['fromCountries'])) {
             $this->templateVarsConfig['cancel']['backUri'] = IrhpApplicationSection::ROUTE_COUNTRIES;
+        } elseif (isset($this->queryParams['fromIrhpApplication'])) {
+            $this->handleIrhpApplicationBackLink();
         }
 
         parent::mergeTemplateVars();
@@ -90,6 +92,20 @@ class CancelIrhpApplicationController extends AbstractSelfserveController
         $this->templateVarsConfig['cancel']['backUri'] = IrhpApplicationSection::ROUTE_IPA_QUESTION;
         $this->templateVarsConfig['cancel']['backUriParams'] = [
             'irhpPermitApplication' => $this->queryParams['ipa'],
+            'slug' => $slug
+        ];
+    }
+
+    private function handleIrhpApplicationBackLink()
+    {
+        $slug = $this->queryParams['fromIrhpApplication'];
+
+        if (!in_array($slug, self::IRHP_APPLICATION_SLUG_WHITELIST)) {
+            return;
+        }
+
+        $this->templateVarsConfig['cancel']['backUri'] = IrhpApplicationSection::ROUTE_QUESTION;
+        $this->templateVarsConfig['cancel']['backUriParams'] = [
             'slug' => $slug
         ];
     }
