@@ -16,6 +16,14 @@ return [
             // OLCS Module Routes
             '*processing/notes*' => [RefData::PERMISSION_INTERNAL_NOTES],
             '*case*' => [RefData::PERMISSION_INTERNAL_CASE],
+            'conviction_ajax*' => [RefData::PERMISSION_INTERNAL_CASE],
+            'conviction*' => [RefData::PERMISSION_INTERNAL_CASE],
+            'offence*' => [RefData::PERMISSION_INTERNAL_CASE],
+            'submission*' => [RefData::PERMISSION_INTERNAL_CASE],
+
+            // @todo will this effect the above processing/notes* rule?
+            'processing*' => [RefData::PERMISSION_INTERNAL_CASE],
+
             '*documents*' => [RefData::PERMISSION_INTERNAL_DOCUMENTS],
             '*docs*' => [RefData::PERMISSION_INTERNAL_DOCUMENTS],
             'fetch_tmp_document' => [RefData::PERMISSION_INTERNAL_DOCUMENTS],
