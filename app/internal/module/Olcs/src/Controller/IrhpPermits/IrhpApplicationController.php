@@ -91,6 +91,11 @@ class IrhpApplicationController extends AbstractInternalController implements
         RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID => 'Multilateral',
     ];
 
+    const COR_CERTIFICATE_NUMBER_TYPES = [
+        RefData::CERT_ROADWORTHINESS_VEHICLE_PERMIT_TYPE_ID,
+        RefData::CERT_ROADWORTHINESS_TRAILER_PERMIT_TYPE_ID
+    ];
+
     // After Adding and Editing we want users taken back to index dashboard
     protected $redirectConfig = [
         'add' => [
@@ -704,6 +709,10 @@ class IrhpApplicationController extends AbstractInternalController implements
         $form->get('topFields')->remove('stockHtml');
         $form->get('bottomFields')->remove('checked');
 
+        if (!in_array($formData['topFields']['irhpPermitType'], self::COR_CERTIFICATE_NUMBER_TYPES)) {
+            $form->get('bottomFields')->remove('corCertificateNumber');
+        }
+
         return $form;
     }
 
@@ -764,6 +773,10 @@ class IrhpApplicationController extends AbstractInternalController implements
 
         if (!$formData['topFields']['requiresPreAllocationCheck']) {
             $form->get('bottomFields')->remove('checked');
+        }
+
+        if (!in_array($formData['topFields']['irhpPermitType'], self::COR_CERTIFICATE_NUMBER_TYPES)) {
+            $form->get('bottomFields')->remove('corCertificateNumber');
         }
 
         return $form;
