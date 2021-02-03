@@ -49,17 +49,4 @@ class MarkerPluginManagerTest extends TestCase
 
         $this->sut->validatePlugin($mockPlugin);
     }
-
-    public function testInjectPartialHelper()
-    {
-        $mockSl = m::mock(\Laminas\ServiceManager\ServiceLocatorInterface::class);
-        $mockService = m::mock();
-
-        $this->sut->setServiceLocator($mockSl);
-
-        $mockSl->shouldReceive('get->get')->once()->andReturn('PARTIAL');
-        $mockService->shouldReceive('setPartialHelper')->with('PARTIAL')->once();
-
-        $this->sut->injectPartialHelper($mockService, $this->sut);
-    }
 }

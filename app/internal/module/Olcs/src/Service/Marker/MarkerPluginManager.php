@@ -17,7 +17,11 @@ class MarkerPluginManager extends AbstractPluginManager
         if ($configuration) {
             $configuration->configureServiceManager($this);
         }
-        $this->addInitializer(array($this, 'injectPartialHelper'), false);
+
+        $this->addInitializer(
+            new PartialHelperInitializer(),
+            false
+        );
     }
 
     /**
@@ -37,21 +41,5 @@ class MarkerPluginManager extends AbstractPluginManager
         }
 
         return true;
-    }
-
-    /**
-     * Inject the ViewHelperManager into the markers
-     *
-     * @param MarkerInterface $service
-     * @param \Olcs\Service\Marker\MarkerService $serviceLocator
-     *
-     * @return MarkerInterface
-     */
-    public function injectPartialHelper($service, self $serviceLocator)
-    {
-        $parentLocator = $serviceLocator->getServiceLocator();
-        $service->setPartialHelper($parentLocator->get('ViewHelperManager')->get('partial'));
-
-        return $service;
     }
 }
