@@ -35,6 +35,8 @@ class DataRetentionController extends AbstractInternalController implements Left
     protected $listDto = RecordsListDto::class;
     protected $listVars = ['dataRetentionRuleId'];
     protected $defaultTableLimit = 25;
+    protected $defaultTableSortField = 'licNo';
+    protected $defaultTableOrderField = 'ASC';
     protected $filterForm = DataRetentionRecordFilter::class;
 
     protected $tableName = 'admin-data-retention-records';

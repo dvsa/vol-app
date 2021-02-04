@@ -18,6 +18,21 @@ use Laminas\Form\Annotation as Form;
 class DataRetentionRecordFilter
 {
     /**
+     * @Form\Attributes({"id":"goodsOrPsv","placeholder":""})
+     * @Form\Options({
+     *     "label": "Goods or PSV",
+     *     "value_options": {
+     *          "":"All",
+     *          \Common\RefData::LICENCE_CATEGORY_GOODS_VEHICLE:"Goods",
+     *          \Common\RefData::LICENCE_CATEGORY_PSV:"PSV"
+     *     },
+     *     "disable_inarray_validator": false
+     * })
+     * @Form\Type("\Laminas\Form\Element\Select")
+     */
+    public $goodsOrPsv = null;
+
+    /**
      * @Form\Attributes({"id":"nextReview","placeholder":""})
      * @Form\Options({
      *     "label": "Next review",
