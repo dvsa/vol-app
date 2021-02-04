@@ -118,9 +118,6 @@ class ViewVehicleController extends AbstractVehicleController
 
         // Prepare translation option
         $optionsFieldset = $form->get(ViewVehicleSwitchboard::FIELD_OPTIONS_FIELDSET_NAME);
-        $select = $optionsFieldset->get(ViewVehicleSwitchboardFieldset::ATTR_TRANSFER_CONTENT);
-        assert($select instanceof Select, 'Expected instance of Select');
-
         $otherLicences = $this->getOtherActiveLicenceOptions($licenceId)->getOtherLicences();
         if (empty($otherLicences)) {
             $optionsFieldset->remove(ViewVehicleSwitchboardFieldset::ATTR_TRANSFER_CONTENT);
@@ -128,6 +125,8 @@ class ViewVehicleController extends AbstractVehicleController
             assert($switchboardElement instanceof \Common\Form\Elements\Types\Radio, 'Expected instance of \Common\Form\Elements\Types\Radio');
             $switchboardElement->unsetValueOption(ViewVehicleSwitchboardFieldset::RADIO_OPTION_TRANSFER);
         } else {
+            $select = $optionsFieldset->get(ViewVehicleSwitchboardFieldset::ATTR_TRANSFER_CONTENT);
+            assert($select instanceof Select, 'Expected instance of Select');
             $this->setLicenceSelectValueOptions($select, $otherLicences);
         }
 
