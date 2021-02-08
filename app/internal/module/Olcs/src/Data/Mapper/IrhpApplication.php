@@ -60,6 +60,10 @@ class IrhpApplication implements MapperInterface
             $formData['bottomFields']['checked'] = $data['checked'];
         }
 
+        if (isset($data['corCertificateNumber'])) {
+            $formData['bottomFields']['corCertificateNumber'] = $data['corCertificateNumber'];
+        }
+
         if (isset($data['irhpPermitType']['id'])) {
             $formData['topFields']['requiresPreAllocationCheck'] = $data['requiresPreAllocationCheck'];
             $formData['topFields']['isApplicationPathEnabled'] = $data['irhpPermitType']['isApplicationPathEnabled'];
@@ -95,6 +99,10 @@ class IrhpApplication implements MapperInterface
 
             if (isset($data['bottomFields']['checked'])) {
                 $cmdData['checked'] = $data['bottomFields']['checked'];
+            }
+
+            if (isset($data['bottomFields']['corCertificateNumber'])) {
+                $cmdData['corCertificateNumber'] = $data['bottomFields']['corCertificateNumber'];
             }
 
             return $cmdData;

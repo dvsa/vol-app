@@ -21,6 +21,53 @@ class IrhpApplicationTest extends MockeryTestCase
         $this->sut = new \Olcs\Data\Mapper\IrhpApplication($this->applicationStepsPostDataTransformer);
     }
 
+    public function testMapFromResult()
+    {
+        $data = [
+            'id' => '123',
+            'dateReceived' => '2019-01-30',
+            'declaration' => '1',
+            'checked' => '1',
+            'corCertificateNumber' => 'ABC123',
+            'irhpPermitType' => [
+                'id' => 1,
+                'isApplicationPathEnabled' => true,
+            ],
+            'requiresPreAllocationCheck' => true,
+            'isApplicationPathEnabled' => true,
+        ];
+
+        $expectedFormData = [
+            'fields' => [
+                'id' => '123',
+                'dateReceived' => '2019-01-30',
+                'declaration' => '1',
+                'checked' => '1',
+                'corCertificateNumber' => 'ABC123',
+                'irhpPermitType' => 1,
+                'requiresPreAllocationCheck' => true,
+                'isApplicationPathEnabled' => true,
+            ],
+            'topFields' => [
+                'id' => '123',
+                'dateReceived' => '2019-01-30',
+                'requiresPreAllocationCheck' => true,
+                'isApplicationPathEnabled' => true,
+                'irhpPermitType' => 1,
+            ],
+            'bottomFields' => [
+                'declaration' => '1',
+                'checked' => '1',
+                'corCertificateNumber' => 'ABC123',
+            ],
+        ];
+
+        $this->assertSame(
+            $expectedFormData,
+            $this->sut->mapFromResult($data)
+        );
+    }
+
     public function testMapApplicationData()
     {
         $formData =
@@ -37,8 +84,6 @@ class IrhpApplicationTest extends MockeryTestCase
                         'totAuthVehicles' => '12',
                         'expiryDate' => '2020-01-01',
                         'grantedDate' => null,
-
-
                     ],
                     'checkedAnswers' => '0',
                     'declaration' => '0',
@@ -227,6 +272,7 @@ class IrhpApplicationTest extends MockeryTestCase
                 ],
                 'qa' => $preTransformedQaData,
                 'bottomFields' => [
+                    'corCertificateNumber' => 'ABC123',
                     'declaration' => 1
                 ]
             ];
@@ -235,8 +281,8 @@ class IrhpApplicationTest extends MockeryTestCase
             'id' => 1,
             'dateReceived' => '2090-01-01',
             'declaration' => 1,
-            'postData' => ['qa' => $postTransformedQaData]
-
+            'postData' => ['qa' => $postTransformedQaData],
+            'corCertificateNumber' => 'ABC123',
         ];
 
         $this->assertSame($expected, $this->sut->mapFromForm($formData, $applicationSteps));
