@@ -30,9 +30,9 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
     public const DEFAULT_TABLE_ROW_LIMIT = 10;
     public const TABLE_TITLE_SINGULAR = 'licence.vehicle.table.title.singular';
     public const TABLE_TITLE_PLURAL = 'licence.vehicle.table.title.plural';
-    protected const TABLE_SEARCH_TITLE_SINGULAR = 'licence.vehicle.table.search.title.singular';
-    protected const TABLE_SEARCH_TITLE_PLURAL = 'licence.vehicle.table.search.title.plural';
-    protected const TABLE_SEARCH_TITLE_EMPTY = 'licence.vehicle.table.search.title.empty';
+    public const TABLE_SEARCH_TITLE_SINGULAR = 'licence.vehicle.table.search.title.singular';
+    public const TABLE_SEARCH_TITLE_PLURAL = 'licence.vehicle.table.search.title.plural';
+    public const TABLE_SEARCH_TITLE_EMPTY = 'licence.vehicle.table.search.title.empty';
 
     protected $toggleConfig = [
         'default' => [FeatureToggle::DVLA_INTEGRATION]
