@@ -59,7 +59,7 @@ class TransferVehicleController extends AbstractVehicleController
             $view->setVariable('note', $this->translator->translate('licence.vehicle.transfer.note.more-then-20-vehicles'));
         }
 
-        if ($vehicleTable->getTotal() > static::VEHICLE_SEARCH_FORM_THRESHOLD || $this->isSearchResultsPage()) {
+        if ($vehicleTable->getTotal() > $vehicleTable->getLimit() || $this->isSearchResultsPage()) {
             $this->alterSearchForm();
             $view->setVariable('searchForm', $this->forms['searchForm']);
         }
