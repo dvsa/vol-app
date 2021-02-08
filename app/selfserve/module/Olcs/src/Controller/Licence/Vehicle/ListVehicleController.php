@@ -11,6 +11,8 @@ use Common\Service\Helper\ResponseHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableBuilder;
 use Common\Service\Table\TableFactory;
+use Dvsa\Olcs\Transfer\Query\AbstractQuery;
+use Dvsa\Olcs\Transfer\Query\Licence\GoodsVehiclesExport;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence;
 use Dvsa\Olcs\Transfer\Query\Licence\Vehicles;
 use Laminas\Form\Element\Hidden;
@@ -36,7 +38,6 @@ class ListVehicleController
     public const QUERY_KEY_ORDER_REMOVED_VEHICLES_TABLE = 'order-r';
     protected const DEFAULT_REMOVED_VEHICLES_TABLE_LIMIT = 10;
     protected const DEFAULT_CURRENT_VEHICLES_TABLE_LIMIT = 10;
-    protected const MAX_QUERY_LIMIT = 10000;
 
     /**
      * @var HandleQuery
@@ -105,47 +106,30 @@ class ListVehicleController
         $licenceId = (int) $routeMatch->getParam('licence');
         $urlQueryData = $request->getQuery()->toArray();
         $format = $request->getQuery()->get('format') ?? static::FORMAT_HTML;
-
-        $licence = $this->getLicence(Licence::create(['id' => $licenceId]));
-
-        // Query licence vehicles that are currently assigned to a licence
-        $licenceVehicleList = $this->listLicenceVehicles(Vehicles::create([
-            'id' => $licenceId,
-            'page' => (int) ($urlQueryData['page'] ?? 1),
-            'limit' => min($urlQueryData['limit'] ?? static::DEFAULT_CURRENT_VEHICLES_TABLE_LIMIT, static::MAX_QUERY_LIMIT),
-            'sort' => $urlQueryData[static::QUERY_KEY_SORT_CURRENT_VEHICLES_TABLE] ?? AbstractVehicleController::DEFAULT_TABLE_SORT_COLUMN,
-            'order' => $urlQueryData[static::QUERY_KEY_ORDER_CURRENT_VEHICLES_TABLE] ?? AbstractVehicleController::DEFAULT_TABLE_SORT_ORDER,
-            'vrm' => $urlQueryData['vehicleSearch'][AbstractInputSearch::ELEMENT_INPUT_NAME] ?? null,
-        ]));
-
-        $removedLicenceVehicleList = null;
-        $includeRemoved = array_key_exists('includeRemoved', $urlQueryData);
-        if ($includeRemoved) {
-            $removedLicenceVehicleList = $this->listLicenceVehicles(Vehicles::create([
+        if ($format === static::FORMAT_HTML) {
+            $licence = $this->getLicence(Licence::create(['id' => $licenceId]));
+            $licenceVehicleList = $this->listLicenceVehicles(Vehicles::create([
                 'id' => $licenceId,
-                'page' => 1,
-                'limit' => static::DEFAULT_REMOVED_VEHICLES_TABLE_LIMIT,
-                'sort' => $urlQueryData[static::QUERY_KEY_SORT_REMOVED_VEHICLES_TABLE] ?? AbstractVehicleController::DEFAULT_TABLE_SORT_COLUMN,
-                'order' => $urlQueryData[static::QUERY_KEY_ORDER_REMOVED_VEHICLES_TABLE] ?? AbstractVehicleController::DEFAULT_TABLE_SORT_ORDER,
-                'includeRemoved' => true,
+                'page' => (int) ($urlQueryData['page'] ?? 1),
+                'limit' => (int) ($urlQueryData['limit'] ?? static::DEFAULT_CURRENT_VEHICLES_TABLE_LIMIT),
+                'sort' => $urlQueryData[static::QUERY_KEY_SORT_CURRENT_VEHICLES_TABLE] ?? AbstractVehicleController::DEFAULT_TABLE_SORT_COLUMN,
+                'order' => $urlQueryData[static::QUERY_KEY_ORDER_CURRENT_VEHICLES_TABLE] ?? AbstractVehicleController::DEFAULT_TABLE_SORT_ORDER,
+                'vrm' => $urlQueryData['vehicleSearch'][AbstractInputSearch::ELEMENT_INPUT_NAME] ?? null,
             ]));
-        }
-
-        $data = [
-            'title' => $this->isSearchResultsPage($request) ? 'licence.vehicle.list.search.header' : 'licence.vehicle.list.header',
-            'licence' => $licence,
-            'backLink' => $this->urlHelper->fromRoute('licence/vehicle/GET', ['licence' => $licenceId]),
-            'exportCurrentAndRemovedCsvAction' => $this->buildCurrentAndRemovedCsvUrl($licenceId),
-            'toggleRemovedAction' => $this->buildToggleRemovedVehiclesUrl($licenceId, $urlQueryData),
-            'bottomContent' => $this->buildChooseDifferentActionUrl($licenceId),
-            'currentLicenceVehicleList' => $licenceVehicleList,
-            'removedLicenceVehicleList' => $removedLicenceVehicleList,
-        ];
-
-        if ('csv' === $format) {
-            $response = $this->renderCsvResponse($request, $data);
+            $response = $this->renderHtmlResponse($request, [
+                'title' => $this->isSearchResultsPage($request) ? 'licence.vehicle.list.search.header' : 'licence.vehicle.list.header',
+                'licence' => $licence,
+                'backLink' => $this->urlHelper->fromRoute('licence/vehicle/GET', ['licence' => $licenceId]),
+                'exportCurrentAndRemovedCsvAction' => $this->buildCurrentAndRemovedCsvUrl($licenceId),
+                'toggleRemovedAction' => $this->buildToggleRemovedVehiclesUrl($licenceId, $urlQueryData),
+                'bottomContent' => $this->buildChooseDifferentActionUrl($licenceId),
+                'currentLicenceVehicleList' => $licenceVehicleList,
+            ]);
         } else {
-            $response = $this->renderHtmlResponse($request, $data);
+            $removedLicenceVehicleList = $this->listLicenceVehicles(GoodsVehiclesExport::create(['id' => $licenceId, 'includeRemoved' => true]));
+            $response = $this->renderCsvResponse($request, [
+                'removedLicenceVehicleList' => $removedLicenceVehicleList,
+            ]);
         }
         return $response;
     }
@@ -284,19 +268,21 @@ class ListVehicleController
             'count' => $data['currentLicenceVehicleList']['count'],
             'results' => $data['currentLicenceVehicleList']['results'],
         ];
+
         if (isset($data['removedLicenceVehicleList'])) {
             $licenceVehicles['count'] = $data['removedLicenceVehicleList']['count'] ?? 0;
             $licenceVehicles['results'] = $data['removedLicenceVehicleList']['results'] ?? [];
         }
+
         $table = $this->tableFactory->getTableBuilder()->prepareTable('licence-vehicle-list-export-current-and-removed', $licenceVehicles);
         return $this->responseHelper->tableToCsv(new HttpResponse(), $table, 'vehicles');
     }
 
     /**
-     * @param Vehicles $query
+     * @param AbstractQuery $query
      * @return array|mixed
      */
-    protected function listLicenceVehicles(Vehicles $query)
+    protected function listLicenceVehicles(AbstractQuery $query)
     {
         return $this->queryHandler->__invoke($query)->getResult();
     }
