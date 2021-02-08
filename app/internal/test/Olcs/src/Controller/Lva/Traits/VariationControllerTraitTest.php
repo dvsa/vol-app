@@ -31,7 +31,10 @@ class VariationControllerTraitTest extends MockeryTestCase
         $this->sut->setServiceLocator($this->sm);
     }
 
-    public function testGetSectionsForView()
+    /**
+     * @dataProvider dpGetSectionsForView
+     */
+    public function testGetSectionsForView($goodsOrPsv, $communityLicencesTranslationKey)
     {
         // Params
         $id = 3;
@@ -77,7 +80,7 @@ class VariationControllerTraitTest extends MockeryTestCase
                 'foo' => '1011',
                 'class' => 'incomplete',
                 'route' => 'lva-variation/community_licences',
-                'alias' => 'community_licences.psv',
+                'alias' => $communityLicencesTranslationKey,
             ]
         ];
 
@@ -90,7 +93,10 @@ class VariationControllerTraitTest extends MockeryTestCase
             ],
             'status' => [
                 'id' => 'XXX'
-            ]
+            ],
+            'goodsOrPsv' => [
+                'id' => $goodsOrPsv
+            ],
         ];
 
         $this->setupGetApplicationData($applicationData);
@@ -102,6 +108,14 @@ class VariationControllerTraitTest extends MockeryTestCase
         $response = $this->sut->callGetSectionsForView();
 
         $this->assertEquals($expected, $response);
+    }
+
+    public function dpGetSectionsForView()
+    {
+        return [
+            [RefData::LICENCE_CATEGORY_GOODS_VEHICLE, 'community_licences'],
+            [RefData::LICENCE_CATEGORY_PSV, 'community_licences.psv'],
+        ];
     }
 
     public function testGetSectionsForViewValidStatus()
@@ -134,8 +148,11 @@ class VariationControllerTraitTest extends MockeryTestCase
                 'businessDetailsStatus' => RefData::VARIATION_STATUS_REQUIRES_ATTENTION,
             ],
             'status' => [
-                'id' => \Common\RefData::APPLICATION_STATUS_VALID
-            ]
+                'id' => RefData::APPLICATION_STATUS_VALID
+            ],
+            'goodsOrPsv' => [
+                'id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE
+            ],
         ];
 
         $this->setupGetApplicationData($applicationData);

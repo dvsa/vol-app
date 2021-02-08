@@ -7,10 +7,10 @@
  */
 namespace Olcs\Controller\Lva\Traits;
 
+use Common\Controller\Lva\Traits\CommonApplicationControllerTrait;
 use Common\RefData;
 use Laminas\Form\Form;
 use Laminas\View\Model\ViewModel;
-use Common\Controller\Lva\Traits\CommonApplicationControllerTrait;
 use Olcs\Controller\Traits\ApplicationControllerTrait as GenericInternalApplicationControllerTrait;
 
 /**
@@ -118,9 +118,11 @@ trait ApplicationControllerTrait
 
         $status = $applicationCompletion['status']['id'];
         // if status is valid then only show Overview section
-        if ($status === \Common\RefData::APPLICATION_STATUS_VALID) {
+        if ($status === RefData::APPLICATION_STATUS_VALID) {
             return $sections;
         }
+
+        $isPsv = $applicationCompletion['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_PSV;
 
         $accessibleSections = $this->setEnabledAndCompleteFlagOnSections(
             $this->getAccessibleSections(false),
@@ -128,6 +130,11 @@ trait ApplicationControllerTrait
         );
 
         foreach ($accessibleSections as $section => $settings) {
+            $alias = $section;
+            if ($section == 'community_licences' && $isPsv) {
+                $alias = $section . '.psv';
+            }
+
             $statusIndex = lcfirst($filter->underscoreToCamel($section)) . 'Status';
 
             $class = '';
@@ -142,7 +149,11 @@ trait ApplicationControllerTrait
 
             $sections[$section] = array_merge(
                 $settings,
-                array('class' => $class, 'route' => 'lva-application/' . $section)
+                [
+                    'class' => $class,
+                    'route' => 'lva-application/' . $section,
+                    'alias' => $alias
+                ]
             );
         }
 

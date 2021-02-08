@@ -197,10 +197,14 @@ class Application implements ListenerAggregateInterface, FactoryInterface
 
         $licenceCategoryId = $application['goodsOrPsv']['id'];
         if ($licenceCategoryId === RefData::LICENCE_CATEGORY_PSV) {
-            $communityLicencesNav = $this->getNavigationService()->findOneById('variation_community_licences');
-            $communityLicencesNav->setLabel(
-                $communityLicencesNav->getLabel() . '.psv'
-            );
+            $lvaTypes = ['application', 'variation'];
+
+            foreach ($lvaTypes as $lvaType) {
+                $communityLicencesNav = $this->getNavigationService()->findOneById($lvaType . '_community_licences');
+                $communityLicencesNav->setLabel(
+                    $communityLicencesNav->getLabel() . '.psv'
+                );
+            }
         }
 
         if (!$application['canCreateCase']) {
