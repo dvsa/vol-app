@@ -232,14 +232,25 @@ class ApplicationTest extends MockeryTestCase
 
         $variationCommunityLicencesPage = m::mock(AbstractPage::class);
         $variationCommunityLicencesPage->shouldReceive('getLabel')
-            ->andReturn('page.label');
+            ->andReturn('variation.page.label');
         $variationCommunityLicencesPage->shouldReceive('setLabel')
-            ->with('page.label.psv')
+            ->with('variation.page.label.psv')
             ->once();
 
         $mockNavigationService->shouldReceive('findOneById')
             ->with('variation_community_licences')
             ->andReturn($variationCommunityLicencesPage);
+
+        $applicationCommunityLicencesPage = m::mock(AbstractPage::class);
+        $applicationCommunityLicencesPage->shouldReceive('getLabel')
+            ->andReturn('application.page.label');
+        $applicationCommunityLicencesPage->shouldReceive('setLabel')
+            ->with('application.page.label.psv')
+            ->once();
+
+        $mockNavigationService->shouldReceive('findOneById')
+            ->with('application_community_licences')
+            ->andReturn($applicationCommunityLicencesPage);
 
         $this->setupMockApplication($applicationId, $application);
 

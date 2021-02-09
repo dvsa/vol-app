@@ -159,7 +159,7 @@ trait VariationControllerTrait
             return $sections;
         }
 
-        $isPsv = $this->isPsv();
+        $isPsv = $applicationData['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_PSV;
 
         $accessibleSections = $this->getAccessibleSections(false);
 
@@ -192,19 +192,5 @@ trait VariationControllerTrait
         }
 
         return $sections;
-    }
-
-    /**
-     * Whether this is a PSV licence
-     *
-     * @return bool
-     */
-    protected function isPsv()
-    {
-        $response = $this->handleQuery(
-            Licence::create(['id' => $this->getLicenceId()])
-        );
-        $licence = $response->getResult();
-        return ($licence['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_PSV);
     }
 }
