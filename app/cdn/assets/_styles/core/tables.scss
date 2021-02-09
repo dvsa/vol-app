@@ -270,40 +270,19 @@ tfoot {
     color: $black;
     text-decoration: none;
     position: relative;
+    &:after {
+      @if $app != 'print' {
+        @include svg('dropdown-down');
+        content: '';
+        position: absolute;
+        display: inline-block;
+        right: 0;
+        top: 7px;
+      }
+    }
   }
-
   a:active {
     color: $grey-1;
-  }
-
-  &.ascending {
-    a {
-      &:after {
-        @if $app != 'print' {
-          @include svg('dropdown-up');
-          content: '';
-          position: absolute;
-          display: inline-block;
-          right: 0;
-          top: 7px;
-        }
-      }
-    }
-  }
-
-  &.descending {
-    a {
-      &:after {
-        @if $app != 'print' {
-          @include svg('dropdown-down');
-          content: '';
-          position: absolute;
-          display: inline-block;
-          right: 0;
-          top: 7px;
-        }
-      }
-    }
   }
 }
 
