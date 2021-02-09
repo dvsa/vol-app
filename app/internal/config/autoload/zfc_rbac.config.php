@@ -52,9 +52,10 @@ return [
             'admin-dashboard/admin-system-info-message*' => [RefData::PERMISSION_SYSTEM_ADMIN],
             'admin-dashboard/task-allocation-rules*' => [RefData::PERMISSION_INTERNAL_ADMIN],
             'admin-dashboard/admin-feature-toggle*' => [RefData::PERMISSION_SYSTEM_ADMIN],
-            'admin-dashboard/admin-permits*' => [RefData::PERMISSION_SYSTEM_ADMIN],
+            'admin-dashboard/admin-permits*' => [RefData::PERMISSION_INTERNAL_PERMITS],
             'admin-dashboard/admin-email-templates' => [RefData::PERMISSION_SYSTEM_ADMIN],
             'admin-dashboard/content-management*' => [RefData::PERMISSION_SYSTEM_ADMIN],
+            'admin-dashboard/admin-publication*' => [RefData::PERMISSION_INTERNAL_PUBLICATIONS],
 
             // All Internal users can see your account, to change their details, password etc
             'admin-dashboard/admin-your-account*' => [RefData::PERMISSION_INTERNAL_VIEW],
