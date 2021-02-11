@@ -4362,10 +4362,10 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "v5.2.2",
+            "version": "v5.2.3",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/filesystem/v5.2.2/symfony-filesystem-v5.2.2.zip",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/filesystem/v5.2.3/symfony-filesystem-v5.2.3.zip",
                 "reference": "262d033b57c73e8b59cd6e68a45c528318b15038",
                 "shasum": ""
             },
@@ -4415,11 +4415,11 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v5.2.2",
+            "version": "v5.2.3",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/finder/v5.2.2/symfony-finder-v5.2.2.zip",
-                "reference": "196f45723b5e618bf0e23b97e96d11652696ea9e",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/finder/v5.2.3/symfony-finder-v5.2.3.zip",
+                "reference": "4adc8d172d602008c204c2e16956f99257248e03",
                 "shasum": ""
             },
             "require": {
@@ -4463,7 +4463,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-27T10:01:46+00:00"
+            "time": "2021-01-28T22:06:19+00:00"
         },
         {
             "name": "symfony/lock",
@@ -6040,11 +6040,11 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.70",
+            "version": "0.12.74",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/phpstan/phpstan/0.12.70/phpstan-phpstan-0.12.70.zip",
-                "reference": "07f0ef37f5f876e8cee44cc8ea0ec3fe80d499ee",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/phpstan/phpstan/0.12.74/phpstan-phpstan-0.12.74.zip",
+                "reference": "bc5f9483c8f461c86653dcbd040cf0d2778c91a2",
                 "shasum": ""
             },
             "require": {
@@ -6086,15 +6086,15 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-01-27T17:06:47+00:00"
+            "time": "2021-02-08T15:00:25+00:00"
         },
         {
             "name": "phpstan/phpstan-doctrine",
-            "version": "0.12.30",
+            "version": "0.12.32",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/phpstan/phpstan-doctrine/0.12.30/phpstan-phpstan-doctrine-0.12.30.zip",
-                "reference": "c4b910638ef416ad336aca596b4551a2db10b5f7",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/phpstan/phpstan-doctrine/0.12.32/phpstan-phpstan-doctrine-0.12.32.zip",
+                "reference": "815dd47ade8120c6850c5a3805649c96fbadbdca",
                 "shasum": ""
             },
             "require": {
@@ -6110,7 +6110,7 @@
             },
             "require-dev": {
                 "doctrine/annotations": "^1.11.0",
-                "doctrine/collections": "^1.0",
+                "doctrine/collections": "^1.6",
                 "doctrine/common": "^2.7 || ^3.0",
                 "doctrine/dbal": "^2.11.0",
                 "doctrine/mongodb-odm": "^1.3 || ^2.1",
@@ -6144,15 +6144,15 @@
                 "MIT"
             ],
             "description": "Doctrine extensions for PHPStan",
-            "time": "2021-01-18T13:00:10+00:00"
+            "time": "2021-02-09T19:07:47+00:00"
         },
         {
             "name": "phpstan/phpstan-mockery",
-            "version": "0.12.11",
+            "version": "0.12.12",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/phpstan/phpstan-mockery/0.12.11/phpstan-phpstan-mockery-0.12.11.zip",
-                "reference": "6e8917e7c952d27fa4a2dda01da98f7b63581f8f",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/phpstan/phpstan-mockery/0.12.12/phpstan-phpstan-mockery-0.12.12.zip",
+                "reference": "053bf9e3ffc4ff906e411636a43d440bace5b914",
                 "shasum": ""
             },
             "require": {
@@ -6187,7 +6187,7 @@
                 "MIT"
             ],
             "description": "PHPStan Mockery extension",
-            "time": "2020-12-14T14:20:20+00:00"
+            "time": "2021-02-05T12:12:41+00:00"
         },
         {
             "name": "phpstan/phpstan-phpunit",
@@ -7308,10 +7308,10 @@
         },
         {
             "name": "symfony/config",
-            "version": "v5.2.2",
+            "version": "v5.2.3",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/config/v5.2.2/symfony-config-v5.2.2.zip",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/config/v5.2.3/symfony-config-v5.2.3.zip",
                 "reference": "50e0e1314a3b2609d32b6a5a0d0fb5342494c4ab",
                 "shasum": ""
             },
@@ -7377,10 +7377,10 @@
         },
         {
             "name": "symfony/dependency-injection",
-            "version": "v5.2.2",
+            "version": "v5.2.3",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/dependency-injection/v5.2.2/symfony-dependency-injection-v5.2.2.zip",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/dependency-injection/v5.2.3/symfony-dependency-injection-v5.2.3.zip",
                 "reference": "62f72187be689540385dce6c68a5d4c16f034139",
                 "shasum": ""
             },
@@ -7513,10 +7513,10 @@
         },
         {
             "name": "symfony/process",
-            "version": "v5.2.2",
+            "version": "v5.2.3",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/process/v5.2.2/symfony-process-v5.2.2.zip",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/process/v5.2.3/symfony-process-v5.2.3.zip",
                 "reference": "313a38f09c77fbcdc1d223e57d368cea76a2fd2f",
                 "shasum": ""
             },
