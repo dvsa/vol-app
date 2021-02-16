@@ -20,12 +20,14 @@ return [
             'conviction*' => [RefData::PERMISSION_INTERNAL_CASE],
             'offence*' => [RefData::PERMISSION_INTERNAL_CASE],
             'submission*' => [RefData::PERMISSION_INTERNAL_CASE],
+            '*surrender*' => [RefData::PERMISSION_INTERNAL_EDIT],
 
             // @todo will this effect the above processing/notes* rule?
-            'processing*' => [RefData::PERMISSION_INTERNAL_CASE],
+            '*processing*' => [RefData::PERMISSION_INTERNAL_CASE],
 
             '*documents*' => [RefData::PERMISSION_INTERNAL_DOCUMENTS],
             '*docs*' => [RefData::PERMISSION_INTERNAL_DOCUMENTS],
+            '*fees*' => [RefData::PERMISSION_INTERNAL_FEES],
             'fetch_tmp_document' => [RefData::PERMISSION_INTERNAL_DOCUMENTS],
             'note' => [RefData::PERMISSION_INTERNAL_NOTES],
 
@@ -81,6 +83,7 @@ return [
             'operator/documents/delete' => [RefData::PERMISSION_INTERNAL_EDIT],
             'operator/documents/relink' => [RefData::PERMISSION_INTERNAL_EDIT],
             'operator/documents/finalise' => [RefData::PERMISSION_INTERNAL_EDIT],
+            'operator/users' => [RefData::PERMISSION_INTERNAL_EDIT],
 
             // Application / Variation
             'lva-application/submit' => [RefData::PERMISSION_INTERNAL_EDIT],
