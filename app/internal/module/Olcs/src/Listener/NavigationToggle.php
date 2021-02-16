@@ -4,6 +4,8 @@ namespace Olcs\Listener;
 
 use Common\Rbac\IdentityProvider;
 use Common\Rbac\User;
+use Common\RefData;
+use Common\Service\Cqrs\Query\QuerySender;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence;
 use Laminas\Authentication\AuthenticationService;
 use Laminas\EventManager\EventManagerInterface;
@@ -13,7 +15,6 @@ use Laminas\Mvc\MvcEvent;
 use Laminas\Navigation\Navigation;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
-use Common\Service\Cqrs\Query\QuerySender;
 
 /**
  * Class NavigationToggle
@@ -72,16 +73,6 @@ class NavigationToggle implements ListenerAggregateInterface, FactoryInterface
         /** @var User $userData */
         $userData = $identity->getUserData();
 
-        $disableDataRetentionRecords = true;
-
-        if (isset($userData['disableDataRetentionRecords'])) {
-            $disableDataRetentionRecords = !$userData['disableDataRetentionRecords'];
-        }
-
-        $this->navigation
-            ->findBy('id', 'admin-dashboard/admin-data-retention')
-            ->setVisible($disableDataRetentionRecords);
-
         //prevent this from running if the user is not logged in
         if (isset($userData['id'])) {
             // IRHP Permits Navigation
@@ -98,7 +89,7 @@ class NavigationToggle implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * Query contextual licence to check if goods to render IRHP Permits tab and check Feature Toggle for Internal Permits
+     * Query contextual licence to check if goods to render IRHP Permits tab
      *
      * @param array $params request params
      *
@@ -109,7 +100,7 @@ class NavigationToggle implements ListenerAggregateInterface, FactoryInterface
         $licenceQuery = $this->querySender->send(Licence::create(['id' => $params['licence']]));
         $licence = $licenceQuery->getResult();
 
-        return $licence['goodsOrPsv']['id'] == 'lcat_gv';
+        return $licence['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_GOODS_VEHICLE;
     }
 
     /**

@@ -2,16 +2,17 @@
 
 namespace OlcsTest\Listener;
 
-use Dvsa\Olcs\Transfer\Query\Licence\Licence;
+use Common\Rbac\IdentityProvider;
+use Common\Rbac\User;
+use Common\RefData;
 use Common\Service\Cqrs\Query\QuerySender;
+use Dvsa\Olcs\Transfer\Query\Licence\Licence;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Navigation\Navigation;
+use Laminas\Navigation\Page\AbstractPage;
+use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Listener\NavigationToggle;
-use Common\Rbac\IdentityProvider;
-use Laminas\Navigation\Navigation;
-use Laminas\Navigation\Page\Uri;
-use Laminas\Mvc\MvcEvent;
-use Common\Rbac\User;
-use Mockery as m;
 
 /**
  * Class NavigationToggleTest
@@ -61,9 +62,7 @@ class NavigationToggleTest extends TestCase
      */
     public function testOnDispatchNotLoggedIn()
     {
-        $userData = [
-            'disableDataRetentionRecords' => false
-        ];
+        $userData = [];
 
         $userObject = new User();
         $userObject->setUserData($userData);
@@ -72,89 +71,83 @@ class NavigationToggleTest extends TestCase
             ->shouldReceive('getIdentity')
             ->andReturn($userObject);
 
-        $page = new Uri();
-
-        $this->mockNavigation
-            ->shouldReceive('findBy')
-            ->with('id', 'admin-dashboard/admin-data-retention')
-            ->andReturn($page);
-
-        /** @var \Laminas\Mvc\MvcEvent | m\MockInterface $mockEvent */
-        $mockEvent = m::mock(\Laminas\Mvc\MvcEvent::class);
+        /** @var MvcEvent | m\MockInterface $mockEvent */
+        $mockEvent = m::mock(MvcEvent::class);
 
         $this->sut->createService($this->mockSm);
         $this->sut->onDispatch($mockEvent);
         $mockEvent->shouldNotReceive('getRouteMatch->getParams');
-
-        $isVisible = $this->mockNavigation->findBy('id', 'admin-dashboard/admin-data-retention')->getVisible();
-        $this->assertTrue($isVisible);
     }
 
     /**
-     * @dataProvider dpDispatch
+     * @dataProvider dpOnDispatch
      */
-    public function testOnDispatch($internalPermitEnabled, $params)
+    public function testOnDispatch($routeParams, $licenceQueryResult, $expectedIrhpPermitsVisible)
     {
-        $licence['goodsOrPsv']['id'] = 'lcat_psv';
-        if (!empty($params)) {
-            $licence['goodsOrPsv']['id'] = 'lcat_gv';
-        }
-
         $userData = [
-            'id' => 'usr123',
-            'disableDataRetentionRecords' => false
+            'id' => 'usr123'
         ];
 
-        $irhpPermitsKey = 'licence_irhp_permits';
-        $userObject = new User();
-        $userObject->setUserData($userData);
+        $userObject = m::mock(User::class);
+        $userObject->shouldReceive('getUserData')
+            ->withNoArgs()
+            ->andReturn($userData);
 
-        $this->mockIdentityProvider
-            ->shouldReceive('getIdentity')
+        $this->mockIdentityProvider->shouldReceive('getIdentity')
+            ->withNoArgs()
             ->andReturn($userObject);
-
-        $page = new Uri();
-        $ihrpPermitsPage = new Uri();
 
         $mockLicence = m::mock(Licence::class);
         $mockLicence->shouldReceive('getResult')
-            ->andReturn($licence);
+            ->withNoArgs()
+            ->andReturn($licenceQueryResult);
 
+        $licenceId = $routeParams['licence'] ?? null;
         $this->mockQuerySender->shouldReceive('send')
-            ->andReturn($mockLicence)
-            ->zeroOrMoreTimes();
+            ->with(m::type(Licence::class))
+            ->andReturnUsing(function ($query) use ($licenceId, $mockLicence) {
+                $this->assertEquals($licenceId, $query->getId());
+                return $mockLicence;
+            });
+
+        $mockIrhpPermitsPage = m::mock(AbstractPage::class);
+        $mockIrhpPermitsPage->shouldReceive('setVisible')
+            ->with($expectedIrhpPermitsVisible)
+            ->once();
 
         $this->mockNavigation
             ->shouldReceive('findBy')
-            ->with('id', 'admin-dashboard/admin-data-retention')
-            ->andReturn($page);
+            ->with('id', 'licence_irhp_permits')
+            ->andReturn($mockIrhpPermitsPage);
 
-        $this->mockNavigation
-            ->shouldReceive('findBy')
-            ->with('id', $irhpPermitsKey)
-            ->andReturn($ihrpPermitsPage);
-
-        /** @var \Laminas\Mvc\MvcEvent | m\MockInterface $mockEvent */
-        $mockEvent = m::mock(\Laminas\Mvc\MvcEvent::class);
-
+        /** @var MvcEvent | m\MockInterface $mockEvent */
+        $mockEvent = m::mock(MvcEvent::class);
         $mockEvent->shouldReceive('getRouteMatch->getParams')
-            ->andReturn($params);
+            ->withNoArgs()
+            ->andReturn($routeParams);
 
         $this->sut->createService($this->mockSm);
         $this->sut->onDispatch($mockEvent);
-
-        $isVisible = $this->mockNavigation->findBy('id', 'admin-dashboard/admin-data-retention')->getVisible();
-        $isIrhpVisible = $this->mockNavigation->findBy('id', $irhpPermitsKey)->getVisible();
-
-        $this->assertTrue($isVisible);
-        $this->assertEquals($isIrhpVisible, $internalPermitEnabled);
     }
 
-    public function dpDispatch(): array
+    public function dpOnDispatch(): array
     {
         return [
-            [true, ['licence' => 7]],
-            [false, []]
+            'goods' => [
+                ['licence' => 7],
+                ['goodsOrPsv' => ['id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE]],
+                true
+            ],
+            'psv' => [
+                ['licence' => 7],
+                ['goodsOrPsv' => ['id' => RefData::LICENCE_CATEGORY_PSV]],
+                false
+            ],
+            'no licence' => [
+                [],
+                null,
+                false
+            ],
         ];
     }
 }
