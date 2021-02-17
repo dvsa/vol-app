@@ -102,8 +102,8 @@ return [
             'mode' => 'gcm',
         ],
         'secrets' => [
-            'node' => 'string',
-            'shared' => 'string',
+            'node' => 'ssweb-cache-encryption-key',
+            'shared' => 'shared-cache-encryption-key',
         ],
     ],
 
