@@ -115,8 +115,8 @@ return [
             'mode' => 'gcm',
         ],
         'secrets' => [
-            'node' => 'string',
-            'shared' => 'string',
+            'node' => 'iuweb-cache-encryption-key',
+            'shared' => 'shared-cache-encryption-key',
         ],
     ],
     

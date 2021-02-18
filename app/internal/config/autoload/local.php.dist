@@ -109,8 +109,8 @@ return array(
             'mode' => 'gcm',
         ],
         'secrets' => [
-            'node' => 'nonprod/redis-iu',
-            'shared' => 'nonprod/redis-shared',
+            'node' => 'iuweb-cache-encryption-key',
+            'shared' => 'shared-cache-encryption-key',
         ],
     ],
     'query_cache' => [
