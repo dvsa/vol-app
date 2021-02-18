@@ -13,7 +13,8 @@ use Dvsa\Olcs\Transfer\Command\IrhpApplication\UpdateCandidatePermitSelection;
 use Dvsa\Olcs\Transfer\Command\IrhpPermit\Replace as ReplaceDTO;
 use Dvsa\Olcs\Transfer\Command\IrhpPermit\Terminate as TerminateDTO;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\ById;
-use Dvsa\Olcs\Transfer\Query\IrhpCandidatePermit\GetListByIrhpApplicationUnpaged as UnpaidPermitsDto;
+use Dvsa\Olcs\Transfer\Query\IrhpCandidatePermit\GetListByIrhpApplicationUnpaged as UnpaidPermitsDtoUnpaged;
+use Dvsa\Olcs\Transfer\Query\IrhpCandidatePermit\GetListByIrhpApplication as UnpaidPermitsDto;
 use Dvsa\Olcs\Transfer\Query\IrhpPermit\ById as ItemDTO;
 use Dvsa\Olcs\Transfer\Query\IrhpPermit\GetListByIrhpId as IrhpListDTO;
 use Olcs\Controller\AbstractInternalController;
@@ -104,8 +105,12 @@ class IrhpPermitController extends AbstractInternalController implements
 
         if ($irhpApplication['canSelectCandidatePermits']) {
             $this->tableName = 'irhp-permits-ecmt-candidate-partial-select';
-            $this->listDto = UnpaidPermitsDto::class;
+            $this->listDto = UnpaidPermitsDtoUnpaged::class;
             $this->tableViewTemplate = 'pages/irhp-permit/choose-candidate-permits';
+            $this->defaultTableSortField = 'id';
+        } elseif ($irhpApplication['canViewCandidatePermits']) {
+            $this->tableName = 'irhp-permits-ecmt-candidate-preview';
+            $this->listDto = UnpaidPermitsDto::class;
             $this->defaultTableSortField = 'id';
         }
 
