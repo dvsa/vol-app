@@ -127,8 +127,8 @@ return [
             'mode' => 'gcm',
         ],
         'secrets' => [
-            'node' => 'redis-ss',
-            'shared' => 'redis-shared',
+            'node' => 'ssweb-cache-encryption-key',
+            'shared' => 'shared-cache-encryption-key',
         ],
     ],
     'query_cache' => [
