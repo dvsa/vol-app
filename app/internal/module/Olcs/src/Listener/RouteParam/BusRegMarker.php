@@ -60,18 +60,15 @@ class BusRegMarker implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * Attach one or more listeners
-     *
-     * Implementors may add an optional $priority argument; the EventManager
-     * implementation will pass this to the aggregate.
-     *
-     * @param EventManagerInterface $events
-     *
-     * @return void
+     * {@inheritdoc}
      */
-    public function attach(EventManagerInterface $events)
+    public function attach(EventManagerInterface $events, $priority = 1)
     {
-        $this->listeners[] = $events->attach(RouteParams::EVENT_PARAM . 'busRegId', [$this, 'onBusRegMarker'], 1);
+        $this->listeners[] = $events->attach(
+            RouteParams::EVENT_PARAM . 'busRegId',
+            [$this, 'onBusRegMarker'],
+            $priority
+        );
     }
 
     /**

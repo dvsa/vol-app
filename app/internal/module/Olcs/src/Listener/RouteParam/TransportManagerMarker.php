@@ -73,31 +73,24 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
     }
 
     /**
-     * Attach one or more listeners
-     *
-     * Implementors may add an optional $priority argument; the EventManager
-     * implementation will pass this to the aggregate.
-     *
-     * @param EventManagerInterface $events
-     *
-     * @return void
+     * {@inheritdoc}
      */
-    public function attach(EventManagerInterface $events)
+    public function attach(EventManagerInterface $events, $priority = 1)
     {
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'transportManager',
             [$this, 'onTransportManagerMarker'],
-            1
+            $priority
         );
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'licence',
             [$this, 'onLicenceTransportManagerMarker'],
-            1
+            $priority
         );
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'application',
             [$this, 'onApplicationTransportManagerMarker'],
-            1
+            $priority
         );
     }
 
