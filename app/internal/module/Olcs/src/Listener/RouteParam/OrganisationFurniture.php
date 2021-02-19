@@ -49,12 +49,15 @@ class OrganisationFurniture implements
         return $this;
     }
 
-    public function attach(EventManagerInterface $events)
+    /**
+     * {@inheritdoc}
+     */
+    public function attach(EventManagerInterface $events, $priority = 1)
     {
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'organisation',
             [$this, 'onOrganisation'],
-            1
+            $priority
         );
     }
 

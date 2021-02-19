@@ -5,8 +5,10 @@ namespace OlcsTest\Listener\RouteParam;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\TransportManager\Details\TransportManagerDetailsResponsibilityController;
 use Olcs\Event\RouteParam;
+use Olcs\Listener\RouteParams;
 use Olcs\Listener\RouteParam\TransportManager as SystemUnderTest;
 use Mockery as m;
+use Laminas\EventManager\EventManagerInterface;
 use Laminas\Navigation\Navigation;
 use Laminas\Navigation\Page\Uri as PageUri;
 use Laminas\Navigation\Page\Mvc as PageMvc;
@@ -20,6 +22,19 @@ use Common\RefData;
  */
 class TransportManagerTest extends MockeryTestCase
 {
+    public function testAttach()
+    {
+        $sut = new SystemUnderTest();
+
+        /** @var EventManagerInterface $eventManager */
+        $eventManager = m::mock(EventManagerInterface::class);
+        $eventManager->shouldReceive('attach')
+            ->with(RouteParams::EVENT_PARAM . 'transportManager', [$sut, 'onTransportManager'], 1)
+            ->once();
+
+        $sut->attach($eventManager);
+    }
+
     /**
      * Tests onTransportManager
      * @dataProvider onTransportManagerProvider
