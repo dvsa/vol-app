@@ -2,9 +2,12 @@
 
 namespace Olcs\Controller;
 
+use Common\RefData;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Laminas\Session\Container;
 use Laminas\View\Model\ViewModel;
+use ZfcRbac\Exception\UnauthorizedException;
+use ZfcRbac\Service\RoleService;
 
 /**
  * Main search controller
@@ -98,6 +101,11 @@ class SearchController extends AbstractController implements LeftViewProvider
 
         /** @var \Common\Controller\Plugin\ElasticSearch $elasticSearch */
         $elasticSearch = $this->ElasticSearch();
+
+        $searchIndex = $elasticSearch->getSearchData()['index'];
+        if (!$this->canAccessSearchIndex($searchIndex)) {
+            throw new UnauthorizedException("User not allowed to access ${searchIndex} search index");
+        }
 
         $this->loadScripts(['table-actions']);
 
@@ -269,6 +277,20 @@ class SearchController extends AbstractController implements LeftViewProvider
         $navigation = $this->getServiceLocator()->get('Navigation');
         if (!empty($this->navigationId)) {
             $navigation->findOneBy('id', $this->navigationId)->setActive();
+        }
+
+        return true;
+    }
+
+    /**
+     * @param string $searchIndex
+     * @return bool
+     */
+    protected function canAccessSearchIndex(string $searchIndex): bool
+    {
+        $roleService = $this->getServiceLocator()->get(RoleService::class);
+        if ($searchIndex === 'user' && $roleService->matchIdentityRoles([RefData::ROLE_INTERNAL_LIMITED_READ_ONLY])) {
+            return false;
         }
 
         return true;
