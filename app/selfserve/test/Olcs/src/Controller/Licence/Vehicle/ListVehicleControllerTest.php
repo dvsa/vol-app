@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace OlcsTest\Controller\Licence\Vehicle;
 
+use Common\Controller\Plugin\HandleCommand;
 use Common\Controller\Plugin\HandleQuery;
 use Common\Service\Cqrs\Response;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\ResponseHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableBuilder;
 use Common\Service\Table\TableFactory;
 use Common\Test\Builder\ServiceManagerBuilder;
+use Dvsa\Olcs\Transfer\Command\Licence\UpdateVehicles;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence;
 use Hamcrest\Arrays\IsArrayContainingKeyValuePair;
 use Hamcrest\Core\IsAnything;
@@ -21,6 +24,7 @@ use Hamcrest\Core\IsInstanceOf;
 use Laminas\Http\Request;
 use Laminas\Mvc\Controller\Plugin\Url;
 use Laminas\Mvc\Router\Http\RouteMatch;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\Stdlib\Parameters;
 use Laminas\View\Model\ViewModel;
@@ -42,6 +46,19 @@ class ListVehicleControllerTest extends MockeryTestCase
 
         // Assert
         $this->assertIsCallable([$sut, 'indexAction']);
+    }
+
+    /**
+     * @test
+     */
+    public function postAction_IsCallable()
+    {
+        // Setup
+        $serviceManager = $this->setUpServiceManager();
+        $sut = $this->setUpSut($serviceManager);
+
+        // Assert
+        $this->assertIsCallable([$sut, 'postAction']);
     }
 
     /**
@@ -268,6 +285,62 @@ class ListVehicleControllerTest extends MockeryTestCase
         $sut->indexAction($request, $routeMatch);
     }
 
+    /**
+     * @depends postAction_IsCallable
+     * @test
+     */
+    public function postAction_RespondsInHtmlFormat_SetsUserOCRSOptInPreference_CheckboxValidValuesRunsCommand()
+    {
+        // Setup
+        $serviceManager = $this->setUpServiceManager();
+        $sut = $this->setUpSut($serviceManager);
+        $request = new Request();
+        $routeMatch = new RouteMatch([]);
+        $commandHandler = $this->resolveMockService($serviceManager, HandleCommand::class);
+        $formHelper = $this->resolveMockService($serviceManager, FormHelperService::class);
+        $mockForm = $this->setUpForm();
+        $mockForm->shouldReceive('getData')->andReturn(['ocrsCheckbox' => $expected = 'Y']);
+        $formHelper->shouldReceive('createForm')->andReturn($mockForm);
+
+        // Define Expectations
+        $commandHandler
+            ->shouldReceive('__invoke')
+            ->withArgs(function($command) use ($expected) {
+                return $command instanceof UpdateVehicles && $command->getShareInfo() === $expected;
+            })
+            ->once()
+            ->andReturn(null);
+
+        // Execute
+        $sut->postAction($request, $routeMatch);
+    }
+
+    /**
+     * @depends postAction_IsCallable
+     * @test
+     */
+    public function postAction_RespondsInHtmlFormat_SetsUserOCRSOptInPreference_CheckboxInvalidValues_ReturnsIndexActionWithErrors()
+    {
+        // Setup
+        $serviceManager = $this->setUpServiceManager();
+        $sut = $this->setUpSut($serviceManager);
+        $request = new Request();
+        $routeMatch = new RouteMatch([]);
+        $commandHandler = $this->resolveMockService($serviceManager, HandleCommand::class);
+        $formHelper = $this->resolveMockService($serviceManager, FormHelperService::class);
+        $mockForm = $this->setUpForm();
+        $mockForm->shouldReceive('isValid')->andReturnFalse();
+        $formHelper->shouldReceive('createForm')->andReturn($mockForm);
+
+        // Define Expectations
+        $updateVehicleCommandMatcher = IsInstanceOf::anInstanceOf(UpdateVehicles::class);
+        $commandHandler->shouldReceive('__invoke')->with($updateVehicleCommandMatcher)->never();
+
+        // Execute
+        $sut->postAction($request, $routeMatch);
+    }
+
+
 //    @todo Re-add in VOL-136
 //
 //    public function setUpRemovedTableTitleData()
@@ -326,11 +399,13 @@ class ListVehicleControllerTest extends MockeryTestCase
     {
         return [
             TranslationHelperService::class => $this->setUpTranslator(),
+            HandleCommand::class => $this->setUpCommandHandler(),
             HandleQuery::class => $this->setUpQueryHandler(),
             Url::class => $this->setUpUrlHelper(),
             ResponseHelperService::class => $this->setUpResponseHelper(),
             TableFactory::class => $this->setUpTableFactory(),
             FormHelperService::class => $this->setUpFormHelper(),
+            FlashMessengerHelperService::class => $this->setUpFlashMessengerHelperService(),
         ];
     }
 
@@ -341,12 +416,14 @@ class ListVehicleControllerTest extends MockeryTestCase
     protected function setUpSut(ServiceManager $serviceManager)
     {
         $translationService = $serviceManager->get(TranslationHelperService::class);
+        $commandHandler = $serviceManager->get(HandleCommand::class);
         $queryHandler = $serviceManager->get(HandleQuery::class);
         $urlHelper = $serviceManager->get(Url::class);
         $responseHelper = $serviceManager->get(ResponseHelperService::class);
         $tableFactory = $serviceManager->get(TableFactory::class);
         $formHelper = $serviceManager->get(FormHelperService::class);
-        return new ListVehicleController($queryHandler, $translationService, $urlHelper, $responseHelper, $tableFactory, $formHelper);
+        $flashMessengerHelper = $serviceManager->get(FlashMessengerHelperService::class);
+        return new ListVehicleController($commandHandler, $queryHandler, $translationService, $urlHelper, $responseHelper, $tableFactory, $formHelper, $flashMessengerHelper);
     }
 
     /**
@@ -368,6 +445,21 @@ class ListVehicleControllerTest extends MockeryTestCase
         $response = m::mock(Response::class);
         $response->shouldIgnoreMissing();
         $response->shouldReceive('getResult')->andReturn(['count' => 0, 'results' => []])->byDefault();
+        $instance->shouldReceive('__invoke')->andReturn($response)->byDefault();
+
+        return $instance;
+    }
+
+    /**
+     * @return HandleCommand
+     */
+    protected function setUpCommandHandler(): HandleCommand
+    {
+        $instance = m::mock(HandleCommand::class);
+        $instance->shouldIgnoreMissing();
+
+        $response = m::mock(Response::class);
+        $response->shouldIgnoreMissing();
         $instance->shouldReceive('__invoke')->andReturn($response)->byDefault();
 
         return $instance;
@@ -432,6 +524,46 @@ class ListVehicleControllerTest extends MockeryTestCase
     {
         $instance = m::mock(FormHelperService::class);
         $instance->shouldIgnoreMissing();
+
+        $mockForm = $this->setUpForm();
+        $instance->shouldReceive('createForm')->andReturn($mockForm)->byDefault();
+
         return $instance;
+    }
+
+    /**
+     * @return FlashMessengerHelperService
+     */
+    protected function setUpFlashMessengerHelperService(): FlashMessengerHelperService
+    {
+        $instance = m::mock(FlashMessengerHelperService::class);
+        $instance->shouldIgnoreMissing();
+        return $instance;
+    }
+
+    /**
+     * @return MockInterface
+     */
+    protected function setUpForm(): MockInterface
+    {
+        $mockForm = m::mock(\Laminas\Form\Form::class);
+        $mockForm->shouldIgnoreMissing();
+        $mockForm->shouldReceive('isValid')->andReturnTrue()->byDefault();
+
+        return $mockForm;
+    }
+
+    /**
+     * Resolves a mock service from a service container.
+     *
+     * @param ServiceLocatorInterface $serviceManager
+     * @param string $service
+     * @return MockInterface
+     */
+    protected function resolveMockService(ServiceLocatorInterface $serviceManager, string $service): MockInterface
+    {
+        $service = $serviceManager->get($service);
+        assert($service instanceof MockInterface, 'Expected instance of MockInterface');
+        return $service;
     }
 }

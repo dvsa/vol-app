@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Olcs\Controller\Licence\Vehicle;
 
 use Common\Controller\Dispatcher;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\ResponseHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Laminas\Mvc\Controller\ControllerManager;
@@ -28,11 +29,13 @@ class ListVehicleControllerFactory implements FactoryInterface
         $translationService = new TranslationHelperService();
         $translationService->setServiceLocator($serviceLocator);
         $queryHandler = $controllerPluginManager->get('handleQuery');
+        $commandHandler = $controllerPluginManager->get('handleCommand');
         $urlHelper = new Url();
         $responseHelper = new ResponseHelperService();
         $tableFactory = $serviceLocator->get('Table');
         $formHelper = $serviceLocator->get('Helper\Form');
-        $controller = new ListVehicleController($queryHandler, $translationService, $urlHelper, $responseHelper, $tableFactory, $formHelper);
+        $flashMessengerHelper = $serviceLocator->get('Helper\FlashMessenger');
+        $controller = new ListVehicleController($commandHandler, $queryHandler, $translationService, $urlHelper, $responseHelper, $tableFactory, $formHelper, $flashMessengerHelper);
 
         // Decorate controller
         $instance = new Dispatcher($controller);

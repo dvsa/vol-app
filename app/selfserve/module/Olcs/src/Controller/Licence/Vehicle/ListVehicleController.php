@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace Olcs\Controller\Licence\Vehicle;
 
+use Common\Controller\Plugin\HandleCommand;
 use Common\Controller\Plugin\HandleQuery;
+use Common\Form\Elements\Custom\OlcsCheckbox;
 use Common\Form\Elements\Types\AbstractInputSearch;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\ResponseHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableBuilder;
 use Common\Service\Table\TableFactory;
+use Dvsa\Olcs\Transfer\Command\Licence\UpdateVehicles;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 use Dvsa\Olcs\Transfer\Query\Licence\GoodsVehiclesExport;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence;
@@ -24,6 +28,8 @@ use Laminas\Mvc\Router\RouteMatch;
 use Olcs\Form\Model\Form\Vehicle\ListVehicleSearch;
 use Laminas\View\Model\ViewModel;
 use Laminas\Http\PhpEnvironment\Response as HttpResponse;
+use Olcs\Form\Model\Form\Vehicle\OCRSOptIn;
+use Olcs\Table\TableEnum;
 
 /**
  * @see ListVehicleControllerFactory
@@ -38,6 +44,11 @@ class ListVehicleController
     public const QUERY_KEY_ORDER_REMOVED_VEHICLES_TABLE = 'order-r';
     protected const DEFAULT_REMOVED_VEHICLES_TABLE_LIMIT = 10;
     protected const DEFAULT_CURRENT_VEHICLES_TABLE_LIMIT = 10;
+
+    /**
+     * @var HandleCommand
+     */
+    protected $commandHandler;
 
     /**
      * @var HandleQuery
@@ -70,28 +81,39 @@ class ListVehicleController
     protected $formHelper;
 
     /**
+     * @var FlashMessengerHelperService
+     */
+    protected $flashMessengerHelper;
+
+    /**
+     * @param HandleCommand $commandHandler
      * @param HandleQuery $queryHandler
      * @param TranslationHelperService $translator
      * @param Url $urlHelper
      * @param ResponseHelperService $responseHelper
      * @param TableFactory $tableFactory
      * @param FormHelperService $formHelper
+     * @param FlashMessengerHelperService $flashMessengerHelper
      */
     public function __construct(
+        HandleCommand $commandHandler,
         HandleQuery $queryHandler,
         TranslationHelperService $translator,
         Url $urlHelper,
         ResponseHelperService $responseHelper,
         TableFactory $tableFactory,
-        FormHelperService $formHelper
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessengerHelper
     )
     {
+        $this->commandHandler = $commandHandler;
         $this->queryHandler = $queryHandler;
         $this->translator = $translator;
         $this->urlHelper = $urlHelper;
         $this->responseHelper = $responseHelper;
         $this->tableFactory = $tableFactory;
         $this->formHelper = $formHelper;
+        $this->flashMessengerHelper = $flashMessengerHelper;
     }
 
     /**
@@ -116,10 +138,14 @@ class ListVehicleController
                 'order' => $urlQueryData[static::QUERY_KEY_ORDER_CURRENT_VEHICLES_TABLE] ?? AbstractVehicleController::DEFAULT_TABLE_SORT_ORDER,
                 'vrm' => $urlQueryData['vehicleSearch'][AbstractInputSearch::ELEMENT_INPUT_NAME] ?? null,
             ]));
+
+            $shareVehicleInfoState = (($licence['organisation']['confirmShareVehicleInfo'] ?? 'N') === 'Y');
+
             $response = $this->renderHtmlResponse($request, [
                 'title' => $this->isSearchResultsPage($request) ? 'licence.vehicle.list.search.header' : 'licence.vehicle.list.header',
                 'licence' => $licence,
                 'backLink' => $this->urlHelper->fromRoute('licence/vehicle/GET', ['licence' => $licenceId]),
+                'shareVehicleInfoState' => $shareVehicleInfoState,
                 'exportCurrentAndRemovedCsvAction' => $this->buildCurrentAndRemovedCsvUrl($licenceId),
                 'toggleRemovedAction' => $this->buildToggleRemovedVehiclesUrl($licenceId, $urlQueryData),
                 'bottomContent' => $this->buildChooseDifferentActionUrl($licenceId),
@@ -132,6 +158,34 @@ class ListVehicleController
             ]);
         }
         return $response;
+    }
+
+    /**
+     * Handles a request from a user to change the user's opt-in preference for OCRS.
+     *
+     * @param Request $request
+     * @param RouteMatch $routeMatch
+     * @return Response|ViewModel
+     */
+    public function postAction(Request $request, RouteMatch $routeMatch)
+    {
+        $licenceId = (int) $routeMatch->getParam('licence');
+
+        $form = $this->createOcrsOptInForm($request->getPost()->toArray());
+        if (!$form->isValid()) {
+            return $this->indexAction($request, $routeMatch);
+        }
+
+        $complianceCheckbox = $form->getData()['ocrsCheckbox'];
+
+        $updateVehicles = UpdateVehicles::create([
+            'id' => $licenceId,
+            'shareInfo' => $complianceCheckbox
+        ]);
+
+        $this->commandHandler->__invoke($updateVehicles);
+
+        return $this->indexAction($request, $routeMatch);
     }
 
     /**
@@ -203,11 +257,17 @@ class ListVehicleController
         // Build current vehicle table
         $data['currentVehiclesTable'] = $this->buildHtmlCurrentLicenceVehiclesTable($request, $data['currentLicenceVehicleList']);
 
+        $ocrsFormPreData = [
+            'ocrsCheckbox' => $data['shareVehicleInfoState']
+        ];
+
+        $view->setVariable('ocrsForm', $this->createOcrsOptInForm($ocrsFormPreData));
+
         unset($data['currentLicenceVehicleList']);
         if ($data['currentVehiclesTable']->getTotal() > $data['currentVehiclesTable']->getLimit() || $this->isSearchResultsPage($request)) {
             $searchFormUrl = $this->urlHelper->fromRoute('licence/vehicle/list/GET', ['licence' => $data['licence']['id']]);
             $view->setVariable('searchForm', $this->createSearchForm($searchFormUrl, $urlQueryParams));
-            $view->setVariable('clearUrl', $this->buildSearchClearUrl($request)); // $this->getLink('licence/vehicle/list/GET'));
+            $view->setVariable('clearUrl', $this->buildSearchClearUrl($request));
         }
 
         // @todo (coming soon in VOL-136) Build removed vehicle table
@@ -294,6 +354,28 @@ class ListVehicleController
     protected function getLicence(Licence $query)
     {
         return $this->queryHandler->__invoke($query)->getResult();
+    }
+
+    /**
+     * Creates a OCRS Opt-In form.
+     *
+     * @param array $data
+     * @return Form
+     */
+    protected function createOcrsOptInForm(array $data = []): Form
+    {
+        $form = $this->formHelper->createForm(OCRSOptIn::class, true, false);
+        $form->setData($data);
+
+        if (in_array('ocrsCheckbox', $data)) {
+            $checked = $data['ocrsCheckbox'] === 'Y';
+
+            $checkbox =  $form->get('ocrsCheckbox');
+            assert($checkbox instanceof OlcsCheckbox, '$checkbox is not an instance of OlcsCheckbox');
+            $checkbox->setChecked($checked);
+        }
+
+        return $form;
     }
 
     /**

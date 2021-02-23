@@ -781,6 +781,16 @@ return [
                                         ],
                                     ],
                                 ],
+                                'POST' => [
+                                    'may_terminate' => true,
+                                    'type' => Method::class,
+                                    'options' => [
+                                        'verb' => 'POST',
+                                        'defaults' => [
+                                            'action' => 'post',
+                                        ],
+                                    ],
+                                ],
                             ],
                         ],
                         'reprint' => [
