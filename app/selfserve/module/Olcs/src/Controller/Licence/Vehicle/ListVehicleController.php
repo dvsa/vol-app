@@ -139,7 +139,7 @@ class ListVehicleController
                 'vrm' => $urlQueryData['vehicleSearch'][AbstractInputSearch::ELEMENT_INPUT_NAME] ?? null,
             ]));
 
-            $shareVehicleInfoState = (($licence['organisation']['confirmShareVehicleInfo'] ?? 'N') === 'Y');
+            $shareVehicleInfoState = $licence['organisation']['confirmShareVehicleInfo'];
 
             $response = $this->renderHtmlResponse($request, [
                 'title' => $this->isSearchResultsPage($request) ? 'licence.vehicle.list.search.header' : 'licence.vehicle.list.header',
