@@ -22,6 +22,13 @@
                     </div>
                 </div>
 
+                <?php if (isset($this->ocrsForm)) { ?>
+                <div id="share-vehicle-details" class="govuk-!-margin-bottom-4">
+                    <h3 class="govuk-heading-m"><?php echo $this->translate('licence.vehicle.list.form.orcs.checkbox.heading'); ?></h3>
+                    <?php echo $this->form($this->ocrsForm); ?>
+                </div>
+                <?php } ?>
+
                 <?php if ($this->currentVehiclesTable->getTotal() > 0) { ?>
                     <div id="export" class="govuk-!-margin-bottom-4">
                         <h3 class="govuk-heading-m"><?php echo $this->translate('licence.vehicle.list.section.export.header'); ?></h3>
