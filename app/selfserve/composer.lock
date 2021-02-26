@@ -1653,6 +1653,7 @@
                 "console",
                 "laminas"
             ],
+            "abandoned": "laminas/laminas-cli",
             "time": "2019-12-31T16:31:44+00:00"
         },
         {
@@ -3572,12 +3573,12 @@
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.317",
+            "version": "4.206.323",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.317/olcs-olcs-common-4.206.317.zip",
-                "reference": "8a009b5351d4315a0d40d56f8c323ce04da31a21",
-                "shasum": "8a009b5351d4315a0d40d56f8c323ce04da31a21"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.323/olcs-olcs-common-4.206.323.zip",
+                "reference": "3a514a841fb80163fc2dd8c3ff8705ff5aeeda96",
+                "shasum": "3a514a841fb80163fc2dd8c3ff8705ff5aeeda96"
             },
             "require": {
                 "doctrine/annotations": "^1.8",
@@ -3663,16 +3664,16 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2021-02-09T19:31:33+00:00"
+            "time": "2021-02-22T13:13:45+00:00"
         },
         {
             "name": "olcs/olcs-logging",
-            "version": "4.206.7",
+            "version": "4.206.8",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-logging/4.206.7/olcs-olcs-logging-4.206.7.zip",
-                "reference": "88d06564ef6aa55c00c77850d0b54a485d2351c4",
-                "shasum": "88d06564ef6aa55c00c77850d0b54a485d2351c4"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-logging/4.206.8/olcs-olcs-logging-4.206.8.zip",
+                "reference": "8b64a031c2c41f8890f11b7f6726ed2a9d694156",
+                "shasum": "8b64a031c2c41f8890f11b7f6726ed2a9d694156"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -3729,16 +3730,16 @@
                 ]
             },
             "description": "Logging Module for Olcs",
-            "time": "2020-12-09T10:36:44+00:00"
+            "time": "2021-02-19T14:39:11+00:00"
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "4.206.120",
+            "version": "4.206.123",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-transfer/4.206.120/olcs-olcs-transfer-4.206.120.zip",
-                "reference": "41c5ef907b43e19aa698cc57f9291a8f42790787",
-                "shasum": "41c5ef907b43e19aa698cc57f9291a8f42790787"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-transfer/4.206.123/olcs-olcs-transfer-4.206.123.zip",
+                "reference": "536ae6aa1e149b44ab8abbfd971f7ac6a5b52972",
+                "shasum": "536ae6aa1e149b44ab8abbfd971f7ac6a5b52972"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -3801,16 +3802,16 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2021-02-09T14:20:01+00:00"
+            "time": "2021-02-22T09:02:19+00:00"
         },
         {
             "name": "olcs/olcs-utils",
-            "version": "4.206.10",
+            "version": "4.206.11",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-utils/4.206.10/olcs-olcs-utils-4.206.10.zip",
-                "reference": "673bb9754419baae2b2cf7eb6599730bb9e547b4",
-                "shasum": "673bb9754419baae2b2cf7eb6599730bb9e547b4"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-utils/4.206.11/olcs-olcs-utils-4.206.11.zip",
+                "reference": "1fe2af32cb8c074b0dac88bcf7122f780ce8532f",
+                "shasum": "1fe2af32cb8c074b0dac88bcf7122f780ce8532f"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -3867,7 +3868,7 @@
                 ]
             },
             "description": "OLCS Utils",
-            "time": "2021-01-27T09:14:51+00:00"
+            "time": "2021-02-19T14:39:52+00:00"
         },
         {
             "name": "paragonie/random_compat",
