@@ -23,7 +23,10 @@ return [
             '*surrender*' => [RefData::PERMISSION_INTERNAL_EDIT],
 
             // @todo will this effect the above processing/notes* rule?
-            '*processing*' => [RefData::PERMISSION_INTERNAL_CASE],
+            '*processing*' => [RefData::PERMISSION_INTERNAL_PROCESSING],
+
+            'licence/opposition*' => [RefData::PERMISSION_INTERNAL_OPPOSITION],
+            'lva-application/opposition*' => [RefData::PERMISSION_INTERNAL_OPPOSITION],
 
             '*documents*' => [RefData::PERMISSION_INTERNAL_DOCUMENTS],
             '*docs*' => [RefData::PERMISSION_INTERNAL_DOCUMENTS],
