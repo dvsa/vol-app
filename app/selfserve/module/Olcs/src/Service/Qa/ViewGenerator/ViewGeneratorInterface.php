@@ -16,13 +16,6 @@ interface ViewGeneratorInterface
     public function getTemplateName();
 
     /**
-     * Get the form name to be used by this view generator
-     *
-     * @return string
-     */
-    public function getFormName();
-
-    /**
      * Get an array of additional view variables to be used in the view
      *
      * @param MvcEvent $mvcEvent

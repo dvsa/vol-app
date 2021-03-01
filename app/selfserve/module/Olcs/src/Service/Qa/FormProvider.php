@@ -56,19 +56,17 @@ class FormProvider
      *
      * @param array $options
      * @param string $submitOptionsName
-     * @param string $formName
      *
      * @return mixed
      */
-    public function get(array $options, $submitOptionsName, $formName)
+    public function get(array $options, $submitOptionsName)
     {
         if (!isset($this->submitOptionsMappings[$submitOptionsName])) {
             throw new RuntimeException('No submit options mapping found for ' . $submitOptionsName);
         }
 
-        $form = $this->formFactory->create($formName);
+        $form = $this->formFactory->create('QaForm');
         $form->setApplicationStep($options);
-        $this->fieldsetPopulator->populate($form, [$options], UsageContext::CONTEXT_SELFSERVE);
 
         $submitFieldsetSpec = $this->customAnnotationBuilder->getFormSpecification(
             $this->submitOptionsMappings[$submitOptionsName]
@@ -76,7 +74,9 @@ class FormProvider
 
         $submitFieldsetSpec['type'] = InputFilterProviderFieldset::class;
         $submitFieldset = $this->laminasFormFactory->create($submitFieldsetSpec);
-        $form->add($submitFieldset);
+        $form->add($submitFieldset, ['name' => 'Submit']);
+
+        $this->fieldsetPopulator->populate($form, [$options], UsageContext::CONTEXT_SELFSERVE);
 
         return $form;
     }

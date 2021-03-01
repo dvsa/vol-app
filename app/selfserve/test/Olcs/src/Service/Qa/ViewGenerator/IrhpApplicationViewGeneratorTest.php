@@ -27,14 +27,6 @@ class IrhpApplicationViewGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function testGetFormName()
-    {
-        $this->assertEquals(
-            'QaForm',
-            $this->irhpApplicationViewGenerator->getFormName()
-        );
-    }
-
     public function testGetAdditionalViewVariables()
     {
         $applicationReference = 'OB12345 / 100001';

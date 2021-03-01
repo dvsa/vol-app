@@ -1638,6 +1638,7 @@ return array(
         'submit_options' => [
             'options_default' => \Permits\Form\Model\Fieldset\Submit::class,
             'options_default_plus_cancel' => \Permits\Form\Model\Fieldset\SubmitOrCancelApplication::class,
+            'options_bilateral' => \Permits\Form\Model\Fieldset\SubmitOnly::class,
         ]
     ]
 );

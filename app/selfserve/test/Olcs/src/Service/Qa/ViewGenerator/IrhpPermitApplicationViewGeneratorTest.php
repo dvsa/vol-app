@@ -29,14 +29,6 @@ class IrhpPermitApplicationViewGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function testGetFormName()
-    {
-        $this->assertEquals(
-            'QaBilateralForm',
-            $this->irhpPermitApplicationViewGenerator->getFormName()
-        );
-    }
-
     public function testGetAdditionalViewVariablesPreviousStepPresent()
     {
         $matchedRouteName = 'ipaQuestion';
