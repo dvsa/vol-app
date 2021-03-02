@@ -8,6 +8,12 @@
         padding: 1.5rem;
     }
 
+    &--h3 {
+        font-size: font-size(6); 
+        margin-top: 0; 
+        font-weight:bold;
+    }
+
     &--grey {
         background-color: $grey-3;
     }
