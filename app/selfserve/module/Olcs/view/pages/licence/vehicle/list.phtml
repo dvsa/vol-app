@@ -29,36 +29,36 @@
                 </div>
                 <?php } ?>
 
-                <?php if ($this->currentVehiclesTable->getTotal() > 0) { ?>
-                    <div id="export" class="govuk-!-margin-bottom-4">
-                        <h3 class="govuk-heading-m"><?php echo $this->translate('licence.vehicle.list.section.export.header'); ?></h3>
-                        <p class="govuk-body"><?php echo $this->translate('licence.vehicle.list.section.export.description'); ?></p>
-                        <ul class="govuk-list">
-                            <li>
-                                <a id="action--export-current-and-removed-csv"
-                                   title="<?php echo $this->translate('licence.vehicle.list.section.export.action.export-current-and-removed-csv.title'); ?>"
-                                   href="<?php echo $this->exportCurrentAndRemovedCsvAction; ?>"
-                                   class="govuk-link">
-                                    <?php echo $this->translate('licence.vehicle.list.section.export.action.export-current-and-removed-csv.label'); ?>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                <?php } ?>
+                <div id="export" class="govuk-!-margin-bottom-4">
+                    <h3 class="govuk-heading-m"><?php echo $this->translate('licence.vehicle.list.section.export.header'); ?></h3>
+                    <p class="govuk-body"><?php echo $this->translate('licence.vehicle.list.section.export.description'); ?></p>
+                    <ul class="govuk-list">
+                        <li>
+                            <a id="action--export-current-and-removed-csv"
+                               title="<?php echo $this->translate('licence.vehicle.list.section.export.action.export-current-and-removed-csv.title'); ?>"
+                               href="<?php echo $this->exportCurrentAndRemovedCsvAction; ?>"
+                               class="govuk-link">
+                                <?php echo $this->translate('licence.vehicle.list.section.export.action.export-current-and-removed-csv.label'); ?>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
 
-                <?php if ($this->showRemovedVehicles ?? false) {?>
-                    <a id="<?php echo is_null($this->removedVehiclesTable) ? 'action--show-removed-vehicles' : 'action--hide-removed-vehicles'; ?>"
+                <?php if ($this->showRemovedVehicles) {?>
+                    <a id="<?php echo $this->showRemovedVehiclesExpanded ? 'action--hide-removed-vehicles' : 'action--show-removed-vehicles'; ?>"
                        href="<?php echo $this->toggleRemovedAction; ?>"
                        role="button"
                        draggable="false"
                        class="govuk-button govuk-button--secondary"
                        data-module="govuk-button"
-                       title="<?php echo $this->translate(is_null($this->removedVehiclesTable) ? 'licence.vehicle.list.section.removed.action.show-removed-vehicles.title' : 'licence.vehicle.list.section.removed.action.hide-removed-vehicles.title'); ?>">
-                        <?php echo $this->translate(is_null($this->removedVehiclesTable) ? 'licence.vehicle.list.section.removed.action.show-removed-vehicles.label' : 'licence.vehicle.list.section.removed.action.hide-removed-vehicles.label'); ?>
+                       aria-controls="removed-table"
+                       aria-expanded="<?php echo $this->showRemovedVehiclesExpanded ? 'true' : 'false'; ?>"
+                       title="<?php echo $this->translate($this->toggleRemovedVehiclesActionTitle); ?>">
+                        <?php echo $this->translate($this->toggleRemovedVehiclesActionLabel); ?>
                     </a>
 
-                    <?php if (! is_null($this->removedVehiclesTable)) { ?>
-                        <div id="removed" class="govuk-!-margin-bottom-4">
+                    <?php if ($this->showRemovedVehiclesExpanded) { ?>
+                        <div id="removed-table" class="govuk-!-margin-bottom-4">
                             <div class="govuk-table">
                                 <div class="govuk-clearfix">
                                     <h3 class="govuk-heading-m"><?php echo $this->removedVehicleTableTitle; ?></h3>

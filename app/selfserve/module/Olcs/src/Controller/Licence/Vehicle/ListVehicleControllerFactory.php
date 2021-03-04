@@ -5,9 +5,14 @@ declare(strict_types=1);
 namespace Olcs\Controller\Licence\Vehicle;
 
 use Common\Controller\Dispatcher;
+use Common\Controller\Plugin\HandleCommand;
+use Common\Controller\Plugin\HandleQuery;
+use Common\Controller\Plugin\Redirect;
 use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\ResponseHelperService;
 use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableFactory;
 use Laminas\Mvc\Controller\ControllerManager;
 use Laminas\Mvc\Controller\Plugin\Url;
 use Laminas\ServiceManager\FactoryInterface;
@@ -23,25 +28,29 @@ class ListVehicleControllerFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        assert($serviceLocator instanceof ControllerManager, 'Expected instance of ControllerManager');
-        $serviceLocator = $serviceLocator->getServiceLocator();
+        if ($serviceLocator instanceof ControllerManager) {
+            $serviceLocator = $serviceLocator->getServiceLocator();
+        }
         $controllerPluginManager = $serviceLocator->get('ControllerPluginManager');
-        $translationService = new TranslationHelperService();
-        $translationService->setServiceLocator($serviceLocator);
-        $queryHandler = $controllerPluginManager->get('handleQuery');
-        $commandHandler = $controllerPluginManager->get('handleCommand');
-        $urlHelper = new Url();
-        $responseHelper = new ResponseHelperService();
-        $tableFactory = $serviceLocator->get('Table');
-        $formHelper = $serviceLocator->get('Helper\Form');
-        $flashMessengerHelper = $serviceLocator->get('Helper\FlashMessenger');
-        $controller = new ListVehicleController($commandHandler, $queryHandler, $translationService, $urlHelper, $responseHelper, $tableFactory, $formHelper, $flashMessengerHelper);
+
+        $controller = new ListVehicleController(
+            $controllerPluginManager->get(HandleCommand::class),
+            $controllerPluginManager->get(HandleQuery::class),
+            $serviceLocator->get(TranslationHelperService::class),
+            $urlHelper = $controllerPluginManager->get(Url::class),
+            $serviceLocator->get(ResponseHelperService::class),
+            $serviceLocator->get(TableFactory::class),
+            $serviceLocator->get(FormHelperService::class),
+            $serviceLocator->get(FlashMessengerHelperService::class),
+            $redirectHelper = $controllerPluginManager->get(Redirect::class)
+        );
 
         // Decorate controller
         $instance = new Dispatcher($controller);
 
         // Initialize plugins
         $urlHelper->setController($instance);
+        $redirectHelper->setController($instance);
 
         return $instance;
     }

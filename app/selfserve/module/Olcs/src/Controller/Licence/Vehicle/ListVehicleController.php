@@ -6,6 +6,8 @@ namespace Olcs\Controller\Licence\Vehicle;
 
 use Common\Controller\Plugin\HandleCommand;
 use Common\Controller\Plugin\HandleQuery;
+use Common\Controller\Plugin\Redirect;
+use Common\Exception\BailOutException;
 use Common\Form\Elements\Custom\OlcsCheckbox;
 use Common\Form\Elements\Types\AbstractInputSearch;
 use Common\Service\Helper\FlashMessengerHelperService;
@@ -19,31 +21,41 @@ use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 use Dvsa\Olcs\Transfer\Query\Licence\GoodsVehiclesExport;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence;
 use Dvsa\Olcs\Transfer\Query\Licence\Vehicles;
+use Laminas\Filter\StringToUpper;
 use Laminas\Form\Element\Hidden;
 use Laminas\Form\Form;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
+use Laminas\InputFilter\Input;
+use Laminas\InputFilter\InputFilter;
 use Laminas\Mvc\Controller\Plugin\Url;
 use Laminas\Mvc\Router\RouteMatch;
+use Laminas\Validator\InArray;
 use Olcs\Form\Model\Form\Vehicle\ListVehicleSearch;
 use Laminas\View\Model\ViewModel;
 use Laminas\Http\PhpEnvironment\Response as HttpResponse;
 use Olcs\Form\Model\Form\Vehicle\OCRSOptIn;
 use Olcs\Table\TableEnum;
+use Laminas\Stdlib\ResponseInterface;
 
 /**
  * @see ListVehicleControllerFactory
  */
 class ListVehicleController
 {
-    public const FORMAT_HTML = 'html';
-    public const FORMAT_CSV = 'csv';
-    public const QUERY_KEY_SORT_CURRENT_VEHICLES_TABLE = 'sort-c';
-    public const QUERY_KEY_ORDER_CURRENT_VEHICLES_TABLE = 'order-c';
-    public const QUERY_KEY_SORT_REMOVED_VEHICLES_TABLE = 'sort-r';
-    public const QUERY_KEY_ORDER_REMOVED_VEHICLES_TABLE = 'order-r';
-    protected const DEFAULT_REMOVED_VEHICLES_TABLE_LIMIT = 10;
-    protected const DEFAULT_CURRENT_VEHICLES_TABLE_LIMIT = 10;
+    const FORMAT_HTML = 'html';
+    const FORMAT_CSV = 'csv';
+    const QUERY_KEY_SORT_CURRENT_VEHICLES = 'sort-c';
+    const QUERY_KEY_ORDER_CURRENT_VEHICLES = 'order-c';
+    const QUERY_KEY_SORT_REMOVED_VEHICLES = 'sort-r';
+    const QUERY_KEY_ORDER_REMOVED_VEHICLES = 'order-r';
+    const QUERY_KEY_INCLUDE_REMOVED = 'includeRemoved';
+    const DEFAULT_LIMIT_REMOVED_VEHICLES = 10;
+    const DEFAULT_LIMIT_CURRENT_VEHICLES = 10;
+    const DEFAULT_SORT_CURRENT_VEHICLES = 'specifiedDate';
+    const DEFAULT_ORDER_CURRENT_VEHICLES = 'DESC';
+    const DEFAULT_SORT_REMOVED_VEHICLES = 'specifiedDate';
+    const DEFAULT_ORDER_REMOVED_TABLE = 'DESC';
 
     /**
      * @var HandleCommand
@@ -83,7 +95,12 @@ class ListVehicleController
     /**
      * @var FlashMessengerHelperService
      */
-    protected $flashMessengerHelper;
+    protected $flashMessenger;
+
+    /**
+     * @var Redirect
+     */
+    protected $redirectHelper;
 
     /**
      * @param HandleCommand $commandHandler
@@ -93,7 +110,8 @@ class ListVehicleController
      * @param ResponseHelperService $responseHelper
      * @param TableFactory $tableFactory
      * @param FormHelperService $formHelper
-     * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param FlashMessengerHelperService $flashMessenger
+     * @param Redirect $redirectHelper
      */
     public function __construct(
         HandleCommand $commandHandler,
@@ -103,9 +121,9 @@ class ListVehicleController
         ResponseHelperService $responseHelper,
         TableFactory $tableFactory,
         FormHelperService $formHelper,
-        FlashMessengerHelperService $flashMessengerHelper
-    )
-    {
+        FlashMessengerHelperService $flashMessenger,
+        Redirect $redirectHelper
+    ) {
         $this->commandHandler = $commandHandler;
         $this->queryHandler = $queryHandler;
         $this->translator = $translator;
@@ -113,7 +131,8 @@ class ListVehicleController
         $this->responseHelper = $responseHelper;
         $this->tableFactory = $tableFactory;
         $this->formHelper = $formHelper;
-        $this->flashMessengerHelper = $flashMessengerHelper;
+        $this->flashMessenger = $flashMessenger;
+        $this->redirectHelper = $redirectHelper;
     }
 
     /**
@@ -121,41 +140,56 @@ class ListVehicleController
      *
      * @param Request $request
      * @param RouteMatch $routeMatch
-     * @return Response|ViewModel
+     * @return ViewModel|ResponseInterface
      */
     public function indexAction(Request $request, RouteMatch $routeMatch)
     {
         $licenceId = (int) $routeMatch->getParam('licence');
-        $urlQueryData = $request->getQuery()->toArray();
+        $inputFilter = $this->newInputFilter($request->getQuery()->toArray());
+        if (! $inputFilter->isValid()) {
+            foreach ($inputFilter->getMessages() as $messages) {
+                foreach ($messages as $message) {
+                    $this->flashMessenger->addErrorMessage($message);
+                }
+            }
+            return $this->redirectHelper->refresh();
+        }
+        $input = $inputFilter->getValues();
+
         $format = $request->getQuery()->get('format') ?? static::FORMAT_HTML;
         if ($format === static::FORMAT_HTML) {
             $licence = $this->getLicence(Licence::create(['id' => $licenceId]));
             $licenceVehicleList = $this->listLicenceVehicles(Vehicles::create([
                 'id' => $licenceId,
-                'page' => (int) ($urlQueryData['page'] ?? 1),
-                'limit' => (int) ($urlQueryData['limit'] ?? static::DEFAULT_CURRENT_VEHICLES_TABLE_LIMIT),
-                'sort' => $urlQueryData[static::QUERY_KEY_SORT_CURRENT_VEHICLES_TABLE] ?? AbstractVehicleController::DEFAULT_TABLE_SORT_COLUMN,
-                'order' => $urlQueryData[static::QUERY_KEY_ORDER_CURRENT_VEHICLES_TABLE] ?? AbstractVehicleController::DEFAULT_TABLE_SORT_ORDER,
-                'vrm' => $urlQueryData['vehicleSearch'][AbstractInputSearch::ELEMENT_INPUT_NAME] ?? null,
+                'page' => (int) ($input['page'] ?? 1),
+                'limit' => (int) ($input['limit'] ?? static::DEFAULT_LIMIT_CURRENT_VEHICLES),
+                'sort' => $input[static::QUERY_KEY_SORT_CURRENT_VEHICLES] ?? static::DEFAULT_SORT_CURRENT_VEHICLES,
+                'order' => $input[static::QUERY_KEY_ORDER_CURRENT_VEHICLES] ?? static::DEFAULT_ORDER_CURRENT_VEHICLES,
+                'vrm' => $input[ListVehicleSearch::FIELD_VEHICLE_SEARCH][AbstractInputSearch::ELEMENT_INPUT_NAME] ?? null,
             ]));
-
-            $shareVehicleInfoState = $licence['organisation']['confirmShareVehicleInfo'] ?? 'N';
-
+            $removedVehicleList = $this->listLicenceVehicles(Vehicles::create([
+                'id' => $licenceId,
+                'page' => 1,
+                'limit' => static::DEFAULT_LIMIT_REMOVED_VEHICLES,
+                'includeRemoved' => true,
+                'includeActive' => false,
+                'sort' => $input[static::QUERY_KEY_SORT_REMOVED_VEHICLES] ?? static::DEFAULT_SORT_REMOVED_VEHICLES,
+                'order' => $input[static::QUERY_KEY_ORDER_REMOVED_VEHICLES] ?? static::DEFAULT_ORDER_REMOVED_TABLE,
+            ]));
             $response = $this->renderHtmlResponse($request, [
                 'title' => $this->isSearchResultsPage($request) ? 'licence.vehicle.list.search.header' : 'licence.vehicle.list.header',
                 'licence' => $licence,
                 'backLink' => $this->urlHelper->fromRoute('licence/vehicle/GET', ['licence' => $licenceId]),
-                'shareVehicleInfoState' => $shareVehicleInfoState,
+                'shareVehicleInfoState' => $licence['organisation']['confirmShareVehicleInfo'],
                 'exportCurrentAndRemovedCsvAction' => $this->buildCurrentAndRemovedCsvUrl($licenceId),
-                'toggleRemovedAction' => $this->buildToggleRemovedVehiclesUrl($licenceId, $urlQueryData),
+                'toggleRemovedAction' => $this->buildToggleRemovedVehiclesUrl($licenceId, $input),
                 'bottomContent' => $this->buildChooseDifferentActionUrl($licenceId),
                 'currentLicenceVehicleList' => $licenceVehicleList,
+                'removedLicenceVehicleList' => $removedVehicleList,
             ]);
         } else {
             $removedLicenceVehicleList = $this->listLicenceVehicles(GoodsVehiclesExport::create(['id' => $licenceId, 'includeRemoved' => true]));
-            $response = $this->renderCsvResponse($request, [
-                'removedLicenceVehicleList' => $removedLicenceVehicleList,
-            ]);
+            $response = $this->renderCsvResponse(['removedLicenceVehicleList' => $removedLicenceVehicleList]);
         }
         return $response;
     }
@@ -165,7 +199,8 @@ class ListVehicleController
      *
      * @param Request $request
      * @param RouteMatch $routeMatch
-     * @return Response|ViewModel
+     * @return Response|ResponseInterface|ViewModel
+     * @throws BailOutException
      */
     public function postAction(Request $request, RouteMatch $routeMatch)
     {
@@ -189,6 +224,89 @@ class ListVehicleController
     }
 
     /**
+     * @param array $data
+     * @return InputFilter
+     */
+    protected function newInputFilter(array $data)
+    {
+        $filter = new InputFilter();
+        $filter->add($this->newSortColumnInput(static::QUERY_KEY_SORT_REMOVED_VEHICLES, ['v.vrm', 'specifiedDate', 'removalDate']));
+        $filter->add($this->newSortColumnInput(static::QUERY_KEY_SORT_CURRENT_VEHICLES, ['v.vrm', 'specifiedDate']));
+        $filter->add($this->newOrderInput(static::QUERY_KEY_ORDER_REMOVED_VEHICLES));
+        $filter->add($this->newOrderInput(static::QUERY_KEY_ORDER_CURRENT_VEHICLES));
+        $filter->add($this->newSearchInput());
+        $filter->setData($data);
+        return $filter;
+    }
+
+    /**
+     * @return Input
+     */
+    protected function newSearchInput(): Input
+    {
+        $input = $this->newInput(ListVehicleSearch::FIELD_VEHICLE_SEARCH);
+        $input->setRequired(false);
+        return $input;
+    }
+
+    /**
+     * @param string $name
+     * @return Input
+     */
+    protected function newInput(string $name): Input
+    {
+        $input = new Input($name);
+        $input->setContinueIfEmpty(true);
+        return $input;
+    }
+
+    /**
+     * @param string $name
+     * @param array $validColumnNames
+     * @return Input
+     */
+    protected function newSortColumnInput(string $name, array $validColumnNames): Input
+    {
+        $input = $this->newInput($name);
+        $input->setRequired(false);
+
+        $sortValidatorChain = $input->getValidatorChain();
+
+        $inArrayValidator = new InArray();
+        $inArrayValidator->setHaystack($validColumnNames);
+        $inArrayValidator->setMessages([InArray::NOT_IN_ARRAY => 'table.validation.error.sort.in-array']);
+        $inArrayValidator->setTranslator($this->translator->getTranslator());
+        $sortValidatorChain->attach($inArrayValidator);
+
+        return $input;
+    }
+
+    /**
+     * @param string $name
+     * @return Input
+     */
+    protected function newOrderInput(string $name): Input
+    {
+        $input = $this->newInput($name);
+        $input->setRequired(false);
+
+        // Build validator chain
+        $sortValidatorChain = $input->getValidatorChain();
+
+        $inArrayValidator = new InArray();
+        $inArrayValidator->setHaystack(['ASC', 'DESC']);
+        $inArrayValidator->setMessages([InArray::NOT_IN_ARRAY => 'table.validation.error.order.in-array']);
+        $inArrayValidator->setTranslator($this->translator->getTranslator());
+        $sortValidatorChain->attach($inArrayValidator);
+
+        // Build filter chain
+        $sortFilterChain = $input->getFilterChain();
+        $sortFilterChain->attach(new StringToUpper());
+
+        return $input;
+    }
+
+    /**
      * @param int $licenceId
      * @return string
      */
@@ -208,25 +326,7 @@ class ListVehicleController
      */
     protected function isSearchResultsPage(Request $request): bool
     {
-        $request = $this->filterSearchQuery($request->getQuery()->toArray());
-        return array_key_exists('vehicleSearch', $request);
-    }
-
-    /**
-     * Filter out unneeded variables from the vehicle search query if present
-     *
-     * @param array $query
-     * @return array
-     */
-    protected function filterSearchQuery(array $query): array
-    {
-        if (empty($query['vehicleSearch'][AbstractInputSearch::ELEMENT_INPUT_NAME])) {
-            unset($query['vehicleSearch']);
-        } else {
-            unset($query['vehicleSearch'][AbstractInputSearch::ELEMENT_SUBMIT_NAME]);
-        }
-
-        return $query;
+        return array_key_exists(ListVehicleSearch::FIELD_VEHICLE_SEARCH, $request->getQuery()->toArray());
     }
 
     /**
@@ -236,8 +336,8 @@ class ListVehicleController
     protected function buildCurrentAndRemovedCsvUrl(int $licenceId): string
     {
         return $this->urlHelper->fromRoute('licence/vehicle/list/GET', ['licence' => $licenceId], ['query' => [
-            'format' => 'csv',
-            'includeRemoved' => '',
+            'format' => static::FORMAT_CSV,
+            static::QUERY_KEY_INCLUDE_REMOVED => '',
         ]]);
     }
 
@@ -257,30 +357,32 @@ class ListVehicleController
         // Build current vehicle table
         $data['currentVehiclesTable'] = $this->buildHtmlCurrentLicenceVehiclesTable($request, $data['currentLicenceVehicleList']);
 
-        $ocrsFormPreData = [
-            'ocrsCheckbox' => $data['shareVehicleInfoState']
-        ];
-
-        $view->setVariable('ocrsForm', $this->createOcrsOptInForm($ocrsFormPreData));
+        $view->setVariable('ocrsForm', $this->createOcrsOptInForm(['ocrsCheckbox' => $data['shareVehicleInfoState']]));
 
         unset($data['currentLicenceVehicleList']);
-        if ($data['currentVehiclesTable']->getTotal() > $data['currentVehiclesTable']->getLimit() || $this->isSearchResultsPage($request)) {
+        $isSearchResultsPage = $this->isSearchResultsPage($request);
+        if ($data['currentVehiclesTable']->getTotal() > $data['currentVehiclesTable']->getLimit() || $isSearchResultsPage) {
             $searchFormUrl = $this->urlHelper->fromRoute('licence/vehicle/list/GET', ['licence' => $data['licence']['id']]);
             $view->setVariable('searchForm', $this->createSearchForm($searchFormUrl, $urlQueryParams));
             $view->setVariable('clearUrl', $this->buildSearchClearUrl($request));
         }
 
-        // @todo (coming soon in VOL-136) Build removed vehicle table
-//        $removedLicenceVehicleList = $data['removedLicenceVehicleList'];
-//        if (! is_null($removedLicenceVehicleList)) {
-//            $data['removedVehiclesTable'] = $this->buildHtmlRemovedLicenceVehiclesTable($request, $removedLicenceVehicleList);
-//            $tableTotal = $data['removedVehiclesTable']->getTotal();
-//            $data['removedVehicleTableTitle'] = $this->translator->translateReplace(
-//                sprintf('licence.vehicle.list.section.removed.header.title.%s', $tableTotal === 1 ? 'singular' : 'plural'),
-//                [$tableTotal]
-//            );
-//            unset($data['removedLicenceVehicleList']);
-//        }
+        $data['toggleRemovedVehiclesActionTitle'] = 'licence.vehicle.list.section.removed.action.show-removed-vehicles.title';
+        $data['toggleRemovedVehiclesActionLabel'] = 'licence.vehicle.list.section.removed.action.show-removed-vehicles.label';
+        $data['removedVehiclesTable'] = $this->buildHtmlRemovedLicenceVehiclesTable($request, $data['removedLicenceVehicleList']);
+        $tableTotal = $data['removedVehiclesTable']->getTotal();
+        $data['showRemovedVehicles'] = !$isSearchResultsPage && $tableTotal > 0;
+        if ($data['showRemovedVehicles'] && array_key_exists(static::QUERY_KEY_INCLUDE_REMOVED, $urlQueryParams)) {
+            $tableTotal = $tableTotal > static::DEFAULT_LIMIT_REMOVED_VEHICLES ? static::DEFAULT_LIMIT_REMOVED_VEHICLES : $tableTotal;
+            $data['removedVehicleTableTitle'] = $this->translator->translateReplace(
+                sprintf('licence.vehicle.list.section.removed.header.title.%s', $tableTotal === 1 ? 'singular' : 'plural'),
+                [$tableTotal]
+            );
+            unset($data['removedLicenceVehicleList']);
+            $data['showRemovedVehicles'] = $data['showRemovedVehiclesExpanded'] = true;
+            $data['toggleRemovedVehiclesActionTitle'] = 'licence.vehicle.list.section.removed.action.hide-removed-vehicles.title';
+            $data['toggleRemovedVehiclesActionLabel'] = 'licence.vehicle.list.section.removed.action.hide-removed-vehicles.label';
+        }
 
         return $view->setVariables($data);
     }
@@ -291,10 +393,10 @@ class ListVehicleController
      */
     protected function buildSearchClearUrl(Request $request): string
     {
-        $urlQueryParams = $request->getQuery();
-        $urlQueryParams->offsetUnset('vehicleSearch');
+        $urlQueryParams = $request->getQuery()->toArray();
+        unset($urlQueryParams[ListVehicleSearch::FIELD_VEHICLE_SEARCH]);
         $url = $request->getUri();
-        $url->setQuery($urlQueryParams->toString());
+        $url->setQuery($urlQueryParams);
         return $url->toString();
     }
 
@@ -305,12 +407,12 @@ class ListVehicleController
      */
     protected function buildToggleRemovedVehiclesUrl(int $licenceId, array $queryParams = []): string
     {
-        if (array_key_exists('includeRemoved', $queryParams)) {
-            unset($queryParams['includeRemoved']);
-            unset($queryParams[static::QUERY_KEY_SORT_REMOVED_VEHICLES_TABLE]);
-            unset($queryParams[static::QUERY_KEY_ORDER_REMOVED_VEHICLES_TABLE]);
+        if (array_key_exists(static::QUERY_KEY_INCLUDE_REMOVED, $queryParams)) {
+            unset($queryParams[static::QUERY_KEY_INCLUDE_REMOVED]);
+            unset($queryParams[static::QUERY_KEY_SORT_REMOVED_VEHICLES]);
+            unset($queryParams[static::QUERY_KEY_ORDER_REMOVED_VEHICLES]);
         } else {
-            $queryParams['includeRemoved'] = '';
+            $queryParams[static::QUERY_KEY_INCLUDE_REMOVED] = '';
         }
         return $this->urlHelper->fromRoute('licence/vehicle/list/GET', ['licence' => $licenceId], ['query' => $queryParams]);
     }
@@ -318,11 +420,10 @@ class ListVehicleController
     /**
      * Creates a response from a set of data; formatted as csv.
      *
-     * @param Request $request
      * @param array $data
      * @return Response
      */
-    protected function renderCsvResponse(Request $request, array $data): Response
+    protected function renderCsvResponse(array $data): Response
     {
         $licenceVehicles = [
             'count' => $data['currentLicenceVehicleList']['count'],
@@ -334,7 +435,7 @@ class ListVehicleController
             $licenceVehicles['results'] = $data['removedLicenceVehicleList']['results'] ?? [];
         }
 
-        $table = $this->tableFactory->getTableBuilder()->prepareTable('licence-vehicle-list-export-current-and-removed', $licenceVehicles);
+        $table = $this->tableFactory->getTableBuilder()->prepareTable(TableEnum::LICENCE_VEHICLE_LIST_EXPORT_CURRENT_AND_REMOVED, $licenceVehicles);
         return $this->responseHelper->tableToCsv(new HttpResponse(), $table, 'vehicles');
     }
 
@@ -387,17 +488,17 @@ class ListVehicleController
     {
         $form = $this->formHelper->createForm(ListVehicleSearch::class, true, false);
         assert($form instanceof Form, 'Expected instance of Form');
-        $form->get('vehicleSearch')->setOption('legend', 'licence.vehicle.table.search.list.legend');
+        $form->get(ListVehicleSearch::FIELD_VEHICLE_SEARCH)->setOption('legend', 'licence.vehicle.table.search.list.legend');
         $form->setAttribute('action', $action);
 
-        $searchFormData = array_intersect_key($data, array_flip(['vehicleSearch']));
+        $searchFormData = array_intersect_key($data, array_flip([ListVehicleSearch::FIELD_VEHICLE_SEARCH]));
         if (! empty($searchFormData)) {
             $form->setData($searchFormData);
             $form->isValid();
         }
 
         // Add hidden fields for any other data that is not search related
-        $extraFormData = array_diff_key($data, array_flip(['vehicleSearch']));
+        $extraFormData = array_diff_key($data, array_flip([ListVehicleSearch::FIELD_VEHICLE_SEARCH]));
         while (! empty($extraFormData)) {
             end($extraFormData);
             $key = key($extraFormData);
@@ -432,20 +533,17 @@ class ListVehicleController
 
         $params = [
             'page' => (int) (array_key_exists('page', $requestQueryParams) && !empty($requestQueryParams['page']) ? $requestQueryParams['page'] : 1),
-            'sort' => $requestQueryParams[static::QUERY_KEY_SORT_CURRENT_VEHICLES_TABLE] ?? null,
-            'order' => $requestQueryParams[static::QUERY_KEY_ORDER_CURRENT_VEHICLES_TABLE] ?? null,
+            'sort' => $requestQueryParams[static::QUERY_KEY_SORT_CURRENT_VEHICLES] ?? null,
+            'order' => $requestQueryParams[static::QUERY_KEY_ORDER_CURRENT_VEHICLES] ?? null,
             'query' => $requestQueryParams,
-            'limit' => (int) ($requestQueryParams['limit'] ?? static::DEFAULT_CURRENT_VEHICLES_TABLE_LIMIT),
+            'limit' => (int) ($requestQueryParams['limit'] ?? static::DEFAULT_LIMIT_CURRENT_VEHICLES),
         ];
 
-        $table = $this->tableFactory->getTableBuilder();
-
+        $table = $this->tableFactory->prepareTable(TableEnum::LICENCE_VEHICLE_LIST_CURRENT, $currentLicenceVehicleList, $params);
         $table->setUrlParameterNameMap([
-            'sort' => static::QUERY_KEY_SORT_CURRENT_VEHICLES_TABLE,
-            'order' => static::QUERY_KEY_ORDER_CURRENT_VEHICLES_TABLE,
+            'sort' => static::QUERY_KEY_SORT_CURRENT_VEHICLES,
+            'order' => static::QUERY_KEY_ORDER_CURRENT_VEHICLES,
         ]);
-
-        $table = $table->prepareTable('licence-vehicles', $currentLicenceVehicleList, $params);
 
         $totalVehicles = $currentLicenceVehicleList['count'];
         if ($this->isSearchResultsPage($request)) {
@@ -461,7 +559,6 @@ class ListVehicleController
         $table->removeColumn('action');
 
         if ($table->getTotal() <= $table->getLimit()) {
-
             // Disable pagination when the query has fewer total results then the table item limit
             $table->setSettings(array_diff_key($table->getSettings(), array_flip(['paginate'])));
         }
@@ -519,17 +616,16 @@ class ListVehicleController
         $requestQueryParams = $request->getQuery()->toArray();
         $params = [
             'page' => 1,
-            'sort' => $requestQueryParams[static::QUERY_KEY_SORT_REMOVED_VEHICLES_TABLE] ?? null,
-            'order' => $requestQueryParams[static::QUERY_KEY_ORDER_REMOVED_VEHICLES_TABLE] ?? null,
+            'sort' => $requestQueryParams[static::QUERY_KEY_SORT_REMOVED_VEHICLES] ?? null,
+            'order' => $requestQueryParams[static::QUERY_KEY_ORDER_REMOVED_VEHICLES] ?? null,
             'query' => $requestQueryParams,
-            'limit' => static::DEFAULT_REMOVED_VEHICLES_TABLE_LIMIT,
+            'limit' => static::DEFAULT_LIMIT_REMOVED_VEHICLES,
         ];
-        $table = $this->tableFactory->getTableBuilder();
+        $table = $this->tableFactory->prepareTable(TableEnum::LICENCE_VEHICLE_LIST_REMOVED, $currentLicenceVehicleList, $params);
         $table->setUrlParameterNameMap([
-            'sort' => static::QUERY_KEY_SORT_REMOVED_VEHICLES_TABLE,
-            'order' => static::QUERY_KEY_ORDER_REMOVED_VEHICLES_TABLE
+            'sort' => static::QUERY_KEY_SORT_REMOVED_VEHICLES,
+            'order' => static::QUERY_KEY_ORDER_REMOVED_VEHICLES
         ]);
-        $table = $table->prepareTable('licence-vehicles', $currentLicenceVehicleList, $params);
 
         // Always prefix the table title with the table total
         $table->setSetting('showTotal', true);
