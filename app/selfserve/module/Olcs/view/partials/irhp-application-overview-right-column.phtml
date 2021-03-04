@@ -2,7 +2,7 @@
     use Permits\View\Helper\IrhpApplicationSection as Section;
 ?>
 
-<aside class="sidebar" role="complementary">
+<div class="sidebar" role="complementary">
     <div class="info-box info-box--grey">
         <h2 class="info-box__heading"><?php echo $this->escapeHtml($this->translate('permits.irhp-application.status.question')); ?></h2>
         <p class="info-box__icon-wrapper info-box__text"><i class="info-box__icon selfserve-important"></i><?php echo $this->escapeHtml($this->translate($application['status']['description'])); ?></p>
@@ -16,4 +16,4 @@
             </ul>
         <?php endif; ?>
     </div>
-</aside>
+</div>

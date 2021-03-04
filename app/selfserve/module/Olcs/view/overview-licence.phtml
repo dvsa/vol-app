@@ -32,7 +32,7 @@
   </div>
 
     <div class="one-third">
-        <aside class="sidebar" role="complementary">
+        <div class="sidebar" role="complementary">
 
             <?php if ($this->showExpiryWarning === true): ?>
             <div class="info-box info-box--pink">
@@ -78,7 +78,7 @@
                     <dd><?php echo $this->renewalDate ? date('d F Y', strtotime($this->renewalDate)) : ''; ?></dd>
                 </dl>
             </div>
-        </aside>
+        </div>
 
 
     </div>
