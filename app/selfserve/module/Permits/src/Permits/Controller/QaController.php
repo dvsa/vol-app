@@ -107,11 +107,7 @@ class QaController extends AbstractOlcsController
         $result = $response->getResult();
 
         $applicationStep = $result['applicationStep'];
-        $form = $this->formProvider->get(
-            $applicationStep,
-            $result['submitOptions'],
-            $viewGenerator->getFormName()
-        );
+        $form = $this->formProvider->get($applicationStep, $result['submitOptions']);
 
         $hasProcessedFiles = false;
         if ($form->has('MultipleFileUpload')) {

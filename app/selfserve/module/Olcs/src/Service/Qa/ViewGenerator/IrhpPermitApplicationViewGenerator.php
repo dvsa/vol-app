@@ -20,14 +20,6 @@ class IrhpPermitApplicationViewGenerator implements ViewGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function getFormName()
-    {
-        return 'QaBilateralForm';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getAdditionalViewVariables(MvcEvent $mvcEvent, array $result)
     {
         $additionalViewData = $result['additionalViewData'];

@@ -22,14 +22,6 @@ class IrhpApplicationViewGenerator implements ViewGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function getFormName()
-    {
-        return 'QaForm';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getAdditionalViewVariables(MvcEvent $mvcEvent, array $result)
     {
         return [

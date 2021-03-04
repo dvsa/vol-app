@@ -17,8 +17,6 @@ use RuntimeException;
 
 class FormProviderTest extends MockeryTestCase
 {
-    const FORM_NAME = 'FormName';
-
     const OPTIONS = [
         'option1Key' => 'option1Value',
         'option2Key' => 'option2Value'
@@ -80,17 +78,21 @@ class FormProviderTest extends MockeryTestCase
             ->with(self::OPTIONS)
             ->once();
         $form->shouldReceive('add')
-            ->with($fieldset)
-            ->once();
+            ->with($fieldset, ['name' => 'Submit'])
+            ->once()
+            ->globally()
+            ->ordered();
 
         $this->formFactory->shouldReceive('create')
-            ->with(self::FORM_NAME)
+            ->with('QaForm')
             ->once()
             ->andReturn($form);
 
         $this->fieldsetPopulator->shouldReceive('populate')
             ->with($form, [self::OPTIONS], UsageContext::CONTEXT_SELFSERVE)
-            ->once();
+            ->once()
+            ->globally()
+            ->ordered();
 
         $this->laminasFormFactory->shouldReceive('create')
             ->with($expectedFormFactoryFormSpecification)
@@ -104,7 +106,7 @@ class FormProviderTest extends MockeryTestCase
 
         $this->assertSame(
             $form,
-            $this->formProvider->get(self::OPTIONS, self::SUBMIT_OPTIONS_NAME, self::FORM_NAME)
+            $this->formProvider->get(self::OPTIONS, self::SUBMIT_OPTIONS_NAME)
         );
     }
 
@@ -113,6 +115,6 @@ class FormProviderTest extends MockeryTestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('No submit options mapping found for submit_options_type_xyz');
 
-        $this->formProvider->get(self::OPTIONS, 'submit_options_type_xyz', self::FORM_NAME);
+        $this->formProvider->get(self::OPTIONS, 'submit_options_type_xyz', 'QaForm');
     }
 }
