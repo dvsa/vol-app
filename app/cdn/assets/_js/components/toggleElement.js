@@ -15,7 +15,6 @@ OLCS.toggleElement = (function(document, $, undefined) {
   'use strict';
 
   return function init(options) {
-
     if (!options || !options.triggerSelector || !options.targetSelector) {
       throw new Error('OLCS.toggleElement requires a triggerSelector and an targetSelector option');
     }
@@ -26,15 +25,31 @@ OLCS.toggleElement = (function(document, $, undefined) {
     function hide() {
       $(trigger).removeClass('active');
       $(target).removeAttr('style');
+      $(trigger).attr('aria-expanded','false');
+    }
+    function show() {
+      $(trigger).addClass('active');
+      $(target).show();
+      $(trigger).attr('aria-expanded','true');
+    }
+
+    function toggle() {
+      if ($(trigger).hasClass('active')) {
+        hide();
+      } else {
+        show();
+      }
     }
 
     $(document).on('click', trigger, function(e) {
       e.stopPropagation();
-      if ($(this).hasClass('active')) {
-        hide();
-      } else {
-        $(this).addClass('active');
-        $(target).show();
+      toggle();
+    });
+
+    $(document).on('keypress', trigger, function(e) {
+      if(e.keyCode === 13 || e.keyCode === 32) {
+        e.stopPropagation();
+        toggle();
       }
     });
 
@@ -43,7 +58,6 @@ OLCS.toggleElement = (function(document, $, undefined) {
         hide();
       }
     });
-
   };
 
 }(document, window.jQuery));
