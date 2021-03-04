@@ -869,6 +869,15 @@ class IrhpApplicationController extends AbstractInternalController implements
 
         $fieldsetPopulator = $this->getServiceLocator()->get('QaFieldsetPopulator');
         $fieldsetPopulator->populate($form, $this->applicationSteps, UsageContext::CONTEXT_INTERNAL);
+
+        // remove validation for fieldsets that are not enabled
+        $qaInputFilter = $form->getInputFilter()->get('qa');
+        foreach ($this->applicationSteps as $applicationStep) {
+            if (!$applicationStep['enabled']) {
+                $qaInputFilter->remove($applicationStep['fieldsetName']);
+            }
+        }
+
         return $form;
     }
 
