@@ -44,7 +44,7 @@
                     </ul>
                 </div>
 
-                <?php if ($this->showRemovedVehicles) {?>
+                <?php if ($this->showRemovedVehicles ?? false) {?>
                     <a id="<?php echo $this->showRemovedVehiclesExpanded ? 'action--hide-removed-vehicles' : 'action--show-removed-vehicles'; ?>"
                        href="<?php echo $this->toggleRemovedAction; ?>"
                        role="button"

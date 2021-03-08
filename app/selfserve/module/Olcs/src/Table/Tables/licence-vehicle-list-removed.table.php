@@ -10,8 +10,8 @@ return [
     'columns' => [
         [
             'title' => 'table.licence-vehicle-list-removed.column.vrm.title',
-            'formatter' => 'VehicleLink',
-            'sort' => 'v.vrm',
+            'formatter' => 'StackValue',
+            'stack' => 'vehicle->vrm',
         ],
         [
             'title' => 'table.licence-vehicle-list-removed.column.weight.title',
@@ -22,13 +22,11 @@ return [
             'title' => 'table.licence-vehicle-list-removed.column.specified.title',
             'formatter' => 'Date',
             'name' => 'specifiedDate',
-            'sort' => 'specifiedDate',
         ],
         [
             'title' => 'table.licence-vehicle-list-removed.column.removed.title',
             'formatter' => 'Date',
             'name' => 'removalDate',
-            'sort' => 'removalDate',
         ],
     ],
 ];
