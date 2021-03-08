@@ -46,6 +46,7 @@ return [
             'create-translation-csv' => ['*'],
 
             // Admin Module Routes
+            'admin-dashboard/admin-report/upload*' => [RefData::PERMISSION_SYSTEM_ADMIN],
             'admin-dashboard/admin-financial-standing*' => [RefData::PERMISSION_SYSTEM_ADMIN],
             'admin-dashboard/admin-public-holiday*' => [RefData::PERMISSION_SYSTEM_ADMIN],
             'admin-dashboard/admin-team-management*' => [RefData::PERMISSION_INTERNAL_ADMIN],
