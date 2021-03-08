@@ -153,6 +153,18 @@ OLCS.postcodeSearch = (function(document, $, undefined) {
           success: OLCS.normaliseResponse(function(response) {
             var root = getRootSelector(fieldset);
             F.render(root, response.body);
+            if(response.hasErrors === false) {
+              var rootElem = document.querySelector(root);
+              var fieldsetSelector = 'fieldset[data-group="' + fieldset[0].getAttribute('data-group') + '"]';
+              var fieldSetElement = rootElem.querySelector(fieldsetSelector); 
+              var selectElement = fieldSetElement.querySelector('.address__select select');
+              if (null === selectElement) {
+                var nextInputElement = fieldSetElement.querySelector('input:not([type="hidden"]):not([id^="postcodeInput"])'); 
+                nextInputElement.focus();
+              } else {
+                selectElement.focus();
+              }
+            }
           }),
           error: OLCS.normaliseResponse(function() {
             lookupError();
