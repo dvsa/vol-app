@@ -141,19 +141,12 @@ class PeopleController extends AbstractController implements AdapterAwareInterfa
             $form->setData($data);
 
             if ($form->isValid()) {
-                $submittedPersonIds = [];
-                foreach ($form->getData()['data'] as $submittedPerson) {
-                    if ($submittedPerson['id']) {
-                        $submittedPersonIds[] = $submittedPerson['id'];
-                        $adapter->update($submittedPerson);
-                    } else {
-                        $adapter->create(array_merge($submittedPerson, ['id' => $variationId]));
-                    }
-                }
-
-                $deletedPersonIds = array_diff($existingPersonIds, $submittedPersonIds);
-                if ($deletedPersonIds) {
-                    $adapter->delete($deletedPersonIds);
+                $submittedPerson = $form->getData()['data'];
+                if ($submittedPerson['id']) {
+                    $submittedPersonIds[] = $submittedPerson['id'];
+                    $adapter->update($submittedPerson);
+                } else {
+                    $adapter->create(array_merge($submittedPerson, ['id' => $variationId]));
                 }
 
                 return $this->completeSection('people');
