@@ -40,6 +40,7 @@ class CancelIrhpApplicationController extends AbstractSelfserveController
             'question' => 'permits.page.cancel.question',
             'bulletList' => [
                 'title' => 'permits.page.cancel.bullet.list.title',
+                'type' => 'medium',
                 'list' => 'markup-irhp-application-cancel'
             ],
             'backUri' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW
