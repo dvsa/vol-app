@@ -59,13 +59,13 @@ class AvailableBilateralStocksTest extends \Mockery\Adapter\Phpunit\MockeryTestC
         $mockFieldSet = m::mock(Fieldset::class);
         $mockForm = m::mock(Form::class);
 
-        $mockForm->shouldReceive('get')->twice()->with('fields')->andReturn($mockFieldSet);
+        $mockForm->shouldReceive('get')->once()->with('fields')->andReturn($mockFieldSet);
 
         $mockFieldSet->shouldReceive('add')->once()->with([
             'name' => 'irhpPermitStockLabel',
             'type' => Html::class,
             'attributes' => [
-                'value' => 'im no longer a key, im translated!',
+                'value' => '<p class="govuk-body-l">im no longer a key, im translated!</p>',
             ]
         ]);
 

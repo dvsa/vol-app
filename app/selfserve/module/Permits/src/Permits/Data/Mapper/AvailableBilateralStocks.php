@@ -114,19 +114,26 @@ class AvailableBilateralStocks
      */
     private function singleStockOption(Form $form, array $stock)
     {
+        $markup = sprintf(
+            '<p class="govuk-body-l">%s</p>',
+            $this->translator->translate($stock['periodNameKey'])
+        );
+
+        $fields = $form->get('fields');
+
         // Add label for single stock translation key
-        $form->get('fields')->add(
+        $fields->add(
             [
                 'name' => 'irhpPermitStockLabel',
                 'type' => Html::class,
                 'attributes' => [
-                    'value' => $this->translator->translate($stock['periodNameKey']),
+                    'value' => $markup,
                 ]
             ]
         );
 
         // add hidden field with stock ID
-        $form->get('fields')->add(
+        $fields->add(
             [
                 'name' => 'irhpPermitStock',
                 'type' => Hidden::class,
