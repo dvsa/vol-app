@@ -56,6 +56,8 @@ class AvailableBilateralStocks
 
             $data['application']['selectedStockId'] = $selectedCountryStock;
 
+            $data['question'] = $data['browserTitle'] = 'permits.page.bilateral.which-period-required.multi-stock';
+
             $isMorocco = $countryId == self::MOROCCO_CODE;
 
             if ($isMorocco) {
@@ -115,7 +117,8 @@ class AvailableBilateralStocks
     private function singleStockOption(Form $form, array $stock)
     {
         $markup = sprintf(
-            '<p class="govuk-body-l">%s</p>',
+            '<p class="govuk-body-l">%s %s</p>',
+            $this->translator->translate('permits.page.bilateral.which-period-required.single-stock.text'),
             $this->translator->translate($stock['periodNameKey'])
         );
 
