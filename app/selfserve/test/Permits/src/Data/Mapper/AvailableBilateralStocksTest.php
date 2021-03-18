@@ -51,10 +51,15 @@ class AvailableBilateralStocksTest extends \Mockery\Adapter\Phpunit\MockeryTestC
             ]
         ];
 
-        $this->translationHelperService->shouldReceive('translate')
+        $this->translationHelperService
+            ->shouldReceive('translate')
             ->once()
             ->with('i.am.a.key')
-            ->andReturn('im no longer a key, im translated!');
+            ->andReturn('im no longer a key, im translated!')
+            ->shouldReceive('translate')
+            ->once()
+            ->with('permits.page.bilateral.which-period-required.single-stock.text')
+            ->andReturn('single stock text');
 
         $mockFieldSet = m::mock(Fieldset::class);
         $mockForm = m::mock(Form::class);
@@ -65,7 +70,7 @@ class AvailableBilateralStocksTest extends \Mockery\Adapter\Phpunit\MockeryTestC
             'name' => 'irhpPermitStockLabel',
             'type' => Html::class,
             'attributes' => [
-                'value' => '<p class="govuk-body-l">im no longer a key, im translated!</p>',
+                'value' => '<p class="govuk-body-l">single stock text im no longer a key, im translated!</p>',
             ]
         ]);
 
@@ -165,6 +170,8 @@ class AvailableBilateralStocksTest extends \Mockery\Adapter\Phpunit\MockeryTestC
         $outputData = $inputData;
         $outputData[IrhpApplicationDataSource::DATA_KEY]['countryName'] = 'Norway';
         $outputData[IrhpApplicationDataSource::DATA_KEY]['selectedStockId'] = 12;
+        $outputData['question'] = 'permits.page.bilateral.which-period-required.multi-stock';
+        $outputData['browserTitle'] = 'permits.page.bilateral.which-period-required.multi-stock';
 
         $this->assertEquals(
             $outputData,
