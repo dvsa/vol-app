@@ -8,21 +8,48 @@ use Common\Controller\Lva\AbstractConvictionsPenaltiesController;
 use Common\RefData;
 use Common\Service\Table\TableBuilder;
 use Dvsa\Olcs\Transfer\Command\Variation\GrantDirectorChange;
+use Laminas\I18n\Translator\TranslatorInterface;
 use Olcs\Controller\Lva\Traits\VariationWizardFinalPageControllerTrait;
 use Laminas\Http\Response;
 use Laminas\Mvc\Controller\Plugin\FlashMessenger;
 
 /**
- * Class ConvictionsPenaltiesController
- *
- * @package Olcs\Controller\Lva\DirectorChange
+ * @see ConvictionsPenaltiesControllerFactory
+ * @see \OlcsTest\Controller\Lva\DirectorChange\ConvictionsPenaltiesControllerTest
  */
 class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesController
 {
     use VariationWizardFinalPageControllerTrait;
 
+    /**
+     * @var string
+     */
     protected $location = 'external';
+
+    /**
+     * @var string
+     */
     protected $lva = self::LVA_VAR;
+
+    /**
+     * @var TranslatorInterface
+     */
+    protected $translator;
+
+    /**
+     * @var FlashMessenger
+     */
+    protected $flashMessenger;
+
+    /**
+     * @param TranslatorInterface $translator
+     * @param FlashMessenger $flashMessenger
+     */
+    public function __construct(TranslatorInterface $translator, FlashMessenger $flashMessenger)
+    {
+        $this->translator = $translator;
+        $this->flashMessenger = $flashMessenger;
+    }
 
     /**
      * Get the required previous sections
@@ -71,15 +98,20 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
             $createdPersonIDs = [$createdPersonIDs];
         }
 
-        /** @var FlashMessenger $flashMessenger */
-        $flashMessenger = $this->plugin('FlashMessenger');
+        $createdPeopleCount = count($createdPersonIDs);
 
         if ($response->isClientError() || $response->isServerError()) {
-            $flashMessenger->addErrorMessage('unknown-error');
+            $this->flashMessenger->addErrorMessage('unknown-error');
+        }
+
+        if ($createdPeopleCount > 0) {
+            $messageKey = 'selfserve-app-subSection-your-business-people.message.created.success.' . ($createdPeopleCount === 1 ? 'singular' : 'plural');
+            $message = sprintf($this->translator->translate($messageKey), $createdPeopleCount);
+            $this->flashMessenger->addSuccessMessage($message);
         }
 
         foreach ($createdPersonIDs as $createdPersonID) {
-            $flashMessenger->addMessage($createdPersonID, AbstractController::FLASH_MESSENGER_CREATED_PERSON_NAMESPACE);
+            $this->flashMessenger->addMessage($createdPersonID, AbstractController::FLASH_MESSENGER_CREATED_PERSON_NAMESPACE);
         }
 
         return $this->redirectToStartRoute();

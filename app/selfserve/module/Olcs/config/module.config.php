@@ -1246,12 +1246,9 @@ return array(
             'LvaVariation/UploadEvidence'           => \Olcs\Controller\Lva\Variation\UploadEvidenceController::class,
             'LvaVariation/PaymentSubmission'        => 'Olcs\Controller\Lva\Variation\PaymentSubmissionController',
             'LvaVariation/Review'                   => \Common\Controller\Lva\ReviewController::class,
-            'LvaDirectorChange/People'=>
-                \Olcs\Controller\Lva\DirectorChange\PeopleController::class,
-            'LvaDirectorChange/FinancialHistory'    =>
-                Olcs\Controller\Lva\DirectorChange\FinancialHistoryController::class,
-            'LvaDirectorChange/ConvictionsPenalties'=>
-                \Olcs\Controller\Lva\DirectorChange\ConvictionsPenaltiesController::class,
+            'LvaDirectorChange/People'=> \Olcs\Controller\Lva\DirectorChange\PeopleController::class,
+            'LvaDirectorChange/FinancialHistory' => Olcs\Controller\Lva\DirectorChange\FinancialHistoryController::class,
+            'LvaDirectorChange/ConvictionsPenalties' => \Olcs\Controller\Lva\DirectorChange\ConvictionsPenaltiesControllerFactory::class,
             'LvaTransportManager/CheckAnswers' => \OLCS\Controller\Lva\TransportManager\CheckAnswersController::class,
             'LvaTransportManager/Confirmation' => \OLCS\Controller\Lva\TransportManager\ConfirmationController::class,
             'LvaTransportManager/OperatorDeclaration' => \OLCS\Controller\Lva\TransportManager\OperatorDeclarationController::class,
