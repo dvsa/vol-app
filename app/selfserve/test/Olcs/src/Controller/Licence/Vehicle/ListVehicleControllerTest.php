@@ -16,6 +16,7 @@ use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableBuilder;
 use Common\Service\Table\TableFactory;
 use Common\Test\Builder\ServiceManagerBuilder;
+use Common\Test\MockeryTestCase;
 use Dvsa\Olcs\Transfer\Command\Licence\UpdateVehicles;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence;
 use Dvsa\Olcs\Transfer\Query\Licence\Vehicles;
@@ -41,9 +42,8 @@ use Olcs\Controller\Licence\Vehicle\ListVehicleController;
 use Olcs\Controller\Licence\Vehicle\ListVehicleControllerFactory;
 use Olcs\Form\Model\Form\Vehicle\ListVehicleSearch;
 use Olcs\Table\TableEnum;
-use Common\Test\UnitTestCase;
 
-class ListVehicleControllerTest extends UnitTestCase
+class ListVehicleControllerTest extends MockeryTestCase
 {
     /**
      * @test
