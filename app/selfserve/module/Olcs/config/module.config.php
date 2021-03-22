@@ -1214,7 +1214,7 @@ return array(
             'LvaLicence/BusinessType'               => 'Olcs\Controller\Lva\Licence\BusinessTypeController',
             'LvaLicence/BusinessDetails'            => 'Olcs\Controller\Lva\Licence\BusinessDetailsController',
             'LvaLicence/Addresses'                  => 'Olcs\Controller\Lva\Licence\AddressesController',
-            'LvaLicence/People'                     => 'Olcs\Controller\Lva\Licence\PeopleController',
+            'LvaLicence/People'                     => \Olcs\Controller\Lva\Licence\PeopleControllerFactory::class,
             'LvaLicence/OperatingCentres'           => 'Olcs\Controller\Lva\Licence\OperatingCentresController',
             'LvaLicence/TransportManagers'          => Olcs\Controller\Lva\Licence\TransportManagersController::class,
             'LvaLicence/Vehicles'                   => 'Olcs\Controller\Lva\Licence\VehiclesController',
