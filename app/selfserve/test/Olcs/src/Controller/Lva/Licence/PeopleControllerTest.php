@@ -52,7 +52,7 @@ class PeopleControllerTest extends MockeryTestCase
      * @test
      * @depends editAction_IsCallable
      */
-    public function editAction__ReturnsViewModel()
+    public function editAction_ReturnsViewModel()
     {
         // Setup
         $serviceLocator = $this->setUpServiceLocator();
@@ -69,9 +69,9 @@ class PeopleControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends editAction__ReturnsViewModel
+     * @depends editAction_ReturnsViewModel
      */
-    public function editAction__DisplaysCorrectTitle()
+    public function editAction_DisplaysCorrectTitle()
     {
         // Setup
         $serviceLocator = $this->setUpServiceLocator();
@@ -92,7 +92,7 @@ class PeopleControllerTest extends MockeryTestCase
      * @test
      * @depends editAction_IsCallable
      */
-    public function editAction__TranslatesTitle()
+    public function editAction_TranslatesTitle()
     {
         // Setup
         $serviceLocator = $this->setUpServiceLocator();
@@ -112,9 +112,9 @@ class PeopleControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends editAction__ReturnsViewModel
+     * @depends editAction_ReturnsViewModel
      */
-    public function editAction__ReplacesPersonsNameInTitle()
+    public function editAction_ReplacesPersonsNameInTitle()
     {
         // Setup
         $serviceLocator = $this->setUpServiceLocator();
@@ -142,9 +142,9 @@ class PeopleControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends editAction__ReplacesPersonsNameInTitle
+     * @depends editAction_ReplacesPersonsNameInTitle
      */
-    public function editAction__EscapesPersonsNameInTitle()
+    public function editAction_EscapesPersonsNameInTitle()
     {
         // Setup
         $serviceLocator = $this->setUpServiceLocator();
@@ -168,7 +168,7 @@ class PeopleControllerTest extends MockeryTestCase
      * @test
      * @depends editAction_IsCallable
      */
-    public function editAction__ThrowsResourceNotFoundException_IfPersonNotFound()
+    public function editAction_ThrowsResourceNotFoundException_IfPersonNotFound()
     {
         // Setup
         $serviceLocator = $this->setUpServiceLocator();
