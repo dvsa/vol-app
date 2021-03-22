@@ -3,8 +3,13 @@
 namespace Olcs\Controller\Lva\Licence;
 
 use Common\Controller\Lva;
+use Common\Exception\ResourceNotFoundException;
 use Common\RefData;
+use Common\Util\Escape;
+use Common\View\Helper\PersonName;
 use Dvsa\Olcs\Transfer\Command\Licence\CreateVariation;
+use Laminas\I18n\Translator\TranslatorInterface;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\Lva\Adapters\LicencePeopleAdapter;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 use Laminas\Form\Form;
@@ -12,18 +17,40 @@ use Laminas\Http\Request;
 use Laminas\Http\Response;
 
 /**
- * External Licence People Controller
- *
- * @author Nick Payne <nick.payne@valtech.co.uk>
- * @author Rob Caiger <rob@clocal.co.uk>
+ * @see \OlcsTest\Controller\Lva\Licence\PeopleControllerTest
+ * @see PeopleControllerFactory
  */
 class PeopleController extends Lva\AbstractPeopleController
 {
     use LicenceControllerTrait;
 
+    /**
+     * @var TranslatorInterface
+     */
+    protected $translator;
+
+    /**
+     * @var string
+     */
     protected $lva = 'licence';
+
+    /**
+     * @var string
+     */
     protected $location = 'external';
+
+    /**
+     * @var string
+     */
     protected $section = 'people';
+
+    /**
+     * @param TranslatorInterface $translator
+     */
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
 
     /**
      * Prevent default licence actions
@@ -63,15 +90,28 @@ class PeopleController extends Lva\AbstractPeopleController
     }
 
     /**
-     * Disallow editing by disallowing non-get requests (still allow the edit page to be accessible via get)
+     * Handles a request from a user to view the page to edit a person.
      *
-     * @return Response
+     * @return mixed
+     * @throws ResourceNotFoundException
      */
     public function editAction()
     {
-        /** @var Request $request */
-        $request = $this->request;
-        return $request->isGet() ? parent::editAction() : $this->redirectToIndexWithPermissionError();
+        $response = parent::editAction();
+
+        if ($response instanceof ViewModel) {
+            $personId = $this->getEvent()->getRouteMatch()->getParam('child_id');
+            $personData = $this->getAdapter()->getPersonData($personId);
+            if (false === $personData) {
+                throw new ResourceNotFoundException();
+            }
+            $view = array_values($response->getChildren())[0];
+            $translatedTitle = $this->translator->translate($view->getVariable('title'));
+            $fullName = (new PersonName())->__invoke($personData['person']);
+            $view->setVariable('title', sprintf($translatedTitle, Escape::html($fullName)));
+        }
+
+        return $response;
     }
 
     /**
