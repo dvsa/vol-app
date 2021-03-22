@@ -100,6 +100,9 @@ class LicenceDecisionsController extends AbstractController implements
                     case 'ongoingPermitApplications':
                         $messages[$key] = 'There are ongoing permit applications on this licence';
                         break;
+                    case 'validCorPermitApplications':
+                        $messages[$key] = 'There are active certificates on this licence';
+                        break;
                 }
             }
             $form->get('messages')->get('message')->setValue(implode('<br>', $messages));
