@@ -26,6 +26,7 @@ class DocumentRelinkController extends AbstractDocumentController
         'case'             => 'Case ID',
         'licence'          => 'Licence No',
         'irfoOrganisation' => 'IRFO ID',
+        'irhpApplication'  => 'IRHP application id',
         'transportManager' => 'Transport manager ID'
     ];
 

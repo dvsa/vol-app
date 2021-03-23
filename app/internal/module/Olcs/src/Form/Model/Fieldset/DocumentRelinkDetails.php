@@ -30,6 +30,7 @@ class DocumentRelinkDetails
      *          "case":"Case",
      *          "licence":"Licence",
      *          "irfoOrganisation":"IRFO",
+     *          "irhpApplication":"Permit",
      *          "transportManager":"Transport Manager"
      *      },
      * })
