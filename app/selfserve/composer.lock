@@ -3570,16 +3570,17 @@
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.338",
+            "version": "4.206.339",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.338/olcs-olcs-common-4.206.338.zip",
-                "reference": "ed3e57cc86d0bc508ab0f061191f6f5937e8e6e6",
-                "shasum": "ed3e57cc86d0bc508ab0f061191f6f5937e8e6e6"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.339/olcs-olcs-common-4.206.339.zip",
+                "reference": "1eee8b1bb494435c2308309850e32e330dec56a9",
+                "shasum": "1eee8b1bb494435c2308309850e32e330dec56a9"
             },
             "require": {
                 "doctrine/annotations": "^1.8",
                 "doctrine/doctrine-orm-module": "~0.10.0",
+                "elendev/nexus-composer-push": "^0.1",
                 "laminas/laminas-cache": "^2.5",
                 "laminas/laminas-code": "^2.5",
                 "laminas/laminas-dependency-plugin": "^2.0",
@@ -3612,7 +3613,6 @@
                 "symfony/lock": "^5"
             },
             "require-dev": {
-                "elendev/nexus-composer-push": "^0.1",
                 "olcs/olcs-devtools": "~4.206.0",
                 "olcs/olcs-logging": "~4.206.0",
                 "olcs/olcs-testhelpers": "~4.206.0",
@@ -3661,7 +3661,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2021-03-23T13:18:58+00:00"
+            "time": "2021-03-29T08:52:58+00:00"
         },
         {
             "name": "olcs/olcs-logging",
