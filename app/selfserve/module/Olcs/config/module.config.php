@@ -4,9 +4,11 @@ use Olcs\Controller\Cookie\DetailsController as CookieDetailsController;
 use Olcs\Controller\Cookie\SettingsController as CookieSettingsController;
 use Olcs\Controller\Cookie\SettingsControllerFactory as CookieSettingsControllerFactory;
 use Olcs\Controller\IndexController;
+use Olcs\Controller\Licence\Vehicle\ListVehicleController;
 use Olcs\Controller\MyDetailsController;
 use Olcs\Controller\PromptController;
 use Olcs\Controller\Search\SearchController;
+use Olcs\Controller\SessionTimeoutController;
 use Olcs\Controller\UserForgotUsernameController;
 use Olcs\Controller\UserRegistrationController;
 use Olcs\Form\Element\SearchDateRangeFieldset;
@@ -54,26 +56,26 @@ foreach ($sections as $section) {
     );
 }
 
-$routes = array(
-    'index' => array(
+$routes = [
+    'index' => [
         'type' => 'literal',
-        'options' =>  array(
+        'options' =>  [
             'route' => '/',
-            'defaults' => array(
+            'defaults' => [
                 'controller' => IndexController::class,
                 'action' => 'index'
-            )
-        )
-    ),
-    'cookies' => array(
+            ]
+        ]
+    ],
+    'cookies' => [
         'type' => 'segment',
-        'options' =>  array(
+        'options' =>  [
             'route' => '/cookies[/]',
-            'defaults' => array(
+            'defaults' => [
                 'controller' => CookieDetailsController::class,
                 'action' => 'generic',
-            )
-        ),
+            ]
+        ],
         'may_terminate' => true,
         'child_routes' => [
             'settings' => [
@@ -88,29 +90,29 @@ $routes = array(
                 ],
             ],
         ],
-    ),
-    'privacy-notice' => array(
+    ],
+    'privacy-notice' => [
         'type' => 'segment',
-        'options' =>  array(
+        'options' =>  [
             'route' => '/privacy-notice[/]',
-            'defaults' => array(
+            'defaults' => [
                 'controller' => \Common\Controller\GuidesController::class,
                 'action' => 'index',
                 'guide' => 'privacy-notice',
-            )
-        )
-    ),
-    'terms-and-conditions' => array(
+            ]
+        ]
+    ],
+    'terms-and-conditions' => [
         'type' => 'segment',
-        'options' =>  array(
+        'options' =>  [
             'route' => '/terms-and-conditions[/]',
-            'defaults' => array(
+            'defaults' => [
                 'controller' => \Common\Controller\GuidesController::class,
                 'action' => 'index',
                 'guide' => 'terms-and-conditions',
-            )
-        )
-    ),
+            ]
+        ]
+    ],
     'accessibility-statement' => [
         'type' => 'segment',
         'options' =>  [
@@ -123,32 +125,32 @@ $routes = array(
         ]
     ],
     //  search result page with filter and table of results
-    'search' => array(
+    'search' => [
         'type' => 'segment',
-        'options' =>  array(
+        'options' =>  [
             'route' => '/search[/:index][/:action][/]',
-            'defaults' => array(
+            'defaults' => [
                 'controller' => SearchController::class,
                 'action' => 'index',
-            ),
-            'constraints' => array(
+            ],
+            'constraints' => [
                 'index' => '(bus|operator|operating-centre|person|publication|vehicle-external)',
                 'action' => '(index|search)'
-            )
-        )
-    ),
+            ]
+        ]
+    ],
     // Unfortunately, we need separate routes
-    'search-operator' => array(
+    'search-operator' => [
         'type' => 'segment',
-        'options' =>  array(
+        'options' =>  [
             'route' => '/search/find-lorry-bus-operators[/]',
-            'defaults' => array(
+            'defaults' => [
                 'controller' => SearchController::class,
                 'action' => 'index',
                 'index' => 'operator'
-            )
-        )
-    ),
+            ]
+        ]
+    ],
     'search-bus' => [
         'type' => Segment::class,
         'options' =>  [
@@ -161,28 +163,28 @@ $routes = array(
         ],
         'may_terminate' => true,
         'child_routes' => [
-            'browse' => array(
+            'browse' => [
                 'type' => 'segment',
-                'options' =>  array(
+                'options' =>  [
                     'route' => 'browse[/]',
-                    'defaults' => array(
+                    'defaults' => [
                         'controller' => Olcs\Controller\BusReg\BusRegBrowseController::class,
                         'action' => 'index',
-                    ),
-                ),
+                    ],
+                ],
                 'may_terminate' => true,
                 'child_routes' => [
-                    'results' => array(
+                    'results' => [
                         'type' => 'segment',
-                        'options' =>  array(
+                        'options' =>  [
                             'route' => 'results[/]',
-                            'defaults' => array(
+                            'defaults' => [
                                 'action' => 'results',
-                            ),
-                        )
-                    ),
+                            ],
+                        ]
+                    ],
                 ],
-            ),
+            ],
             'details' => [
                 'type' => Segment::class,
                 'options' =>  [
@@ -198,89 +200,89 @@ $routes = array(
             ],
         ],
     ],
-    'search-publication' => array(
+    'search-publication' => [
         'type' => 'segment',
-        'options' =>  array(
+        'options' =>  [
             'route' => '/search/check-vehicle-operator-decisions-applications[/]',
-            'defaults' => array(
+            'defaults' => [
                 'controller' => SearchController::class,
                 'action' => 'index',
                 'index' => 'publication'
-            )
-        )
-    ),
-    'search-vehicle-external' => array(
+            ]
+        ]
+    ],
+    'search-vehicle-external' => [
         'type' => 'segment',
-        'options' =>  array(
+        'options' =>  [
             'route' => '/search/find-vehicles[/]',
-            'defaults' => array(
+            'defaults' => [
                 'controller' => SearchController::class,
                 'action' => 'index',
                 'index' => 'vehicle-external'
-            )
-        )
-    ),
-    'busreg-registrations' => array(
+            ]
+        ]
+    ],
+    'busreg-registrations' => [
         'type' => 'segment',
-        'options' =>  array(
+        'options' =>  [
             'route' => '/busreg-registrations[/]',
-            'defaults' => array(
+            'defaults' => [
                 'controller' => Olcs\Controller\BusReg\BusRegRegistrationsController::class,
                 'action' => 'index',
-            )
-        )
-    ),
-    'bus-registration' => array(
+            ]
+        ]
+    ],
+    'bus-registration' => [
         'type' => 'segment',
-        'options' =>  array(
+        'options' =>  [
             'route' => '/bus-registration[/]',
-            'defaults' => array(
+            'defaults' => [
                 'controller' => Olcs\Controller\Ebsr\BusRegApplicationsController::class,
                 'action' => 'index',
-            )
-        ),
+            ]
+        ],
         'may_terminate' => true,
         'child_routes' => [
-            'details' => array(
+            'details' => [
                 'type' => 'segment',
-                'options' =>  array(
+                'options' =>  [
                     'route' => 'details[/busreg/:busRegId][/]',
-                    'defaults' => array(
+                    'defaults' => [
                         'action' => 'details',
-                    ),
+                    ],
                     'constraints' => [
                         'busRegId' => '[0-9]+',
                         'subType' => '[a-z_]+',
                         'status' => '[a-z_]+',
                         'page' => '[0-9]+',
                     ]
-                )
-            ),
-            'ebsr' => array(
+                ]
+            ],
+            'ebsr' => [
                 'type' => 'segment',
-                'options' =>  array(
+                'options' =>  [
                     'route' => 'ebsr[/:action][/:id][/]',
-                    'defaults' => array(
+                    'defaults' => [
                         'controller' => 'Olcs\Ebsr\Uploads',
                         'action' => 'upload'
-                    ),
-                    'constraints' => array(
+                    ],
+                    'constraints' => [
                         'action' => '(upload|detail)'
-                    )
-                )
-            ),
+                    ]
+                ]
+            ],
         ]
-    ),
-    'dashboard' => array(
+    ],
+    'dashboard' => [
         'type' => 'segment',
-        'options' => array(
+        'options' => [
             'route' => '/dashboard[/]',
-            'defaults' => array(
+            'defaults' => [
                 'controller' => 'Dashboard',
                 'action' => 'index'
-            )
-        )
-    ),
+            ]
+        ]
+    ],
     'prompt' => [
         'type' => 'segment',
         'options' =>  [
@@ -291,110 +293,110 @@ $routes = array(
             ],
         ],
     ],
-    'fees' => array(
+    'fees' => [
         'type' => 'segment',
-        'options' => array(
+        'options' => [
             'route' => '/fees[/]',
-            'defaults' => array(
+            'defaults' => [
                 'controller' => Olcs\Controller\FeesController::class,
                 'action' => 'index',
-            ),
-        ),
+            ],
+        ],
         'may_terminate' => true,
-        'child_routes' => array(
-            'pay' => array(
+        'child_routes' => [
+            'pay' => [
                 'type' => 'segment',
-                'options' => array(
+                'options' => [
                     'route' => 'pay/:fee[/]',
-                    'constraints' => array(
+                    'constraints' => [
                         'fee' => '[0-9\,]+',
-                    ),
-                    'defaults' => array(
+                    ],
+                    'defaults' => [
                         'action' => 'pay-fees',
-                    ),
-                ),
-            ),
-            'result' => array(
+                    ],
+                ],
+            ],
+            'result' => [
                 'type' => 'segment',
-                'options' => array(
+                'options' => [
                     'route' => 'result[/]',
-                    'defaults' => array(
+                    'defaults' => [
                         'action' => 'handle-result',
-                    ),
-                ),
-            ),
-            'receipt' => array(
+                    ],
+                ],
+            ],
+            'receipt' => [
                 'type' => 'segment',
-                'options' => array(
+                'options' => [
                     'route' => 'receipt/:reference[/:action][/]',
-                    'constraints' => array(
+                    'constraints' => [
                         'reference' => '[0-9A-Za-z]+-[0-9A-F\-]+',
-                    ),
-                    'defaults' => array(
+                    ],
+                    'defaults' => [
                         'action' => 'receipt',
-                    ),
-                ),
-            ),
-            'late' => array(
+                    ],
+                ],
+            ],
+            'late' => [
                 'type' => 'segment',
-                'options' => array(
+                'options' => [
                     'route' => 'late/:fee[/]',
-                    'constraints' => array(
+                    'constraints' => [
                         'fee' => '[0-9\,]+',
-                    ),
-                    'defaults' => array(
+                    ],
+                    'defaults' => [
                         'action' => 'late-fee',
-                    ),
-                ),
-            ),
-        ),
-    ),
-    'correspondence' => array(
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'correspondence' => [
         'type' => 'segment',
-        'options' => array(
+        'options' => [
             'route' => '/correspondence[/]',
-            'defaults' => array(
+            'defaults' => [
                 'controller' => Olcs\Controller\CorrespondenceController::class,
                 'action' => 'index'
-            )
-        ),
+            ]
+        ],
         'may_terminate' => true,
-        'child_routes' => array(
-            'access' => array(
+        'child_routes' => [
+            'access' => [
                 'type' => 'segment',
-                'options' => array(
+                'options' => [
                     'route' => 'access/:correspondenceId[/]',
-                    'defaults' => array(
+                    'defaults' => [
                         'action' => 'accessCorrespondence',
-                    ),
-                )
-            )
-        )
-    ),
-    'create_application' => array(
+                    ],
+                ]
+            ]
+        ]
+    ],
+    'create_application' => [
         'type' => 'segment',
-        'options' => array(
+        'options' => [
             'route' => '/application/create[/]',
-            'defaults' => array(
+            'defaults' => [
                 'skipPreDispatch' => true,
                 'controller' => 'LvaApplication/TypeOfLicence',
                 'action' => 'createApplication'
-            )
-        )
-    ),
-    'create_variation' => array(
+            ]
+        ]
+    ],
+    'create_variation' => [
         'type' => 'segment',
-        'options' => array(
+        'options' => [
             'route' => '/variation/create/:licence[/]',
-            'constraints' => array(
+            'constraints' => [
                 'licence' => '[0-9]+',
-            ),
-            'defaults' => array(
+            ],
+            'defaults' => [
                 'controller' => 'LvaLicence',
                 'action' => 'createVariation'
-            )
-        )
-    ),
+            ]
+        ]
+    ],
     'licence-print' => [
         'type' => Segment::class,
         'options' => [
@@ -408,111 +410,111 @@ $routes = array(
             ],
         ],
     ],
-    'user-registration' => array(
+    'user-registration' => [
         'type' => 'segment',
-        'options' => array(
+        'options' => [
             'route' => '/register[/]',
-            'defaults' => array(
+            'defaults' => [
                 'controller' => UserRegistrationController::class,
                 'action' => 'add'
-            )
-        )
-    ),
-    'user-forgot-username' => array(
+            ]
+        ]
+    ],
+    'user-forgot-username' => [
         'type' => 'segment',
-        'options' => array(
+        'options' => [
             'route' => '/forgot-username[/]',
-            'defaults' => array(
+            'defaults' => [
                 'controller' => UserForgotUsernameController::class,
                 'action' => 'index'
-            )
-        )
-    ),
-    'manage-user' => array(
+            ]
+        ]
+    ],
+    'manage-user' => [
         'type' => 'segment',
-        'options' => array(
+        'options' => [
             'route' => '/manage-user[/:action][/:id][/]',
-            'constraints' => array(
+            'constraints' => [
                 'action' => '(index|add|edit|delete)',
                 'id' => '[0-9]+',
-            ),
-            'defaults' => array(
+            ],
+            'defaults' => [
                 'controller' => Olcs\Controller\UserController::class,
                 'action' => 'index'
-            )
-        )
-    ),
-    'your-account' => array(
+            ]
+        ]
+    ],
+    'your-account' => [
         'type' => 'segment',
-        'options' => array(
+        'options' => [
             'route' => '/your-account[/]',
-            'defaults' => array(
+            'defaults' => [
                 'controller' => MyDetailsController::class,
                 'action' => 'edit'
-            )
-        )
-    ),
-    'entity-view' => array(
+            ]
+        ]
+    ],
+    'entity-view' => [
         'type' => 'segment',
-        'options' =>  array(
+        'options' =>  [
             'route' => '/view-details/:entity[/:entityId][/]',
-            'constraints' => array(
+            'constraints' => [
                 'entity' => '(licence)',
                 'entityId' => '[0-9]+',
-            ),
-            'defaults' => array(
+            ],
+            'defaults' => [
                 'controller' => Olcs\Controller\Entity\ViewController::class,
                 'action' => 'details'
-            )
-        )
-    ),
-    'verify' => array(
+            ]
+        ]
+    ],
+    'verify' => [
         'type' => \Laminas\Mvc\Router\Http\Literal::class,
-        'options' => array(
+        'options' => [
             'route' => '/verify',
             'defaults' => [
                 'controller' => Olcs\Controller\GdsVerifyController::class,
                 'action' => 'index',
             ]
-        ),
+        ],
         'may_terminate' => false,
-        'child_routes' => array(
-            'initiate-request' => array(
+        'child_routes' => [
+            'initiate-request' => [
                 'type' => Segment::class,
-                'options' => array(
+                'options' => [
                     'route' => '/initiate-request[/application/:application]'.
                         '[/continuation-detail/:continuationDetailId][/]',
-                    'defaults' => array(
+                    'defaults' => [
                         'action' => 'initiate-request',
-                    ),
-                )
-            ),
+                    ],
+                ]
+            ],
             'transport-manager' =>[
                 'type' => Segment::class,
-                'options' => array(
+                'options' => [
                     'route' => '/:lva/:applicationId/transport-manager/:transportManagerApplicationId/:role[/]',
-                    'defaults' => array(
+                    'defaults' => [
                         'action' => 'initiate-request',
-                    ),
+                    ],
                     'constraints' =>[
                             'lva' => '(application|variation)',
                             'applicationId' => '[0-9]+',
                             'transportManagerApplicationId' => '[0-9]+',
                             'role' =>'(tma\\_sign\\_as\\_tm|tma\\_sign\\_as\\_op|tma\\_sign\\_as\\_top)'
                     ],
-                )
+                ]
             ],
             'surrender' =>[
                 'type' => Segment::class,
-                'options' => array(
+                'options' => [
                     'route' => '/surrender/:licenceId[/]',
-                    'defaults' => array(
+                    'defaults' => [
                         'action' => 'initiate-request',
-                    ),
+                    ],
                     'constraints' =>[
                         'licenceId' => '[0-9]+',
                     ],
-                )
+                ]
             ],
             'process-response' => [
                 'type' => Segment::class,
@@ -532,9 +534,19 @@ $routes = array(
                     ],
                 ]
             ],
-        )
-    ),
-);
+        ]
+    ],
+    'session-timeout' => [
+        'type' => 'segment',
+        'options' =>  [
+            'route' => '/auth/timeout[/]',
+            'defaults' => [
+                'controller' => SessionTimeoutController::class,
+                'action' => 'index',
+            ]
+        ]
+    ],
+];
 
 $files = glob(__DIR__ . '/selfserve-routes/*.php');
 
@@ -1307,7 +1319,8 @@ return array(
         ),
         'factories' => array(
             CookieSettingsController::class => CookieSettingsControllerFactory::class,
-            \Olcs\Controller\Licence\Vehicle\ListVehicleController::class => \Olcs\Controller\Licence\Vehicle\ListVehicleControllerFactory::class,
+            ListVehicleController::class => \Olcs\Controller\Licence\Vehicle\ListVehicleControllerFactory::class,
+            SessionTimeoutController::class => \Olcs\Controller\SessionTimeoutControllerFactory::class,
         ),
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
@@ -1401,6 +1414,12 @@ return array(
         'default' => 'd-m-Y'
     ),
     'view_helpers' => array(
+        'factories' => [
+            \Olcs\View\Helper\SessionTimeoutWarning\SessionTimeoutWarning::class => \Olcs\View\Helper\SessionTimeoutWarning\SessionTimeoutWarningFactory::class
+        ],
+        'aliases' => array(
+            'sessionTimeoutWarning' => \Olcs\View\Helper\SessionTimeoutWarning\SessionTimeoutWarning::class,
+        ),
         'invokables' => array(
             'generatePeopleList' => \Olcs\View\Helper\GeneratePeopleList::class,
             'tmCheckAnswersChangeLink' => \Olcs\View\Helper\TmCheckAnswersChangeLink::class,
@@ -1620,6 +1639,7 @@ return array(
                 'accessibility-statement' => ['*'],
                 'not-found' => ['*'],
                 'server-error' => ['*'],
+                'session-timeout' => ['*'],
                 '*' => ['selfserve-user'],
             ]
         ]

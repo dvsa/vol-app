@@ -1,0 +1,19 @@
+<?php $redirectTimeout = round($this->sessionTimeoutWarning()->getRedirectTimeout() / 60); ?>
+<div id="sessionTimeoutModal" class="modal__wrapper modal--blockBackground govuk-visually-hidden">
+    <div class="modal">
+        <div class="modal__header">
+            <h1 class="modal__title"><?php echo $this->translate("session-timeout.modal.title"); ?></h1>
+        </div>
+        <div class="modal__content">
+            <p class="govuk-body"><?php echo $this->translateReplace("session-timeout.modal.content", [$redirectTimeout] )?></p>
+            <div class="govuk--button-group govuk-!-margin-bottom-0">
+                <button id="sessionTimeoutButtonStaySignedIn" class="govuk-button" data-module="govuk-button" data-prevent-double-click="true">
+                     <?php echo $this->translate("session-timeout.modal.button.stay-signed-in"); ?>
+                </button>
+                <a id="sessionTimeoutButtonSignOutNow" class="govuk-button govuk-button--secondary" href="/auth/logout/" data-prevent-double-click="true">
+                     <?php echo $this->translate("session-timeout.modal.button.sign-out-now"); ?>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
