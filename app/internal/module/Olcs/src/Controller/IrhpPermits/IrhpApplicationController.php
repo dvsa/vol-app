@@ -99,12 +99,15 @@ class IrhpApplicationController extends AbstractInternalController implements
     // After Adding and Editing we want users taken back to index dashboard
     protected $redirectConfig = [
         'add' => [
-            'route' => 'licence/irhp-application',
-            'action' => 'index',
+            'route' => 'licence/irhp-application/application',
+            'action' => 'edit',
+            'resultIdMap' => [
+                'irhpAppId' => 'irhpApplication',
+            ],
         ],
         'edit' => [
-            'route' => 'licence/irhp-application',
-            'action' => 'index',
+            'route' => 'licence/irhp-application/application',
+            'action' => 'edit',
         ],
         'cancel' => [
             'route' => 'licence/irhp-application',
@@ -331,7 +334,6 @@ class IrhpApplicationController extends AbstractInternalController implements
                 ]
             );
     }
-
 
     /**
      * @return mixed|Response
