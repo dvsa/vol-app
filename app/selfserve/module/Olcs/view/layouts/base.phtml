@@ -43,6 +43,9 @@ $isLoggedIn = $currentUser->isLoggedIn();
   <![endif]-->
 
   <meta property="og:image" content="<?php echo $this->assetPath('/assets/images/govuk-opengraph-image.png') ?>">
+  <?php if ($isLoggedIn) {
+    echo $this->sessionTimeoutWarning()->generateHeadMetaTags();
+  } ?>
 </head>
 
 <body class="govuk-template__body app-body-class selfserve" id="<?php echo $this->pageId(); ?>">
@@ -289,6 +292,13 @@ $isLoggedIn = $currentUser->isLoggedIn();
       </div>
     </div>
   </footer>
+
+  <?php
+  if($isLoggedIn) {
+      echo $this->partial('partials/modal-session-timeout');
+  }
+  ?>
+
   <?php echo $this->inlineScript()->prependFile($this->assetPath('js/' . $this->applicationName() . '.js')) ?>
 
   <script>

@@ -1,0 +1,18 @@
+<?php echo $this->partial('partials/page-header-simple', ['pageTitle' => $this->pageTitle()]); ?>
+
+<main class="govuk-main-wrapper" id="main-content" role="main">
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper" id="main-content" role="main">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <h1 class="govuk-heading-xl"><?php echo $this->translate('session-timeout.page.heading'); ?></h1>
+                    <h2 class="govuk-heading-m"><?php echo $this->translate('session-timeout.page.sub-heading'); ?></h2>
+                    <p class="govuk-body">
+                        <?php echo $this->translate('session-timeout.page.content'); ?> <a title="<?php echo $this->translate('session-timeout.page.link-title'); ?>" href="/" class="govuk-link"><?php echo $this->translate('session-timeout.page.link-text'); ?></a>.
+                    </p>
+                </div>
+            </div>
+        </main>
+    </div>
+</main>
+
