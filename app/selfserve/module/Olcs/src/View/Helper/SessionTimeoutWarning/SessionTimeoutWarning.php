@@ -75,10 +75,20 @@ class SessionTimeoutWarning extends AbstractHelper implements HelperInterface
     }
 
     /**
+     * Get the seconds before the expiry to show the warning modal
+     *
+     * @return int
+     */
+    public function getSecondsBeforeExpiryWarning(): int
+    {
+        return $this->secondsBeforeExpiryWarning;
+    }
+
+    /**
      * Returns the timeout in seconds before the page should redirect to a session timeout page.
      * @return int
      */
-    public function getRedirectTimeout(): int
+    private function getRedirectTimeout(): int
     {
         return $this->getSessionMaxIdleLifetime();
     }
@@ -89,8 +99,9 @@ class SessionTimeoutWarning extends AbstractHelper implements HelperInterface
      */
     private function getWarningTimeout(): int
     {
-        return $this->getSessionMaxIdleLifetime() - $this->secondsBeforeExpiryWarning;
+        return $this->getSessionMaxIdleLifetime() - $this->getSecondsBeforeExpiryWarning();
     }
+
 
     /**
      * Fetches the time in seconds a session can be idle for.

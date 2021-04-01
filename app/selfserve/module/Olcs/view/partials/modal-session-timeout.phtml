@@ -1,4 +1,4 @@
-<?php $redirectTimeout = round($this->sessionTimeoutWarning()->getRedirectTimeout() / 60); ?>
+<?php $redirectTimeout = round($this->sessionTimeoutWarning()->getSecondsBeforeExpiryWarning() / 60); ?>
 <div id="sessionTimeoutModal" class="modal__wrapper modal--blockBackground govuk-visually-hidden">
     <div class="modal">
         <div class="modal__header">
