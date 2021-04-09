@@ -1,6 +1,5 @@
 <?php
 $details = $this->placeholder('details')->getValue();
-$locationsTable = $this->placeholder('locationsTable')->getValue();
 $translationsTable = $this->placeholder('translationsTable')->getValue();
 
  ?>
@@ -11,9 +10,6 @@ $translationsTable = $this->placeholder('translationsTable')->getValue();
 </div>
 <div class="govuk-details">
     <?php echo $translationsTable ?>
-</div>
-<div class="govuk-details">
-    <?php echo $locationsTable ?>
 </div>
 <div class="govuk-details">
     <a class="action--tertiary" href="<?php echo $this->url('admin-dashboard/admin-editable-translations', ['action' => 'index']); ?>">
