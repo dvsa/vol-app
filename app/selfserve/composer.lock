@@ -6104,11 +6104,11 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.82",
+            "version": "0.12.83",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/phpstan/phpstan/0.12.82/phpstan-phpstan-0.12.82.zip",
-                "reference": "3920f0fb0aff39263d3a4cb0bca120a67a1a6a11",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/phpstan/phpstan/0.12.83/phpstan-phpstan-0.12.83.zip",
+                "reference": "4a967cec6efb46b500dd6d768657336a3ffe699f",
                 "shasum": ""
             },
             "require": {
@@ -6150,7 +6150,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-03-19T06:08:17+00:00"
+            "time": "2021-04-03T15:35:45+00:00"
         },
         {
             "name": "phpstan/phpstan-doctrine",
@@ -7327,11 +7327,11 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "3.5.8",
+            "version": "3.6.0",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/squizlabs/php_codesniffer/3.5.8/squizlabs-php_codesniffer-3.5.8.zip",
-                "reference": "9d583721a7157ee997f235f327de038e7ea6dac4",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/squizlabs/php_codesniffer/3.6.0/squizlabs-php_codesniffer-3.6.0.zip",
+                "reference": "ffced0d2c8fa8e6cdc4d695a743271fab6c38625",
                 "shasum": ""
             },
             "require": {
@@ -7368,7 +7368,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2020-10-23T02:01:07+00:00"
+            "time": "2021-04-09T00:54:41+00:00"
         },
         {
             "name": "symfony/config",
