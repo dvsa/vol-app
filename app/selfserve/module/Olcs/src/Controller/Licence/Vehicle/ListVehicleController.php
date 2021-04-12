@@ -54,7 +54,7 @@ class ListVehicleController
     const DEFAULT_LIMIT_CURRENT_VEHICLES = 10;
     const DEFAULT_SORT_CURRENT_VEHICLES = 'specifiedDate';
     const DEFAULT_ORDER_CURRENT_VEHICLES = 'DESC';
-    const DEFAULT_SORT_REMOVED_VEHICLES = 'specifiedDate';
+    const DEFAULT_SORT_REMOVED_VEHICLES = 'removalDate';
     const DEFAULT_ORDER_REMOVED_TABLE = 'DESC';
 
     /**
