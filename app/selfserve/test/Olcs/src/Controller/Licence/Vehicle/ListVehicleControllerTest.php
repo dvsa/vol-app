@@ -710,7 +710,7 @@ class ListVehicleControllerTest extends MockeryTestCase
 
         // Define Expectations
         $queryHandler->shouldReceive('__invoke')->withArgs(function ($query) {
-            return $query instanceof Vehicles && $query->getIncludeRemoved() === true && $query->getSort() === 'specifiedDate';
+            return $query instanceof Vehicles && $query->getIncludeRemoved() === true && $query->getSort() === 'removalDate';
         })->once()->andReturns($this->setUpQueryResponse());
 
         // Execute
