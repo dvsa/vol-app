@@ -21,6 +21,7 @@ use Olcs\FormService\Form\Lva as LvaFormService;
 use Olcs\Service\Cookie as CookieService;
 use Olcs\Service\Qa as QaService;
 use Laminas\Mvc\Router\Http\Segment;
+use Olcs\Session\LicenceVehicleManagement;
 
 $sectionConfig = new \Common\Service\Data\SectionConfig();
 $configRoutes = $sectionConfig->getAllRoutes();
@@ -1306,7 +1307,6 @@ return array(
             \Olcs\Controller\Licence\Surrender\InformationChangedController::class => \Olcs\Controller\Licence\Surrender\InformationChangedController::class,
 
             // Licence - Vehicles
-            \Olcs\Controller\Licence\Vehicle\SwitchBoardController::class => \Olcs\Controller\Licence\Vehicle\SwitchBoardController::class,
             \Olcs\Controller\Licence\Vehicle\AddVehicleSearchController::class => \Olcs\Controller\Licence\Vehicle\AddVehicleSearchController::class,
             \Olcs\Controller\Licence\Vehicle\AddDuplicateVehicleController::class => \Olcs\Controller\Licence\Vehicle\AddDuplicateVehicleController::class,
             \Olcs\Controller\Licence\Vehicle\RemoveVehicleController::class => \Olcs\Controller\Licence\Vehicle\RemoveVehicleController::class,
@@ -1321,6 +1321,7 @@ return array(
             CookieSettingsController::class => CookieSettingsControllerFactory::class,
             ListVehicleController::class => \Olcs\Controller\Licence\Vehicle\ListVehicleControllerFactory::class,
             SessionTimeoutController::class => \Olcs\Controller\SessionTimeoutControllerFactory::class,
+            \Olcs\Controller\Licence\Vehicle\SwitchBoardController::class => \Olcs\Controller\Licence\Vehicle\SwitchBoardControllerFactory::class
         ),
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
@@ -1346,6 +1347,7 @@ return array(
             'CookieSettingsCookieNamesProvider' => CookieService\SettingsCookieNamesProvider::class,
             'QaIrhpApplicationViewGenerator' => QaService\ViewGenerator\IrhpApplicationViewGenerator::class,
             'QaIrhpPermitApplicationViewGenerator' => QaService\ViewGenerator\IrhpPermitApplicationViewGenerator::class,
+            LicenceVehicleManagement::class => LicenceVehicleManagement::class
         ),
         'abstract_factories' => [
             \Laminas\Cache\Service\StorageCacheAbstractServiceFactory::class,

@@ -15,6 +15,7 @@ use Common\Util\FlashMessengerTrait;
 use Dvsa\Olcs\Transfer\Query\DvlaSearch\Vehicle;
 use Dvsa\Olcs\Transfer\Query\Licence\Vehicles;
 use Exception;
+use Laminas\Mvc\Controller\Plugin\FlashMessenger;
 use Olcs\Controller\AbstractSelfserveController;
 use Olcs\Controller\Config\DataSource\DataSourceConfig;
 use Olcs\Session\LicenceVehicleManagement;
@@ -23,8 +24,6 @@ use Laminas\View\Model\ViewModel;
 
 abstract class AbstractVehicleController extends AbstractSelfserveController implements ToggleAwareInterface
 {
-    use FlashMessengerTrait;
-
     public const DEFAULT_TABLE_SORT_ORDER = 'DESC';
     public const DEFAULT_TABLE_SORT_COLUMN = 'createdOn';
     public const DEFAULT_TABLE_ROW_LIMIT = 10;
@@ -51,8 +50,8 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
     /** @var  FormHelperService */
     protected $hlpForm;
 
-    /** @var  FlashMessengerHelperService */
-    protected $hlpFlashMsgr;
+    /** @var  FlashMessenger */
+    protected $flashMessenger;
 
     /** @var LicenceVehicleManagement */
     protected $session;
@@ -75,7 +74,7 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
     {
         $this->licenceId = (int)$this->params('licence');
         $this->hlpForm = $this->getServiceLocator()->get('Helper\Form');
-        $this->hlpFlashMsgr = $this->getServiceLocator()->get('Helper\FlashMessenger');
+        $this->flashMessenger = $this->plugin('FlashMessenger');
         $this->translator = $this->getServiceLocator()->get('Helper\Translation');
         $this->session = new LicenceVehicleManagement();
         return parent::onDispatch($e);

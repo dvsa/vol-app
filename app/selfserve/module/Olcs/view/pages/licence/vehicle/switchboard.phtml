@@ -1,0 +1,27 @@
+<div class="govuk-width-container">
+    <div class="js-body">
+        <?php
+        echo $this->linkBack($this->backUrl);
+        if(!empty($this->panel)) {
+            echo $this->panel($this->panel['theme'], $this->panel['title'], $this->panel['body'] ?? '');
+        }
+        echo $this->partial(
+            'partials/page-header-simple',
+            [
+                'pageTitle' => $this->translate($this->title),
+                'pageSubTitle' => $this->licNo,
+            ]
+        );
+        ?>
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                <?php
+                $this->form->prepare();
+                echo $this->formErrors($this->form);
+                echo $this->form($this->form);
+                ?>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -27,7 +27,7 @@ class RemoveVehicleConfirmationController extends AbstractVehicleController
     {
         // Redirect to add action if VRMs are not in session.
         if (!$this->session->hasVrms()) {
-            $this->hlpFlashMsgr->addErrorMessage('licence.vehicle.remove.confirm.error.no-vehicles');
+            $this->flashMessenger->addErrorMessage('licence.vehicle.remove.confirm.error.no-vehicles');
             return $this->nextStep('licence/vehicle/remove/GET');
         }
 
@@ -47,7 +47,7 @@ class RemoveVehicleConfirmationController extends AbstractVehicleController
     {
         // Redirect to remove action if VRMs are not in session.
         if (!$this->session->hasVrms()) {
-            $this->hlpFlashMsgr->addErrorMessage('licence.vehicle.remove.confirm.error.no-vehicles');
+            $this->flashMessenger->addErrorMessage('licence.vehicle.remove.confirm.error.no-vehicles');
             return $this->nextStep('licence/vehicle/remove/GET');
         }
 
@@ -105,15 +105,11 @@ class RemoveVehicleConfirmationController extends AbstractVehicleController
             $successMessageKey = 'licence.vehicle.remove.confirm.success.plural';
         }
 
-        $this->hlpFlashMsgr->addSuccessMessage(
-            $this->translator->translateReplace(
-                $successMessageKey,
-                [count($vehicleIds)]
-            )
-        );
+        $panelMessage = $this->translator->translateReplace($successMessageKey, [count($vehicleIds)]);
+        $this->flashMessenger->addMessage($panelMessage, SwitchBoardController::PANEL_FLASH_MESSENGER_NAMESPACE);
 
         if ($licence->getResult()['activeVehicleCount'] == 0) {
-            $this->hlpFlashMsgr->addSuccessMessage(
+            $this->flashMessenger->addSuccessMessage(
                 $this->translator->translate(
                     'licence.vehicle.remove.confirm.success.last-vehicle-removed'
                 )
