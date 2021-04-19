@@ -7,6 +7,7 @@ use Common\Service\Cqrs\Exception\NotFoundException;
 use Dvsa\Olcs\Transfer\Command\Vehicle\ReprintDisc;
 use Dvsa\Olcs\Transfer\Query\LicenceVehicle\LicenceVehiclesById;
 use Olcs\Controller\Licence\Vehicle\AbstractVehicleController;
+use Olcs\Controller\Licence\Vehicle\SwitchBoardController;
 use Olcs\DTO\Licence\Vehicle\LicenceVehicleDTO;
 use Olcs\Exception\Licence\Vehicle\VehiclesNotFoundWithIdsException;
 use Olcs\Form\Model\Form\Vehicle\VehicleConfirmationForm;
