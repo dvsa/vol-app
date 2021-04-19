@@ -3,7 +3,6 @@
 namespace Admin\Controller;
 
 use Admin\Form\Model\Form\TranslationKey;
-use Admin\Form\Model\Form\TranslationsFilter;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Laminas\Http\Response;
@@ -37,7 +36,6 @@ class EditableTranslationsController extends AbstractInternalController implemen
     protected $createCommand = CreateCommand::class;
     protected $deleteCommand = DeleteCommand::class;
     protected $formClass = TranslationKey::class;
-    protected $filterForm = TranslationsFilter::class;
 
     protected $mapperClass = EditableTranslationMapper::class;
 
@@ -46,7 +44,6 @@ class EditableTranslationsController extends AbstractInternalController implemen
     protected $translationsTablePlaceholderName = 'translationsTable';
     protected $locationsTablePlaceholderName = 'locationsTable';
     protected $translationsTableName = 'translation-key-texts';
-    protected $locationsTableName = 'translation-key-details';
     protected $detailsContentTitle = 'Editable Translations';
 
     /**
@@ -95,8 +92,6 @@ class EditableTranslationsController extends AbstractInternalController implemen
                     'page' => 1,
                     'sort' => 'id',
                     'translationSearch' => $this->params()->fromQuery('translationSearch'),
-                    'category' => $this->params()->fromQuery('category'),
-                    'subCategory' => $this->params()->fromQuery('subCategory'),
                 ]
             )
         );
@@ -277,13 +272,6 @@ class EditableTranslationsController extends AbstractInternalController implemen
                 $this->placeholder()->setPlaceholder(
                     $this->translationsTablePlaceholderName,
                     $translationsTable->render()
-                );
-
-                $translationKeyCategoryLinks = is_array($data['translationKeyCategoryLinks']) ? $data['translationKeyCategoryLinks'] : [];
-                $locationsTable = $this->table()->buildTable($this->locationsTableName, $translationKeyCategoryLinks, []);
-                $this->placeholder()->setPlaceholder(
-                    $this->locationsTablePlaceholderName,
-                    $locationsTable->render()
                 );
             } else {
                 throw new \RuntimeException('Error loading translation key data');

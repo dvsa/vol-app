@@ -1,12 +1,6 @@
 $(function () {
     "use strict";
 
-    OLCS.cascadeInput({
-        source: "#category",
-        dest: "#subCategory",
-        url: "/list/sub-categories"
-    });
-
     var searchForm = $("#translationSearchForm");
     var searchBox = $("#translationSearch");
     var searchResults = $("#keySearchResults");
@@ -54,7 +48,7 @@ $(function () {
         if (searchBox.val().length > 2) {
             delayAjax(function(){
                 $.get(jsonBaseUrl+"xhrsearch",
-                    {translationSearch: searchBox.val(), category: urlParams.get("category"), subCategory: urlParams.get("subCategory")}
+                    {translationSearch: searchBox.val()}
                     ).done(function (data) {
                     searchResults.empty();
                     $.each(data.results, function (index, result) {
