@@ -37,7 +37,7 @@ class ReprintLicenceVehicleDiscConfirmationController extends AbstractVehicleCon
     {
         if (!$this->session->hasVrms()) {
             // Redirect to add action if VRMs are not in session.
-            $this->hlpFlashMsgr->addErrorMessage('licence.vehicle.reprint.confirm.error.no-vehicles');
+            $this->flashMessenger->addErrorMessage('licence.vehicle.reprint.confirm.error.no-vehicles');
             return $this->nextStep('licence/vehicle/reprint/GET');
         }
         $licenceVehicles = $this->getLicenceVehiclesByVehicleId($this->session->getVrms());
@@ -71,7 +71,7 @@ class ReprintLicenceVehicleDiscConfirmationController extends AbstractVehicleCon
     {
         if (!$this->session->hasVrms()) {
             // Redirect to reprint action if VRMs are not in session.
-            $this->hlpFlashMsgr->addErrorMessage('licence.vehicle.reprint.confirm.error.no-vehicles');
+            $this->flashMessenger->addErrorMessage('licence.vehicle.reprint.confirm.error.no-vehicles');
             return $this->nextStep('licence/vehicle/reprint/GET');
         }
 
@@ -105,8 +105,8 @@ class ReprintLicenceVehicleDiscConfirmationController extends AbstractVehicleCon
             $successMessageKey = 'licence.vehicle.reprint.confirm.success.plural';
         }
 
-        $successMessage = $this->translator->translateReplace($successMessageKey, [count($vehicleIds)]);
-        $this->hlpFlashMsgr->addSuccessMessage($successMessage);
+        $panelMessage = $this->translator->translateReplace($successMessageKey, [count($vehicleIds)]);
+        $this->flashMessenger->addMessage($panelMessage, SwitchBoardController::PANEL_FLASH_MESSENGER_NAMESPACE);
 
         return $this->nextStep('licence/vehicle/GET');
     }

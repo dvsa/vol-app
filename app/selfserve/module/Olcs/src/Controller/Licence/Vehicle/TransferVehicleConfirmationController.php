@@ -47,17 +47,17 @@ class TransferVehicleConfirmationController extends AbstractVehicleController
         try {
             return parent::onDispatch($e);
         } catch (VehicleSelectionEmptyException $exception) {
-            $this->hlpFlashMsgr->addErrorMessage('licence.vehicle.transfer.confirm.error.no-vehicles');
+            $this->flashMessenger->addErrorMessage('licence.vehicle.transfer.confirm.error.no-vehicles');
         } catch (VehiclesNotFoundWithIdsException $exception) {
-            $this->hlpFlashMsgr->addErrorMessage('licence.vehicle.transfer.confirm.error.invalid-vehicles');
+            $this->flashMessenger->addErrorMessage('licence.vehicle.transfer.confirm.error.invalid-vehicles');
         } catch (DestinationLicenceNotSetException $exception) {
-            $this->hlpFlashMsgr->addErrorMessage('licence.vehicle.transfer.confirm.error.no-destination-licence');
+            $this->flashMessenger->addErrorMessage('licence.vehicle.transfer.confirm.error.no-destination-licence');
         } catch (DestinationLicenceNotFoundWithIdException $exception) {
-            $this->hlpFlashMsgr->addErrorMessage('licence.vehicle.transfer.confirm.error.invalid-destination');
+            $this->flashMessenger->addErrorMessage('licence.vehicle.transfer.confirm.error.invalid-destination');
         } catch (LicenceNotFoundWithIdException $exception) {
-            $this->hlpFlashMsgr->addErrorMessage('licence.vehicle.transfer.confirm.error.invalid-licence');
+            $this->flashMessenger->addErrorMessage('licence.vehicle.transfer.confirm.error.invalid-licence');
         } catch (LicenceVehicleLimitReachedException $exception) {
-            $this->hlpFlashMsgr->addErrorMessage($this->translator->translateReplace(
+            $this->flashMessenger->addErrorMessage($this->translator->translateReplace(
                 'licence.vehicles_transfer.form.message_exceed',
                 [$exception->getLicenceNumber()]
             ));
@@ -70,7 +70,7 @@ class TransferVehicleConfirmationController extends AbstractVehicleController
                 $message = 'licence.vehicles_transfer.form.message_already_on_licence';
                 $data = [implode(', ', $vehicleVrms), $exception->getLicenceNumber()];
             }
-            $this->hlpFlashMsgr->addErrorMessage($this->translator->translateReplace($message, $data));
+            $this->flashMessenger->addErrorMessage($this->translator->translateReplace($message, $data));
         }
         return $this->redirectToTransferIndex();
     }
@@ -168,7 +168,7 @@ class TransferVehicleConfirmationController extends AbstractVehicleController
         $activeVehicleCount = $licence->getActiveVehicleCount();
         if (null !== $activeVehicleCount && $activeVehicleCount < 1) {
             $message = $this->translator->translate('licence.vehicle.transfer.confirm.success.last-vehicle-transferred');
-            $this->hlpFlashMsgr->addSuccessMessage($message);
+            $this->flashMessenger->addMessage($message, SwitchBoardController::PANEL_FLASH_MESSENGER_NAMESPACE);
         }
     }
 
@@ -192,7 +192,7 @@ class TransferVehicleConfirmationController extends AbstractVehicleController
                 [count($vehicleIds), $destinationLicence->getLicenceNumber()]
             );
         }
-        $this->hlpFlashMsgr->addSuccessMessage($message);
+        $this->flashMessenger->addMessage($message, SwitchBoardController::PANEL_FLASH_MESSENGER_NAMESPACE);
     }
 
     /**

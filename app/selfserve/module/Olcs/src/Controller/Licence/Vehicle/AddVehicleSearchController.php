@@ -91,14 +91,14 @@ class AddVehicleSearchController extends AbstractVehicleController
     {
         // Redirect to add action if vehicleData is not in session.
         if (!$this->session->hasVehicleData()) {
-            $this->hlpFlashMsgr->addErrorMessage('LicenceVehicleManagement does not contain vehicleData');
+            $this->flashMessenger->addErrorMessage('LicenceVehicleManagement does not contain vehicleData');
             return $this->nextStep('licence/vehicle/add/GET');
         }
 
         $vehicleData = $this->session->getVehicleData();
 
         if (empty($vehicleData)) {
-            $this->hlpFlashMsgr->addErrorMessage("licence.vehicle.add.unable-to-add");
+            $this->flashMessenger->addErrorMessage("licence.vehicle.add.unable-to-add");
             return $this->nextStep('licence/vehicle/add/GET');
         }
 
@@ -112,12 +112,8 @@ class AddVehicleSearchController extends AbstractVehicleController
         );
 
         if ($response->isOk()) {
-            $this->hlpFlashMsgr->addSuccessMessage(
-                $this->translator->translateReplace(
-                    'licence.vehicle.add.success',
-                    [$vehicleData['registrationNumber']]
-                )
-            );
+            $panelMessage = $this->translator->translateReplace('licence.vehicle.add.success', [$vehicleData['registrationNumber']]);
+            $this->flashMessenger->addMessage($panelMessage, SwitchBoardController::PANEL_FLASH_MESSENGER_NAMESPACE);
             return $this->nextStep('licence/vehicle/GET');
         }
 
@@ -127,7 +123,7 @@ class AddVehicleSearchController extends AbstractVehicleController
         }
 
         $message = array_values($response->getResult()['messages']['vrm'])[0];
-        $this->hlpFlashMsgr->addErrorMessage($message);
+        $this->flashMessenger->addErrorMessage($message);
 
         return $this->nextStep('licence/vehicle/add/GET');
     }
@@ -204,7 +200,7 @@ class AddVehicleSearchController extends AbstractVehicleController
         } catch (NotFoundException $exception) {
             $this->setFormErrorMessage('licence.vehicle.add.search.vrm-not-found', 'vrm_not_found');
         } catch (Exception $exception) {
-            $this->hlpFlashMsgr->addErrorMessage($this->translator->translate('licence.vehicle.add.search.query-error'));
+            $this->flashMessenger->addErrorMessage($this->translator->translate('licence.vehicle.add.search.query-error'));
         }
         return $vehicleData ?? null;
     }

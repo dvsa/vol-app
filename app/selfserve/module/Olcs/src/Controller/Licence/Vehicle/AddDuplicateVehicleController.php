@@ -25,7 +25,7 @@ class AddDuplicateVehicleController extends AbstractVehicleController
     {
         // Redirect to add action if VRM is not in session.
         if (!$this->session->hasVehicleData()) {
-            $this->hlpFlashMsgr->addErrorMessage('LicenceVehicleManagement does not contain vehicleData');
+            $this->flashMessenger->addErrorMessage('LicenceVehicleManagement does not contain vehicleData');
             return $this->nextStep('licence/vehicle/add/GET');
         }
 
@@ -47,7 +47,7 @@ class AddDuplicateVehicleController extends AbstractVehicleController
     {
         // Redirect to add action if VRM is not in session.
         if (!$this->session->hasVehicleData()) {
-            $this->hlpFlashMsgr->addErrorMessage('LicenceVehicleManagement does not contain vehicleData');
+            $this->flashMessenger->addErrorMessage('LicenceVehicleManagement does not contain vehicleData');
             return $this->nextStep('licence/vehicle/add/GET');
         }
 
@@ -90,12 +90,8 @@ class AddDuplicateVehicleController extends AbstractVehicleController
         );
 
         if ($response->isOk()) {
-            $this->hlpFlashMsgr->addSuccessMessage(
-                $this->translator->translateReplace(
-                    'licence.vehicle.add.success',
-                    [$vehicleData['registrationNumber']]
-                )
-            );
+            $panelMessage = $this->translator->translateReplace('licence.vehicle.add.success', [$vehicleData['registrationNumber']]);
+            $this->flashMessenger->addMessage($panelMessage, SwitchBoardController::PANEL_FLASH_MESSENGER_NAMESPACE);
             return $this->nextStep('licence/vehicle/GET');
         }
     }
