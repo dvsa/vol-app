@@ -24,6 +24,11 @@ class Top extends \Olcs\Form\Model\Fieldset\Base
     public $stockText = null;
 
     /**
+     * @Form\Type("Laminas\Form\Element\Hidden")
+     */
+    public $status = null;
+
+    /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")
      * @Form\Required(false)

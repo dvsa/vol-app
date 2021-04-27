@@ -26,6 +26,9 @@ class IrhpApplicationTest extends MockeryTestCase
         $data = [
             'id' => '123',
             'dateReceived' => '2019-01-30',
+            'status' => [
+                'id' => 'permit_status',
+            ],
             'declaration' => '1',
             'checked' => '1',
             'corCertificateNumber' => 'ABC123',
@@ -41,6 +44,7 @@ class IrhpApplicationTest extends MockeryTestCase
             'fields' => [
                 'id' => '123',
                 'dateReceived' => '2019-01-30',
+                'status' => 'permit_status',
                 'declaration' => '1',
                 'checked' => '1',
                 'corCertificateNumber' => 'ABC123',
@@ -51,6 +55,7 @@ class IrhpApplicationTest extends MockeryTestCase
             'topFields' => [
                 'id' => '123',
                 'dateReceived' => '2019-01-30',
+                'status' => 'permit_status',
                 'requiresPreAllocationCheck' => true,
                 'isApplicationPathEnabled' => true,
                 'irhpPermitType' => 1,
