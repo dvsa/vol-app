@@ -107,7 +107,6 @@ class AddDuplicateVehicleController extends AbstractVehicleController
             'content' => '',
             'form' => $this->form,
             'backLink' => $this->getLink('licence/vehicle/GET'),
-            'bottomContent' => $this->getChooseDifferentActionMarkup()
         ];
     }
 }

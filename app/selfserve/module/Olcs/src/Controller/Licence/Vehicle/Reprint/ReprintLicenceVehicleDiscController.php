@@ -55,7 +55,6 @@ class ReprintLicenceVehicleDiscController extends AbstractVehicleController
             'clearUrl' => $this->getLink('licence/vehicle/reprint/GET'),
             'form' => $form,
             'backLink' => $this->getLink('licence/vehicle/GET'),
-            'bottomContent' => $this->getChooseDifferentActionMarkup()
         ]);
 
         if ($vehicleTable->getTotal() > static::DEFAULT_TABLE_ROW_LIMIT) {

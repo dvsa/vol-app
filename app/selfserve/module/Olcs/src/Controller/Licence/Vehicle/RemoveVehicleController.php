@@ -69,7 +69,6 @@ class RemoveVehicleController extends AbstractVehicleController
             'clearUrl' => $this->getLink('licence/vehicle/remove/GET'),
             'form' => $this->form,
             'backLink' => $this->getLink('licence/vehicle/GET'),
-            'bottomContent' => $this->getChooseDifferentActionMarkup()
         ];
     }
 

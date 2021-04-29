@@ -47,7 +47,6 @@ class ReprintLicenceVehicleDiscConfirmationController extends AbstractVehicleCon
             'licNo' => $this->data['licence']['licNo'],
             'form' => $this->form,
             'backLink' => $this->getLink('licence/vehicle/reprint/GET'),
-            'bottomContent' => $this->getChooseDifferentActionMarkup(),
             'vrmList' => array_map(function (LicenceVehicleDTO $licenceVehicle) {
                 return $licenceVehicle->getVehicle()->getVrm();
             }, $licenceVehicles),
