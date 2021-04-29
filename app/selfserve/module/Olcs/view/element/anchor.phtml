@@ -1,0 +1,12 @@
+<a class="<?php echo $this->escapeHtml($this->class); ?>"
+    <?php if ($this->url) { ?>
+        <?php echo 'href="' . $this->escapeHtml($this->href) . '"'; ?>
+    <?php } else { ?>
+       <?php echo 'href="' . $this->url(...$this->route) . '"'; ?>
+    <?php }; ?>
+    <?php if ($this->title) { ?>
+        title="<?php echo $this->escapeHtml($this->translate($this->title)); ?>"
+    <?php }; ?>
+>
+    <?php echo $this->escapeHtml($this->translate($this->label)); ?>
+</a>
