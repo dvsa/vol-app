@@ -1,0 +1,3 @@
+<div>
+    <p><?php echo sprintf($this->translate($this->content), ...array_map(function ($anchor) { return $this->partial($anchor); }, $this->anchors)); ?></p>
+</div>

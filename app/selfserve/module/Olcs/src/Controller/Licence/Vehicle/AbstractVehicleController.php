@@ -184,19 +184,6 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
     }
 
     /**
-     * @return string
-     */
-    protected function getChooseDifferentActionMarkup(): string
-    {
-        return $this->translator->translateReplace(
-            'licence.vehicle.generic.choose-different-action',
-            [
-                $this->getLink('licence/vehicle/GET')
-            ]
-        );
-    }
-
-    /**
      * Checks the request for presence of vehicle search data to decide if the page
      * to show should be search results
      *

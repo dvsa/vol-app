@@ -104,7 +104,6 @@ class TransferVehicleConfirmationController extends AbstractVehicleController
             'licNo' => $this->data['licence']['licNo'],
             'form' => $this->form,
             'backLink' => $this->getLink(static::ROUTE_TRANSFER_INDEX),
-            'bottomContent' => $this->getChooseDifferentActionMarkup(),
             'destinationLicenceId' => $destinationLicence->getId(),
             'vrmList' => array_map(function (LicenceVehicleDTO  $licenceVehicle) {
                 return $licenceVehicle->getVehicle()->getVrm();

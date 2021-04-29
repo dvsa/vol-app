@@ -89,6 +89,8 @@ class SwitchBoardController
 
 
     /**
+     * Handles a request from a user to view the switchboard for a licence.
+     *
      * @param Request $request
      * @param RouteMatch $routeMatch
      * @return ViewModel|ResponseInterface
@@ -102,8 +104,7 @@ class SwitchBoardController
 
         $viewVariables = [
             'title' => 'licence.vehicle.switchboard.header',
-            'licNo' => $licence['licNo'],
-            'content' => '',
+            'subTitle' => $licence['licNo'],
             'form' => $this->createSwitchBoardForm($licence),
             'backLink' => $this->urlHelper->fromRoute(static::ROUTE_LICENCE_OVERVIEW, [], [], true)
         ];

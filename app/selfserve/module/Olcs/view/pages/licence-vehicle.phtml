@@ -64,18 +64,7 @@
                     <?php echo $this->table; ?>
                 <?php endif; ?>
 
-                <?php if (isset($this->bottomContent)): ?>
-                    <?php echo $this->bottomContent ?>
-                <?php endif; ?>
-
-                <?php
-                if (isset($this->bottomLink)): ?>
-                    <p>
-                        <a href="<?php echo $this->bottomLink ?>">
-                            <?php echo $this->translate($this->bottomText); ?>
-                        </a>
-                    </p>
-                <?php endif; ?>
+                <?php echo $this->partial(new \Olcs\View\Model\Licence\Vehicle\ChooseADifferentOptionViewModel()); ?>
             </div>
         </div>
     </div>

@@ -180,7 +180,6 @@ class ListVehicleController
             'backLink' => $this->urlHelper->fromRoute('licence/vehicle/GET', ['licence' => $licenceId]),
             'shareVehicleInfoState' => $licence['organisation']['confirmShareVehicleInfo'],
             'exportCurrentAndRemovedCsvAction' => $this->buildCurrentAndRemovedCsvUrl($licenceId),
-            'bottomContent' => $this->buildChooseDifferentActionUrl($licenceId),
         ];
 
         // Build current vehicle data
@@ -306,17 +305,6 @@ class ListVehicleController
         $sortFilterChain->attach(new StringToUpper());
 
         return $input;
-    }
-
-    /**
-     * @param int $licenceId
-     * @return string
-     */
-    protected function buildChooseDifferentActionUrl(int $licenceId): string
-    {
-        return $this->translator->translateReplace('licence.vehicle.generic.choose-different-action', [
-            $this->urlHelper->fromRoute('licence/vehicle/GET', ['licence' => $licenceId]),
-        ]);
     }
 
     /**
