@@ -1,18 +1,11 @@
 <?php
 
-/**
- * LVA Overview View Model
- *
- * @author Nick Payne <nick.payne@valtech.co.uk>
- */
 namespace Olcs\View\Model;
 
 use Common\View\AbstractViewModel;
 
 /**
- * LVA Overview View Model
- *
- * @author Nick Payne <nick.payne@valtech.co.uk>
+ * @see \OlcsTest\View\Model\LvaOverviewTest
  */
 abstract class LvaOverview extends AbstractViewModel
 {
@@ -24,20 +17,23 @@ abstract class LvaOverview extends AbstractViewModel
      */
     public function __construct($data, array $sections = array())
     {
-        $sectionModel = __NAMESPACE__ . '\\' . $this->sectionModel;
         $overviewSections = [];
 
         $i = 1;
         foreach ($sections as $key => $section) {
-
             if (is_array($section)) {
                 $data['sectionNumber'] = $i++;
-                $overviewSections[] = new $sectionModel($key, $data, $section);
+                $overviewSections[] = $this->newSectionModel($key, $data, $section);
             } else {
-                $overviewSections[] = new $sectionModel($section, $data);
+                $overviewSections[] = $this->newSectionModel($section, $data);
             }
         }
-
         $this->setVariable('sections', $overviewSections);
     }
+
+    /**
+     * @param mixed ...$args
+     * @return LvaOverviewSection
+     */
+    abstract protected function newSectionModel(...$args): LvaOverviewSection;
 }

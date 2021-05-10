@@ -26,6 +26,9 @@ use Olcs\Session\LicenceVehicleManagement;
 $sectionConfig = new \Common\Service\Data\SectionConfig();
 $configRoutes = $sectionConfig->getAllRoutes();
 
+// We no longer want to generate application routes. Instead they will be defined within the application module.
+unset($configRoutes['lva-application']);
+
 $sections = $sectionConfig->getAllReferences();
 $applicationDetailsPages = array();
 $licenceDetailsPages = array();
@@ -374,17 +377,6 @@ $routes = [
             ]
         ]
     ],
-    'create_application' => [
-        'type' => 'segment',
-        'options' => [
-            'route' => '/application/create[/]',
-            'defaults' => [
-                'skipPreDispatch' => true,
-                'controller' => 'LvaApplication/TypeOfLicence',
-                'action' => 'createApplication'
-            ]
-        ]
-    ],
     'create_variation' => [
         'type' => 'segment',
         'options' => [
@@ -558,123 +550,6 @@ foreach ($files as $config) {
 
 $routes = array_merge($routes, $otherSelfserveRoutes);
 
-$configRoutes['lva-application']['child_routes'] = array_merge(
-    $configRoutes['lva-application']['child_routes'],
-    array(
-        'review' => array(
-            'type' => 'segment',
-            'options' => array(
-                'route' => 'review[/]',
-                'defaults' => array(
-                    'controller' => 'LvaApplication/Review',
-                    'action' => 'index'
-                )
-            )
-        ),
-        'declaration' => array(
-            'type' => 'segment',
-            'options' => array(
-                'route' => 'declaration[/]',
-                'defaults' => array(
-                    'controller' => 'DeclarationFormController',
-                    'action' => 'index'
-                )
-            )
-        ),
-        'pay-and-submit' => array(
-            'type' => 'segment',
-            'options' => array(
-                'route' => 'pay-and-submit[/:redirect-back][/]',
-                'defaults' => array(
-                    'controller' => 'LvaApplication/PaymentSubmission',
-                    'action' => 'payAndSubmit',
-                    'redirect-back' => 'overview',
-                ),
-                'constraints' => array(
-                    'redirect-back' => '[a-z\-]+',
-                ),
-            )
-        ),
-        'payment' => array(
-            'type' => 'segment',
-            'options' => array(
-                'route' => 'payment[/stored-card-reference/:storedCardReference][/]',
-                'defaults' => array(
-                    'controller' => 'LvaApplication/PaymentSubmission',
-                    'action' => 'index'
-                ),
-                'constraints' => array(
-                    'storedCardReference' => '[0-9A-Za-z]+-[0-9A-F\-]+',
-                ),
-            )
-        ),
-        'submission-summary' => array(
-            'type' => 'segment',
-            'options' => array(
-                'route' => 'submission-summary[/]',
-                'defaults' => array(
-                    'controller' => 'LvaApplication/Summary',
-                    'action' => 'postSubmitSummary'
-                )
-            )
-        ),
-        'upload-evidence' => array(
-            'type' => 'segment',
-            'options' => array(
-                'route' => 'upload-evidence[/]',
-                'defaults' => array(
-                    'controller' => 'LvaApplication/UploadEvidence',
-                    'action' => 'index'
-                )
-            )
-        ),
-        'summary' => array(
-            'type' => 'segment',
-            'options' => array(
-                'route' => 'summary[/:reference][/]',
-                'constraints' => array(
-                    'reference' => '[0-9A-Za-z]+-[0-9A-F\-]+',
-                ),
-                'defaults' => array(
-                    'controller' => 'LvaApplication/Summary',
-                    'action' => 'index'
-                )
-            )
-        ),
-        'result' => array(
-            'type' => 'segment',
-            'options' => array(
-                'route' => 'result[/]',
-                'defaults' => array(
-                    'controller' => 'LvaApplication/PaymentSubmission',
-                    'action' => 'payment-result',
-
-                )
-            )
-        ),
-        'cancel' => array(
-            'type' => 'segment',
-            'options' => array(
-                'route' => 'cancel[/]',
-                'defaults' => array(
-                    'controller' => 'LvaApplication',
-                    'action' => 'cancel'
-                )
-            )
-        ),
-        'withdraw' => array(
-            'type' => 'segment',
-            'options' => array(
-                'route' => 'withdraw[/]',
-                'defaults' => array(
-                    'controller' => 'LvaApplication',
-                    'action' => 'withdraw'
-                )
-            )
-        ),
-    )
-);
-
 $configRoutes['lva-variation']['child_routes'] = array_merge(
     $configRoutes['lva-variation']['child_routes'],
     array(
@@ -798,7 +673,7 @@ $configRoutes['lva-licence']['child_routes'] = array_merge(
     )
 );
 
-foreach (['application', 'variation'] as $lva) {
+foreach (['variation'] as $lva) {
     $configRoutes['lva-' . $lva]['child_routes'] = array_merge(
         $configRoutes['lva-' . $lva]['child_routes'],
         array(
@@ -1198,29 +1073,6 @@ return array(
             Olcs\Controller\Initializer\Navigation::class
         ),
         'lva_controllers' => array(
-            'LvaApplication'                        => 'Olcs\Controller\Lva\Application\OverviewController',
-            'LvaApplication/TypeOfLicence'          => Olcs\Controller\Lva\Application\TypeOfLicenceController::class,
-            'LvaApplication/BusinessType'           => 'Olcs\Controller\Lva\Application\BusinessTypeController',
-            'LvaApplication/BusinessDetails'        => 'Olcs\Controller\Lva\Application\BusinessDetailsController',
-            'LvaApplication/Addresses'              => 'Olcs\Controller\Lva\Application\AddressesController',
-            'LvaApplication/People'                 => 'Olcs\Controller\Lva\Application\PeopleController',
-            'LvaApplication/OperatingCentres'       => 'Olcs\Controller\Lva\Application\OperatingCentresController',
-            'LvaApplication/FinancialEvidence'      => 'Olcs\Controller\Lva\Application\FinancialEvidenceController',
-            'LvaApplication/TransportManagers'      =>
-                Olcs\Controller\Lva\Application\TransportManagersController::class,
-            'LvaApplication/Vehicles'               => 'Olcs\Controller\Lva\Application\VehiclesController',
-            'LvaApplication/VehiclesPsv'            => 'Olcs\Controller\Lva\Application\VehiclesPsvController',
-            'LvaApplication/Safety'                 => 'Olcs\Controller\Lva\Application\SafetyController',
-            'LvaApplication/FinancialHistory'       => 'Olcs\Controller\Lva\Application\FinancialHistoryController',
-            'LvaApplication/LicenceHistory'         => 'Olcs\Controller\Lva\Application\LicenceHistoryController',
-            'LvaApplication/ConvictionsPenalties'   => 'Olcs\Controller\Lva\Application\ConvictionsPenaltiesController',
-            'LvaApplication/Undertakings'           => 'Olcs\Controller\Lva\Application\UndertakingsController',
-            'LvaApplication/TaxiPhv'                => 'Olcs\Controller\Lva\Application\TaxiPhvController',
-            'LvaApplication/VehiclesDeclarations'   => 'Olcs\Controller\Lva\Application\VehiclesDeclarationsController',
-            'LvaApplication/PaymentSubmission'      => 'Olcs\Controller\Lva\Application\PaymentSubmissionController',
-            'LvaApplication/Summary'                => 'Olcs\Controller\Lva\Application\SummaryController',
-            'LvaApplication/UploadEvidence'         => \Olcs\Controller\Lva\Application\UploadEvidenceController::class,
-            'LvaApplication/Review'                 => \Common\Controller\Lva\ReviewController::class,
             'LvaLicence'                            => Olcs\Controller\Lva\Licence\OverviewController::class,
             'LvaLicence/Variation'                  => 'Olcs\Controller\Lva\Licence\VariationController',
             'LvaLicence/TypeOfLicence'              => 'Olcs\Controller\Lva\Licence\TypeOfLicenceController',
@@ -1627,7 +1479,6 @@ return array(
 
                 // Selfserve search
                 'search-vehicle-external' => ['selfserve-search-vehicle-external'],
-                'lva-application/transport_manager*' => ['selfserve-tm'],
                 'lva-variation/transport_manager*' => ['selfserve-tm'],
                 'lva-*' => ['selfserve-lva'],
                 'verify/process-response' => ['*'],

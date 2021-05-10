@@ -9,6 +9,7 @@ $config = array(
         'DoctrineModule',
         'Olcs\Logging',
         'Common',
+        'Application',
         'Olcs',
         'ZfcRbac',
         'Permits',

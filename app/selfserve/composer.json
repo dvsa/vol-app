@@ -50,6 +50,7 @@
     "autoload": {
         "classmap": [
             "module/Olcs/src",
+            "module/Application/src",
             "vendor/olcs/olcs-common/Common/src/Common"
         ],
         "psr-4": {

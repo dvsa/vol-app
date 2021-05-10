@@ -4,10 +4,12 @@
     <testsuites>
         <testsuite name="OLCS Selfserve Application">
             <directory>./</directory>
+            <directory>../module/Application/test</directory>
         </testsuite>
     </testsuites>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">../module/Application/src</directory>
             <directory suffix=".php">../module/Olcs/src</directory>
             <directory suffix=".php">../module/Permits/src</directory>
             <exclude>
