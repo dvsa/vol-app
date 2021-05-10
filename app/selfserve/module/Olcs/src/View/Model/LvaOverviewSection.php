@@ -1,19 +1,9 @@
 <?php
 
-/**
- * Abstract Overview Section
- *
- * @author Nick Payne <nick.payne@valtech.co.uk>
- */
 namespace Olcs\View\Model;
 
 use Common\View\AbstractViewModel;
 
-/**
- * Abstract Overview Section
- *
- * @author Nick Payne <nick.payne@valtech.co.uk>
- */
 abstract class LvaOverviewSection extends AbstractViewModel
 {
     protected $variables = array(

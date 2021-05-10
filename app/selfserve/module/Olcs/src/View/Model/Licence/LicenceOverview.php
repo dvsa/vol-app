@@ -13,6 +13,7 @@ use Common\Service\Cqrs\Exception\NotFoundException;
 use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence;
 use Olcs\Service\Surrender\SurrenderStateService;
 use Olcs\View\Model\LvaOverview;
+use Olcs\View\Model\LvaOverviewSection;
 
 /**
  * Licence Overview View Model
@@ -27,8 +28,6 @@ class LicenceOverview extends LvaOverview
      * @var string
      */
     protected $template = 'overview-licence';
-
-    protected $sectionModel = 'Licence\\LicenceOverviewSection';
 
     protected $infoBoxLinks;
 
@@ -64,6 +63,15 @@ class LicenceOverview extends LvaOverview
         $this->infoBoxLinks = $this->returnDefaultInfoBoxLinks();
 
         parent::__construct($data, $sections);
+    }
+
+    /**
+     * @param mixed ...$args
+     * @return LicenceOverviewSection
+     */
+    protected function newSectionModel(...$args): LvaOverviewSection
+    {
+        return new LicenceOverviewSection(...$args);
     }
 
     public function setSurrenderLink($data): void

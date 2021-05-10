@@ -1,22 +1,27 @@
 <?php
 
-namespace Olcs\View\Model\Variation;
+namespace Dvsa\Olcs\Application\View\Model;
 
 use Olcs\View\Model\LvaOverview;
 use Common\RefData;
 use Olcs\View\Model\LvaOverviewSection;
 
-class VariationOverview extends LvaOverview
+/**
+ * Application Overview View Model
+ *
+ * @author Rob Caiger <rob@clocal.co.uk>
+ */
+class ApplicationOverview extends LvaOverview
 {
     /**
      * Holds the template
      *
      * @var string
      */
-    protected $template = 'overview-variation';
+    protected $template = 'overview-application';
 
     /**
-     * VariationOverview constructor. Sets the overview data
+     * ApplicationOverview constructor. Sets the overview data
      *
      * @param array $data           Data array
      * @param array $sections       Sections array
@@ -28,20 +33,29 @@ class VariationOverview extends LvaOverview
         $this->setVariable('licNo', isset($data['licence']['licNo']) ? $data['licence']['licNo'] : '');
         $this->setVariable('createdOn', date('d F Y', strtotime($data['createdOn'])));
         $this->setVariable('status', $data['status']['id']);
+        $this->setVariable('submissionForm', $submissionForm);
         $this->setVariable('receivedDate', $data['receivedDate']);
         $this->setVariable('completionDate', $data['targetCompletionDate']);
-        $this->setVariable('submissionForm', $submissionForm);
         $this->setVariable('canCancel', $data['status']['id'] === RefData::APPLICATION_STATUS_NOT_SUBMITTED);
+
+        $completedSections = array_filter(
+            $sections,
+            function ($section) {
+                return isset($section['complete']) && $section['complete'] == true;
+            }
+        );
+        $this->setVariable('progressX', count($completedSections));
+        $this->setVariable('progressY', count($sections));
 
         parent::__construct($data, $sections);
     }
 
     /**
      * @param mixed ...$args
-     * @return VariationOverviewSection
+     * @return ApplicationOverviewSection
      */
     protected function newSectionModel(...$args): LvaOverviewSection
     {
-        return new VariationOverviewSection(...$args);
+        return new ApplicationOverviewSection(...$args);
     }
 }
