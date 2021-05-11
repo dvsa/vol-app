@@ -11,7 +11,6 @@ return [
             'Application/People' => \Dvsa\Olcs\Application\Controller\PeopleController::class,
             'Application/OperatingCentres' => \Dvsa\Olcs\Application\Controller\OperatingCentresController::class,
             'Application/FinancialEvidence' => \Dvsa\Olcs\Application\Controller\FinancialEvidenceController::class,
-            'Application/TransportManagers' => \Dvsa\Olcs\Application\Controller\TransportManagersController::class,
             'Application/Vehicles' => \Dvsa\Olcs\Application\Controller\VehiclesController::class,
             'Application/VehiclesPsv' => \Dvsa\Olcs\Application\Controller\VehiclesPsvController::class,
             'Application/Safety' => \Dvsa\Olcs\Application\Controller\SafetyController::class,
@@ -27,7 +26,7 @@ return [
             'Application/Review' => \Common\Controller\Lva\ReviewController::class,
         ],
         'factories' => [
-
+            'Application/TransportManagers' => \Dvsa\Olcs\Application\Controller\Factory\TransportManagersControllerFactory::class,
         ],
         'delegators' => [
             'Application/BusinessType' => [
