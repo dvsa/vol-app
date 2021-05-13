@@ -54,7 +54,7 @@ return array(
                         'formatter' => 'Date',
                     ],
                     [
-                        'useByDate' => $row['irhpPermitRange']['irhpPermitStock']['validTo'] ?? null,
+                        'useByDate' => $row['ceasedDate'],
                     ]
                 );
             }
