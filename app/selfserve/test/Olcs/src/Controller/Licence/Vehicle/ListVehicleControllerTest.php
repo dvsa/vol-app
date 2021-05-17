@@ -15,7 +15,6 @@ use Common\Service\Helper\ResponseHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableBuilder;
 use Common\Service\Table\TableFactory;
-use Common\Test\Builder\ServiceManagerBuilder;
 use Common\Test\MockeryTestCase;
 use Dvsa\Olcs\Transfer\Command\Licence\UpdateVehicles;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence;
@@ -31,7 +30,6 @@ use Laminas\Http\Response;
 use Laminas\Mvc\Controller\Plugin\Url;
 use Laminas\Mvc\Router\Http\RouteMatch;
 use Laminas\ServiceManager\ServiceLocatorInterface;
-use Laminas\ServiceManager\ServiceManager;
 use Laminas\Stdlib\Parameters;
 use Laminas\Uri\Http;
 use Laminas\Validator\Translator\TranslatorInterface;
@@ -42,20 +40,30 @@ use Olcs\Controller\Licence\Vehicle\ListVehicleController;
 use Olcs\Controller\Licence\Vehicle\ListVehicleControllerFactory;
 use Olcs\Form\Model\Form\Vehicle\ListVehicleSearch;
 use Olcs\Table\TableEnum;
+use Common\Test\MocksServicesTrait;
 
+/**
+ * @see ListVehicleController
+ */
 class ListVehicleControllerTest extends MockeryTestCase
 {
+    use MocksServicesTrait;
+
+    /**
+     * @var ListVehicleController|null
+     */
+    protected $sut;
+
     /**
      * @test
      */
     public function indexAction_IsCallable()
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
 
         // Assert
-        $this->assertIsCallable([$sut, 'indexAction']);
+        $this->assertIsCallable([$this->sut, 'indexAction']);
     }
 
     /**
@@ -64,11 +72,10 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function postAction_IsCallable()
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
 
         // Assert
-        $this->assertIsCallable([$sut, 'postAction']);
+        $this->assertIsCallable([$this->sut, 'postAction']);
     }
 
     /**
@@ -78,13 +85,12 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function indexAction_RespondsInHtmlFormat_WhenNoFormatIsProvided()
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
         $request = $this->setUpRequest('/');
         $routeMatch = new RouteMatch([]);
 
         // Execute
-        $result = $sut->indexAction($request, $routeMatch);
+        $result = $this->sut->indexAction($request, $routeMatch);
 
         // Assert
         $this->assertInstanceOf(ViewModel::class, $result);
@@ -97,14 +103,13 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function indexAction_RespondsInHtmlFormat_WhenHtmlFormatIsProvided()
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
         $request = $this->setUpRequest('/');
         $request->setQuery(new Parameters(['format' => ListVehicleController::FORMAT_HTML]));
         $routeMatch = new RouteMatch([]);
 
         // Execute
-        $result = $sut->indexAction($request, $routeMatch);
+        $result = $this->sut->indexAction($request, $routeMatch);
 
         // Assert
         $this->assertInstanceOf(ViewModel::class, $result);
@@ -117,12 +122,11 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function indexAction_RespondsInHtmlFormat_WithLicence()
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
         $request = $this->setUpRequest('/');
         $routeMatch = new RouteMatch([]);
 
-        $queryHandler = $serviceManager->get(HandleQuery::class);
+        $queryHandler = $this->serviceManager->get(HandleQuery::class);
         assert($queryHandler instanceof MockInterface, 'Expected instance of MockInterface');
         $licenceData = $this->setUpDefaultLicenceData();
         $licenceQueryMatcher = IsInstanceOf::anInstanceOf(Licence::class);
@@ -132,7 +136,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $queryHandler->shouldReceive('__invoke')->with($licenceQueryMatcher)->andReturn($licenceQueryResponse);
 
         // Execute
-        $result = $sut->indexAction($request, $routeMatch);
+        $result = $this->sut->indexAction($request, $routeMatch);
 
         // Assert
         $this->assertSame($licenceData, $result->getVariables()['licence'] ?? null);
@@ -145,13 +149,12 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function indexAction_RespondsInHtmlFormat_WithExportCurrentAndRemovedCsvAction()
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
         $request = $this->setUpRequest('/');
         $routeMatch = new RouteMatch([]);
 
         // Execute
-        $result = $sut->indexAction($request, $routeMatch);
+        $result = $this->sut->indexAction($request, $routeMatch);
 
         // Assert
         $this->assertArrayHasKey('exportCurrentAndRemovedCsvAction', $result->getVariables());
@@ -164,12 +167,11 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function indexAction_RespondsInHtmlFormat_WithExportCurrentAndRemovedCsvAction_WithFormatQueryParameter()
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
         $request = $this->setUpRequest('/');
         $licenceId = 1;
         $routeMatch = new RouteMatch($routeParams = ['licence' => $licenceId]);
-        $urlHelper = $this->resolveMockService($serviceManager, Url::class);
+        $urlHelper = $this->resolveMockService($this->serviceManager, Url::class);
         $expectedUrl = "abcdefg";
 
         // Define Expectations
@@ -178,7 +180,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $urlHelper->shouldReceive('fromRoute')->with('licence/vehicle/list/GET', $routeParams, $optionsMatcher)->andReturn($expectedUrl);
 
         // Execute
-        $result = $sut->indexAction($request, $routeMatch);
+        $result = $this->sut->indexAction($request, $routeMatch);
 
         // Assert
         $this->assertEquals($expectedUrl, $result->getVariables()['exportCurrentAndRemovedCsvAction']);
@@ -191,12 +193,11 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function indexAction_RespondsInHtmlFormat_WithExportCurrentAndRemovedCsvAction_WithIncludeRemovedQueryParameter()
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
         $request = $this->setUpRequest('/');
         $licenceId = 1;
         $routeMatch = new RouteMatch($routeParams = ['licence' => $licenceId]);
-        $urlHelper = $this->resolveMockService($serviceManager, Url::class);
+        $urlHelper = $this->resolveMockService($this->serviceManager, Url::class);
         $expectedUrl = "abcdefg";
 
         // Define Expectations
@@ -205,7 +206,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $urlHelper->shouldReceive('fromRoute')->with('licence/vehicle/list/GET', $routeParams, $optionsMatcher)->andReturn($expectedUrl);
 
         // Execute
-        $result = $sut->indexAction($request, $routeMatch);
+        $result = $this->sut->indexAction($request, $routeMatch);
 
         // Assert
         $this->assertEquals($expectedUrl, $result->getVariables()['exportCurrentAndRemovedCsvAction']);
@@ -218,8 +219,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function indexAction_RespondsInHtmlFormat_AndConfiguresCurrentVehicleTable_Query()
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
 
         $query = [
             ListVehicleController::QUERY_KEY_SORT_CURRENT_VEHICLES => 'v.vrm',
@@ -233,10 +233,10 @@ class ListVehicleControllerTest extends MockeryTestCase
         // Define Expectations
         $queryMatcher = IsIdentical::identicalTo($query);
         $paramsMatcher = IsArrayContainingKeyValuePair::hasKeyValuePair('query', $queryMatcher);
-        $this->expectTableToBePrepared($serviceManager, TableEnum::LICENCE_VEHICLE_LIST_CURRENT, null, $paramsMatcher);
+        $this->expectTableToBePrepared($this->serviceManager, TableEnum::LICENCE_VEHICLE_LIST_CURRENT, null, $paramsMatcher);
 
         // Execute
-        $sut->indexAction($request, $routeMatch);
+        $this->sut->indexAction($request, $routeMatch);
     }
 
     /**
@@ -246,17 +246,16 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function indexAction_RespondsInHtmlFormat_AndConfiguresCurrentVehicleTable_Page_WhenNoPageIsSetOnARequest()
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
         $request = $this->setUpRequest('/');
         $routeMatch = new RouteMatch([]);
 
         // Define Expectations
         $paramsMatcher = IsArrayContainingKeyValuePair::hasKeyValuePair('page', 1);
-        $this->expectTableToBePrepared($serviceManager, TableEnum::LICENCE_VEHICLE_LIST_CURRENT, null, $paramsMatcher);
+        $this->expectTableToBePrepared($this->serviceManager, TableEnum::LICENCE_VEHICLE_LIST_CURRENT, null, $paramsMatcher);
 
         // Execute
-        $sut->indexAction($request, $routeMatch);
+        $this->sut->indexAction($request, $routeMatch);
     }
 
     /**
@@ -266,18 +265,17 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function indexAction_RespondsInHtmlFormat_AndConfiguresCurrentVehicleTable_Page_WhenEmptyPageIsSetOnARequest()
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
         $request = $this->setUpRequest('/');
         $request->setQuery(new Parameters(['page' => '']));
         $routeMatch = new RouteMatch([]);
 
         // Define Expectations
         $paramsMatcher = IsArrayContainingKeyValuePair::hasKeyValuePair('page', 1);
-        $this->expectTableToBePrepared($serviceManager, TableEnum::LICENCE_VEHICLE_LIST_CURRENT, null, $paramsMatcher);
+        $this->expectTableToBePrepared($this->serviceManager, TableEnum::LICENCE_VEHICLE_LIST_CURRENT, null, $paramsMatcher);
 
         // Execute
-        $sut->indexAction($request, $routeMatch);
+        $this->sut->indexAction($request, $routeMatch);
     }
 
     public function setUpRemovedTableTitleData()
@@ -296,21 +294,20 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function indexAction_RespondsInHtmlFormat_WithCorrectRemovedVehicleTableTitle(int $total, string $expectedTranslationKey)
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
         $request = $this->setUpRequest('/');
         $request->setQuery(new Parameters(['includeRemoved' => '']));
         $routeMatch = new RouteMatch([]);
         $expectedTitle = 'foo';
         $results = array_fill(0, $total, ['id' => 6]);
-        $this->injectRemovedVehiclesQueryResultData($serviceManager, ['count' => $total, 'results' => $results]);
-        $translator = $this->resolveMockService($serviceManager, TranslationHelperService::class);
+        $this->injectRemovedVehiclesQueryResultData($this->serviceManager, ['count' => $total, 'results' => $results]);
+        $translator = $this->resolveMockService($this->serviceManager, TranslationHelperService::class);
 
         // Define Expectations
         $translator->shouldReceive('translateReplace')->once()->with($expectedTranslationKey, [count($results)])->andReturn($expectedTitle);
 
         // Execute
-        $result = $sut->indexAction($request, $routeMatch);
+        $result = $this->sut->indexAction($request, $routeMatch);
         $title = $result->getVariable('removedVehicleTableTitle');
 
         // Assert
@@ -324,14 +321,13 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function indexAction_SetShowRemovedVehiclesToFalse_WhenALicenceHasNoRemovedVehicles()
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
         $request = $this->setUpRequest('/');
         $routeMatch = new RouteMatch([]);
-        $this->injectRemovedVehiclesQueryResultData($serviceManager, ['count' => 0, 'results' => []]);
+        $this->injectRemovedVehiclesQueryResultData($this->serviceManager, ['count' => 0, 'results' => []]);
 
         // Execute
-        $result = $sut->indexAction($request, $routeMatch);
+        $result = $this->sut->indexAction($request, $routeMatch);
 
         // Assert
         $matcher = IsArrayContainingKeyValuePair::hasKeyValuePair('showRemovedVehicles', false);
@@ -345,14 +341,13 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function indexAction_SetShowRemovedVehiclesToTrue_WhenALicenceHasOneRemovedVehicle()
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
         $request = $this->setUpRequest('/');
         $routeMatch = new RouteMatch([]);
-        $this->injectRemovedVehiclesQueryResultData($serviceManager, ['count' => 1, 'results' => []]);
+        $this->injectRemovedVehiclesQueryResultData($this->serviceManager, ['count' => 1, 'results' => []]);
 
         // Execute
-        $result = $sut->indexAction($request, $routeMatch);
+        $result = $this->sut->indexAction($request, $routeMatch);
 
         // Assert
         $matcher = IsArrayContainingKeyValuePair::hasKeyValuePair('showRemovedVehicles', true);
@@ -366,15 +361,14 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function indexAction_SetsExpandRemovedVehicles_WhenQueryParamIsSet_AndALicenceHasOneRemovedVehicle()
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
         $request = $this->setUpRequest('/');
         $request->setQuery(new Parameters(['includeRemoved' => '']));
         $routeMatch = new RouteMatch([]);
-        $this->injectRemovedVehiclesQueryResultData($serviceManager, ['count' => 1, 'results' => []]);
+        $this->injectRemovedVehiclesQueryResultData($this->serviceManager, ['count' => 1, 'results' => []]);
 
         // Execute
-        $result = $sut->indexAction($request, $routeMatch);
+        $result = $this->sut->indexAction($request, $routeMatch);
 
         // Assert
         $this->assertTrue($result->getVariable('showRemovedVehiclesExpanded'));
@@ -387,15 +381,14 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function indexAction_DoesNotSetExpandRemovedVehicles_WhenQueryParamIsSet_AndThereAreNoRemovedVehicles()
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
         $request = $this->setUpRequest('/');
         $request->setQuery(new Parameters(['includeRemoved' => '']));
         $routeMatch = new RouteMatch([]);
-        $this->injectRemovedVehiclesQueryResultData($serviceManager, ['count' => 0, 'results' => []]);
+        $this->injectRemovedVehiclesQueryResultData($this->serviceManager, ['count' => 0, 'results' => []]);
 
         // Execute
-        $result = $sut->indexAction($request, $routeMatch);
+        $result = $this->sut->indexAction($request, $routeMatch);
 
         // Assert
         $this->assertArrayNotHasKey('showRemovedVehiclesExpanded', $result->getVariables());
@@ -418,14 +411,13 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function indexAction_DoesNotSetToggleRemovedVehiclesAction_WhenNoRemovedVehicles()
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
         $request = $this->setUpRequest('foobarbaz');
         $routeMatch = new RouteMatch([]);
-        $this->injectRemovedVehiclesQueryResultData($serviceManager, ['count' => 0, 'results' => []]);
+        $this->injectRemovedVehiclesQueryResultData($this->serviceManager, ['count' => 0, 'results' => []]);
 
         // Execute
-        $variables = (array) ($sut->indexAction($request, $routeMatch)->getVariables());
+        $variables = (array) ($this->sut->indexAction($request, $routeMatch)->getVariables());
 
         // Assert
         $this->assertArrayNotHasKey('toggleRemovedAction', $variables);
@@ -437,13 +429,12 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function indexAction_DoesNotSetToggleRemovedVehiclesAction_WhenSearching()
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
         $request = $this->setUpRequest('foobarbaz', ['vehicleSearch' => []]);
         $routeMatch = new RouteMatch([]);
 
         // Execute
-        $variables = (array) ($sut->indexAction($request, $routeMatch)->getVariables());
+        $variables = (array) ($this->sut->indexAction($request, $routeMatch)->getVariables());
 
         // Assert
         $this->assertArrayNotHasKey('toggleRemovedAction', $variables);
@@ -455,14 +446,13 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function indexAction_SetToggleRemovedVehiclesAction_ToShowRemovedVehicles_WhenNoQueryParamIsSet()
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
         $request = $this->setUpRequest('foobarbaz');
         $routeMatch = new RouteMatch([]);
-        $this->injectRemovedVehiclesQueryResultData($serviceManager, ['count' => 1, 'results' => []]);
+        $this->injectRemovedVehiclesQueryResultData($this->serviceManager, ['count' => 1, 'results' => []]);
 
         // Execute
-        $variables = (array) ($sut->indexAction($request, $routeMatch)->getVariables());
+        $variables = (array) ($this->sut->indexAction($request, $routeMatch)->getVariables());
 
         // Assert
         $expectedQueryParam = ListVehicleController::QUERY_KEY_INCLUDE_REMOVED;
@@ -477,14 +467,13 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function indexAction_SetToggleRemovedVehiclesAction_ToHideRemovedVehicles_WhenQueryParamIsSet()
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
         $request = $this->setUpRequest('foobarbaz', [$expectedQueryParam = ListVehicleController::QUERY_KEY_INCLUDE_REMOVED => '']);
         $routeMatch = new RouteMatch([]);
-        $this->injectRemovedVehiclesQueryResultData($serviceManager, ['count' => 1, 'results' => []]);
+        $this->injectRemovedVehiclesQueryResultData($this->serviceManager, ['count' => 1, 'results' => []]);
 
         // Execute
-        $variables = (array) ($sut->indexAction($request, $routeMatch)->getVariables());
+        $variables = (array) ($this->sut->indexAction($request, $routeMatch)->getVariables());
 
         // Assert
         $message = sprintf('Expected route reference to not have "%s" query parameter set', $expectedQueryParam);
@@ -501,17 +490,16 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function indexAction_SetToggleRemovedVehiclesActionTitle_WithRelevantMessage_WhenQueryParamIsSet_AndLicenceHasRemovedVehicles(string $type)
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
         $request = $this->setUpRequest('/');
         $request->setQuery(new Parameters(['includeRemoved' => '']));
         $routeMatch = new RouteMatch([]);
-        $this->injectRemovedVehiclesQueryResultData($serviceManager, ['count' => 1, 'results' => []]);
+        $this->injectRemovedVehiclesQueryResultData($this->serviceManager, ['count' => 1, 'results' => []]);
         $expectedKey = sprintf('toggleRemovedVehiclesAction%s', ucfirst($type));
         $expectedTitle = sprintf('licence.vehicle.list.section.removed.action.hide-removed-vehicles.%s', $type);
 
         // Execute
-        $result = $sut->indexAction($request, $routeMatch);
+        $result = $this->sut->indexAction($request, $routeMatch);
 
         // Assert
         $variables = (array) $result->getVariables();
@@ -528,16 +516,15 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function indexAction_DoesNotSetToggleRemovedVehiclesActionTitle_WhenQueryParamIsNotSet_AndLicenceDoesNotHaveRemovedVehicles(string $type)
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
         $request = $this->setUpRequest('/');
         $request->setQuery(new Parameters(['includeRemoved' => '']));
         $routeMatch = new RouteMatch([]);
-        $this->injectRemovedVehiclesQueryResultData($serviceManager, ['count' => 0, 'results' => []]);
+        $this->injectRemovedVehiclesQueryResultData($this->serviceManager, ['count' => 0, 'results' => []]);
         $expectedKey = sprintf('toggleRemovedVehiclesAction%s', ucfirst($type));
 
         // Execute
-        $result = $sut->indexAction($request, $routeMatch);
+        $result = $this->sut->indexAction($request, $routeMatch);
 
         // Assert
         $variables = (array) $result->getVariables();
@@ -590,17 +577,16 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function indexAction_ValidatesInput_WhenInvalid_ReturnsRedirectResponse(array $input)
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
         $request = $this->setUpRequest('foobarbaz', $input);
         $routeMatch = new RouteMatch(['licence' => 1]);
 
         // Define Expectations
-        $redirectHelper = $this->resolveMockService($serviceManager, Redirect::class);
+        $redirectHelper = $this->resolveMockService($this->serviceManager, Redirect::class);
         $redirectHelper->shouldReceive('refresh')->withNoArgs()->andReturn($expectedResponse = new Response())->once();
 
         // Execute
-        $response = $sut->indexAction($request, $routeMatch);
+        $response = $this->sut->indexAction($request, $routeMatch);
 
         // Assert
         $this->assertSame($expectedResponse, $response);
@@ -616,17 +602,16 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function indexAction_ValidatesInput_WhenInvalid_FlashesValidationMessages(array $input, string $expectedFlashMessage)
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
         $request = $this->setUpRequest('foobarbaz', $input);
         $routeMatch = new RouteMatch(['licence' => 8]);
-        $flashMessenger = $this->resolveMockService($serviceManager, FlashMessengerHelperService::class);
+        $flashMessenger = $this->resolveMockService($this->serviceManager, FlashMessengerHelperService::class);
 
         // Define Expectations
         $flashMessenger->shouldReceive('addErrorMessage')->with($expectedFlashMessage)->once();
 
         // Execute
-        $sut->indexAction($request, $routeMatch);
+        $this->sut->indexAction($request, $routeMatch);
     }
 
     /**
@@ -639,18 +624,17 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function indexAction_ValidatesInput_WhenInvalid_TranslatesValidationMessages(array $input, string $expectedFlashMessage)
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
         $request = $this->setUpRequest('foobarbaz', $input);
         $routeMatch = new RouteMatch(['licence' => 8]);
-        $translator = $this->resolveMockService($serviceManager, TranslationHelperService::class);
+        $translator = $this->resolveMockService($this->serviceManager, TranslationHelperService::class);
         $baseTranslator = $translator->getTranslator();
 
         // Define Expectations
         $baseTranslator->shouldReceive('translate')->with($expectedFlashMessage, IsAnything::anything())->atLeast()->once()->andReturn('');
 
         // Execute
-        $sut->indexAction($request, $routeMatch);
+        $this->sut->indexAction($request, $routeMatch);
     }
 
     /**
@@ -662,14 +646,13 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function indexAction_ValidatesInput_WhenValid_ReturnsViewModel(array $input)
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
         $request = $this->setUpRequest('/');
         $request->setQuery(new Parameters($input));
         $routeMatch = new RouteMatch(['licence' => 8]);
 
         // Execute
-        $response = $sut->indexAction($request, $routeMatch);
+        $response = $this->sut->indexAction($request, $routeMatch);
 
         // Assert
         $this->assertInstanceOf(ViewModel::class, $response);
@@ -681,11 +664,10 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function indexAction_ReturnsRemovedVehiclesTable_ExcludingActiveVehicles()
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
         $request = $this->setUpRequest('/');
         $routeMatch = new RouteMatch([]);
-        $queryHandler = $this->resolveMockService($serviceManager, HandleQuery::class);
+        $queryHandler = $this->resolveMockService($this->serviceManager, HandleQuery::class);
 
         // Define Expectations
         $queryHandler->shouldReceive('__invoke')->withArgs(function ($query) {
@@ -693,7 +675,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         })->once()->andReturns($this->setUpQueryResponse());
 
         // Execute
-        $sut->indexAction($request, $routeMatch);
+        $this->sut->indexAction($request, $routeMatch);
     }
 
     /**
@@ -702,11 +684,10 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function indexAction_ReturnsRemovedVehiclesTable_SortedByDefault()
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
         $request = $this->setUpRequest('/');
         $routeMatch = new RouteMatch([]);
-        $queryHandler = $this->resolveMockService($serviceManager, HandleQuery::class);
+        $queryHandler = $this->resolveMockService($this->serviceManager, HandleQuery::class);
 
         // Define Expectations
         $queryHandler->shouldReceive('__invoke')->withArgs(function ($query) {
@@ -714,7 +695,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         })->once()->andReturns($this->setUpQueryResponse());
 
         // Execute
-        $sut->indexAction($request, $routeMatch);
+        $this->sut->indexAction($request, $routeMatch);
     }
 
     /**
@@ -723,11 +704,10 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function indexAction_ReturnsRemovedVehiclesTable_OrderedByDefault()
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
         $request = $this->setUpRequest('/');
         $routeMatch = new RouteMatch([]);
-        $queryHandler = $this->resolveMockService($serviceManager, HandleQuery::class);
+        $queryHandler = $this->resolveMockService($this->serviceManager, HandleQuery::class);
 
         // Define Expectations
         $queryHandler->shouldReceive('__invoke')->withArgs(function ($query) {
@@ -735,7 +715,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         })->once()->andReturns($this->setUpQueryResponse());
 
         // Execute
-        $sut->indexAction($request, $routeMatch);
+        $this->sut->indexAction($request, $routeMatch);
     }
 
     /**
@@ -744,11 +724,10 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function indexAction_ReturnsRemovedVehiclesTable_LimitsTo10ByDefault()
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
         $request = $this->setUpRequest('/');
         $routeMatch = new RouteMatch([]);
-        $queryHandler = $this->resolveMockService($serviceManager, HandleQuery::class);
+        $queryHandler = $this->resolveMockService($this->serviceManager, HandleQuery::class);
 
         // Define Expectations
         $queryHandler->shouldReceive('__invoke')->withArgs(function ($query) {
@@ -756,7 +735,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         })->once()->andReturns($this->setUpQueryResponse());
 
         // Execute
-        $sut->indexAction($request, $routeMatch);
+        $this->sut->indexAction($request, $routeMatch);
     }
 
     /**
@@ -765,11 +744,10 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function indexAction_ReturnsRemovedVehiclesTable_SetsPageToFirstPageByDefault()
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
         $request = $this->setUpRequest('/');
         $routeMatch = new RouteMatch([]);
-        $queryHandler = $this->resolveMockService($serviceManager, HandleQuery::class);
+        $queryHandler = $this->resolveMockService($this->serviceManager, HandleQuery::class);
 
         // Define Expectations
         $queryHandler->shouldReceive('__invoke')->withArgs(function ($query) {
@@ -777,7 +755,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         })->once()->andReturns($this->setUpQueryResponse());
 
         // Execute
-        $sut->indexAction($request, $routeMatch);
+        $this->sut->indexAction($request, $routeMatch);
     }
 
     /**
@@ -787,12 +765,11 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function postAction_RespondsInHtmlFormat_SetsUserOCRSOptInPreference_CheckboxValidValuesRunsCommand()
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
         $request = $this->setUpRequest('/');
         $routeMatch = new RouteMatch([]);
-        $commandHandler = $this->resolveMockService($serviceManager, HandleCommand::class);
-        $formHelper = $this->resolveMockService($serviceManager, FormHelperService::class);
+        $commandHandler = $this->resolveMockService($this->serviceManager, HandleCommand::class);
+        $formHelper = $this->resolveMockService($this->serviceManager, FormHelperService::class);
         $mockForm = $this->setUpForm();
         $mockForm->shouldReceive('getData')->andReturn(['ocrsCheckbox' => $expected = 'Y']);
         $formHelper->shouldReceive('createForm')->andReturn($mockForm);
@@ -807,7 +784,7 @@ class ListVehicleControllerTest extends MockeryTestCase
             ->andReturn(null);
 
         // Execute
-        $sut->postAction($request, $routeMatch);
+        $this->sut->postAction($request, $routeMatch);
     }
 
     /**
@@ -817,12 +794,11 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function postAction_RespondsInHtmlFormat_SetsUserOCRSOptInPreference_CheckboxInvalidValues_ReturnsIndexActionWithErrors()
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
         $request = $this->setUpRequest('/');
         $routeMatch = new RouteMatch([]);
-        $commandHandler = $this->resolveMockService($serviceManager, HandleCommand::class);
-        $formHelper = $this->resolveMockService($serviceManager, FormHelperService::class);
+        $commandHandler = $this->resolveMockService($this->serviceManager, HandleCommand::class);
+        $formHelper = $this->resolveMockService($this->serviceManager, FormHelperService::class);
         $mockForm = $this->setUpForm();
         $mockForm->shouldReceive('isValid')->andReturnFalse();
         $formHelper->shouldReceive('createForm')->andReturn($mockForm);
@@ -832,7 +808,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $commandHandler->shouldReceive('__invoke')->with($updateVehicleCommandMatcher)->never();
 
         // Execute
-        $sut->postAction($request, $routeMatch);
+        $this->sut->postAction($request, $routeMatch);
     }
 
     /**
@@ -841,57 +817,42 @@ class ListVehicleControllerTest extends MockeryTestCase
     public function indexAction_HidesRemovedVehicles_WhenSearching_AndLicenceHasRemovedVehicles()
     {
         // Setup
-        $serviceManager = $this->setUpServiceManager();
-        $sut = $this->setUpSut($serviceManager);
+        $this->setUpSut();
         $request = $this->setUpRequest('/foo/bar');
         $request->setQuery(new Parameters([ListVehicleSearch::FIELD_VEHICLE_SEARCH => [AbstractInputSearch::ELEMENT_INPUT_NAME => 'foo']]));
         $routeMatch = new RouteMatch([]);
-        $this->injectRemovedVehiclesQueryResultData($serviceManager, ['count' => 1, ['results' => []]]);
+        $this->injectRemovedVehiclesQueryResultData($this->serviceManager, ['count' => 1, ['results' => []]]);
 
         // Execute
-        $result = (array) $sut->indexAction($request, $routeMatch)->getVariables();
+        $result = (array) $this->sut->indexAction($request, $routeMatch)->getVariables();
 
         // Assert
         $this->assertArrayNotHasKey('showRemovedVehicles', $result);
     }
 
-    /**
-     * Sets up default services.
-     *
-     * @return array
-     */
+    protected function setUp(): void
+    {
+        $this->setUpServiceManager();
+    }
+
     public function setUpDefaultServices()
     {
-        return [
-            TableFactory::class => $this->setUpTableFactory(),
-            TranslationHelperService::class => $this->setUpTranslator(),
-            ResponseHelperService::class => $this->setUpResponseHelper(),
-            FormHelperService::class => $this->setUpFormHelper(),
-            FlashMessengerHelperService::class => $this->setUpFlashMessenger(),
-            HandleCommand::class => $this->setUpCommandHandler(),
-            HandleQuery::class => $this->setUpQueryHandler(),
-            Url::class => $this->setUpUrlHelper(),
-            Redirect::class => $this->setUpRedirectHelper(),
-        ];
+        $this->serviceManager->setService(TableFactory::class, $this->setUpTableFactory());
+        $this->serviceManager->setService(TranslationHelperService::class, $this->setUpTranslator());
+        $this->serviceManager->setService(ResponseHelperService::class, $this->setUpResponseHelper());
+        $this->serviceManager->setService(FormHelperService::class, $this->setUpFormHelper());
+        $this->serviceManager->setService(FlashMessengerHelperService::class, $this->setUpFlashMessenger());
+        $this->serviceManager->setService(HandleCommand::class, $this->setUpCommandHandler());
+        $this->serviceManager->setService(HandleQuery::class, $this->setUpQueryHandler());
+        $this->serviceManager->setService(Url::class, $this->setUpUrlHelper());
+        $this->serviceManager->setService(Redirect::class, $this->setUpRedirectHelper());
     }
 
-    /**
-     * @param ServiceManager $serviceManager
-     * @return ListVehicleController
-     */
-    protected function setUpSut(ServiceManager $serviceManager)
+    protected function setUpSut()
     {
         $factory = new ListVehicleControllerFactory();
-        $dispatcher = $factory->createService($serviceManager);
-        return $dispatcher->getDelegate();
-    }
-
-    /**
-     * @return ServiceManager
-     */
-    protected function setUpServiceManager(): ServiceManager
-    {
-        return (new ServiceManagerBuilder($this))->build();
+        $dispatcher = $factory->createService($this->serviceManager);
+        $this->sut = $dispatcher->getDelegate();
     }
 
     /**
@@ -1071,19 +1032,6 @@ class ListVehicleControllerTest extends MockeryTestCase
         $tableFactory = $this->resolveMockService($serviceLocator, TableFactory::class);
         $tableFactory->shouldReceive('prepareTable')->with($tableName, $data ?? $any, $params ?? $any)->once()->andReturn($tableBuilder);
         return $tableBuilder;
-    }
-
-    /**
-     * Resolves a mock service from a service container.
-     *
-     * @param ServiceLocatorInterface $serviceManager
-     * @return MockInterface
-     */
-    protected function resolveMockService(ServiceLocatorInterface $serviceManager, string $service): MockInterface
-    {
-        $service = $serviceManager->get($service);
-        assert($service instanceof MockInterface, 'Expected instance of MockInterface');
-        return $service;
     }
 
     /**
