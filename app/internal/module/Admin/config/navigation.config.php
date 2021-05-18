@@ -236,6 +236,11 @@ return [
                             'route' => 'admin-dashboard/admin-report/cases/open',
                         ],
                         [
+                            'id' => 'admin-dashboard/admin-report/permits',
+                            'label' => 'Permits',
+                            'route' => 'admin-dashboard/admin-report/permits',
+                        ],
+                        [
                             'id' => 'admin-dashboard/admin-report/upload',
                             'label' => 'Upload reports',
                             'route' => 'admin-dashboard/admin-report/upload',
