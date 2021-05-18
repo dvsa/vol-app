@@ -406,6 +406,16 @@ return [
                                     ],
                                 ],
                             ],
+                            'permits' => [
+                                'type' => Segment::class,
+                                'options' => [
+                                    'route' => 'permits[/]',
+                                    'defaults' => [
+                                        'controller' => Admin\Controller\PermitsReportController::class,
+                                        'action' => 'index',
+                                    ]
+                                ],
+                            ],
                             'upload' => [
                                 'type' => 'Segment',
                                 'options' => [
@@ -898,6 +908,7 @@ return [
             'Admin\PiReportController' => 'Admin\Controller\PiReportController',
             Admin\Controller\SystemInfoMessageController::class => Admin\Controller\SystemInfoMessageController::class,
             Admin\Controller\ReportCasesOpenController::class => Admin\Controller\ReportCasesOpenController::class,
+            Admin\Controller\PermitsReportController::class => Admin\Controller\PermitsReportController::class,
             Admin\Controller\DataRetentionController::class => Admin\Controller\DataRetentionController::class,
             Admin\Controller\DataRetentionReviewController::class =>
                 Admin\Controller\DataRetentionReviewController::class,
