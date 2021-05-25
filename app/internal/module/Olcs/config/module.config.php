@@ -403,9 +403,6 @@ return array(
             'submissionSectionOverview' => Olcs\View\Helper\SubmissionSectionOverview::class,
             'surrenderDetails' => Olcs\View\Helper\SurrenderDetails::class,
         ],
-        'delegators' => array(
-            'formElement' => array('Olcs\Form\View\Helper\FormElementDelegatorFactory')
-        ),
         'factories' => array(
             'SubmissionSectionTable' => 'Olcs\View\Helper\SubmissionSectionTableFactory',
             'SubmissionSectionMultipleTables' => 'Olcs\View\Helper\SubmissionSectionMultipleTablesFactory',
@@ -417,6 +414,13 @@ return array(
             'slaIndicator' => 'Olcs\View\Helper\SlaIndicator'
         ]
     ),
+    'form' => [
+        'element' => [
+            'renderers' => [
+                \Olcs\Form\Element\SubmissionSections::class => 'formSubmissionSections',
+            ],
+        ],
+    ],
     'local_forms_path' => array(
         __DIR__ . '/../src/Form/Forms/'
     ),
