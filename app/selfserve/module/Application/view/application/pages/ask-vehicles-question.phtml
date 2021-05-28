@@ -1,0 +1,25 @@
+<?php assert($this->form instanceof \Dvsa\Olcs\Application\Form\AddVehiclesQuestionForm); ?>
+
+<?= $this->partial('partials/page-header-simple', [
+    'pageTitle' => isset($this->title) ? $this->translate($this->title) : '',
+    'pageHeaderText' => isset($this->headerText) ? $this->translate($this->headerText) : '',
+    'pageSubTitle' => is_string($this->pageSubTitle) ? $this->pageSubTitle : $this->partial($this->pageSubTitle),
+    'backUrl' => ['url' => $this->backUrl ?? null],
+]); ?>
+
+<div class="row">
+    <div class="two-thirds">
+        <div class="js-body">
+            <?= $this->formErrors($this->form); ?>
+            <?= $this->form()->openTag($this->form); ?>
+            <?= $this->formRadioVertical($this->form->getRadioElement()); ?>
+            <div class="actions-container">
+                <?= $this->formButton($this->form->getNextButtonElement()); ?>
+                <?= $this->formButton($this->form->getReturnToOverviewButtonElement()); ?>
+            </div>
+            <?= $this->formHidden($this->form->getCsrfElement()); ?>
+            <?= $this->formHidden($this->form->getApplicationVersionElement()); ?>
+            <?= $this->form()->closeTag(); ?>
+        </div>
+    </div>
+</div>

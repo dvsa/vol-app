@@ -18,7 +18,7 @@ class ApplicationOverview extends LvaOverview
      *
      * @var string
      */
-    protected $template = 'overview-application';
+    protected $template = 'application/pages/overview-application';
 
     /**
      * ApplicationOverview constructor. Sets the overview data
