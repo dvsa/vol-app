@@ -15,6 +15,7 @@ class AddVehicleSearch
      * @Form\Name("vehicle-search")
      * @Form\Options({
      *     "label": "vrm.full",
+     *     "shouldEscapeMessages": false,
      * })
      * @Form\Type("\Common\Form\Elements\Types\DvlaVrmSearch")
      */
