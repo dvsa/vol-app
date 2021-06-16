@@ -156,8 +156,8 @@ class BusDetailsController extends AbstractInternalController implements
     {
         $busReg = $this->getBusReg();
 
-        if ($busReg['isReadOnly'] || $busReg['isFromEbsr']) {
-            // If read only or from EBSR show read only form
+        if ($busReg['isReadOnly']) {
+            // If read only show read only form
             $form->setOption('readonly', true);
         }
 
