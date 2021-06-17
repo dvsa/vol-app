@@ -39,7 +39,7 @@ class BusShortController extends AbstractInternalController implements BusRegCon
     {
         $busReg = $this->getBusReg();
 
-        if ($busReg['isReadOnly'] || $busReg['isFromEbsr']) {
+        if ($busReg['isReadOnly']) {
             $form->setOption('readonly', true);
         }
 

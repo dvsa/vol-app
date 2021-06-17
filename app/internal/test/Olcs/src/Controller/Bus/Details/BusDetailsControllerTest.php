@@ -122,28 +122,12 @@ class BusDetailsControllerTest extends MockeryTestCase
             [
                 [
                     'isReadOnly' => true,
-                    'isFromEbsr' => true,
-                ],
-                true,
-            ],
-            [
-                [
-                    'isReadOnly' => true,
-                    'isFromEbsr' => false,
                 ],
                 true,
             ],
             [
                 [
                     'isReadOnly' => false,
-                    'isFromEbsr' => true,
-                ],
-                true,
-            ],
-            [
-                [
-                    'isReadOnly' => false,
-                    'isFromEbsr' => false,
                 ],
                 false,
             ],
