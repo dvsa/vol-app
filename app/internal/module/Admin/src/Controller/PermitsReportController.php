@@ -6,6 +6,7 @@ namespace Admin\Controller;
 
 use Admin\Form\Model\Form\PermitsReport;
 use Common\Form\Form;
+use Dvsa\Olcs\Transfer\Command\Permits\QueueReport;
 use Dvsa\Olcs\Transfer\Query\Permits\ReportList;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
@@ -40,6 +41,36 @@ class PermitsReportController extends AbstractInternalController implements Left
      */
     public function indexAction(): ViewModel
     {
+        $request = $this->getRequest();
+
+        if ($request->isPost()) {
+            $postData = $request->getPost('reportOptions');
+
+            $startDate = $postData['startDate']['year']
+                . '-' . $postData['startDate']['month']
+                . '-' . $postData['startDate']['day'];
+            $endDate = $postData['endDate']['year']
+                . '-' . $postData['endDate']['month']
+                . '-' . $postData['endDate']['day'];
+
+            $command = QueueReport::create(
+                [
+                    'id' => $postData['id'],
+                    'startDate' => $startDate,
+                    'endDate' => $endDate
+                ]
+            );
+
+            $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
+            $response = $this->handleCommand($command);
+
+            if ($response->isOk()) {
+                $flashMessenger->addSuccessMessage('Report has been queued for generation');
+            } elseif ($response->isClientError() || $response->isServerError()) {
+                $this->handleErrors($response->getResult());
+            }
+        }
+
         $editViewTemplate = 'pages/crud-form';
 
         $form = $this->getForm(PermitsReport::class);
@@ -48,16 +79,6 @@ class PermitsReportController extends AbstractInternalController implements Left
         $this->placeholder()->setPlaceholder('form', $form);
 
         return $this->viewBuilder()->buildViewFromTemplate($editViewTemplate);
-    }
-
-    /**
-     * Process action - Generate
-     *
-     * @return ViewModel
-     */
-    public function generateAction(): ViewModel
-    {
-        throw new \BadFunctionCallException("PermitsReportController->generateAction() not yet implemented.");
     }
 
     /**
@@ -82,7 +103,7 @@ class PermitsReportController extends AbstractInternalController implements Left
             $options[$reportCode] = $reportTitle;
         }
 
-        $select = $form->get('reportOptions')->get('reportCode');
+        $select = $form->get('reportOptions')->get('id');
         assert($select instanceof \Laminas\Form\Element\Select);
         $select->setValueOptions($options);
     }

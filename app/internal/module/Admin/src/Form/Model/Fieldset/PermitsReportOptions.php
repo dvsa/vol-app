@@ -10,15 +10,15 @@ use Laminas\Form\Annotation as Form;
 class PermitsReportOptions
 {
     /**
-     * @Form\Name("reportCode")
+     * @Form\Name("id")
      * @Form\Type("Select")
      * @Form\Label("Report type")
      * @Form\Attributes({
-     *      "id": "reportCode",
+     *      "id": "id",
      * })
      * @Form\Options({"label":"Report type"})
      */
-    public $reportCode = null;
+    public $id = null;
 
     /**
      * @Form\Options({
