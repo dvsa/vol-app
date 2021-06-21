@@ -10,16 +10,13 @@ use Common\Form\Element\SubmitButton;
 use Common\Form\Element\Button;
 use Laminas\InputFilter\InputFilterAwareInterface;
 use Laminas\InputFilter\InputFilter;
-use Laminas\InputFilter\Input;
 use Laminas\Validator\InArray;
-use Laminas\Validator\NotEmpty;
 use Laminas\Form\Element\Hidden;
-use Laminas\Validator\GreaterThan;
-use Laminas\Filter\ToInt;
 use Laminas\InputFilter\InputInterface;
-use Laminas\I18n\Validator\IsInt;
 use Common\Form\FormWithCsrfTrait;
 use Common\Form\FormWithCsrfInterface;
+use Common\InputFilter\ChainValidatedInput;
+use Laminas\Validator\ValidatorChain;
 
 /**
  * @see AddVehiclesQuestionFormTest
@@ -68,15 +65,12 @@ class AddVehiclesQuestionForm extends Form implements InputFilterAwareInterface,
         $overviewButtonElement->setAttribute('name', static::SUBMIT);
 
         // Build input filter
-        $input = new Input(static::SUBMIT);
-        $input->setRequired(true);
-        $validatorChain = $input->getValidatorChain();
-
+        $input = new ChainValidatedInput(static::SUBMIT);
         $inArrayValidator = new InArray();
         $inArrayValidator->setStrict(InArray::COMPARE_STRICT);
         $inArrayValidator->setHaystack([static::NEXT, static::OVERVIEW]);
         $inArrayValidator->setMessage('An error occurred, please try again', InArray::NOT_IN_ARRAY);
-        $validatorChain->attach($inArrayValidator);
+        $input->getValidatorChain()->attach($inArrayValidator);
 
         $this->getInputFilter()->add($input);
     }
@@ -123,20 +117,13 @@ class AddVehiclesQuestionForm extends Form implements InputFilterAwareInterface,
         ]);
         $this->add($radioElement);
 
-        $input = new Input(static::RADIO);
-        $input->setRequired(true);
-        $validatorChain = $input->getValidatorChain();
-
-        $notEmptyValidator = new NotEmpty();
-        $notEmptyValidator->setMessage('application.vehicle.add-details.radio.messages.not-in-array', NotEmpty::IS_EMPTY);
-        $notEmptyValidator->setMessage('application.vehicle.add-details.radio.messages.not-in-array', NotEmpty::INVALID);
-        $validatorChain->attach($notEmptyValidator);
+        $input = new ChainValidatedInput(static::RADIO);
 
         $inArrayValidator = new InArray();
         $inArrayValidator->setStrict(InArray::COMPARE_STRICT);
         $inArrayValidator->setHaystack([static::NO, static::YES]);
         $inArrayValidator->setMessage('application.vehicle.add-details.radio.messages.not-in-array', InArray::NOT_IN_ARRAY);
-        $validatorChain->attach($inArrayValidator);
+        $input->getValidatorChain()->attach($inArrayValidator);
 
         $filterChain = $input->getFilterChain();
         $filterChain->attach(function ($value) {
@@ -218,15 +205,8 @@ class AddVehiclesQuestionForm extends Form implements InputFilterAwareInterface,
         $this->add($applicationVersionInput);
 
         // Build input
-        $input = new Input(static::APPLICATION_VERSION);
-
-        $validatorChain = $input->getValidatorChain();
-        $validatorChain->attach((new IsInt())->setStrict(true));
-        $validatorChain->attach(new GreaterThan(['min' => 0]));
-
-        $filterChain = $input->getFilterChain();
-        $filterChain->attach(new ToInt());
-
+        $input = new ChainValidatedInput(static::APPLICATION_VERSION);
+        $input->setRequired(false);
         $this->getInputFilter()->add($input);
     }
 

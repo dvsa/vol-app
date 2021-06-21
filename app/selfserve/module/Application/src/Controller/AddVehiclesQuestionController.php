@@ -236,34 +236,34 @@ class AddVehiclesQuestionController
 
     /**
      * @param int $applicationId
-     * @param int $applicationVersion
+     * @param mixed $applicationVersion
      * @throws BadCommandResponseException
      * @throws BailOutException
      */
-    protected function updateVehicleSectionStatusToComplete(int $applicationId, int $applicationVersion)
+    protected function updateVehicleSectionStatusToComplete(int $applicationId, $applicationVersion)
     {
         return $this->updateVehicleSectionStatus($applicationId, $applicationVersion, false);
     }
 
     /**
      * @param int $applicationId
-     * @param int $applicationVersion
+     * @param mixed $applicationVersion
      * @throws BadCommandResponseException
      * @throws BailOutException
      */
-    protected function updateVehicleSectionStatusToIncomplete(int $applicationId, int $applicationVersion)
+    protected function updateVehicleSectionStatusToIncomplete(int $applicationId, $applicationVersion)
     {
         return $this->updateVehicleSectionStatus($applicationId, $applicationVersion, true);
     }
 
     /**
      * @param int $applicationId
-     * @param int $applicationVersion
+     * @param mixed $applicationVersion
      * @param bool $intendingToEnterVehicleDetails
      * @throws BadCommandResponseException
      * @throws BailOutException
      */
-    protected function updateVehicleSectionStatus(int $applicationId, int $applicationVersion, bool $intendingToEnterVehicleDetails)
+    protected function updateVehicleSectionStatus(int $applicationId, $applicationVersion, bool $intendingToEnterVehicleDetails)
     {
         $command = UpdateVehicles::create([
             'id' => $applicationId,

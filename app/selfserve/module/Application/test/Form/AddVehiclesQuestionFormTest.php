@@ -9,9 +9,8 @@ use Laminas\Form\Element\Csrf;
 use Common\Form\Element\Button;
 use Laminas\Validator\InArray;
 use Common\Form\Elements\Custom\RadioVertical;
-use Laminas\Validator\NotEmpty;
 use Laminas\Form\Element\Hidden;
-use Laminas\InputFilter\InputInterface;
+use Common\InputFilter\ChainValidatedInput;
 
 /**
  * @see AddVehiclesQuestionForm
@@ -60,6 +59,9 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
     protected const POSITIVE_INTEGER = 1;
     protected const POSITIVE_INTEGER_STRING = '1';
     protected const AN_APPLICATION_VERSION = 1;
+    protected const IS_REQUIRED = true;
+    protected const IS_NOT_REQUIRED = false;
+    protected const IS_VALID = true;
 
     /**
      * @var AddVehiclesQuestionForm|null
@@ -519,18 +521,18 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
      * @test
      * @depends getSubmitInput_IsCallable
      */
-    public function getSubmitInput_ReturnsInstanceOfInputInterface()
+    public function getSubmitInput_ReturnsAnInput()
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
 
         // Assert
-        $this->assertInstanceOf(InputInterface::class, $this->sut->getSubmitInput());
+        $this->assertInstanceOf(ChainValidatedInput::class, $this->sut->getSubmitInput());
     }
 
     /**
      * @test
-     * @depends getSubmitInput_ReturnsInstanceOfInputInterface
+     * @depends getSubmitInput_ReturnsAnInput
      */
     public function getSubmitInput_ReturnsInstanceOfInputInterface_ThatIsRequired()
     {
@@ -539,15 +541,15 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
         // Execute
         $this->sut->setData(static::EMPTY_ARRAY_VALUE);
-        $this->sut->isValid();
+        $result = $this->sut->getSubmitInput()->isRequired();
 
         // Assert
-        $this->assertNotNull($this->sut->getMessages()[static::SUBMIT_KEY] ?? null);
+        $this->assertSame(static::IS_REQUIRED, $result);
     }
 
     /**
      * @test
-     * @depends getSubmitInput_ReturnsInstanceOfInputInterface
+     * @depends getSubmitInput_ReturnsAnInput
      */
     public function getSubmitInput_ReturnsInstanceOfInputInterface_ThatRejectsAnInvalidValue()
     {
@@ -596,7 +598,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
      * @depends getRadioInput_IsCallable
      * @depends __construct_InitialisesARadioElement
      */
-    public function getRadioInput_ReturnsInput()
+    public function getRadioInput_ReturnsAnInput()
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -605,7 +607,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $result = $this->sut->getRadioInput();
 
         // Assert
-        $this->assertInstanceOf(InputInterface::class, $result);
+        $this->assertInstanceOf(ChainValidatedInput::class, $result);
     }
 
     /**
@@ -621,7 +623,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getRadioInput_ReturnsInput
+     * @depends getRadioInput_ReturnsAnInput
      * @dataProvider validSubmitValuesDataProvider
      */
     public function getRadioInput_ReturnsInputFilter_ThatAcceptsValidValues(string $value)
@@ -639,7 +641,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getRadioInput_ReturnsInput
+     * @depends getRadioInput_ReturnsAnInput
      */
     public function getRadioInput_ReturnsInputFilter_ThatIsRequired()
     {
@@ -648,10 +650,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
         // Execute
         $this->sut->setData(static::EMPTY_ARRAY_VALUE);
-        $this->sut->isValid();
+        $result = $this->sut->getRadioInput()->isRequired();
 
         // Assert
-        $this->assertNotNull($this->sut->getMessages()[static::RADIO_KEY] ?? null);
+        $this->assertSame(static::IS_REQUIRED, $result);
     }
 
     /**
@@ -671,7 +673,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
     /**
      * @param mixed $value
      * @test
-     * @depends getRadioInput_ReturnsInput
+     * @depends getRadioInput_ReturnsAnInput
      * @dataProvider invalidRadioValueDataProvider
      */
     public function getRadioInput_ReturnsInputFilter_ThatRejectsAnInvalidValue($value)
@@ -689,53 +691,17 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getRadioInput_ReturnsInput
-     */
-    public function getRadioInput_ReturnsInputFilter_ThatRejectsAnInvalidValue_WithCustomMessageFor_NotEmpty_IsEmptyRule()
-    {
-        // Setup
-        $this->setUpSut(static::A_FORM_NAME);
-
-        // Execute
-        $validator = $this->sut->getRadioInput()->getValidatorChain()->getValidators()[0]['instance'];
-        assert($validator instanceof NotEmpty);
-        $result = $validator->getMessageTemplates()[NotEmpty::IS_EMPTY];
-
-        // Assert
-        $this->assertEquals(static::INVALID_RADIO_VALIDATION_MESSAGE, $result);
-    }
-
-    /**
-     * @test
-     * @depends getRadioInput_ReturnsInput
-     */
-    public function getRadioInput_ReturnsInputFilter_ThatRejectsAnInvalidValue_WithCustomMessageFor_NotEmpty_InvalidRule()
-    {
-        // Setup
-        $this->setUpSut(static::A_FORM_NAME);
-
-        // Execute
-        $validator = $this->sut->getRadioInput()->getValidatorChain()->getValidators()[0]['instance'];
-        assert($validator instanceof NotEmpty);
-        $result = $validator->getMessageTemplates()[NotEmpty::INVALID];
-
-        // Assert
-        $this->assertEquals(static::INVALID_RADIO_VALIDATION_MESSAGE, $result);
-    }
-
-    /**
-     * @test
-     * @depends getRadioInput_ReturnsInput
+     * @depends getRadioInput_ReturnsAnInput
      */
     public function getRadioInput_ReturnsInputFilter_ThatRejectsAnInvalidValue_WithCustomMessageFor_InArray_NotInArrayRule()
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
+        $this->sut->getRadioInput()->setValue(static::INVALID_RADIO_OPTION_VALUE);
+        $this->sut->getRadioInput()->isValid();
 
         // Execute
-        $validator = $this->sut->getRadioInput()->getValidatorChain()->getValidators()[1]['instance'];
-        assert($validator instanceof InArray);
-        $result = $validator->getMessageTemplates()[InArray::NOT_IN_ARRAY];
+        $result = $this->sut->getRadioInput()->getMessages()[InArray::NOT_IN_ARRAY];
 
         // Assert
         $this->assertEquals(static::INVALID_RADIO_VALIDATION_MESSAGE, $result);
@@ -1052,7 +1018,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
      * @test
      * @depends getApplicationVersionInput_IsCallable
      */
-    public function getApplicationVersionInput_ReturnsAnInstanceOfInput()
+    public function getApplicationVersionInput_ReturnsAnInput()
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -1061,104 +1027,30 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $result = $this->sut->getApplicationVersionInput();
 
         // Assert
-        $this->assertInstanceOf(InputInterface::class, $result);
+        $this->assertInstanceOf(ChainValidatedInput::class, $result);
     }
 
     /**
-     * @return array
-     */
-    public function validApplicationVersionsDataProvider(): array
-    {
-        return [
-            'positive integer' => [static::POSITIVE_INTEGER, static::POSITIVE_INTEGER],
-            'positive integer string' => [static::POSITIVE_INTEGER_STRING, static::POSITIVE_INTEGER],
-            'positive float' => [1.0, 1],
-            'positive float string' => ['1.0', 1],
-            'decimal positive float' => [1.1, 1],
-            'decimal positive float string' => ['1.1', 1],
-        ];
-    }
-
-    /**
-     * @param mixed $value
-     * @param mixed $filteredValue
      * @test
-     * @depends getApplicationVersionInput_ReturnsAnInstanceOfInput
-     * @dataProvider  validApplicationVersionsDataProvider
+     * @depends getApplicationVersionInput_IsCallable
      */
-    public function getApplicationVersionInput_FiltersValidValuesToBeIntegers($value, $filteredValue)
+    public function getApplicationVersionInput_ReturnsAnInstanceOfInput_WithAnEmptyValidatorChain()
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
 
         // Execute
-        $result = $this->sut->getApplicationVersionInput();
-        $result->setValue($value);
+        $result = $this->sut->getApplicationVersionInput()->getValidatorChain();
 
         // Assert
-        $this->assertEquals($filteredValue, $result->getValue());
-    }
-
-    /**
-     * @param mixed $value
-     * @test
-     * @depends getApplicationVersionInput_FiltersValidValuesToBeIntegers
-     * @dataProvider validApplicationVersionsDataProvider
-     */
-    public function getApplicationVersionInput_AcceptsValidValues($value)
-    {
-        // Setup
-        $this->setUpSut(static::A_FORM_NAME);
-
-        // Execute
-        $result = $this->sut->getApplicationVersionInput();
-        $result->setValue($value);
-
-        // Assert
-        $this->assertTrue($result->isValid());
-    }
-
-    /**
-     * @return array
-     */
-    public function invalidApplicationVersionsDataProvider(): array
-    {
-        return [
-            'zero integer' => [0],
-            'zero string' => ['0'],
-            'zero float' => [0.0],
-            'zero float string' => ['0.0'],
-            'empty string' => [''],
-            'empty array' => [[]],
-            'null' => [null],
-            'string' => ['string'],
-        ];
-    }
-
-    /**
-     * @param mixed $value
-     * @test
-     * @depends getApplicationVersionInput_ReturnsAnInstanceOfInput
-     * @dataProvider invalidApplicationVersionsDataProvider
-     */
-    public function getApplicationVersionInput_RejectsInvalidValues($value)
-    {
-        // Setup
-        $this->setUpSut(static::A_FORM_NAME);
-
-        // Execute
-        $result = $this->sut->getApplicationVersionInput();
-        $result->setValue($value);
-
-        // Assert
-        $this->assertFalse($result->isValid());
+        $this->assertSame(0, $result->count());
     }
 
     /**
      * @test
-     * @depends getApplicationVersionInput_ReturnsAnInstanceOfInput
+     * @depends getApplicationVersionInput_ReturnsAnInput
      */
-    public function getApplicationVersionInput_IsRequired()
+    public function getApplicationVersionInput_IsNotRequired()
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -1167,7 +1059,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $result = $this->sut->getApplicationVersionInput()->isRequired();
 
         // Assert
-        $this->assertTrue($result);
+        $this->assertSame(static::IS_NOT_REQUIRED, $result);
     }
 
     /**
@@ -1218,7 +1110,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
     /**
      * @test
      * @depends selectNo_IsCallable
-     * @depends getRadioInput_ReturnsInput
+     * @depends getRadioInput_ReturnsAnInput
      */
     public function selectNo_AddsRadioToInputFilterData()
     {
@@ -1281,7 +1173,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
     /**
      * @test
      * @depends selectYes_IsCallable
-     * @depends getRadioInput_ReturnsInput
+     * @depends getRadioInput_ReturnsAnInput
      */
     public function selectYes_AddsRadioToInputFilterData()
     {
@@ -1344,7 +1236,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
     /**
      * @test
      * @depends setApplicationVersion_IsCallable
-     * @depends getApplicationVersionInput_ReturnsAnInstanceOfInput
+     * @depends getApplicationVersionInput_ReturnsAnInput
      */
     public function setApplicationVersion_AddsApplicationVersionToInputFilterData()
     {
