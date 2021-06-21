@@ -32,6 +32,8 @@ use Common\Exception\BailOutException;
 use Common\RefData;
 use Common\Service\Cqrs\Exception\NotFoundException;
 use Common\Service\Cqrs\Exception\BadQueryResponseException;
+use Common\Service\Cqrs\Command\CommandSender;
+use Common\Service\Helper\FlashMessengerHelperService;
 
 /**
  * @see AddVehiclesQuestionController
@@ -54,22 +56,37 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
     protected const FLASH_MESSAGE_INPUT_NAMESPACE = 'add-vehicles-question-controller-input';
     protected const INVALID_RADIO_OPTION = 'INVALID RADIO OPTION';
     protected const RADIO_OPTION_YES = 1;
+    protected const RADIO_OPTION_YES_STRING = '1';
     protected const RADIO_OPTION_NO = 0;
     protected const INVALID_CSRF = 'INVALID CSRF';
     protected const VALID_CSRF = 'VALID CSRF';
     protected const INPUT_WITH_AN_INVALID_RADIO_OPTION = [self::RADIO_INPUT_KEY => self::INVALID_RADIO_OPTION];
+    protected const INPUT_WITH_AN_INVALID_RADIO_OPTION_AND_NULL_FOR_REMAINING_INPUTS = [
+        self::RADIO_INPUT_KEY => self::INVALID_RADIO_OPTION,
+        self::SUBMIT_INPUT_KEY => null,
+        self::SECURITY_INPUT_KEY => null,
+        self::APPLICATION_VERSION_INPUT_KEY => null,
+    ];
+    protected const INPUT_WITH_THE_RADIO_OPTION_SET_TO_YES_STRING = [self::RADIO_INPUT_KEY => self::RADIO_OPTION_YES_STRING];
+    protected const INPUT_WITH_THE_RADIO_OPTION_SET_TO_YES_INT = [self::RADIO_INPUT_KEY => self::RADIO_OPTION_YES];
+    protected const INPUT_WITH_THE_RADIO_OPTION_SET_TO_YES_INT_AND_NULL_FOR_REMAINING_INPUTS = [
+        self::RADIO_INPUT_KEY => self::RADIO_OPTION_YES,
+        self::SUBMIT_INPUT_KEY => null,
+        self::SECURITY_INPUT_KEY => null,
+        self::APPLICATION_VERSION_INPUT_KEY => null,
+    ];
     protected const SECURITY_INPUT_KEY = 'security';
     protected const EMPTY_FORM_DATA = [
         self::RADIO_INPUT_KEY => null,
         self::SUBMIT_INPUT_KEY => null,
         self::SECURITY_INPUT_KEY => null,
-        self::APPLICATION_VERSION_INPUT_KEY => null
+        self::APPLICATION_VERSION_INPUT_KEY => null,
     ];
     protected const FORM_DATA_FROM_INPUT_WITH_AN_INVALID_RADIO_OPTION = [
         self::RADIO_INPUT_KEY => self::INVALID_RADIO_OPTION,
         self::SUBMIT_INPUT_KEY => null,
         self::SECURITY_INPUT_KEY => null,
-        self::APPLICATION_VERSION_INPUT_KEY => self::APPLICATION_VERSION
+        self::APPLICATION_VERSION_INPUT_KEY => self::APPLICATION_VERSION,
     ];
     protected const MESSAGES_WITH_JSON_FROM_INPUT_WITH_AN_INVALID_RADIO_OPTION = ['{"radio": "' . self::INVALID_RADIO_OPTION . '"}'];
     protected const INVALID_SUBMIT_VALUE = "INVALID SUBMIT VALUE";
@@ -590,7 +607,7 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
      * @test
      * @depends indexAction_IsCallable
      */
-    public function indexAction_WhenPosting_AndAUserHasSuppliedInvalidInput_FlashTheUsersInput()
+    public function indexAction_WhenPosting_AndAUserHasSuppliedInvalidInput_FlashTheUsersInput_WithCustomNamespace()
     {
         // Setup
         $this->setUpSut();
@@ -599,7 +616,74 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->redirectHelper()->allows('toRoute')->andReturn($this->redirect());
 
         // Expect
-        $this->flashMessenger()->expects()->addMessage(json_encode(array_merge(static::EMPTY_FORM_DATA, static::INPUT_WITH_AN_INVALID_RADIO_OPTION)), static::FLASH_MESSAGE_INPUT_NAMESPACE);
+        $this->flashMessenger()->expects('addMessage')->withArgs(function ($message, $namespace) {
+            $this->assertSame(static::FLASH_MESSAGE_INPUT_NAMESPACE, $namespace);
+            return true;
+        });
+
+        // Execute
+        $this->sut->indexAction($request, $this->routeMatch());
+    }
+
+    /**
+     * @test
+     * @depends indexAction_IsCallable
+     */
+    public function indexAction_WhenPosting_AndAUserHasSuppliedInvalidInput_FlashTheUsersInput_WithJson()
+    {
+        // Setup
+        $this->setUpSut();
+        $request = $this->postRequest(static::INPUT_WITH_AN_INVALID_RADIO_OPTION);
+
+        $this->redirectHelper()->allows('toRoute')->andReturn($this->redirect());
+
+        // Expect
+        $this->flashMessenger()->expects('addMessage')->withArgs(function ($message) {
+            $this->assertJson($message);
+            return true;
+        });
+
+        // Execute
+        $this->sut->indexAction($request, $this->routeMatch());
+    }
+
+    /**
+     * @test
+     * @depends indexAction_WhenPosting_AndAUserHasSuppliedInvalidInput_FlashTheUsersInput_WithJson
+     */
+    public function indexAction_WhenPosting_AndAUserHasSuppliedInvalidInput_FlashTheUsersInput_WithJson_ContainingOriginalInput()
+    {
+        // Setup
+        $this->setUpSut();
+        $request = $this->postRequest(static::INPUT_WITH_AN_INVALID_RADIO_OPTION);
+        $this->redirectHelper()->allows('toRoute')->andReturn($this->redirect());
+
+        // Expect
+        $this->flashMessenger()->expects('addMessage')->withArgs(function ($message) {
+            $this->assertSame(static::INPUT_WITH_AN_INVALID_RADIO_OPTION_AND_NULL_FOR_REMAINING_INPUTS, json_decode($message, true));
+            return true;
+        });
+
+        // Execute
+        $this->sut->indexAction($request, $this->routeMatch());
+    }
+
+    /**
+     * @test
+     * @depends indexAction_WhenPosting_AndAUserHasSuppliedInvalidInput_FlashTheUsersInput_WithJson
+     */
+    public function indexAction_WhenPosting_AndAUserHasSuppliedInvalidInput_FlashTheUsersInput_WithJson_ContainingOriginalInput_FilteredByForm()
+    {
+        // Setup
+        $this->setUpSut();
+        $request = $this->postRequest(static::INPUT_WITH_THE_RADIO_OPTION_SET_TO_YES_STRING);
+        $this->redirectHelper()->allows('toRoute')->andReturn($this->redirect());
+
+        // Expect
+        $this->flashMessenger()->expects('addMessage')->withArgs(function ($message) {
+            $this->assertSame(static::INPUT_WITH_THE_RADIO_OPTION_SET_TO_YES_INT_AND_NULL_FOR_REMAINING_INPUTS, json_decode($message, true));
+            return true;
+        });
 
         // Execute
         $this->sut->indexAction($request, $this->routeMatch());
@@ -645,7 +729,7 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->sut->indexAction($request, $this->routeMatch());
 
         // Assert
-        $this->commandHandler()->shouldHaveReceived('__invoke')->withArgs(function ($command) {
+        $this->commandSender()->shouldHaveReceived('send')->withArgs(function ($command) {
             return $this->assertCommandUpdatesVehicleSectionToBeIncomplete($command);
         });
     }
@@ -687,7 +771,7 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         }
 
         // Assert
-        $this->commandHandler()->shouldHaveReceived('__invoke')->withArgs(function ($command) {
+        $this->commandSender()->shouldHaveReceived('send')->withArgs(function ($command) {
             return $this->assertCommandUpdatesVehicleSectionToBeIncomplete($command);
         });
     }
@@ -732,7 +816,7 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->sut->indexAction($request, $this->routeMatch());
 
         // Assert
-        $this->commandHandler()->shouldHaveReceived('__invoke')->withArgs(function ($command) {
+        $this->commandSender()->shouldHaveReceived('send')->withArgs(function ($command) {
             return $this->assertCommandUpdatesVehicleSectionToBeCompleted($command);
         });
     }
@@ -752,9 +836,27 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->sut->indexAction($request, $this->routeMatch());
 
         // Assert
-        $this->commandHandler()->shouldHaveReceived('__invoke')->withArgs(function ($command) {
+        $this->commandSender()->shouldHaveReceived('send')->withArgs(function ($command) {
             return $this->assertCommandUpdatesVehicleSectionToBeCompleted($command);
         });
+    }
+
+    /**
+     * @test
+     */
+    public function indexAction_WhenPosting_WhenAUserSelectsSaveAndReturnToOverview_AndTheNoRadioOptionIsSelected_UpdateVehicleSectionStatusToComplete_ExposesBailOutExceptionsFromTheCommandHandler()
+    {
+        // Setup
+        $this->enablePopulationOfCsrfDataBeforeFormValidation();
+        $this->setUpSut();
+        $request = $this->postRequest(static::GO_TO_OVERVIEW_WITHOUT_SUBMITTING_VEHICLES_INPUT_SET);
+        $this->commandSender()->allows('send')->with(IsInstanceOf::anInstanceOf(UpdateVehicles::class))->andThrow(BailOutException::class);
+
+        // Expect
+        $this->expectException(BailOutException::class);
+
+        // Execute
+        $this->sut->indexAction($request, $this->routeMatch());
     }
 
     /**
@@ -783,7 +885,7 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->enablePopulationOfCsrfDataBeforeFormValidation();
         $this->setUpSut();
         $request = $this->postRequest(static::GO_TO_OVERVIEW_WITHOUT_SUBMITTING_VEHICLES_INPUT_SET);
-        $this->commandHandler()->allows('__invoke')->andReturn($this->invalidCqrsResponse($invalidStatusCode));
+        $this->commandSender()->allows('send')->andReturn($this->invalidCqrsResponse($invalidStatusCode));
 
         // Expect
         $this->expectException(BadCommandResponseException::class);
@@ -804,7 +906,7 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->setUpSut();
         $request = $this->postRequest(static::GO_TO_OVERVIEW_WITHOUT_SUBMITTING_VEHICLES_INPUT_SET);
         $expectedException = new BailOutException(static::BAILOUT_EXCEPTION_MESSAGE, static::BAILOUT_EXCEPTION_RESPONSE);
-        $this->commandHandler()->allows('__invoke')->andThrow($expectedException);
+        $this->commandSender()->allows('send')->andThrow($expectedException);
 
         // Expect
         $this->expectExceptionObject($expectedException);
@@ -1149,20 +1251,32 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
     }
 
     /**
-     * @return MockInterface|HandleCommand
+     * @return HandleCommand
      */
-    protected function commandHandler(): MockInterface
+    protected function commandHandler(): HandleCommand
     {
-        if (!$this->serviceManager->has(HandleCommand::class)) {
-            $instance = $this->setUpMockService(HandleCommand::class);
-            $instance->allows('__invoke')->andReturnUsing(function () {
-                return $this->cqrsResponse();
-            })->byDefault();
+        if (! $this->serviceManager->has(HandleCommand::class)) {
+            $flashMessengerHelper = new FlashMessengerHelperService();
+            $flashMessengerHelper->setServiceLocator($this->serviceManager);
+            $instance = new HandleCommand($this->commandSender(), $flashMessengerHelper);
             $this->serviceManager->setService(HandleCommand::class, $instance);
         }
-        $instance = $this->serviceManager->get(HandleCommand::class);
-        assert($instance instanceof MockInterface);
-        return $instance;
+        return $this->serviceManager->get(HandleCommand::class);
+    }
+
+    /**
+     * @return MockInterface|CommandSender
+     */
+    protected function commandSender(): MockInterface
+    {
+        if (! $this->serviceManager->has(CommandSender::class)) {
+            $instance = $this->setUpMockService(CommandSender::class);
+            $instance->allows('send')->andReturnUsing(function () {
+                return $this->cqrsResponse();
+            })->byDefault();
+            $this->serviceManager->setService(CommandSender::class, $instance);
+        }
+        return $this->serviceManager->get(CommandSender::class);
     }
 
     /**
