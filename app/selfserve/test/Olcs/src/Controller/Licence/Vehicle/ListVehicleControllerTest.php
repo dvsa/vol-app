@@ -49,6 +49,30 @@ class ListVehicleControllerTest extends MockeryTestCase
 {
     use MocksServicesTrait;
 
+    protected const ROUTE_CONFIGURATION_FOR_LICENCE_WITH_REMOVED_VEHICLES_SHOWING_AND_FOCUSED = [
+        'licence/vehicle/list/GET',
+        [
+            'licence' => 0,
+        ],
+        [
+            'query' => [
+                'includeRemoved' => '',
+            ],
+            'fragment' => ListVehicleController::REMOVE_TABLE_WRAPPER_ID,
+        ],
+    ];
+    protected const ROUTE_CONFIGURATION_FOR_LICENCE_WITHOUT_REMOVED_VEHICLES_SHOWING = [
+        'licence/vehicle/list/GET',
+        [
+            'licence' => 0,
+        ],
+        [
+            'query' => [
+            ],
+        ],
+    ];
+    protected const A_URL = 'A URL';
+
     /**
      * @var ListVehicleController|null
      */
@@ -296,7 +320,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         // Setup
         $this->setUpSut();
         $request = $this->setUpRequest('/');
-        $request->setQuery(new Parameters(['includeRemoved' => '']));
+        $request->setQuery($this->parametersWhichIncludeRemoved());
         $routeMatch = new RouteMatch([]);
         $expectedTitle = 'foo';
         $results = array_fill(0, $total, ['id' => 6]);
@@ -363,7 +387,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         // Setup
         $this->setUpSut();
         $request = $this->setUpRequest('/');
-        $request->setQuery(new Parameters(['includeRemoved' => '']));
+        $request->setQuery($this->parametersWhichIncludeRemoved());
         $routeMatch = new RouteMatch([]);
         $this->injectRemovedVehiclesQueryResultData($this->serviceManager, ['count' => 1, 'results' => []]);
 
@@ -383,7 +407,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         // Setup
         $this->setUpSut();
         $request = $this->setUpRequest('/');
-        $request->setQuery(new Parameters(['includeRemoved' => '']));
+        $request->setQuery($this->parametersWhichIncludeRemoved());
         $routeMatch = new RouteMatch([]);
         $this->injectRemovedVehiclesQueryResultData($this->serviceManager, ['count' => 0, 'results' => []]);
 
@@ -392,6 +416,55 @@ class ListVehicleControllerTest extends MockeryTestCase
 
         // Assert
         $this->assertArrayNotHasKey('showRemovedVehiclesExpanded', $result->getVariables());
+    }
+
+    /**
+     * @test
+     * @depends indexAction_IsCallable
+     */
+    public function indexAction_ToggleUrlIncludesFragment_WhenQueryParamIsNotSet_AndALicenceHasOneRemovedVehicle()
+    {
+        // Setup
+        $this->setUpSut();
+        $request = $this->setUpRequest('/');
+        $routeMatch = new RouteMatch([]);
+        $this->injectRemovedVehiclesQueryResultData($this->serviceManager, ['count' => 1, 'results' => []]);
+        $this->urlHelper()
+            ->allows('fromRoute')
+            ->with(...static::ROUTE_CONFIGURATION_FOR_LICENCE_WITH_REMOVED_VEHICLES_SHOWING_AND_FOCUSED)
+            ->andReturn(static::A_URL);
+
+        // Execute
+        $result = $this->sut->indexAction($request, $routeMatch);
+
+        // Assert
+        $this->urlHelper()->shouldHaveReceived('fromRoute')->withArgs(static::ROUTE_CONFIGURATION_FOR_LICENCE_WITH_REMOVED_VEHICLES_SHOWING_AND_FOCUSED);
+        $this->assertEquals(static::A_URL, $result->getVariable('toggleRemovedAction'));
+    }
+
+    /**
+     * @test
+     * @depends indexAction_IsCallable
+     */
+    public function indexAction_ToggleUrlDoesNotIncludeFragment_WhenQueryParamIsSet_AndALicenceHasOneRemovedVehicle()
+    {
+        // Setup
+        $this->setUpSut();
+        $request = $this->setUpRequest('/');
+        $request->setQuery($this->parametersWhichIncludeRemoved());
+        $routeMatch = new RouteMatch([]);
+        $this->injectRemovedVehiclesQueryResultData($this->serviceManager, ['count' => 1, 'results' => []]);
+        $this->urlHelper()
+            ->allows('fromRoute')
+            ->with(...static::ROUTE_CONFIGURATION_FOR_LICENCE_WITHOUT_REMOVED_VEHICLES_SHOWING)
+            ->andReturn(static::A_URL);
+
+        // Execute
+        $result = $this->sut->indexAction($request, $routeMatch);
+
+        // Assert
+        $this->urlHelper()->shouldHaveReceived('fromRoute')->withArgs(static::ROUTE_CONFIGURATION_FOR_LICENCE_WITHOUT_REMOVED_VEHICLES_SHOWING);
+        $this->assertEquals(static::A_URL, $result->getVariable('toggleRemovedAction'));
     }
 
     /**
@@ -492,7 +565,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         // Setup
         $this->setUpSut();
         $request = $this->setUpRequest('/');
-        $request->setQuery(new Parameters(['includeRemoved' => '']));
+        $request->setQuery($this->parametersWhichIncludeRemoved());
         $routeMatch = new RouteMatch([]);
         $this->injectRemovedVehiclesQueryResultData($this->serviceManager, ['count' => 1, 'results' => []]);
         $expectedKey = sprintf('toggleRemovedVehiclesAction%s', ucfirst($type));
@@ -518,7 +591,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         // Setup
         $this->setUpSut();
         $request = $this->setUpRequest('/');
-        $request->setQuery(new Parameters(['includeRemoved' => '']));
+        $request->setQuery($this->parametersWhichIncludeRemoved());
         $routeMatch = new RouteMatch([]);
         $this->injectRemovedVehiclesQueryResultData($this->serviceManager, ['count' => 0, 'results' => []]);
         $expectedKey = sprintf('toggleRemovedVehiclesAction%s', ucfirst($type));
@@ -844,7 +917,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->serviceManager->setService(FlashMessengerHelperService::class, $this->setUpFlashMessenger());
         $this->serviceManager->setService(HandleCommand::class, $this->setUpCommandHandler());
         $this->serviceManager->setService(HandleQuery::class, $this->setUpQueryHandler());
-        $this->serviceManager->setService(Url::class, $this->setUpUrlHelper());
+        $this->urlHelper();
         $this->serviceManager->setService(Redirect::class, $this->setUpRedirectHelper());
     }
 
@@ -962,13 +1035,16 @@ class ListVehicleControllerTest extends MockeryTestCase
     }
 
     /**
-     * @return Url
+     * @return MockInterface|Url
      */
-    protected function setUpUrlHelper(): Url
+    protected function urlHelper(): MockInterface
     {
-        $instance = m::mock(Url::class);
-        $instance->shouldIgnoreMissing('');
-        return $instance;
+        if (! $this->serviceManager->has(Url::class)) {
+            $instance = m::mock(Url::class);
+            $instance->shouldIgnoreMissing('');
+            $this->serviceManager->setService(Url::class, $instance);
+        }
+        return $this->serviceManager->get(Url::class);
     }
 
     /**
@@ -1083,5 +1159,13 @@ class ListVehicleControllerTest extends MockeryTestCase
         $queryHandler->shouldReceive('__invoke')->withArgs(function ($query) {
             return $query instanceof Vehicles && $query->getIncludeActive() === false;
         })->andReturns($removedVehiclesQueryResponse)->byDefault();
+    }
+
+    /**
+     * @return Parameters
+     */
+    protected function parametersWhichIncludeRemoved(): Parameters
+    {
+        return new Parameters(['includeRemoved' => '']);
     }
 }

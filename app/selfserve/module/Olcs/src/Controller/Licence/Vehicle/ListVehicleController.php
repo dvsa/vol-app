@@ -57,6 +57,7 @@ class ListVehicleController
     const DEFAULT_ORDER_CURRENT_VEHICLES = 'DESC';
     const DEFAULT_SORT_REMOVED_VEHICLES = 'removalDate';
     const DEFAULT_ORDER_REMOVED_TABLE = 'DESC';
+    const REMOVE_TABLE_WRAPPER_ID = 'removed-table';
 
     /**
      * @var HandleCommand
@@ -352,14 +353,20 @@ class ListVehicleController
      */
     protected function buildToggleRemovedVehiclesUrl(int $licenceId, array $queryParams = []): string
     {
+        $urlOptions = [];
+
         if (array_key_exists(static::QUERY_KEY_INCLUDE_REMOVED, $queryParams)) {
             unset($queryParams[static::QUERY_KEY_INCLUDE_REMOVED]);
             unset($queryParams[static::QUERY_KEY_SORT_REMOVED_VEHICLES]);
             unset($queryParams[static::QUERY_KEY_ORDER_REMOVED_VEHICLES]);
         } else {
             $queryParams[static::QUERY_KEY_INCLUDE_REMOVED] = '';
+            $urlOptions['fragment'] = static::REMOVE_TABLE_WRAPPER_ID;
         }
-        return $this->urlHelper->fromRoute('licence/vehicle/list/GET', ['licence' => $licenceId], ['query' => $queryParams]);
+
+        $urlOptions['query'] = $queryParams;
+
+        return $this->urlHelper->fromRoute('licence/vehicle/list/GET', ['licence' => $licenceId], $urlOptions);
     }
 
     /**
