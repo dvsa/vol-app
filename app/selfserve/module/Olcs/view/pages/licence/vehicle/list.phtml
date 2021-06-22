@@ -58,7 +58,7 @@
                     </a>
 
                     <?php if ($this->showRemovedVehiclesExpanded) { ?>
-                        <div id="removed-table" class="govuk-!-margin-bottom-4">
+                        <div id="<?= \Olcs\Controller\Licence\Vehicle\ListVehicleController::REMOVE_TABLE_WRAPPER_ID ?>" class="govuk-!-margin-bottom-4">
                             <div class="govuk-table">
                                 <div class="govuk-clearfix">
                                     <h3 class="govuk-heading-m"><?php echo $this->removedVehicleTableTitle; ?></h3>
