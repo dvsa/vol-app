@@ -109,10 +109,11 @@ class RemoveVehicleConfirmationController extends AbstractVehicleController
         $this->flashMessenger->addMessage($panelMessage, SwitchBoardController::PANEL_FLASH_MESSENGER_NAMESPACE);
 
         if ($licence->getResult()['activeVehicleCount'] == 0) {
-            $this->flashMessenger->addSuccessMessage(
+            $this->flashMessenger->addMessage(
                 $this->translator->translate(
                     'licence.vehicle.remove.confirm.success.last-vehicle-removed'
-                )
+                ),
+                SwitchBoardController::PANEL_FLASH_MESSENGER_NAMESPACE
             );
         }
 

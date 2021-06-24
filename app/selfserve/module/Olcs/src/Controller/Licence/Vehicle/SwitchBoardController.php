@@ -116,6 +116,10 @@ class SwitchBoardController
                 'title' => $panel[0],
                 'theme' => Panel::TYPE_SUCCESS,
             ];
+
+            if (isset($panel[1])) {
+                $viewVariables['panel']['body'] = $panel[1];
+            }
         }
 
         $view = new ViewModel();
