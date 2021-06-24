@@ -41,10 +41,18 @@ class PermitsReportController extends AbstractInternalController implements Left
      */
     public function indexAction(): ViewModel
     {
-        $request = $this->getRequest();
+        $form = $this->getForm(PermitsReport::class);
+        $this->setSelectReportList($form);
 
-        if ($request->isPost()) {
-            $postData = $request->getPost('reportOptions');
+        $isPost = $this->getRequest()->isPost();
+
+        if ($isPost) {
+            $dataFromPost = $this->params()->fromPost();
+            $form->setData($dataFromPost);
+        }
+
+        if ($isPost && $form->isValid()) {
+            $postData = $dataFromPost['reportOptions'];
 
             $startDate = $postData['startDate']['year']
                 . '-' . $postData['startDate']['month']
@@ -66,15 +74,13 @@ class PermitsReportController extends AbstractInternalController implements Left
 
             if ($response->isOk()) {
                 $flashMessenger->addSuccessMessage('Report has been queued for generation');
+                return $this->redirect()->toRoute($this->navigationId);
             } elseif ($response->isClientError() || $response->isServerError()) {
                 $this->handleErrors($response->getResult());
             }
         }
 
         $editViewTemplate = 'pages/crud-form';
-
-        $form = $this->getForm(PermitsReport::class);
-        $this->setSelectReportList($form);
 
         $this->placeholder()->setPlaceholder('form', $form);
 
