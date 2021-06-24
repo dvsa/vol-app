@@ -72,7 +72,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
      * @test
      * @depends indexAction_ReturnsViewModel
      */
-    public function indexAction_ReturnsVierwModel_WithPanel_WhenFlashMessageHasPanelNamespace()
+    public function indexAction_ReturnsViewModel_WithPanel_WhenFlashMessageHasPanelNamespace()
     {
         // Setup
         $serviceLocator = $this->setUpServiceLocator();
@@ -91,6 +91,36 @@ class SwitchBoardControllerTest extends MockeryTestCase
         $expected = [
             'title' => 'title',
             'theme' => Panel::TYPE_SUCCESS
+        ];
+
+        // Assert
+        $this->assertSame($expected, $result->getVariable('panel'));
+    }
+
+    /**
+     * @test
+     * @depends indexAction_ReturnsViewModel_WithPanel_WhenFlashMessageHasPanelNamespace
+     */
+    public function indexAction_ReturnsViewModel_WithPanelBody_WhenFlashMessageHasPanelNamespaceSecondMessage()
+    {
+        // Setup
+        $serviceLocator = $this->setUpServiceLocator();
+        $sut = $this->setUpSut($serviceLocator);
+        $routeMatch = new RouteMatch([]);
+
+        // Define Expectations
+        $flashMessenger = $this->resolveMockService($serviceLocator, FlashMessenger::class);
+        $flashMessenger->shouldReceive('getMessages')
+            ->with('panel')
+            ->andReturn(['title', 'body']);
+
+        // Execute
+        $result = $sut->indexAction(new Request(), $routeMatch);
+
+        $expected = [
+            'title' => 'title',
+            'theme' => Panel::TYPE_SUCCESS,
+            'body' => 'body',
         ];
 
         // Assert
