@@ -52,9 +52,15 @@ return array(
                     case 'note_t_lic':
                     case 'note_t_tm':
                     case 'note_t_org':
-                    case 'note_t_permit':
                         return $data['noteType']['description'];
+                    case 'note_t_permit':
+                        $desc = $data['noteType']['description'];
 
+                        if (isset($data['irhpApplication']['id'])) {
+                            $desc .= ' ' . $data['irhpApplication']['id'];
+                        }
+
+                        return $desc;
                     case 'note_t_app':
                         return $data['noteType']['description'] . ' ' . $data['application']['id'];
                     case 'note_t_case':
