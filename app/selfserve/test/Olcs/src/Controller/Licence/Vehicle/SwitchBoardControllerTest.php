@@ -18,7 +18,6 @@ use Hamcrest\Core\IsInstanceOf;
 use Laminas\Form\Annotation\AnnotationBuilder;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
-use Laminas\Http\Response as HttpResponse;
 use Laminas\Mvc\Controller\Plugin\FlashMessenger;
 use Laminas\Mvc\Controller\Plugin\Url;
 use Laminas\Mvc\Router\Http\RouteMatch;
@@ -204,7 +203,6 @@ class SwitchBoardControllerTest extends MockeryTestCase
         $this->assertArrayNotHasKey(SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_TRANSFER, $options);
         $this->assertArrayNotHasKey(SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_REPRINT, $options);
         $this->assertArrayNotHasKey(SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW, $options);
-
     }
 
     /**
@@ -235,7 +233,6 @@ class SwitchBoardControllerTest extends MockeryTestCase
         $options = $form->get(SwitchBoard::FIELD_OPTIONS_FIELDSET_NAME)->get(SwitchBoard::FIELD_OPTIONS_NAME)->getValueOptions();
 
         $this->assertArrayNotHasKey(SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_TRANSFER, $options);
-
     }
 
     /**
@@ -302,23 +299,9 @@ class SwitchBoardControllerTest extends MockeryTestCase
 
     /**
      * @test
+     * @depends indexAction_IsCallable
      */
-    public function decisionAction_IsCallable()
-    {
-        // Setup
-        $serviceLocator = $this->setUpServiceLocator();
-
-        $sut = $this->setUpSut($serviceLocator);
-
-        // Assert
-        $this->assertIsCallable([$sut, 'decisionAction']);
-    }
-
-    /**
-     * @test
-     * @depends decisionAction_IsCallable
-     */
-    public function decisionAction_ShouldReturnIndexAction_WhenFormIsInavlid()
+    public function indexAction_WithPost_ShouldReturnRedirectToIndexAction_WhenFormIsInvalid()
     {
         // Setup
         $serviceLocator = $this->setUpServiceLocator();
@@ -326,21 +309,26 @@ class SwitchBoardControllerTest extends MockeryTestCase
         $routeMatch = new RouteMatch([]);
         $request = $this->setUpDecisionRequest('foo');
 
+        // Define expectations
+        $redirectHelper = $this->resolveMockService($serviceLocator, Redirect::class);
+        $redirectHelper->shouldReceive('toRoute')
+            ->with('lva-licence/vehicles', [], [], true)
+            ->andReturn($expectedResponse = new Response());
+
         // Execute
-        $result = $sut->decisionAction($request, $routeMatch);
+        $result = $sut->indexAction($request, $routeMatch);
 
         // Assert
-        $this->assertInstanceOf(ViewModel::class, $result);
-
+        $this->assertSame($expectedResponse, $result);
     }
 
     /**
      * @test
-     * @depends      decisionAction_IsCallable
+     * @depends      indexAction_IsCallable
      * @depends      indexAction_ReturnsViewModel
-     * @dataProvider decisionAction_ShouldRedirectToPage_DependantOnDecision_Provider
+     * @dataProvider indexAction_WithPost_ShouldRedirectToPage_DependantOnDecision_Provider
      */
-    public function decisionAction_ShouldRedirectToPage_DependantOnDecision(string $request, int $activeVehicleCount, array $route)
+    public function indexAction_WithPost_ShouldRedirectToPage_DependantOnDecision(string $request, int $activeVehicleCount, array $route)
     {
         // Setup
         $serviceLocator = $this->setUpServiceLocator();
@@ -364,13 +352,13 @@ class SwitchBoardControllerTest extends MockeryTestCase
             ->andReturn($this->setUpQueryResponse($licenceData));
 
         // Execute
-        $response = $sut->decisionAction($this->setUpDecisionRequest($request), $routeMatch);
+        $response = $sut->indexAction($this->setUpDecisionRequest($request), $routeMatch);
 
         // Assert
         $this->assertSame($expectedResponse, $response);
     }
 
-    public function decisionAction_ShouldRedirectToPage_DependantOnDecision_Provider()
+    public function indexAction_WithPost_ShouldRedirectToPage_DependantOnDecision_Provider()
     {
         return [
             'Add decision' => [
@@ -519,7 +507,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
      */
     protected function setUpQueryResponse(array $data): QueryResponse
     {
-        $response = new QueryResponse(new HttpResponse());
+        $response = new QueryResponse(new Response());
         $response->setResult($data);
         return $response;
     }
@@ -530,13 +518,13 @@ class SwitchBoardControllerTest extends MockeryTestCase
     protected function setUpDecisionRequest(string $value): Request
     {
         $request = new Request();
+        $request->setMethod(Request::METHOD_POST);
         $request->setPost(
             new Parameters([
                     SwitchBoard::FIELD_OPTIONS_FIELDSET_NAME => [
                         SwitchBoard::FIELD_OPTIONS_NAME => $value
                     ]
-                ]
-            )
+            ])
         );
         return $request;
     }

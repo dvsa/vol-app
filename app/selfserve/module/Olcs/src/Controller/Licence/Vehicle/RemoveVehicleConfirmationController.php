@@ -117,7 +117,7 @@ class RemoveVehicleConfirmationController extends AbstractVehicleController
             );
         }
 
-        return $this->nextStep('licence/vehicle/GET');
+        return $this->nextStep('lva-licence/vehicles');
     }
 
     /**
