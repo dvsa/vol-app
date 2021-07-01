@@ -54,7 +54,7 @@ class ReprintLicenceVehicleDiscController extends AbstractVehicleController
             'content' => '',
             'clearUrl' => $this->getLink('licence/vehicle/reprint/GET'),
             'form' => $form,
-            'backLink' => $this->getLink('licence/vehicle/GET'),
+            'backLink' => $this->getLink('lva-licence/vehicles'),
         ]);
 
         if ($vehicleTable->getTotal() > static::DEFAULT_TABLE_ROW_LIMIT) {
@@ -80,7 +80,7 @@ class ReprintLicenceVehicleDiscController extends AbstractVehicleController
         $action = array_keys($this->getRequest()->getPost('formActions'))[0];
 
         if ($action !== 'action') {
-            return $this->nextStep('licence/vehicle/GET');
+            return $this->nextStep('lva-licence/vehicles');
         }
 
         $selectedVehicles = $this->getRequest()->getPost('table')['id'] ?? null;

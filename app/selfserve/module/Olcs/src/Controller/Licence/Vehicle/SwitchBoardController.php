@@ -10,7 +10,6 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\ResponseHelperService;
 use Common\View\Helper\Panel;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence;
-use Laminas\Form\ElementInterface;
 use Laminas\Form\Form;
 use Laminas\Http\Request;
 use Laminas\Mvc\Controller\Plugin\FlashMessenger;
@@ -34,6 +33,7 @@ class SwitchBoardController
     const ROUTE_LICENCE_OVERVIEW = 'lva-licence';
 
     const PANEL_FLASH_MESSENGER_NAMESPACE = 'panel';
+    protected const FLASH_MESSAGE_INPUT_NAMESPACE = 'switchboard-input';
     /**
      * @var FlashMessenger
      */
@@ -97,6 +97,11 @@ class SwitchBoardController
      */
     public function indexAction(Request $request, RouteMatch $routeMatch)
     {
+        // Maintains backwards compatibility with OLD LVA Controller routing for /licence/{id}/vehicles
+        if ($request->isPost()) {
+            return $this->decisionAction($request, $routeMatch);
+        }
+
         $licenceId = (int) $routeMatch->getParam('licence');
         $this->session->getManager()->getStorage()->clear(LicenceVehicleManagement::SESSION_NAME);
 
@@ -135,7 +140,7 @@ class SwitchBoardController
      * @return Response|ResponseInterface|ViewModel
      * @throws \Exception
      */
-    public function decisionAction(Request $request, RouteMatch $routeMatch)
+    protected function decisionAction(Request $request, RouteMatch $routeMatch)
     {
         $licenceId = (int) $routeMatch->getParam('licence');
         $licence = $this->getLicence($licenceId);
@@ -143,7 +148,7 @@ class SwitchBoardController
         $form = $this->createSwitchBoardForm($licence, $formData);
 
         if (!$form->isValid()) {
-            return $this->indexAction($request, $routeMatch);
+            return $this->redirectHelper->toRoute('lva-licence/vehicles', [], [], true);
         }
 
         $selectedOption = $formData[SwitchBoardForm::FIELD_OPTIONS_FIELDSET_NAME]
@@ -187,7 +192,6 @@ class SwitchBoardController
      */
     protected function createSwitchBoardForm(array $licence, array $formData = []): Form
     {
-
         $form = $this->formHelper->createForm(SwitchBoardForm::class);
 
         $radioFieldOptions = $form

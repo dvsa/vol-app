@@ -1082,7 +1082,7 @@ return array(
             'LvaLicence/People'                     => \Olcs\Controller\Lva\Licence\PeopleControllerFactory::class,
             'LvaLicence/OperatingCentres'           => 'Olcs\Controller\Lva\Licence\OperatingCentresController',
             'LvaLicence/TransportManagers'          => Olcs\Controller\Lva\Licence\TransportManagersController::class,
-            'LvaLicence/Vehicles'                   => 'Olcs\Controller\Lva\Licence\VehiclesController',
+            'LvaLicence/Vehicles'                   => \Olcs\Controller\Lva\Licence\VehicleControllerFactory::class,
             'LvaLicence/VehiclesPsv'                => 'Olcs\Controller\Lva\Licence\VehiclesPsvController',
             'LvaLicence/Trailers'                   => 'Olcs\Controller\Lva\Licence\TrailersController',
             'LvaLicence/Safety'                     => 'Olcs\Controller\Lva\Licence\SafetyController',

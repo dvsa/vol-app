@@ -17,7 +17,7 @@ class ChooseADifferentOptionViewModel extends ContentWithPartialsViewModel
         $variables[parent::CONTENT_VARIABLE] = $variables[parent::CONTENT_VARIABLE] ?? 'licence.vehicle.partial.choose-different-option.text';
         $variables[parent::PARTIALS_VARIABLE] = [
             $variables['anchor1'] ?? new AnchorViewModel([
-                'route' => ['licence/vehicle/GET', [], [], true],
+                'route' => ['lva-licence/vehicles', [], [], true],
                 'title' => 'licence.vehicle.partial.choose-different-option.action_1.title',
                 'label' => 'licence.vehicle.partial.choose-different-option.action_1.label',
             ]),

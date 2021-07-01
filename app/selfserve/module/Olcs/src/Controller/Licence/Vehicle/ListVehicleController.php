@@ -179,7 +179,7 @@ class ListVehicleController
         $viewData = [
             'title' => $this->isSearchResultsPage($input) ? 'licence.vehicle.list.search.header' : 'licence.vehicle.list.header',
             'licence' => $licence,
-            'backLink' => $this->urlHelper->fromRoute('licence/vehicle/GET', ['licence' => $licenceId]),
+            'backLink' => $this->urlHelper->fromRoute('lva-licence/vehicles', ['licence' => $licenceId]),
             'shareVehicleInfoState' => $licence['organisation']['confirmShareVehicleInfo'],
             'exportCurrentAndRemovedCsvAction' => $this->buildCurrentAndRemovedCsvUrl($licenceId),
         ];

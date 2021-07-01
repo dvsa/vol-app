@@ -44,7 +44,7 @@ class TransferVehicleController extends AbstractVehicleController
             $this->alterVehicleForm();
         } catch (NoOtherLicencesFoundException $ex) {
             // If a user has no licences, redirect them to the switchboard.
-            return $this->nextStep('licence/vehicle/GET');
+            return $this->nextStep('lva-licence/vehicles');
         }
 
         $vehicleTable = $this->createVehicleTable();
@@ -77,7 +77,7 @@ class TransferVehicleController extends AbstractVehicleController
         $input = $this->getRequest()->getPost();
         $action = $input['formActions']['action'] ?? false;
         if ($action !== static::ACTION_TRANSFER) {
-            return $this->nextStep('licence/vehicle/GET');
+            return $this->nextStep('lva-licence/vehicles');
         }
 
         $selectedVehicles = $input['table']['id'] ?? null;
@@ -114,7 +114,7 @@ class TransferVehicleController extends AbstractVehicleController
             'content' => '',
             'clearUrl' => $this->getLink('licence/vehicle/transfer/GET'),
             'form' => $this->form,
-            'backLink' => $this->getLink('licence/vehicle/GET'),
+            'backLink' => $this->getLink('lva-licence/vehicles'),
         ];
     }
 

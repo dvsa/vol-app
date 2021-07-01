@@ -92,7 +92,7 @@ class AddDuplicateVehicleController extends AbstractVehicleController
         if ($response->isOk()) {
             $panelMessage = $this->translator->translateReplace('licence.vehicle.add.success', [$vehicleData['registrationNumber']]);
             $this->flashMessenger->addMessage($panelMessage, SwitchBoardController::PANEL_FLASH_MESSENGER_NAMESPACE);
-            return $this->nextStep('licence/vehicle/GET');
+            return $this->nextStep('lva-licence/vehicles');
         }
     }
 
@@ -106,7 +106,7 @@ class AddDuplicateVehicleController extends AbstractVehicleController
             'licNo' => $this->data['licence']['licNo'],
             'content' => '',
             'form' => $this->form,
-            'backLink' => $this->getLink('licence/vehicle/GET'),
+            'backLink' => $this->getLink('lva-licence/vehicles'),
         ];
     }
 }

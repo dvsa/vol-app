@@ -152,7 +152,7 @@ class TransferVehicleConfirmationController extends AbstractVehicleController
         $this->transferVehicles($this->licenceId, $vehicleIds, $destinationLicence);
         $this->flashTransferOfVehiclesCompleted($destinationLicence, $vehicleIds);
         $this->flashIfLicenceHasNoVehicles($this->licenceId);
-        return $this->nextStep('licence/vehicle/GET');
+        return $this->nextStep('lva-licence/vehicles');
     }
 
     /**

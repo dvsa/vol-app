@@ -55,7 +55,7 @@ class ViewVehicleController extends AbstractVehicleController
                 'make' => $licenceVehicleData['vehicle']['makeModel'],
             ],
             'form' => $this->form,
-            'manageVehiclesLink' => $this->getLink('licence/vehicle/GET'),
+            'manageVehiclesLink' => $this->getLink('lva-licence/vehicles'),
             'backLink' => $this->getLink('licence/vehicle/list/GET'),
         ]);
         $view->setTemplate('/pages/licence/vehicle/view');

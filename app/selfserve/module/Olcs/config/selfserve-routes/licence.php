@@ -489,31 +489,8 @@ return [
                     'type' => Segment::class,
                     'options' => [
                         'route' => 'vehicle[/]',
-                        'defaults' => [
-                            'controller' => SwitchBoardController::class,
-                        ],
                     ],
                     'child_routes' => [
-                        'GET' => [
-                            'may_terminate' => true,
-                            'type' => Method::class,
-                            'options' => [
-                                'verb' => 'GET',
-                                'defaults' => [
-                                    'action' => 'index',
-                                ],
-                            ],
-                        ],
-                        'POST' => [
-                            'may_terminate' => true,
-                            'type' => Method::class,
-                            'options' => [
-                                'verb' => 'POST',
-                                'defaults' => [
-                                    'action' => 'decision',
-                                ],
-                            ],
-                        ],
                         'view' => [
                             'may_terminate' => false,
                             'type' => Segment::class,

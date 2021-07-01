@@ -7,10 +7,7 @@ use Dvsa\Olcs\Transfer\Query;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 
 /**
- * External Licence Vehicles Goods Controller
- *
- * @author Nick Payne <nick.payne@valtech.co.uk>
- * @author Rob Caiger <rob@clocal.co.uk>
+ * @see VehicleControllerFactory
  */
 class VehiclesController extends AbstractGoodsVehiclesController
 {
