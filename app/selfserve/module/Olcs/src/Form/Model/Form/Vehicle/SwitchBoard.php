@@ -18,6 +18,7 @@ class SwitchBoard
     const FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_TRANSFER = 'transfer';
     const FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_REPRINT = 'reprint';
     const FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW = 'view';
+    const FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW_REMOVED = 'view-removed';
 
     /**
      * @Form\Name("optionsFieldset")

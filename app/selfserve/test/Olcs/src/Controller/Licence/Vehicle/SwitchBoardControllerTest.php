@@ -27,6 +27,7 @@ use Laminas\Stdlib\Parameters;
 use Laminas\View\Model\ViewModel;
 use Mockery as m;
 use Mockery\MockInterface;
+use Olcs\Controller\Licence\Vehicle\ListVehicleController;
 use Olcs\Controller\Licence\Vehicle\SwitchBoardController;
 use Olcs\Controller\Licence\Vehicle\SwitchBoardControllerFactory;
 use Olcs\Form\Model\Form\Vehicle\SwitchBoard;
@@ -241,7 +242,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
      * @test
      * @depends indexAction_ReturnsViewModel
      */
-    public function indexAction_SwitchBoardRewordsViewOption_WhenAllVehiclesHaveBeenRemoved()
+    public function indexAction_SwitchBoardRemovesViewOptionButKeepsViewRemoved_WhenAllVehiclesHaveBeenRemoved()
     {
         // Setup
         $serviceLocator = $this->setUpServiceLocator();
@@ -264,9 +265,39 @@ class SwitchBoardControllerTest extends MockeryTestCase
         // Assert
         $form = $result->getVariable('form');
         $options = $form->get(SwitchBoard::FIELD_OPTIONS_FIELDSET_NAME)->get(SwitchBoard::FIELD_OPTIONS_NAME)->getValueOptions();
-        $label = $options[SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW]['label'];
+        $this->assertArrayNotHasKey(SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW, $options);
+        $this->assertArrayHasKey(SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW_REMOVED, $options);
+    }
 
-        $this->assertSame('licence.vehicle.switchboard.form.view.label-removed', $label);
+    /**
+     * @test
+     * @depends indexAction_ReturnsViewModel
+     */
+    public function indexAction_SwitchBoardHasViewOptionRemovesViewRemoved_WhenNoVehiclesHaveBeenRemoved()
+    {
+        // Setup
+        $serviceLocator = $this->setUpServiceLocator();
+        $sut = $this->setUpSut($serviceLocator);
+        $routeMatch = new RouteMatch([]);
+
+        // Define expectations
+        $licenceData = $this->setUpDefaultLicenceData();
+        $licenceData['activeVehicleCount'] = 1;
+        $licenceData['totalVehicleCount'] = 1;
+
+        $queryHandler = $this->resolveMockService($serviceLocator, HandleQuery::class);
+        $queryHandler->shouldReceive('__invoke')
+            ->with(IsInstanceOf::anInstanceOf(Licence::class))
+            ->andReturn($this->setUpQueryResponse($licenceData));
+
+        // Execute
+        $result = $sut->indexAction(new Request(), $routeMatch);
+
+        // Assert
+        $form = $result->getVariable('form');
+        $options = $form->get(SwitchBoard::FIELD_OPTIONS_FIELDSET_NAME)->get(SwitchBoard::FIELD_OPTIONS_NAME)->getValueOptions();
+        $this->assertArrayNotHasKey(SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW_REMOVED, $options);
+        $this->assertArrayHasKey(SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW, $options);
     }
 
     /**
@@ -309,7 +340,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
      * @depends      indexAction_ReturnsViewModel
      * @dataProvider decisionAction_ShouldRedirectToPage_DependantOnDecision_Provider
      */
-    public function decisionAction_ShouldRedirectToPage_DependantOnDecision(string $request, string $route)
+    public function decisionAction_ShouldRedirectToPage_DependantOnDecision(string $request, int $activeVehicleCount, array $route)
     {
         // Setup
         $serviceLocator = $this->setUpServiceLocator();
@@ -318,9 +349,19 @@ class SwitchBoardControllerTest extends MockeryTestCase
 
         // Define expectations
         $redirectHelper = $this->resolveMockService($serviceLocator, Redirect::class);
-        $redirectHelper->shouldReceive('toRoute')
-            ->with($route, [], [], true)
+        $redirectHelper->expects('toRoute')
+            ->withArgs($route)
             ->andReturn($expectedResponse = new Response());
+
+        // Define expectations
+        $licenceData = $this->setUpDefaultLicenceData();
+        $licenceData['activeVehicleCount'] = $activeVehicleCount;
+        $licenceData['totalVehicleCount'] = 1;
+
+        $queryHandler = $this->resolveMockService($serviceLocator, HandleQuery::class);
+        $queryHandler->shouldReceive('__invoke')
+            ->with(IsInstanceOf::anInstanceOf(Licence::class))
+            ->andReturn($this->setUpQueryResponse($licenceData));
 
         // Execute
         $response = $sut->decisionAction($this->setUpDecisionRequest($request), $routeMatch);
@@ -334,24 +375,68 @@ class SwitchBoardControllerTest extends MockeryTestCase
         return [
             'Add decision' => [
                 SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_ADD,
-                SwitchBoardController::ROUTE_LICENCE_VEHICLE_ADD
-
+                1,
+                [
+                    SwitchBoardController::ROUTE_LICENCE_VEHICLE_ADD,
+                    [],
+                    [],
+                    true,
+                ],
             ],
             'Remove Decision' => [
                 SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_REMOVE,
-                SwitchBoardController::ROUTE_LICENCE_VEHICLE_REMOVE
+                1,
+                [
+                    SwitchBoardController::ROUTE_LICENCE_VEHICLE_REMOVE,
+                    [],
+                    [],
+                    true,
+                ],
             ],
             'Reprint decision' => [
-                SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_ADD,
-                SwitchBoardController::ROUTE_LICENCE_VEHICLE_ADD
+                SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_REPRINT,
+                1,
+                [
+                    SwitchBoardController::ROUTE_LICENCE_VEHICLE_REPRINT,
+                    [],
+                    [],
+                    true,
+                ],
             ],
             'Transfer decision' => [
-                SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_ADD,
-                SwitchBoardController::ROUTE_LICENCE_VEHICLE_ADD
+                SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_TRANSFER,
+                1,
+                [
+                    SwitchBoardController::ROUTE_LICENCE_VEHICLE_TRANSFER,
+                    [],
+                    [],
+                    true,
+                ],
             ],
             'View decision' => [
-                SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_ADD,
-                SwitchBoardController::ROUTE_LICENCE_VEHICLE_ADD
+                SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW,
+                1,
+                [
+                    SwitchBoardController::ROUTE_LICENCE_VEHICLE_LIST,
+                    [],
+                    [],
+                    true,
+                ],
+            ],
+            'View removed decision' => [
+                SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW_REMOVED,
+                0,
+                [
+                    SwitchBoardController::ROUTE_LICENCE_VEHICLE_LIST,
+                    [],
+                    [
+                        'query' => [
+                            ListVehicleController::QUERY_KEY_INCLUDE_REMOVED => ''
+                        ],
+                        'fragment' => ListVehicleController::REMOVE_TABLE_WRAPPER_ID
+                    ],
+                    true,
+                ],
             ]
         ];
     }

@@ -161,6 +161,18 @@ class SwitchBoardController
                 return $this->redirectHelper->toRoute(static::ROUTE_LICENCE_VEHICLE_TRANSFER, [], [], true);
             case SwitchBoardForm::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW:
                 return $this->redirectHelper->toRoute(static::ROUTE_LICENCE_VEHICLE_LIST, [], [], true);
+            case SwitchBoardForm::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW_REMOVED:
+                return $this->redirectHelper->toRoute(
+                    static::ROUTE_LICENCE_VEHICLE_LIST,
+                    [],
+                    [
+                        'query' => [
+                            ListVehicleController::QUERY_KEY_INCLUDE_REMOVED => ''
+                        ],
+                        'fragment' => ListVehicleController::REMOVE_TABLE_WRAPPER_ID
+                    ],
+                    true
+                );
             default:
                 throw new \Exception('Unexpected value');
         }
@@ -190,14 +202,12 @@ class SwitchBoardController
             $radioFieldOptions->unsetValueOption(SwitchBoardForm::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_REMOVE);
             $radioFieldOptions->unsetValueOption(SwitchBoardForm::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_REPRINT);
             $radioFieldOptions->unsetValueOption(SwitchBoardForm::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_TRANSFER);
-
+            $radioFieldOptions->unsetValueOption(SwitchBoardForm::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW);
             if ($licence['totalVehicleCount'] === 0) {
-                $radioFieldOptions->unsetValueOption(SwitchBoardForm::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW);
-            } else {
-                $valueOptions = $radioFieldOptions->getValueOptions();
-                $valueOptions['view']['label'] = "licence.vehicle.switchboard.form.view.label-removed";
-                $radioFieldOptions->setValueOptions($valueOptions);
+                $radioFieldOptions->unsetValueOption(SwitchBoardForm::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW_REMOVED);
             }
+        } else {
+            $radioFieldOptions->unsetValueOption(SwitchBoardForm::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW_REMOVED);
         }
 
         $form->setData($formData);
