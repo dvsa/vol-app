@@ -54,7 +54,14 @@ class SwitchBoard
      *              "attributes": {
      *                  "id":"view-vehicles"
      *              },
-     *          }
+     *          },
+     *          "view-removed": {
+     *              "label": "licence.vehicle.switchboard.form.view.label-removed",
+     *              "value": "view-removed",
+     *              "attributes": {
+     *                  "id":"view-removed-vehicles"
+     *              },
+     *          },
      *      }
      * })
      * @Form\Type("\Common\Form\Elements\Types\Radio")
