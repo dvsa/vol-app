@@ -27,7 +27,7 @@ class AddVehiclesQuestionControllerFactory extends BinaryFeatureToggleAwareContr
      */
     protected function getFeatureToggleNames(): array
     {
-        return [FeatureToggle::DVLA_INTEGRATION];
+        return [FeatureToggle::NEW_GOODS_APP_VEHICLE];
     }
 
     /**
