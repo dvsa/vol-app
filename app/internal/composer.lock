@@ -3579,12 +3579,12 @@
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.352",
+            "version": "4.206.354",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.352/olcs-olcs-common-4.206.352.zip",
-                "reference": "3cc3049ce8c94c004c7dc4b0410cb439f9781366",
-                "shasum": "3cc3049ce8c94c004c7dc4b0410cb439f9781366"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.354/olcs-olcs-common-4.206.354.zip",
+                "reference": "f86451fd7d7b0b0da23ad85e6cdfc56641319d66",
+                "shasum": "f86451fd7d7b0b0da23ad85e6cdfc56641319d66"
             },
             "require": {
                 "doctrine/annotations": "^1.8",
@@ -3670,7 +3670,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2021-05-28T11:36:51+00:00"
+            "time": "2021-07-01T14:32:36+00:00"
         },
         {
             "name": "olcs/olcs-logging",
