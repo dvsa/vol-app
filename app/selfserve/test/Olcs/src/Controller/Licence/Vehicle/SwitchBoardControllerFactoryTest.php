@@ -7,6 +7,7 @@ namespace Olcs\Controller\Licence\Vehicle;
 use Common\Controller\Dispatcher;
 use Common\Controller\Plugin\HandleQuery;
 use Common\Controller\Plugin\Redirect;
+use Common\Form\FormValidator;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\ResponseHelperService;
 use Common\Test\MockeryTestCase;
@@ -102,7 +103,8 @@ class SwitchBoardControllerFactoryTest extends MockeryTestCase
             Redirect::class => $this->setUpMockService(Redirect::class),
             ResponseHelperService::class => $this->setUpMockService(ResponseHelperService::class),
             Url::class => $this->setUpMockService(Url::class),
-            LicenceVehicleManagement::class => new LicenceVehicleManagement()
+            LicenceVehicleManagement::class => new LicenceVehicleManagement(),
+            FormValidator::class => new FormValidator(),
         ];
     }
 }
