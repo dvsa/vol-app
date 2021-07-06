@@ -7,7 +7,6 @@ use Common\Rbac\User;
 use Common\RefData;
 use Common\Service\Cqrs\Query\QuerySender;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence;
-use Laminas\Authentication\AuthenticationService;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
@@ -61,9 +60,9 @@ class NavigationToggle implements ListenerAggregateInterface, FactoryInterface
      */
     public function onDispatch(MvcEvent $e)
     {
-        /** @var AuthenticationService $identity */
+        /** @var User $identity */
         $identity = $this->authenticationService->getIdentity();
-        /** @var User $userData */
+
         $userData = $identity->getUserData();
 
         //prevent this from running if the user is not logged in
