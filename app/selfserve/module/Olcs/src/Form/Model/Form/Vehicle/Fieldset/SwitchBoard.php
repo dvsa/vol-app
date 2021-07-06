@@ -18,6 +18,7 @@ class SwitchBoard
      *     "label_attributes": {
      *         "class": "form-control form-control--radio form-control--advanced"
      *     },
+     *     "disable_inarray_validator": true,
      *     "hint": "Select an option to manage your vehicles",
      *     "value_options": {
      *          "add": {
@@ -71,7 +72,17 @@ class SwitchBoard
      *     "options":{
      *         "messages": {
      *             "isEmpty": "licence.vehicle.switchboard.form.error.select-option"
-     *         }
+     *         },
+     *         "break_chain_on_failure": true,
+     *     }
+     * })
+     * @Form\Validator({
+     *     "name":"Laminas\Validator\InArray",
+     *     "options": {
+     *         "haystack": {
+     *             "add", "remove", "reprint", "transfer", "view", "view-removed"
+     *         },
+     *         "strict": true,
      *     }
      * })
      */

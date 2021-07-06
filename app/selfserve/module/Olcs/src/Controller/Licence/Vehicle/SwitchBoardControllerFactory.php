@@ -7,6 +7,7 @@ namespace Olcs\Controller\Licence\Vehicle;
 use Common\Controller\Dispatcher;
 use Common\Controller\Plugin\HandleQuery;
 use Common\Controller\Plugin\Redirect;
+use Common\Form\FormValidator;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\ResponseHelperService;
 use Interop\Container\ContainerInterface;
@@ -52,7 +53,8 @@ class SwitchBoardControllerFactory implements FactoryInterface
             $redirectHelper = $controllerPluginManager->get(Redirect::class),
             $container->get(ResponseHelperService::class),
             $container->get(LicenceVehicleManagement::class),
-            $urlHelper = $controllerPluginManager->get(Url::class)
+            $urlHelper = $controllerPluginManager->get(Url::class),
+            $container->get(FormValidator::class)
         );
 
         // Decorate controller

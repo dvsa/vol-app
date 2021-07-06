@@ -6,6 +6,7 @@ namespace Olcs\Controller\Licence\Vehicle;
 
 use Common\Controller\Plugin\HandleQuery;
 use Common\Controller\Plugin\Redirect;
+use Common\Form\FormValidator;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\ResponseHelperService;
 use Common\View\Helper\Panel;
@@ -69,6 +70,11 @@ class SwitchBoardController
      */
     private $urlHelper;
 
+    /**
+     * @var FormValidator
+     */
+    private $formValidator;
+
     public function __construct(
         FlashMessenger $flashMessenger,
         FormHelperService $formHelper,
@@ -76,7 +82,8 @@ class SwitchBoardController
         Redirect $redirectHelper,
         ResponseHelperService $responseHelper,
         LicenceVehicleManagement $session,
-        Url $urlHelper
+        Url $urlHelper,
+        FormValidator $formValidator
     ) {
         $this->flashMessenger = $flashMessenger;
         $this->formHelper = $formHelper;
@@ -85,6 +92,7 @@ class SwitchBoardController
         $this->responseHelper = $responseHelper;
         $this->session = $session;
         $this->urlHelper = $urlHelper;
+        $this->formValidator = $formValidator;
     }
 
 
@@ -107,10 +115,15 @@ class SwitchBoardController
 
         $licence = $this->getLicence($licenceId);
 
+        $flashedInput = null;
+        if ($this->flashMessenger->hasMessages(static::FLASH_MESSAGE_INPUT_NAMESPACE)) {
+            $flashedInput = json_decode(array_values($this->flashMessenger->getMessages(static::FLASH_MESSAGE_INPUT_NAMESPACE))[0], true);
+        }
+
         $viewVariables = [
             'title' => 'licence.vehicle.switchboard.header',
             'subTitle' => $licence['licNo'],
-            'form' => $this->createSwitchBoardForm($licence),
+            'form' => $this->createSwitchBoardForm($licence, $flashedInput),
             'backLink' => $this->urlHelper->fromRoute(static::ROUTE_LICENCE_OVERVIEW, [], [], true)
         ];
 
@@ -147,7 +160,8 @@ class SwitchBoardController
         $formData = $request->getPost()->toArray();
         $form = $this->createSwitchBoardForm($licence, $formData);
 
-        if (!$form->isValid()) {
+        if (! $this->formValidator->isValid($form)) {
+            $this->flashMessenger->addMessage(json_encode($form->getData()), static::FLASH_MESSAGE_INPUT_NAMESPACE);
             return $this->redirectHelper->toRoute('lva-licence/vehicles', [], [], true);
         }
 
@@ -190,7 +204,7 @@ class SwitchBoardController
      * @param array $formData
      * @return Form
      */
-    protected function createSwitchBoardForm(array $licence, array $formData = []): Form
+    protected function createSwitchBoardForm(array $licence, array $formData = null): Form
     {
         $form = $this->formHelper->createForm(SwitchBoardForm::class);
 
@@ -214,7 +228,12 @@ class SwitchBoardController
             $radioFieldOptions->unsetValueOption(SwitchBoardForm::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW_REMOVED);
         }
 
-        $form->setData($formData);
+        if (null !== $formData) {
+            $form->setData($formData);
+            $this->formValidator->isValid($form);
+        }
+
+
 
         return $form;
     }
