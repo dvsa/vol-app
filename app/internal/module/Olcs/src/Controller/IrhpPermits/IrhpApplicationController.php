@@ -1,11 +1,5 @@
 <?php
 
-/**
- * IRHP Application Controller
- *
- * @author Andy Newton <andy@vitri.ltd>
- */
-
 namespace Olcs\Controller\IrhpPermits;
 
 use Common\Data\Mapper\Permits\NoOfPermits;
@@ -30,7 +24,6 @@ use Dvsa\Olcs\Transfer\Query\IrhpApplication\ApplicationPath;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\BilateralMetadata;
 use Dvsa\Olcs\Transfer\Query\IrhpCandidatePermit\GetListByIrhpApplication as CandidateListDTO;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\AvailableCountries;
-use Dvsa\Olcs\Transfer\Query\IrhpPermitWindow\OpenByCountry;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\ById as ItemDto;
 use Dvsa\Olcs\Transfer\Query\IrhpCandidatePermit\ById as CandidatePermitItemDTO;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\MaxStockPermits;
@@ -58,7 +51,6 @@ use Olcs\Mvc\Controller\ParameterProvider\GenericList;
 use RuntimeException;
 use Laminas\Form\Form;
 use Laminas\Http\Response;
-use Laminas\Validator\ValidatorChain;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
 
@@ -215,7 +207,6 @@ class IrhpApplicationController extends AbstractInternalController implements
 
     /**
      * Renders modal form, and handles redirect to correct application form for permit type.
-     *
      */
     public function selectTypeAction()
     {
@@ -285,7 +276,6 @@ class IrhpApplicationController extends AbstractInternalController implements
      * @return mixed|Response
      *
      * Small override to handle the cancel button on the Add form as this form is not shown in a JS modal popup
-     *
      */
     public function addAction()
     {
@@ -339,7 +329,6 @@ class IrhpApplicationController extends AbstractInternalController implements
      * @return mixed|Response
      *
      * Small override to handle the cancel button on the Edit form
-     *
      */
     public function editAction()
     {
@@ -369,7 +358,6 @@ class IrhpApplicationController extends AbstractInternalController implements
      * Dash redirect helper
      *
      * @return Response
-     *
      */
     protected function permitDashRedirect()
     {
@@ -384,7 +372,6 @@ class IrhpApplicationController extends AbstractInternalController implements
      * Handles click of the Submit button on right-sidebar
      *
      * @return \Laminas\Http\Response
-     *
      */
     public function submitAction()
     {
@@ -450,7 +437,6 @@ class IrhpApplicationController extends AbstractInternalController implements
      * Handles click of the Cancel button on right sidebar
      *
      * @return \Laminas\Http\Response
-     *
      */
     public function cancelAction()
     {
@@ -503,7 +489,6 @@ class IrhpApplicationController extends AbstractInternalController implements
      * Handles click of the Decline button on right sidebar
      *
      * @return \Laminas\Http\Response
-     *
      */
     public function declineAction()
     {
@@ -516,13 +501,10 @@ class IrhpApplicationController extends AbstractInternalController implements
         );
     }
 
-
-
     /**
      * Handles click of the Accept button on right sidebar
      *
      * @return \Laminas\Http\Response
-     *
      */
     public function acceptAction()
     {
@@ -552,7 +534,6 @@ class IrhpApplicationController extends AbstractInternalController implements
             );
         }
     }
-
 
     /**
      * Handles click of the Revive Application button on right sidebar

@@ -988,7 +988,6 @@ $routes = [
                         'may_terminate' => true,
                     ],
                 ],
-
             ],
             'irhp-application-docs' => [
                 'type' => 'segment',

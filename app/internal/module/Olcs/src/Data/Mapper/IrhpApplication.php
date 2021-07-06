@@ -52,6 +52,10 @@ class IrhpApplication implements MapperInterface
             $formData['topFields']['dateReceived'] = $data['dateReceived'];
         }
 
+        if (isset($data['status']['id'])) {
+            $formData['topFields']['status'] = $data['status']['id'];
+        }
+
         if (isset($data['declaration'])) {
             $formData['bottomFields']['declaration'] = $data['declaration'];
         }
