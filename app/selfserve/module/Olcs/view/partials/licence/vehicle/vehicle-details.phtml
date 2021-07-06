@@ -19,11 +19,13 @@
             <?php echo $this->escapeHtml(number_format($vehicleDetails['revenueWeight'])) ?>
         </td>
     </tr>
+    <?php if(!empty($vehicleDetails['make'])): ?>
     <tr class="govuk-table__row">
         <th scope="row" class="govuk-table__header"><?php echo $copy['makeRowHeading'] ?? $this->translate('licence.vehicle.partial.summary-table.makeRowHeading'); ?>:</th>
         <td class="govuk-table__cell">
             <?php echo $this->escapeHtml($vehicleDetails['make']) ?>
         </td>
     </tr>
+    <?php endif; ?>
     </tbody>
 </table>
