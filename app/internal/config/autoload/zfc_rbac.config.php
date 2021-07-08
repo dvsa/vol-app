@@ -63,6 +63,7 @@ return [
             'admin-dashboard/content-management*' => [RefData::PERMISSION_SYSTEM_ADMIN],
             'admin-dashboard/admin-publication*' => [RefData::PERMISSION_INTERNAL_PUBLICATIONS],
             'admin-dashboard/admin-fee-rates*' => [RefData::PERMISSION_SYSTEM_ADMIN],
+            'admin-dashboard/admin-bus-registration*' => [RefData::PERMISSION_INTERNAL_EDIT],
 
             // All Internal users can see your account, to change their details, password etc
             'admin-dashboard/admin-your-account*' => [RefData::PERMISSION_INTERNAL_VIEW],

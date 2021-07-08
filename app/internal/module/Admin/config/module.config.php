@@ -20,6 +20,32 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
+                    'admin-bus-registration' => [
+                        'type' => Segment::class,
+                        'options' => [
+                            'route' => 'bus-registration[/]',
+                            'defaults' => [
+                                'controller' => Admin\Controller\BusNoticePeriodController::class,
+                                'action' => 'index',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'notice-period' => [
+                                'type' => Segment::class,
+                                'options' => [
+                                    'route' => 'notice-period[/:action][/]',
+                                    'constraints' => [
+                                        'action' => '(index|add)',
+                                    ],
+                                    'defaults' => [
+                                        'controller' => Admin\Controller\BusNoticePeriodController::class,
+                                        'action' => 'index',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
                     'admin-data-retention' => [
                         'type' => 'segment',
                         'options' => [
@@ -879,6 +905,7 @@ return [
     'controllers' => [
         'invokables' => [
             Admin\Controller\IndexController::class => Admin\Controller\IndexController::class,
+            Admin\Controller\BusNoticePeriodController::class => Admin\Controller\BusNoticePeriodController::class,
             'Admin\PrintingController' => 'Admin\Controller\PrintingController',
             'Admin\IrfoStockControlController' => 'Admin\Controller\IrfoStockControlController',
             'Admin\IrfoPsvAuthContinuationController' => 'Admin\Controller\IrfoPsvAuthContinuationController',
