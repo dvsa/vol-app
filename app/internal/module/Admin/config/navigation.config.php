@@ -377,6 +377,18 @@ return [
                         ],
                     ],
                 ],
+                [
+                    'id' => 'admin-dashboard/admin-bus-registration/notice-period',
+                    'label' => 'Bus registrations',
+                    'route' => 'admin-dashboard/admin-bus-registration/notice-period',
+                    'pages' => [
+                        [
+                            'id' => 'admin-dashboard/admin-bus-registration/notice-period',
+                            'label' => 'Notice periods',
+                            'route' => 'admin-dashboard/admin-bus-registration/notice-period',
+                        ],
+                    ],
+                ],
             ]
         ]
     ]
