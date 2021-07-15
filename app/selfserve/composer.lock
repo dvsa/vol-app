@@ -96,19 +96,18 @@
         },
         {
             "name": "doctrine/cache",
-            "version": "1.11.3",
+            "version": "1.12.0",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/doctrine/cache/1.11.3/doctrine-cache-1.11.3.zip",
-                "reference": "3bb5588cec00a0268829cc4a518490df6741af9d",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/doctrine/cache/1.12.0/doctrine-cache-1.12.0.zip",
+                "reference": "92032beb419568d3b61ae645f48bbb693cc7e00e",
                 "shasum": ""
             },
             "require": {
                 "php": "~7.1 || ^8.0"
             },
             "conflict": {
-                "doctrine/common": ">2.2,<2.4",
-                "psr/cache": ">=3"
+                "doctrine/common": ">2.2,<2.4"
             },
             "require-dev": {
                 "alcaeus/mongo-php-adapter": "^1.1",
@@ -117,8 +116,9 @@
                 "mongodb/mongodb": "^1.1",
                 "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0",
                 "predis/predis": "~1.0",
-                "psr/cache": "^1.0 || ^2.0",
-                "symfony/cache": "^4.4 || ^5.2"
+                "psr/cache": "^1.0 || ^2.0 || ^3.0",
+                "symfony/cache": "^4.4 || ^5.2 || ^6.0@dev",
+                "symfony/var-exporter": "^4.4 || ^5.2 || ^6.0@dev"
             },
             "suggest": {
                 "alcaeus/mongo-php-adapter": "Required to use legacy MongoDB driver"
@@ -181,7 +181,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-05-25T09:01:55+00:00"
+            "time": "2021-07-14T11:09:49+00:00"
         },
         {
             "name": "doctrine/collections",
@@ -6106,11 +6106,11 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.90",
+            "version": "0.12.92",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/phpstan/phpstan/0.12.90/phpstan-phpstan-0.12.90.zip",
-                "reference": "f0e4b56630fc3d4eb5be86606d07212ac212ede4",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/phpstan/phpstan/0.12.92/phpstan-phpstan-0.12.92.zip",
+                "reference": "64d4c5dc8ea96972bc18432d137a330239a5d2b2",
                 "shasum": ""
             },
             "require": {
@@ -6156,15 +6156,15 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-06-18T07:15:38+00:00"
+            "time": "2021-07-10T13:53:49+00:00"
         },
         {
             "name": "phpstan/phpstan-doctrine",
-            "version": "0.12.40",
+            "version": "0.12.42",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/phpstan/phpstan-doctrine/0.12.40/phpstan-phpstan-doctrine-0.12.40.zip",
-                "reference": "553279066d733a9c223fe2981f3493687c9fed5c",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/phpstan/phpstan-doctrine/0.12.42/phpstan-phpstan-doctrine-0.12.42.zip",
+                "reference": "e3173175dcdaf808d5ca6408528dca669e4de19f",
                 "shasum": ""
             },
             "require": {
@@ -6214,7 +6214,7 @@
                 "MIT"
             ],
             "description": "Doctrine extensions for PHPStan",
-            "time": "2021-07-01T07:48:56+00:00"
+            "time": "2021-07-08T08:41:15+00:00"
         },
         {
             "name": "phpstan/phpstan-mockery",
@@ -6260,11 +6260,11 @@
         },
         {
             "name": "phpstan/phpstan-phpunit",
-            "version": "0.12.20",
+            "version": "0.12.21",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/phpstan/phpstan-phpunit/0.12.20/phpstan-phpstan-phpunit-0.12.20.zip",
-                "reference": "efc009981af383eb3303f0ca9868c29acad7ce74",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/phpstan/phpstan-phpunit/0.12.21/phpstan-phpstan-phpunit-0.12.21.zip",
+                "reference": "6aaff1196c4f808769774b49a94a60e5fdf18de7",
                 "shasum": ""
             },
             "require": {
@@ -6300,7 +6300,7 @@
                 "MIT"
             ],
             "description": "PHPUnit extensions and rules for PHPStan",
-            "time": "2021-06-17T08:28:30+00:00"
+            "time": "2021-07-14T10:48:30+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
