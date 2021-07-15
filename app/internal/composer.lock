@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "709ef4ca727ec2d83152833d128dcb01",
+    "content-hash": "2e5ce580fe7c534c4734181a6b53b5ac",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -3506,16 +3506,17 @@
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "4.206.15",
+            "version": "4.206.16",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-auth/4.206.15/olcs-olcs-auth-4.206.15.zip",
-                "reference": "0897e2ec8754a9818f68a9e68f5a451393d25ad1",
-                "shasum": "0897e2ec8754a9818f68a9e68f5a451393d25ad1"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-auth/4.206.16/olcs-olcs-auth-4.206.16.zip",
+                "reference": "b7b446fca3fe401c7ce1043c14015bc467247ca5",
+                "shasum": "b7b446fca3fe401c7ce1043c14015bc467247ca5"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
                 "elendev/nexus-composer-push": "^0.1",
+                "laminas/laminas-authentication": "^2.5",
                 "laminas/laminas-console": "^2.5",
                 "laminas/laminas-dependency-plugin": "^2.0",
                 "laminas/laminas-di": "^2.5",
@@ -3575,16 +3576,16 @@
                 ]
             },
             "description": "OLCS Authentication",
-            "time": "2020-12-23T13:23:08+00:00"
+            "time": "2021-07-06T12:50:26+00:00"
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.354",
+            "version": "4.206.356",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.354/olcs-olcs-common-4.206.354.zip",
-                "reference": "f86451fd7d7b0b0da23ad85e6cdfc56641319d66",
-                "shasum": "f86451fd7d7b0b0da23ad85e6cdfc56641319d66"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.356/olcs-olcs-common-4.206.356.zip",
+                "reference": "81a34c25f6817517d689e33a681013146aed67cb",
+                "shasum": "81a34c25f6817517d689e33a681013146aed67cb"
             },
             "require": {
                 "doctrine/annotations": "^1.8",
@@ -3670,7 +3671,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2021-07-01T14:32:36+00:00"
+            "time": "2021-07-08T08:10:14+00:00"
         },
         {
             "name": "olcs/olcs-logging",
@@ -3740,12 +3741,12 @@
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "4.206.129",
+            "version": "4.206.130",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-transfer/4.206.129/olcs-olcs-transfer-4.206.129.zip",
-                "reference": "0c85667b0ca70067fa61a25153c57e41d4765eda",
-                "shasum": "0c85667b0ca70067fa61a25153c57e41d4765eda"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-transfer/4.206.130/olcs-olcs-transfer-4.206.130.zip",
+                "reference": "6df6d09704ca16b35f001ede7ca998a653d54fc2",
+                "shasum": "6df6d09704ca16b35f001ede7ca998a653d54fc2"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -3808,7 +3809,7 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2021-06-18T12:48:02+00:00"
+            "time": "2021-07-13T10:57:07+00:00"
         },
         {
             "name": "olcs/olcs-utils",
