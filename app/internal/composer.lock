@@ -1134,6 +1134,7 @@
                 }
             ],
             "description": "Provide a Push command to composer to push to Nexus repositories",
+            "abandoned": "elendev/composer-push",
             "time": "2020-05-19T08:48:34+00:00"
         },
         {
@@ -5689,12 +5690,12 @@
         },
         {
             "name": "olcs/olcs-testhelpers",
-            "version": "4.206.11",
+            "version": "4.206.12",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-testhelpers/4.206.11/olcs-olcs-testhelpers-4.206.11.zip",
-                "reference": "8125ab7ea425f9836ea4bb1d5d358fb62e6b2406",
-                "shasum": "8125ab7ea425f9836ea4bb1d5d358fb62e6b2406"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-testhelpers/4.206.12/olcs-olcs-testhelpers-4.206.12.zip",
+                "reference": "a3b1b3214f895f75d90c6e674224bd7f89bea133",
+                "shasum": "a3b1b3214f895f75d90c6e674224bd7f89bea133"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -5729,7 +5730,7 @@
                 ]
             },
             "description": "OLCS Test helpers",
-            "time": "2021-06-10T13:23:54+00:00"
+            "time": "2021-07-27T10:29:18+00:00"
         },
         {
             "name": "pdepend/pdepend",
@@ -7301,6 +7302,7 @@
                     "type": "github"
                 }
             ],
+            "abandoned": true,
             "time": "2020-11-30T07:30:19+00:00"
         },
         {
