@@ -1,5 +1,11 @@
 <?php
 
+use Olcs\Auth\Adapter\CommandAdapter;
+use Olcs\Auth\Adapter\CommandAdapterFactory;
+use Olcs\Auth\Adapter\SelfserveCommandAdapter;
+use Olcs\Auth\Adapter\SelfserveCommandAdapterFactory;
+use Olcs\Auth\Service\AuthenticationServiceFactory;
+use Olcs\Auth\Service\AuthenticationServiceInterface;
 use Olcs\Controller\Cookie\DetailsController as CookieDetailsController;
 use Olcs\Controller\Cookie\SettingsController as CookieSettingsController;
 use Olcs\Controller\Cookie\SettingsControllerFactory as CookieSettingsControllerFactory;
@@ -546,9 +552,10 @@ $files = glob(__DIR__ . '/selfserve-routes/*.php');
 foreach ($files as $config) {
     $newRoute = include $config;
     $otherSelfserveRoutes = current($newRoute);
+    $routes = array_merge($routes, $otherSelfserveRoutes);
 }
 
-$routes = array_merge($routes, $otherSelfserveRoutes);
+//$routes = array_merge($routes, $otherSelfserveRoutes);
 
 $configRoutes['lva-variation']['child_routes'] = array_merge(
     $configRoutes['lva-variation']['child_routes'],
@@ -1173,7 +1180,8 @@ return array(
             CookieSettingsController::class => CookieSettingsControllerFactory::class,
             ListVehicleController::class => \Olcs\Controller\Licence\Vehicle\ListVehicleControllerFactory::class,
             SessionTimeoutController::class => \Olcs\Controller\SessionTimeoutControllerFactory::class,
-            \Olcs\Controller\Licence\Vehicle\SwitchBoardController::class => \Olcs\Controller\Licence\Vehicle\SwitchBoardControllerFactory::class
+            \Olcs\Controller\Licence\Vehicle\SwitchBoardController::class => \Olcs\Controller\Licence\Vehicle\SwitchBoardControllerFactory::class,
+            \Olcs\Controller\Auth\LoginController::class => \Olcs\Controller\Auth\LoginControllerFactory::class
         ),
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
@@ -1204,7 +1212,7 @@ return array(
         'abstract_factories' => [
             \Laminas\Cache\Service\StorageCacheAbstractServiceFactory::class,
         ],
-        'factories' => array(
+        'factories' => [
             'CookieListener' => \Olcs\Mvc\CookieListenerFactory::class,
             'CookieBannerListener' => \Olcs\Mvc\CookieBannerListenerFactory::class,
             'CookieAcceptAllSetCookieGenerator' => CookieService\AcceptAllSetCookieGeneratorFactory::class,
@@ -1230,7 +1238,8 @@ return array(
             'QaTemplateVarsGenerator' => QaService\TemplateVarsGeneratorFactory::class,
             'QaQuestionArrayProvider' => QaService\QuestionArrayProviderFactory::class,
             'QaViewGeneratorProvider' => QaService\ViewGeneratorProviderFactory::class,
-        )
+            SelfserveCommandAdapter::class => SelfserveCommandAdapterFactory::class,
+        ]
     ),
     'search' => [
         'invokables' => [

@@ -40,7 +40,8 @@
         "olcs/olcs-auth": "~4.206.0",
         "olcs/olcs-logging": "~4.206.0",
         "olcs/olcs-common": "~4.206.0",
-        "laminas/laminas-dependency-plugin": "^2.0"
+        "laminas/laminas-dependency-plugin": "^2.0",
+        "laminas/laminas-authentication": "^2.5"
     },
     "require-dev": {
         "olcs/olcs-devtools": "~4.206.0",
@@ -61,7 +62,8 @@
         "secure-http": false,
         "platform": {
             "php": "7.2.31"
-        }
+        },
+        "sort-packages": true
     },
     "scripts": {
         "ut": "vendor/bin/phpunit -c test/phpunit.xml --stop-on-failure",
