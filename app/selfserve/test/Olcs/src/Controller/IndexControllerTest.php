@@ -29,7 +29,7 @@ class IndexControllerTest extends MockeryTestCase
             ->andReturnNull();
 
         $this->sut->shouldReceive('redirect->toRoute')
-            ->with('auth/login')
+            ->with('auth/login/GET')
             ->once()
             ->andReturn('REDIRECT');
 
@@ -46,7 +46,7 @@ class IndexControllerTest extends MockeryTestCase
             ->andReturn($mockIdentity);
 
         $this->sut->shouldReceive('redirect->toRoute')
-            ->with('auth/login')
+            ->with('auth/login/GET')
             ->once()
             ->andReturn('REDIRECT');
 

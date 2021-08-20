@@ -24,7 +24,7 @@ class IndexController extends AbstractController
         // redirect to the login
         $identity = $this->currentUser()->getIdentity();
         if ($identity === null || $identity->isAnonymous()) {
-            return $this->redirect()->toRoute('auth/login');
+            return $this->redirect()->toRoute('auth/login/GET');
         }
         if ($identity->isNotIdentified()) {
             throw new \Exception('Unable to retrieve identity');
