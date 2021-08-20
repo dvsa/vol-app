@@ -1,41 +1,35 @@
 <?php
 
-use Olcs\Controller\Cases;
-
+use Common\Data\Object\Search\Licence as LicenceSearch;
+use Olcs\Auth;
 use Olcs\Controller\Application\Processing\ApplicationProcessingNoteController;
 use Olcs\Controller\Bus\Processing\BusProcessingNoteController;
-use Olcs\Controller\Licence\Processing\LicenceProcessingNoteController;
-use Olcs\Controller\Operator\OperatorProcessingNoteController;
-use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController as TMProcessingNoteController;
+use Olcs\Controller\Cases;
 use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingHistoryController;
 use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingReadHistoryController;
 use Olcs\Controller\IrhpPermits\IrhpPermitProcessingReadHistoryController;
-
 use Olcs\Controller\Licence\BusRegistrationController as LicenceBusController;
-
-use Olcs\Controller\TransportManager\TransportManagerController;
+use Olcs\Controller\Licence\Processing\LicenceProcessingNoteController;
+use Olcs\Controller\Operator\OperatorProcessingNoteController;
+use Olcs\Controller\SearchController;
 use Olcs\Controller\TransportManager as TmCntr;
 use Olcs\Controller\TransportManager\Details\TransportManagerDetailsDetailController;
-
-use Olcs\Controller\SearchController;
-
+use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController as TMProcessingNoteController;
+use Olcs\Controller\TransportManager\TransportManagerController;
+use Olcs\FormService\Form\Lva as LvaFormService;
+use Olcs\Listener\RouteParam;
 use Olcs\Listener\RouteParam\Application as ApplicationListener;
 use Olcs\Listener\RouteParam\ApplicationFurniture;
+use Olcs\Listener\RouteParam\BusRegFurniture;
+use Olcs\Listener\RouteParam\CasesFurniture;
 use Olcs\Listener\RouteParam\IrhpApplicationFurniture;
-use Olcs\Listener\RouteParam\VariationFurniture;
 use Olcs\Listener\RouteParam\Licence as LicenceListener;
 use Olcs\Listener\RouteParam\LicenceFurniture;
 use Olcs\Listener\RouteParam\OrganisationFurniture;
-use Olcs\Listener\RouteParam\BusRegFurniture;
-use Olcs\Listener\RouteParam\CasesFurniture;
 use Olcs\Listener\RouteParam\SubmissionsFurniture;
 use Olcs\Listener\RouteParam\TransportManagerFurniture;
-use Olcs\Listener\RouteParam;
-
-use Common\Data\Object\Search\Licence as LicenceSearch;
+use Olcs\Listener\RouteParam\VariationFurniture;
 use Olcs\Service\Marker;
-
-use Olcs\FormService\Form\Lva as LvaFormService;
 
 return array(
     'router' => [
@@ -347,11 +341,12 @@ return array(
                 \Olcs\Controller\IrhpPermits\IrhpApplicationProcessingNoteController::class,
             \Olcs\Controller\IrhpPermits\IrhpApplicationProcessingTasksController::class =>
                 \Olcs\Controller\IrhpPermits\IrhpApplicationProcessingTasksController::class,
-            Olcs\Controller\Licence\SurrenderController::class => Olcs\Controller\Licence\SurrenderController::class
+            Olcs\Controller\Licence\SurrenderController::class => Olcs\Controller\Licence\SurrenderController::class,
         ),
         'factories' => [
             TmCntr\Details\TransportManagerDetailsResponsibilityController::class =>
                 TmCntr\Details\TransportManagerDetailsResponsibilityController::class,
+            \Olcs\Controller\Auth\LoginController::class => \Olcs\Controller\Auth\LoginControllerFactory::class
         ],
     ),
     'controller_plugins' => array(
@@ -522,7 +517,7 @@ return array(
                 Olcs\Data\Mapper\BilateralApplicationValidationModifierFactory::class,
             Olcs\Data\Mapper\IrhpApplication::class =>
                 Olcs\Data\Mapper\IrhpApplicationFactory::class,
-    
+
             Olcs\Service\Permits\Bilateral\ApplicationFormPopulator::class =>
                 Olcs\Service\Permits\Bilateral\ApplicationFormPopulatorFactory::class,
             Olcs\Service\Permits\Bilateral\CountryFieldsetGenerator::class =>
@@ -533,6 +528,8 @@ return array(
                 Olcs\Service\Permits\Bilateral\StandardFieldsetPopulatorFactory::class,
             Olcs\Service\Permits\Bilateral\NoOfPermitsElementGenerator::class =>
                 Olcs\Service\Permits\Bilateral\NoOfPermitsElementGeneratorFactory::class,
+
+            Auth\Adapter\InternalCommandAdapter::class => Auth\Adapter\InternalCommandAdapterFactory::class
         )
     ),
     'form_elements' => [
