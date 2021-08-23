@@ -4,14 +4,14 @@ echo $this->partial(
     [
         'pageTitle' => $this->pageTitle(),
         'backUrl' => [
-            'url' => $this->url('auth/login'),
+            'url' => $this->url('auth/login/GET'),
         ],
     ]
 );
 ?>
 
 <div class="row">
-  
+
   <div class="two-thirds">
     <?php echo $this->flashMessengerAll(); ?>
     <?php
