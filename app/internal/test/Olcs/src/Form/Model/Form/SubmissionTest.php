@@ -55,7 +55,7 @@ class SubmissionTest extends AbstractFormValidationTestCase
         $element = ['fields', 'submissionSections'];
         $this->assertElementExists($element);
         $this->assertFormElementType($element, \Olcs\Form\Element\SubmissionSections::class);
-        self::$testedElements[implode($element, '.')] = true;
+        self::$testedElements[implode('.', $element)] = true;
     }
 
     public function testId()

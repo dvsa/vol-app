@@ -313,7 +313,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
     {
         foreach ($application['s4s'] as $s4) {
             $isUnderConsideration = ($application['status']['id'] == RefData::APPLICATION_STATUS_UNDER_CONSIDERATION);
-            if ($isUnderConsideration && ($s4['outcome']['id'] === RefData::S4_STATUS_APPROVED)) {
+            if ($isUnderConsideration && (isset($s4['outcome']['id']) && $s4['outcome']['id'] === RefData::S4_STATUS_APPROVED)) {
                 return true;
             }
         }

@@ -122,7 +122,7 @@ class IrhpPermitPrintRangeType extends AbstractDataService implements FactoryInt
                 throw new DataServiceException('unknown-error');
             }
 
-            $this->setData('IrhpPermitPrintRangeType', $response->getResult()['results']);
+            $this->setData('IrhpPermitPrintRangeType', $response->getResult()['results'] ?? null);
         }
 
         return $this->getData('IrhpPermitPrintRangeType');

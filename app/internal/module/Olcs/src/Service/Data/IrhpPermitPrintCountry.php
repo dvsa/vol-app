@@ -96,7 +96,7 @@ class IrhpPermitPrintCountry extends AbstractDataService implements ListDataInte
                 throw new DataServiceException('unknown-error');
             }
 
-            $this->setData('IrhpPermitPrintCountry', $response->getResult()['results']);
+            $this->setData('IrhpPermitPrintCountry', $response->getResult()['results'] ?? null);
         }
 
         return $this->getData('IrhpPermitPrintCountry');
