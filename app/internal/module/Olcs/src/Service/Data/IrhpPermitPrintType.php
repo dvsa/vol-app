@@ -68,7 +68,7 @@ class IrhpPermitPrintType extends AbstractDataService implements ListDataInterfa
                 throw new DataServiceException('unknown-error');
             }
 
-            $this->setData('IrhpPermitPrintType', $response->getResult()['results']);
+            $this->setData('IrhpPermitPrintType', $response->getResult()['results'] ?? null);
         }
 
         return $this->getData('IrhpPermitPrintType');

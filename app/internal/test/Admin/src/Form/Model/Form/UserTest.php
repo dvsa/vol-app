@@ -59,7 +59,7 @@ class UserTest extends AbstractFormValidationTestCase
                 [$element]
             );
 
-            self::$testedElements[implode($elementToSkip, '.')] = true;
+            self::$testedElements[implode('.', $elementToSkip)] = true;
         }
     }
 

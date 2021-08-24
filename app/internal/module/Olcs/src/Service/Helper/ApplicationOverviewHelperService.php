@@ -89,7 +89,9 @@ class ApplicationOverviewHelperService extends AbstractHelperService
      */
     public function getInterimStatus($application, $lva)
     {
-        if ($application['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_PSV) {
+        if (isset($application['goodsOrPsv']['id'])
+            && $application['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_PSV
+        ) {
             return null;
         }
 

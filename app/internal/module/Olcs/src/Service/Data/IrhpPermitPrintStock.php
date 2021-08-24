@@ -171,7 +171,7 @@ class IrhpPermitPrintStock extends AbstractDataService implements FactoryInterfa
                 throw new DataServiceException('unknown-error');
             }
 
-            $this->setData('IrhpPermitPrintStock', $response->getResult()['results']);
+            $this->setData('IrhpPermitPrintStock', $response->getResult()['results'] ?? null);
         }
 
         return $this->getData('IrhpPermitPrintStock');
