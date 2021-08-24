@@ -128,7 +128,7 @@ trait ExternalControllerTrait
             $data = $response->getResult();
             $params['startDate'] = $data['inForceDate'];
             $params['renewalDate'] = $data['expiryDate'];
-            $params['status'] = $data['status']['id'];
+            $params['status'] = $data['status']['id'] ?? null;
             $params['licNo'] = $data['licNo'];
             $params['lva'] = 'licence';
 
