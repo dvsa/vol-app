@@ -1495,26 +1495,30 @@
         },
         {
             "name": "laminas/laminas-code",
-            "version": "2.6.3",
+            "version": "3.4.1",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/laminas/laminas-code/2.6.3/laminas-laminas-code-2.6.3.zip",
-                "reference": "b33fb9e7bb0b5c19976a17b6345c2577b85e9f78",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/laminas/laminas-code/3.4.1/laminas-laminas-code-3.4.1.zip",
+                "reference": "1cb8f203389ab1482bf89c0e70a04849bacd7766",
                 "shasum": ""
             },
             "require": {
                 "laminas/laminas-eventmanager": "^2.6 || ^3.0",
                 "laminas/laminas-zendframework-bridge": "^1.0",
-                "php": "^5.5 || 7.0.0 - 7.0.4 || ^7.0.6"
+                "php": "^7.1"
+            },
+            "conflict": {
+                "phpspec/prophecy": "<1.9.0"
             },
             "replace": {
                 "zendframework/zend-code": "self.version"
             },
             "require-dev": {
-                "doctrine/annotations": "~1.0",
-                "fabpot/php-cs-fixer": "1.7.*",
+                "doctrine/annotations": "^1.7",
+                "ext-phar": "*",
+                "laminas/laminas-coding-standard": "^1.0",
                 "laminas/laminas-stdlib": "^2.7 || ^3.0",
-                "phpunit/phpunit": "^4.8.21"
+                "phpunit/phpunit": "^7.5.16 || ^8.4"
             },
             "suggest": {
                 "doctrine/annotations": "Doctrine\\Common\\Annotations >=1.0 for annotation features",
@@ -1523,8 +1527,9 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.6-dev",
-                    "dev-develop": "2.7-dev"
+                    "dev-master": "3.4.x-dev",
+                    "dev-develop": "3.5.x-dev",
+                    "dev-dev-4.0": "4.0.x-dev"
                 }
             },
             "autoload": {
@@ -1535,13 +1540,13 @@
             "license": [
                 "BSD-3-Clause"
             ],
-            "description": "provides facilities to generate arbitrary code using an object oriented interface",
+            "description": "Extensions to the PHP Reflection API, static code scanning, and code generation",
             "homepage": "https://laminas.dev",
             "keywords": [
                 "code",
                 "laminas"
             ],
-            "time": "2019-12-31T16:27:30+00:00"
+            "time": "2019-12-31T16:28:24+00:00"
         },
         {
             "name": "laminas/laminas-config",
@@ -3570,19 +3575,20 @@
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.357",
+            "version": "4.206.362",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.357/olcs-olcs-common-4.206.357.zip",
-                "reference": "0605d4b64e939c594dec4ea9f3f25cf6f64f94de",
-                "shasum": "0605d4b64e939c594dec4ea9f3f25cf6f64f94de"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.362/olcs-olcs-common-4.206.362.zip",
+                "reference": "9e908f0fe9e3bfed348a1d17b7fa8e0adcd0a1b6",
+                "shasum": "9e908f0fe9e3bfed348a1d17b7fa8e0adcd0a1b6"
             },
             "require": {
                 "doctrine/annotations": "^1.8",
                 "doctrine/doctrine-orm-module": "~0.10.0",
                 "elendev/nexus-composer-push": "^0.1",
+                "laminas/laminas-authentication": "^2.5",
                 "laminas/laminas-cache": "^2.5",
-                "laminas/laminas-code": "^2.5",
+                "laminas/laminas-code": "~3.4.1",
                 "laminas/laminas-dependency-plugin": "^2.0",
                 "laminas/laminas-di": "^2.5",
                 "laminas/laminas-escaper": "^2.5",
@@ -3658,7 +3664,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2021-08-20T09:55:49+00:00"
+            "time": "2021-08-25T15:22:23+00:00"
         },
         {
             "name": "olcs/olcs-logging",
