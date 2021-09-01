@@ -53,7 +53,7 @@ class DashboardController extends AbstractController
 
         if (empty($organisationId)) {
             $this->flashMessenger()->addErrorMessage('auth.login.failed.reason.account-disabled');
-            return $this->redirect()->toRoute('auth/login');
+            return $this->redirect()->toRoute('auth/login/GET');
         }
 
         // retrieve data

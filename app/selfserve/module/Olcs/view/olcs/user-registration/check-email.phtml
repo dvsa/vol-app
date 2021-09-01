@@ -27,7 +27,7 @@ echo $this->partial(
             ->translateReplace(
                 'user-registration.page.check-email.content',
                 [
-                    $this->getHelperPluginManager()->getServiceLocator()->get('Helper\Url')->fromRoute('auth/login')
+                    $this->getHelperPluginManager()->getServiceLocator()->get('Helper\Url')->fromRoute('auth/login/GET')
                 ]
             ); ?>
       </p>
