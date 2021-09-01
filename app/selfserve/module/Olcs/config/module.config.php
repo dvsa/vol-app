@@ -1371,7 +1371,7 @@ return array(
             ),
             array(
                 'id' => 'signin',
-                'route' => 'auth/login',
+                'route' => 'auth/login/GET', //@todo is this used?
                 'pages' => array(
                     array(
                         'id' => 'forgot-password',
