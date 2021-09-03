@@ -41,7 +41,7 @@ class IndexController extends AbstractController
 
         // redir to the bus reg page
         if ($identity->getUserType() === User::USER_TYPE_LOCAL_AUTHORITY) {
-            return $this->redirect()->toRoute('bus-registration', [], ['code' => 303]);
+            return $this->redirect()->toRoute('busreg-registrations', [], ['code' => 303]);
         }
 
         return $this->redirect()->toRoute('search');
