@@ -18,7 +18,6 @@ use Laminas\Mvc\Controller\Plugin\Url;
 use Laminas\Mvc\Router\Http\RouteMatch;
 use Laminas\View\Model\ViewModel;
 use Olcs\Form\Model\Form\Auth\Login;
-use Olcs\Form\Model\Form\Auth\LoginForm;
 
 class LoginController
 {
@@ -29,7 +28,7 @@ class LoginController
 
     const ROUTE_AUTH_EXPIRED_PASSWORD = 'auth/expired-password';
     const ROUTE_AUTH_LOGIN_GET = 'auth/login/GET';
-    const ROUTE_DASHBOARD = 'dashboard';
+    const ROUTE_INDEX = 'index';
     const DVSA_OLCS_AUTH_CLIENT_OPENAM = 'Dvsa\Olcs\Auth\Client\OpenAm';
     const CHALLENGE_NEW_PASSWORD_REQUIRED = 'NEW_PASSWORD_REQUIRED';
     const DVSA_OLCS_AUTH_CLIENT_COGNITO = 'Dvsa\Olcs\Auth\Client\CognitoAdapter';
@@ -105,7 +104,7 @@ class LoginController
     public function indexAction()
     {
         if (!$this->currentUser->getIdentity()->isAnonymous()) {
-            return $this->redirectHelper->toRoute(static::ROUTE_DASHBOARD);
+            return $this->redirectHelper->toRoute(static::ROUTE_INDEX);
         }
 
         $view = new ViewModel();
@@ -134,7 +133,7 @@ class LoginController
     public function postAction(Request $request, RouteMatch $routeMatch, Response $response): Response
     {
         if (!$this->currentUser->getIdentity()->isAnonymous()) {
-            return $this->redirectHelper->toRoute(static::ROUTE_DASHBOARD);
+            return $this->redirectHelper->toRoute(static::ROUTE_INDEX);
         }
 
         $form = $this->createLoginForm($request->getPost()->toArray());
@@ -252,7 +251,7 @@ class LoginController
             return $this->redirectHelper->toUrl($gotoUrl);
         }
 
-        return $this->redirectHelper->toRoute(static::ROUTE_DASHBOARD);
+        return $this->redirectHelper->toRoute(static::ROUTE_INDEX);
     }
 
     /**
@@ -263,7 +262,7 @@ class LoginController
      */
     private function handleSuccessCognitoResult()
     {
-        return $this->redirectHelper->toRoute(static::ROUTE_DASHBOARD);
+        return $this->redirectHelper->toRoute(static::ROUTE_INDEX);
     }
 
     /**

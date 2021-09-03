@@ -100,7 +100,7 @@ class LoginControllerTest extends MockeryTestCase
         $this->currentUser()->allows('getIdentity')->andReturn($this->identity(false));
 
         // Expect
-        $this->redirectHelper()->expects('toRoute')->with(LoginController::ROUTE_DASHBOARD)->andReturn($this->redirect());
+        $this->redirectHelper()->expects('toRoute')->with(LoginController::ROUTE_INDEX)->andReturn($this->redirect());
 
         // Execute
         $this->sut->indexAction();
@@ -215,7 +215,7 @@ class LoginControllerTest extends MockeryTestCase
         $this->currentUser()->allows('getIdentity')->andReturn($this->identity(false));
 
         // Expect
-        $this->redirectHelper()->expects('toRoute')->with(LoginController::ROUTE_DASHBOARD)->andReturn($this->redirect());
+        $this->redirectHelper()->expects('toRoute')->with(LoginController::ROUTE_INDEX)->andReturn($this->redirect());
 
         // Execute
         $this->sut->postAction($this->postRequest(), new RouteMatch([]), new Response());
@@ -278,7 +278,7 @@ class LoginControllerTest extends MockeryTestCase
         $this->cookieService()->allows('createTokenCookie')->with($response, 'tokenId', false);
 
         // Expect
-        $this->redirectHelper()->expects()->toRoute(LoginController::ROUTE_DASHBOARD)->andReturn($this->redirect());
+        $this->redirectHelper()->expects()->toRoute(LoginController::ROUTE_INDEX)->andReturn($this->redirect());
 
         // Execute
         $this->sut->postAction($request, new RouteMatch([]), $response);
@@ -326,7 +326,7 @@ class LoginControllerTest extends MockeryTestCase
         $this->cookieService()->allows('createTokenCookie')->with($response, 'tokenId', false);
 
         // Expect
-        $this->redirectHelper()->expects()->toRoute(LoginController::ROUTE_DASHBOARD)->andReturn($this->redirect());
+        $this->redirectHelper()->expects()->toRoute(LoginController::ROUTE_INDEX)->andReturn($this->redirect());
 
         // Execute
         $this->sut->postAction($request, new RouteMatch([]), $response);
@@ -370,7 +370,7 @@ class LoginControllerTest extends MockeryTestCase
         $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_SUCCESSFUL_COGNITO));
 
         // Expect
-        $this->redirectHelper()->expects()->toRoute(LoginController::ROUTE_DASHBOARD)->andReturn($this->redirect());
+        $this->redirectHelper()->expects()->toRoute(LoginController::ROUTE_INDEX)->andReturn($this->redirect());
 
         // Execute
         $this->sut->postAction($request, new RouteMatch([]), $response);

@@ -125,7 +125,7 @@ class IndexControllerTest extends MockeryTestCase
             ->andReturn(false);
 
         $this->sut->shouldReceive('redirect->toRoute')
-            ->with('bus-registration', [], ['code' => 303])
+            ->with('busreg-registrations', [], ['code' => 303])
             ->once()
             ->andReturn('REDIRECT');
 
