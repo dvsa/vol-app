@@ -45,16 +45,24 @@ class ApplicationOverviewTest extends AbstractFormValidationTestCase
         $this->assertFormElementIsRequired($element, false);
     }
 
+    /**
+     * @todo unskip https://jira.dvsacloud.uk/browse/VOL-2309
+     */
     public function testReceivedDate()
     {
+        $this->markTestSkipped();
         $element = ['details', 'receivedDate'];
         $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementDate($element);
     }
 
+    /**
+     * @todo unskip https://jira.dvsacloud.uk/browse/VOL-2309
+     */
     public function testCompletionDate()
     {
+        $this->markTestSkipped();
         $element = ['details', 'targetCompletionDate'];
         $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
