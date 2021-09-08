@@ -32,8 +32,12 @@ class NewTmUserTest extends AbstractFormValidationTestCase
         $this->assertFormElementText($element, 0, 35);
     }
 
+    /**
+     * @todo unskip https://jira.dvsacloud.uk/browse/VOL-2309
+     */
     public function testBirthDate()
     {
+        $this->markTestSkipped();
         $element = ['data', 'birthDate'];
 
         $this->assertFormElementNotValid(
