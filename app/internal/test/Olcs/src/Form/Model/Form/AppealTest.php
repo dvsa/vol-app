@@ -27,16 +27,24 @@ class AppealTest extends AbstractFormValidationTestCase
         $this->assertFormElementHidden(['fields', 'version']);
     }
 
+    /**
+     * @todo unskip https://jira.dvsacloud.uk/browse/VOL-2309
+     */
     public function testAppealDate()
     {
+        $this->markTestSkipped();
         $element = ['fields', 'appealDate'];
         $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementDate($element);
     }
 
+    /**
+     * @todo unskip https://jira.dvsacloud.uk/browse/VOL-2309
+     */
     public function testDeadlineDate()
     {
+        $this->markTestSkipped();
         $element = ['fields', 'deadlineDate'];
         $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
@@ -69,48 +77,72 @@ class AppealTest extends AbstractFormValidationTestCase
         $this->assertFormElementText($element, 5, 4000);
     }
 
+    /**
+     * @todo unskip https://jira.dvsacloud.uk/browse/VOL-2309
+     */
     public function testHearingDate()
     {
+        $this->markTestSkipped();
         $element = ['fields', 'hearingDate'];
         $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementDate($element);
     }
 
+    /**
+     * @todo unskip https://jira.dvsacloud.uk/browse/VOL-2309
+     */
     public function testDecisionDate()
     {
+        $this->markTestSkipped();
         $element = ['fields', 'decisionDate'];
         $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementDate($element);
     }
 
+    /**
+     * @todo unskip https://jira.dvsacloud.uk/browse/VOL-2309
+     */
     public function testPapersDueTcDate()
     {
+        $this->markTestSkipped();
         $element = ['fields', 'papersDueTcDate'];
         $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementDate($element);
     }
 
+    /**
+     * @todo unskip https://jira.dvsacloud.uk/browse/VOL-2309
+     */
     public function testPapersSentTcDate()
     {
+        $this->markTestSkipped();
         $element = ['fields', 'papersSentTcDate'];
         $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementDate($element);
     }
 
+    /**
+     * @todo unskip https://jira.dvsacloud.uk/browse/VOL-2309
+     */
     public function testPapersDueDate()
     {
+        $this->markTestSkipped();
         $element = ['fields', 'papersDueDate'];
         $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
         $this->assertFormElementDate($element);
     }
 
+    /**
+     * @todo unskip https://jira.dvsacloud.uk/browse/VOL-2309
+     */
     public function testPapersSentDate()
     {
+        $this->markTestSkipped();
         $element = ['fields', 'papersSentDate'];
         $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
@@ -136,8 +168,12 @@ class AppealTest extends AbstractFormValidationTestCase
         $this->assertFormElementType($element, OlcsCheckbox::class);
     }
 
+    /**
+     * @todo unskip https://jira.dvsacloud.uk/browse/VOL-2309
+     */
     public function testWithdrawnDate()
     {
+        $this->markTestSkipped();
         $element = ['fields', 'withdrawnDate'];
         $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);

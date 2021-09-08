@@ -74,8 +74,12 @@ class TransportManagerTest extends AbstractFormValidationTestCase
         );
     }
 
+    /**
+     * @todo unskip https://jira.dvsacloud.uk/browse/VOL-2309
+     */
     public function testTransportManagerDateOfBirth()
     {
+        $this->markTestSkipped();
         $element = ['transport-manager-details', 'birthDate'];
         $this->assertFormElementIsRequired($element, true);
 
