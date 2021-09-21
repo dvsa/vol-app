@@ -14,12 +14,8 @@ class PublicInquiryAgreedAndLegislationTest extends AbstractFormValidationTestCa
      */
     protected $formName = PublicInquiryAgreedAndLegislation::class;
 
-    /**
-     * @todo unskip https://jira.dvsacloud.uk/browse/VOL-2309
-     */
     public function testFieldsAgreedDate()
     {
-        $this->markTestSkipped();
         $element = ['fields', 'agreedDate'];
         $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
@@ -67,12 +63,8 @@ class PublicInquiryAgreedAndLegislationTest extends AbstractFormValidationTestCa
         $this->assertFormElementDynamicSelect($element);
     }
 
-    /**
-     * @todo unskip https://jira.dvsacloud.uk/browse/VOL-2309
-     */
     public function testFieldsEcmsFirstReceivedDate()
     {
-        $this->markTestSkipped();
         $element = ['fields', 'ecmsFirstReceivedDate'];
         $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);

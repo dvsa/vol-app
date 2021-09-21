@@ -57,34 +57,22 @@ class BusServiceNumberAndTypeTest extends AbstractFormValidationTestCase
         $this->assertFormElementText($element, 0, 800);
     }
 
-    /**
-     * @todo unskip https://jira.dvsacloud.uk/browse/VOL-2309
-     */
     public function testReceivedDate()
     {
-        $this->markTestSkipped();
         $element = ['fields', 'receivedDate'];
         $this->assertFormElementRequired($element, false);
         $this->assertFormElementDate($element);
     }
 
-    /**
-     * @todo unskip https://jira.dvsacloud.uk/browse/VOL-2309
-     */
     public function testEffectiveDate()
     {
-        $this->markTestSkipped();
         $element = ['fields', 'effectiveDate'];
         $this->assertFormElementRequired($element, false);
         $this->assertFormElementDate($element);
     }
 
-    /**
-     * @todo unskip https://jira.dvsacloud.uk/browse/VOL-2309
-     */
     public function testEndDate()
     {
-        $this->markTestSkipped();
         $element = ['fields', 'endDate'];
         $this->assertFormElementRequired($element, false);
         $this->assertFormElementDate($element);

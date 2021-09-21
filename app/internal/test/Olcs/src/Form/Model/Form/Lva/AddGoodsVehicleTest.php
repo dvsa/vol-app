@@ -46,12 +46,8 @@ class AddGoodsVehicleTest extends AbstractFormValidationTestCase
         $this->assertFormElementHidden(['licence-vehicle', 'version']);
     }
 
-    /**
-     * @todo unskip https://jira.dvsacloud.uk/browse/VOL-2309
-     */
     public function testLicenceVehicleReceivedDate()
     {
-        $this->markTestSkipped();
         $element = ['licence-vehicle', 'receivedDate'];
         $this->assertFormElementDate($element);
         $this->assertFormElementRequired($element, false);
@@ -76,12 +72,8 @@ class AddGoodsVehicleTest extends AbstractFormValidationTestCase
         );
     }
 
-    /**
-     * @todo unskip https://jira.dvsacloud.uk/browse/VOL-2309
-     */
     public function testLicenceVehicleRemovalDate()
     {
-        $this->markTestSkipped();
         $element = ['licence-vehicle', 'removalDate'];
         $this->assertFormElementDate($element);
         $this->assertFormElementRequired($element, false);

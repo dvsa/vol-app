@@ -31,12 +31,8 @@ class SubmissionSendToTest extends AbstractFormValidationTestCase
         $this->assertFormElementHidden(['fields', 'senderUser']);
     }
 
-    /**
-     * @todo unskip https://jira.dvsacloud.uk/browse/VOL-2309
-     */
     public function testFieldsInformationCompleteDate()
     {
-        $this->markTestSkipped();
         $element = ['fields', 'informationCompleteDate'];
         $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);
@@ -65,12 +61,8 @@ class SubmissionSendToTest extends AbstractFormValidationTestCase
         );
     }
 
-    /**
-     * @todo unskip https://jira.dvsacloud.uk/browse/VOL-2309
-     */
     public function testFieldsAssignedDate()
     {
-        $this->markTestSkipped();
         $element = ['fields', 'assignedDate'];
         $this->assertFormElementIsRequired($element, false);
         $this->assertFormElementAllowEmpty($element, true);

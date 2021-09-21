@@ -63,12 +63,8 @@ class IrfoPsvAuthTest extends AbstractFormValidationTestCase
         $this->assertFormElementDate(['fields', 'inForceDate']);
     }
 
-    /**
-     * @todo unskip https://jira.dvsacloud.uk/browse/VOL-2309
-     */
     public function testExpiryDate()
     {
-        $this->markTestSkipped();
         $element = ['fields', 'expiryDate'];
         $this->assertFormElementRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
