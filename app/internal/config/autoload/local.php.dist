@@ -146,4 +146,9 @@ return array(
         ],
     ],
     'html-purifier-cache-dir' => '/var/tmp/htmlPurifierCache',
+
+    'auth' => [
+        'session_name' => 'Identity',
+        'identity_provider' => \Common\Rbac\JWTIdentityProvider::class
+    ],
 );

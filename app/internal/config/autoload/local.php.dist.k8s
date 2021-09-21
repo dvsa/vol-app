@@ -119,7 +119,7 @@ return [
             'shared' => 'shared-cache-encryption-key',
         ],
     ],
-    
+
     'query_cache' => [
         // whether the cqrs cache is enabled
         'enabled' => true,
@@ -154,4 +154,9 @@ return [
         ],
     ],
     'html-purifier-cache-dir' => '/var/tmp/htmlPurifierCache',
+
+    'auth' => [
+        'session_name' => 'Identity',
+        'identity_provider' => \Common\Rbac\JWTIdentityProvider::class
+    ],
 ];
