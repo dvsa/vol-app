@@ -62,7 +62,6 @@ return array(
 
     'openam' => [
         'url' => 'http://olcs-auth.olcs.gov.uk:8081/secure/',
-        'realm' => 'internal',
         'cookie' => [
             'domain' => '.olcs.gov.uk',
         ]
@@ -148,6 +147,7 @@ return array(
     'html-purifier-cache-dir' => '/var/tmp/htmlPurifierCache',
 
     'auth' => [
+        'realm' => 'internal',
         'session_name' => 'Identity',
         'identity_provider' => \Common\Rbac\JWTIdentityProvider::class
     ],
