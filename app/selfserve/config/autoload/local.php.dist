@@ -197,4 +197,9 @@ return [
         'seconds-before-expiry-warning' => 300,  // 5 minutes
         'timeout-redirect-url' => '/auth/timeout',
     ],
+
+    'auth' => [
+        'session_name' => 'Identity',
+        'identity_provider' => \Common\Rbac\JWTIdentityProvider::class
+    ],
 ];
