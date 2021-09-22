@@ -2,7 +2,6 @@
 
 namespace Olcs\Listener;
 
-use Common\Rbac\IdentityProvider;
 use Common\Rbac\User;
 use Common\RefData;
 use Common\Service\Cqrs\Query\QuerySender;
@@ -14,6 +13,7 @@ use Laminas\Mvc\MvcEvent;
 use Laminas\Navigation\Navigation;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+use ZfcRbac\Identity\IdentityProviderInterface;
 
 /**
  * Class NavigationToggle
@@ -29,7 +29,7 @@ class NavigationToggle implements ListenerAggregateInterface, FactoryInterface
     protected $navigation;
 
     /**
-     * @var IdentityProvider
+     * @var IdentityProviderInterface
      */
     protected $authenticationService;
 
@@ -105,7 +105,7 @@ class NavigationToggle implements ListenerAggregateInterface, FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $this->navigation = $serviceLocator->get('navigation');
-        $this->authenticationService = $serviceLocator->get('Common\Rbac\IdentityProvider');
+        $this->authenticationService = $serviceLocator->get(IdentityProviderInterface::class);
         $this->querySender = $serviceLocator->get('QuerySender');
 
         return $this;
