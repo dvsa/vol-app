@@ -13,6 +13,7 @@ use Laminas\Navigation\Page\AbstractPage;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Listener\NavigationToggle;
+use ZfcRbac\Identity\IdentityProviderInterface;
 
 /**
  * Class NavigationToggleTest
@@ -42,7 +43,7 @@ class NavigationToggleTest extends TestCase
         $this->mockSm
             ->shouldReceive('get')->with('navigation')->andReturn($this->mockNavigation)
             ->shouldReceive('get')->with('QuerySender')->andReturn($this->mockQuerySender)
-            ->shouldReceive('get')->with('Common\Rbac\IdentityProvider')->andReturn($this->mockIdentityProvider);
+            ->shouldReceive('get')->with(IdentityProviderInterface::class)->andReturn($this->mockIdentityProvider);
 
         $this->sut = new NavigationToggle();
     }
