@@ -27,12 +27,8 @@ class DisqualifyTest extends AbstractFormValidationTestCase
         $this->assertFormElementHidden(['version']);
     }
 
-    /**
-     * @todo unskip https://jira.dvsacloud.uk/browse/VOL-2309
-     */
     public function testStartDate()
     {
-        $this->markTestSkipped();
         $element = ['startDate'];
         $this->assertFormElementDate($element);
         $this->assertFormElementRequired($element, true);

@@ -33,24 +33,16 @@ class IrfoGvPermitTest extends AbstractFormValidationTestCase
         $this->assertFormElementNumber($element);
     }
 
-    /**
-     * @todo unskip https://jira.dvsacloud.uk/browse/VOL-2309
-     */
     public function testInForceDate()
     {
-        $this->markTestSkipped();
         $element = ['fields', 'inForceDate'];
         $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementDate($element);
     }
 
-    /**
-     * @todo unskip https://jira.dvsacloud.uk/browse/VOL-2309
-     */
     public function testExpiryDate()
     {
-        $this->markTestSkipped();
         $element = ['fields', 'expiryDate'];
         $this->assertFormElementIsRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);

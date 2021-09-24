@@ -23,12 +23,8 @@ class CaseStayTest extends AbstractFormValidationTestCase
         $this->assertFormElementHidden($element);
     }
 
-    /**
-     * @todo unskip https://jira.dvsacloud.uk/browse/VOL-2309
-     */
     public function testRequestDate()
     {
-        $this->markTestSkipped();
         $element = ['fields', 'requestDate'];
         $this->assertFormElementIsRequired($element, true);
 
@@ -42,12 +38,8 @@ class CaseStayTest extends AbstractFormValidationTestCase
         );
     }
 
-    /**
-     * @todo unskip https://jira.dvsacloud.uk/browse/VOL-2309
-     */
     public function testDecisionDate()
     {
-        $this->markTestSkipped();
         $element = ['fields', 'decisionDate'];
         $this->assertFormElementIsRequired($element, false);
 
@@ -84,12 +76,8 @@ class CaseStayTest extends AbstractFormValidationTestCase
         $this->assertFormElementType($element, OlcsCheckbox::class);
     }
 
-    /**
-     * @todo unskip https://jira.dvsacloud.uk/browse/VOL-2309
-     */
     public function testWithdrawnDate()
     {
-        $this->markTestSkipped();
         $element = ['fields', 'withdrawnDate'];
         $this->assertFormElementIsRequired($element, false);
 
