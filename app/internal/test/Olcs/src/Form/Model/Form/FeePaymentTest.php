@@ -58,9 +58,7 @@ class FeePaymentTest extends AbstractFormValidationTestCase
 
         $this->assertFormElementAllowEmpty(
             $element,
-            false,
-            [],
-            [NotEmpty::IS_EMPTY, Date::INVALID]
+            false
         );
 
         $this->assertFormElementIsRequired($element, true);

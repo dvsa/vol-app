@@ -77,7 +77,7 @@ class PublicInquiryAgreedAndLegislationTest extends AbstractFormValidationTestCa
             ],
             [DateNotInFuture::IN_FUTURE]
         );
-        $this->assertFormElementDate($element, false);
+        $this->assertFormElementDate($element);
     }
 
     public function testFieldsPiTypes()

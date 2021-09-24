@@ -2,6 +2,7 @@
 
 namespace OlcsTest\Form\Model\Form;
 
+use Laminas\Validator\NotEmpty;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 
 /**
@@ -62,8 +63,16 @@ class InspectionRequestTest extends AbstractFormValidationTestCase
     public function testDueDate()
     {
         $element = ['data', 'dueDate'];
-        $this->assertFormElementRequired($element, true);
-        $this->assertFormElementDate($element);
+        $this->assertFormElementIsRequired($element, true);
+        $this->assertFormElementDate($element, [
+            'data' => [
+                'requestDate' => [
+                    'year' => '1990',
+                    'month' => '01',
+                    'day' => '01',
+                ],
+            ]
+        ]);
     }
 
     public function testReturnDate()
