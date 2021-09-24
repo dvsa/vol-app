@@ -3512,12 +3512,12 @@
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "4.206.18",
+            "version": "4.206.20",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-auth/4.206.18/olcs-olcs-auth-4.206.18.zip",
-                "reference": "982220f169227947857df7faa859c9819623d41b",
-                "shasum": "982220f169227947857df7faa859c9819623d41b"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-auth/4.206.20/olcs-olcs-auth-4.206.20.zip",
+                "reference": "c848795ef080b0bb979fa753d0aa6f637189534b",
+                "shasum": "c848795ef080b0bb979fa753d0aa6f637189534b"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -3579,16 +3579,16 @@
                 ]
             },
             "description": "OLCS Authentication",
-            "time": "2021-08-23T10:07:53+00:00"
+            "time": "2021-09-21T06:58:57+00:00"
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.362",
+            "version": "4.206.367",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.362/olcs-olcs-common-4.206.362.zip",
-                "reference": "9e908f0fe9e3bfed348a1d17b7fa8e0adcd0a1b6",
-                "shasum": "9e908f0fe9e3bfed348a1d17b7fa8e0adcd0a1b6"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.367/olcs-olcs-common-4.206.367.zip",
+                "reference": "f1cf08eaf18eaf2ff78ac0bc96df353c6d40bb0e",
+                "shasum": "f1cf08eaf18eaf2ff78ac0bc96df353c6d40bb0e"
             },
             "require": {
                 "doctrine/annotations": "^1.8",
@@ -3672,7 +3672,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2021-08-25T15:22:23+00:00"
+            "time": "2021-09-24T14:48:10+00:00"
         },
         {
             "name": "olcs/olcs-logging",
@@ -5613,23 +5613,20 @@
         },
         {
             "name": "olcs/coding-standards",
-            "version": "4.206.0",
+            "version": "4.206.2",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/coding-standards/4.206.0/olcs-coding-standards-4.206.0.zip",
-                "reference": "92e78dd7b6d4e374b44ded6f89f0b63c7dbd51e8",
-                "shasum": "92e78dd7b6d4e374b44ded6f89f0b63c7dbd51e8"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/coding-standards/4.206.2/olcs-coding-standards-4.206.2.zip",
+                "reference": "af5ae681f33b69550c5b7f70544314788f7dd179",
+                "shasum": "af5ae681f33b69550c5b7f70544314788f7dd179"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1"
             },
-            "require-dev": {
-                "olcs/olcs-devtools": "~4.206.0"
-            },
             "type": "library",
             "extra": {
                 "nexus-push": {
-                    "url": "http://nexus.shd.ci.nonprod.dvsa.aws/repository/olcs-coding-standards"
+                    "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/olcs-coding-standards"
                 }
             },
             "scripts": {
@@ -5638,16 +5635,16 @@
                 ]
             },
             "description": "OLCS CodeSniffer and MessDetector rule sets",
-            "time": "2019-05-01T11:24:30+00:00"
+            "time": "2021-09-16T07:21:44+00:00"
         },
         {
             "name": "olcs/olcs-devtools",
-            "version": "4.206.8",
+            "version": "4.206.10",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-devtools/4.206.8/olcs-olcs-devtools-4.206.8.zip",
-                "reference": "4fc03a4681cc7678901cbee2b5fb8b4535bce14b",
-                "shasum": "4fc03a4681cc7678901cbee2b5fb8b4535bce14b"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-devtools/4.206.10/olcs-olcs-devtools-4.206.10.zip",
+                "reference": "67a024e4111483a75eb3b36ab6d7e6cb6db9bcc5",
+                "shasum": "67a024e4111483a75eb3b36ab6d7e6cb6db9bcc5"
             },
             "require": {
                 "brianium/paratest": "^3.0",
@@ -5685,16 +5682,16 @@
                 }
             },
             "description": "Dev tools",
-            "time": "2021-08-20T10:24:32+00:00"
+            "time": "2021-09-16T12:46:13+00:00"
         },
         {
             "name": "olcs/olcs-testhelpers",
-            "version": "4.206.13",
+            "version": "4.206.15",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-testhelpers/4.206.13/olcs-olcs-testhelpers-4.206.13.zip",
-                "reference": "7d98b5be900dffb42a21f285f921e9da325ebef3",
-                "shasum": "7d98b5be900dffb42a21f285f921e9da325ebef3"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-testhelpers/4.206.15/olcs-olcs-testhelpers-4.206.15.zip",
+                "reference": "255dc7781759628b7f26f40c46763bba56158b25",
+                "shasum": "255dc7781759628b7f26f40c46763bba56158b25"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -5724,7 +5721,7 @@
                 }
             },
             "description": "OLCS Test helpers",
-            "time": "2021-08-20T09:50:22+00:00"
+            "time": "2021-09-24T15:17:12+00:00"
         },
         {
             "name": "pdepend/pdepend",
