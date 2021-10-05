@@ -50,7 +50,6 @@ return [
 
     'openam' => [
         'url' => 'http://olcs-auth.olcs.gov.uk:8080/secure',
-        'realm' => 'selfserve',
         'cookie' => [
             'domain' => 'olcs.gov.uk',
         ]
@@ -149,6 +148,7 @@ return [
     ],
 
     'auth' => [
+        'realm' => 'selfserve',
         'session_name' => 'Identity',
         'identity_provider' => \Common\Rbac\JWTIdentityProvider::class
     ],
