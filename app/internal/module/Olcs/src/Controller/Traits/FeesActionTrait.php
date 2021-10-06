@@ -22,6 +22,7 @@ use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
 use Laminas\Form\Form;
+use ZfcRbac\Identity\IdentityProviderInterface;
 
 /**
  * Fees action trait
@@ -556,8 +557,8 @@ trait FeesActionTrait
      */
     public function refundFeeAction()
     {
-        /** @var IdentityProvider $authenticationService */
-        $authenticationService = $this->getServiceLocator()->get('Common\Rbac\IdentityProvider');
+        /** @var IdentityProviderInterface $authenticationService */
+        $authenticationService = $this->getServiceLocator()->get(IdentityProviderInterface::class);
         /** @var User $user */
         $user = $authenticationService->getIdentity();
         $isAdmin = $user->hasRole(RefData::ROLE_INTERNAL_ADMIN);
