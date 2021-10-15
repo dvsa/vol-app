@@ -147,6 +147,7 @@ return array(
     'html-purifier-cache-dir' => '/var/tmp/htmlPurifierCache',
 
     'auth' => [
+        'user_unique_id_salt' => '1234',
         'realm' => 'internal',
         'session_name' => 'Identity',
         'identity_provider' => \Common\Rbac\JWTIdentityProvider::class
