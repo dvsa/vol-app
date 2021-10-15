@@ -198,6 +198,7 @@ return [
     ],
 
     'auth' => [
+        'user_unique_id_salt' => '1234',
         'realm' => 'selfserve',
         'session_name' => 'Identity',
         'identity_provider' => \Common\Rbac\JWTIdentityProvider::class
