@@ -134,6 +134,17 @@ $routes = [
             ]
         ]
     ],
+    'right-first-time' => [
+        'type' => 'segment',
+        'options' =>  [
+            'route' => '/are-you-ready[/]',
+            'defaults' => [
+                'controller' => \Common\Controller\GuidesController::class,
+                'action' => 'index',
+                'guide' => \Common\Controller\GuidesController::GUIDE_RIGHT_FIRST_TIME,
+            ]
+        ]
+    ],
     //  search result page with filter and table of results
     'search' => [
         'type' => 'segment',
@@ -1499,6 +1510,7 @@ return array(
                 'privacy-notice' => ['*'],
                 'terms-and-conditions' => ['*'],
                 'accessibility-statement' => ['*'],
+                'right-first-time' => ['*'],
                 'not-found' => ['*'],
                 'server-error' => ['*'],
                 'session-timeout' => ['*'],
