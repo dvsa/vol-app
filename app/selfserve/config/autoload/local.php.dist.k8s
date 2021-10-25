@@ -36,7 +36,7 @@ return [
             ],
             // Postcode/Address service URI *Environment specific*
             'postcode' => [
-                'url' => 'http://address.localdev/',
+                'url' => 'http://address.reg.olcs.dev-dvsacloud.uk/',
                 'options' => [
                     'adapter' => \Laminas\Http\Client\Adapter\Curl::class,
                     'timeout' => 60,
