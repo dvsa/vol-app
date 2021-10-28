@@ -42,6 +42,7 @@ class TransportManagerApplication
         $details['id'] = $data['id'];
         $details['version'] = $data['version'];
         $details['isOwner'] = $data['isOwner'];
+        $details['hasUndertakenTraining'] = $data['hasUndertakenTraining'];
         $details['hoursOfWeek']['hoursPerWeekContent']['hoursMon'] = $data['hoursMon'];
         $details['hoursOfWeek']['hoursPerWeekContent']['hoursTue'] = $data['hoursTue'];
         $details['hoursOfWeek']['hoursPerWeekContent']['hoursWed'] = $data['hoursWed'];
@@ -71,6 +72,7 @@ class TransportManagerApplication
             'id' => $data['details']['id'],
             'version' => $data['details']['version'],
             'tmType' => $data['details']['tmType'],
+            'hasUndertakenTraining' => $data['details']['hasUndertakenTraining'],
             'additionalInformation' => $data['details']['additionalInformation'],
             'hoursMon' => ($data['details']['hoursOfWeek']['hoursPerWeekContent']['hoursMon']) ?: null,
             'hoursTue' => ($data['details']['hoursOfWeek']['hoursPerWeekContent']['hoursTue']) ?: null,
