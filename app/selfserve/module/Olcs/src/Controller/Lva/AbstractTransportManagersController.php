@@ -175,6 +175,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                             'version' => $transportManagerApplicationData['version'],
                             'email' => $data['details']['emailAddress'],
                             'placeOfBirth' => $data['details']['birthPlace'],
+                            'hasUndertakenTraining' => $data['details']['hasUndertakenTraining'],
                             'homeAddress' => $data['homeAddress'],
                             'workAddress' => $data['workAddress'],
                             'tmType' => $data['responsibilities']['tmType'],
@@ -883,6 +884,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             $formData = [
                 'details' => [
                     'emailAddress' => $contactDetails['emailAddress'],
+                    'hasUndertakenTraining' => $data['hasUndertakenTraining'],
                     'birthPlace' => $person['birthPlace']
                 ],
                 'responsibilities' => [
