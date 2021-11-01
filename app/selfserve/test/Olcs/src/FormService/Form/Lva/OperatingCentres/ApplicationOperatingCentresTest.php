@@ -15,6 +15,7 @@ use Laminas\Form\Form;
 use Laminas\Http\Request;
 use Common\Service\Helper\FormHelperService;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
+use Common\RefData;
 
 /**
  * Application Operating Centres Test
@@ -74,6 +75,9 @@ class ApplicationOperatingCentresTest extends MockeryTestCase
             'canHaveSchedule41' => true,
             'canHaveCommunityLicences' => true,
             'isPsv' => false,
+            'licenceType' => ['id' => RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL],
+            'isEligibleForLgv' => true,
+            'totAuthLgvVehicles' => 0,
         ];
 
         $tableElement = $this->mockPopulateFormTable([]);
@@ -92,11 +96,11 @@ class ApplicationOperatingCentresTest extends MockeryTestCase
 
         $data = m::mock();
         $data->shouldReceive('has')
-            ->with('totCommunityLicences')
+            ->with('totCommunityLicencesFieldset')
             ->andReturn(true)
             ->shouldReceive('get')
-            ->with('totCommunityLicences')
-            ->andReturn($totCommunityLicences);
+            ->with('totCommunityLicencesFieldset')
+            ->andReturn(m::mock()->shouldReceive('get')->with('totCommunityLicences')->andReturn($totCommunityLicences)->getMock());
 
         $this->form->shouldReceive('get')
             ->with('data')

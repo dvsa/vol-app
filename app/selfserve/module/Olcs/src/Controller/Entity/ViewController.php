@@ -5,6 +5,7 @@ namespace Olcs\Controller\Entity;
 use Common\Controller\Lva\AbstractController;
 use Common\Exception\ResourceNotFoundException;
 use Common\RefData;
+use Common\Service\Table\TableBuilder;
 use Dvsa\Olcs\Transfer\Query\Search\Licence as SearchLicence;
 use Laminas\Session\Container;
 
@@ -218,8 +219,12 @@ class ViewController extends AbstractController
 
         $tables['operatingCentresTable'] = $tableService->buildTable(
             'entity-view-operating-centres-' . $this->userType,
-            $data['operatingCentres'] ?: []
+            $data['operatingCentres'] ?: [],
+            [],
+            false
         );
+
+        $this->alterOperatingCentresTableForLgv($tables['operatingCentresTable'], $data);
 
         // Using OCs again, just using different data
         $tables['oppositionsTable'] = $tableService->buildTable(
@@ -245,5 +250,24 @@ class ViewController extends AbstractController
         }
 
         return $tables;
+    }
+
+    /**
+     * Alter the operating centres table in accordance with lgv requirements
+     *
+     * @param TableBuilder $tableBuilder
+     * @param array $data
+     */
+    private function alterOperatingCentresTableForLgv(TableBuilder $tableBuilder, array $data)
+    {
+        if ($data['isEligibleForLgv']) {
+            $columns = $tableBuilder->getColumns();
+            $columns['noOfVehiclesRequired']['title'] = str_replace(
+                'vehicles',
+                'hgvs',
+                $columns['noOfVehiclesRequired']['title']
+            );
+            $tableBuilder->setColumns($columns);
+        }
     }
 }

@@ -21,7 +21,8 @@ return array(
             'formatter' => function ($data) {
                 return !empty($data['noOfVehiclesRequired']) ?
                     $data['noOfVehiclesRequired'] : '0';
-            }
+            },
+            'name' => 'noOfVehiclesRequired'
         ),
         array(
             'title' => 'entity-view-table-header-trailers-authorised',

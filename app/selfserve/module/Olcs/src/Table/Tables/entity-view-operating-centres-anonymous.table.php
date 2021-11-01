@@ -18,7 +18,8 @@ return array(
                     return '0';
                 }
                 return $data['noOfVehiclesRequired'];
-            }
+            },
+            'name' => 'noOfVehiclesRequired'
         ),
         array(
             'title' => 'search-result-label-trailers',
