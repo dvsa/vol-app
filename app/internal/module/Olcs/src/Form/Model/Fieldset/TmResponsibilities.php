@@ -107,4 +107,19 @@ class TmResponsibilities
      * @Form\ComposedObject("\Common\Form\Model\Fieldset\MultipleFileUpload")
      */
     public $file = null;
+
+    /**
+     * @Form\Options({
+     *     "label": "tm-review-responsibility-training-undertaken",
+     *     "value_options":{
+     *         "Y":"Yes",
+     *         "N":"No"
+     *     },
+     *     "fieldset-attributes": {
+     *         "class": "checkbox inline"
+     *     }
+     * })
+     * @Form\Type("Radio")
+     */
+    public $hasUndertakenTraining = null;
 }

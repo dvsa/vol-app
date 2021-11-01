@@ -34,6 +34,7 @@ class TransportManagerApplicationTest extends MockeryTestCase
             'id' => 5,
             'version' => 6,
             'isOwner' => 1,
+            'hasUndertakenTraining' => 'Y',
             'hoursMon' => 1,
             'hoursTue' => 2,
             'hoursWed' => 3,
@@ -52,6 +53,7 @@ class TransportManagerApplicationTest extends MockeryTestCase
                 'id' => 5,
                 'version' => 6,
                 'isOwner' => 1,
+                'hasUndertakenTraining' => 'Y',
                 'hoursOfWeek' => [
                     'hoursPerWeekContent' => [
                         'hoursMon' => 1,
@@ -109,6 +111,7 @@ class TransportManagerApplicationTest extends MockeryTestCase
                     ]
                 ],
                 'tmApplicationStatus' => 'as',
+                'hasUndertakenTraining' => 'Y',
                 'isOwner' => 1
             ]
         ];
@@ -125,6 +128,7 @@ class TransportManagerApplicationTest extends MockeryTestCase
             'hoursSat' => 6,
             'hoursSun' => 7,
             'tmApplicationStatus' => 'as',
+            'hasUndertakenTraining' => 'Y',
             'isOwner' => 1
         ];
         $this->assertEquals($expected, Sut::mapFromForm($data));
