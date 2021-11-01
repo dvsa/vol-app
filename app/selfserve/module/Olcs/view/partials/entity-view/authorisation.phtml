@@ -1,0 +1,25 @@
+<div class="read-only">
+    <div class="read-only__header">
+        <h4 class="read-only__title">
+            <?php echo $this->translate('search-result-section-header-authorisation'); ?>
+        </h4>
+    </div>
+        <?php
+
+        $authorisations = [];
+        foreach ($this->result['authorisations'] as $label => $value) {
+            $authorisations[] = [
+                'label' => 'search-result-label-authorisation-' . $label,
+                'value' => $value,
+            ];
+        }
+
+        echo $this->render(
+            'partials/read-only/main',
+            [
+                'items' => $authorisations
+            ]
+        );
+    ?>
+</div>
+
