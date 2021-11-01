@@ -98,6 +98,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
             'new goods application' => [
                 // application overview data
                 [
+                    'isEligibleForLgv' => false,
                     'id' => 69,
                     'createdOn' => '2015-04-08',
                     'goodsOrPsv' => ['id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE],
@@ -186,9 +187,103 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                 // grace period string
                 'None (<a href="GRACE_PERIOD_URL">manage</a>)'
             ],
+            'variation eligible for lgv' => [
+                // application overview data
+                [
+                    'isEligibleForLgv' => true,
+                    'id' => 69,
+                    'createdOn' => '2015-04-08',
+                    'goodsOrPsv' => ['id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE],
+                    'licenceType'  => ['id' => RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL],
+                    'totAuthVehicles' => 10,
+                    'totAuthHgvVehicles' => 4,
+                    'totAuthLgvVehicles' => 6,
+                    'totAuthTrailers' => 13,
+                    'isVariation' => false,
+                    'interimStatus' => [
+                        'id' => 1,
+                        'description' => 'Requested',
+                    ],
+                    'licenceVehicles' => [
+                        ['id' => 1],
+                        ['id' => 2],
+                    ],
+                    'licence' => [
+                        'gracePeriods' => [],
+                        'id'           => 123,
+                        'expiryDate'   => '2017-06-05',
+                        'inForceDate'  => '2014-03-02',
+                        'status'       => ['id' => RefData::LICENCE_STATUS_VALID],
+                        'licenceType'  => ['id' => RefData::LICENCE_TYPE_STANDARD_NATIONAL],
+                        'totAuthHgvVehicles' => 3,
+                        'totAuthLgvVehicles' => 2,
+                        'totAuthTrailers' => 1,
+                        'organisation' => [
+                            'allowEmail' => 'Y',
+                            'id' => 72,
+                            'name' => 'John Smith Haulage',
+                            'licences' => null,
+                        ],
+                        'tradingName' => 'TRADING_NAME',
+                        'licenceVehicles' => null,
+                        'operatingCentres' => [
+                            ['id' => 1],
+                            ['id' => 2],
+                        ],
+                        'changeOfEntitys' => [],
+                        'organisationLicenceCount' => 3,
+                        'numberOfVehicles' => 5
+                    ],
+                    'oppositionCount' => 2,
+                    'feeCount' => 2,
+                    'outOfOppositionDate' => '1966-06-21',
+                    'outOfRepresentationDate' => '1996-07-02',
+                    'operatingCentresNetDelta' => 1,
+                ],
+                // expected view data
+                [
+                    'operatorName' => 'John Smith Haulage',
+                    'operatorId' => 72,
+                    'numberOfLicences' => 3,
+                    'tradingName' => 'TRADING_NAME',
+                    'currentApplications' => 100,
+                    'applicationCreated' => '2015-04-08',
+                    'oppositionCount' => 2,
+                    'licenceStatus' => ['id' => RefData::LICENCE_STATUS_VALID],
+                    'licenceType' => RefData::LICENCE_TYPE_STANDARD_NATIONAL,
+                    'appLicenceType' => RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                    'interimStatus' => 'Requested (<a href="INTERIM_URL">Interim details</a>)',
+                    'outstandingFees' => 2,
+                    'licenceStartDate' => '2014-03-02',
+                    'continuationDate' => '2017-06-05',
+                    'numberOfVehicles' => '5 (7)',
+                    'totalHgvAuthorisation' => '3 (4)',
+                    'totalLgvAuthorisation' => '2 (6)',
+                    'numberOfOperatingCentres' => '2 (3)',
+                    'totalTrailerAuthorisation' => '1 (13)',
+                    'numberOfIssuedDiscs' => null,
+                    'numberOfCommunityLicences' => 101,
+                    'openCases' => 102,
+                    'currentReviewComplaints' => null,
+                    'previousOperatorName' => null,
+                    'previousLicenceNumber' => null,
+                    'outOfOpposition' => null,
+                    'outOfRepresentation' => null,
+                    'changeOfEntity' => 'No (<a class="js-modal-ajax" href="CHANGE_OF_ENTITY_URL">add details</a>)',
+                    'receivesMailElectronically' => 'Y',
+                    'registeredForSelfService' => 'Yes',
+                    'licenceGracePeriods' => 'None (<a href="GRACE_PERIOD_URL">manage</a>)',
+                    'outOfOpposition' => '1966-06-21',
+                    'outOfRepresentation' => '1996-07-02',
+                    'isPsv' => false,
+                ],
+                // grace period string
+                'None (<a href="GRACE_PERIOD_URL">manage</a>)'
+            ],
             'new psv special restricted application' => [
                 // application overview data
                 [
+                    'isEligibleForLgv' => false,
                     'id' => 69,
                     'createdOn' => '2015-04-08',
                     'goodsOrPsv' => ['id' => RefData::LICENCE_CATEGORY_PSV],

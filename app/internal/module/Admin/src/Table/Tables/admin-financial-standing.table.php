@@ -27,6 +27,11 @@ return array(
             'formatter' => 'RefData'
         ),
         array(
+            'title' => 'Vehicle type',
+            'name' => 'vehicleType',
+            'formatter' => 'RefData',
+        ),
+        array(
             'title' => 'First',
             'name' => 'firstVehicleRate',
         ),

@@ -1,5 +1,70 @@
 <?php
 
+$noOfVehiclesContent = [
+    'label' => 'No. of vehicles',
+    'value' => $numberOfVehicles,
+    'hideIfEmpty' => true,
+];
+
+$noOfOperatingCentresContent = [
+    'label' => 'No. of operating centres',
+    'value' => $numberOfOperatingCentres,
+    'hideIfEmpty' => true,
+];
+
+$totalTrailerAuthorisationContent = [
+    'label' => 'Total trailer authorisation',
+    'value' => $totalTrailerAuthorisation,
+    'hideIfEmpty' => true,
+];
+
+$numberOfIssuedDiscsContent = [
+    'label' => 'No. of issued discs',
+    'numeric' => $numberOfIssuedDiscs,
+    'hideIfEmpty' => true,
+];
+
+$numberOfCommunityLicencesContent = [
+    'label' => $this->translate($isPsv ? 'lva.overview.number-psv-certified-copies' : 'lva.overview.number-uk-licences-community'),
+    'numeric' => $numberOfCommunityLicences,
+    'hideIfEmpty' => true,
+];
+
+// Due to the tabular manner in which the items are laid out on the page, the items for key 3 need to be ordered
+// differently depending on whether we're displaying one vehicle authorisation number or a HGV/LGV split
+if (is_null($totalVehicleAuthorisation)) {
+    $key3Content = [
+        $noOfVehiclesContent,
+        [
+            'label' => 'Total Heavy goods vehicle authorisation',
+            'value' => $totalHgvAuthorisation,
+            'hideIfEmpty' => true,
+        ],
+        $noOfOperatingCentresContent,
+        [
+            'label' => 'Total Light goods vehicle authorisation',
+            'value' => $totalLgvAuthorisation,
+            'hideIfEmpty' => true,
+        ],
+        $numberOfIssuedDiscsContent,
+        $totalTrailerAuthorisationContent,
+        $numberOfCommunityLicencesContent,
+    ];
+} else {
+    $key3Content = [
+        $noOfVehiclesContent,
+        [
+            'label' => 'Total vehicle authorisation',
+            'value' => $totalVehicleAuthorisation,
+            'hideIfEmpty' => true,
+        ],
+        $noOfOperatingCentresContent,
+        $totalTrailerAuthorisationContent,
+        $numberOfIssuedDiscsContent,
+        $numberOfCommunityLicencesContent,
+    ];
+}
+
 echo $this->render('partials/read-only/main',
     [
         'multiItems' =>  [
@@ -43,38 +108,7 @@ echo $this->render('partials/read-only/main',
                 ['label' => 'Grace period', 'value' => $licenceGracePeriods, 'noEscape' => true],
                 ['label' => 'Current licence type', 'value' => $this->translate((string)$licenceType), 'hideIfEmpty' => true]
             ],
-            3 => [
-                [
-                    'label' => 'No. of vehicles',
-                    'value' => $numberOfVehicles,
-                    'hideIfEmpty' => true,
-                ],
-                [
-                    'label' => 'Total vehicle authorisation',
-                    'value' => $totalVehicleAuthorisation,
-                    'hideIfEmpty' => true,
-                ],
-                [
-                    'label' => 'No. of operating centres',
-                    'value' => $numberOfOperatingCentres,
-                    'hideIfEmpty' => true,
-                ],
-                [
-                    'label' => 'Total trailer authorisation',
-                    'value' => $totalTrailerAuthorisation,
-                    'hideIfEmpty' => true,
-                ],
-                [
-                    'label' => 'No. of issued discs',
-                    'numeric' => $numberOfIssuedDiscs,
-                    'hideIfEmpty' => true,
-                ],
-                [
-                    'label' => $this->translate($isPsv ? 'lva.overview.number-psv-certified-copies' : 'lva.overview.number-uk-licences-community'),
-                    'numeric' => $numberOfCommunityLicences,
-                    'hideIfEmpty' => true,
-                ],
-            ],
+            3 => $key3Content,
             4 => [
                 ['label' => 'Open cases', 'value' => $openCases],  // not numeric, may be suffixed with ' (PI)'
                 ['label' => 'Current review complaints', 'numeric' => $currentReviewComplaints],

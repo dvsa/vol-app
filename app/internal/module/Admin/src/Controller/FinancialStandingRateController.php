@@ -33,6 +33,8 @@ class FinancialStandingRateController extends AbstractInternalController
      */
     protected $inlineScripts = [
         'indexAction' => ['table-actions'],
+        'addAction' => ['forms/financial-standing-rate-modal'],
+        'editAction' => ['forms/financial-standing-rate-modal'],
     ];
 
     // list

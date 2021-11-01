@@ -2,15 +2,15 @@
 
 namespace OlcsTest\Validator;
 
-use Olcs\Validator\InterimVehicleAuthority;
+use Olcs\Validator\InterimHgvVehicleAuthority;
 
-class InterimVehicleAuthorityTest extends \PHPUnit\Framework\TestCase
+class InterimHgvVehicleAuthorityTest extends \PHPUnit\Framework\TestCase
 {
     protected $sut;
 
     public function setUp(): void
     {
-        $this->sut = new InterimVehicleAuthority();
+        $this->sut = new InterimHgvVehicleAuthority();
     }
 
     /**
@@ -39,49 +39,67 @@ class InterimVehicleAuthorityTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 6,
-                ['totAuthVehicles' => 0],
+                ['isEligibleForLgv' => true],
+                false,
+                ['hgvVehicleAuthExceeded' => 'The interim Heavy Goods Vehicle Authority cannot exceed the total Heavy Goods Vehicle Authority'],
+            ],
+            [
+                6,
+                ['totAuthHgvVehicles' => 0],
                 false,
                 ['vehicleAuthExceeded' => 'The interim vehicle authority cannot exceed the total vehicle authority'],
             ],
             [
                 6,
-                ['totAuthVehicles' => 5],
+                ['totAuthHgvVehicles' => 0, 'isEligibleForLgv' => true],
+                false,
+                ['hgvVehicleAuthExceeded' => 'The interim Heavy Goods Vehicle Authority cannot exceed the total Heavy Goods Vehicle Authority'],
+            ],
+            [
+                6,
+                ['totAuthHgvVehicles' => 5],
                 false,
                 ['vehicleAuthExceeded' => 'The interim vehicle authority cannot exceed the total vehicle authority'],
             ],
             [
                 6,
-                ['totAuthVehicles' => 6, 'isVariation' => true],
+                ['totAuthHgvVehicles' => 5, 'isEligibleForLgv' => true],
+                false,
+                ['hgvVehicleAuthExceeded' => 'The interim Heavy Goods Vehicle Authority cannot exceed the total Heavy Goods Vehicle Authority'],
+            ],
+            [
+                6,
+                ['totAuthHgvVehicles' => 6, 'isVariation' => true],
                 true,
                 [],
             ],
             [
                 6,
-                ['totAuthVehicles' => 10, 'isVariation' => true],
+                ['totAuthHgvVehicles' => 10, 'isVariation' => true],
                 true,
                 [],
             ],
             [
                 0,
-                ['totAuthVehicles' => 10, 'isVariation' => true],
+                ['totAuthHgvVehicles' => 10, 'isVariation' => true],
                 true,
                 [],
             ],
             [
                 0,
-                ['totAuthVehicles' => 10, 'isVariation' => false],
+                ['totAuthHgvVehicles' => 10, 'isVariation' => false],
                 false,
                 ['valueBelowOne' => 'The input is not greater or equal than \'1\''],
             ],
             [
                 0,
-                ['totAuthVehicles' => 0, 'isVariation' => true],
+                ['totAuthHgvVehicles' => 0, 'isVariation' => true],
                 true,
                 [],
             ],
             [
                 0,
-                ['totAuthVehicles' => 0, 'isVariation' => false],
+                ['totAuthHgvVehicles' => 0, 'isVariation' => false],
                 false,
                 ['valueBelowOne' => 'The input is not greater or equal than \'1\''],
             ],

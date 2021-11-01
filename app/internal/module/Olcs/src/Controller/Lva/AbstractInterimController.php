@@ -56,7 +56,9 @@ abstract class AbstractInterimController extends AbstractController
         if ($request->isPost()) {
             $requestData = (array)$request->getPost();
             $requestData['data']['totAuthTrailers'] = $interimData['totAuthTrailers'];
-            $requestData['data']['totAuthVehicles'] = $interimData['totAuthVehicles'];
+            $requestData['data']['totAuthHgvVehicles'] = $interimData['totAuthHgvVehicles'];
+            $requestData['data']['totAuthLgvVehicles'] = $interimData['totAuthLgvVehicles'];
+            $requestData['data']['isEligibleForLgv'] = $interimData['isEligibleForLgv'];
             $requestData['data']['isVariation'] = $interimData['isVariation'];
 
             $form->setData($requestData);
@@ -263,12 +265,18 @@ abstract class AbstractInterimController extends AbstractController
             $formHelper->disableElement($form, 'data->interimReason');
             $formHelper->disableElement($form, 'data->interimStart');
             $formHelper->disableElement($form, 'data->interimEnd');
-            $formHelper->disableElement($form, 'data->interimAuthVehicles');
+            $formHelper->disableElement($form, 'data->interimAuthHgvVehicles');
+            $formHelper->disableElement($form, 'data->interimAuthLgvVehicles');
             $formHelper->disableElement($form, 'data->interimAuthTrailers');
             $formHelper->disableElement($form, 'requested->interimRequested');
 
             $form->get('operatingCentres')->get('table')->getTable()->removeColumn('listed');
             $form->get('vehicles')->get('table')->getTable()->removeColumn('listed');
+        }
+
+        if (!$application['isEligibleForLgv']) {
+            $form->get('data')->get('interimAuthHgvVehicles')->setLabel('internal.interim.form.interim_auth_vehicles');
+            $formHelper->remove($form, 'data->interimAuthLgvVehicles');
         }
 
         if ($application['isInterimInforce']) {

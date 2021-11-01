@@ -65,13 +65,23 @@ class InterimDetails
 
     /**
      * @Form\Required(false)
-     * @Form\Attributes({"class":"short","id":"interimAuthVehicles"})
-     * @Form\Options({"label":"internal.interim.form.interim_auth_vehicles"})
+     * @Form\Attributes({"class":"short","id":"interimAuthHgvVehicles"})
+     * @Form\Options({"label":"internal.interim.form.interim_auth_hgv_vehicles"})
      * @Form\Type("Text")
-     * @Form\Validator({"name":"Olcs\Validator\InterimVehicleAuthority"})
+     * @Form\Validator({"name":"Olcs\Validator\InterimHgvVehicleAuthority"})
      * @Form\Validator({"name":"Digits"})
      */
-    public $interimAuthVehicles = null;
+    public $interimAuthHgvVehicles = null;
+
+    /**
+     * @Form\Required(false)
+     * @Form\Attributes({"class":"short","id":"interimAuthLgvVehicles"})
+     * @Form\Options({"label":"internal.interim.form.interim_auth_lgv_vehicles"})
+     * @Form\Type("Text")
+     * @Form\Validator({"name":"Olcs\Validator\InterimLgvVehicleAuthority"})
+     * @Form\Validator({"name":"Digits"})
+     */
+    public $interimAuthLgvVehicles = null;
 
     /**
      * @Form\Required(false)

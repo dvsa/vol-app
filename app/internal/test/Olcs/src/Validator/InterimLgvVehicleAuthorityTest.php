@@ -2,15 +2,15 @@
 
 namespace OlcsTest\Validator;
 
-use Olcs\Validator\InterimVehicleAuthority;
+use Olcs\Validator\InterimLgvVehicleAuthority;
 
-class InterimVehicleAuthorityTest extends \PHPUnit\Framework\TestCase
+class InterimLgvVehicleAuthorityTest extends \PHPUnit\Framework\TestCase
 {
     protected $sut;
 
     public function setUp(): void
     {
-        $this->sut = new InterimVehicleAuthority();
+        $this->sut = new InterimLgvVehicleAuthority();
     }
 
     /**
@@ -29,59 +29,59 @@ class InterimVehicleAuthorityTest extends \PHPUnit\Framework\TestCase
                 6,
                 null,
                 false,
-                ['vehicleAuthExceeded' => 'The interim vehicle authority cannot exceed the total vehicle authority'],
+                ['vehicleAuthExceeded' => 'The interim Light Goods Vehicle Authority cannot exceed the total Light Goods Vehicle Authority'],
             ],
             [
                 6,
                 [],
                 false,
-                ['vehicleAuthExceeded' => 'The interim vehicle authority cannot exceed the total vehicle authority'],
+                ['vehicleAuthExceeded' => 'The interim Light Goods Vehicle Authority cannot exceed the total Light Goods Vehicle Authority'],
             ],
             [
                 6,
-                ['totAuthVehicles' => 0],
+                ['totAuthLgvVehicles' => 0],
                 false,
-                ['vehicleAuthExceeded' => 'The interim vehicle authority cannot exceed the total vehicle authority'],
+                ['vehicleAuthExceeded' => 'The interim Light Goods Vehicle Authority cannot exceed the total Light Goods Vehicle Authority'],
             ],
             [
                 6,
-                ['totAuthVehicles' => 5],
+                ['totAuthLgvVehicles' => 5],
                 false,
-                ['vehicleAuthExceeded' => 'The interim vehicle authority cannot exceed the total vehicle authority'],
+                ['vehicleAuthExceeded' => 'The interim Light Goods Vehicle Authority cannot exceed the total Light Goods Vehicle Authority'],
             ],
             [
                 6,
-                ['totAuthVehicles' => 6, 'isVariation' => true],
+                ['totAuthLgvVehicles' => 6, 'isVariation' => true],
                 true,
                 [],
             ],
             [
                 6,
-                ['totAuthVehicles' => 10, 'isVariation' => true],
-                true,
-                [],
-            ],
-            [
-                0,
-                ['totAuthVehicles' => 10, 'isVariation' => true],
+                ['totAuthLgvVehicles' => 10, 'isVariation' => true],
                 true,
                 [],
             ],
             [
                 0,
-                ['totAuthVehicles' => 10, 'isVariation' => false],
+                ['totAuthLgvVehicles' => 10, 'isVariation' => true],
+                true,
+                [],
+            ],
+            [
+                0,
+                ['totAuthLgvVehicles' => 10, 'isVariation' => false],
                 false,
                 ['valueBelowOne' => 'The input is not greater or equal than \'1\''],
             ],
             [
                 0,
-                ['totAuthVehicles' => 0, 'isVariation' => true],
+                ['totAuthLgvVehicles' => 0, 'isVariation' => true],
                 true,
                 [],
             ],
             [
                 0,
-                ['totAuthVehicles' => 0, 'isVariation' => false],
+                ['totAuthLgvVehicles' => 0, 'isVariation' => false],
                 false,
                 ['valueBelowOne' => 'The input is not greater or equal than \'1\''],
             ],

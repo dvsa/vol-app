@@ -45,7 +45,6 @@ class ApplicationOverviewHelperService extends AbstractHelperService
             'licenceGracePeriods'       => $licenceOverviewHelper->getLicenceGracePeriods($licence),
             'continuationDate'          => $licence['expiryDate'],
             'numberOfVehicles'          => $this->getNumberOfVehicles($application, $licence),
-            'totalVehicleAuthorisation' => $this->getTotalVehicleAuthorisation($application, $licence),
             'numberOfOperatingCentres'  => $this->getNumberOfOperatingCentres($application, $licence),
             'totalTrailerAuthorisation' => $this->getTotalTrailerAuthorisation($application, $licence),
             'numberOfIssuedDiscs'       => $this->getNumberOfIssuedDiscs($application, $licence),
@@ -76,7 +75,34 @@ class ApplicationOverviewHelperService extends AbstractHelperService
                     ->hasAdminUsers($application['licence']) ? 'Yes' : 'No',
         ];
 
+        $viewData = array_merge(
+            $viewData,
+            $this->getVehicleAuthorisationViewData($application, $licence)
+        );
+
         return $viewData;
+    }
+
+    /**
+     * Gets vehicle authorisation view data appropriate to the specified application and licence data
+     *
+     * @param array $application
+     * @param array $licence
+     *
+     * @return array
+     */
+    private function getVehicleAuthorisationViewData(array $application, array $licence)
+    {
+        if ($application['isEligibleForLgv']) {
+            return [
+                'totalHgvAuthorisation' => $this->getVehicleAuthorisation($application, $licence, 'totAuthHgvVehicles'),
+                'totalLgvAuthorisation' => $this->getVehicleAuthorisation($application, $licence, 'totAuthLgvVehicles'),
+            ];
+        }
+
+        return [
+            'totalVehicleAuthorisation' => $this->getVehicleAuthorisation($application, $licence, 'totAuthVehicles'),
+        ];
     }
 
     /**
@@ -147,23 +173,24 @@ class ApplicationOverviewHelperService extends AbstractHelperService
     }
 
     /**
-     * Gets total vehicle authorisation
+     * Gets vehicle authorisation
      *
-     * @param array $application application overview data
-     * @param array $licence     licence overview data
+     * @param array  $application application overview data
+     * @param array  $licence     licence overview data
+     * @param string $key         key to be used from application and licence data
      *
      * @return string|null
      */
-    public function getTotalVehicleAuthorisation($application, $licence)
+    private function getVehicleAuthorisation($application, $licence, $key)
     {
         if ($application['licenceType']['id'] == RefData::LICENCE_TYPE_SPECIAL_RESTRICTED) {
             return null;
         }
 
-        $str = (string) (int) $licence['totAuthVehicles'];
+        $str = (string) (int) $licence[$key];
 
-        if ($application['totAuthVehicles'] != $licence['totAuthVehicles']) {
-            $str .= ' (' . (string) (int) $application['totAuthVehicles'] . ')';
+        if ($application[$key] != $licence[$key]) {
+            $str .= ' (' . (string) (int) $application[$key] . ')';
         }
 
         return $str;
