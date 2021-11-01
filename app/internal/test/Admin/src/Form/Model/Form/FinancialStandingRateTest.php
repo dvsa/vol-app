@@ -61,6 +61,22 @@ class FinancialStandingRateTest extends AbstractFormValidationTestCase
         );
     }
 
+    public function testVehicleType()
+    {
+        $element = ['details', 'vehicleType'];
+
+        $this->assertFormElementType($element, Radio::class);
+        $this->assertFormElementValid($element, 'fin_sta_veh_typ_na');
+        $this->assertFormElementValid($element, 'fin_sta_veh_typ_hgv');
+        $this->assertFormElementValid($element, 'fin_sta_veh_typ_lgv');
+
+        $this->assertFormElementNotValid(
+            $element,
+            'X',
+            [InArray::NOT_IN_ARRAY]
+        );
+    }
+
     public function testFirstVehicleRate()
     {
         $element = ['details', 'firstVehicleRate'];

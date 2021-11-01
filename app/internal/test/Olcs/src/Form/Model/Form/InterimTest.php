@@ -44,10 +44,18 @@ class InterimTest extends AbstractFormValidationTestCase
         $this->assertFormElementDate(['data', 'interimEnd']);
     }
 
-    public function testInterimAuthVehicles()
+    public function testInterimAuthHgvVehicles()
     {
         $this->assertFormElementRequired(
-            ['data', 'interimAuthVehicles'],
+            ['data', 'interimAuthHgvVehicles'],
+            false
+        );
+    }
+
+    public function testInterimAuthLgvVehicles()
+    {
+        $this->assertFormElementRequired(
+            ['data', 'interimAuthLgvVehicles'],
             false
         );
     }

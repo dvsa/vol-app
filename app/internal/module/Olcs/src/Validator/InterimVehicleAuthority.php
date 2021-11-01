@@ -6,8 +6,9 @@ use Laminas\Validator\AbstractValidator;
 
 class InterimVehicleAuthority extends AbstractValidator
 {
-    const VEHICLE_AUTHORITY_EXCEEDED = "vehicleAuthExceeded";
-    const VALUE_BELOW_ONE = "valueBelowOne";
+    const TOT_AUTH_VEHICLES_KEY = 'totAuthVehicles';
+    const VEHICLE_AUTHORITY_EXCEEDED = 'vehicleAuthExceeded';
+    const VALUE_BELOW_ONE = 'valueBelowOne';
 
     /**
      * Validation failure message template definitions
@@ -23,17 +24,17 @@ class InterimVehicleAuthority extends AbstractValidator
      * Returns true if interim authorised vehicles < total authorised vehicles
      *
      * @param mixed $value
-     * @param null  $context
+     * @param array|null $context
      *
      * @return bool
      */
     public function isValid($value, $context = null)
     {
         $this->setValue($value);
-        $totalAuthVehicles = ($context['totAuthVehicles'] == null ? 0 : $context['totAuthVehicles']);
+        $totalAuthVehicles = $context[static::TOT_AUTH_VEHICLES_KEY] ?? 0;
 
         if ($this->getValue() > $totalAuthVehicles) {
-            $this->error(self::VEHICLE_AUTHORITY_EXCEEDED);
+            $this->error($this->getVehicleAuthorityExceededErrorKey($context));
             return false;
         }
 
@@ -42,5 +43,17 @@ class InterimVehicleAuthority extends AbstractValidator
             return false;
         }
         return true;
+    }
+
+    /**
+     * Get vehicle authority exceeded error key
+     *
+     * @param array|null $context Context
+     *
+     * @return string
+     */
+    protected function getVehicleAuthorityExceededErrorKey(?array $context): string
+    {
+        return self::VEHICLE_AUTHORITY_EXCEEDED;
     }
 }

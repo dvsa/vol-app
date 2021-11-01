@@ -57,6 +57,27 @@ class FinancialStandingRate
     public $licenceType = null;
 
     /**
+     * @Form\Name("vehicleType")
+     * @Form\Attributes({"id": ""})
+     * @Form\Options({
+     *      "short-label": "financial-standing-rate-element-vehicleType",
+     *      "fieldset-attributes": {
+     *          "id": "fieldset-vehicle-type",
+     *          "class": "checkbox"
+     *      },
+     *      "fieldset-data-group": "vehicle-type",
+     *      "label": "financial-standing-rate-element-vehicleType",
+     *      "value_options":{
+     *          "fin_sta_veh_typ_na": "Not Applicable",
+     *          "fin_sta_veh_typ_hgv": "Heavy Goods Vehicle",
+     *          "fin_sta_veh_typ_lgv": "Light Goods Vehicle"
+     *      }
+     * })
+     * @Form\Type("Radio")
+     */
+    public $vehicleType = null;
+
+    /**
      * @Form\Name("firstVehicleRate")
      * @Form\Attributes({"id": ""})
      * @Form\Options({
