@@ -30,8 +30,8 @@ class ApplicationBusinessDetails extends CommonApplicationBusinessDetails implem
 
         $this->getFormHelper()->remove($form, 'allow-email');
 
-        // if we have got any in force licences, lock the elements down
-        if ($params['hasInforceLicences']) {
+        // if we have got any in force licences or submitted licence application lock the elements down
+        if ($params['hasInforceLicences'] || ($params['hasOrganisationSubmittedLicenceApplication'] ?? false)) {
             $this->getFormServiceLocator()->get('lva-lock-business_details')->alterForm($form);
         }
         $this->alterButtons($form);

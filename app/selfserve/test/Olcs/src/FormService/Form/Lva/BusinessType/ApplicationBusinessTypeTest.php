@@ -44,8 +44,11 @@ class ApplicationBusinessTypeTest extends MockeryTestCase
         $this->fsm->setServiceLocator($this->sm); // main service locator is accessed via form service manager
     }
 
-    public function testGetFormWithoutInforceLicences()
+    public function testGetFormWithoutInforceLicencesOrWithNoSubmittedLicenceApplication()
     {
+        $inForceLicences = false;
+        $hasOrganisationSubmittedLicenceApplication = false;
+
         $mockForm = m::mock(Form::class);
         $this->mockAlterButtons($mockForm, $this->fh);
 
@@ -61,13 +64,16 @@ class ApplicationBusinessTypeTest extends MockeryTestCase
 
         $this->fsm->setService('lva-application', $mockApplication);
 
-        $form = $this->sut->getForm(false);
+        $form = $this->sut->getForm($inForceLicences, $hasOrganisationSubmittedLicenceApplication);
 
         $this->assertSame($mockForm, $form);
     }
 
     public function testGetFormWithInforceLicences()
     {
+        $inForceLicences = true;
+        $hasOrganisationSubmittedLicenceApplication = false;
+
         $mockElement = m::mock(Element::class);
 
         $formActions = m::mock();
@@ -135,7 +141,84 @@ class ApplicationBusinessTypeTest extends MockeryTestCase
                     ->getMock()
             );
 
-        $form = $this->sut->getForm(true);
+        $form = $this->sut->getForm($inForceLicences, $hasOrganisationSubmittedLicenceApplication);
+
+        $this->assertSame($mockForm, $form);
+    }
+
+    public function testGetFormWithSubmittedLicenceApplication()
+    {
+        $inForceLicences = false;
+        $hasOrganisationSubmittedLicenceApplication = true;
+
+        $mockElement = m::mock(Element::class);
+
+        $formActions = m::mock();
+        $formActions->shouldReceive('has')->with('save')->andReturn(true);
+        $formActions->shouldReceive('has')->with('cancel')->andReturn(true);
+
+        $formActions->shouldReceive('remove')->once()->with('cancel');
+
+        $formActions->shouldReceive('get')
+            ->with('save')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setLabel')
+                    ->with('lva.external.return.link')
+                    ->once()
+                    ->shouldReceive('removeAttribute')
+                    ->with('class')
+                    ->once()
+                    ->shouldReceive('setAttribute')
+                    ->with('class', 'action--tertiary large')
+                    ->once()
+                    ->getMock()
+            )
+            ->times(3)
+            ->getMock();
+
+        $mockForm = m::mock(Form::class);
+        $mockForm->shouldReceive('get')->with('data')
+            ->andReturn(
+                m::mock()->shouldReceive('get')
+                    ->with('type')
+                    ->andReturn($mockElement)
+                    ->getMock()
+            );
+
+        $mockForm->shouldReceive('has')->with('form-actions')->andReturn(true);
+        $mockForm->shouldReceive('get')->with('form-actions')->andReturn($formActions);
+
+        $this->fh->shouldReceive('createForm')
+            ->once()
+            ->with('Lva\BusinessType')
+            ->andReturn($mockForm)
+            ->shouldReceive('lockElement')
+            ->once()
+            ->with($mockElement, 'business-type.locked')
+            ->shouldReceive('disableElement')
+            ->once()
+            ->with($mockForm, 'data->type');
+
+        $mockApplication = m::mock(FormServiceInterface::class);
+        $mockApplication->shouldReceive('alterForm')
+            ->once()
+            ->with($mockForm);
+
+        $this->fsm->setService('lva-application', $mockApplication);
+
+        $this->sm
+            ->shouldReceive('get')
+            ->with('Helper\Guidance')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('append')
+                    ->with('business-type.locked.message')
+                    ->once()
+                    ->getMock()
+            );
+
+        $form = $this->sut->getForm($inForceLicences, $hasOrganisationSubmittedLicenceApplication);
 
         $this->assertSame($mockForm, $form);
     }

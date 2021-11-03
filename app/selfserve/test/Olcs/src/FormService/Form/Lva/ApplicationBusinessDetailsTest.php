@@ -97,4 +97,72 @@ class ApplicationBusinessDetailsTest extends MockeryTestCase
 
         $this->sut->alterForm($form, $params);
     }
+
+    public function testAlterFormWithoutSubmittedLicenceApplication()
+    {
+        // Params
+        $form = m::mock();
+        $this->mockAlterButtons($form, $this->fh);
+        $params = [
+            'orgType' => RefData::ORG_TYPE_LLP,
+            'hasInforceLicences' => false,
+            'hasOrganisationSubmittedLicenceApplication' => false,
+        ];
+
+        // Mocks
+        $mockApplicationFormService = m::mock('\Common\FormService\FormServiceInterface');
+        $mockLockBusinessDetailsFormService = m::mock('\Common\FormService\FormServiceInterface');
+
+        $this->fsm->setService('lva-application', $mockApplicationFormService);
+        $this->fsm->setService('lva-lock-business_details', $mockLockBusinessDetailsFormService);
+
+        // Expectations
+        $mockApplicationFormService->shouldReceive('alterForm')
+            ->once()
+            ->with($form);
+
+        $this->fh->shouldReceive('remove')
+            ->with($form, 'allow-email')
+            ->once();
+
+        $mockLockBusinessDetailsFormService->shouldReceive('alterForm')
+            ->never()
+            ->with($form);
+
+        $this->sut->alterForm($form, $params);
+    }
+
+    public function testAlterFormWithSubmittedLicenceApplication()
+    {
+        // Params
+        $form = m::mock();
+        $this->mockAlterButtons($form, $this->fh);
+        $params = [
+            'orgType' => RefData::ORG_TYPE_LLP,
+            'hasInforceLicences' => false,
+            'hasOrganisationSubmittedLicenceApplication' => true,
+        ];
+
+        // Mocks
+        $mockApplicationFormService = m::mock('\Common\FormService\FormServiceInterface');
+        $mockLockBusinessDetailsFormService = m::mock('\Common\FormService\FormServiceInterface');
+
+        $this->fsm->setService('lva-application', $mockApplicationFormService);
+        $this->fsm->setService('lva-lock-business_details', $mockLockBusinessDetailsFormService);
+
+        // Expectations
+        $mockApplicationFormService->shouldReceive('alterForm')
+            ->once()
+            ->with($form);
+
+        $this->fh->shouldReceive('remove')
+            ->with($form, 'allow-email')
+            ->once();
+
+        $mockLockBusinessDetailsFormService->shouldReceive('alterForm')
+            ->once()
+            ->with($form);
+
+        $this->sut->alterForm($form, $params);
+    }
 }

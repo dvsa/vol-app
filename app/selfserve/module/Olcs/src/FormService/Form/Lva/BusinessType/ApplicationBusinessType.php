@@ -25,7 +25,7 @@ class ApplicationBusinessType extends CommonApplicationBusinessType
     {
         parent::alterForm($form, $params);
 
-        if ($params['inForceLicences']) {
+        if ($params['inForceLicences'] || $params['hasOrganisationSubmittedLicenceApplication']) {
             $this->removeFormAction($form, 'cancel');
             $form->get('form-actions')->get('save')->setLabel('lva.external.return.link');
             $form->get('form-actions')->get('save')->removeAttribute('class');
