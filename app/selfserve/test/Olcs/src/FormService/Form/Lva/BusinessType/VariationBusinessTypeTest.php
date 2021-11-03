@@ -42,9 +42,9 @@ class VariationBusinessTypeTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider trueFalse
+     * @dataProvider dpGetForm
      */
-    public function testGetForm($bool)
+    public function testGetForm($hasInforceLicences, $hasOrganisationSubmittedLicenceApplication)
     {
         $mockElement = m::mock(Element::class);
 
@@ -103,19 +103,25 @@ class VariationBusinessTypeTest extends MockeryTestCase
 
         $this->fsm->setService('lva-variation', $mockVariation);
 
-        $form = $this->sut->getForm($bool);
+        $form = $this->sut->getForm($hasInforceLicences, $hasOrganisationSubmittedLicenceApplication);
 
         $this->assertSame($mockForm, $form);
     }
 
-    public function trueFalse()
+    public function dpGetForm()
     {
         return [
             [
-                true
+                true, true
             ],
             [
-                false
+                true, false
+            ],
+            [
+                false, true
+            ],
+            [
+                false, false
             ]
         ];
     }
