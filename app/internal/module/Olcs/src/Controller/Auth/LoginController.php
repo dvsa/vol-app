@@ -341,11 +341,12 @@ class LoginController implements InjectApplicationEventInterface
      */
     private function handleChallengeResult(array $messages): Response
     {
-        switch($messages['challengeName']) {
+        switch ($messages['challengeName']) {
             case AuthChallengeContainer::CHALLENEGE_NEW_PASWORD_REQUIRED:
                 $this->applyAuthChallengeContainer($messages);
                 return $this->redirectHelper->toRoute(
-                    self::ROUTE_AUTH_EXPIRED_PASSWORD
+                    self::ROUTE_AUTH_EXPIRED_PASSWORD,
+                    $messages['challengeParameters'] // TODO: Remove passing this in once OpenAM removed
                 );
             default:
                 // Unsupported challenge so redirect to login page
@@ -358,6 +359,12 @@ class LoginController implements InjectApplicationEventInterface
      */
     private function applyAuthChallengeContainer(array $messages): void
     {
+        // OpenAM this key won't exist so we skip adding into session
+        // TODO: Remove this check once OpenAM is removed
+        if (!array_key_exists('USER_ID_FOR_SRP', $messages['challengeParameters'])) {
+            return;
+        }
+
         $this->authChallengeContainer
             ->setChallengeName($messages['challengeName'])
             ->setChallengeSession($messages['challengeSession'])
