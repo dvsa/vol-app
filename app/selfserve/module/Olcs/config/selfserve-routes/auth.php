@@ -48,7 +48,7 @@ return [
                 'expired-password' => [
                     'type' => 'segment',
                     'options' => [
-                        'route' => 'expired-password/[:authToken][/]',
+                        'route' => 'expired-password/[:authId][/]',
                         'defaults' => [
                             'controller' => 'Auth\ExpiredPasswordController',
                             'action' => 'index'
