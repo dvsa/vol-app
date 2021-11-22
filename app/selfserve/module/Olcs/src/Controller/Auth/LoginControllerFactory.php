@@ -15,6 +15,7 @@ use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorAwareInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Olcs\Auth\Adapter\SelfserveCommandAdapter;
+use Dvsa\Olcs\Auth\Container\AuthChallengeContainer;
 
 class LoginControllerFactory implements FactoryInterface
 {
@@ -39,7 +40,8 @@ class LoginControllerFactory implements FactoryInterface
             $controllerPluginManager->get(FlashMessenger::class),
             $container->get(FormHelperService::class),
             $redirectHelper = $controllerPluginManager->get(Redirect::class),
-            $urlHelper = $controllerPluginManager->get(Url::class)
+            $urlHelper = $controllerPluginManager->get(Url::class),
+            new AuthChallengeContainer()
         );
 
         // Decorate controller
