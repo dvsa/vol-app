@@ -7,6 +7,7 @@ use Common\Auth\Service\AuthenticationServiceInterface;
 use Common\Controller\Plugin\CurrentUser;
 use Common\Controller\Plugin\Redirect;
 use Common\Service\Helper\FormHelperService;
+use Dvsa\Olcs\Auth\Container\AuthChallengeContainer;
 use Dvsa\Olcs\Auth\Service\Auth\CookieService;
 use Laminas\Authentication\Adapter\ValidatableAdapterInterface;
 use Laminas\Authentication\Result;
@@ -87,6 +88,11 @@ class LoginController implements InjectApplicationEventInterface
     private $layout;
 
     /**
+     * @var AuthChallengeContainer
+     */
+    private AuthChallengeContainer $authChallengeContainer;
+
+    /**
      * LoginController constructor.
      * @param ValidatableAdapterInterface $authenticationAdapter
      * @param AuthenticationServiceInterface $authenticationService
@@ -97,6 +103,7 @@ class LoginController implements InjectApplicationEventInterface
      * @param Layout $layout
      * @param Redirect $redirectHelper
      * @param Url $urlHelper
+     * @param AuthChallengeContainer $authChallengeContainer
      */
     public function __construct(
         ValidatableAdapterInterface $authenticationAdapter,
@@ -107,7 +114,8 @@ class LoginController implements InjectApplicationEventInterface
         FormHelperService $formHelper,
         Layout $layout,
         Redirect $redirectHelper,
-        Url $urlHelper
+        Url $urlHelper,
+        AuthChallengeContainer $authChallengeContainer
     ) {
         $this->authenticationAdapter = $authenticationAdapter;
         $this->authenticationService = $authenticationService;
@@ -118,6 +126,7 @@ class LoginController implements InjectApplicationEventInterface
         $this->layout = $layout;
         $this->redirectHelper = $redirectHelper;
         $this->urlHelper = $urlHelper;
+        $this->authChallengeContainer = $authChallengeContainer;
     }
 
 
@@ -179,6 +188,26 @@ class LoginController implements InjectApplicationEventInterface
         $this->flashMessenger->addMessage($result->getMessages()[0], static::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR);
 
         return $this->redirectHelper->toRoute(self::ROUTE_AUTH_LOGIN_GET);
+    }
+
+    /**
+     * @param EventInterface $event
+     */
+    public function setEvent(EventInterface $event)
+    {
+        $this->event = $event;
+    }
+
+    /**
+     * @return Event|EventInterface
+     */
+    public function getEvent()
+    {
+        if (!$this->event) {
+            $this->setEvent(new Event());
+        }
+
+        return $this->event;
     }
 
     /**
@@ -312,25 +341,26 @@ class LoginController implements InjectApplicationEventInterface
      */
     private function handleChallengeResult(array $messages): Response
     {
-        if ($messages['challengeName'] ==='NEW_PASSWORD_REQUIRED') {
-            return $this->redirectHelper->toRoute(self::ROUTE_AUTH_EXPIRED_PASSWORD, $messages['challengeParameters']);
+        switch($messages['challengeName']) {
+            case AuthChallengeContainer::CHALLENEGE_NEW_PASWORD_REQUIRED:
+                $this->applyAuthChallengeContainer($messages);
+                return $this->redirectHelper->toRoute(
+                    self::ROUTE_AUTH_EXPIRED_PASSWORD
+                );
+            default:
+                // Unsupported challenge so redirect to login page
+                return $this->redirectHelper->toRoute(self::ROUTE_AUTH_LOGIN_GET);
         }
-
-        //Unsupported challenge so redirect to login
-        return $this->redirectHelper->toRoute(self::ROUTE_AUTH_LOGIN_GET);
     }
 
-    public function setEvent(EventInterface $event)
+    /**
+     * @param array $messages
+     */
+    private function applyAuthChallengeContainer(array $messages): void
     {
-        $this->event = $event;
-    }
-
-    public function getEvent()
-    {
-        if (!$this->event) {
-            $this->setEvent(new Event());
-        }
-
-        return $this->event;
+        $this->authChallengeContainer
+            ->setChallengeName($messages['challengeName'])
+            ->setChallengeSession($messages['challengeSession'])
+            ->setChallengedIdentity($messages['challengeParameters']['USER_ID_FOR_SRP']);
     }
 }

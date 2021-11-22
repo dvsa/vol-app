@@ -8,6 +8,7 @@ use Common\Controller\Dispatcher;
 use Common\Controller\Plugin\CurrentUser;
 use Common\Controller\Plugin\Redirect;
 use Common\Service\Helper\FormHelperService;
+use Dvsa\Olcs\Auth\Container\AuthChallengeContainer;
 use Interop\Container\ContainerInterface;
 use Laminas\Mvc\Controller\Plugin\FlashMessenger;
 use Laminas\Mvc\Controller\Plugin\Layout;
@@ -41,7 +42,8 @@ class LoginControllerFactory implements FactoryInterface
             $container->get(FormHelperService::class),
             $layoutHelper = $controllerPluginManager->get(Layout::class),
             $redirectHelper = $controllerPluginManager->get(Redirect::class),
-            $urlHelper = $controllerPluginManager->get(Url::class)
+            $urlHelper = $controllerPluginManager->get(Url::class),
+            new AuthChallengeContainer()
         );
 
         // Decorate controller
