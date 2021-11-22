@@ -16,8 +16,11 @@ use Laminas\Http\Response;
 use Laminas\Mvc\Controller\Plugin\FlashMessenger;
 use Laminas\Mvc\Controller\Plugin\Url;
 use Laminas\Mvc\Router\Http\RouteMatch;
+use Laminas\Session\Container;
 use Laminas\View\Model\ViewModel;
+use Dvsa\Olcs\Auth\Container\AuthChallengeContainer;
 use Olcs\Form\Model\Form\Auth\Login;
+use Olcs\Logging\Log\Logger;
 
 class LoginController
 {
@@ -72,13 +75,21 @@ class LoginController
     protected $urlHelper;
 
     /**
+     * @var AuthChallengeContainer
+     */
+    private AuthChallengeContainer $authChallengeContainer;
+
+    /**
      * LoginController constructor.
      * @param ValidatableAdapterInterface $authenticationAdapter
      * @param AuthenticationServiceInterface $authenticationService
+     * @param CookieService $cookieService
+     * @param CurrentUser $currentUser
      * @param FlashMessenger $flashMessenger
      * @param FormHelperService $formHelper
      * @param Redirect $redirectHelper
      * @param Url $urlHelper
+     * @param AuthChallengeContainer $authChallengeContainer
      */
     public function __construct(
         ValidatableAdapterInterface $authenticationAdapter,
@@ -88,7 +99,8 @@ class LoginController
         FlashMessenger $flashMessenger,
         FormHelperService $formHelper,
         Redirect $redirectHelper,
-        Url $urlHelper
+        Url $urlHelper,
+        AuthChallengeContainer $authChallengeContainer
     ) {
         $this->authenticationAdapter = $authenticationAdapter;
         $this->authenticationService = $authenticationService;
@@ -98,6 +110,7 @@ class LoginController
         $this->formHelper = $formHelper;
         $this->redirectHelper = $redirectHelper;
         $this->urlHelper = $urlHelper;
+        $this->authChallengeContainer = $authChallengeContainer;
     }
 
 
@@ -290,11 +303,27 @@ class LoginController
      */
     private function handleChallengeResult(array $messages): Response
     {
-        if ($messages['challengeName'] ==='NEW_PASSWORD_REQUIRED') {
-            return $this->redirectHelper->toRoute(self::ROUTE_AUTH_EXPIRED_PASSWORD, $messages['challengeParameters']);
+        switch($messages['challengeName']) {
+            case AuthChallengeContainer::CHALLENEGE_NEW_PASWORD_REQUIRED:
+                $this->applyAuthChallengeContainer($messages);
+                return $this->redirectHelper->toRoute(
+                    self::ROUTE_AUTH_EXPIRED_PASSWORD
+                );
+            default:
+                // Unsupported challenge so redirect to login page
+                Logger::warn('Received unexpected challenge from AWS Cognito', $messages);
+                return $this->redirectHelper->toRoute(self::ROUTE_AUTH_LOGIN_GET);
         }
+    }
 
-        //Unsupported challenge so redirect to login
-        return $this->redirectHelper->toRoute(self::ROUTE_AUTH_LOGIN_GET);
+    /**
+     * @param array $messages
+     */
+    private function applyAuthChallengeContainer(array $messages): void
+    {
+        $this->authChallengeContainer
+            ->setChallengeName($messages['challengeName'])
+            ->setChallengeSession($messages['challengeSession'])
+            ->setChallengedIdentity($messages['challengeParameters']['USER_ID_FOR_SRP']);
     }
 }
