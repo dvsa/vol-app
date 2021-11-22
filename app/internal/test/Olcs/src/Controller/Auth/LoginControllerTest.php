@@ -8,6 +8,7 @@ use Common\Controller\Plugin\CurrentUser;
 use Common\Controller\Plugin\Redirect;
 use Common\Rbac\User;
 use Common\Service\Helper\FormHelperService;
+use Dvsa\Olcs\Auth\Container\AuthChallengeContainer;
 use Dvsa\Olcs\Auth\Service\Auth\CookieService;
 use Laminas\Authentication\Result;
 use Laminas\Form\Annotation\AnnotationBuilder;
@@ -54,7 +55,10 @@ class LoginControllerTest extends MockeryTestCase
         [],
         [
             'challengeName' => LoginController::CHALLENGE_NEW_PASSWORD_REQUIRED,
-            'challengeParameters' => ['authId' => 'authId']
+            'challengeParameters' => [
+                'USER_ID_FOR_SRP' => 'username'
+            ],
+            'challengeSession' => 'challengeSession'
         ]
     ];
     const AUTHENTICATION_RESULT_CHALLENGE_UNSUPPORTED = [
@@ -402,6 +406,35 @@ class LoginControllerTest extends MockeryTestCase
      * @test
      * @depends postAction_IsCallable
      */
+    public function postAction_NewPasswordRequiredChallenge_StoresChallengeInSession()
+    {
+        // Setup
+        $this->setUpSut();
+        $request = $this->postRequest(
+            ['username' => 'username', 'password' => 'password']
+        );
+
+        $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_CHALLENGE_NEW_PASSWORD_REQUIRED));
+
+        $this->redirectHelper()
+            ->allows()
+            ->toRoute(
+                LoginController::ROUTE_AUTH_EXPIRED_PASSWORD,
+            )->andReturn($this->redirect());
+
+        // Expect
+        $this->authChallengeContainer()->expects('setChallengeName')->andReturnSelf();
+        $this->authChallengeContainer()->expects('setChallengeSession')->andReturnSelf();
+        $this->authChallengeContainer()->expects('setChallengedIdentity')->andReturnSelf();
+
+        // Execute
+        $this->sut->postAction($request, new RouteMatch([]), new Response());
+    }
+
+    /**
+     * @test
+     * @depends postAction_NewPasswordRequiredChallenge_StoresChallengeInSession
+     */
     public function postAction_NewPasswordRequiredChallenge_RedirectsToExpiredPassword()
     {
         // Setup
@@ -412,8 +445,12 @@ class LoginControllerTest extends MockeryTestCase
 
         $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_CHALLENGE_NEW_PASSWORD_REQUIRED));
 
+        $this->authChallengeContainer()->allows('setChallengeName')->andReturnSelf();
+        $this->authChallengeContainer()->allows('setChallengeSession')->andReturnSelf();
+        $this->authChallengeContainer()->allows('setChallengedIdentity')->andReturnSelf();
+
         // Expect
-        $this->redirectHelper()->expects()->toRoute(LoginController::ROUTE_AUTH_EXPIRED_PASSWORD, ['authId' => 'authId'])->andReturn($this->redirect());
+        $this->redirectHelper()->expects()->toRoute(LoginController::ROUTE_AUTH_EXPIRED_PASSWORD)->andReturn($this->redirect());
 
         // Execute
         $this->sut->postAction($request, new RouteMatch([]), new Response());
@@ -498,7 +535,8 @@ class LoginControllerTest extends MockeryTestCase
             $this->formHelper(),
             $this->serviceManager->get(Layout::class),
             $this->redirectHelper(),
-            $this->serviceManager->get(Url::class)
+            $this->serviceManager->get(Url::class),
+            $this->authChallengeContainer()
         );
     }
 
@@ -516,6 +554,7 @@ class LoginControllerTest extends MockeryTestCase
         $serviceManager->setService(Layout::class, $this->setUpMockService(Layout::class));
         $this->redirectHelper();
         $serviceManager->setService(Url::class, $this->setUpMockService(Url::class));
+        $this->authChallengeContainer();
     }
 
     /**
@@ -620,6 +659,20 @@ class LoginControllerTest extends MockeryTestCase
             $this->serviceManager->setService('Auth\CookieService', $instance);
         }
         $instance = $this->serviceManager->get('Auth\CookieService');
+        assert($instance instanceof MockInterface);
+        return $instance;
+    }
+
+    /**
+     * @return MockInterface|AuthChallengeContainer
+     */
+    private function authChallengeContainer()
+    {
+        if (!$this->serviceManager->has(AuthChallengeContainer::class)) {
+            $instance = $this->setUpMockService(AuthChallengeContainer::class);
+            $this->serviceManager->setService(AuthChallengeContainer::class, $instance);
+        }
+        $instance = $this->serviceManager->get(AuthChallengeContainer::class);
         assert($instance instanceof MockInterface);
         return $instance;
     }
