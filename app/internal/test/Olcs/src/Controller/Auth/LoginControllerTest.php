@@ -450,7 +450,7 @@ class LoginControllerTest extends MockeryTestCase
         $this->authChallengeContainer()->allows('setChallengedIdentity')->andReturnSelf();
 
         // Expect
-        $this->redirectHelper()->expects()->toRoute(LoginController::ROUTE_AUTH_EXPIRED_PASSWORD)->andReturn($this->redirect());
+        $this->redirectHelper()->expects()->toRoute(LoginController::ROUTE_AUTH_EXPIRED_PASSWORD, ['USER_ID_FOR_SRP' => 'username'])->andReturn($this->redirect());
 
         // Execute
         $this->sut->postAction($request, new RouteMatch([]), new Response());
