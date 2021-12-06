@@ -3576,12 +3576,12 @@
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "4.206.24",
+            "version": "4.206.25",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-auth/4.206.24/olcs-olcs-auth-4.206.24.zip",
-                "reference": "8d5531b8e72d10b2f601ad24feeb591d6e7f40d5",
-                "shasum": "8d5531b8e72d10b2f601ad24feeb591d6e7f40d5"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-auth/4.206.25/olcs-olcs-auth-4.206.25.zip",
+                "reference": "73532c8951a179bdc1d2708b61fb38d54b00c41a",
+                "shasum": "73532c8951a179bdc1d2708b61fb38d54b00c41a"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -3643,16 +3643,16 @@
                 ]
             },
             "description": "OLCS Authentication",
-            "time": "2021-11-22T12:09:40+00:00"
+            "time": "2021-11-29T15:38:30+00:00"
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.377",
+            "version": "4.206.379",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.377/olcs-olcs-common-4.206.377.zip",
-                "reference": "17b99e1819916e22c0e10aa9c1c3b54e0d8cca2a",
-                "shasum": "17b99e1819916e22c0e10aa9c1c3b54e0d8cca2a"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.379/olcs-olcs-common-4.206.379.zip",
+                "reference": "3b7b0718d7e6b6c5c35644fa7ae2971322253c66",
+                "shasum": "3b7b0718d7e6b6c5c35644fa7ae2971322253c66"
             },
             "require": {
                 "doctrine/annotations": "^1.8",
@@ -3736,7 +3736,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2021-11-17T12:00:37+00:00"
+            "time": "2021-11-30T10:05:54+00:00"
         },
         {
             "name": "olcs/olcs-logging",
@@ -7359,7 +7359,6 @@
                     "type": "github"
                 }
             ],
-            "abandoned": true,
             "time": "2020-11-30T07:30:19+00:00"
         },
         {
