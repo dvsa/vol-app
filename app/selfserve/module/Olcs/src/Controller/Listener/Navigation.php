@@ -128,7 +128,7 @@ class Navigation implements ListenerAggregateInterface
         }
 
         $response = $this->identity->getUserData();
-        return $response['eligibleForPermits'];
+        return $response['eligibleForPermits'] ?? false;
     }
 
     /**
