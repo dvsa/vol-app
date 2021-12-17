@@ -137,7 +137,6 @@ class PermitsController extends AbstractSelfserveController
         }
     }
 
-
     /**
      * Whether the organisation is eligible for permits
      *
@@ -146,7 +145,7 @@ class PermitsController extends AbstractSelfserveController
     private function isEligibleForPermits(): bool
     {
         $response = $this->getCurrentUser();
-        return $response['eligibleForPermits'];
+        return $response['eligibleForPermits'] ?? false;
     }
 
     /**
