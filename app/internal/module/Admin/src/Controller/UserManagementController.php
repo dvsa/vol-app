@@ -1,7 +1,4 @@
 <?php
-/**
- * User Management Controller
- */
 
 namespace Admin\Controller;
 
@@ -51,7 +48,6 @@ class UserManagementController extends AbstractInternalController implements Lef
      * details view and itemDto are required.
      */
     protected $itemDto = ItemDto::class;
-    // 'id' => 'conviction', to => from
     protected $itemParams = ['id' => 'user'];
 
     /**
@@ -137,12 +133,12 @@ class UserManagementController extends AbstractInternalController implements Lef
         $form = parent::getForm($type);
 
         $request = $this->getRequest();
-        $post = array();
 
         if ($request->isPost()) {
             $post = (array)$request->getPost();
+            $userType = $post['userType']['userType'] ?? null;
 
-            if ($post['userType']['userType'] === 'transport-manager') {
+            if ($userType === RefData::USER_TYPE_TM) {
                 $form = $this->processApplicationTransportManagerLookup($form);
             }
         }
