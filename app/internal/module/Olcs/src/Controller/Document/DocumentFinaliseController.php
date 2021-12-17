@@ -229,7 +229,7 @@ class DocumentFinaliseController extends AbstractDocumentController
             if ($this->isButtonPressed('yes')) {
                 $this->removeDocument($this->params('doc'));
                 $taskId = $queryParams['taskId'] ?? null;
-                if (! is_null($queryParams['taskId'])) {
+                if (!is_null($taskId)) {
                     $this->closeTask($taskId);
                 }
                 return $this->handleRedirectToDocumentRoute(true);
