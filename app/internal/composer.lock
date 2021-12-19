@@ -6180,11 +6180,11 @@
         },
         {
             "name": "phpmd/phpmd",
-            "version": "2.11.0",
+            "version": "2.11.1",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/phpmd/phpmd/2.11.0/phpmd-phpmd-2.11.0.zip",
-                "reference": "3637949092e6471aeaeca66bc6c016f45e459e24",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/phpmd/phpmd/2.11.1/phpmd-phpmd-2.11.1.zip",
+                "reference": "08b60a2eb7e14c23f46ff8865b510ae08b75d0fd",
                 "shasum": ""
             },
             "require": {
@@ -6248,7 +6248,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-11-29T14:05:52+00:00"
+            "time": "2021-12-17T11:25:43+00:00"
         },
         {
             "name": "phpspec/prophecy",
