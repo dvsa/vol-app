@@ -1516,7 +1516,13 @@ return array(
                 'session-timeout' => ['*'],
                 '*' => ['selfserve-user'],
             ]
-        ]
+        ],
+        'redirect_strategy' => [
+            'redirect_when_connected'        => false,
+            'redirect_to_route_disconnected' => 'auth/login/GET',
+            'append_previous_uri'            => true,
+            'previous_uri_query_key'         => 'goto'
+        ],
     ],
     'date_settings' => [
         'date_format' => 'd M Y',
