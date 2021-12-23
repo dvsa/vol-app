@@ -131,5 +131,11 @@ return [
             // Global route rule needs to be last
             '*' => [RefData::PERMISSION_INTERNAL_VIEW],
         ]
-    ]
+    ],
+    'redirect_strategy' => [
+        'redirect_when_connected'        => false,
+        'redirect_to_route_disconnected' => 'auth/login/GET',
+        'append_previous_uri'            => true,
+        'previous_uri_query_key'         => 'goto'
+    ],
 ];
