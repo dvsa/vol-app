@@ -55,7 +55,7 @@ trait ExternalControllerTrait
     protected function getCurrentOrganisation()
     {
         $data = $this->getCurrentUser();
-        return $data['organisationUsers'][0]['organisation'];
+        return $data['organisationUsers'][0]['organisation'] ?? null;
     }
 
     /**
