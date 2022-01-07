@@ -57,7 +57,7 @@ class SessionTimeoutWarningTest extends MockeryTestCase
         $this->assertCount(3, $result);
 
         foreach ($result as $metaTag) {
-            $this->assertRegExp('/^<meta.+\/>$/', $metaTag);
+            $this->assertMatchesRegularExpression('/^<meta.+\/>$/', $metaTag);
         }
     }
 
