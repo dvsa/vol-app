@@ -126,15 +126,15 @@ trait ApplicationOverviewTrait
     {
         return [
             'details' => [
-                'receivedDate'           => $application['receivedDate'],
-                'targetCompletionDate'   => $application['targetCompletionDate'],
-                'leadTcArea'             => $application['licence']['organisation']['leadTcArea']['id'],
-                'translateToWelsh'       => $application['licence']['translateToWelsh'],
-                'overrideOppositionDate' => $application['overrideOoo'],
-                'version'                => $application['version'],
-                'id'                     => $application['id'],
+                'receivedDate'           => $application['receivedDate'] ?? null,
+                'targetCompletionDate'   => $application['targetCompletionDate'] ?? null,
+                'leadTcArea'             => $application['licence']['organisation']['leadTcArea']['id'] ?? null,
+                'translateToWelsh'       => $application['licence']['translateToWelsh'] ?? null,
+                'overrideOppositionDate' => $application['overrideOoo'] ?? null,
+                'version'                => $application['version'] ?? null,
+                'id'                     => $application['id'] ?? null,
             ],
-            'tracking' => $application['applicationTracking'],
+            'tracking' => $application['applicationTracking'] ?? null,
         ];
     }
 

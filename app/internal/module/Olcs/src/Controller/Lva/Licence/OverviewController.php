@@ -166,10 +166,10 @@ class OverviewController extends AbstractController implements LicenceController
     {
         return [
             'details' => [
-                'continuationDate' => $data['expiryDate'],
-                'reviewDate'       => $data['reviewDate'],
-                'translateToWelsh' => $data['translateToWelsh'],
-                'leadTcArea'       => $data['organisation']['leadTcArea']['id'],
+                'continuationDate' => $data['expiryDate'] ?? null,
+                'reviewDate'       => $data['reviewDate'] ?? null,
+                'translateToWelsh' => $data['translateToWelsh'] ?? null,
+                'leadTcArea'       => $data['organisation']['leadTcArea']['id'] ?? null,
             ],
             'id' => $data['id'],
             'version' => $data['version'],

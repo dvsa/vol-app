@@ -178,7 +178,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         $this->showHideButtons($licence);
         $this->hideSurrenderMenu($licence);
 
-        $licenceCategoryId = $licence['goodsOrPsv']['id'];
+        $licenceCategoryId = $licence['goodsOrPsv']['id'] ?? null;
         $navigationService = $this->getMainNavigationService();
 
         if ($licenceCategoryId === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
@@ -297,8 +297,10 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
      */
     protected function showHideVariationButton($licence, $sidebarNav)
     {
+        $licenceType = $licence['licenceType']['id'] ?? null;
+
         // If the licence type is special restricted we can't create a variation
-        if ($licence['licenceType']['id'] === RefData::LICENCE_TYPE_SPECIAL_RESTRICTED) {
+        if ($licenceType === RefData::LICENCE_TYPE_SPECIAL_RESTRICTED) {
             $sidebarNav->findById('licence-quick-actions-create-variation')->setVisible(0);
             return false;
         }

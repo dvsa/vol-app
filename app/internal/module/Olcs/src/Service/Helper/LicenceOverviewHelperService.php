@@ -96,8 +96,8 @@ class LicenceOverviewHelperService extends AbstractHelperService
      */
     public function getNumberOfCommunityLicences($licence)
     {
-        $type = $licence['licenceType']['id'];
-        $goodsOrPsv = $licence['goodsOrPsv']['id'];
+        $type = $licence['licenceType']['id'] ?? null;
+        $goodsOrPsv = $licence['goodsOrPsv']['id'] ?? null;
 
         if ($type == RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL
             || ($goodsOrPsv == RefData::LICENCE_CATEGORY_PSV

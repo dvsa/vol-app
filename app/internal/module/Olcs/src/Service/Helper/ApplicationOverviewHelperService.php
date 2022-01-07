@@ -36,7 +36,7 @@ class ApplicationOverviewHelperService extends AbstractHelperService
             'applicationCreated'        => $application['createdOn'],
             'oppositionCount'           => $application['oppositionCount'],
             'licenceStatus'             => $licence['status'],
-            'licenceType'               => $licence['licenceType']['id'],
+            'licenceType'               => $licence['licenceType']['id'] ?? null,
             'appLicenceType'            => $application['licenceType']['id'],
             'interimStatus'             => $this->getInterimStatus($application, $lva),
             'isPsv'                     => $application['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_PSV,

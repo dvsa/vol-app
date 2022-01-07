@@ -348,8 +348,8 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         $view = $this->getViewWithTm(
             [
                 'form' => $form,
-                'operatorName' => $tmLicData['licence']['organisation']['name'],
-                'licNo' => $tmLicData['licence']['licNo']
+                'operatorName' => $tmLicData['licence']['organisation']['name'] ?? null,
+                'licNo' => $tmLicData['licence']['licNo'] ?? null,
             ]
         );
 

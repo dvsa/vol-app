@@ -42,8 +42,8 @@ class OperatorBusinessDetails implements MapperInterface
         }
 
         $formData = [
-            'operator-cpid' => ['type' => $data['cpid']['id']],
-            'operator-business-type' => ['type' => $data['type']['id']],
+            'operator-cpid' => ['type' => $data['cpid']['id'] ?? null],
+            'operator-business-type' => ['type' => $data['type']['id'] ?? null],
             'operator-details' => $operatorDetails,
             'registeredAddress' => $registeredAddress
         ];
