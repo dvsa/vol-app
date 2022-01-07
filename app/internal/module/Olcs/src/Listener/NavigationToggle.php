@@ -91,8 +91,9 @@ class NavigationToggle implements ListenerAggregateInterface, FactoryInterface
     {
         $licenceQuery = $this->querySender->send(Licence::create(['id' => $params['licence']]));
         $licence = $licenceQuery->getResult();
+        $goodsOrPsv = $licence['goodsOrPsv']['id'] ?? null;
 
-        return $licence['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_GOODS_VEHICLE;
+        return $goodsOrPsv === RefData::LICENCE_CATEGORY_GOODS_VEHICLE;
     }
 
     /**

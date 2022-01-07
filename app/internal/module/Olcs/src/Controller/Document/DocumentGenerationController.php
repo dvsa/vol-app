@@ -133,9 +133,9 @@ class DocumentGenerationController extends AbstractDocumentController
             $licence = $this->getLicence($queryData['licence']);
 
             $queryData += [
-                'goodsOrPsv' => $licence['goodsOrPsv']['id'],
-                'licenceType' => $licence['licenceType']['id'],
-                'organisation' => $licence['organisation']['id'],
+                'goodsOrPsv' => $licence['goodsOrPsv']['id'] ?? null,
+                'licenceType' => $licence['licenceType']['id'] ?? null,
+                'organisation' => $licence['organisation']['id'] ?? null,
             ];
         }
 

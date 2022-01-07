@@ -100,8 +100,9 @@ trait ApplicationControllerTrait
     protected function getViewWithApplication($variables = array())
     {
         $application = $this->getApplication();
+        $goodsOrPsv = $application['licence']['goodsOrPsv']['id'] ?? null;
 
-        if ($application['licence']['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
+        if ($goodsOrPsv === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
             $this->getServiceLocator()->get('Navigation')->findOneBy('id', 'licence_bus')->setVisible(0);
         }
 
