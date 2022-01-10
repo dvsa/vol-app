@@ -61,7 +61,7 @@
         "preferred-install": "dist",
         "secure-http": false,
         "platform": {
-            "php": "7.2.31"
+            "php": "7.4.26"
         },
         "sort-packages": true
     },
