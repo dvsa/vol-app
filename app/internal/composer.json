@@ -15,7 +15,7 @@
         }
     ],
     "require": {
-        "php": ">=7.2",
+        "php": ">=7.4",
         "ext-intl": "*",
         "laminas/laminas-di": "^2.5",
         "laminas/laminas-escaper": "^2.5",
@@ -28,7 +28,7 @@
         "laminas/laminas-loader": "^2.5",
         "laminas/laminas-modulemanager": "^2.5",
         "laminas/laminas-mvc": "^2.5",
-        "laminas/laminas-navigation": "^2.5",
+        "laminas/laminas-navigation": "<=2.13.0",
         "laminas/laminas-servicemanager": "^2.5",
         "laminas/laminas-session": "^2.5",
         "laminas/laminas-stdlib": "^2.5",
@@ -64,7 +64,7 @@
         "preferred-install": "dist",
         "secure-http": false,
         "platform": {
-            "php": "7.2.31"
+            "php": "7.4.26"
         }
     },
     "scripts": {

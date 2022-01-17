@@ -2,13 +2,17 @@
 
 namespace OlcsTest\Service\Data;
 
+use Common\Service\Data\Application as ApplicationDataService;
+use Common\Service\Data\Licence as LicenceDataService;
+use Laminas\ServiceManager\ServiceManager;
 use Olcs\Service\Data\SubmissionLegislation;
+use Mockery as m;
 
 /**
  * Class SubmissionLegislationTest
  * @package OlcsTest\Service\Data
  */
-class SubmissionLegislationTest extends \PHPUnit\Framework\TestCase
+class SubmissionLegislationTest extends m\Adapter\Phpunit\MockeryTestCase
 {
     private $reasons = [
         ['id' => 12, 'description' => 'Description 1', 'isProposeToRevoke' => 'Y'],
@@ -29,18 +33,23 @@ class SubmissionLegislationTest extends \PHPUnit\Framework\TestCase
 
     public function testCreateService()
     {
-        $mockLicenceService = $this->createMock('\Common\Service\Data\Licence');
+        $mockLicenceService = $this->createMock(LicenceDataService::class);
+        $mockAppService = m::mock(ApplicationDataService::class);
 
-        $mockSl = $this->createMock('\Laminas\ServiceManager\ServiceManager');
-        $mockSl->expects($this->at(0))
-            ->method('get')
+        $mockSl = m::mock(ServiceManager::class);
+        $mockSl->expects('get')
             ->with('\Common\Service\Data\Licence')
-            ->willReturn($mockLicenceService);
+            ->andReturn($mockLicenceService);
+
+        $mockSl->expects('get')
+            ->with('\Common\Service\Data\Application')
+            ->andReturn($mockAppService);
 
         $sut = new SubmissionLegislation();
         $service = $sut->createService($mockSl);
 
         $this->assertInstanceOf('\Olcs\Service\Data\SubmissionLegislation', $service);
         $this->assertSame($mockLicenceService, $service->getLicenceService());
+        $this->assertSame($mockAppService, $service->getApplicationService());
     }
 }
