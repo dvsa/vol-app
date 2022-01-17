@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ab5f52be868d52c9afb539f7484edd3d",
+    "content-hash": "2866eaf5a8f1789c2857e7c4bb1cee65",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -3573,12 +3573,12 @@
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "4.206.25",
+            "version": "4.206.26",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-auth/4.206.25/olcs-olcs-auth-4.206.25.zip",
-                "reference": "73532c8951a179bdc1d2708b61fb38d54b00c41a",
-                "shasum": "73532c8951a179bdc1d2708b61fb38d54b00c41a"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-auth/4.206.26/olcs-olcs-auth-4.206.26.zip",
+                "reference": "1736c229a962abccf1657550addd833f3697cf71",
+                "shasum": "1736c229a962abccf1657550addd833f3697cf71"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -3599,7 +3599,7 @@
                 "laminas/laminas-view": "^2.5",
                 "olcs/olcs-common": "~4.206.0",
                 "olcs/olcs-transfer": "~4.206.0",
-                "php": ">=7.2"
+                "php": ">=7.4"
             },
             "require-dev": {
                 "olcs/olcs-devtools": "~4.206.0"
@@ -3640,16 +3640,16 @@
                 ]
             },
             "description": "OLCS Authentication",
-            "time": "2021-11-29T15:38:30+00:00"
+            "time": "2022-01-13T10:24:00+00:00"
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.390",
+            "version": "4.206.391",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.390/olcs-olcs-common-4.206.390.zip",
-                "reference": "ffd63fb7e088259d0b4ebfd19596c47e7382c79c",
-                "shasum": "ffd63fb7e088259d0b4ebfd19596c47e7382c79c"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.391/olcs-olcs-common-4.206.391.zip",
+                "reference": "b9a92fd4ac086d793df4205b65b7bb04ea92ee16",
+                "shasum": "b9a92fd4ac086d793df4205b65b7bb04ea92ee16"
             },
             "require": {
                 "doctrine/annotations": "^1.8",
@@ -3672,7 +3672,7 @@
                 "laminas/laminas-math": "^3.0",
                 "laminas/laminas-modulemanager": "^2.5",
                 "laminas/laminas-mvc": "^2.5",
-                "laminas/laminas-navigation": "^2.5",
+                "laminas/laminas-navigation": "<=2.13.0",
                 "laminas/laminas-serializer": "^2.5",
                 "laminas/laminas-servicemanager": "^2.5",
                 "laminas/laminas-session": "^2.5",
@@ -3683,7 +3683,7 @@
                 "laminas/laminas-view": "^2.5",
                 "lm-commons/lmc-rbac-mvc": "^2.6",
                 "olcs/olcs-transfer": "~4.206.0",
-                "php": ">=7.2",
+                "php": ">=7.4",
                 "symfony/filesystem": "^5",
                 "symfony/lock": "^5"
             },
@@ -3733,16 +3733,16 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2022-01-07T02:53:46+00:00"
+            "time": "2022-01-13T11:00:45+00:00"
         },
         {
             "name": "olcs/olcs-logging",
-            "version": "4.206.9",
+            "version": "4.206.10",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-logging/4.206.9/olcs-olcs-logging-4.206.9.zip",
-                "reference": "910e4212335357d4deb2d5fad5fb4bf488db0eb6",
-                "shasum": "910e4212335357d4deb2d5fad5fb4bf488db0eb6"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-logging/4.206.10/olcs-olcs-logging-4.206.10.zip",
+                "reference": "b58826a274e0159c9ac45ff9a450124ab21d6647",
+                "shasum": "b58826a274e0159c9ac45ff9a450124ab21d6647"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -3754,7 +3754,7 @@
                 "laminas/laminas-mvc": "^2.5",
                 "laminas/laminas-servicemanager": "^2.5",
                 "laminas/laminas-session": "^2.5",
-                "php": ">=7.2",
+                "php": ">=7.4",
                 "psr/log": "~1.0"
             },
             "require-dev": {
@@ -3796,16 +3796,16 @@
                 ]
             },
             "description": "Logging Module for Olcs",
-            "time": "2021-08-20T09:51:39+00:00"
+            "time": "2022-01-13T10:15:22+00:00"
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "4.206.143",
+            "version": "4.206.144",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-transfer/4.206.143/olcs-olcs-transfer-4.206.143.zip",
-                "reference": "775c3aa3c63b1b9b6076a462cad0c31e964f082c",
-                "shasum": "775c3aa3c63b1b9b6076a462cad0c31e964f082c"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-transfer/4.206.144/olcs-olcs-transfer-4.206.144.zip",
+                "reference": "c4e34c042e49a88e619f8eb12a27addc85174fc0",
+                "shasum": "c4e34c042e49a88e619f8eb12a27addc85174fc0"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -3821,7 +3821,7 @@
                 "laminas/laminas-stdlib": "^2.5",
                 "laminas/laminas-validator": "^2.5",
                 "laminas/laminas-xml": "^1.2.0",
-                "php": ">=7.2",
+                "php": ">=7.4",
                 "soflomo/purifier": "^1.0"
             },
             "require-dev": {
@@ -3865,16 +3865,16 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2022-01-06T21:53:00+00:00"
+            "time": "2022-01-13T10:21:52+00:00"
         },
         {
             "name": "olcs/olcs-utils",
-            "version": "4.206.12",
+            "version": "4.206.13",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-utils/4.206.12/olcs-olcs-utils-4.206.12.zip",
-                "reference": "dd3e980a6fa83ff3ed836a883ad0de65e0adb07e",
-                "shasum": "dd3e980a6fa83ff3ed836a883ad0de65e0adb07e"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-utils/4.206.13/olcs-olcs-utils-4.206.13.zip",
+                "reference": "3adf9eec267caf9ee9d97186b1747204e1d62074",
+                "shasum": "3adf9eec267caf9ee9d97186b1747204e1d62074"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -3886,7 +3886,7 @@
                 "laminas/laminas-servicemanager": "^2.5",
                 "laminas/laminas-uri": "^2.5",
                 "laminas/laminas-view": "^2.5",
-                "php": ">=7.2"
+                "php": ">=7.4"
             },
             "require-dev": {
                 "olcs/olcs-devtools": "~4.206.0",
@@ -3928,7 +3928,7 @@
                 ]
             },
             "description": "OLCS Utils",
-            "time": "2021-08-20T09:47:50+00:00"
+            "time": "2022-01-13T10:21:06+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -5876,12 +5876,12 @@
         },
         {
             "name": "olcs/olcs-testhelpers",
-            "version": "4.206.16",
+            "version": "4.206.17",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-testhelpers/4.206.16/olcs-olcs-testhelpers-4.206.16.zip",
-                "reference": "30fa6fb4f4a4d75a7bf1b1522f3d000921624c50",
-                "shasum": "30fa6fb4f4a4d75a7bf1b1522f3d000921624c50"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-testhelpers/4.206.17/olcs-olcs-testhelpers-4.206.17.zip",
+                "reference": "c3b693594d35c8903d078014a5cb1b416fee725e",
+                "shasum": "c3b693594d35c8903d078014a5cb1b416fee725e"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -5894,7 +5894,7 @@
                 "laminas/laminas-stdlib": "^2.5",
                 "laminas/laminas-validator": "^2.5",
                 "laminas/laminas-view": "^2.5",
-                "php": ">=7.2"
+                "php": ">=7.4"
             },
             "require-dev": {
                 "olcs/olcs-devtools": "~4.206.0"
@@ -5911,7 +5911,7 @@
                 }
             },
             "description": "OLCS Test helpers",
-            "time": "2021-10-05T05:29:13+00:00"
+            "time": "2022-01-13T10:13:32+00:00"
         },
         {
             "name": "pdepend/pdepend",
@@ -8091,12 +8091,12 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=7.2",
+        "php": ">=7.4",
         "ext-intl": "*"
     },
     "platform-dev": [],
     "platform-overrides": {
-        "php": "7.2.31"
+        "php": "7.4.26"
     },
     "plugin-api-version": "1.1.0"
 }
