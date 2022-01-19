@@ -29,8 +29,11 @@ class LoginController implements InjectApplicationEventInterface
 {
     const FLASH_MESSAGE_NAMESPACE_INPUT = 'login-input';
     const FLASH_MESSAGE_NAMESPACE_AUTH_ERROR = 'auth-error';
+    const TRANSLATION_KEY_SUFFIX_AUTH_INVALID_USERNAME_OR_PASSWORD = 'Authentication Failed';
+    const TRANSLATION_KEY_SUFFIX_AUTH_ACCOUNT_DISABLED = 'account-disabled';
 
     const AUTH_SUCCESS_WITH_CHALLENGE = 2;
+    const AUTH_FAILURE_ACCOUNT_DISABLED = -5;
 
     const ROUTE_AUTH_EXPIRED_PASSWORD = 'auth/expired-password';
     const ROUTE_AUTH_LOGIN_GET = 'auth/login/GET';
@@ -185,7 +188,21 @@ class LoginController implements InjectApplicationEventInterface
         }
 
         $this->storeFormData($form);
-        $this->flashMessenger->addMessage($result->getMessages()[0], static::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR);
+
+        switch ($result->getCode() ?? 0) {
+            case static::AUTH_FAILURE_ACCOUNT_DISABLED:
+                $this->flashMessenger->addMessage(
+                    static::TRANSLATION_KEY_SUFFIX_AUTH_ACCOUNT_DISABLED,
+                    static::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR
+                );
+                break;
+            default:
+                // VOL-2394: If the login fails for any other reason, use a generic invalid username or password error.
+                $this->flashMessenger->addMessage(
+                    static::TRANSLATION_KEY_SUFFIX_AUTH_INVALID_USERNAME_OR_PASSWORD,
+                    static::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR
+                );
+        }
 
         return $this->redirectHelper->toRoute(self::ROUTE_AUTH_LOGIN_GET);
     }
