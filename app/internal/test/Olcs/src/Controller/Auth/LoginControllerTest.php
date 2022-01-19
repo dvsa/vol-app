@@ -69,6 +69,9 @@ class LoginControllerTest extends MockeryTestCase
         ]
     ];
     const AUTHENTICATION_RESULT_FAILURE = [Result::FAILURE, [], ['failed']];
+    const AUTHENTICATION_RESULT_USER_NOT_EXIST = [Result::FAILURE_IDENTITY_NOT_FOUND, [], ['Authentication Failed']];
+    const AUTHENTICATION_RESULT_CREDENTIAL_INVALID = [Result::FAILURE_CREDENTIAL_INVALID, [], ['Authentication Failed']];
+    const AUTHENTICATION_RESULT_FAILURE_ACCOUNT_DISABLED = [LoginController::AUTH_FAILURE_ACCOUNT_DISABLED, [], ['account-disabled']];
     const AUTHENTICATION_RESULT_SUCCESSFUL_COGNITO = [Result::SUCCESS, ['provider' => LoginController::DVSA_OLCS_AUTH_CLIENT_COGNITO]];
     const AUTHENTICATION_RESULT_SUCCESSFUL_UNKNOW_PROVIDER = [Result::SUCCESS, [ 'provider' => 'unknown']];
 
@@ -503,7 +506,7 @@ class LoginControllerTest extends MockeryTestCase
      * @test
      * @depends postAction_IsCallable
      */
-    public function postAction_FailedAuthentication_FlashesFailureReason()
+    public function postAction_FailedAuthentication_FlashesInvalidUsernameOrPasswordByDefault()
     {
         // Setup
         $this->setUpSut();
@@ -515,7 +518,73 @@ class LoginControllerTest extends MockeryTestCase
         $this->redirectHelper()->allows()->toRoute(LoginController::ROUTE_AUTH_LOGIN_GET)->andReturn($this->redirect());
 
         // Expect
-        $this->flashMessenger()->expects('addMessage')->withArgs(['failed', LoginController::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR]);
+        $this->flashMessenger()->expects('addMessage')->withArgs([LoginController::TRANSLATION_KEY_SUFFIX_AUTH_INVALID_USERNAME_OR_PASSWORD, LoginController::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR]);
+
+        // Execute
+        $this->sut->postAction($request, new RouteMatch([]), new Response());
+    }
+
+    /**
+     * @test
+     * @depends postAction_IsCallable
+     */
+    public function postAction_FailedAuthentication_FlashesInvalidUsernameOrPasswordWhenUserNotExists()
+    {
+        // Setup
+        $this->setUpSut();
+        $request = $this->postRequest(
+            ['username' => 'username', 'password' => 'password']
+        );
+
+        $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_USER_NOT_EXIST));
+        $this->redirectHelper()->allows()->toRoute(LoginController::ROUTE_AUTH_LOGIN_GET)->andReturn($this->redirect());
+
+        // Expect
+        $this->flashMessenger()->expects('addMessage')->withArgs([LoginController::TRANSLATION_KEY_SUFFIX_AUTH_INVALID_USERNAME_OR_PASSWORD, LoginController::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR]);
+
+        // Execute
+        $this->sut->postAction($request, new RouteMatch([]), new Response());
+    }
+
+    /**
+     * @test
+     * @depends postAction_IsCallable
+     */
+    public function postAction_FailedAuthentication_FlashesInvalidUsernameOrPasswordWhenPasswordIncorrect()
+    {
+        // Setup
+        $this->setUpSut();
+        $request = $this->postRequest(
+            ['username' => 'username', 'password' => 'password']
+        );
+
+        $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_CREDENTIAL_INVALID));
+        $this->redirectHelper()->allows()->toRoute(LoginController::ROUTE_AUTH_LOGIN_GET)->andReturn($this->redirect());
+
+        // Expect
+        $this->flashMessenger()->expects('addMessage')->withArgs([LoginController::TRANSLATION_KEY_SUFFIX_AUTH_INVALID_USERNAME_OR_PASSWORD, LoginController::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR]);
+
+        // Execute
+        $this->sut->postAction($request, new RouteMatch([]), new Response());
+    }
+
+    /**
+     * @test
+     * @depends postAction_IsCallable
+     */
+    public function postAction_FailedAuthentication_FlashesAccountDisabledWhenAuthenticationResult_IsFailureAccountDisabled()
+    {
+        // Setup
+        $this->setUpSut();
+        $request = $this->postRequest(
+            ['username' => 'username', 'password' => 'password']
+        );
+
+        $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_FAILURE_ACCOUNT_DISABLED));
+        $this->redirectHelper()->allows()->toRoute(LoginController::ROUTE_AUTH_LOGIN_GET)->andReturn($this->redirect());
+
+        // Expect
+        $this->flashMessenger()->expects('addMessage')->withArgs([LoginController::TRANSLATION_KEY_SUFFIX_AUTH_ACCOUNT_DISABLED, LoginController::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR]);
 
         // Execute
         $this->sut->postAction($request, new RouteMatch([]), new Response());
