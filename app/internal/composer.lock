@@ -3110,11 +3110,11 @@
         },
         {
             "name": "laminas/laminas-stdlib",
-            "version": "2.7.8",
+            "version": "2.7.9",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/laminas/laminas-stdlib/2.7.8/laminas-laminas-stdlib-2.7.8.zip",
-                "reference": "da8ecaa0b35b92e0834d6c0c111bd5306b6dc471",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/laminas/laminas-stdlib/2.7.9/laminas-laminas-stdlib-2.7.9.zip",
+                "reference": "2b7ee69318bf08ed094ebf0b30f860bb26ddd9f6",
                 "shasum": ""
             },
             "require": {
@@ -3163,7 +3163,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2021-02-16T20:21:34+00:00"
+            "time": "2022-01-20T16:23:34+00:00"
         },
         {
             "name": "laminas/laminas-text",
@@ -5236,18 +5236,18 @@
     "packages-dev": [
         {
             "name": "composer/pcre",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/composer/pcre/1.0.0/composer-pcre-1.0.0.zip",
-                "reference": "3d322d715c43a1ac36c7fe215fa59336265500f2",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/composer/pcre/1.0.1/composer-pcre-1.0.1.zip",
+                "reference": "67a32d7d6f9f560b726ab25a061b38ff3a80c560",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.3.2 || ^7.0 || ^8.0"
             },
             "require-dev": {
-                "phpstan/phpstan": "^1",
+                "phpstan/phpstan": "^1.3",
                 "phpstan/phpstan-strict-rules": "^1.1",
                 "symfony/phpunit-bridge": "^4.2 || ^5"
             },
@@ -5293,7 +5293,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-12-06T15:17:27+00:00"
+            "time": "2022-01-21T20:24:37+00:00"
         },
         {
             "name": "composer/xdebug-handler",
@@ -6727,11 +6727,11 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.5.11",
+            "version": "9.5.13",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/phpunit/phpunit/9.5.11/phpunit-phpunit-9.5.11.zip",
-                "reference": "2406855036db1102126125537adb1406f7242fdd",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/phpunit/phpunit/9.5.13/phpunit-phpunit-9.5.13.zip",
+                "reference": "597cb647654ede35e43b137926dfdfef0fb11743",
                 "shasum": ""
             },
             "require": {
@@ -6816,7 +6816,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-12-25T07:07:57+00:00"
+            "time": "2022-01-24T07:33:35+00:00"
         },
         {
             "name": "sebastian/cli-parser",
