@@ -9,6 +9,7 @@ use Common\Service\Table\TableBuilder;
 use Common\Service\Cqrs\Exception\NotFoundException;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
+use Laminas\Http\Request;
 use Olcs\Listener\CrudListener;
 use Olcs\Logging\Log\Logger;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
@@ -559,7 +560,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
         $this->placeholder()->setPlaceholder('form', $form);
         $this->placeholder()->setPlaceholder('contentTitle', $contentTitle);
 
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
 
         if ($request->isPost()) {
@@ -625,7 +626,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
         Logger::debug(__FILE__);
         Logger::debug(__METHOD__);
 
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
         $action = ucfirst($this->params()->fromRoute('action'));
         $form = $this->getForm($formClass);
@@ -683,6 +684,103 @@ abstract class AbstractInternalController extends AbstractOlcsController
         }
 
         return $this->viewBuilder()->buildViewFromTemplate($editViewTemplate);
+    }
+
+    /**
+     * @param string $formClass
+     * @param string $readOnlyFormClass
+     * @param string $itemDto
+     * @param ParameterProviderInterface $paramProvider
+     * @param string $updateCommand
+     * @param string $mapperClass
+     * @param string $partEditViewTemplate
+     * @param string $successMessage
+     * @param string|null $contentTitle
+     *
+     * @return ViewModel
+     */
+    final protected function partEdit(
+        string $formClass,
+        string $readOnlyFormClass,
+        string $itemDto,
+        ParameterProviderInterface $paramProvider,
+        string $updateCommand,
+        string $mapperClass,
+        string $partEditViewTemplate = 'pages/part-crud-form',
+        string $successMessage = 'Updated record',
+        ?string $contentTitle = null
+    ): ViewModel {
+        Logger::debug(__FILE__);
+        Logger::debug(__METHOD__);
+
+        $request = $this->getRequest();
+        assert($request instanceof Request);
+
+        $form = $this->getForm($formClass);
+        $this->placeholder()->setPlaceholder('form', $form);
+        $this->placeholder()->setPlaceholder('contentTitle', $contentTitle);
+
+        if ($request->isPost()) {
+            $dataFromPost = (array)$this->params()->fromPost();
+            $form->setData($dataFromPost);
+
+            $hasProcessed =
+                $this->getServiceLocator()->get('Helper\Form')->processAddressLookupForm($form, $request);
+
+            if (!$hasProcessed && $this->persist && $form->isValid()) {
+                $commandData = $this->mapFromForm($mapperClass, $form->getData());
+                $response = $this->handleCommand($updateCommand::create($commandData));
+
+                if ($response->isOk()) {
+                    $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($successMessage);
+                    return $this->redirectTo($response->getResult());
+                } elseif ($response->isClientError()) {
+                    $flashErrors = $mapperClass::mapFromErrors($form, $response->getResult());
+
+                    foreach ($flashErrors as $error) {
+                        $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($error);
+                    }
+                } elseif ($response->isServerError()) {
+                    $this->handleErrors($response->getResult());
+                }
+            }
+
+            $itemData = $this->getItem($paramProvider, $itemDto, $mapperClass);
+        } else {
+            $itemData = $this->getItem($paramProvider, $itemDto, $mapperClass);
+            $form->setData($itemData);
+        }
+
+        $readOnlyForm = $this->getForm($readOnlyFormClass);
+        $readOnlyForm->setData($itemData);
+        $readOnlyForm->setOption('readonly', true);
+        $this->placeholder()->setPlaceholder('readOnlyForm', $readOnlyForm);
+
+        return $this->viewBuilder()->buildViewFromTemplate($partEditViewTemplate);
+    }
+
+    /**
+     * @param ParameterProviderInterface $paramProvider
+     * @param string $itemDto
+     * @param string $mapperClass
+     *
+     * @return array
+     */
+    protected function getItem(ParameterProviderInterface $paramProvider, string $itemDto, string $mapperClass): array
+    {
+        $paramProvider->setParams($this->plugin('params'));
+        $itemParams = $paramProvider->provideParameters();
+        $itemResponse = $this->handleQuery($itemDto::create($itemParams));
+        $itemData = [];
+
+        if ($itemResponse->isOk()) {
+            $result = $itemResponse->getResult();
+            $itemData = $mapperClass::mapFromResult($result);
+        } else {
+            $this->handleErrors($itemResponse->getResult());
+        }
+
+        return $itemData;
     }
 
     /**
@@ -993,7 +1091,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
      */
     private function hasCancelledForm()
     {
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
 
         if (!$request->isPost()) {
@@ -1096,7 +1194,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
      */
     public function isButtonPressed($button, $data = null)
     {
-        /** @var \Laminas\Http\Request $request */
+        /** @var Request $request */
         $request = $this->getRequest();
 
         if (is_null($data)) {
