@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Bus\Details;
 
+use Dvsa\Olcs\Transfer\Command\Bus\UpdateEndDate as UpdateEndDateCmd;
 use Dvsa\Olcs\Transfer\Query\Bus\BusReg as ItemDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -9,6 +10,7 @@ use \Olcs\Data\Mapper\BusReg as BusRegMapper;
 use Olcs\Controller\Interfaces\BusRegControllerInterface;
 use Olcs\Controller\Traits as ControllerTraits;
 use Olcs\Form\Model\Form\BusServiceNumberAndType as ServiceForm;
+use Olcs\Form\Model\Form\BusServiceEndDate as EndDateForm;
 use Dvsa\Olcs\Transfer\Command\Bus\UpdateServiceDetails as UpdateServiceCmd;
 use Olcs\Form\Model\Form\BusRegTa as TaForm;
 use Dvsa\Olcs\Transfer\Command\Bus\UpdateTaAuthority as UpdateTaCmd;
@@ -19,11 +21,6 @@ use Dvsa\Olcs\Transfer\Command\Bus\UpdateQualitySchemes as UpdateQualityCmd;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Laminas\View\Model\ViewModel;
 
-/**
- * Bus Details Controller
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
 class BusDetailsController extends AbstractInternalController implements
     BusRegControllerInterface,
     LeftViewProvider
@@ -75,6 +72,22 @@ class BusDetailsController extends AbstractInternalController implements
      */
     public function serviceAction()
     {
+        $busReg = $this->getBusReg();
+
+        if ($busReg['canEditEndDate']) {
+            return $this->partEdit(
+                EndDateForm::class,
+                ServiceForm::class,
+                $this->itemDto,
+                new GenericItem($this->itemParams),
+                UpdateEndDateCmd::class,
+                $this->mapperClass,
+                'pages/part-crud-form',
+                'Updated record',
+                'Service No. & type'
+            );
+        }
+
         return $this->edit(
             ServiceForm::class,
             $this->itemDto,
