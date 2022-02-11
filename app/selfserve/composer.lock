@@ -3580,12 +3580,12 @@
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "4.206.29",
+            "version": "4.206.30",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-auth/4.206.29/olcs-olcs-auth-4.206.29.zip",
-                "reference": "0b809d83d450183aff9530db25122a63a90556d4",
-                "shasum": "0b809d83d450183aff9530db25122a63a90556d4"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-auth/4.206.30/olcs-olcs-auth-4.206.30.zip",
+                "reference": "bfb003bf9cc7a89486f05e54a958225194f371ac",
+                "shasum": "bfb003bf9cc7a89486f05e54a958225194f371ac"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -3647,16 +3647,16 @@
                 ]
             },
             "description": "OLCS Authentication",
-            "time": "2022-01-25T14:08:14+00:00"
+            "time": "2022-02-02T12:24:52+00:00"
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.391",
+            "version": "4.206.393",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.391/olcs-olcs-common-4.206.391.zip",
-                "reference": "b9a92fd4ac086d793df4205b65b7bb04ea92ee16",
-                "shasum": "b9a92fd4ac086d793df4205b65b7bb04ea92ee16"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.393/olcs-olcs-common-4.206.393.zip",
+                "reference": "8723d6b4395fea56c91031c0a1d89adb7b2883bd",
+                "shasum": "8723d6b4395fea56c91031c0a1d89adb7b2883bd"
             },
             "require": {
                 "doctrine/annotations": "^1.8",
@@ -3740,7 +3740,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2022-01-13T11:00:45+00:00"
+            "time": "2022-02-10T15:08:26+00:00"
         },
         {
             "name": "olcs/olcs-logging",
@@ -3807,12 +3807,12 @@
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "4.206.145",
+            "version": "4.206.146",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-transfer/4.206.145/olcs-olcs-transfer-4.206.145.zip",
-                "reference": "48415b72a37348404585360857377b4e36bf1f49",
-                "shasum": "48415b72a37348404585360857377b4e36bf1f49"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-transfer/4.206.146/olcs-olcs-transfer-4.206.146.zip",
+                "reference": "d21574649f83732fcdf6cd56df99a535a12d18f8",
+                "shasum": "d21574649f83732fcdf6cd56df99a535a12d18f8"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -3872,7 +3872,7 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2022-01-18T10:27:58+00:00"
+            "time": "2022-02-04T11:24:48+00:00"
         },
         {
             "name": "olcs/olcs-utils",
@@ -5535,12 +5535,12 @@
             },
             "type": "library",
             "autoload": {
-                "psr-4": {
-                    "DeepCopy\\": "src/DeepCopy/"
-                },
                 "files": [
                     "src/DeepCopy/deep_copy.php"
-                ]
+                ],
+                "psr-4": {
+                    "DeepCopy\\": "src/DeepCopy/"
+                }
             },
             "license": [
                 "MIT"
@@ -5635,12 +5635,12 @@
         },
         {
             "name": "olcs/olcs-devtools",
-            "version": "4.206.13",
+            "version": "4.206.14",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-devtools/4.206.13/olcs-olcs-devtools-4.206.13.zip",
-                "reference": "49b529289f5978c77923841d39bf383cc7b50b09",
-                "shasum": "49b529289f5978c77923841d39bf383cc7b50b09"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-devtools/4.206.14/olcs-olcs-devtools-4.206.14.zip",
+                "reference": "b253aa37746f2a874f24124bb90f19b71f3e0c1a",
+                "shasum": "b253aa37746f2a874f24124bb90f19b71f3e0c1a"
             },
             "require": {
                 "dms/phpunit-arraysubset-asserts": "^0.3.1",
@@ -5677,7 +5677,7 @@
                 }
             },
             "description": "Dev tools",
-            "time": "2022-01-13T10:18:12+00:00"
+            "time": "2022-01-31T14:17:12+00:00"
         },
         {
             "name": "olcs/olcs-testhelpers",
@@ -6725,11 +6725,11 @@
                 }
             },
             "autoload": {
-                "classmap": [
-                    "src/"
-                ],
                 "files": [
                     "src/Framework/Assert/Functions.php"
+                ],
+                "classmap": [
+                    "src/"
                 ]
             },
             "license": [
@@ -7783,12 +7783,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Symfony\\Polyfill\\Php81\\": ""
-                },
                 "files": [
                     "bootstrap.php"
                 ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Php81\\": ""
+                },
                 "classmap": [
                     "Resources/stubs"
                 ]
