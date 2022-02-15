@@ -68,12 +68,22 @@ class VariationTypeOfLicenceTest extends AbstractLvaFormServiceTestCase
             )
             ->getMock();
 
+        $vehicleType = m::mock(Element\Select::class);
+
+        $ltypSiContentFieldset = m::mock(Fieldset::class);
+        $ltypSiContentFieldset->shouldReceive('get')
+            ->with('vehicle-type')
+            ->andReturn($vehicleType);
+
         $licenceType = m::mock(Element\Select::class);
 
         $ltFieldset = m::mock(Fieldset::class);
         $ltFieldset->shouldReceive('get')
             ->with('licence-type')
             ->andReturn($licenceType);
+        $ltFieldset->shouldReceive('get')
+            ->with('ltyp_siContent')
+            ->andReturn($ltypSiContentFieldset);
 
         $mockForm
             ->shouldReceive('get')
@@ -93,6 +103,9 @@ class VariationTypeOfLicenceTest extends AbstractLvaFormServiceTestCase
         $this->formHelper
             ->shouldReceive('setCurrentOption')
             ->with($licenceType, 'foo')
+            ->once()
+            ->shouldReceive('setCurrentOption')
+            ->with($vehicleType, 'bar')
             ->once();
 
         $this->fsm
@@ -108,7 +121,7 @@ class VariationTypeOfLicenceTest extends AbstractLvaFormServiceTestCase
 
         $this->sut->shouldReceive('lockElements');
 
-        $form = $this->sut->getForm(['currentLicenceType' => 'foo']);
+        $form = $this->sut->getForm(['currentLicenceType' => 'foo', 'currentVehicleType' => 'bar']);
 
         static::assertSame($mockForm, $form);
     }
