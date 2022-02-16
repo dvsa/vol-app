@@ -3,6 +3,8 @@
 namespace Olcs\Controller\Document;
 
 use Common\Data\Mapper\LetterGenerationDocument;
+use Common\Exception\ConfigurationException;
+use Common\Rbac\JWTIdentityProvider;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Document\DeleteDocument;
 use Dvsa\Olcs\Transfer\Command\Task\CloseTasks;
@@ -260,15 +262,25 @@ abstract class AbstractDocumentController extends AbstractController
      */
     protected function getUriPattern(): string
     {
+        $config = $this->getServiceLocator()->get('Config');
         $prefix = $this->getOsType();
-        return (string) $this->getServiceLocator()->get('Config')[$prefix . '_document_share']['uri_pattern'];
+
+        // TODO: VOL-2661 - Check for JWTIdentityProvider will be removed post OpenAM.
+        if ($prefix === RefData::USER_OS_TYPE_WINDOWS_10 && $config['auth']['identity_provider'] ?? null === JWTIdentityProvider::class) {
+            $url_pattern = $config['webdav']['url_pattern'] ?? null;
+            if (!isset($url_pattern)) {
+                throw new ConfigurationException('Expected a URL Pattern defined in configuration at: webdav -> url_pattern');
+            }
+            return (string) $url_pattern;
+        }
+
+        return (string) $config[$prefix . '_document_share']['uri_pattern'];
     }
 
-    private function getOsType(): string
+    protected function getOsType(): string
     {
-        //check which ostype
         $query = MyAccount::create([]);
         $response = $this->handleQuery($query)->getResult();
-        return $response['osType']['id'] ?? "windows_7";
+        return $response['osType']['id'] ?? RefData::USER_OS_TYPE_WINDOWS_7;
     }
 }

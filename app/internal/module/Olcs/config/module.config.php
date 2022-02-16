@@ -529,6 +529,9 @@ return array(
             Olcs\Service\Permits\Bilateral\NoOfPermitsElementGenerator::class =>
                 Olcs\Service\Permits\Bilateral\NoOfPermitsElementGeneratorFactory::class,
 
+            \Olcs\Service\Helper\WebDavJsonWebTokenGenerationService::class =>
+                \Olcs\Service\Helper\WebDavJsonWebTokenGenerationServiceFactory::class,
+
             Auth\Adapter\InternalCommandAdapter::class => Auth\Adapter\InternalCommandAdapterFactory::class
         )
     ),
