@@ -150,7 +150,7 @@ class DocumentGenerationController extends AbstractDocumentController
         $response = $this->handleCommand($dto);
 
         if (!$response->isOk()) {
-            throw new \ErrorException('Error creating letter');
+            throw new \ErrorException('Error creating letter: ' . $response->getBody());
         }
 
         // we don't know what params are needed to satisfy this type's

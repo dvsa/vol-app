@@ -2,10 +2,10 @@
 
 return array(
     // Debugging, display environment and version on interface
-//    'version' => [
-//        'environment' => 'Local Dev',
-//        'release' => (file_exists(__DIR__ . '/../version') ? file_get_contents(__DIR__ . '/../version') : '')
-//    ],
+    'version' => [
+        'environment' => 'Local Dev',
+        'release' => (file_exists(__DIR__ . '/../version') ? file_get_contents(__DIR__ . '/../version') : '')
+    ],
 
     // New Backend service
     'api_router' => [
@@ -45,17 +45,28 @@ return array(
         ]
     ],
 
-   // Document service
-       'windows_7_document_share' => [
-           // File hyperlink to document
-           'uri_pattern' => 'file://///<host>/OLCS/olcs/%s',
-       ],
-       'windows_10_document_share' => [
-           'uri_pattern' => 'http://<url>/OLCS/olcs/%s',
-       ],
-       'northern_i_document_share' => [
-               'uri_pattern' => 'webdav://///fs01.olcs.mgt.mtpdvsa/OLCS/olcs/%s',
-        ],
+    // Document service
+    'windows_7_document_share' => [
+        // File hyperlink to document
+        'uri_pattern' => 'file://///<host>/OLCS/olcs/%s',
+    ],
+    'windows_10_document_share' => [
+        'uri_pattern' => 'http://<url>/OLCS/olcs/%s',
+    ],
+    'northern_i_document_share' => [
+        'uri_pattern' => 'webdav://///fs01.olcs.mgt.mtpdvsa/OLCS/olcs/%s',
+    ],
+
+    // WebDav
+    'webdav' => [
+        // Private key used to sign JWT tokens when generating WebDAV links. (PEM Format)
+        // Can be a path to a .pem file or base64 encoded private key in PEM format.
+        'private_key' => '',
+        // The default length in seconds the JWT is valid for.
+        'default_lifetime_seconds' => 3600,
+        // The URL pattern for a WebDAV URL. JWT followed by Document Path will be sprintf'ed into this value.
+        'url_pattern' => 'ms-word:ofe|u|https://iuweb.da.olcs.dev-dvsacloud.uk/documents-dav/%s/olcs/%s'
+    ],
 
     // Asset path, URI to olcs-static (CSS, JS, etc) *Environment specific*
     'asset_path' => 'https://iuap1.olcs.dev.nonprod.dvsa.aws/static/public',

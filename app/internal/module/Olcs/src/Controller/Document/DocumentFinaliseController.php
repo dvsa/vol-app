@@ -3,12 +3,16 @@
 namespace Olcs\Controller\Document;
 
 use Common\Category;
+use Common\Rbac\JWTIdentityProvider;
+use Common\RefData;
 use Dvsa\Olcs\Transfer\Command as TransferCmd;
 use Dvsa\Olcs\Transfer\Command\Document\PrintLetter as PrintLetterCmd;
 use Dvsa\Olcs\Transfer\Query as TransferQry;
+use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 use Laminas\Http\Response;
 use Laminas\Mvc\MvcEvent;
 use Laminas\View\Model\ViewModel;
+use Olcs\Service\Helper\WebDavJsonWebTokenGenerationService;
 
 /**
  * Document Upload Controller
@@ -36,6 +40,16 @@ class DocumentFinaliseController extends AbstractDocumentController
     private $hlpForm;
 
     /**
+     * @var WebDavJsonWebTokenGenerationService
+     */
+    private $webDavJsonWebTokenGenerationService;
+
+    /**
+     * @array
+     */
+    private $config;
+
+    /**
      * Execute the request
      *
      * @param MvcEvent $e Event
@@ -46,6 +60,8 @@ class DocumentFinaliseController extends AbstractDocumentController
     {
         $this->hlpFlashMsgr = $this->getServiceLocator()->get('Helper\FlashMessenger');
         $this->hlpForm = $this->getServiceLocator()->get('Helper\Form');
+        $this->config = $this->getServiceLocator()->get('Config');
+        $this->webDavJsonWebTokenGenerationService = $this->getServiceLocator()->get(WebDavJsonWebTokenGenerationService::class);
 
         return parent::onDispatch($e);
     }
@@ -80,7 +96,17 @@ class DocumentFinaliseController extends AbstractDocumentController
 
         $uriPattern = $this->getUriPattern();
 
-        $url = sprintf($uriPattern, $data['data']['identifier']);
+        // TODO: VOL-2661 - Check for JWTIdentityProvider will be removed post OpenAM.
+        if ($this->getOsType() === RefData::USER_OS_TYPE_WINDOWS_10 && $this->config['auth']['identity_provider'] ?? null === JWTIdentityProvider::class) {
+            $loginId = $this->currentUser()->getIdentity()->getUsername();
+            $jwt = $this->webDavJsonWebTokenGenerationService->generateToken(
+                $loginId,
+                $data['data']['identifier']
+            );
+            $url = sprintf($uriPattern, $jwt, $data['data']['identifier']);
+        } else {
+            $url = sprintf($uriPattern, $data['data']['identifier']);
+        }
 
         $link = sprintf(
             '<a href="%s" data-file-url="%s" target="blank">%s</a>',
