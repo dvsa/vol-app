@@ -22,16 +22,4 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController implements
 
     protected $location = 'internal';
     protected $lva = 'licence';
-
-    /**
-     * indexAction
-     *
-     * @return \Laminas\Http\Response|\Common\View\Model\Section
-     */
-    public function indexAction()
-    {
-        $this->getServiceLocator()->get('Helper\Guidance')->append('licence_type_of_licence_change');
-
-        return parent::indexAction();
-    }
 }
