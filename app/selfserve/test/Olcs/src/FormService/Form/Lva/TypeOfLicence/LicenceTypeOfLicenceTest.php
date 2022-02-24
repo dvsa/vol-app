@@ -77,19 +77,14 @@ class LicenceTypeOfLicenceTest extends MockeryTestCase
     {
         return [
             [
-                ['canUpdateLicenceType' => true, 'canBecomeSpecialRestricted' => true],
-                'form-actions->cancel',
-                1
-            ],
-            [
-                ['canUpdateLicenceType' => true, 'canBecomeSpecialRestricted' => false],
-                'form-actions->cancel',
-                2
-            ],
-            [
                 ['canUpdateLicenceType' => false, 'canBecomeSpecialRestricted' => true],
                 'form-actions',
                 2
+            ],
+            [
+                ['canUpdateLicenceType' => false, 'canBecomeSpecialRestricted' => false],
+                'form-actions',
+                3
             ],
         ];
     }
@@ -160,69 +155,67 @@ class LicenceTypeOfLicenceTest extends MockeryTestCase
                 ->getMock();
         }
 
-        if (!$params['canUpdateLicenceType']) {
-            $this->fh->shouldReceive('disableElement')
-                ->with($mockForm, 'type-of-licence->licence-type->licence-type')
-                ->once()
-                ->shouldReceive('disableElement')
-                ->with($mockForm, 'type-of-licence->licence-type->ltyp_siContent->vehicle-type')
-                ->once()
-                ->shouldReceive('disableElement')
-                ->with(
-                    $mockForm,
-                    'type-of-licence->licence-type->ltyp_siContent->lgv-declaration->lgv-declaration-confirmation'
-                )
-                ->once()
-                ->shouldReceive('lockElement')
-                ->with($ltFieldset, 'licence-type-lock-message')
-                ->once()
-                ->getMock();
+        $this->fh->shouldReceive('disableElement')
+            ->with($mockForm, 'type-of-licence->licence-type->licence-type')
+            ->once()
+            ->shouldReceive('disableElement')
+            ->with($mockForm, 'type-of-licence->licence-type->ltyp_siContent->vehicle-type')
+            ->once()
+            ->shouldReceive('disableElement')
+            ->with(
+                $mockForm,
+                'type-of-licence->licence-type->ltyp_siContent->lgv-declaration->lgv-declaration-confirmation'
+            )
+            ->once()
+            ->shouldReceive('lockElement')
+            ->with($ltFieldset, 'licence-type-lock-message')
+            ->once()
+            ->getMock();
 
-            $mockForm->shouldReceive('has')
-                ->with('form-actions')
+        $mockForm->shouldReceive('has')
+            ->with('form-actions')
+            ->andReturn(true)
+            ->times(3)
+            ->shouldReceive('get')
+            ->with('form-actions')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('has')
+                ->with('save')
+                ->once()
                 ->andReturn(true)
-                ->times(3)
-                ->shouldReceive('get')
-                ->with('form-actions')
-                ->andReturn(
-                    m::mock()
-                    ->shouldReceive('has')
-                    ->with('save')
-                    ->once()
-                    ->andReturn(true)
-                    ->shouldReceive('has')
-                    ->with('saveAndContinue')
-                    ->once()
-                    ->andReturn(true)
-                    ->shouldReceive('has')
-                    ->with('cancel')
-                    ->once()
-                    ->andReturn(true)
-                    ->shouldReceive('remove')
-                    ->with('save')
-                    ->once()
-                    ->shouldReceive('remove')
-                    ->with('saveAndContinue')
-                    ->once()
-                    ->shouldReceive('remove')
-                    ->with('cancel')
-                    ->once()
-                    ->getMock()
-                )
-                ->times(3)
-                ->getMock();
-
-            $mockForm->shouldReceive('get')
-                ->with('form-actions')
-                ->andReturn(
-                    m::mock()
-                    ->shouldReceive('add')
-                    ->with(m::type(BackToLicenceActionLink::class))
-                    ->once()
-                    ->getMock()
-                )
+                ->shouldReceive('has')
+                ->with('saveAndContinue')
                 ->once()
-                ->getMock();
-        }
+                ->andReturn(true)
+                ->shouldReceive('has')
+                ->with('cancel')
+                ->once()
+                ->andReturn(true)
+                ->shouldReceive('remove')
+                ->with('save')
+                ->once()
+                ->shouldReceive('remove')
+                ->with('saveAndContinue')
+                ->once()
+                ->shouldReceive('remove')
+                ->with('cancel')
+                ->once()
+                ->getMock()
+            )
+            ->times(3)
+            ->getMock();
+
+        $mockForm->shouldReceive('get')
+            ->with('form-actions')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('add')
+                ->with(m::type(BackToLicenceActionLink::class))
+                ->once()
+                ->getMock()
+            )
+            ->once()
+            ->getMock();
     }
 }

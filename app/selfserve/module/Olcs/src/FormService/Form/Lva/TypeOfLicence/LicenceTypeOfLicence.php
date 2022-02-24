@@ -24,10 +24,6 @@ class LicenceTypeOfLicence extends CommonLicenceTypeOfLicence
     {
         parent::alterForm($form, $params);
 
-        if (!$params['canUpdateLicenceType']) {
-            $this->getFormHelper()->remove($form, 'form-actions');
-        } else {
-            $this->getFormHelper()->remove($form, 'form-actions->cancel');
-        }
+        $this->getFormHelper()->remove($form, 'form-actions');
     }
 }
