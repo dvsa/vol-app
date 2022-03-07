@@ -260,7 +260,9 @@ class ViewController extends AbstractController
      */
     private function alterOperatingCentresTableForLgv(TableBuilder $tableBuilder, array $data)
     {
-        if ($data['isEligibleForLgv']) {
+        $isMixedWithLgv = ($data['vehicleType']['id'] === RefData::APP_VEHICLE_TYPE_MIXED) && ($data['totAuthLgvVehicles'] !== null);
+
+        if ($isMixedWithLgv) {
             $columns = $tableBuilder->getColumns();
             $columns['noOfVehiclesRequired']['title'] = str_replace(
                 'vehicles',

@@ -10,6 +10,7 @@ namespace Olcs\Controller\Lva\Traits;
 use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 use Laminas\Form\Form;
 use Laminas\View\Model\ViewModel;
+use Common\RefData;
 use Common\View\Model\Section;
 use Dvsa\Olcs\Transfer\Query\User\UserSelfserve as UserQry;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceQry;
@@ -131,10 +132,7 @@ trait ExternalControllerTrait
             $params['status'] = $data['status']['id'] ?? null;
             $params['licNo'] = $data['licNo'];
             $params['lva'] = 'licence';
-
-            $lvaTitleSuffix = ($titleSuffix === 'people') ?
-                ($titleSuffix . '.' . $data['organisation']['type']['id']) : $titleSuffix;
-            $params['title'] = 'lva.section.title.' . $lvaTitleSuffix;
+            $params['title'] = $this->getSectionTitle($titleSuffix, $data);
         }
 
         return $this->renderView(new Section($params));
@@ -157,5 +155,40 @@ trait ExternalControllerTrait
             ->addChild($section, 'content');
 
         return $base;
+    }
+
+    /**
+     * get section title
+     *
+     * @param string $sectionName
+     * @param array $data
+     *
+     * @return string
+     */
+    protected function getSectionTitle(string $sectionName, array $data): string
+    {
+        // default section title
+        $sectionTitle = 'lva.section.title.' . $sectionName;
+
+        switch ($sectionName) {
+            case 'people':
+                // change the section name based on org type
+                $orgType = isset($data['licence']['organisation']['type']['id']) ?
+                    $data['licence']['organisation']['type']['id'] : $data['organisation']['type']['id'];
+
+                $sectionTitle .= '.' . $orgType;
+                break;
+            case 'operating_centres':
+                // change the section name if it is LGV only
+                if (RefData::APP_VEHICLE_TYPE_LGV === $data['vehicleType']['id']) {
+                    $sectionTitle .= '.lgv';
+
+                    // overwrite page title too
+                    $this->placeholder()->setPlaceholder('pageTitle', $sectionTitle);
+                }
+                break;
+        }
+
+        return $sectionTitle;
     }
 }

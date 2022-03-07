@@ -3,7 +3,6 @@
 namespace Olcs\FormService\Form\Lva\OperatingCentres;
 
 use Common\FormService\Form\Lva\OperatingCentres\LicenceOperatingCentres as CommonLicenceOperatingCentres;
-use Common\Service\Table\TableBuilder;
 use Laminas\Form\Form;
 
 /**
@@ -54,23 +53,5 @@ class LicenceOperatingCentres extends CommonLicenceOperatingCentres
         }
 
         $this->removeStandardFormActions($form);
-
-        $table = $form->get('table')->get('table')->getTable();
-        $this->alterTableForLgv($table, $params);
-    }
-
-    /**
-     * Alter the form table in accordance with lgv requirements
-     *
-     * @param TableBuilder $tableBuilder
-     * @param array $params
-     */
-    private function alterTableForLgv(TableBuilder $tableBuilder, array $params)
-    {
-        if ($params['isEligibleForLgv'] && !is_null($params['totAuthLgvVehicles'])) {
-            $columns = $tableBuilder->getColumns();
-            $columns['noOfVehiclesRequired']['title'] = 'application_operating-centres_authorisation.table.hgvs';
-            $tableBuilder->setColumns($columns);
-        }
     }
 }

@@ -65,9 +65,9 @@ class ViewControllerTest extends MockeryTestCase
     }
 
     /**
-     * Tests index details action for licence entity Non Partner, eligible for LGV
+     * Tests index details action for licence entity Non Partner, mixed with lgv
      */
-    public function testIndexActionNonPartnerEligibleForLgv()
+    public function testIndexActionNonPartnerMixedWithLgv()
     {
         $entity = 'licence';
         $entityId = 7;
@@ -82,7 +82,8 @@ class ViewControllerTest extends MockeryTestCase
             'transportManagers' => [],
             'operatingCentres' => [],
             'status' => ['id' => 'foo'],
-            'isEligibleForLgv' => true,
+            'vehicleType' => ['id' => RefData::APP_VEHICLE_TYPE_MIXED],
+            'totAuthLgvVehicles' => 0,
         ];
 
         //  mock plugins
@@ -165,9 +166,9 @@ class ViewControllerTest extends MockeryTestCase
     }
 
     /**
-     * Tests index details action for licence entity Non Partner, not eligible for LGV
+     * Tests index details action for licence entity Non Partner, mixed without lgv
      */
-    public function testIndexActionNonPartnerNotEligibleForLgv()
+    public function testIndexActionNonPartnerMixedWithoutLgv()
     {
         $entity = 'licence';
         $entityId = 7;
@@ -182,7 +183,8 @@ class ViewControllerTest extends MockeryTestCase
             'transportManagers' => [],
             'operatingCentres' => [],
             'status' => ['id' => 'foo'],
-            'isEligibleForLgv' => false,
+            'vehicleType' => ['id' => RefData::APP_VEHICLE_TYPE_MIXED],
+            'totAuthLgvVehicles' => null,
         ];
 
         //  mock plugins
@@ -243,9 +245,9 @@ class ViewControllerTest extends MockeryTestCase
     }
 
     /**
-     * Tests index details action for licence entity for Partner, eligible for LGV
+     * Tests index details action for licence entity for Partner, mixed with lgv
      */
-    public function testIndexActionPartnerEligibleForLgv()
+    public function testIndexActionPartnerMixedWithLgv()
     {
         $entity = 'licence';
         $entityId = 7;
@@ -264,7 +266,8 @@ class ViewControllerTest extends MockeryTestCase
             'conditionUndertakings' => [],
             'applications' => [],
             'status' => ['id' => 'foo'],
-            'isEligibleForLgv' => true,
+            'vehicleType' => ['id' => RefData::APP_VEHICLE_TYPE_MIXED],
+            'totAuthLgvVehicles' => 0,
         ];
 
         //  mock plugins
@@ -362,9 +365,9 @@ class ViewControllerTest extends MockeryTestCase
     }
 
     /**
-     * Tests index details action for licence entity for Partner, not eligible for LGV
+     * Tests index details action for licence entity for Partner, mixed without lgv
      */
-    public function testIndexActionPartnerNotEligibleForLgv()
+    public function testIndexActionPartnerMixedWithoutLgv()
     {
         $entity = 'licence';
         $entityId = 7;
@@ -383,7 +386,8 @@ class ViewControllerTest extends MockeryTestCase
             'conditionUndertakings' => [],
             'applications' => [],
             'status' => ['id' => 'foo'],
-            'isEligibleForLgv' => false,
+            'vehicleType' => ['id' => RefData::APP_VEHICLE_TYPE_MIXED],
+            'totAuthLgvVehicles' => null,
         ];
 
         //  mock plugins

@@ -31,8 +31,10 @@ class ApplicationOperatingCentres extends AbstractOperatingCentres
         parent::alterForm($form, $params);
         $this->alterButtons($form);
 
-        $table = $form->get('table')->get('table')->getTable();
-        $table->removeColumn('noOfComplaints');
+        if ($form->has('table')) {
+            $table = $form->get('table')->get('table')->getTable();
+            $table->removeColumn('noOfComplaints');
+        }
 
         if ($form->get('data')->has('totCommunityLicencesFieldset')) {
             $this->getFormHelper()->alterElementLabel(

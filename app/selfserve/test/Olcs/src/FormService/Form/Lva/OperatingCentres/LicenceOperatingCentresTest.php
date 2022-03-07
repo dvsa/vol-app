@@ -68,7 +68,7 @@ class LicenceOperatingCentresTest extends LicenceOperatingCentresTestCase
             'canHaveCommunityLicences' => true,
             'isPsv' => false,
             'licenceType' => ['id' => RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL],
-            'isEligibleForLgv' => true,
+            'vehicleType' => ['id' => RefData::APP_VEHICLE_TYPE_MIXED],
             'totAuthLgvVehicles' => 0,
         ];
 
@@ -101,6 +101,10 @@ class LicenceOperatingCentresTest extends LicenceOperatingCentresTestCase
         $tableFieldset->shouldReceive('get')
             ->with('table')
             ->andReturn($tableElement);
+
+        $form->shouldReceive('has')
+            ->with('table')
+            ->andReturnTrue();
 
         $form->shouldReceive('get')
             ->with('table')
@@ -220,7 +224,7 @@ class LicenceOperatingCentresTest extends LicenceOperatingCentresTestCase
     {
         return [
             'totAuthHgvVehicles' => ['totAuthHgvVehicles', $this->paramsForLicence()],
-            'totAuthLgvVehicles' => ['totAuthLgvVehicles', $this->paramsForLicenceThatIsEligibleForLgvs()],
+            'totAuthLgvVehicles' => ['totAuthLgvVehicles', $this->paramsForMixedLicenceWithLgv()],
             'totAuthTrailers' => ['totAuthTrailers', $this->paramsForLicence()],
         ];
     }

@@ -10,6 +10,7 @@ namespace OlcsTest\View\Model\Variation;
 use Common\RefData;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\View\Model\Variation\VariationOverviewSection;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Variation Overview Section Test
@@ -21,24 +22,17 @@ class VariationOverviewSectionTest extends MockeryTestCase
     public function testViewWithRequiresAttention()
     {
         $sectionDetails = ['status' => RefData::VARIATION_STATUS_REQUIRES_ATTENTION];
-        $ref = 'people';
+        $ref = 'type_of_licence';
         $data = [
             'id' => 1,
             'idIndex' => 'application',
             'sectionNumber' => 1,
-            'licence' => [
-                'organisation' => [
-                    'type' => [
-                        'id' => 'org_t_llp'
-                    ]
-                ]
-            ]
         ];
 
         $viewModel = new VariationOverviewSection($ref, $data, $sectionDetails);
 
-        $this->assertInstanceOf('\Laminas\View\Model\ViewModel', $viewModel);
-        $this->assertEquals('section.name.people.org_t_llp', $viewModel->getVariable('name'));
+        $this->assertInstanceOf(ViewModel::class, $viewModel);
+        $this->assertEquals('section.name.type_of_licence', $viewModel->getVariable('name'));
         $this->assertEquals('orange', $viewModel->getVariable('statusColour'));
         $this->assertEquals('REQUIRES ATTENTION', $viewModel->getVariable('status'));
 
@@ -54,19 +48,12 @@ class VariationOverviewSectionTest extends MockeryTestCase
             'id' => 1,
             'idIndex' => 'application',
             'sectionNumber' => 1,
-            'licence' => [
-                'organisation' => [
-                    'type' => [
-                        'id' => 'org_t_llp'
-                    ]
-                ]
-            ]
         ];
 
         $viewModel = new VariationOverviewSection($ref, $data, $sectionDetails);
 
-        $this->assertInstanceOf('\Laminas\View\Model\ViewModel', $viewModel);
-
+        $this->assertInstanceOf(ViewModel::class, $viewModel);
+        $this->assertEquals('section.name.type_of_licence', $viewModel->getVariable('name'));
         $this->assertEquals('green', $viewModel->getVariable('statusColour'));
         $this->assertEquals('UPDATED', $viewModel->getVariable('status'));
 
@@ -81,19 +68,12 @@ class VariationOverviewSectionTest extends MockeryTestCase
             'id' => 1,
             'idIndex' => 'application',
             'sectionNumber' => 1,
-            'licence' => [
-                'organisation' => [
-                    'type' => [
-                        'id' => 'org_t_llp'
-                    ]
-                ]
-            ]
         ];
 
         $viewModel = new VariationOverviewSection($ref, $data, $sectionDetails);
 
-        $this->assertInstanceOf('\Laminas\View\Model\ViewModel', $viewModel);
-
+        $this->assertInstanceOf(ViewModel::class, $viewModel);
+        $this->assertEquals('section.name.type_of_licence', $viewModel->getVariable('name'));
         $this->assertEquals('', $viewModel->getVariable('statusColour'));
         $this->assertEquals('', $viewModel->getVariable('status'));
 
@@ -108,23 +88,112 @@ class VariationOverviewSectionTest extends MockeryTestCase
             'id' => 1,
             'idIndex' => 'application',
             'sectionNumber' => 1,
-            'licence' => [
-                'organisation' => [
-                    'type' => [
-                        'id' => 'org_t_llp'
-                    ]
-                ]
-            ]
         ];
 
         $viewModel = new VariationOverviewSection($ref, $data, $sectionDetails);
 
-        $this->assertInstanceOf('\Laminas\View\Model\ViewModel', $viewModel);
-
+        $this->assertInstanceOf(ViewModel::class, $viewModel);
+        $this->assertEquals('section.name.type_of_licence', $viewModel->getVariable('name'));
         $this->assertEquals('', $viewModel->getVariable('statusColour'));
         $this->assertEquals('', $viewModel->getVariable('status'));
         $this->assertEquals(0, $viewModel->getVariable('enabled'));
 
         $this->assertNull($viewModel->getVariable('sectionNumber'));
+    }
+
+    /**
+     * @dataProvider dpTestViewForPeople
+     */
+    public function testViewForPeople($data)
+    {
+        $sectionDetails = ['status' => RefData::VARIATION_STATUS_REQUIRES_ATTENTION];
+        $ref = 'people';
+
+        $viewModel = new VariationOverviewSection($ref, $data, $sectionDetails);
+
+        $this->assertInstanceOf(ViewModel::class, $viewModel);
+        $this->assertEquals('section.name.people.org_t_llp', $viewModel->getVariable('name'));
+    }
+
+    public function dpTestViewForPeople()
+    {
+        return [
+            'org type from licence' => [
+                'data' => [
+                    'id' => 1,
+                    'idIndex' => 'application',
+                    'sectionNumber' => 1,
+                    'licence' => [
+                        'organisation' => [
+                            'type' => [
+                                'id' => 'org_t_llp'
+                            ]
+                        ]
+                    ]
+                ],
+            ],
+            'org type from organisation' => [
+                'data' => [
+                    'id' => 1,
+                    'idIndex' => 'application',
+                    'sectionNumber' => 1,
+                    'organisation' => [
+                        'type' => [
+                            'id' => 'org_t_llp'
+                        ]
+                    ]
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dpTestViewForOperatingCentres
+     */
+    public function testViewForOperatingCentres($data, $expected)
+    {
+        $sectionDetails = ['status' => RefData::VARIATION_STATUS_REQUIRES_ATTENTION];
+        $ref = 'operating_centres';
+
+        $viewModel = new VariationOverviewSection($ref, $data, $sectionDetails);
+
+        $this->assertInstanceOf(ViewModel::class, $viewModel);
+        $this->assertEquals($expected, $viewModel->getVariable('name'));
+    }
+
+    public function dpTestViewForOperatingCentres()
+    {
+        return [
+            'vehicleType not set' => [
+                'data' => [
+                    'id' => 1,
+                    'idIndex' => 'application',
+                    'sectionNumber' => 1,
+                ],
+                'expected' => 'section.name.operating_centres',
+            ],
+            'vehicleType set to LGV' => [
+                'data' => [
+                    'id' => 1,
+                    'idIndex' => 'application',
+                    'sectionNumber' => 1,
+                    'vehicleType' => [
+                        'id' => RefData::APP_VEHICLE_TYPE_LGV,
+                    ],
+                ],
+                'expected' => 'section.name.operating_centres.lgv',
+            ],
+            'vehicleType set to mixed' => [
+                'data' => [
+                    'id' => 1,
+                    'idIndex' => 'application',
+                    'sectionNumber' => 1,
+                    'vehicleType' => [
+                        'id' => RefData::APP_VEHICLE_TYPE_MIXED,
+                    ],
+                ],
+                'expected' => 'section.name.operating_centres',
+            ],
+        ];
     }
 }
