@@ -64,6 +64,12 @@ trait ApplicationControllerTrait
                 $title = $variables['title'];
             } else {
                 $title = 'lva.section.title.' . $content;
+                if ($content == 'operating_centres') {
+                    $applicationData = $this->getApplicationData($this->getApplicationId());
+                    if ($applicationData['vehicleType']['id'] == RefData::APP_VEHICLE_TYPE_LGV) {
+                        $title .= '.lgv';
+                    }
+                }
             }
 
             $content = new ViewModel($sectionParams);
@@ -123,6 +129,7 @@ trait ApplicationControllerTrait
         }
 
         $isPsv = $applicationCompletion['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_PSV;
+        $isLgv = $applicationCompletion['vehicleType']['id'] == RefData::APP_VEHICLE_TYPE_LGV;
 
         $accessibleSections = $this->setEnabledAndCompleteFlagOnSections(
             $this->getAccessibleSections(false),
@@ -133,6 +140,8 @@ trait ApplicationControllerTrait
             $alias = $section;
             if ($section == 'community_licences' && $isPsv) {
                 $alias = $section . '.psv';
+            } elseif ($section == 'operating_centres' && $isLgv) {
+                $alias = $section . '.lgv';
             }
 
             $statusIndex = lcfirst($filter->underscoreToCamel($section)) . 'Status';

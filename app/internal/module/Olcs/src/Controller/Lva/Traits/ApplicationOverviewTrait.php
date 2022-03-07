@@ -156,6 +156,7 @@ trait ApplicationOverviewTrait
         $options = $application['valueOptions']['tracking'];
 
         $licenceCategoryId = $application['licence']['goodsOrPsv']['id'];
+        $vehicleTypeId = $application['vehicleType']['id'];
 
         $sections = $this->getAccessibleSections();
         foreach ($sections as $section) {
@@ -167,6 +168,8 @@ trait ApplicationOverviewTrait
             $label = 'section.name.' . $section;
             if ($section == 'community_licences' && $licenceCategoryId == RefData::LICENCE_CATEGORY_PSV) {
                 $label .= '.psv';
+            } elseif ($section == 'operating_centres' && $vehicleTypeId == RefData::APP_VEHICLE_TYPE_LGV) {
+                $label .= '.lgv';
             }
             $select->setLabel($label);
 

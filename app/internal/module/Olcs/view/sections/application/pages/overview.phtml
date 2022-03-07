@@ -1,67 +1,57 @@
 <?php
 
-$noOfVehiclesContent = [
-    'label' => 'No. of vehicles',
-    'value' => $numberOfVehicles,
-    'hideIfEmpty' => true,
+$key3Content = [
+    [
+        'label' => 'No. of vehicles',
+        'value' => $numberOfVehicles,
+        'hideIfEmpty' => true,
+    ],
+    [
+        'label' => 'No. of operating centres',
+        'value' => $numberOfOperatingCentres,
+        'hideIfEmpty' => true,
+    ],
+    [
+        'label' => 'No. of issued discs',
+        'numeric' => $numberOfIssuedDiscs,
+        'hideIfEmpty' => true,
+    ],
+    [
+        'label' => $this->translate($isPsv ? 'lva.overview.number-psv-certified-copies' : 'lva.overview.number-uk-licences-community'),
+        'numeric' => $numberOfCommunityLicences,
+        'hideIfEmpty' => true,
+    ],
 ];
 
-$noOfOperatingCentresContent = [
-    'label' => 'No. of operating centres',
-    'value' => $numberOfOperatingCentres,
-    'hideIfEmpty' => true,
-];
-
-$totalTrailerAuthorisationContent = [
-    'label' => 'Total trailer authorisation',
-    'value' => $totalTrailerAuthorisation,
-    'hideIfEmpty' => true,
-];
-
-$numberOfIssuedDiscsContent = [
-    'label' => 'No. of issued discs',
-    'numeric' => $numberOfIssuedDiscs,
-    'hideIfEmpty' => true,
-];
-
-$numberOfCommunityLicencesContent = [
-    'label' => $this->translate($isPsv ? 'lva.overview.number-psv-certified-copies' : 'lva.overview.number-uk-licences-community'),
-    'numeric' => $numberOfCommunityLicences,
-    'hideIfEmpty' => true,
-];
-
-// Due to the tabular manner in which the items are laid out on the page, the items for key 3 need to be ordered
-// differently depending on whether we're displaying one vehicle authorisation number or a HGV/LGV split
-if (is_null($totalVehicleAuthorisation)) {
-    $key3Content = [
-        $noOfVehiclesContent,
-        [
-            'label' => 'Total Heavy goods vehicle authorisation',
-            'value' => $totalHgvAuthorisation,
-            'hideIfEmpty' => true,
-        ],
-        $noOfOperatingCentresContent,
-        [
-            'label' => 'Total Light goods vehicle authorisation',
-            'value' => $totalLgvAuthorisation,
-            'hideIfEmpty' => true,
-        ],
-        $numberOfIssuedDiscsContent,
-        $totalTrailerAuthorisationContent,
-        $numberOfCommunityLicencesContent,
+if (isset($totalVehicleAuthorisation)) {
+    $key3Content[] = [
+        'label' => 'Total vehicle authorisation',
+        'value' => $totalVehicleAuthorisation,
+        'hideIfEmpty' => false,
     ];
-} else {
-    $key3Content = [
-        $noOfVehiclesContent,
-        [
-            'label' => 'Total vehicle authorisation',
-            'value' => $totalVehicleAuthorisation,
-            'hideIfEmpty' => true,
-        ],
-        $noOfOperatingCentresContent,
-        $totalTrailerAuthorisationContent,
-        $numberOfIssuedDiscsContent,
-        $numberOfCommunityLicencesContent,
+}
+
+if (isset($totalHgvAuthorisation)) {
+    $key3Content[] = [
+        'label' => 'Total Heavy goods vehicle authorisation',
+        'value' => $totalHgvAuthorisation,
+        'hideIfEmpty' => false,
+    ];
+}
+
+if (isset($totalLgvAuthorisation)) {
+    $key3Content[] = [
+        'label' => 'Total Light goods vehicle authorisation',
+        'value' => $totalLgvAuthorisation,
+        'hideIfEmpty' => false,
+    ];
+}
+
+if (isset($totalTrailerAuthorisation)) {
+    $key3Content[] = [
+        'label' => 'Total trailer authorisation',
+        'value' => $totalTrailerAuthorisation,
+        'hideIfEmpty' => false,
     ];
 }
 

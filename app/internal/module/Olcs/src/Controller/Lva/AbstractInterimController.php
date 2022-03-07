@@ -55,12 +55,6 @@ abstract class AbstractInterimController extends AbstractController
 
         if ($request->isPost()) {
             $requestData = (array)$request->getPost();
-            $requestData['data']['totAuthTrailers'] = $interimData['totAuthTrailers'];
-            $requestData['data']['totAuthHgvVehicles'] = $interimData['totAuthHgvVehicles'];
-            $requestData['data']['totAuthLgvVehicles'] = $interimData['totAuthLgvVehicles'];
-            $requestData['data']['isEligibleForLgv'] = $interimData['isEligibleForLgv'];
-            $requestData['data']['isVariation'] = $interimData['isVariation'];
-
             $form->setData($requestData);
         } else {
             $form->setData(Mapper::mapFromResult($interimData));
@@ -274,7 +268,30 @@ abstract class AbstractInterimController extends AbstractController
             $form->get('vehicles')->get('table')->getTable()->removeColumn('listed');
         }
 
-        if (!$application['isEligibleForLgv']) {
+        $disableVehicleClassifications = false;
+
+        switch ($application['vehicleType']['id']) {
+            case RefData::APP_VEHICLE_TYPE_LGV:
+                // remove HGV related fields
+                $formHelper->remove($form, 'data->interimAuthHgvVehicles');
+                $formHelper->remove($form, 'data->interimAuthTrailers');
+                break;
+            case RefData::APP_VEHICLE_TYPE_HGV:
+            case RefData::APP_VEHICLE_TYPE_PSV:
+                // disable vehicle classifications
+                $disableVehicleClassifications = true;
+                break;
+            case RefData::APP_VEHICLE_TYPE_MIXED:
+            default:
+                if ($application['totAuthLgvVehicles'] === null) {
+                    // disable vehicle classifications
+                    $disableVehicleClassifications = true;
+                }
+                break;
+        }
+
+        if ($disableVehicleClassifications) {
+            // disable vehicle classifications
             $form->get('data')->get('interimAuthHgvVehicles')->setLabel('internal.interim.form.interim_auth_vehicles');
             $formHelper->remove($form, 'data->interimAuthLgvVehicles');
         }

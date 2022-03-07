@@ -82,18 +82,36 @@ class OperatorController extends AbstractController implements OperatorControlle
         if ($request->isPost() && $form->isValid()) {
             $data = $form->getData();
 
+            $typeOfLicenceData = $data['type-of-licence'];
+            $licenceTypeData = $typeOfLicenceData['licence-type'];
+            $licenceType = $licenceTypeData['licence-type'];
+            $vehicleType = null;
+            $lgvDeclarationConfirmation = 0;
+
+            if (isset($licenceTypeData['ltyp_siContent'])) {
+                $siContentData = $licenceTypeData['ltyp_siContent'];
+                $vehicleType = $siContentData['vehicle-type'];
+
+                if (isset($siContentData['lgv-declaration']['lgv-declaration-confirmation'])) {
+                    $lgvDeclarationConfirmation = $siContentData['lgv-declaration']['lgv-declaration-confirmation'];
+                }
+            }
+
             $params = [
                 'organisation' => $this->params('organisation'),
                 'receivedDate' => $data['details']['receivedDate'],
                 'trafficArea' => $data['details']['trafficArea'],
                 'appliedVia' => $data['appliedVia'],
-                'licenceType' => $data['type-of-licence']['licence-type']
+                'licenceType' => $licenceType,
+                'vehicleType' => $vehicleType,
+                'lgvDeclarationConfirmation' => $lgvDeclarationConfirmation
             ];
+
             if ($data['details']['trafficArea'] === RefData::NORTHERN_IRELAND_TRAFFIC_AREA_CODE) {
                 $params['niFlag'] = 'Y';
             } else {
                 $params['niFlag'] = 'N';
-                $params['operatorType'] = $data['type-of-licence']['operator-type'];
+                $params['operatorType'] = $typeOfLicenceData['operator-type'];
             }
             $dto = CreateApplication::create($params);
 
@@ -141,10 +159,30 @@ class OperatorController extends AbstractController implements OperatorControlle
                 ->setValueOptions($organisationData['taValueOptions']);
         }
 
-        if (isset($data['details']['trafficArea'])
-            && $data['details']['trafficArea'] === RefData::NORTHERN_IRELAND_TRAFFIC_AREA_CODE
-        ) {
+        $isNi = isset($data['details']['trafficArea']) &&
+            $data['details']['trafficArea'] === RefData::NORTHERN_IRELAND_TRAFFIC_AREA_CODE;
+
+        if ($isNi) {
             $form->getInputFilter()->get('type-of-licence')->get('operator-type')->setRequired(false);
+        }
+
+        $fieldset = $form->get('type-of-licence');
+        $licenceTypeFieldset = $fieldset->get('licence-type');
+
+        $operatorType = $fieldset->get('operator-type')->getValue();
+        $licenceType = $licenceTypeFieldset->get('licence-type')->getValue();
+        $vehicleType = $licenceTypeFieldset->get('ltyp_siContent')->get('vehicle-type')->getValue();
+
+        $isGoods = ($operatorType == RefData::LICENCE_CATEGORY_GOODS_VEHICLE || $isNi);
+        if ($isGoods && $licenceType == RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL) {
+            if ($vehicleType != RefData::APP_VEHICLE_TYPE_LGV) {
+                $form->getInputFilter()->get('type-of-licence')
+                    ->get('licence-type')
+                    ->get('ltyp_siContent')
+                    ->remove('lgv-declaration');
+            }
+        } else {
+            $form->getInputFilter()->get('type-of-licence')->get('licence-type')->remove('ltyp_siContent');
         }
     }
 

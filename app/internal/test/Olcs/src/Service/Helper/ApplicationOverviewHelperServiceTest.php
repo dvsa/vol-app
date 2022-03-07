@@ -98,11 +98,14 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
             'new goods application' => [
                 // application overview data
                 [
-                    'isEligibleForLgv' => false,
                     'id' => 69,
                     'createdOn' => '2015-04-08',
                     'goodsOrPsv' => ['id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE],
                     'licenceType'  => ['id' => RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL],
+                    'applicableAuthProperties' => [
+                        'totAuthVehicles',
+                        'totAuthTrailers',
+                    ],
                     'totAuthVehicles' => 12,
                     'totAuthTrailers' => 13,
                     'isVariation' => false,
@@ -190,11 +193,15 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
             'variation eligible for lgv' => [
                 // application overview data
                 [
-                    'isEligibleForLgv' => true,
                     'id' => 69,
                     'createdOn' => '2015-04-08',
                     'goodsOrPsv' => ['id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE],
                     'licenceType'  => ['id' => RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL],
+                    'applicableAuthProperties' => [
+                        'totAuthHgvVehicles',
+                        'totAuthLgvVehicles',
+                        'totAuthTrailers',
+                    ],
                     'totAuthVehicles' => 10,
                     'totAuthHgvVehicles' => 4,
                     'totAuthLgvVehicles' => 6,
@@ -283,11 +290,12 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
             'new psv special restricted application' => [
                 // application overview data
                 [
-                    'isEligibleForLgv' => false,
                     'id' => 69,
                     'createdOn' => '2015-04-08',
                     'goodsOrPsv' => ['id' => RefData::LICENCE_CATEGORY_PSV],
                     'licenceType'  => ['id' => RefData::LICENCE_TYPE_SPECIAL_RESTRICTED],
+                    'applicableAuthProperties' => [
+                    ],
                     'totAuthVehicles' => 5,
                     'isVariation' => false,
                     'licenceVehicles' => [],
@@ -350,9 +358,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     'licenceStartDate' => '2014-03-02',
                     'continuationDate' => '2017-06-05',
                     'numberOfVehicles' => null,          // should be null for Special Restricted
-                    'totalVehicleAuthorisation' => null, // should be null for PSV
                     'numberOfOperatingCentres' => null,  // should be null for Special Restricted
-                    'totalTrailerAuthorisation' => null, // should be null for PSV
                     'numberOfIssuedDiscs' => null,
                     'numberOfCommunityLicences' => 101,
                     'openCases' => 102,

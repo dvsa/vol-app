@@ -9,6 +9,8 @@ OLCS.ready(function () {
     function setupCascade() {
 
         var operatorType = F("type-of-licence", "operator-type");
+        var licenceType = F.findInput('type-of-licence', 'licence-type');
+        var vehicleType = F.findInput('type-of-licence', 'vehicle-type');
         var niFlag = OLCS.formHelper('type-of-licence', 'operator-location');
         var trafficArea = F("details", "trafficArea");
 
@@ -51,6 +53,25 @@ OLCS.ready(function () {
                     'selector:#ltyp_sr_radio_group': function () {
                         return operatorType.filter(':checked').val() === 'lcat_psv';
                     },
+                    'selector:div[id$=\'ltyp_si_content\']': function() {
+                        var isGoods = trafficArea.val() == "N" ||
+                            operatorType.filter(':checked').val() == 'lcat_gv';
+
+                        return (
+                            isGoods &&
+                            licenceType.filter(':checked').val() == 'ltyp_si'
+                        );
+                    },
+                    '#lgv-declaration': function() {
+                        var isGoods = trafficArea.val() == "N" ||
+                            operatorType.filter(':checked').val() == 'lcat_gv';
+
+                        return (
+                            isGoods &&
+                            licenceType.filter(':checked').val() == 'ltyp_si' &&
+                            vehicleType.filter(':checked').val() == 'app_veh_type_lgv'
+                        );
+                    }
                 }
             },
         });

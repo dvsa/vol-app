@@ -127,6 +127,11 @@ trait VariationControllerTrait
                     if ($licence['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_PSV) {
                         $title .= '.psv';
                     }
+                } elseif ($content == 'operating_centres') {
+                    $applicationData = $this->getApplicationData($this->getApplicationId());
+                    if ($applicationData['vehicleType']['id'] == RefData::APP_VEHICLE_TYPE_LGV) {
+                        $title .= '.lgv';
+                    }
                 }
             }
 
@@ -160,6 +165,7 @@ trait VariationControllerTrait
         }
 
         $isPsv = $applicationData['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_PSV;
+        $isLgv = $applicationData['vehicleType']['id'] == RefData::APP_VEHICLE_TYPE_LGV;
 
         $accessibleSections = $this->getAccessibleSections(false);
 
@@ -167,6 +173,8 @@ trait VariationControllerTrait
             $alias = $section;
             if ($section == 'community_licences' && $isPsv) {
                 $alias = $section . '.psv';
+            } elseif ($section == 'operating_centres' && $isLgv) {
+                $alias = $section . '.lgv';
             }
 
             $statusIndex = lcfirst($filter->underscoreToCamel($section)) . 'Status';

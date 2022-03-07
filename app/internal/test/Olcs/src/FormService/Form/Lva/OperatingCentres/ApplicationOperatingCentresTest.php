@@ -8,6 +8,7 @@
 namespace OlcsTest\FormService\Form\Lva\OperatingCentres;
 
 use Olcs\FormService\Form\Lva\OperatingCentres\ApplicationOperatingCentres;
+use Common\Form\Elements\Types\Table;
 use Common\FormService\FormServiceInterface;
 use Common\FormService\FormServiceManager;
 use Common\Service\Table\TableBuilder;
@@ -41,7 +42,7 @@ class ApplicationOperatingCentresTest extends MockeryTestCase
 
     public function setUp(): void
     {
-        $this->tableBuilder = m::mock();
+        $this->tableBuilder = m::mock(TableBuilder::class);
 
         $sm = Bootstrap::getServiceManager();
         $sm->setService('Table', $this->tableBuilder);
@@ -74,7 +75,7 @@ class ApplicationOperatingCentresTest extends MockeryTestCase
     {
         $params = [
             'operatingCentres' => [],
-            'canHaveSchedule41' => true,
+            'canHaveSchedule41' => false,
             'canHaveCommunityLicences' => true,
             'isPsv' => false,
             'trafficArea' => null,
@@ -82,7 +83,8 @@ class ApplicationOperatingCentresTest extends MockeryTestCase
             'possibleTrafficAreas' => 'POSSIBLE_TRAFFIC_AREAS',
             'possibleEnforcementAreas' => 'POSSIBLE_ENFORCEMENT_AREAS',
             'licenceType' => ['id' => RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL],
-            'isEligibleForLgv' => true,
+            'vehicleType' => ['id' => RefData::APP_VEHICLE_TYPE_MIXED],
+            'totAuthLgvVehicles' => 0,
         ];
 
         $this->mockPopulateFormTable([]);
@@ -104,19 +106,53 @@ class ApplicationOperatingCentresTest extends MockeryTestCase
 
     protected function mockPopulateFormTable($data)
     {
+        $columns = [
+            'noOfVehiclesRequired' => [
+                'title' => 'vehicles',
+            ]
+        ];
+
         $table = m::mock(TableBuilder::class);
-        $tableElement = m::mock(Fieldset::class);
+        $table->shouldReceive('removeAction')
+            ->with('schedule41')
+            ->once()
+            ->shouldReceive('getColumns')
+            ->withNoArgs()
+            ->andReturn($columns)
+            ->shouldReceive('setColumns')
+            ->with(
+                [
+                    'noOfVehiclesRequired' => [
+                        'title' => 'application_operating-centres_authorisation.table.hgvs',
+                    ]
+                ]
+            )
+            ->once();
+
+        $tableElement = m::mock(Table::class);
+        $tableElement->shouldReceive('getTable')
+            ->withNoArgs()
+            ->andReturn($table);
+
+        $fieldset = m::mock(Fieldset::class);
+        $fieldset->shouldReceive('get')
+            ->with('table')
+            ->andReturn($tableElement);
+
+        $this->form->shouldReceive('has')
+            ->with('table')
+            ->andReturnTrue();
 
         $this->form->shouldReceive('get')
             ->with('table')
-            ->andReturn($tableElement);
+            ->andReturn($fieldset);
 
         $this->tableBuilder->shouldReceive('prepareTable')
             ->with('lva-operating-centres', $data, [])
             ->andReturn($table);
 
         $this->mockFormHelper->shouldReceive('populateFormTable')
-            ->with($tableElement, $table);
+            ->with($fieldset, $table);
 
         return $tableElement;
     }

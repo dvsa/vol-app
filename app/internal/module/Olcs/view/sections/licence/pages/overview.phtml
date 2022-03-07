@@ -1,5 +1,65 @@
 <?php
 
+$key5Content = [
+    [
+        'label' => 'No. of vehicles',
+        'numeric' => $numberOfVehicles,
+        'hideIfEmpty' => true,
+    ],
+    [
+        'label' => 'No. of operating centres',
+        'numeric' => $numberOfOperatingCentres,
+        'hideIfEmpty' => true,
+    ],
+    [
+        'label' => 'No. of issued discs',
+        'numeric' => $numberOfIssuedDiscs,
+        'hideIfEmpty' => true,
+    ],
+    [
+        'label' => $this->translate($isPsv ? 'lva.overview.number-psv-certified-copies' : 'lva.overview.number-uk-licences-community'),
+        'numeric' => $numberOfCommunityLicences,
+        'hideIfEmpty' => true,
+    ],
+    [
+        'label' => 'No. of bus registrations',
+        'numeric' => $numberOfBusRegistrations,
+        'hideIfEmpty' => false,
+    ],
+];
+
+if (isset($totalVehicleAuthorisation)) {
+    $key5Content[] = [
+        'label' => 'Total vehicle authorisation',
+        'value' => $totalVehicleAuthorisation,
+        'hideIfEmpty' => false,
+    ];
+}
+
+if (isset($totalHgvAuthorisation)) {
+    $key5Content[] = [
+        'label' => 'Total Heavy goods vehicle authorisation',
+        'value' => $totalHgvAuthorisation,
+        'hideIfEmpty' => false,
+    ];
+}
+
+if (isset($totalLgvAuthorisation)) {
+    $key5Content[] = [
+        'label' => 'Total Light goods vehicle authorisation',
+        'value' => $totalLgvAuthorisation,
+        'hideIfEmpty' => false,
+    ];
+}
+
+if (isset($totalTrailerAuthorisation)) {
+    $key5Content[] = [
+        'label' => 'Total trailer authorisation',
+        'value' => $totalTrailerAuthorisation,
+        'hideIfEmpty' => false,
+    ];
+}
+
 echo $this->render('partials/read-only/main',
     [
         'multiItems' => [
@@ -39,43 +99,7 @@ echo $this->render('partials/read-only/main',
                     'hideIfEmpty' => true,
                 ],
             ],
-            5 => [
-                [
-                    'label' => 'No. of vehicles',
-                    'numeric' => $numberOfVehicles,
-                    'hideIfEmpty' => true,
-                ],
-                [
-                    'label' => 'Total vehicle authorisation',
-                    'numeric' => $totalVehicleAuthorisation,
-                    'hideIfEmpty' => true,
-                ],
-                [
-                    'label' => 'No. of operating centres',
-                    'numeric' => $numberOfOperatingCentres,
-                    'hideIfEmpty' => true,
-                ],
-                [
-                    'label' => 'Total trailer authorisation',
-                    'numeric' => $totalTrailerAuthorisation,
-                    'hideIfEmpty' => true,
-                ],
-                [
-                    'label' => 'No. of issued discs',
-                    'numeric' => $numberOfIssuedDiscs,
-                    'hideIfEmpty' => true,
-                ],
-                [
-                    'label' => $this->translate($isPsv ? 'lva.overview.number-psv-certified-copies' : 'lva.overview.number-uk-licences-community'),
-                    'numeric' => $numberOfCommunityLicences,
-                    'hideIfEmpty' => true,
-                ],
-                [
-                    'label' => 'No. of bus registrations',
-                    'numeric' => $numberOfBusRegistrations,
-                    'hideIfEmpty' => false,
-                ],
-            ],
+            5 => $key5Content,
             6 => [
                 [
                     'label' => 'Open cases',

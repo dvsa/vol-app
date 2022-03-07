@@ -116,7 +116,11 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     ],
                     'busCount' => '4',
                     'organisationLicenceCount' => 3,
-                    'numberOfVehicles' => 5
+                    'numberOfVehicles' => 5,
+                    'applicableAuthProperties' => [
+                        'totAuthVehicles',
+                        'totAuthTrailers'
+                    ],
                 ],
                 // expected view data
                 [
@@ -145,7 +149,6 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'isPsv'                      => false,
                     'licenceGracePeriods'        => 'None (<a href="GRACE_PERIOD_URL">manage</a>)',
                     'numberOfBusRegistrations'   => '4',
-
                 ],
             ],
             'surrendered psv licence' => [
@@ -204,7 +207,10 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'tradingName' => 'None',
                     'busCount' => '4',
                     'organisationLicenceCount' => 3,
-                    'numberOfVehicles' => 5
+                    'numberOfVehicles' => 5,
+                    'applicableAuthProperties' => [
+                        'totAuthVehicles'
+                    ],
                 ],
                 // expectedViewData
                 [
@@ -221,7 +227,6 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'numberOfVehicles'           => 5,
                     'totalVehicleAuthorisation'  => 10,
                     'numberOfOperatingCentres'   => 2,
-                    'totalTrailerAuthorisation'  => null, // goods only
                     'numberOfIssuedDiscs'        => 6,    // psv only
                     'numberOfCommunityLicences'  => 7,
                     'openCases'                  => '3 (PI)',
@@ -274,7 +279,8 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'currentApplications' => [],
                     'busCount' => '4',
                     'organisationLicenceCount' => 1,
-                    'numberOfVehicles' => 2
+                    'numberOfVehicles' => 2,
+                    'applicableAuthProperties' => [],
                 ],
                 // expectedViewData
                 [
@@ -289,9 +295,7 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'licenceStatus'              => ['id' => RefData::LICENCE_STATUS_VALID],
                     'surrenderedDate'            => null,
                     'numberOfVehicles'           => null,
-                    'totalVehicleAuthorisation'  => null,
                     'numberOfOperatingCentres'   => null,
-                    'totalTrailerAuthorisation'  => null,
                     'numberOfIssuedDiscs'        => null,
                     'numberOfCommunityLicences'  => 0,
                     'openCases'                  => '3 (PI)',
