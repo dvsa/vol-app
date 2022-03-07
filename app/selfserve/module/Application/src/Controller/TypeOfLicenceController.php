@@ -5,6 +5,7 @@ namespace Dvsa\Olcs\Application\Controller;
 use Common\Controller\Lva\Application\AbstractTypeOfLicenceController;
 use Dvsa\Olcs\Transfer\Command\Application\CreateApplication;
 use Laminas\Form\Form;
+use Common\RefData;
 use Common\View\Model\Section;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 
@@ -68,14 +69,35 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController
             $form->setData($data);
 
             $tolFormManagerService->maybeAlterFormForNi($form);
+            $tolFormManagerService->maybeAlterFormForGoodsStandardInternational($form);
 
             if ($form->isValid()) {
+                $data = $form->getData();
+
+                $typeOfLicenceData = $data['type-of-licence'];
+                $licenceTypeData = $typeOfLicenceData['licence-type'];
+                $operatorType = $typeOfLicenceData['operator-type'];
+                $licenceType = $licenceTypeData['licence-type'];
+                $vehicleType = null;
+                $lgvDeclarationConfirmation = 0;
+
+                if (isset($licenceTypeData['ltyp_siContent'])) {
+                    $siContentData = $licenceTypeData['ltyp_siContent'];
+                    $vehicleType = $siContentData['vehicle-type'];
+
+                    if (isset($siContentData['lgv-declaration']['lgv-declaration-confirmation'])) {
+                        $lgvDeclarationConfirmation = $siContentData['lgv-declaration']['lgv-declaration-confirmation'];
+                    }
+                }
+
                 $dto = CreateApplication::create(
                     [
                         'organisation' => $this->getCurrentOrganisationId(),
                         'niFlag' => $this->getOperatorLocation($organisationData, $data),
-                        'operatorType' => $data['type-of-licence']['operator-type'],
-                        'licenceType' => $data['type-of-licence']['licence-type']
+                        'operatorType' => $operatorType,
+                        'licenceType' => $licenceType,
+                        'vehicleType' => $vehicleType,
+                        'lgvDeclarationConfirmation' => $lgvDeclarationConfirmation
                     ]
                 );
 

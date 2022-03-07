@@ -175,6 +175,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                             'version' => $transportManagerApplicationData['version'],
                             'email' => $data['details']['emailAddress'],
                             'placeOfBirth' => $data['details']['birthPlace'],
+                            'lgvAcquiredRightsReferenceNumber' => $data['details']['lgvAcquiredRightsReferenceNumber'] ?? null,
                             'hasUndertakenTraining' => $data['details']['hasUndertakenTraining'],
                             'homeAddress' => $data['homeAddress'],
                             'workAddress' => $data['workAddress'],
@@ -973,6 +974,34 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         );
 
         $this->hlpForm->remove($form, 'responsibilities->tmApplicationStatus');
+
+        if ($tma['application']['vehicleType']['id'] === RefData::APP_VEHICLE_TYPE_LGV) {
+            // LGV only
+            $detailsField = $form->get('details');
+
+            $detailsField->get('certificate')->setLabel('lva-tm-details-details-certificate-lgv-only');
+
+            if (!empty($tma['lgvAcquiredRightsReferenceNumber'])) {
+                // LGV Acquired Rights ref number already set
+                $lgvAcquiredRightsReferenceNumberField = $detailsField->get('lgvAcquiredRightsReferenceNumber');
+
+                // set value
+                $lgvAcquiredRightsReferenceNumberField ->setValue($tma['lgvAcquiredRightsReferenceNumber']);
+
+                // add padlock
+                $this->hlpForm->lockElement(
+                    $lgvAcquiredRightsReferenceNumberField,
+                    'lva-tm-details-details-lgvAcquiredRightsReferenceNumber-locked'
+                );
+
+                // disable element
+                $this->hlpForm->disableElement($form, 'details->lgvAcquiredRightsReferenceNumber');
+            }
+        } else {
+            $this->hlpForm->remove($form, 'details->certificateHtml');
+            $this->hlpForm->remove($form, 'details->lgvAcquiredRightsHtml');
+            $this->hlpForm->remove($form, 'details->lgvAcquiredRightsReferenceNumber');
+        }
 
         /** @var \Laminas\Form\Fieldset $formActions */
         $formActions = $form->get('form-actions');

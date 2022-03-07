@@ -83,11 +83,9 @@ trait ApplicationControllerTrait
 
         $data = $this->getApplicationData($this->getApplicationId());
 
-        $lvaTitleSuffix = ($titleSuffix === 'people') ?
-            ($titleSuffix . '.' . $data['licence']['organisation']['type']['id']) : $titleSuffix;
         $params = array_merge(
             [
-                'title' => 'lva.section.title.' . $lvaTitleSuffix,
+                'title' => $this->getSectionTitle($sectionName, $data),
                 'form' => $form,
                 'reference' => $data['licence']['licNo']  . ' / ' . $this->getApplicationId(),
                 'status' => $data['status']['id'],
