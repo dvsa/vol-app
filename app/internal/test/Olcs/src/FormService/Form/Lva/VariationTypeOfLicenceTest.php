@@ -69,6 +69,12 @@ class VariationTypeOfLicenceTest extends AbstractLvaFormServiceTestCase
             ->getMock();
 
         $licenceType = m::mock(Element\Select::class);
+
+        $ltFieldset = m::mock(Fieldset::class);
+        $ltFieldset->shouldReceive('get')
+            ->with('licence-type')
+            ->andReturn($licenceType);
+
         $mockForm
             ->shouldReceive('get')
             ->with('type-of-licence')
@@ -80,7 +86,7 @@ class VariationTypeOfLicenceTest extends AbstractLvaFormServiceTestCase
                     ->shouldReceive('get')
                     ->with('licence-type')
                     ->once()
-                    ->andReturn($licenceType)
+                    ->andReturn($ltFieldset)
                     ->getMock()
             );
 

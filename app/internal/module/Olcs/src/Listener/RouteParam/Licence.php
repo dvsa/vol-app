@@ -192,6 +192,13 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
             );
         }
 
+        if (isset($licence['vehicleType']['id']) && $licence['vehicleType']['id'] == RefData::APP_VEHICLE_TYPE_LGV) {
+            $operatingCentresNav = $navigationService->findOneById('licence_operating_centres');
+            $operatingCentresNav->setLabel(
+                $operatingCentresNav->getLabel() . '.lgv'
+            );
+        }
+
         if (!$licence['canHaveInspectionRequest']) {
             $this->getMainNavigationService()
                 ->findOneBy('id', 'licence_processing_inspection_request')

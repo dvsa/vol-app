@@ -145,6 +145,13 @@ trait LicenceControllerTrait
                     if ($licence['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_PSV) {
                         $title .= '.psv';
                     }
+                } elseif ($content == 'operating_centres') {
+                    $licence = $this->getLicence();
+                    if (isset($licence['vehicleType']['id']) &&
+                        $licence['vehicleType']['id'] == RefData::APP_VEHICLE_TYPE_LGV
+                    ) {
+                        $title .= '.lgv';
+                    }
                 }
             }
 
@@ -189,11 +196,14 @@ trait LicenceControllerTrait
 
         $licence = $this->getLicence();
         $isPsv = ($licence['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_PSV);
+        $isLgv = isset($licence['vehicleType']['id']) && $licence['vehicleType']['id'] == RefData::APP_VEHICLE_TYPE_LGV;
 
         foreach ($this->getAccessibleSections() as $section) {
             $sectionKey = $section;
             if ($isPsv && $sectionKey == 'community_licences') {
                 $sectionKey = 'community_licences.psv';
+            } elseif ($isLgv && $sectionKey == 'operating_centres') {
+                $sectionKey = 'operating_centres.lgv';
             }
 
             $sections[$sectionKey] = array('route' => 'lva-licence/' . $section);

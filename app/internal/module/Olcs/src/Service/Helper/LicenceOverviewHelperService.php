@@ -42,9 +42,7 @@ class LicenceOverviewHelperService extends AbstractHelperService
             'licenceGracePeriods'       => $this->getLicenceGracePeriods($licence),
             'surrenderedDate'           => $this->getSurrenderedDate($licence),
             'numberOfVehicles'          => $isSpecialRestricted ? null : $licence['numberOfVehicles'],
-            'totalVehicleAuthorisation' => $isSpecialRestricted ? null : $licence['totAuthVehicles'],
             'numberOfOperatingCentres'  => $isSpecialRestricted ? null : count($licence['operatingCentres']),
-            'totalTrailerAuthorisation' => $isPsv ? null : $licence['totAuthTrailers'],
             'numberOfIssuedDiscs'       => $isPsv && !$isSpecialRestricted ? count($licence['psvDiscs']) : null,
             'numberOfCommunityLicences' => $this->getNumberOfCommunityLicences($licence),
             'openCases'                 => $this->getOpenCases($licence),
@@ -57,6 +55,36 @@ class LicenceOverviewHelperService extends AbstractHelperService
             // out of scope for OLCS-5209
             'registeredForSelfService'   => $this->hasAdminUsers($licence) ? 'Yes' : 'No',
         ];
+
+        $viewData = array_merge(
+            $viewData,
+            $this->getAuthorisationViewData($licence)
+        );
+
+        return $viewData;
+    }
+
+    /**
+     * Gets authorisation view data appropriate to the specified licence data
+     *
+     * @param array $licence
+     *
+     * @return array
+     */
+    private function getAuthorisationViewData(array $licence)
+    {
+        $templateKeyLookup = [
+            'totAuthVehicles' => 'totalVehicleAuthorisation',
+            'totAuthHgvVehicles' => 'totalHgvAuthorisation',
+            'totAuthLgvVehicles' => 'totalLgvAuthorisation',
+            'totAuthTrailers' => 'totalTrailerAuthorisation',
+        ];
+
+        $viewData = [];
+        foreach ($licence['applicableAuthProperties'] as $entityKey) {
+            $templateKey = $templateKeyLookup[$entityKey];
+            $viewData[$templateKey] = $licence[$entityKey];
+        }
 
         return $viewData;
     }

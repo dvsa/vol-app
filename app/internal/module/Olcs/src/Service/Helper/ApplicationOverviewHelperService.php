@@ -46,7 +46,6 @@ class ApplicationOverviewHelperService extends AbstractHelperService
             'continuationDate'          => $licence['expiryDate'],
             'numberOfVehicles'          => $this->getNumberOfVehicles($application, $licence),
             'numberOfOperatingCentres'  => $this->getNumberOfOperatingCentres($application, $licence),
-            'totalTrailerAuthorisation' => $this->getTotalTrailerAuthorisation($application, $licence),
             'numberOfIssuedDiscs'       => $this->getNumberOfIssuedDiscs($application, $licence),
             'numberOfCommunityLicences' => $licenceOverviewHelper->getNumberOfCommunityLicences($licence),
             'openCases'                 => $licenceOverviewHelper->getOpenCases($licence),
@@ -77,32 +76,36 @@ class ApplicationOverviewHelperService extends AbstractHelperService
 
         $viewData = array_merge(
             $viewData,
-            $this->getVehicleAuthorisationViewData($application, $licence)
+            $this->getAuthorisationViewData($application, $licence)
         );
 
         return $viewData;
     }
 
     /**
-     * Gets vehicle authorisation view data appropriate to the specified application and licence data
+     * Gets authorisation view data appropriate to the specified application and licence data
      *
      * @param array $application
      * @param array $licence
      *
      * @return array
      */
-    private function getVehicleAuthorisationViewData(array $application, array $licence)
+    private function getAuthorisationViewData(array $application, array $licence)
     {
-        if ($application['isEligibleForLgv']) {
-            return [
-                'totalHgvAuthorisation' => $this->getVehicleAuthorisation($application, $licence, 'totAuthHgvVehicles'),
-                'totalLgvAuthorisation' => $this->getVehicleAuthorisation($application, $licence, 'totAuthLgvVehicles'),
-            ];
+        $templateKeyLookup = [
+            'totAuthVehicles' => 'totalVehicleAuthorisation',
+            'totAuthHgvVehicles' => 'totalHgvAuthorisation',
+            'totAuthLgvVehicles' => 'totalLgvAuthorisation',
+            'totAuthTrailers' => 'totalTrailerAuthorisation',
+        ];
+
+        $viewData = [];
+        foreach ($application['applicableAuthProperties'] as $entityKey) {
+            $templateKey = $templateKeyLookup[$entityKey];
+            $viewData[$templateKey] = $this->getVehicleAuthorisation($application, $licence, $entityKey);
         }
 
-        return [
-            'totalVehicleAuthorisation' => $this->getVehicleAuthorisation($application, $licence, 'totAuthVehicles'),
-        ];
+        return $viewData;
     }
 
     /**
@@ -183,37 +186,10 @@ class ApplicationOverviewHelperService extends AbstractHelperService
      */
     private function getVehicleAuthorisation($application, $licence, $key)
     {
-        if ($application['licenceType']['id'] == RefData::LICENCE_TYPE_SPECIAL_RESTRICTED) {
-            return null;
-        }
-
         $str = (string) (int) $licence[$key];
 
         if ($application[$key] != $licence[$key]) {
             $str .= ' (' . (string) (int) $application[$key] . ')';
-        }
-
-        return $str;
-    }
-
-    /**
-     * Gets total trailer authorisation
-     *
-     * @param array $application application overview data
-     * @param array $licence     licence overview data
-     *
-     * @return string|null
-     */
-    public function getTotalTrailerAuthorisation($application, $licence)
-    {
-        if ($application['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_PSV) {
-            return null;
-        }
-
-        $str = (string) (int) $licence['totAuthTrailers'];
-
-        if ($application['totAuthTrailers'] != $licence['totAuthTrailers']) {
-            $str .= ' (' . (string) (int) $application['totAuthTrailers'] . ')';
         }
 
         return $str;

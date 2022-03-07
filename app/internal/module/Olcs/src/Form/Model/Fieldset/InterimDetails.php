@@ -68,7 +68,6 @@ class InterimDetails
      * @Form\Attributes({"class":"short","id":"interimAuthHgvVehicles"})
      * @Form\Options({"label":"internal.interim.form.interim_auth_hgv_vehicles"})
      * @Form\Type("Text")
-     * @Form\Validator({"name":"Olcs\Validator\InterimHgvVehicleAuthority"})
      * @Form\Validator({"name":"Digits"})
      */
     public $interimAuthHgvVehicles = null;
@@ -78,7 +77,6 @@ class InterimDetails
      * @Form\Attributes({"class":"short","id":"interimAuthLgvVehicles"})
      * @Form\Options({"label":"internal.interim.form.interim_auth_lgv_vehicles"})
      * @Form\Type("Text")
-     * @Form\Validator({"name":"Olcs\Validator\InterimLgvVehicleAuthority"})
      * @Form\Validator({"name":"Digits"})
      */
     public $interimAuthLgvVehicles = null;
@@ -88,7 +86,6 @@ class InterimDetails
      * @Form\Attributes({"class":"short","id":"interimAuthTrailers"})
      * @Form\Options({"label":"internal.interim.form.interim_auth_trailers"})
      * @Form\Type("Text")
-     * @Form\Validator({"name":"Olcs\Validator\InterimTrailerAuthority"})
      * @Form\Validator({"name":"Digits"})
      */
     public $interimAuthTrailers = null;

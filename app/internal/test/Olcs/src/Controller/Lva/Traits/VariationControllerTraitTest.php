@@ -34,8 +34,12 @@ class VariationControllerTraitTest extends MockeryTestCase
     /**
      * @dataProvider dpGetSectionsForView
      */
-    public function testGetSectionsForView($goodsOrPsv, $communityLicencesTranslationKey)
-    {
+    public function testGetSectionsForView(
+        $goodsOrPsv,
+        $vehicleTypeId,
+        $communityLicencesTranslationKey,
+        $operatingCentresTranslationKey
+    ) {
         // Params
         $id = 3;
         $accessibleSections = [
@@ -50,6 +54,9 @@ class VariationControllerTraitTest extends MockeryTestCase
             ],
             'community_licences' => [
                 'foo' => '1011'
+            ],
+            'operating_centres' => [
+                'foo' => '1211'
             ],
         ];
 
@@ -81,6 +88,12 @@ class VariationControllerTraitTest extends MockeryTestCase
                 'class' => 'incomplete',
                 'route' => 'lva-variation/community_licences',
                 'alias' => $communityLicencesTranslationKey,
+            ],
+            'operating_centres' => [
+                'foo' => '1211',
+                'class' => 'incomplete',
+                'route' => 'lva-variation/operating_centres',
+                'alias' => $operatingCentresTranslationKey,
             ]
         ];
 
@@ -90,12 +103,16 @@ class VariationControllerTraitTest extends MockeryTestCase
                 'businessTypeStatus' => RefData::VARIATION_STATUS_UNCHANGED,
                 'businessDetailsStatus' => RefData::VARIATION_STATUS_REQUIRES_ATTENTION,
                 'communityLicencesStatus' => RefData::VARIATION_STATUS_REQUIRES_ATTENTION,
+                'operatingCentresStatus' => RefData::VARIATION_STATUS_REQUIRES_ATTENTION,
             ],
             'status' => [
                 'id' => 'XXX'
             ],
             'goodsOrPsv' => [
                 'id' => $goodsOrPsv
+            ],
+            'vehicleType' => [
+                'id' => $vehicleTypeId
             ],
         ];
 
@@ -113,8 +130,18 @@ class VariationControllerTraitTest extends MockeryTestCase
     public function dpGetSectionsForView()
     {
         return [
-            [RefData::LICENCE_CATEGORY_GOODS_VEHICLE, 'community_licences'],
-            [RefData::LICENCE_CATEGORY_PSV, 'community_licences.psv'],
+            [
+                RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
+                RefData::APP_VEHICLE_TYPE_HGV,
+                'community_licences',
+                'operating_centres',
+            ],
+            [
+                RefData::LICENCE_CATEGORY_PSV,
+                RefData::APP_VEHICLE_TYPE_LGV,
+                'community_licences.psv',
+                'operating_centres.lgv',
+            ],
         ];
     }
 

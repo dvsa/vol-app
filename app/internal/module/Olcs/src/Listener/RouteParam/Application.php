@@ -194,14 +194,12 @@ class Application implements ListenerAggregateInterface, FactoryInterface
 
         $licenceCategoryId = $application['goodsOrPsv']['id'];
         if ($licenceCategoryId === RefData::LICENCE_CATEGORY_PSV) {
-            $lvaTypes = ['application', 'variation'];
+            $this->updateNavigationLabels('_community_licences', '.psv');
+        }
 
-            foreach ($lvaTypes as $lvaType) {
-                $communityLicencesNav = $this->getNavigationService()->findOneById($lvaType . '_community_licences');
-                $communityLicencesNav->setLabel(
-                    $communityLicencesNav->getLabel() . '.psv'
-                );
-            }
+        $vehicleTypeId = $application['vehicleType']['id'];
+        if ($vehicleTypeId == RefData::APP_VEHICLE_TYPE_LGV) {
+            $this->updateNavigationLabels('_operating_centres', '.lgv');
         }
 
         if (!$application['canCreateCase']) {
@@ -215,6 +213,25 @@ class Application implements ListenerAggregateInterface, FactoryInterface
         }
 
         $this->setupPublishApplicationButton($application);
+    }
+
+    /**
+     * Add the specified label suffix to the application and variation navigation items ending with the specified
+     * id suffix
+     *
+     * @param string $idSuffix
+     * @param string $labelSuffix
+     */
+    private function updateNavigationLabels($idSuffix, $labelSuffix)
+    {
+        $lvaTypes = ['application', 'variation'];
+
+        foreach ($lvaTypes as $lvaType) {
+            $navigationItem = $this->getNavigationService()->findOneById($lvaType . $idSuffix);
+            $navigationItem->setLabel(
+                $navigationItem->getLabel() . $labelSuffix
+            );
+        }
     }
 
     /**

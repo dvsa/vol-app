@@ -140,6 +140,9 @@ class LicenceTest extends TestCase
             'goodsOrPsv' => [
                 'id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE
             ],
+            'vehicleType' => [
+                'id' => RefData::APP_VEHICLE_TYPE_HGV,
+            ],
             'continuationMarker' => 'CONTINUATION_MARKER',
             'organisation' => 'ORGANISATION',
             'cases' => 'CASES',
@@ -215,6 +218,9 @@ class LicenceTest extends TestCase
             'goodsOrPsv' => [
                 'id' => RefData::LICENCE_CATEGORY_PSV
             ],
+            'vehicleType' => [
+                'id' => RefData::APP_VEHICLE_TYPE_HGV,
+            ],
             'continuationMarker' => 'CONTINUATION_MARKER',
             'organisation' => 'ORGANISATION',
             'cases' => 'CASES',
@@ -252,6 +258,9 @@ class LicenceTest extends TestCase
             ],
             'goodsOrPsv' => [
                 'id' => RefData::LICENCE_CATEGORY_PSV
+            ],
+            'vehicleType' => [
+                'id' => RefData::APP_VEHICLE_TYPE_HGV,
             ],
             'continuationMarker' => 'CONTINUATION_MARKER',
             'organisation' => 'ORGANISATION',
@@ -296,6 +305,9 @@ class LicenceTest extends TestCase
             'goodsOrPsv' => [
                 'id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE
             ],
+            'vehicleType' => [
+                'id' => RefData::APP_VEHICLE_TYPE_HGV,
+            ],
             'continuationMarker' => 'CONTINUATION_MARKER',
             'organisation' => 'ORGANISATION',
             'cases' => 'CASES',
@@ -339,6 +351,9 @@ class LicenceTest extends TestCase
             ],
             'goodsOrPsv' => [
                 'id' => RefData::LICENCE_CATEGORY_PSV
+            ],
+            'vehicleType' => [
+                'id' => RefData::APP_VEHICLE_TYPE_HGV,
             ],
             'status' => [
                 'id' => RefData::LICENCE_STATUS_NOT_SUBMITTED
@@ -388,6 +403,9 @@ class LicenceTest extends TestCase
             ],
             'goodsOrPsv' => [
                 'id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE
+            ],
+            'vehicleType' => [
+                'id' => RefData::APP_VEHICLE_TYPE_HGV,
             ],
             'continuationMarker' => 'CONTINUATION_MARKER',
             'organisation' => 'ORGANISATION',
@@ -439,6 +457,9 @@ class LicenceTest extends TestCase
             'goodsOrPsv' => [
                 'id' => RefData::LICENCE_CATEGORY_PSV
             ],
+            'vehicleType' => [
+                'id' => RefData::APP_VEHICLE_TYPE_HGV,
+            ],
             'continuationMarker' => 'CONTINUATION_MARKER',
             'organisation' => 'ORGANISATION',
             'cases' => 'CASES',
@@ -488,6 +509,9 @@ class LicenceTest extends TestCase
             ],
             'goodsOrPsv' => [
                 'id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE
+            ],
+            'vehicleType' => [
+                'id' => RefData::APP_VEHICLE_TYPE_HGV,
             ],
             'continuationMarker' => 'CONTINUATION_MARKER',
             'organisation' => 'ORGANISATION',
@@ -574,6 +598,9 @@ class LicenceTest extends TestCase
             'goodsOrPsv' => [
                 'id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE
             ],
+            'vehicleType' => [
+                'id' => RefData::APP_VEHICLE_TYPE_HGV,
+            ],
             'continuationMarker' => 'CONTINUATION_MARKER',
             'organisation' => 'ORGANISATION',
             'cases' => 'CASES',
@@ -630,6 +657,9 @@ class LicenceTest extends TestCase
             ],
             'goodsOrPsv' => [
                 'id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE
+            ],
+            'vehicleType' => [
+                'id' => RefData::APP_VEHICLE_TYPE_HGV,
             ],
             'continuationMarker' => 'CONTINUATION_MARKER',
             'organisation' => 'ORGANISATION',
@@ -753,6 +783,9 @@ class LicenceTest extends TestCase
             ],
             'goodsOrPsv' => [
                 'id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE
+            ],
+            'vehicleType' => [
+                'id' => RefData::APP_VEHICLE_TYPE_HGV,
             ],
             'continuationMarker' => 'CONTINUATION_MARKER',
             'organisation' => 'ORGANISATION',

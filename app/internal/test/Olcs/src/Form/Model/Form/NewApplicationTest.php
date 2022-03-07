@@ -2,6 +2,7 @@
 
 namespace OlcsTest\Form\Model\Form;
 
+use Common\Form\Elements\InputFilters\SingleCheckbox;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 use Laminas\Form\Element\Radio;
 
@@ -46,9 +47,43 @@ class NewApplicationTest extends AbstractFormValidationTestCase
     public function testLicenceType()
     {
         $this->assertFormElementRequired(
-            ['type-of-licence', 'licence-type'],
+            ['type-of-licence', 'licence-type', 'licence-type'],
             true
         );
+    }
+
+    public function testVehicleType()
+    {
+        $element = ['type-of-licence', 'licence-type', 'ltyp_siContent', 'vehicle-type'];
+        $this->assertFormElementType($element, Radio::class);
+        $this->assertFormElementRequired($element, true);
+    }
+
+    public function testLgvDeclarationConfirmation()
+    {
+        $element = [
+            'type-of-licence',
+            'licence-type',
+            'ltyp_siContent',
+            'lgv-declaration',
+            'lgv-declaration-confirmation'
+        ];
+
+        $this->assertFormElementType($element, SingleCheckbox::class);
+        $this->assertFormElementRequired($element, true);
+    }
+
+    public function testLgvDeclarationWarning()
+    {
+        $element = [
+            'type-of-licence',
+            'licence-type',
+            'ltyp_siContent',
+            'lgv-declaration',
+            'lgvDeclarationWarning'
+        ];
+
+        $this->assertFormElementHtml($element);
     }
 
     public function testAppliedVia()

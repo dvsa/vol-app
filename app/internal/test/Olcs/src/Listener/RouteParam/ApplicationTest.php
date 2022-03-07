@@ -90,6 +90,9 @@ class ApplicationTest extends MockeryTestCase
             ],
             'canCreateCase' => $canHaveCases,
             'goodsOrPsv' => ['id' => $category],
+            'vehicleType' => [
+                'id' => RefData::APP_VEHICLE_TYPE_HGV
+            ],
             'isVariation' => $type,
             'licence' => [
                 'organisation' => 'ORGANISATION',
@@ -191,6 +194,9 @@ class ApplicationTest extends MockeryTestCase
             ],
             'canCreateCase' => $canHaveCases,
             'goodsOrPsv' => ['id' => $category],
+            'vehicleType' => [
+                'id' => RefData::APP_VEHICLE_TYPE_HGV
+            ],
             'isVariation' => $type,
             'licence' => [
                 'organisation' => 'ORGANISATION',
@@ -289,6 +295,131 @@ class ApplicationTest extends MockeryTestCase
         $this->sut->onApplication($event);
     }
 
+    public function testModifyOperatingCentreNav()
+    {
+        $status = RefData::APPLICATION_STATUS_UNDER_CONSIDERATION;
+        $category = RefData::LICENCE_CATEGORY_GOODS_VEHICLE;
+        $type = RefData::APPLICATION_TYPE_NEW;
+        $canHaveCases = true;
+        $expectedCallsNo = 0;
+
+        $applicationId = 69;
+        $application = [
+            'id' => $applicationId,
+            'status' => [
+                'id' => $status
+            ],
+            's4s' => [
+                [
+                    'outcome' => null
+                ],
+                [
+                    'outcome' => ['id' => RefData::S4_STATUS_APPROVED]
+                ]
+            ],
+            'canCreateCase' => $canHaveCases,
+            'goodsOrPsv' => ['id' => $category],
+            'vehicleType' => [
+                'id' => RefData::APP_VEHICLE_TYPE_LGV
+            ],
+            'isVariation' => $type,
+            'licence' => [
+                'organisation' => 'ORGANISATION',
+                'id' => 101,
+            ],
+            'licenceType' => ['id' => 'foo'],
+            'existingPublication' => false,
+            'latestNote' => ['comment' => 'latest note'],
+            'canHaveInspectionRequest' => false,
+        ];
+
+        $quickViewActionsVisible = ($status !== RefData::APPLICATION_STATUS_VALID);
+
+        $event = new RouteParam();
+        $event->setValue($applicationId);
+        $event->setTarget(
+            m::mock()
+            ->shouldReceive('trigger')->once()->with('licence', 101)
+            ->getMock()
+        );
+
+        $mockApplicationCaseNavigationService = m::mock('\StdClass');
+        $mockApplicationCaseNavigationService->shouldReceive('setVisible')->times($expectedCallsNo)->with(false);
+
+        $mockNavigationService = m::mock('Laminas\Navigation\Navigation');
+        $mockNavigationService->shouldReceive('findOneById')
+            ->with('application_case')
+            ->andReturn($mockApplicationCaseNavigationService);
+        $mockNavigationService->shouldReceive('findOneById')
+            ->with('application_processing_inspection_request')
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('setVisible')
+                    ->with(false)
+                    ->once()
+                    ->getMock()
+            )
+            ->once();
+
+        $variationOperatingCentresPage = m::mock(AbstractPage::class);
+        $variationOperatingCentresPage->shouldReceive('getLabel')
+            ->andReturn('variation.page.label');
+        $variationOperatingCentresPage->shouldReceive('setLabel')
+            ->with('variation.page.label.lgv')
+            ->once();
+
+        $mockNavigationService->shouldReceive('findOneById')
+            ->with('variation_operating_centres')
+            ->andReturn($variationOperatingCentresPage);
+
+        $applicationOperatingCentresPage = m::mock(AbstractPage::class);
+        $applicationOperatingCentresPage->shouldReceive('getLabel')
+            ->andReturn('application.page.label');
+        $applicationOperatingCentresPage->shouldReceive('setLabel')
+            ->with('application.page.label.lgv')
+            ->once();
+
+        $mockNavigationService->shouldReceive('findOneById')
+            ->with('application_operating_centres')
+            ->andReturn($applicationOperatingCentresPage);
+
+        $this->setupMockApplication($applicationId, $application);
+
+        $mockContainer = m::mock('Laminas\View\Helper\Placeholder\Container');
+        $mockContainer->shouldReceive('set')->with($application)->once();
+        $mockContainer->shouldReceive('set')->with('latest note')->once();
+
+        $mockPlaceholder = m::mock('Laminas\View\Helper\Placeholder');
+        $mockPlaceholder->shouldReceive('getContainer')->with('application')->andReturn($mockContainer)->once();
+        $mockPlaceholder->shouldReceive('getContainer')->with('note')->andReturn($mockContainer)->once();
+
+        $mockViewHelperManager = m::mock('Laminas\View\HelperPluginManager');
+        $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
+
+        $mockSidebar = m::mock()
+            ->shouldReceive('findById')
+            ->with('application-quick-actions')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('setVisible')
+                ->with($quickViewActionsVisible)
+                ->getMock()
+            )
+            ->shouldReceive('findById')
+            ->andReturn(
+                m::mock()
+                ->shouldReceive('setVisible')
+                ->getMock()
+            )
+            ->getMock();
+
+        $this->sut->setViewHelperManager($mockViewHelperManager);
+        $this->sut->setNavigationService($mockNavigationService);
+        $this->sut->setSidebarNavigationService($mockSidebar);
+
+        $this->sut->onApplication($event);
+    }
+
     public function onApplicationProvider()
     {
         return [
@@ -343,6 +474,9 @@ class ApplicationTest extends MockeryTestCase
             'isVariation' => false,
             'canCreateCase' => false,
             'goodsOrPsv' => ['id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE],
+            'vehicleType' => [
+                'id' => RefData::APP_VEHICLE_TYPE_HGV
+            ],
             'licenceType' => ['id' => 'xx'],
             'existingPublication' => true,
             'latestNote' => ['comment' => 'latest note'],
@@ -399,6 +533,9 @@ class ApplicationTest extends MockeryTestCase
             'isVariation' => false,
             'canCreateCase' => false,
             'goodsOrPsv' => ['id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE],
+            'vehicleType' => [
+                'id' => RefData::APP_VEHICLE_TYPE_HGV
+            ],
             'licenceType' => ['id' => 'xx'],
             'existingPublication' => false,
             'latestNote' => ['comment' => 'latest note'],
@@ -454,6 +591,9 @@ class ApplicationTest extends MockeryTestCase
             'isVariation' => false,
             'canCreateCase' => false,
             'goodsOrPsv' => ['id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE],
+            'vehicleType' => [
+                'id' => RefData::APP_VEHICLE_TYPE_HGV
+            ],
             'licenceType' => ['id' => 'xx'],
             'existingPublication' => false,
             'latestNote' => ['comment' => 'latest note'],
