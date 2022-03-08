@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use Dvsa\Olcs\Auth\Controller\ExpiredPasswordController;
 use Laminas\Mvc\Router\Http\Method;
 use Laminas\Mvc\Router\Http\Segment;
 
@@ -48,9 +49,9 @@ return [
                 'expired-password' => [
                     'type' => 'segment',
                     'options' => [
-                        'route' => 'expired-password/[:authId][/]',
+                        'route' => 'expired-password/[:authId]',
                         'defaults' => [
-                            'controller' => 'Auth\ExpiredPasswordController',
+                            'controller' => ExpiredPasswordController::class,
                             'action' => 'index'
                         ]
                     ]
