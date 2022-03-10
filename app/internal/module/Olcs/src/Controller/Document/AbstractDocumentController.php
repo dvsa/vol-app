@@ -266,7 +266,7 @@ abstract class AbstractDocumentController extends AbstractController
         $prefix = $this->getOsType();
 
         // TODO: VOL-2661 - Check for JWTIdentityProvider will be removed post OpenAM.
-        if ($prefix === RefData::USER_OS_TYPE_WINDOWS_10 && $config['auth']['identity_provider'] ?? null === JWTIdentityProvider::class) {
+        if ($prefix === RefData::USER_OS_TYPE_WINDOWS_10 && $config['auth']['identity_provider'] === JWTIdentityProvider::class) {
             $url_pattern = $config['webdav']['url_pattern'] ?? null;
             if (!isset($url_pattern)) {
                 throw new ConfigurationException('Expected a URL Pattern defined in configuration at: webdav -> url_pattern');
