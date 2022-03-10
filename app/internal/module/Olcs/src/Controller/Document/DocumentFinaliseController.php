@@ -97,7 +97,7 @@ class DocumentFinaliseController extends AbstractDocumentController
         $uriPattern = $this->getUriPattern();
 
         // TODO: VOL-2661 - Check for JWTIdentityProvider will be removed post OpenAM.
-        if ($this->getOsType() === RefData::USER_OS_TYPE_WINDOWS_10 && $this->config['auth']['identity_provider'] ?? null === JWTIdentityProvider::class) {
+        if ($this->getOsType() === RefData::USER_OS_TYPE_WINDOWS_10 && $this->config['auth']['identity_provider'] === JWTIdentityProvider::class) {
             $loginId = $this->currentUser()->getIdentity()->getUsername();
             $jwt = $this->webDavJsonWebTokenGenerationService->generateToken(
                 $loginId,
