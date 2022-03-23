@@ -368,6 +368,8 @@ class UserController extends AbstractController
         $this->getFormHelper()->lockElement($fieldSet->get('familyName'), 'name-change.locked.tooltip.message');
         $this->getFormHelper()->disableElement($form, 'main->familyName');
 
+        $this->getFormHelper()->disableElement($form, 'main->loginId');
+
         $message = $this->getServiceLocator()->get('Helper\Translation')->translate('name-change.locked.guidance.message');
         $this->getServiceLocator()->get('Helper\Guidance')->append($message);
     }

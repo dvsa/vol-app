@@ -80,11 +80,16 @@ class GdsVerifyController extends AbstractController
      */
     public function processResponseAction(): HttpResponse
     {
-        $samlResponse = $this->getRequest()->getPost('SAMLResponse', null);
-        if (is_null($samlResponse)) {
-            throw new UnauthorizedException('Missing samlResponse');
+        $samlResponse = $this->getRequest()->getPost(
+            'SAMLResponse',
+            $this->getRequest()->getQuery('SAMLResponse', null)
+        );
+
+        if (empty($samlResponse)) {
+            throw new BadRequestException('Missing SAMLResponse');
         }
 
+        $samlResponse = urldecode($samlResponse);
         $id = $this->getRootAttributeFromSaml($samlResponse, 'InResponseTo');
         $verifyJourneyKey = $this->buildVerifyJourneyKey($id);
         if (!empty($this->cache->removeItems([$verifyJourneyKey]))) {

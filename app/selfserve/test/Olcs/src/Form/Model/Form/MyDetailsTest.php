@@ -16,14 +16,6 @@ class MyDetailsTest extends AbstractFormValidationTestCase
      */
     protected $formName = \Olcs\Form\Model\Form\MyDetails::class;
 
-    public function testLoginId()
-    {
-        $element = ['main', 'loginId'];
-        $this->assertFormElementRequired($element, true);
-        $this->assertFormElementAllowEmpty($element, false);
-        $this->assertFormElementUsername($element);
-    }
-
     public function testForename()
     {
         $element = ['main', 'forename'];
