@@ -13,7 +13,7 @@ class UserLoginSecurity
 {
     /**
      * @Form\Options({"label":"Username"})
-     * @Form\Required(true)
+     * @Form\Required(false)
      * @Form\Attributes({"id":"username","placeholder":"","class":"medium", "required":false})
      * @Form\Type("Text")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})

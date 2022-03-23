@@ -19,14 +19,6 @@ class MyDetailsTest extends AbstractFormValidationTestCase
      */
     protected $formName = \Admin\Form\Model\Form\MyDetails::class;
 
-    public function testLoginId()
-    {
-        $element = ['userDetails', 'loginId'];
-        $this->assertFormElementIsRequired($element, true);
-        $this->assertFormElementAllowEmpty($element, false);
-        $this->assertFormElementUsername($element);
-    }
-
     public function testTeam()
     {
         $this->assertFormElementDynamicSelect(['userDetails', 'team']);

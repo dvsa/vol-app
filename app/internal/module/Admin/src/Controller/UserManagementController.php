@@ -185,6 +185,8 @@ class UserManagementController extends AbstractInternalController implements Lef
             $userLoginSecurity->remove('disabledDate');
         }
 
+        $userLoginSecurity->get('loginId')->setAttribute('disabled', 'disabled');
+
         if (!empty($data['userType']['currentTransportManager'])
             && !empty($data['userType']['currentTransportManagerName'])
         ) {

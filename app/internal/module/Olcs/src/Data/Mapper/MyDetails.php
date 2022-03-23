@@ -28,10 +28,6 @@ class MyDetails implements MapperInterface
             $formData['userDetails']['team'] = $data['team']['id'];
         }
 
-        if (!empty($data['loginId'])) {
-            $formData['userDetails']['loginId'] = $data['loginId'];
-        }
-
         if (!empty($data['contactDetails']['person'])) {
             // set person details
             $formData['person'] = $data['contactDetails']['person'];
@@ -72,7 +68,6 @@ class MyDetails implements MapperInterface
         $commandData['version'] = $data['version'];
 
         $commandData['team'] = $data['userDetails']['team'];
-        $commandData['loginId'] = $data['userDetails']['loginId'];
 
         $commandData['contactDetails']['person'] = $data['person'];
         $commandData['contactDetails']['emailAddress'] = $data['userContact']['emailAddress'];
@@ -100,14 +95,6 @@ class MyDetails implements MapperInterface
      */
     public static function mapFromErrors(FormInterface $form, array $errors)
     {
-        if (isset($errors['messages']['loginId'])) {
-            $messages = [
-                'userDetails' => ['loginId' => $errors['messages']['loginId']]
-            ];
-            $form->setMessages($messages);
-            unset($errors['messages']['loginId']);
-        }
-
         return $errors;
     }
 }
