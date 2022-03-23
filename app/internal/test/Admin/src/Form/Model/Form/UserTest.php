@@ -2,7 +2,7 @@
 
 namespace AdminTest\Form\Model\Form;
 
-use Common\Form\Elements\Types\Readonly;
+use Common\Form\Elements\Types\Readonly as ReadonlyAlias;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 use Common\Form\Elements\Types\Html;
 use Laminas\Form\Element\Button;
@@ -336,7 +336,7 @@ class UserTest extends AbstractFormValidationTestCase
     {
         $this->assertFormElementIsRequired(
             ['userLoginSecurity', 'loginId'],
-            true
+            false
         );
     }
 
@@ -358,14 +358,14 @@ class UserTest extends AbstractFormValidationTestCase
     {
         $element = ['userLoginSecurity', 'locked'];
         $this->assertFormElementIsRequired($element, false);
-        $this->assertFormElementType($element, Readonly::class);
+        $this->assertFormElementType($element, ReadonlyAlias::class);
     }
 
     public function testUserPasswordLastReset()
     {
         $element = ['userLoginSecurity', 'passwordLastReset'];
         $this->assertFormElementIsRequired($element, false);
-        $this->assertFormElementType($element, Readonly::class);
+        $this->assertFormElementType($element, ReadonlyAlias::class);
     }
 
     public function testUserLoginResetPassword()

@@ -69,7 +69,6 @@ class MyDetailsTest extends MockeryTestCase
                     'version' => 1,
                     'userDetails' => [
                         'team' => 111,
-                        'loginId' => 'login id',
                     ],
                     'officeAddress' => [
                         'id' => 200,
@@ -149,7 +148,6 @@ class MyDetailsTest extends MockeryTestCase
                     'id' => 987,
                     'version' => 1,
                     'team' => 111,
-                    'loginId' => 'login id',
                     'contactDetails' => [
                         'address' => [
                             'id' => 200,
@@ -187,7 +185,6 @@ class MyDetailsTest extends MockeryTestCase
     {
         $errors = [
             'messages' => [
-                'loginId' => ['err'],
                 'general' => 'error'
             ]
         ];
@@ -196,11 +193,7 @@ class MyDetailsTest extends MockeryTestCase
                 'general' => 'error'
             ]
         ];
-        $mockForm = m::mock(Form::class)
-            ->shouldReceive('setMessages')
-            ->with(['userDetails' => ['loginId' => ['err']]])
-            ->once()
-            ->getMock();
+        $mockForm = m::mock(Form::class);
 
         $this->assertEquals($expected, Sut::mapFromErrors($mockForm, $errors));
     }
