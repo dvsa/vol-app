@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5615afb3943da4e6bf59dee9a6196017",
+    "content-hash": "1070682e20f0b90500b901551a640485",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -1341,12 +1341,12 @@
                 }
             },
             "autoload": {
-                "files": [
-                    "src/functions_include.php"
-                ],
                 "psr-4": {
                     "GuzzleHttp\\Psr7\\": "src/"
-                }
+                },
+                "files": [
+                    "src/functions_include.php"
+                ]
             },
             "license": [
                 "MIT"
@@ -3584,16 +3584,14 @@
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "4.206.31",
-            "dist": {
-                "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-auth/4.206.31/olcs-olcs-auth-4.206.31.zip",
-                "reference": "245033dafa960c5a94861849711bfa434f15f623",
-                "shasum": "245033dafa960c5a94861849711bfa434f15f623"
+            "version": "dev-project/ci",
+            "source": {
+                "type": "git",
+                "url": "git@repo.olcs.dev-dvsacloud.uk:olcs/olcs-auth.git",
+                "reference": "2dd9b613db6f3c853eb365d306e01a18a4ea9ddd"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
-                "elendev/nexus-composer-push": "^0.1",
                 "laminas/laminas-authentication": "^2.5",
                 "laminas/laminas-console": "^2.5",
                 "laminas/laminas-dependency-plugin": "^2.0",
@@ -3608,8 +3606,8 @@
                 "laminas/laminas-stdlib": "^2.5",
                 "laminas/laminas-validator": "^2.5",
                 "laminas/laminas-view": "^2.5",
-                "olcs/olcs-common": "~4.206.0",
-                "olcs/olcs-transfer": "~4.206.0",
+                "olcs/olcs-common": "dev-project/ci",
+                "olcs/olcs-transfer": "dev-project/ci",
                 "php": ">=7.4"
             },
             "require-dev": {
@@ -3651,21 +3649,19 @@
                 ]
             },
             "description": "OLCS Authentication",
-            "time": "2022-02-23T13:13:28+00:00"
+            "time": "2022-02-25T10:46:21+00:00"
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.394",
-            "dist": {
-                "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.394/olcs-olcs-common-4.206.394.zip",
-                "reference": "ae96cfa94e2c17038521ded700b7e50b76330745",
-                "shasum": "ae96cfa94e2c17038521ded700b7e50b76330745"
+            "version": "dev-project/ci",
+            "source": {
+                "type": "git",
+                "url": "git@repo.olcs.dev-dvsacloud.uk:olcs/olcs-common.git",
+                "reference": "2e49889642dafdcdacd182fb92283914e497f9c9"
             },
             "require": {
                 "doctrine/annotations": "^1.8",
                 "doctrine/doctrine-orm-module": "~0.10.0",
-                "elendev/nexus-composer-push": "^0.1",
                 "laminas/laminas-authentication": "^2.5",
                 "laminas/laminas-cache": "^2.5",
                 "laminas/laminas-code": "~3.4.1",
@@ -3693,7 +3689,7 @@
                 "laminas/laminas-validator": "^2.5",
                 "laminas/laminas-view": "^2.5",
                 "lm-commons/lmc-rbac-mvc": "^2.6",
-                "olcs/olcs-transfer": "~4.206.0",
+                "olcs/olcs-transfer": "dev-project/ci",
                 "php": ">=7.4",
                 "symfony/filesystem": "^5",
                 "symfony/lock": "^5"
@@ -3744,7 +3740,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2022-03-07T14:02:23+00:00"
+            "time": "2022-02-24T15:01:05+00:00"
         },
         {
             "name": "olcs/olcs-logging",
@@ -3811,15 +3807,13 @@
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "4.206.147",
-            "dist": {
-                "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-transfer/4.206.147/olcs-olcs-transfer-4.206.147.zip",
-                "reference": "263cf5436f76b5ada3b8dc83898c5718f4c83c98",
-                "shasum": "263cf5436f76b5ada3b8dc83898c5718f4c83c98"
+            "version": "dev-project/ci",
+            "source": {
+                "type": "git",
+                "url": "git@repo.olcs.dev-dvsacloud.uk:olcs/olcs-transfer.git",
+                "reference": "3659646c521a7f7a3fb8977bacde12e20d3c7c0c"
             },
             "require": {
-                "elendev/nexus-composer-push": "^0.1",
                 "ext-openssl": "*",
                 "laminas/laminas-crypt": "^3.0",
                 "laminas/laminas-dependency-plugin": "^2.0",
@@ -3876,7 +3870,7 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2022-03-07T14:00:37+00:00"
+            "time": "2022-02-25T10:02:57+00:00"
         },
         {
             "name": "olcs/olcs-utils",
@@ -4725,12 +4719,12 @@
                 }
             },
             "autoload": {
-                "files": [
-                    "bootstrap.php"
-                ],
                 "psr-4": {
                     "Symfony\\Polyfill\\Intl\\Idn\\": ""
-                }
+                },
+                "files": [
+                    "bootstrap.php"
+                ]
             },
             "license": [
                 "MIT"
@@ -4801,12 +4795,12 @@
                 }
             },
             "autoload": {
-                "files": [
-                    "bootstrap.php"
-                ],
                 "psr-4": {
                     "Symfony\\Polyfill\\Intl\\Normalizer\\": ""
                 },
+                "files": [
+                    "bootstrap.php"
+                ],
                 "classmap": [
                     "Resources/stubs"
                 ]
@@ -4947,12 +4941,12 @@
                 }
             },
             "autoload": {
-                "files": [
-                    "bootstrap.php"
-                ],
                 "psr-4": {
                     "Symfony\\Polyfill\\Php72\\": ""
-                }
+                },
+                "files": [
+                    "bootstrap.php"
+                ]
             },
             "license": [
                 "MIT"
@@ -5014,12 +5008,12 @@
                 }
             },
             "autoload": {
-                "files": [
-                    "bootstrap.php"
-                ],
                 "psr-4": {
                     "Symfony\\Polyfill\\Php73\\": ""
                 },
+                "files": [
+                    "bootstrap.php"
+                ],
                 "classmap": [
                     "Resources/stubs"
                 ]
@@ -5084,12 +5078,12 @@
                 }
             },
             "autoload": {
-                "files": [
-                    "bootstrap.php"
-                ],
                 "psr-4": {
                     "Symfony\\Polyfill\\Php80\\": ""
                 },
+                "files": [
+                    "bootstrap.php"
+                ],
                 "classmap": [
                     "Resources/stubs"
                 ]
@@ -5540,12 +5534,12 @@
             },
             "type": "library",
             "autoload": {
-                "files": [
-                    "src/DeepCopy/deep_copy.php"
-                ],
                 "psr-4": {
                     "DeepCopy\\": "src/DeepCopy/"
-                }
+                },
+                "files": [
+                    "src/DeepCopy/deep_copy.php"
+                ]
             },
             "license": [
                 "MIT"
@@ -6355,11 +6349,11 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "9.2.14",
+            "version": "9.2.13",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/phpunit/php-code-coverage/9.2.14/phpunit-php-code-coverage-9.2.14.zip",
-                "reference": "9f4d60b6afe5546421462b76cd4e633ebc364ab4",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/phpunit/php-code-coverage/9.2.13/phpunit-php-code-coverage-9.2.13.zip",
+                "reference": "deac8540cb7bd40b2b8cfa679b76202834fd04e8",
                 "shasum": ""
             },
             "require": {
@@ -6418,7 +6412,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-02-28T12:38:02+00:00"
+            "time": "2022-02-23T17:02:38+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -6675,11 +6669,11 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.5.17",
+            "version": "9.5.16",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/phpunit/phpunit/9.5.17/phpunit-phpunit-9.5.17.zip",
-                "reference": "5c5abcfaa2cbd44b2203995d7a339ef910fe0c8f",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/phpunit/phpunit/9.5.16/phpunit-phpunit-9.5.16.zip",
+                "reference": "5ff8c545a50226c569310a35f4fa89d79f1ddfdc",
                 "shasum": ""
             },
             "require": {
@@ -6764,7 +6758,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-03-05T16:54:31+00:00"
+            "time": "2022-02-23T17:10:58+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -7788,12 +7782,12 @@
                 }
             },
             "autoload": {
-                "files": [
-                    "bootstrap.php"
-                ],
                 "psr-4": {
                     "Symfony\\Polyfill\\Php81\\": ""
                 },
+                "files": [
+                    "bootstrap.php"
+                ],
                 "classmap": [
                     "Resources/stubs"
                 ]
@@ -8000,7 +7994,11 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "olcs/olcs-transfer": 20,
+        "olcs/olcs-auth": 20,
+        "olcs/olcs-common": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

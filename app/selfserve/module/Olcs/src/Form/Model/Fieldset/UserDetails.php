@@ -14,7 +14,6 @@ class UserDetails extends Base
     /**
      * @Form\Options({
      *     "label":"user-name",
-     *     "error-message": "userDetails_loginId-error"
      * })
      * @Form\Required(true)
      * @Form\Attributes({"id":"username","placeholder":"","class":"medium", "required":false})

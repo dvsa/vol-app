@@ -53,19 +53,8 @@ class MyDetailsController extends AbstractController
                     $this->getServiceLocator()->get('Helper\FlashMessenger')
                         ->addSuccessMessage('generic.updated.success');
                     return $this->redirectToIndex();
-                } else {
-                    $result = $response->getResult();
-
-                    if (!empty($result['messages']['loginId'])) {
-                        $form->setMessages(
-                            [
-                                'main' => $result['messages']
-                            ]
-                        );
-                    } else {
-                        $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
-                    }
                 }
+                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
             }
         }
 

@@ -12,19 +12,6 @@ use Laminas\Form\Annotation as Form;
 class MyDetails extends Base
 {
     /**
-     * @Form\Options({
-     *      "label":"user-name",
-     *      "error-message": "myDetails_loginId-error"
-     *  })
-     * @Form\Required(true)
-     * @Form\Attributes({"id":"username","placeholder":"","class":"medium", "required":false})
-     * @Form\Type("Text")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\Username"})
-     */
-    public $loginId = null;
-
-    /**
      * @Form\Attributes({"id":"forename","placeholder":"","class":"medium", "required":false, "disabled":"disabled"})
      * @Form\Options({
      *     "label":"user-details.first-name"

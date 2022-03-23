@@ -296,7 +296,6 @@ class MyDetailsControllerTest extends TestCase
         $mockForm->shouldReceive('setData')->twice()->with($postData);
         $mockForm->shouldReceive('isValid')->once()->andReturn(true);
         $mockForm->shouldReceive('getData')->once()->andReturn($postData);
-        $mockForm->shouldReceive('setMessages')->once()->with(m::type('array'));
         $mockForm->shouldReceive('get')->with('main')->andReturn($mockFieldSet)->once();
 
         $mockFormHelper = m::mock();
@@ -318,17 +317,20 @@ class MyDetailsControllerTest extends TestCase
 
         $this->sut->shouldReceive('isButtonPressed')->with('cancel')->once()->andReturn(false);
 
+        $mockFlashMessengerHelper = m::mock();
+        $mockFlashMessengerHelper
+            ->shouldReceive('addErrorMessage')
+            ->once()
+            ->with('unknown-error');
+        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessengerHelper);
+
         $mockParams = m::mock();
         $mockParams->shouldReceive('fromPost')->once()->andReturn($postData);
         $this->sut->shouldReceive('params')->once()->andReturn($mockParams);
 
         $response = m::mock('stdClass');
         $response->shouldReceive('isOk')->andReturn(false);
-        $response->shouldReceive('getResult')->andReturn(
-            [
-                'messages' => ['loginId' => 'err']
-            ]
-        );
+
         $this->sut->shouldReceive('handleCommand')->with(m::type(UpdateDto::class))->andReturn($response);
 
         $mockScript = m::mock();

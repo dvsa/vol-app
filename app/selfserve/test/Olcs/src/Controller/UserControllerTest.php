@@ -400,6 +400,10 @@ class UserControllerTest extends MockeryTestCase
             ->shouldReceive('disableElement')
             ->with($this->mockForm, 'main->familyName')
             ->once();
+        $this->mockFormHelper
+            ->shouldReceive('disableElement')
+            ->with($this->mockForm, 'main->loginId')
+            ->once();
 
         $view = $this->sut->editAction();
 

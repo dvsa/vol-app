@@ -1,5 +1,7 @@
 <?php
 
+use Dvsa\Olcs\Auth\Controller\ExpiredPasswordController;
+use Dvsa\Olcs\Auth\ControllerFactory\ExpiredPasswordControllerFactory;
 use Olcs\Auth\Adapter\CommandAdapter;
 use Olcs\Auth\Adapter\CommandAdapterFactory;
 use Olcs\Auth\Adapter\SelfserveCommandAdapter;
