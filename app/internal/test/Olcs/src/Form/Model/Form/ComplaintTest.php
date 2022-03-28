@@ -65,7 +65,8 @@ class ComplaintTest extends AbstractFormValidationTestCase
 
         $this->assertFormElementValid($element, 'XX59 GTB');
         $this->assertFormElementValid($element, 'FOO1');
-        $this->assertFormElementNotValid($element, 'FOO', 'invalid');
+        // ToDo: removed as part of VOL-2922 - reinstate or expand test as requirements for VRM validation fully elaborated
+        //$this->assertFormElementNotValid($element, 'FOO', 'invalid');
     }
 
     public function testComplaintType()

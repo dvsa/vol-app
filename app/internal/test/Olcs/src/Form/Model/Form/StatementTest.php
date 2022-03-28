@@ -38,9 +38,10 @@ class StatementTest extends AbstractFormValidationTestCase
         );
     }
 
+    // ToDo: edited as part of VOL-2922 - reinstate or expand test as requirements for VRM validation fully elaborated
     public function testVrm()
     {
-        $this->assertFormElementIsRequired(['fields', 'vrm'], true);
+        $this->assertFormElementText(['fields', 'vrm'], true);
     }
 
     public function testRequestorsForename()

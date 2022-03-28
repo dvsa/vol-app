@@ -128,7 +128,8 @@ class ComplianceComplaintFormTest extends AbstractFormTest
                 new F\Value(F\Value::VALID, 'AB 12 CDE'),
                 new F\Value(F\Value::VALID, null),
                 new F\Value(F\Value::VALID, ''),
-                new F\Value(F\Value::INVALID, 'AAAAAAAA')
+                // ToDo: removed as part of VOL-2922 - reinstate or expand test as requirements for VRM validation fully elaborated
+                //new F\Value(F\Value::INVALID, 'AAAAAAAA')
             ),
             new F\Test(
                 new F\Stack(['fields', 'driverForename']),
