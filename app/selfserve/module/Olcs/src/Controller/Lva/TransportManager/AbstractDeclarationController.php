@@ -4,6 +4,7 @@ namespace OLCS\Controller\Lva\TransportManager;
 
 use \Common\Form\Form;
 use Common\RefData;
+use Common\Service\Helper\TranslationHelperService;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 use Common\Controller\Lva\AbstractController;
 use Olcs\Controller\Lva\Traits\TransportManagerApplicationTrait;
@@ -48,7 +49,10 @@ abstract class AbstractDeclarationController extends AbstractController
         $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
 
         $params = [
-            'content' => $translationHelper->translate($this->declarationMarkup),
+            'content' => $translationHelper->translateReplace(
+                $this->declarationMarkup,
+                $this->getTranslatedDeclarationMarkupParams($translationHelper)
+            ),
             'tmFullName' => $this->getTmName(),
             'backLink' => $this->getBackLink()
         ];
@@ -69,6 +73,18 @@ abstract class AbstractDeclarationController extends AbstractController
         $content->setTemplate('pages/lva-tm-details-action');
 
         return $layout;
+    }
+
+    /**
+     * Return an array of parameters to be used as included as translateReplace inputs to the declaration markup
+     *
+     * @param TranslationHelperService $translator
+     *
+     * @return array
+     */
+    protected function getTranslatedDeclarationMarkupParams(TranslationHelperService $translator)
+    {
+        return [];
     }
 
     protected function digitalSignatureAction()

@@ -3,11 +3,11 @@
 namespace OLCS\Controller\Lva\TransportManager;
 
 use Common\RefData;
+use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Command;
 
 class TmDeclarationController extends AbstractDeclarationController
 {
-
     protected $declarationMarkup = 'markup-tma-tm_declaration';
 
     protected function getSignAsRole(): string
@@ -68,5 +68,17 @@ class TmDeclarationController extends AbstractDeclarationController
             return true;
         }
         return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getTranslatedDeclarationMarkupParams(TranslationHelperService $translationHelper)
+    {
+        $translated = $translationHelper->translate(
+            'tma-tm_declaration.residency-clause.' . $this->tma['application']['goodsOrPsv']['id']
+        );
+
+        return [$translated, $translated];
     }
 }
