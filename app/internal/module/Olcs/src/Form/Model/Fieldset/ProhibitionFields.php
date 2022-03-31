@@ -30,8 +30,6 @@ class ProhibitionFields extends Base
      * @Form\Options({"label":"Vehicle registration mark"})
      * @Form\Required(false)
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Common\Filter\Vrm"})
-     * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\Vrm"})
      */
     public $vrm = null;
 

@@ -14,7 +14,7 @@ class AddGoodsVehicleLicence
 {
     /**
      * @Form\Name("data")
-     * @Form\ComposedObject("Common\Form\Model\Form\Lva\Fieldset\GoodsVehiclesVehicleData")
+     * @Form\ComposedObject("Olcs\Form\Model\Fieldset\Lva\GoodsVehiclesVehicleDataInternal")
      */
     public $data = null;
 

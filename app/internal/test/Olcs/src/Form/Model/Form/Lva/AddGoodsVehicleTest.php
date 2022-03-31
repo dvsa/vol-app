@@ -28,7 +28,12 @@ class AddGoodsVehicleTest extends AbstractFormValidationTestCase
 
     public function testVrm()
     {
-        $this->assertFormElementVrm(['data', 'vrm']);
+        $this->assertFormElementHidden(['data', 'vrm']);
+    }
+
+    public function testUnvalidatedVrm()
+    {
+        $this->assertFormElementText(['data', 'unvalidatedVrm']);
     }
 
     public function testPlatedWeight()
