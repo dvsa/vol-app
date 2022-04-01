@@ -16,7 +16,7 @@ if ($allowedReferer !== $trimmedHost) {
     exit;
 }
 
-$samlResponse = $_POST['SAMLResponse'] ?? $_GET['SAMLResponse'] ?? '';
+$samlResponse = urlencode($_POST['SAMLResponse'] ?? $_GET['SAMLResponse'] ?? '');
 
 ?>
 <!DOCTYPE html>
