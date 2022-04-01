@@ -80,10 +80,7 @@ class GdsVerifyController extends AbstractController
      */
     public function processResponseAction(): HttpResponse
     {
-        $samlResponse = $this->getRequest()->getPost(
-            'SAMLResponse',
-            $this->getRequest()->getQuery('SAMLResponse', null)
-        );
+        $samlResponse = $this->getRequest()->getPost('SAMLResponse', null);
 
         if (empty($samlResponse)) {
             throw new BadRequestException('Missing SAMLResponse');
