@@ -5,6 +5,8 @@ namespace Olcs\Controller\Lva;
 use Common\Controller\Lva\AbstractTransportManagersController as CommonAbstractTmController;
 use Common\Controller\Traits\GenericUpload;
 use Common\RefData;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Transfer\Command;
 
 /**
@@ -126,11 +128,12 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
     {
         /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
-
         $postData = (array)$request->getPost();
         $formData = $this->formatFormData($transportManagerApplicationData, $postData);
 
         $form = $this->getDetailsForm($transportManagerApplicationData)->setData($formData);
+
+        $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
         $this->maybeSelectOptions($transportManagerApplicationData, $form);
         $formHelper = $this->getServiceLocator()->get('Helper\Form');
 
@@ -201,7 +204,16 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 /* @var $response \Common\Service\Cqrs\Response */
                 $response = $this->getServiceLocator()->get('CommandService')->send($command);
                 if (!$response->isOk()) {
-                    $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+                    $acquiredRightsError = $this->getAcquiredRightsErrorIfExists($response);
+                    if (!empty($acquiredRightsError)) {
+                        $form->setMessages([
+                            'details' => [
+                                'lgvAcquiredRightsReferenceNumber' => $acquiredRightsError,
+                            ],
+                        ]);
+                        return $this->renderWithForm($transportManagerApplicationData['application'], $form);
+                    }
+                    $flashMessenger->addErrorMessage('unknown-error');
                     return $this->redirect()->refresh();
                 }
 
@@ -235,30 +247,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             }
         }
 
-        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
-
-        $tmHeaderData = $transportManagerApplicationData['application'];
-        $params = [
-            'subTitle' => $translationHelper
-                ->translateReplace(
-                    'markup-tm-details-sub-title',
-                    [
-                        $tmHeaderData['goodsOrPsv']['description'],
-                        $tmHeaderData['licence']['licNo'],
-                        $tmHeaderData['id']
-                    ]
-                )
-        ];
-
-        $this->getServiceLocator()->get('Script')
-            ->loadFiles(['lva-crud', 'tm-previous-history', 'tm-other-employment', 'tm-details']);
-
-        $layout = $this->render('transport_managers-details', $form, $params);
-
-        $content = $layout->getChildrenByCaptureTo('content')[0];
-        $content->setTemplate('pages/lva-tm-details');
-
-        return $layout;
+        return $this->renderWithForm($transportManagerApplicationData['application'], $form);
     }
 
     /**
@@ -1588,5 +1577,58 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
         $tma['tmApplicationStatus']['id'] = $status;
         return $tma;
+    }
+
+    /**
+     * @deprecated To be removed when LGV Acquired Rights is no longer allowed.
+     * @param \Common\Service\Cqrs\Response $response
+     * @return false|mixed
+     */
+    private function getAcquiredRightsErrorIfExists(\Common\Service\Cqrs\Response $response)
+    {
+        try {
+            $errorArray = json_decode($response->getBody(), true);
+        } catch (\InvalidArgumentException $invalidArgumentException) {
+            // do nothing, not valid JSON.
+            return false;
+        }
+        $lgvAcquiredRightsError = $errorArray['messages']['lgvAcquiredRightsReferenceNumber'] ?? null;
+        if (empty($lgvAcquiredRightsError)) {
+            return false;
+        }
+        return $lgvAcquiredRightsError;
+    }
+
+    /**
+     * @param $application
+     * @param \Common\Form\Form $form
+     * @return \Common\View\Model\Section
+     */
+    protected function renderWithForm($application, \Common\Form\Form $form)
+    {
+        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
+
+        $tmHeaderData = $application;
+        $params = [
+            'subTitle' => $translationHelper
+                ->translateReplace(
+                    'markup-tm-details-sub-title',
+                    [
+                        $tmHeaderData['goodsOrPsv']['description'],
+                        $tmHeaderData['licence']['licNo'],
+                        $tmHeaderData['id']
+                    ]
+                )
+        ];
+
+        $this->getServiceLocator()->get('Script')
+            ->loadFiles(['lva-crud', 'tm-previous-history', 'tm-other-employment', 'tm-details']);
+
+        $layout = $this->render('transport_managers-details', $form, $params);
+
+        $content = $layout->getChildrenByCaptureTo('content')[0];
+        $content->setTemplate('pages/lva-tm-details');
+
+        return $layout;
     }
 }
