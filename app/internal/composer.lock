@@ -4445,11 +4445,11 @@
         },
         {
             "name": "symfony/deprecation-contracts",
-            "version": "v2.5.0",
+            "version": "v2.5.1",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/deprecation-contracts/v2.5.0/symfony-deprecation-contracts-v2.5.0.zip",
-                "reference": "6f981ee24cf69ee7ce9736146d1c57c2780598a8",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/deprecation-contracts/v2.5.1/symfony-deprecation-contracts-v2.5.1.zip",
+                "reference": "e8b495ea28c1d97b5e0c121748d6f9b53d075c66",
                 "shasum": ""
             },
             "require": {
@@ -4499,15 +4499,15 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-07-12T14:48:14+00:00"
+            "time": "2022-01-02T09:53:40+00:00"
         },
         {
             "name": "symfony/filesystem",
-            "version": "v5.4.6",
+            "version": "v5.4.7",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/filesystem/v5.4.6/symfony-filesystem-v5.4.6.zip",
-                "reference": "d53a45039974952af7f7ebc461ccdd4295e29440",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/filesystem/v5.4.7/symfony-filesystem-v5.4.7.zip",
+                "reference": "3a4442138d80c9f7b600fb297534ac718b61d37f",
                 "shasum": ""
             },
             "require": {
@@ -4554,7 +4554,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-03-02T12:42:23+00:00"
+            "time": "2022-04-01T12:33:59+00:00"
         },
         {
             "name": "symfony/finder",
@@ -6780,11 +6780,11 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.5.19",
+            "version": "9.5.20",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/phpunit/phpunit/9.5.19/phpunit-phpunit-9.5.19.zip",
-                "reference": "35ea4b7f3acabb26f4bb640f8c30866c401da807",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/phpunit/phpunit/9.5.20/phpunit-phpunit-9.5.20.zip",
+                "reference": "12bc8879fb65aef2138b26fc633cb1e3620cffba",
                 "shasum": ""
             },
             "require": {
@@ -6869,7 +6869,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-03-15T09:57:31+00:00"
+            "time": "2022-04-01T12:37:26+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -7177,11 +7177,11 @@
         },
         {
             "name": "sebastian/environment",
-            "version": "5.1.3",
+            "version": "5.1.4",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/sebastian/environment/5.1.3/sebastian-environment-5.1.3.zip",
-                "reference": "388b6ced16caa751030f6a69e588299fa09200ac",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/sebastian/environment/5.1.4/sebastian-environment-5.1.4.zip",
+                "reference": "1b5dff7bb151a4db11d49d90e5408e4e938270f7",
                 "shasum": ""
             },
             "require": {
@@ -7226,7 +7226,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-09-28T05:52:38+00:00"
+            "time": "2022-04-03T09:37:03+00:00"
         },
         {
             "name": "sebastian/exporter",
@@ -7722,11 +7722,11 @@
         },
         {
             "name": "symfony/config",
-            "version": "v5.4.3",
+            "version": "v5.4.7",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/config/v5.4.3/symfony-config-v5.4.3.zip",
-                "reference": "d65e1bd990c740e31feb07d2b0927b8d4df9956f",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/config/v5.4.7/symfony-config-v5.4.7.zip",
+                "reference": "05624c386afa1b4ccc1357463d830fade8d9d404",
                 "shasum": ""
             },
             "require": {
@@ -7788,15 +7788,15 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-01-03T09:50:52+00:00"
+            "time": "2022-03-21T13:42:03+00:00"
         },
         {
             "name": "symfony/dependency-injection",
-            "version": "v5.4.6",
+            "version": "v5.4.7",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/dependency-injection/v5.4.6/symfony-dependency-injection-v5.4.6.zip",
-                "reference": "0828fa3e6e436243dbb3dc85abe6b698b3876b89",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/dependency-injection/v5.4.7/symfony-dependency-injection-v5.4.7.zip",
+                "reference": "35588b2afb08ea3a142d62fefdcad4cb09be06ed",
                 "shasum": ""
             },
             "require": {
@@ -7868,7 +7868,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-03-02T12:42:23+00:00"
+            "time": "2022-03-08T15:43:06+00:00"
         },
         {
             "name": "symfony/polyfill-php81",
@@ -7942,17 +7942,17 @@
         },
         {
             "name": "symfony/service-contracts",
-            "version": "v2.5.0",
+            "version": "v2.5.1",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/service-contracts/v2.5.0/symfony-service-contracts-v2.5.0.zip",
-                "reference": "1ab11b933cd6bc5464b08e81e2c5b07dec58b0fc",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/service-contracts/v2.5.1/symfony-service-contracts-v2.5.1.zip",
+                "reference": "24d9dc654b83e91aa59f9d167b131bc3b5bea24c",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.2.5",
                 "psr/container": "^1.1",
-                "symfony/deprecation-contracts": "^2.1"
+                "symfony/deprecation-contracts": "^2.1|^3"
             },
             "conflict": {
                 "ext-psr": "<1.1|>=2"
@@ -8012,7 +8012,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-11-04T16:48:04+00:00"
+            "time": "2022-03-13T20:07:29+00:00"
         },
         {
             "name": "theseer/tokenizer",
