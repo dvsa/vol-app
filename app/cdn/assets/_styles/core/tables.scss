@@ -139,7 +139,19 @@ table {
   }
   [type="submit"]:focus {
     border: 0;
-    background: $yellow;
+    background: $outline;
+    color:$black;
+    -webkit-box-shadow: 0 -2px $outline, 0 4px $black;
+    box-shadow: 0 -2px $outline, 0 4px $black;
+    outline: 3px solid transparent;
+    text-decoration: none;
+
+    &.action--secondary{
+      border-color: $outline;
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      border-bottom: 2px solid $black;
+    }
   }
   a:focus {
     outline: none;
