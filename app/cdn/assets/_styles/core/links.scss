@@ -11,10 +11,18 @@ a {
   }
   @if $app == 'selfserve' {
     &:focus {
-      background-color: $focus-colour;
-      outline: 3px solid $focus-colour;
+      outline: 3px solid transparent;
+      color: $black;
+      background-color: $outline;
+      -webkit-box-shadow: 0 -2px $outline, 0 4px $black;
+      box-shadow: 0 -2px $outline, 0 4px $black;
+      text-decoration: none;
     }
   }
+}
+
+.visuallyhidden{
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0,0,0,0); border: 0;
 }
 
 .disabled,
