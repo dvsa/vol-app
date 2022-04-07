@@ -80,13 +80,7 @@ class GdsVerifyController extends AbstractController
      */
     public function processResponseAction(): HttpResponse
     {
-        $samlResponse = $this->getRequest()->getPost('SAMLResponse', null);
-
-        if (empty($samlResponse)) {
-            throw new BadRequestException('Missing SAMLResponse');
-        }
-
-        $samlResponse = urldecode($samlResponse);
+        $samlResponse = $this->retrieveSAMLResponseFromRequest();
         $id = $this->getRootAttributeFromSaml($samlResponse, 'InResponseTo');
         $verifyJourneyKey = $this->buildVerifyJourneyKey($id);
         if (!empty($this->cache->removeItems([$verifyJourneyKey]))) {
@@ -387,5 +381,39 @@ class GdsVerifyController extends AbstractController
 
         $this->cache->removeItem($signatureRedisKey);
         return new DigitalSignature($signature);
+    }
+
+    /**
+     * @return string
+     * @throws BadRequestException
+     */
+    private function retrieveSAMLResponseFromRequest(): string
+    {
+        $samlResponse = $this->getRequest()->getPost('SAMLResponse', null);
+
+        if (empty($samlResponse)) {
+            throw new BadRequestException('Missing SAMLResponse');
+        }
+
+        if (!$this->isFromVerify()) {
+            return urldecode($samlResponse);
+        }
+
+        return $samlResponse;
+    }
+
+    /**
+     * Check if we have come direct from GDS Verify or via our own verify-redirect script
+     *
+     * @return bool
+     */
+    private function isFromVerify(): bool
+    {
+        $verifyReferer = 'signin.service.gov.uk';
+        $referer = $_SERVER['HTTP_REFERER'];
+        $refererHost =  parse_url($referer,PHP_URL_HOST);
+        $trimmedHost = implode('.', array_slice(explode('.', $refererHost), -4, 4));
+
+        return $trimmedHost === $verifyReferer;
     }
 }
