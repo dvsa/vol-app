@@ -50,7 +50,7 @@
     }
     &--success {
       @extend %notice;
-      background: $turquoise;
+      background: $green;
       padding-left: 40px;
       &:before {
         @include svg('selfserve-tick');
