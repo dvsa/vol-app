@@ -170,7 +170,8 @@ class LoginControllerTest extends MockeryTestCase
         $expected = [
             'username' => 'username',
             'password' => 'abc',
-            'submit' => null
+            'submit' => null,
+            'declarationRead' => null
         ];
         $this->assertEquals($expected, $result->getVariable('form')->getData());
     }
@@ -259,7 +260,7 @@ class LoginControllerTest extends MockeryTestCase
     {
         // Setup
         $this->setUpSut();
-        $request = $this->postRequest(['username' => 'username', 'password' => 'password']);
+        $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
         $response = new Response();
 
         $this->redirectHelper()->allows('toRoute')->andReturn($this->redirect());
@@ -280,7 +281,7 @@ class LoginControllerTest extends MockeryTestCase
     {
         // Setup
         $this->setUpSut();
-        $request = $this->postRequest(['username' => 'username', 'password' => 'password']);
+        $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
         $response = new Response();
 
         $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_SUCCESSFUL_OPENAM));
@@ -302,7 +303,7 @@ class LoginControllerTest extends MockeryTestCase
         // Setup
         $this->setUpSut();
         $request = $this->postRequest(
-            ['username' => 'username', 'password' => 'password'],
+            ['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y'],
             ['goto' => 'https://localhost/goto/url']
         );
         $response = new Response();
@@ -326,7 +327,7 @@ class LoginControllerTest extends MockeryTestCase
         // Setup
         $this->setUpSut();
         $request = $this->postRequest(
-            ['username' => 'username', 'password' => 'password'],
+            ['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y'],
             ['goto' => 'https://example.com/goto/url']
         );
         $response = new Response();
@@ -350,7 +351,7 @@ class LoginControllerTest extends MockeryTestCase
         // Setup
         $this->setUpSut();
         $request = $this->postRequest(
-            ['username' => 'username', 'password' => 'password'],
+            ['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y'],
             ['goto' => 'http://localhost/goto/url']
         );
         $response = new Response();
@@ -373,7 +374,7 @@ class LoginControllerTest extends MockeryTestCase
     {
         // Setup
         $this->setUpSut();
-        $request = $this->postRequest(['username' => 'username', 'password' => 'password']);
+        $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
         $response = new Response();
 
         $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_SUCCESSFUL_COGNITO));
@@ -393,7 +394,7 @@ class LoginControllerTest extends MockeryTestCase
     {
         // Setup
         $this->setUpSut();
-        $request = $this->postRequest(['username' => 'username', 'password' => 'password']);
+        $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
         $response = new Response();
 
         $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_SUCCESSFUL_UNKNOW_PROVIDER));
@@ -413,9 +414,7 @@ class LoginControllerTest extends MockeryTestCase
     {
         // Setup
         $this->setUpSut();
-        $request = $this->postRequest(
-            ['username' => 'username', 'password' => 'password']
-        );
+        $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
 
         $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_CHALLENGE_NEW_PASSWORD_REQUIRED));
 
@@ -442,9 +441,7 @@ class LoginControllerTest extends MockeryTestCase
     {
         // Setup
         $this->setUpSut();
-        $request = $this->postRequest(
-            ['username' => 'username', 'password' => 'password']
-        );
+        $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
 
         $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_CHALLENGE_NEW_PASSWORD_REQUIRED));
 
@@ -467,9 +464,7 @@ class LoginControllerTest extends MockeryTestCase
     {
         // Setup
         $this->setUpSut();
-        $request = $this->postRequest(
-            ['username' => 'username', 'password' => 'password']
-        );
+        $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
 
         $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_CHALLENGE_UNSUPPORTED));
 
@@ -488,9 +483,7 @@ class LoginControllerTest extends MockeryTestCase
     {
         // Setup
         $this->setUpSut();
-        $request = $this->postRequest(
-            ['username' => 'username', 'password' => 'password']
-        );
+        $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
 
         $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_FAILURE));
         $this->flashMessenger()->allows('addMessage')->withArgs(['failed', LoginController::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR]);
@@ -510,9 +503,7 @@ class LoginControllerTest extends MockeryTestCase
     {
         // Setup
         $this->setUpSut();
-        $request = $this->postRequest(
-            ['username' => 'username', 'password' => 'password']
-        );
+        $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
 
         $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_FAILURE));
         $this->redirectHelper()->allows()->toRoute(LoginController::ROUTE_AUTH_LOGIN_GET)->andReturn($this->redirect());
@@ -532,9 +523,7 @@ class LoginControllerTest extends MockeryTestCase
     {
         // Setup
         $this->setUpSut();
-        $request = $this->postRequest(
-            ['username' => 'username', 'password' => 'password']
-        );
+        $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
 
         $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_USER_NOT_EXIST));
         $this->redirectHelper()->allows()->toRoute(LoginController::ROUTE_AUTH_LOGIN_GET)->andReturn($this->redirect());
@@ -554,9 +543,7 @@ class LoginControllerTest extends MockeryTestCase
     {
         // Setup
         $this->setUpSut();
-        $request = $this->postRequest(
-            ['username' => 'username', 'password' => 'password']
-        );
+        $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
 
         $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_CREDENTIAL_INVALID));
         $this->redirectHelper()->allows()->toRoute(LoginController::ROUTE_AUTH_LOGIN_GET)->andReturn($this->redirect());
@@ -576,9 +563,7 @@ class LoginControllerTest extends MockeryTestCase
     {
         // Setup
         $this->setUpSut();
-        $request = $this->postRequest(
-            ['username' => 'username', 'password' => 'password']
-        );
+        $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
 
         $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_FAILURE_ACCOUNT_DISABLED));
         $this->redirectHelper()->allows()->toRoute(LoginController::ROUTE_AUTH_LOGIN_GET)->andReturn($this->redirect());
