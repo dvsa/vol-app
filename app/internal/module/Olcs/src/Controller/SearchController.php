@@ -129,7 +129,17 @@ class SearchController extends AbstractController implements LeftViewProvider
 
         // if valid then generate results
         if ($form->isValid()) {
-            $elasticSearch->configureNavigation();
+            $excludeNavIds = ['search-irfo'];
+
+            if ($this->currentUser()->getUserData()['dataAccess']['isIrfo']) {
+                $excludeNavIds = [];
+            }
+            if (!$this->currentUser()->getUserData()['dataAccess']['canAccessAll'] &&
+                $this->currentUser()->getUserData()['dataAccess']['canAccessNi']
+            ) {
+                $excludeNavIds = ['search-psv_disc', 'search-bus_reg', ...$excludeNavIds];
+            }
+            $elasticSearch->configureNavigation($excludeNavIds);
             $view = $elasticSearch->generateResults($view);
         }
 

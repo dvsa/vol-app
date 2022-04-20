@@ -77,7 +77,8 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
         $userData = $identity->getUserData();
 
         //prevent this from running if the user is not logged in
-        if (isset($userData['dataAccess']['allowedSearchIndexes'])) {
+        if (isset($userData['id'])) {
+            // Set Header Search index dropdown with allowed search index values from MyAccount Query
             $headerSearch->get('index')->setValueOptions($userData['dataAccess']['allowedSearchIndexes']);
         }
 
