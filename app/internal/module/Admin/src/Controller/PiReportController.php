@@ -5,6 +5,7 @@
  */
 namespace Admin\Controller;
 
+use Admin\Controller\Traits\ReportLeftViewTrait;
 use Dvsa\Olcs\Transfer\Query\Cases\Pi\ReportList as ListDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -16,6 +17,9 @@ use Laminas\View\Model\ViewModel;
  */
 class PiReportController extends AbstractInternalController implements LeftViewProvider
 {
+
+    use ReportLeftViewTrait;
+
     /**
      * Holds the navigation ID,
      * required when an entire controller is
@@ -35,24 +39,6 @@ class PiReportController extends AbstractInternalController implements LeftViewP
     protected $tableName = 'admin-pi-report';
     protected $listDto = ListDto::class;
     protected $filterForm = FilterForm::class;
-
-    /**
-     * Gets left view
-     *
-     * @return ViewModel
-     */
-    public function getLeftView()
-    {
-        $view = new ViewModel(
-            [
-                'navigationId' => 'admin-dashboard/admin-report',
-                'navigationTitle' => 'Reports'
-            ]
-        );
-        $view->setTemplate('admin/sections/admin/partials/generic-left');
-
-        return $view;
-    }
 
     /**
      * Sets the page title

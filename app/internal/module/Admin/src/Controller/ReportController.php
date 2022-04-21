@@ -5,6 +5,7 @@
 
 namespace Admin\Controller;
 
+use Admin\Controller\Traits\ReportLeftViewTrait;
 use Common\Category;
 use \Laminas\Mvc\Controller\AbstractActionController as LaminasAbstractActionController;
 use Common\RefData;
@@ -28,7 +29,8 @@ class ReportController extends LaminasAbstractActionController implements LeftVi
 {
     use GenericMethods,
         GenericRenderView,
-        ViewHelperManagerAware;
+        ViewHelperManagerAware,
+        ReportLeftViewTrait;
 
     /**
      * render layout
@@ -45,24 +47,6 @@ class ReportController extends LaminasAbstractActionController implements LeftVi
             ->set($view->getVariable('filterForm'));
 
         return $this->renderView($view, $pageTitle, $pageSubTitle);
-    }
-
-    /**
-     * get left view
-     *
-     * @return ViewModel
-     */
-    public function getLeftView()
-    {
-        $view = new ViewModel(
-            [
-                'navigationId' => 'admin-dashboard/admin-report',
-                'navigationTitle' => 'Reports'
-            ]
-        );
-        $view->setTemplate('admin/sections/admin/partials/generic-left');
-
-        return $view;
     }
 
     /**

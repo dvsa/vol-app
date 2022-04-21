@@ -216,11 +216,6 @@ return [
                             'route' => 'admin-dashboard/admin-report/interim-refunds',
                         ],
                         [
-                            'id' => 'admin-dashboard/admin-report/cpid-class',
-                            'label' => 'CPID classification',
-                            'route' => 'admin-dashboard/admin-report/cpid-class',
-                        ],
-                        [
                             'id' => 'admin-dashboard/admin-report/exported-reports',
                             'label' => 'Exported reports',
                             'route' => 'admin-dashboard/admin-report/exported-reports',
