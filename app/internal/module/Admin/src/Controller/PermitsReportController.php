@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Admin\Controller;
 
+use Admin\Controller\Traits\ReportLeftViewTrait;
 use Admin\Form\Model\Form\PermitsReport;
 use Common\Form\Form;
 use Dvsa\Olcs\Transfer\Command\Permits\QueueReport;
@@ -16,23 +17,7 @@ class PermitsReportController extends AbstractInternalController implements Left
 {
     protected $navigationId = 'admin-dashboard/admin-report/permits';
 
-    /**
-     * Left View setting
-     *
-     * @return ViewModel
-     */
-    public function getLeftView(): ViewModel
-    {
-        $view = new ViewModel(
-            [
-                'navigationId' => 'admin-dashboard/admin-report',
-                'navigationTitle' => 'Reports'
-            ]
-        );
-        $view->setTemplate('admin/sections/admin/partials/generic-left');
-
-        return $view;
-    }
+    use ReportLeftViewTrait;
 
     /**
      * Process action - Index

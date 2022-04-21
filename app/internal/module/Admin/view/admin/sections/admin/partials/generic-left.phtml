@@ -1,6 +1,13 @@
 <?php
 $navigation = $this->navigation('navigation')->findOneBy('id', $navigationId);
 
+// If $removePageIds is set on the controller, remove them from the navigation object before rendering.
+if(isset($removePageIds)) {
+    foreach($removePageIds as $pageId) {
+        $navigation->removePage($navigation->findOneBy('route', $pageId), true);
+    }
+}
+
 if (isset($navigation)): ?>
     <h4 class="title"><?php  echo $this->translate($navigationTitle); ?></h4>
 <?php

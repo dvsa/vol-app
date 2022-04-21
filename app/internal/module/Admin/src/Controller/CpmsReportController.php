@@ -2,6 +2,7 @@
 
 namespace Admin\Controller;
 
+use Admin\Controller\Traits\ReportLeftViewTrait;
 use Admin\Form\Model\Form\CpmsReport as Form;
 use Dvsa\Olcs\Transfer\Command\Cpms\RequestReport as GenerateCmd;
 use Olcs\Controller\AbstractInternalController;
@@ -14,30 +15,14 @@ use Laminas\View\Model\ViewModel;
  */
 class CpmsReportController extends AbstractInternalController implements LeftViewProvider
 {
+    use ReportLeftViewTrait;
+
     protected $navigationId = 'admin-dashboard/admin-report';
 
     /**
      * @var array
      */
     private $reports = [];
-
-    /**
-     * Left View setting
-     *
-     * @return ViewModel
-     */
-    public function getLeftView()
-    {
-        $view = new ViewModel(
-            [
-                'navigationId' => 'admin-dashboard/admin-report',
-                'navigationTitle' => 'Reports'
-            ]
-        );
-        $view->setTemplate('admin/sections/admin/partials/generic-left');
-
-        return $view;
-    }
 
     /**
      * Process action - Index

@@ -2,11 +2,11 @@
 
 namespace Admin\Controller;
 
+use Admin\Controller\Traits\ReportLeftViewTrait;
 use Admin\Form\Model\Form\InterimRefundReportFilter as FilterForm;
 use Dvsa\Olcs\Transfer\Query\Fee\InterimRefunds as ListDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Laminas\View\Model\ViewModel;
 
 /**
  * Class InterimRefundsController
@@ -15,6 +15,8 @@ use Laminas\View\Model\ViewModel;
  */
 class InterimRefundsController extends AbstractInternalController implements LeftViewProvider
 {
+    use ReportLeftViewTrait;
+
     protected $navigationId = 'admin-dashboard/admin-report/interim-refunds';
 
     // list
@@ -25,19 +27,6 @@ class InterimRefundsController extends AbstractInternalController implements Lef
     protected $defaultTableOrderField = 'DESC';
     protected $listDto = ListDto::class;
     protected $filterForm = FilterForm::class;
-
-    public function getLeftView()
-    {
-        $view = new ViewModel(
-            [
-                'navigationId' => 'admin-dashboard/admin-report',
-                'navigationTitle' => 'Reports'
-            ]
-        );
-        $view->setTemplate('admin/sections/admin/partials/generic-left');
-
-        return $view;
-    }
 
     /**
      * Sets filter defaults

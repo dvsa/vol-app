@@ -5,6 +5,7 @@
  */
 namespace Admin\Controller;
 
+use Admin\Controller\Traits\ReportLeftViewTrait;
 use Dvsa\Olcs\Transfer\Command\CompaniesHouse\CloseAlerts as CloseDto;
 use Dvsa\Olcs\Transfer\Query\CompaniesHouse\AlertList as ListDto;
 use Olcs\Controller\AbstractInternalController;
@@ -18,6 +19,8 @@ use Laminas\View\Model\ViewModel;
  */
 class CompaniesHouseAlertController extends AbstractInternalController implements LeftViewProvider
 {
+    use ReportLeftViewTrait;
+
     /**
      * Holds the navigation ID,
      * required when an entire controller is
@@ -55,24 +58,6 @@ class CompaniesHouseAlertController extends AbstractInternalController implement
             'action' => 'index'
         ]
     ];
-
-    /**
-     * Get left view
-     *
-     * @return ViewModel
-     */
-    public function getLeftView()
-    {
-        $view = new ViewModel(
-            [
-                'navigationId' => 'admin-dashboard/admin-report',
-                'navigationTitle' => 'Reports'
-            ]
-        );
-        $view->setTemplate('admin/sections/admin/partials/generic-left');
-
-        return $view;
-    }
 
     /**
      * Companies house alert list view

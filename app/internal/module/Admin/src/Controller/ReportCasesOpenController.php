@@ -2,6 +2,7 @@
 
 namespace Admin\Controller;
 
+use Admin\Controller\Traits\ReportLeftViewTrait;
 use Admin\Form\Model\Form;
 use Dvsa\Olcs\Transfer\Query as TransferQry;
 use Olcs\Controller\AbstractInternalController;
@@ -13,6 +14,8 @@ use Laminas\View\Model\ViewModel;
  */
 class ReportCasesOpenController extends AbstractInternalController implements LeftViewProvider
 {
+
+    use ReportLeftViewTrait;
     /**
      * Holds the navigation ID,
      * required when an entire controller is
@@ -33,24 +36,6 @@ class ReportCasesOpenController extends AbstractInternalController implements Le
     protected $listDto = TransferQry\Cases\Report\OpenList::class;
 
     protected $filterForm = Form\CasesOpenReportFilter::class;
-
-    /**
-     * Gets left view
-     *
-     * @return ViewModel
-     */
-    public function getLeftView()
-    {
-        $view = new ViewModel(
-            [
-                'navigationId' => 'admin-dashboard/admin-report',
-                'navigationTitle' => 'Reports',
-            ]
-        );
-        $view->setTemplate('admin/sections/admin/partials/generic-left');
-
-        return $view;
-    }
 
     /**
      * Index action

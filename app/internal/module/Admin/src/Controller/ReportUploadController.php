@@ -2,6 +2,7 @@
 
 namespace Admin\Controller;
 
+use Admin\Controller\Traits\ReportLeftViewTrait;
 use Admin\Form\Model\Form\ReportUpload as ReportUploadForm;
 use Common\Service\AntiVirus\Scan;
 use Common\Util\FileContent;
@@ -17,6 +18,8 @@ use Laminas\View\Model\ViewModel;
  */
 class ReportUploadController extends AbstractInternalController implements LeftViewProvider
 {
+    use ReportLeftViewTrait;
+
     const ERR_UPLOAD_DEF = '4';
     const FILE_UPLOAD_ERR_PREFIX = 'message.file-upload-error.';
 
@@ -26,24 +29,6 @@ class ReportUploadController extends AbstractInternalController implements LeftV
     protected $inlineScripts = [
         'indexAction' => ['forms/report-upload'],
     ];
-
-    /**
-     * Left View setting
-     *
-     * @return ViewModel
-     */
-    public function getLeftView()
-    {
-        $view = new ViewModel(
-            [
-                'navigationId' => 'admin-dashboard/admin-report',
-                'navigationTitle' => 'Reports'
-            ]
-        );
-        $view->setTemplate('admin/sections/admin/partials/generic-left');
-
-        return $view;
-    }
 
     /**
      * Action: index
