@@ -2,7 +2,9 @@
 
 namespace OlcsTest\Listener;
 
+use Common\Service\Helper\TranslationHelperService;
 use Mockery as m;
+use Common\Rbac\User;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Form\Element\SearchDateRangeFieldset;
 use Olcs\Form\Element\SearchFilterFieldset;
@@ -11,6 +13,7 @@ use Olcs\Form\Model\Form;
 use Olcs\Listener\HeaderSearch;
 use Laminas\Mvc\MvcEvent;
 use Laminas\View\Helper\Placeholder;
+use ZfcRbac\Identity\IdentityProviderInterface;
 
 /**
  * Class HeaderSearchTest
@@ -31,6 +34,8 @@ class HeaderSearchTest extends TestCase
     private $mockFormElmMngr;
     /** @var  \Laminas\View\HelperPluginManager | m\MockInterface  */
     private $mockViewHlprMngr;
+    /** @var  IdentityProviderInterface | m\MockInterface  */
+    private $mockAuthService;
 
     public function setUp(): void
     {
@@ -38,6 +43,8 @@ class HeaderSearchTest extends TestCase
         $this->mockSearchSrv = m::mock(\Common\Service\Data\Search\Search::class);
         $this->mockFormElmMngr = m::mock(\Laminas\Form\FormElementManager::class);
         $this->mockViewHlprMngr = m::mock(\Laminas\View\HelperPluginManager::class);
+        $this->mockAuthService = m::mock(IdentityProviderInterface::class);
+        $this->mockTransHelper = m::mock(TranslationHelperService::class);
 
         $this->mockSm = m::mock(\Laminas\ServiceManager\ServiceLocatorInterface::class);
         $this->mockSm
@@ -45,6 +52,8 @@ class HeaderSearchTest extends TestCase
             ->shouldReceive('get')->with('Helper\Form')->andReturn($this->mockFormHlp)
             ->shouldReceive('get')->with(\Common\Service\Data\Search\Search::class)->andReturn($this->mockSearchSrv)
             ->shouldReceive('get')->with('FormElementManager')->andReturn($this->mockFormElmMngr)
+            ->shouldReceive('get')->with('Helper\Translation')->andReturn($this->mockTransHelper)
+            ->shouldReceive('get')->with(IdentityProviderInterface::class)->andReturn($this->mockAuthService)
             ->shouldReceive('get')->with('ViewHelperManager')->andReturn($this->mockViewHlprMngr);
 
         $this->sut = new HeaderSearch();
@@ -60,7 +69,10 @@ class HeaderSearchTest extends TestCase
         $this->sut->attach($mockEventManager);
     }
 
-    public function testOnDispatch()
+    /**
+     * @dataProvider dpOnDispatch
+     */
+    public function testOnDispatch($userData, $setTimes)
     {
         $index = 'licence';
 
@@ -93,9 +105,23 @@ class HeaderSearchTest extends TestCase
             ->with(SearchOrderFieldset::class, ['index' => $index, 'name' => 'sort'])
             ->andReturn($sof);
 
+        $mockHsForm = \Mockery::mock();
+
         $this->mockFormHlp
-            ->shouldReceive('createForm')->with(Form\HeaderSearch::class, false)->andReturn($mockForm)
+            ->shouldReceive('createForm')->with(Form\HeaderSearch::class, false)->andReturn($mockHsForm)
             ->shouldReceive('createForm')->with(Form\SearchFilter::class, false)->andReturn($mockForm);
+
+        $userObject = new User();
+        $userObject->setUserData($userData);
+
+        $this->mockAuthService->shouldReceive('getIdentity')
+            ->andReturn($userObject);
+
+        $mockElement = \Mockery::mock();
+        $mockHsForm->shouldReceive('get')->andReturn($mockElement);
+        $mockHsForm->shouldReceive('bind')->once();
+
+        $mockElement->shouldReceive('setValueOptions')->times($setTimes)->withAnyArgs()->andReturn();
 
         $placeholder = new Placeholder();
         $placeholder->getContainer('headerSearch')->set('foobar');
@@ -110,6 +136,27 @@ class HeaderSearchTest extends TestCase
 
         $this->sut->createService($this->mockSm);
         $this->sut->onDispatch($mockEvent);
+    }
+
+    public function dpOnDispatch(): array
+    {
+        return [
+            'loggedin' => [
+                [
+                    'id' => 'usr123',
+                    'dataAccess' => [
+                        'allowedSearchIndexes' => [
+                            'licence' => 'licence'
+                        ]
+                    ]
+                ],
+                1
+            ],
+            'notloggedin' => [
+                [],
+                0
+            ]
+        ];
     }
 
     public function testCreateService()
