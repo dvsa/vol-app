@@ -23,10 +23,6 @@ class HeaderSearch
      *      "id": "search-select"
      * })
      * @Form\Type("DynamicSelect")
-     * @Form\Options({
-     *      "service_name": "Common\Service\Data\Search\SearchType",
-     *      "context": "internal-search"
-     * })
      */
     protected $index;
 

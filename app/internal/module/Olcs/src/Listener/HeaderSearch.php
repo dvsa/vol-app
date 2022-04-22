@@ -3,6 +3,7 @@
 namespace Olcs\Listener;
 
 use Common\Service\Data\Search\Search as SearchService;
+use Common\Service\Helper\TranslationHelperService;
 use Olcs\Controller\SearchController;
 use Olcs\Form\Element\SearchOrderFieldset;
 use Laminas\EventManager\EventManagerInterface;
@@ -13,6 +14,7 @@ use Laminas\Mvc\MvcEvent;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\Session\Container;
+use ZfcRbac\Identity\IdentityProviderInterface;
 
 /**
  * Class HeaderSearch
@@ -42,6 +44,15 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
     private $hlpForm;
 
     /**
+     * @var IdentityProviderInterface
+     */
+    protected $authenticationService;
+
+    /** @var TranslationHelperService $translator
+     */
+    protected $translator;
+
+    /**
      * {@inheritdoc}
      */
     public function attach(EventManagerInterface $events, $priority = 1)
@@ -60,6 +71,15 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
     {
         $headerSearch = $this->hlpForm->createForm(\Olcs\Form\Model\Form\HeaderSearch::class, false);
         $searchFilterForm = $this->hlpForm->createForm(\Olcs\Form\Model\Form\SearchFilter::class, false);
+
+        /** @var User $identity */
+        $identity = $this->authenticationService->getIdentity();
+        $userData = $identity->getUserData();
+
+        //prevent this from running if the user is not logged in
+        if (isset($userData['dataAccess']['allowedSearchIndexes'])) {
+            $headerSearch->get('index')->setValueOptions($userData['dataAccess']['allowedSearchIndexes']);
+        }
 
         // Index is required for filter fields as they are index specific.
         $index = $e->getRouteMatch()->getParam('index');
@@ -108,7 +128,9 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
         $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
         $this->setSearchService($serviceLocator->get('DataServiceManager')->get(SearchService::class));
         $this->setFormElementManager($serviceLocator->get('FormElementManager'));
+        $this->translator = $serviceLocator->get('Helper\Translation');
         $this->hlpForm = $serviceLocator->get('Helper\Form');
+        $this->authenticationService = $serviceLocator->get(IdentityProviderInterface::class);
 
         return $this;
     }
