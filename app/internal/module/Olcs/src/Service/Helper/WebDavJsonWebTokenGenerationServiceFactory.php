@@ -12,6 +12,7 @@ class WebDavJsonWebTokenGenerationServiceFactory implements FactoryInterface
     public const CONFIG_KEY_NAMESPACE = 'webdav';
     public const CONFIG_KEY_DEFAULT_LIFETIME_SECONDS = 'default_lifetime_seconds';
     public const CONFIG_KEY_PRIVATE_KEY = 'private_key';
+    public const CONFIG_KEY_URL_PATTERN = 'url_pattern';
 
     /**
      * @param ContainerInterface $container
@@ -32,7 +33,8 @@ class WebDavJsonWebTokenGenerationServiceFactory implements FactoryInterface
 
         return new WebDavJsonWebTokenGenerationService(
             $this->getPrivateKeyFromConfig($config),
-            $this->getDefaultLifetimeSecondsFromConfig($config)
+            $this->getDefaultLifetimeSecondsFromConfig($config),
+            $this->getUrlPatternConfig($config)
         );
     }
 
@@ -66,5 +68,15 @@ class WebDavJsonWebTokenGenerationServiceFactory implements FactoryInterface
         }
 
         return $privateKeyConfigValue;
+    }
+
+    protected function getUrlPatternConfig(array $config): string
+    {
+        $urlPattern = $config[static::CONFIG_KEY_URL_PATTERN] ?? null;
+        if (empty($urlPattern)) {
+            throw new \InvalidArgumentException('Config key url_pattern: value must be set and not empty()', 0x30);
+        }
+
+        return $urlPattern;
     }
 }

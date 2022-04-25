@@ -15,6 +15,7 @@ use Dvsa\Olcs\Transfer\Command\Publication\Generate as GenerateCmd;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Laminas\View\Model\ViewModel;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
+use Olcs\Service\Helper\WebDavJsonWebTokenGenerationService;
 
 /**
  * Publication Controller
@@ -42,9 +43,34 @@ class PublicationController extends AbstractInternalController implements LeftVi
      */
     protected function alterTable($table, $data): TableBuilder
     {
-        $data = $this->mergeOsType($data);
+        $data = $this->getPublicationLinkData($data);
         $table->loadData($data);
         return $table;
+    }
+
+    /**
+     * @param $data
+     * @return array
+     */
+    protected function getPublicationLinkData($data)
+    {
+        $webDavJsonWebTokenGenerationService = $this->getServiceLocator()->get(WebDavJsonWebTokenGenerationService::class);
+        $loginId = $this->currentUser()->getIdentity()->getUsername();
+
+        foreach ($data['results'] as $result => $value) {
+            if (isset($value['document'])) {
+                $jwt = $webDavJsonWebTokenGenerationService->generateToken(
+                    $loginId,
+                    $value['document']['identifier']
+                );
+                $url = $webDavJsonWebTokenGenerationService->getJwtWebDavLink(
+                    $jwt,
+                    $value['document']['identifier'],
+                );
+                $data['results'][$result]['webDavUrl'] = $url;
+            }
+        }
+        return $data;
     }
 
     /**
@@ -96,14 +122,5 @@ class PublicationController extends AbstractInternalController implements LeftVi
     public function publishAction()
     {
         return $this->processCommand(new GenericItem(['id' => 'id']), PublishCmd::class);
-    }
-
-
-    private function mergeOsType($data): array
-    {
-        foreach ($data['results'] as $result => $value) {
-            $data['results'][$result]['userOsType'] = $data['extra']['userOsType'];
-        }
-        return $data;
     }
 }
