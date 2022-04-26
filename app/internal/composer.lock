@@ -1177,11 +1177,11 @@
         },
         {
             "name": "firebase/php-jwt",
-            "version": "v6.1.0",
+            "version": "v6.1.2",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/firebase/php-jwt/v6.1.0/firebase-php-jwt-v6.1.0.zip",
-                "reference": "fbb2967a3a68b07e37678c00c0cf51165051495f",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/firebase/php-jwt/v6.1.2/firebase-php-jwt-v6.1.2.zip",
+                "reference": "c297139da7c6873dbd67cbd1093f09ec0bbd0c50",
                 "shasum": ""
             },
             "require": {
@@ -1220,7 +1220,7 @@
                 "jwt",
                 "php"
             ],
-            "time": "2022-03-23T18:26:04+00:00"
+            "time": "2022-04-21T14:37:18+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
