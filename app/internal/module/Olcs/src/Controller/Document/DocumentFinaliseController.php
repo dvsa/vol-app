@@ -3,12 +3,9 @@
 namespace Olcs\Controller\Document;
 
 use Common\Category;
-use Common\Rbac\JWTIdentityProvider;
-use Common\RefData;
 use Dvsa\Olcs\Transfer\Command as TransferCmd;
 use Dvsa\Olcs\Transfer\Command\Document\PrintLetter as PrintLetterCmd;
 use Dvsa\Olcs\Transfer\Query as TransferQry;
-use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 use Laminas\Http\Response;
 use Laminas\Mvc\MvcEvent;
 use Laminas\View\Model\ViewModel;
@@ -92,22 +89,23 @@ class DocumentFinaliseController extends AbstractDocumentController
 
         $category = $data['data']['category']['description'];
         $documentSubCategory = $data['data']['subCategory']['subCategoryName'];
-        $templateName = $data['data']['template']['description'];
-
-        $uriPattern = $this->getUriPattern();
 
         $loginId = $this->currentUser()->getIdentity()->getUsername();
         $jwt = $this->webDavJsonWebTokenGenerationService->generateToken(
             $loginId,
             $data['data']['identifier']
         );
-        $url = sprintf($uriPattern, $jwt, $data['data']['identifier']);
+
+        $url = $this->webDavJsonWebTokenGenerationService->getJwtWebDavLink(
+            $jwt,
+            $data['data']['identifier'],
+        );
 
         $link = sprintf(
             '<a href="%s" data-file-url="%s" target="blank">%s</a>',
             htmlentities($url, ENT_QUOTES, 'utf-8'),
             htmlentities($url, ENT_QUOTES, 'utf-8'),
-            htmlentities($templateName, ENT_QUOTES, 'utf-8')
+            htmlentities($data['data']['template']['description'], ENT_QUOTES, 'utf-8')
         );
 
         $data = [

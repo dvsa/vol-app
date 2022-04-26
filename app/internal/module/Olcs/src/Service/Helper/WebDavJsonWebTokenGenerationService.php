@@ -16,11 +16,13 @@ class WebDavJsonWebTokenGenerationService
 
     private int $defaultLifetimeSeconds;
     private string $privateKey;
+    private string $urlPattern;
 
-    public function __construct(string $privateKey, int $defaultLifetimeSeconds)
+    public function __construct(string $privateKey, int $defaultLifetimeSeconds, string $urlPattern)
     {
         $this->defaultLifetimeSeconds = $this->parseDefaultLifetimeSeconds($defaultLifetimeSeconds);
         $this->privateKey = $this->parsePrivateKey($privateKey);
+        $this->urlPattern = $urlPattern;
     }
 
     public function generateToken(string $subject, string $document, int $lifetimeSeconds = null): string
@@ -57,5 +59,15 @@ class WebDavJsonWebTokenGenerationService
         }
 
         return $privateKey;
+    }
+
+    /**
+     * @param $jwt string JWT token
+     * @param $identifier string Document Identifier string from db
+     * @return string
+     */
+    public function getJwtWebDavLink($jwt, $identifier)
+    {
+        return sprintf($this->urlPattern, $jwt, $identifier);
     }
 }
