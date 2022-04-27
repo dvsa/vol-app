@@ -4,16 +4,11 @@ declare(strict_types=1);
 namespace Olcs\Controller;
 
 use Common\Controller\Dispatcher;
-use Common\Controller\Plugin\CurrentUser;
 use Common\Controller\Plugin\Redirect;
-use Common\Service\Helper\TranslationHelperService;
-use Dvsa\Olcs\Auth\Service\Auth\CookieService;
-use Dvsa\Olcs\Auth\Service\Auth\LogoutService;
-use Laminas\Http\PhpEnvironment\Request;
-use Laminas\Http\Response;
 use Laminas\Mvc\Controller\ControllerManager;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+use ZfcRbac\Identity\IdentityProviderInterface;
 
 /**
  * @See SessionTimeoutController
@@ -32,9 +27,10 @@ class SessionTimeoutControllerFactory implements FactoryInterface
 
         $cookieService = $serviceLocator->get('Auth\CookieService');
         $logoutService = $serviceLocator->get('Auth\LogoutService');
+        $identityProvider = $serviceLocator->get(IdentityProviderInterface::class);
 
         $controller = new SessionTimeoutController(
-            $currentUser = $controllerPluginManager->get(CurrentUser::class),
+            $identityProvider,
             $redirectHelper = $controllerPluginManager->get(Redirect::class),
             $cookieService,
             $logoutService
@@ -44,7 +40,6 @@ class SessionTimeoutControllerFactory implements FactoryInterface
         $instance = new Dispatcher($controller);
 
         // Initialize plugins
-        $currentUser->setController($instance);
         $redirectHelper->setController($instance);
 
         return $instance;

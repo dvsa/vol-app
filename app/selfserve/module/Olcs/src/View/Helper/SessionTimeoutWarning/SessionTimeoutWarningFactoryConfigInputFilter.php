@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace Olcs\View\Helper\SessionTimeoutWarning;
 
-use Laminas\Filter\Boolean;
 use Laminas\Filter\ToInt;
 use Laminas\InputFilter\Input;
 use Laminas\InputFilter\InputFilter;
