@@ -3,11 +3,11 @@ declare(strict_types = 1);
 
 namespace OlcsTest\Controller;
 
-use Common\Controller\Plugin\CurrentUser;
 use Common\Controller\Plugin\Redirect;
+use Common\Rbac\JWTIdentityProvider;
+use Common\Rbac\PidIdentityProvider;
 use Common\Rbac\User;
 use Common\Test\MockeryTestCase;
-use Common\Test\MocksServicesTrait;
 use Dvsa\Olcs\Auth\Service\Auth\CookieService;
 use Dvsa\Olcs\Auth\Service\Auth\LogoutService;
 use Laminas\Http\Request;
@@ -23,6 +23,8 @@ use Laminas\View\Model\ViewModel;
 use Mockery as m;
 use Olcs\Controller\SessionTimeoutController;
 use Olcs\Controller\SessionTimeoutControllerFactory;
+use Olcs\TestHelpers\Service\MocksServicesTrait;
+use ZfcRbac\Identity\IdentityProviderInterface;
 
 /**
  * @see SessionTimeoutController
@@ -32,6 +34,8 @@ class SessionTimeoutControllerTest extends MockeryTestCase
     use MocksServicesTrait;
 
     protected const COOKIE_NAME = 'cookie';
+
+    private $identityProviderClass = PidIdentityProvider::class;
 
     /**
      * @test
@@ -60,7 +64,7 @@ class SessionTimeoutControllerTest extends MockeryTestCase
         // Define Expectations
         $identity = $this->setUpMockService(User::class);
         $identity->shouldReceive('isAnonymous')->andReturnTrue();
-        $currentUser = $this->resolveMockService($serviceLocator, CurrentUser::class);
+        $currentUser = $this->resolveMockService($serviceLocator, IdentityProviderInterface::class);
         $currentUser->shouldReceive('getIdentity')->withNoArgs()->andReturn($identity);
 
         // Execute
@@ -81,7 +85,7 @@ class SessionTimeoutControllerTest extends MockeryTestCase
         $sut = $this->setUpSut($serviceLocator, new Request());
 
         // Define Expectations
-        $currentUser = $this->resolveMockService($serviceLocator, CurrentUser::class);
+        $currentUser = $this->resolveMockService($serviceLocator, IdentityProviderInterface::class);
         $currentUser->shouldReceive('getIdentity')->withNoArgs()->andReturnNull()->once();
 
         // Execute
@@ -103,6 +107,8 @@ class SessionTimeoutControllerTest extends MockeryTestCase
         $request = $this->setUpRequest();
         $sut = $this->setUpSut($serviceLocator, new Request());
 
+        $this->setUpIdentityWithClearSession($this->identityProviderClass);
+
         //Define Expectations
         $logoutService = $this->resolveMockService($serviceLocator, 'Auth\LogoutService');
         $logoutService->shouldReceive('logout')->once();
@@ -117,13 +123,16 @@ class SessionTimeoutControllerTest extends MockeryTestCase
     /**
      * @test
      * @depends indexAction_LogsOutUserIfLoggedIn
+     * @dataProvider dpIdentityProviderClass
      */
-    public function indexAction_RedirectsUserIfLoggedIn()
+    public function indexAction_RedirectsUserIfLoggedIn(string $identityProviderClass)
     {
         // Setup
         $serviceLocator = $this->setUpServiceLocator();
         $request = $this->setUpRequest();
         $sut = $this->setUpSut($serviceLocator, new Request());
+
+        $this->setUpIdentityWithClearSession($identityProviderClass);
 
         // Define Expectations
         $redirectHelper = $this->resolveMockService($serviceLocator, Redirect::class);
@@ -139,6 +148,14 @@ class SessionTimeoutControllerTest extends MockeryTestCase
         $this->assertSame($expectedResponse, $response);
     }
 
+    public function dpIdentityProviderClass(): array
+    {
+        return [
+            [$this->identityProviderClass],
+            [JWTIdentityProvider::class],
+        ];
+    }
+
     /**
      * @test
      * @depends indexAction_RedirectsUserIfLoggedIn
@@ -149,6 +166,8 @@ class SessionTimeoutControllerTest extends MockeryTestCase
         $serviceLocator = $this->setUpServiceLocator();
         $request = $this->setUpRequest();
         $sut = $this->setUpSut($serviceLocator, new Request());
+
+        $this->setUpIdentityWithClearSession($this->identityProviderClass);
 
         //Define Expectations
         $cookieService = $this->resolveMockService($serviceLocator, 'Auth/CookieService');
@@ -170,7 +189,7 @@ class SessionTimeoutControllerTest extends MockeryTestCase
     protected function setUpDefaultServices(ServiceLocatorInterface $serviceLocator): array
     {
         return [
-            CurrentUser::class => $this->setUpIdentity($serviceLocator),
+            IdentityProviderInterface::class => $this->setUpIdentity($this->identityProviderClass),
             Redirect::class => $this->setUpRedirect(),
             'Auth\CookieService' => $this->setUpCookies(),
             'Auth\LogoutService' => $this->setUpMockService(LogoutService::class),
@@ -245,24 +264,41 @@ class SessionTimeoutControllerTest extends MockeryTestCase
     }
 
     /**
-     * @param ServiceLocatorInterface $serviceLocator
+     * @param string $identityProvider
      * @return m\MockInterface
      */
-    protected function setUpIdentity(ServiceLocatorInterface $serviceLocator): m\MockInterface
+    protected function setUpIdentity(string $identityProvider): m\MockInterface
     {
         $identity = $this->setUpMockService(User::class);
         $identity->shouldReceive('isAnonymous')
             ->andReturnFalse()
         ->byDefault();
 
-        $currentUser =  $this->setUpMockService(CurrentUser::class);
+        $currentUser =  $this->getMockServiceWithName($identityProvider, IdentityProviderInterface::class);
         $currentUser->shouldReceive('getIdentity')
             ->withNoArgs()
             ->andReturn($identity)
             ->byDefault();
+        $currentUser->expects('clearSession')
+            ->never()
+            ->byDefault();
 
         return $currentUser;
+    }
 
+    protected function setUpIdentityWithClearSession(string $identityProvider): void
+    {
+        $identity = $this->setUpMockService(User::class);
+        $identity->expects('isAnonymous')
+            ->withNoArgs()
+            ->andReturnFalse();
+
+        $currentUser =  $this->getMockServiceWithName($identityProvider, IdentityProviderInterface::class);
+        $currentUser->expects('getIdentity')
+            ->withNoArgs()
+            ->andReturn($identity);
+        $currentUser->expects('clearSession')
+            ->withNoArgs();
     }
 
     /**
