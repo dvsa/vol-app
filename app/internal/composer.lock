@@ -3639,12 +3639,12 @@
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "4.206.33",
+            "version": "4.206.34",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-auth/4.206.33/olcs-olcs-auth-4.206.33.zip",
-                "reference": "7d63580df68cbd092a19e079858e3a2e8a0089de",
-                "shasum": "7d63580df68cbd092a19e079858e3a2e8a0089de"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-auth/4.206.34/olcs-olcs-auth-4.206.34.zip",
+                "reference": "1e0ecf6167ba31bb192a3bcbda78fae054f5aa1d",
+                "shasum": "1e0ecf6167ba31bb192a3bcbda78fae054f5aa1d"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -3707,16 +3707,16 @@
                 ]
             },
             "description": "OLCS Authentication",
-            "time": "2022-04-21T13:21:37+00:00"
+            "time": "2022-04-28T17:35:42+00:00"
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.400",
+            "version": "4.206.402",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.400/olcs-olcs-common-4.206.400.zip",
-                "reference": "0378dda3414b2f84b0c4b782beca77733a4dc7b1",
-                "shasum": "0378dda3414b2f84b0c4b782beca77733a4dc7b1"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.402/olcs-olcs-common-4.206.402.zip",
+                "reference": "cfc5151fb6cfb3d369206382bf26ffaac0d5ac59",
+                "shasum": "cfc5151fb6cfb3d369206382bf26ffaac0d5ac59"
             },
             "require": {
                 "doctrine/annotations": "^1.8",
@@ -3800,7 +3800,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2022-04-26T13:07:27+00:00"
+            "time": "2022-04-28T17:31:44+00:00"
         },
         {
             "name": "olcs/olcs-logging",
