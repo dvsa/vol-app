@@ -23,15 +23,11 @@ class CasesOpenReportFilter
      *     "label": "Traffic areas",
      *     "disable_inarray_validator": false,
      *     "service_name": "Common\Service\Data\TrafficArea",
-     *     "other_option": false,
-     *     "extra_option": {
-     *          "": "All",
-     *          "OTHER": "Other",
-     *     }
+     *     "other_option": true,
      * })
-     * @Form\Type("DynamicSelect")
+     * @Form\Type("DynamicMultiCheckbox")
      */
-    public $trafficArea = null;
+    public $trafficAreas = null;
 
     /**
      * @Form\Options({
