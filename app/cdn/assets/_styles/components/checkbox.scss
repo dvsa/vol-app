@@ -19,7 +19,7 @@
           top: 0;
           width: 1.25em;
           height: 1.25em;
-          border: 2px solid govuk-colour("grey-2");
+          border: 2px solid govuk-colour("mid-grey");
           background: govuk-colour("white");
           border-radius: 4px;
         }
@@ -45,7 +45,7 @@
 
     &:disabled {
       + label {
-        color: govuk-colour("grey-2");
+        color: govuk-colour("mid-grey");
       }
 
       &:not(:checked) + label:before {
@@ -83,7 +83,7 @@
           top: 0;
           width: 1.25em;
           height: 1.25em;
-          border: 2px solid govuk-colour("grey-3");
+          border: 2px solid govuk-colour("light-grey");
           background: govuk-colour("white");
           border-radius: 4px;
 

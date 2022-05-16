@@ -107,10 +107,6 @@ $mobile-column-stack: breakpoint('break-4');
 
 @if $app == 'internal' {
   $col-gutter : 1.25%;
-  $black  : #222;
-  $grey-1 : #71767C;
-  $grey-2 : #CCC;
-  $grey-3 : #DDD;
   $core-sizes: map-merge($core-sizes, (
     'size-5' : 18
   ));

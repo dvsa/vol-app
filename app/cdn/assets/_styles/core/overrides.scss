@@ -30,9 +30,9 @@ form#AcceptAndPayForm {
     text-decoration: none;
 
     &--secondary {
-      background: govuk-colour('grey-3');
+      background: govuk-colour('light-grey');
       color: govuk-colour('black');
-      box-shadow: 0 2px 0 govuk-colour('grey-2');
+      box-shadow: 0 2px 0 govuk-colour('mid-grey');
     }
   }
 }

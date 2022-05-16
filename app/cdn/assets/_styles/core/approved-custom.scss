@@ -14,22 +14,6 @@
 .heading-box-grey {
   @extend .govuk-inset-text;
 
-  background: govuk-colour("grey-4");
-  border-color: govuk-colour("grey-3");
-}
-
-// GDS Orange is not accessible for text on a white background, this is a short term fix to increase the contrast until we redesign statuses across VOL.
-#pg\:permits\:index,
-#pg\:permits\/ecmt-under-consideration\:underConsideration,
-#pg\:permits\/application\:generic,
-#pg\:permits\/application\/under-consideration\:generic,
-#pg\:permits\/valid\:generic,
-#pg\:permits\/ecmt-valid-permits\:valid {
-  .status {
-    @include govuk-font($size: 14, $weight: bold);
-
-    &.orange {
-      color: #c5490a;
-    }
-  }
+  background: govuk-colour("light-grey");
+  border-color: govuk-colour("mid-grey");
 }
