@@ -4,9 +4,9 @@
     </dt>
     <dd class="govuk-summary-list__value">
         <?php if (isset($this->status)) { ?>
-            <span style="float: right" class="overview__status <?php echo $this->status['colour']; ?>">
+            <strong style="float: right" class="govuk-tag govuk-tag--<?php echo $this->escapeHtml($this->status['colour']); ?>">
                 <?php echo $this->escapeHtml($this->translate($this->status['caption'])); ?>
-            </span>
+            </strong>
         <?php } ?>
         <?php
             /**  @todo move logic to reusable view helper (listValueFormatter?) to encompass common situations */

@@ -179,10 +179,10 @@ $isLoggedIn = $currentUser->isLoggedIn();
                   : $this->translate('header-vehicle-operator-licensing');
           ?>
         </a>
+        <nav aria-label="Menu" class="govuk-header__navigation">
         <button type="button" class="govuk-header__menu-button govuk-js-header-toggle" aria-controls="navigation" aria-label="<?php echo $this->escapeHtml($this->translate('show.or.hide.top.level.navigation')); ?>">
             <?php echo $this->escapeHtml($this->translate('menu')); ?>
         </button>
-        <nav>
           <?php
           if ($isLoggedIn) {
               // get Home navigation
