@@ -1,0 +1,107 @@
+$site-width: 1020px;
+$full-width: 100%;
+$one-quarter: $full-width / 4;
+$one-third: $full-width / 3;
+$half: $full-width / 2;
+$two-thirds: ($full-width) - ($one-third);
+$three-quarters: ($full-width) - ($one-quarter);
+
+$gutter: $govuk-gutter;
+$gutter-one-quarter: $gutter / 4;
+$gutter-one-third: $gutter / 3;
+$gutter-half: $govuk-gutter-half;
+$gutter-two-thirds: $gutter - $gutter-one-third;
+
+$link-colour: $govuk-link-colour;
+$link-active-colour: $govuk-link-active-colour;
+$link-hover-colour: $govuk-link-hover-colour;
+$focus-colour: $govuk-focus-colour;
+$text-colour: $govuk-text-colour;
+$button-colour: #00823b;
+
+$orange: govuk-colour('orange');
+$yellow: govuk-colour('yellow');
+$yellow-50: #ffdf94;
+$yellow-25: #fff2d3;
+$black: govuk-colour("black");
+$department-for-transport: #006c56;
+$grey-1: govuk-colour("dark-grey");
+$grey-2: govuk-colour("mid-grey");
+$grey-3: govuk-colour("light-grey");
+$grey-4: govuk-colour("light-grey"); //only 3 greys in newer GDS
+$white: govuk-colour("white");
+$red: govuk-colour("red");
+$mellow-red: #df3034;
+$red-25: #efcfd1;
+$red-50: #d9888c;
+$pink: govuk-colour("pink");
+$green: govuk-colour("green");
+$error-colour: govuk-colour("red");
+$govuk-blue: govuk-colour("blue");
+$light-blue-50: #96c6e2;
+$light-blue-25: #d5e8f3;
+
+// New Transport Light
+$NTA-Light: $govuk-font-family-nta;
+$NTA-Light-Tabular: $govuk-font-family-nta-tabular;
+
+@mixin media($size: false, $max-width: false, $min-width: false, $ignore-for-ie: false) {
+    @if $size == desktop {
+      @media (min-width: 769px){
+        @content;
+      }
+    } @else if $size == tablet {
+      @media (min-width: 641px){
+        @content;
+      }
+    } @else if $size == mobile {
+      @media (max-width: 640px){
+        @content;
+      }
+    } @else if $max-width != false {
+      @media (max-width: $max-width){
+        @content;
+      }
+    } @else if $min-width != false {
+      @media (min-width: $min-width){
+        @content;
+      }
+    } @else {
+      @media (min-width: $size){
+        @content
+      }
+    }
+}
+
+%site-width-container {
+  max-width: $site-width;
+
+  margin: 0 $gutter-half;
+
+  @include media(tablet) {
+    margin: 0 $gutter;
+  }
+
+  @include media($min-width: ($site-width + $gutter * 2)) {
+    margin: 0 auto;
+  }
+}
+
+@mixin opacity($trans) {
+  zoom: 1;
+  filter: unquote('alpha(opacity=' + ($trans * 100) + ')'); // IE6 to IE8
+  opacity: $trans;
+}
+
+%contain-floats {
+  &:after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+}
+
+%grid-row {
+  @extend %contain-floats;
+  margin: 0 (-$gutter-half);
+}

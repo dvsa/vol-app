@@ -21,7 +21,7 @@
   height: 28px;
   width: 28px;
   background-image: url('#{$asset-path}/bitmap/preloader.gif');
-  @include device-pixel-ratio($ratio: 2) {
+  @include govuk-device-pixel-ratio($ratio: 2) {
     background-image: url('#{$asset-path}/bitmap/preloader-2x.gif');
   }
 }
@@ -31,7 +31,7 @@
   height: 20px;
   width: 20px;
   background-image: url('#{$asset-path}/bitmap/preloader--dark.gif');
-  @include device-pixel-ratio($ratio: 2) {
+  @include govuk-device-pixel-ratio($ratio: 2) {
     background-image: url('#{$asset-path}/bitmap/preloader--dark-2x.gif');
   }
 }
