@@ -74,8 +74,8 @@ class NewTmUserDetails
      * })
      * @Form\Type("Text")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\Username"})
-     * @Form\Required(false)
+     * @Form\Filter({"name":"Laminas\Filter\StringToLower"})
+     * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\UsernameCreate"})
      */
     public $username = null;
 

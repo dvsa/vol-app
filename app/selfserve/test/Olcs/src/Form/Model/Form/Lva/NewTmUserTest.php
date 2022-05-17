@@ -63,9 +63,9 @@ class NewTmUserTest extends AbstractFormValidationTestCase
     public function testUsername()
     {
         $element = ['data', 'username'];
-        $this->assertFormElementRequired($element, false);
-        $this->assertFormElementAllowEmpty($element, true);
-        $this->assertFormElementUsername($element);
+        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementAllowEmpty($element, false);
+        $this->assertFormElementUsernameCreate($element);
     }
 
     public function testEmailAddress()
