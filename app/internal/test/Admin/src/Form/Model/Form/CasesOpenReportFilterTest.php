@@ -12,11 +12,9 @@ class CasesOpenReportFilterTest extends AbstractFormValidationTestCase
 {
     protected $formName = \Admin\Form\Model\Form\CasesOpenReportFilter::class;
 
-    public function testTrafficArea()
+    public function testTrafficAreas()
     {
-        $element = ['trafficArea'];
-        $this->assertFormElementDynamicSelect($element);
-        $this->assertFormElementAllowEmpty($element, false);
+        $this->assertFormElementDynamicMultiCheckbox(['trafficAreas']);
     }
 
     public function testCaseType()
