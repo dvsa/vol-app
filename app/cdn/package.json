@@ -26,7 +26,7 @@
     "grunt-contrib-clean": "^1.1.0",
     "grunt-contrib-copy": "^0.8.2",
     "grunt-contrib-uglify": "^0.11.1",
-    "grunt-karma": "^3.0.1",
+    "grunt-karma": "^4.0.2",
     "grunt-postcss": "^0.8.0",
     "grunt-sass": "^3.1.0",
     "grunt-svg-sprite": "^1.3.7",
@@ -42,8 +42,8 @@
     "svg2png-many": "0.0.7"
   },
   "devDependencies": {
-    "@babel/core": "^7.17.12",
-    "@babel/preset-env": "^7.17.12",
+    "@babel/core": "^7.18.2",
+    "@babel/preset-env": "^7.18.2",
     "assemble": "^0.24.3",
     "browsersync": "0.0.1-security",
     "cssnano": "^4.1.7",
@@ -55,15 +55,15 @@
     "grunt-notify": "^0.4.5",
     "grunt-scss-lint": "^0.5.0",
     "handlebars-helper-repeat": "0.2.0",
-    "karma": "^3.1.3",
-    "karma-coverage": "^1.1.2",
-    "karma-expect": "~1.1.0",
-    "karma-junit-reporter": "^1.2.0",
-    "karma-mocha": "^1.3.0",
+    "karma": "^4.4.1",
+    "karma-coverage": "^2.2.0",
+    "karma-expect": "~1.1.3",
+    "karma-junit-reporter": "^2.0.1",
+    "karma-mocha": "^2.0.1",
     "karma-mocha-reporter": "^2.2.5",
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-sinon": "^1.0.5",
     "phantomjs-prebuilt": "^2.1.16",
-    "snyk": "^1.931.0"
+    "snyk": "^1.939.0"
   }
 }
