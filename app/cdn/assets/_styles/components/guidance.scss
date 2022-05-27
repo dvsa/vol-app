@@ -2,30 +2,6 @@
  * Guidance
  */
 
-%guidance {
-  clear: both;
-  border-left-style: solid;
-  border-left-width: 10px;
-  border-color: $grey-2;
-  padding: $gutter-half;
-  margin-bottom: $gutter-half;
- }
-
-.guidance {
-  @extend %guidance;
-  &:not(:last-child) {
-    margin-bottom: $gutter;
-  }
-  .page-header & {
-    margin-bottom: 0;
-  }
-  .modal__wrapper & {
-    word-wrap: break-word;
-    float: none;
-    overflow: auto;
-  }
-}
-
 .help__summary {
   @extend %paragraph;
   display: inline-block;
@@ -77,15 +53,5 @@
     > .field{
       margin-bottom: 0;
     }
-  }
-}
-
-/**
- * Internal only styles
- */
-
-@if $app == 'internal' {
-  .guidance {
-    max-width: 600px;
   }
 }
