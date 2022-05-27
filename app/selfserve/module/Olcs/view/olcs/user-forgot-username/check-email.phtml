@@ -1,7 +1,7 @@
 <div class="page-header">
   <div class="page-header__wrapper">
     <h1><?php echo $this->translate('user-forgot-username.page.check-email.title'); ?></h1>
-    <div class="page-header__text"><div class="guidance"><p>
+    <div class="page-header__text"><div class="govuk-inset-text"><p>
         <?php echo $this->getHelperPluginManager()
             ->getServiceLocator()->get('Helper\Translation')
             ->translateReplace('user-forgot-username.page.check-email.guidance', [$this->emailAddress]); ?>

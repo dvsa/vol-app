@@ -3,7 +3,7 @@
 
 <div class="row">
     <div class="two-thirds">
-        <div class="guidance">
+        <div class="govuk-inset-text">
             <p><?php echo sprintf($this->translate('signin-or-register-text'), $this->url('user-registration')); ?></p>
             <p><?php echo sprintf($this->translate('auth.login.termsAgreed'), $this->url('terms-and-conditions')); ?></p>
             <hr aria-hidden="true">
@@ -35,7 +35,7 @@
                 </div>
                 <div class="actions-container">
                     <p><?php echo $this->escapeHtml($this->translate('help-sign-in')); ?></p>
-                    <div class="guidance">
+                    <div class="govuk-inset-text">
                         <ul class="list--compound">
                             <li>
                                 <a href="<?php echo $this->url('user-forgot-username'); ?>"
