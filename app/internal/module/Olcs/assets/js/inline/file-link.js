@@ -14,7 +14,7 @@ OLCS.ready(function() {
 
         link = link.replace('%l', fileUrl);
 
-        $(this).parent().append('<div class="guidance">' + link  + '</div>');
+        $(this).parent().append('<div class="govuk-inset-text">' + link  + '</div>');
 
         $(this).replaceWith('<span>' + $(this).html() + '</span>');
       }
