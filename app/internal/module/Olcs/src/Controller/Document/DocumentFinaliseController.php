@@ -90,9 +90,8 @@ class DocumentFinaliseController extends AbstractDocumentController
         $category = $data['data']['category']['description'];
         $documentSubCategory = $data['data']['subCategory']['subCategoryName'];
 
-        $loginId = $this->currentUser()->getIdentity()->getUsername();
         $jwt = $this->webDavJsonWebTokenGenerationService->generateToken(
-            $loginId,
+            'intusr',
             $data['data']['identifier']
         );
 
