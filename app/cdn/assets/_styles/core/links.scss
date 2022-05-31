@@ -12,7 +12,7 @@ a {
   @if $app == 'selfserve' {
     &:focus {
       outline: 3px solid transparent;
-      color: $black;
+      color: $govuk-focus-text-colour;
       background-color: $outline;
       -webkit-box-shadow: 0 -2px $outline, 0 4px $black;
       box-shadow: 0 -2px $outline, 0 4px $black;
