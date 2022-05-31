@@ -55,12 +55,11 @@ class PublicationController extends AbstractInternalController implements LeftVi
     protected function getPublicationLinkData($data)
     {
         $webDavJsonWebTokenGenerationService = $this->getServiceLocator()->get(WebDavJsonWebTokenGenerationService::class);
-        $loginId = $this->currentUser()->getIdentity()->getUsername();
 
         foreach ($data['results'] as $result => $value) {
             if (isset($value['document'])) {
                 $jwt = $webDavJsonWebTokenGenerationService->generateToken(
-                    $loginId,
+                    'intusr',
                     $value['document']['identifier']
                 );
                 $url = $webDavJsonWebTokenGenerationService->getJwtWebDavLink(
