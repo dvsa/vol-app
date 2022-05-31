@@ -60,10 +60,10 @@
                 <h3 class="info-box__heading"><?php echo $this->translate('licence-status'); ?></h3>
                 <p class="info-box__icon-wrapper info-box__text"><i class="info-box__icon selfserve-important"></i><?php echo $this->translate($status); ?></p>
                 <?php foreach ($infoBoxLinks as $link): ?>
-                <ul class="info-box__links">
-                    <li class="govuk-!-margin-top-2">
+                <ul class="govuk-list">
+                    <li>
                         <a href="<?php echo $this->url($link['linkUrl']['route'], $link['linkUrl']['params'], $link['linkUrl']['options'], $link['linkUrl']['reuseMatchedParams']); ?>"
-                           class="govuk-!-font-size-19">
+                           class="govuk-link">
                         <?php echo $this->translate($link['linkText']); ?></a>
                     </li>
                 </ul>
