@@ -19,7 +19,8 @@ class UserDetails extends Base
      * @Form\Attributes({"id":"username","placeholder":"","class":"medium", "required":false})
      * @Form\Type("Text")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\Username"})
+     * @Form\Filter({"name":"Laminas\Filter\StringToLower"})
+     * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\UsernameCreate"})
      */
     public $loginId = null;
 
