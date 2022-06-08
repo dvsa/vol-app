@@ -21,7 +21,7 @@ class UserTest extends AbstractFormValidationTestCase
         $element = ['main', 'loginId'];
         $this->assertFormElementRequired($element, true);
         $this->assertFormElementAllowEmpty($element, false);
-        $this->assertFormElementUsername($element);
+        $this->assertFormElementUsernameCreate($element);
     }
 
     public function testForename()
