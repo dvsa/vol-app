@@ -3911,12 +3911,12 @@
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "4.206.155",
+            "version": "4.206.156",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-transfer/4.206.155/olcs-olcs-transfer-4.206.155.zip",
-                "reference": "bd4d2a63f44b1a48cdccc25bf8e2327b8381c4be",
-                "shasum": "bd4d2a63f44b1a48cdccc25bf8e2327b8381c4be"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-transfer/4.206.156/olcs-olcs-transfer-4.206.156.zip",
+                "reference": "01a70806b03ae3d157f70556e9d3d39fde9a07e2",
+                "shasum": "01a70806b03ae3d157f70556e9d3d39fde9a07e2"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -3976,7 +3976,7 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2022-06-06T09:01:41+00:00"
+            "time": "2022-06-09T08:30:00+00:00"
         },
         {
             "name": "olcs/olcs-utils",
@@ -4485,6 +4485,7 @@
                     "type": "tidelift"
                 }
             ],
+            "abandoned": "symfony/error-handler",
             "time": "2022-04-12T15:19:55+00:00"
         },
         {
