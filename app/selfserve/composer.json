@@ -6,18 +6,6 @@
             "packagist": false
         },
         {
-            "url": "git@repo.olcs.dev-dvsacloud.uk:olcs/olcs-common.git",
-            "type": "vcs"
-        },
-        {
-            "url": "git@repo.olcs.dev-dvsacloud.uk:olcs/olcs-transfer.git",
-            "type": "vcs"
-        },
-        {
-            "url": "git@repo.olcs.dev-dvsacloud.uk:olcs/olcs-auth.git",
-            "type": "vcs"
-        },
-        {
             "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS",
             "type": "composer"
         },
@@ -47,11 +35,11 @@
         "laminas/laminas-view": "^2.5",
         "doctrine/annotations": "^1.8",
         "lm-commons/lmc-rbac-mvc": "^2.6",
-        "olcs/olcs-transfer": "dev-project/lgv-post-mvp",
+        "olcs/olcs-transfer": "~4.206.0",
         "olcs/olcs-utils": "~4.206.0",
-        "olcs/olcs-auth": "dev-project/lgv-post-mvp",
+        "olcs/olcs-auth": "~4.206.0",
         "olcs/olcs-logging": "~4.206.0",
-        "olcs/olcs-common": "dev-project/lgv-post-mvp",
+        "olcs/olcs-common": "~4.206.0",
         "laminas/laminas-dependency-plugin": "^2.0",
         "laminas/laminas-authentication": "^2.5"
     },
