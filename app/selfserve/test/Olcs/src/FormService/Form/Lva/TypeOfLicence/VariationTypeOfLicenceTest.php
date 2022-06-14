@@ -9,7 +9,6 @@ use Olcs\FormService\Form\Lva\TypeOfLicence\VariationTypeOfLicence;
 use Laminas\Form\Form;
 use Common\FormService\FormServiceManager;
 use Laminas\Form\Element;
-use Laminas\Form\Element\Radio;
 use Laminas\Form\Fieldset;
 use Common\RefData;
 use Common\Form\Elements\InputFilters\Lva\BackToVariationActionLink;
@@ -44,7 +43,6 @@ class VariationTypeOfLicenceTest extends MockeryTestCase
      */
     public function testAlterForm($params, $removeElement, $accessToLicenceType)
     {
-
         $mockForm = m::mock(Form::class);
 
         $this->fh->shouldReceive('createForm')
@@ -81,8 +79,8 @@ class VariationTypeOfLicenceTest extends MockeryTestCase
                 [
                     'canUpdateLicenceType' => true,
                     'canBecomeSpecialRestricted' => true,
-                    'canBecomeStandardInternational' => true,
-                    'currentLicenceType' => 'foo'
+                    'currentLicenceType' => 'foo',
+                    'currentVehicleType' => 'bar'
                 ],
                 'form-actions->cancel',
                 2
@@ -91,18 +89,18 @@ class VariationTypeOfLicenceTest extends MockeryTestCase
                 [
                     'canUpdateLicenceType' => true,
                     'canBecomeSpecialRestricted' => false,
-                    'canBecomeStandardInternational' => false,
-                    'currentLicenceType' => 'foo'
+                    'currentLicenceType' => 'foo',
+                    'currentVehicleType' => 'bar'
                 ],
                 'form-actions->cancel',
-                4
+                3
             ],
             [
                 [
                     'canUpdateLicenceType' => false,
                     'canBecomeSpecialRestricted' => true,
-                    'canBecomeStandardInternational' => true,
-                    'currentLicenceType' => 'foo'
+                    'currentLicenceType' => 'foo',
+                    'currentVehicleType' => 'bar'
                 ],
                 'form-actions',
                 3
@@ -124,12 +122,22 @@ class VariationTypeOfLicenceTest extends MockeryTestCase
             ->once()
             ->getMock();
 
-        $mockLicenceType = m::mock(Radio::class);
+        $mockVehicleType = m::mock(Element::class);
+
+        $mockLtypSiContentFieldset = m::mock(Fieldset::class);
+        $mockLtypSiContentFieldset->shouldReceive('get')
+            ->with('vehicle-type')
+            ->andReturn($mockVehicleType);
+
+        $mockLicenceType = m::mock(Element::class);
 
         $ltFieldset = m::mock(Fieldset::class);
         $ltFieldset->shouldReceive('get')
             ->with('licence-type')
             ->andReturn($mockLicenceType);
+        $ltFieldset->shouldReceive('get')
+            ->with('ltyp_siContent')
+            ->andReturn($mockLtypSiContentFieldset);
         $ltFieldset->shouldReceive('setLabel')
             ->with('licence-type')
             ->once();
@@ -151,7 +159,7 @@ class VariationTypeOfLicenceTest extends MockeryTestCase
 
         $mockForm->shouldReceive('get')
             ->with('type-of-licence')
-            ->times(3)
+            ->twice()
             ->andReturn($mockTolFieldset)
             ->getMock();
 
@@ -170,18 +178,14 @@ class VariationTypeOfLicenceTest extends MockeryTestCase
             ->shouldReceive('setCurrentOption')
             ->with($mockLicenceType, $params['currentLicenceType'])
             ->once()
+            ->shouldReceive('setCurrentOption')
+            ->with($mockVehicleType, $params['currentVehicleType'])
+            ->once()
             ->getMock();
 
         if (!$params['canBecomeSpecialRestricted']) {
             $this->fh->shouldReceive('removeOption')
                 ->with($mockLicenceType, RefData::LICENCE_TYPE_SPECIAL_RESTRICTED)
-                ->once()
-                ->getMock();
-        }
-
-        if (!$params['canBecomeStandardInternational']) {
-            $this->fh->shouldReceive('disableOption')
-                ->with($mockLicenceType, RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL)
                 ->once()
                 ->getMock();
         }
