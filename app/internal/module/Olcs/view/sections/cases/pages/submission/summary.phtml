@@ -28,6 +28,49 @@ if (isset($this->data['data']['overview']['caseType']) && $this->data['data']['o
     $licenceItems[] = ['label' => 'Service standard date', 'dateFormat' => 'Y-m-d', 'date' => $this->data['data']['overview']['serviceStandardDate']];
 }
 
+$authorisationItems = [];
+$overviewData = $this->data['data']['overview'];
+
+if (array_key_exists('totAuthorisedVehicles', $overviewData)) {
+    $authorisationItems[] = [
+        'label' => 'Total vehicle authorisation',
+        'numeric' => $overviewData['totAuthorisedVehicles']
+    ];
+}
+
+if (array_key_exists('totAuthorisedHgvVehicles', $overviewData)) {
+    $authorisationItems[] = [
+        'label' => 'Heavy goods vehicle authorisation',
+        'numeric' => $overviewData['totAuthorisedHgvVehicles']
+    ];
+}
+
+if (array_key_exists('totAuthorisedLgvVehicles', $overviewData)) {
+    $authorisationItems[] = [
+        'label' => 'Light goods vehicle authorisation',
+        'numeric' => $overviewData['totAuthorisedLgvVehicles']
+    ];
+}
+
+$authorisationItems[] = [
+    'label' => 'Vehicles in possession',
+    'numeric' => $overviewData['vehiclesInPossession']
+];
+
+if (array_key_exists('totAuthorisedTrailers', $overviewData)) {
+    $authorisationItems[] = [
+        'label' => 'Trailer authorisation',
+        'numeric' => $overviewData['totAuthorisedTrailers']
+    ];
+}
+
+if (array_key_exists('trailersInPossession', $overviewData)) {
+    $authorisationItems[] = [
+        'label' => 'Trailers in possession',
+        'numeric' => $overviewData['trailersInPossession']
+    ];
+}
+
 echo $this->render('partials/read-only/main',
     [
         'id' => $this->data['submissionSection'],
@@ -44,12 +87,7 @@ echo $this->render('partials/read-only/main',
 
             ],
             1 => $licenceItems,
-            2 => [
-                ['label' => 'Total vehicle authorisation', 'numeric' => $this->data['data']['overview']['totAuthorisedVehicles']],
-                ['label' => 'Vehicles in possession', 'numeric' => $this->data['data']['overview']['vehiclesInPossession']],
-                ['label' => 'Trailer authorisation', 'numeric' => $this->data['data']['overview']['totAuthorisedTrailers']],
-                ['label' => 'Trailers in possession', 'numeric' => $this->data['data']['overview']['trailersInPossession']]
-            ]
+            2 => $authorisationItems
         ]
     ]
 );
