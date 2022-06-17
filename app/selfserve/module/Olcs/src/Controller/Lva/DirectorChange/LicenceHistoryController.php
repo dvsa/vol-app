@@ -1,21 +1,22 @@
 <?php
 
 /**
- * External Director Change Variation Financial History Controller
+ * External Director Change Variation Licence History Controller
  */
 
 namespace Olcs\Controller\Lva\DirectorChange;
 
-use Common\Controller\Lva\AbstractFinancialHistoryController;
+use Common\Controller\Lva\AbstractLicenceHistoryController;
 use Common\RefData;
+use Laminas\Mvc\Controller\Plugin\FlashMessenger;
+use Laminas\I18n\Translator\TranslatorInterface;
 use Olcs\Controller\Lva\Traits\VariationWizardPageFormActionsTrait;
 use Olcs\Controller\Lva\Traits\VariationWizardPageWithSubsequentPageControllerTrait;
-use Laminas\Form\FormInterface;
 
 /**
- * External Director Change Variation Financial History Controller
+ * External Director Change Variation Licence History Controller
  */
-class FinancialHistoryController extends AbstractFinancialHistoryController
+class LicenceHistoryController extends AbstractLicenceHistoryController
 {
     use VariationWizardPageWithSubsequentPageControllerTrait;
     use VariationWizardPageFormActionsTrait;
@@ -24,13 +25,23 @@ class FinancialHistoryController extends AbstractFinancialHistoryController
     protected $lva = 'variation';
 
     /**
+     * @param TranslatorInterface $translator
+     * @param FlashMessenger $flashMessenger
+     */
+    public function __construct(TranslatorInterface $translator, FlashMessenger $flashMessenger)
+    {
+        $this->translator = $translator;
+        $this->flashMessenger = $flashMessenger;
+    }
+
+    /**
      * Get the required previous sections
      *
      * @return array required previous sections or return empty array
      */
     protected function getRequiredSections()
     {
-        return ['peopleStatus'];
+        return ['peopleStatus', 'financialHistoryStatus'];
     }
 
     /**
@@ -50,7 +61,7 @@ class FinancialHistoryController extends AbstractFinancialHistoryController
      */
     public function getSubmitActionText()
     {
-        return 'Continue to Licence History';
+        return 'Continue to Convictions and Penalties';
     }
 
     /**
@@ -62,7 +73,7 @@ class FinancialHistoryController extends AbstractFinancialHistoryController
      */
     protected function getPreviousPageRoute()
     {
-        return ['name' => 'lva-director_change/people', 'params' => ['application' => $this->getIdentifier()]];
+        return ['name' => 'lva-director_change/financial_history', 'params' => ['application' => $this->getIdentifier()]];
     }
 
     /**
@@ -73,23 +84,9 @@ class FinancialHistoryController extends AbstractFinancialHistoryController
     protected function getNextPageRoute()
     {
         return [
-            'name' => 'lva-director_change/licence_history',
+            'name' => 'lva-director_change/convictions_penalties',
             'params' => ['application' => $this->getIdentifier()]
         ];
-    }
-
-    /**
-     * Get Financial History Form (extra data is required for this version of the form)
-     *
-     * @param array $data the form data
-     *
-     * @return FormInterface
-     */
-    protected function getFinancialHistoryForm(array $data = [])
-    {
-        $data['variationType'] = $this->getVariationType();
-        $data['organisationType'] = $this->fetchDataForLva()['licence']['organisation']['type']['id'];
-        return parent::getFinancialHistoryForm($data);
     }
 
     /**
@@ -101,5 +98,15 @@ class FinancialHistoryController extends AbstractFinancialHistoryController
     {
         $licenceId = $this->getLicenceId($this->getApplicationId());
         return ['name' => 'lva-licence/people', 'params' => ['licence' => $licenceId]];
+    }
+
+    /**
+     * Return the route the wizard lives under
+     *
+     * @return null|string
+     */
+    protected function getBaseRoute()
+    {
+        return 'lva-director_change/licence_history';
     }
 }
