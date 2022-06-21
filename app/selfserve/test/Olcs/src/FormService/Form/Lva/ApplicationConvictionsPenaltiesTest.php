@@ -14,7 +14,7 @@ use Common\Form\Model\Form\Lva\Fieldset\ConvictionsPenaltiesReadMoreLink;
 use Common\Form\Elements\InputFilters\ActionLink;
 use Common\FormService\FormServiceManager;
 use Laminas\Form\Element;
-use Laminas\Di\ServiceLocator;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Application Convictions and Penalties Form Test
@@ -83,9 +83,7 @@ class ApplicationConvictionsPenaltiesTest extends MockeryTestCase
                 $ConvictionsReadMoreLink
             )->getMock();
 
-        $mockServiceLocator = m::mock(ServiceLocator::class);
-
-
+        $mockServiceLocator = m::mock(ServiceLocatorInterface::class);
         $mockServiceLocator->shouldReceive('get')->with('Helper\Translation')->once()->andReturn($translator);
         $mockServiceLocator->shouldReceive('get')->with('Helper\Url')->once()->andReturn($mockUrl);
 
