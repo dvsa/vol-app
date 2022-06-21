@@ -69,7 +69,7 @@ trait DocumentSearchTrait
      */
     protected function getDocumentForm($filters = [])
     {
-        /** @var \Laminas\Di\ServiceLocator $sm */
+        /** @var \Laminas\ServiceManager\ServiceLocatorInterface $sm */
         $sm = $this->getServiceLocator();
 
         /** @var \Common\Service\Helper\FormHelperService $formHelper */
