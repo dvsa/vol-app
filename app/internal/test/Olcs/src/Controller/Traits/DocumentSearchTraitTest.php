@@ -3,6 +3,7 @@
 namespace OlcsTest\Controller\Traits;
 
 use Dvsa\Olcs\Utils\Constants\FilterOptions;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Service\Data\DocumentSubCategory as DocumentSubCategoryDS;
@@ -161,7 +162,7 @@ class DocumentSearchTraitTest extends MockeryTestCase
             ->shouldReceive('setCategory')->once()->with($expectCategory)
             ->getMock();
 
-        $mockSm = m::mock(\Laminas\Di\ServiceLocatorInterface::class)
+        $mockSm = m::mock(ServiceLocatorInterface::class)
             ->shouldReceive('get')->with('Helper\Form')->once()->andReturn($mockFormHelper)
             ->shouldReceive('get')->with(DocumentSubCategoryDS::class)->once()->andReturn($mockDocSubCatDs)
             ->getMock();

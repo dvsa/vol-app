@@ -12,7 +12,7 @@ use Common\Form\Model\Form\Lva\Fieldset\ConvictionsPenaltiesReadMoreLink;
 use Common\Service\Helper\TranslationHelperService;
 use Olcs\FormService\Form\Lva\ConvictionsPenalties;
 use Mockery as m;
-use Laminas\Di\ServiceLocator;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Convictions & Penalties Form Service Test
@@ -69,7 +69,7 @@ class ConvictionsPenaltiesTest extends AbstractLvaFormServiceTestCase
             ->with('convictions-and-penalties-guidance-route-param')
             ->andReturn('dummy-translated-param');
 
-        $mockServiceLocator = m::mock(ServiceLocator::class);
+        $mockServiceLocator = m::mock(ServiceLocatorInterface::class);
 
         $mockUrl = m::mock();
         $mockUrl

@@ -4,6 +4,7 @@ namespace OlcsTest\Controller\Traits;
 
 use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Utils\Constants\FilterOptions;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Olcs\Service\Data\SubCategory as SubCategoryDS;
@@ -162,7 +163,7 @@ class TaskSearchTraitTest extends MockeryTestCase
             ->shouldReceive('setFormActionFromRequest')->once()->with($mockForm, $mockReq)->andReturnSelf()
             ->getMock();
 
-        $mockSm = m::mock(\Laminas\Di\ServiceLocatorInterface::class)
+        $mockSm = m::mock(ServiceLocatorInterface::class)
             ->shouldReceive('get')->with(SubCategoryDS::class)->once()->andReturn($mockSubCatDs)
             ->shouldReceive('get')->with('Helper\Form')->once()->andReturn($mockFormHlpr)
             ->getMock();
