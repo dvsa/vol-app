@@ -7,7 +7,6 @@ use Olcs\Logging\Log\Logger;
 use Laminas\I18n\Translator\LoaderPluginManager;
 use Laminas\Mvc\Service\ServiceManagerConfig;
 use Laminas\ServiceManager\ServiceManager;
-use Laminas\Di\Di;
 use Mockery as m;
 
 error_reporting(E_ALL & ~E_USER_DEPRECATED);
@@ -22,7 +21,6 @@ date_default_timezone_set('Europe/London');
 class Bootstrap
 {
     protected static $config = array();
-    protected static $di;
 
     public static function init()
     {
@@ -38,24 +36,6 @@ class Bootstrap
 
         // call this once to load module config
         self::getRealServiceManager();
-
-        // Setup Di
-        $di = new Di();
-
-        $di->instanceManager()->addTypePreference(
-            'Laminas\ServiceManager\ServiceLocatorInterface',
-            'Laminas\ServiceManager\ServiceManager'
-        );
-        $di->instanceManager()->addTypePreference(
-            'Laminas\EventManager\EventManagerInterface',
-            'Laminas\EventManager\EventManager'
-        );
-        $di->instanceManager()->addTypePreference(
-            'Laminas\EventManager\SharedEventManagerInterface',
-            'Laminas\EventManager\SharedEventManager'
-        );
-
-        self::$di = $di;
 
         self::setupLogger();
     }
@@ -120,11 +100,6 @@ class Bootstrap
         require('init_autoloader.php');
 
         return $loader;
-    }
-
-    public static function getDi()
-    {
-        return self::$di;
     }
 }
 
