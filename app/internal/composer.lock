@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "72337ec778619e0444eee237af436156",
+    "content-hash": "7bb5a84d9dfb0a23c2d4e29be22dff63",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -1901,51 +1901,6 @@
             "time": "2021-09-08T17:51:35+00:00"
         },
         {
-            "name": "laminas/laminas-di",
-            "version": "2.6.1",
-            "dist": {
-                "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/laminas/laminas-di/2.6.1/laminas-laminas-di-2.6.1.zip",
-                "reference": "239b22408a1f8eacda6fc2b838b5065c4cf1d88e",
-                "shasum": ""
-            },
-            "require": {
-                "container-interop/container-interop": "^1.1",
-                "laminas/laminas-code": "^2.6 || ^3.0",
-                "laminas/laminas-stdlib": "^2.7 || ^3.0",
-                "laminas/laminas-zendframework-bridge": "^0.4.5 || ^1.0",
-                "php": "^5.5 || ^7.0"
-            },
-            "replace": {
-                "zendframework/zend-di": "self.version"
-            },
-            "require-dev": {
-                "fabpot/php-cs-fixer": "1.7.*",
-                "phpunit/phpunit": "~4.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.6-dev",
-                    "dev-develop": "2.7-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Laminas\\Di\\": "src/"
-                }
-            },
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "homepage": "https://laminas.dev",
-            "keywords": [
-                "di",
-                "laminas"
-            ],
-            "time": "2019-12-31T15:17:33+00:00"
-        },
-        {
             "name": "laminas/laminas-diactoros",
             "version": "1.8.7p2",
             "dist": {
@@ -3683,12 +3638,12 @@
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "4.206.34",
+            "version": "4.206.35",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-auth/4.206.34/olcs-olcs-auth-4.206.34.zip",
-                "reference": "1e0ecf6167ba31bb192a3bcbda78fae054f5aa1d",
-                "shasum": "1e0ecf6167ba31bb192a3bcbda78fae054f5aa1d"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-auth/4.206.35/olcs-olcs-auth-4.206.35.zip",
+                "reference": "070d4010cd7413316c4a180b8f6296c3da31a302",
+                "shasum": "070d4010cd7413316c4a180b8f6296c3da31a302"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -3696,7 +3651,6 @@
                 "laminas/laminas-authentication": "^2.5",
                 "laminas/laminas-console": "^2.5",
                 "laminas/laminas-dependency-plugin": "^2.0",
-                "laminas/laminas-di": "^2.5",
                 "laminas/laminas-filter": "^2.5",
                 "laminas/laminas-form": "^2.5",
                 "laminas/laminas-http": "^2.5",
@@ -3751,16 +3705,16 @@
                 ]
             },
             "description": "OLCS Authentication",
-            "time": "2022-04-28T17:35:42+00:00"
+            "time": "2022-06-21T14:10:33+00:00"
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.408",
+            "version": "4.206.409",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.408/olcs-olcs-common-4.206.408.zip",
-                "reference": "7c8fee98ed8bfcfe89261526c7a3c0e22cd1cf03",
-                "shasum": "7c8fee98ed8bfcfe89261526c7a3c0e22cd1cf03"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.409/olcs-olcs-common-4.206.409.zip",
+                "reference": "bcc3d2aea14abb549801c08346c114727602ea74",
+                "shasum": "bcc3d2aea14abb549801c08346c114727602ea74"
             },
             "require": {
                 "doctrine/annotations": "^1.8",
@@ -3770,7 +3724,6 @@
                 "laminas/laminas-cache": "^2.5",
                 "laminas/laminas-code": "~3.4.1",
                 "laminas/laminas-dependency-plugin": "^2.0",
-                "laminas/laminas-di": "^2.5",
                 "laminas/laminas-escaper": "^2.5",
                 "laminas/laminas-eventmanager": "^2.5",
                 "laminas/laminas-filter": "^2.5",
@@ -3844,7 +3797,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2022-06-14T09:32:02+00:00"
+            "time": "2022-06-21T14:12:03+00:00"
         },
         {
             "name": "olcs/olcs-logging",
@@ -5564,6 +5517,51 @@
                 "slow"
             ],
             "time": "2020-12-18T16:20:16+00:00"
+        },
+        {
+            "name": "laminas/laminas-di",
+            "version": "2.6.1",
+            "dist": {
+                "type": "zip",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/laminas/laminas-di/2.6.1/laminas-laminas-di-2.6.1.zip",
+                "reference": "239b22408a1f8eacda6fc2b838b5065c4cf1d88e",
+                "shasum": ""
+            },
+            "require": {
+                "container-interop/container-interop": "^1.1",
+                "laminas/laminas-code": "^2.6 || ^3.0",
+                "laminas/laminas-stdlib": "^2.7 || ^3.0",
+                "laminas/laminas-zendframework-bridge": "^0.4.5 || ^1.0",
+                "php": "^5.5 || ^7.0"
+            },
+            "replace": {
+                "zendframework/zend-di": "self.version"
+            },
+            "require-dev": {
+                "fabpot/php-cs-fixer": "1.7.*",
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.6-dev",
+                    "dev-develop": "2.7-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Laminas\\Di\\": "src/"
+                }
+            },
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "homepage": "https://laminas.dev",
+            "keywords": [
+                "di",
+                "laminas"
+            ],
+            "time": "2019-12-31T15:17:33+00:00"
         },
         {
             "name": "mikey179/vfsstream",
