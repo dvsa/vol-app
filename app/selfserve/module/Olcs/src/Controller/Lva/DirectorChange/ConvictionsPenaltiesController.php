@@ -58,7 +58,7 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
      */
     protected function getRequiredSections()
     {
-        return ['peopleStatus', 'financialHistoryStatus'];
+        return ['peopleStatus', 'financialHistoryStatus', 'licenceHistoryStatus'];
     }
 
 
@@ -137,7 +137,7 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
      */
     protected function getPreviousPageRoute()
     {
-        return ['name' => 'lva-director_change/financial_history', 'params' => ['application' => $this->getIdentifier()]];
+        return ['name' => 'lva-director_change/licence_history', 'params' => ['application' => $this->getIdentifier()]];
     }
 
     /**
