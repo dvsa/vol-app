@@ -2,8 +2,11 @@
 
 namespace OlcsTest\Service\Marker;
 
+use Laminas\ServiceManager\Exception\InvalidServiceException;
+use Laminas\ServiceManager\Exception\RuntimeException;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
+use Olcs\Service\Marker\MarkerInterface;
 
 /**
  * MarkerPluginManagerTest
@@ -34,19 +37,37 @@ class MarkerPluginManagerTest extends TestCase
         $this->assertInstanceOf(\Olcs\Service\Marker\MarkerPluginManager::class, $sut);
     }
 
-    public function testValidatePluginTrue()
+    public function testValidate()
     {
-        $mockPlugin = m::mock(\Olcs\Service\Marker\MarkerInterface::class);
+        $mockPlugin = m::mock(MarkerInterface::class);
 
-        $this->assertTrue($this->sut->validatePlugin($mockPlugin));
+        $this->assertNull($this->sut->validate($mockPlugin));
     }
 
-    public function testValidatePluginFalse()
+    public function testValidateInvalid()
     {
-        $mockPlugin = m::mock();
+        $this->expectException(InvalidServiceException::class);
 
-        $this->expectException(\RuntimeException::class, 'Must implement MarkerInterface');
+        $this->sut->validate(null);
+    }
 
-        $this->sut->validatePlugin($mockPlugin);
+    /**
+     * @todo To be removed as part of OLCS-28149
+     */
+    public function testValidatePlugin()
+    {
+        $mockPlugin = m::mock(MarkerInterface::class);
+
+        $this->assertNull($this->sut->validatePlugin($mockPlugin));
+    }
+
+    /**
+     * @todo To be removed as part of OLCS-28149
+     */
+    public function testValidatePluginInvalid()
+    {
+        $this->expectException(RuntimeException::class);
+
+        $this->sut->validatePlugin(null);
     }
 }
