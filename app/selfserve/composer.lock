@@ -3650,12 +3650,12 @@
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.410",
+            "version": "4.206.412",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.410/olcs-olcs-common-4.206.410.zip",
-                "reference": "1014e7f24ea3d4937006b63d58df946dd5df943c",
-                "shasum": "1014e7f24ea3d4937006b63d58df946dd5df943c"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.412/olcs-olcs-common-4.206.412.zip",
+                "reference": "5059c6be32f925f9ea9d5755ddb4cca7e2a9166a",
+                "shasum": "5059c6be32f925f9ea9d5755ddb4cca7e2a9166a"
             },
             "require": {
                 "doctrine/annotations": "^1.8",
@@ -3738,7 +3738,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2022-06-22T23:50:37+00:00"
+            "time": "2022-07-15T09:05:40+00:00"
         },
         {
             "name": "olcs/olcs-logging",
@@ -3874,12 +3874,12 @@
         },
         {
             "name": "olcs/olcs-utils",
-            "version": "4.206.13",
+            "version": "4.206.14",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-utils/4.206.13/olcs-olcs-utils-4.206.13.zip",
-                "reference": "3adf9eec267caf9ee9d97186b1747204e1d62074",
-                "shasum": "3adf9eec267caf9ee9d97186b1747204e1d62074"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-utils/4.206.14/olcs-olcs-utils-4.206.14.zip",
+                "reference": "047695aa9a332f8f51b1936d072f41afb9d5d181",
+                "shasum": "047695aa9a332f8f51b1936d072f41afb9d5d181"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -3933,7 +3933,7 @@
                 ]
             },
             "description": "OLCS Utils",
-            "time": "2022-01-13T10:21:06+00:00"
+            "time": "2022-07-11T09:00:38+00:00"
         },
         {
             "name": "psr/cache",
