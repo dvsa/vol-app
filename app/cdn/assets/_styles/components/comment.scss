@@ -38,6 +38,7 @@
 }
 
 %edit-link {
+  @extend %govuk-link;
   position: absolute;
   right: 1em;
   margin-right: 0;

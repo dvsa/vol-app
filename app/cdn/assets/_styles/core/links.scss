@@ -2,29 +2,6 @@
  * Links
  */
 
-a {
-  color: $link-colour;
-  &:active,
-  &:hover {
-    color: $link-active-colour;
-    outline: 0;
-  }
-  @if $app == 'selfserve' {
-    &:focus {
-      outline: 3px solid transparent;
-      color: $govuk-focus-text-colour;
-      background-color: $outline;
-      -webkit-box-shadow: 0 -2px $outline, 0 4px $black;
-      box-shadow: 0 -2px $outline, 0 4px $black;
-      text-decoration: none;
-    }
-  }
-}
-
-.visuallyhidden{
-  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0,0,0,0); border: 0;
-}
-
 .disabled {
   text-decoration: none;
   color: $grey-1;
