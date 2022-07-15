@@ -50,7 +50,7 @@ $site-width         : $base-width;
 
 $is-print: false !default;
 
-$font--primary : "nta", Arial, sans-serif;
+$font--primary : $govuk-font-family;
 // scss-lint:disable NameFormat
 $nta-light-tabular: $NTA-Light-Tabular;
 // scss-lint:enable NameFormat

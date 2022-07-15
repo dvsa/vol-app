@@ -15,9 +15,6 @@
  */
 
 html {
-  font-size: 100%;
-  text-size-adjust: 100%;
-  -webkit-tap-highlight-color: rgba($black, 0);
   background: theme(
     $selfserve: $grey-3,
     $internal: $grey-4
@@ -27,13 +24,7 @@ html {
 body {
   margin: 0;
   background: $white;
-  font-weight: 400;
-  color: $black;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   line-height: 1.31579;
-  text-transform: none;
   vertical-align: baseline;
   font-family: $font--primary;
   font-size: theme(

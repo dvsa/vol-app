@@ -95,7 +95,7 @@
       border: 1px solid $red-50;
     }
     &__link {
-      @extend %paragraph--tiny;
+      @extend %govuk-link;
       text-align: right;
       display: block;
       margin-top: 1em;
