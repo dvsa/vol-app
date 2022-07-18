@@ -1,17 +1,15 @@
 <?php
 
-/**
- * Create Variation Processing Service Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace OlcsTest\Service\Processing;
 
+use Common\Service\Cqrs\Command\CommandService;
+use Common\Service\Helper\FormHelperService;
+use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
+use Dvsa\Olcs\Transfer\Command\CommandContainerInterface;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Transfer\Command\Licence\CreateVariation;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use OlcsTest\Bootstrap;
 use Olcs\Service\Processing\CreateVariationProcessingService;
 
 /**
@@ -21,15 +19,28 @@ use Olcs\Service\Processing\CreateVariationProcessingService;
  */
 class CreateVariationProcessingServiceTest extends MockeryTestCase
 {
-    protected $sm;
     protected $sut;
+
+    /** @var  m\MockInterface */
+    protected $formHelper;
+
+    /** @var  m\MockInterface */
+    protected $annotationBuilder;
+
+    /** @var  m\MockInterface */
+    protected $commandService;
 
     public function setUp(): void
     {
-        $this->sm = Bootstrap::getServiceManager();
+        $this->formHelper = m::mock(FormHelperService::class);
+        $this->annotationBuilder = m::mock(AnnotationBuilder::class);
+        $this->commandService = m::mock(CommandService::class);
 
-        $this->sut = new CreateVariationProcessingService();
-        $this->sut->setServiceLocator($this->sm);
+        $this->sut = new CreateVariationProcessingService(
+            $this->formHelper,
+            $this->annotationBuilder,
+            $this->commandService
+        );
     }
 
     public function testGetDataFromForm()
@@ -44,9 +55,6 @@ class CreateVariationProcessingServiceTest extends MockeryTestCase
         $licenceId = 123;
         $data = ['licenceType' => 'bar'];
 
-        $mockTab = m::mock();
-        $mockCs = m::mock();
-
         $result = ['id' => ['application' => 111]];
 
         $response = m::mock();
@@ -55,25 +63,25 @@ class CreateVariationProcessingServiceTest extends MockeryTestCase
             ->shouldReceive('getResult')
             ->andReturn($result);
 
-        $this->sm->setService('TransferAnnotationBuilder', $mockTab);
-        $this->sm->setService('CommandService', $mockCs);
+        $commandContainer = m::mock(CommandContainerInterface::class);
 
-        $mockTab->shouldReceive('createCommand')
+        $this->annotationBuilder->shouldReceive('createCommand')
             ->with(m::type(CreateVariation::class))
+            ->once()
             ->andReturnUsing(
-                function (CommandInterface $command) {
-
+                function (CommandInterface $command) use ($commandContainer) {
                     $data = $command->getArrayCopy();
 
                     $this->assertEquals(123, $data['id']);
                     $this->assertEquals('bar', $data['licenceType']);
 
-                    return 'COMMAND';
+                    return $commandContainer;
                 }
             );
 
-        $mockCs->shouldReceive('send')
-            ->with('COMMAND')
+        $this->commandService->shouldReceive('send')
+            ->with($commandContainer)
+            ->once()
             ->andReturn($response);
 
         $this->assertEquals(111, $this->sut->createVariation($licenceId, $data));
@@ -85,12 +93,10 @@ class CreateVariationProcessingServiceTest extends MockeryTestCase
         $mockRequest = m::mock('\Laminas\Http\Request');
 
         // Mocks
-        $mockFormHelper = m::mock();
-        $this->sm->setService('Helper\Form', $mockFormHelper);
         $mockForm = m::mock();
 
         // Expectations
-        $mockFormHelper->shouldReceive('createFormWithRequest')
+        $this->formHelper->shouldReceive('createFormWithRequest')
             ->with('GenericConfirmation', $mockRequest)
             ->andReturn($mockForm);
 
@@ -121,12 +127,10 @@ class CreateVariationProcessingServiceTest extends MockeryTestCase
         $postData = ['foo' => 'bar'];
 
         // Mocks
-        $mockFormHelper = m::mock();
-        $this->sm->setService('Helper\Form', $mockFormHelper);
         $mockForm = m::mock();
 
         // Expectations
-        $mockFormHelper->shouldReceive('createFormWithRequest')
+        $this->formHelper->shouldReceive('createFormWithRequest')
             ->with('GenericConfirmation', $mockRequest)
             ->andReturn($mockForm);
 
