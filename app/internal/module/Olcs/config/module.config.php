@@ -30,6 +30,7 @@ use Olcs\Listener\RouteParam\SubmissionsFurniture;
 use Olcs\Listener\RouteParam\TransportManagerFurniture;
 use Olcs\Listener\RouteParam\VariationFurniture;
 use Olcs\Service\Marker;
+use Olcs\Service\Processing as ProcessingService;
 
 return array(
     'router' => [
@@ -532,7 +533,8 @@ return array(
             \Olcs\Service\Helper\WebDavJsonWebTokenGenerationService::class =>
                 \Olcs\Service\Helper\WebDavJsonWebTokenGenerationServiceFactory::class,
 
-            Auth\Adapter\InternalCommandAdapter::class => Auth\Adapter\InternalCommandAdapterFactory::class
+            Auth\Adapter\InternalCommandAdapter::class => Auth\Adapter\InternalCommandAdapterFactory::class,
+            'Processing\CreateVariation' => ProcessingService\CreateVariationProcessingServiceFactory::class,
         )
     ),
     'form_elements' => [
