@@ -59,8 +59,13 @@ class UserController extends AbstractController
         }
 
         $view = new User();
-        $view->setServiceLocator($this->getServiceLocator());
-        $view->setUsers($users, $params);
+
+        $view->setUsers(
+            $users,
+            $this->getServiceLocator()->get('Helper\Url'),
+            $this->getServiceLocator()->get('Table'),
+            $params
+        );
 
         $this->getServiceLocator()->get('Script')->loadFiles(['lva-crud']);
 

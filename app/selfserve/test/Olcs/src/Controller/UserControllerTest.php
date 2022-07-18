@@ -124,7 +124,7 @@ class UserControllerTest extends MockeryTestCase
         $mockUrl = m::mock(\Common\Service\Helper\UrlHelperService::class);
         $paramsArr['url'] = $mockUrl;
 
-        $mockTable = m::mock(\Common\Service\Table\TableBuilder::class);
+        $mockTable = m::mock(\Common\Service\Table\TableFactory::class);
         $mockTable->shouldReceive('buildTable')->with('users', $data, $paramsArr, false)->andReturnSelf();
 
         $mockScript = m::mock('stdClass');
@@ -153,7 +153,7 @@ class UserControllerTest extends MockeryTestCase
 
         $mockUrl = m::mock(\Common\Service\Helper\UrlHelperService::class);
 
-        $mockTable = m::mock(\Common\Service\Table\TableBuilder::class)->makePartial();
+        $mockTable = m::mock(\Common\Service\Table\TableFactory::class)->makePartial();
         $mockTable->shouldReceive('buildTable')->once()->andReturnSelf();
 
         $mockScript = m::mock('stdClass');

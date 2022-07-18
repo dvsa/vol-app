@@ -7,6 +7,8 @@
  */
 namespace Olcs\View\Model;
 
+use Common\Service\Helper\UrlHelperService;
+use Common\Service\Table\TableFactory;
 use Common\View\AbstractViewModel;
 
 /**
@@ -24,13 +26,13 @@ class User extends AbstractViewModel
     protected $template = 'user';
 
     /**
-     * Set the user data
-     *
-     * @param array $data Mandatory
-     * @param array $params Optional
+     * @param array $data
+     * @param UrlHelperService $urlHelper
+     * @param TableFactory $tableService
+     * @param array $params
      */
-    public function setUsers(array $data, array $params = [])
+    public function setUsers(array $data, UrlHelperService $urlHelper, TableFactory $tableService, array $params = [])
     {
-        $this->setVariable('users', $this->getTable('users', $data, $params));
+        $this->setVariable('users', $this->getTable('users', $data, $urlHelper, $tableService, $params));
     }
 }
