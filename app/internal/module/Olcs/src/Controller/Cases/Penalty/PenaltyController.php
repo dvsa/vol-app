@@ -12,6 +12,7 @@ use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Laminas\View\Model\ViewModel;
 use Common\Service\Table\TableBuilder;
+use Common\Service\Table\TableBuilderFactory;
 use Olcs\Data\Mapper\GenericFields;
 use Dvsa\Olcs\Transfer\Command\Cases\Si\Applied\Delete as DeleteDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Si\Applied\Penalty as ItemDto;
@@ -115,7 +116,12 @@ class PenaltyController extends AbstractInternalController implements CaseContro
         }
 
         //multiple tables on a page, so we need to give our plugin a new table builder each time
-        $tableBuilder = new TableBuilder($this->getServiceLocator());
+        $tableBuilderFactory = new TableBuilderFactory();
+
+        $tableBuilder = $tableBuilderFactory(
+            $this->getServiceLocator(),
+            TableBuilder::class
+        );
 
         if (!empty($data['case']['erruRequest']['responseSent'])
             && ($data['case']['erruRequest']['responseSent'] === 'Y')
