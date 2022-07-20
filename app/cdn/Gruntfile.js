@@ -246,7 +246,7 @@ var sass = require('node-sass');
                 fonts:{
                     files: [{
                         expand: true,
-                        cwd: 'node_modules/govuk-frontend/assets/fonts/',
+                        cwd: 'node_modules/govuk-frontend/govuk/assets/fonts/',
                         src: ['**/*.{woff2,woff,eot}'],
                         dest: 'public/assets/fonts/'
                     }]

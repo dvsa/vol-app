@@ -8,6 +8,7 @@
 }
 
 .download {
+  @extend %govuk-link;
   font-weight: 600;
   padding: 5px 0;
   display: inline-block;
@@ -19,16 +20,7 @@
     vertical-align: middle;
     margin-right: 0.5em;
   }
-  &:hover {
-    text-decoration: underline;
-  }
   &.print-form {
     margin-bottom: 1.5em;
-  }
-}
-
-@if $app == 'internal' {
-  table a:visited {
-    color: #6439A7;
   }
 }
