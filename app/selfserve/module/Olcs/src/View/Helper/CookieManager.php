@@ -2,19 +2,31 @@
 
 namespace Olcs\View\Helper;
 
-use Laminas\ServiceManager\ServiceLocatorAwareTrait;
-use Laminas\View\Helper\HelperInterface;
 use Laminas\View\Helper\AbstractHelper;
-use Laminas\ServiceManager\ServiceLocatorAwareInterface;
+use Laminas\View\Helper\HelperInterface;
 
 /**
  * Class CookieManagerHelper
  *
  * @package Olcs\View\Helper
  */
-class CookieManager extends AbstractHelper implements HelperInterface, ServiceLocatorAwareInterface
+class CookieManager extends AbstractHelper implements HelperInterface
 {
-    use ServiceLocatorAwareTrait;
+    /** @var array */
+    protected $config;
+
+    /**
+     * Create service instance
+     *
+     * @param array $config
+     *
+     * @return CookieManager
+     */
+    public function __construct(
+        array $config
+    ) {
+        $this->config = $config;
+    }
 
     public function __invoke()
     {
@@ -23,7 +35,6 @@ class CookieManager extends AbstractHelper implements HelperInterface, ServiceLo
 
     private function getConfig(string $name)
     {
-        $config =  $this->getServiceLocator()->getServiceLocator()->get('Config');
-        return json_encode($config[$name]);
+        return json_encode($this->config[$name]);
     }
 }

@@ -13,17 +13,17 @@ class CookieManagerTest extends MockeryTestCase
      */
     protected $sut;
 
+    /** @var array */
+    protected $config;
+
     public function setUp(): void
     {
-        $this->sut = new CookieManager();
+        $this->config = ['cookie-manager' => 'TEST'];
+        $this->sut = new CookieManager($this->config);
     }
 
     public function testInvoke()
     {
-        /** @var \Laminas\ServiceManager\ServiceManager | m\MockInterface $mockSl */
-        $mockSl = m::mock(\Laminas\ServiceManager\ServiceManager::class);
-        $mockSl->shouldReceive('getServiceLocator->get')->once()->with('Config')->andReturn(['cookie-manager' => 'TEST']);
-        $this->sut->setServiceLocator($mockSl);
         $this->assertEquals('"TEST"', $this->sut->__invoke());
     }
 }
