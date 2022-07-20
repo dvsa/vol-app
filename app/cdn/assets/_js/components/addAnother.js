@@ -58,7 +58,7 @@ OLCS.addAnother = (function(document, $, undefined) {
         // Replace the trigger element to prevent it from submitting the form
         if (triggerSelector.is('input[type="submit"]')) {
           var value = triggerSelector.val();
-          triggerSelector.parent().html('<a href="#" class="add-another-trigger">' + value + '</a>');
+          triggerSelector.parent().html('<a href="#" class="add-another-trigger govuk-link">' + value + '</a>');
           triggerSelector = container.find('.add-another-trigger');
         }
 
