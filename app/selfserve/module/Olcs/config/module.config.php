@@ -1293,7 +1293,8 @@ return array(
     ),
     'view_helpers' => array(
         'factories' => [
-            \Olcs\View\Helper\SessionTimeoutWarning\SessionTimeoutWarning::class => \Olcs\View\Helper\SessionTimeoutWarning\SessionTimeoutWarningFactory::class
+            \Olcs\View\Helper\SessionTimeoutWarning\SessionTimeoutWarning::class => \Olcs\View\Helper\SessionTimeoutWarning\SessionTimeoutWarningFactory::class,
+            'cookieManager' => \Olcs\View\Helper\CookieManagerFactory::class,
         ],
         'aliases' => array(
             'sessionTimeoutWarning' => \Olcs\View\Helper\SessionTimeoutWarning\SessionTimeoutWarning::class,
@@ -1301,7 +1302,6 @@ return array(
         'invokables' => array(
             'generatePeopleList' => \Olcs\View\Helper\GeneratePeopleList::class,
             'tmCheckAnswersChangeLink' => \Olcs\View\Helper\TmCheckAnswersChangeLink::class,
-            'cookieManager' => \Olcs\View\Helper\CookieManager::class
         )
     ),
     'view_manager' => array(
