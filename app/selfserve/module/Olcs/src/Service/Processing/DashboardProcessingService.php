@@ -1,24 +1,31 @@
 <?php
 
-/**
- * Dashboard presentation logic
- *
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
 namespace Olcs\Service\Processing;
 
-use Laminas\ServiceManager\ServiceLocatorAwareTrait;
-use Laminas\ServiceManager\ServiceLocatorAwareInterface;
-use Common\RefData;
+use Common\Service\Table\TableFactory;
 
 /**
  * Dashboard presentation logic
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class DashboardProcessingService implements ServiceLocatorAwareInterface
+class DashboardProcessingService
 {
-    use ServiceLocatorAwareTrait;
+    /** @var TableFactory */
+    protected $tableService;
+
+    /**
+     * Create service instance
+     *
+     * @param TableFactory $tableService
+     *
+     * @return DashboardProcessingService
+     */
+    public function __construct(
+        TableFactory $tableService
+    ) {
+        $this->tableService = $tableService;
+    }
 
     /**
      * Get the three tables for display on the dashboard
@@ -51,12 +58,10 @@ class DashboardProcessingService implements ServiceLocatorAwareInterface
         krsort($variations);
         krsort($applications);
 
-        $tableService = $this->getServiceLocator()->get('Table');
-
         return [
-            'licences' => $tableService->buildTable('dashboard-licences', $licences),
-            'variations' => $tableService->buildTable('dashboard-variations', $variations),
-            'applications' => $tableService->buildTable('dashboard-applications', $applications),
+            'licences' => $this->tableService->buildTable('dashboard-licences', $licences),
+            'variations' => $this->tableService->buildTable('dashboard-variations', $variations),
+            'applications' => $this->tableService->buildTable('dashboard-applications', $applications),
         ];
     }
 }

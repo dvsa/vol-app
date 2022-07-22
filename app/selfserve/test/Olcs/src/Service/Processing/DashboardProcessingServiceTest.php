@@ -1,16 +1,12 @@
 <?php
 
-/**
- * DashboardProcessingServiceTest
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
 namespace OlcsTest\View\Model;
 
 use Common\RefData;
+use Common\Service\Table\TableFactory;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
+use Olcs\Service\Processing\DashboardProcessingService;
 
 /**
  * DashboardProcessingServiceTest
@@ -28,29 +24,21 @@ class DashboardProcessingServiceTest extends MockeryTestCase
      */
     public function testGetTables($data, $licences, $variations, $applications)
     {
-        $mockSl = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
-        $mockSl->shouldReceive('get')
-            ->with('Table')
-            ->andReturn(
-                m::mock()
-                ->shouldReceive('buildTable')
-                ->with('dashboard-licences', $licences)
-                ->andReturn($licences)
-                ->once()
-                ->shouldReceive('buildTable')
-                ->with('dashboard-applications', $applications)
-                ->andReturn($applications)
-                ->once()
-                ->shouldReceive('buildTable')
-                ->with('dashboard-variations', $variations)
-                ->andReturn($variations)
-                ->once()
-                ->getMock()
-            )
-            ->getMock();
+        $tableService = m::mock(TableFactory::class);
+        $tableService->shouldReceive('buildTable')
+            ->with('dashboard-licences', $licences)
+            ->once()
+            ->andReturn($licences)
+            ->shouldReceive('buildTable')
+            ->with('dashboard-applications', $applications)
+            ->once()
+            ->andReturn($applications)
+            ->shouldReceive('buildTable')
+            ->with('dashboard-variations', $variations)
+            ->once()
+            ->andReturn($variations);
 
-        $sut = new \Olcs\Service\Processing\DashboardProcessingService();
-        $sut->setServiceLocator($mockSl);
+        $sut = new DashboardProcessingService($tableService);
         $result = $sut->getTables($data);
 
         $this->assertEquals($licences, $result['licences']);

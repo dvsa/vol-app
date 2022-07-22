@@ -28,6 +28,7 @@ use Olcs\Form\Element\SearchOrderFieldsetFactory;
 use Olcs\FormService\Form\Lva as LvaFormService;
 use Olcs\Service\Cookie as CookieService;
 use Olcs\Service\Qa as QaService;
+use Olcs\Service\Processing as ProcessingService;
 use Laminas\Mvc\Router\Http\Segment;
 use Olcs\Session\LicenceVehicleManagement;
 
@@ -1213,8 +1214,6 @@ return array(
                 => 'Olcs\Controller\Lva\Adapters\LicencePeopleAdapter',
             'VariationPeopleAdapter'
                 => 'Olcs\Controller\Lva\Adapters\VariationPeopleAdapter',
-            'DashboardProcessingService'
-                => 'Olcs\Service\Processing\DashboardProcessingService',
             'CookieCookieStateFactory' => CookieService\CookieStateFactory::class,
             'CookiePreferencesFactory' => CookieService\PreferencesFactory::class,
             'CookieSetCookieFactory' => CookieService\SetCookieFactory::class,
@@ -1254,6 +1253,7 @@ return array(
             'QaQuestionArrayProvider' => QaService\QuestionArrayProviderFactory::class,
             'QaViewGeneratorProvider' => QaService\ViewGeneratorProviderFactory::class,
             SelfserveCommandAdapter::class => SelfserveCommandAdapterFactory::class,
+            'DashboardProcessingService' => ProcessingService\DashboardProcessingServiceFactory::class,
         ]
     ),
     'search' => [
