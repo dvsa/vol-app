@@ -3,6 +3,7 @@
 namespace Olcs\Mvc\Controller\Plugin;
 
 use Common\Service\Table\TableBuilder;
+use Common\Service\Table\TableBuilderFactory;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
@@ -20,6 +21,13 @@ class TableFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return new Table(new TableBuilder($serviceLocator->getServiceLocator()));
+        $tableBuilderFactory = new TableBuilderFactory();
+
+        $tableBuilder = $tableBuilderFactory(
+            $serviceLocator->getServiceLocator(),
+            TableBuilder::class
+        );
+
+        return new Table($tableBuilder);
     }
 }
