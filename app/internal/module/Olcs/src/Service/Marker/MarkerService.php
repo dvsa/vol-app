@@ -2,8 +2,6 @@
 
 namespace Olcs\Service\Marker;
 
-use Laminas\ServiceManager\ServiceLocatorAwareTrait;
-use Laminas\ServiceManager\ServiceLocatorAwareInterface;
 use Laminas\ServiceManager\FactoryInterface;
 
 /**

@@ -14,7 +14,6 @@ use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
-use Laminas\ServiceManager\ServiceLocatorAwareTrait;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Laminas\View\Model\ViewModel;
 

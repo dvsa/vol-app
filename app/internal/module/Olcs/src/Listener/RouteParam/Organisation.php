@@ -12,7 +12,6 @@ use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
 use Laminas\Navigation\AbstractContainer;
 use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorAwareTrait;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\View\Helper\Navigation;
 
@@ -23,7 +22,6 @@ use Laminas\View\Helper\Navigation;
 class Organisation implements ListenerAggregateInterface, FactoryInterface
 {
     use ListenerAggregateTrait;
-    use ServiceLocatorAwareTrait;
 
     /** @var  AbstractContainer */
     private $sidebarNavigationService;
