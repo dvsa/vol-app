@@ -1254,6 +1254,7 @@ return array(
             'QaViewGeneratorProvider' => QaService\ViewGeneratorProviderFactory::class,
             SelfserveCommandAdapter::class => SelfserveCommandAdapterFactory::class,
             'DashboardProcessingService' => ProcessingService\DashboardProcessingServiceFactory::class,
+            'Processing\CreateVariation' => ProcessingService\CreateVariationProcessingServiceFactory::class,
         ]
     ),
     'search' => [
