@@ -8,6 +8,7 @@
 namespace OlcsTest\Service\Data;
 
 use Common\Exception\DataServiceException;
+use Common\Service\Data\Licence as LicenceDataService;
 use Olcs\Service\Data\LicenceDecisionLegislation;
 use Mockery as m;
 use Dvsa\Olcs\Transfer\Query\Decision\DecisionList as Qry;
@@ -43,6 +44,24 @@ class LicenceDecisionLegislationTest extends AbstractDataServiceTestCase
         ]
     ];
 
+    /** @var LicenceDecisionLegislation */
+    private $sut;
+
+    /** @var LicenceDataService */
+    protected $licenceDataService;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->licenceDataService = m::mock(LicenceDataService::class);
+
+        $this->sut = new LicenceDecisionLegislation(
+            $this->abstractDataServiceServices,
+            $this->licenceDataService
+        );
+    }
+
     /**
      * Test fetchListData
      */
@@ -50,18 +69,18 @@ class LicenceDecisionLegislationTest extends AbstractDataServiceTestCase
     {
         $results = ['results' => 'results'];
 
-        $params = $this->context;
         $dto = Qry::create($this->context);
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')->once()->andReturnUsing(
-                function ($dto) use ($params) {
+
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
+            ->once()
+            ->andReturnUsing(
+                function ($dto) {
                     $this->assertEquals('sectionCode', $dto->getSort());
                     $this->assertEquals('ASC', $dto->getOrder());
-                    return 'query';
+                    return $this->query;
                 }
-            )
-            ->once()
-            ->getMock();
+            );
 
         $mockResponse = m::mock()
             ->shouldReceive('isOk')
@@ -72,13 +91,12 @@ class LicenceDecisionLegislationTest extends AbstractDataServiceTestCase
             ->twice()
             ->getMock();
 
-        $sut = new LicenceDecisionLegislation();
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
+        $this->mockHandleQuery($mockResponse);
 
-        $this->assertEquals($results['results'], $sut->fetchListData($this->context));
+        $this->assertEquals($results['results'], $this->sut->fetchListData($this->context));
 
         // test cached results
-        $this->assertEquals($results['results'], $sut->fetchListData($this->context));
+        $this->assertEquals($results['results'], $this->sut->fetchListData($this->context));
     }
 
     /**
@@ -86,8 +104,7 @@ class LicenceDecisionLegislationTest extends AbstractDataServiceTestCase
      */
     public function testFetchListOptionsUsingGroups()
     {
-        $sut = new LicenceDecisionLegislation();
-        $sut->setData('licenceDecisionLegislation', $this->listData);
+        $this->sut->setData('licenceDecisionLegislation', $this->listData);
 
         // tests formatGroups is called to give the array structure below
         $this->assertEquals(
@@ -106,7 +123,7 @@ class LicenceDecisionLegislationTest extends AbstractDataServiceTestCase
                     ]
                 ]
             ],
-            $sut->fetchListOptions($this->context, true)
+            $this->sut->fetchListOptions($this->context, true)
         );
     }
 
@@ -115,8 +132,7 @@ class LicenceDecisionLegislationTest extends AbstractDataServiceTestCase
      */
     public function testFetchListOptionsWithoutGroups()
     {
-        $sut = new LicenceDecisionLegislation();
-        $sut->setData('licenceDecisionLegislation', $this->listData);
+        $this->sut->setData('licenceDecisionLegislation', $this->listData);
 
         // tests formatGroups is called to give the array structure below
         $this->assertEquals(
@@ -125,7 +141,7 @@ class LicenceDecisionLegislationTest extends AbstractDataServiceTestCase
                 9 => 'Section 1 - leg 2',
                 6 => 'Section 3 - leg 3'
             ],
-            $sut->fetchListOptions($this->context, false)
+            $this->sut->fetchListOptions($this->context, false)
         );
     }
 
@@ -134,15 +150,12 @@ class LicenceDecisionLegislationTest extends AbstractDataServiceTestCase
      */
     public function testFetchListOptionsEmpty()
     {
-        $licenceId = 987;
-
-        $sut = new LicenceDecisionLegislation();
-        $sut->setData('licenceDecisionLegislation', []);
+        $this->sut->setData('licenceDecisionLegislation', []);
 
         // tests formatGroups is called to give the array structure below
         $this->assertEquals(
             [],
-            $sut->fetchListOptions($this->context, false)
+            $this->sut->fetchListOptions($this->context, false)
         );
     }
 
@@ -152,17 +165,20 @@ class LicenceDecisionLegislationTest extends AbstractDataServiceTestCase
     public function testFetchListDataWithException()
     {
         $this->expectException(DataServiceException::class);
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();
+
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
+            ->once()
+            ->andReturn($this->query);
 
         $mockResponse = m::mock()
             ->shouldReceive('isOk')
             ->andReturn(false)
             ->once()
             ->getMock();
-        $sut = new LicenceDecisionLegislation();
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
 
-        $sut->fetchListData($this->context);
+        $this->mockHandleQuery($mockResponse);
+
+        $this->sut->fetchListData($this->context);
     }
 }

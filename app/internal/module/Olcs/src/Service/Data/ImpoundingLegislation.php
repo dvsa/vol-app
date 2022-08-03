@@ -2,18 +2,35 @@
 
 namespace Olcs\Service\Data;
 
+use Common\Service\Data\Licence;
 use Common\Service\Data\LicenceServiceTrait;
 use Common\Service\Data\RefData;
-use Laminas\ServiceManager\FactoryInterface;
+use Common\Service\Data\RefDataServices;
 
 /**
  * Class ImpoundingLegislation
  *
  * @package Olcs\Service\Data
  */
-class ImpoundingLegislation extends RefData implements FactoryInterface
+class ImpoundingLegislation extends RefData
 {
     use LicenceServiceTrait;
+
+    /**
+     * Create service instance
+     *
+     * @param RefDataServices $refDataServices
+     * @param Licence $licenceDataService
+     *
+     * @return ImpoundingLegislation
+     */
+    public function __construct(
+        RefDataServices $refDataServices,
+        Licence $licenceDataService
+    ) {
+        parent::__construct($refDataServices);
+        $this->setLicenceService($licenceDataService);
+    }
 
     /**
      * Fetch list options
@@ -22,6 +39,7 @@ class ImpoundingLegislation extends RefData implements FactoryInterface
      * @param bool         $useGroups Use groups
      *
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fetchListOptions($context = null, $useGroups = false)
     {

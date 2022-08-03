@@ -4,6 +4,7 @@ namespace OlcsTest\Service\Data;
 
 use Common\Exception\DataServiceException;
 use CommonTest\Service\Data\AbstractDataServiceTestCase;
+use Dvsa\Olcs\Transfer\Query\Si\SiPenaltyTypeListData as Qry;
 use Mockery as m;
 use Olcs\Service\Data\SiPenaltyType;
 
@@ -13,14 +14,22 @@ use Olcs\Service\Data\SiPenaltyType;
  */
 class SiPenaltyTypeTest extends AbstractDataServiceTestCase
 {
+    /** @var SiPenaltyType */
+    private $sut;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->sut = new SiPenaltyType($this->abstractDataServiceServices);
+    }
+
     public function testFormatData()
     {
         $source = $this->getSingleSource();
         $expected = $this->getSingleExpected();
 
-        $sut = new SiPenaltyType();
-
-        $this->assertEquals($expected, $sut->formatData($source));
+        $this->assertEquals($expected, $this->sut->formatData($source));
     }
 
     /**
@@ -28,10 +37,9 @@ class SiPenaltyTypeTest extends AbstractDataServiceTestCase
      */
     public function testFetchListOptions($input, $expected)
     {
-        $sut = new SiPenaltyType();
-        $sut->setData('SiPenaltyType', $input);
+        $this->sut->setData('SiPenaltyType', $input);
 
-        $this->assertEquals($expected, $sut->fetchListOptions(''));
+        $this->assertEquals($expected, $this->sut->fetchListOptions(''));
     }
 
     public function provideFetchListOptions()
@@ -45,10 +53,11 @@ class SiPenaltyTypeTest extends AbstractDataServiceTestCase
     public function testFetchListData()
     {
         $results = ['results' => 'results'];
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')->once()->andReturn('query')
+
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
             ->once()
-            ->getMock();
+            ->andReturn($this->query);
 
         $mockResponse = m::mock()
             ->shouldReceive('isOk')
@@ -59,11 +68,10 @@ class SiPenaltyTypeTest extends AbstractDataServiceTestCase
             ->twice()
             ->getMock();
 
-        $sut = new SiPenaltyType();
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
+        $this->mockHandleQuery($mockResponse);
 
-        $this->assertEquals($results['results'], $sut->fetchListData());
-        $this->assertEquals($results['results'], $sut->fetchListData()); //ensure data is cached
+        $this->assertEquals($results['results'], $this->sut->fetchListData());
+        $this->assertEquals($results['results'], $this->sut->fetchListData()); //ensure data is cached
     }
 
     /**
@@ -72,8 +80,11 @@ class SiPenaltyTypeTest extends AbstractDataServiceTestCase
     public function testFetchListDataWithException()
     {
         $this->expectException(DataServiceException::class);
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();
+
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
+            ->once()
+            ->andReturn($this->query);
 
         $mockResponse = m::mock()
             ->shouldReceive('isOk')
@@ -81,10 +92,9 @@ class SiPenaltyTypeTest extends AbstractDataServiceTestCase
             ->once()
             ->getMock();
 
-        $sut = new SiPenaltyType();
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
+        $this->mockHandleQuery($mockResponse);
 
-        $sut->fetchListData([]);
+        $this->sut->fetchListData([]);
     }
 
     protected function getSingleExpected()

@@ -3,7 +3,6 @@
 namespace OlcsTest\Service\Data;
 
 use Olcs\Service\Data\PublicInquiryReason;
-use CommonTest\Service\Data\AbstractDataServiceTestCase;
 use Dvsa\Olcs\Transfer\Query\Reason\ReasonList as Qry;
 use Mockery as m;
 
@@ -11,21 +10,31 @@ use Mockery as m;
  * Class PublicInquiryReasonTest
  * @package OlcsTest\Service\Data
  */
-class PublicInquiryReasonTest extends AbstractDataServiceTestCase
+class PublicInquiryReasonTest extends AbstractPublicInquiryDataTestCase
 {
     private $reasons = [
         ['id' => 12, 'sectionCode' => 'Section A', 'description' => 'Description 1'],
         ['id' => 15, 'sectionCode' => 'Section C', 'description' => 'Description 2'],
     ];
 
+    /** @var PublicInquiryReason */
+    private $sut;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->sut = new PublicInquiryReason($this->abstractPublicInquiryDataServices);
+    }
+
     public function testFetchListData()
     {
         $results = ['results' => $this->reasons];
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')
+
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
             ->once()
-            ->andReturn('query')
-            ->getMock();
+            ->andReturn($this->query);
 
         $mockResponse = m::mock()
             ->shouldReceive('isOk')
@@ -36,20 +45,18 @@ class PublicInquiryReasonTest extends AbstractDataServiceTestCase
             ->once()
             ->getMock();
 
-        $sut = new PublicInquiryReason();
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
+        $this->mockHandleQuery($mockResponse);
 
-        $this->assertEquals($results, $sut->fetchListData([]));
+        $this->assertEquals($results, $this->sut->fetchListData([]));
     }
 
     public function testFetchPublicInquiryReasonDataFailure()
     {
         $results = [];
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
             ->once()
-            ->andReturn('query')
-            ->getMock();
+            ->andReturn($this->query);
 
         $mockResponse = m::mock()
             ->shouldReceive('isOk')
@@ -60,10 +67,9 @@ class PublicInquiryReasonTest extends AbstractDataServiceTestCase
             ->once()
             ->getMock();
 
-        $sut = new PublicInquiryReason();
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
+        $this->mockHandleQuery($mockResponse);
 
-        $this->assertEmpty($sut->fetchListData([]));
+        $this->assertEmpty($this->sut->fetchListData([]));
     }
 
     /**
@@ -75,9 +81,7 @@ class PublicInquiryReasonTest extends AbstractDataServiceTestCase
      */
     public function testFetchListOptions($niFlag, $goodsOrPsv, $expectedList)
     {
-        $mockLicenceService = m::mock('\Common\Service\Data\Licence');
-        $mockLicenceService
-            ->shouldReceive('getId')
+        $this->licenceDataService->shouldReceive('getId')
             ->once()
             ->andReturn(7)
             ->shouldReceive('fetchLicenceData')
@@ -100,16 +104,16 @@ class PublicInquiryReasonTest extends AbstractDataServiceTestCase
             'goodsOrPsv' => $goodsOrPsv,
         ];
 
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')->once()->andReturnUsing(
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
+            ->once()
+            ->andReturnUsing(
                 function ($dto) use ($params) {
                     $this->assertEquals($params['sort'], $dto->getSort());
                     $this->assertEquals($params['order'], $dto->getOrder());
-                    return 'query';
+                    return $this->query;
                 }
-            )
-            ->once()
-            ->getMock();
+            );
 
         $mockResponse = m::mock()
             ->shouldReceive('isOk')
@@ -120,12 +124,9 @@ class PublicInquiryReasonTest extends AbstractDataServiceTestCase
             ->once()
             ->getMock();
 
-        $sut = new PublicInquiryReason();
-        $sut->setLicenceService($mockLicenceService);
+        $this->mockHandleQuery($mockResponse);
 
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
-
-        $this->assertEquals($this->getSingleExpected(), $sut->fetchListOptions($params));
+        $this->assertEquals($this->getSingleExpected(), $this->sut->fetchListOptions($params));
     }
 
     /**

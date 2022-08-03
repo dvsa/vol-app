@@ -2,18 +2,26 @@
 
 namespace OlcsTest\Service\Data;
 
-use CommonTest\Service\Data\AbstractDataServiceTestCase;
+use CommonTest\Service\Data\AbstractListDataServiceTestCase;
 use Olcs\Service\Data\TaskCategory;
 
 /**
  * @covers \Olcs\Service\Data\TaskCategory
  */
-class TaskCategoryTest extends AbstractDataServiceTestCase
+class TaskCategoryTest extends AbstractListDataServiceTestCase
 {
+    /** @var TaskCategory */
+    private $sut;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->sut = new TaskCategory($this->abstractListDataServiceServices);
+    }
+
     public function testFetchListData()
     {
-        $sut = new TaskCategory();
-
-        static::assertEquals(TaskCategory::TYPE_IS_TASK, $sut->getCategoryType());
+        static::assertEquals(TaskCategory::TYPE_IS_TASK, $this->sut->getCategoryType());
     }
 }

@@ -2,19 +2,26 @@
 
 namespace OlcsTest\Service\Data;
 
-use CommonTest\Service\Data\AbstractDataServiceTestCase;
-use Mockery as m;
+use CommonTest\Service\Data\AbstractListDataServiceTestCase;
 use Olcs\Service\Data\ScannerSubCategory;
 
 /**
  * @covers \Olcs\Service\Data\ScannerSubCategory
  */
-class ScannerSubCategoryTest extends AbstractDataServiceTestCase
+class ScannerSubCategoryTest extends AbstractListDataServiceTestCase
 {
+    /** @var ScannerSubCategory */
+    private $sut;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->sut = new ScannerSubCategory($this->abstractListDataServiceServices);
+    }
+
     public function testFetchListData()
     {
-        $sut = new ScannerSubCategory();
-
-        static::assertEquals(ScannerSubCategory::TYPE_IS_SCAN, $sut->getCategoryType());
+        static::assertEquals(ScannerSubCategory::TYPE_IS_SCAN, $this->sut->getCategoryType());
     }
 }

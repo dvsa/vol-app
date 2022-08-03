@@ -5,7 +5,6 @@ namespace OlcsTest\Service\Data;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Service\Data\AbstractPublicInquiryData;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * @covers Olcs\Service\Data\AbstractPublicInquiryData
@@ -18,18 +17,11 @@ class AbstractPublicInquiryDataTest extends MockeryTestCase
     /** @var  m\MockInterface | AbstractPublicInquiryData */
     private $sut;
 
-    /** @var  m\MockInterface | ServiceLocatorInterface */
-    private $mockSl;
-
     public function setUp(): void
     {
-        $this->mockSl = m::mock(ServiceLocatorInterface::class);
-
         $this->sut = m::mock(AbstractPublicInquiryData::class)
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
-
-        $this->sut->setServiceLocator($this->mockSl);
     }
 
     public function testFetchListOptionsLicGoodsOrPsvIsNullAndAppIdIsNull()

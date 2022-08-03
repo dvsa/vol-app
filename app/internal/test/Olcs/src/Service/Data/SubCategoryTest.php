@@ -3,17 +3,27 @@
 namespace OlcsTest\Service\Data;
 
 use Common\Exception\DataServiceException;
+use CommonTest\Service\Data\AbstractListDataServiceTestCase;
+use Dvsa\Olcs\Transfer\Query\SubCategory\GetList as Qry;
 use Olcs\Service\Data\SubCategory;
 use Mockery as m;
-use Dvsa\Olcs\Transfer\Query\SubCategory\GetList as Qry;
-use CommonTest\Service\Data\AbstractDataServiceTestCase;
 
 /**
  * @covers \Olcs\Service\Data\SubCategory
  */
-class SubCategoryTest extends AbstractDataServiceTestCase
+class SubCategoryTest extends AbstractListDataServiceTestCase
 {
     const CAT_ID = 8001;
+
+    /** @var SubCategory */
+    private $sut;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->sut = new SubCategory($this->abstractListDataServiceServices);
+    }
 
     public function testFetchListData()
     {
@@ -23,8 +33,10 @@ class SubCategoryTest extends AbstractDataServiceTestCase
             'order' => 'ASC',
         ];
 
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')->once()->andReturnUsing(
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
+            ->once()
+            ->andReturnUsing(
                 function (Qry $dto) use ($params) {
                     $this->assertEquals($params['sort'], $dto->getSort());
                     $this->assertEquals($params['order'], $dto->getOrder());
@@ -33,25 +45,22 @@ class SubCategoryTest extends AbstractDataServiceTestCase
                     $this->assertEquals(null, $dto->getIsTaskCategory());
                     $this->assertEquals(self::CAT_ID, $dto->getCategory());
                     $this->assertEquals('Y', $dto->getIsOnlyWithItems());
-                    return 'query';
+                    return $this->query;
                 }
-            )
-            ->once()
-            ->getMock();
+            );
 
         $mockResponse = m::mock()
             ->shouldReceive('isOk')->andReturn(true)->once()
             ->shouldReceive('getResult')->andReturn($results)->once()
             ->getMock();
 
-        $sut = (new SubCategory())
-            ->setCategoryType(SubCategory::TYPE_IS_SCAN)
+        $this->mockHandleQuery($mockResponse);
+
+        $this->sut->setCategoryType(SubCategory::TYPE_IS_SCAN)
             ->setCategory(self::CAT_ID)
             ->setIsOnlyWithItems(true);
 
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
-
-        $this->assertEquals($results['results'], $sut->fetchListData([]));
+        $this->assertEquals($results['results'], $this->sut->fetchListData([]));
     }
 
     public function testFetchListDataCache()
@@ -62,41 +71,40 @@ class SubCategoryTest extends AbstractDataServiceTestCase
                 'subCategoryName'=> 'EXPECTED'
             ],
         ];
-        $sut = new SubCategory();
-        $sut->setCategory(self::CAT_ID);
-        $sut->setData(self::CAT_ID, $data);
+        $this->sut->setCategory(self::CAT_ID);
+        $this->sut->setData(self::CAT_ID, $data);
 
-        static::assertEquals([9999 => 'EXPECTED'], $sut->fetchListOptions());
+        static::assertEquals([9999 => 'EXPECTED'], $this->sut->fetchListOptions());
     }
 
     public function testFetchListDataWithException()
     {
         $this->expectException(DataServiceException::class);
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();
+
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
+            ->once()
+            ->andReturn($this->query);
 
         $mockResponse = m::mock()
             ->shouldReceive('isOk')->andReturn(false)->once()
             ->getMock();
 
-        $sut = new SubCategory();
-        $sut->setCategoryType(SubCategory::TYPE_IS_SCAN);
+        $this->mockHandleQuery($mockResponse);
 
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
+        $this->sut->setCategoryType(SubCategory::TYPE_IS_SCAN);
 
-        $sut->fetchListData([]);
+        $this->sut->fetchListData([]);
     }
 
     public function testFormatData()
     {
-        $sut = new SubCategory();
-
         $this->assertEquals(
             [
                 1 => 'foo',
                 2 => 'bar'
             ],
-            $sut->formatData(
+            $this->sut->formatData(
                 [
                     [
                         'id' => 1,

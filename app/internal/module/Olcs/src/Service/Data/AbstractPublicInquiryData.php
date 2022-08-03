@@ -7,15 +7,13 @@ use Common\Service\Data\AbstractDataService;
 use Common\Service\Data\ApplicationServiceTrait;
 use Common\Service\Data\LicenceServiceTrait;
 use Common\Service\Data\ListDataInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class Abstract Public Inquiry Data
  *
  * @package Olcs\Service\Data
  */
-abstract class AbstractPublicInquiryData extends AbstractDataService implements ListDataInterface, FactoryInterface
+abstract class AbstractPublicInquiryData extends AbstractDataService implements ListDataInterface
 {
     use LicenceServiceTrait;
     use ApplicationServiceTrait;
@@ -26,6 +24,21 @@ abstract class AbstractPublicInquiryData extends AbstractDataService implements 
     protected $sort;
     /** @var string */
     protected $order;
+
+    /**
+     * Create service instance
+     *
+     * @param AbstractPublicInquiryDataServices $abstractPublicInquiryDataServices
+     *
+     * @return AbstractPublicInquiryData
+     */
+    public function __construct(AbstractPublicInquiryDataServices $abstractPublicInquiryDataServices)
+    {
+        parent::__construct($abstractPublicInquiryDataServices->getAbstractDataServiceServices());
+
+        $this->setApplicationService($abstractPublicInquiryDataServices->getApplicationDataService());
+        $this->setLicenceService($abstractPublicInquiryDataServices->getLicenceDataService());
+    }
 
     /**
      * Fetch back a set of options for a drop down list, context passed is parameters which may need to be passed to the
@@ -167,21 +180,5 @@ abstract class AbstractPublicInquiryData extends AbstractDataService implements 
         }
 
         return $optionData;
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator Service locator
-     *
-     * @return $this
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->setServiceLocator($serviceLocator);
-        $this->setLicenceService($serviceLocator->get('\Common\Service\Data\Licence'));
-        $this->setApplicationService($serviceLocator->get('\Common\Service\Data\Application'));
-
-        return $this;
     }
 }

@@ -14,14 +14,22 @@ use CommonTest\Service\Data\AbstractDataServiceTestCase;
  */
 class IrfoGvPermitTypeTest extends AbstractDataServiceTestCase
 {
+    /** @var IrfoGvPermitType */
+    private $sut;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->sut = new IrfoGvPermitType($this->abstractDataServiceServices);
+    }
+
     public function testFormatData()
     {
         $source = $this->getSingleSource();
         $expected = $this->getSingleExpected();
 
-        $sut = new IrfoGvPermitType();
-
-        $this->assertEquals($expected, $sut->formatData($source));
+        $this->assertEquals($expected, $this->sut->formatData($source));
     }
 
     /**
@@ -31,10 +39,9 @@ class IrfoGvPermitTypeTest extends AbstractDataServiceTestCase
      */
     public function testFetchListOptions($input, $expected)
     {
-        $sut = new IrfoGvPermitType();
-        $sut->setData('IrfoGvPermitType', $input);
+        $this->sut->setData('IrfoGvPermitType', $input);
 
-        $this->assertEquals($expected, $sut->fetchListOptions(''));
+        $this->assertEquals($expected, $this->sut->fetchListOptions(''));
     }
 
     public function provideFetchListOptions()
@@ -48,10 +55,11 @@ class IrfoGvPermitTypeTest extends AbstractDataServiceTestCase
     public function testFetchListData()
     {
         $results = ['results' => 'results'];
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')->once()->andReturn('query')
+
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
             ->once()
-            ->getMock();
+            ->andReturn($this->query);
 
         $mockResponse = m::mock()
             ->shouldReceive('isOk')
@@ -62,28 +70,30 @@ class IrfoGvPermitTypeTest extends AbstractDataServiceTestCase
             ->twice()
             ->getMock();
 
-        $sut = new IrfoGvPermitType();
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
+        $this->mockHandleQuery($mockResponse);
 
-        $this->assertEquals($results['results'], $sut->fetchListData());
-        $this->assertEquals($results['results'], $sut->fetchListData());  //ensure data is cached
+        $this->assertEquals($results['results'], $this->sut->fetchListData());
+        $this->assertEquals($results['results'], $this->sut->fetchListData());  //ensure data is cached
     }
 
     public function testFetchLicenceDataWithException()
     {
         $this->expectException(DataServiceException::class);
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();
+
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
+            ->once()
+            ->andReturn($this->query);
 
         $mockResponse = m::mock()
             ->shouldReceive('isOk')
             ->andReturn(false)
             ->once()
             ->getMock();
-        $sut = new IrfoGvPermitType();
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
 
-        $sut->fetchListData();
+        $this->mockHandleQuery($mockResponse);
+
+        $this->sut->fetchListData();
     }
 
     /**

@@ -3,14 +3,28 @@
 namespace OlcsTest\Service\Data;
 
 use Common\Exception\DataServiceException;
+use Dvsa\Olcs\Transfer\Query\QueryContainerInterface;
 use Olcs\Service\Data\AssignedToList;
 use Mockery as m;
 use Dvsa\Olcs\Transfer\Query\User\UserListInternal as Qry;
 use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount as MyAccount;
-use CommonTest\Service\Data\AbstractDataServiceTestCase;
+use CommonTest\Service\Data\AbstractListDataServiceTestCase;
 
-class AssignedToListTest extends AbstractDataServiceTestCase
+class AssignedToListTest extends AbstractListDataServiceTestCase
 {
+    /** @var AssignedToList */
+    private $sut;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->queryA = m::mock(QueryContainerInterface::class);
+        $this->queryB = m::mock(QueryContainerInterface::class);
+
+        $this->sut = new AssignedToList($this->abstractListDataServiceServices);
+    }
+
     private $userList = [
         [
             'id' => 5,
@@ -58,8 +72,7 @@ class AssignedToListTest extends AbstractDataServiceTestCase
 
     public function mockTransferAnnotationBuilder()
     {
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
             ->twice()
             ->andReturnUsing(
                 function ($dto) {
@@ -67,22 +80,18 @@ class AssignedToListTest extends AbstractDataServiceTestCase
                         $this->assertEquals($this->userListParams['sort'], $dto->getSort());
                         $this->assertEquals($this->userListParams['order'], $dto->getOrder());
                         $this->assertEquals($this->userListParams['team'], $dto->getTeam());
-                        return 'queryA';
+                        return $this->queryA;
                     }
                     if (is_a($dto, 'Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount')) {
-                        return 'queryB';
+                        return $this->queryB;
                     }
                 }
-            )
-            ->getMock();
-
-        return $mockTransferAnnotationBuilder;
+            );
     }
 
     public function mockTransferAnnotationBuilderForEmptyUserList()
     {
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
             ->once()
             ->andReturnUsing(
                 function ($dto) {
@@ -90,12 +99,9 @@ class AssignedToListTest extends AbstractDataServiceTestCase
                     $this->assertEquals($this->userListParams['sort'], $dto->getSort());
                     $this->assertEquals($this->userListParams['order'], $dto->getOrder());
                     $this->assertEquals($this->userListParams['team'], $dto->getTeam());
-                    return 'queryA';
+                    return $this->queryA;
                 }
-            )
-            ->getMock();
-
-        return $mockTransferAnnotationBuilder;
+            );
     }
 
     public function mockUserListResponse()
@@ -155,22 +161,19 @@ class AssignedToListTest extends AbstractDataServiceTestCase
      */
     public function testFetchListOptions()
     {
-
-        $mockTransferAnnotationBuilder = $this->mockTransferAnnotationBuilder();
+        $this->mockTransferAnnotationBuilder();
 
         $mockUserListResponse = $this->mockUserListResponse();
 
         $mockCurrentUserResponse = $this->mockCurrentUserResponse();
 
-        $sut = new AssignedToList();
+        $this->sut->setTeamId(1);
+        $this->sut->setData('userList', $this->userList);
 
-        $sut->setTeamId(1);
-        $sut->setData('userList', $this->userList);
-        $this->setupQuerySender($sut, $mockTransferAnnotationBuilder);
-        $this->mockHandleSingleQuery($mockUserListResponse, 'queryA');
-        $this->mockHandleSingleQuery($mockCurrentUserResponse, 'queryB');
+        $this->mockHandleQuery($mockUserListResponse, $this->queryA);
+        $this->mockHandleQuery($mockCurrentUserResponse, $this->queryB);
 
-        $result = $sut->fetchListOptions();
+        $result = $this->sut->fetchListOptions();
 
         $expected = [
             $this->currentUser['id'] =>
@@ -190,19 +193,16 @@ class AssignedToListTest extends AbstractDataServiceTestCase
      */
     public function testFetchListOptionsEmptyUsers()
     {
-
-        $mockTransferAnnotationBuilder = $this->mockTransferAnnotationBuilderForEmptyUserList();
+        $this->mockTransferAnnotationBuilderForEmptyUserList();
 
         $mockUserListResponse = $this->mockUserListResponseEmpty();
 
-        $sut = new AssignedToList();
+        $this->sut->setTeamId(1);
+        $this->sut->setData('userList', $this->userList);
 
-        $sut->setTeamId(1);
-        $sut->setData('userList', $this->userList);
-        $this->setupQuerySender($sut, $mockTransferAnnotationBuilder);
-        $this->mockHandleSingleQuery($mockUserListResponse, 'queryA');
+        $this->mockHandleQuery($mockUserListResponse, $this->queryA);
 
-        $result = $sut->fetchListOptions();
+        $result = $this->sut->fetchListOptions();
 
         $expected = [];
 
@@ -214,22 +214,19 @@ class AssignedToListTest extends AbstractDataServiceTestCase
      */
     public function testFetchListOptionsWithGroups()
     {
-
-        $mockTransferAnnotationBuilder = $this->mockTransferAnnotationBuilder();
+        $this->mockTransferAnnotationBuilder();
 
         $mockUserListResponse = $this->mockUserListResponse();
 
         $mockCurrentUserResponse = $this->mockCurrentUserResponse();
 
-        $sut = new AssignedToList();
+        $this->sut->setTeamId(1);
+        $this->sut->setData('userList', $this->userList);
 
-        $sut->setTeamId(1);
-        $sut->setData('userList', $this->userList);
-        $this->setupQuerySender($sut, $mockTransferAnnotationBuilder);
-        $this->mockHandleSingleQuery($mockUserListResponse, 'queryA');
-        $this->mockHandleSingleQuery($mockCurrentUserResponse, 'queryB');
+        $this->mockHandleQuery($mockUserListResponse, $this->queryA);
+        $this->mockHandleQuery($mockCurrentUserResponse, $this->queryB);
 
-        $result = $sut->fetchListOptions([], true);
+        $result = $this->sut->fetchListOptions([], true);
 
         $expected = [
             [
@@ -264,20 +261,20 @@ class AssignedToListTest extends AbstractDataServiceTestCase
      */
     public function testFetchListOptionsWithExceptionOnGetCurrentUser()
     {
-        $mockTransferAnnotationBuilder = $this->mockTransferAnnotationBuilder();
+        $this->mockTransferAnnotationBuilder();
 
         $mockUserListResponse = $this->mockUserListResponse();
 
         $mockCurrentUserResponseIsOkFalse = $this->mockCurrentUserResponseIsOkFalse();
 
-        $sut = new AssignedToList();
-        $sut->setTeamId(1);
-        $sut->setData('userList', $this->userList);
-        $this->expectException(DataServiceException::class);
-        $this->setupQuerySender($sut, $mockTransferAnnotationBuilder);
-        $this->mockHandleSingleQuery($mockUserListResponse, 'queryA');
-        $this->mockHandleSingleQuery($mockCurrentUserResponseIsOkFalse, 'queryB');
+        $this->sut->setTeamId(1);
+        $this->sut->setData('userList', $this->userList);
 
-        $sut->fetchListOptions();
+        $this->expectException(DataServiceException::class);
+
+        $this->mockHandleQuery($mockUserListResponse, $this->queryA);
+        $this->mockHandleQuery($mockCurrentUserResponseIsOkFalse, $this->queryB);
+
+        $this->sut->fetchListOptions();
     }
 }

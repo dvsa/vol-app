@@ -9,10 +9,10 @@
 namespace OlcsTest\Service\Data;
 
 use Common\Exception\DataServiceException;
+use CommonTest\Service\Data\AbstractDataServiceTestCase;
+use Dvsa\Olcs\Transfer\Query\User\UserList as Qry;
 use Olcs\Service\Data\User;
 use Mockery as m;
-use Dvsa\Olcs\Transfer\Query\User\UserList as Qry;
-use CommonTest\Service\Data\AbstractDataServiceTestCase;
 
 /**
  * User data service test
@@ -27,6 +27,16 @@ class UserTest extends AbstractDataServiceTestCase
         ['id' => 5, 'loginId' => 'Mr E'],
     ];
 
+    /** @var User */
+    private $sut;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->sut = new User($this->abstractDataServiceServices);
+    }
+
     /**
      * Test fetchUserListData
      */
@@ -40,18 +50,19 @@ class UserTest extends AbstractDataServiceTestCase
         ];
         $team = 99;
         $dto = Qry::create($params);
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')->once()->andReturnUsing(
+
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
+            ->once()
+            ->andReturnUsing(
                 function ($dto) use ($params, $team) {
                     $this->assertEquals($params['sort'], $dto->getSort());
                     $this->assertEquals($params['order'], $dto->getOrder());
                     $this->assertEquals($team, $dto->getTeam());
                     $this->assertEquals(true, $dto->getIsInternal());
-                    return 'query';
+                    return $this->query;
                 }
-            )
-            ->once()
-            ->getMock();
+            );
 
         $mockResponse = m::mock()
             ->shouldReceive('isOk')
@@ -62,11 +73,11 @@ class UserTest extends AbstractDataServiceTestCase
             ->twice()
             ->getMock();
 
-        $sut = new User();
-        $sut->setTeam($team);
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
+        $this->mockHandleQuery($mockResponse);
 
-        $this->assertEquals($results['results'], $sut->fetchUserListData(['isInternal' => true]));
+        $this->sut->setTeam($team);
+
+        $this->assertEquals($results['results'], $this->sut->fetchUserListData(['isInternal' => true]));
     }
 
     /**
@@ -75,18 +86,21 @@ class UserTest extends AbstractDataServiceTestCase
     public function testFetchListDataWithException()
     {
         $this->expectException(DataServiceException::class);
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();
+
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
+            ->once()
+            ->andReturn($this->query);
 
         $mockResponse = m::mock()
             ->shouldReceive('isOk')
             ->andReturn(false)
             ->once()
             ->getMock();
-        $sut = new User();
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
 
-        $sut->fetchUserListData([]);
+        $this->mockHandleQuery($mockResponse);
+
+        $this->sut->fetchUserListData([]);
     }
 
     /**
@@ -94,10 +108,9 @@ class UserTest extends AbstractDataServiceTestCase
      */
     public function testFetchListOptions()
     {
-        $sut = new User();
-        $sut->setData('userlist', $this->users);
+        $this->sut->setData('userlist', $this->users);
 
-        $this->assertEquals([1 => 'Logged in user', 5 => 'Mr E'], $sut->fetchListOptions([]));
+        $this->assertEquals([1 => 'Logged in user', 5 => 'Mr E'], $this->sut->fetchListOptions([]));
     }
 
     /**
@@ -105,9 +118,8 @@ class UserTest extends AbstractDataServiceTestCase
      */
     public function testFetchListOptionsEmpty()
     {
-        $sut = new User();
-        $sut->setData('userlist', false);
+        $this->sut->setData('userlist', false);
 
-        $this->assertEquals([], $sut->fetchListOptions([]));
+        $this->assertEquals([], $this->sut->fetchListOptions([]));
     }
 }

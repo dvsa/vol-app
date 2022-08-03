@@ -5,14 +5,24 @@ namespace OlcsTest\Service\Data;
 use Olcs\Service\Data\DocumentSubCategory;
 use Mockery as m;
 use Dvsa\Olcs\Transfer\Query\SubCategory\GetList as Qry;
-use CommonTest\Service\Data\AbstractDataServiceTestCase;
+use CommonTest\Service\Data\AbstractListDataServiceTestCase;
 
 /**
  * @covers \Olcs\Service\Data\DocumentSubCategory
  */
-class DocumentSubCategoryTest extends AbstractDataServiceTestCase
+class DocumentSubCategoryTest extends AbstractListDataServiceTestCase
 {
     const CAT_ID = 8001;
+
+    /** @var DocumentSubCategory */
+    private $sut;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->sut = new DocumentSubCategory($this->abstractListDataServiceServices);
+    }
 
     public function testFetchListData()
     {
@@ -22,28 +32,27 @@ class DocumentSubCategoryTest extends AbstractDataServiceTestCase
             'order' => 'ASC',
         ];
 
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')->once()->andReturnUsing(
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
+            ->once()
+            ->andReturnUsing(
                 function (Qry $dto) use ($params) {
                     $this->assertEquals($params['sort'], $dto->getSort());
                     $this->assertEquals($params['order'], $dto->getOrder());
                     $this->assertEquals(self::CAT_ID, $dto->getCategory());
-                    return 'query';
+                    return $this->query;
                 }
-            )
-            ->once()
-            ->getMock();
+            );
 
         $mockResponse = m::mock()
             ->shouldReceive('isOk')->andReturn(true)->once()
             ->shouldReceive('getResult')->andReturn($results)->once()
             ->getMock();
 
-        $sut = new DocumentSubCategory();
-        $sut->setCategory(self::CAT_ID);
+        $this->sut->setCategory(self::CAT_ID);
 
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
+        $this->mockHandleQuery($mockResponse);
 
-        $this->assertEquals($results['results'], $sut->fetchListData([]));
+        $this->assertEquals($results['results'], $this->sut->fetchListData([]));
     }
 }
