@@ -27,7 +27,7 @@ return array(
         ),
         array(
             'title' => 'Licence',
-            'stringFormat' => '<a href="[LINK]">{licence->licNo}</a> ({licence->status->description})',
+            'stringFormat' => '<a class="govuk-link" href="[LINK]">{licence->licNo}</a> ({licence->status->description})',
             'formatter' => 'StackValueReplacer',
             'type' => 'Link',
             'route' => 'lva-licence',

@@ -736,7 +736,7 @@ class TaskController extends AbstractController
 
         $url = $this->url()->fromRoute('lva-licence', ['licence' => $taskTypeId]);
 
-        return sprintf('<a href="%s">%s</a>', $url, $linkDisplay ? $linkDisplay : $licence['licNo']);
+        return sprintf('<a class="govuk-link" href="%s">%s</a>', $url, $linkDisplay ? $linkDisplay : $licence['licNo']);
     }
 
     /**
@@ -783,7 +783,7 @@ class TaskController extends AbstractController
         $licUrl = $this->url()->fromRoute('lva-licence', ['licence' => $application['licence']['id']]);
         $appUrl = $this->url()->fromRoute('lva-application', ['application' => $taskTypeId]);
 
-        return sprintf('<a href="%s">%s</a> / <a href="%s">%s</a>', $licUrl, $licNo, $appUrl, $taskTypeId);
+        return sprintf('<a class="govuk-link" href="%s">%s</a> / <a class="govuk-link" href="%s">%s</a>', $licUrl, $licNo, $appUrl, $taskTypeId);
     }
 
     /**
@@ -894,7 +894,7 @@ class TaskController extends AbstractController
      */
     protected function getLinkMarkup($url, $linkDisplay, $fallback)
     {
-        return sprintf('<a href="%s">%s</a>', $url, $linkDisplay ? $linkDisplay : $fallback);
+        return sprintf('<a class="govuk-link" href="%s">%s</a>', $url, $linkDisplay ? $linkDisplay : $fallback);
     }
 
     /**

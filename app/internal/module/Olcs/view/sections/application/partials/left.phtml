@@ -10,7 +10,7 @@
         ?>
         <li class="app-navigation__item <?php echo $details['class']; ?> <?php echo $details['enabled'] ? '' : 'disabled'; ?>">
             <?php if (!$current && $details['enabled']) : ?>
-            <a href="<?php echo $this->url($details['route'], ['application' => $lvaId]); ?>">
+            <a class="govuk-link" href="<?php echo $this->url($details['route'], ['application' => $lvaId]); ?>">
                 <?php endif; ?>
                 <?php
                     $sectionName = $reference;

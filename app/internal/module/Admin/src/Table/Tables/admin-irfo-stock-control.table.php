@@ -38,7 +38,7 @@ return array(
                 }
 
                 return sprintf(
-                    '<a href="%s" class="js-modal-ajax">%s</a>',
+                    '<a href="%s" class="govuk-link js-modal-ajax">%s</a>',
                     $this->generateUrl(
                         array(
                             'action' => 'details',
@@ -60,7 +60,7 @@ return array(
                 }
 
                 return sprintf(
-                    '<a href="%s">%s</a>',
+                    '<a class="govuk-link" href="%s">%s</a>',
                     $this->generateUrl(
                         array(
                             'organisation' => $data['irfoGvPermit']['organisation']['id']

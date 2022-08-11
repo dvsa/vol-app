@@ -23,7 +23,7 @@ return array(
                     ['action' => 'edit', 'id' => $data['id'], 'pi' => $data['pi']['id']],
                     'case_pi_hearing', true
                 );
-                return '<a href="' . $url . '" class="js-modal-ajax">' . $date . '</a>';
+                return '<a href="' . $url . '" class="govuk-link js-modal-ajax">' . $date . '</a>';
             },
             'name' => 'id'
         ),

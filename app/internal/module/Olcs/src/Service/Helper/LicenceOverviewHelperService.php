@@ -112,7 +112,7 @@ class LicenceOverviewHelperService extends AbstractHelperService
             ['organisation' => (int) $licence['organisation']['id']]
         );
 
-        return sprintf('%s (<a href="%s">view</a>)', $count, $url);
+        return sprintf('%s (<a class="govuk-link" href="%s">view</a>)', $count, $url);
     }
 
     /**
@@ -235,7 +235,7 @@ class LicenceOverviewHelperService extends AbstractHelperService
 
         $url = $urlHelper->fromRoute('licence/grace-periods', ['licence' => $licence['id']]);
 
-        return sprintf('%s (<a href="%s">manage</a>)', $status, $url);
+        return sprintf('%s (<a class="govuk-link" href="%s">manage</a>)', $status, $url);
     }
 
     public function hasAdminUsers($licence)

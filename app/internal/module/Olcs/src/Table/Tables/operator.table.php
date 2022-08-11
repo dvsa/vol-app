@@ -25,7 +25,7 @@ return array(
             'title' => 'Lic no/status',
             'sort' => 'licNo',
             'formatter' => function ($row) {
-                return '<a href="' . $this->generateUrl(
+                return '<a class="govuk-link" href="' . $this->generateUrl(
                     array('licence' => $row['licenceId']),
                     'licence'
                 ) . '">' . $row['licNo'] . '</a><br/>' . $row['status'];
@@ -39,7 +39,7 @@ return array(
         array(
             'title' => 'Op/trading name',
             'formatter' => function ($data) {
-                return '<a href="' . $this->generateUrl(
+                return '<a class="govuk-link" href="' . $this->generateUrl(
                     array('operator' => $data['organisation_id']),
                     'operator/business-details'
                 ) . '">' . $data['name'] . '</a><br/>' . $data['status'];
@@ -74,13 +74,13 @@ return array(
             'title' => 'Cases',
             'formatter' => function ($data) {
                 if (isset($data['caseCount']) && (int) $data['caseCount'] > 0) {
-                    return '<a href="' . $this->generateUrl(
+                    return '<a class="govuk-link" href="' . $this->generateUrl(
                         array('licence' => $data['licenceId']),
                         'licence/cases',
                         false
                     ) . '">' . $data['caseCount'] . '</a>';
                 } else {
-                    return '<a href="' . $this->generateUrl(
+                    return '<a class="govuk-link" href="' . $this->generateUrl(
                         array('licence' => $data['licenceId'], 'action' => 'add'),
                         'case'
                     ) . '">[Add Case]</a>';

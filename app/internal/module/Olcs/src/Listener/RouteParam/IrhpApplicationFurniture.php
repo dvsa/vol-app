@@ -261,7 +261,7 @@ class IrhpApplicationFurniture implements
         $urlPlugin = $this->getViewHelperManager()->get('Url');
         $escaper = new Escaper;
         $licUrl = $urlPlugin->__invoke('licence/irhp-application', ['licence' => $irhpApplication['licence']['id']], [], false);
-        return '<a href="' . $licUrl . '">' . $escaper->escapeHtml($irhpApplication['licence']['licNo']) . '</a>' . '/' . $escaper->escapeHtml($irhpApplication['id']);
+        return '<a class="govuk-link" href="' . $licUrl . '">' . $escaper->escapeHtml($irhpApplication['licence']['licNo']) . '</a>' . '/' . $escaper->escapeHtml($irhpApplication['id']);
     }
 
     /**

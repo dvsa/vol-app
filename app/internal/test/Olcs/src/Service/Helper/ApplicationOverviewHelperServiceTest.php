@@ -161,7 +161,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     'licenceStatus' => ['id' => RefData::LICENCE_STATUS_VALID],
                     'licenceType' => RefData::LICENCE_TYPE_STANDARD_NATIONAL,
                     'appLicenceType' => RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                    'interimStatus' => 'Requested (<a href="INTERIM_URL">Interim details</a>)',
+                    'interimStatus' => 'Requested (<a class="govuk-link" href="INTERIM_URL">Interim details</a>)',
                     'outstandingFees' => 2,
                     'licenceStartDate' => '2014-03-02',
                     'continuationDate' => '2017-06-05',
@@ -179,16 +179,16 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
 
                     'outOfOpposition' => null,
                     'outOfRepresentation' => null,
-                    'changeOfEntity' => 'No (<a class="js-modal-ajax" href="CHANGE_OF_ENTITY_URL">add details</a>)',
+                    'changeOfEntity' => 'No (<a class="govuk-link js-modal-ajax" href="CHANGE_OF_ENTITY_URL">add details</a>)',
                     'receivesMailElectronically' => 'Y',
                     'registeredForSelfService' => 'Yes',
-                    'licenceGracePeriods' => 'None (<a href="GRACE_PERIOD_URL">manage</a>)',
+                    'licenceGracePeriods' => 'None (<a class="govuk-link" href="GRACE_PERIOD_URL">manage</a>)',
                     'outOfOpposition' => '1966-06-21',
                     'outOfRepresentation' => '1996-07-02',
                     'isPsv' => false,
                 ],
                 // grace period string
-                'None (<a href="GRACE_PERIOD_URL">manage</a>)'
+                'None (<a class="govuk-link" href="GRACE_PERIOD_URL">manage</a>)'
             ],
             'variation eligible for lgv' => [
                 // application overview data
@@ -259,7 +259,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     'licenceStatus' => ['id' => RefData::LICENCE_STATUS_VALID],
                     'licenceType' => RefData::LICENCE_TYPE_STANDARD_NATIONAL,
                     'appLicenceType' => RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                    'interimStatus' => 'Requested (<a href="INTERIM_URL">Interim details</a>)',
+                    'interimStatus' => 'Requested (<a class="govuk-link" href="INTERIM_URL">Interim details</a>)',
                     'outstandingFees' => 2,
                     'licenceStartDate' => '2014-03-02',
                     'continuationDate' => '2017-06-05',
@@ -276,16 +276,16 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     'previousLicenceNumber' => null,
                     'outOfOpposition' => null,
                     'outOfRepresentation' => null,
-                    'changeOfEntity' => 'No (<a class="js-modal-ajax" href="CHANGE_OF_ENTITY_URL">add details</a>)',
+                    'changeOfEntity' => 'No (<a class="govuk-link js-modal-ajax" href="CHANGE_OF_ENTITY_URL">add details</a>)',
                     'receivesMailElectronically' => 'Y',
                     'registeredForSelfService' => 'Yes',
-                    'licenceGracePeriods' => 'None (<a href="GRACE_PERIOD_URL">manage</a>)',
+                    'licenceGracePeriods' => 'None (<a class="govuk-link" href="GRACE_PERIOD_URL">manage</a>)',
                     'outOfOpposition' => '1966-06-21',
                     'outOfRepresentation' => '1996-07-02',
                     'isPsv' => false,
                 ],
                 // grace period string
-                'None (<a href="GRACE_PERIOD_URL">manage</a>)'
+                'None (<a class="govuk-link" href="GRACE_PERIOD_URL">manage</a>)'
             ],
             'new psv special restricted application' => [
                 // application overview data
@@ -369,16 +369,16 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
 
                     'outOfOpposition' => null,
                     'outOfRepresentation' => null,
-                    'changeOfEntity' => 'No (<a class="js-modal-ajax" href="CHANGE_OF_ENTITY_URL">add details</a>)',
+                    'changeOfEntity' => 'No (<a class="govuk-link js-modal-ajax" href="CHANGE_OF_ENTITY_URL">add details</a>)',
                     'receivesMailElectronically' => 'N',
                     'registeredForSelfService' => 'Yes',
-                    'licenceGracePeriods' => 'Active (<a href="GRACE_PERIOD_URL">manage</a>)',
+                    'licenceGracePeriods' => 'Active (<a class="govuk-link" href="GRACE_PERIOD_URL">manage</a>)',
                     'outOfOpposition' => 'Not applicable',
                     'outOfRepresentation' => 'Not applicable',
                     'isPsv' => true,
                 ],
                 // grace period str
-                'Active (<a href="GRACE_PERIOD_URL">manage</a>)',
+                'Active (<a class="govuk-link" href="GRACE_PERIOD_URL">manage</a>)',
             ],
         ];
     }
@@ -413,11 +413,11 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     ],
                     'goodsOrPsv' => ['id' => RefData::LICENCE_CATEGORY_GOODS_VEHICLE],
                 ],
-                'Requested (<a href="INTERIM_URL">Interim details</a>)'
+                'Requested (<a class="govuk-link" href="INTERIM_URL">Interim details</a>)'
             ],
             'no interim' => [
                 null,
-                'None (<a href="INTERIM_URL">add interim</a>)',
+                'None (<a class="govuk-link" href="INTERIM_URL">add interim</a>)',
             ],
         ];
     }
@@ -458,7 +458,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                         ],
                     ],
                 ],
-                'Yes (<a class="js-modal-ajax" href="CHANGE_OF_ENTITY_URL">update details</a>)'
+                'Yes (<a class="govuk-link js-modal-ajax" href="CHANGE_OF_ENTITY_URL">update details</a>)'
             ],
         ];
     }

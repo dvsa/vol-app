@@ -52,7 +52,7 @@ $(function () {
                     ).done(function (data) {
                     searchResults.empty();
                     $.each(data.results, function (index, result) {
-                        searchResults.append("<div class=\"translationAcRow\"><strong><a href=\""+jsonBaseUrl+"details/" + result.id + "\">" + result.id + "</a></strong><br>" + result.description + "</div>");
+                        searchResults.append("<div class=\"translationAcRow\"><strong><a class=\"govuk-link\" href=\""+jsonBaseUrl+"details/" + result.id + "\">" + result.id + "</a></strong><br>" + result.description + "</div>");
                     });
                     showAutocomplete();
                 });

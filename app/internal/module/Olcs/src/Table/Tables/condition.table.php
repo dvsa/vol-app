@@ -28,7 +28,7 @@ return array(
                     array('action' => 'edit', 'id' => $data['id']),
                     'case_conditions_undertakings',
                     true
-                ) . '" class="js-modal-ajax">' . $data['id'] . '</a>';
+                ) . '" class="govuk-link js-modal-ajax">' . $data['id'] . '</a>';
             },
             'name' => 'id'
         ),

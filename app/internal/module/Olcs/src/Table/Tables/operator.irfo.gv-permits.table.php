@@ -25,7 +25,7 @@ return array(
                     array('action' => 'details', 'id' => $data['id']),
                     'operator/irfo/gv-permits',
                     true
-                ) . '" class="js-modal-ajax">' . $data['id'] . '</a>';
+                ) . '" class="govuk-link js-modal-ajax">' . $data['id'] . '</a>';
             }
         ),
         array(

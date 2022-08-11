@@ -10,7 +10,7 @@ return array(
         array(
             'title' => 'Case No.',
             'formatter' => function ($row) {
-                return '<a href="' . $this->generateUrl(
+                return '<a class="govuk-link" href="' . $this->generateUrl(
                     array('case' => $row['case']['id'], 'tab' => 'overview'),
                     'case_opposition',
                     false

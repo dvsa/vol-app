@@ -9,7 +9,7 @@ if (isset($this->sections)): ?>
             <?php $current = ($details['route'] === $currentRoute); ?>
             <li class="vertical-navigation__item <?php echo $current ? 'current' : ''; ?>">
                 <?php if (!$current) : ?>
-                <a href="<?php echo $this->url($details['route'], ['licence' => $lvaId]); ?>">
+                <a class="govuk-link" href="<?php echo $this->url($details['route'], ['licence' => $lvaId]); ?>">
                     <?php endif; ?>
                     <?php echo $this->translate('section.name.' . $reference); ?>
                     <?php if (!$current) : ?>

@@ -34,7 +34,7 @@ return array(
                     array('action' => 'edit', 'opposition' => $data['id']),
                     'case_opposition',
                     true
-                ) . '" class="js-modal-ajax">' . $this->callFormatter($column, $data) . '</a>';
+                ) . '" class="govuk-link js-modal-ajax">' . $this->callFormatter($column, $data) . '</a>';
             },
             'sort' => 'raisedDate',
         ),

@@ -33,7 +33,7 @@ return array(
             'title' => 'Auth Id',
             'formatter' => function ($data) {
                 return sprintf(
-                    '<a href="%s" class="js-modal-ajax">%s</a>',
+                    '<a href="%s" class="govuk-link js-modal-ajax">%s</a>',
                     $this->generateUrl(
                         array('action' => 'edit', 'id' => $data['id'], 'organisation' => $data['organisation']['id']),
                         'operator/irfo/psv-authorisations',
@@ -47,7 +47,7 @@ return array(
             'title' => 'Operator',
             'formatter' => function ($data) {
                 return sprintf(
-                    '<a href="%s" class="js-modal-ajax">%s</a>',
+                    '<a href="%s" class="govuk-link js-modal-ajax">%s</a>',
                     $this->generateUrl(
                         array('action' => 'edit', 'organisation' => $data['organisation']['id']),
                         'operator/irfo/details',

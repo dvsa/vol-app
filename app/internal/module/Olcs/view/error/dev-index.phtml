@@ -10,7 +10,7 @@ $this->placeholder('pageTitle')->set('500-title');
 <div class="article">
     <?php echo $this->translate('markup-500-text'); ?>
     <hr>
-    <p><a href="<?php echo $this->url('dashboard'); ?>"><?php echo $this->translate('back-to-home'); ?></a></p>
+    <p><?php echo $this->link($this->url('dashboard'), 'back-to-home'); ?></p>
 
     <?php echo $this->partial('partials/error/exception'); ?>
 </div>

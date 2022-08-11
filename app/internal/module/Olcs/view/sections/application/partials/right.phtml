@@ -6,10 +6,12 @@
 <div class="small-module">
     <h4 class="title">Licence details</h4>
     <p class="small-module__details">
-        <a href="<?php echo $this->url('operator/business-details', ['organisation' => $licence['organisation']['id']], [], true);?>">
-            <?php echo $this->escapeHtml($licence['organisation']['name']); ?>
-        </a>
         <?php
+        echo $this->link(
+            $this->url('operator/business-details', ['organisation' => $licence['organisation']['id']], [], true),
+            $licence['organisation']['name']
+        );
+
         if (!empty($this->placeholder('isMlh')->getValue())) {
             echo $this->status(['colour' => 'orange', 'value' => 'MLH']);
         }

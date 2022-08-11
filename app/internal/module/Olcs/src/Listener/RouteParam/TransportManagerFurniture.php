@@ -73,7 +73,7 @@ class TransportManagerFurniture implements
             ->__invoke('transport-manager/details', ['transportManager' => $data['id']], [], true);
 
         $pageTitle = sprintf(
-            '<a href="%s">%s %s</a>',
+            '<a class="govuk-link" href="%s">%s %s</a>',
             $url,
             $data['homeCd']['person']['forename'],
             $data['homeCd']['person']['familyName']

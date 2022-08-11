@@ -26,7 +26,7 @@ return array(
                 );
                 return '<a href="'
                     . $url
-                    . '" class=js-modal-ajax>'
+                    . '" class="govuk-link js-modal-ajax">'
                     . $row['qualificationType']['description']
                     . '</a>';
             },

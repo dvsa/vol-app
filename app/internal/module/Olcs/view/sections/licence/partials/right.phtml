@@ -6,10 +6,12 @@ $isPriorityNote = $this->placeholder('isPriorityNote')->getValue();
 <div class="small-module">
     <h4 class="title">Operator details</h4>
     <p class="small-module__details">
-        <a href="<?php echo $this->url('operator/business-details', ['organisation' => $licence['organisation']['id']], [], true);?>">
-            <?php echo $this->escapeHtml($licence['organisation']['name']); ?>
-        </a>
         <?php
+        echo $this->link(
+            $this->url('operator/business-details', ['organisation' => $licence['organisation']['id']], [], true),
+            $licence['organisation']['name']
+        );
+
         if (!empty($this->placeholder('isMlh')->getValue())) {
             echo $this->status(['colour' => 'orange', 'value' => 'MLH']);
         }
@@ -47,7 +49,13 @@ if ($nav->getContainer()->hasPages(true)): ?>
         <div class="latest-note__<?php echo ($isPriorityNote ? "priority" : "details"); ?>">
             <?php echo $this->escapeHtml(substr($note, 0, 100)); ?>
         </div>
-        <a class="latest-note__link" href="<?php echo $this->url('licence/processing/notes', ['licence' => $licence['id']]); ?>">View all notes</a>
+        <?php
+        echo $this->link(
+            $this->url('licence/processing/notes', ['licence' => $licence['id']]),
+            'View all notes',
+            'latest-note__link'
+        );
+        ?>
     </div>
 <?php endif; ?>
 

@@ -60,7 +60,7 @@ class TransportManagerTest extends MockeryTestCase
 
         $url = '#';
 
-        $pageTitle = '<a href="'. $url . '">' . $tm['homeCd']['person']['forename'] . ' ';
+        $pageTitle = '<a class="govuk-link" href="'. $url . '">' . $tm['homeCd']['person']['forename'] . ' ';
         $pageTitle .= $tm['homeCd']['person']['familyName'] . '</a>';
 
         $mockUrl = m::mock('stdClass');
@@ -163,7 +163,7 @@ class TransportManagerTest extends MockeryTestCase
         ];
 
         $url = '#';
-        $pageTitle = '<a href="'. $url . '">' . $tm['homeCd']['person']['forename'] . ' ';
+        $pageTitle = '<a class="govuk-link" href="'. $url . '">' . $tm['homeCd']['person']['forename'] . ' ';
         $pageTitle .= $tm['homeCd']['person']['familyName'] . '</a>';
 
         $sut = new SystemUnderTest();
@@ -246,7 +246,7 @@ class TransportManagerTest extends MockeryTestCase
         ];
 
         $url = '#';
-        $pageTitle = '<a href="'. $url . '">' . $tm['homeCd']['person']['forename'] . ' ';
+        $pageTitle = '<a class="govuk-link" href="'. $url . '">' . $tm['homeCd']['person']['forename'] . ' ';
         $pageTitle .= $tm['homeCd']['person']['familyName'] . '</a>';
 
         $sut = new SystemUnderTest();

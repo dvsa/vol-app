@@ -129,12 +129,12 @@ class ApplicationOverviewHelperService extends AbstractHelperService
 
         if (isset($application['interimStatus']['id']) && !empty($application['interimStatus']['id'])) {
             $interimStatus = sprintf(
-                '%s (<a href="%s">Interim details</a>)',
+                '%s (<a class="govuk-link" href="%s">Interim details</a>)',
                 $application['interimStatus']['description'],
                 $url
             );
         } else {
-            $interimStatus = sprintf('None (<a href="%s">add interim</a>)', $url);
+            $interimStatus = sprintf('None (<a class="govuk-link" href="%s">add interim</a>)', $url);
         }
 
         return $interimStatus;
@@ -170,7 +170,7 @@ class ApplicationOverviewHelperService extends AbstractHelperService
 
         $url = $this->getServiceLocator()->get('Helper\Url')
             ->fromRoute('lva-application/change-of-entity', $args);
-        $value = sprintf('%s (<a class="js-modal-ajax" href="' . $url . '">%s</a>)', $text[0], $text[1]);
+        $value = sprintf('%s (<a class="govuk-link js-modal-ajax" href="' . $url . '">%s</a>)', $text[0], $text[1]);
 
         return $value;
     }

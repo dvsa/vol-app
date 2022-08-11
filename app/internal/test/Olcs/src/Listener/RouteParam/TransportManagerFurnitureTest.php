@@ -98,7 +98,7 @@ class TransportManagerFurnitureTest extends TestCase
                 m::mock()
                 ->shouldReceive('set')
                 ->once()
-                ->with('<a href="url">Bob Smith</a>')
+                ->with('<a class="govuk-link" href="url">Bob Smith</a>')
                 ->getMock()
             )
             ->shouldReceive('getContainer')

@@ -31,7 +31,7 @@ return array(
                     'case_non_pi', true
                 );
                 $column['formatter'] = 'Date';
-                return '<a href="' . $url . '">' . date(\DATETIMESEC_FORMAT, strtotime($data['hearingDate'])) . '</a>';
+                return '<a class="govuk-link" href="' . $url . '">' . date(\DATETIMESEC_FORMAT, strtotime($data['hearingDate'])) . '</a>';
             },
             'name' => 'id'
         ),

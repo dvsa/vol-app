@@ -36,7 +36,7 @@ return array(
                     array('action' => 'edit', 'complaint' => $data['id']),
                     'case_environmental_complaint',
                     true
-                ) . '" class="js-modal-ajax">' . $this->callFormatter($column, $data) . '</a>';
+                ) . '" class="govuk-link js-modal-ajax">' . $this->callFormatter($column, $data) . '</a>';
             },
             'name' => 'complaintDate'
         ),

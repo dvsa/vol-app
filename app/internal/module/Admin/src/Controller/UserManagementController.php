@@ -191,7 +191,7 @@ class UserManagementController extends AbstractInternalController implements Lef
             && !empty($data['userType']['currentTransportManagerName'])
         ) {
             $value = sprintf(
-                '<a href="%s">%s</a>',
+                '<a class="govuk-link" href="%s">%s</a>',
                 $this->getServiceLocator()->get('Helper\Url')->fromRoute(
                     'transport-manager',
                     ['transportManager' => $data['userType']['currentTransportManager']]

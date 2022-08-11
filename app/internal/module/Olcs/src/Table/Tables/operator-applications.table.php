@@ -16,7 +16,7 @@ return array(
         array(
             'title' => 'Licence/App No.',
             'formatter' => function ($row) {
-                return '<a href="' . $this->generateUrl(
+                return '<a class="govuk-link" href="' . $this->generateUrl(
                     array('application' => $row['id']),
                     'lva-application'
                 ) . '">' . $row['licence']['licNo'] .'/'. $row['id'] . '</a>';

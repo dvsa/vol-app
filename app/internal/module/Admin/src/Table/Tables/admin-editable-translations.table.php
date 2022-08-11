@@ -55,7 +55,7 @@ return [
                 );
 
                 return sprintf(
-                    '<a href="%s">%s</a>',
+                    '<a class="govuk-link" href="%s">%s</a>',
                     $url,
                     $sm->get('translator')->translate('view')
                 );
