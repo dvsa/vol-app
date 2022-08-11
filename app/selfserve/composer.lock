@@ -3449,11 +3449,11 @@
         },
         {
             "name": "laminas/laminas-zendframework-bridge",
-            "version": "1.6.0",
+            "version": "1.6.1",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/laminas/laminas-zendframework-bridge/1.6.0/laminas-laminas-zendframework-bridge-1.6.0.zip",
-                "reference": "d74d2da21beae5aceff1e8c07b901066b0e1b719",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/laminas/laminas-zendframework-bridge/1.6.1/laminas-laminas-zendframework-bridge-1.6.1.zip",
+                "reference": "e112dd2c099f4f6142c16fc65fda89a638e06885",
                 "shasum": ""
             },
             "require": {
@@ -3495,7 +3495,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2022-07-14T16:30:30+00:00"
+            "time": "2022-07-29T13:28:29+00:00"
         },
         {
             "name": "lm-commons/lmc-rbac-mvc",
@@ -4321,11 +4321,11 @@
         },
         {
             "name": "symfony/debug",
-            "version": "v4.4.41",
+            "version": "v4.4.44",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/debug/v4.4.41/symfony-debug-v4.4.41.zip",
-                "reference": "6637e62480b60817b9a6984154a533e8e64c6bd5",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/debug/v4.4.44/symfony-debug-v4.4.44.zip",
+                "reference": "1a692492190773c5310bc7877cb590c04c2f05be",
                 "shasum": ""
             },
             "require": {
@@ -4377,7 +4377,7 @@
                 }
             ],
             "abandoned": "symfony/error-handler",
-            "time": "2022-04-12T15:19:55+00:00"
+            "time": "2022-07-28T16:29:46+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -4439,11 +4439,11 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "v5.4.9",
+            "version": "v5.4.11",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/filesystem/v5.4.9/symfony-filesystem-v5.4.9.zip",
-                "reference": "36a017fa4cce1eff1b8e8129ff53513abcef05ba",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/filesystem/v5.4.11/symfony-filesystem-v5.4.11.zip",
+                "reference": "6699fb0228d1bc35b12aed6dd5e7455457609ddd",
                 "shasum": ""
             },
             "require": {
@@ -4490,15 +4490,15 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-05-20T13:55:35+00:00"
+            "time": "2022-07-20T13:00:38+00:00"
         },
         {
             "name": "symfony/finder",
-            "version": "v5.4.8",
+            "version": "v5.4.11",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/finder/v5.4.8/symfony-finder-v5.4.8.zip",
-                "reference": "9b630f3427f3ebe7cd346c277a1408b00249dad9",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/finder/v5.4.11/symfony-finder-v5.4.11.zip",
+                "reference": "7872a66f57caffa2916a584db1aa7f12adc76f8c",
                 "shasum": ""
             },
             "require": {
@@ -4544,7 +4544,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-04-15T08:07:45+00:00"
+            "time": "2022-07-29T07:37:50+00:00"
         },
         {
             "name": "symfony/lock",
@@ -7608,11 +7608,11 @@
         },
         {
             "name": "symfony/config",
-            "version": "v5.4.9",
+            "version": "v5.4.11",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/config/v5.4.9/symfony-config-v5.4.9.zip",
-                "reference": "8f551fe22672ac7ab2c95fe46d899f960ed4d979",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/config/v5.4.11/symfony-config-v5.4.11.zip",
+                "reference": "ec79e03125c1d2477e43dde8528535d90cc78379",
                 "shasum": ""
             },
             "require": {
@@ -7674,15 +7674,15 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-05-17T10:39:36+00:00"
+            "time": "2022-07-20T13:00:38+00:00"
         },
         {
             "name": "symfony/dependency-injection",
-            "version": "v5.4.10",
+            "version": "v5.4.11",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/dependency-injection/v5.4.10/symfony-dependency-injection-v5.4.10.zip",
-                "reference": "88d1c0d38c2e60f757fa11d89cfc885f0b7f5171",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/dependency-injection/v5.4.11/symfony-dependency-injection-v5.4.11.zip",
+                "reference": "a8b9251016e9476db73e25fa836904bc0bf74c62",
                 "shasum": ""
             },
             "require": {
@@ -7754,7 +7754,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-06-26T13:00:04+00:00"
+            "time": "2022-07-20T13:00:38+00:00"
         },
         {
             "name": "symfony/polyfill-php81",
