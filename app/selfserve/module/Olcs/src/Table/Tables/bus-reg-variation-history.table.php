@@ -13,7 +13,7 @@ return array(
                 if (isset($data['id'])) {
                     if ((bool)$this->getVariable('isSearchPage') === true) {
                         return sprintf(
-                            '<a href="%s">%s</a>',
+                            '<a href="%s" class="govuk-link">%s</a>',
                             $this->generateUrl(['busRegId' => $data['id']], 'search-bus/details', false),
                             $data['regNo']
                         );
@@ -22,7 +22,7 @@ return array(
                             array('action' => 'details', 'busRegId' => $data['id']),
                             'bus-registration/details',
                             false
-                        ) . '">' . $data['regNo'] . '</a>';
+                        ) . '" class="govuk-link">' . $data['regNo'] . '</a>';
                     }
                 }
                 return '';

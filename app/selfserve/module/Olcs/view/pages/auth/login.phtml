@@ -36,15 +36,15 @@
                 <div class="actions-container">
                     <p><?php echo $this->escapeHtml($this->translate('help-sign-in')); ?></p>
                     <div class="govuk-inset-text">
-                        <ul class="list--compound">
+                        <ul class="govuk-list">
                             <li>
-                                <a href="<?php echo $this->url('user-forgot-username'); ?>"
+                                <a class="govuk-link" href="<?php echo $this->url('user-forgot-username'); ?>"
                                    aria-label="<?php echo $this->escapeHtml($this->translate('auth.forgot-username.label.audio')); ?>">
                                     <?php echo $this->escapeHtml($this->translate('auth.forgot-username.label')); ?>
                                 </a>
                             </li>
                             <li>
-                                <a href="<?php echo $this->url('auth/forgot-password'); ?>"
+                                <a class="govuk-link" href="<?php echo $this->url('auth/forgot-password'); ?>"
                                    aria-label="<?php echo $this->escapeHtml($this->translate('auth.forgot-password.label.audio')); ?>">
                                     <?php echo $this->escapeHtml($this->translate('auth.forgot-password.label')); ?>
                                 </a>

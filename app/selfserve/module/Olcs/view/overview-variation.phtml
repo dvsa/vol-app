@@ -50,9 +50,9 @@
         <?php if ($canCancel): ?>
           <ul class="govuk-list">
             <li>
-                <a href="<?php echo $this->url('lva-variation/cancel', [], [], true); ?>" class="govuk-link js-modal-ajax">
-                    <?php echo $this->translate('application.cancel'); ?>
-                </a>
+                <?php
+                    echo $this->linkModal($this->url('lva-variation/cancel', [], [], true), 'application.cancel');
+                ?>
             </li>
           </ul>
         <?php endif; ?>

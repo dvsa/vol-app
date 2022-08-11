@@ -17,7 +17,12 @@
                 ?>
             </p>
             <div class>
-                <a href="<?php echo $printLink;?>" title="print form (opens in new window)" class="download govuk-link govuk-!-font-size-19 print-form" target="_blank" ><?php echo $this->translate('print-declaration-form');?></a>
+                <?php echo $this->linkNewWindow(
+                        $printLink,
+                        'print-declaration-form',
+                        'download govuk-link govuk-!-font-size-19 print-form'
+                    );
+                ?>
             </div>
         </div>
         <p><a href="<?php echo $returnLink;?>" title="return to home" class="govuk-button" role="button"><?php echo $this->translate($returnLinkText);?></a> </p>

@@ -9,7 +9,7 @@ use Laminas\View\Helper\AbstractHelper;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class Link extends AbstractHelper
+class PermitsCheckAnswerLink extends AbstractHelper
 {
     const LINK_TEMPLATE = '<a class="%s" href="%s">%s<span class="govuk-visually-hidden">%s</span></a>';
 

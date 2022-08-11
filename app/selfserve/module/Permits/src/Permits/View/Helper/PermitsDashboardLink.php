@@ -22,7 +22,7 @@ class PermitsDashboardLink extends AbstractHelper
      */
     public function __invoke(?string $label = 'cancel.button'): string
     {
-        $linkClass = 'return-overview';
+        $linkClass = 'govuk-link';
 
         $label = $this->view->escapeHtml($this->view->translate($label));
         $url = $this->view->url('permits', [], [], true);

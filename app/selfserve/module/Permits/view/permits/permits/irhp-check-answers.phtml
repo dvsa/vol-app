@@ -22,7 +22,7 @@
                     <dd class="app-check-your-answers__change">
                     <?php
                         if (isset($row['slug'])) {
-                            echo $this->link(
+                            echo $this->permitsCheckAnswerLink(
                                 'permits/application/question',
                                 'common.link.change.label',
                                 $this->translate($row['question']),

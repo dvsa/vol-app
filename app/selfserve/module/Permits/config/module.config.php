@@ -603,7 +603,7 @@ return [
             'permitsBackLink' => \Permits\View\Helper\BackToOverview::class,
             'saveAndReturnLink' => \Permits\View\Helper\BackToOverview::class,
             'permitsDashboardLink' => \Permits\View\Helper\PermitsDashboardLink::class,
-            'link' => \Permits\View\Helper\Link::class,
+            'permitsCheckAnswerLink' => \Permits\View\Helper\PermitsCheckAnswerLink::class,
             'answerFormatter' => \Permits\View\Helper\AnswerFormatter::class,
         ],
     ],

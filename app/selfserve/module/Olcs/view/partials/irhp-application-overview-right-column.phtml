@@ -9,9 +9,12 @@
         <?php if ($application['canBeCancelled']) : ?>
             <ul class="govuk-list">
                 <li>
-                    <a class="govuk-link" href="<?php echo $this->url(Section::ROUTE_CANCEL_APPLICATION, [], [], true); ?>">
-                        <?php echo $this->escapeHtml($this->translate('permits.irhp-application.cancel.question')); ?>
-                    </a>
+                    <?php
+                        echo $this->link(
+                            $this->url(Section::ROUTE_CANCEL_APPLICATION, [], [], true),
+                            'permits.irhp-application.cancel.question'
+                        );
+                    ?>
                 </li>
             </ul>
         <?php endif; ?>

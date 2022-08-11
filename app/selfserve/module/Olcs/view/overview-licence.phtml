@@ -62,9 +62,16 @@
                 <?php foreach ($infoBoxLinks as $link): ?>
                 <ul class="govuk-list">
                     <li>
-                        <a href="<?php echo $this->url($link['linkUrl']['route'], $link['linkUrl']['params'], $link['linkUrl']['options'], $link['linkUrl']['reuseMatchedParams']); ?>"
-                           class="govuk-link">
-                        <?php echo $this->translate($link['linkText']); ?></a>
+                        <?php
+                            $url = $this->url(
+                                $link['linkUrl']['route'],
+                                $link['linkUrl']['params'],
+                                $link['linkUrl']['options'],
+                                $link['linkUrl']['reuseMatchedParams']
+                            );
+
+                            echo $this->link($url, $link['linkText']);
+                        ?>
                     </li>
                 </ul>
                 <?php endforeach; ?>

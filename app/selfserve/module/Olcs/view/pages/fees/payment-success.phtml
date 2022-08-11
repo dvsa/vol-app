@@ -33,8 +33,14 @@ echo $this->partial(
     <hr>
   
     <div class="actions-container">
-      <a href="<?php echo $this->url('fees');?>" class="action--primary large"><?php echo $this->translate('pay-fees.back-to-home'); ?></a>
-      <a href="<?php echo $this->url('fees/receipt', ['action' => 'print'], [], true);?>" class="action--secondary large" target="_blank"><?php echo $this->translate('pay-fees.success.print-receipt'); ?></a>
+      <?php
+        echo $this->link($this->url('fees'), 'pay-fees.back-to-home', 'action--primary large');
+        echo $this->linkNewWindow(
+            $this->url('fees/receipt', ['action' => 'print'], [], true),
+            'pay-fees.success.print-receipt',
+            'action--secondary large'
+        );
+      ?>
     </div>
   
   </div>

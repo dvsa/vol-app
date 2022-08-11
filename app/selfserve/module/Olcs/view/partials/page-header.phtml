@@ -16,8 +16,7 @@
 
       <?php if (!empty($this->pageSubTitleUrl)) : ?>
           <h3 class="page-header__subtitle">
-              <a href="<?php echo $this->pageSubTitleUrl['url'] ?>"><?php
-                  echo $this->escapeHtml($this->translate($this->pageSubTitleUrl['label'])); ?></a>
+              <?php echo $this->link($this->pageSubTitleUrl['url'], $this->pageSubTitleUrl['label']); ?>
           </h3>
       <?php endif; ?>
 
@@ -45,9 +44,7 @@
       <?php if (isset($this->pageHeaderUrl) && !empty($this->pageHeaderUrl)) { ?>
         <p>
           <b>
-            <a href="<?php echo $this->url($this->pageHeaderUrl['route'], $this->pageHeaderUrl['params']);?>">
-              <?php echo $this->escapeHtml($this->translate($this->pageHeaderUrl['text'])); ?>
-            </a>
+            <?php echo $this->link($this->url($this->pageHeaderUrl['route'], $this->pageHeaderUrl['params']), $this->pageHeaderUrl['text']); ?>
           </b>
         </p>
       <?php } ?>

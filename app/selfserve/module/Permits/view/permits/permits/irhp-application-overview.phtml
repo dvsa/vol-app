@@ -10,7 +10,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <div class="page-header">
-            <p><a href="<?php echo $this->url('permits'); ?>" class="govuk-back-link"> <?php echo $this->escapeHtml($this->translate('common.link.back-to-permits.label')); ?></a></p>
+            <p><?php echo $this->link($this->url('permits'), 'common.link.back-to-permits.label', 'govuk-back-link'); ?></p>
             <div class="page-header__wrapper">
                 <span class="govuk-caption-xl">
                     <span class="visually-hidden"><?php echo($this->escapeHtml($this->translate('permits.application.overview.application.reference'))); ?></span>

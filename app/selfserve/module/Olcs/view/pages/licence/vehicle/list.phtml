@@ -12,7 +12,7 @@
                 <?php if (isset($this->searchForm)) { ?>
                     <?php echo $this->formErrors($this->searchForm); ?>
                     <?php echo $this->form($this->searchForm); ?>
-                    <p><a href="<?php echo $this->clearUrl; ?>" class="govuk-link">Clear search</a></p>
+                    <p><?php echo $this->link($this->clearUrl, 'Clear search'); ?></p>
                     <div class="govuk-phase-banner govuk-!-margin-bottom-8 govuk-!-margin-top-0"></div>
                 <?php } ?>
 

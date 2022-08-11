@@ -12,8 +12,12 @@
                     false;
                 ?>
                 <li class="govuk-tabs__list-item <?php echo $active;?>">
-                    <a class="govuk-tabs__tab" href="<?php echo $this->url($route, $params, $options, $reuseMatchedParams);?>">
-                        <?php echo $this->translate($label);?></a>
+                    <?php echo $this->link(
+                            $this->url($route, $params, $options, $reuseMatchedParams),
+                            $label,
+                            'govuk-tabs__tab'
+                        );
+                    ?>
                 </li>
                 <?php
             }

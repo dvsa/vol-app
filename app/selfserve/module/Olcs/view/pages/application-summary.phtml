@@ -25,9 +25,12 @@
           <h2><?php echo $this->escapeHtml($licence . '/' . $application); ?></h2>
           <?php if ($paymentRef): ?>
               <p>
-                  <a href="<?php echo $this->url('fees/receipt', ['action' => 'print', 'reference' => $paymentRef]);?>" target="blank">
-                      <?php echo $this->translate('pay-fees.success.view-receipt'); ?>
-                  </a>
+                  <?php
+                    echo $this->linkNewWindow(
+                        $this->url('fees/receipt', ['action' => 'print', 'reference' => $paymentRef]),
+                        'pay-fees.success.view-receipt'
+                    );
+                  ?>
               </p>
           <?php endif; ?>
       </div>
@@ -47,9 +50,13 @@
                   <h3><?php echo $this->translate('print-sign-return-declaration-form'); ?></h3>
                   <p><?php echo $this->translate('print-sign-return-declaration-form-text' . ($isNi ? '-ni' : '')); ?></p>
                   <p>
-                      <a href="<?php echo $this->url('lva-' . $lva . '/declaration', [], [], true); ?>" target="_blank" class="download">
-                          <?php echo $this->translate('print-declaration-form'); ?>
-                      </a>
+                      <?php
+                          echo $this->linkNewWindow(
+                              $this->url('lva-' . $lva . '/declaration', [], [], true),
+                              'print-declaration-form',
+                              'download'
+                          );
+                      ?>
                   </p>
               </div>
           <?php endif; ?>
@@ -110,8 +117,9 @@
                                       <?php echo $this->transportManagerApplicationStatus($tmStatus['id'], $tmStatus['description']); ?>
                                   </td>
                                   <td><?php echo $this->date(strtotime($tmPerson['birthDate'])); ?></td>
-                                  <td><a class="remove" href="<?php echo $tmLink; ?>"
-                                      ><?php echo $this->translate('approve-tm.table.action.view-details'); ?></a></td>
+                                  <td>
+                                      <?php echo $this->link($tmLink, 'approve-tm.table.action.view-details', 'remove'); ?>
+                                  </td>
                               </tr>
                               <?php
                           }
@@ -141,26 +149,32 @@
 
           <ul class="govuk-list">
           <li>
-              <a class="govuk-link" href="<?php echo $this->url('lva-' . $lva . '/review', [], [], true); ?>" target="_blank"
-                  class=""><?php echo $this->translate('view-full-application') ?></a>
+          <?php
+              echo $this->linkNewWindow($this->url('lva-' . $lva . '/review', [], [], true), 'view-full-application');
+          ?>
           </li>
             <?php if (isset($canCancel) && $canCancel): ?>
             <li>
-                <a href="<?php echo $this->url('lva-application/cancel', [], [], true); ?>" class="govuk-link js-modal-ajax">
-                    <?php echo $this->translate('application.cancel'); ?>
-                </a>
+                <?php
+                    echo $this->linkModal($this->url('lva-application/cancel', [], [], true), 'application.cancel');
+                ?>
             </li>
             <?php endif; ?>
             <?php if (isset($canWithdraw) && $canWithdraw): ?>
-              <li>
-                  <a href="<?php echo $this->url('lva-' . $lva . '/withdraw', [], [], true); ?>"
-                      class="govuk-link js-modal-ajax"><?php echo $this->translate('withdraw-application') ?></a>
-              </li>
+            <li>
+              <?php
+                  echo $this->linkModal($this->url('lva-' . $lva . '/withdraw', [], [], true), 'withdraw-application');
+              ?>
+            </li>
             <?php endif; ?>
             <?php if (isset($paymentRef) && $paymentRef): ?>
               <li>
-                <a class="govuk-link" target="_blank"
-                href="<?php echo $this->url('fees/receipt', ['action' => 'print', 'reference' => $paymentRef]);?>"><?php echo $this->translate('pay-fees.success.print-receipt'); ?></a>
+                  <?php
+                    echo $this->linkNewWindow(
+                        $this->url('fees/receipt', ['action' => 'print', 'reference' => $paymentRef]),
+                        'pay-fees.success.print-receipt'
+                    );
+                  ?>
               </li>
             <?php endif; ?>
           </ul>
@@ -176,9 +190,6 @@
           <dd><?php echo date('d F Y', strtotime($completionDate)); ?></dd>
         </dl>
       </div>
-
-
-
     </div>
   </div>
 
