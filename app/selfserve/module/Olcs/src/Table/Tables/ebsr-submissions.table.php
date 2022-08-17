@@ -40,6 +40,7 @@ return array(
         ),
         array(
             'title' => 'selfserve-table-ebsr-submissions-variation',
+            'isNumeric' => true,
             'formatter' => function ($data, $column) {
                 $column['formatter'] = 'EbsrVariationNumber';
                 return $this->callFormatter($column, $data);
@@ -51,6 +52,7 @@ return array(
         ),
         array(
             'title' => 'selfserve-table-ebsr-submissions-service-numbers',
+            'isNumeric' => true,
             'formatter' => function ($data, $column, $sm) {
                 $string = '';
 

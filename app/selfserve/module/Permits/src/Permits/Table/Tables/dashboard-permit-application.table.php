@@ -16,6 +16,7 @@ return array(
         ),
         array(
             'title' => 'dashboard-table-permit-application-num',
+            'isNumeric' => true,
             'name' => 'permitsRequired',
             'formatter' => 'NullableNumber'
         ),

@@ -10,6 +10,7 @@ return array(
 
         array(
             'title' => $translationPrefix . '.variationNumber',
+            'isNumeric' => true,
             'name' => 'id'
         ),
         array(
@@ -24,6 +25,7 @@ return array(
         ),
         array(
             'title' => $translationPrefix  . '.publicationNumber',
+            'isNumeric' => true,
             'name' => 'publicationNo'
         ),
         array(

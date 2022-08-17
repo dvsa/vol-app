@@ -35,7 +35,7 @@ return array(
             'title' => 'selfserve-fees-table-fee-licence-outstanding',
             'name' => 'outstanding',
             'formatter' => 'FeeAmount',
-            'align' => 'right',
+            'isNumeric' => true,
         ),
         array(
             'title' => '',
@@ -58,7 +58,7 @@ return array(
             'type' => 'th',
             'formatter' => 'FeeAmountSum',
             'name' => 'amount',
-            'align' => 'right',
+            'align' => 'govuk-!-text-align-right',
         ),
         'remainingColspan' => array(
             'type' => 'th',

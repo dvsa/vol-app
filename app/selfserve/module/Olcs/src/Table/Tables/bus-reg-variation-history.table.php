@@ -1,4 +1,5 @@
 <?php
+use Common\Util\Escape;
 
 $variationNo = 1;
 return array(
@@ -30,6 +31,7 @@ return array(
         ),
         array(
             'title' => 'Var No.',
+            'isNumeric' => true,
             'name' => 'variationNo'
         ),
         array(
@@ -67,11 +69,11 @@ return array(
             'name' => 'endDate'
         ),
         array(
-            'title' => '&nbsp;',
+            'title' => 'Action',
             'width' => 'checkbox',
             'formatter' => function ($data) {
                 if (isset($data['canDelete'])) {
-                    return '<input type="radio" name="id" value="' . $data['id'] . '">';
+                    return '<input type="radio" aria-label="Delete ' . Escape::htmlAttr($data['regNo']) . '" name="id" value="' . Escape::htmlAttr($data['id']) . '">';
                 }
             },
         )

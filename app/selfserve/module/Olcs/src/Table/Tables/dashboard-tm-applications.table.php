@@ -14,6 +14,7 @@ return array(
         ),
         array(
             'title' => 'dashboard.tm-applications.table.column.app-no.title',
+            'isNumeric' => true,
             'name' => 'applicationId'
         ),
         array(

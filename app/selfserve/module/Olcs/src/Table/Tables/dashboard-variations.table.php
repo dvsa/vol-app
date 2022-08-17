@@ -12,6 +12,7 @@ return array(
     'columns' => array(
         array(
             'title' => 'dashboard-table-variations-appId',
+            'isNumeric' => true,
             'lva' => 'variation',
             'formatter' => 'DashboardApplicationLink'
         ),

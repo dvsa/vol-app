@@ -16,6 +16,7 @@ return array(
     'columns' => array(
         array(
             'title' => 'permits.irhp.unpaid.permits.table.permit',
+            'isNumeric' => true,
             'name' => 'permitNumber',
             'formatter' => function ($row) {
                 return '<b>' . Escape::html($row['permitNumber']) . '</b>';

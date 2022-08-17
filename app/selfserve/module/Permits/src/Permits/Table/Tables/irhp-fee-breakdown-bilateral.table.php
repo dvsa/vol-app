@@ -25,11 +25,12 @@ return array(
         ),
         array(
             'title' => 'permits.irhp.fee-breakdown.number-of-permits',
+            'isNumeric' => true,
             'name' => 'quantity',
         ),
         array(
             'title' => 'permits.irhp.fee-breakdown.total-fee',
-            'align' => 'right',
+            'isNumeric' => true,
             'name' => 'total',
             'formatter' => function ($row, $column, $sm) {
                 return (new CurrencyFormatter())($row['total']);
@@ -40,10 +41,10 @@ return array(
         array(
             'content' => 'Total',
             'colspan' => 2,
-            'align' => 'left',
+            'align' => 'govuk-!-text-align-left',
         ),
         array(
-            'align' => 'left',
+            'align' => 'govuk-!-text-align-left',
             'formatter' => function ($rows, $column, $sm) {
                 $total = 0;
                 foreach ($rows as $row) {
@@ -54,7 +55,7 @@ return array(
         ),
         array(
             'content' => 'Total',
-            'align' => 'right',
+            'isNumeric' => true,
             'formatter' => function ($rows, $column, $sm) {
                 $total = 0;
                 foreach ($rows as $row) {

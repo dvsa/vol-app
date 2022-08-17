@@ -13,6 +13,7 @@ return array(
         ),
         array(
             'title' => 'search-result-label-vehicles',
+            'isNumeric' => true,
             'formatter' => function ($data, $column) {
                 if (empty($data['noOfVehiclesRequired'])) {
                     return '0';
@@ -23,6 +24,7 @@ return array(
         ),
         array(
             'title' => 'search-result-label-trailers',
+            'isNumeric' => true,
             'formatter' => function ($data, $column) {
                 if (empty($data['noOfTrailersRequired'])) {
                     return '0';
