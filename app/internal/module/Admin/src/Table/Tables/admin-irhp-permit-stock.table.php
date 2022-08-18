@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'variables' => [
+        'title' => 'Permit Stocks',
+        'titleSingular' => 'Permit Stock',
+    ],
     'settings' => [
         'crud' => [
             'actions' => [
@@ -45,6 +49,7 @@ return [
         ],
         [
             'title' => 'Quota',
+            'isNumeric' => true,
             'name' => 'initialStock',
         ],
         [

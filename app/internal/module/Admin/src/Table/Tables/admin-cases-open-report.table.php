@@ -2,6 +2,7 @@
 
 return [
     'variables' => [
+        'titleSingular' => 'Open case',
         'title' => 'Open cases',
         'empty_message' => 'Open cases are not found by specified filter criteria',
     ],
@@ -17,6 +18,7 @@ return [
     'columns' => [
         [
             'title' => 'Case Id',
+            'isNumeric' => true,
             'formatter' => 'CaseLink',
             'name' => 'id',
         ],

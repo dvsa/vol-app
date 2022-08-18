@@ -23,6 +23,7 @@ return array(
     'columns' => array(
         array(
             'title' => 'Key',
+            'isNumeric' => true,
             'name' => 'id',
             'sort' => 'id',
             'formatter' => 'SystemParameterLink'

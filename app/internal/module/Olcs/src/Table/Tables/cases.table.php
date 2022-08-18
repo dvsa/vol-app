@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'Case',
         'title' => 'Cases'
     ),
     'settings' => array(
@@ -31,6 +32,7 @@ return array(
                     true
                 ) . '">' . $row['id'] . '</a>';
             },
+            'isNumeric' => true,
             'sort' => 'id'
         ),
         array(

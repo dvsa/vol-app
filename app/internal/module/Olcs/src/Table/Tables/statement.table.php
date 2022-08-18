@@ -3,6 +3,7 @@
 return array(
     'variables' => array(
         'title' => 'Statements',
+        'titleSingular' => 'Statement',
         'empty_message' => 'There are no statements'
     ),
     'settings' => array(

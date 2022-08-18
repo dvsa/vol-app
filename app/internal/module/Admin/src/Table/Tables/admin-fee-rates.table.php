@@ -5,6 +5,7 @@ use Common\Util\Escape;
 return [
     'variables' => [
         'title' => 'Fee Rates',
+        'titleSingular' => 'Fee Rate',
     ],
     'settings' => [
         'paginate' => [
@@ -25,6 +26,7 @@ return [
     'columns' => [
         [
             'title' => 'ID',
+            'isNumeric' => true,
             'name' => 'id',
             'sort' => 'id',
         ],
@@ -52,16 +54,19 @@ return [
         ],
         [
             'title' => 'Fixed value',
+            'isNumeric' => true,
             'name' => 'fixedValue',
             'sort' => 'fixedValue',
         ],
         [
             'title' => 'Annual value',
+            'isNumeric' => true,
             'name' => 'annualValue',
             'sort' => 'annualValue',
         ],
         [
             'title' => 'Five year value',
+            'isNumeric' => true,
             'name' => 'fiveYearValue',
             'sort' => 'fiveYearValue',
         ],

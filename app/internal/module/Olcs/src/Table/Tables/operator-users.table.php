@@ -5,6 +5,7 @@ use Common\Util\Escape;
 return [
     'variables' => [
         'title' => 'Users',
+        'titleSingular' => 'User',
     ],
     'columns' => [
         [

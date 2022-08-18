@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'Prohibition defect',
         'title' => 'Prohibition defects'
     ),
     'settings' => array(

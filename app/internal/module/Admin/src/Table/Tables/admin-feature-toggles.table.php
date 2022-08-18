@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'Feature toggle',
         'title' => 'Feature toggles'
     ),
     'settings' => array(

@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'Team',
         'title' => 'Teams'
     ),
     'settings' => array(

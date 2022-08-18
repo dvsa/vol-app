@@ -2,7 +2,8 @@
 
 return array(
     'variables' => array(
-        'title' => 'Impounding'
+        'titleSingular' => 'Impounding',
+        'title' => 'Impoundings',
     ),
     'settings' => array(
         'crud' => array(

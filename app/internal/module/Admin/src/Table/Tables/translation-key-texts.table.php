@@ -5,6 +5,7 @@ use Common\Util\Escape;
 return [
     'variables' => [
         'title' => 'Key Translations',
+        'titleSingular' => 'Key Translation',
     ],
     'settings' => [
         'paginate' => [

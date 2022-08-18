@@ -5,6 +5,7 @@ use Common\Util\Escape;
 return [
     'variables' => [
         'title' => 'Pre-Grant Candidate Permits',
+        'titleSingular' => 'Pre-Grant Candidate Permit',
         'id' => 'candidate-permits',
         'empty_message' => 'There are no permit records to display'
     ],
@@ -34,7 +35,7 @@ return [
             'title' => 'Emissions',
             'name' => 'emissions',
             'formatter' => function ($row) {
-                return $row['assignedEmissionsCategory']['description'];
+                return Escape::html($row['assignedEmissionsCategory']['description']);
             },
         ],
         [

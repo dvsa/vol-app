@@ -1,10 +1,9 @@
 <?php
 
-use Common\Util\Escape;
-
 return [
     'variables' => [
         'title' => 'Permits',
+        'titleSingular' => 'Permit',
         'id' => 'permits-table',
         'empty_message' => 'There are no permit records to display'
     ],
@@ -24,6 +23,7 @@ return [
     'columns' => [
         [
             'title' => 'Permit No.',
+            'isNumeric' => true,
             'name' => 'permitNumber',
         ],
         [

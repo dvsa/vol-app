@@ -30,10 +30,12 @@ return array(
         ),
         array(
             'title' => 'transport-manager.otherlicences.table.total_auth_vehicles',
+            'isNumeric' => true,
             'name' => 'totalAuthVehicles',
         ),
         array(
             'title' => 'transport-manager.otherlicences.table.hours_per_week',
+            'isNumeric' => true,
             'name' => 'hoursPerWeek',
         ),
         array(

@@ -4,6 +4,7 @@ use Common\Util\Escape;
 
 return [
     'variables' => [
+        'titleSingular' => 'Document Template',
         'title' => 'Document Templates',
     ],
     'settings' => [

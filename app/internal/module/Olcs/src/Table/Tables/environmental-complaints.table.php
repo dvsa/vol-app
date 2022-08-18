@@ -3,6 +3,7 @@
 return array(
     'variables' => array(
         'title' => 'Environmental complaints',
+        'titleSingular' => 'Environmental complaint',
         'action_route' => [
             'route' => 'case_environmental_complaint',
             'params' => []

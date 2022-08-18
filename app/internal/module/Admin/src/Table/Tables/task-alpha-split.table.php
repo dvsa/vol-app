@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'Alpha split',
         'title' => 'Alpha splits',
         'within_form' => true,
     ),

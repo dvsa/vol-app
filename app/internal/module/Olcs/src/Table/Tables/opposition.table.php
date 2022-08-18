@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'Opposition',
         'title' => 'Oppositions'
     ),
     'settings' => array(

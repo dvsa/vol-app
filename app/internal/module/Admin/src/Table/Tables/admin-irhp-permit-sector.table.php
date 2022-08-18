@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'variables' => [
+        'title' => 'Permit Sectors',
+        'titleSingular' => 'Permit Sector',
+    ],
     'settings' => [
         'crud' => [
             'actions' => [
@@ -23,6 +27,7 @@ return [
         ],
         [
             'title' => 'Quantity of permits',
+            'isNumeric' => true,
             'name' => 'quotaNumber',
             'formatter' => 'IrhpPermitSectorQuota'
         ],

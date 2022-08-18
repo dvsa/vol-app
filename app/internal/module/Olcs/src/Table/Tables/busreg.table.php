@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'Bus registration',
         'title' => 'Bus registrations'
     ),
     'settings' => array(
@@ -26,11 +27,13 @@ return array(
         ),
         array(
             'title' => 'Var No.',
+            'isNumeric' => true,
             'name' => 'variationNo',
             'sort' => 'variationNo'
         ),
         array(
             'title' => 'Service No.',
+            'isNumeric' => true, //mostly numeric so using the style
             'name' => 'serviceNo',
             'sort' => 'serviceNo'
         ),

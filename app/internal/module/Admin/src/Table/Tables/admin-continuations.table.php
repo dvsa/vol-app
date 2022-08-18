@@ -4,6 +4,8 @@ use Common\RefData;
 
 return array(
     'variables' => array(
+        'title' => 'Continuations',
+        'titleSingular' => 'Continuation',
     ),
     'settings' => array(
         'crud' => array(

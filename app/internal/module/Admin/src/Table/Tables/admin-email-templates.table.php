@@ -3,6 +3,7 @@
 return [
     'variables' => [
         'title' => 'Email Templates',
+        'titleSingular' => 'Email Templates',
     ],
     'settings' => [
         'paginate' => [

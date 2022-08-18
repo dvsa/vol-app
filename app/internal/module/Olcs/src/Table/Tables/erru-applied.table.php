@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'Applied penalty',
         'title' => 'Applied penalties'
     ),
     'settings' => array(
@@ -22,6 +23,7 @@ return array(
         ),
         array(
             'title' => 'Penalty ID',
+            'isNumeric' => true,
             'formatter' => function ($data) {
                 return '<a href="' . $this->generateUrl(
                     array(

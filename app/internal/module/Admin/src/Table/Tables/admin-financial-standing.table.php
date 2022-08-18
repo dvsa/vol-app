@@ -33,10 +33,12 @@ return array(
         ),
         array(
             'title' => 'First',
+            'isNumeric' => true,
             'name' => 'firstVehicleRate',
         ),
         array(
             'title' => 'Additional',
+            'isNumeric' => true,
             'name' => 'additionalVehicleRate',
         ),
         array(

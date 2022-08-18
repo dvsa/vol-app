@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'Recipient',
         'title' => 'Recipients'
     ),
     'settings' => array(

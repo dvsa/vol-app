@@ -2,6 +2,7 @@
 return array(
     'variables' => array(
         'title' => 'Legacy offences',
+        'titleSingular' => 'Legacy offence',
         'empty_message' => 'There are no legacy offences'
     ),
     'settings' => array(
@@ -18,7 +19,6 @@ return array(
     'attributes' => array(
     ),
     'columns' => array(
-
         array(
             'title' => 'Offence date from',
             'formatter' => function ($data, $column) {

@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'PSV Authorisation',
         'title' => 'PSV Authorisations'
     ),
     'settings' => array(
@@ -31,6 +32,7 @@ return array(
         ),
         array(
             'title' => 'Authorisation Id',
+            'isNumeric' => true,
             'formatter' => function ($data, $column) {
                 return '<a href="' . $this->generateUrl(
                     array('action' => 'edit', 'id' => $data['id']),

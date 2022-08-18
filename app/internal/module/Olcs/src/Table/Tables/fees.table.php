@@ -46,12 +46,14 @@ return array(
         ),
         array(
             'title' => 'Fee amount',
+            'isNumeric' => true,
             'name' => 'amount',
             'sort' => 'grossAmount',
             'formatter' => 'FeeAmount',
         ),
         array(
             'title' => 'Outstanding',
+            'isNumeric' => true,
             'name' => 'outstanding',
             'formatter' => 'Money',
         ),

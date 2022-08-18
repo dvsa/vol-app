@@ -2,7 +2,8 @@
 
 return [
     'variables' => [
-        'title' => ''
+        'title' => 'Permit Ranges',
+        'titleSingular' => 'Permit Range',
     ],
     'settings' => [
         'crud' => [
@@ -63,6 +64,7 @@ return [
         ],
         [
             'title' => 'Total permits',
+            'isNumeric' => true,
             'name' => 'totalPermits',
             'formatter' => 'IrhpPermitRangeTotalPermits'
         ],

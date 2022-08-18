@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'Partner organisation',
         'title' => 'Partner organisations'
     ),
     'settings' => array(

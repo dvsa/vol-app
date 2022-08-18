@@ -24,6 +24,7 @@ return array(
         ),
         array(
             'title' => 'Publication No.',
+            'isNumeric' => true,
             'formatter' => 'PublicationNumber',
             'name' => 'publicationNo',
             'sort' => 'publicationNo',

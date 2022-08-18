@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'allocation rule',
         'title' => 'allocation rules'
     ),
     'settings' => array(

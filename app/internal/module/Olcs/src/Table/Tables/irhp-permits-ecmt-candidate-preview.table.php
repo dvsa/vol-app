@@ -3,6 +3,7 @@
 return [
     'variables' => [
         'title' => 'Permits',
+        'titleSingular' => 'Permit',
         'id' => 'candidate-permits',
         'empty_message' => 'There are no permit records to display'
     ],
@@ -16,6 +17,7 @@ return [
     'columns' => [
         [
             'title' => 'Permit No.',
+            'isNumeric' => true,
             'name' => 'permitNumber',
         ],
         [

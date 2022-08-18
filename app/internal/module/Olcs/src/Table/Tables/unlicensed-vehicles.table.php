@@ -33,6 +33,7 @@ return array(
         ),
         array(
             'title' => $translationPrefix . '.weight',
+            'isNumeric' => true,
             'stack' => 'vehicle->platedWeight',
             'formatter' => 'UnlicensedVehicleWeight',
             'name' => 'weight',

@@ -30,6 +30,7 @@ return array(
                     true
                 ) . '" class="govuk-link js-modal-ajax">' . $data['id'] . '</a>';
             },
+            'isNumeric' => true,
             'name' => 'id'
         ),
         array(

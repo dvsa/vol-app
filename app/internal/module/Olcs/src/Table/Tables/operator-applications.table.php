@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'Application',
         'title' => 'Applications'
     ),
     'settings' => array(

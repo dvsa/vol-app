@@ -30,6 +30,7 @@ return array(
     'columns' => array(
         array(
             'title' => 'ID',
+            'isNumeric' => true,
             'sort' => 'id',
             'name' => 'id',
             'formatter' => 'InspectionRequestId'
@@ -56,6 +57,7 @@ return array(
         ),
         array(
             'title' => 'Application ID',
+            'isNumeric' => true,
             'formatter' => function ($row) {
                 return $row['application']['id'];
             },

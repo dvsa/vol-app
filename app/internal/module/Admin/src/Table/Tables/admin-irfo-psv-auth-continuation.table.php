@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'title' => 'IRFO PSV Authorisation',
         'title' => 'IRFO PSV Authorisations'
     ),
     'settings' => array(
@@ -31,6 +32,7 @@ return array(
     'columns' => array(
         array(
             'title' => 'Auth Id',
+            'isNumeric' => true,
             'formatter' => function ($data) {
                 return sprintf(
                     '<a href="%s" class="govuk-link js-modal-ajax">%s</a>',

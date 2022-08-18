@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 return [
     'variables' => [
+        'titleSingular' => 'Bus notice period',
         'title' => 'Bus notice periods',
     ],
     'settings' => [
@@ -29,6 +30,7 @@ return [
         ],
         [
             'title' => 'Notice period',
+            'isNumeric' => true,
             'name' => 'standardPeriod',
         ],
     ],

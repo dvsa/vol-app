@@ -26,14 +26,17 @@ return [
     'columns' => [
         [
             'title' => 'Sequence Number',
+            'isNumeric' => true,
             'name' => 'sequenceNumber'
         ],
         [
             'title' => 'Permit No',
+            'isNumeric' => true,
             'name' => 'permitNumberWithPrefix'
         ],
         [
             'title' => 'Application number',
+            'isNumeric' => true,
             'name' => 'id',
             'formatter' => function ($row) {
                 $relatedApplication = $row['irhpPermitApplication']['relatedApplication'];

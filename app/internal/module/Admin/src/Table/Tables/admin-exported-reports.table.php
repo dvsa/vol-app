@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'Exported report',
         'title' => 'Exported reports',
     ),
     'settings' => array(

@@ -3,6 +3,7 @@
 return array(
     'variables' => [
         'title' => 'Interim Refunds',
+        'titleSingular' => 'Interim Refund',
         'empty_message' => 'Interim refunds are not found by specified filter criteria',
     ],
     'settings' => [
@@ -35,6 +36,7 @@ return array(
         ],
         [
             'title' => 'Fee Amount',
+            'isNumeric' => true,
             'name' => 'amount',
             'formatter' => 'FeeAmount'
         ],

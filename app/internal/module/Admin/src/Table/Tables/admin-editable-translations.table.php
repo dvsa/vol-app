@@ -4,6 +4,10 @@ use Common\Util\Escape;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
 return [
+    'variables' => [
+        'title' => 'Editable Translations',
+        'titleSingular' => 'Editable Translation',
+    ],
     'settings' => [
         'paginate' => [
             'limit' => [
@@ -27,6 +31,7 @@ return [
     'columns' => [
         [
             'title' => 'Id',
+            'isNumeric' => true,
             'name' => 'id',
             'sort' => 'id',
         ],

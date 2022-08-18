@@ -23,6 +23,7 @@ return array(
     'columns' => array(
         array(
             'title' => 'Id',
+            'isNumeric' => true,
             'formatter' => function ($data) {
                 return sprintf(
                     '<a href="%s" class="govuk-link js-modal-ajax">%s</a>',

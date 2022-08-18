@@ -22,10 +22,12 @@ return array(
         ),
         array(
             'title' => 'Var No.',
+            'isNumeric' => true,
             'name' => 'variationNo',
         ),
         array(
             'title' => 'Service No.',
+            'isNumeric' => true, //mostly numeric so using the style
             'name' => 'serviceNo',
         ),
         array(

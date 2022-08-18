@@ -1,10 +1,9 @@
 <?php
 
-use Common\Util\Escape;
-
 return [
     'variables' => [
         'title' => 'Permits',
+        'titleSingular' => 'Permit',
         'id' => 'candidate-permits',
         'empty_message' => 'There are no permit records to display'
     ],

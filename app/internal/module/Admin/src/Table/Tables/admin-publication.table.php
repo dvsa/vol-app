@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'Publications',
         'title' => 'Publications'
     ),
     'settings' => array(
@@ -30,6 +31,7 @@ return array(
         ),
         array(
             'title' => 'Publication No.',
+            'isNumeric' => true,
             'formatter' => 'PublicationNumber',
             'name' => 'publicationNo',
             'sort' => 'publicationNo',

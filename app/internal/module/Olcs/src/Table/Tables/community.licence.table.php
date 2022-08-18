@@ -2,6 +2,8 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'Community Licence',
+        'title' => 'Community Licences',
         'within_form' => true,
     ),
     'settings' => array(

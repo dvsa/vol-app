@@ -17,6 +17,7 @@ return array(
     'columns' => array(
         array(
             'title' => 'ID',
+            'isNumeric' => true,
             'name' => 'id',
             'sort' => 'id',
         ),
@@ -28,6 +29,7 @@ return array(
         ),
         array(
             'title' => 'Retention period',
+            'isNumeric' => true,
             'name' => 'retentionPeriod',
             'sort' => 'retentionPeriod',
         ),

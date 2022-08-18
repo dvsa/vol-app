@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'Publication',
         'title' => 'Publications'
     ),
     'settings' => array(
@@ -35,6 +36,7 @@ return array(
         ),
         array(
             'title' => 'Publication No.',
+            'isNumeric' => true,
             'formatter' => function ($data) {
                 return $data['publication']['publicationNo'];
             }

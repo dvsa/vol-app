@@ -31,6 +31,7 @@ return array(
         ),
         array(
             'title' => 'Var No.',
+            'isNumeric' => true,
             'name' => 'variationNo'
         ),
         array(

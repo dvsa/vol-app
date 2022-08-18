@@ -3,11 +3,13 @@
 return array(
     'variables' => array(
         'title' => 'Environmental complaints',
+        'titleSingular' => 'Environmental complaint',
     ),
     'settings' => array(),
     'columns' => array(
         array(
             'title' => 'Case No.',
+            'isNumeric' => true,
             'formatter' => function ($row) {
                 return '<a class="govuk-link" href="' . $this->generateUrl(
                     array('case' => $row['case']['id'], 'tab' => 'overview'),

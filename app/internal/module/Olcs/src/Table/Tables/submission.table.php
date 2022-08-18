@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'Submission',
         'title' => 'Submissions'
     ),
     'settings' => array(
@@ -31,6 +32,7 @@ return array(
         ),
         array(
             'title' => 'Submission No.',
+            'isNumeric' => true,
             'formatter' => function ($row) {
                 return '<a class="govuk-link" href="' . $this->generateUrl(
                     array('submission' => $row['id'], 'action' => 'details'),

@@ -43,6 +43,7 @@ return array(
         ),
         array(
             'title' => 'Witness Count',
+            'isNumeric' => true,
             'name' => 'witnessCount'
         ),
         array(

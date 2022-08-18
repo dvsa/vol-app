@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'variables' => [
+        'title' => 'Permit Windows',
+        'titleSingular' => 'Permit Window',
+    ],
     'settings' => [
         'crud' => [
             'actions' => [

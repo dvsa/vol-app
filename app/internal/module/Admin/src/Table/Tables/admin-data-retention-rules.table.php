@@ -17,6 +17,7 @@ return array(
     'columns' => array(
         array(
             'title' => 'ID',
+            'isNumeric' => true,
             'name' => 'id',
             'sort' => 'id',
         ),
