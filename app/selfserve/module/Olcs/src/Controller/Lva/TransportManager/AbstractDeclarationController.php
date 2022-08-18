@@ -54,6 +54,7 @@ abstract class AbstractDeclarationController extends AbstractController
                 $this->getTranslatedDeclarationMarkupParams($translationHelper)
             ),
             'tmFullName' => $this->getTmName(),
+            'backText' => 'common.link.back.label',
             'backLink' => $this->getBackLink()
         ];
 
