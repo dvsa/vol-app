@@ -165,6 +165,7 @@ $routes = [
     ],
     // Unfortunately, we need separate routes
     'search-operator' => [
+        'class' => 'govuk-link',
         'type' => 'segment',
         'options' =>  [
             'route' => '/search/find-lorry-bus-operators[/]',
@@ -1023,28 +1024,28 @@ $searchNavigation = array(
             'label' => 'search-list-operator',
             'route' => 'search-operator',
             'use_route_match' => true,
-            'class' => 'search-navigation__item',
+            'class' => 'govuk-link',
         ),
         array(
             'id' => 'search-publication',
             'label' => 'search-list-publications',
             'route' => 'search-publication',
             'use_route_match' => true,
-            'class' => 'search-navigation__item',
+            'class' => 'govuk-link',
         ),
         array(
             'id' => 'search-bus',
             'label' => 'search-list-bus-registrations',
             'route' => 'search-bus',
             'use_route_match' => true,
-            'class' => 'search-navigation__item',
+            'class' => 'govuk-link',
         ),
         array(
             'id' => 'search-vehicle-external',
             'label' => 'search-list-vehicles',
             'route' => 'search-vehicle-external',
             'use_route_match' => true,
-            'class' => 'search-navigation__item',
+            'class' => 'govuk-link',
         )
     )
 );
