@@ -995,6 +995,7 @@ $nav = [
                                     'id' => 'transport_manager_processing_publications',
                                     'label' => 'internal-navigation-transport-manager-processing-publications',
                                     'route' => 'transport-manager/processing/publication',
+                                    'class' => 'govuk-link--no-visited-state',
                                     'use_route_match' => true,
                                 ],
                                 [
