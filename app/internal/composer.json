@@ -6,14 +6,6 @@
             "packagist": false
         },
         {
-            "url": "git@repo.olcs.dev-dvsacloud.uk:olcs/olcs-common.git",
-            "type": "vcs"
-        },
-        {
-            "url": "git@repo.olcs.dev-dvsacloud.uk:olcs/olcs-auth.git",
-            "type": "vcs"
-        },
-        {
             "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS",
             "type": "composer"
         },
@@ -45,10 +37,10 @@
         "lm-commons/lmc-rbac-mvc": "^2.6",
         "olcs/olcs-transfer": "~4.206.0",
         "olcs/olcs-utils": "~4.206.0",
-        "olcs/olcs-auth": "dev-VOL-3081-GDS-Upgrade",
+        "olcs/olcs-auth": "~4.206.0",
         "soflomo/purifier": "^1.0",
         "olcs/olcs-logging": "~4.206.0",
-        "olcs/olcs-common": "dev-VOL-3081-GDS-Upgrade",
+        "olcs/olcs-common": "~4.206.0",
         "laminas/laminas-dependency-plugin": "^2.0",
         "firebase/php-jwt": "^6.0"
     },
