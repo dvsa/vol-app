@@ -3576,12 +3576,12 @@
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "4.206.35",
+            "version": "4.206.36",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-auth/4.206.35/olcs-olcs-auth-4.206.35.zip",
-                "reference": "070d4010cd7413316c4a180b8f6296c3da31a302",
-                "shasum": "070d4010cd7413316c4a180b8f6296c3da31a302"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-auth/4.206.36/olcs-olcs-auth-4.206.36.zip",
+                "reference": "2248ec89fcabdc32617f3c759099234a8192514e",
+                "shasum": "2248ec89fcabdc32617f3c759099234a8192514e"
             },
             "require": {
                 "doctrine/annotations": "^1.2.3",
@@ -3643,16 +3643,16 @@
                 ]
             },
             "description": "OLCS Authentication",
-            "time": "2022-06-21T14:10:33+00:00"
+            "time": "2022-08-17T09:08:11+00:00"
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.422",
+            "version": "4.206.425",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.422/olcs-olcs-common-4.206.422.zip",
-                "reference": "8ed22589d56311384d8cb5b17fe4fc9193d04862",
-                "shasum": "8ed22589d56311384d8cb5b17fe4fc9193d04862"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.425/olcs-olcs-common-4.206.425.zip",
+                "reference": "6edc61dae51b847237b91b92cb994154d0c22e7f",
+                "shasum": "6edc61dae51b847237b91b92cb994154d0c22e7f"
             },
             "require": {
                 "doctrine/annotations": "^1.8",
@@ -3735,16 +3735,16 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2022-07-25T00:16:15+00:00"
+            "time": "2022-08-25T14:29:46+00:00"
         },
         {
             "name": "olcs/olcs-logging",
-            "version": "4.206.12",
+            "version": "4.206.14",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-logging/4.206.12/olcs-olcs-logging-4.206.12.zip",
-                "reference": "e6a3c2094005c744f9a6b6a51826c363bb6c60c8",
-                "shasum": "e6a3c2094005c744f9a6b6a51826c363bb6c60c8"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-logging/4.206.14/olcs-olcs-logging-4.206.14.zip",
+                "reference": "e8b0d4ec6ef77f75d701dd704ffd02e7e53660ce",
+                "shasum": "e8b0d4ec6ef77f75d701dd704ffd02e7e53660ce"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -3798,16 +3798,16 @@
                 ]
             },
             "description": "Logging Module for Olcs",
-            "time": "2022-05-16T11:09:53+00:00"
+            "time": "2022-08-17T09:12:46+00:00"
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "4.206.157",
+            "version": "4.206.159",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-transfer/4.206.157/olcs-olcs-transfer-4.206.157.zip",
-                "reference": "7b9922b67378ce6c59e4c493993a0f7209b9a650",
-                "shasum": "7b9922b67378ce6c59e4c493993a0f7209b9a650"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-transfer/4.206.159/olcs-olcs-transfer-4.206.159.zip",
+                "reference": "91e0e699457e6a26bf8d7df10f36b49728dfd018",
+                "shasum": "91e0e699457e6a26bf8d7df10f36b49728dfd018"
             },
             "require": {
                 "elendev/nexus-composer-push": "^0.1",
@@ -3867,7 +3867,7 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2022-06-14T09:35:55+00:00"
+            "time": "2022-08-17T09:09:16+00:00"
         },
         {
             "name": "olcs/olcs-utils",
