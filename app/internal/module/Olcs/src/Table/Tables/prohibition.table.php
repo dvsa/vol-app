@@ -31,7 +31,7 @@ return array(
             'title' => 'Prohibition date',
             'formatter' => function ($data, $column) {
                     $column['formatter'] = 'Date';
-                    return '<a href="' . $this->generateUrl(
+                    return '<a class="govuk-link" href="' . $this->generateUrl(
                         array('prohibition' => $data['id']),
                         'case_prohibition_defect',
                         true

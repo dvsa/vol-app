@@ -25,7 +25,7 @@ return array(
                     ['id' => $row['id'], 'action' => 'edit'],
                     'admin-dashboard/task-allocation-rules'
                 );
-                return '<a href="'. $url . '">' . $row['category']['description'] .'</a>';
+                return '<a class="govuk-link" href="'. $url . '">' . $row['category']['description'] .'</a>';
             }
         ),
         array(

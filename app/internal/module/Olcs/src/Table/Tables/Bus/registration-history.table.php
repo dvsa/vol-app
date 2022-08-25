@@ -22,7 +22,7 @@ return array(
         array(
             'title' => 'Reg No.',
             'formatter' => function ($data) {
-                return '<a href="' . $this->generateUrl(
+                return '<a class="govuk-link" href="' . $this->generateUrl(
                     array('action' => 'index', 'busRegId' => $data['id']),
                     'licence/bus-details/service',
                     true

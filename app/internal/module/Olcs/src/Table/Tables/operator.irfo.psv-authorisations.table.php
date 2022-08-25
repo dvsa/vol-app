@@ -36,7 +36,7 @@ return array(
                     array('action' => 'edit', 'id' => $data['id']),
                     'operator/irfo/psv-authorisations',
                     true
-                ) . '" class="js-modal-ajax">' . $data['id'] . '</a>';
+                ) . '" class="govuk-link js-modal-ajax">' . $data['id'] . '</a>';
             }
         ),
         array(

@@ -11,7 +11,7 @@ return array(
             'formatter' => function ($row) {
                 $routeParams = ['id' => $row['id'], 'action' => 'edit-tm-licence'];
                 $url = $this->generateUrl($routeParams);
-                return '<a href="' . $url . '">' .
+                return '<a class="govuk-link" href="' . $url . '">' .
                 ((isset($row['tmType']['description']) && $row['tmType']['description']) ?
                     $row['tmType']['description'] : 'Not set') . '</a>';
             },
@@ -22,7 +22,7 @@ return array(
             'formatter' => function ($row) {
                 $routeParams = ['licence' => $row['licence']['id']];
                 $url = $this->generateUrl($routeParams, 'lva-licence/transport_managers');
-                return '<a href="'. $url . '">' . $row['licence']['licNo'] . '</a>';
+                return '<a class="govuk-link" href="'. $url . '">' . $row['licence']['licNo'] . '</a>';
             },
         ),
         array(

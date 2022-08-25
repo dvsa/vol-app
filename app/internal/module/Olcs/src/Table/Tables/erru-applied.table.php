@@ -31,7 +31,7 @@ return array(
                     ),
                     'case_penalty_applied',
                     true
-                ) . '" class="js-modal-ajax">' . $data['id'] . '</a>';
+                ) . '" class="govuk-link js-modal-ajax">' . $data['id'] . '</a>';
             },
             'hideWhenDisabled' => true
         ),

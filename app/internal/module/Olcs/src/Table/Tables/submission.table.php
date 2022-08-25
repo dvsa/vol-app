@@ -32,7 +32,7 @@ return array(
         array(
             'title' => 'Submission No.',
             'formatter' => function ($row) {
-                return '<a href="' . $this->generateUrl(
+                return '<a class="govuk-link" href="' . $this->generateUrl(
                     array('submission' => $row['id'], 'action' => 'details'),
                     'submission',
                     true

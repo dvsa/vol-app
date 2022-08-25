@@ -113,14 +113,14 @@ class CasesFurniture implements
             // prepend with application link
             $appUrl = $urlHelper('lva-application/case', ['application' => $case['application']['id']], [], true);
 
-            $pageTitle = sprintf('<a href="%1$s">%2$s</a> / %3$s', $appUrl, $case['application']['id'], $pageTitle);
+            $pageTitle = sprintf('<a class="govuk-link" href="%1$s">%2$s</a> / %3$s', $appUrl, $case['application']['id'], $pageTitle);
         }
 
         if (isset($case['licence']['id'])) {
             // prepend with licence link
             $licUrl = $urlHelper('licence/cases', ['licence' => $case['licence']['id']], [], true);
 
-            $pageTitle = sprintf('<a href="%1$s">%2$s</a> / %3$s', $licUrl, $case['licence']['licNo'], $pageTitle);
+            $pageTitle = sprintf('<a class="govuk-link" href="%1$s">%2$s</a> / %3$s', $licUrl, $case['licence']['licNo'], $pageTitle);
         }
 
         if (isset($case['transportManager']['id'])) {
@@ -132,7 +132,7 @@ class CasesFurniture implements
             );
 
             $pageTitle = sprintf(
-                '<a href="%s">%s %s</a> / %s',
+                '<a class="govuk-link" href="%s">%s %s</a> / %s',
                 $url,
                 $case['transportManager']['homeCd']['person']['forename'],
                 $case['transportManager']['homeCd']['person']['familyName'],

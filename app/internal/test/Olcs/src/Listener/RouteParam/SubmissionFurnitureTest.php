@@ -102,7 +102,7 @@ class SubmissionFurnitureTest extends MockeryTestCase
             ->with('pageTitle')
             ->andReturn(
                 m::mock()->shouldReceive('set')->once()
-                    ->with('<a href="tm">Bob Smith</a> / <a href="lic">AB12345</a> / <a href="app">100</a> / Case 69')
+                    ->with('<a class="govuk-link" href="tm">Bob Smith</a> / <a class="govuk-link" href="lic">AB12345</a> / <a class="govuk-link" href="app">100</a> / Case 69')
                     ->getMock()
             )
             ->getMock();

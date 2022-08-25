@@ -12,7 +12,10 @@
     }
     ?>
     <br>
-    <a href="<?php echo $this->url('operator/disqualify', ['organisation' => $this->organisationId]) ?>" class="js-modal-ajax">
-        <?php echo $this->translate('Edit disqualification') ?>
-    </a>
+    <?php
+        echo $this->linkModal(
+            $this->url('operator/disqualify', ['organisation' => $this->organisationId]),
+            'Edit disqualification'
+        );
+    ?>
 </p>

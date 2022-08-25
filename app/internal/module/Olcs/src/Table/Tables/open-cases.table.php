@@ -14,7 +14,7 @@ return array(
         array(
             'title' => 'Case No.',
             'formatter' => function ($row) {
-                return '<a href="' . $this->generateUrl(
+                return '<a class="govuk-link" href="' . $this->generateUrl(
                     array('case' => $row['id'], 'action' => 'details'),
                     'case',
                     true

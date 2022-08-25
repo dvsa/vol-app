@@ -99,7 +99,7 @@ class VariationFurnitureTest extends TestCase
                 m::mock()
                 ->shouldReceive('set')
                 ->once()
-                ->with('<a href="url">AB123</a> / 111')
+                ->with('<a class="govuk-link" href="url">AB123</a> / 111')
                 ->getMock()
             )
             ->shouldReceive('getContainer')

@@ -36,7 +36,7 @@ return array(
                     ),
                     'case_prohibition_defect',
                     true
-                ) . '" class="js-modal-ajax">' . $data['defectType'] . '</a>';
+                ) . '" class="govuk-link js-modal-ajax">' . $data['defectType'] . '</a>';
             }
         ),
         array(

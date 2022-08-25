@@ -10,7 +10,7 @@ return array(
         array(
             'title' => 'Licence No.',
             'formatter' => function ($row) {
-                return '<a href="' . $this->generateUrl(
+                return '<a class="govuk-link" href="' . $this->generateUrl(
                     array('licence' => $row['id']),
                     'licence'
                 ) . '">' . $row['licNo'] . '</a>';

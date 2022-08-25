@@ -5,7 +5,7 @@ $guidanceMessage = $this->placeholder('guidance');
 if (!empty($guidanceMessage)) {
     foreach ($guidanceMessage as $message):
         ?>
-        <div class="guidance">
+        <div class="govuk-inset-text">
             <p><?php echo $this->translate($message); ?></p>
         </div>
     <?php

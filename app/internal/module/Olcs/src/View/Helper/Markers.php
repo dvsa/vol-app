@@ -55,7 +55,7 @@ class Markers extends AbstractHelper
                     array_push(
                         $contentPlaceholders,
                         '<a ' .
-                        (isset($data['class']) ? 'class="'. $data['class'] . '" ' : '') .
+                        (isset($data['class']) ? 'class="'. $data['class'] . '" ' : 'class="govuk-link"') .
                         'href="' . $urlHelper($data['route'], $data['params']) . '">' . $data['linkText'] .
                         '</a>' . "\n"
                     );

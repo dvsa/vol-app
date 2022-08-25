@@ -101,7 +101,7 @@ class DocumentFinaliseController extends AbstractDocumentController
         );
 
         $link = sprintf(
-            '<a href="%s" data-file-url="%s" target="blank">%s</a>',
+            '<a class="govuk-link" href="%s" data-file-url="%s" target="_blank">%s</a>',
             htmlentities($url, ENT_QUOTES, 'utf-8'),
             htmlentities($url, ENT_QUOTES, 'utf-8'),
             htmlentities($data['data']['template']['description'], ENT_QUOTES, 'utf-8')

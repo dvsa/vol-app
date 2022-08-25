@@ -90,7 +90,7 @@ class VariationFurniture implements ListenerAggregateInterface, FactoryInterface
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
 
-        $html = '<a href="%1$s">%2$s</a> / %3$s';
+        $html = '<a class="govuk-link" href="%1$s">%2$s</a> / %3$s';
         $licenceUrl = $this->getRouter()->assemble(['licence' => $data['licence']['id']], ['name' => 'lva-licence']);
         $placeholder->getContainer('pageTitle')->set(sprintf($html, $licenceUrl, $data['licence']['licNo'], $id));
         $placeholder->getContainer('pageSubtitle')->set($data['licence']['organisation']['name']);

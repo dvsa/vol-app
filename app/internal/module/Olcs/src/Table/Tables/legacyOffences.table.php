@@ -23,7 +23,7 @@ return array(
             'title' => 'Offence date from',
             'formatter' => function ($data, $column) {
                 $url = $this->generateUrl(['action' => 'details', 'id' => $data['id']], 'offence', true);
-                $class = 'js-modal-ajax';
+                $class = 'govuk-link js-modal-ajax';
 
                 if ($data['offenceDate'] == null) {
                     return '<a href="' . $url . '" class="' . $class . '">N/A</a>';

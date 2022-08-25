@@ -106,7 +106,7 @@ class BusRegFurniture implements
     {
         $urlPlugin = $this->getViewHelperManager()->get('Url');
         $licUrl = $urlPlugin->__invoke('licence/bus', ['licence' => $busReg['licence']['id']], [], true);
-        return '<a href="' . $licUrl . '">' . $busReg['licence']['licNo'] . '</a>' . '/' . $busReg['routeNo'];
+        return '<a class="govuk-link" href="' . $licUrl . '">' . $busReg['licence']['licNo'] . '</a>' . '/' . $busReg['routeNo'];
     }
 
     private function getSubTitle($busReg)

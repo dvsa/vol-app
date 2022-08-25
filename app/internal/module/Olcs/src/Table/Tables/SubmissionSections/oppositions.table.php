@@ -37,7 +37,7 @@ return array(
             'title' => 'Date received',
             'name' => 'dateReceived',
             'formatter' => function ($data, $column) {
-                return '<a href="' . $this->generateUrl(
+                return '<a class="govuk-link" href="' . $this->generateUrl(
                     array('action' => 'edit', 'opposition' => $data['id']),
                     'case_opposition',
                     true

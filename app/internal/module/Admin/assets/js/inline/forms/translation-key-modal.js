@@ -26,7 +26,7 @@ $(function () {
                     var hideClass = (idx === "en_GB") ? "" : " js-hidden";
                     var tabTemplate =
                         `<li id="tab{idx}" class="horizontal-navigation__item transKeyTab${current}" data-lang="${idx}" style="padding: 0px; margin: 0px;">
-                            <a id="transKeyEnGB" href="#">${lang.label}</a>
+                            <a class="govuk-link" id="transKeyEnGB" href="#">${lang.label}</a>
                        </li>`;
                     var textAreaTemplate =
                         `<div class="langFields field ${hideClass}">

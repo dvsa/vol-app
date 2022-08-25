@@ -19,7 +19,7 @@ return [
                         'user' => $row['id']
                     ]
                 );
-                return '<a href="'.$url.'">'.Escape::html($row['loginId']).'</a>';
+                return '<a class="govuk-link" href="'.$url.'">'.Escape::html($row['loginId']).'</a>';
             }
 
         ],

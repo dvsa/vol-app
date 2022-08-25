@@ -38,7 +38,7 @@ return array(
                     array('action' => 'edit', 'impounding' => $data['id']),
                     'case_details_impounding',
                     true
-                ) . '" class="js-modal-ajax">' . $this->callFormatter($column, $data) . '</a>';
+                ) . '" class="govuk-link js-modal-ajax">' . $this->callFormatter($column, $data) . '</a>';
             },
             'name' => 'applicationReceiptDate'
         ),

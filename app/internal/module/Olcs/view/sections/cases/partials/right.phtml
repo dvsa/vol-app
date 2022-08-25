@@ -10,9 +10,13 @@ if (isset($case['licence']) && !empty($case['licence'])): ?>
 <div class="small-module">
   <h4 class="title">Operator details</h4>
   <p class="small-module__details">
-    <a href="<?php echo $this->url('operator/business-details', ['organisation' => $case['licence']['organisation']['id']], [], true);?>">
-        <?php echo $case['licence']['organisation']['name']; ?>
-    </a><br>
+     <?php
+        echo $this->link(
+            $this->url('operator/business-details', ['organisation' => $case['licence']['organisation']['id']], [], true),
+            $case['licence']['organisation']['name']
+        );
+    ?>
+    <br>
     <?php echo $this->translate($case['licence']['organisation']['type']['id']); ?><br>
       <?php
       // value checked as errors with minimal applications as trafficArea not set
@@ -26,7 +30,12 @@ if (isset($case['licence']) && !empty($case['licence'])): ?>
 <div class="small-module">
   <h4 class="title">Licence details</h4>
     <p class="small-module__details">
-      <a href="<?php echo $this->url('lva-licence', ['licence' => $case['licence']['id']], [], false); ?>"><?php echo $case['licence']['licNo']; ?></a><br>
+      <?php echo $this->link(
+          $this->url('lva-licence', ['licence' => $case['licence']['id']], [], false),
+          $case['licence']['licNo']
+      );
+      ?>
+      <br>
       <?php if (isset($case['licence']['licenceType']['id'])) : ?>
         <?php echo $this->translate($case['licence']['licenceType']['id']); ?><br/>
       <?php endif; ?>
@@ -46,9 +55,15 @@ if ($transportManager) :
     <p class="small-module__details">
 
     <?php if (isset($transportManager['homeCd']['person'])): ?>
-        <p><strong><a href="<?php echo $this->url('transport-manager/details', ['transportManager' => $transportManager['id']], [], true); ?>">
-            <?php echo $transportManager['homeCd']['person']['forename']
-                . ' ' . $transportManager['homeCd']['person']['familyName']; ?></a></strong>
+        <p>
+            <strong>
+            <?php
+            echo $this->link(
+                $this->url('transport-manager/details', ['transportManager' => $transportManager['id']], [], true),
+                $transportManager['homeCd']['person']['forename'] . ' ' . $transportManager['homeCd']['person']['familyName']
+            );
+            ?>
+            </strong>
         </p>
         <p><?php echo $this->date(strtotime($transportManager['homeCd']['person']['birthDate'])); ?></p>
 

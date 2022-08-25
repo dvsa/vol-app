@@ -28,7 +28,7 @@ return array(
                     array('action' => 'edit', 'id' => $data['id']),
                     $lva .'/processing/publications',
                     true
-                ) . '" class="js-modal-ajax">' . $this->callFormatter($column, $data) . '</a>';
+                ) . '" class="govuk-link js-modal-ajax">' . $this->callFormatter($column, $data) . '</a>';
             },
             'name' => 'createdOn',
             'sort' => 'createdOn'

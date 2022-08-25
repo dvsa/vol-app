@@ -1,9 +1,11 @@
-<ol class="breadcrumbs">
+<div class="govuk-breadcrumbs">
+<ol class="govuk-breadcrumbs__list inline">
   <?php foreach ($this->pages as $key => $page): ?>
   <?php if ($key < count($this->pages) - 1): ?>
-  <li class="breadcrumbs__item"><a href="<?php echo $page->getHref(); ?>"><?php echo $this->translate($page->getLabel()); ?></a></li>
+  <li class="govuk-breadcrumbs__list-item"><a class="govuk-breadcrumbs__link" href="<?php echo $page->getHref(); ?>"><?php echo $this->translate($page->getLabel()); ?></a></li>
   <?php else: ?>
-  <li class="breadcrumbs__item current"><?php echo $this->translate($page->getLabel()); ?></li>
+  <li class="govuk-breadcrumbs__list-item"><?php echo $this->translate($page->getLabel()); ?></li>
   <?php endif; ?>
   <?php endforeach; ?>
 </ol>
+</div>

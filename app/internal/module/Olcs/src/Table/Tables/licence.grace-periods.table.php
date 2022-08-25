@@ -30,7 +30,7 @@ return array(
                         'licence/grace-periods',
                         true
                     ) .
-                    '" class="js-modal-ajax">' . $this->callFormatter($column, $data) . '</a>';
+                    '" class="govuk-link js-modal-ajax">' . $this->callFormatter($column, $data) . '</a>';
             }
         ),
         array(

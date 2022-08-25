@@ -116,7 +116,7 @@ class ApplicationFurniture implements
             );
 
             $placeholder->getContainer('pageTitle')->set(
-                sprintf('<a href="%s">%s</a> / %s', $licenceUrl, $data['licence']['licNo'], $id)
+                sprintf('<a class="govuk-link" href="%s">%s</a> / %s', $licenceUrl, $data['licence']['licNo'], $id)
             );
         } elseif ($data['licence']['licNo']) {
             $placeholder->getContainer('pageTitle')->set(sprintf('%s / %s', $data['licence']['licNo'], $id));
