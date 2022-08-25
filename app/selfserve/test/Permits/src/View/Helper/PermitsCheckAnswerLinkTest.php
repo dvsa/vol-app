@@ -1,19 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PermitsTest\View\Helper;
 
-use Permits\View\Helper\Link;
+use Permits\View\Helper\PermitsCheckAnswerLink;
 use Mockery as m;
 use Laminas\View\Renderer\RendererInterface;
 
-/**
- * Class LinkTest
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
-class LinkTest extends m\Adapter\Phpunit\MockeryTestCase
+class PermitsCheckAnswerLinkTest extends m\Adapter\Phpunit\MockeryTestCase
 {
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $route = 'route';
         $label = 'label';
@@ -26,7 +23,7 @@ class LinkTest extends m\Adapter\Phpunit\MockeryTestCase
         $linkClass = 'link class';
         $url = 'http://url';
 
-        $output = sprintf(Link::LINK_TEMPLATE, $linkClass, $url, $escapedTranslatedLabel, $escapedTranslatedContext);
+        $output = sprintf(PermitsCheckAnswerLink::LINK_TEMPLATE, $linkClass, $url, $escapedTranslatedLabel, $escapedTranslatedContext);
 
         $params = ['params'];
         $options = ['options'];
@@ -57,7 +54,7 @@ class LinkTest extends m\Adapter\Phpunit\MockeryTestCase
             ->with($route, $params, $options, $reUseParams)
             ->andReturn($url);
 
-        $sut = new Link();
+        $sut = new PermitsCheckAnswerLink();
         $sut->setView($view);
 
         $actual = $sut->__invoke(

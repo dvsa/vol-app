@@ -1,9 +1,9 @@
-<div class="tabs">
-    <ul class="tab-list">
+<div class="govuk-tabs">
+    <ul class="govuk-tabs__list">
         <?php
         if (isset($this->tabs) && is_array($this->tabs)) {
             foreach ($this->tabs as $tabConfig) {
-                $active = isset($tabConfig['active']) ? 'active' : '';
+                $active = isset($tabConfig['active']) ? 'govuk-tabs__list-item--selected' : '';
                 $label = isset($tabConfig['label']) ? $tabConfig['label'] : '';
                 $route = isset($tabConfig['route']) ? $tabConfig['route'] : null;
                 $params = isset($tabConfig['params']) ? $tabConfig['params'] : [];
@@ -11,9 +11,13 @@
                 $reuseMatchedParams = isset($tabConfig['reuseMatchedParams']) ? $tabConfig['reuseMatchedParams'] :
                     false;
                 ?>
-                <li class="tab-list__item <?php echo $active;?>">
-                    <a href="<?php echo $this->url($route, $params, $options, $reuseMatchedParams);?>">
-                        <?php echo $this->translate($label);?></a>
+                <li class="govuk-tabs__list-item <?php echo $active;?>">
+                    <?php echo $this->link(
+                            $this->url($route, $params, $options, $reuseMatchedParams),
+                            $label,
+                            'govuk-tabs__tab'
+                        );
+                    ?>
                 </li>
                 <?php
             }

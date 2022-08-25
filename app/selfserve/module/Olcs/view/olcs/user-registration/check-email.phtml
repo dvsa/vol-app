@@ -7,7 +7,7 @@ echo $this->partial(
     [
         'pageTitle' => $this->pageTitle(),
         'pageHeaderText' =>
-            '<div class="guidance"><p>' .
+            '<div class="govuk-inset-text"><p>' .
                 $translationHlp->translateReplace(
                     'user-registration.page.check-email.guidance', [$this->emailAddress]
                 ) .

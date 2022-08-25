@@ -6,8 +6,6 @@
             <?php echo $this->escapeHtml($this->translate('permits.page.irhp-window-closed.title')); ?>
         </h1>
         <?php echo $this->translate('markup-irhp-permits-exhausted'); ?>
-        <a class="govuk-link govuk-!-display-block govuk-body" href="<?php echo $this->url('permits'); ?>">
-            <?php echo $this->escapeHtml($this->translate('permits.link.return.to.dashboard')); ?>
-        </a>
+        <p class="govuk-body"><?php echo $this->link($this->url('permits'), 'permits.link.return.to.dashboard'); ?></p>
     </div>
 </div>

@@ -38,7 +38,7 @@ use Permits\View\Helper\IrhpApplicationSection;
                 <?php echo $this->translate('permits.application.overview.button'); ?>
             </a>
         <?php else : ?>
-            <p class="guidance"><?php echo $this->escapeHtml($this->translate('permits.application.ineligible')); ?></p>
+            <p class="govuk-inset-text"><?php echo $this->escapeHtml($this->translate('permits.application.ineligible')); ?></p>
         <?php endif; ?>
     </div>
     <?php echo $this->translate('markup-ecmt-permit-dashboard-right-column'); ?>

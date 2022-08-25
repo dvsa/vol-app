@@ -14,7 +14,11 @@ return array(
         ),
         array(
             'title' => 'dashboard.tm-applications.table.column.app-no.title',
-            'formatter' => 'DashboardTmApplicationId'
+            'name' => 'applicationId'
+        ),
+        array(
+            'title' => 'dashboard-table-applications-status',
+            'formatter' => 'DashboardTmApplicationStatus'
         ),
         array(
             'title' => 'dashboard.tm-applications.table.column.lic-no.title',

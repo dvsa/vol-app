@@ -52,7 +52,7 @@ $samlResponse = urlencode($_POST['SAMLResponse'] ?? $_GET['SAMLResponse'] ?? '')
 <body class="govuk-template__body app-body-class">
 
 
-<a href="#main-content" class="govuk-skip-link">Skip to main content</a>
+<a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link">Skip to main content</a>
 
 <header class="govuk-header" role="banner" data-module="govuk-header">
     <div class="govuk-header__container govuk-width-container">
@@ -74,7 +74,7 @@ $samlResponse = urlencode($_POST['SAMLResponse'] ?? $_GET['SAMLResponse'] ?? '')
             </a>
         </div>
         <div class="govuk-header__content">
-            <a href="" class="govuk-header__link govuk-header__link--service-name">
+            <a href="" class="govuk-header__link govuk-header__service-name">
                 Vehicle Operator Licensing </a>
             <button type="button" class="govuk-header__menu-button govuk-js-header-toggle"
                     aria-controls="navigation" aria-label="Show or hide Top Level Navigation">

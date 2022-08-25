@@ -36,6 +36,10 @@ return array(
             }
         ),
         array(
+            'title' => 'Status',
+            'formatter' => 'BusRegStatus'
+        ),
+        array(
             'title' => 'selfserve-table-txc-inbox-variation',
             'formatter' => function ($data, $column) {
                 $column['formatter'] = 'EbsrVariationNumber';

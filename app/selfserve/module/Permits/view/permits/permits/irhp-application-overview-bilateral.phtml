@@ -35,9 +35,7 @@
           <ul class="app-task-list__items">
             <li class="app-task-list__item">
               <span class="app-task-list__task-name">
-                <a href="<?php echo $countriesPageUrl ?>">
-                  <?php echo $this->escapeHtml($this->translate('permits.application.overview.select-countries')); ?>
-                </a>
+                <?php echo $this->link($countriesPageUrl, 'permits.application.overview.select-countries'); ?>
               </span>
               <span class="overview__status <?php echo Section::COMPLETION_STATUS_COLOUR[Section::SECTION_COMPLETION_COMPLETED]; ?>"><?php echo $this->escapeHtml($this->translate(Section::COMPLETION_STATUS[Section::SECTION_COMPLETION_COMPLETED])); ?></span>
             </li>
@@ -63,9 +61,7 @@
 
             <li class="app-task-list__item">
               <span class="app-task-list__task-name">
-                <a href="<?php echo $countryUrl; ?>">
-                  <?php echo($country['countryName']); ?>
-                </a>
+                <?php echo $this->link($countryUrl, $country['countryName']); ?>
               </span>
               <span class="overview__status <?php echo $statusColour; ?>"><?php echo $this->escapeHtml($this->translate($statusCaption)); ?></span>
             </li>
@@ -95,9 +91,12 @@
 
               ?>
               <span class="app-task-list__task-name">
-                <?php if ($linkActive) { ?><a href="<?php echo $this->url(Section::ROUTE_DECLARATION, [], [], true); ?>"><?php } ?>
-                  <?php echo $this->escapeHtml($this->translate('permits.application.overview.read-declaration')); ?>
-                <?php if ($linkActive) { ?></a><?php } ?>
+                <?php if ($linkActive) {
+                    echo $this->link(
+                        $this->url(Section::ROUTE_DECLARATION, [], [], true),
+                        'permits.application.overview.read-declaration'
+                    );
+                } ?>
               </span>
               <span class="overview__status <?php echo $statusColour; ?>"><?php echo $this->escapeHtml($this->translate($statusCaption)); ?></span>
             </li>
@@ -111,9 +110,12 @@
 
               ?>
               <span class="app-task-list__task-name">
-                <?php if ($linkActive) { ?><a href="<?php echo $this->url(Section::ROUTE_FEE, [], [], true); ?>"><?php } ?>
-                  <?php echo $this->escapeHtml($this->translate('permits.application.overview.submit-and-pay')); ?>
-                <?php if ($linkActive) { ?></a><?php } ?>
+                <?php if ($linkActive) {
+                    echo $this->link(
+                            $this->url(Section::ROUTE_FEE, [], [], true),
+                            'permits.application.overview.submit-and-pay'
+                    );
+                } ?>
               </span>
               <span class="overview__status <?php echo $statusColour; ?>"><?php echo $this->escapeHtml($this->translate($statusCaption)); ?></span>
             </li>

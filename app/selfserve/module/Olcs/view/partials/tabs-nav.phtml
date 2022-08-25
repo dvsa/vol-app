@@ -1,12 +1,14 @@
-<div class="tabs">
-  <div class="tab-list" role="tablist">
+<div class="govuk-tabs">
+  <ul class="govuk-tabs__list">
   <?php foreach ($this->container as $page): ?>
     <?php if ($page->isVisible(true) && $this->navigation()->accept($page, false)): ?>
-        <a href="<?php echo $page->getHref(); ?>" class="tab-list__item<?php if ($page->isActive(true)) { ?> active<?php } ?>" role="tab" aria-selected="<?php var_export($page->isActive(true)); ?>">
-        <?php echo $this->translate($page->getLabel()); ?>
+      <li class="govuk-tabs__list-item<?php echo $page->isActive(true) ? ' govuk-tabs__list-item--selected' : '';?>">
+        <a href="<?php echo $page->getHref(); ?>" class="govuk-tabs__tab">
+        <?php echo $this->escapeHtml($this->translate($page->getLabel())); ?>
         <?php echo $page->get('count') ? '('.$page->get('count').')' : '';?>
         </a>
+      </li>
     <?php endif; ?>
   <?php endforeach; ?>
-  </div>
+  </ul>
 </div>

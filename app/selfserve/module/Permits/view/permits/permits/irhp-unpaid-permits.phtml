@@ -38,9 +38,12 @@ use Permits\View\Helper\IrhpApplicationSection;
 
         ?>
         <p class="govuk-!-margin-top-4">
-        <a href="<?php echo $this->url(IrhpApplicationSection::ROUTE_AWAITING_FEE, [], [], true) ?>" class="return-overview">
-            <?php echo $this->translate('permits.link.return.to.fee.overview'); ?>
-        </a>
+            <?php
+                echo $this->link(
+                    $this->url(IrhpApplicationSection::ROUTE_AWAITING_FEE, [], [], true),
+                    'permits.link.return.to.fee.overview'
+                );
+            ?>
         </p>
     </div>
 </div>

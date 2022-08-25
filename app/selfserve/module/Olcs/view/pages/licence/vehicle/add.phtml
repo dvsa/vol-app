@@ -52,9 +52,7 @@
                 <?php
                 if (isset($this->bottomLink)): ?>
                     <p>
-                        <a href="<?php echo $this->bottomLink ?>">
-                            <?php echo $this->translate($this->bottomText); ?>
-                        </a>
+                        <?php echo $this->link($this->bottomLink, $this->bottomText); ?>
                     </p>
                 <?php endif; ?>
             </div>

@@ -26,6 +26,10 @@ return array(
             }
         ),
         array(
+            'title' => 'Status',
+            'formatter' => 'BusRegStatus'
+        ),
+        array(
             'title' => 'Variation No.',
             'formatter' => 'EbsrVariationNumber'
         ),

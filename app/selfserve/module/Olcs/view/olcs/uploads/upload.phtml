@@ -24,8 +24,8 @@
         echo $this->formErrors($this->form, true);
         $this->form->prepare();
         echo $this->form()->render($this->form);
+        echo $this->link($this->url('bus-registration'), 'back-to-ebsr-uploads');
       ?>
-      <a href="<?php echo $this->url('bus-registration');?>"><?php echo $this->translate('back-to-ebsr-uploads'); ?></a>
     </div>
 
   </div>

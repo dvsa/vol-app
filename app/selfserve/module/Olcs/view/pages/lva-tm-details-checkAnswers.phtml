@@ -57,9 +57,7 @@ use Common\Util\Escape;
           <?php
           if (isset($this->backLink)): ?>
           <p>
-              <a href="<?php echo $this->backLink ?>">
-                  <?php echo $this->translate($this->backText); ?>
-              </a>
+              <?php echo $this->link($this->backLink, $this->backText, 'govuk-back-link'); ?>
           </p>
           <?php endif; ?>
       </div>

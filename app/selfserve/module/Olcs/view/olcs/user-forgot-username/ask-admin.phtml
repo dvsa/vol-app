@@ -16,7 +16,7 @@ echo $this->partial(
     </div>
   
     <div class="actions-container">
-      <a href="<?php echo $this->url('index');?>"><?php echo $this->translate('back-to-home'); ?></a>
+        <?php echo $this->link($this->url('index'), 'back-to-home'); ?>
     </div>
     
   </div>

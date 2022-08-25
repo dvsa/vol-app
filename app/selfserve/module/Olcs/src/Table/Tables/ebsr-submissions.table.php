@@ -28,6 +28,10 @@ return array(
             }
         ),
         array(
+            'title' => 'File status',
+            'formatter' => 'EbsrDocumentStatus'
+        ),
+        array(
             'title' => 'selfserve-table-ebsr-submissions-reg-number',
             'formatter' => function ($data, $column) {
                 $column['formatter'] = 'EbsrRegNumberLink';
@@ -40,6 +44,10 @@ return array(
                 $column['formatter'] = 'EbsrVariationNumber';
                 return $this->callFormatter($column, $data);
             }
+        ),
+        array(
+            'title' => 'Status',
+            'formatter' => 'BusRegStatus'
         ),
         array(
             'title' => 'selfserve-table-ebsr-submissions-service-numbers',

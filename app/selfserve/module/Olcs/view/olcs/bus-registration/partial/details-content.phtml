@@ -140,18 +140,18 @@
                         );
                     ?>
                     <div class="field file-upload">
-                        <p>
-                            <a href="<?php echo $url?>">
-                                <b><?php
+                        <p class="govuk-!-font-weight-bold">
+                                <?php
                                     if (!empty($document['description'])) {
-                                        echo $document['description'];
+                                        $linkText = $document['description'];
                                     } elseif (!empty($document['filename'])) {
-                                        echo basename($document['filename']);
+                                        $linkText = basename($document['filename']);
                                     } else {
-                                        echo $this->translate('documents.unknown-file-description');
+                                        $linkText = 'documents.unknown-file-description';
                                     }
-                                ?></b>
-                            </a>
+
+                                    echo $this->link($url, $linkText);
+                                ?>
                         </p>
                     </div>
                 <?php endforeach?>

@@ -15,7 +15,7 @@ return array(
                         array('entity' => 'licence', 'entityId' => $data['id']),
                         'entity-view',
                         false
-                    ) . '">' . $data['licNo'] . '</a>';
+                    ) . '" class="govuk-link">' . $data['licNo'] . '</a>';
                 }
                 return '';
             }
