@@ -69,14 +69,9 @@
   width: 100%;
   position: relative;
   float: left;
-  font-family: $nta-light-tabular;
   + .table__header,
   + .table__form {
     margin-top: 2em;
-  }
-  td,
-  th {
-    vertical-align: middle;
   }
   // prevent tables from causing entire page to stretch
   .field > & {
@@ -117,14 +112,6 @@
 }
 
 table {
-  width: 100%;
-  border-collapse: collapse;
-  border-bottom: 1px solid $grey-2;
-  margin-bottom: 1em;
-  .summary &,
-  &:last-child {
-    margin-bottom: 0;
-  }
   [type="checkbox"],
   [type="radio"] {
     margin: 0.25em auto 0;
@@ -187,43 +174,20 @@ tr {
   }
 }
 
-th,
-td {
-  @extend %paragraph--small;
-  padding: 0.7em 10px 0.7em 0;
-  text-align: left;
-  vertical-align: top;
-  > label {
-    margin: 0;
-  }
-}
-
 th {
-  font-weight: 600;
-  border-top: 1px solid $grey-2;
-  &.right-aligned {
-    float: none;
-  }
   &.invalid {
     color: $error-colour;
   }
 }
 
 td {
-  overflow: visible;
-  border-top: 1px solid $grey-2;
   ul {
     list-style-type: disc;
     margin-left: 20px;
   }
-  p,
-  li {
-    @extend %paragraph--small;
-  }
   .right-aligned {
     margin-left: 0.5em;
   }
-
 }
 
 
@@ -231,23 +195,13 @@ td {
 .td--right-aligned {
     text-align: right;
     padding-left: 0.5em;
-
 }
 
 
 tfoot {
-  tr {
-    border-top: 1px solid $grey-2;
-    border-bottom: 0;
-  }
   th,
   td {
-    border: 0;
-    overflow: hidden;
     font-weight: 600;
-  }
-  th {
-    background: none;
   }
 }
 
@@ -276,25 +230,14 @@ tfoot {
 }
 
 .sortable {
-
   a {
-    padding-right: 1em;
-    color: $black;
-    text-decoration: none;
     position: relative;
     &:after {
       @if $app != 'print' {
         @include svg('dropdown-down');
         content: '';
-        position: absolute;
-        display: inline-block;
-        right: 0;
-        top: 7px;
       }
     }
-  }
-  a:active {
-    color: $grey-1;
   }
 }
 
@@ -326,67 +269,6 @@ tfoot {
   }
 }
 
-// Mobile tables
-@media (max-width: breakpoint('break-1')) {
-  .table__wrapper {
-    table {
-      border-bottom: none;
-    }
-    thead {
-      display: none;
-    }
-    tfoot {
-      tr {
-        margin-top: $gutter-half;
-      }
-    }
-    tr {
-      display: block;
-      border: 1px solid $grey-2;
-      position: relative;
-      padding-top: 0.4em;
-      padding-bottom: 0.4em;
-      &:not(:first-child) {
-        margin-top: $gutter-half;
-      }
-    }
-    td {
-      display: block;
-      border: none;
-      padding-left: $gutter-half;
-      padding-right: $gutter-half;
-      padding-top: 0.2em;
-      padding-bottom: 0.2em;
-      &[data-heading] {
-        &:before {
-          content: attr(data-heading);
-          font-weight: bold;
-          margin-right: $gutter-one-third;
-          display: inline-block;
-          vertical-align: top;
-          width: 30%;
-        }
-        [type="checkbox"] {
-          position: absolute;
-          top: 0.5em;
-          right: 0.65em;
-        }
-        a,
-        input[type="submit"] {
-          width: calc(100% - 30% - #{$gutter-one-third});
-        }
-      }
-      &:empty {
-        display: none;
-      }
-    }
-    .right-aligned {
-      float: none;
-      margin-left: 0;
-    }
-  }
-}
-
 // Selfserve theme
 // ---------------
 
@@ -404,12 +286,6 @@ tfoot {
 
     }
   }
-
-  td {
-    span.nowrap {
-      white-space: nowrap;
-    }
-  }
 }
 
 // Internal theme
@@ -422,14 +298,6 @@ tfoot {
     margin-bottom: 0.5em;
   }
 
-  table {
-    border: 1px solid $grey-3;
-  }
-
-  tfoot {
-    background: $grey-4;
-  }
-
   tr {
     &.urgent {
       border-left: 5px solid $mellow-red;
@@ -438,41 +306,6 @@ tfoot {
     &.checked {
       background: $grey-4;
     }
-  }
-
-  th,
-  td {
-    padding: 0.5em 0.75em;
-  }
-
-  th {
-    background: $grey-4;
-    border: 1px solid $grey-3;
-    a {
-      display: block;
-    }
-  }
-
-  td {
-    border-top: 1px solid $grey-3;
-    border-right: 1px dotted $grey-3;
-  }
-
-  .sortable {
-    padding: 0.5em 0.75em;
-    background: $grey-4;
-    a {
-      padding: 0 1.25em 0 0;
-    }
-    &:hover,
-    &.ascending,
-    &.descening {
-      background-color: $grey-4;
-    }
-  }
-
-  .not-sortable {
-    padding: 0.5em 0.75em;
   }
 
   // add to column title to prevent heading wrapping

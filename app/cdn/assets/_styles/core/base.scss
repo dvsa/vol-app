@@ -14,35 +14,9 @@
  * The document/application wrapper which contains the entire app
  */
 
-html {
-  background: theme(
-    $selfserve: $grey-3,
-    $internal: $grey-4
-  );
-}
 
 body {
-  margin: 0;
-  background: $white;
-  line-height: 1.31579;
-  vertical-align: baseline;
   font-family: $font--primary;
-  font-size: theme(
-    $selfserve: 100%,
-    $internal: font-size(3)
-  );
-}
-
-/**
- * [2] - CSS Reset/Standardise
- * Reset any default styles applied by the browser and render any
- * inconsistencies as consistent
- */
-
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
 }
 
 pre {
