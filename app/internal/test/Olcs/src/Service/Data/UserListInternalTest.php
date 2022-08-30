@@ -3,16 +3,16 @@
 namespace OlcsTest\Service\Data;
 
 use Common\Exception\DataServiceException;
+use CommonTest\Service\Data\AbstractListDataServiceTestCase;
+use Dvsa\Olcs\Transfer\Query\User\UserListInternal as Qry;
 use Olcs\Service\Data\UserListInternal;
 use Mockery as m;
-use Dvsa\Olcs\Transfer\Query\User\UserListInternal as Qry;
-use CommonTest\Service\Data\AbstractDataServiceTestCase;
 
 /**
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  * @covers \Olcs\Service\Data\UserListInternal
  */
-class UserListInternalTest extends AbstractDataServiceTestCase
+class UserListInternalTest extends AbstractListDataServiceTestCase
 {
     private $userList = [
         [
@@ -65,6 +65,16 @@ class UserListInternalTest extends AbstractDataServiceTestCase
         ],
     ];
 
+    /** @var UserListInternal */
+    private $sut;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->sut = new UserListInternal($this->abstractListDataServiceServices);
+    }
+
     /**
      * Test fetchUserListData
      */
@@ -78,32 +88,32 @@ class UserListInternalTest extends AbstractDataServiceTestCase
             'excludeLimitedReadOnly' => false
         ];
 
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')->once()->andReturnUsing(
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
+            ->once()
+            ->andReturnUsing(
                 function (Qry $dto) use ($params) {
                     $this->assertEquals($params['sort'], $dto->getSort());
                     $this->assertEquals($params['order'], $dto->getOrder());
                     $this->assertEquals($params['team'], $dto->getTeam());
                     $this->assertEquals($params['excludeLimitedReadOnly'], $dto->getExcludeLimitedReadOnly());
-                    return 'query';
+                    return $this->query;
                 }
-            )
-            ->once()
-            ->getMock();
+            );
 
         $mockResponse = m::mock()
             ->shouldReceive('isOk')->andReturn(true)->once()
             ->shouldReceive('getResult')->andReturn($results)->once()
             ->getMock();
 
-        $sut = new UserListInternal();
-        $sut->setTeamId(1);
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
+        $this->mockHandleQuery($mockResponse);
 
-        $this->assertEquals($results['results'], $sut->fetchListData());
+        $this->sut->setTeamId(1);
+
+        $this->assertEquals($results['results'], $this->sut->fetchListData());
 
         // test cached results
-        $this->assertEquals($results['results'], $sut->fetchListData());
+        $this->assertEquals($results['results'], $this->sut->fetchListData());
     }
 
     /**
@@ -112,8 +122,11 @@ class UserListInternalTest extends AbstractDataServiceTestCase
     public function testFetchListDataWithException()
     {
         $this->expectException(DataServiceException::class);
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();
+
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
+            ->once()
+            ->andReturn($this->query);
 
         $mockResponse = m::mock()
             ->shouldReceive('isOk')
@@ -121,10 +134,9 @@ class UserListInternalTest extends AbstractDataServiceTestCase
             ->once()
             ->getMock();
 
-        $sut = new UserListInternal();
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
+        $this->mockHandleQuery($mockResponse);
 
-        $sut->fetchListData();
+        $this->sut->fetchListData();
     }
 
     /**
@@ -132,8 +144,7 @@ class UserListInternalTest extends AbstractDataServiceTestCase
      */
     public function testFetchListOptionsUsingGroups()
     {
-        $sut = new UserListInternal();
-        $sut->setData('userlist', $this->userList);
+        $this->sut->setData('userlist', $this->userList);
 
         // tests formatGroups is called to give the array structure below
         $this->assertEquals(
@@ -153,7 +164,7 @@ class UserListInternalTest extends AbstractDataServiceTestCase
                     ]
                 ]
             ],
-            $sut->fetchListOptions([], true)
+            $this->sut->fetchListOptions([], true)
         );
     }
 
@@ -162,8 +173,7 @@ class UserListInternalTest extends AbstractDataServiceTestCase
      */
     public function testFetchListOptionsWithoutGroups()
     {
-        $sut = new UserListInternal();
-        $sut->setData('userlist', $this->userList);
+        $this->sut->setData('userlist', $this->userList);
 
         // tests formatData is called to give the array structure below
         $this->assertSame(
@@ -173,7 +183,7 @@ class UserListInternalTest extends AbstractDataServiceTestCase
                 6 => 'Adam Peterbottom',
                 7 => 'usr888',
             ],
-            $sut->fetchListOptions([], false)
+            $this->sut->fetchListOptions([], false)
         );
     }
 
@@ -182,10 +192,9 @@ class UserListInternalTest extends AbstractDataServiceTestCase
      */
     public function testFetchListOptionsEmpty()
     {
-        $sut = new UserListInternal();
-        $sut->setData('userlist', false);
+        $this->sut->setData('userlist', false);
 
-        $this->assertEquals([], $sut->fetchListOptions([]));
+        $this->assertEquals([], $this->sut->fetchListOptions([]));
     }
 
     /**
@@ -193,15 +202,13 @@ class UserListInternalTest extends AbstractDataServiceTestCase
      */
     public function testSetTeamId()
     {
-        $sut = new UserListInternal();
-        $sut->setTeamId(1);
-        $this->assertEquals($sut->getTeamId(), 1);
+        $this->sut->setTeamId(1);
+        $this->assertEquals(1, $this->sut->getTeamId());
     }
 
     public function testExcludeLimitedReadOnly()
     {
-        $sut = new UserListInternal();
-        $sut->setExcludeLimitedReadOnly(true);
-        $this->assertEquals($sut->getExcludeLimitedReadOnly(), true);
+        $this->sut->setExcludeLimitedReadOnly(true);
+        $this->assertTrue($this->sut->getExcludeLimitedReadOnly());
     }
 }

@@ -2,17 +2,13 @@
 
 namespace OlcsTest\Service\Data;
 
-use Common\Service\Data\Application as ApplicationDataService;
-use Common\Service\Data\Licence as LicenceDataService;
-use Laminas\ServiceManager\ServiceManager;
 use Olcs\Service\Data\SubmissionLegislation;
-use Mockery as m;
 
 /**
  * Class SubmissionLegislationTest
  * @package OlcsTest\Service\Data
  */
-class SubmissionLegislationTest extends m\Adapter\Phpunit\MockeryTestCase
+class SubmissionLegislationTest extends AbstractPublicInquiryDataTestCase
 {
     private $reasons = [
         ['id' => 12, 'description' => 'Description 1', 'isProposeToRevoke' => 'Y'],
@@ -24,32 +20,18 @@ class SubmissionLegislationTest extends m\Adapter\Phpunit\MockeryTestCase
         ['value' => 15, 'label' => 'Description 2', 'attributes' => ['data-in-office-revokation' => 'N']],
     ];
 
-    public function testFormatData()
-    {
-        $sut = new SubmissionLegislation();
+    /** @var SubmissionLegislation */
+    private $sut;
 
-        $this->assertEquals($this->reasons2, $sut->formatData($this->reasons));
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->sut = new SubmissionLegislation($this->abstractPublicInquiryDataServices);
     }
 
-    public function testCreateService()
+    public function testFormatData()
     {
-        $mockLicenceService = $this->createMock(LicenceDataService::class);
-        $mockAppService = m::mock(ApplicationDataService::class);
-
-        $mockSl = m::mock(ServiceManager::class);
-        $mockSl->expects('get')
-            ->with('\Common\Service\Data\Licence')
-            ->andReturn($mockLicenceService);
-
-        $mockSl->expects('get')
-            ->with('\Common\Service\Data\Application')
-            ->andReturn($mockAppService);
-
-        $sut = new SubmissionLegislation();
-        $service = $sut->createService($mockSl);
-
-        $this->assertInstanceOf('\Olcs\Service\Data\SubmissionLegislation', $service);
-        $this->assertSame($mockLicenceService, $service->getLicenceService());
-        $this->assertSame($mockAppService, $service->getApplicationService());
+        $this->assertEquals($this->reasons2, $this->sut->formatData($this->reasons));
     }
 }

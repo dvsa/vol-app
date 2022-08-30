@@ -2,7 +2,9 @@
 
 namespace OlcsTest\Service\Data;
 
+use Common\Service\Helper\FlashMessengerHelperService;
 use CommonTest\Service\Data\AbstractDataServiceTestCase;
+use Dvsa\Olcs\Transfer\Query\InspectionRequest\OperatingCentres as Qry;
 use Mockery as m;
 use Olcs\Service\Data\OperatingCentresForInspectionRequest;
 
@@ -13,17 +15,22 @@ use Olcs\Service\Data\OperatingCentresForInspectionRequest;
  */
 class OperatingCentresForInspectionRequestTest extends AbstractDataServiceTestCase
 {
-    /**
-     * @var Mock $service
-     */
-    public $sut;
+    /** @var OperatingCentresForInspectionRequest */
+    private $sut;
 
-    /**
-     * Set up
-     */
-    public function setUp(): void
+    /** @var FlashMessengerHelperService */
+    protected $flashMessengerHelper;
+
+    protected function setUp(): void
     {
-        $this->sut = new OperatingCentresForInspectionRequest();
+        parent::setUp();
+
+        $this->flashMessengerHelper = m::mock(FlashMessengerHelperService::class);
+
+        $this->sut = new OperatingCentresForInspectionRequest(
+            $this->abstractDataServiceServices,
+            $this->flashMessengerHelper
+        );
     }
 
     /**
@@ -96,10 +103,11 @@ class OperatingCentresForInspectionRequestTest extends AbstractDataServiceTestCa
     public function testFetchListData()
     {
         $results = ['results' => 'results'];
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')->once()->andReturn('query')
+
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
             ->once()
-            ->getMock();
+            ->andReturn($this->query);
 
         $mockResponse = m::mock()
             ->shouldReceive('isOk')
@@ -109,7 +117,7 @@ class OperatingCentresForInspectionRequestTest extends AbstractDataServiceTestCa
             ->andReturn($results)
             ->getMock();
 
-        $this->mockHandleQuery($this->sut, $mockTransferAnnotationBuilder, $mockResponse);
+        $this->mockHandleQuery($mockResponse);
 
         $this->assertEquals($results, $this->sut->fetchListData());
         $this->assertEquals($results, $this->sut->fetchListData());  //ensure data is cached
@@ -117,8 +125,10 @@ class OperatingCentresForInspectionRequestTest extends AbstractDataServiceTestCa
 
     public function testFetchLicenceDataWithError()
     {
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
+            ->once()
+            ->andReturn($this->query);
 
         $mockResponse = m::mock()
             ->shouldReceive('isOk')
@@ -126,17 +136,12 @@ class OperatingCentresForInspectionRequestTest extends AbstractDataServiceTestCa
             ->andReturn(false)
             ->getMock();
 
-        $this->mockHandleQuery($this->sut, $mockTransferAnnotationBuilder, $mockResponse);
+        $this->mockHandleQuery($mockResponse);
 
-        $this->mockServiceLocator->shouldReceive('get')
-            ->with('Helper\FlashMessenger')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('addErrorMessage')
-                    ->with('unknown-error')
-                    ->once()
-                    ->getMock()
-            );
+        $this->flashMessengerHelper
+            ->shouldReceive('addErrorMessage')
+            ->with('unknown-error')
+            ->once();
 
         $this->sut->fetchListData();
     }

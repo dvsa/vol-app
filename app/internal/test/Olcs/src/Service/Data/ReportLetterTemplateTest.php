@@ -7,7 +7,6 @@ use Common\Service\Cqrs\Response;
 use Common\Service\Data\CategoryDataService;
 use CommonTest\Service\Data\AbstractDataServiceTestCase;
 use Dvsa\Olcs\Transfer\Query\DocTemplate\GetList;
-use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder as TransferAnnotationBuilder;
 use Olcs\Service\Data\ReportLetterTemplate;
 use Mockery as m;
 
@@ -16,23 +15,31 @@ use Mockery as m;
  */
 class ReportLetterTemplateTest extends AbstractDataServiceTestCase
 {
+    /** @var ReportLetterTemplate */
+    private $sut;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->sut = new ReportLetterTemplate($this->abstractDataServiceServices);
+    }
+
     /**
      * @dataProvider dpTestFetchListOptions
      */
     public function testFetchListOptions($results, $expected)
     {
-        $mockTransferAnnotationBuilder = m::mock(TransferAnnotationBuilder::class)
-            ->shouldReceive('createQuery')
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
             ->with(m::type(GetList::class))
             ->once()
             ->andReturnUsing(
                 function ($dto) {
                     $this->assertEquals(CategoryDataService::CATEGORY_REPORT, $dto->getCategory());
                     $this->assertEquals(CategoryDataService::DOC_SUB_CATEGORY_LETTER, $dto->getSubCategory());
-                    return 'query';
+                    return $this->query;
                 }
-            )
-            ->getMock();
+            );
 
         $mockResponse = m::mock(Response::class)
             ->shouldReceive('isOk')
@@ -45,11 +52,9 @@ class ReportLetterTemplateTest extends AbstractDataServiceTestCase
             ->andReturn($results)
             ->getMock();
 
-        $sut = new ReportLetterTemplate();
+        $this->mockHandleQuery($mockResponse);
 
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
-
-        $this->assertEquals($expected, $sut->fetchListOptions());
+        $this->assertEquals($expected, $this->sut->fetchListOptions());
     }
 
     public function dpTestFetchListOptions()
@@ -84,12 +89,10 @@ class ReportLetterTemplateTest extends AbstractDataServiceTestCase
     {
         $this->expectException(DataServiceException::class);
 
-        $mockTransferAnnotationBuilder = m::mock(TransferAnnotationBuilder::class)
-            ->shouldReceive('createQuery')
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
             ->with(m::type(GetList::class))
             ->once()
-            ->andReturn('query')
-            ->getMock();
+            ->andReturn($this->query);
 
         $mockResponse = m::mock(Response::class)
             ->shouldReceive('isOk')
@@ -98,8 +101,8 @@ class ReportLetterTemplateTest extends AbstractDataServiceTestCase
             ->andReturn(false)
             ->getMock();
 
-        $sut = new ReportLetterTemplate();
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
-        $sut->fetchListOptions(null);
+        $this->mockHandleQuery($mockResponse);
+
+        $this->sut->fetchListOptions(null);
     }
 }

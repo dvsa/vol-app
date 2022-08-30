@@ -4,17 +4,18 @@ namespace Olcs\Service\Data;
 
 use Common\Exception\DataServiceException;
 use Common\Service\Data\AbstractDataService;
+use Common\Service\Data\AbstractDataServiceServices;
+use Common\Service\Data\Licence;
 use Common\Service\Data\LicenceServiceTrait;
 use Common\Service\Data\ListDataInterface;
 use Dvsa\Olcs\Transfer\Query\Decision\DecisionList as DecisionListDto;
-use Laminas\ServiceManager\FactoryInterface;
 
 /**
  * Class LicenceDecisionLegislation
  *
  * @package Olcs\Service\Data
  */
-class LicenceDecisionLegislation extends AbstractDataService implements ListDataInterface, FactoryInterface
+class LicenceDecisionLegislation extends AbstractDataService implements ListDataInterface
 {
     use LicenceServiceTrait;
 
@@ -27,6 +28,22 @@ class LicenceDecisionLegislation extends AbstractDataService implements ListData
      * @var string
      */
     protected $order = 'ASC';
+
+    /**
+     * Create service instance
+     *
+     * @param AbstractDataServiceServices $abstractDataServiceServices
+     * @param Licence $licenceDataService
+     *
+     * @return LicenceDecisionLegislation
+     */
+    public function __construct(
+        AbstractDataServiceServices $abstractDataServiceServices,
+        Licence $licenceDataService
+    ) {
+        parent::__construct($abstractDataServiceServices);
+        $this->setLicenceService($licenceDataService);
+    }
 
     /**
      * Fetch list options

@@ -10,7 +10,7 @@ namespace OlcsTest\Service\Data;
 use Common\Exception\DataServiceException;
 use Olcs\Service\Data\Printer;
 use Mockery as m;
-use Dvsa\Olcs\Transfer\Query\Printer\GetList as Qry;
+use Dvsa\Olcs\Transfer\Query\Printer\PrinterList as Qry;
 use CommonTest\Service\Data\AbstractDataServiceTestCase;
 
 /**
@@ -20,14 +20,24 @@ use CommonTest\Service\Data\AbstractDataServiceTestCase;
  */
 class PrinterTest extends AbstractDataServiceTestCase
 {
+    /** @var Printer */
+    private $sut;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->sut = new Printer($this->abstractDataServiceServices);
+    }
+
     public function testFetchListData()
     {
         $results = ['results' => 'results'];
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')
+
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
             ->once()
-            ->andReturn('query')
-            ->getMock();
+            ->andReturn($this->query);
 
         $mockResponse = m::mock()
             ->shouldReceive('isOk')
@@ -38,34 +48,35 @@ class PrinterTest extends AbstractDataServiceTestCase
             ->once()
             ->getMock();
 
-        $sut = new Printer();
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
+        $this->mockHandleQuery($mockResponse);
 
-        $this->assertEquals($results['results'], $sut->fetchListData([]));
+        $this->assertEquals($results['results'], $this->sut->fetchListData([]));
     }
 
     public function testFetchListDataWithException()
     {
         $this->expectException(DataServiceException::class);
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();
+
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
+            ->once()
+            ->andReturn($this->query);
 
         $mockResponse = m::mock()
             ->shouldReceive('isOk')
             ->andReturn(false)
             ->once()
             ->getMock();
-        $sut = new Printer();
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
 
-        $sut->fetchListData([]);
+        $this->mockHandleQuery($mockResponse);
+
+        $this->sut->fetchListData([]);
     }
 
     public function testFetchListOptionsEmpty()
     {
-        $sut = new Printer();
-        $sut->setData('Printer', []);
-        $this->assertEquals([], $sut->fetchListOptions(null));
+        $this->sut->setData('Printer', []);
+        $this->assertEquals([], $this->sut->fetchListOptions(null));
     }
 
     public function testFetchListOptions()
@@ -84,8 +95,8 @@ class PrinterTest extends AbstractDataServiceTestCase
             1 => 'foo',
             2 => 'cake'
         ];
-        $sut = new Printer();
-        $sut->setData('Printer', $data);
-        $this->assertEquals($expected, $sut->fetchListOptions(null));
+
+        $this->sut->setData('Printer', $data);
+        $this->assertEquals($expected, $this->sut->fetchListOptions(null));
     }
 }

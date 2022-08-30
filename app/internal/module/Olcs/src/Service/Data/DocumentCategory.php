@@ -2,6 +2,8 @@
 
 namespace Olcs\Service\Data;
 
+use Common\Service\Data\AbstractListDataServiceServices;
+
 /**
  * Class DocumentCategory
  *
@@ -10,10 +12,16 @@ namespace Olcs\Service\Data;
 class DocumentCategory extends Category
 {
     /**
-     * constructor
+     * Create service instance
+     *
+     * @param AbstractListDataServiceServices $abstractListDataServiceServices
+     *
+     * @return DocumentCategory
      */
-    public function __construct()
+    public function __construct(AbstractListDataServiceServices $abstractListDataServiceServices)
     {
+        parent::__construct($abstractListDataServiceServices);
+
         $this->setCategoryType(self::TYPE_IS_DOC);
     }
 }

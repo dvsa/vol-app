@@ -2,19 +2,18 @@
 
 namespace Olcs\Service\Data;
 
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Common\Service\Data\RefData;
 
 /**
  * Class Submission
  *
  * @package Olcs\Service
  */
-class Submission implements FactoryInterface
+class Submission
 {
     /**
      * Ref data service
-     * @var object
+     * @var RefData
      */
     protected $refDataService;
 
@@ -25,19 +24,16 @@ class Submission implements FactoryInterface
     protected $allSectionsRefData = [];
 
     /**
-     * Create Submission service with injected ref data service
+     * Create service instance
      *
-     * @param ServiceLocatorInterface $serviceLocator Service locator
+     * @param RefData $refDataService
      *
      * @return Submission
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->setRefDataService(
-            $serviceLocator->get('Common\Service\Data\RefData')
-        );
-
-        return $this;
+    public function __construct(
+        RefData $refDataService
+    ) {
+        $this->refDataService = $refDataService;
     }
 
     /**
@@ -49,6 +45,7 @@ class Submission implements FactoryInterface
      * @param array $submissionConfig         Submission config
      *
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function extractSelectedSubmissionSectionsData($submission, $submissionSectionRefData, $submissionConfig)
     {
@@ -103,7 +100,7 @@ class Submission implements FactoryInterface
     {
         if (empty($this->allSectionsRefData)) {
             $this->allSectionsRefData =
-                $this->getRefDataService()->fetchListOptions(
+                $this->refDataService->fetchListOptions(
                     'submission_section'
                 );
         }
@@ -123,29 +120,5 @@ class Submission implements FactoryInterface
         $this->allSectionsRefData = $allSectionsRefData;
 
         return $this;
-    }
-
-    /**
-     * Set refData service
-     *
-     * @param object $refDataService Ref data service
-     *
-     * @return $this
-     */
-    public function setRefDataService($refDataService)
-    {
-        $this->refDataService = $refDataService;
-
-        return $this;
-    }
-
-    /**
-     * Get ref data service
-     *
-     * @return Common\Service\Data\RefData
-     */
-    public function getRefDataService()
-    {
-        return $this->refDataService;
     }
 }

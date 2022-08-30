@@ -5,8 +5,7 @@ namespace OlcsTest\Service\Data;
 use Common\Exception\DataServiceException;
 use Common\Service\Cqrs\Response;
 use CommonTest\Service\Data\AbstractDataServiceTestCase;
-use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintType;
-use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder as TransferAnnotationBuilder;
+use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintType as Qry;
 use Olcs\Service\Data\IrhpPermitPrintType;
 use Mockery as m;
 
@@ -15,17 +14,25 @@ use Mockery as m;
  */
 class IrhpPermitPrintTypeTest extends AbstractDataServiceTestCase
 {
+    /** @var IrhpPermitPrintType */
+    private $sut;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->sut = new IrhpPermitPrintType($this->abstractDataServiceServices);
+    }
+
     /**
      * @dataProvider dpTestFetchListOptions
      */
     public function testFetchListOptions($results, $expected)
     {
-        $mockTransferAnnotationBuilder = m::mock(TransferAnnotationBuilder::class)
-            ->shouldReceive('createQuery')
-            ->with(m::type(ReadyToPrintType::class))
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
             ->once()
-            ->andReturn('query')
-            ->getMock();
+            ->andReturn($this->query);
 
         $mockResponse = m::mock(Response::class)
             ->shouldReceive('isOk')
@@ -36,11 +43,9 @@ class IrhpPermitPrintTypeTest extends AbstractDataServiceTestCase
             ->andReturn($results)
             ->getMock();
 
-        $sut = new IrhpPermitPrintType();
+        $this->mockHandleQuery($mockResponse);
 
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
-
-        $this->assertEquals($expected, $sut->fetchListOptions(null));
+        $this->assertEquals($expected, $this->sut->fetchListOptions(null));
     }
 
     public function dpTestFetchListOptions()
@@ -86,12 +91,10 @@ class IrhpPermitPrintTypeTest extends AbstractDataServiceTestCase
     {
         $this->expectException(DataServiceException::class);
 
-        $mockTransferAnnotationBuilder = m::mock(TransferAnnotationBuilder::class)
-            ->shouldReceive('createQuery')
-            ->with(m::type(ReadyToPrintType::class))
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
             ->once()
-            ->andReturn('query')
-            ->getMock();
+            ->andReturn($this->query);
 
         $mockResponse = m::mock(Response::class)
             ->shouldReceive('isOk')
@@ -99,10 +102,8 @@ class IrhpPermitPrintTypeTest extends AbstractDataServiceTestCase
             ->andReturn(false)
             ->getMock();
 
-        $sut = new IrhpPermitPrintType();
+        $this->mockHandleQuery($mockResponse);
 
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
-
-        $sut->fetchListOptions(null);
+        $this->sut->fetchListOptions(null);
     }
 }

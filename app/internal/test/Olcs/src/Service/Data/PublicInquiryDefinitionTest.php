@@ -8,23 +8,36 @@ use Olcs\Service\Data\PublicInquiryDefinition;
  * Class PublicInquiryDefinitionTest
  * @package OlcsTest\Service\Data
  */
-class PublicInquiryDefinitionTest extends \PHPUnit\Framework\TestCase
+class PublicInquiryDefinitionTest extends AbstractPublicInquiryDataTestCase
 {
     private $definitions = [
         ['id' => 12, 'piDefinitionCategory' => 'Category A', 'description' => 'Description 1'],
         ['id' => 15, 'piDefinitionCategory' => 'Category C', 'description' => 'Description 2'],
     ];
 
+    /** @var PublicInquiryDefinition */
+    private $sut;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->sut = new PublicInquiryDefinition($this->abstractPublicInquiryDataServices);
+    }
+
     public function testFetchListOptionsWithGroups()
     {
-        $mockLicenceService = $this->createMock('\Common\Service\Data\Licence');
-        $mockLicenceService->expects($this->once())
-            ->method('fetchLicenceData')
-            ->willReturn(['niFlag'=> true, 'goodsOrPsv' => ['id'=>'lcat_gv'], 'trafficArea' => ['id' => 'B']]);
+        $this->licenceDataService->shouldReceive('getId')
+            ->once()
+            ->andReturnNull()
+            ->shouldReceive('fetchLicenceData')
+            ->withNoArgs()
+            ->once()
+            ->andReturn(
+                ['niFlag'=> true, 'goodsOrPsv' => ['id'=>'lcat_gv'], 'trafficArea' => ['id' => 'B']]
+            );
 
-        $sut = new PublicInquiryDefinition();
-        $sut->setLicenceService($mockLicenceService);
-        $sut->setData('pid', $this->definitions);
+        $this->sut->setData('pid', $this->definitions);
 
         $expected = [
             'Category A' => [
@@ -37,6 +50,6 @@ class PublicInquiryDefinitionTest extends \PHPUnit\Framework\TestCase
             ]
         ];
 
-        $this->assertEquals($expected, $sut->fetchListOptions([], true));
+        $this->assertEquals($expected, $this->sut->fetchListOptions([], true));
     }
 }

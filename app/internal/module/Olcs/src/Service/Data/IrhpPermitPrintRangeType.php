@@ -4,18 +4,17 @@ namespace Olcs\Service\Data;
 
 use Common\Exception\DataServiceException;
 use Common\Service\Data\AbstractDataService;
+use Common\Service\Data\AbstractDataServiceServices;
 use Common\Service\Data\ListDataInterface;
 use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintRangeType;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class IrhpPermitPrintRangeType
  *
  * @package Olcs\Service\Data
  */
-class IrhpPermitPrintRangeType extends AbstractDataService implements FactoryInterface, ListDataInterface
+class IrhpPermitPrintRangeType extends AbstractDataService implements ListDataInterface
 {
     /**
      * @var TranslationHelperService
@@ -28,17 +27,19 @@ class IrhpPermitPrintRangeType extends AbstractDataService implements FactoryInt
     private $irhpPermitStock;
 
     /**
-     * Create the service
+     * Create service instance
      *
-     * @param ServiceLocatorInterface $serviceLocator Service locator
+     * @param AbstractDataServiceServices $abstractDataServiceServices
+     * @param TranslationHelperService $translationHelperService
      *
      * @return IrhpPermitPrintRangeType
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->translator = $serviceLocator->get('Helper\Translation');
-
-        return $this;
+    public function __construct(
+        AbstractDataServiceServices $abstractDataServiceServices,
+        TranslationHelperService $translationHelperService
+    ) {
+        parent::__construct($abstractDataServiceServices);
+        $this->translator = $translationHelperService;
     }
 
     /**

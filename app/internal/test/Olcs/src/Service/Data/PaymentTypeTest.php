@@ -2,16 +2,25 @@
 
 namespace OlcsTest\Service\Data;
 
+use CommonTest\Service\Data\RefDataTestCase;
 use Olcs\Service\Data\PaymentType;
-use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Mockery as m;
 
 /**
  * Class PaymentTypeTest
  * @package OlcsTest\Service\Data
  */
-class PaymentTypeTest extends MockeryTestCase
+class PaymentTypeTest extends RefDataTestCase
 {
+    /** @var PaymentType */
+    private $sut;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->sut = new PaymentType($this->refDataServices);
+    }
+
     public function testFetchListData()
     {
         $data = [
@@ -26,8 +35,7 @@ class PaymentTypeTest extends MockeryTestCase
                 'description' => 'Will Be Overridden'
             ]
         ];
-        $sut = new PaymentType();
-        $sut->setData('fee_pay_method', $data);
+        $this->sut->setData('fee_pay_method', $data);
 
         $result = [
             [
@@ -39,6 +47,6 @@ class PaymentTypeTest extends MockeryTestCase
             ]
         ];
 
-        $this->assertEquals($result, $sut->fetchListData());
+        $this->assertEquals($result, $this->sut->fetchListData());
     }
 }

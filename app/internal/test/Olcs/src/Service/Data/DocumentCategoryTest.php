@@ -5,13 +5,23 @@ namespace OlcsTest\Service\Data;
 use Olcs\Service\Data\DocumentCategory;
 use Mockery as m;
 use Dvsa\Olcs\Transfer\Query\Category\GetList as Qry;
-use CommonTest\Service\Data\AbstractDataServiceTestCase;
+use CommonTest\Service\Data\AbstractListDataServiceTestCase;
 
 /**
  * @covers \Olcs\Service\Data\DocumentCategory
  */
-class DocumentCategoryTest extends AbstractDataServiceTestCase
+class DocumentCategoryTest extends AbstractListDataServiceTestCase
 {
+    /** @var DocumentCategory */
+    private $sut;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->sut = new DocumentCategory($this->abstractListDataServiceServices);
+    }
+
     public function testFetchListData()
     {
         $results = ['results' => 'results'];
@@ -21,17 +31,17 @@ class DocumentCategoryTest extends AbstractDataServiceTestCase
             'isDocCategory' => 'Y'
         ];
 
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')->once()->andReturnUsing(
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
+            ->once()
+            ->andReturnUsing(
                 function (Qry $dto) use ($params) {
                     $this->assertEquals($params['sort'], $dto->getSort());
                     $this->assertEquals($params['order'], $dto->getOrder());
                     $this->assertEquals($params['isDocCategory'], $dto->getIsDocCategory());
-                    return 'query';
+                    return $this->query;
                 }
-            )
-            ->once()
-            ->getMock();
+            );
 
         $mockResponse = m::mock()
             ->shouldReceive('isOk')
@@ -42,11 +52,10 @@ class DocumentCategoryTest extends AbstractDataServiceTestCase
             ->once()
             ->getMock();
 
-        $sut = new DocumentCategory();
-        $sut->setCategoryType(DocumentCategory::TYPE_IS_DOC);
+        $this->sut->setCategoryType(DocumentCategory::TYPE_IS_DOC);
 
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
+        $this->mockHandleQuery($mockResponse);
 
-        $this->assertEquals($results['results'], $sut->fetchListData([]));
+        $this->assertEquals($results['results'], $this->sut->fetchListData([]));
     }
 }

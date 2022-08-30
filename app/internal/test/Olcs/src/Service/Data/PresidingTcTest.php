@@ -20,6 +20,16 @@ use CommonTest\Service\Data\AbstractDataServiceTestCase;
  */
 class PresidingTcTest extends AbstractDataServiceTestCase
 {
+    /** @var PresidingTc */
+    private $sut;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->sut = new PresidingTc($this->abstractDataServiceServices);
+    }
+
     /**
      * Test fetchUserListData
      */
@@ -31,16 +41,17 @@ class PresidingTcTest extends AbstractDataServiceTestCase
             'order' => 'ASC'
         ];
         $dto = Qry::create($params);
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')->once()->andReturnUsing(
+
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
+            ->once()
+            ->andReturnUsing(
                 function ($dto) use ($params) {
                     $this->assertEquals($params['sort'], $dto->getSort());
                     $this->assertEquals($params['order'], $dto->getOrder());
-                    return 'query';
+                    return $this->query;
                 }
-            )
-            ->once()
-            ->getMock();
+            );
 
         $mockResponse = m::mock()
             ->shouldReceive('isOk')
@@ -51,10 +62,9 @@ class PresidingTcTest extends AbstractDataServiceTestCase
             ->twice()
             ->getMock();
 
-        $sut = new PresidingTc();
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
+        $this->mockHandleQuery($mockResponse);
 
-        $this->assertEquals($results['results'], $sut->fetchUserListData([]));
+        $this->assertEquals($results['results'], $this->sut->fetchUserListData([]));
     }
 
     /**
@@ -63,17 +73,20 @@ class PresidingTcTest extends AbstractDataServiceTestCase
     public function testFetchListDataWithException()
     {
         $this->expectException(DataServiceException::class);
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();
+
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
+            ->once()
+            ->andReturn($this->query);
 
         $mockResponse = m::mock()
             ->shouldReceive('isOk')
             ->andReturn(false)
             ->once()
             ->getMock();
-        $sut = new PresidingTc();
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
 
-        $sut->fetchUserListData([]);
+        $this->mockHandleQuery($mockResponse);
+
+        $this->sut->fetchUserListData([]);
     }
 }

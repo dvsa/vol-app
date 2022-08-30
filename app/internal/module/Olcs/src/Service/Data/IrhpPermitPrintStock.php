@@ -4,18 +4,17 @@ namespace Olcs\Service\Data;
 
 use Common\Exception\DataServiceException;
 use Common\Service\Data\AbstractDataService;
+use Common\Service\Data\AbstractDataServiceServices;
 use Common\Service\Data\ListDataInterface;
 use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintStock;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class IrhpPermitPrintStock
  *
  * @package Olcs\Service\Data
  */
-class IrhpPermitPrintStock extends AbstractDataService implements FactoryInterface, ListDataInterface
+class IrhpPermitPrintStock extends AbstractDataService implements ListDataInterface
 {
     const COUNTRY_ID_MOROCCO = 'MA';
 
@@ -30,23 +29,25 @@ class IrhpPermitPrintStock extends AbstractDataService implements FactoryInterfa
     private $irhpPermitType;
 
     /**
-     * Create the service
-     *
-     * @param ServiceLocatorInterface $serviceLocator Service locator
-     *
-     * @return IrhpPermitPrintStock
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->translator = $serviceLocator->get('Helper\Translation');
-
-        return $this;
-    }
-
-    /**
      * @var string
      */
     private $country;
+
+    /**
+     * Create service instance
+     *
+     * @param AbstractDataServiceServices $abstractDataServiceServices
+     * @param TranslationHelperService $translationHelperService
+     *
+     * @return IrhpPermitPrintStock
+     */
+    public function __construct(
+        AbstractDataServiceServices $abstractDataServiceServices,
+        TranslationHelperService $translationHelperService
+    ) {
+        parent::__construct($abstractDataServiceServices);
+        $this->translator = $translationHelperService;
+    }
 
     /**
      * Set Irhp Permit Type

@@ -1,8 +1,8 @@
 <?php
 namespace OlcsTest\Service\Data;
 
+use Common\Service\Data\RefData;
 use Olcs\Service\Data\Submission;
-
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
@@ -12,30 +12,17 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  */
 class SubmissionTest extends TestCase
 {
+    /** @var Submission */
     protected $sut;
 
-    public function setUp(): void
+    /** @var  m\MockInterface */
+    private $refDataService;
+
+    protected function setUp(): void
     {
-        $this->sut = new Submission();
-    }
+        $this->refDataService = m::mock(RefData::class);
 
-    public function testCreateService()
-    {
-        $mockRefDataService = $this->createMock('Common\Service\Data\RefData');
-
-        $mockSl = $this->createMock('\Laminas\ServiceManager\ServiceManager');
-        $mockSl->expects($this->any())
-            ->method('get')
-            ->willReturnMap(
-                [
-                    ['Common\Service\Data\RefData', true, $mockRefDataService]
-                ]
-            );
-
-        $service = $this->sut->createService($mockSl);
-
-        $this->assertInstanceOf('\Olcs\Service\Data\Submission', $service);
-        $this->assertSame($mockRefDataService, $service->getRefDataService());
+        $this->sut = new Submission($this->refDataService);
     }
 
     /**
@@ -82,15 +69,12 @@ class SubmissionTest extends TestCase
 
     public function testGetAllSectionsRefData()
     {
-        $mockRefDataService = $this->createMock('Common\Service\Data\RefData');
-
         $mockSectionRefData = $this->getMockSectionRefData();
-        $mockRefDataService->expects(
-            $this->once()
-        )->method('fetchListOptions')->with('submission_section')
-            ->willReturn($mockSectionRefData);
 
-        $this->sut->setRefDataService($mockRefDataService);
+        $this->refDataService->shouldReceive('fetchListOptions')
+            ->with('submission_section')
+            ->once()
+            ->andReturn($mockSectionRefData);
 
         $this->assertEquals($this->getMockSectionRefData(), $this->sut->getAllSectionsRefData());
 

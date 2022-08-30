@@ -1,6 +1,7 @@
 <?php
 
 use Common\Data\Object\Search\Licence as LicenceSearch;
+use Common\Service\Data as CommonDataService;
 use Olcs\Auth;
 use Olcs\Controller\Application\Processing\ApplicationProcessingNoteController;
 use Olcs\Controller\Bus\Processing\BusProcessingNoteController;
@@ -31,6 +32,7 @@ use Olcs\Listener\RouteParam\TransportManagerFurniture;
 use Olcs\Listener\RouteParam\VariationFurniture;
 use Olcs\Service\Marker;
 use Olcs\Service\Processing as ProcessingService;
+use Olcs\Service\Data as DataService;
 
 return array(
     'router' => [
@@ -446,35 +448,6 @@ return array(
         'invokables' => [
             'ApplicationUtility' => 'Olcs\Service\Utility\ApplicationUtility',
             'Olcs\Listener\RouteParams' => 'Olcs\Listener\RouteParams',
-            Olcs\Service\Data\Category::class => Olcs\Service\Data\Category::class,
-            Olcs\Service\Data\SubCategory::class => Olcs\Service\Data\SubCategory::class,
-            Olcs\Service\Data\SubCategoryDescription::class => Olcs\Service\Data\SubCategoryDescription::class,
-            Olcs\Service\Data\DocumentCategory::class => Olcs\Service\Data\DocumentCategory::class,
-            Olcs\Service\Data\DocumentCategoryWithDocs::class => Olcs\Service\Data\DocumentCategoryWithDocs::class,
-            Olcs\Service\Data\DocumentSubCategory::class => Olcs\Service\Data\DocumentSubCategory::class,
-            Olcs\Service\Data\DocumentSubCategoryWithDocs::class =>
-                Olcs\Service\Data\DocumentSubCategoryWithDocs::class,
-            Olcs\Service\Data\IrhpPermitPrintCountry::class => Olcs\Service\Data\IrhpPermitPrintCountry::class,
-            Olcs\Service\Data\ScannerCategory::class => Olcs\Service\Data\ScannerCategory::class,
-            Olcs\Service\Data\ScannerSubCategory::class => Olcs\Service\Data\ScannerSubCategory::class,
-            Olcs\Service\Data\TaskCategory::class => Olcs\Service\Data\TaskCategory::class,
-            Olcs\Service\Data\TaskSubCategory::class => Olcs\Service\Data\TaskSubCategory::class,
-            'Olcs\Service\Data\User' => 'Olcs\Service\Data\User',
-            Olcs\Service\Data\UserListInternal::class => Olcs\Service\Data\UserListInternal::class,
-            Olcs\Service\Data\UserListInternalExcludingLimitedReadOnlyUsers::class => Olcs\Service\Data\UserListInternalExcludingLimitedReadOnlyUsers::class,
-            'Olcs\Service\Data\UserWithName' => 'Olcs\Service\Data\UserWithName',
-            'Olcs\Service\Data\PresidingTc' => 'Olcs\Service\Data\PresidingTc',
-            'Olcs\Service\Data\IrfoCountry' => 'Olcs\Service\Data\IrfoCountry',
-            'Olcs\Service\Data\IrfoGvPermitType' => 'Olcs\Service\Data\IrfoGvPermitType',
-            'Olcs\Service\Data\BusNoticePeriod' => 'Olcs\Service\Data\BusNoticePeriod',
-            'Olcs\Service\Data\BusServiceType' => 'Olcs\Service\Data\BusServiceType',
-            'Olcs\Service\Data\Team' => 'Olcs\Service\Data\Team',
-            \Olcs\Service\Data\SiPenaltyType::class => \Olcs\Service\Data\SiPenaltyType::class,
-            'Olcs\Service\Data\OperatingCentresForInspectionRequest'
-            => 'Olcs\Service\Data\OperatingCentresForInspectionRequest',
-            \Olcs\Service\Data\Cases::class => \Olcs\Service\Data\Cases::class,
-            Olcs\Service\Data\Licence::class => Olcs\Service\Data\Licence::class,
-            Olcs\Service\Data\ApplicationStatus::class => \Olcs\Service\Data\ApplicationStatus::class,
             Olcs\Service\Permits\Bilateral\MoroccoFieldsetPopulator::class =>
                 Olcs\Service\Permits\Bilateral\MoroccoFieldsetPopulator::class,
         ],
@@ -482,6 +455,49 @@ return array(
             \Laminas\Cache\Service\StorageCacheAbstractServiceFactory::class,
         ],
         'factories' => array(
+            DataService\ActionToBeTaken::class => CommonDataService\RefDataFactory::class,
+            DataService\ApplicationStatus::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\AssignedToList::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\BusNoticePeriod::class => CommonDataService\AbstractDataServiceFactory::class,
+            DataService\BusServiceType::class => CommonDataService\AbstractDataServiceFactory::class,
+            DataService\Cases::class => CommonDataService\AbstractDataServiceFactory::class,
+            DataService\Category::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\DocumentCategory::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\DocumentCategoryWithDocs::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\DocumentSubCategory::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\DocumentSubCategoryWithDocs::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\EmailTemplateCategory::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\IrfoCountry::class => CommonDataService\AbstractDataServiceFactory::class,
+            DataService\IrfoGvPermitType::class => CommonDataService\AbstractDataServiceFactory::class,
+            DataService\IrfoPsvAuthType::class => CommonDataService\AbstractDataServiceFactory::class,
+            DataService\IrhpPermitPrintCountry::class => CommonDataService\AbstractDataServiceFactory::class,
+            DataService\IrhpPermitPrintRangeType::class => DataService\IrhpPermitPrintRangeTypeFactory::class,
+            DataService\IrhpPermitPrintStock::class => DataService\IrhpPermitPrintStockFactory::class,
+            DataService\IrhpPermitPrintType::class => CommonDataService\AbstractDataServiceFactory::class,
+            DataService\Licence::class => DataService\LicenceFactory::class,
+            DataService\OperatingCentresForInspectionRequest::class => DataService\OperatingCentresForInspectionRequestFactory::class,
+            DataService\PaymentType::class => CommonDataService\RefDataFactory::class,
+            DataService\PresidingTc::class => CommonDataService\AbstractDataServiceFactory::class,
+            DataService\Printer::class => CommonDataService\AbstractDataServiceFactory::class,
+            DataService\ReportEmailTemplate::class => CommonDataService\AbstractDataServiceFactory::class,
+            DataService\ReportLetterTemplate::class => CommonDataService\AbstractDataServiceFactory::class,
+            DataService\ScannerCategory::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\ScannerSubCategory::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\SiPenaltyType::class => CommonDataService\AbstractDataServiceFactory::class,
+            DataService\SubCategory::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\SubCategoryDescription::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\Submission::class => DataService\SubmissionFactory::class,
+            DataService\SubmissionActionTypes::class => DataService\SubmissionActionTypesFactory::class,
+            DataService\TaskCategory::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\TaskSubCategory::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\Team::class => DataService\TeamFactory::class,
+            DataService\User::class => CommonDataService\AbstractDataServiceFactory::class,
+            DataService\UserInternalTeamList::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\UserListInternal::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\UserListInternalExcludingLimitedReadOnlyUsers::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\UserListInternalExcludingLimitedReadOnlyUsersSorted::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\UserWithName::class => CommonDataService\AbstractDataServiceFactory::class,
+
             \Olcs\Service\Marker\MarkerService::class => \Olcs\Service\Marker\MarkerService::class,
             \Olcs\Service\Marker\MarkerPluginManager::class =>
                 \Olcs\Service\Marker\MarkerPluginManagerFactory::class,
@@ -505,14 +521,9 @@ return array(
             LicenceListener::class => LicenceListener::class,
             'Olcs\Listener\RouteParam\CaseMarker' => 'Olcs\Listener\RouteParam\CaseMarker',
             'Olcs\Listener\RouteParam\Organisation' => 'Olcs\Listener\RouteParam\Organisation',
-            'Olcs\Service\Data\Submission' => 'Olcs\Service\Data\Submission',
-            'Olcs\Service\Data\Pi' => 'Olcs\Service\Data\Pi',
             'Olcs\Navigation\RightHandNavigation' => 'Olcs\Navigation\RightHandNavigationFactory',
             'Olcs\Listener\HeaderSearch' => 'Olcs\Listener\HeaderSearch',
             'Olcs\Listener\NavigationToggle' => 'Olcs\Listener\NavigationToggle',
-            'Olcs\Service\Data\SubmissionActionTypes' => 'Olcs\Service\Data\SubmissionActionTypes',
-            Olcs\Service\Data\IrhpPermitPrintRangeType::class => Olcs\Service\Data\IrhpPermitPrintRangeType::class,
-            Olcs\Service\Data\IrhpPermitPrintStock::class => Olcs\Service\Data\IrhpPermitPrintStock::class,
 
             Olcs\Data\Mapper\BilateralApplicationValidationModifier::class =>
                 Olcs\Data\Mapper\BilateralApplicationValidationModifierFactory::class,
@@ -647,12 +658,13 @@ return array(
         'invokables' => [
         ],
         'factories' => [
-            'Olcs\Service\Data\SubmissionLegislation' => 'Olcs\Service\Data\SubmissionLegislation',
-            'Olcs\Service\Data\PublicInquiryReason' => 'Olcs\Service\Data\PublicInquiryReason',
-            'Olcs\Service\Data\PublicInquiryDecision' => 'Olcs\Service\Data\PublicInquiryDecision',
-            'Olcs\Service\Data\PublicInquiryDefinition' => 'Olcs\Service\Data\PublicInquiryDefinition',
-            'Olcs\Service\Data\ImpoundingLegislation' => 'Olcs\Service\Data\ImpoundingLegislation',
-            'Olcs\Service\Data\LicenceDecisionLegislation' => 'Olcs\Service\Data\LicenceDecisionLegislation'
+            DataService\AbstractPublicInquiryDataServices::class => DataService\AbstractPublicInquiryDataServicesFactory::class,
+            DataService\ImpoundingLegislation::class => DataService\ImpoundingLegislationFactory::class,
+            DataService\LicenceDecisionLegislation::class => DataService\LicenceDecisionLegislationFactory::class,
+            DataService\PublicInquiryDecision::class => DataService\AbstractPublicInquiryDataFactory::class,
+            DataService\PublicInquiryDefinition::class => DataService\AbstractPublicInquiryDataFactory::class,
+            DataService\PublicInquiryReason::class => DataService\AbstractPublicInquiryDataFactory::class,
+            DataService\SubmissionLegislation::class => DataService\AbstractPublicInquiryDataFactory::class,
         ]
     ],
     'form_service_manager' => [

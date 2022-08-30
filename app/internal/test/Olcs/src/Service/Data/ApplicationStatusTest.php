@@ -3,33 +3,32 @@
 namespace OlcsTest\Service\Data;
 
 use Common\Exception\DataServiceException;
-use CommonTest\Service\Data\AbstractDataServiceTestCase;
+use CommonTest\Service\Data\AbstractListDataServiceTestCase;
 use Mockery as m;
 use Olcs\Service\Data\ApplicationStatus;
-use Dvsa\Olcs\Transfer\Query as TransferQry;
+use Dvsa\Olcs\Transfer\Query\DataService\ApplicationStatus as Qry;
+use Laminas\Http\Response;
 
 /**
  * @covers \Olcs\Service\Data\ApplicationStatus
  */
-class ApplicationStatusTest extends AbstractDataServiceTestCase
+class ApplicationStatusTest extends AbstractListDataServiceTestCase
 {
     const ORG_ID = 9999;
 
-    /** @var  ApplicationStatus */
+    /** @var ApplicationStatus */
     private $sut;
+
     /** @var  \Laminas\Http\Response | m\MockInterface */
     private $mockResp;
-    /** @var  \Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder | m\MockInterface */
-    protected $mockTransferAnnotationBuilder;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
-        $this->sut = new ApplicationStatus;
-
-        $this->mockResp = m::mock(\Laminas\Http\Response::class);
-        $this->mockTransferAnnotationBuilder = m::mock(\Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder::class);
-
         parent::setUp();
+
+        $this->sut = new ApplicationStatus($this->abstractListDataServiceServices);
+
+        $this->mockResp = m::mock(Response::class);
     }
 
     public function testSetters()
@@ -43,14 +42,15 @@ class ApplicationStatusTest extends AbstractDataServiceTestCase
     {
         $results = ['results' => ['unit_Results']];
 
-        $this->mockTransferAnnotationBuilder
+        $this->transferAnnotationBuilder
             ->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
             ->once()
             ->andReturnUsing(
-                function (TransferQry\DataService\ApplicationStatus $qry) {
+                function (Qry $qry) {
                     static::assertEquals(self::ORG_ID, $qry->getOrganisation());
 
-                    return 'query';
+                    return $this->query;
                 }
             );
 
@@ -58,7 +58,7 @@ class ApplicationStatusTest extends AbstractDataServiceTestCase
             ->shouldReceive('isOk')->once()->andReturn(true)
             ->shouldReceive('getResult')->once()->andReturn($results);
 
-        $this->mockHandleQuery($this->sut, $this->mockTransferAnnotationBuilder, $this->mockResp);
+        $this->mockHandleQuery($this->mockResp);
 
         $this->sut->setOrgId(self::ORG_ID);
 
@@ -70,10 +70,14 @@ class ApplicationStatusTest extends AbstractDataServiceTestCase
     {
         $this->expectException(DataServiceException::class);
 
-        $this->mockTransferAnnotationBuilder->shouldReceive('createQuery')->once()->andReturn('query');
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
+            ->once()
+            ->andReturn($this->query);
+
         $this->mockResp->shouldReceive('isOk')->once()->andReturn(false);
 
-        $this->mockHandleQuery($this->sut, $this->mockTransferAnnotationBuilder, $this->mockResp);
+        $this->mockHandleQuery($this->mockResp);
 
         $this->sut->fetchListData([]);
     }

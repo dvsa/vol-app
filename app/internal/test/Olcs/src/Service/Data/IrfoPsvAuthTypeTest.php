@@ -3,6 +3,7 @@
 namespace OlcsTest\Service\Data;
 
 use Common\Exception\DataServiceException;
+use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPsvAuthTypeList as Qry;
 use Olcs\Service\Data\IrfoPsvAuthType;
 use Mockery as m;
 use CommonTest\Service\Data\AbstractDataServiceTestCase;
@@ -13,14 +14,22 @@ use CommonTest\Service\Data\AbstractDataServiceTestCase;
  */
 class IrfoPsvAuthTypeTest extends AbstractDataServiceTestCase
 {
+    /** @var IrfoPsvAuthType */
+    private $sut;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->sut = new IrfoPsvAuthType($this->abstractDataServiceServices);
+    }
+
     public function testFormatData()
     {
         $source = $this->getSingleSource();
         $expected = $this->getSingleExpected();
 
-        $sut = new IrfoPsvAuthType();
-
-        $this->assertEquals($expected, $sut->formatData($source));
+        $this->assertEquals($expected, $this->sut->formatData($source));
     }
 
     /**
@@ -30,10 +39,9 @@ class IrfoPsvAuthTypeTest extends AbstractDataServiceTestCase
      */
     public function testFetchListOptions($input, $expected)
     {
-        $sut = new IrfoPsvAuthType();
-        $sut->setData('IrfoPsvAuthType', $input);
+        $this->sut->setData('IrfoPsvAuthType', $input);
 
-        $this->assertEquals($expected, $sut->fetchListOptions(''));
+        $this->assertEquals($expected, $this->sut->fetchListOptions(''));
     }
 
     public function provideFetchListOptions()
@@ -47,10 +55,11 @@ class IrfoPsvAuthTypeTest extends AbstractDataServiceTestCase
     public function testFetchListData()
     {
         $results = ['results' => 'results'];
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')->once()->andReturn('query')
+
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
             ->once()
-            ->getMock();
+            ->andReturn($this->query);
 
         $mockResponse = m::mock()
             ->shouldReceive('isOk')
@@ -61,11 +70,10 @@ class IrfoPsvAuthTypeTest extends AbstractDataServiceTestCase
             ->twice()
             ->getMock();
 
-        $sut = new IrfoPsvAuthType();
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
+        $this->mockHandleQuery($mockResponse);
 
-        $this->assertEquals($results['results'], $sut->fetchListData());
-        $this->assertEquals($results['results'], $sut->fetchListData()); //ensure data is cached
+        $this->assertEquals($results['results'], $this->sut->fetchListData());
+        $this->assertEquals($results['results'], $this->sut->fetchListData()); //ensure data is cached
     }
 
     /**
@@ -74,18 +82,21 @@ class IrfoPsvAuthTypeTest extends AbstractDataServiceTestCase
     public function testFetchListDataWithException()
     {
         $this->expectException(DataServiceException::class);
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();
+
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
+            ->once()
+            ->andReturn($this->query);
 
         $mockResponse = m::mock()
             ->shouldReceive('isOk')
             ->andReturn(false)
             ->once()
             ->getMock();
-        $sut = new IrfoPsvAuthType();
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
 
-        $sut->fetchListData([]);
+        $this->mockHandleQuery($mockResponse);
+
+        $this->sut->fetchListData([]);
     }
 
     /**

@@ -2,9 +2,10 @@
 
 namespace OlcsTest\Service\Data;
 
+use Common\Service\Data\Licence as LicenceDataService;
+use CommonTest\Service\Data\RefDataTestCase;
 use Olcs\Service\Data\ImpoundingLegislation;
 use Mockery as m;
-use CommonTest\Service\Data\AbstractDataServiceTestCase;
 
 /**
  * Class ImpoundingLegislationTest
@@ -12,24 +13,38 @@ use CommonTest\Service\Data\AbstractDataServiceTestCase;
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class ImpoundingLegislationTest extends AbstractDataServiceTestCase
+class ImpoundingLegislationTest extends RefDataTestCase
 {
+    /** @var ImpoundingLegislation */
+    private $sut;
+
+    /** @var LicenceDataService */
+    protected $licenceDataService;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->licenceDataService = m::mock(LicenceDataService::class);
+
+        $this->sut = new ImpoundingLegislation(
+            $this->refDataServices,
+            $this->licenceDataService
+        );
+    }
+
     /**
      * Tests fetchListOptions when no licence is present
      */
     public function testFetchListOptionsNoLicence()
     {
-        $mockLicenceService = m::mock('\Common\Service\Data\Licence');
-        $mockLicenceService->shouldReceive('fetchLicenceData')
-            ->andReturn([])
+        $this->licenceDataService->shouldReceive('fetchLicenceData')
             ->once()
-            ->getMock();
+            ->andReturn([]);
 
-        $sut = new ImpoundingLegislation();
-        $sut->setLicenceService($mockLicenceService);
-        $sut->setData('impound_legislation_goods_gb', $this->getSingleSource());
+        $this->sut->setData('impound_legislation_goods_gb', $this->getSingleSource());
 
-        $this->assertEquals($this->getSingleExpected(), $sut->fetchListOptions([]));
+        $this->assertEquals($this->getSingleExpected(), $this->sut->fetchListOptions([]));
     }
 
     /**
@@ -41,8 +56,8 @@ class ImpoundingLegislationTest extends AbstractDataServiceTestCase
      */
     public function testFetchListOptions($niFlag, $goodsOrPsv, $expectedList)
     {
-        $mockLicenceService = m::mock('\Common\Service\Data\Licence');
-        $mockLicenceService->shouldReceive('fetchLicenceData')
+        $this->licenceDataService->shouldReceive('fetchLicenceData')
+            ->once()
             ->andReturn(
                 [
                     'id' => 7,
@@ -50,15 +65,11 @@ class ImpoundingLegislationTest extends AbstractDataServiceTestCase
                     'goodsOrPsv' => ['id'=> $goodsOrPsv],
                     'trafficArea' => ['id'=> 'B']
                 ]
-            )
-            ->once()
-            ->getMock();
+            );
 
-        $sut = new ImpoundingLegislation();
-        $sut->setLicenceService($mockLicenceService);
-        $sut->setData($expectedList, $this->getSingleSource());
+        $this->sut->setData($expectedList, $this->getSingleSource());
 
-        $this->assertEquals($this->getSingleExpected(), $sut->fetchListOptions([]));
+        $this->assertEquals($this->getSingleExpected(), $this->sut->fetchListOptions([]));
     }
 
     /**
@@ -66,8 +77,8 @@ class ImpoundingLegislationTest extends AbstractDataServiceTestCase
      */
     public function testFetchListOptionsNoData()
     {
-        $mockLicenceService = m::mock('\Common\Service\Data\Licence');
-        $mockLicenceService->shouldReceive('fetchLicenceData')
+        $this->licenceDataService->shouldReceive('fetchLicenceData')
+            ->once()
             ->andReturn(
                 [
                     'id' => 7,
@@ -75,15 +86,11 @@ class ImpoundingLegislationTest extends AbstractDataServiceTestCase
                     'goodsOrPsv' => ['id'=> 'lcat_gv'],
                     'trafficArea' => ['id'=> 'B']
                 ]
-            )
-            ->once()
-            ->getMock();
+            );
 
-        $sut = new ImpoundingLegislation();
-        $sut->setLicenceService($mockLicenceService);
-        $sut->setData('impound_legislation_goods_ni', '');
+        $this->sut->setData('impound_legislation_goods_ni', '');
 
-        $this->assertEquals([], $sut->fetchListOptions([]));
+        $this->assertEquals([], $this->sut->fetchListOptions([]));
     }
 
     /**

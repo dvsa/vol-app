@@ -3,7 +3,9 @@
 namespace Olcs\Service\Data;
 
 use Common\Service\Data\AbstractDataService;
+use Common\Service\Data\AbstractDataServiceServices;
 use Common\Service\Data\ListDataInterface;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Dvsa\Olcs\Transfer\Query\Team\TeamListData as TeamQry;
 
 /**
@@ -26,6 +28,25 @@ class Team extends AbstractDataService implements ListDataInterface
      */
     protected $serviceName = 'Team';
 
+    /** @var FlashMessengerHelperService */
+    protected $flashMessengerHelper;
+
+    /**
+     * Create service instance
+     *
+     * @param AbstractDataServiceServices $abstractDataServiceServices
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     *
+     * @return Team
+     */
+    public function __construct(
+        AbstractDataServiceServices $abstractDataServiceServices,
+        FlashMessengerHelperService $flashMessengerHelper
+    ) {
+        parent::__construct($abstractDataServiceServices);
+        $this->flashMessengerHelper = $flashMessengerHelper;
+    }
+
     /**
      * Fetch list options
      *
@@ -33,6 +54,7 @@ class Team extends AbstractDataService implements ListDataInterface
      * @param bool         $useGroups Use groups
      *
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fetchListOptions($context, $useGroups = false)
     {
@@ -68,9 +90,8 @@ class Team extends AbstractDataService implements ListDataInterface
             $response = $this->handleQuery($dtoData);
 
             if (!$response->isOk()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+                $this->flashMessengerHelper->addErrorMessage('unknown-error');
                 return [];
-
             } elseif (isset($response->getResult()['results'])) {
                 $this->setData('teamlist', $response->getResult()['results']);
             }

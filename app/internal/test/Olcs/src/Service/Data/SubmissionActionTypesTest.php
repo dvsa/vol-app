@@ -2,40 +2,30 @@
 
 namespace OlcsTest\Service\Data;
 
+use Common\Service\Data\RefData;
+use CommonTest\Service\Data\AbstractDataServiceTestCase;
 use Olcs\Service\Data\SubmissionActionTypes;
-use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Mockery as m;
 
 /**
  * Class SubmissionActionTypes Test
  * @package CommonTest\Service
  */
-class SubmissionActionTypesTest extends TestCase
+class SubmissionActionTypesTest extends AbstractDataServiceTestCase
 {
+    /** @var SubmissionActionTypes */
     protected $sut;
 
-    public function setUp(): void
+    /** @var  m\MockInterface */
+    private $refDataService;
+
+    protected function setUp(): void
     {
-        $this->sut = new SubmissionActionTypes();
-    }
+        parent::setUp();
 
-    public function testCreateService()
-    {
-        $mockRefDataService = $this->createMock('\Common\Service\Data\RefData');
+        $this->refDataService = m::mock(RefData::class);
 
-        $mockSl = $this->createMock('\Laminas\ServiceManager\ServiceManager');
-        $mockSl->expects($this->any())
-            ->method('get')
-            ->willReturnMap(
-                [
-                    ['\Common\Service\Data\RefData', true, $mockRefDataService]
-                ]
-            );
-
-        $service = $this->sut->createService($mockSl);
-
-        $this->assertInstanceOf('\Olcs\Service\Data\SubmissionActionTypes', $service);
-        $this->assertInstanceOf('\Common\Service\Data\RefData', $this->sut->getRefDataService());
+        $this->sut = new SubmissionActionTypes($this->abstractDataServiceServices, $this->refDataService);
     }
 
     public function testFetchListOptions()
@@ -54,16 +44,12 @@ class SubmissionActionTypesTest extends TestCase
             ]
         ];
 
-        $mockRefDataService = m::mock('\Common\Service\Data\RefData');
-        $mockRefDataService->shouldReceive('fetchListData')->with('sub_st_rec')
+        $this->refDataService->shouldReceive('fetchListData')
+            ->with('sub_st_rec')
+            ->once()
             ->andReturn($mockRefData);
 
-        $mockSl = m::mock('\Laminas\ServiceManager\ServiceManager');
-        $mockSl->shouldReceive('get')->with('\Common\Service\Data\RefData')->andReturn($mockRefDataService);
-
-        $sut = $this->sut->createService($mockSl);
-
-        $result = $sut->fetchListOptions($context, $useGroups);
+        $result = $this->sut->fetchListOptions($context, $useGroups);
 
         $this->assertArrayHasKey('option_id1', $result);
     }
@@ -84,16 +70,12 @@ class SubmissionActionTypesTest extends TestCase
             ]
         ];
 
-        $mockRefDataService = m::mock('\Common\Service\Data\RefData');
-        $mockRefDataService->shouldReceive('fetchListData')->with('sub_st_rec')
+        $this->refDataService->shouldReceive('fetchListData')
+            ->with('sub_st_rec')
+            ->once()
             ->andReturn($mockRefData);
 
-        $mockSl = m::mock('\Laminas\ServiceManager\ServiceManager');
-        $mockSl->shouldReceive('get')->with('\Common\Service\Data\RefData')->andReturn($mockRefDataService);
-
-        $sut = $this->sut->createService($mockSl);
-
-        $result = $sut->fetchListOptions($context, $useGroups);
+        $result = $this->sut->fetchListOptions($context, $useGroups);
 
         $this->assertArrayHasKey('option_id1', $result['sub_st_rec_group1']['options']);
     }
@@ -105,16 +87,11 @@ class SubmissionActionTypesTest extends TestCase
 
         $mockRefData = [];
 
-        $mockRefDataService = m::mock('\Common\Service\Data\RefData');
-        $mockRefDataService->shouldReceive('fetchListData')->with('sub_st_rec')
+        $this->refDataService->shouldReceive('fetchListData')
+            ->with('sub_st_rec')
             ->andReturn($mockRefData);
 
-        $mockSl = m::mock('\Laminas\ServiceManager\ServiceManager');
-        $mockSl->shouldReceive('get')->with('\Common\Service\Data\RefData')->andReturn($mockRefDataService);
-
-        $sut = $this->sut->createService($mockSl);
-
-        $result = $sut->fetchListOptions($context, $useGroups);
+        $result = $this->sut->fetchListOptions($context, $useGroups);
 
         $this->assertEmpty($result);
     }

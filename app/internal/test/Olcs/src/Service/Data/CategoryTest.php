@@ -6,13 +6,23 @@ use Common\Exception\DataServiceException;
 use Olcs\Service\Data\Category;
 use Mockery as m;
 use Dvsa\Olcs\Transfer\Query\Category\GetList as Qry;
-use CommonTest\Service\Data\AbstractDataServiceTestCase;
+use CommonTest\Service\Data\AbstractListDataServiceTestCase;
 
 /**
  * @covers \Olcs\Service\Data\Category
  */
-class CategoryTest extends AbstractDataServiceTestCase
+class CategoryTest extends AbstractListDataServiceTestCase
 {
+    /** @var Category */
+    private $sut;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->sut = new Category($this->abstractListDataServiceServices);
+    }
+
     public function testFetchListData()
     {
         $results = ['results' => 'results'];
@@ -21,45 +31,42 @@ class CategoryTest extends AbstractDataServiceTestCase
             'order' => 'ASC',
         ];
 
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')->once()->andReturnUsing(
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
+            ->once()
+            ->andReturnUsing(
                 function (Qry $dto) use ($params) {
                     $this->assertEquals($params['sort'], $dto->getSort());
                     $this->assertEquals($params['order'], $dto->getOrder());
                     $this->assertEquals('Y', $dto->getIsScanCategory());
                     $this->assertEquals('Y', $dto->getIsOnlyWithItems());
-                    return 'query';
+                    return $this->query;
                 }
-            )
-            ->once()
-            ->getMock();
+            );
 
         $mockResponse = m::mock()
             ->shouldReceive('isOk')->andReturn(true)->once()
             ->shouldReceive('getResult')->andReturn($results)->once()
             ->getMock();
 
-        $sut = new Category();
-        $sut->setCategoryType(Category::TYPE_IS_SCAN);
-        $sut->setIsOnlyWithItems(true);
+        $this->sut->setCategoryType(Category::TYPE_IS_SCAN);
+        $this->sut->setIsOnlyWithItems(true);
 
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
+        $this->mockHandleQuery($mockResponse);
 
-        $this->assertEquals($results['results'], $sut->fetchListData([]));
+        $this->assertEquals($results['results'], $this->sut->fetchListData([]));
     }
 
     public function testSetters()
     {
-        $sut = new Category();
+        static::assertNull($this->sut->getCategoryType());
+        static::assertFalse($this->sut->getIsOnlyWithItems());
 
-        static::assertNull($sut->getCategoryType());
-        static::assertFalse($sut->getIsOnlyWithItems());
+        $this->sut->setCategoryType(Category::TYPE_IS_DOC);
+        $this->sut->setIsOnlyWithItems(true);
 
-        $sut->setCategoryType(Category::TYPE_IS_DOC);
-        $sut->setIsOnlyWithItems(true);
-
-        static::assertEquals(Category::TYPE_IS_DOC, $sut->getCategoryType());
-        static::assertTrue($sut->getIsOnlyWithItems());
+        static::assertEquals(Category::TYPE_IS_DOC, $this->sut->getCategoryType());
+        static::assertTrue($this->sut->getIsOnlyWithItems());
     }
 
     public function testFetchListDataCache()
@@ -70,17 +77,20 @@ class CategoryTest extends AbstractDataServiceTestCase
                 'description'=> 'EXPECTED'
             ],
         ];
-        $sut = new Category();
-        $sut->setData('categories', $data);
 
-        static::assertEquals([9999 => 'EXPECTED'], $sut->fetchListOptions());
+        $this->sut->setData('categories', $data);
+
+        static::assertEquals([9999 => 'EXPECTED'], $this->sut->fetchListOptions());
     }
 
     public function testFetchListDataWithException()
     {
         $this->expectException(DataServiceException::class);
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();
+
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
+            ->once()
+            ->andReturn($this->query);
 
         $mockResponse = m::mock()
             ->shouldReceive('isOk')
@@ -88,11 +98,10 @@ class CategoryTest extends AbstractDataServiceTestCase
             ->once()
             ->getMock();
 
-        $sut = new Category();
-        $sut->setCategoryType(Category::TYPE_IS_SCAN);
+        $this->sut->setCategoryType(Category::TYPE_IS_SCAN);
 
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
+        $this->mockHandleQuery($mockResponse);
 
-        $sut->fetchListData([]);
+        $this->sut->fetchListData([]);
     }
 }

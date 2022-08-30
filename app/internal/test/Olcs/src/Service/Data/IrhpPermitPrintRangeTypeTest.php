@@ -7,26 +7,34 @@ use Common\Service\Cqrs\Response;
 use Common\Service\Helper\TranslationHelperService;
 use CommonTest\Service\Data\AbstractDataServiceTestCase;
 use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintRangeType;
-use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder as TransferAnnotationBuilder;
 use Olcs\Service\Data\IrhpPermitPrintRangeType;
 use Mockery as m;
-use Laminas\ServiceManager\ServiceManager;
 
 /**
  * Class IrhpPermitPrintRangeType Test
  */
 class IrhpPermitPrintRangeTypeTest extends AbstractDataServiceTestCase
 {
-    protected $sut;
+    /** @var IrhpPermitPrintRangeType */
+    private $sut;
 
+    /** @var TranslationHelperService */
     protected $translationHelper;
 
-    protected $transferAnnotationBuilder;
-
+    /** @var Response */
     protected $response;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
+        parent::setUp();
+
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(ReadyToPrintRangeType::class))
+            ->andReturn($this->query);
+
+        $this->response = m::mock(Response::class);
+        $this->mockHandleQuery($this->response);
+
         $this->translationHelper = m::mock(TranslationHelperService::class);
         $this->translationHelper->shouldReceive('translate')
             ->andReturnUsing(
@@ -35,23 +43,10 @@ class IrhpPermitPrintRangeTypeTest extends AbstractDataServiceTestCase
                 }
             );
 
-        $serviceLocator = m::mock(ServiceManager::class);
-        $serviceLocator->shouldReceive('get')
-            ->with('Helper\Translation')
-            ->once()
-            ->andReturn($this->translationHelper);
-
-        $this->sut = (new IrhpPermitPrintRangeType())->createService($serviceLocator);
-
-        $this->transferAnnotationBuilder = m::mock(TransferAnnotationBuilder::class)
-            ->shouldReceive('createQuery')
-            ->with(m::type(ReadyToPrintRangeType::class))
-            ->andReturn('query')
-            ->getMock();
-
-        $this->response = m::mock(Response::class);
-
-        $this->mockHandleQuery($this->sut, $this->transferAnnotationBuilder, $this->response);
+        $this->sut = new IrhpPermitPrintRangeType(
+            $this->abstractDataServiceServices,
+            $this->translationHelper
+        );
     }
 
     /**
@@ -103,8 +98,7 @@ class IrhpPermitPrintRangeTypeTest extends AbstractDataServiceTestCase
 
         $this->response->shouldReceive('isOk')
             ->once()
-            ->andReturn(false)
-            ->getMock();
+            ->andReturn(false);
 
         $this->sut->fetchListOptions();
     }

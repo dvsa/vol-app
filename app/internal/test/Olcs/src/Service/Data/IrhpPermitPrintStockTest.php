@@ -7,22 +7,25 @@ use Common\RefData;
 use Common\Service\Cqrs\Response;
 use Common\Service\Helper\TranslationHelperService;
 use CommonTest\Service\Data\AbstractDataServiceTestCase;
-use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintStock;
-use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder as TransferAnnotationBuilder;
+use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintStock as Qry;
 use Olcs\Service\Data\IrhpPermitPrintStock;
 use Mockery as m;
-use Laminas\ServiceManager\ServiceManager;
 
 /**
  * Class IrhpPermitPrintStock Test
  */
 class IrhpPermitPrintStockTest extends AbstractDataServiceTestCase
 {
-    /**
-     * @dataProvider dpTestFetchListOptions
-     */
-    public function testFetchListOptions($country, $results, $expected)
+    /** @var IrhpPermitPrintStock */
+    private $sut;
+
+    /** @var TranslationHelperService */
+    protected $translationHelper;
+
+    protected function setUp(): void
     {
+        parent::setUp();
+
         $this->translationHelper = m::mock(TranslationHelperService::class);
         $this->translationHelper->shouldReceive('translate')
             ->andReturnUsing(
@@ -31,23 +34,27 @@ class IrhpPermitPrintStockTest extends AbstractDataServiceTestCase
                 }
             );
 
-        $serviceLocator = m::mock(ServiceManager::class);
-        $serviceLocator->shouldReceive('get')
-            ->with('Helper\Translation')
-            ->once()
-            ->andReturn($this->translationHelper);
+        $this->sut = new IrhpPermitPrintStock(
+            $this->abstractDataServiceServices,
+            $this->translationHelper
+        );
+    }
 
-        $mockTransferAnnotationBuilder = m::mock(TransferAnnotationBuilder::class)
-            ->shouldReceive('createQuery')
+    /**
+     * @dataProvider dpTestFetchListOptions
+     */
+    public function testFetchListOptions($country, $results, $expected)
+    {
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
             ->once()
             ->andReturnUsing(
-                function (ReadyToPrintStock $dto) use ($country) {
+                function (Qry $dto) use ($country) {
                     $this->assertEquals(RefData::IRHP_BILATERAL_PERMIT_TYPE_ID, $dto->getIrhpPermitType());
                     $this->assertEquals($country, $dto->getCountry());
-                    return 'query';
+                    return $this->query;
                 }
-            )
-            ->getMock();
+            );
 
         $mockResponse = m::mock(Response::class)
             ->shouldReceive('isOk')
@@ -58,15 +65,14 @@ class IrhpPermitPrintStockTest extends AbstractDataServiceTestCase
             ->andReturn($results)
             ->getMock();
 
-        $sut = (new IrhpPermitPrintStock())->createService($serviceLocator);
-        $sut->setIrhpPermitType(RefData::IRHP_BILATERAL_PERMIT_TYPE_ID);
-        $sut->setCountry($country);
+        $this->sut->setIrhpPermitType(RefData::IRHP_BILATERAL_PERMIT_TYPE_ID);
+        $this->sut->setCountry($country);
 
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
+        $this->mockHandleQuery($mockResponse);
 
-        $this->assertEquals($expected, $sut->fetchListOptions(null));
-        $this->assertEquals(RefData::IRHP_BILATERAL_PERMIT_TYPE_ID, $sut->getIrhpPermitType());
-        $this->assertEquals($country, $sut->getCountry());
+        $this->assertEquals($expected, $this->sut->fetchListOptions(null));
+        $this->assertEquals(RefData::IRHP_BILATERAL_PERMIT_TYPE_ID, $this->sut->getIrhpPermitType());
+        $this->assertEquals($country, $this->sut->getCountry());
     }
 
     public function dpTestFetchListOptions()
@@ -156,12 +162,10 @@ class IrhpPermitPrintStockTest extends AbstractDataServiceTestCase
     {
         $this->expectException(DataServiceException::class);
 
-        $mockTransferAnnotationBuilder = m::mock(TransferAnnotationBuilder::class)
-            ->shouldReceive('createQuery')
-            ->with(m::type(ReadyToPrintStock::class))
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
             ->once()
-            ->andReturn('query')
-            ->getMock();
+            ->andReturn($this->query);
 
         $mockResponse = m::mock(Response::class)
             ->shouldReceive('isOk')
@@ -169,10 +173,8 @@ class IrhpPermitPrintStockTest extends AbstractDataServiceTestCase
             ->andReturn(false)
             ->getMock();
 
-        $sut = new IrhpPermitPrintStock();
+        $this->mockHandleQuery($mockResponse);
 
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
-
-        $sut->fetchListOptions(null);
+        $this->sut->fetchListOptions(null);
     }
 }

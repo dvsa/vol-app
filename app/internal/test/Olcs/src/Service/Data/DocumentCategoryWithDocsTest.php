@@ -2,19 +2,27 @@
 
 namespace OlcsTest\Service\Data;
 
-use CommonTest\Service\Data\AbstractDataServiceTestCase;
+use CommonTest\Service\Data\AbstractListDataServiceTestCase;
 use Olcs\Service\Data\DocumentCategoryWithDocs;
 
 /**
  * @covers \Olcs\Service\Data\DocumentCategoryWithDocs
  */
-class DocumentCategoryWithDocsTest extends AbstractDataServiceTestCase
+class DocumentCategoryWithDocsTest extends AbstractListDataServiceTestCase
 {
+    /** @var DocumentCategoryWithDocs */
+    private $sut;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->sut = new DocumentCategoryWithDocs($this->abstractListDataServiceServices);
+    }
+
     public function testFetchListData()
     {
-        $sut = new DocumentCategoryWithDocs();
-
-        static::assertEquals(DocumentCategoryWithDocs::TYPE_IS_DOC, $sut->getCategoryType());
-        static::assertTrue($sut->getIsOnlyWithItems());
+        static::assertEquals(DocumentCategoryWithDocs::TYPE_IS_DOC, $this->sut->getCategoryType());
+        static::assertTrue($this->sut->getIsOnlyWithItems());
     }
 }

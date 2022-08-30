@@ -3,7 +3,9 @@
 namespace Olcs\Service\Data;
 
 use Common\Service\Data\AbstractDataService;
+use Common\Service\Data\AbstractDataServiceServices;
 use Common\Service\Data\ListDataInterface;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Dvsa\Olcs\Transfer\Query\InspectionRequest\OperatingCentres as OperatingCentresQry;
 
 /**
@@ -22,6 +24,25 @@ class OperatingCentresForInspectionRequest extends AbstractDataService implement
      * @var int
      */
     protected $identifier;
+
+    /** @var FlashMessengerHelperService */
+    protected $flashMessengerHelper;
+
+    /**
+     * Create service instance
+     *
+     * @param AbstractDataServiceServices $abstractDataServiceServices
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     *
+     * @return OperatingCentresForInspectionRequest
+     */
+    public function __construct(
+        AbstractDataServiceServices $abstractDataServiceServices,
+        FlashMessengerHelperService $flashMessengerHelper
+    ) {
+        parent::__construct($abstractDataServiceServices);
+        $this->flashMessengerHelper = $flashMessengerHelper;
+    }
 
     /**
      * Format data
@@ -53,6 +74,7 @@ class OperatingCentresForInspectionRequest extends AbstractDataService implement
      * @param bool         $useGroups Use groups
      *
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fetchListOptions($context, $useGroups = false)
     {
@@ -73,7 +95,6 @@ class OperatingCentresForInspectionRequest extends AbstractDataService implement
     public function fetchListData()
     {
         if (is_null($this->getData('OperatingCentres'))) {
-
             $dtoData = OperatingCentresQry::create(
                 [
                     'type'       => $this->getType(),
@@ -83,7 +104,7 @@ class OperatingCentresForInspectionRequest extends AbstractDataService implement
             $response = $this->handleQuery($dtoData);
 
             if (!$response->isOk()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+                $this->flashMessengerHelper->addErrorMessage('unknown-error');
                 return [];
             }
 

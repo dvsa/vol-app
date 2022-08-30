@@ -2,7 +2,9 @@
 
 namespace OlcsTest\Service\Data;
 
+use Common\Service\Helper\FlashMessengerHelperService;
 use CommonTest\Service\Data\AbstractDataServiceTestCase;
+use Dvsa\Olcs\Transfer\Query\Team\TeamListData as Qry;
 use Mockery as m;
 use Olcs\Service\Data\Team;
 
@@ -12,15 +14,32 @@ use Olcs\Service\Data\Team;
  */
 class TeamTest extends AbstractDataServiceTestCase
 {
+    /** @var Team */
+    private $sut;
+
+    /** @var  m\MockInterface */
+    protected $flashMessengerHelper;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->flashMessengerHelper = m::mock(FlashMessengerHelperService::class);
+
+        $this->sut = new Team(
+            $this->abstractDataServiceServices,
+            $this->flashMessengerHelper
+        );
+    }
+
     /**
      * @dataProvider provideFetchListOptions
      */
     public function testFetchListOptions($input, $expected)
     {
-        $sut = new Team();
-        $sut->setData('teamlist', $input);
+        $this->sut->setData('teamlist', $input);
 
-        $this->assertEquals($expected, $sut->fetchListOptions(''));
+        $this->assertEquals($expected, $this->sut->fetchListOptions(''));
     }
 
     public function provideFetchListOptions()
@@ -34,10 +53,11 @@ class TeamTest extends AbstractDataServiceTestCase
     public function testFetchListData()
     {
         $results = ['results' => 'results'];
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')->once()->andReturn('query')
+
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
             ->once()
-            ->getMock();
+            ->andReturn($this->query);
 
         $mockResponse = m::mock()
             ->shouldReceive('isOk')
@@ -47,17 +67,18 @@ class TeamTest extends AbstractDataServiceTestCase
             ->andReturn($results)
             ->getMock();
 
-        $sut = new Team();
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
+        $this->mockHandleQuery($mockResponse);
 
-        $this->assertEquals($results['results'], $sut->fetchTeamListData());
-        $this->assertEquals($results['results'], $sut->fetchTeamListData());  //ensure data is cached
+        $this->assertEquals($results['results'], $this->sut->fetchTeamListData());
+        $this->assertEquals($results['results'], $this->sut->fetchTeamListData());  //ensure data is cached
     }
 
     public function testFetchLicenceDataWithError()
     {
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
+            ->once()
+            ->andReturn($this->query);
 
         $mockResponse = m::mock()
             ->shouldReceive('isOk')
@@ -65,20 +86,13 @@ class TeamTest extends AbstractDataServiceTestCase
             ->andReturn(false)
             ->getMock();
 
-        $sut = new Team();
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
+        $this->mockHandleQuery($mockResponse);
 
-        $this->mockServiceLocator->shouldReceive('get')
-            ->with('Helper\FlashMessenger')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('addErrorMessage')
-                    ->with('unknown-error')
-                    ->once()
-                    ->getMock()
-            );
+        $this->flashMessengerHelper->shouldReceive('addErrorMessage')
+            ->with('unknown-error')
+            ->once();
 
-        $sut->fetchTeamListData();
+        $this->sut->fetchTeamListData();
     }
 
     protected function getSingleExpected()

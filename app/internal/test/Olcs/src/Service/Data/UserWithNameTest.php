@@ -19,6 +19,16 @@ use CommonTest\Service\Data\AbstractDataServiceTestCase;
  */
 class UserWithNameTest extends AbstractDataServiceTestCase
 {
+    /** @var UserWithName */
+    private $sut;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->sut = new UserWithName($this->abstractDataServiceServices);
+    }
+
     /**
      * Test fetchListOptions
      */
@@ -43,10 +53,10 @@ class UserWithNameTest extends AbstractDataServiceTestCase
             1 => 'foo bar',
             2 => 'cake'
         ];
-        $sut = new UserWithName();
-        $sut->setData('userlist', $users);
 
-        $this->assertEquals($expected, $sut->fetchListOptions([]));
+        $this->sut->setData('userlist', $users);
+
+        $this->assertEquals($expected, $this->sut->fetchListOptions([]));
     }
 
     /**
@@ -54,9 +64,8 @@ class UserWithNameTest extends AbstractDataServiceTestCase
      */
     public function testFetchListOptionsEmpty()
     {
-        $sut = new UserWithName();
-        $sut->setData('userlist', 'foo');
+        $this->sut->setData('userlist', 'foo');
 
-        $this->assertEquals([], $sut->fetchListOptions([]));
+        $this->assertEquals([], $this->sut->fetchListOptions([]));
     }
 }

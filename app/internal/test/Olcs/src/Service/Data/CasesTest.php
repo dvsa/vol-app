@@ -4,6 +4,7 @@ namespace OlcsTest\Service\Data;
 
 use Common\Exception\ResourceNotFoundException;
 use CommonTest\Service\Data\AbstractDataServiceTestCase;
+use Dvsa\Olcs\Transfer\Query\Cases\Cases as Qry;
 use Mockery as m;
 use Olcs\Service\Data\Cases;
 
@@ -13,15 +14,25 @@ use Olcs\Service\Data\Cases;
  */
 class CasesTest extends AbstractDataServiceTestCase
 {
+    /** @var Cases */
+    private $sut;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->sut = new Cases($this->abstractDataServiceServices);
+    }
+
     public function testFetchData()
     {
         $id = 123;
         $caseData = ['id' => $id];
 
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')->once()->andReturn('query')
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
             ->once()
-            ->getMock();
+            ->andReturn($this->query);
 
         $mockResponse = m::mock()
             ->shouldReceive('isOk')
@@ -32,11 +43,10 @@ class CasesTest extends AbstractDataServiceTestCase
             ->once()
             ->getMock();
 
-        $sut = new Cases();
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
+        $this->mockHandleQuery($mockResponse);
 
-        $this->assertEquals($caseData, $sut->fetchData($id));
-        $this->assertEquals($caseData, $sut->fetchData($id)); //ensure data is cached
+        $this->assertEquals($caseData, $this->sut->fetchData($id));
+        $this->assertEquals($caseData, $this->sut->fetchData($id)); //ensure data is cached
     }
 
     /**
@@ -46,8 +56,10 @@ class CasesTest extends AbstractDataServiceTestCase
     {
         $this->expectException(ResourceNotFoundException::class);
 
-        $mockTransferAnnotationBuilder = m::mock()
-            ->shouldReceive('createQuery')->once()->andReturn('query')->getMock();
+        $this->transferAnnotationBuilder->shouldReceive('createQuery')
+            ->with(m::type(Qry::class))
+            ->once()
+            ->andReturn($this->query);
 
         $mockResponse = m::mock()
             ->shouldReceive('isOk')
@@ -55,9 +67,8 @@ class CasesTest extends AbstractDataServiceTestCase
             ->once()
             ->getMock();
 
-        $sut = new Cases();
-        $this->mockHandleQuery($sut, $mockTransferAnnotationBuilder, $mockResponse);
+        $this->mockHandleQuery($mockResponse);
 
-        $sut->fetchData(123);
+        $this->sut->fetchData(123);
     }
 }

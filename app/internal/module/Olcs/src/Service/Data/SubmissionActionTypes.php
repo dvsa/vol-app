@@ -3,9 +3,9 @@
 namespace Olcs\Service\Data;
 
 use Common\Service\Data\AbstractDataService;
+use Common\Service\Data\AbstractDataServiceServices;
 use Common\Service\Data\ListDataInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Common\Service\Data\RefData;
 
 /**
  * Class SubmissionActionTypes
@@ -13,18 +13,31 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
  *
  * @package Olcs\Service\Data
  */
-class SubmissionActionTypes extends AbstractDataService implements FactoryInterface, ListDataInterface
+class SubmissionActionTypes extends AbstractDataService implements ListDataInterface
 {
     /**
      * Ref data category ID for submission action types
      */
     const EBSR_REF_DATA_CATEGORY_ID = 'sub_st_rec';
 
-    /**
-     * RefData Service
-     * @var string
-     */
+    /** @var RefData */
     protected $refDataService;
+
+    /**
+     * Create service instance
+     *
+     * @param AbstractDataServiceServices $abstractDataServiceServices
+     * @param RefData $refDataService
+     *
+     * @return SubmissionActionTypes
+     */
+    public function __construct(
+        AbstractDataServiceServices $abstractDataServiceServices,
+        RefData $refDataService
+    ) {
+        parent::__construct($abstractDataServiceServices);
+        $this->refDataService = $refDataService;
+    }
 
     /**
      * Fetch list options
@@ -33,6 +46,7 @@ class SubmissionActionTypes extends AbstractDataService implements FactoryInterf
      * @param bool         $useGroups Use groups
      *
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fetchListOptions($context, $useGroups = false)
     {
@@ -56,7 +70,7 @@ class SubmissionActionTypes extends AbstractDataService implements FactoryInterf
      */
     public function fetchListData()
     {
-        $allOptions =  $this->getRefDataService()->fetchListData(self::EBSR_REF_DATA_CATEGORY_ID);
+        $allOptions =  $this->refDataService->fetchListData(self::EBSR_REF_DATA_CATEGORY_ID);
 
         $this->setData('SubmissionActionTypes', false);
 
@@ -110,44 +124,5 @@ class SubmissionActionTypes extends AbstractDataService implements FactoryInterf
         }
 
         return $optionData;
-    }
-
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator Service locator
-     *
-     * @return $this
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->setRefDataService($serviceLocator->get('\Common\Service\Data\RefData'));
-
-        return $this;
-    }
-
-    /**
-     * Set ref data service
-     *
-     * @param string $refDataService Ref data service
-     *
-     * @return $this
-     */
-    public function setRefDataService($refDataService)
-    {
-        $this->refDataService = $refDataService;
-
-        return $this;
-    }
-
-    /**
-     * Get ref data service
-     *
-     * @return string
-     */
-    public function getRefDataService()
-    {
-        return $this->refDataService;
     }
 }
