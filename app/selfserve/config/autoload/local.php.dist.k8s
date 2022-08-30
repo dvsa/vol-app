@@ -15,7 +15,7 @@ return [
                     'backend' => [
                         'options' => [
                             // Backend service URI *Environment specific*
-                            'route' => 'olcs-backend.olcs.gov.uk',
+                            'route' => 'backend',
                         ]
                     ]
                 ]
@@ -28,7 +28,7 @@ return [
         'endpoints' => [
             // Backend service URI *Environment specific*
             'backend' => [
-                'url' => 'http://olcs-backend.olcs.gov.uk/',
+                'url' => 'http://backend/',
                 'options' => [
                     'adapter' => \Laminas\Http\Client\Adapter\Curl::class,
                     'timeout' => 60,
