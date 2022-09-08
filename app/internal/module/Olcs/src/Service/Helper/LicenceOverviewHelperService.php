@@ -5,14 +5,30 @@
  */
 namespace Olcs\Service\Helper;
 
-use Common\Service\Helper\AbstractHelperService;
+use Common\Service\Helper\UrlHelperService;
 use Common\RefData;
 
 /**
  * Licence Overview Helper Service
  */
-class LicenceOverviewHelperService extends AbstractHelperService
+class LicenceOverviewHelperService
 {
+    /** @var UrlHelperService */
+    protected $urlHelperService;
+
+    /**
+     * Create service instance
+     *
+     * @param UrlHelperService $urlHelperService
+     *
+     * @return LicenceOverviewHelperService
+     */
+    public function __construct(
+        UrlHelperService $urlHelperService
+    ) {
+        $this->urlHelperService = $urlHelperService;
+    }
+
     /**
      * Collate all the read-only data for the view
      *
@@ -106,8 +122,7 @@ class LicenceOverviewHelperService extends AbstractHelperService
             return $count;
         }
 
-        $urlHelper = $this->getServiceLocator()->get('Helper\Url');
-        $url = $urlHelper->fromRoute(
+        $url = $this->urlHelperService->fromRoute(
             'operator/applications',
             ['organisation' => (int) $licence['organisation']['id']]
         );
@@ -219,8 +234,6 @@ class LicenceOverviewHelperService extends AbstractHelperService
      */
     public function getLicenceGracePeriods($licence)
     {
-        $urlHelper = $this->getServiceLocator()->get('Helper\Url');
-
         if (empty($licence['gracePeriods'])) {
             $status = 'None';
         } else {
@@ -233,7 +246,7 @@ class LicenceOverviewHelperService extends AbstractHelperService
             }
         }
 
-        $url = $urlHelper->fromRoute('licence/grace-periods', ['licence' => $licence['id']]);
+        $url = $this->urlHelperService->fromRoute('licence/grace-periods', ['licence' => $licence['id']]);
 
         return sprintf('%s (<a class="govuk-link" href="%s">manage</a>)', $status, $url);
     }

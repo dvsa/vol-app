@@ -8,10 +8,10 @@
 namespace OlcsTest\Service\Helper;
 
 use Common\RefData;
+use Common\Service\Helper\UrlHelperService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Olcs\Service\Helper\LicenceOverviewHelperService as Sut;
-use OlcsTest\Bootstrap;
+use Olcs\Service\Helper\LicenceOverviewHelperService;
 
 /**
  * Licence Overview Helper Service Test
@@ -21,15 +21,16 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
 {
     protected $sut;
 
-    protected $sm;
+    /** @var UrlHelperService */
+    protected $urlHelperService;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->sut = new Sut();
-        $this->sm = m::mock(Bootstrap::getServiceManager())->makePartial();
-        $this->sut->setServiceLocator($this->sm);
+        $this->urlHelperService = m::mock(UrlHelperService::class);
+
+        $this->sut = new LicenceOverviewHelperService($this->urlHelperService);
     }
 
     /**
@@ -41,26 +42,22 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
      */
     public function testGetViewData($licenceData, $expectedViewData)
     {
-        $this->sm->shouldReceive('get')->with('Helper\Url')->andReturn(
-            m::mock()
-                ->shouldReceive('fromRoute')
-                ->with(
-                    'licence/grace-periods',
-                    array(
-                        'licence' => $licenceData['id'],
-                    )
+        $this->urlHelperService->shouldReceive('fromRoute')
+            ->with(
+                'licence/grace-periods',
+                array(
+                    'licence' => $licenceData['id'],
                 )
-                ->andReturn('GRACE_PERIOD_URL')
-                ->shouldReceive('fromRoute')
-                ->with(
-                    'operator/applications',
-                    [
-                        'organisation' => 72
-                    ]
-                )
-                ->andReturn('APP_SEARCH_URL')
-                ->getMock()
-        );
+            )
+            ->andReturn('GRACE_PERIOD_URL')
+            ->shouldReceive('fromRoute')
+            ->with(
+                'operator/applications',
+                [
+                    'organisation' => 72
+                ]
+            )
+            ->andReturn('APP_SEARCH_URL');
 
         $this->assertEquals($expectedViewData, $this->sut->getViewData($licenceData));
     }

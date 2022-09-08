@@ -8,10 +8,11 @@
 namespace OlcsTest\Service\Helper;
 
 use Common\RefData;
+use Common\Service\Helper\UrlHelperService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Olcs\Service\Helper\ApplicationOverviewHelperService as Sut;
-use OlcsTest\Bootstrap;
+use Olcs\Service\Helper\ApplicationOverviewHelperService;
+use Olcs\Service\Helper\LicenceOverviewHelperService;
 
 /**
  * Application Overview Helper Service Test
@@ -22,15 +23,23 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
 {
     protected $sut;
 
-    protected $sm;
+    /** @var LicenceOverviewHelperService */
+    protected $licenceOverviewHelperService;
+
+    /** @var UrlHelperService */
+    protected $urlHelperService;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->sut = new Sut();
-        $this->sm = Bootstrap::getServiceManager();
-        $this->sut->setServiceLocator($this->sm);
+        $this->licenceOverviewHelperService = m::mock(LicenceOverviewHelperService::class);
+        $this->urlHelperService = m::mock(UrlHelperService::class);
+
+        $this->sut = new ApplicationOverviewHelperService(
+            $this->licenceOverviewHelperService,
+            $this->urlHelperService
+        );
     }
 
     /**
@@ -43,15 +52,14 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
         $lva = 'application';
 
         // mocks
-        $licenceOverviewHelperMock = m::mock()
+        $this->licenceOverviewHelperService
             ->shouldReceive('hasAdminUsers')
             ->with($overviewData['licence'])
             ->andReturn(true)
-            ->once()
-            ->getMock();
+            ->once();
 
         // expectations
-        $licenceOverviewHelperMock
+        $this->licenceOverviewHelperService
             ->shouldReceive('getCurrentApplications')
             ->with($overviewData['licence'])
             ->once()
@@ -69,10 +77,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
             ->once()
             ->andReturn($gracePeriodStr);
 
-        $this->sm->setService('Helper\LicenceOverview', $licenceOverviewHelperMock);
-
-        $urlHelperMock = m::mock();
-        $urlHelperMock
+        $this->urlHelperService
             ->shouldReceive('fromRoute')
             ->with('lva-'.$lva.'/interim', [], [], true)
             ->andReturn('INTERIM_URL')
@@ -81,10 +86,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
             ->andReturn('CHANGE_OF_ENTITY_URL')
             ->shouldReceive('fromRoute')
             ->with('licence/grace-periods', ['licence' => 123])
-            ->andReturn('GRACE_PERIOD_URL')
-            ->getMock();
-
-        $this->sm->setService('Helper\Url', $urlHelperMock);
+            ->andReturn('GRACE_PERIOD_URL');
 
         $this->assertEquals(
             $expectedViewData,
@@ -390,14 +392,10 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
      */
     public function testGetInterimStatus($applicationData, $expected)
     {
-        $urlHelperMock = m::mock();
-
-        $urlHelperMock
+        $this->urlHelperService
             ->shouldReceive('fromRoute')
             ->with('lva-application/interim', [], [], true)
             ->andReturn('INTERIM_URL');
-
-        $this->sm->setService('Helper\Url', $urlHelperMock);
 
         $this->assertEquals($expected, $this->sut->getInterimStatus($applicationData, 'application'));
     }
@@ -427,7 +425,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
      */
     public function testGetChangeOfEntity($application, $expected)
     {
-        $urlHelperMock = m::mock()
+        $this->urlHelperService
             ->shouldReceive('fromRoute')
             ->with(
                 'lva-application/change-of-entity',
@@ -436,9 +434,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
                     'changeId' => $application['licence']['changeOfEntitys'][0]['id']
                 )
             )
-        ->andReturn('CHANGE_OF_ENTITY_URL');
-
-        $this->sm->setService('Helper\Url', $urlHelperMock->getMock());
+            ->andReturn('CHANGE_OF_ENTITY_URL');
 
         $this->assertEquals($expected, $this->sut->getChangeOfEntity($application));
     }
