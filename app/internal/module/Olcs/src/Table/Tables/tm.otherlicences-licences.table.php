@@ -39,6 +39,7 @@ return array(
             'name' => 'hoursPerWeek',
         ),
         array(
+            'title' => 'markup-table-th-remove', //this is a view partial from olcs-common
             'type' => 'ActionLinks',
             'deleteInputName' => 'table[action][delete-other-licence-licences][%d]'
         ),

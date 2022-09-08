@@ -70,7 +70,7 @@ return array(
             'name' => 'ecmsNo'
         ),
         array(
-            'title' => '',
+            'title' => 'markup-table-th-action', //this is a translation key
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}'
         ),

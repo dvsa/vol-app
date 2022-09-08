@@ -61,7 +61,7 @@ return array(
             'sort' => 'name',
         ),
         array(
-            'title' => '',
+            'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'formatter' => 'TaskCheckbox',
         )
