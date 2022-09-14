@@ -6,6 +6,7 @@ use Common\Form\Elements\Custom\DateSelect;
 use Dvsa\Olcs\Transfer\Command\Submission\AssignSubmission as AssignUpdateDto;
 use Dvsa\Olcs\Transfer\Command\Submission\InformationCompleteSubmission as InformationCompleteDto;
 use Dvsa\Olcs\Transfer\Query\Submission\Submission as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Cases\PresidingTc\GetList as TcListDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Data\Mapper\Submission as Mapper;
@@ -56,6 +57,10 @@ class ProcessSubmissionController extends AbstractInternalController implements 
 
     protected $mapperClass = Mapper::class;
 
+    protected $inlineScripts = [
+        'assignAction' => ['forms/assign-submission']
+    ];
+
     /**
      * Generate form action to update submission, setting assigned_date, sender/recipient_user_ids
      *
@@ -72,17 +77,46 @@ class ProcessSubmissionController extends AbstractInternalController implements 
 
     protected function alterFormForAssign($form, $initialData)
     {
-        if (isset($initialData['readOnlyFields']) && !empty($initialData['readOnlyFields'])) {
-            foreach ($initialData['readOnlyFields'] as $field) {
-                $readOnlyField = $form->get('fields')->get($field);
-                if ($readOnlyField instanceof DateSelect) {
-                    foreach ($readOnlyField->getElements() as $element) {
-                        $element->setAttribute('readonly', true);
-                    }
-                } else {
-                    $readOnlyField->setAttribute('readonly', true);
+        $response = $this->handleQuery(
+            TcListDto::create(
+                [
+                    'limit' => 200,
+                    'order' => 'asc',
+                    'page' => 1,
+                    'sort' => 'id',
+                ]
+            )
+        );
+        if ($response->isOk()) {
+            // Get list of TC user ide from Presiding TCs response
+            $tcUserIds = [];
+            foreach ($response->getResult()['results'] as $tcResult) {
+                if (isset($tcResult['user']['id'])) {
+                    $tcUserIds[] = $tcResult['user']['id'];
                 }
             }
+
+            //Get user list uses for Other User select box
+            $tcUsers = $form->get('fields')->get('recipientUser')->getValueOptions();
+            $recipientUsers = $tcUsers;
+            foreach ($tcUsers as $groupId => $group) {
+                foreach ($group['options'] as $optionUserId => $name) {
+                    //remove users who are not TCs from each set of group options
+                    if (!in_array($optionUserId, $tcUserIds)) {
+                        unset($tcUsers[$groupId]['options'][$optionUserId]);
+                    } else {
+                        unset($recipientUsers[$groupId]['options'][$optionUserId]);
+                    }
+                }
+                // If the above removal left any empty groups, remove the groups
+                if (empty($tcUsers[$groupId]['options'])) {
+                    unset($tcUsers[$groupId]);
+                }
+            }
+            $form->get('fields')->get('presidingTcUser')->setValueOptions($tcUsers);
+            $form->get('fields')->get('recipientUser')->setValueOptions($recipientUsers);
+        } else {
+            throw new \RuntimeException('Cannot retrieve TC/DTC user list');
         }
         return $form;
     }
