@@ -5,14 +5,36 @@
  */
 namespace Olcs\Service\Helper;
 
-use Common\Service\Helper\AbstractHelperService;
+use Common\Service\Helper\UrlHelperService;
 use Common\RefData;
 
 /**
  * Application Overview Helper Service
  */
-class ApplicationOverviewHelperService extends AbstractHelperService
+class ApplicationOverviewHelperService
 {
+    /** @var LicenceOverviewHelperService */
+    protected $licenceOverviewHelperService;
+
+    /** @var UrlHelperService */
+    protected $urlHelperService;
+
+    /**
+     * Create service instance
+     *
+     * @param LicenceOverviewHelperService $licenceOverviewHelperService
+     * @param UrlHelperService $urlHelperService
+     *
+     * @return ApplicationOverviewHelperService
+     */
+    public function __construct(
+        LicenceOverviewHelperService $licenceOverviewHelperService,
+        UrlHelperService $urlHelperService
+    ) {
+        $this->licenceOverviewHelperService = $licenceOverviewHelperService;
+        $this->urlHelperService = $urlHelperService;
+    }
+
     /**
      * Gets application view data
      *
@@ -23,8 +45,6 @@ class ApplicationOverviewHelperService extends AbstractHelperService
      */
     public function getViewData($application, $lva)
     {
-        $licenceOverviewHelper = $this->getServiceLocator()->get('Helper\LicenceOverview');
-
         $licence = $application['licence'];
 
         $viewData = [
@@ -32,7 +52,7 @@ class ApplicationOverviewHelperService extends AbstractHelperService
             'operatorId'                => $licence['organisation']['id'], // used for URL generation
             'numberOfLicences'          => $licence['organisationLicenceCount'],
             'tradingName'               => $licence['tradingName'],
-            'currentApplications'       => $licenceOverviewHelper->getCurrentApplications($licence),
+            'currentApplications'       => $this->licenceOverviewHelperService->getCurrentApplications($licence),
             'applicationCreated'        => $application['createdOn'],
             'oppositionCount'           => $application['oppositionCount'],
             'licenceStatus'             => $licence['status'],
@@ -42,13 +62,13 @@ class ApplicationOverviewHelperService extends AbstractHelperService
             'isPsv'                     => $application['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_PSV,
             'outstandingFees'           => $application['feeCount'],
             'licenceStartDate'          => $licence['inForceDate'],
-            'licenceGracePeriods'       => $licenceOverviewHelper->getLicenceGracePeriods($licence),
+            'licenceGracePeriods'       => $this->licenceOverviewHelperService->getLicenceGracePeriods($licence),
             'continuationDate'          => $licence['expiryDate'],
             'numberOfVehicles'          => $this->getNumberOfVehicles($application, $licence),
             'numberOfOperatingCentres'  => $this->getNumberOfOperatingCentres($application, $licence),
             'numberOfIssuedDiscs'       => $this->getNumberOfIssuedDiscs($application, $licence),
-            'numberOfCommunityLicences' => $licenceOverviewHelper->getNumberOfCommunityLicences($licence),
-            'openCases'                 => $licenceOverviewHelper->getOpenCases($licence),
+            'numberOfCommunityLicences' => $this->licenceOverviewHelperService->getNumberOfCommunityLicences($licence),
+            'openCases'                 => $this->licenceOverviewHelperService->getOpenCases($licence),
 
             'changeOfEntity'            => (
                 (boolean)$application['isVariation'] ?
@@ -68,10 +88,7 @@ class ApplicationOverviewHelperService extends AbstractHelperService
 
             'outOfOpposition'            => $application['outOfOppositionDate'],
             'outOfRepresentation'        => $application['outOfRepresentationDate'],
-            'registeredForSelfService'   =>
-                $this->getServiceLocator()
-                    ->get('Helper\LicenceOverview')
-                    ->hasAdminUsers($application['licence']) ? 'Yes' : 'No',
+            'registeredForSelfService'   => $this->licenceOverviewHelperService->hasAdminUsers($application['licence']) ? 'Yes' : 'No',
         ];
 
         $viewData = array_merge(
@@ -124,8 +141,7 @@ class ApplicationOverviewHelperService extends AbstractHelperService
             return null;
         }
 
-        $url = $this->getServiceLocator()->get('Helper\Url')
-            ->fromRoute('lva-'.$lva.'/interim', [], [], true);
+        $url = $this->urlHelperService->fromRoute('lva-'.$lva.'/interim', [], [], true);
 
         if (isset($application['interimStatus']['id']) && !empty($application['interimStatus']['id'])) {
             $interimStatus = sprintf(
@@ -168,8 +184,7 @@ class ApplicationOverviewHelperService extends AbstractHelperService
             );
         }
 
-        $url = $this->getServiceLocator()->get('Helper\Url')
-            ->fromRoute('lva-application/change-of-entity', $args);
+        $url = $this->urlHelperService->fromRoute('lva-application/change-of-entity', $args);
         $value = sprintf('%s (<a class="govuk-link js-modal-ajax" href="' . $url . '">%s</a>)', $text[0], $text[1]);
 
         return $value;

@@ -33,6 +33,7 @@ use Olcs\Listener\RouteParam\VariationFurniture;
 use Olcs\Service\Marker;
 use Olcs\Service\Processing as ProcessingService;
 use Olcs\Service\Data as DataService;
+use Olcs\Service\Helper as HelperService;
 
 return array(
     'router' => [
@@ -444,6 +445,8 @@ return array(
             'right-sidebar' => 'Olcs\Navigation\RightHandNavigation',
             'HeaderSearchListener' => 'Olcs\Listener\HeaderSearch',
             'NavigationToggleListener' => 'Olcs\Listener\NavigationToggle',
+            'Helper\ApplicationOverview' => HelperService\ApplicationOverviewHelperService::class,
+            'Helper\LicenceOverview' => HelperService\LicenceOverviewHelperService::class,
         ],
         'invokables' => [
             'ApplicationUtility' => 'Olcs\Service\Utility\ApplicationUtility',
@@ -497,6 +500,9 @@ return array(
             DataService\UserListInternalExcludingLimitedReadOnlyUsers::class => CommonDataService\AbstractListDataServiceFactory::class,
             DataService\UserListInternalExcludingLimitedReadOnlyUsersSorted::class => CommonDataService\AbstractListDataServiceFactory::class,
             DataService\UserWithName::class => CommonDataService\AbstractDataServiceFactory::class,
+
+            HelperService\ApplicationOverviewHelperService::class => HelperService\ApplicationOverviewHelperServiceFactory::class,
+            HelperService\LicenceOverviewHelperService::class => HelperService\LicenceOverviewHelperServiceFactory::class,
 
             \Olcs\Service\Marker\MarkerService::class => \Olcs\Service\Marker\MarkerService::class,
             \Olcs\Service\Marker\MarkerPluginManager::class =>
