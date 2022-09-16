@@ -1256,8 +1256,7 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
     protected function commandHandler(): HandleCommand
     {
         if (! $this->serviceManager->has(HandleCommand::class)) {
-            $flashMessengerHelper = new FlashMessengerHelperService();
-            $flashMessengerHelper->setServiceLocator($this->serviceManager);
+            $flashMessengerHelper = new FlashMessengerHelperService($this->flashMessenger());
             $instance = new HandleCommand($this->commandSender(), $flashMessengerHelper);
             $this->serviceManager->setService(HandleCommand::class, $instance);
         }
