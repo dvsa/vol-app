@@ -38,12 +38,12 @@ return array(
         ),
         array(
             'formatter' => 'Sum',
-            'isNumeric' => true,
+            'align' => 'govuk-!-text-align-right',
             'name' => 'noOfVehiclesRequired'
         ),
         'trailersCol' => array(
             'formatter' => 'Sum',
-            'isNumeric' => true,
+            'align' => 'govuk-!-text-align-right',
             'name' => 'noOfTrailersRequired'
         )
     )

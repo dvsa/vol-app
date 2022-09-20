@@ -38,7 +38,7 @@ return array(
             'isNumeric' => true,
         ),
         array(
-            'title' => '',
+            'title' => 'action',
             'type' => 'Checkbox',
             'width' => 'checkbox',
             'name' => 'checkbox',

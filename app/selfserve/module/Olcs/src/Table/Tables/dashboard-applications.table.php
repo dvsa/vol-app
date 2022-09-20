@@ -12,7 +12,6 @@ return array(
     'columns' => array(
         array(
             'title' => 'dashboard-table-applications-appId',
-            'isNumeric' => true,
             'lva' => 'application',
             'formatter' => 'DashboardApplicationLink'
         ),
