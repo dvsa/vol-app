@@ -56,7 +56,7 @@ describe('OLCS.accessibility', function() {
 
     beforeEach(function() {
       $('body').append([
-        '<a id="stub" class="visually-hidden" href="#main">Skip to Main Content</a>',
+        '<a id="stub" class="govuk-visually-hidden" href="#main">Skip to Main Content</a>',
         '<div id="main"></div>'
       ].join('\n'));
     });

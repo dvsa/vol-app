@@ -11,12 +11,6 @@
   overflow: hidden;
 }
 
-%visually-hidden,
-.visually-hidden {
-  position: absolute;
-  left: -9999em;
-}
-
 .hidden {
   display: none !important;
 }
@@ -48,7 +42,7 @@
 
 .js-enabled {
   .js-visually-hidden {
-    @extend %visually-hidden;
+    @extend.govuk-visually-hidden;
   }
   .js-hidden {
     display: none;

@@ -199,7 +199,7 @@ OLCS.postcodeSearch = (function(document, $, undefined) {
     // if we can't connect to the postcode API we need to let the user know
     function lookupError() {
       $(selectClass).hide();
-      $('.postcode-connectionLost').removeClass('visually-hidden');
+      $('.postcode-connectionLost').removeClass('govuk-visually-hidden');
     }
 
     // Ensure any time the page is re-rendered we resolve our components' state
