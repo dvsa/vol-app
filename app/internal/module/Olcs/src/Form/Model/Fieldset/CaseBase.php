@@ -6,7 +6,7 @@ use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("case-base")
- * @Form\Attributes({"class": "visually-hidden"})
+ * @Form\Attributes({"class": "govuk-visually-hidden"})
  */
 class CaseBase extends Base
 {

@@ -22,7 +22,7 @@ OLCS.ready(function () {
     });
 
     if ($.inArray($(".permitApplicationStatus").val(), ["permit_app_withdrawn", "permit_app_cancelled", "permit_app_valid"]) > -1) {
-        $("#saveIrhpPermitApplication").addClass("visually-hidden");
+        $("#saveIrhpPermitApplication").addClass("govuk-visually-hidden");
     }
 
     $(".permitApplicationStatus").click(function (e) {
