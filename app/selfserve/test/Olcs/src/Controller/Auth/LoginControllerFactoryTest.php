@@ -58,7 +58,7 @@ class LoginControllerFactoryTest extends MockeryTestCase
         // Expectations
         $this->sut->expects('__invoke')->withArgs(function ($serviceManager, $requestedName) {
             $this->assertSame($this->serviceManager(), $serviceManager, 'Expected first argument to be the ServiceManager passed to createService');
-            $this->assertSame(null, $requestedName, 'Expected requestedName to be NULL');
+            $this->assertSame(Dispatcher::class, $requestedName, 'Expected requestedName to be NULL');
             return true;
         });
 

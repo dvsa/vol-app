@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace Olcs\View\Helper\SessionTimeoutWarning;
 
+use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
@@ -34,20 +35,7 @@ class SessionTimeoutWarningFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator): SessionTimeoutWarning
     {
-        $config = $serviceLocator->getServiceLocator()->get('Config')['session-timeout-warning-modal-helper'] ?? [];
-        $this->validateConfiguration($config);
-
-        return new SessionTimeoutWarning(
-            $this->configInputFilter->getValue(
-                SessionTimeoutWarningFactoryConfigInputFilter::CONFIG_ENABLED
-            ),
-            $this->configInputFilter->getValue(
-                SessionTimeoutWarningFactoryConfigInputFilter::CONFIG_SECONDS_BEFORE_EXPIRY_WARNING
-            ),
-            $this->configInputFilter->getValue(
-                SessionTimeoutWarningFactoryConfigInputFilter::CONFIG_TIMEOUT_REDIRECT_URL
-            )
-        );
+        return $this->__invoke($serviceLocator, SessionTimeoutWarning::class);
     }
 
     /**
@@ -65,5 +53,30 @@ class SessionTimeoutWarningFactory implements FactoryInterface
                 . json_encode($this->configInputFilter->getMessages())
             );
         }
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return SessionTimeoutWarning
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : SessionTimeoutWarning
+    {
+        $config = $container->getServiceLocator()->get('Config')['session-timeout-warning-modal-helper'] ?? [];
+        $this->validateConfiguration($config);
+        return new SessionTimeoutWarning(
+            $this->configInputFilter->getValue(
+                SessionTimeoutWarningFactoryConfigInputFilter::CONFIG_ENABLED
+            ),
+            $this->configInputFilter->getValue(
+                SessionTimeoutWarningFactoryConfigInputFilter::CONFIG_SECONDS_BEFORE_EXPIRY_WARNING
+            ),
+            $this->configInputFilter->getValue(
+                SessionTimeoutWarningFactoryConfigInputFilter::CONFIG_TIMEOUT_REDIRECT_URL
+            )
+        );
     }
 }

@@ -23,7 +23,7 @@ class TransportManagersControllerFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator): TransportManagersController
     {
-        return $this->__invoke($serviceLocator, null);
+        return $this->__invoke($serviceLocator, TransportManagersController::class);
     }
 
     /**
@@ -31,6 +31,8 @@ class TransportManagersControllerFactory implements FactoryInterface
      * @param mixed $requestedName
      * @param array|null $options
      * @return mixed
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TransportManagersController
     {

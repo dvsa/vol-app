@@ -14,6 +14,8 @@ class SelfserveCommandAdapterFactory implements FactoryInterface
      * @param $requestedName
      * @param array|null $options
      * @return SelfserveCommandAdapter
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SelfserveCommandAdapter
     {
@@ -28,6 +30,6 @@ class SelfserveCommandAdapterFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator): SelfserveCommandAdapter
     {
-        return $this->__invoke($serviceLocator, null);
+        return $this->__invoke($serviceLocator, SelfserveCommandAdapter::class);
     }
 }

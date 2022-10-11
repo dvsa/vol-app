@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Lva\Factory\Adapter;
 
+use Interop\Container\ContainerInterface;
 use Olcs\Controller\Lva\Adapters\LicenceTransportManagerAdapter;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
@@ -13,17 +14,29 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
  */
 class LicenceTransportManagerAdapterFactory implements FactoryInterface
 {
-    public function createService(ServiceLocatorInterface $sl)
+    public function createService(ServiceLocatorInterface $serviceLocator) : LicenceTransportManagerAdapter
+    {
+        return $this->__invoke($serviceLocator, LicenceTransportManagerAdapter::class);
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array $options
+     * @return LicenceTransportManagerAdapter
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : LicenceTransportManagerAdapter
     {
         /** @var \Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder $transferAnnotationBuilder */
-        $transferAnnotationBuilder = $sl->get('TransferAnnotationBuilder');
+        $transferAnnotationBuilder = $container->get('TransferAnnotationBuilder');
         /** @var \Common\Service\Cqrs\Query\CachingQueryService $querySrv */
-        $querySrv = $sl->get('QueryService');
+        $querySrv = $container->get('QueryService');
         /** @var \Common\Service\Cqrs\Command\CommandService $commandSrv */
-        $commandSrv = $sl->get('CommandService');
+        $commandSrv = $container->get('CommandService');
         /** @var \Common\Service\Lva\VariationLvaService $variationSrv */
-        $variationSrv = $sl->get('Lva\Variation');
-
+        $variationSrv = $container->get('Lva\Variation');
         return new LicenceTransportManagerAdapter(
             $transferAnnotationBuilder,
             $querySrv,

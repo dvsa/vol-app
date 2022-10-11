@@ -25,6 +25,8 @@ class VehicleControllerFactory extends BinaryFeatureToggleAwareControllerFactory
      * @param $requestedName
      * @param array|null $options
      * @return Dispatcher
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function createServiceWhenEnabled(ContainerInterface $container, $requestedName, array $options = null): Dispatcher
     {
@@ -36,6 +38,8 @@ class VehicleControllerFactory extends BinaryFeatureToggleAwareControllerFactory
      * @param $requestedName
      * @param array|null $options
      * @return VehiclesController
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function createServiceWhenDisabled(ContainerInterface $container, $requestedName, array $options = null): VehiclesController
     {

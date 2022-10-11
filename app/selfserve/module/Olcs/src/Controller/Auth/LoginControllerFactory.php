@@ -24,6 +24,8 @@ class LoginControllerFactory implements FactoryInterface
      * @param $requestedName
      * @param array|null $options
      * @return Dispatcher
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Dispatcher
     {
@@ -61,6 +63,6 @@ class LoginControllerFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator): Dispatcher
     {
-        return $this->__invoke($serviceLocator, null);
+        return $this->__invoke($serviceLocator, Dispatcher::class);
     }
 }
