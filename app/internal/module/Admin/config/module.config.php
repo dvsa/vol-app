@@ -883,6 +883,20 @@ return [
                             ]
                         ],
                     ],
+                    'admin-presiding-tcs' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' =>
+                                'presiding-tcs[/:action][/:id][/][:subid]',
+                            'constraints' => [
+                                'action' => '(index|add|delete|edit)'
+                            ],
+                            'defaults' => [
+                                'controller' => Admin\Controller\PresidingTcController::class,
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
                 ],
             ],
         ],
@@ -967,7 +981,8 @@ return [
             Admin\Controller\InterimRefundsController::class =>Admin\Controller\InterimRefundsController::class,
             Admin\Controller\FeeRateController::class => Admin\Controller\FeeRateController::class,
             Admin\Controller\EditableTranslationsController::class => Admin\Controller\EditableTranslationsController::class,
-            Admin\Controller\ReplacementsController::class => Admin\Controller\ReplacementsController::class
+            Admin\Controller\ReplacementsController::class => Admin\Controller\ReplacementsController::class,
+            Admin\Controller\PresidingTcController::class => Admin\Controller\PresidingTcController::class
         ],
     ],
     'view_manager' => [

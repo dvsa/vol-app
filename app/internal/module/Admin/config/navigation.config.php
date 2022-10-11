@@ -453,6 +453,12 @@ return [
                         ],
                     ],
                 ],
+                [
+                    'label' => 'Presiding TCs',
+                    'id' => 'admin-dashboard/presiding-tcs',
+                    'class' => 'govuk-link--no-visited-state',
+                    'route' => 'admin-dashboard/admin-presiding-tcs',
+                ],
             ]
         ]
     ]
