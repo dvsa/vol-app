@@ -2,6 +2,7 @@
 
 namespace Olcs\Listener\RouteParam;
 
+use Interop\Container\ContainerInterface;
 use Common\Exception\ResourceNotFoundException;
 use Common\Service\Cqrs\Command\CommandSenderAwareInterface;
 use Common\Service\Cqrs\Command\CommandSenderAwareTrait;
@@ -40,13 +41,9 @@ class LicenceFurniture implements
      * @param ServiceLocatorInterface $serviceLocator
      * @return mixed
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function createService(ServiceLocatorInterface $serviceLocator) : LicenceFurniture
     {
-        $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
-        $this->setQuerySender($serviceLocator->get('QuerySender'));
-        $this->setCommandSender($serviceLocator->get('CommandSender'));
-
-        return $this;
+        return $this->__invoke($serviceLocator, LicenceFurniture::class);
     }
 
     /**
@@ -89,5 +86,21 @@ class LicenceFurniture implements
         $right->setTemplate('sections/licence/partials/right');
 
         $placeholder->getContainer('right')->set($right);
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return LicenceFurniture
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : LicenceFurniture
+    {
+        $this->setViewHelperManager($container->get('ViewHelperManager'));
+        $this->setQuerySender($container->get('QuerySender'));
+        $this->setCommandSender($container->get('CommandSender'));
+        return $this;
     }
 }

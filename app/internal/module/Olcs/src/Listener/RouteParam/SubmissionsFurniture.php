@@ -6,6 +6,7 @@ use Common\Service\Cqrs\Command\CommandSenderAwareInterface;
 use Common\Service\Cqrs\Command\CommandSenderAwareTrait;
 use Common\Service\Cqrs\Query\QuerySenderAwareInterface;
 use Common\Service\Cqrs\Query\QuerySenderAwareTrait;
+use Interop\Container\ContainerInterface;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use \Dvsa\Olcs\Transfer\Query\Cases\Cases as ItemDto;
@@ -41,13 +42,9 @@ class SubmissionsFurniture implements
      * @param ServiceLocatorInterface $serviceLocator
      * @return mixed
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function createService(ServiceLocatorInterface $serviceLocator) : SubmissionsFurniture
     {
-        $this->setQuerySender($serviceLocator->get('QuerySender'));
-        $this->setCommandSender($serviceLocator->get('CommandSender'));
-        $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
-
-        return $this;
+        return $this->__invoke($serviceLocator, SubmissionsFurniture::class);
     }
 
     /**
@@ -160,5 +157,21 @@ class SubmissionsFurniture implements
         ];
 
         return $status;
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return SubmissionsFurniture
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : SubmissionsFurniture
+    {
+        $this->setQuerySender($container->get('QuerySender'));
+        $this->setCommandSender($container->get('CommandSender'));
+        $this->setViewHelperManager($container->get('ViewHelperManager'));
+        return $this;
     }
 }

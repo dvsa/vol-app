@@ -2,6 +2,7 @@
 
 namespace Olcs\Listener;
 
+use Interop\Container\ContainerInterface;
 use Common\Service\Data\Search\Search as SearchService;
 use Common\Service\Helper\TranslationHelperService;
 use Olcs\Controller\SearchController;
@@ -124,16 +125,9 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
      *
      * @return HeaderSearch
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function createService(ServiceLocatorInterface $serviceLocator) : HeaderSearch
     {
-        $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
-        $this->setSearchService($serviceLocator->get('DataServiceManager')->get(SearchService::class));
-        $this->setFormElementManager($serviceLocator->get('FormElementManager'));
-        $this->translator = $serviceLocator->get('Helper\Translation');
-        $this->hlpForm = $serviceLocator->get('Helper\Form');
-        $this->authenticationService = $serviceLocator->get(IdentityProviderInterface::class);
-
-        return $this;
+        return $this->__invoke($serviceLocator, HeaderSearch::class);
     }
 
     /**
@@ -202,6 +196,25 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
     public function setFormElementManager(FormElementManager $formElementManager)
     {
         $this->formElementManager = $formElementManager;
+        return $this;
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return HeaderSearch
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : HeaderSearch
+    {
+        $this->setViewHelperManager($container->get('ViewHelperManager'));
+        $this->setSearchService($container->get('DataServiceManager')->get(SearchService::class));
+        $this->setFormElementManager($container->get('FormElementManager'));
+        $this->translator = $container->get('Helper\Translation');
+        $this->hlpForm = $container->get('Helper\Form');
+        $this->authenticationService = $container->get(IdentityProviderInterface::class);
         return $this;
     }
 }

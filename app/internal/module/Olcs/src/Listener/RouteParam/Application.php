@@ -2,6 +2,7 @@
 
 namespace Olcs\Listener\RouteParam;
 
+use Interop\Container\ContainerInterface;
 use Common\RefData;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
@@ -263,17 +264,9 @@ class Application implements ListenerAggregateInterface, FactoryInterface
      * @param ServiceLocatorInterface $serviceLocator
      * @return mixed
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function createService(ServiceLocatorInterface $serviceLocator) : Application
     {
-        $this->setAnnotationBuilder($serviceLocator->get('TransferAnnotationBuilder'));
-        $this->setQueryService($serviceLocator->get('QueryService'));
-        $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
-        $this->setNavigationService($serviceLocator->get('Navigation'));
-        $this->setSidebarNavigationService($serviceLocator->get('right-sidebar'));
-        $this->setMarkerService($serviceLocator->get(\Olcs\Service\Marker\MarkerService::class));
-        $this->setApplicationService($serviceLocator->get(\Common\Service\Data\Application::class));
-
-        return $this;
+        return $this->__invoke($serviceLocator, Application::class);
     }
 
     protected function shouldShowWithdrawButton($status)
@@ -400,5 +393,25 @@ class Application implements ListenerAggregateInterface, FactoryInterface
         if ($applicationData['existingPublication']) {
             $button->setLabel('Republish application');
         }
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return $this
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : Application
+    {
+        $this->setAnnotationBuilder($container->get('TransferAnnotationBuilder'));
+        $this->setQueryService($container->get('QueryService'));
+        $this->setViewHelperManager($container->get('ViewHelperManager'));
+        $this->setNavigationService($container->get('Navigation'));
+        $this->setSidebarNavigationService($container->get('right-sidebar'));
+        $this->setMarkerService($container->get(\Olcs\Service\Marker\MarkerService::class));
+        $this->setApplicationService($container->get(\Common\Service\Data\Application::class));
+        return $this;
     }
 }

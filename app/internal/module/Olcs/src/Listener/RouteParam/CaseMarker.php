@@ -5,6 +5,7 @@
 
 namespace Olcs\Listener\RouteParam;
 
+use Interop\Container\ContainerInterface;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Laminas\EventManager\EventManagerInterface;
@@ -114,12 +115,24 @@ class CaseMarker implements ListenerAggregateInterface, FactoryInterface
      * @param ServiceLocatorInterface $serviceLocator
      * @return mixed
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function createService(ServiceLocatorInterface $serviceLocator) : CaseMarker
     {
-        $this->setMarkerService($serviceLocator->get(\Olcs\Service\Marker\MarkerService::class));
-        $this->setAnnotationBuilderService($serviceLocator->get('TransferAnnotationBuilder'));
-        $this->setQueryService($serviceLocator->get('QueryService'));
+        return $this->__invoke($serviceLocator, CaseMarker::class);
+    }
 
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return CaseMarker
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : CaseMarker
+    {
+        $this->setMarkerService($container->get(\Olcs\Service\Marker\MarkerService::class));
+        $this->setAnnotationBuilderService($container->get('TransferAnnotationBuilder'));
+        $this->setQueryService($container->get('QueryService'));
         return $this;
     }
 }

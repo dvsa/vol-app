@@ -2,6 +2,7 @@
 
 namespace Olcs\View\Helper;
 
+use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
@@ -19,12 +20,24 @@ class SubmissionSectionMultipleTablesFactory implements FactoryInterface
      * @param ServiceLocatorInterface $serviceLocator
      * @return SubmissionSectionMultipleTables
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function createService(ServiceLocatorInterface $serviceLocator) : SubmissionSectionMultipleTables
     {
-        $translator = $serviceLocator->getServiceLocator()->get('Translator');
+        return $this->__invoke($serviceLocator, SubmissionSectionMultipleTables::class);
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return SubmissionSectionMultipleTables
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : SubmissionSectionMultipleTables
+    {
+        $translator = $container->getServiceLocator()->get('Translator');
         $service = new SubmissionSectionMultipleTables();
         $service->setTranslator($translator);
-
         return $service;
     }
 }

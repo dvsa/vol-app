@@ -2,6 +2,7 @@
 
 namespace Olcs\Mvc\Controller\Plugin;
 
+use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
@@ -17,8 +18,21 @@ class ScriptFactory implements FactoryInterface
      * @param ServiceLocatorInterface $serviceLocator
      * @return mixed
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function createService(ServiceLocatorInterface $serviceLocator) : Script
     {
-        return new Script($serviceLocator->getServiceLocator()->get('Script'));
+        return $this->__invoke($serviceLocator, Script::class);
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return Script
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : Script
+    {
+        return new Script($container->getServiceLocator()->get('Script'));
     }
 }

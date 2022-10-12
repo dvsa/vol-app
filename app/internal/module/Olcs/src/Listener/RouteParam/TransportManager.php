@@ -2,6 +2,7 @@
 
 namespace Olcs\Listener\RouteParam;
 
+use Interop\Container\ContainerInterface;
 use Olcs\Controller\TransportManager\Details\TransportManagerDetailsResponsibilityController;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
@@ -189,15 +190,9 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
      * @param ServiceLocatorInterface $serviceLocator
      * @return mixed
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function createService(ServiceLocatorInterface $serviceLocator) : TransportManager
     {
-        $this->setAnnotationBuilder($serviceLocator->get('TransferAnnotationBuilder'));
-        $this->setQueryService($serviceLocator->get('QueryService'));
-        $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
-        $this->setSidebarNavigation($serviceLocator->get('right-sidebar'));
-        $this->setAuthService($serviceLocator->get('ZfcRbac\Service\AuthorizationService'));
-
-        return $this;
+        return $this->__invoke($serviceLocator, TransportManager::class);
     }
 
     /**
@@ -245,5 +240,23 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
         }
 
         return $response->getResult()['reputeUrl'];
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return $this
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $this->setAnnotationBuilder($container->get('TransferAnnotationBuilder'));
+        $this->setQueryService($container->get('QueryService'));
+        $this->setViewHelperManager($container->get('ViewHelperManager'));
+        $this->setSidebarNavigation($container->get('right-sidebar'));
+        $this->setAuthService($container->get('ZfcRbac\Service\AuthorizationService'));
+        return $this;
     }
 }

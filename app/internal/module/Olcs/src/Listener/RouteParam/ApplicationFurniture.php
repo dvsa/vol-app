@@ -2,6 +2,7 @@
 
 namespace Olcs\Listener\RouteParam;
 
+use Interop\Container\ContainerInterface;
 use Common\Exception\ResourceNotFoundException;
 use Common\RefData;
 use Common\Service\Cqrs\Command\CommandSenderAwareInterface;
@@ -133,5 +134,13 @@ class ApplicationFurniture implements
         $right->setTemplate('sections/application/partials/right');
 
         $placeholder->getContainer('right')->set($right);
+    }
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
+        $this->setQuerySender($serviceLocator->get('QuerySender'));
+        $this->setRouter($serviceLocator->get('Router'));
+        $this->setCommandSender($serviceLocator->get('CommandSender'));
+        return $this;
     }
 }

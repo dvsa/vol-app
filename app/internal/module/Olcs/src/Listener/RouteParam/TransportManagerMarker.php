@@ -2,6 +2,7 @@
 
 namespace Olcs\Listener\RouteParam;
 
+use Interop\Container\ContainerInterface;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Laminas\EventManager\EventManagerInterface;
@@ -151,14 +152,9 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
      * @param ServiceLocatorInterface $serviceLocator
      * @return mixed
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function createService(ServiceLocatorInterface $serviceLocator) : TransportManagerMarker
     {
-        $this->setMarkerService($serviceLocator->get(\Olcs\Service\Marker\MarkerService::class));
-        $this->setAnnotationBuilderService($serviceLocator->get('TransferAnnotationBuilder'));
-        $this->setQueryService($serviceLocator->get('QueryService'));
-        $this->setApplicationService($serviceLocator->get('Application'));
-
-        return $this;
+        return $this->__invoke($serviceLocator, TransportManagerMarker::class);
     }
 
     public function getTransportManager($tmId)
@@ -255,5 +251,22 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
         if (isset($result['extra']['requiresSiQualification']) && $result['extra']['requiresSiQualification'] == true) {
             $this->getMarkerService()->addData('transportManagersFromLicence', $result['results']);
         }
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return TransportManagerMarker
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : TransportManagerMarker
+    {
+        $this->setMarkerService($container->get(\Olcs\Service\Marker\MarkerService::class));
+        $this->setAnnotationBuilderService($container->get('TransferAnnotationBuilder'));
+        $this->setQueryService($container->get('QueryService'));
+        $this->setApplicationService($container->get('Application'));
+        return $this;
     }
 }

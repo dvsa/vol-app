@@ -38,6 +38,9 @@ class SubmissionSectionsFactoryTest extends MockeryTestCase
         $mockFormElementManager = m::mock('\Laminas\Form\FormElementManager');
 
         $mockServiceLocator = m::mock('\Laminas\ServiceManager\ServiceLocatorInterface');
+
+        $mockServiceLocator->shouldReceive('get')->with('FormElementManager')
+            ->andReturn($mockFormElementManager);
         $mockServiceLocator->shouldReceive('get')->with('ControllerPluginManager')
             ->andReturnSelf();
         $mockServiceLocator->shouldReceive('get')->with('DataServiceManager')
@@ -47,7 +50,10 @@ class SubmissionSectionsFactoryTest extends MockeryTestCase
         $mockServiceLocator->shouldReceive('get')->with('params')
             ->andReturn($mockParamsPlugin);
 
+
         $mockHiddenElement = m::mock('Laminas\Form\Element\Hidden');
+        $mockServiceLocator->shouldReceive('get')->with('Hidden')
+            ->andReturn($mockHiddenElement);
         $mockHiddenElement->shouldReceive('setValue')->with($transportManagerId);
         $mockDynamicSelectElement = m::mock('\Common\Form\Element\DynamicSelect');
         $mockDynamicSelectElement->shouldReceive('setOptions')->with(m::type('array'));
@@ -55,6 +61,9 @@ class SubmissionSectionsFactoryTest extends MockeryTestCase
         $mockSubmitElement->shouldReceive('setOptions')->with(m::type('array'));
         $mockDynamicMultiCheckboxElement = m::mock('\Common\Form\Element\DynamicMultiCheckbox');
         $mockDynamicMultiCheckboxElement->shouldReceive('setOptions')->with(m::type('array'));
+
+
+
 
         $mockFormElementManager->shouldReceive('getServiceLocator')->andReturn($mockServiceLocator);
         $mockFormElementManager->shouldReceive('get')->with('Hidden')->andReturn($mockHiddenElement);
