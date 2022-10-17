@@ -30,7 +30,7 @@ class SubmissionSendTo extends Base
     public $tcOrOther = null;
 
     /**
-     * @Form\Required(true)
+     * @Form\Required(false)
      * @Form\Attributes({"id":"presidingTcUser","data-container-class":"tcUser js-hidden","placeholder":"","class":"chosen-select-medium js-sub-user",
      * "required":false})
      * @Form\Type("DynamicSelect")
@@ -43,7 +43,7 @@ class SubmissionSendTo extends Base
     public $presidingTcUser = null;
 
     /**
-     * @Form\Required(true)
+     * @Form\Required(false)
      * @Form\Attributes({"id":"recipientUser","data-container-class":"otherUser js-hidden","placeholder":"","class":"chosen-select-medium js-sub-user",
      * "required":false})
      * @Form\Type("DynamicSelect")
