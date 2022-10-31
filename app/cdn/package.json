@@ -64,6 +64,6 @@
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-sinon": "^1.0.5",
     "phantomjs-prebuilt": "^2.1.16",
-    "snyk": "^1.940.0"
+    "snyk": "1.1044.0"
   }
 }
