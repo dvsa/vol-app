@@ -32,7 +32,6 @@ return array(
                     true
                 ) . '">' . $row['id'] . '</a>';
             },
-            'isNumeric' => true,
             'sort' => 'id'
         ),
         array(
