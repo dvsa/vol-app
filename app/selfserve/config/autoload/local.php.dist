@@ -203,4 +203,19 @@ return [
         'session_name' => 'Identity',
         'identity_provider' => \Common\Rbac\JWTIdentityProvider::class
     ],
+    'govukaccount-redirect' => [
+        //Whitelist of GET keys allowed to be passed-thru to the self-serve controller URI
+        'get-whitelist' => [
+            'state',
+            'code',
+            'error',
+            'error_description'
+        ],
+        // URI Path on SelfServe to redirect inbound visitors to
+        'redirect-path' => '/govuk-account/handle-return',
+        // HTTP_REFERER hostname will be checked to end with the following string.
+        'referrer_ends_with' => '.gov.uk',
+        // Should the redirect be done as a Location: header 302 (true) or client-side meta-refresh (false)
+        'headerRedirect' => true
+    ]
 ];
