@@ -1123,44 +1123,55 @@
             "time": "2022-05-31T18:46:25+00:00"
         },
         {
-            "name": "elendev/nexus-composer-push",
-            "version": "0.1.7",
+            "name": "elendev/composer-push",
+            "version": "1.0.3",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/elendev/nexus-composer-push/0.1.7/elendev-nexus-composer-push-0.1.7.zip",
-                "reference": "1af0a4ccb4e7c5e703f9e8b7fc13e61c7185d942",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/elendev/composer-push/1.0.3/elendev-composer-push-1.0.3.zip",
+                "reference": "c2163c3d36e03654a34dade0b1323ca25ea3ba36",
                 "shasum": ""
             },
             "require": {
-                "composer-plugin-api": "^1.1",
+                "composer-plugin-api": "^1.1|^2.0",
                 "ext-curl": "*",
+                "ext-json": "*",
                 "ext-zip": "*",
-                "guzzlehttp/guzzle": "^6.0",
-                "php": "^5.6 || ^7.0",
-                "symfony/filesystem": "^3.0|^4.0|^5.0",
-                "symfony/finder": "^3.0|^4.0|^5.0"
+                "guzzlehttp/guzzle": "^6.0|^7.0",
+                "php": ">=7.2 || ^8.0",
+                "symfony/filesystem": "^4.0|^5.0|^6.0",
+                "symfony/finder": "^4.0|^5.0|^6.0"
+            },
+            "replace": {
+                "elendev/nexus-composer-push": "*"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^2.14"
+                "composer/composer": "^1.8 ||  ^2.0",
+                "friendsofphp/php-cs-fixer": "^2.18|^3.4.0",
+                "phpunit/phpunit": "^8 || ^9 || ^10"
+            },
+            "suggest": {
+                "elendev/composer-push": "Replaces the elendev/nexus-composer-push repository, which is deprecated."
             },
             "type": "composer-plugin",
             "extra": {
-                "class": "Elendev\\NexusComposerPush\\Plugin"
+                "class": "Elendev\\ComposerPush\\Plugin"
             },
             "autoload": {
                 "psr-4": {
-                    "Elendev\\NexusComposerPush\\": "src/"
+                    "Elendev\\ComposerPush\\": "src/"
                 }
             },
+            "license": [
+                "Apache-2.0"
+            ],
             "authors": [
                 {
                     "name": "Elendev",
                     "email": "jonas.renaudot@gmail.com"
                 }
             ],
-            "description": "Provide a Push command to composer to push to Nexus repositories",
-            "abandoned": "elendev/composer-push",
-            "time": "2020-05-19T08:48:34+00:00"
+            "description": "Provide a Push command to composer to push to repositories",
+            "time": "2022-06-27T08:29:14+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -3692,17 +3703,17 @@
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.431",
+            "version": "4.206.432",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.431/olcs-olcs-common-4.206.431.zip",
-                "reference": "d876f9d0888e4fa8d5c44ab6a675221d4b977042",
-                "shasum": "d876f9d0888e4fa8d5c44ab6a675221d4b977042"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.432/olcs-olcs-common-4.206.432.zip",
+                "reference": "3698c2863485fe327d95607617ee84cc636ff9c2",
+                "shasum": "3698c2863485fe327d95607617ee84cc636ff9c2"
             },
             "require": {
                 "doctrine/annotations": "^1.8",
                 "doctrine/doctrine-orm-module": "~0.10.0",
-                "elendev/nexus-composer-push": "^0.1",
+                "elendev/composer-push": "^1.0.3",
                 "laminas/laminas-authentication": "^2.5",
                 "laminas/laminas-cache": "^2.5",
                 "laminas/laminas-code": "~3.4.1",
@@ -3780,7 +3791,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2022-10-04T11:49:13+00:00"
+            "time": "2022-11-08T09:43:44+00:00"
         },
         {
             "name": "olcs/olcs-logging",
@@ -5370,6 +5381,51 @@
             "time": "2021-10-17T18:50:58+00:00"
         },
         {
+            "name": "fzaninotto/faker",
+            "version": "v1.9.2",
+            "dist": {
+                "type": "zip",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/fzaninotto/faker/v1.9.2/fzaninotto-faker-v1.9.2.zip",
+                "reference": "848d8125239d7dbf8ab25cb7f054f1a630e68c2e",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.3.3 || ^7.0"
+            },
+            "require-dev": {
+                "ext-intl": "*",
+                "phpunit/phpunit": "^4.8.35 || ^5.7",
+                "squizlabs/php_codesniffer": "^2.9.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.9-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Faker\\": "src/Faker/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "François Zaninotto"
+                }
+            ],
+            "description": "Faker is a PHP library that generates fake data for you.",
+            "keywords": [
+                "data",
+                "faker",
+                "fixtures"
+            ],
+            "abandoned": true,
+            "time": "2020-12-11T09:56:16+00:00"
+        },
+        {
             "name": "hamcrest/hamcrest-php",
             "version": "v2.0.1",
             "dist": {
@@ -5677,16 +5733,17 @@
         },
         {
             "name": "olcs/olcs-devtools",
-            "version": "4.206.14",
+            "version": "4.206.16",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-devtools/4.206.14/olcs-olcs-devtools-4.206.14.zip",
-                "reference": "b253aa37746f2a874f24124bb90f19b71f3e0c1a",
-                "shasum": "b253aa37746f2a874f24124bb90f19b71f3e0c1a"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-devtools/4.206.16/olcs-olcs-devtools-4.206.16.zip",
+                "reference": "b46692290a182f558f0c8641776f54a477bbbd9d",
+                "shasum": "b46692290a182f558f0c8641776f54a477bbbd9d"
             },
             "require": {
                 "dms/phpunit-arraysubset-asserts": "^0.3.1",
-                "elendev/nexus-composer-push": "^0.1",
+                "elendev/composer-push": "^1.0.3",
+                "fzaninotto/faker": "^1.9",
                 "johnkary/phpunit-speedtrap": "^3.2",
                 "mikey179/vfsstream": "^1.6",
                 "mockery/mockery": "~1.4.4",
@@ -5719,7 +5776,7 @@
                 }
             },
             "description": "Dev tools",
-            "time": "2022-01-31T14:17:12+00:00"
+            "time": "2022-10-21T14:03:45+00:00"
         },
         {
             "name": "olcs/olcs-testhelpers",
