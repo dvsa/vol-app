@@ -18,11 +18,13 @@ return array(
         ),
         array(
             'title' => 'application_operating-centres_authorisation.table.vehicles',
+            'isNumeric' => true,
             'name' => 'noOfVehiclesRequired',
             'sort' => 'noOfVehiclesRequired'
         ),
         array(
             'title' => 'application_operating-centres_authorisation.table.trailers',
+            'isNumeric' => true,
             'name' => 'noOfTrailersRequired',
             'sort' => 'noOfTrailersRequired'
         )
@@ -36,10 +38,12 @@ return array(
         ),
         array(
             'formatter' => 'Sum',
+            'align' => 'govuk-!-text-align-right',
             'name' => 'noOfVehiclesRequired'
         ),
         'trailersCol' => array(
             'formatter' => 'Sum',
+            'align' => 'govuk-!-text-align-right',
             'name' => 'noOfTrailersRequired'
         )
     )

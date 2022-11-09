@@ -54,11 +54,15 @@ return array(
             }
         ],
         [
-            'title' => 'action',
+            'title' => 'markup-table-th-remove', //this is a view partial from olcs-common
             'type' => 'ActionLinks',
             'isRemoveVisible' => function ($row) {
                 /** $var TableBuilder $this */
                 return ($row['id'] !== $this->authService->getIdentity()->getUserData()['id']);
+            },
+            'ariaDescription' => function ($row, $column) {
+                $column['formatter'] = 'Name';
+                return $this->callFormatter($column, $row['contactDetails']['person']);
             },
             'deleteInputName' => 'action[delete][%d]',
             'dontUseModal' => true,

@@ -6,7 +6,7 @@ use Permits\View\Helper\IrhpApplicationSection;
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <span class="govuk-caption-xl">
-            <span class="visually-hidden">
+            <span class="govuk-visually-hidden">
                 <?php echo($this->escapeHtml($this->translate('permits.application.overview.application.reference'))); ?>
             </span>
             <?php echo $this->escapeHtml($data[IrhpAppDataSource::DATA_KEY]['applicationRef']); ?>

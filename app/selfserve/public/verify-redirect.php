@@ -97,9 +97,9 @@ $samlResponse = urlencode($_POST['SAMLResponse'] ?? $_GET['SAMLResponse'] ?? '')
     <main class="govuk-main-wrapper app-main-class" id="main-content" role="main">
         <form method="post" name="VerifyResponse" novalidate="novalidate" id="verify-redirect"
               action="/verify/process-response">
-            <div class="field visually-hidden">
+            <div class="field govuk-visually-hidden">
                 <button type="submit" name="form-actions[continue]"
-                        class="visually-hidden" style="display: none;" id="hidden-continue" value="">Continue
+                        class="govuk-visually-hidden" style="display: none;" id="hidden-continue" value="">Continue
                 </button>
             </div>
             <fieldset data-group="details">

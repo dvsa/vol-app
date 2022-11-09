@@ -17,12 +17,14 @@ return array(
     'columns' => array(
         array(
             'title' => 'permits.irhp.valid.permits.table.application-no',
+            'isNumeric' => true,
             'name' => 'irhpApplication',
             'stack' => 'irhpPermitApplication->relatedApplication->id',
             'formatter' => 'StackValue',
         ),
         array(
             'title' => 'permits.irhp.valid.permits.table.permit-no',
+            'isNumeric' => true,
             'name' => 'permitNumber',
             'formatter' => 'NullableNumber',
         ),

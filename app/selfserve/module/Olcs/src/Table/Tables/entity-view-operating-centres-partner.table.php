@@ -18,6 +18,7 @@ return array(
         ),
         array(
             'title' => 'entity-view-table-header-vehicles-authorised',
+            'isNumeric' => true,
             'formatter' => function ($data) {
                 return !empty($data['noOfVehiclesRequired']) ?
                     $data['noOfVehiclesRequired'] : '0';
@@ -26,6 +27,7 @@ return array(
         ),
         array(
             'title' => 'entity-view-table-header-trailers-authorised',
+            'isNumeric' => true,
             'formatter' => function ($data) {
                 return !empty($data['noOfTrailersRequired']) ?
                     $data['noOfTrailersRequired'] : '0';

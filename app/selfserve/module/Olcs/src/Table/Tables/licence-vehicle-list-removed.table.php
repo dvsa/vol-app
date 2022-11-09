@@ -15,6 +15,7 @@ return [
         ],
         [
             'title' => 'table.licence-vehicle-list-removed.column.weight.title',
+            'isNumeric' => true,
             'stack' => 'vehicle->platedWeight',
             'formatter' => 'NumberStackValue',
         ],

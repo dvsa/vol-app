@@ -18,6 +18,7 @@ return [
         ],
         [
             'title' => 'table.licence-vehicle-list-current.column.weight.title',
+            'isNumeric' => true,
             'stack' => 'vehicle->platedWeight',
             'formatter' => 'NumberStackValue',
         ],
@@ -29,6 +30,7 @@ return [
         ],
         [
             'title' => 'table.licence-vehicle-list-current.column.disc_no.title',
+            'isNumeric' => true,
             'name' => 'discNo',
             'formatter' => 'VehicleDiscNo'
         ],

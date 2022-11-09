@@ -1,6 +1,7 @@
 <?php
 return array(
     'variables' => array(
+        'titleSingular' => 'Bus registration',
         'title' => 'Bus registrations'
     ),
     'settings' => array(

@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'Bus registration',
         'title' => 'Bus registrations'
     ),
     'settings' => array(
@@ -31,10 +32,12 @@ return array(
         ),
         array(
             'title' => 'Variation No.',
+            'isNumeric' => true,
             'formatter' => 'EbsrVariationNumber'
         ),
         array(
             'title' => 'Service No.',
+            'isNumeric' => true,
             'formatter' => function ($row) {
                 return str_replace('(', ' (', $row['serviceNo']);
             }

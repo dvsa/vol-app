@@ -11,6 +11,7 @@ return [
         ),
         array(
             'title' => 'table.licence-vehicle-list-export-current-and-removed.column.plated-weight.title',
+            'isNumeric' => true,
             'stringFormat' => '{vehicle->platedWeight} kg',
             'formatter' => 'StackValueReplacer'
         ),
@@ -28,6 +29,7 @@ return [
         ),
         array(
             'title' => 'table.licence-vehicle-list-export-current-and-removed.column.disc-number.title',
+            'isNumeric' => true,
             'name' => 'discNo',
             'formatter' => 'VehicleDiscNo'
         ),

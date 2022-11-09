@@ -14,7 +14,7 @@ class LicenceForm
      * @Form\Name("fields")
      * @Form\Options({
      *   "label": "permits.page.licence.question",
-     *   "label_attributes": {"class": "visually-hidden"},
+     *   "label_attributes": {"class": "govuk-visually-hidden"},
      * })
      * @Form\ComposedObject("Permits\Form\Model\Fieldset\Licence")
      */

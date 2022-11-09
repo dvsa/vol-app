@@ -23,6 +23,7 @@ return array(
         ),
         array(
             'title' => 'Plated weight',
+            'isNumeric' => true,
             'stringFormat' => '{vehicle->platedWeight} Kg',
             'formatter' => 'StackValueReplacer'
         ),

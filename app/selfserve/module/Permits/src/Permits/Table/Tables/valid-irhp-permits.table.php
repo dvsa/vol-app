@@ -16,6 +16,7 @@ return array(
     'columns' => array(
         array(
             'title' => 'permits.irhp.valid.permits.table.permit-no',
+            'isNumeric' => true,
             'name' => 'permitNumber',
             'formatter' => 'NullableNumber',
         ),

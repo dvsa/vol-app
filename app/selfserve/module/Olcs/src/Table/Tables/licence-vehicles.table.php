@@ -28,6 +28,7 @@ return [
         ],
         [
             'title' => $translationPrefix . '.weight',
+            'isNumeric' => true,
             'stack' => 'vehicle->platedWeight',
             'formatter' => 'NumberStackValue',
         ],
@@ -39,6 +40,7 @@ return [
         ],
         [
             'title' => $translationPrefix . '.disc-no',
+            'isNumeric' => true,
             'name' => 'discNo',
             'formatter' => 'VehicleDiscNo'
         ],

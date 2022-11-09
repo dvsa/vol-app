@@ -41,6 +41,7 @@ return array(
         ),
         array(
             'title' => 'selfserve-table-txc-inbox-variation',
+            'isNumeric' => true,
             'formatter' => function ($data, $column) {
                 $column['formatter'] = 'EbsrVariationNumber';
                 return $this->callFormatter($column, $data);
@@ -48,6 +49,7 @@ return array(
         ),
         array(
             'title' => 'selfserve-table-txc-inbox-service-numbers',
+            'isNumeric' => true,
             'formatter' => function ($data) {
                 $string = '';
 
