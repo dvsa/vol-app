@@ -33,10 +33,12 @@ return array(
         ),
         array(
             'title' => 'First',
+            'isNumeric' => true,
             'name' => 'firstVehicleRate',
         ),
         array(
             'title' => 'Additional',
+            'isNumeric' => true,
             'name' => 'additionalVehicleRate',
         ),
         array(
@@ -45,7 +47,7 @@ return array(
             'formatter' => 'Date'
         ),
         array(
-            'title' => '',
+            'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'type' => 'Checkbox'
         ),

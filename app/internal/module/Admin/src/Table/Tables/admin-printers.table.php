@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'Printer',
         'title' => 'Printers'
     ),
     'settings' => array(

@@ -3,6 +3,7 @@
 return array(
     'variables' => array(
         'title' => 'Environmental complaints',
+        'titleSingular' => 'Environmental complaint',
         'action_route' => [
             'route' => 'case_environmental_complaint',
             'params' => []
@@ -24,7 +25,7 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => '',
+            'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}'
         ),

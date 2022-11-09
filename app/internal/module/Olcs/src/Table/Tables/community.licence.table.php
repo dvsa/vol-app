@@ -2,6 +2,8 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'Community Licence',
+        'title' => 'Community Licences',
         'within_form' => true,
     ),
     'settings' => array(
@@ -56,7 +58,7 @@ return array(
         ),
         array(
             'type' => 'Checkbox',
-            'title' => '',
+            'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'disableIfRowIsDisabled' => true,
             'data-attributes' => ['status']

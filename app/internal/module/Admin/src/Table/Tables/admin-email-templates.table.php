@@ -3,6 +3,7 @@
 return [
     'variables' => [
         'title' => 'Email Templates',
+        'titleSingular' => 'Email Templates',
     ],
     'settings' => [
         'paginate' => [
@@ -37,7 +38,7 @@ return [
             'name' => 'format',
         ],
         [
-            'title' => '',
+            'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}'
         ],

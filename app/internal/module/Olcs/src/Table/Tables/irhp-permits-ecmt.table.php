@@ -1,10 +1,9 @@
 <?php
 
-use Common\Util\Escape;
-
 return [
     'variables' => [
         'title' => 'Permits',
+        'titleSingular' => 'Permit',
         'id' => 'permits-table',
         'empty_message' => 'There are no permit records to display'
     ],
@@ -24,6 +23,7 @@ return [
     'columns' => [
         [
             'title' => 'Permit No.',
+            'isNumeric' => true,
             'name' => 'permitNumber',
         ],
         [
@@ -60,7 +60,7 @@ return [
             'formatter' => 'RefDataStatus'
         ],
         [
-            'title' => '',
+            'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}'
         ]

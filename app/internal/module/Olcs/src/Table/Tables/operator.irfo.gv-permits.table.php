@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'GV Permit',
         'title' => 'GV Permits'
     ),
     'settings' => array(
@@ -20,6 +21,7 @@ return array(
     'columns' => array(
         array(
             'title' => 'Permit Id',
+            'isNumeric' => true,
             'formatter' => function ($data) {
                 return '<a href="' . $this->generateUrl(
                     array('action' => 'details', 'id' => $data['id']),

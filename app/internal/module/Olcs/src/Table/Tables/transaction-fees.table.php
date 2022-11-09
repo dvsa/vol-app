@@ -3,6 +3,7 @@
 return array(
     'variables' => array(
         'title' => 'Fees',
+        'titleSingular' => 'Fee',
     ),
     'attributes' => array(
     ),
@@ -25,13 +26,13 @@ return array(
             'title' => 'Fee amount',
             'name' => 'amount',
             'formatter' => 'FeeAmount',
-            'align' => 'right',
+            'isNumeric' => true,
         ),
         array(
             'title' => 'Allocation',
             'name' => 'allocatedAmount',
             'formatter' => 'TransactionFeeAllocatedAmount',
-            'align' => 'right',
+            'isNumeric' => true,
         ),
         array(
             'title' => 'Status',

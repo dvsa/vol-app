@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'PSV Authorisation',
         'title' => 'PSV Authorisations'
     ),
     'settings' => array(
@@ -25,12 +26,13 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => '',
+            'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}'
         ),
         array(
             'title' => 'Authorisation Id',
+            'isNumeric' => true,
             'formatter' => function ($data, $column) {
                 return '<a href="' . $this->generateUrl(
                     array('action' => 'edit', 'id' => $data['id']),

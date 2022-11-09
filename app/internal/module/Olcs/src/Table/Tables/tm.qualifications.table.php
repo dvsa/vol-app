@@ -51,6 +51,7 @@ return array(
             },
         ),
         array(
+            'title' => 'markup-table-th-remove', //this is a view partial from olcs-common
             'type' => 'ActionLinks',
             'deleteInputName' => 'action[delete][%d]'
         ),

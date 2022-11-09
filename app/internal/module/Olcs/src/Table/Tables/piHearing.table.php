@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'Hearing',
         'title' => 'Hearings',
     ),
     'settings' => array(

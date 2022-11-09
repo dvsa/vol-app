@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingluar' => 'Licence',
         'title' => 'Licences'
     ),
     'settings' => array(

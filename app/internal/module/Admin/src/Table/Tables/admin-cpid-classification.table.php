@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'Operator',
         'title' => 'Operators',
     ),
     'settings' => array(

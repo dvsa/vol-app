@@ -17,7 +17,7 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => '',
+            'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}'
         ),
@@ -30,6 +30,7 @@ return array(
                     true
                 ) . '" class="govuk-link js-modal-ajax">' . $data['id'] . '</a>';
             },
+            'isNumeric' => true,
             'name' => 'id'
         ),
         array(

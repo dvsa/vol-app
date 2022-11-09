@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'Bus registration',
         'title' => 'Bus registrations'
     ),
     'settings' => array(
@@ -26,11 +27,13 @@ return array(
         ),
         array(
             'title' => 'Var No.',
+            'isNumeric' => true,
             'name' => 'variationNo',
             'sort' => 'variationNo'
         ),
         array(
             'title' => 'Service No.',
+            'isNumeric' => true, //mostly numeric so using the style
             'name' => 'serviceNo',
             'sort' => 'serviceNo'
         ),
@@ -55,7 +58,7 @@ return array(
             'sort' => 'busRegStatusDesc',
         ),
         array(
-            'title' => '',
+            'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}'
         )

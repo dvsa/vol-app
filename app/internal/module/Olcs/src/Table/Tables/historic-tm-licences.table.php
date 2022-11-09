@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'Licence',
         'title' => 'Licences'
     ),
     'columns' => array(
@@ -31,6 +32,7 @@ return array(
         ),
         array(
             'title' => 'Weekly hours of work',
+            'isNumeric' => true,
             'name' => 'hoursPerWeek'
         )
     )

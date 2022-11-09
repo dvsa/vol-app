@@ -61,7 +61,7 @@ return array(
             'sort' => 'name',
         ),
         array(
-            'title' => '',
+            'title' => 'markup-table-th-action', //this is a translation key
             'width' => 'checkbox',
             'type' => 'Checkbox',
             'formatter' => 'TaskCheckbox',

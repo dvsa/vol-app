@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'Case',
         'title' => 'Cases'
     ),
     'settings' => array(
@@ -68,7 +69,7 @@ return array(
             'name' => 'ecmsNo'
         ),
         array(
-            'title' => '',
+            'title' => 'markup-table-th-action', //this is a translation key
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}'
         ),

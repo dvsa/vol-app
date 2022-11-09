@@ -30,13 +30,16 @@ return array(
         ),
         array(
             'title' => 'transport-manager.otherlicences.table.total_auth_vehicles',
+            'isNumeric' => true,
             'name' => 'totalAuthVehicles',
         ),
         array(
             'title' => 'transport-manager.otherlicences.table.hours_per_week',
+            'isNumeric' => true,
             'name' => 'hoursPerWeek',
         ),
         array(
+            'title' => 'markup-table-th-remove', //this is a view partial from olcs-common
             'type' => 'ActionLinks',
             'deleteInputName' => 'table[action][delete-other-licence-licences][%d]'
         ),

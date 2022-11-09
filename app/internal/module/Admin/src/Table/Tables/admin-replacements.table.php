@@ -3,6 +3,10 @@
 use Common\Util\Escape;
 
 return [
+    'variables' => [
+        'title' => 'Replacements',
+        'titleSingular' => 'Replacement',
+    ],
     'settings' => [
         'paginate' => [
             'limit' => [
@@ -26,6 +30,7 @@ return [
     'columns' => [
         [
             'title' => 'Id',
+            'isNumeric' => true,
             'name' => 'id',
             'sort' => 'id',
         ],
@@ -44,7 +49,7 @@ return [
             'sort' => 'replacementText',
         ],
         [
-            'title' => '',
+            'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}'
         ],

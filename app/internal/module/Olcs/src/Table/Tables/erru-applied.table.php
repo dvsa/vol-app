@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'Applied penalty',
         'title' => 'Applied penalties'
     ),
     'settings' => array(
@@ -15,13 +16,14 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => '',
+            'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}',
             'hideWhenDisabled' => true
         ),
         array(
             'title' => 'Penalty ID',
+            'isNumeric' => true,
             'formatter' => function ($data) {
                 return '<a href="' . $this->generateUrl(
                     array(

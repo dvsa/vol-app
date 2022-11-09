@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'Public Inquiry',
         'title' => 'Public Inquiries'
     ),
     'settings' => array(
@@ -21,6 +22,7 @@ return array(
     'columns' => array(
         array(
             'title' => 'Case Id',
+            'isNumeric' => true,
             'formatter' => function ($data) {
                 return $this->callFormatter(
                     [

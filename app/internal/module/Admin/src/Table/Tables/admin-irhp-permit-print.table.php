@@ -3,6 +3,10 @@
 use Common\Util\Escape;
 
 return [
+    'variables' => [
+        'title' => 'Permits',
+        'titleSingular' => 'Permit',
+    ],
     'settings' => [
         'crud' => [
             'actions' => [
@@ -38,11 +42,13 @@ return [
     'columns' => [
         [
             'title' => 'Permit No',
+            'isNumeric' => true,
             'name' => 'permitNumberWithPrefix',
             'sort' => 'permitNumber',
         ],
         [
             'title' => 'Application number',
+            'isNumeric' => true,
             'name' => 'id',
             'sort' => 'ia.id',
             'formatter' => function ($row) {

@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'variables' => [
+        'title' => 'Jurisdictions',
+        'titleSingular' => 'Jurisdiction',
+    ],
     'settings' => [
         'crud' => [
             'actions' => [
@@ -23,6 +27,7 @@ return [
         ],
         [
             'title' => 'Quantity of permits',
+            'isNumeric' => true,
             'name' => 'permitNumber',
             'formatter' => 'IrhpPermitJurisdictionPermitNumber'
         ],

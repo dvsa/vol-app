@@ -5,6 +5,7 @@ use Common\Service\Table\Formatter\IrhpPermitsRequired;
 return [
     'variables' => [
         'title' => 'Permit Applications',
+        'titleSingular' => 'Permit Application',
         'id' => 'permit-applications-table',
         'empty_message' => 'There are no permit application records to display'
     ],
@@ -23,6 +24,7 @@ return [
         ],
         [
             'title' => 'dashboard-table-permit-application-num',
+            'isNumeric' => true,
             'formatter' => IrhpPermitsRequired::NAME,
             'name' => 'permitsRequired',
         ],

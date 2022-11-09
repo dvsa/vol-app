@@ -33,12 +33,13 @@ return array(
         ),
         array(
             'title' => $translationPrefix . '.weight',
+            'isNumeric' => true,
             'stack' => 'vehicle->platedWeight',
             'formatter' => 'UnlicensedVehicleWeight',
             'name' => 'weight',
         ),
         array(
-            'title' => '',
+            'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/checkbox]}}'
         ),

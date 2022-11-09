@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'Serious Infringement',
         'title' => 'Serious Infringements'
     ),
     'settings' => array(
@@ -15,6 +16,7 @@ return array(
     'columns' => array(
         array(
             'title' => 'ID',
+            'isNumeric' => true,
             'name' => 'id',
             'formatter' => 'SeriousInfringementLink'
         ),

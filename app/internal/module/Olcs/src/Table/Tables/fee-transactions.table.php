@@ -36,19 +36,19 @@ return array(
             'title' => 'Allocation',
             'name' => 'amount',
             'formatter' => 'TransactionAmount',
-            'align' => 'right',
+            'isNumeric' => true,
         ),
     ),
     'footer' => array(
         'total' => array(
             'content' => 'Total',
             'colspan' => 5,
-            'align' => 'right',
+            'align' => 'govuk-!-text-align-right',
         ),
         array(
             'formatter' => 'TransactionAmountSum',
             'name' => 'amount',
-            'align' => 'right',
+            'align' => 'govuk-!-text-align-right',
         ),
     )
 );

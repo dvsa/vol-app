@@ -2,7 +2,8 @@
 
 return array(
     'variables' => array(
-        'title' => 'Change history'
+        'title' => 'Change history entries',
+        'titleSingular' => 'Change history entry',
     ),
     'settings' => array(
         'paginate' => array(
@@ -39,6 +40,7 @@ return array(
         ),
         array(
             'title' => 'App. Id',
+            'isNumeric' => true,
             'name' => 'appId',
             'formatter' => function ($row) {
                 return isset($row['application']['id']) ? $row['application']['id'] : null;

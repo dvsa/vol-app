@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'IRFO permit',
         'title' => 'IRFO permits'
     ),
     'settings' => array(
@@ -28,10 +29,12 @@ return array(
     'columns' => array(
         array(
             'title' => 'Serial number',
+            'isNumeric' => true,
             'name' => 'serialNo',
         ),
         array(
             'title' => 'Permit No',
+            'isNumeric' => true,
             'formatter' => function ($data) {
                 if (empty($data['irfoGvPermit']['id'])) {
                     return '';

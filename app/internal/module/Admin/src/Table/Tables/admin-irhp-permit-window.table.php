@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'variables' => [
+        'title' => 'Permit Windows',
+        'titleSingular' => 'Permit Window',
+    ],
     'settings' => [
         'crud' => [
             'actions' => [
@@ -39,7 +43,7 @@ return [
             'formatter' => 'DateTime'
         ],
         [
-            'title' => '',
+            'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}'
         ],

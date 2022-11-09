@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'Publications',
         'title' => 'Publications'
     ),
     'settings' => array(
@@ -30,6 +31,7 @@ return array(
         ),
         array(
             'title' => 'Publication No.',
+            'isNumeric' => true,
             'formatter' => 'PublicationNumber',
             'name' => 'publicationNo',
             'sort' => 'publicationNo',
@@ -51,7 +53,7 @@ return array(
             'formatter' => 'Date'
         ),
         array(
-            'title' => '',
+            'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}'
         ),

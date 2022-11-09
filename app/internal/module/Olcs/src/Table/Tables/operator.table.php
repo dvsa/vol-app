@@ -2,7 +2,8 @@
 
 return array(
     'variables' => array(
-        'title' => 'Result list'
+        'title' => 'Operators',
+        'titleSingular' => 'Operator',
     ),
     'settings' => array(
         'paginate' => array(
@@ -33,6 +34,7 @@ return array(
         ),
         array(
             'title' => 'App ID/status',
+            'isNumeric' => true,
             'format' => '{{appNumber}}<br/>{{appStatus}}',
             'sort' => 'appId'
         ),

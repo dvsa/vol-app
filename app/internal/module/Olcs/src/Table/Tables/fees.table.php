@@ -46,17 +46,19 @@ return array(
         ),
         array(
             'title' => 'Fee amount',
+            'isNumeric' => true,
             'name' => 'amount',
             'sort' => 'grossAmount',
             'formatter' => 'FeeAmount',
         ),
         array(
             'title' => 'Outstanding',
+            'isNumeric' => true,
             'name' => 'outstanding',
             'formatter' => 'Money',
         ),
         array(
-            'title' => '',
+            'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/checkbox]}}',
             'type' => 'Checkbox',

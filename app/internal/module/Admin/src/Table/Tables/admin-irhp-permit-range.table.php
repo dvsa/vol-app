@@ -2,7 +2,8 @@
 
 return [
     'variables' => [
-        'title' => ''
+        'title' => 'Permit Ranges',
+        'titleSingular' => 'Permit Range',
     ],
     'settings' => [
         'crud' => [
@@ -63,11 +64,12 @@ return [
         ],
         [
             'title' => 'Total permits',
+            'isNumeric' => true,
             'name' => 'totalPermits',
             'formatter' => 'IrhpPermitRangeTotalPermits'
         ],
         [
-            'title' => '',
+            'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}'
         ],

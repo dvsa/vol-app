@@ -23,6 +23,7 @@ return array(
     'columns' => array(
         array(
             'title' => 'Id',
+            'isNumeric' => true,
             'formatter' => function ($data) {
                 return sprintf(
                     '<a href="%s" class="govuk-link js-modal-ajax">%s</a>',
@@ -37,7 +38,7 @@ return array(
             'name' => 'siCategoryType'
         ),
         array(
-            'title' => '',
+            'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}'
         )

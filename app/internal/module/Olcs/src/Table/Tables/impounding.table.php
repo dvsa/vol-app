@@ -2,7 +2,8 @@
 
 return array(
     'variables' => array(
-        'title' => 'Impounding'
+        'titleSingular' => 'Impounding',
+        'title' => 'Impoundings',
     ),
     'settings' => array(
         'crud' => array(
@@ -26,7 +27,7 @@ return array(
     ),
     'columns' => array(
         array(
-            'title' => '',
+            'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}'
         ),

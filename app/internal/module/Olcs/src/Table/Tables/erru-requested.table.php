@@ -2,6 +2,7 @@
 
 return array(
     'variables' => array(
+        'titleSingular' => 'Requested penalty',
         'title' => 'Requested penalties'
     ),
     'settings' => array(

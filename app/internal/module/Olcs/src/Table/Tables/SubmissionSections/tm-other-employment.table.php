@@ -43,7 +43,7 @@ return array(
         ),
         array(
             'type' => 'Checkbox',
-            'title' => '',
+            'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/checkbox]}}',
             'hideWhenDisabled' => true

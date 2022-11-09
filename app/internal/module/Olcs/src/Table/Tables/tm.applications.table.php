@@ -39,11 +39,13 @@ return array(
         ),
         array(
             'title' => 'Hours per week',
+            'isNumeric' => true,
             'name' => 'hours',
             'formatter' => 'SumColumns',
             'columns' => ['hoursMon', 'hoursTue', 'hoursWed', 'hoursThu', 'hoursFri', 'hoursSat', 'hoursSun']
         ),
         array(
+            'title' => 'markup-table-th-remove', //this is a view partial from olcs-common
             'type' => 'ActionLinks',
             'deleteInputName' => 'table[action][delete-tm-application][%d]'
         ),

@@ -37,7 +37,7 @@ class UnlicensedOperatorAddress
 
     /**
      * @Form\Attributes({"class":"long","id":""})
-     * @Form\Options({"label":"Address line 2","label_attributes":{"class":"visually-hidden"}})
+     * @Form\Options({"label":"Address line 2","label_attributes":{"class":"govuk-visually-hidden"}})
      * @Form\Type("Text")
      * @Form\Required(false)
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
@@ -46,7 +46,7 @@ class UnlicensedOperatorAddress
 
     /**
      * @Form\Attributes({"class":"long","id":""})
-     * @Form\Options({"label":"Address line 3","label_attributes":{"class":"visually-hidden"}})
+     * @Form\Options({"label":"Address line 3","label_attributes":{"class":"govuk-visually-hidden"}})
      * @Form\Type("Text")
      * @Form\Required(false)
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
@@ -55,7 +55,7 @@ class UnlicensedOperatorAddress
 
     /**
      * @Form\Attributes({"class":"long","id":""})
-     * @Form\Options({"label":"Address line 4","label_attributes":{"class":"visually-hidden"}})
+     * @Form\Options({"label":"Address line 4","label_attributes":{"class":"govuk-visually-hidden"}})
      * @Form\Type("Text")
      * @Form\Required(false)
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
@@ -64,7 +64,7 @@ class UnlicensedOperatorAddress
 
     /**
      * @Form\Attributes({"class":"long","id":""})
-     * @Form\Options({"label":"Town/City","label_attributes":{"class":"visually-hidden"}})
+     * @Form\Options({"label":"Town/City","label_attributes":{"class":"govuk-visually-hidden"}})
      * @Form\Type("Text")
      * @Form\Required(false)
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
