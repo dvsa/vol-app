@@ -2,10 +2,13 @@
 
 namespace Olcs\Controller\Lva;
 
+use Common\FeatureToggle;
 use Common\RefData;
 use Common\Controller\Lva\Traits\EnabledSectionTrait;
 use Common\Controller\Lva\AbstractController;
 use Dvsa\Olcs\Transfer\Command\Application\UpdateDeclaration;
+use Dvsa\Olcs\Transfer\Command\GovUkAccount\GetGovUkAccountRedirect;
+use Dvsa\Olcs\Transfer\Query\FeatureToggle\IsEnabled as IsEnabledQry;
 use Common\Form\Form;
 
 /**
@@ -54,7 +57,7 @@ abstract class AbstractUndertakingsController extends AbstractController
                 $response = $this->save($form->getData(), $shouldCompleteSection);
                 if ($response->isOk()) {
                     $this->completeSection('undertakings');
-                    return $this->goToNextStep();
+                    return $this->goToNextStep($applicationData['id']);
                 }
             } else {
                 // validation failed, we need to use the application data
@@ -103,7 +106,7 @@ abstract class AbstractUndertakingsController extends AbstractController
      *
      * @return \Laminas\Http\Response
      */
-    protected function goToNextStep()
+    protected function goToNextStep($appId)
     {
         if ($this->isButtonPressed('submitAndPay') || $this->isButtonPressed('submit')) {
             // section completed
@@ -114,10 +117,32 @@ abstract class AbstractUndertakingsController extends AbstractController
                 true
             );
         } elseif ($this->isButtonPressed('sign')) {
-            return $this->redirect()->toRoute(
-                'verify/initiate-request',
-                [$this->getIdentifierIndex() => $this->getIdentifier()]
+            $featureEnabled = $this->handleQuery(IsEnabledQry::create(['ids' => [FeatureToggle::GOVUK_ACCOUNT]]))->getResult()['isEnabled'];
+            if (!$featureEnabled) {
+                return $this->redirect()->toRoute(
+                    'verify/initiate-request',
+                    [$this->getIdentifierIndex() => $this->getIdentifier()]
+                );
+            }
+
+            $returnUrl = $this->url()->fromRoute(
+                'lva-application/undertakings',
+                [
+                    'application' => $appId,
+                    'action' => 'index'
+                ], [], true
             );
+
+            $urlResult = $this->handleCommand(GetGovUkAccountRedirect::create([
+                'journey' => RefData::JOURNEY_NEW_APPLICATION,
+                'id' => $appId,
+                'role' => RefData::TMA_SIGN_AS_OP,
+                'returnUrl' => $returnUrl,
+            ]));
+            if (!$urlResult->isOk()) {
+                throw new \Exception('GetGovUkAccountRedirect command returned non-OK', $urlResult->getStatusCode());
+            }
+            return $this->redirect()->toUrl($urlResult->getResult()['messages'][0]);
         }
     }
 

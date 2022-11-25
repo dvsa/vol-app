@@ -482,6 +482,27 @@ $routes = [
             ]
         ]
     ],
+    'govuk-account' => [
+        'type' => \Laminas\Mvc\Router\Http\Literal::class,
+        'options' => [
+            'route' => '/govuk-account',
+            'defaults' => [
+                'controller' => Olcs\Controller\SignatureVerificationController::class,
+            ]
+        ],
+        'may_terminate' => false,
+        'child_routes' => [
+            'process' => [
+                'type' => \Laminas\Mvc\Router\Http\Literal::class,
+                'options' => [
+                    'route' => '/process',
+                    'defaults' => [
+                        'action' => 'index',
+                    ],
+                ],
+            ],
+        ],
+    ],
     'verify' => [
         'type' => \Laminas\Mvc\Router\Http\Literal::class,
         'options' => [
@@ -1192,6 +1213,9 @@ return array(
             \Olcs\Controller\Licence\Vehicle\TransferVehicleConfirmationController::class => \Olcs\Controller\Licence\Vehicle\TransferVehicleConfirmationController::class,
             \Olcs\Controller\Licence\Vehicle\Reprint\ReprintLicenceVehicleDiscController::class => \Olcs\Controller\Licence\Vehicle\Reprint\ReprintLicenceVehicleDiscController::class,
             \Olcs\Controller\Licence\Vehicle\Reprint\ReprintLicenceVehicleDiscConfirmationController::class => \Olcs\Controller\Licence\Vehicle\Reprint\ReprintLicenceVehicleDiscConfirmationController::class,
+
+            // Process Signature from GOV.UK Account
+            \Olcs\Controller\SignatureVerificationController::class => \Olcs\Controller\SignatureVerificationController::class,
         ),
         'factories' => array(
             CookieSettingsController::class => CookieSettingsControllerFactory::class,
