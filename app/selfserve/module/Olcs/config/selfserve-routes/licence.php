@@ -214,8 +214,20 @@ return [
                                             'action' => 'index',
                                         ],
                                     ],
-                                ]
-                            ]
+                                ],
+                                'sign-with-external' => [
+                                    'may_terminate' => true,
+                                    'type' => Segment::class,
+                                    'options' => [
+                                        'route' => 'sign-with-external[/]',
+                                        'defaults' => [
+                                            'controller' => Olcs\Controller\Licence\Surrender\DeclarationController::class,
+                                            'action' => 'index',
+                                        ],
+                                        'action' => 'index',
+                                    ],
+                                ],
+                            ],
                         ],
                         'operator-licence' => [
                             'may_terminate' => false,

@@ -17,6 +17,7 @@
     "require": {
         "php": ">=7.4",
         "ext-intl": "*",
+        "ext-json": "*",
         "laminas/laminas-eventmanager": "^2.5",
         "laminas/laminas-filter": "^2.5",
         "laminas/laminas-form": "^2.5",

@@ -2,9 +2,12 @@
 
 namespace OLCS\Controller\Lva\TransportManager;
 
+use Common\FeatureToggle;
 use \Common\Form\Form;
 use Common\RefData;
 use Common\Service\Helper\TranslationHelperService;
+use Dvsa\Olcs\Transfer\Command\GovUkAccount\GetGovUkAccountRedirect;
+use Dvsa\Olcs\Transfer\Query\FeatureToggle\IsEnabled as IsEnabledQry;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 use Common\Controller\Lva\AbstractController;
 use Olcs\Controller\Lva\Traits\TransportManagerApplicationTrait;
@@ -94,10 +97,33 @@ abstract class AbstractDeclarationController extends AbstractController
         // this will be either RefData::TMA_SIGN_AS_TM || RefData::TMA_SIGN_AS_TM_OP
         // isOwner will disambiguate later.
         $routeParams = ['lva'=>$this->lva, 'role'=>$role, 'applicationId'=>$this->tma['application']['id'], 'transportManagerApplicationId'=>$this->tma['id']];
-        $this->redirect()->toRoute(
-            'verify/transport-manager',
-            $routeParams
+        $featureEnabled = $this->handleQuery(IsEnabledQry::create(['ids' => [FeatureToggle::GOVUK_ACCOUNT]]))->getResult()['isEnabled'];
+        if (!$featureEnabled) {
+            $this->redirect()->toRoute(
+                'verify/transport-manager',
+                $routeParams
+            );
+        }
+
+        $returnUrl = $this->url()->fromRoute(
+            'lva-' . $this->lva . '/transport_manager_confirmation',
+            [
+                'child_id' => $this->tma['id'],
+                'application' => $this->tma['application']['id'],
+                'action' => 'index'
+            ], [], true
         );
+
+        $urlResult = $this->handleCommand(GetGovUkAccountRedirect::create([
+            'journey' => RefData::JOURNEY_TM_APPLICATION,
+            'id' => $this->tma['id'],
+            'role' => $role,
+            'returnUrl' => $returnUrl,
+        ]));
+        if (!$urlResult->isOk()) {
+            throw new \Exception('GetGovUkAccountRedirect command returned non-OK', $urlResult->getStatusCode());
+        }
+        return $this->redirect()->toUrl($urlResult->getResult()['messages'][0]);
     }
 
     /**
