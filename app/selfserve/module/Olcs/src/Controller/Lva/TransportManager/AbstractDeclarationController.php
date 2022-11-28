@@ -99,7 +99,7 @@ abstract class AbstractDeclarationController extends AbstractController
         $routeParams = ['lva'=>$this->lva, 'role'=>$role, 'applicationId'=>$this->tma['application']['id'], 'transportManagerApplicationId'=>$this->tma['id']];
         $featureEnabled = $this->handleQuery(IsEnabledQry::create(['ids' => [FeatureToggle::GOVUK_ACCOUNT]]))->getResult()['isEnabled'];
         if (!$featureEnabled) {
-            $this->redirect()->toRoute(
+            return $this->redirect()->toRoute(
                 'verify/transport-manager',
                 $routeParams
             );
