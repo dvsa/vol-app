@@ -267,25 +267,6 @@ select {
   }
 }
 
-[type="submit"] {
-  background: none;
-  border: 0;
-  padding: 0;
-  text-decoration: underline;
-  color: $link-colour;
-  font-family: $font--primary;
-  cursor: pointer;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  b & {
-    font-weight: 600;
-  }
-  &:hover {
-    color: $link-active-colour;
-  }
-}
-
 input,
 textarea,
 select,
@@ -334,7 +315,7 @@ input.govuk-input,
 
   &__label {
     .js-enabled & {
-      @extend .action--secondary;
+      @extend .govuk-button--secondary;
       @extend %h4;
       display: inline-block;
       margin-bottom: 10px;
