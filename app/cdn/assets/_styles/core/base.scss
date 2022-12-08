@@ -74,19 +74,11 @@ input {
   box-sizing: border-box;
 }
 
-button,
 input,
 select,
 textarea {
   font: inherit;
   margin: 0;
-}
-
-button,
-html [type="button"],
-[type="reset"],
-[type="submit"] {
-  -webkit-appearance: button;
 }
 
 [type="checkbox"],
@@ -106,7 +98,6 @@ html [type="button"],
   -webkit-appearance: none;
 }
 
-button::-moz-focus-inner,
 input::-moz-focus-inner {
   border: 0;
   padding: 0;

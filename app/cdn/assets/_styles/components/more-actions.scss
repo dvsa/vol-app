@@ -15,7 +15,7 @@
   }
 
   &__button {
-    @extend .action--secondary;
+    @extend .govuk-button--secondary;
     &:after {
       @include svg('dropdown-down');
       content: '';

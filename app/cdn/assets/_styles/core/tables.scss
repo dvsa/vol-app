@@ -119,27 +119,6 @@ table {
     display: block;
     cursor: pointer;
   }
-  [type="submit"] {
-    white-space: normal;
-    text-align: left;
-    @extend %h5;
-  }
-  [type="submit"]:focus {
-    border: 0;
-    background: $outline;
-    color:$black;
-    -webkit-box-shadow: 0 -2px $outline, 0 4px $black;
-    box-shadow: 0 -2px $outline, 0 4px $black;
-    outline: 3px solid transparent;
-    text-decoration: none;
-
-    &.action--secondary{
-      border-color: $outline;
-      -webkit-box-shadow: none;
-      box-shadow: none;
-      border-bottom: 2px solid $black;
-    }
-  }
   a:focus {
     outline: none;
   }
@@ -156,17 +135,9 @@ tr {
   }
   &.disabled {
     cursor: default;
-    [type="submit"] {
-      cursor: default;
-      color: $grey-1;
-    }
-    [disabled="disabled"] {
-      text-decoration: none;
-    }
     a {
       text-decoration: underline;
     }
-    [type="submit"]:hover,
     a:hover {
       cursor: pointer;
       color: $black;
@@ -208,9 +179,6 @@ tfoot {
 .right {
   text-align: right;
   a,
-  [type="submit"] {
-    margin-left: 12px;
-  }
   [type="checkbox"],
   [type="radio"] {
     float: right;

@@ -14,9 +14,7 @@
     vertical-align: top;
   }
   &__submit {
-    @extend .action--primary;
-    vertical-align: bottom;
-    margin-left: 5px;
+
   }
   &__clear {
     @extend %paragraph--small;
