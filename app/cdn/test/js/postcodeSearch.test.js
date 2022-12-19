@@ -26,7 +26,7 @@ describe("OLCS.postcodeSearch", function() {
           var stub = [
             "<div class=address id=stub data-group=a>",
               "<fieldset>",
-                "<button type=submit name='address[searchPostcode][search]' class='action--primary large js-find' value=search>Find address</button>",
+                "<button type=submit name='address[searchPostcode][search]' class='govuk-button js-find' data-module='govuk-button'>Find address</button>",
                 "<div class=field>",
                   "<p class=hint id=p1><a href=#>Manual</a></p>",
                 "</div>",
@@ -110,7 +110,7 @@ describe("OLCS.postcodeSearch", function() {
             "<div class=address id=stub>",
               "<fieldset>",
                 "<input type=text class=js-input value=ls81an>",
-                "<button type=submit name='address[searchPostcode][search]' class='action--primary large js-find' value=search>Find address</button>",
+                "<button type=submit name='address[searchPostcode][search]' class='govuk-button js-find' data-module='govuk-button'>Find address</button>",
               "</fieldset>",
             "</div>"
           ].join("\n");

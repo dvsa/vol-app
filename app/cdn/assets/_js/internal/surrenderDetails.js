@@ -76,13 +76,13 @@ OLCS.surrenderDetails = (function(document, $) {
     };
 
     exports.enableSurrender = function () {
-        $(".js-approve-surrender").removeClass("disabled");
+        $(".js-approve-surrender").removeClass("govuk-button--disabled");
     };
 
     exports.disableSurrender = function () {
         var button = $(".js-approve-surrender");
-        if (!button.hasClass("disabled")) {
-            button.addClass("disabled");
+        if (!button.hasClass("govuk-button--disabled")) {
+            button.addClass("govuk-button--disabled");
         }
     };
 

@@ -37,7 +37,7 @@ describe("OLCS.fileUpload", function() {
               "</div>",
               "<ul class='js-upload-list' data-group='advertisements[file][list]'></ul>",
               "<input type=hidden name='advertisements[file][__messages__]' id='advertisements[file][__messages__]>",
-              "<button type=submit name='advertisements[file][upload]' class='inline-upload js-upload' id='advertisements[file][upload]' value=Upload>Upload</button>",
+              "<button type=submit name='advertisements[file][upload]' class='govuk-button inline-upload js-upload' id='advertisements[file][upload]' value=Upload>Upload</button>",
             "</fieldset>"
           ].join("\n");
 

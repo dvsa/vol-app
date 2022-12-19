@@ -21,7 +21,7 @@ describe('OLCS.surrenderDetails', function () {
                 '<input type="checkbox" name="checks[openCases]" class="surrenderChecks__checkbox js-surrender-checks-openCases" disabled="disabled" checked="checked" id="checks[openCases]" value="1">',
                 '<input type="checkbox" name="checks[digitalSignature]" class="surrenderChecks__checkbox js-surrender-checks-digitalSignature" required="required" id="signatureCheck" value="1">',
                 '<input type="checkbox" name="checks[ecms]" class="surrenderChecks__checkbox js-surrender-checks-ecms" required="required" id="ecmsCheck" value="1">',
-                '<button type="submit" name="actions[surrender]" class="action--primary large disabled js-approve-surrender  value="" id="surrenderButton">Surrender</button>'
+                '<button type="submit" name="actions[surrender]" class="govuk-button govuk-button--disabled js-approve-surrender  value="" id="surrenderButton">Surrender</button>'
             ].join('\n');
             this.body = $("body");
             this.body.append(this.template);
@@ -51,7 +51,7 @@ describe('OLCS.surrenderDetails', function () {
                 '<input type="checkbox" name="checks[openCases]" class="surrenderChecks__checkbox js-surrender-checks-openCases" disabled="disabled" checked="checked" id="checks[openCases]" value="1">',
                 '<input type="checkbox" name="checks[digitalSignature]" class="surrenderChecks__checkbox js-surrender-checks-digitalSignature" required="required" id="signatureCheck" value="1">',
                 '<input type="checkbox" name="checks[ecms]" class="surrenderChecks__checkbox js-surrender-checks-ecms" required="required" id="ecmsCheck" value="1">',
-                '<button type="submit" name="actions[surrender]" class="action--primary large disabled js-approve-surrender  value="" id="surrenderButton">Surrender</button>'
+                '<button type="submit" name="actions[surrender]" class="govuk-button govuk-button--disabled js-approve-surrender  value="" id="surrenderButton">Surrender</button>'
             ].join('\n');
 
             this.body = $("body");
@@ -70,7 +70,7 @@ describe('OLCS.surrenderDetails', function () {
             });
 
             it("should not enable the surrender button", function () {
-                expect(this.surrenderButton.classList.contains('disabled')).to.equal(true);
+                expect(this.surrenderButton.classList.contains('govuk-button--disabled')).to.equal(true);
             });
         });
 
@@ -82,7 +82,7 @@ describe('OLCS.surrenderDetails', function () {
             });
 
             it("should not enable the surrender button", function () {
-                expect(this.surrenderButton.classList.contains('disabled')).to.equal(true);
+                expect(this.surrenderButton.classList.contains('govuk-button--disabled')).to.equal(true);
             });
         });
 
@@ -94,7 +94,7 @@ describe('OLCS.surrenderDetails', function () {
             });
 
             it("should not enable the surrender button", function () {
-                expect(this.surrenderButton.classList.contains('disabled')).to.equal(true);
+                expect(this.surrenderButton.classList.contains('govuk-button--disabled')).to.equal(true);
             });
         });
 
@@ -106,7 +106,7 @@ describe('OLCS.surrenderDetails', function () {
             });
 
             it("should enable the surrender button", function () {
-                expect(this.surrenderButton.classList.contains('disabled')).to.equal(false);
+                expect(this.surrenderButton.classList.contains('govuk-button--disabled')).to.equal(false);
             });
 
             describe('when digital signature is unchecked', function () {
@@ -117,7 +117,7 @@ describe('OLCS.surrenderDetails', function () {
                 });
 
                 it('should disable the surrender button', function () {
-                    expect(this.surrenderButton.classList.contains('disabled')).to.equal(true);
+                    expect(this.surrenderButton.classList.contains('govuk-button--disabled')).to.equal(true);
                 });
             });
 
@@ -129,7 +129,7 @@ describe('OLCS.surrenderDetails', function () {
                 });
 
                 it('should disable the surrender button', function () {
-                    expect(this.surrenderButton.classList.contains('disabled')).to.equal(true);
+                    expect(this.surrenderButton.classList.contains('govuk-button--disabled')).to.equal(true);
                 });
             });
 
@@ -200,7 +200,7 @@ describe('OLCS.surrenderDetails', function () {
             this.template = [
                 '<input type="checkbox" name="checks[digitalSignature]" class="surrenderChecks__checkbox js-surrender-checks-digitalSignature" required="required" id="signatureCheck" value="1">',
                 '<input type="checkbox" name="checks[ecms]" class="surrenderChecks__checkbox js-surrender-checks-ecms" required="required" id="ecmsCheck" value="1">',
-                '<button type="submit" name="actions[surrender]" class="action--primary large disabled js-approve-surrender  value="" id="surrenderButton">Surrender</button>'
+                '<button type="submit" name="actions[surrender]" class="govuk-button govuk-button--disabled js-approve-surrender  value="" id="surrenderButton">Surrender</button>'
             ].join('\n');
 
             this.body = $("body");
@@ -219,7 +219,7 @@ describe('OLCS.surrenderDetails', function () {
             });
 
             it("should not enable the surrender button", function () {
-                expect(this.surrenderButton.classList.contains('disabled')).to.equal(true);
+                expect(this.surrenderButton.classList.contains('govuk-button--disabled')).to.equal(true);
             });
         });
 
@@ -231,7 +231,7 @@ describe('OLCS.surrenderDetails', function () {
             });
 
             it("should not enable the surrender button", function () {
-                expect(this.surrenderButton.classList.contains('disabled')).to.equal(true);
+                expect(this.surrenderButton.classList.contains('govuk-button--disabled')).to.equal(true);
             });
         });
 
@@ -243,7 +243,7 @@ describe('OLCS.surrenderDetails', function () {
             });
 
             it("should not enable the surrender button", function () {
-                expect(this.surrenderButton.classList.contains('disabled')).to.equal(true);
+                expect(this.surrenderButton.classList.contains('govuk-button--disabled')).to.equal(true);
             });
         });
 
@@ -255,7 +255,7 @@ describe('OLCS.surrenderDetails', function () {
             });
 
             it("should not enable the surrender button", function () {
-                expect(this.surrenderButton.classList.contains('disabled')).to.equal(true);
+                expect(this.surrenderButton.classList.contains('govuk-button--disabled')).to.equal(true);
             });
         });
 
@@ -272,7 +272,7 @@ describe('OLCS.surrenderDetails', function () {
                 '<input type="checkbox" name="checks[busRegistrations]" class="surrenderChecks__checkbox js-surrender-checks-busRegistrations" disabled="disabled" checked="checked" id="checks[busRegistrations]" value="1">',
                 '<input type="checkbox" name="checks[digitalSignature]" class="surrenderChecks__checkbox js-surrender-checks-digitalSignature" required="required" id="signatureCheck" value="1">',
                 '<input type="checkbox" name="checks[ecms]" class="surrenderChecks__checkbox js-surrender-checks-ecms" required="required" id="ecmsCheck" value="1">',
-                '<button type="submit" name="actions[surrender]" class="action--primary large disabled js-approve-surrender  value="" id="surrenderButton">Surrender</button>'
+                '<button type="submit" name="actions[surrender]" class="govuk-button govuk-button--disabled js-approve-surrender  value="" id="surrenderButton">Surrender</button>'
             ].join('\n');
 
             this.body = $("body");
@@ -291,7 +291,7 @@ describe('OLCS.surrenderDetails', function () {
             });
 
             it("should not enable the surrender button", function () {
-                expect(this.surrenderButton.classList.contains('disabled')).to.equal(true);
+                expect(this.surrenderButton.classList.contains('govuk-button--disabled')).to.equal(true);
             });
         });
 
@@ -303,7 +303,7 @@ describe('OLCS.surrenderDetails', function () {
             });
 
             it("should not enable the surrender button", function () {
-                expect(this.surrenderButton.classList.contains('disabled')).to.equal(true);
+                expect(this.surrenderButton.classList.contains('govuk-button--disabled')).to.equal(true);
             });
         });
 
@@ -315,7 +315,7 @@ describe('OLCS.surrenderDetails', function () {
             });
 
             it("should not enable the surrender button", function () {
-                expect(this.surrenderButton.classList.contains('disabled')).to.equal(true);
+                expect(this.surrenderButton.classList.contains('govuk-button--disabled')).to.equal(true);
             });
         });
 
@@ -327,7 +327,7 @@ describe('OLCS.surrenderDetails', function () {
             });
 
             it("should enable the surrender button", function () {
-                expect(this.surrenderButton.classList.contains('disabled')).to.equal(false);
+                expect(this.surrenderButton.classList.contains('govuk-button--disabled')).to.equal(false);
             });
 
             describe('when digital signature is unchecked', function () {
@@ -338,7 +338,7 @@ describe('OLCS.surrenderDetails', function () {
                 });
 
                 it('should disable the surrender button', function () {
-                    expect(this.surrenderButton.classList.contains('disabled')).to.equal(true);
+                    expect(this.surrenderButton.classList.contains('govuk-button--disabled')).to.equal(true);
                 });
             });
 
@@ -350,7 +350,7 @@ describe('OLCS.surrenderDetails', function () {
                 });
 
                 it('should disable the surrender button', function () {
-                    expect(this.surrenderButton.classList.contains('disabled')).to.equal(true);
+                    expect(this.surrenderButton.classList.contains('govuk-button--disabled')).to.equal(true);
                 });
             });
         });
@@ -371,7 +371,7 @@ describe('OLCS.surrenderDetails', function () {
                 '<input type="checkbox" name="checks[openCases]" class="surrenderChecks__checkbox js-surrender-checks-openCases" disabled="disabled" checked="checked" id="checks[openCases]" value="1">',
                 '<input type="checkbox" name="checks[digitalSignature]" class="surrenderChecks__checkbox js-surrender-checks-digitalSignature" required="required" id="signatureCheck" value="1">',
                 '<input type="checkbox" name="checks[ecms]" class="surrenderChecks__checkbox js-surrender-checks-ecms" required="required" id="ecmsCheck" value="1">',
-                '<button type="submit" name="actions[surrender]" class="action--primary large disabled js-approve-surrender  value="" id="surrenderButton">Surrender</button>'
+                '<button type="submit" name="actions[surrender]" class="govuk-button govuk-button--disabled js-approve-surrender  value="" id="surrenderButton">Surrender</button>'
             ].join('\n');
 
             this.body = $("body");
@@ -390,7 +390,7 @@ describe('OLCS.surrenderDetails', function () {
             });
 
             it("should not enable the surrender button", function () {
-                expect(this.surrenderButton.classList.contains('disabled')).to.equal(true);
+                expect(this.surrenderButton.classList.contains('govuk-button--disabled')).to.equal(true);
             });
         });
 
@@ -402,7 +402,7 @@ describe('OLCS.surrenderDetails', function () {
             });
 
             it("should not enable the surrender button", function () {
-                expect(this.surrenderButton.classList.contains('disabled')).to.equal(true);
+                expect(this.surrenderButton.classList.contains('govuk-button--disabled')).to.equal(true);
             });
         });
 
@@ -414,7 +414,7 @@ describe('OLCS.surrenderDetails', function () {
             });
 
             it("should not enable the surrender button", function () {
-                expect(this.surrenderButton.classList.contains('disabled')).to.equal(true);
+                expect(this.surrenderButton.classList.contains('govuk-button--disabled')).to.equal(true);
             });
         });
 
@@ -426,7 +426,7 @@ describe('OLCS.surrenderDetails', function () {
             });
 
             it("should not enable the surrender button", function () {
-                expect(this.surrenderButton.classList.contains('disabled')).to.equal(true);
+                expect(this.surrenderButton.classList.contains('govuk-button--disabled')).to.equal(true);
             });
         });
 
