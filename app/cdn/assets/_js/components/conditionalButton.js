@@ -40,8 +40,10 @@ OLCS.conditionalButton = (function(document, $, undefined) {
         predicate(checkedInputs.length, function(enabled) {
           if (enabled) {
             button.prop('disabled', false);
+            button.removeClass('govuk-button--disabled');
           } else {
             button.prop('disabled', true);
+            button.addClass('govuk-button--disabled');
           }
 
           /*

@@ -27,7 +27,7 @@
       '<form action="/foo" method="get" class="js-form">',
       '<input name="bar" class="source" type="text" />',
       '<select name="baz" class="dest"></select>',
-      '<input type="submit" id="submitId"/>',
+      '<button type="submit" id="submitId">submit</button>',
       '</form>',
       '</div>'
       ].join("\n");

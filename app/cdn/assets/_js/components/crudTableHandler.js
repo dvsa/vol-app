@@ -16,7 +16,7 @@ OLCS.crudTableHandler = (function(document, $, undefined) {
 
     var crudActionSelector = options.selector || [
       ".table__header button:not(.js-disable-crud)",
-      ".table__wrapper input[type=submit]",
+      ".table__wrapper button[type=submit]",
       ".table__empty button"
     ].join(",");
 

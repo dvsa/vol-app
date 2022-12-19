@@ -15,7 +15,7 @@ OLCS.addAnother = (function(document, $, undefined) {
 
     var options = $.extend({
       container       : '.add-another',
-      triggerSelector : '.hint input[type="submit"]',
+      triggerSelector : '.hint button[type="submit"]',
       targetSelector  : 'fieldset',
     }, custom);
 
