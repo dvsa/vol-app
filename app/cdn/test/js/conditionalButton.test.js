@@ -25,7 +25,7 @@ describe('OLCS.conditionalButton', function() {
     beforeEach(function() {
       var template = [
         '<form id="stub" method="post" action="/baz">',
-          '<div class="actions-container">',
+          '<div class="govuk-button-group">',
             '<button type="submit" value="Edit" data-label="Edit">Edit</button>',
             '<button type="submit" value="Delete" data-label="Delete">Delete</button>',
           '</div>',
@@ -120,7 +120,7 @@ describe('OLCS.conditionalButton', function() {
         beforeEach(function() {
             var template = [
                 '<form id="stub" method="post" action="/baz">',
-                '<div class="actions-container">',
+                '<div class="govuk-button-group">',
                 '<select name="table[action]">',
                 '<option value="" disabled="disabled" selected="">Select actions</option>',
                 '<option value="add" data-label="Add">Add</option>',

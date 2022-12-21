@@ -25,7 +25,7 @@ OLCS.conditionalButton = (function(document, $, undefined) {
 
     var predicate       = options.predicate;
     var checkedSelector = options.checkedSelector || 'table :checked';
-    var actionSelector  = '.actions-container button, .actions-container option';
+    var actionSelector  = '.govuk-button-group button, .govuk-button-group option';
 
     if ($.isPlainObject(predicate)) {
       predicate = OLCS.complexPredicate(predicate);

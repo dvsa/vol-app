@@ -16,23 +16,10 @@
       margin: 0;
     }
   }
-  .actions-container {
+  .govuk-button-group {
     display: block;
     @if $app == 'selfserve' {
       margin-bottom: 10px;
-      .action--tertiary {
-        @extend %h4;
-        float: left;
-        clear: both;
-        padding-top: 0;
-        padding-bottom: 0;
-        text-decoration: underline;
-        font-weight: 600;
-      }
-      .action-secondary-top
-      {
-        margin-top:10px;
-      }
     }
     @if $app == 'internal' {
       float: right;
@@ -91,16 +78,6 @@
     margin-top: 10px;
     margin-bottom: 10px;
     float: left;
-  }
-  .actions-container .action--tertiary {
-    // ensure correct specificity without using !important
-    &:not(:first-child) {
-      margin-top: 0;
-    }
-    &:hover,
-    &:focus {
-      color: $link-active-colour;
-    }
   }
 }
 
