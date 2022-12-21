@@ -44,7 +44,7 @@ describe("OLCS.cascadeForm", function() {
                 '</div>',
               '</div>',
             '</fieldset>',
-            '<input type="submit" />',
+            '<button type="submit" />',
           '</form>',
         '</div>'
       ].join("\n");

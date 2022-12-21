@@ -24,7 +24,7 @@ describe("OLCS.conditionallyDisableButtons", function() {
         beforeEach(function() {
             var template = [
                 '<form id="stub" method="post" action="/baz">',
-                '<div class="actions-container">',
+                '<div class="govuk-button-group">',
                 '<button id="generate" type="submit" value="Generate" disabled>Generate</button>',
                 '<button id="publish" type="submit" value="Publish" disabled>Publish</button>',
                 '</div>',

@@ -75,7 +75,7 @@ describe('OLCS.wysiwyg', function() {
               this.requests[i].respond(200, { 'Content-Type': 'text/json' }, authResonseJson);
             } else if(this.requests[i].url === "/foo") {
               var htmlResponse = '<textarea class="tinymce"></textarea>' + 
-              '<fieldset class="actions-container" data-group="form-actions">' +
+              '<fieldset class="govuk-button-group" data-group="form-actions">' +
               '<button type="button" name="form-actions&#x5B;submit&#x5D;" value="" id="submit">Save</button>' +
               '<button type="button" name="form-actions&#x5B;cancel&#x5D;" >Cancel</button></fieldset>' +
               '</form></div>'

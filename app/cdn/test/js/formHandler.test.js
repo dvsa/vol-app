@@ -19,7 +19,7 @@ describe("OLCS.formHandler", function() {
         '<div id="stub">',
           '<form action="/foo" method="get" class="js-form">',
             '<input name="bar" type="text" />',
-            '<input type="submit" />',
+            '<button type="submit" />',
           '</form>',
           '<div class="container"></div>',
         '</div>'
