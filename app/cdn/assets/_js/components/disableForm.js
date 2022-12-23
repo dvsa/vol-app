@@ -18,7 +18,7 @@ OLCS.disableForm = (function(document, $, undefined) {
     var options = $.extend({
       container: '.govuk-button-group',
       actions: '[type="submit"]:not(.js-disable-crud), [class*="action-"]:not(.js-disable-crud)',
-      disabledClass: 'disabled',
+      disabledClass: 'govuk-button--disabled',
       loadingText: false
     }, custom);
 

@@ -22,7 +22,7 @@ describe('OLCS.disableForm', function() {
         '<form id="stub">' +
           '<input  id="input-submit"  type="submit"  class="submit" value="Submit">' +
           '<button id="button-submit" type="submit"  class="submit">Submit</button>' +
-          '<a      id="anchor-submit" href="#submit" class="submit action-primary">Close</a>' +
+          '<a      id="anchor-submit" href="#submit" class="submit govuk-button">Close</a>' +
         '</form>' +
         '<button type="submit" class="fake-submit">Fake Submit</button>'
       ].join("\n"));
@@ -50,8 +50,8 @@ describe('OLCS.disableForm', function() {
           $('#button-submit').click();
         });
 
-        it('The action buttons should have the "disabled" class', function() {
-          expect($('#stub .submit').hasClass('disabled')).to.be(true);
+        it('The action buttons should have the "govuk-button--disabled" class', function() {
+          expect($('#stub .submit').hasClass('govuk-button--disabled')).to.be(true);
         });
 
         it('The clicked button should have correct loading text', function() {
@@ -68,8 +68,8 @@ describe('OLCS.disableForm', function() {
           $('#input-submit').click();
         });
 
-        it('The action buttons should have the "disabled" class', function() {
-          expect($('#stub .submit').hasClass('disabled')).to.be(true);
+        it('The action buttons should have the "govuk-button--disabled" class', function() {
+          expect($('#stub .submit').hasClass('govuk-button--disabled')).to.be(true);
         });
 
         it('The clicked button should have correct loading text', function() {
@@ -94,8 +94,8 @@ describe('OLCS.disableForm', function() {
           $('#button-submit').click();
         });
 
-        it('The action buttons should have the "disabled" class', function() {
-          expect($('#stub .submit').hasClass('disabled')).to.be(true);
+        it('The action buttons should have the "govuk-button--disabled" class', function() {
+          expect($('#stub .submit').hasClass('govuk-button--disabled')).to.be(true);
         });
 
         it('The clicked button should not have altered text', function() {
@@ -103,7 +103,7 @@ describe('OLCS.disableForm', function() {
         });
 
         it('All other submit buttons should remain unaffected', function() {
-          expect($('.fake-submit').hasClass('disabled')).to.be(false);
+          expect($('.fake-submit').hasClass('govuk-button--disabled')).to.be(false);
         });
       });
 
