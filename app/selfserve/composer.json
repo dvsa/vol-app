@@ -16,19 +16,11 @@
     ],
     "require": {
         "php": ">=7.4",
-        "ext-intl": "*",
-        "ext-json": "*",
-        "doctrine/annotations": "^1.8",
-        "olcs/olcs-transfer": "~4.206.0",
-        "olcs/olcs-utils": "~4.206.0",
-        "olcs/olcs-auth": "~4.206.0",
-        "olcs/olcs-logging": "~4.206.0",
-        "olcs/olcs-common": "~4.206.0",
+        "olcs/olcs-frontend-deps": "~4.206.0",
         "olcs/olcs-laminas": "~2.5.0"
     },
     "require-dev": {
-        "olcs/olcs-devtools": "~4.206.0",
-        "olcs/olcs-testhelpers": "~4.206.0"
+        "olcs/olcs-devtools": "~4.206.0"
     },
     "autoload": {
         "classmap": [
