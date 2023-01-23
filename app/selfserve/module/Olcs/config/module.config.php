@@ -306,6 +306,18 @@ $routes = [
                 'controller' => 'Dashboard',
                 'action' => 'index'
             ]
+        ],
+        'may_terminate' => true,
+        'child_routes' => [
+            'topsreport' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'topsreport',
+                    'defaults' => [
+                        'action' => 'topsreport',
+                    ],
+                ]
+            ]
         ]
     ],
     'prompt' => [

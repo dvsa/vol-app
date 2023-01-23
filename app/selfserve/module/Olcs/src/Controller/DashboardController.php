@@ -8,11 +8,15 @@
 
 namespace Olcs\Controller;
 
+use Common\FeatureToggle;
 use Olcs\View\Model\Dashboard;
 use Common\Controller\Lva\AbstractController;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Organisation\Dashboard as DashboardQry;
+use Dvsa\Olcs\Transfer\Command\DvsaReports\GetRedirect as GetReportRedirectCmd;
+use Dvsa\Olcs\Transfer\Query\FeatureToggle\IsEnabled as IsEnabledQry;
 use Laminas\View\Model\ViewModel;
+use Laminas\Authentication\Storage\Session;
 
 /**
  * Dashboard Controller
@@ -24,6 +28,35 @@ class DashboardController extends AbstractController
     use Lva\Traits\ExternalControllerTrait;
 
     protected $lva = "application";
+
+    /**
+     * POST required data to DVSA Reports URL, handle response and perform redirect.
+     *
+     */
+    public function topsreportAction() {
+        $dashboardData = $this->getDashboardData();
+
+        $licenceNumbers = [];
+        foreach ($dashboardData['licences'] as $licence) {
+            $licenceNumbers[] = $licence['licNo'];
+        }
+
+        $session = $this->getServiceLocator()->get(Session::class)->read();
+        $redirectCmd = GetReportRedirectCmd::create(
+            [
+                'olNumbers' => $licenceNumbers,
+                'jwt' => $session['AccessToken'],
+                'refreshToken' => $session['RefreshToken']]
+        );
+        $response = $this->handleCommand($redirectCmd);
+        $messages = $response->getResult()['messages'];
+
+        $view = new \Laminas\View\Model\ViewModel();
+        $view->setTemplate('top-redirect');
+        $view->setVariable('redirectUrl', $messages[0]);
+
+        return $view;
+    }
 
     /**
      * Dashboard index action
@@ -49,18 +82,7 @@ class DashboardController extends AbstractController
      */
     protected function standardDashboardView()
     {
-        $organisationId = $this->getCurrentOrganisationId();
-
-        if (empty($organisationId)) {
-            $this->flashMessenger()->addErrorMessage('auth.login.failed.reason.account-disabled');
-            return $this->redirect()->toRoute('auth/login/GET');
-        }
-
-        // retrieve data
-        $query = DashboardQry::create(['id' => $organisationId]);
-        $response = $this->handleQuery($query);
-        $dashboardData = $response->getResult()['dashboard'];
-
+        $dashboardData = $this->getDashboardData();
         $total = 0;
 
         if (isset($dashboardData['licences'])
@@ -84,8 +106,31 @@ class DashboardController extends AbstractController
         $view->setVariable('numberOfLicences', count($dashboardData['licences']));
         $view->setVariable('numberOfApplications', count($dashboardData['applications']));
         $view->setVariable('niFlag', $this->isNiFlagTrue($dashboardData));
+        if(
+            $this->handleQuery(IsEnabledQry::create(['ids' => [FeatureToggle::TOP_REPORTS_LINK]]))->getResult()['isEnabled']
+            && (isset($dashboardData['licences']) && !empty($dashboardData['licences']))
+        ) {
+            $view->setVariable('topReportsLink', $this->url()->fromRoute('dashboard/topsreport'));
+        }
 
         return $view;
+    }
+
+    /**
+     * Perform dashboard data Qry
+     */
+    protected function getDashboardData() {
+        $organisationId = $this->getCurrentOrganisationId();
+
+        if (empty($organisationId)) {
+            $this->flashMessenger()->addErrorMessage('auth.login.failed.reason.account-disabled');
+            return $this->redirect()->toRoute('auth/login/GET');
+        }
+
+        // retrieve data
+        $query = DashboardQry::create(['id' => $organisationId]);
+        $response = $this->handleQuery($query);
+        return $response->getResult()['dashboard'];
     }
 
     private function isNiFlagTrue($dashboardData)
