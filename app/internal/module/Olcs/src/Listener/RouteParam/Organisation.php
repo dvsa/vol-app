@@ -5,6 +5,7 @@ namespace Olcs\Listener\RouteParam;
 use Common\Exception\ResourceNotFoundException;
 use Common\Service\Cqrs\Query\CachingQueryService as QueryService;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
+use Interop\Container\ContainerInterface;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Laminas\EventManager\EventManagerInterface;
@@ -116,14 +117,26 @@ class Organisation implements ListenerAggregateInterface, FactoryInterface
      *
      * @return mixed
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function createService(ServiceLocatorInterface $serviceLocator) : Organisation
     {
-        $this->annotationBuilder = $serviceLocator->get('TransferAnnotationBuilder');
-        $this->queryService = $serviceLocator->get('QueryService');
-        $this->sidebarNavigationService = $serviceLocator->get('right-sidebar');
-        $this->markerService = $serviceLocator->get(\Olcs\Service\Marker\MarkerService::class);
-        $this->navigationPlugin = $serviceLocator->get('ViewHelperManager')->get('Navigation');
+        return $this->__invoke($serviceLocator, Organisation::class);
+    }
 
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return Organisation
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : Organisation
+    {
+        $this->annotationBuilder = $container->get('TransferAnnotationBuilder');
+        $this->queryService = $container->get('QueryService');
+        $this->sidebarNavigationService = $container->get('right-sidebar');
+        $this->markerService = $container->get(\Olcs\Service\Marker\MarkerService::class);
+        $this->navigationPlugin = $container->get('ViewHelperManager')->get('Navigation');
         return $this;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Olcs\Listener\RouteParam;
 
+use Interop\Container\ContainerInterface;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use \Dvsa\Olcs\Transfer\Query\Bus\BusReg as ItemDto;
@@ -75,14 +76,9 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
      * @param ServiceLocatorInterface $serviceLocator
      * @return mixed
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function createService(ServiceLocatorInterface $serviceLocator) : BusRegId
     {
-        $this->setAnnotationBuilder($serviceLocator->get('TransferAnnotationBuilder'));
-        $this->setQueryService($serviceLocator->get('QueryService'));
-        $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
-        $this->setNavigationService($serviceLocator->get('Navigation'));
-
-        return $this;
+        return $this->__invoke($serviceLocator, BusRegId::class);
     }
 
     /**
@@ -140,5 +136,22 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
         }
 
         return $response->getResult();
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return BusRegId
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : BusRegId
+    {
+        $this->setAnnotationBuilder($container->get('TransferAnnotationBuilder'));
+        $this->setQueryService($container->get('QueryService'));
+        $this->setViewHelperManager($container->get('ViewHelperManager'));
+        $this->setNavigationService($container->get('Navigation'));
+        return $this;
     }
 }

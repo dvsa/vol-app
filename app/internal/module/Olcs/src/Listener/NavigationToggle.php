@@ -2,6 +2,7 @@
 
 namespace Olcs\Listener;
 
+use Interop\Container\ContainerInterface;
 use Common\Rbac\User;
 use Common\RefData;
 use Common\Service\Cqrs\Query\QuerySender;
@@ -101,14 +102,26 @@ class NavigationToggle implements ListenerAggregateInterface, FactoryInterface
      *
      * @param ServiceLocatorInterface $serviceLocator Service locator
      *
-     * @return $this
+     * @return NavigationToggle
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function createService(ServiceLocatorInterface $serviceLocator) : NavigationToggle
     {
-        $this->navigation = $serviceLocator->get('navigation');
-        $this->authenticationService = $serviceLocator->get(IdentityProviderInterface::class);
-        $this->querySender = $serviceLocator->get('QuerySender');
+        return $this->__invoke($serviceLocator, AnalyticsCookieNamesProvider::class);
+    }
 
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return NavigationToggle
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : NavigationToggle
+    {
+        $this->navigation = $container->get('navigation');
+        $this->authenticationService = $container->get(IdentityProviderInterface::class);
+        $this->querySender = $container->get('QuerySender');
         return $this;
     }
 }

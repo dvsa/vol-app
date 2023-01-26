@@ -2,6 +2,7 @@
 
 namespace Olcs\Listener\RouteParam;
 
+use Interop\Container\ContainerInterface;
 use Common\Exception\DataServiceException;
 use Common\RefData;
 use Common\Service\Data\Surrender;
@@ -235,19 +236,9 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
      *
      * @return mixed
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function createService(ServiceLocatorInterface $serviceLocator) : Licence
     {
-        $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
-        $this->setLicenceService($serviceLocator->get('DataServiceManager')->get('Common\Service\Data\Licence'));
-        $this->setNavigationService($serviceLocator->get('right-sidebar'));
-        $this->setMainNavigationService($serviceLocator->get('Navigation'));
-
-        $this->setMarkerService($serviceLocator->get(\Olcs\Service\Marker\MarkerService::class));
-        $this->setAnnotationBuilderService($serviceLocator->get('TransferAnnotationBuilder'));
-        $this->setQueryService($serviceLocator->get('QueryService'));
-        $this->setSurrenderService($serviceLocator->get('DataServiceManager')->get(Surrender::class));
-
-        return $this;
+        return $this->__invoke($serviceLocator, Licence::class);
     }
 
     public function getAnnotationBuilderService()
@@ -548,5 +539,26 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         if ($licence['status']['id'] !== RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION) {
             $this->getMainNavigationService()->findOneById('licence_surrender')->setVisible(0);
         }
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return $this
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : Licence
+    {
+        $this->setViewHelperManager($container->get('ViewHelperManager'));
+        $this->setLicenceService($container->get('DataServiceManager')->get('Common\Service\Data\Licence'));
+        $this->setNavigationService($container->get('right-sidebar'));
+        $this->setMainNavigationService($container->get('Navigation'));
+        $this->setMarkerService($container->get(\Olcs\Service\Marker\MarkerService::class));
+        $this->setAnnotationBuilderService($container->get('TransferAnnotationBuilder'));
+        $this->setQueryService($container->get('QueryService'));
+        $this->setSurrenderService($container->get('DataServiceManager')->get(Surrender::class));
+        return $this;
     }
 }

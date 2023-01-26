@@ -6,6 +6,7 @@ use Common\Exception\ResourceNotFoundException;
 use Common\Service\Cqrs\Query\QuerySenderAwareInterface;
 use Common\Service\Cqrs\Query\QuerySenderAwareTrait;
 use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQuery;
+use Interop\Container\ContainerInterface;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Laminas\EventManager\EventManagerInterface;
@@ -52,13 +53,9 @@ class VariationFurniture implements ListenerAggregateInterface, FactoryInterface
      * @param ServiceLocatorInterface $serviceLocator
      * @return mixed
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function createService(ServiceLocatorInterface $serviceLocator) : VariationFurniture
     {
-        $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
-        $this->setQuerySender($serviceLocator->get('QuerySender'));
-        $this->setRouter($serviceLocator->get('Router'));
-
-        return $this;
+        return $this->__invoke($serviceLocator, VariationFurniture::class);
     }
 
     /**
@@ -101,5 +98,21 @@ class VariationFurniture implements ListenerAggregateInterface, FactoryInterface
         $right->setTemplate('sections/variation/partials/right');
 
         $placeholder->getContainer('right')->set($right);
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return VariationFurniture
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : VariationFurniture
+    {
+        $this->setViewHelperManager($container->get('ViewHelperManager'));
+        $this->setQuerySender($container->get('QuerySender'));
+        $this->setRouter($container->get('Router'));
+        return $this;
     }
 }

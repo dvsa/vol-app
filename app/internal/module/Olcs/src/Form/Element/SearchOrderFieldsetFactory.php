@@ -2,6 +2,7 @@
 
 namespace Olcs\Form\Element;
 
+use Interop\Container\ContainerInterface;
 use Common\Service\Data\Search\Search as SearchDataService;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
@@ -32,14 +33,24 @@ class SearchOrderFieldsetFactory implements FactoryInterface
      *
      * @return SearchOrderFieldset
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function createService(ServiceLocatorInterface $serviceLocator) : SearchOrderFieldset
     {
-        $serviceLocator = $serviceLocator->getServiceLocator();
+        return $this->__invoke($serviceLocator, AnalyticsCookieNamesProvider::class);
+    }
 
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return SearchOrderFieldset
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : SearchOrderFieldset
+    {
+        $serviceLocator = $container->getServiceLocator();
         $fs = new SearchOrderFieldset($this->options['name'], $this->options);
-
         $fs->setSearchService($serviceLocator->get('DataServiceManager')->get(SearchDataService::class));
-
         return $fs;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Olcs\Listener\RouteParam;
 
+use Interop\Container\ContainerInterface;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Laminas\EventManager\EventManagerInterface;
@@ -86,13 +87,9 @@ class BusRegMarker implements ListenerAggregateInterface, FactoryInterface
      * @param ServiceLocatorInterface $serviceLocator
      * @return mixed
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function createService(ServiceLocatorInterface $serviceLocator) : BusRegMarker
     {
-        $this->setMarkerService($serviceLocator->get(\Olcs\Service\Marker\MarkerService::class));
-        $this->setAnnotationBuilderService($serviceLocator->get('TransferAnnotationBuilder'));
-        $this->setQueryService($serviceLocator->get('QueryService'));
-
-        return $this;
+        return $this->__invoke($serviceLocator, BusRegMarker::class);
     }
 
     /**
@@ -116,5 +113,21 @@ class BusRegMarker implements ListenerAggregateInterface, FactoryInterface
         }
 
         return $response->getResult();
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return BusRegMarker
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : BusRegMarker
+    {
+        $this->setMarkerService($container->get(\Olcs\Service\Marker\MarkerService::class));
+        $this->setAnnotationBuilderService($container->get('TransferAnnotationBuilder'));
+        $this->setQueryService($container->get('QueryService'));
+        return $this;
     }
 }

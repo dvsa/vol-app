@@ -2,6 +2,7 @@
 
 namespace Olcs\Listener\RouteParam;
 
+use Interop\Container\ContainerInterface;
 use Common\Service\Cqrs\Command\CommandSenderAwareInterface;
 use Common\Service\Cqrs\Command\CommandSenderAwareTrait;
 use Common\Service\Cqrs\Query\QuerySenderAwareInterface;
@@ -40,13 +41,9 @@ class BusRegFurniture implements
      * @param ServiceLocatorInterface $serviceLocator
      * @return mixed
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function createService(ServiceLocatorInterface $serviceLocator) : BusRegFurniture
     {
-        $this->setQuerySender($serviceLocator->get('QuerySender'));
-        $this->setCommandSender($serviceLocator->get('CommandSender'));
-        $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
-
-        return $this;
+        return $this->__invoke($serviceLocator, BusRegFurniture::class);
     }
 
     /**
@@ -112,5 +109,21 @@ class BusRegFurniture implements
     private function getSubTitle($busReg)
     {
         return $busReg['licence']['organisation']['name'] . ', Variation ' . $busReg['variationNo'];
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return BusRegFurniture
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : BusRegFurniture
+    {
+        $this->setQuerySender($container->get('QuerySender'));
+        $this->setCommandSender($container->get('CommandSender'));
+        $this->setViewHelperManager($container->get('ViewHelperManager'));
+        return $this;
     }
 }

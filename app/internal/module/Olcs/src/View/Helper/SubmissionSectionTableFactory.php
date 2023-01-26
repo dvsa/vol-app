@@ -2,6 +2,7 @@
 
 namespace Olcs\View\Helper;
 
+use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
@@ -19,12 +20,24 @@ class SubmissionSectionTableFactory implements FactoryInterface
      * @param ServiceLocatorInterface $serviceLocator
      * @return SubmissionSectionTable
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function createService(ServiceLocatorInterface $serviceLocator) : SubmissionSectionTable
     {
-        $tableBuilder = $serviceLocator->getServiceLocator()->get('Table');
+        return $this->__invoke($serviceLocator, SubmissionSectionTable::class);
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return SubmissionSectionTable
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : SubmissionSectionTable
+    {
+        $tableBuilder = $container->getServiceLocator()->get('Table');
         $service = new SubmissionSectionTable();
         $service->setTableBuilder($tableBuilder);
-
         return $service;
     }
 }

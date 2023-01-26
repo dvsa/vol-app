@@ -2,6 +2,8 @@
 
 namespace Olcs\Listener\RouteParam;
 
+use Dvsa\Olcs\Transfer\Command\Publication\Bus;
+use Interop\Container\ContainerInterface;
 use Common\Service\Cqrs\Query\QueryService;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Olcs\Event\RouteParam;
@@ -110,14 +112,9 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
      *
      * @return mixed
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function createService(ServiceLocatorInterface $serviceLocator) : BusRegAction
     {
-        $this->setAnnotationBuilder($serviceLocator->get('TransferAnnotationBuilder'));
-        $this->setQueryService($serviceLocator->get('QueryService'));
-        $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
-        $this->setSidebarNavigationService($serviceLocator->get('right-sidebar'));
-
-        return $this;
+        return $this->__invoke($serviceLocator, BusRegAction::class);
     }
 
     /**
@@ -209,5 +206,22 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
     private function shouldOpenGrantButtonInModal($busReg)
     {
         return ($busReg['status']['id'] === RefData::BUSREG_STATUS_VARIATION);
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return BusRegAction
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : BusRegAction
+    {
+        $this->setAnnotationBuilder($container->get('TransferAnnotationBuilder'));
+        $this->setQueryService($container->get('QueryService'));
+        $this->setViewHelperManager($container->get('ViewHelperManager'));
+        $this->setSidebarNavigationService($container->get('right-sidebar'));
+        return $this;
     }
 }

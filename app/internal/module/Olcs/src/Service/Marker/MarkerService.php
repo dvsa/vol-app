@@ -2,6 +2,7 @@
 
 namespace Olcs\Service\Marker;
 
+use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\FactoryInterface;
 
 /**
@@ -47,11 +48,9 @@ class MarkerService implements FactoryInterface
      *
      * @return MarkerService
      */
-    public function createService(\Laminas\ServiceManager\ServiceLocatorInterface $serviceLocator)
+    public function createService(\Laminas\ServiceManager\ServiceLocatorInterface $serviceLocator) : MarkerService
     {
-        $this->setMarkerPluginManager($serviceLocator->get(\Olcs\Service\Marker\MarkerPluginManager::class));
-
-        return $this;
+        return $this->__invoke($serviceLocator, MarkerService::class);
     }
 
     /**
@@ -88,5 +87,19 @@ class MarkerService implements FactoryInterface
         }
 
         return $markers;
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return MarkerService
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : MarkerService
+    {
+        $this->setMarkerPluginManager($container->get(\Olcs\Service\Marker\MarkerPluginManager::class));
+        return $this;
     }
 }

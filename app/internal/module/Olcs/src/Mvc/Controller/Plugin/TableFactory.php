@@ -4,6 +4,7 @@ namespace Olcs\Mvc\Controller\Plugin;
 
 use Common\Service\Table\TableBuilder;
 use Common\Service\Table\TableBuilderFactory;
+use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
@@ -19,15 +20,26 @@ class TableFactory implements FactoryInterface
      * @param ServiceLocatorInterface $serviceLocator
      * @return mixed
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function createService(ServiceLocatorInterface $serviceLocator) : Table
+    {
+        return $this->__invoke($serviceLocator, Table::class);
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return Table
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : Table
     {
         $tableBuilderFactory = new TableBuilderFactory();
-
         $tableBuilder = $tableBuilderFactory(
-            $serviceLocator->getServiceLocator(),
+            $container->getServiceLocator(),
             TableBuilder::class
         );
-
         return new Table($tableBuilder);
     }
 }
