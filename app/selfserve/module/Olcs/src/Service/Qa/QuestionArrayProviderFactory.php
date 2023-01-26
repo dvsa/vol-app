@@ -2,6 +2,7 @@
 
 namespace Olcs\Service\Qa;
 
+use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
@@ -14,10 +15,23 @@ class QuestionArrayProviderFactory implements FactoryInterface
      *
      * @return QuestionArrayProvider
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function createService(ServiceLocatorInterface $serviceLocator) : QuestionArrayProvider
+    {
+        return $this->__invoke($serviceLocator, QuestionArrayProvider::class);
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return QuestionArrayProvider
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : QuestionArrayProvider
     {
         return new QuestionArrayProvider(
-            $serviceLocator->get('QaFormattedTranslateableTextParametersGenerator')
+            $container->get('QaFormattedTranslateableTextParametersGenerator')
         );
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Listener;
 
+use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use ZfcRbac\Service\AuthorizationService;
@@ -21,10 +22,23 @@ class NavigationFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator): Navigation
     {
+        return $this->__invoke($serviceLocator, Navigation::class);
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return Navigation
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : Navigation
+    {
         return new Navigation(
-            $serviceLocator->get('navigation'),
-            $serviceLocator->get('QuerySender'),
-            $serviceLocator->get(AuthorizationService::class)->getIdentity()
+            $container->get('navigation'),
+            $container->get('QuerySender'),
+            $container->get(AuthorizationService::class)->getIdentity()
         );
     }
 }
