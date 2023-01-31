@@ -1280,6 +1280,7 @@ return array(
             SelfserveCommandAdapter::class => SelfserveCommandAdapterFactory::class,
             'DashboardProcessingService' => ProcessingService\DashboardProcessingServiceFactory::class,
             'Processing\CreateVariation' => ProcessingService\CreateVariationProcessingServiceFactory::class,
+            Olcs\View\Model\User::class => Olcs\View\Model\UserFactory::class
         ]
     ),
     'search' => [

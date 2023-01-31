@@ -3,9 +3,9 @@
 namespace Olcs\View\Model;
 
 use Common\RefData;
-use Common\View\AbstractViewModel;
+use Laminas\View\Model\ViewModel;
 
-abstract class LvaOverviewSection extends AbstractViewModel
+abstract class LvaOverviewSection extends ViewModel
 {
     protected $variables = array(
         'enabled' => true

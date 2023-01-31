@@ -58,12 +58,11 @@ class UserController extends AbstractController
             $users = [];
         }
 
-        $view = new User();
+        $view = $this->getServiceLocator()->get(User::class);
+        assert($view instanceof User);
 
         $view->setUsers(
             $users,
-            $this->getServiceLocator()->get('Helper\Url'),
-            $this->getServiceLocator()->get('Table'),
             $params
         );
 
