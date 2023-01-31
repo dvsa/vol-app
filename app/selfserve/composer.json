@@ -18,30 +18,13 @@
         "php": ">=7.4",
         "ext-intl": "*",
         "ext-json": "*",
-        "laminas/laminas-eventmanager": "^2.5",
-        "laminas/laminas-filter": "^2.5",
-        "laminas/laminas-form": "^2.5",
-        "laminas/laminas-http": "^2.5",
-        "laminas/laminas-i18n": "^2.5",
-        "laminas/laminas-inputfilter": "^2.5",
-        "laminas/laminas-loader": "^2.5",
-        "laminas/laminas-log": "^2.5",
-        "laminas/laminas-mvc": "^2.5",
-        "laminas/laminas-navigation": "<=2.13.0",
-        "laminas/laminas-servicemanager": "^2.5",
-        "laminas/laminas-session": "^2.5",
-        "laminas/laminas-stdlib": "^2.5",
-        "laminas/laminas-validator": "^2.5",
-        "laminas/laminas-view": "^2.5",
         "doctrine/annotations": "^1.8",
-        "lm-commons/lmc-rbac-mvc": "^2.6",
         "olcs/olcs-transfer": "~4.206.0",
         "olcs/olcs-utils": "~4.206.0",
         "olcs/olcs-auth": "~4.206.0",
         "olcs/olcs-logging": "~4.206.0",
         "olcs/olcs-common": "~4.206.0",
-        "laminas/laminas-dependency-plugin": "^2.0",
-        "laminas/laminas-authentication": "^2.5"
+        "olcs/olcs-laminas": "~2.5.0"
     },
     "require-dev": {
         "olcs/olcs-devtools": "~4.206.0",
@@ -61,7 +44,7 @@
         "preferred-install": "dist",
         "secure-http": false,
         "platform": {
-            "php": "7.4.26"
+            "php": "7.4.33"
         },
         "sort-packages": true,
         "allow-plugins": {
