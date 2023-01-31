@@ -2,12 +2,12 @@
 
 namespace Olcs\View\Model;
 
-use Common\View\AbstractViewModel;
+use Laminas\View\Model\ViewModel;
 
 /**
  * @see \OlcsTest\View\Model\LvaOverviewTest
  */
-abstract class LvaOverview extends AbstractViewModel
+abstract class LvaOverview extends ViewModel
 {
     /**
      * Set the overview data

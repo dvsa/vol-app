@@ -7,15 +7,15 @@
  */
 namespace Olcs\View\Model;
 
-use Common\View\AbstractViewModel;
 use Laminas\Form\Form as LaminasForm;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Form View Model
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class Form extends AbstractViewModel
+class Form extends ViewModel
 {
     /**
      * Set the template for the dashboard

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Controller;
 
 use Dvsa\Olcs\Transfer\Command\User\CreateUserSelfserve;
@@ -8,6 +10,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Dvsa\Olcs\Transfer\Query as TransferQry;
 use Laminas\Mvc\Controller\Plugin\Redirect;
+use Olcs\View\Model\User;
 
 /**
  * Class User Controller Test
@@ -121,28 +124,42 @@ class UserControllerTest extends MockeryTestCase
 
         $this->mockRequest->shouldReceive('isPost')->andReturn(false);
 
-        $mockUrl = m::mock(\Common\Service\Helper\UrlHelperService::class);
-        $paramsArr['url'] = $mockUrl;
-
-        $mockTable = m::mock(\Common\Service\Table\TableFactory::class);
-        $mockTable->shouldReceive('buildTable')->with('users', $data, $paramsArr, false)->andReturnSelf();
+        $mockUserModel = m::mock(User::class);
+        $mockUserModel->expects('setUsers')->with($data, $paramsArr);
 
         $mockScript = m::mock('stdClass');
         $mockScript->shouldReceive('loadFiles')->once()->with(['lva-crud'])->andReturnNull();
 
-        $this->mockSl->shouldReceive('get')->with('Helper\Url')->andReturn($mockUrl);
-        $this->mockSl->shouldReceive('get')->with('Table')->andReturn($mockTable);
+        $this->mockSl->shouldReceive('get')->with(User::class)->andReturn($mockUserModel);
         $this->mockSl->shouldReceive('get')->with('Script')->andReturn($mockScript);
 
         $actual = $this->sut->indexAction();
 
-        $this->assertInstanceOf(\Olcs\View\Model\User::class, $actual);
-        $this->assertEquals($mockTable, $actual->getVariable('users'));
+        $this->assertInstanceOf(User::class, $actual);
     }
 
     public function testIndexActionNotOk()
     {
-        $this->mockParams->shouldReceive('fromQuery')->andReturnSelf();
+        $page = '2';
+        $sort = 'name';
+        $order = 'ASC';
+        $limit = 20;
+        $query = [];
+
+        $paramsArr = [
+            'page' => $page,
+            'sort' => $sort,
+            'order' => $order,
+            'limit' => $limit,
+            'query' => $query,
+        ];
+
+        $this->mockParams
+            ->shouldReceive('fromQuery')->with('page', 1)->andReturn($page)
+            ->shouldReceive('fromQuery')->with('sort', 'id')->andReturn($sort)
+            ->shouldReceive('fromQuery')->with('order', 'DESC')->andReturn($order)
+            ->shouldReceive('fromQuery')->with('limit', 10)->andReturn($limit)
+            ->shouldReceive('fromQuery')->withNoArgs()->andReturn($query);
 
         $this->mockRequest->shouldReceive('isPost')->andReturn(false);
 
@@ -151,22 +168,18 @@ class UserControllerTest extends MockeryTestCase
 
         $this->mockFlashMsgr->shouldReceive('addUnknownError')->once();
 
-        $mockUrl = m::mock(\Common\Service\Helper\UrlHelperService::class);
-
-        $mockTable = m::mock(\Common\Service\Table\TableFactory::class)->makePartial();
-        $mockTable->shouldReceive('buildTable')->once()->andReturnSelf();
+        $mockUserModel = m::mock(User::class);
+        $mockUserModel->expects('setUsers')->with([], $paramsArr);
 
         $mockScript = m::mock('stdClass');
         $mockScript->shouldReceive('loadFiles')->once()->with(['lva-crud'])->andReturnNull();
 
-        $this->mockSl->shouldReceive('get')->with('Helper\Url')->andReturn($mockUrl);
-        $this->mockSl->shouldReceive('get')->with('Table')->andReturn($mockTable);
+        $this->mockSl->shouldReceive('get')->with(User::class)->andReturn($mockUserModel);
         $this->mockSl->shouldReceive('get')->with('Script')->andReturn($mockScript);
 
         $actual = $this->sut->indexAction();
 
-        $this->assertInstanceOf(\Olcs\View\Model\User::class, $actual);
-        $this->assertEquals($mockTable, $actual->getVariable('users'));
+        $this->assertInstanceOf(User::class, $actual);
     }
 
     public function testSaveExistingRecord()

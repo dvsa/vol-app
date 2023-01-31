@@ -1,22 +1,12 @@
 <?php
 
-/**
- * User View Model
- *
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
- */
 namespace Olcs\View\Model;
 
 use Common\Service\Helper\UrlHelperService;
 use Common\Service\Table\TableFactory;
-use Common\View\AbstractViewModel;
+use Laminas\View\Model\ViewModel;
 
-/**
- * User View Model
- *
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
- */
-class User extends AbstractViewModel
+class User extends ViewModel
 {
     /**
      * Set the template for the dashboard
@@ -24,15 +14,33 @@ class User extends AbstractViewModel
      * @var string
      */
     protected $template = 'user';
+    private UrlHelperService $urlHelper;
+    private TableFactory $tableService;
+
+    public function __construct(UrlHelperService $urlHelper, TableFactory $tableService)
+    {
+        $this->urlHelper = $urlHelper;
+        $this->tableService = $tableService;
+    }
 
     /**
      * @param array $data
-     * @param UrlHelperService $urlHelper
-     * @param TableFactory $tableService
      * @param array $params
      */
-    public function setUsers(array $data, UrlHelperService $urlHelper, TableFactory $tableService, array $params = [])
+    public function setUsers(array $data, array $params = [])
     {
-        $this->setVariable('users', $this->getTable('users', $data, $urlHelper, $tableService, $params));
+        $this->setVariable('users', $this->getTable('users', $data, $params));
+    }
+
+    private function getTable(
+        string $table,
+        array $results,
+        array $data = []
+    ) {
+        if (!isset($data['url'])) {
+            $data['url'] = $this->urlHelper;
+        }
+
+        return $this->tableService->buildTable($table, $results, $data, false);
     }
 }
