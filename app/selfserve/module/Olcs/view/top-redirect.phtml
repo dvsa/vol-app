@@ -1,8 +1,8 @@
 <?php // Form for redirecting user to DVSA Reports - auto send  ?>
 
-<p><?php echo $this->translate('top-report-link-redirect-message'); ?></p>
+<p><?php echo $this->escapeHtml($this->translate('top-report-link-redirect-message')); ?></p>
 
-<form id="top-report" method="get" class="js-hidden" action="<?php echo $redirectUrl ?>" method="post">
+<form id="top-report" method="get" class="js-hidden" action="<?php echo $this->escapeHtmlAttr($redirectUrl) ?>" method="post">
     <button type="submit" class="js-submit">Proceed to DVSA Reports</button>
 </form>
 

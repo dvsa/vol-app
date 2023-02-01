@@ -34,7 +34,7 @@ class DashboardController extends AbstractController
      *
      */
     public function topsreportAction() {
-        $dashboardData = $this->getDashboardData();
+        $dashboardData = $this->getDashboardData($this->getCurrentOrganisationId());
 
         $licenceNumbers = [];
         foreach ($dashboardData['licences'] as $licence) {
@@ -82,7 +82,13 @@ class DashboardController extends AbstractController
      */
     protected function standardDashboardView()
     {
-        $dashboardData = $this->getDashboardData();
+        $organisationId = $this->getCurrentOrganisationId();
+
+        if (empty($organisationId)) {
+            $this->flashMessenger()->addErrorMessage('auth.login.failed.reason.account-disabled');
+            return $this->redirect()->toRoute('auth/login/GET');
+        }
+        $dashboardData = $this->getDashboardData($organisationId);
         $total = 0;
 
         if (isset($dashboardData['licences'])
@@ -119,14 +125,7 @@ class DashboardController extends AbstractController
     /**
      * Perform dashboard data Qry
      */
-    protected function getDashboardData() {
-        $organisationId = $this->getCurrentOrganisationId();
-
-        if (empty($organisationId)) {
-            $this->flashMessenger()->addErrorMessage('auth.login.failed.reason.account-disabled');
-            return $this->redirect()->toRoute('auth/login/GET');
-        }
-
+    protected function getDashboardData($organisationId) {
         // retrieve data
         $query = DashboardQry::create(['id' => $organisationId]);
         $response = $this->handleQuery($query);
