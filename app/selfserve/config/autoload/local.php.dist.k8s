@@ -167,5 +167,9 @@ return [
         'referrer_ends_with' => '.gov.uk',
         // Should the redirect be done as a Location: header 302 (true) or client-side meta-refresh (false)
         'headerRedirect' => true
-    ]
+    ],
+    'top-report-link' => [
+            'targetUrl' => 'https://operator-reports-api.develop.edh.dvsacloud.uk/redirect',
+            'apiKey' => '123'
+        ]
 ];
