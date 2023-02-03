@@ -13,6 +13,7 @@ use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Organisation\Dashboard as DashboardQry;
 use Olcs\TestHelpers\Controller\Traits\ControllerTestTrait;
 use Olcs\Mvc\Controller\Plugin\Placeholder;
+use Common\Service\Cqrs\Response as QueryResponse;
 
 /**
  * Dashboard Controller Test
@@ -113,6 +114,21 @@ class DashboardControllerTest extends MockeryTestCase
             ->with($dashboardData)
             ->once()
             ->andReturn(['applications' => ['apps'], 'variations' => ['vars'], 'licences' => ['lics']]);
+
+        $this->sut->shouldReceive('getCurrentOrganisationId')
+            ->with()
+            ->andReturn($organisationId);
+
+        $dashboardDataResponse = m::mock(QueryResponse::class);
+        $dashboardDataResponse->shouldIgnoreMissing();
+        $dashboardDataResponse->shouldReceive('getResult')->andReturn($dashboardData);
+
+        $reportToggleResponse = m::mock(QueryResponse::class);
+        $reportToggleResponse->shouldIgnoreMissing();
+        $reportToggleResponse->shouldReceive('getResult')->andReturn(['isEnabled' => 1]);
+
+        $this->sut->shouldReceive('handleQuery')
+                 ->andReturn($reportToggleResponse);
 
         $view = $this->sut->indexAction();
 
