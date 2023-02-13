@@ -4268,16 +4268,16 @@
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.442",
+            "version": "4.206.448",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.442/olcs-olcs-common-4.206.442.zip",
-                "reference": "935ec3de41f4eb812034a9eed49ce5a0275d574f",
-                "shasum": "935ec3de41f4eb812034a9eed49ce5a0275d574f"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.448/olcs-olcs-common-4.206.448.zip",
+                "reference": "9fc16eec98813bd9d0dc9f3f52a3c9f1d81a0d98",
+                "shasum": "9fc16eec98813bd9d0dc9f3f52a3c9f1d81a0d98"
             },
             "require": {
                 "elendev/composer-push": "^1.0.3",
-                "olcs/olcs-laminas": "~2.5.0 || ~3.0.0",
+                "olcs/olcs-laminas": "~2.5.0",
                 "php": ">=7.4"
             },
             "require-dev": {
@@ -4286,6 +4286,7 @@
                 "olcs/olcs-logging": "~4.206.0",
                 "olcs/olcs-transfer": "~4.206.0",
                 "olcs/olcs-utils": "~4.206.0",
+                "soflomo/purifier": "^1.0",
                 "symfony/lock": "^5"
             },
             "type": "library",
@@ -4328,7 +4329,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2023-01-31T14:41:49+00:00"
+            "time": "2023-02-13T12:21:35+00:00"
         },
         {
             "name": "olcs/olcs-frontend-deps",
@@ -4473,12 +4474,12 @@
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "4.206.172",
+            "version": "4.206.173",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-transfer/4.206.172/olcs-olcs-transfer-4.206.172.zip",
-                "reference": "ea46a52d83f4756e9c013771b3c399a3e5829fe3",
-                "shasum": "ea46a52d83f4756e9c013771b3c399a3e5829fe3"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-transfer/4.206.173/olcs-olcs-transfer-4.206.173.zip",
+                "reference": "00bd416fec0d5e2e25d7d884bda740889642ec9f",
+                "shasum": "00bd416fec0d5e2e25d7d884bda740889642ec9f"
             },
             "require": {
                 "elendev/composer-push": "^1.0.3",
@@ -4527,7 +4528,7 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2023-01-31T14:38:48+00:00"
+            "time": "2023-02-02T10:25:14+00:00"
         },
         {
             "name": "olcs/olcs-utils",
@@ -6426,12 +6427,12 @@
         },
         {
             "name": "olcs/olcs-devtools",
-            "version": "4.206.18",
+            "version": "4.206.19",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-devtools/4.206.18/olcs-olcs-devtools-4.206.18.zip",
-                "reference": "b87b343dc588adb9c397bba7b9e785d23a3c7915",
-                "shasum": "b87b343dc588adb9c397bba7b9e785d23a3c7915"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-devtools/4.206.19/olcs-olcs-devtools-4.206.19.zip",
+                "reference": "438d54f0e601c0594109667260044fce9e8249bf",
+                "shasum": "438d54f0e601c0594109667260044fce9e8249bf"
             },
             "require": {
                 "dms/phpunit-arraysubset-asserts": "^0.3.1",
@@ -6450,7 +6451,7 @@
                 "phpstan/phpstan-mockery": "^0.12",
                 "phpstan/phpstan-phpunit": "^0.12",
                 "phpunit/phpcov": "8.*",
-                "phpunit/phpunit": "9.*",
+                "phpunit/phpunit": "~9.5.0",
                 "squizlabs/php_codesniffer": "~3.6.2"
             },
             "bin": [
@@ -6470,32 +6471,21 @@
                 }
             },
             "description": "Dev tools",
-            "time": "2023-01-31T14:13:47+00:00"
+            "time": "2023-02-07T13:40:41+00:00"
         },
         {
             "name": "olcs/olcs-testhelpers",
-            "version": "4.206.19",
+            "version": "4.206.20",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-testhelpers/4.206.19/olcs-olcs-testhelpers-4.206.19.zip",
-                "reference": "b9b8317141f584a35ada5e669d1f0f9d1c2c54d0",
-                "shasum": "b9b8317141f584a35ada5e669d1f0f9d1c2c54d0"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-testhelpers/4.206.20/olcs-olcs-testhelpers-4.206.20.zip",
+                "reference": "021877a35ebe2bbb58f4f38bc1dbcfe3a3206eb4",
+                "shasum": "021877a35ebe2bbb58f4f38bc1dbcfe3a3206eb4"
             },
             "require": {
-                "elendev/nexus-composer-push": "^0.1",
-                "laminas/laminas-dependency-plugin": "^2.0",
-                "laminas/laminas-form": "^2.5",
-                "laminas/laminas-http": "^2.5",
-                "laminas/laminas-i18n": "^2.5",
-                "laminas/laminas-mvc": "^2.5",
-                "laminas/laminas-servicemanager": "^2.5",
-                "laminas/laminas-stdlib": "^2.5",
-                "laminas/laminas-validator": "^2.5",
-                "laminas/laminas-view": "^2.5",
+                "elendev/composer-push": "^1.0.3",
+                "olcs/olcs-laminas": "~2.5.0 || ~3.0.0",
                 "php": ">=7.4"
-            },
-            "require-dev": {
-                "olcs/olcs-devtools": "~4.206.0"
             },
             "type": "library",
             "extra": {
@@ -6509,7 +6499,7 @@
                 }
             },
             "description": "OLCS Test helpers",
-            "time": "2022-05-17T14:56:40+00:00"
+            "time": "2023-02-03T17:33:16+00:00"
         },
         {
             "name": "pdepend/pdepend",
