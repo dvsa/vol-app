@@ -40,7 +40,7 @@ class ListVehicleControllerFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : Dispatcher
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Dispatcher
     {
         if (method_exists($container, 'getServiceLocator')) {
             $sl = $container->getServiceLocator();
