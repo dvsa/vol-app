@@ -2,15 +2,13 @@
 
 namespace Olcs\Controller\Bus\Details;
 
-use Dvsa\Olcs\Transfer\Command\Bus\UpdateEndDate as UpdateEndDateCmd;
 use Dvsa\Olcs\Transfer\Query\Bus\BusReg as ItemDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use \Olcs\Data\Mapper\BusReg as BusRegMapper;
+use Olcs\Data\Mapper\BusReg as BusRegMapper;
 use Olcs\Controller\Interfaces\BusRegControllerInterface;
 use Olcs\Controller\Traits as ControllerTraits;
 use Olcs\Form\Model\Form\BusServiceNumberAndType as ServiceForm;
-use Olcs\Form\Model\Form\BusServiceEndDate as EndDateForm;
 use Dvsa\Olcs\Transfer\Command\Bus\UpdateServiceDetails as UpdateServiceCmd;
 use Olcs\Form\Model\Form\BusRegTa as TaForm;
 use Dvsa\Olcs\Transfer\Command\Bus\UpdateTaAuthority as UpdateTaCmd;
@@ -72,32 +70,16 @@ class BusDetailsController extends AbstractInternalController implements
      */
     public function serviceAction()
     {
-        $busReg = $this->getBusReg();
-
-        if ($busReg['canEditEndDate']) {
-            return $this->partEdit(
-                EndDateForm::class,
+            return $this->edit(
                 ServiceForm::class,
                 $this->itemDto,
                 new GenericItem($this->itemParams),
-                UpdateEndDateCmd::class,
+                UpdateServiceCmd::class,
                 $this->mapperClass,
-                'pages/part-crud-form',
+                'pages/crud-form',
                 'Updated record',
                 'Service No. & type'
             );
-        }
-
-        return $this->edit(
-            ServiceForm::class,
-            $this->itemDto,
-            new GenericItem($this->itemParams),
-            UpdateServiceCmd::class,
-            $this->mapperClass,
-            'pages/crud-form',
-            'Updated record',
-            'Service No. & type'
-        );
     }
 
     /**
