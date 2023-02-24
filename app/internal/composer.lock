@@ -1191,11 +1191,11 @@
         },
         {
             "name": "elendev/composer-push",
-            "version": "1.0.3",
+            "version": "1.0.4",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/elendev/composer-push/1.0.3/elendev-composer-push-1.0.3.zip",
-                "reference": "c2163c3d36e03654a34dade0b1323ca25ea3ba36",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/elendev/composer-push/1.0.4/elendev-composer-push-1.0.4.zip",
+                "reference": "74cd140d8481b68284291628c37d92e4c7caebbe",
                 "shasum": ""
             },
             "require": {
@@ -1240,9 +1240,9 @@
             "description": "Provide a Push command to composer to push to repositories",
             "support": {
                 "issues": "https://github.com/Elendev/composer-push/issues",
-                "source": "https://github.com/Elendev/composer-push/tree/1.0.3"
+                "source": "https://github.com/Elendev/composer-push/tree/1.0.4"
             },
-            "time": "2022-06-27T08:29:14+00:00"
+            "time": "2023-02-21T09:59:18+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
