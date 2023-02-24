@@ -4269,16 +4269,16 @@
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.448",
+            "version": "4.206.449",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.448/olcs-olcs-common-4.206.448.zip",
-                "reference": "9fc16eec98813bd9d0dc9f3f52a3c9f1d81a0d98",
-                "shasum": "9fc16eec98813bd9d0dc9f3f52a3c9f1d81a0d98"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.449/olcs-olcs-common-4.206.449.zip",
+                "reference": "94431ee23045f89da6d81621693254060fc8190f",
+                "shasum": "94431ee23045f89da6d81621693254060fc8190f"
             },
             "require": {
                 "elendev/composer-push": "^1.0.3",
-                "olcs/olcs-laminas": "~2.5.0",
+                "olcs/olcs-laminas": "~2.5.0 || ~3.0.0",
                 "php": ">=7.4"
             },
             "require-dev": {
@@ -4330,7 +4330,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2023-02-13T12:21:35+00:00"
+            "time": "2023-02-20T12:13:28+00:00"
         },
         {
             "name": "olcs/olcs-frontend-deps",
@@ -4475,12 +4475,12 @@
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "4.206.173",
+            "version": "4.206.174",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-transfer/4.206.173/olcs-olcs-transfer-4.206.173.zip",
-                "reference": "00bd416fec0d5e2e25d7d884bda740889642ec9f",
-                "shasum": "00bd416fec0d5e2e25d7d884bda740889642ec9f"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-transfer/4.206.174/olcs-olcs-transfer-4.206.174.zip",
+                "reference": "6d0764fda7384156586012bbf45d8b3972eb3928",
+                "shasum": "6d0764fda7384156586012bbf45d8b3972eb3928"
             },
             "require": {
                 "elendev/composer-push": "^1.0.3",
@@ -4529,7 +4529,7 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2023-02-02T10:25:14+00:00"
+            "time": "2023-02-17T18:14:51+00:00"
         },
         {
             "name": "olcs/olcs-utils",
