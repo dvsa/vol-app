@@ -42,6 +42,7 @@
         },
         "sort-packages": true,
         "allow-plugins": {
+            "laminas/laminas-component-installer": true,
             "laminas/laminas-dependency-plugin": true,
             "elendev/composer-push": true,
             "phpstan/extension-installer": true
