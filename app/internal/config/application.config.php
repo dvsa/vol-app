@@ -75,8 +75,13 @@ $config = array(
     // 'service_manager' => array(),
 );
 
-if (file_exists(__DIR__ . '/../vendor/laminas/laminas-developer-tools/Module.php')) {
-    array_unshift($config['modules'], 'Laminas\DeveloperTools');
+if (file_exists(__DIR__ . '/../vendor/laminas/laminas-developer-tools/src/Module.php')) {
+    $config['modules'][] = 'Laminas\DeveloperTools';
+
+    if (file_exists(__DIR__ . '/../vendor/san/san-session-toolbar/src/Module.php')) {
+        /** @todo once we're on Laminas 3, this line will be uncommented by VOL-3749  */
+        //$config['modules'][] = 'SanSessionToolbar';
+    }
 }
 
 return $config;
