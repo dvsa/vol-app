@@ -23,11 +23,19 @@ The following people created OLCS Static
 * Sam Quayle
 * Nick Payne
 
-### Requirements
+### Requirements for local install
+Using a local container would usually be the preferred option, however instructions for a local install are below
 
-* [Node.js](https://nodejs.org/en/) v6.9.2
+* [Node.js](https://nodejs.org/en/) v14 is the latest version that works
+* [Python](https://www.python.org/) 2.7 is the latest version that works
 
 ### Installation
+* [install nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+* nvm install 14
+* nvm use 14
+
+Apple machines now ship with Python 3
+* [install python 2.7 (macbook tutorial)](https://dev.to/jordicuevas/how-to-install-python2-in-a-macbook-m1-with-brew-bhi)
 
 ##### Clone the repo:
 
@@ -97,6 +105,6 @@ You can run all unit tests by calling the grunt task:
 
 Individual unit tests can be called with:
 
-````$ grunt test:single --taget=compnentName````
+````$ grunt test:single --target=componentName````
 
 e.g.  `grunt test:single --target=ajax` will only run ajax.test.js.
