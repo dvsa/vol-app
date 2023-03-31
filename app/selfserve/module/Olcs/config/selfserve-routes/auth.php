@@ -1,7 +1,11 @@
 <?php
 declare(strict_types=1);
 
+use Dvsa\Olcs\Auth\Controller\ChangePasswordController;
 use Dvsa\Olcs\Auth\Controller\ExpiredPasswordController;
+use Dvsa\Olcs\Auth\Controller\ForgotPasswordController;
+use Dvsa\Olcs\Auth\Controller\LogoutController;
+use Dvsa\Olcs\Auth\Controller\ResetPasswordController;
 use Laminas\Mvc\Router\Http\Method;
 use Laminas\Mvc\Router\Http\Segment;
 
@@ -61,7 +65,7 @@ return [
                     'options' => [
                         'route' => 'forgot-password[/]',
                         'defaults' => [
-                            'controller' => 'Auth\ForgotPasswordController',
+                            'controller' => ForgotPasswordController::class,
                             'action' => 'index'
                         ],
                     ],
@@ -71,7 +75,7 @@ return [
                     'options' => [
                         'route' => 'reset-password[/]',
                         'defaults' => [
-                            'controller' => 'Auth\ResetPasswordController',
+                            'controller' => ResetPasswordController::class,
                             'action' => 'index'
                         ],
                     ],
@@ -81,7 +85,7 @@ return [
                     'options' => [
                         'route' => 'logout[/]',
                         'defaults' => [
-                            'controller' => 'Auth\LogoutController',
+                            'controller' => LogoutController::class,
                             'action' => 'index'
                         ]
                     ],
@@ -103,7 +107,7 @@ return [
             'options' => [
                 'route' => '/change-password[/]',
                 'defaults' => [
-                    'controller' => 'Auth\ChangePasswordController',
+                    'controller' => ChangePasswordController::class,
                     'action' => 'index'
                 ],
             ],
