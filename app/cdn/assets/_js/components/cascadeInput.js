@@ -38,7 +38,6 @@ OLCS.cascadeInput = (function(document, $, undefined) {
 
         if(disableSubmit) {
           document.getElementById(disableSubmit).disabled = true;
-          //document.getElementById(disableSubmit).addClass("govuk-button--disabled");
         }
 
         OLCS.ajax({
@@ -70,7 +69,6 @@ OLCS.cascadeInput = (function(document, $, undefined) {
 
         if(disableSubmit) {
           document.getElementById(disableSubmit).disabled = false;
-          //document.getElementById(disableSubmit).removeClass("govuk-button--disabled");
         }
 
         if (filter) {
