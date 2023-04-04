@@ -25,4 +25,7 @@
   &__title {
     padding: 0;
   }
+  + .govuk-button-group {
+    margin-top: $gutter-half;
+  }
 }
