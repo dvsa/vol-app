@@ -12,7 +12,6 @@ use Interop\Container\ContainerInterface;
 use Laminas\Mvc\Controller\Plugin\FlashMessenger;
 use Laminas\Mvc\Controller\Plugin\Url;
 use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorAwareInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Olcs\Auth\Adapter\SelfserveCommandAdapter;
 use Dvsa\Olcs\Auth\Container\AuthChallengeContainer;
@@ -29,9 +28,6 @@ class LoginControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Dispatcher
     {
-        if ($container instanceof ServiceLocatorAwareInterface) {
-            $container = $container->getServiceLocator();
-        }
         $controllerPluginManager = $container->get('ControllerPluginManager');
 
         $controller = new LoginController(
