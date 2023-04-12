@@ -2,7 +2,7 @@
 
 namespace Olcs\FormService\Form\Lva;
 
-use Laminas\ServiceManager\Factory\FactoryInterface;
+use Laminas\ServiceManager\FactoryInterface;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
