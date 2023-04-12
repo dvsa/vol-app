@@ -3,18 +3,20 @@
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\AbstractFormService;
-use Laminas\ServiceManager\ServiceLocatorAwareInterface;
-use Laminas\ServiceManager\ServiceLocatorAwareTrait;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Abstract class to create submission form at LVA Overview page
  *
  * @author Dmitry Golubev <dmitrij.golubev@valtech.co.uk>
  */
-class AbstractOverviewSubmission extends AbstractFormService implements ServiceLocatorAwareInterface
+class AbstractOverviewSubmission extends AbstractFormService
 {
-    use ServiceLocatorAwareTrait;
+    protected $translationHelper;
+
+    public function __construct($translationHelper)
+    {
+        $this->translationHelper = $translationHelper;
+    }
 
     /** @var array */
     protected $sections = [];
@@ -58,11 +60,10 @@ class AbstractOverviewSubmission extends AbstractFormService implements ServiceL
         if ($fee > 0) {
             // show fee amount
             $form->get('amount')->setValue(
-                $this->getServiceLocator()->get('Helper\Translation')
-                    ->translateReplace(
-                        'application.payment-submission.amount.value',
-                        [number_format($fee, 2)]
-                    )
+                $this->translationHelper->translateReplace(
+                    'application.payment-submission.amount.value',
+                    [number_format($fee, 2)]
+                )
             );
         } else {
             $formHelper->remove($form, 'amount');

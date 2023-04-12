@@ -4,7 +4,6 @@ namespace Olcs\FormService\Form\Lva\BusinessType;
 
 use Common\FormService\Form\Lva\BusinessType\VariationBusinessType as CommonVariationBusinessType;
 use Laminas\Form\Form;
-use Laminas\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
  * Variation Business Type Form

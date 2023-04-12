@@ -5,21 +5,18 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\BusinessDetails\VariationBusinessDetails as CommonVariationBusinessDetails;
-use Laminas\ServiceManager\ServiceLocatorAwareInterface;
-use Laminas\ServiceManager\ServiceLocatorAwareTrait;
 
 /**
  * Variation Business Details Form
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class VariationBusinessDetails extends CommonVariationBusinessDetails implements ServiceLocatorAwareInterface
+class VariationBusinessDetails extends CommonVariationBusinessDetails
 {
-    use ServiceLocatorAwareTrait;
-
     /**
      * Alter form
      *

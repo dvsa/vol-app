@@ -33,7 +33,6 @@ class ApplicationBusinessDetailsTest extends MockeryTestCase
         $this->fh = m::mock('\Common\Service\Helper\FormHelperService')->makePartial();
 
         $this->sut = new ApplicationBusinessDetails();
-        $this->sut->setServiceLocator($this->sm);
         $this->sut->setFormServiceLocator($this->fsm);
         $this->sut->setFormHelper($this->fh);
     }
@@ -45,7 +44,7 @@ class ApplicationBusinessDetailsTest extends MockeryTestCase
         $this->mockAlterButtons($form, $this->fh);
         $params = [
             'orgType' => RefData::ORG_TYPE_LLP,
-            'hasInforceLicences' =>false
+            'hasInforceLicences' => false
         ];
 
         // Mocks

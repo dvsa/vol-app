@@ -2,6 +2,7 @@
 
 namespace OlcsTest\FormService\Form\Lva;
 
+use Laminas\I18n\View\Helper\Translate;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use OlcsTest\Bootstrap;
@@ -22,13 +23,17 @@ class AbstractOverviewSubmissionTest extends MockeryTestCase
     /** @var  m\MockInterface | \Common\Service\Helper\FormHelperService */
     private $mockFormHlp;
 
+    private $mockTranslationHelper;
+
     public function setUp(): void
     {
         $this->mockForm = m::mock(\Laminas\Form\FormInterface::class);
 
         $this->mockSm = Bootstrap::getServiceManager();
-        $this->mockSm
-            ->shouldReceive('get->translateReplace')
+
+        $this->mockTranslationHelper = m::mock(Translate::class);
+        $this->mockTranslationHelper
+            ->shouldReceive('translateReplace')
             ->andReturnUsing(
                 function ($text, $params) {
                     return '_TRLTD_' . $text . '[' . implode('|', $params) . ']';
@@ -37,8 +42,7 @@ class AbstractOverviewSubmissionTest extends MockeryTestCase
 
         $this->mockFormHlp = m::mock(\Common\Service\Helper\FormHelperService::class)->makePartial();
 
-        $this->sut = new AbstractOverviewSubmissionStub();
-        $this->sut->setServiceLocator($this->mockSm);
+        $this->sut = new AbstractOverviewSubmissionStub($this->mockTranslationHelper);
         $this->sut->setFormHelper($this->mockFormHlp);
     }
 
@@ -53,7 +57,7 @@ class AbstractOverviewSubmissionTest extends MockeryTestCase
             ->shouldReceive('createForm')->once()->with('Lva\PaymentSubmission')->andReturn($this->mockForm);
 
         /** @var AbstractOverviewSubmissionStub | m\MockInterface $sut */
-        $sut = m::mock(AbstractOverviewSubmissionStub::class . '[alterForm]')
+        $sut = m::mock(AbstractOverviewSubmissionStub::class . '[alterForm]', [$this->mockTranslationHelper])
             ->shouldAllowMockingProtectedMethods()
             ->shouldReceive('alterForm')->once()->with($this->mockForm, $data, $params)
             ->getMock();

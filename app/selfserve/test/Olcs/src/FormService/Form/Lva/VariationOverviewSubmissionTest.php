@@ -3,6 +3,7 @@
 namespace OlcsTest\FormService\Form\Lva;
 
 use Common\RefData;
+use Laminas\I18n\View\Helper\Translate;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use OlcsTest\Bootstrap;
@@ -27,7 +28,9 @@ class VariationOverviewSubmissionTest extends MockeryTestCase
 
         $this->mockFormHlp = m::mock(\Common\Service\Helper\FormHelperService::class);
 
-        $this->sut = new VariationOverviewSubmissionStub();
+        $mockTranslationHelper = m::mock(Translate::class);
+
+        $this->sut = new VariationOverviewSubmissionStub($mockTranslationHelper);
         $this->sut->setFormHelper($this->mockFormHlp);
     }
 
