@@ -3,8 +3,6 @@
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\BusinessDetails\LicenceBusinessDetails as CommonLicenceBusinessDetails;
-use Laminas\ServiceManager\ServiceLocatorAwareInterface;
-use Laminas\ServiceManager\ServiceLocatorAwareTrait;
 use Common\Form\Form;
 
 /**
@@ -12,10 +10,8 @@ use Common\Form\Form;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class LicenceBusinessDetails extends CommonLicenceBusinessDetails implements ServiceLocatorAwareInterface
+class LicenceBusinessDetails extends CommonLicenceBusinessDetails
 {
-    use ServiceLocatorAwareTrait;
-
     /**
      * Alter form
      *

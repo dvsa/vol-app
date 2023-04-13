@@ -529,36 +529,36 @@ $routes = [
             'initiate-request' => [
                 'type' => Segment::class,
                 'options' => [
-                    'route' => '/initiate-request[/application/:application]'.
+                    'route' => '/initiate-request[/application/:application]' .
                         '[/continuation-detail/:continuationDetailId][/]',
                     'defaults' => [
                         'action' => 'initiate-request',
                     ],
                 ]
             ],
-            'transport-manager' =>[
+            'transport-manager' => [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/:lva/:applicationId/transport-manager/:transportManagerApplicationId/:role[/]',
                     'defaults' => [
                         'action' => 'initiate-request',
                     ],
-                    'constraints' =>[
+                    'constraints' => [
                             'lva' => '(application|variation)',
                             'applicationId' => '[0-9]+',
                             'transportManagerApplicationId' => '[0-9]+',
-                            'role' =>'(tma\\_sign\\_as\\_tm|tma\\_sign\\_as\\_op|tma\\_sign\\_as\\_top)'
+                            'role' => '(tma\\_sign\\_as\\_tm|tma\\_sign\\_as\\_op|tma\\_sign\\_as\\_top)'
                     ],
                 ]
             ],
-            'surrender' =>[
+            'surrender' => [
                 'type' => Segment::class,
                 'options' => [
                     'route' => '/surrender/:licenceId[/]',
                     'defaults' => [
                         'action' => 'initiate-request',
                     ],
-                    'constraints' =>[
+                    'constraints' => [
                         'licenceId' => '[0-9]+',
                     ],
                 ]
@@ -1167,7 +1167,7 @@ return array(
             'LvaVariation/UploadEvidence'           => \Olcs\Controller\Lva\Variation\UploadEvidenceController::class,
             'LvaVariation/PaymentSubmission'        => 'Olcs\Controller\Lva\Variation\PaymentSubmissionController',
             'LvaVariation/Review'                   => \Common\Controller\Lva\ReviewController::class,
-            'LvaDirectorChange/People'=> \Olcs\Controller\Lva\DirectorChange\PeopleController::class,
+            'LvaDirectorChange/People' => \Olcs\Controller\Lva\DirectorChange\PeopleController::class,
             'LvaDirectorChange/FinancialHistory' => Olcs\Controller\Lva\DirectorChange\FinancialHistoryController::class,
             'LvaDirectorChange/LicenceHistory' => \Olcs\Controller\Lva\DirectorChange\LicenceHistoryControllerFactory::class,
             'LvaDirectorChange/ConvictionsPenalties' => \Olcs\Controller\Lva\DirectorChange\ConvictionsPenaltiesControllerFactory::class,
@@ -1508,10 +1508,11 @@ return array(
             'lva-application-taxi_phv' => LvaFormService\ApplicationTaxiPhv::class,
 
             'lva-licence-trailers' => LvaFormService\LicenceTrailers::class,
-
-            'lva-application-overview-submission' => LvaFormService\ApplicationOverviewSubmission::class,
-            'lva-variation-overview-submission' => LvaFormService\VariationOverviewSubmission::class,
         ],
+        'factories' => [
+            'lva-application-overview-submission' => LvaFormService\ApplicationOverviewSubmissionFactory::class,
+            'lva-variation-overview-submission' => LvaFormService\VariationOverviewSubmissionFactory::class,
+        ]
     ],
     'zfc_rbac' => [
         'assertion_map' => [

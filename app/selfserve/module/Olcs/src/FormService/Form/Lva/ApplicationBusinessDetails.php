@@ -3,8 +3,6 @@
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\BusinessDetails\ApplicationBusinessDetails as CommonApplicationBusinessDetails;
-use Laminas\ServiceManager\ServiceLocatorAwareInterface;
-use Laminas\ServiceManager\ServiceLocatorAwareTrait;
 use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
 use Common\Form\Form;
 
@@ -13,10 +11,9 @@ use Common\Form\Form;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationBusinessDetails extends CommonApplicationBusinessDetails implements ServiceLocatorAwareInterface
+class ApplicationBusinessDetails extends CommonApplicationBusinessDetails
 {
-    use ServiceLocatorAwareTrait,
-        ButtonsAlterations;
+    use ButtonsAlterations;
 
     /**
      * Alter form
