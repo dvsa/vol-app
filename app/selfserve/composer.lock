@@ -3923,12 +3923,12 @@
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "4.206.39",
+            "version": "4.206.41",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-auth/4.206.39/olcs-olcs-auth-4.206.39.zip",
-                "reference": "56062e9a8053c3e4557ba197e36f484dd2307aa9",
-                "shasum": "56062e9a8053c3e4557ba197e36f484dd2307aa9"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-auth/4.206.41/olcs-olcs-auth-4.206.41.zip",
+                "reference": "ebe145b550157be49869bdb03afc8aefddd8e802",
+                "shasum": "ebe145b550157be49869bdb03afc8aefddd8e802"
             },
             "require": {
                 "elendev/composer-push": "^1.0.3",
@@ -3937,7 +3937,8 @@
             },
             "require-dev": {
                 "olcs/olcs-common": "~4.206.0",
-                "olcs/olcs-devtools": "~4.206.0"
+                "olcs/olcs-devtools": "~4.206.0",
+                "olcs/olcs-transfer": "~4.206.0"
             },
             "type": "library",
             "extra": {
@@ -3975,7 +3976,7 @@
                 ]
             },
             "description": "OLCS Authentication",
-            "time": "2023-02-28T10:25:04+00:00"
+            "time": "2023-04-05T11:21:55+00:00"
         },
         {
             "name": "olcs/olcs-common",
