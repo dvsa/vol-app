@@ -388,14 +388,4 @@ class SearchController extends AbstractController
     {
         return $this->getServiceLocator()->get('DataServiceManager')->get(Search::class);
     }
-
-    /**
-     * Get search type service
-     *
-     * @return SearchType
-     */
-    public function getSearchTypeService()
-    {
-        return $this->getServiceLocator()->get('DataServiceManager')->get(SearchType::class);
-    }
 }
