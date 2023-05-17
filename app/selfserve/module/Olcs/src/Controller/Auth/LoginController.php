@@ -7,16 +7,14 @@ use Common\Auth\Service\AuthenticationServiceInterface;
 use Common\Controller\Plugin\CurrentUser;
 use Common\Controller\Plugin\Redirect;
 use Common\Service\Helper\FormHelperService;
-use Dvsa\Olcs\Auth\Service\Auth\CookieService;
 use Laminas\Authentication\Adapter\ValidatableAdapterInterface;
 use Laminas\Authentication\Result;
 use Laminas\Form\Form;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
 use Laminas\Mvc\Controller\Plugin\FlashMessenger;
-use Laminas\Mvc\Controller\Plugin\Url;
 use Laminas\Mvc\Router\Http\RouteMatch;
-use Laminas\Session\Container;
+use Laminas\Uri\Uri;
 use Laminas\View\Model\ViewModel;
 use Dvsa\Olcs\Auth\Container\AuthChallengeContainer;
 use Olcs\Form\Model\Form\Auth\Login;
@@ -48,11 +46,6 @@ class LoginController
     protected $authenticationService;
 
     /**
-     * @var CookieService
-     */
-    private $cookieService;
-
-    /**
      * @var CurrentUser
      */
     private $currentUser;
@@ -73,11 +66,6 @@ class LoginController
     protected $redirectHelper;
 
     /**
-     * @var Url
-     */
-    protected $urlHelper;
-
-    /**
      * @var AuthChallengeContainer
      */
     private AuthChallengeContainer $authChallengeContainer;
@@ -86,36 +74,29 @@ class LoginController
      * LoginController constructor.
      * @param ValidatableAdapterInterface $authenticationAdapter
      * @param AuthenticationServiceInterface $authenticationService
-     * @param CookieService $cookieService
      * @param CurrentUser $currentUser
      * @param FlashMessenger $flashMessenger
      * @param FormHelperService $formHelper
      * @param Redirect $redirectHelper
-     * @param Url $urlHelper
      * @param AuthChallengeContainer $authChallengeContainer
      */
     public function __construct(
         ValidatableAdapterInterface $authenticationAdapter,
         AuthenticationServiceInterface $authenticationService,
-        CookieService $cookieService,
         CurrentUser $currentUser,
         FlashMessenger $flashMessenger,
         FormHelperService $formHelper,
         Redirect $redirectHelper,
-        Url $urlHelper,
         AuthChallengeContainer $authChallengeContainer
     ) {
         $this->authenticationAdapter = $authenticationAdapter;
         $this->authenticationService = $authenticationService;
-        $this->cookieService = $cookieService;
         $this->currentUser = $currentUser;
         $this->flashMessenger = $flashMessenger;
         $this->formHelper = $formHelper;
         $this->redirectHelper = $redirectHelper;
-        $this->urlHelper = $urlHelper;
         $this->authChallengeContainer = $authChallengeContainer;
     }
-
 
     public function indexAction()
     {
@@ -162,7 +143,7 @@ class LoginController
         $result = $this->attemptAuthentication($request);
 
         if ($result->getCode() === Result::SUCCESS) {
-            return $this->handleSuccessfulAuthentication($result, $response, $request);
+            return $this->handleSuccessfulAuthentication($request);
         }
 
         if ($result->getCode() === static::AUTH_SUCCESS_WITH_CHALLENGE) {
@@ -242,76 +223,29 @@ class LoginController
         return $result;
     }
 
-    /**
-     * @param Result $result
-     * @param Response $response
-     * @param Request $request
-     * @return Response
-     */
-    private function handleSuccessfulAuthentication(Result $result, Response $response, Request $request)
+    private function handleSuccessfulAuthentication(Request $request): Response
     {
-        switch ($result->getIdentity()['provider']) {
-            case static::DVSA_OLCS_AUTH_CLIENT_OPENAM:
-                return $this->handleSuccessOpenAMResult($result->getIdentity(), $request, $response);
-            case self::DVSA_OLCS_AUTH_CLIENT_COGNITO:
-                return $this->handleSuccessCognitoResult();
-            default:
-                return $this->redirectHelper->toRoute(static::ROUTE_AUTH_LOGIN_GET);
-        }
-    }
+        $gotoUrl = $request->getQuery('goto');
 
-    /**
-     * @param array $identity
-     * @param Request $request
-     * @param Response $response
-     * @return Response
-     */
-    private function handleSuccessOpenAMResult(array $identity, Request $request, Response $response)
-    {
-        $gotoUrl = $request->getQuery('goto', '');
-
-        $this->cookieService->createTokenCookie($response, $identity['tokenId'], false);
-
-        // The "goto" URL added by openAm is always http, if we are running https, then need to change it
-        if ($request->getUri()->getScheme() === 'https') {
-            $gotoUrl = str_replace('http://', 'https://', $gotoUrl);
+        if (empty($gotoUrl)) {
+            return $this->redirectHelper->toRoute(static::ROUTE_INDEX);
         }
 
-        if ($this->validateGotoUrl($gotoUrl, $request)) {
+        $currentUri = $request->getUri();
+        $gotoUri = new Uri($gotoUrl);
+
+        // Ensure the host isn't changing as part of the redirect.
+        if ($currentUri->getHost() !== $gotoUri->getHost()) {
+            return $this->redirectHelper->toRoute(static::ROUTE_INDEX);
+        }
+
+        $isValidGoto = filter_var($gotoUrl, FILTER_VALIDATE_URL) !== false;
+
+        if ($isValidGoto) {
             return $this->redirectHelper->toUrl($gotoUrl);
         }
 
         return $this->redirectHelper->toRoute(static::ROUTE_INDEX);
-    }
-
-    /**
-     * @param array $identity
-     * @param Request $request
-     * @param Response $response
-     * @return Response
-     */
-    private function handleSuccessCognitoResult()
-    {
-        return $this->redirectHelper->toRoute(static::ROUTE_INDEX);
-    }
-
-    /**
-     * Validate that the goto URL is valid
-     *
-     * @param string $gotoUrl Goto URL
-     *
-     * @return bool
-     */
-    private function validateGotoUrl(string $gotoUrl, Request $request)
-    {
-        if (!is_string($gotoUrl) || empty($gotoUrl)) {
-            return false;
-        }
-
-        // Check that the goto URL is valid, ie it begins with the server name from the request
-        $uri = $request->getUri();
-        $serverUrl = $uri->getScheme() . '://' . $uri->getHost() . '/';
-        return strpos($gotoUrl, $serverUrl) === 0;
     }
 
     /**
