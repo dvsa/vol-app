@@ -9,7 +9,6 @@ use Common\Controller\Plugin\Redirect;
 use Common\Rbac\User;
 use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Auth\Container\AuthChallengeContainer;
-use Dvsa\Olcs\Auth\Service\Auth\CookieService;
 use Laminas\Authentication\Result;
 use Laminas\Form\Annotation\AnnotationBuilder;
 use Laminas\Form\Form;
@@ -17,7 +16,6 @@ use Laminas\Http\Request;
 use Laminas\Http\Response;
 use Laminas\Http\Response as HttpResponse;
 use Laminas\Mvc\Controller\Plugin\FlashMessenger;
-use Laminas\Mvc\Controller\Plugin\Url;
 use Laminas\Mvc\Router\Http\RouteMatch;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\Stdlib\Parameters;
@@ -40,14 +38,12 @@ class LoginControllerTest extends MockeryTestCase
         'csrf' => null,
     ];
 
-    const AUTHENTICATION_RESULT_SUCCESSFUL_OPENAM = [
+    const AUTHENTICATION_RESULT_SUCCESSFUL = [
         Result::SUCCESS,
-        [
-            'provider' => LoginController::DVSA_OLCS_AUTH_CLIENT_OPENAM,
-            'tokenId' => 'tokenId'
-        ],
+        [],
         []
     ];
+
     const AUTHENTICATION_RESULT_CHALLENGE_NEW_PASSWORD_REQUIRED = [
         LoginController::AUTH_SUCCESS_WITH_CHALLENGE,
         [],
@@ -70,8 +66,6 @@ class LoginControllerTest extends MockeryTestCase
     const AUTHENTICATION_RESULT_USER_NOT_EXIST = [Result::FAILURE_IDENTITY_NOT_FOUND, [], ['Authentication Failed']];
     const AUTHENTICATION_RESULT_CREDENTIAL_INVALID = [Result::FAILURE_CREDENTIAL_INVALID, [], ['Authentication Failed']];
     const AUTHENTICATION_RESULT_FAILURE_ACCOUNT_DISABLED = [LoginController::AUTH_FAILURE_ACCOUNT_DISABLED, [], ['account-disabled']];
-    const AUTHENTICATION_RESULT_SUCCESSFUL_COGNITO = [Result::SUCCESS, ['provider' => LoginController::DVSA_OLCS_AUTH_CLIENT_COGNITO]];
-    const AUTHENTICATION_RESULT_SUCCESSFUL_UNKNOW_PROVIDER = [Result::SUCCESS, [ 'provider' => 'unknown']];
 
     /**
      * @var LoginController
@@ -251,38 +245,15 @@ class LoginControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends postAction_IsCallable
      */
-    public function postAction_SuccessfullOpenAMAuth_SetsCookie()
+    public function postAction_SuccessfulAuth_RedirectsToDashBoard_WhenGotoNotPresent()
     {
         // Setup
         $this->setUpSut();
         $request = $this->postRequest(['username' => 'username', 'password' => 'password']);
         $response = new Response();
 
-        $this->redirectHelper()->allows('toRoute')->andReturn($this->redirect());
-        $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_SUCCESSFUL_OPENAM));
-
-        // Expect
-        $this->cookieService()->expects('createTokenCookie')->with($response, 'tokenId', false);
-
-        // Execute
-        $this->sut->postAction($request, new RouteMatch([]), $response);
-    }
-
-    /**
-     * @test
-     * @depends postAction_SuccessfullOpenAMAuth_SetsCookie
-     */
-    public function postAction_SuccessfullOpenAMAuth_RedirectsToDashBoard_WhenGotoNotPresent()
-    {
-        // Setup
-        $this->setUpSut();
-        $request = $this->postRequest(['username' => 'username', 'password' => 'password']);
-        $response = new Response();
-
-        $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_SUCCESSFUL_OPENAM));
-        $this->cookieService()->allows('createTokenCookie')->with($response, 'tokenId', false);
+        $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_SUCCESSFUL));
 
         // Expect
         $this->redirectHelper()->expects()->toRoute(LoginController::ROUTE_INDEX)->andReturn($this->redirect());
@@ -293,9 +264,8 @@ class LoginControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends postAction_SuccessfullOpenAMAuth_SetsCookie
      */
-    public function postAction_SuccessfullOpenAMAuth_RedirectsToGoto_WhenPresentAndValid()
+    public function postAction_SuccessfulAuth_RedirectsToGoto_WhenPresentAndValid()
     {
         // Setup
         $this->setUpSut();
@@ -305,8 +275,7 @@ class LoginControllerTest extends MockeryTestCase
         );
         $response = new Response();
 
-        $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_SUCCESSFUL_OPENAM));
-        $this->cookieService()->allows('createTokenCookie')->with($response, 'tokenId', false);
+        $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_SUCCESSFUL));
 
         // Expect
         $this->redirectHelper()->expects()->toUrl('https://localhost/goto/url')->andReturn($this->redirect());
@@ -317,9 +286,8 @@ class LoginControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends postAction_SuccessfullOpenAMAuth_SetsCookie
      */
-    public function postAction_SuccessfullOpenAMAuth_RedirectsToDashboard_WhenGotoPresentAndInvalid()
+    public function postAction_SuccessfulOAuth_RedirectsToDashboard_WhenGotoPresentAndInvalid()
     {
         // Setup
         $this->setUpSut();
@@ -329,75 +297,10 @@ class LoginControllerTest extends MockeryTestCase
         );
         $response = new Response();
 
-        $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_SUCCESSFUL_OPENAM));
-        $this->cookieService()->allows('createTokenCookie')->with($response, 'tokenId', false);
+        $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_SUCCESSFUL));
 
         // Expect
         $this->redirectHelper()->expects()->toRoute(LoginController::ROUTE_INDEX)->andReturn($this->redirect());
-
-        // Execute
-        $this->sut->postAction($request, new RouteMatch([]), $response);
-    }
-
-    /**
-     * @test
-     * @depends postAction_SuccessfullOpenAMAuth_SetsCookie
-     */
-    public function postAction_SuccessfullOpenAMAuth_RedirectsHttps_WhenGotoIsHttp()
-    {
-        // Setup
-        $this->setUpSut();
-        $request = $this->postRequest(
-            ['username' => 'username', 'password' => 'password'],
-            ['goto' => 'http://localhost/goto/url']
-        );
-        $response = new Response();
-
-        $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_SUCCESSFUL_OPENAM));
-        $this->cookieService()->allows('createTokenCookie')->with($response, 'tokenId', false);
-
-        // Expect
-        $this->redirectHelper()->expects()->toUrl('https://localhost/goto/url')->andReturn($this->redirect());
-
-        // Execute
-        $this->sut->postAction($request, new RouteMatch([]), $response);
-    }
-
-    /**
-     * @test
-     * @depends postAction_IsCallable
-     */
-    public function postAction_SuccessfulCognitoAuth_RedirectsToDashboard()
-    {
-        // Setup
-        $this->setUpSut();
-        $request = $this->postRequest(['username' => 'username', 'password' => 'password']);
-        $response = new Response();
-
-        $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_SUCCESSFUL_COGNITO));
-
-        // Expect
-        $this->redirectHelper()->expects()->toRoute(LoginController::ROUTE_INDEX)->andReturn($this->redirect());
-
-        // Execute
-        $this->sut->postAction($request, new RouteMatch([]), $response);
-    }
-
-    /**
-     * @test
-     * @depends postAction_IsCallable
-     */
-    public function postAction_UnknownProvider_RedirectsToLogin()
-    {
-        // Setup
-        $this->setUpSut();
-        $request = $this->postRequest(['username' => 'username', 'password' => 'password']);
-        $response = new Response();
-
-        $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_SUCCESSFUL_UNKNOW_PROVIDER));
-
-        // Expect
-        $this->redirectHelper()->expects()->toRoute(LoginController::ROUTE_AUTH_LOGIN_GET)->andReturn($this->redirect());
 
         // Execute
         $this->sut->postAction($request, new RouteMatch([]), $response);
@@ -597,12 +500,10 @@ class LoginControllerTest extends MockeryTestCase
         $this->sut = new LoginController(
             $this->authenticationAdapter(),
             $this->authenticationService(),
-            $this->cookieService(),
             $this->currentUser(),
             $this->flashMessenger(),
             $this->formHelper(),
             $this->redirectHelper(),
-            $this->serviceManager->get(Url::class),
             $this->authChallengeContainer()
         );
     }
@@ -614,12 +515,10 @@ class LoginControllerTest extends MockeryTestCase
     {
         $this->authenticationAdapter();
         $this->authenticationService();
-        $this->cookieService();
         $this->currentUser();
         $this->flashMessenger();
         $this->formHelper();
         $this->redirectHelper();
-        $serviceManager->setService(Url::class, $this->setUpMockService(Url::class));
         $this->authChallengeContainer();
     }
 
@@ -711,20 +610,6 @@ class LoginControllerTest extends MockeryTestCase
             $this->serviceManager->setService(Redirect::class, $instance);
         }
         $instance = $this->serviceManager->get(Redirect::class);
-        assert($instance instanceof MockInterface);
-        return $instance;
-    }
-
-    /**
-     * @return MockInterface|CookieService
-     */
-    private function cookieService()
-    {
-        if (!$this->serviceManager->has('Auth\CookieService')) {
-            $instance = $this->setUpMockService(CookieService::class);
-            $this->serviceManager->setService('Auth\CookieService', $instance);
-        }
-        $instance = $this->serviceManager->get('Auth\CookieService');
         assert($instance instanceof MockInterface);
         return $instance;
     }
