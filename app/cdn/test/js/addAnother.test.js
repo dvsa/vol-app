@@ -17,7 +17,7 @@ describe("OLCS.addAnother", function() {
               "<input type=text name='[fieldName][0]id.name' id='[fieldName][0]id.id' value='something else'>",
             "</div>",
           "</fieldset>",
-          "<p class=hint><button type='submit' value='Add another'>Add another</button></p>",
+          "<p class=hint><input type='submit' value='Add another'></p>",
         "</div>"
       ].join("\n"));
     });
