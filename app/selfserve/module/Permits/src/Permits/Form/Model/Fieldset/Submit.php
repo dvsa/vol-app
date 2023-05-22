@@ -6,28 +6,39 @@ use Laminas\Form\Annotation as Form;
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("Submit")
+ * @Form\Attributes({
+ *     "class":"govuk-button-group",
+ * })
  */
 class Submit
 {
     /**
      * @Form\Name("SubmitButton")
      * @Form\Attributes({
-     *     "class":"action--primary large",
+     *     "class":"govuk-button",
+     *     "data-module": "govuk-button",
      *     "id":"submitbutton",
-     *     "value":"Save and continue",
+     *     "type":"submit",
      * })
-     * @Form\Type("Laminas\Form\Element\Submit")
+     * @Form\Options({
+     *     "label":"Save and continue",
+     * })
+     * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
     public $submit = null;
 
     /**
      * @Form\Name("SaveAndReturnButton")
      * @Form\Attributes({
+     *     "class":"govuk-button govuk-button--secondary",
+     *     "data-module": "govuk-button",
      *     "id":"save-return-button",
-     *     "value":"Save and return to overview",
-     *     "role":"link"
+     *     "type":"submit",
      * })
-     * @Form\Type("Laminas\Form\Element\Submit")
+     * @Form\Options({
+     *     "label":"Save and return to overview",
+     * })
+     * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
     public $save = null;
 }

@@ -7,17 +7,24 @@ use Laminas\Form\Annotation as Form;
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("SaveAndReturnOnly")
+ * @Form\Attributes({
+ *     "class":"govuk-button-group",
+ * })
  */
 class SaveAndReturnOnly
 {
     /**
      * @Form\Name("SubmitButton")
      * @Form\Attributes({
-     *     "class":"action--primary large",
+     *     "class":"govuk-button",
+     *     "data-module": "govuk-button",
      *     "id":"saveandreturnbutton",
-     *     "value":"save.button",
+     *     "type":"submit",
      * })
-     * @Form\Type("Laminas\Form\Element\Submit")
+     * @Form\Options({
+     *     "label":"save.button",
+     * })
+     * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
     public $submit = null;
 }

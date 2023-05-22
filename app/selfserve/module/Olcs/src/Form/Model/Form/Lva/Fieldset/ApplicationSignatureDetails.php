@@ -16,7 +16,12 @@ class ApplicationSignatureDetails
     public $signature = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary large","id":"submitAndPay"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button",
+     *     "id": "submitAndPay"
+     * })
      * @Form\Options({"label": "submitandpay.button"})
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */

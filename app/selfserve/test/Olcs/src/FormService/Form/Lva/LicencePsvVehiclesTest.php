@@ -44,7 +44,7 @@ class LicencePsvVehiclesTest extends MockeryTestCase
             ->andReturn(
                 m::mock()
                 ->shouldReceive('setAttribute')
-                ->with('class', 'action--primary large')
+                ->with('class', 'govuk-button')
                 ->once()
                 ->getMock()
             )

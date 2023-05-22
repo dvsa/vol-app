@@ -2,6 +2,7 @@
 
 namespace PermitsTest\Form\Model\Form;
 
+use \Common\Form\Elements\InputFilters\ActionButton;
 use Common\Form\Elements\Types\Radio;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 
@@ -28,6 +29,6 @@ class LicenceSelectionFormTest extends AbstractFormValidationTestCase
     {
         $element = ['Submit', 'SubmitButton'];
         $this->assertFormElementActionButton($element);
-        $this->assertFormElementType($element, "Laminas\Form\Element\Submit");
+        $this->assertFormElementType($element, ActionButton::class);
     }
 }

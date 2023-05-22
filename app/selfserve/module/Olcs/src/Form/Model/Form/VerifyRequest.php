@@ -23,7 +23,7 @@ class VerifyRequest
     public $details = null;
 
     /**
-     * @Form\Attributes({"class":"actions-container"})
+     * @Form\Attributes({"class":"govuk-button-group"})
      * @Form\ComposedObject("Common\Form\Model\Fieldset\SubmitButton")
      */
     public $formActions = null;

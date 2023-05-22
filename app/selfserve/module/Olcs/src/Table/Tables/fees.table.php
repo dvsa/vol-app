@@ -10,7 +10,7 @@ return array(
             'formName' => 'fees',
             'actions' => array(
                 'pay' => array(
-                    'class' => 'action--secondary js-require--multiple',
+                    'class' => 'govuk-button govuk-button--secondary js-require--multiple',
                     'value' => 'Pay',
                     'requireRows' => true
                 ),

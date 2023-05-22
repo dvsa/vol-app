@@ -37,7 +37,11 @@ class OCRSOptIn
     public $ocrsCheckbox = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button govuk-button--secondary",
+     * })
      * @Form\Options({"label":"licence.vehicle.list.form.orcs.submit.label"})
      * @Form\Type("\Laminas\Form\Element\Button")
      */

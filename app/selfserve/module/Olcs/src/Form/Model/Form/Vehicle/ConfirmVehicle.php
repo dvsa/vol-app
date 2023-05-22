@@ -16,7 +16,7 @@ class ConfirmVehicle
      * @Form\Options({"label": "Add vehicle"})
      * @Form\Attributes({
      *     "type": "submit",
-     *     "class": "action--secondary",
+     *     "class": "govuk-button govuk-button--secondary",
      * })
      */
     public $confirm = null;

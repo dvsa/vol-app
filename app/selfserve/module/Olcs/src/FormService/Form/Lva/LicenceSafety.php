@@ -20,7 +20,7 @@ class LicenceSafety extends CommonSafety
     {
         $form = parent::getForm();
 
-        $form->get('form-actions')->get('save')->setAttribute('class', 'action--primary large');
+        $form->get('form-actions')->get('save')->setAttribute('class', 'govuk-button');
         $this->getFormHelper()->remove($form, 'form-actions->cancel');
 
         return $form;

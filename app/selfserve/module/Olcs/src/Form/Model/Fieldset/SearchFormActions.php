@@ -7,12 +7,16 @@ use Laminas\Form\Annotation as Form;
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("form-actions")
- * @Form\Attributes({"class":"actions-container"})
+ * @Form\Attributes({"class":"govuk-button-group"})
  */
 class SearchFormActions
 {
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary large"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button",
+     * })
      * @Form\Options({"label": "search.form.filter.update_button"})
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */

@@ -23,11 +23,15 @@ class SimpleSearch
     protected $search;
 
     /**
-     * @Form\Attributes({
-     *    "class": "action--primary large",
-     *    "value": "lookup-basic-search-submit"
+     * @Form\Options({
+     *     "label": "lookup-basic-search-submit",
      * })
-     * @Form\Type("Submit")
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button"
+     * })
+     * @Form\Type("Button")
      */
     protected $submit;
 

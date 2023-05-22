@@ -27,13 +27,17 @@ class SwitchBoard
     public $optionsFieldset = null;
 
     /**
+     * @Form\Options({
+     *     "label": "Next",
+     * })
      * @Form\Attributes({
      *     "id": "next",
-     *     "value": "Next",
-     *     "class": "action--primary large",
-     *     "title": "licence.vehicle.switchboard.form.next.title"
+     *     "title": "licence.vehicle.switchboard.form.next.title",
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button",
      * })
-     * @Form\Type("Submit")
+     * @Form\Type("Button")
      */
     public $formActions = null;
 }

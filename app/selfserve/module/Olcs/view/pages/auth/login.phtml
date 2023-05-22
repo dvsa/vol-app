@@ -30,10 +30,10 @@
             <fieldset>
                 <?php echo $this->formRow($form->get('username')); ?>
                 <?php echo $this->formRow($form->get('password')); ?>
-                <div class="actions-container">
+                <div class="govuk-button-group">
                     <?php echo $this->formElement($form->get('submit')); ?>
                 </div>
-                <div class="actions-container">
+                <div>
                     <p><?php echo $this->escapeHtml($this->translate('help-sign-in')); ?></p>
                     <div class="govuk-inset-text">
                         <ul class="govuk-list">

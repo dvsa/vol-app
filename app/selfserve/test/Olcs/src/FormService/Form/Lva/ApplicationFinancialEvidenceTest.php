@@ -76,7 +76,7 @@ class ApplicationFinancialEvidenceTest extends MockeryTestCase
             ->with('class')
             ->once()
             ->shouldReceive('setAttribute')
-            ->with('class', 'action--tertiary large')
+            ->with('class', 'govuk-button govuk-button--secondary')
             ->once()
             ->getMock();
 

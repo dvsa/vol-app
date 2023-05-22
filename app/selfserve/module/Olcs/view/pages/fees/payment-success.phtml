@@ -32,13 +32,13 @@ echo $this->partial(
   
     <hr>
   
-    <div class="actions-container">
+    <div class="govuk-button-group">
       <?php
-        echo $this->link($this->url('fees'), 'pay-fees.back-to-home', 'action--primary large');
+        echo $this->link($this->url('fees'), 'pay-fees.back-to-home', 'govuk-button');
         echo $this->linkNewWindow(
             $this->url('fees/receipt', ['action' => 'print'], [], true),
             'pay-fees.success.print-receipt',
-            'action--secondary large'
+            'govuk-button govuk-button--secondary'
         );
       ?>
     </div>

@@ -6,17 +6,24 @@ use Laminas\Form\Annotation as Form;
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("CancelButton")
+ * @Form\Attributes({
+ *     "class":"govuk-button-group",
+ * })
  */
 class CancelButton
 {
     /**
      * @Form\Name("SubmitButton")
      * @Form\Attributes({
-     *     "class":"action--primary large",
+     *     "class":"govuk-button",
+     *     "data-module": "govuk-button",
      *     "id":"cancelbutton",
-     *     "value":"permits.form.cancel_application.button",
+     *     "type":"submit",
      * })
-     * @Form\Type("Laminas\Form\Element\Submit")
+     * @Form\Options({
+     *     "label":"permits.form.cancel_application.button",
+     * })
+     * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
     public $cancel = null;
 }

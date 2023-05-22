@@ -17,10 +17,12 @@ echo $this->render(
 
     <div id="top" class="full-width">
         <?php echo $this->content; ?>
-        <div class="actions-container actions-container--inline-block">
-            <a class="action--tertiary large js-disable-crud" href="#top"
+        <div class="govuk-button-group">
+            <a class="govuk-button govuk-button--secondary js-disable-crud" href="#top"
+               role="button" draggable="false" data-module="govuk-button"
                 ><?php echo $this->translate('search-result-nav-back-to-top');?></a>
-            <a class="action--tertiary large js-disable-crud" href="<?php echo $this->urlBackToSearch; ?>"
+            <a class="govuk-button govuk-button--secondary js-disable-crud" href="<?php echo $this->urlBackToSearch; ?>"
+               role="button" draggable="false" data-module="govuk-button"
                 ><?php echo $this->translate('search-result-nav-back-to-operator-search');?></a>
         </div>
     </div><!-- .three-quarters .js-disable-crud -->

@@ -23,7 +23,7 @@ class LicencePsvVehicles extends PsvVehicles
         parent::alterForm($form);
         $this->removeFormAction($form, 'saveAndContinue');
         $this->removeFormAction($form, 'cancel');
-        $form->get('form-actions')->get('save')->setAttribute('class', 'action--primary large');
+        $form->get('form-actions')->get('save')->setAttribute('class', 'govuk-button');
         return $form;
     }
 }

@@ -23,7 +23,7 @@ class LicenceAddresses extends CommonAddress
     protected function alterForm(Form $form, array $params)
     {
         parent::alterForm($form, $params);
-        $form->get('form-actions')->get('save')->setAttribute('class', 'action--primary large');
+        $form->get('form-actions')->get('save')->setAttribute('class', 'govuk-button');
         $this->getFormHelper()->remove($form, 'form-actions->cancel');
 
         return $form;
