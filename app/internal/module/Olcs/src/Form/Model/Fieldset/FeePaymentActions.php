@@ -6,12 +6,16 @@ use Laminas\Form\Annotation as Form;
 
 /**
  * Fee Payment Actions fieldset
- * @Form\Attributes({"class":"actions-container"})
+ * @Form\Attributes({"class":"govuk-button-group"})
  */
 class FeePaymentActions
 {
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button",
+     * })
      * @Form\Options({
      *     "label": "Make payment"
      * })
@@ -20,7 +24,12 @@ class FeePaymentActions
     public $pay = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary","id":"cancel"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button govuk-button--secondary",
+     *     "id":"cancel",
+     * })
      * @Form\Options({
      *     "label": "Cancel"
      * })

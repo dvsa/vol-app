@@ -5,14 +5,14 @@ namespace Admin\Form\Model\Fieldset;
 use Laminas\Form\Annotation as Form;
 
 /**
- * @Form\Attributes({"class":"actions-container"})
+ * @Form\Attributes({"class":"govuk-button-group"})
  * @Form\Name("form-actions")
  */
 class IrhpPermitPrintActions
 {
     /**
      * @Form\Name("search")
-     * @Form\Attributes({"type":"submit","class":"action--primary"})
+     * @Form\Attributes({"type":"submit","class":"govuk-button"})
      * @Form\Options({
      *     "label": "Search"
      * })

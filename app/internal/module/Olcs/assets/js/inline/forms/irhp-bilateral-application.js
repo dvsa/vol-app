@@ -30,7 +30,7 @@ $(function () {
 
         $('body').on("change", "#addOrRemoveCountriesContainer input[type='checkbox']", function() {
             var $modalWrapper = $(".modal__wrapper");
-            var $applyButton = $modalWrapper.find(".action--primary");
+            var $applyButton = $modalWrapper.find(".primary-button");
 
             if ($modalWrapper.find("input:checked").length) {
                 $applyButton.show();
@@ -63,9 +63,9 @@ $(function () {
         $("#addOrRemoveCountriesButton").on("click", function(event) {
             var markup = "<div id=\"addOrRemoveCountriesContainer\">" +
                 "<div style=\"padding-bottom: 20px;\"></div>" +
-                "<fieldset class=\"actions-container\">" + 
-                "<a id=\"addOrRemoveCountriesApplyButton\" class=\"action--primary\" href=\"\">Apply</a>" +
-                "<a id=\"addOrRemoveCountriesCancelButton\" class=\"action--secondary\" href=\"\">Cancel</a>" +
+                "<fieldset class=\"govuk-button-group\">" + 
+                "<a id=\"addOrRemoveCountriesApplyButton\" class=\"govuk-button primary-button\" href=\"\">Apply</a>" +
+                "<a id=\"addOrRemoveCountriesCancelButton\" class=\"govuk-button govuk-button--secondary\" href=\"\">Cancel</a>" +
                 "</fieldset>" +
                 "</div>";
 

@@ -13,7 +13,11 @@ use Laminas\Form\Annotation as Form;
 class InterimActions
 {
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button",
+     * })
      * @Form\Options({
      *     "label": "internal.interim.form.interim_save"
      * })
@@ -22,7 +26,12 @@ class InterimActions
     public $save = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary","id":"grant"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button govuk-button--secondary",
+     *     "id":"grant",
+     * })
      * @Form\Options({
      *     "label": "internal.interim.form.interim_grant"
      * })
@@ -31,7 +40,12 @@ class InterimActions
     public $grant = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary","id":"refuse"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button govuk-button--secondary",
+     *     "id":"refuse",
+     * })
      * @Form\Options({
      *     "label": "internal.interim.form.interim_refuse"
      * })
@@ -40,7 +54,12 @@ class InterimActions
     public $refuse = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary","id":"cancel"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button govuk-button--secondary",
+     *     "id":"cancel",
+     * })
      * @Form\Options({
      *     "label": "internal.interim.form.interim_cancel"
      * })
@@ -49,7 +68,12 @@ class InterimActions
     public $cancel = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary","id":"reprint"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button govuk-button--secondary",
+     *     "id":"reprint",
+     * })
      * @Form\Options({
      *     "label": "internal.interim.form.interim_reprint"
      * })

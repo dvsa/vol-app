@@ -21,7 +21,7 @@ class Team extends Base
 
     /**
      * @Form\Name("form-actions")
-     * @Form\Attributes({"class":"actions-container"})
+     * @Form\Attributes({"class":"govuk-button-group"})
      * @Form\ComposedObject("Common\Form\Model\Fieldset\CancelFormActions")
      */
     public $formActions = null;

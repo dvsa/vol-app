@@ -5,13 +5,17 @@ namespace Olcs\Form\Model\Fieldset;
 use Laminas\Form\Annotation as Form;
 
 /**
- * @Form\Attributes({"class":"actions-container"})
+ * @Form\Attributes({"class":"govuk-button-group"})
  * @Form\Name("form-actions")
  */
 class FinaliseDocumentActions
 {
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button",
+     * })
      * @Form\Options({
      *     "label": "Save"
      * })
@@ -20,7 +24,12 @@ class FinaliseDocumentActions
     public $submit = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button govuk-button--secondary",
+     *     "id":"cancel",
+     * })
      * @Form\Options({
      *     "label": "Back"
      * })
@@ -29,7 +38,12 @@ class FinaliseDocumentActions
     public $back = null;
 
     /**
-     * @Form\Attributes({"id":"cancel-finalise","type":"submit","class":"action--secondary"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button govuk-button--secondary",
+     *     "id":"cancel-finalise",
+     * })
      * @Form\Options({
      *     "label": "Cancel"
      * })

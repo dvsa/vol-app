@@ -10,12 +10,12 @@ return array(
             'actions' => array(
                 'renew' => array(
                     'label' => 'Set to renew', 
-                    'class' => 'action--primary js-require--multiple', 
+                    'class' => 'govuk-button js-require--multiple', 
                     'requireRows' => true
                 ),
                 'print' => array(
                     'label' => 'Print checklist', 
-                    'class' => 'action--secondary js-require--multiple', 
+                    'class' => 'govuk-button govuk-button--secondary js-require--multiple', 
                     'requireRows' => true
                 )
             )

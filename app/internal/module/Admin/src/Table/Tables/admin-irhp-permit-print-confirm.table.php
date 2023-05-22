@@ -12,11 +12,11 @@ return [
                 'print' => [
                     'requireRows' => false,
                     'label' => 'Confirm',
-                    'class' => 'action--primary'
+                    'class' => 'govuk-button'
                 ],
                 'cancel' => [
                     'requireRows' => false,
-                    'class' => 'action--secondary'
+                    'class' => 'govuk-button govuk-button--secondary'
                 ]
             ]
         ],

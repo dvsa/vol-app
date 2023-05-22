@@ -10,9 +10,9 @@ return array(
         'crud' => array(
             'formName' => 'conviction',
             'actions' => array(
-                'add' => array('class' => 'action--primary', 'label' => 'Add conviction'),
-                'edit' => array('requireRows' => true, 'class' => 'action--secondary js-require--one'),
-                'delete' => array('requireRows' => true, 'class' => 'action--secondary js-require--one')
+                'add' => array('class' => 'govuk-button', 'label' => 'Add conviction'),
+                'edit' => array('requireRows' => true, 'class' => 'govuk-button govuk-button--secondary js-require--one'),
+                'delete' => array('requireRows' => true, 'class' => 'govuk-button govuk-button--secondary js-require--one')
             )
         ),
         'paginate' => array(

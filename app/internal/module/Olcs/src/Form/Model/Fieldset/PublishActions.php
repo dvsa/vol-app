@@ -7,12 +7,16 @@ use Laminas\Form\Annotation as Form;
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("form-actions")
- * @Form\Attributes({"class":"actions-container"})
+ * @Form\Attributes({"class":"govuk-button-group"})
  */
 class PublishActions
 {
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary large"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button",
+     * })
      * @Form\Options({
      *     "label": "Save"
      * })
@@ -21,7 +25,11 @@ class PublishActions
     public $submit = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary large"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button",
+     * })
      * @Form\Options({
      *     "label": "Save & Publish"
      * })
@@ -30,7 +38,12 @@ class PublishActions
     public $publish = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"cancel"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button govuk-button--secondary",
+     *     "id":"cancel",
+     * })
      * @Form\Options({
      *     "label": "Cancel"
      * })

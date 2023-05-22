@@ -6,12 +6,17 @@ use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("form-actions")
- * @Form\Attributes({"class":"actions-container"})
+ * @Form\Attributes({"class":"govuk-button-group"})
  */
 class YesNoFormActions
 {
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary large"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button",
+     *     "id": "yes",
+     * })
      * @Form\Options({
      *     "label": "Yes"
      * })
@@ -20,7 +25,12 @@ class YesNoFormActions
     public $yes = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"no"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button govuk-button--secondary",
+     *     "id":"no",
+     * })
      * @Form\Options({
      *     "label": "No"
      * })

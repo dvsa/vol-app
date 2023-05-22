@@ -6,7 +6,7 @@ use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore No methods
- * @Form\Attributes({"class":"actions-container"})
+ * @Form\Attributes({"class":"govuk-button-group"})
  * @Form\Name("operator-id")
  */
 class OperatorId

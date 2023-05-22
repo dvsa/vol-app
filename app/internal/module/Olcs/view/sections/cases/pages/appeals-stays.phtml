@@ -14,7 +14,7 @@ if (empty($appeal)){
             'helpText' => 'There is currently no appeal',
             'url' => $this->url('case_appeal', ['case' => $caseId, 'action' => 'add'], [], false),
             'label' => 'Add appeal',
-            'class' => 'action--primary js-modal-ajax'
+            'class' => 'govuk-button js-modal-ajax'
         ]
     );
 } else {
@@ -30,7 +30,7 @@ if (empty($appeal)){
                         [],
                         false
                     ),
-                    'class' => 'action--secondary js-modal-ajax'
+                    'class' => 'govuk-button govuk-button--secondary js-modal-ajax'
                 ]
             ],
             'multiItems' => [
@@ -99,7 +99,7 @@ if (empty($appeal)){
                         false
                     ),
                     'label' => 'Add stay',
-                    'class' => 'action--primary js-modal-ajax'
+                    'class' => 'govuk-button js-modal-ajax'
                 ]
             );
 
@@ -119,7 +119,7 @@ if (empty($appeal)){
                         false
                     ),
                     'label' => 'Add stay',
-                    'class' => 'action--primary js-modal-ajax'
+                    'class' => 'govuk-button js-modal-ajax'
                 ]
             );
         endif;

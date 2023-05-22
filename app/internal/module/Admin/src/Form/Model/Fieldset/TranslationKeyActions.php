@@ -6,15 +6,15 @@ use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("form-actions")
- * @Form\Attributes({"class":"actions-container"})
+ * @Form\Attributes({"class":"govuk-button-group"})
  */
 class TranslationKeyActions
 {
     /**
      * @Form\Attributes({
-     *     "type":"submit",
-     *     "class":"action--primary large",
-     *     "aria-label": "Save and replace"
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button",
      * })
      * @Form\Options({"label": "Save and replace"})
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
@@ -24,7 +24,7 @@ class TranslationKeyActions
     /**
      * @Form\Attributes({
      *     "type":"submit",
-     *     "class":"action--secondary large",
+     *     "class":"govuk-button govuk-button--secondary",
      *     "id": "cancel"
      * })
      * @Form\Options({

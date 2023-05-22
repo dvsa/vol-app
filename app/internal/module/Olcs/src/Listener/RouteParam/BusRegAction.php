@@ -163,7 +163,7 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
         $sidebarNav->findOneBy('id', 'bus-registration-decisions-grant')
             ->setVisible($busReg['isGrantable'])
             ->setClass(
-                $this->shouldOpenGrantButtonInModal($busReg) ? 'action--secondary js-modal-ajax' : 'action--secondary'
+                $this->shouldOpenGrantButtonInModal($busReg) ? 'govuk-button govuk-button--secondary js-modal-ajax' : 'govuk-button govuk-button--secondary'
             );
         $sidebarNav->findOneBy('id', 'bus-registration-decisions-refuse')
             ->setVisible($busReg['canRefuse']);

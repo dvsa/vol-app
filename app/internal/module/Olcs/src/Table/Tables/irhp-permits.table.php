@@ -12,8 +12,8 @@ return [
     'settings' => [
         'crud' => [
             'actions' => [
-                'terminate' => ['requireRows' => true, 'class' => 'action--secondary js-require--one'],
-                'request replacement' => ['requireRows' => true, 'class' => 'action--secondary js-require--one']
+                'terminate' => ['requireRows' => true, 'class' => 'govuk-button govuk-button--secondary js-require--one'],
+                'request replacement' => ['requireRows' => true, 'class' => 'govuk-button govuk-button--secondary js-require--one']
             ],
         ],
         'paginate' => [

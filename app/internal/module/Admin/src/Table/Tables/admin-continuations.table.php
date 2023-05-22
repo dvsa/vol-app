@@ -12,7 +12,7 @@ return array(
             'actions' => array(
                 'generate' => array(
                     'label' => 'Generate',
-                    'class' => 'action--primary js-require--multiple',
+                    'class' => 'govuk-button js-require--multiple',
                     'requireRows' => true
                 ),
             )

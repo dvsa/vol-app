@@ -25,7 +25,12 @@ class OperatorBusinessType
     public $type = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary js-hidden","id":"refresh"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button govuk-button--secondary js-hidden",
+     *     "id":"refresh",
+     * })
      * @Form\Options({
      *     "label": "internal-operator-profile-business-type-refresh"
      * })

@@ -37,7 +37,7 @@ class Top extends \Olcs\Form\Model\Fieldset\Base
 
     /**
      * @Form\Type("Common\Form\Elements\Types\Html")
-     * @Form\Attributes({"value":"<a id=""addOrRemoveCountriesButton"" class=""action--secondary"">Add or remove countries</a>"})
+     * @Form\Attributes({"value":"<a id=""addOrRemoveCountriesButton"" class=""govuk-button govuk-button--secondary"" role=""button"" data-module=""govuk-button"">Add or remove countries</a>"})
      */
     public $addOrRemoveCountriesButton = null;
 

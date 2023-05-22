@@ -6,12 +6,17 @@ use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("form-actions")
- * @Form\Attributes({"class":"actions-container"})
+ * @Form\Attributes({"class":"govuk-button-group"})
  */
 class TaskCloseFormActions
 {
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary large","id":"close"})
+     * @Form\Attributes({
+     *     "type":"submit",
+     *     "data-module": "govuk-button",
+     *     "class": "govuk-button",
+     *     "id": "close",
+     * })
      * @Form\Options({
      *     "label": "Close"
      * })
@@ -20,7 +25,12 @@ class TaskCloseFormActions
     public $close = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"cancel"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button govuk-button--secondary",
+     *     "id":"cancel",
+     * })
      * @Form\Options({
      *     "label": "Cancel"
      * })

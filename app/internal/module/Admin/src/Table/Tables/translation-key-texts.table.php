@@ -17,14 +17,14 @@ return [
         'crud' => [
             'actions' => [
                 'edittexts' => [
-                    'class' => 'action--primary',
+                    'class' => 'govuk-button',
                     'requireRows' => false,
                     'label' => 'Edit Translation Key',
                 ],
                 'deleteText' => [
                     'label' => 'Delete Text',
                     'requireRows' => false,
-                    'class' => 'action--secondary js-require--one'
+                    'class' => 'govuk-button govuk-button--secondary js-require--one'
                 ]
             ],
         ],

@@ -6,12 +6,17 @@ use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("form-actions")
- * @Form\Attributes({"class":"actions-container"})
+ * @Form\Attributes({"class":"govuk-button-group"})
  */
 class UpdateContinuationFormActions
 {
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary large","id":"continue-licence"})
+     * @Form\Attributes({
+     *     "type":"submit",
+     *     "data-module": "govuk-button",
+     *     "class": "govuk-button",
+     *     "id": "continue-licence",
+     * })
      * @Form\Options({
      *     "label": "Continue Licence"
      * })
@@ -20,7 +25,12 @@ class UpdateContinuationFormActions
     public $continueLicence = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"submit"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button govuk-button--secondary",
+     *     "id":"submit",
+     * })
      * @Form\Options({
      *     "label": "save"
      * })
@@ -29,7 +39,12 @@ class UpdateContinuationFormActions
     public $submit = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"cancel"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button govuk-button--secondary",
+     *     "id":"cancel",
+     * })
      * @Form\Options({
      *     "label": "cancel"
      * })
@@ -38,7 +53,12 @@ class UpdateContinuationFormActions
     public $cancel = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"print-separator"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button govuk-button--secondary",
+     *     "id":"print-separator",
+     * })
      * @Form\Options({
      *     "label": "Print separator"
      * })
@@ -47,7 +67,13 @@ class UpdateContinuationFormActions
     public $printSeperator = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"view-continuation","target":"_blank"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button govuk-button--secondary",
+     *     "id":"view-continuation",
+     *     "target":"_blank",
+     * })
      * @Form\Options({
      *     "label": "View digital continuation"
      * })

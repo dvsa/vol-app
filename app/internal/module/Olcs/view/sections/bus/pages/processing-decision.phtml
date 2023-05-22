@@ -29,7 +29,7 @@ if (!empty($busReg['decision'])) {
                     [
                         'url' => $this->url(null, ['action' => 'cancel'], [], true),
                         'label' => 'Admin cancel',
-                        'class' => 'action--secondary js-modal-ajax'
+                        'class' => 'govuk-button govuk-button--secondary js-modal-ajax'
                     ]
                 ]
             ]
@@ -42,14 +42,14 @@ if (!empty($busReg['decision'])) {
             $multiUrl[] = [
                 'url' => $this->url(null, ['action' => 'withdraw'], [], true),
                 'label' => 'Withdraw',
-                'class' => 'action--secondary js-modal-ajax'
+                'class' => 'govuk-button govuk-button--secondary js-modal-ajax'
             ];
         }
         if ($busReg['canRefuse']) {
             $multiUrl[] = [
                 'url' => $this->url(null, ['action' => 'refuse'], [], true),
                 'label' => 'Refuse',
-                'class' => 'action--secondary js-modal-ajax'
+                'class' => 'govuk-button govuk-button--secondary js-modal-ajax'
             ];
         }
 
@@ -57,7 +57,7 @@ if (!empty($busReg['decision'])) {
             $multiUrl[] = [
                 'url' => $this->url(null, ['action' => 'grant'], [], true),
                 'label' => 'Grant',
-                'class' => 'action--primary' . ($busReg['status']['id'] == 'breg_s_var' ? ' js-modal-ajax' : '')
+                'class' => 'govuk-button' . ($busReg['status']['id'] == 'breg_s_var' ? ' js-modal-ajax' : '')
             ];
         }
 
@@ -65,7 +65,7 @@ if (!empty($busReg['decision'])) {
             $multiUrl[] = [
                 'url' => $this->url(null, ['action' => 'refuse-by-short-notice'], [], true),
                 'label' => 'Refuse by SN',
-                'class' => 'action--secondary js-modal-ajax'
+                'class' => 'govuk-button govuk-button--secondary js-modal-ajax'
             ];
         }
 

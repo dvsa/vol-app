@@ -42,8 +42,8 @@ $(function() {
         '<p>The print run was between ' + startNumber.val() + ' and ' + endNumber.val() + discsVoided,
         '<p>Did the discs print successfully?</p>',
         '<div class="action-container">',
-          '<a href id="discPrintingOk" class="action--primary large popupButtons">Yes</a>',
-          '<a href id="discPrintingFailed" class="action--secondary large popupButtons">No</a>',
+          '<a href id="discPrintingOk" role="button" draggable="false" class="govuk-button large popupButtons" data-module="govuk-button">Yes</a>',
+          '<a href id="discPrintingFailed" role="button" draggable="false" class="govuk-button large popupButtons" data-module="govuk-button">No</a>',
         '</div>',  
       '</div>'
     ].join('\n');
@@ -55,8 +55,8 @@ $(function() {
         '<p>The print run was between ' + startNumber.val() + ' and ' + endNumber.val() + discsVoided,
         '<p>Did the discs print successfully?</p>',
         '<div class="action-container">',
-          '<a href id="discPrintingOk" class="action--primary large popupButtons">Yes</a>',
-          '<a href id="discPrintingFailed" class="action--secondary large popupButtons">No</a>',
+          '<a href id="discPrintingOk" role="button" draggable="false" class="govuk-button large popupButtons" data-module="govuk-button">Yes</a>',
+          '<a href id="discPrintingFailed" role="button" draggable="false" class="govuk-button govuk-button--secondary large popupButtons" data-module="govuk-button">No</a>',
         '</div>',  
       '</div>'
     ].join('\n');

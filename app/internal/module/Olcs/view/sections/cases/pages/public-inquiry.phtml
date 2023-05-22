@@ -21,14 +21,14 @@ if (!$pi) {
         $reopenAction = [
             'label' => 'Reopen',
             'url' => $this->url(null, ['action' => 'reopen'], [], true),
-            'class' => 'js-modal-ajax action--secondary'
+            'class' => 'js-modal-ajax govuk-button govuk-button--secondary'
         ];
         $actions[] = $reopenAction;
     } else if ($pi['canClose']) {
         $closeAction = [
             'label' => 'Close',
             'url' => $this->url(null, ['action' => 'close'], [], true),
-            'class' => 'js-modal-ajax action--secondary'
+            'class' => 'js-modal-ajax govuk-button govuk-button--secondary'
         ];
         $actions[] = $closeAction;
     }

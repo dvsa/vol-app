@@ -7,15 +7,15 @@ return [
     'settings' => [
         'crud' => [
             'actions' => [
-                'upload' => ['class' => 'action--primary'],
+                'upload' => ['class' => 'govuk-button'],
                 'New letter' => [],
-                'split' => ['class' => 'action--secondary', 'requireRows' => true],
+                'split' => ['class' => 'govuk-button govuk-button--secondary', 'requireRows' => true],
                 'relink' => [
-                    'class' => 'action--secondary js-require--multiple',
+                    'class' => 'govuk-button govuk-button--secondary js-require--multiple',
                     'requireRows' => true,
                 ],
                 'delete' => [
-                    'class' => 'action--delete action--secondary js-require--multiple',
+                    'class' => 'govuk-button govuk-button--warning js-require--multiple',
                     'requireRows' => true,
                 ],
             ],

@@ -6,13 +6,17 @@ use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("form-actions")
- * @Form\Attributes({"class":"actions-container"})
+ * @Form\Attributes({"class":"govuk-button-group"})
  */
 class GrantAuthorityFormActions
 {
     /**
      * @Form\Name("continue-to-grant")
-     * @Form\Attributes({"type":"submit","class":"action--primary large"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button",
+     * })
      * @Form\Options({
      *     "label": "Grant"
      * })
@@ -21,7 +25,12 @@ class GrantAuthorityFormActions
     public $continueToGrant = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"cancel"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button govuk-button--secondary",
+     *     "id":"cancel",
+     * })
      * @Form\Options({
      *     "label": "Cancel"
      * })

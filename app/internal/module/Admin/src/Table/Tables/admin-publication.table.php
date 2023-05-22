@@ -8,8 +8,8 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'generate' => array('requireRows' => true, 'class' => 'action--primary js-require--one'),
-                'publish' => array('requireRows' => true, 'class' => 'action--secondary js-require--one')
+                'generate' => array('requireRows' => true, 'class' => 'govuk-button js-require--one'),
+                'publish' => array('requireRows' => true, 'class' => 'govuk-button govuk-button--secondary js-require--one')
             )
         ),
         'paginate' => array(

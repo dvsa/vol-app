@@ -5,14 +5,18 @@ namespace Admin\Form\Model\Fieldset;
 use Laminas\Form\Annotation as Form;
 
 /**
- * @Form\Attributes({"class":"actions-container"})
+ * @Form\Attributes({"class":"govuk-button-group"})
  * @Form\Name("fee-actions")
  */
 class DiscActions
 {
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary", "id": "submit"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button",
+     * })
      * @Form\Options({
      *     "label": "Print discs"
      * })

@@ -7,13 +7,18 @@ use Laminas\Form\Annotation as Form;
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("form-actions")
- * @Form\Attributes({"class":"actions-container"})
+ * @Form\Attributes({"class":"govuk-button-group"})
  */
 class LicenceStatusDecisionFormActions
 {
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary large","id":"affect-immediate"})
+     * @Form\Attributes({
+     *     "type":"submit",
+     *     "data-module": "govuk-button",
+     *     "class": "govuk-button",
+     *     "id": "affect-immediate",
+     * })
      * @Form\Options({
      *     "label": "Affect now"
      * })
@@ -22,7 +27,12 @@ class LicenceStatusDecisionFormActions
     public $affectImmediate = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary large","id":"submit"})
+     * @Form\Attributes({
+     *     "type":"submit",
+     *     "data-module": "govuk-button",
+     *     "class": "govuk-button",
+     *     "id": "submit",
+     * })
      * @Form\Options({
      *     "label": "Save"
      * })
@@ -31,7 +41,12 @@ class LicenceStatusDecisionFormActions
     public $submit = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"cancel"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button govuk-button--secondary",
+     *     "id":"cancel",
+     * })
      * @Form\Options({
      *     "label": "Cancel"
      * })
@@ -40,7 +55,12 @@ class LicenceStatusDecisionFormActions
     public $cancel = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary large","id":"remove"})
+     * @Form\Attributes({
+     *     "type":"submit",
+     *     "data-module": "govuk-button",
+     *     "class": "govuk-button",
+     *     "id": "remove",
+     * })
      * @Form\Options({
      *     "label": "licence-status.remove"
      * })

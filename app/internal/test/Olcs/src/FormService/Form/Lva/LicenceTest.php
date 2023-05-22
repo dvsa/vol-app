@@ -43,7 +43,7 @@ class LicenceTest extends MockeryTestCase
 
         $mockSave = m::mock();
         $mockSave->shouldReceive('setLabel')->once()->with('internal.save.button');
-        $mockSave->shouldReceive('setAttribute')->once()->with('class', 'action--primary large');
+        $mockSave->shouldReceive('setAttribute')->once()->with('class', 'govuk-button');
 
         $formActions->shouldReceive('has')->with('save')->andReturn(true);
         $formActions->shouldReceive('get')->with('save')->andReturn($mockSave);

@@ -12,7 +12,7 @@ return [
     'settings' => [
         'crud' => [
             'actions' => [
-                'Apply' => ['class' => 'action--primary']
+                'Apply' => ['class' => 'govuk-button']
             ],
         ],
     ],

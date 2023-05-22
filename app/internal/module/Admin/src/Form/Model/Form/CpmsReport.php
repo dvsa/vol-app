@@ -21,7 +21,7 @@ class CpmsReport
 
     /**
      * @Form\Name("form-actions")
-     * @Form\Attributes({"class":"actions-container"})
+     * @Form\Attributes({"class":"govuk-button-group"})
      * @Form\ComposedObject("Admin\Form\Model\Fieldset\GenerateActions")
      */
     public $formActions = null;

@@ -13,11 +13,11 @@ return [
                 'confirm' => [
                     'requireRows' => true,
                     'label' => 'Continue',
-                    'class' => 'action--primary js-require--multiple'
+                    'class' => 'govuk-button js-require--multiple'
                 ],
                 'cancel' => [
                     'requireRows' => false,
-                    'class' => 'action--secondary'
+                    'class' => 'govuk-button govuk-button--secondary'
                 ]
             ]
         ],

@@ -6,12 +6,17 @@ use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("form-actions")
- * @Form\Attributes({"class":"actions-container"})
+ * @Form\Attributes({"class":"govuk-button-group"})
  */
 class ApplicationChangeOfEntityFormActions
 {
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary large","id":"submit"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button",
+     *     "id": "submit"
+     * })
      * @Form\Options({
      *     "label": "save"
      * })
@@ -20,7 +25,12 @@ class ApplicationChangeOfEntityFormActions
     public $submit = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"cancel"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button govuk-button--secondary",
+     *     "id":"cancel",
+     * })
      * @Form\Options({
      *     "label": "cancel"
      * })
@@ -29,7 +39,12 @@ class ApplicationChangeOfEntityFormActions
     public $cancel = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary large","id":"remove"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button",
+     *     "id": "remove"
+     * })
      * @Form\Options({
      *     "label": "licence-status.remove"
      * })

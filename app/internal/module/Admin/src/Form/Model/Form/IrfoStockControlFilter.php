@@ -47,7 +47,11 @@ class IrfoStockControlFilter
     public $status = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button",
+     * })
      * @Form\Options({
      *     "label": "filter-button"
      * })

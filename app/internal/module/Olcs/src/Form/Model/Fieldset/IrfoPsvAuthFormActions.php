@@ -7,12 +7,16 @@ use Laminas\Form\Annotation as Form;
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("form-actions")
- * @Form\Attributes({"class":"actions-container"})
+ * @Form\Attributes({"class":"govuk-button-group"})
  */
 class IrfoPsvAuthFormActions
 {
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary large"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button",
+     * })
      * @Form\Options({
      *     "label": "Save"
      * })
@@ -21,7 +25,12 @@ class IrfoPsvAuthFormActions
     public $submit = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"grant"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button govuk-button--secondary",
+     *     "id":"grant",
+     * })
      * @Form\Options({
      *     "label": "Grant"
      * })
@@ -30,7 +39,12 @@ class IrfoPsvAuthFormActions
     public $grant = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"approve"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button govuk-button--secondary",
+     *     "id":"approve",
+     * })
      * @Form\Options({
      *     "label": "Approve"
      * })
@@ -39,7 +53,12 @@ class IrfoPsvAuthFormActions
     public $approve = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"generate"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button govuk-button--secondary",
+     *     "id":"generate",
+     * })
      * @Form\Options({
      *     "label": "Generate"
      * })
@@ -48,7 +67,12 @@ class IrfoPsvAuthFormActions
     public $generate = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"cns"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button govuk-button--secondary",
+     *     "id":"cns",
+     * })
      * @Form\Options({
      *     "label": "CNS"
      * })
@@ -57,7 +81,12 @@ class IrfoPsvAuthFormActions
     public $cns = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"withdraw"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button govuk-button--secondary",
+     *     "id":"withdraw",
+     * })
      * @Form\Options({
      *     "label": "Withdraw"
      * })
@@ -66,7 +95,12 @@ class IrfoPsvAuthFormActions
     public $withdraw = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"refuse"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button govuk-button--secondary",
+     *     "id":"refuse",
+     * })
      * @Form\Options({
      *     "label": "Refuse"
      * })
@@ -75,7 +109,12 @@ class IrfoPsvAuthFormActions
     public $refuse = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large","id":"cancel"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button govuk-button--secondary",
+     *     "id":"cancel",
+     * })
      * @Form\Options({
      *     "label": "Cancel"
      * })

@@ -28,7 +28,7 @@ class Impounding
 
     /**
      * @Form\Name("form-actions")
-     * @Form\Attributes({"class":"actions-container"})
+     * @Form\Attributes({"class":"govuk-button-group"})
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\PublishActions")
      */
     public $formActions = null;

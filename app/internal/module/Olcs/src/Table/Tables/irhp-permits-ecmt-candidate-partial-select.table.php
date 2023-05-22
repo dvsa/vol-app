@@ -10,7 +10,7 @@ return [
     'settings' => [
         'crud' => [
             'actions' => [
-                'save' => ['requireRows' => true, 'class' => 'action--secondary js-require--multiple']
+                'save' => ['requireRows' => true, 'class' => 'govuk-button govuk-button--secondary js-require--multiple']
             ]
         ],
     ],

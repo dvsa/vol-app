@@ -28,7 +28,7 @@ class IrhpBilateral
 
     /**
      * @Form\Name("form-actions")
-     * @Form\Attributes({"class":"actions-container"})
+     * @Form\Attributes({"class":"govuk-button-group"})
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\PermitFormActions")
      * @Form\Flags({"priority": -2})
      */

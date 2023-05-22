@@ -81,7 +81,7 @@ if ($table) {
     echo $table;
 }
 ?>
-<div class="actions-container">
+<div class="govuk-button-group">
     <?php
     /* OLCS-11825
     if ($adjustLink): ?>
@@ -90,10 +90,10 @@ if ($table) {
     */
     ?>
     <?php if ($reverseLink): ?>
-        <a href="<?php echo $reverseLink; ?>" class="action--primary js-modal-ajax" target="_blank">Reverse payment</a>
+        <a href="<?php echo $reverseLink; ?>" class="govuk-button js-modal-ajax" target="_blank">Reverse payment</a>
     <?php endif; ?>
     <?php if ($receiptLink): ?>
-        <a href="<?php echo $receiptLink; ?>" class="action--primary" target="_blank">Generate receipt</a>
+        <a href="<?php echo $receiptLink; ?>" class="govuk-button" target="_blank">Generate receipt</a>
     <?php endif; ?>
-    <a href="<?php echo $backLink; ?>" class="action--secondary">Back</a>
+    <a href="<?php echo $backLink; ?>" class="govuk-button govuk-button--secondary">Back</a>
 </div>
