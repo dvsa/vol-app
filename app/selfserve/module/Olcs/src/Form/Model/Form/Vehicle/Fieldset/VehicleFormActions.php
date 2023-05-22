@@ -6,7 +6,7 @@ use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("form-actions")
- * @Form\Attributes({"class":"actions-container"})
+ * @Form\Attributes({"class":"govuk-button-group"})
  */
 class VehicleFormActions
 {
@@ -14,8 +14,8 @@ class VehicleFormActions
      * @Form\Attributes({
      *     "id": "action-button",
      *     "type":"submit",
-     *     "class":"action--primary",
-     *     "data-module": "govuk-button"
+     *     "class":"govuk-button",
+     *     "data-module": "govuk-button",
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
@@ -25,7 +25,7 @@ class VehicleFormActions
      * @Form\Attributes({
      *     "id": "cancel-button",
      *     "type": "submit",
-     *     "class": "action--secondary"
+     *     "class": "govuk-button govuk-button--secondary"
      * })
      * @Form\Options({"label": "cancel.button"})
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")

@@ -6,16 +6,23 @@ use Laminas\Form\Annotation as Form;
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("SaveAndContinueOrCancelApplication")
+ * @Form\Attributes({
+ *     "class":"govuk-button-group",
+ * })
  */
 class SaveAndContinueOrCancelApplication
 {
     /**
      * @Form\Name("SubmitButton")
      * @Form\Attributes({
-     *     "class":"action--primary large",
-     *     "value":"Save and continue",
+     *     "class":"govuk-button",
+     *     "data-module": "govuk-button",
+     *     "type":"submit",
      * })
-     * @Form\Type("Laminas\Form\Element\Submit")
+     * @Form\Options({
+     *     "label":"Save and continue",
+     * })
+     * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
     public $submit = null;
 
@@ -23,9 +30,11 @@ class SaveAndContinueOrCancelApplication
      * @Form\Name("CancelButton")
      * @Form\Attributes({
      *     "role":"link",
-     *     "value":"permits.form.cancel_application.button",
      * })
-     * @Form\Type("Laminas\Form\Element\Submit")
+     * @Form\Options({
+     *     "label":"permits.form.cancel_application.button",
+     * })
+     * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
     public $cancel = null;
 }

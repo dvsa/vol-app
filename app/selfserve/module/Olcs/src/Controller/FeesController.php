@@ -123,7 +123,7 @@ class FeesController extends AbstractController
         if ($this->getDisableCardPayments()) {
             $form->get('form-actions')->remove('pay');
             $form->get('form-actions')->get('cancel')->setLabel('back-to-fees');
-            $form->get('form-actions')->get('cancel')->setAttribute('class', 'action--tertiary large');
+            $form->get('form-actions')->get('cancel')->setAttribute('class', 'govuk-button govuk-button--secondary');
             $this->getServiceLocator()->get('Helper\Guidance')->append('selfserve-card-payments-disabled');
         }
 

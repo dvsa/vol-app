@@ -14,8 +14,8 @@ if ($showApplicationTable) {
     echo $applications;
 }
 ?>
-<div class="actions-container new-application--wrapper">
-        <a href="<?php echo $this->url('create_application'); ?>" class="action--primary large">
+<div class="govuk-button-group new-application--wrapper">
+        <a href="<?php echo $this->url('create_application'); ?>" class="govuk-button" role="button" draggable="false" data-module="govuk-button">
             <?php echo $this->translate('application.new.button'); ?>
 </a>
 </div>

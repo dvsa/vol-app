@@ -6,6 +6,9 @@ use Laminas\Form\Annotation as Form;
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("SubmitAndPay")
+ * @Form\Attributes({
+ *     "class":"govuk-button-group",
+ * })
  */
 class SubmitAndPay
 {
@@ -13,10 +16,14 @@ class SubmitAndPay
      * @Form\Name("SubmitButton")
      * @Form\Attributes({
      *     "class":"govuk-button",
-     *     "value":"permits.button.submit-and-pay",
-     *     "role":"button"
+     *     "data-module": "govuk-button",
+     *     "role":"button",
+     *     "type":"submit",
      * })
-     * @Form\Type("Laminas\Form\Element\Submit")
+     * @Form\Options({
+     *     "label":"permits.button.submit-and-pay",
+     * })
+     * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
     public $submit = null;
 }

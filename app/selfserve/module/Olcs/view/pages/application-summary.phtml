@@ -76,10 +76,10 @@
                       ?>
                   </ul>
               <?php endif; ?>
-              <div class="actions-container">
-                  <a class="action--secondary large" href="<?php echo $this->url('lva-' . $lva . '/upload-evidence', [], [], true); ?>"><?php echo $this->translate('upload-evidence-button'); ?></a>
+              <div class="govuk-button-group">
+                  <a class="govuk-button govuk-button--secondary" role="button" draggable="false" data-module="govuk-button" href="<?php echo $this->url('lva-' . $lva . '/upload-evidence', [], [], true); ?>"><?php echo $this->translate('upload-evidence-button'); ?></a>
               </div>
-              <div class="actions-container">
+              <div class="govuk-button-group">
                 <p class="govuk-body"><?php echo $this->translate('supply-supporting-evidence-text-2' . ($isNi ? '-ni' : '')); ?> (<?php echo $this->escapeHtml($licence) . '/' . $this->escapeHtml($application); ?>).</p>
               </div>
           </div>
@@ -134,8 +134,8 @@
 
       </div><!-- .article -->
 
-      <div class="actions-container">
-          <a class="action--primary large" href="<?php echo $this->url('dashboard'); ?>"><?php echo $this->translate('return-home-button-text'); ?></a>
+      <div class="govuk-button-group">
+          <a class="govuk-button" role="button" draggable="false" data-module="govuk-button" href="<?php echo $this->url('dashboard'); ?>"><?php echo $this->translate('return-home-button-text'); ?></a>
       </div>
 
   </div>

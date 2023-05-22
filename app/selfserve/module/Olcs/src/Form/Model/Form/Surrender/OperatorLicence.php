@@ -18,7 +18,7 @@ class OperatorLicence
     /**
      * @Form\Name("form-actions")
      * @Form\ComposedObject("Common\Form\Model\Fieldset\SaveButton")
-     * @Form\Attributes({"class":"actions-container"})
+     * @Form\Attributes({"class":"govuk-button-group"})
      */
     public $formActions = null;
 }

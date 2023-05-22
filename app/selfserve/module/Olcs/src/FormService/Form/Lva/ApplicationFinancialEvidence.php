@@ -29,7 +29,7 @@ class ApplicationFinancialEvidence extends FinancialEvidence
         $saveButton = $formActions->get('save');
         $saveButton->setLabel('lva.external.save_and_return.link');
         $saveButton->removeAttribute('class');
-        $saveButton->setAttribute('class', 'action--tertiary large');
+        $saveButton->setAttribute('class', 'govuk-button govuk-button--secondary');
         $formActions->get('saveAndContinue')->setLabel('lva.external.save_and_continue.button');
         $formActions->remove('cancel');
 

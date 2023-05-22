@@ -66,7 +66,7 @@ return array(
             },
             'deleteInputName' => 'action[delete][%d]',
             'dontUseModal' => true,
-            'actionClasses' => 'left-aligned action--secondary'
+            'actionClasses' => 'left-aligned govuk-button govuk-button--secondary'
         ],
     ]
 );

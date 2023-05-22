@@ -6,15 +6,19 @@ use Laminas\Form\Annotation as Form;
 /**
  * @codeCoverageIgnore Auto-generated file with no methods
  * @Form\Name("Submit")
+ * @Form\Attributes({
+ *     "class":"govuk-button-group",
+ * })
  */
 class SubmitOrCancelApplication
 {
     /**
      * @Form\Name("SubmitButton")
      * @Form\Attributes({
-     *     "class":"action--primary large govuk-!-margin-right-1",
+     *     "class":"govuk-button",
+     *     "data-module": "govuk-button",
      *     "id":"submit-button",
-     *     "type":"submit"
+     *     "type":"submit",
      * })
      * @Form\Options({"label": "Save and continue"})
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
@@ -26,7 +30,8 @@ class SubmitOrCancelApplication
      * @Form\Attributes({
      *     "id":"cancel-button",
      *     "type":"submit",
-     *     "class":"action--secondary large"
+     *     "class":"govuk-button govuk-button--secondary",
+     *     "data-module": "govuk-button",
      * })
      * @Form\Options({"label": "permits.form.cancel_application.button"})
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
@@ -37,11 +42,14 @@ class SubmitOrCancelApplication
      * @Form\Name("SaveAndReturnButton")
      * @Form\Attributes({
      *     "id":"save-return-button",
-     *     "value":"Save and return to overview",
-     *     "role":"link",
-     *     "class": "govuk-!-margin-top-7"
+     *     "type":"submit",
+     *     "class":"govuk-button govuk-button--secondary",
+     *     "data-module": "govuk-button",
      * })
-     * @Form\Type("Laminas\Form\Element\Submit")
+     * @Form\Options({
+     *     "label":"Save and return to overview",
+     * })
+     * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
     public $save = null;
 }

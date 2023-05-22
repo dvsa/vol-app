@@ -1000,7 +1000,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $saveButton = $formActions->get('save');
         $saveButton->setLabel('lva.external.save_and_return_to_tm.link');
         $saveButton->removeAttribute('class');
-        $saveButton->setAttribute('class', 'action--tertiary large');
+        $saveButton->setAttribute('class', 'govuk-button govuk-button--secondary');
 
         $this->hlpForm->remove($form, 'form-actions->cancel');
 

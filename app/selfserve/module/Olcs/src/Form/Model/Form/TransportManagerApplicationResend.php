@@ -27,8 +27,9 @@ class TransportManagerApplicationResend
 
     /**
      * @Form\Attributes({
-     *     "type":"submit",
-     *     "class":"action--primary large",
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button",
      *     "aria-label": "Confirm resend link to Transport Manger"
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")

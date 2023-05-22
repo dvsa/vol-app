@@ -105,9 +105,9 @@ $samlResponse = urlencode($_POST['SAMLResponse'] ?? $_GET['SAMLResponse'] ?? '')
             <fieldset data-group="details">
                 <div class="field ">You should automatically be redirected.</div>
             </fieldset>
-            <fieldset class="actions-container" data-group="formActions">
+            <fieldset class="govuk-button-group" data-group="formActions">
                 <button type="submit"
-                        name="formActions[submit]" class="action--primary large" id="formActions[submit]"
+                        name="formActions[submit]" class="govuk-button" id="formActions[submit]"
                         value="">Continue
                 </button>
             </fieldset>

@@ -29,7 +29,7 @@ class ApplicationBusinessType extends CommonApplicationBusinessType
             $this->removeFormAction($form, 'cancel');
             $form->get('form-actions')->get('save')->setLabel('lva.external.return.link');
             $form->get('form-actions')->get('save')->removeAttribute('class');
-            $form->get('form-actions')->get('save')->setAttribute('class', 'action--tertiary large');
+            $form->get('form-actions')->get('save')->setAttribute('class', 'govuk-button govuk-button--secondary');
 
             $this->lockForm($form, false);
         } else {

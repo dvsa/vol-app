@@ -2,6 +2,7 @@
 
 namespace PermitsTest\Form\Model\Form;
 
+use Common\Form\Elements\InputFilters\ActionButton;
 use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
 use Laminas\Validator;
 
@@ -34,6 +35,6 @@ class DeclineApplicationFormTest extends AbstractFormValidationTestCase
     {
         $element = ['Submit', 'SubmitButton'];
         $this->assertFormElementActionButton($element);
-        $this->assertFormElementType($element, "Laminas\Form\Element\Submit");
+        $this->assertFormElementType($element, ActionButton::class);
     }
 }

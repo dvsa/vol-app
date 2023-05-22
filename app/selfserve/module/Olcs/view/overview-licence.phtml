@@ -40,7 +40,7 @@
                     <?php printf($this->translate('This licence is due to expire on %s'), $this->date(strtotime($this->expiryDate))); ?>
                 </h3>
                 <p class="info-box__text"><?php echo $this->translate('The licence will automatically end after the expiry date.') ?></p>
-                <a href="<?php echo $this->url('continuation', ['continuationDetailId' => $this->continuationDetailId]) ?>" class="action--primary">
+                <a href="<?php echo $this->url('continuation', ['continuationDetailId' => $this->continuationDetailId]) ?>" class="govuk-button" role="button" draggable="false" data-module="govuk-button">
                     <?php echo $this->translate('Continue licence')?>
                 </a>
             </div>

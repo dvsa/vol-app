@@ -29,7 +29,7 @@ class ViewVehicleSwitchboard
      * @Form\Attributes({
      *     "id": "next",
      *     "value": "licence.vehicle.view.switchboard.action.next.label",
-     *     "class": "action--secondary large",
+     *     "class": "govuk-button govuk-button--secondary",
      *     "title": "licence.vehicle.view.switchboard.action.next.title"
      * })
      * @Form\Type("Submit")

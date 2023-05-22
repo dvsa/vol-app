@@ -27,7 +27,7 @@ class VariationUndertakings
     /**
      * @Form\Name("form-actions")
      * @Form\ComposedObject("Olcs\Form\Model\Form\Lva\Fieldset\FormActionsUndertakings")
-     * @Form\Attributes({"class":"actions-container"})
+     * @Form\Attributes({"class":"govuk-button-group"})
      */
     public $formActions = null;
 }
