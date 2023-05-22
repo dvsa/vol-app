@@ -10,12 +10,12 @@ return array(
             'actions' => array(
                 'generate-letters' => array(
                     'label' => 'Generate letters',
-                    'class' => 'action--primary js-require--multiple',
+                    'class' => 'govuk-button js-require--multiple',
                     'requireRows' => true
                 ),
                 'export' => array(
                     'label' => 'Export',
-                    'class' => 'action--secondary js-disable-crud js-require--multiple',
+                    'class' => 'govuk-button govuk-button--secondary js-disable-crud js-require--multiple',
                     'requireRows' => true
                 ),
             )

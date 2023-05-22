@@ -5,7 +5,7 @@ namespace Olcs\Form\Model\Fieldset;
 use Laminas\Form\Annotation as Form;
 
 /**
- * @Form\Attributes({"class":"actions-container"})
+ * @Form\Attributes({"class":"govuk-button-group"})
  * @Form\Name("doc-send-actions")
  */
 class DocumentSendActions
@@ -13,7 +13,8 @@ class DocumentSendActions
     /**
      * @Form\Attributes({
      *     "type":"submit",
-     *     "class":"action--primary",
+     *     "data-module": "govuk-button",
+     *     "class": "govuk-button",
      * })
      * @Form\Options({
      *     "label": "Email"
@@ -25,7 +26,8 @@ class DocumentSendActions
     /**
      * @Form\Attributes({
      *     "type":"submit",
-     *     "class":"action--primary",
+     *     "data-module": "govuk-button",
+     *     "class": "govuk-button",
      * })
      * @Form\Options({
      *     "label": "Print and post"
@@ -35,7 +37,12 @@ class DocumentSendActions
     public $printAndPost = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary","id":"close"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button govuk-button--secondary",
+     *     "id":"close",
+     * })
      * @Form\Options({
      *     "label": "Close",
      * })

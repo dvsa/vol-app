@@ -9,7 +9,7 @@ return array(
         'crud' => array(
             'actions' => array(
                 'export' => array(
-                    'class' => 'action--primary', 
+                    'class' => 'govuk-button', 
                     'requireRows' => true
                 )
             )

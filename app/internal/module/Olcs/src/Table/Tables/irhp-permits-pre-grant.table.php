@@ -12,9 +12,9 @@ return [
     'settings' => [
         'crud' => [
             'actions' => [
-                'preGrantAdd' => ['requireRows' => false, 'class' => 'action--primary', 'label' => 'Add', 'value' => 'preGrantAdd'],
-                'preGrantDelete' => ['requireRows' => true, 'class' => 'action--secondary js-require--one', 'label' => 'Delete', 'value' => 'preGrantDelete'],
-                'preGrantEdit' => ['requireRows' => true, 'class' => 'action--secondary js-require--one', 'label' => 'Edit', 'value' => 'preGrantEdit']
+                'preGrantAdd' => ['requireRows' => false, 'class' => 'govuk-button', 'label' => 'Add', 'value' => 'preGrantAdd'],
+                'preGrantDelete' => ['requireRows' => true, 'class' => 'govuk-button govuk-button--secondary js-require--one', 'label' => 'Delete', 'value' => 'preGrantDelete'],
+                'preGrantEdit' => ['requireRows' => true, 'class' => 'govuk-button govuk-button--secondary js-require--one', 'label' => 'Edit', 'value' => 'preGrantEdit']
             ],
         ],
         'paginate' => [

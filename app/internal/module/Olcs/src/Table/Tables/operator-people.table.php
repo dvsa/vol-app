@@ -10,11 +10,11 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'add' => array('class' => 'action--primary'),
+                'add' => array('class' => 'govuk-button'),
                 'edit' => array('requireRows' => true),
                 'delete' => array(
                     'label' => 'people_table_action.delete.label',
-                    'class' => 'action--secondary',
+                    'class' => 'govuk-button govuk-button--secondary',
                     'requireRows' => true,
                 ),
             )

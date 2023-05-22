@@ -14,8 +14,8 @@ return array(
         ),
         'crud' => array(
             'actions' => array(
-                'createOperator' => array('class' => 'action--primary', 'value' => 'Create operator'),
-                'createTransportManager' => array('class' => 'action--secondary', 'value' => 'Create transport manager')
+                'createOperator' => array('class' => 'govuk-button', 'value' => 'Create operator'),
+                'createTransportManager' => array('class' => 'govuk-button govuk-button--secondary', 'value' => 'Create transport manager')
             )
         ),
     ),

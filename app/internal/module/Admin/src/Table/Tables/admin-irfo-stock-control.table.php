@@ -8,13 +8,13 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'add' => array('class' => 'action--primary', 'requireRows' => false),
+                'add' => array('class' => 'govuk-button', 'requireRows' => false),
                 'in-stock' => array(
-                    'label' => 'In Stock', 'class' => 'action--secondary js-require--multiple', 'requireRows' => true
+                    'label' => 'In Stock', 'class' => 'govuk-button govuk-button--secondary js-require--multiple', 'requireRows' => true
                 ),
-                'issued' => array('class' => 'action--secondary js-require--multiple', 'requireRows' => true),
-                'void' => array('class' => 'action--secondary js-require--multiple', 'requireRows' => true),
-                'returned' => array('class' => 'action--secondary js-require--multiple', 'requireRows' => true)
+                'issued' => array('class' => 'govuk-button govuk-button--secondary js-require--multiple', 'requireRows' => true),
+                'void' => array('class' => 'govuk-button govuk-button--secondary js-require--multiple', 'requireRows' => true),
+                'returned' => array('class' => 'govuk-button govuk-button--secondary js-require--multiple', 'requireRows' => true)
             )
         ),
         'paginate' => array(

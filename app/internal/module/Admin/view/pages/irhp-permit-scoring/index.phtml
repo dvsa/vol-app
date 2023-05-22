@@ -8,20 +8,20 @@
     $alignStockHref = $this->url($operationBaseUrl, ['stockId' => $stockId, 'action' => 'alignStock']);
 ?>
 <div style="float: right;">
-    <a id="runWithDeviationButton" style="display: none;" class="action--primary large js-modal-ajax" data-href="<?php echo($runWithDeviationHref); ?>">
+    <a id="runWithDeviationButton" style="display: none;" class="govuk-button js-modal-ajax" data-href="<?php echo($runWithDeviationHref); ?>">
         Run with mean deviation
     </a>
     <input type="number" id="deviation" min="0" style="visibility: hidden" name="deviation" placeholder="Mean deviation"/>
-     <a id="runButton" style="margin-left: 20px; visibility: hidden;" class="action--primary large js-modal-ajax" href="<?php echo($runHref); ?>">
+     <a id="runButton" style="margin-left: 20px; visibility: hidden;" class="govuk-button js-modal-ajax" href="<?php echo($runHref); ?>">
         Run
     </a>
-    <a id="acceptButton" style="margin-left: 10px; visibility: hidden;" class="action--primary large js-modal-ajax" href="<?php echo($acceptHref); ?>">
+    <a id="acceptButton" style="margin-left: 10px; visibility: hidden;" class="govuk-button js-modal-ajax" href="<?php echo($acceptHref); ?>">
         Accept
     </a>
-    <a id="alignStockButton" style="margin-left: 40px; visibility: hidden;" class="action--primary large" href="<?php echo($alignStockHref); ?>">
+    <a id="alignStockButton" style="margin-left: 40px; visibility: hidden;" class="govuk-button" href="<?php echo($alignStockHref); ?>">
         Align stock
     </a>
-    <a id="postScoringReportButton" style="margin-left: 10px; visibility: hidden;" class="action--primary large" href="<?php echo($postScoringReportHref); ?>">
+    <a id="postScoringReportButton" style="margin-left: 10px; visibility: hidden;" class="govuk-button" href="<?php echo($postScoringReportHref); ?>">
         Report
     </a>
 </div>

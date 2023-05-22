@@ -15,8 +15,8 @@ return array(
         'crud' => array(
             'formName' => 'fees',
             'actions' => array(
-                'new' => array('class' => 'action--secondary', 'value' => 'New', 'requireRows' => false),
-                'pay' => array('class' => 'action--primary js-require--multiple', 'value' => 'Pay', 'requireRows' => true),
+                'new' => array('class' => 'govuk-button govuk-button--secondary', 'value' => 'New', 'requireRows' => false),
+                'pay' => array('class' => 'govuk-button js-require--multiple', 'value' => 'Pay', 'requireRows' => true),
             )
         ),
     ),

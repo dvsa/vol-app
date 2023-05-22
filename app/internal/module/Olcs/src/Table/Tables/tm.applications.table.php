@@ -7,7 +7,7 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'add' => array('label' => 'Add', 'class' => 'action--primary'),
+                'add' => array('label' => 'Add', 'class' => 'govuk-button'),
             )
         ),
     ),

@@ -9,14 +9,14 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'addAlphasplit' => array('class' => 'action--primary', 'label' => 'add'),
+                'addAlphasplit' => array('class' => 'govuk-button', 'label' => 'add'),
                 'editAlphasplit' => array(
-                    'class' => 'action--secondary js-require--one',
+                    'class' => 'govuk-button govuk-button--secondary js-require--one',
                     'label' => 'edit',
                     'requireRows' => true
                 ),
                 'deleteAlphasplit' => array(
-                    'class' => 'action--secondary js-require--multiple',
+                    'class' => 'govuk-button govuk-button--secondary js-require--multiple',
                     'label' => 'delete',
                     'requireRows' => true
                 )

@@ -12,22 +12,22 @@ return [
                 'assign' => [
                     'label' => 'Assign',
                     'requireRows' => true,
-                    'class' => 'action--primary js-require--multiple'
+                    'class' => 'govuk-button js-require--multiple'
                 ],
                 'delay' => [
                     'label' => 'Delay',
                     'requireRows' => true,
-                    'class' => 'action--primary js-require--multiple'
+                    'class' => 'govuk-button js-require--multiple'
                 ],
                 'review' => [
                     'label' => 'Mark for Review',
                     'requireRows' => true,
-                    'class' => 'action--primary js-require--multiple'
+                    'class' => 'govuk-button js-require--multiple'
                 ],
                 'delete' => [
                     'label' => 'Mark as Delete',
                     'requireRows' => true,
-                    'class' => 'action--delete js-require--multiple'
+                    'class' => 'govuk-button govuk-button--warning js-require--multiple'
                 ],
             ]
         ],

@@ -62,12 +62,16 @@ class Login
     public $declarationRead = null;
 
     /**
+     * @Form\Options({
+     *     "label": "auth.login.button",
+     * })
      * @Form\Attributes({
      *     "id": "auth.login.button",
-     *     "value": "auth.login.button",
-     *     "class": "action--primary large"
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button"
      * })
-     * @Form\Type("Submit")
+     * @Form\Type("Button")
      */
     public $submit = null;
 }

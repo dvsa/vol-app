@@ -5,7 +5,7 @@
 <div class="submission-section__header">
     <h4 class="submission-section_title"><?php echo(isset($header) ? $this->translate($header) : '') ?></h4>
     <?php if (isset($actions)) : ?>
-        <div class="actions-container">
+        <div class="govuk-button-group">
             <?php
             foreach ($actions as $action) {
                 if (isset($action['url'])) {
@@ -16,7 +16,7 @@
                         }
                     }
                     echo '<a href="' . $action['url'] . '" class="' . (isset($action['class']) ? $action['class'] :
-                            'action--secondary') . '"' . $attributeString . '>' . $this->translate($action['label']) .
+                            'govuk-button govuk-button--secondary') . '"' . $attributeString . '>' . $this->translate($action['label']) .
                         '</a>';
                 }
                 else{
@@ -25,7 +25,7 @@
                     $element->setAttribute('type', 'submit');
                     $element->setAttribute('name', 'action');
                     $element->setAttribute('id', $lowerLabel);
-                    $element->setAttribute('class', (isset($action['class']) ? $action['class'] : 'action--secondary'));
+                    $element->setAttribute('class', (isset($action['class']) ? $action['class'] : 'govuk-button govuk-button--secondary'));
                     $element->setAttribute('value', $this->translate($action['label']));
                     echo $this->formInput($element);
                 }

@@ -5,13 +5,18 @@ namespace Admin\Form\Model\Fieldset;
 use Laminas\Form\Annotation as Form;
 
 /**
- * @Form\Attributes({"class":"actions-container"})
+ * @Form\Attributes({"class":"govuk-button-group"})
  * @Form\Name("generate-actions")
  */
 class GenerateActions
 {
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary large", "id": "submit"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button",
+     *     "id": "submit"
+     * })
      * @Form\Options({
      *     "label": "Generate"
      * })

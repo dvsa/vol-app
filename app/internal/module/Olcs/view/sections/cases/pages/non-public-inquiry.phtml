@@ -9,7 +9,7 @@ if (count((array)$result) < 1) {
             'helpText' => 'There are currently no Non-Public Inquiries',
             'url' => $this->url('case_non_pi', ['action' => 'add'], [], true),
             'label' => 'Add Non-Public Inquiry',
-            'class' => 'action--primary left-aligned js-modal-ajax'
+            'class' => 'govuk-button left-aligned js-modal-ajax'
         ]
     );
 } else { //there is a decision
@@ -66,12 +66,12 @@ if (count((array)$result) < 1) {
                         [],
                         true
                     ),
-                    'class' => 'action--secondary right-aligned js-modal-ajax'
+                    'class' => 'govuk-button govuk-button--secondary right-aligned js-modal-ajax'
                 ],
                 [
                     'label' => 'Edit',
                     'url' => $this->url('case_non_pi', ['action' => 'edit','id' => $data['id']], [], true),
-                    'class' => 'action--primary right-aligned js-modal-ajax'
+                    'class' => 'govuk-button right-aligned js-modal-ajax'
                 ]
             ],
             'multiItems' => $items

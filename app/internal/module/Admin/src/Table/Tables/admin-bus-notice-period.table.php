@@ -11,7 +11,7 @@ return [
         'crud' => [
             'actions' => [
                 'add' => [
-                    'class' => 'action--primary',
+                    'class' => 'govuk-button',
                     'requireRows' => false,
                 ],
             ],

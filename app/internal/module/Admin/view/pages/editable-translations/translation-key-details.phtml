@@ -12,7 +12,10 @@ $translationsTable = $this->placeholder('translationsTable')->getValue();
     <?php echo $translationsTable ?>
 </div>
 <div class="govuk-details">
-    <a class="action--tertiary" href="<?php echo $this->url('admin-dashboard/admin-editable-translations', ['action' => 'index']); ?>">
-        <button  name="filter" class="action--tertiary" id="filter" value="">New search</button>
-    </a>
+    <a class="govuk-button govuk-button--secondary"
+       id="filter"
+       role="button"
+       draggable="false"
+       href="<?php echo $this->url('admin-dashboard/admin-editable-translations', ['action' => 'index']); ?>"
+    >New search</a>
 </div>

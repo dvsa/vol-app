@@ -25,7 +25,7 @@ class DefendantDetails
     public $defendantType = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary small","value":"Select"})
+     * @Form\Attributes({"type":"submit","class":"govuk-button govuk-button--secondary","value":"Select"})
      * @Form\Options({
      *     "label": "Select"
      * })

@@ -8,7 +8,7 @@ return array(
         'crud' => array(
             'actions' => array(
                 'close' => array(
-                    'class' => 'action--primary js-require--multiple',
+                    'class' => 'govuk-button js-require--multiple',
                     'requireRows' => false
                 ),
             )

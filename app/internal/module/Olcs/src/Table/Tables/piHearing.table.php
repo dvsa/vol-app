@@ -8,15 +8,15 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'addHearing' => array('class' => 'action--primary', 'label' => 'Add'),
+                'addHearing' => array('class' => 'govuk-button', 'label' => 'Add'),
                 'editHearing' => array(
-                    'class' => 'action--secondary js-require--one',
+                    'class' => 'govuk-button govuk-button--secondary js-require--one',
                     'requireRows' => true,
                     'label' => 'Edit'
                 ),
                 'generate' => array(
                     'requireRows' => true,
-                    'class' => 'action--secondary js-require--one',
+                    'class' => 'govuk-button govuk-button--secondary js-require--one',
                     'label' => 'Generate Letter'
                 ),
             ),

@@ -31,7 +31,11 @@ class Schedule41Transfer
     public $surrenderLicence = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary large"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button",
+     * })
      * @Form\Options({
      *     "label": "Transfer"
      * })
@@ -40,7 +44,12 @@ class Schedule41Transfer
     public $transfer = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary large", "id": "cancel"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button govuk-button--secondary",
+     *     "id":"cancel",
+     * })
      * @Form\Options({
      *     "label": "Cancel"
      * })

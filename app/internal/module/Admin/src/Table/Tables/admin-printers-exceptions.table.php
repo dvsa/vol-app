@@ -11,18 +11,18 @@ return array(
             'formName' => 'printerExceptions',
             'actions' => array(
                 'addRule' => array(
-                    'class' => 'action--primary', 
+                    'class' => 'govuk-button', 
                     'requireRows' => false, 
                     'label' => 'add'
                 ),
                 'editRule' => array(
                     'requireRows' => true, 
-                    'class' => 'action--secondary js-require--one', 
+                    'class' => 'govuk-button govuk-button--secondary js-require--one', 
                     'label' => 'edit'
                 ),
                 'deleteRule' => array(
                     'requireRows' => true, 
-                    'class' => 'action--secondary js-require--one', 
+                    'class' => 'govuk-button govuk-button--secondary js-require--one', 
                     'label' => 'delete'
                 )
             )

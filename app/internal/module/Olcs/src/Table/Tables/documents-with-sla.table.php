@@ -7,11 +7,11 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'upload' => array('class' => 'action--primary'),
+                'upload' => array('class' => 'govuk-button'),
                 'New letter' => array(),
-                'delete' => array('class' => 'action--secondary js-require--multiple', 'requireRows' => true),
-                'split' => array('class' => 'action--secondary', 'requireRows' => true),
-                'relink' => array('class' => 'action--secondary js-require--multiple', 'requireRows' => true)
+                'delete' => array('class' => 'govuk-button govuk-button--secondary js-require--multiple', 'requireRows' => true),
+                'split' => array('class' => 'govuk-button govuk-button--secondary', 'requireRows' => true),
+                'relink' => array('class' => 'govuk-button govuk-button--secondary js-require--multiple', 'requireRows' => true)
             )
         ),
         'paginate' => array(

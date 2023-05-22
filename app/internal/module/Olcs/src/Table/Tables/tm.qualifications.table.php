@@ -10,7 +10,7 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'add' => array('class' => 'action--primary'),
+                'add' => array('class' => 'govuk-button'),
             )
         )
     ),

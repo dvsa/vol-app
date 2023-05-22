@@ -6,7 +6,8 @@
         <h4 class="title"><?php echo $this->translate('internal-operator-quick-actions'); ?></h4>
         <ul class="record-actions__group">
             <li class="record-actions__item">
-                <a class="action--secondary<?php echo $this->disable ? ' disabled' : ''; ?> js-modal-ajax"
+                <a class="govuk-button govuk-button--secondary<?php echo $this->disable ? ' disabled govuk-button--disabled' : ''; ?> js-modal-ajax"
+                   role="button" draggable="false" data-module="govuk-button"
                    href="<?php echo $this->url('operator/new-application', [], [], true); ?>">
                     <?php echo $this->translate('internal-operator-new-application'); ?>
                 </a>

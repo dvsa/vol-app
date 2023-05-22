@@ -8,9 +8,9 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'add' => array('class' => 'action--primary', 'requireRows' => false),
-                'edit' => array('class' => 'action--secondary js-require--one', 'requireRows' => true),
-                'delete' => array('class' => 'action--secondary js-require--one', 'requireRows' => true)
+                'add' => array('class' => 'govuk-button', 'requireRows' => false),
+                'edit' => array('class' => 'govuk-button govuk-button--secondary js-require--one', 'requireRows' => true),
+                'delete' => array('class' => 'govuk-button govuk-button--secondary js-require--one', 'requireRows' => true)
             )
         ),
         'paginate' => array(

@@ -7,9 +7,9 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'add' => array('class' => 'action--primary'),
-                'edit' => array('class' => 'action--secondary js-require--one'),
-                'delete' => array('class' => 'action--secondary js-require--multiple')
+                'add' => array('class' => 'govuk-button'),
+                'edit' => array('class' => 'govuk-button govuk-button--secondary js-require--one'),
+                'delete' => array('class' => 'govuk-button govuk-button--secondary js-require--multiple')
             )
         )
     ),

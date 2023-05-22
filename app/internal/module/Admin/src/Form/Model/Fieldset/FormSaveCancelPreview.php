@@ -6,14 +6,15 @@ use Laminas\Form\Annotation as Form;
 
 /**
  * @Form\Name("form-actions")
- * @Form\Attributes({"class":"actions-container"})
+ * @Form\Attributes({"class":"govuk-button-group"})
  */
 class FormSaveCancelPreview
 {
     /**
      * @Form\Attributes({
-     *     "type":"submit",
-     *     "class":"action--primary large",
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button",
      *     "aria-label": "Save and Continue",
      *     "id": "save"
      * })
@@ -25,7 +26,7 @@ class FormSaveCancelPreview
     /**
      * @Form\Attributes({
      *     "type":"submit",
-     *     "class":"action--secondary large",
+     *     "class":"class="govuk-button govuk-button--secondary",
      *     "id": "cancel"
      * })
      * @Form\Options({
@@ -39,7 +40,7 @@ class FormSaveCancelPreview
     /**
      * @Form\Attributes({
      *     "type":"button",
-     *     "class":"action--secondary large",
+     *     "class":"govuk-button govuk-button--secondary",
      *     "id": "preview"
      * })
      * @Form\Options({

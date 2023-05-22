@@ -32,7 +32,11 @@ class CompaniesHouseAlertFilters
     public $typeOfChange = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button",
+     * })
      * @Form\Options({
      *     "label": "tasks.submit.filter",
      *     "empty_option": "ch_alert_reason.all"

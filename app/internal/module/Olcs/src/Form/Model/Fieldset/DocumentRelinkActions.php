@@ -6,13 +6,17 @@ use Laminas\Form\Annotation as Form;
 
 /**
  * @codeCoverageIgnore No methods
- * @Form\Attributes({"class":"actions-container"})
+ * @Form\Attributes({"class":"govuk-button-group"})
  * @Form\Name("fee-actions")
  */
 class DocumentRelinkActions
 {
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button",
+     * })
      * @Form\Options({
      *     "label": "Copy"
      * })
@@ -21,7 +25,11 @@ class DocumentRelinkActions
     public $copy = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--primary"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button",
+     * })
      * @Form\Options({
      *     "label": "Move"
      * })
@@ -30,7 +38,12 @@ class DocumentRelinkActions
     public $move = null;
 
     /**
-     * @Form\Attributes({"type":"submit","class":"action--secondary","id":"cancel"})
+     * @Form\Attributes({
+     *     "data-module": "govuk-button",
+     *     "type": "submit",
+     *     "class": "govuk-button govuk-button--secondary",
+     *     "id":"cancel",
+     * })
      * @Form\Options({
      *     "label": "Cancel"
      * })

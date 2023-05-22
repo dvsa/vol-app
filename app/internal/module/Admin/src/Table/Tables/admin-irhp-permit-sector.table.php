@@ -9,11 +9,11 @@ return [
         'crud' => [
             'actions' => [
                 'save' => [
-                    'class' => 'action--primary',
+                    'class' => 'govuk-button',
                     'requireRows' => false
                 ],
                 'cancel' => [
-                    'class' => 'action--secondary',
+                    'class' => 'govuk-button govuk-button--secondary',
                     'requireRows' => false
                 ]
             ]

@@ -46,7 +46,7 @@ class GrantAuthorityForm
 
     /**
      * @Form\Name("form-actions")
-     * @Form\Attributes({"class":"actions-container"})
+     * @Form\Attributes({"class":"govuk-button-group"})
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\GrantAuthorityFormActions")
      */
     public $formActions = null;

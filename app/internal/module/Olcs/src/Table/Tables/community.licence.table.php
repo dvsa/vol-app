@@ -15,9 +15,9 @@ return array(
         ),
         'crud' => array(
             'actions' => array(
-                'add' => array('class' => 'action--secondary', 'value' => 'Add'),
-                'office-licence-add' => array('class' => 'action--secondary', 'value' => 'Add office licence'),
-                'restore' => array('class' => 'action--secondary', 'value' => 'Restore')
+                'add' => array('class' => 'govuk-button govuk-button--secondary', 'value' => 'Add'),
+                'office-licence-add' => array('class' => 'govuk-button govuk-button--secondary', 'value' => 'Add office licence'),
+                'restore' => array('class' => 'govuk-button govuk-button--secondary', 'value' => 'Restore')
             )
         ),
         'row-disabled-callback' => function ($row) {

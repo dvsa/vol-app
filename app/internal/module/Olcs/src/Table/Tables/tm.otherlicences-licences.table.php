@@ -8,7 +8,7 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'add-other-licence-licences' => array('label' => 'Add', 'class' => 'action--primary'),
+                'add-other-licence-licences' => array('label' => 'Add', 'class' => 'govuk-button'),
             ),
         ),
     ),
