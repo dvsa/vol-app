@@ -30,9 +30,9 @@ OLCS.fileUpload = (function(document, $, undefined) {
 
     function disableElements() {
       uploadInProgress = true;
-      $(removeSelector).addClass("govuk-button--disabled");
-      var pageActions = $(".govuk-button-group").last().children();
-      $(attachButtonSelector).addClass("govuk-button--disabled");
+      $(removeSelector).addClass("disabled");
+      var pageActions = $(".govuk-main-wrapper").last().children();
+      $(attachButtonSelector).addClass("disabled");
       $(pageActions, inputSelector).attr({
         "disabled"    : true,
         "aria-hidden" : true
@@ -41,10 +41,10 @@ OLCS.fileUpload = (function(document, $, undefined) {
     }
 
     function enableElements() {
-      $(removeSelector).removeClass("govuk-button--disabled");
+      $(removeSelector).removeClass("disabled");
       uploadInProgress = false;
-      $(attachButtonSelector).removeClass("govuk-button--disabled");
-      $(".govuk-button-group").last().children().removeAttr("disabled", "aria-hidden");
+      $(attachButtonSelector).removeClass("disabled");
+      $(".govuk-main-wrapper").last().children().removeAttr("disabled", "aria-hidden");
     }
 
     function handleResponse(response, index) {
