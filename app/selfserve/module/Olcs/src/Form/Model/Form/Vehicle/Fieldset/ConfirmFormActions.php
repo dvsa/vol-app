@@ -16,7 +16,7 @@ class ConfirmFormActions
      * })
      * @Form\Attributes({
      *     "id": "next",
-     *     "title": "licence.vehicle.generic.button.next.title"
+     *     "title": "licence.vehicle.generic.button.next.title",
      *     "data-module": "govuk-button",
      *     "type": "submit",
      *     "class": "govuk-button"
