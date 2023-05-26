@@ -2,7 +2,9 @@
 
 namespace OlcsTest\View\Helper;
 
+use Common\Service\Table\Formatter\Address;
 use Olcs\View\Helper\Address as AddressHelper;
+use Mockery as m;
 
 /**
  * Class AddressTest
@@ -10,6 +12,13 @@ use Olcs\View\Helper\Address as AddressHelper;
  */
 class AddressTest extends \PHPUnit\Framework\TestCase
 {
+    protected $addressFormatter;
+
+    protected function setUp(): void
+    {
+        $this->addressFormatter = m::mock(Address::class);
+        $this->sut = new AddressHelper($this->addressFormatter);
+    }
     public function testInvoke()
     {
         $address = array (
@@ -23,8 +32,10 @@ class AddressTest extends \PHPUnit\Framework\TestCase
 
         $string = 'Unit 9, Shapely Industrial Estate, Harehills, Leeds, LS9 2FA';
 
-        $addressHelper = new AddressHelper();
+        $this->addressFormatter->shouldReceive('format')
+            ->with($address, ['addressFields' => ['addressLine1', 'addressLine2', 'addressLine3', 'addressLine4', 'town', 'postcode', 'countryCode']])
+            ->andReturn($string);
 
-        $this->assertEquals($string, $addressHelper->__invoke($address));
+        $this->assertEquals($string, $this->sut->__invoke($address));
     }
 }

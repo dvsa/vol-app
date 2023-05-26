@@ -11,14 +11,18 @@ use Common\Service\Table\Formatter\Address as AddressFormatter;
  */
 class Address extends AbstractHelper
 {
+    private AddressFormatter $addressFormatter;
+
+    public function __construct(AddressFormatter $addressFormatter)
+    {
+        $this->addressFormatter = $addressFormatter;
+    }
     /**
      * @param $address
      * @return string
      */
     public function __invoke(array $address)
     {
-        $formatter = new AddressFormatter();
-
         $options = [
             'addressFields' => [
                 'addressLine1',
@@ -31,6 +35,6 @@ class Address extends AbstractHelper
             ]
         ];
 
-        return $formatter->format($address, $options);
+        return $this->addressFormatter->format($address, $options);
     }
 }
