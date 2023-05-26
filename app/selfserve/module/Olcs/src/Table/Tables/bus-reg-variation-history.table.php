@@ -41,15 +41,15 @@ return array(
         ),
         array(
             'title' => 'Application type',
-            'formatter' => function ($data, $column, $sm) {
+            'formatter' => function ($data, $column) {
                 if ($data['isTxcApp'] == 'Y') {
                     if ($data['ebsrRefresh'] == 'Y') {
-                        return $sm->get('translator')->translate('EBSR Data Refresh');
+                        return $this->translator->translate('EBSR Data Refresh');
                     } else {
-                        return $sm->get('translator')->translate('EBSR');
+                        return $this->translator->translate('EBSR');
                     }
                 } else {
-                    return $sm->get('translator')->translate('Manual');
+                    return $this->translator->translate('Manual');
                 }
             }
         ),

@@ -28,11 +28,8 @@ return array(
         ),
         array(
             'title' => $translationPrefix . '.status',
-            'formatter' => function ($data, $col, $sl) {
-                /** @var \Laminas\I18n\Translator\Translator $translator */
-                $translator = $sl->get('translator');
-
-                return $translator->translate(
+            'formatter' => function ($data, $col) {
+                return $this->translator->translate(
                     'common.table.status.' .
                     ($data['isDraft'] === 'Y' ? 'draft' : 'approved')
                 );

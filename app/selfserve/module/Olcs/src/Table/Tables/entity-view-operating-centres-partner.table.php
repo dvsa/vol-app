@@ -36,7 +36,7 @@ return array(
         array(
             'title' => 'entity-view-table-header-date-added',
             'name' => 'createdOn',
-            'formatter' => function ($row, $column, $sl) {
+            'formatter' => function ($row, $column) {
                 $column['formatter'] = 'Date';
                 return $this->callFormatter($column, $row['operatingCentre']);
             }
@@ -44,7 +44,7 @@ return array(
         array(
             'title' => 'entity-view-table-header-date-removed',
             'name' => 'deletedDate',
-            'formatter' => function ($row, $column, $sl) {
+            'formatter' => function ($row, $column) {
                 $column['formatter'] = 'Date';
                 if (empty($row['deletedDate'])) {
                     return 'NA';

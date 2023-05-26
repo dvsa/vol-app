@@ -27,7 +27,7 @@ return array(
         ),
         array(
             'title' => 'selfserve-fees-table-fee-reference',
-            'formatter' => function ($row, $col, $sm) {
+            'formatter' => function ($row, $col) {
                 return $row['licence']['licNo'];
             },
         ),
