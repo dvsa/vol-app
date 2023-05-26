@@ -45,6 +45,16 @@ abstract class AbstractUndertakingsController extends AbstractController
         }
         $this->getServiceLocator()->get('Script')->loadFiles($files);
 
+        $hasGovUkAccountError = $this->getFlashMessenger()->getContainer()->offsetExists('govUkAccountError');
+        if ($hasGovUkAccountError) {
+            $form->setMessages([
+                'declarationsAndUndertakings' => [
+                    'signatureOptions' => ['undertakings-sign-declaration-again']
+                ],
+            ]);
+            $form->setOption('formErrorsParagraph', 'undertakings-govuk-account-generic-error');
+        }
+
         if ($request->isPost()) {
             $data = (array) $request->getPost();
             $form->setData($data);
