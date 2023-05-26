@@ -396,7 +396,6 @@ return array(
     ),
     'view_helpers' => array(
         'invokables' => [
-            'addressFormat' => Olcs\View\Helper\Address::class,
             'piListData' => Olcs\View\Helper\PiListData::class,
             'formSubmissionSections' => Olcs\Form\View\Helper\SubmissionSections::class,
             'submissionSectionDetails' => Olcs\View\Helper\SubmissionSectionDetails::class,
@@ -404,6 +403,7 @@ return array(
             'surrenderDetails' => Olcs\View\Helper\SurrenderDetails::class,
         ],
         'factories' => array(
+            'addressFormat' => Olcs\View\Helper\AddressFactory::class,
             'SubmissionSectionTable' => 'Olcs\View\Helper\SubmissionSectionTableFactory',
             'SubmissionSectionMultipleTables' => 'Olcs\View\Helper\SubmissionSectionMultipleTablesFactory',
             'Olcs\View\Helper\SlaIndicator' => 'Olcs\View\Helper\SlaIndicator',
