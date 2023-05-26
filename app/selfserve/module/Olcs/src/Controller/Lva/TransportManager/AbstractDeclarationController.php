@@ -73,8 +73,8 @@ abstract class AbstractDeclarationController extends AbstractController
         $hasGovUkAccountError = $this->getFlashMessenger()->getContainer()->offsetExists('govUkAccountError');
         if ($hasGovUkAccountError) {
             $form->setMessages([
-                'declarationsAndUndertakings' => [
-                    'signatureOptions' => ['undertakings-sign-declaration-again']
+                'content' => [
+                    'isDigitallySigned' => ['undertakings-sign-declaration-again']
                 ],
             ]);
             $form->setOption('formErrorsParagraph', 'undertakings-govuk-account-generic-error');
