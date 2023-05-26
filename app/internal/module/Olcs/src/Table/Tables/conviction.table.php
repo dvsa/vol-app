@@ -53,14 +53,12 @@ return array(
         ),
         array(
             'title' => 'Name / defendant type',
-            'formatter' => function ($data, $column, $sm) {
+            'formatter' => function ($data, $column) {
 
-                $translator = $sm->get('translator');
-
-                $person = $data['personFirstname'] . ' ' . $data['personLastname'];
+                                $person = $data['personFirstname'] . ' ' . $data['personLastname'];
                 $organisationName = $data['operatorName'];
                 $name = ($organisationName == '' ? $person : $organisationName) . ' <br /> '
-                      . $translator->translate($data['defendantType']['description']);
+                      . $this->translator->translate($data['defendantType']['description']);
 
                 return $name;
             }

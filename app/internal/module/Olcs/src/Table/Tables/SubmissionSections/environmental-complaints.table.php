@@ -57,10 +57,10 @@ return array(
         ),
         array(
             'title' => 'Status',
-            'formatter' => function ($data, $column, $sm) {
-                $translateService =  $sm->get('translator');
+            'formatter' => function ($data, $column) {
+
                 return empty($data['closeDate']) ?
-                    $translateService->translate('Open') : $translateService->translate('Closed');
+                    $this->translator->translate('Open') : $this->translator->translate('Closed');
             }
         ),
         array(

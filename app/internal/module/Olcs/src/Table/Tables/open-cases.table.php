@@ -25,9 +25,9 @@ return array(
         ),
         array(
             'title' => 'Case type',
-            'formatter' => function ($row, $column, $sm) {
+            'formatter' => function ($row, $column) {
                 if (isset($row['caseType']['description'])) {
-                    return $sm->get('translator')->translate($row['caseType']['description']);
+                    return $this->translator->translate($row['caseType']['description']);
                 } else {
                     return 'Not set';
                 }

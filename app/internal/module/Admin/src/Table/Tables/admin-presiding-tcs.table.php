@@ -40,9 +40,8 @@ return [
             'title' => 'User',
             'name' => 'userId',
             'sort' => 'userId',
-            'formatter' => function ($row, $col, $sm) {
-                $urlHelper = $sm->get('Helper\Url');
-                $url = $urlHelper->fromRoute(
+            'formatter' => function ($row, $col) {
+                    $url = $this->urlHelper->fromRoute(
                     'admin-dashboard/admin-user-management',
                     [
                         'action' => 'edit',
