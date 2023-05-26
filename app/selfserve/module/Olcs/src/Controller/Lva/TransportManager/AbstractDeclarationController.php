@@ -70,6 +70,16 @@ abstract class AbstractDeclarationController extends AbstractController
 
         $this->getServiceLocator()->get('Script')->loadFiles(['tm-lva-declaration']);
 
+        $hasGovUkAccountError = $this->getFlashMessenger()->getContainer()->offsetExists('govUkAccountError');
+        if ($hasGovUkAccountError) {
+            $form->setMessages([
+                'content' => [
+                    'isDigitallySigned' => ['undertakings-sign-declaration-again']
+                ],
+            ]);
+            $form->setOption('formErrorsParagraph', 'undertakings-govuk-account-generic-error');
+        }
+
         $layout = $this->render('transport-manager-application.declaration', $form, $params);
         /* @var $layout \Laminas\View\Model\ViewModel */
 

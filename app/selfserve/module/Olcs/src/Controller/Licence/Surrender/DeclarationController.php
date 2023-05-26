@@ -85,6 +85,17 @@ class DeclarationController extends AbstractSurrenderController
         $form->setAttribute('action', $this->url()->fromRoute(
             'licence/surrender/declaration/sign-with-external', [], [], true
         ));
+
+        $hasGovUkAccountError = $this->getFlashMessenger()->getContainer()->offsetExists('govUkAccountError');
+        if ($hasGovUkAccountError) {
+            $form->setMessages([
+                'declarationsAndUndertakings' => [
+                    'signatureOptions' => ['undertakings-sign-declaration-again']
+                ],
+            ]);
+            $form->setOption('formErrorsParagraph', 'undertakings-govuk-account-generic-error');
+        }
+
         return $form;
     }
 
