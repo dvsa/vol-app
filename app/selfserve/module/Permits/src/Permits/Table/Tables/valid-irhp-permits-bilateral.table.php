@@ -31,10 +31,9 @@ return array(
         array(
             'title' => 'permits.irhp.valid.permits.table.country',
             'name' => 'country',
-            'formatter' => function ($row, $column, $sm) {
-                $translator = $sm->get('translator');
+            'formatter' => function ($row, $column) {
                 return Escape::html(
-                    $translator->translate($row['irhpPermitRange']['irhpPermitStock']['country']['countryDesc'])
+                    $this->translator->translate($row['irhpPermitRange']['irhpPermitStock']['country']['countryDesc'])
                 );
             },
         ),

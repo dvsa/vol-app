@@ -23,7 +23,7 @@ return array(
             'title' => 'permits.irhp.fee-breakdown.fee-per-permit',
             'isNumeric' => true,
             'name' => 'feePerPermit',
-            'formatter' => function ($row, $column, $sm) {
+            'formatter' => function ($row, $column) {
                 return (new CurrencyFormatter())($row['feePerPermit']);
             }
         ),
@@ -36,7 +36,7 @@ return array(
             'title' => 'permits.irhp.fee-breakdown.total-fee',
             'isNumeric' => true,
             'name' => 'totalFee',
-            'formatter' => function ($row, $column, $sm) {
+            'formatter' => function ($row, $column) {
                 return (new CurrencyFormatter())($row['totalFee']);
             }
         ),

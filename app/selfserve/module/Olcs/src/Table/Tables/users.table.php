@@ -27,7 +27,7 @@ return array(
             'title' => 'Name',
             'type' => 'Action',
             'action' => 'edit',
-            'formatter' => function ($row, $column, $sl) {
+            'formatter' => function ($row, $column) {
                 $column['formatter'] = 'Name';
                 return $this->callFormatter($column, $row['contactDetails']['person']);
             }
@@ -40,13 +40,12 @@ return array(
         ],
         [
             'title' => 'manage-users.table.column.permission.title',
-            'formatter' => function ($row, $column, $sm) {
+            'formatter' => function ($row, $column) {
                 return implode(
                     ',',
                     array_map(
-                        function ($role) use ($sm) {
-                            return $sm->get('translator')
-                                ->translate('role.' . $role['role']);
+                        function ($role) {
+                            return $this->translator->translate('role.' . $role['role']);
                         },
                         $row['roles']
                     )

@@ -53,7 +53,7 @@ return array(
         array(
             'title' => 'selfserve-table-ebsr-submissions-service-numbers',
             'isNumeric' => true,
-            'formatter' => function ($data, $column, $sm) {
+            'formatter' => function ($data, $column) {
                 $string = '';
 
                 if (isset($data['busReg']['serviceNo'])) {

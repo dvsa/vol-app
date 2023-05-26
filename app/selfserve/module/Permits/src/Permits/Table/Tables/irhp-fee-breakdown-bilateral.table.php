@@ -16,10 +16,9 @@ return array(
         array(
             'title' => 'permits.irhp.fee-breakdown.type',
             'name' => 'type',
-            'formatter' => function ($row, $column, $sm) {
-                $translator = $sm->get('translator');
+            'formatter' => function ($row, $column) {
                 return Escape::html(
-                    $translator->translate($row['type'])
+                    $this->translator->translate($row['type'])
                 );
             },
         ),
@@ -32,7 +31,7 @@ return array(
             'title' => 'permits.irhp.fee-breakdown.total-fee',
             'isNumeric' => true,
             'name' => 'total',
-            'formatter' => function ($row, $column, $sm) {
+            'formatter' => function ($row, $column) {
                 return (new CurrencyFormatter())($row['total']);
             }
         ),
@@ -45,7 +44,7 @@ return array(
         ),
         array(
             'align' => 'govuk-!-text-align-left',
-            'formatter' => function ($rows, $column, $sm) {
+            'formatter' => function ($rows, $column) {
                 $total = 0;
                 foreach ($rows as $row) {
                     $total += $row['quantity'];
@@ -56,7 +55,7 @@ return array(
         array(
             'content' => 'Total',
             'isNumeric' => true,
-            'formatter' => function ($rows, $column, $sm) {
+            'formatter' => function ($rows, $column) {
                 $total = 0;
                 foreach ($rows as $row) {
                     $total += $row['total'];
