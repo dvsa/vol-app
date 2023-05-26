@@ -32,8 +32,8 @@ return array(
         array(
             'title' => 'Added via',
             'width' => '8%',
-            'formatter' => function ($data, $column, $sl) {
-                $string = $sl->get('translator')->translate($data['addedVia']) . ' '
+            'formatter' => function ($data, $column) {
+                $string = $this->translator->translate($data['addedVia']) . ' '
                     .$data['parentId'];
                 return $string;
             },
@@ -55,9 +55,9 @@ return array(
         array(
             'title' => 'Attached to',
             'width' => '8%',
-            'formatter' => function ($data, $column, $sm) {
+            'formatter' => function ($data, $column) {
                 $attachedTo = $data['attachedTo'] == 'Operating Centre' ? 'OC' : $data['attachedTo'];
-                return $sm->get('translator')->translate($attachedTo);
+                return $this->translator->translate($attachedTo);
             }
         ),
         array(

@@ -50,8 +50,8 @@ return [
         ],
         [
             'title' => '',
-            'formatter' => function ($data, $column = array(), ServiceLocatorInterface $sm = null) {
-                $url = $sm->get('Helper\Url')->fromRoute(
+            'formatter' => function ($data, $column = array()) {
+                $url = $this->urlHelper->fromRoute(
                     'admin-dashboard/admin-editable-translations',
                     [
                         'action' => 'details',
@@ -62,7 +62,7 @@ return [
                 return sprintf(
                     '<a class="govuk-link" href="%s">%s</a>',
                     $url,
-                    $sm->get('translator')->translate('view')
+                    $this->translator->translate('view')
                 );
             }
         ],

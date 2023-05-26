@@ -45,8 +45,8 @@ return array(
         ),
         array(
             'title' => 'Type',
-            'formatter' => function ($data, $column, $sm) {
-                return $sm->get('translator')->translate($data['impoundingType']['id']);
+            'formatter' => function ($data, $column) {
+                return $this->translator->translate($data['impoundingType']['id']);
             }
         ),
         array(
@@ -57,8 +57,8 @@ return array(
         ),
         array(
             'title' => 'Outcome',
-            'formatter' => function ($data, $column, $sm) {
-                return (isset($data['outcome']['id']) ? $sm->get('translator')->translate($data['outcome']['id']) : '');
+            'formatter' => function ($data, $column) {
+                return (isset($data['outcome']['id']) ? $this->translator->translate($data['outcome']['id']) : '');
             }
         ),
         array(

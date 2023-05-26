@@ -11,9 +11,9 @@ return [
         [
             'title' => 'Username',
             'name' => 'loginId',
-            'formatter' => function ($row, $col, $sm) {
-                $urlHelper = $sm->get('Helper\Url');
-                $url = $urlHelper->fromRoute(
+            'formatter' => function ($row, $col) {
+
+                $url = $this->urlHelper->fromRoute(
                     'admin-dashboard/admin-user-management',
                     [
                         'action' => 'edit',

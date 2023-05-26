@@ -40,14 +40,14 @@ return array(
         ),
         array(
             'title' => 'Requested by',
-            'formatter' => function ($data, $column, $sm) {
+            'formatter' => function ($data, $column) {
                 return $data['requestorsContactDetails']['person']['forename'] . ' ' .
                     $data['requestorsContactDetails']['person']['familyName'];
             }
         ),
         array(
             'title' => 'Statement type',
-            'formatter' => function ($data, $column, $sm) {
+            'formatter' => function ($data, $column) {
 
                 return $data['statementType']['description'];
             },
@@ -63,11 +63,11 @@ return array(
         ),
         array(
             'title' => 'Date issued',
-            'formatter' => function ($data, $column, $sl) {
+            'formatter' => function ($data, $column) {
                 $column['formatter'] = 'Date';
                 return (!empty($data['issuedDate']) ?
                     $this->callFormatter($column, $data) :
-                    $sl->get('translator')->translate('Not issued')
+                    $this->translator->translate('Not issued')
                 );
             },
             'name' => 'issuedDate'

@@ -15,8 +15,8 @@ return array(
         ),
         array(
             'title' => 'Added via',
-            'formatter' => function ($data, $column, $sl) {
-                return $sl->get('translator')->translate($data['addedVia']['description']);
+            'formatter' => function ($data, $column) {
+                return $this->translator->translate($data['addedVia']['description']);
             },
         ),
         array(
@@ -33,14 +33,14 @@ return array(
         ),
         array(
             'title' => 'Attached to',
-            'formatter' => function ($data, $column, $sm) {
-                return $sm->get('translator')->translate($data['attachedTo']['description']);
+            'formatter' => function ($data, $column) {
+                return $this->translator->translate($data['attachedTo']['description']);
             },
         ),
         array(
             'title' => 'OC address',
             'width' => '300px',
-            'formatter' => function ($data, $column, $sm) {
+            'formatter' => function ($data, $column) {
 
                 if (isset($data['operatingCentre']['address'])) {
 
