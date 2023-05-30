@@ -129,6 +129,7 @@ abstract class AbstractDeclarationController extends AbstractController
             'id' => $this->tma['id'],
             'role' => $role,
             'returnUrl' => $returnUrl,
+            'returnUrlOnError' => $this->url()->fromRoute(null, [], [], true),
         ]));
         if (!$urlResult->isOk()) {
             throw new \Exception('GetGovUkAccountRedirect command returned non-OK', $urlResult->getStatusCode());

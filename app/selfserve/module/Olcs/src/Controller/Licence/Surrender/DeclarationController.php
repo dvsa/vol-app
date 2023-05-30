@@ -68,6 +68,7 @@ class DeclarationController extends AbstractSurrenderController
                     'journey' => RefData::JOURNEY_SURRENDER,
                     'id' => $this->licenceId,
                     'returnUrl' => $returnUrl,
+                    'returnUrlOnError' => $this->url()->fromRoute(null, [], [], true),
                 ]));
 
                 if (!$urlResult->isOk()) {
