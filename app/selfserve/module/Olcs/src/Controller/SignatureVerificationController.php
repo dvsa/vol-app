@@ -3,11 +3,7 @@
 namespace Olcs\Controller;
 
 use Common\FeatureToggle;
-use Common\RefData;
-use Common\Service\Cqrs\Response;
 use Dvsa\Olcs\Transfer\Command\GovUkAccount\ProcessAuthResponse;
-use Laminas\Stdlib\Parameters;
-use Olcs\Logging\Log\Logger;
 
 
 class SignatureVerificationController extends AbstractSelfserveController
@@ -27,6 +23,7 @@ class SignatureVerificationController extends AbstractSelfserveController
 
         $result = $response->getResult();
         $redirectUrl = $result['flags']['redirect_url'] ?? null;
+        $redirectUrlOnError = $result['flags']['redirect_url_on_error'] ?? null;
         $error = $result['flags']['error'] ?? null;
 
         if (empty($redirectUrl)) {
@@ -35,6 +32,10 @@ class SignatureVerificationController extends AbstractSelfserveController
 
         if (!empty($error)) {
             $this->flashMessenger()->getContainer()->offsetSet('govUkAccountError', true);
+
+            if (!empty($redirectUrlOnError)) {
+                $redirectUrl = $redirectUrlOnError;
+            }
         }
 
         return $this->redirect()->toUrl($redirectUrl);
