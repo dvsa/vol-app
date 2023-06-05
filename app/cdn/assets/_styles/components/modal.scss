@@ -60,6 +60,12 @@
     margin-bottom: 0;
   }
 
+  .govuk-button-group {
+    display: block;
+    margin-bottom: 0;
+    margin-top: $gutter-half;
+  }
+
   // force table cells to always wrap on multiple lines
   td {
     word-break: break-word;
@@ -112,7 +118,7 @@
   .modal,
   .modal--alert {
     border-radius: 3px;
-    padding: 0 0 0 0;
+    padding: 0 0 $gutter * 1.5;
     &__title {
       @extend %h4;
     }
@@ -129,6 +135,14 @@
     }
     &__content {
       padding: $gutter-two-thirds $gutter-half;
+    }
+    .govuk-button-group {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      padding: 15px;
+      width: auto;
     }
     p {
       @extend %paragraph--small;
