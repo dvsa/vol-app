@@ -19,7 +19,7 @@ return array(
                 'edit' => array('requireRows' => true, 'class' => 'govuk-button govuk-button--secondary js-require--one'),
                 'delete' => array(
                     'requireRows' => true,
-                    'class' => 'govuk-button govuk-button--secondary js-require--one',
+                    'class' => 'govuk-button govuk-button--warning js-require--one',
                     'label' => 'Remove'
                 )
             )

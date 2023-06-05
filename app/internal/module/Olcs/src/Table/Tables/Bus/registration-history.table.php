@@ -8,7 +8,7 @@ return array(
     'settings' => array(
         'crud' => array(
             'actions' => array(
-                'delete' => array('requireRows' => true),
+                'delete' => array('requireRows' => true, 'class' => 'govuk-button govuk-button--warning js-require--one'),
             ),
         ),
         'paginate' => array(

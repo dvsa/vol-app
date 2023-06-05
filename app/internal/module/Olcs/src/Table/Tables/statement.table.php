@@ -16,7 +16,7 @@ return array(
                     'class' => 'govuk-button govuk-button--secondary js-require--one',
                     'label' => 'Generate Letter'
                 ),
-                'delete' => array('class' => 'govuk-button govuk-button--secondary js-require--one', 'requireRows' => true)
+                'delete' => array('class' => 'govuk-button govuk-button--warning js-require--one', 'requireRows' => true)
             )
         )
     ),

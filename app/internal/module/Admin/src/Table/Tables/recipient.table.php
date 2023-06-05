@@ -10,7 +10,7 @@ return array(
             'actions' => array(
                 'add' => array('class' => 'govuk-button', 'requireRows' => false),
                 'edit' => array('class' => 'govuk-button govuk-button--secondary js-require--one', 'requireRows' => true),
-                'delete' => array('class' => 'govuk-button govuk-button--secondary js-require--one', 'requireRows' => true)
+                'delete' => array('class' => 'govuk-button govuk-button--warning js-require--one', 'requireRows' => true)
             )
         ),
         'paginate' => array(

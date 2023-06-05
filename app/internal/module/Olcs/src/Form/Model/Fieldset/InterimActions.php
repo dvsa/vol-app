@@ -7,7 +7,7 @@ use Laminas\Form\Annotation as Form;
 /**
  * Interim actions
  *
- * @Form\Attributes({"class":""})
+ * @Form\Attributes({"class":"govuk-button-group"})
  * @Form\Name("form-actions")
  */
 class InterimActions
