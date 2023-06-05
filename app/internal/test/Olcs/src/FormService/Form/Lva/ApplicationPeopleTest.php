@@ -6,6 +6,7 @@ use Common\Form\Form;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\ApplicationPeople;
+use ZfcRbac\Service\AuthorizationService;
 
 class ApplicationPeopleTest extends MockeryTestCase
 {
@@ -22,9 +23,7 @@ class ApplicationPeopleTest extends MockeryTestCase
         $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
         $this->fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
 
-        $this->sut = new ApplicationPeople();
-        $this->sut->setFormHelper($this->formHelper);
-        $this->sut->setFormServiceLocator($this->fsm);
+        $this->sut = new ApplicationPeople($this->formHelper, m::mock(AuthorizationService::class));
     }
 
     public function testGetForm()

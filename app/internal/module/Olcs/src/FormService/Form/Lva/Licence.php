@@ -1,13 +1,10 @@
 <?php
 
-/**
- * Licence Form
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\Licence as CommonLicence;
+use Common\Service\Helper\FormHelperService;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Licence Form
@@ -16,6 +13,14 @@ use Common\FormService\Form\Lva\Licence as CommonLicence;
  */
 class Licence extends CommonLicence
 {
+    protected FormHelperService $formHelper;
+    protected AuthorizationService $authService;
+
+    public function __construct(FormHelperService $formHelper, AuthorizationService $authService)
+    {
+        parent::__construct($formHelper, $authService);
+    }
+
     public function alterForm($form)
     {
         parent::alterForm($form);

@@ -3,6 +3,7 @@
 namespace Olcs\FormService\Form\Lva\OperatingCentre;
 
 use Common\FormService\Form\Lva\OperatingCentre\CommonOperatingCentre;
+use Common\Service\Helper\FormHelperService;
 use Laminas\Form\Form;
 use Laminas\Validator\Identical as ValidatorIdentical;
 use Common\Validator\ValidateIf;
@@ -16,6 +17,13 @@ use Common\Data\Mapper\Lva\OperatingCentre as OperatingCentreMapper;
  */
 class LvaOperatingCentre extends CommonOperatingCentre
 {
+    protected FormHelperService $formHelper;
+
+    public function __construct(FormHelperService $formHelper)
+    {
+        $this->formHelper = $formHelper;
+    }
+
     /**
      * Alter the Form
      *
@@ -26,10 +34,9 @@ class LvaOperatingCentre extends CommonOperatingCentre
      */
     public function alterForm(Form $form, array $params)
     {
-        $formHelper = $this->getFormHelper();
-        $formHelper->removeValidator($form, 'data->permission->permission', ValidatorIdentical::class);
+        $this->formHelper->removeValidator($form, 'data->permission->permission', ValidatorIdentical::class);
         // On Internal uploading the advert isn't mandatory
-        $formHelper->removeValidator($form, 'advertisements->uploadedFileCount', ValidateIf::class);
+        $this->formHelper->removeValidator($form, 'advertisements->uploadedFileCount', ValidateIf::class);
 
         $appliedVia = null;
         if (isset($params['appliedVia']['id'])) {
@@ -38,8 +45,8 @@ class LvaOperatingCentre extends CommonOperatingCentre
             $appliedVia = $params['appliedVia'];
         }
 
-        $formHelper->remove($form, 'advertisements->adSendByPostContent');
-        $formHelper->remove($form, 'advertisements->adPlacedLaterContent');
+        $this->formHelper->remove($form, 'advertisements->adSendByPostContent');
+        $this->formHelper->remove($form, 'advertisements->adPlacedLaterContent');
 
         $advertisements = $form->get('advertisements');
         $advertisements->setLabel('application_operating-centres_authorisation-sub-action.advertisements.adPlaced');

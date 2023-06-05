@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Application Test
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 namespace OlcsTest\FormService\Form\Lva;
 
 use Mockery as m;
@@ -12,6 +7,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\Application;
 use Laminas\Form\Fieldset;
 use Laminas\Form\Form;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Application Test
@@ -27,9 +23,7 @@ class ApplicationTest extends MockeryTestCase
     public function setUp(): void
     {
         $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService');
-
-        $this->sut = new Application();
-        $this->sut->setFormHelper($this->formHelper);
+        $this->sut = new Application($this->formHelper, m::mock(AuthorizationService::class));
     }
 
     public function testAlterForm()

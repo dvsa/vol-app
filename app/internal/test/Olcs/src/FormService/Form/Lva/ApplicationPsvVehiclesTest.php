@@ -1,14 +1,10 @@
 <?php
 
-/**
- * Application Psv Vehicles Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace OlcsTest\FormService\Form\Lva;
 
 use Mockery as m;
 use Olcs\FormService\Form\Lva\ApplicationPsvVehicles;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Application Psv Vehicles Test
@@ -20,6 +16,12 @@ class ApplicationPsvVehiclesTest extends AbstractLvaFormServiceTestCase
     protected $classToTest = ApplicationPsvVehicles::class;
 
     protected $formName = 'Lva\PsvVehicles';
+
+    public function setUp(): void
+    {
+        $this->classArgs = [m::mock(AuthorizationService::class)];
+        parent::setUp();
+    }
 
     public function testGetForm()
     {

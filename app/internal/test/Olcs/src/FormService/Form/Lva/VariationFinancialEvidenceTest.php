@@ -2,10 +2,13 @@
 
 namespace OlcsTest\FormService\Form\Lva;
 
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Helper\UrlHelperService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\VariationFinancialEvidence;
 use OlcsTest\Bootstrap;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * @covers Olcs\FormService\Form\Lva\VariationFinancialEvidence
@@ -28,8 +31,8 @@ class VariationFinancialEvidenceTest extends MockeryTestCase
     {
         $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
         $this->fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
-        $this->urlHelper = m::mock();
-        $this->translator = m::mock();
+        $this->urlHelper = m::mock(UrlHelperService::class);
+        $this->translator = m::mock(TranslationHelperService::class);
 
         $sm = Bootstrap::getServiceManager();
         $sm->setService('Helper\Url', $this->urlHelper);
@@ -37,9 +40,7 @@ class VariationFinancialEvidenceTest extends MockeryTestCase
 
         $this->fsm->shouldReceive('getServiceLocator')->andReturn($sm);
 
-        $this->sut = new VariationFinancialEvidence();
-        $this->sut->setFormHelper($this->formHelper);
-        $this->sut->setFormServiceLocator($this->fsm);
+        $this->sut = new VariationFinancialEvidence($this->formHelper, m::mock(AuthorizationService::class), $this->translator, $this->urlHelper);
     }
 
     public function testGetForm()

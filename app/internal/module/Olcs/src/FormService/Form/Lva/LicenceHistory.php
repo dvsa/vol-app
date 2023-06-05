@@ -1,13 +1,9 @@
 <?php
 
-/**
- * LicenceHistory Form
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\LicenceHistory as CommonLicenceHistory;
+use Common\Service\Helper\FormHelperService;
 
 /**
  * LicenceHistory Form
@@ -16,6 +12,13 @@ use Common\FormService\Form\Lva\LicenceHistory as CommonLicenceHistory;
  */
 class LicenceHistory extends CommonLicenceHistory
 {
+    protected FormHelperService $formHelper;
+
+    public function __construct(FormHelperService $formHelper)
+    {
+        parent::__construct($formHelper);
+    }
+
     /**
      * Make form alterations
      *

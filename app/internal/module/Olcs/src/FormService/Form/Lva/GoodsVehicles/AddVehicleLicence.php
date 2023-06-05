@@ -1,24 +1,24 @@
 <?php
 
-/**
- * Add Vehicle Licence
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace Olcs\FormService\Form\Lva\GoodsVehicles;
 
-use Common\FormService\Form\AbstractFormService;
-
 /**
  * Add Vehicle Licence
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class AddVehicleLicence extends AbstractFormService
+class AddVehicleLicence
 {
+    protected FormHelperService $formHelper;
+
+    public function __construct(FormHelperService $formHelper)
+    {
+        $this->formHelper = $formHelper;
+    }
+
     public function getForm($request, $params = [])
     {
-        $form = $this->getFormHelper()->createFormWithRequest('Lva\AddGoodsVehicleLicence', $request);
+        $form = $this->formHelper->createFormWithRequest('Lva\AddGoodsVehicleLicence', $request);
 
         $this->alterForm($form, $params);
 

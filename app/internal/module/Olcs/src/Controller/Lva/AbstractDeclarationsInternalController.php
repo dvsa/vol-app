@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Lva;
 
+use Common\FormService\FormServiceManager;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Common\Controller\Lva\AbstractController;
 use Dvsa\Olcs\Transfer\Command\Application\UpdateAuthSignature;
@@ -68,7 +69,7 @@ abstract class AbstractDeclarationsInternalController extends AbstractController
     protected function getForm()
     {
         $form = $this->getServiceLocator()
-            ->get('FormServiceManager')
+            ->get(FormServiceManager::class)
             ->get('lva-' . $this->lva . '-undertakings')
             ->getForm();
 

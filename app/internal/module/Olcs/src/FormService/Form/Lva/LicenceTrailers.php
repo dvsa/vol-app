@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Licence Trailers
- *
- * @author Alex Peshkov <alex.pehkov@valtech.co.uk>
- */
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\CommonLicenceTrailers as CommonLicenceTrailers;
@@ -17,6 +12,13 @@ use Common\Service\Helper\FormHelperService;
  */
 class LicenceTrailers extends CommonLicenceTrailers
 {
+    protected FormHelperService $formHelper;
+
+    public function __construct(FormHelperService $formHelper)
+    {
+        parent::__construct($formHelper);
+    }
+
     /**
      * Make form alterations
      *
@@ -29,7 +31,7 @@ class LicenceTrailers extends CommonLicenceTrailers
         parent::alterForm($form, $table);
 
         $saveButton = $form->get('form-actions')->get('save');
-        $this->getFormHelper()->alterElementLabel($saveButton, 'internal.', FormHelperService::ALTER_LABEL_PREPEND);
+        $this->formHelper->alterElementLabel($saveButton, 'internal.', FormHelperService::ALTER_LABEL_PREPEND);
         return $form;
     }
 }

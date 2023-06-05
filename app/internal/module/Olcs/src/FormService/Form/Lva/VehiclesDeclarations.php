@@ -1,13 +1,9 @@
 <?php
 
-/**
- * Vehicles Declarations Form
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\VehiclesDeclarations as CommonVehiclesDeclarations;
+use Common\Service\Helper\FormHelperService;
 
 /**
  * Vehicles Declarations Form
@@ -16,6 +12,13 @@ use Common\FormService\Form\Lva\VehiclesDeclarations as CommonVehiclesDeclaratio
  */
 class VehiclesDeclarations extends CommonVehiclesDeclarations
 {
+    protected FormHelperService $formHelper;
+
+    public function __construct(FormHelperService $formHelper)
+    {
+        parent::__construct($formHelper);
+    }
+
     /**
      * Make form alterations
      *

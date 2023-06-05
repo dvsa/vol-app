@@ -26,8 +26,7 @@ class LvaOperatingCentreTest extends MockeryTestCase
     {
         $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService');
 
-        $this->sut = new LvaOperatingCentre();
-        $this->sut->setFormHelper($this->formHelper);
+        $this->sut = new LvaOperatingCentre($this->formHelper);
     }
 
     /**

@@ -1,16 +1,13 @@
 <?php
 
-/**
- * Licence Goods Vehicles Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace OlcsTest\FormService\Form\Lva;
 
+use Common\Form\Form;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\LicenceGoodsVehicles;
 use OlcsTest\Bootstrap;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Licence Goods Vehicles Test
@@ -35,9 +32,7 @@ class LicenceGoodsVehiclesTest extends MockeryTestCase
             ->andReturn($this->sm);
         $this->formService = m::mock('\Common\FormService\FormServiceManager')->makePartial();
 
-        $this->sut = new LicenceGoodsVehicles();
-        $this->sut->setFormHelper($this->formHelper);
-        $this->sut->setFormServiceLocator($this->formService);
+        $this->sut = new LicenceGoodsVehicles($this->formHelper, m::mock(AuthorizationService::class), $this->formService);
     }
 
     public function testGetForm()
@@ -73,10 +68,10 @@ class LicenceGoodsVehiclesTest extends MockeryTestCase
             ->with($mockValidator);
 
         // <<--- START SUT::alterForm
-        $mockLicence = m::mock('\Common\FormService\FormServiceInterface');
+        $mockLicence = m::mock(Form::class);
         $this->formService->setService('lva-licence', $mockLicence);
 
-        $mockLicenceVariationVehicles = m::mock('\Common\FormService\FormServiceInterface');
+        $mockLicenceVariationVehicles = m::mock(Form::class);
         $this->formService->setService('lva-licence-variation-vehicles', $mockLicenceVariationVehicles);
 
         $mockLicence->shouldReceive('alterForm')

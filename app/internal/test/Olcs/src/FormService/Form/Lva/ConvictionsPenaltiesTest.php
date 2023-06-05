@@ -1,15 +1,11 @@
 <?php
 
-/**
- * Convictions & Penalties Form Service Test
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 namespace OlcsTest\FormService\Form\Lva;
 
 use Common\Form\Elements\InputFilters\ActionLink;
 use Common\Form\Model\Form\Lva\Fieldset\ConvictionsPenaltiesReadMoreLink;
 use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Helper\UrlHelperService;
 use Olcs\FormService\Form\Lva\ConvictionsPenalties;
 use Mockery as m;
 use Laminas\ServiceManager\ServiceLocatorInterface;
@@ -22,6 +18,14 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
 class ConvictionsPenaltiesTest extends AbstractLvaFormServiceTestCase
 {
     protected $classToTest = ConvictionsPenalties::class;
+
+    public function setUp(): void
+    {
+        $this->translator = m::mock(TranslationHelperService::class);
+        $this->urlHelper = m::mock(UrlHelperService::class);
+        $this->classArgs = [$this->translator, $this->urlHelper];
+        parent::setUp();
+    }
 
     public function testGetForm()
     {
@@ -63,16 +67,12 @@ class ConvictionsPenaltiesTest extends AbstractLvaFormServiceTestCase
                 $ConvictionsReadMoreLink
             )->getMock();
 
-        $translator = m::mock(TranslationHelperService::class);
-        $translator
+        $this->translator
             ->shouldReceive('translate')
             ->with('convictions-and-penalties-guidance-route-param')
             ->andReturn('dummy-translated-param');
 
-        $mockServiceLocator = m::mock(ServiceLocatorInterface::class);
-
-        $mockUrl = m::mock();
-        $mockUrl
+        $this->urlHelper
             ->shouldReceive('fromRoute')
             ->with(
                 'guides/guide',
@@ -80,13 +80,6 @@ class ConvictionsPenaltiesTest extends AbstractLvaFormServiceTestCase
             )
             ->once()
             ->andReturn('dummy-url');
-
-        $mockServiceLocator->shouldReceive('get')->with('Helper\Translation')->once()->andReturn($translator);
-        $mockServiceLocator->shouldReceive('get')->with('Helper\Url')->once()->andReturn($mockUrl);
-
-        $this->fsm
-            ->shouldReceive('getServiceLocator')
-            ->andReturn($mockServiceLocator);
 
         $form = $this->sut->getForm();
 
