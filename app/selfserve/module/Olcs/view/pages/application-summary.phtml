@@ -76,10 +76,10 @@
                       ?>
                   </ul>
               <?php endif; ?>
-              <div class="govuk-button-group">
+              <div>
                   <a class="govuk-button govuk-button--secondary" role="button" draggable="false" data-module="govuk-button" href="<?php echo $this->url('lva-' . $lva . '/upload-evidence', [], [], true); ?>"><?php echo $this->translate('upload-evidence-button'); ?></a>
               </div>
-              <div class="govuk-button-group">
+              <div>
                 <p class="govuk-body"><?php echo $this->translate('supply-supporting-evidence-text-2' . ($isNi ? '-ni' : '')); ?> (<?php echo $this->escapeHtml($licence) . '/' . $this->escapeHtml($application); ?>).</p>
               </div>
           </div>
@@ -88,15 +88,16 @@
               <div class="incomplete-section">
                   <h3><?php echo $this->translate('approve-tm.title'); ?></h3>
                   <div class="table__wrapper">
-                      <table>
-                          <thead>
-                              <tr>
-                                  <th><?php echo $this->translate('approve-tm.table.column.name.title'); ?></th>
-                                  <th><?php echo $this->translate('approve-tm.table.column.dob.title'); ?></th>
-                                  <th><?php echo $this->translate('approve-tm.table.column.actions.title'); ?></th>
+                      <table class="govuk-table">
+                          <thead class="govuk-table__head">
+                              <tr class="govuk-table__row">
+                                  <th scope="col" class="govuk-table__header"><?php echo $this->escapeHtml($this->translate('approve-tm.table.column.name.title')); ?></th>
+                                  <th scope="col" class="govuk-table__header"><?php echo $this->escapeHtml($this->translate('Status')); ?></th>
+                                  <th scope="col" class="govuk-table__header"><?php echo $this->escapeHtml($this->translate('approve-tm.table.column.dob.title')); ?></th>
+                                  <th scope="col" class="govuk-table__header"><?php echo $this->escapeHtml($this->translate('approve-tm.table.column.actions.title')); ?></th>
                               </tr>
                           </thead>
-                          <tbody>
+                          <tbody class="govuk-table__body">
                           <?php
                           foreach ($transportManagers as $transportManager) {
 
@@ -111,14 +112,16 @@
                               );
 
                               ?>
-                              <tr>
-                                  <td>
-                                      <?php echo $tmName; ?>
+                              <tr class="govuk-table__row">
+                                  <td class="govuk-table__cell">
+                                      <?php echo $this->escapeHtml($tmName); ?>
+                                  </td>
+                                  <td class="govuk-table__cell">
                                       <?php echo $this->transportManagerApplicationStatus($tmStatus['id'], $tmStatus['description']); ?>
                                   </td>
-                                  <td><?php echo $this->date(strtotime($tmPerson['birthDate'])); ?></td>
-                                  <td>
-                                      <?php echo $this->link($tmLink, 'approve-tm.table.action.view-details', 'remove'); ?>
+                                  <td class="govuk-table__cell"><?php echo $this->escapeHtml($this->date(strtotime($tmPerson['birthDate']))); ?></td>
+                                  <td class="govuk-table__cell">
+                                      <?php echo $this->link($tmLink, 'approve-tm.table.action.view-details'); ?>
                                   </td>
                               </tr>
                               <?php
@@ -130,8 +133,13 @@
               </div>
           <?php endif; ?>
 
-          <p class="important"><strong><?php echo $this->translate($this->importantText); ?></strong></p>
-
+          <div class="govuk-warning-text">
+              <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+              <strong class="govuk-warning-text__text">
+                  <span class="govuk-warning-text__assistive">Warning</span>
+                  <?php echo $this->translate($this->importantText); ?>
+              </strong>
+          </div>
       </div><!-- .article -->
 
       <div class="govuk-button-group">

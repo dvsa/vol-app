@@ -32,7 +32,8 @@ class SubmitAccept
      * @Form\Attributes({
      *     "id":"save-return-button",
      *     "type":"submit",
-     *     "role":"link"
+     *     "class":"govuk-button govuk-button--secondary",
+     *     "data-module": "govuk-button",
      * })
      * @Form\Options({
      *     "label":"Save and return to overview",
