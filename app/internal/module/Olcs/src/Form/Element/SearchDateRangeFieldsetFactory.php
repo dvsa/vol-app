@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: craig
- * Date: 09/03/2015
- * Time: 12:06
- */
 
 namespace Olcs\Form\Element;
 
@@ -33,7 +27,7 @@ class SearchDateRangeFieldsetFactory implements FactoryInterface
      * @param ServiceLocatorInterface $serviceLocator
      * @return mixed
      */
-    public function createService(ServiceLocatorInterface $serviceLocator) : SearchDateRangeFieldset
+    public function createService(ServiceLocatorInterface $serviceLocator): SearchDateRangeFieldset
     {
         return $this->__invoke($serviceLocator, SearchDateRangeFieldset::class);
     }
@@ -46,11 +40,13 @@ class SearchDateRangeFieldsetFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : SearchDateRangeFieldset
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SearchDateRangeFieldset
     {
-        $serviceLocator = $container->getServiceLocator();
+        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
+            $container = $container->getServiceLocator();
+        }
         $fs = new SearchDateRangeFieldset($this->options['name'], $this->options);
-        $fs->setSearchService($serviceLocator->get('DataServiceManager')->get(Search::class));
+        $fs->setSearchService($container->get('DataServiceManager')->get(Search::class));
         return $fs;
     }
 }

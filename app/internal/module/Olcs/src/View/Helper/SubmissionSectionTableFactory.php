@@ -20,7 +20,7 @@ class SubmissionSectionTableFactory implements FactoryInterface
      * @param ServiceLocatorInterface $serviceLocator
      * @return SubmissionSectionTable
      */
-    public function createService(ServiceLocatorInterface $serviceLocator) : SubmissionSectionTable
+    public function createService(ServiceLocatorInterface $serviceLocator): SubmissionSectionTable
     {
         return $this->__invoke($serviceLocator, SubmissionSectionTable::class);
     }
@@ -33,9 +33,12 @@ class SubmissionSectionTableFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : SubmissionSectionTable
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SubmissionSectionTable
     {
-        $tableBuilder = $container->getServiceLocator()->get('Table');
+        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
+            $container = $container->getServiceLocator();
+        }
+        $tableBuilder = $container->get('Table');
         $service = new SubmissionSectionTable();
         $service->setTableBuilder($tableBuilder);
         return $service;

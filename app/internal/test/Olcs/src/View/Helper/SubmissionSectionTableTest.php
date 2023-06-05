@@ -1,6 +1,5 @@
 <?php
 
-
 namespace OlcsTest\View\Helper;
 
 use Olcs\View\Helper\SubmissionSectionTable;
@@ -63,18 +62,14 @@ class SubmissionSectionTableTest extends TestCase
     {
         $mockTableBuilder = m::mock('\Common\Service\Table\TableFactory');
 
-        $mockSm = m::mock('\Laminas\ServiceManager\ServiceManager');
         $mockSl = m::mock('\Laminas\ServiceManager\ServiceManager');
-
-        $mockSm->shouldReceive('getServiceLocator')
-            ->andReturn($mockSl);
 
         $mockSl->shouldReceive('get')
             ->with('Table')
             ->andReturn($mockTableBuilder);
 
         $sut = new SubmissionSectionTableFactory();
-        $service = $sut->createService($mockSm);
+        $service = $sut->createService($mockSl);
 
         $this->assertInstanceOf('Olcs\View\Helper\SubmissionSectionTable', $service);
         $this->assertSame($mockTableBuilder, $service->getTableBuilder());
