@@ -13,7 +13,7 @@ return [
         'crud' => [
             'actions' => [
                 'preGrantAdd' => ['requireRows' => false, 'class' => 'govuk-button', 'label' => 'Add', 'value' => 'preGrantAdd'],
-                'preGrantDelete' => ['requireRows' => true, 'class' => 'govuk-button govuk-button--secondary js-require--one', 'label' => 'Delete', 'value' => 'preGrantDelete'],
+                'preGrantDelete' => ['requireRows' => true, 'class' => 'govuk-button govuk-button--warning js-require--one', 'label' => 'Delete', 'value' => 'preGrantDelete'],
                 'preGrantEdit' => ['requireRows' => true, 'class' => 'govuk-button govuk-button--secondary js-require--one', 'label' => 'Edit', 'value' => 'preGrantEdit']
             ],
         ],

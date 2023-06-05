@@ -10,7 +10,7 @@ return array(
             'actions' => array(
                 'add' => array('class' => 'govuk-button'),
                 'edit' => array('class' => 'govuk-button govuk-button--secondary js-require--one'),
-                'delete' => array('class' => 'govuk-button govuk-button--secondary js-require--multiple')
+                'delete' => array('class' => 'govuk-button govuk-button--warning js-require--multiple')
             )
         ),
         // This has to exist so that the title gets prepended with the document count

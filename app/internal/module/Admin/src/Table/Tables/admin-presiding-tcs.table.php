@@ -25,7 +25,7 @@ return [
                 ],
                 'delete' => [
                     'requireRows' => false,
-                    'class' => 'govuk-button govuk-button--secondary js-require--one'
+                    'class' => 'govuk-button govuk-button--warning js-require--one'
                 ]
             ]
         ],

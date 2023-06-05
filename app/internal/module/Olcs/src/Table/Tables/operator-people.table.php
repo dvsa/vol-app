@@ -14,7 +14,7 @@ return array(
                 'edit' => array('requireRows' => true),
                 'delete' => array(
                     'label' => 'people_table_action.delete.label',
-                    'class' => 'govuk-button govuk-button--secondary',
+                    'class' => 'govuk-button govuk-button--warning',
                     'requireRows' => true,
                 ),
             )

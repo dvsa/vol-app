@@ -16,7 +16,7 @@ return array(
                     'requireRows' => true
                 ),
                 'deleteAlphasplit' => array(
-                    'class' => 'govuk-button govuk-button--secondary js-require--multiple',
+                    'class' => 'govuk-button govuk-button--warning js-require--multiple',
                     'label' => 'delete',
                     'requireRows' => true
                 )

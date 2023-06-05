@@ -9,7 +9,7 @@ return array(
             'actions' => array(
                 'upload' => array('class' => 'govuk-button'),
                 'New letter' => array(),
-                'delete' => array('class' => 'govuk-button govuk-button--secondary js-require--multiple', 'requireRows' => true),
+                'delete' => array('class' => 'govuk-button govuk-button--warning js-require--multiple', 'requireRows' => true),
                 'split' => array('class' => 'govuk-button govuk-button--secondary', 'requireRows' => true),
                 'relink' => array('class' => 'govuk-button govuk-button--secondary js-require--multiple', 'requireRows' => true)
             )

@@ -9,7 +9,7 @@ return array(
             'actions' => array(
                 'add' => array('class' => 'govuk-button'),
                 'edit' => array('class' => 'govuk-button govuk-button--secondary js-require--one'),
-                'delete' => array('class' => 'govuk-button govuk-button--secondary js-require--multiple')
+                'delete' => array('class' => 'govuk-button govuk-button--warning js-require--multiple')
             )
         )
     ),
