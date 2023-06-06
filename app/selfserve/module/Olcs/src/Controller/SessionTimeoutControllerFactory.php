@@ -37,9 +37,10 @@ class SessionTimeoutControllerFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : Dispatcher
     {
         $serviceLocator = $container;
-        if ($container instanceof ControllerManager) {
-            $serviceLocator = $serviceLocator->getServiceLocator();
+        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
+            $container = $container->getServiceLocator();
         }
+
         $controllerPluginManager = $serviceLocator->get('ControllerPluginManager');
         $cookieService = $serviceLocator->get('Auth\CookieService');
         $logoutService = $serviceLocator->get('Auth\LogoutService');

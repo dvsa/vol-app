@@ -30,7 +30,9 @@ class SettingsControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : SettingsController
     {
-        $mainServiceLocator = $container->getServiceLocator();
+        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
+            $mainServiceLocator = $container->getServiceLocator();
+        }
         return new SettingsController(
             $mainServiceLocator->get('CookieCurrentPreferencesProvider'),
             $mainServiceLocator->get('CookieSetCookieArrayGenerator'),
