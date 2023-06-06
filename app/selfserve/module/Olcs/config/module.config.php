@@ -1,7 +1,5 @@
 <?php
 
-use Dvsa\Olcs\Auth\Controller\ExpiredPasswordController;
-use Dvsa\Olcs\Auth\ControllerFactory\ExpiredPasswordControllerFactory;
 use Olcs\Auth\Adapter\CommandAdapter;
 use Olcs\Auth\Adapter\CommandAdapterFactory;
 use Olcs\Auth\Adapter\SelfserveCommandAdapter;
@@ -1246,11 +1244,11 @@ return array(
     'service_manager' => array(
         'invokables' => array(
             'ApplicationPeopleAdapter'
-                => 'Olcs\Controller\Lva\Adapters\ApplicationPeopleAdapter',
+                => \Olcs\Controller\Lva\Adapters\ApplicationPeopleAdapter::class,
             'LicencePeopleAdapter'
-                => 'Olcs\Controller\Lva\Adapters\LicencePeopleAdapter',
+                => \Olcs\Controller\Lva\Adapters\LicencePeopleAdapter::class,
             'VariationPeopleAdapter'
-                => 'Olcs\Controller\Lva\Adapters\VariationPeopleAdapter',
+                => \Olcs\Controller\Lva\Adapters\VariationPeopleAdapter::class,
             'CookieCookieStateFactory' => CookieService\CookieStateFactory::class,
             'CookiePreferencesFactory' => CookieService\PreferencesFactory::class,
             'CookieSetCookieFactory' => CookieService\SetCookieFactory::class,
@@ -1275,7 +1273,7 @@ return array(
             'CookieSetCookieArrayGenerator' => CookieService\SetCookieArrayGeneratorFactory::class,
             'CookieAnalyticsCookieNamesProvider' => CookieService\AnalyticsCookieNamesProviderFactory::class,
             'CookieDeleteCookieNamesProvider' => CookieService\DeleteCookieNamesProviderFactory::class,
-            'Olcs\InputFilter\EbsrPackInput' => 'Olcs\InputFilter\EbsrPackFactory',
+            'Olcs\InputFilter\EbsrPackInput' => \Olcs\InputFilter\EbsrPackFactory::class,
             'navigation' => Laminas\Navigation\Service\DefaultNavigationFactory::class,
             'Olcs\Navigation\DashboardNavigation' => Olcs\Navigation\DashboardNavigationFactory::class,
             Olcs\Controller\Listener\Navigation::class => Olcs\Controller\Listener\NavigationFactory::class,
@@ -1494,7 +1492,6 @@ return array(
             'lva-application-financial_history' => LvaFormService\ApplicationFinancialHistory::class,
             'lva-application-licence_history' => LvaFormService\ApplicationLicenceHistory::class,
             'lva-application-convictions_penalties' => LvaFormService\ApplicationConvictionsPenalties::class,
-            'lva-licence-convictions_penalties' => Olcs\FormService\Form\Lva\ConvictionsPenalties::class,
 
             'lva-application-vehicles_psv' => LvaFormService\ApplicationPsvVehicles::class,
             'lva-application-goods-vehicles' => LvaFormService\ApplicationGoodsVehicles::class,
