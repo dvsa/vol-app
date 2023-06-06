@@ -3988,12 +3988,12 @@
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.451",
+            "version": "4.206.461",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.451/olcs-olcs-common-4.206.451.zip",
-                "reference": "63b783f746b9ef5923737a10b9d0e8a354b93f4e",
-                "shasum": "63b783f746b9ef5923737a10b9d0e8a354b93f4e"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.461/olcs-olcs-common-4.206.461.zip",
+                "reference": "3d7e77adea71d70251a47f152e22b1aeef99d408",
+                "shasum": "3d7e77adea71d70251a47f152e22b1aeef99d408"
             },
             "require": {
                 "elendev/composer-push": "^1.0.3",
@@ -4028,6 +4028,11 @@
                     "./Common/Module.php"
                 ]
             },
+            "autoload-dev": {
+                "psr-4": {
+                    "CommonTest\\": "test/Common/src/"
+                }
+            },
             "scripts": {
                 "ut": [
                     "vendor/bin/phpunit -c test/phpunit.xml --stop-on-failure"
@@ -4049,7 +4054,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2023-05-22T16:41:07+00:00"
+            "time": "2023-06-06T09:22:54+00:00"
         },
         {
             "name": "olcs/olcs-frontend-deps",
@@ -4199,12 +4204,12 @@
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "4.206.175",
+            "version": "4.206.178",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-transfer/4.206.175/olcs-olcs-transfer-4.206.175.zip",
-                "reference": "b26ac3b2b3da4ddfd4b9add193f191ea4c692b90",
-                "shasum": "b26ac3b2b3da4ddfd4b9add193f191ea4c692b90"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-transfer/4.206.178/olcs-olcs-transfer-4.206.178.zip",
+                "reference": "6705a1ee6ab188ca0e5653951c11d7fbed459923",
+                "shasum": "6705a1ee6ab188ca0e5653951c11d7fbed459923"
             },
             "require": {
                 "elendev/composer-push": "^1.0.3",
@@ -4253,7 +4258,7 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2023-02-28T10:28:07+00:00"
+            "time": "2023-06-01T12:56:39+00:00"
         },
         {
             "name": "olcs/olcs-utils",
