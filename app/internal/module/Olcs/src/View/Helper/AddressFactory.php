@@ -5,7 +5,7 @@ namespace Olcs\View\Helper;
 use Common\Service\Table\Formatter\FormatterPluginManager;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
-use \Common\Service\Table\Formatter\Address as AddressFormatter;
+use Common\Service\Table\Formatter\Address as AddressFormatter;
 
 /**
  * Class MarkersFactory
