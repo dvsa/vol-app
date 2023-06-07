@@ -31,7 +31,7 @@ return array(
         ),
         array(
             'title' => 'Criteria',
-            'formatter' => 'TaskAllocationRule\Criteria',
+            'formatter' => 'TaskAllocationCriteria',
         ),
         array(
             'title' => 'Traffic Area',
@@ -51,7 +51,7 @@ return array(
         array(
             'title' => 'User',
             'name' => 'user->contactDetails->person',
-            'formatter' => 'TaskAllocationRule\User',
+            'formatter' => 'TaskAllocationUser',
         ),
         array(
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common
