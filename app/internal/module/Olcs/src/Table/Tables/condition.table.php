@@ -36,13 +36,13 @@ return array(
         array(
             'title' => 'Type',
             'formatter' => function ($data, $column) {
-                return $this->translator->get('translator')->translate($data['conditionType']['description']);
+                return $this->translator->translate($data['conditionType']['description']);
             },
         ),
         array(
             'title' => 'Added via',
             'formatter' => function ($data, $column) {
-                return $this->translator->get('translator')->translate($data['addedVia']['description']);
+                return $this->translator->translate($data['addedVia']['description']);
             },
         ),
         array(
