@@ -18,10 +18,12 @@ class SessionTimeoutWarningFactoryTest extends MockeryTestCase
     public function createService()
     {
         $mockSL = m::mock(ServiceLocatorInterface::class);
-        $mockSL->shouldReceive('getServiceLocator->get')->andReturn([]);
+        $mockSL->shouldReceive('get')->andReturn([]);
 
-        $mockInputFilter = m::mock(SessionTimeoutWarningFactoryConfigInputFilter::class)->shouldIgnoreMissing();
+        $mockInputFilter = m::mock(SessionTimeoutWarningFactoryConfigInputFilter::class)
+            ->shouldIgnoreMissing();
         $mockInputFilter->shouldReceive('isValid')->andReturn(true);
+
         $mockInputFilter
             ->shouldReceive('getValue')
             ->with(SessionTimeoutWarningFactoryConfigInputFilter::CONFIG_ENABLED)
@@ -49,7 +51,7 @@ class SessionTimeoutWarningFactoryTest extends MockeryTestCase
     public function createServiceWithInvalidConfigurationThrowsException()
     {
         $mockSL = m::mock(ServiceLocatorInterface::class);
-        $mockSL->shouldReceive('getServiceLocator->get')->andReturn([]);
+        $mockSL->shouldReceive('get')->andReturn([]);
 
         $mockInputFilter = m::mock(SessionTimeoutWarningFactoryConfigInputFilter::class)->shouldIgnoreMissing();
 
