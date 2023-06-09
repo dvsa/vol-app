@@ -32,9 +32,10 @@ class PlaceholderFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : Placeholder
-    { if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
-        $container = $container->getServiceLocator();
-    }
+    {
+        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
+            $container = $container->getServiceLocator();
+        }
         return new Placeholder($container->get('ViewHelperManager')->get('placeholder'));
     }
 }
