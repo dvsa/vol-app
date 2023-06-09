@@ -35,7 +35,7 @@ class SearchOrderFieldsetFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator) : SearchOrderFieldset
     {
-        return $this->__invoke($serviceLocator, AnalyticsCookieNamesProvider::class);
+        return $this->__invoke($serviceLocator, SearchOrderFieldset::class);
     }
 
     /**
