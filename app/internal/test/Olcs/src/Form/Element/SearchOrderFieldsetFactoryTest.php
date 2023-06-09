@@ -23,7 +23,6 @@ class SearchOrderFieldsetFactoryTest extends TestCase
         $service = m::mock(SearchDataService::class);
 
         $sl = m::mock(ServiceLocatorInterface::class)
-            ->shouldReceive('getServiceLocator')->once()->andReturnSelf()
             ->shouldReceive('get')->with('DataServiceManager')->once()->andReturn(
                 m::mock()
                     ->shouldReceive('get')->with(SearchDataService::class)->once()->andReturn($service)

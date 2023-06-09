@@ -33,7 +33,7 @@ class SearchOrderFieldsetFactory implements FactoryInterface
      *
      * @return SearchOrderFieldset
      */
-    public function createService(ServiceLocatorInterface $serviceLocator) : SearchOrderFieldset
+    public function createService(ServiceLocatorInterface $serviceLocator): SearchOrderFieldset
     {
         return $this->__invoke($serviceLocator, SearchOrderFieldset::class);
     }
@@ -46,7 +46,7 @@ class SearchOrderFieldsetFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : SearchOrderFieldset
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SearchOrderFieldset
     {
         if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
             $container = $container->getServiceLocator();
