@@ -13,7 +13,7 @@ return array(
         ),
         array(
             'title' => 'entity-view-table-header-interim',
-            'formatter' => 'yesno',
+            'formatter' => 'YesNo',
             'name' => 'isInterim'
         ),
         array(
