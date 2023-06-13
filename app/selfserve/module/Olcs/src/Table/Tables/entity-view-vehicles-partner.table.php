@@ -8,7 +8,7 @@ return array(
         array(
             'title' => 'Interim',
             'name' => 'interimApplication',
-            'formatter' => 'yesno',
+            'formatter' => 'YesNo',
         ),
         array(
             'title' => 'Vehicle registration number',
