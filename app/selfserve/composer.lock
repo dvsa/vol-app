@@ -3992,12 +3992,12 @@
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.461",
+            "version": "4.206.474",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.461/olcs-olcs-common-4.206.461.zip",
-                "reference": "3d7e77adea71d70251a47f152e22b1aeef99d408",
-                "shasum": "3d7e77adea71d70251a47f152e22b1aeef99d408"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.474/olcs-olcs-common-4.206.474.zip",
+                "reference": "f887b21287d33eeb0c47570df8d0173f816b4945",
+                "shasum": "f887b21287d33eeb0c47570df8d0173f816b4945"
             },
             "require": {
                 "elendev/composer-push": "^1.0.3",
@@ -4058,7 +4058,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2023-06-06T09:22:54+00:00"
+            "time": "2023-06-16T14:49:40+00:00"
         },
         {
             "name": "olcs/olcs-frontend-deps",
@@ -4152,12 +4152,12 @@
         },
         {
             "name": "olcs/olcs-logging",
-            "version": "4.206.18",
+            "version": "4.206.19",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-logging/4.206.18/olcs-olcs-logging-4.206.18.zip",
-                "reference": "d4b4a6e4df72105c08deb4213c4638088b31d172",
-                "shasum": "d4b4a6e4df72105c08deb4213c4638088b31d172"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-logging/4.206.19/olcs-olcs-logging-4.206.19.zip",
+                "reference": "32f2b765355710404c22c52d09a4d8204f2a2c54",
+                "shasum": "32f2b765355710404c22c52d09a4d8204f2a2c54"
             },
             "require": {
                 "elendev/composer-push": "^1.0.3",
@@ -4204,16 +4204,16 @@
                 ]
             },
             "description": "Logging Module for Olcs",
-            "time": "2023-02-28T10:26:45+00:00"
+            "time": "2023-06-16T14:34:17+00:00"
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "4.206.178",
+            "version": "4.206.180",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-transfer/4.206.178/olcs-olcs-transfer-4.206.178.zip",
-                "reference": "6705a1ee6ab188ca0e5653951c11d7fbed459923",
-                "shasum": "6705a1ee6ab188ca0e5653951c11d7fbed459923"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-transfer/4.206.180/olcs-olcs-transfer-4.206.180.zip",
+                "reference": "d642d7eabb1e750f3b525e16bf425e8fd8e77b60",
+                "shasum": "d642d7eabb1e750f3b525e16bf425e8fd8e77b60"
             },
             "require": {
                 "elendev/composer-push": "^1.0.3",
@@ -4262,7 +4262,7 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2023-06-01T12:56:39+00:00"
+            "time": "2023-06-16T14:37:53+00:00"
         },
         {
             "name": "olcs/olcs-utils",
@@ -6298,12 +6298,12 @@
         },
         {
             "name": "olcs/olcs-devtools",
-            "version": "4.206.20",
+            "version": "4.206.21",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-devtools/4.206.20/olcs-olcs-devtools-4.206.20.zip",
-                "reference": "e21ce2486b67ff37c787a04692f77d5dbb3efa88",
-                "shasum": "e21ce2486b67ff37c787a04692f77d5dbb3efa88"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-devtools/4.206.21/olcs-olcs-devtools-4.206.21.zip",
+                "reference": "08058c29491b81313069fc373000d581101fede2",
+                "shasum": "08058c29491b81313069fc373000d581101fede2"
             },
             "require": {
                 "dms/phpunit-arraysubset-asserts": "^0.3.1",
@@ -6322,7 +6322,7 @@
                 "phpstan/phpstan-mockery": "^0.12",
                 "phpstan/phpstan-phpunit": "^0.12",
                 "phpunit/phpcov": "8.*",
-                "phpunit/phpunit": "~9.5.0",
+                "phpunit/phpunit": "^9",
                 "squizlabs/php_codesniffer": "~3.6.2"
             },
             "bin": [
@@ -6342,7 +6342,7 @@
                 }
             },
             "description": "Dev tools",
-            "time": "2023-03-03T09:48:26+00:00"
+            "time": "2023-06-16T14:43:09+00:00"
         },
         {
             "name": "olcs/olcs-testhelpers",
