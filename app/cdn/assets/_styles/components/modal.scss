@@ -73,6 +73,13 @@
 
 }// .modal
 
+//specific problem with continuations - ideally we'll find time to remove this
+//for now we can alter the padding slightly
+form#updateContinuation .govuk-button-group {
+  padding-top: 20px;
+  padding-bottom: 10px;
+}
+
 .modal--alert {
   max-width: 460px;
 }
