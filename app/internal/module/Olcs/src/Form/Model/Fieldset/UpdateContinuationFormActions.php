@@ -68,14 +68,12 @@ class UpdateContinuationFormActions
 
     /**
      * @Form\Attributes({
-     *     "data-module": "govuk-button",
-     *     "type": "submit",
-     *     "class": "govuk-button govuk-button--secondary",
+     *     "class": "govuk-link",
      *     "id":"view-continuation",
      *     "target":"_blank",
      * })
      * @Form\Options({
-     *     "label": "View digital continuation"
+     *     "label": "View digital continuation (opens in new window)"
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionLink")
      */
