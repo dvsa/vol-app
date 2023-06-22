@@ -2,20 +2,20 @@
 
 namespace Olcs\FormService\Form\Lva;
 
-use Common\FormService\Form\AbstractFormService;
-
 /**
  * Abstract class to create submission form at LVA Overview page
  *
  * @author Dmitry Golubev <dmitrij.golubev@valtech.co.uk>
  */
-class AbstractOverviewSubmission extends AbstractFormService
+class AbstractOverviewSubmission
 {
     protected $translationHelper;
+    protected $formHelper;
 
-    public function __construct($translationHelper)
+    public function __construct($translationHelper, $formHelper)
     {
         $this->translationHelper = $translationHelper;
+        $this->formHelper = $formHelper;
     }
 
     /** @var array */
@@ -33,7 +33,7 @@ class AbstractOverviewSubmission extends AbstractFormService
     {
         $this->sections = $params['sections'];
 
-        $form = $this->getFormHelper()->createForm('Lva\PaymentSubmission');
+        $form = $this->formHelper->createForm('Lva\PaymentSubmission');
         $this->alterForm($form, $data, $params);
 
         return $form;
@@ -50,9 +50,6 @@ class AbstractOverviewSubmission extends AbstractFormService
      */
     protected function alterForm(\Laminas\Form\FormInterface $form, array $data, array $params)
     {
-        /** @var \Common\Service\Helper\FormHelperService $formHelper */
-        $formHelper = $this->getFormHelper();
-
         $elmBtnSubmit = $form->get('submitPay');
 
         //
@@ -66,7 +63,7 @@ class AbstractOverviewSubmission extends AbstractFormService
                 )
             );
         } else {
-            $formHelper->remove($form, 'amount');
+            $this->formHelper->remove($form, 'amount');
 
             // if no fee, change submit button text
             $elmBtnSubmit->setLabel('submit-application.button');
@@ -82,7 +79,7 @@ class AbstractOverviewSubmission extends AbstractFormService
         if ($params['isReadyToSubmit']) {
             $form->setAttribute('action', $params['actionUrl']);
         } else {
-            $formHelper->remove($form, 'submitPay');
+            $this->formHelper->remove($form, 'submitPay');
         }
     }
 

@@ -30,8 +30,7 @@ class VariationOverviewSubmissionTest extends MockeryTestCase
 
         $mockTranslationHelper = m::mock(Translate::class);
 
-        $this->sut = new VariationOverviewSubmissionStub($mockTranslationHelper);
-        $this->sut->setFormHelper($this->mockFormHlp);
+        $this->sut = new VariationOverviewSubmissionStub($mockTranslationHelper, $this->mockFormHlp);
     }
 
     /**

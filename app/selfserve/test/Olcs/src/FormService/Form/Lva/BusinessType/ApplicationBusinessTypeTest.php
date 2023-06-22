@@ -2,15 +2,14 @@
 
 namespace OlcsTest\FormService\Form\Lva\BusinessType;
 
-use Common\Form\Elements\InputFilters\Lva\BackToApplicationActionLink;
 use Common\Service\Helper\FormHelperService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\BusinessType\ApplicationBusinessType;
-use Common\FormService\FormServiceInterface;
 use Laminas\Form\Form;
 use Laminas\Form\Element;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Application Business Type Form Test
@@ -19,6 +18,8 @@ use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
  */
 class ApplicationBusinessTypeTest extends MockeryTestCase
 {
+    use ButtonsAlterations;
+
     /**
      * @var ApplicationBusinessType
      */
@@ -30,18 +31,14 @@ class ApplicationBusinessTypeTest extends MockeryTestCase
 
     protected $sm;
 
-    use ButtonsAlterations;
-
     public function setUp(): void
     {
         $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
         $this->fh = m::mock(FormHelperService::class)->makePartial();
-        $this->sm = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
+        $this->authService = m::mock(AuthorizationService::class);
+        $this->guidanceHelper = m::mock('\Common\Service\Helper\GuidanceHelperService');
 
-        $this->sut = new ApplicationBusinessType();
-        $this->sut->setFormServiceLocator($this->fsm);
-        $this->sut->setFormHelper($this->fh);
-        $this->fsm->setServiceLocator($this->sm); // main service locator is accessed via form service manager
+        $this->sut = new ApplicationBusinessType($this->fh, $this->authService, $this->guidanceHelper, $this->fsm);
     }
 
     public function testGetFormWithoutInforceLicencesOrWithNoSubmittedLicenceApplication()
@@ -57,7 +54,7 @@ class ApplicationBusinessTypeTest extends MockeryTestCase
             ->with('Lva\BusinessType')
             ->andReturn($mockForm);
 
-        $mockApplication = m::mock(FormServiceInterface::class);
+        $mockApplication = m::mock(Form::class);
         $mockApplication->shouldReceive('alterForm')
             ->once()
             ->with($mockForm);
@@ -123,23 +120,17 @@ class ApplicationBusinessTypeTest extends MockeryTestCase
             ->once()
             ->with($mockForm, 'data->type');
 
-        $mockApplication = m::mock(FormServiceInterface::class);
+        $mockApplication = m::mock(Form::class);
         $mockApplication->shouldReceive('alterForm')
             ->once()
             ->with($mockForm);
 
         $this->fsm->setService('lva-application', $mockApplication);
 
-        $this->sm
-            ->shouldReceive('get')
-            ->with('Helper\Guidance')
-            ->andReturn(
-                m::mock()
+        $this->guidanceHelper
                     ->shouldReceive('append')
                     ->with('business-type.locked.message')
-                    ->once()
-                    ->getMock()
-            );
+                    ->once();
 
         $form = $this->sut->getForm($inForceLicences, $hasOrganisationSubmittedLicenceApplication);
 
@@ -200,23 +191,18 @@ class ApplicationBusinessTypeTest extends MockeryTestCase
             ->once()
             ->with($mockForm, 'data->type');
 
-        $mockApplication = m::mock(FormServiceInterface::class);
+        $mockApplication = m::mock(Form::class);
         $mockApplication->shouldReceive('alterForm')
             ->once()
             ->with($mockForm);
 
         $this->fsm->setService('lva-application', $mockApplication);
 
-        $this->sm
-            ->shouldReceive('get')
-            ->with('Helper\Guidance')
-            ->andReturn(
-                m::mock()
+        $this->guidanceHelper
                     ->shouldReceive('append')
                     ->with('business-type.locked.message')
                     ->once()
-                    ->getMock()
-            );
+                    ->getMock();
 
         $form = $this->sut->getForm($inForceLicences, $hasOrganisationSubmittedLicenceApplication);
 

@@ -5,6 +5,7 @@ namespace Olcs\Controller\Lva\DirectorChange;
 use Common\Controller\Lva\AbstractController;
 use Common\Controller\Lva\Interfaces\AdapterAwareInterface;
 use Common\Controller\Lva\Traits\AdapterAwareTrait;
+use Common\FormService\FormServiceManager;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Application\People;
 use Olcs\Controller\Lva\Adapters\VariationPeopleAdapter;
@@ -117,7 +118,7 @@ class PeopleController extends AbstractController implements AdapterAwareInterfa
 
         /** @var \Common\Form\Form $form */
         $form = $this->getServiceLocator()
-            ->get('FormServiceManager')
+            ->get(FormServiceManager::class)
             ->get('lva-licence-addperson')
             ->getForm(['organisationType' =>  $adapter->getOrganisationType()]);
 

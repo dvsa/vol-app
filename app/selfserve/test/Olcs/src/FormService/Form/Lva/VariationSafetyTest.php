@@ -28,8 +28,7 @@ class VariationSafetyTest extends MockeryTestCase
     public function setUp(): void
     {
         $this->fh = m::mock(FormHelperService::class)->makePartial();
-        $this->sut = new VariationSafety();
-        $this->sut->setFormHelper($this->fh);
+        $this->sut = new VariationSafety($this->fh);
     }
 
     public function testAlterForm()

@@ -1436,76 +1436,10 @@ return array(
     ),
     'asset_path' => '//dev_dvsa-static.web01.olcs.mgt.mtpdvsa',
     'form_service_manager' => [
-        'invokables' => [
-            // Type of Licence
-            'lva-licence-type_of_licence' => LvaFormService\TypeOfLicence\LicenceTypeOfLicence::class,
-            'lva-variation-type_of_licence' => LvaFormService\TypeOfLicence\VariationTypeOfLicence::class,
-            'lva-application-type_of_licence' => LvaFormService\TypeOfLicence\ApplicationTypeOfLicence::class,
-
-            // Address
-            'lva-licence-addresses' => LvaFormService\Addresses\LicenceAddresses::class,
-            'lva-variation-addresses' => LvaFormService\Addresses\VariationAddresses::class,
-            'lva-application-addresses' => LvaFormService\Addresses\ApplicationAddresses::class,
-
-            // Safety
-            'lva-licence-safety' => LvaFormService\LicenceSafety::class,
-            'lva-variation-safety' => LvaFormService\VariationSafety::class,
-
-            // Operating Centres
-            'lva-licence-operating_centres' => LvaFormService\OperatingCentres\LicenceOperatingCentres::class,
-            'lva-variation-operating_centres' => LvaFormService\OperatingCentres\VariationOperatingCentres::class,
-            'lva-application-operating_centres' => LvaFormService\OperatingCentres\ApplicationOperatingCentres::class,
-
-            'lva-application-operating_centre' => LvaFormService\OperatingCentre\LvaOperatingCentre::class,
-            'lva-licence-operating_centre' => LvaFormService\OperatingCentre\LvaOperatingCentre::class,
-            'lva-variation-operating_centre' => LvaFormService\OperatingCentre\LvaOperatingCentre::class,
-
-            // Business Type
-            'lva-application-business_type' => LvaFormService\BusinessType\ApplicationBusinessType::class,
-            'lva-licence-business_type' => LvaFormService\BusinessType\LicenceBusinessType::class,
-            'lva-variation-business_type' => LvaFormService\BusinessType\VariationBusinessType::class,
-            //
-            'lva-lock-business_details' => LvaFormService\LockBusinessDetails::class,
-            'lva-licence-business_details' => LvaFormService\LicenceBusinessDetails::class,
-            'lva-variation-business_details' => LvaFormService\VariationBusinessDetails::class,
-            'lva-application-business_details' => LvaFormService\ApplicationBusinessDetails::class,
-            // Goods vehicle filter form service
-            'lva-application-goods-vehicles-filters' => LvaFormService\ApplicationGoodsVehiclesFilters::class,
-            // External common goods vehicles vehicle form service
-            'lva-application-goods-vehicles-add-vehicle' => LvaFormService\GoodsVehicles\AddVehicle::class,
-            'lva-licence-vehicles_psv' => LvaFormService\LicencePsvVehicles::class,
-            'lva-licence-goods-vehicles' => LvaFormService\LicenceGoodsVehicles::class,
-            'lva-licence-goods-vehicles-add-vehicle' => LvaFormService\GoodsVehicles\AddVehicle::class,
-            'lva-variation-goods-vehicles-add-vehicle' => LvaFormService\GoodsVehicles\AddVehicle::class,
-            'lva-application-goods-vehicles-edit-vehicle' => LvaFormService\GoodsVehicles\EditVehicle::class,
-            'lva-licence-goods-vehicles-edit-vehicle' => LvaFormService\GoodsVehicles\EditVehicle::class,
-            'lva-variation-goods-vehicles-edit-vehicle' => LvaFormService\GoodsVehicles\EditVehicle::class,
-            // External common psv vehicles vehicle form service
-            'lva-psv-vehicles-vehicle' => LvaFormService\PsvVehiclesVehicle::class,
-            // External common vehicles vehicle form service (Goods and PSV)
-            'lva-vehicles-vehicle' => LvaFormService\VehiclesVehicle::class,
-
-            'lva-application-people' => LvaFormService\People\ApplicationPeople::class,
-            'lva-application-financial_evidence' => LvaFormService\ApplicationFinancialEvidence::class,
-            'lva-application-vehicles_declarations' => LvaFormService\ApplicationVehiclesDeclarations::class,
-            'lva-application-safety' => LvaFormService\ApplicationSafety::class,
-            'lva-application-financial_history' => LvaFormService\ApplicationFinancialHistory::class,
-            'lva-application-licence_history' => LvaFormService\ApplicationLicenceHistory::class,
-            'lva-application-convictions_penalties' => LvaFormService\ApplicationConvictionsPenalties::class,
-
-            'lva-application-vehicles_psv' => LvaFormService\ApplicationPsvVehicles::class,
-            'lva-application-goods-vehicles' => LvaFormService\ApplicationGoodsVehicles::class,
-
-            'lva-licence-sole_trader' => LvaFormService\People\SoleTrader\LicenceSoleTrader::class,
-            'lva-variation-sole_trader' => LvaFormService\People\SoleTrader\VariationSoleTrader::class,
-            'lva-application-sole_trader' => LvaFormService\People\SoleTrader\ApplicationSoleTrader::class,
-
-            'lva-application-transport_managers' => LvaFormService\TransportManager\ApplicationTransportManager::class,
-
-            'lva-application-taxi_phv' => LvaFormService\ApplicationTaxiPhv::class,
-
-            'lva-licence-trailers' => LvaFormService\LicenceTrailers::class,
+        'abstract_factories' => [
+            LvaFormService\AbstractLvaFormServiceFactory::class,
         ],
+        'aliases' => LvaFormService\AbstractLvaFormServiceFactory::FORM_SERVICE_CLASS_ALIASES,
         'factories' => [
             'lva-application-overview-submission' => LvaFormService\ApplicationOverviewSubmissionFactory::class,
             'lva-variation-overview-submission' => LvaFormService\VariationOverviewSubmissionFactory::class,

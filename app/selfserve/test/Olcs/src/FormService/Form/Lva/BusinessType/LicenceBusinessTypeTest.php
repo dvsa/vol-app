@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Licence Business Type Form Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace OlcsTest\FormService\Form\Lva\BusinessType;
 
 use Common\Form\Elements\InputFilters\Lva\BackToLicenceActionLink;
@@ -15,6 +10,7 @@ use Olcs\FormService\Form\Lva\BusinessType\LicenceBusinessType;
 use Common\FormService\FormServiceInterface;
 use Laminas\Form\Form;
 use Laminas\Form\Element;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Licence Business Type Form Test
@@ -38,12 +34,9 @@ class LicenceBusinessTypeTest extends MockeryTestCase
     {
         $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
         $this->fh = m::mock(FormHelperService::class)->makePartial();
-        $this->sm = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
-
-        $this->sut = new LicenceBusinessType();
-        $this->sut->setFormServiceLocator($this->fsm);
-        $this->sut->setFormHelper($this->fh);
-        $this->fsm->setServiceLocator($this->sm);
+        $this->authService = m::mock(AuthorizationService::class);
+        $this->guidanceHelper = m::mock('\Common\Service\Helper\GuidanceHelperService');
+        $this->sut = new LicenceBusinessType($this->fh, $this->authService, $this->guidanceHelper, $this->fsm);
     }
 
     /**
@@ -91,21 +84,15 @@ class LicenceBusinessTypeTest extends MockeryTestCase
             ->once()
             ->getMock();
 
-        $mockLicence = m::mock(FormServiceInterface::class);
+        $mockLicence = m::mock(Form::class);
         $mockLicence->shouldReceive('alterForm')
             ->once()
             ->with($mockForm);
 
-        $this->sm
-            ->shouldReceive('get')
-            ->with('Helper\Guidance')
-            ->andReturn(
-                m::mock()
+        $this->guidanceHelper
                     ->shouldReceive('append')
                     ->with('business-type.locked.message')
-                    ->once()
-                    ->getMock()
-            );
+                    ->once();
 
         $this->fsm->setService('lva-licence', $mockLicence);
 

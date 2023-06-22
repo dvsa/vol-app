@@ -28,8 +28,7 @@ class ApplicationAddressesTest extends MockeryTestCase
     public function setUp(): void
     {
         $this->fh = m::mock(FormHelperService::class)->makePartial();
-        $this->sut = new ApplicationAddresses();
-        $this->sut->setFormHelper($this->fh);
+        $this->sut = new ApplicationAddresses($this->fh);
     }
 
     public function testAlterForm()

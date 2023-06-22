@@ -3,6 +3,7 @@
 namespace Olcs\FormService\Form\Lva\Addresses;
 
 use Common\FormService\Form\Lva\Addresses as CommonAddress;
+use Common\Service\Helper\FormHelperService;
 use Laminas\Form\Form;
 use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
 
@@ -14,6 +15,13 @@ use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
 class ApplicationAddresses extends CommonAddress
 {
     use ButtonsAlterations;
+
+    protected FormHelperService $formHelper;
+
+    public function __construct(FormHelperService $formHelper)
+    {
+        parent::__construct($formHelper);
+    }
 
     /**
      * Make form alterations

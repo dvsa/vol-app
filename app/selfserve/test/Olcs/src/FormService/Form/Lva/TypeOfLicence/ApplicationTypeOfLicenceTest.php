@@ -3,6 +3,7 @@
 namespace OlcsTest\FormService\Form\Lva\TypeOfLicence;
 
 use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\GuidanceHelperService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\TypeOfLicence\ApplicationTypeOfLicence;
@@ -10,6 +11,7 @@ use Laminas\Form\Form;
 use Laminas\Form\Fieldset;
 use Common\FormService\FormServiceManager;
 use Common\Service\Table\TableBuilder;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Application Type of Licence Form Test
@@ -30,10 +32,9 @@ class ApplicationTypeOfLicenceTest extends MockeryTestCase
     public function setUp(): void
     {
         $this->fh = m::mock(FormHelperService::class)->makePartial();
+        $this->guidanceHelper = m::mock(GuidanceHelperService::class);
         $this->fsm = m::mock(FormServiceManager::class)->makePartial();
-        $this->sut = new ApplicationTypeOfLicence();
-        $this->sut->setFormHelper($this->fh);
-        $this->sut->setFormServiceLocator($this->fsm);
+        $this->sut = new ApplicationTypeOfLicence($this->fh, m::mock(AuthorizationService::class), $this->guidanceHelper, $this->fsm);
     }
 
     public function testAlterForm()

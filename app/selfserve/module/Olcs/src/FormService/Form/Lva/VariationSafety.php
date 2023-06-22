@@ -3,6 +3,7 @@
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\Safety as CommonSafety;
+use Common\Service\Helper\FormHelperService;
 
 /**
  * Variation safety
@@ -11,6 +12,13 @@ use Common\FormService\Form\Lva\Safety as CommonSafety;
  */
 class VariationSafety extends CommonSafety
 {
+    protected FormHelperService $formHelper;
+
+    public function __construct(FormHelperService $formHelper)
+    {
+        parent::__construct($formHelper);
+    }
+
     /**
      * Returns form
      *
@@ -20,7 +28,7 @@ class VariationSafety extends CommonSafety
     {
         $form = parent::getForm();
 
-        $this->getFormHelper()->remove($form, 'form-actions->cancel');
+        $this->formHelper->remove($form, 'form-actions->cancel');
 
         return $form;
     }

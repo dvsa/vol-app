@@ -3,6 +3,7 @@
 namespace OlcsTest\FormService\Form\Lva;
 
 use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\UrlHelperService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\ApplicationConvictionsPenalties;
@@ -36,20 +37,19 @@ class ApplicationConvictionsPenaltiesTest extends MockeryTestCase
 
     public function setUp(): void
     {
-        $this->fh = m::mock(FormHelperService::class)->makePartial();
-        $this->sut = new ApplicationConvictionsPenalties();
-        $this->sut->setFormHelper($this->fh);
+        $this->formHelper = m::mock(FormHelperService::class)->makePartial();
+        $this->translator = m::mock(TranslationHelperService::class);
+        $this->urlHelper = m::mock(UrlHelperService::class);
+        $this->sut = new ApplicationConvictionsPenalties($this->formHelper, $this->translator, $this->urlHelper);
     }
 
     public function checkAlterForm($guidePath, $guideName)
     {
-        $translator = m::mock(TranslationHelperService::class);
-        $translator
+        $this->translator
             ->shouldReceive('translate')
             ->andReturn($guideName);
 
-        $mockUrl = m::mock();
-        $mockUrl
+        $this->urlHelper
             ->shouldReceive('fromRoute')
             ->with(
                 'guides/guide',
@@ -57,9 +57,6 @@ class ApplicationConvictionsPenaltiesTest extends MockeryTestCase
             )
             ->once()
             ->andReturn($guidePath);
-        $this->formHelper = m::mock(FormHelperService::class);
-        $this->fsm = m::mock(FormServiceManager::class)->makePartial();
-
 
         $dataTable = m::mock(ConvictionsPenaltiesData::class);
         $dataTable
@@ -83,22 +80,11 @@ class ApplicationConvictionsPenaltiesTest extends MockeryTestCase
                 $ConvictionsReadMoreLink
             )->getMock();
 
-        $mockServiceLocator = m::mock(ServiceLocatorInterface::class);
-        $mockServiceLocator->shouldReceive('get')->with('Helper\Translation')->once()->andReturn($translator);
-        $mockServiceLocator->shouldReceive('get')->with('Helper\Url')->once()->andReturn($mockUrl);
-
         $this->formHelper
             ->shouldReceive('createForm')
             ->once()
             ->with($this->formName)
             ->andReturn($form);
-
-        $this->fsm
-            ->shouldReceive('getServiceLocator')
-            ->andReturn($mockServiceLocator);
-
-        $this->sut->setFormHelper($this->formHelper);
-        $this->sut->setFormServiceLocator($this->fsm);
 
         $this->mockAlterButtons($form, $this->formHelper);
 
@@ -126,6 +112,7 @@ class ApplicationConvictionsPenaltiesTest extends MockeryTestCase
     public function testAlterForm()
     {
         $this->checkGetFormGb();
+        $this->setUp();
         $this->checkGetFormNi();
     }
 }

@@ -3,8 +3,12 @@
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\FinancialEvidence;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Helper\UrlHelperService;
 use Laminas\Form\Form;
 use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Application financial evidence
@@ -14,6 +18,23 @@ use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
 class ApplicationFinancialEvidence extends FinancialEvidence
 {
     use ButtonsAlterations;
+
+    protected FormHelperService $formHelper;
+    protected AuthorizationService $authService;
+    protected UrlHelperService $urlHelper;
+    protected TranslationHelperService $translator;
+
+    public function __construct(
+        FormHelperService $formHelper,
+        AuthorizationService $authService,
+        TranslationHelperService $translator,
+        UrlHelperService $urlHelper
+    ) {
+        $this->formHelper = $formHelper;
+        $this->authService = $authService;
+        $this->urlHelper = $urlHelper;
+        $this->translator = $translator;
+    }
 
     /**
      * Make form alterations

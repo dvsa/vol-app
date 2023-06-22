@@ -3,6 +3,7 @@
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\CommonLicenceTrailers as CommonLicenceTrailers;
+use Common\Service\Helper\FormHelperService;
 use Laminas\Form\Form;
 use Common\Service\Table\TableBuilder;
 
@@ -13,6 +14,13 @@ use Common\Service\Table\TableBuilder;
  */
 class LicenceTrailers extends CommonLicenceTrailers
 {
+    protected FormHelperService $formHelper;
+
+    public function __construct(FormHelperService $formHelper)
+    {
+        $this->formHelper = $formHelper;
+    }
+
     /**
      * Alter form
      *
@@ -24,7 +32,7 @@ class LicenceTrailers extends CommonLicenceTrailers
     protected function alterForm($form, $table)
     {
         parent::alterForm($form, $table);
-        $this->getFormHelper()->remove($form, 'form-actions->cancel');
+        $this->formHelper->remove($form, 'form-actions->cancel');
 
         return $form;
     }

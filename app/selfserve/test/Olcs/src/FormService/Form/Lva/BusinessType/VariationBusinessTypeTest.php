@@ -7,9 +7,9 @@ use Common\Service\Helper\FormHelperService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\BusinessType\VariationBusinessType;
-use Common\FormService\FormServiceInterface;
 use Laminas\Form\Form;
 use Laminas\Form\Element;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Variation Business Type Form Test
@@ -33,12 +33,10 @@ class VariationBusinessTypeTest extends MockeryTestCase
     {
         $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
         $this->fh = m::mock(FormHelperService::class)->makePartial();
-        $this->sm = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
+        $this->authService = m::mock(AuthorizationService::class);
+        $this->guidanceHelper = m::mock('\Common\Service\Helper\GuidanceHelperService');
 
-        $this->sut = new VariationBusinessType();
-        $this->sut->setFormServiceLocator($this->fsm);
-        $this->sut->setFormHelper($this->fh);
-        $this->fsm->setServiceLocator($this->sm);
+        $this->sut = new VariationBusinessType($this->fh, $this->authService, $this->guidanceHelper, $this->fsm);
     }
 
     /**
@@ -85,21 +83,15 @@ class VariationBusinessTypeTest extends MockeryTestCase
             ->with($mockForm, 'form-actions')
             ->once();
 
-        $mockVariation = m::mock(FormServiceInterface::class);
+        $mockVariation = m::mock(Form::class);
         $mockVariation->shouldReceive('alterForm')
             ->once()
             ->with($mockForm);
 
-        $this->sm
-            ->shouldReceive('get')
-            ->with('Helper\Guidance')
-            ->andReturn(
-                m::mock()
+        $this->guidanceHelper
                     ->shouldReceive('append')
                     ->with('business-type.locked.message')
-                    ->once()
-                    ->getMock()
-            );
+                    ->once();
 
         $this->fsm->setService('lva-variation', $mockVariation);
 

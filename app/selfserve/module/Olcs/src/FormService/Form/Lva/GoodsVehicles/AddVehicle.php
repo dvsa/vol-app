@@ -1,24 +1,26 @@
 <?php
 
-/**
- * Add Vehicle
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace Olcs\FormService\Form\Lva\GoodsVehicles;
 
 use Common\FormService\Form\AbstractFormService;
+use Common\Service\Helper\FormHelperService;
 
 /**
  * Add Vehicle
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class AddVehicle extends AbstractFormService
+class AddVehicle
 {
+    protected FormHelperService $formHelper;
+
+    public function __construct(FormHelperService $formHelper)
+    {
+        $this->formHelper = $formHelper;
+    }
     public function getForm($request, $params = [])
     {
-        $form = $this->getFormHelper()->createFormWithRequest('Lva\AddGoodsVehicle', $request);
+        $form = $this->formHelper->createFormWithRequest('Lva\AddGoodsVehicle', $request);
 
         $this->alterForm($form, $params);
 

@@ -30,8 +30,7 @@ class LicenceTrailersTest extends MockeryTestCase
     public function setUp(): void
     {
         $this->fh = m::mock(FormHelperService::class)->makePartial();
-        $this->sut = new LicenceTrailers();
-        $this->sut->setFormHelper($this->fh);
+        $this->sut = new LicenceTrailers($this->fh);
     }
 
     public function testAlterForm()

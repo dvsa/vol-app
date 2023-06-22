@@ -2,17 +2,17 @@
 
 namespace OlcsTest\FormService\Form\Lva\People\SoleTrader;
 
-use Common\Form\Elements\InputFilters\Lva\BackToApplicationActionLink;
 use Common\FormService\FormServiceManager;
 use Common\Service\Helper\FormHelperService;
+use Common\Service\Lva\PeopleLvaService;
 use Olcs\FormService\Form\Lva\People\SoleTrader\ApplicationSoleTrader;
 use OlcsTest\Bootstrap;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\People\SoleTrader\ApplicationSoleTrader as Sut;
-use Laminas\Form\Form;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Application Sole Trader Test
@@ -42,6 +42,10 @@ class ApplicationSoleTraderTest extends MockeryTestCase
      * @var ServiceLocatorInterface
      */
     protected $sm;
+    /**
+     * @var PeopleLvaService|(PeopleLvaService&m\LegacyMockInterface)|(PeopleLvaService&m\MockInterface)|m\LegacyMockInterface|m\MockInterface
+     */
+    private $peopleLvaService;
 
     public function setUp(): void
     {
@@ -53,9 +57,9 @@ class ApplicationSoleTraderTest extends MockeryTestCase
         $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
         $this->fsm->setServiceLocator($this->sm);
 
-        $this->sut = new Sut();
-        $this->sut->setFormHelper($this->formHelper);
-        $this->sut->setFormServiceLocator($this->fsm);
+        $this->peopleLvaService = m::mock(PeopleLvaService::class);
+
+        $this->sut = new Sut($this->formHelper, m::mock(AuthorizationService::class), $this->peopleLvaService);
     }
 
     /**
@@ -172,12 +176,11 @@ class ApplicationSoleTraderTest extends MockeryTestCase
             ->with('Lva\SoleTrader')
             ->andReturn($form);
 
-        $peopleService = m::mock();
-        $peopleService->shouldReceive('lockPersonForm')
+        $this->peopleLvaService->shouldReceive('lockPersonForm')
             ->once()
             ->with($form, 'bar');
 
-        $this->sm->setService('Lva\People', $peopleService);
+        $this->sm->setService('Lva\People', $this->peopleLvaService);
 
         $this->sut->getForm($params);
     }

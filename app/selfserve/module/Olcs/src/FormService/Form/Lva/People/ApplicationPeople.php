@@ -3,9 +3,11 @@
 namespace Olcs\FormService\Form\Lva\People;
 
 use Common\FormService\Form\Lva\People\ApplicationPeople as CommonApplicationPeople;
+use Common\Service\Helper\FormHelperService;
 use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
 use Common\Form\Form;
 use Common\Form\Elements\Validators\TableRequiredValidator;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Application People
@@ -15,6 +17,14 @@ use Common\Form\Elements\Validators\TableRequiredValidator;
 class ApplicationPeople extends CommonApplicationPeople
 {
     use ButtonsAlterations;
+
+    protected FormHelperService $formHelper;
+    protected AuthorizationService $authService;
+
+    public function __construct(FormHelperService $formHelper, AuthorizationService $authService)
+    {
+        parent::__construct($formHelper, $authService);
+    }
 
     /**
      * Alter form
@@ -37,7 +47,7 @@ class ApplicationPeople extends CommonApplicationPeople
         }
 
         if ($params['isPartnership']) {
-            $formHelper = $this->getFormHelper();
+            $formHelper = $this->formHelper;
             $formHelper->removeValidator($form, 'table->rows', TableRequiredValidator::class);
             $validator = new TableRequiredValidator(['rowsRequired' => 2]);
             $validator->setMessage('people.partnership.validation-message', 'required');

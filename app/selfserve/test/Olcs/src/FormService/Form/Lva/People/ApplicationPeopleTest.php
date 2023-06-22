@@ -10,6 +10,7 @@ use Common\Service\Helper\FormHelperService;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 use Olcs\FormService\Form\Lva\People\ApplicationPeople as Sut;
 use Common\Form\Elements\Validators\TableRequiredValidator;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Application People Test
@@ -40,9 +41,7 @@ class ApplicationPeopleTest extends MockeryTestCase
         $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService');
         $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
 
-        $this->sut = new Sut();
-        $this->sut->setFormHelper($this->formHelper);
-        $this->sut->setFormServiceLocator($this->fsm);
+        $this->sut = new Sut($this->formHelper, m::mock(AuthorizationService::class));
     }
 
     public function testGetFormAndCanModify()

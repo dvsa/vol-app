@@ -2,6 +2,7 @@
 
 namespace OlcsTest\FormService\Form\Lva;
 
+use Common\Form\Form;
 use Common\RefData;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -24,10 +25,8 @@ class VariationBusinessDetailsTest extends MockeryTestCase
     {
         $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
 
-        $this->sut = new VariationBusinessDetails();
-        $this->sut->setFormServiceLocator($this->fsm);
         $this->fh = m::mock('\Common\Service\Helper\FormHelperService')->makePartial();
-        $this->sut->setFormHelper($this->fh);
+        $this->sut = new VariationBusinessDetails($this->fh, $this->fsm);
     }
 
     public function testAlterForm()
@@ -40,8 +39,8 @@ class VariationBusinessDetailsTest extends MockeryTestCase
         ];
 
         // Mocks
-        $mockApplicationFormService = m::mock('\Common\FormService\FormServiceInterface');
-        $mockLockBusinessDetailsFormService = m::mock('\Common\FormService\FormServiceInterface');
+        $mockApplicationFormService = m::mock(Form::class);
+        $mockLockBusinessDetailsFormService = m::mock(Form::class);
 
         $this->fsm->setService('lva-variation', $mockApplicationFormService);
         $this->fsm->setService('lva-lock-business_details', $mockLockBusinessDetailsFormService);

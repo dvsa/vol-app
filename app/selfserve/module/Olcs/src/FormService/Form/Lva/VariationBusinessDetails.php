@@ -9,6 +9,8 @@
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\BusinessDetails\VariationBusinessDetails as CommonVariationBusinessDetails;
+use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FormHelperService;
 
 /**
  * Variation Business Details Form
@@ -17,6 +19,14 @@ use Common\FormService\Form\Lva\BusinessDetails\VariationBusinessDetails as Comm
  */
 class VariationBusinessDetails extends CommonVariationBusinessDetails
 {
+    protected FormServiceManager $formServiceLocator;
+    protected FormHelperService $formHelper;
+
+    public function __construct(FormHelperService $formHelper, FormServiceManager $formServiceLocator)
+    {
+        parent::__construct($formHelper, $formServiceLocator);
+    }
+
     /**
      * Alter form
      *
@@ -27,9 +37,9 @@ class VariationBusinessDetails extends CommonVariationBusinessDetails
     {
         parent::alterForm($form, $params);
 
-        $this->getFormHelper()->remove($form, 'allow-email');
+        $this->formHelper->remove($form, 'allow-email');
 
-        $this->getFormServiceLocator()->get('lva-lock-business_details')->alterForm($form);
-        $this->getFormHelper()->remove($form, 'form-actions->cancel');
+        $this->formServiceLocator->get('lva-lock-business_details')->alterForm($form);
+        $this->formHelper->remove($form, 'form-actions->cancel');
     }
 }

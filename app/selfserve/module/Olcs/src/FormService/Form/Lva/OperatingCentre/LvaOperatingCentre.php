@@ -3,6 +3,9 @@
 namespace Olcs\FormService\Form\Lva\OperatingCentre;
 
 use Common\FormService\Form\Lva\OperatingCentre\CommonOperatingCentre;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Helper\UrlHelperService;
 use Common\View\Helper\ReturnToAddress;
 use Dvsa\Olcs\Utils\Helper\ValueHelper;
 use Laminas\Form\Form;
@@ -14,15 +17,24 @@ use Laminas\Form\Form;
  */
 class LvaOperatingCentre extends CommonOperatingCentre
 {
-    /** @var \Common\Service\Helper\TranslationHelperService */
-    protected $translator;
+    protected FormHelperService $formHelper;
+    protected TranslationHelperService $translator;
+    protected UrlHelperService $urlHelper;
 
-    /** @var \Common\Service\Helper\UrlHelperService */
-    protected $url;
+    public function __construct(
+        FormHelperService $formHelper,
+        TranslationHelperService $translator,
+        UrlHelperService $urlHelper
+    ) {
+        $this->formHelper = $formHelper;
+        $this->translator = $translator;
+        $this->urlHelper = $urlHelper;
+    }
 
-    const DEFAULT_ADVERT_TEMPLATE = 'default-guide-oc-advert-gb-new';
+    public const DEFAULT_ADVERT_TEMPLATE = 'default-guide-oc-advert-gb-new';
 
     /**
+     * /**
      * Alter form
      *
      * @param Form $form Form
@@ -174,11 +186,11 @@ class LvaOperatingCentre extends CommonOperatingCentre
      */
     protected function getUrl()
     {
-        if ($this->url === null) {
-            $this->url = $this->getServiceLocator()->get('Helper\Url');
+        if ($this->urlHelper === null) {
+            $this->urlHelper = $this->getServiceLocator()->get('Helper\Url');
         }
 
-        return $this->url;
+        return $this->urlHelper;
     }
 
     /**

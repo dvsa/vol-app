@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Lock Business Details Form Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace OlcsTest\FormService\Form\Lva;
 
 use Mockery as m;
@@ -26,8 +21,7 @@ class LockBusinessDetailsTest extends MockeryTestCase
     {
         $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService');
 
-        $this->sut = new LockBusinessDetails();
-        $this->sut->setFormHelper($this->formHelper);
+        $this->sut = new LockBusinessDetails($this->formHelper);
     }
 
     public function testAlterFormWithoutCompanyNumberOrName()

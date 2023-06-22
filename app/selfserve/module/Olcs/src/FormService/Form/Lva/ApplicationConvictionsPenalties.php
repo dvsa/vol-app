@@ -3,6 +3,9 @@
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\ConvictionsPenalties;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Helper\UrlHelperService;
 use Laminas\Form\Form;
 use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
 
@@ -14,6 +17,18 @@ use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
 class ApplicationConvictionsPenalties extends ConvictionsPenalties
 {
     use ButtonsAlterations;
+
+    protected TranslationHelperService $translator;
+    protected UrlHelperService $urlHelper;
+    protected FormHelperService $formHelper;
+
+    public function __construct(
+        FormHelperService $formHelper,
+        TranslationHelperService $translator,
+        UrlHelperService $urlHelper
+    ) {
+        parent::__construct($formHelper, $translator, $urlHelper);
+    }
 
     /**
      * Make form alterations

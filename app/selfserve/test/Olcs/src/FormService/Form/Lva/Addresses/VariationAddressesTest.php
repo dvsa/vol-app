@@ -28,8 +28,7 @@ class VariationAddressesTest extends MockeryTestCase
     public function setUp(): void
     {
         $this->fh = m::mock(FormHelperService::class)->makePartial();
-        $this->sut = new VariationAddresses();
-        $this->sut->setFormHelper($this->fh);
+        $this->sut = new VariationAddresses($this->fh);
     }
 
     public function testAlterForm()

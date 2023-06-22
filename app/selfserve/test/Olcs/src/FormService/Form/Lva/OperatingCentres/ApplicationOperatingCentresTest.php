@@ -2,6 +2,7 @@
 
 namespace OlcsTest\FormService\Form\Lva\OperatingCentres;
 
+use Common\Service\Table\TableFactory;
 use Olcs\FormService\Form\Lva\OperatingCentres\ApplicationOperatingCentres;
 use Common\Form\Elements\Types\Table;
 use Common\FormService\FormServiceInterface;
@@ -17,6 +18,7 @@ use Laminas\Http\Request;
 use Common\Service\Helper\FormHelperService;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 use Common\RefData;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Application Operating Centres Test
@@ -40,23 +42,19 @@ class ApplicationOperatingCentresTest extends MockeryTestCase
 
     public function setUp(): void
     {
-        $this->tableBuilder = m::mock(TableBuilder::class);
-
-        $sm = Bootstrap::getServiceManager();
-        $sm->setService('Table', $this->tableBuilder);
-
-        $fsm = m::mock(FormServiceManager::class)->makePartial();
-        $fsm->shouldReceive('getServiceLocator')
-            ->andReturn($sm);
 
         $this->form = m::mock(Form::class);
 
-        $lvaApplication = m::mock(FormServiceInterface::class);
+        $lvaApplication = m::mock(Form::class);
         $lvaApplication->shouldReceive('alterForm')
             ->once()
             ->with($this->form);
 
-        $fsm->setService('lva-application', $lvaApplication);
+        $fsm = m::mock(FormServiceManager::class);
+
+        $fsm->shouldReceive('get')
+            ->with('lva-application')
+            ->andReturn($lvaApplication);
 
         $this->mockFormHelper = m::mock(FormHelperService::class);
         $this->mockFormHelper->shouldReceive('createForm')
@@ -64,9 +62,10 @@ class ApplicationOperatingCentresTest extends MockeryTestCase
             ->with('Lva\OperatingCentres')
             ->andReturn($this->form);
 
-        $this->sut = new ApplicationOperatingCentres();
-        $this->sut->setFormHelper($this->mockFormHelper);
-        $this->sut->setFormServiceLocator($fsm);
+        $this->authService = m::mock(AuthorizationService::class);
+        $this->tableBuilder = m::mock(TableFactory::class);
+
+        $this->sut = new ApplicationOperatingCentres($this->mockFormHelper, $this->authService, $this->tableBuilder, $fsm);
     }
 
     public function testGetForm()

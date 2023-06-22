@@ -2,6 +2,7 @@
 
 namespace Olcs\FormService\Form\Lva;
 
+use Common\Service\Helper\FormHelperService;
 use Laminas\ServiceManager\FactoryInterface;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
@@ -23,7 +24,7 @@ class ApplicationOverviewSubmissionFactory implements FactoryInterface
         }
 
         // Creates an instance of the ConcreteClass with the $formHelper dependency from the container
-        return new ApplicationOverviewSubmission($container->get('Helper\Translation'));
+        return new ApplicationOverviewSubmission($container->get('Helper\Translation'), $container->get(FormHelperService::class));
     }
 
     /**

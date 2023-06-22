@@ -8,6 +8,7 @@ use Olcs\FormService\Form\Lva\TransportManager\ApplicationTransportManager as Su
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 use Common\Service\Helper\FormHelperService;
 use Common\FormService\FormServiceManager;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Application TransportManager Test
@@ -30,9 +31,7 @@ class ApplicationTransportManagerTest extends MockeryTestCase
         $this->formHelper = m::mock(FormHelperService::class);
         $this->fsm = m::mock(FormServiceManager::class)->makePartial();
 
-        $this->sut = new Sut();
-        $this->sut->setFormHelper($this->formHelper);
-        $this->sut->setFormServiceLocator($this->fsm);
+        $this->sut = new Sut($this->formHelper, m::mock(AuthorizationService::class));
     }
 
     public function testGetForm()

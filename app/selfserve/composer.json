@@ -7,16 +7,25 @@
         },
         {
             "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS",
-            "type": "composer"
+            "type": "composer",
+            "canonical": false
         },
         {
             "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy",
             "type": "composer"
+        },
+        {
+            "type": "vcs",
+            "url": "git@repo.olcs.dev-dvsacloud.uk:olcs/olcs-frontend-deps.git"
+        },
+        {
+            "type": "vcs",
+            "url": "git@repo.olcs.dev-dvsacloud.uk:olcs/olcs-common.git"
         }
     ],
     "require": {
         "php": ">=7.4",
-        "olcs/olcs-frontend-deps": "~4.206.0",
+        "olcs/olcs-frontend-deps": "dev-vol-3293-formserviceinitializer",
         "olcs/olcs-laminas": "~2.5.0"
     },
     "require-dev": {

@@ -29,8 +29,7 @@ class ApplicationOverviewSubmissionTest extends MockeryTestCase
 
         $mockTranslationHelper = m::mock(Translate::class);
 
-        $this->sut = new ApplicationOverviewSubmissionStub($mockTranslationHelper);
-        $this->sut->setFormHelper($this->mockFormHlp);
+        $this->sut = new ApplicationOverviewSubmissionStub($mockTranslationHelper, $this->mockFormHlp);
     }
 
     public function testAlterFormReadySubmit()

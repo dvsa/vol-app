@@ -28,8 +28,7 @@ class ApplicationVehiclesDeclarationsTest extends MockeryTestCase
     public function setUp(): void
     {
         $this->fh = m::mock(FormHelperService::class)->makePartial();
-        $this->sut = new ApplicationVehiclesDeclarations();
-        $this->sut->setFormHelper($this->fh);
+        $this->sut = new ApplicationVehiclesDeclarations($this->fh);
     }
 
     public function testAlterForm()
