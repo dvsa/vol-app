@@ -13,7 +13,7 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
  */
 class VersionFactory implements FactoryInterface
 {
-    const DEFAULT_VERSION = 'Not specified';
+    public const DEFAULT_VERSION = 'Not specified';
 
     /**
      * Create version helper service
@@ -22,7 +22,7 @@ class VersionFactory implements FactoryInterface
      *
      * @return Version
      */
-    public function createService(ServiceLocatorInterface $serviceLocator) : Version
+    public function createService(ServiceLocatorInterface $serviceLocator): Version
     {
         return $this->__invoke($serviceLocator, Version::class);
     }
@@ -55,9 +55,12 @@ class VersionFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : Version
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Version
     {
-        $config = $container->getServiceLocator()->get('config');
+        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
+            $container = $container->getServiceLocator();
+        }
+        $config = $container->get('config');
         $version = $this->getVersion($config);
         $helper = new Version();
         $helper->setVersion($version);

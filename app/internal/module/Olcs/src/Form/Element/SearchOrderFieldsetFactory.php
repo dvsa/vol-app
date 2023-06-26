@@ -33,9 +33,9 @@ class SearchOrderFieldsetFactory implements FactoryInterface
      *
      * @return SearchOrderFieldset
      */
-    public function createService(ServiceLocatorInterface $serviceLocator) : SearchOrderFieldset
+    public function createService(ServiceLocatorInterface $serviceLocator): SearchOrderFieldset
     {
-        return $this->__invoke($serviceLocator, AnalyticsCookieNamesProvider::class);
+        return $this->__invoke($serviceLocator, SearchOrderFieldset::class);
     }
 
     /**
@@ -46,11 +46,14 @@ class SearchOrderFieldsetFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : SearchOrderFieldset
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SearchOrderFieldset
     {
-        $serviceLocator = $container->getServiceLocator();
+        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
+            $container = $container->getServiceLocator();
+        }
+
         $fs = new SearchOrderFieldset($this->options['name'], $this->options);
-        $fs->setSearchService($serviceLocator->get('DataServiceManager')->get(SearchDataService::class));
+        $fs->setSearchService($container->get('DataServiceManager')->get(SearchDataService::class));
         return $fs;
     }
 }

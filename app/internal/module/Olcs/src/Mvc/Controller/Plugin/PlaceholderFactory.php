@@ -18,7 +18,7 @@ class PlaceholderFactory implements FactoryInterface
      * @param ServiceLocatorInterface $serviceLocator
      * @return mixed
      */
-    public function createService(ServiceLocatorInterface $serviceLocator) : Placeholder
+    public function createService(ServiceLocatorInterface $serviceLocator): Placeholder
     {
         return $this->__invoke($serviceLocator, Placeholder::class);
     }
@@ -31,8 +31,11 @@ class PlaceholderFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : Placeholder
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Placeholder
     {
-        return new Placeholder($container->getServiceLocator()->get('viewHelperManager')->get('placeholder'));
+        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
+            $container = $container->getServiceLocator();
+        }
+        return new Placeholder($container->get('viewHelperManager')->get('placeholder'));
     }
 }

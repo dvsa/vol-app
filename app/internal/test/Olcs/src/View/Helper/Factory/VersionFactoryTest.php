@@ -42,7 +42,7 @@ class VersionFactoryTest extends TestCase
     private function getMockViewServiceLocator()
     {
         $serviceLocator = m::mock(\Laminas\ServiceManager\ServiceLocatorInterface::class);
-        $serviceLocator->shouldReceive('getServiceLocator->get')
+        $serviceLocator->shouldReceive('get')
             ->with('config')
             ->once()
             ->andReturn($this->config);

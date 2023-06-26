@@ -4,6 +4,7 @@ namespace Olcs\View\Helper;
 
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+use Olcs\Service\Marker\MarkerService;
 
 /**
  * Class MarkersFactory
@@ -15,7 +16,7 @@ class MarkersFactory implements \Laminas\ServiceManager\FactoryInterface
      * @param ServiceLocatorInterface $serviceLocator
      * @return RenderMarkers
      */
-    public function createService(ServiceLocatorInterface $serviceLocator) : RenderMarkers
+    public function createService(ServiceLocatorInterface $serviceLocator): RenderMarkers
     {
         return $this->__invoke($serviceLocator, RenderMarkers::class);
     }
@@ -28,11 +29,14 @@ class MarkersFactory implements \Laminas\ServiceManager\FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : RenderMarkers
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): RenderMarkers
     {
+        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
+            $container = $container->getServiceLocator();
+        }
         $markersHelper = new RenderMarkers();
         $markersHelper->setMarkerService(
-            $container->getServiceLocator()->get(\Olcs\Service\Marker\MarkerService::class)
+            $container->get(MarkerService::class)
         );
         return $markersHelper;
     }

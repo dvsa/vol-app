@@ -18,7 +18,7 @@ class ScriptFactory implements FactoryInterface
      * @param ServiceLocatorInterface $serviceLocator
      * @return mixed
      */
-    public function createService(ServiceLocatorInterface $serviceLocator) : Script
+    public function createService(ServiceLocatorInterface $serviceLocator): Script
     {
         return $this->__invoke($serviceLocator, Script::class);
     }
@@ -31,8 +31,12 @@ class ScriptFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : Script
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Script
     {
-        return new Script($container->getServiceLocator()->get('Script'));
+        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
+            $container = $container->getServiceLocator();
+        }
+
+        return new Script($container->get('Script'));
     }
 }

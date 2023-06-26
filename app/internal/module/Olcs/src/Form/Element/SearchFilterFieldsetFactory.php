@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: craig
- * Date: 09/03/2015
- * Time: 12:06
- */
 
 namespace Olcs\Form\Element;
 
@@ -33,7 +27,7 @@ class SearchFilterFieldsetFactory implements FactoryInterface
      * @param ServiceLocatorInterface $serviceLocator
      * @return mixed
      */
-    public function createService(ServiceLocatorInterface $serviceLocator) : SearchFilterFieldset
+    public function createService(ServiceLocatorInterface $serviceLocator): SearchFilterFieldset
     {
         return $this->__invoke($serviceLocator, SearchFilterFieldset::class);
     }
@@ -46,11 +40,13 @@ class SearchFilterFieldsetFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : SearchFilterFieldset
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SearchFilterFieldset
     {
-        $serviceLocator = $container->getServiceLocator();
+        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
+            $container = $container->getServiceLocator();
+        }
         $fs = new SearchFilterFieldset($this->options['name'], $this->options);
-        $fs->setSearchService($serviceLocator->get('DataServiceManager')->get(Search::class));
+        $fs->setSearchService($container->get('DataServiceManager')->get(Search::class));
         return $fs;
     }
 }

@@ -17,6 +17,9 @@ use Olcs\Controller\TransportManager as TmCntr;
 use Olcs\Controller\TransportManager\Details\TransportManagerDetailsDetailController;
 use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController as TMProcessingNoteController;
 use Olcs\Controller\TransportManager\TransportManagerController;
+use Olcs\Form\Element\SearchDateRangeFieldsetFactory;
+use Olcs\Form\Element\SearchFilterFieldsetFactory;
+use Olcs\Form\Element\SubmissionSectionsFactory;
 use Olcs\FormService\Form\Lva as LvaFormService;
 use Olcs\Listener\RouteParam;
 use Olcs\Listener\RouteParam\Application as ApplicationListener;
@@ -34,6 +37,9 @@ use Olcs\Service\Marker;
 use Olcs\Service\Processing as ProcessingService;
 use Olcs\Service\Data as DataService;
 use Olcs\Service\Helper as HelperService;
+use Olcs\View\Helper\SlaIndicator;
+use Olcs\View\Helper\SubmissionSectionMultipleTablesFactory;
+use Olcs\View\Helper\SubmissionSectionTableFactory;
 
 return array(
     'router' => [
@@ -402,14 +408,14 @@ return array(
             'submissionSectionOverview' => Olcs\View\Helper\SubmissionSectionOverview::class,
             'surrenderDetails' => Olcs\View\Helper\SurrenderDetails::class,
         ],
-        'factories' => array(
+        'factories' => [
             'addressFormat' => Olcs\View\Helper\AddressFactory::class,
-            'SubmissionSectionTable' => 'Olcs\View\Helper\SubmissionSectionTableFactory',
-            'SubmissionSectionMultipleTables' => 'Olcs\View\Helper\SubmissionSectionMultipleTablesFactory',
-            'Olcs\View\Helper\SlaIndicator' => 'Olcs\View\Helper\SlaIndicator',
+            'SubmissionSectionTable' => SubmissionSectionTableFactory::class,
+            'SubmissionSectionMultipleTables' => SubmissionSectionMultipleTablesFactory::class,
+            'Olcs\View\Helper\SlaIndicator' => SlaIndicator::class,
             'showMarkers' => Olcs\View\Helper\MarkersFactory::class,
             'showVersion' => Olcs\View\Helper\Factory\VersionFactory::class,
-        ),
+        ],
         'aliases' => [
             'slaIndicator' => 'Olcs\View\Helper\SlaIndicator'
         ]
@@ -556,12 +562,9 @@ return array(
     ),
     'form_elements' => [
         'factories' => [
-            'PublicInquiryReason' => 'Olcs\Form\Element\PublicInquiryReasonFactory',
-            'SubmissionSections' => 'Olcs\Form\Element\SubmissionSectionsFactory',
-            'Olcs\Form\Element\SlaDateSelect' => 'Olcs\Form\Element\SlaDateSelectFactory',
-            'Olcs\Form\Element\SlaDateTimeSelect' => 'Olcs\Form\Element\SlaDateTimeSelectFactory',
-            'Olcs\Form\Element\SearchFilterFieldset' => 'Olcs\Form\Element\SearchFilterFieldsetFactory',
-            'Olcs\Form\Element\SearchDateRangeFieldset' => 'Olcs\Form\Element\SearchDateRangeFieldsetFactory',
+            'SubmissionSections' => SubmissionSectionsFactory::class,
+            'Olcs\Form\Element\SearchFilterFieldset' => SearchFilterFieldsetFactory::class,
+            'Olcs\Form\Element\SearchDateRangeFieldset' => SearchDateRangeFieldsetFactory::class,
             Olcs\Form\Element\SearchOrderFieldset::class => Olcs\Form\Element\SearchOrderFieldsetFactory::class,
         ],
         'aliases' => [

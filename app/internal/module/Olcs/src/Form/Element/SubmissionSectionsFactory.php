@@ -19,7 +19,7 @@ class SubmissionSectionsFactory implements FactoryInterface
      *
      * @return SubmissionSections
      */
-    public function createService(ServiceLocatorInterface $serviceLocator) : SubmissionSections
+    public function createService(ServiceLocatorInterface $serviceLocator): SubmissionSections
     {
         return $this->__invoke($serviceLocator, SubmissionSections::class);
     }
@@ -50,14 +50,17 @@ class SubmissionSectionsFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : SubmissionSections
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SubmissionSections
     {
-        $serviceLocator = $container->getServiceLocator();
-        $formElementManager = $serviceLocator->get('FormElementManager');
+        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
+            $container = $container->getServiceLocator();
+        }
+
+        $formElementManager = $container->get('FormElementManager');
         $element = new SubmissionSections();
         // set up TM ID to trigger additional TM sections when generating element
         $transportManagerElement = $formElementManager->get('Hidden');
-        $case = $this->getCase($serviceLocator);
+        $case = $this->getCase($container);
         if (!empty($case['transportManager']['id'])) {
             $transportManagerElement->setValue($case['transportManager']['id']);
         }

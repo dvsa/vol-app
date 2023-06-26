@@ -20,7 +20,7 @@ class TableFactory implements FactoryInterface
      * @param ServiceLocatorInterface $serviceLocator
      * @return mixed
      */
-    public function createService(ServiceLocatorInterface $serviceLocator) : Table
+    public function createService(ServiceLocatorInterface $serviceLocator): Table
     {
         return $this->__invoke($serviceLocator, Table::class);
     }
@@ -33,11 +33,14 @@ class TableFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : Table
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Table
     {
+        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
+            $container = $container->getServiceLocator();
+        }
         $tableBuilderFactory = new TableBuilderFactory();
         $tableBuilder = $tableBuilderFactory(
-            $container->getServiceLocator(),
+            $container,
             TableBuilder::class
         );
         return new Table($tableBuilder);

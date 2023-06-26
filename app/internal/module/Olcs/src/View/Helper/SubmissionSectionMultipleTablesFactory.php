@@ -20,7 +20,7 @@ class SubmissionSectionMultipleTablesFactory implements FactoryInterface
      * @param ServiceLocatorInterface $serviceLocator
      * @return SubmissionSectionMultipleTables
      */
-    public function createService(ServiceLocatorInterface $serviceLocator) : SubmissionSectionMultipleTables
+    public function createService(ServiceLocatorInterface $serviceLocator): SubmissionSectionMultipleTables
     {
         return $this->__invoke($serviceLocator, SubmissionSectionMultipleTables::class);
     }
@@ -33,9 +33,12 @@ class SubmissionSectionMultipleTablesFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : SubmissionSectionMultipleTables
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SubmissionSectionMultipleTables
     {
-        $translator = $container->getServiceLocator()->get('Translator');
+        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
+            $container = $container->getServiceLocator();
+        }
+        $translator = $container->get('Translator');
         $service = new SubmissionSectionMultipleTables();
         $service->setTranslator($translator);
         return $service;
