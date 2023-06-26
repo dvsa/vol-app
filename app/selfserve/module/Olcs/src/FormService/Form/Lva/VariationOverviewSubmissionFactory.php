@@ -18,11 +18,12 @@ class VariationOverviewSubmissionFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): VariationOverviewSubmission
     {
-        // Retrieve the $formHelper dependency from the $container
-        $translationHelper = $container->getServiceLocator()->get('Helper\Translation');
+        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
+            $container = $container->getServiceLocator();
+        }
 
-        // Create an instance of the ConcreteClass with the $formHelper dependency
-        return new VariationOverviewSubmission($translationHelper);
+        // Create an instance of the ConcreteClass with the $formHelper dependency retrieved from the container
+        return new VariationOverviewSubmission($container->get('Helper\Translation'));
     }
 
     /**

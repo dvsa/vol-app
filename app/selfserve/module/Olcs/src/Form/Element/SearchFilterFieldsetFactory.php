@@ -48,9 +48,13 @@ class SearchFilterFieldsetFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : SearchFilterFieldset
     {
-        $serviceLocator = $container->getServiceLocator();
+        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
+            $container = $container->getServiceLocator();
+        }
+
         $fs = new SearchFilterFieldset($this->options['name'], $this->options);
-        $fs->setSearchService($serviceLocator->get('DataServiceManager')->get(Search::class));
+
+        $fs->setSearchService($container->get('DataServiceManager')->get(Search::class));
         return $fs;
     }
 }

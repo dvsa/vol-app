@@ -21,8 +21,10 @@ class PlaceholderFactoryTest extends MockeryTestCase
         $viewPlaceholder = new ViewPlaceholder();
 
         $mockSl = m::mock(\Laminas\ServiceManager\ServiceLocatorInterface::class);
-        $mockSl->shouldReceive('getServiceLocator->get')->with('ViewHelperManager')->once()->andReturnSelf()
-            ->shouldReceive('get')->with('placeholder')->once()->andReturn($viewPlaceholder);
+
+        $mockSl->shouldReceive('get')->with('ViewHelperManager')->once()->andReturnSelf();
+
+        $mockSl->shouldReceive('get')->with('placeholder')->once()->andReturn($viewPlaceholder);
 
         $sut = new PlaceholderFactory();
         $obj = $sut->createService($mockSl);

@@ -30,13 +30,15 @@ class QaControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : QaController
     {
-        $parentLocator = $container->getServiceLocator();
+        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
+            $container = $container->getServiceLocator();
+        }
         return new QaController(
-            $parentLocator->get('QaFormProvider'),
-            $parentLocator->get('QaTemplateVarsGenerator'),
-            $parentLocator->get('Helper\Translation'),
-            $parentLocator->get('QaViewGeneratorProvider'),
-            $parentLocator->get('QaApplicationStepsPostDataTransformer')
+            $container->get('QaFormProvider'),
+            $container->get('QaTemplateVarsGenerator'),
+            $container->get('Helper\Translation'),
+            $container->get('QaViewGeneratorProvider'),
+            $container->get('QaApplicationStepsPostDataTransformer')
         );
     }
 }

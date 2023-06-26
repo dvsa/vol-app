@@ -18,11 +18,12 @@ class ApplicationOverviewSubmissionFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ApplicationOverviewSubmission
     {
-        // Retrieve the $formHelper dependency from the $container
-        $translationHelper = $container->getServiceLocator()->get('Helper\Translation');
+        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
+            $container = $container->getServiceLocator();
+        }
 
-        // Create an instance of the ConcreteClass with the $formHelper dependency
-        return new ApplicationOverviewSubmission($translationHelper);
+        // Creates an instance of the ConcreteClass with the $formHelper dependency from the container
+        return new ApplicationOverviewSubmission($container->get('Helper\Translation'));
     }
 
     /**
