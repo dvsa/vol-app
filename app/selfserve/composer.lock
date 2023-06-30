@@ -3935,12 +3935,12 @@
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "4.206.42",
+            "version": "4.206.43",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-auth/4.206.42/olcs-olcs-auth-4.206.42.zip",
-                "reference": "05333d897f210eca06b6bcb7556cc8e402a0ee97",
-                "shasum": "05333d897f210eca06b6bcb7556cc8e402a0ee97"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-auth/4.206.43/olcs-olcs-auth-4.206.43.zip",
+                "reference": "3c3e77f1f2fd9b0e863f25763915f442868782fb",
+                "shasum": "3c3e77f1f2fd9b0e863f25763915f442868782fb"
             },
             "require": {
                 "elendev/composer-push": "^1.0.3",
@@ -3988,16 +3988,16 @@
                 ]
             },
             "description": "OLCS Authentication",
-            "time": "2023-05-22T16:39:58+00:00"
+            "time": "2023-06-27T14:51:25+00:00"
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.474",
+            "version": "4.206.477",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.474/olcs-olcs-common-4.206.474.zip",
-                "reference": "f887b21287d33eeb0c47570df8d0173f816b4945",
-                "shasum": "f887b21287d33eeb0c47570df8d0173f816b4945"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.477/olcs-olcs-common-4.206.477.zip",
+                "reference": "3bff3d6c77ac0e409d67764259220e3f231b1bef",
+                "shasum": "3bff3d6c77ac0e409d67764259220e3f231b1bef"
             },
             "require": {
                 "elendev/composer-push": "^1.0.3",
@@ -4058,7 +4058,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2023-06-16T14:49:40+00:00"
+            "time": "2023-06-30T14:32:37+00:00"
         },
         {
             "name": "olcs/olcs-frontend-deps",
