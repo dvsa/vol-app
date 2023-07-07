@@ -210,7 +210,7 @@ class UndertakingsController extends AbstractUndertakingsController
         if (!$form->has('interim')) {
             return;
         }
-        $form->get('interim')->get('YContent')->get('interimFee')->setValue(
+        $form->get('interim')->get('interimFee')->setValue(
             $translator->translateReplace('selfserve.declaration.interim_fee', [$applicationData['interimFee']])
         );
         if (!$applicationData['interimFee']) {
@@ -233,7 +233,7 @@ class UndertakingsController extends AbstractUndertakingsController
             return;
         }
         if (!$applicationData['interimFee']) {
-            $form->get('interim')->get('YContent')->get('goodsApplicationInterim')->setLabel(
+            $form->get('interim')->get('goodsApplicationInterim')->setLabel(
                 $translator->translate('interim.application.undertakings.form.checkbox.label.no-interim-fee')
             );
         }
@@ -257,7 +257,6 @@ class UndertakingsController extends AbstractUndertakingsController
         } else {
             $formHelper->remove($form, 'declarationsAndUndertakings->disabledReview');
             $data = (array) $this->getRequest()->getPost();
-
             if (isset($data['declarationsAndUndertakings']['signatureOptions'])
                 && $data['declarationsAndUndertakings']['signatureOptions'] === 'N'
             ) {
