@@ -111,15 +111,19 @@ class AbstractLvaFormServiceFactory implements AbstractFactoryInterface
         'lva-licence-trailers' => LicenceTrailers::class,
     ];
 
-
-    public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
+    public function canCreate($container, $requestedName)
     {
-        file_put_contents('php://stderr', 'AbstractLvaFormServiceFactory::canCreateServiceWithName' . PHP_EOL);
         return in_array($requestedName, self::FORM_SERVICE_CLASS_ALIASES);
     }
 
-    public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
+    public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
+        return $this->canCreate($serviceLocator, $requestedName);
+    }
+
+    public function __invoke($container, $requestedName, array $options = null)
+    {
+
         /** @var FormServiceManager $formServiceLocator */
         /** @var FormHelperService $formHelper */
         /** @var AuthorizationService $authService */
@@ -127,7 +131,7 @@ class AbstractLvaFormServiceFactory implements AbstractFactoryInterface
         /** @var TranslationHelperService $translator */
         /** @var TableBuilder $tableBuilder */
 
-        $serviceLocator = method_exists($serviceLocator, 'getServiceLocator') ? $serviceLocator->getServiceLocator() : $serviceLocator;
+        $serviceLocator = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
         $formHelper = $serviceLocator->get(FormHelperService::class);
 
         switch ($requestedName) {
@@ -307,11 +311,8 @@ class AbstractLvaFormServiceFactory implements AbstractFactoryInterface
         ));
     }
 
-    public function canCreate(ContainerInterface $container, $requestedName)
+    public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
-    }
-
-    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
-    {
+        return $this->__invoke($serviceLocator, $requestedName);
     }
 }
