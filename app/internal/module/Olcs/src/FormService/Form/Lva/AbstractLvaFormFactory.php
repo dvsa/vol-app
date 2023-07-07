@@ -16,7 +16,6 @@ use Olcs\FormService\Form\Lva\GoodsVehicles\EditVehicle;
 use Olcs\FormService\Form\Lva\GoodsVehicles\EditVehicleLicence;
 use Olcs\FormService\Form\Lva\OperatingCentre\LvaOperatingCentre;
 use Olcs\FormService\Form\Lva\OperatingCentres\ApplicationOperatingCentres;
-use Psr\Container\ContainerInterface;
 use ZfcRbac\Service\AuthorizationService;
 
 class AbstractLvaFormFactory implements AbstractFactoryInterface
@@ -89,13 +88,33 @@ class AbstractLvaFormFactory implements AbstractFactoryInterface
         'lva-application-business_details' => ApplicationBusinessDetails::class,
     ];
 
-
-    public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
+    /**
+     * @param $container
+     * @param $requestedName
+     * @return bool
+     */
+    public function canCreate($container, $requestedName)
     {
         return in_array($requestedName, self::FORM_SERVICE_CLASS_ALIASES);
     }
 
-    public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
+    /**
+     * @param ServiceLocatorInterface $serviceLocator
+     * @param $name
+     * @param $requestedName
+     * @return bool
+     */
+    public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
+    {
+        return $this->canCreate($serviceLocator, $requestedName);
+    }
+
+    /**
+     * @param $container
+     * @param $requestedName
+     * @param array|null $options
+     */
+    public function __invoke($container, $requestedName, array $options = null)
     {
         /** @var FormServiceManager $formServiceLocator */
         /** @var FormHelperService $formHelper */
@@ -104,7 +123,7 @@ class AbstractLvaFormFactory implements AbstractFactoryInterface
         /** @var TranslationHelperService $translator */
         /** @var TableBuilder $tableBuilder */
 
-        $serviceLocator = method_exists($serviceLocator, 'getServiceLocator') ? $serviceLocator->getServiceLocator() : $serviceLocator;
+        $serviceLocator = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
         $formHelper = $serviceLocator->get(FormHelperService::class);
 
         switch ($requestedName) {
@@ -113,7 +132,7 @@ class AbstractLvaFormFactory implements AbstractFactoryInterface
                 $tableBuilder = $serviceLocator->get('Table');
                 $formServiceLocator = $serviceLocator->get(FormServiceManager::class);
                 return new ApplicationOperatingCentres($formHelper, $authService, $tableBuilder, $formServiceLocator);
-        // Operating Centre
+            // Operating Centre
             case self::FORM_SERVICE_CLASS_ALIASES['lva-variation-operating_centre']:
             case self::FORM_SERVICE_CLASS_ALIASES['lva-licence-operating_centre']:
             case self::FORM_SERVICE_CLASS_ALIASES['lva-application-operating_centre']:
@@ -144,11 +163,11 @@ class AbstractLvaFormFactory implements AbstractFactoryInterface
                 $authService = $serviceLocator->get(AuthorizationService::class);
                 return new Application($formHelper, $authService);
 
-        // Internal common psv vehicles vehicle form service
+            // Internal common psv vehicles vehicle form service
             case self::FORM_SERVICE_CLASS_ALIASES['lva-psv-vehicles-vehicle']:
                 return new PsvVehiclesVehicle();
 
-        // Addresses form services
+            // Addresses form services
             case self::FORM_SERVICE_CLASS_ALIASES['lva-variation-addresses']:
             case self::FORM_SERVICE_CLASS_ALIASES['lva-application-addresses']:
             case self::FORM_SERVICE_CLASS_ALIASES['lva-licence-addresses']:
@@ -242,11 +261,13 @@ class AbstractLvaFormFactory implements AbstractFactoryInterface
         ));
     }
 
-    public function canCreate(ContainerInterface $container, $requestedName)
+    /**
+     * @param ServiceLocatorInterface $serviceLocator
+     * @param $name
+     * @param $requestedName
+     */
+    public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
-    }
-
-    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
-    {
+        return $this->__invoke($serviceLocator, $requestedName);
     }
 }
