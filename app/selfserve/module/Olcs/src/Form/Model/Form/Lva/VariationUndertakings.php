@@ -21,8 +21,6 @@ class VariationUndertakings
     /**
      * @Form\Name("interim")
      * @Form\ComposedObject("Common\Form\Model\Form\Lva\Fieldset\Interim")
-     * @Form\Options({
-     *  "label": "interim.application.undertakings.form.checkbox.label"})
      */
     public $interim = null;
 

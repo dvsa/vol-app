@@ -64,7 +64,6 @@ abstract class AbstractUndertakingsController extends AbstractController
                 } else {
                     $shouldCompleteSection = false;
                 }
-
                 $response = $this->save($form->getData(), $shouldCompleteSection);
                 if ($response->isOk()) {
                     $this->completeSection('undertakings');
@@ -181,7 +180,7 @@ abstract class AbstractUndertakingsController extends AbstractController
             'interimRequested' => isset($formData['interim']) ?
                 $formData['interim']['goodsApplicationInterim'] : null,
             'interimReason' => isset($formData['interim']) ?
-                $formData['interim']['YContent']['goodsApplicationInterimReason'] : null
+                $formData['interim']['goodsApplicationInterimReason'] : null
         ];
         if ($signatureType) {
             $data['signatureType'] = $signatureType;
@@ -235,7 +234,7 @@ abstract class AbstractUndertakingsController extends AbstractController
             $interim = array();
             if (!is_null($applicationData['interimReason'])) {
                 $interim['goodsApplicationInterim'] = "Y";
-                $interim['YContent']['goodsApplicationInterimReason'] = $applicationData['interimReason'];
+                $interim['goodsApplicationInterimReason'] = $applicationData['interimReason'];
             }
 
             $output['interim'] = $interim;
