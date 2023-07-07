@@ -18,9 +18,11 @@ class CookieManagerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CookieManager
     {
-        return new CookieManager(
-            $container->getServiceLocator()->get('Config')
-        );
+        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
+            $container = $container->getServiceLocator();
+        }
+        $config = $container->get('Config');
+        return new CookieManager($config);
     }
 
     /**
@@ -32,6 +34,6 @@ class CookieManagerFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $services)
     {
-        return $this($services, CookieManager::class);
+        return $this->__invoke($services, CookieManager::class);
     }
 }

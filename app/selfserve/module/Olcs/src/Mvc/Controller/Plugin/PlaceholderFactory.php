@@ -33,6 +33,9 @@ class PlaceholderFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : Placeholder
     {
-        return new Placeholder($container->getServiceLocator()->get('ViewHelperManager')->get('placeholder'));
+        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
+            $container = $container->getServiceLocator();
+        }
+        return new Placeholder($container->get('ViewHelperManager')->get('placeholder'));
     }
 }

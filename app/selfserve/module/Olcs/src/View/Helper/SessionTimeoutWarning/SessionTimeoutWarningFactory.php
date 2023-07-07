@@ -65,7 +65,10 @@ class SessionTimeoutWarningFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : SessionTimeoutWarning
     {
-        $config = $container->getServiceLocator()->get('Config')['session-timeout-warning-modal-helper'] ?? [];
+        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
+            $container = $container->getServiceLocator();
+        }
+        $config = $container->get('Config')['session-timeout-warning-modal-helper'] ?? [];
         $this->validateConfiguration($config);
         return new SessionTimeoutWarning(
             $this->configInputFilter->getValue(
