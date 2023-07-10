@@ -17,7 +17,6 @@ use ZfcRbac\Service\AuthorizationService;
  */
 class ApplicationOperatingCentres extends AbstractOperatingCentres
 {
-    protected FormHelperService $formHelper;
     protected AuthorizationService $authService;
     protected $tableBuilder;
     protected FormServiceManager $formServiceLocator;
@@ -28,10 +27,10 @@ class ApplicationOperatingCentres extends AbstractOperatingCentres
         $tableBuilder,
         FormServiceManager $formServiceLocator
     ) {
-        $this->formHelper = $formHelper;
         $this->authService = $authService;
         $this->tableBuilder = $tableBuilder;
         $this->formServiceLocator = $formServiceLocator;
+        parent::__construct($formHelper);
     }
 
     protected function alterForm(Form $form, array $params)
