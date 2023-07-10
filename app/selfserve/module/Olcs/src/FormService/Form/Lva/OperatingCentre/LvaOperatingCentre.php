@@ -34,7 +34,6 @@ class LvaOperatingCentre extends CommonOperatingCentre
     public const DEFAULT_ADVERT_TEMPLATE = 'default-guide-oc-advert-gb-new';
 
     /**
-     * /**
      * Alter form
      *
      * @param Form $form Form
