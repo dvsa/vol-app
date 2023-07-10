@@ -20,7 +20,10 @@ class ApplicationUndertakings
 
     /**
      * @Form\Name("interim")
+     * @Form\Type("\Common\Form\Elements\Types\Radio")
      * @Form\ComposedObject("Common\Form\Model\Form\Lva\Fieldset\Interim")
+     * @Form\Options({
+     *     "label": "interim.application.undertakings.form.checkbox.label"})
      */
     public $interim = null;
 

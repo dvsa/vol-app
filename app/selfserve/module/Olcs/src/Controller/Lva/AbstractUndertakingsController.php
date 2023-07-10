@@ -18,11 +18,11 @@ use Common\Form\Form;
  */
 abstract class AbstractUndertakingsController extends AbstractController
 {
+    use EnabledSectionTrait;
+
     protected $location = 'external';
 
     protected $data = [];
-
-    use EnabledSectionTrait;
 
     /**
      * Index action
@@ -64,6 +64,7 @@ abstract class AbstractUndertakingsController extends AbstractController
                 } else {
                     $shouldCompleteSection = false;
                 }
+
                 $response = $this->save($form->getData(), $shouldCompleteSection);
                 if ($response->isOk()) {
                     $this->completeSection('undertakings');
@@ -121,7 +122,7 @@ abstract class AbstractUndertakingsController extends AbstractController
         if ($this->isButtonPressed('submitAndPay') || $this->isButtonPressed('submit')) {
             // section completed
             return $this->redirect()->toRoute(
-                'lva-'.$this->lva . '/pay-and-submit',
+                'lva-' . $this->lva . '/pay-and-submit',
                 [$this->getIdentifierIndex() => $this->getIdentifier(), 'redirect-back' => 'undertakings'],
                 [],
                 true
@@ -140,7 +141,9 @@ abstract class AbstractUndertakingsController extends AbstractController
                 [
                     'application' => $appId,
                     'action' => 'index'
-                ], [], true
+                ],
+                [],
+                true
             );
 
             $urlResult = $this->handleCommand(GetGovUkAccountRedirect::create([
@@ -180,7 +183,7 @@ abstract class AbstractUndertakingsController extends AbstractController
             'interimRequested' => isset($formData['interim']) ?
                 $formData['interim']['goodsApplicationInterim'] : null,
             'interimReason' => isset($formData['interim']) ?
-                $formData['interim']['goodsApplicationInterimReason'] : null
+                $formData['interim']['YContent']['goodsApplicationInterimReason'] : null
         ];
         if ($signatureType) {
             $data['signatureType'] = $signatureType;
@@ -234,7 +237,7 @@ abstract class AbstractUndertakingsController extends AbstractController
             $interim = array();
             if (!is_null($applicationData['interimReason'])) {
                 $interim['goodsApplicationInterim'] = "Y";
-                $interim['goodsApplicationInterimReason'] = $applicationData['interimReason'];
+                $interim['YContent']['goodsApplicationInterimReason'] = $applicationData['interimReason'];
             }
 
             $output['interim'] = $interim;
