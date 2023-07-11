@@ -214,7 +214,7 @@ class UndertakingsController extends AbstractUndertakingsController
             $translator->translateReplace('selfserve.declaration.interim_fee', [$applicationData['interimFee']])
         );
         if (!$applicationData['interimFee']) {
-            $form->get('interim')->remove('interimFee');
+            $form->get('interim')->get('YContent')->remove('interimFee');
         }
     }
 
