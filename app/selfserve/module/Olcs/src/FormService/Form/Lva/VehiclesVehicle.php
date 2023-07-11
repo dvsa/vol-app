@@ -2,14 +2,8 @@
 
 namespace Olcs\FormService\Form\Lva;
 
-use Common\FormService\Form\AbstractFormService;
 use Common\Service\Helper\FormHelperService;
 
-/**
- * Vehicles Vehicle
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class VehiclesVehicle
 {
     protected FormHelperService $formHelper;

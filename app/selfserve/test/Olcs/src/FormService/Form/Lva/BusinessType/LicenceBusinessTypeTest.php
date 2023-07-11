@@ -7,16 +7,10 @@ use Common\Service\Helper\FormHelperService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\BusinessType\LicenceBusinessType;
-use Common\FormService\FormServiceInterface;
 use Laminas\Form\Form;
 use Laminas\Form\Element;
 use ZfcRbac\Service\AuthorizationService;
 
-/**
- * Licence Business Type Form Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class LicenceBusinessTypeTest extends MockeryTestCase
 {
     /**
@@ -27,8 +21,6 @@ class LicenceBusinessTypeTest extends MockeryTestCase
     protected $fsm;
 
     protected $fh;
-
-    protected $sm;
 
     public function setUp(): void
     {

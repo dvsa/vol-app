@@ -14,11 +14,6 @@ use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use ZfcRbac\Service\AuthorizationService;
 
-/**
- * Application Sole Trader Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class ApplicationSoleTraderTest extends MockeryTestCase
 {
     use ButtonsAlterations;
@@ -42,6 +37,7 @@ class ApplicationSoleTraderTest extends MockeryTestCase
      * @var ServiceLocatorInterface
      */
     protected $sm;
+
     /**
      * @var PeopleLvaService|(PeopleLvaService&m\LegacyMockInterface)|(PeopleLvaService&m\MockInterface)|m\LegacyMockInterface|m\MockInterface
      */

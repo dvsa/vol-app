@@ -11,11 +11,6 @@ use Laminas\Form\Element;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 use ZfcRbac\Service\AuthorizationService;
 
-/**
- * Application Business Type Form Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class ApplicationBusinessTypeTest extends MockeryTestCase
 {
     use ButtonsAlterations;
@@ -28,8 +23,6 @@ class ApplicationBusinessTypeTest extends MockeryTestCase
     protected $fsm;
 
     protected $fh;
-
-    protected $sm;
 
     public function setUp(): void
     {
@@ -128,9 +121,9 @@ class ApplicationBusinessTypeTest extends MockeryTestCase
         $this->fsm->setService('lva-application', $mockApplication);
 
         $this->guidanceHelper
-                    ->shouldReceive('append')
-                    ->with('business-type.locked.message')
-                    ->once();
+            ->shouldReceive('append')
+            ->with('business-type.locked.message')
+            ->once();
 
         $form = $this->sut->getForm($inForceLicences, $hasOrganisationSubmittedLicenceApplication);
 

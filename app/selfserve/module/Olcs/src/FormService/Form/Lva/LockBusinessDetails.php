@@ -2,14 +2,8 @@
 
 namespace Olcs\FormService\Form\Lva;
 
-use Common\FormService\Form\AbstractFormService;
 use Common\Service\Helper\FormHelperService;
 
-/**
- * Licence Variation Business Details Form
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class LockBusinessDetails
 {
     protected FormHelperService $formHelper;
