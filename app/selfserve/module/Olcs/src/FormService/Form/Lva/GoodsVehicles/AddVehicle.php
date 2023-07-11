@@ -2,7 +2,6 @@
 
 namespace Olcs\FormService\Form\Lva\GoodsVehicles;
 
-use Common\FormService\Form\AbstractFormService;
 use Common\Service\Helper\FormHelperService;
 
 /**
