@@ -18,11 +18,11 @@ use Common\Form\Form;
  */
 abstract class AbstractUndertakingsController extends AbstractController
 {
+    use EnabledSectionTrait;
+
     protected $location = 'external';
 
     protected $data = [];
-
-    use EnabledSectionTrait;
 
     /**
      * Index action
@@ -122,7 +122,7 @@ abstract class AbstractUndertakingsController extends AbstractController
         if ($this->isButtonPressed('submitAndPay') || $this->isButtonPressed('submit')) {
             // section completed
             return $this->redirect()->toRoute(
-                'lva-'.$this->lva . '/pay-and-submit',
+                'lva-' . $this->lva . '/pay-and-submit',
                 [$this->getIdentifierIndex() => $this->getIdentifier(), 'redirect-back' => 'undertakings'],
                 [],
                 true
@@ -141,7 +141,9 @@ abstract class AbstractUndertakingsController extends AbstractController
                 [
                     'application' => $appId,
                     'action' => 'index'
-                ], [], true
+                ],
+                [],
+                true
             );
 
             $urlResult = $this->handleCommand(GetGovUkAccountRedirect::create([
