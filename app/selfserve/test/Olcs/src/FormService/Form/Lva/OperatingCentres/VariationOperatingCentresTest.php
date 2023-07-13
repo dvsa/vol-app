@@ -16,11 +16,6 @@ use Common\Service\Helper\FormHelperService;
 use Common\RefData;
 use ZfcRbac\Service\AuthorizationService;
 
-/**
- * Variation Operating Centres Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class VariationOperatingCentresTest extends MockeryTestCase
 {
     protected $form;

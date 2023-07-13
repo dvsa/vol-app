@@ -9,6 +9,7 @@ use Common\Service\Helper\FormHelperService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 class AddVehicle
 {
     protected FormHelperService $formHelper;
@@ -17,6 +18,7 @@ class AddVehicle
     {
         $this->formHelper = $formHelper;
     }
+
     public function getForm($request, $params = [])
     {
         $form = $this->formHelper->createFormWithRequest('Lva\AddGoodsVehicle', $request);

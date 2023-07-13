@@ -11,11 +11,6 @@ use Olcs\FormService\Form\Lva\People\SoleTrader\LicenceSoleTrader as Sut;
 use Laminas\Form\Form;
 use ZfcRbac\Service\AuthorizationService;
 
-/**
- * Licence Sole Trader Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class LicenceSoleTraderTest extends MockeryTestCase
 {
     protected $sut;

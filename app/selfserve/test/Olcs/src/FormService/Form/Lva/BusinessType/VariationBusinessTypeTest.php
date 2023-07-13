@@ -11,11 +11,6 @@ use Laminas\Form\Form;
 use Laminas\Form\Element;
 use ZfcRbac\Service\AuthorizationService;
 
-/**
- * Variation Business Type Form Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class VariationBusinessTypeTest extends MockeryTestCase
 {
     /**
@@ -26,8 +21,6 @@ class VariationBusinessTypeTest extends MockeryTestCase
     protected $fsm;
 
     protected $fh;
-
-    protected $sm;
 
     public function setUp(): void
     {

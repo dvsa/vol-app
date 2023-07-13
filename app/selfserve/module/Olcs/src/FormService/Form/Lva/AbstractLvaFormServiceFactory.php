@@ -34,27 +34,26 @@ use Olcs\FormService\Form\Lva\TransportManager\ApplicationTransportManager;
 use Olcs\FormService\Form\Lva\TypeOfLicence\ApplicationTypeOfLicence;
 use Olcs\FormService\Form\Lva\TypeOfLicence\LicenceTypeOfLicence;
 use Olcs\FormService\Form\Lva\TypeOfLicence\VariationTypeOfLicence;
-use Psr\Container\ContainerInterface;
 use ZfcRbac\Service\AuthorizationService;
 
 class AbstractLvaFormServiceFactory implements AbstractFactoryInterface
 {
     public const FORM_SERVICE_CLASS_ALIASES = [
-// Type of Licence
+        // Type of Licence
         'lva-licence-type_of_licence' => LicenceTypeOfLicence::class,
         'lva-variation-type_of_licence' => VariationTypeOfLicence::class,
         'lva-application-type_of_licence' => ApplicationTypeOfLicence::class,
 
-// Address
+        // Address
         'lva-licence-addresses' => LicenceAddresses::class,
         'lva-variation-addresses' => VariationAddresses::class,
         'lva-application-addresses' => ApplicationAddresses::class,
 
-// Safety
+        // Safety
         'lva-licence-safety' => LicenceSafety::class,
         'lva-variation-safety' => VariationSafety::class,
 
-// Operating Centres
+        // Operating Centres
         'lva-licence-operating_centres' => LicenceOperatingCentres::class,
         'lva-variation-operating_centres' => VariationOperatingCentres::class,
         'lva-application-operating_centres' => ApplicationOperatingCentres::class,
@@ -63,18 +62,20 @@ class AbstractLvaFormServiceFactory implements AbstractFactoryInterface
         'lva-licence-operating_centre' => LvaOperatingCentre::class,
         'lva-variation-operating_centre' => LvaOperatingCentre::class,
 
-// Business Type
+        // Business Type
         'lva-application-business_type' => ApplicationBusinessType::class,
         'lva-licence-business_type' => LicenceBusinessType::class,
         'lva-variation-business_type' => VariationBusinessType::class,
-//
+
         'lva-lock-business_details' => LockBusinessDetails::class,
         'lva-licence-business_details' => LicenceBusinessDetails::class,
         'lva-variation-business_details' => VariationBusinessDetails::class,
         'lva-application-business_details' => ApplicationBusinessDetails::class,
-// Goods vehicle filter form service
+        
+        // Goods vehicle filter form service
         'lva-application-goods-vehicles-filters' => ApplicationGoodsVehiclesFilters::class,
-// External common goods vehicles vehicle form service
+
+        // External common goods vehicles vehicle form service
         'lva-application-goods-vehicles-add-vehicle' => GoodsVehicles\AddVehicle::class,
         'lva-licence-vehicles_psv' => LicencePsvVehicles::class,
         'lva-licence-goods-vehicles' => LicenceGoodsVehicles::class,
@@ -83,9 +84,11 @@ class AbstractLvaFormServiceFactory implements AbstractFactoryInterface
         'lva-application-goods-vehicles-edit-vehicle' => GoodsVehicles\EditVehicle::class,
         'lva-licence-goods-vehicles-edit-vehicle' => GoodsVehicles\EditVehicle::class,
         'lva-variation-goods-vehicles-edit-vehicle' => GoodsVehicles\EditVehicle::class,
-// External common psv vehicles vehicle form service
+
+        // External common psv vehicles vehicle form service
         'lva-psv-vehicles-vehicle' => PsvVehiclesVehicle::class,
-// External common vehicles vehicle form service (Goods and PSV)
+
+        // External common vehicles vehicle form service (Goods and PSV)
         'lva-vehicles-vehicle' => VehiclesVehicle::class,
 
         'lva-application-people' => ApplicationPeople::class,
@@ -123,7 +126,6 @@ class AbstractLvaFormServiceFactory implements AbstractFactoryInterface
 
     public function __invoke($container, $requestedName, array $options = null)
     {
-
         /** @var FormServiceManager $formServiceLocator */
         /** @var FormHelperService $formHelper */
         /** @var AuthorizationService $authService */
