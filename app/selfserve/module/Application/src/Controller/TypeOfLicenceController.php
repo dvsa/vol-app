@@ -80,6 +80,11 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController
                 $licenceType = $licenceTypeData['licence-type'];
                 $vehicleType = null;
                 $lgvDeclarationConfirmation = 0;
+                $licenceTypeRestrictedGuidance = '';
+
+                if ($licenceType == RefData::LICENCE_TYPE_RESTRICTED && isset($licenceTypeData['ltyp_rContent'])) {
+                    $licenceTypeRestrictedGuidance = $licenceTypeData['ltyp_rContent'];
+                }
 
                 if (isset($licenceTypeData['ltyp_siContent'])) {
                     $siContentData = $licenceTypeData['ltyp_siContent'];
@@ -97,7 +102,8 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController
                         'operatorType' => $operatorType,
                         'licenceType' => $licenceType,
                         'vehicleType' => $vehicleType,
-                        'lgvDeclarationConfirmation' => $lgvDeclarationConfirmation
+                        'lgvDeclarationConfirmation' => $lgvDeclarationConfirmation,
+                        'licenceTypeRestrictedGuidance' => $licenceTypeRestrictedGuidance,
                     ]
                 );
 
