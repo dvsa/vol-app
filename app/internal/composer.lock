@@ -3935,12 +3935,12 @@
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "4.206.43",
+            "version": "4.206.44",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-auth/4.206.43/olcs-olcs-auth-4.206.43.zip",
-                "reference": "3c3e77f1f2fd9b0e863f25763915f442868782fb",
-                "shasum": "3c3e77f1f2fd9b0e863f25763915f442868782fb"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-auth/4.206.44/olcs-olcs-auth-4.206.44.zip",
+                "reference": "289513165b543e4adc8478e4db30f59c52b3d82b",
+                "shasum": "289513165b543e4adc8478e4db30f59c52b3d82b"
             },
             "require": {
                 "elendev/composer-push": "^1.0.3",
@@ -3988,16 +3988,16 @@
                 ]
             },
             "description": "OLCS Authentication",
-            "time": "2023-06-27T14:51:25+00:00"
+            "time": "2023-07-10T08:57:30+00:00"
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.477",
+            "version": "4.206.487",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.477/olcs-olcs-common-4.206.477.zip",
-                "reference": "3bff3d6c77ac0e409d67764259220e3f231b1bef",
-                "shasum": "3bff3d6c77ac0e409d67764259220e3f231b1bef"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.487/olcs-olcs-common-4.206.487.zip",
+                "reference": "5db9c45b48fe249a778a252c7417dec499fa4c97",
+                "shasum": "5db9c45b48fe249a778a252c7417dec499fa4c97"
             },
             "require": {
                 "elendev/composer-push": "^1.0.3",
@@ -4058,7 +4058,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2023-06-30T14:32:37+00:00"
+            "time": "2023-07-14T15:39:02+00:00"
         },
         {
             "name": "olcs/olcs-frontend-deps",
@@ -4266,12 +4266,12 @@
         },
         {
             "name": "olcs/olcs-utils",
-            "version": "4.206.18",
+            "version": "4.206.19",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-utils/4.206.18/olcs-olcs-utils-4.206.18.zip",
-                "reference": "cd495bc1a09bb99f18f8ab22200aea0dfab94cd8",
-                "shasum": "cd495bc1a09bb99f18f8ab22200aea0dfab94cd8"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-utils/4.206.19/olcs-olcs-utils-4.206.19.zip",
+                "reference": "c9f8d3cfcb2a0da45ada6588b6f15c6731601a13",
+                "shasum": "c9f8d3cfcb2a0da45ada6588b6f15c6731601a13"
             },
             "require": {
                 "elendev/composer-push": "^1.0.3",
@@ -4318,7 +4318,7 @@
                 ]
             },
             "description": "OLCS Utils",
-            "time": "2023-02-28T10:29:38+00:00"
+            "time": "2023-07-10T08:47:38+00:00"
         },
         {
             "name": "psr/cache",
