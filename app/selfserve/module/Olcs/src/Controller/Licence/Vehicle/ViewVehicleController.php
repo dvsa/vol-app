@@ -6,8 +6,13 @@ namespace Olcs\Controller\Licence\Vehicle;
 
 use Common\Service\Cqrs\Exception\AccessDeniedException;
 use Common\Service\Cqrs\Exception\NotFoundException;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Query\Licence\GoodsVehicles;
 use Dvsa\Olcs\Transfer\Query\Licence\OtherActiveLicences;
+use Exception;
 use Laminas\Form\Element\Select;
 use Laminas\Form\Form;
 use Laminas\Http\Request;
@@ -18,14 +23,14 @@ use Olcs\DTO\Licence\OtherActiveLicenceListDTO;
 use Olcs\Exception\Licence\Vehicle\VehiclesNotFoundWithIdsException;
 use Olcs\Form\Model\Form\Vehicle\View\ViewVehicleSwitchboard;
 use Olcs\Form\Model\Form\Vehicle\View\ViewVehicleSwitchboardFieldset;
-use Exception;
+use Permits\Data\Mapper\MapperManager;
 
 /**
  * @see ViewVehicleControllerFactory
  */
 class ViewVehicleController extends AbstractVehicleController
 {
-    const REF_DATA_ATTRIBUTES = ['description', 'displayOrder', 'id', 'olbsKey', 'refDataCategoryId', 'version'];
+    public const REF_DATA_ATTRIBUTES = ['description', 'displayOrder', 'id', 'olbsKey', 'refDataCategoryId', 'version'];
 
     protected $formConfig = [
         'default' => [
@@ -34,6 +39,23 @@ class ViewVehicleController extends AbstractVehicleController
             ],
         ]
     ];
+
+    /**
+     * @param TranslationHelperService $translationHelper
+     * @param FormHelperService $formHelper
+     * @param TableFactory $tableBuilder
+     * @param MapperManager $mapperManager
+     * @param FlashMessengerHelperService $flashMessenger
+     */
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        TableFactory $tableBuilder,
+        MapperManager $mapperManager,
+        FlashMessengerHelperService $flashMessenger
+    ) {
+        parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessenger);
+    }
 
     /**
      * Handles a request from a user to view a single vehicle.
@@ -148,7 +170,7 @@ class ViewVehicleController extends AbstractVehicleController
             $otherActiveLicence = array_values($licences)[0];
             $selectFormElementClass = $select->getAttribute('class');
             $select->setAttribute('class', sprintf('%s govuk-!-display-none', $selectFormElementClass));
-            $select->setLabel($this->translator->translateReplace(
+            $select->setLabel($this->translationHelper->translateReplace(
                 "licence.vehicle.view.switchboard.option.transfer.select.label.singular",
                 [$otherActiveLicence->getLicenceNumber()]
             ));
@@ -207,7 +229,7 @@ class ViewVehicleController extends AbstractVehicleController
 
         try {
             $queryResult = $this->handleQuery($query);
-        } catch (NotFoundException|AccessDeniedException $exception) {
+        } catch (NotFoundException | AccessDeniedException $exception) {
             throw new VehiclesNotFoundWithIdsException([$vehicleId]);
         }
 

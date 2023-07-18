@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Olcs\Controller;
@@ -16,12 +17,10 @@ use ZfcRbac\Identity\IdentityProviderInterface;
  */
 class SessionTimeoutControllerFactory implements FactoryInterface
 {
-
     /**
      * @param ServiceLocatorInterface $serviceLocator
-     * @return Dispatcher
      */
-    public function createService(ServiceLocatorInterface $serviceLocator) : Dispatcher
+    public function createService(ServiceLocatorInterface $serviceLocator): Dispatcher
     {
         return $this->__invoke($serviceLocator, Dispatcher::class);
     }
@@ -30,11 +29,10 @@ class SessionTimeoutControllerFactory implements FactoryInterface
      * @param ContainerInterface $container
      * @param $requestedName
      * @param array|null $options
-     * @return Dispatcher
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : Dispatcher
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Dispatcher
     {
         if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
             $container = $container->getServiceLocator();

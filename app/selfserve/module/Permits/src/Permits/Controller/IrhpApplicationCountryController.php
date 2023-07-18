@@ -1,16 +1,21 @@
 <?php
+
 namespace Permits\Controller;
 
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\UpdateCountries;
+use Laminas\Mvc\MvcEvent;
 use Olcs\Controller\AbstractSelfserveController;
+use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\DataSource\AvailableCountries;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\DataSource\IrhpApplication;
-use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
+use Permits\Data\Mapper\MapperManager;
 use Permits\View\Helper\IrhpApplicationSection;
-use Laminas\Mvc\MvcEvent;
 
 class IrhpApplicationCountryController extends AbstractSelfserveController
 {
@@ -48,6 +53,21 @@ class IrhpApplicationCountryController extends AbstractSelfserveController
             'saveAndReturnStep' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
         ],
     ];
+
+    /**
+     * @param TranslationHelperService $translationHelper
+     * @param FormHelperService $formHelper
+     * @param TableFactory $tableBuilder
+     * @param MapperManager $mapperManager
+     */
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        TableFactory $tableBuilder,
+        MapperManager $mapperManager
+    ) {
+        parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager);
+    }
 
     /**
      * Fix the issue whereby the country checkboxes selected in the form are not ticked on the postback where none
@@ -92,7 +112,8 @@ class IrhpApplicationCountryController extends AbstractSelfserveController
      */
     public function retrieveForms()
     {
-        if (empty($this->postParams) &&
+        if (
+            empty($this->postParams) &&
             isset($this->queryParams['countries']) &&
             is_string($this->queryParams['countries'])
         ) {
@@ -135,7 +156,8 @@ class IrhpApplicationCountryController extends AbstractSelfserveController
             );
         }
 
-        if (isset($this->postParams['fields']['countries']) &&
+        if (
+            isset($this->postParams['fields']['countries']) &&
             is_array($this->postParams['fields']['countries']) &&
             !empty($this->postParams['fields']['countries'])
         ) {

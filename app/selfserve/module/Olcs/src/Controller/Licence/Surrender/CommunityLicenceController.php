@@ -2,10 +2,15 @@
 
 namespace Olcs\Controller\Licence\Surrender;
 
+use Common\Data\Mapper\Licence\Surrender\CommunityLicence as Mapper;
 use Common\RefData;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableFactory;
 use Olcs\Controller\Config\DataSource\Surrender;
 use Olcs\Form\Model\Form\Surrender\CommunityLicence;
-use Common\Data\Mapper\Licence\Surrender\CommunityLicence as Mapper;
+use Permits\Data\Mapper\MapperManager;
 
 /**
  * Class CommunityLicenceController
@@ -43,6 +48,23 @@ class CommunityLicenceController extends AbstractSurrenderController
         ]
     ];
 
+    /**
+     * @param TranslationHelperService $translationHelper
+     * @param FormHelperService $formHelper
+     * @param TableFactory $tableBuilder
+     * @param MapperManager $mapperManager
+     * @param FlashMessengerHelperService $hlpFlashMsgr
+     */
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        TableFactory $tableBuilder,
+        MapperManager $mapperManager,
+        FlashMessengerHelperService $hlpFlashMsgr
+    ) {
+        parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager, $hlpFlashMsgr);
+    }
+
     public function indexAction()
     {
          return $this->createView();
@@ -55,7 +77,7 @@ class CommunityLicenceController extends AbstractSurrenderController
         $this->form->setData($formData);
         $validForm = $this->form->isValid();
         if ($validForm) {
-            $data = $this->getServiceLocator()->get(Mapper::class)->mapFromForm($formData);
+            $data = $this->mapperManager->get(Mapper::class)->mapFromForm($formData);
             if ($this->updateSurrender(RefData::SURRENDER_STATUS_COMM_LIC_DOCS_COMPLETE, $data)) {
                 $routeName = 'licence/surrender/review/GET';
                 $this->nextStep($routeName);
@@ -66,8 +88,7 @@ class CommunityLicenceController extends AbstractSurrenderController
 
     public function alterForm($form)
     {
-        $translator = $this->getServiceLocator()->get('Helper\Translation');
-        $form->get('form-actions')->get('submit')->setLabel($translator->translate('lva.external.save_and_continue.button'));
+        $form->get('form-actions')->get('submit')->setLabel($this->translationHelper->translate('lva.external.save_and_continue.button'));
         return $form;
     }
 

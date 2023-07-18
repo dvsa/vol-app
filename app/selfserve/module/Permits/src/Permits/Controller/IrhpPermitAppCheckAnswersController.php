@@ -1,16 +1,20 @@
 <?php
+
 namespace Permits\Controller;
 
 use Common\Preference\Language;
 use Common\RefData;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\UpdateCheckAnswers;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\AnswersSummary;
 use Olcs\Controller\AbstractSelfserveController;
-use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
+use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
 use Permits\Controller\Config\Form\FormConfig;
-
+use Permits\Data\Mapper\MapperManager;
 use Permits\View\Helper\IrhpApplicationSection;
 
 class IrhpPermitAppCheckAnswersController extends AbstractSelfserveController
@@ -54,6 +58,25 @@ class IrhpPermitAppCheckAnswersController extends AbstractSelfserveController
         ],
     ];
 
+    protected Language $languagePreference;
+
+    /**
+     * @param TranslationHelperService $translationHelper
+     * @param FormHelperService $formHelper
+     * @param TableFactory $tableBuilder
+     * @param MapperManager $mapperManager
+     */
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        TableFactory $tableBuilder,
+        MapperManager $mapperManager,
+        Language $languagePreference
+    ) {
+        $this->languagePreference = $languagePreference;
+        parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager);
+    }
+
     public function mergeTemplateVars()
     {
         $backUri = IrhpApplicationSection::ROUTE_IPA_QUESTION;
@@ -80,11 +103,7 @@ class IrhpPermitAppCheckAnswersController extends AbstractSelfserveController
 
         $irhpPermitApplicationId = $this->data['routeParams']['irhpPermitApplication'];
 
-        $languagePreference = $this->getServiceLocator()
-            ->get('LanguagePreference')
-            ->getPreference();
-
-        $translateToWelsh = $languagePreference == Language::OPTION_CY ? 'Y' : 'N';
+        $translateToWelsh = $this->languagePreference == Language::OPTION_CY ? 'Y' : 'N';
 
         $answersSummaryParams = [
             'id' => $irhpApplicationId,

@@ -16,7 +16,7 @@ class NoOfPermitsFactory implements FactoryInterface
      *
      * @return NoOfPermits
      */
-    public function createService(ServiceLocatorInterface $serviceLocator) : NoOfPermits
+    public function createService(ServiceLocatorInterface $serviceLocator): NoOfPermits
     {
         return $this->__invoke($serviceLocator, NoOfPermits::class);
     }
@@ -29,10 +29,14 @@ class NoOfPermitsFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : NoOfPermits
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): NoOfPermits
     {
+        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
+            $container = $container->getServiceLocator();
+        }
+        $mapperManager = $container->get(MapperManager::class);
         return new NoOfPermits(
-            $container->get(CommonNoOfPermits::class)
+            $mapperManager->get(CommonNoOfPermits::class)
         );
     }
 }

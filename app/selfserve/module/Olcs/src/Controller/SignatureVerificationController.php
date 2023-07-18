@@ -3,14 +3,32 @@
 namespace Olcs\Controller;
 
 use Common\FeatureToggle;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\GovUkAccount\ProcessAuthResponse;
-
+use Permits\Data\Mapper\MapperManager;
 
 class SignatureVerificationController extends AbstractSelfserveController
 {
     protected $toggleConfig = [
         'default' => FeatureToggle::GOVUK_ACCOUNT
     ];
+
+    /**
+     * @param TranslationHelperService $translationHelper
+     * @param FormHelperService $formHelper
+     * @param TableFactory $tableBuilder
+     * @param MapperManager $mapperManager
+     */
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        TableFactory $tableBuilder,
+        MapperManager $mapperManager
+    ) {
+        parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager);
+    }
 
     public function indexAction()
     {

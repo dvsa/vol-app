@@ -24,7 +24,6 @@ class VehicleControllerFactory extends BinaryFeatureToggleAwareControllerFactory
      * @param ContainerInterface $container
      * @param $requestedName
      * @param array|null $options
-     * @return Dispatcher
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

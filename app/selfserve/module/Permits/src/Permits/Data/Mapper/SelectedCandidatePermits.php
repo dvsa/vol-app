@@ -2,12 +2,16 @@
 
 namespace Permits\Data\Mapper;
 
+use Common\Data\Mapper\MapperInterface;
+
 /**
  * Selected candidate permits mapper
  */
-class SelectedCandidatePermits
+class SelectedCandidatePermits implements MapperInterface
 {
-    const CANDIDATE_PREFIX = 'candidate-';
+    use MapFromResultTrait;
+
+    public const CANDIDATE_PREFIX = 'candidate-';
 
     /**
      * @param array $data

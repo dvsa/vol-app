@@ -3,9 +3,14 @@
 namespace Olcs\Controller\Licence\Surrender;
 
 use Common\RefData;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableFactory;
 use Common\Util\FlashMessengerTrait;
 use Dvsa\Olcs\Transfer\Command\Surrender\SubmitForm;
 use Laminas\View\Model\ViewModel;
+use Permits\Data\Mapper\MapperManager;
 
 /**
  * Class PrintSignReturnController
@@ -14,12 +19,28 @@ use Laminas\View\Model\ViewModel;
  */
 class PrintSignReturnController extends AbstractSurrenderController
 {
-
     use FlashMessengerTrait;
 
     protected $templateConfig = [
         'default' => 'licence/surrender-print-sign-return'
     ];
+
+    /**
+     * @param TranslationHelperService $translationHelper
+     * @param FormHelperService $formHelper
+     * @param TableFactory $tableBuilder
+     * @param MapperManager $mapperManager
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     */
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        TableFactory $tableBuilder,
+        MapperManager $mapperManager,
+        FlashMessengerHelperService $flashMessengerHelper
+    ) {
+        parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessengerHelper);
+    }
 
     public function indexAction()
     {
@@ -29,13 +50,12 @@ class PrintSignReturnController extends AbstractSurrenderController
 
     public function printAction()
     {
-        $translator = $this->getServiceLocator()->get('Helper\Translation');
         $params = [
             'isNi' => $this->data['surrender']['licence']['niFlag'] === 'Y',
             'licNo' => $this->data['surrender']['licence']['licNo'],
             'name' => $this->data['surrender']['licence']['organisation']['name'],
             'title' => $this->determineTitle(),
-            'undertakings' => $translator->translateReplace(
+            'undertakings' => $this->translationHelper->translateReplace(
                 'markup-licence-surrender-declaration',
                 [$this->data['surrender']['licence']['licNo']]
             )
@@ -51,14 +71,14 @@ class PrintSignReturnController extends AbstractSurrenderController
         $response = $this->handleCommand(SubmitForm::create(
             [
                 "id" => $this->licenceId,
-                "version"=>1
+                "version" => 1
             ]
         ));
         if ($response->isOk()) {
             return $layout;
         }
 
-        $this->flashMessenger()->addErrorMessage('licence.surrender.print-sign-return.form.error');
+        $this->flashMessengerHelper->addErrorMessage('licence.surrender.print-sign-return.form.error');
         return $this->redirect()->toRoute('licence/surrender/print-sign-return/GET', [], [], true);
     }
 

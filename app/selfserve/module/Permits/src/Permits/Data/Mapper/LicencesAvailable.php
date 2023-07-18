@@ -2,15 +2,18 @@
 
 namespace Permits\Data\Mapper;
 
+use Common\Data\Mapper\MapperInterface;
 use Common\Form\Elements\Types\HtmlTranslated;
 use Permits\Controller\Config\DataSource\LicencesAvailable as LicencesAvailableDataSource;
 
 /**
  * Available Licences mapper
  */
-class LicencesAvailable
+class LicencesAvailable implements MapperInterface
 {
-    const ECMT_RESTRICTED_HINT = 'permits.form.ecmt-licence.restricted-licence.hint';
+    use MapFromResultTrait;
+
+    public const ECMT_RESTRICTED_HINT = 'permits.form.ecmt-licence.restricted-licence.hint';
 
     /**
      * @param array $data

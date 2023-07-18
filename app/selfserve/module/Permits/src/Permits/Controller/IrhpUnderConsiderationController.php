@@ -2,11 +2,15 @@
 
 namespace Permits\Controller;
 
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableFactory;
 use Olcs\Controller\AbstractSelfserveController;
-use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
+use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
 use Permits\Data\Mapper\IrhpApplicationFeeSummary;
+use Permits\Data\Mapper\MapperManager;
 use Permits\View\Helper\IrhpApplicationSection;
 
 class IrhpUnderConsiderationController extends AbstractSelfserveController
@@ -32,13 +36,28 @@ class IrhpUnderConsiderationController extends AbstractSelfserveController
     ];
 
     /**
+     * @param TranslationHelperService $translationHelper
+     * @param FormHelperService $formHelper
+     * @param TableFactory $tableBuilder
+     * @param MapperManager $mapperManager
+     */
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        TableFactory $tableBuilder,
+        MapperManager $mapperManager
+    ) {
+        parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function retrieveData()
     {
         parent::retrieveData();
 
-        $this->data = $this->getServiceLocator()
+        $this->data = $this->mapperManager
             ->get(IrhpApplicationFeeSummary::class)
             ->mapForDisplay($this->data);
     }

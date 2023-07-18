@@ -2,12 +2,16 @@
 
 namespace Permits\Data\Mapper;
 
+use Common\Data\Mapper\MapperInterface;
+
 /**
  * Fee mapper
  */
-class IrhpFee
+class IrhpFee implements MapperInterface
 {
-    const SUBMIT_APPLICATION_CAPTION = 'permits.button.submit-application';
+    use MapFromResultTrait;
+
+    public const SUBMIT_APPLICATION_CAPTION = 'permits.button.submit-application';
 
     /**
      * Map for form options

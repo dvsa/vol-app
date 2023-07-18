@@ -2,10 +2,13 @@
 
 namespace Permits\Data\Mapper;
 
+use Common\Data\Mapper\MapperInterface;
 use Common\Exception\ResourceNotFoundException;
 
-class PermitTypeTitle
+class PermitTypeTitle implements MapperInterface
 {
+    use MapFromResultTrait;
+
     /**
      * Maps data
      *

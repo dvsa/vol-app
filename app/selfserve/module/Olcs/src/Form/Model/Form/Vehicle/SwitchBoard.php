@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Olcs\Form\Model\Form\Vehicle;
@@ -11,14 +12,15 @@ use Laminas\Form\Annotation as Form;
  */
 class SwitchBoard
 {
-    const FIELD_OPTIONS_FIELDSET_NAME = 'optionsFieldset';
-    const FIELD_OPTIONS_NAME = 'options';
-    const FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_ADD = 'add';
-    const FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_REMOVE = 'remove';
-    const FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_TRANSFER = 'transfer';
-    const FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_REPRINT = 'reprint';
-    const FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW = 'view';
-    const FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW_REMOVED = 'view-removed';
+    public const FIELD_OPTIONS_FIELDSET_NAME = 'optionsFieldset';
+
+    public const FIELD_OPTIONS_NAME = 'options';
+    public const FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_ADD = 'add';
+    public const FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_REMOVE = 'remove';
+    public const FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_TRANSFER = 'transfer';
+    public const FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_REPRINT = 'reprint';
+    public const FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW = 'view';
+    public const FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW_REMOVED = 'view-removed';
 
     /**
      * @Form\Name("optionsFieldset")

@@ -2,6 +2,7 @@
 
 namespace Permits\Data\Mapper;
 
+use Common\Data\Mapper\MapperInterface;
 use Common\Data\Mapper\Permits\NoOfPermits as CommonNoOfPermitsMapper;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpApplicationDataSource;
 use Permits\Controller\Config\DataSource\IrhpFeePerPermit as IrhpFeePerPermitDataSource;
@@ -10,8 +11,10 @@ use Permits\Controller\Config\DataSource\IrhpMaxStockPermits as IrhpMaxStockPerm
 /**
  * No of permits mapper
  */
-class NoOfPermits
+class NoOfPermits implements MapperInterface
 {
+    use MapFromResultTrait;
+
     /** @var CommonNoOfPermitsMapper */
     private $commonNoOfPermitsMapper;
 

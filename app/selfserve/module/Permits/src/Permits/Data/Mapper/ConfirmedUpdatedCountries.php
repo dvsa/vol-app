@@ -2,11 +2,15 @@
 
 namespace Permits\Data\Mapper;
 
+use Common\Data\Mapper\MapperInterface;
+
 /**
  * Confirmed updated countries mapper
  */
-class ConfirmedUpdatedCountries
+class ConfirmedUpdatedCountries implements MapperInterface
 {
+    use MapFromResultTrait;
+
     /**
      * @param array $data
      *

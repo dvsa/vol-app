@@ -2,6 +2,7 @@
 
 namespace Permits\Data\Mapper;
 
+use Common\Data\Mapper\MapperInterface;
 use Common\Form\Form;
 use Permits\Controller\Config\DataSource\AvailableCountries as AvailableCountriesDataSource;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpApplicationDataSource;
@@ -10,8 +11,10 @@ use Permits\Controller\Config\DataSource\IrhpApplication as IrhpApplicationDataS
  *
  * Available Countries mapper
  */
-class AvailableCountries
+class AvailableCountries implements MapperInterface
 {
+    use MapFromResultTrait;
+
     /**
      * @param array $data
      * @param Form  $form

@@ -17,7 +17,6 @@ use Interop\Container\ContainerInterface;
 use Laminas\Mvc\Controller\Plugin\Url;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
-use Laminas\ServiceManager\ServiceManager;
 
 /**
  * @see ListVehicleController
@@ -36,7 +35,6 @@ class ListVehicleControllerFactory implements FactoryInterface
      * @param ContainerInterface $container
      * @param $requestedName
      * @param array $options
-     * @return Dispatcher
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

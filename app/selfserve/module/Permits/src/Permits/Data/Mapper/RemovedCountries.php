@@ -2,14 +2,17 @@
 
 namespace Permits\Data\Mapper;
 
+use Common\Data\Mapper\MapperInterface;
 use Common\Form\Form;
 use Permits\Controller\Config\DataSource\AvailableCountries;
 
 /**
  * Removed countries mapper
  */
-class RemovedCountries
+class RemovedCountries implements MapperInterface
 {
+    use MapFromResultTrait;
+
     /**
      * @param array $data
      * @param Form $form

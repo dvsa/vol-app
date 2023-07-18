@@ -2,6 +2,7 @@
 
 namespace Permits\Data\Mapper;
 
+use Common\Data\Mapper\MapperInterface;
 use Common\Form\Form;
 use Common\RefData;
 use Permits\Controller\Config\DataSource\AvailableStocks as AvailableStocksDataSource;
@@ -10,8 +11,10 @@ use RuntimeException;
 /**
  * Available stocks mapper
  */
-class AvailableStocks
+class AvailableStocks implements MapperInterface
 {
+    use MapFromResultTrait;
+
     /**
      * Map stock options
      *

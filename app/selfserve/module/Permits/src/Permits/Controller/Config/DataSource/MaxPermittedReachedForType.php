@@ -2,8 +2,7 @@
 
 namespace Permits\Controller\Config\DataSource;
 
-use Dvsa\Olcs\Transfer\Query\Permits\MaxPermittedReachedByTypeAndOrganisation
-    as MaxPermittedReachedByTypeAndOrganisationDto;
+use Dvsa\Olcs\Transfer\Query\Permits\MaxPermittedReachedByTypeAndOrganisation as MaxPermittedReachedByTypeAndOrganisationDto;
 use Olcs\Controller\Config\DataSource\AbstractDataSource;
 
 /**
@@ -11,7 +10,7 @@ use Olcs\Controller\Config\DataSource\AbstractDataSource;
  */
 class MaxPermittedReachedForType extends AbstractDataSource
 {
-    const DATA_KEY = 'maxPermittedReached';
+    public const DATA_KEY = 'maxPermittedReached';
     protected $dto = MaxPermittedReachedByTypeAndOrganisationDto::class;
 
     protected $paramsMap = [

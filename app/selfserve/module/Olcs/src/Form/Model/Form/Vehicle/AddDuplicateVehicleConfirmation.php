@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Olcs\Form\Model\Form\Vehicle;
@@ -12,8 +13,8 @@ use Laminas\Form\Annotation as Form;
  */
 class AddDuplicateVehicleConfirmation
 {
-    const FIELD_OPTIONS_FIELDSET_NAME = 'optionsFieldset';
-    const FIELD_OPTIONS_NAME = 'options';
+    public const FIELD_OPTIONS_FIELDSET_NAME = 'optionsFieldset';
+    public const FIELD_OPTIONS_NAME = 'options';
 
     /**
      * @Form\Name("optionsFieldset")

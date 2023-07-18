@@ -2,13 +2,18 @@
 
 namespace Olcs\Controller\Licence\Vehicle\Reprint;
 
+use Common\Form\Form;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableFactory;
+use Laminas\Http\Request;
+use Laminas\Http\Response;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\Licence\Vehicle\AbstractVehicleController;
 use Olcs\Form\Model\Form\Vehicle\ListVehicleSearch;
 use Olcs\Form\Model\Form\Vehicle\Vehicles as VehiclesForm;
-use Common\Form\Form;
-use Laminas\Http\Request;
-use Laminas\View\Model\ViewModel;
-use Laminas\Http\Response;
+use Permits\Data\Mapper\MapperManager;
 
 /**
  * @see ReprintVehicleLicenceControllerFactory
@@ -30,6 +35,23 @@ class ReprintLicenceVehicleDiscController extends AbstractVehicleController
             ]
         ]
     ];
+
+    /**
+     * @param TranslationHelperService $translationHelper
+     * @param FormHelperService $formHelper
+     * @param TableFactory $tableBuilder
+     * @param MapperManager $mapperManager
+     * @param FlashMessengerHelperService $flashMessenger
+     */
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        TableFactory $tableBuilder,
+        MapperManager $mapperManager,
+        FlashMessengerHelperService $flashMessengerHelper
+    ) {
+        parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessengerHelper);
+    }
 
     /**
      * Handles a request from a user to show the form to reprint one or more of the licences that they have access to.
@@ -58,7 +80,7 @@ class ReprintLicenceVehicleDiscController extends AbstractVehicleController
         ]);
 
         if ($vehicleTable->getTotal() > static::DEFAULT_TABLE_ROW_LIMIT) {
-            $view->setVariable('note', $this->translator->translateReplace('licence.vehicle.reprint.note', [static::MAX_ACTION_BATCH_SIZE]));
+            $view->setVariable('note', $this->translationHelper->translateReplace('licence.vehicle.reprint.note', [static::MAX_ACTION_BATCH_SIZE]));
         }
 
         if ($vehicleTable->getTotal() > static::DEFAULT_TABLE_ROW_LIMIT || $this->isSearchResultsPage()) {
@@ -91,7 +113,7 @@ class ReprintLicenceVehicleDiscController extends AbstractVehicleController
         }
 
         if (count($selectedVehicles) > static::MAX_ACTION_BATCH_SIZE) {
-            $message = $this->translator->translateReplace('licence.vehicle.reprint.error.too-many-selected', [static::MAX_ACTION_BATCH_SIZE]);
+            $message = $this->translationHelper->translateReplace('licence.vehicle.reprint.error.too-many-selected', [static::MAX_ACTION_BATCH_SIZE]);
             $this->form->get('formActions')->get('action')->setMessages([$message]);
             return $this->indexAction();
         }

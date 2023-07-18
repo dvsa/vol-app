@@ -4,15 +4,20 @@ namespace Olcs\Controller\Licence\Vehicle\Reprint;
 
 use Common\Service\Cqrs\Exception\AccessDeniedException;
 use Common\Service\Cqrs\Exception\NotFoundException;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\Vehicle\ReprintDisc;
 use Dvsa\Olcs\Transfer\Query\LicenceVehicle\LicenceVehiclesById;
+use Exception;
+use Laminas\Http\Response;
 use Olcs\Controller\Licence\Vehicle\AbstractVehicleController;
 use Olcs\Controller\Licence\Vehicle\SwitchBoardController;
 use Olcs\DTO\Licence\Vehicle\LicenceVehicleDTO;
 use Olcs\Exception\Licence\Vehicle\VehiclesNotFoundWithIdsException;
 use Olcs\Form\Model\Form\Vehicle\VehicleConfirmationForm;
-use Exception;
-use Laminas\Http\Response;
+use Permits\Data\Mapper\MapperManager;
 
 class ReprintLicenceVehicleDiscConfirmationController extends AbstractVehicleController
 {
@@ -27,6 +32,26 @@ class ReprintLicenceVehicleDiscConfirmationController extends AbstractVehicleCon
         ]
     ];
 
+    protected FlashMessengerHelperService $flashMessengerHelper;
+
+    /**
+     * @param TranslationHelperService $translationHelper
+     * @param FormHelperService $formHelper
+     * @param TableFactory $tableBuilder
+     * @param MapperManager $mapperManager
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     */
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        TableFactory $tableBuilder,
+        MapperManager $mapperManager,
+        FlashMessengerHelperService $flashMessengerHelper
+    ) {
+        $this->flashMessengerHelper = $flashMessengerHelper;
+        parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessengerHelper);
+    }
+
     /**
      * Handles a request from a user to view a page from which they can confirm the reprint of one or more licences
      * for vehicles that they have access to.
@@ -38,7 +63,7 @@ class ReprintLicenceVehicleDiscConfirmationController extends AbstractVehicleCon
     {
         if (!$this->session->hasVrms()) {
             // Redirect to add action if VRMs are not in session.
-            $this->flashMessenger->addErrorMessage('licence.vehicle.reprint.confirm.error.no-vehicles');
+            $this->flashMessengerHelper->addErrorMessage('licence.vehicle.reprint.confirm.error.no-vehicles');
             return $this->nextStep('licence/vehicle/reprint/GET');
         }
         $licenceVehicles = $this->getLicenceVehiclesByVehicleId($this->session->getVrms());
@@ -71,7 +96,7 @@ class ReprintLicenceVehicleDiscConfirmationController extends AbstractVehicleCon
     {
         if (!$this->session->hasVrms()) {
             // Redirect to reprint action if VRMs are not in session.
-            $this->flashMessenger->addErrorMessage('licence.vehicle.reprint.confirm.error.no-vehicles');
+            $this->flashMessengerHelper->addErrorMessage('licence.vehicle.reprint.confirm.error.no-vehicles');
             return $this->nextStep('licence/vehicle/reprint/GET');
         }
 
@@ -105,8 +130,8 @@ class ReprintLicenceVehicleDiscConfirmationController extends AbstractVehicleCon
             $successMessageKey = 'licence.vehicle.reprint.confirm.success.plural';
         }
 
-        $panelMessage = $this->translator->translateReplace($successMessageKey, [count($vehicleIds)]);
-        $this->flashMessenger->addMessage($panelMessage, SwitchBoardController::PANEL_FLASH_MESSENGER_NAMESPACE);
+        $panelMessage = $this->translationHelper->translateReplace($successMessageKey, [count($vehicleIds)]);
+        $this->flashMessengerHelper->addMessage($panelMessage, SwitchBoardController::PANEL_FLASH_MESSENGER_NAMESPACE);
 
         return $this->nextStep('lva-licence/vehicles');
     }
@@ -124,7 +149,7 @@ class ReprintLicenceVehicleDiscConfirmationController extends AbstractVehicleCon
         $query = LicenceVehiclesById::create(['ids' => $vehicleIds]);
         try {
             $queryResult = $this->handleQuery($query);
-        } catch (NotFoundException|AccessDeniedException $exception) {
+        } catch (NotFoundException | AccessDeniedException $exception) {
             throw new VehiclesNotFoundWithIdsException($vehicleIds);
         }
         $licenceVehicles = $queryResult->getResult()['results'] ?? [];

@@ -2,14 +2,17 @@
 
 namespace Permits\Data\Mapper;
 
+use Common\Data\Mapper\MapperInterface;
 use Common\Form\Form;
 use Permits\Controller\Config\DataSource\AvailableTypes as AvailableTypesDataSource;
 
 /**
  * Available types mapper
  */
-class AvailableTypes
+class AvailableTypes implements MapperInterface
 {
+    use MapFromResultTrait;
+
     /**
      * @param array $data
      * @param Form  $form

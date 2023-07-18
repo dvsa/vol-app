@@ -2,13 +2,18 @@
 
 namespace Olcs\Controller\Licence\Vehicle;
 
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableFactory;
 use Olcs\Form\Model\Form\Vehicle\AddDuplicateVehicleConfirmation as AddDuplicateVehicleConfirmationForm;
+use Permits\Data\Mapper\MapperManager;
 
 class AddDuplicateVehicleController extends AbstractVehicleController
 {
     use AddVehicleTrait;
 
-    const PAGE_HEADER = "licence.vehicle.add.duplicate.header";
+    public const PAGE_HEADER = "licence.vehicle.add.duplicate.header";
 
     protected $formConfig = [
         'default' => [
@@ -17,6 +22,23 @@ class AddDuplicateVehicleController extends AbstractVehicleController
             ]
         ]
     ];
+
+    /**
+     * @param TranslationHelperService $translationHelper
+     * @param FormHelperService $formHelper
+     * @param TableFactory $tableBuilder
+     * @param MapperManager $mapperManager
+     * @param FlashMessengerHelperService $flashMessenger
+     */
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        TableFactory $tableBuilder,
+        MapperManager $mapperManager,
+        FlashMessengerHelperService $flashMessenger
+    ) {
+        parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessenger);
+    }
 
     /**
      * @return \Laminas\Http\Response|\Laminas\View\Model\ViewModel
@@ -30,7 +52,7 @@ class AddDuplicateVehicleController extends AbstractVehicleController
         }
 
         $params = $this->getViewVariables();
-        $params['note'] = $this->translator->translateReplace(
+        $params['note'] = $this->translationHelper->translateReplace(
             'licence.vehicle.add.duplicate.note',
             [
                 $this->session->getVehicleData()['registrationNumber']
@@ -90,7 +112,7 @@ class AddDuplicateVehicleController extends AbstractVehicleController
         );
 
         if ($response->isOk()) {
-            $panelMessage = $this->translator->translateReplace('licence.vehicle.add.success', [$vehicleData['registrationNumber']]);
+            $panelMessage = $this->translationHelper->translateReplace('licence.vehicle.add.success', [$vehicleData['registrationNumber']]);
             $this->flashMessenger->addMessage($panelMessage, SwitchBoardController::PANEL_FLASH_MESSENGER_NAMESPACE);
             return $this->nextStep('lva-licence/vehicles');
         }

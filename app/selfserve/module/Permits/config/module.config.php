@@ -1,11 +1,39 @@
 <?php
+
 namespace Permits;
 
+use Permits\Controller\CancelIrhpApplicationControllerFactory;
+use Permits\Controller\EssentialInformationControllerFactory;
+use Permits\Controller\IrhpApplicationControllerFactory;
+use Permits\Controller\IrhpApplicationCountryConfirmationControllerFactory;
+use Permits\Controller\IrhpApplicationCountryControllerFactory;
 use Permits\Controller\IrhpApplicationDeclarationController;
+use Permits\Controller\IrhpApplicationDeclarationControllerFactory;
+use Permits\Controller\IrhpApplicationFeeControllerFactory;
 use Permits\Controller\IrhpApplicationPeriodController;
+use Permits\Controller\IrhpApplicationPeriodControllerFactory;
+use Permits\Controller\IrhpAwaitingFeeControllerFactory;
+use Permits\Controller\IrhpCandidatePermitSelectionControllerFactory;
+use Permits\Controller\IrhpCheckAnswersControllerFactory;
+use Permits\Controller\IrhpDeclineControllerFactory;
+use Permits\Controller\IrhpNoLicencesControllerFactory;
+use Permits\Controller\IrhpNotEligibleControllerFactory;
+use Permits\Controller\IrhpPermitAppCheckAnswersControllerFactory;
+use Permits\Controller\IrhpPermitsExhaustedControllerFactory;
+use Permits\Controller\IrhpStockControllerFactory;
+use Permits\Controller\IrhpUnderConsiderationControllerFactory;
+use Permits\Controller\IrhpUnpaidPermitsControllerFactory;
+use Permits\Controller\IrhpValidPermitsControllerFactory;
+use Permits\Controller\IrhpWithdrawControllerFactory;
 use Permits\Controller\LicenceController;
+use Permits\Controller\LicenceControllerFactory;
+use Permits\Controller\MaxPermittedReachedForStockControllerFactory;
+use Permits\Controller\MaxPermittedReachedForTypeControllerFactory;
+use Permits\Controller\NoOfPermitsControllerFactory;
+use Permits\Controller\PermitsControllerFactory;
 use Permits\Controller\SubmittedController;
 use Permits\Controller\PermitsController;
+use Permits\Controller\SubmittedControllerFactory;
 use Permits\Controller\TypeController;
 use Permits\Controller\IrhpApplicationController;
 use Permits\Controller\IrhpApplicationCountryController;
@@ -29,47 +57,48 @@ use Permits\Controller\MaxPermittedReachedForStockController;
 use Permits\Controller\MaxPermittedReachedForTypeController;
 use Permits\Controller\QaController;
 use Permits\Controller\QaControllerFactory;
+use Permits\Controller\TypeControllerFactory;
+use Permits\Controller\WindowClosedControllerFactory;
 use Permits\Controller\YearController;
 use Permits\Controller\WindowClosedController;
 use Permits\Controller\IrhpStockController;
 use Permits\Controller\EssentialInformationController;
+use Permits\Controller\YearControllerFactory;
 use Permits\Data\Mapper;
 
 return [
   'controllers' => [
-    'invokables' => [
-        PermitsController::class => PermitsController::class,
-        LicenceController::class => LicenceController::class,
-        TypeController::class => TypeController::class,
-        SubmittedController::class => SubmittedController::class,
-        IrhpApplicationController::class => IrhpApplicationController::class,
-        IrhpApplicationCountryController::class => IrhpApplicationCountryController::class,
-        IrhpApplicationCountryConfirmationController::class => IrhpApplicationCountryConfirmationController::class,
-        NoOfPermitsController::class => NoOfPermitsController::class,
-        IrhpApplicationDeclarationController::class => IrhpApplicationDeclarationController::class,
-        IrhpCheckAnswersController::class => IrhpCheckAnswersController::class,
-        IrhpPermitAppCheckAnswersController::class => IrhpPermitAppCheckAnswersController::class,
-        CancelIrhpApplicationController::class => CancelIrhpApplicationController::class,
-        IrhpWithdrawController::class => IrhpWithdrawController::class,
-        IrhpAwaitingFeeController::class => IrhpAwaitingFeeController::class,
-        IrhpDeclineController::class => IrhpDeclineController::class,
-        IrhpApplicationFeeController::class => IrhpApplicationFeeController::class,
-        IrhpUnderConsiderationController::class => IrhpUnderConsiderationController::class,
-        IrhpUnpaidPermitsController::class => IrhpUnpaidPermitsController::class,
-        IrhpValidPermitsController::class => IrhpValidPermitsController::class,
-        IrhpPermitsExhaustedController::class => IrhpPermitsExhaustedController::class,
-        IrhpNotEligibleController::class => IrhpNotEligibleController::class,
-        IrhpNoLicencesController::class => IrhpNoLicencesController::class,
-        MaxPermittedReachedForStockController::class => MaxPermittedReachedForStockController::class,
-        MaxPermittedReachedForTypeController::class => MaxPermittedReachedForTypeController::class,
-        YearController::class => YearController::class,
-        WindowClosedController::class => WindowClosedController::class,
-        IrhpStockController::class => IrhpStockController::class,
-        EssentialInformationController::class => EssentialInformationController::class,
-        IrhpApplicationPeriodController::class => IrhpApplicationPeriodController::class,
-        IrhpCandidatePermitSelectionController::class => IrhpCandidatePermitSelectionController::class,
-    ],
     'factories' => [
+        LicenceController::class => LicenceControllerFactory::class,
+        TypeController::class => TypeControllerFactory::class,
+        SubmittedController::class => SubmittedControllerFactory::class,
+        IrhpApplicationController::class => IrhpApplicationControllerFactory::class,
+        IrhpApplicationCountryController::class => IrhpApplicationCountryControllerFactory::class,
+        IrhpApplicationCountryConfirmationController::class => IrhpApplicationCountryConfirmationControllerFactory::class,
+        NoOfPermitsController::class => NoOfPermitsControllerFactory::class,
+        IrhpCheckAnswersController::class => IrhpCheckAnswersControllerFactory::class,
+        IrhpPermitAppCheckAnswersController::class => IrhpPermitAppCheckAnswersControllerFactory::class,
+        CancelIrhpApplicationController::class => CancelIrhpApplicationControllerFactory::class,
+        IrhpWithdrawController::class => IrhpWithdrawControllerFactory::class,
+        IrhpAwaitingFeeController::class => IrhpAwaitingFeeControllerFactory::class,
+        IrhpDeclineController::class => IrhpDeclineControllerFactory::class,
+        IrhpApplicationFeeController::class => IrhpApplicationFeeControllerFactory::class,
+        IrhpUnderConsiderationController::class => IrhpUnderConsiderationControllerFactory::class,
+        IrhpUnpaidPermitsController::class => IrhpUnpaidPermitsControllerFactory::class,
+        IrhpValidPermitsController::class => IrhpValidPermitsControllerFactory::class,
+        IrhpNotEligibleController::class => IrhpNotEligibleControllerFactory::class,
+        IrhpNoLicencesController::class => IrhpNoLicencesControllerFactory::class,
+        MaxPermittedReachedForStockController::class => MaxPermittedReachedForStockControllerFactory::class,
+        MaxPermittedReachedForTypeController::class => MaxPermittedReachedForTypeControllerFactory::class,
+        YearController::class => YearControllerFactory::class,
+        WindowClosedController::class => WindowClosedControllerFactory::class,
+        IrhpStockController::class => IrhpStockControllerFactory::class,
+        EssentialInformationController::class => EssentialInformationControllerFactory::class,
+        IrhpApplicationPeriodController::class => IrhpApplicationPeriodControllerFactory::class,
+        IrhpCandidatePermitSelectionController::class => IrhpCandidatePermitSelectionControllerFactory::class,
+        IrhpApplicationDeclarationController::class => IrhpApplicationDeclarationControllerFactory::class,
+        IrhpPermitsExhaustedController::class => IrhpPermitsExhaustedControllerFactory::class,
+        PermitsController::class => PermitsControllerFactory::class,
         QaController::class => QaControllerFactory::class,
     ],
   ],
@@ -576,6 +605,11 @@ return [
     ],
   ],
   'service_manager' => [
+      'factories' => [
+          Mapper\MapperManager::class => Mapper\MapperManagerFactory::class
+      ]
+  ],
+  'mappers' =>  [
       'invokables' => [
           Mapper\AvailableCountries::class => Mapper\AvailableCountries::class,
           Mapper\AvailableTypes::class => Mapper\AvailableTypes::class,
@@ -595,8 +629,9 @@ return [
           Mapper\AvailableYears::class => Mapper\AvailableYearsFactory::class,
           Mapper\CandidatePermitSelection::class => Mapper\CandidatePermitSelectionFactory::class,
       ],
-  ],
-    /** @todo we don't need all of these different link helpers! OLCS-21512 */
+    ]
+    ,
+    /** TODO: we don't need all of these different link helpers! OLCS-21512 */
     'view_helpers' => [
         'invokables' => [
             'irhpApplicationSection' => \Permits\View\Helper\IrhpApplicationSection::class,

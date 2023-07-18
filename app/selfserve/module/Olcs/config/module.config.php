@@ -8,6 +8,7 @@ use Olcs\Auth\Adapter\SelfserveCommandAdapterFactory;
 use Olcs\Auth\Service\AuthenticationServiceFactory;
 use Olcs\Auth\Service\AuthenticationServiceInterface;
 use Olcs\Controller\Cookie\DetailsController as CookieDetailsController;
+use Olcs\Controller\Cookie\DetailsControllerFactory;
 use Olcs\Controller\Cookie\SettingsController as CookieSettingsController;
 use Olcs\Controller\Cookie\SettingsControllerFactory as CookieSettingsControllerFactory;
 use Olcs\Controller\IndexController;
@@ -1193,9 +1194,7 @@ return array(
                 Olcs\Controller\BusReg\BusRegRegistrationsController::class,
             Olcs\Controller\BusReg\BusRegBrowseController::class =>
                 Olcs\Controller\BusReg\BusRegBrowseController::class,
-            CookieDetailsController::class => CookieDetailsController::class,
             'Dashboard' => Olcs\Controller\DashboardController::class,
-            PromptController::class => PromptController::class,
             Olcs\Controller\FeesController::class => Olcs\Controller\FeesController::class,
             Olcs\Controller\CorrespondenceController::class => Olcs\Controller\CorrespondenceController::class,
             Olcs\Controller\UserController::class => Olcs\Controller\UserController::class,
@@ -1207,42 +1206,42 @@ return array(
             'Search\Result' => 'Olcs\Controller\Search\ResultController',
             Olcs\Controller\Entity\ViewController::class => Olcs\Controller\Entity\ViewController::class,
             Olcs\Controller\GdsVerifyController::class => Olcs\Controller\GdsVerifyController::class,
-
-            // License - Surrender
-            Olcs\Controller\Licence\Surrender\ReviewContactDetailsController::class => Olcs\Controller\Licence\Surrender\ReviewContactDetailsController::class,
-            Olcs\Controller\Licence\Surrender\AddressDetailsController::class =>
-            Olcs\Controller\Licence\Surrender\AddressDetailsController::class,
-            Olcs\Controller\Licence\Surrender\StartController::class => Olcs\Controller\Licence\Surrender\StartController::class,
-            Olcs\Controller\Licence\Surrender\DeclarationController::class => Olcs\Controller\Licence\Surrender\DeclarationController::class,
-            Olcs\Controller\Licence\Surrender\ConfirmationController::class => Olcs\Controller\Licence\Surrender\ConfirmationController::class,
-            Olcs\Controller\Licence\Surrender\CurrentDiscsController::class => Olcs\Controller\Licence\Surrender\CurrentDiscsController::class,
-            Olcs\Controller\Licence\Surrender\OperatorLicenceController::class => Olcs\Controller\Licence\Surrender\OperatorLicenceController::class,
-            Olcs\Controller\Licence\Surrender\ReviewController::class => Olcs\Controller\Licence\Surrender\ReviewController::class,
-            Olcs\Controller\Licence\Surrender\CommunityLicenceController::class => Olcs\Controller\Licence\Surrender\CommunityLicenceController::class,
-            Olcs\Controller\Licence\Surrender\DestroyController::class => Olcs\Controller\Licence\Surrender\DestroyController::class,
-            Olcs\Controller\Licence\Surrender\PrintSignReturnController::class => Olcs\Controller\Licence\Surrender\PrintSignReturnController::class,
-            \Olcs\Controller\Licence\Surrender\InformationChangedController::class => \Olcs\Controller\Licence\Surrender\InformationChangedController::class,
-
-            // Licence - Vehicles
-            \Olcs\Controller\Licence\Vehicle\AddVehicleSearchController::class => \Olcs\Controller\Licence\Vehicle\AddVehicleSearchController::class,
-            \Olcs\Controller\Licence\Vehicle\AddDuplicateVehicleController::class => \Olcs\Controller\Licence\Vehicle\AddDuplicateVehicleController::class,
-            \Olcs\Controller\Licence\Vehicle\RemoveVehicleController::class => \Olcs\Controller\Licence\Vehicle\RemoveVehicleController::class,
-            \Olcs\Controller\Licence\Vehicle\RemoveVehicleConfirmationController::class => \Olcs\Controller\Licence\Vehicle\RemoveVehicleConfirmationController::class,
-            \Olcs\Controller\Licence\Vehicle\TransferVehicleController::class => \Olcs\Controller\Licence\Vehicle\TransferVehicleController::class,
-            \Olcs\Controller\Licence\Vehicle\ViewVehicleController::class => \Olcs\Controller\Licence\Vehicle\ViewVehicleController::class,
-            \Olcs\Controller\Licence\Vehicle\TransferVehicleConfirmationController::class => \Olcs\Controller\Licence\Vehicle\TransferVehicleConfirmationController::class,
-            \Olcs\Controller\Licence\Vehicle\Reprint\ReprintLicenceVehicleDiscController::class => \Olcs\Controller\Licence\Vehicle\Reprint\ReprintLicenceVehicleDiscController::class,
-            \Olcs\Controller\Licence\Vehicle\Reprint\ReprintLicenceVehicleDiscConfirmationController::class => \Olcs\Controller\Licence\Vehicle\Reprint\ReprintLicenceVehicleDiscConfirmationController::class,
-
-            // Process Signature from GOV.UK Account
-            \Olcs\Controller\SignatureVerificationController::class => \Olcs\Controller\SignatureVerificationController::class,
         ),
         'factories' => array(
             CookieSettingsController::class => CookieSettingsControllerFactory::class,
             ListVehicleController::class => \Olcs\Controller\Licence\Vehicle\ListVehicleControllerFactory::class,
             SessionTimeoutController::class => \Olcs\Controller\SessionTimeoutControllerFactory::class,
             \Olcs\Controller\Licence\Vehicle\SwitchBoardController::class => \Olcs\Controller\Licence\Vehicle\SwitchBoardControllerFactory::class,
-            \Olcs\Controller\Auth\LoginController::class => \Olcs\Controller\Auth\LoginControllerFactory::class
+            \Olcs\Controller\Auth\LoginController::class => \Olcs\Controller\Auth\LoginControllerFactory::class,
+            CookieDetailsController::class => DetailsControllerFactory::class,
+
+            // License - Surrender
+            Olcs\Controller\Licence\Surrender\ReviewContactDetailsController::class => Olcs\Controller\Licence\Surrender\ReviewContactDetailsControllerFactory::class,
+            Olcs\Controller\Licence\Surrender\AddressDetailsController::class =>
+                Olcs\Controller\Licence\Surrender\AddressDetailsControllerFactory::class,
+            Olcs\Controller\Licence\Surrender\StartController::class => Olcs\Controller\Licence\Surrender\StartControllerFactory::class,
+            Olcs\Controller\Licence\Surrender\DeclarationController::class => Olcs\Controller\Licence\Surrender\DeclarationControllerFactory::class,
+            Olcs\Controller\Licence\Surrender\ConfirmationController::class => Olcs\Controller\Licence\Surrender\ConfirmationControllerFactory::class,
+            Olcs\Controller\Licence\Surrender\CurrentDiscsController::class => Olcs\Controller\Licence\Surrender\CurrentDiscsControllerFactory::class,
+            Olcs\Controller\Licence\Surrender\OperatorLicenceController::class => Olcs\Controller\Licence\Surrender\OperatorLicenceControllerFactory::class,
+            Olcs\Controller\Licence\Surrender\ReviewController::class => Olcs\Controller\Licence\Surrender\ReviewControllerFactory::class,
+            Olcs\Controller\Licence\Surrender\CommunityLicenceController::class => Olcs\Controller\Licence\Surrender\CommunityLicenceControllerFactory::class,
+            Olcs\Controller\Licence\Surrender\DestroyController::class => Olcs\Controller\Licence\Surrender\DestroyControllerFactory::class,
+            Olcs\Controller\Licence\Surrender\PrintSignReturnController::class => Olcs\Controller\Licence\Surrender\PrintSignReturnControllerFactory::class,
+            \Olcs\Controller\Licence\Surrender\InformationChangedController::class => \Olcs\Controller\Licence\Surrender\InformationChangedControllerFactory::class,
+            // Licence - Vehicles
+            \Olcs\Controller\Licence\Vehicle\AddVehicleSearchController::class => \Olcs\Controller\Licence\Vehicle\AddVehicleSearchControllerFactory::class,
+            \Olcs\Controller\Licence\Vehicle\AddDuplicateVehicleController::class => \Olcs\Controller\Licence\Vehicle\AddDuplicateVehicleControllerFactory::class,
+            \Olcs\Controller\Licence\Vehicle\RemoveVehicleController::class => \Olcs\Controller\Licence\Vehicle\RemoveVehicleControllerFactory::class,
+            \Olcs\Controller\Licence\Vehicle\RemoveVehicleConfirmationController::class => \Olcs\Controller\Licence\Vehicle\RemoveVehicleConfirmationControllerFactory::class,
+            \Olcs\Controller\Licence\Vehicle\TransferVehicleController::class => \Olcs\Controller\Licence\Vehicle\TransferVehicleControllerFactory::class,
+            \Olcs\Controller\Licence\Vehicle\ViewVehicleController::class => \Olcs\Controller\Licence\Vehicle\ViewVehicleControllerFactory::class,
+            \Olcs\Controller\Licence\Vehicle\TransferVehicleConfirmationController::class => \Olcs\Controller\Licence\Vehicle\TransferVehicleConfirmationControllerFactory::class,
+            \Olcs\Controller\Licence\Vehicle\Reprint\ReprintLicenceVehicleDiscController::class => \Olcs\Controller\Licence\Vehicle\Reprint\ReprintLicenceVehicleDiscControllerFactory::class,
+            \Olcs\Controller\Licence\Vehicle\Reprint\ReprintLicenceVehicleDiscConfirmationController::class => \Olcs\Controller\Licence\Vehicle\Reprint\ReprintLicenceVehicleDiscConfirmationControllerFactory::class,
+            PromptController::class => \Olcs\Controller\PromptControllerFactory::class,
+            // Process Signature from GOV.UK Account
+            \Olcs\Controller\SignatureVerificationController::class => \Olcs\Controller\SignatureVerificationControllerFactory::class,
         ),
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',

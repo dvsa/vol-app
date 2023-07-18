@@ -5,18 +5,43 @@ namespace Olcs\Controller\Licence\Surrender;
 use Common\Data\Mapper\Licence\Surrender\CurrentDiscs as CurrentDiscsMapper;
 use Common\Form\Form;
 use Common\RefData;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
-use Dvsa\Olcs\Transfer\Query\Licence\GoodsDiscCount;
-use Dvsa\Olcs\Transfer\Query\Licence\PsvDiscCount;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
 use Olcs\Form\Model\Form\Surrender\CurrentDiscs\CurrentDiscs;
+use Permits\Data\Mapper\MapperManager;
 
 class CurrentDiscsController extends AbstractSurrenderController
 {
     use ReviewRedirect;
+
     /**
      * @var Form
      */
     protected $form;
+
+    protected ScriptFactory $scriptFactory;
+
+    /**
+     * @param TranslationHelperService $translationHelper
+     * @param FormHelperService $formHelper
+     * @param TableFactory $tableBuilder
+     * @param MapperManager $mapperManager
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     */
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        TableFactory $tableBuilder,
+        MapperManager $mapperManager,
+        FlashMessengerHelperService $flashMessengerHelper,
+        ScriptFactory $scriptFactory
+    ) {
+        $this->scriptFactory = $scriptFactory;
+        parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessengerHelper);
+    }
 
     public function indexAction()
     {
@@ -26,7 +51,7 @@ class CurrentDiscsController extends AbstractSurrenderController
         $this->form->setData($formData);
 
         $params = $this->getViewVariables();
-        $this->getServiceLocator()->get('Script')->loadFiles(['licence-surrender-current-discs']);
+        $this->scriptFactory->loadFiles(['licence-surrender-current-discs']);
 
         return $this->renderView($params);
     }
@@ -37,12 +62,10 @@ class CurrentDiscsController extends AbstractSurrenderController
         $formData = (array)$this->getRequest()->getPost();
         $this->form->setData($formData);
 
-
         $validForm = $this->form->isValid();
         if (!$this->checkDiscCount($this->form->getData())) {
             $messages = $this->form->getMessages();
-            $translator = $this->getServiceLocator()->get('Helper\Translation');
-            $messages['headerSection']['header'] = ["disc_count_mismatch" => $translator->translate('licence.surrender.current_discs.disc_count_mismatch')];
+            $messages['headerSection']['header'] = ["disc_count_mismatch" => $this->translationHelper->translate('licence.surrender.current_discs.disc_count_mismatch')];
             $this->form->setMessages($messages);
             $validForm = false;
         }
@@ -57,9 +80,9 @@ class CurrentDiscsController extends AbstractSurrenderController
             }
         }
 
-        $this->hlpFlashMsgr->addUnknownError();
+        $this->flashMessengerHelper->addUnknownError();
         $params = $this->getViewVariables();
-        $this->getServiceLocator()->get('Script')->loadFiles(['licence-surrender-current-discs']);
+        $this->scriptFactory->loadFiles(['licence-surrender-current-discs']);
 
         return $this->renderView($params);
     }
@@ -95,13 +118,11 @@ class CurrentDiscsController extends AbstractSurrenderController
      */
     protected function getViewVariables(): array
     {
-        /** @var TranslationHelperService $translator */
-        $translator = $this->getServiceLocator()->get('Helper\Translation');
         $numberOfDiscs = $this->getNumberOfDiscs();
         return [
             'title' => 'licence.surrender.current_discs.title',
             'licNo' => $this->data['surrender']['licence']['licNo'],
-            'content' => $translator->translateReplace(
+            'content' => $this->translationHelper->translateReplace(
                 'licence.surrender.current_discs.content',
                 [$numberOfDiscs]
             ),

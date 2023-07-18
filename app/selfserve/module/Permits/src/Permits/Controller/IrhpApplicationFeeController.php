@@ -5,11 +5,16 @@ namespace Permits\Controller;
 use Common\Controller\Traits\GenericReceipt;
 use Common\RefData;
 use Common\Service\Cqrs\Response as CqrsResponse;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableFactory;
 use Common\Util\FlashMessengerTrait;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\SubmitApplication;
 use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePaymentCmd;
 use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees;
 use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
+use Laminas\Http\Response as HttpResponse;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractSelfserveController;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
@@ -20,9 +25,8 @@ use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
 use Permits\Controller\Config\Table\TableConfig;
 use Permits\Data\Mapper\IrhpApplicationFeeSummary;
+use Permits\Data\Mapper\MapperManager;
 use Permits\View\Helper\IrhpApplicationSection;
-use Laminas\Http\Response as HttpResponse;
-use Laminas\View\Model\ViewModel;
 
 class IrhpApplicationFeeController extends AbstractSelfserveController
 {
@@ -87,6 +91,21 @@ class IrhpApplicationFeeController extends AbstractSelfserveController
     protected $currentMessages = [];
 
     /**
+     * @param TranslationHelperService $translationHelper
+     * @param FormHelperService $formHelper
+     * @param TableFactory $tableBuilder
+     * @param MapperManager $mapperManager
+     */
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        TableFactory $tableBuilder,
+        MapperManager $mapperManager
+    ) {
+        parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager);
+    }
+
+    /**
      * Attach messages to display in the current response
      *
      * @return void
@@ -124,13 +143,12 @@ class IrhpApplicationFeeController extends AbstractSelfserveController
         $errorMessage = !$response->isOk() ? 'feeNotPaidError' : '';
         $messages = $response->getResult()['messages'];
 
-        $translateHelper = $this->getServiceLocator()->get('Helper\Translation');
         foreach ($messages as $message) {
             if (is_array($message) && array_key_exists(RefData::ERR_WAIT, $message)) {
-                $errorMessage = $translateHelper->translate('payment.error.15sec');
+                $errorMessage = $this->translationHelper->translate('payment.error.15sec');
                 break;
             } elseif (is_array($message) && array_key_exists(RefData::ERR_NO_FEES, $message)) {
-                $errorMessage = $translateHelper->translate('payment.error.feepaid');
+                $errorMessage = $this->translationHelper->translate('payment.error.feepaid');
                 break;
             }
         }
@@ -153,11 +171,10 @@ class IrhpApplicationFeeController extends AbstractSelfserveController
             ]
         );
 
-        $translator = $this->getServiceLocator()->get('Helper\Translation');
         $this->placeholder()
             ->setPlaceholder(
                 'pageTitle',
-                $translator->translate($this->templateVarsConfig['payment']['browserTitle'])
+                $this->translationHelper->translate($this->templateVarsConfig['payment']['browserTitle'])
             );
 
         // render the gateway redirect
@@ -254,7 +271,7 @@ class IrhpApplicationFeeController extends AbstractSelfserveController
     {
         parent::retrieveData();
 
-        $this->data = $this->getServiceLocator()
+        $this->data = $this->mapperManager
             ->get(IrhpApplicationFeeSummary::class)
             ->mapForDisplay($this->data);
     }
