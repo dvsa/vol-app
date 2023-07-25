@@ -3,6 +3,7 @@
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\Addresses as CommonAddresses;
+use Common\Service\Helper\FormHelperService;
 
 /**
  * Addresses Form
@@ -11,6 +12,13 @@ use Common\FormService\Form\Lva\Addresses as CommonAddresses;
  */
 class Addresses extends CommonAddresses
 {
+    protected FormHelperService $formHelper;
+
+    public function __construct(FormHelperService $formHelper)
+    {
+        parent::__construct($formHelper);
+    }
+
     /**
      * Alter Form
      *

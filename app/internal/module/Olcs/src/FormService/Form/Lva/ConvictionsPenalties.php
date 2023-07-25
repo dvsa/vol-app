@@ -1,14 +1,11 @@
 <?php
 
-/**
- * ConvictionsPenalties Form
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
-
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\ConvictionsPenalties as CommonConvictionsPenalties;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Helper\UrlHelperService;
 
 /**
  * ConvictionsPenalties Form
@@ -17,6 +14,18 @@ use Common\FormService\Form\Lva\ConvictionsPenalties as CommonConvictionsPenalti
  */
 class ConvictionsPenalties extends CommonConvictionsPenalties
 {
+    protected TranslationHelperService $translator;
+    protected UrlHelperService $urlHelper;
+    protected FormHelperService $formHelper;
+
+    public function __construct(
+        FormHelperService $formHelper,
+        TranslationHelperService $translator,
+        UrlHelperService $urlHelper
+    ) {
+        parent::__construct($formHelper, $translator, $urlHelper);
+    }
+
     /**
      * Make form alterations
      *

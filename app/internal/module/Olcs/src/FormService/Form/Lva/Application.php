@@ -1,13 +1,10 @@
 <?php
 
-/**
- * Application Form
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\Application as CommonApplication;
+use Common\Service\Helper\FormHelperService;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Application Form
@@ -16,6 +13,14 @@ use Common\FormService\Form\Lva\Application as CommonApplication;
  */
 class Application extends CommonApplication
 {
+    protected FormHelperService $formHelper;
+    protected AuthorizationService $authService;
+
+    public function __construct(FormHelperService $formHelper, AuthorizationService $authService)
+    {
+        parent::__construct($formHelper, $authService);
+    }
+
     public function alterForm($form)
     {
         parent::alterForm($form);

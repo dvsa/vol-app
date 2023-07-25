@@ -1,13 +1,9 @@
 <?php
 
-/**
- * Undertakings Form
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\Undertakings as CommonUndertakings;
+use Common\Service\Helper\FormHelperService;
 
 /**
  * Undertakings Form
@@ -16,6 +12,13 @@ use Common\FormService\Form\Lva\Undertakings as CommonUndertakings;
  */
 class Undertakings extends CommonUndertakings
 {
+    protected FormHelperService $formHelper;
+
+    public function __construct(FormHelperService $formHelper)
+    {
+        parent::__construct($formHelper);
+    }
+
     /**
      * Make form alterations
      *
@@ -28,7 +31,7 @@ class Undertakings extends CommonUndertakings
 
         $form->get('form-actions')->get('save')->setLabel('internal.save.button');
 
-        $this->getFormHelper()->remove($form, 'interim');
+        $this->formHelper->remove($form, 'interim');
 
         return $form;
     }

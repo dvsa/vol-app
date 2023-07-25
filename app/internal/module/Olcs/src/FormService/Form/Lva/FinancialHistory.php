@@ -4,6 +4,8 @@ namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\FinancialHistory as CommonFinancialHistory;
 use Common\Form\Form;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
 
 /**
  * FinancialHistory Form
@@ -12,6 +14,17 @@ use Common\Form\Form;
  */
 class FinancialHistory extends CommonFinancialHistory
 {
+    protected TranslationHelperService $translator;
+    protected FormHelperService $formHelper;
+
+
+    public function __construct(
+        FormHelperService $formHelper,
+        TranslationHelperService $translator
+    ) {
+        parent::__construct($formHelper, $translator);
+    }
+
     /**
      * Make form alterations
      *

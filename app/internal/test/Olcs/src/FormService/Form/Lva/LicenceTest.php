@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Licence Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace OlcsTest\FormService\Form\Lva;
 
 use Mockery as m;
@@ -13,6 +8,7 @@ use Olcs\FormService\Form\Lva\Licence;
 use OlcsTest\Bootstrap;
 use Laminas\Form\Fieldset;
 use Laminas\Form\Form;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Licence Test
@@ -29,8 +25,7 @@ class LicenceTest extends MockeryTestCase
     {
         $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService');
 
-        $this->sut = new Licence();
-        $this->sut->setFormHelper($this->formHelper);
+        $this->sut = new Licence($this->formHelper, m::mock(AuthorizationService::class));
     }
 
     public function testAlterForm()

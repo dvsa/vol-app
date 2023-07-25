@@ -4,6 +4,8 @@ namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\TaxiPhv as CommonTaxiPhv;
 use Common\Form\Form;
+use Common\Service\Helper\FormHelperService;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Application Taxi PHV Form
@@ -12,6 +14,13 @@ use Common\Form\Form;
  */
 class ApplicationTaxiPhv extends CommonTaxiPhv
 {
+    protected FormHelperService $formHelper;
+    protected AuthorizationService $authService;
+
+    public function __construct(FormHelperService $formHelper, AuthorizationService $authService)
+    {
+        parent::__construct($formHelper, $authService);
+    }
     /**
      * Alter form
      *

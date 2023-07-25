@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Application Business Details Form Service Test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 namespace OlcsTest\FormService\Form\Lva;
 
 use Mockery as m;
@@ -29,9 +24,7 @@ class ApplicationBusinessDetailsTest extends MockeryTestCase
         $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService')->makePartial();
         $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
 
-        $this->sut = new ApplicationBusinessDetails();
-        $this->sut->setFormHelper($this->formHelper);
-        $this->sut->setFormServiceLocator($this->fsm);
+        $this->sut = new ApplicationBusinessDetails($this->formHelper, $this->fsm);
     }
 
     public function testAlterForm()

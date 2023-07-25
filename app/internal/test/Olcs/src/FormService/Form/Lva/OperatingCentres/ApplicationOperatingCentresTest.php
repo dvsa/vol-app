@@ -1,24 +1,16 @@
 <?php
 
-/**
- * Application Operating Centres Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace OlcsTest\FormService\Form\Lva\OperatingCentres;
 
 use Olcs\FormService\Form\Lva\OperatingCentres\ApplicationOperatingCentres;
 use Common\Form\Elements\Types\Table;
-use Common\FormService\FormServiceInterface;
 use Common\FormService\FormServiceManager;
 use Common\Service\Table\TableBuilder;
 use OlcsTest\Bootstrap;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Laminas\Form\Element;
 use Laminas\Form\Fieldset;
 use Laminas\Form\Form;
-use Laminas\Http\Request;
 use Common\Service\Helper\FormHelperService;
 use Common\RefData;
 
@@ -53,7 +45,7 @@ class ApplicationOperatingCentresTest extends MockeryTestCase
 
         $this->form = m::mock(Form::class);
 
-        $lvaApplication = m::mock(FormServiceInterface::class);
+        $lvaApplication = m::mock(\Common\Form\Form::class);
         $lvaApplication->shouldReceive('alterForm')
             ->once()
             ->with($this->form);
@@ -66,9 +58,7 @@ class ApplicationOperatingCentresTest extends MockeryTestCase
             ->with('Lva\OperatingCentres')
             ->andReturn($this->form);
 
-        $this->sut = new ApplicationOperatingCentres();
-        $this->sut->setFormHelper($this->mockFormHelper);
-        $this->sut->setFormServiceLocator($fsm);
+        $this->sut = new ApplicationOperatingCentres($this->mockFormHelper, m::mock(\ZfcRbac\Service\AuthorizationService::class), $this->tableBuilder, $fsm);
     }
 
     public function testGetForm()

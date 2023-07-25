@@ -3,6 +3,7 @@
 namespace OlcsTest\FormService\Form\Lva;
 
 use Common\Form\Form;
+use Common\Service\Helper\TranslationHelperService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\FinancialHistory;
@@ -24,11 +25,8 @@ class FinancialHistoryTest extends MockeryTestCase
     public function setUp(): void
     {
         $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
-        $this->fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
-
-        $this->sut = new FinancialHistory();
-        $this->sut->setFormHelper($this->formHelper);
-        $this->sut->setFormServiceLocator($this->fsm);
+        $this->translator = m::mock(TranslationHelperService::class);
+        $this->sut = new FinancialHistory($this->formHelper, $this->translator);
     }
 
     public function testGetForm()

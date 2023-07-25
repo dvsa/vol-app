@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Licence Trailers
- *
- * @author Alex Peshkov <alex.pehkov@valtech.co.uk>
- */
 namespace OlcsTest\FormService\Form\Lva;
 
 use Olcs\FormService\Form\Lva\LicenceTrailers;
@@ -33,8 +28,7 @@ class LicenceTrailersTest extends MockeryTestCase
     {
         $this->formHelper = m::mock(FormHelperService::class);
 
-        $this->sut = new LicenceTrailers();
-        $this->sut->setFormHelper($this->formHelper);
+        $this->sut = new LicenceTrailers($this->formHelper);
     }
 
     public function testGetForm()

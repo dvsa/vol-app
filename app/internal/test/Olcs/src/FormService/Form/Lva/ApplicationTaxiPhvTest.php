@@ -21,9 +21,7 @@ class ApplicationTaxiPhvTest extends MockeryTestCase
         $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
         $this->fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
 
-        $this->sut = new ApplicationTaxiPhv();
-        $this->sut->setFormHelper($this->formHelper);
-        $this->sut->setFormServiceLocator($this->fsm);
+        $this->sut = new ApplicationTaxiPhv($this->formHelper, m::mock(\ZfcRbac\Service\AuthorizationService::class));
     }
 
     public function testGetForm()

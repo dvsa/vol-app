@@ -1,13 +1,10 @@
 <?php
 
-/**
- * Application Psv Vehicles
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\PsvVehicles as CommonPsvVehicles;
+use Common\Service\Helper\FormHelperService;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Application Psv Vehicles
@@ -16,6 +13,14 @@ use Common\FormService\Form\Lva\PsvVehicles as CommonPsvVehicles;
  */
 class ApplicationPsvVehicles extends CommonPsvVehicles
 {
+    protected FormHelperService $formHelper;
+    protected AuthorizationService $authService;
+
+    public function __construct(FormHelperService $formHelper, AuthorizationService $authService)
+    {
+        parent::__construct($formHelper, $authService);
+    }
+
     protected function alterForm($form)
     {
         parent::alterForm($form);
