@@ -270,7 +270,9 @@ class AbstractLvaFormServiceFactory implements AbstractFactoryInterface
                 $urlHelper = $serviceLocator->get(UrlHelperService::class);
                 return new ApplicationConvictionsPenalties($formHelper, $translator, $urlHelper);
             case self::FORM_SERVICE_CLASS_ALIASES['lva-licence-convictions_penalties']:
-                return new ConvictionsPenalties();
+                $translator = $serviceLocator->get(TranslationHelperService::class);
+                $urlHelper = $serviceLocator->get(UrlHelperService::class);
+                return new ConvictionsPenalties($formHelper, $translator, $urlHelper);
 
             case self::FORM_SERVICE_CLASS_ALIASES['lva-application-vehicles_psv']:
                 $authService = $serviceLocator->get(AuthorizationService::class);
