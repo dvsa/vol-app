@@ -2,9 +2,12 @@
 
 namespace Olcs\FormService\Form\Lva;
 
+use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FormHelperService;
 use Laminas\Form\Form;
 use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
 use Common\FormService\Form\Lva\ApplicationGoodsVehicles as CommonGoodsVehicles;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Application Goods vehicles
@@ -14,6 +17,18 @@ use Common\FormService\Form\Lva\ApplicationGoodsVehicles as CommonGoodsVehicles;
 class ApplicationGoodsVehicles extends CommonGoodsVehicles
 {
     use ButtonsAlterations;
+
+    protected FormHelperService $formHelper;
+    protected AuthorizationService $authService;
+    protected FormServiceManager $formServiceLocator;
+
+    public function __construct(
+        FormHelperService $formHelper,
+        AuthorizationService $authService,
+        FormServiceManager $formServiceLocator
+    ) {
+        parent::__construct($formHelper, $authService, $formServiceLocator);
+    }
 
     /**
      * Make form alterations

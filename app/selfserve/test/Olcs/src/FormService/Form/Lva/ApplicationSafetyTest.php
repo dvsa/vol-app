@@ -28,8 +28,7 @@ class ApplicationSafetyTest extends MockeryTestCase
     public function setUp(): void
     {
         $this->fh = m::mock(FormHelperService::class)->makePartial();
-        $this->sut = new ApplicationSafety();
-        $this->sut->setFormHelper($this->fh);
+        $this->sut = new ApplicationSafety($this->fh);
     }
 
     public function testAlterForm()

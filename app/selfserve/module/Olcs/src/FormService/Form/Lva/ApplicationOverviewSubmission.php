@@ -24,7 +24,7 @@ class ApplicationOverviewSubmission extends AbstractOverviewSubmission
         parent::alterForm($form, $data, $params);
 
         if ($params['isReadyToSubmit']) {
-            $this->getFormHelper()->remove($form, 'description');
+            $this->formHelper->remove($form, 'description');
         } else {
             $form->get('description')->setLabel('application.overview.submission.desc.notcomplete');
         }

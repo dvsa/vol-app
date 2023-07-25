@@ -3,6 +3,7 @@
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\Safety as CommonSafety;
+use Common\Service\Helper\FormHelperService;
 
 /**
  * Licence safety
@@ -11,6 +12,13 @@ use Common\FormService\Form\Lva\Safety as CommonSafety;
  */
 class LicenceSafety extends CommonSafety
 {
+    protected FormHelperService $formHelper;
+
+    public function __construct(FormHelperService $formHelper)
+    {
+        parent::__construct($formHelper);
+    }
+
     /**
      * Returns form
      *
@@ -21,7 +29,7 @@ class LicenceSafety extends CommonSafety
         $form = parent::getForm();
 
         $form->get('form-actions')->get('save')->setAttribute('class', 'govuk-button');
-        $this->getFormHelper()->remove($form, 'form-actions->cancel');
+        $this->formHelper->remove($form, 'form-actions->cancel');
 
         return $form;
     }

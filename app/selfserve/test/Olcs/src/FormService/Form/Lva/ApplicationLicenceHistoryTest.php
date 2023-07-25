@@ -29,8 +29,7 @@ class ApplicationLicenceHistoryTest extends MockeryTestCase
     public function setUp(): void
     {
         $this->fh = m::mock(FormHelperService::class)->makePartial();
-        $this->sut = new ApplicationLicenceHistory();
-        $this->sut->setFormHelper($this->fh);
+        $this->sut = new ApplicationLicenceHistory($this->fh);
     }
 
     public function testAlterForm()

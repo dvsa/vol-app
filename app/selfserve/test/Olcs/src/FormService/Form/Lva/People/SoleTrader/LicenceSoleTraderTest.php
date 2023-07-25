@@ -2,20 +2,15 @@
 
 namespace OlcsTest\FormService\Form\Lva\People\SoleTrader;
 
-use Common\Form\Elements\InputFilters\Lva\BackToLicenceActionLink;
-use Common\FormService\FormServiceInterface;
 use Common\FormService\FormServiceManager;
+use Common\Service\Lva\PeopleLvaService;
 use OlcsTest\Bootstrap;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\People\SoleTrader\LicenceSoleTrader as Sut;
 use Laminas\Form\Form;
+use ZfcRbac\Service\AuthorizationService;
 
-/**
- * Licence Sole Trader Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class LicenceSoleTraderTest extends MockeryTestCase
 {
     protected $sut;
@@ -27,12 +22,14 @@ class LicenceSoleTraderTest extends MockeryTestCase
     protected $sm;
 
     protected $mockLicenceService;
+    private $peopleLvaService;
 
     public function setUp(): void
     {
         $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService');
 
-        $this->mockLicenceService = m::mock(FormServiceInterface::class);
+        $this->mockLicenceService = m::mock(Form::class);
+        $this->peopleLvaService = m::mock(PeopleLvaService::class);
 
         $this->sm = Bootstrap::getServiceManager();
 
@@ -41,9 +38,7 @@ class LicenceSoleTraderTest extends MockeryTestCase
         $this->fsm->setServiceLocator($this->sm);
         $this->fsm->setService('lva-licence', $this->mockLicenceService);
 
-        $this->sut = new Sut();
-        $this->sut->setFormHelper($this->formHelper);
-        $this->sut->setFormServiceLocator($this->fsm);
+        $this->sut = new Sut($this->formHelper, m::mock(AuthorizationService::class), $this->peopleLvaService, $this->fsm);
     }
 
     /**
@@ -141,7 +136,7 @@ class LicenceSoleTraderTest extends MockeryTestCase
             ->once()
             ->with('foo');
 
-        $form = m::mock();
+        $form = m::mock(Form::class);
 
         $this->mockLicenceService->shouldReceive('alterForm')
             ->once()
@@ -154,12 +149,11 @@ class LicenceSoleTraderTest extends MockeryTestCase
             ->with('Lva\SoleTrader')
             ->andReturn($form);
 
-        $peopleService = m::mock();
-        $peopleService->shouldReceive('lockPersonForm')
+        $this->peopleLvaService->shouldReceive('lockPersonForm')
             ->once()
             ->with($form, 'bar');
 
-        $this->sm->setService('Lva\People', $peopleService);
+        $this->sm->setService('Lva\People', $this->peopleLvaService);
 
         $this->sut->getForm($params);
     }

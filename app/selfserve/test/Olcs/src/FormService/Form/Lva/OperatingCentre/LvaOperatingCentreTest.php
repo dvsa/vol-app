@@ -3,6 +3,8 @@
 namespace OlcsTest\FormService\Form\Lva\OperatingCentre;
 
 use Common\FormService\FormServiceManager;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Helper\UrlHelperService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\Form\Form;
@@ -40,7 +42,7 @@ class LvaOperatingCentreTest extends MockeryTestCase
     {
         $this->formHelper = m::mock(FormHelperService::class);
 
-        $mockTranslator = m::mock();
+        $mockTranslator = m::mock(TranslationHelperService::class);
         $mockTranslator->shouldReceive('translate')
             ->andReturnUsing(
                 function ($string) {
@@ -54,7 +56,7 @@ class LvaOperatingCentreTest extends MockeryTestCase
                 }
             );
 
-        $mockUrl = m::mock();
+        $mockUrl = m::mock(UrlHelperService::class);
         $mockUrl->shouldReceive('fromRoute')
             ->andReturnUsing(
                 function ($route, $params) {
@@ -62,16 +64,7 @@ class LvaOperatingCentreTest extends MockeryTestCase
                 }
             );
 
-        $sm = m::mock(ServiceManager::class)->makePartial();
-        $sm->setService('Helper\Translation', $mockTranslator);
-        $sm->setService('Helper\Url', $mockUrl);
-
-        $fsm = m::mock(FormServiceManager::class)->makePartial();
-        $fsm->setServiceLocator($sm);
-
-        $this->sut = new LvaOperatingCentre();
-        $this->sut->setFormHelper($this->formHelper);
-        $this->sut->setFormServiceLocator($fsm);
+        $this->sut = new LvaOperatingCentre($this->formHelper, $mockTranslator, $mockUrl);
     }
 
     /**

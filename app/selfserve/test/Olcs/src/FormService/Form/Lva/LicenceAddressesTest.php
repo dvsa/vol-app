@@ -24,18 +24,12 @@ class LicenceAddressesTest extends MockeryTestCase
     public function setUp(): void
     {
         $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService')->makePartial();
-        $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
 
-        $this->sut = new LicenceAddresses();
-        $this->sut->setFormServiceLocator($this->fsm);
-        $this->sut->setFormHelper($this->formHelper);
+        $this->sut = new LicenceAddresses($this->formHelper);
     }
 
     public function testGetForm()
     {
-        $mockAddresses = m::mock('\Common\FormService\FormServiceInterface');
-        $this->fsm->setService('lva-licence-addresses', $mockAddresses);
-
         $formActions = m::mock();
         $formActions->shouldReceive('get')
             ->with('save')

@@ -3,8 +3,10 @@
 namespace Olcs\FormService\Form\Lva\TransportManager;
 
 use Common\FormService\Form\Lva\AbstractLvaFormService;
+use Common\Service\Helper\FormHelperService;
 use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
 use Common\Form\Form;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Application Transport Manager
@@ -16,6 +18,15 @@ class ApplicationTransportManager extends AbstractLvaFormService
 {
     use ButtonsAlterations;
 
+    protected FormHelperService $formHelper;
+    protected AuthorizationService $authService;
+
+    public function __construct(FormHelperService $formHelper, AuthorizationService $authService)
+    {
+        $this->formHelper = $formHelper;
+        $this->authService = $authService;
+    }
+
     /**
      * Get form
      *
@@ -23,7 +34,7 @@ class ApplicationTransportManager extends AbstractLvaFormService
      */
     public function getForm()
     {
-        $form = $this->getFormHelper()->createForm('Lva\TransportManagers');
+        $form = $this->formHelper->createForm('Lva\TransportManagers');
 
         $this->alterForm($form);
 

@@ -11,6 +11,7 @@ use Laminas\Form\Fieldset;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 use Common\FormService\FormServiceManager;
 use Common\Service\Table\TableBuilder;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Application Goods Vehicles Form Test
@@ -34,9 +35,7 @@ class ApplicationGoodsVehiclesTest extends MockeryTestCase
     {
         $this->fh = m::mock(FormHelperService::class)->makePartial();
         $this->fsm = m::mock(FormServiceManager::class)->makePartial();
-        $this->sut = new ApplicationGoodsVehicles();
-        $this->sut->setFormHelper($this->fh);
-        $this->sut->setFormServiceLocator($this->fsm);
+        $this->sut = new ApplicationGoodsVehicles($this->fh, m::mock(AuthorizationService::class), $this->fsm);
     }
 
     public function testAlterForm()

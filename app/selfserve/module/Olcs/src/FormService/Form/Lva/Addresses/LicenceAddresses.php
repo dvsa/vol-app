@@ -3,6 +3,7 @@
 namespace Olcs\FormService\Form\Lva\Addresses;
 
 use Common\FormService\Form\Lva\Addresses as CommonAddress;
+use Common\Service\Helper\FormHelperService;
 use Laminas\Form\Form;
 
 /**
@@ -12,6 +13,12 @@ use Laminas\Form\Form;
  */
 class LicenceAddresses extends CommonAddress
 {
+    protected FormHelperService $formHelper;
+
+    public function __construct(FormHelperService $formHelper)
+    {
+        parent::__construct($formHelper);
+    }
     /**
      * Make form alterations
      *
@@ -24,7 +31,7 @@ class LicenceAddresses extends CommonAddress
     {
         parent::alterForm($form, $params);
         $form->get('form-actions')->get('save')->setAttribute('class', 'govuk-button');
-        $this->getFormHelper()->remove($form, 'form-actions->cancel');
+        $this->formHelper->remove($form, 'form-actions->cancel');
 
         return $form;
     }

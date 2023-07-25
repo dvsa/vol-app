@@ -3,6 +3,8 @@
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\BusinessDetails\ApplicationBusinessDetails as CommonApplicationBusinessDetails;
+use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FormHelperService;
 use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
 use Common\Form\Form;
 
@@ -15,6 +17,14 @@ class ApplicationBusinessDetails extends CommonApplicationBusinessDetails
 {
     use ButtonsAlterations;
 
+    protected FormServiceManager $formServiceLocator;
+    protected FormHelperService $formHelper;
+
+    public function __construct(FormHelperService $formHelper, FormServiceManager $formServiceLocator)
+    {
+        parent::__construct($formHelper, $formServiceLocator);
+    }
+
     /**
      * Alter form
      *
@@ -25,11 +35,11 @@ class ApplicationBusinessDetails extends CommonApplicationBusinessDetails
     {
         parent::alterForm($form, $params);
 
-        $this->getFormHelper()->remove($form, 'allow-email');
+        $this->formHelper->remove($form, 'allow-email');
 
         // if we have got any in force licences or submitted licence application lock the elements down
         if ($params['hasInforceLicences'] || ($params['hasOrganisationSubmittedLicenceApplication'] ?? false)) {
-            $this->getFormServiceLocator()->get('lva-lock-business_details')->alterForm($form);
+            $this->formServiceLocator->get('lva-lock-business_details')->alterForm($form);
         }
         $this->alterButtons($form);
     }

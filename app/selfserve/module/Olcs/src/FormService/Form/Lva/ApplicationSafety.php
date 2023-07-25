@@ -3,6 +3,7 @@
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\Safety;
+use Common\Service\Helper\FormHelperService;
 use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
 
 /**
@@ -14,6 +15,13 @@ class ApplicationSafety extends Safety
 {
     use ButtonsAlterations;
 
+    protected FormHelperService $formHelper;
+
+    public function __construct(FormHelperService $formHelper)
+    {
+        parent::__construct($formHelper);
+    }
+
     /**
      * Returns form
      *
@@ -21,7 +29,7 @@ class ApplicationSafety extends Safety
      */
     public function getForm()
     {
-        $form = $this->getFormHelper()->createForm('Lva\Safety');
+        $form = $this->formHelper->createForm('Lva\Safety');
 
         $this->alterButtons($form);
 

@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Vehicles Vehicle Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace OlcsTest\FormService\Form\Lva;
 
 use Mockery as m;
@@ -26,8 +21,7 @@ class VehiclesVehicleTest extends MockeryTestCase
     {
         $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService');
 
-        $this->sut = new VehiclesVehicle();
-        $this->sut->setFormHelper($this->formHelper);
+        $this->sut = new VehiclesVehicle($this->formHelper);
     }
 
     public function testAlterForm()

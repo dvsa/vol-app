@@ -11,6 +11,13 @@ use Common\RefData;
  */
 class VariationOverviewSubmission extends AbstractOverviewSubmission
 {
+    protected $translationHelper;
+    protected $formHelper;
+
+    public function __construct($translationHelper, $formHelper)
+    {
+        parent::__construct($translationHelper, $formHelper);
+    }
     /**
      * Make changes in form
      *

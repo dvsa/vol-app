@@ -3,9 +3,12 @@
 namespace Olcs\FormService\Form\Lva\OperatingCentres;
 
 use Common\FormService\Form\Lva\OperatingCentres\AbstractOperatingCentres;
+use Common\FormService\FormServiceManager;
+use Common\Service\Table\TableFactory;
 use Laminas\Form\Form;
 use Common\Service\Helper\FormHelperService;
 use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Application Operating Centres
@@ -15,6 +18,23 @@ use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
 class ApplicationOperatingCentres extends AbstractOperatingCentres
 {
     use ButtonsAlterations;
+
+    protected FormHelperService $formHelper;
+    protected AuthorizationService $authService;
+    protected $tableBuilder;
+    protected FormServiceManager $formServiceLocator;
+
+    public function __construct(
+        FormHelperService $formHelper,
+        AuthorizationService $authService,
+        $tableBuilder,
+        FormServiceManager $formServiceLocator
+    ) {
+        $this->formHelper = $formHelper;
+        $this->authService = $authService;
+        $this->tableBuilder = $tableBuilder;
+        $this->formServiceLocator = $formServiceLocator;
+    }
 
     /**
      * Alter form
@@ -26,7 +46,7 @@ class ApplicationOperatingCentres extends AbstractOperatingCentres
      */
     protected function alterForm(Form $form, array $params)
     {
-        $this->getFormServiceLocator()->get('lva-application')->alterForm($form);
+        $this->formServiceLocator->get('lva-application')->alterForm($form);
 
         parent::alterForm($form, $params);
         $this->alterButtons($form);
@@ -37,7 +57,7 @@ class ApplicationOperatingCentres extends AbstractOperatingCentres
         }
 
         if ($form->get('data')->has('totCommunityLicencesFieldset')) {
-            $this->getFormHelper()->alterElementLabel(
+            $this->formHelper->alterElementLabel(
                 $form->get('data')->get('totCommunityLicencesFieldset')->get('totCommunityLicences'),
                 '-external-app',
                 FormHelperService::ALTER_LABEL_APPEND

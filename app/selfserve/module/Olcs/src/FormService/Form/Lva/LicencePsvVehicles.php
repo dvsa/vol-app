@@ -2,7 +2,9 @@
 
 namespace Olcs\FormService\Form\Lva;
 
+use Common\Service\Helper\FormHelperService;
 use Laminas\Form\Form;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Licence Psv Vehicles
@@ -11,6 +13,13 @@ use Laminas\Form\Form;
  */
 class LicencePsvVehicles extends PsvVehicles
 {
+    protected FormHelperService $formHelper;
+    protected AuthorizationService $authService;
+
+    public function __construct(FormHelperService $formHelper, AuthorizationService $authService)
+    {
+        parent::__construct($formHelper, $authService);
+    }
     /**
      * Alter form
      *

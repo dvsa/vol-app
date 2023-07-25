@@ -10,6 +10,7 @@ use Laminas\Form\Form;
 use Laminas\Form\Fieldset;
 use Common\FormService\FormServiceManager;
 use Common\Service\Table\TableBuilder;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Licence Goods Vehicles Form Test
@@ -31,9 +32,7 @@ class LicenceGoodsVehiclesTest extends MockeryTestCase
     {
         $this->fh = m::mock(FormHelperService::class)->makePartial();
         $this->fsm = m::mock(FormServiceManager::class)->makePartial();
-        $this->sut = new LicenceGoodsVehicles();
-        $this->sut->setFormHelper($this->fh);
-        $this->sut->setFormServiceLocator($this->fsm);
+        $this->sut = new LicenceGoodsVehicles($this->fh, m::mock(AuthorizationService::class), $this->fsm);
     }
 
     public function testAlterForm()

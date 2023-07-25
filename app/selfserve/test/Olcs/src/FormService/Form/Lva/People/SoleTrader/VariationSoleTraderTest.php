@@ -2,14 +2,14 @@
 
 namespace OlcsTest\FormService\Form\Lva\People\SoleTrader;
 
-use Common\Form\Elements\InputFilters\Lva\BackToVariationActionLink;
-use Common\FormService\FormServiceInterface;
 use Common\FormService\FormServiceManager;
+use Common\Service\Lva\PeopleLvaService;
 use OlcsTest\Bootstrap;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\People\SoleTrader\VariationSoleTrader as Sut;
 use Laminas\Form\Form;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Variation Sole Trader Test
@@ -32,18 +32,17 @@ class VariationSoleTraderTest extends MockeryTestCase
     {
         $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService');
 
-        $this->mockVariationService = m::mock(FormServiceInterface::class);
+        $this->mockVariationService = m::mock(Form::class);
 
         $this->sm = Bootstrap::getServiceManager();
 
         /** @var FormServiceManager fsm */
         $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
-        $this->fsm->setServiceLocator($this->sm);
+        $this->peopleLvaService = m::mock(PeopleLvaService::class);
+
         $this->fsm->setService('lva-variation', $this->mockVariationService);
 
-        $this->sut = new Sut();
-        $this->sut->setFormHelper($this->formHelper);
-        $this->sut->setFormServiceLocator($this->fsm);
+        $this->sut = new Sut($this->formHelper, m::mock(AuthorizationService::class), $this->peopleLvaService, $this->fsm);
     }
 
     /**
@@ -64,7 +63,7 @@ class VariationSoleTraderTest extends MockeryTestCase
         $formActions->shouldReceive('has')->with('disqualify')->andReturn(true);
         $formActions->shouldReceive('remove')->once()->with('disqualify');
 
-        $form = m::mock();
+        $form = m::mock(Form::class);
 
         $this->mockVariationService->shouldReceive('alterForm')
             ->once()
@@ -102,7 +101,7 @@ class VariationSoleTraderTest extends MockeryTestCase
             ->once()
             ->with('foo');
 
-        $form = m::mock();
+        $form = m::mock(Form::class);
 
         $this->mockVariationService->shouldReceive('alterForm')
             ->once()
@@ -141,7 +140,7 @@ class VariationSoleTraderTest extends MockeryTestCase
             ->once()
             ->with('foo');
 
-        $form = m::mock();
+        $form = m::mock(Form::class);
 
         $this->mockVariationService->shouldReceive('alterForm')
             ->once()
@@ -154,12 +153,9 @@ class VariationSoleTraderTest extends MockeryTestCase
             ->with('Lva\SoleTrader')
             ->andReturn($form);
 
-        $peopleService = m::mock();
-        $peopleService->shouldReceive('lockPersonForm')
+        $this->peopleLvaService->shouldReceive('lockPersonForm')
             ->once()
             ->with($form, 'bar');
-
-        $this->sm->setService('Lva\People', $peopleService);
 
         $this->sut->getForm($params);
     }

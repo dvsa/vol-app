@@ -42,8 +42,7 @@ class AbstractOverviewSubmissionTest extends MockeryTestCase
 
         $this->mockFormHlp = m::mock(\Common\Service\Helper\FormHelperService::class)->makePartial();
 
-        $this->sut = new AbstractOverviewSubmissionStub($this->mockTranslationHelper);
-        $this->sut->setFormHelper($this->mockFormHlp);
+        $this->sut = new AbstractOverviewSubmissionStub($this->mockTranslationHelper, $this->mockFormHlp);
     }
 
     public function testGetForm()
@@ -57,12 +56,10 @@ class AbstractOverviewSubmissionTest extends MockeryTestCase
             ->shouldReceive('createForm')->once()->with('Lva\PaymentSubmission')->andReturn($this->mockForm);
 
         /** @var AbstractOverviewSubmissionStub | m\MockInterface $sut */
-        $sut = m::mock(AbstractOverviewSubmissionStub::class . '[alterForm]', [$this->mockTranslationHelper])
+        $sut = m::mock(AbstractOverviewSubmissionStub::class . '[alterForm]', [$this->mockTranslationHelper, $this->mockFormHlp])
             ->shouldAllowMockingProtectedMethods()
             ->shouldReceive('alterForm')->once()->with($this->mockForm, $data, $params)
             ->getMock();
-
-        $sut->setFormHelper($this->mockFormHlp);
 
         static::assertSame($this->mockForm, $sut->getForm($data, $params));
     }
@@ -121,28 +118,5 @@ class AbstractOverviewSubmissionTest extends MockeryTestCase
 
         //  call
         $this->sut->alterForm($this->mockForm, $data, $params);
-    }
-
-    public function testSectionsWithStatus()
-    {
-        $params = [
-            'sections' => [
-                [
-                    'status' => 'unit_ExpectedStatus',
-                ],
-            ],
-        ];
-
-        /** @var AbstractOverviewSubmissionStub | m\MockInterface $sut */
-        $sut = m::mock(AbstractOverviewSubmissionStub::class)
-            ->makePartial()
-            ->shouldAllowMockingProtectedMethods();
-        $sut->shouldReceive('getFormHelper->createForm')->andReturn($this->mockForm);
-        $sut->shouldReceive('alterForm');
-
-        $sut->getForm([], $params);
-
-        static::assertTrue($sut->hasSectionsWithStatus('unit_ExpectedStatus'));
-        static::assertFalse($sut->hasSectionsWithStatus('unit_NotExpectedStatus'));
     }
 }

@@ -3,6 +3,8 @@
 namespace OlcsTest\FormService\Form\Lva;
 
 use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Helper\UrlHelperService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\ApplicationFinancialEvidence;
@@ -10,6 +12,7 @@ use Laminas\Form\Form;
 use Laminas\Http\Request;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 use OlcsTest\Bootstrap;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Application Financial Evidence Form Test
@@ -38,8 +41,8 @@ class ApplicationFinancialEvidenceTest extends MockeryTestCase
     {
         $this->fh = m::mock(FormHelperService::class)->makePartial();
         $this->fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
-        $this->urlHelper = m::mock();
-        $this->translator = m::mock();
+        $this->urlHelper = m::mock(UrlHelperService::class);
+        $this->translator = m::mock(TranslationHelperService::class);
 
         $sm = Bootstrap::getServiceManager();
         $sm->setService('Helper\Url', $this->urlHelper);
@@ -47,9 +50,7 @@ class ApplicationFinancialEvidenceTest extends MockeryTestCase
 
         $this->fsm->shouldReceive('getServiceLocator')->andReturn($sm);
 
-        $this->sut = new ApplicationFinancialEvidence();
-        $this->sut->setFormHelper($this->fh);
-        $this->sut->setFormServiceLocator($this->fsm);
+        $this->sut = new ApplicationFinancialEvidence($this->fh, m::mock(AuthorizationService::class), $this->translator, $this->urlHelper);
     }
 
     public function testAlterForm()

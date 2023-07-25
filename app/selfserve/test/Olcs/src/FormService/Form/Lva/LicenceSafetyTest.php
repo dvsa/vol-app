@@ -2,6 +2,7 @@
 
 namespace OlcsTest\FormService\Form\Lva;
 
+use Laminas\Form\Form;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\LicenceSafety;
@@ -24,14 +25,12 @@ class LicenceSafetyTest extends MockeryTestCase
         $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService')->makePartial();
         $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
 
-        $this->sut = new LicenceSafety();
-        $this->sut->setFormServiceLocator($this->fsm);
-        $this->sut->setFormHelper($this->formHelper);
+        $this->sut = new LicenceSafety($this->formHelper);
     }
 
     public function testGetForm()
     {
-        $mockLicenceVehicles = m::mock('\Common\FormService\FormServiceInterface');
+        $mockLicenceVehicles = m::mock(Form::class);
         $this->fsm->setService('lva-licence-vehicles_psv', $mockLicenceVehicles);
 
         $formActions = m::mock();

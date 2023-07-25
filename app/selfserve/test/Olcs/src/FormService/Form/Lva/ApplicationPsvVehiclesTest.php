@@ -3,6 +3,7 @@
 namespace OlcsTest\FormService\Form\Lva;
 
 use Common\Service\Helper\FormHelperService;
+use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\ApplicationPsvVehicles;
@@ -28,8 +29,7 @@ class ApplicationPsvVehiclesTest extends MockeryTestCase
     public function setUp(): void
     {
         $this->fh = m::mock(FormHelperService::class)->makePartial();
-        $this->sut = new ApplicationPsvVehicles();
-        $this->sut->setFormHelper($this->fh);
+        $this->sut = new ApplicationPsvVehicles($this->fh, m::mock(\ZfcRbac\Service\AuthorizationService::class));
     }
 
     public function testAlterForm()

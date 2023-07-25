@@ -12,6 +12,7 @@ use Laminas\Form\Element;
 use Laminas\Form\Fieldset;
 use Common\RefData;
 use Common\Form\Elements\InputFilters\Lva\BackToLicenceActionLink;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Licence Type of Licence Form Test
@@ -33,9 +34,7 @@ class LicenceTypeOfLicenceTest extends MockeryTestCase
     {
         $this->fh = m::mock(FormHelperService::class)->makePartial();
         $this->fsm = m::mock(FormServiceManager::class)->makePartial();
-        $this->sut = new LicenceTypeOfLicence();
-        $this->sut->setFormHelper($this->fh);
-        $this->sut->setFormServiceLocator($this->fsm);
+        $this->sut = new LicenceTypeOfLicence($this->fh, m::mock(AuthorizationService::class), $this->fsm);
     }
 
     /**

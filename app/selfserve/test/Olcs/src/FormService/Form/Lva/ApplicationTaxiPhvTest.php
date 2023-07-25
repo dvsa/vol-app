@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Application Taxi Phv Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace OlcsTest\FormService\Form\Lva;
 
 use Common\Form\Elements\InputFilters\Lva\BackToApplicationActionLink;
@@ -13,6 +8,7 @@ use Common\Service\Helper\FormHelperService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Application Taxi Phv Test
@@ -36,9 +32,7 @@ class ApplicationTaxiPhvTest extends MockeryTestCase
     public function setUp(): void
     {
         $this->formHelper = m::mock(FormHelperService::class);
-
-        $this->sut = new ApplicationTaxiPhv();
-        $this->sut->setFormHelper($this->formHelper);
+        $this->sut = new ApplicationTaxiPhv($this->formHelper, m::mock(AuthorizationService::class));
     }
 
     public function testGetForm()

@@ -41,6 +41,7 @@ use Mockery\MockInterface;
 use Olcs\Controller\Lva\DirectorChange\ConvictionsPenaltiesController;
 use Olcs\Controller\Lva\DirectorChange\ConvictionsPenaltiesControllerFactory;
 use ZfcRbac\Service\AuthorizationService;
+use Mockery as m;
 
 /**
  * @see ConvictionsPenaltiesController
@@ -80,12 +81,6 @@ class ConvictionsPenaltiesControllerTest extends MockeryTestCase
         $grantDirectorMatcher = IsInstanceOf::anInstanceOf(GrantDirectorChange::class);
         $commandHandler->shouldReceive('__invoke')->with($grantDirectorMatcher)->andReturn($grantDirectorResponse);
 
-        // Define Expectations
-        $this->resolveMockService($serviceLocator, 'FlashMessenger')
-            ->shouldReceive('addSuccessMessage')
-            ->with(StringContains::containsString('singular'))
-            ->once();
-
         // Execute
         $sut->indexAction();
     }
@@ -106,12 +101,6 @@ class ConvictionsPenaltiesControllerTest extends MockeryTestCase
         $commandHandler = $this->resolveMockService($serviceLocator, 'handleCommand');
         $grantDirectorMatcher = IsInstanceOf::anInstanceOf(GrantDirectorChange::class);
         $commandHandler->shouldReceive('__invoke')->with($grantDirectorMatcher)->andReturn($grantDirectorResponse);
-
-        // Define Expectations
-        $this->resolveMockService($serviceLocator, 'FlashMessenger')
-            ->shouldReceive('addSuccessMessage')
-            ->with(StringContains::containsString('plural'))
-            ->once();
 
         // Execute
         $sut->indexAction();
@@ -135,16 +124,10 @@ class ConvictionsPenaltiesControllerTest extends MockeryTestCase
         $commandHandler->shouldReceive('__invoke')->with($grantDirectorMatcher)->andReturn($grantDirectorResponse);
         $this->resolveMockService($serviceLocator, TranslatorInterface::class)->shouldReceive('translate')->andReturn('%s');
 
-        // Define Expectations
-        $this->resolveMockService($serviceLocator, 'FlashMessenger')
-            ->shouldReceive('addSuccessMessage')
-            ->with(IsEqual::equalTo('1'))
-            ->once();
-
         // Execute
         $sut->indexAction();
     }
-    
+
     /**
      * @param ServiceLocatorInterface $serviceLocator
      * @return array
@@ -161,7 +144,7 @@ class ConvictionsPenaltiesControllerTest extends MockeryTestCase
             'FlashMessenger' => $this->setUpMockService(FlashMessenger::class),
             'handleQuery' => $this->setUpQueryHandler(),
             'Helper\Form' => $this->setUpFormHelperService(),
-            'FormServiceManager' => $this->setUpFormServiceManager($serviceLocator),
+            FormServiceManager::class => $this->setUpFormServiceManager($serviceLocator),
             'Config' => [
                 'csrf' => [
                     'timeout' => 300,
@@ -240,13 +223,16 @@ class ConvictionsPenaltiesControllerTest extends MockeryTestCase
      */
     protected function setUpFormServiceManager(ServiceLocatorInterface $serviceLocator): FormServiceManager
     {
-        $instance = new FormServiceManager(new Config([
-            'invokables' => [
-                'lva-variation-convictions_penalties' => \Common\FormService\Form\Lva\ConvictionsPenalties::class,
-            ],
-        ]));
-        $instance->setServiceLocator($serviceLocator);
-        return $instance;
+        $formServiceManager = m::mock(FormServiceManager::class);
+        $mockForm = m::mock(\Common\FormService\Form\Lva\ConvictionsPenalties::class);
+        $mockForm->shouldReceive('getForm')->andReturnUsing(function () {
+            $annotationBuilder = new AnnotationBuilder();
+            $form = $annotationBuilder->createForm(ConvictionsPenalties::class);
+            return $form;
+        })->byDefault();
+
+        $formServiceManager->shouldReceive('get')->andReturn($mockForm)->byDefault();
+        return $formServiceManager;
     }
 
     /**

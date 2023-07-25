@@ -3,6 +3,7 @@
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\LicenceHistory;
+use Common\Service\Helper\FormHelperService;
 use Laminas\Form\Form;
 use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
 
@@ -14,6 +15,13 @@ use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
 class ApplicationLicenceHistory extends LicenceHistory
 {
     use ButtonsAlterations;
+
+    protected FormHelperService $formHelper;
+
+    public function __construct(FormHelperService $formHelper)
+    {
+        parent::__construct($formHelper);
+    }
 
     /**
      * Make form alterations

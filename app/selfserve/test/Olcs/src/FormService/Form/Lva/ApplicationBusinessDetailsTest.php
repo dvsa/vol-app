@@ -2,6 +2,7 @@
 
 namespace OlcsTest\FormService\Form\Lva;
 
+use Common\Form\Form;
 use Common\RefData;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -29,12 +30,9 @@ class ApplicationBusinessDetailsTest extends MockeryTestCase
     public function setUp(): void
     {
         $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
-        $this->sm = Bootstrap::getServiceManager();
         $this->fh = m::mock('\Common\Service\Helper\FormHelperService')->makePartial();
 
-        $this->sut = new ApplicationBusinessDetails();
-        $this->sut->setFormServiceLocator($this->fsm);
-        $this->sut->setFormHelper($this->fh);
+        $this->sut = new ApplicationBusinessDetails($this->fh, $this->fsm);
     }
 
     public function testAlterFormWithoutInforceLicences()
@@ -48,7 +46,7 @@ class ApplicationBusinessDetailsTest extends MockeryTestCase
         ];
 
         // Mocks
-        $mockApplicationFormService = m::mock('\Common\FormService\FormServiceInterface');
+        $mockApplicationFormService = m::mock(Form::class);
 
         $this->fsm->setService('lva-application', $mockApplicationFormService);
 
@@ -75,8 +73,8 @@ class ApplicationBusinessDetailsTest extends MockeryTestCase
         ];
 
         // Mocks
-        $mockApplicationFormService = m::mock('\Common\FormService\FormServiceInterface');
-        $mockLockBusinessDetailsFormService = m::mock('\Common\FormService\FormServiceInterface');
+        $mockApplicationFormService = m::mock(Form::class);
+        $mockLockBusinessDetailsFormService = m::mock(Form::class);
 
         $this->fsm->setService('lva-application', $mockApplicationFormService);
         $this->fsm->setService('lva-lock-business_details', $mockLockBusinessDetailsFormService);
@@ -109,8 +107,8 @@ class ApplicationBusinessDetailsTest extends MockeryTestCase
         ];
 
         // Mocks
-        $mockApplicationFormService = m::mock('\Common\FormService\FormServiceInterface');
-        $mockLockBusinessDetailsFormService = m::mock('\Common\FormService\FormServiceInterface');
+        $mockApplicationFormService = m::mock(Form::class);
+        $mockLockBusinessDetailsFormService = m::mock(Form::class);
 
         $this->fsm->setService('lva-application', $mockApplicationFormService);
         $this->fsm->setService('lva-lock-business_details', $mockLockBusinessDetailsFormService);
@@ -143,8 +141,8 @@ class ApplicationBusinessDetailsTest extends MockeryTestCase
         ];
 
         // Mocks
-        $mockApplicationFormService = m::mock('\Common\FormService\FormServiceInterface');
-        $mockLockBusinessDetailsFormService = m::mock('\Common\FormService\FormServiceInterface');
+        $mockApplicationFormService = m::mock(Form::class);
+        $mockLockBusinessDetailsFormService = m::mock(Form::class);
 
         $this->fsm->setService('lva-application', $mockApplicationFormService);
         $this->fsm->setService('lva-lock-business_details', $mockLockBusinessDetailsFormService);

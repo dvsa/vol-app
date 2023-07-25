@@ -3,7 +3,11 @@
 namespace Olcs\FormService\Form\Lva\OperatingCentres;
 
 use Common\FormService\Form\Lva\OperatingCentres\LicenceOperatingCentres as CommonLicenceOperatingCentres;
+use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Table\TableFactory;
 use Laminas\Form\Form;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * @see \OlcsTest\FormService\Form\Lva\OperatingCentres\LicenceOperatingCentresTest
@@ -17,6 +21,20 @@ class LicenceOperatingCentres extends CommonLicenceOperatingCentres
         'totAuthLgvVehiclesFieldset->totAuthLgvVehicles',
         'totAuthTrailersFieldset->totAuthTrailers',
     ];
+
+    protected FormHelperService $formHelper;
+    protected AuthorizationService $authService;
+    protected $tableBuilder;
+    protected FormServiceManager $formServiceLocator;
+
+    public function __construct(
+        FormHelperService $formHelper,
+        AuthorizationService $authService,
+        $tableBuilder,
+        FormServiceManager $formServiceLocator
+    ) {
+        parent::__construct($formHelper, $authService, $tableBuilder, $formServiceLocator);
+    }
 
     /**
      * Alter form
@@ -32,7 +50,7 @@ class LicenceOperatingCentres extends CommonLicenceOperatingCentres
 
         $dataElement = $form->get('data');
 
-        $this->getFormHelper()->disableElements($dataElement);
+        $this->formHelper->disableElements($dataElement);
 
         if ($form->has('dataTrafficArea')) {
             $form->get('dataTrafficArea')->remove('enforcementArea');
@@ -48,7 +66,7 @@ class LicenceOperatingCentres extends CommonLicenceOperatingCentres
                 $lockElement = $lockElement->has($elementRef) ? $lockElement->get($elementRef) : null;
             }
             if (null !== $lockElement) {
-                $this->getFormHelper()->lockElement($lockElement, 'operating-centres-licence-locked');
+                $this->formHelper->lockElement($lockElement, 'operating-centres-licence-locked');
             }
         }
 

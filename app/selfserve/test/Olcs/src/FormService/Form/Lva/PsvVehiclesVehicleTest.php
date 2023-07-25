@@ -1,12 +1,9 @@
 <?php
 
-/**
- * Psv Vehicles Vehicle Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace OlcsTest\FormService\Form\Lva;
 
+use Common\FormService\FormServiceManager;
+use Laminas\Form\Form;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\PsvVehiclesVehicle;
@@ -29,9 +26,7 @@ class PsvVehiclesVehicleTest extends MockeryTestCase
         $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService');
         $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
 
-        $this->sut = new PsvVehiclesVehicle();
-        $this->sut->setFormServiceLocator($this->fsm);
-        $this->sut->setFormHelper($this->formHelper);
+        $this->sut = new PsvVehiclesVehicle($this->formHelper, $this->fsm);
     }
 
     public function testAlterForm()
@@ -39,7 +34,7 @@ class PsvVehiclesVehicleTest extends MockeryTestCase
         $mockForm = m::mock();
         $params = [];
 
-        $mockVehiclesVehicle = m::mock('\Common\FormService\FormServiceInterface');
+        $mockVehiclesVehicle = m::mock(Form::class);
         $this->fsm->setService('lva-vehicles-vehicle', $mockVehiclesVehicle);
 
         $mockVehiclesVehicle->shouldReceive('alterForm')

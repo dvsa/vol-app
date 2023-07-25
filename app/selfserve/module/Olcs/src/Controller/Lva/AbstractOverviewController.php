@@ -3,12 +3,12 @@
 namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractController;
+use Common\FormService\FormServiceManager;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\Application\CancelApplication as CancelApplicationCmd;
 use Dvsa\Olcs\Transfer\Command\Application\WithdrawApplication as WithdrawApplicationCmd;
 use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
 use Dvsa\Olcs\Transfer\Query\Application\Summary as WithdrawQry;
-
 use Laminas\Mvc\MvcEvent;
 
 /**
@@ -42,7 +42,7 @@ abstract class AbstractOverviewController extends AbstractController
         $form = null;
         if ($isVisible) {
             /** @var \Common\Form\Form $form */
-            $form = $this->getServiceLocator()->get('FormServiceManager')
+            $form = $this->getServiceLocator()->get(FormServiceManager::class)
                 ->get('lva-' . $this->lva . '-overview-submission')
                 ->getForm(
                     $data,
@@ -129,7 +129,6 @@ abstract class AbstractOverviewController extends AbstractController
         $form->get('form-actions')->get('submit')->setLabel('external.withdraw_application.confirm.confirm_button');
         $form->get('form-actions')->get('cancel')->setLabel('external.withdraw_application.confirm.back_button');
 
-
         $form->get('messages')->get('message')->setValue('external.withdraw_application.confirm.message');
 
         $formHelper->setFormActionFromRequest($form, $this->getRequest());
@@ -145,8 +144,10 @@ abstract class AbstractOverviewController extends AbstractController
      */
     protected function checkForRedirect($lvaId)
     {
-        if ($this->isButtonPressed('cancel') &&
-            ($this->params('action') === 'cancel' || $this->params('action') === 'withdraw')) {
+        if (
+            $this->isButtonPressed('cancel') &&
+            ($this->params('action') === 'cancel' || $this->params('action') === 'withdraw')
+        ) {
             return $this->redirect()->toRoute('lva-' . $this->lva, [], [], true);
         }
         return parent::checkForRedirect($lvaId);
@@ -170,9 +171,9 @@ abstract class AbstractOverviewController extends AbstractController
     /**
      * Return view
      *
-     * @param array                    $data     Api/Form Data
-     * @param array                    $sections Sections
-     * @param \Laminas\Form\FormInterface $form     Form
+     * @param array $data Api/Form Data
+     * @param array $sections Sections
+     * @param \Laminas\Form\FormInterface $form Form
      *
      * @return \Olcs\View\Model\LvaOverview
      */

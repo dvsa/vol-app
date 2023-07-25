@@ -2,8 +2,8 @@
 
 namespace OlcsTest\FormService\Form\Lva\OperatingCentres;
 
+use Common\Service\Helper\TranslationHelperService;
 use Olcs\FormService\Form\Lva\OperatingCentres\VariationOperatingCentres;
-use Common\FormService\FormServiceInterface;
 use Common\FormService\FormServiceManager;
 use Common\Service\Table\TableBuilder;
 use OlcsTest\Bootstrap;
@@ -12,15 +12,10 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\Form\Element;
 use Laminas\Form\Fieldset;
 use Laminas\Form\Form;
-use Laminas\Http\Request;
 use Common\Service\Helper\FormHelperService;
 use Common\RefData;
+use ZfcRbac\Service\AuthorizationService;
 
-/**
- * Variation Operating Centres Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class VariationOperatingCentresTest extends MockeryTestCase
 {
     protected $form;
@@ -40,7 +35,7 @@ class VariationOperatingCentresTest extends MockeryTestCase
     {
         $this->tableBuilder = m::mock();
 
-        $this->translator = m::mock();
+        $this->translator = m::mock(TranslationHelperService::class);
 
         $sm = Bootstrap::getServiceManager();
         $sm->setService('Table', $this->tableBuilder);
@@ -52,7 +47,7 @@ class VariationOperatingCentresTest extends MockeryTestCase
 
         $this->form = m::mock(Form::class);
 
-        $lvaVariation = m::mock(FormServiceInterface::class);
+        $lvaVariation = m::mock(Form::class);
         $lvaVariation->shouldReceive('alterForm')
             ->once()
             ->with($this->form);
@@ -65,9 +60,7 @@ class VariationOperatingCentresTest extends MockeryTestCase
             ->with('Lva\OperatingCentres')
             ->andReturn($this->form);
 
-        $this->sut = new VariationOperatingCentres();
-        $this->sut->setFormHelper($this->mockFormHelper);
-        $this->sut->setFormServiceLocator($fsm);
+        $this->sut = new VariationOperatingCentres($this->mockFormHelper, m::mock(AuthorizationService::class), $this->tableBuilder, $fsm, $this->translator);
     }
 
     public function testGetForm()
@@ -111,7 +104,6 @@ class VariationOperatingCentresTest extends MockeryTestCase
             ->andReturn('current-authorisation-hint-12');
 
         $totCommunityLicences = m::mock(Element::class);
-
 
         $data = m::mock();
         $data->shouldReceive('has')

@@ -3,7 +3,10 @@
 namespace Olcs\FormService\Form\Lva\TypeOfLicence;
 
 use Common\FormService\Form\Lva\TypeOfLicence\LicenceTypeOfLicence as CommonLicenceTypeOfLicence;
+use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FormHelperService;
 use Laminas\Form\Form;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Licence Type Of Licence Form
@@ -12,6 +15,11 @@ use Laminas\Form\Form;
  */
 class LicenceTypeOfLicence extends CommonLicenceTypeOfLicence
 {
+    public function __construct(FormHelperService $formHelper, AuthorizationService $authService, FormServiceManager $formServiceLocator)
+    {
+        parent::__construct($formHelper, $authService, $formServiceLocator);
+    }
+
     /**
      * Alter form
      *
@@ -24,6 +32,6 @@ class LicenceTypeOfLicence extends CommonLicenceTypeOfLicence
     {
         parent::alterForm($form, $params);
 
-        $this->getFormHelper()->remove($form, 'form-actions');
+        $this->formHelper->remove($form, 'form-actions');
     }
 }

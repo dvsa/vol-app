@@ -24,6 +24,6 @@ trait ButtonsAlterations
         $form->get('form-actions')->get('save')->setLabel('lva.external.save_and_return.link');
         $form->get('form-actions')->get('save')->removeAttribute('class');
         $form->get('form-actions')->get('save')->setAttribute('class', 'govuk-button govuk-button--secondary');
-        $this->getFormHelper()->remove($form, 'form-actions->cancel');
+        $this->formHelper->remove($form, 'form-actions->cancel');
     }
 }

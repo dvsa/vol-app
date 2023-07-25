@@ -3,6 +3,7 @@
 namespace Dvsa\Olcs\Application\Controller;
 
 use Common\Controller\Lva\Application\AbstractTypeOfLicenceController;
+use Common\FormService\FormServiceManager;
 use Dvsa\Olcs\Transfer\Command\Application\CreateApplication;
 use Laminas\Form\Form;
 use Common\RefData;
@@ -53,7 +54,7 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController
         $request = $this->getRequest();
 
         /** @var \Common\FormService\Form\Lva\TypeOfLicence\ApplicationTypeOfLicence $tolFormManagerService */
-        $tolFormManagerService = $this->getServiceLocator()->get('FormServiceManager')
+        $tolFormManagerService = $this->getServiceLocator()->get(FormServiceManager::class)
             ->get('lva-application-type-of-licence');
         /** @var \Common\Form\Form $form */
         $form = $tolFormManagerService->getForm();

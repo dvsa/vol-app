@@ -1,25 +1,22 @@
 <?php
 
-/**
- * Vehicles Vehicle
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace Olcs\FormService\Form\Lva;
 
-use Common\FormService\Form\AbstractFormService;
+use Common\Service\Helper\FormHelperService;
 
-/**
- * Vehicles Vehicle
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
-class VehiclesVehicle extends AbstractFormService
+class VehiclesVehicle
 {
+    protected FormHelperService $formHelper;
+
+    public function __construct(FormHelperService $formHelper)
+    {
+        $this->formHelper = $formHelper;
+    }
+
     public function alterForm($form)
     {
-        $this->getFormHelper()->remove($form, 'licence-vehicle->specifiedDate');
-        $this->getFormHelper()->remove($form, 'licence-vehicle->removalDate');
-        $this->getFormHelper()->remove($form, 'licence-vehicle->discNo');
+        $this->formHelper->remove($form, 'licence-vehicle->specifiedDate');
+        $this->formHelper->remove($form, 'licence-vehicle->removalDate');
+        $this->formHelper->remove($form, 'licence-vehicle->discNo');
     }
 }

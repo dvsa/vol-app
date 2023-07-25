@@ -1,24 +1,27 @@
 <?php
 
-/**
- * Edit Vehicle
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace Olcs\FormService\Form\Lva\GoodsVehicles;
 
 use Common\FormService\Form\AbstractFormService;
+use Common\Service\Helper\FormHelperService;
 
 /**
  * Edit Vehicle
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class EditVehicle extends AbstractFormService
+class EditVehicle
 {
+    protected FormHelperService $formHelper;
+
+    public function __construct(FormHelperService $formHelper)
+    {
+        $this->formHelper = $formHelper;
+    }
+
     public function getForm($request, $params = [])
     {
-        $form = $this->getFormHelper()->createFormWithRequest('Lva\EditGoodsVehicle', $request);
+        $form = $this->formHelper->createFormWithRequest('Lva\EditGoodsVehicle', $request);
 
         $this->alterForm($form, $params);
 
@@ -28,9 +31,9 @@ class EditVehicle extends AbstractFormService
     protected function alterForm($form, $params)
     {
         if ($params['isRemoved']) {
-            $this->getFormHelper()->disableElements($form->get('data'));
-            $this->getFormHelper()->disableElements($form->get('licence-vehicle'));
-            $this->getFormHelper()->remove($form, 'form-actions->submit');
+            $this->formHelper->disableElements($form->get('data'));
+            $this->formHelper->disableElements($form->get('licence-vehicle'));
+            $this->formHelper->remove($form, 'form-actions->submit');
         }
     }
 }
