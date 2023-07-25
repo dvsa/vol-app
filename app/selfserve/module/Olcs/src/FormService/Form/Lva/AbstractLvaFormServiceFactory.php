@@ -71,7 +71,7 @@ class AbstractLvaFormServiceFactory implements AbstractFactoryInterface
         'lva-licence-business_details' => LicenceBusinessDetails::class,
         'lva-variation-business_details' => VariationBusinessDetails::class,
         'lva-application-business_details' => ApplicationBusinessDetails::class,
-        
+
         // Goods vehicle filter form service
         'lva-application-goods-vehicles-filters' => ApplicationGoodsVehiclesFilters::class,
 
@@ -175,7 +175,8 @@ class AbstractLvaFormServiceFactory implements AbstractFactoryInterface
                 $authService = $serviceLocator->get(AuthorizationService::class);
                 $tableBuilder = $serviceLocator->get(TableFactory::class);
                 $formServiceLocator = $serviceLocator->get(FormServiceManager::class);
-                return new VariationOperatingCentres($formHelper, $authService, $tableBuilder, $formServiceLocator);
+                $translator = $serviceLocator->get(TranslationHelperService::class);
+                return new VariationOperatingCentres($formHelper, $authService, $tableBuilder, $formServiceLocator, $translator);
             case self::FORM_SERVICE_CLASS_ALIASES['lva-application-operating_centres']:
                 $authService = $serviceLocator->get(AuthorizationService::class);
                 $tableBuilder = $serviceLocator->get(TableFactory::class);
