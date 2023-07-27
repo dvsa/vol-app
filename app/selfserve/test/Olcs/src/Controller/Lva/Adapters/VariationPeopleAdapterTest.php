@@ -5,6 +5,7 @@ namespace OlcsTest\Controller\Lva\Adapters;
 use Common\RefData;
 use Common\Service\Lva\PeopleLvaService;
 use Dvsa\Olcs\Transfer\Command as TransferCmd;
+use Interop\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\Lva\Adapters\VariationPeopleAdapter;
@@ -24,8 +25,8 @@ class VariationPeopleAdapterTest extends MockeryTestCase
     protected $mockForm;
     /** @var  \Common\Service\Table\TableBuilder | m\MockInterface */
     protected $mockTbl;
-    /** @var  \Laminas\ServiceManager\ServiceManager | m\MockInterface */
-    protected $mockSm;
+    /** @var  ContainerInterface | m\MockInterface */
+    protected $mockContainer;
     /** @var  PeopleLvaService | m\MockInterface */
     protected $mockPplSrv;
     /** @var  \Laminas\Http\Response | m\MockInterface */
@@ -38,16 +39,12 @@ class VariationPeopleAdapterTest extends MockeryTestCase
 
         $this->mockPplSrv = m::mock(PeopleLvaService::class);
 
-        $this->mockSm = m::mock(\Laminas\ServiceManager\ServiceManager::class)->makePartial();
-        $this->mockSm
-            ->setAllowOverride(true)
-            ->setService('Table', $this->mockTbl)
-            ->setService('Lva\People', $this->mockPplSrv);
+        $this->mockContainer = m::mock(ContainerInterface::class);
+        $this->mockContainer->allows('get')->with('Table')->andReturn($this->mockTbl);
 
-        $this->sut = m::mock(VariationPeopleAdapter::class)
+        $this->sut = m::mock(VariationPeopleAdapter::class, [$this->mockContainer, $this->mockPplSrv])
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
-        $this->sut->setServiceLocator($this->mockSm);
 
         $this->mockResp = m::mock(\Laminas\Http\Response::class);
         $this->mockResp->shouldReceive('isOk')->andReturn(true);

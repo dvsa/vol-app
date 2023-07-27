@@ -7,6 +7,7 @@ use Common\Service\Cqrs\Command\CommandService;
 use Common\Service\Cqrs\Query\CachingQueryService;
 use Common\Service\Lva\VariationLvaService;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder as TransferAnnotationBuilder;
+use Interop\Container\ContainerInterface;
 
 /**
  * External Licence Transport Manager Adater
@@ -19,23 +20,14 @@ class LicenceTransportManagerAdapter extends CommonAdapter
     /** @var VariationLvaService */
     private $lvaVariationSrv;
 
-    /**
-     * LicenceTransportManagerAdapter constructor.
-     *
-     * @param TransferAnnotationBuilder $transferAnnotationBuilder annotation builder
-     * @param CachingQueryService       $querySrv                  caching query service
-     * @param CommandService            $commandSrv                command service
-     * @param VariationLvaService       $lvaVariationSrv           lva variation service
-     *
-     * @return void
-     */
     public function __construct(
         TransferAnnotationBuilder $transferAnnotationBuilder,
         CachingQueryService $querySrv,
         CommandService $commandSrv,
-        VariationLvaService $lvaVariationSrv
+        VariationLvaService $lvaVariationSrv,
+        ContainerInterface $container
     ) {
-        parent::__construct($transferAnnotationBuilder, $querySrv, $commandSrv);
+        parent::__construct($transferAnnotationBuilder, $querySrv, $commandSrv, $container);
 
         $this->lvaVariationSrv = $lvaVariationSrv;
     }

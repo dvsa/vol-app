@@ -283,9 +283,7 @@ class PeopleControllerTest extends MockeryTestCase
      */
     protected function setUpAdaptor(ServiceLocatorInterface $serviceLocator): LicencePeopleAdapter
     {
-        $instance = new LicencePeopleAdapter();
-        $instance->setServiceLocator($serviceLocator);
-        return $instance;
+        return new LicencePeopleAdapter($serviceLocator);
     }
 
     /**
