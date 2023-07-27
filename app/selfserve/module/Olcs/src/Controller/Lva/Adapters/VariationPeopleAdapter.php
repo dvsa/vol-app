@@ -2,6 +2,8 @@
 
 namespace Olcs\Controller\Lva\Adapters;
 
+use Common\Service\Lva\PeopleLvaService;
+use Interop\Container\ContainerInterface;
 use Laminas\Form\Form;
 use Common\Controller\Lva\Adapters\AbstractPeopleAdapter;
 
@@ -12,6 +14,14 @@ use Common\Controller\Lva\Adapters\AbstractPeopleAdapter;
  */
 class VariationPeopleAdapter extends AbstractPeopleAdapter
 {
+    protected PeopleLvaService $peopleLvaService;
+
+    public function __construct(ContainerInterface $container, PeopleLvaService $peopleLvaService)
+    {
+        $this->peopleLvaService = $peopleLvaService;
+        parent::__construct($container);
+    }
+
     /**
      * Can Modify
      *
@@ -52,7 +62,7 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
             return;
         }
 
-        $this->getServiceLocator()->get('Lva\People')->lockOrganisationForm($form, $table);
+        $this->peopleLvaService->lockOrganisationForm($form, $table);
     }
 
     /**
@@ -68,7 +78,7 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
             return;
         }
 
-        $this->getServiceLocator()->get('Lva\People')->lockPersonForm($form, $this->getOrganisationType());
+        $this->peopleLvaService->lockPersonForm($form, $this->getOrganisationType());
     }
 
     /**

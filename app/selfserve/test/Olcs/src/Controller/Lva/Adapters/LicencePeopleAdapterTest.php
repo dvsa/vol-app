@@ -13,6 +13,7 @@ use Common\Service\Cqrs\Response;
 use Common\Service\Lva\PeopleLvaService;
 use Common\Service\Table\TableBuilder;
 use Dvsa\Olcs\Transfer\Command\Licence\DeletePeopleViaVariation;
+use Interop\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\Lva\Adapters\LicencePeopleAdapter;
@@ -33,8 +34,8 @@ class LicencePeopleAdapterTest extends MockeryTestCase
     /** @var  TableBuilder|m\Mock */
     protected $mockTbl;
     /** @var  ServiceManager|m\Mock */
-    protected $mockSm;
-    /** @var  PeopleLvaService|m\Mock */
+    protected $mockContainer;
+    /** @var  ContainerInterface|m\Mock */
     protected $mockPplSrv;
 
     public function setUp(): void
@@ -44,17 +45,12 @@ class LicencePeopleAdapterTest extends MockeryTestCase
 
         $this->mockPplSrv = m::mock(PeopleLvaService::class);
 
-        $this->mockSm = m::mock(ServiceManager::class)->makePartial();
-        $this->mockSm
-            ->setAllowOverride(true)
-            ->setService('Table', $this->mockTbl)
-            ->setService('Lva\People', $this->mockPplSrv);
+        $this->mockContainer = m::mock(ContainerInterface::class);
+        $this->mockContainer->allows('get')->with('Table')->andReturn($this->mockTbl);
 
-        $this->sut = m::mock(LicencePeopleAdapter::class)
+        $this->sut = m::mock(LicencePeopleAdapter::class, [$this->mockContainer, $this->mockPplSrv])
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
-
-        $this->sut->setServiceLocator($this->mockSm);
     }
 
     public function testAlterFormForOrganisationCantModify()

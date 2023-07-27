@@ -2,6 +2,11 @@
 
 namespace OlcsTest\Controller\Lva\Factory\Adapter;
 
+use Common\Service\Cqrs\Command\CommandService;
+use Common\Service\Cqrs\Query\CachingQueryService;
+use Common\Service\Lva\VariationLvaService;
+use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
+use Interop\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\Lva\Adapters;
@@ -16,24 +21,24 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
  */
 class TransportManagerAdapterFactoryTest extends MockeryTestCase
 {
-    /** @var ServiceLocatorInterface|\Mockery\MockInterface */
-    protected $sm;
+    /** @var ContainerInterface|\Mockery\MockInterface */
+    protected $container;
 
     public function setUp(): void
     {
-        $this->sm = m::mock(ServiceLocatorInterface::class);
+        $this->container = m::mock(ServiceLocatorInterface::class);
 
         $closure = function ($class) {
             $map = [
-                'TransferAnnotationBuilder' => m::mock(\Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder::class),
-                'QueryService' => m::mock(\Common\Service\Cqrs\Query\CachingQueryService::class),
-                'CommandService' => m::mock(\Common\Service\Cqrs\Command\CommandService::class),
-                'Lva\Variation' => m::mock(\Common\Service\Lva\VariationLvaService::class),
+                AnnotationBuilder::class => m::mock(\Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder::class),
+                CachingQueryService::class => m::mock(\Common\Service\Cqrs\Query\CachingQueryService::class),
+                CommandService::class => m::mock(\Common\Service\Cqrs\Command\CommandService::class),
+                VariationLvaService::class => m::mock(VariationLvaService::class)
             ];
 
             return $map[$class];
         };
-        $this->sm->shouldReceive('get')->andReturnUsing($closure);
+        $this->container->shouldReceive('get')->andReturnUsing($closure);
     }
 
     public function testCreateServiceLicence()
@@ -42,7 +47,7 @@ class TransportManagerAdapterFactoryTest extends MockeryTestCase
 
         static::assertInstanceOf(
             Adapters\LicenceTransportManagerAdapter::class,
-            $factory->createService($this->sm)
+            $factory->createService($this->container)
         );
     }
 
@@ -52,7 +57,7 @@ class TransportManagerAdapterFactoryTest extends MockeryTestCase
 
         static::assertInstanceOf(
             Adapters\VariationTransportManagerAdapter::class,
-            $factory->createService($this->sm)
+            $factory->createService($this->container)
         );
     }
 }

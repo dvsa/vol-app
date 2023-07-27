@@ -9,9 +9,11 @@
 namespace Olcs\Controller\Lva\Adapters;
 
 use Common\Controller\Lva\Adapters\AbstractPeopleAdapter;
+use Common\Service\Lva\PeopleLvaService;
 use Common\Service\Table\TableBuilder;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\Command\Licence\DeletePeopleViaVariation;
+use Interop\Container\ContainerInterface;
 use Laminas\Form\Form;
 
 /**
@@ -21,6 +23,14 @@ use Laminas\Form\Form;
  */
 class LicencePeopleAdapter extends AbstractPeopleAdapter
 {
+    protected PeopleLvaService $peopleLvaService;
+
+    public function __construct(ContainerInterface $container, PeopleLvaService $peopleLvaService)
+    {
+        $this->peopleLvaService = $peopleLvaService;
+        parent::__construct($container);
+    }
+
     /**
      * Alter Form For Organisation
      *
@@ -36,7 +46,7 @@ class LicencePeopleAdapter extends AbstractPeopleAdapter
             return;
         }
 
-        $this->getServiceLocator()->get('Lva\People')->lockOrganisationForm($form, $table);
+        $this->peopleLvaService->lockOrganisationForm($form, $table);
     }
 
     /**
@@ -48,7 +58,7 @@ class LicencePeopleAdapter extends AbstractPeopleAdapter
      */
     public function alterAddOrEditFormForOrganisation(Form $form)
     {
-        return $this->getServiceLocator()->get('Lva\People')->lockPersonForm($form, $this->getOrganisationType());
+        $this->peopleLvaService->lockPersonForm($form, $this->getOrganisationType());
     }
 
     /**

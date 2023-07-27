@@ -6,6 +6,7 @@ use Common\Service\Cqrs\Command\CommandService;
 use Common\Service\Cqrs\Query\CachingQueryService;
 use Common\Service\Lva\VariationLvaService;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder as TransferAnnotationBuilder;
+use Interop\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\Lva\Adapters\LicenceTransportManagerAdapter;
@@ -26,6 +27,8 @@ class LicenceTransportManagerAdapterTest extends MockeryTestCase
     /** @var  VariationLvaService|\Mockery\MockInterface */
     protected $mockLvaVariationSrv;
 
+    protected $mockContainer;
+
     public function setUp(): void
     {
         /** @var TransferAnnotationBuilder $mockAnnotationBuilder */
@@ -37,11 +40,14 @@ class LicenceTransportManagerAdapterTest extends MockeryTestCase
 
         $this->mockLvaVariationSrv = m::mock(VariationLvaService::class);
 
+        $this->mockContainer = m::mock(ContainerInterface::class);
+
         $this->sut = new LicenceTransportManagerAdapter(
             $mockAnnotationBuilder,
             $mockQuerySrv,
             $mockCommandSrv,
-            $this->mockLvaVariationSrv
+            $this->mockLvaVariationSrv,
+            $this->mockContainer
         );
     }
 
