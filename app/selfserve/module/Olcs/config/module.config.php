@@ -12,10 +12,12 @@ use Olcs\Controller\Cookie\SettingsController as CookieSettingsController;
 use Olcs\Controller\Cookie\SettingsControllerFactory as CookieSettingsControllerFactory;
 use Olcs\Controller\IndexController;
 use Olcs\Controller\Licence\Vehicle\ListVehicleController;
+use Olcs\Controller\Lva\Adapters\ApplicationPeopleAdapter;
 use Olcs\Controller\Lva\Adapters\LicencePeopleAdapter;
 use Olcs\Controller\Lva\Adapters\LicenceTransportManagerAdapter;
 use Olcs\Controller\Lva\Adapters\VariationPeopleAdapter;
 use Olcs\Controller\Lva\Adapters\VariationTransportManagerAdapter;
+use Olcs\Controller\Lva\Factory\Adapter\ApplicationPeopleAdapterFactory;
 use Olcs\Controller\Lva\Factory\Adapter\LicencePeopleAdapterFactory;
 use Olcs\Controller\Lva\Factory\Adapter\LicenceTransportManagerAdapterFactory;
 use Olcs\Controller\Lva\Factory\Adapter\VariationPeopleAdapterFactory;
@@ -1251,14 +1253,13 @@ return array(
     ),
     'service_manager' => array(
         'aliases' => [
-            'LicencePeopleAdapter' => \Olcs\Controller\Lva\Adapters\LicencePeopleAdapter::class,
+            'LicencePeopleAdapter' => LicencePeopleAdapter::class,
             'VariationTransportManagerAdapter' => VariationTransportManagerAdapter::class,
             'LicenceTransportManagerAdapter' => LicenceTransportManagerAdapter::class,
             'VariationPeopleAdapter' => VariationPeopleAdapter::class,
+            'ApplicationPeopleAdapter' => ApplicationPeopleAdapter::class,
         ],
         'invokables' => array(
-            'ApplicationPeopleAdapter'
-                => \Olcs\Controller\Lva\Adapters\ApplicationPeopleAdapter::class,
             'CookieCookieStateFactory' => CookieService\CookieStateFactory::class,
             'CookiePreferencesFactory' => CookieService\PreferencesFactory::class,
             'CookieSetCookieFactory' => CookieService\SetCookieFactory::class,
@@ -1298,6 +1299,7 @@ return array(
             'Processing\CreateVariation' => ProcessingService\CreateVariationProcessingServiceFactory::class,
             Olcs\View\Model\User::class => Olcs\View\Model\UserFactory::class,
             //Adapters
+            ApplicationPeopleAdapter::class => ApplicationPeopleAdapterFactory::class,
             LicencePeopleAdapter::class => LicencePeopleAdapterFactory::class,
             LicenceTransportManagerAdapter::class => LicenceTransportManagerAdapterFactory::class,
             VariationTransportManagerAdapter::class => VariationTransportManagerAdapterFactory::class,
