@@ -2,6 +2,9 @@
 
 namespace Olcs\Controller\Lva\Adapters;
 
+use Common\Service\Lva\PeopleLvaService;
+use Interop\Container\ContainerInterface;
+
 /**
  * External Application People Adapter
  *
@@ -9,6 +12,12 @@ namespace Olcs\Controller\Lva\Adapters;
  */
 class ApplicationPeopleAdapter extends VariationPeopleAdapter
 {
+    public function __construct(ContainerInterface $container, PeopleLvaService $peopleLvaService)
+    {
+        $this->peopleLvaService = $peopleLvaService;
+        parent::__construct($container, $peopleLvaService);
+    }
+
     /**
      * Can Modify
      *
