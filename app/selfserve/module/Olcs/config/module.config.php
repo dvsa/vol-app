@@ -11,6 +11,8 @@ use Olcs\Controller\Cookie\SettingsController as CookieSettingsController;
 use Olcs\Controller\Cookie\SettingsControllerFactory as CookieSettingsControllerFactory;
 use Olcs\Controller\IndexController;
 use Olcs\Controller\Licence\Vehicle\ListVehicleController;
+use Olcs\Controller\Lva\Adapters\LicencePeopleAdapter;
+use Olcs\Controller\Lva\Adapters\LicencePeopleAdapterFactory;
 use Olcs\Controller\MyDetailsController;
 use Olcs\Controller\PromptController;
 use Olcs\Controller\Search\SearchController;
@@ -1242,11 +1244,12 @@ return array(
         )
     ),
     'service_manager' => array(
+        'aliases' => [
+            'LicencePeopleAdapter' => \Olcs\Controller\Lva\Adapters\LicencePeopleAdapter::class,
+        ],
         'invokables' => array(
             'ApplicationPeopleAdapter'
                 => \Olcs\Controller\Lva\Adapters\ApplicationPeopleAdapter::class,
-            'LicencePeopleAdapter'
-                => \Olcs\Controller\Lva\Adapters\LicencePeopleAdapter::class,
             'VariationPeopleAdapter'
                 => \Olcs\Controller\Lva\Adapters\VariationPeopleAdapter::class,
             'CookieCookieStateFactory' => CookieService\CookieStateFactory::class,
@@ -1290,7 +1293,8 @@ return array(
             SelfserveCommandAdapter::class => SelfserveCommandAdapterFactory::class,
             'DashboardProcessingService' => ProcessingService\DashboardProcessingServiceFactory::class,
             'Processing\CreateVariation' => ProcessingService\CreateVariationProcessingServiceFactory::class,
-            Olcs\View\Model\User::class => Olcs\View\Model\UserFactory::class
+            Olcs\View\Model\User::class => Olcs\View\Model\UserFactory::class,
+            LicencePeopleAdapter::class => LicencePeopleAdapterFactory::class,
         ]
     ),
     'search' => [
