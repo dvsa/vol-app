@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Olcs\Controller\Lva\Adapters;
+namespace Olcs\Controller\Lva\Factory\Adapter;
 
 use Common\Service\Lva\PeopleLvaService;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+use Olcs\Controller\Lva\Adapters\LicencePeopleAdapter;
 
 class LicencePeopleAdapterFactory implements FactoryInterface
 {

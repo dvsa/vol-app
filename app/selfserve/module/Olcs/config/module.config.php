@@ -1,5 +1,6 @@
 <?php
 
+use Laminas\Mvc\Router\Http\Segment;
 use Olcs\Auth\Adapter\CommandAdapter;
 use Olcs\Auth\Adapter\CommandAdapterFactory;
 use Olcs\Auth\Adapter\SelfserveCommandAdapter;
@@ -12,7 +13,13 @@ use Olcs\Controller\Cookie\SettingsControllerFactory as CookieSettingsController
 use Olcs\Controller\IndexController;
 use Olcs\Controller\Licence\Vehicle\ListVehicleController;
 use Olcs\Controller\Lva\Adapters\LicencePeopleAdapter;
-use Olcs\Controller\Lva\Adapters\LicencePeopleAdapterFactory;
+use Olcs\Controller\Lva\Adapters\LicenceTransportManagerAdapter;
+use Olcs\Controller\Lva\Adapters\VariationPeopleAdapter;
+use Olcs\Controller\Lva\Adapters\VariationTransportManagerAdapter;
+use Olcs\Controller\Lva\Factory\Adapter\LicencePeopleAdapterFactory;
+use Olcs\Controller\Lva\Factory\Adapter\LicenceTransportManagerAdapterFactory;
+use Olcs\Controller\Lva\Factory\Adapter\VariationPeopleAdapterFactory;
+use Olcs\Controller\Lva\Factory\Adapter\VariationTransportManagerAdapterFactory;
 use Olcs\Controller\MyDetailsController;
 use Olcs\Controller\PromptController;
 use Olcs\Controller\Search\SearchController;
@@ -27,9 +34,8 @@ use Olcs\Form\Element\SearchOrderFieldset;
 use Olcs\Form\Element\SearchOrderFieldsetFactory;
 use Olcs\FormService\Form\Lva as LvaFormService;
 use Olcs\Service\Cookie as CookieService;
-use Olcs\Service\Qa as QaService;
 use Olcs\Service\Processing as ProcessingService;
-use Laminas\Mvc\Router\Http\Segment;
+use Olcs\Service\Qa as QaService;
 use Olcs\Session\LicenceVehicleManagement;
 
 $sectionConfig = new \Common\Service\Data\SectionConfig();
@@ -1246,12 +1252,13 @@ return array(
     'service_manager' => array(
         'aliases' => [
             'LicencePeopleAdapter' => \Olcs\Controller\Lva\Adapters\LicencePeopleAdapter::class,
+            'VariationTransportManagerAdapter' => VariationTransportManagerAdapter::class,
+            'LicenceTransportManagerAdapter' => LicenceTransportManagerAdapter::class,
+            'VariationPeopleAdapter' => VariationPeopleAdapter::class,
         ],
         'invokables' => array(
             'ApplicationPeopleAdapter'
                 => \Olcs\Controller\Lva\Adapters\ApplicationPeopleAdapter::class,
-            'VariationPeopleAdapter'
-                => \Olcs\Controller\Lva\Adapters\VariationPeopleAdapter::class,
             'CookieCookieStateFactory' => CookieService\CookieStateFactory::class,
             'CookiePreferencesFactory' => CookieService\PreferencesFactory::class,
             'CookieSetCookieFactory' => CookieService\SetCookieFactory::class,
@@ -1280,10 +1287,6 @@ return array(
             'navigation' => Laminas\Navigation\Service\DefaultNavigationFactory::class,
             'Olcs\Navigation\DashboardNavigation' => Olcs\Navigation\DashboardNavigationFactory::class,
             Olcs\Controller\Listener\Navigation::class => Olcs\Controller\Listener\NavigationFactory::class,
-            'LicenceTransportManagerAdapter' =>
-                \Olcs\Controller\Lva\Factory\Adapter\LicenceTransportManagerAdapterFactory::class,
-            'VariationTransportManagerAdapter' =>
-                \Olcs\Controller\Lva\Factory\Adapter\VariationTransportManagerAdapterFactory::class,
             'QaFormProvider' => QaService\FormProviderFactory::class,
             'QaFormFactory' => QaService\FormFactoryFactory::class,
             'QaGuidanceTemplateVarsAdder' => QaService\GuidanceTemplateVarsAdderFactory::class,
@@ -1294,7 +1297,11 @@ return array(
             'DashboardProcessingService' => ProcessingService\DashboardProcessingServiceFactory::class,
             'Processing\CreateVariation' => ProcessingService\CreateVariationProcessingServiceFactory::class,
             Olcs\View\Model\User::class => Olcs\View\Model\UserFactory::class,
+            //Adapters
             LicencePeopleAdapter::class => LicencePeopleAdapterFactory::class,
+            LicenceTransportManagerAdapter::class => LicenceTransportManagerAdapterFactory::class,
+            VariationTransportManagerAdapter::class => VariationTransportManagerAdapterFactory::class,
+            VariationPeopleAdapter::class => VariationPeopleAdapterFactory::class,
         ]
     ),
     'search' => [
