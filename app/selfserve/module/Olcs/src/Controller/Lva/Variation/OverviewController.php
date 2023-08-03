@@ -1,16 +1,16 @@
 <?php
 
-/**
- * Variation Overview Controller
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace Olcs\Controller\Lva\Variation;
 
-use Olcs\Controller\Lva\AbstractOverviewController;
-use Olcs\View\Model\Variation\VariationOverview;
-use Olcs\Controller\Lva\Traits\VariationControllerTrait;
+use Common\FormService\FormServiceManager;
 use Common\RefData;
+use Common\Service\Helper\FormHelperService;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use Olcs\Controller\Lva\AbstractOverviewController;
+use Olcs\Controller\Lva\Traits\VariationControllerTrait;
+use Olcs\Service\Helper\ApplicationOverviewHelperService;
+use Olcs\View\Model\Variation\VariationOverview;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Variation Overview Controller
@@ -22,7 +22,27 @@ class OverviewController extends AbstractOverviewController
     use VariationControllerTrait;
 
     protected $lva = 'variation';
-    protected $location = 'external';
+    protected string $location = 'external';
+
+    /**
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormServiceManager $formServiceManager
+     * @param FormHelperService $formHelper
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FormServiceManager $formServiceManager,
+        FormHelperService $formHelper
+    ) {
+        parent::__construct(
+            $niTextTranslationUtil,
+            $authService,
+            $formServiceManager,
+            $formHelper
+        );
+    }
 
     /**
      * Get overview view

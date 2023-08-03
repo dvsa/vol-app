@@ -5,14 +5,20 @@ namespace Olcs\Controller;
 use Common\Controller\Lva\AbstractController;
 use Common\Controller\Lva\Traits\CrudTableTrait;
 use Common\Form\Form;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\GuidanceHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Transfer\Command\User\CreateUserSelfserve as CreateDto;
 use Dvsa\Olcs\Transfer\Command\User\DeleteUserSelfserve as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\User\UpdateUserSelfserve as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\User\UserListSelfserve as ListDto;
 use Dvsa\Olcs\Transfer\Query\User\UserSelfserve as ItemDto;
-use Olcs\View\Model\User;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\View\Model\ViewModel;
+use Olcs\View\Model\User;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * User Controller
@@ -23,6 +29,43 @@ class UserController extends AbstractController
 {
     use Lva\Traits\ExternalControllerTrait;
     use CrudTableTrait;
+
+    protected User $user;
+    protected ScriptFactory $scriptFactory;
+    protected FormHelperService $formHelper;
+    protected FlashMessengerHelperService $flashMessengerHelper;
+    protected TranslationHelperService $translationHelper;
+    protected GuidanceHelperService $guidanceHelper;
+
+    /**
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param User $user
+     * @param ScriptFactory $scriptFactory
+     * @param FormHelperService $formHelper
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param TranslationHelperService $translationHelper
+     * @param GuidanceHelperService $guidanceHelper
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        User $user,
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessengerHelper,
+        TranslationHelperService $translationHelper,
+        GuidanceHelperService $guidanceHelper
+    ) {
+        $this->user = $user;
+        $this->scriptFactory = $scriptFactory;
+        $this->formHelper = $formHelper;
+        $this->flashMessengerHelper = $flashMessengerHelper;
+        $this->translationHelper = $translationHelper;
+        $this->guidanceHelper = $guidanceHelper;
+
+        parent::__construct($niTextTranslationUtil, $authService);
+    }
 
     /**
      * Dashboard index action
@@ -58,7 +101,7 @@ class UserController extends AbstractController
             $users = [];
         }
 
-        $view = $this->getServiceLocator()->get(User::class);
+        $view = $this->user;
         assert($view instanceof User);
 
         $view->setUsers(
@@ -66,7 +109,7 @@ class UserController extends AbstractController
             $params
         );
 
-        $this->getServiceLocator()->get('Script')->loadFiles(['lva-crud']);
+        $this->scriptFactory->loadFiles(['lva-crud']);
 
         return $view;
     }
@@ -189,7 +232,7 @@ class UserController extends AbstractController
         $request = $this->getRequest();
 
         /** @var \Laminas\Form\FormInterface $form */
-        $form = $this->getServiceLocator()->get('Helper\Form')
+        $form = $this->formHelper
             ->createFormWithRequest('GenericDeleteConfirmation', $request);
 
         if ($request->isPost()) {
@@ -300,7 +343,7 @@ class UserController extends AbstractController
      */
     public function getFlashMessenger()
     {
-        return $this->getServiceLocator()->get('Helper\FlashMessenger');
+        return $this->flashMessengerHelper;
     }
 
     /**
@@ -374,8 +417,8 @@ class UserController extends AbstractController
 
         $this->getFormHelper()->disableElement($form, 'main->loginId');
 
-        $message = $this->getServiceLocator()->get('Helper\Translation')->translate('name-change.locked.guidance.message');
-        $this->getServiceLocator()->get('Helper\Guidance')->append($message);
+        $message = $this->translationHelper->translate('name-change.locked.guidance.message');
+        $this->guidanceHelper->append($message);
     }
 
     /**
@@ -383,6 +426,6 @@ class UserController extends AbstractController
      */
     protected function getFormHelper()
     {
-        return $this->getServiceLocator()->get('Helper\Form');
+        return $this->formHelper;
     }
 }

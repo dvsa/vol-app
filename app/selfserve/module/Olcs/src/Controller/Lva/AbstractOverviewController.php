@@ -5,11 +5,13 @@ namespace Olcs\Controller\Lva;
 use Common\Controller\Lva\AbstractController;
 use Common\FormService\FormServiceManager;
 use Common\RefData;
+use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Transfer\Command\Application\CancelApplication as CancelApplicationCmd;
 use Dvsa\Olcs\Transfer\Command\Application\WithdrawApplication as WithdrawApplicationCmd;
 use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
 use Dvsa\Olcs\Transfer\Query\Application\Summary as WithdrawQry;
-use Laminas\Mvc\MvcEvent;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Abstract External Overview Controller
@@ -21,7 +23,28 @@ use Laminas\Mvc\MvcEvent;
 abstract class AbstractOverviewController extends AbstractController
 {
     protected $lva;
-    protected $location = 'external';
+    protected string $location = 'external';
+
+    protected FormServiceManager $formServiceManager;
+    protected FormHelperService $formHelper;
+
+    /**
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormServiceManager $formServiceManager
+     * @param FormHelperService $formHelper
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FormServiceManager $formServiceManager,
+        FormHelperService $formHelper
+    ) {
+        $this->formServiceManager = $formServiceManager;
+        $this->formHelper = $formHelper;
+
+        parent::__construct($niTextTranslationUtil, $authService);
+    }
 
     /**
      * Process action : Index
@@ -42,7 +65,7 @@ abstract class AbstractOverviewController extends AbstractController
         $form = null;
         if ($isVisible) {
             /** @var \Common\Form\Form $form */
-            $form = $this->getServiceLocator()->get(FormServiceManager::class)
+            $form = $this->formServiceManager
                 ->get('lva-' . $this->lva . '-overview-submission')
                 ->getForm(
                     $data,
@@ -80,7 +103,7 @@ abstract class AbstractOverviewController extends AbstractController
             $this->addSuccessMessage('external.cancel_application.confirm.cancel_message');
             return $this->redirect()->toRouteAjax('dashboard', [], [], true);
         }
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
         $form = $formHelper->createForm('GenericConfirmation');
         $form->get('form-actions')->get('submit')->setLabel('external.cancel_application.confirm.confirm_button');
         $form->get('form-actions')->get('cancel')->setLabel('external.cancel_application.confirm.back_button');
@@ -124,7 +147,7 @@ abstract class AbstractOverviewController extends AbstractController
             return $this->redirect()->toRouteAjax('dashboard', [], [], true);
         }
 
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
         $form = $formHelper->createForm('GenericConfirmation');
         $form->get('form-actions')->get('submit')->setLabel('external.withdraw_application.confirm.confirm_button');
         $form->get('form-actions')->get('cancel')->setLabel('external.withdraw_application.confirm.back_button');

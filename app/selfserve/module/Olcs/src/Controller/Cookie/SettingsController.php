@@ -3,13 +3,13 @@
 namespace Olcs\Controller\Cookie;
 
 use Common\Controller\AbstractOlcsController;
+use Laminas\Validator\Csrf as CsrfValidator;
+use Laminas\View\Model\ViewModel;
 use Olcs\Service\Cookie\CurrentPreferencesProvider;
 use Olcs\Service\Cookie\Preferences;
 use Olcs\Service\Cookie\PreferencesFactory;
 use Olcs\Service\Cookie\SetCookieArrayGenerator;
 use RuntimeException;
-use Laminas\Validator\Csrf as CsrfValidator;
-use Laminas\View\Model\ViewModel;
 
 class SettingsController extends AbstractOlcsController
 {

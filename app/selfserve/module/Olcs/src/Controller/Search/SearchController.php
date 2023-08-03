@@ -9,15 +9,20 @@ namespace Olcs\Controller\Search;
 use Common\Controller\Lva\AbstractController;
 use Common\Controller\Traits\ViewHelperManagerAware;
 use Common\Service\Data\Search\Search;
-use Common\Service\Data\Search\SearchType;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Script\ScriptFactory;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use Laminas\Form\FormElementManager;
+use Laminas\Session\Container;
+use Laminas\View\Model\ViewModel;
 use Olcs\Form\Element\SearchDateRangeFieldset;
 use Olcs\Form\Element\SearchFilterFieldset;
 use Olcs\Form\Element\SearchOrderFieldset;
 use Olcs\Form\Model\Form\SearchFilter as SearchFilterForm;
 use Olcs\Form\Model\Form\SearchOperator;
 use Olcs\Form\Model\Form\SimpleSearch;
-use Laminas\Session\Container;
-use Laminas\View\Model\ViewModel;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Search Controller
@@ -25,6 +30,47 @@ use Laminas\View\Model\ViewModel;
 class SearchController extends AbstractController
 {
     use ViewHelperManagerAware;
+
+    protected ScriptFactory $scriptFactory;
+    protected FormHelperService $formHelper;
+    protected $navigation;
+    protected FormElementManager $formElementManager;
+    protected $viewHelperManager;
+    protected $dataServiceManager;
+    protected TranslationHelperService $translationHelper;
+
+    /**
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param ScriptFactory $scriptFactory
+     * @param FormHelperService $formHelper
+     * @param $navigation
+     * @param FormElementManager $formElementManager
+     * @param $viewHelperManager
+     * @param $dataServiceManager
+     * @param TranslationHelperService $translationHelper
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        $navigation,
+        FormElementManager $formElementManager,
+        $viewHelperManager,
+        $dataServiceManager,
+        TranslationHelperService $translationHelper
+    ) {
+        $this->scriptFactory = $scriptFactory;
+        $this->formHelper = $formHelper;
+        $this->navigation = $navigation;
+        $this->formElementManager = $formElementManager;
+        $this->viewHelperManager = $viewHelperManager;
+        $this->dataServiceManager = $dataServiceManager;
+        $this->translationHelper = $translationHelper;
+
+        parent::__construct($niTextTranslationUtil, $authService);
+    }
 
     /**
      * Search index action
@@ -212,7 +258,7 @@ class SearchController extends AbstractController
 
         $view->setTemplate('layouts/main-search-results.phtml');
 
-        $this->getServiceLocator()->get('Script')->loadFile('search-results');
+        $this->scriptFactory->loadFile('search-results');
 
         $this->placeholder()->setPlaceholder('pageTitle', 'page.title.search-' . $indexPrm . '.index');
         $this->placeholder()->setPlaceholder('usePageTitleAsHeader', true);
@@ -272,14 +318,12 @@ class SearchController extends AbstractController
     {
         $formName = ($index === 'operator') ? SearchOperator::class : SimpleSearch::class;
 
-        $serviceLocator = $this->getServiceLocator();
-
-        /** @var \Laminas\Form\Form $form */
-        $form = $serviceLocator->get('Helper\Form')->createForm($formName);
-        $serviceLocator->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
+       /** @var \Laminas\Form\Form $form */
+        $form = $this->formHelper->createForm($formName);
+        $this->formHelper->setFormActionFromRequest($form, $this->getRequest());
 
         if ($formName === SearchOperator::class) {
-            $translator = $serviceLocator->get('Helper\Translation');
+            $translator = $this->translationHelper;
 
             $form->get('search')->setLabelAttributes(
                 [
@@ -290,7 +334,7 @@ class SearchController extends AbstractController
                 ]
             );
 
-            $serviceLocator->get('Script')->loadFile('search-operator');
+            $this->scriptFactory->loadFile('search-operator');
         } else {
             // OLCS-13903 set custom hints depending on the search being performed
             $form->get('search')->setLabel('search.form.label.' . $index);
@@ -308,8 +352,8 @@ class SearchController extends AbstractController
      */
     public function getFilterForm($name)
     {
-        $form = $this->getServiceLocator()->get('Helper\Form')->createForm($name);
-        $this->getServiceLocator()->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
+        $form = $this->formHelper->createForm($name);
+        $this->formHelper->setFormActionFromRequest($form, $this->getRequest());
         return $form;
     }
 
@@ -323,7 +367,7 @@ class SearchController extends AbstractController
      */
     public function setNavigationCurrentLocation()
     {
-        $navigation = $this->getServiceLocator()->get('Navigation');
+        $navigation = $this->navigation;
         if (!empty($this->navigationId)) {
             $navigation->findOneBy('id', $this->navigationId)->setActive();
         }
@@ -349,26 +393,25 @@ class SearchController extends AbstractController
 
             // terms filters
             /** @var  $fs */
-            $fs = $this->getServiceLocator()->get('FormElementManager')
+            $fs = $this->formElementManager
                 ->get(SearchFilterFieldset::class, ['index' => $index, 'name' => 'filter']);
             $form->add($fs);
 
             // date ranges
-            $fs = $this->getServiceLocator()->get('FormElementManager')
+            $fs = $this->formElementManager
                 ->get(SearchDateRangeFieldset::class, ['index' => $index, 'name' => 'dateRanges']);
 
             $form->add($fs);
 
             // order
-            $fs = $this->getServiceLocator()->get('FormElementManager')
+            $fs = $this->formElementManager
                 ->get(SearchOrderFieldset::class, ['index' => $index, 'name' => 'sort']);
             $form->add($fs);
         }
 
         $form->populateValues($this->getIncomingSearchData());
 
-        $this->getServiceLocator()
-            ->get('ViewHelperManager')
+        $this->viewHelperManager
             ->get('placeholder')
             ->getContainer('searchFilter')
             ->set($form);
@@ -386,6 +429,6 @@ class SearchController extends AbstractController
      */
     public function getSearchService()
     {
-        return $this->getServiceLocator()->get('DataServiceManager')->get(Search::class);
+        return $this->dataServiceManager->get(Search::class);
     }
 }

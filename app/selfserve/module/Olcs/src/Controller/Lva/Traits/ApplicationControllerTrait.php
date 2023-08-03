@@ -3,12 +3,11 @@
 namespace Olcs\Controller\Lva\Traits;
 
 use Common\Controller\Lva\Traits\CommonApplicationControllerTrait;
+use Common\RefData;
 use Common\View\Model\Section;
 use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
-use Olcs\Logging\Log\Logger;
 use Laminas\Form\Form;
 use Laminas\View\Model\ViewModel;
-use Common\RefData;
 
 /**
  * EXTERNAL Abstract Application Controller

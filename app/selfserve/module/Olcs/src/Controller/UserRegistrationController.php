@@ -4,16 +4,47 @@ namespace Olcs\Controller;
 
 use Common\Controller\Lva\AbstractController;
 use Common\Service\Cqrs\Exception\NotFoundException;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Helper\UrlHelperService;
+use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Transfer\Command\User\RegisterUserSelfserve as RegisterDto;
 use Dvsa\Olcs\Transfer\Query\Licence\LicenceRegisteredAddress as LicenceByNumberDto;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\Form\Form;
 use Laminas\View\Model\ViewModel;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * User Registration Controller
  */
 class UserRegistrationController extends AbstractController
 {
+    protected FormHelperService $formHelper;
+    protected ScriptFactory $scriptFactory;
+    protected TranslationHelperService $translationHelper;
+    protected UrlHelperService $urlHelper;
+    protected FlashMessengerHelperService $flashMessengerHelper;
+
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FormHelperService $formHelper,
+        ScriptFactory $scriptFactory,
+        TranslationHelperService $translationHelper,
+        UrlHelperService $urlHelper,
+        FlashMessengerHelperService $flashMessengerHelper
+    ) {
+        $this->formHelper = $formHelper;
+        $this->scriptFactory = $scriptFactory;
+        $this->translationHelper = $translationHelper;
+        $this->urlHelper = $urlHelper;
+        $this->flashMessengerHelper = $flashMessengerHelper;
+
+        parent::__construct($niTextTranslationUtil, $authService);
+    }
+
     /**
      * Method used for the registration form page
      *
@@ -22,7 +53,7 @@ class UserRegistrationController extends AbstractController
     public function addAction()
     {
         /** @var \Common\Form\Form $form */
-        $form = $this->getServiceLocator()->get('Helper\Form')
+        $form = $this->formHelper
             ->createFormWithRequest('UserRegistration', $this->getRequest());
 
         if ($this->getRequest()->isPost()) {
@@ -49,7 +80,7 @@ class UserRegistrationController extends AbstractController
         );
         $view->setTemplate('olcs/user-registration/index');
 
-        $this->getServiceLocator()->get('Script')->loadFile('user-registration');
+        $this->scriptFactory->loadFile('user-registration');
 
         return $view;
     }
@@ -66,10 +97,10 @@ class UserRegistrationController extends AbstractController
         // inject link into terms agreed label
         $termsAgreed = $form->get('fields')->get('termsAgreed');
 
-        $label = $this->getServiceLocator()->get('Helper\Translation')->translateReplace(
+        $label = $this->translationHelper->translateReplace(
             $termsAgreed->getLabel(),
             [
-                $this->getServiceLocator()->get('Helper\Url')->fromRoute('terms-and-conditions')
+                $this->urlHelper->fromRoute('terms-and-conditions')
             ]
         );
 
@@ -89,7 +120,7 @@ class UserRegistrationController extends AbstractController
     private function generateContentForUserRegistration(array $formData = [], array $errors = [])
     {
         /** @var \Common\Form\Form $form */
-        $form = $this->getServiceLocator()->get('Helper\Form')
+        $form = $this->formHelper
             ->createFormWithRequest('UserRegistration', $this->getRequest());
 
         if (!empty($formData)) {
@@ -112,7 +143,7 @@ class UserRegistrationController extends AbstractController
         );
         $view->setTemplate('olcs/user-registration/index');
 
-        $this->getServiceLocator()->get('Script')->loadFile('user-registration');
+        $this->scriptFactory->loadFile('user-registration');
 
         return $view;
     }
@@ -163,7 +194,7 @@ class UserRegistrationController extends AbstractController
                 $result = $response->getResult();
 
                 /** @var \Common\Form\Form $form */
-                $form = $this->getServiceLocator()->get('Helper\Form')
+                $form = $this->formHelper
                     ->createFormWithRequest('UserRegistrationAddress', $this->getRequest());
 
                 $form->setData($formData);
@@ -186,7 +217,7 @@ class UserRegistrationController extends AbstractController
             if (!empty($result['messages']['licenceNumber'])) {
                 $errors = $result['messages'];
             } else {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+                $this->flashMessengerHelper->addErrorMessage('unknown-error');
             }
         } catch (NotFoundException $e) {
             $errors = [
@@ -274,7 +305,7 @@ class UserRegistrationController extends AbstractController
         if (!empty($result['messages']['licenceNumber']) || !empty($result['messages']['loginId'])) {
             $errors = $result['messages'];
         } else {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            $this->flashMessengerHelper->addErrorMessage('unknown-error');
         }
 
         return $this->generateContentForUserRegistration($formData, $errors);

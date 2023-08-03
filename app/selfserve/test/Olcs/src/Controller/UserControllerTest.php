@@ -4,13 +4,22 @@ declare(strict_types=1);
 
 namespace OlcsTest\Controller;
 
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\GuidanceHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Transfer\Command\User\CreateUserSelfserve;
 use Dvsa\Olcs\Transfer\Command\User\UpdateUserSelfserve;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use Laminas\Form\Element;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Dvsa\Olcs\Transfer\Query as TransferQry;
 use Laminas\Mvc\Controller\Plugin\Redirect;
+use Olcs\Controller\UserController;
 use Olcs\View\Model\User;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Class User Controller Test
@@ -24,8 +33,6 @@ class UserControllerTest extends MockeryTestCase
 
     /** @var  m\MockInterface */
     private $mockParams;
-    /** @var  m\MockInterface */
-    private $mockSl;
     /** @var  m\MockInterface */
     private $mockResponse;
     /** @var  m\MockInterface */
@@ -48,9 +55,26 @@ class UserControllerTest extends MockeryTestCase
 
     public function setUp(): void
     {
-        $this->sut = m::mock(\Olcs\Controller\UserController::class)
-            ->makePartial()
-            ->shouldAllowMockingProtectedMethods();
+
+        $this->mockNiTextTranslationUtil = m::mock(NiTextTranslation::class);
+        $this->mockAuthService = m::mock(AuthorizationService::class);
+        $this->mockUser = m::mock(User::class);
+        $this->mockScriptFactory = m::mock(ScriptFactory::class);
+        $this->mockFormHelper = m::mock(FormHelperService::class);
+        $this->mockFlashMessengerHelper = m::mock(FlashMessengerHelperService::class);
+        $this->mockTranslationHelper = m::mock(TranslationHelperService::class);
+        $this->mockGuidanceHelper = m::mock(GuidanceHelperService::class);
+
+        $this->sut = m::mock(UserController::class, [
+            $this->mockNiTextTranslationUtil,
+            $this->mockAuthService,
+            $this->mockUser,
+            $this->mockScriptFactory,
+            $this->mockFormHelper,
+            $this->mockFlashMessengerHelper,
+            $this->mockTranslationHelper,
+            $this->mockGuidanceHelper
+        ])->shouldAllowMockingProtectedMethods()->makePartial();
 
         $this->mockRequest = m::mock(\Laminas\Http\Request::class);
         $this->sut->shouldReceive('getRequest')->andReturn($this->mockRequest);
@@ -61,29 +85,17 @@ class UserControllerTest extends MockeryTestCase
         $this->mockParams = m::mock(\Laminas\Mvc\Controller\Plugin\Params::class);
         $this->sut->shouldReceive('params')->andReturn($this->mockParams);
 
-        $this->mockSl = m::mock(\Laminas\ServiceManager\ServiceManager::class);
-        $this->sut->shouldReceive('getServiceLocator')->andReturn($this->mockSl);
-
         $this->mockForm = m::mock(\Common\Form\Form::class);
         $this->mockForm->shouldReceive('get')->with('permission')->andReturnSelf();
 
-        $this->mockFormHelper = m::mock();
-        $this->mockSl->shouldReceive('get')->with('Helper\Form')->andReturn($this->mockFormHelper);
-
-        $this->mockFlashMsgr = m::mock('stdClass');
-        $this->mockSl->shouldReceive('get')->with('Helper\FlashMessenger')->andReturn($this->mockFlashMsgr);
-
-        $this->mockTranslator = m::mock();
-        $this->mockTranslator->shouldReceive('translate')->andReturnUsing(
+        $this->mockTranslationHelper->shouldReceive('translate')->andReturnUsing(
             function ($arg) {
                 return $arg . "_translated";
             }
         );
-        $this->mockSl->shouldReceive('get')->with('Helper\Translation')->andReturn($this->mockTranslator);
 
-        $this->mockGuidanceHelper = m::mock();
+
         $this->mockGuidanceHelper->shouldReceive('append');
-        $this->mockSl->shouldReceive('get')->with('Helper\Guidance')->andReturn($this->mockGuidanceHelper);
     }
 
     public function tearDown(): void
@@ -124,14 +136,9 @@ class UserControllerTest extends MockeryTestCase
 
         $this->mockRequest->shouldReceive('isPost')->andReturn(false);
 
-        $mockUserModel = m::mock(User::class);
-        $mockUserModel->expects('setUsers')->with($data, $paramsArr);
+        $this->mockUser->expects('setUsers')->with($data, $paramsArr);
 
-        $mockScript = m::mock('stdClass');
-        $mockScript->shouldReceive('loadFiles')->once()->with(['lva-crud'])->andReturnNull();
-
-        $this->mockSl->shouldReceive('get')->with(User::class)->andReturn($mockUserModel);
-        $this->mockSl->shouldReceive('get')->with('Script')->andReturn($mockScript);
+        $this->mockScriptFactory->shouldReceive('loadFiles')->once()->with(['lva-crud'])->andReturnNull();
 
         $actual = $this->sut->indexAction();
 
@@ -166,16 +173,11 @@ class UserControllerTest extends MockeryTestCase
         $this->mockResponse->shouldReceive('isOk')->andReturn(false);
         $this->sut->shouldReceive('handleQuery')->andReturn($this->mockResponse);
 
-        $this->mockFlashMsgr->shouldReceive('addUnknownError')->once();
+        $this->mockFlashMessengerHelper->shouldReceive('addUnknownError')->once();
 
-        $mockUserModel = m::mock(User::class);
-        $mockUserModel->expects('setUsers')->with([], $paramsArr);
+        $this->mockUser->expects('setUsers')->with([], $paramsArr);
 
-        $mockScript = m::mock('stdClass');
-        $mockScript->shouldReceive('loadFiles')->once()->with(['lva-crud'])->andReturnNull();
-
-        $this->mockSl->shouldReceive('get')->with(User::class)->andReturn($mockUserModel);
-        $this->mockSl->shouldReceive('get')->with('Script')->andReturn($mockScript);
+        $this->mockScriptFactory->shouldReceive('loadFiles')->once()->with(['lva-crud'])->andReturnNull();
 
         $actual = $this->sut->indexAction();
 
@@ -219,7 +221,7 @@ class UserControllerTest extends MockeryTestCase
 
         $this->mockParams->shouldReceive('fromRoute')->with('id', null)->andReturn($id);
 
-        $this->mockFlashMsgr->shouldReceive('addSuccessMessage')->andReturnNull();
+        $this->mockFlashMessengerHelper->shouldReceive('addSuccessMessage')->andReturnNull();
 
         $this->mockForm->shouldReceive('setData')->with($this->sut->formatLoadData($rawEditData))// happy path.
             ->shouldReceive('unsetValueOption')->with('tm')->once()
@@ -268,7 +270,7 @@ class UserControllerTest extends MockeryTestCase
             ->andReturn('EXPECT');
         $this->sut->shouldReceive('redirect')->andReturn($mockRedirect);
 
-        $this->mockFlashMsgr->shouldReceive('addSuccessMessage')->andReturnNull();
+        $this->mockFlashMessengerHelper->shouldReceive('addSuccessMessage')->andReturnNull();
 
         $this->mockForm->shouldReceive('isValid')->andReturn(true);
         $this->mockForm->shouldReceive('setData')->with($rawEditData);
@@ -313,7 +315,7 @@ class UserControllerTest extends MockeryTestCase
             ->andReturn('EXPECT');
         $this->sut->shouldReceive('redirect')->andReturn($mockRedirect);
 
-        $this->mockFlashMsgr->shouldReceive('addSuccessMessage')->andReturnNull();
+        $this->mockFlashMessengerHelper->shouldReceive('addSuccessMessage')->andReturnNull();
 
         $this->mockForm->shouldReceive('isValid')->andReturn(true);
         $this->mockForm->shouldReceive('setData')->with($rawEditData);
@@ -377,14 +379,14 @@ class UserControllerTest extends MockeryTestCase
 
         $this->mockParams->shouldReceive('fromRoute')->with('id', null)->andReturn($id);
 
-        $this->mockFlashMsgr->shouldReceive('addSuccessMessage')->andReturnNull();
+        $this->mockFlashMessengerHelper->shouldReceive('addSuccessMessage')->andReturnNull();
 
         $mockFieldSet = m::mock();
-        $mockElementForename = m::mock();
+        $mockElementForename = m::mock(Element::class);
         $mockFieldSet->shouldReceive('get')->with('forename')->once()->andReturn($mockElementForename);
-        $mockElementFamilyName = m::mock();
+        $mockElementFamilyName = m::mock(Element::class);
         $mockFieldSet->shouldReceive('get')->with('familyName')->once()->andReturn($mockElementFamilyName);
-        $mockPermissionElement = m::mock();
+        $mockPermissionElement = m::mock(Element::class);
         $mockPermissionElement->shouldReceive('unsetValueOption')->with('tm')->once();
         $mockFieldSet->shouldReceive('get')->with('permission')->once()->andReturn($mockPermissionElement);
 
@@ -434,7 +436,7 @@ class UserControllerTest extends MockeryTestCase
             ->with(m::type(TransferQry\User\UserSelfserve::class))
             ->andReturn($this->mockResponse);
 
-        $this->mockFlashMsgr->shouldReceive('addUnknownError')->once();
+        $this->mockFlashMessengerHelper->shouldReceive('addUnknownError')->once();
 
         $mockRedirect = m::mock(Redirect::class);
         $mockRedirect

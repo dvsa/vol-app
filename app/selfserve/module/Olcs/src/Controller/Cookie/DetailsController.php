@@ -2,7 +2,6 @@
 
 namespace Olcs\Controller\Cookie;
 
-use Common\Data\Mapper\MapperInterface;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableFactory;

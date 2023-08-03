@@ -4,23 +4,53 @@ namespace OLCS\Controller\Lva\TransportManager;
 
 use Common\Controller\Lva\AbstractController;
 use Common\RefData;
+use Common\Service\Cqrs\Command\CommandService;
+use Common\Service\Helper\TranslationHelperService;
+use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 use Olcs\Controller\Lva\Traits\TransportManagerApplicationTrait;
+use ZfcRbac\Service\AuthorizationService;
 
 class ConfirmationController extends AbstractController
 {
-    use ExternalControllerTrait,
-        TransportManagerApplicationTrait;
+    use ExternalControllerTrait;
+    use TransportManagerApplicationTrait;
 
-    const TM_MARKUP = 'markup-tma-confirmation-tm';
+    public const TM_MARKUP = 'markup-tma-confirmation-tm';
 
-    const OPERATOR_MARKUP = 'markup-tma-confirmation-operator';
+    public const OPERATOR_MARKUP = 'markup-tma-confirmation-operator';
 
     protected $tma;
 
     protected $markup = self::OPERATOR_MARKUP;
 
     protected $signature;
+
+    protected TranslationHelperService $translationHelper;
+    protected AnnotationBuilder $transferAnnotationBuilder;
+    protected CommandService $commandService;
+
+    /**
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param TranslationHelperService $translationHelper
+     * @param AnnotationBuilder $transferAnnotationBuilder
+     * @param CommandService $commandService
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        TranslationHelperService $translationHelper,
+        AnnotationBuilder $transferAnnotationBuilder,
+        CommandService $commandService
+    ) {
+        $this->translationHelper = $translationHelper;
+        $this->transferAnnotationBuilder = $transferAnnotationBuilder;
+        $this->commandService = $commandService;
+
+        parent::__construct($niTextTranslationUtil, $authService);
+    }
 
     /**
      * index action for /transport-manager/:TmaId/confirmation route
@@ -29,7 +59,7 @@ class ConfirmationController extends AbstractController
      */
     public function indexAction()
     {
-        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
+        $translationHelper = $this->translationHelper;
 
         $this->signature = $this->tma['opDigitalSignature'];
 
@@ -96,7 +126,7 @@ class ConfirmationController extends AbstractController
         return $this->url()->fromRoute('dashboard');
     }
 
-    private function isOperatorUserOrAdmin() :bool
+    private function isOperatorUserOrAdmin(): bool
     {
         if ($this->isGranted(RefData::PERMISSION_SELFSERVE_LVA)) {
             return true;
@@ -123,16 +153,20 @@ class ConfirmationController extends AbstractController
      */
     protected function isUserPermitted()
     {
-        if ($this->tma['isTmLoggedInUser'] &&
+        if (
+            $this->tma['isTmLoggedInUser'] &&
             ($this->tma['tmApplicationStatus']['id'] === RefData::TMA_STATUS_TM_SIGNED ||
                 $this->tma['tmApplicationStatus']['id'] === RefData::TMA_STATUS_RECEIVED) &&
-            !is_null($this->tma['tmDigitalSignature'])) {
+            !is_null($this->tma['tmDigitalSignature'])
+        ) {
             return true;
         }
 
-        if ((!$this->tma['isTmLoggedInUser']) &&
+        if (
+            (!$this->tma['isTmLoggedInUser']) &&
             $this->tma['tmApplicationStatus']['id'] === RefData::TMA_STATUS_RECEIVED &&
-            !is_null($this->tma['opDigitalSignature'])) {
+            !is_null($this->tma['opDigitalSignature'])
+        ) {
             return true;
         }
         return false;

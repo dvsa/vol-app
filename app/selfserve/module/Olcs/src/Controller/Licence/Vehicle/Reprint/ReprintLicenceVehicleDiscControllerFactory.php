@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace Olcs\Controller\Licence\Vehicle\Reprint;
 
-use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableFactory;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
-use Olcs\Controller\Licence\Vehicle\AddDuplicateVehicleController;
 use Permits\Data\Mapper\MapperManager;
 
 class ReprintLicenceVehicleDiscControllerFactory implements FactoryInterface

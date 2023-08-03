@@ -3,8 +3,21 @@
 namespace Olcs\Controller\Lva\Licence;
 
 use Common\Controller\Lva\AbstractGoodsVehiclesController;
+use Common\Controller\Lva\Adapters\LicenceLvaAdapter;
+use Common\Data\Mapper\Lva\GoodsVehiclesVehicle;
+use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\GuidanceHelperService;
+use Common\Service\Helper\ResponseHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Lva\VariationLvaService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Query;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * @see VehicleControllerFactory
@@ -14,13 +27,64 @@ class VehiclesController extends AbstractGoodsVehiclesController
     use LicenceControllerTrait;
 
     protected $lva = 'licence';
-    protected $location = 'external';
+    protected string $location = 'external';
+
+    protected ResponseHelperService $responseHelper;
 
     protected static $exportDataMap = [
         'licence' => Query\Licence\GoodsVehiclesExport::class,
         'variation' => Query\Variation\GoodsVehiclesExport::class,
         'application' => Query\Application\GoodsVehiclesExport::class,
     ];
+
+    protected LicenceLvaAdapter $licenceLvaAdapter;
+
+    /**
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param FormServiceManager $formServiceManager
+     * @param TableFactory $tableFactory
+     * @param GuidanceHelperService $guidanceHelper
+     * @param TranslationHelperService $translationHelper
+     * @param ScriptFactory $scriptFactory
+     * @param VariationLvaService $variationLvaService
+     * @param GoodsVehiclesVehicle $goodsVehiclesVehicleMapper
+     * @param LicenceLvaAdapter $licenceLvaAdapter
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessengerHelper,
+        FormServiceManager $formServiceManager,
+        TableFactory $tableFactory,
+        GuidanceHelperService $guidanceHelper,
+        TranslationHelperService $translationHelper,
+        ScriptFactory $scriptFactory,
+        VariationLvaService $variationLvaService,
+        GoodsVehiclesVehicle $goodsVehiclesVehicleMapper,
+        ResponseHelperService $responseHelper,
+        LicenceLvaAdapter $licenceLvaAdapter
+    ) {
+        $this->responseHelper = $responseHelper;
+        $this->licenceLvaAdapter = $licenceLvaAdapter;
+
+        parent::__construct(
+            $niTextTranslationUtil,
+            $authService,
+            $formHelper,
+            $flashMessengerHelper,
+            $formServiceManager,
+            $tableFactory,
+            $guidanceHelper,
+            $translationHelper,
+            $scriptFactory,
+            $variationLvaService,
+            $goodsVehiclesVehicleMapper
+        );
+    }
 
     protected function getScripts()
     {
@@ -50,8 +114,7 @@ class VehiclesController extends AbstractGoodsVehiclesController
             );
             $request->getPost()->set('query', $query);
 
-            return $this->getServiceLocator()
-                ->get('Helper\Response')
+            return $this->responseHelper
                 ->tableToCsv(
                     $this->getResponse(),
                     $this->getTable($this->getExportData(), $this->getFilters()),

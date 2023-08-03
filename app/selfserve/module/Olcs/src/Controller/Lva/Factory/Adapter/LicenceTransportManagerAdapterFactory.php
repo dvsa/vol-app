@@ -7,9 +7,9 @@ use Common\Service\Cqrs\Query\CachingQueryService;
 use Common\Service\Lva\VariationLvaService;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Interop\Container\ContainerInterface;
-use Olcs\Controller\Lva\Adapters\LicenceTransportManagerAdapter;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+use Olcs\Controller\Lva\Adapters\LicenceTransportManagerAdapter;
 
 /**
  * Factory for creation Licence Transport Manager Adapter

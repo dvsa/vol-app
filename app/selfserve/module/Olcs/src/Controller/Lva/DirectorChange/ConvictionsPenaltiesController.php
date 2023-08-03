@@ -1,17 +1,23 @@
 <?php
 
-
 namespace Olcs\Controller\Lva\DirectorChange;
 
 use Common\Controller\Lva\AbstractController;
 use Common\Controller\Lva\AbstractConvictionsPenaltiesController;
+use Common\FormService\FormServiceManager;
 use Common\RefData;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableBuilder;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\Variation\GrantDirectorChange;
-use Laminas\I18n\Translator\TranslatorInterface;
-use Olcs\Controller\Lva\Traits\VariationWizardFinalPageControllerTrait;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\Http\Response;
 use Laminas\Mvc\Controller\Plugin\FlashMessenger;
+use Olcs\Controller\Lva\Traits\VariationWizardFinalPageControllerTrait;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * @see ConvictionsPenaltiesControllerFactory
@@ -24,31 +30,38 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
     /**
      * @var string
      */
-    protected $location = 'external';
+    protected string $location = 'external';
 
     /**
      * @var string
      */
     protected $lva = self::LVA_VAR;
+    private TranslationHelperService $translationHelper;
+    protected FlashMessenger $flashMessengerPlugin;
 
-    /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessengerHelper,
+        FormServiceManager $formServiceManager,
+        TableFactory $tableFactory,
+        TranslationHelperService $translationHelper,
+        ScriptFactory $scriptFactory,
+        FlashMessenger $flashMessengerPlugin
+    ) {
+        $this->translationHelper = $translationHelper;
+        $this->flashMessengerPlugin = $flashMessengerPlugin;
 
-    /**
-     * @var FlashMessenger
-     */
-    protected $flashMessenger;
-
-    /**
-     * @param TranslatorInterface $translator
-     * @param FlashMessenger $flashMessenger
-     */
-    public function __construct(TranslatorInterface $translator, FlashMessenger $flashMessenger)
-    {
-        $this->translator = $translator;
-        $this->flashMessenger = $flashMessenger;
+        parent::__construct(
+            $niTextTranslationUtil,
+            $authService,
+            $formHelper,
+            $flashMessengerHelper,
+            $formServiceManager,
+            $tableFactory,
+            $scriptFactory
+        );
     }
 
     /**
@@ -101,17 +114,17 @@ class ConvictionsPenaltiesController extends AbstractConvictionsPenaltiesControl
         $createdPeopleCount = count($createdPersonIDs);
 
         if ($response->isClientError() || $response->isServerError()) {
-            $this->flashMessenger->addErrorMessage('unknown-error');
+            $this->flashMessengerHelper->addErrorMessage('unknown-error');
         }
 
         if ($createdPeopleCount > 0) {
             $messageKey = 'selfserve-app-subSection-your-business-people.message.created.success.' . ($createdPeopleCount === 1 ? 'singular' : 'plural');
-            $message = sprintf($this->translator->translate($messageKey), $createdPeopleCount);
-            $this->flashMessenger->addSuccessMessage($message);
+            $message = sprintf($this->translationHelper->translate($messageKey), $createdPeopleCount);
+            $this->flashMessengerHelper->addSuccessMessage($message);
         }
 
         foreach ($createdPersonIDs as $createdPersonID) {
-            $this->flashMessenger->addMessage($createdPersonID, AbstractController::FLASH_MESSENGER_CREATED_PERSON_NAMESPACE);
+            $this->flashMessengerPlugin->addMessage($createdPersonID, AbstractController::FLASH_MESSENGER_CREATED_PERSON_NAMESPACE);
         }
 
         return $this->redirectToStartRoute();

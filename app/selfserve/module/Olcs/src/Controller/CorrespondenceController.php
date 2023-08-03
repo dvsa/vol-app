@@ -3,10 +3,14 @@
 namespace Olcs\Controller;
 
 use Common\Controller\Lva\AbstractController;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\Correspondence\AccessCorrespondence;
 use Dvsa\Olcs\Transfer\Query\Correspondence\Correspondence;
 use Dvsa\Olcs\Transfer\Query\Correspondence\Correspondences;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\View\Model\ViewModel;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Class CorrespondenceController
@@ -20,6 +24,21 @@ use Laminas\View\Model\ViewModel;
 class CorrespondenceController extends AbstractController
 {
     use Lva\Traits\ExternalControllerTrait;
+
+    protected FlashMessengerHelperService $flashMessengerHelper;
+    protected TableFactory $tableFactory;
+
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FlashMessengerHelperService $flashMessengerHelper,
+        TableFactory $tableFactory
+    ) {
+        $this->flashMessengerHelper = $flashMessengerHelper;
+        $this->tableFactory = $tableFactory;
+
+        parent::__construct($niTextTranslationUtil, $authService);
+    }
 
     /**
      * Display the table and all the correspondence for the given organisation.
@@ -45,11 +64,11 @@ class CorrespondenceController extends AbstractController
         if ($response->isOk()) {
             $docs = $response->getResult();
         } else {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            $this->flashMessengerHelper->addErrorMessage('unknown-error');
             $docs = [];
         }
 
-        $table = $this->getServiceLocator()->get('Table')
+        $table = $this->tableFactory
             ->buildTable('correspondence', $this->formatTableData($docs), $params);
 
         $view = new ViewModel(['table' => $table]);
@@ -76,7 +95,7 @@ class CorrespondenceController extends AbstractController
         $response = $this->handleCommand($command);
         if (!$response->isOk()) {
             if ($response->isClientError() || $response->isServerError()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+                $this->flashMessengerHelper->addErrorMessage('unknown-error');
             }
 
             return $this->notFoundAction();
@@ -91,7 +110,7 @@ class CorrespondenceController extends AbstractController
         $response = $this->handleQuery($query);
         if (!$response->isOk()) {
             if ($response->isClientError() || $response->isServerError()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+                $this->flashMessengerHelper->addErrorMessage('unknown-error');
             }
 
             return $this->notFoundAction();

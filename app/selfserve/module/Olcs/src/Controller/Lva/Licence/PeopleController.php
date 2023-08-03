@@ -4,17 +4,24 @@ namespace Olcs\Controller\Lva\Licence;
 
 use Common\Controller\Lva;
 use Common\Exception\ResourceNotFoundException;
+use Common\FormService\FormServiceManager;
 use Common\RefData;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\GuidanceHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Lva\VariationLvaService;
+use Common\Service\Script\ScriptFactory;
 use Common\Util\Escape;
 use Common\View\Helper\PersonName;
 use Dvsa\Olcs\Transfer\Command\Licence\CreateVariation;
-use Laminas\I18n\Translator\TranslatorInterface;
-use Laminas\View\Model\ViewModel;
-use Olcs\Controller\Lva\Adapters\LicencePeopleAdapter;
-use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\Form\Form;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
+use Laminas\View\Model\ViewModel;
+use Olcs\Controller\Lva\Adapters\LicencePeopleAdapter;
+use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * @see \OlcsTest\Controller\Lva\Licence\PeopleControllerTest
@@ -25,11 +32,6 @@ class PeopleController extends Lva\AbstractPeopleController
     use LicenceControllerTrait;
 
     /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
-
-    /**
      * @var string
      */
     protected $lva = 'licence';
@@ -37,19 +39,49 @@ class PeopleController extends Lva\AbstractPeopleController
     /**
      * @var string
      */
-    protected $location = 'external';
+    protected string $location = 'external';
 
     /**
      * @var string
      */
     protected $section = 'people';
 
+    protected TranslationHelperService $translationHelper;
+
     /**
-     * @param TranslatorInterface $translator
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
+     * @param FormServiceManager $formServiceManager
+     * @param ScriptFactory $scriptFactory
+     * @param VariationLvaService $variationLvaService
+     * @param GuidanceHelperService $guidanceHelper
+     * @param TranslationHelperService $translationHelper
+     * @param LicencePeopleAdapter $lvaAdapter
      */
-    public function __construct(TranslatorInterface $translator)
-    {
-        $this->translator = $translator;
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FormHelperService $formHelper,
+        FormServiceManager $formServiceManager,
+        ScriptFactory $scriptFactory,
+        VariationLvaService $variationLvaService,
+        GuidanceHelperService $guidanceHelper,
+        TranslationHelperService $translationHelper,
+        LicencePeopleAdapter $lvaAdapter
+    ) {
+        $this->translationHelper = $translationHelper;
+
+        parent::__construct(
+            $niTextTranslationUtil,
+            $authService,
+            $formHelper,
+            $formServiceManager,
+            $scriptFactory,
+            $variationLvaService,
+            $guidanceHelper,
+            $lvaAdapter
+        );
     }
 
     /**
@@ -101,12 +133,12 @@ class PeopleController extends Lva\AbstractPeopleController
 
         if ($response instanceof ViewModel) {
             $personId = $this->getEvent()->getRouteMatch()->getParam('child_id');
-            $personData = $this->getAdapter()->getPersonData($personId);
+            $personData = $this->lvaAdapter->getPersonData($personId);
             if (false === $personData) {
                 throw new ResourceNotFoundException();
             }
             $view = array_values($response->getChildren())[0];
-            $translatedTitle = $this->translator->translate($view->getVariable('title'));
+            $translatedTitle = $this->translationHelper->translate($view->getVariable('title'));
             $fullName = (new PersonName())->__invoke($personData['person']);
             $view->setVariable('title', sprintf($translatedTitle, Escape::html($fullName)));
         }
@@ -210,7 +242,7 @@ class PeopleController extends Lva\AbstractPeopleController
     private function getLicencePeopleAdapter()
     {
         /** @var LicencePeopleAdapter $adapter */
-        $adapter = $this->getAdapter();
+        $adapter = $this->lvaAdapter;
         return $adapter;
     }
 }

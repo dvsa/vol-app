@@ -4,16 +4,38 @@ namespace Olcs\Controller;
 
 use Common\Controller\Lva\AbstractController;
 use Common\Form\Form;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
+use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Transfer\Command\MyAccount\UpdateMyAccountSelfserve as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount as MyAccountQuery;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\View\Model\ViewModel;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * My Details Controller
  */
 class MyDetailsController extends AbstractController
 {
+    protected FlashMessengerHelperService $flashMessengerHelper;
+    protected ScriptFactory $scriptFactory;
+    protected FormHelperService $formHelper;
+
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FlashMessengerHelperService $flashMessengerHelper,
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper
+    ) {
+        $this->flashMessengerHelper = $flashMessengerHelper;
+        $this->scriptFactory = $scriptFactory;
+        $this->formHelper = $formHelper;
+
+        parent::__construct($niTextTranslationUtil, $authService);
+    }
+
     /**
      * Edit action
      *
@@ -32,7 +54,7 @@ class MyDetailsController extends AbstractController
             $data = $this->formatLoadData($response->getResult());
             $form->setData($data);
         } else {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            $this->flashMessengerHelper->addErrorMessage('unknown-error');
         }
 
         if ($this->getRequest()->isPost()) {
@@ -50,11 +72,11 @@ class MyDetailsController extends AbstractController
                 );
 
                 if ($response->isOk()) {
-                    $this->getServiceLocator()->get('Helper\FlashMessenger')
+                    $this->flashMessengerHelper
                         ->addSuccessMessage('generic.updated.success');
                     return $this->redirectToIndex();
                 }
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+                $this->flashMessengerHelper->addErrorMessage('unknown-error');
             }
         }
 
@@ -68,7 +90,7 @@ class MyDetailsController extends AbstractController
         );
         $view->setTemplate('pages/my-details-page');
 
-        $this->getServiceLocator()->get('Script')->loadFile('my-details');
+        $this->scriptFactory->loadFile('my-details');
 
         return $view;
     }
@@ -132,7 +154,7 @@ class MyDetailsController extends AbstractController
     private function getFormHelper()
     {
         /** @var FormHelperService $formHelper */
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
         return $formHelper;
     }
 

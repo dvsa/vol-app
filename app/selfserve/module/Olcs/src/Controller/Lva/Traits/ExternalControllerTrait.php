@@ -7,13 +7,11 @@
  */
 namespace Olcs\Controller\Lva\Traits;
 
-use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
-use Laminas\Form\Form;
-use Laminas\View\Model\ViewModel;
 use Common\RefData;
 use Common\View\Model\Section;
-use Dvsa\Olcs\Transfer\Query\User\UserSelfserve as UserQry;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceQry;
+use Laminas\Form\Form;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Abstract External Controller

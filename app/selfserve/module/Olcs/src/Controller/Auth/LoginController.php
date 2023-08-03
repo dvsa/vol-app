@@ -7,6 +7,7 @@ use Common\Auth\Service\AuthenticationServiceInterface;
 use Common\Controller\Plugin\CurrentUser;
 use Common\Controller\Plugin\Redirect;
 use Common\Service\Helper\FormHelperService;
+use Dvsa\Olcs\Auth\Container\AuthChallengeContainer;
 use Laminas\Authentication\Adapter\ValidatableAdapterInterface;
 use Laminas\Authentication\Result;
 use Laminas\Form\Form;
@@ -16,7 +17,6 @@ use Laminas\Mvc\Controller\Plugin\FlashMessenger;
 use Laminas\Mvc\Router\Http\RouteMatch;
 use Laminas\Uri\Uri;
 use Laminas\View\Model\ViewModel;
-use Dvsa\Olcs\Auth\Container\AuthChallengeContainer;
 use Olcs\Form\Model\Form\Auth\Login;
 use Olcs\Logging\Log\Logger;
 

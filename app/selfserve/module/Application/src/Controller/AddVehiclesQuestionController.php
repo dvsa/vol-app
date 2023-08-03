@@ -4,26 +4,26 @@ declare(strict_types=1);
 
 namespace Dvsa\Olcs\Application\Controller;
 
+use Common\Controller\Plugin\HandleCommand;
+use Common\Controller\Plugin\HandleQuery;
 use Common\Controller\Plugin\Redirect;
+use Common\Exception\BailOutException;
+use Common\Exception\ResourceNotFoundException;
+use Common\Form\FormValidator;
+use Common\RefData;
+use Common\Service\Cqrs\Exception\BadCommandResponseException;
+use Common\Service\Cqrs\Exception\BadQueryResponseException;
+use Dvsa\Olcs\Application\Controller\Factory\AddVehiclesQuestionControllerFactory;
+use Dvsa\Olcs\Application\Form\AddVehiclesQuestionForm;
+use Dvsa\Olcs\Application\View\Model\JourneyProgressDescriptionViewModel;
+use Dvsa\Olcs\Transfer\Command\Application\UpdateVehicles;
+use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQuery;
 use Laminas\Http\Request;
+use Laminas\Http\Response;
+use Laminas\Mvc\Controller\Plugin\FlashMessenger;
 use Laminas\Mvc\Controller\Plugin\Url;
 use Laminas\Mvc\Router\RouteMatch;
 use Laminas\View\Model\ViewModel;
-use Dvsa\Olcs\Application\Controller\Factory\AddVehiclesQuestionControllerFactory;
-use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQuery;
-use Common\Controller\Plugin\HandleQuery;
-use Dvsa\Olcs\Application\View\Model\JourneyProgressDescriptionViewModel;
-use Dvsa\Olcs\Application\Form\AddVehiclesQuestionForm;
-use Laminas\Http\Response;
-use Laminas\Mvc\Controller\Plugin\FlashMessenger;
-use Common\Form\FormValidator;
-use Common\Exception\ResourceNotFoundException;
-use Dvsa\Olcs\Transfer\Command\Application\UpdateVehicles;
-use Common\Controller\Plugin\HandleCommand;
-use Common\Service\Cqrs\Exception\BadCommandResponseException;
-use Common\Exception\BailOutException;
-use Common\RefData;
-use Common\Service\Cqrs\Exception\BadQueryResponseException;
 
 /**
  * A controller for the first step of the vehicle application journey which asks a user whether they would like to

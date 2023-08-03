@@ -5,15 +5,20 @@
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
+
 namespace OlcsTest\Controller;
 
+use Common\Service\Table\DataMapper\DashboardTmApplications;
+use Common\Service\Table\TableFactory;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Organisation\Dashboard as DashboardQry;
+use Olcs\Service\Processing\DashboardProcessingService;
 use Olcs\TestHelpers\Controller\Traits\ControllerTestTrait;
 use Olcs\Mvc\Controller\Plugin\Placeholder;
 use Common\Service\Cqrs\Response as QueryResponse;
+use ReflectionClass;
 
 /**
  * Dashboard Controller Test
@@ -24,10 +29,10 @@ class DashboardControllerTest extends MockeryTestCase
 {
     use ControllerTestTrait;
 
-    protected function getServiceManager()
-    {
-        return m::mock('\Laminas\ServiceManager\ServiceManager')->makePartial();
-    }
+    protected $mockDashboardProcessingService;
+    protected $mockDashboardTmApplicationsDataMapper;
+    protected $mockTableFactory;
+
 
     public function setUp(): void
     {
@@ -35,10 +40,22 @@ class DashboardControllerTest extends MockeryTestCase
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
 
-        $this->sm = $this->getServiceManager();
-        $this->sm->setAllowOverride(true);
+        $this->mockDashboardProcessingService = m::mock(DashboardProcessingService::class);
+        $this->mockDashboardTmApplicationsDataMapper = m::mock(DashboardTmApplications::class);
+        $this->mockTableFactory = m::mock(TableFactory::class);
 
-        $this->sut->setServiceLocator($this->sm);
+        $reflectionClass = new ReflectionClass('\Olcs\Controller\DashboardController');
+        $reflectionProperty = $reflectionClass->getProperty('dashboardProcessingService');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->sut, $this->mockDashboardProcessingService);
+
+        $reflectionProperty = $reflectionClass->getProperty('dashboardTmApplicationsDataMapper');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->sut, $this->mockDashboardTmApplicationsDataMapper);
+
+        $reflectionProperty = $reflectionClass->getProperty('tableFactory');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->sut, $this->mockTableFactory);
     }
 
     public function dataProviderCorrectDashboardShown()
@@ -81,9 +98,6 @@ class DashboardControllerTest extends MockeryTestCase
     {
         $organisationId = 45;
 
-        $mockDashboardProcessingService = m::mock();
-        $this->sm->setService('DashboardProcessingService', $mockDashboardProcessingService);
-
         $this->sut->shouldReceive('isGranted')
             ->with(RefData::PERMISSION_SELFSERVE_TM_DASHBOARD)
             ->once()
@@ -110,7 +124,7 @@ class DashboardControllerTest extends MockeryTestCase
             ]
         );
 
-        $mockDashboardProcessingService->shouldReceive('getTables')
+        $this->mockDashboardProcessingService->shouldReceive('getTables')
             ->with($dashboardData)
             ->once()
             ->andReturn(['applications' => ['apps'], 'variations' => ['vars'], 'licences' => ['lics']]);
@@ -141,15 +155,6 @@ class DashboardControllerTest extends MockeryTestCase
 
     public function testDashboardTransportManager()
     {
-        $mockUserEntity = m::mock();
-        $this->sm->setService('Entity\User', $mockUserEntity);
-
-        $mockTable = m::mock();
-        $this->sm->setService('Table', $mockTable);
-
-        $mockDataMapper = m::mock();
-        $this->sm->setService('DataMapper\DashboardTmApplications', $mockDataMapper);
-
         $this->sut->shouldReceive('isGranted')
             ->with(RefData::PERMISSION_SELFSERVE_TM_DASHBOARD)
             ->once()
@@ -172,12 +177,12 @@ class DashboardControllerTest extends MockeryTestCase
             ->once();
         $this->sut->shouldReceive('placeholder')->andReturn($placeholder);
 
-        $mockDataMapper->shouldReceive('map')
+        $this->mockDashboardTmApplicationsDataMapper->shouldReceive('map')
             ->with(['service data'])
             ->once()
             ->andReturn(['mapped data']);
 
-        $mockTable->shouldReceive('buildTable')
+        $this->mockTableFactory->shouldReceive('buildTable')
             ->with('dashboard-tm-applications', ['mapped data'])
             ->once()
             ->andReturn('TABLE');

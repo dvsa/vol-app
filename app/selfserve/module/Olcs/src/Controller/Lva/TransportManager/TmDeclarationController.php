@@ -3,12 +3,47 @@
 namespace OLCS\Controller\Lva\TransportManager;
 
 use Common\RefData;
+use Common\Service\Cqrs\Command\CommandService;
+use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Transfer\Command;
+use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use ZfcRbac\Service\AuthorizationService;
 
 class TmDeclarationController extends AbstractDeclarationController
 {
     protected $declarationMarkup = 'markup-tma-tm_declaration';
+
+    /**
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param TranslationHelperService $translationHelper
+     * @param FormHelperService $formHelper
+     * @param ScriptFactory $scriptFactory
+     * @param AnnotationBuilder $transferAnnotatiobBuilder
+     * @param CommandService $commandService
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        ScriptFactory $scriptFactory,
+        AnnotationBuilder $transferAnnotatiobBuilder,
+        CommandService $commandService
+    ) {
+        parent::__construct(
+            $niTextTranslationUtil,
+            $authService,
+            $translationHelper,
+            $formHelper,
+            $scriptFactory,
+            $transferAnnotatiobBuilder,
+            $commandService
+        );
+    }
 
     protected function getSignAsRole(): string
     {
@@ -63,8 +98,10 @@ class TmDeclarationController extends AbstractDeclarationController
      */
     protected function isUserPermitted()
     {
-        if ($this->tma['isTmLoggedInUser'] &&
-            $this->tma['tmApplicationStatus']['id'] === RefData::TMA_STATUS_DETAILS_CHECKED) {
+        if (
+            $this->tma['isTmLoggedInUser'] &&
+            $this->tma['tmApplicationStatus']['id'] === RefData::TMA_STATUS_DETAILS_CHECKED
+        ) {
             return true;
         }
         return false;

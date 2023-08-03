@@ -5,17 +5,30 @@ declare(strict_types=1);
 namespace Dvsa\Olcs\Application\Controller\Factory;
 
 use Common\Controller\Dispatcher;
+use Common\Controller\Factory\FeatureToggle\BinaryFeatureToggleAwareControllerFactory;
+use Common\Controller\Plugin\HandleCommand;
+use Common\Controller\Plugin\HandleQuery;
 use Common\Controller\Plugin\Redirect;
+use Common\Data\Mapper\Lva\GoodsVehiclesVehicle;
+use Common\FeatureToggle;
+use Common\Form\FormValidator;
+use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\GuidanceHelperService;
+use Common\Service\Helper\RestrictionHelperService;
+use Common\Service\Helper\StringHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Lva\VariationLvaService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
+use Dvsa\Olcs\Application\Controller\AddVehiclesQuestionController;
+use Dvsa\Olcs\Application\Controller\LvaVehicleController;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use Interop\Container\ContainerInterface;
 use Laminas\Mvc\Controller\Plugin\Url;
 use Laminas\ServiceManager\FactoryInterface;
-use Dvsa\Olcs\Application\Controller\AddVehiclesQuestionController;
-use Common\FeatureToggle;
-use Interop\Container\ContainerInterface;
-use Dvsa\Olcs\Application\Controller\LvaVehicleController;
-use Common\Controller\Factory\FeatureToggle\BinaryFeatureToggleAwareControllerFactory;
-use Common\Controller\Plugin\HandleQuery;
-use Common\Form\FormValidator;
-use Common\Controller\Plugin\HandleCommand;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * @see AddVehiclesQuestionController
@@ -68,7 +81,38 @@ class AddVehiclesQuestionControllerFactory extends BinaryFeatureToggleAwareContr
      */
     protected function createServiceWhenDisabled(ContainerInterface $container, $requestedName, array $options = null): LvaVehicleController
     {
-        $instance = new LvaVehicleController();
+        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
+
+        $niTextTranslationUtil = $container->get(NiTextTranslation::class);
+        $authService = $container->get(AuthorizationService::class);
+        $formHelper = $container->get(FormHelperService::class);
+        $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
+        $formServiceManager = $container->get(FormServiceManager::class);
+        $tableFactory = $container->get(TableFactory::class);
+        $guidanceHelper = $container->get(GuidanceHelperService::class);
+        $translationHelper = $container->get(TranslationHelperService::class);
+        $scriptFactory = $container->get(ScriptFactory::class);
+        $variationLvaService = $container->get(VariationLvaService::class);
+        $goodsVehiclesVehicleMapper = $container->get(GoodsVehiclesVehicle::class);
+        $restrictionHelper = $container->get(RestrictionHelperService::class);
+        $stringHelper = $container->get(StringHelperService::class);
+
+        $instance = new LvaVehicleController(
+            $niTextTranslationUtil,
+            $authService,
+            $formHelper,
+            $flashMessengerHelper,
+            $formServiceManager,
+            $tableFactory,
+            $guidanceHelper,
+            $translationHelper,
+            $scriptFactory,
+            $variationLvaService,
+            $goodsVehiclesVehicleMapper,
+            $restrictionHelper,
+            $stringHelper
+        );
+
         if ($instance instanceof FactoryInterface) {
             $instance = $instance->createService($container);
         }

@@ -2,12 +2,19 @@
 
 namespace OlcsTest\Controller;
 
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount as ItemDto;
 use Dvsa\Olcs\Transfer\Command\MyAccount\UpdateMyAccountSelfserve as UpdateDto;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use Laminas\Form\Element;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Controller\MyDetailsController as Sut;
 use OlcsTest\Bootstrap;
+use ReflectionClass;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Class My Details Controller Test
@@ -23,9 +30,25 @@ class MyDetailsControllerTest extends TestCase
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
 
-        $this->sm = Bootstrap::getServiceManager();
+        $this->mockniTextTranslationUtil = m::mock(NiTextTranslation::class)->makePartial();
+        $this->mockauthService = m::mock(AuthorizationService::class)->makePartial();
+        $this->mockflashMessengerHelper = m::mock(FlashMessengerHelperService::class)->makePartial();
+        $this->mockscriptFactory = m::mock(ScriptFactory::class)->makePartial();
+        $this->mockformHelper = m::mock(FormHelperService::class)->makePartial();
 
-        $this->sut->setServiceLocator($this->sm);
+        $reflectionClass = new ReflectionClass(Sut::class);
+        $this->setMockedProperties($reflectionClass, 'niTextTranslationUtil', $this->mockniTextTranslationUtil);
+        $this->setMockedProperties($reflectionClass, 'authService', $this->mockauthService);
+        $this->setMockedProperties($reflectionClass, 'flashMessengerHelper', $this->mockflashMessengerHelper);
+        $this->setMockedProperties($reflectionClass, 'scriptFactory', $this->mockscriptFactory);
+        $this->setMockedProperties($reflectionClass, 'formHelper', $this->mockformHelper);
+    }
+
+    public function setMockedProperties($reflectionClass, $property, $value)
+    {
+        $reflectionProperty = $reflectionClass->getProperty($property);
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->sut, $value);
     }
 
     public function testEditActionForGet()
@@ -70,38 +93,33 @@ class MyDetailsControllerTest extends TestCase
         $this->sut->shouldReceive('handleQuery')->with(m::type(ItemDto::class))->andReturn($response);
 
         $mockFieldSet = m::mock();
-        $mockElementForename = m::mock();
+        $mockElementForename = m::mock(Element::class);
         $mockFieldSet->shouldReceive('get')->with('forename')->once()->andReturn($mockElementForename);
-        $mockElementFamilyName = m::mock();
+        $mockElementFamilyName = m::mock(Element::class);
         $mockFieldSet->shouldReceive('get')->with('familyName')->once()->andReturn($mockElementFamilyName);
 
         $mockForm = m::mock('Common\Form\Form');
         $mockForm->shouldReceive('setData')->with($formattedData)->once();
         $mockForm->shouldReceive('get')->with('main')->andReturn($mockFieldSet)->once();
 
-        $mockFormHelper = m::mock();
-        $mockFormHelper
+        $this->mockformHelper
             ->shouldReceive('createFormWithRequest')
             ->with('MyDetails', $mockRequest)
             ->once()
             ->andReturn($mockForm);
-        $mockFormHelper
+        $this->mockformHelper
             ->shouldReceive('lockElement')
             ->with($mockElementForename, 'name-change.locked.tooltip.message')
             ->once();
-        $mockFormHelper
+        $this->mockformHelper
             ->shouldReceive('lockElement')
             ->with($mockElementFamilyName, 'name-change.locked.tooltip.message')
             ->once();
 
-        $this->sm->setService('Helper\Form', $mockFormHelper);
-
-        $mockScript = m::mock();
-        $mockScript
+        $this->mockscriptFactory
             ->shouldReceive('loadFile')
             ->with('my-details')
             ->once();
-        $this->sm->setService('Script', $mockScript);
 
         $view = $this->sut->editAction();
 
@@ -119,45 +137,38 @@ class MyDetailsControllerTest extends TestCase
         $this->sut->shouldReceive('handleQuery')->with(m::type(ItemDto::class))->andReturn($response);
 
         $mockFieldSet = m::mock();
-        $mockElementForename = m::mock();
+        $mockElementForename = m::mock(Element::class);
         $mockFieldSet->shouldReceive('get')->with('forename')->once()->andReturn($mockElementForename);
-        $mockElementFamilyName = m::mock();
+        $mockElementFamilyName = m::mock(Element::class);
         $mockFieldSet->shouldReceive('get')->with('familyName')->once()->andReturn($mockElementFamilyName);
 
         $mockForm = m::mock('Common\Form\Form');
         $mockForm->shouldReceive('setData')->never();
         $mockForm->shouldReceive('get')->with('main')->andReturn($mockFieldSet)->once();
 
-        $mockFormHelper = m::mock();
-        $mockFormHelper
+        $this->mockformHelper
             ->shouldReceive('createFormWithRequest')
             ->with('MyDetails', $mockRequest)
             ->once()
             ->andReturn($mockForm);
-        $mockFormHelper
+        $this->mockformHelper
             ->shouldReceive('lockElement')
             ->with($mockElementForename, 'name-change.locked.tooltip.message')
             ->once();
-        $mockFormHelper
+        $this->mockformHelper
             ->shouldReceive('lockElement')
             ->with($mockElementFamilyName, 'name-change.locked.tooltip.message')
             ->once();
 
-        $this->sm->setService('Helper\Form', $mockFormHelper);
-
-        $mockFlashMessengerHelper = m::mock();
-        $mockFlashMessengerHelper
+        $this->mockflashMessengerHelper
             ->shouldReceive('addErrorMessage')
             ->once()
             ->with('unknown-error');
-        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessengerHelper);
 
-        $mockScript = m::mock();
-        $mockScript
+        $this->mockscriptFactory
             ->shouldReceive('loadFile')
             ->with('my-details')
             ->once();
-        $this->sm->setService('Script', $mockScript);
 
         $view = $this->sut->editAction();
 
@@ -211,13 +222,11 @@ class MyDetailsControllerTest extends TestCase
         $mockForm->shouldReceive('isValid')->once()->andReturn(true);
         $mockForm->shouldReceive('getData')->once()->andReturn($postData);
 
-        $mockFormHelper = m::mock();
-        $mockFormHelper
+        $this->mockformHelper
             ->shouldReceive('createFormWithRequest')
             ->with('MyDetails', $mockRequest)
             ->once()
             ->andReturn($mockForm);
-        $this->sm->setService('Helper\Form', $mockFormHelper);
 
         $this->sut->shouldReceive('isButtonPressed')->with('cancel')->once()->andReturn(false);
 
@@ -229,12 +238,10 @@ class MyDetailsControllerTest extends TestCase
         $response->shouldReceive('isOk')->andReturn(true);
         $this->sut->shouldReceive('handleCommand')->with(m::type(UpdateDto::class))->andReturn($response);
 
-        $mockFlashMessengerHelper = m::mock();
-        $mockFlashMessengerHelper
+        $this->mockflashMessengerHelper
             ->shouldReceive('addSuccessMessage')
             ->once()
             ->with('generic.updated.success');
-        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessengerHelper);
 
         $this->sut->shouldReceive('redirect->toRoute')
             ->with('your-account', ['action' => 'edit'], array(), false)
@@ -287,9 +294,9 @@ class MyDetailsControllerTest extends TestCase
         $this->sut->shouldReceive('handleQuery')->with(m::type(ItemDto::class))->andReturn($response);
 
         $mockFieldSet = m::mock();
-        $mockElementForename = m::mock();
+        $mockElementForename = m::mock(Element::class);
         $mockFieldSet->shouldReceive('get')->with('forename')->once()->andReturn($mockElementForename);
-        $mockElementFamilyName = m::mock();
+        $mockElementFamilyName = m::mock(Element::class);
         $mockFieldSet->shouldReceive('get')->with('familyName')->once()->andReturn($mockElementFamilyName);
 
         $mockForm = m::mock('Common\Form\Form');
@@ -298,31 +305,26 @@ class MyDetailsControllerTest extends TestCase
         $mockForm->shouldReceive('getData')->once()->andReturn($postData);
         $mockForm->shouldReceive('get')->with('main')->andReturn($mockFieldSet)->once();
 
-        $mockFormHelper = m::mock();
-        $mockFormHelper
+        $this->mockformHelper
             ->shouldReceive('createFormWithRequest')
             ->with('MyDetails', $mockRequest)
             ->once()
             ->andReturn($mockForm);
-        $mockFormHelper
+        $this->mockformHelper
             ->shouldReceive('lockElement')
             ->with($mockElementForename, 'name-change.locked.tooltip.message')
             ->once();
-        $mockFormHelper
+        $this->mockformHelper
             ->shouldReceive('lockElement')
             ->with($mockElementFamilyName, 'name-change.locked.tooltip.message')
             ->once();
 
-        $this->sm->setService('Helper\Form', $mockFormHelper);
-
         $this->sut->shouldReceive('isButtonPressed')->with('cancel')->once()->andReturn(false);
 
-        $mockFlashMessengerHelper = m::mock();
-        $mockFlashMessengerHelper
+        $this->mockflashMessengerHelper
             ->shouldReceive('addErrorMessage')
             ->once()
             ->with('unknown-error');
-        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessengerHelper);
 
         $mockParams = m::mock();
         $mockParams->shouldReceive('fromPost')->once()->andReturn($postData);
@@ -333,12 +335,10 @@ class MyDetailsControllerTest extends TestCase
 
         $this->sut->shouldReceive('handleCommand')->with(m::type(UpdateDto::class))->andReturn($response);
 
-        $mockScript = m::mock();
-        $mockScript
+        $this->mockscriptFactory
             ->shouldReceive('loadFile')
             ->with('my-details')
             ->once();
-        $this->sm->setService('Script', $mockScript);
 
         $view = $this->sut->editAction();
 
@@ -390,13 +390,11 @@ class MyDetailsControllerTest extends TestCase
         $mockForm = m::mock('Common\Form\Form');
         $mockForm->shouldReceive('setData')->once()->with($responseData);
 
-        $mockFormHelper = m::mock();
-        $mockFormHelper
+        $this->mockformHelper
             ->shouldReceive('createFormWithRequest')
             ->with('MyDetails', $mockRequest)
             ->once()
             ->andReturn($mockForm);
-        $this->sm->setService('Helper\Form', $mockFormHelper);
 
         $this->sut->shouldReceive('isButtonPressed')->with('cancel')->once()->andReturn(true);
 

@@ -4,6 +4,9 @@ namespace Olcs\Controller\Ebsr;
 
 use Common\Controller\Lva\AbstractController;
 use Common\Rbac\User;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\Bus\Ebsr\UpdateTxcInbox as UpdateTxcInboxDto;
 use Dvsa\Olcs\Transfer\Query\Bus\BusReg as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\BusRegWithTxcInbox;
@@ -11,16 +14,43 @@ use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\EbsrSubmissionList;
 use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\TxcInboxList;
 use Dvsa\Olcs\Transfer\Query\Bus\RegistrationHistoryList as BusRegVariationHistoryDto;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\Http\Response;
 use Laminas\Session\Container;
 use Laminas\View\Model\ViewModel;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Class BusRegApplicationsController
  */
 class BusRegApplicationsController extends AbstractController
 {
-    const TABLE_TXC_INBOX = 'txc-inbox';
+    public const TABLE_TXC_INBOX = 'txc-inbox';
+
+    protected FlashMessengerHelperService $flashMessengerHelper;
+    protected TableFactory $tableFactory;
+    protected FormHelperService $formHelper;
+
+    /**
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param TableFactory $tableFactory
+     * @param FormHelperService $formHelper
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FlashMessengerHelperService $flashMessengerHelper,
+        TableFactory $tableFactory,
+        FormHelperService $formHelper
+    ) {
+        $this->flashMessengerHelper = $flashMessengerHelper;
+        $this->tableFactory = $tableFactory;
+        $this->formHelper = $formHelper;
+
+        parent::__construct($niTextTranslationUtil, $authService);
+    }
 
     /**
      * On bus registration page we use this to handle the posted data
@@ -42,7 +72,7 @@ class BusRegApplicationsController extends AbstractController
                 return $this->processMarkAsRead($postData);
             }
 
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('select-at-least-one-row');
+            $this->flashMessengerHelper->addErrorMessage('select-at-least-one-row');
         }
 
         return $this->processSearch($postData);
@@ -88,7 +118,7 @@ class BusRegApplicationsController extends AbstractController
         $response = $this->handleQuery($query);
 
         if ($response->isClientError() || $response->isServerError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentUnknownError();
+            $this->flashMessengerHelper->addCurrentUnknownError();
         }
 
         $busRegistrationTable = '';
@@ -133,7 +163,7 @@ class BusRegApplicationsController extends AbstractController
     private function generateTable($result, $params)
     {
         /** @var \Common\Service\Table\TableBuilder $tableBuilder */
-        $tableBuilder = $this->getServiceLocator()->get('Table');
+        $tableBuilder = $this->tableFactory;
 
         $userData = $this->currentUser()->getUserData();
 
@@ -170,7 +200,7 @@ class BusRegApplicationsController extends AbstractController
         $response = $this->handleCommand($command);
 
         if ($response->isClientError() || $response->isServerError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentUnknownError();
+            $this->flashMessengerHelper->addCurrentUnknownError();
         }
 
         $params['status'] = $this->params()->fromQuery('status');
@@ -261,7 +291,7 @@ class BusRegApplicationsController extends AbstractController
         }
 
         if (!$response->isOk()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentUnknownError();
+            $this->flashMessengerHelper->addCurrentUnknownError();
             return null;
         }
 
@@ -325,7 +355,7 @@ class BusRegApplicationsController extends AbstractController
     private function fetchVariationHistoryTable($busRegId, $isSearchPage)
     {
         /** @var \Common\Service\Table\TableBuilder $tableBuilder */
-        $tableBuilder = $this->getServiceLocator()->get('Table');
+        $tableBuilder = $this->tableFactory;
 
         $query = BusRegVariationHistoryDto::create(
             [
@@ -338,7 +368,7 @@ class BusRegApplicationsController extends AbstractController
         $response = $this->handleQuery($query);
 
         if ($response->isClientError() || $response->isServerError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            $this->flashMessengerHelper->addErrorMessage('unknown-error');
         }
 
         if ($response->isOk()) {
@@ -417,7 +447,7 @@ class BusRegApplicationsController extends AbstractController
     private function getFilterForm($params, $formName)
     {
         /** @var \Laminas\Form\FormInterface $filterForm */
-        $filterForm = $this->getServiceLocator()->get('Helper\Form')->createForm($formName);
+        $filterForm = $this->formHelper->createForm($formName);
 
         $filterForm->setData(
             [
@@ -438,15 +468,17 @@ class BusRegApplicationsController extends AbstractController
      */
     private function generateTabs()
     {
-        if (in_array(
-            $this->currentUser()->getUserData()['userType'],
-            [
+        if (
+            in_array(
+                $this->currentUser()->getUserData()['userType'],
+                [
                 User::USER_TYPE_LOCAL_AUTHORITY,
                 User::USER_TYPE_OPERATOR,
                 User::USER_TYPE_TRANSPORT_MANAGER
-            ],
-            true
-        )) {
+                ],
+                true
+            )
+        ) {
             return [
                 0 => [
                     'label' => 'busreg-tab-title-registrations',

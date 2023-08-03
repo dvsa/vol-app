@@ -5,11 +5,16 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace Olcs\Controller\Lva\Licence;
 
-use Laminas\View\Model\ViewModel;
 use Common\Controller\Lva;
+use Common\Service\Helper\GuidanceHelperService;
+use Common\Service\Review\LicenceConditionsUndertakingsReviewService;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * External Licence Conditions Undertakings Controller
@@ -21,7 +26,28 @@ class ConditionsUndertakingsController extends Lva\AbstractController
     use LicenceControllerTrait;
 
     protected $lva = 'licence';
-    protected $location = 'external';
+    protected string $location = 'external';
+
+    protected LicenceConditionsUndertakingsReviewService $licenceConditionsUndertakingsReviewSvc;
+    protected GuidanceHelperService $guidanceHelper;
+
+    /**
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param LicenceConditionsUndertakingsReviewService $licenceConditionsUndertakingsReviewSvc
+     * @param GuidanceHelperService $guidanceHelper
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        LicenceConditionsUndertakingsReviewService $licenceConditionsUndertakingsReviewSvc,
+        GuidanceHelperService $guidanceHelper
+    ) {
+        $this->licenceConditionsUndertakingsReviewSvc = $licenceConditionsUndertakingsReviewSvc;
+        $this->guidanceHelper = $guidanceHelper;
+
+        parent::__construct($niTextTranslationUtil, $authService);
+    }
 
     public function indexAction()
     {
@@ -36,10 +62,10 @@ class ConditionsUndertakingsController extends Lva\AbstractController
         }
         $data = $response->getResult();
 
-        $config = $this->getServiceLocator()->get('Review\LicenceConditionsUndertakings')
+        $config = $this->licenceConditionsUndertakingsReviewSvc
             ->getConfigFromData($data);
 
-        $this->getServiceLocator()->get('Helper\Guidance')->append('cannot-change-conditions-undertakings-guidance');
+        $this->guidanceHelper->append('cannot-change-conditions-undertakings-guidance');
 
         $view = new ViewModel($config);
         $view->setTemplate('partials/read-only/subSections');

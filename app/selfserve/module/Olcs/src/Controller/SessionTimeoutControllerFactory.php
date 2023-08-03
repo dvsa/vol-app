@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Olcs\Controller;
 
-use Interop\Container\ContainerInterface;
 use Common\Controller\Dispatcher;
 use Common\Controller\Plugin\Redirect;
-use Laminas\Mvc\Controller\ControllerManager;
+use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use ZfcRbac\Identity\IdentityProviderInterface;
