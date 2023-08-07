@@ -2,6 +2,8 @@
 
 namespace Olcs\FormService\Form\Lva\GoodsVehicles;
 
+use Common\Service\Helper\FormHelperService;
+
 /**
  * Add Vehicle Licence
  *
