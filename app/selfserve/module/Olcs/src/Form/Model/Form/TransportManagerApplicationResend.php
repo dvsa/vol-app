@@ -12,18 +12,10 @@ use Laminas\Form\Annotation as Form;
 class TransportManagerApplicationResend
 {
     /**
-     * @Form\Attributes({"id":"emailAddress","placeholder":"","class":"medium"})
-     * @Form\Options({
-     *     "label": "transport-managers-email-address",
-     *     "label_attributes": {
-     *         "aria-label": "Enter Transport Manager's email address"
-     *     }
-     * })
-     * @Form\Type("Text")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\EmailAddress"})
+     * @Form\Attributes({"value":"transport-manager-application-resend"})
+     * @Form\Type("Hidden")
      */
-    protected $emailAddress;
+    public $formName;
 
     /**
      * @Form\Attributes({

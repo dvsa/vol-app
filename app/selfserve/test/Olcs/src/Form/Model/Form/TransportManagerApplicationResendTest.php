@@ -16,14 +16,6 @@ class TransportManagerApplicationResendTest extends AbstractFormValidationTestCa
      */
     protected $formName = \Olcs\Form\Model\Form\TransportManagerApplicationResend::class;
 
-    public function testEmailAddress()
-    {
-        $element = ['emailAddress'];
-        $this->assertFormElementRequired($element, true);
-        $this->assertFormElementAllowEmpty($element, false);
-        $this->assertFormElementEmailAddress($element);
-    }
-
     public function testSubmit()
     {
         $element = ['submit'];
