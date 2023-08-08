@@ -7,16 +7,13 @@ use Dvsa\Olcs\Transfer\Command\Operator\UpdateUnlicensed as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Operator\UnlicensedBusinessDetails as BusinessDetailsDto;
 use Olcs\Data\Mapper\UnlicensedOperatorBusinessDetails as Mapper;
 
-/**
- * Unlicensed Operator Business Details Controller
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 class UnlicensedBusinessDetailsController extends OperatorBusinessDetailsController
 {
     protected $subNavRoute = 'unlicensed_operator_profile';
 
-    /** @var  Mapper */
+    /**
+     * @var Mapper 
+     */
     protected $mapperClass = Mapper::class;
     protected $createDtoClass = CreateDto::class;
     protected $updateDtoClass = UpdateDto::class;
@@ -53,11 +50,15 @@ class UnlicensedBusinessDetailsController extends OperatorBusinessDetailsControl
             }
         }
 
-        /** @var \Laminas\Form\FormInterface $form */
+        /**
+ * @var \Laminas\Form\FormInterface $form 
+*/
         $form = $this->getForm('UnlicensedOperator');
         $this->pageTitle = 'internal-operator-create-new-unlicensed-operator';
 
-        /** @var \Laminas\Http\Request $request */
+        /**
+ * @var \Laminas\Http\Request $request 
+*/
         $request = $this->getRequest();
 
         if ($operator) {

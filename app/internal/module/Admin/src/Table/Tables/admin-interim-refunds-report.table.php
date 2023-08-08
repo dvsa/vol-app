@@ -51,9 +51,11 @@ return array(
             'title' => 'Date of Refund',
             'sort' => 'ftr.createdOn',
             'formatter' => function ($data) {
-                $refundTransaction = array_filter($data['feeTransactions'], function ($transaction) {
-                    return $transaction['amount'] < 0;
-                });
+                $refundTransaction = array_filter(
+                    $data['feeTransactions'], function ($transaction) {
+                        return $transaction['amount'] < 0;
+                    }
+                );
                 $refundTransaction = array_shift($refundTransaction);
                 return $this->callFormatter(
                     [

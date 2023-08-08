@@ -1,24 +1,24 @@
 <?php
 
-/**
- * Case ConditionUndertaking Controller
- *
- * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
- */
 namespace Olcs\Controller\Cases\ConditionUndertaking;
 
+use Common\Exception\DataServiceException;
+use Common\RefData;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Command\ConditionUndertaking\Create as CreateDto;
 use Dvsa\Olcs\Transfer\Command\ConditionUndertaking\Delete as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\ConditionUndertaking\Update as UpdateDto;
-use Dvsa\Olcs\Transfer\Query\ConditionUndertaking\Get as ItemDto;
-use Dvsa\Olcs\Transfer\Query\Cases\ConditionUndertaking\ConditionUndertakingList as ListDto;
 use Dvsa\Olcs\Transfer\Query\Cases\CasesWithLicence as CasesWithLicenceDto;
-use Common\RefData;
+use Dvsa\Olcs\Transfer\Query\Cases\ConditionUndertaking\ConditionUndertakingList as ListDto;
+use Dvsa\Olcs\Transfer\Query\ConditionUndertaking\Get as ItemDto;
+use Laminas\Navigation\Navigation;
+use Laminas\View\HelperPluginManager;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Common\Exception\DataServiceException;
-use Laminas\View\Model\ViewModel;
 
 /**
  * Case ConditionUndertaking Controller
@@ -64,7 +64,17 @@ class ConditionUndertakingController extends AbstractInternalController implemen
     protected $tableName = 'condition';
     protected $listDto = ListDto::class;
     protected $listVars = ['case'];
+    protected HelperPluginManager $viewHelperManager;
+    public function __construct( TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessengerHelper,
+        Navigation $navigation,
+        HelperPluginManager $viewHelperManager
+    ) {
 
+        $this->viewHelperManager = $viewHelperManager;
+        parent::__construct($translationHelper, $formHelper, $flashMessengerHelper, $navigation);
+    }
     /**
      * get method for left view
      *
@@ -225,8 +235,8 @@ class ConditionUndertakingController extends AbstractInternalController implemen
     {
         $optionList = [];
         if (isset($caseData['licence']['operatingCentres'])) {
-            $viewHelperManager = $this->getServiceLocator()->get('ViewHelperManager');
-            $addressViewHelper = $viewHelperManager->get('Address');
+
+            $addressViewHelper = $this->viewHelperManager->get('Address');
             foreach ($caseData['licence']['operatingCentres'] as $operatingCentreDetails) {
                 $optionList[$operatingCentreDetails['operatingCentre']['id']] =
                     $addressViewHelper($operatingCentreDetails['operatingCentre']['address']);

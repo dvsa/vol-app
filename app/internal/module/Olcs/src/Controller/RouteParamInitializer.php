@@ -5,10 +5,6 @@ use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\InitializerInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
-/**
- * Class RouteParamInitializer
- * @package Olcs\Controller
- */
 class RouteParamInitializer implements InitializerInterface
 {
     /**
@@ -41,6 +37,7 @@ class RouteParamInitializer implements InitializerInterface
 
     /**
      * {@inheritdoc}
+     *
      * @todo OLCS-28149
      */
     public function initialize($instance, ServiceLocatorInterface $serviceLocator)

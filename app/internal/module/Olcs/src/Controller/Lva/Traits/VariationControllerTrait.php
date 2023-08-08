@@ -7,13 +7,13 @@
  */
 namespace Olcs\Controller\Lva\Traits;
 
+use Common\Controller\Lva\Traits\CommonVariationControllerTrait;
 use Common\RefData;
-use Olcs\Controller\Interfaces\LeftViewProvider;
+use Common\View\Model\Section;
+use Dvsa\Olcs\Transfer\Query\Licence\Licence;
 use Laminas\Form\Form;
 use Laminas\View\Model\ViewModel;
-use Common\View\Model\Section;
-use Common\Controller\Lva\Traits\CommonVariationControllerTrait;
-use Dvsa\Olcs\Transfer\Query\Licence\Licence;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 
 /**
  * INTERNAL Abstract Variation Controller
@@ -98,9 +98,9 @@ trait VariationControllerTrait
     /**
      * Render the section
      *
-     * @param string|ViewModel $content   content
-     * @param \Laminas\Form\Form  $form      form
-     * @param array            $variables variables
+     * @param string|ViewModel   $content   content
+     * @param \Laminas\Form\Form $form      form
+     * @param array              $variables variables
      *
      * @return \Laminas\View\Model\ViewModel
      */
@@ -152,7 +152,7 @@ trait VariationControllerTrait
     {
         $applicationData = $this->getApplicationData($this->getApplicationId());
         $variationStatuses = $applicationData['applicationCompletion'];
-        $filter = $this->getServiceLocator()->get('Helper\String');
+        $filter = $this->stringHelper;
 
         $sections = array(
             'overview' => array('class' => 'no-background', 'route' => 'lva-variation')
@@ -181,12 +181,12 @@ trait VariationControllerTrait
 
             $class = '';
             switch ($variationStatuses[$statusIndex]) {
-                case RefData::VARIATION_STATUS_UPDATED:
-                    $class = 'edited';
-                    break;
-                case RefData::VARIATION_STATUS_REQUIRES_ATTENTION:
-                    $class = 'incomplete';
-                    break;
+            case RefData::VARIATION_STATUS_UPDATED:
+                $class = 'edited';
+                break;
+            case RefData::VARIATION_STATUS_REQUIRES_ATTENTION:
+                $class = 'incomplete';
+                break;
             }
 
             $sections[$section] = array_merge(

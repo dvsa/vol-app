@@ -3,22 +3,21 @@
 namespace Olcs\Controller\Document;
 
 use Common\Category;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command as TransferCmd;
 use Dvsa\Olcs\Transfer\Command\Document\PrintLetter as PrintLetterCmd;
 use Dvsa\Olcs\Transfer\Query as TransferQry;
 use Laminas\Http\Response;
-use Laminas\Mvc\MvcEvent;
+use Laminas\View\HelperPluginManager;
 use Laminas\View\Model\ViewModel;
 use Olcs\Service\Helper\WebDavJsonWebTokenGenerationService;
 
-/**
- * Document Upload Controller
- *
- * @author Nick Payne <nick.payne@valtech.co.uk>
- */
 class DocumentFinaliseController extends AbstractDocumentController
 {
-    const PRINT_MSGS_SUCCESS = [
+    public const PRINT_MSGS_SUCCESS = [
         'close' => 'The document has been saved',
         PrintLetterCmd::METHOD_EMAIL => 'The document has been saved and sent by email',
         PrintLetterCmd::METHOD_PRINT_AND_POST => 'The document has been saved, printed and sent by post',
@@ -26,41 +25,27 @@ class DocumentFinaliseController extends AbstractDocumentController
     ];
 
     private $redirect;
+    private FlashMessengerHelperService $flashMessengerHelper;
+    private WebDavJsonWebTokenGenerationService $webDavJsonWebTokenGenerationService;
 
-    /**
-     * @var  \Common\Service\Helper\FlashMessengerHelperService
-     */
-    private $hlpFlashMsgr;
-    /**
-     * @var  \Common\Service\Helper\FormHelperService
-     */
-    private $hlpForm;
-
-    /**
-     * @var WebDavJsonWebTokenGenerationService
-     */
-    private $webDavJsonWebTokenGenerationService;
-
-    /**
-     * @array
-     */
-    private $config;
-
-    /**
-     * Execute the request
-     *
-     * @param MvcEvent $e Event
-     *
-     * @return mixed
-     */
-    public function onDispatch(MvcEvent $e)
-    {
-        $this->hlpFlashMsgr = $this->getServiceLocator()->get('Helper\FlashMessenger');
-        $this->hlpForm = $this->getServiceLocator()->get('Helper\Form');
-        $this->config = $this->getServiceLocator()->get('Config');
-        $this->webDavJsonWebTokenGenerationService = $this->getServiceLocator()->get(WebDavJsonWebTokenGenerationService::class);
-
-        return parent::onDispatch($e);
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        TableFactory $tableFactory,
+        HelperPluginManager $viewHelperManager,
+        array $config,
+        FlashMessengerHelperService $flashMessengerHelper,
+        WebDavJsonWebTokenGenerationService $webDavJsonWebTokenGenerationService
+    ) {
+        parent::__construct(
+            $scriptFactory,
+            $formHelper,
+            $tableFactory,
+            $viewHelperManager,
+            $config
+        );
+        $this->flashMessengerHelper = $flashMessengerHelper;
+        $this->webDavJsonWebTokenGenerationService = $webDavJsonWebTokenGenerationService;
     }
 
     /**
@@ -123,7 +108,7 @@ class DocumentFinaliseController extends AbstractDocumentController
             return $this->redirect;
         }
 
-        $this->getServiceLocator()->get('Script')->loadFile('file-link');
+        $this->scriptFactory->loadFile('file-link');
 
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('pages/form');
@@ -156,7 +141,7 @@ class DocumentFinaliseController extends AbstractDocumentController
             } elseif ($this->isButtonPressed('proposeToRevoke')) {
                 return $this->processProposeToRevoke();
             } else {
-                $this->hlpFlashMsgr->addSuccessMessage(self::PRINT_MSGS_SUCCESS['close']);
+                $this->flashMessengerHelper->addSuccessMessage(self::PRINT_MSGS_SUCCESS['close']);
 
                 return $this->handleRedirectToDocumentRoute(true);
             }
@@ -171,7 +156,7 @@ class DocumentFinaliseController extends AbstractDocumentController
             );
 
             if ($respPost->isOk()) {
-                $this->hlpFlashMsgr->addSuccessMessage(self::PRINT_MSGS_SUCCESS[$method]);
+                $this->flashMessengerHelper->addSuccessMessage(self::PRINT_MSGS_SUCCESS[$method]);
 
                 return $this->handleRedirectToDocumentRoute($request->isXmlHttpRequest());
             }
@@ -191,27 +176,27 @@ class DocumentFinaliseController extends AbstractDocumentController
             }
 
             if ($resp->isServerError()) {
-                $this->hlpFlashMsgr->addUnknownError();
+                $this->flashMessengerHelper->addUnknownError();
             } elseif ($resp->isClientError()) {
                 $respResult = $resp->getResult();
                 $errMsgs = (isset($respResult['messages']) ? $respResult['messages'] : []);
                 foreach ($errMsgs as $err) {
-                    $this->hlpFlashMsgr->addCurrentErrorMessage($err);
+                    $this->flashMessengerHelper->addCurrentErrorMessage($err);
                 }
             }
         }
 
         //  prepare form
-        $form = $this->hlpForm->createForm('DocumentSend');
+        $form = $this->formHelper->createForm('DocumentSend');
 
         //  define visibility of buttons
         $flags = $result['flags'];
         if (!$flags[PrintLetterCmd::METHOD_EMAIL]) {
-            $this->hlpForm->disableElement($form, 'form-actions->email');
+            $this->formHelper->disableElement($form, 'form-actions->email');
         }
 
         if (!$flags[PrintLetterCmd::METHOD_PRINT_AND_POST]) {
-            $this->hlpForm->disableElement($form, 'form-actions->printAndPost');
+            $this->formHelper->disableElement($form, 'form-actions->printAndPost');
         }
 
         $labelText = 'Would you like to send this letter?';
@@ -261,7 +246,7 @@ class DocumentFinaliseController extends AbstractDocumentController
             );
         }
 
-        $form = $this->getServiceLocator()->get('Helper\Form')
+        $form = $this->formHelper
             ->createFormWithRequest('ConfirmYesNo', $this->getRequest());
 
         $view = new ViewModel();
@@ -292,24 +277,24 @@ class DocumentFinaliseController extends AbstractDocumentController
 
         // we need to link certain documents to multiple IDs
         switch ($type) {
-            case 'application':
-                $data['licence'] = $this->getLicenceIdForApplication();
-                break;
+        case 'application':
+            $data['licence'] = $this->getLicenceIdForApplication();
+            break;
 
-            case 'case':
-                $data = array_merge($data, $this->getCaseData());
-                break;
+        case 'case':
+            $data = array_merge($data, $this->getCaseData());
+            break;
 
-            case 'busReg':
-                $data['licence'] = $this->params('licence');
-                break;
+        case 'busReg':
+            $data['licence'] = $this->params('licence');
+            break;
 
-            case 'irhpApplication':
-                $data['licence'] = $this->params('licence');
-                break;
+        case 'irhpApplication':
+            $data['licence'] = $this->params('licence');
+            break;
 
-            default:
-                break;
+        default:
+            break;
         }
 
         $data[$type] = $routeParams[$this->getRouteParamKeyForType($type)];
@@ -324,7 +309,7 @@ class DocumentFinaliseController extends AbstractDocumentController
         $response = $this->handleCommand($dto);
 
         if (!$response->isOk()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addUnknownError();
+            $this->flashMessengerHelper->addUnknownError();
             $this->redirect = $this->redirect()->refresh();
             return;
         }
@@ -354,7 +339,7 @@ class DocumentFinaliseController extends AbstractDocumentController
 
     private function modifyFormForProposeToRevoke(\Common\Form\Form $form): void
     {
-        $this->hlpForm->remove($form, 'form-actions->email');
+        $this->formHelper->remove($form, 'form-actions->email');
         $form->get('form-actions')->get('printAndPost')->removeAttribute('disabled');
         $form->get('form-actions')->get('printAndPost')->setLabel('Propose to revoke');
         $form->get('form-actions')->get('printAndPost')->setName('proposeToRevoke');
@@ -382,9 +367,9 @@ class DocumentFinaliseController extends AbstractDocumentController
         );
 
         if ($response->isOk()) {
-            $this->hlpFlashMsgr->addSuccessMessage(self::PRINT_MSGS_SUCCESS['proposeToRevoke']);
+            $this->flashMessengerHelper->addSuccessMessage(self::PRINT_MSGS_SUCCESS['proposeToRevoke']);
         } else {
-            $this->hlpFlashMsgr->addUnknownError();
+            $this->flashMessengerHelper->addUnknownError();
         }
 
         return $this->handleRedirectToDocumentRoute(true);

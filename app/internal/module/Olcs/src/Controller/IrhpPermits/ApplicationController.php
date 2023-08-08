@@ -7,12 +7,12 @@
 namespace Olcs\Controller\IrhpPermits;
 
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\InternalApplicationsSummary;
+use Laminas\Http\Response;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Olcs\Form\Model\Form\IrhpApplicationFilter as FilterForm;
-use Laminas\Http\Response;
-use Laminas\View\Model\ViewModel;
 
 class ApplicationController extends AbstractInternalController implements LeftViewProvider, LicenceControllerInterface
 {

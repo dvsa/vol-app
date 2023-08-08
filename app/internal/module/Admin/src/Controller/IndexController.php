@@ -1,18 +1,9 @@
 <?php
 
-/**
- * IndexController
- */
 namespace Admin\Controller;
 
 use Laminas\View\Model\ViewModel;
 
-/**
- * IndexController
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class IndexController extends AbstractController
 {
     public function indexAction()

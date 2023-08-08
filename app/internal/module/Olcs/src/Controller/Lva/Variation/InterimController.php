@@ -5,12 +5,21 @@
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
+
 namespace Olcs\Controller\Lva\Variation;
 
+use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\StringHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
+use Dvsa\Olcs\Transfer\Command\Variation\UpdateInterim;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use Olcs\Controller\Interfaces\VariationControllerInterface;
 use Olcs\Controller\Lva\AbstractInterimController;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
-use Olcs\Controller\Interfaces\VariationControllerInterface;
-use Dvsa\Olcs\Transfer\Command\Variation\UpdateInterim;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Internal Variation Interim Controller
@@ -22,6 +31,41 @@ class InterimController extends AbstractInterimController implements VariationCo
     use VariationControllerTrait;
 
     protected $lva = 'variation';
-    protected $location = 'internal';
+    protected string $location = 'internal';
     protected $updateInterimCommand = UpdateInterim::class;
+
+    protected StringHelperService $stringHelper;
+    protected FormServiceManager $formServiceManager;
+
+    /**
+     * @param NiTextTranslation           $niTextTranslationUtil
+     * @param AuthorizationService        $authService
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param FormHelperService           $formHelper
+     * @param ScriptFactory               $scriptFactory
+     * @param TableFactory                $tableFactory
+     * @param StringHelperService         $stringHelper
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FlashMessengerHelperService $flashMessengerHelper,
+        FormHelperService $formHelper,
+        ScriptFactory $scriptFactory,
+        TableFactory $tableFactory,
+        StringHelperService $stringHelper,
+        FormServiceManager $formServiceManager
+    ) {
+        $this->stringHelper = $stringHelper;
+        $this->formServiceManager = $formServiceManager;
+
+        parent::__construct(
+            $niTextTranslationUtil,
+            $authService,
+            $flashMessengerHelper,
+            $formHelper,
+            $scriptFactory,
+            $tableFactory
+        );
+    }
 }

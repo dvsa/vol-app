@@ -2,15 +2,17 @@
 
 namespace Admin\Controller;
 
-use Olcs\Controller\Interfaces\LeftViewProvider;
-use Dvsa\Olcs\Transfer\Query\IrhpPermitJurisdiction\GetList as ListDto;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Transfer\Command\IrhpPermitJurisdiction\Update as Update;
-use Laminas\View\Model\ViewModel;
+use Dvsa\Olcs\Transfer\Query\IrhpPermitJurisdiction\GetList as ListDto;
 use Laminas\Http\Response;
+use Laminas\Navigation\Navigation;
+use Laminas\View\Model\ViewModel;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 
-/**
- * IRHP Permits Jurisdiction Controller
- */
 class IrhpPermitJurisdictionController extends AbstractIrhpPermitAdminController implements LeftViewProvider
 {
     protected $tableName = 'admin-irhp-permit-jurisdiction';
@@ -27,7 +29,16 @@ class IrhpPermitJurisdictionController extends AbstractIrhpPermitAdminController
     protected $navigationId = 'admin-dashboard/admin-permits';
 
     protected $defaultData = ['stockId' => 'route'];
-
+    public function __construct(
+        TranslationHelperService $translationHelperService,
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessengerHelperService,
+        Navigation $navigation,
+        ScriptFactory $scriptFactory
+    ) {
+        $this->scriptFactory = $scriptFactory;
+        parent::__construct($translationHelperService, $formHelper, $flashMessengerHelperService, $navigation);
+    }
     /**
      * Get left view
      *
@@ -53,7 +64,7 @@ class IrhpPermitJurisdictionController extends AbstractIrhpPermitAdminController
      */
     public function indexAction()
     {
-        $this->getServiceLocator()->get('Script')->loadFile('irhp-permit-total-table');
+        $this->scriptFactory->loadFile('irhp-permit-total-table');
 
         $request = $this->getRequest();
 

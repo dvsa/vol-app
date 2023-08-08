@@ -2,25 +2,25 @@
 
 namespace Admin\Controller;
 
+use Admin\Form\Model\Form\User as Form;
+use Common\RefData;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Helper\UrlHelperService;
 use Dvsa\Olcs\Transfer\Command\User\CreateUser as CreateDto;
-use Dvsa\Olcs\Transfer\Command\User\UpdateUser as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\User\DeleteUser as DeleteDto;
-use Dvsa\Olcs\Transfer\Query\User\User as ItemDto;
+use Dvsa\Olcs\Transfer\Command\User\UpdateUser as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetList as TransportManagerApplicationListDto;
+use Dvsa\Olcs\Transfer\Query\User\User as ItemDto;
+use Laminas\Form\Element\Radio as RadioElement;
+use Laminas\Form\Fieldset as FormFieldset;
+use Laminas\Navigation\Navigation;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\User as Mapper;
-use Admin\Form\Model\Form\User as Form;
-use Laminas\View\Model\ViewModel;
-use Common\RefData;
-use Laminas\Form\Fieldset as FormFieldset;
-use Laminas\Form\Element\Radio as RadioElement;
 
-/**
- * User Management Controller
- *
- * @method redirect Laminas\Mvc\Controller\Plugin\Redirect
- */
 class UserManagementController extends AbstractInternalController implements LeftViewProvider
 {
     /**
@@ -92,7 +92,17 @@ class UserManagementController extends AbstractInternalController implements Lef
             'action' => 'index'
         ]
     ];
+    public function __construct(
+        TranslationHelperService $translationHelperService,
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessengerHelperService,
+        Navigation $navigation,
+        UrlHelperService $urlHelperService
+    ) {
+        $this->urlHelper = $urlHelperService;
 
+        parent::__construct($translationHelperService, $formHelper, $flashMessengerHelperService, $navigation);
+    }
     /**
      * Defines left view
      *
@@ -150,7 +160,7 @@ class UserManagementController extends AbstractInternalController implements Lef
      * Alters the form for add
      *
      * @param \Laminas\Form\Form $form The form to alter
-     * @param array           $data Form data
+     * @param array              $data Form data
      *
      * @return \Laminas\Form\Form
      */
@@ -169,7 +179,7 @@ class UserManagementController extends AbstractInternalController implements Lef
      * Alters the form for edit
      *
      * @param \Laminas\Form\Form $form The form to alter
-     * @param array           $data Form data
+     * @param array              $data Form data
      *
      * @return \Laminas\Form\Form
      */
@@ -192,7 +202,7 @@ class UserManagementController extends AbstractInternalController implements Lef
         ) {
             $value = sprintf(
                 '<a class="govuk-link" href="%s">%s</a>',
-                $this->getServiceLocator()->get('Helper\Url')->fromRoute(
+                $this->urlHelperService->fromRoute(
                     'transport-manager',
                     ['transportManager' => $data['userType']['currentTransportManager']]
                 ),
@@ -205,17 +215,17 @@ class UserManagementController extends AbstractInternalController implements Lef
 
         //password reset options
         switch ($data['userType']['userType']) {
-            case RefData::USER_TYPE_INTERNAL:
-            case RefData::USER_TYPE_PARTNER:
-            case RefData::USER_TYPE_LOCAL_AUTHORITY:
-                //for partners and local authorities, remove the post option
-                $resetPwField = $userLoginSecurity->get('resetPassword');
-                $valueOptions = $resetPwField->getValueOptions();
-                unset($valueOptions['post']);
-                $resetPwField->setValueOptions($valueOptions);
-                break;
-            default:
-                //transport manager and operator, we don't modify the form
+        case RefData::USER_TYPE_INTERNAL:
+        case RefData::USER_TYPE_PARTNER:
+        case RefData::USER_TYPE_LOCAL_AUTHORITY:
+            //for partners and local authorities, remove the post option
+            $resetPwField = $userLoginSecurity->get('resetPassword');
+            $valueOptions = $resetPwField->getValueOptions();
+            unset($valueOptions['post']);
+            $resetPwField->setValueOptions($valueOptions);
+            break;
+        default:
+            //transport manager and operator, we don't modify the form
         }
 
         //Hide OS type select for non internal users
@@ -241,7 +251,8 @@ class UserManagementController extends AbstractInternalController implements Lef
 
         // If we have clicked find application, persist the form
         if (isset($post['userType']['applicationTransportManagers']['search'])
-            && !empty($post['userType']['applicationTransportManagers']['search'])) {
+            && !empty($post['userType']['applicationTransportManagers']['search'])
+        ) {
             $this->persist = false;
         }
 
@@ -290,7 +301,7 @@ class UserManagementController extends AbstractInternalController implements Lef
         );
 
         if ($response->isServerError() || $response->isClientError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            $this->flashMessengerHelperService->addErrorMessage('unknown-error');
         }
 
         $optionData = [];

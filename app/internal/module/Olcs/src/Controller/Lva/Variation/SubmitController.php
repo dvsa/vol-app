@@ -5,11 +5,19 @@
  *
  * @author Alex Peshkov <alex.pehkov@valtech.co.uk>
  */
+
 namespace Olcs\Controller\Lva\Variation;
 
+use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\StringHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use Olcs\Controller\Interfaces\VariationControllerInterface;
 use Olcs\Controller\Lva\AbstractSubmitController;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
-use Olcs\Controller\Interfaces\VariationControllerInterface;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Variation Submit Controller
@@ -21,5 +29,37 @@ class SubmitController extends AbstractSubmitController implements VariationCont
     use VariationControllerTrait;
 
     protected $lva = 'variation';
-    protected $location = 'internal';
+    protected string $location = 'internal';
+
+    protected StringHelperService $stringHelper;
+    protected FormServiceManager $formServiceManager;
+
+    /**
+     * @param NiTextTranslation           $niTextTranslationUtil
+     * @param AuthorizationService        $authService
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param TranslationHelperService    $translationHelper
+     * @param FormHelperService           $formHelper
+     * @param StringHelperService         $stringHelper
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FlashMessengerHelperService $flashMessengerHelper,
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        StringHelperService $stringHelper,
+        FormServiceManager $formServiceManager
+    ) {
+        $this->stringHelper = $stringHelper;
+        $this->formServiceManager = $formServiceManager;
+
+        parent::__construct(
+            $niTextTranslationUtil,
+            $authService,
+            $flashMessengerHelper,
+            $translationHelper,
+            $formHelper
+        );
+    }
 }

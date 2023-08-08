@@ -2,6 +2,7 @@
 
 namespace OlcsTest\Listener;
 
+use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Mockery as m;
 use Common\Rbac\User;
@@ -49,10 +50,10 @@ class HeaderSearchTest extends TestCase
         $this->mockSm = m::mock(\Laminas\ServiceManager\ServiceLocatorInterface::class);
         $this->mockSm
             ->shouldReceive('get')->with('DataServiceManager')->andReturnSelf()
-            ->shouldReceive('get')->with('Helper\Form')->andReturn($this->mockFormHlp)
+            ->shouldReceive('get')->with(FormHelperService::class)->andReturn($this->mockFormHlp)
             ->shouldReceive('get')->with(\Common\Service\Data\Search\Search::class)->andReturn($this->mockSearchSrv)
             ->shouldReceive('get')->with('FormElementManager')->andReturn($this->mockFormElmMngr)
-            ->shouldReceive('get')->with('Helper\Translation')->andReturn($this->mockTransHelper)
+            ->shouldReceive('get')->with(TranslationHelperService::class)->andReturn($this->mockTransHelper)
             ->shouldReceive('get')->with(IdentityProviderInterface::class)->andReturn($this->mockAuthService)
             ->shouldReceive('get')->with('ViewHelperManager')->andReturn($this->mockViewHlprMngr);
 

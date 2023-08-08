@@ -7,9 +7,8 @@
  */
 namespace Olcs\Controller\Traits;
 
-use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
-use Laminas\View\Model\ViewModel;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
+use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 
 /**
  * Inspection Request Trait
@@ -23,8 +22,7 @@ trait InspectionRequestTrait
         $this->placeholder()->setPlaceholder('enforcementAreaName', $this->getEnforcementAreaName());
 
         if (!$this->enforcementAreaName) {
-            $this->getServiceLocator()
-                ->get('Helper\FlashMessenger')
+            $this->flashMessengerHelper
                 ->addErrorMessage('internal-inspection-request.area-not-set');
 
             return $this->redirectToIndex();

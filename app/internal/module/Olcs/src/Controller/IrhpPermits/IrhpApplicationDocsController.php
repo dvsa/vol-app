@@ -2,9 +2,16 @@
 
 namespace Olcs\Controller\IrhpPermits;
 
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Constants\FilterOptions;
+use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Interfaces\IrhpApplicationControllerInterface;
 use Olcs\Controller\Traits as ControllerTraits;
+use Olcs\Service\Data\DocumentSubCategory;
 
 /**
  * IRHP Application Docs Controller
@@ -13,13 +20,37 @@ use Olcs\Controller\Traits as ControllerTraits;
  */
 class IrhpApplicationDocsController extends AbstractIrhpPermitController implements IrhpApplicationControllerInterface
 {
-    use ControllerTraits\DocumentActionTrait,
-        ControllerTraits\DocumentSearchTrait;
+    use ControllerTraits\DocumentActionTrait;
+    use ControllerTraits\DocumentSearchTrait;
+
+    protected DocumentSubCategory $docSubCategoryDataService;
+    protected TranslationHelperService $translationHelper;
+    protected FlashMessengerHelperService $flashMessengerHelper;
+
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        TableFactory $tableFactory,
+        HelperPluginManager $viewHelperManager,
+        FlashMessengerHelperService $flashMessengerHelper,
+        DocumentSubCategory $docSubCategoryDataService,
+        TranslationHelperService $translationHelper
+    ) {
+        parent::__construct(
+            $scriptFactory,
+            $formHelper,
+            $tableFactory,
+            $viewHelperManager,
+        );
+        $this->docSubCategoryDataService = $docSubCategoryDataService;
+        $this->translationHelper = $translationHelper;
+        $this->flashMessengerHelper = $flashMessengerHelper;
+    }
 
     /**
      * Get configured document form
      *
-     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return \Laminas\Form\FormInterface
      */
     protected function getConfiguredDocumentForm()
@@ -40,7 +71,7 @@ class IrhpApplicationDocsController extends AbstractIrhpPermitController impleme
     /**
      * Table to use
      *
-     * @see \Olcs\Controller\Traits\DocumentSearchTrait
+     * @see    \Olcs\Controller\Traits\DocumentSearchTrait
      * @return string
      */
     protected function getDocumentTableName()
@@ -51,7 +82,7 @@ class IrhpApplicationDocsController extends AbstractIrhpPermitController impleme
     /**
      * Route (prefix) for document action redirects
      *
-     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
     protected function getDocumentRoute()
@@ -62,7 +93,7 @@ class IrhpApplicationDocsController extends AbstractIrhpPermitController impleme
     /**
      * Route params for document action redirects
      *
-     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return array
      */
     protected function getDocumentRouteParams()
@@ -91,7 +122,7 @@ class IrhpApplicationDocsController extends AbstractIrhpPermitController impleme
     /**
      * Get view model for document action
      *
-     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return \Laminas\View\Model\ViewModel
      */
     protected function getDocumentView()

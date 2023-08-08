@@ -3,61 +3,76 @@
 namespace Olcs\Controller\Cases\PublicInquiry;
 
 use Common\Exception\BadRequestException;
-use Olcs\Controller\Interfaces\LeftViewProvider;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Script\ScriptFactory;
+use Dvsa\Olcs\Transfer\Command\Cases\Pi\Close as CloseCmd;
+use Dvsa\Olcs\Transfer\Command\Cases\Pi\CreateAgreedAndLegislation as CreateCmd;
+use Dvsa\Olcs\Transfer\Command\Cases\Pi\Reopen as ReopenCmd;
+use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateAgreedAndLegislation as UpdateCmd;
+use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateDecision as UpdateDecisionCmd;
+use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateSla as UpdateSlaCmd;
+use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateTmDecision as UpdateTmDecisionCmd;
+use Dvsa\Olcs\Transfer\Query\Cases\Pi as PiDto;
+use Laminas\Navigation\Navigation;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\Pi as PiMapper;
-use Dvsa\Olcs\Transfer\Query\Cases\Pi as PiDto;
+use Olcs\Form\Model\Form\PublicInquiryAgreedAndLegislation as AgreedAndLegislationForm;
 use Olcs\Form\Model\Form\PublicInquiryRegisterDecision as DecisionForm;
 use Olcs\Form\Model\Form\PublicInquiryRegisterTmDecision as TmDecisionForm;
 use Olcs\Form\Model\Form\PublicInquirySla as SlaForm;
-use Olcs\Form\Model\Form\PublicInquiryAgreedAndLegislation as AgreedAndLegislationForm;
-use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
-use Dvsa\Olcs\Transfer\Command\Cases\Pi\CreateAgreedAndLegislation as CreateCmd;
-use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateAgreedAndLegislation as UpdateCmd;
-use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateDecision as UpdateDecisionCmd;
-use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateTmDecision as UpdateTmDecisionCmd;
-use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateSla as UpdateSlaCmd;
-use Dvsa\Olcs\Transfer\Command\Cases\Pi\Close as CloseCmd;
-use Dvsa\Olcs\Transfer\Command\Cases\Pi\Reopen as ReopenCmd;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
-use Laminas\View\Model\ViewModel;
+use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 
-/**
- * Class PiController
- */
+
 class PiController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
-    /** Details view */
+    /**
+     * Details view
+     */
     protected $detailsViewPlaceholderName = 'pi';
     protected $detailsViewTemplate = 'sections/cases/pages/public-inquiry';
     protected $navigationId = 'case_hearings_appeals_public_inquiry';
     protected $itemDto = PiDto::class;
 
-    /** Create and update Pi with Agreed and Legislation info */
+    /**
+     * Create and update Pi with Agreed and Legislation info
+     */
     protected $createCommand = CreateCmd::class;
     protected $updateCommand = UpdateCmd::class;
     protected $formClass = AgreedAndLegislationForm::class;
     protected $addContentTitle = 'Add Traffic Commissioner agreement and legislation';
     protected $editContentTitle = 'Edit Traffic Commissioner agreement and legislation';
 
-    /** Pi Decision */
+    /**
+     * Pi Decision
+     */
     protected $updateDecisionCommand = UpdateDecisionCmd::class;
     protected $updateTmDecisionCommand = UpdateTmDecisionCmd::class;
     protected $decisionForm = DecisionForm::class;
 
-    /** Sla */
+    /**
+     * Sla
+     */
     protected $slaForm = SlaForm::class;
     protected $updateSlaCommand = UpdateSlaCmd::class;
 
-    /** Close */
+    /**
+     * Close
+     */
     protected $closeCommand = CloseCmd::class;
     protected $closeParams = ['id' => 'case'];
     protected $closeModalTitle = 'Close the PI';
     protected $closeConfirmMessage = 'Are you sure you want to close the PI?';
     protected $closeSuccessMessage = 'PI closed';
 
-    /** Reopen */
+    /**
+     * Reopen
+     */
     protected $reopenCommand = ReopenCmd::class;
     protected $reopenParams = ['id' => 'case'];
     protected $reopenModalTitle = 'Reopen the PI?';
@@ -94,6 +109,24 @@ class PiController extends AbstractInternalController implements CaseControllerI
         ]
     ];
 
+    protected FlashMessengerHelperService $flashMessenger;
+    protected TranslationHelperService $translationHelper;
+    protected FormHelperService $formHelper;
+    protected Navigation $navigation;
+    protected ScriptFactory $scriptService;
+
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessengerHelper,
+        Navigation $navigation,
+        ScriptFactory $scriptService
+    ) {
+        $this->scriptService = $scriptService;
+        parent::__construct($translationHelper, $formHelper, $flashMessengerHelper, $navigation);
+    }
+
+
     /**
      * get method View Model
      *
@@ -125,7 +158,7 @@ class PiController extends AbstractInternalController implements CaseControllerI
     public function indexAction()
     {
         $pi = $this->getPi();
-        $this->getServiceLocator()->get('Script')->loadFile('pi-form');
+        $this->scriptService->loadFile('pi-form');
         //if we don't have a Pi, display the add Pi page
         if (!isset($pi['id'])) {
             return $this->viewBuilder()->buildViewFromTemplate($this->detailsViewTemplate);
@@ -139,19 +172,19 @@ class PiController extends AbstractInternalController implements CaseControllerI
             //we need the hearing controller for this, so this code is necessary for compatibility with the table
             //actions script
             switch ($action) {
-                case 'addhearing':
-                    $redirectParams = $this->getHearingRedirectParams('add', null, $pi['id']);
-                    break;
-                case 'edithearing':
-                    if ($this->checkValidHearingId($id)) {
-                        $redirectParams = $this->getHearingRedirectParams('edit', $id, $pi['id']);
-                    }
-                    break;
-                case 'generate':
-                    if ($this->checkValidHearingId($id)) {
-                        $redirectParams = $this->getHearingRedirectParams('generate', $id, $pi['id']);
-                    }
-                    break;
+            case 'addhearing':
+                $redirectParams = $this->getHearingRedirectParams('add', null, $pi['id']);
+                break;
+            case 'edithearing':
+                if ($this->checkValidHearingId($id)) {
+                    $redirectParams = $this->getHearingRedirectParams('edit', $id, $pi['id']);
+                }
+                break;
+            case 'generate':
+                if ($this->checkValidHearingId($id)) {
+                    $redirectParams = $this->getHearingRedirectParams('generate', $id, $pi['id']);
+                }
+                break;
             }
 
             //if no matched action, or no valid id, we won't have redirect params
@@ -263,7 +296,7 @@ class PiController extends AbstractInternalController implements CaseControllerI
      *
      * @param \Laminas\Form\FormInterface    $form    Form
      * @param \Laminas\Form\ElementInterface $element Element
-     * @param array                       $data    Data
+     * @param array                          $data    Data
      *
      * @return \Laminas\Form\FormInterface
      */
@@ -304,8 +337,7 @@ class PiController extends AbstractInternalController implements CaseControllerI
     {
         if (!(int)$id) {
             //no row selected, probably Js switched off
-            $this->getServiceLocator()
-                ->get('Helper\FlashMessenger')
+            $this->flashMessenger
                 ->addWarningMessage('Please select a row');
 
             return false;
@@ -328,7 +360,7 @@ class PiController extends AbstractInternalController implements CaseControllerI
             //don't display error for pi not found on index, as it shouldn't necessarily have one
             $action = $this->getEvent()->getRouteMatch()->getParam('action');
             if ($action !== 'index') {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+                $this->flashMessenger->addErrorMessage('unknown-error');
             }
         }
 

@@ -2,20 +2,23 @@
 
 namespace Olcs\Controller\Document;
 
+use Common\Category;
 use Common\Data\Mapper\LetterGenerationDocument;
 use Common\Exception\ConfigurationException;
-use Common\Rbac\JWTIdentityProvider;
 use Common\RefData;
+use Common\Service\Cqrs\Response;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\Document\DeleteDocument;
 use Dvsa\Olcs\Transfer\Command\Task\CloseTasks;
+use Dvsa\Olcs\Transfer\Query as TransferQry;
 use Dvsa\Olcs\Transfer\Query\Application\Application;
 use Dvsa\Olcs\Transfer\Query\Cases\Cases;
 use Dvsa\Olcs\Transfer\Query\Document\Letter;
-use Dvsa\Olcs\Transfer\Query as TransferQry;
 use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
+use Laminas\View\HelperPluginManager;
 use Olcs\Controller\AbstractController;
-use Common\Category;
-use Common\Service\Cqrs\Response;
 
 /**
  * @author Nick Payne <nick.payne@valtech.co.uk>
@@ -68,6 +71,19 @@ abstract class AbstractDocumentController extends AbstractController
 
     private $caseData;
 
+    protected array $config;
+
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        TableFactory $tableFactory,
+        HelperPluginManager $viewHelperManager,
+        array $config
+    ) {
+        parent::__construct($scriptFactory, $formHelper, $tableFactory, $viewHelperManager);
+        $this->config = $config;
+    }
+
     /**
      * Maps an entity type to the key needed to get the id from the route
      *
@@ -80,14 +96,14 @@ abstract class AbstractDocumentController extends AbstractController
     public function getRouteParamKeyForType($type)
     {
         switch ($type) {
-            case 'busReg':
-                return 'busRegId';
-            case 'irfoOrganisation':
-                return 'organisation';
-            case 'irhpApplication':
-                return 'irhpAppId';
-            default:
-                return $type;
+        case 'busReg':
+            return 'busRegId';
+        case 'irfoOrganisation':
+            return 'organisation';
+        case 'irhpApplication':
+            return 'irhpAppId';
+        default:
+            return $type;
         }
     }
 
@@ -110,7 +126,7 @@ abstract class AbstractDocumentController extends AbstractController
     /**
      * Deletes a document by id
      *
-     * @param int $id Document id
+     * @param  int $id Document id
      * @return \Common\Service\Cqrs\Response
      */
     protected function removeDocument($id)
@@ -121,7 +137,7 @@ abstract class AbstractDocumentController extends AbstractController
     /**
      * Closes a task by id.
      *
-     * @param int $taskId
+     * @param  int $taskId
      * @return Response
      */
     protected function closeTask(int $taskId): Response
@@ -132,11 +148,11 @@ abstract class AbstractDocumentController extends AbstractController
     /**
      * Redirects to the document route
      *
-     * @param string $type Type of document
-     * @param string $action Action to redirect to
-     * @param array $routeParams Route params
-     * @param bool $ajax Whether it's an ajax redirect
-     * @param array $additionaQueryParams Appends additional query params to the ajax request
+     * @param  string $type                 Type of document
+     * @param  string $action               Action to redirect to
+     * @param  array  $routeParams          Route params
+     * @param  bool   $ajax                 Whether it's an ajax redirect
+     * @param  array  $additionaQueryParams Appends additional query params to the ajax request
      * @return \Laminas\Http\Response
      */
     protected function redirectToDocumentRoute($type, $action, $routeParams, $ajax = false, array $additionaQueryParams = [])
@@ -244,13 +260,13 @@ abstract class AbstractDocumentController extends AbstractController
             'case' => $case['id']
         ];
         switch ($case['caseType']['id']) {
-            case 'case_t_tm':
-                $data['transportManager'] = $case['transportManager']['id'];
-                break;
+        case 'case_t_tm':
+            $data['transportManager'] = $case['transportManager']['id'];
+            break;
 
-            default:
-                $data['licence'] = $case['licence']['id'];
-                break;
+        default:
+            $data['licence'] = $case['licence']['id'];
+            break;
         }
 
         return $data;
@@ -262,7 +278,7 @@ abstract class AbstractDocumentController extends AbstractController
      */
     protected function getUriPattern(): string
     {
-        $config = $this->getServiceLocator()->get('Config');
+        $config = $this->config;
 
         $url_pattern = $config['webdav']['url_pattern'] ?? null;
         if (!isset($url_pattern)) {

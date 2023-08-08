@@ -2,19 +2,48 @@
 
 namespace Olcs\Controller\Lva;
 
-use Common\FormService\FormServiceManager;
-use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Common\Controller\Lva\AbstractController;
+use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Command\Application\UpdateAuthSignature;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use Olcs\Controller\Interfaces\ApplicationControllerInterface;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
-* Internal Application Undertakings Controller
+ * Internal Application Undertakings Controller
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
 abstract class AbstractDeclarationsInternalController extends AbstractController implements
     ApplicationControllerInterface
 {
+    protected FormServiceManager $formServiceManager;
+    protected TranslationHelperService $translationHelper;
+    protected FlashMessengerHelperService $flashMessengerHelper;
+
+    /**
+     * @param NiTextTranslation           $niTextTranslationUtil
+     * @param AuthorizationService        $authService
+     * @param FormServiceManager          $formServiceManager
+     * @param TranslationHelperService    $translationHelper
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FormServiceManager $formServiceManager,
+        TranslationHelperService $translationHelper,
+        FlashMessengerHelperService $flashMessengerHelper
+    ) {
+        $this->formServiceManager = $formServiceManager;
+        $this->translationHelper = $translationHelper;
+        $this->flashMessengerHelper = $flashMessengerHelper;
+
+        parent::__construct($niTextTranslationUtil, $authService);
+    }
+
     /**
      * indexAction
      *
@@ -44,7 +73,7 @@ abstract class AbstractDeclarationsInternalController extends AbstractController
                 if ($response->isOk()) {
                     return $this->completeSection('undertakings');
                 } else {
-                    $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+                    $this->flashMessengerHelper->addErrorMessage('unknown-error');
                 }
             }
         } else {
@@ -68,13 +97,12 @@ abstract class AbstractDeclarationsInternalController extends AbstractController
      */
     protected function getForm()
     {
-        $form = $this->getServiceLocator()
-            ->get(FormServiceManager::class)
+        $form = $this->formServiceManager
             ->get('lva-' . $this->lva . '-undertakings')
             ->getForm();
 
         // populate the link
-        $translator = $this->getServiceLocator()->get('Helper\Translation');
+        $translator = $this->translationHelper;
         $summaryDownload = $translator->translateReplace(
             'undertakings_summary_download',
             [

@@ -5,12 +5,6 @@ namespace Olcs\Controller\TransportManager;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits;
 
-/**
- * Transport Manager Document Controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 class TransportManagerDocumentController extends TransportManagerController implements LeftViewProvider
 {
     use Traits\DocumentActionTrait,
@@ -20,7 +14,7 @@ class TransportManagerDocumentController extends TransportManagerController impl
     /**
      * Table to use
      *
-     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
     protected function getDocumentTableName()
@@ -47,7 +41,7 @@ class TransportManagerDocumentController extends TransportManagerController impl
     /**
      * Route (prefix) for document action redirects
      *
-     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
     protected function getDocumentRoute()
@@ -58,7 +52,7 @@ class TransportManagerDocumentController extends TransportManagerController impl
     /**
      * Route params for document action redirects
      *
-     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return array
      */
     protected function getDocumentRouteParams()
@@ -69,7 +63,7 @@ class TransportManagerDocumentController extends TransportManagerController impl
     /**
      * Get view model for document action
      *
-     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return \Laminas\View\Model\ViewModel
      */
     protected function getDocumentView()

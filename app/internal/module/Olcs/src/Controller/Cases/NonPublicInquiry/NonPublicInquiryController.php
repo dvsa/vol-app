@@ -1,29 +1,19 @@
 <?php
 
-/**
- * Case Conviction Controller
- *
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
- */
 namespace Olcs\Controller\Cases\NonPublicInquiry;
 
 use Dvsa\Olcs\Transfer\Command\Cases\NonPi\Create as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Cases\NonPi\Delete as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\Cases\NonPi\Update as UpdateDto;
-use Dvsa\Olcs\Transfer\Query\Cases\NonPi\Single as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Cases\NonPi\Listing as ListDto;
-use Olcs\Controller\Interfaces\LeftViewProvider;
-use Olcs\Data\Mapper\NonPi as MapperClass;
+use Dvsa\Olcs\Transfer\Query\Cases\NonPi\Single as ItemDto;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Data\Mapper\NonPi as MapperClass;
 use Olcs\Form\Model\Form\NonPi as FormClass;
-use Laminas\View\Model\ViewModel;
 
-/**
- * Case Conviction Controller
- *
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
- */
 class NonPublicInquiryController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
     /**

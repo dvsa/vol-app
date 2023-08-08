@@ -3,17 +3,39 @@
 namespace Olcs\Controller\Licence;
 
 use Common\RefData;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
+use Laminas\Validator\Translator\TranslatorInterface;
+use Laminas\View\HelperPluginManager;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractController;
 use Olcs\Data\Mapper\Continuation as ContinuationMapper;
-use Laminas\View\Model\ViewModel;
 
-/**
- * Continuation Controller
- *
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
 class ContinuationController extends AbstractController
 {
+    protected FlashMessengerHelperService $flashMessengerHelper;
+    protected TranslatorInterface $translationHelper;
+
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        TableFactory $tableFactory,
+        HelperPluginManager $viewHelperManager,
+        FlashMessengerHelperService $flashMessengerHelper,
+        TranslatorInterface $translationHelper
+    ) {
+        parent::__construct(
+            $scriptFactory,
+            $formHelper,
+            $tableFactory,
+            $viewHelperManager
+        );
+        $this->flashMessengerHelper = $flashMessengerHelper;
+        $this->translationHelper = $translationHelper;
+    }
+
     /**
      * Process action - updateContinuation
      *
@@ -28,13 +50,17 @@ class ContinuationController extends AbstractController
         $hasOutstandingContinuationFee = $data['hasOutstandingContinuationFee'];
         $numNotCeasedDiscs = $data['numNotCeasedDiscs'];
 
-        /** @var \Common\Form\Form $form */
+        /**
+ * @var \Common\Form\Form $form
+*/
         $form = $this->getForm('UpdateContinuation');
 
         $this->alterForm($form, $continuationDetail, $hasOutstandingContinuationFee);
         $this->populateFormDefaultValues($form, $continuationDetail, $numNotCeasedDiscs);
 
-        /** @var \Laminas\Http\Request $request */
+        /**
+ * @var \Laminas\Http\Request $request
+*/
         $request = $this->getRequest();
 
         if ($request->isPost()) {
@@ -66,7 +92,7 @@ class ContinuationController extends AbstractController
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('pages/form');
 
-        $this->getServiceLocator()->get('Script')->loadFile('forms/update-continuation');
+        $this->scriptFactory->loadFile('forms/update-continuation');
 
         return $this->renderView($view, 'Continue licence');
     }
@@ -82,7 +108,9 @@ class ContinuationController extends AbstractController
     protected function postSetFormData(\Common\Form\Form $form)
     {
         if ($form->getName() === 'UpdateContinuation') {
-            /** @var \Laminas\Form\Fieldset $fields */
+            /**
+ * @var \Laminas\Form\Fieldset $fields
+*/
             $fields = $form->get('fields');
 
             if ($fields->get('received')->getValue() === 'N') {
@@ -188,12 +216,12 @@ class ContinuationController extends AbstractController
             $errors = ContinuationMapper::mapFromErrors($form, $response->getResult()['messages']);
             if ($errors) {
                 foreach ($errors as $error) {
-                    $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($error);
+                    $this->flashMessengerHelper->addErrorMessage($error);
                 }
             }
         }
         if ($response->isServerError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('Unknown error');
+            $this->flashMessengerHelper->addErrorMessage('Unknown error');
         }
         return $response->isOk();
     }
@@ -202,8 +230,8 @@ class ContinuationController extends AbstractController
      * Populate the values of the form
      *
      * @param \Laminas\Form\Form $form               form
-     * @param array           $continuationDetail Entity data
-     * @param int             $numNotCeasedDiscs  numNotCeasedDiscs
+     * @param array              $continuationDetail Entity data
+     * @param int                $numNotCeasedDiscs  numNotCeasedDiscs
      *
      * @return void
      */
@@ -239,8 +267,8 @@ class ContinuationController extends AbstractController
      * Alter the update continuation form dependant on licence and continuation details
      *
      * @param \Laminas\Form\Form $form                          form
-     * @param array           $continuationDetail            Entity data
-     * @param bool            $hasOutstandingContinuationFee hasOutstandingContinuationFee
+     * @param array              $continuationDetail            Entity data
+     * @param bool               $hasOutstandingContinuationFee hasOutstandingContinuationFee
      *
      * @return void
      */
@@ -260,7 +288,7 @@ class ContinuationController extends AbstractController
             $form->get('fields')->get('message')
                 ->setValue('The licence cannot be continued yet because the continuation fee is still outstanding');
         } else {
-             $this->getServiceLocator()->get('Helper\Form')->remove($form, 'fields->messages');
+             $this->formHelper->remove($form, 'fields->messages');
         }
 
         $form->get('form-actions')->get('viewContinuation')->setValue(
@@ -277,17 +305,17 @@ class ContinuationController extends AbstractController
      * Alter form action buttons
      *
      * @param \Laminas\Form\Form $form                          form
-     * @param bool            $hasOutstandingContinuationFee hasoutstandingContinuationFee
-     * @param array           $continuationDetail            Entity data
+     * @param bool               $hasOutstandingContinuationFee hasoutstandingContinuationFee
+     * @param array              $continuationDetail            Entity data
      *
-     *@return void
+     * @return void
      */
     public function alterFormActions($form, $hasOutstandingContinuationFee, $continuationDetail)
     {
         if ($hasOutstandingContinuationFee
             || $continuationDetail['status']['id'] === RefData::CONTINUATION_DETAIL_STATUS_COMPLETE
-            ) {
-            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'form-actions->continueLicence');
+        ) {
+            $this->formHelper->remove($form, 'form-actions->continueLicence');
         }
     }
 
@@ -295,7 +323,7 @@ class ContinuationController extends AbstractController
      * Only enable the Received element for certain continuation statuses
      *
      * @param \Laminas\Form\Form $form               form
-     * @param array           $continuationDetail continuationDetail
+     * @param array              $continuationDetail continuationDetail
      *
      * @return void
      */
@@ -303,10 +331,11 @@ class ContinuationController extends AbstractController
     {
         if ($continuationDetail['status']['id'] === RefData::CONTINUATION_DETAIL_STATUS_PRINTED
             || ($continuationDetail['status']['id'] !== RefData::CONTINUATION_DETAIL_STATUS_PRINTED
-            && $continuationDetail['received'] === 'N')) {
+            && $continuationDetail['received'] === 'N')
+        ) {
             // Enabled by default
         } else {
-            $this->getServiceLocator()->get('Helper\Form')->disableElement($form, 'fields->received');
+            $this->formHelper->disableElement($form, 'fields->received');
         }
     }
 
@@ -340,7 +369,7 @@ class ContinuationController extends AbstractController
      * Only enable the ChecklistStatus element for certain continuation statuses
      *
      * @param \Laminas\Form\Form $form               form
-     * @param array           $continuationDetail continuationDetail
+     * @param array              $continuationDetail continuationDetail
      *
      * @return void
      */
@@ -350,7 +379,7 @@ class ContinuationController extends AbstractController
 
         if ($this->isAllowedContinuationStatuses($continuationDetail['status']['id'])) {
             if ($continuationDetail['received'] === 'N') {
-                $this->getServiceLocator()->get('Helper\Form')->disableElement($form, 'fields->checklistStatus');
+                $this->formHelper->disableElement($form, 'fields->checklistStatus');
             }
             // remove status that we aren't allowed to set to
             $allowedStatuses = $this->getAllowedContinuationStatuses();
@@ -360,7 +389,7 @@ class ContinuationController extends AbstractController
                 }
             }
         } else {
-            $this->getServiceLocator()->get('Helper\Form')->disableElement($form, 'fields->checklistStatus');
+            $this->formHelper->disableElement($form, 'fields->checklistStatus');
             /* @var $e \Laminas\Form\Element */
             $e = $form->get('fields')->get('checklistStatus');
             // force element to always disabled, eg JS will not re-enable it
@@ -377,7 +406,7 @@ class ContinuationController extends AbstractController
      * Only show the TotalVehicleAuthorisation element for certain licence types
      *
      * @param \Laminas\Form\Form $form               form
-     * @param array           $continuationDetail continuationDetail
+     * @param array              $continuationDetail continuationDetail
      *
      * @return void
      */
@@ -387,14 +416,15 @@ class ContinuationController extends AbstractController
         if ($licence['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_PSV
             && ($licence['licenceType']['id'] === RefData::LICENCE_TYPE_RESTRICTED
             || $licence['licenceType']['id'] === RefData::LICENCE_TYPE_STANDARD_NATIONAL
-            || $licence['licenceType']['id'] === RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL)) {
+            || $licence['licenceType']['id'] === RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL)
+        ) {
             // Displayed by default
             if (!$this->isAllowedContinuationStatuses($continuationDetail['status']['id'])) {
-                $this->getServiceLocator()->get('Helper\Form')
+                $this->formHelper
                     ->disableElement($form, 'fields->totalVehicleAuthorisation');
             }
         } else {
-            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'fields->totalVehicleAuthorisation');
+            $this->formHelper->remove($form, 'fields->totalVehicleAuthorisation');
         }
     }
 
@@ -402,8 +432,8 @@ class ContinuationController extends AbstractController
      * Only show the NumberOfDiscs element for certain licence types
      *
      * @param \Laminas\Form\Form $form               form
-     * @param array           $continuationDetail continuationDetail
-     * @param array           $postData           postData
+     * @param array              $continuationDetail continuationDetail
+     * @param array              $postData           postData
      *
      * @return void
      */
@@ -413,7 +443,8 @@ class ContinuationController extends AbstractController
         if ($licence['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_PSV
             && ($licence['licenceType']['id'] === RefData::LICENCE_TYPE_RESTRICTED
             || $licence['licenceType']['id'] === RefData::LICENCE_TYPE_STANDARD_NATIONAL
-            || $licence['licenceType']['id'] === RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL)) {
+            || $licence['licenceType']['id'] === RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL)
+        ) {
             // Displayed by default
             $totalVehicles = $licence['totAuthVehicles'];
             if (isset($postData['fields']['totalVehicleAuthorisation'])) {
@@ -421,23 +452,23 @@ class ContinuationController extends AbstractController
             }
 
             if ($this->isAllowedContinuationStatuses($continuationDetail['status']['id'])) {
-                $this->getServiceLocator()->get('Helper\Form')->attachValidator(
+                $this->formHelper->attachValidator(
                     $form,
                     'fields->numberOfDiscs',
                     new \Laminas\Validator\LessThan(
                         [
                         'max' => $totalVehicles,
                         'inclusive' => true,
-                        'translator' => $this->getServiceLocator()->get('Translator'),
+                        'translator' => $this->translationHelper,
                         'message' => 'update-continuation.validation.total-auth-vehicles'
                         ]
                     )
                 );
             } else {
-                $this->getServiceLocator()->get('Helper\Form')->disableElement($form, 'fields->numberOfDiscs');
+                $this->formHelper->disableElement($form, 'fields->numberOfDiscs');
             }
         } else {
-            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'fields->numberOfDiscs');
+            $this->formHelper->remove($form, 'fields->numberOfDiscs');
         }
     }
 
@@ -451,12 +482,12 @@ class ContinuationController extends AbstractController
     protected function displayCommunityLicenceElement($licence)
     {
         $displayFor = [
-            RefData::LICENCE_CATEGORY_GOODS_VEHICLE .'-'.
+            RefData::LICENCE_CATEGORY_GOODS_VEHICLE . '-' .
                 RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-            RefData::LICENCE_CATEGORY_PSV .'-'. RefData::LICENCE_TYPE_RESTRICTED,
-            RefData::LICENCE_CATEGORY_PSV .'-'. RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            RefData::LICENCE_CATEGORY_PSV . '-' . RefData::LICENCE_TYPE_RESTRICTED,
+            RefData::LICENCE_CATEGORY_PSV . '-' . RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL,
         ];
-        $type = $licence['goodsOrPsv']['id'] .'-'. $licence['licenceType']['id'];
+        $type = $licence['goodsOrPsv']['id'] . '-' . $licence['licenceType']['id'];
 
         return (in_array($type, $displayFor));
     }
@@ -465,8 +496,8 @@ class ContinuationController extends AbstractController
      * Only show the NumberOfCommunityLicences element for certain licence types
      *
      * @param \Laminas\Form\Form $form               form
-     * @param array           $continuationDetail continationDetail
-     * @param array           $postData           postData
+     * @param array              $continuationDetail continationDetail
+     * @param array              $postData           postData
      *
      * @return void
      */
@@ -476,30 +507,30 @@ class ContinuationController extends AbstractController
         if ($this->displayCommunityLicenceElement($licence)) {
             // Displayed by default
             $totalVehicles = $licence['totAuthVehicles'];
-            if ($licence['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_PSV &&
-                isset($postData['fields']['totalVehicleAuthorisation'])) {
+            if ($licence['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_PSV
+                && isset($postData['fields']['totalVehicleAuthorisation'])
+            ) {
                 $totalVehicles = $postData['fields']['totalVehicleAuthorisation'];
             }
 
             if ($this->isAllowedContinuationStatuses($continuationDetail['status']['id'])) {
-                $this->getServiceLocator()->get('Helper\Form')->attachValidator(
+                $this->formHelper->attachValidator(
                     $form,
                     'fields->numberOfCommunityLicences',
                     new \Laminas\Validator\LessThan(
                         [
                         'max' => $totalVehicles,
                         'inclusive' => true,
-                        'translator' => $this->getServiceLocator()->get('Translator'),
+                        'translator' => $this->translationHelper,
                         'message' => 'update-continuation.validation.total-auth-vehicles'
                         ]
                     )
                 );
             } else {
-                $this->getServiceLocator()->get('Helper\Form')
-                    ->disableElement($form, 'fields->numberOfCommunityLicences');
+                $this->formHelper->disableElement($form, 'fields->numberOfCommunityLicences');
             }
         } else {
-            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'fields->numberOfCommunityLicences');
+            $this->formHelper->remove($form, 'fields->numberOfCommunityLicences');
         }
     }
 }

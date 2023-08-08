@@ -22,7 +22,7 @@ class PermitsReportController extends AbstractInternalController implements Left
     /**
      * Process action - Index
      *
-     * @return  ViewModel
+     * @return ViewModel
      */
     public function indexAction(): ViewModel
     {
@@ -54,7 +54,7 @@ class PermitsReportController extends AbstractInternalController implements Left
                 ]
             );
 
-            $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
+            $flashMessenger = $this->flashMessengerHelperService;
             $response = $this->handleCommand($command);
 
             if ($response->isOk()) {

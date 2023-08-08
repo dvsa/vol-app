@@ -54,12 +54,12 @@ return array(
             'title' => 'Trailer',
             'formatter' => function ($data) {
                 switch ($data['isTrailer']) {
-                    case 'Y':
-                        return 'Yes';
-                    case 'N':
-                        return 'No';
-                    default:
-                        return '-';
+                case 'Y':
+                    return 'Yes';
+                case 'N':
+                    return 'No';
+                default:
+                    return '-';
                 }
             }
         ),

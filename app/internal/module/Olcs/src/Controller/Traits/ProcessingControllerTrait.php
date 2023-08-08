@@ -9,7 +9,7 @@ use Laminas\View\Model\ViewModel;
  * ProcessingControllerTrait
  *
  * @package Olcs\Controller
- * @author Dan Eggleston <dan@stolenegg.com>
+ * @author  Dan Eggleston <dan@stolenegg.com>
  */
 trait ProcessingControllerTrait
 {
@@ -75,7 +75,7 @@ trait ProcessingControllerTrait
     {
         $navigation = new Navigation($this->getNavigationConfig());
 
-        $router = $this->getServiceLocator()->get('router');
+        $router = $this->router;
 
         foreach ($navigation->getPages() as $page) {
             $page->setRouter($router);

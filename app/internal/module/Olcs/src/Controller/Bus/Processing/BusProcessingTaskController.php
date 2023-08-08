@@ -2,11 +2,17 @@
 
 namespace Olcs\Controller\Bus\Processing;
 
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Constants\FilterOptions;
+use Laminas\Mvc\Router\Http\TreeRouteStack;
+use Laminas\View\HelperPluginManager;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\BusRegControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits;
+use Olcs\Service\Data\SubCategory;
 
 /**
  * Bus Processing Task controller
@@ -16,9 +22,29 @@ use Olcs\Controller\Traits;
  */
 class BusProcessingTaskController extends AbstractController implements BusRegControllerInterface, LeftViewProvider
 {
-    use Traits\ProcessingControllerTrait,
-    Traits\TaskActionTrait {
+    use Traits\ProcessingControllerTrait, Traits\TaskActionTrait {
         Traits\TaskActionTrait::getTaskForm as traitGetTaskForm;
+    }
+
+    protected TreeRouteStack $router;
+    protected SubCategory $subCategoryDataService;
+
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        TableFactory $tableFactory,
+        HelperPluginManager $viewHelperManager,
+        TreeRouteStack $router,
+        SubCategory $subCategoryDataService
+    ) {
+        parent::__construct(
+            $scriptFactory,
+            $formHelper,
+            $tableFactory,
+            $viewHelperManager
+        );
+        $this->router = $router;
+        $this->subCategoryDataService = $subCategoryDataService;
     }
 
     /**

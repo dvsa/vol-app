@@ -3,16 +3,11 @@
 namespace Olcs\Controller\TransportManager\Details;
 
 use Common\Controller\Lva\Traits\CrudActionTrait;
-use Olcs\Controller\Interfaces\LeftViewProvider;
 use Laminas\Form\FormInterface;
 use Laminas\Http\Response;
 use Laminas\View\Model\ViewModel;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 
-/**
- * Transport Manager Details Previous History Controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 class TransportManagerDetailsPreviousHistoryController extends AbstractTransportManagerDetailsController implements
     LeftViewProvider
 {
@@ -35,7 +30,9 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
      */
     public function indexAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /**
+ * @var \Laminas\Http\Request $request
+*/
         $request = $this->getRequest();
 
         if ($request->isPost()) {
@@ -71,12 +68,14 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
 
     protected function getPreviousHistoryForm()
     {
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
 
-        /** @var \Laminas\Form\FormInterface $form */
+        /**
+ * @var \Laminas\Form\FormInterface $form
+*/
         $form = $formHelper->createForm('TmPreviousHistory');
 
-        $this->getServiceLocator()->get('Helper\TransportManager')
+        $this->transportManagerHelper
             ->alterPreviousHistoryFieldset($form->get('previousHistory'), $this->params('transportManager'));
 
         return $form;
@@ -143,8 +142,8 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
     /**
      * Form action
      *
-     * @param string $type
-     * @param string $formName
+     * @param  string $type
+     * @param  string $formName
      * @return mixed
      */
     protected function formAction($type, $formName)
@@ -177,14 +176,14 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
     /**
      * Alter form
      *
-     * @param FormInterface $form
-     * @param string $type
+     * @param  FormInterface $form
+     * @param  string        $type
      * @return FormInterface
      */
     protected function alterForm(FormInterface $form, $type)
     {
         if ($type !== 'Add') {
-            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'form-actions->addAnother');
+            $this->formHelper->remove($form, 'form-actions->addAnother');
         }
         return $form;
     }
@@ -192,7 +191,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
     /**
      * Populate edit form
      *
-     * @param FormInterface $form
+     * @param  FormInterface $form
      * @return FormInterface
      */
     protected function populateEditForm($form, $formName)
@@ -234,7 +233,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
     /**
      * Process form and redirect back to list
      *
-     * @param array $data
+     * @param  array $data
      * @return Response
      */
     protected function processForm($data)

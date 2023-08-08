@@ -5,10 +5,14 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace OlcsTest\Controller\Lva\Traits\Stubs;
 
+use Common\Service\Helper\StringHelperService;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 use Common\Controller\Lva\AbstractController;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Variation Controller Trait Stub
@@ -21,6 +25,17 @@ class VariationControllerTraitStub extends AbstractController
 
     protected $applicationId;
     protected $accessibleSections = [];
+
+    protected StringHelperService $stringHelper;
+
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        StringHelperService $stringHelper
+    ) {
+        parent::__construct($niTextTranslationUtil, $authService);
+        $this->stringHelper = $stringHelper;
+    }
 
     public function setAccessibleSections($accessibleSections)
     {

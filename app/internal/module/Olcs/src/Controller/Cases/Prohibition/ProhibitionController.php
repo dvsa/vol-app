@@ -1,33 +1,23 @@
 <?php
 
-/**
- * Case Prohibition Controller
- *
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
- */
 namespace Olcs\Controller\Cases\Prohibition;
 
 use Dvsa\Olcs\Transfer\Command\Cases\Prohibition\Create as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Cases\Prohibition\Delete as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\Cases\Prohibition\Update as UpdateDto;
+use Dvsa\Olcs\Transfer\Command\Cases\UpdateProhibitionNote as CommentUpdateDto;
+use Dvsa\Olcs\Transfer\Query\Cases\Cases as CommentItemDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Prohibition\Prohibition as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Prohibition\ProhibitionList as ListDto;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Olcs\Form\Model\Form\Prohibition as Form;
 use Olcs\Data\Mapper\GenericFields as Mapper;
-use Dvsa\Olcs\Transfer\Query\Cases\Cases as CommentItemDto;
-use Dvsa\Olcs\Transfer\Command\Cases\UpdateProhibitionNote as CommentUpdateDto;
-use Olcs\Form\Model\Form\Comment as CommentForm;
 use Olcs\Data\Mapper\ProhibitionCommentBox as CommentMapper;
-use Laminas\View\Model\ViewModel;
+use Olcs\Form\Model\Form\Comment as CommentForm;
+use Olcs\Form\Model\Form\Prohibition as Form;
 
-/**
- * Case Prohibition Controller
- *
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
- */
 class ProhibitionController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
     /**
@@ -50,10 +40,10 @@ class ProhibitionController extends AbstractInternalController implements CaseCo
     protected $listVars = ['case'];
 
      /**
-     * get method left view
-     *
-     * @return ViewModel
-     **/
+      * get method left view
+      *
+      * @return ViewModel
+      **/
     public function getLeftView()
     {
         $view = new ViewModel();

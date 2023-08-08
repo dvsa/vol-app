@@ -126,7 +126,7 @@ trait DocumentActionTrait
     {
         $id = $this->params()->fromRoute($this->documentIdentifierName);
 
-        $translator = $this->getServiceLocator()->get('translator');
+        $translator = $this->translationHelper;
         $response = $this->confirm($translator->translate('internal.documents.delete.delete_message'));
 
         if ($response instanceof ViewModel) {

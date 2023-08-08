@@ -1,32 +1,22 @@
 <?php
 
-/**
- * Case Conviction Controller
- *
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
- */
 namespace Olcs\Controller\Cases\Conviction;
 
 use Dvsa\Olcs\Transfer\Command\Cases\Conviction\Create as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Cases\Conviction\Delete as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\Cases\Conviction\Update as UpdateDto;
+use Dvsa\Olcs\Transfer\Command\Cases\UpdateConvictionNote as CommentUpdateDto;
+use Dvsa\Olcs\Transfer\Query\Cases\Cases as CommentItemDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Conviction\Conviction as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Conviction\ConvictionList as ListDto;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Olcs\Form\Model\Form\Conviction;
-use Dvsa\Olcs\Transfer\Query\Cases\Cases as CommentItemDto;
-use Dvsa\Olcs\Transfer\Command\Cases\UpdateConvictionNote as CommentUpdateDto;
-use Olcs\Form\Model\Form\Comment as CommentForm;
 use Olcs\Data\Mapper\ConvictionCommentBox as CommentMapper;
-use Laminas\View\Model\ViewModel;
+use Olcs\Form\Model\Form\Comment as CommentForm;
+use Olcs\Form\Model\Form\Conviction;
 
-/**
- * Case Conviction Controller
- *
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
- */
 class ConvictionController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
     /**

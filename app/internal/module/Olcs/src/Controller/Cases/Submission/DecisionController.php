@@ -5,15 +5,12 @@ namespace Olcs\Controller\Cases\Submission;
 use Dvsa\Olcs\Transfer\Command\Submission\CreateSubmissionAction as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Submission\UpdateSubmissionAction as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Submission\SubmissionAction as ItemDto;
+use Laminas\Form\Form as LaminasForm;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Data\Mapper\SubmissionAction as Mapper;
 use Olcs\Form\Model\Form\SubmissionDecision as Form;
-use Laminas\Form\Form as LaminasForm;
 
-/**
- * Submission Decision Controller
- */
 class DecisionController extends AbstractInternalController implements CaseControllerInterface
 {
     /**
@@ -125,7 +122,7 @@ class DecisionController extends AbstractInternalController implements CaseContr
      * Alter form for Add
      *
      * @param LaminasForm $form     form
-     * @param array    $formData formData
+     * @param array       $formData formData
      *
      * @return LaminasForm|array
      */
@@ -135,10 +132,10 @@ class DecisionController extends AbstractInternalController implements CaseContr
     }
 
     /**
-     *alter Form for Edit
+     * alter Form for Edit
      *
      * @param LaminasForm $form     form
-     * @param array    $formData formData
+     * @param array       $formData formData
      *
      * @return LaminasForm|array
      */
@@ -151,7 +148,7 @@ class DecisionController extends AbstractInternalController implements CaseContr
      * Change the id of the text area to be unique (avoid DOM clashes with multiple TinyMCE instances)
      *
      * @param LaminasForm $form form
-     * @param int      $id   id
+     * @param int         $id   id
      *
      * @return LaminasForm
      */

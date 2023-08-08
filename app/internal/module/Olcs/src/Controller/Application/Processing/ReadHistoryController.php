@@ -6,10 +6,10 @@
 namespace Olcs\Controller\Application\Processing;
 
 use Dvsa\Olcs\Transfer\Query\Audit\ReadApplication;
-use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\LeftViewProvider;
-use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Laminas\View\Model\ViewModel;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\ApplicationControllerInterface;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 
 /**
  * Read History Controller

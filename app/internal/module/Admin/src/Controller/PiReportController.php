@@ -6,11 +6,16 @@
 namespace Admin\Controller;
 
 use Admin\Controller\Traits\ReportLeftViewTrait;
+use Admin\Form\Model\Form\PiReportFilter as FilterForm;
+use Common\Service\Helper\DateHelperService;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Query\Cases\Pi\ReportList as ListDto;
+use Laminas\Navigation\Navigation;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Admin\Form\Model\Form\PiReportFilter as FilterForm;
-use Laminas\View\Model\ViewModel;
 
 /**
  * PI Report Controller
@@ -40,6 +45,16 @@ class PiReportController extends AbstractInternalController implements LeftViewP
     protected $listDto = ListDto::class;
     protected $filterForm = FilterForm::class;
 
+    public function __construct(
+        TranslationHelperService $translationHelperService,
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessengerHelperService,
+        Navigation $navigation,
+        DateHelperService $dateHelperService
+    ) {
+        $this->dateHelperService = $dateHelperService;
+        parent::__construct($translationHelperService, $formHelper, $flashMessengerHelperService, $navigation);
+    }
     /**
      * Sets the page title
      *
@@ -60,7 +75,7 @@ class PiReportController extends AbstractInternalController implements LeftViewP
         /* @var $request \Laminas\Http\Request */
         $request = $this->getRequest();
 
-        $eomDate = $this->getServiceLocator()->get('Helper\Date')->getDate('Y-m-t');
+        $eomDate = $this->dateHelperService->getDate('Y-m-t');
         list($year, $month, $lastDay) = explode('-', $eomDate);
 
         $filters = array_merge(

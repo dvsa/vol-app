@@ -7,11 +7,6 @@ use Dvsa\Olcs\Transfer\Query\Cases\ProposeToRevoke\ProposeToRevokeByCase;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Form\Model\Form\RevocationsSla;
 
-/**
- * Class RevocationsSlaController
- *
- * @package Olcs\Controller\Sla
- */
 class RevocationsSlaController extends AbstractInternalController
 {
     protected $formClass = RevocationsSla::class;

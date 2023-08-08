@@ -2,6 +2,10 @@
 
 namespace Olcs\Controller\Lva;
 
+use Common\Service\Helper\FormHelperService;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use ZfcRbac\Service\AuthorizationService;
+
 /**
  * Abstract PublishController
  *
@@ -9,6 +13,23 @@ namespace Olcs\Controller\Lva;
  */
 abstract class AbstractPublishController extends \Common\Controller\Lva\AbstractController
 {
+    protected FormHelperService $formHelper;
+
+    /**
+     * @param NiTextTranslation    $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService    $formHelper
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FormHelperService $formHelper
+    ) {
+        $this->formHelper = $formHelper;
+
+        parent::__construct($niTextTranslationUtil, $authService);
+    }
+
     /**
      * indexAction
      *
@@ -99,13 +120,10 @@ abstract class AbstractPublishController extends \Common\Controller\Lva\Abstract
 
     /**
      * Get the generic Message form
-     *
-     * @return \Olcs\Form\Message
      */
     protected function getMessageForm()
     {
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
-        return $formHelper->createFormWithRequest('Message', $this->getRequest());
+        return $this->formHelper->createFormWithRequest('Message', $this->getRequest());
     }
 
     /**

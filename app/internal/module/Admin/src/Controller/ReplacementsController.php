@@ -2,19 +2,16 @@
 
 namespace Admin\Controller;
 
-use Admin\Form\Model\Form\Replacement;
 use Admin\Data\Mapper\Replacement as ReplacementMapper;
-use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\LeftViewProvider;
-use Dvsa\Olcs\Transfer\Query\Replacement\GetList as ListDTO;
-use Dvsa\Olcs\Transfer\Query\Replacement\ById as ItemDTO;
+use Admin\Form\Model\Form\Replacement;
 use Dvsa\Olcs\Transfer\Command\Replacement\Create as CreateDTO;
 use Dvsa\Olcs\Transfer\Command\Replacement\Update as UpdateDTO;
+use Dvsa\Olcs\Transfer\Query\Replacement\ById as ItemDTO;
+use Dvsa\Olcs\Transfer\Query\Replacement\GetList as ListDTO;
 use Laminas\View\Model\ViewModel;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 
-/**
- * Editable Translations Controller
- */
 class ReplacementsController extends AbstractInternalController implements LeftViewProvider
 {
     protected $navigationId = 'admin-dashboard/content-management/replacements';

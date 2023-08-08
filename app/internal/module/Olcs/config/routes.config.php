@@ -1,10 +1,16 @@
 <?php
 
-use Olcs\Controller\IrhpPermits\IrhpApplicationController;
+use Olcs\Controller\Application\Processing\ApplicationProcessingInspectionRequestController;
+use Olcs\Controller\Application\Processing\ApplicationProcessingNoteController;
+use Olcs\Controller\Application\Processing\ApplicationProcessingPublicationsController;
 use Olcs\Controller\IrhpPermits\IrhpApplicationFeesController;
 use Olcs\Controller\Licence\SurrenderController;
+use Olcs\Controller\Operator\OperatorBusinessDetailsController;
+use Olcs\Controller\TaskController;
+use Olcs\Controller\TransportManager\Details\TransportManagerDetailsDetailController;
+use Olcs\Controller\Operator\OperatorFeesController;
+use Olcs\Controller\Operator\OperatorProcessingTasksController;
 use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController as TMProcessingNoteController;
-use Olcs\Controller\Application\Processing\ApplicationProcessingNoteController;
 use Olcs\Controller\Licence\BusRegistrationController as LicenceBusController;
 use Olcs\Controller\Licence\Processing\LicenceProcessingNoteController;
 use Olcs\Controller\Bus\Processing\BusProcessingDecisionController;
@@ -15,13 +21,15 @@ use Olcs\Controller\IrhpPermits\PermitController as IrhpPermitsPermitController;
 use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingOverviewController;
 use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingNoteController;
 use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingTasksController;
-use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingHistoryController;
 use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingReadHistoryController;
 use Olcs\Controller\Bus\Details\BusDetailsController;
 use Olcs\Controller\Bus\Service\BusServiceController;
 use Olcs\Controller\SearchController;
 use Laminas\Mvc\Router\Http\Segment;
 use Olcs\Controller\TransportManager as TmCntr;
+use Olcs\Controller\Operator as OperatorControllers;
+use Olcs\Controller\Application as ApplicationControllers;
+use Olcs\Controller\Licence as LicenceControllers;
 
 $feeActionRoute = [
     // child route config that is used in multiple places
@@ -143,7 +151,7 @@ $routes = [
                 'typeId' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => 'TaskController',
+                'controller' => TaskController::class,
             ]
         ],
         'may_terminate' => true,
@@ -167,7 +175,7 @@ $routes = [
             ],
             'defaults' => [
                 'type' => 'licence',
-                'controller' => 'DocumentGenerationController',
+                'controller' => \Olcs\Controller\Document\DocumentGenerationController::class,
                 'action' => 'listTemplateBookmarks'
             ]
         ]
@@ -177,7 +185,7 @@ $routes = [
         'options' => [
             'route' => '/documents/tmp/:id/:filename[/]',
             'defaults' => [
-                'controller' => 'DocumentGenerationController',
+                'controller' => \Olcs\Controller\Document\DocumentGenerationController::class,
                 'action' => 'downloadTmp'
             ]
         ]
@@ -446,7 +454,7 @@ $routes = [
                                 'constraints' => [
                                     'busRegId' => '[0-9]+',
                                 ],
-                                'controller' => 'BusRequestMapController',
+                                'controller' => Olcs\Controller\Bus\BusRequestMapController::class,
                                 'action' => 'add',
                             ]
                         ]
@@ -531,7 +539,7 @@ $routes = [
                 'options' => [
                     'route' => 'bus/:busRegId/short[/]',
                     'defaults' => [
-                        'controller' => 'BusShortController',
+                        'controller' => Olcs\Controller\Bus\Short\BusShortController::class,
                         'action' => 'edit',
                     ]
                 ],
@@ -553,7 +561,7 @@ $routes = [
                 'options' => [
                     'route' => 'bus/:busRegId/docs[/]',
                     'defaults' => [
-                        'controller' => 'BusDocsController',
+                        'controller' => \Olcs\Controller\Bus\Docs\BusDocsController::class,
                         'action' => 'documents',
                     ]
                 ],
@@ -565,7 +573,7 @@ $routes = [
                             'route' => 'generate[/:doc][/]',
                             'defaults' => [
                                 'type' => 'busReg',
-                                'controller' => 'DocumentGenerationController',
+                                'controller' => \Olcs\Controller\Document\DocumentGenerationController::class,
                                 'action' => 'generate'
                             ]
                         ],
@@ -576,7 +584,7 @@ $routes = [
                             'route' => 'finalise/:doc[/:action][/]',
                             'defaults' => [
                                 'type' => 'busReg',
-                                'controller' => 'DocumentFinaliseController',
+                                'controller' => \Olcs\Controller\Document\DocumentFinaliseController::class,
                                 'action' => 'finalise'
                             ]
                         ],
@@ -609,7 +617,7 @@ $routes = [
                             'route' => 'relink/:doc[/]',
                             'defaults' => [
                                 'type' => 'busReg',
-                                'controller' => 'DocumentRelinkController',
+                                'controller' => \Olcs\Controller\Document\DocumentRelinkController::class,
                                 'action' => 'relink'
                             ]
                         ],
@@ -648,7 +656,7 @@ $routes = [
                                 'action' => '(index|delete)'
                             ],
                             'defaults' => [
-                                'controller' => 'BusProcessingRegistrationHistoryController',
+                                'controller' => Olcs\Controller\Bus\Processing\BusProcessingRegistrationHistoryController::class,
                                 'action' => 'index'
                             ]
                         ],
@@ -681,7 +689,7 @@ $routes = [
                         'options' => [
                             'route' => 'event-history[/:action[/:id]][/]',
                             'defaults' => [
-                                'controller' => 'BusRegHistoryController',
+                                'controller' => Olcs\Controller\Bus\Processing\HistoryController::class,
                                 'action' => 'index',
                             ]
                         ],
@@ -691,7 +699,7 @@ $routes = [
                         'options' => [
                             'route' => 'read-history[/]',
                             'defaults' => [
-                                'controller' => 'BusRegReadHistoryController',
+                                'controller' => Olcs\Controller\Bus\Processing\ReadHistoryController::class,
                                 'action' => 'index',
                             ]
                         ],
@@ -759,7 +767,7 @@ $routes = [
                                 'entityType' => '(document)',
                             ],
                             'defaults' => [
-                                'controller' => 'LicenceDocumentSlaTargetDateController',
+                                'controller' => Olcs\Controller\Sla\LicenceDocumentSlaTargetDateController::class,
                                 'action' => 'addSla'
                             ]
                         ],
@@ -774,7 +782,7 @@ $routes = [
                             ],
                             'defaults' => [
                                 'type' => 'case',
-                                'controller' => 'LicenceDocumentSlaTargetDateController',
+                                'controller' => Olcs\Controller\Sla\LicenceDocumentSlaTargetDateController::class,
                                 'action' => 'editSla'
                             ]
                         ],
@@ -785,7 +793,7 @@ $routes = [
                             'route' => 'generate[/:doc][/]',
                             'defaults' => [
                                 'type' => 'licence',
-                                'controller' => 'DocumentGenerationController',
+                                'controller' => \Olcs\Controller\Document\DocumentGenerationController::class,
                                 'action' => 'generate'
                             ]
                         ],
@@ -796,7 +804,7 @@ $routes = [
                             'route' => 'finalise/:doc[/:action][/]',
                             'defaults' => [
                                 'type' => 'licence',
-                                'controller' => 'DocumentFinaliseController',
+                                'controller' => \Olcs\Controller\Document\DocumentFinaliseController::class,
                                 'action' => 'finalise'
                             ]
                         ],
@@ -829,7 +837,7 @@ $routes = [
                             'route' => 'relink/:doc[/]',
                             'defaults' => [
                                 'type' => 'licence',
-                                'controller' => 'DocumentRelinkController',
+                                'controller' => \Olcs\Controller\Document\DocumentRelinkController::class,
                                 'action' => 'relink'
                             ]
                         ],
@@ -902,7 +910,7 @@ $routes = [
                 'options' => [
                     'route' => 'irhp-application[/]',
                     'defaults' => [
-                        'controller' => IrhpApplicationController::class,
+                        'controller' => Olcs\Controller\IrhpPermits\IrhpApplicationController::class,
                         'action' => 'index',
                     ]
                 ],
@@ -981,7 +989,7 @@ $routes = [
                                 'permitTypeId' => '[0-9]+',
                             ],
                             'defaults' => [
-                                'controller' => 'IrhpPermitController',
+                                'controller' => Olcs\Controller\IrhpPermits\IrhpPermitController::class,
                                 'action' => 'index',
                             ]
                         ],
@@ -997,7 +1005,7 @@ $routes = [
                         'irhpAppId' => '[0-9]+',
                     ],
                     'defaults' => [
-                        'controller' => 'IrhpApplicationDocsController',
+                        'controller' => \Olcs\Controller\IrhpPermits\IrhpApplicationDocsController::class,
                         'action' => 'documents',
                     ]
                 ],
@@ -1009,7 +1017,7 @@ $routes = [
                             'route' => 'generate[/:doc][/]',
                             'defaults' => [
                                 'type' => 'irhpApplication',
-                                'controller' => 'DocumentGenerationController',
+                                'controller' => \Olcs\Controller\Document\DocumentGenerationController::class,
                                 'action' => 'generate'
                             ]
                         ],
@@ -1020,7 +1028,7 @@ $routes = [
                             'route' => 'finalise/:doc[/:action][/]',
                             'defaults' => [
                                 'type' => 'irhpApplication',
-                                'controller' => 'DocumentFinaliseController',
+                                'controller' => \Olcs\Controller\Document\DocumentFinaliseController::class,
                                 'action' => 'finalise'
                             ]
                         ],
@@ -1042,7 +1050,7 @@ $routes = [
                             'route' => 'delete/:doc[/]',
                             'defaults' => [
                                 'type' => 'irhpApplication',
-                                'controller' => 'IrhpApplicationDocsController',
+                                'controller' => \Olcs\Controller\IrhpPermits\IrhpApplicationDocsController::class,
                                 'action' => 'delete-document'
                             ]
                         ],
@@ -1053,7 +1061,7 @@ $routes = [
                             'route' => 'relink/:doc[/]',
                             'defaults' => [
                                 'type' => 'irhpApplication',
-                                'controller' => 'DocumentRelinkController',
+                                'controller' => \Olcs\Controller\Document\DocumentRelinkController::class,
                                 'action' => 'relink'
                             ]
                         ],
@@ -1107,7 +1115,7 @@ $routes = [
                                 'id' => '[0-9]+',
                             ],
                             'defaults' => [
-                                'controller' => IrhpApplicationProcessingHistoryController::class,
+                                'controller' => Olcs\Controller\IrhpPermits\IrhpApplicationProcessingHistoryController::class,
                                 'action' => 'index',
                             ]
                         ],
@@ -1129,7 +1137,7 @@ $routes = [
                 'options' => [
                     'route' => 'processing[/]',
                     'defaults' => [
-                        'controller' => 'LicenceProcessingOverviewController',
+                        'controller' => Olcs\Controller\Licence\Processing\LicenceProcessingOverviewController::class,
                         'action' => 'index',
                     ]
                 ],
@@ -1140,7 +1148,7 @@ $routes = [
                         'options' => [
                             'route' => 'publications[/:action][/:id][/]',
                             'defaults' => [
-                                'controller' => 'LicenceProcessingPublicationsController',
+                                'controller' => Olcs\Controller\Licence\Processing\LicenceProcessingPublicationsController::class,
                                 'action' => 'index'
                             ],
                             'constraints' => [
@@ -1154,7 +1162,7 @@ $routes = [
                         'options' => [
                             'route' => 'tasks[/]',
                             'defaults' => [
-                                'controller' => 'LicenceProcessingTasksController',
+                                'controller' => LicenceControllers\Processing\LicenceProcessingTasksController::class,
                                 'action' => 'index'
                             ]
                         ]
@@ -1177,7 +1185,7 @@ $routes = [
                         'options' => [
                             'route' => 'inspection-request[/:action[/:id]][/]',
                             'defaults' => [
-                                'controller' => 'LicenceProcessingInspectionRequestController',
+                                'controller' => LicenceControllers\Processing\LicenceProcessingInspectionRequestController::class,
                                 'action' => 'index'
                             ]
                         ],
@@ -1187,7 +1195,7 @@ $routes = [
                         'options' => [
                             'route' => 'event-history[/:action[/:id]][/]',
                             'defaults' => [
-                                'controller' => 'LicenceHistoryController',
+                                'controller' => LicenceControllers\Processing\HistoryController::class,
                                 'action' => 'index',
                             ]
                         ],
@@ -1197,7 +1205,7 @@ $routes = [
                         'options' => [
                             'route' => 'read-history[/]',
                             'defaults' => [
-                                'controller' => 'LicenceReadHistoryController',
+                                'controller' => Olcs\Controller\Licence\Processing\ReadHistoryController::class,
                                 'action' => 'index',
                             ]
                         ],
@@ -1209,7 +1217,7 @@ $routes = [
                 'options' => [
                     'route' => 'fees[/]',
                     'defaults' => [
-                        'controller' => 'LicenceFeesController',
+                        'controller' => LicenceControllers\Fees\LicenceFeesController::class,
                         'action' => 'fees',
                     ]
                 ],
@@ -1252,7 +1260,7 @@ $routes = [
                 'options' => [
                     'route' => 'business-details[/]',
                     'defaults' => [
-                        'controller' => 'OperatorBusinessDetailsController',
+                        'controller' => OperatorBusinessDetailsController::class,
                         'action' => 'index',
                     ]
                 ]
@@ -1266,7 +1274,7 @@ $routes = [
                         'id' => '([0-9]+,?)+',
                     ],
                     'defaults' => [
-                        'controller' => 'OperatorPeopleController',
+                        'controller' => Olcs\Controller\Operator\OperatorPeopleController::class,
                         'action' => 'index',
                     ]
                 ]
@@ -1316,7 +1324,7 @@ $routes = [
                 'options' => array(
                     'route' => 'irfo[/]',
                     'defaults' => array(
-                        'controller' => 'OperatorIrfoDetailsController',
+                        'controller' => Olcs\Controller\Operator\OperatorIrfoDetailsController::class,
                         'action' => 'index'
                     )
                 ),
@@ -1328,7 +1336,7 @@ $routes = [
                         'options' => [
                             'route' => 'details[/]',
                             'defaults' => [
-                                'controller' => 'OperatorIrfoDetailsController',
+                                'controller' => Olcs\Controller\Operator\OperatorIrfoDetailsController::class,
                                 'action' => 'edit'
                             ]
                         ],
@@ -1343,7 +1351,7 @@ $routes = [
                                 'id' => '[0-9]+'
                             ],
                             'defaults' => [
-                                'controller' => 'OperatorIrfoGvPermitsController',
+                                'controller' => Olcs\Controller\Operator\OperatorIrfoGvPermitsController::class,
                                 'action' => 'index'
                             ]
                         ],
@@ -1358,7 +1366,7 @@ $routes = [
                                 'id' => '[0-9]+'
                             ],
                             'defaults' => [
-                                'controller' => 'OperatorIrfoPsvAuthorisationsController',
+                                'controller' => Olcs\Controller\Operator\OperatorIrfoPsvAuthorisationsController::Class,
                                 'action' => 'index'
                             ]
                         ],
@@ -1370,7 +1378,7 @@ $routes = [
                 'options' => array(
                     'route' => 'processing[/]',
                     'defaults' => array(
-                        'controller' => 'OperatorHistoryController',
+                        'controller' => OperatorControllers\HistoryController::class,
                         'action' => 'index'
                     )
                 ),
@@ -1381,7 +1389,7 @@ $routes = [
                         'options' => [
                             'route' => 'history[/:action[/:id]][/]',
                             'defaults' => [
-                                'controller' => 'OperatorHistoryController',
+                                'controller' => OperatorControllers\HistoryController::class,
                                 'action' => 'index',
                             ]
                         ],
@@ -1391,7 +1399,7 @@ $routes = [
                         'options' => [
                             'route' => 'read-history[/]',
                             'defaults' => [
-                                'controller' => 'OperatorReadHistoryController',
+                                'controller' => OperatorControllers\Processing\ReadHistoryController::Class,
                                 'action' => 'index',
                             ]
                         ],
@@ -1415,7 +1423,7 @@ $routes = [
                         'options' => [
                             'route' => 'tasks[/]',
                             'defaults' => [
-                                'controller' => 'OperatorProcessingTasksController',
+                                'controller' => OperatorProcessingTasksController::class,
                                 'action' => 'index'
                             ]
                         ]
@@ -1427,7 +1435,7 @@ $routes = [
                 'options' => [
                     'route' => 'fees[/]',
                     'defaults' => [
-                        'controller' => 'OperatorFeesController',
+                        'controller' => OperatorFeesController::class,
                         'action' => 'fees',
                     ]
                 ],
@@ -1443,7 +1451,7 @@ $routes = [
                 'options' => [
                     'route' => 'documents[/]',
                     'defaults' => [
-                        'controller' => 'OperatorDocsController',
+                        'controller' => OperatorControllers\Docs\OperatorDocsController::class,
                         'action' => 'documents',
                     ]
                 ],
@@ -1455,7 +1463,7 @@ $routes = [
                             'route' => 'generate[/:doc][/]',
                             'defaults' => [
                                 'type' => 'irfoOrganisation',
-                                'controller' => 'DocumentGenerationController',
+                                'controller' => \Olcs\Controller\Document\DocumentGenerationController::class,
                                 'action' => 'generate'
                             ]
                         ],
@@ -1466,7 +1474,7 @@ $routes = [
                             'route' => 'finalise/:doc[/:action][/]',
                             'defaults' => [
                                 'type' => 'irfoOrganisation',
-                                'controller' => 'DocumentFinaliseController',
+                                'controller' => \Olcs\Controller\Document\DocumentFinaliseController::class,
                                 'action' => 'finalise'
                             ]
                         ],
@@ -1488,7 +1496,7 @@ $routes = [
                             'route' => 'delete/:doc[/]',
                             'defaults' => [
                                 'type' => 'irfoOrganisation',
-                                'controller' => 'OperatorDocsController',
+                                'controller' => OperatorControllers\Docs\OperatorDocsController::class,
                                 'action' => 'delete-document'
                             ]
                         ],
@@ -1499,7 +1507,7 @@ $routes = [
                             'route' => 'relink/:doc[/]',
                             'defaults' => [
                                 'type' => 'irfoOrganisation',
-                                'controller' => 'DocumentRelinkController',
+                                'controller' => \Olcs\Controller\Document\DocumentRelinkController::class,
                                 'action' => 'relink'
                             ]
                         ],
@@ -1553,7 +1561,7 @@ $routes = [
         'options' => [
             'route' => '/operator/create[/]',
             'defaults' => [
-                'controller' => 'OperatorBusinessDetailsController',
+                'controller' => OperatorBusinessDetailsController::class,
                 'action' => 'index',
             ],
         ],
@@ -1567,7 +1575,7 @@ $routes = [
                 'organisation' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => Olcs\Controller\Operator\UnlicensedBusinessDetailsController::class,
+                'controller' => OperatorControllers\UnlicensedBusinessDetailsController::class,
                 'action' => 'index-jump',
             ]
         ],
@@ -1591,7 +1599,7 @@ $routes = [
                         'action' => 'index|details|add|edit|delete',
                     ],
                     'defaults' => [
-                        'controller' => 'UnlicensedOperatorVehiclesController',
+                        'controller' => Olcs\Controller\Operator\UnlicensedOperatorVehiclesController::class,
                         'action' => 'index',
                     ]
                 ]
@@ -1601,7 +1609,7 @@ $routes = [
                 'options' => [
                     'route' => 'cases[/]',
                     'defaults' => [
-                        'controller' => 'UnlicensedCasesOperatorController',
+                        'controller' => OperatorControllers\Cases\UnlicensedCasesOperatorController::class,
                         'action' => 'cases',
                     ]
                 ]
@@ -1666,7 +1674,7 @@ $routes = [
                 'options' => [
                     'route' => 'details[/]',
                     'defaults' => [
-                        'controller' => 'TMDetailsDetailController',
+                        'controller' => TransportManagerDetailsDetailController::class,
                         'action' => 'index',
                     ]
                 ],
@@ -1677,7 +1685,7 @@ $routes = [
                         'options' => [
                             'route' => 'competences[/:action][/:id][/]',
                             'defaults' => [
-                                'controller' => 'TMDetailsCompetenceController',
+                                'controller' => Olcs\Controller\TransportManager\Details\TransportManagerDetailsCompetenceController::class,
                                 'action' => 'index',
                             ],
                             'constraints' => [
@@ -1701,7 +1709,7 @@ $routes = [
                         'options' => [
                             'route' => 'employment[/:action[/:id]][/]',
                             'defaults' => [
-                                'controller' => 'TMDetailsEmploymentController',
+                                'controller' => Olcs\Controller\TransportManager\Details\TransportManagerDetailsEmploymentController::class,
                                 'action' => 'index',
                             ]
                         ]
@@ -1781,7 +1789,7 @@ $routes = [
                         'options' => [
                             'route' => 'event-history[/:action[/:id]][/]',
                             'defaults' => [
-                                'controller' => 'TransportManagerHistoryController',
+                                'controller' => Olcs\Controller\TransportManager\Processing\HistoryController::class,
                                 'action' => 'index',
                             ]
                         ],
@@ -1792,7 +1800,7 @@ $routes = [
                         'options' => [
                             'route' => 'read-history[/]',
                             'defaults' => [
-                                'controller' => 'TransportManagerReadHistoryController',
+                                'controller' => Olcs\Controller\TransportManager\Processing\ReadHistoryController::class,
                                 'action' => 'index',
                             ]
                         ],
@@ -1804,7 +1812,7 @@ $routes = [
                 'options' => [
                     'route' => 'cases[/:action][/:id][/]',
                     'defaults' => [
-                        'controller' => 'TMCaseController',
+                        'controller' => Olcs\Controller\TransportManager\TransportManagerCaseController::class,
                         'action' => 'index',
                     ],
                     'constraints' => [
@@ -1830,7 +1838,7 @@ $routes = [
                             'route' => 'generate[/:doc][/]',
                             'defaults' => [
                                 'type' => 'transportManager',
-                                'controller' => 'DocumentGenerationController',
+                                'controller' => \Olcs\Controller\Document\DocumentGenerationController::class,
                                 'action' => 'generate'
                             ]
                         ],
@@ -1841,7 +1849,7 @@ $routes = [
                             'route' => 'finalise/:doc[/:action][/]',
                             'defaults' => [
                                 'type' => 'transportManager',
-                                'controller' => 'DocumentFinaliseController',
+                                'controller' => \Olcs\Controller\Document\DocumentFinaliseController::class,
                                 'action' => 'finalise'
                             ]
                         ],
@@ -1874,7 +1882,7 @@ $routes = [
                             'route' => 'relink/:doc[/]',
                             'defaults' => [
                                 'type' => 'transportManager',
-                                'controller' => 'DocumentRelinkController',
+                                'controller' => \Olcs\Controller\Document\DocumentRelinkController::class,
                                 'action' => 'relink'
                             ]
                         ],
@@ -1964,7 +1972,7 @@ $routes = [
         'options' => [
             'route' => '/transport-manager/create[/]',
             'defaults' => [
-                'controller' => 'TMDetailsDetailController',
+                'controller' => TransportManagerDetailsDetailController::class,
                 'action' => 'index',
             ],
         ],
@@ -2220,7 +2228,7 @@ $routes['lva-application']['child_routes'] = array_merge(
             'options' => array(
                 'route' => 'undo-grant[/]',
                 'defaults' => array(
-                    'controller' => 'ApplicationController',
+                    'controller' => ApplicationControllers\ApplicationController::class,
                     'action' => 'undoGrant'
                 )
             )
@@ -2280,7 +2288,7 @@ $routes['lva-application']['child_routes'] = array_merge(
             'options' => array(
                 'route' => 'schedule41[/]',
                 'defaults' => array(
-                    'controller' => 'ApplicationSchedule41Controller',
+                    'controller' => ApplicationControllers\ApplicationSchedule41Controller::class,
                     'action' => 'licenceSearch'
                 )
             ),
@@ -2291,7 +2299,7 @@ $routes['lva-application']['child_routes'] = array_merge(
                     'options' => array(
                         'route' => 'transfer[/:licNo][/]',
                         'defaults' => array(
-                            'controller' => 'ApplicationSchedule41Controller',
+                            'controller' => ApplicationControllers\ApplicationSchedule41Controller::class,
                             'action' => 'transfer'
                         )
                     )
@@ -2303,7 +2311,7 @@ $routes['lva-application']['child_routes'] = array_merge(
             'options' => array(
                 'route' => 'approve-schedule-41[/]',
                 'defaults' => array(
-                    'controller' => 'ApplicationSchedule41Controller',
+                    'controller' => ApplicationControllers\ApplicationSchedule41Controller::class,
                     'action' => 'approveSchedule41'
                 )
             )
@@ -2313,7 +2321,7 @@ $routes['lva-application']['child_routes'] = array_merge(
             'options' => array(
                 'route' => 'reset-schedule-41[/]',
                 'defaults' => array(
-                    'controller' => 'ApplicationSchedule41Controller',
+                    'controller' => ApplicationControllers\ApplicationSchedule41Controller::class,
                     'action' => 'resetSchedule41'
                 )
             )
@@ -2323,7 +2331,7 @@ $routes['lva-application']['child_routes'] = array_merge(
             'options' => array(
                 'route' => 'refuse-schedule-41[/]',
                 'defaults' => array(
-                    'controller' => 'ApplicationSchedule41Controller',
+                    'controller' => ApplicationControllers\ApplicationSchedule41Controller::class,
                     'action' => 'refuseSchedule41'
                 )
             )
@@ -2343,7 +2351,7 @@ $routes['lva-application']['child_routes'] = array_merge(
             'options' => array(
                 'route' => 'change-of-entity[/:changeId][/]',
                 'defaults' => array(
-                    'controller' => 'ApplicationController',
+                    'controller' => ApplicationControllers\ApplicationController::class,
                     'action' => 'changeOfEntity'
                 )
             )
@@ -2353,7 +2361,7 @@ $routes['lva-application']['child_routes'] = array_merge(
             'options' => array(
                 'route' => 'case[/]',
                 'defaults' => array(
-                    'controller' => 'ApplicationController',
+                    'controller' => ApplicationControllers\ApplicationController::class,
                     'action' => 'case'
                 )
             )
@@ -2363,7 +2371,7 @@ $routes['lva-application']['child_routes'] = array_merge(
             'options' => array(
                 'route' => 'opposition[/]',
                 'defaults' => array(
-                    'controller' => 'ApplicationController',
+                    'controller' => ApplicationControllers\ApplicationController::class,
                     'action' => 'opposition'
                 )
             )
@@ -2373,7 +2381,7 @@ $routes['lva-application']['child_routes'] = array_merge(
             'options' => [
                 'route' => 'documents[/]',
                 'defaults' => [
-                    'controller' => 'ApplicationDocsController',
+                    'controller' => ApplicationControllers\Docs\ApplicationDocsController::class,
                     'action' => 'documents',
                 ]
             ],
@@ -2385,7 +2393,7 @@ $routes['lva-application']['child_routes'] = array_merge(
                         'route' => 'generate[/:doc][/]',
                         'defaults' => [
                             'type' => 'application',
-                            'controller' => 'DocumentGenerationController',
+                            'controller' => \Olcs\Controller\Document\DocumentGenerationController::class,
                             'action' => 'generate'
                         ]
                     ],
@@ -2396,7 +2404,7 @@ $routes['lva-application']['child_routes'] = array_merge(
                         'route' => 'finalise/:doc[/:action][/]',
                         'defaults' => [
                             'type' => 'application',
-                            'controller' => 'DocumentFinaliseController',
+                            'controller' => \Olcs\Controller\Document\DocumentFinaliseController::class,
                             'action' => 'finalise'
                         ]
                     ],
@@ -2418,7 +2426,7 @@ $routes['lva-application']['child_routes'] = array_merge(
                         'route' => 'delete/:doc[/]',
                         'defaults' => [
                             'type' => 'application',
-                            'controller' => 'ApplicationDocsController',
+                            'controller' => ApplicationControllers\Docs\ApplicationDocsController::class,
                             'action' => 'delete-document'
                         ]
                     ],
@@ -2429,7 +2437,7 @@ $routes['lva-application']['child_routes'] = array_merge(
                         'route' => 'relink/:doc[/]',
                         'defaults' => [
                             'type' => 'application',
-                            'controller' => 'DocumentRelinkController',
+                            'controller' => \Olcs\Controller\Document\DocumentRelinkController::class,
                             'action' => 'relink'
                         ]
                     ],
@@ -2441,7 +2449,7 @@ $routes['lva-application']['child_routes'] = array_merge(
             'options' => array(
                 'route' => 'processing[/]',
                 'defaults' => array(
-                    'controller' => 'ApplicationProcessingOverviewController',
+                    'controller' => ApplicationControllers\Processing\ApplicationProcessingOverviewController::class,
                     'action' => 'index'
                 )
             ),
@@ -2452,7 +2460,7 @@ $routes['lva-application']['child_routes'] = array_merge(
                     'options' => [
                         'route' => 'publications[/:action][/:id][/]',
                         'defaults' => [
-                            'controller' => 'ApplicationProcessingPublicationsController',
+                            'controller' => ApplicationProcessingPublicationsController::class,
                             'action' => 'index'
                         ]
                     ],
@@ -2463,7 +2471,7 @@ $routes['lva-application']['child_routes'] = array_merge(
                     'options' => [
                         'route' => 'tasks[/]',
                         'defaults' => [
-                            'controller' => 'ApplicationProcessingTasksController',
+                            'controller' => ApplicationControllers\Processing\ApplicationProcessingTasksController::class,
                             'action' => 'index'
                         ]
                     ]
@@ -2473,7 +2481,7 @@ $routes['lva-application']['child_routes'] = array_merge(
                     'options' => [
                         'route' => 'inspection-request[/:action[/:id]][/]',
                         'defaults' => [
-                            'controller' => 'ApplicationProcessingInspectionRequestController',
+                            'controller' => ApplicationProcessingInspectionRequestController::class,
                             'action' => 'index'
                         ]
                     ],
@@ -2495,7 +2503,7 @@ $routes['lva-application']['child_routes'] = array_merge(
                     'options' => [
                         'route' => 'event-history[/:action[/:id]][/]',
                         'defaults' => [
-                            'controller' => 'ApplicationHistoryController',
+                            'controller' => Olcs\Controller\Application\Processing\HistoryController::class,
                             'action' => 'index'
                         ]
                     ],
@@ -2506,7 +2514,7 @@ $routes['lva-application']['child_routes'] = array_merge(
                     'options' => [
                         'route' => 'read-history[/]',
                         'defaults' => [
-                            'controller' => 'ApplicationReadHistoryController',
+                            'controller' => Olcs\Controller\Application\Processing\ReadHistoryController::class,
                             'action' => 'index'
                         ]
                     ],
@@ -2518,7 +2526,7 @@ $routes['lva-application']['child_routes'] = array_merge(
             'options' => array(
                 'route' => 'fees[/]',
                 'defaults' => array(
-                    'controller' => 'ApplicationFeesController',
+                    'controller' => ApplicationControllers\Fees\ApplicationFeesController::class,
                     'action' => 'fees',
                 )
             ),

@@ -1,22 +1,16 @@
 <?php
 
-/**
- * Class AnnualTestHistoryController
- */
 namespace Olcs\Controller\Cases\AnnualTestHistory;
 
-use Dvsa\Olcs\Transfer\Query\Cases\AnnualTestHistory as AnnualTestHistoryQuery;
 use Dvsa\Olcs\Transfer\Command\Cases\UpdateAnnualTestHistory as UpdateAnnualTestHistoryCommand;
+use Dvsa\Olcs\Transfer\Query\Cases\AnnualTestHistory as AnnualTestHistoryQuery;
+use Laminas\View\Model\ViewModel;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\AnnualTestHistory as AnnualTestHistoryMapper;
 use Olcs\Form\Model\Form\AnnualTestHistory as AnnualTestHistoryForm;
-use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\CaseControllerInterface;
-use Laminas\View\Model\ViewModel;
 
-/**
- * Class AnnualTestHistoryController
- */
 class AnnualTestHistoryController extends AbstractInternalController implements
     CaseControllerInterface,
     LeftViewProvider

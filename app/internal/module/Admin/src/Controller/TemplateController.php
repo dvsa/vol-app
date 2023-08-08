@@ -2,22 +2,19 @@
 
 namespace Admin\Controller;
 
-use Dvsa\Olcs\Transfer\Query\Template\PreviewTemplateSource;
-use Olcs\Controller\AbstractInternalController;
-use Dvsa\Olcs\Transfer\Query\Template\TemplateSource as ItemDto;
-use Dvsa\Olcs\Transfer\Query\Template\AvailableTemplates as ListDto;
-use Dvsa\Olcs\Transfer\Command\Template\UpdateTemplateSource as UpdateDto;
-use Olcs\Controller\Interfaces\LeftViewProvider;
 use Admin\Data\Mapper\Template as Mapper;
-use Laminas\Form\Form;
-use Laminas\View\Model\ViewModel;
 use Admin\Form\Model\Form\TemplateEdit;
 use Admin\Form\Model\Form\TemplateFilter;
+use Dvsa\Olcs\Transfer\Command\Template\UpdateTemplateSource as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\Template\AvailableTemplates as ListDto;
+use Dvsa\Olcs\Transfer\Query\Template\PreviewTemplateSource;
+use Dvsa\Olcs\Transfer\Query\Template\TemplateSource as ItemDto;
+use Laminas\Form\Form;
 use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 
-/**
- * Email Template admin controller
- */
 class TemplateController extends AbstractInternalController implements LeftViewProvider
 {
     /**
@@ -76,8 +73,8 @@ class TemplateController extends AbstractInternalController implements LeftViewP
     /**
      * Uses description field from Item response to add title to Edit modal
      *
-     * @param Form $form
-     * @param array $formData
+     * @param  Form  $form
+     * @param  array $formData
      * @return Form
      */
     public function alterFormForEdit(Form $form, Array $formData)

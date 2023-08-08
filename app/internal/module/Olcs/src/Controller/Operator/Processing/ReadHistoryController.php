@@ -1,21 +1,13 @@
 <?php
 
-/**
- * Read History Controller
- */
 namespace Olcs\Controller\Operator\Processing;
 
 use Dvsa\Olcs\Transfer\Query\Audit\ReadOrganisation;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
-use Laminas\View\Model\ViewModel;
 
-/**
- * Read History Controller
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class ReadHistoryController extends AbstractInternalController implements OperatorControllerInterface, LeftViewProvider
 {
     /**

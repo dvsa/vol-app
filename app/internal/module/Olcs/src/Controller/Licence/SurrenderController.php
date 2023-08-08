@@ -3,18 +3,20 @@
 namespace Olcs\Controller\Licence;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
+use Common\Controller\Traits\GenericRenderView;
 use Common\Exception\BadRequestException;
 use Common\FeatureToggle;
-use Common\Controller\Traits\GenericRenderView;
 use Common\Form\Form;
 use Common\RefData;
 use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Command\Surrender\Approve as ApproveSurrender;
-use Dvsa\Olcs\Transfer\Command\Surrender\Withdraw as WithdrawSurrender;
 use Dvsa\Olcs\Transfer\Command\Surrender\Update as UpdateSurrender;
+use Dvsa\Olcs\Transfer\Command\Surrender\Withdraw as WithdrawSurrender;
 use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence;
 use Dvsa\Olcs\Transfer\Query\Surrender\OpenBusReg;
 use Dvsa\Olcs\Transfer\Query\Surrender\OpenCases;
+use Laminas\Mvc\MvcEvent;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
@@ -23,8 +25,6 @@ use Olcs\Form\Model\Form\Licence\Surrender\Confirmation;
 use Olcs\Form\Model\Form\Licence\Surrender\Surrender;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericList;
-use Laminas\Mvc\MvcEvent;
-use Laminas\View\Model\ViewModel;
 
 class SurrenderController extends AbstractInternalController implements
     ToggleAwareInterface,
@@ -139,9 +139,10 @@ class SurrenderController extends AbstractInternalController implements
 
     public function withdrawAction()
     {
-        /** @var TranslationHelperService $translator
+        /**
+ * @var TranslationHelperService $translator
          */
-        $translator = $this->getServiceLocator()->get('Helper\Translation');
+        $translator = $this->translationHelperService;
 
         $form = $this->getForm(Confirmation::class);
         $message = $translator->translateReplace(
@@ -293,9 +294,11 @@ class SurrenderController extends AbstractInternalController implements
         }
         $this->index(
             OpenBusReg::class,
-            new GenericList([
+            new GenericList(
+                [
                 'id' => 'licence',
-            ], 'licId'),
+                ], 'licId'
+            ),
             'busRegistrations',
             'licence-surrender-busreg',
             $this->tableViewTemplate
@@ -305,19 +308,23 @@ class SurrenderController extends AbstractInternalController implements
     private function surrenderLicence(int $licenceId): bool
     {
         $surrenderDate = new \DateTime();
-        $command = ApproveSurrender::create([
+        $command = ApproveSurrender::create(
+            [
             'id' => $licenceId,
             'surrenderDate' => $surrenderDate->format('Y-m-d')
-        ]);
+            ]
+        );
         $response = $this->handleCommand($command);
         return $response->isOk();
     }
 
     private function withdrawSurrender(int $licenceId): bool
     {
-        $command = WithdrawSurrender::create([
+        $command = WithdrawSurrender::create(
+            [
             'id' => $licenceId
-        ]);
+            ]
+        );
 
         $response = $this->handleCommand($command);
         return $response->isOk();
@@ -325,9 +332,13 @@ class SurrenderController extends AbstractInternalController implements
 
     private function getSurrender(int $licenceId)
     {
-        $response = $this->handleQuery(ByLicence::create([
-            'id' => $licenceId
-        ]));
+        $response = $this->handleQuery(
+            ByLicence::create(
+                [
+                'id' => $licenceId
+                ]
+            )
+        );
 
         if (!$response->isOk()) {
             throw new \RuntimeException('Failed to get Surrender data');

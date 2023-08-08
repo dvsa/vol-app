@@ -3,17 +3,12 @@
 namespace Olcs\Controller\Operator;
 
 use Common\RefData;
+use Dvsa\Olcs\Transfer\Query\User\UserList as ListDTO;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
-use Dvsa\Olcs\Transfer\Query\User\UserList as ListDTO;
-use Laminas\View\Model\ViewModel;
 
-/**
- * OperatorUsersController
- *
- * @author Andy Newton <andy.newton@vitri.ltd>
- */
 class OperatorUsersController extends AbstractInternalController implements
     OperatorControllerInterface,
     LeftViewProvider

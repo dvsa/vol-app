@@ -5,7 +5,7 @@
  */
 namespace Olcs\Controller\Traits;
 
-use \Dvsa\Olcs\Transfer\Query\Operator\BusinessDetails as BusinessDetailsQry;
+use Dvsa\Olcs\Transfer\Query\Operator\BusinessDetails as BusinessDetailsQry;
 
 /**
  * Operator Controller Trait
@@ -15,7 +15,7 @@ trait OperatorControllerTrait
     /**
      * Get view with Operator
      *
-     * @param array $variables
+     * @param  array $variables
      * @return \Laminas\View\Model\ViewModel
      */
     protected function getViewWithOrganisation($variables = [])
@@ -42,16 +42,15 @@ trait OperatorControllerTrait
     protected function getBusinessDetailsData($organisationId)
     {
         $retv = [];
-        $queryToSend = $this->getServiceLocator()
-            ->get('TransferAnnotationBuilder')
+        $queryToSend = $this->transferAnnotationBuilder
             ->createQuery(
                 BusinessDetailsQry::create(['id' => $organisationId])
             );
 
-        $response = $this->getServiceLocator()->get('QueryService')->send($queryToSend);
+        $response = $this->queryService->send($queryToSend);
 
         if ($response->isClientError() || $response->isServerError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            $this->flashMessengerHelper->addErrorMessage('unknown-error');
         }
 
         if ($response->isOk()) {
@@ -67,7 +66,7 @@ trait OperatorControllerTrait
      */
     public function getNavigation()
     {
-        return $this->getServiceLocator()->get('Navigation');
+        return $this->navigation;
     }
 
     /**

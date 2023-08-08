@@ -2,7 +2,19 @@
 
 namespace Olcs\Controller\Operator;
 
+use Common\Service\Cqrs\Command\CommandService;
+use Common\Service\Cqrs\Query\QueryService;
+use Common\Service\Helper\DateHelperService;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
+use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
+use Laminas\Navigation\Navigation;
+use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Traits;
+use Olcs\Service\Data\Licence;
+use Olcs\Service\Data\SubCategory;
 
 /**
  * Operator Processing Tasks Controller
@@ -23,10 +35,30 @@ class OperatorProcessingTasksController extends OperatorController
      */
     protected $subNavRoute = 'operator_processing';
 
+    protected SubCategory $subCategoryDataService;
+
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        TableFactory $tableFactory,
+        HelperPluginManager $viewHelperManager,
+        DateHelperService $dateHelper,
+        AnnotationBuilder $transferAnnotationBuilder,
+        CommandService $commandService,
+        FlashMessengerHelperService $flashMessengerHelper,
+        Licence $licenceDataService,
+        QueryService $queryService,
+        Navigation $navigation,
+        SubCategory $subCategoryDataService
+    ) {
+        parent::__construct($scriptFactory, $formHelper, $tableFactory, $viewHelperManager, $dateHelper, $transferAnnotationBuilder, $commandService, $flashMessengerHelper, $licenceDataService, $queryService, $navigation);
+        $this->subCategoryDataService = $subCategoryDataService;
+    }
+
     /**
      * Get task action type
      *
-     * @see \Olcs\Controller\Traits\TaskActionTrait
+     * @see    \Olcs\Controller\Traits\TaskActionTrait
      * @return string
      */
     protected function getTaskActionType()
@@ -37,7 +69,7 @@ class OperatorProcessingTasksController extends OperatorController
     /**
      * Get task action filters
      *
-     * @see \Olcs\Controller\Traits\TaskActionTrait
+     * @see    \Olcs\Controller\Traits\TaskActionTrait
      * @return array
      */
     protected function getTaskActionFilters()

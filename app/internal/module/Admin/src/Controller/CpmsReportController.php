@@ -5,14 +5,11 @@ namespace Admin\Controller;
 use Admin\Controller\Traits\ReportLeftViewTrait;
 use Admin\Form\Model\Form\CpmsReport as Form;
 use Dvsa\Olcs\Transfer\Command\Cpms\RequestReport as GenerateCmd;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\CpmsReport as Mapper;
-use Laminas\View\Model\ViewModel;
 
-/**
- * Cpms Report Controller
- */
 class CpmsReportController extends AbstractInternalController implements LeftViewProvider
 {
     use ReportLeftViewTrait;
@@ -46,7 +43,9 @@ class CpmsReportController extends AbstractInternalController implements LeftVie
 
         $this->placeholder()->setPlaceholder('pageTitle', 'CPMS Financial report');
 
-        /** @var \Laminas\Http\Request $request */
+        /**
+ * @var \Laminas\Http\Request $request
+*/
         $request = $this->getRequest();
         $form = $this->getForm(Form::class);
         $this->setSelectReportList($form);
@@ -65,19 +64,19 @@ class CpmsReportController extends AbstractInternalController implements LeftVie
             $response = $this->handleCommand(GenerateCmd::create($commandData));
 
             if ($response->isServerError()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+                $this->flashMessenger->addErrorMessage('unknown-error');
             }
 
             if ($response->isClientError()) {
                 $flashErrors = Mapper::mapFromErrors($form, $response->getResult());
 
                 foreach ($flashErrors as $error) {
-                    $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($error);
+                    $this->flashMessenger->addErrorMessage($error);
                 }
             }
 
             if ($response->isOk()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage($successMessage);
+                $this->flashMessenger->addSuccessMessage($successMessage);
                 return $this->redirectTo($response->getResult());
             }
         }

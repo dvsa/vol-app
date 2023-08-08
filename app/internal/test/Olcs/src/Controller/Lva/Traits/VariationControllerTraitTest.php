@@ -5,12 +5,16 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace OlcsTest\Controller\Lva\Traits;
 
 use Common\RefData;
+use Common\Service\Helper\StringHelperService;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use OlcsTest\Bootstrap;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Variation Controller Trait Test
@@ -24,11 +28,14 @@ class VariationControllerTraitTest extends MockeryTestCase
 
     public function setUp(): void
     {
-        $this->sm = Bootstrap::getServiceManager();
-
-        $this->sut = new Stubs\VariationControllerTraitStub();
-
-        $this->sut->setServiceLocator($this->sm);
+        $this->mockNiTextTranslationUtil = m::mock(NiTextTranslation::class);
+        $this->mockAuthService = m::mock(AuthorizationService::class);
+        $this->mockStringHelper = m::mock(StringHelperService::class)->makePartial();
+        $this->sut = new Stubs\VariationControllerTraitStub(
+            $this->mockNiTextTranslationUtil,
+            $this->mockAuthService,
+            $this->mockStringHelper
+        );
     }
 
     /**

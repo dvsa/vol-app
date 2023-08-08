@@ -3,10 +3,10 @@
 namespace Olcs\Controller\IrhpPermits;
 
 use Dvsa\Olcs\Transfer\Query\Audit\ReadIrhpApplication;
-use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\LeftViewProvider;
-use Olcs\Controller\Interfaces\IrhpApplicationControllerInterface;
 use Laminas\View\Model\ViewModel;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\IrhpApplicationControllerInterface;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 
 /**
  * Irhp Application Processing Read History Controller

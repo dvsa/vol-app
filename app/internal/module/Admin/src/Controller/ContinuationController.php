@@ -2,23 +2,24 @@
 
 namespace Admin\Controller;
 
-use Common\RefData;
-use Laminas\View\Model\ViewModel;
 use Common\Controller\Lva\Traits\CrudActionTrait;
-use Dvsa\Olcs\Transfer\Query\ContinuationDetail\GetList as GetListQry;
+use Common\RefData;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\Continuation\Create as CreateCmd;
 use Dvsa\Olcs\Transfer\Command\ContinuationDetail\PrepareContinuations as PrepareCmd;
+use Dvsa\Olcs\Transfer\Query\ContinuationDetail\GetList as GetListQry;
+use Laminas\View\Helper\Placeholder;
+use Laminas\View\Model\ViewModel;
 
-/**
- * Continuation Controller
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class ContinuationController extends AbstractController
 {
     use CrudActionTrait;
 
-    const CONTINUATION_TYPE_IRFO = 'irfo';
+    public const CONTINUATION_TYPE_IRFO = 'irfo';
 
     protected $defaultFilters = [
         'licenceStatus' => [
@@ -32,6 +33,28 @@ class ContinuationController extends AbstractController
     ];
 
     protected $detailRoute = 'admin-dashboard/admin-continuation/detail';
+
+    protected FlashMessengerHelperService $flashMessengerHelper;
+    protected ScriptFactory $scriptFactory;
+    protected TranslationHelperService $translationHelper;
+    protected TableFactory $tableFactory;
+    protected FormHelperService $formHelper;
+
+    public function __construct(
+        Placeholder $placeholder,
+        FlashMessengerHelperService $flashMessengerHelper,
+        ScriptFactory $scriptFactory,
+        TranslationHelperService $translationHelper,
+        TableFactory $tableFactory,
+        FormHelperService $formHelper
+    ) {
+        parent::__construct($placeholder);
+        $this->flashMessengerHelper = $flashMessengerHelper;
+        $this->scriptFactory = $scriptFactory;
+        $this->translationHelper = $translationHelper;
+        $this->tableFactory = $tableFactory;
+        $this->formHelper = $formHelper;
+    }
 
     /**
      * Action: index
@@ -76,7 +99,7 @@ class ContinuationController extends AbstractController
                 CreateCmd::create($criteria)
             );
 
-            $fm = $this->getServiceLocator()->get('Helper\FlashMessenger');
+            $fm = $this->flashMessengerHelper;
             if ($response->isServerError() || $response->isClientError()) {
                 $fm->addCurrentErrorMessage('unknown-error');
             }
@@ -96,7 +119,7 @@ class ContinuationController extends AbstractController
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('pages/form');
         $this->setNavigationId('admin-dashboard/continuations');
-        $this->getServiceLocator()->get('Script')->loadFile('continuations');
+        $this->scriptFactory->loadFile('continuations');
 
         return $this->renderView($view, 'admin-generate-continuations-title');
     }
@@ -123,9 +146,8 @@ class ContinuationController extends AbstractController
 
         $id = $this->params('id');
 
-        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
-        /** @var \Common\Service\Table\TableBuilder $tableHelper */
-        $tableHelper = $this->getServiceLocator()->get('Table');
+        $translationHelper = $this->translationHelper;
+        $tableHelper = $this->tableFactory;
 
         $filterForm = $this->getDetailFilterForm();
         if ($filterForm->isValid()) {
@@ -145,9 +167,9 @@ class ContinuationController extends AbstractController
         $table = $tableHelper->prepareTable('admin-continuations', $tableData);
         $table->setVariable('title', $tableData['count'] . ' licence(s)');
 
-        $this->getServiceLocator()->get('Script')->loadFiles(['forms/filter', 'table-actions']);
+        $this->scriptFactory->loadFiles(['forms/filter', 'table-actions']);
 
-        $this->getServiceLocator()->get('viewHelperManager')->get('placeholder')
+        $this->placeholder
             ->getContainer('tableFilters')->set($filterForm);
 
         $this->setNavigationId('admin-dashboard/continuations-details');
@@ -184,7 +206,7 @@ class ContinuationController extends AbstractController
                     ]
                 )
             );
-            $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
+            $flashMessenger = $this->flashMessengerHelper;
             if ($response->isOk()) {
                 $flashMessenger->addSuccessMessage('The selected licence(s) have been queued');
             }
@@ -195,7 +217,7 @@ class ContinuationController extends AbstractController
             return $this->redirect()->toRouteAjax(null, ['action' => null, 'child_id' => null], [], true);
         }
 
-        $form = $this->getServiceLocator()->get('Helper\Form')
+        $form = $this->formHelper
             ->createFormWithRequest('Confirmation', $request);
 
         $params = [
@@ -221,7 +243,7 @@ class ContinuationController extends AbstractController
 
         $filters = array_merge($this->defaultFilters, $query);
 
-        return $this->getServiceLocator()->get('Helper\Form')
+        return $this->formHelper
             ->createForm('ContinuationDetailFilter', false)
             ->setData(['filters' => $filters]);
     }
@@ -250,7 +272,7 @@ class ContinuationController extends AbstractController
             $header = $response->getResult()['header'];
         }
         if ($response->isServerError() || $response->isClientError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            $this->flashMessengerHelper->addErrorMessage('unknown-error');
         }
         return [
             $result,
@@ -265,7 +287,7 @@ class ContinuationController extends AbstractController
      */
     protected function getContinuationForm()
     {
-        return $this->getServiceLocator()->get('Helper\Form')
+        return $this->formHelper
             ->createForm('GenerateContinuation');
     }
 }

@@ -4,22 +4,41 @@ namespace Olcs\Controller\Licence;
 
 use Common\Controller\Traits\CheckForCrudAction;
 use Common\RefData;
+use Common\Service\Helper\ComplaintsHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\OppositionHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Query\Cases\ByLicence as CasesByLicenceQry;
+use Laminas\Http\Response;
+use Laminas\View\HelperPluginManager;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Olcs\Controller\Lva;
-use Laminas\Http\Response;
-use Laminas\View\Model\ViewModel;
 
-/**
- * Licence Controller
- *
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
- */
 class LicenceController extends AbstractController implements LicenceControllerInterface
 {
-    use Lva\Traits\LicenceControllerTrait,
-        CheckForCrudAction;
+    use Lva\Traits\LicenceControllerTrait;
+    use CheckForCrudAction;
+
+    protected OppositionHelperService $oppositionHelper;
+    protected ComplaintsHelperService $complaintsHelper;
+
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        TableFactory $tableFactory,
+        HelperPluginManager $viewHelperManager,
+        OppositionHelperService $oppositionHelper,
+        ComplaintsHelperService $complaintsHelper,
+        $navigation
+    ) {
+        parent::__construct($scriptFactory, $formHelper, $tableFactory, $viewHelperManager);
+        $this->oppositionHelper = $oppositionHelper;
+        $this->complaintsHelper = $complaintsHelper;
+        $this->navigation = $navigation;
+    }
 
     /**
      * Cases
@@ -92,7 +111,7 @@ class LicenceController extends AbstractController implements LicenceControllerI
         $oppositionResults = $responseOppositions->getResult()['results'];
 
         /* @var $oppositionHelperService \Common\Service\Helper\OppositionHelperService */
-        $oppositionHelperService = $this->getServiceLocator()->get('Helper\Opposition');
+        $oppositionHelperService = $this->oppositionHelper;
         $oppositions = $oppositionHelperService->sortOpenClosed($oppositionResults);
 
         $responseComplaints = $this->handleQuery(
@@ -112,7 +131,7 @@ class LicenceController extends AbstractController implements LicenceControllerI
         $casesResults = $responseComplaints->getResult()['results'];
 
         /* @var $complaintsHelperService \Common\Service\Helper\ComplaintsHelperService */
-        $complaintsHelperService = $this->getServiceLocator()->get('Helper\Complaints');
+        $complaintsHelperService = $this->complaintsHelper;
         $complaints = $complaintsHelperService->sortCasesOpenClosed($casesResults);
 
         $view = new ViewModel(

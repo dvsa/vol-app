@@ -1,23 +1,21 @@
 <?php
 
-/**
- * SubmissionSectionComment Controller
- */
 namespace Olcs\Controller\Cases\Submission;
 
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Command\Submission\CreateSubmissionSectionComment as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Submission\UpdateSubmissionSectionComment as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Submission\SubmissionSectionComment as ItemDto;
+use Laminas\Form\Form as LaminasForm;
+use Laminas\Navigation\Navigation;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Data\Mapper\SubmissionSectionComment as Mapper;
 use Olcs\Form\Model\Form\SubmissionSectionAddComment as AddForm;
 use Olcs\Form\Model\Form\SubmissionSectionEditComment as EditForm;
-use \Laminas\Form\Form as LaminasForm;
 
-/**
- * Submission Section Comment Controller
- */
 class SubmissionSectionCommentController extends AbstractInternalController implements CaseControllerInterface
 {
     /**
@@ -87,6 +85,14 @@ class SubmissionSectionCommentController extends AbstractInternalController impl
         'submissionSection' => 'route',
     ];
 
+
+    public function __construct(TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessenger,
+        Navigation $navigation
+    ) {
+        parent::__construct($translationHelper, $formHelper, $flashMessenger, $navigation);
+    }
     /**
      * Swaps the default add form for the edit form
      *
@@ -103,7 +109,7 @@ class SubmissionSectionCommentController extends AbstractInternalController impl
      * Alters the edit form at runtime
      *
      * @param LaminasForm $form     the form
-     * @param array    $formData form data
+     * @param array       $formData form data
      *
      * @return LaminasForm
      */
@@ -116,7 +122,7 @@ class SubmissionSectionCommentController extends AbstractInternalController impl
      * Change the id of the text area to be unique (avoid DOM clashes with multiple TinyMCE instances
      *
      * @param LaminasForm $form the form
-     * @param int      $id   the id
+     * @param int         $id   the id
      *
      * @return LaminasForm
      */

@@ -1,21 +1,11 @@
 <?php
 
-/**
- * BusReg History Controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 namespace Olcs\Controller\Bus\Processing;
 
 use Dvsa\Olcs\Transfer\Query\Bus\HistoryList as BusRegHistoryList;
-use Olcs\Controller\Interfaces\BusRegControllerInterface;
 use Olcs\Controller\AbstractHistoryController;
+use Olcs\Controller\Interfaces\BusRegControllerInterface;
 
-/**
- * BusReg History Controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 class HistoryController extends AbstractHistoryController implements BusRegControllerInterface
 {
     protected $navigationId = 'licence_bus_processing_event-history';

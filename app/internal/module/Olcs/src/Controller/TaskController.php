@@ -3,51 +3,54 @@
 namespace Olcs\Controller;
 
 use Common\Exception\BadRequestException;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\Task\CloseTasks;
 use Dvsa\Olcs\Transfer\Command\Task\CreateTask;
 use Dvsa\Olcs\Transfer\Command\Task\ReassignTasks;
 use Dvsa\Olcs\Transfer\Command\Task\UpdateTask;
 use Dvsa\Olcs\Transfer\Query\Application\Application;
 use Dvsa\Olcs\Transfer\Query\Cases\Cases;
+use Dvsa\Olcs\Transfer\Query\IrhpApplication\ById as IrhpApplicationById;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence;
 use Dvsa\Olcs\Transfer\Query\Task\Task;
-use Dvsa\Olcs\Transfer\Query\IrhpApplication\ById as IrhpApplicationById;
-use Olcs\Controller\Traits as ControllerTraits;
-use Laminas\Mvc\MvcEvent;
+use Laminas\View\HelperPluginManager;
 use Laminas\View\Model\ViewModel;
-use \Olcs\Data\Mapper;
+use Olcs\Controller\Traits as ControllerTraits;
+use Olcs\Data\Mapper;
+use Olcs\Service\Data\SubCategory;
+use Olcs\Service\Data\UserListInternalExcludingLimitedReadOnlyUsers;
 
-/**
- * Task Controller
- *
- * @author Nick Payne <nick.payne@valtech.co.uk>
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class TaskController extends AbstractController
 {
-    use ControllerTraits\BusControllerTrait,
-        ControllerTraits\TaskSearchTrait;
+    use ControllerTraits\BusControllerTrait;
+    use ControllerTraits\TaskSearchTrait;
 
-    const METHOD_ADD = 'Add';
-    const METHOD_EDIT = 'Edit';
+    public const METHOD_ADD = 'Add';
+    public const METHOD_EDIT = 'Edit';
 
-    /** @var  \Common\Service\Helper\FlashMessengerHelperService */
-    private $hlpFlashMsgr;
+    protected FlashMessengerHelperService $flashMessengerHelper;
+    protected SubCategory $subCategoryDataService;
 
-    /**
-     * Constructor
-     *
-     * @param MvcEvent $e Event
-     *
-     * @return mixed
-     */
-    public function onDispatch(MvcEvent $e)
-    {
-        $this->hlpFlashMsgr = $this->getServiceLocator()->get('Helper\FlashMessenger');
+    protected UserListInternalExcludingLimitedReadOnlyUsers $userListInternalExcLtdRdOnlyDataService;
 
-        return parent::onDispatch($e);
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        TableFactory $tableFactory,
+        HelperPluginManager $viewHelperManager,
+        FlashMessengerHelperService $flashMessengerHelper,
+        SubCategory $subCategoryDataService,
+        UserListInternalExcludingLimitedReadOnlyUsers $userListInternalExcLtdRdOnlyDataService
+    ) {
+        parent::__construct($scriptFactory, $formHelper, $tableFactory, $viewHelperManager);
+        $this->flashMessengerHelper = $flashMessengerHelper;
+        $this->subCategoryDataService = $subCategoryDataService;
+        $this->userListInternalExcLtdRdOnlyDataService = $userListInternalExcLtdRdOnlyDataService;
     }
+
 
     /**
      * Add a new task
@@ -91,8 +94,7 @@ class TaskController extends AbstractController
             ->setData($this->expandData($data));
 
         if ($teamId > 0) {
-            $assignedToUserOptions = $form->get('assignment')->get('assignedToUser')->getOptions();
-            $this->getServiceLocator()->get($assignedToUserOptions['service_name'])
+            $this->userListInternalExcLtdRdOnlyDataService
                 ->setTeamId($teamId);
         }
 
@@ -162,9 +164,9 @@ class TaskController extends AbstractController
         $response = $this->handleCommand(CloseTasks::create(['ids' => $ids]));
 
         if ($response->isOk()) {
-            $this->hlpFlashMsgr->addSuccessMessage('task-close-success');
+            $this->flashMessengerHelper->addSuccessMessage('task-close-success');
         } else {
-            $this->hlpFlashMsgr->addUnknownError();
+            $this->flashMessengerHelper->addUnknownError();
         }
 
         return $this->redirectToList();
@@ -173,7 +175,7 @@ class TaskController extends AbstractController
     /**
      * Callback invoked when the form is valid
      *
-     * @param array                    $data Data
+     * @param array                       $data Data
      * @param \Laminas\Form\FormInterface $form Form
      *
      * @return \Laminas\Http\Response
@@ -194,14 +196,14 @@ class TaskController extends AbstractController
         $response = $this->handleCommand($cmd);
 
         if ($response->isOk()) {
-            $this->hlpFlashMsgr->addSuccessMessage('task-reassign-success');
+            $this->flashMessengerHelper->addSuccessMessage('task-reassign-success');
             return $this->redirectToList();
         }
 
         if ($response->isClientError()) {
-            Mapper\Task::mapFormErrors($response->getResult()['messages'], $form, $this->hlpFlashMsgr);
+            Mapper\Task::mapFormErrors($response->getResult()['messages'], $form, $this->flashMessengerHelper);
         } else {
-            $this->hlpFlashMsgr->addUnknownError();
+            $this->flashMessengerHelper->addUnknownError();
         }
 
         return null;
@@ -220,28 +222,29 @@ class TaskController extends AbstractController
 
         // Set up the data services so that dynamic selects populate correctly if we already have data
         if (isset($data['category'])) {
-            $this->getServiceLocator()->get(\Olcs\Service\Data\SubCategory::class)->setCategory($data['category']);
+            $this->subCategoryDataService->setCategory($data['category']);
         }
 
         $form = $this->getForm('Task');
-        $assignedToUserOptions = $form->get('assignment')->get('assignedToUser')->getOptions();
 
         // Set up the data services so that dynamic selects populate correctly if we already have data
         $teamId = (int)$data['assignedToTeam'];
         if ($teamId > 0) {
-            $this->getServiceLocator()->get($assignedToUserOptions['service_name'])
+            $this->userListInternalExcLtdRdOnlyDataService
                 ->setTeamId($data['assignedToTeam']);
         }
 
-        $this->getServiceLocator()->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
+        $this->formHelper->setFormActionFromRequest($form, $this->getRequest());
 
         if ($teamId === 0) {
             $form->get('assignment')->get('assignedToUser')->setEmptyOption('please-select');
         }
 
         if (isset($data['isClosed']) && $data['isClosed'] === 'Y') {
-            /** @var \Common\Service\Helper\FormHelperService $formHelper */
-            $formHelper = $this->getServiceLocator()->get('Helper\Form');
+            /**
+            * @var \Common\Service\Helper\FormHelperService $formHelper
+            */
+            $formHelper = $this->formHelper;
             $formHelper->disableElements($form);
             $formHelper->enableElements($form->get('form-actions')->get('cancel'));
 
@@ -260,10 +263,12 @@ class TaskController extends AbstractController
                 $this->getTaskHistoryTable($data['taskHistory'])
             );
         } else {
-            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'taskHistory->table');
+            $this->formHelper->remove($form, 'taskHistory->table');
         }
 
-        /** @var \Laminas\Form\Fieldset $details */
+        /**
+         * @var \Laminas\Form\Fieldset $details
+        */
         $details = $form->get('details');
         $details->get('link')->setValue($this->getLinkForTaskForm());
         $details->get('status')->setValue('<b>' . $textStatus . '</b>');
@@ -299,8 +304,7 @@ class TaskController extends AbstractController
      */
     protected function getTaskHistoryTable($details)
     {
-        return $this->getServiceLocator()
-            ->get('Table')
+        return $this->tableFactory
             ->prepareTable('task-history', $details);
     }
 
@@ -323,7 +327,7 @@ class TaskController extends AbstractController
     /**
      * Callback invoked when the form is valid
      *
-     * @param array                    $data Data
+     * @param array                       $data Data
      * @param \Laminas\Form\FormInterface $form Form
      *
      * @return null|\Laminas\Http\Response
@@ -336,7 +340,7 @@ class TaskController extends AbstractController
     /**
      * Callback invoked when the form is valid
      *
-     * @param array                    $data Data
+     * @param array                       $data Data
      * @param \Laminas\Form\FormInterface $form Form
      *
      * @return null|\Laminas\Http\Response
@@ -349,8 +353,8 @@ class TaskController extends AbstractController
     /**
      * Callback invoked when the form is valid
      *
-     * @param string                   $method Method
-     * @param array                    $data   Data
+     * @param string                      $method Method
+     * @param array                       $data   Data
      * @param \Laminas\Form\FormInterface $form   Form
      *
      * @return null|\Laminas\Http\Response
@@ -372,15 +376,15 @@ class TaskController extends AbstractController
         );
 
         if ($response->isOk()) {
-            $this->hlpFlashMsgr->addSuccessMessage($isEdit ? 'task-update-success' : 'task-create-success');
+            $this->flashMessengerHelper->addSuccessMessage($isEdit ? 'task-update-success' : 'task-create-success');
 
             return $this->redirectToList();
         }
 
         if ($response->isClientError()) {
-            Mapper\Task::mapFormErrors($response->getResult()['messages'], $form, $this->hlpFlashMsgr);
+            Mapper\Task::mapFormErrors($response->getResult()['messages'], $form, $this->flashMessengerHelper);
         } else {
-            $this->hlpFlashMsgr->addUnknownError();
+            $this->flashMessengerHelper->addUnknownError();
         }
 
         return null;
@@ -427,8 +431,8 @@ class TaskController extends AbstractController
             case 'irhpapplication':
                 $route = 'licence/irhp-application-processing/tasks';
                 $params = [
-                    'irhpAppId' => $taskTypeId,
-                    'licence' => $this->getLicenceIdForIrhpApplication($taskTypeId),
+                'irhpAppId' => $taskTypeId,
+                'licence' => $this->getLicenceIdForIrhpApplication($taskTypeId),
                 ];
                 break;
             default:

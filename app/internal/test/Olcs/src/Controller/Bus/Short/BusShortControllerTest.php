@@ -5,6 +5,10 @@
  */
 namespace OlcsTest\Controller\Bus\Short;
 
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Laminas\Navigation\Navigation;
 use Olcs\Controller\Bus\Short\BusShortController as Sut;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
@@ -18,7 +22,13 @@ class BusShortControllerTest extends MockeryTestCase
 
     public function setUp(): void
     {
-        $this->sut = new Sut;
+        $this->translationHelper = m::mock(TranslationHelperService::class);
+        $this->formHelper = m::mock(FormHelperService::class);
+        $this->flashMessengerHelper =  m::mock(FlashMessengerHelperService::class);
+        $this->navigation = m::mock(Navigation::class);
+
+        $this->sut = new Sut($this->translationHelper, $this->formHelper, $this->flashMessengerHelper, $this->navigation);
+
     }
 
     /**

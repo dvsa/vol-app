@@ -2,26 +2,28 @@
 
 namespace Admin\Controller;
 
+use Admin\Data\Mapper\DocumentTemplate as DocumentTemplateMapper;
+use Admin\Form\Model\Form\DocTemplateFilter;
 use Admin\Form\Model\Form\DocumentTemplateUpload as DocumentTemplateUploadForm;
 use Common\Category;
 use Common\Service\AntiVirus\Scan;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
 use Common\Util\FileContent;
-use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\LeftViewProvider;
-use Admin\Form\Model\Form\DocTemplateFilter;
+use Dvsa\Olcs\Transfer\Command\DocTemplate\Create as CreateDTO;
+use Dvsa\Olcs\Transfer\Command\DocTemplate\Delete as DeleteDTO;
+use Dvsa\Olcs\Transfer\Command\DocTemplate\Update as UpdateDTO;
+use Dvsa\Olcs\Transfer\Query\DocTemplate\ById as ItemDTO;
+use Dvsa\Olcs\Transfer\Query\DocTemplate\FullList as ListDTO;
 use Laminas\Form\Form;
 use Laminas\Http\Response;
+use Laminas\Navigation\Navigation;
 use Laminas\View\Model\ViewModel;
-use Dvsa\Olcs\Transfer\Query\DocTemplate\FullList as ListDTO;
-use Dvsa\Olcs\Transfer\Query\DocTemplate\ById as ItemDTO;
-use Dvsa\Olcs\Transfer\Command\DocTemplate\Create as CreateDTO;
-use Dvsa\Olcs\Transfer\Command\DocTemplate\Update as UpdateDTO;
-use Dvsa\Olcs\Transfer\Command\DocTemplate\Delete as DeleteDTO;
-use Admin\Data\Mapper\DocumentTemplate as DocumentTemplateMapper;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Service\Data\SubCategory;
 
-/**
- * Report Upload Controller
- */
 class DocumentTemplateController extends AbstractInternalController implements LeftViewProvider
 {
     const ERR_UPLOAD_DEF = '4';
@@ -56,7 +58,19 @@ class DocumentTemplateController extends AbstractInternalController implements L
         'addAction' => ['forms/document-template'],
         'editAction' => ['forms/document-template']
     ];
+    public function __construct(
+        TranslationHelperService $translationHelperService,
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessengerHelperService,
+        Navigation $navigation,
+        Scan $scannerAntiVirusService,
+        SubCategory $subCategoryDataService
+    ) {
+        $this->scannerAntiVirusService = $scannerAntiVirusService;
+        $this->subCategoryDataService = $subCategoryDataService;
 
+        parent::__construct($translationHelperService, $formHelper, $flashMessengerHelperService, $navigation);
+    }
     /**
      * Left View setting
      *
@@ -167,7 +181,7 @@ class DocumentTemplateController extends AbstractInternalController implements L
         }
 
         // Run virus scan on file
-        $scanner = $this->getServiceLocator()->get(Scan::class);
+        $scanner = $this->scannerAntiVirusService;
         if ($scanner->isEnabled() && !$scanner->isClean($fileTmpName)) {
             $fileField->setMessages([self::FILE_UPLOAD_ERR_PREFIX . 'virus']);
             return $form;
@@ -192,7 +206,7 @@ class DocumentTemplateController extends AbstractInternalController implements L
             $actionDTO::create($dtoData)
         );
 
-        $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
+        $flashMessenger = $this->flashMessengerHelperService;
 
         if ($response->isOk()) {
             $flashMessenger->addSuccessMessage('Document Template uploaded sucessfully');
@@ -211,13 +225,13 @@ class DocumentTemplateController extends AbstractInternalController implements L
      * Alter form for editRule action, set default values for listboxes
      *
      * @param \Laminas\Form\Form $form     Form
-     * @param array           $formData Form data
+     * @param array              $formData Form data
      *
      * @return \Laminas\Form\Form
      */
     protected function alterFormForAdd($form, $formData)
     {
-        $this->getServiceLocator()->get(\Olcs\Service\Data\SubCategory::class)
+        $this->subCategoryDataService
             ->setCategory(Category::CATEGORY_APPLICATION);
 
         return $form;
@@ -227,7 +241,7 @@ class DocumentTemplateController extends AbstractInternalController implements L
      * Alter form for editRule action, set default values for listboxes
      *
      * @param \Laminas\Form\Form $form     Form
-     * @param array           $formData Form data
+     * @param array              $formData Form data
      *
      * @return \Laminas\Form\Form
      */
@@ -236,7 +250,7 @@ class DocumentTemplateController extends AbstractInternalController implements L
         $defaultCategory = isset($formData['fields']['category']) ?
             $formData['fields']['category'] : Category::CATEGORY_APPLICATION;
 
-        $this->getServiceLocator()->get(\Olcs\Service\Data\SubCategory::class)
+        $this->subCategoryDataService
             ->setCategory($defaultCategory);
 
         $form->get('fields')->get('templateSlug')->setAttributes(['disabled' => true]);

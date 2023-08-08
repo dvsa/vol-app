@@ -1,10 +1,11 @@
 <?php
 
-/**
- * Bus Processing Decision Controller
- */
 namespace Olcs\Controller\Bus\Processing;
 
+use Common\RefData;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Command\Bus\AdminCancelBusReg as AdminCancelDto;
 use Dvsa\Olcs\Transfer\Command\Bus\GrantBusReg as GrantDto;
 use Dvsa\Olcs\Transfer\Command\Bus\RefuseBusReg as RefuseDto;
@@ -13,18 +14,18 @@ use Dvsa\Olcs\Transfer\Command\Bus\ResetBusReg as ResetDto;
 use Dvsa\Olcs\Transfer\Command\Bus\WithdrawBusReg as WithdrawDto;
 use Dvsa\Olcs\Transfer\Command\Publication\Bus as PublishDto;
 use Dvsa\Olcs\Transfer\Query\Bus\BusRegDecision as ItemDto;
+use Laminas\Http\Response;
+use Laminas\Navigation\Navigation;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\BusRegControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\BusRegUpdateStatus as UpdateStatusMapper;
-use Olcs\Form\Model\Form\BusRegUpdateWithdrawn as WithdrawForm;
 use Olcs\Form\Model\Form\BusRegUpdateStatus as UpdateStatusForm;
+use Olcs\Form\Model\Form\BusRegUpdateWithdrawn as WithdrawForm;
 use Olcs\Form\Model\Form\BusRegVariationReason as VariationReasonForm;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
-use Common\RefData;
-use Laminas\View\Model\ViewModel;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
-use \Laminas\Http\Response;
 
 /**
  * Bus Processing Decision Controller
@@ -74,6 +75,16 @@ class BusProcessingDecisionController extends AbstractInternalController impleme
             'action' => 'details'
         ]
     ];
+
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessenger,
+        Navigation $navigation
+    ) {
+        parent::__construct($translationHelper, $formHelper, $flashMessenger, $navigation);
+    }
+
 
     /**
      * get method Left View
@@ -160,7 +171,7 @@ class BusProcessingDecisionController extends AbstractInternalController impleme
 
             if (empty($busReg) || !$busReg['isGrantable']) {
                 // not grantable
-                $this->getServiceLocator()->get('Helper\FlashMessenger')
+                $this->flashMessengerHelperService
                     ->addErrorMessage('The record is not grantable');
                 return $this->redirectTo([]);
             }
@@ -174,7 +185,7 @@ class BusProcessingDecisionController extends AbstractInternalController impleme
             }
         } else {
             // can't get the record
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            $this->flashMessengerHelperService->addErrorMessage('unknown-error');
         }
 
         return $this->redirectTo([]);

@@ -4,11 +4,11 @@ namespace Olcs\Controller\Bus\Registration;
 
 use Common\Service\Helper\FlashMessengerHelperService;
 use Dvsa\Olcs\Transfer\Command as TransferCmd;
-use Olcs\View\Model\ViewModel;
 use Laminas\Http\Response;
 use Laminas\Mvc\Controller\AbstractActionController;
-use Olcs\Controller\Interfaces\BusRegControllerInterface;
 use Laminas\Mvc\MvcEvent;
+use Olcs\Controller\Interfaces\BusRegControllerInterface;
+use Olcs\View\Model\ViewModel;
 
 /**
  * Bus Registration Controller
@@ -18,11 +18,22 @@ use Laminas\Mvc\MvcEvent;
  */
 class BusRegistrationController extends AbstractActionController implements BusRegControllerInterface
 {
-    /** @var  FlashMessengerHelperService */
+    /**
+     * @var FlashMessengerHelperService
+     */
     private $hlpFlashMsgr;
 
-    /** @var  int */
+    /**
+     * @var int
+     */
     private $busRegId;
+
+    protected FlashMessengerHelperService $flashMessenger;
+    public function __construct(
+        FlashMessengerHelperService $flashMessenger
+    ) {
+        $this->flashMessengerHelperService = $flashMessenger;
+    }
 
     /**
      * On Dispatch
@@ -33,7 +44,7 @@ class BusRegistrationController extends AbstractActionController implements BusR
      */
     public function onDispatch(MvcEvent $e)
     {
-        $this->hlpFlashMsgr = $this->getServiceLocator()->get('Helper\FlashMessenger');
+        $this->hlpFlashMsgr =  $this->flashMessengerHelperService;
 
         $this->busRegId = $this->params()->fromRoute('busRegId');
 
@@ -51,7 +62,7 @@ class BusRegistrationController extends AbstractActionController implements BusR
     }
 
     /**
-     *Create Bus Reg
+     * Create Bus Reg
      *
      * @return ViewModel
      */

@@ -14,15 +14,17 @@ use Olcs\Service\Data\SubCategory as SubCategoryDS;
  */
 class TaskSearchTraitTest extends MockeryTestCase
 {
-    const ID = 99999;
-    const TEAM_ID = 8888;
+    public const ID = 99999;
+    public const TEAM_ID = 8888;
 
     /** @var \OlcsTest\Controller\Traits\Stub\StubTaskSearchTrait */
     private $sut;
 
     public function setUp(): void
     {
-        $this->sut = m::mock(\OlcsTest\Controller\Traits\Stub\StubTaskSearchTrait::class)
+        $this->mockFormHelper = m::mock(FormHelperService::class);
+        $this->mockSubCategoryDataService = m::mock(SubCategoryDS::class)->makePartial();
+        $this->sut = m::mock(\OlcsTest\Controller\Traits\Stub\StubTaskSearchTrait::class, [$this->mockFormHelper, $this->mockSubCategoryDataService])
             ->makePartial()
             ->shouldAllowMockingProtectedMethods(true);
     }
@@ -154,24 +156,17 @@ class TaskSearchTraitTest extends MockeryTestCase
 
         $mockReq = m::mock(\Laminas\Http\Request::class);
 
-        $mockSubCatDs = m::mock(SubCategoryDS::class)
+        $this->mockSubCategoryDataService
             ->shouldReceive('setCategory')->once()->with($expectCategory)
             ->getMock();
 
-        $mockFormHlpr = m::mock(FormHelperService::class)
+        $this->mockFormHelper
             ->shouldReceive('createForm')->once()->with('TasksHome', false)->andReturn($mockForm)
-            ->shouldReceive('setFormActionFromRequest')->once()->with($mockForm, $mockReq)->andReturnSelf()
-            ->getMock();
-
-        $mockSm = m::mock(ServiceLocatorInterface::class)
-            ->shouldReceive('get')->with(SubCategoryDS::class)->once()->andReturn($mockSubCatDs)
-            ->shouldReceive('get')->with('Helper\Form')->once()->andReturn($mockFormHlpr)
-            ->getMock();
+            ->shouldReceive('setFormActionFromRequest')->once()->with($mockForm, $mockReq)->andReturnSelf();
 
         //  call
         /** @var \OlcsTest\Controller\Traits\Stub\StubTaskSearchTrait $sut */
         $this->sut
-            ->shouldReceive('getServiceLocator')->once()->andReturn($mockSm)
             ->shouldReceive('getRequest')->once()->andReturn($mockReq)
             ->shouldReceive('getListDataTeam')->once()->andReturn($listData['assignedToTeam'])
             ->shouldReceive('getListDataUser')->once()->with($expectTeam, 'All')->andReturn($listData['assignedToUser'])

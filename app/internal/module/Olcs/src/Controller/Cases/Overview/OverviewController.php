@@ -1,29 +1,23 @@
 <?php
 
-/**
- * Overview Controller, also deals with add and edit of cases
- */
 namespace Olcs\Controller\Cases\Overview;
 
-use Olcs\Controller\AbstractInternalController;
-use Dvsa\Olcs\Transfer\Command\Cases\CreateCase as CreateCaseCommand;
-use Dvsa\Olcs\Transfer\Command\Cases\UpdateCase as UpdateCaseCommand;
-use Dvsa\Olcs\Transfer\Command\Cases\DeleteCase as DeleteCaseCommand;
 use Dvsa\Olcs\Transfer\Command\Cases\CloseCase as CloseCmd;
+use Dvsa\Olcs\Transfer\Command\Cases\CreateCase as CreateCaseCommand;
+use Dvsa\Olcs\Transfer\Command\Cases\DeleteCase as DeleteCaseCommand;
 use Dvsa\Olcs\Transfer\Command\Cases\ReopenCase as ReopenCmd;
+use Dvsa\Olcs\Transfer\Command\Cases\UpdateCase as UpdateCaseCommand;
 use Dvsa\Olcs\Transfer\Query\Cases\Cases as CasesDto;
+use Laminas\View\Model\ViewModel;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\NavigationIdProvider;
 use Olcs\Controller\Interfaces\RightViewProvider;
 use Olcs\Data\Mapper\GenericFields as GenericMapper;
 use Olcs\Form\Model\Form\Cases as CaseForm;
-use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
-use Laminas\View\Model\ViewModel;
 
-/**
- * Overview Controller, also deals with add and edit of cases
- */
 class OverviewController extends AbstractInternalController implements
     CaseControllerInterface,
     LeftViewProvider,
@@ -49,14 +43,18 @@ class OverviewController extends AbstractInternalController implements
     protected $addContentTitle = 'Add case';
     protected $editContentTitle = 'Edit case';
 
-    /** Close */
+    /**
+     * Close
+     */
     protected $closeCommand = CloseCmd::class;
     protected $closeParams = ['id' => 'case'];
     protected $closeModalTitle = 'Close the case';
     protected $closeConfirmMessage = 'Are you sure you want to close the case?';
     protected $closeSuccessMessage = 'Case closed';
 
-    /** Reopen */
+    /**
+     * Reopen
+     */
     protected $reopenCommand = ReopenCmd::class;
     protected $reopenParams = ['id' => 'case'];
     protected $reopenModalTitle = 'Reopen the Case?';
@@ -81,6 +79,7 @@ class OverviewController extends AbstractInternalController implements
         ]
     ];
 
+
     /**
      * Get Method for Navigation
      *
@@ -91,25 +90,25 @@ class OverviewController extends AbstractInternalController implements
         $action = $this->params()->fromRoute('action');
 
         switch ($action) {
-            case 'add':
-                $licence = $this->params()->fromRoute('licence');
-                $application = $this->params()->fromRoute('application');
-                $transportManager = $this->params()->fromRoute('transportManager');
+        case 'add':
+            $licence = $this->params()->fromRoute('licence');
+            $application = $this->params()->fromRoute('application');
+            $transportManager = $this->params()->fromRoute('transportManager');
 
-                if ($licence) {
-                    return 'case';
-                }
+            if ($licence) {
+                return 'case';
+            }
 
-                if ($transportManager) {
-                    return 'transport_managers';
-                }
+            if ($transportManager) {
+                return 'transport_managers';
+            }
 
-                if ($application) {
-                    return 'application';
-                }
-                // Missing break is intentional
-            default:
-                return null;
+            if ($application) {
+                return 'application';
+            }
+            // Missing break is intentional
+        default:
+            return null;
         }
     }
 
@@ -123,32 +122,32 @@ class OverviewController extends AbstractInternalController implements
         $action = $this->params()->fromRoute('action');
 
         switch ($action) {
-            case 'add':
-                $licence = $this->params()->fromRoute('licence');
-                $application = $this->params()->fromRoute('application');
-                $transportManager = $this->params()->fromRoute('transportManager');
+        case 'add':
+            $licence = $this->params()->fromRoute('licence');
+            $application = $this->params()->fromRoute('application');
+            $transportManager = $this->params()->fromRoute('transportManager');
 
-                if ($licence) {
-                    $viewModel = new ViewModel();
-                    $viewModel->setTemplate('sections/licence/partials/right');
-                    return $viewModel;
-                }
+            if ($licence) {
+                $viewModel = new ViewModel();
+                $viewModel->setTemplate('sections/licence/partials/right');
+                return $viewModel;
+            }
 
-                if ($transportManager) {
-                    $viewModel = new ViewModel();
-                    $viewModel->setTemplate('sections/transport-manager/partials/right');
-                    return $viewModel;
-                }
+            if ($transportManager) {
+                $viewModel = new ViewModel();
+                $viewModel->setTemplate('sections/transport-manager/partials/right');
+                return $viewModel;
+            }
 
-                if ($application) {
-                    $viewModel = new ViewModel();
-                    $viewModel->setTemplate('sections/application/partials/right');
-                    return $viewModel;
-                }
-                // Missing break is intentional
-            default:
-                // Already setup in the listener
-                return null;
+            if ($application) {
+                $viewModel = new ViewModel();
+                $viewModel->setTemplate('sections/application/partials/right');
+                return $viewModel;
+            }
+            // Missing break is intentional
+        default:
+            // Already setup in the listener
+            return null;
         }
     }
 
@@ -162,29 +161,29 @@ class OverviewController extends AbstractInternalController implements
         $action = $this->params()->fromRoute('action');
 
         switch ($action) {
-            case 'add':
-                $licence = $this->params()->fromRoute('licence');
-                $application = $this->params()->fromRoute('application');
-                $transportManager = $this->params()->fromRoute('transportManager');
+        case 'add':
+            $licence = $this->params()->fromRoute('licence');
+            $application = $this->params()->fromRoute('application');
+            $transportManager = $this->params()->fromRoute('transportManager');
 
-                if ($licence) {
-                    $viewModel = new ViewModel();
-                    $viewModel->setTemplate('sections/licence/partials/left');
-                    return $viewModel;
-                }
-
-                if ($transportManager) {
-                    return null;
-                }
-
-                if ($application) {
-                    return null;
-                }
-                // Missing break is intentional
-            default:
+            if ($licence) {
                 $viewModel = new ViewModel();
-                $viewModel->setTemplate('sections/cases/partials/left');
+                $viewModel->setTemplate('sections/licence/partials/left');
                 return $viewModel;
+            }
+
+            if ($transportManager) {
+                return null;
+            }
+
+            if ($application) {
+                return null;
+            }
+            // Missing break is intentional
+        default:
+            $viewModel = new ViewModel();
+            $viewModel->setTemplate('sections/cases/partials/left');
+            return $viewModel;
         }
     }
 
@@ -269,15 +268,15 @@ class OverviewController extends AbstractInternalController implements
     public function alterFormForEdit($form, $initialData)
     {
         switch ($initialData['fields']['caseType']) {
-            case 'case_t_app':
-                $unwantedOptions = ['case_t_tm' => '', 'case_t_lic' => '', 'case_t_imp' => ''];
-                break;
-            case 'case_t_tm':
-                $unwantedOptions = ['case_t_app' => '', 'case_t_lic' => '', 'case_t_imp' => ''];
-                break;
-            default:
-                $unwantedOptions = ['case_t_tm' => '', 'case_t_app' => ''];
-                break;
+        case 'case_t_app':
+            $unwantedOptions = ['case_t_tm' => '', 'case_t_lic' => '', 'case_t_imp' => ''];
+            break;
+        case 'case_t_tm':
+            $unwantedOptions = ['case_t_app' => '', 'case_t_lic' => '', 'case_t_imp' => ''];
+            break;
+        default:
+            $unwantedOptions = ['case_t_tm' => '', 'case_t_app' => ''];
+            break;
         }
 
         $options = $form->get('fields')

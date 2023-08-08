@@ -2,18 +2,19 @@
 
 namespace Olcs\Controller\Cases\Submission;
 
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Command\Submission\CreateSubmissionAction as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Submission\UpdateSubmissionAction as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Submission\SubmissionAction as ItemDto;
+use Laminas\Form\FormInterface;
+use Laminas\Navigation\Navigation;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Data\Mapper\SubmissionAction as Mapper;
 use Olcs\Form\Model\Form\SubmissionRecommendation as Form;
-use Laminas\Form\FormInterface;
 
-/**
- * Submission Recommendation Controller
- */
 class RecommendationController extends AbstractInternalController implements CaseControllerInterface
 {
     /**
@@ -91,6 +92,14 @@ class RecommendationController extends AbstractInternalController implements Cas
         'isDecision' => 'N',
     ];
 
+
+    public function __construct(TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessenger,
+        Navigation $navigation
+    ) {
+        parent::__construct($translationHelper, $formHelper, $flashMessenger, $navigation);
+    }
     /**
      * Process action - Index
      *

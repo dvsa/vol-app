@@ -11,11 +11,6 @@ use Dvsa\Olcs\Transfer\Query\System\PublicHoliday\GetList as ListQry;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Data\Mapper\PublicHoliday as AddEditFormMapper;
 
-/**
- * Public Holiday Controller
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
 class PublicHolidayController extends AbstractInternalController
 {
     protected $navigationId = 'admin-dashboard/admin-public-holiday';

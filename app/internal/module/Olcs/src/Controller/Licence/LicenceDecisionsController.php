@@ -1,40 +1,33 @@
 <?php
 
-/**
- * LicenceDecisionsController.php
- */
-
 namespace Olcs\Controller\Licence;
 
 use Common\Controller\Interfaces\MethodToggleAwareInterface;
+use Common\Controller\Lva\Traits\MethodToggleTrait;
 use Common\FeatureToggle;
 use Common\RefData;
 use Common\Service\Cqrs\Exception\NotFoundException;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
+use Dvsa\Olcs\Transfer\Command\Licence\CurtailLicence;
+use Dvsa\Olcs\Transfer\Command\Licence\ResetToValid;
+use Dvsa\Olcs\Transfer\Command\Licence\RevokeLicence;
+use Dvsa\Olcs\Transfer\Command\Licence\SurrenderLicence;
+use Dvsa\Olcs\Transfer\Command\Licence\SuspendLicence;
+use Dvsa\Olcs\Transfer\Command\LicenceStatusRule\CreateLicenceStatusRule;
+use Dvsa\Olcs\Transfer\Command\LicenceStatusRule\DeleteLicenceStatusRule;
+use Dvsa\Olcs\Transfer\Command\LicenceStatusRule\UpdateLicenceStatusRule;
 use Dvsa\Olcs\Transfer\Command\Surrender\Withdraw;
-use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence;
-use Olcs\Controller\AbstractController;
-use Common\Controller\Lva\Traits\MethodToggleTrait;
-use Olcs\Controller\Traits\LicenceControllerTrait;
 use Dvsa\Olcs\Transfer\Query\Licence\LicenceDecisions;
 use Dvsa\Olcs\Transfer\Query\LicenceStatusRule\LicenceStatusRule;
-use Dvsa\Olcs\Transfer\Command\LicenceStatusRule\CreateLicenceStatusRule;
-use Dvsa\Olcs\Transfer\Command\LicenceStatusRule\UpdateLicenceStatusRule;
-use Dvsa\Olcs\Transfer\Command\LicenceStatusRule\DeleteLicenceStatusRule;
-use Dvsa\Olcs\Transfer\Command\Licence\RevokeLicence;
-use Dvsa\Olcs\Transfer\Command\Licence\CurtailLicence;
-use Dvsa\Olcs\Transfer\Command\Licence\SuspendLicence;
-use Dvsa\Olcs\Transfer\Command\Licence\SurrenderLicence;
-use Dvsa\Olcs\Transfer\Command\Licence\ResetToValid;
+use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence;
+use Laminas\View\HelperPluginManager;
+use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
+use Olcs\Controller\Traits\LicenceControllerTrait;
 
-/**
- * Class LicenceDecisionsController
- *
- * Calling code for logic around actions directly against the licence. E.g.
- * suspending or revoking the licence for a specified amount of time.
- *
- * @package Olcs\Controller\Licence
- */
 class LicenceDecisionsController extends AbstractController implements
     LicenceControllerInterface,
     MethodToggleAwareInterface
@@ -48,6 +41,27 @@ class LicenceDecisionsController extends AbstractController implements
 
     protected $undoCommand;
 
+    protected FlashMessengerHelperService $flashMessengerHelper;
+    protected $navigation;
+
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        TableFactory $tableFactory,
+        HelperPluginManager $viewHelperManager,
+        FlashMessengerHelperService $flashMessengerHelper,
+        $navigation
+    ) {
+        parent::__construct(
+            $scriptFactory,
+            $formHelper,
+            $tableFactory,
+            $viewHelperManager
+        );
+        $this->flashMessengerHelper = $flashMessengerHelper;
+        $this->navigation = $navigation;
+    }
+
     /**
      * Display messages and enable to user to carry on to a decision if applicable.
      *
@@ -58,7 +72,7 @@ class LicenceDecisionsController extends AbstractController implements
         $decision = $this->fromRoute('decision', null);
         $licence = $this->fromRoute('licence', null);
 
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
 
         $form = $formHelper->createFormWithRequest('LicenceStatusDecisionMessages', $this->getRequest());
 
@@ -72,8 +86,9 @@ class LicenceDecisionsController extends AbstractController implements
         $result = $response->getResult();
 
         $pageTitle = ucfirst($decision) . " licence";
-        if (!isset($result['suitableForDecisions']) || $this->getRequest()->isPost() ||
-            $result['suitableForDecisions'] === true) {
+        if (!isset($result['suitableForDecisions']) || $this->getRequest()->isPost()
+            || $result['suitableForDecisions'] === true
+        ) {
             return $this->redirectToDecision($decision, $licence);
         }
 
@@ -85,24 +100,24 @@ class LicenceDecisionsController extends AbstractController implements
                 }
 
                 switch ($key) {
-                    case 'activeComLics':
-                        $messages[$key] = 'There are active, pending or suspended community licences';
-                        break;
-                    case 'activeBusRoutes':
-                        $messages[$key] = 'There are active bus routes on this licence';
-                        break;
-                    case 'activeVariations':
-                        $messages[$key] = 'There are applications still under consideration';
-                        break;
-                    case 'activePermits':
-                        $messages[$key] = 'There are active permits on this licence';
-                        break;
-                    case 'ongoingPermitApplications':
-                        $messages[$key] = 'There are ongoing permit applications on this licence';
-                        break;
-                    case 'validCorPermitApplications':
-                        $messages[$key] = 'There are active certificates on this licence';
-                        break;
+                case 'activeComLics':
+                    $messages[$key] = 'There are active, pending or suspended community licences';
+                    break;
+                case 'activeBusRoutes':
+                    $messages[$key] = 'There are active bus routes on this licence';
+                    break;
+                case 'activeVariations':
+                    $messages[$key] = 'There are applications still under consideration';
+                    break;
+                case 'activePermits':
+                    $messages[$key] = 'There are active permits on this licence';
+                    break;
+                case 'ongoingPermitApplications':
+                    $messages[$key] = 'There are ongoing permit applications on this licence';
+                    break;
+                case 'validCorPermitApplications':
+                    $messages[$key] = 'There are active certificates on this licence';
+                    break;
                 }
             }
             $form->get('messages')->get('message')->setValue(implode('<br>', $messages));
@@ -470,7 +485,7 @@ class LicenceDecisionsController extends AbstractController implements
             }
         }
 
-        $this->getServiceLocator()->get('Helper\Form')->setDefaultDate(
+        $this->formHelper->setDefaultDate(
             $form->get('licence-decision')->get('surrenderDate')
         );
         $form->get('form-actions')->get('confirm')->setLabel('licence-status.surrender.surrender-button');
@@ -512,7 +527,7 @@ class LicenceDecisionsController extends AbstractController implements
             }
         }
 
-        $this->getServiceLocator()->get('Helper\Form')->setDefaultDate(
+        $this->formHelper->setDefaultDate(
             $form->get('licence-decision')->get('terminateDate')
         );
         $form->get('form-actions')->get('confirm')->setLabel('licence-status.terminate.terminate-button');
@@ -563,7 +578,7 @@ class LicenceDecisionsController extends AbstractController implements
      */
     private function getDecisionForm($name = null, $status = null, array $keys = array())
     {
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
         $form = $formHelper->createFormWithRequest($name, $this->getRequest());
 
         if (!is_null($status)) {
@@ -629,7 +644,7 @@ class LicenceDecisionsController extends AbstractController implements
     {
         $view = $this->getViewWithLicence(['form' => $form]);
 
-        $this->getServiceLocator()->get('Script')->loadFiles(['forms/licence-decision']);
+        $this->scriptFactory->loadFiles(['forms/licence-decision']);
 
         $view->setTemplate('pages/form');
 
@@ -672,7 +687,7 @@ class LicenceDecisionsController extends AbstractController implements
         $response = $this->handleQuery($query);
         if (!$response->isOk()) {
             if ($response->isClientError() || $response->isServerError()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+                $this->flashMessengerHelper->addErrorMessage('unknown-error');
             }
 
             return $this->notFoundAction();

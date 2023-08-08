@@ -2,17 +2,18 @@
 
 namespace Olcs\Controller\Bus\Processing;
 
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Dvsa\Olcs\Transfer\Command\Bus\DeleteBus;
 use Dvsa\Olcs\Transfer\Query\Bus\BusReg;
 use Dvsa\Olcs\Transfer\Query\Bus\PaginatedRegistrationHistoryList as BusRegRegistrationHistoryList;
-use Dvsa\Olcs\Transfer\Command\Bus\DeleteBus;
+use Laminas\Navigation\Navigation;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\BusRegControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Laminas\View\Model\ViewModel;
 
-/**
- * Bus Processing Registration History Controller
- */
 class BusProcessingRegistrationHistoryController extends AbstractInternalController implements
     BusRegControllerInterface,
     LeftViewProvider
@@ -62,6 +63,14 @@ class BusProcessingRegistrationHistoryController extends AbstractInternalControl
         'index' => 'table-actions'
     ];
 
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessenger,
+        Navigation $navigation
+    ) {
+        parent::__construct($translationHelper, $formHelper, $flashMessenger, $navigation);
+    }
     /**
      * If there is a previous bus reg id then we override the redirect to the licence/bus page
      * and instead redirect to the registration history list

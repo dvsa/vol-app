@@ -1,22 +1,33 @@
 <?php
-/**
- * Application History Controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
+
 namespace Olcs\Controller\Application\Processing;
 
-use Olcs\Controller\Interfaces\ApplicationControllerInterface;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableFactory;
+use Laminas\Navigation\Navigation;
 use Olcs\Controller\AbstractHistoryController;
+use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 
-/**
- * Application History Controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 class HistoryController extends AbstractHistoryController implements ApplicationControllerInterface
 {
     protected $navigationId = 'application_processing_history';
     protected $listVars = ['application'];
     protected $itemParams = ['application', 'id' => 'id'];
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessenger,
+        Navigation $navigation,
+        TableFactory $tableBuilder
+    ) {
+        parent::__construct(
+            $translationHelper,
+            $formHelper,
+            $flashMessenger,
+            $navigation,
+            $tableBuilder
+        );
+    }
 }

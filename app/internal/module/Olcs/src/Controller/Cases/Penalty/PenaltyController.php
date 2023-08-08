@@ -1,32 +1,26 @@
 <?php
 
-/**
- * Case Penalty Controller
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
 namespace Olcs\Controller\Cases\Penalty;
 
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableBuilderFactory;
+use Common\Service\Table\TableFactory;
+use Dvsa\Olcs\Transfer\Command\Cases\Si\Applied\Create as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Cases\Si\Applied\Delete as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\Cases\Si\Applied\Update as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\Cases\Si\Applied\Penalty as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Cases\Si\Si as SingleSiDto;
+use Laminas\Navigation\Navigation;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Laminas\View\Model\ViewModel;
-use Common\Service\Table\TableBuilder;
-use Common\Service\Table\TableBuilderFactory;
 use Olcs\Data\Mapper\GenericFields;
-use Dvsa\Olcs\Transfer\Command\Cases\Si\Applied\Delete as DeleteDto;
-use Dvsa\Olcs\Transfer\Query\Cases\Si\Applied\Penalty as ItemDto;
-use Dvsa\Olcs\Transfer\Query\Cases\Si\Si as SingleSiDto;
-use Dvsa\Olcs\Transfer\Command\Cases\Si\Applied\Create as CreateDto;
-use Dvsa\Olcs\Transfer\Command\Cases\Si\Applied\Update as UpdateDto;
 use Olcs\Form\Model\Form\ErruPenalty;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 
-/**
- * Case Penalty Controller
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
 class PenaltyController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
     /**
@@ -61,6 +55,24 @@ class PenaltyController extends AbstractInternalController implements CaseContro
     protected $inlineScripts = array(
         'indexAction' => ['table-actions']
     );
+
+    protected TableFactory $tableFactory;
+
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessenger,
+        Navigation $navigation,
+        TableFactory $tableFactory
+    ) {
+        parent::__construct(
+            $translationHelper,
+            $formHelper,
+            $flashMessenger,
+            $navigation
+        );
+        $this->tableFactory = $tableFactory;
+    }
 
     /**
      * Get method LeftView
@@ -118,10 +130,7 @@ class PenaltyController extends AbstractInternalController implements CaseContro
         //multiple tables on a page, so we need to give our plugin a new table builder each time
         $tableBuilderFactory = new TableBuilderFactory();
 
-        $tableBuilder = $tableBuilderFactory(
-            $this->getServiceLocator(),
-            TableBuilder::class
-        );
+        $tableBuilder = $this->tableFactory;
 
         if (!empty($data['case']['erruRequest']['responseSent'])
             && ($data['case']['erruRequest']['responseSent'] === 'Y')
@@ -145,7 +154,7 @@ class PenaltyController extends AbstractInternalController implements CaseContro
         );
 
         if (!$response->isOk()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            $this->flashMessengerHelperService->addErrorMessage('unknown-error');
             return [];
         }
 

@@ -3,21 +3,35 @@
 namespace Admin\Controller\DataRetention;
 
 use Admin\Form\Model\Form\DataRetentionExport;
-use Common\Service\Table\TableBuilder;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\ResponseHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Query\DataRetention\GetProcessedList;
 use Dvsa\Olcs\Transfer\Query\DataRetention\RuleList;
+use Laminas\Navigation\Navigation;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\DataRetentionExport as Mapper;
-use Laminas\View\Model\ViewModel;
 
-/**
- * Cpms Report Controller
- */
 class ExportController extends AbstractInternalController implements LeftViewProvider
 {
     protected $navigationId = 'admin-dashboard/admin-data-retention';
 
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessengerHelperService,
+        Navigation $navigation,
+        TableFactory $tableFactory,
+        ResponseHelperService $responseHelperService
+    ) {
+        $this->tableFactory = $tableFactory;
+        $this->responseHelperService = $responseHelperService;
+        parent::__construct($translationHelper, $formHelper, $flashMessengerHelperService, $navigation);
+    }
     /**
      * Left View setting
      *
@@ -63,21 +77,18 @@ class ExportController extends AbstractInternalController implements LeftViewPro
 
             if ($response->isOk()) {
                 if ($response->getResult()['count'] > 0) {
-                    /** @var TableBuilder $table */
-                    $table = $this->getServiceLocator()->get('Table')->prepareTable(
+
+                    $table = $this->tableFactory->prepareTable(
                         'data-retention-export',
                         $response->getResult()
                     );
 
-                    return $this->getServiceLocator()
-                        ->get('Helper\Response')
+                    return $this->responseHelperService
                         ->tableToCsv($this->getResponse(), $table, 'data-retention');
                 }
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage(
-                    'No data retention items were found'
-                );
+                $this->$flashMessengerHelperService->addErrorMessage('No data retention items were found');
             } else {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addUnknownError();
+                $this->$flashMessengerHelperService->addUnknownError();
             }
         }
 

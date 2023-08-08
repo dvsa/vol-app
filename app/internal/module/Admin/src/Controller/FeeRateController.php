@@ -2,21 +2,16 @@
 
 namespace Admin\Controller;
 
+use Admin\Data\Mapper\FeeRate as FeeRateMapper;
 use Admin\Form\Model\Form\FeeRate;
 use Admin\Form\Model\Form\FeeRateFilter;
+use Dvsa\Olcs\Transfer\Command\FeeType\Update as UpdateDTO;
+use Dvsa\Olcs\Transfer\Query\Fee\FeeType as ItemDTO;
+use Dvsa\Olcs\Transfer\Query\FeeType\GetList as ListDTO;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Laminas\View\Model\ViewModel;
-use Dvsa\Olcs\Transfer\Query\FeeType\GetList as ListDTO;
-use Dvsa\Olcs\Transfer\Query\Fee\FeeType as ItemDTO;
-use Dvsa\Olcs\Transfer\Command\FeeType\Update as UpdateDTO;
-use Admin\Data\Mapper\FeeRate as FeeRateMapper;
 
-/**
- * FeeRate Controller
- *
- * @author Andy Newton <andy@vitri.ltd>
- */
 class FeeRateController extends AbstractInternalController implements LeftViewProvider
 {
     protected $tableName = 'admin-fee-rates';

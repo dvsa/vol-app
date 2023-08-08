@@ -3,23 +3,29 @@
 namespace Olcs\Controller\Operator;
 
 use Common\RefData;
+use Common\Service\Cqrs\Command\CommandService;
+use Common\Service\Cqrs\Query\QueryService;
+use Common\Service\Helper\DateHelperService;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\Application\CreateApplication;
+use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
+use Laminas\Navigation\Navigation;
+use Laminas\View\HelperPluginManager;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
 use Olcs\Controller\Traits;
 use Olcs\Data\Mapper\OperatorTransfer as OperatorTransferMapper;
-use Laminas\View\Model\ViewModel;
+use Olcs\Service\Data\Licence;
 
-/**
- * Operator Controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 class OperatorController extends AbstractController implements OperatorControllerInterface, LeftViewProvider
 {
-    use Traits\OperatorControllerTrait,
-        Traits\ListDataTrait;
+    use Traits\OperatorControllerTrait;
+    use Traits\ListDataTrait;
 
     /**
      * @var string
@@ -30,6 +36,37 @@ class OperatorController extends AbstractController implements OperatorControlle
      * @var string
      */
     protected $section;
+
+    protected DateHelperService $dateHelper;
+    protected AnnotationBuilder $transferAnnotationBuilder;
+    protected CommandService $commandService;
+    protected FlashMessengerHelperService $flashMessengerHelper;
+    protected Licence $licenceDataService;
+    protected QueryService $queryService;
+    protected Navigation $navigation;
+
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        TableFactory $tableFactory,
+        HelperPluginManager $viewHelperManager,
+        DateHelperService $dateHelper,
+        AnnotationBuilder $transferAnnotationBuilder,
+        CommandService $commandService,
+        FlashMessengerHelperService $flashMessengerHelper,
+        Licence $licenceDataService,
+        QueryService $queryService,
+        Navigation $navigation
+    ) {
+        parent::__construct($scriptFactory, $formHelper, $tableFactory, $viewHelperManager);
+        $this->dateHelper = $dateHelper;
+        $this->transferAnnotationBuilder = $transferAnnotationBuilder;
+        $this->commandService = $commandService;
+        $this->flashMessengerHelper = $flashMessengerHelper;
+        $this->licenceDataService = $licenceDataService;
+        $this->queryService = $queryService;
+        $this->navigation = $navigation;
+    }
 
     /**
      * Get Left View
@@ -61,18 +98,22 @@ class OperatorController extends AbstractController implements OperatorControlle
      */
     public function newApplicationAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /**
+ * @var \Laminas\Http\Request $request
+*/
         $request = $this->getRequest();
 
         if ($request->isPost()) {
             $data = (array)$request->getPost();
         } else {
-            $data['details']['receivedDate'] = $this->getServiceLocator()->get('Helper\Date')->getDateObject();
+            $data['details']['receivedDate'] = $this->dateHelper->getDateObject();
         }
 
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
 
-        /** @var \Laminas\Form\FormInterface $form */
+        /**
+ * @var \Laminas\Form\FormInterface $form
+*/
         $form = $formHelper->createForm('NewApplication');
         $form->setData($data);
         $this->alterForm($form, $data);
@@ -115,10 +156,12 @@ class OperatorController extends AbstractController implements OperatorControlle
             }
             $dto = CreateApplication::create($params);
 
-            $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createCommand($dto);
+            $command = $this->transferAnnotationBuilder->createCommand($dto);
 
-            /** @var \Common\Service\Cqrs\Response $response */
-            $response = $this->getServiceLocator()->get('CommandService')->send($command);
+            /**
+ * @var \Common\Service\Cqrs\Response $response
+*/
+            $response = $this->commandService->send($command);
 
             if ($response->isOk()) {
                 return $this->redirect()->toRouteAjax(
@@ -127,11 +170,11 @@ class OperatorController extends AbstractController implements OperatorControlle
                 );
             }
 
-            $this->getServiceLocator()->get('Helper\FlashMessenger')
+            $this->flashMessengerHelper
                 ->addErrorMessage('unknown-error');
         }
 
-        $this->getServiceLocator()->get('Script')->loadFile('forms/type-of-licence-operator');
+        $this->scriptFactory->loadFile('forms/type-of-licence-operator');
 
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('pages/form');
@@ -143,13 +186,13 @@ class OperatorController extends AbstractController implements OperatorControlle
      * Alter form
      *
      * @param \Laminas\Form\FormInterface $form Form
-     * @param array                    $data Api/Form Data
+     * @param array                       $data Api/Form Data
      *
      * @return void
      */
     protected function alterForm($form, $data)
     {
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
         $formHelper->remove($form, 'type-of-licence->operator-location');
         $formHelper->remove($form, 'type-of-licence->difference');
         $organisationData = $this->getOrganisation($this->params()->fromRoute('organisation'));
@@ -220,10 +263,11 @@ class OperatorController extends AbstractController implements OperatorControlle
     {
         $organisationId = (int) $this->params()->fromRoute('organisation');
 
-        $sl = $this->getServiceLocator();
-        $sl->get(\Olcs\Service\Data\Licence::class)->setOrganisationId($organisationId);
+        $this->licenceDataService->setOrganisationId($organisationId);
 
-        /** @var \Laminas\Http\Request $request */
+        /**
+ * @var \Laminas\Http\Request $request
+*/
         $request = $this->getRequest();
         if ($request->isPost()) {
             $data = (array)$request->getPost();

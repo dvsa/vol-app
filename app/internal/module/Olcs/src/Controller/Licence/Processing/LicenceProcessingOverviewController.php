@@ -5,8 +5,6 @@
  */
 namespace Olcs\Controller\Licence\Processing;
 
-use Laminas\View\Model\ViewModel;
-
 /**
  * Licence Processing Overview Controller
  *

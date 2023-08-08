@@ -1,30 +1,20 @@
 <?php
 
-/**
- * Printing Controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 namespace Admin\Controller;
 
-use Olcs\Controller\AbstractInternalController;
+use Admin\Form\Model\Form\Printer as PrinterForm;
 use Common\Controller\Traits\GenericMethods;
 use Dvsa\Olcs\Transfer\Command\Printer\CreatePrinter as CreateDto;
-use Dvsa\Olcs\Transfer\Command\Printer\UpdatePrinter as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\Printer\DeletePrinter as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\Printer\UpdatePrinter as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Printer\Printer as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Printer\PrinterList as ListDto;
+use Laminas\View\Model\ViewModel;
+use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\Printer as PrinterMapper;
-use Admin\Form\Model\Form\Printer as PrinterForm;
-use Laminas\View\Model\ViewModel;
 use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
 
-/**
- * Printing Controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 class PrintingController extends AbstractInternalController implements LeftViewProvider
 {
     use GenericMethods;
@@ -90,7 +80,7 @@ class PrintingController extends AbstractInternalController implements LeftViewP
 
     protected function alterFormForEdit($form)
     {
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this-$this->formHelperService;
         $formHelper->remove($form, 'form-actions->addAnother');
         return $form;
     }
@@ -119,9 +109,9 @@ class PrintingController extends AbstractInternalController implements LeftViewP
         // can't remove the printer - display error messages
         if (isset($result['messages']) && $response->isClientError()) {
             $message = implode('<br />', $result['messages']);
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage($message);
+            $this->flashMessengerHelperService->addErrorMessage($message);
         } elseif ($response->isClientError() || $response->isServerError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            $this->flashMessengerHelperService->addErrorMessage('unknown-error');
         }
 
         // it's possible to remove the printer, now need to confirm it

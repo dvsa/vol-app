@@ -2,14 +2,15 @@
 
 namespace Olcs\Controller\Cases\Penalty;
 
+use Dvsa\Olcs\Transfer\Command\Cases\Si\CreateResponse as CreateResponseCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\Si\CreateSi as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Cases\Si\DeleteSi as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\Cases\Si\UpdateSi as UpdateDto;
-use Dvsa\Olcs\Transfer\Command\Cases\Si\CreateResponse as CreateResponseCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\UpdatePenaltiesNote as CommentUpdateDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Cases as CaseDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Si\Si as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Si\SiList as ListDto;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -18,13 +19,7 @@ use Olcs\Data\Mapper\PenaltyCommentBox as CommentMapper;
 use Olcs\Form\Model\Form\Comment as CommentForm;
 use Olcs\Form\Model\Form\Si as Form;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
-use Laminas\View\Model\ViewModel;
 
-/**
- * Si Controller
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
 class SiController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
     /**

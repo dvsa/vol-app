@@ -1,29 +1,11 @@
 <?php
 
-/**
- * Historic Tm Details Controller
- *
- * @author Shaun Lizzio <shaun@lizzio.co.uk>
- */
 namespace Olcs\Controller\TransportManager\HistoricTm;
 
 use Dvsa\Olcs\Transfer\Query\Tm\HistoricTm as HistoricTmQry;
-use Olcs\Controller\Interfaces\LeftViewProvider;
-use Olcs\Data\Mapper\TransportManager as Mapper;
 use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
-use Olcs\Form\Model\Form\TransportManager as TransportManagerForm;
-use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
-use Laminas\View\Model\ViewModel;
-use Common\RefData;
-use Olcs\Logging\Log\Logger;
 
-/**
- * Historic Tm Details Controller
- *
- * @author Shaun Lizzio <shaun@lizzio.co.uk>
- */
 class HistoricTmController extends AbstractInternalController
 {
     protected $section = 'transport-manager';
@@ -61,7 +43,7 @@ class HistoricTmController extends AbstractInternalController
         $response = $this->handleQuery($query);
 
         if ($response->isClientError() || $response->isServerError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            $this->flashMessengerHelperService->addErrorMessage('unknown-error');
         }
 
         if ($response->isOk()) {

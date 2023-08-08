@@ -2,41 +2,43 @@
 
 namespace Olcs\Controller\TransportManager\Details;
 
-use Olcs\Controller\TransportManager\TransportManagerController;
 use Common\Controller\Traits\GenericUpload;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Helper\TransportManagerHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
+use Laminas\View\HelperPluginManager;
 use Laminas\View\Model\ViewModel;
+use Olcs\Controller\TransportManager\TransportManagerController;
 
-/**
- * Abstract Transport Manager Details Controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
-abstract class AbstractTransportManagerDetailsController extends TransportManagerController implements FactoryInterface
+abstract class AbstractTransportManagerDetailsController extends TransportManagerController
 {
     use GenericUpload;
 
-    /** @var  \Common\Service\Helper\FormHelperService */
-    protected $formHelper;
-    /** @var  \Common\Service\Helper\TransportManagerHelperService */
-    protected $transportManagerHelper;
+    protected TransportManagerHelperService $transportManagerHelper;
 
-    /**
-     * Create service
-     *
-     * @param \Laminas\Mvc\Controller\ControllerManager $serviceLocator Service Manager
-     *
-     * @return $this
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        $sm = $serviceLocator->getServiceLocator();
-
-        $this->formHelper = $sm->get('Helper\Form');
-        $this->transportManagerHelper = $sm->get('Helper\TransportManager');
-
-        return $this;
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        TableFactory $tableFactory,
+        HelperPluginManager $viewHelperManager,
+        FlashMessengerHelperService $flashMessengerHelper,
+        TranslationHelperService $translationHelper,
+        $navigation,
+        TransportManagerHelperService $transportManagerHelper
+    ) {
+        parent::__construct(
+            $scriptFactory,
+            $formHelper,
+            $tableFactory,
+            $viewHelperManager,
+            $flashMessengerHelper,
+            $translationHelper,
+            $navigation
+        );
+        $this->transportManagerHelper = $transportManagerHelper;
     }
 
     /**
@@ -54,43 +56,7 @@ abstract class AbstractTransportManagerDetailsController extends TransportManage
     /**
      * Delete record or multiple records
      *
-     * @param string $serviceName
-     * @return mixed
-     */
-    protected function deleteRecords($serviceName)
-    {
-        if ($this->isButtonPressed('cancel')) {
-            return $this->redirectToIndex();
-        }
-        $translator = $this->getServiceLocator()->get('translator');
-        $id = $this->getFromRoute('id');
-        if (!$id) {
-            // multiple delete
-            $id = $this->params()->fromQuery('id');
-        }
-
-        if (is_string($id) && strstr($id, ',')) {
-            $id = explode(',', $id);
-        }
-
-        $response = $this->confirm(
-            $translator->translate('transport-manager.previous-history.delete-question')
-        );
-
-        if ($response instanceof ViewModel) {
-            return $this->renderView($response);
-        }
-
-        $this->getServiceLocator()->get($serviceName)->deleteListByIds(['id' => !is_array($id) ? [$id] : $id]);
-        $this->addSuccessMessage('transport-manager.deleted-message');
-
-        return $this->redirectToIndex();
-    }
-
-    /**
-     * Delete record or multiple records
-     *
-     * @param string $command DTO class name
+     * @param  string $command DTO class name
      * @return mixed
      */
     protected function deleteRecordsCommand($command)
@@ -98,7 +64,7 @@ abstract class AbstractTransportManagerDetailsController extends TransportManage
         if ($this->isButtonPressed('cancel')) {
             return $this->redirectToIndex();
         }
-        $translator = $this->getServiceLocator()->get('translator');
+        $translator = $this->translationHelper;
         $id = $this->getFromRoute('id');
         if (!$id) {
             // multiple delete
@@ -120,7 +86,7 @@ abstract class AbstractTransportManagerDetailsController extends TransportManage
         $ids = !is_array($id) ? [$id] : $id;
         $commandResponse = $this->handleCommand($command::create(['ids' => $ids]));
         if (!$commandResponse->isOk()) {
-            throw new \RuntimeException('Error deleting '. $command);
+            throw new \RuntimeException('Error deleting ' . $command);
         }
 
         $this->addSuccessMessage('generic.deleted.success');

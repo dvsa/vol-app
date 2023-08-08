@@ -1,32 +1,28 @@
 <?php
 
-/**
- * Application Processing Inspection Request Controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 namespace Olcs\Controller\Application\Processing;
 
 use Common\RefData;
-use Olcs\Controller\Interfaces\LeftViewProvider;
-use Olcs\Controller\Traits\InspectionRequestTrait;
+use Common\Service\Cqrs\Query\CachingQueryService;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Dvsa\Olcs\Transfer\Command\InspectionRequest\Create as CreateDto;
+use Dvsa\Olcs\Transfer\Command\InspectionRequest\Delete as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\InspectionRequest\Update as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Application\EnforcementArea as AppEnforcementAreaQry;
-use Olcs\Data\Mapper\InspectionRequest as InspectionRequestMapper;
-use Olcs\Controller\AbstractInternalController;
 use Dvsa\Olcs\Transfer\Query\InspectionRequest\ApplicationInspectionRequestList as ApplicationInspectionRequestListQry;
 use Dvsa\Olcs\Transfer\Query\InspectionRequest\InspectionRequest as InspectionRequestQry;
-use Dvsa\Olcs\Transfer\Command\InspectionRequest\Delete as DeleteDto;
-use Olcs\Controller\Interfaces\ApplicationControllerInterface;
-use Dvsa\Olcs\Transfer\Command\InspectionRequest\Create as CreateDto;
-use Dvsa\Olcs\Transfer\Command\InspectionRequest\Update as UpdateDto;
-use Olcs\Form\Model\Form\InspectionRequest;
+use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder as TransferAnnotationBuilder;
+use Laminas\Navigation\Navigation;
 use Laminas\View\Model\ViewModel;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\ApplicationControllerInterface;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Controller\Traits\InspectionRequestTrait;
+use Olcs\Data\Mapper\InspectionRequest as InspectionRequestMapper;
+use Olcs\Form\Model\Form\InspectionRequest;
 
-/**
- * Application Processing Inspection Request Controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 class ApplicationProcessingInspectionRequestController extends AbstractInternalController implements
     LeftViewProvider,
     ApplicationControllerInterface
@@ -90,6 +86,21 @@ class ApplicationProcessingInspectionRequestController extends AbstractInternalC
      * @var string
      */
     protected $section = 'inspection-request';
+    protected TransferAnnotationBuilder $transferAnnotationBuilder;
+    protected CachingQueryService $queryService;
+
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessenger,
+        Navigation $navigation,
+        TransferAnnotationBuilder $transferAnnotationBuilder,
+        CachingQueryService $queryService
+    ) {
+        $this->transferAnnotationBuilder = $transferAnnotationBuilder;
+        $this->queryService = $queryService;
+        parent::__construct($translationHelper, $formHelper, $flashMessenger, $navigation);
+    }
 
     /**
      * get method LeftView
@@ -122,16 +133,15 @@ class ApplicationProcessingInspectionRequestController extends AbstractInternalC
     protected function getEnforcementAreaName()
     {
         if (!$this->enforcementAreaName) {
-            $queryToSend = $this->getServiceLocator()
-                ->get('TransferAnnotationBuilder')
+            $queryToSend = $this->transferAnnotationBuilder
                 ->createQuery(
                     AppEnforcementAreaQry::create(['id' => $this->params()->fromRoute('application')])
                 );
 
-            $response = $this->getServiceLocator()->get('QueryService')->send($queryToSend);
+            $response = $this->queryService->send($queryToSend);
 
             if ($response->isClientError() || $response->isServerError()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+                $this->flashMessengerHelperService->addErrorMessage('unknown-error');
             }
 
             if ($response->isOk()) {
@@ -150,7 +160,8 @@ class ApplicationProcessingInspectionRequestController extends AbstractInternalC
      */
     protected function setUpOcListbox()
     {
-        $service = $this->getServiceLocator()->get('Olcs\Service\Data\OperatingCentresForInspectionRequest');
+        $service = $this->operatingCentresForInspectionRequest;
+
         $service->setType('application');
         $service->setIdentifier($this->params()->fromRoute('application'));
     }

@@ -2,8 +2,8 @@
 
 namespace Olcs\Controller\Traits;
 
-use Dvsa\Olcs\Transfer\Query\Task\TaskList;
 use Dvsa\Olcs\Transfer\Query\Task\TaskDetails;
+use Dvsa\Olcs\Transfer\Query\Task\TaskList;
 use Dvsa\Olcs\Utils\Constants\FilterOptions;
 use Laminas\Form\Element\Select;
 
@@ -59,11 +59,7 @@ trait TaskSearchTrait
      */
     protected function getTaskForm(array $filters = [])
     {
-        /** @var \Laminas\ServiceManager\ServiceLocatorInterface $sm */
-        $sm = $this->getServiceLocator();
-
-        /** @var \Common\Service\Helper\FormHelperService $formHelper */
-        $formHelper = $sm->get('Helper\Form');
+        $formHelper = $this->formHelper;
 
         $form = $formHelper->createForm('TasksHome', false);
         $formHelper->setFormActionFromRequest($form, $this->getRequest());
@@ -74,7 +70,7 @@ trait TaskSearchTrait
 
         // grab all the relevant backend data needed to populate the
         // various dropdowns on the filter form
-        $sm->get(\Olcs\Service\Data\SubCategory::class)
+        $this->subCategoryDataService
             ->setCategory($category);
 
         $selects = [
@@ -88,7 +84,9 @@ trait TaskSearchTrait
         }
 
         //  show task fiels
-        /** @var \Laminas\Form\Element\Select $option */
+        /**
+ * @var \Laminas\Form\Element\Select $option
+*/
         $option = $form->get('showTasks');
         $option->setValueOptions(
             [
@@ -111,7 +109,9 @@ trait TaskSearchTrait
      */
     protected function getTaskTable($filters = [], $noCreate = false)
     {
-        /** @var \Common\Service\Cqrs\Response $response */
+        /**
+ * @var \Common\Service\Cqrs\Response $response
+*/
         $response = $this->handleQuery(TaskList::create($filters));
         $tasks = $response->getResult();
 
@@ -160,51 +160,51 @@ trait TaskSearchTrait
             }
 
             switch ($type) {
-                case 'organisation':
-                    $params = [
-                        'type' => 'organisation',
-                        'typeId' => $this->params('organisation'),
-                    ];
-                    break;
-                case 'licence':
-                    $params = [
-                        'type' => 'licence',
-                        'typeId' => $this->params('licence'),
-                    ];
-                    break;
-                case 'application':
-                    $params = [
-                        'type' => 'application',
-                        'typeId' => $this->params('application'),
-                    ];
-                    break;
-                case 'transportManager':
-                    $params = [
-                        'type' => 'tm',
-                        'typeId' => $this->params('transportManager'),
-                    ];
-                    break;
-                case 'busReg':
-                    $params = [
-                        'type' => 'busreg',
-                        'typeId' => $this->params('busRegId'),
-                    ];
-                    break;
-                case 'case':
-                    $params = [
-                        'type' => 'case',
-                        'typeId' => $this->params('case'),
-                    ];
-                    break;
-                case 'irhpapplication':
-                    $params = [
-                        'type' => 'irhpapplication',
-                        'typeId' => $this->params('irhpAppId'),
-                    ];
-                    break;
-                default:
-                    // no type - call from the home page
-                    break;
+            case 'organisation':
+                $params = [
+                    'type' => 'organisation',
+                    'typeId' => $this->params('organisation'),
+                ];
+                break;
+            case 'licence':
+                $params = [
+                    'type' => 'licence',
+                    'typeId' => $this->params('licence'),
+                ];
+                break;
+            case 'application':
+                $params = [
+                    'type' => 'application',
+                    'typeId' => $this->params('application'),
+                ];
+                break;
+            case 'transportManager':
+                $params = [
+                    'type' => 'tm',
+                    'typeId' => $this->params('transportManager'),
+                ];
+                break;
+            case 'busReg':
+                $params = [
+                    'type' => 'busreg',
+                    'typeId' => $this->params('busRegId'),
+                ];
+                break;
+            case 'case':
+                $params = [
+                    'type' => 'case',
+                    'typeId' => $this->params('case'),
+                ];
+                break;
+            case 'irhpapplication':
+                $params = [
+                    'type' => 'irhpapplication',
+                    'typeId' => $this->params('irhpAppId'),
+                ];
+                break;
+            default:
+                // no type - call from the home page
+                break;
             }
             $params['action'] = $action;
 
@@ -212,7 +212,6 @@ trait TaskSearchTrait
                 $params['task'] = $id;
             }
             $options = ['query' => $this->getRequest()->getQuery()->toArray()];
-
             return $this->redirect()->toRoute('task_action', $params, $options);
         }
 
@@ -232,7 +231,9 @@ trait TaskSearchTrait
             $id = $this->params('task');
         }
 
-        /** @var \Common\Service\Cqrs\Response $response */
+        /**
+ * @var \Common\Service\Cqrs\Response $response
+*/
         $response = $this->handleQuery(TaskDetails::create(['id' => $id]));
 
         return $response->getResult();

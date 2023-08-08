@@ -6,15 +6,15 @@
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob.caiger@clocal.co.uk>
  */
+
 namespace Olcs\Controller\Lva\Traits;
 
-use Olcs\Controller\Interfaces\LeftViewProvider;
-use Laminas\Form\Form;
-use Laminas\View\Model\ViewModel;
 use Common\RefData;
-use Olcs\Controller\Traits;
+use Laminas\Form\Form;
 use Laminas\Session\Container;
-use Laminas\Http\Response;
+use Laminas\View\Model\ViewModel;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Controller\Traits;
 
 /**
  * Internal Abstract Licence Controller
@@ -23,10 +23,8 @@ use Laminas\Http\Response;
  */
 trait LicenceControllerTrait
 {
-    use InternalControllerTrait,
-        // @TODO: the LVA trait importing the old, generic licence trait
-        // should be a temporary measure; they need consolidating into one
-        Traits\LicenceControllerTrait;
+    use InternalControllerTrait;
+    use Traits\LicenceControllerTrait;
 
     private $searchForm;
 
@@ -111,9 +109,9 @@ trait LicenceControllerTrait
     /**
      * Render the section
      *
-     * @param string|ViewModel $content   content
-     * @param \Laminas\Form\Form  $form      form
-     * @param array            $variables variables
+     * @param string|ViewModel   $content   content
+     * @param \Laminas\Form\Form $form      form
+     * @param array              $variables variables
      *
      * @return \Laminas\View\Model\ViewModel
      */
@@ -147,8 +145,8 @@ trait LicenceControllerTrait
                     }
                 } elseif ($content == 'operating_centres') {
                     $licence = $this->getLicence();
-                    if (isset($licence['vehicleType']['id']) &&
-                        $licence['vehicleType']['id'] == RefData::APP_VEHICLE_TYPE_LGV
+                    if (isset($licence['vehicleType']['id'])
+                        && $licence['vehicleType']['id'] == RefData::APP_VEHICLE_TYPE_LGV
                     ) {
                         $title .= '.lgv';
                     }
@@ -172,8 +170,7 @@ trait LicenceControllerTrait
     public function getSearchForm()
     {
         if ($this->searchForm === null) {
-            $this->searchForm = $this->getServiceLocator()
-                ->get('Helper\Form')
+            $this->searchForm = $this->formHelper
                 ->createForm('HeaderSearch', false, false);
 
             $container = new Container('search');

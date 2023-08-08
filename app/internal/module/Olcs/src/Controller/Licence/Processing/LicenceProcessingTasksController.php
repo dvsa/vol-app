@@ -4,12 +4,6 @@ namespace Olcs\Controller\Licence\Processing;
 
 use Olcs\Controller\Traits;
 
-/**
- * Licence Processing Tasks Controller
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 class LicenceProcessingTasksController extends AbstractLicenceProcessingController
 {
     use Traits\TaskActionTrait {
@@ -24,7 +18,7 @@ class LicenceProcessingTasksController extends AbstractLicenceProcessingControll
     /**
      * Get task action type
      *
-     * @see \Olcs\Controller\Traits\TaskActionTrait
+     * @see    \Olcs\Controller\Traits\TaskActionTrait
      * @return string
      */
     protected function getTaskActionType()
@@ -35,7 +29,7 @@ class LicenceProcessingTasksController extends AbstractLicenceProcessingControll
     /**
      * Get task action filters
      *
-     * @see \Olcs\Controller\Traits\TaskActionTrait
+     * @see    \Olcs\Controller\Traits\TaskActionTrait
      * @return array
      */
     protected function getTaskActionFilters()

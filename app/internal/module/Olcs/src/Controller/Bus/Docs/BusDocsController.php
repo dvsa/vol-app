@@ -2,11 +2,17 @@
 
 namespace Olcs\Controller\Bus\Docs;
 
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Constants\FilterOptions;
+use Laminas\View\HelperPluginManager;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\BusRegControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits as ControllerTraits;
+use Olcs\Service\Data\DocumentSubCategory;
 
 /**
  * Bus Docs Controller
@@ -16,13 +22,34 @@ use Olcs\Controller\Traits as ControllerTraits;
  */
 class BusDocsController extends AbstractController implements BusRegControllerInterface, LeftViewProvider
 {
-    use ControllerTraits\DocumentActionTrait,
-        ControllerTraits\DocumentSearchTrait;
+    use ControllerTraits\DocumentActionTrait;
+    use ControllerTraits\DocumentSearchTrait;
+
+    protected TranslationHelperService $translationHelper;
+    protected DocumentSubCategory $docSubCategoryDataService;
+
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        TableFactory $tableFactory,
+        HelperPluginManager $viewHelperManager,
+        TranslationHelperService $translationHelper,
+        DocumentSubCategory $docSubCategoryDataService
+    ) {
+        parent::__construct(
+            $scriptFactory,
+            $formHelper,
+            $tableFactory,
+            $viewHelperManager
+        );
+        $this->translationHelper = $translationHelper;
+        $this->docSubCategoryDataService = $docSubCategoryDataService;
+    }
 
     /**
      * Get configured document form
      *
-     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return \Laminas\Form\FormInterface
      */
     protected function getConfiguredDocumentForm()
@@ -44,7 +71,7 @@ class BusDocsController extends AbstractController implements BusRegControllerIn
     /**
      * Table to use
      *
-     * @see \Olcs\Controller\Traits\DocumentSearchTrait
+     * @see    \Olcs\Controller\Traits\DocumentSearchTrait
      * @return string
      */
     protected function getDocumentTableName()
@@ -55,7 +82,7 @@ class BusDocsController extends AbstractController implements BusRegControllerIn
     /**
      * Route (prefix) for document action redirects
      *
-     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
     protected function getDocumentRoute()
@@ -66,7 +93,7 @@ class BusDocsController extends AbstractController implements BusRegControllerIn
     /**
      * Route params for document action redirects
      *
-     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return array
      */
     protected function getDocumentRouteParams()
@@ -95,7 +122,7 @@ class BusDocsController extends AbstractController implements BusRegControllerIn
     /**
      * Get view model for document action
      *
-     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return \Laminas\View\Model\ViewModel
      */
     protected function getDocumentView()

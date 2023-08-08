@@ -1,15 +1,14 @@
 <?php
-/**
- * Unlicensed Operator Vehicles Controller
- */
+
 namespace Olcs\Controller\Operator;
 
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Command\LicenceVehicle\CreateUnlicensedOperatorLicenceVehicle as CreateDto;
 use Dvsa\Olcs\Transfer\Command\LicenceVehicle\DeleteUnlicensedOperatorLicenceVehicle as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\LicenceVehicle\UpdateUnlicensedOperatorLicenceVehicle as UpdateDto;
-use Dvsa\Olcs\Transfer\Query\Operator\UnlicensedVehicles as ListDto;
 use Dvsa\Olcs\Transfer\Query\LicenceVehicle\LicenceVehicle as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Operator\UnlicensedVehicles as ListDto;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
@@ -17,11 +16,7 @@ use Olcs\Data\Mapper\UnlicensedOperatorLicenceVehicle as Mapper;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericList;
-use Laminas\View\Model\ViewModel;
 
-/**
- * Unlicensed Operator Vehicles Controller
- */
 class UnlicensedOperatorVehiclesController extends AbstractInternalController implements
     OperatorControllerInterface,
     LeftViewProvider
@@ -108,8 +103,8 @@ class UnlicensedOperatorVehiclesController extends AbstractInternalController im
     /**
      * Alter table presentation depending on operator type
      *
-     * @param Table $table
-     * @param array $data
+     * @param  Table $table
+     * @param  array $data
      * @return Table
      */
     protected function alterTable($table, $data)

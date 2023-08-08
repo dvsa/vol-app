@@ -2,11 +2,19 @@
 
 namespace Olcs\Controller\Licence\Docs;
 
+use Common\Service\Helper\ComplaintsHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\OppositionHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Constants\FilterOptions;
+use Laminas\View\HelperPluginManager;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Licence\LicenceController;
 use Olcs\Controller\Traits;
-use Laminas\View\Model\ViewModel;
+use Olcs\Service\Data\DocumentSubCategory;
 
 /**
  * Licence Docs Controller
@@ -15,13 +23,40 @@ use Laminas\View\Model\ViewModel;
  */
 class LicenceDocsController extends LicenceController implements LeftViewProvider
 {
-    use Traits\DocumentSearchTrait,
-        Traits\DocumentActionTrait;
+    use Traits\DocumentSearchTrait;
+    use Traits\DocumentActionTrait;
+
+    protected TranslationHelperService $translationHelper;
+    protected DocumentSubCategory $docSubCategoryDataService;
+
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        TableFactory $tableFactory,
+        HelperPluginManager $viewHelperManager,
+        OppositionHelperService $oppositionHelper,
+        ComplaintsHelperService $complaintsHelper,
+        TranslationHelperService $translationHelper,
+        DocumentSubCategory $docSubCategoryDataService,
+        $navigation
+    ) {
+        parent::__construct(
+            $scriptFactory,
+            $formHelper,
+            $tableFactory,
+            $viewHelperManager,
+            $oppositionHelper,
+            $complaintsHelper,
+            $navigation
+        );
+        $this->translationHelper = $translationHelper;
+        $this->docSubCategoryDataService = $docSubCategoryDataService;
+    }
 
     /**
      * Table to use
      *
-     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
     protected function getDocumentTableName()
@@ -32,7 +67,7 @@ class LicenceDocsController extends LicenceController implements LeftViewProvide
     /**
      * Route (prefix) for document action redirects
      *
-     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
     protected function getDocumentRoute()
@@ -43,7 +78,7 @@ class LicenceDocsController extends LicenceController implements LeftViewProvide
     /**
      * Route params for document action redirects
      *
-     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return array
      */
     protected function getDocumentRouteParams()
@@ -90,7 +125,7 @@ class LicenceDocsController extends LicenceController implements LeftViewProvide
     /**
      * Get view model for document action
      *
-     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return ViewModel
      */
     protected function getDocumentView()

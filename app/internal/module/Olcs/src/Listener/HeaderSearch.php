@@ -2,6 +2,7 @@
 
 namespace Olcs\Listener;
 
+use Common\Service\Helper\FormHelperService;
 use Interop\Container\ContainerInterface;
 use Common\Service\Data\Search\Search as SearchService;
 use Common\Service\Helper\TranslationHelperService;
@@ -19,6 +20,7 @@ use ZfcRbac\Identity\IdentityProviderInterface;
 
 /**
  * Class HeaderSearch
+ *
  * @package Olcs\Listener
  */
 class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
@@ -27,6 +29,7 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * ViewHelperManager
+     *
      * @var
      */
     protected $viewHelperManager;
@@ -41,7 +44,9 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
      */
     protected $formElementManager;
 
-    /** @var \Common\Service\Helper\FormHelperService */
+    /**
+     * @var \Common\Service\Helper\FormHelperService
+     */
     private $hlpForm;
 
     /**
@@ -49,7 +54,8 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
      */
     protected $authenticationService;
 
-    /** @var TranslationHelperService $translator
+    /**
+     * @var TranslationHelperService $translator
      */
     protected $translator;
 
@@ -73,7 +79,6 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
         $headerSearch = $this->hlpForm->createForm(\Olcs\Form\Model\Form\HeaderSearch::class, false);
         $searchFilterForm = $this->hlpForm->createForm(\Olcs\Form\Model\Form\SearchFilter::class, false);
 
-        /** @var User $identity */
         $identity = $this->authenticationService->getIdentity();
         $userData = $identity->getUserData();
 
@@ -200,9 +205,9 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @param ContainerInterface $container
-     * @param $requestedName
-     * @param array|null $options
+     * @param  ContainerInterface $container
+     * @param  $requestedName
+     * @param  array|null         $options
      * @return HeaderSearch
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -212,8 +217,8 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
         $this->setViewHelperManager($container->get('ViewHelperManager'));
         $this->setSearchService($container->get('DataServiceManager')->get(SearchService::class));
         $this->setFormElementManager($container->get('FormElementManager'));
-        $this->translator = $container->get('Helper\Translation');
-        $this->hlpForm = $container->get('Helper\Form');
+        $this->translator = $container->get(TranslationHelperService::class);
+        $this->hlpForm = $container->get(FormHelperService::class);
         $this->authenticationService = $container->get(IdentityProviderInterface::class);
         return $this;
     }

@@ -2,8 +2,8 @@
 
 namespace Olcs\Controller\Bus;
 
-use Olcs\Controller\AbstractInternalController;
 use Dvsa\Olcs\Transfer\Command\Bus\Ebsr\RequestMap as RequestMapCmd;
+use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\BusRegControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\BusRequestMap as Mapper;

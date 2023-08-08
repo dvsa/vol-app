@@ -5,6 +5,11 @@
  */
 namespace OlcsTest\Controller\Bus\Service;
 
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableFactory;
+use Laminas\Navigation\Navigation;
 use Olcs\Controller\Bus\Service\BusServiceController as Sut;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
@@ -16,15 +21,32 @@ use Common\RefData;
 class BusServiceControllerTest extends MockeryTestCase
 {
     protected $sut;
+    protected $translationHelper;
+    protected $formHelper;
+    protected $flashMessengerHelper;
+    protected $navigation;
+    protected $tableFactory;
 
     public function setUp(): void
     {
-        $this->sut = new Sut;
+        $this->translationHelper = m::mock(TranslationHelperService::class);
+        $this->formHelper = m::mock(FormHelperService::class);
+        $this->flashMessengerHelper =  m::mock(FlashMessengerHelperService::class);
+        $this->navigation = m::mock(Navigation::class);
+        $this->tableFactory = m::mock(TableFactory::class);
+
+        $this->sut = new Sut(
+            $this->translationHelper,
+            $this->formHelper,
+            $this->flashMessengerHelper,
+            $this->navigation,
+            $this->tableFactory
+        );
     }
 
     public function testGetForm()
     {
-        $this->sut = m::mock(Sut::class)
+        $this->sut = m::mock(Sut::class, [$this->translationHelper, $this->formHelper, $this->flashMessengerHelper, $this->navigation, $this->tableFactory])
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
 
@@ -50,22 +72,22 @@ class BusServiceControllerTest extends MockeryTestCase
         $mockForm->shouldReceive('hasAttribute')->with('action')->andReturnNull();
         $mockForm->shouldReceive('setAttribute')->with('action', '');
 
-        $mockFormHelper = m::mock('Common\Form\View\Helper\Form');
-        $mockFormHelper->shouldReceive('createForm')->with($type)->andReturn($mockForm);
-        $mockFormHelper->shouldReceive('setFormActionFromRequest')->with(
+        $this->formHelper->shouldReceive('createForm')->with($type)->andReturn($mockForm);
+        $this->formHelper->shouldReceive('setFormActionFromRequest')->with(
             $mockForm,
             m::type('object')
         )->andReturn($mockForm);
-        $mockFormHelper->shouldReceive('populateFormTable')->with(
+        $this->formHelper->shouldReceive('populateFormTable')->with(
             m::type('object'),
-            m::type('array')
+            m::type(tableFactory::class)
         )->andReturn($mockForm);
 
-        $mockTableService = m::mock('\Common\Service\Table\TableFactory');
-        $mockTableService->shouldReceive('prepareTable')->with(
+        $mockTable = m::mock(tableFactory::class);
+
+        $this->tableFactory->shouldReceive('prepareTable')->with(
             m::type('string'),
             m::type('array')
-        )->andReturn(['tabledata']);
+        )->andReturn($mockTable);
 
         $response = m::mock()
             ->shouldReceive('isServerError')
@@ -87,12 +109,6 @@ class BusServiceControllerTest extends MockeryTestCase
             ->shouldReceive('handleQuery')
             ->once()
             ->andReturn($response);
-
-        $mockSl = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
-        $mockSl->shouldReceive('get')->with('Helper\Form')->andReturn($mockFormHelper);
-        $mockSl->shouldReceive('get')->with('Table')->andReturn($mockTableService);
-
-        $this->sut->setServiceLocator($mockSl);
 
         $result = $this->sut->getForm($type);
 

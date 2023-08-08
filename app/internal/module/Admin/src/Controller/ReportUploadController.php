@@ -5,17 +5,18 @@ namespace Admin\Controller;
 use Admin\Controller\Traits\ReportLeftViewTrait;
 use Admin\Form\Model\Form\ReportUpload as ReportUploadForm;
 use Common\Service\AntiVirus\Scan;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
 use Common\Util\FileContent;
 use Dvsa\Olcs\Transfer\Command\Report\Upload;
-use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\LeftViewProvider;
 use Laminas\Form\Form;
 use Laminas\Http\Response;
+use Laminas\Navigation\Navigation;
 use Laminas\View\Model\ViewModel;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 
-/**
- * Report Upload Controller
- */
 class ReportUploadController extends AbstractInternalController implements LeftViewProvider
 {
     use ReportLeftViewTrait;
@@ -30,6 +31,17 @@ class ReportUploadController extends AbstractInternalController implements LeftV
         'indexAction' => ['forms/report-upload'],
     ];
 
+    public function __construct(
+        TranslationHelperService $translationHelperService,
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessengerHelperService,
+        Navigation $navigation,
+        Scan $scannerAntiVirusService
+    ) {
+        $this->scannerAntiVirusService = $scannerAntiVirusService;
+
+        parent::__construct($translationHelperService, $formHelper, $flashMessengerHelperService, $navigation);
+    }
     /**
      * Action: index
      *
@@ -119,7 +131,7 @@ class ReportUploadController extends AbstractInternalController implements LeftV
         }
 
         // Run virus scan on file
-        $scanner = $this->getServiceLocator()->get(Scan::class);
+        $scanner = $this->scannerAntiVirusService;
         if ($scanner->isEnabled() && !$scanner->isClean($fileTmpName)) {
             $fileField->setMessages([self::FILE_UPLOAD_ERR_PREFIX . 'virus']);
 
@@ -140,7 +152,7 @@ class ReportUploadController extends AbstractInternalController implements LeftV
             )
         );
 
-        $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
+        $flashMessenger = $this->flashMessengerHelperService;
 
         if ($response->isOk()) {
             $flashMessenger->addSuccessMessage('Report uploaded successfully.');

@@ -7,8 +7,10 @@
  */
 namespace OlcsTest\Controller;
 
+use Common\Service\Script\ScriptFactory;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+
 use OlcsTest\Bootstrap;
 use Olcs\Controller\SplitScreenController;
 
@@ -27,18 +29,16 @@ class SplitScreenControllerTest extends MockeryTestCase
     {
         $this->sm = Bootstrap::getServiceManager();
 
-        $this->sut = new SplitScreenController();
+        $this->mockScriptFactory = m::mock(ScriptFactory::class)->makePartial();
+        $this->sut = new SplitScreenController($this->mockScriptFactory);
         $this->sut->setServiceLocator($this->sm);
     }
 
     public function testIndexAction()
     {
-        // Mocks
-        $script = m::mock();
-        $this->sm->setService('Script', $script);
 
         // Expectations
-        $script->shouldReceive('loadFile')
+        $this->mockScriptFactory->shouldReceive('loadFile')
             ->with('split-screen');
 
         $view = $this->sut->indexAction();

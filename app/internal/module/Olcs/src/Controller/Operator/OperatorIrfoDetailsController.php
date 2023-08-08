@@ -1,19 +1,16 @@
 <?php
 
-/**
- * Operator Irfo Details Controller
- */
 namespace Olcs\Controller\Operator;
 
 use Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoDetails as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoDetails as ItemDto;
+use Laminas\Http\Response;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
 use Olcs\Data\Mapper\IrfoDetails as Mapper;
 use Olcs\Form\Model\Form\IrfoDetails as Form;
-use Laminas\Http\Response;
-use Laminas\View\Model\ViewModel;
 
 /**
  * Operator Irfo Details Controller
