@@ -2,10 +2,11 @@
 
 return [
     // Debugging, display environment and version on interface
-//    'version' => [
-//        'environment' => 'Local Dev',
-//        'release' => (file_exists(__DIR__ . '/../version') ? file_get_contents(__DIR__ . '/../version') : '')
-//    ],
+    'version' => [
+        'environment' => 'localdev',
+        'release' => (file_exists(__DIR__ . '/../version') ? file_get_contents(__DIR__ . '/../version') : ''),
+        'description' => 'olcs.localdev',
+    ],
 
     // New Backend service
     'api_router' => [
@@ -15,7 +16,7 @@ return [
                     'backend' => [
                         'options' => [
                             // Backend service URI *Environment specific*
-                            'route' => 'olcs-backend.olcs.gov.uk',
+                            'route' => 'backend-nginx',
                         ]
                     ]
                 ]
@@ -28,7 +29,7 @@ return [
         'endpoints' => [
             // Backend service URI *Environment specific*
             'backend' => [
-                'url' => 'http://olcs-backend.olcs.gov.uk/',
+                'url' => 'backend-nginx',
                 'options' => [
                     'adapter' => \Laminas\Http\Client\Adapter\Curl::class,
                     'timeout' => 60,
@@ -45,11 +46,11 @@ return [
         ]
     ],
 
-    // Asset path, URI to olcs-static (CSS, JS, etc) *Environment specific*
-    'asset_path' => 'https://iuap1.olcs.dev.nonprod.dvsa.aws/static/public',
+    // Asset path, URI to olcs-static (CSS, JS, etc) *Environment specific for local use http://127.0.0.1:7001*
+    'asset_path' => 'http://localhost:7001',
 
     'openam' => [
-        'url' => 'http://olcs-auth.olcs.gov.uk:8081/secure/',
+        'url' => 'localhost',
         'cookie' => [
             'domain' => '.olcs.gov.uk',
         ]
@@ -63,19 +64,79 @@ return [
             'error/index' => __DIR__ . '/../../module/Olcs/view/error/dev-index.phtml'
         ],
     ],
+    'cookie-manager' => [
+        'delete-undefined-cookies' => true,
+        'user-preference-cookie-name' => 'cookie_policy',
+        'user-preference-cookie-secure' => true,
+        'user-preference-cookie-expiry-days' => 365,
+        'user-preference-configuration-form-id' => 'olcs-cookie-settings',
+        'cookie-banner-id' => 'olcs-cookie-banner',
+        'user-preference-saved-callback' => false,
+        'cookie-banner-visibility-class' => 'hidden',
+        'cookie-banner-visible-on-page-with-preference-form' => false,
+        'cookie-manifest' =>
+            [
+                [
+                    'category-name' => 'essential',
+                    'optional' => false,
+                    'cookies' =>
+                        [
+                            'PHPSESSID',
+                            'secureToken',
+                            'incap_ses',
+                            'nlbi_',
+                            'visid_incap',
+                            '_utmvm',
+                            '_ utmva',
+                            '__utmvb',
+                            '__utmvc'
+                        ],
+                ],
+                [
+                    'category-name' => 'analytics',
+                    'optional' => true,
+                    'cookies' =>
+                        [
+                            '_ga',
+                            '_gtm',
+                            '_gid',
+                            '_gat',
+                            '__utmt'
+                        ],
+                ],
+                [
+                    'category-name' => 'settings',
+                    'optional' => true,
+                    'cookies' =>
+                        [
+                            'langPref',
+                        ],
+                ],
+            ],
+    ],
     /**
      * Configure the location of the application log
      */
     'log' => [
+        'allowPasswordLogging' => true,
         'Logger' => [
             'writers' => [
                 'full' => [
                     'options' => [
-                        'stream' => '/var/tmp/selfserve.log'
+                        'stream' => 'php://stdout'
                     ],
                 ]
             ]
         ],
+        'ExceptionLogger' => [
+            'writers' => [
+                'full' => [
+                    'options' => [
+                        'stream' => 'php://stdout'
+                    ],
+                ]
+            ]
+        ]
     ],
 
     // enable the virus scanning of uploaded files
@@ -93,7 +154,7 @@ return [
     'google-tag' => '',
 
     // The domain value needed to delete GA cookies
-    'google-ga-domain' => '.olcs-selfserve.olcs.gov.uk',
+    'google-ga-domain' => '',
 
     'caches' => [
         \Laminas\Cache\Storage\Adapter\Redis::class => [
@@ -101,14 +162,14 @@ return [
                 'name' => 'redis',
                 'options' => [
                     'server' => [
-                        'host' => '127.0.0.1',
+                        'host' => 'redis',
                         'port' => 6379,
                     ],
                     'lib_options' => [
                         \Redis::OPT_SERIALIZER => \Redis::SERIALIZER_IGBINARY
                     ],
-                    'ttl' => 3600, //one hour, likely to be overridden based on use case
-                    'namespace' => 'zfcache',
+                    'ttl' => 3600, // one hour, likely to be overridden based on use case
+                    'namespace' => 'zfcache', // otherwise Laminas will default to "zfcache", but usually overridden anyway
                 ],
                 'plugins' => [
                     'exception_handler' => [
@@ -139,58 +200,8 @@ return [
             \Dvsa\Olcs\Transfer\Query\CacheableLongTermQueryInterface::class => 43200, //12 hours
         ],
     ],
-    'cookie-manager' => [
-            'delete-undefined-cookies' => true,
-            'user-preference-cookie-name' => 'cookie_policy',
-            'user-preference-cookie-secure' => true,
-            'user-preference-cookie-expiry-days' => 365,
-            'user-preference-configuration-form-id' => 'olcs-cookie-settings',
-            'cookie-banner-id' => 'olcs-cookie-banner',
-            'user-preference-saved-callback' => false,
-            'cookie-banner-visibility-class' => 'hidden',
-            'cookie-banner-visible-on-page-with-preference-form' => false,
-            'cookie-manifest' =>
-                [
-                    [
-                        'category-name' => 'essential',
-                        'optional' => false,
-                        'cookies' =>
-                            [
-                                'PHPSESSID',
-                                'secureToken',
-                                'incap_ses',
-                                'nlbi_',
-                                'visid_incap',
-                                '_utmvm',
-                                '_ utmva',
-                                '__utmvb',
-                                '__utmvc'
-                            ],
-                    ],
-                    [
-                        'category-name' => 'analytics',
-                        'optional' => true,
-                        'cookies' =>
-                            [
-                                '_ga',
-                                '_gtm',
-                                '_gid',
-                                '_gat',
-                                '__utmt'
-                            ],
-                    ],
-                    [
-                        'category-name' => 'settings',
-                        'optional' => true,
-                        'cookies' =>
-                            [
-                                'langPref',
-                            ],
-                    ],
-                ],
-        ],
-    'html-purifier-cache-dir' => '/var/tmp/htmlPurifierCache',
-
+    'html-purifier-cache-dir' => '/tmp',
+ 
     'session-timeout-warning-modal-helper' => [
         'enabled' => true,
         'seconds-before-expiry-warning' => 300,  // 5 minutes
