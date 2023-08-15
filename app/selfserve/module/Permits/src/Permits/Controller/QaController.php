@@ -11,21 +11,21 @@ use Dvsa\Olcs\Transfer\Command\IrhpApplication\SubmitApplicationStep;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\ApplicationStep;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\ById;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\Documents;
+use Laminas\View\Model\ViewModel;
 use Olcs\Service\Qa\FormProvider;
 use Olcs\Service\Qa\TemplateVarsGenerator;
 use Olcs\Service\Qa\ViewGeneratorProvider;
 use Permits\View\Helper\IrhpApplicationSection;
 use RuntimeException;
-use Laminas\View\Model\ViewModel;
 
 class QaController extends AbstractOlcsController
 {
-    const FIELDSET_DATA_PREFIX = 'fieldset';
-
-    const UPLOADED_FILE_CATEGORY = Category::CATEGORY_PERMITS;
-    const UPLOADED_FILE_SUBCATEGORY = Category::DOC_SUB_CATEGORY_MOT_CERTIFICATE;
-
     use GenericUpload;
+
+    public const FIELDSET_DATA_PREFIX = 'fieldset';
+
+    public const UPLOADED_FILE_CATEGORY = Category::CATEGORY_PERMITS;
+    public const UPLOADED_FILE_SUBCATEGORY = Category::DOC_SUB_CATEGORY_MOT_CERTIFICATE;
 
     /** @var FormProvider */
     private $formProvider;
@@ -217,7 +217,7 @@ class QaController extends AbstractOlcsController
         if ($showErrorInBrowserTitle) {
             $this->placeholder()->setPlaceholder(
                 'pageTitle',
-                $this->translationHelperService->translate('permits.application.browser.title.error').': '.$pageTitle
+                $this->translationHelperService->translate('permits.application.browser.title.error') . ': ' . $pageTitle
             );
         }
 

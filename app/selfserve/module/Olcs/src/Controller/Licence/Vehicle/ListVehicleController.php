@@ -24,19 +24,19 @@ use Dvsa\Olcs\Transfer\Query\Licence\Vehicles;
 use Laminas\Filter\StringToUpper;
 use Laminas\Form\Element\Hidden;
 use Laminas\Form\Form;
+use Laminas\Http\PhpEnvironment\Response as HttpResponse;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
 use Laminas\InputFilter\Input;
 use Laminas\InputFilter\InputFilter;
 use Laminas\Mvc\Controller\Plugin\Url;
 use Laminas\Mvc\Router\RouteMatch;
+use Laminas\Stdlib\ResponseInterface;
 use Laminas\Validator\InArray;
-use Olcs\Form\Model\Form\Vehicle\ListVehicleSearch;
 use Laminas\View\Model\ViewModel;
-use Laminas\Http\PhpEnvironment\Response as HttpResponse;
+use Olcs\Form\Model\Form\Vehicle\ListVehicleSearch;
 use Olcs\Form\Model\Form\Vehicle\OCRSOptIn;
 use Olcs\Table\TableEnum;
-use Laminas\Stdlib\ResponseInterface;
 
 /**
  * @see ListVehicleControllerFactory
@@ -44,20 +44,20 @@ use Laminas\Stdlib\ResponseInterface;
  */
 class ListVehicleController
 {
-    const FORMAT_HTML = 'html';
-    const FORMAT_CSV = 'csv';
-    const QUERY_KEY_SORT_CURRENT_VEHICLES = 'sort-c';
-    const QUERY_KEY_ORDER_CURRENT_VEHICLES = 'order-c';
-    const QUERY_KEY_SORT_REMOVED_VEHICLES = 'sort-r';
-    const QUERY_KEY_ORDER_REMOVED_VEHICLES = 'order-r';
-    const QUERY_KEY_INCLUDE_REMOVED = 'includeRemoved';
-    const DEFAULT_LIMIT_REMOVED_VEHICLES = 10;
-    const DEFAULT_LIMIT_CURRENT_VEHICLES = 10;
-    const DEFAULT_SORT_CURRENT_VEHICLES = 'specifiedDate';
-    const DEFAULT_ORDER_CURRENT_VEHICLES = 'DESC';
-    const DEFAULT_SORT_REMOVED_VEHICLES = 'removalDate';
-    const DEFAULT_ORDER_REMOVED_TABLE = 'DESC';
-    const REMOVE_TABLE_WRAPPER_ID = 'removed-table';
+    public const FORMAT_HTML = 'html';
+    public const FORMAT_CSV = 'csv';
+    public const QUERY_KEY_SORT_CURRENT_VEHICLES = 'sort-c';
+    public const QUERY_KEY_ORDER_CURRENT_VEHICLES = 'order-c';
+    public const QUERY_KEY_SORT_REMOVED_VEHICLES = 'sort-r';
+    public const QUERY_KEY_ORDER_REMOVED_VEHICLES = 'order-r';
+    public const QUERY_KEY_INCLUDE_REMOVED = 'includeRemoved';
+    public const DEFAULT_LIMIT_REMOVED_VEHICLES = 10;
+    public const DEFAULT_LIMIT_CURRENT_VEHICLES = 10;
+    public const DEFAULT_SORT_CURRENT_VEHICLES = 'specifiedDate';
+    public const DEFAULT_ORDER_CURRENT_VEHICLES = 'DESC';
+    public const DEFAULT_SORT_REMOVED_VEHICLES = 'removalDate';
+    public const DEFAULT_ORDER_REMOVED_TABLE = 'DESC';
+    public const REMOVE_TABLE_WRAPPER_ID = 'removed-table';
 
     /**
      * @var HandleCommand

@@ -2,16 +2,16 @@
 
 namespace Permits\Controller\Config\ConditionalDisplay;
 
-use Permits\Controller\Config\DataSource\BilateralCountryAccessible;
-use Permits\Controller\Config\DataSource\LicencesAvailable;
+use Permits\Controller\Config\DataSource\AvailableStocks;
 use Permits\Controller\Config\DataSource\AvailableTypes;
 use Permits\Controller\Config\DataSource\AvailableYears;
-use Permits\Controller\Config\DataSource\AvailableStocks;
+use Permits\Controller\Config\DataSource\BilateralCountryAccessible;
+use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
+use Permits\Controller\Config\DataSource\LicencesAvailable;
 use Permits\Controller\Config\DataSource\MaxPermittedReachedForStock;
 use Permits\Controller\Config\DataSource\MaxPermittedReachedForType;
 use Permits\Controller\Config\DataSource\PermitApplication as PermitAppDataSource;
 use Permits\Controller\Config\DataSource\PermitsAvailable;
-use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
 use Permits\View\Helper\IrhpApplicationSection;
 
 /**
@@ -19,7 +19,7 @@ use Permits\View\Helper\IrhpApplicationSection;
  */
 class ConditionalDisplayConfig
 {
-    const PERMIT_APP_CAN_APPLY = [
+    public const PERMIT_APP_CAN_APPLY = [
         [
             'source' => AvailableTypes::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_WINDOW_CLOSED,
@@ -28,7 +28,7 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const PERMIT_APP_CAN_SELECT_YEAR = [
+    public const PERMIT_APP_CAN_SELECT_YEAR = [
         [
             'source' => AvailableYears::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_WINDOW_CLOSED,
@@ -43,7 +43,7 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const PERMIT_APP_CAN_SELECT_STOCK = [
+    public const PERMIT_APP_CAN_SELECT_STOCK = [
         [
             'source' => AvailableStocks::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_WINDOW_CLOSED,
@@ -52,7 +52,7 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const PERMIT_APP_CAN_APPLY_LICENCE = [
+    public const PERMIT_APP_CAN_APPLY_LICENCE = [
         [
             'source' => LicencesAvailable::DATA_KEY,
             'key' => 'hasOpenWindow',
@@ -73,7 +73,7 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const PERMIT_APP_CAN_SHOW_MAX_PERMITTED_REACHED_FOR_TYPE = [
+    public const PERMIT_APP_CAN_SHOW_MAX_PERMITTED_REACHED_FOR_TYPE = [
         [
             'source' => MaxPermittedReachedForType::DATA_KEY,
             'key' => 'maxPermittedReached',
@@ -82,7 +82,7 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const PERMIT_APP_CAN_SHOW_MAX_PERMITTED_REACHED_FOR_STOCK = [
+    public const PERMIT_APP_CAN_SHOW_MAX_PERMITTED_REACHED_FOR_STOCK = [
         [
             'source' => LicencesAvailable::DATA_KEY,
             'key' => 'hasOpenWindow',
@@ -109,7 +109,7 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const IRHP_APP_NOT_SUBMITTED = [
+    public const IRHP_APP_NOT_SUBMITTED = [
         [
             'source' => IrhpAppDataSource::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_PERMITS,
@@ -118,7 +118,7 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const IRHP_BILATERAL_APP_NOT_SUBMITTED = [
+    public const IRHP_BILATERAL_APP_NOT_SUBMITTED = [
         [
             'source' => IrhpAppDataSource::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_PERMITS,
@@ -133,7 +133,7 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const IRHP_APP_OVERVIEW_ACCESSIBLE = [
+    public const IRHP_APP_OVERVIEW_ACCESSIBLE = [
         [
             'source' => IrhpAppDataSource::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_PERMITS,
@@ -148,7 +148,7 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const IRHP_APP_CAN_VIEW_ESSENTIAL_INFORMATION = [
+    public const IRHP_APP_CAN_VIEW_ESSENTIAL_INFORMATION = [
         [
             'source' => IrhpAppDataSource::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_PERMITS,
@@ -169,7 +169,7 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const IRHP_APP_CAN_SELECT_BILATERAL_PERIOD = [
+    public const IRHP_APP_CAN_SELECT_BILATERAL_PERIOD = [
         [
             'source' => IrhpAppDataSource::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_PERMITS,
@@ -190,7 +190,7 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const IRHP_APP_CAN_PAY_APP_FEE = [
+    public const IRHP_APP_CAN_PAY_APP_FEE = [
         [
             'source' => IrhpAppDataSource::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_PERMITS,
@@ -205,7 +205,7 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const IRHP_APP_SUBMITTED = [
+    public const IRHP_APP_SUBMITTED = [
         [
             'source' => IrhpAppDataSource::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_PERMITS,
@@ -214,7 +214,7 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const IRHP_APP_UNDER_CONSIDERATION = [
+    public const IRHP_APP_UNDER_CONSIDERATION = [
         [
             'source' => IrhpAppDataSource::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_PERMITS,
@@ -223,7 +223,7 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const IRHP_APP_READY_FOR_COUNTRIES =  [
+    public const IRHP_APP_READY_FOR_COUNTRIES =  [
         [
             'source' => IrhpAppDataSource::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_PERMITS,
@@ -232,7 +232,7 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const IRHP_APP_READY_FOR_NO_OF_PERMITS = [
+    public const IRHP_APP_READY_FOR_NO_OF_PERMITS = [
         [
             'source' => IrhpAppDataSource::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_PERMITS,
@@ -241,7 +241,7 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const IRHP_APP_CAN_CHECK_ANSWERS = [
+    public const IRHP_APP_CAN_CHECK_ANSWERS = [
         [
             'source' => IrhpAppDataSource::DATA_KEY,
             'key' => 'canCheckAnswers',
@@ -256,7 +256,7 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const IRHP_IPA_CAN_CHECK_ANSWERS = [
+    public const IRHP_IPA_CAN_CHECK_ANSWERS = [
         [
             'source' => IrhpAppDataSource::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_PERMITS,
@@ -265,7 +265,7 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const IRHP_APP_CAN_BE_CANCELLED = [
+    public const IRHP_APP_CAN_BE_CANCELLED = [
         [
             'source' => IrhpAppDataSource::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_PERMITS,
@@ -274,7 +274,7 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const IRHP_APP_IS_CANCELLED = [
+    public const IRHP_APP_IS_CANCELLED = [
         [
             'source' => IrhpAppDataSource::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_PERMITS,
@@ -283,7 +283,7 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const IRHP_APP_CAN_BE_WITHDRAWN = [
+    public const IRHP_APP_CAN_BE_WITHDRAWN = [
         [
             'source' => IrhpAppDataSource::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_PERMITS,
@@ -292,7 +292,7 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const IRHP_APP_CAN_BE_DECLINED = [
+    public const IRHP_APP_CAN_BE_DECLINED = [
         [
             'source' => IrhpAppDataSource::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_PERMITS,
@@ -301,7 +301,7 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const IRHP_APP_IS_WITHDRAWN = [
+    public const IRHP_APP_IS_WITHDRAWN = [
         [
             'source' => IrhpAppDataSource::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_PERMITS,
@@ -310,7 +310,7 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const IRHP_APP_HAS_OUTSTANDING_FEES = [
+    public const IRHP_APP_HAS_OUTSTANDING_FEES = [
         [
             'source' => IrhpAppDataSource::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_PERMITS,
@@ -319,7 +319,7 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const IRHP_APP_IS_AWAITING_FEE = [
+    public const IRHP_APP_IS_AWAITING_FEE = [
         [
             'source' => IrhpAppDataSource::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_PERMITS,
@@ -328,7 +328,7 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const IRHP_APP_CAN_VIEW_CANDIDATE_PERMITS = [
+    public const IRHP_APP_CAN_VIEW_CANDIDATE_PERMITS = [
         [
             'source' => IrhpAppDataSource::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_PERMITS,
@@ -337,7 +337,7 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const IRHP_APP_CAN_SELECT_CANDIDATE_PERMITS = [
+    public const IRHP_APP_CAN_SELECT_CANDIDATE_PERMITS = [
         [
             'source' => IrhpAppDataSource::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_PERMITS,
@@ -346,7 +346,7 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const IRHP_APP_IS_DECLINED = [
+    public const IRHP_APP_IS_DECLINED = [
         [
             'source' => IrhpAppDataSource::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_PERMITS,
@@ -355,7 +355,7 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const IRHP_APP_CAN_MAKE_DECLARATION = [
+    public const IRHP_APP_CAN_MAKE_DECLARATION = [
         [
             'source' => IrhpAppDataSource::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_PERMITS,
@@ -370,7 +370,7 @@ class ConditionalDisplayConfig
         ],
     ];
 
-    const PERMIT_APP_ISSUING = [
+    public const PERMIT_APP_ISSUING = [
         [
             'source' => PermitAppDataSource::DATA_KEY,
             'route' => IrhpApplicationSection::ROUTE_PERMITS,

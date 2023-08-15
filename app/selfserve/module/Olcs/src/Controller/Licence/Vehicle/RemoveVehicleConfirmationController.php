@@ -1,17 +1,22 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Olcs\Controller\Licence\Vehicle;
 
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\Vehicle\DeleteLicenceVehicle;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence;
 use Dvsa\Olcs\Transfer\Query\LicenceVehicle\LicenceVehiclesById;
 use Olcs\Form\Model\Form\Vehicle\VehicleConfirmationForm;
 use Olcs\Logging\Log\Logger;
+use Permits\Data\Mapper\MapperManager;
 
 class RemoveVehicleConfirmationController extends AbstractVehicleController
 {
-
     protected $formConfig = [
         'default' => [
             'confirmationForm' => [
@@ -19,6 +24,23 @@ class RemoveVehicleConfirmationController extends AbstractVehicleController
             ]
         ]
     ];
+
+    /**
+     * @param TranslationHelperService $translationHelper
+     * @param FormHelperService $formHelper
+     * @param TableFactory $tableBuilder
+     * @param MapperManager $mapperManager
+     * @param FlashMessengerHelperService $flashMessenger
+     */
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        TableFactory $tableBuilder,
+        MapperManager $mapperManager,
+        FlashMessengerHelperService $flashMessenger
+    ) {
+        parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessenger);
+    }
 
     /**
      * @return \Laminas\Http\Response|\Laminas\View\Model\ViewModel
@@ -105,12 +127,12 @@ class RemoveVehicleConfirmationController extends AbstractVehicleController
             $successMessageKey = 'licence.vehicle.remove.confirm.success.plural';
         }
 
-        $panelMessage = $this->translator->translateReplace($successMessageKey, [count($vehicleIds)]);
+        $panelMessage = $this->translationHelper->translateReplace($successMessageKey, [count($vehicleIds)]);
         $this->flashMessenger->addMessage($panelMessage, SwitchBoardController::PANEL_FLASH_MESSENGER_NAMESPACE);
 
         if ($licence->getResult()['activeVehicleCount'] == 0) {
             $this->flashMessenger->addMessage(
-                $this->translator->translate(
+                $this->translationHelper->translate(
                     'licence.vehicle.remove.confirm.success.last-vehicle-removed'
                 ),
                 SwitchBoardController::PANEL_FLASH_MESSENGER_NAMESPACE

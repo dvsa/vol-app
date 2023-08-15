@@ -1,6 +1,10 @@
 <?php
+
 namespace Permits\Controller;
 
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\SubmitApplication;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
@@ -8,6 +12,7 @@ use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\DataSource\IrhpApplication;
 use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
+use Permits\Data\Mapper\MapperManager;
 use Permits\View\Helper\IrhpApplicationSection;
 
 class IrhpApplicationController extends AbstractSelfserveController
@@ -53,6 +58,21 @@ class IrhpApplicationController extends AbstractSelfserveController
     ];
 
     /**
+     * @param TranslationHelperService $translationHelper
+     * @param FormHelperService $formHelper
+     * @param TableFactory $tableBuilder
+     * @param MapperManager $mapperManager
+     */
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        TableFactory $tableBuilder,
+        MapperManager $mapperManager
+    ) {
+        parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager);
+    }
+
+    /**
      * Retrieve data for the specified DTOs
      */
     public function retrieveData()
@@ -92,7 +112,8 @@ class IrhpApplicationController extends AbstractSelfserveController
             // possibly display SubmitApplication button
             $this->data['displaySubmitApplicationButton'] = false;
 
-            if ($declarationStatus == IrhpApplicationSection::SECTION_COMPLETION_COMPLETED
+            if (
+                $declarationStatus == IrhpApplicationSection::SECTION_COMPLETION_COMPLETED
                 && $submitAndPayStatus == IrhpApplicationSection::SECTION_COMPLETION_COMPLETED
             ) {
                 $this->data['displaySubmitApplicationButton'] = true;

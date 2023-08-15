@@ -11,16 +11,17 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableBuilder;
-use Common\Util\FlashMessengerTrait;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Query\DvlaSearch\Vehicle;
 use Dvsa\Olcs\Transfer\Query\Licence\Vehicles;
 use Exception;
 use Laminas\Mvc\Controller\Plugin\FlashMessenger;
+use Laminas\Mvc\MvcEvent;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractSelfserveController;
 use Olcs\Controller\Config\DataSource\DataSourceConfig;
 use Olcs\Session\LicenceVehicleManagement;
-use Laminas\Mvc\MvcEvent;
-use Laminas\View\Model\ViewModel;
+use Permits\Data\Mapper\MapperManager;
 
 abstract class AbstractVehicleController extends AbstractSelfserveController implements ToggleAwareInterface
 {
@@ -47,9 +48,6 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
 
     protected $pageTemplate = 'pages/licence-vehicle';
 
-    /** @var  FormHelperService */
-    protected $hlpForm;
-
     /** @var  FlashMessenger */
     protected $flashMessenger;
 
@@ -57,14 +55,27 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
     protected $session;
 
     /**
-     * @var TranslationHelperService
-     */
-    protected $translator;
-
-    /**
      * @var int $licenceId
      */
     protected $licenceId;
+
+    /**
+     * @param TranslationHelperService $translationHelper
+     * @param FormHelperService $formHelper
+     * @param TableFactory $tableBuilder
+     * @param MapperManager $mapperManager
+     * @param FlashMessengerHelperService $flashMessenger
+     */
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        TableFactory $tableBuilder,
+        MapperManager $mapperManager,
+        FlashMessengerHelperService $flashMessenger
+    ) {
+        $this->flashMessenger = $flashMessenger;
+        parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager);
+    }
 
     /**
      * @param MvcEvent $e
@@ -73,9 +84,6 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
     public function onDispatch(MvcEvent $e)
     {
         $this->licenceId = (int)$this->params('licence');
-        $this->hlpForm = $this->getServiceLocator()->get('Helper\Form');
-        $this->flashMessenger = $this->plugin('FlashMessenger');
-        $this->translator = $this->getServiceLocator()->get('Helper\Translation');
         $this->session = new LicenceVehicleManagement();
         return parent::onDispatch($e);
     }
@@ -173,8 +181,7 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
         $params = array_merge($dtoData, ['query' => $query]);
 
         /** @var TableBuilder $table */
-        $table = $this->getServiceLocator()->get('Table');
-        $table = $table->prepareTable('licence-vehicles', $vehicleData, $params);
+        $table = $this->tableBuilder->prepareTable('licence-vehicles', $vehicleData, $params);
 
         if ($this->isSearchResultsPage()) {
             return $this->alterTableForSearchView($table, $totalVehicles);
@@ -231,7 +238,7 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
             default:
                 $title = static::TABLE_SEARCH_TITLE_PLURAL;
         }
-        $table->setVariable('title', $this->translator->translate($title));
+        $table->setVariable('title', $this->translationHelper->translate($title));
         $table->setSetting('overrideTotal', false);
         return $table;
     }
@@ -248,7 +255,7 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
 
         $table->setVariable(
             'title',
-            $this->translator->translateReplace($title, [$totalVehicles])
+            $this->translationHelper->translateReplace($title, [$totalVehicles])
         );
 
         return $table;

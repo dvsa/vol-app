@@ -1,12 +1,17 @@
 <?php
+
 namespace Permits\Controller;
 
 use Common\RefData;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableFactory;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\DataSource\AvailableTypes;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\Form\FormConfig;
+use Permits\Data\Mapper\MapperManager;
 use Permits\View\Helper\IrhpApplicationSection;
 
 class TypeController extends AbstractSelfserveController
@@ -42,6 +47,21 @@ class TypeController extends AbstractSelfserveController
             'step' => IrhpApplicationSection::ROUTE_ADD_LICENCE,
         ],
     ];
+
+    /**
+     * @param TranslationHelperService $translationHelper
+     * @param FormHelperService $formHelper
+     * @param TableFactory $tableBuilder
+     * @param MapperManager $mapperManager
+     */
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        TableFactory $tableBuilder,
+        MapperManager $mapperManager
+    ) {
+        parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager);
+    }
 
     /**
      * {@inheritdoc}

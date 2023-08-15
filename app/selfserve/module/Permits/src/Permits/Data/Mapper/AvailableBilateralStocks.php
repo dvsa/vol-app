@@ -2,6 +2,7 @@
 
 namespace Permits\Data\Mapper;
 
+use Common\Data\Mapper\MapperInterface;
 use Common\Form\Element\DynamicRadio;
 use Common\Form\Elements\Types\Html;
 use Common\Form\Form;
@@ -13,9 +14,9 @@ use Laminas\Form\Element\Hidden;
 /**
  * Available stocks mapper
  */
-class AvailableBilateralStocks
+class AvailableBilateralStocks implements MapperInterface
 {
-    const MOROCCO_CODE = 'MA';
+    public const MOROCCO_CODE = 'MA';
 
     /** @var TranslationHelperService */
     private $translator;
@@ -198,7 +199,7 @@ class AvailableBilateralStocks
      * @param $data
      * @return array
      */
-    public function mapFromForm($data)
+    public static function mapFromResult($data)
     {
         return $data['fields'];
     }

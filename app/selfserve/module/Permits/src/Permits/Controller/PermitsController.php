@@ -4,18 +4,21 @@ namespace Permits\Controller;
 
 use Common\Controller\Traits\GenericReceipt;
 use Common\Controller\Traits\StoredCardsTrait;
+use Common\RefData;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableFactory;
 use Common\Util\FlashMessengerTrait;
-use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\SelfserveApplicationsSummary;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\SelfserveIssuedPermitsSummary;
-use Common\RefData;
-use Olcs\Controller\AbstractSelfserveController;
-use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
-use Permits\View\Helper\IrhpApplicationSection;
 use Laminas\Http\Header\Referer as HttpReferer;
 use Laminas\Http\PhpEnvironment\Request as HttpRequest;
 use Laminas\Mvc\MvcEvent;
 use Laminas\View\Model\ViewModel;
+use Olcs\Controller\AbstractSelfserveController;
+use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
+use Permits\Data\Mapper\MapperManager;
+use Permits\View\Helper\IrhpApplicationSection;
 
 class PermitsController extends AbstractSelfserveController
 {
@@ -35,6 +38,21 @@ class PermitsController extends AbstractSelfserveController
      * @var array
      */
     protected $govUkReferrers = [];
+
+    /**
+     * @param TranslationHelperService $translationHelper
+     * @param FormHelperService $formHelper
+     * @param TableFactory $tableBuilder
+     * @param MapperManager $mapperManager
+     */
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        TableFactory $tableBuilder,
+        MapperManager $mapperManager
+    ) {
+        parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager);
+    }
 
     public function indexAction()
     {
@@ -66,9 +84,8 @@ class PermitsController extends AbstractSelfserveController
 
         $issuedData = $response->getResult();
 
-        $table = $this->getServiceLocator()->get('Table');
-        $issuedTable = $table->prepareTable($this->issuedTableName, $this->alterDataForTable($issuedData));
-        $applicationsTable = $table->prepareTable($this->applicationsTableName, $applicationData);
+        $issuedTable = $this->tableBuilder->prepareTable($this->issuedTableName, $this->alterDataForTable($issuedData));
+        $applicationsTable = $this->tableBuilder->prepareTable($this->applicationsTableName, $applicationData);
 
         $this->placeholder()->setPlaceholder('pageTitle', 'permits.page.dashboard.browser.title');
 
@@ -93,13 +110,15 @@ class PermitsController extends AbstractSelfserveController
         $keys = [];
 
         foreach ($data as $key => $item) {
-            if (in_array(
-                $item['typeId'],
-                [
+            if (
+                in_array(
+                    $item['typeId'],
+                    [
                     RefData::CERT_ROADWORTHINESS_VEHICLE_PERMIT_TYPE_ID,
                     RefData::CERT_ROADWORTHINESS_TRAILER_PERMIT_TYPE_ID,
-                ]
-            )) {
+                    ]
+                )
+            ) {
                 // TODO - OLCS-25382
                 // Certificate of Roadworthiness doesn't have valid permit count
                 // set the value here for now

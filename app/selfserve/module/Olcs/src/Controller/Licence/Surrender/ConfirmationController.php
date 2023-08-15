@@ -3,13 +3,34 @@
 namespace Olcs\Controller\Licence\Surrender;
 
 use Common\RefData;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Query\Surrender\GetSignature;
+use Permits\Data\Mapper\MapperManager;
 
 class ConfirmationController extends AbstractSurrenderController
 {
     protected $pageTemplate = 'pages/confirmation';
     protected $dataSourceConfig = [];
+
+    /**
+     * @param TranslationHelperService $translationHelper
+     * @param FormHelperService $formHelper
+     * @param TableFactory $tableBuilder
+     * @param MapperManager $mapperManager
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     */
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        TableFactory $tableBuilder,
+        MapperManager $mapperManager,
+        FlashMessengerHelperService $flashMessengerHelper
+    ) {
+        parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessengerHelper);
+    }
 
     public function indexAction()
     {
@@ -53,11 +74,9 @@ class ConfirmationController extends AbstractSurrenderController
      */
     protected function getViewVariables(): array
     {
-        /** @var $translator TranslationHelperService */
-        $translator = $this->getServiceLocator()->get('Helper\Translation');
         $this->data['surrender'] = $this->getSurrender();
         return [
-            'content' => $translator->translateReplace(
+            'content' => $this->translationHelper->translateReplace(
                 'markup-licence-surrender-confirmation',
                 [
                     $this->data['surrender']['licence']['licNo'],

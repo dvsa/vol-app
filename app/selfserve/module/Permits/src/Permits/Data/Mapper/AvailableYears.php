@@ -2,6 +2,7 @@
 
 namespace Permits\Data\Mapper;
 
+use Common\Data\Mapper\MapperInterface;
 use Common\Form\Elements\Types\Html;
 use Common\Form\Form;
 use Common\RefData;
@@ -13,8 +14,10 @@ use Laminas\Form\Element\Hidden;
 /**
  * Available years mapper
  */
-class AvailableYears
+class AvailableYears implements MapperInterface
 {
+    use MapFromResultTrait;
+
     /** @var TranslationHelperService */
     private $translator;
 

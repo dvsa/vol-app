@@ -2,13 +2,16 @@
 
 namespace Permits\Data\Mapper;
 
+use Common\Data\Mapper\MapperInterface;
 use Common\Service\Helper\TranslationHelperService;
 
 /**
  * ECMT No of permits mapper
  */
-class EcmtNoOfPermits
+class EcmtNoOfPermits implements MapperInterface
 {
+    use MapFromResultTrait;
+
     /** @var TranslationHelperService */
     private $translator;
 
@@ -17,7 +20,6 @@ class EcmtNoOfPermits
      *
      * @param TranslationHelperService $translator
      *
-     * @return EcmtNoOfPermits
      */
     public function __construct(TranslationHelperService $translator)
     {

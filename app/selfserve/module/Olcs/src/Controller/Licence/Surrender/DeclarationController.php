@@ -6,15 +6,36 @@ use Common\FeatureToggle;
 use Common\Form\Form;
 use Common\Form\GenericConfirmation;
 use Common\RefData;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\GovUkAccount\GetGovUkAccountRedirect;
 use Dvsa\Olcs\Transfer\Query\FeatureToggle\IsEnabled as IsEnabledQry;
 use Laminas\Http\Response;
 use Olcs\Form\Model\Form\Surrender\DeclarationSign;
+use Permits\Data\Mapper\MapperManager;
 
 class DeclarationController extends AbstractSurrenderController
 {
     protected $form;
+
+    /**
+     * @param TranslationHelperService $translationHelper
+     * @param FormHelperService $formHelper
+     * @param TableFactory $tableBuilder
+     * @param MapperManager $mapperManager
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     */
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        TableFactory $tableBuilder,
+        MapperManager $mapperManager,
+        FlashMessengerHelperService $flashMessengerHelper
+    ) {
+        parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessengerHelper);
+    }
 
     public function indexAction()
     {
@@ -25,13 +46,10 @@ class DeclarationController extends AbstractSurrenderController
             }
         }
 
-        /** @var TranslationHelperService $translator */
-        $translator = $this->getServiceLocator()->get('Helper\Translation');
-
         if ($this->data['surrender']['disableSignatures'] === false) {
             $this->form = $this->getSignForm();
         } else {
-            $this->form = $this->getPrintForm($translator);
+            $this->form = $this->getPrintForm($this->translationHelper);
         }
 
         $params = $this->getViewVariables();
@@ -84,7 +102,10 @@ class DeclarationController extends AbstractSurrenderController
     {
         $form = $this->getForm(DeclarationSign::class);
         $form->setAttribute('action', $this->url()->fromRoute(
-            'licence/surrender/declaration/sign-with-external', [], [], true
+            'licence/surrender/declaration/sign-with-external',
+            [],
+            [],
+            true
         ));
 
         $hasGovUkAccountError = $this->getFlashMessenger()->getContainer()->offsetExists('govUkAccountError');
@@ -103,7 +124,7 @@ class DeclarationController extends AbstractSurrenderController
     protected function getPrintForm(TranslationHelperService $translator): Form
     {
         /* @var $form GenericConfirmation */
-        $form = $this->hlpForm->createForm('GenericConfirmation');
+        $form = $this->formHelper->createForm('GenericConfirmation');
         $submitLabel = $translator->translate('lva.section.title.transport-manager-application.print-sign');
         $form->setSubmitLabel($submitLabel);
         $form->removeCancel();
@@ -116,12 +137,10 @@ class DeclarationController extends AbstractSurrenderController
      */
     protected function getViewVariables(): array
     {
-        /** @var TranslationHelperService $translator */
-        $translator = $this->getServiceLocator()->get('Helper\Translation');
         return [
             'title' => 'licence.surrender.declaration.title',
             'licNo' => $this->data['surrender']['licence']['licNo'],
-            'content' => $translator->translateReplace(
+            'content' => $this->translationHelper->translateReplace(
                 'markup-licence-surrender-declaration',
                 [$this->data['surrender']['licence']['licNo']]
             ),

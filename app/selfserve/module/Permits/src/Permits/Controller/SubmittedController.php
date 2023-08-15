@@ -1,10 +1,15 @@
 <?php
+
 namespace Permits\Controller;
 
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableFactory;
 use Olcs\Controller\AbstractSelfserveController;
+use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
 use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
-use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
+use Permits\Data\Mapper\MapperManager;
 use Permits\View\Helper\IrhpApplicationSection;
 
 class SubmittedController extends AbstractSelfserveController
@@ -48,6 +53,21 @@ class SubmittedController extends AbstractSelfserveController
         ],
     ];
 
+    /**
+     * @param TranslationHelperService $translationHelper
+     * @param FormHelperService $formHelper
+     * @param TableFactory $tableBuilder
+     * @param MapperManager $mapperManager
+     */
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        TableFactory $tableBuilder,
+        MapperManager $mapperManager
+    ) {
+        parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager);
+    }
+
     public function issueSubmittedAction()
     {
         $this->addReceiptUrl(IrhpApplicationSection::ROUTE_PRINT_RECEIPT);
@@ -66,7 +86,7 @@ class SubmittedController extends AbstractSelfserveController
         if ($irhpAppData['isSubmittedForConsideration']) {
             // change content of the submitted page if the application is submitted for consideration
             $this->data['extraContent']['list']
-                = 'markup-irhp-submitted-uc-what-happens-next-'.$irhpAppData['businessProcess']['id'];
+                = 'markup-irhp-submitted-uc-what-happens-next-' . $irhpAppData['businessProcess']['id'];
         } elseif ($irhpAppData['irhpPermitType']['isEcmtShortTerm'] || $irhpAppData['irhpPermitType']['isEcmtAnnual']) {
             // Short term ECMT/Annual ECMT confirmation page after user pays issue fee successfully
             $this->data['browserTitle'] = 'permits.page.confirmation.irhp-payment-successful.browser.title';

@@ -2,6 +2,8 @@
 
 namespace Permits\Data\Mapper;
 
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Helper\UrlHelperService;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
@@ -28,15 +30,19 @@ class IrhpApplicationFeeSummaryFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : IrhpApplicationFeeSummary
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IrhpApplicationFeeSummary
     {
+        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
+            $container = $container->getServiceLocator();
+        }
         $viewHelperManager = $container->get('ViewHelperManager');
+        $mapperManager = $container->get(MapperManager::class);
         return new IrhpApplicationFeeSummary(
-            $container->get('Helper\Translation'),
-            $container->get(EcmtNoOfPermits::class),
+            $container->get(TranslationHelperService::class),
+            $mapperManager->get(EcmtNoOfPermits::class),
             $viewHelperManager->get('status'),
             $viewHelperManager->get('currencyFormatter'),
-            $container->get('Helper\Url')
+            $container->get(UrlHelperService::class)
         );
     }
 }

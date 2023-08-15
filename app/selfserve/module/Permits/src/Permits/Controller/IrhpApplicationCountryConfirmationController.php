@@ -2,6 +2,9 @@
 
 namespace Permits\Controller;
 
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\UpdateCountries;
 use Olcs\Controller\AbstractSelfserveController;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
@@ -11,12 +14,13 @@ use Permits\Controller\Config\DataSource\IrhpApplication;
 use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
 use Permits\Data\Mapper\ConfirmedUpdatedCountries;
+use Permits\Data\Mapper\MapperManager;
 use Permits\View\Helper\IrhpApplicationSection;
 
 class IrhpApplicationCountryConfirmationController extends AbstractSelfserveController
 {
-    const REMOVED_COUNTRY_CODES_KEY = 'removedCountryCodes';
-    const VALIDATED_SELECTED_COUNTRY_CODES_CSV_KEY = 'validatedSelectedCountryCodesCsv';
+    public const REMOVED_COUNTRY_CODES_KEY = 'removedCountryCodes';
+    public const VALIDATED_SELECTED_COUNTRY_CODES_CSV_KEY = 'validatedSelectedCountryCodesCsv';
 
     protected $dataSourceConfig = [
         'default' => DataSourceConfig::IRHP_APP_COUNTRIES,
@@ -57,6 +61,21 @@ class IrhpApplicationCountryConfirmationController extends AbstractSelfserveCont
             'saveAndReturnStep' => IrhpApplicationSection::ROUTE_APPLICATION_OVERVIEW,
         ],
     ];
+
+    /**
+     * @param TranslationHelperService $translationHelper
+     * @param FormHelperService $formHelper
+     * @param TableFactory $tableBuilder
+     * @param MapperManager $mapperManager
+     */
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        TableFactory $tableBuilder,
+        MapperManager $mapperManager
+    ) {
+        parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager);
+    }
 
     /**
      * Extend method to generate lists of removed and selected country codes from input passed in via querystring

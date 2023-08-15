@@ -8,14 +8,18 @@ use Common\Data\Mapper\MapperInterface;
 use Common\Form\Form;
 use Common\Service\Cqrs\Response as CqrsResponse;
 use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
+use Dvsa\Olcs\Utils\Helper\ValueHelper;
 use Olcs\Controller\Config\DataSource\DataSourceInterface;
 use Olcs\Logging\Log\Logger;
 use Laminas\Http\PhpEnvironment\Response as PhpEnvironmentResponse;
 use Laminas\Http\Response as HttpResponse;
 use Laminas\Mvc\MvcEvent;
 use Laminas\View\Model\ViewModel;
+use Permits\Data\Mapper\MapperManager;
 
 /**
  * Abstract selfserve controller
@@ -25,7 +29,7 @@ use Laminas\View\Model\ViewModel;
  */
 abstract class AbstractSelfserveController extends AbstractOlcsController
 {
-    const CONDITIONAL_REDIRECT_MSG = 'Key %s from source %s is not equal to %s - redirecting to route %s';
+    protected const CONDITIONAL_REDIRECT_MSG = 'Key %s from source %s is not equal to %s - redirecting to route %s';
 
     /**
      * The current controller action
@@ -158,6 +162,26 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      */
     protected $redirectOptions;
 
+    protected TranslationHelperService $translationHelper;
+
+    protected FormHelperService $formHelper;
+
+    protected MapperManager $mapperManager;
+
+    protected TableFactory $tableBuilder;
+
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        TableFactory $tableBuilder,
+        MapperManager $mapperManager
+    ) {
+        $this->translationHelper = $translationHelper;
+        $this->formHelper = $formHelper;
+        $this->mapperManager = $mapperManager;
+        $this->tableBuilder = $tableBuilder;
+    }
+
     /**
      * onDispatch method
      *
@@ -204,7 +228,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
 
     public function mergeTemplateVars()
     {
-        $this->template = isset($this->templateConfig[$this->action]) ? $this->templateConfig[$this->action] : $this->templateConfig['default'];
+        $this->template = $this->templateConfig[$this->action] ?? $this->templateConfig['default'];
         $templateVars = $this->configsForAction('templateVarsConfig');
         $this->data = array_merge($this->data, $templateVars);
     }
@@ -212,12 +236,11 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     public function setBrowserTitle()
     {
         if (isset($this->data['browserTitle'])) {
-            $translator = $this->getServiceLocator()->get('Helper\Translation');
             $prepend = '';
             if ($this->form instanceof Form) {
                 if ($this->form->hasValidated()) {
                     if (!$this->formIsValid()) {
-                        $prepend = $translator->translate('permits.application.browser.title.error').': ';
+                        $prepend = $this->translationHelper->translate('permits.application.browser.title.error') . ': ';
                     }
                 }
             }
@@ -228,7 +251,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
                 $prepend .= $this->data[$tVarConfig['prependTitleDataKey']]['prependTitle'] . ' - ';
             }
 
-            $this->placeholder()->setPlaceholder('pageTitle', $prepend.$translator->translate($this->data['browserTitle']));
+            $this->placeholder()->setPlaceholder('pageTitle', $prepend . $this->translationHelper->translate($this->data['browserTitle']));
         }
     }
 
@@ -280,7 +303,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
                     $mapperClass = $config['mapperClass'];
                 }
 
-                $mapper = $this->getServiceLocator()->get($mapperClass);
+                $mapper = $this->mapperManager->get($mapperClass);
 
                 $saveData = [];
 
@@ -297,9 +320,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
                 if (isset($config['conditional'])) {
                     $dataKey = $config['conditional']['dataKey'];
                     $field = $config['conditional']['field'];
-                    $value = isset($config['conditional']['value'])
-                        ? $config['conditional']['value']
-                        : $params[$config['conditional']['compareParam']];
+                    $value = $config['conditional']['value'] ?? $params[$config['conditional']['compareParam']];
 
                     if ($this->data[$dataKey][$field] === $value) {
                         return $this->redirectConditionalPost($config);
@@ -390,7 +411,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
 
             if (isset($config['mapper'])) {
                 $mapper = isset($config['mapper']) ? $config['mapper'] : DefaultMapper::class;
-                $data = $this->getServiceLocator()->get($mapper)->mapForDisplay($data);
+                $data = $this->mapperManager->get($mapper)->mapForDisplay($data);
             }
 
             $this->data[$source::DATA_KEY] = $data;
@@ -402,7 +423,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
                         $source::DATA_KEY => $data
                     ];
 
-                    $this->data[$appendTo] = $this->getServiceLocator()->get($mapper)->mapForDisplay($combinedData);
+                    $this->data[$appendTo] = $this->mapperManager->get($mapper)->mapForDisplay($combinedData);
                 }
             }
         }
@@ -434,7 +455,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
                 $this->data[$config['dataRouteParam']] = $this->params()->fromRoute($config['dataRouteParam']);
             }
 
-            $mapper = $this->getServiceLocator()->get($mapperClass);
+            $mapper = $this->mapperManager->get($mapperClass);
             if (isset($config['mapper']['type'])) {
                 $methodName = $config['mapper']['type'];
                 $this->data = $mapper->$methodName($this->data, $form);
@@ -586,9 +607,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
             ['query' => $this->queryParams]
         );
 
-        return $this->getServiceLocator()
-            ->get('Table')
-            ->prepareTable($tableName, $data, $params);
+        return $this->tableBuilder->prepareTable($tableName, $data, $params);
     }
 
     /**
@@ -600,10 +619,8 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      */
     protected function getForm(string $formName): Form
     {
-        /** @var FormHelperService $formHelper */
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
-        $form = $formHelper->createForm($formName, true, false);
-        $formHelper->setFormActionFromRequest($form, $this->getRequest());
+        $form = $this->formHelper->createForm($formName, true, false);
+        $this->formHelper->setFormActionFromRequest($form, $this->getRequest());
 
         return $form;
     }

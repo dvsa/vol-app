@@ -3,17 +3,19 @@
 namespace Olcs\Controller\Licence\Surrender;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
-use Common\RefData;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableFactory;
 use Common\Util;
 use Dvsa\Olcs\Transfer\Command\Surrender\Update as UpdateSurrender;
+use Laminas\Mvc\MvcEvent;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractSelfserveController;
 use Olcs\Controller\Config\DataSource\DataSourceConfig;
 use Olcs\Service\Surrender\SurrenderStateService;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
-use Laminas\Mvc\MvcEvent;
-use Laminas\View\Model\ViewModel;
+use Permits\Data\Mapper\MapperManager;
 
 abstract class AbstractSurrenderController extends AbstractSelfserveController implements ToggleAwareInterface
 {
@@ -23,7 +25,7 @@ abstract class AbstractSurrenderController extends AbstractSelfserveController i
         'default' => FeatureToggleConfig::SELFSERVE_SURRENDER_ENABLED
     ];
 
-    protected $templateConfig =[
+    protected $templateConfig = [
         'default' =>  'pages/licence-surrender'
     ];
 
@@ -33,22 +35,35 @@ abstract class AbstractSurrenderController extends AbstractSelfserveController i
 
     protected $pageTemplate = 'pages/licence-surrender';
 
-    /** @var  FormHelperService */
-    protected $hlpForm;
-
-    /** @var  FlashMessengerHelperService */
-    protected $hlpFlashMsgr;
+    /** @var FlashMessengerHelperService */
+    protected $flashMessengerHelper;
 
     /**
      * @var int $licenceId
      */
     protected $licenceId;
 
+    /**
+     * @param TranslationHelperService $translationHelper
+     * @param FormHelperService $formHelper
+     * @param TableFactory $tableBuilder
+     * @param MapperManager $mapperManager
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     */
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        TableFactory $tableBuilder,
+        MapperManager $mapperManager,
+        FlashMessengerHelperService $flashMessengerHelper
+    ) {
+        $this->flashMessengerHelper = $flashMessengerHelper;
+        parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager);
+    }
+
     public function onDispatch(MvcEvent $e)
     {
         $this->licenceId = (int)$this->params('licence');
-        $this->hlpForm = $this->getServiceLocator()->get('Helper\Form');
-        $this->hlpFlashMsgr = $this->getServiceLocator()->get('Helper\FlashMessenger');
         return parent::onDispatch($e);
     }
 
@@ -92,7 +107,7 @@ abstract class AbstractSurrenderController extends AbstractSelfserveController i
      * other useful util functions for the state of a surrender e.g. number of disks
      * @return SurrenderStateService
      */
-    protected function getSurrenderStateService():SurrenderStateService
+    protected function getSurrenderStateService(): SurrenderStateService
     {
         return (new SurrenderStateService())->setSurrenderData($this->data['surrender']);
     }

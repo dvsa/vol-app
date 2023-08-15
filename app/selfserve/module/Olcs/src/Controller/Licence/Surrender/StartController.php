@@ -4,15 +4,19 @@ namespace Olcs\Controller\Licence\Surrender;
 
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Common\Service\Cqrs\Exception\AccessDeniedException;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Transfer\Command\Surrender\Create;
-use Olcs\Controller\AbstractSelfserveController;
-use Olcs\Controller\Config\DataSource\DataSourceConfig;
-use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Laminas\Http\Response;
 use Laminas\I18n\Translator\Translator;
 use Laminas\Mvc\MvcEvent;
-use Laminas\View\Helper\FlashMessenger;
+use Olcs\Controller\AbstractSelfserveController;
+use Olcs\Controller\Config\DataSource\DataSourceConfig;
+use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
+use Permits\Data\Mapper\MapperManager;
 
 class StartController extends AbstractSelfserveController implements ToggleAwareInterface
 {
@@ -36,11 +40,28 @@ class StartController extends AbstractSelfserveController implements ToggleAware
         ]
     ];
 
-    private $translateService;
+    protected FlashMessengerHelperService $flashMessengerHelper;
+
+    /**
+     * @param TranslationHelperService $translationHelper
+     * @param FormHelperService $formHelper
+     * @param TableFactory $tableBuilder
+     * @param MapperManager $mapperManager
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     */
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        TableFactory $tableBuilder,
+        MapperManager $mapperManager,
+        FlashMessengerHelperService $flashMessengerHelper
+    ) {
+        $this->flashMessengerHelper = $flashMessengerHelper;
+        parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager);
+    }
 
     public function onDispatch(MvcEvent $e)
     {
-        $this->translateService = $this->getServiceLocator()->get('Helper\Translation');
         return parent::onDispatch($e);
     }
 
@@ -52,7 +73,7 @@ class StartController extends AbstractSelfserveController implements ToggleAware
     public function indexAction()
     {
         $licence = $this->data['licence'];
-        return $this->getView($licence, $this->translateService);
+        return $this->getView($licence, $this->translationHelper);
     }
 
     /**
@@ -63,7 +84,6 @@ class StartController extends AbstractSelfserveController implements ToggleAware
     public function startAction()
     {
         $licNo = $this->params('licence');
-        $hlpFlashMsgr = $this->getServiceLocator()->get('Helper\FlashMessenger');
 
         try {
             $response = $this->handleCommand(Create::create(['id' => $licNo]));
@@ -79,10 +99,10 @@ class StartController extends AbstractSelfserveController implements ToggleAware
                 }
             }
         } catch (AccessDeniedException $e) {
-            $message = $this->translateService->translate('licence.surrender.already.applied');
-            $hlpFlashMsgr->addInfoMessage($message);
+            $message = $this->translationHelper->translate('licence.surrender.already.applied');
+            $this->flashMessengerHelper->addInfoMessage($message);
         } catch (\Exception $e) {
-            $hlpFlashMsgr->addUnknownError();
+            $this->flashMessengerHelper->addUnknownError();
         }
 
         $this->redirect()->refresh();

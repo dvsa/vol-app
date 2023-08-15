@@ -2,6 +2,7 @@
 
 namespace Permits\Data\Mapper;
 
+use Common\Data\Mapper\MapperInterface;
 use Common\Form\Elements\Custom\EcmtCandidatePermitSelectionValidatingElement;
 use Common\Form\Elements\InputFilters\SingleCheckbox;
 use Common\Form\Form;
@@ -11,8 +12,10 @@ use Common\Service\Table\TableFactory;
 /**
  * Candidate permit selection mapper
  */
-class CandidatePermitSelection
+class CandidatePermitSelection implements MapperInterface
 {
+    use MapFromResultTrait;
+
     /** @var HtmlAdder */
     private $htmlAdder;
 
@@ -59,11 +62,11 @@ class CandidatePermitSelection
         $candidatePermits = $data['unpaginatedUnpaidPermits']['results'];
 
         for ($index = 1; $index <= $tableMarkupElementsCount; $index++) {
-            $tableMarkupElement = $tableMarkupElements[$index-1];
+            $tableMarkupElement = $tableMarkupElements[$index - 1];
             $this->htmlAdder->add($fieldset, 'table' . $index, $tableMarkupElement);
 
             if ($index < $tableMarkupElementsCount) {
-                $candidatePermit = $candidatePermits[$index-1];
+                $candidatePermit = $candidatePermits[$index - 1];
                 $checkboxId = 'candidate-' . $candidatePermit['id'];
 
                 $fieldset->add(

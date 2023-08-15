@@ -2,10 +2,14 @@
 
 namespace Olcs\Controller\Licence\Surrender;
 
-use Common\RefData;
 use Common\Data\Mapper\Licence\Surrender\OperatorLicence as Mapper;
-use Olcs\Controller\Config\DataSource\DataSourceConfig;
+use Common\RefData;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableFactory;
 use Olcs\Form\Model\Form\Surrender\OperatorLicence;
+use Permits\Data\Mapper\MapperManager;
 
 class OperatorLicenceController extends AbstractSurrenderController
 {
@@ -27,6 +31,23 @@ class OperatorLicenceController extends AbstractSurrenderController
         'default' => 'licence/surrender-licence-documents'
     ];
 
+    /**
+     * @param TranslationHelperService $translationHelper
+     * @param FormHelperService $formHelper
+     * @param TableFactory $tableBuilder
+     * @param MapperManager $mapperManager
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     */
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        TableFactory $tableBuilder,
+        MapperManager $mapperManager,
+        FlashMessengerHelperService $flashMessengerHelper
+    ) {
+        parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessengerHelper);
+    }
+
     public function indexAction()
     {
         return $this->createView();
@@ -38,7 +59,7 @@ class OperatorLicenceController extends AbstractSurrenderController
         $this->form->setData($formData);
         $validForm = $this->form->isValid();
         if ($validForm) {
-            $data = $this->getServiceLocator()->get(Mapper::class)->mapFromForm($formData);
+            $data = $this->mapperManager->get(Mapper::class)->mapFromForm($formData);
             if ($this->updateSurrender(RefData::SURRENDER_STATUS_LIC_DOCS_COMPLETE, $data)) {
                 $routeName = 'licence/surrender/review/GET';
                 if ($this->isInternationalLicence() && $this->data['fromReview'] === false) {
@@ -52,8 +73,7 @@ class OperatorLicenceController extends AbstractSurrenderController
 
     public function alterForm($form)
     {
-        $translator = $this->getServiceLocator()->get('Helper\Translation');
-        $form->get('form-actions')->get('submit')->setLabel($translator->translate('lva.external.save_and_continue.button'));
+        $form->get('form-actions')->get('submit')->setLabel($this->translationHelper->translate('lva.external.save_and_continue.button'));
         return $form;
     }
 

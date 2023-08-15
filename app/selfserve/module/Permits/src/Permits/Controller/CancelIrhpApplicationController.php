@@ -1,19 +1,24 @@
 <?php
+
 namespace Permits\Controller;
 
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\CancelApplication;
 use Olcs\Controller\AbstractSelfserveController;
-use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\ConditionalDisplay\ConditionalDisplayConfig;
+use Permits\Controller\Config\DataSource\DataSourceConfig;
 use Permits\Controller\Config\DataSource\IrhpApplication as IrhpAppDataSource;
 use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
+use Permits\Data\Mapper\MapperManager;
 use Permits\View\Helper\IrhpApplicationSection;
 
 class CancelIrhpApplicationController extends AbstractSelfserveController
 {
-    const CABOTAGE_SLUG_WHITELIST = ['bi-cabotage-only', 'bi-standard-and-cabotage'];
-    const IRHP_APPLICATION_SLUG_WHITELIST = ['check-ecmt-needed'];
+    public const CABOTAGE_SLUG_WHITELIST = ['bi-cabotage-only', 'bi-standard-and-cabotage'];
+    public const IRHP_APPLICATION_SLUG_WHITELIST = ['check-ecmt-needed'];
 
     protected $dataSourceConfig = [
         'default' => DataSourceConfig::IRHP_APP,
@@ -65,6 +70,21 @@ class CancelIrhpApplicationController extends AbstractSelfserveController
             'step' => IrhpApplicationSection::ROUTE_CANCEL_CONFIRMATION,
         ],
     ];
+
+    /**
+     * @param TranslationHelperService $translationHelper
+     * @param FormHelperService $formHelper
+     * @param TableFactory $tableBuilder
+     * @param MapperManager $mapperManager
+     */
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        TableFactory $tableBuilder,
+        MapperManager $mapperManager
+    ) {
+        parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager);
+    }
 
     public function mergeTemplateVars()
     {

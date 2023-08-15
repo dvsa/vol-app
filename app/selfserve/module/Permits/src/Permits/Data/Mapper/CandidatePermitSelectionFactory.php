@@ -2,6 +2,8 @@
 
 namespace Permits\Data\Mapper;
 
+use Common\Service\Qa\Custom\Common\HtmlAdder;
+use Common\Service\Table\TableFactory;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
@@ -15,7 +17,7 @@ class CandidatePermitSelectionFactory implements FactoryInterface
      *
      * @return CandidatePermitSelection
      */
-    public function createService(ServiceLocatorInterface $serviceLocator) : CandidatePermitSelection
+    public function createService(ServiceLocatorInterface $serviceLocator): CandidatePermitSelection
     {
         return $this->__invoke($serviceLocator, CandidatePermitSelection::Class);
     }
@@ -28,11 +30,14 @@ class CandidatePermitSelectionFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : CandidatePermitSelection
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CandidatePermitSelection
     {
+        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
+            $container = $container->getServiceLocator();
+        }
         return new CandidatePermitSelection(
-            $container->get('QaCommonHtmlAdder'),
-            $container->get('Table')
+            $container->get(HtmlAdder::class),
+            $container->get(TableFactory::class)
         );
     }
 }

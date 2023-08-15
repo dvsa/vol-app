@@ -2,6 +2,7 @@
 
 namespace Permits\Data\Mapper;
 
+use Common\Service\Helper\TranslationHelperService;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
@@ -15,7 +16,7 @@ class EcmtNoOfPermitsFactory implements FactoryInterface
      *
      * @return EcmtNoOfPermits
      */
-    public function createService(ServiceLocatorInterface $serviceLocator) : EcmtNoOfPermits
+    public function createService(ServiceLocatorInterface $serviceLocator): EcmtNoOfPermits
     {
         return $this->__invoke($serviceLocator, EcmtNoOfPermits::class);
     }
@@ -28,10 +29,13 @@ class EcmtNoOfPermitsFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : EcmtNoOfPermits
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): EcmtNoOfPermits
     {
+        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
+            $container = $container->getServiceLocator();
+        }
         return new EcmtNoOfPermits(
-            $container->get('Helper\Translation')
+            $container->get(TranslationHelperService::class)
         );
     }
 }

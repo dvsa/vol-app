@@ -5,10 +5,14 @@ namespace Olcs\Controller\Licence\Vehicle;
 use Common\Form\Elements\Types\AbstractInputSearch;
 use Common\Form\Form;
 use Common\Service\Cqrs\Exception\NotFoundException;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableFactory;
 use Exception;
 use Olcs\Form\Model\Form\Vehicle\AddVehicleSearch;
 use Olcs\Form\Model\Form\Vehicle\ConfirmVehicle;
-use Laminas\Mvc\MvcEvent;
+use Permits\Data\Mapper\MapperManager;
 
 class AddVehicleSearchController extends AbstractVehicleController
 {
@@ -27,8 +31,26 @@ class AddVehicleSearchController extends AbstractVehicleController
 
     protected $pageTemplate = 'pages/licence/vehicle/add';
 
-    const SEARCH_TITLE = 'licence.vehicle.add.search.title';
-    const RESULTS_TITLE = 'licence.vehicle.add.result.title';
+    public const SEARCH_TITLE = 'licence.vehicle.add.search.title';
+
+    public const RESULTS_TITLE = 'licence.vehicle.add.result.title';
+
+    /**
+     * @param TranslationHelperService $translationHelper
+     * @param FormHelperService $formHelper
+     * @param TableFactory $tableBuilder
+     * @param MapperManager $mapperManager
+     * @param FlashMessengerHelperService $flashMessenger
+     */
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        TableFactory $tableBuilder,
+        MapperManager $mapperManager,
+        FlashMessengerHelperService $flashMessenger
+    ) {
+        parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessenger);
+    }
 
     /**
      * @return \Laminas\View\Model\ViewModel
@@ -112,7 +134,7 @@ class AddVehicleSearchController extends AbstractVehicleController
         );
 
         if ($response->isOk()) {
-            $panelMessage = $this->translator->translateReplace('licence.vehicle.add.success', [$vehicleData['registrationNumber']]);
+            $panelMessage = $this->translationHelper->translateReplace('licence.vehicle.add.success', [$vehicleData['registrationNumber']]);
             $this->flashMessenger->addMessage($panelMessage, SwitchBoardController::PANEL_FLASH_MESSENGER_NAMESPACE);
             return $this->nextStep('lva-licence/vehicles');
         }
@@ -184,7 +206,7 @@ class AddVehicleSearchController extends AbstractVehicleController
     {
         $this->form->get('vehicle-search')->setMessages([
             AbstractInputSearch::ELEMENT_INPUT_NAME => [
-                $type => $this->translator->translate($message)
+                $type => $this->translationHelper->translate($message)
             ]
         ]);
     }
@@ -200,7 +222,7 @@ class AddVehicleSearchController extends AbstractVehicleController
         } catch (NotFoundException $exception) {
             $this->setFormErrorMessage('licence.vehicle.add.search.vrm-not-found', 'vrm_not_found');
         } catch (Exception $exception) {
-            $this->flashMessenger->addErrorMessage($this->translator->translate('licence.vehicle.add.search.query-error'));
+            $this->flashMessenger->addErrorMessage($this->translationHelper->translate('licence.vehicle.add.search.query-error'));
         }
         return $vehicleData ?? null;
     }
