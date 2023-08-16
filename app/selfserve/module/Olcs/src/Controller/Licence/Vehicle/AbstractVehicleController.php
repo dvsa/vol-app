@@ -64,14 +64,14 @@ abstract class AbstractVehicleController extends AbstractSelfserveController imp
      * @param FormHelperService $formHelper
      * @param TableFactory $tableBuilder
      * @param MapperManager $mapperManager
-     * @param FlashMessengerHelperService $flashMessenger
+     * @param FlashMessenger $flashMessenger
      */
     public function __construct(
         TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
         TableFactory $tableBuilder,
         MapperManager $mapperManager,
-        FlashMessengerHelperService $flashMessenger
+        FlashMessenger $flashMessenger
     ) {
         $this->flashMessenger = $flashMessenger;
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager);

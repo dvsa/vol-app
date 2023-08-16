@@ -31,7 +31,7 @@ class ReprintLicenceVehicleDiscConfirmationControllerFactory implements FactoryI
         $formHelper = $container->get(FormHelperService::class);
         $tableBuilder = $container->get(TableFactory::class);
         $mapperManager = $container->get(MapperManager::class);
-        $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
+        $flashMessengerHelper = $container->get('ControllerPluginManager')->get('FlashMessenger');
         return new ReprintLicenceVehicleDiscConfirmationController($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessengerHelper);
     }
 

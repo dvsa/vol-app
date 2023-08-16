@@ -4,7 +4,7 @@ namespace Olcs\Controller\Licence\Vehicle\Reprint;
 
 use Common\Service\Cqrs\Exception\AccessDeniedException;
 use Common\Service\Cqrs\Exception\NotFoundException;
-use Common\Service\Helper\FlashMessengerHelperService;
+use Laminas\Mvc\Controller\Plugin\FlashMessenger;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableFactory;
@@ -32,21 +32,21 @@ class ReprintLicenceVehicleDiscConfirmationController extends AbstractVehicleCon
         ]
     ];
 
-    protected FlashMessengerHelperService $flashMessengerHelper;
+    protected FlashMessenger $flashMessengerHelper;
 
     /**
      * @param TranslationHelperService $translationHelper
      * @param FormHelperService $formHelper
      * @param TableFactory $tableBuilder
      * @param MapperManager $mapperManager
-     * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param FlashMessenger $flashMessengerHelper
      */
     public function __construct(
         TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
         TableFactory $tableBuilder,
         MapperManager $mapperManager,
-        FlashMessengerHelperService $flashMessengerHelper
+        FlashMessenger $flashMessengerHelper
     ) {
         $this->flashMessengerHelper = $flashMessengerHelper;
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessengerHelper);
