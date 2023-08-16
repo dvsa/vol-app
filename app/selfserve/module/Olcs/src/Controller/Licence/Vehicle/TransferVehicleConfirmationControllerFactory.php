@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Olcs\Controller\Licence\Vehicle;
 
-use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableFactory;
@@ -31,7 +30,7 @@ class TransferVehicleConfirmationControllerFactory implements FactoryInterface
         $formHelper = $container->get(FormHelperService::class);
         $tableBuilder = $container->get(TableFactory::class);
         $mapperManager = $container->get(MapperManager::class);
-        $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
+        $flashMessengerHelper = $container->get('ControllerPluginManager')->get('FlashMessenger');
         return new TransferVehicleConfirmationController($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessengerHelper);
     }
 
