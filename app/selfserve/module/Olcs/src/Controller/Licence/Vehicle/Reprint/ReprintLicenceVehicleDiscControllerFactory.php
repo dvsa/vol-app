@@ -23,7 +23,7 @@ class ReprintLicenceVehicleDiscControllerFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): AddDuplicateVehicleController
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ReprintLicenceVehicleDiscController
     {
         if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
             $container = $container->getServiceLocator();
@@ -33,15 +33,15 @@ class ReprintLicenceVehicleDiscControllerFactory implements FactoryInterface
         $tableBuilder = $container->get(TableFactory::class);
         $mapperManager = $container->get(MapperManager::class);
         $flashMessengerHelper = $container->get('ControllerPluginManager')->get('FlashMessenger');
-        return new AddDuplicateVehicleController($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessengerHelper);
+        return new ReprintLicenceVehicleDiscController($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessengerHelper);
     }
 
     /**
      * @param ServiceLocatorInterface $serviceLocator
      * @deprecated
      */
-    public function createService(ServiceLocatorInterface $serviceLocator): AddDuplicateVehicleController
+    public function createService(ServiceLocatorInterface $serviceLocator): ReprintLicenceVehicleDiscController
     {
-        return $this->__invoke($serviceLocator, AddDuplicateVehicleController::class);
+        return $this->__invoke($serviceLocator, ReprintLicenceVehicleDiscController::class);
     }
 }
