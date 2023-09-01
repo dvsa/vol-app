@@ -2,6 +2,7 @@
 
 namespace Permits\Data\Mapper;
 
+use Common\Service\Helper\TranslationHelperService;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
@@ -30,8 +31,11 @@ class AvailableYearsFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : AvailableYears
     {
+        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
+            $container = $container->getServiceLocator();
+        }
         return new AvailableYears(
-            $container->get('Helper\Translation')
+            $container->get(TranslationHelperService::class)
         );
     }
 }
