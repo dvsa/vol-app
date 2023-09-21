@@ -1,5 +1,7 @@
 <?php
 
+use Common\Service\Table\Formatter\Address;
+
 return array(
     'variables' => array(),
     'settings' => array(),
@@ -8,7 +10,7 @@ return array(
         array(
             'title' => 'search-result-label-operating-centre',
             'addressFields' => 'FULL',
-            'formatter' => 'Address',
+            'formatter' => Address::class,
             'name' => 'operatingCentre->address'
         ),
         array(

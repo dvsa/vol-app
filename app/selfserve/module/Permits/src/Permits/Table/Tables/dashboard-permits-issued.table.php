@@ -1,5 +1,9 @@
 <?php
 
+use Common\Service\Table\Formatter\LicencePermitReference;
+use Common\Service\Table\Formatter\NullableNumber;
+use Common\Service\Table\Formatter\RefDataStatus;
+
 return array(
     'variables' => array(
         'title' => 'dashboard-table-permits-title',
@@ -12,13 +16,13 @@ return array(
         array(
             'title' => 'dashboard-table-permit-licence-number',
             'name' => 'id',
-            'formatter' => 'LicencePermitReference',
+            'formatter' => LicencePermitReference::class,
         ),
         array(
             'title' => 'dashboard-table-permit-application-num',
             'isNumeric' => true,
             'name' => 'validPermitCount',
-            'formatter' => 'NullableNumber'
+            'formatter' => NullableNumber::class
         ),
         array(
             'title' => 'dashboard-table-permit-application-type',
@@ -31,7 +35,7 @@ return array(
                 return $this->callFormatter(
                     [
                         'name' => 'status',
-                        'formatter' => 'RefDataStatus',
+                        'formatter' => RefDataStatus::class,
                     ],
                     [
                         'status' => [

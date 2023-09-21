@@ -1,5 +1,7 @@
 <?php
 
+use Common\Service\Table\Formatter\Name;
+
 return array(
     'variables' => [
         'title' => 'manage-users.table.title.count'
@@ -28,7 +30,7 @@ return array(
             'type' => 'Action',
             'action' => 'edit',
             'formatter' => function ($row, $column) {
-                $column['formatter'] = 'Name';
+                $column['formatter'] = Name::class;
                 return $this->callFormatter($column, $row['contactDetails']['person']);
             }
         ],

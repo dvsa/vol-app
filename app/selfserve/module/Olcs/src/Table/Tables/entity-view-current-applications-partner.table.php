@@ -1,5 +1,10 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\RefData;
+use Common\Service\Table\Formatter\Translate;
+use Common\Service\Table\Formatter\YesNo;
+
 $translationPrefix = 'entity-view-table-current-applications.table';
 
 return [
@@ -16,12 +21,12 @@ return [
         [
             'title' => $translationPrefix . '.dateReceived',
             'name' => 'receivedDate',
-            'formatter' => 'Date'
+            'formatter' => Date::class
         ],
         [
             'title' => $translationPrefix . '.datePublished',
             'name' => 'publishedDate',
-            'formatter' => 'Date'
+            'formatter' => Date::class
         ],
         [
             'title' => $translationPrefix  . '.publicationNumber',
@@ -31,27 +36,27 @@ return [
         [
             'title' => $translationPrefix . '.grantDate',
             'name' => 'grantedDate',
-            'formatter' => 'Date'
+            'formatter' => Date::class
         ],
         [
             'title' => $translationPrefix . '.oooDate',
             'name' => 'oooDate',
-            'formatter' => 'Translate',
+            'formatter' => Translate::class,
         ],
         [
             'title' => $translationPrefix . '.oorDate',
             'name' => 'oorDate',
-            'formatter' => 'Translate',
+            'formatter' => Translate::class,
         ],
         [
             'title' => $translationPrefix . '.objectionRepresentationMade',
             'name' => 'isOpposed',
-            'formatter' => 'YesNo',
+            'formatter' => YesNo::class,
         ],
         [
             'title' => 'interim-status',
             'name' => 'interimStatus',
-            'formatter' => 'RefData',
+            'formatter' => RefData::class,
         ]
     ]
 ];

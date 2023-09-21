@@ -1,5 +1,9 @@
 <?php
 
+use Common\Service\Table\Formatter\Address;
+use Common\Service\Table\Formatter\Sum;
+use Common\Service\Table\Formatter\Translate;
+
 return array(
     'variables' => array(
         'title' => 'application_operating-centres_authorisation.table.title',
@@ -12,7 +16,7 @@ return array(
         array(
             'title' => 'application_operating-centres_authorisation.table.address',
             'name' => 'operatingCentre->address',
-            'formatter' => 'Address',
+            'formatter' => Address::class,
             'addressFields' => 'BRIEF',
             'sort' => 'adr'
         ),
@@ -33,16 +37,16 @@ return array(
         'total' => array(
             'type' => 'th',
             'content' => 'application_operating-centres_authorisation.table.footer.total',
-            'formatter' => 'Translate',
+            'formatter' => Translate::class,
             'colspan' => 1
         ),
         array(
-            'formatter' => 'Sum',
+            'formatter' => Sum::class,
             'align' => 'govuk-!-text-align-right',
             'name' => 'noOfVehiclesRequired'
         ),
         'trailersCol' => array(
-            'formatter' => 'Sum',
+            'formatter' => Sum::class,
             'align' => 'govuk-!-text-align-right',
             'name' => 'noOfTrailersRequired'
         )

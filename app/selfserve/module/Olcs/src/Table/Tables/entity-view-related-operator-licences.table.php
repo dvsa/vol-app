@@ -1,5 +1,8 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\RefData;
+
 return array(
     'variables' => array(
         'empty_message' => 'entity-view-table-related-operator-licences.table.empty',
@@ -22,12 +25,12 @@ return array(
         ),
         array(
             'title' => 'search-result-label-licence-status',
-            'formatter' => 'RefData',
+            'formatter' => RefData::class,
             'name' => 'status'
         ),
         array(
             'title' => 'search-result-label-continuation-date',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
             'name' => 'expiryDate'
         )
     )

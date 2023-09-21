@@ -1,5 +1,7 @@
 <?php
 
+use Common\Service\Table\Formatter\Name;
+
 return array(
     'variables' => array(
         'empty_message' => 'entity-view-table-transport-managers.table.empty',
@@ -9,7 +11,7 @@ return array(
     'columns' => array(
         array(
             'title' => 'name',
-            'formatter' => 'Name',
+            'formatter' => Name::class,
             'name' => 'transportManager->homeCd->person'
         )
     )

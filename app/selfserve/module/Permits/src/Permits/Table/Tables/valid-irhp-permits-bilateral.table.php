@@ -1,5 +1,10 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\IrhpPermitRangeType;
+use Common\Service\Table\Formatter\NullableNumber;
+use Common\Service\Table\Formatter\RefDataStatus;
+use Common\Service\Table\Formatter\StackValue;
 use Common\Util\Escape;
 use Common\RefData;
 
@@ -20,13 +25,13 @@ return array(
             'isNumeric' => true,
             'name' => 'irhpApplication',
             'stack' => 'irhpPermitApplication->relatedApplication->id',
-            'formatter' => 'StackValue',
+            'formatter' => StackValue::class,
         ),
         array(
             'title' => 'permits.irhp.valid.permits.table.permit-no',
             'isNumeric' => true,
             'name' => 'permitNumber',
-            'formatter' => 'NullableNumber',
+            'formatter' => NullableNumber::class,
         ),
         array(
             'title' => 'permits.irhp.valid.permits.table.country',
@@ -44,7 +49,7 @@ return array(
                 return $this->callFormatter(
                     [
                         'name' => 'irhpPermitRangeType',
-                        'formatter' => 'IrhpPermitRangeType',
+                        'formatter' => IrhpPermitRangeType::class,
                     ],
                     $row['irhpPermitRange']
                 );
@@ -53,17 +58,17 @@ return array(
         array(
             'title' => 'permits.irhp.valid.permits.table.issued-date',
             'name' => 'issueDate',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
         ),
         array(
             'title' => 'permits.irhp.valid.permits.table.start-date',
             'name' => 'startDate',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
         ),
         array(
             'title' => 'permits.irhp.valid.permits.table.expiry-date',
             'name' => 'ceasedDate',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
         ),
         array(
             'title' => 'status',
@@ -72,7 +77,7 @@ return array(
                 return $this->callFormatter(
                     [
                         'name' => 'status',
-                        'formatter' => 'RefDataStatus',
+                        'formatter' => RefDataStatus::class,
                     ],
                     [
                         'status' => [

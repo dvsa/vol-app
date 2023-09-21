@@ -1,5 +1,9 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\StackValueReplacer;
+use Common\Service\Table\Formatter\YesNo;
+
 return array(
     'variables' => array(),
     'settings' => array(),
@@ -8,7 +12,7 @@ return array(
         array(
             'title' => 'Interim',
             'name' => 'interimApplication',
-            'formatter' => 'YesNo',
+            'formatter' => YesNo::class,
         ),
         array(
             'title' => 'Vehicle registration number',
@@ -25,11 +29,11 @@ return array(
             'title' => 'Plated weight',
             'isNumeric' => true,
             'stringFormat' => '{vehicle->platedWeight} Kg',
-            'formatter' => 'StackValueReplacer'
+            'formatter' => StackValueReplacer::class
         ),
         array(
             'title' => 'Specified date',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
             'name' => 'specifiedDate'
         ),
     )

@@ -1,5 +1,10 @@
 <?php
 
+use Common\Service\Table\Formatter\BusRegStatus;
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\EbsrRegNumberLink;
+use Common\Service\Table\Formatter\EbsrVariationNumber;
+
 return array(
     'variables' => array(
         'titleSingular' => 'Bus registration',
@@ -22,18 +27,18 @@ return array(
         array(
             'title' => 'Bus registration No.',
             'formatter' => function ($data, $column) {
-                $column['formatter'] = 'EbsrRegNumberLink';
+                $column['formatter'] = EbsrRegNumberLink::class;
                 return $this->callFormatter($column, $data);
             }
         ),
         array(
             'title' => 'Status',
-            'formatter' => 'BusRegStatus'
+            'formatter' => BusRegStatus::class
         ),
         array(
             'title' => 'Variation No.',
             'isNumeric' => true,
-            'formatter' => 'EbsrVariationNumber'
+            'formatter' => EbsrVariationNumber::class
         ),
         array(
             'title' => 'Service No.',
@@ -46,7 +51,7 @@ return array(
             'title' => '1st-registered-cancelled',
             'name' => 'date1stReg',
             'formatter' => function ($data, $column) {
-                $column['formatter'] = 'Date';
+                $column['formatter'] = Date::class;
                 return $this->callFormatter($column, $data);
             },
         ),

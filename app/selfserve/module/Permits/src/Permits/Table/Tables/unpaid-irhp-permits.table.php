@@ -1,5 +1,7 @@
 <?php
 
+use Common\Service\Table\Formatter\ConstrainedCountriesList;
+use Common\Service\Table\Formatter\StackValue;
 use Common\Util\Escape;
 
 return array(
@@ -26,12 +28,12 @@ return array(
             'title' => 'permits.irhp.unpaid.permits.table.min-emission',
             'name' => 'emissionsCategory',
             'stack' => 'irhpPermitRange->emissionsCategory->description',
-            'formatter' => 'StackValue',
+            'formatter' => StackValue::class,
         ),
         array(
             'title' => 'permits.irhp.unpaid.permits.table.countries',
             'name' => 'constrainedCountries',
-            'formatter' => 'ConstrainedCountriesList',
+            'formatter' => ConstrainedCountriesList::class,
         ),
     )
 );

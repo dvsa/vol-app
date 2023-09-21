@@ -1,5 +1,10 @@
 <?php
 
+use Common\Service\Table\Formatter\FeeAmount;
+use Common\Service\Table\Formatter\FeeAmountSum;
+use Common\Service\Table\Formatter\FeeUrlExternal;
+use Common\Service\Table\Formatter\Translate;
+
 return array(
     'variables' => array(
         'title' => 'dashboard-fees.table.title',
@@ -23,7 +28,7 @@ return array(
         array(
             'title' => 'selfserve-fees-table-fee-description',
             'name' => 'description',
-            'formatter' => 'FeeUrlExternal',
+            'formatter' => FeeUrlExternal::class,
         ),
         array(
             'title' => 'selfserve-fees-table-fee-reference',
@@ -34,7 +39,7 @@ return array(
         array(
             'title' => 'selfserve-fees-table-fee-licence-outstanding',
             'name' => 'outstanding',
-            'formatter' => 'FeeAmount',
+            'formatter' => FeeAmount::class,
             'isNumeric' => true,
         ),
         array(
@@ -51,12 +56,12 @@ return array(
         'total' => array(
             'type' => 'th',
             'content' => 'dashboard-fees-total',
-            'formatter' => 'Translate',
+            'formatter' => Translate::class,
             'colspan' => 2
         ),
         array(
             'type' => 'th',
-            'formatter' => 'FeeAmountSum',
+            'formatter' => FeeAmountSum::class,
             'name' => 'amount',
             'align' => 'govuk-!-text-align-right',
         ),

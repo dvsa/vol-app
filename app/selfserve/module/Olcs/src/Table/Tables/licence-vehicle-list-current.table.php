@@ -1,5 +1,10 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\NumberStackValue;
+use Common\Service\Table\Formatter\VehicleDiscNo;
+use Common\Service\Table\Formatter\VehicleLink;
+
 return [
     'settings' => [
         'paginate' => [
@@ -13,18 +18,18 @@ return [
     'columns' => [
         [
             'title' => 'table.licence-vehicle-list-current.column.vrm.title',
-            'formatter' => 'VehicleLink',
+            'formatter' => VehicleLink::class,
             'sort' => 'v.vrm',
         ],
         [
             'title' => 'table.licence-vehicle-list-current.column.weight.title',
             'isNumeric' => true,
             'stack' => 'vehicle->platedWeight',
-            'formatter' => 'NumberStackValue',
+            'formatter' => NumberStackValue::class,
         ],
         [
             'title' => 'table.licence-vehicle-list-current.column.specified.title',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
             'name' => 'specifiedDate',
             'sort' => 'specifiedDate',
         ],
@@ -32,7 +37,7 @@ return [
             'title' => 'table.licence-vehicle-list-current.column.disc_no.title',
             'isNumeric' => true,
             'name' => 'discNo',
-            'formatter' => 'VehicleDiscNo'
+            'formatter' => VehicleDiscNo::class
         ],
     ],
 ];
