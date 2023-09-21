@@ -1,5 +1,7 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+
 return array(
     'variables' => array(
         'title' => 'Data retention export'
@@ -23,7 +25,7 @@ return array(
         ),
         array(
             'title' => 'Deleted date',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
             'name' => 'deletedDate',
         ),
     )

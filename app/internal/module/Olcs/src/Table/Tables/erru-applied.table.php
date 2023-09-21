@@ -1,5 +1,8 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\YesNo;
+
 return array(
     'variables' => array(
         'titleSingular' => 'Applied penalty',
@@ -46,7 +49,7 @@ return array(
         array(
             'title' => 'Start date',
             'formatter' => function ($data, $column) {
-                $column['formatter'] = 'Date';
+                $column['formatter'] = Date::class;
                 return $this->callFormatter($column, $data);
             },
             'name' => 'startDate'
@@ -54,14 +57,14 @@ return array(
         array(
             'title' => 'End date',
             'formatter' => function ($data, $column) {
-                $column['formatter'] = 'Date';
+                $column['formatter'] = Date::class;
                 return $this->callFormatter($column, $data);
             },
             'name' => 'endDate'
         ),
         array(
             'title' => 'Imposed',
-            'formatter' => 'YesNo',
+            'formatter' => YesNo::class,
             'name' => 'imposed'
         )
     )

@@ -1,5 +1,11 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\FeeAmount;
+use Common\Service\Table\Formatter\FeeNoAndStatus;
+use Common\Service\Table\Formatter\FeeUrl;
+use Common\Service\Table\Formatter\Money;
+
 return array(
     'variables' => array(
         'title' => 'Fees',
@@ -27,17 +33,17 @@ return array(
             'title' => 'Fee No.',
             'sort' => 'id',
             'name' => 'id',
-            'formatter' => 'FeeNoAndStatus',
+            'formatter' => FeeNoAndStatus::class,
         ),
         array(
             'title' => 'Description',
-            'formatter' => 'FeeUrl',
+            'formatter' => FeeUrl::class,
             'sort' => 'description',
         ),
         array(
             'title' => 'Created',
             'name' => 'invoicedDate',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
             'sort' => 'invoicedDate'
         ),
         array(
@@ -49,13 +55,13 @@ return array(
             'isNumeric' => true,
             'name' => 'amount',
             'sort' => 'grossAmount',
-            'formatter' => 'FeeAmount',
+            'formatter' => FeeAmount::class,
         ),
         array(
             'title' => 'Outstanding',
             'isNumeric' => true,
             'name' => 'outstanding',
-            'formatter' => 'Money',
+            'formatter' => Money::class,
         ),
         array(
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common

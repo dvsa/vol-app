@@ -1,5 +1,8 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\InspectionRequestId;
+
 return array(
     'variables' => array(
         'title' => 'Inspection requests',
@@ -33,7 +36,7 @@ return array(
             'isNumeric' => true,
             'sort' => 'id',
             'name' => 'id',
-            'formatter' => 'InspectionRequestId'
+            'formatter' => InspectionRequestId::class
         ),
         array(
             'title' => 'Report type',
@@ -46,13 +49,13 @@ return array(
         array(
             'title' => 'Date requested',
             'name' => 'requestDate',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
             'sort' => 'requestDate'
         ),
         array(
             'title' => 'Due date',
             'name' => 'dueDate',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
             'sort' => 'duetDate'
         ),
         array(

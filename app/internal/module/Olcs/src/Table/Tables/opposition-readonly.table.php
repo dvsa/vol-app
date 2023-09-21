@@ -1,5 +1,9 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\Name;
+use Common\Service\Table\Formatter\RefData;
+
 return array(
     'variables' => array(
         'titleSingular' => 'Opposition',
@@ -29,17 +33,17 @@ return array(
         array(
             'title' => 'Date received',
             'name' => 'raisedDate',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
             'sort' => 'raisedDate',
         ),
         array(
             'title' => 'Opposition type',
-            'formatter' => 'RefData',
+            'formatter' => RefData::class,
             'name' => 'oppositionType'
         ),
         array(
             'title' => 'Name',
-            'formatter' => 'Name',
+            'formatter' => Name::class,
             'name' => 'opposer->contactDetails->person',
         ),
         array(

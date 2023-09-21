@@ -1,5 +1,7 @@
 <?php
 
+use Common\Service\Table\Formatter\OrganisationLink;
+
 return array(
     'variables' => array(
         'titleSingular' => 'Operator',
@@ -28,7 +30,7 @@ return array(
             'title' => 'ID',
             'name' => 'id',
             'formatter' => function ($row) {
-                $column['formatter'] = 'OrganisationLink';
+                $column['formatter'] = OrganisationLink::class;
                 return $this->callFormatter(
                     $column,
                     [

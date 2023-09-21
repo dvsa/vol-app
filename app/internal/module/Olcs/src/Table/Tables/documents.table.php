@@ -1,5 +1,9 @@
 <?php
 
+use Common\Service\Table\Formatter\DocumentDescription;
+use Common\Service\Table\Formatter\DocumentSubcategory;
+use Common\Service\Table\Formatter\FileExtension;
+
 return [
     'variables' => [
         'title' => 'Docs & attachments'
@@ -31,7 +35,7 @@ return [
             'title' => 'Description',
             'name' => 'description',
             'sort' => 'description',
-            'formatter' => 'DocumentDescription',
+            'formatter' => DocumentDescription::class,
         ],
         [
             'title' => 'Category',
@@ -42,16 +46,16 @@ return [
             'title' => 'Subcategory',
             'name' => 'documentSubCategoryName',
             'sort' => 'documentSubCategoryName',
-            'formatter' => 'DocumentSubcategory'
+            'formatter' => DocumentSubcategory::class
         ],
         [
             'title' => 'Format',
-            'formatter' => 'FileExtension'
+            'formatter' => FileExtension::class
         ],
         [
             'title' => 'Date',
             'name' => 'issuedDate',
-            'formatter' => 'DateTime',
+            'formatter' => \Common\Service\Table\Formatter\DateTime::class,
             'sort' => 'issuedDate',
         ],
         [

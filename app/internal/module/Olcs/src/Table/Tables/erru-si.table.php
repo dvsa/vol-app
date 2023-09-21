@@ -1,5 +1,9 @@
 <?php
 
+use Common\Service\Table\Formatter\RefData;
+use Common\Service\Table\Formatter\SeriousInfringementLink;
+use Common\Service\Table\Formatter\YesNo;
+
 return array(
     'variables' => array(
         'titleSingular' => 'Serious Infringement',
@@ -18,16 +22,16 @@ return array(
             'title' => 'ID',
             'isNumeric' => true,
             'name' => 'id',
-            'formatter' => 'SeriousInfringementLink'
+            'formatter' => SeriousInfringementLink::class
         ),
         array(
             'title' => 'Category',
-            'formatter' => 'RefData',
+            'formatter' => RefData::class,
             'name' => 'siCategoryType'
         ),
         array(
             'title' => 'Penalty applied',
-            'formatter' => 'YesNo',
+            'formatter' => YesNo::class,
             'name' => 'responseSet'
         ),
     )

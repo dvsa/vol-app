@@ -1,5 +1,7 @@
 <?php
 
+use Common\Service\Table\Formatter\Address;
+
 return array(
     'variables' => array(
         'titleSingular' => 'Partner organisation',
@@ -29,7 +31,7 @@ return array(
         ),
         array(
             'title' => 'Address',
-            'formatter' => 'Address',
+            'formatter' => Address::class,
             'name' => 'address',
             'addressFields' => 'FULL',
         ),

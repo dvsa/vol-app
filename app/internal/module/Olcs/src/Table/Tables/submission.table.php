@@ -1,5 +1,10 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\HideIfClosedRadio;
+use Common\Service\Table\Formatter\Name;
+use Common\Service\Table\Formatter\YesNo;
+
 return array(
     'variables' => array(
         'titleSingular' => 'Submission',
@@ -28,7 +33,7 @@ return array(
         array(
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
-            'formatter' => 'HideIfClosedRadio'
+            'formatter' => HideIfClosedRadio::class
         ),
         array(
             'title' => 'Submission No.',
@@ -63,13 +68,13 @@ return array(
         ),
         array(
             'title' => 'Date closed',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
             'name' => 'closedDate'
         ),
         array(
             'title' => 'Currently with',
             'formatter' => function ($data, $column) {
-                $column['formatter'] = 'Name';
+                $column['formatter'] = Name::class;
                 if (!empty($data['recipientUser']['contactDetails']['person'])) {
                     return $this->callFormatter($column, $data['recipientUser']['contactDetails']['person']);
                 }
@@ -81,12 +86,12 @@ return array(
         ),
         array(
             'title' => 'Date assigned',
-            'formatter' => 'DateTime',
+            'formatter' => \Common\Service\Table\Formatter\DateTime::class,
             'name' => 'assignedDate'
         ),
         array(
             'title' => 'Urgent',
-            'formatter' => 'YesNo',
+            'formatter' => YesNo::class,
             'name' => 'urgent'
         )
     )

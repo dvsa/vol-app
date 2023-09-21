@@ -1,5 +1,7 @@
 <?php
 
+use Common\Service\Table\Formatter\Address;
+
 return array(
     'variables' => array(
         'id' => 'environmental-complaints',
@@ -39,7 +41,7 @@ return array(
             'title' => 'OC Address',
             'width' => '350px',
             'formatter' => function ($data, $column) {
-                $column['formatter'] = 'Address';
+                $column['formatter'] = Address::class;
                 $addressList = '';
                 foreach ($data['ocAddress'] as $operatingCentre) {
                     $addressList .= $this->callFormatter($column, $operatingCentre['address']) . '<br/>';
@@ -52,7 +54,7 @@ return array(
         array(
             'title' => 'Description',
             'name' => 'description',
-            'formatter' => 'Comment',
+            'formatter' => \Common\Service\Table\Formatter\Comment::class,
             'append' => '...'
         ),
         array(

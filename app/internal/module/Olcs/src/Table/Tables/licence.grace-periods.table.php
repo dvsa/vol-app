@@ -1,5 +1,7 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+
 return array(
     'variables' => array(
         'title' => 'licence.grace-periods.table.title',
@@ -20,7 +22,7 @@ return array(
             'title' => 'licence.grace-periods.table.startDate',
             'name' => 'startDate',
             'formatter' => function ($data, $column) {
-                $column['formatter'] = 'Date';
+                $column['formatter'] = Date::class;
                 return '<a href="' .
                     $this->generateUrl(
                         array(
@@ -36,7 +38,7 @@ return array(
         array(
             'title' => 'licence.grace-periods.table.endDate',
             'name' => 'endDate',
-            'formatter' => 'Date'
+            'formatter' => Date::class
         ),
         array(
             'title' => 'licence.grace-periods.table.description',

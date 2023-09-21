@@ -1,5 +1,9 @@
 <?php
 
+use Common\Service\Table\Formatter\IrhpPermitStockCountry;
+use Common\Service\Table\Formatter\IrhpPermitStockType;
+use Common\Service\Table\Formatter\IrhpPermitStockValidity;
+
 return [
     'variables' => [
         'title' => 'Permit Stocks',
@@ -35,17 +39,17 @@ return [
         [
             'title' => 'Type',
             'name' => 'irhpPermitTypeId',
-            'formatter' => 'IrhpPermitStockType'
+            'formatter' => IrhpPermitStockType::class
         ],
         [
             'title' => 'Country',
             'name' => 'country',
-            'formatter' => 'IrhpPermitStockCountry'
+            'formatter' => IrhpPermitStockCountry::class
         ],
         [
             'title' => 'Validity Period',
             'name' => 'validFrom',
-            'formatter' => 'IrhpPermitStockValidity'
+            'formatter' => IrhpPermitStockValidity::class
         ],
         [
             'title' => 'Quota',

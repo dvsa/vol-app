@@ -1,5 +1,7 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+
 return array(
     'variables' => array(
         'title' => 'Statements',
@@ -29,7 +31,7 @@ return array(
         array(
             'title' => 'Date requested',
             'formatter' => function ($data, $column) {
-                $column['formatter'] = 'Date';
+                $column['formatter'] = Date::Class;
                 return '<a href="' . $this->generateUrl(
                     array('action' => 'edit', 'statement' => $data['id']),
                     'case_statement',
@@ -54,7 +56,7 @@ return array(
         ),
         array(
             'title' => 'Date stopped',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
             'name' => 'stoppedDate'
         ),
         array(
@@ -64,7 +66,7 @@ return array(
         array(
             'title' => 'Date issued',
             'formatter' => function ($data, $column) {
-                $column['formatter'] = 'Date';
+                $column['formatter'] = Date::class;
                 return (!empty($data['issuedDate']) ?
                     $this->callFormatter($column, $data) :
                     $this->translator->translate('Not issued')

@@ -1,5 +1,8 @@
 <?php
 
+use Common\Service\Table\Formatter\Address;
+use Common\Service\Table\Formatter\InterimOcCheckbox;
+
 return array(
     'variables' => array(
         'title' => 'internal.interim.operatingcentres.table.header',
@@ -16,7 +19,7 @@ return array(
         array(
             'title' => 'internal.interim.operatingcentres.table.address',
             'name' => 'operatingCentre->address',
-            'formatter' => 'Address'
+            'formatter' => Address::class
         ),
         array(
             'title' => 'internal.interim.operatingcentres.table.vehicles',
@@ -29,7 +32,7 @@ return array(
         array(
             'title' => 'internal.interim.operatingcentres.table.listed',
             'width' => 'checkbox',
-            'formatter' => 'InterimOcCheckbox',
+            'formatter' => InterimOcCheckbox::class,
             'name' => 'listed'
         ),
     )

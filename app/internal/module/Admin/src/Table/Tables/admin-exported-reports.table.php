@@ -1,5 +1,9 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\DocumentDescription;
+use Common\Service\Table\Formatter\FileExtension;
+
 return array(
     'variables' => array(
         'titleSingular' => 'Exported report',
@@ -18,7 +22,7 @@ return array(
             'title' => 'Description',
             'name' => 'description',
             'formatter' => function ($row) {
-                $column['formatter'] = 'DocumentDescription';
+                $column['formatter'] = DocumentDescription::class;
                 return $this->callFormatter(
                     $column,
                     $row
@@ -37,7 +41,7 @@ return array(
             'title' => 'Format',
             'name' => 'filename',
             'formatter' => function ($row) {
-                $column['formatter'] = 'FileExtension';
+                $column['formatter'] = FileExtension::class;
                 return $this->callFormatter(
                     $column,
                     $row
@@ -47,7 +51,7 @@ return array(
         array(
             'title' => 'Date',
             'name' => 'issuedDate',
-            'formatter' => 'Date'
+            'formatter' => Date::class
         ),
     )
 );

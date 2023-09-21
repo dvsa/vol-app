@@ -1,5 +1,8 @@
 <?php
 
+use Common\Service\Table\Formatter\DataRetentionRuleActionType;
+use Common\Service\Table\Formatter\DataRetentionRuleLink;
+
 return array(
     'variables' => array(
         'title' => 'Data Retention rules',
@@ -25,13 +28,13 @@ return array(
             'title' => 'Description',
             'name' => 'description',
             'sort' => 'description',
-            'formatter' => 'DataRetentionRuleLink'
+            'formatter' => DataRetentionRuleLink::class
         ),
         array(
             'title' => 'Action type',
             'name' => 'actionType',
             'sort' => 'actionType',
-            'formatter' => 'DataRetentionRuleActionType'
+            'formatter' => DataRetentionRuleActionType::class
         ),
     )
 );

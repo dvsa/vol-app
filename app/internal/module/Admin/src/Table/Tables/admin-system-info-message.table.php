@@ -1,5 +1,7 @@
 <?php
 
+use Common\Service\Table\Formatter\SystemInfoMessageLink;
+
 return [
     'variables' => [
         'title' => 'System messages',
@@ -28,7 +30,7 @@ return [
             'title' => 'Message',
             'sort' => 'description',
             'action' => 'edit',
-            'formatter' => 'SystemInfoMessageLink',
+            'formatter' => SystemInfoMessageLink::class,
         ],
         [
             'title' => 'Displayed to',
@@ -44,14 +46,14 @@ return [
             'title' => 'Start',
             'name' => 'startDate',
             'sort' => 'startDate',
-            'formatter' => 'DateTime',
+            'formatter' => \Common\Service\Table\Formatter\DateTime::class,
             'dateformat' => 'H:i d/m/Y',
         ],
         [
             'title' => 'End',
             'name' => 'endDate',
             'sort' => 'endDate',
-            'formatter' => 'DateTime',
+            'formatter' => \Common\Service\Table\Formatter\DateTime::class,
             'dateformat' => 'H:i d/m/Y',
         ],
         [

@@ -1,5 +1,12 @@
 <?php
 
+use Common\Service\Table\Formatter\CaseEntityName;
+use Common\Service\Table\Formatter\CaseEntityNrStatus;
+use Common\Service\Table\Formatter\CaseLink;
+use Common\Service\Table\Formatter\CaseTrafficArea;
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\RefData;
+
 return [
     'variables' => [
         'titleSingular' => 'Open case',
@@ -19,40 +26,40 @@ return [
         [
             'title' => 'Case Id',
             'isNumeric' => true,
-            'formatter' => 'CaseLink',
+            'formatter' => CaseLink::class,
             'name' => 'id',
         ],
         [
             'title' => 'Entity',
-            'formatter' => 'CaseEntityNrStatus',
+            'formatter' => CaseEntityNrStatus::class,
         ],
         [
             'title' => 'Traffic area',
-            'formatter' => 'CaseTrafficArea',
+            'formatter' => CaseTrafficArea::class,
         ],
         [
             'title' => 'Name',
-            'formatter' => 'CaseEntityName',
+            'formatter' => CaseEntityName::class,
         ],
         [
             'title' => 'Open Date',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
             'name' => 'openDate',
         ],
         [
             'title' => 'Type',
-            'formatter' => 'RefData',
+            'formatter' => RefData::class,
             'name' => 'caseType',
         ],
         [
             'title' => 'Category',
-            'formatter' => 'RefData',
+            'formatter' => RefData::class,
             'name' => 'categorys',
             'separator' => ', ',
         ],
         [
             'title' => 'Outcome',
-            'formatter' => 'RefData',
+            'formatter' => RefData::class,
             'name' => 'outcomes',
             'separator' => ', ',
         ],

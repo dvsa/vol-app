@@ -1,4 +1,7 @@
 <?php
+
+use Common\Service\Table\Formatter\Date;
+
 return array(
     'variables' => array(
         'title' => ' active bus registrations associated with this licence.'
@@ -32,7 +35,7 @@ return array(
         ),
         array(
             'title' => '1st registered / cancelled',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
             'name' => 'date1stReg'
         ),
         array(

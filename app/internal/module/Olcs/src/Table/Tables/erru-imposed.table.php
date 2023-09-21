@@ -1,5 +1,7 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+
 return array(
     'variables' => array(
         'titleSingular' => 'Imposed penalty',
@@ -12,7 +14,7 @@ return array(
         array(
             'title' => 'Final decision date',
             'formatter' => function ($data, $column) {
-                $column['formatter'] = 'Date';
+                $column['formatter'] = Date::class;
                 return $this->callFormatter($column, $data);
             },
             'name' => 'finalDecisionDate'
@@ -26,7 +28,7 @@ return array(
         array(
             'title' => 'Start date',
             'formatter' => function ($data, $column) {
-                $column['formatter'] = 'Date';
+                $column['formatter'] = Date::class;
                 return $this->callFormatter($column, $data);
             },
             'name' => 'startDate'
@@ -34,7 +36,7 @@ return array(
         array(
             'title' => 'End date',
             'formatter' => function ($data, $column) {
-                $column['formatter'] = 'Date';
+                $column['formatter'] = Date::class;
                 return $this->callFormatter($column, $data);
             },
             'name' => 'endDate'

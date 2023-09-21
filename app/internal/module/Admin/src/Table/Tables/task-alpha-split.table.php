@@ -1,5 +1,7 @@
 <?php
 
+use Common\Service\Table\Formatter\Name;
+
 return array(
     'variables' => array(
         'titleSingular' => 'Alpha split',
@@ -31,7 +33,7 @@ return array(
         array(
             'title' => 'User',
             'name' => 'user->contactDetails->person',
-            'formatter' => 'Name',
+            'formatter' => Name::class,
         ),
         array(
             'title' => 'Assign operator tasks starting with these letters',

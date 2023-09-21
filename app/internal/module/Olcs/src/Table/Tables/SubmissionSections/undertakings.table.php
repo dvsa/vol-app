@@ -1,5 +1,7 @@
 <?php
 
+use Common\Service\Table\Formatter\AddressLines;
+
 return array(
     'variables' => array(
         'id' => 'undertakings',
@@ -63,14 +65,14 @@ return array(
         array(
             'title' => 'OC Address',
             'width' => '20%',
-            'formatter' => 'AddressLines',
+            'formatter' => AddressLines::class,
             'name' => 'OcAddress'
         ),
         array(
             'title' => 'Notes',
             'width' => '40%',
             'name' => 'notes',
-            'formatter' => 'Comment',
+            'formatter' => \Common\Service\Table\Formatter\Comment::class,
         ),
         array(
             'type' => 'Checkbox',

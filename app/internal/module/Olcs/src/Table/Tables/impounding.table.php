@@ -1,5 +1,7 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+
 return array(
     'variables' => array(
         'titleSingular' => 'Impounding',
@@ -34,7 +36,7 @@ return array(
         array(
             'title' => 'Application received',
             'formatter' => function ($data, $column) {
-                $column['formatter'] = 'Date';
+                $column['formatter'] = Date::class;
                 return '<a href="' . $this->generateUrl(
                     array('action' => 'edit', 'impounding' => $data['id']),
                     'case_details_impounding',
@@ -64,7 +66,7 @@ return array(
         array(
             'title' => 'Outcome sent',
             'formatter' => function ($data, $column) {
-                $column['formatter'] = 'Date';
+                $column['formatter'] = Date::class;
                 return $this->callFormatter($column, $data);
             },
             'name' => 'outcomeSentDate'

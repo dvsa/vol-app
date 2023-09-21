@@ -1,5 +1,7 @@
 <?php
 
+use Common\Service\Table\Formatter\InterimVehiclesCheckbox;
+
 return array(
     'variables' => array(
         'title' => 'internal.interim.vehicles.table.header',
@@ -29,7 +31,7 @@ return array(
         array(
             'title' => 'internal.interim.vehicles.table.listed',
             'width' => 'checkbox',
-            'formatter' => 'InterimVehiclesCheckbox',
+            'formatter' => InterimVehiclesCheckbox::class,
             'name' => 'listed'
         ),
     )

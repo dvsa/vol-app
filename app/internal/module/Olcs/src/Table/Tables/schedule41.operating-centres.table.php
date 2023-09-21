@@ -1,5 +1,9 @@
 <?php
 
+use Common\Service\Table\Formatter\Address;
+use Common\Service\Table\Formatter\OcConditions;
+use Common\Service\Table\Formatter\OcUndertakings;
+
 return array(
     'variables' => array(
         'title' => 'schedule41.operating-centre.table.title',
@@ -15,7 +19,7 @@ return array(
     'columns' => array(
         array(
             'title' => 'schedule41.operating-centre.table.address',
-            'formatter' => 'Address',
+            'formatter' => Address::class,
             'name' => 'address'
         ),
         array(
@@ -32,13 +36,13 @@ return array(
             'title' => 'schedule41.operating-centre.table.conditions',
             'isNumeric' => true,
             'name' => 'noOfConditions',
-            'formatter' => 'OcConditions'
+            'formatter' => OcConditions::class
         ),
         array(
             'title' => 'schedule41.operating-centre.table.undertakings',
             'isNumeric' => true,
             'name' => 'noOfUndertakings',
-            'formatter' => 'OcUndertakings'
+            'formatter' => OcUndertakings::class
         ),
         array(
             'width' => 'checkbox',

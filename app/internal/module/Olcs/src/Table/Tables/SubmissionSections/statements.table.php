@@ -1,4 +1,7 @@
 <?php
+
+use Common\Service\Table\Formatter\Name;
+
 return array(
     'variables' => array(
         'id' => 'statements',
@@ -30,7 +33,7 @@ return array(
         array(
             'title' => 'Requested by',
             'name' => 'requestedBy',
-            'formatter' => 'Name'
+            'formatter' => Name::class
         ),
         array(
             'title' => 'Statement type',
@@ -44,7 +47,7 @@ return array(
         ),
         array(
             'title' => 'Requestor body',
-            'formatter' => 'Comment',
+            'formatter' => \Common\Service\Table\Formatter\Comment::class,
             'name' => 'requestorsBody'
         ),
         array(

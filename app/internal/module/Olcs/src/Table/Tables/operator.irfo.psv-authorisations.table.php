@@ -1,5 +1,7 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+
 return array(
     'variables' => array(
         'titleSingular' => 'PSV Authorisation',
@@ -47,7 +49,7 @@ return array(
         ),
         array(
             'title' => 'In force date',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
             'name' => 'inForceDate'
         ),
         array(

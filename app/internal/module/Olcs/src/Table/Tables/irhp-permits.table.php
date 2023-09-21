@@ -1,5 +1,9 @@
 <?php
 
+use Common\Service\Table\Formatter\ConstrainedCountriesList;
+use Common\Service\Table\Formatter\IrhpPermitNumberInternal;
+use Common\Service\Table\Formatter\IrhpPermitRangeType;
+use Common\Service\Table\Formatter\RefDataStatus;
 use Common\Util\Escape;
 
 return [
@@ -27,7 +31,7 @@ return [
             'title' => 'Permit No.',
             'isNumeric' => true,
             'name' => 'permitNumber',
-            'formatter' => 'IrhpPermitNumberInternal',
+            'formatter' => IrhpPermitNumberInternal::class,
         ],
         [
             'title' => 'Minimum emission standard',
@@ -39,12 +43,12 @@ return [
         [
             'title' => 'Not valid to travel to',
             'name' => 'constrainedCountries',
-            'formatter' => 'ConstrainedCountriesList',
+            'formatter' => ConstrainedCountriesList::class,
         ],
         [
             'title' => 'Issued date',
             'name' => 'issueDate',
-            'formatter' => 'DateTime',
+            'formatter' => \Common\Service\Table\Formatter\DateTime::class,
         ],
         [
             'title' => 'Type',
@@ -53,7 +57,7 @@ return [
                 return $this->callFormatter(
                     [
                         'name' => 'irhpPermitRangeType',
-                        'formatter' => 'IrhpPermitRangeType',
+                        'formatter' => IrhpPermitRangeType::class,
                     ],
                     $row['irhpPermitRange']
                 );
@@ -69,7 +73,7 @@ return [
         [
             'title' => 'Ceased Date',
             'name' => 'ceasedDate',
-            'formatter' => 'DateTime',
+            'formatter' => \Common\Service\Table\Formatter\DateTime::class,
         ],
         [
             'title' => 'Replacement',
@@ -82,7 +86,7 @@ return [
         [
             'title' => 'Status',
             'name' => 'status',
-            'formatter' => 'RefDataStatus'
+            'formatter' => RefDataStatus::class
         ],
         [
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common

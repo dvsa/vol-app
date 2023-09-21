@@ -35,12 +35,12 @@ return [
         [
             'title' => 'Window Start Date',
             'name' => 'startDate',
-            'formatter' => 'DateTime'
+            'formatter' => \Common\Service\Table\Formatter\DateTime::class
         ],
         [
             'title' => 'Window End Date',
             'name' => 'endDate',
-            'formatter' => 'DateTime'
+            'formatter' => \Common\Service\Table\Formatter\DateTime::class
         ],
         [
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common

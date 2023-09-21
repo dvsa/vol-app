@@ -1,5 +1,7 @@
 <?php
 
+use Common\Service\Table\Formatter\SumColumns;
+
 return array(
     'variables' => array(
         'title' => 'transport-manager.responsibilities.table.licences'
@@ -36,7 +38,7 @@ return array(
             'title' => 'Hours per week',
             'isNumeric' => true,
             'name' => 'hours',
-            'formatter' => 'SumColumns',
+            'formatter' => SumColumns::class,
             'columns' => ['hoursMon', 'hoursTue', 'hoursWed', 'hoursThu', 'hoursFri', 'hoursSat', 'hoursSun']
         ),
     )

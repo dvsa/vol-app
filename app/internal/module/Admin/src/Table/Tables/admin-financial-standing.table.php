@@ -1,5 +1,8 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\RefData;
+
 return array(
     'variables' => array(
         'title' => 'crud-financial-standing-title'
@@ -19,17 +22,17 @@ return array(
             'type' => 'Action',
             'action' => 'edit',
             'name' => 'goodsOrPsv',
-            'formatter' => 'RefData'
+            'formatter' => RefData::class
         ),
         array(
             'title' => 'Licence type',
             'name' => 'licenceType',
-            'formatter' => 'RefData'
+            'formatter' => RefData::class
         ),
         array(
             'title' => 'Vehicle type',
             'name' => 'vehicleType',
-            'formatter' => 'RefData',
+            'formatter' => RefData::class
         ),
         array(
             'title' => 'First',
@@ -44,7 +47,7 @@ return array(
         array(
             'title' => 'Effective',
             'name' => 'effectiveFrom',
-            'formatter' => 'Date'
+            'formatter' => Date::class
         ),
         array(
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common
