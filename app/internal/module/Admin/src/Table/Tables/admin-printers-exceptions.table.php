@@ -1,5 +1,8 @@
 <?php
 
+use Common\Service\Table\Formatter\PrinterDocumentCategory;
+use Common\Service\Table\Formatter\PrinterException;
+
 return array(
     'variables' => array(
         'title' => ' Printers exceptions',
@@ -35,12 +38,12 @@ return array(
         array(
             'title' => 'Exception',
             'name' => 'exception',
-            'formatter' => 'PrinterException'
+            'formatter' => PrinterException::class
         ),
         array(
             'title' => 'Document categories',
             'name' => 'documentCategories',
-            'formatter' => 'PrinterDocumentCategory'
+            'formatter' => PrinterDocumentCategory::class
         ),
         array(
             'title' => 'Designated printer',

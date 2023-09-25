@@ -1,5 +1,11 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\FeeAmount;
+use Common\Service\Table\Formatter\FeeIdUrl;
+use Common\Service\Table\Formatter\TransactionFeeAllocatedAmount;
+use Common\Service\Table\Formatter\TransactionFeeStatus;
+
 return array(
     'variables' => array(
         'title' => 'Fees',
@@ -11,7 +17,7 @@ return array(
         array(
             'title' => 'Fee No.',
             'name' => 'id',
-            'formatter' => 'FeeIdUrl',
+            'formatter' => FeeIdUrl::class,
         ),
         array(
             'title' => 'Description',
@@ -20,23 +26,23 @@ return array(
         array(
             'title' => 'Created',
             'name' => 'invoicedDate',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
         ),
         array(
             'title' => 'Fee amount',
             'name' => 'amount',
-            'formatter' => 'FeeAmount',
+            'formatter' => FeeAmount::class,
             'isNumeric' => true,
         ),
         array(
             'title' => 'Allocation',
             'name' => 'allocatedAmount',
-            'formatter' => 'TransactionFeeAllocatedAmount',
+            'formatter' => TransactionFeeAllocatedAmount::class,
             'isNumeric' => true,
         ),
         array(
             'title' => 'Status',
-            'formatter' => 'TransactionFeeStatus',
+            'formatter' => TransactionFeeStatus::class,
         ),
     ),
 );

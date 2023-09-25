@@ -1,5 +1,8 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\PublicationNumber;
+
 return array(
     'variables' => array(
         'titleSingular' => 'Publications',
@@ -32,7 +35,7 @@ return array(
         array(
             'title' => 'Publication No.',
             'isNumeric' => true,
-            'formatter' => 'PublicationNumber',
+            'formatter' => PublicationNumber::class,
             'name' => 'publicationNo',
             'sort' => 'publicationNo',
         ),
@@ -50,7 +53,7 @@ return array(
             'title' => 'Publication date',
             'name' => 'pubDate',
             'sort' => 'pubDate',
-            'formatter' => 'Date'
+            'formatter' => Date::class
         ),
         array(
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common

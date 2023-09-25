@@ -1,5 +1,7 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+
 return array(
     'variables' => array(
         'title' => 'IRFO PSV Authorisation',
@@ -62,12 +64,12 @@ return array(
         array(
             'title' => 'In force date',
             'name' => 'inForceDate',
-            'formatter' => 'Date'
+            'formatter' => Date::class
         ),
         array(
             'title' => 'Expiry date',
             'name' => 'expiryDate',
-            'formatter' => 'Date'
+            'formatter' => Date::class
         ),
         array(
             'title' => 'Status',

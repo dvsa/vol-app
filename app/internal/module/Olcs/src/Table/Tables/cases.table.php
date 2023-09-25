@@ -1,5 +1,7 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+
 return array(
     'variables' => array(
         'titleSingular' => 'Case',
@@ -47,19 +49,19 @@ return array(
         ),
         array(
             'title' => 'Created',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
             'name' => 'createdOn',
             'sort' => 'createdOn'
         ),
         array(
             'title' => 'Closed',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
             'name' => 'closedDate',
             'sort' => 'closedDate'
         ),
         array(
             'title' => 'Description',
-            'formatter' => 'Comment',
+            'formatter' => \Common\Service\Table\Formatter\Comment::class,
             'maxlength' => 250,
             'append' => '...',
             'name' => 'description'

@@ -1,5 +1,7 @@
 <?php
 
+use Common\Service\Table\Formatter\ConstrainedCountriesList;
+
 return [
     'variables' => [
         'title' => 'Permits',
@@ -27,7 +29,7 @@ return [
         ],
         [
             'title' => 'Not valid for travel to',
-            'formatter' => 'ConstrainedCountriesList'
+            'formatter' => ConstrainedCountriesList::class
         ],
         [
             'title' => 'Ceased Date',

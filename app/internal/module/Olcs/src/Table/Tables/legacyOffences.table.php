@@ -1,4 +1,7 @@
 <?php
+
+use Common\Service\Table\Formatter\Date;
+
 return array(
     'variables' => array(
         'title' => 'Legacy offences',
@@ -29,7 +32,7 @@ return array(
                     return '<a href="' . $url . '" class="' . $class . '">N/A</a>';
                 }
 
-                $column['formatter'] = 'Date';
+                $column['formatter'] = Date::class;
                 return '<a href="' . $url . '" class="' . $class . '">' . $this->callFormatter($column, $data) . '</a>';
             },
             'name' => 'offenceDate'
@@ -49,7 +52,7 @@ return array(
         array(
             'title' => 'Offence detail',
             'name' => 'notes',
-            'formatter' => 'Comment',
+            'formatter' => \Common\Service\Table\Formatter\Comment::class,
             'maxlength' => 150,
             'append' => '...'
         )

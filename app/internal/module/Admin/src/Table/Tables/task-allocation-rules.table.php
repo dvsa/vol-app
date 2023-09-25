@@ -1,5 +1,8 @@
 <?php
 
+use Common\Service\Table\Formatter\TaskAllocationCriteria;
+use Common\Service\Table\Formatter\TaskAllocationUser;
+
 return array(
     'variables' => array(
         'titleSingular' => 'allocation rule',
@@ -31,7 +34,7 @@ return array(
         ),
         array(
             'title' => 'Criteria',
-            'formatter' => 'TaskAllocationCriteria',
+            'formatter' => TaskAllocationCriteria::class,
         ),
         array(
             'title' => 'Traffic Area',
@@ -51,7 +54,7 @@ return array(
         array(
             'title' => 'User',
             'name' => 'user->contactDetails->person',
-            'formatter' => 'TaskAllocationUser',
+            'formatter' => TaskAllocationUser::class,
         ),
         array(
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common

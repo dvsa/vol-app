@@ -1,5 +1,9 @@
 <?php
 
+use Common\Service\Table\Formatter\ConstrainedCountriesList;
+use Common\Service\Table\Formatter\RefDataStatus;
+use Common\Service\Table\Formatter\StackValue;
+
 return [
     'variables' => [
         'title' => 'Permits',
@@ -30,21 +34,21 @@ return [
             'title' => 'Minimum emission standard',
             'name' => 'emissionsCategory',
             'stack' => 'irhpPermitRange->emissionsCategory->description',
-            'formatter' => 'StackValue',
+            'formatter' => StackValue::class,
         ],
         [
             'title' => 'Issued date',
             'name' => 'issueDate',
-            'formatter' => 'DateTime',
+            'formatter' => \Common\Service\Table\Formatter\DateTime::class,
         ],
         [
             'title' => 'Not valid for travel to',
-            'formatter' => 'ConstrainedCountriesList',
+            'formatter' => ConstrainedCountriesList::class,
         ],
         [
             'title' => 'Ceased Date',
             'name' => 'expiryDate',
-            'formatter' => 'DateTime',
+            'formatter' => \Common\Service\Table\Formatter\DateTime::class,
         ],
         [
             'title' => 'Replacement',
@@ -57,7 +61,7 @@ return [
         [
             'title' => 'Status',
             'name' => 'status',
-            'formatter' => 'RefDataStatus'
+            'formatter' => RefDataStatus::class
         ],
         [
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common

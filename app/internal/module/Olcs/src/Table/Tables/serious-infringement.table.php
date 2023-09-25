@@ -1,5 +1,7 @@
 <?php
 
+use Common\Service\Table\Formatter\RefData;
+
 return array(
     'variables' => array(
         'title' => 'Serious Infringements',
@@ -34,7 +36,7 @@ return array(
         ),
         array(
             'title' => 'Category',
-            'formatter' => 'RefData',
+            'formatter' => RefData::class,
             'name' => 'siCategoryType'
         ),
         array(

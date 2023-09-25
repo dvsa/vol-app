@@ -1,5 +1,7 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+
 return array(
     'variables' => array(
         'title' => 'Prohibitions',
@@ -30,7 +32,7 @@ return array(
         array(
             'title' => 'Prohibition date',
             'formatter' => function ($data, $column) {
-                    $column['formatter'] = 'Date';
+                    $column['formatter'] = Date::class;
                     return '<a class="govuk-link" href="' . $this->generateUrl(
                         array('prohibition' => $data['id']),
                         'case_prohibition_defect',
@@ -41,7 +43,7 @@ return array(
         ),
         array(
             'title' => 'Cleared date',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
             'name' => 'clearedDate',
         ),
         array(

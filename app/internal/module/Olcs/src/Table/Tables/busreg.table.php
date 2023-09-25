@@ -1,5 +1,8 @@
 <?php
 
+use Common\Service\Table\Formatter\BusRegNumberLink;
+use Common\Service\Table\Formatter\Date;
+
 return array(
     'variables' => array(
         'titleSingular' => 'Bus registration',
@@ -22,7 +25,7 @@ return array(
     'columns' => array(
         array(
             'title' => 'Reg No.',
-            'formatter' => 'BusRegNumberLink',
+            'formatter' => BusRegNumberLink::class,
             'sort' => 'routeNo',
         ),
         array(
@@ -39,7 +42,7 @@ return array(
         ),
         array(
             'title' => '1st registered / cancelled',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
             'name' => 'date1stReg'
         ),
         array(

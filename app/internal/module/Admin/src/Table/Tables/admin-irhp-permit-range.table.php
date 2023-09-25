@@ -1,5 +1,13 @@
 <?php
 
+use Common\Service\Table\Formatter\IrhpPermitRangePermitNumber;
+use Common\Service\Table\Formatter\IrhpPermitRangeReplacement;
+use Common\Service\Table\Formatter\IrhpPermitRangeReserve;
+use Common\Service\Table\Formatter\IrhpPermitRangeRestrictedCountries;
+use Common\Service\Table\Formatter\IrhpPermitRangeTotalPermits;
+use Common\Service\Table\Formatter\IrhpPermitRangeType;
+use Common\Service\Table\Formatter\RefData;
+
 return [
     'variables' => [
         'title' => 'Permit Ranges',
@@ -35,38 +43,38 @@ return [
         [
             'title' => 'Permit numbers',
             'name' => 'permitNumbers',
-            'formatter' => 'IrhpPermitRangePermitNumber'
+            'formatter' => IrhpPermitRangePermitNumber::class
         ],
         [
             'title' => 'Emissions Question',
             'name' => 'emissionsCategory',
-            'formatter' => 'RefData'
+            'formatter' => RefData::class
         ],
         [
             'title' => 'Type',
             'name' => 'permitRangeType',
-            'formatter' => 'IrhpPermitRangeType'
+            'formatter' => IrhpPermitRangeType::class
         ],
         [
             'title' => 'Restricted countries',
             'name' => 'restrictedCountries',
-            'formatter' => 'IrhpPermitRangeRestrictedCountries'
+            'formatter' => IrhpPermitRangeRestrictedCountries::class
         ],
         [
             'title' => 'Minister of state reserve',
             'name' => 'ssReserve',
-            'formatter' => 'IrhpPermitRangeReserve'
+            'formatter' => IrhpPermitRangeReserve::class
         ],
         [
             'title' => 'Replacement stock',
             'name' => 'lostReplacement',
-            'formatter' => 'IrhpPermitRangeReplacement'
+            'formatter' => IrhpPermitRangeReplacement::class
         ],
         [
             'title' => 'Total permits',
             'isNumeric' => true,
             'name' => 'totalPermits',
-            'formatter' => 'IrhpPermitRangeTotalPermits'
+            'formatter' => IrhpPermitRangeTotalPermits::class
         ],
         [
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common

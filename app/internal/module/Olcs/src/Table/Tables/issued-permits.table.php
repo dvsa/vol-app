@@ -1,5 +1,9 @@
 <?php
 
+use Common\Service\Table\Formatter\ConstrainedCountriesList;
+use Common\Service\Table\Formatter\IrhpPermitRangeType;
+use Common\Service\Table\Formatter\IssuedPermitLicencePermitReference;
+use Common\Service\Table\Formatter\RefDataStatus;
 use Common\Util\Escape;
 
 return [
@@ -32,7 +36,7 @@ return [
                 return $this->callFormatter(
                     [
                         'name' => 'id',
-                        'formatter' => 'IssuedPermitLicencePermitReference',
+                        'formatter' => IssuedPermitLicencePermitReference::class,
                     ],
                     [
                         'id' => $relatedApplication['id'],
@@ -60,7 +64,7 @@ return [
         [
             'title' => 'Not valid to travel to',
             'name' => 'constrainedCountries',
-            'formatter' => 'ConstrainedCountriesList',
+            'formatter' => ConstrainedCountriesList::class,
         ],
         [
             'title' => 'Country',
@@ -76,7 +80,7 @@ return [
                 return $this->callFormatter(
                     [
                         'name' => 'irhpPermitRangeType',
-                        'formatter' => 'IrhpPermitRangeType',
+                        'formatter' => IrhpPermitRangeType::class,
                     ],
                     $row['irhpPermitRange']
                 );
@@ -85,12 +89,12 @@ return [
         [
             'title' => 'Issued date',
             'name' => 'issueDate',
-            'formatter' => 'DateTime',
+            'formatter' => \Common\Service\Table\Formatter\DateTime::class,
         ],
         [
             'title' => 'Ceased Date',
             'name' => 'ceasedDate',
-            'formatter' => 'DateTime',
+            'formatter' => \Common\Service\Table\Formatter\DateTime::class,
         ],
         [
             'title' => 'Replacement',
@@ -103,7 +107,7 @@ return [
         [
             'title' => 'Status',
             'name' => 'status',
-            'formatter' => 'RefDataStatus'
+            'formatter' => RefDataStatus::class
         ],
     ],
 ];

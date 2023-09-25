@@ -1,5 +1,8 @@
 <?php
 
+use Common\Service\Table\Formatter\Address;
+use Common\Service\Table\Formatter\ConditionsUndertakingsType;
+
 return array(
     'variables' => array(
         'title' => 'Conditions & Undertakings'
@@ -11,7 +14,7 @@ return array(
         ),
         array(
             'title' => 'lva-conditions-undertakings-table-type',
-            'formatter' => 'ConditionsUndertakingsType',
+            'formatter' => ConditionsUndertakingsType::class,
         ),
         array(
             'title' => 'Added via',
@@ -44,7 +47,7 @@ return array(
 
                 if (isset($data['operatingCentre']['address'])) {
 
-                    $column['formatter'] = 'Address';
+                    $column['formatter'] = Address::class;
 
                     return $this->callFormatter($column, $data['operatingCentre']['address']);
                 }

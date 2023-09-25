@@ -42,7 +42,7 @@ return array(
         ),
         array(
             'title' => 'Notes',
-            'formatter' => 'Comment',
+            'formatter' => \Common\Service\Table\Formatter\Comment::class,
             'name' => 'notes',
         )
     )

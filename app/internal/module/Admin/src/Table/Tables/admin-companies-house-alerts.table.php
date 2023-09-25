@@ -1,4 +1,9 @@
 <?php
+
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\LicenceTypeShort;
+use Common\Service\Table\Formatter\OrganisationLink;
+
 return array(
     'variables' => array(
         'title' => 'crud-companies-house-alert-title',
@@ -38,13 +43,13 @@ return array(
             'title' => 'Licence Type.',
             'name' => 'description',
             'sort' => 'cha_o_lst.id',
-            'formatter' => 'LicenceTypeShort'
+            'formatter' => LicenceTypeShort::class
         ),
         array(
             'title' => 'OLCS Company name.',
             'name' => 'organisation',
             'sort' => 'cha_o.name',
-            'formatter' => 'OrganisationLink',
+            'formatter' => OrganisationLink::class,
         ),
 
 
@@ -70,7 +75,7 @@ return array(
             'title' => 'Detected',
             'name' => 'createdOn',
             'sort' => 'createdOn',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
         ),
         array(
             'title' => 'Select',

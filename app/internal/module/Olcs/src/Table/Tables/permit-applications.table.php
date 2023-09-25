@@ -1,6 +1,10 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\InternalLicencePermitReference;
 use Common\Service\Table\Formatter\IrhpPermitsRequired;
+use Common\Service\Table\Formatter\IrhpPermitTypeWithValidityDate;
+use Common\Service\Table\Formatter\RefDataStatus;
 
 return [
     'variables' => [
@@ -20,7 +24,7 @@ return [
         [
             'title' => 'dashboard-table-permit-application-ref',
             'name' => 'id',
-            'formatter' => 'InternalLicencePermitReference'
+            'formatter' => InternalLicencePermitReference::class
         ],
         [
             'title' => 'dashboard-table-permit-application-num',
@@ -30,13 +34,13 @@ return [
         ],
         [
             'title' => 'dashboard-table-permit-application-type',
-            'formatter' => 'IrhpPermitTypeWithValidityDate',
+            'formatter' => IrhpPermitTypeWithValidityDate::class,
             'name' => 'typeDescription',
         ],
         [
             'title' => 'Rec\'d Date',
             'name' => 'dateReceived',
-            'formatter' => 'Date'
+            'formatter' => Date::class
         ],
         [
             'title' => 'dashboard-table-permit-application-status',
@@ -45,7 +49,7 @@ return [
                 return $this->callFormatter(
                     [
                         'name' => 'status',
-                        'formatter' => 'RefDataStatus',
+                        'formatter' => RefDataStatus::class,
                     ],
                     [
                         'status' => [

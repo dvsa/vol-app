@@ -1,5 +1,9 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\LicenceTypeShort;
+use Common\Service\Table\Formatter\RefData;
+
 return array(
     'variables' => array(
         'titleSingluar' => 'Licence',
@@ -19,16 +23,16 @@ return array(
         ),
         array(
             'title' => 'Type',
-            'formatter' => 'LicenceTypeShort',
+            'formatter' => LicenceTypeShort::class,
         ),
         array(
             'title' => 'Start date',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
             'name' => 'inForceDate'
         ),
         array(
             'title' => 'Status',
-            'formatter' => 'RefData',
+            'formatter' => RefData::class,
             'name' => 'status'
         ),
     )

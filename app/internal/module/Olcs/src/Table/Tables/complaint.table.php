@@ -1,5 +1,7 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+
 return array(
     'variables' => array(
         'title' => 'Complaints',
@@ -30,7 +32,7 @@ return array(
         array(
             'title' => 'Date',
             'formatter' => function ($data, $column) {
-                $column['formatter'] = 'Date';
+                $column['formatter'] = Date::class;
                 return '<a href="' . $this->generateUrl(
                     array('action' => 'edit', 'complaint' => $data['id']),
                     'case_complaint',
@@ -48,7 +50,7 @@ return array(
         ),
         array(
             'title' => 'Description',
-            'formatter' => 'Comment',
+            'formatter' => \Common\Service\Table\Formatter\Comment::class,
             'name' => 'description'
         )
     )

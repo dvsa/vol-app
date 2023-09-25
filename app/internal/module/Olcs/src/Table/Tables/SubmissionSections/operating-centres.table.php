@@ -1,5 +1,7 @@
 <?php
 
+use Common\Service\Table\Formatter\Address;
+
 return array(
     'variables' => array(
         'id' => 'operating-centres',
@@ -24,7 +26,7 @@ return array(
         array(
             'title' => 'Address',
             'width' => '350px',
-            'formatter' => 'Address',
+            'formatter' => Address::class,
             'addressFields' => 'FULL',
             'name' => 'OcAddress'
         ),

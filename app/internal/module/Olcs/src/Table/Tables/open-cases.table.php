@@ -1,5 +1,7 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+
 return array(
     'variables' => array(
         'title' => ' open cases associated with this licence'
@@ -36,14 +38,14 @@ return array(
         ),
         array(
             'title' => 'Created',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
             'name' => 'createdOn',
             'sort' => 'createdOn'
         ),
 
         array(
             'title' => 'Description',
-            'formatter' => 'Comment',
+            'formatter' => \Common\Service\Table\Formatter\Comment::class,
             'maxlength' => 250,
             'append' => '...',
             'name' => 'description'

@@ -1,5 +1,6 @@
 <?php
 
+use Common\Service\Table\Formatter\DocumentDescription;
 use Common\Util\Escape;
 
 return [
@@ -37,7 +38,7 @@ return [
             'name' => 'description',
             'sort' => 'description',
             'formatter' => function ($row) {
-                $column['formatter'] = 'DocumentDescription';
+                $column['formatter'] = DocumentDescription::class;
                 return $this->callFormatter(
                     $column,
                     $row

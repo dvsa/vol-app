@@ -1,5 +1,8 @@
 <?php
 
+use Common\Service\Table\Formatter\EventHistoryDescription;
+use Common\Service\Table\Formatter\EventHistoryUser;
+
 return array(
     'variables' => array(
         'title' => 'Change history entries',
@@ -21,7 +24,7 @@ return array(
     'columns' => array(
         array(
             'title' => 'Details',
-            'formatter' => 'EventHistoryDescription',
+            'formatter' => EventHistoryDescription::class,
         ),
         array(
             'title' => 'Info',
@@ -49,12 +52,12 @@ return array(
         array(
             'title' => 'Date',
             'name' => 'eventDatetime',
-            'formatter' => 'DateTime',
+            'formatter' => \Common\Service\Table\Formatter\DateTime::class,
             'sort' => 'eventDatetime',
         ),
         array(
             'title' => 'By',
-            'formatter' => 'EventHistoryUser'
+            'formatter' => EventHistoryUser::class
         )
     )
 );

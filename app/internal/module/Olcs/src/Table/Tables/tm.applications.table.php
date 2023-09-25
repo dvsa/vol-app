@@ -1,5 +1,8 @@
 <?php
 
+use Common\Service\Table\Formatter\SumColumns;
+use Common\Service\Table\Formatter\TmApplicationManagerType;
+
 return array(
     'variables' => array(
         'title' => 'transport-manager.responsibilities.table.applications'
@@ -15,7 +18,7 @@ return array(
         array(
             'title' => 'Manager Type',
             'name' => 'tmType',
-            'formatter' => 'TmApplicationManagerType'
+            'formatter' => TmApplicationManagerType::class
         ),
         array(
             'title' => 'Application ID',
@@ -41,7 +44,7 @@ return array(
             'title' => 'Hours per week',
             'isNumeric' => true,
             'name' => 'hours',
-            'formatter' => 'SumColumns',
+            'formatter' => SumColumns::class,
             'columns' => ['hoursMon', 'hoursTue', 'hoursWed', 'hoursThu', 'hoursFri', 'hoursSat', 'hoursSun']
         ),
         array(

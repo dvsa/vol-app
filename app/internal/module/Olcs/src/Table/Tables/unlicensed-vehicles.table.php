@@ -1,5 +1,8 @@
 <?php
 
+use Common\Service\Table\Formatter\StackValue;
+use Common\Service\Table\Formatter\UnlicensedVehicleWeight;
+
 $translationPrefix = 'internal-operator-unlicensed-vehicles.table';
 
 return array(
@@ -27,7 +30,7 @@ return array(
         array(
             'title' => $translationPrefix . '.vrm',
             'stack' => 'vehicle->vrm',
-            'formatter' => 'StackValue',
+            'formatter' => StackValue::class,
             'action' => 'edit',
             'type' => 'Action',
         ),
@@ -35,7 +38,7 @@ return array(
             'title' => $translationPrefix . '.weight',
             'isNumeric' => true,
             'stack' => 'vehicle->platedWeight',
-            'formatter' => 'UnlicensedVehicleWeight',
+            'formatter' => UnlicensedVehicleWeight::class,
             'name' => 'weight',
         ),
         array(

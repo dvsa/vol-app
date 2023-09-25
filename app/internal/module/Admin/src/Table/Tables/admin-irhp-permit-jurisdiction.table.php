@@ -1,5 +1,8 @@
 <?php
 
+use Common\Service\Table\Formatter\IrhpPermitJurisdictionPermitNumber;
+use Common\Service\Table\Formatter\IrhpPermitJurisdictionTrafficArea;
+
 return [
     'variables' => [
         'title' => 'Jurisdictions',
@@ -23,13 +26,13 @@ return [
         [
             'title' => 'Devolved administrations',
             'name' => 'trafficArea',
-            'formatter' => 'IrhpPermitJurisdictionTrafficArea'
+            'formatter' => IrhpPermitJurisdictionTrafficArea::class
         ],
         [
             'title' => 'Quantity of permits',
             'isNumeric' => true,
             'name' => 'permitNumber',
-            'formatter' => 'IrhpPermitJurisdictionPermitNumber'
+            'formatter' => IrhpPermitJurisdictionPermitNumber::class
         ],
     ]
 ];

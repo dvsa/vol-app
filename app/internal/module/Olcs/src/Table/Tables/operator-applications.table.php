@@ -1,5 +1,8 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\RefData;
+
 return array(
     'variables' => array(
         'titleSingular' => 'Application',
@@ -31,12 +34,12 @@ return array(
         ),
         array(
             'title' => 'Received',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
             'name' => 'receivedDate'
         ),
         array(
             'title' => 'Status',
-            'formatter' => 'RefData',
+            'formatter' => RefData::class,
             'name' => 'status'
         ),
     )

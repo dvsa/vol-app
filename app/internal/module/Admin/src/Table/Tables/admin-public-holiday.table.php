@@ -1,5 +1,8 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\PublicHolidayArea;
+
 return [
     'variables' => [
         'title' => 'Public holidays',
@@ -30,11 +33,11 @@ return [
             'title' => 'Date',
             'name' => 'publicHolidayDate',
             'sort' => 'publicHolidayDate',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
         ],
         [
             'title' => 'Area',
-            'formatter' => 'PublicHolidayArea',
+            'formatter' => PublicHolidayArea::class,
         ],
         [
             'type' => 'Action',

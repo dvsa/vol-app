@@ -1,5 +1,8 @@
 <?php
 
+use Common\Service\Table\Formatter\IrhpPermitSectorName;
+use Common\Service\Table\Formatter\IrhpPermitSectorQuota;
+
 return [
     'variables' => [
         'title' => 'Permit Sectors',
@@ -23,13 +26,13 @@ return [
         [
             'title' => 'Sector Name',
             'name' => 'sectorId',
-            'formatter' => 'IrhpPermitSectorName'
+            'formatter' => IrhpPermitSectorName::class
         ],
         [
             'title' => 'Quantity of permits',
             'isNumeric' => true,
             'name' => 'quotaNumber',
-            'formatter' => 'IrhpPermitSectorQuota'
+            'formatter' => IrhpPermitSectorQuota::class
         ],
     ]
 ];

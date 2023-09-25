@@ -1,5 +1,8 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\YesNo;
+
 return array(
     'variables' => array(
         'titleSingular' => 'Licence',
@@ -12,22 +15,22 @@ return array(
         ),
         array(
             'title' => 'Date added',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
             'name' => 'dateAdded'
         ),
         array(
             'title' => 'Date removed',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
             'name' => 'dateRemoved'
         ),
         array(
             'title' => 'Seen qualification?',
-            'formatter' => 'YesNo',
+            'formatter' => YesNo::class,
             'name' => 'seenQualification'
         ),
         array(
             'title' => 'Seen contract?',
-            'formatter' => 'YesNo',
+            'formatter' => YesNo::class,
             'name' => 'seenContract'
         ),
         array(

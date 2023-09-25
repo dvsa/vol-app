@@ -1,5 +1,9 @@
 <?php
 
+use Common\Service\Table\Formatter\LicenceTypeShort;
+use Common\Service\Table\Formatter\StackValue;
+use Common\Service\Table\Formatter\StackValueReplacer;
+
 return array(
     'variables' => array(
         'title' => 'Continuations',
@@ -25,12 +29,12 @@ return array(
         array(
             'title' => 'Operator name',
             'stack' => ['licence', 'organisation', 'name'],
-            'formatter' => 'StackValue'
+            'formatter' => StackValue::class
         ),
         array(
             'title' => 'Licence',
             'stringFormat' => '<a class="govuk-link" href="[LINK]">{licence->licNo}</a> ({licence->status->description})',
-            'formatter' => 'StackValueReplacer',
+            'formatter' => StackValueReplacer::class,
             'type' => 'Link',
             'route' => 'lva-licence',
             'params' => [
@@ -39,7 +43,7 @@ return array(
         ),
         array(
             'title' => 'Licence type',
-            'formatter' => 'LicenceTypeShort'
+            'formatter' => LicenceTypeShort::class
         ),
         array(
             'title' => 'Method',

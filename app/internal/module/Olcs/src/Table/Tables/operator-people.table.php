@@ -1,5 +1,8 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\Name;
+
 return array(
     'variables' => array(
         'titleSingular' => 'Person',
@@ -25,7 +28,7 @@ return array(
             'title' => 'selfserve-app-subSection-your-business-people-columnName',
             'type' => 'Action',
             'action' => 'edit',
-            'formatter' => 'Name'
+            'formatter' => Name::class
         ),
         array(
             'title' => 'selfserve-app-subSection-your-business-people-columnHasOtherNames',
@@ -37,7 +40,7 @@ return array(
         array(
             'title' => 'selfserve-app-subSection-your-business-people-columnDate',
             'name' => 'birthDate',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
         ),
         array(
             'title' => 'selfserve-app-subSection-your-business-people-columnPosition',

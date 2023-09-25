@@ -1,5 +1,6 @@
 <?php
 
+use Common\Service\Table\Formatter\IssuedPermitLicencePermitReference;
 use Common\Util\Escape;
 
 return [
@@ -57,7 +58,7 @@ return [
                 return $this->callFormatter(
                     [
                         'name' => 'id',
-                        'formatter' => 'IssuedPermitLicencePermitReference',
+                        'formatter' => IssuedPermitLicencePermitReference::class,
                     ],
                     [
                         'id' => $relatedApplication['id'],

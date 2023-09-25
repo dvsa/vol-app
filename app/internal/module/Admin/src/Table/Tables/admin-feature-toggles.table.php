@@ -1,5 +1,8 @@
 <?php
 
+use Common\Service\Table\Formatter\FeatureToggleEditLink;
+use Common\Service\Table\Formatter\RefDataStatus;
+
 return array(
     'variables' => array(
         'titleSingular' => 'Feature toggle',
@@ -26,7 +29,7 @@ return array(
         array(
             'title' => 'Name',
             'name' => 'friendlyName',
-            'formatter' => 'FeatureToggleEditLink'
+            'formatter' => FeatureToggleEditLink::class
         ),
         array(
             'title' => 'Handler (or config key)',
@@ -35,7 +38,7 @@ return array(
         array(
             'title' => 'Status',
             'name' => 'status',
-            'formatter' => 'RefDataStatus'
+            'formatter' => RefDataStatus::class
         ),
         array(
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common

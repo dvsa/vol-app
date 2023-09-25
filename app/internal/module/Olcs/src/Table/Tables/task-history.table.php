@@ -1,5 +1,8 @@
 <?php
 
+use Common\Service\Table\Formatter\EventHistoryUser;
+use Common\Service\Table\Formatter\StackValue;
+
 return [
     'variables' => [
         'title' => 'History'
@@ -10,7 +13,7 @@ return [
         [
             'title' => 'Details',
             'stack' => 'eventHistoryType->description',
-            'formatter' => 'StackValue',
+            'formatter' => StackValue::class,
         ],
         [
             'title' => 'Info',
@@ -19,11 +22,11 @@ return [
         [
             'title' => 'Date',
             'name' => 'eventDatetime',
-            'formatter' => 'DateTime',
+            'formatter' => \Common\Service\Table\Formatter\DateTime::class,
         ],
         [
             'title' => 'By',
-            'formatter' => 'EventHistoryUser',
+            'formatter' => EventHistoryUser::class,
         ],
     ]
 ];

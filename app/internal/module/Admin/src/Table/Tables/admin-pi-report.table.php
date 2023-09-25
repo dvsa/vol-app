@@ -1,5 +1,11 @@
 <?php
 
+use Common\Service\Table\Formatter\CaseLink;
+use Common\Service\Table\Formatter\PiHearingStatus;
+use Common\Service\Table\Formatter\PiReportName;
+use Common\Service\Table\Formatter\PiReportRecord;
+use Common\Service\Table\Formatter\VenueAddress;
+
 return array(
     'variables' => array(
         'titleSingular' => 'Public Inquiry',
@@ -26,7 +32,7 @@ return array(
             'formatter' => function ($data) {
                 return $this->callFormatter(
                     [
-                        'formatter' => 'CaseLink',
+                        'formatter' => CaseLink::class,
                     ],
                     $data['pi']['case']
                 );
@@ -34,11 +40,11 @@ return array(
         ),
         array(
             'title' => 'Record',
-            'formatter' => 'PiReportRecord'
+            'formatter' => PiReportRecord::class
         ),
         array(
             'title' => 'Name',
-            'formatter' => 'PiReportName'
+            'formatter' => PiReportName::class
         ),
         array(
             'title' => 'PI Date & Time',
@@ -46,13 +52,13 @@ return array(
                 return $this->callFormatter(
                     [
                         'name' => 'hearingDate',
-                        'formatter' => 'DateTime',
+                        'formatter' => \Common\Service\Table\Formatter\DateTime::class
                     ],
                     $data
                 ).
                 $this->callFormatter(
                     [
-                        'formatter' => 'PiHearingStatus',
+                        'formatter' => PiHearingStatus::class,
                     ],
                     $data
                 );
@@ -60,7 +66,7 @@ return array(
         ),
         array(
             'title' => 'Venue',
-            'formatter' => 'VenueAddress'
+            'formatter' => VenueAddress::class
         ),
     )
 );

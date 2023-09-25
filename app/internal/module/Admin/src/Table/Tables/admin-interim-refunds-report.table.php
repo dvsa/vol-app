@@ -1,5 +1,11 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\FeeAmount;
+use Common\Service\Table\Formatter\InternalLicenceNumberLink;
+use Common\Service\Table\Formatter\OrganisationLink;
+use Common\Service\Table\Formatter\RefData;
+
 return array(
     'variables' => [
         'title' => 'Interim Refunds',
@@ -14,7 +20,7 @@ return array(
         [
             'title' => 'Licence Number',
             'sort' => 'l.licNo',
-            'formatter' => 'InternalLicenceNumberLink',
+            'formatter' => InternalLicenceNumberLink::class,
         ],
         [
             'title' => 'Operator Name',
@@ -22,7 +28,7 @@ return array(
             'formatter' => function ($data) {
                 return $this->callFormatter(
                     [
-                        'formatter' => 'OrganisationLink',
+                        'formatter' => OrganisationLink::class,
                     ],
                     $data['licence']
                 );
@@ -32,13 +38,13 @@ return array(
             'title' => 'Date Fee Invoiced',
             'sort' => 'invoicedDate',
             'name' => 'invoicedDate',
-            'formatter' => 'Date'
+            'formatter' => Date::class
         ],
         [
             'title' => 'Fee Amount',
             'isNumeric' => true,
             'name' => 'amount',
-            'formatter' => 'FeeAmount'
+            'formatter' => FeeAmount::class
         ],
 
         [
@@ -51,7 +57,7 @@ return array(
                 $refundTransaction = array_shift($refundTransaction);
                 return $this->callFormatter(
                     [
-                        'formatter' => 'Date',
+                        'formatter' => Date::class,
                         'name' => 'createdOn',
                     ],
                     $refundTransaction
@@ -62,7 +68,7 @@ return array(
             'title' => 'Refund Status',
             'sort' => 'feeStatus',
             'name' => 'feeStatus',
-            'formatter' => 'RefData'
+            'formatter' => RefData::class
         ],
     ]
 );

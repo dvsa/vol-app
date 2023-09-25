@@ -1,5 +1,10 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\TransactionAmount;
+use Common\Service\Table\Formatter\TransactionAmountSum;
+use Common\Service\Table\Formatter\TransactionNoAndStatus;
+
 return array(
     'variables' => array(
         'title' => 'Payments and adjustments',
@@ -13,12 +18,12 @@ return array(
         array(
             'title' => 'No.',
             'name' => 'transactionId',
-            'formatter' => 'TransactionNoAndStatus',
+            'formatter' => TransactionNoAndStatus::class,
         ),
         array(
             'title' => 'Date',
             'name' => 'createdOn',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
         ),
         array(
             'title' => 'Type',
@@ -35,7 +40,7 @@ return array(
         array(
             'title' => 'Allocation',
             'name' => 'amount',
-            'formatter' => 'TransactionAmount',
+            'formatter' => TransactionAmount::class,
             'isNumeric' => true,
         ),
     ),
@@ -46,7 +51,7 @@ return array(
             'align' => 'govuk-!-text-align-right',
         ),
         array(
-            'formatter' => 'TransactionAmountSum',
+            'formatter' => TransactionAmountSum::class,
             'name' => 'amount',
             'align' => 'govuk-!-text-align-right',
         ),

@@ -1,5 +1,7 @@
 <?php
 
+use Common\Service\Table\Formatter\SystemParameterLink;
+
 return array(
     'variables' => array(
         'title' => 'parameters',
@@ -26,7 +28,7 @@ return array(
             'isNumeric' => true,
             'name' => 'id',
             'sort' => 'id',
-            'formatter' => 'SystemParameterLink'
+            'formatter' => SystemParameterLink::class
         ),
         array(
             'title' => 'Value',

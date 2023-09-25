@@ -1,5 +1,9 @@
 <?php
 
+use Common\Service\Table\Formatter\Address;
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\Name;
+
 return array(
     'variables' => array(
         'title' => 'Environmental complaints',
@@ -20,18 +24,18 @@ return array(
         ),
         array(
             'title' => 'Date received',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
             'name' => 'complaintDate'
         ),
         array(
             'title' => 'Complainant',
-            'formatter' => 'Name',
+            'formatter' => Name::class,
             'name' => 'complainantContactDetails->person',
         ),
         array(
             'title' => 'OC Address',
             'formatter' => function ($data, $column) {
-                $column['formatter'] = 'Address';
+                $column['formatter'] = Address::class;
                 $addressList = '';
                 foreach ($data['operatingCentres'] as $operatingCentre) {
                     $addressList .= $this->callFormatter($column, $operatingCentre['address']) . '<br/>';

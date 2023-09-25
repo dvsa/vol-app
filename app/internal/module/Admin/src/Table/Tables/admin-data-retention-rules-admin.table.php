@@ -1,5 +1,9 @@
 <?php
 
+use Common\Service\Table\Formatter\DataRetentionRuleActionType;
+use Common\Service\Table\Formatter\DataRetentionRuleAdminLink;
+use Common\Service\Table\Formatter\DataRetentionRuleIsEnabled;
+
 return array(
     'variables' => array(
         'title' => 'Data Retention rules',
@@ -25,7 +29,7 @@ return array(
             'title' => 'Description',
             'name' => 'description',
             'sort' => 'description',
-            'formatter' => 'DataRetentionRuleAdminLink'
+            'formatter' => DataRetentionRuleAdminLink::class
         ),
         array(
             'title' => 'Retention period',
@@ -42,13 +46,13 @@ return array(
             'title' => 'is Enabled',
             'name' => 'isEnabled',
             'sort' => 'isEnabled',
-            'formatter' => 'DataRetentionRuleIsEnabled'
+            'formatter' => DataRetentionRuleIsEnabled::class
         ),
         array(
             'title' => 'Action type',
             'name' => 'actionType',
             'sort' => 'actionType',
-            'formatter' => 'DataRetentionRuleActionType'
+            'formatter' => DataRetentionRuleActionType::class
         ),
     )
 );

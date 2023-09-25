@@ -1,5 +1,8 @@
 <?php
 
+use Common\Service\Table\Formatter\ConstrainedCountriesList;
+use Common\Service\Table\Formatter\StackValue;
+
 return [
     'variables' => [
         'title' => 'Permits',
@@ -24,11 +27,11 @@ return [
             'title' => 'Minimum emission standard',
             'name' => 'emissionsCategory',
             'stack' => 'irhpPermitRange->emissionsCategory->description',
-            'formatter' => 'StackValue',
+            'formatter' => StackValue::class,
         ],
         [
             'title' => 'Not valid for travel to',
-            'formatter' => 'ConstrainedCountriesList'
+            'formatter' => ConstrainedCountriesList::class
         ],
     ],
 ];

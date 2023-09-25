@@ -1,5 +1,8 @@
 <?php
 
+use Common\Service\Table\Formatter\ConvictionDescription;
+use Common\Service\Table\Formatter\Date;
+
 return array(
     'variables' => array(
         'title' => 'Convictions',
@@ -41,14 +44,14 @@ return array(
                     return '<a href="' . $url . '" class="' . $class . '">N/A</a>';
                 }
 
-                $column['formatter'] = 'Date';
+                $column['formatter'] = Date::class;
                 return '<a href="' . $url . '" class="' . $class . '">' . $this->callFormatter($column, $data) . '</a>';
             },
             'name' => 'convictionDate'
         ),
         array(
             'title' => 'Date of offence',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
             'name' => 'offenceDate'
         ),
         array(
@@ -65,7 +68,7 @@ return array(
         ),
         array(
             'title' => 'Description',
-            'formatter' => 'ConvictionDescription',
+            'formatter' => ConvictionDescription::class,
         ),
         array(
             'title' => 'Court/FPN',

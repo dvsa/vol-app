@@ -1,4 +1,7 @@
 <?php
+
+use Common\Service\Table\Formatter\Address;
+
 return array(
     'variables' => array(
         'id' => 'tm-other-employment',
@@ -30,7 +33,7 @@ return array(
         array(
             'title' => 'Address',
             'width' => '350px',
-            'formatter' => 'Address',
+            'formatter' => Address::class,
             'name' => 'address'
         ),
         array(

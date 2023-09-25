@@ -1,5 +1,6 @@
 <?php
 
+use Common\Service\Table\Formatter\ConstrainedCountriesList;
 use Common\Util\Escape;
 
 return [
@@ -43,7 +44,7 @@ return [
         ],
         [
             'title' => 'Not valid for travel to',
-            'formatter' => 'ConstrainedCountriesList'
+            'formatter' => ConstrainedCountriesList::class
         ],
         [
             'title' => 'Ceased Date',

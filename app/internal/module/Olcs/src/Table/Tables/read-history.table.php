@@ -1,5 +1,8 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\StackValueReplacer;
+
 return array(
     'variables' => array(
         'title' => 'Access history'
@@ -18,11 +21,11 @@ return array(
         array(
             'title' => 'Date',
             'name' => 'createdOn',
-            'formatter' => 'Date'
+            'formatter' => Date::class
         ),
         array(
             'title' => 'User',
-            'formatter' => 'StackValueReplacer',
+            'formatter' => StackValueReplacer::class,
             'stringFormat' => '{user->contactDetails->person->forename} {user->contactDetails->person->familyName}'
         )
     )

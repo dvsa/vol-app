@@ -1,5 +1,7 @@
 <?php
 
+use Common\Service\Table\Formatter\Address;
+
 return array(
     'variables' => array(
         'title' => 'Conditions & undertakings',
@@ -70,7 +72,7 @@ return array(
 
                 if (isset($data['operatingCentre']['address'])) {
 
-                    $column['formatter'] = 'Address';
+                    $column['formatter'] = Address::class;
 
                     return $this->callFormatter($column, $data['operatingCentre']['address']);
                 }
