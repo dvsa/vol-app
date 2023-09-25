@@ -1,6 +1,9 @@
 <?php
 
 use Common\RefData;
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\RefDataStatus;
+use Common\Service\Table\Formatter\StackValue;
 use Common\Util\Escape;
 
 return array(
@@ -28,7 +31,7 @@ return array(
             'isNumeric' => true,
             'name' => 'irhpApplication',
             'stack' => 'irhpPermitApplication->relatedApplication->id',
-            'formatter' => 'StackValue',
+            'formatter' => StackValue::class,
         ),
         array(
             'title' => 'permits.ecmt.page.valid.tableheader.countries',
@@ -40,12 +43,12 @@ return array(
         array(
             'title' => 'permits.irhp.valid.permits.table.start-date',
             'name' => 'issueDate',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
         ),
         array(
             'title' => 'permits.irhp.valid.permits.table.expiry-date',
             'name' => 'expiryDate',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
         ),
         array(
             'title' => 'status',
@@ -54,7 +57,7 @@ return array(
                 return $this->callFormatter(
                     [
                         'name' => 'status',
-                        'formatter' => 'RefDataStatus',
+                        'formatter' => RefDataStatus::class,
                     ],
                     [
                         'status' => [

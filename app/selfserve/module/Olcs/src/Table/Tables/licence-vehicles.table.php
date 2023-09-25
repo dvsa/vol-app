@@ -1,5 +1,9 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\NumberStackValue;
+use Common\Service\Table\Formatter\VehicleDiscNo;
+use Common\Service\Table\Formatter\VehicleLink;
 use Olcs\Controller\Licence\Vehicle\AbstractVehicleController;
 
 $translationPrefix = 'licence.vehicle.table';
@@ -23,18 +27,18 @@ return [
     'columns' => [
         [
             'title' => $translationPrefix . '.vrm',
-            'formatter' => 'VehicleLink',
+            'formatter' => VehicleLink::class,
             'sort' => 'v.vrm'
         ],
         [
             'title' => $translationPrefix . '.weight',
             'isNumeric' => true,
             'stack' => 'vehicle->platedWeight',
-            'formatter' => 'NumberStackValue',
+            'formatter' => NumberStackValue::class,
         ],
         [
             'title' => $translationPrefix . '.specified',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
             'name' => 'specifiedDate',
             'sort' => 'specifiedDate'
         ],
@@ -42,7 +46,7 @@ return [
             'title' => $translationPrefix . '.disc-no',
             'isNumeric' => true,
             'name' => 'discNo',
-            'formatter' => 'VehicleDiscNo'
+            'formatter' => VehicleDiscNo::class
         ],
         [
             'title' => 'Select',

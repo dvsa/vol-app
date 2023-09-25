@@ -1,5 +1,9 @@
 <?php
 
+use Common\Service\Table\Formatter\Address;
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\YesNo;
+
 return array(
     'variables' => array(),
     'settings' => array(),
@@ -8,12 +12,12 @@ return array(
         array(
             'title' => 'entity-view-label-operating-centre',
             'addressFields' => 'FULL',
-            'formatter' => 'Address',
+            'formatter' => Address::class,
             'name' => 'operatingCentre->address'
         ),
         array(
             'title' => 'entity-view-table-header-interim',
-            'formatter' => 'YesNo',
+            'formatter' => YesNo::class,
             'name' => 'isInterim'
         ),
         array(
@@ -37,7 +41,7 @@ return array(
             'title' => 'entity-view-table-header-date-added',
             'name' => 'createdOn',
             'formatter' => function ($row, $column) {
-                $column['formatter'] = 'Date';
+                $column['formatter'] = Date::class;
                 return $this->callFormatter($column, $row['operatingCentre']);
             }
         ),
@@ -45,7 +49,7 @@ return array(
             'title' => 'entity-view-table-header-date-removed',
             'name' => 'deletedDate',
             'formatter' => function ($row, $column) {
-                $column['formatter'] = 'Date';
+                $column['formatter'] = Date::class;
                 if (empty($row['deletedDate'])) {
                     return 'NA';
                 }

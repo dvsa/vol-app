@@ -1,5 +1,6 @@
 <?php
 
+use Common\Service\Table\Formatter\ValidityPeriod;
 use Common\Util\Escape;
 use Common\View\Helper\CurrencyFormatter;
 
@@ -17,7 +18,7 @@ return array(
         array(
             'title' => 'permits.irhp.fee-breakdown.validity-period',
             'name' => 'validityPeriod',
-            'formatter' => 'ValidityPeriod',
+            'formatter' => ValidityPeriod::class,
         ),
         array(
             'title' => 'permits.irhp.fee-breakdown.fee-per-permit',

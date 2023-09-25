@@ -1,5 +1,12 @@
 <?php
 
+use Common\Service\Table\Formatter\BusRegStatus;
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\EbsrDocumentLink;
+use Common\Service\Table\Formatter\EbsrDocumentStatus;
+use Common\Service\Table\Formatter\EbsrRegNumberLink;
+use Common\Service\Table\Formatter\EbsrVariationNumber;
+
 return array(
     'variables' => array(
         'title' => 'selfserve-table-ebsr-submissions-heading'
@@ -23,18 +30,18 @@ return array(
         array(
             'title' => 'selfserve-table-ebsr-submissions-file-name',
             'formatter' => function ($data, $column) {
-                $column['formatter'] = 'EbsrDocumentLink';
+                $column['formatter'] = EbsrDocumentLink::class;
                 return $this->callFormatter($column, $data);
             }
         ),
         array(
             'title' => 'File status',
-            'formatter' => 'EbsrDocumentStatus'
+            'formatter' => EbsrDocumentStatus::class
         ),
         array(
             'title' => 'selfserve-table-ebsr-submissions-reg-number',
             'formatter' => function ($data, $column) {
-                $column['formatter'] = 'EbsrRegNumberLink';
+                $column['formatter'] = EbsrRegNumberLink::class;
                 return $this->callFormatter($column, $data);
             }
         ),
@@ -42,13 +49,13 @@ return array(
             'title' => 'selfserve-table-ebsr-submissions-variation',
             'isNumeric' => true,
             'formatter' => function ($data, $column) {
-                $column['formatter'] = 'EbsrVariationNumber';
+                $column['formatter'] = EbsrVariationNumber::class;
                 return $this->callFormatter($column, $data);
             }
         ),
         array(
             'title' => 'Status',
-            'formatter' => 'BusRegStatus'
+            'formatter' => BusRegStatus::class
         ),
         array(
             'title' => 'selfserve-table-ebsr-submissions-service-numbers',
@@ -70,7 +77,7 @@ return array(
         array(
             'title' => 'selfserve-table-ebsr-submissions-uploaded',
             'formatter' => function ($data, $column) {
-                $column['formatter'] = 'Date';
+                $column['formatter'] = Date::class;
                 return $this->callFormatter($column, $data);
             },
             'name' => 'submittedDate'

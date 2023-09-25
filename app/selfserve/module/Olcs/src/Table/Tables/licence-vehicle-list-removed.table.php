@@ -1,5 +1,9 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\NumberStackValue;
+use Common\Service\Table\Formatter\StackValue;
+
 return [
     'paginate' => [
         'limit' => [
@@ -10,23 +14,23 @@ return [
     'columns' => [
         [
             'title' => 'table.licence-vehicle-list-removed.column.vrm.title',
-            'formatter' => 'StackValue',
+            'formatter' => StackValue::class,
             'stack' => 'vehicle->vrm',
         ],
         [
             'title' => 'table.licence-vehicle-list-removed.column.weight.title',
             'isNumeric' => true,
             'stack' => 'vehicle->platedWeight',
-            'formatter' => 'NumberStackValue',
+            'formatter' => NumberStackValue::class,
         ],
         [
             'title' => 'table.licence-vehicle-list-removed.column.specified.title',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
             'name' => 'specifiedDate',
         ],
         [
             'title' => 'table.licence-vehicle-list-removed.column.removed.title',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
             'name' => 'removalDate',
         ],
     ],

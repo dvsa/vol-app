@@ -1,4 +1,7 @@
 <?php
+
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\Translate;
 use Common\Util\Escape;
 
 $variationNo = 1;
@@ -36,7 +39,7 @@ return array(
         ),
         array(
             'title' => 'Status',
-            'formatter' => 'Translate',
+            'formatter' => Translate::class,
             'name' => 'status->description',
         ),
         array(
@@ -55,17 +58,17 @@ return array(
         ),
         array(
             'title' => 'Date received',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
             'name' => 'receivedDate'
         ),
         array(
             'title' => 'Date effective',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
             'name' => 'effectiveDate'
         ),
         array(
             'title' => 'End date',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
             'name' => 'endDate'
         ),
         array(

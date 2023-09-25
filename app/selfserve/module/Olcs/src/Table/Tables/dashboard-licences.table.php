@@ -1,5 +1,9 @@
 <?php
 
+use Common\Service\Table\Formatter\LicenceNumberAndStatus;
+use Common\Service\Table\Formatter\LicenceStatusSelfserve;
+use Common\Service\Table\Formatter\Translate;
+
 $translationPrefix = 'dashboard-table-licences';
 
 return array(
@@ -14,22 +18,22 @@ return array(
         array(
             'title' => 'dashboard-table-licences-licNo',
             'name' => 'licNo',
-            'formatter' => 'LicenceNumberAndStatus'
+            'formatter' => LicenceNumberAndStatus::class
         ),
         array(
             'title' => 'dashboard-table-licences-status',
             'name' => 'status',
-            'formatter' => 'LicenceStatusSelfserve',
+            'formatter' => LicenceStatusSelfserve::class,
         ),
         array(
             'title' => 'dashboard-table-licences-licType',
             'name' => 'type',
-            'formatter' => 'Translate'
+            'formatter' => Translate::class
         ),
         array(
             'title' => 'dashboard-table-licences-area',
             'name' => 'trafficArea',
-            'formatter' => 'Translate'
+            'formatter' => Translate::class
         )
     )
 );

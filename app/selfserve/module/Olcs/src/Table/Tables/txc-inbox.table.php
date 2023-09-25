@@ -1,5 +1,9 @@
 <?php
 
+use Common\Service\Table\Formatter\BusRegStatus;
+use Common\Service\Table\Formatter\EbsrRegNumberLink;
+use Common\Service\Table\Formatter\StackValue;
+
 return array(
     'variables' => array(
         'title' => 'selfserve-table-txc-inbox-heading'
@@ -26,18 +30,18 @@ return array(
             'permissionRequisites' => ['local-authority-admin', 'local-authority-user'],
             'title' => 'Organisation',
             'stack' => 'busReg->licence->organisation->name',
-            'formatter' => 'StackValue',
+            'formatter' => StackValue::class,
         ),
         array(
             'title' => 'selfserve-table-txc-inbox-reg-number',
             'formatter' => function ($data, $column) {
-                $column['formatter'] = 'EbsrRegNumberLink';
+                $column['formatter'] = EbsrRegNumberLink::class;
                 return $this->callFormatter($column, $data);
             }
         ),
         array(
             'title' => 'Status',
-            'formatter' => 'BusRegStatus'
+            'formatter' => BusRegStatus::class
         ),
         array(
             'title' => 'selfserve-table-txc-inbox-variation',

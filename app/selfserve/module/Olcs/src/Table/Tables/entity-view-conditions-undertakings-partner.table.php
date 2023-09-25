@@ -1,5 +1,9 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\Translate;
+use Common\Service\Table\Formatter\YesNo;
+
 $translationPrefix = 'entity-view-table-conditions-undertakings.table';
 
 return array(
@@ -13,17 +17,17 @@ return array(
         ),
         array(
             'title' => $translationPrefix . '.type',
-            'formatter' => 'Translate',
+            'formatter' => Translate::class,
             'name' => 'conditionType->description'
         ),
         array(
             'title' => $translationPrefix . '.dateAdded',
             'name' => 'createdOn',
-            'formatter' => 'Date'
+            'formatter' => Date::class
         ),
         array(
             'title' => $translationPrefix  . '.fulfilled',
-            'formatter' => 'YesNo',
+            'formatter' => YesNo::class,
             'name' => 'isFulfilled'
         ),
         array(

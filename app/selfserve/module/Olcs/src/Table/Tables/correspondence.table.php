@@ -1,5 +1,8 @@
 <?php
 
+use Common\Service\Table\Formatter\AccessedCorrespondence;
+use Common\Service\Table\Formatter\LicenceNumberLink;
+
 return array(
     'variables' => array(
         'title' => 'dashboard-documents.table.title',
@@ -34,13 +37,13 @@ return array(
         array(
             'title' => 'dashboard-correspondence.table.column.title',
             'name' => 'correspondence',
-            'formatter' => 'AccessedCorrespondence',
+            'formatter' => AccessedCorrespondence::class,
             'sort' => 'd.description'
         ),
         array(
             'title' => 'dashboard-correspondence.table.column.reference',
             'name' => 'licence',
-            'formatter' => 'LicenceNumberLink',
+            'formatter' => LicenceNumberLink::class,
             'sort' => 'l.licNo'
         ),
     )

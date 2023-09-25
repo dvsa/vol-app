@@ -1,5 +1,8 @@
 <?php
 
+use Common\Service\Table\Formatter\DashboardApplicationLink;
+use Common\Service\Table\Formatter\RefDataStatus;
+
 $translationPrefix = 'dashboard-table-applications';
 
 return array(
@@ -13,7 +16,7 @@ return array(
         array(
             'title' => 'dashboard-table-applications-appId',
             'lva' => 'application',
-            'formatter' => 'DashboardApplicationLink'
+            'formatter' => DashboardApplicationLink::class
         ),
         array(
             'title' => 'dashboard-table-applications-status',
@@ -21,7 +24,7 @@ return array(
                 return $this->callFormatter(
                     [
                         'name' => 'status',
-                        'formatter' => 'RefDataStatus',
+                        'formatter' => RefDataStatus::class,
                     ],
                     [
                         'status' => [

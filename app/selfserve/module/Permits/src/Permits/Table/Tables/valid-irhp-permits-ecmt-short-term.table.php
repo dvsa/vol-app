@@ -1,6 +1,10 @@
 <?php
 
 use Common\RefData;
+use Common\Service\Table\Formatter\ConstrainedCountriesList;
+use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\Formatter\RefDataStatus;
+use Common\Service\Table\Formatter\StackValue;
 use Common\Util\Escape;
 
 return array(
@@ -28,23 +32,23 @@ return array(
             'isNumeric' => true,
             'name' => 'irhpApplication',
             'stack' => 'irhpPermitApplication->relatedApplication->id',
-            'formatter' => 'StackValue',
+            'formatter' => StackValue::class,
         ),
         array(
             'title' => 'permits.irhp.valid.permits.table.emissions-standard',
             'name' => 'emissionsCategory',
             'stack' => 'irhpPermitRange->emissionsCategory->description',
-            'formatter' => 'StackValue',
+            'formatter' => StackValue::class,
         ),
         array(
             'title' => 'permits.irhp.valid.permits.table.constrained.countries',
             'name' => 'constrainedCountries',
-            'formatter' => 'ConstrainedCountriesList',
+            'formatter' => ConstrainedCountriesList::class,
         ),
         array(
             'title' => 'permits.irhp.valid.permits.table.issue-date',
             'name' => 'issueDate',
-            'formatter' => 'Date',
+            'formatter' => Date::class,
         ),
         array(
             'title' => 'permits.irhp.valid.permits.table.use-by-date',
@@ -53,7 +57,7 @@ return array(
                 return $this->callFormatter(
                     [
                         'name' => 'useByDate',
-                        'formatter' => 'Date',
+                        'formatter' => Date::class,
                     ],
                     [
                         'useByDate' => $row['ceasedDate'],
@@ -68,7 +72,7 @@ return array(
                 return $this->callFormatter(
                     [
                         'name' => 'status',
-                        'formatter' => 'RefDataStatus',
+                        'formatter' => RefDataStatus::class,
                     ],
                     [
                         'status' => [

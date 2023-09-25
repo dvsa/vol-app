@@ -1,5 +1,8 @@
 <?php
 
+use Common\Service\Table\Formatter\DashboardTmActionLink;
+use Common\Service\Table\Formatter\DashboardTmApplicationStatus;
+
 return array(
     'variables' => array(
         'title' => '',
@@ -18,7 +21,7 @@ return array(
         ),
         array(
             'title' => 'dashboard-table-applications-status',
-            'formatter' => 'DashboardTmApplicationStatus'
+            'formatter' => DashboardTmApplicationStatus::class
         ),
         array(
             'title' => 'dashboard.tm-applications.table.column.lic-no.title',
@@ -26,7 +29,7 @@ return array(
         ),
         array(
             'title' => '',
-            'formatter' => 'DashboardTmActionLink'
+            'formatter' => DashboardTmActionLink::class
         )
     )
 );
