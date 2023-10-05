@@ -31,7 +31,7 @@ class VariationUndertakingsTest extends AbstractFormValidationTestCase
     public function testDeclarationConfirmation()
     {
         $element = ['declarationsAndUndertakings', 'declarationConfirmation'];
-        $this->assertFormElementRequired($element, true);
+        $this->assertFormElementIsRequired($element);
         $this->assertFormElementAllowEmpty($element, false);
         $this->assertFormElementValid($element, 'Y');
         $this->assertFormElementNotValid($element, 'N', \Laminas\Validator\Identical::NOT_SAME);
