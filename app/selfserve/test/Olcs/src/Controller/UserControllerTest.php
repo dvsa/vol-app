@@ -94,7 +94,6 @@ class UserControllerTest extends MockeryTestCase
             }
         );
 
-
         $this->mockGuidanceHelper->shouldReceive('append');
     }
 

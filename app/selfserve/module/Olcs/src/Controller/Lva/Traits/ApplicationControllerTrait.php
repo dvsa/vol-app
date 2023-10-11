@@ -16,8 +16,8 @@ use Laminas\View\Model\ViewModel;
  */
 trait ApplicationControllerTrait
 {
-    use ExternalControllerTrait,
-        CommonApplicationControllerTrait;
+    use ExternalControllerTrait;
+    use CommonApplicationControllerTrait;
 
     /**
      * Hook into the dispatch before the controller action is executed
@@ -136,7 +136,7 @@ trait ApplicationControllerTrait
         }
 
         // we can pass this array straight to the view
-        return ['stepX' => $index+1, 'stepY' => count($sections)];
+        return ['stepX' => $index + 1, 'stepY' => count($sections)];
     }
 
     /**

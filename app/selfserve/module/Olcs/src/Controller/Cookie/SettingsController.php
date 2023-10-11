@@ -13,8 +13,8 @@ use RuntimeException;
 
 class SettingsController extends AbstractOlcsController
 {
-    const SUCCESS_QUERY_PARAM = 'success';
-    const SUCCESS_QUERY_VALUE = 'true';
+    public const SUCCESS_QUERY_PARAM = 'success';
+    public const SUCCESS_QUERY_VALUE = 'true';
 
     /** @var CurrentPreferencesProvider */
     private $currentPreferencesProvider;

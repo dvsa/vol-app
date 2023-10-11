@@ -18,12 +18,12 @@ use Olcs\Controller\Lva\Adapters\LicenceTransportManagerAdapter;
  */
 class LicenceTransportManagerAdapterFactory implements FactoryInterface
 {
-    public function createService(ServiceLocatorInterface $serviceLocator) : LicenceTransportManagerAdapter
+    public function createService(ServiceLocatorInterface $serviceLocator): LicenceTransportManagerAdapter
     {
         return $this->__invoke($serviceLocator, LicenceTransportManagerAdapter::class);
     }
 
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : LicenceTransportManagerAdapter
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LicenceTransportManagerAdapter
     {
         $transferAnnotationBuilder = $container->get(AnnotationBuilder::class);
         assert($transferAnnotationBuilder instanceof AnnotationBuilder);
