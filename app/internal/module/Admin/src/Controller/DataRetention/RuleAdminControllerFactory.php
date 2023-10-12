@@ -26,7 +26,6 @@ class RuleAdminControllerFactory implements FactoryInterface
         $navigation = $container->get('navigation');
         assert($navigation instanceof Navigation);
 
-
         return new RuleAdminController(
             $translationHelper,
             $formHelperService,

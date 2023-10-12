@@ -3,6 +3,7 @@
 /**
  * Bus Short Controller Test
  */
+
 namespace OlcsTest\Controller\Bus\Short;
 
 use Common\Service\Helper\FlashMessengerHelperService;
@@ -28,7 +29,6 @@ class BusShortControllerTest extends MockeryTestCase
         $this->navigation = m::mock(Navigation::class);
 
         $this->sut = new Sut($this->translationHelper, $this->formHelper, $this->flashMessengerHelper, $this->navigation);
-
     }
 
     /**

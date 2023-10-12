@@ -13,7 +13,7 @@ use Olcs\Service\Data\DocumentSubCategory;
  */
 class DocumentSearchTraitTest extends MockeryTestCase
 {
-    const CAT_ID = 8001;
+    public const CAT_ID = 8001;
 
     /** @var Stub\StubDocumentSearchTrait */
     private $sut;

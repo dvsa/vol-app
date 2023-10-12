@@ -312,7 +312,8 @@ class ContinuationController extends AbstractController
      */
     public function alterFormActions($form, $hasOutstandingContinuationFee, $continuationDetail)
     {
-        if ($hasOutstandingContinuationFee
+        if (
+            $hasOutstandingContinuationFee
             || $continuationDetail['status']['id'] === RefData::CONTINUATION_DETAIL_STATUS_COMPLETE
         ) {
             $this->formHelper->remove($form, 'form-actions->continueLicence');
@@ -329,7 +330,8 @@ class ContinuationController extends AbstractController
      */
     protected function alterFormReceived($form, $continuationDetail)
     {
-        if ($continuationDetail['status']['id'] === RefData::CONTINUATION_DETAIL_STATUS_PRINTED
+        if (
+            $continuationDetail['status']['id'] === RefData::CONTINUATION_DETAIL_STATUS_PRINTED
             || ($continuationDetail['status']['id'] !== RefData::CONTINUATION_DETAIL_STATUS_PRINTED
             && $continuationDetail['received'] === 'N')
         ) {
@@ -413,7 +415,8 @@ class ContinuationController extends AbstractController
     protected function alterFormTotalVehicleAuthorisation($form, $continuationDetail)
     {
         $licence = $continuationDetail['licence'];
-        if ($licence['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_PSV
+        if (
+            $licence['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_PSV
             && ($licence['licenceType']['id'] === RefData::LICENCE_TYPE_RESTRICTED
             || $licence['licenceType']['id'] === RefData::LICENCE_TYPE_STANDARD_NATIONAL
             || $licence['licenceType']['id'] === RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL)
@@ -440,7 +443,8 @@ class ContinuationController extends AbstractController
     protected function alterFormNumberOfDiscs($form, $continuationDetail, $postData)
     {
         $licence = $continuationDetail['licence'];
-        if ($licence['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_PSV
+        if (
+            $licence['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_PSV
             && ($licence['licenceType']['id'] === RefData::LICENCE_TYPE_RESTRICTED
             || $licence['licenceType']['id'] === RefData::LICENCE_TYPE_STANDARD_NATIONAL
             || $licence['licenceType']['id'] === RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL)
@@ -507,7 +511,8 @@ class ContinuationController extends AbstractController
         if ($this->displayCommunityLicenceElement($licence)) {
             // Displayed by default
             $totalVehicles = $licence['totAuthVehicles'];
-            if ($licence['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_PSV
+            if (
+                $licence['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_PSV
                 && isset($postData['fields']['totalVehicleAuthorisation'])
             ) {
                 $totalVehicles = $postData['fields']['totalVehicleAuthorisation'];

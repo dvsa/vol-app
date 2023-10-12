@@ -160,51 +160,51 @@ trait TaskSearchTrait
             }
 
             switch ($type) {
-            case 'organisation':
-                $params = [
+                case 'organisation':
+                    $params = [
                     'type' => 'organisation',
                     'typeId' => $this->params('organisation'),
-                ];
-                break;
-            case 'licence':
-                $params = [
+                    ];
+                    break;
+                case 'licence':
+                    $params = [
                     'type' => 'licence',
                     'typeId' => $this->params('licence'),
-                ];
-                break;
-            case 'application':
-                $params = [
+                    ];
+                    break;
+                case 'application':
+                    $params = [
                     'type' => 'application',
                     'typeId' => $this->params('application'),
-                ];
-                break;
-            case 'transportManager':
-                $params = [
+                    ];
+                    break;
+                case 'transportManager':
+                    $params = [
                     'type' => 'tm',
                     'typeId' => $this->params('transportManager'),
-                ];
-                break;
-            case 'busReg':
-                $params = [
+                    ];
+                    break;
+                case 'busReg':
+                    $params = [
                     'type' => 'busreg',
                     'typeId' => $this->params('busRegId'),
-                ];
-                break;
-            case 'case':
-                $params = [
+                    ];
+                    break;
+                case 'case':
+                    $params = [
                     'type' => 'case',
                     'typeId' => $this->params('case'),
-                ];
-                break;
-            case 'irhpapplication':
-                $params = [
+                    ];
+                    break;
+                case 'irhpapplication':
+                    $params = [
                     'type' => 'irhpapplication',
                     'typeId' => $this->params('irhpAppId'),
-                ];
-                break;
-            default:
-                // no type - call from the home page
-                break;
+                    ];
+                    break;
+                default:
+                    // no type - call from the home page
+                    break;
             }
             $params['action'] = $action;
 

@@ -747,8 +747,8 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         $command = $this->transferAnnotationBuilder->createCommand($dto);
 
         /**
- * @var \Common\Service\Cqrs\Response $response
-*/
+        * @var \Common\Service\Cqrs\Response $response
+        */
         $response = $this->commandService->send($command);
         if ($response->isClientError()) {
             $messages = $response->getResult()['messages'];

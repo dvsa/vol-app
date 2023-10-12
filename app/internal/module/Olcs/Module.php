@@ -5,15 +5,14 @@
  *
  * @author Someone <someone@valtech.co.uk>
  */
+
 namespace Olcs;
 
 use Laminas\Mvc\ModuleRouteListener;
 use Laminas\Mvc\MvcEvent;
-use Laminas\View\Helper\Placeholder\Container\AbstractContainer;
 use Laminas\View\Model\ViewModel;
 use Common\Exception\ResourceNotFoundException;
 use Olcs\Listener\HeaderSearch;
-use Olcs\Listener\NavigationToggle;
 use Olcs\Listener\RouteParams;
 
 /**
@@ -54,7 +53,8 @@ class Module
                 $exception = $e->getParam('exception');
                 // If something throws an uncaught ResourceNotFoundException in
                 // an HTTP context, return a 404
-                if ($exception instanceof ResourceNotFoundException
+                if (
+                    $exception instanceof ResourceNotFoundException
                     && $e->getResponse() instanceof \Laminas\Http\Response
                 ) {
                     $model = new ViewModel(

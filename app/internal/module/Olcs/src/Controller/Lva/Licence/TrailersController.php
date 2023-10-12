@@ -5,6 +5,7 @@
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
+
 namespace Olcs\Controller\Lva\Licence;
 
 use Common\Controller\Lva;

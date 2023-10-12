@@ -3,6 +3,7 @@
 /**
  * Read History Controller
  */
+
 namespace Olcs\Controller\Bus\Processing;
 
 use Dvsa\Olcs\Transfer\Query\Audit\ReadBusReg;

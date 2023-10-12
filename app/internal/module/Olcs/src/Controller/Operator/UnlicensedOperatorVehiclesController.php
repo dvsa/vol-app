@@ -168,7 +168,7 @@ class UnlicensedOperatorVehiclesController extends AbstractInternalController im
      */
     private function getGoodsOrPsv()
     {
-        $paramProvider= new GenericList($this->listVars, $this->defaultTableSortField);
+        $paramProvider = new GenericList($this->listVars, $this->defaultTableSortField);
         $paramProvider->setParams($this->plugin('params'));
         $response = $this->handleQuery(ListDto::create($paramProvider->provideParameters()));
 

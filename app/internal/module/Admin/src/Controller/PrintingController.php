@@ -80,7 +80,7 @@ class PrintingController extends AbstractInternalController implements LeftViewP
 
     protected function alterFormForEdit($form)
     {
-        $formHelper = $this-$this->formHelperService;
+        $formHelper = $this - $this->formHelperService;
         $formHelper->remove($form, 'form-actions->addAnother');
         return $form;
     }

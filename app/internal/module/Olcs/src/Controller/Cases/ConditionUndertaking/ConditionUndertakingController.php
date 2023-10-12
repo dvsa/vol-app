@@ -43,7 +43,6 @@ class ConditionUndertakingController extends AbstractInternalController implemen
     CaseControllerInterface,
     LeftViewProvider
 {
-
     /**
      * Holds the navigation ID,
      * required when an entire controller is
@@ -65,7 +64,8 @@ class ConditionUndertakingController extends AbstractInternalController implemen
     protected $listDto = ListDto::class;
     protected $listVars = ['case'];
     protected HelperPluginManager $viewHelperManager;
-    public function __construct( TranslationHelperService $translationHelper,
+    public function __construct(
+        TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
         FlashMessengerHelperService $flashMessengerHelper,
         Navigation $navigation,
@@ -235,7 +235,6 @@ class ConditionUndertakingController extends AbstractInternalController implemen
     {
         $optionList = [];
         if (isset($caseData['licence']['operatingCentres'])) {
-
             $addressViewHelper = $this->viewHelperManager->get('Address');
             foreach ($caseData['licence']['operatingCentres'] as $operatingCentreDetails) {
                 $optionList[$operatingCentreDetails['operatingCentre']['id']] =

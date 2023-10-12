@@ -14,11 +14,11 @@ use Olcs\Service\Data\SubCategoryDescription;
 
 class ScanningController extends LaminasAbstractActionController
 {
+    use GenericRenderView;
+
     public const ERR_NO_ENTITY_FOR_CATEGORY = 'ERR_NO_ENTITY_FOR_CATEGORY';
     public const ERR_ENTITY_NAME_NOT_SETUP = 'ERR_ENTITY_NAME_NOT_SETUP';
     public const ERR_NO_DESCRIPTION = 'ERR_NO_DESCRIPTION';
-
-    use GenericRenderView;
 
     protected FlashMessengerHelperService $flashMessengerHelper;
     protected FormHelperService $formHelper;
@@ -169,7 +169,8 @@ class ScanningController extends LaminasAbstractActionController
         if (isset($result['messages'])) {
             $messages = $result['messages'];
 
-            if (array_key_exists(self::ERR_NO_ENTITY_FOR_CATEGORY, $messages)
+            if (
+                array_key_exists(self::ERR_NO_ENTITY_FOR_CATEGORY, $messages)
                 || array_key_exists(self::ERR_ENTITY_NAME_NOT_SETUP, $messages)
                 // Temporary fix, if the response was a client error, assume the entity was not found
                 || $response->isClientError()

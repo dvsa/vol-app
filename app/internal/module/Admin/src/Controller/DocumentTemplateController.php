@@ -26,8 +26,8 @@ use Olcs\Service\Data\SubCategory;
 
 class DocumentTemplateController extends AbstractInternalController implements LeftViewProvider
 {
-    const ERR_UPLOAD_DEF = '4';
-    const FILE_UPLOAD_ERR_PREFIX = 'message.file-upload-error.';
+    public const ERR_UPLOAD_DEF = '4';
+    public const FILE_UPLOAD_ERR_PREFIX = 'message.file-upload-error.';
 
     protected $tableName = 'admin-document-templates';
     protected $hasMultiDelete = false;

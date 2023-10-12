@@ -60,7 +60,7 @@ class CpmsReportController extends AbstractInternalController implements LeftVie
         if ($request->isPost() && $form->isValid()) {
             $commandData = Mapper::mapFromForm($form->getData());
             $commandData['name'] = $this->getReportName($commandData['reportCode'])
-                .' '. $commandData['start'] .' to '. $commandData['end'];
+                . ' ' . $commandData['start'] . ' to ' . $commandData['end'];
             $response = $this->handleCommand(GenerateCmd::create($commandData));
 
             if ($response->isServerError()) {

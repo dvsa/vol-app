@@ -46,7 +46,8 @@ class ConditionsUndertakingsControllerTest extends AbstractLvaControllerTestCase
         $this->mockRestrictionHelper = m::mock(RestrictionHelperService::class);
 
         $this->mockController(
-            ConditionsUndertakingsController::class, [
+            ConditionsUndertakingsController::class,
+            [
             $this->mockNiTextTranslationUtil,
             $this->mockAuthService,
             $this->mockFormHelper,
@@ -60,8 +61,6 @@ class ConditionsUndertakingsControllerTest extends AbstractLvaControllerTestCase
         );
 
         $this->sut->shouldReceive('setAdapter');
-
-
     }
 
     public function testIndexActionWithGet()

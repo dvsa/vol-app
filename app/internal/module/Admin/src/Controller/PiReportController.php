@@ -3,6 +3,7 @@
 /**
  * PI Report Controller
  */
+
 namespace Admin\Controller;
 
 use Admin\Controller\Traits\ReportLeftViewTrait;
@@ -22,7 +23,6 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
  */
 class PiReportController extends AbstractInternalController implements LeftViewProvider
 {
-
     use ReportLeftViewTrait;
 
     /**

@@ -5,6 +5,7 @@
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
+
 namespace OlcsTest\Controller\Licence;
 
 use Common\RefData;
@@ -185,7 +186,6 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
     public function testAlterFormTotalVehicleAuthorisation($displayed, $goodsOrPsv, $licenceType)
     {
         $mockForm = \Mockery::mock(Form::class);
-
 
         if ($displayed) {
             $this->mockFormHelper->shouldReceive('remove')->never();

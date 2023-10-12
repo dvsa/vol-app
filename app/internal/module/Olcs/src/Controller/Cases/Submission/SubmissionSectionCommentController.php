@@ -86,7 +86,8 @@ class SubmissionSectionCommentController extends AbstractInternalController impl
     ];
 
 
-    public function __construct(TranslationHelperService $translationHelper,
+    public function __construct(
+        TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
         FlashMessengerHelperService $flashMessenger,
         Navigation $navigation

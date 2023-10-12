@@ -26,7 +26,6 @@ class IrhpPermitControllerFactory implements FactoryInterface
         $navigation = $container->get('navigation');
         assert($navigation instanceof Navigation);
 
-
         return new IrhpPermitController(
             $translationHelper,
             $formHelper,

@@ -3,6 +3,7 @@
 /**
  * Internal Variation Licence History Controller
  */
+
 namespace Olcs\Controller\Lva\Variation;
 
 use Common\Controller\Lva;

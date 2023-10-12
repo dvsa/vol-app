@@ -109,12 +109,12 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
         ];
 
         switch ($case['caseType']['id']) {
-        case 'case_t_tm':
-            $filters['transportManager'] = $case['transportManager']['id'];
-            break;
-        default:
-            $filters['licence'] = $case['licence']['id'];
-            break;
+            case 'case_t_tm':
+                $filters['transportManager'] = $case['transportManager']['id'];
+                break;
+            default:
+                $filters['licence'] = $case['licence']['id'];
+                break;
         }
 
         return $this->mapDocumentFilters($filters);

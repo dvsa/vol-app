@@ -11,7 +11,6 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 
-
 class DecisionsController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
     /**

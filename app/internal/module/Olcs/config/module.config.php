@@ -117,7 +117,6 @@ use Olcs\View\Helper\SubmissionSectionTableFactory;
 use Olcs\Controller\TransportManager as TransportManagerControllers;
 use Olcs\Controller\Factory\TransportManager as TransportManagerControllerFactories;
 
-
 return array(
     'router' => [
         'routes' => include __DIR__ . '/routes.config.php'

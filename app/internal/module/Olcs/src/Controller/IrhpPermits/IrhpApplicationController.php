@@ -83,12 +83,12 @@ class IrhpApplicationController extends AbstractInternalController implements
     // Stores the application steps array retrieved from Q&A
     protected $applicationSteps;
 
-    const PERMIT_TYPE_LABELS = [
+    public const PERMIT_TYPE_LABELS = [
         RefData::IRHP_BILATERAL_PERMIT_TYPE_ID => 'Bilateral',
         RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID => 'Multilateral',
     ];
 
-    const COR_CERTIFICATE_NUMBER_TYPES = [
+    public const COR_CERTIFICATE_NUMBER_TYPES = [
         RefData::CERT_ROADWORTHINESS_VEHICLE_PERMIT_TYPE_ID,
         RefData::CERT_ROADWORTHINESS_TRAILER_PERMIT_TYPE_ID
     ];
@@ -246,9 +246,9 @@ class IrhpApplicationController extends AbstractInternalController implements
             ];
 
             switch ($permitTypeId) {
-            case RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID:
-            case RefData::ECMT_PERMIT_TYPE_ID:
-                return $this->redirect()
+                case RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID:
+                case RefData::ECMT_PERMIT_TYPE_ID:
+                    return $this->redirect()
                     ->toRouteAjax(
                         'licence/irhp-application/add',
                         $routeParams,
@@ -259,8 +259,8 @@ class IrhpApplicationController extends AbstractInternalController implements
                                 ],
                             ]
                     );
-            case RefData::IRHP_BILATERAL_PERMIT_TYPE_ID:
-                return $this->redirect()
+                case RefData::IRHP_BILATERAL_PERMIT_TYPE_ID:
+                    return $this->redirect()
                     ->toRouteAjax(
                         'licence/irhp-application/add',
                         $routeParams,
@@ -270,11 +270,11 @@ class IrhpApplicationController extends AbstractInternalController implements
                                 ],
                             ]
                     );
-            case RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID:
-            case RefData::ECMT_REMOVAL_PERMIT_TYPE_ID:
-            case RefData::CERT_ROADWORTHINESS_VEHICLE_PERMIT_TYPE_ID:
-            case RefData::CERT_ROADWORTHINESS_TRAILER_PERMIT_TYPE_ID:
-                return $this->redirect()->toRouteAjax('licence/irhp-application/add', $routeParams);
+                case RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID:
+                case RefData::ECMT_REMOVAL_PERMIT_TYPE_ID:
+                case RefData::CERT_ROADWORTHINESS_VEHICLE_PERMIT_TYPE_ID:
+                case RefData::CERT_ROADWORTHINESS_TRAILER_PERMIT_TYPE_ID:
+                    return $this->redirect()->toRouteAjax('licence/irhp-application/add', $routeParams);
             }
         }
 
@@ -451,7 +451,8 @@ class IrhpApplicationController extends AbstractInternalController implements
     {
         $feeIds = [];
         foreach ($fees as $fee) {
-            if ($fee['feeStatus']['id'] === RefData::FEE_STATUS_OUTSTANDING
+            if (
+                $fee['feeStatus']['id'] === RefData::FEE_STATUS_OUTSTANDING
                 && in_array($fee['feeType']['feeType']['id'], $feeTypes)
             ) {
                 $feeIds[] = $fee['id'];
@@ -935,8 +936,8 @@ class IrhpApplicationController extends AbstractInternalController implements
         if ($request->isPost()) {
             $postData = (array)$this->params()->fromPost();
             switch ($postData['action']) {
-            case 'preGrantEdit':
-                return $this->redirect()
+                case 'preGrantEdit':
+                    return $this->redirect()
                     ->toRoute(
                         'licence/irhp-application/application',
                         [
@@ -946,8 +947,8 @@ class IrhpApplicationController extends AbstractInternalController implements
                         [],
                         true
                     );
-            case 'preGrantDelete':
-                return $this->redirect()
+                case 'preGrantDelete':
+                    return $this->redirect()
                     ->toRoute(
                         'licence/irhp-application/application',
                         [
@@ -957,8 +958,8 @@ class IrhpApplicationController extends AbstractInternalController implements
                         [],
                         true
                     );
-            case 'preGrantAdd':
-                return $this->redirect()
+                case 'preGrantAdd':
+                    return $this->redirect()
                     ->toRoute(
                         'licence/irhp-application/application',
                         [ 'action' => 'preGrantAdd'],

@@ -2,7 +2,6 @@
 
 namespace OlcsTest\Controller\Application\Processing;
 
-
 use Common\Service\Data\PluginManager as DataServiceManager;
 use Common\Service\Helper\ComplaintsHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;

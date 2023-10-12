@@ -3,6 +3,7 @@
 /**
  * Operator Controller Trait
  */
+
 namespace Olcs\Controller\Traits;
 
 use Dvsa\Olcs\Transfer\Query\Operator\BusinessDetails as BusinessDetailsQry;

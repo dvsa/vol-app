@@ -5,6 +5,7 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace Olcs\Controller\Lva\Traits;
 
 use Dvsa\Olcs\Transfer\Query\Application\Application as AppQry;

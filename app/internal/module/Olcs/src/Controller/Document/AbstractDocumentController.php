@@ -96,14 +96,14 @@ abstract class AbstractDocumentController extends AbstractController
     public function getRouteParamKeyForType($type)
     {
         switch ($type) {
-        case 'busReg':
-            return 'busRegId';
-        case 'irfoOrganisation':
-            return 'organisation';
-        case 'irhpApplication':
-            return 'irhpAppId';
-        default:
-            return $type;
+            case 'busReg':
+                return 'busRegId';
+            case 'irfoOrganisation':
+                return 'organisation';
+            case 'irhpApplication':
+                return 'irhpAppId';
+            default:
+                return $type;
         }
     }
 
@@ -260,13 +260,13 @@ abstract class AbstractDocumentController extends AbstractController
             'case' => $case['id']
         ];
         switch ($case['caseType']['id']) {
-        case 'case_t_tm':
-            $data['transportManager'] = $case['transportManager']['id'];
-            break;
+            case 'case_t_tm':
+                $data['transportManager'] = $case['transportManager']['id'];
+                break;
 
-        default:
-            $data['licence'] = $case['licence']['id'];
-            break;
+            default:
+                $data['licence'] = $case['licence']['id'];
+                break;
         }
 
         return $data;

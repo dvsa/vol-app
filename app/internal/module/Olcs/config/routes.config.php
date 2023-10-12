@@ -268,7 +268,7 @@ $routes = [
                     ]
                 ],
             ],
-            'surrender-details' =>[
+            'surrender-details' => [
                 'may_terminate' => false,
                 'type' => 'segment',
                 'options' => [

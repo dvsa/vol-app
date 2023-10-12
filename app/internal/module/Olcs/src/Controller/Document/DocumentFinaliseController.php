@@ -277,24 +277,24 @@ class DocumentFinaliseController extends AbstractDocumentController
 
         // we need to link certain documents to multiple IDs
         switch ($type) {
-        case 'application':
-            $data['licence'] = $this->getLicenceIdForApplication();
-            break;
+            case 'application':
+                $data['licence'] = $this->getLicenceIdForApplication();
+                break;
 
-        case 'case':
-            $data = array_merge($data, $this->getCaseData());
-            break;
+            case 'case':
+                $data = array_merge($data, $this->getCaseData());
+                break;
 
-        case 'busReg':
-            $data['licence'] = $this->params('licence');
-            break;
+            case 'busReg':
+                $data['licence'] = $this->params('licence');
+                break;
 
-        case 'irhpApplication':
-            $data['licence'] = $this->params('licence');
-            break;
+            case 'irhpApplication':
+                $data['licence'] = $this->params('licence');
+                break;
 
-        default:
-            break;
+            default:
+                break;
         }
 
         $data[$type] = $routeParams[$this->getRouteParamKeyForType($type)];

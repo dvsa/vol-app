@@ -7,9 +7,9 @@ use Olcs\Controller\Traits;
 
 class TransportManagerDocumentController extends TransportManagerController implements LeftViewProvider
 {
-    use Traits\DocumentActionTrait,
-        Traits\DocumentSearchTrait,
-        Traits\ListDataTrait;
+    use Traits\DocumentActionTrait;
+    use Traits\DocumentSearchTrait;
+    use Traits\ListDataTrait;
 
     /**
      * Table to use

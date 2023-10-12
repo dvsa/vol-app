@@ -5,12 +5,12 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace OlcsTest\Controller;
 
 use Common\Service\Script\ScriptFactory;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-
 use OlcsTest\Bootstrap;
 use Olcs\Controller\SplitScreenController;
 

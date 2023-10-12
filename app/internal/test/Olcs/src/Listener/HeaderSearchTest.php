@@ -85,21 +85,21 @@ class HeaderSearchTest extends TestCase
             ->shouldReceive('setIndex')->with($index)
             ->shouldReceive('getFilters')->with([]);
 
-        $sff = new SearchFilterFieldset;
+        $sff = new SearchFilterFieldset();
         $sff->setName('filter');
         $sff->setSearchService($this->mockSearchSrv);
         $this->mockFormElmMngr->shouldReceive('get')
             ->with('SearchFilterFieldset', ['index' => $index, 'name' => 'filter'])
             ->andReturn($sff);
 
-        $srf = new SearchDateRangeFieldset;
+        $srf = new SearchDateRangeFieldset();
         $srf->setName('dateRanges');
         $srf->setSearchService($this->mockSearchSrv);
         $this->mockFormElmMngr->shouldReceive('get')
             ->with('SearchDateRangeFieldset', ['index' => $index, 'name' => 'dateRanges'])
             ->andReturn($srf);
 
-        $sof = new SearchOrderFieldset;
+        $sof = new SearchOrderFieldset();
         $sof->setName('sort');
         $sof->setSearchService($this->mockSearchSrv);
         $this->mockFormElmMngr->shouldReceive('get')

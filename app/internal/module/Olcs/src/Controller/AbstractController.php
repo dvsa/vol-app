@@ -13,7 +13,6 @@ use Laminas\Mvc\Controller\AbstractActionController as LaminasAbstractActionCont
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Traits as OlcsTraits;
 
-
 /**
  * Abstract Controller
  *

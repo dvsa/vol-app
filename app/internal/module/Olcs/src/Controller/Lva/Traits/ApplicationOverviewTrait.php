@@ -52,15 +52,15 @@ trait ApplicationOverviewTrait
                 $cmd = OverviewCmd::create($dtoData);
 
                 /**
- * @var Response $response
-*/
+                * @var Response $response
+                */
                 $response = $this->handleCommand($cmd);
                 if ($response->isOk()) {
                     $this->addSuccessMessage('application.overview.saved');
 
                     if ($this->isButtonPressed('saveAndContinue')) {
                         return $this->redirect()->toRoute(
-                            'lva-'.$this->lva.'/type_of_licence',
+                            'lva-' . $this->lva . '/type_of_licence',
                             ['application' => $applicationId]
                         );
                     }

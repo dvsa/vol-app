@@ -36,7 +36,6 @@ class GrantControllerFactory implements FactoryInterface
         $stringHelper = $container->get(StringHelperService::class);
         $restrictionHelper = $container->get(RestrictionHelperService::class);
 
-
         return new GrantController(
             $niTextTranslationUtil,
             $authService,

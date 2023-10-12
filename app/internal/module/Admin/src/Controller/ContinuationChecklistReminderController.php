@@ -16,9 +16,9 @@ use Laminas\View\Model\ViewModel;
 
 class ContinuationChecklistReminderController extends AbstractController
 {
-    public const TYPE_CONT_CHECKLIST_REMINDER_GENERATE_LETTER = 'que_typ_cont_check_rem_gen_let';
-
     use CrudActionTrait;
+
+    public const TYPE_CONT_CHECKLIST_REMINDER_GENERATE_LETTER = 'que_typ_cont_check_rem_gen_let';
 
     protected DateHelperService $dateHelper;
     protected FlashMessengerHelperService $flashMessengerHelper;
@@ -91,7 +91,7 @@ class ContinuationChecklistReminderController extends AbstractController
 
         $table = $this->getTable($results);
         $subTitle = date('M Y', strtotime($year . '-' . $month . '-01'));
-        $table->setVariable('title', $subTitle .': '. $total . ' licence(s)');
+        $table->setVariable('title', $subTitle . ': ' . $total . ' licence(s)');
 
         $this->scriptFactory->loadFiles(['forms/filter', 'forms/crud-table-handler']);
 

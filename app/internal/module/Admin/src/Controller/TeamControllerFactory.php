@@ -14,7 +14,6 @@ use Laminas\View\HelperPluginManager;
 use Olcs\Service\Data\SubCategory;
 use Olcs\Service\Data\UserWithName;
 
-
 class TeamControllerFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TeamController

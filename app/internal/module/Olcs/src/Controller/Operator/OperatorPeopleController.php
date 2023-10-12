@@ -241,7 +241,8 @@ class OperatorPeopleController extends AbstractInternalController implements
             $formHelperService->remove($form, 'data->position');
         }
         // if not a sole trader OR no person OR already disqualified then hide the disqualify button
-        if ($data['type']['id'] !== \Common\RefData::ORG_TYPE_SOLE_TRADER
+        if (
+            $data['type']['id'] !== \Common\RefData::ORG_TYPE_SOLE_TRADER
             || !isset($data['organisationPersons'][0]['person']['id'])
             || $data['organisationPersons'][0]['person']['disqualificationStatus'] !== 'None'
         ) {

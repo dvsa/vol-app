@@ -90,7 +90,7 @@ class LicenceProcessingInspectionRequestController extends AbstractInternalContr
     protected $section = 'inspection-request';
 
     protected OperatingCentresForInspectionRequest $operatingCentresForInspectionRequest;
-    protected  AnnotationBuilder $annotationBuilderService;
+    protected AnnotationBuilder $annotationBuilderService;
 
     public function __construct(
         TranslationHelperService $translationHelper,

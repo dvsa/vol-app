@@ -1,4 +1,5 @@
 <?php
+
 namespace Olcs\Controller\Operator;
 
 use Common\Service\Table\TableBuilder;

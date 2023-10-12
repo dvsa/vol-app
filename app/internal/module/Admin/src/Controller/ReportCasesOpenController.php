@@ -11,8 +11,8 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
 
 class ReportCasesOpenController extends AbstractInternalController implements LeftViewProvider
 {
-
     use ReportLeftViewTrait;
+
     /**
      * Holds the navigation ID,
      * required when an entire controller is

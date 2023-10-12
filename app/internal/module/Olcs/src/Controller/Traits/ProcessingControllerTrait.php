@@ -13,7 +13,6 @@ use Laminas\View\Model\ViewModel;
  */
 trait ProcessingControllerTrait
 {
-
     /**
      * Holds the current section
      *
@@ -60,7 +59,7 @@ trait ProcessingControllerTrait
     protected function getProcessingHelper()
     {
         if (empty($this->processingHelper)) {
-            $this->processingHelper = new $this->helperClass;
+            $this->processingHelper = new $this->helperClass();
         }
 
         return $this->processingHelper;

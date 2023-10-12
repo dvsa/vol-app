@@ -70,8 +70,8 @@ trait DocumentSearchTrait
     protected function getDocumentForm($filters = [])
     {
         /**
- * @var \Common\Service\Helper\FormHelperService $formHelper 
-*/
+         * @var \Common\Service\Helper\FormHelperService $formHelper
+         */
         $formHelper = $this->formHelper;
 
         $form = $formHelper->createForm('DocumentsHome', false);
@@ -86,7 +86,7 @@ trait DocumentSearchTrait
 
         //  show document field
         /**
- * @var Select $option 
+ * @var Select $option
 */
         $option = $form->get('showDocs');
         $option->setValueOptions(
@@ -97,7 +97,7 @@ trait DocumentSearchTrait
 
         // Populate the "Format" filter select element with values
         /**
- * @var \Laminas\Form\Element\Select $formatSelectElement 
+ * @var \Laminas\Form\Element\Select $formatSelectElement
 */
         $formatSelectElement = $form->get('format');
         $formatSelectElement->setValueOptions(array_merge(['' => 'All'], $this->getDocumentsExtensionList($filters)));
@@ -163,7 +163,7 @@ trait DocumentSearchTrait
         }
 
         /**
- * @var \Common\Service\Cqrs\Response $response 
+ * @var \Common\Service\Cqrs\Response $response
 */
         $response = $this->handleQuery(DocumentList::create($filters));
         if (!$response->isOk()) {

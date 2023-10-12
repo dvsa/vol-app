@@ -145,7 +145,8 @@ trait LicenceControllerTrait
                     }
                 } elseif ($content == 'operating_centres') {
                     $licence = $this->getLicence();
-                    if (isset($licence['vehicleType']['id'])
+                    if (
+                        isset($licence['vehicleType']['id'])
                         && $licence['vehicleType']['id'] == RefData::APP_VEHICLE_TYPE_LGV
                     ) {
                         $title .= '.lgv';

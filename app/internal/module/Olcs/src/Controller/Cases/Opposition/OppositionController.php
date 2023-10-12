@@ -227,7 +227,8 @@ class OppositionController extends AbstractInternalController implements CaseCon
                 ->setLabel('Out of objection ' . $oooString);
         }
 
-        if (!empty($caseWithOppositionDates['licence']['goodsOrPsv']['id'])
+        if (
+            !empty($caseWithOppositionDates['licence']['goodsOrPsv']['id'])
             && ($caseWithOppositionDates['licence']['goodsOrPsv']['id'] == 'lcat_psv')
         ) {
             // modify opposition type options

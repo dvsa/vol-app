@@ -31,7 +31,6 @@ class ExportControllerFactory implements FactoryInterface
         $tableFactory = $container->get(TableFactory::class);
         assert($tableFactory instanceof TableFactory);
 
-
         $responseHelperService = $container->get(ResponseHelperService::class);
         assert($responseHelperService instanceof ResponseHelperService);
 

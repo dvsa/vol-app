@@ -15,7 +15,6 @@ use Olcs\Data\Mapper\SystemParameter as SystemParameterMapper;
 
 class SystemParametersController extends AbstractInternalController implements LeftViewProvider
 {
-
     protected $navigationId = 'admin-dashboard/admin-manage-system-parameters';
 
     /**

@@ -100,7 +100,8 @@ class IndexController extends AbstractController implements LeftViewProvider
         $table = null;
 
         // assignedToTeam or Category must be selected
-        if (empty($filters['assignedToTeam'])
+        if (
+            empty($filters['assignedToTeam'])
             && empty($filters['category'])
         ) {
             $table = $this->getTable('tasks-no-create', []);
@@ -156,114 +157,114 @@ class IndexController extends AbstractController implements LeftViewProvider
         $value = $this->params('value');
 
         switch ($key) {
-        case 'enforcement-area':
-            $results = $this->getListDataEnforcementArea($value, 'Please select');
-            break;
-        case 'task-allocation-users':
-            /**
- * @var \Olcs\Service\Data\UserListInternal $srv
+            case 'enforcement-area':
+                $results = $this->getListDataEnforcementArea($value, 'Please select');
+                break;
+            case 'task-allocation-users':
+                /**
+     * @var \Olcs\Service\Data\UserListInternal $srv
 */
-            $srv = $this->userListInternalDataService;
-            $srv->setTeamId($value);
+                $srv = $this->userListInternalDataService;
+                $srv->setTeamId($value);
 
-            $results =
+                $results =
                 [
                     '' => 'Unassigned',
                     'alpha-split' => 'Alpha split',
                 ] +
                 $srv->fetchListOptions(null);
 
-            break;
-        case 'users-internal':
-            /**
- * @var \Olcs\Service\Data\UserListInternal $srv
+                break;
+            case 'users-internal':
+                /**
+     * @var \Olcs\Service\Data\UserListInternal $srv
 */
-            $srv = $this->userListInternalDataService;
-            $srv->setTeamId($value);
+                $srv = $this->userListInternalDataService;
+                $srv->setTeamId($value);
 
-            $results =
+                $results =
                 [
                     '' => ((int)$value > 0 ? 'Unassigned' : 'Please select'),
                 ] +
                 $srv->fetchListOptions(null);
 
-            break;
-        case 'users-internal-exclude-limited-read-only':
-            /**
- * @var \Olcs\Service\Data\UserListInternalExcludingLimitedReadOnlyUsers $srv
+                break;
+            case 'users-internal-exclude-limited-read-only':
+                /**
+     * @var \Olcs\Service\Data\UserListInternalExcludingLimitedReadOnlyUsers $srv
 */
-            $srv = $this->userListInternalExcludingDataService;
-            $srv->setTeamId($value);
-            $results =
+                $srv = $this->userListInternalExcludingDataService;
+                $srv->setTeamId($value);
+                $results =
                 [
                     '' => ((int)$value > 0 ? 'Unassigned' : 'Please select'),
                 ] +
                 $srv->fetchListOptions(null);
-            break;
-        case 'users':
-            $results = $this->getListDataUser($value, 'All');
-            break;
-        case 'sub-categories':
-            $srv = $this->subCategoryDataService
+                break;
+            case 'users':
+                $results = $this->getListDataUser($value, 'All');
+                break;
+            case 'sub-categories':
+                $srv = $this->subCategoryDataService
                 ->setCategory($value);
-            $results = ['' => 'All'] + $srv->fetchListOptions();
-            break;
-        case 'sub-categories-no-first-option':
-            $results = $this->subCategoryDataService
+                $results = ['' => 'All'] + $srv->fetchListOptions();
+                break;
+            case 'sub-categories-no-first-option':
+                $results = $this->subCategoryDataService
                 ->setCategory($value)
                 ->fetchListOptions();
-            break;
-        case 'task-sub-categories':
-            $srv = $this->taskSubCategoryDataService
+                break;
+            case 'task-sub-categories':
+                $srv = $this->taskSubCategoryDataService
                 ->setCategory($value);
-            $results = ['' => 'All'] + $srv->fetchListOptions();
-            break;
-        case 'document-sub-categories':
-            $srv = $this->documentSubCategoryDataService
+                $results = ['' => 'All'] + $srv->fetchListOptions();
+                break;
+            case 'document-sub-categories':
+                $srv = $this->documentSubCategoryDataService
                 ->setCategory($value);
-            $results = ['' => 'All'] + $srv->fetchListOptions();
-            break;
-        case 'document-sub-categories-with-docs':
-            $srv = $this->documentSubCategoryWithDocsDataService
+                $results = ['' => 'All'] + $srv->fetchListOptions();
+                break;
+            case 'document-sub-categories-with-docs':
+                $srv = $this->documentSubCategoryWithDocsDataService
                 ->setCategory($value);
-            $results = ['' => 'All'] + $srv->fetchListOptions();
-            break;
-        case 'scanning-sub-categories':
-            $srv = $this->scannerSubCategoryDataService
+                $results = ['' => 'All'] + $srv->fetchListOptions();
+                break;
+            case 'scanning-sub-categories':
+                $srv = $this->scannerSubCategoryDataService
                 ->setCategory($value);
-            $results = ['' => 'All'] + $srv->fetchListOptions();
-            break;
-        case 'document-templates':
-            $results = $this->getListDataDocTemplates(null, $value, 'All');
-            break;
-        case 'sub-category-descriptions':
-            $results =  $this->subCategoryDescriptionDataService
+                $results = ['' => 'All'] + $srv->fetchListOptions();
+                break;
+            case 'document-templates':
+                $results = $this->getListDataDocTemplates(null, $value, 'All');
+                break;
+            case 'sub-category-descriptions':
+                $results =  $this->subCategoryDescriptionDataService
                 ->setSubCategory($value)
                 ->fetchListOptions();
-            break;
-        case 'irhp-permit-print-country':
-            $srv = $this->irhpPermitPrintCountryDataService
+                break;
+            case 'irhp-permit-print-country':
+                $srv = $this->irhpPermitPrintCountryDataService
                 ->setIrhpPermitType($value);
-            $results = ['' => 'Please select'] + $srv->fetchListOptions();
-            break;
-        case 'irhp-permit-print-stock-by-country':
-            $srv = $this->irhpPermitPrintStockDataService
+                $results = ['' => 'Please select'] + $srv->fetchListOptions();
+                break;
+            case 'irhp-permit-print-stock-by-country':
+                $srv = $this->irhpPermitPrintStockDataService
                 ->setIrhpPermitType(RefData::IRHP_BILATERAL_PERMIT_TYPE_ID)
                 ->setCountry($value);
-            $results = ['' => 'Please select'] + $srv->fetchListOptions();
-            break;
-        case 'irhp-permit-print-stock-by-type':
-            $srv = $this->irhpPermitPrintStockDataService
+                $results = ['' => 'Please select'] + $srv->fetchListOptions();
+                break;
+            case 'irhp-permit-print-stock-by-type':
+                $srv = $this->irhpPermitPrintStockDataService
                 ->setIrhpPermitType($value);
-            $results = ['' => 'Please select'] + $srv->fetchListOptions();
-            break;
-        case 'irhp-permit-print-range-type-by-stock':
-            $srv = $this->irhpPermitPrintRangeTypeDataService
+                $results = ['' => 'Please select'] + $srv->fetchListOptions();
+                break;
+            case 'irhp-permit-print-range-type-by-stock':
+                $srv = $this->irhpPermitPrintRangeTypeDataService
                 ->setIrhpPermitStock($value);
-            $results = ['' => 'Please select'] + $srv->fetchListOptions();
-            break;
-        default:
-            throw new \Exception('Invalid entity filter key: ' . $key);
+                $results = ['' => 'Please select'] + $srv->fetchListOptions();
+                break;
+            default:
+                throw new \Exception('Invalid entity filter key: ' . $key);
         }
 
         // iterate over the list data and just convert it to a more

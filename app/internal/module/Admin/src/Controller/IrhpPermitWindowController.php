@@ -38,7 +38,7 @@ class IrhpPermitWindowController extends AbstractIrhpPermitAdminController imple
     protected $indexPageTitle = 'Permits';
 
     protected $tableViewTemplate = 'pages/irhp-permit-window/index';
-    protected $pageScript= 'irhp-permit-window';
+    protected $pageScript = 'irhp-permit-window';
 
     protected $navigationId = 'admin-dashboard/admin-permits';
 

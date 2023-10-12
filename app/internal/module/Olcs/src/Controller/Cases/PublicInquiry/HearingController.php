@@ -20,7 +20,7 @@ use Olcs\Mvc\Controller\ParameterProvider\PreviousPiHearingData;
 
 class HearingController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
-    const MSG_CLOSED_PI = 'The Pi has already been closed';
+    public const MSG_CLOSED_PI = 'The Pi has already been closed';
 
     protected $listVars = ['pi'];
     protected $navigationId = 'case_hearings_appeals_public_inquiry';

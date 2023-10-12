@@ -6,15 +6,12 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Helper\UrlHelperService;
-use Common\View\Helper\Config;
 use Laminas\Navigation\Navigation;
 use Laminas\View\Renderer\PhpRenderer as ViewRenderer;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Controller\Cases\Submission\SubmissionController;
-use Olcs\Form\Model\Form\Submission as SubmissionForm;
 use Olcs\Service\Data\Submission;
-
 
 /**
  * Class ComfirmPluginTest
@@ -87,7 +84,6 @@ class ConfirmTest extends TestCase
             ->with($cancelLabel)
             ->once()
             ->getMock();
-
 
         $this->sut
             ->shouldReceive('getForm')

@@ -31,7 +31,8 @@ class SurrenderController extends AbstractInternalController implements
     LeftViewProvider,
     LicenceControllerInterface
 {
-    use GenericRenderView, LicenceControllerTrait;
+    use GenericRenderView;
+    use LicenceControllerTrait;
 
     protected $toggleConfig = [
         'default' => [
@@ -297,7 +298,8 @@ class SurrenderController extends AbstractInternalController implements
             new GenericList(
                 [
                 'id' => 'licence',
-                ], 'licId'
+                ],
+                'licId'
             ),
             'busRegistrations',
             'licence-surrender-busreg',

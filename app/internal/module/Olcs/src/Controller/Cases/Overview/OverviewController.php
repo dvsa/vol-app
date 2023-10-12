@@ -90,25 +90,25 @@ class OverviewController extends AbstractInternalController implements
         $action = $this->params()->fromRoute('action');
 
         switch ($action) {
-        case 'add':
-            $licence = $this->params()->fromRoute('licence');
-            $application = $this->params()->fromRoute('application');
-            $transportManager = $this->params()->fromRoute('transportManager');
+            case 'add':
+                $licence = $this->params()->fromRoute('licence');
+                $application = $this->params()->fromRoute('application');
+                $transportManager = $this->params()->fromRoute('transportManager');
 
-            if ($licence) {
-                return 'case';
-            }
+                if ($licence) {
+                    return 'case';
+                }
 
-            if ($transportManager) {
-                return 'transport_managers';
-            }
+                if ($transportManager) {
+                    return 'transport_managers';
+                }
 
-            if ($application) {
-                return 'application';
-            }
-            // Missing break is intentional
-        default:
-            return null;
+                if ($application) {
+                    return 'application';
+                }
+                // Missing break is intentional
+            default:
+                return null;
         }
     }
 
@@ -122,32 +122,32 @@ class OverviewController extends AbstractInternalController implements
         $action = $this->params()->fromRoute('action');
 
         switch ($action) {
-        case 'add':
-            $licence = $this->params()->fromRoute('licence');
-            $application = $this->params()->fromRoute('application');
-            $transportManager = $this->params()->fromRoute('transportManager');
+            case 'add':
+                $licence = $this->params()->fromRoute('licence');
+                $application = $this->params()->fromRoute('application');
+                $transportManager = $this->params()->fromRoute('transportManager');
 
-            if ($licence) {
-                $viewModel = new ViewModel();
-                $viewModel->setTemplate('sections/licence/partials/right');
-                return $viewModel;
-            }
+                if ($licence) {
+                    $viewModel = new ViewModel();
+                    $viewModel->setTemplate('sections/licence/partials/right');
+                    return $viewModel;
+                }
 
-            if ($transportManager) {
-                $viewModel = new ViewModel();
-                $viewModel->setTemplate('sections/transport-manager/partials/right');
-                return $viewModel;
-            }
+                if ($transportManager) {
+                    $viewModel = new ViewModel();
+                    $viewModel->setTemplate('sections/transport-manager/partials/right');
+                    return $viewModel;
+                }
 
-            if ($application) {
-                $viewModel = new ViewModel();
-                $viewModel->setTemplate('sections/application/partials/right');
-                return $viewModel;
-            }
-            // Missing break is intentional
-        default:
-            // Already setup in the listener
-            return null;
+                if ($application) {
+                    $viewModel = new ViewModel();
+                    $viewModel->setTemplate('sections/application/partials/right');
+                    return $viewModel;
+                }
+                // Missing break is intentional
+            default:
+                // Already setup in the listener
+                return null;
         }
     }
 
@@ -161,29 +161,29 @@ class OverviewController extends AbstractInternalController implements
         $action = $this->params()->fromRoute('action');
 
         switch ($action) {
-        case 'add':
-            $licence = $this->params()->fromRoute('licence');
-            $application = $this->params()->fromRoute('application');
-            $transportManager = $this->params()->fromRoute('transportManager');
+            case 'add':
+                $licence = $this->params()->fromRoute('licence');
+                $application = $this->params()->fromRoute('application');
+                $transportManager = $this->params()->fromRoute('transportManager');
 
-            if ($licence) {
+                if ($licence) {
+                    $viewModel = new ViewModel();
+                    $viewModel->setTemplate('sections/licence/partials/left');
+                    return $viewModel;
+                }
+
+                if ($transportManager) {
+                    return null;
+                }
+
+                if ($application) {
+                    return null;
+                }
+                // Missing break is intentional
+            default:
                 $viewModel = new ViewModel();
-                $viewModel->setTemplate('sections/licence/partials/left');
+                $viewModel->setTemplate('sections/cases/partials/left');
                 return $viewModel;
-            }
-
-            if ($transportManager) {
-                return null;
-            }
-
-            if ($application) {
-                return null;
-            }
-            // Missing break is intentional
-        default:
-            $viewModel = new ViewModel();
-            $viewModel->setTemplate('sections/cases/partials/left');
-            return $viewModel;
         }
     }
 
@@ -268,15 +268,15 @@ class OverviewController extends AbstractInternalController implements
     public function alterFormForEdit($form, $initialData)
     {
         switch ($initialData['fields']['caseType']) {
-        case 'case_t_app':
-            $unwantedOptions = ['case_t_tm' => '', 'case_t_lic' => '', 'case_t_imp' => ''];
-            break;
-        case 'case_t_tm':
-            $unwantedOptions = ['case_t_app' => '', 'case_t_lic' => '', 'case_t_imp' => ''];
-            break;
-        default:
-            $unwantedOptions = ['case_t_tm' => '', 'case_t_app' => ''];
-            break;
+            case 'case_t_app':
+                $unwantedOptions = ['case_t_tm' => '', 'case_t_lic' => '', 'case_t_imp' => ''];
+                break;
+            case 'case_t_tm':
+                $unwantedOptions = ['case_t_app' => '', 'case_t_lic' => '', 'case_t_imp' => ''];
+                break;
+            default:
+                $unwantedOptions = ['case_t_tm' => '', 'case_t_app' => ''];
+                break;
         }
 
         $options = $form->get('fields')

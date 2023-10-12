@@ -181,7 +181,6 @@ class DisqualifyControllerTest extends MockeryTestCase
         $this->mockFormHelper->shouldReceive('attachValidator')
             ->with($mockForm, 'isDisqualified', m::type(\Laminas\Validator\Identical::class))->once();
 
-
         $this->sut->shouldReceive('renderView')->once()->andReturn('RENDERED');
 
         $this->assertSame('RENDERED', $this->sut->indexAction());

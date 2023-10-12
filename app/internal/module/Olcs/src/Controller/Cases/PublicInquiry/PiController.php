@@ -28,7 +28,6 @@ use Olcs\Form\Model\Form\PublicInquirySla as SlaForm;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 
-
 class PiController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
     /**
@@ -172,19 +171,19 @@ class PiController extends AbstractInternalController implements CaseControllerI
             //we need the hearing controller for this, so this code is necessary for compatibility with the table
             //actions script
             switch ($action) {
-            case 'addhearing':
-                $redirectParams = $this->getHearingRedirectParams('add', null, $pi['id']);
-                break;
-            case 'edithearing':
-                if ($this->checkValidHearingId($id)) {
-                    $redirectParams = $this->getHearingRedirectParams('edit', $id, $pi['id']);
-                }
-                break;
-            case 'generate':
-                if ($this->checkValidHearingId($id)) {
-                    $redirectParams = $this->getHearingRedirectParams('generate', $id, $pi['id']);
-                }
-                break;
+                case 'addhearing':
+                    $redirectParams = $this->getHearingRedirectParams('add', null, $pi['id']);
+                    break;
+                case 'edithearing':
+                    if ($this->checkValidHearingId($id)) {
+                        $redirectParams = $this->getHearingRedirectParams('edit', $id, $pi['id']);
+                    }
+                    break;
+                case 'generate':
+                    if ($this->checkValidHearingId($id)) {
+                        $redirectParams = $this->getHearingRedirectParams('generate', $id, $pi['id']);
+                    }
+                    break;
             }
 
             //if no matched action, or no valid id, we won't have redirect params

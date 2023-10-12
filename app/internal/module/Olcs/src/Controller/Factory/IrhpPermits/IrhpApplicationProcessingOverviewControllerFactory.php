@@ -32,7 +32,6 @@ class IrhpApplicationProcessingOverviewControllerFactory implements FactoryInter
         $router = $container->get(TreeRouteStack::class);
         $processingHelper = $container->get(ApplicationProcessingHelper::class);
 
-
         return new IrhpApplicationProcessingOverviewController(
             $scriptFactory,
             $formHelper,

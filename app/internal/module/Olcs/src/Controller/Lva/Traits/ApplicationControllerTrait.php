@@ -5,6 +5,7 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace Olcs\Controller\Lva\Traits;
 
 use Common\Controller\Lva\Traits\CommonApplicationControllerTrait;
@@ -148,12 +149,12 @@ trait ApplicationControllerTrait
 
             $class = '';
             switch ($applicationStatuses[$statusIndex]) {
-            case RefData::APPLICATION_COMPLETION_STATUS_COMPLETE:
-                $class = 'complete';
-                break;
-            case RefData::APPLICATION_COMPLETION_STATUS_INCOMPLETE:
-                $class = 'incomplete';
-                break;
+                case RefData::APPLICATION_COMPLETION_STATUS_COMPLETE:
+                    $class = 'complete';
+                    break;
+                case RefData::APPLICATION_COMPLETION_STATUS_INCOMPLETE:
+                    $class = 'incomplete';
+                    break;
             }
 
             $sections[$section] = array_merge(

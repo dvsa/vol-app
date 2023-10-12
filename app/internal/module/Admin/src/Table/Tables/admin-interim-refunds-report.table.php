@@ -52,7 +52,8 @@ return array(
             'sort' => 'ftr.createdOn',
             'formatter' => function ($data) {
                 $refundTransaction = array_filter(
-                    $data['feeTransactions'], function ($transaction) {
+                    $data['feeTransactions'],
+                    function ($transaction) {
                         return $transaction['amount'] < 0;
                     }
                 );

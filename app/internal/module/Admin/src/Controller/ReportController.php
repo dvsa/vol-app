@@ -21,10 +21,10 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
 
 class ReportController extends LaminasAbstractActionController implements LeftViewProvider
 {
-    use GenericMethods,
-        GenericRenderView,
-        ViewHelperManagerAware,
-        ReportLeftViewTrait;
+    use GenericMethods;
+    use GenericRenderView;
+    use ViewHelperManagerAware;
+    use ReportLeftViewTrait;
 
     protected ScriptFactory $scriptFactory;
     protected TableFactory $tableFactory;

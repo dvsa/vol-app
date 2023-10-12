@@ -1,7 +1,6 @@
 <?php
 
 use Laminas\Mvc\Router\Http\Segment;
-
 use Admin\Listener\RouteParam\IrhpPermitAdminFurniture;
 use Admin\Listener\RouteParam;
 
@@ -661,9 +660,9 @@ return [
                                 'options' => [
                                     'route' => 'stocks/:stockId/scoring[/:action][/:deviation]',
                                     'constraints' => [
-                                        'stockId' =>'[0-9\,]+',
+                                        'stockId' => '[0-9\,]+',
                                         'action' => '(index|accept|runStandard|runWithMeanDeviation|postScoringReport|alignStock|status)',
-                                        'deviation' =>'[0-9\.]+'
+                                        'deviation' => '[0-9\.]+'
                                     ],
                                     'defaults' => [
                                         'controller' => Admin\Controller\IrhpPermitScoringController::class,
@@ -928,7 +927,7 @@ return [
             Admin\Controller\FeatureToggleController::class => Admin\Controller\FeatureToggleControllerFactory::class,
             Admin\Controller\FeeRateController::class => Admin\Controller\FeeRateControllerFactory::class,
             Admin\Controller\FinancialStandingRateController::class => Admin\Controller\FinancialStandingRateControllerFactory::class,
-            Admin\Controller\InterimRefundsController::class =>Admin\Controller\InterimRefundsControllerFactory::class,
+            Admin\Controller\InterimRefundsController::class => Admin\Controller\InterimRefundsControllerFactory::class,
             Admin\Controller\IrfoPsvAuthContinuationController::class => Admin\Controller\IrfoPsvAuthContinuationControllerFactory::class,
             Admin\Controller\IrfoStockControlController::class => Admin\Controller\IrfoStockControlControllerFactory::class,
             Admin\Controller\IrhpPermitJurisdictionController::class => Admin\Controller\IrhpPermitJurisdictionControllerFactory::class,

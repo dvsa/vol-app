@@ -49,10 +49,10 @@ class TransportManagerCaseController extends AbstractInternalController implemen
         ],
     ];
     public function __construct(
-        TranslationHelperService      $translationHelper,
-        FormHelperService             $formHelper,
-        FlashMessengerHelperService   $flashMessenger,
-        Navigation                    $navigation
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessenger,
+        Navigation $navigation
     ) {
         parent::__construct($translationHelper, $formHelper, $flashMessenger, $navigation);
     }

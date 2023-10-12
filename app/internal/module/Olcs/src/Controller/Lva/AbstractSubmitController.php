@@ -9,7 +9,6 @@ use Dvsa\Olcs\Transfer\Command\Application\SubmitApplication;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use ZfcRbac\Service\AuthorizationService;
 
-
 /**
  * Abstract Internal Submit Controller
  *

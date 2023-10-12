@@ -2,7 +2,6 @@
 
 namespace Olcs\Controller\Factory\IrhpPermits;
 
-
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;

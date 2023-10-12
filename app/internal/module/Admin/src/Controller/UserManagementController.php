@@ -197,7 +197,8 @@ class UserManagementController extends AbstractInternalController implements Lef
 
         $userLoginSecurity->get('loginId')->setAttribute('disabled', 'disabled');
 
-        if (!empty($data['userType']['currentTransportManager'])
+        if (
+            !empty($data['userType']['currentTransportManager'])
             && !empty($data['userType']['currentTransportManagerName'])
         ) {
             $value = sprintf(
@@ -215,17 +216,17 @@ class UserManagementController extends AbstractInternalController implements Lef
 
         //password reset options
         switch ($data['userType']['userType']) {
-        case RefData::USER_TYPE_INTERNAL:
-        case RefData::USER_TYPE_PARTNER:
-        case RefData::USER_TYPE_LOCAL_AUTHORITY:
-            //for partners and local authorities, remove the post option
-            $resetPwField = $userLoginSecurity->get('resetPassword');
-            $valueOptions = $resetPwField->getValueOptions();
-            unset($valueOptions['post']);
-            $resetPwField->setValueOptions($valueOptions);
-            break;
-        default:
-            //transport manager and operator, we don't modify the form
+            case RefData::USER_TYPE_INTERNAL:
+            case RefData::USER_TYPE_PARTNER:
+            case RefData::USER_TYPE_LOCAL_AUTHORITY:
+                //for partners and local authorities, remove the post option
+                $resetPwField = $userLoginSecurity->get('resetPassword');
+                $valueOptions = $resetPwField->getValueOptions();
+                unset($valueOptions['post']);
+                $resetPwField->setValueOptions($valueOptions);
+                break;
+            default:
+                //transport manager and operator, we don't modify the form
         }
 
         //Hide OS type select for non internal users
@@ -250,7 +251,8 @@ class UserManagementController extends AbstractInternalController implements Lef
         $post = ($request->isPost()) ? (array)$request->getPost() : [];
 
         // If we have clicked find application, persist the form
-        if (isset($post['userType']['applicationTransportManagers']['search'])
+        if (
+            isset($post['userType']['applicationTransportManagers']['search'])
             && !empty($post['userType']['applicationTransportManagers']['search'])
         ) {
             $this->persist = false;

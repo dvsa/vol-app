@@ -22,7 +22,7 @@ class DocumentGenerationController extends AbstractDocumentController
     /**
      * Labels for empty select options
      */
-    const EMPTY_LABEL = 'Please select';
+    public const EMPTY_LABEL = 'Please select';
 
     protected FlashMessengerHelperService $flashMessengerHelper;
     protected DocumentSubCategoryWithDocs $docSubcategoryWithDocsDataService;
@@ -129,26 +129,26 @@ class DocumentGenerationController extends AbstractDocumentController
 
         // we need to link certain documents to multiple IDs
         switch ($routeParams['type']) {
-        case 'application':
-            $queryData['licence'] = $this->getLicenceIdForApplication();
-            break;
-        case 'case':
-            $queryData = array_merge($queryData, $this->getCaseData());
-            break;
-        case 'busReg':
-            $queryData['licence'] = $routeParams['licence'];
-            break;
+            case 'application':
+                $queryData['licence'] = $this->getLicenceIdForApplication();
+                break;
+            case 'case':
+                $queryData = array_merge($queryData, $this->getCaseData());
+                break;
+            case 'busReg':
+                $queryData['licence'] = $routeParams['licence'];
+                break;
             // fixing irfoOrganisation / organisation ambiguity
-        case 'irhpApplication':
-            $queryData['licence'] = $routeParams['licence'];
-            break;
+            case 'irhpApplication':
+                $queryData['licence'] = $routeParams['licence'];
+                break;
             // fixing irfoOrganisation / organisation ambiguity
-        case 'irfoOrganisation':
-            $queryData['irfoOrganisation'] = $routeParams['organisation'];
-            unset($queryData['organisation']);
-            break;
-        default:
-            break;
+            case 'irfoOrganisation':
+                $queryData['irfoOrganisation'] = $routeParams['organisation'];
+                unset($queryData['organisation']);
+                break;
+            default:
+                break;
         }
 
         //  get licence data
@@ -310,7 +310,8 @@ class DocumentGenerationController extends AbstractDocumentController
 
     protected function isProposeToRevoke($data): bool
     {
-        if ($data['details']['category'] === (string) Category::CATEGORY_COMPLIANCE
+        if (
+            $data['details']['category'] === (string) Category::CATEGORY_COMPLIANCE
             && $data['details']['documentSubCategory'] === (string) Category::DOC_SUB_CATEGORY_IN_OFFICE_REVOCATION
         ) {
             return true;

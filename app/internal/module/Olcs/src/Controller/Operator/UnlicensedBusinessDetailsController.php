@@ -12,7 +12,7 @@ class UnlicensedBusinessDetailsController extends OperatorBusinessDetailsControl
     protected $subNavRoute = 'unlicensed_operator_profile';
 
     /**
-     * @var Mapper 
+     * @var Mapper
      */
     protected $mapperClass = Mapper::class;
     protected $createDtoClass = CreateDto::class;
@@ -51,13 +51,13 @@ class UnlicensedBusinessDetailsController extends OperatorBusinessDetailsControl
         }
 
         /**
- * @var \Laminas\Form\FormInterface $form 
+ * @var \Laminas\Form\FormInterface $form
 */
         $form = $this->getForm('UnlicensedOperator');
         $this->pageTitle = 'internal-operator-create-new-unlicensed-operator';
 
         /**
- * @var \Laminas\Http\Request $request 
+ * @var \Laminas\Http\Request $request
 */
         $request = $this->getRequest();
 

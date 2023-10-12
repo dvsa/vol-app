@@ -72,14 +72,14 @@ class IrhpPermitController extends AbstractInternalController implements
             $postParams = $this->params()->fromPost();
             if (isset($postParams['action'])) {
                 switch ($postParams['action']) {
-                case 'Terminate':
-                    $action = 'terminatePermit';
-                    break;
-                case 'Request Replacement':
-                    $action = 'requestReplacement';
-                    break;
-                case 'Save':
-                    return $this->handleCandidateChoices($postParams);
+                    case 'Terminate':
+                        $action = 'terminatePermit';
+                        break;
+                    case 'Request Replacement':
+                        $action = 'requestReplacement';
+                        break;
+                    case 'Save':
+                        return $this->handleCandidateChoices($postParams);
                 }
 
                 return $this->redirect()->toRoute(
@@ -164,23 +164,23 @@ class IrhpPermitController extends AbstractInternalController implements
         $permitTypeId = intval($this->params()->fromRoute('permitTypeId'));
 
         switch ($permitTypeId) {
-        case RefData::ECMT_PERMIT_TYPE_ID:
-            $table->removeColumn('type');
-            break;
-        case RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID:
-            $table->removeColumn('type');
-            $table->removeColumn('country');
-            break;
-        case RefData::IRHP_BILATERAL_PERMIT_TYPE_ID:
-            $table->removeColumn('emissionsCategory');
-            $table->removeColumn('constrainedCountries');
-            break;
-        default:
-            $table->removeColumn('type');
-            $table->removeColumn('emissionsCategory');
-            $table->removeColumn('constrainedCountries');
-            $table->removeColumn('country');
-            break;
+            case RefData::ECMT_PERMIT_TYPE_ID:
+                $table->removeColumn('type');
+                break;
+            case RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID:
+                $table->removeColumn('type');
+                $table->removeColumn('country');
+                break;
+            case RefData::IRHP_BILATERAL_PERMIT_TYPE_ID:
+                $table->removeColumn('emissionsCategory');
+                $table->removeColumn('constrainedCountries');
+                break;
+            default:
+                $table->removeColumn('type');
+                $table->removeColumn('emissionsCategory');
+                $table->removeColumn('constrainedCountries');
+                $table->removeColumn('country');
+                break;
         }
 
         return $table;

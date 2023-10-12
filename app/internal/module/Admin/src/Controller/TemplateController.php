@@ -77,9 +77,9 @@ class TemplateController extends AbstractInternalController implements LeftViewP
      * @param  array $formData
      * @return Form
      */
-    public function alterFormForEdit(Form $form, Array $formData)
+    public function alterFormForEdit(Form $form, array $formData)
     {
-        $this->placeholder()->setPlaceholder('contentTitle', 'Edit: '.$formData['description']);
+        $this->placeholder()->setPlaceholder('contentTitle', 'Edit: ' . $formData['description']);
 
         $form->get('jsonUrl')
             ->setValue(

@@ -615,7 +615,8 @@ class SubmissionController extends AbstractInternalController implements Submiss
         $postData = $this->params()->fromPost('fields');
 
         // Intercept Submission type submit button to prevent saving
-        if (isset($postData['submissionSections']['submissionTypeSubmit'])
+        if (
+            isset($postData['submissionSections']['submissionTypeSubmit'])
             || !(empty($initialData['fields']['submissionType']))
         ) {
             $this->persist = false;
@@ -646,7 +647,8 @@ class SubmissionController extends AbstractInternalController implements Submiss
                 unset($sectionData);
                 $this->sectionId = $sectionId;
                 // if we allow attachments, then create the attachments form for this section
-                if (isset($submissionConfig['sections'][$sectionId]['allow_attachments'])
+                if (
+                    isset($submissionConfig['sections'][$sectionId]['allow_attachments'])
                     && $submissionConfig['sections'][$sectionId]['allow_attachments']
                 ) {
                     $this->sectionSubcategory = $submissionConfig['sections'][$sectionId]['subcategoryId'];

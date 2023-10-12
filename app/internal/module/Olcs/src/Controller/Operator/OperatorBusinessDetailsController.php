@@ -362,35 +362,35 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
     {
         $formHelper = $this->formHelper;
         switch ($businessType) {
-        case RefData::ORG_TYPE_REGISTERED_COMPANY:
-        case RefData::ORG_TYPE_LLP:
-            $formHelper->remove($form, 'operator-details->firstName');
-            $formHelper->remove($form, 'operator-details->lastName');
-            $formHelper->remove($form, 'operator-details->personId');
-            break;
-        case RefData::ORG_TYPE_SOLE_TRADER:
-            $formHelper->remove($form, 'operator-details->companyNumber');
-            $formHelper->remove($form, 'operator-details->name');
-            $formHelper->remove($form, 'registeredAddress');
-            break;
-        case RefData::ORG_TYPE_PARTNERSHIP:
-        case RefData::ORG_TYPE_OTHER:
-            $formHelper->remove($form, 'operator-details->firstName');
-            $formHelper->remove($form, 'operator-details->lastName');
-            $formHelper->remove($form, 'operator-details->personId');
-            $formHelper->remove($form, 'registeredAddress');
-            $formHelper->remove($form, 'operator-details->companyNumber');
-            break;
-        case RefData::ORG_TYPE_IRFO:
-            $formHelper->remove($form, 'operator-details->companyNumber');
-            $formHelper->remove($form, 'operator-details->natureOfBusiness');
-            $formHelper->remove($form, 'operator-details->information');
-            $formHelper->remove($form, 'operator-details->firstName');
-            $formHelper->remove($form, 'operator-details->lastName');
-            $formHelper->remove($form, 'operator-details->personId');
-            $formHelper->remove($form, 'operator-details->isIrfo');
-            $formHelper->remove($form, 'registeredAddress');
-            break;
+            case RefData::ORG_TYPE_REGISTERED_COMPANY:
+            case RefData::ORG_TYPE_LLP:
+                $formHelper->remove($form, 'operator-details->firstName');
+                $formHelper->remove($form, 'operator-details->lastName');
+                $formHelper->remove($form, 'operator-details->personId');
+                break;
+            case RefData::ORG_TYPE_SOLE_TRADER:
+                $formHelper->remove($form, 'operator-details->companyNumber');
+                $formHelper->remove($form, 'operator-details->name');
+                $formHelper->remove($form, 'registeredAddress');
+                break;
+            case RefData::ORG_TYPE_PARTNERSHIP:
+            case RefData::ORG_TYPE_OTHER:
+                $formHelper->remove($form, 'operator-details->firstName');
+                $formHelper->remove($form, 'operator-details->lastName');
+                $formHelper->remove($form, 'operator-details->personId');
+                $formHelper->remove($form, 'registeredAddress');
+                $formHelper->remove($form, 'operator-details->companyNumber');
+                break;
+            case RefData::ORG_TYPE_IRFO:
+                $formHelper->remove($form, 'operator-details->companyNumber');
+                $formHelper->remove($form, 'operator-details->natureOfBusiness');
+                $formHelper->remove($form, 'operator-details->information');
+                $formHelper->remove($form, 'operator-details->firstName');
+                $formHelper->remove($form, 'operator-details->lastName');
+                $formHelper->remove($form, 'operator-details->personId');
+                $formHelper->remove($form, 'operator-details->isIrfo');
+                $formHelper->remove($form, 'registeredAddress');
+                break;
         }
         if (!$operatorId) {
             $formHelper->remove($form, 'operator-id');

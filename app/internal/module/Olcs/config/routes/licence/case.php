@@ -3,10 +3,6 @@
 use Olcs\Controller\Cases;
 use Olcs\Controller\Cases as CaseeControllers;
 
-/**
- * @internal as we work on each controller, replace string with controller class
- * Routes for the licence section and case route.
- */
 return [
     'case' => [
         'type' => 'segment',

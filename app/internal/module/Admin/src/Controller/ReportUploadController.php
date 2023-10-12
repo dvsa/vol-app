@@ -21,8 +21,8 @@ class ReportUploadController extends AbstractInternalController implements LeftV
 {
     use ReportLeftViewTrait;
 
-    const ERR_UPLOAD_DEF = '4';
-    const FILE_UPLOAD_ERR_PREFIX = 'message.file-upload-error.';
+    public const ERR_UPLOAD_DEF = '4';
+    public const FILE_UPLOAD_ERR_PREFIX = 'message.file-upload-error.';
 
     /**
      * @var array

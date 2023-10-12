@@ -132,7 +132,8 @@ class PenaltyController extends AbstractInternalController implements CaseContro
 
         $tableBuilder = $this->tableFactory;
 
-        if (!empty($data['case']['erruRequest']['responseSent'])
+        if (
+            !empty($data['case']['erruRequest']['responseSent'])
             && ($data['case']['erruRequest']['responseSent'] === 'Y')
         ) {
             // set as disabled if response sent

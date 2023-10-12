@@ -5,6 +5,7 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace Olcs\Controller\Lva\Traits;
 
 use Common\Controller\Lva\Traits\CommonVariationControllerTrait;
@@ -181,12 +182,12 @@ trait VariationControllerTrait
 
             $class = '';
             switch ($variationStatuses[$statusIndex]) {
-            case RefData::VARIATION_STATUS_UPDATED:
-                $class = 'edited';
-                break;
-            case RefData::VARIATION_STATUS_REQUIRES_ATTENTION:
-                $class = 'incomplete';
-                break;
+                case RefData::VARIATION_STATUS_UPDATED:
+                    $class = 'edited';
+                    break;
+                case RefData::VARIATION_STATUS_REQUIRES_ATTENTION:
+                    $class = 'incomplete';
+                    break;
             }
 
             $sections[$section] = array_merge(

@@ -130,7 +130,7 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
      *
      * @return HeaderSearch
      */
-    public function createService(ServiceLocatorInterface $serviceLocator) : HeaderSearch
+    public function createService(ServiceLocatorInterface $serviceLocator): HeaderSearch
     {
         return $this->__invoke($serviceLocator, HeaderSearch::class);
     }
@@ -212,7 +212,7 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : HeaderSearch
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): HeaderSearch
     {
         $this->setViewHelperManager($container->get('ViewHelperManager'));
         $this->setSearchService($container->get('DataServiceManager')->get(SearchService::class));

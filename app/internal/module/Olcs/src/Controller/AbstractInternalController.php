@@ -267,7 +267,8 @@ abstract class AbstractInternalController extends AbstractOlcsController
 
     protected Navigation $navigation;
 
-    public function __construct(TranslationHelperService $translationHelper,
+    public function __construct(
+        TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
         FlashMessengerHelperService $flashMessenger,
         Navigation $navigation
@@ -277,7 +278,6 @@ abstract class AbstractInternalController extends AbstractOlcsController
         $this->formHelperService = $formHelper;
         $this->flashMessengerHelperService = $flashMessenger;
         $this->navigation = $navigation;
-
     }
 
     /**
@@ -574,7 +574,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
         $action = ucfirst($this->params()->fromRoute('action'));
 
         /**
- * @var Form $form 
+ * @var Form $form
 */
         $form = $this->getForm($formClass);
         $initialData = $mapperClass::mapFromResult($defaultDataProvider->provideParameters());
@@ -588,7 +588,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
         $this->placeholder()->setPlaceholder('contentTitle', $contentTitle);
 
         /**
- * @var Request $request 
+ * @var Request $request
 */
         $request = $this->getRequest();
 
@@ -656,7 +656,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
         Logger::debug(__METHOD__);
 
         /**
- * @var Request $request 
+ * @var Request $request
 */
         $request = $this->getRequest();
         $action = ucfirst($this->params()->fromRoute('action'));
@@ -702,9 +702,11 @@ abstract class AbstractInternalController extends AbstractOlcsController
                 $formData = $mapperClass::mapFromResult($result);
 
                 $methodName = preg_replace_callback(
-                    "#\-([A-z])#", function ($letter) use ($action) {
+                    "#\-([A-z])#",
+                    function ($letter) use ($action) {
                         return strtoupper($letter[1]);
-                    }, $action
+                    },
+                    $action
                 );
                 if (method_exists($this, 'alterFormFor' . $methodName)) {
                     $form = $this->{'alterFormFor' . $methodName}($form, $formData);
@@ -1026,7 +1028,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
     private function hasCancelledForm()
     {
         /**
- * @var Request $request 
+ * @var Request $request
 */
         $request = $this->getRequest();
 
@@ -1130,7 +1132,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
     public function isButtonPressed($button, $data = null)
     {
         /**
- * @var Request $request 
+ * @var Request $request
 */
         $request = $this->getRequest();
 

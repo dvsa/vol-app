@@ -129,18 +129,18 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
         foreach ($this->allActions as $action) {
             if ($this->isButtonPressed($action)) {
                 switch ($action) {
-                case 'generate':
-                    return GenerateDto::class;
-                case 'grant':
-                    return GrantDto::class;
-                case 'approve':
-                    return ApproveDto::class;
-                case 'refuse':
-                    return RefuseDto::class;
-                case 'withdraw':
-                    return WithdrawDto::class;
-                case 'cns':
-                    return CnsDto::class;
+                    case 'generate':
+                        return GenerateDto::class;
+                    case 'grant':
+                        return GrantDto::class;
+                    case 'approve':
+                        return ApproveDto::class;
+                    case 'refuse':
+                        return RefuseDto::class;
+                    case 'withdraw':
+                        return WithdrawDto::class;
+                    case 'cns':
+                        return CnsDto::class;
                 }
             }
         }
@@ -280,7 +280,8 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
             'cns' => 'isCnsable',
         ];
 
-        if (empty($actionToFlag[$action])
+        if (
+            empty($actionToFlag[$action])
             || empty($formData['fields'][$actionToFlag[$action]])
             || ((bool) $formData['fields'][$actionToFlag[$action]] !== true)
         ) {
@@ -304,19 +305,19 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
         $readonlyFields = [];
 
         switch ($formData['fields']['status']) {
-        case RefData::IRFO_PSV_AUTH_STATUS_PENDING:
-            $readonlyFields = ['irfoPsvAuthType', 'isFeeExemptApplication'];
-            break;
-        case RefData::IRFO_PSV_AUTH_STATUS_RENEW:
-            $readonlyFields = ['irfoPsvAuthType'];
-            break;
-        case RefData::IRFO_PSV_AUTH_STATUS_GRANTED:
-        case RefData::IRFO_PSV_AUTH_STATUS_APPROVED:
-            $readonlyFields = ['irfoPsvAuthType', 'validityPeriod', 'isFeeExemptApplication',
+            case RefData::IRFO_PSV_AUTH_STATUS_PENDING:
+                $readonlyFields = ['irfoPsvAuthType', 'isFeeExemptApplication'];
+                break;
+            case RefData::IRFO_PSV_AUTH_STATUS_RENEW:
+                $readonlyFields = ['irfoPsvAuthType'];
+                break;
+            case RefData::IRFO_PSV_AUTH_STATUS_GRANTED:
+            case RefData::IRFO_PSV_AUTH_STATUS_APPROVED:
+                $readonlyFields = ['irfoPsvAuthType', 'validityPeriod', 'isFeeExemptApplication',
                 'isFeeExemptAnnual', 'exemptionDetails', 'copiesRequired'];
-            break;
-        default:
-            $form->setOption('readonly', true);
+                break;
+            default:
+                $form->setOption('readonly', true);
         }
 
         foreach ($readonlyFields as $readonlyField) {

@@ -305,23 +305,23 @@ abstract class AbstractInterimController extends AbstractController
         $disableVehicleClassifications = false;
 
         switch ($application['vehicleType']['id']) {
-        case RefData::APP_VEHICLE_TYPE_LGV:
-            // remove HGV related fields
-            $formHelper->remove($form, 'data->interimAuthHgvVehicles');
-            $formHelper->remove($form, 'data->interimAuthTrailers');
-            break;
-        case RefData::APP_VEHICLE_TYPE_HGV:
-        case RefData::APP_VEHICLE_TYPE_PSV:
-            // disable vehicle classifications
-            $disableVehicleClassifications = true;
-            break;
-        case RefData::APP_VEHICLE_TYPE_MIXED:
-        default:
-            if ($application['totAuthLgvVehicles'] === null) {
+            case RefData::APP_VEHICLE_TYPE_LGV:
+                // remove HGV related fields
+                $formHelper->remove($form, 'data->interimAuthHgvVehicles');
+                $formHelper->remove($form, 'data->interimAuthTrailers');
+                break;
+            case RefData::APP_VEHICLE_TYPE_HGV:
+            case RefData::APP_VEHICLE_TYPE_PSV:
                 // disable vehicle classifications
                 $disableVehicleClassifications = true;
-            }
-            break;
+                break;
+            case RefData::APP_VEHICLE_TYPE_MIXED:
+            default:
+                if ($application['totAuthLgvVehicles'] === null) {
+                    // disable vehicle classifications
+                    $disableVehicleClassifications = true;
+                }
+                break;
         }
 
         if ($disableVehicleClassifications) {

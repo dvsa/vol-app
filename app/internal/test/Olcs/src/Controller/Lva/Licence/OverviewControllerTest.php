@@ -6,6 +6,7 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  * @author Dan Eggleston <dan@stolenegg.com>
  */
+
 namespace OlcsTest\Controller\Lva\Licence;
 
 use Common\RefData;
@@ -100,7 +101,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             ->andReturn($form);
 
         $this->mockRender();
-
 
         $view = $this->sut->indexAction();
         $this->assertEquals('sections/licence/pages/overview', $view->getTemplate());
@@ -279,7 +279,6 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
             ->with($form, 'details->translateToWelsh');
 
         $this->mockTcAreaSelect($form);
-
 
         $this->mockFormHelper->shouldReceive('createForm')
             ->once()

@@ -77,7 +77,6 @@ class ExportController extends AbstractInternalController implements LeftViewPro
 
             if ($response->isOk()) {
                 if ($response->getResult()['count'] > 0) {
-
                     $table = $this->tableFactory->prepareTable(
                         'data-retention-export',
                         $response->getResult()

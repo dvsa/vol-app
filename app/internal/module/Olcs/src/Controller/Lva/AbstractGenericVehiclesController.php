@@ -5,6 +5,7 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractGoodsVehiclesController;
@@ -119,7 +120,7 @@ abstract class AbstractGenericVehiclesController extends AbstractGoodsVehiclesCo
     public function exportAction()
     {
         /**
- * @var \Laminas\Http\Request $request 
+ * @var \Laminas\Http\Request $request
 */
         $request = $this->getRequest();
 

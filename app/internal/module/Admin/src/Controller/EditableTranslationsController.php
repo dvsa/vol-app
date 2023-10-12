@@ -184,7 +184,7 @@ class EditableTranslationsController extends AbstractInternalController implemen
         $form->get('translationVar')->setValue('translatedText');
         $form->get('addedit')->setValue($addEdit);
 
-        $this->placeholder()->setPlaceholder('pageTitle', ucfirst($addEdit).' Translation Key');
+        $this->placeholder()->setPlaceholder('pageTitle', ucfirst($addEdit) . ' Translation Key');
 
         return $form;
     }

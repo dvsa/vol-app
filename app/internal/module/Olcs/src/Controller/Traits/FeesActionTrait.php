@@ -139,22 +139,22 @@ trait FeesActionTrait
 
             $action = isset($data['action']) ? strtolower($data['action']) : '';
             switch ($action) {
-            case 'new':
-                $params = [
+                case 'new':
+                    $params = [
                     'action' => 'add-fee',
-                ];
-                break;
-            case 'pay':
-            default:
-                if (!isset($data['id']) || empty($data['id'])) {
-                    $this->addErrorMessage('fees.pay.error.please-select');
-                    return $this->redirectToList();
-                }
-                $params = [
+                    ];
+                    break;
+                case 'pay':
+                default:
+                    if (!isset($data['id']) || empty($data['id'])) {
+                        $this->addErrorMessage('fees.pay.error.please-select');
+                        return $this->redirectToList();
+                    }
+                    $params = [
                     'action' => 'pay-fees',
                     'fee' => implode(',', $data['id']),
-                ];
-                break;
+                    ];
+                    break;
             }
 
             return $this->redirect()->toRoute(
@@ -301,7 +301,8 @@ trait FeesActionTrait
     public function ftDisplayFilter($feeTransaction)
     {
         // OLCS-10687 exclude outstanding waive transactions
-        if ($feeTransaction['transaction']['status']['id'] === RefData::TRANSACTION_STATUS_OUTSTANDING
+        if (
+            $feeTransaction['transaction']['status']['id'] === RefData::TRANSACTION_STATUS_OUTSTANDING
             && $feeTransaction['transaction']['type']['id'] === RefData::TRANSACTION_TYPE_WAIVE
         ) {
             return false;
@@ -386,25 +387,26 @@ trait FeesActionTrait
         $receiptLink = '';
 
         switch ($transaction['type']['id']) {
-        case RefData::TRANSACTION_TYPE_PAYMENT:
-            $title = 'internal.transaction-details.title-payment';
-            if ($transaction['status']['id'] == RefData::TRANSACTION_STATUS_COMPLETE
-                && !empty($transaction['reference'])
-            ) {
-                $receiptLink = $urlHelper->fromRoute(
-                    $this->getFeesRoute() . '/print-receipt',
-                    ['reference' => $transaction['reference']],
-                    [],
-                    true
-                );
-            }
-            break;
-        case RefData::TRANSACTION_TYPE_REVERSAL:
-            $title = 'internal.transaction-details.title-reversal';
-            break;
-        default:
-            $title = 'internal.transaction-details.title-other';
-            break;
+            case RefData::TRANSACTION_TYPE_PAYMENT:
+                $title = 'internal.transaction-details.title-payment';
+                if (
+                    $transaction['status']['id'] == RefData::TRANSACTION_STATUS_COMPLETE
+                    && !empty($transaction['reference'])
+                ) {
+                    $receiptLink = $urlHelper->fromRoute(
+                        $this->getFeesRoute() . '/print-receipt',
+                        ['reference' => $transaction['reference']],
+                        [],
+                        true
+                    );
+                }
+                break;
+            case RefData::TRANSACTION_TYPE_REVERSAL:
+                $title = 'internal.transaction-details.title-reversal';
+                break;
+            default:
+                $title = 'internal.transaction-details.title-other';
+                break;
         }
 
         $viewParams = [
@@ -1141,71 +1143,71 @@ trait FeesActionTrait
         }
 
         switch ($paymentMethod) {
-        case RefData::FEE_PAYMENT_METHOD_CARD_OFFLINE:
-            $cpmsRedirectUrl = $this->url()->fromRoute(
-                $this->getFeesRoute() . '/fee_action',
-                [
+            case RefData::FEE_PAYMENT_METHOD_CARD_OFFLINE:
+                $cpmsRedirectUrl = $this->url()->fromRoute(
+                    $this->getFeesRoute() . '/fee_action',
+                    [
                     'action' => 'payment-result',
-                ],
-                [
+                    ],
+                    [
                     'force_canonical' => true,
                     'query' => array_merge(
                         ['backToFee' => (int) $backToFee],
                         $this->getRequest()->getQuery()->toArray()
                     ),
-                ],
-                true
-            );
+                    ],
+                    true
+                );
 
-            $dtoData = array_merge($dtoData, compact('cpmsRedirectUrl', 'feeIds', 'paymentMethod'));
-            $dto = PayOutstandingFeesCmd::create($dtoData);
-            $response = $this->handleCommand($dto);
+                $dtoData = array_merge($dtoData, compact('cpmsRedirectUrl', 'feeIds', 'paymentMethod'));
+                $dto = PayOutstandingFeesCmd::create($dtoData);
+                $response = $this->handleCommand($dto);
 
-            if (!$response->isOk()) {
-                $this->addErrorMessage('unknown-error');
-                return $this->redirectToList();
-            }
+                if (!$response->isOk()) {
+                    $this->addErrorMessage('unknown-error');
+                    return $this->redirectToList();
+                }
 
-            $errorMessage = $this->getResolvingErrorMessage($response->getResult()['messages']);
-            if ($errorMessage !== '') {
-                $this->addErrorMessage($errorMessage);
-                return $this->redirectToList();
-            }
+                $errorMessage = $this->getResolvingErrorMessage($response->getResult()['messages']);
+                if ($errorMessage !== '') {
+                    $this->addErrorMessage($errorMessage);
+                    return $this->redirectToList();
+                }
 
-            // Look up the new payment in order to get the redirect data
-            $transactionId = $response->getResult()['id']['transaction'];
-            $response = $this->handleQuery(PaymentByIdQry::create(['id' => $transactionId]));
-            $transaction = $response->getResult();
-            $view = new ViewModel(
-                [
+                // Look up the new payment in order to get the redirect data
+                $transactionId = $response->getResult()['id']['transaction'];
+                $response = $this->handleQuery(PaymentByIdQry::create(['id' => $transactionId]));
+                $transaction = $response->getResult();
+                $view = new ViewModel(
+                    [
                     'gateway' => $transaction['gatewayUrl'],
                     'data' => [
                         'receipt_reference' => $transaction['reference']
                     ]
-                ]
-            );
-            // render the gateway redirect and return early
-            $view->setTemplate('cpms/payment');
-            return $this->renderView($view);
+                    ]
+                );
+                // render the gateway redirect and return early
+                $view->setTemplate('cpms/payment');
+                return $this->renderView($view);
 
-        case RefData::FEE_PAYMENT_METHOD_CASH:
-            $dtoData = array_merge(
-                $dtoData,
-                [
+            case RefData::FEE_PAYMENT_METHOD_CASH:
+                $dtoData = array_merge(
+                    $dtoData,
+                    [
                     'feeIds' => $feeIds,
                     'paymentMethod' => $paymentMethod,
                     'received' => $details['received'],
                     'receiptDate' => $details['receiptDate'],
                     'payer' => $details['payer'],
                     'slipNo' => $details['slipNo'],
-                ]
-            );
-            break;
+                    ]
+                );
+                break;
 
-        case RefData::FEE_PAYMENT_METHOD_CHEQUE:
-            $dtoData = array_merge(
-                $dtoData,
-                [
+            case RefData::FEE_PAYMENT_METHOD_CHEQUE:
+                $dtoData = array_merge(
+                    $dtoData,
+                    [
                     'feeIds' => $feeIds,
                     'paymentMethod' => $paymentMethod,
                     'received' => $details['received'],
@@ -1214,14 +1216,14 @@ trait FeesActionTrait
                     'slipNo' => $details['slipNo'],
                     'chequeNo' => $details['chequeNo'],
                     'chequeDate' => $details['chequeDate'],
-                ]
-            );
-            break;
+                    ]
+                );
+                break;
 
-        case RefData::FEE_PAYMENT_METHOD_POSTAL_ORDER:
-            $dtoData = array_merge(
-                $dtoData,
-                [
+            case RefData::FEE_PAYMENT_METHOD_POSTAL_ORDER:
+                $dtoData = array_merge(
+                    $dtoData,
+                    [
                     'feeIds' => $feeIds,
                     'paymentMethod' => $paymentMethod,
                     'received' => $details['received'],
@@ -1229,12 +1231,12 @@ trait FeesActionTrait
                     'payer' => $details['payer'],
                     'slipNo' => $details['slipNo'],
                     'poNo' => $details['poNo'],
-                ]
-            );
-            break;
+                    ]
+                );
+                break;
 
-        default:
-            throw new \UnexpectedValueException("Payment type '$paymentMethod' is not valid");
+            default:
+                throw new \UnexpectedValueException("Payment type '$paymentMethod' is not valid");
         }
 
         $dto = PayOutstandingFeesCmd::create($dtoData);
@@ -1309,21 +1311,21 @@ trait FeesActionTrait
         $transaction = $response->getResult();
 
         switch ($transaction['status']['id']) {
-        case RefData::TRANSACTION_STATUS_COMPLETE:
-            $this->addSuccessMessage('The fee(s) have been paid successfully');
-            if ($licenceContinued) {
-                $this->addSuccessMessage('Licence has been continued');
-            }
-            break;
-        case RefData::TRANSACTION_STATUS_CANCELLED:
-            $this->addWarningMessage('The fee payment was cancelled');
-            break;
-        case RefData::TRANSACTION_STATUS_FAILED:
-            $this->addErrorMessage('The fee payment failed');
-            break;
-        default:
-            $this->addErrorMessage('An unexpected error occured');
-            break;
+            case RefData::TRANSACTION_STATUS_COMPLETE:
+                $this->addSuccessMessage('The fee(s) have been paid successfully');
+                if ($licenceContinued) {
+                    $this->addSuccessMessage('Licence has been continued');
+                }
+                break;
+            case RefData::TRANSACTION_STATUS_CANCELLED:
+                $this->addWarningMessage('The fee payment was cancelled');
+                break;
+            case RefData::TRANSACTION_STATUS_FAILED:
+                $this->addErrorMessage('The fee payment failed');
+                break;
+            default:
+                $this->addErrorMessage('An unexpected error occured');
+                break;
         }
 
         if (isset($queryStringData['backToFee']) && !empty($queryStringData['backToFee'])) {

@@ -26,7 +26,6 @@ class PermitControllerFactory implements FactoryInterface
         $navigation = $container->get('navigation');
         assert($navigation instanceof Navigation);
 
-
         return new PermitController(
             $translationHelper,
             $formHelper,

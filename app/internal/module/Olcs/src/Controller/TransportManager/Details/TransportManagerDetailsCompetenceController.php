@@ -77,12 +77,12 @@ class TransportManagerDetailsCompetenceController extends AbstractInternalContro
     protected $hasMultiDelete = true;
 
     public function __construct(
-        TranslationHelperService      $translationHelper,
-        FormHelperService             $formHelper,
-        FlashMessengerHelperService   $flashMessenger,
-        Navigation                    $navigation,
-        TransferAnnotationBuilder     $transferAnnotationBuilder,
-        CachingQueryService           $queryService,
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessenger,
+        Navigation $navigation,
+        TransferAnnotationBuilder $transferAnnotationBuilder,
+        CachingQueryService $queryService,
         TransportManagerHelperService $transportMangerHelper
     ) {
         $this->transferAnnotationBuilder = $transferAnnotationBuilder;

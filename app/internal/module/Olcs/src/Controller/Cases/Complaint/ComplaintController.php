@@ -5,6 +5,7 @@
  *
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
+
 namespace Olcs\Controller\Cases\Complaint;
 
 use Dvsa\Olcs\Transfer\Command\Complaint\CreateComplaint as CreateDto;

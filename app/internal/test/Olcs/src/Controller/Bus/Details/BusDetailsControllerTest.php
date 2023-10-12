@@ -3,6 +3,7 @@
 /**
  * Bus Details Controller Test
  */
+
 namespace OlcsTest\Controller\Bus\Details;
 
 use Common\Service\Helper\FlashMessengerHelperService;
@@ -11,7 +12,6 @@ use Common\Service\Helper\TranslationHelperService;
 use Olcs\Controller\Bus\Details\BusDetailsController as Sut;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
-
 use Laminas\Navigation\Navigation;
 
 /**

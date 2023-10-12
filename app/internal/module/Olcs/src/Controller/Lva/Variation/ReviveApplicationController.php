@@ -3,6 +3,7 @@
 /**
  * ReviveApplicationController.php
  */
+
 namespace Olcs\Controller\Lva\Variation;
 
 use Common\FormService\FormServiceManager;

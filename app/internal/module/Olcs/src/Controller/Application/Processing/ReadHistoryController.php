@@ -3,6 +3,7 @@
 /**
  * Read History Controller
  */
+
 namespace Olcs\Controller\Application\Processing;
 
 use Dvsa\Olcs\Transfer\Query\Audit\ReadApplication;

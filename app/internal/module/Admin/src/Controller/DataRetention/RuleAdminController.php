@@ -13,7 +13,6 @@ use Olcs\Data\Mapper\DataRetentionRule as Mapper;
 
 class RuleAdminController extends AbstractInternalController implements LeftViewProvider
 {
-
     /**
      * Holds the navigation ID,
      * required when an entire controller is

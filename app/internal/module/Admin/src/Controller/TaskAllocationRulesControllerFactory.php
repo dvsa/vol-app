@@ -31,7 +31,6 @@ class TaskAllocationRulesControllerFactory implements FactoryInterface
         $tableFactory = $container->get(TableFactory::class);
         assert($tableFactory instanceof TableFactory);
 
-
         $userListInternal = $container->get(UserListInternal::class);
         assert($userListInternal instanceof UserListInternal);
 

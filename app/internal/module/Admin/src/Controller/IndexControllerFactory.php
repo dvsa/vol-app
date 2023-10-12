@@ -13,7 +13,6 @@ class IndexControllerFactory implements FactoryInterface
     {
         $placeholder = $container->get('ViewHelperManager')->get(Placeholder::class);
 
-
         return new IndexController(
             $placeholder
         );

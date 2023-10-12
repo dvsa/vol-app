@@ -2,7 +2,6 @@
 
 namespace Olcs\Controller\Factory\Licence\Docs;
 
-
 use Common\Service\Helper\ComplaintsHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\OppositionHelperService;

@@ -86,7 +86,8 @@ class LicenceDecisionsController extends AbstractController implements
         $result = $response->getResult();
 
         $pageTitle = ucfirst($decision) . " licence";
-        if (!isset($result['suitableForDecisions']) || $this->getRequest()->isPost()
+        if (
+            !isset($result['suitableForDecisions']) || $this->getRequest()->isPost()
             || $result['suitableForDecisions'] === true
         ) {
             return $this->redirectToDecision($decision, $licence);
@@ -100,24 +101,24 @@ class LicenceDecisionsController extends AbstractController implements
                 }
 
                 switch ($key) {
-                case 'activeComLics':
-                    $messages[$key] = 'There are active, pending or suspended community licences';
-                    break;
-                case 'activeBusRoutes':
-                    $messages[$key] = 'There are active bus routes on this licence';
-                    break;
-                case 'activeVariations':
-                    $messages[$key] = 'There are applications still under consideration';
-                    break;
-                case 'activePermits':
-                    $messages[$key] = 'There are active permits on this licence';
-                    break;
-                case 'ongoingPermitApplications':
-                    $messages[$key] = 'There are ongoing permit applications on this licence';
-                    break;
-                case 'validCorPermitApplications':
-                    $messages[$key] = 'There are active certificates on this licence';
-                    break;
+                    case 'activeComLics':
+                        $messages[$key] = 'There are active, pending or suspended community licences';
+                        break;
+                    case 'activeBusRoutes':
+                        $messages[$key] = 'There are active bus routes on this licence';
+                        break;
+                    case 'activeVariations':
+                        $messages[$key] = 'There are applications still under consideration';
+                        break;
+                    case 'activePermits':
+                        $messages[$key] = 'There are active permits on this licence';
+                        break;
+                    case 'ongoingPermitApplications':
+                        $messages[$key] = 'There are ongoing permit applications on this licence';
+                        break;
+                    case 'validCorPermitApplications':
+                        $messages[$key] = 'There are active certificates on this licence';
+                        break;
                 }
             }
             $form->get('messages')->get('message')->setValue(implode('<br>', $messages));

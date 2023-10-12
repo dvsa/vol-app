@@ -54,12 +54,12 @@ class DiscPrintingController extends LaminasAbstractActionController implements 
     /**
      * Discs on page
      */
-    const DISCS_ON_PAGE = 6;
+    public const DISCS_ON_PAGE = 6;
 
     /**
      * Where we store generated lists of discs in JR
      */
-    const STORAGE_PATH = 'discs';
+    public const STORAGE_PATH = 'discs';
 
     private $hasDiscsToPrint = false;
 

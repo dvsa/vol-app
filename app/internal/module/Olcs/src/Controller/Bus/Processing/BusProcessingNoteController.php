@@ -22,7 +22,6 @@ use Olcs\Form\Model\Form\NoteEdit as EditForm;
 use Olcs\Form\Model\Form\NoteFilter as FilterForm;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 
-
 class BusProcessingNoteController extends AbstractInternalController implements
     BusRegControllerInterface,
     LeftViewProvider

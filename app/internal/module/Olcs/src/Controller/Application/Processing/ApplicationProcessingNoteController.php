@@ -1,7 +1,9 @@
 <?php
+
 /**
  * Note Controller
  */
+
 namespace Olcs\Controller\Application\Processing;
 
 use Dvsa\Olcs\Transfer\Command\Processing\Note\Create as CreateDto;

@@ -130,7 +130,7 @@ class IrhpPermitScoringController extends AbstractIrhpPermitAdminController impl
 
         $commaSeparatedRows = [];
         foreach ($result['rows'] as $row) {
-            $commaSeparatedRows[] = '"'.implode('","', $row).'"';
+            $commaSeparatedRows[] = '"' . implode('","', $row) . '"';
         }
 
         $content = implode("\n", $commaSeparatedRows);

@@ -5,6 +5,7 @@
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
+
 namespace Olcs\Controller\Traits;
 
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
