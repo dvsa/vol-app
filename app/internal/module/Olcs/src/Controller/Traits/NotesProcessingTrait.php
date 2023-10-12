@@ -29,7 +29,7 @@ trait NotesProcessingTrait
      */
     protected function alterFormForAdd($form, $data)
     {
-        $this->formHelper->setFormActionFromRequest($form, $this->getRequest());
+        $this->formHelperService->setFormActionFromRequest($form, $this->getRequest());
         return $form;
     }
 
@@ -42,7 +42,7 @@ trait NotesProcessingTrait
      */
     protected function alterFormForEdit($form, $data)
     {
-        $this->getServiceLocator()->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
+        $this->formHelperService->setFormActionFromRequest($form, $this->getRequest());
         return $form;
     }
 }
