@@ -2,6 +2,7 @@
 $config = array(
     // This should be an array of module namespaces used in the application.
     'modules' => array(
+        'Dvsa\LaminasConfigCloudParameters',
         'Dvsa\Olcs\Auth',
         'Dvsa\Olcs\Utils',
         'Dvsa\Olcs\Transfer',
