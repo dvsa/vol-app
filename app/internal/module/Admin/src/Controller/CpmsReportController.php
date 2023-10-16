@@ -44,8 +44,8 @@ class CpmsReportController extends AbstractInternalController implements LeftVie
         $this->placeholder()->setPlaceholder('pageTitle', 'CPMS Financial report');
 
         /**
- * @var \Laminas\Http\Request $request
-*/
+        * @var \Laminas\Http\Request $request
+        */
         $request = $this->getRequest();
         $form = $this->getForm(Form::class);
         $this->setSelectReportList($form);
@@ -64,19 +64,19 @@ class CpmsReportController extends AbstractInternalController implements LeftVie
             $response = $this->handleCommand(GenerateCmd::create($commandData));
 
             if ($response->isServerError()) {
-                $this->flashMessenger->addErrorMessage('unknown-error');
+                $this->flashMessengerHelperService->addErrorMessage('unknown-error');
             }
 
             if ($response->isClientError()) {
                 $flashErrors = Mapper::mapFromErrors($form, $response->getResult());
 
                 foreach ($flashErrors as $error) {
-                    $this->flashMessenger->addErrorMessage($error);
+                    $this->flashMessengerHelperService->addErrorMessage($error);
                 }
             }
 
             if ($response->isOk()) {
-                $this->flashMessenger->addSuccessMessage($successMessage);
+                $this->flashMessengerHelperService->addSuccessMessage($successMessage);
                 return $this->redirectTo($response->getResult());
             }
         }
