@@ -2,10 +2,10 @@
 
 namespace Olcs\Controller\Lva\Traits;
 
+use Common\RefData;
+use Dvsa\Olcs\Transfer\Command;
 use Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetDetails;
 use Laminas\Mvc\MvcEvent;
-use Dvsa\Olcs\Transfer\Command;
-use Common\RefData;
 
 trait TransportManagerApplicationTrait
 {
@@ -76,14 +76,14 @@ trait TransportManagerApplicationTrait
      */
     protected function updateTmaStatus($tmaId, $newStatus, $version = null)
     {
-        $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')
+        $command = $this->transferAnnotationBuilder
             ->createCommand(
                 Command\TransportManagerApplication\UpdateStatus::create(
                     ['id' => $tmaId, 'status' => $newStatus, 'version' => $version]
                 )
             );
         /* @var $response \Common\Service\Cqrs\Response */
-        $response = $this->getServiceLocator()->get('CommandService')->send($command);
+        $response = $this->commandService->send($command);
 
         return $response->isOk();
     }
@@ -96,8 +96,10 @@ trait TransportManagerApplicationTrait
     private function redirectIfSectionNotCorrect()
     {
         if (!$this->isUserPermitted($this->tma)) {
-            if ($this->isGranted(RefData::PERMISSION_SELFSERVE_TM_DASHBOARD) &&
-                !$this->isGranted(RefData::PERMISSION_SELFSERVE_LVA)) {
+            if (
+                $this->isGranted(RefData::PERMISSION_SELFSERVE_TM_DASHBOARD) &&
+                !$this->isGranted(RefData::PERMISSION_SELFSERVE_LVA)
+            ) {
                 return $this->redirect()->toRoute('dashboard');
             } else {
                 return $this->redirect()->toRoute(

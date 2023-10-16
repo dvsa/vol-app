@@ -2,14 +2,21 @@
 
 namespace Olcs\Controller\Lva;
 
-use Common\FeatureToggle;
-use Common\RefData;
-use Common\Controller\Lva\Traits\EnabledSectionTrait;
 use Common\Controller\Lva\AbstractController;
+use Common\Controller\Lva\Traits\EnabledSectionTrait;
+use Common\FeatureToggle;
+use Common\Form\Form;
+use Common\RefData;
+use Common\Service\Cqrs\Command\CommandService;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Transfer\Command\Application\UpdateDeclaration;
 use Dvsa\Olcs\Transfer\Command\GovUkAccount\GetGovUkAccountRedirect;
 use Dvsa\Olcs\Transfer\Query\FeatureToggle\IsEnabled as IsEnabledQry;
-use Common\Form\Form;
+use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * External Abstract Undertakings Controller
@@ -20,9 +27,42 @@ abstract class AbstractUndertakingsController extends AbstractController
 {
     use EnabledSectionTrait;
 
-    protected $location = 'external';
+    protected string $location = 'external';
 
     protected $data = [];
+
+    protected ScriptFactory $scriptFactory;
+    protected AnnotationBuilder $transferAnnotationBuilder;
+    protected CommandService $commandService;
+    protected FlashMessengerHelperService $flashMessengerHelper;
+    protected FormHelperService $formHelper;
+
+    /**
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param ScriptFactory $scriptFactory
+     * @param AnnotationBuilder $transferAnnotationBuilder
+     * @param CommandService $commandService
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param FormHelperService $formHelper
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        ScriptFactory $scriptFactory,
+        AnnotationBuilder $transferAnnotationBuilder,
+        CommandService $commandService,
+        FlashMessengerHelperService $flashMessengerHelper,
+        FormHelperService $formHelper
+    ) {
+        $this->scriptFactory = $scriptFactory;
+        $this->transferAnnotationBuilder = $transferAnnotationBuilder;
+        $this->commandService = $commandService;
+        $this->flashMessengerHelper = $flashMessengerHelper;
+        $this->formHelper = $formHelper;
+
+        parent::__construct($niTextTranslationUtil, $authService);
+    }
 
     /**
      * Index action
@@ -43,7 +83,7 @@ abstract class AbstractUndertakingsController extends AbstractController
         if ($this->lva === 'application' && !$this->data['disableSignatures']) {
             $files[] = 'undertakings-verify';
         }
-        $this->getServiceLocator()->get('Script')->loadFiles($files);
+        $this->scriptFactory->loadFiles($files);
 
         $hasGovUkAccountError = $this->getFlashMessenger()->getContainer()->offsetExists('govUkAccountError');
         if ($hasGovUkAccountError) {
@@ -100,13 +140,13 @@ abstract class AbstractUndertakingsController extends AbstractController
     {
         $dto = $this->createUpdateDeclarationDto($formData, $shouldCompleteSection);
 
-        $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createCommand($dto);
+        $command = $this->transferAnnotationBuilder->createCommand($dto);
 
         /* @var $response \Common\Service\Cqrs\Response */
-        $response = $this->getServiceLocator()->get('CommandService')->send($command);
+        $response = $this->commandService->send($command);
 
         if (!$response->isOk()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            $this->flashMessengerHelper->addErrorMessage('unknown-error');
         }
 
         return $response;
@@ -210,7 +250,7 @@ abstract class AbstractUndertakingsController extends AbstractController
             return $result;
         }
 
-        $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+        $this->flashMessengerHelper->addErrorMessage('unknown-error');
 
         return false;
     }
@@ -256,7 +296,7 @@ abstract class AbstractUndertakingsController extends AbstractController
      */
     protected function updateSubmitButtons($form, $applicationData)
     {
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
 
         if (!$this->isReadyToSubmit($applicationData)) {
             $formHelper->remove($form, 'form-actions->submitAndPay');

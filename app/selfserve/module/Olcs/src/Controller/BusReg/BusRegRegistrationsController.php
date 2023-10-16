@@ -4,14 +4,37 @@ namespace Olcs\Controller\BusReg;
 
 use Common\Controller\Lva\AbstractController;
 use Common\Rbac\User;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Query\BusRegSearchView\BusRegSearchViewList as ListDto;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\View\Model\ViewModel;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Class BusRegRegistrationsController
  */
 class BusRegRegistrationsController extends AbstractController
 {
+    protected FlashMessengerHelperService $flashMessengerHelper;
+    protected TableFactory $tableFactory;
+    protected FormHelperService $formHelper;
+
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FlashMessengerHelperService $flashMessengerHelper,
+        TableFactory $tableFactory,
+        FormHelperService $formHelper
+    ) {
+        $this->flashMessengerHelper = $flashMessengerHelper;
+        $this->tableFactory = $tableFactory;
+        $this->formHelper = $formHelper;
+
+        parent::__construct($niTextTranslationUtil, $authService);
+    }
+
     /**
      * Lists all Bus Reg's with filter search form
      *
@@ -46,7 +69,7 @@ class BusRegRegistrationsController extends AbstractController
         $response = $this->handleQuery($query);
 
         if ($response->isClientError() || $response->isServerError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentUnknownError();
+            $this->flashMessengerHelper->addCurrentUnknownError();
         }
 
         $busRegistrationTable = '';
@@ -91,7 +114,7 @@ class BusRegRegistrationsController extends AbstractController
     private function generateTable($result, $params)
     {
         /** @var \Common\Service\Table\TableBuilder $tableBuilder */
-        $tableBuilder = $this->getServiceLocator()->get('Table');
+        $tableBuilder = $this->tableFactory;
 
         $tableName = 'busreg-registrations';
 
@@ -167,7 +190,7 @@ class BusRegRegistrationsController extends AbstractController
     public function getFilterForm($params)
     {
         /** @var \Common\Form\Form $filterForm */
-        $filterForm = $this->getServiceLocator()->get('Helper\Form')->createForm('BusRegRegistrationsFilterForm');
+        $filterForm = $this->formHelper->createForm('BusRegRegistrationsFilterForm');
 
         if ($this->currentUser()->getUserData()['userType'] !== User::USER_TYPE_LOCAL_AUTHORITY) {
             // remove Organisation name filter for organisations
@@ -198,14 +221,16 @@ class BusRegRegistrationsController extends AbstractController
      */
     private function generateTabs()
     {
-        if (in_array(
-            $this->currentUser()->getUserData()['userType'],
-            [
+        if (
+            in_array(
+                $this->currentUser()->getUserData()['userType'],
+                [
                 User::USER_TYPE_LOCAL_AUTHORITY,
                 User::USER_TYPE_OPERATOR,
                 User::USER_TYPE_TRANSPORT_MANAGER
-            ]
-        )) {
+                ]
+            )
+        ) {
             return [
                 0 => [
                     'label' => 'busreg-tab-title-registrations',

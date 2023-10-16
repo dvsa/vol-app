@@ -3,18 +3,18 @@
 namespace Olcs\Controller\Cookie;
 
 use Common\Controller\AbstractOlcsController;
+use Laminas\Validator\Csrf as CsrfValidator;
+use Laminas\View\Model\ViewModel;
 use Olcs\Service\Cookie\CurrentPreferencesProvider;
 use Olcs\Service\Cookie\Preferences;
 use Olcs\Service\Cookie\PreferencesFactory;
 use Olcs\Service\Cookie\SetCookieArrayGenerator;
 use RuntimeException;
-use Laminas\Validator\Csrf as CsrfValidator;
-use Laminas\View\Model\ViewModel;
 
 class SettingsController extends AbstractOlcsController
 {
-    const SUCCESS_QUERY_PARAM = 'success';
-    const SUCCESS_QUERY_VALUE = 'true';
+    public const SUCCESS_QUERY_PARAM = 'success';
+    public const SUCCESS_QUERY_VALUE = 'true';
 
     /** @var CurrentPreferencesProvider */
     private $currentPreferencesProvider;

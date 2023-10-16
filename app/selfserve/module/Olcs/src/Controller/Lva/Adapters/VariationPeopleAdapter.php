@@ -2,10 +2,10 @@
 
 namespace Olcs\Controller\Lva\Adapters;
 
+use Common\Controller\Lva\Adapters\AbstractPeopleAdapter;
 use Common\Service\Lva\PeopleLvaService;
 use Interop\Container\ContainerInterface;
 use Laminas\Form\Form;
-use Common\Controller\Lva\Adapters\AbstractPeopleAdapter;
 
 /**
  * External Variation People Adapter

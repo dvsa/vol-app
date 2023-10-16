@@ -5,19 +5,28 @@
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
+
 namespace Olcs\Controller;
 
 use Common\Controller\Lva\AbstractController;
-use Common\RefData;
-use Laminas\View\Model\ViewModel;
+use Common\Controller\Traits\GenericReceipt;
+use Common\Controller\Traits\StoredCardsTrait;
 use Common\Exception\ResourceNotFoundException;
+use Common\RefData;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\GuidanceHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Helper\UrlHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
+use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePayment;
+use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees;
+use Dvsa\Olcs\Transfer\Query\Fee\Fee;
 use Dvsa\Olcs\Transfer\Query\Organisation\OutstandingFees;
 use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentById;
-use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees;
-use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePayment;
-use Common\Controller\Traits\GenericReceipt;
-use Dvsa\Olcs\Transfer\Query\Fee\Fee;
-use Common\Controller\Traits\StoredCardsTrait;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use Laminas\View\Model\ViewModel;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Fees Controller
@@ -26,13 +35,50 @@ use Common\Controller\Traits\StoredCardsTrait;
  */
 class FeesController extends AbstractController
 {
-    use Lva\Traits\ExternalControllerTrait,
-        StoredCardsTrait,
-        GenericReceipt;
+    use Lva\Traits\ExternalControllerTrait;
+    use StoredCardsTrait;
+    use GenericReceipt;
 
-    const PAYMENT_METHOD = RefData::FEE_PAYMENT_METHOD_CARD_ONLINE;
+    protected const PAYMENT_METHOD = RefData::FEE_PAYMENT_METHOD_CARD_ONLINE;
 
     private $disableCardPayments = false;
+
+    protected TableFactory $tableFactory;
+    protected GuidanceHelperService $guidanceHelper;
+    protected ScriptFactory $scriptFactory;
+    protected FormHelperService $formHelper;
+    protected UrlHelperService $urlHelper;
+    protected TranslationHelperService $translationHelper;
+
+    /**
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param TableFactory $tableFactory
+     * @param GuidanceHelperService $guidanceHelper
+     * @param ScriptFactory $scriptFactory
+     * @param FormHelperService $formHelper
+     * @param UrlHelperService $urlHelper
+     * @param TranslationHelperService $translationHelper
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        TableFactory $tableFactory,
+        GuidanceHelperService $guidanceHelper,
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        UrlHelperService $urlHelper,
+        TranslationHelperService $translationHelper
+    ) {
+        $this->tableFactory = $tableFactory;
+        $this->guidanceHelper = $guidanceHelper;
+        $this->scriptFactory = $scriptFactory;
+        $this->formHelper = $formHelper;
+        $this->urlHelper = $urlHelper;
+        $this->translationHelper = $translationHelper;
+
+        parent::__construct($niTextTranslationUtil, $authService);
+    }
 
     /**
      * Fees index action
@@ -48,19 +94,19 @@ class FeesController extends AbstractController
 
         $fees = $this->getOutstandingFeesForOrganisation($organisationId);
 
-        $table = $this->getServiceLocator()->get('Table')
+        $table = $this->tableFactory
             ->buildTable('fees', $fees, [], false);
 
         if ($this->getDisableCardPayments()) {
             $table->removeAction('pay');
             $table->removeColumn('checkbox');
-            $this->getServiceLocator()->get('Helper\Guidance')->append('selfserve-card-payments-disabled');
+            $this->guidanceHelper->append('selfserve-card-payments-disabled');
         }
 
         $view = new ViewModel(['table' => $table]);
         $view->setTemplate('pages/fees/home');
 
-        $this->getServiceLocator()->get('Script')->loadFile('dashboard-fees');
+        $this->scriptFactory->loadFile('dashboard-fees');
 
         return $view;
     }
@@ -96,7 +142,7 @@ class FeesController extends AbstractController
         $this->setupSelectStoredCards($form, $firstFee['feeType']['isNi']);
 
         if (count($fees) > 1) {
-            $table = $this->getServiceLocator()->get('Table')
+            $table = $this->tableFactory
                 ->buildTable('pay-fees', $fees, [], false);
             $view = new ViewModel(
                 [
@@ -124,7 +170,7 @@ class FeesController extends AbstractController
             $form->get('form-actions')->remove('pay');
             $form->get('form-actions')->get('cancel')->setLabel('back-to-fees');
             $form->get('form-actions')->get('cancel')->setAttribute('class', 'govuk-button govuk-button--secondary');
-            $this->getServiceLocator()->get('Helper\Guidance')->append('selfserve-card-payments-disabled');
+            $this->guidanceHelper->append('selfserve-card-payments-disabled');
         }
 
         return $view;
@@ -228,7 +274,7 @@ class FeesController extends AbstractController
 
     protected function getForm()
     {
-        return $this->getServiceLocator()->get('Helper\Form')
+        return $this->formHelper
             ->createForm('FeePayment');
     }
 
@@ -265,7 +311,7 @@ class FeesController extends AbstractController
      */
     protected function payOutstandingFees(array $feeIds, $storedCardReference = false)
     {
-        $cpmsRedirectUrl = $this->getServiceLocator()->get('Helper\Url')
+        $cpmsRedirectUrl = $this->urlHelper
             ->fromRoute('fees/result', [], ['force_canonical' => true], true);
 
         $paymentMethod = self::PAYMENT_METHOD;
@@ -278,7 +324,7 @@ class FeesController extends AbstractController
         $response = $this->handleCommand($dto);
 
         $messages = $response->getResult()['messages'];
-        $translateHelper = $this->getServiceLocator()->get('Helper\Translation');
+        $translateHelper = $this->translationHelper;
         $errorMessage = '';
         foreach ($messages as $message) {
             if (is_array($message) && array_key_exists(RefData::ERR_WAIT, $message)) {

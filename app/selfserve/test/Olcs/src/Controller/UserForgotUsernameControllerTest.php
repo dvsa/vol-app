@@ -1,14 +1,22 @@
 <?php
+
 /**
  * Class User Forgot Username Controller Test
  */
+
 namespace OlcsTest\Controller;
 
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Transfer\Command\User\RemindUsernameSelfserve as RemindUsernameDto;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Controller\UserForgotUsernameController as Sut;
 use OlcsTest\Bootstrap;
+use ReflectionClass;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Class User Forgot Username Controller Test
@@ -24,9 +32,23 @@ class UserForgotUsernameControllerTest extends TestCase
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
 
-        $this->sm = Bootstrap::getServiceManager();
+        $this->mockniTextTranslationUtil = m::mock(NiTextTranslation::class)->makePartial();
+        $this->mockauthService = m::mock(AuthorizationService::class)->makePartial();
+        $this->mockformHelper = m::mock(FormHelperService::class)->makePartial();
+        $this->mockflashMessengerHelper = m::mock(FlashMessengerHelperService::class)->makePartial();
 
-        $this->sut->setServiceLocator($this->sm);
+        $reflectionClass = new ReflectionClass(Sut::class);
+        $this->setMockedProperties($reflectionClass, 'niTextTranslationUtil', $this->mockniTextTranslationUtil);
+        $this->setMockedProperties($reflectionClass, 'authService', $this->mockauthService);
+        $this->setMockedProperties($reflectionClass, 'flashMessengerHelper', $this->mockflashMessengerHelper);
+        $this->setMockedProperties($reflectionClass, 'formHelper', $this->mockformHelper);
+    }
+
+    public function setMockedProperties($reflectionClass, $property, $value)
+    {
+        $reflectionProperty = $reflectionClass->getProperty($property);
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->sut, $value);
     }
 
     public function testIndexActionForGet()
@@ -37,13 +59,11 @@ class UserForgotUsernameControllerTest extends TestCase
 
         $mockForm = m::mock('Common\Form\Form');
 
-        $mockFormHelper = m::mock();
-        $mockFormHelper
+        $this->mockformHelper
             ->shouldReceive('createFormWithRequest')
             ->with('UserForgotUsername', $mockRequest)
             ->once()
             ->andReturn($mockForm);
-        $this->sm->setService('Helper\Form', $mockFormHelper);
 
         $view = $this->sut->indexAction();
 
@@ -59,13 +79,11 @@ class UserForgotUsernameControllerTest extends TestCase
 
         $mockForm = m::mock('Common\Form\Form');
 
-        $mockFormHelper = m::mock();
-        $mockFormHelper
+        $this->mockformHelper
             ->shouldReceive('createFormWithRequest')
             ->with('UserForgotUsername', $mockRequest)
             ->once()
             ->andReturn($mockForm);
-        $this->sm->setService('Helper\Form', $mockFormHelper);
 
         $this->sut->shouldReceive('isButtonPressed')->with('cancel')->once()->andReturn(true);
 
@@ -95,13 +113,11 @@ class UserForgotUsernameControllerTest extends TestCase
         $mockForm->shouldReceive('isValid')->once()->andReturn(true);
         $mockForm->shouldReceive('getData')->once()->andReturn($postData);
 
-        $mockFormHelper = m::mock();
-        $mockFormHelper
+        $this->mockformHelper
             ->shouldReceive('createFormWithRequest')
             ->with('UserForgotUsername', $mockRequest)
             ->once()
             ->andReturn($mockForm);
-        $this->sm->setService('Helper\Form', $mockFormHelper);
 
         $this->sut->shouldReceive('isButtonPressed')->with('cancel')->once()->andReturn(false);
 
@@ -148,13 +164,11 @@ class UserForgotUsernameControllerTest extends TestCase
         $mockForm->shouldReceive('isValid')->once()->andReturn(true);
         $mockForm->shouldReceive('getData')->once()->andReturn($postData);
 
-        $mockFormHelper = m::mock();
-        $mockFormHelper
+        $this->mockformHelper
             ->shouldReceive('createFormWithRequest')
             ->with('UserForgotUsername', $mockRequest)
             ->once()
             ->andReturn($mockForm);
-        $this->sm->setService('Helper\Form', $mockFormHelper);
 
         $this->sut->shouldReceive('isButtonPressed')->with('cancel')->once()->andReturn(false);
 
@@ -204,13 +218,11 @@ class UserForgotUsernameControllerTest extends TestCase
         $mockForm->shouldReceive('get')->with('emailAddress')->once()->andReturnSelf();
         $mockForm->shouldReceive('setMessages')->with(['ERR_FORGOT_USERNAME_NOT_FOUND'])->once()->andReturnSelf();
 
-        $mockFormHelper = m::mock();
-        $mockFormHelper
+        $this->mockformHelper
             ->shouldReceive('createFormWithRequest')
             ->with('UserForgotUsername', $mockRequest)
             ->once()
             ->andReturn($mockForm);
-        $this->sm->setService('Helper\Form', $mockFormHelper);
 
         $this->sut->shouldReceive('isButtonPressed')->with('cancel')->once()->andReturn(false);
 
@@ -251,13 +263,11 @@ class UserForgotUsernameControllerTest extends TestCase
         $mockForm->shouldReceive('isValid')->once()->andReturn(true);
         $mockForm->shouldReceive('getData')->once()->andReturn($postData);
 
-        $mockFormHelper = m::mock();
-        $mockFormHelper
+        $this->mockformHelper
             ->shouldReceive('createFormWithRequest')
             ->with('UserForgotUsername', $mockRequest)
             ->once()
             ->andReturn($mockForm);
-        $this->sm->setService('Helper\Form', $mockFormHelper);
 
         $this->sut->shouldReceive('isButtonPressed')->with('cancel')->once()->andReturn(false);
 
@@ -269,12 +279,10 @@ class UserForgotUsernameControllerTest extends TestCase
         $response->shouldReceive('isOk')->andReturn(false);
         $this->sut->shouldReceive('handleCommand')->with(m::type(RemindUsernameDto::class))->andReturn($response);
 
-        $mockFlashMessengerHelper = m::mock();
-        $mockFlashMessengerHelper
+        $this->mockflashMessengerHelper
             ->shouldReceive('addErrorMessage')
             ->once()
             ->with('unknown-error');
-        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessengerHelper);
 
         $view = $this->sut->indexAction();
 

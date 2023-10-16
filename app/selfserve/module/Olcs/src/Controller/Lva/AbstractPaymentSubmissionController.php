@@ -3,17 +3,23 @@
 namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractController;
-use Common\RefData;
-use Laminas\View\Model\ViewModel;
-use Common\Exception\BadRequestException;
-use Common\Exception\ResourceNotFoundException;
-use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees as PayOutstandingFeesCmd;
-use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePaymentCmd;
-use Dvsa\Olcs\Transfer\Command\Application\SubmitApplication as SubmitApplicationCmd;
-use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
-use Dvsa\Olcs\Transfer\Query\Application\OutstandingFees;
 use Common\Controller\Traits\GenericReceipt;
 use Common\Controller\Traits\StoredCardsTrait;
+use Common\Exception\BadRequestException;
+use Common\Exception\ResourceNotFoundException;
+use Common\RefData;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableFactory;
+use Dvsa\Olcs\Transfer\Command\Application\SubmitApplication as SubmitApplicationCmd;
+use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction as CompletePaymentCmd;
+use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees as PayOutstandingFeesCmd;
+use Dvsa\Olcs\Transfer\Query\Application\OutstandingFees;
+use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use Laminas\View\Model\ViewModel;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * External Abstract Payment Submission Controller
@@ -24,14 +30,43 @@ use Common\Controller\Traits\StoredCardsTrait;
  */
 abstract class AbstractPaymentSubmissionController extends AbstractController
 {
-    use GenericReceipt,
-        StoredCardsTrait;
+    use GenericReceipt;
+    use StoredCardsTrait;
 
-    const PAYMENT_METHOD = RefData::FEE_PAYMENT_METHOD_CARD_ONLINE;
+    protected const PAYMENT_METHOD = RefData::FEE_PAYMENT_METHOD_CARD_ONLINE;
 
     protected $lva;
-    protected $location = 'external';
+    protected string $location = 'external';
     protected $disableCardPayments = false;
+
+    protected TranslationHelperService $translationHelper;
+    protected FlashMessengerHelperService $flashMessengerHelper;
+    protected TableFactory $tableFactory;
+    protected FormHelperService $formHelper;
+
+    /**
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param TranslationHelperService $translationHelper
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param TableFactory $tableFactory
+     * @param FormHelperService $formHelper
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        TranslationHelperService $translationHelper,
+        FlashMessengerHelperService $flashMessengerHelper,
+        TableFactory $tableFactory,
+        FormHelperService $formHelper
+    ) {
+        $this->translationHelper = $translationHelper;
+        $this->flashMessengerHelper = $flashMessengerHelper;
+        $this->tableFactory = $tableFactory;
+        $this->formHelper = $formHelper;
+
+        parent::__construct($niTextTranslationUtil, $authService);
+    }
 
     /**
      * Index action
@@ -48,7 +83,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
         }
 
         $redirectUrl = $this->url()->fromRoute(
-            'lva-'.$this->lva.'/result',
+            'lva-' . $this->lva . '/result',
             ['action' => 'payment-result'],
             ['force_canonical' => true],
             true
@@ -65,7 +100,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
 
         $messages = $response->getResult()['messages'];
 
-        $translateHelper = $this->getServiceLocator()->get('Helper\Translation');
+        $translateHelper = $this->translationHelper;
         $errorMessage = '';
         foreach ($messages as $message) {
             if (is_array($message) && array_key_exists(RefData::ERR_WAIT, $message)) {
@@ -133,7 +168,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
             return $this->redirectToSummary();
         }
 
-        $this->getServiceLocator()->get('Helper\FlashMessenger')->addUnknownError();
+        $this->flashMessengerHelper->addUnknownError();
         return $this->redirectToOverview();
     }
 
@@ -191,7 +226,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
     protected function redirectToSummary($ref = null)
     {
         return $this->redirect()->toRoute(
-            'lva-'.$this->lva.'/summary',
+            'lva-' . $this->lva . '/summary',
             [
                 'application' => $this->getApplicationId(),
                 'reference' => $ref
@@ -207,7 +242,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
     protected function redirectToOverview()
     {
         return $this->redirect()->toRoute(
-            'lva-'.$this->lva,
+            'lva-' . $this->lva,
             ['application' => $this->getApplicationId()]
         );
     }
@@ -262,11 +297,11 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
             if ($storedCardReference) {
                 $params['storedCardReference'] = $storedCardReference;
             }
-            return $this->redirect()->toRoute('lva-'.$this->lva.'/payment', $params);
+            return $this->redirect()->toRoute('lva-' . $this->lva . '/payment', $params);
         }
 
         /* @var $form \Common\Form\Form */
-        $form = $this->getServiceLocator()->get('Helper\Form')->createForm('FeePayment');
+        $form = $this->formHelper->createForm('FeePayment');
         $firstFee = reset($fees);
         $this->setupSelectStoredCards($form, $firstFee['feeType']['isNi']);
 
@@ -284,7 +319,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
     protected function getStoredCardsView($fees, $form)
     {
         if (count($fees) > 1) {
-            $table = $this->getServiceLocator()->get('Table')
+            $table = $this->tableFactory
                 ->buildTable('pay-fees', $fees, [], false);
             $view = new ViewModel(
                 [

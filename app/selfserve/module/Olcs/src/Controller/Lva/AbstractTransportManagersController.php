@@ -4,12 +4,22 @@ namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractTransportManagersController as CommonAbstractTmController;
 use Common\Controller\Traits\GenericUpload;
-use Common\Exception\Exception;
+use Common\FormService\FormServiceManager;
 use Common\RefData;
+use Common\Service\Cqrs\Command\CommandService;
+use Common\Service\Cqrs\Query\QuerySender;
+use Common\Service\Cqrs\Query\QueryService;
+use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Helper\TransportManagerHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command;
+use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Abstract Transport Managers Controller
@@ -48,6 +58,70 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         self::TYPE_OTHER_EMPLOYMENT => Command\TmEmployment\DeleteList::class,
     ];
 
+    protected TransportManagerHelperService $transportManagerHelper;
+    protected FormHelperService $formHelper;
+    protected FlashMessengerHelperService $flashMessengerHelper;
+    protected FormServiceManager $formServiceManager;
+    protected ScriptFactory $scriptFactory;
+    protected TableFactory $tableFactory;
+    protected QuerySender $querySender;
+    protected QueryService $queryService;
+    protected CommandService $commandService;
+    protected AnnotationBuilder $transferAnnotationBuilder;
+    protected TranslationHelperService $translationHelper;
+    protected FileUploadHelperService $uploadHelper;
+
+    /**
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
+     * @param FormServiceManager $formServiceManager
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param ScriptFactory $scriptFactory
+     * @param QueryService $queryService
+     * @param CommandService $commandService
+     * @param AnnotationBuilder $transferAnnotationBuilder
+     * @param TransportManagerHelperService $transportManagerHelper
+     * @param TranslationHelperService $translationHelper
+     * @param $lvaAdapter
+     * @param TableFactory $tableFactory
+     * @param FileUploadHelperService $uploadHelper
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FormHelperService $formHelper,
+        FormServiceManager $formServiceManager,
+        FlashMessengerHelperService $flashMessengerHelper,
+        ScriptFactory $scriptFactory,
+        QueryService $queryService,
+        CommandService $commandService,
+        AnnotationBuilder $transferAnnotationBuilder,
+        TransportManagerHelperService $transportManagerHelper,
+        TranslationHelperService $translationHelper,
+        $lvaAdapter,
+        TableFactory $tableFactory,
+        FileUploadHelperService $uploadHelper
+    ) {
+        $this->translationHelper = $translationHelper;
+        $this->tableFactory = $tableFactory;
+        $this->uploadHelper = $uploadHelper;
+
+        parent::__construct(
+            $niTextTranslationUtil,
+            $authService,
+            $formHelper,
+            $formServiceManager,
+            $flashMessengerHelper,
+            $scriptFactory,
+            $queryService,
+            $commandService,
+            $transferAnnotationBuilder,
+            $transportManagerHelper,
+            $lvaAdapter
+        );
+    }
+
     /**
      * Revert to editing the form
      *
@@ -60,7 +134,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         if ($this->updateTmaStatus($tmaId, RefData::TMA_STATUS_INCOMPLETE)) {
             return $this->redirect()->toRouteAjax("lva-{$this->lva}/transport_manager_details", [], [], true);
         } else {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            $this->flashMessengerHelper->addErrorMessage('unknown-error');
         }
     }
 
@@ -135,9 +209,9 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
         $form = $this->getDetailsForm($transportManagerApplicationData)->setData($formData);
 
-        $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
+        $flashMessenger = $this->flashMessengerHelper;
         $this->maybeSelectOptions($transportManagerApplicationData, $form);
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
 
         $hasProcessedAddressLookup = $formHelper->processAddressLookupForm($form, $request);
 
@@ -173,7 +247,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             if ($form->isValid()) {
                 $data = $form->getData();
                 $hoursOfWeek = $data['responsibilities']['hoursOfWeek'];
-                $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')->createCommand(
+                $command = $this->transferAnnotationBuilder->createCommand(
                     Command\TransportManagerApplication\UpdateDetails::create(
                         [
                             'id' => $transportManagerApplicationData['id'],
@@ -204,7 +278,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                     )
                 );
                 /* @var $response \Common\Service\Cqrs\Response */
-                $response = $this->getServiceLocator()->get('CommandService')->send($command);
+                $response = $this->commandService->send($command);
                 if (!$response->isOk()) {
                     $acquiredRightsError = $this->getAcquiredRightsErrorIfExists($response);
                     if (!empty($acquiredRightsError)) {
@@ -235,7 +309,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
                 // save and return later
                 if (!$submit) {
-                    $this->getServiceLocator()->get('Helper\FlashMessenger')
+                    $this->flashMessengerHelper
                         ->addSuccessMessage('lva-tm-details-save-success');
 
                     return $this->redirectTmToHome();
@@ -400,22 +474,22 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             $ids = explode(',', $this->params('grand_child_id'));
 
             $commandClass = $this->deleteCommandMap[$type];
-            $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')
+            $command = $this->transferAnnotationBuilder
                 ->createCommand($commandClass::create(['ids' => $ids]));
             /* @var $response \Common\Service\Cqrs\Response */
-            $response = $this->getServiceLocator()->get('CommandService')->send($command);
+            $response = $this->commandService->send($command);
             if ($response->isOk()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage(
+                $this->flashMessengerHelper->addSuccessMessage(
                     'transport_managers-details-' . $type . '-delete-success'
                 );
             } else {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+                $this->flashMessengerHelper->addErrorMessage('unknown-error');
             }
 
             return $this->backToDetails();
         }
 
-        $form = $this->getServiceLocator()->get('Helper\Form')
+        $form = $this->formHelper
             ->createFormWithRequest('GenericDeleteConfirmation', $request);
 
         $params = ['sectionText' => 'delete.confirmation.text'];
@@ -441,7 +515,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
 
         $request = $this->getRequest();
 
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
 
         $form = $formHelper->createFormWithRequest($this->formMap[$type], $request);
 
@@ -468,16 +542,16 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 $command = $this->{'get' . $type . 'UpdateCommand'}($data);
             }
 
-            $commandContainer = $this->getServiceLocator()->get('TransferAnnotationBuilder')
+            $commandContainer = $this->transferAnnotationBuilder
                 ->createCommand($command);
             /* @var $response \Common\Service\Cqrs\Response */
-            $response = $this->getServiceLocator()->get('CommandService')->send($commandContainer);
+            $response = $this->commandService->send($commandContainer);
 
             if ($response->isOk()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')
+                $this->flashMessengerHelper
                     ->addSuccessMessage('lva.section.title.transport_managers-details-' . $type . '-success');
             } else {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')
+                $this->flashMessengerHelper
                     ->addErrorMessage('unknown-error');
                 return $this->render('transport_managers-details-' . $mode . '-' . $type, $form);
             }
@@ -710,10 +784,10 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     protected function getOtherLicencesData($id)
     {
-        $query = $this->getServiceLocator()->get('TransferAnnotationBuilder')
+        $query = $this->transferAnnotationBuilder
             ->createQuery(\Dvsa\Olcs\Transfer\Query\OtherLicence\OtherLicence::create(['id' => $id]));
         /* @var $response \Common\Service\Cqrs\Response */
-        $response = $this->getServiceLocator()->get('QueryService')->send($query);
+        $response = $this->queryService->send($query);
 
         return ['data' => $response->getResult()];
     }
@@ -727,10 +801,10 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     protected function getPreviousConvictionsData($id)
     {
-        $query = $this->getServiceLocator()->get('TransferAnnotationBuilder')
+        $query = $this->transferAnnotationBuilder
             ->createQuery(\Dvsa\Olcs\Transfer\Query\PreviousConviction\PreviousConviction::create(['id' => $id]));
         /* @var $response \Common\Service\Cqrs\Response */
-        $response = $this->getServiceLocator()->get('QueryService')->send($query);
+        $response = $this->queryService->send($query);
 
         return ['tm-convictions-and-penalties-details' => $response->getResult()];
     }
@@ -744,10 +818,10 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     protected function getPreviousLicencesData($id)
     {
-        $query = $this->getServiceLocator()->get('TransferAnnotationBuilder')
+        $query = $this->transferAnnotationBuilder
             ->createQuery(\Dvsa\Olcs\Transfer\Query\OtherLicence\OtherLicence::create(['id' => $id]));
         /* @var $response \Common\Service\Cqrs\Response */
-        $response = $this->getServiceLocator()->get('QueryService')->send($query);
+        $response = $this->queryService->send($query);
 
         return ['tm-previous-licences-details' => $response->getResult()];
     }
@@ -761,7 +835,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     protected function getOtherEmploymentsData($id)
     {
-        return $this->getServiceLocator()->get('Helper\TransportManager')->getOtherEmploymentData($id);
+        return $this->transportManagerHelper->getOtherEmploymentData($id);
     }
 
     /**
@@ -773,7 +847,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     public function processCertificateUpload($file)
     {
-        $data = $this->getServiceLocator()->get('Helper\TransportManager')
+        $data = $this->transportManagerHelper
             ->getCertificateFileData($this->tma['transportManager']['id'], $file);
 
         $additionalData = [
@@ -801,7 +875,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     public function processResponsibilityFileUpload($file)
     {
-        $data = $this->getServiceLocator()->get('Helper\TransportManager')
+        $data = $this->transportManagerHelper
             ->getResponsibilityFileData($this->tma['transportManager']['id'], $file);
 
         $data['application'] = $this->getIdentifier();
@@ -943,15 +1017,15 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     protected function getDetailsForm(array $tma)
     {
-        $form = $this->hlpForm->createForm('Lva\TransportManagerDetails');
+        $form = $this->formHelper->createForm('Lva\TransportManagerDetails');
 
-        $this->hlpTransMngr->removeTmTypeBothOption($form->get('responsibilities')->get('tmType'));
-        $this->hlpTransMngr->populateOtherLicencesTable(
+        $this->transportManagerHelper->removeTmTypeBothOption($form->get('responsibilities')->get('tmType'));
+        $this->transportManagerHelper->populateOtherLicencesTable(
             $form->get('responsibilities')->get('otherLicencesFieldset')->get('otherLicences'),
             $this->getOtherLicencesTable($tma['otherLicences'])
         );
 
-        $this->hlpTransMngr->alterPreviousHistoryFieldsetTm(
+        $this->transportManagerHelper->alterPreviousHistoryFieldsetTm(
             $form->get('previousHistory'),
             $tma['transportManager']
         );
@@ -961,12 +1035,12 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 ->setEmptyMessage('transport-manager.convictionsandpenalties.table.empty.ni');
         }
 
-        $this->hlpTransMngr->prepareOtherEmploymentTableTm(
+        $this->transportManagerHelper->prepareOtherEmploymentTableTm(
             $form->get('otherEmployments')->get('otherEmployment'),
             $tma['transportManager']
         );
 
-        $this->hlpForm->remove($form, 'responsibilities->tmApplicationStatus');
+        $this->formHelper->remove($form, 'responsibilities->tmApplicationStatus');
 
         if ($tma['application']['vehicleType']['id'] === RefData::APP_VEHICLE_TYPE_LGV) {
             // LGV only
@@ -982,18 +1056,18 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 $lgvAcquiredRightsReferenceNumberField ->setValue($tma['lgvAcquiredRightsReferenceNumber']);
 
                 // add padlock
-                $this->hlpForm->lockElement(
+                $this->formHelper->lockElement(
                     $lgvAcquiredRightsReferenceNumberField,
                     'lva-tm-details-details-lgvAcquiredRightsReferenceNumber-locked'
                 );
 
                 // disable element
-                $this->hlpForm->disableElement($form, 'details->lgvAcquiredRightsReferenceNumber');
+                $this->formHelper->disableElement($form, 'details->lgvAcquiredRightsReferenceNumber');
             }
         } else {
-            $this->hlpForm->remove($form, 'details->certificateHtml');
-            $this->hlpForm->remove($form, 'details->lgvAcquiredRightsHtml');
-            $this->hlpForm->remove($form, 'details->lgvAcquiredRightsReferenceNumber');
+            $this->formHelper->remove($form, 'details->certificateHtml');
+            $this->formHelper->remove($form, 'details->lgvAcquiredRightsHtml');
+            $this->formHelper->remove($form, 'details->lgvAcquiredRightsReferenceNumber');
         }
 
         /** @var \Laminas\Form\Fieldset $formActions */
@@ -1006,7 +1080,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         $saveButton->removeAttribute('class');
         $saveButton->setAttribute('class', 'govuk-button govuk-button--secondary');
 
-        $this->hlpForm->remove($form, 'form-actions->cancel');
+        $this->formHelper->remove($form, 'form-actions->cancel');
 
         return $form;
     }
@@ -1020,7 +1094,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     protected function getOtherLicencesTable($otherLicences)
     {
-        return $this->getServiceLocator()->get('Table')->prepareTable('tm.otherlicences-applications', $otherLicences);
+        return $this->tableFactory->prepareTable('tm.otherlicences-applications', $otherLicences);
     }
 
     /**
@@ -1164,14 +1238,14 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     protected function updateTmaStatus($tmaId, $newStatus, $version = null)
     {
-        $command = $this->getServiceLocator()->get('TransferAnnotationBuilder')
+        $command = $this->transferAnnotationBuilder
             ->createCommand(
                 Command\TransportManagerApplication\UpdateStatus::create(
                     ['id' => $tmaId, 'status' => $newStatus, 'version' => $version]
                 )
             );
         /* @var $response \Common\Service\Cqrs\Response */
-        $response = $this->getServiceLocator()->get('CommandService')->send($command);
+        $response = $this->commandService->send($command);
 
         return $response->isOk();
     }
@@ -1185,7 +1259,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     private function page1Point3(array $tma)
     {
-        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
+
+        $translationHelper = $this->translationHelper;
 
         $tmaEmailAddress = $tma['transportManager']['homeCd']['emailAddress'] ?? null;
 
@@ -1193,7 +1268,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             'content' => $translationHelper->translateReplace('markup-tma-ab1-3', [$tmaEmailAddress])
         ];
 
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
         $form = $formHelper->createForm('TransportManagerApplicationResend');
         /* @var $form \Common\Form\Form */
         $formHelper->setFormActionFromRequest($form, $this->getRequest());
@@ -1217,7 +1292,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     private function page2Point1(array $tma)
     {
-        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
+        $translationHelper = $this->translationHelper;
         $params = [
             'content' => $translationHelper->translateReplace('markup-tma-a2-1', [$this->getEditTmUrl()]),
         ];
@@ -1234,7 +1309,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     private function page2Point2(array $tma)
     {
-        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
+        $translationHelper = $this->translationHelper;
         $params = [
             'content' => $translationHelper->translateReplace(
                 'markup-tma-a2-2',
@@ -1244,7 +1319,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             'backLink' => null,
         ];
 
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
         $form = $formHelper->createForm('GenericConfirmation');
         /* @var $form \Common\Form\Form */
         $formHelper->setFormActionFromRequest($form, $this->getRequest());
@@ -1300,7 +1375,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             }
         }
 
-        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
+        $translationHelper = $this->translationHelper;
         $params['content'] = $translationHelper->translateReplace($template, [$this->getViewTmUrl()]);
 
         $this->flashMessenger()->addSuccessMessage('operator-approve-message');
@@ -1316,7 +1391,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     private function page4(array $tma)
     {
-        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
+        $translationHelper = $this->translationHelper;
         $params['content'] = $translationHelper->translateReplace('markup-tma-ab-4', [$this->getViewTmUrl()]);
 
         return $this->renderTmAction('transport-manager-application.details-received', null, $tma, $params);
@@ -1331,7 +1406,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     private function pagePostal(array $tma)
     {
-        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
+        $translationHelper = $this->translationHelper;
         $params = [
             'content' => $translationHelper->translate('markup-tma-c-0'),
             'backLink' => null,
@@ -1468,7 +1543,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             );
         }
 
-        $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
+        $flashMessenger = $this->flashMessengerHelper;
         if ($response->isOk()) {
             $flashMessenger->addSuccessMessage('transport-manager-application.resend-form.success');
         } else {
@@ -1530,7 +1605,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         if ($this->updateTmaStatus($tmaId, RefData::TMA_STATUS_INCOMPLETE)) {
             $this->sendTmApplicationEmail(self::TM_APPLICATION_AMEND_EMAIL);
         } else {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            $this->flashMessengerHelper->addErrorMessage('unknown-error');
         }
     }
 
@@ -1608,7 +1683,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      */
     protected function renderWithForm($application, \Common\Form\Form $form)
     {
-        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
+        $translationHelper = $this->translationHelper;
 
         $tmHeaderData = $application;
         $params = [
@@ -1623,7 +1698,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 )
         ];
 
-        $this->getServiceLocator()->get('Script')
+        $this->scriptFactory
             ->loadFiles(['lva-crud', 'tm-previous-history', 'tm-other-employment', 'tm-details']);
 
         $layout = $this->render('transport_managers-details', $form, $params);

@@ -11,6 +11,11 @@ use Olcs\Controller\Cookie\DetailsController as CookieDetailsController;
 use Olcs\Controller\Cookie\DetailsControllerFactory;
 use Olcs\Controller\Cookie\SettingsController as CookieSettingsController;
 use Olcs\Controller\Cookie\SettingsControllerFactory as CookieSettingsControllerFactory;
+use Olcs\Controller\Factory\BusReg\BusRegRegistrationsControllerFactory;
+use Olcs\Controller\Factory\CorrespondenceControllerFactory;
+use Olcs\Controller\Factory\Ebsr\UploadsControllerFactory;
+use Olcs\Controller\Factory\IndexControllerFactory;
+use Olcs\Controller\Factory\MyDetailsControllerFactory;
 use Olcs\Controller\IndexController;
 use Olcs\Controller\Licence\Vehicle\ListVehicleController;
 use Olcs\Controller\Lva\Adapters\ApplicationPeopleAdapter;
@@ -40,6 +45,16 @@ use Olcs\Service\Cookie as CookieService;
 use Olcs\Service\Processing as ProcessingService;
 use Olcs\Service\Qa as QaService;
 use Olcs\Session\LicenceVehicleManagement;
+use Olcs\Controller\Lva\Application as LvaApplicationControllers;
+use Olcs\Controller\Lva\Factory\Controller\Application as LvaApplicationControllerFactories;
+use Olcs\Controller\Lva\Licence as LvaLicenceControllers;
+use Olcs\Controller\Lva\Factory\Controller\Licence as LvaLicenceControllerFactories;
+use Olcs\Controller\Lva\Variation as LvaVariationControllers;
+use Olcs\Controller\Lva\Factory\Controller\Variation as LvaVariationControllerFactories;
+use Olcs\Controller\Lva\TransportManager as LvaTransportManagerControllers;
+use Olcs\Controller\Lva\Factory\Controller\TransportManager as LvaTransportManagerControllerFactories;
+use Olcs\Controller\Lva\DirectorChange as LvaDirectorChangeControllers;
+use Olcs\Controller\Lva\Factory\Controller\DirectorChange as LvaDirectorChangeControllerFactories;
 
 $sectionConfig = new \Common\Service\Data\SectionConfig();
 $configRoutes = $sectionConfig->getAllRoutes();
@@ -1143,10 +1158,10 @@ return array(
             'LvaLicence/BusinessType'               => 'Olcs\Controller\Lva\Licence\BusinessTypeController',
             'LvaLicence/BusinessDetails'            => 'Olcs\Controller\Lva\Licence\BusinessDetailsController',
             'LvaLicence/Addresses'                  => 'Olcs\Controller\Lva\Licence\AddressesController',
-            'LvaLicence/People'                     => \Olcs\Controller\Lva\Licence\PeopleControllerFactory::class,
+            'LvaLicence/People'                     => \Olcs\Controller\Lva\Licence\PeopleController::class,
             'LvaLicence/OperatingCentres'           => 'Olcs\Controller\Lva\Licence\OperatingCentresController',
             'LvaLicence/TransportManagers'          => Olcs\Controller\Lva\Licence\TransportManagersController::class,
-            'LvaLicence/Vehicles'                   => \Olcs\Controller\Lva\Licence\VehicleControllerFactory::class,
+            'LvaLicence/Vehicles'                   => \Olcs\Controller\Lva\Licence\VehiclesController::class,
             'LvaLicence/VehiclesPsv'                => 'Olcs\Controller\Lva\Licence\VehiclesPsvController',
             'LvaLicence/Trailers'                   => 'Olcs\Controller\Lva\Licence\TrailersController',
             'LvaLicence/Safety'                     => 'Olcs\Controller\Lva\Licence\SafetyController',
@@ -1178,42 +1193,95 @@ return array(
             'LvaVariation/Review'                   => \Common\Controller\Lva\ReviewController::class,
             'LvaDirectorChange/People' => \Olcs\Controller\Lva\DirectorChange\PeopleController::class,
             'LvaDirectorChange/FinancialHistory' => Olcs\Controller\Lva\DirectorChange\FinancialHistoryController::class,
-            'LvaDirectorChange/LicenceHistory' => \Olcs\Controller\Lva\DirectorChange\LicenceHistoryControllerFactory::class,
+            'LvaDirectorChange/LicenceHistory' => \Olcs\Controller\Lva\DirectorChange\LicenceHistoryController::class,
             'LvaDirectorChange/ConvictionsPenalties' => \Olcs\Controller\Lva\DirectorChange\ConvictionsPenaltiesControllerFactory::class,
             'LvaTransportManager/CheckAnswers' => \OLCS\Controller\Lva\TransportManager\CheckAnswersController::class,
             'LvaTransportManager/Confirmation' => \OLCS\Controller\Lva\TransportManager\ConfirmationController::class,
             'LvaTransportManager/OperatorDeclaration' => \OLCS\Controller\Lva\TransportManager\OperatorDeclarationController::class,
             'LvaTransportManager/TmDeclaration' => \OLCS\Controller\Lva\TransportManager\TmDeclarationController::class,
         ),
+        'aliases' => [
+            'LvaLicence'                            => LvaLicenceControllers\OverviewController::class,
+            'LvaLicence/Variation'                  => LvaLicenceControllers\VariationController::class,
+            'LvaLicence/TypeOfLicence'              => LvaLicenceControllers\TypeOfLicenceController::class,
+            'LvaLicence/BusinessType'               => LvaLicenceControllers\BusinessTypeController::class,
+            'LvaLicence/BusinessDetails'            => LvaLicenceControllers\BusinessDetailsController::class,
+            'LvaLicence/Addresses'                  => LvaLicenceControllers\AddressesController::class,
+            'LvaLicence/People'                     => LvaLicenceControllers\PeopleController::class,
+            'LvaLicence/OperatingCentres'           => LvaLicenceControllers\OperatingCentresController::class,
+            'LvaLicence/TransportManagers'          => LvaLicenceControllers\TransportManagersController::class,
+            'LvaLicence/Vehicles'                   => LvaLicenceControllers\VehiclesController::class,
+            'LvaLicence/VehiclesPsv'                => LvaLicenceControllers\VehiclesPsvController::class,
+            'LvaLicence/Trailers'                   => LvaLicenceControllers\TrailersController::class,
+            'LvaLicence/Safety'                     => LvaLicenceControllers\SafetyController::class,
+            'LvaLicence/TaxiPhv'                    => LvaLicenceControllers\TaxiPhvController::class,
+            'LvaLicence/Discs'                      => LvaLicenceControllers\DiscsController::class,
+            'LvaLicence/ConditionsUndertakings'     => LvaLicenceControllers\ConditionsUndertakingsController::class,
+            'LvaVariation'                          => LvaVariationControllers\OverviewController::class,
+            'LvaVariation/TypeOfLicence'            => LvaVariationControllers\TypeOfLicenceController::class,
+            'LvaVariation/BusinessType'             => LvaVariationControllers\BusinessTypeController::class,
+            'LvaVariation/BusinessDetails'          => LvaVariationControllers\BusinessDetailsController::class,
+            'LvaVariation/Addresses'                => LvaVariationControllers\AddressesController::class,
+            'LvaVariation/People'                   => LvaVariationControllers\PeopleController::class,
+            'LvaVariation/OperatingCentres'         => LvaVariationControllers\OperatingCentresController::class,
+            'LvaVariation/TransportManagers'        => LvaVariationControllers\TransportManagersController::class,
+            'LvaVariation/Vehicles'                 => LvaVariationControllers\VehiclesController::class,
+            'LvaVariation/VehiclesPsv'              => LvaVariationControllers\VehiclesPsvController::class,
+            'LvaVariation/Safety'                   => LvaVariationControllers\SafetyController::class,
+            'LvaVariation/TaxiPhv'                  => LvaVariationControllers\TaxiPhvController::class,
+            'LvaVariation/Discs'                    => LvaVariationControllers\DiscsController::class,
+            'LvaVariation/Undertakings'             => LvaVariationControllers\UndertakingsController::class,
+            'LvaVariation/FinancialEvidence'        => LvaVariationControllers\FinancialEvidenceController::class,
+            'LvaVariation/VehiclesDeclarations'     => LvaVariationControllers\VehiclesDeclarationsController::class,
+            'LvaVariation/FinancialHistory'         => LvaVariationControllers\FinancialHistoryController::class,
+            'LvaVariation/LicenceHistory'           => LvaVariationControllers\LicenceHistoryController::class,
+            'LvaVariation/ConvictionsPenalties'     => LvaVariationControllers\ConvictionsPenaltiesController::class,
+            'LvaVariation/Summary'                  => LvaVariationControllers\SummaryController::class,
+            'LvaVariation/UploadEvidence'           => LvaVariationControllers\UploadEvidenceController::class,
+            'LvaVariation/PaymentSubmission'        => LvaVariationControllers\PaymentSubmissionController::class,
+            'LvaVariation/Review'                   => \Common\Controller\Lva\ReviewController::class,
+            'LvaDirectorChange/People'              => LvaDirectorChangeControllers\PeopleController::class,
+            'LvaDirectorChange/FinancialHistory'    => LvaDirectorChangeControllers\FinancialHistoryController::class,
+            'LvaDirectorChange/LicenceHistory'      => LvaDirectorChangeControllers\LicenceHistoryController::class,
+            'LvaDirectorChange/ConvictionsPenalties' => LvaDirectorChangeControllers\ConvictionsPenaltiesController::class,
+            'LvaTransportManager/CheckAnswers'      => LvaTransportManagerControllers\CheckAnswersController::class,
+            'LvaTransportManager/Confirmation'      => LvaTransportManagerControllers\ConfirmationController::class,
+            'LvaTransportManager/OperatorDeclaration' => LvaTransportManagerControllers\OperatorDeclarationController::class,
+            'LvaTransportManager/TmDeclaration'     => LvaTransportManagerControllers\TmDeclarationController::class,
+            'Dashboard' => Olcs\Controller\DashboardController::class,
+            'Olcs\Ebsr\Uploads' => \Olcs\Controller\Ebsr\UploadsController::class,
+        ],
         'invokables' => array(
             'DeclarationFormController' => \Olcs\Controller\Lva\DeclarationFormController::class,
-            'Olcs\Ebsr\Uploads' => 'Olcs\Controller\Ebsr\UploadsController',
-            Olcs\Controller\Ebsr\BusRegApplicationsController::class =>
-                Olcs\Controller\Ebsr\BusRegApplicationsController::class,
-            Olcs\Controller\BusReg\BusRegRegistrationsController::class =>
-                Olcs\Controller\BusReg\BusRegRegistrationsController::class,
-            Olcs\Controller\BusReg\BusRegBrowseController::class =>
-                Olcs\Controller\BusReg\BusRegBrowseController::class,
             'Dashboard' => Olcs\Controller\DashboardController::class,
-            Olcs\Controller\FeesController::class => Olcs\Controller\FeesController::class,
-            Olcs\Controller\CorrespondenceController::class => Olcs\Controller\CorrespondenceController::class,
-            Olcs\Controller\UserController::class => Olcs\Controller\UserController::class,
-            IndexController::class => IndexController::class,
-            UserForgotUsernameController::class => UserForgotUsernameController::class,
-            UserRegistrationController::class => UserRegistrationController::class,
-            MyDetailsController::class => MyDetailsController::class,
-            SearchController::class => SearchController::class,
             'Search\Result' => 'Olcs\Controller\Search\ResultController',
-            Olcs\Controller\Entity\ViewController::class => Olcs\Controller\Entity\ViewController::class,
-            Olcs\Controller\GdsVerifyController::class => Olcs\Controller\GdsVerifyController::class,
         ),
         'factories' => array(
+
+            IndexController::class => IndexControllerFactory::class,
             CookieSettingsController::class => CookieSettingsControllerFactory::class,
             ListVehicleController::class => \Olcs\Controller\Licence\Vehicle\ListVehicleControllerFactory::class,
             SessionTimeoutController::class => \Olcs\Controller\SessionTimeoutControllerFactory::class,
             \Olcs\Controller\Licence\Vehicle\SwitchBoardController::class => \Olcs\Controller\Licence\Vehicle\SwitchBoardControllerFactory::class,
             \Olcs\Controller\Auth\LoginController::class => \Olcs\Controller\Auth\LoginControllerFactory::class,
             CookieDetailsController::class => DetailsControllerFactory::class,
+
+            Olcs\Controller\BusReg\BusRegRegistrationsController::class => BusRegRegistrationsControllerFactory::class,
+            Olcs\Controller\Ebsr\BusRegApplicationsController::class => \Olcs\Controller\Factory\Ebsr\BusRegApplicationsControllerFactory::class,
+            Olcs\Controller\BusReg\BusRegBrowseController::class => \Olcs\Controller\Factory\BusReg\BusRegBrowseControllerFactory::class,
+            Olcs\Controller\CorrespondenceController::class => CorrespondenceControllerFactory::class,
+            \Olcs\Controller\DashboardController::class => \Olcs\Controller\Factory\DashboardControllerFactory::class,
+            Olcs\Controller\FeesController::class => \Olcs\Controller\Factory\FeesControllerFactory::class,
+            MyDetailsController::class => MyDetailsControllerFactory::class,
+            SearchController::class => \Olcs\Controller\Factory\Search\SearchControllerFactory::class,
+            \Olcs\Controller\Ebsr\UploadsController::class => UploadsControllerFactory::class,
+            Olcs\Controller\UserController::class => \Olcs\Controller\Factory\UserControllerFactory::class,
+            UserForgotUsernameController::class => \Olcs\Controller\Factory\UserForgotUsernameControllerFactory::class,
+            UserRegistrationController::class => \Olcs\Controller\Factory\UserRegistrationControllerFactory::class,
+
+            Olcs\Controller\Entity\ViewController::class => \Olcs\Controller\Factory\Entity\ViewControllerFactory::class,
+
+            Olcs\Controller\GdsVerifyController::class => \Olcs\Controller\Factory\GdsVerifyControllerFactory::class,
 
             // License - Surrender
             Olcs\Controller\Licence\Surrender\ReviewContactDetailsController::class => Olcs\Controller\Licence\Surrender\ReviewContactDetailsControllerFactory::class,
@@ -1242,6 +1310,55 @@ return array(
             PromptController::class => \Olcs\Controller\PromptControllerFactory::class,
             // Process Signature from GOV.UK Account
             \Olcs\Controller\SignatureVerificationController::class => \Olcs\Controller\SignatureVerificationControllerFactory::class,
+            // LVA Controller Factories
+            LvaLicenceControllers\AddressesController::class => LvaLicenceControllerFactories\AddressesControllerFactory::class,
+            LvaLicenceControllers\BusinessDetailsController::class => LvaLicenceControllerFactories\BusinessDetailsControllerFactory::class,
+            LvaLicenceControllers\BusinessTypeController::class => LvaLicenceControllerFactories\BusinessTypeControllerFactory::class,
+            LvaLicenceControllers\ConditionsUndertakingsController::class => LvaLicenceControllerFactories\ConditionsUndertakingsControllerFactory::class,
+            LvaLicenceControllers\DiscsController::class => LvaLicenceControllerFactories\DiscsControllerFactory::class,
+            LvaLicenceControllers\OperatingCentresController::class => LvaLicenceControllerFactories\OperatingCentresControllerFactory::class,
+            LvaLicenceControllers\OverviewController::class => LvaLicenceControllerFactories\OverviewControllerFactory::class,
+            LvaLicenceControllers\PeopleController::class => LvaLicenceControllerFactories\PeopleControllerFactory::class,
+            LvaLicenceControllers\SafetyController::class => LvaLicenceControllerFactories\SafetyControllerFactory::class,
+            LvaLicenceControllers\TaxiPhvController::class => LvaLicenceControllerFactories\TaxiPhvControllerFactory::class,
+            LvaLicenceControllers\TrailersController::class => LvaLicenceControllerFactories\TrailersControllerFactory::class,
+            LvaLicenceControllers\TransportManagersController::class => LvaLicenceControllerFactories\TransportManagersControllerFactory::class,
+            LvaLicenceControllers\TypeOfLicenceController::class => LvaLicenceControllerFactories\TypeOfLicenceControllerFactory::class,
+            LvaLicenceControllers\VariationController::class => LvaLicenceControllerFactories\VariationControllerFactory::class,
+            LvaLicenceControllers\VehiclesController::class => LvaLicenceControllerFactories\VehiclesControllerFactory::class,
+            LvaLicenceControllers\VehiclesPsvController::class => LvaLicenceControllerFactories\VehiclesPsvControllerFactory::class,
+
+            LvaVariationControllers\AddressesController::class => LvaVariationControllerFactories\AddressesControllerFactory::class,
+            LvaVariationControllers\BusinessDetailsController::class => LvaVariationControllerFactories\BusinessDetailsControllerFactory::class,
+            LvaVariationControllers\BusinessTypeController::class => LvaVariationControllerFactories\BusinessTypeControllerFactory::class,
+            LvaVariationControllers\ConvictionsPenaltiesController::class => LvaVariationControllerFactories\ConvictionsPenaltiesControllerFactory::class,
+            LvaVariationControllers\DiscsController::class => LvaVariationControllerFactories\DiscsControllerFactory::class,
+            LvaVariationControllers\FinancialEvidenceController::class => LvaVariationControllerFactories\FinancialEvidenceControllerFactory::class,
+            LvaVariationControllers\FinancialHistoryController::class => LvaVariationControllerFactories\FinancialHistoryControllerFactory::class,
+            LvaVariationControllers\LicenceHistoryController::class => LvaVariationControllerFactories\LicenceHistoryControllerFactory::class,
+            LvaVariationControllers\OperatingCentresController::class => LvaVariationControllerFactories\OperatingCentresControllerFactory::class,
+            LvaVariationControllers\OverviewController::class => LvaVariationControllerFactories\OverviewControllerFactory::class,
+            LvaVariationControllers\PaymentSubmissionController::class => LvaVariationControllerFactories\PaymentSubmissionControllerFactory::class,
+            LvaVariationControllers\PeopleController::class => LvaVariationControllerFactories\PeopleControllerFactory::class,
+            LvaVariationControllers\SafetyController::class => LvaVariationControllerFactories\SafetyControllerFactory::class,
+            LvaVariationControllers\TaxiPhvController::class => LvaVariationControllerFactories\TaxiPhvControllerFactory::class,
+            LvaVariationControllers\TransportManagersController::class => LvaVariationControllerFactories\TransportManagersControllerFactory::class,
+            LvaVariationControllers\TypeOfLicenceController::class => LvaVariationControllerFactories\TypeOfLicenceControllerFactory::class,
+            LvaVariationControllers\UndertakingsController::class => LvaVariationControllerFactories\UndertakingsControllerFactory::class,
+            LvaVariationControllers\UploadEvidenceController::class => LvaVariationControllerFactories\UploadEvidenceControllerFactory::class,
+            LvaVariationControllers\VehiclesController::class => LvaVariationControllerFactories\VehiclesControllerFactory::class,
+            LvaVariationControllers\VehiclesDeclarationsController::class => LvaVariationControllerFactories\VehiclesDeclarationsControllerFactory::class,
+            LvaVariationControllers\VehiclesPsvController::class => LvaVariationControllerFactories\VehiclesPsvControllerFactory::class,
+            LvaVariationControllers\SummaryController::class => LvaVariationControllerFactories\SummaryControllerFactory::class,
+            LvaTransportManagerControllers\CheckAnswersController::class => LvaTransportManagerControllerFactories\CheckAnswersControllerFactory::class,
+            LvaTransportManagerControllers\ConfirmationController::class => LvaTransportManagerControllerFactories\ConfirmationControllerFactory::class,
+            LvaTransportManagerControllers\OperatorDeclarationController::class => LvaTransportManagerControllerFactories\OperatorDeclarationControllerFactory::class,
+            LvaTransportManagerControllers\TmDeclarationController::class => LvaTransportManagerControllerFactories\TmDeclarationControllerFactory::class,
+
+            LvaDirectorChangeControllers\ConvictionsPenaltiesController::class => LvaDirectorChangeControllerFactories\ConvictionsPenaltiesControllerFactory::class,
+            LvaDirectorChangeControllers\FinancialHistoryController::class => LvaDirectorChangeControllerFactories\FinancialHistoryControllerFactory::class,
+            LvaDirectorChangeControllers\LicenceHistoryController::class => LvaDirectorChangeControllerFactories\LicenceHistoryControllerFactory::class,
+            LvaDirectorChangeControllers\PeopleController::class => LvaDirectorChangeControllerFactories\PeopleControllerFactory::class,
         ),
     ),
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
@@ -1257,6 +1374,8 @@ return array(
             'LicenceTransportManagerAdapter' => LicenceTransportManagerAdapter::class,
             'VariationPeopleAdapter' => VariationPeopleAdapter::class,
             'ApplicationPeopleAdapter' => ApplicationPeopleAdapter::class,
+            'DashboardProcessingService' => ProcessingService\DashboardProcessingService::class,
+            'Processing\CreateVariation' => ProcessingService\CreateVariationProcessingService::class,
         ],
         'invokables' => array(
             'CookieCookieStateFactory' => CookieService\CookieStateFactory::class,
@@ -1283,6 +1402,7 @@ return array(
             'CookieSetCookieArrayGenerator' => CookieService\SetCookieArrayGeneratorFactory::class,
             'CookieAnalyticsCookieNamesProvider' => CookieService\AnalyticsCookieNamesProviderFactory::class,
             'CookieDeleteCookieNamesProvider' => CookieService\DeleteCookieNamesProviderFactory::class,
+            ProcessingService\DashboardProcessingService::class => ProcessingService\DashboardProcessingServiceFactory::class,
             'Olcs\InputFilter\EbsrPackInput' => \Olcs\InputFilter\EbsrPackFactory::class,
             'navigation' => Laminas\Navigation\Service\DefaultNavigationFactory::class,
             'Olcs\Navigation\DashboardNavigation' => Olcs\Navigation\DashboardNavigationFactory::class,
@@ -1294,8 +1414,7 @@ return array(
             'QaQuestionArrayProvider' => QaService\QuestionArrayProviderFactory::class,
             'QaViewGeneratorProvider' => QaService\ViewGeneratorProviderFactory::class,
             SelfserveCommandAdapter::class => SelfserveCommandAdapterFactory::class,
-            'DashboardProcessingService' => ProcessingService\DashboardProcessingServiceFactory::class,
-            'Processing\CreateVariation' => ProcessingService\CreateVariationProcessingServiceFactory::class,
+            ProcessingService\CreateVariationProcessingService::class => ProcessingService\CreateVariationProcessingServiceFactory::class,
             Olcs\View\Model\User::class => Olcs\View\Model\UserFactory::class,
             //Adapters
             ApplicationPeopleAdapter::class => ApplicationPeopleAdapterFactory::class,

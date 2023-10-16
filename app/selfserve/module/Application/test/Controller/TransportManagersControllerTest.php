@@ -4,19 +4,30 @@ declare(strict_types=1);
 
 namespace Dvsa\Olcs\Application\Controller;
 
+use Common\Controller\Lva\Adapters\ApplicationTransportManagerAdapter;
+use Common\FormService\FormServiceManager;
+use Common\Service\Cqrs\Command\CommandService;
+use Common\Service\Cqrs\Query\QueryService;
+use Common\Service\Helper\FileUploadHelperService;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\RestrictionHelperService;
+use Common\Service\Helper\StringHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
 use Common\Test\MockeryTestCase;
-use Common\Test\MocksServicesTrait;
-use Laminas\ServiceManager\ServiceManager;
-use Common\Form\View\Helper\Form;
+use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Common\Service\Helper\TransportManagerHelperService;
+use ZfcRbac\Service\AuthorizationService;
+use Mockery as m;
 
 /**
  * @see TransportManagersController
  */
 class TransportManagersControllerTest extends MockeryTestCase
 {
-    use MocksServicesTrait;
-
     /**
      * @var TransportManagersController
      */
@@ -62,35 +73,43 @@ class TransportManagersControllerTest extends MockeryTestCase
         $this->assertFalse($result);
     }
 
-    /**
-     * @test
-     * @depends isInitialized_IsCallable
-     */
-    public function isInitialized_ReturnsTrueAfterCreateServiceIsCalled()
-    {
-        // Setup
-        $this->setUpSut();
-        $serviceManager = $this->setUpServiceManager();
-
-        // Execute
-        $this->sut->createService($serviceManager);
-        $result = $this->sut->isInitialized();
-
-        // Assert
-        $this->assertTrue($result);
-    }
 
     protected function setUpSut()
     {
-        $this->sut = new TransportManagersController();
-    }
+        $mockNiTextTranslationUtil = m::mock(NiTextTranslation::class)->makePartial();
+        $mockAuthService = m::mock(AuthorizationService::class)->makePartial();
+        $mockFormHelper = m::mock(FormHelperService::class)->makePartial();
+        $mockFormServiceManager = m::mock(FormServiceManager::class)->makePartial();
+        $mockFlashMessengerHelper = m::mock(FlashMessengerHelperService::class)->makePartial();
+        $mockScriptFactory = m::mock(ScriptFactory::class)->makePartial();
+        $mockQueryService = m::mock(QueryService::class)->makePartial();
+        $mockCommandService = m::mock(CommandService::class)->makePartial();
+        $mockTransferAnnotationBuilder = m::mock(AnnotationBuilder::class)->makePartial();
+        $mockTransportManagerHelper = m::mock(TransportManagerHelperService::class)->makePartial();
+        $mockTranslationHelper = m::mock(TranslationHelperService::class)->makePartial();
+        $mockRestrictionHelper = m::mock(RestrictionHelperService::class)->makePartial();
+        $mockStringHelper = m::mock(StringHelperService::class)->makePartial();
+        $mockLvaAdapter = m::mock(ApplicationTransportManagerAdapter::class)->makePartial();
+        $mockTableFactory = m::mock(TableFactory::class)->makePartial();
+        $mockUploadHelper = m::mock(FileUploadHelperService::class)->makePartial();
 
-    /**
-     * @param ServiceManager $serviceManager
-     */
-    protected function setUpDefaultServices(ServiceManager $serviceManager)
-    {
-        $serviceManager->setService('Helper\Form', $this->setUpMockService(Form::class));
-        $serviceManager->setService('Helper\TransportManager', $this->setUpMockService(TransportManagerHelperService::class));
+        $this->sut = new TransportManagersController(
+            $mockNiTextTranslationUtil,
+            $mockAuthService,
+            $mockFormHelper,
+            $mockFormServiceManager,
+            $mockFlashMessengerHelper,
+            $mockScriptFactory,
+            $mockQueryService,
+            $mockCommandService,
+            $mockTransferAnnotationBuilder,
+            $mockTransportManagerHelper,
+            $mockTranslationHelper,
+            $mockRestrictionHelper,
+            $mockStringHelper,
+            $mockLvaAdapter,
+            $mockTableFactory,
+            $mockUploadHelper
+        );
     }
 }

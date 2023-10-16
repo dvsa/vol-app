@@ -6,12 +6,22 @@
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace Olcs\Controller\Lva\Licence;
 
-use Laminas\Form\Form;
 use Common\Controller\Lva;
+use Common\Controller\Lva\Adapters\LicenceLvaAdapter;
 use Common\Controller\Lva\Traits\LicenceSafetyControllerTrait;
+use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use Laminas\Form\Form;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * External Licence Safety Controller
@@ -21,14 +31,51 @@ use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
  */
 class SafetyController extends Lva\AbstractSafetyController
 {
-    use LicenceSafetyControllerTrait,
-        LicenceControllerTrait {
+    use LicenceSafetyControllerTrait, LicenceControllerTrait {
         LicenceSafetyControllerTrait::alterFormForLva as licenceSafetyAlterFormForLva;
         LicenceControllerTrait::alterFormForLva as licenceAlterFormForLva;
     }
 
+    protected LicenceLvaAdapter $licenceLvaAdapter;
+
+    /**
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
+     * @param FormServiceManager $formServiceManager
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param TableFactory $tableFactory
+     * @param ScriptFactory $scriptFactory
+     * @param TranslationHelperService $translationHelper
+     * @param LicenceLvaAdapter $licenceLvaAdapter
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FormHelperService $formHelper,
+        FormServiceManager $formServiceManager,
+        FlashMessengerHelperService $flashMessengerHelper,
+        TableFactory $tableFactory,
+        ScriptFactory $scriptFactory,
+        TranslationHelperService $translationHelper,
+        LicenceLvaAdapter $licenceLvaAdapter
+    ) {
+        $this->licenceLvaAdapter = $licenceLvaAdapter;
+
+        parent::__construct(
+            $niTextTranslationUtil,
+            $authService,
+            $formHelper,
+            $formServiceManager,
+            $flashMessengerHelper,
+            $tableFactory,
+            $scriptFactory,
+            $translationHelper
+        );
+    }
+
     protected $lva = 'licence';
-    protected $location = 'external';
+    protected string $location = 'external';
 
     /**
      * This method allows both trait alterFormForLva methods to be called

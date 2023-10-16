@@ -3,12 +3,11 @@
 namespace Olcs\Controller\Lva\Traits;
 
 use Common\Controller\Lva\Traits\CommonApplicationControllerTrait;
+use Common\RefData;
 use Common\View\Model\Section;
 use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
-use Olcs\Logging\Log\Logger;
 use Laminas\Form\Form;
 use Laminas\View\Model\ViewModel;
-use Common\RefData;
 
 /**
  * EXTERNAL Abstract Application Controller
@@ -17,8 +16,8 @@ use Common\RefData;
  */
 trait ApplicationControllerTrait
 {
-    use ExternalControllerTrait,
-        CommonApplicationControllerTrait;
+    use ExternalControllerTrait;
+    use CommonApplicationControllerTrait;
 
     /**
      * Hook into the dispatch before the controller action is executed
@@ -137,7 +136,7 @@ trait ApplicationControllerTrait
         }
 
         // we can pass this array straight to the view
-        return ['stepX' => $index+1, 'stepY' => count($sections)];
+        return ['stepX' => $index + 1, 'stepY' => count($sections)];
     }
 
     /**

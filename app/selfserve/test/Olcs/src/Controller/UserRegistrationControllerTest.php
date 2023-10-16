@@ -1,15 +1,25 @@
 <?php
+
 /**
  * Class User Registration Controller Test
  */
+
 namespace OlcsTest\Controller;
 
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Helper\UrlHelperService;
+use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Transfer\Command\User\RegisterUserSelfserve as CreateDto;
 use Dvsa\Olcs\Transfer\Query\Licence\LicenceRegisteredAddress as LicenceByNumberDto;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Controller\UserRegistrationController as Sut;
 use OlcsTest\Bootstrap;
+use ReflectionClass;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Class User Registration Controller Test
@@ -25,9 +35,29 @@ class UserRegistrationControllerTest extends TestCase
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
 
-        $this->sm = Bootstrap::getServiceManager();
+        $this->mockniTextTranslationUtil = m::mock(NiTextTranslation::class)->makePartial();
+        $this->mockauthService = m::mock(AuthorizationService::class)->makePartial();
+        $this->mockFormHelper = m::mock(FormHelperService::class)->makePartial();
+        $this->mockFlashMessengerHelper = m::mock(FlashMessengerHelperService::class)->makePartial();
+        $this->mockScriptFactory = m::mock(ScriptFactory::class)->makePartial();
+        $this->mockUrlHelper = m::mock(UrlHelperService::class)->makePartial();
+        $this->mockTranslationHelper = m::mock(TranslationHelperService::class)->makePartial();
 
-        $this->sut->setServiceLocator($this->sm);
+        $reflectionClass = new ReflectionClass(Sut::class);
+        $this->setMockedProperties($reflectionClass, 'niTextTranslationUtil', $this->mockniTextTranslationUtil);
+        $this->setMockedProperties($reflectionClass, 'authService', $this->mockauthService);
+        $this->setMockedProperties($reflectionClass, 'flashMessengerHelper', $this->mockFlashMessengerHelper);
+        $this->setMockedProperties($reflectionClass, 'formHelper', $this->mockFormHelper);
+        $this->setMockedProperties($reflectionClass, 'scriptFactory', $this->mockScriptFactory);
+        $this->setMockedProperties($reflectionClass, 'urlHelper', $this->mockUrlHelper);
+        $this->setMockedProperties($reflectionClass, 'translationHelper', $this->mockTranslationHelper);
+    }
+
+    public function setMockedProperties($reflectionClass, $property, $value)
+    {
+        $reflectionProperty = $reflectionClass->getProperty($property);
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->sut, $value);
     }
 
     public function testAddActionForGet()
@@ -36,7 +66,7 @@ class UserRegistrationControllerTest extends TestCase
         $mockRequest->shouldReceive('isPost')->andReturn(false);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
-        $termsAgreedElement = new \Laminas\Form\Element;
+        $termsAgreedElement = new \Laminas\Form\Element();
         $termsAgreedElement->setLabel('termsAgreedLabel');
 
         $mockForm = m::mock('Common\Form\Form');
@@ -50,35 +80,27 @@ class UserRegistrationControllerTest extends TestCase
             ->once()
             ->andReturn($termsAgreedElement);
 
-        $mockFormHelper = m::mock();
-        $mockFormHelper
+        $this->mockFormHelper
             ->shouldReceive('createFormWithRequest')
             ->with('UserRegistration', $mockRequest)
             ->once()
             ->andReturn($mockForm);
-        $this->sm->setService('Helper\Form', $mockFormHelper);
 
-        $mockTranslation = m::mock();
-        $mockTranslation
+        $this->mockTranslationHelper
             ->shouldReceive('translateReplace')
             ->with('termsAgreedLabel', ['URL'])
             ->once();
-        $this->sm->setService('Helper\Translation', $mockTranslation);
 
-        $mockUrl = m::mock();
-        $mockUrl
+        $this->mockUrlHelper
             ->shouldReceive('fromRoute')
             ->with('terms-and-conditions')
             ->once()
             ->andReturn('URL');
-        $this->sm->setService('Helper\Url', $mockUrl);
 
-        $mockScript = m::mock();
-        $mockScript
+        $this->mockScriptFactory
             ->shouldReceive('loadFile')
             ->with('user-registration')
             ->once();
-        $this->sm->setService('Script', $mockScript);
 
         $view = $this->sut->addAction();
 
@@ -93,13 +115,11 @@ class UserRegistrationControllerTest extends TestCase
 
         $mockForm = m::mock('Common\Form\Form');
 
-        $mockFormHelper = m::mock();
-        $mockFormHelper
+        $this->mockFormHelper
             ->shouldReceive('createFormWithRequest')
             ->with('UserRegistration', $mockRequest)
             ->once()
             ->andReturn($mockForm);
-        $this->sm->setService('Helper\Form', $mockFormHelper);
 
         $this->sut->shouldReceive('isButtonPressed')->with('cancel')->once()->andReturn(true);
 
@@ -136,13 +156,11 @@ class UserRegistrationControllerTest extends TestCase
         $mockForm->shouldReceive('isValid')->once()->andReturn(true);
         $mockForm->shouldReceive('getData')->once()->andReturn($postData);
 
-        $mockFormHelper = m::mock();
-        $mockFormHelper
+        $this->mockFormHelper
             ->shouldReceive('createFormWithRequest')
             ->with('UserRegistration', $mockRequest)
             ->once()
             ->andReturn($mockForm);
-        $this->sm->setService('Helper\Form', $mockFormHelper);
 
         $this->sut->shouldReceive('isButtonPressed')->with('cancel')->once()->andReturn(false);
         $this->sut->shouldReceive('isButtonPressed')->with('postAccount')->once()->andReturn(false);
@@ -187,7 +205,7 @@ class UserRegistrationControllerTest extends TestCase
         $mockRequest->shouldReceive('isPost')->andReturn(true);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
-        $termsAgreedElement = new \Laminas\Form\Element;
+        $termsAgreedElement = new \Laminas\Form\Element();
         $termsAgreedElement->setLabel('termsAgreedLabel');
 
         $mockForm = m::mock('Common\Form\Form');
@@ -197,13 +215,11 @@ class UserRegistrationControllerTest extends TestCase
         $mockForm->shouldReceive('get')->once()->with('fields')->andReturnSelf();
         $mockForm->shouldReceive('get')->once()->with('termsAgreed')->andReturn($termsAgreedElement);
 
-        $mockFormHelper = m::mock();
-        $mockFormHelper
+        $this->mockFormHelper
             ->shouldReceive('createFormWithRequest')
             ->with('UserRegistration', $mockRequest)
             ->twice()
             ->andReturn($mockForm);
-        $this->sm->setService('Helper\Form', $mockFormHelper);
 
         $this->sut->shouldReceive('isButtonPressed')->with('cancel')->once()->andReturn(false);
         $this->sut->shouldReceive('isButtonPressed')->with('postAccount')->once()->andReturn(false);
@@ -217,34 +233,26 @@ class UserRegistrationControllerTest extends TestCase
         $response->shouldReceive('getResult')->andReturn([]);
         $this->sut->shouldReceive('handleCommand')->with(m::type(CreateDto::class))->andReturn($response);
 
-        $mockFlashMessengerHelper = m::mock();
-        $mockFlashMessengerHelper
+        $this->mockFlashMessengerHelper
             ->shouldReceive('addErrorMessage')
             ->once()
             ->with('unknown-error');
-        $this->sm->setService('Helper\FlashMessenger', $mockFlashMessengerHelper);
 
-        $mockTranslation = m::mock();
-        $mockTranslation
+        $this->mockTranslationHelper
             ->shouldReceive('translateReplace')
             ->with('termsAgreedLabel', ['URL'])
             ->once();
-        $this->sm->setService('Helper\Translation', $mockTranslation);
 
-        $mockUrl = m::mock();
-        $mockUrl
+        $this->mockUrlHelper
             ->shouldReceive('fromRoute')
             ->with('terms-and-conditions')
             ->once()
             ->andReturn('URL');
-        $this->sm->setService('Helper\Url', $mockUrl);
 
-        $mockScript = m::mock();
-        $mockScript
+        $this->mockScriptFactory
             ->shouldReceive('loadFile')
             ->with('user-registration')
             ->once();
-        $this->sm->setService('Script', $mockScript);
 
         $view = $this->sut->addAction();
 
@@ -292,18 +300,16 @@ class UserRegistrationControllerTest extends TestCase
         $mockFormAddress = m::mock('Common\Form\Form');
         $mockFormAddress->shouldReceive('setData')->once()->with($formattedPostData);
 
-        $mockFormHelper = m::mock();
-        $mockFormHelper
+        $this->mockFormHelper
             ->shouldReceive('createFormWithRequest')
             ->with('UserRegistration', $mockRequest)
             ->once()
             ->andReturn($mockForm);
-        $mockFormHelper
+        $this->mockFormHelper
             ->shouldReceive('createFormWithRequest')
             ->with('UserRegistrationAddress', $mockRequest)
             ->once()
             ->andReturn($mockFormAddress);
-        $this->sm->setService('Helper\Form', $mockFormHelper);
 
         $this->sut->shouldReceive('isButtonPressed')->with('cancel')->once()->andReturn(false);
         $this->sut->shouldReceive('isButtonPressed')->with('postAccount')->once()->andReturn(false);
@@ -370,7 +376,7 @@ class UserRegistrationControllerTest extends TestCase
         $mockRequest->shouldReceive('isPost')->andReturn(true);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
-        $termsAgreedElement = new \Laminas\Form\Element;
+        $termsAgreedElement = new \Laminas\Form\Element();
         $termsAgreedElement->setLabel('termsAgreedLabel');
 
         $mockForm = m::mock('Common\Form\Form');
@@ -381,13 +387,11 @@ class UserRegistrationControllerTest extends TestCase
         $mockForm->shouldReceive('get')->once()->with('fields')->andReturnSelf();
         $mockForm->shouldReceive('get')->once()->with('termsAgreed')->andReturn($termsAgreedElement);
 
-        $mockFormHelper = m::mock();
-        $mockFormHelper
+        $this->mockFormHelper
             ->shouldReceive('createFormWithRequest')
             ->with('UserRegistration', $mockRequest)
             ->twice()
             ->andReturn($mockForm);
-        $this->sm->setService('Helper\Form', $mockFormHelper);
 
         $this->sut->shouldReceive('isButtonPressed')->with('cancel')->once()->andReturn(false);
         $this->sut->shouldReceive('isButtonPressed')->with('postAccount')->once()->andReturn(false);
@@ -402,27 +406,21 @@ class UserRegistrationControllerTest extends TestCase
         $response->shouldReceive('getResult')->andReturn(['messages' => ['licenceNumber' => 'err']]);
         $this->sut->shouldReceive('handleQuery')->with(m::type(LicenceByNumberDto::class))->andReturn($response);
 
-        $mockTranslation = m::mock();
-        $mockTranslation
+        $this->mockTranslationHelper
             ->shouldReceive('translateReplace')
             ->with('termsAgreedLabel', ['URL'])
             ->once();
-        $this->sm->setService('Helper\Translation', $mockTranslation);
 
-        $mockUrl = m::mock();
-        $mockUrl
+        $this->mockUrlHelper
             ->shouldReceive('fromRoute')
             ->with('terms-and-conditions')
             ->once()
             ->andReturn('URL');
-        $this->sm->setService('Helper\Url', $mockUrl);
 
-        $mockScript = m::mock();
-        $mockScript
+        $this->mockScriptFactory
             ->shouldReceive('loadFile')
             ->with('user-registration')
             ->once();
-        $this->sm->setService('Script', $mockScript);
 
         $view = $this->sut->addAction();
 
@@ -467,13 +465,11 @@ class UserRegistrationControllerTest extends TestCase
         $mockForm->shouldReceive('isValid')->once()->andReturn(true);
         $mockForm->shouldReceive('getData')->once()->andReturn($formattedPostData);
 
-        $mockFormHelper = m::mock();
-        $mockFormHelper
+        $this->mockFormHelper
             ->shouldReceive('createFormWithRequest')
             ->with('UserRegistration', $mockRequest)
             ->once()
             ->andReturn($mockForm);
-        $this->sm->setService('Helper\Form', $mockFormHelper);
 
         $this->sut->shouldReceive('isButtonPressed')->with('cancel')->once()->andReturn(false);
         $this->sut->shouldReceive('isButtonPressed')->with('postAccount')->once()->andReturn(true);
@@ -531,7 +527,7 @@ class UserRegistrationControllerTest extends TestCase
         $mockRequest->shouldReceive('isPost')->andReturn(true);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
-        $termsAgreedElement = new \Laminas\Form\Element;
+        $termsAgreedElement = new \Laminas\Form\Element();
         $termsAgreedElement->setLabel('termsAgreedLabel');
 
         $mockForm = m::mock('Common\Form\Form');
@@ -542,13 +538,11 @@ class UserRegistrationControllerTest extends TestCase
         $mockForm->shouldReceive('get')->once()->with('fields')->andReturnSelf();
         $mockForm->shouldReceive('get')->once()->with('termsAgreed')->andReturn($termsAgreedElement);
 
-        $mockFormHelper = m::mock();
-        $mockFormHelper
+        $this->mockFormHelper
             ->shouldReceive('createFormWithRequest')
             ->with('UserRegistration', $mockRequest)
             ->twice()
             ->andReturn($mockForm);
-        $this->sm->setService('Helper\Form', $mockFormHelper);
 
         $this->sut->shouldReceive('isButtonPressed')->with('cancel')->once()->andReturn(false);
         $this->sut->shouldReceive('isButtonPressed')->with('postAccount')->once()->andReturn(true);
@@ -562,27 +556,21 @@ class UserRegistrationControllerTest extends TestCase
         $response->shouldReceive('getResult')->andReturn(['messages' => ['loginId' => 'err']]);
         $this->sut->shouldReceive('handleCommand')->with(m::type(CreateDto::class))->andReturn($response);
 
-        $mockTranslation = m::mock();
-        $mockTranslation
+        $this->mockTranslationHelper
             ->shouldReceive('translateReplace')
             ->with('termsAgreedLabel', ['URL'])
             ->once();
-        $this->sm->setService('Helper\Translation', $mockTranslation);
 
-        $mockUrl = m::mock();
-        $mockUrl
+        $this->mockUrlHelper
             ->shouldReceive('fromRoute')
             ->with('terms-and-conditions')
             ->once()
             ->andReturn('URL');
-        $this->sm->setService('Helper\Url', $mockUrl);
 
-        $mockScript = m::mock();
-        $mockScript
+        $this->mockScriptFactory
             ->shouldReceive('loadFile')
             ->with('user-registration')
             ->once();
-        $this->sm->setService('Script', $mockScript);
 
         $view = $this->sut->addAction();
 

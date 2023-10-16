@@ -13,12 +13,12 @@ use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Dvsa\Olcs\Utils\Helper\ValueHelper;
-use Olcs\Controller\Config\DataSource\DataSourceInterface;
-use Olcs\Logging\Log\Logger;
 use Laminas\Http\PhpEnvironment\Response as PhpEnvironmentResponse;
 use Laminas\Http\Response as HttpResponse;
 use Laminas\Mvc\MvcEvent;
 use Laminas\View\Model\ViewModel;
+use Olcs\Controller\Config\DataSource\DataSourceInterface;
+use Olcs\Logging\Log\Logger;
 use Permits\Data\Mapper\MapperManager;
 
 /**

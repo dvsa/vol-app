@@ -2,10 +2,18 @@
 
 namespace Olcs\Controller\Lva\Variation;
 
-use Olcs\Controller\Lva\Traits\VariationControllerTrait;
-use Olcs\Controller\Lva\AbstractUndertakingsController;
-use Common\RefData;
 use Common\Form\Form;
+use Common\RefData;
+use Common\Service\Cqrs\Command\CommandService;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Script\ScriptFactory;
+use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use Olcs\Controller\Lva\AbstractUndertakingsController;
+use Olcs\Controller\Lva\Traits\VariationControllerTrait;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * External Variation Undertakings Controller
@@ -18,7 +26,42 @@ class UndertakingsController extends AbstractUndertakingsController
     use VariationControllerTrait;
 
     protected $lva = 'variation';
-    protected $location = 'external';
+    protected string $location = 'external';
+
+    protected TranslationHelperService $translationHelper;
+
+    /**
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param ScriptFactory $scriptFactory
+     * @param AnnotationBuilder $transferAnnotationBuilder
+     * @param CommandService $commandService
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param FormHelperService $formHelper
+     * @param TranslationHelperService $translationHelper
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        ScriptFactory $scriptFactory,
+        AnnotationBuilder $transferAnnotationBuilder,
+        CommandService $commandService,
+        FlashMessengerHelperService $flashMessengerHelper,
+        FormHelperService $formHelper,
+        TranslationHelperService $translationHelper
+    ) {
+        $this->translationHelper = $translationHelper;
+
+        parent::__construct(
+            $niTextTranslationUtil,
+            $authService,
+            $scriptFactory,
+            $transferAnnotationBuilder,
+            $commandService,
+            $flashMessengerHelper,
+            $formHelper
+        );
+    }
 
     /**
      * Get form
@@ -27,7 +70,7 @@ class UndertakingsController extends AbstractUndertakingsController
      */
     protected function getForm()
     {
-        return $this->getServiceLocator()->get('Helper\Form')
+        return $this->formHelper
             ->createForm('Lva\VariationUndertakings');
     }
 
@@ -41,9 +84,9 @@ class UndertakingsController extends AbstractUndertakingsController
      */
     protected function updateForm($form, $applicationData)
     {
-        $translator = $this->getServiceLocator()->get('Helper\Translation');
+        $translator = $this->translationHelper;
         $fieldset = $form->get('declarationsAndUndertakings');
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
 
         $summaryDownload = $translator->translateReplace(
             'undertakings_summary_download',

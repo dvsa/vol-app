@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Olcs\Controller\Auth;
@@ -8,12 +9,12 @@ use Common\Controller\Dispatcher;
 use Common\Controller\Plugin\CurrentUser;
 use Common\Controller\Plugin\Redirect;
 use Common\Service\Helper\FormHelperService;
+use Dvsa\Olcs\Auth\Container\AuthChallengeContainer;
 use Interop\Container\ContainerInterface;
 use Laminas\Mvc\Controller\Plugin\FlashMessenger;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Olcs\Auth\Adapter\SelfserveCommandAdapter;
-use Dvsa\Olcs\Auth\Container\AuthChallengeContainer;
 
 class LoginControllerFactory implements FactoryInterface
 {

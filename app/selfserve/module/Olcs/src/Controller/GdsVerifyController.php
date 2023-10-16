@@ -4,8 +4,12 @@ namespace Olcs\Controller;
 
 use Common\Controller\Lva\AbstractController;
 use Common\Exception\BadRequestException;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Transfer\Command\GdsVerify\ProcessSignatureResponse;
 use Dvsa\Olcs\Transfer\Query\GdsVerify\GetAuthRequest;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Exception;
 use Laminas\Cache\Storage\Adapter\Redis;
 use Laminas\Cache\Storage\StorageInterface;
@@ -16,13 +20,35 @@ use Olcs\DTO\Verify\DigitalSignature;
 use Olcs\Logging\Log\Logger;
 use RuntimeException;
 use ZfcRbac\Exception\UnauthorizedException;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * GdsVerifyController Controller
  */
 class GdsVerifyController extends AbstractController
 {
-    const CACHE_PREFIX = "verify:";
+    protected const CACHE_PREFIX = "verify:";
+
+    protected Redis $redis;
+    protected FormHelperService $formHelper;
+    protected ScriptFactory $scriptFactory;
+    protected FlashMessengerHelperService $flashMessengerHelper;
+
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        Redis $redis,
+        FormHelperService $formHelper,
+        ScriptFactory $scriptFactory,
+        FlashMessengerHelperService $flashMessengerHelper
+    ) {
+        $this->redis = $redis;
+        $this->formHelper = $formHelper;
+        $this->scriptFactory = $scriptFactory;
+        $this->flashMessengerHelper = $flashMessengerHelper;
+
+        parent::__construct($niTextTranslationUtil, $authService);
+    }
 
     /**
      * @var StorageInterface
@@ -31,7 +57,7 @@ class GdsVerifyController extends AbstractController
 
     public function onDispatch(MvcEvent $e)
     {
-        $this->cache = $this->getServiceLocator()->get(Redis::class);
+        $this->cache = $this->redis;
         return parent::onDispatch($e);
     }
 
@@ -61,11 +87,11 @@ class GdsVerifyController extends AbstractController
         );
         $this->whitelistUserVerifyRequest($verifyRequestId);
 
-        $form = $this->getServiceLocator()->get('Helper\Form')->createForm('VerifyRequest');
+        $form = $this->formHelper->createForm('VerifyRequest');
         $form->setAttribute('action', $result['url']);
         $form->get('SAMLRequest')->setValue($result['samlRequest']);
 
-        $this->getServiceLocator()->get('Script')->loadFile('verify-request');
+        $this->scriptFactory->loadFile('verify-request');
 
         return new ViewModel(array('form' => $form));
     }
@@ -166,7 +192,7 @@ class GdsVerifyController extends AbstractController
 
         $response = $this->handleCommand($dto);
         if (!$response->isOk()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('undertakings_not_signed');
+            $this->flashMessengerHelper->addErrorMessage('undertakings_not_signed');
         }
 
         if ($applicationId && !$transportManagerApplicationId) {
@@ -348,8 +374,7 @@ class GdsVerifyController extends AbstractController
             $this->cache->removeItems([
                     $this->buildVerifyJourneyKey($previousVerifyId),
                     $activeUserKey
-                ]
-            );
+                ]);
         }
 
         $this->cache->addItems([
@@ -411,7 +436,7 @@ class GdsVerifyController extends AbstractController
     {
         $verifyReferer = 'signin.service.gov.uk';
         $referer = $_SERVER['HTTP_REFERER'];
-        $refererHost =  parse_url($referer,PHP_URL_HOST);
+        $refererHost =  parse_url($referer, PHP_URL_HOST);
         $trimmedHost = implode('.', array_slice(explode('.', $refererHost), -4, 4));
 
         return $trimmedHost === $verifyReferer;

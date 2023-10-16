@@ -2,24 +2,58 @@
 
 namespace OLCS\Controller\Lva\TransportManager;
 
-use Common\RefData;
 use Common\Controller\Lva\AbstractController;
 use Common\Data\Mapper\Lva\TransportManagerApplication;
+use Common\RefData;
+use Common\Service\Cqrs\Command\CommandService;
+use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
+use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
 use Olcs\Controller\Lva\Traits\TransportManagerApplicationTrait;
+use ZfcRbac\Service\AuthorizationService;
 
 class CheckAnswersController extends AbstractController
 {
-    use ExternalControllerTrait,
-        TransportManagerApplicationTrait;
+    use ExternalControllerTrait;
+    use TransportManagerApplicationTrait;
 
     protected $tma;
+
+    protected FormHelperService $formHelper;
+    protected TranslationHelperService $translationHelper;
+    protected AnnotationBuilder $transferAnnotationBuilder;
+    protected CommandService $commandService;
+
+    /**
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
+     * @param TranslationHelperService $translationHelper
+     * @param AnnotationBuilder $transferAnnotationBuilder
+     * @param CommandService $commandService
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FormHelperService $formHelper,
+        TranslationHelperService $translationHelper,
+        AnnotationBuilder $transferAnnotationBuilder,
+        CommandService $commandService
+    ) {
+        $this->formHelper = $formHelper;
+        $this->translationHelper = $translationHelper;
+        $this->transferAnnotationBuilder = $transferAnnotationBuilder;
+        $this->commandService = $commandService;
+
+        parent::__construct($niTextTranslationUtil, $authService);
+    }
 
     public function indexAction()
     {
 
-        $translator = $this->serviceLocator->get('Helper\Translation');
+        $translator = $this->translationHelper;
 
         list($title, $defaultParams, $form) = $this->getPageLayout(
             $translator,
@@ -58,7 +92,7 @@ class CheckAnswersController extends AbstractController
 
     private function getConfirmationForm(): \Common\Form\Form
     {
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
 
         /* @var $form \Common\Form\Form */
         $form = $formHelper->createForm('GenericConfirmation');
@@ -141,8 +175,10 @@ class CheckAnswersController extends AbstractController
      */
     private function changeTmaStatusToDetailsSubmittedIfDetailsChecked()
     {
-        if ($this->tma['tmApplicationStatus']['id'] ===
-            RefData::TMA_STATUS_DETAILS_CHECKED) {
+        if (
+            $this->tma['tmApplicationStatus']['id'] ===
+            RefData::TMA_STATUS_DETAILS_CHECKED
+        ) {
             $this->updateTmaStatus(
                 $this->tma['id'],
                 RefData::TMA_STATUS_DETAILS_SUBMITTED
@@ -159,11 +195,13 @@ class CheckAnswersController extends AbstractController
      */
     protected function isUserPermitted($transportManagerApplication)
     {
-        if ($transportManagerApplication['isTmLoggedInUser'] &&
+        if (
+            $transportManagerApplication['isTmLoggedInUser'] &&
             ($transportManagerApplication['tmApplicationStatus']['id'] ===
                 RefData::TMA_STATUS_DETAILS_SUBMITTED ||
                 $transportManagerApplication['tmApplicationStatus']['id'] ===
-                RefData::TMA_STATUS_DETAILS_CHECKED)) {
+                RefData::TMA_STATUS_DETAILS_CHECKED)
+        ) {
             return true;
         }
         return false;

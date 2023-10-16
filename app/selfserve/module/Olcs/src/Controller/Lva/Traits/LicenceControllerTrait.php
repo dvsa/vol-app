@@ -62,6 +62,6 @@ trait LicenceControllerTrait
      */
     protected function alterFormForLva(Form $form, $data = null)
     {
-        return $this->getServiceLocator()->get('LicenceLvaAdapter')->alterForm($form);
+        return $this->licenceLvaAdapter->alterForm($form);
     }
 }

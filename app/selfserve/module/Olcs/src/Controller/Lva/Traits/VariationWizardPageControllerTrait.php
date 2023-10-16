@@ -2,11 +2,11 @@
 
 namespace Olcs\Controller\Lva\Traits;
 
-use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
 use Common\Controller\Plugin\Redirect;
 use Common\Service\Cqrs\Response as CqrsResponse;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Transfer\Command\Variation\DeleteVariation;
+use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
 use Laminas\Form\Form;
 use Laminas\Http\Request;
 use Laminas\Http\Response;

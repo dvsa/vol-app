@@ -6,18 +6,21 @@ use Common\Controller\Lva\AbstractController;
 use Common\Controller\Traits\GenericUpload;
 use Common\Form\Form;
 use Common\RefData;
+use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Transfer\Query\Application\UploadEvidence;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * External Abstract Upload Evidence Controller
  */
 abstract class AbstractUploadEvidenceController extends AbstractController
 {
-    use GenericUpload,
-        ApplicationControllerTrait;
+    use GenericUpload;
+    use ApplicationControllerTrait;
 
-    protected $location = 'external';
+    protected string $location = 'external';
 
     /**
      * Data from API
@@ -29,6 +32,26 @@ abstract class AbstractUploadEvidenceController extends AbstractController
      * @var array|null
      */
     private $application;
+
+    protected FormHelperService $formHelper;
+
+    /**
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FormHelperService $formHelper
+    ) {
+        $this->formHelper = $formHelper;
+
+        parent::__construct(
+            $niTextTranslationUtil,
+            $authService
+        );
+    }
 
     /**
      * Index action
@@ -78,7 +101,7 @@ abstract class AbstractUploadEvidenceController extends AbstractController
     private function getForm()
     {
         /** @var Form $form */
-        $form = $this->getServiceLocator()->get('Helper\Form')->createForm('Lva\UploadEvidence');
+        $form = $this->formHelper->createForm('Lva\UploadEvidence');
 
         if ($this->shouldShowFinancialEvidence()) {
             $this->processFiles(
@@ -102,7 +125,7 @@ abstract class AbstractUploadEvidenceController extends AbstractController
                 $this->operatingCentreId = $data['operatingCentres'][$i]['operatingCentre']['id'];
                 $this->processFiles(
                     $form,
-                    'operatingCentres->'. (string)$i .'->file',
+                    'operatingCentres->' . (string)$i . '->file',
                     [$this, 'operatingCentreProcessFileUpload'],
                     [$this, 'deleteFile'],
                     [$this, 'operatingCentreLoadFileUpload']
@@ -307,12 +330,12 @@ abstract class AbstractUploadEvidenceController extends AbstractController
 
     /**
      * Should we show the supporting evidence form?
-     * 
+     *
      * @return bool
      */
     private function shouldShowSupportingEvidence()
     {
-        if (is_null($this->application)){
+        if (is_null($this->application)) {
             $this->application = $this->getApplicationData($this->getIdentifier());
         }
         return $this->application['status']['id'] === RefData::APPLICATION_STATUS_UNDER_CONSIDERATION;

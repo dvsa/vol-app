@@ -4,17 +4,47 @@ namespace Olcs\Controller\BusReg;
 
 use Common\Controller\Lva\AbstractController;
 use Common\Service\Cqrs\Exception\NotFoundException;
-use Dvsa\Olcs\Transfer\Query\Bus\BusRegBrowseList;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Query\Bus\BusRegBrowseExport;
-use Olcs\Form\Model\Form\BusRegBrowseForm as Form;
-use Laminas\View\Model\ViewModel;
+use Dvsa\Olcs\Transfer\Query\Bus\BusRegBrowseList;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\Session\Container;
+use Laminas\View\Model\ViewModel;
+use Olcs\Form\Model\Form\BusRegBrowseForm as Form;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Class BusRegBrowseController
  */
 class BusRegBrowseController extends AbstractController
 {
+    protected FormHelperService $formHelper;
+    protected FlashMessengerHelperService $flashMessengerHelper;
+    protected TableFactory $tableFactory;
+
+    /**
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param TableFactory $tableFactory
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessengerHelper,
+        TableFactory $tableFactory
+    ) {
+        $this->formHelper = $formHelper;
+        $this->flashMessengerHelper = $flashMessengerHelper;
+        $this->tableFactory = $tableFactory;
+
+        parent::__construct($niTextTranslationUtil, $authService);
+    }
+
     /**
      * Index action
      *
@@ -23,7 +53,7 @@ class BusRegBrowseController extends AbstractController
     public function indexAction()
     {
         /** @var \Laminas\Form\Form $form */
-        $form = $this->getServiceLocator()->get('Helper\Form')->createForm(Form::class);
+        $form = $this->formHelper->createForm(Form::class);
 
         /** @var \Laminas\Http\Request $request */
         $request = $this->getRequest();
@@ -95,10 +125,10 @@ class BusRegBrowseController extends AbstractController
                 return $httpResponse;
             }
 
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentUnknownError();
+            $this->flashMessengerHelper->addCurrentUnknownError();
         } catch (NotFoundException $e) {
             // no results found
-            $this->getServiceLocator()->get('Helper\FlashMessenger')
+            $this->flashMessengerHelper
                 ->addErrorMessage('selfserve.search.busreg.browse.no-results');
         }
 
@@ -156,12 +186,12 @@ class BusRegBrowseController extends AbstractController
         if ($response->isOk()) {
             $result = $response->getResult();
         } else {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentUnknownError();
+            $this->flashMessengerHelper->addCurrentUnknownError();
             $result = [];
         }
 
         /** @var \Common\Service\Table\TableBuilder $tableBuilder */
-        $tableBuilder = $this->getServiceLocator()->get('Table');
+        $tableBuilder = $this->tableFactory;
 
         $busRegistrationTable = $tableBuilder->buildTable(
             'bus-reg-browse',
@@ -181,7 +211,7 @@ class BusRegBrowseController extends AbstractController
     private function initialiseFilterForm()
     {
         /** @var \Common\Form\Form $form */
-        $form = $this->getServiceLocator()->get('Helper\Form')->createForm(Form::class);
+        $form = $this->formHelper->createForm(Form::class);
 
         // make sure we always submit to the browse action
         $form->setAttribute('action', $this->url()->fromRoute('search-bus/browse'));

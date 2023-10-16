@@ -2,28 +2,67 @@
 
 namespace OLCS\Controller\Lva\TransportManager;
 
+use Common\Controller\Lva\AbstractController;
 use Common\FeatureToggle;
-use \Common\Form\Form;
+use Common\Form\Form;
 use Common\RefData;
+use Common\Service\Cqrs\Command\CommandService;
+use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Transfer\Command\GovUkAccount\GetGovUkAccountRedirect;
 use Dvsa\Olcs\Transfer\Query\FeatureToggle\IsEnabled as IsEnabledQry;
+use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use Laminas\View\Model\ViewModel as LaminasViewModel;
 use Olcs\Controller\Lva\Traits\ExternalControllerTrait;
-use Common\Controller\Lva\AbstractController;
 use Olcs\Controller\Lva\Traits\TransportManagerApplicationTrait;
-use \Laminas\View\Model\ViewModel as LaminasViewModel;
+use ZfcRbac\Service\AuthorizationService;
 
 abstract class AbstractDeclarationController extends AbstractController
 {
-    use ExternalControllerTrait,
-        TransportManagerApplicationTrait;
+    use ExternalControllerTrait;
+    use TransportManagerApplicationTrait;
 
     protected $declarationMarkup;
+
+    protected TranslationHelperService $translationHelper;
+    protected FormHelperService $formHelper;
+    protected ScriptFactory $scriptFactory;
+    protected AnnotationBuilder $transferAnnotationBuilder;
+    protected CommandService $commandService;
 
     /**
      * @var TransportManagerApplication
      */
     protected $tma;
+
+    /**
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param TranslationHelperService $translationHelper
+     * @param FormHelperService $formHelper
+     * @param ScriptFactory $scriptFactory
+     * @param AnnotationBuilder $transferAnnotationBuilder
+     * @param CommandService $commandService
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        ScriptFactory $scriptFactory,
+        AnnotationBuilder $transferAnnotationBuilder,
+        CommandService $commandService
+    ) {
+        $this->translationHelper = $translationHelper;
+        $this->formHelper = $formHelper;
+        $this->scriptFactory = $scriptFactory;
+        $this->transferAnnotationBuilder = $transferAnnotationBuilder;
+        $this->commandService = $commandService;
+
+        parent::__construct($niTextTranslationUtil, $authService);
+    }
 
     /**
      * Index action for the lva-transport_manager/tm_declaration and lva-transport_manager/declaration routes
@@ -49,7 +88,7 @@ abstract class AbstractDeclarationController extends AbstractController
      */
     private function renderDeclarationPage(): LaminasViewModel
     {
-        $translationHelper = $this->getServiceLocator()->get('Helper\Translation');
+        $translationHelper = $this->translationHelper;
 
         $params = [
             'content' => $translationHelper->translateReplace(
@@ -61,14 +100,14 @@ abstract class AbstractDeclarationController extends AbstractController
             'backLink' => $this->getBackLink()
         ];
 
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
         $form = $formHelper->createForm('TransportManagerApplicationDeclaration');
         /* @var $form \Common\Form\Form */
         $formHelper->setFormActionFromRequest($form, $this->getRequest());
 
         $this->alterDeclarationForm($form);
 
-        $this->getServiceLocator()->get('Script')->loadFiles(['tm-lva-declaration']);
+        $this->scriptFactory->loadFiles(['tm-lva-declaration']);
 
         $hasGovUkAccountError = $this->getFlashMessenger()->getContainer()->offsetExists('govUkAccountError');
         if ($hasGovUkAccountError) {
@@ -106,7 +145,7 @@ abstract class AbstractDeclarationController extends AbstractController
         $role = $this->getSignAsRole();
         // this will be either RefData::TMA_SIGN_AS_TM || RefData::TMA_SIGN_AS_TM_OP
         // isOwner will disambiguate later.
-        $routeParams = ['lva'=>$this->lva, 'role'=>$role, 'applicationId'=>$this->tma['application']['id'], 'transportManagerApplicationId'=>$this->tma['id']];
+        $routeParams = ['lva' => $this->lva, 'role' => $role, 'applicationId' => $this->tma['application']['id'], 'transportManagerApplicationId' => $this->tma['id']];
         $featureEnabled = $this->handleQuery(IsEnabledQry::create(['ids' => [FeatureToggle::GOVUK_ACCOUNT]]))->getResult()['isEnabled'];
         if (!$featureEnabled) {
             return $this->redirect()->toRoute(
@@ -121,7 +160,9 @@ abstract class AbstractDeclarationController extends AbstractController
                 'child_id' => $this->tma['id'],
                 'application' => $this->tma['application']['id'],
                 'action' => 'index'
-            ], [], true
+            ],
+            [],
+            true
         );
 
         $urlResult = $this->handleCommand(GetGovUkAccountRedirect::create([

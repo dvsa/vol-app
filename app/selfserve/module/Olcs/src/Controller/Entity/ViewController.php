@@ -5,9 +5,13 @@ namespace Olcs\Controller\Entity;
 use Common\Controller\Lva\AbstractController;
 use Common\Exception\ResourceNotFoundException;
 use Common\RefData;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Table\TableBuilder;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Query\Search\Licence as SearchLicence;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\Session\Container;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Entity View Controller
@@ -16,8 +20,23 @@ use Laminas\Session\Container;
  */
 class ViewController extends AbstractController
 {
-    const USER_TYPE_PARTNER = 'partner';
-    const USER_TYPE_ANONYMOUS = 'anonymous';
+    public const USER_TYPE_PARTNER = 'partner';
+    public const USER_TYPE_ANONYMOUS = 'anonymous';
+
+    protected FlashMessengerHelperService $flashMessengerHelper;
+    protected TableFactory $tableFactory;
+
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FlashMessengerHelperService $flashMessengerHelper,
+        TableFactory $tableFactory
+    ) {
+        $this->flashMessengerHelper = $flashMessengerHelper;
+        $this->tableFactory = $tableFactory;
+
+        parent::__construct($niTextTranslationUtil, $authService);
+    }
 
     /**
      * @var $entity
@@ -65,7 +84,7 @@ class ViewController extends AbstractController
 
         // handle response
         if ($response->isClientError() || $response->isServerError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            $this->flashMessengerHelper->addErrorMessage('unknown-error');
         }
 
         $result = null;
@@ -185,7 +204,8 @@ class ViewController extends AbstractController
             return $this->userType;
         }
 
-        if ($this->isGranted(RefData::PERMISSION_SELFSERVE_PARTNER_ADMIN)
+        if (
+            $this->isGranted(RefData::PERMISSION_SELFSERVE_PARTNER_ADMIN)
             || $this->isGranted(RefData::PERMISSION_SELFSERVE_PARTNER_USER)
         ) {
             $this->userType = self::USER_TYPE_PARTNER;
@@ -205,7 +225,7 @@ class ViewController extends AbstractController
     private function generateTables($data)
     {
         $tables = [];
-        $tableService = $this->getServiceLocator()->get('Table');
+        $tableService = $this->tableFactory;
 
         $tables['relatedOperatorLicencesTable'] = $tableService->buildTable(
             'entity-view-related-operator-licences',

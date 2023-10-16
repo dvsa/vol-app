@@ -13,6 +13,8 @@ use Common\RefData;
  */
 class IndexController extends AbstractController
 {
+    protected $lva = 'licence';
+    protected string $location = 'external';
 
     /**
      * Index action

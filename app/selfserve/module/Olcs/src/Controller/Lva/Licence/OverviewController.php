@@ -4,15 +4,19 @@ namespace Olcs\Controller\Lva\Licence;
 
 use Common\Controller\Interfaces\MethodToggleAwareInterface;
 use Common\Controller\Lva\AbstractController;
+use Common\Controller\Lva\Adapters\LicenceLvaAdapter;
+use Common\Controller\Lva\Traits\MethodToggleTrait;
 use Common\RefData;
 use Common\Service\Cqrs\Exception\NotFoundException;
 use Dvsa\Olcs\Transfer\Command\Licence\PrintLicence;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceQry;
+use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
-use Common\Controller\Lva\Traits\MethodToggleTrait;
+use Olcs\Service\Helper\LicenceOverviewHelperService;
 use Olcs\View\Model\Licence\LicenceOverview;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
-use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Licence Overview Controller
@@ -26,13 +30,30 @@ class OverviewController extends AbstractController implements MethodToggleAware
     use MethodToggleTrait;
 
     protected $lva = 'licence';
-    protected $location = 'external';
+    protected string $location = 'external';
     protected $infoBoxLinks = [];
 
     protected $methodToggles = [
         'showSurrenderLink' => FeatureToggleConfig::SELFSERVE_SURRENDER_ENABLED,
 
     ];
+
+    protected LicenceLvaAdapter $licenceLvaAdapter;
+
+    /**
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param LicenceLvaAdapter $licenceLvaAdapter
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        LicenceLvaAdapter $licenceLvaAdapter
+    ) {
+        $this->licenceLvaAdapter = $licenceLvaAdapter;
+
+        parent::__construct($niTextTranslationUtil, $authService);
+    }
 
     /**
      * Licence overview

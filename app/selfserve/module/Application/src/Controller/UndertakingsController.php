@@ -2,10 +2,20 @@
 
 namespace Dvsa\Olcs\Application\Controller;
 
-use Olcs\Controller\Lva\AbstractUndertakingsController;
-use Common\RefData;
-use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 use Common\Form\Form;
+use Common\RefData;
+use Common\Service\Cqrs\Command\CommandService;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\RestrictionHelperService;
+use Common\Service\Helper\StringHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Script\ScriptFactory;
+use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use Olcs\Controller\Lva\AbstractUndertakingsController;
+use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * External Application Undertakings Controller
@@ -18,7 +28,52 @@ class UndertakingsController extends AbstractUndertakingsController
     use ApplicationControllerTrait;
 
     protected $lva = 'application';
-    protected $location = 'external';
+    protected string $location  = 'external';
+
+    protected TranslationHelperService $translationHelper;
+    protected RestrictionHelperService $restrictionHelper;
+    protected StringHelperService $stringHelper;
+
+    /**
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param ScriptFactory $scriptFactory
+     * @param AnnotationBuilder $transferAnnotationBuilder
+     * @param CommandService $commandService
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param FormHelperService $formHelper
+     * @param TranslationHelperService $translationHelper
+     * @param RestrictionHelperService $restrictionHelper
+     * @param StringHelperService $stringHelper
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        ScriptFactory $scriptFactory,
+        AnnotationBuilder $transferAnnotationBuilder,
+        CommandService $commandService,
+        FlashMessengerHelperService $flashMessengerHelper,
+        FormHelperService $formHelper,
+        TranslationHelperService $translationHelper,
+        RestrictionHelperService $restrictionHelper,
+        StringHelperService $stringHelper
+    ) {
+        $this->restrictionHelper = $restrictionHelper;
+        $this->stringHelper = $stringHelper;
+        $this->translationHelper = $translationHelper;
+
+        parent::__construct(
+            $niTextTranslationUtil,
+            $authService,
+            $scriptFactory,
+            $transferAnnotationBuilder,
+            $commandService,
+            $flashMessengerHelper,
+            $formHelper
+        );
+    }
+
+
 
     /**
      * View Declarations page
@@ -45,7 +100,7 @@ class UndertakingsController extends AbstractUndertakingsController
      */
     public function signedAction()
     {
-        $form = $this->getServiceLocator()->get('Helper\Form')->createForm('Lva\ApplicationSigned');
+        $form = $this->formHelper->createForm('Lva\ApplicationSigned');
 
         // If form submitted then go to payment page
         if ($this->getRequest()->isPost()) {
@@ -64,7 +119,7 @@ class UndertakingsController extends AbstractUndertakingsController
 
         // Update the form HTML with details name of person who signed
         /** @var \Common\Service\Helper\TranslationHelperService $translator */
-        $translator = $this->getServiceLocator()->get('Helper\Translation');
+        $translator = $this->translationHelper;
         $form->get('signatureDetails')->get('signature')->setValue(
             $translator->translateReplace('undertakings_signed', [$signedBy, $signedDate->format(\DATE_FORMAT)])
         );
@@ -79,7 +134,7 @@ class UndertakingsController extends AbstractUndertakingsController
      */
     protected function getForm()
     {
-        return $this->getServiceLocator()->get('Helper\Form')
+        return $this->formHelper
             ->createForm('Lva\ApplicationUndertakings');
     }
 
@@ -94,8 +149,8 @@ class UndertakingsController extends AbstractUndertakingsController
     protected function updateForm($form, $applicationData)
     {
         $fieldset = $form->get('declarationsAndUndertakings');
-        $translator = $this->getServiceLocator()->get('Helper\Translation');
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $translator = $this->translationHelper;
+        $formHelper = $this->formHelper;
 
         $this->updateReviewElement($applicationData, $fieldset, $translator);
         $this->updateDeclarationElement($fieldset, $translator);
@@ -192,7 +247,7 @@ class UndertakingsController extends AbstractUndertakingsController
         $goodsOrPsv  = $applicationData['goodsOrPsv']['id'];
 
         if ($goodsOrPsv !== RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
-            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'interim');
+            $this->formHelper->remove($form, 'interim');
         }
     }
 
@@ -248,7 +303,7 @@ class UndertakingsController extends AbstractUndertakingsController
      */
     protected function updateFormBasedOnDisableSignatureSetting($form)
     {
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
         if ($this->data['disableSignatures']) {
             // remove options radio, sign button, checkbox, enable print sign and return fieldset
             $formHelper->remove($form, 'declarationsAndUndertakings->signatureOptions');

@@ -7,8 +7,18 @@
 namespace Olcs\Controller\Lva\Licence;
 
 use Common\Controller\Lva;
-use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
+use Common\Controller\Lva\Adapters\LicenceLvaAdapter;
+use Common\FormService\FormServiceManager;
+use Common\Service\Cqrs\Query\QuerySender;
+use Common\Service\Helper\DateHelperService;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\Mvc\MvcEvent;
+use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Class TrailersController
@@ -24,7 +34,48 @@ class TrailersController extends Lva\AbstractTrailersController
     use LicenceControllerTrait;
 
     protected $lva = 'licence';
-    protected $location = 'external';
+    protected string $location = 'external';
+
+    protected LicenceLvaAdapter $licenceLvaAdapter;
+
+    /**
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
+     * @param FormServiceManager $formServiceManager
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param TableFactory $tableFactory
+     * @param ScriptFactory $scriptFactory
+     * @param DateHelperService $dateHelper
+     * @param QuerySender $querySender
+     * @param LicenceLvaAdapter $licenceLvaAdapter
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FormHelperService $formHelper,
+        FormServiceManager $formServiceManager,
+        FlashMessengerHelperService $flashMessengerHelper,
+        TableFactory $tableFactory,
+        ScriptFactory $scriptFactory,
+        DateHelperService $dateHelper,
+        QuerySender $querySender,
+        LicenceLvaAdapter $licenceLvaAdapter
+    ) {
+        $this->licenceLvaAdapter = $licenceLvaAdapter;
+
+        parent::__construct(
+            $niTextTranslationUtil,
+            $authService,
+            $formHelper,
+            $formServiceManager,
+            $flashMessengerHelper,
+            $tableFactory,
+            $scriptFactory,
+            $dateHelper,
+            $querySender
+        );
+    }
 
     /**
      * Prevent access to NI

@@ -8,15 +8,20 @@
 
 namespace Olcs\Controller;
 
-use Common\FeatureToggle;
-use Olcs\View\Model\Dashboard;
 use Common\Controller\Lva\AbstractController;
+use Common\FeatureToggle;
 use Common\RefData;
-use Dvsa\Olcs\Transfer\Query\Organisation\Dashboard as DashboardQry;
+use Common\Service\Table\DataMapper\DashboardTmApplications;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\DvsaReports\GetRedirect as GetReportRedirectCmd;
 use Dvsa\Olcs\Transfer\Query\FeatureToggle\IsEnabled as IsEnabledQry;
-use Laminas\View\Model\ViewModel;
+use Dvsa\Olcs\Transfer\Query\Organisation\Dashboard as DashboardQry;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\Authentication\Storage\Session;
+use Laminas\View\Model\ViewModel;
+use Olcs\Service\Processing\DashboardProcessingService;
+use Olcs\View\Model\Dashboard;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Dashboard Controller
@@ -29,11 +34,33 @@ class DashboardController extends AbstractController
 
     protected $lva = "application";
 
+    protected Session $session;
+    protected DashboardProcessingService $dashboardProcessingService;
+    protected DashboardTmApplications $dashboardTmApplicationsDataMapper;
+    protected TableFactory $tableFactory;
+
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        Session $session,
+        DashboardProcessingService $dashboardProcessingService,
+        DashboardTmApplications $dashboardTmApplicationsDataMapper,
+        TableFactory $tableFactory
+    ) {
+        $this->session = $session;
+        $this->dashboardProcessingService = $dashboardProcessingService;
+        $this->dashboardTmApplicationsDataMapper = $dashboardTmApplicationsDataMapper;
+        $this->tableFactory = $tableFactory;
+
+        parent::__construct($niTextTranslationUtil, $authService);
+    }
+
     /**
      * POST required data to DVSA Reports URL, handle response and perform redirect.
      *
      */
-    public function topsreportAction() {
+    public function topsreportAction()
+    {
         $dashboardData = $this->getDashboardData($this->getCurrentOrganisationId());
 
         $licenceNumbers = [];
@@ -41,7 +68,7 @@ class DashboardController extends AbstractController
             $licenceNumbers[] = $licence['licNo'];
         }
 
-        $session = $this->getServiceLocator()->get(Session::class)->read();
+        $session = $this->session->read();
         $redirectCmd = GetReportRedirectCmd::create(
             [
                 'olNumbers' => $licenceNumbers,
@@ -65,8 +92,10 @@ class DashboardController extends AbstractController
      */
     public function indexAction()
     {
-        if ($this->isGranted(RefData::PERMISSION_SELFSERVE_TM_DASHBOARD) &&
-            !$this->isGranted(RefData::PERMISSION_SELFSERVE_LVA)) {
+        if (
+            $this->isGranted(RefData::PERMISSION_SELFSERVE_TM_DASHBOARD) &&
+            !$this->isGranted(RefData::PERMISSION_SELFSERVE_LVA)
+        ) {
             $view = $this->transportManagerDashboardView();
         } else {
             $view = $this->standardDashboardView();
@@ -91,16 +120,18 @@ class DashboardController extends AbstractController
         $dashboardData = $this->getDashboardData($organisationId);
         $total = 0;
 
-        if (isset($dashboardData['licences'])
+        if (
+            isset($dashboardData['licences'])
             && isset($dashboardData['applications'])
-            && isset($dashboardData['variations'])) {
+            && isset($dashboardData['variations'])
+        ) {
             $total = count($dashboardData['licences'])
                 + count($dashboardData['applications'])
                 + count($dashboardData['variations']);
         }
 
         // build tables
-        $params = $this->getServiceLocator()->get('DashboardProcessingService')->getTables($dashboardData);
+        $params = $this->dashboardProcessingService->getTables($dashboardData);
 
         $params['total'] = $total;
         $params['showVariationTable'] = count($dashboardData['variations']) > 0;
@@ -112,7 +143,7 @@ class DashboardController extends AbstractController
         $view->setVariable('numberOfLicences', count($dashboardData['licences']));
         $view->setVariable('numberOfApplications', count($dashboardData['applications']));
         $view->setVariable('niFlag', $this->isNiFlagTrue($dashboardData));
-        if(
+        if (
             $this->handleQuery(IsEnabledQry::create(['ids' => [FeatureToggle::TOP_REPORTS_LINK]]))->getResult()['isEnabled']
             && (isset($dashboardData['licences']) && !empty($dashboardData['licences']))
         ) {
@@ -125,7 +156,8 @@ class DashboardController extends AbstractController
     /**
      * Perform dashboard data Qry
      */
-    protected function getDashboardData($organisationId) {
+    protected function getDashboardData($organisationId)
+    {
         // retrieve data
         $query = DashboardQry::create(['id' => $organisationId]);
         $response = $this->handleQuery($query);
@@ -165,10 +197,10 @@ class DashboardController extends AbstractController
         $results = $response->getResult()['results'];
 
         // flatten the array
-        $data = $this->getServiceLocator()->get('DataMapper\DashboardTmApplications')->map($results);
+        $data = $this->dashboardTmApplicationsDataMapper->map($results);
 
         // create table
-        $table = $this->getServiceLocator()->get('Table')->buildTable('dashboard-tm-applications', $data);
+        $table = $this->tableFactory->buildTable('dashboard-tm-applications', $data);
 
         // setup view
         $view = new \Laminas\View\Model\ViewModel();

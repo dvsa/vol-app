@@ -3,8 +3,16 @@
 namespace Dvsa\Olcs\Application\Controller;
 
 use Common\Controller\Lva;
-use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
+use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\RestrictionHelperService;
+use Common\Service\Helper\StringHelperService;
+use Common\Service\Script\ScriptFactory;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\Form\Form;
+use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * External Application Addresses Controller
@@ -17,7 +25,43 @@ class AddressesController extends Lva\AbstractAddressesController
     use ApplicationControllerTrait;
 
     protected $lva = 'application';
-    protected $location = 'external';
+    protected string $location  = 'external';
+
+    protected RestrictionHelperService $restrictionHelper;
+    protected StringHelperService $stringHelper;
+
+    /**
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param FormServiceManager $formServiceManager
+     * @param ScriptFactory $scriptFactory
+     * @param RestrictionHelperService $restrictionHelper
+     * @param StringHelperService $stringHelper
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessengerHelper,
+        FormServiceManager $formServiceManager,
+        ScriptFactory $scriptFactory,
+        RestrictionHelperService $restrictionHelper,
+        StringHelperService $stringHelper
+    ) {
+        $this->restrictionHelper = $restrictionHelper;
+        $this->stringHelper = $stringHelper;
+
+        parent::__construct(
+            $niTextTranslationUtil,
+            $authService,
+            $formHelper,
+            $flashMessengerHelper,
+            $formServiceManager,
+            $scriptFactory
+        );
+    }
 
     /**
      * Alter form
@@ -29,8 +73,8 @@ class AddressesController extends Lva\AbstractAddressesController
      */
     protected function alterFormForLva(Form $form, $data = null)
     {
-        $this->getServiceLocator()->get('Helper\Form')->remove($form, 'consultant');
-        $this->getServiceLocator()->get('Helper\Form')->remove($form, 'consultantContact');
-        $this->getServiceLocator()->get('Helper\Form')->remove($form, 'consultantAddress');
+        $this->formHelper->remove($form, 'consultant');
+        $this->formHelper->remove($form, 'consultantContact');
+        $this->formHelper->remove($form, 'consultantAddress');
     }
 }

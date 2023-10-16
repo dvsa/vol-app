@@ -2,15 +2,19 @@
 
 namespace Olcs\Controller\Ebsr;
 
-use Common\Controller\Traits\GenericMethods;
-use Laminas\Http\Request as HttpRequest;
-use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\OrganisationUnprocessedList;
-use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\EbsrSubmission as EbsrSubmissionQry;
-use Dvsa\Olcs\Transfer\Command\Bus\Ebsr\QueuePacks as QueuePacksCmd;
-use Laminas\View\Model\ViewModel;
-use Common\Util\FlashMessengerTrait;
-use Common\Controller\Lva\AbstractController;
 use Common\Category;
+use Common\Controller\Lva\AbstractController;
+use Common\Controller\Traits\GenericMethods;
+use Common\Service\Helper\FileUploadHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Util\FlashMessengerTrait;
+use Dvsa\Olcs\Transfer\Command\Bus\Ebsr\QueuePacks as QueuePacksCmd;
+use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\EbsrSubmission as EbsrSubmissionQry;
+use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\OrganisationUnprocessedList;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use Laminas\Http\Request as HttpRequest;
+use Laminas\View\Model\ViewModel;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Class UploadsController
@@ -19,6 +23,21 @@ class UploadsController extends AbstractController
 {
     use GenericMethods;
     use FlashMessengerTrait;
+
+    protected FormHelperService $formHelper;
+    protected FileUploadHelperService $uploadHelper;
+
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FormHelperService $formHelper,
+        FileUploadHelperService $uploadHelper
+    ) {
+        $this->formHelper = $formHelper;
+        $this->uploadHelper = $uploadHelper;
+
+        parent::__construct($niTextTranslationUtil, $authService);
+    }
 
     /**
      * Returns an EBSR submission details page
@@ -43,8 +62,7 @@ class UploadsController extends AbstractController
         $request = $this->getRequest();
 
         /** @var \Common\Form\Form $form */
-        $form = $this->getServiceLocator()
-            ->get('Helper\Form')
+        $form = $this->formHelper
             ->createFormWithRequest('EbsrPackUpload', $request);
 
         if ($request->isPost()) {

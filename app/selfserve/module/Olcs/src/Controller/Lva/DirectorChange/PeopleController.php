@@ -3,31 +3,44 @@
 namespace Olcs\Controller\Lva\DirectorChange;
 
 use Common\Controller\Lva\AbstractController;
-use Common\Controller\Lva\Interfaces\AdapterAwareInterface;
-use Common\Controller\Lva\Traits\AdapterAwareTrait;
 use Common\FormService\FormServiceManager;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Application\People;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use Laminas\Http\Request;
+use Laminas\Http\Response;
 use Olcs\Controller\Lva\Adapters\VariationPeopleAdapter;
 use Olcs\Controller\Lva\Traits\VariationWizardPageFormActionsTrait;
 use Olcs\Controller\Lva\Traits\VariationWizardPageWithSubsequentPageControllerTrait;
-use Laminas\Http\Request;
-use Laminas\Http\Response;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Director Change Variation People Controller
  *
  * @author Richard Ward <richard.ward@bjss.com>
  */
-class PeopleController extends AbstractController implements AdapterAwareInterface
+class PeopleController extends AbstractController
 {
     use VariationWizardPageWithSubsequentPageControllerTrait;
     use VariationWizardPageFormActionsTrait;
-    use AdapterAwareTrait;
 
     protected $lva = 'variation';
-    protected $location = 'external';
+    protected string $location = 'external';
     protected $section = 'people';
+
+    protected FormServiceManager $formServiceManager;
+    protected VariationPeopleAdapter $lvaAdapter;
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FormServiceManager $formServiceManager,
+        VariationPeopleAdapter $lvaAdapter
+    ) {
+        $this->formServiceManager = $formServiceManager;
+        $this->lvaAdapter = $lvaAdapter;
+
+        parent::__construct($niTextTranslationUtil, $authService);
+    }
 
     /**
      * Get the required previous sections
@@ -117,8 +130,7 @@ class PeopleController extends AbstractController implements AdapterAwareInterfa
         $request = $this->getRequest();
 
         /** @var \Common\Form\Form $form */
-        $form = $this->getServiceLocator()
-            ->get(FormServiceManager::class)
+        $form = $this->formServiceManager
             ->get('lva-licence-addperson')
             ->getForm(['organisationType' =>  $adapter->getOrganisationType()]);
 
@@ -169,7 +181,7 @@ class PeopleController extends AbstractController implements AdapterAwareInterfa
     private function getVariationPeopleAdapter()
     {
         /** @var VariationPeopleAdapter $adapter */
-        $adapter = $this->getAdapter();
+        $adapter = $this->lvaAdapter;
         return $adapter;
     }
 }

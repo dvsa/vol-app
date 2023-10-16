@@ -5,7 +5,6 @@ namespace Olcs\Controller;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableFactory;
-use Olcs\Controller\AbstractSelfserveController;
 use Permits\Data\Mapper\MapperManager;
 
 class PromptController extends AbstractSelfserveController

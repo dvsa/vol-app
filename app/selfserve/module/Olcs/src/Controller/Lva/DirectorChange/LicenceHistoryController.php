@@ -7,11 +7,18 @@
 namespace Olcs\Controller\Lva\DirectorChange;
 
 use Common\Controller\Lva\AbstractLicenceHistoryController;
+use Common\FormService\FormServiceManager;
 use Common\RefData;
-use Laminas\Mvc\Controller\Plugin\FlashMessenger;
-use Laminas\I18n\Translator\TranslatorInterface;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\StringHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Lva\Traits\VariationWizardPageFormActionsTrait;
 use Olcs\Controller\Lva\Traits\VariationWizardPageWithSubsequentPageControllerTrait;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * External Director Change Variation Licence History Controller
@@ -21,17 +28,34 @@ class LicenceHistoryController extends AbstractLicenceHistoryController
     use VariationWizardPageWithSubsequentPageControllerTrait;
     use VariationWizardPageFormActionsTrait;
 
-    protected $location = 'external';
+    protected string $location = 'external';
     protected $lva = 'variation';
 
-    /**
-     * @param TranslatorInterface $translator
-     * @param FlashMessenger $flashMessenger
-     */
-    public function __construct(TranslatorInterface $translator, FlashMessenger $flashMessenger)
-    {
-        $this->translator = $translator;
-        $this->flashMessenger = $flashMessenger;
+    private TranslationHelperService $translationHelper;
+
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FlashMessengerHelperService $flashMessengerHelper,
+        FormServiceManager $formServiceManager,
+        ScriptFactory $scriptFactory,
+        StringHelperService $stringHelper,
+        TableFactory $tableFactory,
+        FormHelperService $formHelper,
+        TranslationHelperService $translationHelper
+    ) {
+        $this->translationHelper = $translationHelper;
+
+        parent::__construct(
+            $niTextTranslationUtil,
+            $authService,
+            $flashMessengerHelper,
+            $formServiceManager,
+            $scriptFactory,
+            $stringHelper,
+            $tableFactory,
+            $formHelper
+        );
     }
 
     /**

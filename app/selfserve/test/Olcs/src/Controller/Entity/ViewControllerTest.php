@@ -3,14 +3,14 @@
 namespace OlcsTest\Controller;
 
 use Common\RefData;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Table\TableFactory;
 use Doctrine\DBAL\Schema\View;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\Entity\ViewController;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
-use Laminas\Mvc\Controller\AbstractActionController;
-use Laminas\ServiceManager\ServiceManager;
-use Laminas\Session\Container;
 use Laminas\View\Model\ViewModel;
 use ZfcRbac\Mvc\Controller\Plugin\IsGranted;
 
@@ -32,11 +32,8 @@ class ViewControllerTest extends MockeryTestCase
 
     public function setUp(): void
     {
-        $this->mockSl = m::mock(\Laminas\ServiceManager\ServiceLocatorInterface::class)->makePartial();
-        $this->mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
-
         //  mock plugins
-        $this->mockPluginManager = (new ControllerPluginManagerHelper)->getMockPluginManager(
+        $this->mockPluginManager = (new ControllerPluginManagerHelper())->getMockPluginManager(
             [
                 'handleQuery' => 'handleQuery',
                 'url' => 'Url',
@@ -54,8 +51,17 @@ class ViewControllerTest extends MockeryTestCase
             ->andReturn($this->mockIsGrantedPlgn);
 
         //  instance of tested class
-        $this->sut = new ViewController();
-        $this->sut->setServiceLocator($this->mockSl);
+        $this->mockNiUtil = m::mock(NiTextTranslation::class);
+        $this->mockAuth = m::mock(\ZfcRbac\Service\AuthorizationService::class);
+        $this->mockFlash = m::mock(FlashMessengerHelperService::class);
+        $this->mockTable = m::mock(TableFactory::class);
+        $this->sut = new ViewController(
+            $this->mockNiUtil,
+            $this->mockAuth,
+            $this->mockFlash,
+            $this->mockTable
+        );
+
         $this->sut->setPluginManager($this->mockPluginManager);
     }
 
@@ -99,12 +105,11 @@ class ViewControllerTest extends MockeryTestCase
         $mockParams->shouldReceive('fromRoute')->with('entityId')->andReturn($entityId);
 
         //  mock table
-        $mockTable = m::mock('Common\Service\Table\TableBuilder');
-        $mockTable->shouldReceive('buildTable')
+        $this->mockTable->shouldReceive('buildTable')
             ->with('entity-view-related-operator-licences', $mockResult['otherLicences'])
             ->andReturn('otherLicencesTableResult');
 
-        $mockTable->shouldReceive('buildTable')
+        $this->mockTable->shouldReceive('buildTable')
             ->with('entity-view-transport-managers', $mockResult['transportManagers'])
             ->andReturn('transportManagersTableResult');
 
@@ -132,15 +137,13 @@ class ViewControllerTest extends MockeryTestCase
             ->with($expectedUpdatedOperatingCentresColumns)
             ->once();
 
-        $mockTable->shouldReceive('buildTable')
+        $this->mockTable->shouldReceive('buildTable')
             ->with('entity-view-operating-centres-anonymous', $mockResult['operatingCentres'], [], false)
             ->andReturn($mockOperatingCentresTableBuilder);
 
-        $mockTable->shouldReceive('buildTable')
+        $this->mockTable->shouldReceive('buildTable')
             ->with('entity-view-oppositions-anonymous', $mockResult['operatingCentres'])
             ->andReturn('operatingCentresTableResult2');
-
-        $this->mockSl->shouldReceive('get')->with('Table')->andReturn($mockTable);
 
         //  mock permissions
         $this->mockIsGrantedPlgn->shouldReceive('__invoke')
@@ -200,26 +203,24 @@ class ViewControllerTest extends MockeryTestCase
         $mockParams->shouldReceive('fromRoute')->with('entityId')->andReturn($entityId);
 
         //  mock table
-        $mockTable = m::mock('Common\Service\Table\TableBuilder');
-        $mockTable->shouldReceive('buildTable')
+
+        $this->mockTable->shouldReceive('buildTable')
             ->with('entity-view-related-operator-licences', $mockResult['otherLicences'])
             ->andReturn('otherLicencesTableResult');
 
-        $mockTable->shouldReceive('buildTable')
+        $this->mockTable->shouldReceive('buildTable')
             ->with('entity-view-transport-managers', $mockResult['transportManagers'])
             ->andReturn('transportManagersTableResult');
 
         $mockOperatingCentresTableBuilder = m::mock(\Common\Service\Table\TableBuilder::class);
 
-        $mockTable->shouldReceive('buildTable')
+        $this->mockTable->shouldReceive('buildTable')
             ->with('entity-view-operating-centres-anonymous', $mockResult['operatingCentres'], [], false)
             ->andReturn($mockOperatingCentresTableBuilder);
 
-        $mockTable->shouldReceive('buildTable')
+        $this->mockTable->shouldReceive('buildTable')
             ->with('entity-view-oppositions-anonymous', $mockResult['operatingCentres'])
             ->andReturn('operatingCentresTableResult2');
-
-        $this->mockSl->shouldReceive('get')->with('Table')->andReturn($mockTable);
 
         //  mock permissions
         $this->mockIsGrantedPlgn->shouldReceive('__invoke')
@@ -282,13 +283,11 @@ class ViewControllerTest extends MockeryTestCase
         $mockParams->shouldReceive('fromRoute')->with('entity')->andReturn($entity);
         $mockParams->shouldReceive('fromRoute')->with('entityId')->andReturn($entityId);
 
-        //  mock table
-        $mockTable = m::mock('Common\Service\Table\TableBuilder');
-        $mockTable->shouldReceive('buildTable')
+        $this->mockTable->shouldReceive('buildTable')
             ->with('entity-view-related-operator-licences', $mockResult['otherLicences'])
             ->andReturn('otherLicencesTableResult');
 
-        $mockTable->shouldReceive('buildTable')
+        $this->mockTable->shouldReceive('buildTable')
             ->with('entity-view-transport-managers', $mockResult['transportManagers'])
             ->andReturn('transportManagersTableResult');
 
@@ -316,27 +315,25 @@ class ViewControllerTest extends MockeryTestCase
             ->with($expectedUpdatedOperatingCentresColumns)
             ->once();
 
-        $mockTable->shouldReceive('buildTable')
+        $this->mockTable->shouldReceive('buildTable')
             ->with('entity-view-operating-centres-partner', $mockResult['operatingCentres'], [], false)
             ->andReturn($mockOperatingCentresTableBuilder);
 
-        $mockTable->shouldReceive('buildTable')
+        $this->mockTable->shouldReceive('buildTable')
             ->with('entity-view-oppositions-partner', $mockResult['operatingCentres'])
             ->andReturn('operatingCentresTableResult2');
 
-        $mockTable->shouldReceive('buildTable')
+        $this->mockTable->shouldReceive('buildTable')
             ->with('entity-view-vehicles-partner', $mockResult['vehicles'])
             ->andReturn('vehiclesTableResult');
 
-        $mockTable->shouldReceive('buildTable')
+        $this->mockTable->shouldReceive('buildTable')
             ->with('entity-view-current-applications-partner', $mockResult['currentApplications'])
             ->andReturn('currentApplicationsTableResult');
 
-        $mockTable->shouldReceive('buildTable')
+        $this->mockTable->shouldReceive('buildTable')
             ->with('entity-view-conditions-undertakings-partner', $mockResult['conditionUndertakings'])
             ->andReturn('conditionsUndertakingsTableResult');
-
-        $this->mockSl->shouldReceive('get')->with('Table')->andReturn($mockTable);
 
         //  mock permissions
         $this->mockIsGrantedPlgn->shouldReceive('__invoke')
@@ -403,38 +400,35 @@ class ViewControllerTest extends MockeryTestCase
         $mockParams->shouldReceive('fromRoute')->with('entityId')->andReturn($entityId);
 
         //  mock table
-        $mockTable = m::mock('Common\Service\Table\TableBuilder');
-        $mockTable->shouldReceive('buildTable')
+        $this->mockTable->shouldReceive('buildTable')
             ->with('entity-view-related-operator-licences', $mockResult['otherLicences'])
             ->andReturn('otherLicencesTableResult');
 
-        $mockTable->shouldReceive('buildTable')
+        $this->mockTable->shouldReceive('buildTable')
             ->with('entity-view-transport-managers', $mockResult['transportManagers'])
             ->andReturn('transportManagersTableResult');
 
         $mockOperatingCentresTableBuilder = m::mock(\Common\Service\Table\TableBuilder::class);
 
-        $mockTable->shouldReceive('buildTable')
+        $this->mockTable->shouldReceive('buildTable')
             ->with('entity-view-operating-centres-partner', $mockResult['operatingCentres'], [], false)
             ->andReturn($mockOperatingCentresTableBuilder);
 
-        $mockTable->shouldReceive('buildTable')
+        $this->mockTable->shouldReceive('buildTable')
             ->with('entity-view-oppositions-partner', $mockResult['operatingCentres'])
             ->andReturn('operatingCentresTableResult2');
 
-        $mockTable->shouldReceive('buildTable')
+        $this->mockTable->shouldReceive('buildTable')
             ->with('entity-view-vehicles-partner', $mockResult['vehicles'])
             ->andReturn('vehiclesTableResult');
 
-        $mockTable->shouldReceive('buildTable')
+        $this->mockTable->shouldReceive('buildTable')
             ->with('entity-view-current-applications-partner', $mockResult['currentApplications'])
             ->andReturn('currentApplicationsTableResult');
 
-        $mockTable->shouldReceive('buildTable')
+        $this->mockTable->shouldReceive('buildTable')
             ->with('entity-view-conditions-undertakings-partner', $mockResult['conditionUndertakings'])
             ->andReturn('conditionsUndertakingsTableResult');
-
-        $this->mockSl->shouldReceive('get')->with('Table')->andReturn($mockTable);
 
         //  mock permissions
         $this->mockIsGrantedPlgn->shouldReceive('__invoke')

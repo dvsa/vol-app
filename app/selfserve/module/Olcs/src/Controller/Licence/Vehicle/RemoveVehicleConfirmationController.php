@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Olcs\Controller\Licence\Vehicle;
 
-use Laminas\Mvc\Controller\Plugin\FlashMessenger;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\Vehicle\DeleteLicenceVehicle;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence;
 use Dvsa\Olcs\Transfer\Query\LicenceVehicle\LicenceVehiclesById;
+use Laminas\Mvc\Controller\Plugin\FlashMessenger;
 use Olcs\Form\Model\Form\Vehicle\VehicleConfirmationForm;
 use Olcs\Logging\Log\Logger;
 use Permits\Data\Mapper\MapperManager;

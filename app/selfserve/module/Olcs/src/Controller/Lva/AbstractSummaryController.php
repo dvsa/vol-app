@@ -5,12 +5,15 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractController;
-use Laminas\View\Model\ViewModel;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Application\Summary as Qry;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use Laminas\View\Model\ViewModel;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * External Abstract Summary Controller
@@ -19,7 +22,16 @@ use Dvsa\Olcs\Transfer\Query\Application\Summary as Qry;
  */
 abstract class AbstractSummaryController extends AbstractController
 {
-    protected $location = 'external';
+    protected string $location = 'external';
+
+    /**
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     */
+    public function __construct(NiTextTranslation $niTextTranslationUtil, AuthorizationService $authService)
+    {
+        parent::__construct($niTextTranslationUtil, $authService);
+    }
 
     /**
      * Index action

@@ -7,10 +7,17 @@
 namespace Olcs\Controller\Lva\DirectorChange;
 
 use Common\Controller\Lva\AbstractFinancialHistoryController;
+use Common\FormService\FormServiceManager;
 use Common\RefData;
+use Common\Service\Helper\DataHelperService;
+use Common\Service\Helper\FileUploadHelperService;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Script\ScriptFactory;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use Laminas\Form\FormInterface;
 use Olcs\Controller\Lva\Traits\VariationWizardPageFormActionsTrait;
 use Olcs\Controller\Lva\Traits\VariationWizardPageWithSubsequentPageControllerTrait;
-use Laminas\Form\FormInterface;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * External Director Change Variation Financial History Controller
@@ -20,10 +27,38 @@ class FinancialHistoryController extends AbstractFinancialHistoryController
     use VariationWizardPageWithSubsequentPageControllerTrait;
     use VariationWizardPageFormActionsTrait;
 
-    protected $location = 'external';
+    protected string $location = 'external';
     protected $lva = 'variation';
 
     /**
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param FormServiceManager $formServiceManager
+     * @param ScriptFactory $scriptFactory
+     * @param DataHelperService $dataHelper
+     * @param FileUploadHelperService $uploadHelper
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FlashMessengerHelperService $flashMessengerHelper,
+        FormServiceManager $formServiceManager,
+        ScriptFactory $scriptFactory,
+        DataHelperService $dataHelper,
+        FileUploadHelperService $uploadHelper
+    ) {
+        parent::__construct(
+            $niTextTranslationUtil,
+            $authService,
+            $flashMessengerHelper,
+            $formServiceManager,
+            $scriptFactory,
+            $dataHelper,
+            $uploadHelper
+        );
+    }
+     /**
      * Get the required previous sections
      *
      * @return array required previous sections or return empty array

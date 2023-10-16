@@ -2,6 +2,8 @@
 
 namespace Olcs\Controller\Listener;
 
+use Common\Rbac\User as RbacUser;
+use Common\Service\Cqrs\Query\QuerySender;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
@@ -9,9 +11,6 @@ use Laminas\Http\Header\Referer as HttpReferer;
 use Laminas\Http\PhpEnvironment\Request as HttpRequest;
 use Laminas\Mvc\MvcEvent;
 use Laminas\Navigation\Navigation as LaminasNavigation;
-use Common\Service\Cqrs\Query\QuerySender;
-use Common\Rbac\User as RbacUser;
-use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
 
 /**
  * Class Navigation
