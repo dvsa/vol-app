@@ -2,22 +2,48 @@
 
 namespace Olcs\Controller\Document;
 
+use Common\Service\AntiVirus\Scan;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
 use Common\Util\FileContent;
 use Dvsa\Olcs\Transfer\Command\Document\Upload;
 use Laminas\Form\Form;
+use Laminas\View\HelperPluginManager;
 use Laminas\View\Model\ViewModel;
+use Olcs\Service\Data\DocumentSubCategory;
 
-/**
- * Document Generation Controller
- *
- * @author Jessica Rowbottom <jess.rowbottom@valtech.co.uk>
- * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
- * @author Nick Payne <nick.payne@valtech.co.uk>
- */
 class DocumentUploadController extends AbstractDocumentController
 {
-    const ERR_UPLOAD_DEF = '4';
-    const FILE_UPLOAD_ERR_PREFIX = 'message.file-upload-error.';
+    public const ERR_UPLOAD_DEF = '4';
+    public const FILE_UPLOAD_ERR_PREFIX = 'message.file-upload-error.';
+
+    protected FlashMessengerHelperService $flashMessengerHelper;
+    protected DocumentSubCategory $documentSubCategoryDataService;
+    protected Scan $avScanner;
+
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        TableFactory $tableFactory,
+        HelperPluginManager $viewHelperManager,
+        array $config,
+        FlashMessengerHelperService $flashMessengerHelper,
+        DocumentSubCategory $docSubcategoryDataService,
+        Scan $avScanner
+    ) {
+        parent::__construct(
+            $scriptFactory,
+            $formHelper,
+            $tableFactory,
+            $viewHelperManager,
+            $config
+        );
+        $this->flashMessengerHelper = $flashMessengerHelper;
+        $this->docSubcategoryDataService = $docSubcategoryDataService;
+        $this->avScanner = $avScanner;
+    }
 
     /**
      * Upload action
@@ -43,7 +69,7 @@ class DocumentUploadController extends AbstractDocumentController
         }
 
         //  set dynamic select
-        $this->getServiceLocator()->get(\Olcs\Service\Data\DocumentSubCategory::class)
+        $this->documentSubCategoryDataService
             ->setCategory($category);
 
         $form = $this->generateFormWithData('UploadDocument', 'processUpload', $data);
@@ -92,7 +118,7 @@ class DocumentUploadController extends AbstractDocumentController
         }
 
         // Run virus scan on file
-        $scanner = $this->getServiceLocator()->get(\Common\Service\AntiVirus\Scan::class);
+        $scanner = $this->avScanner;
         if ($scanner->isEnabled() && !$scanner->isClean($fileTmpName)) {
             $form->get('details')->get('file')->setMessages([self::FILE_UPLOAD_ERR_PREFIX . 'virus']);
 
@@ -174,7 +200,7 @@ class DocumentUploadController extends AbstractDocumentController
             }
         }
 
-        $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentUnknownError();
+        $this->flashMessengerHelperService->addCurrentUnknownError();
 
         return $form;
     }

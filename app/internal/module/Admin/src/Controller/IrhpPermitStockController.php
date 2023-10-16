@@ -2,17 +2,21 @@
 
 namespace Admin\Controller;
 
-use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\LeftViewProvider;
+use Admin\Data\Mapper\IrhpPermitStock as PermitStockMapper;
+use Admin\Form\Model\Form\IrhpPermitStock as PermitStockForm;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Script\ScriptFactory;
+use Dvsa\Olcs\Transfer\Command\IrhpPermitStock\Create as CreateDto;
+use Dvsa\Olcs\Transfer\Command\IrhpPermitStock\Delete as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\IrhpPermitStock\Update as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\ById as ItemDto;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\GetList as ListDto;
-use Dvsa\Olcs\Transfer\Command\IrhpPermitStock\Create as CreateDto;
-use Dvsa\Olcs\Transfer\Command\IrhpPermitStock\Update as UpdateDto;
-use Dvsa\Olcs\Transfer\Command\IrhpPermitStock\Delete as DeleteDto;
-use Admin\Form\Model\Form\IrhpPermitStock as PermitStockForm;
-use Admin\Data\Mapper\IrhpPermitStock as PermitStockMapper;
-
+use Laminas\Navigation\Navigation;
 use Laminas\View\Model\ViewModel;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 
 /**
  * IRHP Permits Admin Controller
@@ -62,6 +66,16 @@ class IrhpPermitStockController extends AbstractInternalController implements Le
 
     protected $tableViewTemplate = 'pages/irhp-permit-stock/index';
 
+    public function __construct(
+        TranslationHelperService $translationHelperService,
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessengerHelperService,
+        Navigation $navigation,
+        ScriptFactory $scriptFactory
+    ) {
+        $this->scriptFactory = $scriptFactory;
+        parent::__construct($translationHelperService, $formHelper, $flashMessengerHelperService, $navigation);
+    }
     /**
      * Get left view
      *
@@ -88,7 +102,7 @@ class IrhpPermitStockController extends AbstractInternalController implements Le
      */
     public function indexAction()
     {
-        $this->getServiceLocator()->get('Script')->loadFile('irhp-permit-stock');
+        $this->scriptFactory->loadFile('irhp-permit-stock');
         $this->placeholder()->setPlaceholder('pageTitle', 'Permits');
 
         return parent::indexAction();
@@ -97,9 +111,9 @@ class IrhpPermitStockController extends AbstractInternalController implements Le
     /**
      * Setup required values for Add form
      *
-     * @param $form
-     * @param $formData
-     * @return mixed
+     * @param                                         $form
+     * @param                                         $formData
+     * @return                                        mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function alterFormForAdd($form, $formData)
@@ -114,10 +128,9 @@ class IrhpPermitStockController extends AbstractInternalController implements Le
     /**
      * Setup required values for Edit form
      *
-     * @param $form
-     * @param $formData
+     * @param  $form
+     * @param  $formData
      * @return mixed
-     *
      */
     protected function alterFormForEdit($form, $formData)
     {

@@ -3,13 +3,14 @@
 /**
  * Read History Controller
  */
+
 namespace Olcs\Controller\Bus\Processing;
 
 use Dvsa\Olcs\Transfer\Query\Audit\ReadBusReg;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\BusRegControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Laminas\View\Model\ViewModel;
 
 /**
  * Read History Controller

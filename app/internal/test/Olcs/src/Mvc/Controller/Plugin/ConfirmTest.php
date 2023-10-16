@@ -2,25 +2,55 @@
 
 namespace OlcsTest\Mvc\Controller\Plugin;
 
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Helper\UrlHelperService;
+use Laminas\Navigation\Navigation;
+use Laminas\View\Renderer\PhpRenderer as ViewRenderer;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
+use Olcs\Controller\Cases\Submission\SubmissionController;
+use Olcs\Service\Data\Submission;
 
 /**
  * Class ComfirmPluginTest
+ *
  * @package OlcsTest\Mvc\Controller\Plugin
  */
 class ConfirmTest extends TestCase
 {
     protected $sut;
+    public function setUp(): void
+    {
 
+        $this->translationHelper = m::mock(TranslationHelperService::class);
+        $this->formHelper = m::mock(FormHelperService::class);
+        $this->flashMessengerHelper = m::mock(FlashMessengerHelperService::class);
+        $this->navigation = m::mock(Navigation::class);
+        $this->urlHelper = m::mock(UrlHelperService::class);
+        $this->configHelper = array();
+        $this->viewRenderer = m::mock(ViewRenderer::class);
+        $this->submissionService = m::mock(Submission::class);
+        $this->sut = m::mock(SubmissionController::class, [
+            $this->translationHelper,
+            $this->formHelper,
+            $this->flashMessengerHelper,
+            $this->navigation,
+            $this->urlHelper,
+            $this->configHelper,
+            $this->viewRenderer,
+            $this->submissionService
+        ])->makePartial();
+    }
     /**
-     * @group confirmPlugin
+     * @group        confirmPlugin
      * @dataProvider dpTestInvokeGenerateForm
      */
     public function testInvokeGenerateForm($confirmLabel, $cancelLabel, $defaultLabelParams)
     {
         $plugin = new \Olcs\Mvc\Controller\Plugin\Confirm();
-
+        $this->configHelper = array();
         $mockFormCustomLabels = m::mock('Laminas\Form\Form')
             ->shouldReceive('getAttribute')
             ->with('action')
@@ -55,22 +85,21 @@ class ConfirmTest extends TestCase
             ->once()
             ->getMock();
 
-        $controller = m::mock('\Olcs\Controller\Cases\Submission\SubmissionController[getForm]');
-        $controller
+        $this->sut
             ->shouldReceive('getForm')
             ->with('Confirm')
             ->andReturn($mockFormCustomLabels)
             ->shouldReceive('params')
             ->andReturn(
                 m::mock()
-                ->shouldReceive('fromPost')
-                ->andReturn([])
-                ->shouldReceive('fromQuery')
-                ->andReturn(['foo' => 'bar'])
-                ->getMock()
+                    ->shouldReceive('fromPost')
+                    ->andReturn([])
+                    ->shouldReceive('fromQuery')
+                    ->andReturn(['foo' => 'bar'])
+                    ->getMock()
             );
 
-        $plugin->setController($controller);
+        $plugin->setController($this->sut);
         if ($defaultLabelParams) {
             $result = $plugin->__invoke('some message', true, 'custom');
         } else {
@@ -102,9 +131,9 @@ class ConfirmTest extends TestCase
             ->shouldReceive('get')
             ->andReturn(
                 m::mock()
-                ->shouldReceive('setValue')
-                ->with('custom')
-                ->getMock()
+                    ->shouldReceive('setValue')
+                    ->with('custom')
+                    ->getMock()
             );
 
         $mockParams = m::mock('\StdClass[fromPost]');
@@ -118,13 +147,12 @@ class ConfirmTest extends TestCase
         $mockRequest = m::mock('Laminas\Http\Request');
         $mockRequest->shouldReceive('isPost')->andReturn(true);
 
-        $controller = m::mock('\Olcs\Controller\Cases\Submission\SubmissionController[getForm, getRequest, params]');
-        $controller->shouldReceive('getForm')->with('Confirm')->andReturn($mockForm);
-        $controller->shouldReceive('getRequest')->andReturn($mockRequest);
-        $controller->shouldReceive('params')->andReturn($mockParams);
-        $controller->shouldReceive('setTerminal')->andReturn(true);
+        $this->sut->shouldReceive('getForm')->with('Confirm')->andReturn($mockForm);
+        $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
+        $this->sut->shouldReceive('params')->andReturn($mockParams);
+        $this->sut->shouldReceive('setTerminal')->andReturn(true);
 
-        $plugin->setController($controller);
+        $plugin->setController($this->sut);
         $result = $plugin->__invoke('some message', true, 'custom');
 
         $this->assertTrue($result);
@@ -171,12 +199,11 @@ class ConfirmTest extends TestCase
         $mockRequest = m::mock('Laminas\Http\Request');
         $mockRequest->shouldReceive('isPost')->andReturn(true);
 
-        $controller = m::mock('\Olcs\Controller\Cases\Submission\SubmissionController[getForm, getRequest, params]');
-        $controller->shouldReceive('getForm')->with('Confirm')->andReturn($mockForm);
-        $controller->shouldReceive('getRequest')->andReturn($mockRequest);
-        $controller->shouldReceive('params')->andReturn($mockParams);
+        $this->sut->shouldReceive('getForm')->with('Confirm')->andReturn($mockForm);
+        $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
+        $this->sut->shouldReceive('params')->andReturn($mockParams);
 
-        $plugin->setController($controller);
+        $plugin->setController($this->sut);
         $result = $plugin->__invoke('some message');
 
         $this->assertInstanceOf('\Laminas\View\Model\ViewModel', $result);

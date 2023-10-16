@@ -2,25 +2,22 @@
 
 namespace Olcs\Controller\Operator;
 
-use Dvsa\Olcs\Transfer\Command\Irfo\CreateIrfoGvPermit as CreateDto;
-use Dvsa\Olcs\Transfer\Command\Irfo\ResetIrfoGvPermit as ResetDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\ApproveIrfoGvPermit as ApproveDto;
+use Dvsa\Olcs\Transfer\Command\Irfo\CreateIrfoGvPermit as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\GenerateIrfoGvPermit as GenerateDto;
-use Dvsa\Olcs\Transfer\Command\Irfo\WithdrawIrfoGvPermit as WithdrawDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\RefuseIrfoGvPermit as RefuseDto;
+use Dvsa\Olcs\Transfer\Command\Irfo\ResetIrfoGvPermit as ResetDto;
+use Dvsa\Olcs\Transfer\Command\Irfo\WithdrawIrfoGvPermit as WithdrawDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoGvPermit as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoGvPermitList as ListDto;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
 use Olcs\Data\Mapper\IrfoGvPermit as Mapper;
 use Olcs\Form\Model\Form\IrfoGvPermit as Form;
-use Laminas\View\Model\ViewModel;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 
-/**
- * Operator Irfo Gv Permits Controller
- */
 class OperatorIrfoGvPermitsController extends AbstractInternalController implements
     OperatorControllerInterface,
     LeftViewProvider

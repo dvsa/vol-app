@@ -9,11 +9,10 @@ use Laminas\View\Model\ViewModel;
  * ProcessingControllerTrait
  *
  * @package Olcs\Controller
- * @author Dan Eggleston <dan@stolenegg.com>
+ * @author  Dan Eggleston <dan@stolenegg.com>
  */
 trait ProcessingControllerTrait
 {
-
     /**
      * Holds the current section
      *
@@ -60,7 +59,7 @@ trait ProcessingControllerTrait
     protected function getProcessingHelper()
     {
         if (empty($this->processingHelper)) {
-            $this->processingHelper = new $this->helperClass;
+            $this->processingHelper = new $this->helperClass();
         }
 
         return $this->processingHelper;
@@ -75,7 +74,7 @@ trait ProcessingControllerTrait
     {
         $navigation = new Navigation($this->getNavigationConfig());
 
-        $router = $this->getServiceLocator()->get('router');
+        $router = $this->router;
 
         foreach ($navigation->getPages() as $page) {
             $page->setRouter($router);

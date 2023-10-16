@@ -7,16 +7,16 @@ use Dvsa\Olcs\Transfer\Command\Processing\Note\Delete as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\Processing\Note\Update as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Processing\Note as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Processing\NoteList as ListDto;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\IrhpApplicationControllerInterface;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits\NotesProcessingTrait;
 use Olcs\Data\Mapper\GenericFields as Mapper;
 use Olcs\Form\Model\Form\Note as AddForm;
 use Olcs\Form\Model\Form\NoteEdit as EditForm;
 use Olcs\Form\Model\Form\NoteFilter as FilterForm;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
-use Laminas\View\Model\ViewModel;
 
 /**
  * Irhp Application Processing Note Controller

@@ -3,16 +3,12 @@
 /**
  * ApplicationSchedule41Controller.php
  */
+
 namespace Olcs\Controller\Application;
 
-use Dvsa\Olcs\Transfer\Query\Application\Application;
+use Common\Controller\Lva\Schedule41Controller;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
-
-use Common\Controller\Lva\Schedule41Controller;
-
-use Common\Controller\Lva\AbstractController;
-use Common\Controller\Plugin\Redirect;
 
 /**
  * Class ApplicationSchedule41Controller
@@ -28,7 +24,7 @@ class ApplicationSchedule41Controller extends Schedule41Controller implements Ap
     use ApplicationControllerTrait;
 
     protected $lva = 'application';
-    protected $location = 'internal';
+    protected string $location = 'internal';
 
     protected $section = 'operating_centres';
 }

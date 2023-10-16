@@ -2,6 +2,12 @@
 
 namespace OlcsTest\Controller\Application\Processing;
 
+use Common\Service\Helper\ComplaintsHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\OppositionHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
+use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Licence\Processing\LicenceProcessingOverviewController;
 use Laminas\Mvc\Controller\Plugin\FlashMessenger;
 use Laminas\Mvc\Controller\Plugin\PluginInterface;
@@ -10,9 +16,11 @@ use Laminas\Mvc\Controller\PluginManager;
 use Laminas\Mvc\Controller\Plugin\Params;
 use Laminas\Mvc\Router\RouteMatch;
 use Laminas\View\Model\ViewModel;
+use Olcs\Service\Data\SubCategory;
 use OlcsTest\Bootstrap;
 use Laminas\Http\Response;
 use Laminas\Mvc\MvcEvent;
+use Mockery as m;
 
 /**
  * Class LicenceProcessingOverviewControllerTest
@@ -36,7 +44,25 @@ class LicenceProcessingOverviewControllerTest extends \PHPUnit\Framework\TestCas
 
     private function getController($action)
     {
-        $controller = new LicenceProcessingOverviewController();
+        $this->mockScriptFactory = m::mock(ScriptFactory::class);
+        $this->mockFormHelper = m::mock(FormHelperService::class);
+        $this->mockTableFactory = m::mock(TableFactory::class);
+        $this->mockViewHelperManager = m::mock(HelperPluginManager::class);
+        $this->mockOppositionHelper = m::mock(OppositionHelperService::class);
+        $this->mockComplaintsHelper = m::mock(ComplaintsHelperService::class);
+        $this->mockNavigation = m::mock(); // Note: No class provided for $navigation, so it'll be a generic mock
+        $this->mockSubCategoryDataService = m::mock(SubCategory::class);
+
+        $controller = new LicenceProcessingOverviewController(
+            $this->mockScriptFactory,
+            $this->mockFormHelper,
+            $this->mockTableFactory,
+            $this->mockViewHelperManager,
+            $this->mockOppositionHelper,
+            $this->mockComplaintsHelper,
+            $this->mockNavigation,
+            $this->mockSubCategoryDataService
+        );
 
         $serviceManager = Bootstrap::getServiceManager();
 

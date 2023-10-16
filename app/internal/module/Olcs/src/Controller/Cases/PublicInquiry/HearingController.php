@@ -2,28 +2,25 @@
 
 namespace Olcs\Controller\Cases\PublicInquiry;
 
-use Olcs\Controller\Interfaces\LeftViewProvider;
-use Olcs\Controller\AbstractInternalController;
-use Laminas\View\Model\ViewModel;
-use Olcs\Controller\Interfaces\CaseControllerInterface;
-use Olcs\Data\Mapper\PiHearing as PiHearingMapper;
-use Olcs\Form\Model\Form\PublicInquiryHearing as HearingForm;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\CreateHearing as CreateCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateHearing as UpdateCmd;
+use Dvsa\Olcs\Transfer\Query\Cases\Pi as PiDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Pi\Hearing as PiHearingDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Pi\HearingList as PiHearingListDto;
-use Dvsa\Olcs\Transfer\Query\Cases\Pi as PiDto;
-use Olcs\Mvc\Controller\ParameterProvider\PreviousPiHearingData;
-use Olcs\Mvc\Controller\ParameterProvider\GenericList;
 use Laminas\Form\Form as LaminasForm;
+use Laminas\View\Model\ViewModel;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Data\Mapper\PiHearing as PiHearingMapper;
+use Olcs\Form\Model\Form\PublicInquiryHearing as HearingForm;
+use Olcs\Mvc\Controller\ParameterProvider\GenericList;
+use Olcs\Mvc\Controller\ParameterProvider\PreviousPiHearingData;
 
-/**
- * Class HearingController
- * @package Olcs\Controller\Cases\PublicInquiry
- */
 class HearingController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
-    const MSG_CLOSED_PI = 'The Pi has already been closed';
+    public const MSG_CLOSED_PI = 'The Pi has already been closed';
 
     protected $listVars = ['pi'];
     protected $navigationId = 'case_hearings_appeals_public_inquiry';
@@ -59,6 +56,7 @@ class HearingController extends AbstractInternalController implements CaseContro
         'indexAction' => ['table-actions']
     ];
 
+    protected FlashMessengerHelperService $flashMessenger;
     /**
      * get Method Left View
      *
@@ -105,7 +103,7 @@ class HearingController extends AbstractInternalController implements CaseContro
         $pi = $this->getPi();
 
         if ($pi['isClosed']) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage(self::MSG_CLOSED_PI);
+            $this->flashMessenger->addErrorMessage(self::MSG_CLOSED_PI);
 
             return $this->redirectTo([]);
         }
@@ -131,7 +129,7 @@ class HearingController extends AbstractInternalController implements CaseContro
         $pi = $this->getPi();
 
         if ($pi['isClosed']) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage(self::MSG_CLOSED_PI);
+            $this->flashMessenger->addErrorMessage(self::MSG_CLOSED_PI);
 
             return $this->redirectTo([]);
         }
@@ -157,7 +155,7 @@ class HearingController extends AbstractInternalController implements CaseContro
         $response = $this->handleQuery(PiHearingDto::create($params));
 
         if ($response->isClientError() || $response->isServerError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            $this->flashMessenger->addErrorMessage('unknown-error');
         }
 
         return $response->getResult();
@@ -174,7 +172,7 @@ class HearingController extends AbstractInternalController implements CaseContro
         $response = $this->handleQuery(PiDto::create($params));
 
         if ($response->isClientError() || $response->isServerError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            $this->flashMessenger->addErrorMessage('unknown-error');
         }
 
         return $response->getResult();
@@ -259,7 +257,7 @@ class HearingController extends AbstractInternalController implements CaseContro
      * Sets the SLA target date as a hint on the form elements
      *
      * @param LaminasForm $form from
-     * @param String   $data data
+     * @param String      $data data
      *
      * @return LaminasForm
      */

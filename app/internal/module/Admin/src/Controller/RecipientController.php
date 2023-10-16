@@ -1,24 +1,18 @@
 <?php
 
-/**
- * Recipient Controller
- */
 namespace Admin\Controller;
 
+use Admin\Form\Model\Form\Recipient as Form;
 use Dvsa\Olcs\Transfer\Command\Publication\CreateRecipient as CreateDto;
-use Dvsa\Olcs\Transfer\Command\Publication\UpdateRecipient as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\Publication\DeleteRecipient as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\Publication\UpdateRecipient as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Publication\Recipient as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Publication\RecipientList as ListDto;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\Recipient as Mapper;
-use Admin\Form\Model\Form\Recipient as Form;
-use Laminas\View\Model\ViewModel;
 
-/**
- * Recipient Controller
- */
 class RecipientController extends AbstractInternalController implements LeftViewProvider
 {
     /**

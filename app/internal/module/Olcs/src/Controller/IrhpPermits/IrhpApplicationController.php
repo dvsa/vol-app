@@ -5,8 +5,14 @@ namespace Olcs\Controller\IrhpPermits;
 use Common\Data\Mapper\Permits\NoOfPermits;
 use Common\RefData;
 use Common\Service\Cqrs\Exception\NotFoundException;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Qa\FieldsetPopulator;
 use Common\Service\Qa\UsageContext;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\CancelApplication;
+use Dvsa\Olcs\Transfer\Command\IrhpApplication\Create as QaCreateDTO;
+use Dvsa\Olcs\Transfer\Command\IrhpApplication\CreateFull as CreateDTO;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\Grant;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\ResetToNotYetSubmittedFromCancelled;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\ResetToNotYetSubmittedFromValid;
@@ -14,45 +20,44 @@ use Dvsa\Olcs\Transfer\Command\IrhpApplication\ReviveFromUnsuccessful;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\ReviveFromWithdrawn;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\SubmitApplication;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\Terminate;
-use Dvsa\Olcs\Transfer\Command\IrhpApplication\Withdraw;
-use Dvsa\Olcs\Transfer\Command\Permits\AcceptEcmtPermits;
-use Dvsa\Olcs\Transfer\Query\Permits\AvailableStocks;
-use Dvsa\Olcs\Transfer\Query\Permits\AvailableYears;
-use Olcs\Form\Model\Form\IrhpApplicationWithdraw as WithdrawForm;
-use Olcs\Form\Model\Form\IrhpCandidatePermit as IrhpCandidatePermitForm;
-use Dvsa\Olcs\Transfer\Query\IrhpApplication\ApplicationPath;
-use Dvsa\Olcs\Transfer\Query\IrhpApplication\BilateralMetadata;
-use Dvsa\Olcs\Transfer\Query\IrhpCandidatePermit\GetListByIrhpApplication as CandidateListDTO;
-use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\AvailableCountries;
-use Dvsa\Olcs\Transfer\Query\IrhpApplication\ById as ItemDto;
-use Dvsa\Olcs\Transfer\Query\IrhpCandidatePermit\ById as CandidatePermitItemDTO;
-use Dvsa\Olcs\Transfer\Query\IrhpApplication\MaxStockPermits;
-use Dvsa\Olcs\Transfer\Query\IrhpPermitWindow\OpenByType;
-use Dvsa\Olcs\Transfer\Query\IrhpPermitType\ById as PermitTypeQry;
-use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceDto;
-use Dvsa\Olcs\Transfer\Command\IrhpApplication\CreateFull as CreateDTO;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\UpdateFull as UpdateDTO;
-use Dvsa\Olcs\Transfer\Command\IrhpApplication\Create as QaCreateDTO;
+use Dvsa\Olcs\Transfer\Command\IrhpApplication\Withdraw;
+use Dvsa\Olcs\Transfer\Command\IrhpCandidatePermit\Create as CandidatePermitCreateCmd;
 use Dvsa\Olcs\Transfer\Command\IrhpCandidatePermit\Delete as CandidatePermitDeleteCmd;
 use Dvsa\Olcs\Transfer\Command\IrhpCandidatePermit\Update as CandidatePermitUpdateCmd;
-use Dvsa\Olcs\Transfer\Command\IrhpCandidatePermit\Create as CandidatePermitCreateCmd;
+use Dvsa\Olcs\Transfer\Command\Permits\AcceptEcmtPermits;
+use Dvsa\Olcs\Transfer\Query\IrhpApplication\ApplicationPath;
+use Dvsa\Olcs\Transfer\Query\IrhpApplication\BilateralMetadata;
+use Dvsa\Olcs\Transfer\Query\IrhpApplication\ById as ItemDto;
+use Dvsa\Olcs\Transfer\Query\IrhpApplication\MaxStockPermits;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\RangesByIrhpApplication as RangesDTO;
-use Olcs\Controller\Interfaces\IrhpApplicationControllerInterface;
-use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
-use Olcs\Form\Model\Form\IrhpApplication;
+use Dvsa\Olcs\Transfer\Query\IrhpCandidatePermit\ById as CandidatePermitItemDTO;
+use Dvsa\Olcs\Transfer\Query\IrhpCandidatePermit\GetListByIrhpApplication as CandidateListDTO;
+use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\AvailableCountries;
+use Dvsa\Olcs\Transfer\Query\IrhpPermitType\ById as PermitTypeQry;
+use Dvsa\Olcs\Transfer\Query\IrhpPermitWindow\OpenByType;
+use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceDto;
+use Dvsa\Olcs\Transfer\Query\Permits\AvailableStocks;
+use Dvsa\Olcs\Transfer\Query\Permits\AvailableYears;
+use Laminas\Form\Form;
+use Laminas\Http\Response;
+use Laminas\Navigation\Navigation;
+use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\IrhpApplicationControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\BilateralApplicationValidationModifier as BilateralApplicationValidationModifierMapper;
 use Olcs\Data\Mapper\IrhpApplication as IrhpApplicationMapper;
 use Olcs\Data\Mapper\IrhpCandidatePermit as IrhpCandidatePermitMapper;
+use Olcs\Form\Model\Form\IrhpApplication;
+use Olcs\Form\Model\Form\IrhpApplicationWithdraw as WithdrawForm;
+use Olcs\Form\Model\Form\IrhpCandidatePermit as IrhpCandidatePermitForm;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericList;
 use RuntimeException;
-use Laminas\Form\Form;
-use Laminas\Http\Response;
-use Laminas\View\Model\JsonModel;
-use Laminas\View\Model\ViewModel;
 
 class IrhpApplicationController extends AbstractInternalController implements
     IrhpApplicationControllerInterface,
@@ -78,12 +83,12 @@ class IrhpApplicationController extends AbstractInternalController implements
     // Stores the application steps array retrieved from Q&A
     protected $applicationSteps;
 
-    const PERMIT_TYPE_LABELS = [
+    public const PERMIT_TYPE_LABELS = [
         RefData::IRHP_BILATERAL_PERMIT_TYPE_ID => 'Bilateral',
         RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID => 'Multilateral',
     ];
 
-    const COR_CERTIFICATE_NUMBER_TYPES = [
+    public const COR_CERTIFICATE_NUMBER_TYPES = [
         RefData::CERT_ROADWORTHINESS_VEHICLE_PERMIT_TYPE_ID,
         RefData::CERT_ROADWORTHINESS_TRAILER_PERMIT_TYPE_ID
     ];
@@ -160,6 +165,27 @@ class IrhpApplicationController extends AbstractInternalController implements
         'addAction' => ['forms/irhp-bilateral-application'],
         'editAction' => ['forms/irhp-application', 'forms/irhp-bilateral-application'],
     ];
+    protected FieldsetPopulator $QaFieldsetPopulator;
+    protected BilateralApplicationValidationModifierMapper $bilateralApplicationValidationModifierMapper;
+    protected NoOfPermits $noOfPermitsMapper;
+    protected IrhpApplicationMapper $irhpApplicationMapper;
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelperService,
+        FlashMessengerHelperService $flashMessenger,
+        Navigation $navigation,
+        FieldsetPopulator $QaFieldsetPopulator,
+        BilateralApplicationValidationModifierMapper $bilateralApplicationValidationModifierMapper,
+        NoOfPermits $noOfPermitsMapper,
+        IrhpApplicationMapper $irhpApplicationMapper
+    ) {
+        $this->QaFieldsetPopulator = $QaFieldsetPopulator;
+        $this->bilateralApplicationValidationModifierMapper = $bilateralApplicationValidationModifierMapper;
+        $this->noOfPermitsMapper = $noOfPermitsMapper;
+        $this->irhpApplicationMapper = $irhpApplicationMapper;
+
+        parent::__construct($translationHelper, $formHelperService, $flashMessenger, $navigation);
+    }
 
     /**
      * Get left view
@@ -223,27 +249,27 @@ class IrhpApplicationController extends AbstractInternalController implements
                 case RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID:
                 case RefData::ECMT_PERMIT_TYPE_ID:
                     return $this->redirect()
-                        ->toRouteAjax(
-                            'licence/irhp-application/add',
-                            $routeParams,
-                            [
+                    ->toRouteAjax(
+                        'licence/irhp-application/add',
+                        $routeParams,
+                        [
                                 'query' => [
                                     'year' => $this->params()->fromPost()['year'],
                                     'irhpPermitStock' => $this->params()->fromPost()['stock']
                                 ],
                             ]
-                        );
+                    );
                 case RefData::IRHP_BILATERAL_PERMIT_TYPE_ID:
                     return $this->redirect()
-                        ->toRouteAjax(
-                            'licence/irhp-application/add',
-                            $routeParams,
-                            [
+                    ->toRouteAjax(
+                        'licence/irhp-application/add',
+                        $routeParams,
+                        [
                                 'query' => [
                                     'countries' => implode(',', $this->params()->fromPost()['countries'])
                                 ],
                             ]
-                        );
+                    );
                 case RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID:
                 case RefData::ECMT_REMOVAL_PERMIT_TYPE_ID:
                 case RefData::CERT_ROADWORTHINESS_VEHICLE_PERMIT_TYPE_ID:
@@ -416,7 +442,7 @@ class IrhpApplicationController extends AbstractInternalController implements
     /**
      * check for any outstanding fees of the specified types, return the IDs to pass to Fees controller to pay.
      *
-     * @param array $fees Array of fees associated with the application
+     * @param array $fees     Array of fees associated with the application
      * @param array $feeTypes Array of fee types of which we need to know if any are outstanding
      *
      * @return array
@@ -425,8 +451,10 @@ class IrhpApplicationController extends AbstractInternalController implements
     {
         $feeIds = [];
         foreach ($fees as $fee) {
-            if ($fee['feeStatus']['id'] === RefData::FEE_STATUS_OUTSTANDING
-                && in_array($fee['feeType']['feeType']['id'], $feeTypes)) {
+            if (
+                $fee['feeStatus']['id'] === RefData::FEE_STATUS_OUTSTANDING
+                && in_array($fee['feeType']['feeType']['id'], $feeTypes)
+            ) {
                 $feeIds[] = $fee['id'];
             }
         }
@@ -571,7 +599,6 @@ class IrhpApplicationController extends AbstractInternalController implements
      * Handles click of the Grant button on right sidebar
      *
      * @return \Laminas\Http\Response
-     *
      */
     public function grantAction()
     {
@@ -619,8 +646,8 @@ class IrhpApplicationController extends AbstractInternalController implements
     /**
      * Setup required values for Add form
      *
-     * @param $form
-     * @param $formData
+     * @param  $form
+     * @param  $formData
      * @return mixed
      * @throws NotFoundException
      */
@@ -656,7 +683,7 @@ class IrhpApplicationController extends AbstractInternalController implements
             // Build the dynamic NoOfPermits per country per year form from Common
             $formData['application']['licence']['totAuthVehicles'] = $licence['totAuthVehicles'];
 
-            $this->getServiceLocator()->get(NoOfPermits::class)->mapForFormOptions(
+            $this->noOfPermitsMapper->mapForFormOptions(
                 $formData,
                 $form,
                 'application',
@@ -682,8 +709,7 @@ class IrhpApplicationController extends AbstractInternalController implements
             $formData['selectedCountryIds'] = $selectedCountryIds;
 
             $formData['bilateralMetadata'] = $response->getResult();
-            $this->getServiceLocator()
-                ->get(BilateralApplicationValidationModifierMapper::class)
+            $this->bilateralApplicationValidationModifierMapper
                 ->mapForFormOptions($formData, $form);
         }
 
@@ -702,8 +728,8 @@ class IrhpApplicationController extends AbstractInternalController implements
     /**
      * Setup required values for Edit form
      *
-     * @param $form
-     * @param $formData
+     * @param  $form
+     * @param  $formData
      * @return mixed
      *
      * @throws NotFoundException
@@ -741,7 +767,7 @@ class IrhpApplicationController extends AbstractInternalController implements
         } elseif (!empty($formData['fields']['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock'])) {
             $irhpPermitStock = $formData['fields']['irhpPermitApplications'][0]['irhpPermitWindow']['irhpPermitStock'];
 
-            $translator = $this->getServiceLocator()->get('Helper\Translation');
+            $translator = $this->translationHelperService;
             $stockText = sprintf(
                 '%s %s',
                 $irhpPermitStock['irhpPermitType']['name']['description'],
@@ -766,10 +792,10 @@ class IrhpApplicationController extends AbstractInternalController implements
     }
 
     /**
-     * @param int $irhpApplicationId
-     * @param Form $form
-     * @param array $formData
-     * @param array $licence
+     * @param  int   $irhpApplicationId
+     * @param  Form  $form
+     * @param  array $formData
+     * @param  array $licence
      * @return mixed
      * @throws NotFoundException
      */
@@ -798,7 +824,7 @@ class IrhpApplicationController extends AbstractInternalController implements
             // Build the dynamic NoOfPermits per country per year form from Common
             $formData['application']['licence']['totAuthVehicles'] = $licence['totAuthVehicles'];
 
-            $this->getServiceLocator()->get(NoOfPermits::class)->mapForFormOptions(
+            $this->noOfPermitsMapper->mapForFormOptions(
                 $formData,
                 $form,
                 'application',
@@ -823,9 +849,8 @@ class IrhpApplicationController extends AbstractInternalController implements
             }
             $formData['selectedCountryIds'] = $selectedCountryIds;
 
-            $this->getServiceLocator()
-                 ->get(BilateralApplicationValidationModifierMapper::class)
-                 ->mapForFormOptions($formData, $form);
+            $this->bilateralApplicationValidationModifierMapper
+                ->mapForFormOptions($formData, $form);
         } else {
             throw new RuntimeException('Unsupported permit type ' . $irhpPermitTypeId);
         }
@@ -836,8 +861,8 @@ class IrhpApplicationController extends AbstractInternalController implements
     /**
      * Perform query to obtain application steps for given application ID and populate form.
      *
-     * @param int $irhpApplicationId
-     * @param Form $form
+     * @param  int  $irhpApplicationId
+     * @param  Form $form
      * @return mixed
      */
     protected function questionAnswerFormSetup(int $irhpApplicationId, Form $form)
@@ -850,7 +875,7 @@ class IrhpApplicationController extends AbstractInternalController implements
 
         $this->applicationSteps = $response->getResult();
 
-        $fieldsetPopulator = $this->getServiceLocator()->get('QaFieldsetPopulator');
+        $fieldsetPopulator = $this->QaFieldsetPopulator;
         $fieldsetPopulator->populate($form, $this->applicationSteps, UsageContext::CONTEXT_INTERNAL);
 
         // remove validation for fieldsets that are not enabled
@@ -870,16 +895,17 @@ class IrhpApplicationController extends AbstractInternalController implements
      */
     protected function getMultilateralWindows()
     {
-        $windows = $this->handleQuery(OpenByType::create(
-            [
+        $windows = $this->handleQuery(
+            OpenByType::create(
+                [
                 'irhpPermitType' => RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID,
-            ]
-        ));
+                ]
+            )
+        );
 
         if (!$windows->isOk()) {
             throw new NotFoundException('Could not retrieve open windows');
         }
-
 
         return $windows->getResult();
     }
@@ -899,9 +925,7 @@ class IrhpApplicationController extends AbstractInternalController implements
     }
 
     /**
-     *
      * Redirect to relevant action, or return index table of candidate permits
-     *
      */
     public function preGrantAction()
     {
@@ -914,34 +938,34 @@ class IrhpApplicationController extends AbstractInternalController implements
             switch ($postData['action']) {
                 case 'preGrantEdit':
                     return $this->redirect()
-                        ->toRoute(
-                            'licence/irhp-application/application',
-                            [
+                    ->toRoute(
+                        'licence/irhp-application/application',
+                        [
                                 'action' => 'preGrantEdit',
                                 'permitId' => $postData['id']
                             ],
-                            [],
-                            true
-                        );
+                        [],
+                        true
+                    );
                 case 'preGrantDelete':
                     return $this->redirect()
-                        ->toRoute(
-                            'licence/irhp-application/application',
-                            [
+                    ->toRoute(
+                        'licence/irhp-application/application',
+                        [
                                 'action' => 'preGrantDelete',
                                 'permitId' => $postData['id']
                             ],
-                            [],
-                            true
-                        );
+                        [],
+                        true
+                    );
                 case 'preGrantAdd':
                     return $this->redirect()
-                        ->toRoute(
-                            'licence/irhp-application/application',
-                            [ 'action' => 'preGrantAdd'],
-                            [],
-                            true
-                        );
+                    ->toRoute(
+                        'licence/irhp-application/application',
+                        [ 'action' => 'preGrantAdd'],
+                        [],
+                        true
+                    );
             }
         }
 
@@ -1057,9 +1081,9 @@ class IrhpApplicationController extends AbstractInternalController implements
     /**
      * Get existing application and populate some required fields on Edit form.
      *
-     * @param Form $form
-     * @param array $formData
-     * @return mixed
+     * @param                                         Form  $form
+     * @param                                         array $formData
+     * @return                                        mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function alterFormForPreGrantAdd($form, $formData)
@@ -1074,8 +1098,8 @@ class IrhpApplicationController extends AbstractInternalController implements
     /**
      * Get existing application and populate some required fields on Add form.
      *
-     * @param Form $form
-     * @param array $formData
+     * @param  Form  $form
+     * @param  array $formData
      * @return mixed
      */
     protected function alterFormForPreGrantEdit($form, $formData)
@@ -1110,15 +1134,17 @@ class IrhpApplicationController extends AbstractInternalController implements
      */
     public function availableStocksAction()
     {
-        $response = $this->handleQuery(AvailableStocks::create(
-            [
+        $response = $this->handleQuery(
+            AvailableStocks::create(
+                [
                 'irhpPermitType' => $this->params()->fromPost('permitType'),
                 'year' => $this->params()->fromPost('year'),
-            ]
-        ));
+                ]
+            )
+        );
         $stocks = [];
         if ($response->isOk()) {
-            $translator = $this->getServiceLocator()->get('Helper\Translation');
+            $translator = $this->translationHelperService;
             $stocks = $response->getResult();
             foreach ($stocks['stocks'] as $key => $stock) {
                 $stocks['stocks'][$key]['periodName'] = $translator->translate($stock['periodNameKey']);
@@ -1170,14 +1196,14 @@ class IrhpApplicationController extends AbstractInternalController implements
      * Map from form
      *
      * @param string $mapperClass
-     * @param array $data
+     * @param array  $data
      *
      * @return array
      */
     protected function mapFromForm($mapperClass, array $data)
     {
         if ($mapperClass === IrhpApplicationMapper::class) {
-            return $this->getServiceLocator()->get($mapperClass)->mapFromForm($data, $this->applicationSteps);
+            return $this->irhpApplicationMapper->mapFromForm($data, $this->applicationSteps);
         }
 
         return parent::mapFromForm($mapperClass, $data);

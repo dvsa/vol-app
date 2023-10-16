@@ -1,36 +1,30 @@
 <?php
 
-/**
- * Operator Irfo Psv Authorisations Controller
- */
 namespace Olcs\Controller\Operator;
 
+use Common\RefData;
+use Dvsa\Olcs\Transfer\Command\Irfo\ApproveIrfoPsvAuth as ApproveDto;
+use Dvsa\Olcs\Transfer\Command\Irfo\CnsIrfoPsvAuth as CnsDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\CreateIrfoPsvAuth as CreateDto;
-use Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoPsvAuth as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\GenerateIrfoPsvAuth as GenerateDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\GrantIrfoPsvAuth as GrantDto;
-use Dvsa\Olcs\Transfer\Command\Irfo\ApproveIrfoPsvAuth as ApproveDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\RefuseIrfoPsvAuth as RefuseDto;
-use Dvsa\Olcs\Transfer\Command\Irfo\WithdrawIrfoPsvAuth as WithdrawDto;
-use Dvsa\Olcs\Transfer\Command\Irfo\CnsIrfoPsvAuth as CnsDto;
 use Dvsa\Olcs\Transfer\Command\Irfo\ResetIrfoPsvAuth as ResetDto;
+use Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoPsvAuth as UpdateDto;
+use Dvsa\Olcs\Transfer\Command\Irfo\WithdrawIrfoPsvAuth as WithdrawDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPsvAuth as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPsvAuthList as ListDto;
+use Laminas\Form\Element\Hidden;
+use Laminas\Form\Form as LaminasForm;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
 use Olcs\Data\Mapper\IrfoPsvAuth as Mapper;
 use Olcs\Form\Model\Form\IrfoPsvAuth as Form;
-use Laminas\Form\Element\Hidden;
-use Laminas\View\Model\ViewModel;
-use Common\RefData;
-use Laminas\Form\Form as LaminasForm;
-use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
+use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 
-/**
- * Operator Irfo Psv Authorisations Controller
- */
 class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController implements
     OperatorControllerInterface,
     LeftViewProvider
@@ -215,9 +209,9 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
      * Method to alter the form based on status
      *
      * @param LaminasForm $form     form
-     * @param array    $formData formData
+     * @param array       $formData formData
      *
-     * @return  \Common\Form\Form
+     * @return \Common\Form\Form
      */
     protected function alterFormForEdit($form, $formData)
     {
@@ -234,9 +228,9 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
      * Method to alter the form based on status
      *
      * @param LaminasForm $form     form
-     * @param array    $formData formData
+     * @param array       $formData formData
      *
-     * @return  \Common\Form\Form
+     * @return \Common\Form\Form
      */
     protected function alterFormForAdd($form, $formData)
     {
@@ -251,7 +245,7 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
      * Removes action buttons not possible from the form on GET only
      *
      * @param LaminasForm $form     form
-     * @param array    $formData formData
+     * @param array       $formData formData
      *
      * @return LaminasForm
      */
@@ -270,8 +264,8 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
      * Removes buttons if action cannot be performed on the entity
      *
      * @param LaminasForm $form     form
-     * @param array    $formData formData
-     * @param array    $action   action
+     * @param array       $formData formData
+     * @param array       $action   action
      *
      * @return LaminasForm
      */
@@ -286,7 +280,8 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
             'cns' => 'isCnsable',
         ];
 
-        if (empty($actionToFlag[$action])
+        if (
+            empty($actionToFlag[$action])
             || empty($formData['fields'][$actionToFlag[$action]])
             || ((bool) $formData['fields'][$actionToFlag[$action]] !== true)
         ) {
@@ -301,7 +296,7 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
      * ensure data is not lost during validation.
      *
      * @param LaminasForm $form     form
-     * @param array    $formData formData
+     * @param array       $formData formData
      *
      * @return LaminasForm
      */
@@ -319,7 +314,7 @@ class OperatorIrfoPsvAuthorisationsController extends AbstractInternalController
             case RefData::IRFO_PSV_AUTH_STATUS_GRANTED:
             case RefData::IRFO_PSV_AUTH_STATUS_APPROVED:
                 $readonlyFields = ['irfoPsvAuthType', 'validityPeriod', 'isFeeExemptApplication',
-                    'isFeeExemptAnnual', 'exemptionDetails', 'copiesRequired'];
+                'isFeeExemptAnnual', 'exemptionDetails', 'copiesRequired'];
                 break;
             default:
                 $form->setOption('readonly', true);

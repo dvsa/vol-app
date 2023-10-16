@@ -3,21 +3,18 @@
 namespace Olcs\Controller\TransportManager\Details;
 
 use Dvsa\Olcs\Transfer\Command\TmEmployment\Create as CreateDto;
-use Dvsa\Olcs\Transfer\Command\TmEmployment\Update as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\TmEmployment\DeleteList as DeleteDto;
-use Dvsa\Olcs\Transfer\Query\TmEmployment\GetSingle as ItemDto;
+use Dvsa\Olcs\Transfer\Command\TmEmployment\Update as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\TmEmployment\GetList as ListDto;
+use Dvsa\Olcs\Transfer\Query\TmEmployment\GetSingle as ItemDto;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
 use Olcs\Data\Mapper\TransportManager\EmploymentHistory as Mapper;
 use Olcs\Form\Model\Form\TmEmployment as Form;
-use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
-use Laminas\View\Model\ViewModel;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 
-/**
- * Transport Manager Details Employment Controller
- */
 class TransportManagerDetailsEmploymentController extends AbstractInternalController implements
     TransportManagerControllerInterface,
     LeftViewProvider
@@ -89,14 +86,14 @@ class TransportManagerDetailsEmploymentController extends AbstractInternalContro
 
     protected function alterFormForEdit(\Laminas\Form\Form $form, $data)
     {
-        $this->getServiceLocator()->get('Helper\Form')->remove($form, 'form-actions->addAnother');
+        $this->formHelperService->remove($form, 'form-actions->addAnother');
 
         return $form;
     }
 
     /**
-     * @param \Common\Service\Table\TableBuilder $table
-     * @param array $data
+     * @param  \Common\Service\Table\TableBuilder $table
+     * @param  array                              $data
      * @return \Common\Service\Table\TableBuilder
      */
     protected function alterTable($table, $data)

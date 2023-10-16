@@ -1,28 +1,27 @@
 <?php
-/**
- * Note Controller
- */
+
 namespace Olcs\Controller\Bus\Processing;
 
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Command\Processing\Note\Create as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Processing\Note\Delete as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\Processing\Note\Update as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Processing\Note as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Processing\NoteList as ListDto;
+use Laminas\Navigation\Navigation;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\BusRegControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Controller\Traits\NotesProcessingTrait;
+use Olcs\Data\Mapper\BusRegNotes as Mapper;
 use Olcs\Form\Model\Form\Note as AddForm;
 use Olcs\Form\Model\Form\NoteEdit as EditForm;
 use Olcs\Form\Model\Form\NoteFilter as FilterForm;
-use Olcs\Data\Mapper\BusRegNotes as Mapper;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
-use Laminas\View\Model\ViewModel;
-use Olcs\Controller\Traits\NotesProcessingTrait;
 
-/**
- * Note Controller
- */
 class BusProcessingNoteController extends AbstractInternalController implements
     BusRegControllerInterface,
     LeftViewProvider
@@ -113,6 +112,14 @@ class BusProcessingNoteController extends AbstractInternalController implements
     protected $addContentTitle = 'Add note';
     protected $editContentTitle = 'Edit note';
 
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessenger,
+        Navigation $navigation
+    ) {
+        parent::__construct($translationHelper, $formHelper, $flashMessenger, $navigation);
+    }
     /**
      * get left view
      *

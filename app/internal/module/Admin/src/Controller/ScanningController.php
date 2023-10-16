@@ -2,23 +2,43 @@
 
 namespace Admin\Controller;
 
-use Laminas\View\Model\ViewModel;
-use Common\Service\Data\CategoryDataService;
-use Laminas\Mvc\Controller\AbstractActionController as LaminasAbstractActionController;
 use Common\Controller\Traits\GenericRenderView;
+use Common\Service\Data\CategoryDataService;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Script\ScriptFactory;
+use Laminas\Mvc\Controller\AbstractActionController as LaminasAbstractActionController;
+use Laminas\View\Model\ViewModel;
+use Olcs\Service\Data\ScannerSubCategory;
+use Olcs\Service\Data\SubCategoryDescription;
 
-/**
- * Scanning Controller
- *
- * @author Nick Payne <nick.payne@valtech.co.uk>
- */
 class ScanningController extends LaminasAbstractActionController
 {
-    const ERR_NO_ENTITY_FOR_CATEGORY = 'ERR_NO_ENTITY_FOR_CATEGORY';
-    const ERR_ENTITY_NAME_NOT_SETUP = 'ERR_ENTITY_NAME_NOT_SETUP';
-    const ERR_NO_DESCRIPTION = 'ERR_NO_DESCRIPTION';
-
     use GenericRenderView;
+
+    public const ERR_NO_ENTITY_FOR_CATEGORY = 'ERR_NO_ENTITY_FOR_CATEGORY';
+    public const ERR_ENTITY_NAME_NOT_SETUP = 'ERR_ENTITY_NAME_NOT_SETUP';
+    public const ERR_NO_DESCRIPTION = 'ERR_NO_DESCRIPTION';
+
+    protected FlashMessengerHelperService $flashMessengerHelper;
+    protected FormHelperService $formHelper;
+    protected ScannerSubCategory $scannerSubCategoryDataService;
+    protected SubCategoryDescription $subCategoryDescriptionDataService;
+    protected ScriptFactory $scriptFactory;
+
+    public function __construct(
+        FlashMessengerHelperService $flashMessengerHelper,
+        FormHelperService $formHelper,
+        ScannerSubCategory $scannerSubCategoryDataService,
+        SubCategoryDescription $subCategoryDescriptionDataService,
+        ScriptFactory $scriptFactory
+    ) {
+        $this->flashMessengerHelper = $flashMessengerHelper;
+        $this->formHelper = $formHelper;
+        $this->scannerSubCategoryDataService = $scannerSubCategoryDataService;
+        $this->subCategoryDescriptionDataService = $subCategoryDescriptionDataService;
+        $this->scriptFactory = $scriptFactory;
+    }
 
     /**
      * Index page
@@ -49,29 +69,26 @@ class ScanningController extends LaminasAbstractActionController
         $category    = $data['details']['category'];
         $subCategory = $data['details']['subCategory'];
 
-        //  set parameters of Dinamyc Selectors
-        $sm = $this->getServiceLocator();
-
-        $sm->get(\Olcs\Service\Data\ScannerSubCategory::class)
+        $this->scannerSubCategoryDataService
             ->setCategory($category);
 
-        $sm->get(\Olcs\Service\Data\SubCategoryDescription::class)
+        $this->subCategoryDescriptionDataService
             ->setSubCategory($subCategory);
 
         //  create form
         $form = $this->createFormWithData($data);
 
-        $sm->get('Script')->loadFile('forms/scanning');
+        $this->scriptFactory->loadFile('forms/scanning');
 
         //  is POST
         if ($prg !== false) {
             $details = $data['details'];
             // if no sub category descriptions, then remove the "description" select element
-            if (count($sm->get(\Olcs\Service\Data\SubCategoryDescription::class)->fetchListData()) === 0) {
-                $sm->get('Helper\Form')->remove($form, 'details->description');
+            if (count($this->subCategoryDescriptionDataService->fetchListData()) === 0) {
+                $this->formHelper->remove($form, 'details->description');
             } else {
                 // else remove the "otherDescription" text element
-                $sm->get('Helper\Form')->remove($form, 'details->otherDescription');
+                $this->formHelper->remove($form, 'details->otherDescription');
             }
 
             // received date not applicable and shouldn't be validated if not a back scan
@@ -105,7 +122,7 @@ class ScanningController extends LaminasAbstractActionController
                 if (!$response->isOk()) {
                     $this->processMessages($response, $form, $category);
                 } else {
-                    $sm->get('Helper\FlashMessenger')->addSuccessMessage('scanning.message.success');
+                    $this->flashMessengerHelper->addSuccessMessage('scanning.message.success');
 
                     // The AC says sub cat & description dropdowns should be reset to their defaults, but
                     // this presents an issue; description depends on sub category,
@@ -122,7 +139,7 @@ class ScanningController extends LaminasAbstractActionController
 
                     // ... so we load in some extra JS which will fire off our cascade
                     // input, which in turn will populate the list of descriptions
-                    $sm->get('Script')->loadFile('scanning-success');
+                    $this->scriptFactory->loadFile('scanning-success');
                 }
             }
         }
@@ -152,7 +169,8 @@ class ScanningController extends LaminasAbstractActionController
         if (isset($result['messages'])) {
             $messages = $result['messages'];
 
-            if (array_key_exists(self::ERR_NO_ENTITY_FOR_CATEGORY, $messages)
+            if (
+                array_key_exists(self::ERR_NO_ENTITY_FOR_CATEGORY, $messages)
                 || array_key_exists(self::ERR_ENTITY_NAME_NOT_SETUP, $messages)
                 // Temporary fix, if the response was a client error, assume the entity was not found
                 || $response->isClientError()
@@ -168,7 +186,7 @@ class ScanningController extends LaminasAbstractActionController
         if (count($errors['details'])) {
             $form->setMessages($errors);
         } else {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            $this->flashMessengerHelper->addErrorMessage('unknown-error');
         }
     }
 
@@ -181,8 +199,7 @@ class ScanningController extends LaminasAbstractActionController
      */
     private function createFormWithData($data)
     {
-        $form = $this->getServiceLocator()
-            ->get('Helper\Form')
+        $form = $this->formHelper
             ->createForm('Scanning')
             ->setData($data);
 

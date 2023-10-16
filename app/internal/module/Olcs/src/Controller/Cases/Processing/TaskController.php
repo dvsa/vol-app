@@ -2,30 +2,49 @@
 
 namespace Olcs\Controller\Cases\Processing;
 
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Constants\FilterOptions;
+use Laminas\Mvc\Router\Http\TreeRouteStack;
+use Laminas\View\HelperPluginManager;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits as ControllerTraits;
+use Olcs\Service\Data\SubCategory;
 
-/**
- * Case Task controller
- * Case task search and display
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 class TaskController extends AbstractController implements CaseControllerInterface, LeftViewProvider
 {
-    use ControllerTraits\CaseControllerTrait,
-    ControllerTraits\ProcessingControllerTrait,
-    ControllerTraits\TaskActionTrait {
+    use ControllerTraits\CaseControllerTrait, ControllerTraits\ProcessingControllerTrait, ControllerTraits\TaskActionTrait {
         ControllerTraits\TaskActionTrait::getTaskForm as traitGetTaskForm;
+    }
+
+    protected TreeRouteStack $router;
+    protected SubCategory $subCategoryDataService;
+
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        TableFactory $tableFactory,
+        HelperPluginManager $viewHelperManager,
+        TreeRouteStack $router,
+        SubCategory $subCategoryDataService
+    ) {
+        parent::__construct(
+            $scriptFactory,
+            $formHelper,
+            $tableFactory,
+            $viewHelperManager
+        );
+        $this->router = $router;
+        $this->subCategoryDataService = $subCategoryDataService;
     }
 
     /**
      * Get task action type
      *
-     * @see \Olcs\Controller\Traits\TaskActionTrait
+     * @see    \Olcs\Controller\Traits\TaskActionTrait
      * @return string
      */
     protected function getTaskActionType()
@@ -36,7 +55,7 @@ class TaskController extends AbstractController implements CaseControllerInterfa
     /**
      * Get task action filters
      *
-     * @see \Olcs\Controller\Traits\TaskActionTrait
+     * @see    \Olcs\Controller\Traits\TaskActionTrait
      * @return array
      */
     protected function getTaskActionFilters()
@@ -54,7 +73,7 @@ class TaskController extends AbstractController implements CaseControllerInterfa
      * Get id array for case
      *
      * @return array
-     * @throw \RuntimeException
+     * @throw  \RuntimeException
      */
     private function getIdArrayForCase()
     {

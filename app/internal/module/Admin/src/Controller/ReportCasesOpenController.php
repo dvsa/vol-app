@@ -5,17 +5,14 @@ namespace Admin\Controller;
 use Admin\Controller\Traits\ReportLeftViewTrait;
 use Admin\Form\Model\Form;
 use Dvsa\Olcs\Transfer\Query as TransferQry;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Laminas\View\Model\ViewModel;
 
-/**
- * @author Dmitry Golubev <d.e.golubev@gmail.com>
- */
 class ReportCasesOpenController extends AbstractInternalController implements LeftViewProvider
 {
-
     use ReportLeftViewTrait;
+
     /**
      * Holds the navigation ID,
      * required when an entire controller is

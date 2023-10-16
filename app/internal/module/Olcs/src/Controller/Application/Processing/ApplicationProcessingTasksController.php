@@ -2,8 +2,18 @@
 
 namespace Olcs\Controller\Application\Processing;
 
+use Common\Service\Data\PluginManager;
+use Common\Service\Helper\ComplaintsHelperService;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\OppositionHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Constants\FilterOptions;
+use Laminas\Mvc\Router\Http\TreeRouteStack;
+use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Traits;
+use Olcs\Service\Data\SubCategory;
 
 /**
  * Application Processing Tasks Controller
@@ -16,6 +26,25 @@ class ApplicationProcessingTasksController extends AbstractApplicationProcessing
         Traits\TaskActionTrait::getTaskForm as traitGetTaskForm;
     }
 
+    protected SubCategory $subCategoryDataService;
+
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        TableFactory $tableFactory,
+        HelperPluginManager $viewHelperManager,
+        PluginManager $dataServiceManager,
+        OppositionHelperService $oppositionHelper,
+        ComplaintsHelperService $complaintsHelper,
+        FlashMessengerHelperService $flashMessengerHelper,
+        TreeRouteStack $router,
+        SubCategory $subCategoryDataService
+    ) {
+        parent::__construct($scriptFactory, $formHelper, $tableFactory, $viewHelperManager, $dataServiceManager, $oppositionHelper, $complaintsHelper, $flashMessengerHelper, $router);
+        $this->subCategoryDataService = $subCategoryDataService;
+    }
+
+
     /**
      * @var string
      */
@@ -24,7 +53,7 @@ class ApplicationProcessingTasksController extends AbstractApplicationProcessing
     /**
      * Get task action type
      *
-     * @see \Olcs\Controller\Traits\TaskActionTrait
+     * @see    \Olcs\Controller\Traits\TaskActionTrait
      * @return string
      */
     protected function getTaskActionType()
@@ -35,7 +64,7 @@ class ApplicationProcessingTasksController extends AbstractApplicationProcessing
     /**
      * Get task action filters
      *
-     * @see \Olcs\Controller\Traits\TaskActionTrait
+     * @see    \Olcs\Controller\Traits\TaskActionTrait
      * @return array
      */
     protected function getTaskActionFilters()

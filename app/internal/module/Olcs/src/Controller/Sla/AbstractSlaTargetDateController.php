@@ -1,10 +1,5 @@
 <?php
 
-/**
- * SLA Date Controller
- *
- * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
- */
 namespace Olcs\Controller\Sla;
 
 use Dvsa\Olcs\Transfer\Command\System\CreateSlaTargetDate as CreateDto;
@@ -14,13 +9,7 @@ use Dvsa\Olcs\Transfer\Query\System\SlaTargetDate as ItemDto;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Data\Mapper\SlaTargetDate as Mapper;
 use Olcs\Form\Model\Form\SlaTargetDate as Form;
-use Laminas\View\Model\ViewModel;
 
-/**
- * Abstract SLA Date Controller
- *
- * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
- */
 abstract class AbstractSlaTargetDateController extends AbstractInternalController
 {
     /**
@@ -112,8 +101,8 @@ abstract class AbstractSlaTargetDateController extends AbstractInternalControlle
     /**
      * Alter Form to add the entity description to the form.
      *
-     * @param \Common\Controller\Form $form
-     * @param array $initialData
+     * @param  \Common\Controller\Form $form
+     * @param  array                   $initialData
      * @return \Common\Controller\Form
      */
     public function alterFormForAddSla($form, $initialData)
@@ -130,7 +119,7 @@ abstract class AbstractSlaTargetDateController extends AbstractInternalControlle
     /**
      * Load the entity and return
      *
-     * @param $id
+     * @param  $id
      * @return array|mixed
      */
     private function loadEntity($id)
@@ -141,7 +130,7 @@ abstract class AbstractSlaTargetDateController extends AbstractInternalControlle
         $response = $this->handleQuery($query);
 
         if ($response->isClientError() || $response->isServerError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            $this->flashMessengerHelperService->addErrorMessage('unknown-error');
         }
 
         if ($response->isOk()) {

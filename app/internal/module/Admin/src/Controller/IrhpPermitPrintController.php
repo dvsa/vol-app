@@ -2,17 +2,14 @@
 
 namespace Admin\Controller;
 
-use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\LeftViewProvider;
-use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 use Dvsa\Olcs\Transfer\Command\Permits\PrintPermits as PrintPermitsDto;
 use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrint as ListDto;
 use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintConfirm as ConfirmListDto;
 use Laminas\View\Model\ViewModel;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 
-/**
- * IRHP Permits Stock Print Controller
- */
 class IrhpPermitPrintController extends AbstractInternalController implements LeftViewProvider
 {
     protected $tableName = 'admin-irhp-permit-print';

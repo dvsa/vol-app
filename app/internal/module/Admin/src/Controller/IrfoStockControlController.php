@@ -1,27 +1,27 @@
 <?php
 
-/**
- * IRFO Stock Control Controller
- */
 namespace Admin\Controller;
 
-use Dvsa\Olcs\Transfer\Command\Irfo\CreateIrfoPermitStock as CreateDto;
-use Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoPermitStock as UpdateDto;
-use Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoPermitStockIssued as IssuedDto;
-use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPermitStockList as ListDto;
-use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\LeftViewProvider;
-use Olcs\Data\Mapper\IrfoStockControl as Mapper;
 use Admin\Form\Model\Form\IrfoStockControl as Form;
 use Admin\Form\Model\Form\IrfoStockControlFilter as FilterForm;
 use Admin\Form\Model\Form\IrfoStockControlIssued as IssuedForm;
 use Common\RefData;
+use Common\Service\Helper\DateHelperService;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Dvsa\Olcs\Transfer\Command\Irfo\CreateIrfoPermitStock as CreateDto;
+use Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoPermitStock as UpdateDto;
+use Dvsa\Olcs\Transfer\Command\Irfo\UpdateIrfoPermitStockIssued as IssuedDto;
+use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPermitStockList as ListDto;
+use Laminas\Navigation\Navigation;
 use Laminas\View\Model\ViewModel;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Data\Mapper\IrfoStockControl as Mapper;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
+use Olcs\Service\Data\IrfoCountry;
 
-/**
- * IRFO Stock Control Controller
- */
 class IrfoStockControlController extends AbstractInternalController implements LeftViewProvider
 {
     /**
@@ -74,6 +74,18 @@ class IrfoStockControlController extends AbstractInternalController implements L
 
     protected $addContentTitle = 'Add IRFO Stock Control';
 
+    public function __construct(
+        TranslationHelperService $translationHelperService,
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessengerHelperService,
+        Navigation $navigation,
+        DateHelperService $dateHelperService,
+        IrfoCountry $irfoCountryDataService
+    ) {
+        $this->dateHelperService = $dateHelperService;
+        $this->irfoCountryDataService = $irfoCountryDataService;
+        parent::__construct($translationHelperService, $formHelper, $flashMessengerHelperService, $navigation);
+    }
     public function getLeftView()
     {
         $view = new ViewModel(
@@ -99,7 +111,7 @@ class IrfoStockControlController extends AbstractInternalController implements L
 
         $filters = array_merge(
             [
-                'validForYear' => $this->getServiceLocator()->get('Helper\Date')->getDate('Y'),
+                'validForYear' => $this->dateHelperService->getDate('Y'),
                 'order' => 'ASC',
                 'limit' => 25
             ],
@@ -108,7 +120,7 @@ class IrfoStockControlController extends AbstractInternalController implements L
 
         if (empty($filters['irfoCountry'])) {
             // if not yet set, set default irfoCountry to the first country on the list
-            $irfoCountries = $this->getServiceLocator()->get('Olcs\Service\Data\IrfoCountry')
+            $irfoCountries = $this->irfoCountryDataService
                 ->fetchListData();
             if (!empty($irfoCountries)) {
                 $filters['irfoCountry'] = $irfoCountries[0]['id'];
@@ -169,7 +181,7 @@ class IrfoStockControlController extends AbstractInternalController implements L
             );
 
             if ($response->isOk()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('Update successful');
+                $this->flashMessengerHelperService->addSuccessMessage('Update successful');
                 return $this->redirectTo($response->getResult());
             } else {
                 $this->handleErrors($response->getResult());

@@ -2,21 +2,18 @@
 
 namespace Admin\Controller;
 
+use Admin\Data\Mapper\IrhpPermitWindow as PermitWindowMapper;
+use Admin\Form\Model\Form\IrhpPermitWindow as PermitWindowForm;
 use Common\Form\Form;
-use Olcs\Controller\Interfaces\LeftViewProvider;
+use Dvsa\Olcs\Transfer\Command\IrhpPermitWindow\Create as CreateDto;
+use Dvsa\Olcs\Transfer\Command\IrhpPermitWindow\Delete as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\IrhpPermitWindow\Update as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\ById as GetIrhpPermitStockByIdDto;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitWindow\ById as ItemDto;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitWindow\GetList as ListDto;
-use Dvsa\Olcs\Transfer\Command\IrhpPermitWindow\Create as CreateDto;
-use Dvsa\Olcs\Transfer\Command\IrhpPermitWindow\Update as UpdateDto;
-use Dvsa\Olcs\Transfer\Command\IrhpPermitWindow\Delete as DeleteDto;
-use Admin\Form\Model\Form\IrhpPermitWindow as PermitWindowForm;
-use Admin\Data\Mapper\IrhpPermitWindow as PermitWindowMapper;
 use Laminas\View\Model\ViewModel;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 
-/**
- * IRHP Permits Admin Controller
- */
 class IrhpPermitWindowController extends AbstractIrhpPermitAdminController implements LeftViewProvider
 {
     protected $tableName = 'admin-irhp-permit-window';
@@ -41,7 +38,7 @@ class IrhpPermitWindowController extends AbstractIrhpPermitAdminController imple
     protected $indexPageTitle = 'Permits';
 
     protected $tableViewTemplate = 'pages/irhp-permit-window/index';
-    protected $pageScript= 'irhp-permit-window';
+    protected $pageScript = 'irhp-permit-window';
 
     protected $navigationId = 'admin-dashboard/admin-permits';
 
@@ -89,7 +86,7 @@ class IrhpPermitWindowController extends AbstractIrhpPermitAdminController imple
      * @param Form  $form     Form
      * @param array $formData Form data
      *
-     * @return Form
+     * @return                                        Form
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function alterFormForAdd(Form $form, array $formData)
@@ -103,7 +100,7 @@ class IrhpPermitWindowController extends AbstractIrhpPermitAdminController imple
      * @param Form  $form     Form
      * @param array $formData Form data
      *
-     * @return Form
+     * @return                                        Form
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function alterFormForEdit(Form $form, array $formData)

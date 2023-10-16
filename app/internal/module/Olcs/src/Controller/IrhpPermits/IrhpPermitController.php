@@ -1,11 +1,5 @@
 <?php
 
-/**
- * IRHP Permit Application Controller
- *
- * @author Andy Newton <andy@vitri.ltd>
- */
-
 namespace Olcs\Controller\IrhpPermits;
 
 use Common\RefData;
@@ -13,15 +7,15 @@ use Dvsa\Olcs\Transfer\Command\IrhpApplication\UpdateCandidatePermitSelection;
 use Dvsa\Olcs\Transfer\Command\IrhpPermit\Replace as ReplaceDTO;
 use Dvsa\Olcs\Transfer\Command\IrhpPermit\Terminate as TerminateDTO;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\ById;
-use Dvsa\Olcs\Transfer\Query\IrhpCandidatePermit\GetListByIrhpApplicationUnpaged as UnpaidPermitsDtoUnpaged;
 use Dvsa\Olcs\Transfer\Query\IrhpCandidatePermit\GetListByIrhpApplication as UnpaidPermitsDto;
+use Dvsa\Olcs\Transfer\Query\IrhpCandidatePermit\GetListByIrhpApplicationUnpaged as UnpaidPermitsDtoUnpaged;
 use Dvsa\Olcs\Transfer\Query\IrhpPermit\ById as ItemDTO;
 use Dvsa\Olcs\Transfer\Query\IrhpPermit\GetListByIrhpId as IrhpListDTO;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\IrhpApplicationControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\IrhpPermit as IrhpPermitMapper;
-use Laminas\View\Model\ViewModel;
 
 class IrhpPermitController extends AbstractInternalController implements
     IrhpApplicationControllerInterface,
@@ -159,9 +153,9 @@ class IrhpPermitController extends AbstractInternalController implements
      * Alter table
      *
      * @param \Common\Service\Table\TableBuilder $table table
-     * @param array $data data
+     * @param array                              $data  data
      *
-     * @return \Common\Service\Table\TableBuilder
+     * @return                                        \Common\Service\Table\TableBuilder
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function alterTable($table, $data)

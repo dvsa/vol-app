@@ -1,24 +1,22 @@
 <?php
+
 namespace Olcs\Controller\Operator;
 
+use Common\Service\Table\TableBuilder;
 use Dvsa\Olcs\Transfer\Command\Processing\Note\Create as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Processing\Note\Delete as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\Processing\Note\Update as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Processing\Note as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Processing\NoteList as ListDto;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
+use Olcs\Data\Mapper\GenericFields as Mapper;
 use Olcs\Form\Model\Form\Note as AddForm;
 use Olcs\Form\Model\Form\NoteEdit as EditForm;
-use Olcs\Data\Mapper\GenericFields as Mapper;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
-use Laminas\View\Model\ViewModel;
-use Common\Service\Table\TableBuilder;
 
-/**
- * Note Controller
- */
 class OperatorProcessingNoteController extends AbstractInternalController implements
     OperatorControllerInterface,
     LeftViewProvider
@@ -148,7 +146,7 @@ class OperatorProcessingNoteController extends AbstractInternalController implem
         $title = ($table->getTotal() === 1)
             ? 'internal-operator-processing-notes-table-header-singular'
             : 'internal-operator-processing-notes-table-header';
-        $table->setVariable('title', $this->getServiceLocator()->get('Helper\Translation')->translate($title));
+        $table->setVariable('title', $this->translationHelperService->translate($title));
 
         return $table;
     }

@@ -1,30 +1,20 @@
 <?php
 
-/**
- * Case Impounding Controller
- *
- * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
- */
 namespace Olcs\Controller\Cases\Impounding;
 
+use Common\RefData as RefData;
 use Dvsa\Olcs\Transfer\Command\Cases\Impounding\CreateImpounding as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Cases\Impounding\DeleteImpounding as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\Cases\Impounding\UpdateImpounding as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Impounding\Impounding as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Impounding\ImpoundingList as ListDto;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits as ControllerTraits;
 use Olcs\Form\Model\Form\Impounding;
-use Laminas\View\Model\ViewModel;
-use Common\RefData as RefData;
 
-/**
- * Case Impounding Controller
- *
- * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
- */
 class ImpoundingController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
     use ControllerTraits\GenerateActionTrait;

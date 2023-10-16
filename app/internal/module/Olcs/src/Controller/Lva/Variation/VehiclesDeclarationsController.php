@@ -5,11 +5,19 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace Olcs\Controller\Lva\Variation;
 
 use Common\Controller\Lva;
-use Olcs\Controller\Lva\Traits\VariationControllerTrait;
+use Common\FormService\FormServiceManager;
+use Common\Service\Helper\DataHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\StringHelperService;
+use Common\Service\Script\ScriptFactory;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Interfaces\VariationControllerInterface;
+use Olcs\Controller\Lva\Traits\VariationControllerTrait;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Internal Variation Vehicles Declarations Controller
@@ -22,5 +30,37 @@ class VehiclesDeclarationsController extends Lva\AbstractVehiclesDeclarationsCon
     use VariationControllerTrait;
 
     protected $lva = 'variation';
-    protected $location = 'internal';
+    protected string $location = 'internal';
+
+    protected StringHelperService $stringHelper;
+
+    /**
+     * @param NiTextTranslation    $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService    $formHelper
+     * @param FormServiceManager   $formServiceManager
+     * @param ScriptFactory        $scriptFactory
+     * @param DataHelperService    $dataHelper
+     * @param StringHelperService  $stringHelper
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FormHelperService $formHelper,
+        FormServiceManager $formServiceManager,
+        ScriptFactory $scriptFactory,
+        DataHelperService $dataHelper,
+        StringHelperService $stringHelper
+    ) {
+        $this->stringHelper = $stringHelper;
+
+        parent::__construct(
+            $niTextTranslationUtil,
+            $authService,
+            $formHelper,
+            $formServiceManager,
+            $scriptFactory,
+            $dataHelper
+        );
+    }
 }

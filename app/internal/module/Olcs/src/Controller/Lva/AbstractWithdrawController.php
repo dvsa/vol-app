@@ -2,7 +2,12 @@
 
 namespace Olcs\Controller\Lva;
 
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Command\Application\WithdrawApplication;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Abstract Internal Withdraw Controller
@@ -15,6 +20,32 @@ abstract class AbstractWithdrawController extends AbstractApplicationDecisionCon
     protected $successMessageKey =  'application-withdrawn-successfully';
     protected $titleKey          =  'internal-application-withdraw-title';
 
+    protected FormHelperService $formHelper;
+
+    /**
+     * @param NiTextTranslation           $niTextTranslationUtil
+     * @param AuthorizationService        $authService
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param TranslationHelperService    $translationHelper
+     * @param FormHelperService           $formHelper
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FlashMessengerHelperService $flashMessengerHelper,
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper
+    ) {
+        $this->formHelper = $formHelper;
+
+        parent::__construct(
+            $niTextTranslationUtil,
+            $authService,
+            $flashMessengerHelper,
+            $translationHelper
+        );
+    }
+
     /**
      * get from
      *
@@ -23,7 +54,7 @@ abstract class AbstractWithdrawController extends AbstractApplicationDecisionCon
     protected function getForm()
     {
         $request  = $this->getRequest();
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
         $form = $formHelper->createFormWithRequest('Withdraw', $request);
 
         // override default label on confirm action button

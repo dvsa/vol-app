@@ -2,11 +2,16 @@
 
 namespace Admin\Controller;
 
-use Olcs\Controller\Interfaces\LeftViewProvider;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Transfer\Command\IrhpPermitSector\Update as Update;
 use Dvsa\Olcs\Transfer\Query\IrhpPermitSector\GetList as ListDto;
-use Laminas\View\Model\ViewModel;
 use Laminas\Http\Response;
+use Laminas\Navigation\Navigation;
+use Laminas\View\Model\ViewModel;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 
 /**
  * IRHP Permits Sector controller
@@ -28,6 +33,16 @@ class IrhpPermitSectorController extends AbstractIrhpPermitAdminController imple
 
     protected $defaultData = ['stockId' => 'route'];
 
+    public function __construct(
+        TranslationHelperService $translationHelperService,
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessengerHelperService,
+        Navigation $navigation,
+        ScriptFactory $scriptFactory
+    ) {
+        $this->scriptFactory = $scriptFactory;
+        parent::__construct($translationHelperService, $formHelper, $flashMessengerHelperService, $navigation);
+    }
     /**
      * Get left view
      *
@@ -54,7 +69,7 @@ class IrhpPermitSectorController extends AbstractIrhpPermitAdminController imple
      */
     public function indexAction()
     {
-        $this->getServiceLocator()->get('Script')->loadFile('irhp-permit-total-table');
+        $this->scriptFactory->loadFile('irhp-permit-total-table');
 
         $request = $this->getRequest();
 

@@ -2,25 +2,30 @@
 
 namespace OlcsTest\Controller\Traits;
 
+use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Utils\Constants\FilterOptions;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Olcs\Service\Data\DocumentSubCategory as DocumentSubCategoryDS;
+use Olcs\Service\Data\DocumentSubCategory;
 
 /**
  * @covers \Olcs\Controller\Traits\DocumentSearchTrait
  */
 class DocumentSearchTraitTest extends MockeryTestCase
 {
-    const CAT_ID = 8001;
+    public const CAT_ID = 8001;
 
     /** @var Stub\StubDocumentSearchTrait */
     private $sut;
 
     public function setUp(): void
     {
-        $this->sut = m::mock(\OlcsTest\Controller\Traits\Stub\StubDocumentSearchTrait::class)
+        $this->mockFormHelper = m::mock(FormHelperService::class);
+        $this->docSubCategoryDataService = m::mock(DocumentSubCategory::class)->makePartial();
+        $this->sut = m::mock(\OlcsTest\Controller\Traits\Stub\StubDocumentSearchTrait::class, [
+            $this->mockFormHelper,
+            $this->docSubCategoryDataService
+        ])
             ->makePartial()
             ->shouldAllowMockingProtectedMethods(true);
     }
@@ -153,18 +158,12 @@ class DocumentSearchTraitTest extends MockeryTestCase
             ->shouldReceive('get')->once()->with('format')->andReturn($mockFormatSelect)
             ->getMock();
 
-        $mockFormHelper = m::mock(\Common\Service\Helper\FormHelperService::class)->makePartial()
+        $this->mockFormHelper
             ->shouldReceive('createForm')->once()->with('DocumentsHome', false)->andReturn($mockForm)
-            ->shouldReceive('setFormActionFromRequest')->once()->with($mockForm, $mockRequest)
-            ->getMock();
+            ->shouldReceive('setFormActionFromRequest')->once()->with($mockForm, $mockRequest);
 
-        $mockDocSubCatDs = m::mock(DocumentSubCategoryDS::class)
+        $this->docSubCategoryDataService
             ->shouldReceive('setCategory')->once()->with($expectCategory)
-            ->getMock();
-
-        $mockSm = m::mock(ServiceLocatorInterface::class)
-            ->shouldReceive('get')->with('Helper\Form')->once()->andReturn($mockFormHelper)
-            ->shouldReceive('get')->with(DocumentSubCategoryDS::class)->once()->andReturn($mockDocSubCatDs)
             ->getMock();
 
         $mockDocumentListResponse = m::mock(\Common\Service\Cqrs\Response::class);
@@ -176,7 +175,6 @@ class DocumentSearchTraitTest extends MockeryTestCase
         //  call
         $this->sut
             ->shouldReceive('getRequest')->once()->andReturn($mockRequest)
-            ->shouldReceive('getServiceLocator')->once()->andReturn($mockSm)
             ->shouldReceive('handleQuery')->once()->andReturn($mockDocumentListResponse);
 
         $this->sut->traitGetDocumentForm($filters);

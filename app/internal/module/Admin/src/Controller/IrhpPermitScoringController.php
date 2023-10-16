@@ -1,23 +1,19 @@
 <?php
-/**
- * IRHP Permits Scoring Controller
- *
- * @author Andy Newton <andy@vitri.ltd>
- */
+
 namespace Admin\Controller;
 
 use DateTime;
 use Dvsa\Olcs\Transfer\Command\Permits\QueueAcceptScoring;
 use Dvsa\Olcs\Transfer\Command\Permits\QueueRunScoring;
-use Dvsa\Olcs\Transfer\Query\Permits\StockAlignmentReport;
 use Dvsa\Olcs\Transfer\Query\Permits\PostScoringReport;
+use Dvsa\Olcs\Transfer\Query\Permits\StockAlignmentReport;
 use Dvsa\Olcs\Transfer\Query\Permits\StockOperationsPermitted;
-use Olcs\Controller\Interfaces\LeftViewProvider;
-use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
 use Laminas\Escaper\Escaper;
 use Laminas\Http\Response;
-use Laminas\View\Model\ViewModel;
 use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
 
 class IrhpPermitScoringController extends AbstractIrhpPermitAdminController implements LeftViewProvider
 {
@@ -134,7 +130,7 @@ class IrhpPermitScoringController extends AbstractIrhpPermitAdminController impl
 
         $commaSeparatedRows = [];
         foreach ($result['rows'] as $row) {
-            $commaSeparatedRows[] = '"'.implode('","', $row).'"';
+            $commaSeparatedRows[] = '"' . implode('","', $row) . '"';
         }
 
         $content = implode("\n", $commaSeparatedRows);
@@ -176,11 +172,13 @@ class IrhpPermitScoringController extends AbstractIrhpPermitAdminController impl
     {
         $response = new Response();
         $response->setStatusCode(Response::STATUS_CODE_200);
-        $response->getHeaders()->addHeaders([
+        $response->getHeaders()->addHeaders(
+            [
             'Content-Type' => 'text/csv',
             'Content-Disposition' => 'attachment; filename="' . $filename . '"',
             'Content-Length' => strlen($content)
-        ]);
+            ]
+        );
         $response->setContent($content);
 
         return $response;

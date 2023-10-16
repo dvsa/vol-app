@@ -5,10 +5,20 @@
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
+
 namespace OlcsTest\Controller\Licence;
 
 use Common\RefData;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
+use Laminas\Form\Form;
+use Laminas\Validator\Translator\TranslatorInterface;
+use Laminas\View\HelperPluginManager;
+use Olcs\Controller\Licence\ContinuationController;
 use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
+use Mockery as m;
 
 /**
  * Continuation Controller Test
@@ -21,29 +31,39 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
     {
         parent::setUp();
 
-        $this->mockController('\Olcs\Controller\Licence\ContinuationController');
+        $this->mockScriptFactory = m::mock(ScriptFactory::class);
+        $this->mockFormHelper = m::mock(FormHelperService::class);
+        $this->mockTableFactory = m::mock(TableFactory::class);
+        $this->mockViewHelperManager = m::mock(HelperPluginManager::class);
+        $this->mockFlashMessengerHelper = m::mock(FlashMessengerHelperService::class);
+        $this->mockTranslationHelper = m::mock(TranslatorInterface::class);
+        $this->mockController(ContinuationController::class, [
+            $this->mockScriptFactory,
+            $this->mockFormHelper,
+            $this->mockTableFactory,
+            $this->mockViewHelperManager,
+            $this->mockFlashMessengerHelper,
+            $this->mockTranslationHelper,
+        ]);
     }
 
     public function testAlterFormActionsComplete()
     {
-        $mockForm = \Mockery::mock();
+        $mockForm = \Mockery::mock(Form::class);
         $continuationDetail = [
             'status' => [
                 'id' => RefData::CONTINUATION_DETAIL_STATUS_COMPLETE
             ]
         ];
 
-        $mockHelper = \Mockery::mock();
-        $this->sm->setService('Helper\Form', $mockHelper);
-
-        $mockHelper->shouldReceive('remove')->with($mockForm, 'form-actions->continueLicence')->once();
+        $this->mockFormHelper->shouldReceive('remove')->with($mockForm, 'form-actions->continueLicence')->once();
 
         $this->sut->alterFormActions($mockForm, false, $continuationDetail);
     }
 
     public function testAlterFormActionsNotCompleteWithOutFees()
     {
-        $mockForm = \Mockery::mock();
+        $mockForm = \Mockery::mock(Form::class);
         $continuationDetail = [
             'status' => [
                 'id' => RefData::CONTINUATION_DETAIL_STATUS_PRINTED
@@ -80,15 +100,12 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
      */
     public function testAlterFormReceived($enabled, $status, $received)
     {
-        $mockForm = \Mockery::mock();
-
-        $mockFormHelper = \Mockery::mock();
-        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $mockForm = \Mockery::mock(Form::class);
 
         if ($enabled) {
-            $mockFormHelper->shouldReceive('disableElement')->never();
+            $this->mockFormHelper->shouldReceive('disableElement')->never();
         } else {
-            $mockFormHelper->shouldReceive('disableElement')->with($mockForm, 'fields->received')->once();
+            $this->mockFormHelper->shouldReceive('disableElement')->with($mockForm, 'fields->received')->once();
         }
 
         $continuationDetail = ['status' => ['id' => $status], 'received' => $received];
@@ -132,17 +149,14 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
             RefData::CONTINUATION_DETAIL_STATUS_UNACCEPTABLE => 'G',
         ];
 
-        $mockForm = \Mockery::mock();
-
-        $mockFormHelper = \Mockery::mock();
-        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $mockForm = \Mockery::mock(Form::class);
 
         $mockForm->shouldReceive('get->get')->andReturn($mockElement);
         $mockElement->shouldReceive('getValueOptions')->once()->andReturn($valueOptions);
 
         if ($enabled) {
             if (!$received) {
-                $mockFormHelper->shouldReceive('disableElement')->once();
+                $this->mockFormHelper->shouldReceive('disableElement')->once();
             }
             $mockElement->shouldReceive('setValueOptions')->once()->with(
                 [
@@ -152,7 +166,7 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
                 ]
             )->andReturn();
         } else {
-            $mockFormHelper->shouldReceive('disableElement')->with($mockForm, 'fields->checklistStatus')->once();
+            $this->mockFormHelper->shouldReceive('disableElement')->with($mockForm, 'fields->checklistStatus')->once();
             $valueOptions[RefData::CONTINUATION_DETAIL_STATUS_PRINTED] = 'E (not continued)';
             $mockElement->shouldReceive('setValueOptions')->with($valueOptions)->once();
             $mockElement->shouldReceive('setAttribute');
@@ -171,15 +185,12 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
      */
     public function testAlterFormTotalVehicleAuthorisation($displayed, $goodsOrPsv, $licenceType)
     {
-        $mockForm = \Mockery::mock();
-
-        $mockFormHelper = \Mockery::mock();
-        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $mockForm = \Mockery::mock(Form::class);
 
         if ($displayed) {
-            $mockFormHelper->shouldReceive('remove')->never();
+            $this->mockFormHelper->shouldReceive('remove')->never();
         } else {
-            $mockFormHelper->shouldReceive('remove')->with($mockForm, 'fields->totalVehicleAuthorisation')->once();
+            $this->mockFormHelper->shouldReceive('remove')->with($mockForm, 'fields->totalVehicleAuthorisation')->once();
         }
 
         $continuationDetail = [
@@ -197,13 +208,10 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
      */
     public function testAlterFormTotalVehicleAuthorisationDisables($enabled, $status)
     {
-        $mockForm = \Mockery::mock();
-
-        $mockFormHelper = \Mockery::mock();
-        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $mockForm = \Mockery::mock(Form::class);
 
         if (!$enabled) {
-            $mockFormHelper->shouldReceive('disableElement')->with($mockForm, 'fields->totalVehicleAuthorisation')
+            $this->mockFormHelper->shouldReceive('disableElement')->with($mockForm, 'fields->totalVehicleAuthorisation')
                 ->once();
         }
 
@@ -237,19 +245,14 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
      */
     public function testFormNumberOfDiscs($displayed, $goodsOrPsv, $licenceType)
     {
-        $mockForm = \Mockery::mock();
-
-        $mockFormHelper = \Mockery::mock();
-        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $mockForm = \Mockery::mock(Form::class);
 
         if ($displayed) {
-            $mockFormHelper->shouldReceive('remove')->never();
+            $this->mockFormHelper->shouldReceive('remove')->never();
 
-            $this->sm->setService('Translator', \Mockery::mock('Laminas\Mvc\I18n\Translator'));
-
-            $mockFormHelper->shouldReceive('attachValidator')->once();
+            $this->mockFormHelper->shouldReceive('attachValidator')->once();
         } else {
-            $mockFormHelper->shouldReceive('remove')->with($mockForm, 'fields->numberOfDiscs')->once();
+            $this->mockFormHelper->shouldReceive('remove')->with($mockForm, 'fields->numberOfDiscs')->once();
         }
 
         $continuationDetail = [
@@ -275,16 +278,12 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
      */
     public function testFormNumberOfDiscsDisables($enabled, $status)
     {
-        $mockForm = \Mockery::mock();
-
-        $mockFormHelper = \Mockery::mock();
-        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $mockForm = \Mockery::mock(Form::class);
 
         if ($enabled) {
-            $this->sm->setService('Translator', \Mockery::mock('Laminas\Mvc\I18n\Translator'));
-            $mockFormHelper->shouldReceive('attachValidator')->once();
+            $this->mockFormHelper->shouldReceive('attachValidator')->once();
         } else {
-            $mockFormHelper->shouldReceive('disableElement')->with($mockForm, 'fields->numberOfDiscs')->once();
+            $this->mockFormHelper->shouldReceive('disableElement')->with($mockForm, 'fields->numberOfDiscs')->once();
         }
 
         $continuationDetail = [
@@ -325,19 +324,13 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
      */
     public function testAlterFormNumberOfCommunityLicences($displayed, $goodsOrPsv, $licenceType)
     {
-        $mockForm = \Mockery::mock();
-
-        $mockFormHelper = \Mockery::mock();
-        $this->sm->setService('Helper\Form', $mockFormHelper);
+        $mockForm = \Mockery::mock(Form::class);
 
         if ($displayed) {
-            $mockFormHelper->shouldReceive('remove')->never();
-
-            $this->sm->setService('Translator', \Mockery::mock('Laminas\Mvc\I18n\Translator'));
-
-            $mockFormHelper->shouldReceive('attachValidator')->once();
+            $this->mockFormHelper->shouldReceive('remove')->never();
+            $this->mockFormHelper->shouldReceive('attachValidator')->once();
         } else {
-            $mockFormHelper->shouldReceive('remove')->with($mockForm, 'fields->numberOfCommunityLicences')->once();
+            $this->mockFormHelper->shouldReceive('remove')->with($mockForm, 'fields->numberOfCommunityLicences')->once();
         }
 
         $continuationDetail = [
@@ -363,19 +356,14 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
      */
     public function testAlterFormNumberOfCommunityLicencesDisables($enabled, $status)
     {
-        $mockForm = \Mockery::mock();
+        $mockForm = \Mockery::mock(Form::class);
 
-        $mockFormHelper = \Mockery::mock();
-        $this->sm->setService('Helper\Form', $mockFormHelper);
-
-        $mockFormHelper->shouldReceive('remove')->never();
-
-        $this->sm->setService('Translator', \Mockery::mock('Laminas\Mvc\I18n\Translator'));
+        $this->mockFormHelper->shouldReceive('remove')->never();
 
         if ($enabled) {
-            $mockFormHelper->shouldReceive('attachValidator')->once();
+            $this->mockFormHelper->shouldReceive('attachValidator')->once();
         } else {
-            $mockFormHelper->shouldReceive('disableElement')->with($mockForm, 'fields->numberOfCommunityLicences')
+            $this->mockFormHelper->shouldReceive('disableElement')->with($mockForm, 'fields->numberOfCommunityLicences')
                 ->once();
         }
 

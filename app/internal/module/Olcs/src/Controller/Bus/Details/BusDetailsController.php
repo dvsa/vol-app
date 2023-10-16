@@ -2,22 +2,22 @@
 
 namespace Olcs\Controller\Bus\Details;
 
-use Dvsa\Olcs\Transfer\Query\Bus\BusReg as ItemDto;
-use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\LeftViewProvider;
-use Olcs\Data\Mapper\BusReg as BusRegMapper;
-use Olcs\Controller\Interfaces\BusRegControllerInterface;
-use Olcs\Controller\Traits as ControllerTraits;
-use Olcs\Form\Model\Form\BusServiceNumberAndType as ServiceForm;
-use Dvsa\Olcs\Transfer\Command\Bus\UpdateServiceDetails as UpdateServiceCmd;
-use Olcs\Form\Model\Form\BusRegTa as TaForm;
-use Dvsa\Olcs\Transfer\Command\Bus\UpdateTaAuthority as UpdateTaCmd;
-use Olcs\Form\Model\Form\BusRegStop as StopForm;
-use Dvsa\Olcs\Transfer\Command\Bus\UpdateStops as UpdateStopCmd;
-use Olcs\Form\Model\Form\BusRegQuality as QualityForm;
 use Dvsa\Olcs\Transfer\Command\Bus\UpdateQualitySchemes as UpdateQualityCmd;
-use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
+use Dvsa\Olcs\Transfer\Command\Bus\UpdateServiceDetails as UpdateServiceCmd;
+use Dvsa\Olcs\Transfer\Command\Bus\UpdateStops as UpdateStopCmd;
+use Dvsa\Olcs\Transfer\Command\Bus\UpdateTaAuthority as UpdateTaCmd;
+use Dvsa\Olcs\Transfer\Query\Bus\BusReg as ItemDto;
 use Laminas\View\Model\ViewModel;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\BusRegControllerInterface;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Controller\Traits as ControllerTraits;
+use Olcs\Data\Mapper\BusReg as BusRegMapper;
+use Olcs\Form\Model\Form\BusRegQuality as QualityForm;
+use Olcs\Form\Model\Form\BusRegStop as StopForm;
+use Olcs\Form\Model\Form\BusRegTa as TaForm;
+use Olcs\Form\Model\Form\BusServiceNumberAndType as ServiceForm;
+use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 
 class BusDetailsController extends AbstractInternalController implements
     BusRegControllerInterface,

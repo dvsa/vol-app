@@ -3,8 +3,12 @@
 namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractController;
-use Olcs\Controller\Interfaces\ApplicationControllerInterface;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\View\Model\ViewModel;
+use Olcs\Controller\Interfaces\ApplicationControllerInterface;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Abstract Internal Application Decsision Controller
@@ -18,6 +22,28 @@ abstract class AbstractApplicationDecisionController extends AbstractController 
     protected $successMessageKey;
     protected $titleKey;
 
+    protected FlashMessengerHelperService $flashMessengerHelper;
+    protected TranslationHelperService $translationHelper;
+
+    /**
+     * @param NiTextTranslation           $niTextTranslationUtil
+     * @param AuthorizationService        $authService
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param TranslationHelperService    $translationHelper
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FlashMessengerHelperService $flashMessengerHelper,
+        TranslationHelperService $translationHelper
+    ) {
+        $this->flashMessengerHelper = $flashMessengerHelper;
+        $this->translationHelper = $translationHelper;
+
+        parent::__construct($niTextTranslationUtil, $authService);
+    }
+
+
     /**
      * indexAction
      *
@@ -25,13 +51,17 @@ abstract class AbstractApplicationDecisionController extends AbstractController 
      */
     public function indexAction()
     {
-        $helperFlashMsgr = $this->getServiceLocator()->get('Helper\FlashMessenger');
+        $helperFlashMsgr = $this->flashMessengerHelper;
 
-        /** @var \Laminas\Http\Request $request */
+        /**
+ * @var \Laminas\Http\Request $request
+*/
         $request = $this->getRequest();
         $id      = $this->params('application');
 
-        /** @var \Laminas\Form\FormInterface $form */
+        /**
+ * @var \Laminas\Form\FormInterface $form
+*/
         $form    = $this->getForm();
 
         if ($request->isPost()) {
@@ -50,7 +80,7 @@ abstract class AbstractApplicationDecisionController extends AbstractController 
                 $response = $this->processDecision($id, $data);
 
                 if ($response->isOk()) {
-                    $message = $this->getServiceLocator()->get('Helper\Translation')
+                    $message = $this->translationHelper
                         ->translateReplace($this->successMessageKey, [$id]);
 
                     $helperFlashMsgr->addSuccessMessage($message);

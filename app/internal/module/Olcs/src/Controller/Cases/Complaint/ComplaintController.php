@@ -5,19 +5,20 @@
  *
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
+
 namespace Olcs\Controller\Cases\Complaint;
 
 use Dvsa\Olcs\Transfer\Command\Complaint\CreateComplaint as CreateDto;
-use Dvsa\Olcs\Transfer\Command\Complaint\UpdateComplaint as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\Complaint\DeleteComplaint as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\Complaint\UpdateComplaint as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Complaint\Complaint as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Complaint\ComplaintList as ListDto;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\Complaint as Mapper;
 use Olcs\Form\Model\Form\Complaint as Form;
-use Laminas\View\Model\ViewModel;
 
 /**
  * Case Complaint Controller

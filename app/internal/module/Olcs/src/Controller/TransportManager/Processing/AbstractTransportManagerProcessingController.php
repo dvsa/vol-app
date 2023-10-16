@@ -1,21 +1,11 @@
 <?php
 
-/**
- * Abstract Transport Manager Processing Controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 namespace Olcs\Controller\TransportManager\Processing;
 
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\TransportManager\TransportManagerController;
-use Laminas\View\Model\ViewModel;
 
-/**
- * Abstract Transport Manager Processing Controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 abstract class AbstractTransportManagerProcessingController extends TransportManagerController implements
     LeftViewProvider
 {

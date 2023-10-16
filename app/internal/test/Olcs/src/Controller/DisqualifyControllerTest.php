@@ -2,6 +2,12 @@
 
 namespace OlcsTest\Controller;
 
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
+use Laminas\Form\Form;
+use Laminas\View\HelperPluginManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
@@ -16,7 +22,18 @@ class DisqualifyControllerTest extends MockeryTestCase
 
     protected function setUp(): void
     {
-        $this->sut = m::mock(\Olcs\Controller\DisqualifyController::class)
+        $this->mockScriptFactory = m::mock(ScriptFactory::class);
+        $this->mockFormHelper = m::mock(FormHelperService::class);
+        $this->mockTableFactory = m::mock(TableFactory::class);
+        $this->mockViewHelperManager = m::mock(HelperPluginManager::class);
+        $this->mockFlashMessengerHelper = m::mock(FlashMessengerHelperService::class);
+        $this->sut = m::mock(\Olcs\Controller\DisqualifyController::class, [
+            $this->mockScriptFactory,
+            $this->mockFormHelper,
+            $this->mockTableFactory,
+            $this->mockViewHelperManager,
+            $this->mockFlashMessengerHelper,
+        ])
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
     }
@@ -48,16 +65,13 @@ class DisqualifyControllerTest extends MockeryTestCase
 
         $this->sut->shouldReceive('getRequest')->with()->once()->andReturn($mockRequest);
 
-        $mockForm = m::mock();
+        $mockForm = m::mock(Form::class);
         $mockForm->shouldReceive('setData')->with($data)->once();
 
-        $mockFormHelper = m::mock();
-        $mockFormHelper->shouldReceive('createForm')->with('Disqualify')->once()->andReturn($mockForm);
-        $mockFormHelper->shouldReceive('setFormActionFromRequest')->with($mockForm, $mockRequest)->once();
-        $mockFormHelper->shouldReceive('attachValidator')
+        $this->mockFormHelper->shouldReceive('createForm')->with('Disqualify')->once()->andReturn($mockForm);
+        $this->mockFormHelper->shouldReceive('setFormActionFromRequest')->with($mockForm, $mockRequest)->once();
+        $this->mockFormHelper->shouldReceive('attachValidator')
             ->with($mockForm, 'isDisqualified', m::type(\Laminas\Validator\Identical::class))->once();
-
-        $this->sut->shouldReceive('getServiceLocator->get')->with('Helper\Form')->once()->andReturn($mockFormHelper);
 
         $this->sut->shouldReceive('renderView')->once()->andReturn('RENDERED');
 
@@ -86,17 +100,14 @@ class DisqualifyControllerTest extends MockeryTestCase
 
         $this->sut->shouldReceive('getRequest')->with()->once()->andReturn($mockRequest);
 
-        $mockForm = m::mock();
+        $mockForm = m::mock(Form::class);
         $mockForm->shouldReceive('setData')->with($postData)->once();
         $mockForm->shouldReceive('getInputFilter->get->setRequired')->with(false)->once();
         $mockForm->shouldReceive('isValid')->with()->once()->andReturn(true);
         $mockForm->shouldReceive('getData')->with()->once()->andReturn(['FORM_DATA']);
 
-        $mockFormHelper = m::mock();
-        $mockFormHelper->shouldReceive('createForm')->with('Disqualify')->once()->andReturn($mockForm);
-        $mockFormHelper->shouldReceive('setFormActionFromRequest')->with($mockForm, $mockRequest)->once();
-
-        $this->sut->shouldReceive('getServiceLocator->get')->with('Helper\Form')->once()->andReturn($mockFormHelper);
+        $this->mockFormHelper->shouldReceive('createForm')->with('Disqualify')->once()->andReturn($mockForm);
+        $this->mockFormHelper->shouldReceive('setFormActionFromRequest')->with($mockForm, $mockRequest)->once();
 
         $this->sut->shouldReceive('saveDisqualification')->once()->with(
             ['FORM_DATA'],
@@ -133,16 +144,13 @@ class DisqualifyControllerTest extends MockeryTestCase
 
         $this->sut->shouldReceive('getRequest')->with()->once()->andReturn($mockRequest);
 
-        $mockForm = m::mock();
+        $mockForm = m::mock(Form::class);
         $mockForm->shouldReceive('setData')->with($postData)->once();
         $mockForm->shouldReceive('getInputFilter->get->setRequired')->with(false)->once();
         $mockForm->shouldReceive('isValid')->with()->once()->andReturn(false);
 
-        $mockFormHelper = m::mock();
-        $mockFormHelper->shouldReceive('createForm')->with('Disqualify')->once()->andReturn($mockForm);
-        $mockFormHelper->shouldReceive('setFormActionFromRequest')->with($mockForm, $mockRequest)->once();
-
-        $this->sut->shouldReceive('getServiceLocator->get')->with('Helper\Form')->once()->andReturn($mockFormHelper);
+        $this->mockFormHelper->shouldReceive('createForm')->with('Disqualify')->once()->andReturn($mockForm);
+        $this->mockFormHelper->shouldReceive('setFormActionFromRequest')->with($mockForm, $mockRequest)->once();
 
         $this->sut->shouldReceive('renderView')->once()->andReturn('RESPONSE');
 
@@ -165,16 +173,13 @@ class DisqualifyControllerTest extends MockeryTestCase
 
         $this->sut->shouldReceive('getRequest')->with()->once()->andReturn($mockRequest);
 
-        $mockForm = m::mock();
+        $mockForm = m::mock(Form::class);
         $mockForm->shouldReceive('setData')->with($data)->once();
 
-        $mockFormHelper = m::mock();
-        $mockFormHelper->shouldReceive('createForm')->with('Disqualify')->once()->andReturn($mockForm);
-        $mockFormHelper->shouldReceive('setFormActionFromRequest')->with($mockForm, $mockRequest)->once();
-        $mockFormHelper->shouldReceive('attachValidator')
+        $this->mockFormHelper->shouldReceive('createForm')->with('Disqualify')->once()->andReturn($mockForm);
+        $this->mockFormHelper->shouldReceive('setFormActionFromRequest')->with($mockForm, $mockRequest)->once();
+        $this->mockFormHelper->shouldReceive('attachValidator')
             ->with($mockForm, 'isDisqualified', m::type(\Laminas\Validator\Identical::class))->once();
-
-        $this->sut->shouldReceive('getServiceLocator->get')->with('Helper\Form')->once()->andReturn($mockFormHelper);
 
         $this->sut->shouldReceive('renderView')->once()->andReturn('RENDERED');
 
@@ -400,7 +405,7 @@ class DisqualifyControllerTest extends MockeryTestCase
 
         $mockResponse->shouldReceive('isOk')->with()->once()->andReturn(true);
 
-        $this->sut->shouldReceive('getServiceLocator->get->addSuccessMessage')->once();
+        $this->mockFlashMessengerHelper->shouldReceive('addSuccessMessage')->once();
 
         $this->sut->saveDisqualification($formData, null, 642, null);
     }
@@ -436,7 +441,7 @@ class DisqualifyControllerTest extends MockeryTestCase
 
         $mockResponse->shouldReceive('isOk')->with()->once()->andReturn(true);
 
-        $this->sut->shouldReceive('getServiceLocator->get->addSuccessMessage')->once();
+        $this->mockFlashMessengerHelper->shouldReceive('addSuccessMessage')->once();
 
         $this->sut->saveDisqualification($formData, null, null, 634);
     }
@@ -473,7 +478,7 @@ class DisqualifyControllerTest extends MockeryTestCase
 
         $mockResponse->shouldReceive('isOk')->with()->once()->andReturn(true);
 
-        $this->sut->shouldReceive('getServiceLocator->get->addSuccessMessage')->once();
+        $this->mockFlashMessengerHelper->shouldReceive('addSuccessMessage')->once();
 
         $this->sut->saveDisqualification($formData, 12, 642, null);
     }
@@ -494,7 +499,7 @@ class DisqualifyControllerTest extends MockeryTestCase
 
         $mockResponse->shouldReceive('isOk')->with()->once()->andReturn(false);
 
-        $this->sut->shouldReceive('getServiceLocator->get->addErrorMessage')->with('unknown-error')->once();
+        $this->mockFlashMessengerHelper->shouldReceive('addErrorMessage')->with('unknown-error')->once();
 
         $this->sut->saveDisqualification($formData, 12, 642, null);
     }

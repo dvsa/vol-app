@@ -2,10 +2,11 @@
 
 namespace Admin\Controller;
 
-use Olcs\Controller\Interfaces\LeftViewProvider;
-use Laminas\Mvc\Controller\AbstractActionController as LaminasAbstractActionController;
 use Common\Controller\Traits\GenericRenderView;
+use Laminas\Mvc\Controller\AbstractActionController as LaminasAbstractActionController;
+use Laminas\View\Helper\Placeholder;
 use Laminas\View\Model\ViewModel;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 
 /**
  * Abstract Controller
@@ -19,6 +20,14 @@ use Laminas\View\Model\ViewModel;
 abstract class AbstractController extends LaminasAbstractActionController implements LeftViewProvider
 {
     use GenericRenderView;
+
+    protected Placeholder $placeholder;
+
+    public function __construct(
+        Placeholder $placeholder
+    ) {
+        $this->placeholder = $placeholder;
+    }
 
     /**
      * Get Left View
@@ -42,7 +51,6 @@ abstract class AbstractController extends LaminasAbstractActionController implem
      */
     protected function setNavigationId($id)
     {
-        $this->getServiceLocator()->get('viewHelperManager')->get('placeholder')
-            ->getContainer('navigationId')->set($id);
+        $this->placeholder->getContainer('navigationId')->set($id);
     }
 }

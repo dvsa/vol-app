@@ -41,7 +41,7 @@ class NavigationToggleTest extends TestCase
 
         $this->mockSm = m::mock(\Laminas\ServiceManager\ServiceLocatorInterface::class);
         $this->mockSm
-            ->shouldReceive('get')->with('navigation')->andReturn($this->mockNavigation)
+            ->shouldReceive('get')->with('Navigation')->andReturn($this->mockNavigation)
             ->shouldReceive('get')->with('QuerySender')->andReturn($this->mockQuerySender)
             ->shouldReceive('get')->with(IdentityProviderInterface::class)->andReturn($this->mockIdentityProvider);
 

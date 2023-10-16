@@ -5,6 +5,7 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace Olcs\Controller\Lva\Traits;
 
 use Common\Controller\Lva\Traits\CommonApplicationControllerTrait;
@@ -44,9 +45,9 @@ trait ApplicationControllerTrait
     /**
      * Render the section
      *
-     * @param string|ViewModel $content   content
-     * @param \Laminas\Form\Form  $form      form
-     * @param array            $variables variables
+     * @param string|ViewModel   $content   content
+     * @param \Laminas\Form\Form $form      form
+     * @param array              $variables variables
      *
      * @return \Laminas\View\Model\ViewModel|null
      */
@@ -116,7 +117,7 @@ trait ApplicationControllerTrait
     {
         $applicationCompletion = $this->getApplicationData($this->getApplicationId());
         $applicationStatuses = $applicationCompletion['applicationCompletion'];
-        $filter = $this->getServiceLocator()->get('Helper\String');
+        $filter = $this->stringHelper;
 
         $sections = array(
             'overview' => array('class' => 'no-background', 'route' => 'lva-application', 'enabled' => true)

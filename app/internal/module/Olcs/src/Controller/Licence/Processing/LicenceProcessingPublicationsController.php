@@ -1,25 +1,19 @@
 <?php
 
-/**
- * Licence Processing Publication Controller
- */
 namespace Olcs\Controller\Licence\Processing;
 
-use Dvsa\Olcs\Transfer\Query\Publication\PublicationLinkList;
-use Dvsa\Olcs\Transfer\Query\Publication\PublicationLink as PublicationLinkDto;
 use Dvsa\Olcs\Transfer\Command\Publication\DeletePublicationLink;
 use Dvsa\Olcs\Transfer\Command\Publication\UpdatePublicationLink;
+use Dvsa\Olcs\Transfer\Query\Publication\PublicationLink as PublicationLinkDto;
+use Dvsa\Olcs\Transfer\Query\Publication\PublicationLinkList;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Olcs\Data\Mapper\PublicationLink as PublicationLinkMapper;
 use Olcs\Form\Model\Form\Publication as PublicationForm;
 use Olcs\Form\Model\Form\PublicationNotNew as PublicationNotNewForm;
-use Laminas\View\Model\ViewModel;
 
-/**
- * Licence Processing Publication Controller
- */
 class LicenceProcessingPublicationsController extends AbstractInternalController implements
     LicenceControllerInterface,
     LeftViewProvider
@@ -79,7 +73,7 @@ class LicenceProcessingPublicationsController extends AbstractInternalController
         $response = $this->handleQuery(PublicationLinkDto::create($params));
 
         if ($response->isServerError() || $response->isClientError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            $this->flashMessengerHelperService->addErrorMessage('unknown-error');
         }
 
         return $response->getResult();

@@ -2,8 +2,8 @@
 
 namespace Admin\Controller;
 
-use Olcs\Controller\AbstractInternalController;
 use Admin\Controller\Interfaces\IrhpPermitStockControllerInterface;
+use Olcs\Controller\AbstractInternalController;
 
 /**
  * Abstract Class for Admin Irhp Permits to implement interface that handles setting Title and Subtitle.

@@ -1,23 +1,13 @@
 <?php
 
-/**
- * Read History Controller
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace Olcs\Controller\TransportManager\Processing;
 
 use Dvsa\Olcs\Transfer\Query\Audit\ReadTransportManager;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
-use Laminas\View\Model\ViewModel;
 
-/**
- * Read History Controller
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class ReadHistoryController extends AbstractInternalController implements
     TransportManagerControllerInterface,
     LeftViewProvider

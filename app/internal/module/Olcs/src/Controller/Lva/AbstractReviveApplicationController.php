@@ -2,7 +2,12 @@
 
 namespace Olcs\Controller\Lva;
 
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Command\Application\ReviveApplication;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Class AbstractReviveApplicationController
@@ -13,11 +18,32 @@ use Dvsa\Olcs\Transfer\Command\Application\ReviveApplication;
  */
 abstract class AbstractReviveApplicationController extends AbstractApplicationDecisionController
 {
-    protected $lva               = 'application';
-    protected $location          = 'internal';
+    protected string $lva               = 'application';
+    protected string $location          = 'internal';
     protected $cancelMessageKey  = 'application-not-revive-application';
     protected $successMessageKey = 'application-revive-application-successfully';
     protected $titleKey          = 'internal-application-revive-application-title';
+
+    protected FormHelperService $formHelper;
+
+    /**
+     * @param NiTextTranslation           $niTextTranslationUtil
+     * @param AuthorizationService        $authService
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param TranslationHelperService    $translationHelper
+     * @param FormHelperService           $formHelper
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FlashMessengerHelperService $flashMessengerHelper,
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper
+    ) {
+        $this->formHelper = $formHelper;
+
+        parent::__construct($niTextTranslationUtil, $authService, $flashMessengerHelper, $translationHelper);
+    }
 
     /**
      * get Form
@@ -27,8 +53,7 @@ abstract class AbstractReviveApplicationController extends AbstractApplicationDe
     protected function getForm()
     {
         $request  = $this->getRequest();
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
-        $form = $formHelper->createFormWithRequest('GenericConfirmation', $request);
+        $form = $this->formHelper->createFormWithRequest('GenericConfirmation', $request);
 
         // override default label on confirm action button
         $form->get('messages')->get('message')->setValue('internal-application-revive-application-confirm');

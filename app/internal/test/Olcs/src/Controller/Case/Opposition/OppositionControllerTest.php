@@ -8,8 +8,13 @@
 
 namespace OlcsTest\Controller;
 
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Laminas\Navigation\Navigation;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Olcs\Controller\Bus\Service\BusServiceController as Sut;
 use Olcs\TestHelpers\ControllerPluginManagerHelper;
 use Olcs\TestHelpers\ControllerRouteMatchHelper;
 
@@ -27,7 +32,14 @@ class OppositionControllerTest extends MockeryTestCase
 
     public function setUp(): void
     {
-        $this->sut = new \Olcs\Controller\Cases\Opposition\OppositionController();
+
+        $this->translationHelper = m::mock(TranslationHelperService::class);
+        $this->formHelper = m::mock(FormHelperService::class);
+        $this->flashMessengerHelper =  m::mock(FlashMessengerHelperService::class);
+        $this->navigation = m::mock(Navigation::class);
+
+        $this->sut = new \Olcs\Controller\Cases\Opposition\OppositionController($this->translationHelper, $this->formHelper, $this->flashMessengerHelper, $this->navigation);
+
         $this->pluginManagerHelper = new ControllerPluginManagerHelper();
         $this->routeMatchHelper = new ControllerRouteMatchHelper();
         parent::setUp();
@@ -102,7 +114,6 @@ class OppositionControllerTest extends MockeryTestCase
 
     /**
      * Tests the generate action
-     *
      */
     public function testGenerateAction()
     {

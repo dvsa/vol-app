@@ -19,9 +19,9 @@ use Dvsa\Olcs\Transfer\Query\Fee\FeeList as FeeListQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeType as FeeTypeQry;
 use Dvsa\Olcs\Transfer\Query\Fee\FeeTypeList as FeeTypeListQry;
 use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
+use Laminas\Form\Form;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
-use Laminas\Form\Form;
 use ZfcRbac\Identity\IdentityProviderInterface;
 
 /**
@@ -92,7 +92,7 @@ trait FeesActionTrait
             return $this->getResponse();
         }
 
-        $this->getServiceLocator()->get('Helper\Form')
+        $this->formHelper
             ->setDefaultDate($form->get('fee-details')->get('createdDate'));
 
         $view = new ViewModel(['form' => $form]);
@@ -141,7 +141,7 @@ trait FeesActionTrait
             switch ($action) {
                 case 'new':
                     $params = [
-                        'action' => 'add-fee',
+                    'action' => 'add-fee',
                     ];
                     break;
                 case 'pay':
@@ -151,8 +151,8 @@ trait FeesActionTrait
                         return $this->redirectToList();
                     }
                     $params = [
-                        'action' => 'pay-fees',
-                        'fee' => implode(',', $data['id']),
+                    'action' => 'pay-fees',
+                    'fee' => implode(',', $data['id']),
                     ];
                     break;
             }
@@ -175,8 +175,10 @@ trait FeesActionTrait
      */
     protected function getFeeFilterForm($filters = [])
     {
-        /** @var \Common\Service\Helper\FormHelperService $formHelper */
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        /**
+ * @var \Common\Service\Helper\FormHelperService $formHelper
+*/
+        $formHelper = $this->formHelper;
         $form = $formHelper->createForm('FeeFilter', false);
         $form->setData($filters);
 
@@ -188,7 +190,7 @@ trait FeesActionTrait
     /**
      * Get fees table
      *
-     * @param string $status
+     * @param  string $status
      * @return \Common\Service\Table\TableBuilder;
      */
     protected function getFeesTable($status)
@@ -249,7 +251,7 @@ trait FeesActionTrait
         $fee = $this->getFee($id);
 
         $form = $this->alterFeeForm($this->getForm('Fee'), $fee);
-        $this->getServiceLocator()->get('Helper\Form')->setFormActionFromRequest($form, $this->getRequest());
+        $this->formHelper->setFormActionFromRequest($form, $this->getRequest());
         $form = $this->setDataFeeForm($fee, $form);
         $this->processForm($form);
 
@@ -293,14 +295,15 @@ trait FeesActionTrait
      * Alter which feeTransactions are displayed in the table,
      * called as array_filter callback
      *
-     * @param array $feeTransaction
+     * @param  array $feeTransaction
      * @return boolean
      */
     public function ftDisplayFilter($feeTransaction)
     {
         // OLCS-10687 exclude outstanding waive transactions
-        if ($feeTransaction['transaction']['status']['id'] === RefData::TRANSACTION_STATUS_OUTSTANDING &&
-            $feeTransaction['transaction']['type']['id'] === RefData::TRANSACTION_TYPE_WAIVE
+        if (
+            $feeTransaction['transaction']['status']['id'] === RefData::TRANSACTION_STATUS_OUTSTANDING
+            && $feeTransaction['transaction']['type']['id'] === RefData::TRANSACTION_TYPE_WAIVE
         ) {
             return false;
         }
@@ -372,7 +375,7 @@ trait FeesActionTrait
         $table = $this->getTable('transaction-fees', $fees);
         $this->updateTableActionWithQuery($table);
 
-        $urlHelper = $this->getServiceLocator()->get('Helper\Url');
+        $urlHelper = $this->urlHelper;
 
         $backLink = $urlHelper->fromRoute(
             $this->getFeesRoute() . '/fee_action',
@@ -386,8 +389,9 @@ trait FeesActionTrait
         switch ($transaction['type']['id']) {
             case RefData::TRANSACTION_TYPE_PAYMENT:
                 $title = 'internal.transaction-details.title-payment';
-                if ($transaction['status']['id'] == RefData::TRANSACTION_STATUS_COMPLETE &&
-                    !empty($transaction['reference'])
+                if (
+                    $transaction['status']['id'] == RefData::TRANSACTION_STATUS_COMPLETE
+                    && !empty($transaction['reference'])
                 ) {
                     $receiptLink = $urlHelper->fromRoute(
                         $this->getFeesRoute() . '/print-receipt',
@@ -428,13 +432,13 @@ trait FeesActionTrait
     /**
      * Determine reversal url from transaction data
      *
-     * @param array $transaction
-     * @return  string
+     * @param  array $transaction
+     * @return string
      */
     protected function getReverseLink(array $transaction)
     {
         if ($transaction['displayReversalOption']) {
-            return $this->getServiceLocator()->get('Helper\Url')->fromRoute(
+            return $this->urlHelper->fromRoute(
                 $this->getFeesRoute() . '/fee_action/transaction/reverse',
                 ['transaction' => $transaction['id']],
                 ['query' => $this->getRequest()->getQuery()->toArray()],
@@ -503,7 +507,7 @@ trait FeesActionTrait
         $hasProcessed = false;
         if ($form->has('address')) {
             $hasProcessed =
-                $this->getServiceLocator()->get('Helper\Form')->processAddressLookupForm($form, $this->getRequest());
+                $this->formHelper->processAddressLookupForm($form, $this->getRequest());
         }
 
         if (!$hasProcessed && $request->isPost()) {
@@ -516,8 +520,7 @@ trait FeesActionTrait
 
             if ($this->isCardPayment($data)) {
                 // remove field and validator if this is a card payment
-                $this->getServiceLocator()
-                    ->get('Helper\Form')
+                $this->formHelper
                     ->remove($form, 'details->received');
             }
 
@@ -557,9 +560,13 @@ trait FeesActionTrait
      */
     public function refundFeeAction()
     {
-        /** @var IdentityProviderInterface $authenticationService */
-        $authenticationService = $this->getServiceLocator()->get(IdentityProviderInterface::class);
-        /** @var User $user */
+        /**
+ * @var IdentityProviderInterface $authenticationService
+*/
+        $authenticationService = $this->identityProvider;
+        /**
+ * @var User $user
+*/
         $user = $authenticationService->getIdentity();
         $isAdmin = $user->hasRole(RefData::ROLE_INTERNAL_ADMIN);
 
@@ -576,7 +583,7 @@ trait FeesActionTrait
         }
         if ($form->has('address')) {
             $hasProcessed =
-                $this->getServiceLocator()->get('Helper\Form')->processAddressLookupForm($form, $this->getRequest());
+                $this->formHelper->processAddressLookupForm($form, $this->getRequest());
         }
 
         if (!$hasProcessed && $this->getRequest()->isPost()) {
@@ -585,7 +592,9 @@ trait FeesActionTrait
             }
             if ($form->isValid()) {
                 $dtoData = $this->refundFeeDtoData($data);
-                /** @var Response $response */
+                /**
+ * @var Response $response
+*/
                 $response = $this->handleCommand(
                     RefundFeeCmd::create($dtoData)
                 );
@@ -659,7 +668,7 @@ trait FeesActionTrait
     private function getRefundFeeForm($isAdmin)
     {
         $formName = $this->isMiscellaneousFees() || $isAdmin ? 'RefundFee' : 'GenericConfirmation';
-        $form = $this->getServiceLocator()->get('Helper\Form')->createFormWithRequest($formName, $this->getRequest());
+        $form = $this->formHelper->createFormWithRequest($formName, $this->getRequest());
         if ($formName === 'GenericConfirmation') {
             $form->setSubmitLabel('Refund');
         }
@@ -686,7 +695,7 @@ trait FeesActionTrait
         $hasProcessed = false;
         if ($form->has('address')) {
             $hasProcessed =
-                $this->getServiceLocator()->get('Helper\Form')->processAddressLookupForm($form, $this->getRequest());
+                $this->formHelper->processAddressLookupForm($form, $this->getRequest());
         }
 
         if (!$hasProcessed && $request->isPost()) {
@@ -710,7 +719,7 @@ trait FeesActionTrait
             return $this->redirectToTransaction(true);
         }
 
-        $translator = $this->getServiceLocator()->get('Helper\Translation');
+        $translator = $this->translationHelper;
         $message = $translator->translateReplace(
             'fees.reverse-transaction.confirm',
             [strtolower($transaction['paymentMethod']['description'])]
@@ -730,7 +739,7 @@ trait FeesActionTrait
      */
     private function getReverseTransactionForm()
     {
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
         $form = $formHelper->createFormWithRequest('ReverseTransaction', $this->getRequest());
         if (!$this->isMiscellaneousFees()) {
             $formHelper->remove($form, 'details->customerReference');
@@ -783,8 +792,8 @@ trait FeesActionTrait
     /**
      * Alter fee form
      *
-     * @param \Laminas\Form\Form $form
-     * @param array $fee
+     * @param  \Laminas\Form\Form $form
+     * @param  array              $fee
      * @return \Laminas\Form\Form
      */
     protected function alterFeeForm($form, $fee)
@@ -822,10 +831,10 @@ trait FeesActionTrait
     /**
      * Alter fee payment form
      *
-     * @param \Laminas\Form\Form $form
-     * @param array $feeData from FeeList query
-     * @param boolean $backToFee whether to populate 'backToFee' field which
-     * controls the final redirect
+     * @param  \Laminas\Form\Form $form
+     * @param  array              $feeData   from FeeList query
+     * @param  boolean            $backToFee whether to populate 'backToFee' field which
+     *                                       controls the final redirect
      * @return \Laminas\Form\Form
      */
     protected function alterPaymentForm($form, $feeData, $backToFee = false)
@@ -834,7 +843,7 @@ trait FeesActionTrait
         $maxAmount = $feeData['extra']['totalOutstanding'];
 
         // default the receipt date to 'today'
-        $today = $this->getServiceLocator()->get('Helper\Date')->getDateObject();
+        $today = $this->dateHelper->getDateObject();
         $form->get('details')
             ->get('receiptDate')
             ->setValue($today);
@@ -858,7 +867,7 @@ trait FeesActionTrait
             $form->get('details')->get('backToFee')->setValue($feeData['results'][0]['id']);
         }
 
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
         if (!$this->isMiscellaneousFees()) {
             $formHelper->remove($form, 'details->customerReference');
             $formHelper->remove($form, 'details->customerName');
@@ -878,7 +887,7 @@ trait FeesActionTrait
      */
     protected function alterCreateFeeForm($form)
     {
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
 
         // disable amount validation by default
         $form->get('fee-details')->get('amount')->setAttribute('readonly', true);
@@ -900,8 +909,8 @@ trait FeesActionTrait
     /**
      * Get value options array for create fee type form
      *
-     * @param string $effectiveDate string presentation of DateTime
-     * @param int $currentFeeType
+     * @param  string $effectiveDate  string presentation of DateTime
+     * @param  int    $currentFeeType
      * @return array
      */
     protected function fetchFeeTypeValueOptions($effectiveDate = null, $currentFeeType = null)
@@ -917,8 +926,8 @@ trait FeesActionTrait
     /**
      * Fetch fee type list data
      *
-     * @param string $effectiveDate string presentation of DateTime
-     * @param int $currentFeeType
+     * @param  string $effectiveDate  string presentation of DateTime
+     * @param  int    $currentFeeType
      * @return array
      */
     protected function fetchFeeTypeListData($effectiveDate = null, $currentFeeType = null)
@@ -1073,8 +1082,8 @@ trait FeesActionTrait
     /**
      * Set data
      *
-     * @param array $fee
-     * @param \Laminas\Form\Form $form
+     * @param  array              $fee
+     * @param  \Laminas\Form\Form $form
      * @return \Laminas\Form\Form
      */
     protected function setDataFeeForm($fee, $form)
@@ -1138,14 +1147,14 @@ trait FeesActionTrait
                 $cpmsRedirectUrl = $this->url()->fromRoute(
                     $this->getFeesRoute() . '/fee_action',
                     [
-                        'action' => 'payment-result',
+                    'action' => 'payment-result',
                     ],
                     [
-                        'force_canonical' => true,
-                        'query' => array_merge(
-                            ['backToFee' => (int) $backToFee],
-                            $this->getRequest()->getQuery()->toArray()
-                        ),
+                    'force_canonical' => true,
+                    'query' => array_merge(
+                        ['backToFee' => (int) $backToFee],
+                        $this->getRequest()->getQuery()->toArray()
+                    ),
                     ],
                     true
                 );
@@ -1171,10 +1180,10 @@ trait FeesActionTrait
                 $transaction = $response->getResult();
                 $view = new ViewModel(
                     [
-                        'gateway' => $transaction['gatewayUrl'],
-                        'data' => [
-                            'receipt_reference' => $transaction['reference']
-                        ]
+                    'gateway' => $transaction['gatewayUrl'],
+                    'data' => [
+                        'receipt_reference' => $transaction['reference']
+                    ]
                     ]
                 );
                 // render the gateway redirect and return early
@@ -1185,12 +1194,12 @@ trait FeesActionTrait
                 $dtoData = array_merge(
                     $dtoData,
                     [
-                        'feeIds' => $feeIds,
-                        'paymentMethod' => $paymentMethod,
-                        'received' => $details['received'],
-                        'receiptDate' => $details['receiptDate'],
-                        'payer' => $details['payer'],
-                        'slipNo' => $details['slipNo'],
+                    'feeIds' => $feeIds,
+                    'paymentMethod' => $paymentMethod,
+                    'received' => $details['received'],
+                    'receiptDate' => $details['receiptDate'],
+                    'payer' => $details['payer'],
+                    'slipNo' => $details['slipNo'],
                     ]
                 );
                 break;
@@ -1199,14 +1208,14 @@ trait FeesActionTrait
                 $dtoData = array_merge(
                     $dtoData,
                     [
-                        'feeIds' => $feeIds,
-                        'paymentMethod' => $paymentMethod,
-                        'received' => $details['received'],
-                        'receiptDate' => $details['receiptDate'],
-                        'payer' => $details['payer'],
-                        'slipNo' => $details['slipNo'],
-                        'chequeNo' => $details['chequeNo'],
-                        'chequeDate' => $details['chequeDate'],
+                    'feeIds' => $feeIds,
+                    'paymentMethod' => $paymentMethod,
+                    'received' => $details['received'],
+                    'receiptDate' => $details['receiptDate'],
+                    'payer' => $details['payer'],
+                    'slipNo' => $details['slipNo'],
+                    'chequeNo' => $details['chequeNo'],
+                    'chequeDate' => $details['chequeDate'],
                     ]
                 );
                 break;
@@ -1215,13 +1224,13 @@ trait FeesActionTrait
                 $dtoData = array_merge(
                     $dtoData,
                     [
-                        'feeIds' => $feeIds,
-                        'paymentMethod' => $paymentMethod,
-                        'received' => $details['received'],
-                        'receiptDate' => $details['receiptDate'],
-                        'payer' => $details['payer'],
-                        'slipNo' => $details['slipNo'],
-                        'poNo' => $details['poNo'],
+                    'feeIds' => $feeIds,
+                    'paymentMethod' => $paymentMethod,
+                    'received' => $details['received'],
+                    'receiptDate' => $details['receiptDate'],
+                    'payer' => $details['payer'],
+                    'slipNo' => $details['slipNo'],
+                    'poNo' => $details['poNo'],
                     ]
                 );
                 break;
@@ -1261,7 +1270,7 @@ trait FeesActionTrait
     protected function getResolvingErrorMessage($messages)
     {
         $errorMessage = '';
-        $translateHelper = $this->getServiceLocator()->get('Helper\Translation');
+        $translateHelper = $this->translationHelper;
         foreach ($messages as $message) {
             if (is_array($message) && array_key_exists(RefData::ERR_WAIT, $message)) {
                 $errorMessage = $translateHelper->translate('payment.error.15sec');
@@ -1354,7 +1363,7 @@ trait FeesActionTrait
     /**
      * Determine if we're making a card payment
      *
-     * @param array $data payment data
+     * @param  array $data payment data
      * @return boolean
      */
     public function isCardPayment($data)
@@ -1366,8 +1375,8 @@ trait FeesActionTrait
     }
 
     /**
-     * @param array $feeData from FeeList query
-     * @param array $postData
+     * @param  array $feeData  from FeeList query
+     * @param  array $postData
      * @return boolean
      */
     protected function shouldConfirmPayment(array $feeData, array $postData)
@@ -1383,8 +1392,8 @@ trait FeesActionTrait
     }
 
     /**
-     * @param array $feeData from FeeList query response
-     * @param array $postData
+     * @param  array $feeData  from FeeList query response
+     * @param  array $postData
      * @return string message (translation key)
      */
     protected function getConfirmPaymentMessage(array $feeData, $postData)

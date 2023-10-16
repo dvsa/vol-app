@@ -18,6 +18,7 @@ use ZfcRbac\Identity\IdentityProviderInterface;
 
 /**
  * Class NavigationToggle
+ *
  * @package Olcs\Listener
  */
 class NavigationToggle implements ListenerAggregateInterface, FactoryInterface
@@ -61,7 +62,9 @@ class NavigationToggle implements ListenerAggregateInterface, FactoryInterface
      */
     public function onDispatch(MvcEvent $e)
     {
-        /** @var User $identity */
+        /**
+        * @var User $identity
+        */
         $identity = $this->authenticationService->getIdentity();
 
         $userData = $identity->getUserData();
@@ -104,22 +107,22 @@ class NavigationToggle implements ListenerAggregateInterface, FactoryInterface
      *
      * @return NavigationToggle
      */
-    public function createService(ServiceLocatorInterface $serviceLocator) : NavigationToggle
+    public function createService(ServiceLocatorInterface $serviceLocator): NavigationToggle
     {
-        return $this->__invoke($serviceLocator, AnalyticsCookieNamesProvider::class);
+        return $this->__invoke($serviceLocator, NavigationToggle::class);
     }
 
     /**
-     * @param ContainerInterface $container
-     * @param $requestedName
-     * @param array|null $options
+     * @param  ContainerInterface $container
+     * @param  $requestedName
+     * @param  array|null         $options
      * @return NavigationToggle
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : NavigationToggle
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): NavigationToggle
     {
-        $this->navigation = $container->get('navigation');
+        $this->navigation = $container->get('Navigation');
         $this->authenticationService = $container->get(IdentityProviderInterface::class);
         $this->querySender = $container->get('QuerySender');
         return $this;

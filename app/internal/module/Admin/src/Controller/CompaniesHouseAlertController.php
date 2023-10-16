@@ -1,22 +1,21 @@
 <?php
 
-/**
- * Companies House Alert Controller
- */
 namespace Admin\Controller;
 
 use Admin\Controller\Traits\ReportLeftViewTrait;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Command\CompaniesHouse\CloseAlerts as CloseDto;
 use Dvsa\Olcs\Transfer\Query\CompaniesHouse\AlertList as ListDto;
+use Laminas\Navigation\Navigation;
+use Laminas\View\HelperPluginManager;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Form\Model\Form\CompaniesHouseAlertFilters as FilterForm;
 use Olcs\Logging\Log\Logger;
-use Laminas\View\Model\ViewModel;
 
-/**
- * Companies House Alert Controller
- */
 class CompaniesHouseAlertController extends AbstractInternalController implements LeftViewProvider
 {
     use ReportLeftViewTrait;
@@ -59,6 +58,16 @@ class CompaniesHouseAlertController extends AbstractInternalController implement
         ]
     ];
 
+    public function __construct(
+        TranslationHelperService $translationHelperService,
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessengerHelperService,
+        Navigation $navigation,
+        HelperPluginManager $viewHelperPluginManager
+    ) {
+        $this->viewHelperPluginManager = $viewHelperPluginManager;
+        parent::__construct($translationHelperService, $formHelper, $flashMessengerHelperService, $navigation);
+    }
     /**
      * Companies house alert list view
      *
@@ -72,8 +81,7 @@ class CompaniesHouseAlertController extends AbstractInternalController implement
 
         // populate the filter dropdown from the data retrieved by the main ListDto
         $valueOptions = $this->listData['extra']['valueOptions']['companiesHouseAlertReason'];
-        $this->getServiceLocator()
-            ->get('viewHelperManager')
+        $this->viewHelperPluginManager
             ->get('placeholder')
             ->getContainer('tableFilters')
             ->getValue()
@@ -94,7 +102,7 @@ class CompaniesHouseAlertController extends AbstractInternalController implement
         Logger::debug(__FILE__);
         Logger::debug(__METHOD__);
 
-        $confirmMessage = $this->getServiceLocator()->get('Helper\Translation')
+        $confirmMessage = $this->translationHelperService
             ->translate('companies-house-alert.close.confirm');
         $confirm = $this->confirm($confirmMessage);
 
@@ -107,11 +115,11 @@ class CompaniesHouseAlertController extends AbstractInternalController implement
         $response = $this->handleCommand(CloseDto::create($dtoData));
 
         if ($response->isServerError() || $response->isClientError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            $this->flashMessengerHelperService->addErrorMessage('unknown-error');
         }
 
         if ($response->isOk()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')
+            $this->flashMessengerHelperService
                 ->addSuccessMessage('companies-house-alert.close.success');
         }
 

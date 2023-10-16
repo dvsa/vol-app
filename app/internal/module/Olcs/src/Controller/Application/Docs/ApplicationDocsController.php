@@ -2,11 +2,21 @@
 
 namespace Olcs\Controller\Application\Docs;
 
+use Common\Service\Data\PluginManager;
+use Common\Service\Helper\ComplaintsHelperService;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\OppositionHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Constants\FilterOptions;
+use Laminas\View\HelperPluginManager;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\Application\ApplicationController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits;
-use Laminas\View\Model\ViewModel;
+use Olcs\Service\Data\DocumentSubCategory;
 
 /**
  * Application Controller
@@ -15,13 +25,45 @@ use Laminas\View\Model\ViewModel;
  */
 class ApplicationDocsController extends ApplicationController implements LeftViewProvider
 {
-    use Traits\DocumentSearchTrait,
-        Traits\DocumentActionTrait;
+    use Traits\DocumentSearchTrait;
+    use Traits\DocumentActionTrait;
+
+    protected DocumentSubCategory $docSubCategoryDataService;
+    protected TranslationHelperService $translationHelper;
+    protected $navigation;
+
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        TableFactory $tableFactory,
+        HelperPluginManager $viewHelperManager,
+        PluginManager $dataServiceManager,
+        OppositionHelperService $oppositionHelper,
+        ComplaintsHelperService $complaintsHelper,
+        FlashMessengerHelperService $flashMessengerHelper,
+        DocumentSubCategory $docSubCategoryDataService,
+        TranslationHelperService $translationHelper,
+        $navigation
+    ) {
+        parent::__construct(
+            $scriptFactory,
+            $formHelper,
+            $tableFactory,
+            $viewHelperManager,
+            $dataServiceManager,
+            $oppositionHelper,
+            $complaintsHelper,
+            $flashMessengerHelper
+        );
+        $this->docSubCategoryDataService = $docSubCategoryDataService;
+        $this->translationHelper = $translationHelper;
+        $this->navigation = $navigation;
+    }
 
     /**
      * Table to use
      *
-     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
     protected function getDocumentTableName()
@@ -32,7 +74,7 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
     /**
      * Route (prefix) for document action redirects
      *
-     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
     protected function getDocumentRoute()
@@ -43,7 +85,7 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
     /**
      * Route params for document action redirects
      *
-     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return array
      */
     protected function getDocumentRouteParams()
@@ -73,7 +115,7 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
     /**
      * Get view model for document action
      *
-     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return ViewModel
      */
     protected function getDocumentView()

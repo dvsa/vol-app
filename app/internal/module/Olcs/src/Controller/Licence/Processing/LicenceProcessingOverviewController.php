@@ -3,9 +3,8 @@
 /**
  * Overview Controller
  */
-namespace Olcs\Controller\Licence\Processing;
 
-use Laminas\View\Model\ViewModel;
+namespace Olcs\Controller\Licence\Processing;
 
 /**
  * Licence Processing Overview Controller

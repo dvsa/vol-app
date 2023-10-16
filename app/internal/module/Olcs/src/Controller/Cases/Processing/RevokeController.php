@@ -5,16 +5,13 @@ namespace Olcs\Controller\Cases\Processing;
 use Dvsa\Olcs\Transfer\Command\Cases\ProposeToRevoke\CreateProposeToRevoke as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Cases\ProposeToRevoke\UpdateProposeToRevoke as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Cases\ProposeToRevoke\ProposeToRevokeByCase as ItemDto;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\Revoke as Mapper;
 use Olcs\Form\Model\Form\Revoke as Form;
-use Laminas\View\Model\ViewModel;
 
-/**
- * Revoke Controller
- */
 class RevokeController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
     /**

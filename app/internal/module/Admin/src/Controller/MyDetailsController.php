@@ -5,10 +5,10 @@ namespace Admin\Controller;
 use Admin\Form\Model\Form\MyDetails as Form;
 use Dvsa\Olcs\Transfer\Command\MyAccount\UpdateMyAccount as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount as ItemDto;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\MyDetails as Mapper;
-use Laminas\View\Model\ViewModel;
 
 /**
  * My Details Controller

@@ -3,12 +3,25 @@
 namespace OlcsTest\Controller;
 
 use Common\RefData;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
+use Laminas\View\HelperPluginManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\IndexController;
+use Olcs\Service\Data\DocumentSubCategory;
+use Olcs\Service\Data\DocumentSubCategoryWithDocs;
 use Olcs\Service\Data\IrhpPermitPrintCountry;
 use Olcs\Service\Data\IrhpPermitPrintRangeType;
 use Olcs\Service\Data\IrhpPermitPrintStock;
+use Olcs\Service\Data\ScannerSubCategory;
+use Olcs\Service\Data\SubCategory;
+use Olcs\Service\Data\SubCategoryDescription;
+use Olcs\Service\Data\TaskSubCategory;
+use Olcs\Service\Data\UserListInternal;
+use Olcs\Service\Data\UserListInternalExcludingLimitedReadOnlyUsers;
 use OlcsTest\Bootstrap;
 use Laminas\View\Model\JsonModel;
 
@@ -23,13 +36,43 @@ class IndexControllerTest extends MockeryTestCase
 
     public function setUp(): void
     {
-        $this->sm = Bootstrap::getServiceManager();
+        $this->mockScriptFactory = m::mock(ScriptFactory::class);
+        $this->mockFormHelper = m::mock(FormHelperService::class);
+        $this->mockTableFactory = m::mock(TableFactory::class);
+        $this->mockViewHelperManager = m::mock(HelperPluginManager::class);
+        $this->mockFlashMessengerHelper = m::mock(FlashMessengerHelperService::class);
+        $this->mockUserListInternalDataService = m::mock(UserListInternal::class);
+        $this->mockUserListInternalExcludingDataService = m::mock(UserListInternalExcludingLimitedReadOnlyUsers::class);
+        $this->mockSubCategoryDataService = m::mock(SubCategory::class);
+        $this->mockTaskSubCategoryDataService = m::mock(TaskSubCategory::class);
+        $this->mockDocumentSubCategoryDataService = m::mock(DocumentSubCategory::class);
+        $this->mockDocumentSubCategoryWithDocsDataService = m::mock(DocumentSubCategoryWithDocs::class);
+        $this->mockScannerSubCategoryDataService = m::mock(ScannerSubCategory::class);
+        $this->mockSubCategoryDescriptionDataService = m::mock(SubCategoryDescription::class);
+        $this->mockIrhpPermitPrintCountryDataService = m::mock(IrhpPermitPrintCountry::class);
+        $this->mockIrhpPermitPrintStockDataService = m::mock(IrhpPermitPrintStock::class);
+        $this->mockIrhpPermitPrintRangeTypeDataService = m::mock(IrhpPermitPrintRangeType::class);
 
-        $this->sut = m::mock(IndexController::class)
+        $this->sut = m::mock(IndexController::class, [
+            $this->mockScriptFactory,
+            $this->mockFormHelper,
+            $this->mockTableFactory,
+            $this->mockViewHelperManager,
+            $this->mockFlashMessengerHelper,
+            $this->mockUserListInternalDataService,
+            $this->mockUserListInternalExcludingDataService,
+            $this->mockSubCategoryDataService,
+            $this->mockTaskSubCategoryDataService,
+            $this->mockDocumentSubCategoryDataService,
+            $this->mockDocumentSubCategoryWithDocsDataService,
+            $this->mockScannerSubCategoryDataService,
+            $this->mockSubCategoryDescriptionDataService,
+            $this->mockIrhpPermitPrintCountryDataService,
+            $this->mockIrhpPermitPrintStockDataService,
+            $this->mockIrhpPermitPrintRangeTypeDataService
+        ])
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
-
-        $this->sut->setServiceLocator($this->sm);
     }
 
     /**
@@ -42,9 +85,14 @@ class IndexControllerTest extends MockeryTestCase
         $this->sut->shouldReceive('params')->with('type')->once()->andReturn($type);
         $this->sut->shouldReceive('params')->with('value')->once()->andReturn($value);
 
+        $mockDataService = $this->$mockDataService;
+        $mockDataService->shouldReceive('setIrhpPermitType')->with($value)->andReturnSelf();
+        $mockDataService->shouldReceive('setIrhpPermitType')
+            ->with(RefData::IRHP_BILATERAL_PERMIT_TYPE_ID)
+            ->andReturnSelf();
+        $mockDataService->shouldReceive('setCountry')->with($value)->andReturnSelf();
+        $mockDataService->shouldReceive('setIrhpPermitStock')->with($value)->andReturnSelf();
         $mockDataService->shouldReceive('fetchListOptions')->withNoArgs()->andReturn($list);
-
-        $this->sm->setService($dataService, $mockDataService);
 
         $view = $this->sut->entityListAction();
 
@@ -56,27 +104,12 @@ class IndexControllerTest extends MockeryTestCase
     {
         $value = 100;
 
-        $irhpPermitPrintCountry = m::mock(IrhpPermitPrintCountry::class);
-        $irhpPermitPrintCountry->shouldReceive('setIrhpPermitType')->with($value)->andReturnSelf();
-
-        $irhpPermitPrintStockByCountry = m::mock(IrhpPermitPrintStock::class);
-        $irhpPermitPrintStockByCountry->shouldReceive('setIrhpPermitType')
-            ->with(RefData::IRHP_BILATERAL_PERMIT_TYPE_ID)
-            ->andReturnSelf();
-        $irhpPermitPrintStockByCountry->shouldReceive('setCountry')->with($value)->andReturnSelf();
-
-        $irhpPermitPrintStockByType = m::mock(IrhpPermitPrintStock::class);
-        $irhpPermitPrintStockByType->shouldReceive('setIrhpPermitType')->with($value)->andReturnSelf();
-
-        $irhpPermitPrintRangeType = m::mock(IrhpPermitPrintRangeType::class);
-        $irhpPermitPrintRangeType->shouldReceive('setIrhpPermitStock')->with($value)->andReturnSelf();
-
         return [
             'irhp-permit-print-country' => [
                 'type' => 'irhp-permit-print-country',
                 'value' => $value,
                 'dataService' => IrhpPermitPrintCountry::class,
-                'mockDataService' => $irhpPermitPrintCountry,
+                'mockDataService' => 'mockIrhpPermitPrintCountryDataService',
                 'expected'
                     => '[{"value":"","label":"Please select"},{"value":11,"label":"ABC"},{"value":12,"label":"DEF"}]',
             ],
@@ -84,7 +117,7 @@ class IndexControllerTest extends MockeryTestCase
                 'type' => 'irhp-permit-print-stock-by-country',
                 'value' => $value,
                 'dataService' => IrhpPermitPrintStock::class,
-                'mockDataService' => $irhpPermitPrintStockByCountry,
+                'mockDataService' => 'mockIrhpPermitPrintStockDataService',
                 'expected'
                     => '[{"value":"","label":"Please select"},{"value":11,"label":"ABC"},{"value":12,"label":"DEF"}]',
             ],
@@ -92,7 +125,7 @@ class IndexControllerTest extends MockeryTestCase
                 'type' => 'irhp-permit-print-stock-by-type',
                 'value' => $value,
                 'dataService' => IrhpPermitPrintStock::class,
-                'mockDataService' => $irhpPermitPrintStockByType,
+                'mockDataService' => 'mockIrhpPermitPrintStockDataService',
                 'expected'
                     => '[{"value":"","label":"Please select"},{"value":11,"label":"ABC"},{"value":12,"label":"DEF"}]',
             ],
@@ -100,7 +133,7 @@ class IndexControllerTest extends MockeryTestCase
                 'type' => 'irhp-permit-print-range-type-by-stock',
                 'value' => $value,
                 'dataService' => IrhpPermitPrintRangeType::class,
-                'mockDataService' => $irhpPermitPrintRangeType,
+                'mockDataService' => 'mockIrhpPermitPrintRangeTypeDataService',
                 'expected'
                     => '[{"value":"","label":"Please select"},{"value":11,"label":"ABC"},{"value":12,"label":"DEF"}]',
             ],

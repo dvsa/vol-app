@@ -5,11 +5,20 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace Olcs\Controller\Lva\Application;
 
-use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Common\Controller\Lva;
+use Common\FormService\FormServiceManager;
+use Common\Service\Helper\DataHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\RestrictionHelperService;
+use Common\Service\Helper\StringHelperService;
+use Common\Service\Script\ScriptFactory;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Internal Application Vehicles Declarations Controller
@@ -22,5 +31,40 @@ class VehiclesDeclarationsController extends Lva\AbstractVehiclesDeclarationsCon
     use ApplicationControllerTrait;
 
     protected $lva = 'application';
-    protected $location = 'internal';
+    protected string $location = 'internal';
+
+    protected StringHelperService $stringHelper;
+    protected RestrictionHelperService $restrictionHelper;
+
+    /**
+     * @param NiTextTranslation    $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService    $formHelper
+     * @param FormServiceManager   $formServiceManager
+     * @param ScriptFactory        $scriptFactory
+     * @param DataHelperService    $dataHelper
+     * @param StringHelperService  $stringHelper
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FormHelperService $formHelper,
+        FormServiceManager $formServiceManager,
+        ScriptFactory $scriptFactory,
+        DataHelperService $dataHelper,
+        StringHelperService $stringHelper,
+        RestrictionHelperService $restrictionHelper
+    ) {
+        $this->stringHelper = $stringHelper;
+        $this->restrictionHelper = $restrictionHelper;
+
+        parent::__construct(
+            $niTextTranslationUtil,
+            $authService,
+            $formHelper,
+            $formServiceManager,
+            $scriptFactory,
+            $dataHelper
+        );
+    }
 }

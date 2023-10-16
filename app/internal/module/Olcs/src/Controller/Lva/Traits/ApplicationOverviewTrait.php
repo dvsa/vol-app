@@ -5,9 +5,9 @@ namespace Olcs\Controller\Lva\Traits;
 use Common\Form\Elements\InputFilters\SelectEmpty as SelectElement;
 use Common\RefData;
 use Common\Service\Cqrs\Response;
-use Laminas\View\Model\ViewModel;
-use Dvsa\Olcs\Transfer\Query\Application\Overview as OverviewQry;
 use Dvsa\Olcs\Transfer\Command\Application\Overview as OverviewCmd;
+use Dvsa\Olcs\Transfer\Query\Application\Overview as OverviewQry;
+use Laminas\View\Model\ViewModel;
 
 /**
  * This trait enables the Application and Variation overview controllers to
@@ -22,7 +22,9 @@ trait ApplicationOverviewTrait
      */
     public function indexAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /**
+ * @var \Laminas\Http\Request $request
+*/
         $request = $this->getRequest();
 
         if ($request->isPost() && $this->isButtonPressed('cancel')) {
@@ -49,14 +51,16 @@ trait ApplicationOverviewTrait
                 $dtoData = $this->mapData($form->getData());
                 $cmd = OverviewCmd::create($dtoData);
 
-                /** @var Response $response */
+                /**
+                * @var Response $response
+                */
                 $response = $this->handleCommand($cmd);
                 if ($response->isOk()) {
                     $this->addSuccessMessage('application.overview.saved');
 
                     if ($this->isButtonPressed('saveAndContinue')) {
                         return $this->redirect()->toRoute(
-                            'lva-'.$this->lva.'/type_of_licence',
+                            'lva-' . $this->lva . '/type_of_licence',
                             ['application' => $applicationId]
                         );
                     }
@@ -71,8 +75,10 @@ trait ApplicationOverviewTrait
         }
 
         // Render the view
-        /** @var \Olcs\Service\Helper\ApplicationOverviewHelperService $helper */
-        $helper = $this->getServiceLocator()->get('Helper\ApplicationOverview');
+        /**
+ * @var \Olcs\Service\Helper\ApplicationOverviewHelperService $helper
+*/
+        $helper = $this->applicationOverviewHelper;
         $viewData = $helper->getViewData($application, $this->lva);
 
         $content = new ViewModel(
@@ -96,7 +102,7 @@ trait ApplicationOverviewTrait
      */
     protected function getOverviewForm()
     {
-        return $this->getServiceLocator()->get('Helper\Form')
+        return $this->formHelper
             ->createForm('ApplicationOverview');
     }
 
@@ -142,8 +148,8 @@ trait ApplicationOverviewTrait
      * alter form
      *
      * @param \Laminas\Form\FormInterface $form        form
-     * @param array                    $licence     licence overview data
-     * @param array                    $application application overview data
+     * @param array                       $licence     licence overview data
+     * @param array                       $application application overview data
      *
      * @return Laminas/Form/FormInterface
      */
@@ -151,7 +157,7 @@ trait ApplicationOverviewTrait
     {
         // build up the tracking fieldset dynamically, based on relevant sections
         $fieldset = $form->get('tracking');
-        $stringHelper = $this->getServiceLocator()->get('Helper\String');
+        $stringHelper = $this->stringHelper;
 
         $options = $application['valueOptions']['tracking'];
 
@@ -184,7 +190,7 @@ trait ApplicationOverviewTrait
         );
 
         if ($licence['trafficArea']['isWales'] !== true) {
-            $this->getServiceLocator()->get('Helper\Form')->remove($form, 'details->translateToWelsh');
+            $this->formHelper->remove($form, 'details->translateToWelsh');
         }
 
         $this->alterFormForLva($form);

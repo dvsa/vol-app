@@ -2,22 +2,18 @@
 
 namespace Admin\Controller;
 
-use Common\Form\Form;
-use Olcs\Controller\Interfaces\LeftViewProvider;
-use Dvsa\Olcs\Transfer\Query\IrhpPermitRange\GetList as ListDto;
-use Dvsa\Olcs\Transfer\Query\IrhpPermitRange\ById as ItemDto;
-use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\ById as GetIrhpPermitStockByIdDto;
-use Dvsa\Olcs\Transfer\Command\IrhpPermitRange\Create as CreateDto;
-use Dvsa\Olcs\Transfer\Command\IrhpPermitRange\Update as UpdateDto;
-use Dvsa\Olcs\Transfer\Command\IrhpPermitRange\Delete as DeleteDto;
-use Admin\Form\Model\Form\IrhpPermitRange as PermitRangeForm;
 use Admin\Data\Mapper\IrhpPermitRange as PermitRangeMapper;
-
+use Admin\Form\Model\Form\IrhpPermitRange as PermitRangeForm;
+use Common\Form\Form;
+use Dvsa\Olcs\Transfer\Command\IrhpPermitRange\Create as CreateDto;
+use Dvsa\Olcs\Transfer\Command\IrhpPermitRange\Delete as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\IrhpPermitRange\Update as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\IrhpPermitRange\ById as ItemDto;
+use Dvsa\Olcs\Transfer\Query\IrhpPermitRange\GetList as ListDto;
+use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\ById as GetIrhpPermitStockByIdDto;
 use Laminas\View\Model\ViewModel;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 
-/**
- * IRHP Permits Stock Range Controller
- */
 class IrhpPermitRangeController extends AbstractIrhpPermitAdminController implements LeftViewProvider
 {
     /**
@@ -94,7 +90,7 @@ class IrhpPermitRangeController extends AbstractIrhpPermitAdminController implem
      * @param Form  $form     Form
      * @param array $formData Form data
      *
-     * @return Form
+     * @return                                        Form
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function alterFormForAdd(Form $form, array $formData)
@@ -108,7 +104,7 @@ class IrhpPermitRangeController extends AbstractIrhpPermitAdminController implem
      * @param Form  $form     Form
      * @param array $formData Form data
      *
-     * @return Form
+     * @return                                        Form
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function alterFormForEdit(Form $form, array $formData)
@@ -133,8 +129,9 @@ class IrhpPermitRangeController extends AbstractIrhpPermitAdminController implem
 
         $permitRangeDetails = $form->get('permitRangeDetails');
 
-        if (!$irhpPermitStock['irhpPermitType']['isEcmtShortTerm'] &&
-            !$irhpPermitStock['irhpPermitType']['isEcmtAnnual']
+        if (
+            !$irhpPermitStock['irhpPermitType']['isEcmtShortTerm']
+            && !$irhpPermitStock['irhpPermitType']['isEcmtAnnual']
         ) {
             // emissionsCategory only required for Short-term or annual ECMT
             $permitRangeDetails->remove('emissionsCategory');

@@ -3,22 +3,81 @@
 namespace Olcs\Controller;
 
 use Common\RefData;
-use Olcs\Controller\Interfaces\LeftViewProvider;
-use Laminas\View\Model\ViewModel;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
+use Laminas\View\HelperPluginManager;
 use Laminas\View\Model\JsonModel;
+use Laminas\View\Model\ViewModel;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits\TaskSearchTrait;
+use Olcs\Service\Data\DocumentSubCategory;
+use Olcs\Service\Data\DocumentSubCategoryWithDocs;
+use Olcs\Service\Data\IrhpPermitPrintCountry;
+use Olcs\Service\Data\IrhpPermitPrintRangeType;
+use Olcs\Service\Data\IrhpPermitPrintStock;
+use Olcs\Service\Data\ScannerSubCategory;
+use Olcs\Service\Data\SubCategory;
+use Olcs\Service\Data\SubCategoryDescription;
+use Olcs\Service\Data\TaskSubCategory;
+use Olcs\Service\Data\UserListInternal;
+use Olcs\Service\Data\UserListInternalExcludingLimitedReadOnlyUsers;
 
-/**
- * Index Controller
- *
- * @author Mike Cooper <michael.cooper@valtech.co.uk>
- * @author Nick Payne <nick.payne@valtech.co.uk>
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class IndexController extends AbstractController implements LeftViewProvider
 {
     use TaskSearchTrait;
+
+    protected FlashMessengerHelperService $flashMessengerHelper;
+    protected UserListInternal $userListInternalDataService;
+    protected UserListInternalExcludingLimitedReadOnlyUsers $userListInternalExcludingDataService;
+    protected SubCategory $subCategoryDataService;
+    protected TaskSubCategory $taskSubCategoryDataService;
+    protected DocumentSubCategory $documentSubCategoryDataService;
+    protected DocumentSubCategoryWithDocs $documentSubCategoryWithDocsDataService;
+    protected ScannerSubCategory $scannerSubCategoryDataService;
+    protected SubCategoryDescription $subCategoryDescriptionDataService;
+    protected IrhpPermitPrintCountry $irhpPermitPrintCountryDataService;
+    protected IrhpPermitPrintStock $irhpPermitPrintStockDataService;
+    protected IrhpPermitPrintRangeType $irhpPermitPrintRangeTypeDataService;
+
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        TableFactory $tableFactory,
+        HelperPluginManager $viewHelperManager,
+        FlashMessengerHelperService $flashMessengerHelper,
+        UserListInternal $userListInternalDataService,
+        UserListInternalExcludingLimitedReadOnlyUsers $userListInternalExcludingDataService,
+        SubCategory $subCategoryDataService,
+        TaskSubCategory $taskSubCategoryDataService,
+        DocumentSubCategory $documentSubCategoryDataService,
+        DocumentSubCategoryWithDocs $documentSubCategoryWithDocsDataService,
+        ScannerSubCategory $scannerSubCategoryDataService,
+        SubCategoryDescription $subCategoryDescriptionDataService,
+        IrhpPermitPrintCountry $irhpPermitPrintCountryDataService,
+        IrhpPermitPrintStock $irhpPermitPrintStockDataService,
+        IrhpPermitPrintRangeType $irhpPermitPrintRangeTypeDataService
+    ) {
+        parent::__construct(
+            $scriptFactory,
+            $formHelper,
+            $tableFactory,
+            $viewHelperManager
+        );
+        $this->flashMessengerHelper = $flashMessengerHelper;
+        $this->userListInternalDataService = $userListInternalDataService;
+        $this->userListInternalExcludingDataService = $userListInternalExcludingDataService;
+        $this->subCategoryDataService = $subCategoryDataService;
+        $this->taskSubCategoryDataService = $taskSubCategoryDataService;
+        $this->documentSubCategoryDataService = $documentSubCategoryDataService;
+        $this->documentSubCategoryWithDocsDataService = $documentSubCategoryWithDocsDataService;
+        $this->scannerSubCategoryDataService = $scannerSubCategoryDataService;
+        $this->subCategoryDescriptionDataService = $subCategoryDescriptionDataService;
+        $this->irhpPermitPrintCountryDataService = $irhpPermitPrintCountryDataService;
+        $this->irhpPermitPrintStockDataService = $irhpPermitPrintStockDataService;
+        $this->irhpPermitPrintRangeTypeDataService = $irhpPermitPrintRangeTypeDataService;
+    }
 
     /**
      * Process action - Index
@@ -35,17 +94,20 @@ class IndexController extends AbstractController implements LeftViewProvider
 
         $filters = $this->mapTaskFilters();
 
-        /** @var \Common\Service\Table\TableBuilder $table */
+        /**
+ * @var \Common\Service\Table\TableBuilder $table
+*/
         $table = null;
 
         // assignedToTeam or Category must be selected
-        if (empty($filters['assignedToTeam'])
+        if (
+            empty($filters['assignedToTeam'])
             && empty($filters['category'])
         ) {
             $table = $this->getTable('tasks-no-create', []);
             $table->setEmptyMessage('tasks.search.error.filter.needed');
 
-            $this->getServiceLocator()->get('Helper\FlashMessenger')
+            $this->flashMessengerHelper
                 ->addWarningMessage('tasks.search.error.filter.needed');
         } else {
             //  if user specified then remove team from filters (ignore team) @see OLCS-13501
@@ -91,8 +153,6 @@ class IndexController extends AbstractController implements LeftViewProvider
      */
     public function entityListAction()
     {
-        $sm = $this->getServiceLocator();
-
         $key = $this->params('type');
         $value = $this->params('value');
 
@@ -101,126 +161,106 @@ class IndexController extends AbstractController implements LeftViewProvider
                 $results = $this->getListDataEnforcementArea($value, 'Please select');
                 break;
             case 'task-allocation-users':
-                /** @var \Olcs\Service\Data\UserListInternal $srv */
-                $srv = $sm->get(\Olcs\Service\Data\UserListInternal::class);
+                /**
+     * @var \Olcs\Service\Data\UserListInternal $srv
+*/
+                $srv = $this->userListInternalDataService;
                 $srv->setTeamId($value);
 
                 $results =
-                    [
-                        '' => 'Unassigned',
-                        'alpha-split' => 'Alpha split',
-                    ] +
-                    $srv->fetchListOptions(null);
+                [
+                    '' => 'Unassigned',
+                    'alpha-split' => 'Alpha split',
+                ] +
+                $srv->fetchListOptions(null);
 
                 break;
             case 'users-internal':
-                /** @var \Olcs\Service\Data\UserListInternal $srv */
-                $srv = $sm->get(\Olcs\Service\Data\UserListInternal::class);
+                /**
+     * @var \Olcs\Service\Data\UserListInternal $srv
+*/
+                $srv = $this->userListInternalDataService;
                 $srv->setTeamId($value);
 
                 $results =
-                    [
-                        '' => ((int)$value > 0 ? 'Unassigned' : 'Please select'),
-                    ] +
-                    $srv->fetchListOptions(null);
+                [
+                    '' => ((int)$value > 0 ? 'Unassigned' : 'Please select'),
+                ] +
+                $srv->fetchListOptions(null);
 
                 break;
             case 'users-internal-exclude-limited-read-only':
-                /** @var \Olcs\Service\Data\UserListInternalExcludingLimitedReadOnlyUsers $srv */
-                $srv = $sm->get(\Olcs\Service\Data\UserListInternalExcludingLimitedReadOnlyUsers::class);
+                /**
+     * @var \Olcs\Service\Data\UserListInternalExcludingLimitedReadOnlyUsers $srv
+*/
+                $srv = $this->userListInternalExcludingDataService;
                 $srv->setTeamId($value);
-
                 $results =
-                    [
-                        '' => ((int)$value > 0 ? 'Unassigned' : 'Please select'),
-                    ] +
-                    $srv->fetchListOptions(null);
-
+                [
+                    '' => ((int)$value > 0 ? 'Unassigned' : 'Please select'),
+                ] +
+                $srv->fetchListOptions(null);
                 break;
             case 'users':
                 $results = $this->getListDataUser($value, 'All');
                 break;
             case 'sub-categories':
-                /** @var \Olcs\Service\Data\DocumentSubCategory $srv */
-                $srv = $sm->get(\Olcs\Service\Data\SubCategory::class)
-                    ->setCategory($value);
-
+                $srv = $this->subCategoryDataService
+                ->setCategory($value);
                 $results = ['' => 'All'] + $srv->fetchListOptions();
-
                 break;
             case 'sub-categories-no-first-option':
-                $results = $sm->get(\Olcs\Service\Data\SubCategory::class)
-                    ->setCategory($value)
-                    ->fetchListOptions();
-
+                $results = $this->subCategoryDataService
+                ->setCategory($value)
+                ->fetchListOptions();
                 break;
             case 'task-sub-categories':
-                /** @var \Olcs\Service\Data\SubCategory $srv */
-                $srv = $sm->get(\Olcs\Service\Data\TaskSubCategory::class)
-                    ->setCategory($value);
-
+                $srv = $this->taskSubCategoryDataService
+                ->setCategory($value);
                 $results = ['' => 'All'] + $srv->fetchListOptions();
-
                 break;
             case 'document-sub-categories':
-                /** @var \Olcs\Service\Data\DocumentSubCategory $srv */
-                $srv = $sm->get(\Olcs\Service\Data\DocumentSubCategory::class)
-                    ->setCategory($value);
-
+                $srv = $this->documentSubCategoryDataService
+                ->setCategory($value);
                 $results = ['' => 'All'] + $srv->fetchListOptions();
-
                 break;
             case 'document-sub-categories-with-docs':
-                /** @var \Olcs\Service\Data\DocumentSubCategory $srv */
-                $srv = $sm->get(\Olcs\Service\Data\DocumentSubCategoryWithDocs::class)
-                    ->setCategory($value);
-
+                $srv = $this->documentSubCategoryWithDocsDataService
+                ->setCategory($value);
                 $results = ['' => 'All'] + $srv->fetchListOptions();
-
                 break;
             case 'scanning-sub-categories':
-                /** @var \Olcs\Service\Data\SubCategory $srv */
-                $srv = $sm->get(\Olcs\Service\Data\ScannerSubCategory::class)
-                    ->setCategory($value);
-
+                $srv = $this->scannerSubCategoryDataService
+                ->setCategory($value);
                 $results = ['' => 'All'] + $srv->fetchListOptions();
                 break;
             case 'document-templates':
                 $results = $this->getListDataDocTemplates(null, $value, 'All');
                 break;
             case 'sub-category-descriptions':
-                $results =  $sm->get(\Olcs\Service\Data\SubCategoryDescription::class)
-                    ->setSubCategory($value)
-                    ->fetchListOptions();
-
+                $results =  $this->subCategoryDescriptionDataService
+                ->setSubCategory($value)
+                ->fetchListOptions();
                 break;
             case 'irhp-permit-print-country':
-                /** @var \Olcs\Service\Data\IrhpPermitPrintCountry $srv */
-                $srv = $sm->get(\Olcs\Service\Data\IrhpPermitPrintCountry::class)
-                    ->setIrhpPermitType($value);
-
+                $srv = $this->irhpPermitPrintCountryDataService
+                ->setIrhpPermitType($value);
                 $results = ['' => 'Please select'] + $srv->fetchListOptions();
                 break;
             case 'irhp-permit-print-stock-by-country':
-                /** @var \Olcs\Service\Data\IrhpPermitPrintStock $srv */
-                $srv = $sm->get(\Olcs\Service\Data\IrhpPermitPrintStock::class)
-                    ->setIrhpPermitType(RefData::IRHP_BILATERAL_PERMIT_TYPE_ID)
-                    ->setCountry($value);
-
+                $srv = $this->irhpPermitPrintStockDataService
+                ->setIrhpPermitType(RefData::IRHP_BILATERAL_PERMIT_TYPE_ID)
+                ->setCountry($value);
                 $results = ['' => 'Please select'] + $srv->fetchListOptions();
                 break;
             case 'irhp-permit-print-stock-by-type':
-                /** @var \Olcs\Service\Data\IrhpPermitPrintStock $srv */
-                $srv = $sm->get(\Olcs\Service\Data\IrhpPermitPrintStock::class)
-                    ->setIrhpPermitType($value);
-
+                $srv = $this->irhpPermitPrintStockDataService
+                ->setIrhpPermitType($value);
                 $results = ['' => 'Please select'] + $srv->fetchListOptions();
                 break;
             case 'irhp-permit-print-range-type-by-stock':
-                /** @var \Olcs\Service\Data\IrhpPermitPrintRangeType $srv */
-                $srv = $sm->get(\Olcs\Service\Data\IrhpPermitPrintRangeType::class)
-                    ->setIrhpPermitStock($value);
-
+                $srv = $this->irhpPermitPrintRangeTypeDataService
+                ->setIrhpPermitStock($value);
                 $results = ['' => 'Please select'] + $srv->fetchListOptions();
                 break;
             default:

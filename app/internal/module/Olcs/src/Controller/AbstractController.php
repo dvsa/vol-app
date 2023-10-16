@@ -5,9 +5,13 @@ namespace Olcs\Controller;
 use Common\Controller\Traits as CommonTraits;
 use Common\Controller\Traits\GenericMethods;
 use Common\Controller\Traits\GenericRenderView;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
 use Common\Util\FlashMessengerTrait;
-use Olcs\Controller\Traits as OlcsTraits;
 use Laminas\Mvc\Controller\AbstractActionController as LaminasAbstractActionController;
+use Laminas\View\HelperPluginManager;
+use Olcs\Controller\Traits as OlcsTraits;
 
 /**
  * Abstract Controller
@@ -21,11 +25,28 @@ use Laminas\Mvc\Controller\AbstractActionController as LaminasAbstractActionCont
  */
 class AbstractController extends LaminasAbstractActionController
 {
-    use CommonTraits\ViewHelperManagerAware,
-        OlcsTraits\ListDataTrait,
-        GenericRenderView,
-        GenericMethods,
-        FlashMessengerTrait;
+    use CommonTraits\ViewHelperManagerAware;
+    use OlcsTraits\ListDataTrait;
+    use GenericRenderView;
+    use GenericMethods;
+    use FlashMessengerTrait;
+
+    protected ScriptFactory $scriptFactory;
+    protected FormHelperService $formHelper;
+    protected TableFactory $tableFactory;
+    protected HelperPluginManager $viewHelperManager;
+
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        TableFactory $tableFactory,
+        HelperPluginManager $viewHelperManager
+    ) {
+        $this->scriptFactory = $scriptFactory;
+        $this->formHelper = $formHelper;
+        $this->tableFactory = $tableFactory;
+        $this->viewHelperManager = $viewHelperManager;
+    }
 
     /**
      * Gets a variable from the route
@@ -83,6 +104,6 @@ class AbstractController extends LaminasAbstractActionController
      */
     public function setTableFilters($filters)
     {
-        $this->getViewHelperManager()->get('placeholder')->getContainer('tableFilters')->set($filters);
+        $this->viewHelperManager->get('placeholder')->getContainer('tableFilters')->set($filters);
     }
 }

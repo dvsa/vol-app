@@ -10,14 +10,19 @@
 namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractController;
+use Common\Data\Mapper\Lva\Interim as Mapper;
+use Common\RefData;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableBuilder;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\Application\GrantInterim;
 use Dvsa\Olcs\Transfer\Command\Application\PrintInterimDocument;
 use Dvsa\Olcs\Transfer\Command\Application\RefuseInterim;
 use Dvsa\Olcs\Transfer\Query\Application\Interim;
-use Laminas\View\Model\ViewModel;
-use Common\Data\Mapper\Lva\Interim as Mapper;
-use Common\RefData;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Abstract Interim Controller
@@ -27,11 +32,40 @@ use Common\RefData;
  */
 abstract class AbstractInterimController extends AbstractController
 {
-    const ACTION_GRANTED = 'granted';
-    const ACTION_IN_FORCE = 'in_force';
-    const ACTION_FEE_REQUEST = 'fee_request';
+    protected const ACTION_GRANTED = 'granted';
+    protected const ACTION_IN_FORCE = 'in_force';
+    protected const ACTION_FEE_REQUEST = 'fee_request';
 
     protected $updateInterimCommand;
+
+    protected FlashMessengerHelperService $flashMessengerHelper;
+    protected FormHelperService $formHelper;
+    protected ScriptFactory $scriptFactory;
+    protected TableFactory $tableFactory;
+
+    /**
+     * @param NiTextTranslation           $niTextTranslationUtil
+     * @param AuthorizationService        $authService
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param FormHelperService           $formHelper
+     * @param ScriptFactory               $scriptFactory
+     * @param TableFactory                $tableFactory
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FlashMessengerHelperService $flashMessengerHelper,
+        FormHelperService $formHelper,
+        ScriptFactory $scriptFactory,
+        TableFactory $tableFactory
+    ) {
+        $this->flashMessengerHelper = $flashMessengerHelper;
+        $this->formHelper = $formHelper;
+        $this->scriptFactory = $scriptFactory;
+        $this->tableFactory = $tableFactory;
+
+        parent::__construct($niTextTranslationUtil, $authService);
+    }
 
     /**
      * Index Action
@@ -75,11 +109,11 @@ abstract class AbstractInterimController extends AbstractController
                 return $this->postSaveRedirect();
             }
 
-            $fm = $this->getServiceLocator()->get('Helper\FlashMessenger');
+            $fm = $this->flashMessengerHelper;
             Mapper::mapFormErrors($form, $response->getResult()['messages'], $fm);
         }
 
-        $this->getServiceLocator()->get('Script')->loadFiles(['forms/interim']);
+        $this->scriptFactory->loadFiles(['forms/interim']);
 
         return $this->render('interim', $form);
     }
@@ -96,7 +130,7 @@ abstract class AbstractInterimController extends AbstractController
         if (isset($result['messages'])) {
             foreach ($result['messages'] as $message) {
                 if (is_array($message) && array_key_exists(RefData::ERROR_FEE_NOT_CREATED, $message)) {
-                    $fm = $this->getServiceLocator()->get('Helper\FlashMessenger');
+                    $fm = $this->flashMessengerHelper;
                     $fm->addWarningMessage($message[RefData::ERROR_FEE_NOT_CREATED]);
                     break;
                 }
@@ -116,7 +150,7 @@ abstract class AbstractInterimController extends AbstractController
         }
 
         $request = $this->getRequest();
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
         $form = $formHelper->createFormWithRequest('GenericConfirmation', $request);
 
         // override default label on confirm action button
@@ -125,7 +159,7 @@ abstract class AbstractInterimController extends AbstractController
         if ($request->isPost()) {
             $response = $this->handleCommand(GrantInterim::create(['id' => $this->getIdentifier()]));
 
-            $fm = $this->getServiceLocator()->get('Helper\FlashMessenger');
+            $fm = $this->flashMessengerHelper;
 
             if ($response->isOk()) {
                 $messageMap = [
@@ -159,7 +193,7 @@ abstract class AbstractInterimController extends AbstractController
         }
 
         $request = $this->getRequest();
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
         $form = $formHelper->createFormWithRequest('GenericConfirmation', $request);
 
         // override default label on confirm action button
@@ -168,7 +202,7 @@ abstract class AbstractInterimController extends AbstractController
         if ($request->isPost()) {
             $response = $this->handleCommand(RefuseInterim::create(['id' => $this->getIdentifier()]));
 
-            $fm = $this->getServiceLocator()->get('Helper\FlashMessenger');
+            $fm = $this->flashMessengerHelper;
 
             if ($response->isOk()) {
                 $fm->addSuccessMessage('internal.interim.form.interim_refused');
@@ -192,7 +226,7 @@ abstract class AbstractInterimController extends AbstractController
      */
     protected function getTable($tableName, $data)
     {
-        return $this->getServiceLocator()->get('Table')->prepareTable($tableName, $data);
+        return $this->tableFactory->prepareTable($tableName, $data);
     }
 
     /**
@@ -204,7 +238,7 @@ abstract class AbstractInterimController extends AbstractController
      */
     protected function getInterimForm($interimData)
     {
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
         $form = $formHelper->createForm('Interim');
 
         $formHelper->populateFormTable(
@@ -238,13 +272,13 @@ abstract class AbstractInterimController extends AbstractController
      * Alter form
      *
      * @param \Laminas\Form\Form $form        form
-     * @param array           $application application
+     * @param array              $application application
      *
      * @return \Laminas\Form\Form
      */
     protected function alterInterimForm($form, $application)
     {
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
 
         if (!$application['isInterimRequested']) {
             $formHelper->remove($form, 'form-actions->grant');
@@ -366,7 +400,7 @@ abstract class AbstractInterimController extends AbstractController
             return $this->redirect()->toRoute(null, ['action' => 'refuse'], [], true);
         }
 
-        $this->getServiceLocator()->get('Helper\FlashMessenger')
+        $this->flashMessengerHelper
             ->addSuccessMessage('internal.interim.interim_details_saved');
 
         return $this->redirectToOverview();
@@ -379,7 +413,7 @@ abstract class AbstractInterimController extends AbstractController
      */
     protected function printInterim()
     {
-        $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
+        $flashMessenger = $this->flashMessengerHelper;
 
         $response = $this->handleCommand(PrintInterimDocument::create(['id' => $this->params('application')]));
 

@@ -1,29 +1,17 @@
 <?php
 
-/**
- * Hearing & Appeal Controller
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
- */
 namespace Olcs\Controller\Cases\Hearing;
 
 use Dvsa\Olcs\Transfer\Command\Cases\Hearing\CreateAppeal as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Cases\Hearing\UpdateAppeal as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Hearing\Appeal as AppealDto;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Olcs\Form\Model\Form\Appeal as FormClass;
 use Olcs\Data\Mapper\Appeal as Mapper;
-use Laminas\View\Model\ViewModel;
+use Olcs\Form\Model\Form\Appeal as FormClass;
 
-/**
- * Hearing Appeal Controller
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
- */
 class AppealController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
     /**

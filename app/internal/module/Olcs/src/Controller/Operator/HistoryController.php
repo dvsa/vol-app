@@ -1,18 +1,12 @@
 <?php
 
-/**
- * History Controller
- */
 namespace Olcs\Controller\Operator;
 
 use Dvsa\Olcs\Transfer\Query\EventHistory\EventHistory as ItemDto;
-use Olcs\Form\Model\Form\EventHistory as EventHistorytForm;
-use Olcs\Data\Mapper\EventHistory as Mapper;
 use Laminas\View\Model\ViewModel;
+use Olcs\Data\Mapper\EventHistory as Mapper;
+use Olcs\Form\Model\Form\EventHistory as EventHistorytForm;
 
-/**
- * History Controller
- */
 class HistoryController extends OperatorController
 {
     /**
@@ -40,7 +34,7 @@ class HistoryController extends OperatorController
         $response = $this->getListData();
 
         if ($response->isClientError() || $response->isServerError()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            $this->flashMessengerHelper->addErrorMessage('unknown-error');
             return $this->renderView($view);
         }
 
@@ -51,7 +45,7 @@ class HistoryController extends OperatorController
 
             $data = $response->getResult();
 
-            $table = $this->getServiceLocator()->get('Table')->buildTable($tableName, $data, $params, false);
+            $table = $this->tableFactory->buildTable($tableName, $data, $params, false);
             $table->removeColumn('appId');
 
             $view->{'table'} = $table;
@@ -62,8 +56,6 @@ class HistoryController extends OperatorController
 
     /**
      * get method list data
-     *
-     * @return Response
      */
     public function getListData()
     {
@@ -72,10 +64,9 @@ class HistoryController extends OperatorController
         $dto = new \Dvsa\Olcs\Transfer\Query\Processing\History();
         $dto->exchangeArray($params);
 
-        $query = $this->getServiceLocator()->get('TransferAnnotationBuilder')
-            ->createQuery($dto);
+        $query = $this->transferAnnotationBuilder->createQuery($dto);
 
-        return $this->getServiceLocator()->get('QueryService')->send($query);
+        return $this->queryService->send($query);
     }
 
     /**
@@ -141,7 +132,7 @@ class HistoryController extends OperatorController
         $response = $this->handleQuery(ItemDto::create(['id' => $this->params('id')]));
 
         if (!$response->isOk()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('Unknown error');
+            $this->flashMessengerHelper->addErrorMessage('Unknown error');
             return $this->redirect()->toRouteAjax('operator/processing/history', ['action' => 'index'], [], true);
         }
         $form = $this->getEventHistoryDetailsForm(Mapper::mapFromResult($response->getResult()));
@@ -158,7 +149,7 @@ class HistoryController extends OperatorController
      */
     protected function getEventHistoryDetailsForm($data)
     {
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
         $form = $formHelper->createForm(EventHistorytForm::class);
         $form->setData($data);
 
@@ -179,13 +170,10 @@ class HistoryController extends OperatorController
      * Get event details table
      *
      * @param array $details details
-     *
-     * @return Table
      */
     protected function getDetailsTable($details)
     {
-        return $this->getServiceLocator()
-            ->get('Table')
+        return $this->tableFactory
             ->prepareTable('event-history-details', $details);
     }
 }

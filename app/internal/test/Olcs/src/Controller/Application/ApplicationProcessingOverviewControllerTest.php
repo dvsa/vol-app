@@ -2,6 +2,16 @@
 
 namespace OlcsTest\Controller\Application\Processing;
 
+use Common\Service\Data\PluginManager as DataServiceManager;
+use Common\Service\Helper\ComplaintsHelperService;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\OppositionHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
+use Dvsa\Olcs\Api\Domain\Repository\DataService;
+use Laminas\Mvc\Router\Http\TreeRouteStack;
+use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Application\Processing\ApplicationProcessingOverviewController;
 use Laminas\Mvc\Controller\Plugin\FlashMessenger;
 use Laminas\Mvc\Controller\Plugin\PluginInterface;
@@ -13,13 +23,11 @@ use Laminas\View\Model\ViewModel;
 use OlcsTest\Bootstrap;
 use Laminas\Http\Response;
 use Laminas\Mvc\MvcEvent;
+use Common\Service\Data\Application as ApplicationData;
+use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * Class ApplicationProcessingOverviewControllerTest
- * @package OlcsTest\Controller\Application\Processing
- * @covers Olcs\Controller\Application\Processing\ApplicationProcessingOverviewController
- */
-class ApplicationProcessingOverviewControllerTest extends \PHPUnit\Framework\TestCase
+class ApplicationProcessingOverviewControllerTest extends MockeryTestCase
 {
     public function testIndexActionRedirects()
     {
@@ -36,11 +44,33 @@ class ApplicationProcessingOverviewControllerTest extends \PHPUnit\Framework\Tes
 
     private function getController($action)
     {
-        $controller = new ApplicationProcessingOverviewController();
+        $mockScriptFactory = m::mock(ScriptFactory::class);
+        $mockFormHelper = m::mock(FormHelperService::class);
+        $mockTableFactory = m::mock(TableFactory::class);
+        $mockViewHelperManager = m::mock(HelperPluginManager::class);
+        $mockDataServiceManager = m::mock(DataServiceManager::class);
+        $mockOppositionHelper = m::mock(OppositionHelperService::class);
+        $mockComplaintsHelper = m::mock(ComplaintsHelperService::class);
+        $mockFlashMessengerHelper = m::mock(FlashMessengerHelperService::class);
+        $mockRouter = m::mock(TreeRouteStack::class);
+
+        $controller = new ApplicationProcessingOverviewController(
+            $mockScriptFactory,
+            $mockFormHelper,
+            $mockTableFactory,
+            $mockViewHelperManager,
+            $mockDataServiceManager,
+            $mockOppositionHelper,
+            $mockComplaintsHelper,
+            $mockFlashMessengerHelper,
+            $mockRouter
+        );
 
         $serviceManager = Bootstrap::getServiceManager();
 
-        /** @var \Laminas\Mvc\Router\Http\TreeRouteStack $router */
+        /**
+        * @var \Laminas\Mvc\Router\Http\TreeRouteStack $router
+        */
         $router = $serviceManager->get('HttpRouter');
         $routeMatch = new RouteMatch(
             [

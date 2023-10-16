@@ -5,12 +5,25 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace Olcs\Controller\Lva;
 
 use Common\Controller\Lva\AbstractGoodsVehiclesController;
+use Common\Data\Mapper\Lva\GoodsVehiclesVehicle;
+use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\GuidanceHelperService;
+use Common\Service\Helper\ResponseHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Lva\VariationLvaService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\Application\CreateVehicleListDocument as ApplicationCreateDocument;
 use Dvsa\Olcs\Transfer\Command\Licence\CreateVehicleListDocument as LicenceCreateDocument;
 use Dvsa\Olcs\Transfer\Query;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Abstract Generic Vehicles Goods Controller
@@ -31,6 +44,53 @@ abstract class AbstractGenericVehiclesController extends AbstractGoodsVehiclesCo
         'application' => Query\Application\GoodsVehiclesExport::class,
     ];
 
+    protected ResponseHelperService $responseHelper;
+
+    /**
+     * @param NiTextTranslation           $niTextTranslationUtil
+     * @param AuthorizationService        $authService
+     * @param FormHelperService           $formHelper
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param FormServiceManager          $formServiceManager
+     * @param TableFactory                $tableFactory
+     * @param GuidanceHelperService       $guidanceHelper
+     * @param TranslationHelperService    $translationHelper
+     * @param ScriptFactory               $scriptFactory
+     * @param VariationLvaService         $variationLvaService
+     * @param GoodsVehiclesVehicle        $goodsVehiclesVehicleMapper
+     * @param ResponseHelperService       $responseHelper
+     */
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessengerHelper,
+        FormServiceManager $formServiceManager,
+        TableFactory $tableFactory,
+        GuidanceHelperService $guidanceHelper,
+        TranslationHelperService $translationHelper,
+        ScriptFactory $scriptFactory,
+        VariationLvaService $variationLvaService,
+        GoodsVehiclesVehicle $goodsVehiclesVehicleMapper,
+        ResponseHelperService $responseHelper
+    ) {
+        $this->responseHelper = $responseHelper;
+
+        parent::__construct(
+            $niTextTranslationUtil,
+            $authService,
+            $formHelper,
+            $flashMessengerHelper,
+            $formServiceManager,
+            $tableFactory,
+            $guidanceHelper,
+            $translationHelper,
+            $scriptFactory,
+            $variationLvaService,
+            $goodsVehiclesVehicleMapper
+        );
+    }
+
     /**
      * Print vehicles action
      *
@@ -41,7 +101,7 @@ abstract class AbstractGenericVehiclesController extends AbstractGoodsVehiclesCo
         $dtoClass = $this->docGenerationMap[$this->lva];
         $response = $this->handleCommand($dtoClass::create(['id' => $this->getIdentifier()]));
 
-        $fm = $this->getServiceLocator()->get('Helper\FlashMessenger');
+        $fm = $this->flashMessengerHelper;
 
         if ($response->isOk()) {
             $fm->addSuccessMessage('vehicle-list-printed');
@@ -59,7 +119,9 @@ abstract class AbstractGenericVehiclesController extends AbstractGoodsVehiclesCo
      */
     public function exportAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /**
+ * @var \Laminas\Http\Request $request
+*/
         $request = $this->getRequest();
 
         $query = $request->getPost('query');
@@ -69,8 +131,7 @@ abstract class AbstractGenericVehiclesController extends AbstractGoodsVehiclesCo
         );
         $request->getPost()->set('query', $query);
 
-        return $this->getServiceLocator()
-            ->get('Helper\Response')
+        return $this->responseHelper
             ->tableToCsv(
                 $this->getResponse(),
                 $this->getTable($this->getExportData(), $this->getFilters()),

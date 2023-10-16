@@ -3,13 +3,10 @@
 namespace Admin\Controller;
 
 use Dvsa\Olcs\Transfer\Query\DataRetention\RuleList as ListDto;
-use Olcs\Controller\Interfaces\LeftViewProvider;
-use Olcs\Controller\AbstractInternalController;
 use Laminas\View\Model\ViewModel;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 
-/**
- * Data retention review controller
- */
 class DataRetentionReviewController extends AbstractInternalController implements LeftViewProvider
 {
     /**

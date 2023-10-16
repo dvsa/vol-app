@@ -1,23 +1,13 @@
 <?php
 
-/**
- * Unlicensed Cases Operator Controller
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 namespace Olcs\Controller\Operator\Cases;
 
-use Dvsa\Olcs\Transfer\Query\Organisation\UnlicensedCases as OrganisationWithCases;
-use Olcs\Controller\Operator\OperatorController;
-use Laminas\View\Model\ViewModel;
 use Common\Controller\Traits\CheckForCrudAction;
+use Dvsa\Olcs\Transfer\Query\Organisation\UnlicensedCases as OrganisationWithCases;
 use Laminas\Http\Response;
+use Laminas\View\Model\ViewModel;
+use Olcs\Controller\Operator\OperatorController;
 
-/**
- * Unlicensed Cases Operator Controller
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
 class UnlicensedCasesOperatorController extends OperatorController
 {
     use CheckForCrudAction;

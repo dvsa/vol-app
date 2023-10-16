@@ -1,25 +1,18 @@
 <?php
 
-/**
- * Rule Admin Controller
- */
 namespace Admin\Controller\DataRetention;
 
-use Dvsa\Olcs\Transfer\Query\DataRetention\RuleAdmin as ListDto;
-use Olcs\Controller\Interfaces\LeftViewProvider;
-use Olcs\Controller\AbstractInternalController;
-use Dvsa\Olcs\Transfer\Command\DataRetention\UpdateRule as UpdateDto;
-use Olcs\Data\Mapper\DataRetentionRule as Mapper;
-use Laminas\View\Model\ViewModel;
 use Admin\Form\Model\Form\DataRetentionAdmin as FormClass;
+use Dvsa\Olcs\Transfer\Command\DataRetention\UpdateRule as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\DataRetention\GetRule as ItemDto;
+use Dvsa\Olcs\Transfer\Query\DataRetention\RuleAdmin as ListDto;
+use Laminas\View\Model\ViewModel;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Data\Mapper\DataRetentionRule as Mapper;
 
-/**
- * Rule admin controller
- */
 class RuleAdminController extends AbstractInternalController implements LeftViewProvider
 {
-
     /**
      * Holds the navigation ID,
      * required when an entire controller is

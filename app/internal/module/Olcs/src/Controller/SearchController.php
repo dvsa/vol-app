@@ -3,18 +3,20 @@
 namespace Olcs\Controller;
 
 use Common\RefData;
-use Olcs\Controller\Interfaces\LeftViewProvider;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
 use Laminas\Session\Container;
+use Laminas\View\Helper\Placeholder;
+use Laminas\View\HelperPluginManager;
 use Laminas\View\Model\ViewModel;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use ZfcRbac\Exception\UnauthorizedException;
 use ZfcRbac\Service\RoleService;
 
 /**
  * Main search controller
- *
- * @author Mike Cooper <michael.cooper@valtech.co.uk>
- * @author Rob Caiger <rob@clocal.co.uk>
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  *
  * @method \Common\Controller\Plugin\ElasticSearch elasticSearch()
  */
@@ -24,7 +26,40 @@ class SearchController extends AbstractController implements LeftViewProvider
 
     protected $navigationId = 'mainsearch';
 
-    const CONTAINER = 'searchForm';
+    public const CONTAINER = 'searchForm';
+
+    protected FlashMessengerHelperService $flashMessengerHelper;
+    protected $navigation;
+    protected RoleService $roleService;
+    protected Placeholder $placeholder;
+
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        TableFactory $tableFactory,
+        HelperPluginManager $viewHelperManager,
+        FlashMessengerHelperService $flashMessengerHelper,
+        $navigation,
+        RoleService $roleService,
+        Placeholder $placeholder
+    ) {
+        parent::__construct($scriptFactory, $formHelper, $tableFactory, $viewHelperManager);
+        $this->flashMessengerHelper = $flashMessengerHelper;
+        $this->navigation = $navigation;
+        $this->roleService = $roleService;
+        $this->placeholder = $placeholder;
+    }
+
+    /**
+     * utility method to get placeholder dependency in controller plugins
+     *
+     * @return Placeholder
+     */
+    public function getPlaceholder(): Placeholder
+    {
+        return $this->placeholder;
+    }
+
     /**
      * At first glance this seems a little unnecessary, but we need to intercept the post
      * and turn it into a get. This way the search URL contains the search params.
@@ -99,7 +134,9 @@ class SearchController extends AbstractController implements LeftViewProvider
             return $this->handleCrudAction($this->params()->fromPost());
         }
 
-        /** @var \Common\Controller\Plugin\ElasticSearch $elasticSearch */
+        /**
+ * @var \Common\Controller\Plugin\ElasticSearch $elasticSearch
+*/
         $elasticSearch = $this->ElasticSearch();
 
         $searchIndex = $elasticSearch->getSearchData()['index'];
@@ -134,8 +171,9 @@ class SearchController extends AbstractController implements LeftViewProvider
             if ($this->currentUser()->getUserData()['dataAccess']['isIrfo']) {
                 $excludeNavIds = [];
             }
-            if (!$this->currentUser()->getUserData()['dataAccess']['canAccessAll'] &&
-                $this->currentUser()->getUserData()['dataAccess']['canAccessNi']
+            if (
+                !$this->currentUser()->getUserData()['dataAccess']['canAccessAll']
+                && $this->currentUser()->getUserData()['dataAccess']['canAccessNi']
             ) {
                 $excludeNavIds = ['search-psv_disc', 'search-bus_reg', ...$excludeNavIds];
             }
@@ -153,7 +191,9 @@ class SearchController extends AbstractController implements LeftViewProvider
      */
     public function resetAction()
     {
-        /** @var \Common\Controller\Plugin\ElasticSearch $elasticSearch */
+        /**
+ * @var \Common\Controller\Plugin\ElasticSearch $elasticSearch
+*/
         $elasticSearch = $this->ElasticSearch();
 
         $sd = $elasticSearch->getSearchData();
@@ -196,15 +236,15 @@ class SearchController extends AbstractController implements LeftViewProvider
                 )
             );
             if ($response->isOk()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')
+                $this->flashMessengerHelper
                     ->addSuccessMessage('form.vehicle.removeSection26.success');
             } else {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+                $this->flashMessengerHelper->addErrorMessage('unknown-error');
             }
             return $this->redirect()->toRouteAjax('search', array('index' => 'vehicle', 'action' => 'search'));
         }
 
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
         $form = $formHelper->createFormWithRequest('GenericConfirmation', $this->getRequest());
         $form->get('messages')->get('message')->setValue('form.vehicle.removeSection26.confirm');
 
@@ -229,15 +269,15 @@ class SearchController extends AbstractController implements LeftViewProvider
                 )
             );
             if ($response->isOk()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')
+                $this->flashMessengerHelper
                     ->addSuccessMessage('form.vehicle.setSection26.success');
             } else {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+                $this->flashMessengerHelper->addErrorMessage('unknown-error');
             }
             return $this->redirect()->toRouteAjax('search', array('index' => 'vehicle', 'action' => 'search'));
         }
 
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
         $form = $formHelper->createFormWithRequest('GenericConfirmation', $this->getRequest());
         $form->get('messages')->get('message')->setValue('form.vehicle.setSection26.confirm');
 
@@ -284,7 +324,7 @@ class SearchController extends AbstractController implements LeftViewProvider
      */
     public function setNavigationCurrentLocation()
     {
-        $navigation = $this->getServiceLocator()->get('Navigation');
+        $navigation = $this->navigation;
         if (!empty($this->navigationId)) {
             $navigation->findOneBy('id', $this->navigationId)->setActive();
         }
@@ -293,12 +333,12 @@ class SearchController extends AbstractController implements LeftViewProvider
     }
 
     /**
-     * @param string $searchIndex
+     * @param  string $searchIndex
      * @return bool
      */
     protected function canAccessSearchIndex(string $searchIndex): bool
     {
-        $roleService = $this->getServiceLocator()->get(RoleService::class);
+        $roleService = $this->roleService;
         if ($searchIndex === 'user' && $roleService->matchIdentityRoles([RefData::ROLE_INTERNAL_LIMITED_READ_ONLY])) {
             return false;
         }

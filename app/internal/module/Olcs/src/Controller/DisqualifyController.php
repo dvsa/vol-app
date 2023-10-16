@@ -2,16 +2,29 @@
 
 namespace Olcs\Controller;
 
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\Disqualification\Delete;
+use Laminas\View\HelperPluginManager;
 use Laminas\View\Model\ViewModel;
 
-/**
- * DisqualifyController
- *
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
 class DisqualifyController extends AbstractController
 {
+    protected FlashMessengerHelperService $flashMessengerHelper;
+
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        TableFactory $tableFactory,
+        HelperPluginManager $viewHelperManager,
+        FlashMessengerHelperService $flashMessengerHelper
+    ) {
+        parent::__construct($scriptFactory, $formHelper, $tableFactory, $viewHelperManager);
+        $this->flashMessengerHelper = $flashMessengerHelper;
+    }
+
     /**
      * index action
      *
@@ -37,7 +50,7 @@ class DisqualifyController extends AbstractController
             $data = (array)$request->getPost();
         }
 
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
         /* @var $form \Common\Form\Form */
         $form = $formHelper->createForm('Disqualify');
         $form->setData($data);
@@ -142,11 +155,11 @@ class DisqualifyController extends AbstractController
 
         $response = $this->handleCommand($command);
         if ($response->isOk()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')
+            $this->flashMessengerHelper
                 ->addSuccessMessage('The disqualification details have been changed');
             return true;
         } else {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+            $this->flashMessengerHelper->addErrorMessage('unknown-error');
             return false;
         }
     }

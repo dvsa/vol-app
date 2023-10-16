@@ -5,24 +5,19 @@ namespace Olcs\Controller\Cases\Opposition;
 use Dvsa\Olcs\Transfer\Command\Opposition\CreateOpposition as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Opposition\DeleteOpposition as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\Opposition\UpdateOpposition as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\Cases\CasesWithOppositionDates as CasesWithOppositionDatesDto;
+use Dvsa\Olcs\Transfer\Query\EnvironmentalComplaint\EnvironmentalComplaintList as EnvComplaintListDto;
 use Dvsa\Olcs\Transfer\Query\Opposition\Opposition as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Opposition\OppositionList as OppositionListDto;
-use Dvsa\Olcs\Transfer\Query\EnvironmentalComplaint\EnvironmentalComplaintList as EnvComplaintListDto;
-use Dvsa\Olcs\Transfer\Query\Cases\CasesWithOppositionDates as CasesWithOppositionDatesDto;
+use Laminas\View\Model\ConsoleModel;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Data\Mapper\Opposition as Mapper;
 use Olcs\Form\Model\Form\Opposition as Form;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericList;
-use Laminas\View\Model\ConsoleModel;
-use Laminas\View\Model\ViewModel;
 
-/**
- * Case Opposition Controller
- *
- * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
- */
 class OppositionController extends AbstractInternalController implements CaseControllerInterface
 {
     /**
@@ -135,7 +130,7 @@ class OppositionController extends AbstractInternalController implements CaseCon
     /**
      * Setup Environment Complaints table
      *
-     *@return void
+     * @return void
      */
     private function setupEnvironmentComplaintsTable()
     {
@@ -232,7 +227,8 @@ class OppositionController extends AbstractInternalController implements CaseCon
                 ->setLabel('Out of objection ' . $oooString);
         }
 
-        if (!empty($caseWithOppositionDates['licence']['goodsOrPsv']['id'])
+        if (
+            !empty($caseWithOppositionDates['licence']['goodsOrPsv']['id'])
             && ($caseWithOppositionDates['licence']['goodsOrPsv']['id'] == 'lcat_psv')
         ) {
             // modify opposition type options

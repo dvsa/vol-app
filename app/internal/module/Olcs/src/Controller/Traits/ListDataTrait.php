@@ -2,7 +2,7 @@
 
 namespace Olcs\Controller\Traits;
 
-use \Dvsa\Olcs\Transfer\Query as TranferQry;
+use Dvsa\Olcs\Transfer\Query as TranferQry;
 
 /**
  * Class ListDataTrait

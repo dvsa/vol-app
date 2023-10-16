@@ -1,42 +1,59 @@
 <?php
 
-/**
- * LicenceGracePeriodsController.php
- */
 namespace Olcs\Controller\Licence;
 
+use Common\Controller\Lva\AbstractController;
+use Common\Controller\Lva\Traits\CrudTableTrait;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
+use Dvsa\Olcs\Transfer\Command\GracePeriod\CreateGracePeriod;
+use Dvsa\Olcs\Transfer\Command\GracePeriod\DeleteGracePeriod;
+use Dvsa\Olcs\Transfer\Command\GracePeriod\UpdateGracePeriod;
 use Dvsa\Olcs\Transfer\Query\GracePeriod\GracePeriod;
+use Dvsa\Olcs\Transfer\Query\GracePeriod\GracePeriods;
+use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use Laminas\Form\FormInterface;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
+use ZfcRbac\Service\AuthorizationService;
 
-use Common\Controller\Lva\Traits\CrudTableTrait;
-use Common\Controller\Lva\AbstractController;
-
-use Dvsa\Olcs\Transfer\Query\GracePeriod\GracePeriods;
-use Dvsa\Olcs\Transfer\Command\GracePeriod\CreateGracePeriod;
-use Dvsa\Olcs\Transfer\Command\GracePeriod\UpdateGracePeriod;
-use Dvsa\Olcs\Transfer\Command\GracePeriod\DeleteGracePeriod;
-
-use Laminas\Form\FormInterface;
-
-/**
- * Class LicenceGracePeriodController
- *
- * Controller for managing licence grace periods, provides basic crud functionality.
- *
- * @package Olcs\Controller\Licence
- *
- * @author Josh Curtis <josh.curtis@valtech.co.uk>
- */
 class LicenceGracePeriodsController extends AbstractController implements LicenceControllerInterface
 {
-    use LicenceControllerTrait,
-        CrudTableTrait;
+    use LicenceControllerTrait;
+    use CrudTableTrait;
 
     protected $lva = 'licence';
-    protected $location = 'internal';
+    protected string $location = 'internal';
 
     protected $section = 'grace-periods';
+
+    protected FlashMessengerHelperService $flashMessengerHelper;
+    protected TableFactory $tableFactory;
+    protected FormHelperService $formHelper;
+    protected ScriptFactory $scriptFactory;
+    protected $navigation;
+
+    public function __construct(
+        NiTextTranslation $niTextTranslationUtil,
+        AuthorizationService $authService,
+        FlashMessengerHelperService $flashMessengerHelper,
+        TableFactory $tableFactory,
+        FormHelperService $formHelper,
+        ScriptFactory $scriptFactory,
+        $navigation
+    ) {
+        parent::__construct(
+            $niTextTranslationUtil,
+            $authService
+        );
+        $this->flashMessengerHelper = $flashMessengerHelper;
+        $this->tableFactory = $tableFactory;
+        $this->formHelper = $formHelper;
+        $this->scriptFactory = $scriptFactory;
+        $this->navigation = $navigation;
+    }
 
     /**
      * List the grace periods for this licence.
@@ -64,7 +81,7 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
 
         if (!$response->isOk()) {
             if ($response->isClientError() || $response->isServerError()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+                $this->flashMessengerHelper->addErrorMessage('unknown-error');
             }
 
             return $this->notFoundAction();
@@ -74,7 +91,7 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
 
         $form = $this->getForm($result);
 
-        $this->getServiceLocator()->get('Script')->loadFile('table-actions');
+        $this->scriptFactory->loadFile('table-actions');
 
         return $this->render(
             'grace-period',
@@ -91,7 +108,7 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
     {
         $request = $this->getRequest();
 
-        $form = $this->getServiceLocator()->get('Helper\Form')
+        $form = $this->formHelper
             ->createFormWithRequest(
                 'GracePeriod',
                 $request
@@ -110,7 +127,7 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
 
                 if (!$response->isOk()) {
                     if ($response->isClientError() || $response->isServerError()) {
-                        $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+                        $this->flashMessengerHelper->addErrorMessage('unknown-error');
                     }
 
                     $this->flashMessenger()->addErrorMessage('licence.grace-period.saved.failure');
@@ -143,7 +160,7 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
 
         if (!$response->isOk()) {
             if ($response->isClientError() || $response->isServerError()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+                $this->flashMessengerHelper->addErrorMessage('unknown-error');
             }
 
             return $this->notFoundAction();
@@ -151,7 +168,7 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
 
         $gracePeriod = $response->getResult();
 
-        $form = $this->getServiceLocator()->get('Helper\Form')
+        $form = $this->formHelper
             ->createFormWithRequest(
                 'GracePeriod',
                 $request
@@ -170,7 +187,7 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
 
                 if (!$response->isOk()) {
                     if ($response->isClientError() || $response->isServerError()) {
-                        $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+                        $this->flashMessengerHelper->addErrorMessage('unknown-error');
                     }
 
                     $this->flashMessenger()->addErrorMessage('licence.grace-period.saved.failure');
@@ -182,7 +199,7 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
             }
         }
 
-        $this->getServiceLocator()->get('Helper/Form')->remove($form, 'form-actions->addAnother');
+        $this->formHelper->remove($form, 'form-actions->addAnother');
         $form->setData(
             array(
                 'details' => $gracePeriod
@@ -226,8 +243,7 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
      */
     protected function getForm(array $gracePeriods)
     {
-        $form = $this->getServiceLocator()
-            ->get('Helper\Form')
+        $form = $this->formHelper
             ->createFormWithRequest(
                 'GracePeriods',
                 $this->getRequest()
@@ -248,8 +264,7 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
      */
     protected function alterForm(FormInterface $form, array $gracePeriods)
     {
-        $this->getServiceLocator()
-            ->get('Helper\Form')
+        $this->formHelper
             ->removeFieldList(
                 $form,
                 'form-actions',
@@ -274,8 +289,7 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
      */
     protected function getTable(array $gracePeriods)
     {
-        return $this->getServiceLocator()
-            ->get('Table')
+        return $this->tableFactory
             ->prepareTable('licence.grace-periods', $this->getTableData($gracePeriods));
     }
 

@@ -1,11 +1,8 @@
 <?php
 
 use Olcs\Controller\Cases;
+use Olcs\Controller\Cases as CaseeControllers;
 
-/**
- * @internal as we work on each controller, replace string with controller class
- * Routes for the licence section and case route.
- */
 return [
     'case' => [
         'type' => 'segment',
@@ -134,7 +131,7 @@ return [
                 'case' => '[0-9]+',
             ],
             'defaults' => [
-                'controller' => 'CaseAnnualTestHistoryController',
+                'controller' => Olcs\Controller\Cases\AnnualTestHistory\AnnualTestHistoryController::class,
                 'action' => 'edit'
             ]
         ]
@@ -148,7 +145,7 @@ return [
                 'prohibition' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => 'CaseProhibitionController',
+                'controller' => Olcs\Controller\Cases\Prohibition\ProhibitionController::class,
                 'action' => 'index'
             ]
         ],
@@ -163,7 +160,7 @@ return [
                 'prohibition' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => 'CaseProhibitionDefectController',
+                'controller' =>  Olcs\Controller\Cases\Prohibition\ProhibitionDefectController::class,
                 'action' => 'index'
             ]
         ]
@@ -192,7 +189,7 @@ return [
                 'id' => '[0-9]+',
             ],
             'defaults' => [
-                'controller' => 'CaseLegacyOffenceController',
+                'controller' => Olcs\Controller\Cases\Conviction\LegacyOffenceController::class,
                 'action' => 'index'
             ]
         ]
@@ -207,7 +204,7 @@ return [
                 'id' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => 'CaseSiController',
+                'controller' => Olcs\Controller\Cases\Penalty\SiController::class,
                 'action' => 'index'
             ]
         ]
@@ -223,7 +220,7 @@ return [
                 'action' => '(add|edit|delete)'
             ],
             'defaults' => [
-                'controller' => 'CasePenaltyController',
+                'controller' =>  Olcs\Controller\Cases\Penalty\PenaltyController::class,
                 'action' => 'index'
             ]
         ]
@@ -238,7 +235,7 @@ return [
                 'complaint' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => 'CaseComplaintController',
+                'controller' => Olcs\Controller\Cases\Complaint\ComplaintController::class,
                 'action' => 'index',
                 'isCompliance' => 1
             ]
@@ -254,7 +251,7 @@ return [
                 'complaint' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => 'CaseEnvironmentalComplaintController',
+                'controller' => Olcs\Controller\Cases\Complaint\EnvironmentalComplaintController::class,
                 'action' => 'index',
             ]
         ]
@@ -268,7 +265,7 @@ return [
                 'action' => '(add|edit|details)',
             ],
             'defaults' => [
-                'controller' => 'CaseNonPublicInquiryController',
+                'controller' => Olcs\Controller\Cases\NonPublicInquiry\NonPublicInquiryController::class,
                 'action' => 'details'
             ]
         ]
@@ -369,7 +366,7 @@ return [
                 'id' => '[0-9]+',
             ],
             'defaults' => [
-                'controller' => 'CaseSubmissionDecisionController',
+                'controller' => Olcs\Controller\Cases\Submission\DecisionController::class,
                 'action' => 'add'
             ]
         ]
@@ -443,7 +440,7 @@ return [
                 'case' => '[0-9]+',
             ],
             'defaults' => [
-                'controller' => 'CaseDecisionsController',
+                'controller' => Olcs\Controller\Cases\Processing\DecisionsController::class,
                 'action' => 'index'
             ]
         ]
@@ -456,7 +453,7 @@ return [
                 'case' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => 'CaseDecisionsController',
+                'controller' => Olcs\Controller\Cases\Processing\DecisionsController::class,
                 'action' => 'details'
             ],
         ],
@@ -471,7 +468,7 @@ return [
                         'id' => '[0-9]+'
                     ],
                     'defaults' => [
-                        'controller' => 'CaseDecisionsReputeNotLostController'
+                        'controller' => Olcs\Controller\Cases\Processing\DecisionsReputeNotLostController::class
                     ]
                 ],
             ],
@@ -484,7 +481,7 @@ return [
                         'id' => '[0-9]+'
                     ],
                     'defaults' => [
-                        'controller' => 'CaseDecisionsDeclareUnfitController'
+                        'controller' => Olcs\Controller\Cases\Processing\DecisionsDeclareUnfitController::class,
                     ]
                 ],
             ],
@@ -497,7 +494,7 @@ return [
                         'id' => '[0-9]+'
                     ],
                     'defaults' => [
-                        'controller' => 'CaseDecisionsNoFurtherActionController'
+                        'controller' => Olcs\Controller\Cases\Processing\DecisionsNoFurtherActionController::class
                     ]
                 ],
             ],
@@ -512,7 +509,7 @@ return [
                 'action' => 'edit'
             ],
             'defaults' => [
-                'controller' => \Olcs\Controller\Sla\RevocationsSlaController::class,
+                'controller' => Olcs\Controller\Sla\RevocationsSlaController::class,
             ]
         ]
     ],
@@ -525,7 +522,7 @@ return [
                 'action' => '(add|edit|details)'
             ],
             'defaults' => [
-                'controller' => 'CaseRevokeController',
+                'controller' => Olcs\Controller\Cases\Processing\RevokeController::class,
                 'action' => 'index'
             ]
         ]
@@ -536,7 +533,7 @@ return [
         'options' => [
             'route' => '/case/:case/processing/history[/:action[/:id]][/]',
             'defaults' => [
-                'controller' => 'CaseHistoryController',
+                'controller' => Olcs\Controller\Cases\Processing\HistoryController::class,
                 'action' => 'index'
             ]
         ]
@@ -546,7 +543,7 @@ return [
         'options' => [
             'route' => '/case/:case/processing/read-history[/]',
             'defaults' => [
-                'controller' => 'CaseReadHistoryController',
+                'controller' => Olcs\Controller\Cases\Processing\ReadHistoryController::class,
                 'action' => 'index'
             ]
         ]
@@ -559,7 +556,7 @@ return [
                 'action' => '(index|add|edit|details|overview)'
             ],
             'defaults' => [
-                'controller' => Cases\Processing\TaskController::class,
+                'controller' => CaseeControllers\Processing\TaskController::class,
                 'action' => 'index'
             ]
         ]
@@ -578,16 +575,6 @@ return [
             ]
         ],
     ],
-    //  #TODO REMOVE: can't find controller, looks like route not in use
-    'note' => [
-        'type' => 'segment',
-        'options' => [
-            'route' => '/licence/:licence[/case/:case][/:type/:typeId][/:section]/note[/:action][/:id][/]',
-            'defaults' => [
-                'controller' => 'SubmissionNoteController',
-            ]
-        ]
-    ],
     'case_conditions_undertakings' => [
         'type' => 'segment',
         'options' => [
@@ -598,7 +585,7 @@ return [
                 'id' => '[0-9]+',
             ],
             'defaults' => [
-                'controller' => 'CaseConditionUndertakingController',
+                'controller' => Olcs\Controller\Cases\ConditionUndertaking\ConditionUndertakingController::class,
                 'action' => 'index'
             ]
         ]
@@ -612,7 +599,7 @@ return [
                 'impounding' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => 'CaseImpoundingController',
+                'controller' => Olcs\Controller\Cases\Impounding\ImpoundingController::class,
                 'action' => 'index'
             ]
         ]
@@ -627,7 +614,7 @@ return [
                 'id' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => 'CaseRevokeController'
+                'controller' => Olcs\Controller\Cases\Processing\RevokeController::class
             ]
         ]
     ],
@@ -639,7 +626,7 @@ return [
                 'case' => '[0-9]+'
             ],
             'defaults' => [
-                'controller' => 'CaseDocsController',
+                'controller' => Olcs\Controller\Cases\Docs\CaseDocsController::class,
                 'action' => 'documents'
             ]
         ],
@@ -654,7 +641,7 @@ return [
                         'entityType' => '(document)',
                     ],
                     'defaults' => [
-                        'controller' => 'CaseDocumentSlaTargetDateController',
+                        'controller' => Olcs\Controller\Sla\CaseDocumentSlaTargetDateController::class,
                         'action' => 'addSla'
                     ]
                 ],
@@ -669,7 +656,7 @@ return [
                     ],
                     'defaults' => [
                         'type' => 'case',
-                        'controller' => 'CaseDocumentSlaTargetDateController',
+                        'controller' => Olcs\Controller\Sla\CaseDocumentSlaTargetDateController::class,
                         'action' => 'editSla'
                     ]
                 ],
@@ -713,7 +700,7 @@ return [
                     'route' => 'delete/:doc[/]',
                     'defaults' => [
                         'type' => 'case',
-                        'controller' => 'CaseDocsController',
+                        'controller' => Olcs\Controller\Cases\Docs\CaseDocsController::class,
                         'action' => 'delete-document'
                     ]
                 ],
@@ -779,7 +766,7 @@ return [
                             'route' => 'delete/:doc[/]',
                             'defaults' => [
                                 'type' => 'case',
-                                'controller' => 'CaseDocsController',
+                                'controller' => Olcs\Controller\Cases\Docs\CaseDocsController::class,
                                 'action' => 'delete-document'
                             ]
                         ],

@@ -4,14 +4,11 @@ namespace Olcs\Controller\Cases\Conviction;
 
 use Dvsa\Olcs\Transfer\Query\Cases\LegacyOffence;
 use Dvsa\Olcs\Transfer\Query\Cases\LegacyOffenceList;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Laminas\View\Model\ViewModel;
 
-/**
- * Class LegacyOffenceController
- */
 class LegacyOffenceController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
     /**

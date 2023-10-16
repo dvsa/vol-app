@@ -1,27 +1,21 @@
 <?php
 
-/**
- * Publication Controller
- */
-
 namespace Admin\Controller;
 
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableBuilder;
-use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount;
-use Olcs\Controller\AbstractInternalController;
-use Dvsa\Olcs\Transfer\Query\Publication\PendingList;
-use Dvsa\Olcs\Transfer\Command\Publication\Publish as PublishCmd;
 use Dvsa\Olcs\Transfer\Command\Publication\Generate as GenerateCmd;
-use Olcs\Controller\Interfaces\LeftViewProvider;
+use Dvsa\Olcs\Transfer\Command\Publication\Publish as PublishCmd;
+use Dvsa\Olcs\Transfer\Query\Publication\PendingList;
+use Laminas\Navigation\Navigation;
 use Laminas\View\Model\ViewModel;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Service\Helper\WebDavJsonWebTokenGenerationService;
 
-/**
- * Publication Controller
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
 class PublicationController extends AbstractInternalController implements LeftViewProvider
 {
     protected $navigationId = 'admin-dashboard/admin-publication';
@@ -34,10 +28,22 @@ class PublicationController extends AbstractInternalController implements LeftVi
         'publish' => ['requireRows' => true],
     ];
 
+    protected WebDavJsonWebTokenGenerationService $webDavJsonWebTokenGenerationService;
 
+    public function __construct(
+        TranslationHelperService $translationHelperService,
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessengerHelperService,
+        Navigation $navigation,
+        WebDavJsonWebTokenGenerationService $webDavJsonWebTokenGenerationService
+    ) {
+        $this->webDavJsonWebTokenGenerationService = $webDavJsonWebTokenGenerationService;
+
+        parent::__construct($translationHelperService, $formHelper, $flashMessengerHelperService, $navigation);
+    }
     /**
      * @param TableBuilder $table
-     * @param  array       $data
+     * @param array        $data
      *
      * @return TableBuilder
      */
@@ -49,12 +55,12 @@ class PublicationController extends AbstractInternalController implements LeftVi
     }
 
     /**
-     * @param $data
+     * @param  $data
      * @return array
      */
     protected function getPublicationLinkData($data)
     {
-        $webDavJsonWebTokenGenerationService = $this->getServiceLocator()->get(WebDavJsonWebTokenGenerationService::class);
+        $webDavJsonWebTokenGenerationService = $this->webDavJsonWebTokenGenerationService;
 
         foreach ($data['results'] as $result => $value) {
             if (isset($value['document'])) {

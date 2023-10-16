@@ -3,8 +3,8 @@
 namespace Olcs\Controller\Traits;
 
 use Common\RefData;
-use Olcs\Controller\Interfaces\LeftViewProvider;
 use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 
 /**
  * Application Controller Trait
@@ -15,8 +15,8 @@ trait ApplicationControllerTrait
 {
     /**
      * @param \Laminas\View\Model\ViewModel $view
-     * @param string|null  $title
-     * @param array $variables
+     * @param string|null                   $title
+     * @param array                         $variables
      *
      * @return mixed
      */
@@ -77,7 +77,7 @@ trait ApplicationControllerTrait
     /**
      * Gets the application by ID.
      *
-     * @param integer $id
+     * @param  integer $id
      * @return array
      */
     protected function getApplication($id = null)
@@ -94,7 +94,7 @@ trait ApplicationControllerTrait
     /**
      * Get view with application
      *
-     * @param array $variables
+     * @param  array $variables
      * @return \Laminas\View\Model\ViewModel
      */
     protected function getViewWithApplication($variables = array())
@@ -103,7 +103,7 @@ trait ApplicationControllerTrait
         $goodsOrPsv = $application['licence']['goodsOrPsv']['id'] ?? null;
 
         if ($goodsOrPsv === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
-            $this->getServiceLocator()->get('Navigation')->findOneBy('id', 'licence_bus')->setVisible(0);
+            $this->navigation->findOneBy('id', 'licence_bus')->setVisible(0);
         }
 
         $variables = array_merge(

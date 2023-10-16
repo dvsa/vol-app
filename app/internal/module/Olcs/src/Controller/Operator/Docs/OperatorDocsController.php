@@ -2,24 +2,63 @@
 
 namespace Olcs\Controller\Operator\Docs;
 
+use Common\Service\Cqrs\Command\CommandService;
+use Common\Service\Cqrs\Query\QueryService;
+use Common\Service\Helper\DateHelperService;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
+use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
+use Laminas\Navigation\Navigation;
+use Laminas\View\HelperPluginManager;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\Operator\OperatorController;
 use Olcs\Controller\Traits;
-use Laminas\View\Model\ViewModel;
+use Olcs\Service\Data\DocumentSubCategory;
+use Olcs\Service\Data\Licence;
 
-/**
- * Operator Docs Controller
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class OperatorDocsController extends OperatorController
 {
-    use Traits\DocumentSearchTrait,
-        Traits\DocumentActionTrait;
+    use Traits\DocumentSearchTrait;
+    use Traits\DocumentActionTrait;
+
+    protected DocumentSubCategory $docSubCategoryDataService;
+
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        TableFactory $tableFactory,
+        HelperPluginManager $viewHelperManager,
+        DateHelperService $dateHelper,
+        AnnotationBuilder $transferAnnotationBuilder,
+        CommandService $commandService,
+        FlashMessengerHelperService $flashMessengerHelper,
+        Licence $licenceDataService,
+        QueryService $queryService,
+        Navigation $navigation,
+        DocumentSubCategory $docSubCategoryDataService
+    ) {
+        parent::__construct(
+            $scriptFactory,
+            $formHelper,
+            $tableFactory,
+            $viewHelperManager,
+            $dateHelper,
+            $transferAnnotationBuilder,
+            $commandService,
+            $flashMessengerHelper,
+            $licenceDataService,
+            $queryService,
+            $navigation
+        );
+        $this->docSubCategoryDataService = $docSubCategoryDataService;
+    }
 
     /**
      * Table to use
      *
-     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
     protected function getDocumentTableName()
@@ -30,7 +69,7 @@ class OperatorDocsController extends OperatorController
     /**
      * Route (prefix) for document action redirects
      *
-     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
     protected function getDocumentRoute()
@@ -41,7 +80,7 @@ class OperatorDocsController extends OperatorController
     /**
      * Route params for document action redirects
      *
-     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return array
      */
     protected function getDocumentRouteParams()
@@ -52,7 +91,7 @@ class OperatorDocsController extends OperatorController
     /**
      * Get view model for document action
      *
-     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return ViewModel
      */
     protected function getDocumentView()

@@ -2,11 +2,17 @@
 
 namespace Olcs\Controller\Cases\Docs;
 
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Constants\FilterOptions;
+use Laminas\View\HelperPluginManager;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits as ControllerTraits;
+use Olcs\Service\Data\DocumentSubCategory;
 
 /**
  * Case Docs Controller
@@ -15,14 +21,35 @@ use Olcs\Controller\Traits as ControllerTraits;
  */
 class CaseDocsController extends AbstractController implements CaseControllerInterface, LeftViewProvider
 {
-    use ControllerTraits\CaseControllerTrait,
-        ControllerTraits\DocumentActionTrait,
-        ControllerTraits\DocumentSearchTrait;
+    use ControllerTraits\CaseControllerTrait;
+    use ControllerTraits\DocumentActionTrait;
+    use ControllerTraits\DocumentSearchTrait;
+
+    protected TranslationHelperService $translationHelper;
+    protected DocumentSubCategory $docSubCategoryDataService;
+
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        TableFactory $tableFactory,
+        HelperPluginManager $viewHelperManager,
+        TranslationHelperService $translationHelper,
+        DocumentSubCategory $docSubCategoryDataService
+    ) {
+        parent::__construct(
+            $scriptFactory,
+            $formHelper,
+            $tableFactory,
+            $viewHelperManager
+        );
+        $this->translationHelper = $translationHelper;
+        $this->docSubCategoryDataService = $docSubCategoryDataService;
+    }
 
     /**
      * Table to use
      *
-     * @see \Olcs\Controller\Traits\DocumentSearchTrait
+     * @see    \Olcs\Controller\Traits\DocumentSearchTrait
      * @return string
      */
     protected function getDocumentTableName()
@@ -33,7 +60,7 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
     /**
      * Route (prefix) for document action redirects
      *
-     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return string
      */
     protected function getDocumentRoute()
@@ -44,7 +71,7 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
     /**
      * Route params for document action redirects
      *
-     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return array
      */
     protected function getDocumentRouteParams()
@@ -55,7 +82,7 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
     /**
      * Get view model for document action
      *
-     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return \Laminas\View\Model\ViewModel
      */
     protected function getDocumentView()
@@ -96,7 +123,7 @@ class CaseDocsController extends AbstractController implements CaseControllerInt
     /**
      * Get configured document form
      *
-     * @see \Olcs\Controller\Traits\DocumentActionTrait
+     * @see    \Olcs\Controller\Traits\DocumentActionTrait
      * @return \Laminas\Form\FormInterface
      */
     protected function getConfiguredDocumentForm()

@@ -1,36 +1,47 @@
 <?php
-/**
- * Report Controller
- */
 
 namespace Admin\Controller;
 
 use Admin\Controller\Traits\ReportLeftViewTrait;
 use Common\Category;
-use \Laminas\Mvc\Controller\AbstractActionController as LaminasAbstractActionController;
-use Common\RefData;
-use Dvsa\Olcs\Transfer\Command\Organisation\CpidOrganisationExport;
-use Dvsa\Olcs\Transfer\Query\Document\DocumentList;
-use Dvsa\Olcs\Transfer\Query\Organisation\CpidOrganisation;
-use Dvsa\Olcs\Transfer\Query\Organisation\Organisation;
-use Olcs\Controller\Interfaces\LeftViewProvider;
-use Laminas\View\Model\ViewModel;
 use Common\Controller\Traits\GenericMethods;
 use Common\Controller\Traits\GenericRenderView;
 use Common\Controller\Traits\ViewHelperManagerAware;
-
-/**
- * Report Controller
- *
- * @author Dan Eggleston <dan@stolenegg.com>
- */
+use Common\RefData;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
+use Dvsa\Olcs\Transfer\Command\Organisation\CpidOrganisationExport;
+use Dvsa\Olcs\Transfer\Query\Document\DocumentList;
+use Dvsa\Olcs\Transfer\Query\Organisation\CpidOrganisation;
+use Laminas\Mvc\Controller\AbstractActionController as LaminasAbstractActionController;
+use Laminas\View\Helper\Placeholder;
+use Laminas\View\Model\ViewModel;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 
 class ReportController extends LaminasAbstractActionController implements LeftViewProvider
 {
-    use GenericMethods,
-        GenericRenderView,
-        ViewHelperManagerAware,
-        ReportLeftViewTrait;
+    use GenericMethods;
+    use GenericRenderView;
+    use ViewHelperManagerAware;
+    use ReportLeftViewTrait;
+
+    protected ScriptFactory $scriptFactory;
+    protected TableFactory $tableFactory;
+    protected FormHelperService $formHelper;
+    protected Placeholder $placeholder;
+
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        TableFactory $tableFactory,
+        FormHelperService $formHelper,
+        Placeholder $placeholder
+    ) {
+        $this->scriptFactory = $scriptFactory;
+        $this->tableFactory = $tableFactory;
+        $this->formHelper = $formHelper;
+        $this->placeholder = $placeholder;
+    }
 
     /**
      * render layout
@@ -43,7 +54,7 @@ class ReportController extends LaminasAbstractActionController implements LeftVi
      */
     protected function renderLayout($view, $pageTitle = 'Reports', $pageSubTitle = null)
     {
-        $this->getViewHelperManager()->get('placeholder')->getContainer('tableFilters')
+        $this->placeholder->getContainer('tableFilters')
             ->set($view->getVariable('filterForm'));
 
         return $this->renderView($view, $pageTitle, $pageSubTitle);
@@ -76,7 +87,7 @@ class ReportController extends LaminasAbstractActionController implements LeftVi
                     ]
                 );
 
-                $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
+                $flashMessenger = $this->flashMessenger();
                 $response = $this->handleCommand($command);
                 if ($response->isOk()) {
                     $flashMessenger->addSuccessMessage('Mass Export Queued.');

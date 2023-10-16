@@ -1,32 +1,28 @@
 <?php
 
-/**
- * Licence Processing Inspection Request Controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 namespace Olcs\Controller\Licence\Processing;
 
 use Common\RefData;
-use Olcs\Controller\Interfaces\LeftViewProvider;
-use Olcs\Controller\Traits\InspectionRequestTrait;
-use Dvsa\Olcs\Transfer\Query\Licence\EnforcementArea as LicEnforcementAreaQry;
-use Olcs\Data\Mapper\InspectionRequest as InspectionRequestMapper;
-use Olcs\Controller\AbstractInternalController;
-use Dvsa\Olcs\Transfer\Query\InspectionRequest\LicenceInspectionRequestList as LicenceInspectionRequestListQry;
-use Dvsa\Olcs\Transfer\Query\InspectionRequest\InspectionRequest as InspectionRequestQry;
-use Dvsa\Olcs\Transfer\Command\InspectionRequest\Delete as DeleteDto;
-use Olcs\Controller\Interfaces\LicenceControllerInterface;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Command\InspectionRequest\Create as CreateDto;
+use Dvsa\Olcs\Transfer\Command\InspectionRequest\Delete as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\InspectionRequest\Update as UpdateDto;
-use Olcs\Form\Model\Form\InspectionRequest;
+use Dvsa\Olcs\Transfer\Query\InspectionRequest\InspectionRequest as InspectionRequestQry;
+use Dvsa\Olcs\Transfer\Query\InspectionRequest\LicenceInspectionRequestList as LicenceInspectionRequestListQry;
+use Dvsa\Olcs\Transfer\Query\Licence\EnforcementArea as LicEnforcementAreaQry;
+use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
+use Laminas\Navigation\Navigation;
 use Laminas\View\Model\ViewModel;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Controller\Interfaces\LicenceControllerInterface;
+use Olcs\Controller\Traits\InspectionRequestTrait;
+use Olcs\Data\Mapper\InspectionRequest as InspectionRequestMapper;
+use Olcs\Form\Model\Form\InspectionRequest;
+use Olcs\Service\Data\OperatingCentresForInspectionRequest;
 
-/**
- * Licence Processing Inspection Request Controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 class LicenceProcessingInspectionRequestController extends AbstractInternalController implements
     LicenceControllerInterface,
     LeftViewProvider
@@ -93,6 +89,22 @@ class LicenceProcessingInspectionRequestController extends AbstractInternalContr
      */
     protected $section = 'inspection-request';
 
+    protected OperatingCentresForInspectionRequest $operatingCentresForInspectionRequest;
+    protected AnnotationBuilder $annotationBuilderService;
+
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessenger,
+        Navigation $navigation,
+        OperatingCentresForInspectionRequest $operatingCentresForInspectionRequest,
+        AnnotationBuilder $annotationBuilderService
+    ) {
+        $this->operatingCentresForInspectionRequest = $operatingCentresForInspectionRequest;
+        $this->annotationBuilderService = $annotationBuilderService;
+        parent::__construct($translationHelper, $formHelper, $flashMessenger, $navigation);
+    }
+
     /**
      * get method Left View
      *
@@ -124,16 +136,15 @@ class LicenceProcessingInspectionRequestController extends AbstractInternalContr
     protected function getEnforcementAreaName()
     {
         if (!$this->enforcementAreaName) {
-            $queryToSend = $this->getServiceLocator()
-                ->get('TransferAnnotationBuilder')
+            $queryToSend = $this->annotationBuilderService
                 ->createQuery(
                     LicEnforcementAreaQry::create(['id' => $this->params()->fromRoute('licence')])
                 );
 
-            $response = $this->getServiceLocator()->get('QueryService')->send($queryToSend);
+            $response = $this->queryService->send($queryToSend);
 
             if ($response->isClientError() || $response->isServerError()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+                $this->flashMessengerHelperService->addErrorMessage('unknown-error');
             }
 
             if ($response->isOk()) {
@@ -152,7 +163,7 @@ class LicenceProcessingInspectionRequestController extends AbstractInternalContr
      */
     protected function setUpOcListbox()
     {
-        $service = $this->getServiceLocator()->get('Olcs\Service\Data\OperatingCentresForInspectionRequest');
+        $service = $this->operatingCentresForInspectionRequest;
         $service->setType('licence');
         $service->setIdentifier($this->params()->fromRoute('licence'));
     }

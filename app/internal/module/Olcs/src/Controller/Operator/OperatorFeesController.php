@@ -3,19 +3,31 @@
 /**
  * Operator Fees Controller
  */
+
 namespace Olcs\Controller\Operator;
 
 use Common\Controller\Traits\GenericReceipt;
-use Olcs\Controller\Traits\FeesActionTrait;
+use Common\Service\Cqrs\Command\CommandService;
+use Common\Service\Cqrs\Query\QueryService;
+use Common\Service\Helper\DateHelperService;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableBuilder;
+use Common\Service\Table\TableFactory;
+use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
+use Laminas\View\HelperPluginManager;
+use Olcs\Controller\Traits\FeesActionTrait;
+use Olcs\Service\Data\Licence;
 
 /**
  * Operator Fees Controller
  */
 class OperatorFeesController extends OperatorController
 {
-    use FeesActionTrait,
-        GenericReceipt;
+    use FeesActionTrait;
+    use GenericReceipt;
 
     /**
      * @var string
@@ -27,10 +39,42 @@ class OperatorFeesController extends OperatorController
      */
     protected $subNavRoute = 'operator_fees';
 
+    protected TranslationHelperService $translationHelper;
+
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        TableFactory $tableFactory,
+        HelperPluginManager $viewHelperManager,
+        DateHelperService $dateHelper,
+        AnnotationBuilder $transferAnnotationBuilder,
+        CommandService $commandService,
+        FlashMessengerHelperService $flashMessengerHelper,
+        Licence $licenceDataService,
+        QueryService $queryService,
+        \Laminas\Navigation\Navigation $navigation,
+        TranslationHelperService $translatorHelper
+    ) {
+        $this->translationHelper = $translatorHelper;
+        parent::__construct(
+            $scriptFactory,
+            $formHelper,
+            $tableFactory,
+            $viewHelperManager,
+            $dateHelper,
+            $transferAnnotationBuilder,
+            $commandService,
+            $flashMessengerHelper,
+            $licenceDataService,
+            $queryService,
+            $navigation
+        );
+    }
+
     /**
      * Route (prefix) for fees action redirects
      *
-     * @see Olcs\Controller\Traits\FeesActionTrait
+     * @see    Olcs\Controller\Traits\FeesActionTrait
      * @return string
      */
     protected function getFeesRoute()
@@ -41,7 +85,7 @@ class OperatorFeesController extends OperatorController
     /**
      * The fees route redirect params
      *
-     * @see Olcs\Controller\Traits\FeesActionTrait
+     * @see    Olcs\Controller\Traits\FeesActionTrait
      * @return array
      */
     protected function getFeesRouteParams()
@@ -54,7 +98,7 @@ class OperatorFeesController extends OperatorController
     /**
      * The controller specific fees table params
      *
-     * @see Olcs\Controller\Traits\FeesActionTrait
+     * @see    Olcs\Controller\Traits\FeesActionTrait
      * @return array
      */
     protected function getFeesTableParams()
@@ -96,7 +140,7 @@ class OperatorFeesController extends OperatorController
      */
     protected function alterCreateFeeForm($form)
     {
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
 
         // disable amount validation by default
         $formHelper->disableEmptyValidationOnElement($form, 'fee-details->amount');
@@ -167,7 +211,7 @@ class OperatorFeesController extends OperatorController
      */
     protected function alterFeeTable($table, $results)
     {
-        $translator = $this->getServiceLocator()->get('Translator');
+        $translator = $this->translationHelper;
         $table->setVariable(
             'title',
             $translator->translate(

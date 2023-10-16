@@ -3,23 +3,57 @@
 namespace Olcs\Controller\IrhpPermits;
 
 use Common\Controller\Traits\GenericReceipt;
+use Common\Service\Helper\DateHelperService;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Helper\UrlHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
+use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Traits\FeesActionTrait;
+use ZfcRbac\Identity\IdentityProviderInterface;
 
-/**
- * IRHP Application Fees Controller
- *
- * @author Andy Newton <andy@vitri.ltd>
- */
 class IrhpApplicationFeesController extends AbstractIrhpPermitController
 {
-    use FeesActionTrait,
-        GenericReceipt,
-        IrhpFeesTrait;
+    use FeesActionTrait;
+    use GenericReceipt;
+    use IrhpFeesTrait;
+
+    protected FlashMessengerHelperService $flashMessengerHelper;
+    protected UrlHelperService $urlHelper;
+    protected IdentityProviderInterface $identityProvider;
+    protected TranslationHelperService $translationHelper;
+    protected DateHelperService $dateHelper;
+
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        TableFactory $tableFactory,
+        HelperPluginManager $viewHelperManager,
+        FlashMessengerHelperService $flashMessengerHelper,
+        UrlHelperService $urlHelper,
+        IdentityProviderInterface $identityProvider,
+        TranslationHelperService $translationHelper,
+        DateHelperService $dateHelper
+    ) {
+        parent::__construct(
+            $scriptFactory,
+            $formHelper,
+            $tableFactory,
+            $viewHelperManager
+        );
+        $this->flashMessengerHelper = $flashMessengerHelper;
+        $this->urlHelper = $urlHelper;
+        $this->identityProvider = $identityProvider;
+        $this->translationHelper = $translationHelper;
+        $this->dateHelper = $dateHelper;
+    }
 
     /**
      * Route (prefix) for fees action redirects
      *
-     * @see Olcs\Controller\Traits\FeesActionTrait
+     * @see    Olcs\Controller\Traits\FeesActionTrait
      * @return string
      */
     protected function getFeesRoute()
@@ -30,7 +64,7 @@ class IrhpApplicationFeesController extends AbstractIrhpPermitController
     /**
      * The fees route redirect params
      *
-     * @see Olcs\Controller\Traits\FeesActionTrait
+     * @see    Olcs\Controller\Traits\FeesActionTrait
      * @return array
      */
     protected function getFeesRouteParams()
@@ -45,7 +79,7 @@ class IrhpApplicationFeesController extends AbstractIrhpPermitController
     /**
      * The controller specific fees table params
      *
-     * @see Olcs\Controller\Traits\FeesActionTrait
+     * @see    Olcs\Controller\Traits\FeesActionTrait
      * @return array
      */
     protected function getFeesTableParams()
@@ -61,7 +95,7 @@ class IrhpApplicationFeesController extends AbstractIrhpPermitController
      *
      * @param string|\Laminas\View\Model\ViewModel $view View
      *
-     * @see Olcs\Controller\Traits\FeesActionTrait
+     * @see    Olcs\Controller\Traits\FeesActionTrait
      * @return \Laminas\View\Model\ViewModel
      */
     protected function renderLayout($view)
@@ -72,7 +106,7 @@ class IrhpApplicationFeesController extends AbstractIrhpPermitController
     /**
      * Get fee type dto data
      *
-     * @see Olcs\Controller\Traits\FeesActionTrait
+     * @see    Olcs\Controller\Traits\FeesActionTrait
      * @return array
      */
     protected function getFeeTypeDtoData()
@@ -87,7 +121,7 @@ class IrhpApplicationFeesController extends AbstractIrhpPermitController
      *
      * @param array $formData Data
      *
-     * @see Olcs\Controller\Traits\FeesActionTrait
+     * @see    Olcs\Controller\Traits\FeesActionTrait
      * @return array
      */
     protected function getCreateFeeDtoData(array $formData)

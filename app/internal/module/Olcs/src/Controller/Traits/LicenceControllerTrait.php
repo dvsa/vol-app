@@ -5,6 +5,7 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace Olcs\Controller\Traits;
 
 use Common\RefData;
@@ -19,14 +20,14 @@ trait LicenceControllerTrait
     /**
      * Get view with licence
      *
-     * @param array $variables
+     * @param  array $variables
      * @return \Laminas\View\Model\ViewModel
      */
     protected function getViewWithLicence($variables = array())
     {
         $licence = $this->getLicence();
         if ($licence['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
-            $this->getServiceLocator()->get('Navigation')->findOneBy('id', 'licence_bus')->setVisible(0);
+            $this->navigation->findOneBy('id', 'licence_bus')->setVisible(0);
         }
 
         $variables['licence'] = $licence;
@@ -37,7 +38,7 @@ trait LicenceControllerTrait
     /**
      * Gets the licence by ID.
      *
-     * @param integer $id
+     * @param  integer $id
      * @return array
      */
     protected function getLicence($id = null)

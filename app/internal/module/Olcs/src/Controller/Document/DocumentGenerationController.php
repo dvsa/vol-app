@@ -4,25 +4,48 @@ namespace Olcs\Controller\Document;
 
 use Common\Category;
 use Common\Form\Elements\InputFilters\MultiCheckboxEmpty;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\Document\CreateLetter;
 use Dvsa\Olcs\Transfer\Query\Document\TemplateParagraphs;
-use Olcs\Logging\Log\Logger;
 use Laminas\Form\Fieldset;
 use Laminas\Form\Form;
+use Laminas\View\HelperPluginManager;
 use Laminas\View\Model\ViewModel;
+use Olcs\Logging\Log\Logger;
+use Olcs\Service\Data\DocumentSubCategoryWithDocs;
 
-/**
- * Document Generation Controller
- *
- * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
- * @author Nick Payne <nick.payne@valtech.co.uk>
- */
 class DocumentGenerationController extends AbstractDocumentController
 {
     /**
      * Labels for empty select options
      */
-    const EMPTY_LABEL = 'Please select';
+    public const EMPTY_LABEL = 'Please select';
+
+    protected FlashMessengerHelperService $flashMessengerHelper;
+    protected DocumentSubCategoryWithDocs $docSubcategoryWithDocsDataService;
+
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        TableFactory $tableFactory,
+        HelperPluginManager $viewHelperManager,
+        array $config,
+        FlashMessengerHelperService $flashMessengerHelper,
+        DocumentSubCategoryWithDocs $docSubcategoryWithDocsDataService
+    ) {
+        parent::__construct(
+            $scriptFactory,
+            $formHelper,
+            $tableFactory,
+            $viewHelperManager,
+            $config
+        );
+        $this->flashMessengerHelper = $flashMessengerHelper;
+        $this->docSubcategoryWithDocsDataService = $docSubcategoryWithDocsDataService;
+    }
 
     /**
      * Process action - Generate
@@ -78,7 +101,7 @@ class DocumentGenerationController extends AbstractDocumentController
             return $this->processGenerateDocument($data);
         } catch (\ErrorException $e) {
             Logger::warn($e->getMessage());
-            $this->getServiceLocator()->get('Helper\FlashMessenger')
+            $this->flashMessengerHelper
                 ->addCurrentErrorMessage('Unable to generate the document');
         }
 
@@ -196,7 +219,9 @@ class DocumentGenerationController extends AbstractDocumentController
 
         $data = [];
 
-        /** @var \Laminas\Http\Request $request */
+        /**
+ * @var \Laminas\Http\Request $request
+*/
         $request = $this->getRequest();
 
         if ($request->isPost()) {
@@ -213,7 +238,7 @@ class DocumentGenerationController extends AbstractDocumentController
         $catId = (int)$details['category'];
 
         //  set dynamic select
-        $this->getServiceLocator()->get(\Olcs\Service\Data\DocumentSubCategoryWithDocs::class)
+        $this->docSubcategoryWithDocsDataService
             ->setCategory($catId);
 
         $docTemplates = ['' => self::EMPTY_LABEL];
@@ -236,7 +261,7 @@ class DocumentGenerationController extends AbstractDocumentController
     /**
      * Add template bookmarks
      *
-     * @param int                          $id       Template Id
+     * @param int                             $id       Template Id
      * @param \Laminas\Form\FieldsetInterface $fieldset Target container element
      *
      * @return void
@@ -285,8 +310,9 @@ class DocumentGenerationController extends AbstractDocumentController
 
     protected function isProposeToRevoke($data): bool
     {
-        if ($data['details']['category'] === (string) Category::CATEGORY_COMPLIANCE &&
-            $data['details']['documentSubCategory'] === (string) Category::DOC_SUB_CATEGORY_IN_OFFICE_REVOCATION
+        if (
+            $data['details']['category'] === (string) Category::CATEGORY_COMPLIANCE
+            && $data['details']['documentSubCategory'] === (string) Category::DOC_SUB_CATEGORY_IN_OFFICE_REVOCATION
         ) {
             return true;
         }

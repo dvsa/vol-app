@@ -3,15 +3,16 @@
 namespace Olcs\Controller\TransportManager;
 
 use Common\Service\Cqrs\Exception\NotFoundException;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
+use Laminas\Mvc\MvcEvent;
+use Laminas\View\HelperPluginManager;
 use Olcs\Controller\AbstractController;
 use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
-use Laminas\Mvc\MvcEvent;
 
-/**
- * Transport Manager Controller
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 class TransportManagerController extends AbstractController implements TransportManagerControllerInterface
 {
     /**
@@ -21,15 +22,40 @@ class TransportManagerController extends AbstractController implements Transport
 
     /**
      * Memoize TM details to prevent multiple backend calls with same id
+     *
      * @var array
      */
     protected $tmDetailsCache = [];
+
+    protected FlashMessengerHelperService $flashMessengerHelper;
+    protected TranslationHelperService $translationHelper;
+    protected $navigation;
+
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        TableFactory $tableFactory,
+        HelperPluginManager $viewHelperManager,
+        FlashMessengerHelperService $flashMessengerHelper,
+        TranslationHelperService $translationHelper,
+        $navigation
+    ) {
+        parent::__construct(
+            $scriptFactory,
+            $formHelper,
+            $tableFactory,
+            $viewHelperManager
+        );
+        $this->flashMessengerHelper = $flashMessengerHelper;
+        $this->translationHelper = $translationHelper;
+        $this->navigation = $navigation;
+    }
 
     /**
      * Redirect to the first menu section
      *
      * @codeCoverageIgnore
-     * @return \Laminas\Http\Response
+     * @return             \Laminas\Http\Response
      */
     public function indexJumpAction()
     {
@@ -40,7 +66,7 @@ class TransportManagerController extends AbstractController implements Transport
      * Redirect to the first menu section
      *
      * @codeCoverageIgnore
-     * @return \Laminas\Http\Response
+     * @return             \Laminas\Http\Response
      */
     public function indexProcessingJumpAction()
     {
@@ -57,7 +83,7 @@ class TransportManagerController extends AbstractController implements Transport
      *
      * @todo this can probably be removed now
      *
-     * @param array $variables
+     * @param  array $variables
      * @return \Laminas\View\Model\ViewModel
      */
     protected function getViewWithTm($variables = [])
@@ -72,7 +98,9 @@ class TransportManagerController extends AbstractController implements Transport
     {
         $transportManagerId = (int) $this->params()->fromRoute('transportManager');
 
-        /** @var \Laminas\Http\Request $request */
+        /**
+ * @var \Laminas\Http\Request $request
+*/
         $request = $this->getRequest();
         if ($request->isPost()) {
             $data = (array)$request->getPost();
@@ -81,15 +109,15 @@ class TransportManagerController extends AbstractController implements Transport
             if (!$tmData) {
                 return $this->notFoundAction();
             }
-            $data['fromTmName'] = $tmData['id'] .' '.
-                $tmData['homeCd']['person']['forename'] .' '.
+            $data['fromTmName'] = $tmData['id'] . ' ' .
+                $tmData['homeCd']['person']['forename'] . ' ' .
                 $tmData['homeCd']['person']['familyName'];
             if (isset($tmData['users'][0])) {
-                $data['fromTmName'] .= ' (associated user: '. $tmData['users'][0]['loginId'] .')';
+                $data['fromTmName'] .= ' (associated user: ' . $tmData['users'][0]['loginId'] . ')';
             }
         }
 
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
         $formName = isset($data['changeUserConfirm']) ? 'TmMergeConfirmation' : 'TransportManagerMerge';
         /* @var $form \Common\Form\Form */
         $form = $formHelper->createForm($formName);
@@ -113,7 +141,7 @@ class TransportManagerController extends AbstractController implements Transport
                     \Dvsa\Olcs\Transfer\Command\Tm\Merge::create($params)
                 );
                 if ($response->isOk()) {
-                    $this->getServiceLocator()->get('Helper\FlashMessenger')
+                    $this->flashMessengerHelper
                         ->addSuccessMessage('form.tm-merge.success');
                     return $this->redirect()->toRouteAjax(
                         'transport-manager/details',
@@ -128,7 +156,7 @@ class TransportManagerController extends AbstractController implements Transport
             }
         }
 
-        $this->getServiceLocator()->get('Script')->loadFile('tm-merge');
+        $this->scriptFactory->loadFile('tm-merge');
 
         $view = new \Laminas\View\Model\ViewModel(['form' => $form]);
         $view->setTemplate('pages/form');
@@ -140,8 +168,8 @@ class TransportManagerController extends AbstractController implements Transport
      * Process TM merge form messages
      *
      * @param \Common\Service\Cqrs\Response $response
-     * @param \Laminas\Form\FormInterface $form
-     * @param int $toTmId
+     * @param \Laminas\Form\FormInterface   $form
+     * @param int                           $toTmId
      *
      * return Form
      */
@@ -158,7 +186,7 @@ class TransportManagerController extends AbstractController implements Transport
         } elseif (isset($result['messages']['TM_MERGE_BOTH_HAVE_USER_ACCOUNTS'])) {
             $form = $this->setupMergeConfirmationForm($toTmId);
         } else {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')
+            $this->flashMessengerHelper
                 ->addErrorMessage('unknown-error');
         }
         return $form;
@@ -167,12 +195,12 @@ class TransportManagerController extends AbstractController implements Transport
     /**
      * Setup TM merge confirmation form
      *
-     * @param $toTmId
+     * @param  $toTmId
      * @return \Laminas\Form\FormInterface
      */
     protected function setupMergeConfirmationForm($toTmId)
     {
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
         $form = $formHelper->createForm('TmMergeConfirmation');
         $form->get('messages')->get('message')->setValue('internal.confirm-merge.message');
         $form->get('form-actions')->get('submit')->setLabel('internal.confirm-merge.button');
@@ -193,18 +221,20 @@ class TransportManagerController extends AbstractController implements Transport
             return $this->notFoundAction();
         }
 
-        /** @var \Laminas\Http\Request $request */
+        /**
+ * @var \Laminas\Http\Request $request
+*/
         $request = $this->getRequest();
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
         /* @var $form \Common\Form\Form */
         $form = $formHelper->createForm('GenericConfirmation');
-        $message = $this->getServiceLocator()->get('Helper\Translation')->translateReplace(
+        $message = $this->translationHelper->translateReplace(
             'form.tm-unmerge.message',
             [
                 $transportManagerId,
-                $tmData['homeCd']['person']['forename'] .' '. $tmData['homeCd']['person']['familyName'],
+                $tmData['homeCd']['person']['forename'] . ' ' . $tmData['homeCd']['person']['familyName'],
                 $tmData['mergeToTransportManager']['id'],
-                $tmData['mergeToTransportManager']['homeCd']['person']['forename'] .' '.
+                $tmData['mergeToTransportManager']['homeCd']['person']['forename'] . ' ' .
                     $tmData['mergeToTransportManager']['homeCd']['person']['familyName'],
             ]
         );
@@ -217,14 +247,14 @@ class TransportManagerController extends AbstractController implements Transport
                 \Dvsa\Olcs\Transfer\Command\Tm\Unmerge::create(['id' => $transportManagerId])
             );
             if ($response->isOk()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addSuccessMessage('form.tm-unmerge.success');
+                $this->flashMessengerHelper->addSuccessMessage('form.tm-unmerge.success');
 
                 return $this->redirect()->toRouteAjax(
                     'transport-manager/details',
                     ['transportManager' => $transportManagerId]
                 );
             } else {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+                $this->flashMessengerHelper->addErrorMessage('unknown-error');
             }
         }
 
@@ -274,9 +304,9 @@ class TransportManagerController extends AbstractController implements Transport
         if (!$tmData) {
             return $this->notFoundAction();
         }
-        $name = $tmData['homeCd']['person']['forename'] .' '. $tmData['homeCd']['person']['familyName'];
+        $name = $tmData['homeCd']['person']['forename'] . ' ' . $tmData['homeCd']['person']['familyName'];
         if (isset($tmData['users'][0])) {
-            $name .= ' (associated user: '. $tmData['users'][0]['loginId'] .')';
+            $name .= ' (associated user: ' . $tmData['users'][0]['loginId'] . ')';
         }
         $view->setVariables(
             [
@@ -316,8 +346,7 @@ class TransportManagerController extends AbstractController implements Transport
             );
         }
 
-        $form = $this->getServiceLocator()
-            ->get('Helper\Form')
+        $form = $this->formHelper
             ->createFormWithRequest(
                 'LicenceStatusDecisionMessages',
                 $this->getRequest()
@@ -341,11 +370,12 @@ class TransportManagerController extends AbstractController implements Transport
 
     public function removeAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /**
+ * @var \Laminas\Http\Request $request
+*/
         $request = $this->getRequest();
 
-        $form = $this->getServiceLocator()
-            ->get('Helper\Form')
+        $form = $this->formHelper
             ->createFormWithRequest('GenericConfirmation', $request);
 
         $form->get('messages')
@@ -380,10 +410,11 @@ class TransportManagerController extends AbstractController implements Transport
 
     public function undoDisqualificationAction()
     {
-        /** @var \Laminas\Http\Request $request */
+        /**
+ * @var \Laminas\Http\Request $request
+*/
         $request = $this->getRequest();
-        $form = $this->getServiceLocator()
-            ->get('Helper\Form')
+        $form = $this->formHelper
             ->createFormWithRequest('GenericConfirmation', $request);
 
         $form->get('messages')
@@ -412,7 +443,7 @@ class TransportManagerController extends AbstractController implements Transport
                 );
             }
             if ($response->isClientError() || $response->isServerError()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addErrorMessage('unknown-error');
+                $this->flashMessengerHelper->addErrorMessage('unknown-error');
             }
         }
 
@@ -432,7 +463,7 @@ class TransportManagerController extends AbstractController implements Transport
             return;
         }
 
-        $navigation = $this->getServiceLocator()->get('Navigation');
+        $navigation = $this->navigation;
         $navigation->findOneBy('id', $this->navigationId)->setActive();
     }
 

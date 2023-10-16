@@ -5,13 +5,15 @@
  *
  * @author Someone <someone@valtech.co.uk>
  */
+
 namespace Olcs;
 
 use Laminas\Mvc\ModuleRouteListener;
 use Laminas\Mvc\MvcEvent;
-use Laminas\View\Helper\Placeholder\Container\AbstractContainer;
 use Laminas\View\Model\ViewModel;
 use Common\Exception\ResourceNotFoundException;
+use Olcs\Listener\HeaderSearch;
+use Olcs\Listener\RouteParams;
 
 /**
  * Module
@@ -51,7 +53,8 @@ class Module
                 $exception = $e->getParam('exception');
                 // If something throws an uncaught ResourceNotFoundException in
                 // an HTTP context, return a 404
-                if ($exception instanceof ResourceNotFoundException
+                if (
+                    $exception instanceof ResourceNotFoundException
                     && $e->getResponse() instanceof \Laminas\Http\Response
                 ) {
                     $model = new ViewModel(
@@ -66,6 +69,34 @@ class Module
                     $e->getResponse()->setStatusCode(404);
                     $e->stopPropagation();
                     return $model;
+                }
+            }
+        );
+
+        $eventManager->attach($e->getApplication()->getServiceManager()->get(RouteParams::class));
+        $eventManager->attach($e->getApplication()->getServiceManager()->get(HeaderSearch::class));
+
+        $eventManager->attach(
+            MvcEvent::EVENT_ROUTE,
+            function (MvcEvent $e) {
+                $routeMatch = $e->getRouteMatch();
+
+                $controllerManager = $e->getApplication()->getServiceManager()->get('ControllerManager');
+                $controllerClass = $controllerManager->get($routeMatch->getParam('controller'));
+                $controllerFQCN = get_class($controllerClass);
+
+                $container = $e->getApplication()->getServiceManager();
+                $config = $container->get('Config');
+
+                $routeParamsListener = $container->get(RouteParams::class);
+
+                foreach ($config['route_param_listeners'] as $interface => $listeners) {
+                    if (is_a($controllerFQCN, $interface, true)) {
+                        foreach ($listeners as $listener) {
+                            $listenerInstance = $container->get($listener);
+                            $routeParamsListener->getEventManager()->attach($listenerInstance);
+                        }
+                    }
                 }
             }
         );

@@ -1,29 +1,23 @@
 <?php
 
-/**
- * Overview Controller, also deals with add and edit of cases
- */
 namespace Olcs\Controller\Cases\Overview;
 
-use Olcs\Controller\AbstractInternalController;
-use Dvsa\Olcs\Transfer\Command\Cases\CreateCase as CreateCaseCommand;
-use Dvsa\Olcs\Transfer\Command\Cases\UpdateCase as UpdateCaseCommand;
-use Dvsa\Olcs\Transfer\Command\Cases\DeleteCase as DeleteCaseCommand;
 use Dvsa\Olcs\Transfer\Command\Cases\CloseCase as CloseCmd;
+use Dvsa\Olcs\Transfer\Command\Cases\CreateCase as CreateCaseCommand;
+use Dvsa\Olcs\Transfer\Command\Cases\DeleteCase as DeleteCaseCommand;
 use Dvsa\Olcs\Transfer\Command\Cases\ReopenCase as ReopenCmd;
+use Dvsa\Olcs\Transfer\Command\Cases\UpdateCase as UpdateCaseCommand;
 use Dvsa\Olcs\Transfer\Query\Cases\Cases as CasesDto;
+use Laminas\View\Model\ViewModel;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\NavigationIdProvider;
 use Olcs\Controller\Interfaces\RightViewProvider;
 use Olcs\Data\Mapper\GenericFields as GenericMapper;
 use Olcs\Form\Model\Form\Cases as CaseForm;
-use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
-use Laminas\View\Model\ViewModel;
 
-/**
- * Overview Controller, also deals with add and edit of cases
- */
 class OverviewController extends AbstractInternalController implements
     CaseControllerInterface,
     LeftViewProvider,
@@ -49,14 +43,18 @@ class OverviewController extends AbstractInternalController implements
     protected $addContentTitle = 'Add case';
     protected $editContentTitle = 'Edit case';
 
-    /** Close */
+    /**
+     * Close
+     */
     protected $closeCommand = CloseCmd::class;
     protected $closeParams = ['id' => 'case'];
     protected $closeModalTitle = 'Close the case';
     protected $closeConfirmMessage = 'Are you sure you want to close the case?';
     protected $closeSuccessMessage = 'Case closed';
 
-    /** Reopen */
+    /**
+     * Reopen
+     */
     protected $reopenCommand = ReopenCmd::class;
     protected $reopenParams = ['id' => 'case'];
     protected $reopenModalTitle = 'Reopen the Case?';
@@ -80,6 +78,7 @@ class OverviewController extends AbstractInternalController implements
             'action' => 'details'
         ]
     ];
+
 
     /**
      * Get Method for Navigation

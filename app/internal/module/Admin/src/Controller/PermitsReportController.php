@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Admin\Controller;
 
@@ -15,14 +15,14 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
 
 class PermitsReportController extends AbstractInternalController implements LeftViewProvider
 {
-    protected $navigationId = 'admin-dashboard/admin-report/permits';
-
     use ReportLeftViewTrait;
+
+    protected $navigationId = 'admin-dashboard/admin-report/permits';
 
     /**
      * Process action - Index
      *
-     * @return  ViewModel
+     * @return ViewModel
      */
     public function indexAction(): ViewModel
     {
@@ -54,7 +54,7 @@ class PermitsReportController extends AbstractInternalController implements Left
                 ]
             );
 
-            $flashMessenger = $this->getServiceLocator()->get('Helper\FlashMessenger');
+            $flashMessenger = $this->flashMessengerHelperService;
             $response = $this->handleCommand($command);
 
             if ($response->isOk()) {
@@ -85,7 +85,7 @@ class PermitsReportController extends AbstractInternalController implements Left
         $response = $this->handleQuery(ReportList::create([]));
         if (!$response->isOk()) {
             throw new \Exception(
-                "Permit Reports: Unable to fetch report list - ". $response->getStatusCode()
+                "Permit Reports: Unable to fetch report list - " . $response->getStatusCode()
             );
         }
 

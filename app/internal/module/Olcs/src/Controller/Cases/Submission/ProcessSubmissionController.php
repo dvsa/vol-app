@@ -2,20 +2,20 @@
 
 namespace Olcs\Controller\Cases\Submission;
 
-use Common\Form\Elements\Custom\DateSelect;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Command\Submission\AssignSubmission as AssignUpdateDto;
 use Dvsa\Olcs\Transfer\Command\Submission\InformationCompleteSubmission as InformationCompleteDto;
-use Dvsa\Olcs\Transfer\Query\Submission\Submission as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Cases\PresidingTc\GetList as TcListDto;
+use Dvsa\Olcs\Transfer\Query\Submission\Submission as ItemDto;
+use Laminas\Navigation\Navigation;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Data\Mapper\Submission as Mapper;
 use Olcs\Form\Model\Form\SubmissionInformationComplete as CompleteForm;
 use Olcs\Form\Model\Form\SubmissionSendTo as SendToForm;
 
-/**
- * Process Submission Controller
- */
 class ProcessSubmissionController extends AbstractInternalController implements CaseControllerInterface
 {
     /**
@@ -60,7 +60,14 @@ class ProcessSubmissionController extends AbstractInternalController implements 
     protected $inlineScripts = [
         'assignAction' => ['forms/assign-submission']
     ];
-
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelper,
+        FlashMessengerHelperService $flashMessenger,
+        Navigation $navigation
+    ) {
+        parent::__construct($translationHelper, $formHelper, $flashMessenger, $navigation);
+    }
     /**
      * Generate form action to update submission, setting assigned_date, sender/recipient_user_ids
      *

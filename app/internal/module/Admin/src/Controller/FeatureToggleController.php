@@ -2,22 +2,17 @@
 
 namespace Admin\Controller;
 
-use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\LeftViewProvider;
-use Laminas\View\Model\ViewModel;
-use Dvsa\Olcs\Transfer\Command\FeatureToggle\Create as CreateDto;
-use Dvsa\Olcs\Transfer\Command\FeatureToggle\Update as UpdateDto;
-use Dvsa\Olcs\Transfer\Command\FeatureToggle\Delete as DeleteDto;
-use Dvsa\Olcs\Transfer\Query\FeatureToggle\ById as ItemDto;
-use Dvsa\Olcs\Transfer\Query\FeatureToggle\GetList as ListDto;
 use Admin\Data\Mapper\FeatureToggle as FeatureToggleMapper;
 use Admin\Form\Model\Form\FeatureToggle as FeatureToggleForm;
+use Dvsa\Olcs\Transfer\Command\FeatureToggle\Create as CreateDto;
+use Dvsa\Olcs\Transfer\Command\FeatureToggle\Delete as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\FeatureToggle\Update as UpdateDto;
+use Dvsa\Olcs\Transfer\Query\FeatureToggle\ById as ItemDto;
+use Dvsa\Olcs\Transfer\Query\FeatureToggle\GetList as ListDto;
+use Laminas\View\Model\ViewModel;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 
-/**
- * FeatureToggle Controller
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
 class FeatureToggleController extends AbstractInternalController implements LeftViewProvider
 {
     protected $navigationId = 'admin-dashboard/admin-feature-toggle';

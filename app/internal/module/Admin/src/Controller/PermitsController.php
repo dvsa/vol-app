@@ -2,15 +2,10 @@
 
 namespace Admin\Controller;
 
-use Olcs\Controller\AbstractInternalController;
-use Laminas\View\Model\ViewModel;
 use Common\Controller\Traits\GenericMethods;
+use Laminas\View\Model\ViewModel;
+use Olcs\Controller\AbstractInternalController;
 
-/**
- * Permits Controller
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- */
 class PermitsController extends AbstractInternalController
 {
     use GenericMethods;

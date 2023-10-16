@@ -1,24 +1,18 @@
 <?php
 
-/**
- * Partner Controller
- */
 namespace Admin\Controller;
 
+use Admin\Form\Model\Form\Partner as Form;
 use Dvsa\Olcs\Transfer\Command\User\CreatePartner as CreateDto;
-use Dvsa\Olcs\Transfer\Command\User\UpdatePartner as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\User\DeletePartner as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\User\UpdatePartner as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\User\Partner as ItemDto;
 use Dvsa\Olcs\Transfer\Query\User\PartnerList as ListDto;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\Partner as Mapper;
-use Admin\Form\Model\Form\Partner as Form;
-use Laminas\View\Model\ViewModel;
 
-/**
- * Partner Controller
- */
 class PartnerController extends AbstractInternalController implements LeftViewProvider
 {
     /**

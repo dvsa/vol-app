@@ -5,13 +5,25 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace Olcs\Controller\Application\Fees;
 
 use Common\Controller\Traits\GenericReceipt;
+use Common\Service\Data\PluginManager;
+use Common\Service\Helper\ComplaintsHelperService;
+use Common\Service\Helper\DateHelperService;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\OppositionHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Helper\UrlHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
+use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Application\ApplicationController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits\FeesActionTrait;
-use Laminas\View\Model\ViewModel;
+use ZfcRbac\Identity\IdentityProviderInterface;
 
 /**
  * Application Controller
@@ -20,8 +32,47 @@ use Laminas\View\Model\ViewModel;
  */
 class ApplicationFeesController extends ApplicationController implements LeftViewProvider
 {
-    use FeesActionTrait,
-        GenericReceipt;
+    use FeesActionTrait;
+    use GenericReceipt;
+
+    protected PluginManager $dataServiceManager;
+    protected OppositionHelperService $oppositionHelper;
+    protected ComplaintsHelperService $complaintsHelper;
+    protected FlashMessengerHelperService $flashMessengerHelper;
+    protected UrlHelperService $urlHelper;
+    protected IdentityProviderInterface $identityProvider;
+    protected TranslationHelperService $translationHelper;
+    protected DateHelperService $dateHelper;
+
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        TableFactory $tableFactory,
+        HelperPluginManager $viewHelperManager,
+        PluginManager $dataServiceManager,
+        OppositionHelperService $oppositionHelper,
+        ComplaintsHelperService $complaintsHelper,
+        FlashMessengerHelperService $flashMessengerHelper,
+        UrlHelperService $urlHelper,
+        IdentityProviderInterface $identityProvider,
+        TranslationHelperService $translationHelper,
+        DateHelperService $dateHelper
+    ) {
+        parent::__construct(
+            $scriptFactory,
+            $formHelper,
+            $tableFactory,
+            $viewHelperManager,
+            $dataServiceManager,
+            $oppositionHelper,
+            $complaintsHelper,
+            $flashMessengerHelper
+        );
+        $this->urlHelper = $urlHelper;
+        $this->identityProvider = $identityProvider;
+        $this->translationHelper = $translationHelper;
+        $this->dateHelper = $dateHelper;
+    }
 
     /**
      * render Layout

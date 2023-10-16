@@ -1,17 +1,17 @@
 <?php
 
-/**
- * Permit Controller
- */
-
 namespace Olcs\Controller\IrhpPermits;
 
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Query\IrhpPermit\GetListByLicence;
+use Laminas\Navigation\Navigation;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Olcs\Form\Model\Form\IrhpPermitFilter as FilterForm;
-use Laminas\View\Model\ViewModel;
 
 class PermitController extends AbstractInternalController implements LeftViewProvider, LicenceControllerInterface
 {
@@ -28,7 +28,14 @@ class PermitController extends AbstractInternalController implements LeftViewPro
     protected $inlineScripts = [
         'indexAction' => ['forms/filter'],
     ];
-
+    public function __construct(
+        TranslationHelperService $translationHelper,
+        FormHelperService $formHelperService,
+        FlashMessengerHelperService $flashMessenger,
+        Navigation $navigation
+    ) {
+        parent::__construct($translationHelper, $formHelperService, $flashMessenger, $navigation);
+    }
     /**
      * Get left view
      *

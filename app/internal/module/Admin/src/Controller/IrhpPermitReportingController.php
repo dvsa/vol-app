@@ -2,10 +2,10 @@
 
 namespace Admin\Controller;
 
-use Olcs\Controller\Interfaces\LeftViewProvider;
-use Laminas\View\Model\ViewModel;
 use Common\Category;
 use Dvsa\Olcs\Transfer\Query\Document\DocumentList;
+use Laminas\View\Model\ViewModel;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 
 class IrhpPermitReportingController extends AbstractIrhpPermitAdminController implements LeftViewProvider
 {

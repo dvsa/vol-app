@@ -1,24 +1,18 @@
 <?php
 
-/**
- * Processing Controller
- */
 namespace Olcs\Controller\Cases\Processing;
 
 use Dvsa\Olcs\Transfer\Command\TmCaseDecision\CreateReputeNotLost as CreateDto;
-use Dvsa\Olcs\Transfer\Command\TmCaseDecision\UpdateReputeNotLost as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\TmCaseDecision\Delete as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\TmCaseDecision\UpdateReputeNotLost as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\TmCaseDecision\GetByCase as ItemDto;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\TmCaseDecision as Mapper;
 use Olcs\Form\Model\Form\TmCaseRepute as Form;
-use Laminas\View\Model\ViewModel;
 
-/**
- * Case Decisions ReputeNotLost Controller
- */
 class DecisionsReputeNotLostController extends AbstractInternalController implements
     CaseControllerInterface,
     LeftViewProvider

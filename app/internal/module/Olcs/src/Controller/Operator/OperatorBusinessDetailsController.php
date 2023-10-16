@@ -5,16 +5,28 @@
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
+
 namespace Olcs\Controller\Operator;
 
 use Common\Controller\Traits\CompanySearch;
 use Common\RefData;
+use Common\Service\Cqrs\Command\CommandService;
+use Common\Service\Cqrs\Query\QueryService;
+use Common\Service\Helper\DateHelperService;
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\Operator\Create as CreateDto;
 use Dvsa\Olcs\Transfer\Command\Operator\Update as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Operator\BusinessDetails as BusinessDetailsDto;
+use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
+use Laminas\View\HelperPluginManager;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\OperatorBusinessDetails as Mapper;
-use Laminas\View\Model\ViewModel;
+use Olcs\Service\Data\Licence;
 
 /**
  * Operator Business Details Controller
@@ -41,6 +53,38 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
     protected $createDtoClass = CreateDto::class;
     protected $updateDtoClass = UpdateDto::class;
     protected $queryDtoClass = BusinessDetailsDto::class;
+
+    protected TranslationHelperService $translationHelper;
+
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        TableFactory $tableFactory,
+        HelperPluginManager $viewHelperManager,
+        DateHelperService $dateHelper,
+        AnnotationBuilder $transferAnnotationBuilder,
+        CommandService $commandService,
+        FlashMessengerHelperService $flashMessengerHelper,
+        Licence $licenceDataService,
+        QueryService $queryService,
+        \Laminas\Navigation\Navigation $navigation,
+        TranslationHelperService $translatorHelper
+    ) {
+        $this->translationHelper = $translatorHelper;
+        parent::__construct(
+            $scriptFactory,
+            $formHelper,
+            $tableFactory,
+            $viewHelperManager,
+            $dateHelper,
+            $transferAnnotationBuilder,
+            $commandService,
+            $flashMessengerHelper,
+            $licenceDataService,
+            $queryService,
+            $navigation
+        );
+    }
 
     /**
      * Index action
@@ -119,7 +163,7 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
             $form->setData($originalData);
         }
 
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
 
         // process company lookup
         if (isset($post['operator-details']['companyNumber']['submit_lookup_company'])) {
@@ -196,10 +240,10 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
         $response = $this->handleCommand($dto);
 
         if ($response->isOk()) {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')
+            $this->flashMessengerHelper
                 ->addSuccessMessage('The operator has been updated successfully');
         } else {
-            $this->getServiceLocator()->get('Helper\FlashMessenger')->addUnknownError();
+            $this->flashMessengerHelper->addUnknownError();
         }
 
         return $this->redirectToBusinessDetails($operator);
@@ -209,8 +253,8 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
      * Save form
      *
      * @param \Laminas\Form\Form $form        form
-     * @param string          $action      action
-     * @param string          $routePrefix routePrefix
+     * @param string             $action      action
+     * @param string             $routePrefix routePrefix
      *
      * @return ViewModel
      */
@@ -266,7 +310,7 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
 
             $labels = [];
 
-            $translation = $this->getServiceLocator()->get('Helper\Translation');
+            $translation = $this->translationHelper;
 
             foreach ($transitions as $transition) {
                 $labels[] = $translation->translate($transition);
@@ -298,7 +342,7 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
         $mapper = $this->mapperClass;
         $errors = $mapper::mapFromErrors($form, $errors);
         if (!empty($errors)) {
-            $fm = $this->getServiceLocator()->get('Helper\FlashMessenger');
+            $fm = $this->flashMessengerHelper;
             foreach ($errors as $error) {
                 $fm->addCurrentErrorMessage($error);
             }
@@ -308,15 +352,15 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
     /**
      * Make form alterations
      *
-     * @param string          $businessType businessType
+     * @param string             $businessType businessType
      * @param \Laminas\Form\Form $form         form
-     * @param int             $operatorId   operatorId
+     * @param int                $operatorId   operatorId
      *
      * @return \Laminas\Form\Form
      */
     private function makeFormAlterations($businessType, $form, $operatorId)
     {
-        $formHelper = $this->getServiceLocator()->get('Helper\Form');
+        $formHelper = $this->formHelper;
         switch ($businessType) {
             case RefData::ORG_TYPE_REGISTERED_COMPANY:
             case RefData::ORG_TYPE_LLP:
@@ -371,7 +415,7 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
             $response = $this->handleQuery($query::create(['id' => $organisationId]));
 
             if ($response->isClientError() || $response->isServerError()) {
-                $this->getServiceLocator()->get('Helper\FlashMessenger')->addCurrentErrorMessage('unknown-error');
+                $this->flashMessengerHelper->addCurrentErrorMessage('unknown-error');
                 return $this->notFoundAction();
             }
             $this->organisation = $response->getResult();

@@ -5,18 +5,11 @@ namespace Olcs\Controller\Cases\Hearing;
 use Common\Service\Cqrs\Exception\NotFoundException;
 use Dvsa\Olcs\Transfer\Query\Cases\Hearing\AppealByCase as AppealDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Hearing\StayList as StayListDto;
+use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Olcs\Logging\Log\Logger;
-use Laminas\View\Model\ViewModel;
 
-/**
- * Hearing Appeal Controller
- *
- * @author Ian Lindsay <ian@hemera-business-services.co.uk>
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
- */
 class HearingAppealController extends AbstractInternalController implements CaseControllerInterface, LeftViewProvider
 {
     /**

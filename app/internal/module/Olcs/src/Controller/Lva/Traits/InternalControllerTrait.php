@@ -5,10 +5,11 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace Olcs\Controller\Lva\Traits;
 
-use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicQry;
 use Dvsa\Olcs\Transfer\Query\Application\Application as AppQry;
+use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicQry;
 
 /**
  * Abstract Internal Controller
@@ -26,7 +27,7 @@ trait InternalControllerTrait
      */
     protected function handleCancelRedirect($lvaId)
     {
-        $this->getServiceLocator()->get('Helper\FlashMessenger')->addInfoMessage('flash-discarded-changes');
+        $this->flashMessengerHelper->addInfoMessage('flash-discarded-changes');
 
         return $this->reload();
     }

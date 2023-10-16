@@ -1,31 +1,20 @@
 <?php
 
-/**
- * System Parameters Controller
- *
- * @author Alexander Peshkov <alex.peshkov@valtech.co.uk>
- */
 namespace Admin\Controller;
 
-use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\LeftViewProvider;
-use Laminas\View\Model\ViewModel;
+use Admin\Form\Model\Form\SystemParameter as SystemParameterForm;
 use Dvsa\Olcs\Transfer\Command\SystemParameter\CreateSystemParameter as CreateDto;
-use Dvsa\Olcs\Transfer\Command\SystemParameter\UpdateSystemParameter as UpdateDto;
 use Dvsa\Olcs\Transfer\Command\SystemParameter\DeleteSystemParameter as DeleteDto;
+use Dvsa\Olcs\Transfer\Command\SystemParameter\UpdateSystemParameter as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\SystemParameter\SystemParameter as ItemDto;
 use Dvsa\Olcs\Transfer\Query\SystemParameter\SystemParameterList as ListDto;
+use Laminas\View\Model\ViewModel;
+use Olcs\Controller\AbstractInternalController;
+use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Data\Mapper\SystemParameter as SystemParameterMapper;
-use Admin\Form\Model\Form\SystemParameter as SystemParameterForm;
 
-/**
- * System Parameters Controller
- *
- * @author Alexander Peshkov <alex.peshkov@valtech.co.uk>
- */
 class SystemParametersController extends AbstractInternalController implements LeftViewProvider
 {
-
     protected $navigationId = 'admin-dashboard/admin-manage-system-parameters';
 
     /**
@@ -87,7 +76,7 @@ class SystemParametersController extends AbstractInternalController implements L
 
     public function alterFormForEdit($form)
     {
-        $formHelper = $this->getServiceLocator()->get('Helper/Form');
+        $formHelper = $this->formHelperService;
 
         // id is disabled in hidden mode so it could be empty after form validation failed
         $form->get('system-parameter-details')
