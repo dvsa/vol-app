@@ -65,7 +65,7 @@ return array(
         // The default length in seconds the JWT is valid for.
         'default_lifetime_seconds' => 3600,
         // The URL pattern for a WebDAV URL. JWT followed by Document Path will be sprintf'ed into this value.
-        'url_pattern' => 'ms-word:ofe|u|https://iuweb.da.olcs.dev-dvsacloud.uk/documents-dav/%s/olcs/%s'
+        'url_pattern' => 'ms-word:ofe|u|https://iuweb.da.olcs.dev-dvsacloud.uk/documents-dav/%%s/olcs/%%s'
     ],
 
     // Asset path, URI to olcs-static (CSS, JS, etc) *Environment specific*
