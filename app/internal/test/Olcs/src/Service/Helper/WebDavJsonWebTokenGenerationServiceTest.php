@@ -18,7 +18,7 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
     protected const JWT_PRIVATE_KEY_BASE64 = 'LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlCT3dJQkFBSkJBSnRybTk2M3BYNlJIdG1oWTdGSndlTUcrWDU4bWMwbzRjUTlOMmp3SmVLWFlnM2h3bEpWCkVkTTByM1d6Y0FVcVhHeStvNlpWVGF5N3NnRmdTM1kvbVZVQ0F3RUFBUUpCQUkwdkxjTWVOTHBLL2lsWTBJVW0KcVhpZ3gxZzl2RUdBbDhaNmpiRklKa0kxTU45bEZmRVNMSHJWQTNKck1KZEh2R3RIN2ZoSHNoaUM1LzR1SDVpbAorU2tDSVFEa2dBYjJveThNMkUwQ05FbEJpbWhwTzN4MWV5bTNxNStPR0NZeEZHckxWd0loQUs0Z0IvMytodlpICk5SNm1rUldONktCRC95ZDMzaDFJa0djNmFXTTBhRUV6QWlFQWxQdE1qdjZ5cktOVEFuN296SXpicXRFWVF0ajgKeUQ1a0Y1ZHpQMGphb0owQ0lENWFJZ0tHSG5ZYVVaOUVMamYxdFJPT3hkT3dUTTFYcXI0TVlLaXhuNU9aQWlCOApaQkNaTG41dTRuWEFpZW1ENHA3bkF5dWp4azlQcWdBQmxUbXBJRHE1clE9PQotLS0tLUVORCBSU0EgUFJJVkFURSBLRVktLS0tLQ==';
     protected const JWT_PUBLIC_KEY_BASE64 = 'LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUZ3d0RRWUpLb1pJaHZjTkFRRUJCUUFEU3dBd1NBSkJBSnRybTk2M3BYNlJIdG1oWTdGSndlTUcrWDU4bWMwbwo0Y1E5TjJqd0plS1hZZzNod2xKVkVkTTByM1d6Y0FVcVhHeStvNlpWVGF5N3NnRmdTM1kvbVZVQ0F3RUFBUT09Ci0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQ==';
     protected const JWT_DEFAULT_LIFETIME_1_MINUTE = 60;
-    protected const WEBDAV_URI_PATTERN = 'ms-word:ofe|u|https://testhost/documents-dav/%%s/olcs/%%s';
+    protected const WEBDAV_URI_PATTERN = 'ms-word:ofe|u|https://testhost/documents-dav/%s/olcs/%s';
 
     protected const JWT_SUBJECT = 'user4574';
     protected const JWT_DOCUMENT = '0000000000000_OC00000000X_CoverLetter.rtf';
@@ -136,10 +136,10 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
         $result = $this->sut->generateToken(static::JWT_SUBJECT, static::JWT_DOCUMENT);
         $decodedJwt = JWT::decode($result, new Key(base64_decode(static::JWT_PUBLIC_KEY_BASE64, true), WebDavJsonWebTokenGenerationService::TOKEN_ALGORITHM));
 
-        $this->assertObjectHasAttribute(WebDavJsonWebTokenGenerationService::TOKEN_PAYLOAD_KEY_SUBJECT, $decodedJwt);
+        $this->assertObjectHasProperty(WebDavJsonWebTokenGenerationService::TOKEN_PAYLOAD_KEY_SUBJECT, $decodedJwt);
         $this->assertEquals(static::JWT_SUBJECT, $decodedJwt->sub);
 
-        $this->assertObjectHasAttribute(WebDavJsonWebTokenGenerationService::TOKEN_PAYLOAD_KEY_DOCUMENT, $decodedJwt);
+        $this->assertObjectHasProperty(WebDavJsonWebTokenGenerationService::TOKEN_PAYLOAD_KEY_DOCUMENT, $decodedJwt);
         $this->assertEquals(static::JWT_DOCUMENT, $decodedJwt->doc);
     }
 
@@ -160,10 +160,10 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
         $result = $this->sut->generateToken(static::JWT_SUBJECT, static::JWT_DOCUMENT);
         $decodedJwt = JWT::decode($result, new Key(base64_decode(static::JWT_PUBLIC_KEY_BASE64, true), WebDavJsonWebTokenGenerationService::TOKEN_ALGORITHM));
 
-        $this->assertObjectHasAttribute(WebDavJsonWebTokenGenerationService::TOKEN_PAYLOAD_KEY_SUBJECT, $decodedJwt);
+        $this->assertObjectHasProperty(WebDavJsonWebTokenGenerationService::TOKEN_PAYLOAD_KEY_SUBJECT, $decodedJwt);
         $this->assertEquals(static::JWT_SUBJECT, $decodedJwt->sub);
 
-        $this->assertObjectHasAttribute(WebDavJsonWebTokenGenerationService::TOKEN_PAYLOAD_KEY_DOCUMENT, $decodedJwt);
+        $this->assertObjectHasProperty(WebDavJsonWebTokenGenerationService::TOKEN_PAYLOAD_KEY_DOCUMENT, $decodedJwt);
         $this->assertEquals(static::JWT_DOCUMENT, $decodedJwt->doc);
     }
 
@@ -182,8 +182,8 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
         $result = $this->sut->generateToken(static::JWT_SUBJECT, static::JWT_DOCUMENT);
         $decodedJwt = JWT::decode($result, new Key(base64_decode(static::JWT_PUBLIC_KEY_BASE64, true), WebDavJsonWebTokenGenerationService::TOKEN_ALGORITHM));
 
-        $this->assertObjectHasAttribute(WebDavJsonWebTokenGenerationService::TOKEN_PAYLOAD_KEY_ISSUED_AT, $decodedJwt);
-        $this->assertObjectHasAttribute(WebDavJsonWebTokenGenerationService::TOKEN_PAYLOAD_KEY_EXPIRES_AT, $decodedJwt);
+        $this->assertObjectHasProperty(WebDavJsonWebTokenGenerationService::TOKEN_PAYLOAD_KEY_ISSUED_AT, $decodedJwt);
+        $this->assertObjectHasProperty(WebDavJsonWebTokenGenerationService::TOKEN_PAYLOAD_KEY_EXPIRES_AT, $decodedJwt);
     }
 
     public function testGFetJwtWebDavLink(): void
