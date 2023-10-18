@@ -19,6 +19,7 @@ abstract class AbstractTransportManagerDetailsController extends TransportManage
     use GenericUpload;
 
     protected TransportManagerHelperService $transportManagerHelper;
+    protected FileUploadHelperService $uploadHelper;
 
     public function __construct(
         ScriptFactory $scriptFactory,
@@ -28,7 +29,8 @@ abstract class AbstractTransportManagerDetailsController extends TransportManage
         FlashMessengerHelperService $flashMessengerHelper,
         TranslationHelperService $translationHelper,
         $navigation,
-        TransportManagerHelperService $transportManagerHelper
+        TransportManagerHelperService $transportManagerHelper,
+        FileUploadHelperService $uploadHelper
     ) {
         parent::__construct(
             $scriptFactory,
@@ -40,6 +42,7 @@ abstract class AbstractTransportManagerDetailsController extends TransportManage
             $navigation
         );
         $this->transportManagerHelper = $transportManagerHelper;
+        $this->uploadHelper = $uploadHelper;
     }
 
     /**

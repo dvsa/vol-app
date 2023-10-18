@@ -4,6 +4,7 @@ namespace Olcs\Controller\Factory\TransportManager\Details;
 
 use Common\Service\Cqrs\Command\CommandService;
 use Common\Service\Cqrs\Query\QueryService;
+use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -42,6 +43,7 @@ class TransportManagerDetailsResponsibilityControllerFactory implements FactoryI
         $commandService = $container->get(CommandService::class);
         $queryService = $container->get(QueryService::class);
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
+        $uploadHelper = $container->get(FileUploadHelperService::class);
 
         return new TransportManagerDetailsResponsibilityController(
             $scriptFactory,
@@ -55,7 +57,8 @@ class TransportManagerDetailsResponsibilityControllerFactory implements FactoryI
             $transferAnnotationBuilder,
             $commandService,
             $queryService,
-            $niTextTranslationUtil
+            $niTextTranslationUtil,
+            $uploadHelper
         );
     }
 

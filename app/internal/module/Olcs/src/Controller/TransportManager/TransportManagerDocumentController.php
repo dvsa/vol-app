@@ -2,14 +2,45 @@
 
 namespace Olcs\Controller\TransportManager;
 
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
+use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits;
+use Olcs\Service\Data\DocumentSubCategory;
 
 class TransportManagerDocumentController extends TransportManagerController implements LeftViewProvider
 {
     use Traits\DocumentActionTrait;
     use Traits\DocumentSearchTrait;
     use Traits\ListDataTrait;
+
+    protected DocumentSubCategory $docSubCategoryDataService;
+
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        TableFactory $tableFactory,
+        HelperPluginManager $viewHelperManager,
+        FlashMessengerHelperService $flashMessengerHelper,
+        TranslationHelperService $translationHelper,
+        $navigation,
+        DocumentSubCategory $docSubCategoryDataService
+    ) {
+        parent::__construct(
+            $scriptFactory,
+            $formHelper,
+            $tableFactory,
+            $viewHelperManager,
+            $flashMessengerHelper,
+            $translationHelper,
+            $navigation
+        );
+        $this->docSubCategoryDataService = $docSubCategoryDataService;
+    }
 
     /**
      * Table to use

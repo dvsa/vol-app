@@ -2,12 +2,43 @@
 
 namespace Olcs\Controller\TransportManager\Processing;
 
+use Common\Service\Helper\FlashMessengerHelperService;
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
+use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Traits;
+use Olcs\Service\Data\SubCategory;
 
 class TransportManagerProcessingTaskController extends AbstractTransportManagerProcessingController
 {
     use Traits\TaskActionTrait {
         Traits\TaskActionTrait::getTaskForm as traitGetTaskForm;
+    }
+
+    protected SubCategory $subCategoryDataService;
+
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        TableFactory $tableFactory,
+        HelperPluginManager $viewHelperManager,
+        FlashMessengerHelperService $flashMessengerHelper,
+        TranslationHelperService $translationHelper,
+        $navigation,
+        SubCategory $subCategoryDataService
+    ) {
+        parent::__construct(
+            $scriptFactory,
+            $formHelper,
+            $tableFactory,
+            $viewHelperManager,
+            $flashMessengerHelper,
+            $translationHelper,
+            $navigation
+        );
+        $this->subCategoryDataService = $subCategoryDataService;
     }
 
     /**

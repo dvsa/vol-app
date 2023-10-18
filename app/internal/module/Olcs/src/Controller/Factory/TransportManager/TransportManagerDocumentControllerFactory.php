@@ -1,6 +1,6 @@
 <?php
 
-namespace Olcs\Controller\Factory\TransportManager\Processing;
+namespace Olcs\Controller\Factory\TransportManager;
 
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
@@ -11,18 +11,19 @@ use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\View\HelperPluginManager;
-use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingTaskController;
-use Olcs\Service\Data\SubCategory;
+use Olcs\Controller\TransportManager\TransportManagerController;
+use Olcs\Controller\TransportManager\TransportManagerDocumentController;
+use Olcs\Service\Data\DocumentSubCategory;
 
-class TransportManagerProcessingTaskControllerFactory implements FactoryInterface
+class TransportManagerDocumentControllerFactory implements FactoryInterface
 {
     /**
      * @param  ContainerInterface $container
      * @param  $requestedName
      * @param  array|null         $options
-     * @return TransportManagerProcessingTaskController
+     * @return TransportManagerController
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TransportManagerProcessingTaskController
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TransportManagerController
     {
         $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
 
@@ -33,9 +34,9 @@ class TransportManagerProcessingTaskControllerFactory implements FactoryInterfac
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         $translationHelper = $container->get(TranslationHelperService::class);
         $navigation = $container->get('navigation');
-        $subCategoryDataService = $container->get(SubCategory::class);
+        $docSubCategoryDataService = $container->get(DocumentSubCategory::class);
 
-        return new TransportManagerProcessingTaskController(
+        return new TransportManagerDocumentController(
             $scriptFactory,
             $formHelper,
             $tableFactory,
@@ -43,7 +44,7 @@ class TransportManagerProcessingTaskControllerFactory implements FactoryInterfac
             $flashMessengerHelper,
             $translationHelper,
             $navigation,
-            $subCategoryDataService
+            $docSubCategoryDataService
         );
     }
 
@@ -52,10 +53,10 @@ class TransportManagerProcessingTaskControllerFactory implements FactoryInterfac
      *
      * @param ServiceLocatorInterface $serviceLocator
      *
-     * @return TransportManagerProcessingTaskController
+     * @return TransportManagerController
      */
-    public function createService(ServiceLocatorInterface $serviceLocator): TransportManagerProcessingTaskController
+    public function createService(ServiceLocatorInterface $serviceLocator): TransportManagerController
     {
-        return $this->__invoke($serviceLocator, TransportManagerProcessingTaskController::class);
+        return $this->__invoke($serviceLocator, TransportManagerController::class);
     }
 }
