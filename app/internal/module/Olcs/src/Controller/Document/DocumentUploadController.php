@@ -20,7 +20,7 @@ class DocumentUploadController extends AbstractDocumentController
     public const FILE_UPLOAD_ERR_PREFIX = 'message.file-upload-error.';
 
     protected FlashMessengerHelperService $flashMessengerHelper;
-    protected DocumentSubCategory $documentSubCategoryDataService;
+    protected DocumentSubCategory $documentSubcategoryDataService;
     protected Scan $avScanner;
 
     public function __construct(
@@ -41,7 +41,7 @@ class DocumentUploadController extends AbstractDocumentController
             $config
         );
         $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->docSubcategoryDataService = $docSubcategoryDataService;
+        $this->documentSubcategoryDataService = $docSubcategoryDataService;
         $this->avScanner = $avScanner;
     }
 
@@ -69,7 +69,7 @@ class DocumentUploadController extends AbstractDocumentController
         }
 
         //  set dynamic select
-        $this->documentSubCategoryDataService
+        $this->documentSubcategoryDataService
             ->setCategory($category);
 
         $form = $this->generateFormWithData('UploadDocument', 'processUpload', $data);

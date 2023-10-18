@@ -38,6 +38,7 @@ use Olcs\Controller\Factory\Licence as LicenceControllerFactories;
 use Olcs\Controller\Factory\Operator as OperatorControllerFactories;
 use Olcs\Controller\Factory\Operator\OperatorBusinessDetailsControllerFactory;
 use Olcs\Controller\Factory\SearchControllerFactory;
+use Olcs\Controller\Factory\SplitScreenControllerFactory;
 use Olcs\Controller\Factory\TaskControllerFactory;
 use Olcs\Controller\Factory\TransportManager\Processing\TransportManagerProcessingTaskControllerFactory;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
@@ -416,6 +417,7 @@ return array(
             ApplicationProcessingPublicationsController::class => ApplicationProcessingPublicationsControllerFactory::class,
             SearchController::class => SearchControllerFactory::class,
             OperatorBusinessDetailsController::class => OperatorBusinessDetailsControllerFactory::class,
+            \Olcs\Controller\SplitScreenController::class => SplitScreenControllerFactory::class,
         ],
         'aliases' => [
             'LvaApplication' => Olcs\Controller\Lva\Application\OverviewController::class,
@@ -542,7 +544,7 @@ return array(
             'TMDocumentController' => 'Olcs\Controller\TransportManager\TransportManagerDocumentController',
             'InterimApplicationController' => 'Olcs\Controller\Lva\Application\InterimController',
             'InterimVariationController' => 'Olcs\Controller\Lva\Variation\InterimController',
-            'SplitScreenController' => 'Olcs\Controller\SplitScreenController',
+            'SplitScreenController' => \Olcs\Controller\SplitScreenController::class,
             'CaseHistoryController' => Olcs\Controller\Cases\Processing\HistoryController::class,
             'CaseReadHistoryController' => 'Olcs\Controller\Cases\Processing\ReadHistoryController',
             'BusRegHistoryController' => 'Olcs\Controller\Bus\Processing\HistoryController',

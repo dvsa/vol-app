@@ -31,7 +31,7 @@ class DocumentUploadControllerFactory implements FactoryInterface
         $tableFactory = $container->get(TableFactory::class);
         $viewHelperManager = $container->get(HelperPluginManager::class);
         $config = $container->get('Config');
-        $flashMessangerHelper = $container->get(FlashMessengerHelperService::class);
+        $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         $documentSubCategoryDataService = $container->get(DocumentSubCategory::class);
         $avScan = $container->get(Scan::class);
 
@@ -41,7 +41,7 @@ class DocumentUploadControllerFactory implements FactoryInterface
             $tableFactory,
             $viewHelperManager,
             $config,
-            $flashMessangerHelper,
+            $flashMessengerHelper,
             $documentSubCategoryDataService,
             $avScan
         );

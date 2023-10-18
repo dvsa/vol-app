@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Cases\Submission;
 
+use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -39,6 +40,8 @@ class SubmissionControllerFactory implements FactoryInterface
 
         $submissionDataService = $container->get(Submission::class);
 
+        $uploadHelper = $container->get(FileUploadHelperService::class);
+
         return new SubmissionController(
             $translationHelper,
             $formHelper,
@@ -47,7 +50,8 @@ class SubmissionControllerFactory implements FactoryInterface
             $urlHelper,
             $configHelper,
             $viewRenderer,
-            $submissionDataService
+            $submissionDataService,
+            $uploadHelper
         );
     }
     public function createService(ServiceLocatorInterface $serviceLocator): SubmissionController

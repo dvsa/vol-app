@@ -3,6 +3,7 @@
 namespace Olcs\Controller\TransportManager\Details;
 
 use Common\Controller\Traits\GenericUpload;
+use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
