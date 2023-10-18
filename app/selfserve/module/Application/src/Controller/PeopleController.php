@@ -4,6 +4,7 @@ namespace Dvsa\Olcs\Application\Controller;
 
 use Common\Controller\Lva;
 use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\GuidanceHelperService;
 use Common\Service\Helper\RestrictionHelperService;
@@ -43,6 +44,7 @@ class PeopleController extends Lva\AbstractPeopleController
      * @param RestrictionHelperService $restrictionHelper
      * @param StringHelperService $stringHelper
      * @param ApplicationPeopleAdapter $lvaAdapter
+     * @param FlashMessengerHelperService $flashMessengerHelper
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -54,7 +56,8 @@ class PeopleController extends Lva\AbstractPeopleController
         GuidanceHelperService $guidanceHelper,
         RestrictionHelperService $restrictionHelper,
         StringHelperService $stringHelper,
-        ApplicationPeopleAdapter $lvaAdapter
+        ApplicationPeopleAdapter $lvaAdapter,
+        FlashMessengerHelperService $flashMessengerHelper
     ) {
         $this->restrictionHelper = $restrictionHelper;
         $this->stringHelper = $stringHelper;
@@ -67,7 +70,8 @@ class PeopleController extends Lva\AbstractPeopleController
             $scriptFactory,
             $variationLvaService,
             $guidanceHelper,
-            $lvaAdapter
+            $lvaAdapter,
+            $flashMessengerHelper
         );
     }
 }
