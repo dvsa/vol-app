@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Factory\TransportManager\Details;
 
+use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -34,6 +35,7 @@ class TransportManagerDetailsPreviousHistoryControllerFactory implements Factory
         $translationHelper = $container->get(TranslationHelperService::class);
         $navigation = $container->get('navigation');
         $transportManagerHelper = $container->get(TransportManagerHelperService::class);
+        $uploadHelper = $container->get(FileUploadHelperService::class);
 
         return new TransportManagerDetailsPreviousHistoryController(
             $scriptFactory,
@@ -44,6 +46,7 @@ class TransportManagerDetailsPreviousHistoryControllerFactory implements Factory
             $translationHelper,
             $navigation,
             $transportManagerHelper,
+            $uploadHelper
         );
     }
 

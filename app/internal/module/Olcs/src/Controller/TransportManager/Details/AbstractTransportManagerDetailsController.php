@@ -3,6 +3,7 @@
 namespace Olcs\Controller\TransportManager\Details;
 
 use Common\Controller\Traits\GenericUpload;
+use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -18,6 +19,7 @@ abstract class AbstractTransportManagerDetailsController extends TransportManage
     use GenericUpload;
 
     protected TransportManagerHelperService $transportManagerHelper;
+    protected FileUploadHelperService $uploadHelper;
 
     public function __construct(
         ScriptFactory $scriptFactory,
@@ -27,7 +29,8 @@ abstract class AbstractTransportManagerDetailsController extends TransportManage
         FlashMessengerHelperService $flashMessengerHelper,
         TranslationHelperService $translationHelper,
         $navigation,
-        TransportManagerHelperService $transportManagerHelper
+        TransportManagerHelperService $transportManagerHelper,
+        FileUploadHelperService $uploadHelper
     ) {
         parent::__construct(
             $scriptFactory,
@@ -39,6 +42,7 @@ abstract class AbstractTransportManagerDetailsController extends TransportManage
             $navigation
         );
         $this->transportManagerHelper = $transportManagerHelper;
+        $this->uploadHelper = $uploadHelper;
     }
 
     /**

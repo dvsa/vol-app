@@ -30,6 +30,7 @@ use Olcs\Controller\TransportManager as TmCntr;
 use Olcs\Controller\Operator as OperatorControllers;
 use Olcs\Controller\Application as ApplicationControllers;
 use Olcs\Controller\Licence as LicenceControllers;
+use Olcs\Controller\Document as DocumentControllers;
 
 $feeActionRoute = [
     // child route config that is used in multiple places
@@ -595,7 +596,7 @@ $routes = [
                             'route' => 'upload[/]',
                             'defaults' => [
                                 'type' => 'busReg',
-                                'controller' => 'DocumentUploadController',
+                                'controller' => DocumentControllers\DocumentUploadController::class,
                                 'action' => 'upload'
                             ]
                         ],
@@ -815,7 +816,7 @@ $routes = [
                             'route' => 'upload[/]',
                             'defaults' => [
                                 'type' => 'licence',
-                                'controller' => 'DocumentUploadController',
+                                'controller' => DocumentControllers\DocumentUploadController::class,
                                 'action' => 'upload'
                             ]
                         ],
@@ -1039,7 +1040,7 @@ $routes = [
                             'route' => 'upload[/]',
                             'defaults' => [
                                 'type' => 'irhpApplication',
-                                'controller' => 'DocumentUploadController',
+                                'controller' => DocumentControllers\DocumentUploadController::class,
                                 'action' => 'upload'
                             ]
                         ],
@@ -1485,7 +1486,7 @@ $routes = [
                             'route' => 'upload[/]',
                             'defaults' => [
                                 'type' => 'irfoOrganisation',
-                                'controller' => 'DocumentUploadController',
+                                'controller' => DocumentControllers\DocumentUploadController::class,
                                 'action' => 'upload'
                             ]
                         ],
@@ -1860,7 +1861,7 @@ $routes = [
                             'route' => 'upload[/]',
                             'defaults' => [
                                 'type' => 'transportManager',
-                                'controller' => 'DocumentUploadController',
+                                'controller' => DocumentControllers\DocumentUploadController::class,
                                 'action' => 'upload'
                             ]
                         ],
@@ -1983,7 +1984,7 @@ $routes = [
         'options' => [
             'route' => '/split[/]',
             'defaults' => [
-                'controller' => 'SplitScreenController',
+                'controller' => \Olcs\Controller\SplitScreenController::class,
                 'action' => 'index'
             ]
         ]
@@ -2415,7 +2416,7 @@ $routes['lva-application']['child_routes'] = array_merge(
                         'route' => 'upload[/]',
                         'defaults' => [
                             'type' => 'application',
-                            'controller' => 'DocumentUploadController',
+                            'controller' => DocumentControllers\DocumentUploadController::class,
                             'action' => 'upload'
                         ]
                     ],

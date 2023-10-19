@@ -4,6 +4,7 @@ namespace Olcs\Controller\Cases\Submission;
 
 use Common\Controller\Traits\GenericUpload;
 use Common\Service\Data\CategoryDataService;
+use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -190,7 +191,8 @@ class SubmissionController extends AbstractInternalController implements Submiss
     protected FlashMessengerHelperService $flashMessengerHelperService;
     protected Navigation $navigation;
     protected UrlHelperService $urlHelper;
-    protected Submission $submissionService;
+    protected Submission $submissionDataService;
+    protected FileUploadHelperService $uploadHelper;
 
     public function __construct(
         TranslationHelperService $translationHelper,
@@ -200,12 +202,14 @@ class SubmissionController extends AbstractInternalController implements Submiss
         UrlHelperService $urlHelper,
         array $configHelper,
         ViewRenderer $viewRenderer,
-        Submission $submissionService
+        Submission $submissionDataService,
+        FileUploadHelperService $uploadHelper
     ) {
         $this->urlHelper = $urlHelper;
         $this->configHelper = $configHelper;
         $this->viewRenderer = $viewRenderer;
-        $this->submissionService = $submissionService;
+        $this->submissionDataService = $submissionDataService;
+        $this->uploadHelper = $uploadHelper;
 
         parent::__construct($translationHelper, $formHelper, $flashMessenger, $navigation);
     }

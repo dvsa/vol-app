@@ -38,8 +38,10 @@ use Olcs\Controller\Factory\Licence as LicenceControllerFactories;
 use Olcs\Controller\Factory\Operator as OperatorControllerFactories;
 use Olcs\Controller\Factory\Operator\OperatorBusinessDetailsControllerFactory;
 use Olcs\Controller\Factory\SearchControllerFactory;
+use Olcs\Controller\Factory\SplitScreenControllerFactory;
 use Olcs\Controller\Factory\TaskControllerFactory;
 use Olcs\Controller\Factory\TransportManager\Processing\TransportManagerProcessingTaskControllerFactory;
+use Olcs\Controller\Factory\TransportManager\TransportManagerDocumentControllerFactory;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Olcs\Controller\Interfaces\BusRegControllerInterface;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
@@ -75,6 +77,7 @@ use Olcs\Controller\TransportManager as TmCntr;
 use Olcs\Controller\TransportManager\Details\TransportManagerDetailsDetailController;
 use Olcs\Controller\TransportManager\Details\TransportManagerDetailsDetailControllerFactory;
 use Olcs\Controller\TransportManager\Details\TransportManagerDetailsPreviousHistoryController;
+use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingTaskController;
 use Olcs\Controller\TransportManager\TransportManagerController;
 use Olcs\Form\Element\SearchDateRangeFieldsetFactory;
 use Olcs\Form\Element\SearchFilterFieldsetFactory;
@@ -416,6 +419,8 @@ return array(
             ApplicationProcessingPublicationsController::class => ApplicationProcessingPublicationsControllerFactory::class,
             SearchController::class => SearchControllerFactory::class,
             OperatorBusinessDetailsController::class => OperatorBusinessDetailsControllerFactory::class,
+            \Olcs\Controller\SplitScreenController::class => SplitScreenControllerFactory::class,
+            TransportManagerDocumentController::class => TransportManagerDocumentControllerFactory::class,
         ],
         'aliases' => [
             'LvaApplication' => Olcs\Controller\Lva\Application\OverviewController::class,
@@ -538,18 +543,18 @@ return array(
             'TMDetailsDetailController' => TransportManagerDetailsDetailController::class,
             'TMDetailsPreviousHistoryController' => TransportManagerDetailsPreviousHistoryController::class,
             'TMProcessingPublicationController' => Olcs\Controller\TransportManager\Processing\PublicationController::class,
-            'TMProcessingTaskController' => 'Olcs\Controller\TransportManager\Processing\TransportManagerProcessingTaskController',
-            'TMDocumentController' => 'Olcs\Controller\TransportManager\TransportManagerDocumentController',
+            'TMProcessingTaskController' => TransportManagerProcessingTaskController::class,
+            'TMDocumentController' => TmCntr\TransportManagerDocumentController::class,
             'InterimApplicationController' => 'Olcs\Controller\Lva\Application\InterimController',
             'InterimVariationController' => 'Olcs\Controller\Lva\Variation\InterimController',
-            'SplitScreenController' => 'Olcs\Controller\SplitScreenController',
+            'SplitScreenController' => \Olcs\Controller\SplitScreenController::class,
             'CaseHistoryController' => Olcs\Controller\Cases\Processing\HistoryController::class,
             'CaseReadHistoryController' => 'Olcs\Controller\Cases\Processing\ReadHistoryController',
             'BusRegHistoryController' => 'Olcs\Controller\Bus\Processing\HistoryController',
             'BusRegReadHistoryController' => 'Olcs\Controller\Bus\Processing\ReadHistoryController',
             'LicenceHistoryController' => 'Olcs\Controller\Licence\Processing\HistoryController',
             'LicenceReadHistoryController' => 'Olcs\Controller\Licence\Processing\ReadHistoryController',
-            'TransportManagerHistoryController' => 'Olcs\Controller\TransportManager\Processing\HistoryController',
+            'TransportManagerHistoryController' => TmCntr\Processing\HistoryController::class,
             'TransportManagerReadHistoryController' => 'Olcs\Controller\TransportManager\Processing\ReadHistoryController',
             'ApplicationHistoryController' => ApplicationControllers\Processing\HistoryController::class,//'Olcs\Controller\Application\Processing\HistoryController',
             'ApplicationReadHistoryController' => ApplicationControllers\Processing\ReadHistoryController::class,//'Olcs\Controller\Application\Processing\ReadHistoryController',

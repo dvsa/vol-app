@@ -2,6 +2,7 @@
 
 namespace OlcsTest\Mvc\Controller\Plugin;
 
+use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -32,6 +33,7 @@ class ConfirmTest extends TestCase
         $this->configHelper = array();
         $this->viewRenderer = m::mock(ViewRenderer::class);
         $this->submissionService = m::mock(Submission::class);
+        $this->uploadHelper = m::mock(FileUploadHelperService::class);
         $this->sut = m::mock(SubmissionController::class, [
             $this->translationHelper,
             $this->formHelper,
@@ -40,7 +42,8 @@ class ConfirmTest extends TestCase
             $this->urlHelper,
             $this->configHelper,
             $this->viewRenderer,
-            $this->submissionService
+            $this->submissionService,
+            $this->uploadHelper
         ])->makePartial();
     }
     /**

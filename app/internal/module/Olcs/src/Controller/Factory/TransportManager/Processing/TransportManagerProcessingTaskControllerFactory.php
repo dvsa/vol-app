@@ -12,6 +12,7 @@ use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingTaskController;
+use Olcs\Service\Data\SubCategory;
 
 class TransportManagerProcessingTaskControllerFactory implements FactoryInterface
 {
@@ -32,6 +33,7 @@ class TransportManagerProcessingTaskControllerFactory implements FactoryInterfac
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         $translationHelper = $container->get(TranslationHelperService::class);
         $navigation = $container->get('navigation');
+        $subCategoryDataService = $container->get(SubCategory::class);
 
         return new TransportManagerProcessingTaskController(
             $scriptFactory,
@@ -40,7 +42,8 @@ class TransportManagerProcessingTaskControllerFactory implements FactoryInterfac
             $viewHelperManager,
             $flashMessengerHelper,
             $translationHelper,
-            $navigation
+            $navigation,
+            $subCategoryDataService
         );
     }
 

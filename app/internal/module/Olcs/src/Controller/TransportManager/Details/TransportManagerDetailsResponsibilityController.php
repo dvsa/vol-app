@@ -5,6 +5,7 @@ namespace Olcs\Controller\TransportManager\Details;
 use Common\Controller\Traits\CheckForCrudAction;
 use Common\Service\Cqrs\Command\CommandService;
 use Common\Service\Cqrs\Query\QueryService;
+use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -85,7 +86,8 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         AnnotationBuilder $transferAnnotationBuilder,
         CommandService $commandService,
         QueryService $queryService,
-        NiTextTranslation $niTextTranslationUtil
+        NiTextTranslation $niTextTranslationUtil,
+        FileUploadHelperService $uploadHelper
     ) {
         parent::__construct(
             $scriptFactory,
@@ -95,7 +97,8 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             $flashMessengerHelper,
             $translationHelper,
             $navigation,
-            $transportManagerHelper
+            $transportManagerHelper,
+            $uploadHelper
         );
         $this->transferAnnotationBuilder = $transferAnnotationBuilder;
         $this->commandService = $commandService;
