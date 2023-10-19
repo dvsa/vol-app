@@ -10,6 +10,7 @@ use Olcs\Controller\TaskController;
 use Olcs\Controller\TransportManager\Details\TransportManagerDetailsDetailController;
 use Olcs\Controller\Operator\OperatorFeesController;
 use Olcs\Controller\Operator\OperatorProcessingTasksController;
+use Olcs\Controller\TransportManager\Processing\HistoryController;
 use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingNoteController as TMProcessingNoteController;
 use Olcs\Controller\Licence\BusRegistrationController as LicenceBusController;
 use Olcs\Controller\Licence\Processing\LicenceProcessingNoteController;
@@ -1743,7 +1744,7 @@ $routes = [
                         'options' => [
                             'route' => 'history[/:action[/:id]][/]',
                             'defaults' => [
-                                'controller' => 'TMProcessingHistoryController',
+                                'controller' => TmCntr\Processing\HistoryController::class,
                                 'action' => 'index',
                             ]
                         ]
@@ -1753,7 +1754,7 @@ $routes = [
                         'options' => [
                             'route' => 'publication[/:action][/:id][/]',
                             'defaults' => [
-                                'controller' => 'TMProcessingPublicationController',
+                                'controller' => TmCntr\Processing\PublicationController::class,
                                 'action' => 'index',
                             ],
                             'constraints' => [

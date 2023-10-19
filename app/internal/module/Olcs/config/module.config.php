@@ -369,7 +369,7 @@ return array(
             Olcs\Controller\Cases\ConditionUndertaking\ConditionUndertakingController::class => Olcs\Controller\Cases\ConditionUndertaking\ConditionUndertakingControllerFactory::class,
             Olcs\Controller\Cases\Impounding\ImpoundingController::class => Olcs\Controller\Cases\Impounding\ImpoundingControllerFactory::class,
             Cases\Statement\StatementController::class => Cases\Statement\StatementControllerFactory::class,
-            Olcs\Controller\TransportManager\Processing\HistoryController::class => Olcs\Controller\TransportManager\Processing\HistoryControllerfactory::class,
+            Olcs\Controller\TransportManager\Processing\HistoryController::class => Olcs\Controller\TransportManager\Processing\HistoryControllerFactory::class,
             Olcs\Controller\Licence\Processing\HistoryController::class => LicenceControllers\Processing\HistoryControllerFactory::class,
             Olcs\Controller\IrhpPermits\ChangeHistoryController::class => Olcs\Controller\IrhpPermits\ChangeHistoryControllerFactory::class,
             Olcs\Controller\IrhpPermits\IrhpApplicationProcessingHistoryController::class => Olcs\Controller\IrhpPermits\IrhpApplicationProcessingHistoryControllerFactory::class,
