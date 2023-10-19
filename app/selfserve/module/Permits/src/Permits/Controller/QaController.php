@@ -5,6 +5,7 @@ namespace Permits\Controller;
 use Common\Category;
 use Common\Controller\AbstractOlcsController;
 use Common\Controller\Traits\GenericUpload;
+use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Qa\DataTransformer\ApplicationStepsPostDataTransformer;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\SubmitApplicationStep;
@@ -48,6 +49,8 @@ class QaController extends AbstractOlcsController
     /** @var int */
     protected $irhpApplicationId;
 
+    protected FileUploadHelperService $uploadHelper;
+
     /**
      * Create service instance
      *
@@ -64,13 +67,15 @@ class QaController extends AbstractOlcsController
         TemplateVarsGenerator $templateVarsGenerator,
         TranslationHelperService $translationHelperService,
         ViewGeneratorProvider $viewGeneratorProvider,
-        ApplicationStepsPostDataTransformer $applicationStepsPostDataTransformer
+        ApplicationStepsPostDataTransformer $applicationStepsPostDataTransformer,
+        FileUploadHelperService $uploadHelper
     ) {
         $this->formProvider = $formProvider;
         $this->templateVarsGenerator = $templateVarsGenerator;
         $this->translationHelperService = $translationHelperService;
         $this->viewGeneratorProvider = $viewGeneratorProvider;
         $this->applicationStepsPostDataTransformer = $applicationStepsPostDataTransformer;
+        $this->uploadHelper = $uploadHelper;
     }
 
     /**

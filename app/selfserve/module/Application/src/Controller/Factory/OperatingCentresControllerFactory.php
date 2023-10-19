@@ -3,6 +3,7 @@
 namespace Dvsa\Olcs\Application\Controller\Factory;
 
 use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\RestrictionHelperService;
@@ -39,6 +40,7 @@ class OperatingCentresControllerFactory implements FactoryInterface
         $variationLvaService = $container->get(VariationLvaService::class);
         $restrictionHelper = $container->get(RestrictionHelperService::class);
         $stringHelper = $container->get(StringHelperService::class);
+        $uploadHelper = $container->get(FileUploadHelperService::class);
 
         return new OperatingCentresController(
             $niTextTranslationUtil,
@@ -50,7 +52,8 @@ class OperatingCentresControllerFactory implements FactoryInterface
             $scriptFactory,
             $variationLvaService,
             $restrictionHelper,
-            $stringHelper
+            $stringHelper,
+            $uploadHelper
         );
     }
 

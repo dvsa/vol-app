@@ -4,6 +4,7 @@ namespace Dvsa\Olcs\Application\Controller;
 
 use Common\Controller\Lva;
 use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\RestrictionHelperService;
@@ -42,6 +43,7 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
      * @param VariationLvaService $variationLvaService
      * @param RestrictionHelperService $restrictionHelper
      * @param StringHelperService $stringHelper
+     * @param FileUploadHelperService $uploadHelper
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -53,7 +55,8 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
         ScriptFactory $scriptFactory,
         VariationLvaService $variationLvaService,
         RestrictionHelperService $restrictionHelper,
-        StringHelperService $stringHelper
+        StringHelperService $stringHelper,
+        FileUploadHelperService $uploadHelper
     ) {
         $this->restrictionHelper = $restrictionHelper;
         $this->stringHelper = $stringHelper;
@@ -66,7 +69,8 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
             $formServiceManager,
             $translationHelper,
             $scriptFactory,
-            $variationLvaService
+            $variationLvaService,
+            $uploadHelper
         );
     }
 }

@@ -3,6 +3,7 @@
 namespace Dvsa\Olcs\Application\Controller\Factory;
 
 use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\GuidanceHelperService;
 use Common\Service\Helper\RestrictionHelperService;
@@ -39,6 +40,7 @@ class PeopleControllerFactory implements FactoryInterface
         $restrictionHelper = $container->get(RestrictionHelperService::class);
         $stringHelper = $container->get(StringHelperService::class);
         $lvaAdapter = $container->get(ApplicationPeopleAdapter::class);
+        $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
 
         return new PeopleController(
             $niTextTranslationUtil,
@@ -50,7 +52,8 @@ class PeopleControllerFactory implements FactoryInterface
             $guidanceHelper,
             $restrictionHelper,
             $stringHelper,
-            $lvaAdapter
+            $lvaAdapter,
+            $flashMessengerHelper
         );
     }
 

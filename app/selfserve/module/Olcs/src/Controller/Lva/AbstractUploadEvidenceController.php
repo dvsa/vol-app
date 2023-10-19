@@ -6,6 +6,7 @@ use Common\Controller\Lva\AbstractController;
 use Common\Controller\Traits\GenericUpload;
 use Common\Form\Form;
 use Common\RefData;
+use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Transfer\Query\Application\UploadEvidence;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
@@ -34,18 +35,22 @@ abstract class AbstractUploadEvidenceController extends AbstractController
     private $application;
 
     protected FormHelperService $formHelper;
+    protected FileUploadHelperService $uploadHelper;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
      * @param FormHelperService $formHelper
+     * @param FileUploadHelperService $uploadHelper
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
-        FormHelperService $formHelper
+        FormHelperService $formHelper,
+        FileUploadHelperService $uploadHelper
     ) {
         $this->formHelper = $formHelper;
+        $this->uploadHelper = $uploadHelper;
 
         parent::__construct(
             $niTextTranslationUtil,

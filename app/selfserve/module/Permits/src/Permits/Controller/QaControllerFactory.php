@@ -2,6 +2,7 @@
 
 namespace Permits\Controller;
 
+use Common\Service\Helper\FileUploadHelperService;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
@@ -38,7 +39,8 @@ class QaControllerFactory implements FactoryInterface
             $container->get('QaTemplateVarsGenerator'),
             $container->get('Helper\Translation'),
             $container->get('QaViewGeneratorProvider'),
-            $container->get('QaApplicationStepsPostDataTransformer')
+            $container->get('QaApplicationStepsPostDataTransformer'),
+            $container->get(FileUploadHelperService::class)
         );
     }
 }
