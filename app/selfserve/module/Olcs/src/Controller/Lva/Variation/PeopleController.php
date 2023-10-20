@@ -4,6 +4,7 @@ namespace Olcs\Controller\Lva\Variation;
 
 use Common\Controller\Lva;
 use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\GuidanceHelperService;
 use Common\Service\Lva\VariationLvaService;
@@ -35,6 +36,7 @@ class PeopleController extends Lva\AbstractPeopleController
      * @param VariationLvaService $variationLvaService
      * @param GuidanceHelperService $guidanceHelper
      * @param VariationPeopleAdapter $lvaAdapter
+     * @param FlashMessengerHelperService $flashMessengerHelper
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -44,7 +46,8 @@ class PeopleController extends Lva\AbstractPeopleController
         ScriptFactory $scriptFactory,
         VariationLvaService $variationLvaService,
         GuidanceHelperService $guidanceHelper,
-        VariationPeopleAdapter $lvaAdapter
+        VariationPeopleAdapter $lvaAdapter,
+        FlashMessengerHelperService $flashMessengerHelper
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -54,7 +57,8 @@ class PeopleController extends Lva\AbstractPeopleController
             $scriptFactory,
             $variationLvaService,
             $guidanceHelper,
-            $lvaAdapter
+            $lvaAdapter,
+            $flashMessengerHelper
         );
     }
 }

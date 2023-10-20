@@ -11,6 +11,7 @@ namespace Olcs\Controller\Lva\Licence;
 
 use Common\Controller\Lva\AbstractVariationController;
 use Common\Controller\Lva\Adapters\LicenceLvaAdapter;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
@@ -43,7 +44,8 @@ class VariationController extends AbstractVariationController
         AuthorizationService $authService,
         TranslationHelperService $translationHelper,
         $processingCreateVariation,
-        LicenceLvaAdapter $licenceLvaAdapter
+        LicenceLvaAdapter $licenceLvaAdapter,
+        FlashMessengerHelperService $flashMessengerHelper
     ) {
         $this->licenceLvaAdapter = $licenceLvaAdapter;
 
@@ -51,7 +53,8 @@ class VariationController extends AbstractVariationController
             $niTextTranslationUtil,
             $authService,
             $translationHelper,
-            $processingCreateVariation
+            $processingCreateVariation,
+            $flashMessengerHelper
         );
     }
 }

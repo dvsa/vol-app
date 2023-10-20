@@ -96,23 +96,4 @@ class TransportManagersController extends AbstractTransportManagersController
             $uploadHelper
         );
     }
-
-    /**
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return TransportManagersController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        $result = parent::createService($serviceLocator);
-        $this->initialized = true;
-        return $result;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isInitialized(): bool
-    {
-        return $this->initialized === true;
-    }
 }

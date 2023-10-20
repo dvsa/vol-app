@@ -6,6 +6,7 @@ use Common\Controller\Lva;
 use Common\Exception\ResourceNotFoundException;
 use Common\FormService\FormServiceManager;
 use Common\RefData;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\GuidanceHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -68,7 +69,8 @@ class PeopleController extends Lva\AbstractPeopleController
         VariationLvaService $variationLvaService,
         GuidanceHelperService $guidanceHelper,
         TranslationHelperService $translationHelper,
-        LicencePeopleAdapter $lvaAdapter
+        LicencePeopleAdapter $lvaAdapter,
+        FlashMessengerHelperService $flashMessengerHelper
     ) {
         $this->translationHelper = $translationHelper;
 
@@ -80,7 +82,8 @@ class PeopleController extends Lva\AbstractPeopleController
             $scriptFactory,
             $variationLvaService,
             $guidanceHelper,
-            $lvaAdapter
+            $lvaAdapter,
+            $flashMessengerHelper
         );
     }
 

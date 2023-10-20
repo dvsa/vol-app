@@ -202,7 +202,7 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController
         );
         if (!$response->isOk()) {
             throw new \RuntimeException(
-                $this->translationHelper->translate('external.error-getting-organisation')
+                $this->translatorHelper->translate('external.error-getting-organisation')
             );
         }
         return $response->getResult();

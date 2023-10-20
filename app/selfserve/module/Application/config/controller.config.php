@@ -52,21 +52,5 @@ return [
             ApplicationControllers\TransportManagersController::class => ApplicationControllerFactories\TransportManagersControllerFactory::class,
             ApplicationControllers\VehiclesPsvController::class => ApplicationControllerFactories\VehiclesPsvControllerFactory::class,
         ],
-        'delegators' => [
-            'Application/BusinessType' => [
-                // NOTE: we need an associative array when we need to override the
-                // delegator elsewhere, such as in selfserve or internal
-                'delegator' => \Common\Controller\Lva\Delegators\GenericBusinessTypeDelegator::class,
-            ],
-            'Application/FinancialEvidence' => [
-                Common\Controller\Lva\Delegators\ApplicationFinancialEvidenceDelegator::class,
-            ],
-            'Application/People' => [
-                \Common\Controller\Lva\Delegators\ApplicationPeopleDelegator::class,
-            ],
-            'Application/TransportManagers' => [
-                Common\Controller\Lva\Delegators\ApplicationTransportManagerDelegator::class,
-            ],
-        ],
     ],
 ];
