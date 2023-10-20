@@ -3,6 +3,7 @@
 namespace Olcs\Controller\Lva\Factory\Controller\Variation;
 
 use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\StringHelperService;
@@ -37,6 +38,7 @@ class OperatingCentresControllerFactory implements FactoryInterface
         $scriptFactory = $container->get(ScriptFactory::class);
         $variationLvaService = $container->get(VariationLvaService::class);
         $stringHelper = $container->get(StringHelperService::class);
+        $uploadHelper = $container->get(FileUploadHelperService::class);
 
         return new OperatingCentresController(
             $niTextTranslationUtil,
@@ -47,7 +49,8 @@ class OperatingCentresControllerFactory implements FactoryInterface
             $translationHelper,
             $scriptFactory,
             $variationLvaService,
-            $stringHelper
+            $stringHelper,
+            $uploadHelper
         );
     }
 

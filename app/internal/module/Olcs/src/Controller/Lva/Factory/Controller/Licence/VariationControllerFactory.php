@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Lva\Factory\Controller\Licence;
 
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
@@ -29,13 +30,15 @@ class VariationControllerFactory implements FactoryInterface
         $translationHelper = $container->get(TranslationHelperService::class);
         $processingCreateVariation = $container->get(CreateVariationProcessingService::class);
         $formHelper = $container->get(FormHelperService::class);
+        $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
 
         return new VariationController(
             $niTextTranslationUtil,
             $authService,
             $translationHelper,
             $processingCreateVariation,
-            $formHelper
+            $formHelper,
+            $flashMessengerHelper
         );
     }
 

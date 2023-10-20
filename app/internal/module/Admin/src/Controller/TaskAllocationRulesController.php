@@ -88,6 +88,10 @@ class TaskAllocationRulesController extends AbstractInternalController
             'reUseParams' => false
         ],
     ];
+
+    protected TableFactory $tableFactory;
+    protected UserListInternal $userListInternal;
+
     public function __construct(
         TranslationHelperService $translationHelperService,
         FormHelperService $formHelper,

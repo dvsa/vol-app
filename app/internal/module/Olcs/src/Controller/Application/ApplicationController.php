@@ -40,6 +40,8 @@ class ApplicationController extends AbstractController implements ApplicationCon
     protected ComplaintsHelperService $complaintsHelper;
     protected FlashMessengerHelperService $flashMessengerHelper;
 
+    protected $navigation;
+
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
@@ -48,7 +50,8 @@ class ApplicationController extends AbstractController implements ApplicationCon
         PluginManager $dataServiceManager,
         OppositionHelperService $oppositionHelper,
         ComplaintsHelperService $complaintsHelper,
-        FlashMessengerHelperService $flashMessengerHelper
+        FlashMessengerHelperService $flashMessengerHelper,
+        $navigation
     ) {
         parent::__construct(
             $scriptFactory,
@@ -60,6 +63,7 @@ class ApplicationController extends AbstractController implements ApplicationCon
         $this->oppositionHelper = $oppositionHelper;
         $this->complaintsHelper = $complaintsHelper;
         $this->flashMessengerHelper = $flashMessengerHelper;
+        $this->navigation = $navigation;
     }
 
     /**

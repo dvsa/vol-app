@@ -181,11 +181,6 @@ class SubmissionController extends AbstractInternalController implements Submiss
      */
     private $sectionSubcategory;
 
-    /**
-     * @var \Common\Service\Helper\FlashMessengerHelperService
-     */
-    private $hlpFlash;
-
     protected TranslationHelperService $translationHelperService;
     protected FormHelperService $formHelperService;
     protected FlashMessengerHelperService $flashMessengerHelperService;
@@ -193,6 +188,8 @@ class SubmissionController extends AbstractInternalController implements Submiss
     protected UrlHelperService $urlHelper;
     protected Submission $submissionDataService;
     protected FileUploadHelperService $uploadHelper;
+    protected array $configHelper;
+    protected ViewRenderer $viewRenderer;
 
     public function __construct(
         TranslationHelperService $translationHelper,
@@ -212,20 +209,6 @@ class SubmissionController extends AbstractInternalController implements Submiss
         $this->uploadHelper = $uploadHelper;
 
         parent::__construct($translationHelper, $formHelper, $flashMessenger, $navigation);
-    }
-
-    /**
-     * On Dispatch
-     *
-     * @param MvcEvent $e Event
-     *
-     * @return \Laminas\Http\Response
-     */
-    public function onDispatch(MvcEvent $e)
-    {
-        $this->hlpFlash = $this->flashMessengerHelperService;
-
-        return parent::onDispatch($e);
     }
 
     /**
@@ -413,7 +396,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
             )
         );
 
-        $this->hlpFlash->addSuccessMessage('Submission snapshot created');
+        $this->flashMessengerHelperService->addSuccessMessage('Submission snapshot created');
 
         return $this->redirect()->toRoute(
             'submission',
@@ -503,9 +486,9 @@ class SubmissionController extends AbstractInternalController implements Submiss
         }
 
         if ($response->isClientError() || $response->isServerError()) {
-            $this->hlpFlash->addUnknownError();
+            $this->flashMessengerHelperService->addUnknownError();
         } elseif ($response->isOk()) {
-            $this->hlpFlash->addSuccessMessage('Submission updated');
+            $this->flashMessengerHelperService->addSuccessMessage('Submission updated');
         }
 
         return $this->redirect()->toRoute(

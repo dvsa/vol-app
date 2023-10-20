@@ -53,11 +53,11 @@ class ApplicationDocsController extends ApplicationController implements LeftVie
             $dataServiceManager,
             $oppositionHelper,
             $complaintsHelper,
-            $flashMessengerHelper
+            $flashMessengerHelper,
+            $navigation
         );
         $this->docSubCategoryDataService = $docSubCategoryDataService;
         $this->translationHelper = $translationHelper;
-        $this->navigation = $navigation;
     }
 
     /**

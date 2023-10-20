@@ -6,6 +6,7 @@ use Common\FormService\FormServiceManager;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\GuidanceHelperService;
+use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Interop\Container\ContainerInterface;
@@ -33,6 +34,7 @@ class DiscsControllerFactory implements FactoryInterface
         $formServiceManager = $container->get(FormServiceManager::class);
         $tableFactory = $container->get(TableFactory::class);
         $guidanceHelper = $container->get(GuidanceHelperService::class);
+        $scriptFactory  = $container->get(ScriptFactory::class);
 
         return new DiscsController(
             $niTextTranslationUtil,
@@ -41,7 +43,8 @@ class DiscsControllerFactory implements FactoryInterface
             $flashMessengerHelper,
             $formServiceManager,
             $tableFactory,
-            $guidanceHelper
+            $guidanceHelper,
+            $scriptFactory
         );
     }
 

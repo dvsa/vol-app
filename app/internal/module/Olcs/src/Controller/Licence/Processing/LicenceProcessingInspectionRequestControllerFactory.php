@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Licence\Processing;
 
+use Common\Service\Cqrs\Query\QueryService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -34,13 +35,16 @@ class LicenceProcessingInspectionRequestControllerFactory implements FactoryInte
         $annotationBuilderService = $container->get(AnnotationBuilder::class);
         assert($annotationBuilderService instanceof AnnotationBuilder);
 
+        $queryService = $container->get(QueryService::class);
+
         return new LicenceProcessingInspectionRequestController(
             $translationHelper,
             $formHelper,
             $flashMessenger,
             $navigation,
             $setUpOcListboxService,
-            $annotationBuilderService
+            $annotationBuilderService,
+            $queryService
         );
     }
     public function createService(ServiceLocatorInterface $serviceLocator): LicenceProcessingInspectionRequestController

@@ -13,6 +13,7 @@ use Common\FormService\FormServiceManager;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\GuidanceHelperService;
+use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
@@ -47,14 +48,18 @@ class DiscsController extends Lva\AbstractDiscsController implements LicenceCont
         FlashMessengerHelperService $flashMessengerHelper,
         FormServiceManager $formServiceManager,
         TableFactory $tableFactory,
-        GuidanceHelperService $guidanceHelper
+        GuidanceHelperService $guidanceHelper,
+        ScriptFactory $scriptFactory
     ) {
-        $this->formHelper = $formHelper;
-        $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->formServiceManager = $formServiceManager;
-        $this->tableFactory = $tableFactory;
-        $this->guidanceHelper = $guidanceHelper;
-
-        parent::__construct($niTextTranslationUtil, $authService);
+        parent::__construct(
+            $niTextTranslationUtil,
+            $authService,
+            $formHelper,
+            $flashMessengerHelper,
+            $formServiceManager,
+            $tableFactory,
+            $guidanceHelper,
+            $scriptFactory
+        );
     }
 }

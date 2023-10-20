@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Lva\Factory\Controller\Application;
 
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\RestrictionHelperService;
 use Common\Service\Helper\StringHelperService;
@@ -31,6 +32,7 @@ class OverviewControllerFactory implements FactoryInterface
         $applicationOverviewHelper = $container->get(ApplicationOverviewHelperService::class);
         $formHelper = $container->get(FormHelperService::class);
         $restrictionHelper = $container->get(RestrictionHelperService::class);
+        $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
 
         return new OverviewController(
             $niTextTranslationUtil,
@@ -38,7 +40,8 @@ class OverviewControllerFactory implements FactoryInterface
             $stringHelper,
             $applicationOverviewHelper,
             $formHelper,
-            $restrictionHelper
+            $restrictionHelper,
+            $flashMessengerHelper
         );
     }
 

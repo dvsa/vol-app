@@ -39,15 +39,16 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
     protected StringHelperService $stringHelper;
 
     /**
-     * @param NiTextTranslation           $niTextTranslationUtil
-     * @param AuthorizationService        $authService
-     * @param FormHelperService           $formHelper
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
      * @param FlashMessengerHelperService $flashMessengerHelper
-     * @param FormServiceManager          $formServiceManager
-     * @param TranslationHelperService    $translationHelper
-     * @param ScriptFactory               $scriptFactory
-     * @param VariationLvaService         $variationLvaService
-     * @param StringHelperService         $stringHelper
+     * @param FormServiceManager $formServiceManager
+     * @param TranslationHelperService $translationHelper
+     * @param ScriptFactory $scriptFactory
+     * @param VariationLvaService $variationLvaService
+     * @param StringHelperService $stringHelper
+     * @param FileUploadHelperService $uploadHelper
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -58,7 +59,8 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
         TranslationHelperService $translationHelper,
         ScriptFactory $scriptFactory,
         VariationLvaService $variationLvaService,
-        StringHelperService $stringHelper
+        StringHelperService $stringHelper,
+        FileUploadHelperService $uploadHelper
     ) {
         $this->stringHelper = $stringHelper;
 
@@ -70,7 +72,8 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
             $formServiceManager,
             $translationHelper,
             $scriptFactory,
-            $variationLvaService
+            $variationLvaService,
+            $uploadHelper
         );
     }
 }

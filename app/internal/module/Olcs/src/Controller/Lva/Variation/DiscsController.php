@@ -14,6 +14,7 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\GuidanceHelperService;
 use Common\Service\Helper\StringHelperService;
+use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Interfaces\VariationControllerInterface;
@@ -52,7 +53,8 @@ class DiscsController extends Lva\AbstractDiscsController implements VariationCo
         FormServiceManager $formServiceManager,
         TableFactory $tableFactory,
         GuidanceHelperService $guidanceHelper,
-        StringHelperService $stringHelper
+        StringHelperService $stringHelper,
+        ScriptFactory $scriptFactory
     ) {
         $this->stringHelper = $stringHelper;
 
@@ -63,7 +65,8 @@ class DiscsController extends Lva\AbstractDiscsController implements VariationCo
             $flashMessengerHelper,
             $formServiceManager,
             $tableFactory,
-            $guidanceHelper
+            $guidanceHelper,
+            $scriptFactory
         );
     }
 }

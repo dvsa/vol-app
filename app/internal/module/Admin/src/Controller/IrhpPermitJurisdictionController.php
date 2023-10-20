@@ -29,6 +29,9 @@ class IrhpPermitJurisdictionController extends AbstractIrhpPermitAdminController
     protected $navigationId = 'admin-dashboard/admin-permits';
 
     protected $defaultData = ['stockId' => 'route'];
+
+    protected ScriptFactory $scriptFactory;
+
     public function __construct(
         TranslationHelperService $translationHelperService,
         FormHelperService $formHelper,

@@ -43,6 +43,7 @@ class ApplicationFeesControllerFactory implements FactoryInterface
         $identityProvider = $container->get(IdentityProviderInterface::class);
         $translationHelper = $container->get(TranslationHelperService::class);
         $dateHelper = $container->get(DateHelperService::class);
+        $navigation = $container->get('Navigation');
 
         return new ApplicationFeesController(
             $scriptFactory,
@@ -56,7 +57,8 @@ class ApplicationFeesControllerFactory implements FactoryInterface
             $urlHelper,
             $identityProvider,
             $translationHelper,
-            $dateHelper
+            $dateHelper,
+            $navigation
         );
     }
 

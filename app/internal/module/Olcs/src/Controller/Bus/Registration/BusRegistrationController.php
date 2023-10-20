@@ -18,10 +18,7 @@ use Olcs\View\Model\ViewModel;
  */
 class BusRegistrationController extends AbstractActionController implements BusRegControllerInterface
 {
-    /**
-     * @var FlashMessengerHelperService
-     */
-    private $hlpFlashMsgr;
+    protected FlashMessengerHelperService $flashMessengerHelperService;
 
     /**
      * @var int
@@ -29,6 +26,7 @@ class BusRegistrationController extends AbstractActionController implements BusR
     private $busRegId;
 
     protected FlashMessengerHelperService $flashMessenger;
+
     public function __construct(
         FlashMessengerHelperService $flashMessenger
     ) {
@@ -44,10 +42,7 @@ class BusRegistrationController extends AbstractActionController implements BusR
      */
     public function onDispatch(MvcEvent $e)
     {
-        $this->hlpFlashMsgr =  $this->flashMessengerHelperService;
-
         $this->busRegId = $this->params()->fromRoute('busRegId');
-
         parent::onDispatch($e);
     }
 
@@ -131,9 +126,9 @@ class BusRegistrationController extends AbstractActionController implements BusR
         $response = $this->handleCommand($command);
 
         if ($response->isOk()) {
-            $this->hlpFlashMsgr->addSuccessMessage('Created record');
+            $this->flashMessengerHelperService->addSuccessMessage('Created record');
         } else {
-            $this->hlpFlashMsgr->addUnknownError();
+            $this->flashMessengerHelperService->addUnknownError();
         }
 
         return $this->redirectToDetails($response->getResult()['id']['bus']);
@@ -153,9 +148,9 @@ class BusRegistrationController extends AbstractActionController implements BusR
         );
 
         if ($response->isOk()) {
-            $this->hlpFlashMsgr->addSuccessMessage('Bus registration letter created');
+            $this->flashMessengerHelperService->addSuccessMessage('Bus registration letter created');
         } else {
-            $this->hlpFlashMsgr->addErrorMessage('Bus registration letter not created');
+            $this->flashMessengerHelperService->addErrorMessage('Bus registration letter not created');
         }
 
         return $this->redirect()->toRouteAjax('licence/bus-docs', ['busRegId' => $this->busRegId], [], true);

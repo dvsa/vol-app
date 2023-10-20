@@ -92,6 +92,9 @@ class UserManagementController extends AbstractInternalController implements Lef
             'action' => 'index'
         ]
     ];
+
+    protected UrlHelperService $urlHelper;
+
     public function __construct(
         TranslationHelperService $translationHelperService,
         FormHelperService $formHelper,
@@ -203,7 +206,7 @@ class UserManagementController extends AbstractInternalController implements Lef
         ) {
             $value = sprintf(
                 '<a class="govuk-link" href="%s">%s</a>',
-                $this->urlHelperService->fromRoute(
+                $this->urlHelper->fromRoute(
                     'transport-manager',
                     ['transportManager' => $data['userType']['currentTransportManager']]
                 ),

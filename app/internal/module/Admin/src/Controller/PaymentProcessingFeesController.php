@@ -5,7 +5,10 @@ namespace Admin\Controller;
 use Common\Controller\Traits\GenericMethods;
 use Common\Controller\Traits\GenericReceipt;
 use Common\Controller\Traits\GenericRenderView;
+use Common\Service\Helper\DateHelperService;
 use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Helper\UrlHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Common\Util\FlashMessengerTrait;
@@ -13,6 +16,7 @@ use Laminas\Mvc\Controller\AbstractActionController as LaminasAbstractActionCont
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits\FeesActionTrait;
+use ZfcRbac\Identity\IdentityProviderInterface;
 
 class PaymentProcessingFeesController extends LaminasAbstractActionController implements LeftViewProvider
 {
@@ -25,15 +29,28 @@ class PaymentProcessingFeesController extends LaminasAbstractActionController im
     protected ScriptFactory $scriptFactory;
     protected TableFactory $tableFactory;
     protected FormHelperService $formHelper;
+    protected UrlHelperService $urlHelper;
+    protected IdentityProviderInterface $identityProvider;
+    protected TranslationHelperService $translationHelper;
+    protected DateHelperService $dateHelper;
+
 
     public function __construct(
         ScriptFactory $scriptFactory,
         TableFactory $tableFactory,
-        FormHelperService $formHelper
+        FormHelperService $formHelper,
+        UrlHelperService $urlHelper,
+        IdentityProviderInterface $identityProvider,
+        TranslationHelperService $translationHelper,
+        DateHelperService $dateHelper
     ) {
         $this->scriptFactory = $scriptFactory;
         $this->tableFactory = $tableFactory;
         $this->formHelper = $formHelper;
+        $this->urlHelper = $urlHelper;
+        $this->identityProvider = $identityProvider;
+        $this->translationHelper = $translationHelper;
+        $this->dateHelper = $dateHelper;
     }
 
     /**

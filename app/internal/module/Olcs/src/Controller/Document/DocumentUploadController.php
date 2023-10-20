@@ -200,7 +200,7 @@ class DocumentUploadController extends AbstractDocumentController
             }
         }
 
-        $this->flashMessengerHelperService->addCurrentUnknownError();
+        $this->flashMessengerHelper->addCurrentUnknownError();
 
         return $form;
     }

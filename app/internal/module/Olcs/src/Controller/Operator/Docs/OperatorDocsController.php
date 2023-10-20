@@ -7,6 +7,7 @@ use Common\Service\Cqrs\Query\QueryService;
 use Common\Service\Helper\DateHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
@@ -24,6 +25,7 @@ class OperatorDocsController extends OperatorController
     use Traits\DocumentActionTrait;
 
     protected DocumentSubCategory $docSubCategoryDataService;
+    protected TranslationHelperService $translationHelper;
 
     public function __construct(
         ScriptFactory $scriptFactory,
@@ -37,7 +39,8 @@ class OperatorDocsController extends OperatorController
         Licence $licenceDataService,
         QueryService $queryService,
         Navigation $navigation,
-        DocumentSubCategory $docSubCategoryDataService
+        DocumentSubCategory $docSubCategoryDataService,
+        TranslationHelperService $translationHelper
     ) {
         parent::__construct(
             $scriptFactory,
@@ -53,6 +56,7 @@ class OperatorDocsController extends OperatorController
             $navigation
         );
         $this->docSubCategoryDataService = $docSubCategoryDataService;
+        $this->translationHelper = $translationHelper;
     }
 
     /**

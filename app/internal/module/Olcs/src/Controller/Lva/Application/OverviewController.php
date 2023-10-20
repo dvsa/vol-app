@@ -10,6 +10,7 @@
 namespace Olcs\Controller\Lva\Application;
 
 use Common\Controller\Lva\AbstractController;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\RestrictionHelperService;
 use Common\Service\Helper\StringHelperService;
@@ -38,14 +39,16 @@ class OverviewController extends AbstractController implements ApplicationContro
     protected ApplicationOverviewHelperService $applicationOverviewHelper;
     protected FormHelperService $formHelper;
     protected RestrictionHelperService $restrictionHelper;
+    protected FlashMessengerHelperService $flashMessengerHelper;
 
     /**
-     * @param NiTextTranslation                $niTextTranslationUtil
-     * @param AuthorizationService             $authService
-     * @param StringHelperService              $stringHelper
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param StringHelperService $stringHelper
      * @param ApplicationOverviewHelperService $applicationOverviewHelper
-     * @param FormHelperService                $formHelper
-     * @param RestrictionHelperService         $restrictionHelper
+     * @param FormHelperService $formHelper
+     * @param RestrictionHelperService $restrictionHelper
+     * @param FlashMessengerHelperService $flashMessengerHelper
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -53,12 +56,14 @@ class OverviewController extends AbstractController implements ApplicationContro
         StringHelperService $stringHelper,
         ApplicationOverviewHelperService $applicationOverviewHelper,
         FormHelperService $formHelper,
-        RestrictionHelperService $restrictionHelper
+        RestrictionHelperService $restrictionHelper,
+        FlashMessengerHelperService $flashMessengerHelper
     ) {
         $this->stringHelper = $stringHelper;
         $this->applicationOverviewHelper = $applicationOverviewHelper;
         $this->formHelper = $formHelper;
         $this->restrictionHelper = $restrictionHelper;
+        $this->flashMessengerHelper = $flashMessengerHelper;
 
         parent::__construct($niTextTranslationUtil, $authService);
     }

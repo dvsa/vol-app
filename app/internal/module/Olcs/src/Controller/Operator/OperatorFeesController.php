@@ -13,6 +13,7 @@ use Common\Service\Helper\DateHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Helper\UrlHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableBuilder;
 use Common\Service\Table\TableFactory;
@@ -20,6 +21,7 @@ use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Traits\FeesActionTrait;
 use Olcs\Service\Data\Licence;
+use ZfcRbac\Identity\IdentityProviderInterface;
 
 /**
  * Operator Fees Controller
@@ -40,6 +42,8 @@ class OperatorFeesController extends OperatorController
     protected $subNavRoute = 'operator_fees';
 
     protected TranslationHelperService $translationHelper;
+    protected UrlHelperService $urlHelper;
+    protected IdentityProviderInterface $identityProvider;
 
     public function __construct(
         ScriptFactory $scriptFactory,
@@ -53,9 +57,13 @@ class OperatorFeesController extends OperatorController
         Licence $licenceDataService,
         QueryService $queryService,
         \Laminas\Navigation\Navigation $navigation,
-        TranslationHelperService $translatorHelper
+        TranslationHelperService $translatorHelper,
+        UrlHelperService $urlHelper,
+        IdentityProviderInterface $identityProvider
     ) {
         $this->translationHelper = $translatorHelper;
+        $this->urlHelper = $urlHelper;
+        $this->identityProvider = $identityProvider;
         parent::__construct(
             $scriptFactory,
             $formHelper,

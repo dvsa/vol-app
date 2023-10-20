@@ -6,6 +6,7 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Interop\Container\ContainerInterface;
+use Laminas\Mvc\Router\Http\TreeRouteStack;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\View\HelperPluginManager;
@@ -27,12 +28,14 @@ class IrhpApplicationProcessingTasksControllerFactory implements FactoryInterfac
         $formHelper = $container->get(FormHelperService::class);
         $tableFactory = $container->get(TableFactory::class);
         $viewHelperManager = $container->get(HelperPluginManager::class);
+        $router = $container->get(TreeRouteStack::class);
 
         return new IrhpApplicationProcessingTasksController(
             $scriptFactory,
             $formHelper,
             $tableFactory,
             $viewHelperManager,
+            $router
         );
     }
 

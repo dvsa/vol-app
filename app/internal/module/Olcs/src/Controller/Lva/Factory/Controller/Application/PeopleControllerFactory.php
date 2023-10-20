@@ -4,6 +4,7 @@ namespace Olcs\Controller\Lva\Factory\Controller\Application;
 
 use Common\Controller\Lva\Adapters\ApplicationPeopleAdapter;
 use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\GuidanceHelperService;
 use Common\Service\Helper\RestrictionHelperService;
@@ -39,6 +40,7 @@ class PeopleControllerFactory implements FactoryInterface
         $stringHelper = $container->get(StringHelperService::class);
         $lvaAdapter = $container->get(ApplicationPeopleAdapter::class);
         $restrictionHelper = $container->get(RestrictionHelperService::class);
+        $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
 
         return new PeopleController(
             $niTextTranslationUtil,
@@ -50,7 +52,8 @@ class PeopleControllerFactory implements FactoryInterface
             $guidanceHelper,
             $stringHelper,
             $lvaAdapter,
-            $restrictionHelper
+            $restrictionHelper,
+            $flashMessengerHelper
         );
     }
 

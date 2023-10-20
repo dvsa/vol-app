@@ -5,6 +5,7 @@ namespace Olcs\Controller\IrhpPermits;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Table\TableFactory;
 use Interop\Container\ContainerInterface;
 use Laminas\Navigation\Navigation;
 use Laminas\ServiceManager\FactoryInterface;
@@ -26,11 +27,14 @@ class ChangeHistoryControllerFactory implements FactoryInterface
         $navigation = $container->get('navigation');
         assert($navigation instanceof Navigation);
 
+        $tableFactory = $container->get(TableFactory::class);
+
         return new ChangeHistoryController(
             $translationHelper,
             $formHelperService,
             $flashMessenger,
-            $navigation
+            $navigation,
+            $tableFactory
         );
     }
     public function createService(ServiceLocatorInterface $serviceLocator): ChangeHistoryController

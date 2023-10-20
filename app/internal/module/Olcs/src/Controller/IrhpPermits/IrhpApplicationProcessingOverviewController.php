@@ -25,8 +25,7 @@ class IrhpApplicationProcessingOverviewController extends AbstractIrhpPermitProc
         TreeRouteStack $router,
         ApplicationProcessingHelper $processingHelper
     ) {
-        parent::__construct($scriptFactory, $formHelper, $tableFactory, $viewHelperManager);
-        $this->router = $router;
+        parent::__construct($scriptFactory, $formHelper, $tableFactory, $viewHelperManager, $router);
         $this->processingHelper = $processingHelper;
     }
 

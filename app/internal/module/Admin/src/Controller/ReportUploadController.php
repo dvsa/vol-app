@@ -31,6 +31,8 @@ class ReportUploadController extends AbstractInternalController implements LeftV
         'indexAction' => ['forms/report-upload'],
     ];
 
+    protected Scan $scannerAntiVirusService;
+
     public function __construct(
         TranslationHelperService $translationHelperService,
         FormHelperService $formHelper,

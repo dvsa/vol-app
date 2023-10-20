@@ -5,6 +5,7 @@ namespace Olcs\Controller\Licence;
 use Common\Controller\Traits\CheckForCrudAction;
 use Common\RefData;
 use Common\Service\Helper\ComplaintsHelperService;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\OppositionHelperService;
 use Common\Service\Script\ScriptFactory;
@@ -25,6 +26,10 @@ class LicenceController extends AbstractController implements LicenceControllerI
     protected OppositionHelperService $oppositionHelper;
     protected ComplaintsHelperService $complaintsHelper;
 
+    protected $navigation;
+
+    protected FlashMessengerHelperService $flashMessengerHelper;
+
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,
@@ -32,12 +37,14 @@ class LicenceController extends AbstractController implements LicenceControllerI
         HelperPluginManager $viewHelperManager,
         OppositionHelperService $oppositionHelper,
         ComplaintsHelperService $complaintsHelper,
-        $navigation
+        $navigation,
+        FlashMessengerHelperService $flashMessengerHelper
     ) {
         parent::__construct($scriptFactory, $formHelper, $tableFactory, $viewHelperManager);
         $this->oppositionHelper = $oppositionHelper;
         $this->complaintsHelper = $complaintsHelper;
         $this->navigation = $navigation;
+        $this->flashMessengerHelper = $flashMessengerHelper;
     }
 
     /**

@@ -4,6 +4,7 @@ namespace Olcs\Controller\Factory\Application;
 
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\StringHelperService;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Interop\Container\ContainerInterface;
@@ -29,13 +30,17 @@ class ApplicationSchedule41ControllerFactory implements FactoryInterface
         $formHelper = $container->get(FormHelperService::class);
         $tableFactory = $container->get(TableFactory::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
+        $stringHelper = $container->get(StringHelperService::class);
+        $navigation = $container->get('Navigation');
 
         return new ApplicationSchedule41Controller(
             $niTextTranslationUtil,
             $authService,
             $formHelper,
             $tableFactory,
-            $flashMessengerHelper
+            $flashMessengerHelper,
+            $stringHelper,
+            $navigation
         );
     }
 

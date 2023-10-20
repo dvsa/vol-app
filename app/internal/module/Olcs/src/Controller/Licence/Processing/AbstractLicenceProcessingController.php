@@ -7,10 +7,12 @@
 namespace Olcs\Controller\Licence\Processing;
 
 use Common\Service\Helper\ComplaintsHelperService;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\OppositionHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
+use Laminas\Mvc\Router\Http\TreeRouteStack;
 use Laminas\View\HelperPluginManager;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -31,6 +33,7 @@ abstract class AbstractLicenceProcessingController extends LicenceController imp
     protected $helperClass = '\Olcs\Helper\LicenceProcessingHelper';
 
     protected SubCategory $subCategoryDataService;
+    protected TreeRouteStack $router;
 
     public function __construct(
         ScriptFactory $scriptFactory,
@@ -40,7 +43,9 @@ abstract class AbstractLicenceProcessingController extends LicenceController imp
         OppositionHelperService $oppositionHelper,
         ComplaintsHelperService $complaintsHelper,
         $navigation,
-        SubCategory $subCategoryDataService
+        SubCategory $subCategoryDataService,
+        FlashMessengerHelperService $flashMessengerHelper,
+        TreeRouteStack $router
     ) {
         parent::__construct(
             $scriptFactory,
@@ -49,9 +54,11 @@ abstract class AbstractLicenceProcessingController extends LicenceController imp
             $viewHelperManager,
             $oppositionHelper,
             $complaintsHelper,
-            $navigation
+            $navigation,
+            $flashMessengerHelper
         );
         $this->subCategoryDataService = $subCategoryDataService;
+        $this->router = $router;
     }
 
     /**

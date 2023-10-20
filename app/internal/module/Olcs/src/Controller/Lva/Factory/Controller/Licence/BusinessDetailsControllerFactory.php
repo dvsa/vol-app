@@ -37,6 +37,7 @@ class BusinessDetailsControllerFactory implements FactoryInterface
         $identityProvider = $container->get(IdentityProviderInterface::class);
         $tableFactory = $container->get(TableFactory::class);
         $fileUploadHelper = $container->get(FileUploadHelperService::class);
+        $navigation = $container->get('Navigation');
 
         return new BusinessDetailsController(
             $niTextTranslationUtil,
@@ -47,7 +48,8 @@ class BusinessDetailsControllerFactory implements FactoryInterface
             $scriptFactory,
             $identityProvider,
             $tableFactory,
-            $fileUploadHelper
+            $fileUploadHelper,
+            $navigation
         );
     }
 

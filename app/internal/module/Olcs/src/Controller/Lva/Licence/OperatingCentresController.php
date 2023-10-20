@@ -11,6 +11,7 @@ namespace Olcs\Controller\Lva\Licence;
 
 use Common\Controller\Lva;
 use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -35,14 +36,15 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
     protected string $location = 'internal';
 
     /**
-     * @param NiTextTranslation           $niTextTranslationUtil
-     * @param AuthorizationService        $authService
-     * @param FormHelperService           $formHelper
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
      * @param FlashMessengerHelperService $flashMessengerHelper
-     * @param FormServiceManager          $formServiceManager
-     * @param TranslationHelperService    $translationHelper
-     * @param ScriptFactory               $scriptFactory
-     * @param VariationLvaService         $variationLvaService
+     * @param FormServiceManager $formServiceManager
+     * @param TranslationHelperService $translationHelper
+     * @param ScriptFactory $scriptFactory
+     * @param VariationLvaService $variationLvaService
+     * @param FileUploadHelperService $uploadHelper
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -52,7 +54,8 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
         FormServiceManager $formServiceManager,
         TranslationHelperService $translationHelper,
         ScriptFactory $scriptFactory,
-        VariationLvaService $variationLvaService
+        VariationLvaService $variationLvaService,
+        FileUploadHelperService $uploadHelper
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -62,7 +65,8 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
             $formServiceManager,
             $translationHelper,
             $scriptFactory,
-            $variationLvaService
+            $variationLvaService,
+            $uploadHelper
         );
     }
 }

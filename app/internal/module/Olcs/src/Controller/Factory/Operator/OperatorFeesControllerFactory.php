@@ -8,6 +8,7 @@ use Common\Service\Helper\DateHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
+use Common\Service\Helper\UrlHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
@@ -19,6 +20,7 @@ use Olcs\Controller\Operator\OperatorBusinessDetailsController;
 use Olcs\Controller\Operator\OperatorController;
 use Olcs\Controller\Operator\OperatorFeesController;
 use Olcs\Service\Data\Licence;
+use ZfcRbac\Identity\IdentityProviderInterface;
 
 class OperatorFeesControllerFactory implements FactoryInterface
 {
@@ -44,6 +46,8 @@ class OperatorFeesControllerFactory implements FactoryInterface
         $queryService = $container->get(QueryService::class);
         $navigation = $container->get('navigation');
         $translationHelper = $container->get(TranslationHelperService::class);
+        $urlHelper = $container->get(UrlHelperService::class);
+        $identityProvider = $container->get(IdentityProviderInterface::class);
 
         return new OperatorFeesController(
             $scriptFactory,
@@ -57,7 +61,9 @@ class OperatorFeesControllerFactory implements FactoryInterface
             $licenceDataService,
             $queryService,
             $navigation,
-            $translationHelper
+            $translationHelper,
+            $urlHelper,
+            $identityProvider
         );
     }
 

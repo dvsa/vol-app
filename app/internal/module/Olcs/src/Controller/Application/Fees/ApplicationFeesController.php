@@ -56,7 +56,8 @@ class ApplicationFeesController extends ApplicationController implements LeftVie
         UrlHelperService $urlHelper,
         IdentityProviderInterface $identityProvider,
         TranslationHelperService $translationHelper,
-        DateHelperService $dateHelper
+        DateHelperService $dateHelper,
+        $navigation
     ) {
         parent::__construct(
             $scriptFactory,
@@ -66,7 +67,8 @@ class ApplicationFeesController extends ApplicationController implements LeftVie
             $dataServiceManager,
             $oppositionHelper,
             $complaintsHelper,
-            $flashMessengerHelper
+            $flashMessengerHelper,
+            $navigation
         );
         $this->urlHelper = $urlHelper;
         $this->identityProvider = $identityProvider;

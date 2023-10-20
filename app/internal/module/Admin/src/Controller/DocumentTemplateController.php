@@ -58,6 +58,10 @@ class DocumentTemplateController extends AbstractInternalController implements L
         'addAction' => ['forms/document-template'],
         'editAction' => ['forms/document-template']
     ];
+
+    protected Scan $scannerAntiVirusService;
+    protected SubCategory $subCategoryDataService;
+
     public function __construct(
         TranslationHelperService $translationHelperService,
         FormHelperService $formHelper,
