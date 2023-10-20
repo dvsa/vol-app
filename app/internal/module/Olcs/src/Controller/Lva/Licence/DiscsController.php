@@ -32,14 +32,18 @@ class DiscsController extends Lva\AbstractDiscsController implements LicenceCont
     protected $lva = 'licence';
     protected string $location = 'internal';
 
+    protected string $navigation;
+
     /**
-     * @param NiTextTranslation           $niTextTranslationUtil
-     * @param AuthorizationService        $authService
-     * @param FormHelperService           $formHelper
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
      * @param FlashMessengerHelperService $flashMessengerHelper
-     * @param FormServiceManager          $formServiceManager
-     * @param TableFactory                $tableFactory
-     * @param GuidanceHelperService       $guidanceHelper
+     * @param FormServiceManager $formServiceManager
+     * @param TableFactory $tableFactory
+     * @param GuidanceHelperService $guidanceHelper
+     * @param ScriptFactory $scriptFactory
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -49,7 +53,8 @@ class DiscsController extends Lva\AbstractDiscsController implements LicenceCont
         FormServiceManager $formServiceManager,
         TableFactory $tableFactory,
         GuidanceHelperService $guidanceHelper,
-        ScriptFactory $scriptFactory
+        ScriptFactory $scriptFactory,
+        $navigation
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -61,5 +66,6 @@ class DiscsController extends Lva\AbstractDiscsController implements LicenceCont
             $guidanceHelper,
             $scriptFactory
         );
+        $this->navigation = $navigation;
     }
 }

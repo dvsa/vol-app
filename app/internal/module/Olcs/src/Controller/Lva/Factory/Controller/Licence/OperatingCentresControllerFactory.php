@@ -37,6 +37,7 @@ class OperatingCentresControllerFactory implements FactoryInterface
         $scriptFactory = $container->get(ScriptFactory::class);
         $variationLvaService = $container->get(VariationLvaService::class);
         $uploadHelper = $container->get(FileUploadHelperService::class);
+        $navigation = $container->get('Navigation');
 
         return new OperatingCentresController(
             $niTextTranslationUtil,
@@ -47,7 +48,8 @@ class OperatingCentresControllerFactory implements FactoryInterface
             $translationHelper,
             $scriptFactory,
             $variationLvaService,
-            $uploadHelper
+            $uploadHelper,
+            $navigation
         );
     }
 

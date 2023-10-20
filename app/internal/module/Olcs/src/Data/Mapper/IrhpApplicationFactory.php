@@ -17,7 +17,7 @@ class IrhpApplicationFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator) : IrhpApplication
     {
-        return $this->__invoke($serviceLocator, AnalyticsCookieNamesProvider::class);
+        return $this->__invoke($serviceLocator, IrhpApplication::class);
     }
 
     /**

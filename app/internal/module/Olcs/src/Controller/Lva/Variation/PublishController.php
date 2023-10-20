@@ -23,23 +23,27 @@ class PublishController extends \Olcs\Controller\Lva\AbstractPublishController
 
     protected StringHelperService $stringHelper;
     protected FormServiceManager $formServiceManager;
+    protected $navigation;
 
     /**
-     * @param NiTextTranslation    $niTextTranslationUtil
+     * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
-     * @param FormHelperService    $formHelper
-     * @param StringHelperService  $stringHelper
-     * @param FormServiceManager   $formServiceManager
+     * @param FormHelperService $formHelper
+     * @param StringHelperService $stringHelper
+     * @param FormServiceManager $formServiceManager
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
         FormHelperService $formHelper,
         StringHelperService $stringHelper,
-        FormServiceManager $formServiceManager
+        FormServiceManager $formServiceManager,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
         $this->formServiceManager = $formServiceManager;
+        $this->navigation = $navigation;
 
         parent::__construct($niTextTranslationUtil, $authService, $formHelper);
     }

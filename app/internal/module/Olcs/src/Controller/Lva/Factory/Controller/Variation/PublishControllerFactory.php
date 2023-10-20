@@ -29,13 +29,15 @@ class PublishControllerFactory implements FactoryInterface
         $formHelper = $container->get(FormHelperService::class);
         $stringHelper = $container->get(StringHelperService::class);
         $formServiceManager = $container->get(FormServiceManager::class);
+        $navigation = $container->get('Navigation');
 
         return new PublishController(
             $niTextTranslationUtil,
             $authService,
             $formHelper,
             $stringHelper,
-            $formServiceManager
+            $formServiceManager,
+            $navigation
         );
     }
 

@@ -25,13 +25,16 @@ class AddressesController extends AbstractAddressesController implements Licence
     protected $lva = 'licence';
     protected string $location = 'internal';
 
+    protected string $navigation;
+
     /**
-     * @param NiTextTranslation           $niTextTranslationUtil
-     * @param AuthorizationService        $authService
-     * @param FormHelperService           $formHelper
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
      * @param FlashMessengerHelperService $flashMessengerHelper
-     * @param FormServiceManager          $formServiceManager
-     * @param ScriptFactory               $scriptFactory
+     * @param FormServiceManager $formServiceManager
+     * @param ScriptFactory $scriptFactory
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -39,8 +42,10 @@ class AddressesController extends AbstractAddressesController implements Licence
         FormHelperService $formHelper,
         FlashMessengerHelperService $flashMessengerHelper,
         FormServiceManager $formServiceManager,
-        ScriptFactory $scriptFactory
+        ScriptFactory $scriptFactory,
+        $navigation
     ) {
         parent::__construct($niTextTranslationUtil, $authService, $formHelper, $flashMessengerHelper, $formServiceManager, $scriptFactory);
+        $this->navigation = $navigation;
     }
 }

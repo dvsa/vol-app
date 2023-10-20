@@ -35,22 +35,23 @@ class VehiclesPsvController extends AbstractVehiclesPsvController implements Var
 
     protected $lva = 'variation';
     protected string $location = 'internal';
-
     protected StringHelperService $stringHelper;
+    protected $navigation;
 
     /**
-     * @param NiTextTranslation           $niTextTranslationUtil
-     * @param AuthorizationService        $authService
-     * @param FormHelperService           $formHelper
-     * @param FormServiceManager          $formServiceManager
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
+     * @param FormServiceManager $formServiceManager
      * @param FlashMessengerHelperService $flashMessengerHelper
-     * @param ScriptFactory               $scriptFactory
-     * @param UrlHelperService            $urlHelper
-     * @param ResponseHelperService       $responseHelper
-     * @param TableFactory                $tableFactory
-     * @param TranslationHelperService    $translatorHelper
-     * @param GuidanceHelperService       $guidanceHelper
-     * @param StringHelperService         $stringHelper
+     * @param ScriptFactory $scriptFactory
+     * @param UrlHelperService $urlHelper
+     * @param ResponseHelperService $responseHelper
+     * @param TableFactory $tableFactory
+     * @param TranslationHelperService $translatorHelper
+     * @param GuidanceHelperService $guidanceHelper
+     * @param StringHelperService $stringHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -64,7 +65,8 @@ class VehiclesPsvController extends AbstractVehiclesPsvController implements Var
         TableFactory $tableFactory,
         TranslationHelperService $translatorHelper,
         GuidanceHelperService $guidanceHelper,
-        StringHelperService $stringHelper
+        StringHelperService $stringHelper,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
 
@@ -81,5 +83,6 @@ class VehiclesPsvController extends AbstractVehiclesPsvController implements Var
             $translatorHelper,
             $guidanceHelper
         );
+        $this->navigation = $navigation;
     }
 }

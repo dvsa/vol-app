@@ -34,7 +34,6 @@ class BusinessDetailsController extends AbstractBusinessDetailsController implem
 
     protected $lva = 'licence';
     protected string $location = 'internal';
-
     protected $navigation;
 
     /**

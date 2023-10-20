@@ -32,17 +32,19 @@ class TrailersController extends Lva\AbstractTrailersController implements Licen
 
     protected $lva = 'licence';
     protected string $location = 'internal';
+    protected string $navigation;
 
     /**
-     * @param NiTextTranslation           $niTextTranslationUtil
-     * @param AuthorizationService        $authService
-     * @param FormHelperService           $formHelper
-     * @param FormServiceManager          $formServiceManager
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
+     * @param FormServiceManager $formServiceManager
      * @param FlashMessengerHelperService $flashMessengerHelper
-     * @param TableFactory                $tableFactory
-     * @param ScriptFactory               $scriptFactory
-     * @param DateHelperService           $dateHelper
-     * @param QuerySender                 $querySender
+     * @param TableFactory $tableFactory
+     * @param ScriptFactory $scriptFactory
+     * @param DateHelperService $dateHelper
+     * @param QuerySender $querySender
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -53,7 +55,8 @@ class TrailersController extends Lva\AbstractTrailersController implements Licen
         TableFactory $tableFactory,
         ScriptFactory $scriptFactory,
         DateHelperService $dateHelper,
-        QuerySender $querySender
+        QuerySender $querySender,
+        $navigation
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -66,5 +69,6 @@ class TrailersController extends Lva\AbstractTrailersController implements Licen
             $dateHelper,
             $querySender
         );
+        $this->navigation = $navigation;
     }
 }

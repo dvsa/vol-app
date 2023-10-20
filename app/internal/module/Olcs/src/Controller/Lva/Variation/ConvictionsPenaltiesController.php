@@ -34,16 +34,18 @@ class ConvictionsPenaltiesController extends Lva\AbstractConvictionsPenaltiesCon
     protected string $location = 'internal';
 
     protected StringHelperService $stringHelper;
+    protected $navigation;
 
     /**
-     * @param NiTextTranslation           $niTextTranslationUtil
-     * @param AuthorizationService        $authService
-     * @param FormHelperService           $formHelper
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
      * @param FlashMessengerHelperService $flashMessengerHelper
-     * @param FormServiceManager          $formServiceManager
-     * @param TableFactory                $tableFactory
-     * @param ScriptFactory               $scriptFactory
-     * @param StringHelperService         $stringHelper
+     * @param FormServiceManager $formServiceManager
+     * @param TableFactory $tableFactory
+     * @param ScriptFactory $scriptFactory
+     * @param StringHelperService $stringHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -53,7 +55,8 @@ class ConvictionsPenaltiesController extends Lva\AbstractConvictionsPenaltiesCon
         FormServiceManager $formServiceManager,
         TableFactory $tableFactory,
         ScriptFactory $scriptFactory,
-        StringHelperService $stringHelper
+        StringHelperService $stringHelper,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
 
@@ -66,5 +69,6 @@ class ConvictionsPenaltiesController extends Lva\AbstractConvictionsPenaltiesCon
             $tableFactory,
             $scriptFactory
         );
+        $this->navigation = $navigation;
     }
 }

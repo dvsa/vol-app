@@ -35,6 +35,7 @@ class InterimControllerFactory implements FactoryInterface
         $tableFactory = $container->get(TableFactory::class);
         $stringHelper = $container->get(StringHelperService::class);
         $formServiceManager = $container->get(FormServiceManager::class);
+        $navigation = $container->get('Navigation');
 
         return new InterimController(
             $niTextTranslationUtil,
@@ -44,7 +45,8 @@ class InterimControllerFactory implements FactoryInterface
             $scriptFactory,
             $tableFactory,
             $stringHelper,
-            $formServiceManager
+            $formServiceManager,
+            $navigation
         );
     }
 

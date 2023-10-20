@@ -7,7 +7,6 @@ return array(
             'route' => 'submission_update_table',
             'params' => ['section' => 'outstanding-applications']
         ],
-        'title' => 'Outstanding applications'
     ),
     'settings' => array(
         'crud' => array(

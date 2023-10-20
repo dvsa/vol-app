@@ -32,6 +32,7 @@ class VariationController extends AbstractVariationController implements Licence
     protected string $location = 'internal';
 
     protected FormHelperService $formHelper;
+    protected $navigation;
 
     /**
      * @param NiTextTranslation        $niTextTranslationUtil
@@ -46,7 +47,8 @@ class VariationController extends AbstractVariationController implements Licence
         TranslationHelperService $translationHelper,
         $processingCreateVariation,
         FormHelperService $formHelper,
-        FlashMessengerHelperService $flashMessengerHelper
+        FlashMessengerHelperService $flashMessengerHelper,
+        $navigation
     ) {
         $this->formHelper = $formHelper;
 
@@ -57,5 +59,6 @@ class VariationController extends AbstractVariationController implements Licence
             $processingCreateVariation,
             $flashMessengerHelper
         );
+        $this->navigation = $navigation;
     }
 }

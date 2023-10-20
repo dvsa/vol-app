@@ -23,15 +23,19 @@ class VariationSchedule41Controller extends Schedule41Controller implements Appl
 
     protected StringHelperService $stringHelper;
 
+    protected $navigation;
+
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
         FormHelperService $formHelper,
         TableFactory $tableFactory,
         FlashMessengerHelperService $flashMessengerHelper,
-        StringHelperService $stringHelper
+        StringHelperService $stringHelper,
+        $navigation
     ) {
         parent::__construct($niTextTranslationUtil, $authService, $formHelper, $tableFactory, $flashMessengerHelper);
         $this->stringHelper = $stringHelper;
+        $this->navigation = $navigation;
     }
 }

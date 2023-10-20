@@ -31,6 +31,7 @@ class VariationControllerFactory implements FactoryInterface
         $processingCreateVariation = $container->get(CreateVariationProcessingService::class);
         $formHelper = $container->get(FormHelperService::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
+        $navigation = $container->get('Navigation');
 
         return new VariationController(
             $niTextTranslationUtil,
@@ -38,7 +39,8 @@ class VariationControllerFactory implements FactoryInterface
             $translationHelper,
             $processingCreateVariation,
             $formHelper,
-            $flashMessengerHelper
+            $flashMessengerHelper,
+            $navigation
         );
     }
 

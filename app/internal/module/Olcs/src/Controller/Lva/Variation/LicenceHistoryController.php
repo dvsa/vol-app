@@ -29,15 +29,18 @@ class LicenceHistoryController extends Lva\AbstractLicenceHistoryController impl
     protected $lva = 'variation';
     protected string $location = 'internal';
 
+    protected $navigation;
+
     /**
-     * @param NiTextTranslation           $niTextTranslationUtil
-     * @param AuthorizationService        $authService
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
      * @param FlashMessengerHelperService $flashMessengerHelper
-     * @param FormServiceManager          $formServiceManager
-     * @param ScriptFactory               $scriptFactory
-     * @param StringHelperService         $stringHelper
-     * @param TableFactory                $tableFactory
-     * @param FormHelperService           $formHelper
+     * @param FormServiceManager $formServiceManager
+     * @param ScriptFactory $scriptFactory
+     * @param StringHelperService $stringHelper
+     * @param TableFactory $tableFactory
+     * @param FormHelperService $formHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -47,7 +50,8 @@ class LicenceHistoryController extends Lva\AbstractLicenceHistoryController impl
         ScriptFactory $scriptFactory,
         StringHelperService $stringHelper,
         TableFactory $tableFactory,
-        FormHelperService $formHelper
+        FormHelperService $formHelper,
+        $navigation
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -59,5 +63,6 @@ class LicenceHistoryController extends Lva\AbstractLicenceHistoryController impl
             $tableFactory,
             $formHelper
         );
+        $this->navigation = $navigation;
     }
 }

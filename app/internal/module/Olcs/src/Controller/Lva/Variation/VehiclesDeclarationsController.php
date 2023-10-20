@@ -31,17 +31,18 @@ class VehiclesDeclarationsController extends Lva\AbstractVehiclesDeclarationsCon
 
     protected $lva = 'variation';
     protected string $location = 'internal';
-
     protected StringHelperService $stringHelper;
+    protected $navigation;
 
     /**
-     * @param NiTextTranslation    $niTextTranslationUtil
+     * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
-     * @param FormHelperService    $formHelper
-     * @param FormServiceManager   $formServiceManager
-     * @param ScriptFactory        $scriptFactory
-     * @param DataHelperService    $dataHelper
-     * @param StringHelperService  $stringHelper
+     * @param FormHelperService $formHelper
+     * @param FormServiceManager $formServiceManager
+     * @param ScriptFactory $scriptFactory
+     * @param DataHelperService $dataHelper
+     * @param StringHelperService $stringHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -50,7 +51,8 @@ class VehiclesDeclarationsController extends Lva\AbstractVehiclesDeclarationsCon
         FormServiceManager $formServiceManager,
         ScriptFactory $scriptFactory,
         DataHelperService $dataHelper,
-        StringHelperService $stringHelper
+        StringHelperService $stringHelper,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
 
@@ -62,5 +64,6 @@ class VehiclesDeclarationsController extends Lva\AbstractVehiclesDeclarationsCon
             $scriptFactory,
             $dataHelper
         );
+        $this->navigation = $navigation;
     }
 }

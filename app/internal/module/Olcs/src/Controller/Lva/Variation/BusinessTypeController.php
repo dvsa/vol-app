@@ -39,20 +39,22 @@ class BusinessTypeController extends Lva\AbstractBusinessTypeController implemen
     protected string $location = 'internal';
 
     protected StringHelperService $stringHelper;
+    protected $navigation;
 
     /**
-     * @param NiTextTranslation           $niTextTranslationUtil
-     * @param AuthorizationService        $authService
-     * @param FormHelperService           $formHelper
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
      * @param FlashMessengerHelperService $flashMessengerHelper
-     * @param FormServiceManager          $formServiceManager
-     * @param ScriptFactory               $scriptFactory
-     * @param IdentityProviderInterface   $identityProvider
-     * @param TranslationHelperService    $translationHelper
-     * @param AnnotationBuilder           $transferAnnotationBuilder
-     * @param QueryService                $queryService
-     * @param StringHelperService         $stringHelper
-     * @param GenericBusinessTypeAdapter  $lvaAdapter
+     * @param FormServiceManager $formServiceManager
+     * @param ScriptFactory $scriptFactory
+     * @param IdentityProviderInterface $identityProvider
+     * @param TranslationHelperService $translationHelper
+     * @param AnnotationBuilder $transferAnnotationBuilder
+     * @param QueryService $queryService
+     * @param StringHelperService $stringHelper
+     * @param GenericBusinessTypeAdapter $lvaAdapter
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -66,7 +68,8 @@ class BusinessTypeController extends Lva\AbstractBusinessTypeController implemen
         AnnotationBuilder $transferAnnotationBuilder,
         QueryService $queryService,
         StringHelperService $stringHelper,
-        GenericBusinessTypeAdapter $lvaAdapter
+        GenericBusinessTypeAdapter $lvaAdapter,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
 
@@ -83,5 +86,6 @@ class BusinessTypeController extends Lva\AbstractBusinessTypeController implemen
             $queryService,
             $lvaAdapter
         );
+        $this->navigation = $navigation;
     }
 }

@@ -30,17 +30,18 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController implements
 
     protected string $location = 'internal';
     protected $lva = 'variation';
-
     protected StringHelperService $stringHelper;
+    protected $navigation;
 
     /**
-     * @param NiTextTranslation           $niTextTranslationUtil
-     * @param AuthorizationService        $authService
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
      * @param FlashMessengerHelperService $flashMessengerHelper
-     * @param ScriptFactory               $scriptFactory
-     * @param FormServiceManager          $formServiceManager
-     * @param FormHelper                  $formHelper
-     * @param StringHelperService         $stringHelper
+     * @param ScriptFactory $scriptFactory
+     * @param FormServiceManager $formServiceManager
+     * @param FormHelperService $formHelper
+     * @param StringHelperService $stringHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -49,7 +50,8 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController implements
         ScriptFactory $scriptFactory,
         FormServiceManager $formServiceManager,
         FormHelperService $formHelper,
-        StringHelperService $stringHelper
+        StringHelperService $stringHelper,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
 
@@ -61,5 +63,6 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController implements
             $formServiceManager,
             $formHelper
         );
+        $this->navigation = $navigation;
     }
 }

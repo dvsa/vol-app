@@ -37,6 +37,7 @@ class PeopleController extends Lva\AbstractPeopleController implements Variation
     protected string $location = 'internal';
 
     protected StringHelperService $stringHelper;
+    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -49,6 +50,7 @@ class PeopleController extends Lva\AbstractPeopleController implements Variation
      * @param StringHelperService $stringHelper
      * @param VariationPeopleAdapter $lvaAdapter
      * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -60,7 +62,8 @@ class PeopleController extends Lva\AbstractPeopleController implements Variation
         GuidanceHelperService $guidanceHelper,
         StringHelperService $stringHelper,
         VariationPeopleAdapter $lvaAdapter,
-        FlashMessengerHelperService $flashMessengerHelper
+        FlashMessengerHelperService $flashMessengerHelper,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
 
@@ -75,5 +78,6 @@ class PeopleController extends Lva\AbstractPeopleController implements Variation
             $lvaAdapter,
             $flashMessengerHelper
         );
+        $this->navigation = $navigation;
     }
 }

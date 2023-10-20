@@ -33,6 +33,7 @@ class ConditionsUndertakingsControllerFactory implements FactoryInterface
         $formServiceManager = $container->get(FormServiceManager::class);
         $tableFactory = $container->get(TableFactory::class);
         $lvaAdapter = $container->get(LicenceConditionsUndertakingsAdapter::class);
+        $navigation = $container->get('Navigation');
 
         return new ConditionsUndertakingsController(
             $niTextTranslationUtil,
@@ -41,7 +42,8 @@ class ConditionsUndertakingsControllerFactory implements FactoryInterface
             $flashMessengerHelper,
             $formServiceManager,
             $tableFactory,
-            $lvaAdapter
+            $lvaAdapter,
+            $navigation
         );
     }
 

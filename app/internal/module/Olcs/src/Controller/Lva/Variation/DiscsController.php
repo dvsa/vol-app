@@ -34,16 +34,19 @@ class DiscsController extends Lva\AbstractDiscsController implements VariationCo
     protected string $location = 'internal';
 
     protected StringHelperService $stringHelper;
+    protected $navigation;
 
     /**
-     * @param NiTextTranslation           $niTextTranslationUtil
-     * @param AuthorizationService        $authService
-     * @param FormHelperService           $formHelper
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
      * @param FlashMessengerHelperService $flashMessengerHelper
-     * @param FormServiceManager          $formServiceManager
-     * @param TableFactory                $tableFactory
-     * @param GuidanceHelperService       $guidanceHelper
-     * @param StringHelperService         $stringHelper
+     * @param FormServiceManager $formServiceManager
+     * @param TableFactory $tableFactory
+     * @param GuidanceHelperService $guidanceHelper
+     * @param StringHelperService $stringHelper
+     * @param ScriptFactory $scriptFactory
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -54,7 +57,8 @@ class DiscsController extends Lva\AbstractDiscsController implements VariationCo
         TableFactory $tableFactory,
         GuidanceHelperService $guidanceHelper,
         StringHelperService $stringHelper,
-        ScriptFactory $scriptFactory
+        ScriptFactory $scriptFactory,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
 
@@ -68,5 +72,6 @@ class DiscsController extends Lva\AbstractDiscsController implements VariationCo
             $guidanceHelper,
             $scriptFactory
         );
+        $this->navigation = $navigation;
     }
 }

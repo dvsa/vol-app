@@ -11,6 +11,7 @@ namespace Olcs\Controller\Lva\Variation;
 use Common\Controller\Lva;
 use Common\Controller\Lva\Traits\VariationOperatingCentresControllerTrait;
 use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\StringHelperService;
@@ -37,6 +38,7 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
     protected string $location = 'internal';
 
     protected StringHelperService $stringHelper;
+    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -49,6 +51,7 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
      * @param VariationLvaService $variationLvaService
      * @param StringHelperService $stringHelper
      * @param FileUploadHelperService $uploadHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -60,9 +63,11 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
         ScriptFactory $scriptFactory,
         VariationLvaService $variationLvaService,
         StringHelperService $stringHelper,
-        FileUploadHelperService $uploadHelper
+        FileUploadHelperService $uploadHelper,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
+        $this->navigation = $navigation;
 
         parent::__construct(
             $niTextTranslationUtil,

@@ -33,6 +33,7 @@ class GrantControllerFactory implements FactoryInterface
         $scriptFactory = $container->get(ScriptFactory::class);
         $translationHelper = $container->get(TranslationHelperService::class);
         $stringHelper = $container->get(StringHelperService::class);
+        $navigation = $container->get('Navigation');
 
         return new GrantController(
             $niTextTranslationUtil,
@@ -41,7 +42,8 @@ class GrantControllerFactory implements FactoryInterface
             $formHelper,
             $scriptFactory,
             $translationHelper,
-            $stringHelper
+            $stringHelper,
+            $navigation
         );
     }
 

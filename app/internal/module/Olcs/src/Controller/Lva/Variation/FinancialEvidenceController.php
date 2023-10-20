@@ -39,6 +39,7 @@ class FinancialEvidenceController extends Lva\AbstractFinancialEvidenceControlle
     protected string $location = 'internal';
 
     protected StringHelperService $stringHelper;
+    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -52,6 +53,7 @@ class FinancialEvidenceController extends Lva\AbstractFinancialEvidenceControlle
      * @param StringHelperService $stringHelper
      * @param VariationFinancialEvidenceAdapter $lvaAdapter
      * @param FileUploadHelperService $fileUploader
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -64,7 +66,8 @@ class FinancialEvidenceController extends Lva\AbstractFinancialEvidenceControlle
         CommandService $commandService,
         StringHelperService $stringHelper,
         VariationFinancialEvidenceAdapter $lvaAdapter,
-        FileUploadHelperService $fileUploader
+        FileUploadHelperService $fileUploader,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
 
@@ -80,5 +83,6 @@ class FinancialEvidenceController extends Lva\AbstractFinancialEvidenceControlle
             $lvaAdapter,
             $fileUploader
         );
+        $this->navigation = $navigation;
     }
 }

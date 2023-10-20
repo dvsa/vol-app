@@ -35,21 +35,25 @@ class OverviewController extends AbstractController implements LicenceController
 
     protected LicenceOverviewHelperService $licenceOverviewHelper;
     protected FormHelperService $formHelper;
+    protected string $navigation;
 
     /**
-     * @param NiTextTranslation            $niTextTranslationUtil
-     * @param AuthorizationService         $authService
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
      * @param LicenceOverviewHelperService $licenceOverviewHelper
-     * @param FormHelperService            $formHelper
+     * @param FormHelperService $formHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
         LicenceOverviewHelperService $licenceOverviewHelper,
-        FormHelperService $formHelper
+        FormHelperService $formHelper,
+        $navigation
     ) {
         $this->licenceOverviewHelper = $licenceOverviewHelper;
         $this->formHelper = $formHelper;
+        $this->navigation = $navigation;
 
         parent::__construct($niTextTranslationUtil, $authService);
     }

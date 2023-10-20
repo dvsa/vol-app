@@ -36,14 +36,16 @@ class OverviewController extends AbstractController implements VariationControll
     protected StringHelperService $stringHelper;
     protected FormHelperService $formHelper;
     protected FormServiceManager $formServiceManager;
+    protected $navigation;
 
     /**
-     * @param NiTextTranslation                $niTextTranslationUtil
-     * @param AuthorizationService             $authService
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
      * @param ApplicationOverviewHelperService $applicationOverviewHelper
-     * @param StringHelperService              $stringHelper
-     * @param FormHelperService                $formHelper
-     * @param FormServiceManager               $formServiceManager
+     * @param StringHelperService $stringHelper
+     * @param FormHelperService $formHelper
+     * @param FormServiceManager $formServiceManager
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -51,12 +53,14 @@ class OverviewController extends AbstractController implements VariationControll
         ApplicationOverviewHelperService $applicationOverviewHelper,
         StringHelperService $stringHelper,
         FormHelperService $formHelper,
-        FormServiceManager $formServiceManager
+        FormServiceManager $formServiceManager,
+        $navigation
     ) {
         $this->applicationOverviewHelper = $applicationOverviewHelper;
         $this->stringHelper = $stringHelper;
         $this->formHelper = $formHelper;
         $this->formServiceManager = $formServiceManager;
+        $this->navigation = $navigation;
 
         parent::__construct($niTextTranslationUtil, $authService);
     }

@@ -33,6 +33,7 @@ class VehiclesDeclarationsControllerFactory implements FactoryInterface
         $scriptFactory = $container->get(ScriptFactory::class);
         $dataHelper = $container->get(DataHelperService::class);
         $stringHelper = $container->get(StringHelperService::class);
+        $navigation = $container->get('Navigation');
 
         return new VehiclesDeclarationsController(
             $niTextTranslationUtil,
@@ -41,7 +42,8 @@ class VehiclesDeclarationsControllerFactory implements FactoryInterface
             $formServiceManager,
             $scriptFactory,
             $dataHelper,
-            $stringHelper
+            $stringHelper,
+            $navigation
         );
     }
 

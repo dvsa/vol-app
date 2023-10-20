@@ -27,12 +27,14 @@ class OverviewControllerFactory implements FactoryInterface
         $authService = $container->get(AuthorizationService::class);
         $applicationOverviewHelper = $container->get(LicenceOverviewHelperService::class);
         $formHelper = $container->get(FormHelperService::class);
+        $navigation = $container->get('Navigation');
 
         return new OverviewController(
             $niTextTranslationUtil,
             $authService,
             $applicationOverviewHelper,
-            $formHelper
+            $formHelper,
+            $navigation
         );
     }
 

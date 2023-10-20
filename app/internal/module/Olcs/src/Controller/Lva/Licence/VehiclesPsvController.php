@@ -29,18 +29,21 @@ class VehiclesPsvController extends AbstractVehiclesPsvController implements Lic
     protected $lva = 'licence';
     protected string $location = 'internal';
 
+    protected $navigation;
+
     /**
-     * @param NiTextTranslation           $niTextTranslationUtil
-     * @param AuthorizationService        $authService
-     * @param FormHelperService           $formHelper
-     * @param FormServiceManager          $formServiceManager
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
+     * @param FormServiceManager $formServiceManager
      * @param FlashMessengerHelperService $flashMessengerHelper
-     * @param ScriptFactory               $scriptFactory
-     * @param UrlHelperService            $urlHelper
-     * @param ResponseHelperService       $responseHelper
-     * @param TableFactory                $tableFactory
-     * @param TranslationHelperService    $translatorHelper
-     * @param GuidanceHelperService       $guidanceHelper
+     * @param ScriptFactory $scriptFactory
+     * @param UrlHelperService $urlHelper
+     * @param ResponseHelperService $responseHelper
+     * @param TableFactory $tableFactory
+     * @param TranslationHelperService $translatorHelper
+     * @param GuidanceHelperService $guidanceHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -53,7 +56,8 @@ class VehiclesPsvController extends AbstractVehiclesPsvController implements Lic
         ResponseHelperService $responseHelper,
         TableFactory $tableFactory,
         TranslationHelperService $translatorHelper,
-        GuidanceHelperService $guidanceHelper
+        GuidanceHelperService $guidanceHelper,
+        $navigation
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -68,5 +72,6 @@ class VehiclesPsvController extends AbstractVehiclesPsvController implements Lic
             $translatorHelper,
             $guidanceHelper
         );
+        $this->navigation = $navigation;
     }
 }

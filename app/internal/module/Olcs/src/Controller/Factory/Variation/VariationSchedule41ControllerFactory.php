@@ -31,6 +31,7 @@ class VariationSchedule41ControllerFactory implements FactoryInterface
         $tableFactory = $container->get(TableFactory::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         $stringHelper = $container->get(StringHelperService::class);
+        $navigation = $container->get('Navigation');
 
         return new VariationSchedule41Controller(
             $niTextTranslationUtil,
@@ -38,7 +39,8 @@ class VariationSchedule41ControllerFactory implements FactoryInterface
             $formHelper,
             $tableFactory,
             $flashMessengerHelper,
-            $stringHelper
+            $stringHelper,
+            $navigation
         );
     }
 

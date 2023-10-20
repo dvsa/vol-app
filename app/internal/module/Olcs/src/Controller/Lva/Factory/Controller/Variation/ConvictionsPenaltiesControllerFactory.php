@@ -35,6 +35,7 @@ class ConvictionsPenaltiesControllerFactory implements FactoryInterface
         $tableFactory = $container->get(TableFactory::class);
         $scriptFactory = $container->get(ScriptFactory::class);
         $stringHelper = $container->get(StringHelperService::class);
+        $navigation = $container->get('Navigation');
 
         return new ConvictionsPenaltiesController(
             $niTextTranslationUtil,
@@ -44,7 +45,8 @@ class ConvictionsPenaltiesControllerFactory implements FactoryInterface
             $formServiceManager,
             $tableFactory,
             $scriptFactory,
-            $stringHelper
+            $stringHelper,
+            $navigation
         );
     }
 
