@@ -62,6 +62,6 @@ trait LicenceControllerTrait
      */
     protected function alterFormForLva(Form $form, $data = null)
     {
-        return $this->licenceLvaAdapter->alterForm($form);
+        return $this->lvaAdapter->alterForm($form);
     }
 }

@@ -35,7 +35,7 @@ class DiscsControllerFactory implements FactoryInterface
         $formServiceManager = $container->get(FormServiceManager::class);
         $tableFactory = $container->get(TableFactory::class);
         $guidanceHelper = $container->get(GuidanceHelperService::class);
-        $licenceLvaAdapter = $container->get(LicenceLvaAdapter::class);
+        $lvaAdapter = $container->get(LicenceLvaAdapter::class);
         $scriptFactory = $container->get(ScriptFactory::class);
 
         return new DiscsController(
@@ -46,7 +46,7 @@ class DiscsControllerFactory implements FactoryInterface
             $formServiceManager,
             $tableFactory,
             $guidanceHelper,
-            $licenceLvaAdapter,
+            $lvaAdapter,
             $scriptFactory
         );
     }

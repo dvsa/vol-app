@@ -36,7 +36,7 @@ class TrailersController extends Lva\AbstractTrailersController
     protected $lva = 'licence';
     protected string $location = 'external';
 
-    protected LicenceLvaAdapter $licenceLvaAdapter;
+    protected LicenceLvaAdapter $lvaAdapter;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -48,7 +48,7 @@ class TrailersController extends Lva\AbstractTrailersController
      * @param ScriptFactory $scriptFactory
      * @param DateHelperService $dateHelper
      * @param QuerySender $querySender
-     * @param LicenceLvaAdapter $licenceLvaAdapter
+     * @param LicenceLvaAdapter $lvaAdapter
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -60,10 +60,8 @@ class TrailersController extends Lva\AbstractTrailersController
         ScriptFactory $scriptFactory,
         DateHelperService $dateHelper,
         QuerySender $querySender,
-        LicenceLvaAdapter $licenceLvaAdapter
+        LicenceLvaAdapter $lvaAdapter
     ) {
-        $this->licenceLvaAdapter = $licenceLvaAdapter;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

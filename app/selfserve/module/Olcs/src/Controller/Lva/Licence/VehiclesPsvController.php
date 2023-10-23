@@ -42,7 +42,7 @@ class VehiclesPsvController extends AbstractVehiclesPsvController
         return $scripts;
     }
 
-    protected LicenceLvaAdapter $licenceLvaAdapter;
+    protected LicenceLvaAdapter $lvaAdapter;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -56,7 +56,7 @@ class VehiclesPsvController extends AbstractVehiclesPsvController
      * @param TableFactory $tableFactory
      * @param TranslationHelperService $translatorHelper
      * @param GuidanceHelperService $guidanceHelper
-     * @param LicenceLvaAdapter $licenceLvaAdapter
+     * @param LicenceLvaAdapter $lvaAdapter
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -70,10 +70,8 @@ class VehiclesPsvController extends AbstractVehiclesPsvController
         TableFactory $tableFactory,
         TranslationHelperService $translatorHelper,
         GuidanceHelperService $guidanceHelper,
-        LicenceLvaAdapter $licenceLvaAdapter
+        LicenceLvaAdapter $lvaAdapter
     ) {
-        $this->licenceLvaAdapter = $licenceLvaAdapter;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

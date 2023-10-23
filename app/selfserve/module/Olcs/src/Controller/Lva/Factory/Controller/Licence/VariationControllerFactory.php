@@ -29,7 +29,7 @@ class VariationControllerFactory implements FactoryInterface
         $authService = $container->get(AuthorizationService::class);
         $translationHelper = $container->get(TranslationHelperService::class);
         $processingCreateVariation = $container->get(CreateVariationProcessingService::class);
-        $licenceLvaAdapter = $container->get(LicenceLvaAdapter::class);
+        $lvaAdapter = $container->get(LicenceLvaAdapter::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
 
         return new VariationController(
@@ -37,7 +37,7 @@ class VariationControllerFactory implements FactoryInterface
             $authService,
             $translationHelper,
             $processingCreateVariation,
-            $licenceLvaAdapter,
+            $lvaAdapter,
             $flashMessengerHelper
         );
     }

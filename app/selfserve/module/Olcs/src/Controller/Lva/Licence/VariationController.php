@@ -30,24 +30,23 @@ class VariationController extends AbstractVariationController
     protected $lva = 'licence';
     protected string $location = 'external';
 
-    protected LicenceLvaAdapter $licenceLvaAdapter;
+    protected LicenceLvaAdapter $lvaAdapter;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
      * @param TranslationHelperService $translationHelper
      * @param $processingCreateVariation
-     * @param LicenceLvaAdapter $licenceLvaAdapter
+     * @param LicenceLvaAdapter $lvaAdapter
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
         TranslationHelperService $translationHelper,
         $processingCreateVariation,
-        LicenceLvaAdapter $licenceLvaAdapter,
+        LicenceLvaAdapter $lvaAdapter,
         FlashMessengerHelperService $flashMessengerHelper
     ) {
-        $this->licenceLvaAdapter = $licenceLvaAdapter;
 
         parent::__construct(
             $niTextTranslationUtil,

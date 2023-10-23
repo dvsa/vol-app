@@ -42,7 +42,7 @@ class VehiclesPsvControllerFactory implements FactoryInterface
         $scriptFactory = $container->get(ScriptFactory::class);
         $urlHelper = $container->get(UrlHelperService::class);
         $responseHelper = $container->get(ResponseHelperService::class);
-        $licenceLvaAdapter = $container->get(LicenceLvaAdapter::class);
+        $lvaAdapter = $container->get(LicenceLvaAdapter::class);
 
         return new VehiclesPsvController(
             $niTextTranslationUtil,
@@ -56,7 +56,7 @@ class VehiclesPsvControllerFactory implements FactoryInterface
             $tableFactory,
             $translationHelper,
             $guidanceHelper,
-            $licenceLvaAdapter
+            $lvaAdapter
         );
     }
 

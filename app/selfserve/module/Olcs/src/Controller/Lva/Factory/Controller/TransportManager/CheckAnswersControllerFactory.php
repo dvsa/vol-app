@@ -10,7 +10,7 @@ use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
-use OLCS\Controller\Lva\TransportManager\CheckAnswersController;
+use Olcs\Controller\Lva\TransportManager\CheckAnswersController;
 use ZfcRbac\Service\AuthorizationService;
 
 class CheckAnswersControllerFactory implements FactoryInterface

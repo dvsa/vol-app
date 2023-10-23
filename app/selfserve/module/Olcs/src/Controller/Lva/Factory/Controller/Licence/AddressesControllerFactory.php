@@ -32,7 +32,7 @@ class AddressesControllerFactory implements FactoryInterface
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         $formServiceManager = $container->get(FormServiceManager::class);
         $scriptFactory = $container->get(ScriptFactory::class);
-        $licenceLvaAdapter = $container->get(LicenceLvaAdapter::class);
+        $lvaAdapter = $container->get(LicenceLvaAdapter::class);
 
         return new AddressesController(
             $niTextTranslationUtil,
@@ -41,7 +41,7 @@ class AddressesControllerFactory implements FactoryInterface
             $flashMessengerHelper,
             $formServiceManager,
             $scriptFactory,
-            $licenceLvaAdapter
+            $lvaAdapter
         );
     }
 

@@ -11,7 +11,7 @@ use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
-use OLCS\Controller\Lva\TransportManager\OperatorDeclarationController;
+use Olcs\Controller\Lva\TransportManager\OperatorDeclarationController;
 use ZfcRbac\Service\AuthorizationService;
 
 class OperatorDeclarationControllerFactory implements FactoryInterface
