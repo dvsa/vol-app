@@ -22,8 +22,9 @@
     },
     "require-dev": {
         "laminas/laminas-developer-tools": "*",
-        "san/san-session-toolbar": "*",
-        "olcs/olcs-devtools": "~4.206.0"
+        "olcs/olcs-devtools": "~4.206.0",
+        "phpstan/phpstan": "^0.12.100",
+        "san/san-session-toolbar": "*"
     },
     "autoload": {
         "classmap": [

@@ -24,12 +24,12 @@ class OverviewControllerFactory implements FactoryInterface
 
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
-        $licenceLvaAdapter = $container->get(LicenceLvaAdapter::class);
+        $lvaAdapter = $container->get(LicenceLvaAdapter::class);
 
         return new OverviewController(
             $niTextTranslationUtil,
             $authService,
-            $licenceLvaAdapter
+            $lvaAdapter
         );
     }
 

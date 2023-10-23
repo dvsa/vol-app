@@ -32,7 +32,7 @@ class TypeOfLicenceControllerFactory implements FactoryInterface
         $scriptFactory = $container->get(ScriptFactory::class);
         $formServiceManager = $container->get(FormServiceManager::class);
         $variationLvaService = $container->get(VariationLvaService::class);
-        $licenceLvaAdapter = $container->get(LicenceLvaAdapter::class);
+        $lvaAdapter = $container->get(LicenceLvaAdapter::class);
 
         return new TypeOfLicenceController(
             $niTextTranslationUtil,
@@ -41,7 +41,7 @@ class TypeOfLicenceControllerFactory implements FactoryInterface
             $scriptFactory,
             $formServiceManager,
             $variationLvaService,
-            $licenceLvaAdapter
+            $lvaAdapter
         );
     }
 

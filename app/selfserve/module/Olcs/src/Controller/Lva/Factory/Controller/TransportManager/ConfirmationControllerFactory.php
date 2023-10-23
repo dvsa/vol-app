@@ -9,7 +9,7 @@ use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
-use OLCS\Controller\Lva\TransportManager\ConfirmationController;
+use Olcs\Controller\Lva\TransportManager\ConfirmationController;
 use ZfcRbac\Service\AuthorizationService;
 
 class ConfirmationControllerFactory implements FactoryInterface

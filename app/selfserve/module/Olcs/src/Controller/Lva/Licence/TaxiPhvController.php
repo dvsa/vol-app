@@ -32,7 +32,7 @@ class TaxiPhvController extends Lva\AbstractTaxiPhvController
     protected $lva = 'licence';
     protected string $location = 'external';
 
-    protected LicenceLvaAdapter $licenceLvaAdapter;
+    protected LicenceLvaAdapter $lvaAdapter;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -43,7 +43,7 @@ class TaxiPhvController extends Lva\AbstractTaxiPhvController
      * @param TableFactory $tableFactory
      * @param ScriptFactory $scriptFactory
      * @param TranslationHelperService $translationHelper
-     * @param LicenceLvaAdapter $licenceLvaAdapter
+     * @param LicenceLvaAdapter $lvaAdapter
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -54,10 +54,8 @@ class TaxiPhvController extends Lva\AbstractTaxiPhvController
         TableFactory $tableFactory,
         ScriptFactory $scriptFactory,
         TranslationHelperService $translationHelper,
-        LicenceLvaAdapter $licenceLvaAdapter
+        LicenceLvaAdapter $lvaAdapter
     ) {
-        $this->licenceLvaAdapter = $licenceLvaAdapter;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,

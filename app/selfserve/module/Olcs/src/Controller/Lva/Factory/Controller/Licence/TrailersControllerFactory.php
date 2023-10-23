@@ -38,7 +38,7 @@ class TrailersControllerFactory implements FactoryInterface
         $scriptFactory = $container->get(ScriptFactory::class);
         $dataHelper = $container->get(DataHelperService::class);
         $queryService = $container->get(QueryService::class);
-        $licenceLvaAdapter = $container->get(LicenceLvaAdapter::class);
+        $lvaAdapter = $container->get(LicenceLvaAdapter::class);
 
         return new TrailersController(
             $niTextTranslationUtil,
@@ -50,7 +50,7 @@ class TrailersControllerFactory implements FactoryInterface
             $scriptFactory,
             $dataHelper,
             $queryService,
-            $licenceLvaAdapter
+            $lvaAdapter
         );
     }
 

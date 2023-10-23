@@ -12,6 +12,7 @@ namespace Olcs\Controller\Lva\Licence;
 use Common\Controller\Lva;
 use Common\Controller\Lva\Adapters\LicenceLvaAdapter;
 use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -34,7 +35,7 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
     protected $lva = 'licence';
     protected string $location = 'external';
 
-    protected LicenceLvaAdapter $licenceLvaAdapter;
+    protected LicenceLvaAdapter $lvaAdapter;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -45,7 +46,8 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
      * @param TranslationHelperService $translationHelper
      * @param ScriptFactory $scriptFactory
      * @param VariationLvaService $variationLvaService
-     * @param LicenceLvaAdapter $licenceLvaAdapter
+     * @param LicenceLvaAdapter $lvaAdapter
+     * @param FileUploadHelperService $uploadHelper
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -56,10 +58,9 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
         TranslationHelperService $translationHelper,
         ScriptFactory $scriptFactory,
         VariationLvaService $variationLvaService,
-        LicenceLvaAdapter $licenceLvaAdapter
+        LicenceLvaAdapter $lvaAdapter,
+        FileUploadHelperService $uploadHelper
     ) {
-        $this->licenceLvaAdapter = $licenceLvaAdapter;
-
         parent::__construct(
             $niTextTranslationUtil,
             $authService,
@@ -68,7 +69,8 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
             $formServiceManager,
             $translationHelper,
             $scriptFactory,
-            $variationLvaService
+            $variationLvaService,
+            $uploadHelper
         );
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace OLCS\Controller\Lva\TransportManager;
+namespace Olcs\Controller\Lva\TransportManager;
 
 use Common\RefData;
 use Common\Service\Cqrs\Command\CommandService;

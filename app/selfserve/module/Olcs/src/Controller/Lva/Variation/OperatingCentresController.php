@@ -35,8 +35,6 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
     protected $lva = 'variation';
     protected string $location = 'external';
 
-    protected FileUploadHelperService $uploadHelper;
-
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -67,8 +65,8 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
             $formServiceManager,
             $translationHelper,
             $scriptFactory,
-            $variationLvaService
+            $variationLvaService,
+            $uploadHelper
         );
-        $this->uploadHelper = $uploadHelper;
     }
 }

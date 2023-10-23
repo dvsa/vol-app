@@ -3,6 +3,7 @@
 namespace Olcs\Controller\Lva\Factory\Controller\Variation;
 
 use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\GuidanceHelperService;
 use Common\Service\Lva\VariationLvaService;
@@ -35,6 +36,7 @@ class PeopleControllerFactory implements FactoryInterface
         $variationLvaService = $container->get(VariationLvaService::class);
         $guidanceHelper = $container->get(GuidanceHelperService::class);
         $lvaAdapter = $container->get(VariationPeopleAdapter::class);
+        $flashMessenegerHelper = $container->get(FlashMessengerHelperService::class);
 
         return new PeopleController(
             $niTextTranslationUtil,
@@ -44,7 +46,8 @@ class PeopleControllerFactory implements FactoryInterface
             $scriptFactory,
             $variationLvaService,
             $guidanceHelper,
-            $lvaAdapter
+            $lvaAdapter,
+            $flashMessenegerHelper
         );
     }
 

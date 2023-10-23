@@ -36,7 +36,7 @@ class SafetyControllerFactory implements FactoryInterface
         $tableFactory = $container->get(TableFactory::class);
         $scriptFactory = $container->get(ScriptFactory::class);
         $translationHelper = $container->get(TranslationHelperService::class);
-        $licenceLvaAdapter = $container->get(LicenceLvaAdapter::class);
+        $lvaAdapter = $container->get(LicenceLvaAdapter::class);
 
         return new SafetyController(
             $niTextTranslationUtil,
@@ -47,7 +47,7 @@ class SafetyControllerFactory implements FactoryInterface
             $tableFactory,
             $scriptFactory,
             $translationHelper,
-            $licenceLvaAdapter
+            $lvaAdapter
         );
     }
 

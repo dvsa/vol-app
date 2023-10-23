@@ -1,0 +1,9 @@
+parameters:
+    level: 0
+    paths:
+        - module
+    excludes_analyse:
+    ignoreErrors:
+        - '#^Undefined variable: \$(\w+)$#'
+        - '#^Method (.*) should return (.*) but return statement is missing\.$#'
+

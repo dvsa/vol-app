@@ -70,7 +70,7 @@ class VehiclesControllerFactory extends BinaryFeatureToggleAwareControllerFactor
         $variationLvaService = $container->get(VariationLvaService::class);
         $goodsVehicleMapper = $container->get(GoodsVehiclesVehicle::class);
         $responseHelper = $container->get(ResponseHelperService::class);
-        $licenceLvaAdapter = $container->get(LicenceLvaAdapter::class);
+        $lvaAdapter = $container->get(LicenceLvaAdapter::class);
 
         return new VehiclesController(
             $niTextTranslationUtil,
@@ -85,7 +85,7 @@ class VehiclesControllerFactory extends BinaryFeatureToggleAwareControllerFactor
             $variationLvaService,
             $goodsVehicleMapper,
             $responseHelper,
-            $licenceLvaAdapter
+            $lvaAdapter
         );
     }
 }

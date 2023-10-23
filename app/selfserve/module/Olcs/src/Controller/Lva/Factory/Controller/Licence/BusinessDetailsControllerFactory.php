@@ -36,7 +36,7 @@ class BusinessDetailsControllerFactory implements FactoryInterface
         $formServiceManager = $container->get(FormServiceManager::class);
         $scriptFactory = $container->get(ScriptFactory::class);
         $identityProvider = $container->get(IdentityProviderInterface::class);
-        $licenceLvaAdapter = $container->get(LicenceLvaAdapter::class);
+        $lvaAdapter = $container->get(LicenceLvaAdapter::class);
         $tableFactory = $container->get(TableFactory::class);
         $uploadHelper = $container->get(FileUploadHelperService::class);
 
@@ -49,7 +49,7 @@ class BusinessDetailsControllerFactory implements FactoryInterface
             $scriptFactory,
             $identityProvider,
             $tableFactory,
-            $licenceLvaAdapter,
+            $lvaAdapter,
             $uploadHelper
         );
     }
