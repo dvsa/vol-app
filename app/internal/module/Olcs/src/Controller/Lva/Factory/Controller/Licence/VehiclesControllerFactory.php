@@ -43,6 +43,7 @@ class VehiclesControllerFactory implements FactoryInterface
         $variationLvaService = $container->get(VariationLvaService::class);
         $goodsVehicleMapper = $container->get(GoodsVehiclesVehicle::class);
         $responseHelper = $container->get(ResponseHelperService::class);
+        $navigation = $container->get('Navigation');
 
         return new VehiclesController(
             $niTextTranslationUtil,
@@ -56,7 +57,8 @@ class VehiclesControllerFactory implements FactoryInterface
             $scriptFactory,
             $variationLvaService,
             $goodsVehicleMapper,
-            $responseHelper
+            $responseHelper,
+            $navigation
         );
     }
 

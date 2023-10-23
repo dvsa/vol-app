@@ -3,6 +3,7 @@
 namespace Olcs\Controller\TransportManager\Details;
 
 use Common\Service\Cqrs\Query\CachingQueryService;
+use Common\Service\Cqrs\Query\QueryService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -32,8 +33,8 @@ class TransportManagerDetailsCompetenceControllerFactory implements FactoryInter
         $transferAnnotationBuilder = $container->get(TransferAnnotationBuilder::class);
         assert($transferAnnotationBuilder instanceof TransferAnnotationBuilder);
 
-        $queryService = $container->get(CachingQueryService::class);
-        assert($queryService instanceof CachingQueryService);
+        $queryService = $container->get(QueryService::class);
+        assert($queryService instanceof QueryService);
 
         $transportMangerHelper = $container->get(TransportManagerHelperService::class);
         assert($transportMangerHelper instanceof TransportManagerHelperService);

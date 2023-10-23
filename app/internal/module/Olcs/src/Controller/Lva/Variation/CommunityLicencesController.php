@@ -35,16 +35,19 @@ class CommunityLicencesController extends Lva\AbstractCommunityLicencesControlle
     protected string $location = 'internal';
 
     protected StringHelperService $stringHelper;
+    protected $navigation;
 
     /**
-     * @param NiTextTranslation           $niTextTranslationUtil
-     * @param AuthorizationService        $authService
-     * @param FormHelperService           $formHelper
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
      * @param FlashMessengerHelperService $flashMessengerHelper
-     * @param FormServiceManager          $formServiceManager
-     * @param ScriptFactory               $scriptFactory
-     * @param AnnotationBuilder           $transferAnnotationBuilder
-     * @param CommandService              $commandService
+     * @param FormServiceManager $formServiceManager
+     * @param ScriptFactory $scriptFactory
+     * @param AnnotationBuilder $transferAnnotationBuilder
+     * @param CommandService $commandService
+     * @param StringHelperService $stringHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -55,7 +58,8 @@ class CommunityLicencesController extends Lva\AbstractCommunityLicencesControlle
         ScriptFactory $scriptFactory,
         AnnotationBuilder $transferAnnotationBuilder,
         CommandService $commandService,
-        StringHelperService $stringHelper
+        StringHelperService $stringHelper,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
 
@@ -69,5 +73,6 @@ class CommunityLicencesController extends Lva\AbstractCommunityLicencesControlle
             $transferAnnotationBuilder,
             $commandService
         );
+        $this->navigation = $navigation;
     }
 }

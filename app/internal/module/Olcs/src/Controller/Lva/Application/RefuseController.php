@@ -33,6 +33,8 @@ class RefuseController extends AbstractRefuseController
     protected StringHelperService $stringHelper;
     protected RestrictionHelperService $restrictionHelper;
 
+    protected $navigation;
+
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -41,6 +43,7 @@ class RefuseController extends AbstractRefuseController
      * @param FormHelperService $formHelper
      * @param StringHelperService $stringHelper
      * @param RestrictionHelperService $restrictionHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -49,10 +52,12 @@ class RefuseController extends AbstractRefuseController
         TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
         StringHelperService $stringHelper,
-        RestrictionHelperService $restrictionHelper
+        RestrictionHelperService $restrictionHelper,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
         $this->restrictionHelper = $restrictionHelper;
+        $this->navigation = $navigation;
 
         parent::__construct(
             $niTextTranslationUtil,

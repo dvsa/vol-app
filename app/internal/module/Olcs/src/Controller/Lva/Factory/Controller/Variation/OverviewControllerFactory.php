@@ -3,6 +3,7 @@
 namespace Olcs\Controller\Lva\Factory\Controller\Variation;
 
 use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\StringHelperService;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
@@ -31,6 +32,8 @@ class OverviewControllerFactory implements FactoryInterface
         $applicationOverviewHelper = $container->get(ApplicationOverviewHelperService::class);
         $formHelper = $container->get(FormHelperService::class);
         $formServiceManager = $container->get(FormServiceManager::class);
+        $navigation = $container->get('Navigation');
+        $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
 
         return new OverviewController(
             $niTextTranslationUtil,
@@ -38,7 +41,9 @@ class OverviewControllerFactory implements FactoryInterface
             $applicationOverviewHelper,
             $stringHelper,
             $formHelper,
-            $formServiceManager
+            $formServiceManager,
+            $navigation,
+            $flashMessengerHelper
         );
     }
 

@@ -104,6 +104,12 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
             'reUseParams' => false
         ]
     ];
+
+    protected HelperPluginManager $viewHelperPluginManager;
+    protected SubCategory $subCategory;
+    protected TableFactory $tableFactory;
+    protected UserWithName $userWithName;
+
     public function __construct(
         TranslationHelperService $translationHelperService,
         FormHelperService $formHelper,

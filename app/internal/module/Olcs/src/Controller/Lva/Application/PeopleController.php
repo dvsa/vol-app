@@ -12,6 +12,7 @@ namespace Olcs\Controller\Lva\Application;
 use Common\Controller\Lva;
 use Common\Controller\Lva\Adapters\ApplicationPeopleAdapter;
 use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\GuidanceHelperService;
 use Common\Service\Helper\RestrictionHelperService;
@@ -39,17 +40,21 @@ class PeopleController extends Lva\AbstractPeopleController implements Applicati
     protected StringHelperService $stringHelper;
     protected RestrictionHelperService $restrictionHelper;
 
+    protected $navigation;
+
     /**
-     * @param NiTextTranslation        $niTextTranslationUtil
-     * @param AuthorizationService     $authService
-     * @param FormHelperService        $formHelper
-     * @param FormServiceManager       $formServiceManager
-     * @param ScriptFactory            $scriptFactory
-     * @param VariationLvaService      $variationLvaService
-     * @param GuidanceHelperService    $guidanceHelper
-     * @param StringHelperService      $stringHelper
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
+     * @param FormServiceManager $formServiceManager
+     * @param ScriptFactory $scriptFactory
+     * @param VariationLvaService $variationLvaService
+     * @param GuidanceHelperService $guidanceHelper
+     * @param StringHelperService $stringHelper
      * @param ApplicationPeopleAdapter $lvaAdapter
      * @param RestrictionHelperService $restrictionHelper
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -61,10 +66,13 @@ class PeopleController extends Lva\AbstractPeopleController implements Applicati
         GuidanceHelperService $guidanceHelper,
         StringHelperService $stringHelper,
         ApplicationPeopleAdapter $lvaAdapter,
-        RestrictionHelperService $restrictionHelper
+        RestrictionHelperService $restrictionHelper,
+        FlashMessengerHelperService $flashMessengerHelper,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
         $this->restrictionHelper = $restrictionHelper;
+        $this->navigation = $navigation;
 
         parent::__construct(
             $niTextTranslationUtil,
@@ -74,7 +82,8 @@ class PeopleController extends Lva\AbstractPeopleController implements Applicati
             $scriptFactory,
             $variationLvaService,
             $guidanceHelper,
-            $lvaAdapter
+            $lvaAdapter,
+            $flashMessengerHelper
         );
     }
 }

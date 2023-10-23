@@ -43,6 +43,7 @@ class FinancialEvidenceControllerFactory implements FactoryInterface
         $lvaAdapter = $container->get(ApplicationFinancialEvidenceAdapter::class);
         $uploadHelper = $container->get(FileUploadHelperService::class);
         $restrictionHelper = $container->get(RestrictionHelperService::class);
+        $navigation = $container->get('Navigation');
 
         return new FinancialEvidenceController(
             $niTextTranslationUtil,
@@ -56,7 +57,8 @@ class FinancialEvidenceControllerFactory implements FactoryInterface
             $stringHelper,
             $lvaAdapter,
             $uploadHelper,
-            $restrictionHelper
+            $restrictionHelper,
+            $navigation
         );
     }
 

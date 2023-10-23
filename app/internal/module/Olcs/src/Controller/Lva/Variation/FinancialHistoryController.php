@@ -34,16 +34,18 @@ class FinancialHistoryController extends Lva\AbstractFinancialHistoryController 
     protected string $location = 'internal';
 
     protected StringHelperService $stringHelper;
+    protected $navigation;
 
     /**
-     * @param NiTextTranslation           $niTextTranslationUtil
-     * @param AuthorizationService        $authService
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
      * @param FlashMessengerHelperService $flashMessengerHelper
-     * @param FormServiceManager          $formServiceManager
-     * @param ScriptFactory               $scriptFactory
-     * @param DataHelperService           $dataHelper
-     * @param FileUploadHelperService     $fileUploadHelper
-     * @param StringHelperService         $stringHelper
+     * @param FormServiceManager $formServiceManager
+     * @param ScriptFactory $scriptFactory
+     * @param DataHelperService $dataHelper
+     * @param FileUploadHelperService $fileUploadHelper
+     * @param StringHelperService $stringHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -53,7 +55,8 @@ class FinancialHistoryController extends Lva\AbstractFinancialHistoryController 
         ScriptFactory $scriptFactory,
         DataHelperService $dataHelper,
         FileUploadHelperService $fileUploadHelper,
-        StringHelperService $stringHelper
+        StringHelperService $stringHelper,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
 
@@ -66,5 +69,6 @@ class FinancialHistoryController extends Lva\AbstractFinancialHistoryController 
             $dataHelper,
             $fileUploadHelper
         );
+        $this->navigation = $navigation;
     }
 }

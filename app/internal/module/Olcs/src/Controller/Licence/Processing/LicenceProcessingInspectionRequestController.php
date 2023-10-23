@@ -3,6 +3,7 @@
 namespace Olcs\Controller\Licence\Processing;
 
 use Common\RefData;
+use Common\Service\Cqrs\Query\QueryService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -91,6 +92,8 @@ class LicenceProcessingInspectionRequestController extends AbstractInternalContr
 
     protected OperatingCentresForInspectionRequest $operatingCentresForInspectionRequest;
     protected AnnotationBuilder $annotationBuilderService;
+    protected QueryService $queryService;
+    protected FlashMessengerHelperService $flashMessengerHelper;
 
     public function __construct(
         TranslationHelperService $translationHelper,
@@ -98,10 +101,14 @@ class LicenceProcessingInspectionRequestController extends AbstractInternalContr
         FlashMessengerHelperService $flashMessenger,
         Navigation $navigation,
         OperatingCentresForInspectionRequest $operatingCentresForInspectionRequest,
-        AnnotationBuilder $annotationBuilderService
+        AnnotationBuilder $annotationBuilderService,
+        QueryService $queryService
     ) {
         $this->operatingCentresForInspectionRequest = $operatingCentresForInspectionRequest;
         $this->annotationBuilderService = $annotationBuilderService;
+        $this->queryService = $queryService;
+        $this->flashMessengerHelper = $flashMessenger;
+
         parent::__construct($translationHelper, $formHelper, $flashMessenger, $navigation);
     }
 

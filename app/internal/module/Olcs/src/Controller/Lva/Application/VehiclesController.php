@@ -43,20 +43,24 @@ class VehiclesController extends AbstractGenericVehiclesController implements Ap
     protected StringHelperService $stringHelper;
     protected RestrictionHelperService $restrictionHelper;
 
+    protected $navigation;
+
     /**
-     * @param NiTextTranslation           $niTextTranslationUtil
-     * @param AuthorizationService        $authService
-     * @param FormHelperService           $formHelper
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
      * @param FlashMessengerHelperService $flashMessengerHelper
-     * @param FormServiceManager          $formServiceManager
-     * @param TableFactory                $tableFactory
-     * @param GuidanceHelperService       $guidanceHelper
-     * @param TranslationHelperService    $translationHelper
-     * @param ScriptFactory               $scriptFactory
-     * @param VariationLvaService         $variationLvaService
-     * @param GoodsVehiclesVehicle        $goodsVehiclesVehicleMapper
-     * @param ResponseHelperService       $responseHelper
-     * @param StringHelperService         $stringHelper
+     * @param FormServiceManager $formServiceManager
+     * @param TableFactory $tableFactory
+     * @param GuidanceHelperService $guidanceHelper
+     * @param TranslationHelperService $translationHelper
+     * @param ScriptFactory $scriptFactory
+     * @param VariationLvaService $variationLvaService
+     * @param GoodsVehiclesVehicle $goodsVehiclesVehicleMapper
+     * @param ResponseHelperService $responseHelper
+     * @param StringHelperService $stringHelper
+     * @param RestrictionHelperService $restrictionHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -72,10 +76,12 @@ class VehiclesController extends AbstractGenericVehiclesController implements Ap
         GoodsVehiclesVehicle $goodsVehiclesVehicleMapper,
         ResponseHelperService $responseHelper,
         StringHelperService $stringHelper,
-        RestrictionHelperService $restrictionHelper
+        RestrictionHelperService $restrictionHelper,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
         $this->restrictionHelper = $restrictionHelper;
+        $this->navigation = $navigation;
 
         parent::__construct(
             $niTextTranslationUtil,

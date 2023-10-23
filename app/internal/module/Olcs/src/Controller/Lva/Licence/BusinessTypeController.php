@@ -37,18 +37,21 @@ class BusinessTypeController extends Lva\AbstractBusinessTypeController implemen
     protected $lva = 'licence';
     protected string $location = 'internal';
 
+    protected string $navigation;
+
     /**
-     * @param NiTextTranslation           $niTextTranslationUtil
-     * @param AuthorizationService        $authService
-     * @param FormHelperService           $formHelper
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
      * @param FlashMessengerHelperService $flashMessengerHelper
-     * @param FormServiceManager          $formServiceManager
-     * @param ScriptFactory               $scriptFactory
-     * @param IdentityProviderInterface   $identityProvider
-     * @param TranslationHelperService    $translationHelper
-     * @param AnnotationBuilder           $transferAnnotationBuilder
-     * @param QueryService                $queryService
-     * @param GenericBusinessTypeAdapter  $lvaAdapter
+     * @param FormServiceManager $formServiceManager
+     * @param ScriptFactory $scriptFactory
+     * @param IdentityProviderInterface $identityProvider
+     * @param TranslationHelperService $translationHelper
+     * @param AnnotationBuilder $transferAnnotationBuilder
+     * @param QueryService $queryService
+     * @param GenericBusinessTypeAdapter $lvaAdapter
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -61,7 +64,8 @@ class BusinessTypeController extends Lva\AbstractBusinessTypeController implemen
         TranslationHelperService $translationHelper,
         AnnotationBuilder $transferAnnotationBuilder,
         QueryService $queryService,
-        GenericBusinessTypeAdapter $lvaAdapter
+        GenericBusinessTypeAdapter $lvaAdapter,
+        $navigation
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -76,5 +80,6 @@ class BusinessTypeController extends Lva\AbstractBusinessTypeController implemen
             $queryService,
             $lvaAdapter
         );
+        $this->navigation = $navigation;
     }
 }

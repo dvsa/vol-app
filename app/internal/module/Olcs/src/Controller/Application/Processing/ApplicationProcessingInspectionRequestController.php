@@ -22,6 +22,7 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits\InspectionRequestTrait;
 use Olcs\Data\Mapper\InspectionRequest as InspectionRequestMapper;
 use Olcs\Form\Model\Form\InspectionRequest;
+use Olcs\Service\Data\OperatingCentresForInspectionRequest;
 
 class ApplicationProcessingInspectionRequestController extends AbstractInternalController implements
     LeftViewProvider,
@@ -88,6 +89,8 @@ class ApplicationProcessingInspectionRequestController extends AbstractInternalC
     protected $section = 'inspection-request';
     protected TransferAnnotationBuilder $transferAnnotationBuilder;
     protected CachingQueryService $queryService;
+    protected FlashMessengerHelperService $flashMessengerHelper;
+    protected OperatingCentresForInspectionRequest $operatingCentresForInspectionRequest;
 
     public function __construct(
         TranslationHelperService $translationHelper,
@@ -95,10 +98,13 @@ class ApplicationProcessingInspectionRequestController extends AbstractInternalC
         FlashMessengerHelperService $flashMessenger,
         Navigation $navigation,
         TransferAnnotationBuilder $transferAnnotationBuilder,
-        CachingQueryService $queryService
+        CachingQueryService $queryService,
+        OperatingCentresForInspectionRequest $operatingCentresForInspectionRequest
     ) {
         $this->transferAnnotationBuilder = $transferAnnotationBuilder;
         $this->queryService = $queryService;
+        $this->operatingCentresForInspectionRequest = $operatingCentresForInspectionRequest;
+        $this->flashMessengerHelper = $flashMessenger;
         parent::__construct($translationHelper, $formHelper, $flashMessenger, $navigation);
     }
 

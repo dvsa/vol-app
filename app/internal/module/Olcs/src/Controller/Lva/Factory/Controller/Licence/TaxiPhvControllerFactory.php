@@ -35,6 +35,7 @@ class TaxiPhvControllerFactory implements FactoryInterface
         $tableFactory = $container->get(TableFactory::class);
         $scriptFactory = $container->get(ScriptFactory::class);
         $translationHelper = $container->get(TranslationHelperService::class);
+        $navigation = $container->get('Navigation');
 
         return new TaxiPhvController(
             $niTextTranslationUtil,
@@ -44,7 +45,8 @@ class TaxiPhvControllerFactory implements FactoryInterface
             $flashMessengerHelper,
             $tableFactory,
             $scriptFactory,
-            $translationHelper
+            $translationHelper,
+            $navigation
         );
     }
 

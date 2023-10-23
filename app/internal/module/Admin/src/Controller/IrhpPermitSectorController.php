@@ -33,6 +33,8 @@ class IrhpPermitSectorController extends AbstractIrhpPermitAdminController imple
 
     protected $defaultData = ['stockId' => 'route'];
 
+    protected ScriptFactory $scriptFactory;
+
     public function __construct(
         TranslationHelperService $translationHelperService,
         FormHelperService $formHelper,

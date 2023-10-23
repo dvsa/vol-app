@@ -45,6 +45,7 @@ class BusinessTypeControllerFactory implements FactoryInterface
         $translationHelper = $container->get(TranslationHelperService::class);
         $lvaAdapter = $container->get(GenericBusinessTypeAdapter::class);
         $restrictionHelper = $container->get(RestrictionHelperService::class);
+        $navigation = $container->get('Navigation');
 
         return new BusinessTypeController(
             $niTextTranslationUtil,
@@ -59,7 +60,8 @@ class BusinessTypeControllerFactory implements FactoryInterface
             $queryService,
             $stringHelper,
             $lvaAdapter,
-            $restrictionHelper
+            $restrictionHelper,
+            $navigation
         );
     }
 

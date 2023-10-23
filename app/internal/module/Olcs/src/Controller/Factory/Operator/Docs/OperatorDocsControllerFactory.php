@@ -7,6 +7,7 @@ use Common\Service\Cqrs\Query\QueryService;
 use Common\Service\Helper\DateHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
+use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
@@ -42,6 +43,7 @@ class OperatorDocsControllerFactory implements FactoryInterface
         $queryService = $container->get(QueryService::class);
         $navigation = $container->get('navigation');
         $docSubCategoryDataService = $container->get(DocumentSubCategory::class);
+        $translationHelper = $container->get(TranslationHelperService::class);
 
         return new OperatorDocsController(
             $scriptFactory,
@@ -55,7 +57,8 @@ class OperatorDocsControllerFactory implements FactoryInterface
             $licenceDataService,
             $queryService,
             $navigation,
-            $docSubCategoryDataService
+            $docSubCategoryDataService,
+            $translationHelper
         );
     }
 

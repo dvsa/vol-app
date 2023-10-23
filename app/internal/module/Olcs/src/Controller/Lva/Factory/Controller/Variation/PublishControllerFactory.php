@@ -3,6 +3,7 @@
 namespace Olcs\Controller\Lva\Factory\Controller\Variation;
 
 use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\StringHelperService;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
@@ -29,13 +30,17 @@ class PublishControllerFactory implements FactoryInterface
         $formHelper = $container->get(FormHelperService::class);
         $stringHelper = $container->get(StringHelperService::class);
         $formServiceManager = $container->get(FormServiceManager::class);
+        $navigation = $container->get('Navigation');
+        $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
 
         return new PublishController(
             $niTextTranslationUtil,
             $authService,
             $formHelper,
             $stringHelper,
-            $formServiceManager
+            $formServiceManager,
+            $navigation,
+            $flashMessengerHelper
         );
     }
 

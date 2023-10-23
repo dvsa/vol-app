@@ -12,6 +12,7 @@ namespace Olcs\Controller\Lva\Variation;
 use Common\Controller\Lva;
 use Common\Controller\Lva\Adapters\VariationPeopleAdapter;
 use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\GuidanceHelperService;
 use Common\Service\Helper\StringHelperService;
@@ -36,17 +37,20 @@ class PeopleController extends Lva\AbstractPeopleController implements Variation
     protected string $location = 'internal';
 
     protected StringHelperService $stringHelper;
+    protected $navigation;
 
     /**
-     * @param NiTextTranslation      $niTextTranslationUtil
-     * @param AuthorizationService   $authService
-     * @param FormHelperService      $formHelper
-     * @param FormServiceManager     $formServiceManager
-     * @param ScriptFactory          $scriptFactory
-     * @param VariationLvaService    $variationLvaService
-     * @param GuidanceHelperService  $guidanceHelper
-     * @param StringHelperService    $stringHelper
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
+     * @param FormServiceManager $formServiceManager
+     * @param ScriptFactory $scriptFactory
+     * @param VariationLvaService $variationLvaService
+     * @param GuidanceHelperService $guidanceHelper
+     * @param StringHelperService $stringHelper
      * @param VariationPeopleAdapter $lvaAdapter
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -57,7 +61,9 @@ class PeopleController extends Lva\AbstractPeopleController implements Variation
         VariationLvaService $variationLvaService,
         GuidanceHelperService $guidanceHelper,
         StringHelperService $stringHelper,
-        VariationPeopleAdapter $lvaAdapter
+        VariationPeopleAdapter $lvaAdapter,
+        FlashMessengerHelperService $flashMessengerHelper,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
 
@@ -69,7 +75,9 @@ class PeopleController extends Lva\AbstractPeopleController implements Variation
             $scriptFactory,
             $variationLvaService,
             $guidanceHelper,
-            $lvaAdapter
+            $lvaAdapter,
+            $flashMessengerHelper
         );
+        $this->navigation = $navigation;
     }
 }

@@ -33,6 +33,7 @@ class SubmitControllerFactory implements FactoryInterface
         $formHelper = $container->get(FormHelperService::class);
         $stringHelper = $container->get(StringHelperService::class);
         $restrictionHelper = $container->get(RestrictionHelperService::class);
+        $navigation = $container->get('Navigation');
 
         return new SubmitController(
             $niTextTranslationUtil,
@@ -41,7 +42,8 @@ class SubmitControllerFactory implements FactoryInterface
             $translationHelper,
             $formHelper,
             $stringHelper,
-            $restrictionHelper
+            $restrictionHelper,
+            $navigation
         );
     }
 

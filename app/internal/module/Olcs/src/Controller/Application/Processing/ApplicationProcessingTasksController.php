@@ -38,9 +38,21 @@ class ApplicationProcessingTasksController extends AbstractApplicationProcessing
         ComplaintsHelperService $complaintsHelper,
         FlashMessengerHelperService $flashMessengerHelper,
         TreeRouteStack $router,
-        SubCategory $subCategoryDataService
+        SubCategory $subCategoryDataService,
+        $navigation
     ) {
-        parent::__construct($scriptFactory, $formHelper, $tableFactory, $viewHelperManager, $dataServiceManager, $oppositionHelper, $complaintsHelper, $flashMessengerHelper, $router);
+        parent::__construct(
+            $scriptFactory,
+            $formHelper,
+            $tableFactory,
+            $viewHelperManager,
+            $dataServiceManager,
+            $oppositionHelper,
+            $complaintsHelper,
+            $flashMessengerHelper,
+            $router,
+            $navigation
+        );
         $this->subCategoryDataService = $subCategoryDataService;
     }
 

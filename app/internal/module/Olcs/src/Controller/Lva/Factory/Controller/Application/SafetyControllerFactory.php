@@ -39,6 +39,7 @@ class SafetyControllerFactory implements FactoryInterface
         $translationHelper = $container->get(TranslationHelperService::class);
         $stringHelper = $container->get(StringHelperService::class);
         $restrictionHelper = $container->get(RestrictionHelperService::class);
+        $navigation = $container->get('Navigation');
 
         return new SafetyController(
             $niTextTranslationUtil,
@@ -50,7 +51,8 @@ class SafetyControllerFactory implements FactoryInterface
             $scriptFactory,
             $translationHelper,
             $stringHelper,
-            $restrictionHelper
+            $restrictionHelper,
+            $navigation
         );
     }
 

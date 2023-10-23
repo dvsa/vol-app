@@ -43,6 +43,7 @@ class VehiclesPsvControllerFactory implements FactoryInterface
         $translationHelper = $container->get(TranslationHelperService::class);
         $guidanceHelper = $container->get(GuidanceHelperService::class);
         $stringHelper = $container->get(StringHelperService::class);
+        $navigation = $container->get('Navigation');
 
         return new VehiclesPsvController(
             $niTextTranslationUtil,
@@ -56,7 +57,8 @@ class VehiclesPsvControllerFactory implements FactoryInterface
             $tableFactory,
             $translationHelper,
             $guidanceHelper,
-            $stringHelper
+            $stringHelper,
+            $navigation
         );
     }
 

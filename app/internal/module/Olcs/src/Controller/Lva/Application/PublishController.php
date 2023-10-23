@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Lva\Application;
 
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\RestrictionHelperService;
 use Common\Service\Helper\StringHelperService;
@@ -23,6 +24,9 @@ class PublishController extends \Olcs\Controller\Lva\AbstractPublishController
 
     protected StringHelperService $stringHelper;
     protected RestrictionHelperService $restrictionHelper;
+    protected FlashMessengerHelperService $flashMessengerHelper;
+
+    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -30,16 +34,22 @@ class PublishController extends \Olcs\Controller\Lva\AbstractPublishController
      * @param FormHelperService $formHelper
      * @param StringHelperService $stringHelper
      * @param RestrictionHelperService $restrictionHelper
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
         FormHelperService $formHelper,
         StringHelperService $stringHelper,
-        RestrictionHelperService $restrictionHelper
+        RestrictionHelperService $restrictionHelper,
+        FlashMessengerHelperService $flashMessengerHelper,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
         $this->restrictionHelper = $restrictionHelper;
+        $this->flashMessengerHelper = $flashMessengerHelper;
+        $this->navigation = $navigation;
 
         parent::__construct($niTextTranslationUtil, $authService, $formHelper);
     }

@@ -41,19 +41,21 @@ class TransportManagersController extends Lva\AbstractTransportManagersControlle
 
     protected $lva = 'licence';
     protected string $location = 'internal';
+    protected string $navigation;
 
     /**
-     * @param NiTextTranslation              $niTextTranslationUtil
-     * @param AuthorizationService           $authService
-     * @param FormHelperService              $formHelper
-     * @param FormServiceManager             $formServiceManager
-     * @param FlashMessengerHelperService    $flashMessengerHelper
-     * @param ScriptFactory                  $scriptFactory
-     * @param QueryService                   $queryService
-     * @param CommandService                 $commandService
-     * @param AnnotationBuilder              $transferAnnotationBuilder
-     * @param TransportManagerHelperService  $transportManagerHelper
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
+     * @param FormServiceManager $formServiceManager
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param ScriptFactory $scriptFactory
+     * @param QueryService $queryService
+     * @param CommandService $commandService
+     * @param AnnotationBuilder $transferAnnotationBuilder
+     * @param TransportManagerHelperService $transportManagerHelper
      * @param LicenceTransportManagerAdapter $lvaAdapter
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -66,7 +68,8 @@ class TransportManagersController extends Lva\AbstractTransportManagersControlle
         CommandService $commandService,
         AnnotationBuilder $transferAnnotationBuilder,
         TransportManagerHelperService $transportManagerHelper,
-        LicenceTransportManagerAdapter $lvaAdapter
+        LicenceTransportManagerAdapter $lvaAdapter,
+        $navigation
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -81,6 +84,7 @@ class TransportManagersController extends Lva\AbstractTransportManagersControlle
             $transportManagerHelper,
             $lvaAdapter
         );
+        $this->navigation = $navigation;
     }
 
     /**

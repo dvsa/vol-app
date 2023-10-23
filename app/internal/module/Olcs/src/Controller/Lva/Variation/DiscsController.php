@@ -14,6 +14,7 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\GuidanceHelperService;
 use Common\Service\Helper\StringHelperService;
+use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Interfaces\VariationControllerInterface;
@@ -33,16 +34,19 @@ class DiscsController extends Lva\AbstractDiscsController implements VariationCo
     protected string $location = 'internal';
 
     protected StringHelperService $stringHelper;
+    protected $navigation;
 
     /**
-     * @param NiTextTranslation           $niTextTranslationUtil
-     * @param AuthorizationService        $authService
-     * @param FormHelperService           $formHelper
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
      * @param FlashMessengerHelperService $flashMessengerHelper
-     * @param FormServiceManager          $formServiceManager
-     * @param TableFactory                $tableFactory
-     * @param GuidanceHelperService       $guidanceHelper
-     * @param StringHelperService         $stringHelper
+     * @param FormServiceManager $formServiceManager
+     * @param TableFactory $tableFactory
+     * @param GuidanceHelperService $guidanceHelper
+     * @param StringHelperService $stringHelper
+     * @param ScriptFactory $scriptFactory
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -52,7 +56,9 @@ class DiscsController extends Lva\AbstractDiscsController implements VariationCo
         FormServiceManager $formServiceManager,
         TableFactory $tableFactory,
         GuidanceHelperService $guidanceHelper,
-        StringHelperService $stringHelper
+        StringHelperService $stringHelper,
+        ScriptFactory $scriptFactory,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
 
@@ -63,7 +69,9 @@ class DiscsController extends Lva\AbstractDiscsController implements VariationCo
             $flashMessengerHelper,
             $formServiceManager,
             $tableFactory,
-            $guidanceHelper
+            $guidanceHelper,
+            $scriptFactory
         );
+        $this->navigation = $navigation;
     }
 }

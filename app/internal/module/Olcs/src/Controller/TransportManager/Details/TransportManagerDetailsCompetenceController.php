@@ -4,6 +4,7 @@ namespace Olcs\Controller\TransportManager\Details;
 
 use Common\Controller\Traits\GenericUpload;
 use Common\Service\Cqrs\Query\CachingQueryService;
+use Common\Service\Cqrs\Query\QueryService;
 use Common\Service\Cqrs\Response;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
@@ -75,6 +76,9 @@ class TransportManagerDetailsCompetenceController extends AbstractInternalContro
     protected $deleteCommand = DeleteDto::class;
     protected $deleteParams = ['ids' => 'id'];
     protected $hasMultiDelete = true;
+    protected TransferAnnotationBuilder $transferAnnotationBuilder;
+    protected QueryService $queryService;
+    protected TransportManagerHelperService $transportMangerHelper;
 
     public function __construct(
         TranslationHelperService $translationHelper,
@@ -82,7 +86,7 @@ class TransportManagerDetailsCompetenceController extends AbstractInternalContro
         FlashMessengerHelperService $flashMessenger,
         Navigation $navigation,
         TransferAnnotationBuilder $transferAnnotationBuilder,
-        CachingQueryService $queryService,
+        QueryService $queryService,
         TransportManagerHelperService $transportMangerHelper
     ) {
         $this->transferAnnotationBuilder = $transferAnnotationBuilder;
@@ -167,12 +171,12 @@ class TransportManagerDetailsCompetenceController extends AbstractInternalContro
                 );
 
             /**
- * @var Response $response
-*/
+            * @var Response $response
+            */
             $response = $this->queryService->send($queryToSend);
 
             if ($response->isClientError() || $response->isServerError()) {
-                $this->flashMessenger->addErrorMessage('unknown-error');
+                $this->flashMessengerHelperService->addErrorMessage('unknown-error');
             }
             $mappedResults = [];
             if ($response->isOk()) {

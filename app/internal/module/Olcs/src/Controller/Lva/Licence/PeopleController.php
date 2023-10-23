@@ -12,6 +12,7 @@ namespace Olcs\Controller\Lva\Licence;
 use Common\Controller\Lva;
 use Common\Controller\Lva\Adapters\LicencePeopleAdapter;
 use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\GuidanceHelperService;
 use Common\Service\Lva\VariationLvaService;
@@ -34,15 +35,19 @@ class PeopleController extends Lva\AbstractPeopleController implements LicenceCo
     protected $lva = 'licence';
     protected string $location = 'internal';
 
+    protected string $navigation;
+
     /**
-     * @param NiTextTranslation     $niTextTranslationUtil
-     * @param AuthorizationService  $authService
-     * @param FormHelperService     $formHelper
-     * @param FormServiceManager    $formServiceManager
-     * @param ScriptFactory         $scriptFactory
-     * @param VariationLvaService   $variationLvaService
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
+     * @param FormServiceManager $formServiceManager
+     * @param ScriptFactory $scriptFactory
+     * @param VariationLvaService $variationLvaService
      * @param GuidanceHelperService $guidanceHelper
-     * @param LicencePeopleAdapter  $lvaAdapter
+     * @param LicencePeopleAdapter $lvaAdapter
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -52,7 +57,9 @@ class PeopleController extends Lva\AbstractPeopleController implements LicenceCo
         ScriptFactory $scriptFactory,
         VariationLvaService $variationLvaService,
         GuidanceHelperService $guidanceHelper,
-        LicencePeopleAdapter $lvaAdapter
+        LicencePeopleAdapter $lvaAdapter,
+        FlashMessengerHelperService $flashMessengerHelper,
+        $navigation
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -62,7 +69,9 @@ class PeopleController extends Lva\AbstractPeopleController implements LicenceCo
             $scriptFactory,
             $variationLvaService,
             $guidanceHelper,
-            $lvaAdapter
+            $lvaAdapter,
+            $flashMessengerHelper
         );
+        $this->navigation = $navigation;
     }
 }

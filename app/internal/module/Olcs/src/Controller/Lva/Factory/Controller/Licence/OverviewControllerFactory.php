@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Lva\Factory\Controller\Licence;
 
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Interop\Container\ContainerInterface;
@@ -27,12 +28,16 @@ class OverviewControllerFactory implements FactoryInterface
         $authService = $container->get(AuthorizationService::class);
         $applicationOverviewHelper = $container->get(LicenceOverviewHelperService::class);
         $formHelper = $container->get(FormHelperService::class);
+        $navigation = $container->get('Navigation');
+        $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
 
         return new OverviewController(
             $niTextTranslationUtil,
             $authService,
             $applicationOverviewHelper,
-            $formHelper
+            $formHelper,
+            $navigation,
+            $flashMessengerHelper
         );
     }
 

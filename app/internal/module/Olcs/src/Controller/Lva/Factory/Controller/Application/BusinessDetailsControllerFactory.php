@@ -41,6 +41,7 @@ class BusinessDetailsControllerFactory implements FactoryInterface
         $tableFactory = $container->get(TableFactory::class);
         $fileUploadHelper = $container->get(FileUploadHelperService::class);
         $restrictionHelper = $container->get(RestrictionHelperService::class);
+        $navigation = $container->get('Navigation');
 
         return new BusinessDetailsController(
             $niTextTranslationUtil,
@@ -53,7 +54,8 @@ class BusinessDetailsControllerFactory implements FactoryInterface
             $stringHelper,
             $tableFactory,
             $fileUploadHelper,
-            $restrictionHelper
+            $restrictionHelper,
+            $navigation
         );
     }
 

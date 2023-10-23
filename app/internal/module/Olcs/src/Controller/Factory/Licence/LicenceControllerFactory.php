@@ -3,6 +3,7 @@
 namespace Olcs\Controller\Factory\Licence;
 
 use Common\Service\Helper\ComplaintsHelperService;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\OppositionHelperService;
 use Common\Service\Script\ScriptFactory;
@@ -33,6 +34,7 @@ class LicenceControllerFactory implements FactoryInterface
         $oppositionHelper = $container->get(OppositionHelperService::class);
         $complaintsHelper = $container->get(ComplaintsHelperService::class);
         $navigation = $container->get('navigation');
+        $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
 
         return new LicenceController(
             $scriptFactory,
@@ -41,7 +43,8 @@ class LicenceControllerFactory implements FactoryInterface
             $viewHelperManager,
             $oppositionHelper,
             $complaintsHelper,
-            $navigation
+            $navigation,
+            $flashMessengerHelper
         );
     }
 

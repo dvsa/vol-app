@@ -38,23 +38,24 @@ class VehiclesController extends AbstractGenericVehiclesController implements Va
 
     protected $lva = 'variation';
     protected string $location = 'internal';
-
     protected StringHelperService $stringHelper;
+    protected $navigation;
 
     /**
-     * @param NiTextTranslation           $niTextTranslationUtil
-     * @param AuthorizationService        $authService
-     * @param FormHelperService           $formHelper
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
      * @param FlashMessengerHelperService $flashMessengerHelper
-     * @param FormServiceManager          $formServiceManager
-     * @param TableFactory                $tableFactory
-     * @param GuidanceHelperService       $guidanceHelper
-     * @param TranslationHelperService    $translationHelper
-     * @param ScriptFactory               $scriptFactory
-     * @param VariationLvaService         $variationLvaService
-     * @param GoodsVehiclesVehicle        $goodsVehiclesVehicleMapper
-     * @param ResponseHelperService       $responseHelper
-     * @param StringHelperService         $stringHelper
+     * @param FormServiceManager $formServiceManager
+     * @param TableFactory $tableFactory
+     * @param GuidanceHelperService $guidanceHelper
+     * @param TranslationHelperService $translationHelper
+     * @param ScriptFactory $scriptFactory
+     * @param VariationLvaService $variationLvaService
+     * @param GoodsVehiclesVehicle $goodsVehiclesVehicleMapper
+     * @param ResponseHelperService $responseHelper
+     * @param StringHelperService $stringHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -69,7 +70,8 @@ class VehiclesController extends AbstractGenericVehiclesController implements Va
         VariationLvaService $variationLvaService,
         GoodsVehiclesVehicle $goodsVehiclesVehicleMapper,
         ResponseHelperService $responseHelper,
-        StringHelperService $stringHelper
+        StringHelperService $stringHelper,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
 
@@ -87,5 +89,6 @@ class VehiclesController extends AbstractGenericVehiclesController implements Va
             $goodsVehiclesVehicleMapper,
             $responseHelper
         );
+        $this->navigation = $navigation;
     }
 }

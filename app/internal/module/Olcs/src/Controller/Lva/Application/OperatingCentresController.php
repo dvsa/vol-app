@@ -10,6 +10,7 @@ namespace Olcs\Controller\Lva\Application;
 
 use Common\Controller\Lva;
 use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\RestrictionHelperService;
@@ -38,6 +39,8 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
     protected StringHelperService $stringHelper;
     protected RestrictionHelperService $restrictionHelper;
 
+    protected $navigation;
+
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -49,6 +52,8 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
      * @param VariationLvaService $variationLvaService
      * @param StringHelperService $stringHelper
      * @param RestrictionHelperService $restrictionHelper
+     * @param FileUploadHelperService $uploadHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -60,10 +65,13 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
         ScriptFactory $scriptFactory,
         VariationLvaService $variationLvaService,
         StringHelperService $stringHelper,
-        RestrictionHelperService $restrictionHelper
+        RestrictionHelperService $restrictionHelper,
+        FileUploadHelperService $uploadHelper,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
         $this->restrictionHelper = $restrictionHelper;
+        $this->navigation = $navigation;
 
         parent::__construct(
             $niTextTranslationUtil,
@@ -73,7 +81,8 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
             $formServiceManager,
             $translationHelper,
             $scriptFactory,
-            $variationLvaService
+            $variationLvaService,
+            $uploadHelper
         );
     }
 }

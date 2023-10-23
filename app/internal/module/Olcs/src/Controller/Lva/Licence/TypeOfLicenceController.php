@@ -32,6 +32,7 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController implements
     protected $lva = 'licence';
 
     protected FormHelperService $formHelper;
+    protected $navigation;
 
     /**
      * @param NiTextTranslation           $niTextTranslationUtil
@@ -49,7 +50,8 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController implements
         ScriptFactory $scriptFactory,
         FormServiceManager $formServiceManager,
         FormHelperService $formHelper,
-        VariationLvaService $variationLvaService
+        VariationLvaService $variationLvaService,
+        $navigation
     ) {
         $this->formHelper = $formHelper;
 
@@ -61,5 +63,7 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController implements
             $formServiceManager,
             $variationLvaService
         );
+
+        $this->navigation = $navigation;
     }
 }

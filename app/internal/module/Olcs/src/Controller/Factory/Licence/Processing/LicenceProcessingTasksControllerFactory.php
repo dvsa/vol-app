@@ -3,11 +3,13 @@
 namespace Olcs\Controller\Factory\Licence\Processing;
 
 use Common\Service\Helper\ComplaintsHelperService;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\OppositionHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Interop\Container\ContainerInterface;
+use Laminas\Mvc\Router\Http\TreeRouteStack;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\View\HelperPluginManager;
@@ -34,6 +36,8 @@ class LicenceProcessingTasksControllerFactory implements FactoryInterface
         $complaintsHelper = $container->get(ComplaintsHelperService::class);
         $navigation = $container->get('navigation');
         $subCategoryDataService = $container->get(SubCategory::class);
+        $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
+        $router = $container->get(TreeRouteStack::class);
 
         return new LicenceProcessingTasksController(
             $scriptFactory,
@@ -43,7 +47,9 @@ class LicenceProcessingTasksControllerFactory implements FactoryInterface
             $oppositionHelper,
             $complaintsHelper,
             $navigation,
-            $subCategoryDataService
+            $subCategoryDataService,
+            $flashMessengerHelper,
+            $router
         );
     }
 

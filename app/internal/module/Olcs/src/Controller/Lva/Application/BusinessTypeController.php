@@ -41,21 +41,23 @@ class BusinessTypeController extends Lva\AbstractBusinessTypeController implemen
 
     protected StringHelperService $stringHelper;
     protected RestrictionHelperService $restrictionHelper;
+    protected $navigation;
 
     /**
-     * @param NiTextTranslation           $niTextTranslationUtil
-     * @param AuthorizationService        $authService
-     * @param FormHelperService           $formHelper
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
      * @param FlashMessengerHelperService $flashMessengerHelper
-     * @param FormServiceManager          $formServiceManager
-     * @param ScriptFactory               $scriptFactory
-     * @param IdentityProviderInterface   $identityProvider
-     * @param TranslationHelperService    $translationHelper
-     * @param AnnotationBuilder           $transferAnnotationBuilder
-     * @param QueryService                $queryService
-     * @param StringHelperService         $stringHelper
-     * @param GenericBusinessTypeAdapter  $lvaAdapter
-     * @param RestrictionHelperService    $restrictionHelper
+     * @param FormServiceManager $formServiceManager
+     * @param ScriptFactory $scriptFactory
+     * @param IdentityProviderInterface $identityProvider
+     * @param TranslationHelperService $translationHelper
+     * @param AnnotationBuilder $transferAnnotationBuilder
+     * @param QueryService $queryService
+     * @param StringHelperService $stringHelper
+     * @param GenericBusinessTypeAdapter $lvaAdapter
+     * @param RestrictionHelperService $restrictionHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -70,10 +72,12 @@ class BusinessTypeController extends Lva\AbstractBusinessTypeController implemen
         QueryService $queryService,
         StringHelperService $stringHelper,
         GenericBusinessTypeAdapter $lvaAdapter,
-        RestrictionHelperService $restrictionHelper
+        RestrictionHelperService $restrictionHelper,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
         $this->restrictionHelper = $restrictionHelper;
+        $this->navigation = $navigation;
 
         parent::__construct(
             $niTextTranslationUtil,

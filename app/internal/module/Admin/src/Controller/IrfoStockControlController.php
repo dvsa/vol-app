@@ -73,6 +73,8 @@ class IrfoStockControlController extends AbstractInternalController implements L
     protected $createCommand = CreateDto::class;
 
     protected $addContentTitle = 'Add IRFO Stock Control';
+    protected DateHelperService $dateHelperService;
+    protected IrfoCountry $irfoCountryDataService;
 
     public function __construct(
         TranslationHelperService $translationHelperService,

@@ -36,15 +36,18 @@ class InterimController extends AbstractInterimController implements VariationCo
 
     protected StringHelperService $stringHelper;
     protected FormServiceManager $formServiceManager;
+    protected $navigation;
 
     /**
-     * @param NiTextTranslation           $niTextTranslationUtil
-     * @param AuthorizationService        $authService
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
      * @param FlashMessengerHelperService $flashMessengerHelper
-     * @param FormHelperService           $formHelper
-     * @param ScriptFactory               $scriptFactory
-     * @param TableFactory                $tableFactory
-     * @param StringHelperService         $stringHelper
+     * @param FormHelperService $formHelper
+     * @param ScriptFactory $scriptFactory
+     * @param TableFactory $tableFactory
+     * @param StringHelperService $stringHelper
+     * @param FormServiceManager $formServiceManager
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -54,7 +57,8 @@ class InterimController extends AbstractInterimController implements VariationCo
         ScriptFactory $scriptFactory,
         TableFactory $tableFactory,
         StringHelperService $stringHelper,
-        FormServiceManager $formServiceManager
+        FormServiceManager $formServiceManager,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
         $this->formServiceManager = $formServiceManager;
@@ -67,5 +71,6 @@ class InterimController extends AbstractInterimController implements VariationCo
             $scriptFactory,
             $tableFactory
         );
+        $this->navigation = $navigation;
     }
 }

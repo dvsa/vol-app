@@ -37,6 +37,7 @@ class CommunityLicencesControllerFactory implements FactoryInterface
         $stringHelper = $container->get(StringHelperService::class);
         $commandService = $container->get(CommandService::class);
         $transferAnnotationBuilder = $container->get(AnnotationBuilder::class);
+        $navigation = $container->get('Navigation');
 
         return new CommunityLicencesController(
             $niTextTranslationUtil,
@@ -47,7 +48,8 @@ class CommunityLicencesControllerFactory implements FactoryInterface
             $scriptFactory,
             $transferAnnotationBuilder,
             $commandService,
-            $stringHelper
+            $stringHelper,
+            $navigation
         );
     }
 

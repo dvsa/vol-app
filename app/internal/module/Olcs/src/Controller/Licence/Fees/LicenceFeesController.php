@@ -9,6 +9,7 @@
 namespace Olcs\Controller\Licence\Fees;
 
 use Common\Controller\Traits\GenericReceipt;
+use Common\Service\Data\PluginManager;
 use Common\Service\Helper\ComplaintsHelperService;
 use Common\Service\Helper\DateHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
@@ -65,7 +66,8 @@ class LicenceFeesController extends LicenceController implements LeftViewProvide
             $viewHelperManager,
             $oppositionHelper,
             $complaintsHelper,
-            $navigation
+            $navigation,
+            $flashMessengerHelper
         );
         $this->flashMessengerHelper = $flashMessengerHelper;
         $this->urlHelper = $urlHelper;

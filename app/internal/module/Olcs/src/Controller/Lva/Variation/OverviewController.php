@@ -10,6 +10,7 @@ namespace Olcs\Controller\Lva\Variation;
 
 use Common\Controller\Lva\AbstractController;
 use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\StringHelperService;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
@@ -36,14 +37,18 @@ class OverviewController extends AbstractController implements VariationControll
     protected StringHelperService $stringHelper;
     protected FormHelperService $formHelper;
     protected FormServiceManager $formServiceManager;
+    protected $navigation;
+    protected FlashMessengerHelperService $flashMessengerHelper;
 
     /**
-     * @param NiTextTranslation                $niTextTranslationUtil
-     * @param AuthorizationService             $authService
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
      * @param ApplicationOverviewHelperService $applicationOverviewHelper
-     * @param StringHelperService              $stringHelper
-     * @param FormHelperService                $formHelper
-     * @param FormServiceManager               $formServiceManager
+     * @param StringHelperService $stringHelper
+     * @param FormHelperService $formHelper
+     * @param FormServiceManager $formServiceManager
+     * @param $navigation
+     * @param FlashMessengerHelperService $flashMessengerHelper
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -51,12 +56,16 @@ class OverviewController extends AbstractController implements VariationControll
         ApplicationOverviewHelperService $applicationOverviewHelper,
         StringHelperService $stringHelper,
         FormHelperService $formHelper,
-        FormServiceManager $formServiceManager
+        FormServiceManager $formServiceManager,
+        $navigation,
+        FlashMessengerHelperService $flashMessengerHelper
     ) {
         $this->applicationOverviewHelper = $applicationOverviewHelper;
         $this->stringHelper = $stringHelper;
         $this->formHelper = $formHelper;
         $this->formServiceManager = $formServiceManager;
+        $this->navigation = $navigation;
+        $this->flashMessengerHelper = $flashMessengerHelper;
 
         parent::__construct($niTextTranslationUtil, $authService);
     }

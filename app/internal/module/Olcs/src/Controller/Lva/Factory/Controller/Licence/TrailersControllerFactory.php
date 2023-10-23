@@ -37,6 +37,7 @@ class TrailersControllerFactory implements FactoryInterface
         $scriptFactory = $container->get(ScriptFactory::class);
         $dateHelper = $container->get(DateHelperService::class);
         $querySender = $container->get(QuerySender::class);
+        $navigation = $container->get('Navigation');
 
         return new TrailersController(
             $niTextTranslationUtil,
@@ -47,7 +48,8 @@ class TrailersControllerFactory implements FactoryInterface
             $tableFactory,
             $scriptFactory,
             $dateHelper,
-            $querySender
+            $querySender,
+            $navigation
         );
     }
 

@@ -38,19 +38,22 @@ class VehiclesController extends AbstractGenericVehiclesController implements Li
     protected $lva = 'licence';
     protected string $location = 'internal';
 
+    protected $navigation;
+
     /**
-     * @param NiTextTranslation           $niTextTranslationUtil
-     * @param AuthorizationService        $authService
-     * @param FormHelperService           $formHelper
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
      * @param FlashMessengerHelperService $flashMessengerHelper
-     * @param FormServiceManager          $formServiceManager
-     * @param TableFactory                $tableFactory
-     * @param GuidanceHelperService       $guidanceHelper
-     * @param TranslationHelperService    $translationHelper
-     * @param ScriptFactory               $scriptFactory
-     * @param VariationLvaService         $variationLvaService
-     * @param GoodsVehiclesVehicle        $goodsVehiclesVehicleMapper
-     * @param ResponseHelperService       $responseHelper
+     * @param FormServiceManager $formServiceManager
+     * @param TableFactory $tableFactory
+     * @param GuidanceHelperService $guidanceHelper
+     * @param TranslationHelperService $translationHelper
+     * @param ScriptFactory $scriptFactory
+     * @param VariationLvaService $variationLvaService
+     * @param GoodsVehiclesVehicle $goodsVehiclesVehicleMapper
+     * @param ResponseHelperService $responseHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -64,7 +67,8 @@ class VehiclesController extends AbstractGenericVehiclesController implements Li
         ScriptFactory $scriptFactory,
         VariationLvaService $variationLvaService,
         GoodsVehiclesVehicle $goodsVehiclesVehicleMapper,
-        ResponseHelperService $responseHelper
+        ResponseHelperService $responseHelper,
+        $navigation
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -80,5 +84,7 @@ class VehiclesController extends AbstractGenericVehiclesController implements Li
             $goodsVehiclesVehicleMapper,
             $responseHelper
         );
+
+        $this->navigation = $navigation;
     }
 }

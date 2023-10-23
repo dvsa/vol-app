@@ -28,16 +28,18 @@ class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertaking
     protected string $location = 'internal';
 
     protected StringHelperService $stringHelper;
+    protected $navigation;
 
     /**
-     * @param NiTextTranslation                      $niTextTranslationUtil
-     * @param AuthorizationService                   $authService
-     * @param FormHelperService                      $formHelper
-     * @param FlashMessengerHelperService            $flashMessengerHelper
-     * @param FormServiceManager                     $formServiceManager
-     * @param TableFactory                           $tableFactory
-     * @param StringHelperService                    $stringHelper
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param FormServiceManager $formServiceManager
+     * @param TableFactory $tableFactory
+     * @param StringHelperService $stringHelper
      * @param VariationConditionsUndertakingsAdapter $lvaAdapter
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -47,7 +49,8 @@ class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertaking
         FormServiceManager $formServiceManager,
         TableFactory $tableFactory,
         StringHelperService $stringHelper,
-        VariationConditionsUndertakingsAdapter $lvaAdapter
+        VariationConditionsUndertakingsAdapter $lvaAdapter,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
 
@@ -60,6 +63,7 @@ class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertaking
             $tableFactory,
             $lvaAdapter
         );
+        $this->navigation = $navigation;
     }
 
     /**

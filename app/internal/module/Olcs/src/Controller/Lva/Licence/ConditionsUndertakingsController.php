@@ -32,14 +32,17 @@ class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertaking
     protected $lva = 'licence';
     protected string $location = 'internal';
 
+    protected string $navigation;
+
     /**
-     * @param NiTextTranslation                    $niTextTranslationUtil
-     * @param AuthorizationService                 $authService
-     * @param FormHelperService                    $formHelper
-     * @param FlashMessengerHelperService          $flashMessengerHelper
-     * @param FormServiceManager                   $formServiceManager
-     * @param TableFactory                         $tableFactory
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param FormServiceManager $formServiceManager
+     * @param TableFactory $tableFactory
      * @param LicenceConditionsUndertakingsAdapter $lvaAdapter
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -48,7 +51,8 @@ class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertaking
         FlashMessengerHelperService $flashMessengerHelper,
         FormServiceManager $formServiceManager,
         TableFactory $tableFactory,
-        LicenceConditionsUndertakingsAdapter $lvaAdapter
+        LicenceConditionsUndertakingsAdapter $lvaAdapter,
+        $navigation
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -59,6 +63,7 @@ class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertaking
             $tableFactory,
             $lvaAdapter
         );
+        $this->navigation = $navigation;
     }
 
     /**

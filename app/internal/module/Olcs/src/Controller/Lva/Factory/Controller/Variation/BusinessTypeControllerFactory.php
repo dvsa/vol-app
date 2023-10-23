@@ -43,6 +43,7 @@ class BusinessTypeControllerFactory implements FactoryInterface
         $transferAnnotationBuilder = $container->get(AnnotationBuilder::class);
         $translationHelper = $container->get(TranslationHelperService::class);
         $lvaAdapter = $container->get(GenericBusinessTypeAdapter::class);
+        $navigation = $container->get('Navigation');
 
         return new BusinessTypeController(
             $niTextTranslationUtil,
@@ -56,7 +57,8 @@ class BusinessTypeControllerFactory implements FactoryInterface
             $transferAnnotationBuilder,
             $queryService,
             $stringHelper,
-            $lvaAdapter
+            $lvaAdapter,
+            $navigation
         );
     }
 

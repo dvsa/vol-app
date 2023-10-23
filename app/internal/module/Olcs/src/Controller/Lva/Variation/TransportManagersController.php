@@ -43,17 +43,22 @@ class TransportManagersController extends Lva\AbstractTransportManagersControlle
 
     protected StringHelperService $stringHelper;
 
+    protected $navigation;
+
     /**
-     * @param NiTextTranslation             $niTextTranslationUtil
-     * @param AuthorizationService          $authService
-     * @param FormHelperService             $formHelper
-     * @param FormServiceManager            $formServiceManager
-     * @param FlashMessengerHelperService   $flashMessengerHelper
-     * @param ScriptFactory                 $scriptFactory
-     * @param QueryService                  $queryService
-     * @param CommandService                $commandService
-     * @param AnnotationBuilder             $transferAnnotationBuilder
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
+     * @param FormServiceManager $formServiceManager
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param ScriptFactory $scriptFactory
+     * @param QueryService $queryService
+     * @param CommandService $commandService
+     * @param AnnotationBuilder $transferAnnotationBuilder
      * @param TransportManagerHelperService $transportManagerHelper
+     * @param VariationTransportManagerAdapter $lvaAdapter
+     * @param StringHelperService $stringHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -67,7 +72,8 @@ class TransportManagersController extends Lva\AbstractTransportManagersControlle
         AnnotationBuilder $transferAnnotationBuilder,
         TransportManagerHelperService $transportManagerHelper,
         VariationTransportManagerAdapter $lvaAdapter,
-        StringHelperService $stringHelper
+        StringHelperService $stringHelper,
+        $navigation
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -83,5 +89,6 @@ class TransportManagersController extends Lva\AbstractTransportManagersControlle
             $lvaAdapter
         );
         $this->stringHelper = $stringHelper;
+        $this->navigation = $navigation;
     }
 }

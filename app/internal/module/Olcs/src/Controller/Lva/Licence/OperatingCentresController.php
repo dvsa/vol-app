@@ -11,6 +11,7 @@ namespace Olcs\Controller\Lva\Licence;
 
 use Common\Controller\Lva;
 use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -34,15 +35,19 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
     protected $lva = 'licence';
     protected string $location = 'internal';
 
+    protected string $navigation;
+
     /**
-     * @param NiTextTranslation           $niTextTranslationUtil
-     * @param AuthorizationService        $authService
-     * @param FormHelperService           $formHelper
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
      * @param FlashMessengerHelperService $flashMessengerHelper
-     * @param FormServiceManager          $formServiceManager
-     * @param TranslationHelperService    $translationHelper
-     * @param ScriptFactory               $scriptFactory
-     * @param VariationLvaService         $variationLvaService
+     * @param FormServiceManager $formServiceManager
+     * @param TranslationHelperService $translationHelper
+     * @param ScriptFactory $scriptFactory
+     * @param VariationLvaService $variationLvaService
+     * @param FileUploadHelperService $uploadHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -52,7 +57,9 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
         FormServiceManager $formServiceManager,
         TranslationHelperService $translationHelper,
         ScriptFactory $scriptFactory,
-        VariationLvaService $variationLvaService
+        VariationLvaService $variationLvaService,
+        FileUploadHelperService $uploadHelper,
+        $navigation
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -62,7 +69,9 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
             $formServiceManager,
             $translationHelper,
             $scriptFactory,
-            $variationLvaService
+            $variationLvaService,
+            $uploadHelper
         );
+        $this->navigation = $navigation;
     }
 }

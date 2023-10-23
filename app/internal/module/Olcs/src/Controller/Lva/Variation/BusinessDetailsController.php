@@ -37,18 +37,20 @@ class BusinessDetailsController extends AbstractBusinessDetailsController implem
     protected string $location = 'internal';
 
     protected StringHelperService $stringHelper;
+    protected $navigation;
 
     /**
-     * @param NiTextTranslation           $niTextTranslationUtil
-     * @param AuthorizationService        $authService
-     * @param FormHelperService           $formHelper
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
      * @param FlashMessengerHelperService $flashMessengerHelper
-     * @param FormServiceManager          $formServiceManager
-     * @param ScriptFactory               $scriptFactory
-     * @param IdentityProviderInterface   $identityProvider
-     * @param TableFactory                $tableFactory
-     * @param StringHelperService         $stringHelper
-     * @param FileUploadHelperService     $fileUploadHelper
+     * @param FormServiceManager $formServiceManager
+     * @param ScriptFactory $scriptFactory
+     * @param IdentityProviderInterface $identityProvider
+     * @param TableFactory $tableFactory
+     * @param StringHelperService $stringHelper
+     * @param FileUploadHelperService $fileUploadHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -60,7 +62,8 @@ class BusinessDetailsController extends AbstractBusinessDetailsController implem
         IdentityProviderInterface $identityProvider,
         TableFactory $tableFactory,
         StringHelperService $stringHelper,
-        FileUploadHelperService $fileUploadHelper
+        FileUploadHelperService $fileUploadHelper,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
 
@@ -75,5 +78,6 @@ class BusinessDetailsController extends AbstractBusinessDetailsController implem
             $tableFactory,
             $fileUploadHelper
         );
+        $this->navigation = $navigation;
     }
 }

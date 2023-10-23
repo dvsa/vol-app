@@ -4,6 +4,7 @@ namespace Olcs\Controller\Lva\Factory\Controller\Licence;
 
 use Common\Controller\Lva\Adapters\LicencePeopleAdapter;
 use Common\FormService\FormServiceManager;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\GuidanceHelperService;
 use Common\Service\Lva\VariationLvaService;
@@ -35,6 +36,8 @@ class PeopleControllerFactory implements FactoryInterface
         $variationLvaService = $container->get(VariationLvaService::class);
         $guidanceHelper = $container->get(GuidanceHelperService::class);
         $lvaAdapter = $container->get(LicencePeopleAdapter::class);
+        $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
+        $navigation = $container->get('Navigation');
 
         return new PeopleController(
             $niTextTranslationUtil,
@@ -44,7 +47,9 @@ class PeopleControllerFactory implements FactoryInterface
             $scriptFactory,
             $variationLvaService,
             $guidanceHelper,
-            $lvaAdapter
+            $lvaAdapter,
+            $flashMessengerHelper,
+            $navigation
         );
     }
 

@@ -39,7 +39,7 @@ class ApplicationDocsControllerFactory implements FactoryInterface
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         $docSubCategoryDataService = $container->get(DocumentSubCategory::class);
         $translationHelper = $container->get(TranslationHelperService::class);
-        $navigation = $container->get('navigation');
+        $navigation = $container->get('Navigation');
 
         return new ApplicationDocsController(
             $scriptFactory,

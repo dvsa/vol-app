@@ -34,16 +34,19 @@ class BusinessDetailsController extends AbstractBusinessDetailsController implem
 
     protected $lva = 'licence';
     protected string $location = 'internal';
+    protected $navigation;
 
     /**
-     * @param NiTextTranslation           $niTextTranslationUtil
-     * @param AuthorizationService        $authService
-     * @param FormHelperService           $formHelper
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
      * @param FlashMessengerHelperService $flashMessengerHelper
-     * @param FormServiceManager          $formServiceManager
-     * @param ScriptFactory               $scriptFactory
-     * @param IdentityProviderInterface   $identityProvider
-     * @param FileUploadHelperService     $fileUploadHelper
+     * @param FormServiceManager $formServiceManager
+     * @param ScriptFactory $scriptFactory
+     * @param IdentityProviderInterface $identityProvider
+     * @param TableFactory $tableFactory
+     * @param FileUploadHelperService $fileUploadHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -54,7 +57,8 @@ class BusinessDetailsController extends AbstractBusinessDetailsController implem
         ScriptFactory $scriptFactory,
         IdentityProviderInterface $identityProvider,
         TableFactory $tableFactory,
-        FileUploadHelperService $fileUploadHelper
+        FileUploadHelperService $fileUploadHelper,
+        $navigation
     ) {
         parent::__construct(
             $niTextTranslationUtil,
@@ -67,5 +71,6 @@ class BusinessDetailsController extends AbstractBusinessDetailsController implem
             $tableFactory,
             $fileUploadHelper
         );
+        $this->navigation = $navigation;
     }
 }

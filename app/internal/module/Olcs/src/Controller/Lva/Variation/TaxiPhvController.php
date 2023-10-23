@@ -32,19 +32,20 @@ class TaxiPhvController extends Lva\AbstractTaxiPhvController implements Variati
 
     protected $lva = 'variation';
     protected string $location = 'internal';
-
     protected StringHelperService $stringHelper;
+    protected $navigation;
 
     /**
-     * @param NiTextTranslation           $niTextTranslationUtil
-     * @param AuthorizationService        $authService
-     * @param FormHelperService           $formHelper
-     * @param FormServiceManager          $formServiceManager
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
+     * @param FormServiceManager $formServiceManager
      * @param FlashMessengerHelperService $flashMessengerHelper
-     * @param TableFactory                $tableFactory
-     * @param ScriptFactory               $scriptFactory
-     * @param TranslationHelperService    $translationHelper
-     * @param StringHelperService         $stringHelper
+     * @param TableFactory $tableFactory
+     * @param ScriptFactory $scriptFactory
+     * @param TranslationHelperService $translationHelper
+     * @param StringHelperService $stringHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -55,7 +56,8 @@ class TaxiPhvController extends Lva\AbstractTaxiPhvController implements Variati
         TableFactory $tableFactory,
         ScriptFactory $scriptFactory,
         TranslationHelperService $translationHelper,
-        StringHelperService $stringHelper
+        StringHelperService $stringHelper,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
 
@@ -69,5 +71,6 @@ class TaxiPhvController extends Lva\AbstractTaxiPhvController implements Variati
             $scriptFactory,
             $translationHelper
         );
+        $this->navigation = $navigation;
     }
 }

@@ -11,6 +11,7 @@ use Interop\Container\ContainerInterface;
 use Laminas\Navigation\Navigation;
 use Laminas\ServiceManager\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+use Olcs\Service\Data\OperatingCentresForInspectionRequest;
 
 class ApplicationProcessingInspectionRequestControllerFactory implements FactoryInterface
 {
@@ -34,13 +35,16 @@ class ApplicationProcessingInspectionRequestControllerFactory implements Factory
         $queryService = $container->get(CachingQueryService::class);
         assert($queryService instanceof CachingQueryService);
 
+        $operatingCentresForInspectionRequest = $container->get(OperatingCentresForInspectionRequest::class);
+
         return new ApplicationProcessingInspectionRequestController(
             $translationHelper,
             $formHelper,
             $flashMessengerHelper,
             $navigation,
             $transferAnnotationBuilder,
-            $queryService
+            $queryService,
+            $operatingCentresForInspectionRequest
         );
     }
 

@@ -3,6 +3,7 @@
 namespace Olcs\Controller\Licence\Docs;
 
 use Common\Service\Helper\ComplaintsHelperService;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\OppositionHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -38,7 +39,8 @@ class LicenceDocsController extends LicenceController implements LeftViewProvide
         ComplaintsHelperService $complaintsHelper,
         TranslationHelperService $translationHelper,
         DocumentSubCategory $docSubCategoryDataService,
-        $navigation
+        $navigation,
+        FlashMessengerHelperService $flashMessengerHelper
     ) {
         parent::__construct(
             $scriptFactory,
@@ -47,7 +49,8 @@ class LicenceDocsController extends LicenceController implements LeftViewProvide
             $viewHelperManager,
             $oppositionHelper,
             $complaintsHelper,
-            $navigation
+            $navigation,
+            $flashMessengerHelper
         );
         $this->translationHelper = $translationHelper;
         $this->docSubCategoryDataService = $docSubCategoryDataService;

@@ -41,7 +41,8 @@ abstract class AbstractApplicationProcessingController extends ApplicationContro
         OppositionHelperService $oppositionHelper,
         ComplaintsHelperService $complaintsHelper,
         FlashMessengerHelperService $flashMessengerHelper,
-        TreeRouteStack $router
+        TreeRouteStack $router,
+        $navigation
     ) {
         parent::__construct(
             $scriptFactory,
@@ -51,7 +52,8 @@ abstract class AbstractApplicationProcessingController extends ApplicationContro
             $dataServiceManager,
             $oppositionHelper,
             $complaintsHelper,
-            $flashMessengerHelper
+            $flashMessengerHelper,
+            $navigation
         );
         $this->router = $router;
     }

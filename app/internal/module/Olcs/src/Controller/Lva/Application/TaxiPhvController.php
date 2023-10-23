@@ -37,6 +37,8 @@ class TaxiPhvController extends Lva\AbstractTaxiPhvController implements Applica
     protected StringHelperService $stringHelper;
     protected RestrictionHelperService $restrictionHelper;
 
+    protected $navigation;
+
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -59,10 +61,12 @@ class TaxiPhvController extends Lva\AbstractTaxiPhvController implements Applica
         ScriptFactory $scriptFactory,
         TranslationHelperService $translationHelper,
         StringHelperService $stringHelper,
-        RestrictionHelperService $restrictionHelper
+        RestrictionHelperService $restrictionHelper,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
         $this->restrictionHelper = $restrictionHelper;
+        $this->navigation = $navigation;
 
         parent::__construct(
             $niTextTranslationUtil,

@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Lva\Factory\Controller\Variation;
 
+use Common\FormService\FormServiceManager;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\StringHelperService;
@@ -32,6 +33,7 @@ class ReviveApplicationControllerFactory implements FactoryInterface
         $formHelper = $container->get(FormHelperService::class);
         $stringHelper = $container->get(StringHelperService::class);
         $formServiceManager = $container->get(FormServiceManager::class);
+        $navigation = $container->get('Navigation');
 
         return new ReviveApplicationController(
             $niTextTranslationUtil,
@@ -40,7 +42,8 @@ class ReviveApplicationControllerFactory implements FactoryInterface
             $translationHelper,
             $formHelper,
             $stringHelper,
-            $formServiceManager
+            $formServiceManager,
+            $navigation
         );
     }
 

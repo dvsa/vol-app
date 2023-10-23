@@ -66,6 +66,8 @@ class IrhpPermitStockController extends AbstractInternalController implements Le
 
     protected $tableViewTemplate = 'pages/irhp-permit-stock/index';
 
+    private ScriptFactory $scriptFactory;
+
     public function __construct(
         TranslationHelperService $translationHelperService,
         FormHelperService $formHelper,
