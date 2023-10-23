@@ -221,7 +221,7 @@ return array(
             'LvaVariation/Publish' => 'Olcs\Controller\Lva\Variation\PublishController',
         ),
         'factories' => [
-            TmCntr\Details\TransportManagerDetailsResponsibilityController::class => TmCntr\Details\TransportManagerDetailsResponsibilityController::class,
+            TmCntr\Details\TransportManagerDetailsResponsibilityController::class => TransportManagerControllerFactories\Details\TransportManagerDetailsResponsibilityControllerFactory::class,
             \Olcs\Controller\Auth\LoginController::class => \Olcs\Controller\Auth\LoginControllerFactory::class,
             LvaApplicationControllers\AddressesController::class => LvaApplicationControllerFactories\AddressesControllerFactory::class,
             LvaApplicationControllers\BusinessDetailsController::class => LvaApplicationControllerFactories\BusinessDetailsControllerFactory::class,
