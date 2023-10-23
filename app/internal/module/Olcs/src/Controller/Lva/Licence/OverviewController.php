@@ -10,6 +10,7 @@ namespace Olcs\Controller\Lva\Licence;
 
 use Common\Controller\Lva\AbstractController;
 use Common\RefData;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Transfer\Command\Licence\Overview as OverviewCmd;
 use Dvsa\Olcs\Transfer\Command\Licence\PrintLicence;
@@ -35,7 +36,8 @@ class OverviewController extends AbstractController implements LicenceController
 
     protected LicenceOverviewHelperService $licenceOverviewHelper;
     protected FormHelperService $formHelper;
-    protected string $navigation;
+    protected $navigation;
+    protected FlashMessengerHelperService $flashMessengerHelper;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -43,17 +45,20 @@ class OverviewController extends AbstractController implements LicenceController
      * @param LicenceOverviewHelperService $licenceOverviewHelper
      * @param FormHelperService $formHelper
      * @param $navigation
+     * @param FlashMessengerHelperService $flashMessengerHelper
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
         LicenceOverviewHelperService $licenceOverviewHelper,
         FormHelperService $formHelper,
-        $navigation
+        $navigation,
+        FlashMessengerHelperService $flashMessengerHelper
     ) {
         $this->licenceOverviewHelper = $licenceOverviewHelper;
         $this->formHelper = $formHelper;
         $this->navigation = $navigation;
+        $this->flashMessengerHelper = $flashMessengerHelper;
 
         parent::__construct($niTextTranslationUtil, $authService);
     }

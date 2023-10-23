@@ -37,6 +37,7 @@ class FinancialHistoryControllerFactory implements FactoryInterface
         $stringHelper = $container->get(StringHelperService::class);
         $uploadHelper = $container->get(FileUploadHelperService::class);
         $restrictionHelper = $container->get(RestrictionHelperService::class);
+        $navigation = $container->get('Navigation');
 
         return new FinancialHistoryController(
             $niTextTranslationUtil,
@@ -47,7 +48,8 @@ class FinancialHistoryControllerFactory implements FactoryInterface
             $dataHelper,
             $stringHelper,
             $uploadHelper,
-            $restrictionHelper
+            $restrictionHelper,
+            $navigation
         );
     }
 

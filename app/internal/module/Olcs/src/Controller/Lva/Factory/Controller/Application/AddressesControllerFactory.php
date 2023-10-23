@@ -35,6 +35,7 @@ class AddressesControllerFactory implements FactoryInterface
         $scriptFactory = $container->get(ScriptFactory::class);
         $stringHelper = $container->get(StringHelperService::class);
         $restrictionHelper = $container->get(RestrictionHelperService::class);
+        $navigation = $container->get('Navigation');
 
         return new AddressesController(
             $niTextTranslationUtil,
@@ -44,7 +45,8 @@ class AddressesControllerFactory implements FactoryInterface
             $formServiceManager,
             $scriptFactory,
             $stringHelper,
-            $restrictionHelper
+            $restrictionHelper,
+            $navigation
         );
     }
 

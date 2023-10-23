@@ -39,6 +39,8 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
     protected StringHelperService $stringHelper;
     protected RestrictionHelperService $restrictionHelper;
 
+    protected $navigation;
+
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -51,6 +53,7 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
      * @param StringHelperService $stringHelper
      * @param RestrictionHelperService $restrictionHelper
      * @param FileUploadHelperService $uploadHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -63,10 +66,12 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController 
         VariationLvaService $variationLvaService,
         StringHelperService $stringHelper,
         RestrictionHelperService $restrictionHelper,
-        FileUploadHelperService $uploadHelper
+        FileUploadHelperService $uploadHelper,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
         $this->restrictionHelper = $restrictionHelper;
+        $this->navigation = $navigation;
 
         parent::__construct(
             $niTextTranslationUtil,

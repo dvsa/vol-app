@@ -41,6 +41,8 @@ class SafetyController extends Lva\AbstractSafetyController implements Applicati
     protected StringHelperService $stringHelper;
     protected RestrictionHelperService $restrictionHelper;
 
+    protected $navigation;
+
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
@@ -52,6 +54,7 @@ class SafetyController extends Lva\AbstractSafetyController implements Applicati
      * @param TranslationHelperService $translationHelper
      * @param StringHelperService $stringHelper
      * @param RestrictionHelperService $restrictionHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -63,10 +66,12 @@ class SafetyController extends Lva\AbstractSafetyController implements Applicati
         ScriptFactory $scriptFactory,
         TranslationHelperService $translationHelper,
         StringHelperService $stringHelper,
-        RestrictionHelperService $restrictionHelper
+        RestrictionHelperService $restrictionHelper,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
         $this->restrictionHelper = $restrictionHelper;
+        $this->navigation = $navigation;
 
         parent::__construct(
             $niTextTranslationUtil,

@@ -37,6 +37,7 @@ class LicenceHistoryControllerFactory implements FactoryInterface
         $tableFactory = $container->get(TableFactory::class);
         $formHelper = $container->get(FormHelperService::class);
         $restrictionHelper = $container->get(RestrictionHelperService::class);
+        $navigation = $container->get('Navigation');
 
         return new LicenceHistoryController(
             $niTextTranslationUtil,
@@ -47,7 +48,8 @@ class LicenceHistoryControllerFactory implements FactoryInterface
             $stringHelper,
             $tableFactory,
             $formHelper,
-            $restrictionHelper
+            $restrictionHelper,
+            $navigation
         );
     }
 

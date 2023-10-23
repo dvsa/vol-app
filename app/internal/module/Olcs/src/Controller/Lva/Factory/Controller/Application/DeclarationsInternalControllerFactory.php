@@ -33,6 +33,7 @@ class DeclarationsInternalControllerFactory implements FactoryInterface
         $formServiceManager = $container->get(FormServiceManager::class);
         $stringHelper = $container->get(StringHelperService::class);
         $restrictionHelper = $container->get(RestrictionHelperService::class);
+        $navigation = $container->get('Navigation');
 
         return new DeclarationsInternalController(
             $niTextTranslationUtil,
@@ -41,7 +42,8 @@ class DeclarationsInternalControllerFactory implements FactoryInterface
             $translationHelper,
             $flashMessengerHelper,
             $stringHelper,
-            $restrictionHelper
+            $restrictionHelper,
+            $navigation
         );
     }
 

@@ -35,6 +35,7 @@ class TypeOfLicenceControllerFactory implements FactoryInterface
         $stringHelper = $container->get(StringHelperService::class);
         $restrictionHelper = $container->get(RestrictionHelperService::class);
         $formHelper = $container->get(FormHelperService::class);
+        $navigation = $container->get('Navigation');
 
         return new TypeOfLicenceController(
             $niTextTranslationUtil,
@@ -44,7 +45,8 @@ class TypeOfLicenceControllerFactory implements FactoryInterface
             $formServiceManager,
             $stringHelper,
             $restrictionHelper,
-            $formHelper
+            $formHelper,
+            $navigation
         );
     }
 

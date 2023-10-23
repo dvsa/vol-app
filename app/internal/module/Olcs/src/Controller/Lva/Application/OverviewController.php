@@ -40,6 +40,7 @@ class OverviewController extends AbstractController implements ApplicationContro
     protected FormHelperService $formHelper;
     protected RestrictionHelperService $restrictionHelper;
     protected FlashMessengerHelperService $flashMessengerHelper;
+    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -49,6 +50,7 @@ class OverviewController extends AbstractController implements ApplicationContro
      * @param FormHelperService $formHelper
      * @param RestrictionHelperService $restrictionHelper
      * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -57,13 +59,15 @@ class OverviewController extends AbstractController implements ApplicationContro
         ApplicationOverviewHelperService $applicationOverviewHelper,
         FormHelperService $formHelper,
         RestrictionHelperService $restrictionHelper,
-        FlashMessengerHelperService $flashMessengerHelper
+        FlashMessengerHelperService $flashMessengerHelper,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
         $this->applicationOverviewHelper = $applicationOverviewHelper;
         $this->formHelper = $formHelper;
         $this->restrictionHelper = $restrictionHelper;
         $this->flashMessengerHelper = $flashMessengerHelper;
+        $this->navigation = $navigation;
 
         parent::__construct($niTextTranslationUtil, $authService);
     }

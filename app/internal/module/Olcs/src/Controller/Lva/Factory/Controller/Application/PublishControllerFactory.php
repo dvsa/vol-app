@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Lva\Factory\Controller\Application;
 
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\RestrictionHelperService;
 use Common\Service\Helper\StringHelperService;
@@ -29,13 +30,16 @@ class PublishControllerFactory implements FactoryInterface
         $formHelper = $container->get(FormHelperService::class);
         $stringHelper = $container->get(StringHelperService::class);
         $restrictionHelper = $container->get(RestrictionHelperService::class);
+        $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
 
         return new PublishController(
             $niTextTranslationUtil,
             $authService,
             $formHelper,
             $stringHelper,
-            $restrictionHelper
+            $restrictionHelper,
+            $flashMessengerHelper,
+            $navigation
         );
     }
 

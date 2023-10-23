@@ -33,6 +33,7 @@ class NotTakenUpControllerFactory implements FactoryInterface
         $formHelper = $container->get(FormHelperService::class);
         $stringHelper = $container->get(StringHelperService::class);
         $restrictionHelper = $container->get(RestrictionHelperService::class);
+        $navigation = $container->get('Navigation');
 
         return new NotTakenUpController(
             $niTextTranslationUtil,
@@ -41,7 +42,8 @@ class NotTakenUpControllerFactory implements FactoryInterface
             $translationHelper,
             $formHelper,
             $stringHelper,
-            $restrictionHelper
+            $restrictionHelper,
+            $navigation
         );
     }
 

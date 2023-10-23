@@ -33,6 +33,7 @@ class OverviewControllerFactory implements FactoryInterface
         $formHelper = $container->get(FormHelperService::class);
         $restrictionHelper = $container->get(RestrictionHelperService::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
+        $navigation = $container->get('Navigation');
 
         return new OverviewController(
             $niTextTranslationUtil,
@@ -41,7 +42,8 @@ class OverviewControllerFactory implements FactoryInterface
             $applicationOverviewHelper,
             $formHelper,
             $restrictionHelper,
-            $flashMessengerHelper
+            $flashMessengerHelper,
+            $navigation
         );
     }
 

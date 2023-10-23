@@ -36,22 +36,23 @@ class BusinessDetailsController extends AbstractBusinessDetailsController implem
 
     protected $lva = 'application';
     protected string $location = 'internal';
-
     protected StringHelperService $stringHelper;
     protected RestrictionHelperService $restrictionHelper;
+    protected $navigation;
 
     /**
-     * @param NiTextTranslation           $niTextTranslationUtil
-     * @param AuthorizationService        $authService
-     * @param FormHelperService           $formHelper
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
      * @param FlashMessengerHelperService $flashMessengerHelper
-     * @param FormServiceManager          $formServiceManager
-     * @param ScriptFactory               $scriptFactory
-     * @param IdentityProviderInterface   $identityProvider
-     * @param StringHelperService         $stringHelper
-     * @param TableFactory                $tableFactory
-     * @param FileUploadHelperService     $fileUploadHelper
-     * @param RestrictionHelperService    $restrictionHelper
+     * @param FormServiceManager $formServiceManager
+     * @param ScriptFactory $scriptFactory
+     * @param IdentityProviderInterface $identityProvider
+     * @param StringHelperService $stringHelper
+     * @param TableFactory $tableFactory
+     * @param FileUploadHelperService $fileUploadHelper
+     * @param RestrictionHelperService $restrictionHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -64,10 +65,12 @@ class BusinessDetailsController extends AbstractBusinessDetailsController implem
         StringHelperService $stringHelper,
         TableFactory $tableFactory,
         FileUploadHelperService $fileUploadHelper,
-        RestrictionHelperService $restrictionHelper
+        RestrictionHelperService $restrictionHelper,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
         $this->restrictionHelper = $restrictionHelper;
+        $this->navigation = $navigation;
 
         parent::__construct(
             $niTextTranslationUtil,

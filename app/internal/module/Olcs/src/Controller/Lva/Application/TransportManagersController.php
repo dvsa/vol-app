@@ -45,20 +45,23 @@ class TransportManagersController extends Lva\AbstractTransportManagersControlle
     protected StringHelperService $stringHelper;
     protected RestrictionHelperService $restrictionHelper;
 
+    protected $navigation;
+
     /**
-     * @param NiTextTranslation                  $niTextTranslationUtil
-     * @param AuthorizationService               $authService
-     * @param FormHelperService                  $formHelper
-     * @param FormServiceManager                 $formServiceManager
-     * @param FlashMessengerHelperService        $flashMessengerHelper
-     * @param ScriptFactory                      $scriptFactory
-     * @param QueryService                       $queryService
-     * @param CommandService                     $commandService
-     * @param AnnotationBuilder                  $transferAnnotationBuilder
-     * @param TransportManagerHelperService      $transportManagerHelper
-     * @param StringHelperService                $stringHelper
+     * @param NiTextTranslation $niTextTranslationUtil
+     * @param AuthorizationService $authService
+     * @param FormHelperService $formHelper
+     * @param FormServiceManager $formServiceManager
+     * @param FlashMessengerHelperService $flashMessengerHelper
+     * @param ScriptFactory $scriptFactory
+     * @param QueryService $queryService
+     * @param CommandService $commandService
+     * @param AnnotationBuilder $transferAnnotationBuilder
+     * @param TransportManagerHelperService $transportManagerHelper
+     * @param StringHelperService $stringHelper
      * @param ApplicationTransportManagerAdapter $lvaAdapter
-     * @param RestrictionHelperService           $restrictionHelper
+     * @param RestrictionHelperService $restrictionHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -73,10 +76,12 @@ class TransportManagersController extends Lva\AbstractTransportManagersControlle
         TransportManagerHelperService $transportManagerHelper,
         StringHelperService $stringHelper,
         ApplicationTransportManagerAdapter $lvaAdapter,
-        RestrictionHelperService $restrictionHelper
+        RestrictionHelperService $restrictionHelper,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
         $this->restrictionHelper = $restrictionHelper;
+        $this->navigation = $navigation;
 
         parent::__construct(
             $niTextTranslationUtil,

@@ -43,6 +43,8 @@ class TransportManagersController extends Lva\AbstractTransportManagersControlle
 
     protected StringHelperService $stringHelper;
 
+    protected $navigation;
+
     /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService

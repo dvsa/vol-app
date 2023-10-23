@@ -29,9 +29,10 @@ class NotTakenUpController extends AbstractApplicationDecisionController
     protected $titleKey          = 'internal-application-ntu-title';
 
     protected FormHelperService $formHelper;
-
     protected StringHelperService $stringHelper;
     protected RestrictionHelperService $restrictionHelper;
+
+    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -49,11 +50,13 @@ class NotTakenUpController extends AbstractApplicationDecisionController
         TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
         StringHelperService $stringHelper,
-        RestrictionHelperService $restrictionHelper
+        RestrictionHelperService $restrictionHelper,
+        $navigation
     ) {
         $this->formHelper = $formHelper;
         $this->stringHelper = $stringHelper;
         $this->restrictionHelper = $restrictionHelper;
+        $this->navigation = $navigation;
 
         parent::__construct(
             $niTextTranslationUtil,

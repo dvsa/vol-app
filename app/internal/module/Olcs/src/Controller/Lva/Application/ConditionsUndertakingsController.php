@@ -36,6 +36,7 @@ class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertaking
 
     protected StringHelperService $stringHelper;
     protected RestrictionHelperService $restrictionHelper;
+    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -47,6 +48,7 @@ class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertaking
      * @param StringHelperService $stringHelper
      * @param ApplicationConditionsUndertakingsAdapter $lvaAdapter
      * @param RestrictionHelperService $restrictionHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -57,10 +59,12 @@ class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertaking
         TableFactory $tableFactory,
         StringHelperService $stringHelper,
         ApplicationConditionsUndertakingsAdapter $lvaAdapter,
-        RestrictionHelperService $restrictionHelper
+        RestrictionHelperService $restrictionHelper,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
         $this->restrictionHelper = $restrictionHelper;
+        $this->navigation = $navigation;
 
         parent::__construct(
             $niTextTranslationUtil,

@@ -4,6 +4,7 @@ namespace Olcs\Controller\Lva\Factory\Controller\Application;
 
 use Common\FormService\FormServiceManager;
 use Common\Service\Helper\DataHelperService;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\RestrictionHelperService;
 use Common\Service\Helper\StringHelperService;
@@ -35,6 +36,7 @@ class VehiclesDeclarationsControllerFactory implements FactoryInterface
         $dataHelper = $container->get(DataHelperService::class);
         $stringHelper = $container->get(StringHelperService::class);
         $restrictionHelper = $container->get(RestrictionHelperService::class);
+        $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
 
         return new VehiclesDeclarationsController(
             $niTextTranslationUtil,
@@ -44,7 +46,9 @@ class VehiclesDeclarationsControllerFactory implements FactoryInterface
             $scriptFactory,
             $dataHelper,
             $stringHelper,
-            $restrictionHelper
+            $restrictionHelper,
+            $flashMessengerHelper,
+            $navigation
         );
     }
 

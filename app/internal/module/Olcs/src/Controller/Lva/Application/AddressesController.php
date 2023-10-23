@@ -20,9 +20,9 @@ class AddressesController extends AbstractAddressesController implements Applica
 
     protected $lva = 'application';
     protected string $location = 'internal';
-
     protected StringHelperService $stringHelper;
     protected RestrictionHelperService $restrictionHelper;
+    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -33,6 +33,7 @@ class AddressesController extends AbstractAddressesController implements Applica
      * @param ScriptFactory $scriptFactory
      * @param StringHelperService $stringHelper
      * @param RestrictionHelperService $restrictionHelper
+     * @param $navigation
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -42,10 +43,12 @@ class AddressesController extends AbstractAddressesController implements Applica
         FormServiceManager $formServiceManager,
         ScriptFactory $scriptFactory,
         StringHelperService $stringHelper,
-        RestrictionHelperService $restrictionHelper
+        RestrictionHelperService $restrictionHelper,
+        $navigation
     ) {
         $this->stringHelper = $stringHelper;
         $this->restrictionHelper = $restrictionHelper;
+        $this->navigation = $navigation;
 
         parent::__construct($niTextTranslationUtil, $authService, $formHelper, $flashMessengerHelper, $formServiceManager, $scriptFactory);
     }

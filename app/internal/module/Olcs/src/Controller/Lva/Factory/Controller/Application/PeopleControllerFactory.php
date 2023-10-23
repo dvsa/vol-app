@@ -41,6 +41,7 @@ class PeopleControllerFactory implements FactoryInterface
         $lvaAdapter = $container->get(ApplicationPeopleAdapter::class);
         $restrictionHelper = $container->get(RestrictionHelperService::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
+        $navigation = $container->get('Navigation');
 
         return new PeopleController(
             $niTextTranslationUtil,
@@ -53,7 +54,8 @@ class PeopleControllerFactory implements FactoryInterface
             $stringHelper,
             $lvaAdapter,
             $restrictionHelper,
-            $flashMessengerHelper
+            $flashMessengerHelper,
+            $navigation
         );
     }
 

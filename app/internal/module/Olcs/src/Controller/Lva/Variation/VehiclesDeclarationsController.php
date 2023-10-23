@@ -11,6 +11,7 @@ namespace Olcs\Controller\Lva\Variation;
 use Common\Controller\Lva;
 use Common\FormService\FormServiceManager;
 use Common\Service\Helper\DataHelperService;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\StringHelperService;
 use Common\Service\Script\ScriptFactory;
@@ -33,6 +34,7 @@ class VehiclesDeclarationsController extends Lva\AbstractVehiclesDeclarationsCon
     protected string $location = 'internal';
     protected StringHelperService $stringHelper;
     protected $navigation;
+    protected FlashMessengerHelperService $flashMessengerHelper;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
@@ -43,6 +45,7 @@ class VehiclesDeclarationsController extends Lva\AbstractVehiclesDeclarationsCon
      * @param DataHelperService $dataHelper
      * @param StringHelperService $stringHelper
      * @param $navigation
+     * @param FlashMessengerHelperService $flashMessengerHelper
      */
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -52,9 +55,11 @@ class VehiclesDeclarationsController extends Lva\AbstractVehiclesDeclarationsCon
         ScriptFactory $scriptFactory,
         DataHelperService $dataHelper,
         StringHelperService $stringHelper,
-        $navigation
+        $navigation,
+        FlashMessengerHelperService $flashMessengerHelper
     ) {
         $this->stringHelper = $stringHelper;
+        $this->flashMessengerHelper = $flashMessengerHelper;
 
         parent::__construct(
             $niTextTranslationUtil,
