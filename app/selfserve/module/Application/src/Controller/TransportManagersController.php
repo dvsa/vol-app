@@ -42,6 +42,14 @@ class TransportManagersController extends AbstractTransportManagersController
     private $initialized = false;
 
     /**
+     * @return bool
+     */
+    public function isInitialized(): bool
+    {
+        return $this->initialized === true;
+    }
+
+    /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
      * @param FormHelperService $formHelper
