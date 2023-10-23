@@ -10,6 +10,7 @@
 namespace OlcsTest\Controller\Lva\Licence;
 
 use Common\RefData;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Transfer\Command\Licence\Overview as OverviewCommand;
 use Dvsa\Olcs\Transfer\Query\Licence\Overview as OverviewQuery;
@@ -37,11 +38,15 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $this->mockAuthService = m::mock(AuthorizationService::class);
         $this->mockLicenceOverviewHelper = m::mock(LicenceOverviewHelperService::class);
         $this->mockFormHelper = m::mock(FormHelperService::class);
+        $this->mockNavigation = m::mock('Navigation');
+        $this->mockFlashMessenger = m::mock(FlashMessengerHelperService::class);
         $this->mockController(OverviewController::class, [
            $this->mockNiTextTranslationUtil,
             $this->mockAuthService,
             $this->mockLicenceOverviewHelper,
             $this->mockFormHelper,
+            $this->mockNavigation,
+            $this->mockFlashMessenger
         ]);
     }
 

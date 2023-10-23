@@ -53,6 +53,7 @@ class ApplicationProcessingOverviewControllerTest extends MockeryTestCase
         $mockComplaintsHelper = m::mock(ComplaintsHelperService::class);
         $mockFlashMessengerHelper = m::mock(FlashMessengerHelperService::class);
         $mockRouter = m::mock(TreeRouteStack::class);
+        $mockNavigation = m::mock('Navigation');
 
         $controller = new ApplicationProcessingOverviewController(
             $mockScriptFactory,
@@ -63,7 +64,8 @@ class ApplicationProcessingOverviewControllerTest extends MockeryTestCase
             $mockOppositionHelper,
             $mockComplaintsHelper,
             $mockFlashMessengerHelper,
-            $mockRouter
+            $mockRouter,
+            $mockNavigation
         );
 
         $serviceManager = Bootstrap::getServiceManager();

@@ -3,10 +3,12 @@
 namespace OlcsTest\Controller\Application\Processing;
 
 use Common\Service\Helper\ComplaintsHelperService;
+use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\OppositionHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
+use Laminas\Mvc\Router\Http\TreeRouteStack;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Licence\Processing\LicenceProcessingOverviewController;
 use Laminas\Mvc\Controller\Plugin\FlashMessenger;
@@ -52,6 +54,8 @@ class LicenceProcessingOverviewControllerTest extends \PHPUnit\Framework\TestCas
         $this->mockComplaintsHelper = m::mock(ComplaintsHelperService::class);
         $this->mockNavigation = m::mock(); // Note: No class provided for $navigation, so it'll be a generic mock
         $this->mockSubCategoryDataService = m::mock(SubCategory::class);
+        $this->mockFlashMessenger = m::mock(FlashMessengerHelperService::class);
+        $this->mockRouter = m::mock(TreeRouteStack::class);
 
         $controller = new LicenceProcessingOverviewController(
             $this->mockScriptFactory,
@@ -61,7 +65,9 @@ class LicenceProcessingOverviewControllerTest extends \PHPUnit\Framework\TestCas
             $this->mockOppositionHelper,
             $this->mockComplaintsHelper,
             $this->mockNavigation,
-            $this->mockSubCategoryDataService
+            $this->mockSubCategoryDataService,
+            $this->mockFlashMessenger,
+            $this->mockRouter
         );
 
         $serviceManager = Bootstrap::getServiceManager();
