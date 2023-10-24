@@ -35,7 +35,7 @@ class PeopleController extends Lva\AbstractPeopleController implements LicenceCo
     protected $lva = 'licence';
     protected string $location = 'internal';
 
-    protected string $navigation;
+    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil

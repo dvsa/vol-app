@@ -25,7 +25,7 @@ class AddressesController extends AbstractAddressesController implements Licence
     protected $lva = 'licence';
     protected string $location = 'internal';
 
-    protected string $navigation;
+    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil

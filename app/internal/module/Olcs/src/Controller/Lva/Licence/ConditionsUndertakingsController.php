@@ -32,7 +32,7 @@ class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertaking
     protected $lva = 'licence';
     protected string $location = 'internal';
 
-    protected string $navigation;
+    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
