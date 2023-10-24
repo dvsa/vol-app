@@ -667,7 +667,7 @@ return [
                     'route' => 'generate[/:doc][/]',
                     'defaults' => [
                         'type' => 'case',
-                        'controller' => 'DocumentGenerationController',
+                        'controller' => \Olcs\Controller\Document\DocumentGenerationController::class,
                         'action' => 'generate'
                     ]
                 ],
@@ -678,7 +678,7 @@ return [
                     'route' => 'finalise/:doc[/:action][/]',
                     'defaults' => [
                         'type' => 'case',
-                        'controller' => 'DocumentFinaliseController',
+                        'controller' => \Olcs\Controller\Document\DocumentFinaliseController::class,
                         'action' => 'finalise'
                     ]
                 ],
@@ -689,7 +689,7 @@ return [
                     'route' => 'upload[/]',
                     'defaults' => [
                         'type' => 'case',
-                        'controller' => 'DocumentUploadController',
+                        'controller' => \Olcs\Controller\Document\DocumentUploadController::class,
                         'action' => 'upload'
                     ]
                 ],
@@ -711,7 +711,7 @@ return [
                     'route' => 'relink/:doc[/]',
                     'defaults' => [
                         'type' => 'case',
-                        'controller' => 'DocumentRelinkController',
+                        'controller' => \Olcs\Controller\Document\DocumentRelinkController::class,
                         'action' => 'relink'
                     ]
                 ],
@@ -733,7 +733,7 @@ return [
                             'route' => 'generate[/:doc][/]',
                             'defaults' => [
                                 'type' => 'case',
-                                'controller' => 'DocumentGenerationController',
+                                'controller' => \Olcs\Controller\Document\DocumentGenerationController::class,
                                 'action' => 'generate'
                             ]
                         ],
@@ -744,7 +744,7 @@ return [
                             'route' => 'finalise/:doc[/:action][/]',
                             'defaults' => [
                                 'type' => 'case',
-                                'controller' => 'DocumentFinaliseController',
+                                'controller' => \Olcs\Controller\Document\DocumentFinaliseController::class,
                                 'action' => 'finalise'
                             ]
                         ],
@@ -755,7 +755,7 @@ return [
                             'route' => 'upload[/]',
                             'defaults' => [
                                 'type' => 'case',
-                                'controller' => 'DocumentUploadController',
+                                'controller' => \Olcs\Controller\Document\DocumentUploadController::class,
                                 'action' => 'upload'
                             ]
                         ],
