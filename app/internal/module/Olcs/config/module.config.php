@@ -453,7 +453,7 @@ return array(
             'LvaApplication/DeclarationsInternal' => LvaApplicationControllers\DeclarationsInternalController::class,
             'LvaApplication/Publish' => LvaApplicationControllers\PublishController::class,
             'LvaApplication/Submit' => LvaApplicationControllers\SubmitController::class,
-            'VariationSchedule41Controller' => 'Olcs\Controller\Variation\VariationSchedule41Controller',
+            'VariationSchedule41Controller' => \Olcs\Controller\Variation\VariationSchedule41Controller::class,
             'LvaLicence' => LvaLicenceControllers\OverviewController::class,
             'LvaLicence/TypeOfLicence' => LvaLicenceControllers\TypeOfLicenceController::class,
             'LvaLicence/BusinessType' => LvaLicenceControllers\BusinessTypeController::class,

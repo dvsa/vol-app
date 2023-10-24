@@ -36,7 +36,7 @@ class SafetyController extends Lva\AbstractSafetyController implements LicenceCo
     protected $lva = 'licence';
     protected string $location = 'internal';
 
-    protected string $navigation;
+    protected $navigation;
 
     /**
      * @param NiTextTranslation $niTextTranslationUtil
