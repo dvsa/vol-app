@@ -38,7 +38,7 @@ class ApplicationProcessingTasksControllerFactory implements FactoryInterface
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         $router = $container->get('router');
         $subCategoryDataService = $container->get(SubCategory::class);
-        $navigation = $container->get('Mavigation');
+        $navigation = $container->get('Navigation');
 
         return new ApplicationProcessingTasksController(
             $scriptFactory,
