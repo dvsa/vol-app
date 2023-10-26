@@ -70,6 +70,7 @@ class SafetyController extends Lva\AbstractSafetyController
             $scriptFactory,
             $translationHelper
         );
+        $this->lvaAdapter = $lvaAdapter;
     }
 
     protected $lva = 'licence';

@@ -55,5 +55,6 @@ class VariationController extends AbstractVariationController
             $processingCreateVariation,
             $flashMessengerHelper
         );
+        $this->lvaAdapter = $lvaAdapter;
     }
 }

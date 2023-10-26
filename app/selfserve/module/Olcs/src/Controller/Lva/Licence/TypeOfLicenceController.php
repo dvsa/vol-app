@@ -58,5 +58,6 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController
             $formServiceManager,
             $variationLvaService
         );
+        $this->lvaAdapter = $lvaAdapter;
     }
 }

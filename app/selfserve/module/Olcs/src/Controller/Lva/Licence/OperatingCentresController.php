@@ -72,5 +72,6 @@ class OperatingCentresController extends Lva\AbstractOperatingCentresController
             $variationLvaService,
             $uploadHelper
         );
+        $this->lvaAdapter = $lvaAdapter;
     }
 }
