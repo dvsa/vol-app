@@ -280,7 +280,7 @@ class OperatorController extends AbstractController implements OperatorControlle
             $data = ['fromOperatorName' => $organisationData['name']];
         }
 
-        $formHelper = $sl->get('Helper\Form');
+        $formHelper = $this->formHelper;
 
         /* @var $form \Common\Form\Form */
         $form = $formHelper->createForm('OperatorMerge');
@@ -305,14 +305,14 @@ class OperatorController extends AbstractController implements OperatorControlle
 
             $messages = $response->getResult()['messages'];
             if ($response->isOk()) {
-                $sl->get('Helper\FlashMessenger')->addSuccessMessage($messages[count($messages) - 1]);
+                $this->flashMessengerHelper->addSuccessMessage($messages[count($messages) - 1]);
                 return $this->redirect()->toRouteAjax('operator/business-details', ['organisation' => $toOperatorId]);
             } else {
                 OperatorTransferMapper::mapFromErrors($form, $messages);
             }
         }
 
-        $sl->get('Script')->loadFile('operator-merge');
+        $this->scriptFactory->loadFile('operator-merge');
 
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('pages/form');
