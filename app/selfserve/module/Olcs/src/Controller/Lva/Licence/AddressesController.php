@@ -60,5 +60,6 @@ class AddressesController extends Lva\AbstractAddressesController
             $formServiceManager,
             $scriptFactory
         );
+        $this->lvaAdapter = $lvaAdapter;
     }
 }

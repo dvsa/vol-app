@@ -60,5 +60,6 @@ class DiscsController extends Lva\AbstractDiscsController
             $guidanceHelper,
             $scriptFactory
         );
+        $this->lvaAdapter = $lvaAdapter;
     }
 }

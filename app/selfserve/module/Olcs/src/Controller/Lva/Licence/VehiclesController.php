@@ -83,6 +83,7 @@ class VehiclesController extends AbstractGoodsVehiclesController
             $variationLvaService,
             $goodsVehiclesVehicleMapper
         );
+        $this->lvaAdapter = $lvaAdapter;
     }
 
     protected function getScripts()

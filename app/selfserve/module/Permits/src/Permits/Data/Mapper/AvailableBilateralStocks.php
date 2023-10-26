@@ -220,4 +220,13 @@ class AvailableBilateralStocks implements MapperInterface
         }
         return null;
     }
+
+    /**
+     * @param $data
+     * @return array
+     */
+    public function mapFromForm($data)
+    {
+        return $data['fields'];
+    }
 }

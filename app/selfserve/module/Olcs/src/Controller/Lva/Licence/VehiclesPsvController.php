@@ -85,5 +85,6 @@ class VehiclesPsvController extends AbstractVehiclesPsvController
             $translatorHelper,
             $guidanceHelper
         );
+        $this->lvaAdapter = $lvaAdapter;
     }
 }

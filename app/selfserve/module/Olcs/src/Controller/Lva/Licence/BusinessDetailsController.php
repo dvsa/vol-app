@@ -72,5 +72,6 @@ class BusinessDetailsController extends AbstractBusinessDetailsController
             $tableFactory,
             $uploadHelper
         );
+        $this->lvaAdapter = $lvaAdapter;
     }
 }

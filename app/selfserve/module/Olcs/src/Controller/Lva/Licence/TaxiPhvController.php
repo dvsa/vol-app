@@ -66,5 +66,6 @@ class TaxiPhvController extends Lva\AbstractTaxiPhvController
             $scriptFactory,
             $translationHelper
         );
+        $this->lvaAdapter = $lvaAdapter;
     }
 }

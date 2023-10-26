@@ -51,6 +51,7 @@ class OverviewController extends AbstractController implements MethodToggleAware
         LicenceLvaAdapter $lvaAdapter
     ) {
         parent::__construct($niTextTranslationUtil, $authService);
+        $this->lvaAdapter = $lvaAdapter;
     }
 
     /**

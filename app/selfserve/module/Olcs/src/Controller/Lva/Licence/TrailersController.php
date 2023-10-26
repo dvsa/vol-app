@@ -73,6 +73,7 @@ class TrailersController extends Lva\AbstractTrailersController
             $dateHelper,
             $querySender
         );
+        $this->lvaAdapter = $lvaAdapter;
     }
 
     /**
