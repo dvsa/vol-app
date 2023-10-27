@@ -55,6 +55,7 @@ class PrintingController extends AbstractInternalController implements LeftViewP
     protected $addContentTitle = 'Add printer';
     protected $editContentTitle = 'Edit printer';
 
+
     /**
      * Index action
      */
@@ -80,7 +81,7 @@ class PrintingController extends AbstractInternalController implements LeftViewP
 
     protected function alterFormForEdit($form)
     {
-        $formHelper = $this - $this->formHelperService;
+        $formHelper = $this->formHelperService;
         $formHelper->remove($form, 'form-actions->addAnother');
         return $form;
     }
