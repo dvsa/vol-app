@@ -26,7 +26,7 @@ class FormSaveCancelPreview
     /**
      * @Form\Attributes({
      *     "type":"submit",
-     *     "class":"class="govuk-button govuk-button--secondary",
+     *     "class":"govuk-button govuk-button--secondary",
      *     "id": "cancel"
      * })
      * @Form\Options({
