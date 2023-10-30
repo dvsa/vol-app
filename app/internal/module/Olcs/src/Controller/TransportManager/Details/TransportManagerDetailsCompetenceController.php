@@ -3,9 +3,9 @@
 namespace Olcs\Controller\TransportManager\Details;
 
 use Common\Controller\Traits\GenericUpload;
-use Common\Service\Cqrs\Query\CachingQueryService;
 use Common\Service\Cqrs\Query\QueryService;
 use Common\Service\Cqrs\Response;
+use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -79,6 +79,7 @@ class TransportManagerDetailsCompetenceController extends AbstractInternalContro
     protected TransferAnnotationBuilder $transferAnnotationBuilder;
     protected QueryService $queryService;
     protected TransportManagerHelperService $transportMangerHelper;
+    protected FileUploadHelperService $uploadHelper;
 
     public function __construct(
         TranslationHelperService $translationHelper,
@@ -87,11 +88,13 @@ class TransportManagerDetailsCompetenceController extends AbstractInternalContro
         Navigation $navigation,
         TransferAnnotationBuilder $transferAnnotationBuilder,
         QueryService $queryService,
-        TransportManagerHelperService $transportMangerHelper
+        TransportManagerHelperService $transportMangerHelper,
+        FileUploadHelperService $uploadHelper
     ) {
         $this->transferAnnotationBuilder = $transferAnnotationBuilder;
         $this->queryService = $queryService;
         $this->transportMangerHelper = $transportMangerHelper;
+        $this->uploadHelper = $uploadHelper;
 
         parent::__construct($translationHelper, $formHelper, $flashMessenger, $navigation);
     }
