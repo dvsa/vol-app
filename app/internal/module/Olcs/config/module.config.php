@@ -41,6 +41,7 @@ use Olcs\Controller\Factory\Operator\OperatorBusinessDetailsControllerFactory;
 use Olcs\Controller\Factory\SearchControllerFactory;
 use Olcs\Controller\Factory\SplitScreenControllerFactory;
 use Olcs\Controller\Factory\TaskControllerFactory;
+use Olcs\Controller\Factory\TransportManager\Details\TransportManagerDetailsPreviousHistoryControllerFactory;
 use Olcs\Controller\Factory\TransportManager\Processing\TransportManagerProcessingTaskControllerFactory;
 use Olcs\Controller\Factory\TransportManager\TransportManagerDocumentControllerFactory;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
@@ -423,6 +424,7 @@ return array(
             OperatorBusinessDetailsController::class => OperatorBusinessDetailsControllerFactory::class,
             \Olcs\Controller\SplitScreenController::class => SplitScreenControllerFactory::class,
             TransportManagerDocumentController::class => TransportManagerDocumentControllerFactory::class,
+            TransportManagerDetailsPreviousHistoryController::class => TransportManagerDetailsPreviousHistoryControllerFactory::class,
         ],
         'aliases' => [
             'LvaApplication' => Olcs\Controller\Lva\Application\OverviewController::class,
