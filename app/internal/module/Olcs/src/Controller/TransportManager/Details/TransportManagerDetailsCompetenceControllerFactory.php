@@ -4,6 +4,7 @@ namespace Olcs\Controller\TransportManager\Details;
 
 use Common\Service\Cqrs\Query\CachingQueryService;
 use Common\Service\Cqrs\Query\QueryService;
+use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -39,6 +40,8 @@ class TransportManagerDetailsCompetenceControllerFactory implements FactoryInter
         $transportMangerHelper = $container->get(TransportManagerHelperService::class);
         assert($transportMangerHelper instanceof TransportManagerHelperService);
 
+        $uploadHelper = $container->get(FileUploadHelperService::class);
+
         return new TransportManagerDetailsCompetenceController(
             $translationHelperService,
             $formHelper,
@@ -46,7 +49,8 @@ class TransportManagerDetailsCompetenceControllerFactory implements FactoryInter
             $navigation,
             $transferAnnotationBuilder,
             $queryService,
-            $transportMangerHelper
+            $transportMangerHelper,
+            $uploadHelper
         );
     }
     public function createService(ServiceLocatorInterface $serviceLocator): TransportManagerDetailsCompetenceController
