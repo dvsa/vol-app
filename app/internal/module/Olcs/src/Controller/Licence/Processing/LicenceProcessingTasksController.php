@@ -50,7 +50,7 @@ class LicenceProcessingTasksController extends AbstractLicenceProcessingControll
      */
     protected function getTaskForm(array $filters = [])
     {
-        return $this->traitGetTaskForm($filters)
-            ->remove('showTasks');
+        $this->placeholder()->setPlaceholder('tableFilters', $this->traitGetTaskForm($filters)
+            ->remove('showTasks'));
     }
 }
