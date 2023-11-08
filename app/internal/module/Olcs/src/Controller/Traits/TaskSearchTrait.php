@@ -83,10 +83,10 @@ trait TaskSearchTrait
             $form->get($name)->setValueOptions($options);
         }
 
-        //  show task fiels
+        //  show task fields
         /**
- * @var \Laminas\Form\Element\Select $option
-*/
+        * @var \Laminas\Form\Element\Select $option
+        */
         $option = $form->get('showTasks');
         $option->setValueOptions(
             [
