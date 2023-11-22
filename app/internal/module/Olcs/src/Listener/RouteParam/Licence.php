@@ -187,6 +187,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         }
 
         if ($licenceCategoryId === RefData::LICENCE_CATEGORY_PSV) {
+            $navigationService->findOneById('licence_irhp_permits')->setVisible(false);
             $communityLicencesNav = $navigationService->findOneById('licence_community_licences');
             $communityLicencesNav->setLabel(
                 $communityLicencesNav->getLabel() . '.psv'
@@ -271,7 +272,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
      */
     protected function showHideButtons($licence)
     {
-        /** @var Laminas\Navigation\Navigation */
+        /** @var \Laminas\Navigation\Navigation */
         $sidebarNav = $this->getNavigationService();
 
         // 'Quick actions' buttons

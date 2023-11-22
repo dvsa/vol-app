@@ -4,6 +4,8 @@ namespace OlcsTest\Listener\RouteParam;
 
 use Common\Exception\DataServiceException;
 use Common\Service\Data\Surrender;
+use Laminas\Navigation\Navigation;
+use Laminas\View\HelperPluginManager;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParam\Licence;
@@ -11,7 +13,8 @@ use Mockery as m;
 use Olcs\Listener\RouteParams;
 use Common\RefData;
 use Laminas\Navigation\Page\AbstractPage;
-use Laminas\View\Helper\Container;
+use Laminas\View\Helper\Placeholder;
+use Olcs\Service\Marker\MarkerService;
 
 /**
  * Class LicenceTest
@@ -56,14 +59,14 @@ class LicenceTest extends TestCase
 
         $mockResult = m::mock();
 
-        $mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
+        $mockMarkerService = m::mock(MarkerService::class);
         $this->sut->setMarkerService($mockMarkerService);
 
         $mockLicenceService = m::mock();
         $this->sut->setLicenceService($mockLicenceService);
 
 
-        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
+        $mockViewHelperManager = m::mock(HelperPluginManager::class);
         $this->sut->setViewHelperManager($mockViewHelperManager);
 
         $mockAnnotationBuilder->shouldReceive('createQuery')->once()->andReturnUsing(
@@ -91,21 +94,21 @@ class LicenceTest extends TestCase
             $mockLicenceService->shouldReceive('setId')->with($licenceId);
 
             $mockViewHelperManager->shouldReceive('get->getContainer')->with('licence')->andReturn(
-                m::mock(Container::class)
+                m::mock(Placeholder::class)
                     ->shouldReceive('set')
                     ->with($licenceData)
                     ->once()
                     ->getMock()
             );
             $mockViewHelperManager->shouldReceive('get->getContainer')->with('note')->andReturn(
-                m::mock(Container::class)
+                m::mock(Placeholder::class)
                     ->shouldReceive('set')
                     ->with('latest note')
                     ->once()
                     ->getMock()
             );
             $mockViewHelperManager->shouldReceive('get->getContainer')->with('isPriorityNote')->andReturn(
-                m::mock(Container::class)
+                m::mock(Placeholder::class)
                     ->shouldReceive('set')
                     ->with(true)
                     ->once()
@@ -553,11 +556,11 @@ class LicenceTest extends TestCase
         $mockViewHelperManager = m::mock('Laminas\View\HelperPluginManager');
         $mockLicenceService = m::mock('Common\Service\Data\Licence');
         $mockSurrenderService = m::mock(Surrender::class);
-        $mockNavigation = m::mock(); // 'right-sidebar'
+        $mockNavigation = m::mock(Navigation::class); // 'right-sidebar'
         $mockAnnotationBuilder = m::mock();
         $mockQueryService = m::mock();
-        $mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
-        $mainNav = m::mock();
+        $mockMarkerService = m::mock(MarkerService::class);
+        $mainNav = m::mock(Navigation::class);
 
         $mockSl = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
@@ -565,7 +568,7 @@ class LicenceTest extends TestCase
         $mockSl->shouldReceive('get')->with('Common\Service\Data\Licence')->andReturn($mockLicenceService);
         $mockSl->shouldReceive('get')->with('Common\Service\Data\Surrender')->andReturn($mockSurrenderService);
         $mockSl->shouldReceive('get')->with('right-sidebar')->andReturn($mockNavigation);
-        $mockSl->shouldReceive('get')->with(\Olcs\Service\Marker\MarkerService::class)->andReturn($mockMarkerService);
+        $mockSl->shouldReceive('get')->with(MarkerService::class)->andReturn($mockMarkerService);
         $mockSl->shouldReceive('get')->with('TransferAnnotationBuilder')->andReturn($mockAnnotationBuilder);
         $mockSl->shouldReceive('get')->with('QueryService')->andReturn($mockQueryService);
         $mockSl->shouldReceive('get')->with('Navigation')->andReturn($mainNav);
@@ -731,7 +734,7 @@ class LicenceTest extends TestCase
 
     protected function mockMainNavigation($type, $surrender = false): void
     {
-        $mainNav = m::mock();
+        $mainNav = m::mock(Navigation::class);
 
         if (!$surrender) {
             if ($type === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
@@ -764,6 +767,13 @@ class LicenceTest extends TestCase
             $mainNav->shouldReceive('findOneById')
                 ->with('licence_community_licences')
                 ->andReturn($communityLicencesPage);
+
+            $mockIrhpPermitMenu = m::mock(AbstractPage::class);
+            $mockIrhpPermitMenu->expects('setVisible')->with(false);
+
+            $mainNav->expects('findOneById')->with('licence_irhp_permits')->andReturn(
+                $mockIrhpPermitMenu
+            );
         }
 
         $this->sut->setMainNavigationService($mainNav);
