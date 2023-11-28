@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c92021592cb56686fc4acbf0f9b699b8",
+    "content-hash": "e06442d3b98c12a26b3fdc3cc8a81578",
     "packages": [
         {
             "name": "brick/varexporter",
@@ -4197,12 +4197,12 @@
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.512",
+            "version": "4.206.513",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.512/olcs-olcs-common-4.206.512.zip",
-                "reference": "202348d747d72e05044e24c91e04c95622a76662",
-                "shasum": "202348d747d72e05044e24c91e04c95622a76662"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.513/olcs-olcs-common-4.206.513.zip",
+                "reference": "fd8e56e81df88082ee9fc2baea0444ce73fa4f5f",
+                "shasum": "fd8e56e81df88082ee9fc2baea0444ce73fa4f5f"
             },
             "require": {
                 "elendev/composer-push": "^1.0.3",
@@ -4212,9 +4212,9 @@
             "require-dev": {
                 "doctrine/annotations": "^1.14.2",
                 "olcs/olcs-devtools": "~4.206.0",
-                "olcs/olcs-logging": "~4.206.0",
+                "olcs/olcs-logging": "^5.0.0",
                 "olcs/olcs-transfer": "~4.206.0",
-                "olcs/olcs-utils": "~4.206.0",
+                "olcs/olcs-utils": "^5.0.0",
                 "phpstan/phpstan": "^0.12.100",
                 "soflomo/purifier": "^1.0",
                 "symfony/lock": "^5"
@@ -4264,16 +4264,16 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2023-11-23T17:24:45+00:00"
+            "time": "2023-11-28T12:55:38+00:00"
         },
         {
             "name": "olcs/olcs-frontend-deps",
-            "version": "4.206.3",
+            "version": "4.206.4",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-frontend-deps/4.206.3/olcs-olcs-frontend-deps-4.206.3.zip",
-                "reference": "83b28d656b251b41c093284b7a5277c1851955b1",
-                "shasum": "83b28d656b251b41c093284b7a5277c1851955b1"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-frontend-deps/4.206.4/olcs-olcs-frontend-deps-4.206.4.zip",
+                "reference": "02dd23c7d32a2ccd6de6d453a5370c1e4619cf8b",
+                "shasum": "02dd23c7d32a2ccd6de6d453a5370c1e4619cf8b"
             },
             "require": {
                 "doctrine/annotations": "^1.14.2",
@@ -4282,9 +4282,9 @@
                 "firebase/php-jwt": "^6.0",
                 "olcs/olcs-auth": "~4.206.0",
                 "olcs/olcs-common": "~4.206.0",
-                "olcs/olcs-logging": "~4.206.0",
+                "olcs/olcs-logging": "^5.0.0",
                 "olcs/olcs-transfer": "~4.206.0",
-                "olcs/olcs-utils": "~4.206.0",
+                "olcs/olcs-utils": "^5.0.0",
                 "php": ">=7.4",
                 "soflomo/purifier": "^1.0",
                 "symfony/filesystem": "^5",
@@ -4297,7 +4297,7 @@
                 }
             },
             "description": "List of front end dependencies, shared between internal and selfserve nodes",
-            "time": "2023-03-01T14:20:56+00:00"
+            "time": "2023-11-28T17:13:26+00:00"
         },
         {
             "name": "olcs/olcs-laminas",
@@ -4358,68 +4358,58 @@
         },
         {
             "name": "olcs/olcs-logging",
-            "version": "4.206.20",
+            "version": "5.0.0.alpha1",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-logging/4.206.20/olcs-olcs-logging-4.206.20.zip",
-                "reference": "f9a013824d79fac5177e9596619cb08bce48bb39",
-                "shasum": "f9a013824d79fac5177e9596619cb08bce48bb39"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/olcs/olcs-logging/5.0.0.alpha1/olcs-olcs-logging-5.0.0.alpha1.zip",
+                "reference": "2312891aeb3e67cd17c4fce9dbafe0f0e7c2e099",
+                "shasum": ""
             },
             "require": {
-                "elendev/composer-push": "^1.0.3",
-                "olcs/olcs-laminas": "~2.5.0 || ~3.0.0",
-                "php": ">=7.4",
-                "psr/log": "~1.0"
+                "laminas/laminas-console": "^2.7",
+                "laminas/laminas-eventmanager": "^2.6.4|^3.0",
+                "laminas/laminas-log": "^2.12",
+                "laminas/laminas-mvc": "^2.7.15|^3.3",
+                "laminas/laminas-session": "^2.8.7",
+                "laminas/laminas-stdlib": "^2.7.9|^3.0",
+                "php": "^7.4",
+                "psr/log": "^1.0"
             },
             "require-dev": {
-                "olcs/olcs-devtools": "~4.206.0"
+                "bamarni/composer-bin-plugin": "^1.8",
+                "johnkary/phpunit-speedtrap": "^4.0",
+                "mockery/mockery": "^1.6",
+                "phpunit/phpunit": "^9.6"
             },
             "type": "library",
             "extra": {
-                "nexus-push": {
-                    "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/olcs-logging",
-                    "ignore": [
-                        "test/",
-                        "sonar-project.properties"
-                    ]
+                "bamarni-bin": {
+                    "bin-links": true,
+                    "forward-command": true
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Olcs\\Logging\\": "src//"
+                    "Olcs\\Logging\\": "src/"
                 }
             },
-            "scripts": {
-                "ut": [
-                    "vendor/bin/phpunit -c test/phpunit.xml --stop-on-failure"
-                ],
-                "review": [
-                    "vendor/bin/review"
-                ],
-                "cs": [
-                    "vendor/bin/phpcs --severity=1 --standard=vendor/dvsa/coding-standards/src/Profiles/DVSA/CS/ruleset.xml"
-                ],
-                "coverage": [
-                    "vendor/bin/phpunit -c test/phpunit.xml --coverage-html ./test/coverage/html"
-                ],
-                "sonar": [
-                    "vendor/bin/phpunit -c test/phpunit.xml --coverage-clover ./test/coverage/coverage-report.clover --log-junit ./test/coverage/log.junit"
-                ],
-                "update-syms": [
-                    "vendor/bin/composer-update-syms"
-                ]
+            "license": [
+                "MIT"
+            ],
+            "description": "Logging Module for OLCS",
+            "support": {
+                "source": "https://github.com/dvsa/olcs-logging/tree/5.0.0.alpha1"
             },
-            "description": "Logging Module for Olcs",
-            "time": "2023-11-23T16:38:13+00:00"
+            "time": "2023-11-23T16:49:30+00:00"
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "4.206.183",
+            "version": "4.206.184",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-transfer/4.206.183/olcs-olcs-transfer-4.206.183.zip",
-                "reference": "59d492b3b46616de24d2b5706ce661a8133fcc0d",
-                "shasum": "59d492b3b46616de24d2b5706ce661a8133fcc0d"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-transfer/4.206.184/olcs-olcs-transfer-4.206.184.zip",
+                "reference": "d4f155544d94e32dff555ff6920dd8b6c4e0cec5",
+                "shasum": "d4f155544d94e32dff555ff6920dd8b6c4e0cec5"
             },
             "require": {
                 "elendev/composer-push": "^1.0.3",
@@ -4429,7 +4419,8 @@
             },
             "require-dev": {
                 "doctrine/annotations": "^1.14.2",
-                "olcs/olcs-devtools": "~4.206.0"
+                "olcs/olcs-devtools": "~4.206.0",
+                "phpunit/phpunit": "^9.6"
             },
             "type": "library",
             "extra": {
@@ -4468,34 +4459,40 @@
                 ]
             },
             "description": "OLCS Transfer",
-            "time": "2023-08-10T08:53:37+00:00"
+            "time": "2023-11-28T11:16:01+00:00"
         },
         {
             "name": "olcs/olcs-utils",
-            "version": "4.206.20",
+            "version": "5.0.0.alpha1",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-utils/4.206.20/olcs-olcs-utils-4.206.20.zip",
-                "reference": "060150978ef906706af8e0b67786c1fdc7edfdf1",
-                "shasum": "060150978ef906706af8e0b67786c1fdc7edfdf1"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/olcs/olcs-utils/5.0.0.alpha1/olcs-olcs-utils-5.0.0.alpha1.zip",
+                "reference": "82b2c2986397dfc8b5e615b48259747fb28ca1a8",
+                "shasum": ""
             },
             "require": {
-                "elendev/composer-push": "^1.0.3",
-                "olcs/olcs-laminas": "~2.5.0 || ~3.0.0",
-                "php": ">=7.4"
+                "container-interop/container-interop": "^1.2",
+                "laminas/laminas-eventmanager": "^2.6",
+                "laminas/laminas-http": "^2.8",
+                "laminas/laminas-i18n": "^2.14",
+                "laminas/laminas-mvc": "^2.7",
+                "laminas/laminas-servicemanager": "^2.7",
+                "laminas/laminas-view": "^2.11",
+                "php": "^7.4",
+                "psr/container": "^1.1|^2.0"
             },
             "require-dev": {
-                "olcs/olcs-devtools": "~4.206.0",
-                "olcs/olcs-logging": "~4.206.0"
+                "bamarni/composer-bin-plugin": "^1.8",
+                "johnkary/phpunit-speedtrap": "^4.0",
+                "mockery/mockery": "^1.6",
+                "olcs/olcs-logging": "^5.0.0",
+                "phpunit/phpunit": "^9.6"
             },
             "type": "library",
             "extra": {
-                "nexus-push": {
-                    "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/olcs-utils",
-                    "ignore": [
-                        "test/",
-                        "sonar-project.properties"
-                    ]
+                "bamarni-bin": {
+                    "bin-links": true,
+                    "forward-command": true
                 }
             },
             "autoload": {
@@ -4503,28 +4500,11 @@
                     "Dvsa\\Olcs\\Utils\\": "src/"
                 }
             },
-            "scripts": {
-                "ut": [
-                    "vendor/bin/phpunit -c test/phpunit.xml --stop-on-failure"
-                ],
-                "review": [
-                    "vendor/bin/review"
-                ],
-                "cs": [
-                    "vendor/bin/phpcs --severity=1 --standard=vendor/dvsa/coding-standards/src/Profiles/DVSA/CS/ruleset.xml"
-                ],
-                "coverage": [
-                    "vendor/bin/phpunit -c test/phpunit.xml --coverage-html ./test/coverage/html"
-                ],
-                "sonar": [
-                    "vendor/bin/phpunit -c test/phpunit.xml --coverage-clover ./test/coverage/coverage-report.clover --log-junit ./test/coverage/log.junit"
-                ],
-                "update-syms": [
-                    "vendor/bin/composer-update-syms"
-                ]
-            },
             "description": "OLCS Utils",
-            "time": "2023-10-18T11:32:29+00:00"
+            "support": {
+                "source": "https://github.com/dvsa/olcs-utils/tree/5.0.0.alpha1"
+            },
+            "time": "2023-11-27T14:10:02+00:00"
         },
         {
             "name": "psr/cache",
@@ -8933,9 +8913,9 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": [],
-    "prefer-stable": false,
+    "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": ">=7.4"
