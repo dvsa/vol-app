@@ -4197,12 +4197,12 @@
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.511",
+            "version": "4.206.512",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.511/olcs-olcs-common-4.206.511.zip",
-                "reference": "70c39b600b99d1d66507386a65520eb2f9b147a6",
-                "shasum": "70c39b600b99d1d66507386a65520eb2f9b147a6"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.512/olcs-olcs-common-4.206.512.zip",
+                "reference": "202348d747d72e05044e24c91e04c95622a76662",
+                "shasum": "202348d747d72e05044e24c91e04c95622a76662"
             },
             "require": {
                 "elendev/composer-push": "^1.0.3",
@@ -4264,7 +4264,7 @@
                 ]
             },
             "description": "Common library for the OLCS Project",
-            "time": "2023-11-09T10:51:46+00:00"
+            "time": "2023-11-23T17:24:45+00:00"
         },
         {
             "name": "olcs/olcs-frontend-deps",
@@ -4358,12 +4358,12 @@
         },
         {
             "name": "olcs/olcs-logging",
-            "version": "4.206.19",
+            "version": "4.206.20",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-logging/4.206.19/olcs-olcs-logging-4.206.19.zip",
-                "reference": "32f2b765355710404c22c52d09a4d8204f2a2c54",
-                "shasum": "32f2b765355710404c22c52d09a4d8204f2a2c54"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-logging/4.206.20/olcs-olcs-logging-4.206.20.zip",
+                "reference": "f9a013824d79fac5177e9596619cb08bce48bb39",
+                "shasum": "f9a013824d79fac5177e9596619cb08bce48bb39"
             },
             "require": {
                 "elendev/composer-push": "^1.0.3",
@@ -4410,7 +4410,7 @@
                 ]
             },
             "description": "Logging Module for Olcs",
-            "time": "2023-06-16T14:34:17+00:00"
+            "time": "2023-11-23T16:38:13+00:00"
         },
         {
             "name": "olcs/olcs-transfer",
