@@ -6,6 +6,14 @@
             "packagist": false
         },
         {
+            "type": "composer",
+            "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy",
+            "only": [
+                "olcs/olcs-logging",
+                "olcs/olcs-utils"
+            ]
+        },
+        {
             "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS",
             "type": "composer"
         },
@@ -36,6 +44,8 @@
             "Common\\": "vendor/olcs/olcs-common/Common/src/Common"
         }
     },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "config": {
         "preferred-install": "dist",
         "secure-http": false,
