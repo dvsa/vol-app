@@ -739,6 +739,57 @@ $routes = [
                 ],
                 'may_terminate' => true,
             ],
+            'conversation' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'conversation[/]',
+                    'verb' => 'GET',
+                    'defaults' => [
+                        'controller' => Olcs\Controller\Messages\LicenceConversationListController::class,
+                        'action' => 'index'
+                    ],
+                ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'view' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => ':conversation[/]',
+                            'verb' => 'GET',
+                            'defaults' => [
+                                    'controller' => Olcs\Controller\AbstractInternalController::class,
+                                    'action' => 'index'
+                                    ],
+                        ],
+                        'may_terminate' => true,
+                    ],
+
+                    'new' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'new[/]',
+                            'verb' => 'GET',
+                            'defaults' => [
+                                'controller' => Olcs\Controller\Messages\LicenceNewConversationController::class,
+                                'action' => 'index'
+                            ],
+                        ],
+                        'may_terminate' => true,
+                    ],
+                    'disable' => [
+                        'type' => 'segment',
+                         'options' => [
+                                'route' => 'disable[/]',
+                                 'verb' => 'GET',
+                                  'defaults' => [
+                                   'controller' => Olcs\Controller\Messages\LicenceDisableConversationListController::class,
+                                   'action' => 'index'
+                                   ]
+                              ],
+                              'may_terminate' => true,
+                    ],
+                ],
+            ],
             'opposition' => [
                 'type' => 'segment',
                 'options' => [
@@ -1368,7 +1419,7 @@ $routes = [
                                 'id' => '[0-9]+'
                             ],
                             'defaults' => [
-                                'controller' => Olcs\Controller\Operator\OperatorIrfoPsvAuthorisationsController::Class,
+                                'controller' => Olcs\Controller\Operator\OperatorIrfoPsvAuthorisationsController::class,
                                 'action' => 'index'
                             ]
                         ],
@@ -1401,7 +1452,7 @@ $routes = [
                         'options' => [
                             'route' => 'read-history[/]',
                             'defaults' => [
-                                'controller' => OperatorControllers\Processing\ReadHistoryController::Class,
+                                'controller' => OperatorControllers\Processing\ReadHistoryController::class,
                                 'action' => 'index',
                             ]
                         ],
@@ -2539,6 +2590,56 @@ $routes['lva-application']['child_routes'] = array_merge(
                 'print-receipt' => $feePrintReceiptRoute,
             )
         ),
+      'conversation' => [
+            'type' => 'segment',
+            'options' => [
+                'route' => 'conversation',
+                'verb' => 'GET',
+                'defaults' => [
+                    'controller' => Olcs\Controller\Messages\ApplicationConversationListController::class,
+                    'action' => 'index'
+                ],
+            ],
+            'may_terminate' => true,
+            'child_routes' => [
+                'view' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => ':conversation[/]',
+                        'verb' => 'GET',
+                        'defaults' => [
+                            'controller' =>  Olcs\Controller\AbstractInternalController::class,
+                            'action' => 'index'
+                            ],
+                    ],
+                    'may_terminate' => true,
+                ],
+                'new' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => 'new[/]',
+                        'verb' => 'GET',
+                        'defaults' => [
+                            'controller' => Olcs\Controller\Messages\LicenceNewConversationController::class,
+                            'action' => 'index'
+                        ],
+                    ],
+                    'may_terminate' => true,
+                ],
+                'disable' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => 'disable[/]',
+                        'verb' => 'GET',
+                        'defaults' => [
+                            'controller' => Olcs\Controller\Messages\LicenceDisableConversationListController::class,
+                            'action' => 'index'
+                        ],
+                    ],
+                    'may_terminate' => true,
+                ],
+            ],
+        ],
         'interim' => array(
             'type' => 'segment',
             'options' => array(
