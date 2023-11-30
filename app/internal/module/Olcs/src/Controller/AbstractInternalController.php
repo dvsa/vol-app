@@ -455,7 +455,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
         $paramProvider->setParams($this->plugin('params'));
         $providedParameters = $this->modifyListQueryParameters($paramProvider->provideParameters());
         $response = $this->handleQuery($listDto::create($providedParameters));
-
+       
         if ($response->isOk()) {
             $data = $response->getResult();
             $this->listData = $data;
