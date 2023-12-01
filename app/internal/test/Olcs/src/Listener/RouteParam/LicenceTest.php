@@ -3,18 +3,21 @@
 namespace OlcsTest\Listener\RouteParam;
 
 use Common\Exception\DataServiceException;
+use Common\FeatureToggle;
+use Common\RefData;
 use Common\Service\Data\Surrender;
+use Dvsa\Olcs\Transfer\Query\FeatureToggle\IsEnabled;
 use Laminas\Navigation\Navigation;
+use Laminas\Navigation\Page\AbstractPage;
+use Laminas\View\Helper\Placeholder;
 use Laminas\View\HelperPluginManager;
+use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParam\Licence;
-use Mockery as m;
 use Olcs\Listener\RouteParams;
-use Common\RefData;
-use Laminas\Navigation\Page\AbstractPage;
-use Laminas\View\Helper\Placeholder;
 use Olcs\Service\Marker\MarkerService;
+use RuntimeException;
 
 /**
  * Class LicenceTest
@@ -65,7 +68,6 @@ class LicenceTest extends TestCase
         $mockLicenceService = m::mock();
         $this->sut->setLicenceService($mockLicenceService);
 
-
         $mockViewHelperManager = m::mock(HelperPluginManager::class);
         $this->sut->setViewHelperManager($mockViewHelperManager);
 
@@ -114,6 +116,17 @@ class LicenceTest extends TestCase
                     ->once()
                     ->getMock()
             );
+
+            $mockAnnotationBuilder->shouldReceive('createQuery')->once()->andReturnUsing(
+                function ($dto) use ($licenceId) {
+                    $this->assertInstanceOf(IsEnabled::class, $dto);
+                    $this->assertSame(['ids' => [FeatureToggle::MESSAGING]], $dto->getArrayCopy());
+                    return 'FT_QUERY';
+                }
+            );
+            $mockFtQueryResult = m::mock();
+            $mockFtQueryResult->expects('getResult')->once()->andReturn(['isEnabled' => true]);
+            $mockQueryService->shouldReceive('send')->with('FT_QUERY')->once()->andReturn($mockFtQueryResult);
         }
     }
 
@@ -123,7 +136,7 @@ class LicenceTest extends TestCase
         $event = new RouteParam();
         $event->setValue(32);
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
 
         $this->sut->onLicence($event);
     }
@@ -698,7 +711,6 @@ class LicenceTest extends TestCase
         $this->signatureType = RefData::SIGNATURE_TYPE_PHYSICAL_SIGNATURE;
         $this->mockMainNavigation($licence['goodsOrPsv']['id'], true);
 
-
         $mockSurrenderService = m::mock(Surrender::class);
         $mockSurrenderService->shouldReceive('fetchSurrenderData')->with(4)->times(1)->andReturn([
             'signatureType' => ['id' => $this->signatureType]
@@ -825,7 +837,6 @@ class LicenceTest extends TestCase
         $this->mockHideButton($mockSidebar, 'licence-decisions-undo-terminate');
         $this->mockHideButton($mockSidebar, 'licence-decisions-surrender');
         $this->mockHideButton($mockSidebar, 'licence-quick-actions-create-variation');
-
 
 
         $this->sut->setNavigationService($mockSidebar);
