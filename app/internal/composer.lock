@@ -1065,15 +1065,15 @@
         },
         {
             "name": "ezyang/htmlpurifier",
-            "version": "v4.16.0",
+            "version": "v4.17.0",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/ezyang/htmlpurifier/v4.16.0/ezyang-htmlpurifier-v4.16.0.zip",
-                "reference": "523407fb06eb9e5f3d59889b3978d5bfe94299c8",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/ezyang/htmlpurifier/v4.17.0/ezyang-htmlpurifier-v4.17.0.zip",
+                "reference": "bbc513d79acf6691fa9cf10f192c90dd2957f18c",
                 "shasum": ""
             },
             "require": {
-                "php": "~5.6.0 || ~7.0.0 || ~7.1.0 || ~7.2.0 || ~7.3.0 || ~7.4.0 || ~8.0.0 || ~8.1.0 || ~8.2.0"
+                "php": "~5.6.0 || ~7.0.0 || ~7.1.0 || ~7.2.0 || ~7.3.0 || ~7.4.0 || ~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0"
             },
             "require-dev": {
                 "cerdic/css-tidy": "^1.7 || ^2.0",
@@ -1114,9 +1114,9 @@
             ],
             "support": {
                 "issues": "https://github.com/ezyang/htmlpurifier/issues",
-                "source": "https://github.com/ezyang/htmlpurifier/tree/v4.16.0"
+                "source": "https://github.com/ezyang/htmlpurifier/tree/v4.17.0"
             },
-            "time": "2022-09-18T07:06:19+00:00"
+            "time": "2023-11-17T15:01:25+00:00"
         },
         {
             "name": "firebase/php-jwt",
@@ -4005,6 +4005,7 @@
                     "type": "community_bridge"
                 }
             ],
+            "abandoned": true,
             "time": "2022-07-29T13:28:29+00:00"
         },
         {
@@ -5080,11 +5081,11 @@
         },
         {
             "name": "symfony/dependency-injection",
-            "version": "v5.4.31",
+            "version": "v5.4.32",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/dependency-injection/v5.4.31/symfony-dependency-injection-v5.4.31.zip",
-                "reference": "eb1bcafa54e00ed218e1b733b8b6ad1c9ff83d20",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/dependency-injection/v5.4.32/symfony-dependency-injection-v5.4.32.zip",
+                "reference": "d5d48f215ed73f7973d01256b9a2fac729bef759",
                 "shasum": ""
             },
             "require": {
@@ -5143,7 +5144,7 @@
             "description": "Allows you to standardize and centralize the way objects are constructed in your application",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/dependency-injection/tree/v5.4.31"
+                "source": "https://github.com/symfony/dependency-injection/tree/v5.4.32"
             },
             "funding": [
                 {
@@ -5159,7 +5160,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-10-31T07:58:33+00:00"
+            "time": "2023-11-29T06:58:28+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -5339,11 +5340,11 @@
         },
         {
             "name": "symfony/lock",
-            "version": "v5.4.31",
+            "version": "v5.4.32",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/lock/v5.4.31/symfony-lock-v5.4.31.zip",
-                "reference": "23146b4eeeff63121066590e95a22ce223d19cf9",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/lock/v5.4.32/symfony-lock-v5.4.32.zip",
+                "reference": "a6d7d829f4907134775a0e1b162780e61f80ed87",
                 "shasum": ""
             },
             "require": {
@@ -5392,7 +5393,7 @@
                 "semaphore"
             ],
             "support": {
-                "source": "https://github.com/symfony/lock/tree/v5.4.31"
+                "source": "https://github.com/symfony/lock/tree/v5.4.32"
             },
             "funding": [
                 {
@@ -5408,7 +5409,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-11-06T17:37:45+00:00"
+            "time": "2023-11-20T15:40:25+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -6743,18 +6744,19 @@
         },
         {
             "name": "pdepend/pdepend",
-            "version": "2.15.1",
+            "version": "2.16.0",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/pdepend/pdepend/2.15.1/pdepend-pdepend-2.15.1.zip",
-                "reference": "d12f25bcdfb7754bea458a4a5cb159d55e9950d0",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/pdepend/pdepend/2.16.0/pdepend-pdepend-2.16.0.zip",
+                "reference": "8dfc0c46529e2073fa97986552f80646eedac562",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.7",
-                "symfony/config": "^2.3.0|^3|^4|^5|^6.0",
-                "symfony/dependency-injection": "^2.3.0|^3|^4|^5|^6.0",
-                "symfony/filesystem": "^2.3.0|^3|^4|^5|^6.0"
+                "symfony/config": "^2.3.0|^3|^4|^5|^6.0|^7.0",
+                "symfony/dependency-injection": "^2.3.0|^3|^4|^5|^6.0|^7.0",
+                "symfony/filesystem": "^2.3.0|^3|^4|^5|^6.0|^7.0",
+                "symfony/polyfill-mbstring": "^1.19"
             },
             "require-dev": {
                 "easy-doc/easy-doc": "0.0.0|^1.2.3",
@@ -6788,7 +6790,7 @@
             ],
             "support": {
                 "issues": "https://github.com/pdepend/pdepend/issues",
-                "source": "https://github.com/pdepend/pdepend/tree/2.15.1"
+                "source": "https://github.com/pdepend/pdepend/tree/2.16.0"
             },
             "funding": [
                 {
@@ -6796,7 +6798,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-09-28T12:00:56+00:00"
+            "time": "2023-11-29T08:52:35+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -7571,11 +7573,11 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.6.13",
+            "version": "9.6.14",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/phpunit/phpunit/9.6.13/phpunit-phpunit-9.6.13.zip",
-                "reference": "f3d767f7f9e191eab4189abe41ab37797e30b1be",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/phpunit/phpunit/9.6.14/phpunit-phpunit-9.6.14.zip",
+                "reference": "43653e6ad7adc22e7b667dd561bf8fcb74c10cf0",
                 "shasum": ""
             },
             "require": {
@@ -7648,7 +7650,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.13"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.14"
             },
             "funding": [
                 {
@@ -7664,7 +7666,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-09-19T05:39:22+00:00"
+            "time": "2023-12-01T06:10:48+00:00"
         },
         {
             "name": "san/san-session-toolbar",
@@ -8869,11 +8871,11 @@
         },
         {
             "name": "theseer/tokenizer",
-            "version": "1.2.1",
+            "version": "1.2.2",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/theseer/tokenizer/1.2.1/theseer-tokenizer-1.2.1.zip",
-                "reference": "34a41e998c2183e22995f158c581e7b5e755ab9e",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/theseer/tokenizer/1.2.2/theseer-tokenizer-1.2.2.zip",
+                "reference": "b2ad5003ca10d4ee50a12da31de12a5774ba6b96",
                 "shasum": ""
             },
             "require": {
@@ -8901,7 +8903,7 @@
             "description": "A small library for converting tokenized PHP source code into XML and potentially other formats",
             "support": {
                 "issues": "https://github.com/theseer/tokenizer/issues",
-                "source": "https://github.com/theseer/tokenizer/tree/1.2.1"
+                "source": "https://github.com/theseer/tokenizer/tree/1.2.2"
             },
             "funding": [
                 {
@@ -8909,7 +8911,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-07-28T10:34:58+00:00"
+            "time": "2023-11-20T00:12:19+00:00"
         }
     ],
     "aliases": [],
