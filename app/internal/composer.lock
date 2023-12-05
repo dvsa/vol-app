@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2c3c3a8d662f4887e8eb61e5b5ddb012",
+    "content-hash": "926f570c4dbb7a72b98401a22da9ae14",
     "packages": [
         {
             "name": "brick/varexporter",
@@ -4269,12 +4269,12 @@
         },
         {
             "name": "olcs/olcs-frontend-deps",
-            "version": "4.206.4",
+            "version": "4.206.5",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-frontend-deps/4.206.4/olcs-olcs-frontend-deps-4.206.4.zip",
-                "reference": "02dd23c7d32a2ccd6de6d453a5370c1e4619cf8b",
-                "shasum": "02dd23c7d32a2ccd6de6d453a5370c1e4619cf8b"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-frontend-deps/4.206.5/olcs-olcs-frontend-deps-4.206.5.zip",
+                "reference": "b169d5e819495a96e7f4fb3b3c6187a31d0b6049",
+                "shasum": "b169d5e819495a96e7f4fb3b3c6187a31d0b6049"
             },
             "require": {
                 "doctrine/annotations": "^1.14.2",
@@ -4284,7 +4284,7 @@
                 "olcs/olcs-auth": "~4.206.0",
                 "olcs/olcs-common": "~4.206.0",
                 "olcs/olcs-logging": "^5.0.0",
-                "olcs/olcs-transfer": "~4.206.0",
+                "olcs/olcs-transfer": "^5.0.0",
                 "olcs/olcs-utils": "^5.0.0",
                 "php": ">=7.4",
                 "soflomo/purifier": "^1.0",
@@ -4298,7 +4298,7 @@
                 }
             },
             "description": "List of front end dependencies, shared between internal and selfserve nodes",
-            "time": "2023-11-28T17:13:26+00:00"
+            "time": "2023-12-04T14:01:31+00:00"
         },
         {
             "name": "olcs/olcs-laminas",
@@ -4405,33 +4405,37 @@
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "4.206.184",
+            "version": "5.0.0.alpha1",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-transfer/4.206.184/olcs-olcs-transfer-4.206.184.zip",
-                "reference": "d4f155544d94e32dff555ff6920dd8b6c4e0cec5",
-                "shasum": "d4f155544d94e32dff555ff6920dd8b6c4e0cec5"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/olcs/olcs-transfer/5.0.0.alpha1/olcs-olcs-transfer-5.0.0.alpha1.zip",
+                "reference": "9d457fdb8d4bac53e7d484021c3d952979b12109",
+                "shasum": ""
             },
             "require": {
-                "elendev/composer-push": "^1.0.3",
                 "ext-openssl": "*",
-                "olcs/olcs-laminas": "~2.5.0 || ~3.0.0",
-                "php": ">=7.4"
+                "laminas/laminas-crypt": "^3.4.0",
+                "laminas/laminas-filter": "^2.9.4",
+                "laminas/laminas-form": "^2.13.0|^3.0",
+                "laminas/laminas-inputfilter": "^2.10.1",
+                "laminas/laminas-servicemanager": "^2.7.11|^3.0",
+                "laminas/laminas-stdlib": "^2.7.9|^3.0",
+                "laminas/laminas-validator": "^2.11.1",
+                "laminas/laminas-xml": "^1.4.0",
+                "php": "^7.4"
             },
             "require-dev": {
+                "bamarni/composer-bin-plugin": "^1.8",
                 "doctrine/annotations": "^1.14.2",
-                "olcs/olcs-devtools": "~4.206.0",
+                "johnkary/phpunit-speedtrap": "^4.0",
+                "mockery/mockery": "^1.6",
                 "phpunit/phpunit": "^9.6"
             },
             "type": "library",
             "extra": {
-                "nexus-push": {
-                    "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/olcs-transfer",
-                    "ignore": [
-                        "test/",
-                        "sonar-project.properties",
-                        "build.xml"
-                    ]
+                "bamarni-bin": {
+                    "bin-links": true,
+                    "forward-command": true
                 }
             },
             "autoload": {
@@ -4439,28 +4443,11 @@
                     "Dvsa\\Olcs\\Transfer\\": "src/"
                 }
             },
-            "scripts": {
-                "ut": [
-                    "vendor/bin/phpunit -c test/phpunit.xml --stop-on-failure"
-                ],
-                "review": [
-                    "vendor/bin/review"
-                ],
-                "cs": [
-                    "vendor/bin/phpcs --severity=1 --standard=vendor/dvsa/coding-standards/src/Profiles/DVSA/CS/ruleset.xml"
-                ],
-                "coverage": [
-                    "vendor/bin/phpunit -c test/phpunit.xml --coverage-html ./test/coverage/html"
-                ],
-                "sonar": [
-                    "vendor/bin/phpunit -c test/phpunit.xml --coverage-clover ./test/coverage/coverage-report.clover --log-junit ./test/coverage/log.junit"
-                ],
-                "update-syms": [
-                    "vendor/bin/composer-update-syms"
-                ]
-            },
             "description": "OLCS Transfer",
-            "time": "2023-11-28T11:16:01+00:00"
+            "support": {
+                "source": "https://github.com/dvsa/olcs-transfer/tree/5.0.0.alpha1"
+            },
+            "time": "2023-12-01T11:59:16+00:00"
         },
         {
             "name": "olcs/olcs-utils",
