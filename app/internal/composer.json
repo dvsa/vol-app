@@ -11,7 +11,8 @@
             "only": [
                 "olcs/olcs-logging",
                 "olcs/olcs-utils",
-                "olcs/olcs-transfer"
+                "olcs/olcs-transfer",
+                "olcs/olcs-auth"
             ]
         },
         {
