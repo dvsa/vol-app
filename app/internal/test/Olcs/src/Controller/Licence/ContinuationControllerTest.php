@@ -14,7 +14,7 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Laminas\Form\Form;
-use Laminas\Validator\Translator\TranslatorInterface;
+use Laminas\Validator\LessThan;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Licence\ContinuationController;
 use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
@@ -36,14 +36,14 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
         $this->mockTableFactory = m::mock(TableFactory::class);
         $this->mockViewHelperManager = m::mock(HelperPluginManager::class);
         $this->mockFlashMessengerHelper = m::mock(FlashMessengerHelperService::class);
-        $this->mockTranslationHelper = m::mock(TranslatorInterface::class);
+        $this->mockLessThanValidator = m::mock(LessThan::class);
         $this->mockController(ContinuationController::class, [
             $this->mockScriptFactory,
             $this->mockFormHelper,
             $this->mockTableFactory,
             $this->mockViewHelperManager,
             $this->mockFlashMessengerHelper,
-            $this->mockTranslationHelper,
+            $this->mockLessThanValidator,
         ]);
     }
 
@@ -246,13 +246,19 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
     public function testFormNumberOfDiscs($displayed, $goodsOrPsv, $licenceType)
     {
         $mockForm = \Mockery::mock(Form::class);
+        $formField = 'fields->numberOfDiscs';
+        $totalVehicleAuth = 50;
 
         if ($displayed) {
             $this->mockFormHelper->shouldReceive('remove')->never();
-
-            $this->mockFormHelper->shouldReceive('attachValidator')->once();
+            $this->mockLessThanValidator->expects('setMax')->with($totalVehicleAuth);
+            $this->mockFormHelper->expects('attachValidator')->with(
+                $mockForm,
+                $formField,
+                $this->mockLessThanValidator
+            );
         } else {
-            $this->mockFormHelper->shouldReceive('remove')->with($mockForm, 'fields->numberOfDiscs')->once();
+            $this->mockFormHelper->expects('remove')->with($mockForm, $formField);
         }
 
         $continuationDetail = [
@@ -266,7 +272,7 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
         $this->sut->alterFormNumberOfDiscs(
             $mockForm,
             $continuationDetail,
-            ['fields' => ['totalVehicleAuthorisation' => 50]]
+            ['fields' => ['totalVehicleAuthorisation' => $totalVehicleAuth]],
         );
     }
 
@@ -279,11 +285,18 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
     public function testFormNumberOfDiscsDisables($enabled, $status)
     {
         $mockForm = \Mockery::mock(Form::class);
+        $formField = 'fields->numberOfDiscs';
+        $totalVehicleAuth = 50;
 
         if ($enabled) {
-            $this->mockFormHelper->shouldReceive('attachValidator')->once();
+            $this->mockLessThanValidator->expects('setMax')->with($totalVehicleAuth);
+            $this->mockFormHelper->expects('attachValidator')->with(
+                $mockForm,
+                $formField,
+                $this->mockLessThanValidator
+            );
         } else {
-            $this->mockFormHelper->shouldReceive('disableElement')->with($mockForm, 'fields->numberOfDiscs')->once();
+            $this->mockFormHelper->expects('disableElement')->with($mockForm, $formField);
         }
 
         $continuationDetail = [
@@ -297,21 +310,21 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
         $this->sut->alterFormNumberOfDiscs(
             $mockForm,
             $continuationDetail,
-            ['fields' => ['totalVehicleAuthorisation' => 50]]
+            ['fields' => ['totalVehicleAuthorisation' => $totalVehicleAuth]],
         );
     }
 
-    public function dataProviderAlterFormNumberOfCommunityLicences()
+    public function dataProviderAlterFormNumberOfCommunityLicences(): array
     {
         return [
-            [false, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_RESTRICTED],
-            [false, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_SPECIAL_RESTRICTED],
-            [true, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL],
-            [false, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_STANDARD_NATIONAL],
-            [true, RefData::LICENCE_CATEGORY_PSV, RefData::LICENCE_TYPE_RESTRICTED],
-            [false, RefData::LICENCE_CATEGORY_PSV, RefData::LICENCE_TYPE_SPECIAL_RESTRICTED],
-            [true, RefData::LICENCE_CATEGORY_PSV, RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL],
-            [false, RefData::LICENCE_CATEGORY_PSV, RefData::LICENCE_TYPE_STANDARD_NATIONAL],
+            [false, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_RESTRICTED, 4],
+            [false, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_SPECIAL_RESTRICTED, 4],
+            [true, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL, 4],
+            [false, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_STANDARD_NATIONAL, 4],
+            [true, RefData::LICENCE_CATEGORY_PSV, RefData::LICENCE_TYPE_RESTRICTED, 1],
+            [false, RefData::LICENCE_CATEGORY_PSV, RefData::LICENCE_TYPE_SPECIAL_RESTRICTED, 1],
+            [true, RefData::LICENCE_CATEGORY_PSV, RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL, 1],
+            [false, RefData::LICENCE_CATEGORY_PSV, RefData::LICENCE_TYPE_STANDARD_NATIONAL, 1],
         ];
     }
 
@@ -322,15 +335,21 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
      * @param string $goodsOrPsv
      * @param string $licenceType
      */
-    public function testAlterFormNumberOfCommunityLicences($displayed, $goodsOrPsv, $licenceType)
+    public function testAlterFormNumberOfCommunityLicences($displayed, $goodsOrPsv, $licenceType, $maxAuth)
     {
         $mockForm = \Mockery::mock(Form::class);
+        $formField = 'fields->numberOfCommunityLicences';
 
         if ($displayed) {
             $this->mockFormHelper->shouldReceive('remove')->never();
-            $this->mockFormHelper->shouldReceive('attachValidator')->once();
+            $this->mockLessThanValidator->expects('setMax')->with($maxAuth);
+            $this->mockFormHelper->expects('attachValidator')->with(
+                $mockForm,
+                $formField,
+                $this->mockLessThanValidator
+            );
         } else {
-            $this->mockFormHelper->shouldReceive('remove')->with($mockForm, 'fields->numberOfCommunityLicences')->once();
+            $this->mockFormHelper->expects('remove')->with($mockForm, $formField);
         }
 
         $continuationDetail = [
@@ -357,14 +376,21 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
     public function testAlterFormNumberOfCommunityLicencesDisables($enabled, $status)
     {
         $mockForm = \Mockery::mock(Form::class);
+        $totalVehicleAuth = 4;
+        $formField = 'fields->numberOfCommunityLicences';
 
         $this->mockFormHelper->shouldReceive('remove')->never();
 
         if ($enabled) {
-            $this->mockFormHelper->shouldReceive('attachValidator')->once();
+            $this->mockLessThanValidator->expects('setMax')->with($totalVehicleAuth);
+            $this->mockFormHelper->expects('attachValidator')->with(
+                $mockForm,
+                $formField,
+                $this->mockLessThanValidator
+            );
+
         } else {
-            $this->mockFormHelper->shouldReceive('disableElement')->with($mockForm, 'fields->numberOfCommunityLicences')
-                ->once();
+            $this->mockFormHelper->expects('disableElement')->with($mockForm, $formField);
         }
 
         $continuationDetail = [
@@ -372,7 +398,7 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
             'licence' => [
                 'goodsOrPsv' => ['id' => 'lcat_gv'],
                 'licenceType' => ['id' => 'ltyp_si'],
-                'totAuthVehicles' => 4
+                'totAuthVehicles' => $totalVehicleAuth,
             ]
         ];
         $this->sut->alterFormNumberOfCommunityLicences(

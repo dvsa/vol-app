@@ -7,7 +7,7 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
-use Laminas\Validator\Translator\TranslatorInterface;
+use Laminas\Validator\LessThan;
 use Laminas\View\HelperPluginManager;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractController;
@@ -16,7 +16,7 @@ use Olcs\Data\Mapper\Continuation as ContinuationMapper;
 class ContinuationController extends AbstractController
 {
     protected FlashMessengerHelperService $flashMessengerHelper;
-    protected TranslatorInterface $translationHelper;
+    protected LessThan $lessThanValidator;
 
     public function __construct(
         ScriptFactory $scriptFactory,
@@ -24,7 +24,7 @@ class ContinuationController extends AbstractController
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
         FlashMessengerHelperService $flashMessengerHelper,
-        TranslatorInterface $translationHelper
+        LessThan $lessThanValidator
     ) {
         parent::__construct(
             $scriptFactory,
@@ -33,7 +33,7 @@ class ContinuationController extends AbstractController
             $viewHelperManager
         );
         $this->flashMessengerHelper = $flashMessengerHelper;
-        $this->translationHelper = $translationHelper;
+        $this->lessThanValidator = $lessThanValidator;
     }
 
     /**
@@ -51,16 +51,16 @@ class ContinuationController extends AbstractController
         $numNotCeasedDiscs = $data['numNotCeasedDiscs'];
 
         /**
- * @var \Common\Form\Form $form
-*/
+        * @var \Common\Form\Form $form
+        */
         $form = $this->getForm('UpdateContinuation');
 
         $this->alterForm($form, $continuationDetail, $hasOutstandingContinuationFee);
         $this->populateFormDefaultValues($form, $continuationDetail, $numNotCeasedDiscs);
 
         /**
- * @var \Laminas\Http\Request $request
-*/
+        * @var \Laminas\Http\Request $request
+        */
         $request = $this->getRequest();
 
         if ($request->isPost()) {
@@ -443,6 +443,8 @@ class ContinuationController extends AbstractController
     protected function alterFormNumberOfDiscs($form, $continuationDetail, $postData)
     {
         $licence = $continuationDetail['licence'];
+        $formField = 'fields->numberOfDiscs';
+
         if (
             $licence['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_PSV
             && ($licence['licenceType']['id'] === RefData::LICENCE_TYPE_RESTRICTED
@@ -456,23 +458,13 @@ class ContinuationController extends AbstractController
             }
 
             if ($this->isAllowedContinuationStatuses($continuationDetail['status']['id'])) {
-                $this->formHelper->attachValidator(
-                    $form,
-                    'fields->numberOfDiscs',
-                    new \Laminas\Validator\LessThan(
-                        [
-                        'max' => $totalVehicles,
-                        'inclusive' => true,
-                        'translator' => $this->translationHelper,
-                        'message' => 'update-continuation.validation.total-auth-vehicles'
-                        ]
-                    )
-                );
+                $this->lessThanValidator->setMax($totalVehicles);
+                $this->formHelper->attachValidator($form, $formField, $this->lessThanValidator);
             } else {
-                $this->formHelper->disableElement($form, 'fields->numberOfDiscs');
+                $this->formHelper->disableElement($form, $formField);
             }
         } else {
-            $this->formHelper->remove($form, 'fields->numberOfDiscs');
+            $this->formHelper->remove($form, $formField);
         }
     }
 
@@ -508,6 +500,8 @@ class ContinuationController extends AbstractController
     protected function alterFormNumberOfCommunityLicences($form, $continuationDetail, $postData)
     {
         $licence = $continuationDetail['licence'];
+        $formField = 'fields->numberOfCommunityLicences';
+
         if ($this->displayCommunityLicenceElement($licence)) {
             // Displayed by default
             $totalVehicles = $licence['totAuthVehicles'];
@@ -519,23 +513,13 @@ class ContinuationController extends AbstractController
             }
 
             if ($this->isAllowedContinuationStatuses($continuationDetail['status']['id'])) {
-                $this->formHelper->attachValidator(
-                    $form,
-                    'fields->numberOfCommunityLicences',
-                    new \Laminas\Validator\LessThan(
-                        [
-                        'max' => $totalVehicles,
-                        'inclusive' => true,
-                        'translator' => $this->translationHelper,
-                        'message' => 'update-continuation.validation.total-auth-vehicles'
-                        ]
-                    )
-                );
+                $this->lessThanValidator->setMax($totalVehicles);
+                $this->formHelper->attachValidator($form, $formField, $this->lessThanValidator);
             } else {
-                $this->formHelper->disableElement($form, 'fields->numberOfCommunityLicences');
+                $this->formHelper->disableElement($form, $formField);
             }
         } else {
-            $this->formHelper->remove($form, 'fields->numberOfCommunityLicences');
+            $this->formHelper->remove($form, $formField);
         }
     }
 }
