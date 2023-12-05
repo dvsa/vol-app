@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7f333e9da50bf58bf6fe716e0330e1ac",
+    "content-hash": "b975eab7ae08619705afc3f79137f651",
     "packages": [
         {
             "name": "brick/varexporter",
@@ -4141,31 +4141,39 @@
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "4.206.44",
+            "version": "5.0.0.alpha1",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-auth/4.206.44/olcs-olcs-auth-4.206.44.zip",
-                "reference": "289513165b543e4adc8478e4db30f59c52b3d82b",
-                "shasum": "289513165b543e4adc8478e4db30f59c52b3d82b"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/olcs/olcs-auth/5.0.0.alpha1/olcs-olcs-auth-5.0.0.alpha1.zip",
+                "reference": "18c095f2dd4c89da0a7dae8a43588cf002234eef",
+                "shasum": ""
             },
             "require": {
-                "elendev/composer-push": "^1.0.3",
-                "olcs/olcs-laminas": "~2.5.0 || ~3.0.0",
-                "php": ">=7.4"
+                "container-interop/container-interop": "^1.2",
+                "laminas/laminas-authentication": "^2.5",
+                "laminas/laminas-form": "^2.7",
+                "laminas/laminas-http": "^2.5",
+                "laminas/laminas-mvc": "^2.7.14",
+                "laminas/laminas-servicemanager": "^2.7.5",
+                "laminas/laminas-session": "^2.8.1",
+                "laminas/laminas-stdlib": "^2.7.9",
+                "laminas/laminas-view": "^2.11",
+                "php": "^7.4",
+                "psr/container": "^1.1.2"
             },
             "require-dev": {
-                "olcs/olcs-common": "~4.206.0",
-                "olcs/olcs-devtools": "~4.206.0",
-                "olcs/olcs-transfer": "~4.206.0"
+                "bamarni/composer-bin-plugin": "^1.8",
+                "johnkary/phpunit-speedtrap": "^4.0",
+                "mockery/mockery": "^1.6",
+                "olcs/olcs-common": "~4.206.511",
+                "olcs/olcs-transfer": "^5.0.0",
+                "phpunit/phpunit": "^9.6"
             },
             "type": "library",
             "extra": {
-                "nexus-push": {
-                    "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/olcs-auth",
-                    "ignore": [
-                        "test/",
-                        "composer.phar"
-                    ]
+                "bamarni-bin": {
+                    "bin-links": true,
+                    "forward-command": true
                 }
             },
             "autoload": {
@@ -4173,28 +4181,14 @@
                     "Dvsa\\Olcs\\Auth\\": "src/"
                 }
             },
-            "scripts": {
-                "ut": [
-                    "phpunit -c test/phpunit.xml --stop-on-failure"
-                ],
-                "review": [
-                    "review"
-                ],
-                "cs": [
-                    "phpcs --severity=1 --standard=vendor/dvsa/coding-standards/src/Profiles/DVSA/CS/ruleset.xml"
-                ],
-                "coverage": [
-                    "phpunit -c test/phpunit.xml --coverage-html ./test/coverage/html"
-                ],
-                "sonar": [
-                    "phpunit -c test/phpunit.xml --coverage-clover ./test/coverage/coverage-report.clover --log-junit ./test/coverage/log.junit"
-                ],
-                "update-syms": [
-                    "composer-update-syms"
-                ]
-            },
+            "license": [
+                "MIT"
+            ],
             "description": "OLCS Authentication",
-            "time": "2023-07-10T08:57:30+00:00"
+            "support": {
+                "source": "https://github.com/dvsa/olcs-auth/tree/5.0.0.alpha1"
+            },
+            "time": "2023-12-05T14:02:14+00:00"
         },
         {
             "name": "olcs/olcs-common",
@@ -4269,19 +4263,19 @@
         },
         {
             "name": "olcs/olcs-frontend-deps",
-            "version": "4.206.5",
+            "version": "4.206.6",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-frontend-deps/4.206.5/olcs-olcs-frontend-deps-4.206.5.zip",
-                "reference": "b169d5e819495a96e7f4fb3b3c6187a31d0b6049",
-                "shasum": "b169d5e819495a96e7f4fb3b3c6187a31d0b6049"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-frontend-deps/4.206.6/olcs-olcs-frontend-deps-4.206.6.zip",
+                "reference": "98bfab9e865941e35716aa8fed54e933a1c46905",
+                "shasum": "98bfab9e865941e35716aa8fed54e933a1c46905"
             },
             "require": {
                 "doctrine/annotations": "^1.14.2",
                 "doctrine/doctrine-module": "^1",
                 "ext-intl": "*",
                 "firebase/php-jwt": "^6.0",
-                "olcs/olcs-auth": "~4.206.0",
+                "olcs/olcs-auth": "^5.0.0",
                 "olcs/olcs-common": "~4.206.0",
                 "olcs/olcs-logging": "^5.0.0",
                 "olcs/olcs-transfer": "^5.0.0",
@@ -4298,7 +4292,7 @@
                 }
             },
             "description": "List of front end dependencies, shared between internal and selfserve nodes",
-            "time": "2023-12-04T14:01:31+00:00"
+            "time": "2023-12-05T14:48:57+00:00"
         },
         {
             "name": "olcs/olcs-laminas",
@@ -8913,5 +8907,5 @@
     "platform-overrides": {
         "php": "7.4.33"
     },
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
