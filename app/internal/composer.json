@@ -10,7 +10,8 @@
             "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy",
             "only": [
                 "olcs/olcs-logging",
-                "olcs/olcs-utils"
+                "olcs/olcs-utils",
+                "olcs/olcs-transfer"
             ]
         },
         {
