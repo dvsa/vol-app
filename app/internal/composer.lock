@@ -4399,11 +4399,11 @@
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "5.0.0.alpha1",
+            "version": "5.0.0-alpha.2",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/olcs/olcs-transfer/5.0.0.alpha1/olcs-olcs-transfer-5.0.0.alpha1.zip",
-                "reference": "9d457fdb8d4bac53e7d484021c3d952979b12109",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/olcs/olcs-transfer/5.0.0-alpha.2/olcs-olcs-transfer-5.0.0-alpha.2.zip",
+                "reference": "89ee9fc602ac8ce6293d4865e7851fa75a85c760",
                 "shasum": ""
             },
             "require": {
@@ -4439,9 +4439,9 @@
             },
             "description": "OLCS Transfer",
             "support": {
-                "source": "https://github.com/dvsa/olcs-transfer/tree/5.0.0.alpha1"
+                "source": "https://github.com/dvsa/olcs-transfer/tree/5.0.0-alpha.2"
             },
-            "time": "2023-12-01T11:59:16+00:00"
+            "time": "2023-12-11T16:50:48+00:00"
         },
         {
             "name": "olcs/olcs-utils",
@@ -8907,5 +8907,5 @@
     "platform-overrides": {
         "php": "7.4.33"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
