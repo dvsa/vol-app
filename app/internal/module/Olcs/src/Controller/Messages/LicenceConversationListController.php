@@ -2,36 +2,22 @@
 
 namespace Olcs\Controller\Messages;
 
+use Common\Controller\Interfaces\ToggleAwareInterface;
+use Common\FeatureToggle;
+use Dvsa\Olcs\Transfer\Query\Messaging\Conversations\ByLicence as ConversationsByLicenceQuery;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
-use Dvsa\Olcs\Transfer\Query\Messaging\GetConversationList;
-use Dvsa\Olcs\Transfer\Query\IrhpApplication\InternalApplicationsSummary;
-use Common\Controller\Interfaces\ToggleAwareInterface;
-use Common\FeatureToggle;
-use Olcs\Controller\Interfaces\RightViewProvider;
-use Olcs\Listener\RouteParam\Licence;
 
 class LicenceConversationListController extends AbstractInternalController implements LeftViewProvider, LicenceControllerInterface, ToggleAwareInterface
 {
-
     protected $navigationId = 'conversations';
     protected $listVars = ['licence'];
-    protected $listDto = GetConversationList::class;
-    protected $routeIdentifier = 'messages';
-    protected $tableName = 'conversations-list'; 
+    protected $listDto = ConversationsByLicenceQuery::class;
+    protected $tableName = 'conversations-list';
     protected $tableViewTemplate = 'pages/table';
-    protected $toggleConfig = [
-        'default' => [
-            FeatureToggle::MESSAGING
-        ],
-    ];
-
-    public function indexAction()
-    {
-        return parent::indexAction();
-    }
+    protected $toggleConfig = ['default' => [FeatureToggle::MESSAGING]];
 
     /**
      * Get left view
