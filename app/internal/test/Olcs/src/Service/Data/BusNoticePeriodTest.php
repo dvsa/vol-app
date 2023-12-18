@@ -6,7 +6,7 @@ use Common\Exception\DataServiceException;
 use Dvsa\Olcs\Transfer\Query\Bus\BusNoticePeriodList as Qry;
 use Olcs\Service\Data\BusNoticePeriod;
 use Mockery as m;
-use CommonTest\Service\Data\AbstractDataServiceTestCase;
+use CommonTest\Common\Service\Data\AbstractDataServiceTestCase;
 
 /**
  * Class BusNoticePeriod Test

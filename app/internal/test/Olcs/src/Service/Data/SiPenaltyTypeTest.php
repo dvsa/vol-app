@@ -3,7 +3,7 @@
 namespace OlcsTest\Service\Data;
 
 use Common\Exception\DataServiceException;
-use CommonTest\Service\Data\AbstractDataServiceTestCase;
+use CommonTest\Common\Service\Data\AbstractDataServiceTestCase;
 use Dvsa\Olcs\Transfer\Query\Si\SiPenaltyTypeListData as Qry;
 use Mockery as m;
 use Olcs\Service\Data\SiPenaltyType;

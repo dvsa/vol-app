@@ -5,7 +5,7 @@ namespace OlcsTest\Service\Data;
 use Olcs\Service\Data\DocumentCategory;
 use Mockery as m;
 use Dvsa\Olcs\Transfer\Query\Category\GetList as Qry;
-use CommonTest\Service\Data\AbstractListDataServiceTestCase;
+use CommonTest\Common\Service\Data\AbstractListDataServiceTestCase;
 
 /**
  * @covers \Olcs\Service\Data\DocumentCategory

@@ -12,7 +12,7 @@ use Common\Service\Data\Licence as LicenceDataService;
 use Olcs\Service\Data\LicenceDecisionLegislation;
 use Mockery as m;
 use Dvsa\Olcs\Transfer\Query\Decision\DecisionList as Qry;
-use CommonTest\Service\Data\AbstractDataServiceTestCase;
+use CommonTest\Common\Service\Data\AbstractDataServiceTestCase;
 
 /**
  * LicenceDecisionLegislation data service test

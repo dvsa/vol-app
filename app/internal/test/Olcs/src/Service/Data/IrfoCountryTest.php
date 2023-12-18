@@ -6,7 +6,7 @@ use Common\Exception\DataServiceException;
 use Olcs\Service\Data\IrfoCountry;
 use Mockery as m;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoCountryList as Qry;
-use CommonTest\Service\Data\AbstractDataServiceTestCase;
+use CommonTest\Common\Service\Data\AbstractDataServiceTestCase;
 
 /**
  * Class IrfoCountry Test

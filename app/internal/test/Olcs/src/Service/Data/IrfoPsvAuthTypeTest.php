@@ -6,7 +6,7 @@ use Common\Exception\DataServiceException;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPsvAuthTypeList as Qry;
 use Olcs\Service\Data\IrfoPsvAuthType;
 use Mockery as m;
-use CommonTest\Service\Data\AbstractDataServiceTestCase;
+use CommonTest\Common\Service\Data\AbstractDataServiceTestCase;
 
 /**
  * Class IrfoPsvAuthType Test

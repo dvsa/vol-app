@@ -2,7 +2,7 @@
 
 namespace OlcsTest\Service\Data;
 
-use CommonTest\Service\Data\AbstractListDataServiceTestCase;
+use CommonTest\Common\Service\Data\AbstractListDataServiceTestCase;
 use Olcs\Service\Data\ScannerSubCategory;
 
 /**

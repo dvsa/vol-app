@@ -8,7 +8,7 @@ use Olcs\Service\Data\AssignedToList;
 use Mockery as m;
 use Dvsa\Olcs\Transfer\Query\User\UserListInternal as Qry;
 use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount as MyAccount;
-use CommonTest\Service\Data\AbstractListDataServiceTestCase;
+use CommonTest\Common\Service\Data\AbstractListDataServiceTestCase;
 
 class AssignedToListTest extends AbstractListDataServiceTestCase
 {

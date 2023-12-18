@@ -10,7 +10,7 @@ namespace OlcsTest\Service\Data;
 use Olcs\Service\Data\UserWithName;
 use Mockery as m;
 use Dvsa\Olcs\Transfer\Query\User\UserList as Qry;
-use CommonTest\Service\Data\AbstractDataServiceTestCase;
+use CommonTest\Common\Service\Data\AbstractDataServiceTestCase;
 
 /**
  * UserWithName data service test

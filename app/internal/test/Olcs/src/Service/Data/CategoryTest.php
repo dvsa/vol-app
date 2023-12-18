@@ -6,7 +6,7 @@ use Common\Exception\DataServiceException;
 use Olcs\Service\Data\Category;
 use Mockery as m;
 use Dvsa\Olcs\Transfer\Query\Category\GetList as Qry;
-use CommonTest\Service\Data\AbstractListDataServiceTestCase;
+use CommonTest\Common\Service\Data\AbstractListDataServiceTestCase;
 
 /**
  * @covers \Olcs\Service\Data\Category
