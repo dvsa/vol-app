@@ -1065,11 +1065,11 @@
         },
         {
             "name": "firebase/php-jwt",
-            "version": "v6.9.0",
+            "version": "v6.10.0",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/firebase/php-jwt/v6.9.0/firebase-php-jwt-v6.9.0.zip",
-                "reference": "f03270e63eaccf3019ef0f32849c497385774e11",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/firebase/php-jwt/v6.10.0/firebase-php-jwt-v6.10.0.zip",
+                "reference": "a49db6f0a5033aef5143295342f1c95521b075ff",
                 "shasum": ""
             },
             "require": {
@@ -1116,9 +1116,9 @@
             ],
             "support": {
                 "issues": "https://github.com/firebase/php-jwt/issues",
-                "source": "https://github.com/firebase/php-jwt/tree/v6.9.0"
+                "source": "https://github.com/firebase/php-jwt/tree/v6.10.0"
             },
-            "time": "2023-10-05T00:24:42+00:00"
+            "time": "2023-12-01T16:26:39+00:00"
         },
         {
             "name": "laminas/laminas-authentication",
@@ -3729,11 +3729,11 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v4.17.1",
+            "version": "v4.18.0",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/nikic/php-parser/v4.17.1/nikic-php-parser-v4.17.1.zip",
-                "reference": "a6303e50c90c355c7eeee2c4a8b27fe8dc8fef1d",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/nikic/php-parser/v4.18.0/nikic-php-parser-v4.18.0.zip",
+                "reference": "1bcbb2179f97633e98bbbc87044ee2611c7d7999",
                 "shasum": ""
             },
             "require": {
@@ -3773,9 +3773,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v4.17.1"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v4.18.0"
             },
-            "time": "2023-08-13T19:53:39+00:00"
+            "time": "2023-12-10T21:03:43+00:00"
         },
         {
             "name": "olcs/olcs-auth",
@@ -3830,36 +3830,55 @@
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.514",
+            "version": "5.0.0-alpha.1",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/olcs/olcs-common/4.206.514/olcs-olcs-common-4.206.514.zip",
-                "reference": "3de6e57bfac648414e68477f01c080bdabf069b4",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/olcs/olcs-common/5.0.0-alpha.1/olcs-olcs-common-5.0.0-alpha.1.zip",
+                "reference": "0a9748ed58e43b414dbe572383a0ff85bf98f3de",
                 "shasum": ""
             },
             "require": {
-                "olcs/olcs-laminas": "~2.5.0 || ~3.0.0",
-                "php": ">=7.4"
+                "container-interop/container-interop": "^1.2",
+                "ezyang/htmlpurifier": "^4.17",
+                "laminas/laminas-authentication": "^2.6",
+                "laminas/laminas-cache": "^2.8",
+                "laminas/laminas-code": "^3.4.1",
+                "laminas/laminas-eventmanager": "^2.6",
+                "laminas/laminas-filter": "^2.9",
+                "laminas/laminas-form": "^2.13",
+                "laminas/laminas-http": "^2.8",
+                "laminas/laminas-i18n": "^2.14",
+                "laminas/laminas-inputfilter": "^2.10",
+                "laminas/laminas-modulemanager": "^2.9",
+                "laminas/laminas-mvc": "^2.7",
+                "laminas/laminas-navigation": "2.13.0",
+                "laminas/laminas-servicemanager": "^2.7",
+                "laminas/laminas-stdlib": "^2.7",
+                "laminas/laminas-validator": "^2.11",
+                "laminas/laminas-view": "^2.11",
+                "olcs/olcs-logging": "^5.0.0",
+                "olcs/olcs-transfer": "^5.0.0",
+                "olcs/olcs-utils": "^5.0",
+                "php": "^7.4"
             },
             "require-dev": {
+                "bamarni/composer-bin-plugin": "^1.8",
+                "dms/phpunit-arraysubset-asserts": "^0.5.0",
                 "doctrine/annotations": "^1.14.2",
-                "olcs/olcs-devtools": "~4.206.0",
-                "olcs/olcs-logging": "^5.0.0",
-                "olcs/olcs-transfer": "~4.206.0",
-                "olcs/olcs-utils": "^5.0.0",
-                "phpstan/phpstan": "^0.12.100",
-                "soflomo/purifier": "^1.0",
-                "symfony/lock": "^5"
+                "johnkary/phpunit-speedtrap": "^4.0",
+                "laminas/laminas-serializer": "^2.10",
+                "lm-commons/lmc-rbac-mvc": "^2.6",
+                "mikey179/vfsstream": "~v1.6.11",
+                "mockery/mockery": "^1.6.7",
+                "phpunit/phpunit": "^9.6",
+                "symfony/filesystem": "^5.4",
+                "symfony/lock": "^5.4"
             },
             "type": "library",
             "extra": {
-                "nexus-push": {
-                    "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/olcs-common",
-                    "ignore": [
-                        "composer.phar",
-                        "build.xml",
-                        "composer-update.sh"
-                    ]
+                "bamarni-bin": {
+                    "bin-links": true,
+                    "forward-command": true
                 }
             },
             "autoload": {
@@ -3872,18 +3891,18 @@
             },
             "description": "Common library for the OLCS Project",
             "support": {
-                "source": "https://github.com/dvsa/olcs-common/tree/4.206.514"
+                "source": "https://github.com/dvsa/olcs-common/tree/5.0.0-alpha.1"
             },
-            "time": "2023-11-30T11:57:35+00:00"
+            "time": "2023-12-15T09:41:55+00:00"
         },
         {
             "name": "olcs/olcs-frontend-deps",
-            "version": "4.206.6",
+            "version": "4.206.7",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-frontend-deps/4.206.6/olcs-olcs-frontend-deps-4.206.6.zip",
-                "reference": "98bfab9e865941e35716aa8fed54e933a1c46905",
-                "shasum": "98bfab9e865941e35716aa8fed54e933a1c46905"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-frontend-deps/4.206.7/olcs-olcs-frontend-deps-4.206.7.zip",
+                "reference": "d9cdc7c021ecb4e1ff7d88c8c6f55a3905f6366f",
+                "shasum": "d9cdc7c021ecb4e1ff7d88c8c6f55a3905f6366f"
             },
             "require": {
                 "doctrine/annotations": "^1.14.2",
@@ -3891,7 +3910,7 @@
                 "ext-intl": "*",
                 "firebase/php-jwt": "^6.0",
                 "olcs/olcs-auth": "^5.0.0",
-                "olcs/olcs-common": "~4.206.0",
+                "olcs/olcs-common": "^5.0.0",
                 "olcs/olcs-logging": "^5.0.0",
                 "olcs/olcs-transfer": "^5.0.0",
                 "olcs/olcs-utils": "^5.0.0",
@@ -3907,7 +3926,7 @@
                 }
             },
             "description": "List of front end dependencies, shared between internal and selfserve nodes",
-            "time": "2023-12-05T14:48:57+00:00"
+            "time": "2023-12-15T11:08:53+00:00"
         },
         {
             "name": "olcs/olcs-laminas",
@@ -4014,11 +4033,11 @@
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "5.0.0-alpha.2",
+            "version": "5.0.0-alpha.3",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/olcs/olcs-transfer/5.0.0-alpha.2/olcs-olcs-transfer-5.0.0-alpha.2.zip",
-                "reference": "89ee9fc602ac8ce6293d4865e7851fa75a85c760",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/olcs/olcs-transfer/5.0.0-alpha.3/olcs-olcs-transfer-5.0.0-alpha.3.zip",
+                "reference": "d83cd24b3a180167ed17add4a2557dff2d03a460",
                 "shasum": ""
             },
             "require": {
@@ -4054,9 +4073,9 @@
             },
             "description": "OLCS Transfer",
             "support": {
-                "source": "https://github.com/dvsa/olcs-transfer/tree/5.0.0-alpha.2"
+                "source": "https://github.com/dvsa/olcs-transfer/tree/5.0.0-alpha.3"
             },
-            "time": "2023-12-11T16:50:48+00:00"
+            "time": "2023-12-13T13:42:29+00:00"
         },
         {
             "name": "olcs/olcs-utils",
@@ -4544,11 +4563,11 @@
         },
         {
             "name": "symfony/dependency-injection",
-            "version": "v5.4.32",
+            "version": "v5.4.33",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/dependency-injection/v5.4.32/symfony-dependency-injection-v5.4.32.zip",
-                "reference": "d5d48f215ed73f7973d01256b9a2fac729bef759",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/dependency-injection/v5.4.33/symfony-dependency-injection-v5.4.33.zip",
+                "reference": "14969a558cd6382b2a12b14b20ef9a851a02da79",
                 "shasum": ""
             },
             "require": {
@@ -4607,7 +4626,7 @@
             "description": "Allows you to standardize and centralize the way objects are constructed in your application",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/dependency-injection/tree/v5.4.32"
+                "source": "https://github.com/symfony/dependency-injection/tree/v5.4.33"
             },
             "funding": [
                 {
@@ -4623,7 +4642,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-11-29T06:58:28+00:00"
+            "time": "2023-11-30T08:15:37+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -5801,11 +5820,11 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "7.8.0",
+            "version": "7.8.1",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/guzzlehttp/guzzle/7.8.0/guzzlehttp-guzzle-7.8.0.zip",
-                "reference": "1110f66a6530a40fe7aea0378fe608ee2b2248f9",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/guzzlehttp/guzzle/7.8.1/guzzlehttp-guzzle-7.8.1.zip",
+                "reference": "41042bc7ab002487b876a0683fc8dce04ddce104",
                 "shasum": ""
             },
             "require": {
@@ -5820,11 +5839,11 @@
                 "psr/http-client-implementation": "1.0"
             },
             "require-dev": {
-                "bamarni/composer-bin-plugin": "^1.8.1",
+                "bamarni/composer-bin-plugin": "^1.8.2",
                 "ext-curl": "*",
                 "php-http/client-integration-tests": "dev-master#2c025848417c1135031fdf9c728ee53d0a7ceaee as 3.0.999",
                 "php-http/message-factory": "^1.1",
-                "phpunit/phpunit": "^8.5.29 || ^9.5.23",
+                "phpunit/phpunit": "^8.5.36 || ^9.6.15",
                 "psr/log": "^1.1 || ^2.0 || ^3.0"
             },
             "suggest": {
@@ -5901,7 +5920,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/guzzle/issues",
-                "source": "https://github.com/guzzle/guzzle/tree/7.8.0"
+                "source": "https://github.com/guzzle/guzzle/tree/7.8.1"
             },
             "funding": [
                 {
@@ -5917,23 +5936,23 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-08-27T10:20:53+00:00"
+            "time": "2023-12-03T20:35:24+00:00"
         },
         {
             "name": "guzzlehttp/promises",
-            "version": "2.0.1",
+            "version": "2.0.2",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/guzzlehttp/promises/2.0.1/guzzlehttp-promises-2.0.1.zip",
-                "reference": "111166291a0f8130081195ac4556a5587d7f1b5d",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/guzzlehttp/promises/2.0.2/guzzlehttp-promises-2.0.2.zip",
+                "reference": "bbff78d96034045e58e13dedd6ad91b5d1253223",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2.5 || ^8.0"
             },
             "require-dev": {
-                "bamarni/composer-bin-plugin": "^1.8.1",
-                "phpunit/phpunit": "^8.5.29 || ^9.5.23"
+                "bamarni/composer-bin-plugin": "^1.8.2",
+                "phpunit/phpunit": "^8.5.36 || ^9.6.15"
             },
             "type": "library",
             "extra": {
@@ -5978,7 +5997,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/promises/issues",
-                "source": "https://github.com/guzzle/promises/tree/2.0.1"
+                "source": "https://github.com/guzzle/promises/tree/2.0.2"
             },
             "funding": [
                 {
@@ -5994,15 +6013,15 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-08-03T15:11:55+00:00"
+            "time": "2023-12-03T20:19:20+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "2.6.1",
+            "version": "2.6.2",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/guzzlehttp/psr7/2.6.1/guzzlehttp-psr7-2.6.1.zip",
-                "reference": "be45764272e8873c72dbe3d2edcfdfcc3bc9f727",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/guzzlehttp/psr7/2.6.2/guzzlehttp-psr7-2.6.2.zip",
+                "reference": "45b30f99ac27b5ca93cb4831afe16285f57b8221",
                 "shasum": ""
             },
             "require": {
@@ -6016,9 +6035,9 @@
                 "psr/http-message-implementation": "1.0"
             },
             "require-dev": {
-                "bamarni/composer-bin-plugin": "^1.8.1",
+                "bamarni/composer-bin-plugin": "^1.8.2",
                 "http-interop/http-factory-tests": "^0.9",
-                "phpunit/phpunit": "^8.5.29 || ^9.5.23"
+                "phpunit/phpunit": "^8.5.36 || ^9.6.15"
             },
             "suggest": {
                 "laminas/laminas-httphandlerrunner": "Emit PSR-7 responses"
@@ -6088,7 +6107,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/psr7/issues",
-                "source": "https://github.com/guzzle/psr7/tree/2.6.1"
+                "source": "https://github.com/guzzle/psr7/tree/2.6.2"
             },
             "funding": [
                 {
@@ -6104,7 +6123,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-08-27T10:13:57+00:00"
+            "time": "2023-12-03T20:05:35+00:00"
         },
         {
             "name": "hamcrest/hamcrest-php",
@@ -6512,11 +6531,11 @@
         },
         {
             "name": "pdepend/pdepend",
-            "version": "2.16.0",
+            "version": "2.16.2",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/pdepend/pdepend/2.16.0/pdepend-pdepend-2.16.0.zip",
-                "reference": "8dfc0c46529e2073fa97986552f80646eedac562",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/pdepend/pdepend/2.16.2/pdepend-pdepend-2.16.2.zip",
+                "reference": "f942b208dc2a0868454d01b29f0c75bbcfc6ed58",
                 "shasum": ""
             },
             "require": {
@@ -6529,7 +6548,6 @@
             "require-dev": {
                 "easy-doc/easy-doc": "0.0.0|^1.2.3",
                 "gregwar/rst": "^1.0",
-                "phpunit/phpunit": "^4.8.36|^5.7.27",
                 "squizlabs/php_codesniffer": "^2.0.0"
             },
             "bin": [
@@ -6558,7 +6576,7 @@
             ],
             "support": {
                 "issues": "https://github.com/pdepend/pdepend/issues",
-                "source": "https://github.com/pdepend/pdepend/tree/2.16.0"
+                "source": "https://github.com/pdepend/pdepend/tree/2.16.2"
             },
             "funding": [
                 {
@@ -6566,7 +6584,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-11-29T08:52:35+00:00"
+            "time": "2023-12-17T18:09:59+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -6669,17 +6687,17 @@
         },
         {
             "name": "phpmd/phpmd",
-            "version": "2.14.1",
+            "version": "2.15.0",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/phpmd/phpmd/2.14.1/phpmd-phpmd-2.14.1.zip",
-                "reference": "442fc2c34edcd5198b442d8647c7f0aec3afabe8",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/phpmd/phpmd/2.15.0/phpmd-phpmd-2.15.0.zip",
+                "reference": "74a1f56e33afad4128b886e334093e98e1b5e7c0",
                 "shasum": ""
             },
             "require": {
                 "composer/xdebug-handler": "^1.0 || ^2.0 || ^3.0",
                 "ext-xml": "*",
-                "pdepend/pdepend": "^2.15.1",
+                "pdepend/pdepend": "^2.16.1",
                 "php": ">=5.3.9"
             },
             "require-dev": {
@@ -6688,7 +6706,6 @@
                 "ext-simplexml": "*",
                 "gregwar/rst": "^1.0",
                 "mikey179/vfsstream": "^1.6.8",
-                "phpunit/phpunit": "^4.8.36 || ^5.7.27",
                 "squizlabs/php_codesniffer": "^2.9.2 || ^3.7.2"
             },
             "bin": [
@@ -6735,7 +6752,7 @@
             "support": {
                 "irc": "irc://irc.freenode.org/phpmd",
                 "issues": "https://github.com/phpmd/phpmd/issues",
-                "source": "https://github.com/phpmd/phpmd/tree/2.14.1"
+                "source": "https://github.com/phpmd/phpmd/tree/2.15.0"
             },
             "funding": [
                 {
@@ -6743,7 +6760,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-09-28T13:07:44+00:00"
+            "time": "2023-12-11T08:22:20+00:00"
         },
         {
             "name": "phpstan/extension-installer",
@@ -7341,11 +7358,11 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.6.14",
+            "version": "9.6.15",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/phpunit/phpunit/9.6.14/phpunit-phpunit-9.6.14.zip",
-                "reference": "43653e6ad7adc22e7b667dd561bf8fcb74c10cf0",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/phpunit/phpunit/9.6.15/phpunit-phpunit-9.6.15.zip",
+                "reference": "05017b80304e0eb3f31d90194a563fd53a6021f1",
                 "shasum": ""
             },
             "require": {
@@ -7418,7 +7435,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.14"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.6.15"
             },
             "funding": [
                 {
@@ -7434,7 +7451,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-12-01T06:10:48+00:00"
+            "time": "2023-12-01T16:55:19+00:00"
         },
         {
             "name": "psr/http-client",
@@ -8542,6 +8559,20 @@
                 "source": "https://github.com/squizlabs/PHP_CodeSniffer",
                 "wiki": "https://github.com/squizlabs/PHP_CodeSniffer/wiki"
             },
+            "funding": [
+                {
+                    "url": "https://github.com/PHPCSStandards",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/jrfnl",
+                    "type": "github"
+                },
+                {
+                    "url": "https://opencollective.com/php_codesniffer",
+                    "type": "open_collective"
+                }
+            ],
             "time": "2021-12-12T21:44:58+00:00"
         },
         {
