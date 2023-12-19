@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b975eab7ae08619705afc3f79137f651",
+    "content-hash": "3cb79b91a181949f3067cf83a339cece",
     "packages": [
         {
             "name": "brick/varexporter",
@@ -1009,61 +1009,6 @@
             "time": "2023-11-06T10:01:58+00:00"
         },
         {
-            "name": "elendev/composer-push",
-            "version": "1.0.4",
-            "dist": {
-                "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/elendev/composer-push/1.0.4/elendev-composer-push-1.0.4.zip",
-                "reference": "74cd140d8481b68284291628c37d92e4c7caebbe",
-                "shasum": ""
-            },
-            "require": {
-                "composer-plugin-api": "^1.1|^2.0",
-                "ext-curl": "*",
-                "ext-json": "*",
-                "ext-zip": "*",
-                "guzzlehttp/guzzle": "^6.0|^7.0",
-                "php": ">=7.2 || ^8.0",
-                "symfony/filesystem": "^4.0|^5.0|^6.0",
-                "symfony/finder": "^4.0|^5.0|^6.0"
-            },
-            "replace": {
-                "elendev/nexus-composer-push": "*"
-            },
-            "require-dev": {
-                "composer/composer": "^1.8 ||  ^2.0",
-                "friendsofphp/php-cs-fixer": "^2.18|^3.4.0",
-                "phpunit/phpunit": "^8 || ^9 || ^10"
-            },
-            "suggest": {
-                "elendev/composer-push": "Replaces the elendev/nexus-composer-push repository, which is deprecated."
-            },
-            "type": "composer-plugin",
-            "extra": {
-                "class": "Elendev\\ComposerPush\\Plugin"
-            },
-            "autoload": {
-                "psr-4": {
-                    "Elendev\\ComposerPush\\": "src/"
-                }
-            },
-            "license": [
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "Elendev",
-                    "email": "jonas.renaudot@gmail.com"
-                }
-            ],
-            "description": "Provide a Push command to composer to push to repositories",
-            "support": {
-                "issues": "https://github.com/Elendev/composer-push/issues",
-                "source": "https://github.com/Elendev/composer-push/tree/1.0.4"
-            },
-            "time": "2023-02-21T09:59:18+00:00"
-        },
-        {
             "name": "ezyang/htmlpurifier",
             "version": "v4.17.0",
             "dist": {
@@ -1174,313 +1119,6 @@
                 "source": "https://github.com/firebase/php-jwt/tree/v6.9.0"
             },
             "time": "2023-10-05T00:24:42+00:00"
-        },
-        {
-            "name": "guzzlehttp/guzzle",
-            "version": "7.8.0",
-            "dist": {
-                "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/guzzlehttp/guzzle/7.8.0/guzzlehttp-guzzle-7.8.0.zip",
-                "reference": "1110f66a6530a40fe7aea0378fe608ee2b2248f9",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "guzzlehttp/promises": "^1.5.3 || ^2.0.1",
-                "guzzlehttp/psr7": "^1.9.1 || ^2.5.1",
-                "php": "^7.2.5 || ^8.0",
-                "psr/http-client": "^1.0",
-                "symfony/deprecation-contracts": "^2.2 || ^3.0"
-            },
-            "provide": {
-                "psr/http-client-implementation": "1.0"
-            },
-            "require-dev": {
-                "bamarni/composer-bin-plugin": "^1.8.1",
-                "ext-curl": "*",
-                "php-http/client-integration-tests": "dev-master#2c025848417c1135031fdf9c728ee53d0a7ceaee as 3.0.999",
-                "php-http/message-factory": "^1.1",
-                "phpunit/phpunit": "^8.5.29 || ^9.5.23",
-                "psr/log": "^1.1 || ^2.0 || ^3.0"
-            },
-            "suggest": {
-                "ext-curl": "Required for CURL handler support",
-                "ext-intl": "Required for Internationalized Domain Name (IDN) support",
-                "psr/log": "Required for using the Log middleware"
-            },
-            "type": "library",
-            "extra": {
-                "bamarni-bin": {
-                    "bin-links": true,
-                    "forward-command": false
-                }
-            },
-            "autoload": {
-                "files": [
-                    "src/functions_include.php"
-                ],
-                "psr-4": {
-                    "GuzzleHttp\\": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Graham Campbell",
-                    "email": "hello@gjcampbell.co.uk",
-                    "homepage": "https://github.com/GrahamCampbell"
-                },
-                {
-                    "name": "Michael Dowling",
-                    "email": "mtdowling@gmail.com",
-                    "homepage": "https://github.com/mtdowling"
-                },
-                {
-                    "name": "Jeremy Lindblom",
-                    "email": "jeremeamia@gmail.com",
-                    "homepage": "https://github.com/jeremeamia"
-                },
-                {
-                    "name": "George Mponos",
-                    "email": "gmponos@gmail.com",
-                    "homepage": "https://github.com/gmponos"
-                },
-                {
-                    "name": "Tobias Nyholm",
-                    "email": "tobias.nyholm@gmail.com",
-                    "homepage": "https://github.com/Nyholm"
-                },
-                {
-                    "name": "Márk Sági-Kazár",
-                    "email": "mark.sagikazar@gmail.com",
-                    "homepage": "https://github.com/sagikazarmark"
-                },
-                {
-                    "name": "Tobias Schultze",
-                    "email": "webmaster@tubo-world.de",
-                    "homepage": "https://github.com/Tobion"
-                }
-            ],
-            "description": "Guzzle is a PHP HTTP client library",
-            "keywords": [
-                "client",
-                "curl",
-                "framework",
-                "http",
-                "http client",
-                "psr-18",
-                "psr-7",
-                "rest",
-                "web service"
-            ],
-            "support": {
-                "issues": "https://github.com/guzzle/guzzle/issues",
-                "source": "https://github.com/guzzle/guzzle/tree/7.8.0"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/GrahamCampbell",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/Nyholm",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/guzzlehttp/guzzle",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2023-08-27T10:20:53+00:00"
-        },
-        {
-            "name": "guzzlehttp/promises",
-            "version": "2.0.1",
-            "dist": {
-                "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/guzzlehttp/promises/2.0.1/guzzlehttp-promises-2.0.1.zip",
-                "reference": "111166291a0f8130081195ac4556a5587d7f1b5d",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.2.5 || ^8.0"
-            },
-            "require-dev": {
-                "bamarni/composer-bin-plugin": "^1.8.1",
-                "phpunit/phpunit": "^8.5.29 || ^9.5.23"
-            },
-            "type": "library",
-            "extra": {
-                "bamarni-bin": {
-                    "bin-links": true,
-                    "forward-command": false
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "GuzzleHttp\\Promise\\": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Graham Campbell",
-                    "email": "hello@gjcampbell.co.uk",
-                    "homepage": "https://github.com/GrahamCampbell"
-                },
-                {
-                    "name": "Michael Dowling",
-                    "email": "mtdowling@gmail.com",
-                    "homepage": "https://github.com/mtdowling"
-                },
-                {
-                    "name": "Tobias Nyholm",
-                    "email": "tobias.nyholm@gmail.com",
-                    "homepage": "https://github.com/Nyholm"
-                },
-                {
-                    "name": "Tobias Schultze",
-                    "email": "webmaster@tubo-world.de",
-                    "homepage": "https://github.com/Tobion"
-                }
-            ],
-            "description": "Guzzle promises library",
-            "keywords": [
-                "promise"
-            ],
-            "support": {
-                "issues": "https://github.com/guzzle/promises/issues",
-                "source": "https://github.com/guzzle/promises/tree/2.0.1"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/GrahamCampbell",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/Nyholm",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/guzzlehttp/promises",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2023-08-03T15:11:55+00:00"
-        },
-        {
-            "name": "guzzlehttp/psr7",
-            "version": "2.6.1",
-            "dist": {
-                "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/guzzlehttp/psr7/2.6.1/guzzlehttp-psr7-2.6.1.zip",
-                "reference": "be45764272e8873c72dbe3d2edcfdfcc3bc9f727",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.2.5 || ^8.0",
-                "psr/http-factory": "^1.0",
-                "psr/http-message": "^1.1 || ^2.0",
-                "ralouphie/getallheaders": "^3.0"
-            },
-            "provide": {
-                "psr/http-factory-implementation": "1.0",
-                "psr/http-message-implementation": "1.0"
-            },
-            "require-dev": {
-                "bamarni/composer-bin-plugin": "^1.8.1",
-                "http-interop/http-factory-tests": "^0.9",
-                "phpunit/phpunit": "^8.5.29 || ^9.5.23"
-            },
-            "suggest": {
-                "laminas/laminas-httphandlerrunner": "Emit PSR-7 responses"
-            },
-            "type": "library",
-            "extra": {
-                "bamarni-bin": {
-                    "bin-links": true,
-                    "forward-command": false
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "GuzzleHttp\\Psr7\\": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Graham Campbell",
-                    "email": "hello@gjcampbell.co.uk",
-                    "homepage": "https://github.com/GrahamCampbell"
-                },
-                {
-                    "name": "Michael Dowling",
-                    "email": "mtdowling@gmail.com",
-                    "homepage": "https://github.com/mtdowling"
-                },
-                {
-                    "name": "George Mponos",
-                    "email": "gmponos@gmail.com",
-                    "homepage": "https://github.com/gmponos"
-                },
-                {
-                    "name": "Tobias Nyholm",
-                    "email": "tobias.nyholm@gmail.com",
-                    "homepage": "https://github.com/Nyholm"
-                },
-                {
-                    "name": "Márk Sági-Kazár",
-                    "email": "mark.sagikazar@gmail.com",
-                    "homepage": "https://github.com/sagikazarmark"
-                },
-                {
-                    "name": "Tobias Schultze",
-                    "email": "webmaster@tubo-world.de",
-                    "homepage": "https://github.com/Tobion"
-                },
-                {
-                    "name": "Márk Sági-Kazár",
-                    "email": "mark.sagikazar@gmail.com",
-                    "homepage": "https://sagikazarmark.hu"
-                }
-            ],
-            "description": "PSR-7 message implementation that also provides common utility methods",
-            "keywords": [
-                "http",
-                "message",
-                "psr-7",
-                "request",
-                "response",
-                "stream",
-                "uri",
-                "url"
-            ],
-            "support": {
-                "issues": "https://github.com/guzzle/psr7/issues",
-                "source": "https://github.com/guzzle/psr7/tree/2.6.1"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/GrahamCampbell",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/Nyholm",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/guzzlehttp/psr7",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2023-08-27T10:13:57+00:00"
         },
         {
             "name": "laminas/laminas-authentication",
@@ -4192,37 +3830,55 @@
         },
         {
             "name": "olcs/olcs-common",
-            "version": "4.206.514",
+            "version": "5.0.0-alpha.1",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-common/4.206.514/olcs-olcs-common-4.206.514.zip",
-                "reference": "6a1f7f18fa1bb34a40bc171280bcb4019ccf975f",
-                "shasum": "6a1f7f18fa1bb34a40bc171280bcb4019ccf975f"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/olcs/olcs-common/5.0.0-alpha.1/olcs-olcs-common-5.0.0-alpha.1.zip",
+                "reference": "0a9748ed58e43b414dbe572383a0ff85bf98f3de",
+                "shasum": ""
             },
             "require": {
-                "elendev/composer-push": "^1.0.3",
-                "olcs/olcs-laminas": "~2.5.0 || ~3.0.0",
-                "php": ">=7.4"
+                "container-interop/container-interop": "^1.2",
+                "ezyang/htmlpurifier": "^4.17",
+                "laminas/laminas-authentication": "^2.6",
+                "laminas/laminas-cache": "^2.8",
+                "laminas/laminas-code": "^3.4.1",
+                "laminas/laminas-eventmanager": "^2.6",
+                "laminas/laminas-filter": "^2.9",
+                "laminas/laminas-form": "^2.13",
+                "laminas/laminas-http": "^2.8",
+                "laminas/laminas-i18n": "^2.14",
+                "laminas/laminas-inputfilter": "^2.10",
+                "laminas/laminas-modulemanager": "^2.9",
+                "laminas/laminas-mvc": "^2.7",
+                "laminas/laminas-navigation": "2.13.0",
+                "laminas/laminas-servicemanager": "^2.7",
+                "laminas/laminas-stdlib": "^2.7",
+                "laminas/laminas-validator": "^2.11",
+                "laminas/laminas-view": "^2.11",
+                "olcs/olcs-logging": "^5.0.0",
+                "olcs/olcs-transfer": "^5.0.0",
+                "olcs/olcs-utils": "^5.0",
+                "php": "^7.4"
             },
             "require-dev": {
+                "bamarni/composer-bin-plugin": "^1.8",
+                "dms/phpunit-arraysubset-asserts": "^0.5.0",
                 "doctrine/annotations": "^1.14.2",
-                "olcs/olcs-devtools": "~4.206.0",
-                "olcs/olcs-logging": "^5.0.0",
-                "olcs/olcs-transfer": "~4.206.0",
-                "olcs/olcs-utils": "^5.0.0",
-                "phpstan/phpstan": "^0.12.100",
-                "soflomo/purifier": "^1.0",
-                "symfony/lock": "^5"
+                "johnkary/phpunit-speedtrap": "^4.0",
+                "laminas/laminas-serializer": "^2.10",
+                "lm-commons/lmc-rbac-mvc": "^2.6",
+                "mikey179/vfsstream": "~v1.6.11",
+                "mockery/mockery": "^1.6.7",
+                "phpunit/phpunit": "^9.6",
+                "symfony/filesystem": "^5.4",
+                "symfony/lock": "^5.4"
             },
             "type": "library",
             "extra": {
-                "nexus-push": {
-                    "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/olcs-common",
-                    "ignore": [
-                        "composer.phar",
-                        "build.xml",
-                        "composer-update.sh"
-                    ]
+                "bamarni-bin": {
+                    "bin-links": true,
+                    "forward-command": true
                 }
             },
             "autoload": {
@@ -4233,42 +3889,20 @@
                     "./Common/Module.php"
                 ]
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "CommonTest\\": "test/Common/src/"
-                }
-            },
-            "scripts": {
-                "ut": [
-                    "vendor/bin/phpunit -c test/phpunit.xml --stop-on-failure"
-                ],
-                "review": [
-                    "vendor/bin/review"
-                ],
-                "cs": [
-                    "vendor/bin/phpcs --severity=1 --standard=vendor/dvsa/coding-standards/src/Profiles/DVSA/CS/ruleset.xml"
-                ],
-                "coverage": [
-                    "vendor/bin/phpunit -c test/phpunit.xml --coverage-html ./test/coverage/html"
-                ],
-                "sonar": [
-                    "vendor/bin/phpunit -c test/phpunit.xml --coverage-clover ./test/coverage/coverage-report.clover --log-junit ./test/coverage/log.junit"
-                ],
-                "update-syms": [
-                    "vendor/bin/composer-update-syms"
-                ]
-            },
             "description": "Common library for the OLCS Project",
-            "time": "2023-11-30T12:00:25+00:00"
+            "support": {
+                "source": "https://github.com/dvsa/olcs-common/tree/5.0.0-alpha.1"
+            },
+            "time": "2023-12-15T09:41:55+00:00"
         },
         {
             "name": "olcs/olcs-frontend-deps",
-            "version": "4.206.6",
+            "version": "4.206.7",
             "dist": {
                 "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-frontend-deps/4.206.6/olcs-olcs-frontend-deps-4.206.6.zip",
-                "reference": "98bfab9e865941e35716aa8fed54e933a1c46905",
-                "shasum": "98bfab9e865941e35716aa8fed54e933a1c46905"
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS/olcs/olcs-frontend-deps/4.206.7/olcs-olcs-frontend-deps-4.206.7.zip",
+                "reference": "d9cdc7c021ecb4e1ff7d88c8c6f55a3905f6366f",
+                "shasum": "d9cdc7c021ecb4e1ff7d88c8c6f55a3905f6366f"
             },
             "require": {
                 "doctrine/annotations": "^1.14.2",
@@ -4276,7 +3910,7 @@
                 "ext-intl": "*",
                 "firebase/php-jwt": "^6.0",
                 "olcs/olcs-auth": "^5.0.0",
-                "olcs/olcs-common": "~4.206.0",
+                "olcs/olcs-common": "^5.0.0",
                 "olcs/olcs-logging": "^5.0.0",
                 "olcs/olcs-transfer": "^5.0.0",
                 "olcs/olcs-utils": "^5.0.0",
@@ -4292,7 +3926,7 @@
                 }
             },
             "description": "List of front end dependencies, shared between internal and selfserve nodes",
-            "time": "2023-12-05T14:48:57+00:00"
+            "time": "2023-12-15T11:08:53+00:00"
         },
         {
             "name": "olcs/olcs-laminas",
@@ -4574,101 +4208,6 @@
             "time": "2021-11-05T16:50:12+00:00"
         },
         {
-            "name": "psr/http-client",
-            "version": "1.0.3",
-            "dist": {
-                "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/psr/http-client/1.0.3/psr-http-client-1.0.3.zip",
-                "reference": "bb5906edc1c324c9a05aa0873d40117941e5fa90",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.0 || ^8.0",
-                "psr/http-message": "^1.0 || ^2.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Psr\\Http\\Client\\": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "PHP-FIG",
-                    "homepage": "https://www.php-fig.org/"
-                }
-            ],
-            "description": "Common interface for HTTP clients",
-            "homepage": "https://github.com/php-fig/http-client",
-            "keywords": [
-                "http",
-                "http-client",
-                "psr",
-                "psr-18"
-            ],
-            "support": {
-                "source": "https://github.com/php-fig/http-client"
-            },
-            "time": "2023-09-23T14:17:50+00:00"
-        },
-        {
-            "name": "psr/http-factory",
-            "version": "1.0.2",
-            "dist": {
-                "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/psr/http-factory/1.0.2/psr-http-factory-1.0.2.zip",
-                "reference": "e616d01114759c4c489f93b099585439f795fe35",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.0.0",
-                "psr/http-message": "^1.0 || ^2.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Psr\\Http\\Message\\": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "PHP-FIG",
-                    "homepage": "https://www.php-fig.org/"
-                }
-            ],
-            "description": "Common interfaces for PSR-7 HTTP message factories",
-            "keywords": [
-                "factory",
-                "http",
-                "message",
-                "psr",
-                "psr-17",
-                "psr-7",
-                "request",
-                "response"
-            ],
-            "support": {
-                "source": "https://github.com/php-fig/http-factory/tree/1.0.2"
-            },
-            "time": "2023-04-10T20:10:41+00:00"
-        },
-        {
             "name": "psr/http-message",
             "version": "1.1",
             "dist": {
@@ -4803,44 +4342,6 @@
                 "source": "https://github.com/php-fig/simple-cache/tree/master"
             },
             "time": "2017-10-23T01:57:42+00:00"
-        },
-        {
-            "name": "ralouphie/getallheaders",
-            "version": "3.0.3",
-            "dist": {
-                "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/ralouphie/getallheaders/3.0.3/ralouphie-getallheaders-3.0.3.zip",
-                "reference": "120b605dfeb996808c31b6477290a714d356e822",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.6"
-            },
-            "require-dev": {
-                "php-coveralls/php-coveralls": "^2.1",
-                "phpunit/phpunit": "^5 || ^6.5"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "src/getallheaders.php"
-                ]
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Ralph Khattar",
-                    "email": "ralph.khattar@gmail.com"
-                }
-            ],
-            "description": "A polyfill for getallheaders.",
-            "support": {
-                "issues": "https://github.com/ralouphie/getallheaders/issues",
-                "source": "https://github.com/ralouphie/getallheaders/tree/develop"
-            },
-            "time": "2019-03-08T08:55:37+00:00"
         },
         {
             "name": "soflomo/purifier",
@@ -5261,63 +4762,6 @@
                 }
             ],
             "time": "2023-05-31T13:04:02+00:00"
-        },
-        {
-            "name": "symfony/finder",
-            "version": "v5.4.27",
-            "dist": {
-                "type": "zip",
-                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/finder/v5.4.27/symfony-finder-v5.4.27.zip",
-                "reference": "ff4bce3c33451e7ec778070e45bd23f74214cd5d",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=7.2.5",
-                "symfony/deprecation-contracts": "^2.1|^3",
-                "symfony/polyfill-php80": "^1.16"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\Finder\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Finds files and directories via an intuitive fluent interface",
-            "homepage": "https://symfony.com",
-            "support": {
-                "source": "https://github.com/symfony/finder/tree/v5.4.27"
-            },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2023-07-31T08:02:31+00:00"
         },
         {
             "name": "symfony/lock",
@@ -6271,6 +5715,61 @@
             "time": "2022-01-17T15:41:57+00:00"
         },
         {
+            "name": "elendev/composer-push",
+            "version": "1.0.4",
+            "dist": {
+                "type": "zip",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/elendev/composer-push/1.0.4/elendev-composer-push-1.0.4.zip",
+                "reference": "74cd140d8481b68284291628c37d92e4c7caebbe",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.1|^2.0",
+                "ext-curl": "*",
+                "ext-json": "*",
+                "ext-zip": "*",
+                "guzzlehttp/guzzle": "^6.0|^7.0",
+                "php": ">=7.2 || ^8.0",
+                "symfony/filesystem": "^4.0|^5.0|^6.0",
+                "symfony/finder": "^4.0|^5.0|^6.0"
+            },
+            "replace": {
+                "elendev/nexus-composer-push": "*"
+            },
+            "require-dev": {
+                "composer/composer": "^1.8 ||  ^2.0",
+                "friendsofphp/php-cs-fixer": "^2.18|^3.4.0",
+                "phpunit/phpunit": "^8 || ^9 || ^10"
+            },
+            "suggest": {
+                "elendev/composer-push": "Replaces the elendev/nexus-composer-push repository, which is deprecated."
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "Elendev\\ComposerPush\\Plugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "Elendev\\ComposerPush\\": "src/"
+                }
+            },
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Elendev",
+                    "email": "jonas.renaudot@gmail.com"
+                }
+            ],
+            "description": "Provide a Push command to composer to push to repositories",
+            "support": {
+                "issues": "https://github.com/Elendev/composer-push/issues",
+                "source": "https://github.com/Elendev/composer-push/tree/1.0.4"
+            },
+            "time": "2023-02-21T09:59:18+00:00"
+        },
+        {
             "name": "fzaninotto/faker",
             "version": "v1.9.2",
             "dist": {
@@ -6318,6 +5817,313 @@
             },
             "abandoned": true,
             "time": "2020-12-11T09:56:16+00:00"
+        },
+        {
+            "name": "guzzlehttp/guzzle",
+            "version": "7.8.0",
+            "dist": {
+                "type": "zip",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/guzzlehttp/guzzle/7.8.0/guzzlehttp-guzzle-7.8.0.zip",
+                "reference": "1110f66a6530a40fe7aea0378fe608ee2b2248f9",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "guzzlehttp/promises": "^1.5.3 || ^2.0.1",
+                "guzzlehttp/psr7": "^1.9.1 || ^2.5.1",
+                "php": "^7.2.5 || ^8.0",
+                "psr/http-client": "^1.0",
+                "symfony/deprecation-contracts": "^2.2 || ^3.0"
+            },
+            "provide": {
+                "psr/http-client-implementation": "1.0"
+            },
+            "require-dev": {
+                "bamarni/composer-bin-plugin": "^1.8.1",
+                "ext-curl": "*",
+                "php-http/client-integration-tests": "dev-master#2c025848417c1135031fdf9c728ee53d0a7ceaee as 3.0.999",
+                "php-http/message-factory": "^1.1",
+                "phpunit/phpunit": "^8.5.29 || ^9.5.23",
+                "psr/log": "^1.1 || ^2.0 || ^3.0"
+            },
+            "suggest": {
+                "ext-curl": "Required for CURL handler support",
+                "ext-intl": "Required for Internationalized Domain Name (IDN) support",
+                "psr/log": "Required for using the Log middleware"
+            },
+            "type": "library",
+            "extra": {
+                "bamarni-bin": {
+                    "bin-links": true,
+                    "forward-command": false
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/functions_include.php"
+                ],
+                "psr-4": {
+                    "GuzzleHttp\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Graham Campbell",
+                    "email": "hello@gjcampbell.co.uk",
+                    "homepage": "https://github.com/GrahamCampbell"
+                },
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                },
+                {
+                    "name": "Jeremy Lindblom",
+                    "email": "jeremeamia@gmail.com",
+                    "homepage": "https://github.com/jeremeamia"
+                },
+                {
+                    "name": "George Mponos",
+                    "email": "gmponos@gmail.com",
+                    "homepage": "https://github.com/gmponos"
+                },
+                {
+                    "name": "Tobias Nyholm",
+                    "email": "tobias.nyholm@gmail.com",
+                    "homepage": "https://github.com/Nyholm"
+                },
+                {
+                    "name": "Márk Sági-Kazár",
+                    "email": "mark.sagikazar@gmail.com",
+                    "homepage": "https://github.com/sagikazarmark"
+                },
+                {
+                    "name": "Tobias Schultze",
+                    "email": "webmaster@tubo-world.de",
+                    "homepage": "https://github.com/Tobion"
+                }
+            ],
+            "description": "Guzzle is a PHP HTTP client library",
+            "keywords": [
+                "client",
+                "curl",
+                "framework",
+                "http",
+                "http client",
+                "psr-18",
+                "psr-7",
+                "rest",
+                "web service"
+            ],
+            "support": {
+                "issues": "https://github.com/guzzle/guzzle/issues",
+                "source": "https://github.com/guzzle/guzzle/tree/7.8.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/GrahamCampbell",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/Nyholm",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/guzzlehttp/guzzle",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2023-08-27T10:20:53+00:00"
+        },
+        {
+            "name": "guzzlehttp/promises",
+            "version": "2.0.1",
+            "dist": {
+                "type": "zip",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/guzzlehttp/promises/2.0.1/guzzlehttp-promises-2.0.1.zip",
+                "reference": "111166291a0f8130081195ac4556a5587d7f1b5d",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2.5 || ^8.0"
+            },
+            "require-dev": {
+                "bamarni/composer-bin-plugin": "^1.8.1",
+                "phpunit/phpunit": "^8.5.29 || ^9.5.23"
+            },
+            "type": "library",
+            "extra": {
+                "bamarni-bin": {
+                    "bin-links": true,
+                    "forward-command": false
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "GuzzleHttp\\Promise\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Graham Campbell",
+                    "email": "hello@gjcampbell.co.uk",
+                    "homepage": "https://github.com/GrahamCampbell"
+                },
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                },
+                {
+                    "name": "Tobias Nyholm",
+                    "email": "tobias.nyholm@gmail.com",
+                    "homepage": "https://github.com/Nyholm"
+                },
+                {
+                    "name": "Tobias Schultze",
+                    "email": "webmaster@tubo-world.de",
+                    "homepage": "https://github.com/Tobion"
+                }
+            ],
+            "description": "Guzzle promises library",
+            "keywords": [
+                "promise"
+            ],
+            "support": {
+                "issues": "https://github.com/guzzle/promises/issues",
+                "source": "https://github.com/guzzle/promises/tree/2.0.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/GrahamCampbell",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/Nyholm",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/guzzlehttp/promises",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2023-08-03T15:11:55+00:00"
+        },
+        {
+            "name": "guzzlehttp/psr7",
+            "version": "2.6.1",
+            "dist": {
+                "type": "zip",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/guzzlehttp/psr7/2.6.1/guzzlehttp-psr7-2.6.1.zip",
+                "reference": "be45764272e8873c72dbe3d2edcfdfcc3bc9f727",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2.5 || ^8.0",
+                "psr/http-factory": "^1.0",
+                "psr/http-message": "^1.1 || ^2.0",
+                "ralouphie/getallheaders": "^3.0"
+            },
+            "provide": {
+                "psr/http-factory-implementation": "1.0",
+                "psr/http-message-implementation": "1.0"
+            },
+            "require-dev": {
+                "bamarni/composer-bin-plugin": "^1.8.1",
+                "http-interop/http-factory-tests": "^0.9",
+                "phpunit/phpunit": "^8.5.29 || ^9.5.23"
+            },
+            "suggest": {
+                "laminas/laminas-httphandlerrunner": "Emit PSR-7 responses"
+            },
+            "type": "library",
+            "extra": {
+                "bamarni-bin": {
+                    "bin-links": true,
+                    "forward-command": false
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "GuzzleHttp\\Psr7\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Graham Campbell",
+                    "email": "hello@gjcampbell.co.uk",
+                    "homepage": "https://github.com/GrahamCampbell"
+                },
+                {
+                    "name": "Michael Dowling",
+                    "email": "mtdowling@gmail.com",
+                    "homepage": "https://github.com/mtdowling"
+                },
+                {
+                    "name": "George Mponos",
+                    "email": "gmponos@gmail.com",
+                    "homepage": "https://github.com/gmponos"
+                },
+                {
+                    "name": "Tobias Nyholm",
+                    "email": "tobias.nyholm@gmail.com",
+                    "homepage": "https://github.com/Nyholm"
+                },
+                {
+                    "name": "Márk Sági-Kazár",
+                    "email": "mark.sagikazar@gmail.com",
+                    "homepage": "https://github.com/sagikazarmark"
+                },
+                {
+                    "name": "Tobias Schultze",
+                    "email": "webmaster@tubo-world.de",
+                    "homepage": "https://github.com/Tobion"
+                },
+                {
+                    "name": "Márk Sági-Kazár",
+                    "email": "mark.sagikazar@gmail.com",
+                    "homepage": "https://sagikazarmark.hu"
+                }
+            ],
+            "description": "PSR-7 message implementation that also provides common utility methods",
+            "keywords": [
+                "http",
+                "message",
+                "psr-7",
+                "request",
+                "response",
+                "stream",
+                "uri",
+                "url"
+            ],
+            "support": {
+                "issues": "https://github.com/guzzle/psr7/issues",
+                "source": "https://github.com/guzzle/psr7/tree/2.6.1"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/GrahamCampbell",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/Nyholm",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/guzzlehttp/psr7",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2023-08-27T10:13:57+00:00"
         },
         {
             "name": "hamcrest/hamcrest-php",
@@ -7650,6 +7456,139 @@
             "time": "2023-12-01T06:10:48+00:00"
         },
         {
+            "name": "psr/http-client",
+            "version": "1.0.3",
+            "dist": {
+                "type": "zip",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/psr/http-client/1.0.3/psr-http-client-1.0.3.zip",
+                "reference": "bb5906edc1c324c9a05aa0873d40117941e5fa90",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.0 || ^8.0",
+                "psr/http-message": "^1.0 || ^2.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Http\\Client\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "https://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for HTTP clients",
+            "homepage": "https://github.com/php-fig/http-client",
+            "keywords": [
+                "http",
+                "http-client",
+                "psr",
+                "psr-18"
+            ],
+            "support": {
+                "source": "https://github.com/php-fig/http-client"
+            },
+            "time": "2023-09-23T14:17:50+00:00"
+        },
+        {
+            "name": "psr/http-factory",
+            "version": "1.0.2",
+            "dist": {
+                "type": "zip",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/psr/http-factory/1.0.2/psr-http-factory-1.0.2.zip",
+                "reference": "e616d01114759c4c489f93b099585439f795fe35",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.0",
+                "psr/http-message": "^1.0 || ^2.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Http\\Message\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "https://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interfaces for PSR-7 HTTP message factories",
+            "keywords": [
+                "factory",
+                "http",
+                "message",
+                "psr",
+                "psr-17",
+                "psr-7",
+                "request",
+                "response"
+            ],
+            "support": {
+                "source": "https://github.com/php-fig/http-factory/tree/1.0.2"
+            },
+            "time": "2023-04-10T20:10:41+00:00"
+        },
+        {
+            "name": "ralouphie/getallheaders",
+            "version": "3.0.3",
+            "dist": {
+                "type": "zip",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/ralouphie/getallheaders/3.0.3/ralouphie-getallheaders-3.0.3.zip",
+                "reference": "120b605dfeb996808c31b6477290a714d356e822",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "php-coveralls/php-coveralls": "^2.1",
+                "phpunit/phpunit": "^5 || ^6.5"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/getallheaders.php"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ralph Khattar",
+                    "email": "ralph.khattar@gmail.com"
+                }
+            ],
+            "description": "A polyfill for getallheaders.",
+            "support": {
+                "issues": "https://github.com/ralouphie/getallheaders/issues",
+                "source": "https://github.com/ralouphie/getallheaders/tree/develop"
+            },
+            "time": "2019-03-08T08:55:37+00:00"
+        },
+        {
             "name": "san/san-session-toolbar",
             "version": "1.0.12",
             "dist": {
@@ -8696,6 +8635,63 @@
                 }
             ],
             "time": "2023-11-09T08:22:43+00:00"
+        },
+        {
+            "name": "symfony/finder",
+            "version": "v5.4.27",
+            "dist": {
+                "type": "zip",
+                "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy/symfony/finder/v5.4.27/symfony-finder-v5.4.27.zip",
+                "reference": "ff4bce3c33451e7ec778070e45bd23f74214cd5d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2.5",
+                "symfony/deprecation-contracts": "^2.1|^3",
+                "symfony/polyfill-php80": "^1.16"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Finder\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Finds files and directories via an intuitive fluent interface",
+            "homepage": "https://symfony.com",
+            "support": {
+                "source": "https://github.com/symfony/finder/tree/v5.4.27"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2023-07-31T08:02:31+00:00"
         },
         {
             "name": "symfony/polyfill-php72",

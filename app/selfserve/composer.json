@@ -12,7 +12,8 @@
                 "olcs/olcs-logging",
                 "olcs/olcs-utils",
                 "olcs/olcs-transfer",
-                "olcs/olcs-auth"
+                "olcs/olcs-auth",
+                "olcs/olcs-common"
             ]
         },
         {
