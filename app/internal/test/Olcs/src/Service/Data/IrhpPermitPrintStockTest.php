@@ -6,7 +6,7 @@ use Common\Exception\DataServiceException;
 use Common\RefData;
 use Common\Service\Cqrs\Response;
 use Common\Service\Helper\TranslationHelperService;
-use CommonTest\Service\Data\AbstractDataServiceTestCase;
+use CommonTest\Common\Service\Data\AbstractDataServiceTestCase;
 use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintStock as Qry;
 use Olcs\Service\Data\IrhpPermitPrintStock;
 use Mockery as m;

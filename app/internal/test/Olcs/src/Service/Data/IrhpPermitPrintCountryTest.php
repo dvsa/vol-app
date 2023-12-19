@@ -5,7 +5,7 @@ namespace OlcsTest\Service\Data;
 use Common\Exception\DataServiceException;
 use Common\RefData;
 use Common\Service\Cqrs\Response;
-use CommonTest\Service\Data\AbstractDataServiceTestCase;
+use CommonTest\Common\Service\Data\AbstractDataServiceTestCase;
 use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintCountry as Qry;
 use Olcs\Service\Data\IrhpPermitPrintCountry;
 use Mockery as m;

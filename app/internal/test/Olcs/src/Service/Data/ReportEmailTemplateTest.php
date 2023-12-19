@@ -5,7 +5,7 @@ namespace OlcsTest\Service\Data;
 use Common\Exception\DataServiceException;
 use Common\Service\Cqrs\Response;
 use Common\Service\Data\CategoryDataService;
-use CommonTest\Service\Data\AbstractDataServiceTestCase;
+use CommonTest\Common\Service\Data\AbstractDataServiceTestCase;
 use Dvsa\Olcs\Transfer\Query\Template\AvailableTemplates;
 use Olcs\Service\Data\ReportEmailTemplate;
 use Mockery as m;

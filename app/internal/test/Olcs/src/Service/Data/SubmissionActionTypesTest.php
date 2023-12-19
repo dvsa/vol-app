@@ -3,7 +3,7 @@
 namespace OlcsTest\Service\Data;
 
 use Common\Service\Data\RefData;
-use CommonTest\Service\Data\AbstractDataServiceTestCase;
+use CommonTest\Common\Service\Data\AbstractDataServiceTestCase;
 use Olcs\Service\Data\SubmissionActionTypes;
 use Mockery as m;
 

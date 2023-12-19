@@ -3,7 +3,7 @@
 namespace OlcsTest\Service\Data;
 
 use Common\Exception\DataServiceException;
-use CommonTest\Service\Data\AbstractListDataServiceTestCase;
+use CommonTest\Common\Service\Data\AbstractListDataServiceTestCase;
 use Dvsa\Olcs\Transfer\Query\SubCategory\GetList as Qry;
 use Olcs\Service\Data\SubCategory;
 use Mockery as m;

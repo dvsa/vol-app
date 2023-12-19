@@ -3,7 +3,7 @@
 namespace OlcsTest\Service\Data;
 
 use Common\Service\Data\Licence as LicenceDataService;
-use CommonTest\Service\Data\RefDataTestCase;
+use CommonTest\Common\Service\Data\RefDataTestCase;
 use Olcs\Service\Data\ImpoundingLegislation;
 use Mockery as m;
 

@@ -4,7 +4,7 @@ namespace OlcsTest\Service\Data;
 
 use Common\Service\Data\Application as ApplicationDataService;
 use Common\Service\Data\Licence as LicenceDataService;
-use CommonTest\Service\Data\AbstractDataServiceTestCase;
+use CommonTest\Common\Service\Data\AbstractDataServiceTestCase;
 use Mockery as m;
 use Olcs\Service\Data\AbstractPublicInquiryDataServices;
 

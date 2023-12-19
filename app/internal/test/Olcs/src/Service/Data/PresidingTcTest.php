@@ -11,7 +11,7 @@ use Common\Exception\DataServiceException;
 use Olcs\Service\Data\PresidingTc;
 use Mockery as m;
 use Dvsa\Olcs\Transfer\Query\Cases\PresidingTc\GetList as Qry;
-use CommonTest\Service\Data\AbstractDataServiceTestCase;
+use CommonTest\Common\Service\Data\AbstractDataServiceTestCase;
 
 /**
  * PresidingTc data service test

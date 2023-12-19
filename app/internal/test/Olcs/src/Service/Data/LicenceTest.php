@@ -3,7 +3,7 @@
 namespace OlcsTest\Service\Data;
 
 use Common\Service\Helper\FlashMessengerHelperService;
-use CommonTest\Service\Data\AbstractDataServiceTestCase;
+use CommonTest\Common\Service\Data\AbstractDataServiceTestCase;
 use Olcs\Service\Data\Licence;
 use Mockery as m;
 use Dvsa\Olcs\Transfer\Query\Licence\GetList as Qry;

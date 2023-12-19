@@ -6,7 +6,7 @@ use Common\Exception\DataServiceException;
 use Olcs\Service\Data\IrfoGvPermitType;
 use Mockery as m;
 use Dvsa\Olcs\Transfer\Query\Irfo\IrfoGvPermitTypeList as Qry;
-use CommonTest\Service\Data\AbstractDataServiceTestCase;
+use CommonTest\Common\Service\Data\AbstractDataServiceTestCase;
 
 /**
  * Class IrfoGvPermitType Test

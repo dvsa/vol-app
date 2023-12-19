@@ -12,7 +12,8 @@
                 "olcs/olcs-logging",
                 "olcs/olcs-utils",
                 "olcs/olcs-transfer",
-                "olcs/olcs-auth"
+                "olcs/olcs-auth",
+                "olcs/olcs-common"
             ]
         },
         {
@@ -44,7 +45,7 @@
         ],
         "psr-4": {
             "Common\\": "vendor/olcs/olcs-common/Common/src/Common",
-            "CommonTest\\": "vendor/olcs/olcs-common/test/Common/"
+            "CommonTest\\": "vendor/olcs/olcs-common/test/Common/src/"
         }
     },
     "minimum-stability": "dev",

@@ -2,7 +2,7 @@
 
 namespace OlcsTest\Service\Data;
 
-use CommonTest\Service\Data\RefDataTestCase;
+use CommonTest\Common\Service\Data\RefDataTestCase;
 use Olcs\Service\Data\PaymentType;
 
 /**
