@@ -273,3 +273,7 @@ tfoot {
     border-bottom: 1px solid $grey-2;
   }
 }
+
+table.no-row-border-separator tr td {
+  border-color: transparent;
+}
