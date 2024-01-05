@@ -5,7 +5,7 @@ namespace OlcsTest\Form\Model\Form\Surrender;
 use Common\Form\Elements\InputFilters\ActionButton;
 use Common\Form\Elements\Types\Radio;
 use Common\Form\Elements\Types\HtmlTranslated;
-use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
+use OlcsTest\TestHelpers\AbstractFormValidationTestCase;
 use Laminas\Form\Element\Button;
 use Laminas\Form\Element\Textarea;
 

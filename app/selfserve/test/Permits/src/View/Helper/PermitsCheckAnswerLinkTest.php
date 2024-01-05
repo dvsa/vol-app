@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace PermitsTest\View\Helper;
 
-use Permits\View\Helper\PermitsCheckAnswerLink;
 use Mockery as m;
 use Laminas\View\Renderer\RendererInterface;
+use Permits\View\Helper\PermitsCheckAnswerLink;
 
 class PermitsCheckAnswerLinkTest extends m\Adapter\Phpunit\MockeryTestCase
 {
@@ -27,7 +27,7 @@ class PermitsCheckAnswerLinkTest extends m\Adapter\Phpunit\MockeryTestCase
 
         $params = ['params'];
         $options = ['options'];
-        
+
         $view = m::mock(RendererInterface::class);
         $view->shouldReceive('translate')
             ->once()

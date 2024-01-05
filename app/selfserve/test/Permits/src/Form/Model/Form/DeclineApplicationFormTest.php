@@ -3,7 +3,7 @@
 namespace PermitsTest\Form\Model\Form;
 
 use Common\Form\Elements\InputFilters\ActionButton;
-use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
+use OlcsTest\TestHelpers\AbstractFormValidationTestCase;
 use Laminas\Validator;
 
 /**

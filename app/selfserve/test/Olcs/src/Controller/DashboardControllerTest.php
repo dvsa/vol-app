@@ -15,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Organisation\Dashboard as DashboardQry;
 use Olcs\Service\Processing\DashboardProcessingService;
-use Olcs\TestHelpers\Controller\Traits\ControllerTestTrait;
+use OlcsTest\Controller\Traits\ControllerTestTrait;
 use Olcs\Mvc\Controller\Plugin\Placeholder;
 use Common\Service\Cqrs\Response as QueryResponse;
 use ReflectionClass;

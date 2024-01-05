@@ -2,16 +2,22 @@
 
 namespace OlcsTest\FormService\Form\Lva;
 
+use Common\Form\Element\DynamicMultiCheckbox;
+use Common\Form\Element\DynamicRadio;
+use Common\Form\Element\DynamicSelect;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Helper\UrlHelperService;
+use Common\Service\Translator\TranslationLoader;
+use Laminas\I18n\Translator\LoaderPluginManager;
+use Laminas\Mvc\Service\ServiceManagerConfig;
+use Laminas\ServiceManager\ServiceManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\ApplicationFinancialEvidence;
 use Laminas\Form\Form;
 use Laminas\Http\Request;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
-use OlcsTest\Bootstrap;
 use ZfcRbac\Service\AuthorizationService;
 
 /**
@@ -37,6 +43,94 @@ class ApplicationFinancialEvidenceTest extends MockeryTestCase
     /** @var  m\MockInterface */
     protected $translator;
 
+    /**
+     * We can access service manager if we need to add a mock for certain applications
+     *
+     * @return \Laminas\ServiceManager\ServiceLocatorInterface
+     */
+    public function getServiceManager()
+    {
+            $serviceManager =  self::getRealServiceManager();
+            $serviceManager->setAllowOverride(true);
+
+            $serviceManager->get('FormElementManager')->setFactory(
+                'DynamicSelect',
+                function ($serviceLocator, $name, $requestedName) {
+                    $element = new DynamicSelect();
+                    $element->setValueOptions(
+                        [
+                            '1' => 'one',
+                            '2' => 'two',
+                            '3' => 'three'
+                        ]
+                    );
+                    return $element;
+                }
+            );
+
+            $serviceManager->get('FormElementManager')->setFactory(
+                'DynamicRadio',
+                function ($serviceLocator, $name, $requestedName) {
+                    $element = new DynamicRadio();
+                    $element->setValueOptions(
+                        [
+                            '1' => 'one',
+                            '2' => 'two',
+                            '3' => 'three'
+                        ]
+                    );
+                    return $element;
+                }
+            );
+
+            $serviceManager->get('FormElementManager')->setFactory(
+                'Common\Form\Element\DynamicMultiCheckbox',
+                function ($serviceLocator, $name, $requestedName) {
+                    $element = new DynamicMultiCheckbox();
+                    $element->setValueOptions(
+                        [
+                            '1' => 'one',
+                            '2' => 'two',
+                            '3' => 'three'
+                        ]
+                    );
+                    return $element;
+                }
+            );
+
+        return $serviceManager;
+    }
+
+    /**
+     * Added this method for backwards compatibility
+     *
+     * @return \Laminas\ServiceManager\ServiceManager
+     */
+    public static function getRealServiceManager()
+    {
+        $serviceManager = new ServiceManager(new ServiceManagerConfig());
+        $config = include 'config/application.config.php';
+        $serviceManager->setService('ApplicationConfig', $config);
+        $serviceManager->get('ModuleManager')->loadModules();
+        $serviceManager->setAllowOverride(true);
+
+        $mockTranslationLoader = m::mock(TranslationLoader::class);
+        $mockTranslationLoader->shouldReceive('load')->andReturn(['default' => ['en_GB' => []]]);
+        $mockTranslationLoader->shouldReceive('loadReplacements')->andReturn([]);
+        $serviceManager->setService(TranslationLoader::class, $mockTranslationLoader);
+
+        $pluginManager = new LoaderPluginManager($serviceManager);
+        $pluginManager->setService(TranslationLoader::class, $mockTranslationLoader);
+        $serviceManager->setService('TranslatorPluginManager', $pluginManager);
+
+        // Mess up the backend, so any real rest calls will fail
+        $config = $serviceManager->get('Config');
+        $config['service_api_mapping']['endpoints']['backend'] = 'http://some-fake-backend/';
+        $serviceManager->setService('Config', $config);
+
+        return $serviceManager;
+    }
+
     public function setUp(): void
     {
         $this->fh = m::mock(FormHelperService::class)->makePartial();
@@ -44,7 +138,7 @@ class ApplicationFinancialEvidenceTest extends MockeryTestCase
         $this->urlHelper = m::mock(UrlHelperService::class);
         $this->translator = m::mock(TranslationHelperService::class);
 
-        $sm = Bootstrap::getServiceManager();
+        $sm = $this->getServiceManager();
         $sm->setService('Helper\Url', $this->urlHelper);
         $sm->setService('Helper\Translation', $this->translator);
 

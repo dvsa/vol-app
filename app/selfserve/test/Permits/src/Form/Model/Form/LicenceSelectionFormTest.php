@@ -4,7 +4,7 @@ namespace PermitsTest\Form\Model\Form;
 
 use \Common\Form\Elements\InputFilters\ActionButton;
 use Common\Form\Elements\Types\Radio;
-use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
+use OlcsTest\TestHelpers\AbstractFormValidationTestCase;
 
 /**
  * Class LicenceSelectionFormTest

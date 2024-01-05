@@ -4,7 +4,10 @@ namespace OlcsTest\FormService\Form\Lva\People\SoleTrader;
 
 use Common\FormService\FormServiceManager;
 use Common\Service\Lva\PeopleLvaService;
-use OlcsTest\Bootstrap;
+use Common\Service\Translator\TranslationLoader;
+use Laminas\I18n\Translator\LoaderPluginManager;
+use Laminas\Mvc\Service\ServiceManagerConfig;
+use Laminas\ServiceManager\ServiceManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\People\SoleTrader\VariationSoleTrader as Sut;
@@ -28,13 +31,43 @@ class VariationSoleTraderTest extends MockeryTestCase
 
     protected $mockVariationService;
 
+    /**
+     * We can access service manager if we need to add a mock for certain applications
+     *
+     * @return \Laminas\ServiceManager\ServiceLocatorInterface
+     */
+    public static function getRealServiceManager()
+    {
+        $serviceManager = new ServiceManager(new ServiceManagerConfig());
+        $config = include 'config/application.config.php';
+        $serviceManager->setService('ApplicationConfig', $config);
+        $serviceManager->get('ModuleManager')->loadModules();
+        $serviceManager->setAllowOverride(true);
+
+        $mockTranslationLoader = m::mock(TranslationLoader::class);
+        $mockTranslationLoader->shouldReceive('load')->andReturn(['default' => ['en_GB' => []]]);
+        $mockTranslationLoader->shouldReceive('loadReplacements')->andReturn([]);
+        $serviceManager->setService(TranslationLoader::class, $mockTranslationLoader);
+
+        $pluginManager = new LoaderPluginManager($serviceManager);
+        $pluginManager->setService(TranslationLoader::class, $mockTranslationLoader);
+        $serviceManager->setService('TranslatorPluginManager', $pluginManager);
+
+        // Mess up the backend, so any real rest calls will fail
+        $config = $serviceManager->get('Config');
+        $config['service_api_mapping']['endpoints']['backend'] = 'http://some-fake-backend/';
+        $serviceManager->setService('Config', $config);
+
+        return $serviceManager;
+    }
+
     public function setUp(): void
     {
         $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService');
 
         $this->mockVariationService = m::mock(Form::class);
 
-        $this->sm = Bootstrap::getServiceManager();
+        $this->sm = $this->getRealServiceManager();
 
         /** @var FormServiceManager fsm */
         $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();

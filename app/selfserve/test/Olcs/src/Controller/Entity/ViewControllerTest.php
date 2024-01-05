@@ -10,7 +10,7 @@ use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\Entity\ViewController;
-use Olcs\TestHelpers\ControllerPluginManagerHelper;
+use OlcsTest\TestHelpers\ControllerPluginManagerHelper;
 use Laminas\View\Model\ViewModel;
 use ZfcRbac\Mvc\Controller\Plugin\IsGranted;
 

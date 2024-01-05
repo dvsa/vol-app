@@ -15,8 +15,8 @@ use Laminas\ServiceManager\ServiceManager;
 use Olcs\Auth\Adapter\SelfserveCommandAdapter;
 use Olcs\Controller\Auth\LoginController;
 use Olcs\Controller\Auth\LoginControllerFactory;
-use Olcs\TestHelpers\MockeryTestCase;
-use Olcs\TestHelpers\Service\MocksServicesTrait;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Common\Test\MocksServicesTrait;
 use Mockery as m;
 
 class LoginControllerFactoryTest extends MockeryTestCase

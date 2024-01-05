@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  pull_request:
+  schedule:
+    - cron: '0 0 * * 1'
+
+jobs:
+  security:
+    uses: dvsa/.github/.github/workflows/php-security.yml@main
+    secrets:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+  static-analysis:
+    uses: dvsa/.github/.github/workflows/php-static.yml@main
+    with:
+      php-version: '7.4'
+
+  tests:
+    uses: dvsa/.github/.github/workflows/php-tests.yml@main
+    with:
+      php-versions: "[\"7.4\"]"
+      fail-fast: false

@@ -7,7 +7,9 @@ use Common\Controller\Plugin\Redirect;
 use Common\Rbac\JWTIdentityProvider;
 use Common\Rbac\PidIdentityProvider;
 use Common\Rbac\User;
-use Common\Test\MockeryTestCase;
+use Common\Test\MocksServicesTrait;
+use Laminas\ServiceManager\ServiceManager;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Dvsa\Olcs\Auth\Service\Auth\CookieService;
 use Dvsa\Olcs\Auth\Service\Auth\LogoutService;
 use Laminas\Http\Request;
@@ -21,9 +23,9 @@ use Laminas\Stdlib\Parameters;
 use Laminas\Uri\Http;
 use Laminas\View\Model\ViewModel;
 use Mockery as m;
+use Mockery\MockInterface;
 use Olcs\Controller\SessionTimeoutController;
 use Olcs\Controller\SessionTimeoutControllerFactory;
-use Olcs\TestHelpers\Service\MocksServicesTrait;
 use ZfcRbac\Identity\IdentityProviderInterface;
 
 /**
@@ -38,17 +40,55 @@ class SessionTimeoutControllerTest extends MockeryTestCase
     private $identityProviderClass = PidIdentityProvider::class;
 
     /**
+     * @var ServiceManager
+     */
+    private $serviceManager;
+
+    /**
+     * @return ServiceManager
+     */
+    protected function serviceManager(): ServiceManager
+    {
+        assert(null !== $this->serviceManager, 'Expected service manager to be set. Hint: You may need to call `setUpServiceManager` before trying to get a service manager');
+        return $this->serviceManager;
+    }
+
+    /**
      * @test
      */
     public function indexAction_IsCallable()
     {
         // Setup
-        $serviceLocator = $this->setUpServiceLocator();
+        $serviceLocator = $this->setUpServiceManager();
 
         $sut = $this->setUpSut($serviceLocator, new Request());
 
         // Assert
         $this->assertTrue(method_exists($sut, 'indexAction') && is_callable([$sut, 'indexAction']));
+    }
+
+    /**
+     * @return ServiceManager
+     */
+    protected function setUpServiceManager(): ServiceManager
+    {
+        $this->serviceManager = new ServiceManager();
+        $this->serviceManager->setAllowOverride(true);
+        $services = $this->setUpDefaultServices($this->serviceManager);
+
+        // Maintain support for deprecated way of registering services via an array of services. Instead, services
+        // should be registered by calling the available setter methods on the ServiceManager instance.
+        if (is_array($services)) {
+            foreach ($services as $serviceName => $service) {
+                $this->serviceManager->setService($serviceName, $service);
+            }
+        }
+
+        // Set controller plugin manager to the main service manager so that all services can be resolved from the one
+        // service manager instance.
+        $this->serviceManager->setService('ControllerPluginManager', $this->serviceManager);
+
+        return $this->serviceManager;
     }
 
     /**
@@ -284,6 +324,18 @@ class SessionTimeoutControllerTest extends MockeryTestCase
             ->byDefault();
 
         return $currentUser;
+    }
+
+    protected function getMockServiceWithName(string $class, string $serviceName): MockInterface
+    {
+        if (!$this->serviceManager->has($serviceName)) {
+            $this->serviceManager->setService(
+                $serviceName,
+                $this->setUpMockService($class)
+            );
+        }
+
+        return $this->serviceManager->get($serviceName);
     }
 
     protected function setUpIdentityWithClearSession(string $identityProvider): void

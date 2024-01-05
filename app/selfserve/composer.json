@@ -1,40 +1,36 @@
 {
     "name": "olcs/olcs-selfserve",
     "description": "OLCS Self Service Web Site",
-    "repositories": [
-        {
-            "packagist": false
-        },
-        {
-            "type": "composer",
-            "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy",
-            "only": [
-                "olcs/olcs-logging",
-                "olcs/olcs-utils",
-                "olcs/olcs-transfer",
-                "olcs/olcs-auth",
-                "olcs/olcs-common"
-            ]
-        },
-        {
-            "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/OLCS",
-            "type": "composer"
-        },
-        {
-            "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/Packagist-Proxy",
-            "type": "composer"
-        }
-    ],
     "require": {
-        "php": ">=7.4",
-        "dvsa/laminas-config-cloud-parameters": "^0.1.0",
-        "olcs/olcs-frontend-deps": "~4.206.0",
-        "olcs/olcs-laminas": "~2.5.0"
+        "php": "^7.4",
+        "container-interop/container-interop": "^1.2",
+        "doctrine/annotations": "^1.14.2",
+        "doctrine/doctrine-module": "^1",
+        "dvsa/laminas-config-cloud-parameters": "^0.2.0",
+        "laminas/laminas-authentication": "^2.6",
+        "laminas/laminas-eventmanager": "^2.6",
+        "laminas/laminas-form": "^2.13",
+        "laminas/laminas-http": "^2.8",
+        "laminas/laminas-i18n": "^2.14",
+        "laminas/laminas-mvc": "^2.7",
+        "laminas/laminas-serializer": "^2.10",
+        "laminas/laminas-servicemanager": "^2.7",
+        "laminas/laminas-session": "^2.8",
+        "laminas/laminas-stdlib": "^2.7",
+        "laminas/laminas-view": "^2.11",
+        "lm-commons/lmc-rbac-mvc": "^2.6",
+        "olcs/olcs-auth": "^5.0.0",
+        "olcs/olcs-common": "^5.0.0",
+        "olcs/olcs-logging": "^5.0.0",
+        "olcs/olcs-transfer": "^5.0.0",
+        "olcs/olcs-utils": "^5.0.0"
     },
     "require-dev": {
+        "bamarni/composer-bin-plugin": "^1.8",
+        "johnkary/phpunit-speedtrap": "^4.0",
         "laminas/laminas-developer-tools": "*",
-        "olcs/olcs-devtools": "~4.206.0",
-        "phpstan/phpstan": "^0.12.100",
+        "mockery/mockery": "^1.6",
+        "phpunit/phpunit": "^9.6",
         "san/san-session-toolbar": "*"
     },
     "autoload": {
@@ -47,38 +43,41 @@
             "Common\\": "vendor/olcs/olcs-common/Common/src/Common"
         }
     },
+  "autoload-dev": {
+    "psr-4": {
+      "OlcsTest\\": "test/Olcs/src",
+      "PermitsTest\\": "test/Permits/src"
+    }
+  },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "config": {
-        "preferred-install": "dist",
-        "secure-http": false,
-        "platform": {
-            "php": "7.4.33"
-        },
         "sort-packages": true,
         "allow-plugins": {
-            "laminas/laminas-component-installer": true,
-            "laminas/laminas-dependency-plugin": true,
-            "elendev/composer-push": true,
-            "phpstan/extension-installer": true
+            "bamarni/composer-bin-plugin": true,
+            "laminas/laminas-dependency-plugin": true
         }
     },
-    "scripts": {
-        "ut": "vendor/bin/phpunit -c test/phpunit.xml --stop-on-failure",
-        "review": "vendor/bin/review",
-        "cs": "vendor/bin/phpcs --severity=1 --standard=vendor/dvsa/coding-standards/src/Profiles/DVSA/CS/ruleset.xml",
-        "coverage": "vendor/bin/phpunit -c test/phpunit.xml --coverage-html ./test/coverage/html",
-        "sonar": "vendor/bin/phpunit -c test/phpunit.xml --coverage-clover ./test/coverage/coverage-report.clover --log-junit ./test/coverage/log.junit",
-        "update-syms": "vendor/bin/composer-update-syms"
-    },
+  "scripts": {
+    "bin": "echo 'bin not installed'",
+    "post-install-cmd": [
+      "@composer bin all install"
+    ],
+    "test": "phpunit",
+    "phpcs": "phpcs",
+    "psalm": "psalm",
+    "phpstan": "phpstan",
+    "all": [
+      "@test",
+      "@phpcs",
+      "@psalm",
+      "@phpstan"
+    ]
+  },
     "extra": {
-        "nexus-push": {
-            "url": "https://nexus.olcs.dev-dvsacloud.uk/repository/olcs-selfserve",
-            "ignore": [
-                "test/",
-                "config/autoload/local.php",
-                "node_modules/"
-            ]
-        }
+      "bamarni-bin": {
+        "bin-links": true,
+        "forward-command": true
+      }
     }
 }
