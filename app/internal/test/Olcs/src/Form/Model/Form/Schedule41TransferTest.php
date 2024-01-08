@@ -2,7 +2,7 @@
 
 namespace OlcsTest\Form\Model\Form;
 
-use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
+use Dvsa\OlcsTest\FormTester\AbstractFormValidationTestCase;
 
 /**
  * Class Schedule41TransferTest

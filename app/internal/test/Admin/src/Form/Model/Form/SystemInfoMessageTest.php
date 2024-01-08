@@ -2,7 +2,7 @@
 
 namespace AdminTest\Form\Model\Form;
 
-use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
+use Dvsa\OlcsTest\FormTester\AbstractFormValidationTestCase;
 use Laminas\Validator\InArray;
 
 /**

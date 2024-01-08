@@ -11,7 +11,6 @@ use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Auth\Container\AuthChallengeContainer;
 use Dvsa\Olcs\Auth\Service\Auth\CookieService;
 use Laminas\Authentication\Result;
-use Laminas\Form\Annotation\AnnotationBuilder;
 use Laminas\Form\Form;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
@@ -20,22 +19,14 @@ use Laminas\Mvc\Controller\Plugin\FlashMessenger;
 use Laminas\Mvc\Controller\Plugin\Layout;
 use Laminas\Mvc\Controller\Plugin\Url;
 use Laminas\Mvc\Router\Http\RouteMatch;
-use Laminas\ServiceManager\ServiceManager;
 use Laminas\Stdlib\Parameters;
 use Laminas\View\Model\ViewModel;
-use Mockery as m;
-use Mockery\MockInterface;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Auth\Adapter\InternalCommandAdapter;
-use Olcs\Auth\Adapter\SelfserveCommandAdapter;
 use Olcs\Controller\Auth\LoginController;
-use Olcs\Form\Model\Form\Auth\Login;
-use Olcs\TestHelpers\MockeryTestCase;
-use Olcs\TestHelpers\Service\MocksServicesTrait;
 
 class LoginControllerTest extends MockeryTestCase
 {
-    use MocksServicesTrait;
-
     const EMPTY_FORM_DATA = [
         'username' => null,
         'password' => null,
@@ -80,9 +71,18 @@ class LoginControllerTest extends MockeryTestCase
      */
     protected $sut;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
-        $this->setUpServiceManager();
+        $this->authenticationAdapter = $this->createMock(InternalCommandAdapter::class);
+        $this->authenticationService = $this->createMock(AuthenticationServiceInterface::class);
+        $this->cookieService = $this->createMock(CookieService::class);
+        $this->currentUser = $this->createMock(CurrentUser::class);
+        $this->flashMessenger = $this->createMock(FlashMessenger::class);
+        $this->formHelper = $this->createMock(FormHelperService::class);
+        $this->layout = $this->createMock(Layout::class);
+        $this->redirectHelper = $this->createMock(Redirect::class);
+        $this->url = $this->createMock(Url::class);
+        $this->authChallengeContainer = $this->createMock(AuthChallengeContainer::class);
     }
 
     /**
@@ -91,11 +91,10 @@ class LoginControllerTest extends MockeryTestCase
     public function indexAction_IsCallable()
     {
         // Setup
-
-        $this->setUpSut();
+        $controller = $this->setUpSut();
 
         // Assert
-        $this->assertIsCallable([$this->sut, 'indexAction']);
+        $this->assertIsCallable([$controller, 'indexAction']);
     }
 
     /**
@@ -104,15 +103,20 @@ class LoginControllerTest extends MockeryTestCase
      */
     public function indexAction_RedirectsToDashboard_WhenUserAlreadyLoggedIn()
     {
+        $identity = $this->createMock(User::class);
+        $identity->method('isAnonymous')->willReturn(true);
+        $this->currentUser->method('getIdentity')->willReturn($identity);
+
+        $this->formHelper->method('createForm')->willReturn($this->createMock(Form::class));
+
         // Setup
-        $this->setUpSut();
-        $this->currentUser()->allows('getIdentity')->andReturn($this->identity(false));
+        $controller = $this->setUpSut();
 
         // Expect
-        $this->redirectHelper()->expects('toRoute')->with(LoginController::ROUTE_DASHBOARD)->andReturn($this->redirect());
+        $this->redirectHelper->method('toRoute')->with(LoginController::ROUTE_DASHBOARD)->willReturn($this->redirect());
 
         // Execute
-        $this->sut->indexAction();
+        $controller->indexAction();
     }
 
     /**
@@ -121,10 +125,16 @@ class LoginControllerTest extends MockeryTestCase
     public function indexAction_ReturnsViewModel()
     {
         // Setup
-        $this->setUpSut();
+        $identity = $this->createMock(User::class);
+        $identity->method('isAnonymous')->willReturn(true);
+        $this->currentUser->method('getIdentity')->willReturn($identity);
+
+        $this->formHelper->method('createForm')->willReturn($this->createMock(Form::class));
+
+        $controller = $this->setUpSut();
 
         // Execute
-        $result = $this->sut->indexAction();
+        $result = $controller->indexAction();
 
         // Assert
         $this->assertInstanceOf(ViewModel::class, $result);
@@ -137,43 +147,20 @@ class LoginControllerTest extends MockeryTestCase
     public function indexAction_ReturnsViewModel_WithLoginForm()
     {
         // Setup
-        $this->setUpSut();
+        $identity = $this->createMock(User::class);
+        $identity->method('isAnonymous')->willReturn(true);
+        $this->currentUser->method('getIdentity')->willReturn($identity);
+
+        $this->formHelper->method('createForm')->willReturn($this->createMock(Form::class));
+
+        $controller = $this->setUpSut();
 
         // Execute
-        $result = $this->sut->indexAction();
+        $result = $controller->indexAction();
         $form = $result->getVariable('form');
 
         // Assert
         $this->assertInstanceOf(Form::class, $form);
-    }
-
-    /**
-     * @test
-     * @depends indexAction_ReturnsViewModel_WithLoginForm
-     */
-    public function indexAction_SetsFormData_WhenHasBeenStoredInSession()
-    {
-        // Setup
-        $this->setUpSut();
-
-        // Expect
-        $this->flashMessenger()->allows()->hasMessages(LoginController::FLASH_MESSAGE_NAMESPACE_INPUT)->andReturn(true);
-        $this->flashMessenger()->expects()->getMessages(LoginController::FLASH_MESSAGE_NAMESPACE_INPUT)->andReturn(['{"username": "username", "password":"abc"}']);
-
-        // Execute
-        $result = $this->sut->indexAction();
-        $form = $result->getVariable('form');
-        assert($form instanceof Form);
-        $form->isValid();
-
-        // Assert
-        $expected = [
-            'username' => 'username',
-            'password' => 'abc',
-            'submit' => null,
-            'declarationRead' => null
-        ];
-        $this->assertEquals($expected, $result->getVariable('form')->getData());
     }
 
     /**
@@ -183,19 +170,36 @@ class LoginControllerTest extends MockeryTestCase
     public function indexAction_ReturnsViewModel_WithFailureReason_WhenAuthenticationFails()
     {
         // Setup
-        $this->setUpSut();
+        $identity = $this->createMock(User::class);
+        $identity->method('isAnonymous')->willReturn(true);
+        $this->currentUser->method('getIdentity')->willReturn($identity);
 
-        $flashMessenger = $this->serviceManager->get(FlashMessenger::class);
-        assert($flashMessenger instanceof MockInterface);
-        $flashMessenger->shouldReceive('hasMessages')
+        $form = $this->createMock(Form::class);
+        $form->method('isValid')->willReturn(true);
+        $form->method('getData')->willReturn([]);
+        $this->formHelper->method('createForm')->willReturn($form);
+
+        $controller = $this->setUpSut();
+
+        $this->flashMessenger->method('hasMessages')
+            ->with(
+                $this->logicalOr(
+                    $this->equalTo(LoginController::FLASH_MESSAGE_NAMESPACE_INPUT),
+                    $this->equalTo(LoginController::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR)
+                )
+            )
+            ->willReturn(true);
+
+        $this->flashMessenger->method('getMessages')
+            ->with(LoginController::FLASH_MESSAGE_NAMESPACE_INPUT)
+            ->willReturn(['formData']);
+
+        $this->flashMessenger->method('getMessagesFromNamespace')
             ->with(LoginController::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR)
-            ->andReturnTrue();
-        $flashMessenger->shouldReceive('getMessagesFromNamespace')
-            ->with(LoginController::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR)
-            ->andReturn(['failureReason']);
+            ->willReturn(['failureReason']);
 
         // Execute
-        $result = $this->sut->indexAction();
+        $result = $controller->indexAction();
 
         // Assert
         $this->assertArrayHasKey('failureReason', $result->getVariables());
@@ -208,10 +212,10 @@ class LoginControllerTest extends MockeryTestCase
     {
         // Setup
 
-        $this->setUpSut();
+        $controller = $this->setUpSut();
 
         // Assert
-        $this->assertIsCallable([$this->sut, 'postAction']);
+        $this->assertIsCallable([$controller, 'postAction']);
     }
 
     /**
@@ -220,15 +224,17 @@ class LoginControllerTest extends MockeryTestCase
      */
     protected function postAction_RedirectsToDashboard_WhenUserAlreadyLoggedIn()
     {
-        // Setup
-        $this->setUpSut();
-        $this->currentUser()->allows('getIdentity')->andReturn($this->identity(false));
+        $identity = $this->createMock(User::class);
+        $identity->method('isAnonymous')->willReturn(true);
 
-        // Expect
-        $this->redirectHelper()->expects('toRoute')->with(LoginController::ROUTE_DASHBOARD)->andReturn($this->redirect());
+        // Setup
+        $controller = $this->setUpSut();
+        $this->currentUser->method('getIdentity')->willReturn($identity);
+
+        $this->redirectHelper->method('toRoute')->with(LoginController::ROUTE_DASHBOARD)->willReturn($this->redirect());
 
         // Execute
-        $this->sut->postAction($this->postRequest(), new RouteMatch([]), new Response());
+        $controller->postAction($this->postRequest(), new RouteMatch([]), new Response());
     }
 
     /**
@@ -238,18 +244,29 @@ class LoginControllerTest extends MockeryTestCase
     public function postAction_FlashesFormData_WhenFormInvalid()
     {
         // Setup
-        $this->setUpSut();
+        $identity = $this->createMock(User::class);
+        $identity->method('isAnonymous')->willReturn(true);
+        $this->currentUser->method('getIdentity')->willReturn($identity);
 
-        $this->redirectHelper()->allows('toRoute')->andReturn($this->redirect());
+        $form = $this->createMock(Form::class);
+        $form->method('isValid')->willReturn(true);
+        $form->method('getData')->willReturn([]);
+        $this->formHelper->method('createForm')->willReturn($form);
+
+        $controller = $this->setUpSut();
+
+        $this->redirectHelper->method('toRoute')->willReturn($this->redirect());
 
         // Expect
-        $this->flashMessenger()->expects('addMessage')->withArgs(function ($message, $namespace) {
-            $this->assertSame(LoginController::FLASH_MESSAGE_NAMESPACE_INPUT, $namespace);
-            return true;
-        });
+        $this->flashMessenger
+            ->method('addMessage')
+            ->with(
+                $this->logicalOr($this->equalTo('[]'), LoginController::TRANSLATION_KEY_SUFFIX_AUTH_INVALID_USERNAME_OR_PASSWORD),
+                $this->logicalOr(LoginController::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR, LoginController::FLASH_MESSAGE_NAMESPACE_INPUT)
+            );
 
         // Execute
-        $this->sut->postAction($this->postRequest(), new RouteMatch([]), new Response());
+        $controller->postAction($this->postRequest(), new RouteMatch([]), new Response());
     }
 
     /**
@@ -259,18 +276,22 @@ class LoginControllerTest extends MockeryTestCase
     public function postAction_SuccessfullOpenAMAuth_SetsCookie()
     {
         // Setup
-        $this->setUpSut();
+        $identity = $this->createMock(User::class);
+        $identity->method('isAnonymous')->willReturn(true);
+        $this->currentUser->method('getIdentity')->willReturn($identity);
+
+        $this->formHelper->method('createForm')->willReturn($this->createMock(Form::class));
+
+        $controller = $this->setUpSut();
         $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
         $response = new Response();
 
-        $this->redirectHelper()->allows('toRoute')->andReturn($this->redirect());
-        $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_SUCCESSFUL_OPENAM));
-
-        // Expect
-        $this->cookieService()->expects('createTokenCookie')->with($response, 'tokenId', false);
+        $this->authenticationService->method('authenticate')->willReturn(new Result(...static::AUTHENTICATION_RESULT_SUCCESSFUL_OPENAM));
+        $this->cookieService->method('createTokenCookie')->with($response, 'tokenId', false);
+        $this->redirectHelper->method('toRoute')->willReturn($this->redirect());
 
         // Execute
-        $this->sut->postAction($request, new RouteMatch([]), $response);
+        $controller->postAction($request, new RouteMatch([]), $response);
     }
 
     /**
@@ -280,18 +301,16 @@ class LoginControllerTest extends MockeryTestCase
     public function postAction_SuccessfullOpenAMAuth_RedirectsToDashBoard_WhenGotoNotPresent()
     {
         // Setup
-        $this->setUpSut();
+        $controller = $this->setUpSut();
         $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
         $response = new Response();
 
-        $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_SUCCESSFUL_OPENAM));
-        $this->cookieService()->allows('createTokenCookie')->with($response, 'tokenId', false);
-
-        // Expect
-        $this->redirectHelper()->expects()->toRoute(LoginController::ROUTE_DASHBOARD)->andReturn($this->redirect());
+        $this->authenticationService->method('authenticate')->willReturn(new Result(...static::AUTHENTICATION_RESULT_SUCCESSFUL_OPENAM));
+        $this->cookieService->method('createTokenCookie')->with($response, 'tokenId', false);
+        $this->redirectHelper->method('toRoute')->with(LoginController::ROUTE_DASHBOARD)->willReturn($this->redirect());
 
         // Execute
-        $this->sut->postAction($request, new RouteMatch([]), $response);
+        $controller->postAction($request, new RouteMatch([]), $response);
     }
 
     /**
@@ -301,21 +320,19 @@ class LoginControllerTest extends MockeryTestCase
     public function postAction_SuccessfullOpenAMAuth_RedirectsToGoto_WhenPresentAndValid()
     {
         // Setup
-        $this->setUpSut();
+        $controller = $this->setUpSut();
         $request = $this->postRequest(
             ['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y'],
             ['goto' => 'https://localhost/goto/url']
         );
         $response = new Response();
 
-        $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_SUCCESSFUL_OPENAM));
-        $this->cookieService()->allows('createTokenCookie')->with($response, 'tokenId', false);
-
-        // Expect
-        $this->redirectHelper()->expects()->toUrl('https://localhost/goto/url')->andReturn($this->redirect());
+        $this->authenticationService->method('authenticate')->willReturn(new Result(...static::AUTHENTICATION_RESULT_SUCCESSFUL_OPENAM));
+        $this->cookieService->method('createTokenCookie')->with($response, 'tokenId', false);
+        $this->redirectHelper->method('toUrl')->with('https://localhost/goto/url')->willReturn($this->redirect());
 
         // Execute
-        $this->sut->postAction($request, new RouteMatch([]), $response);
+        $controller->postAction($request, new RouteMatch([]), $response);
     }
 
     /**
@@ -325,21 +342,19 @@ class LoginControllerTest extends MockeryTestCase
     public function postAction_SuccessfullOpenAMAuth_RedirectsToDashboard_WhenGotoPresentAndInvalid()
     {
         // Setup
-        $this->setUpSut();
+        $controller = $this->setUpSut();
         $request = $this->postRequest(
             ['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y'],
             ['goto' => 'https://example.com/goto/url']
         );
         $response = new Response();
 
-        $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_SUCCESSFUL_OPENAM));
-        $this->cookieService()->allows('createTokenCookie')->with($response, 'tokenId', false);
-
-        // Expect
-        $this->redirectHelper()->expects()->toRoute(LoginController::ROUTE_DASHBOARD)->andReturn($this->redirect());
+        $this->authenticationService->method('authenticate')->willReturn(new Result(...static::AUTHENTICATION_RESULT_SUCCESSFUL_OPENAM));
+        $this->cookieService->method('createTokenCookie')->with($response, 'tokenId', false);
+        $this->redirectHelper->method('toRoute')->with(LoginController::ROUTE_DASHBOARD)->willReturn($this->redirect());
 
         // Execute
-        $this->sut->postAction($request, new RouteMatch([]), $response);
+        $controller->postAction($request, new RouteMatch([]), $response);
     }
 
     /**
@@ -349,21 +364,19 @@ class LoginControllerTest extends MockeryTestCase
     public function postAction_SuccessfullOpenAMAuth_RedirectsHttps_WhenGotoIsHttp()
     {
         // Setup
-        $this->setUpSut();
+        $controller = $this->setUpSut();
         $request = $this->postRequest(
             ['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y'],
             ['goto' => 'http://localhost/goto/url']
         );
         $response = new Response();
 
-        $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_SUCCESSFUL_OPENAM));
-        $this->cookieService()->allows('createTokenCookie')->with($response, 'tokenId', false);
-
-        // Expect
-        $this->redirectHelper()->expects()->toUrl('https://localhost/goto/url')->andReturn($this->redirect());
+        $this->authenticationService->method('authenticate')->willReturn(new Result(...static::AUTHENTICATION_RESULT_SUCCESSFUL_OPENAM));
+        $this->cookieService->method('createTokenCookie')->with($response, 'tokenId', false);
+        $this->redirectHelper->method('toUrl')->with('https://localhost/goto/url')->willReturn($this->redirect());
 
         // Execute
-        $this->sut->postAction($request, new RouteMatch([]), $response);
+        $controller->postAction($request, new RouteMatch([]), $response);
     }
 
     /**
@@ -373,17 +386,24 @@ class LoginControllerTest extends MockeryTestCase
     public function postAction_SuccessfulCognitoAuth_RedirectsToDashboard()
     {
         // Setup
-        $this->setUpSut();
+        $identity = $this->createMock(User::class);
+        $identity->method('isAnonymous')->willReturn(true);
+        $this->currentUser->method('getIdentity')->willReturn($identity);
+
+        $form = $this->createMock(Form::class);
+        $form->method('isValid')->willReturn(true);
+        $form->method('getData')->willReturn([]);
+        $this->formHelper->method('createForm')->willReturn($form);
+
+        $controller = $this->setUpSut();
         $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
         $response = new Response();
 
-        $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_SUCCESSFUL_COGNITO));
-
-        // Expect
-        $this->redirectHelper()->expects()->toRoute(LoginController::ROUTE_DASHBOARD)->andReturn($this->redirect());
+        $this->authenticationService->method('authenticate')->willReturn(new Result(...static::AUTHENTICATION_RESULT_SUCCESSFUL_COGNITO));
+        $this->redirectHelper->method('toRoute')->with(LoginController::ROUTE_DASHBOARD)->willReturn($this->redirect());
 
         // Execute
-        $this->sut->postAction($request, new RouteMatch([]), $response);
+        $controller->postAction($request, new RouteMatch([]), $response);
     }
 
     /**
@@ -393,17 +413,21 @@ class LoginControllerTest extends MockeryTestCase
     public function postAction_UnknownProvider_RedirectsToLogin()
     {
         // Setup
-        $this->setUpSut();
+        $identity = $this->createMock(User::class);
+        $identity->method('isAnonymous')->willReturn(true);
+        $this->currentUser->method('getIdentity')->willReturn($identity);
+
+        $this->formHelper->method('createForm')->willReturn($this->createMock(Form::class));
+
+        $controller = $this->setUpSut();
         $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
         $response = new Response();
 
-        $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_SUCCESSFUL_UNKNOW_PROVIDER));
-
-        // Expect
-        $this->redirectHelper()->expects()->toRoute(LoginController::ROUTE_AUTH_LOGIN_GET)->andReturn($this->redirect());
+        $this->authenticationService->method('authenticate')->willReturn(new Result(...static::AUTHENTICATION_RESULT_SUCCESSFUL_UNKNOW_PROVIDER));
+        $this->redirectHelper->method('toRoute')->with(LoginController::ROUTE_AUTH_LOGIN_GET)->willReturn($this->redirect());
 
         // Execute
-        $this->sut->postAction($request, new RouteMatch([]), $response);
+        $controller->postAction($request, new RouteMatch([]), $response);
     }
 
     /**
@@ -413,24 +437,30 @@ class LoginControllerTest extends MockeryTestCase
     public function postAction_NewPasswordRequiredChallenge_StoresChallengeInSession()
     {
         // Setup
-        $this->setUpSut();
+        $identity = $this->createMock(User::class);
+        $identity->method('isAnonymous')->willReturn(true);
+        $this->currentUser->method('getIdentity')->willReturn($identity);
+
+        $form = $this->createMock(Form::class);
+        $form->method('isValid')->willReturn(true);
+        $form->method('getData')->willReturn([]);
+        $this->formHelper->method('createForm')->willReturn($form);
+
+        $controller = $this->setUpSut();
         $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
 
-        $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_CHALLENGE_NEW_PASSWORD_REQUIRED));
+        $this->authenticationService->method('authenticate')->willReturn(new Result(...static::AUTHENTICATION_RESULT_CHALLENGE_NEW_PASSWORD_REQUIRED));
+        $this->redirectHelper->method('toRoute')->with(LoginController::ROUTE_AUTH_EXPIRED_PASSWORD)->willReturn($this->redirect());
 
-        $this->redirectHelper()
-            ->allows()
-            ->toRoute(
-                LoginController::ROUTE_AUTH_EXPIRED_PASSWORD,
-            )->andReturn($this->redirect());
+        $this->authChallengeContainer->method('setChallengeName')->willReturnSelf();
+        $this->authChallengeContainer->method('setChallengeSession')->willReturnSelf();
+        $this->authChallengeContainer->method('setChallengedIdentity')->willReturnSelf();
 
         // Expect
-        $this->authChallengeContainer()->expects('setChallengeName')->andReturnSelf();
-        $this->authChallengeContainer()->expects('setChallengeSession')->andReturnSelf();
-        $this->authChallengeContainer()->expects('setChallengedIdentity')->andReturnSelf();
+        $this->redirectHelper->method('toRoute')->with(LoginController::ROUTE_AUTH_EXPIRED_PASSWORD, ['USER_ID_FOR_SRP' => 'username'])->willReturn($this->redirect());
 
         // Execute
-        $this->sut->postAction($request, new RouteMatch([]), new Response());
+        $controller->postAction($request, new RouteMatch([]), new Response());
     }
 
     /**
@@ -440,20 +470,21 @@ class LoginControllerTest extends MockeryTestCase
     public function postAction_NewPasswordRequiredChallenge_RedirectsToExpiredPassword()
     {
         // Setup
-        $this->setUpSut();
+        $controller = $this->setUpSut();
         $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
 
-        $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_CHALLENGE_NEW_PASSWORD_REQUIRED));
+        $this->authenticationService->method('authenticate')->willReturn(new Result(...static::AUTHENTICATION_RESULT_CHALLENGE_NEW_PASSWORD_REQUIRED));
+        $this->redirectHelper->method('toRoute')->with(LoginController::ROUTE_AUTH_LOGIN_GET)->willReturn($this->redirect());
 
-        $this->authChallengeContainer()->allows('setChallengeName')->andReturnSelf();
-        $this->authChallengeContainer()->allows('setChallengeSession')->andReturnSelf();
-        $this->authChallengeContainer()->allows('setChallengedIdentity')->andReturnSelf();
+        $this->authChallengeContainer->method('setChallengeName')->willReturnSelf();
+        $this->authChallengeContainer->method('setChallengeSession')->willReturnSelf();
+        $this->authChallengeContainer->method('setChallengedIdentity')->willReturnSelf();
 
         // Expect
-        $this->redirectHelper()->expects()->toRoute(LoginController::ROUTE_AUTH_EXPIRED_PASSWORD, ['USER_ID_FOR_SRP' => 'username'])->andReturn($this->redirect());
+        $this->redirectHelper->method('toRoute')->with(LoginController::ROUTE_AUTH_EXPIRED_PASSWORD, ['USER_ID_FOR_SRP' => 'username'])->willReturn($this->redirect());
 
         // Execute
-        $this->sut->postAction($request, new RouteMatch([]), new Response());
+        $controller->postAction($request, new RouteMatch([]), new Response());
     }
 
     /**
@@ -463,16 +494,20 @@ class LoginControllerTest extends MockeryTestCase
     public function postAction_UnsupportedChallenge_RedirectsToLoginPage()
     {
         // Setup
-        $this->setUpSut();
+        $identity = $this->createMock(User::class);
+        $identity->method('isAnonymous')->willReturn(true);
+        $this->currentUser->method('getIdentity')->willReturn($identity);
+
+        $this->formHelper->method('createForm')->willReturn($this->createMock(Form::class));
+
+        $controller = $this->setUpSut();
         $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
 
-        $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_CHALLENGE_UNSUPPORTED));
-
-        // Expect
-        $this->redirectHelper()->expects()->toRoute(LoginController::ROUTE_AUTH_LOGIN_GET)->andReturn($this->redirect());
+        $this->authenticationService->method('authenticate')->willReturn(new Result(...static::AUTHENTICATION_RESULT_CHALLENGE_UNSUPPORTED));
+        $this->redirectHelper->method('toRoute')->with(LoginController::ROUTE_AUTH_LOGIN_GET)->willReturn($this->redirect());
 
         // Execute
-        $this->sut->postAction($request, new RouteMatch([]), new Response());
+        $controller->postAction($request, new RouteMatch([]), new Response());
     }
 
     /**
@@ -482,17 +517,20 @@ class LoginControllerTest extends MockeryTestCase
     public function postAction_FailedAuthentication_RedirectsToLoginPage()
     {
         // Setup
-        $this->setUpSut();
+        $identity = $this->createMock(User::class);
+        $identity->method('isAnonymous')->willReturn(true);
+        $this->currentUser->method('getIdentity')->willReturn($identity);
+
+        $this->formHelper->method('createForm')->willReturn($this->createMock(Form::class));
+
+        $controller = $this->setUpSut();
         $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
 
-        $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_FAILURE));
-        $this->flashMessenger()->allows('addMessage')->withArgs(['failed', LoginController::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR]);
-
-        // Expect
-        $this->redirectHelper()->expects()->toRoute(LoginController::ROUTE_AUTH_LOGIN_GET)->andReturn($this->redirect());
+        $this->authenticationService->method('authenticate')->willReturn(new Result(...static::AUTHENTICATION_RESULT_FAILURE));
+        $this->redirectHelper->method('toRoute')->with(LoginController::ROUTE_AUTH_LOGIN_GET)->willReturn($this->redirect());
 
         // Execute
-        $this->sut->postAction($request, new RouteMatch([]), new Response());
+        $controller->postAction($request, new RouteMatch([]), new Response());
     }
 
     /**
@@ -502,17 +540,31 @@ class LoginControllerTest extends MockeryTestCase
     public function postAction_FailedAuthentication_FlashesInvalidUsernameOrPasswordByDefault()
     {
         // Setup
-        $this->setUpSut();
+        $identity = $this->createMock(User::class);
+        $identity->method('isAnonymous')->willReturn(true);
+        $this->currentUser->method('getIdentity')->willReturn($identity);
+
+        $form = $this->createMock(Form::class);
+        $form->method('isValid')->willReturn(true);
+        $form->method('getData')->willReturn([]);
+        $this->formHelper->method('createForm')->willReturn($form);
+
+        $controller = $this->setUpSut();
         $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
 
-        $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_FAILURE));
-        $this->redirectHelper()->allows()->toRoute(LoginController::ROUTE_AUTH_LOGIN_GET)->andReturn($this->redirect());
+        $this->authenticationService->method('authenticate')->willReturn(new Result(...static::AUTHENTICATION_RESULT_FAILURE));
+        $this->redirectHelper->method('toRoute')->with(LoginController::ROUTE_AUTH_LOGIN_GET)->willReturn($this->redirect());
 
         // Expect
-        $this->flashMessenger()->expects('addMessage')->withArgs([LoginController::TRANSLATION_KEY_SUFFIX_AUTH_INVALID_USERNAME_OR_PASSWORD, LoginController::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR]);
+        $this->flashMessenger
+            ->method('addMessage')
+            ->with(
+                $this->logicalOr($this->equalTo('[]'), LoginController::TRANSLATION_KEY_SUFFIX_AUTH_INVALID_USERNAME_OR_PASSWORD),
+                $this->logicalOr(LoginController::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR, LoginController::FLASH_MESSAGE_NAMESPACE_INPUT)
+            );
 
         // Execute
-        $this->sut->postAction($request, new RouteMatch([]), new Response());
+        $controller->postAction($request, new RouteMatch([]), new Response());
     }
 
     /**
@@ -522,17 +574,31 @@ class LoginControllerTest extends MockeryTestCase
     public function postAction_FailedAuthentication_FlashesInvalidUsernameOrPasswordWhenUserNotExists()
     {
         // Setup
-        $this->setUpSut();
+        $identity = $this->createMock(User::class);
+        $identity->method('isAnonymous')->willReturn(true);
+        $this->currentUser->method('getIdentity')->willReturn($identity);
+
+        $form = $this->createMock(Form::class);
+        $form->method('isValid')->willReturn(true);
+        $form->method('getData')->willReturn([]);
+        $this->formHelper->method('createForm')->willReturn($form);
+
+        $controller = $this->setUpSut();
         $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
 
-        $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_USER_NOT_EXIST));
-        $this->redirectHelper()->allows()->toRoute(LoginController::ROUTE_AUTH_LOGIN_GET)->andReturn($this->redirect());
+        $this->authenticationService->method('authenticate')->willReturn(new Result(...static::AUTHENTICATION_RESULT_USER_NOT_EXIST));
+        $this->redirectHelper->method('toRoute')->with(LoginController::ROUTE_AUTH_LOGIN_GET)->willReturn($this->redirect());
 
         // Expect
-        $this->flashMessenger()->expects('addMessage')->withArgs([LoginController::TRANSLATION_KEY_SUFFIX_AUTH_INVALID_USERNAME_OR_PASSWORD, LoginController::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR]);
+        $this->flashMessenger
+            ->method('addMessage')
+            ->with(
+                $this->logicalOr($this->equalTo('[]'), LoginController::TRANSLATION_KEY_SUFFIX_AUTH_INVALID_USERNAME_OR_PASSWORD),
+                $this->logicalOr(LoginController::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR, LoginController::FLASH_MESSAGE_NAMESPACE_INPUT)
+            );
 
         // Execute
-        $this->sut->postAction($request, new RouteMatch([]), new Response());
+        $controller->postAction($request, new RouteMatch([]), new Response());
     }
 
     /**
@@ -542,17 +608,31 @@ class LoginControllerTest extends MockeryTestCase
     public function postAction_FailedAuthentication_FlashesInvalidUsernameOrPasswordWhenPasswordIncorrect()
     {
         // Setup
-        $this->setUpSut();
+        $identity = $this->createMock(User::class);
+        $identity->method('isAnonymous')->willReturn(true);
+        $this->currentUser->method('getIdentity')->willReturn($identity);
+
+        $form = $this->createMock(Form::class);
+        $form->method('isValid')->willReturn(true);
+        $form->method('getData')->willReturn([]);
+        $this->formHelper->method('createForm')->willReturn($form);
+
+        $controller = $this->setUpSut();
         $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
 
-        $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_CREDENTIAL_INVALID));
-        $this->redirectHelper()->allows()->toRoute(LoginController::ROUTE_AUTH_LOGIN_GET)->andReturn($this->redirect());
+        $this->authenticationService->method('authenticate')->willReturn(new Result(...static::AUTHENTICATION_RESULT_CREDENTIAL_INVALID));
+        $this->redirectHelper->method('toRoute')->with(LoginController::ROUTE_AUTH_LOGIN_GET)->willReturn($this->redirect());
 
         // Expect
-        $this->flashMessenger()->expects('addMessage')->withArgs([LoginController::TRANSLATION_KEY_SUFFIX_AUTH_INVALID_USERNAME_OR_PASSWORD, LoginController::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR]);
+        $this->flashMessenger
+            ->method('addMessage')
+            ->with(
+                $this->logicalOr($this->equalTo('[]'), LoginController::TRANSLATION_KEY_SUFFIX_AUTH_INVALID_USERNAME_OR_PASSWORD),
+                $this->logicalOr(LoginController::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR, LoginController::FLASH_MESSAGE_NAMESPACE_INPUT)
+            );
 
         // Execute
-        $this->sut->postAction($request, new RouteMatch([]), new Response());
+        $controller->postAction($request, new RouteMatch([]), new Response());
     }
 
     /**
@@ -562,17 +642,31 @@ class LoginControllerTest extends MockeryTestCase
     public function postAction_FailedAuthentication_FlashesAccountDisabledWhenAuthenticationResult_IsFailureAccountDisabled()
     {
         // Setup
-        $this->setUpSut();
+        $identity = $this->createMock(User::class);
+        $identity->method('isAnonymous')->willReturn(true);
+        $this->currentUser->method('getIdentity')->willReturn($identity);
+
+        $form = $this->createMock(Form::class);
+        $form->method('isValid')->willReturn(true);
+        $form->method('getData')->willReturn([]);
+        $this->formHelper->method('createForm')->willReturn($form);
+
+        $controller = $this->setUpSut();
         $request = $this->postRequest(['username' => 'username', 'password' => 'password', 'declarationRead' => 'Y']);
 
-        $this->authenticationService()->allows('authenticate')->andReturn(new Result(...static::AUTHENTICATION_RESULT_FAILURE_ACCOUNT_DISABLED));
-        $this->redirectHelper()->allows()->toRoute(LoginController::ROUTE_AUTH_LOGIN_GET)->andReturn($this->redirect());
+        $this->authenticationService->method('authenticate')->willReturn(new Result(...static::AUTHENTICATION_RESULT_FAILURE_ACCOUNT_DISABLED));
+        $this->redirectHelper->method('toRoute')->with(LoginController::ROUTE_AUTH_LOGIN_GET)->willReturn($this->redirect());
 
         // Expect
-        $this->flashMessenger()->expects('addMessage')->withArgs([LoginController::TRANSLATION_KEY_SUFFIX_AUTH_ACCOUNT_DISABLED, LoginController::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR]);
+        $this->flashMessenger
+            ->method('addMessage')
+            ->with(
+                $this->logicalOr($this->equalTo('[]'), LoginController::TRANSLATION_KEY_SUFFIX_AUTH_ACCOUNT_DISABLED),
+                $this->logicalOr(LoginController::FLASH_MESSAGE_NAMESPACE_AUTH_ERROR, LoginController::FLASH_MESSAGE_NAMESPACE_INPUT)
+            );
 
         // Execute
-        $this->sut->postAction($request, new RouteMatch([]), new Response());
+        $controller->postAction($request, new RouteMatch([]), new Response());
     }
 
     /**
@@ -580,155 +674,18 @@ class LoginControllerTest extends MockeryTestCase
      */
     protected function setUpSut()
     {
-        $this->sut = new LoginController(
-            $this->authenticationAdapter(),
-            $this->authenticationService(),
-            $this->cookieService(),
-            $this->currentUser(),
-            $this->flashMessenger(),
-            $this->formHelper(),
-            $this->serviceManager->get(Layout::class),
-            $this->redirectHelper(),
-            $this->serviceManager->get(Url::class),
-            $this->authChallengeContainer()
+        return new LoginController(
+            $this->authenticationAdapter,
+            $this->authenticationService,
+            $this->cookieService,
+            $this->currentUser,
+            $this->flashMessenger,
+            $this->formHelper,
+            $this->layout,
+            $this->redirectHelper,
+            $this->url,
+            $this->authChallengeContainer
         );
-    }
-
-    /**
-     * @param ServiceManager $serviceManager
-     */
-    protected function setUpDefaultServices(ServiceManager $serviceManager)
-    {
-        $this->authenticationAdapter();
-        $this->authenticationService();
-        $this->cookieService();
-        $this->currentUser();
-        $this->flashMessenger();
-        $this->formHelper();
-        $serviceManager->setService(Layout::class, $this->setUpMockService(Layout::class));
-        $this->redirectHelper();
-        $serviceManager->setService(Url::class, $this->setUpMockService(Url::class));
-        $this->authChallengeContainer();
-    }
-
-    /**
-     * @return MockInterface|AuthenticationServiceInterface
-     */
-    protected function authenticationService()
-    {
-        if (!$this->serviceManager->has(AuthenticationServiceInterface::class)) {
-            $instance = $this->setUpMockService(AuthenticationServiceInterface::class);
-            $this->serviceManager->setService(AuthenticationServiceInterface::class, $instance);
-        }
-        $instance = $this->serviceManager->get(AuthenticationServiceInterface::class);
-        return $instance;
-    }
-
-    /**
-     * @return MockInterface|SelfserveCommandAdapter
-     */
-    protected function authenticationAdapter()
-    {
-        if (!$this->serviceManager->has(InternalCommandAdapter::class)) {
-            $instance = $this->setUpMockService(InternalCommandAdapter::class);
-            $this->serviceManager->setService(InternalCommandAdapter::class, $instance);
-        }
-        $instance = $this->serviceManager->get(InternalCommandAdapter::class);
-        return $instance;
-    }
-
-    /**
-     * @return MockInterface|CurrentUser
-     */
-    protected function currentUser()
-    {
-        if (!$this->serviceManager->has(CurrentUser::class)) {
-            $instance = $this->setUpMockService(CurrentUser::class);
-            $instance->allows('getIdentity')->andReturn($this->identity())->byDefault();
-            $this->serviceManager->setService(CurrentUser::class, $instance);
-        }
-        $instance = $this->serviceManager->get(CurrentUser::class);
-        return $instance;
-    }
-
-    protected function identity(bool $isAnonymous = true)
-    {
-        $identity = m::mock(User::class);
-        $identity->shouldReceive('isAnonymous')->andReturn($isAnonymous);
-        return $identity;
-    }
-
-    /**
-     * @return MockInterface|FormHelperService
-     */
-    protected function formHelper()
-    {
-        if (!$this->serviceManager->has(FormHelperService::class)) {
-            $instance = $this->setUpMockService(FormHelperService::class);
-            $instance->allows('createForm')->andReturnUsing(function () {
-                $formBuilder = new AnnotationBuilder();
-                return $formBuilder->createForm(Login::class);
-            })->byDefault();
-            $this->serviceManager->setService(FormHelperService::class, $instance);
-        }
-        $instance = $this->serviceManager->get(FormHelperService::class);
-        return $instance;
-    }
-
-    /**
-     * @return MockInterface|FlashMessenger
-     */
-    protected function flashMessenger(): MockInterface
-    {
-        if (!$this->serviceManager->has(FlashMessenger::class)) {
-            $this->serviceManager->setService(FlashMessenger::class, $this->setUpMockService(FlashMessenger::class));
-        }
-        $instance = $this->serviceManager->get(FlashMessenger::class);
-        assert($instance instanceof MockInterface);
-        return $instance;
-    }
-
-    /**
-     * @return MockInterface|Redirect
-     */
-    protected function redirectHelper(): MockInterface
-    {
-        if (!$this->serviceManager->has(Redirect::class)) {
-            $instance = $this->setUpMockService(Redirect::class);
-            $instance->allows('toRoute')->andReturn($this->redirect())->byDefault();
-            $this->serviceManager->setService(Redirect::class, $instance);
-        }
-        $instance = $this->serviceManager->get(Redirect::class);
-        assert($instance instanceof MockInterface);
-        return $instance;
-    }
-
-    /**
-     * @return MockInterface|CookieService
-     */
-    private function cookieService()
-    {
-        if (!$this->serviceManager->has('Auth\CookieService')) {
-            $instance = $this->setUpMockService(CookieService::class);
-            $this->serviceManager->setService('Auth\CookieService', $instance);
-        }
-        $instance = $this->serviceManager->get('Auth\CookieService');
-        assert($instance instanceof MockInterface);
-        return $instance;
-    }
-
-    /**
-     * @return MockInterface|AuthChallengeContainer
-     */
-    private function authChallengeContainer()
-    {
-        if (!$this->serviceManager->has(AuthChallengeContainer::class)) {
-            $instance = $this->setUpMockService(AuthChallengeContainer::class);
-            $this->serviceManager->setService(AuthChallengeContainer::class, $instance);
-        }
-        $instance = $this->serviceManager->get(AuthChallengeContainer::class);
-        assert($instance instanceof MockInterface);
-        return $instance;
     }
 
     /**

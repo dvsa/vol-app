@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace AdminTest\Data\Mapper;
 
 use Mockery as m;
-use Olcs\TestHelpers\MockeryTestCase;
 use Admin\Data\Mapper\BusNoticePeriod;
 use Laminas\Form\FormInterface;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 /**
  * @see BusNoticePeriod

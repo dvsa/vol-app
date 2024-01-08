@@ -3,7 +3,7 @@
 namespace AdminTest\Form\Model\Form;
 
 use Common\Form\Elements\InputFilters\SingleCheckbox;
-use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
+use Dvsa\OlcsTest\FormTester\AbstractFormValidationTestCase;
 
 /**
  * Class ScanningTest

@@ -3,7 +3,7 @@
 namespace OlcsTest\Form\Model\Form;
 
 use Common\Form\Elements\Validators\DateNotInFuture;
-use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
+use Dvsa\OlcsTest\FormTester\AbstractFormValidationTestCase;
 use Common\Validator\DateCompare;
 
 /**

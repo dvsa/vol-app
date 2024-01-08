@@ -2,8 +2,7 @@
 
 namespace OlcsTest\Form\Model\Form;
 
-use Olcs\TestHelpers\FormTester\AbstractFormTest as BaseAbstract;
-use OlcsTest\Bootstrap;
+use Dvsa\OlcsTest\FormTester\AbstractFormTest as BaseAbstract;
 
 /**
  * Class AbstractFormTest
@@ -11,11 +10,4 @@ use OlcsTest\Bootstrap;
  */
 abstract class AbstractFormTest extends BaseAbstract
 {
-    /**
-     * @return \Laminas\ServiceManager\ServiceManager
-     */
-    protected function getServiceManager()
-    {
-        return Bootstrap::getRealServiceManager();
-    }
 }

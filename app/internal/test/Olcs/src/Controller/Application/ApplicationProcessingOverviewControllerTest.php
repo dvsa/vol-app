@@ -9,21 +9,14 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\OppositionHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
-use Dvsa\Olcs\Api\Domain\Repository\DataService;
 use Laminas\Mvc\Router\Http\TreeRouteStack;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Application\Processing\ApplicationProcessingOverviewController;
-use Laminas\Mvc\Controller\Plugin\FlashMessenger;
-use Laminas\Mvc\Controller\Plugin\PluginInterface;
 use Laminas\Mvc\Controller\Plugin\Redirect;
 use Laminas\Mvc\Controller\PluginManager;
-use Laminas\Mvc\Controller\Plugin\Params;
 use Laminas\Mvc\Router\RouteMatch;
-use Laminas\View\Model\ViewModel;
-use OlcsTest\Bootstrap;
-use Laminas\Http\Response;
 use Laminas\Mvc\MvcEvent;
-use Common\Service\Data\Application as ApplicationData;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
@@ -68,12 +61,7 @@ class ApplicationProcessingOverviewControllerTest extends MockeryTestCase
             $mockNavigation
         );
 
-        $serviceManager = Bootstrap::getServiceManager();
-
-        /**
-        * @var \Laminas\Mvc\Router\Http\TreeRouteStack $router
-        */
-        $router = $serviceManager->get('HttpRouter');
+        $router = $this->createMock(TreeRouteStack::class);
         $routeMatch = new RouteMatch(
             [
                 'application' => 'internal',
@@ -90,7 +78,7 @@ class ApplicationProcessingOverviewControllerTest extends MockeryTestCase
 
         $controller->setEvent($event);
         $controller->setPluginManager($pluginManager);
-        $controller->setServiceLocator($serviceManager);
+        $controller->setServiceLocator($this->createMock(ServiceLocatorInterface::class));
 
         return $controller;
     }

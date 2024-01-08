@@ -3,7 +3,7 @@
 namespace OlcsTest\Form\Model\Form\Licence\Surrender;
 
 use Olcs\Form\Model\Form\Licence\Surrender\Surrender;
-use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
+use Dvsa\OlcsTest\FormTester\AbstractFormValidationTestCase;
 use Laminas\Form\Element\Checkbox;
 use Laminas\Validator;
 

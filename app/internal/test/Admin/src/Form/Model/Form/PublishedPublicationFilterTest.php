@@ -3,7 +3,7 @@
 namespace AdminTest\Form\Model\Form;
 
 use Admin\Form\Model\Form\PublishedPublicationFilter;
-use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
+use Dvsa\OlcsTest\FormTester\AbstractFormValidationTestCase;
 use Laminas\Form\Element\Select;
 
 class PublishedPublicationFilterTest extends AbstractFormValidationTestCase

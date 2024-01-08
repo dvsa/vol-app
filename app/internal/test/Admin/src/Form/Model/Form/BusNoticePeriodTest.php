@@ -6,7 +6,7 @@ namespace OlcsTest\Form\Model\Form;
 
 use Admin\Form\Model\Form\BusNoticePeriod;
 use Laminas\Validator\Between;
-use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
+use Dvsa\OlcsTest\FormTester\AbstractFormValidationTestCase;
 
 /**
  * @see   BusNoticePeriod

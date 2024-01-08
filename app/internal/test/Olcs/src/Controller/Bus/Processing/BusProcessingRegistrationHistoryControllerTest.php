@@ -12,7 +12,7 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Laminas\Navigation\Navigation;
-use Olcs\TestHelpers\ControllerPluginManagerHelper;
+use Dvsa\OlcsTest\Controller\ControllerPluginManagerHelper;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 

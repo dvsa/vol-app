@@ -6,17 +6,16 @@
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
 
-namespace OlcsTest\Controller;
+namespace OlcsTest\Olcs\Controller\Cases\Opposition;
 
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
+use Dvsa\OlcsTest\Controller\ControllerPluginManagerHelper;
+use Dvsa\OlcsTest\Controller\ControllerRouteMatchHelper;
 use Laminas\Navigation\Navigation;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Olcs\Controller\Bus\Service\BusServiceController as Sut;
-use Olcs\TestHelpers\ControllerPluginManagerHelper;
-use Olcs\TestHelpers\ControllerRouteMatchHelper;
 
 /**
  * Opposition Test Controller

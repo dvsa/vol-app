@@ -17,3 +17,13 @@ node_modules
 /.vscode
 test/coverage/
 .scannerwork/
+
+vendor-bin/**/composer.lock
+.phpunit.result.cache
+
+# Non-dist files for the static analysis.
+# This allows developers to set a different (more strict) static analysis locally.
+phpcs.xml
+phpstan.neon
+phpunit.xml
+psalm.xml

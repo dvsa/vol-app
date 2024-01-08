@@ -2,7 +2,7 @@
 
 namespace OlcsTest\Form\Model\Form;
 
-use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
+use Dvsa\OlcsTest\FormTester\AbstractFormValidationTestCase;
 use Common\Form\Elements\InputFilters\ActionButton;
 use Common\Form\Elements\Types\AttachFilesButton;
 

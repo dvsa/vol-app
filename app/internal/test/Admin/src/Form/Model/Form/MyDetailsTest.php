@@ -2,7 +2,7 @@
 
 namespace AdminTest\Form\Model\Form;
 
-use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
+use Dvsa\OlcsTest\FormTester\AbstractFormValidationTestCase;
 use Common\Form\Elements\Validators\DateNotInFuture;
 use Laminas\Validator\EmailAddress;
 use Common\Form\Elements\Validators\EmailConfirm;

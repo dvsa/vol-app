@@ -7,7 +7,7 @@ use Common\Form\Elements\Validators\DateNotInFuture;
 use Common\Validator\Date as DateValidator;
 use Common\Validator\DateCompare;
 use DateTime;
-use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
+use Dvsa\OlcsTest\FormTester\AbstractFormValidationTestCase;
 use Laminas\Validator\StringLength;
 use Laminas\Form\Element\Select;
 use Common\Form\Elements\Custom\OlcsCheckbox;

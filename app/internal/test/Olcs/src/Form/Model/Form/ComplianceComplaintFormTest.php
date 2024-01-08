@@ -2,7 +2,7 @@
 
 namespace OlcsTest\Form\Model\Form;
 
-use Olcs\TestHelpers\FormTester\Data\Object as F;
+use Dvsa\OlcsTest\FormTester\Data\Object as F;
 
 /**
  * Class ComplianceComplaintFormTest

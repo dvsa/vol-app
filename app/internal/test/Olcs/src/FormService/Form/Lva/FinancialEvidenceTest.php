@@ -4,11 +4,11 @@ namespace OlcsTest\FormService\Form\Lva;
 
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Helper\UrlHelperService;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\FinancialEvidence;
-use OlcsTest\Bootstrap;
 
 /**
  * @covers Olcs\FormService\Form\Lva\FinancialEvidence
@@ -34,11 +34,13 @@ class FinancialEvidenceTest extends MockeryTestCase
         $this->urlHelper = m::mock(UrlHelperService::class);
         $this->translator = m::mock(TranslationHelperService::class);
 
-        $sm = Bootstrap::getServiceManager();
-        $sm->setService('Helper\Url', $this->urlHelper);
-        $sm->setService('Helper\Translation', $this->translator);
+        $serviceManager = $this->createMock(ServiceLocatorInterface::class);
+        $serviceManager->method('get')->willReturnMap([
+            ['Helper\Url', $this->urlHelper],
+            ['Helper\Translation', $this->translator],
+        ]);
 
-        $this->fsm->shouldReceive('getServiceLocator')->andReturn($sm);
+        $this->fsm->shouldReceive('getServiceLocator')->andReturn($serviceManager);
 
         $this->sut = new FinancialEvidence($this->formHelper, m::mock(\ZfcRbac\Service\AuthorizationService::class), $this->translator, $this->urlHelper);
     }

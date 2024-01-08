@@ -3,7 +3,7 @@
 namespace OlcsTest\Form\Model\Form;
 
 use Common\Validator\Date as CommonDateValidator;
-use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
+use Dvsa\OlcsTest\FormTester\AbstractFormValidationTestCase;
 use Laminas\Validator\Date as LaminasDateValidator;
 
 /**

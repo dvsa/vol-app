@@ -5,9 +5,6 @@ namespace OlcsTest\View\Helper;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\View\Helper\SubmissionSectionMultipleTablesFactory;
 use Mockery as m;
-use Laminas\Mvc\Service\ServiceManagerConfig;
-use Laminas\ServiceManager\ServiceManager;
-use \Olcs\TestHelpers\ControllerPluginManagerHelper;
 
 /**
  * Class SubmissionSectionMultipleTablesFactoryTest

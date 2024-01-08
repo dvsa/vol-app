@@ -3,7 +3,7 @@
 namespace AdminTest\Form\Model\Form;
 
 use OlcsTest\Form\Model\Form\AbstractFormTest;
-use Olcs\TestHelpers\FormTester\Data\Object as F;
+use Dvsa\OlcsTest\FormTester\Data\Object as F;
 
 /**
  * Class RecipientTest

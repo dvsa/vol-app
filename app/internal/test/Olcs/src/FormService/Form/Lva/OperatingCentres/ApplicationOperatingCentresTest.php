@@ -2,11 +2,11 @@
 
 namespace OlcsTest\FormService\Form\Lva\OperatingCentres;
 
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Olcs\FormService\Form\Lva\OperatingCentres\ApplicationOperatingCentres;
 use Common\Form\Elements\Types\Table;
 use Common\FormService\FormServiceManager;
 use Common\Service\Table\TableBuilder;
-use OlcsTest\Bootstrap;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\Form\Fieldset;
@@ -36,12 +36,15 @@ class ApplicationOperatingCentresTest extends MockeryTestCase
     {
         $this->tableBuilder = m::mock(TableBuilder::class);
 
-        $sm = Bootstrap::getServiceManager();
-        $sm->setService('Table', $this->tableBuilder);
+        $serviceManager = $this->createMock(ServiceLocatorInterface::class);
+        $serviceManager
+            ->method('get')
+            ->with('Table')
+            ->willReturn($this->tableBuilder);
 
         $fsm = m::mock(FormServiceManager::class)->makePartial();
         $fsm->shouldReceive('getServiceLocator')
-            ->andReturn($sm);
+            ->andReturn($serviceManager);
 
         $this->form = m::mock(Form::class);
 

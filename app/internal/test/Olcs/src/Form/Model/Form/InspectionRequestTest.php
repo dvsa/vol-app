@@ -3,7 +3,7 @@
 namespace OlcsTest\Form\Model\Form;
 
 use Laminas\Validator\NotEmpty;
-use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
+use Dvsa\OlcsTest\FormTester\AbstractFormValidationTestCase;
 
 /**
  * Class InspectionRequestTest

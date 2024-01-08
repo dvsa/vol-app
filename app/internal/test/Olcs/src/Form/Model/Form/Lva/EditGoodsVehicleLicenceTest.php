@@ -2,7 +2,7 @@
 
 namespace OlcsTest\Form\Model\Form\Lva;
 
-use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
+use Dvsa\OlcsTest\FormTester\AbstractFormValidationTestCase;
 
 /**
  * Class EditGoodsVehicleLicenceTest

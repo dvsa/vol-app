@@ -111,20 +111,4 @@ class Module
     {
         return include __DIR__ . '/config/module.config.php';
     }
-
-    /**
-     * get Autoloader config for this module
-     *
-     * @return array
-     */
-    public function getAutoloaderConfig()
-    {
-        return array(
-            'Laminas\Loader\StandardAutoloader' => array(
-                'namespaces' => array(
-                    __NAMESPACE__ => __DIR__ . '/src/',
-                ),
-            ),
-        );
-    }
 }

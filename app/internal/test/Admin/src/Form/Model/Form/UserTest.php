@@ -3,7 +3,7 @@
 namespace AdminTest\Form\Model\Form;
 
 use Common\Form\Elements\Types\Readonly as ReadonlyAlias;
-use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
+use Dvsa\OlcsTest\FormTester\AbstractFormValidationTestCase;
 use Common\Form\Elements\Types\Html;
 use Laminas\Form\Element\Button;
 use Laminas\Form\Element\Select;

@@ -9,7 +9,6 @@
 namespace Olcs\Form\Element;
 
 use Laminas\Form\Element as LaminasElement;
-use Laminas\ModuleManager\Feature\ViewHelperProviderInterface;
 use Laminas\Form\ElementPrepareAwareInterface;
 use Laminas\Form\FormInterface;
 use Laminas\InputFilter\InputProviderInterface;

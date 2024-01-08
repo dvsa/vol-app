@@ -4,7 +4,7 @@ namespace OlcsTest\Form\Model\Form;
 
 use Common\Form\Elements\Validators\DateNotInFuture;
 use Olcs\Form\Model\Form\PublicInquiryAgreedAndLegislation;
-use Olcs\TestHelpers\FormTester\AbstractFormValidationTestCase;
+use Dvsa\OlcsTest\FormTester\AbstractFormValidationTestCase;
 use Olcs\Validator\TypeOfPI;
 
 class PublicInquiryAgreedAndLegislationTest extends AbstractFormValidationTestCase
