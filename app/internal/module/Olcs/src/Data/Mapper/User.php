@@ -4,8 +4,9 @@ namespace Olcs\Data\Mapper;
 
 use Common\Data\Mapper\MapperInterface;
 use Dvsa\Olcs\Utils\Helper\DateTimeHelper;
-use Olcs\Data\Mapper\Traits as MapperTraits;
 use Laminas\Form\FormInterface;
+use Olcs\Data\Mapper\Traits as MapperTraits;
+use Olcs\Module;
 
 /**
  * Class User Mapper
@@ -46,7 +47,7 @@ class User implements MapperInterface
                 = !empty($data['lockedOn'])
                     ? sprintf(
                         'Yes on %s',
-                        (new \DateTime($data['lockedOn']))->format(\DATETIMESEC_FORMAT)
+                        (new \DateTime($data['lockedOn']))->format(Module::$dateTimeSecFormat)
                     )
                     : 'No';
 
@@ -54,7 +55,7 @@ class User implements MapperInterface
                 $formData['userLoginSecurity']['passwordLastReset'] = sprintf(
                     '%s on %s',
                     $data['latestPasswordResetEvent']['eventData'],
-                    DateTimeHelper::format($data['latestPasswordResetEvent']['eventDatetime'], \DATETIMESEC_FORMAT)
+                    DateTimeHelper::format($data['latestPasswordResetEvent']['eventDatetime'], Module::$dateTimeSecFormat)
                 );
             }
 

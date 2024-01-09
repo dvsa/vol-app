@@ -3,6 +3,7 @@
 namespace Olcs\Data\Mapper;
 
 use Dvsa\Olcs\Utils\Helper\DateTimeHelper;
+use Olcs\Module;
 
 /**
  * Event History
@@ -23,7 +24,7 @@ class EventHistory
         $result['details'] = $data['eventHistoryType']['description'];
         $result['info'] = $data['eventData'];
 
-        $result['date'] = date(\DATETIME_FORMAT, strtotime($data['eventDatetime']));
+        $result['date'] = date(Module::$dateTimeFormat, strtotime($data['eventDatetime']));
 
         $result['by'] = isset($data['user']['contactDetails']['person']['forename']) &&
             isset($data['user']['contactDetails']['person']['familyName']) ?
@@ -43,7 +44,7 @@ class EventHistory
 
                 foreach (['newValue', 'oldValue'] as $key) {
                     if (!empty($item[$key])) {
-                        $item[$key] = DateTimeHelper::format($item[$key], \DATETIME_FORMAT);
+                        $item[$key] = DateTimeHelper::format($item[$key], Module::$dateTimeFormat);
                     }
                 }
             }

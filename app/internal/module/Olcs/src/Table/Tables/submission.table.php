@@ -4,6 +4,7 @@ use Common\Service\Table\Formatter\Date;
 use Common\Service\Table\Formatter\HideIfClosedRadio;
 use Common\Service\Table\Formatter\Name;
 use Common\Service\Table\Formatter\YesNo;
+use Olcs\Module;
 
 return array(
     'variables' => array(
@@ -62,7 +63,7 @@ return array(
         array(
             'title' => 'Date created',
             'formatter' => function ($row) {
-                return date(\DATETIMESEC_FORMAT, strtotime($row['createdOn']));
+                return date(Module::$dateTimeSecFormat, strtotime($row['createdOn']));
             },
             'sort' => 'createdOn'
         ),

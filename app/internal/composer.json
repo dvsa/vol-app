@@ -42,13 +42,9 @@
         "bamarni/composer-bin-plugin": "^1.8"
     },
     "autoload": {
-        "classmap": [
-            "module/Admin/src",
-            "module/Olcs/src",
-            "vendor/olcs/olcs-common/Common/src/Common",
-            "vendor/olcs/olcs-common/test/Common"
-        ],
         "psr-4": {
+            "Olcs\\": "module/Olcs/src",
+            "Admin\\": "module/Admin/src",
             "Common\\": "vendor/olcs/olcs-common/Common/src/Common",
             "CommonTest\\": "vendor/olcs/olcs-common/test/Common/src/"
         }

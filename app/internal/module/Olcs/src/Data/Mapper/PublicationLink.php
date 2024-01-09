@@ -4,6 +4,7 @@ namespace Olcs\Data\Mapper;
 
 use Common\Data\Mapper\MapperInterface;
 use Laminas\Form\FormInterface;
+use Olcs\Module;
 
 /**
  * Class Generic Mapper for forms with Fields field set
@@ -25,7 +26,7 @@ class PublicationLink implements MapperInterface
             'status' => $data['publication']['pubStatus']['description'],
             'section' => $data['publicationSection']['description'],
             'trafficArea' => $data['publication']['trafficArea']['name'],
-            'publicationDate' => date(\DATE_FORMAT, strtotime($data['publication']['pubDate']))
+            'publicationDate' => date(Module::$dateFormat, strtotime($data['publication']['pubDate']))
         ];
 
         $textFields = [

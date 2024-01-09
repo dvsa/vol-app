@@ -1,6 +1,7 @@
 <?php
 
 use Common\Service\Table\Formatter\Date;
+use Olcs\Module;
 
 return array(
     'variables' => array(
@@ -65,7 +66,7 @@ return array(
             'title' => 'Publication date',
             'formatter' => function ($data) {
                 $date = new DateTime($data['publication']['pubDate']);
-                return $date->format(\DATE_FORMAT);
+                return $date->format(Module::$dateFormat);
             }
         ),
         array(

@@ -1,4 +1,7 @@
 <?php
+
+use Olcs\Module;
+
 $result = $this->placeholder('details')->getValue();
 
 //no decision so display buttons
@@ -20,7 +23,7 @@ if (count((array)$result) < 1) {
             ['label' => 'Type', 'value' => $data['hearingType']['description']],
             [
                 'label' => 'Meeting date & time',
-                'value' => $this->date(strtotime($data['hearingDate']), \DATETIME_FORMAT, 'N/a')
+                'value' => $this->date(strtotime($data['hearingDate']), Module::$dateTimeFormat, 'N/a')
             ],
         ],
         [
@@ -30,7 +33,7 @@ if (count((array)$result) < 1) {
             ],
             [
                 'label' => 'TC/DTC/TR/DTR agreed date',
-                'value' => $this->date(strtotime($data['agreedByTcDate']), \DATE_FORMAT, 'N/a')
+                'value' => $this->date(strtotime($data['agreedByTcDate']), Module::$dateFormat, 'N/a')
             ]
         ],
         [

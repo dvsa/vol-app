@@ -1,5 +1,7 @@
 <p class="notice--warning">
-    <?php if (!$this->hideCaseLink): ?>
+    <?php use Olcs\Module;
+
+    if (!$this->hideCaseLink): ?>
     <?php
         echo $this->link(
             $this->url('case_hearing_appeal', ['case' => $this->caseId]),
@@ -15,6 +17,6 @@
     </strong>
     <br>
     <?php
-    echo $this->appealDate->format(\DATE_FORMAT);
+    echo $this->appealDate->format(Module::$dateFormat);
     ?>
 </p>

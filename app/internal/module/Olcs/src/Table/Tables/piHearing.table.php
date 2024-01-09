@@ -1,5 +1,7 @@
 <?php
 
+use Olcs\Module;
+
 return array(
     'variables' => array(
         'titleSingular' => 'Hearing',
@@ -40,7 +42,7 @@ return array(
         array(
             'title' => 'Date of PI',
             'formatter' => function ($data) {
-                $date = date(\DATE_FORMAT, strtotime($data['hearingDate']));
+                $date = date(Module::$dateFormat, strtotime($data['hearingDate']));
                 if (!empty($data['pi']['closedDate'])) {
                     return $date;
                 } else {

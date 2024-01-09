@@ -15,6 +15,7 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Data\Mapper\Opposition as Mapper;
 use Olcs\Form\Model\Form\Opposition as Form;
+use Olcs\Module;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
 use Olcs\Mvc\Controller\ParameterProvider\GenericList;
 
@@ -211,7 +212,7 @@ class OppositionController extends AbstractInternalController implements CaseCon
 
         if (!empty($caseWithOppositionDates['oorDate'])) {
             // set oor date
-            $oorString = (new \DateTime($caseWithOppositionDates['oorDate']))->format(\DATE_FORMAT);
+            $oorString = (new \DateTime($caseWithOppositionDates['oorDate']))->format(Module::$dateFormat);
 
             $form->get('fields')
                 ->get('outOfRepresentationDate')
@@ -220,7 +221,7 @@ class OppositionController extends AbstractInternalController implements CaseCon
 
         if (!empty($caseWithOppositionDates['oooDate'])) {
             // set ooo date
-            $oooString = (new \DateTime($caseWithOppositionDates['oooDate']))->format(\DATE_FORMAT);
+            $oooString = (new \DateTime($caseWithOppositionDates['oooDate']))->format(Module::$dateFormat);
 
             $form->get('fields')
                 ->get('outOfObjectionDate')

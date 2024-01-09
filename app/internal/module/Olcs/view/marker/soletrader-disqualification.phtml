@@ -6,9 +6,9 @@
     </strong>
     <br>
     <?php
-    echo $this->startDateTime->format(\DATE_FORMAT);
+    echo $this->startDateTime->format(Olcs\Module::$dateFormat);
     if (!empty($this->endDateTime)) {
-        echo ' to '. $this->endDateTime->format(\DATE_FORMAT);
+        echo ' to '. $this->endDateTime->format(Olcs\Module::$dateFormat);
     }
     ?>
     <br>

@@ -3840,16 +3840,16 @@
         },
         {
             "name": "olcs/olcs-common",
-            "version": "5.0.0-alpha.2",
+            "version": "5.0.0-alpha.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dvsa/olcs-common.git",
-                "reference": "7e8cff216df08d1f9957c4c37e46419473271f09"
+                "reference": "6cab5bde0d23951d7c5bd2fe1d1d8c925fa8aa51"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/7e8cff216df08d1f9957c4c37e46419473271f09",
-                "reference": "7e8cff216df08d1f9957c4c37e46419473271f09",
+                "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/6cab5bde0d23951d7c5bd2fe1d1d8c925fa8aa51",
+                "reference": "6cab5bde0d23951d7c5bd2fe1d1d8c925fa8aa51",
                 "shasum": ""
             },
             "require": {
@@ -3897,19 +3897,19 @@
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Common\\": "Common/src/"
+                "psr-4": {
+                    "Common\\": "Common/src/Common"
                 },
                 "classmap": [
-                    "./Common/Module.php"
+                    "./Common/src/Module.php"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "Common library for the OLCS Project",
             "support": {
-                "source": "https://github.com/dvsa/olcs-common/tree/5.0.0-alpha.2"
+                "source": "https://github.com/dvsa/olcs-common/tree/5.0.0-alpha.3"
             },
-            "time": "2024-01-09T11:25:00+00:00"
+            "time": "2024-01-09T12:55:28+00:00"
         },
         {
             "name": "olcs/olcs-logging",
@@ -7541,5 +7541,5 @@
         "php": "^7.4"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }

@@ -49,7 +49,7 @@ echo $this->partial(
     'sections/cases/pages/submission/submission-declaration',
     [
         'submission' => $submission,
-        'header' => 'Submission exported: ' . date(\DATETIME_FORMAT)
+        'header' => 'Submission exported: ' . date(Olcs\Module::$dateTimeFormat)
     ]
 );
 
@@ -92,7 +92,7 @@ echo $this->render('partials/read-only/main',
                 <p><?php echo nl2br($sa['comment']); ?></p>
                 <p><strong>Legislation:</strong><br /><?php echo implode('<br />', array_map(function($item){return $item['sectionCode'] . ' - '. $item['description'];}, $sa['reasons'])); ?></p>
                 <p><b>Created by:</b><br /><?php echo $createdBy; ?></p>
-                <p><b>Created:</b><br /><?php echo $this->date(strtotime($sa['createdOn']), \DATETIME_FORMAT); ?></p>
+                <p><b>Created:</b><br /><?php echo $this->date(strtotime($sa['createdOn']), Olcs\Module::$dateTimeFormat); ?></p>
             </li><!-- submission-item -->
         <?php endforeach; ?>
     </ul>

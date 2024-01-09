@@ -1,6 +1,7 @@
 <?php
 
 use Common\Service\Table\Formatter\Date;
+use Olcs\Module;
 
 return array(
     'variables' => array(
@@ -33,7 +34,7 @@ return array(
                     'case_non_pi', true
                 );
                 $column['formatter'] = Date::class;
-                return '<a class="govuk-link" href="' . $url . '">' . date(\DATETIMESEC_FORMAT, strtotime($data['hearingDate'])) . '</a>';
+                return '<a class="govuk-link" href="' . $url . '">' . date(Module::$dateTimeSecFormat, strtotime($data['hearingDate'])) . '</a>';
             },
             'name' => 'id'
         ),

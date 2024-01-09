@@ -4,6 +4,7 @@ namespace Olcs\Data\Mapper;
 
 use Common\Data\Mapper\MapperInterface;
 use Laminas\Form\FormInterface;
+use Olcs\Module;
 
 /**
  * Class IrfoPsvAuth Mapper
@@ -35,7 +36,7 @@ class IrfoPsvAuth implements MapperInterface
         if (!empty($formData['fields']['createdOn'])) {
             // format createOn date
             $createdOn = new \DateTime($formData['fields']['createdOn']);
-            $formData['fields']['createdOnHtml'] = $createdOn->format(\DATE_FORMAT);
+            $formData['fields']['createdOnHtml'] = $createdOn->format(Module::$dateFormat);
         }
 
         // default all copies fields to 0

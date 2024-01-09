@@ -20,6 +20,7 @@ use Laminas\View\HelperPluginManager;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\Traits as ControllerTraits;
 use Olcs\Data\Mapper;
+use Olcs\Module;
 use Olcs\Service\Data\SubCategory;
 use Olcs\Service\Data\UserListInternalExcludingLimitedReadOnlyUsers;
 
@@ -319,7 +320,7 @@ class TaskController extends AbstractController
     {
         if (isset($data['lastModifiedOn']) && isset($data['lastModifiedByDetails'])) {
             $data['lastModifiedByDetails'] .=
-                ' (' . (new \DateTime($data['lastModifiedOn']))->format(\DATETIMESEC_FORMAT) . ')';
+                ' (' . (new \DateTime($data['lastModifiedOn']))->format(Module::$dateTimeSecFormat) . ')';
         }
         return $data;
     }

@@ -6,6 +6,7 @@ use Common\Data\Mapper\MapperInterface;
 use Common\Form\Elements\Custom\DateTimeSelect;
 use Dvsa\Olcs\Utils\Helper\DateTimeHelper;
 use Laminas\Form\FormInterface;
+use Olcs\Module;
 
 /**
  * Class PiHearing
@@ -104,7 +105,7 @@ class PiHearing implements MapperInterface
             foreach ($errors['messages'] as $key => $value) {
                 if ($key === 'HEARING_DATE_BEFORE_PI') {
                     /** @var DateTimeSelect $e */
-                    $piDate = DateTimeHelper::format($value, DATE_FORMAT);
+                    $piDate = DateTimeHelper::format($value, Module::$dateFormat);
                     $form->get('fields')->get('hearingDate')->setMessages(
                         ['Hearing date must be after or the same as the PI agreed date '. $piDate]
                     );
