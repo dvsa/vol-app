@@ -36,6 +36,7 @@
     "autoload": {
         "classmap": [
             "module/Olcs/src",
+            "module/Permits/src",
             "module/Application/src",
             "vendor/olcs/olcs-common/Common/src/Common"
         ],
