@@ -1,0 +1,47 @@
+version: 2
+updates:
+  - package-ecosystem: "composer"
+    directory: "/"
+    versioning-strategy: "increase-if-necessary"
+    schedule:
+      interval: "weekly"
+    groups:
+      composer-dependencies:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "composer"
+    directory: "/vendor-bin/phpcs"
+    schedule:
+      interval: "weekly"
+    groups:
+      composer-dependencies:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "composer"
+    directory: "/vendor-bin/phpstan"
+    schedule:
+      interval: "weekly"
+    groups:
+      composer-dependencies:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "composer"
+    directory: "/vendor-bin/psalm"
+    schedule:
+      interval: "weekly"
+    groups:
+      composer-dependencies:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      github-action-dependencies:
+        patterns:
+          - "*"
