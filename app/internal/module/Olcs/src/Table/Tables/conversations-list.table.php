@@ -17,9 +17,7 @@ return [
         ],
     ],
     'columns' => [
-
         [
-            
             'name' => 'id',
             'formatter' => InternalLicenceConversationLink::class
         ],

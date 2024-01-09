@@ -757,13 +757,12 @@ $routes = [
                             'route' => ':conversation[/]',
                             'verb' => 'GET',
                             'defaults' => [
-                                    'controller' => Olcs\Controller\AbstractInternalController::class,
-                                    'action' => 'index'
-                                    ],
+                                'controller' => Olcs\Controller\Messages\LicenceConversationMessagesController::class,
+                                'action' => 'index'
+                            ],
                         ],
                         'may_terminate' => true,
                     ],
-
                     'new' => [
                         'type' => 'segment',
                         'options' => [
@@ -779,14 +778,14 @@ $routes = [
                     'disable' => [
                         'type' => 'segment',
                          'options' => [
-                                'route' => 'disable[/]',
-                                 'verb' => 'GET',
-                                  'defaults' => [
-                                   'controller' => Olcs\Controller\Messages\LicenceDisableConversationListController::class,
-                                   'action' => 'index'
-                                   ]
-                              ],
-                              'may_terminate' => true,
+                             'route' => 'disable[/]',
+                             'verb' => 'GET',
+                             'defaults' => [
+                                 'controller' => Olcs\Controller\Messages\LicenceDisableConversationListController::class,
+                                 'action' => 'index'
+                             ]
+                         ],
+                         'may_terminate' => true,
                     ],
                 ],
             ],
@@ -2608,7 +2607,7 @@ $routes['lva-application']['child_routes'] = array_merge(
                         'route' => ':conversation[/]',
                         'verb' => 'GET',
                         'defaults' => [
-                            'controller' =>  Olcs\Controller\AbstractInternalController::class,
+                            'controller' =>  Olcs\Controller\Messages\LicenceConversationMessagesController::class,
                             'action' => 'index'
                             ],
                     ],
