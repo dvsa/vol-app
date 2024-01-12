@@ -11,6 +11,7 @@ error_reporting(E_ALL & ~E_USER_DEPRECATED);
 
 chdir(dirname(__DIR__));
 
+ini_set('intl.default_locale', 'en_GB');
 date_default_timezone_set('Europe/London');
 
 // Decline static file requests back to the PHP built-in webserver
