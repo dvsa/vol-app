@@ -3,6 +3,7 @@
 namespace Dvsa\Olcs\Application\Controller;
 
 use Common\Form\Form;
+use Common\Module;
 use Common\RefData;
 use Common\Service\Cqrs\Command\CommandService;
 use Common\Service\Helper\FlashMessengerHelperService;
@@ -121,7 +122,7 @@ class UndertakingsController extends AbstractUndertakingsController
         /** @var \Common\Service\Helper\TranslationHelperService $translator */
         $translator = $this->translationHelper;
         $form->get('signatureDetails')->get('signature')->setValue(
-            $translator->translateReplace('undertakings_signed', [$signedBy, $signedDate->format(\DATE_FORMAT)])
+            $translator->translateReplace('undertakings_signed', [$signedBy, $signedDate->format(Module::$dateFormat)])
         );
 
         return $this->render('undertakings', $form);

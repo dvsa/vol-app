@@ -1,5 +1,6 @@
 <?php
 
+use Common\Module;
 use Common\Service\Table\Formatter\AccessedCorrespondence;
 use Common\Service\Table\Formatter\LicenceNumberLink;
 
@@ -28,7 +29,7 @@ return array(
             'width' => '20%',
             'formatter' => function ($row) {
                 if (isset($row['correspondence']['document']['issuedDate'])) {
-                    return date(\DATE_FORMAT, strtotime($row['correspondence']['document']['issuedDate']));
+                    return date(Module::$dateFormat, strtotime($row['correspondence']['document']['issuedDate']));
                 }
                 return '';
             },
