@@ -10,7 +10,7 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
-use Dvsa\Olcs\Transfer\Command\Messaging\Close;
+use Dvsa\Olcs\Transfer\Command\Messaging\Conversation\Close;
 use Laminas\Http\Response;
 use Laminas\View\HelperPluginManager;
 use Laminas\View\Model\ViewModel;
