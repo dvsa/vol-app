@@ -775,6 +775,17 @@ $routes = [
                         ],
                         'may_terminate' => true,
                     ],
+                    'close' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => ':conversation/close[/]',
+                            'defaults' => [
+                                'controller' => Olcs\Controller\Messages\LicenceCloseConversationController::class,
+                                'action' => 'confirm'
+                            ],
+                        ],
+                        'may_terminate' => true,
+                    ],
                     'disable' => [
                         'type' => 'segment',
                          'options' => [

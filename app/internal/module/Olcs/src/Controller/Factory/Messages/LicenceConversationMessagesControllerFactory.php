@@ -17,20 +17,18 @@ use Olcs\Controller\Messages\LicenceConversationMessagesController;
 class LicenceConversationMessagesControllerFactory implements FactoryInterface
 {
     /**
-     * @param  ContainerInterface $container
+     * @param ContainerInterface $container
      * @param  $requestedName
-     * @param  array|null         $options
+     * @param array|null $options
      * @return LicenceConversationMessagesController
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LicenceConversationMessagesController
     {
         $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
         $formHelper = $container->get(FormHelperService::class);
-
         $translationHelper = $container->get(TranslationHelperService::class);
-
         $flashMessenger = $container->get(FlashMessengerHelperService::class);
+        $scriptsFactory = $container->get(ScriptFactory::class);
 
         $navigation = $container->get('navigation');
 
@@ -38,7 +36,8 @@ class LicenceConversationMessagesControllerFactory implements FactoryInterface
             $translationHelper,
             $formHelper,
             $flashMessenger,
-            $navigation
+            $navigation,
+            $scriptsFactory
         );
     }
 
