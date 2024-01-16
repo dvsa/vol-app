@@ -4,14 +4,13 @@ namespace OlcsTest\FormService\Form\Lva\TypeOfLicence;
 
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\GuidanceHelperService;
+use Laminas\Form\ElementInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\TypeOfLicence\ApplicationTypeOfLicence;
 use Laminas\Form\Form;
-use Laminas\Form\Fieldset;
 use Common\FormService\FormServiceManager;
-use Common\Service\Table\TableBuilder;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Application Type of Licence Form Test
@@ -44,11 +43,11 @@ class ApplicationTypeOfLicenceTest extends MockeryTestCase
             ->shouldReceive('get')
             ->with('form-actions')
             ->andReturn(
-                m::mock()
+                m::mock(ElementInterface::class)
                 ->shouldReceive('get')
                 ->with('saveAndContinue')
                 ->andReturn(
-                    m::mock()
+                    m::mock(ElementInterface::class)
                     ->shouldReceive('setLabel')
                     ->with('lva.external.save_and_continue.button')
                     ->once()
@@ -73,7 +72,7 @@ class ApplicationTypeOfLicenceTest extends MockeryTestCase
             ->with('lva-application')
             ->once()
             ->andReturn(
-                m::mock()
+                m::mock(ElementInterface::class)
                 ->shouldReceive('alterForm')
                 ->with($mockForm)
                 ->once()

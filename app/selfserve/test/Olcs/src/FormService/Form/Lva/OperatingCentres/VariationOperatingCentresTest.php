@@ -5,11 +5,16 @@ namespace OlcsTest\FormService\Form\Lva\OperatingCentres;
 use Common\Form\Element\DynamicMultiCheckbox;
 use Common\Form\Element\DynamicRadio;
 use Common\Form\Element\DynamicSelect;
+use Common\Form\Elements\Validators\TableRequiredValidator;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Translator\TranslationLoader;
+use Laminas\Form\ElementInterface;
 use Laminas\I18n\Translator\LoaderPluginManager;
+use Laminas\InputFilter\InputFilterInterface;
+use Laminas\InputFilter\InputInterface;
 use Laminas\Mvc\Service\ServiceManagerConfig;
 use Laminas\ServiceManager\ServiceManager;
+use Laminas\Validator\ValidatorChain;
 use Olcs\FormService\Form\Lva\OperatingCentres\VariationOperatingCentres;
 use Common\FormService\FormServiceManager;
 use Common\Service\Table\TableBuilder;
@@ -20,7 +25,7 @@ use Laminas\Form\Fieldset;
 use Laminas\Form\Form;
 use Common\Service\Helper\FormHelperService;
 use Common\RefData;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 class VariationOperatingCentresTest extends MockeryTestCase
 {
@@ -37,107 +42,13 @@ class VariationOperatingCentresTest extends MockeryTestCase
 
     protected $translator;
 
-    /**
-     * We can access service manager if we need to add a mock for certain applications
-     *
-     * @return \Laminas\ServiceManager\ServiceLocatorInterface
-     */
-    public function getServiceManager()
-    {
-            $serviceManager =  self::getRealServiceManager();
-            $serviceManager->setAllowOverride(true);
-
-            $serviceManager->get('FormElementManager')->setFactory(
-                'DynamicSelect',
-                function ($serviceLocator, $name, $requestedName) {
-                    $element = new DynamicSelect();
-                    $element->setValueOptions(
-                        [
-                            '1' => 'one',
-                            '2' => 'two',
-                            '3' => 'three'
-                        ]
-                    );
-                    return $element;
-                }
-            );
-
-            $serviceManager->get('FormElementManager')->setFactory(
-                'DynamicRadio',
-                function ($serviceLocator, $name, $requestedName) {
-                    $element = new DynamicRadio();
-                    $element->setValueOptions(
-                        [
-                            '1' => 'one',
-                            '2' => 'two',
-                            '3' => 'three'
-                        ]
-                    );
-                    return $element;
-                }
-            );
-
-            $serviceManager->get('FormElementManager')->setFactory(
-                'Common\Form\Element\DynamicMultiCheckbox',
-                function ($serviceLocator, $name, $requestedName) {
-                    $element = new DynamicMultiCheckbox();
-                    $element->setValueOptions(
-                        [
-                            '1' => 'one',
-                            '2' => 'two',
-                            '3' => 'three'
-                        ]
-                    );
-                    return $element;
-                }
-            );
-
-        return $serviceManager;
-    }
-
-    /**
-     * Added this method for backwards compatibility
-     *
-     * @return \Laminas\ServiceManager\ServiceManager
-     */
-    public static function getRealServiceManager()
-    {
-        $serviceManager = new ServiceManager(new ServiceManagerConfig());
-        $config = include 'config/application.config.php';
-        $serviceManager->setService('ApplicationConfig', $config);
-        $serviceManager->get('ModuleManager')->loadModules();
-        $serviceManager->setAllowOverride(true);
-
-        $mockTranslationLoader = m::mock(TranslationLoader::class);
-        $mockTranslationLoader->shouldReceive('load')->andReturn(['default' => ['en_GB' => []]]);
-        $mockTranslationLoader->shouldReceive('loadReplacements')->andReturn([]);
-        $serviceManager->setService(TranslationLoader::class, $mockTranslationLoader);
-
-        $pluginManager = new LoaderPluginManager($serviceManager);
-        $pluginManager->setService(TranslationLoader::class, $mockTranslationLoader);
-        $serviceManager->setService('TranslatorPluginManager', $pluginManager);
-
-        // Mess up the backend, so any real rest calls will fail
-        $config = $serviceManager->get('Config');
-        $config['service_api_mapping']['endpoints']['backend'] = 'http://some-fake-backend/';
-        $serviceManager->setService('Config', $config);
-
-        return $serviceManager;
-    }
-
     public function setUp(): void
     {
         $this->tableBuilder = m::mock();
 
         $this->translator = m::mock(TranslationHelperService::class);
 
-        $sm = $this->getServiceManager();
-        $sm->setService('Table', $this->tableBuilder);
-        $sm->setService('Helper\Translation', $this->translator);
-
         $fsm = m::mock(FormServiceManager::class)->makePartial();
-        $fsm->shouldReceive('getServiceLocator')
-            ->andReturn($sm);
 
         $this->form = m::mock(Form::class);
 
@@ -199,7 +110,7 @@ class VariationOperatingCentresTest extends MockeryTestCase
 
         $totCommunityLicences = m::mock(Element::class);
 
-        $data = m::mock();
+        $data = m::mock(ElementInterface::class);
         $data->shouldReceive('has')
             ->with('totAuthLgvVehiclesFieldset')
             ->andReturn(true)
@@ -302,11 +213,34 @@ class VariationOperatingCentresTest extends MockeryTestCase
         $this->form->shouldReceive('get')
             ->with('dataTrafficArea')
             ->andReturn(
-                m::mock()
+                m::mock(ElementInterface::class)
                     ->shouldReceive('remove')
                     ->with('enforcementArea')
                     ->getMock()
             );
+
+        $inputFilterMock = m::mock(InputFilterInterface::class);
+        $tableInputMock = m::mock(InputInterface::class);
+        $rowsInputMock = m::mock(InputInterface::class);
+        $validatorChainMock = m::mock(ValidatorChain::class);
+
+        // Set up the input filter mock to return table input and rows input mocks
+        $inputFilterMock->shouldReceive('get')->with('table')->andReturn($tableInputMock);
+        $tableInputMock->shouldReceive('get')->with('rows')->andReturn($rowsInputMock);
+
+        // Set up the rows input mock to return the validator chain mock
+        $rowsInputMock->shouldReceive('getValidatorChain')->andReturn($validatorChainMock);
+
+        // Mock the behavior of the validator chain
+        // For simplicity, assuming no validators are initially present
+        $validatorChainMock->shouldReceive('getValidators')->andReturn([]);
+
+        // Expect the attach method to be called with an instance of TableRequiredValidator
+        $validatorChainMock->shouldReceive('attach')->with(m::type(TableRequiredValidator::class));
+
+        // Mock the form to return the input filter mock
+        $this->form->shouldReceive('getInputFilter')->andReturn($inputFilterMock);
+
 
         $form = $this->sut->getForm($params);
         $this->assertSame($this->form, $form);

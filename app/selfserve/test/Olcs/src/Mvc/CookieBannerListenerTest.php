@@ -19,7 +19,7 @@ use Laminas\Http\Headers;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
 use Laminas\Mvc\MvcEvent;
-use Laminas\Mvc\Router\Http\RouteMatch;
+use Laminas\Router\Http\RouteMatch;
 use Laminas\View\Helper\Placeholder;
 use Laminas\View\Helper\Placeholder\Container\AbstractContainer;
 

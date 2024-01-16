@@ -17,7 +17,7 @@ use Laminas\Form\Form;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
 use Laminas\Mvc\Controller\Plugin\FlashMessenger;
-use Laminas\Mvc\Router\RouteMatch;
+use Laminas\Router\RouteMatch;
 use Laminas\View\Model\ViewModel;
 use Olcs\DTO\Licence\OtherActiveLicenceListDTO;
 use Olcs\Exception\Licence\Vehicle\VehiclesNotFoundWithIdsException;

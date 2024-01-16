@@ -7,7 +7,7 @@ if(!empty($this->results)) {
 
 
 /** @var \Common\Service\Helper\TranslationHelperService $translationHlp */
-$translationHlp = $this->getHelperPluginManager()->getServiceLocator()->get('Helper\Translation');
+$translationHlp = $this->getHelperPluginManager()->get('Helper\Translation');
 
 echo $this->partial(
     'partials/page-header-simple',

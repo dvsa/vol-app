@@ -21,9 +21,9 @@ class Login
      * @Form\Attributes({
      *     "id": "auth.login.username"
      * })
-     * @Form\Filter({"name": "Laminas\Filter\StringTrim"})
-     * @Form\Filter({"name": "Common\Filter\StripSpaces"})
-     * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\Username"})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Filter("Common\Filter\StripSpaces")
+     * @Form\Validator("Dvsa\Olcs\Transfer\Validators\Username")
      * @Form\Type("Text")
      */
     public $username = null;
@@ -39,8 +39,8 @@ class Login
      * @Form\Attributes({
      *     "id": "auth.login.password"
      * })
-     * @Form\Filter({"name": "Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":8}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":8})
      * @Form\Type("Password")
      */
     public $password = null;

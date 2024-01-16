@@ -7,8 +7,9 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Helper\UrlHelperService;
 use Laminas\Form\Form;
+use Laminas\Validator\ValidatorPluginManager;
 use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Application financial evidence
@@ -23,17 +24,20 @@ class ApplicationFinancialEvidence extends FinancialEvidence
     protected AuthorizationService $authService;
     protected UrlHelperService $urlHelper;
     protected TranslationHelperService $translator;
+    protected ValidatorPluginManager $validatorPluginManager;
 
     public function __construct(
         FormHelperService $formHelper,
         AuthorizationService $authService,
         TranslationHelperService $translator,
-        UrlHelperService $urlHelper
+        UrlHelperService $urlHelper,
+        $validatorPluginManager
     ) {
         $this->formHelper = $formHelper;
         $this->authService = $authService;
         $this->urlHelper = $urlHelper;
         $this->translator = $translator;
+        $this->validatorPluginManager = $validatorPluginManager;
     }
 
     /**

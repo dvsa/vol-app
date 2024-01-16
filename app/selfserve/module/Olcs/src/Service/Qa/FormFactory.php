@@ -3,21 +3,13 @@
 namespace Olcs\Service\Qa;
 
 use Common\Form\QaForm;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
 
 class FormFactory
 {
-    /** @var ServiceLocatorInterface */
-    private $serviceLocator;
+    private ContainerInterface $serviceLocator;
 
-    /**
-     * Create service instance
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return FormFactory
-     */
-    public function __construct(ServiceLocatorInterface $serviceLocator)
+    public function __construct(ContainerInterface $serviceLocator)
     {
         $this->serviceLocator = $serviceLocator;
     }

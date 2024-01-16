@@ -18,8 +18,8 @@ class MyDetails extends Base
      * })
      * @Form\Type("Text")
      * @Form\Required(false)
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":35}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"max":35})
      */
     public $forename = null;
 
@@ -28,8 +28,8 @@ class MyDetails extends Base
      * @Form\Options({"label":"last-name"})
      * @Form\Type("Text")
      * @Form\Required(false)
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":35}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"max":35})
      */
     public $familyName = null;
 
@@ -40,9 +40,9 @@ class MyDetails extends Base
      *      "error-message": "myDetails_emailAddress-error"
      * })
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\EmailAddress"})
-     * @Form\Validator({"name":"Common\Form\Elements\Validators\EmailConfirm","options":{"token":"emailConfirm"}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Dvsa\Olcs\Transfer\Validators\EmailAddress")
+     * @Form\Validator("Common\Form\Elements\Validators\EmailConfirm", options={"token":"emailConfirm"})
      */
     public $emailAddress = null;
 
@@ -53,7 +53,7 @@ class MyDetails extends Base
      *     "error-message": "myDetails_emailConfirms-error"
      * })
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Filter("Laminas\Filter\StringTrim")
      */
     public $emailConfirm = null;
 

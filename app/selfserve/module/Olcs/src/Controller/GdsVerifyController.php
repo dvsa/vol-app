@@ -19,8 +19,8 @@ use Laminas\View\Model\ViewModel;
 use Olcs\DTO\Verify\DigitalSignature;
 use Olcs\Logging\Log\Logger;
 use RuntimeException;
-use ZfcRbac\Exception\UnauthorizedException;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Exception\UnauthorizedException;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * GdsVerifyController Controller

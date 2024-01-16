@@ -17,14 +17,13 @@ class Countries
      * @Form\Options({
      *      "label_attributes": {"class": "form-control form-control--checkbox form-control--confirm govuk-!-padding-bottom-2"},
      * })
-     * @Form\Validator({
-     *      "name": "Laminas\Validator\NotEmpty",
-     *      "options": {
+     * @Form\Validator("Laminas\Validator\NotEmpty",
+     *      options={
      *          "messages": {
      *              "isEmpty": "error.messages.permits.countries"
      *          }
      *      }
-     * })
+     * )
      * @Form\Type("DynamicMultiCheckbox")
      */
     public $countries;

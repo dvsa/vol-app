@@ -4,8 +4,7 @@ declare(strict_types=1);
 namespace Olcs\Auth\Adapter;
 
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class SelfserveCommandAdapterFactory implements FactoryInterface
 {
@@ -21,15 +20,5 @@ class SelfserveCommandAdapterFactory implements FactoryInterface
     {
         $commandSender = $container->get('CommandSender');
         return new SelfserveCommandAdapter($commandSender);
-    }
-
-    /**
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return SelfserveCommandAdapter
-     * @deprecated
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): SelfserveCommandAdapter
-    {
-        return $this->__invoke($serviceLocator, SelfserveCommandAdapter::class);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace OlcsTest\View\Helper\SessionTimeoutWarning;
 
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Olcs\View\Helper\SessionTimeoutWarning\SessionTimeoutWarning;
@@ -15,10 +15,10 @@ class SessionTimeoutWarningFactoryTest extends MockeryTestCase
      * @test
      * @throws \Exception
      */
-    public function createService()
+    public function testInvoke()
     {
-        $mockSL = m::mock(ServiceLocatorInterface::class);
-        $mockSL->shouldReceive('get')->andReturn([]);
+        $container = m::mock(ContainerInterface::class);
+        $container->expects('get')->with('Config')->andReturn([]);
 
         $mockInputFilter = m::mock(SessionTimeoutWarningFactoryConfigInputFilter::class)
             ->shouldIgnoreMissing();
@@ -37,21 +37,20 @@ class SessionTimeoutWarningFactoryTest extends MockeryTestCase
             ->with(SessionTimeoutWarningFactoryConfigInputFilter::CONFIG_TIMEOUT_REDIRECT_URL)
             ->andReturn("");
 
-
         $sut = new SessionTimeoutWarningFactory($mockInputFilter);
-        $service = $sut->createService($mockSL);
+        $service = $sut->__invoke($container, SessionTimeoutWarning::class);
 
         $this->assertInstanceOf(SessionTimeoutWarning::class, $service);
     }
 
     /**
      * @test
-     * @depends createService
+     * @depends testInvoke
      */
-    public function createServiceWithInvalidConfigurationThrowsException()
+    public function testInvokeWithInvalidConfigurationThrowsException()
     {
-        $mockSL = m::mock(ServiceLocatorInterface::class);
-        $mockSL->shouldReceive('get')->andReturn([]);
+        $container = m::mock(ContainerInterface::class);
+        $container->expects('get')->with('Config')->andReturn([]);
 
         $mockInputFilter = m::mock(SessionTimeoutWarningFactoryConfigInputFilter::class)->shouldIgnoreMissing();
 
@@ -59,6 +58,6 @@ class SessionTimeoutWarningFactoryTest extends MockeryTestCase
         $this->expectExceptionMessage("Unable to instantiate SessionTimeoutWarning due to invalid configuration:");
 
         $sut = new SessionTimeoutWarningFactory($mockInputFilter);
-        $sut->createService($mockSL);
+        $sut->__invoke($container, SessionTimeoutWarning::class);
     }
 }

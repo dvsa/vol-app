@@ -18,7 +18,7 @@ use Dvsa\Olcs\Transfer\Query\User\UserSelfserve as ItemDto;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\View\Model\ViewModel;
 use Olcs\View\Model\User;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * User Controller

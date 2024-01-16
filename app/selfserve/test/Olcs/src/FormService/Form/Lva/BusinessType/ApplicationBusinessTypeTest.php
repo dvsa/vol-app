@@ -3,13 +3,14 @@
 namespace OlcsTest\FormService\Form\Lva\BusinessType;
 
 use Common\Service\Helper\FormHelperService;
+use Laminas\Form\ElementInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\BusinessType\ApplicationBusinessType;
 use Laminas\Form\Form;
 use Laminas\Form\Element;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 class ApplicationBusinessTypeTest extends MockeryTestCase
 {
@@ -66,7 +67,7 @@ class ApplicationBusinessTypeTest extends MockeryTestCase
 
         $mockElement = m::mock(Element::class);
 
-        $formActions = m::mock();
+        $formActions = m::mock(ElementInterface::class);
         $formActions->shouldReceive('has')->with('save')->andReturn(true);
         $formActions->shouldReceive('has')->with('cancel')->andReturn(true);
 
@@ -75,7 +76,7 @@ class ApplicationBusinessTypeTest extends MockeryTestCase
         $formActions->shouldReceive('get')
             ->with('save')
             ->andReturn(
-                m::mock()
+                m::mock(ElementInterface::class)
                 ->shouldReceive('setLabel')
                 ->with('lva.external.return.link')
                 ->once()
@@ -93,7 +94,7 @@ class ApplicationBusinessTypeTest extends MockeryTestCase
         $mockForm = m::mock(Form::class);
         $mockForm->shouldReceive('get')->with('data')
             ->andReturn(
-                m::mock()->shouldReceive('get')
+                m::mock(ElementInterface::class)->shouldReceive('get')
                     ->with('type')
                     ->andReturn($mockElement)
                     ->getMock()
@@ -137,7 +138,7 @@ class ApplicationBusinessTypeTest extends MockeryTestCase
 
         $mockElement = m::mock(Element::class);
 
-        $formActions = m::mock();
+        $formActions = m::mock(ElementInterface::class);
         $formActions->shouldReceive('has')->with('save')->andReturn(true);
         $formActions->shouldReceive('has')->with('cancel')->andReturn(true);
 
@@ -146,7 +147,7 @@ class ApplicationBusinessTypeTest extends MockeryTestCase
         $formActions->shouldReceive('get')
             ->with('save')
             ->andReturn(
-                m::mock()
+                m::mock(ElementInterface::class)
                     ->shouldReceive('setLabel')
                     ->with('lva.external.return.link')
                     ->once()
@@ -164,7 +165,7 @@ class ApplicationBusinessTypeTest extends MockeryTestCase
         $mockForm = m::mock(Form::class);
         $mockForm->shouldReceive('get')->with('data')
             ->andReturn(
-                m::mock()->shouldReceive('get')
+                m::mock(ElementInterface::class)->shouldReceive('get')
                     ->with('type')
                     ->andReturn($mockElement)
                     ->getMock()

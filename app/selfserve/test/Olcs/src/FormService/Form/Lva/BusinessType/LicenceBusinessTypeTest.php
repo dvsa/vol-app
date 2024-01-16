@@ -4,12 +4,13 @@ namespace OlcsTest\FormService\Form\Lva\BusinessType;
 
 use Common\Form\Elements\InputFilters\Lva\BackToLicenceActionLink;
 use Common\Service\Helper\FormHelperService;
+use Laminas\Form\ElementInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\BusinessType\LicenceBusinessType;
 use Laminas\Form\Form;
 use Laminas\Form\Element;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 class LicenceBusinessTypeTest extends MockeryTestCase
 {
@@ -38,7 +39,7 @@ class LicenceBusinessTypeTest extends MockeryTestCase
     {
         $mockElement = m::mock(Element::class);
 
-        $formActions = m::mock();
+        $formActions = m::mock(ElementInterface::class);
         $formActions->shouldReceive('has')->with('save')->andReturn(true);
         $formActions->shouldReceive('has')->with('saveAndContinue')->andReturn(true);
         $formActions->shouldReceive('has')->with('cancel')->andReturn(true);
@@ -52,7 +53,7 @@ class LicenceBusinessTypeTest extends MockeryTestCase
         $mockForm = m::mock(Form::class);
         $mockForm->shouldReceive('get')->with('data')
             ->andReturn(
-                m::mock()->shouldReceive('get')
+                m::mock(ElementInterface::class)->shouldReceive('get')
                     ->with('type')
                     ->andReturn($mockElement)
                     ->getMock()

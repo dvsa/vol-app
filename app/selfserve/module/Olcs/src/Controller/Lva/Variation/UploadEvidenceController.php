@@ -7,7 +7,7 @@ use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Lva\AbstractUploadEvidenceController;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * External Upload Evidence Controller

@@ -2,6 +2,7 @@
 
 namespace OlcsTest\FormService\Form\Lva\Traits;
 
+use Laminas\Form\ElementInterface;
 use Mockery as m;
 
 /**
@@ -14,13 +15,13 @@ trait ButtonsAlterations
     protected function mockAlterButtons($form, $formHelper, $formActions = null)
     {
         if ($formActions === null) {
-            $formActions = m::mock();
+            $formActions = m::mock(ElementInterface::class);
         }
         $formActions
             ->shouldReceive('get')
             ->with('saveAndContinue')
             ->andReturn(
-                m::mock()
+                m::mock(ElementInterface::class)
                     ->shouldReceive('setLabel')
                     ->with('lva.external.save_and_continue.button')
                     ->once()
@@ -30,7 +31,7 @@ trait ButtonsAlterations
             ->shouldReceive('get')
             ->with('save')
             ->andReturn(
-                m::mock()
+                m::mock(ElementInterface::class)
                     ->shouldReceive('setLabel')
                     ->with('lva.external.save_and_return.link')
                     ->once()

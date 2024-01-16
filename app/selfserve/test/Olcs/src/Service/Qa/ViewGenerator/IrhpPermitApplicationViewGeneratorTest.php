@@ -10,7 +10,7 @@ use RuntimeException;
 use Laminas\Http\Response;
 use Laminas\Mvc\Controller\Plugin\Redirect;
 use Laminas\Mvc\MvcEvent;
-use Laminas\Mvc\Router\Http\RouteMatch;
+use Laminas\Router\Http\RouteMatch;
 
 class IrhpPermitApplicationViewGeneratorTest extends MockeryTestCase
 {

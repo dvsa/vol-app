@@ -4,23 +4,10 @@ namespace Permits\Controller;
 
 use Common\Service\Helper\FileUploadHelperService;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class QaControllerFactory implements FactoryInterface
 {
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return QaController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator) : QaController
-    {
-        return $this->__invoke($serviceLocator, QaController::class);
-    }
-
     /**
      * @param ContainerInterface $container
      * @param $requestedName
@@ -31,9 +18,6 @@ class QaControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : QaController
     {
-        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
-            $container = $container->getServiceLocator();
-        }
         return new QaController(
             $container->get('QaFormProvider'),
             $container->get('QaTemplateVarsGenerator'),

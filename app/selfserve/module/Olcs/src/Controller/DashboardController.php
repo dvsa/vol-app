@@ -21,7 +21,7 @@ use Laminas\Authentication\Storage\Session;
 use Laminas\View\Model\ViewModel;
 use Olcs\Service\Processing\DashboardProcessingService;
 use Olcs\View\Model\Dashboard;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Dashboard Controller

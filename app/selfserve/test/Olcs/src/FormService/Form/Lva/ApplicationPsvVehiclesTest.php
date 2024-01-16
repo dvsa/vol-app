@@ -29,7 +29,7 @@ class ApplicationPsvVehiclesTest extends MockeryTestCase
     public function setUp(): void
     {
         $this->fh = m::mock(FormHelperService::class)->makePartial();
-        $this->sut = new ApplicationPsvVehicles($this->fh, m::mock(\ZfcRbac\Service\AuthorizationService::class));
+        $this->sut = new ApplicationPsvVehicles($this->fh, m::mock(\LmcRbacMvc\Service\AuthorizationService::class));
     }
 
     public function testAlterForm()

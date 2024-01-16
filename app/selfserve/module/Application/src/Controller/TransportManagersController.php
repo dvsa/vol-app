@@ -17,10 +17,10 @@ use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+
 use Olcs\Controller\Lva\AbstractTransportManagersController;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * @see \Dvsa\Olcs\Application\Controller\Factory\TransportManagersControllerFactory

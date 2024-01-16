@@ -12,7 +12,7 @@ use Laminas\Http\Response;
 use Olcs\Controller\Lva\Adapters\VariationPeopleAdapter;
 use Olcs\Controller\Lva\Traits\VariationWizardPageFormActionsTrait;
 use Olcs\Controller\Lva\Traits\VariationWizardPageWithSubsequentPageControllerTrait;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Director Change Variation People Controller

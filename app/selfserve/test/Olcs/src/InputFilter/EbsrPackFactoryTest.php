@@ -2,6 +2,8 @@
 
 namespace OlcsTest\InputFilter;
 
+use Interop\Container\ContainerInterface;
+use Laminas\InputFilter\Input;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\InputFilter\EbsrPackFactory;
@@ -12,17 +14,16 @@ use Olcs\InputFilter\EbsrPackFactory;
  */
 class EbsrPackFactoryTest extends MockeryTestCase
 {
-    public function testCreateService()
+    public function testInvoke(): void
     {
         $mockValidator = m::mock('\Laminas\Validator\AbstractValidator');
         $mockValidator->shouldReceive('setOptions');
-        $mockSL = m::mock('\Laminas\ServiceManager\ServiceLocatorInterface');
+        $mockSL = m::mock(ContainerInterface::class);
         $mockSL->shouldReceive('get->get')->andReturn($mockValidator);
 
         $sut = new EbsrPackFactory();
 
-        $service = $sut->createService($mockSL);
-
-        $this->assertInstanceOf('\Laminas\InputFilter\Input', $service);
+        $service = $sut->__invoke($mockSL, Input::class);
+        $this->assertInstanceOf(Input::class, $service);
     }
 }

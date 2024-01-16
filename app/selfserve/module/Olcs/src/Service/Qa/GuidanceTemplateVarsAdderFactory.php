@@ -2,9 +2,8 @@
 
 namespace Olcs\Service\Qa;
 
-use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Psr\Container\ContainerInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class GuidanceTemplateVarsAdderFactory implements FactoryInterface
 {
@@ -16,20 +15,10 @@ class GuidanceTemplateVarsAdderFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, string $requestedName, array $options = null): GuidanceTemplateVarsAdder
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): GuidanceTemplateVarsAdder
     {
         return new GuidanceTemplateVarsAdder(
             $container->get('QaTranslateableTextHandler')
         );
-    }
-
-    /**
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed|void
-     * @deprecated Use __invoke instead.
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): GuidanceTemplateVarsAdder
-    {
-        return $this->__invoke($serviceLocator, GuidanceTemplateVarsAdder::class);
     }
 }

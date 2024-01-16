@@ -20,9 +20,8 @@ class LicenceLost
     /**
      * @Form\AllowEmpty(true)
      * @Form\ContinueIfEmpty(true)
-     * @Form\Validator({
-     *     "name": "ValidateIf",
-     *      "options":{
+     * @Form\Validator("ValidateIf",
+     *      options={
      *          "context_field": "operatorLicenceDocument",
      *          "context_values": {"lost"},
      *          "inject_post_data" : "operatorLicenceDocument->operatorLicenceDocument",
@@ -50,9 +49,9 @@ class LicenceLost
      *            }
      *        }
      *     }
-     * })
+     * )
      * @Form\Type("\Laminas\Form\Element\Textarea")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Filter("Laminas\Filter\StringTrim")
      * @Form\Attributes({
      *     "class" : "govuk-textarea",
      *     "rows" : "5"

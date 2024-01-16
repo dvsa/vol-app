@@ -18,7 +18,7 @@ use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Lva\Traits\VariationWizardPageFormActionsTrait;
 use Olcs\Controller\Lva\Traits\VariationWizardPageWithSubsequentPageControllerTrait;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * External Director Change Variation Licence History Controller

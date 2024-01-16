@@ -4,7 +4,7 @@ namespace Olcs\FormService\Form\Lva;
 
 use Common\Service\Helper\FormHelperService;
 use Laminas\Form\Form;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Licence Psv Vehicles

@@ -20,8 +20,8 @@ class UserForgotUsername
      *     }
      * })
      * @Form\Attributes({"class":"medium"})
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":2,"max":18}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":2,"max":18})
      */
     public $licenceNumber = null;
 
@@ -34,8 +34,8 @@ class UserForgotUsername
      *     }
      * })
      * @Form\Attributes({"class":"long"})
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\EmailAddress"})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Dvsa\Olcs\Transfer\Validators\EmailAddress")
      */
     public $emailAddress = null;
 }

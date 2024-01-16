@@ -2,23 +2,25 @@
 
 namespace OlcsTest\FormService\Form\Lva\OperatingCentres;
 
+use Common\Form\Elements\Validators\TableRequiredValidator;
 use Common\Service\Table\TableFactory;
+use Laminas\Form\ElementInterface;
+use Laminas\InputFilter\InputFilterInterface;
+use Laminas\InputFilter\InputInterface;
+use Laminas\Validator\ValidatorChain;
 use Olcs\FormService\Form\Lva\OperatingCentres\ApplicationOperatingCentres;
 use Common\Form\Elements\Types\Table;
 use Common\FormService\FormServiceInterface;
 use Common\FormService\FormServiceManager;
 use Common\Service\Table\TableBuilder;
-use OlcsTest\Bootstrap;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Laminas\Form\Element;
 use Laminas\Form\Fieldset;
 use Laminas\Form\Form;
-use Laminas\Http\Request;
 use Common\Service\Helper\FormHelperService;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 use Common\RefData;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Application Operating Centres Test
@@ -92,15 +94,15 @@ class ApplicationOperatingCentresTest extends MockeryTestCase
         $tableElement->shouldReceive('get->getTable->removeColumn')
             ->with('noOfComplaints');
 
-        $totCommunityLicences = m::mock();
+        $totCommunityLicences = m::mock(ElementInterface::class);
 
-        $data = m::mock();
+        $data = m::mock(ElementInterface::class);
         $data->shouldReceive('has')
             ->with('totCommunityLicencesFieldset')
             ->andReturn(true)
             ->shouldReceive('get')
             ->with('totCommunityLicencesFieldset')
-            ->andReturn(m::mock()->shouldReceive('get')->with('totCommunityLicences')->andReturn($totCommunityLicences)->getMock());
+            ->andReturn(m::mock(ElementInterface::class)->shouldReceive('get')->with('totCommunityLicences')->andReturn($totCommunityLicences)->getMock());
 
         $this->form->shouldReceive('get')
             ->with('data')
@@ -117,11 +119,32 @@ class ApplicationOperatingCentresTest extends MockeryTestCase
         $this->form->shouldReceive('get')
             ->with('dataTrafficArea')
             ->andReturn(
-                m::mock()
+                m::mock(ElementInterface::class)
                 ->shouldReceive('remove')
                 ->with('enforcementArea')
                 ->getMock()
             );
+
+        $rowsInput = m::mock(InputInterface::class);
+        $validatorChain = m::mock(ValidatorChain::class);
+        $rowsInput->shouldReceive('getValidatorChain')->andReturn($validatorChain);
+
+        // Simulate the getValidators method to return an array without the TableRequiredValidator initially
+        $validatorChain->shouldReceive('getValidators')->andReturn([]);
+
+        // Expect the attach method to be called with TableRequiredValidator
+        $validatorChain->shouldReceive('attach')->with(m::type(TableRequiredValidator::class));
+
+        // Mock the 'table' input filter to return the mocked 'rows' input
+        $tableInputFilter = m::mock(InputFilterInterface::class);
+        $tableInputFilter->shouldReceive('get')->with('rows')->andReturn($rowsInput);
+
+        // Mock the main form's input filter to return the mocked 'table' input filter
+        $formInputFilter = m::mock(InputFilterInterface::class);
+        $formInputFilter->shouldReceive('get')->with('table')->andReturn($tableInputFilter);
+
+        // Attach this input filter to the form
+        $this->form->shouldReceive('getInputFilter')->andReturn($formInputFilter);
 
         $this->mockAlterButtons($this->form, $this->mockFormHelper);
 

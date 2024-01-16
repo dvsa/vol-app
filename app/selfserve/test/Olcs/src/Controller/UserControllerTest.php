@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OlcsTest\Controller;
 
+use Common\Form\Form;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\GuidanceHelperService;
@@ -13,13 +14,16 @@ use Dvsa\Olcs\Transfer\Command\User\CreateUserSelfserve;
 use Dvsa\Olcs\Transfer\Command\User\UpdateUserSelfserve;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\Form\Element;
+use Laminas\Form\ElementInterface;
+use Laminas\Http\Request;
+use Laminas\Mvc\Controller\Plugin\Params;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Dvsa\Olcs\Transfer\Query as TransferQry;
 use Laminas\Mvc\Controller\Plugin\Redirect;
 use Olcs\Controller\UserController;
 use Olcs\View\Model\User;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Class User Controller Test
@@ -76,16 +80,16 @@ class UserControllerTest extends MockeryTestCase
             $this->mockGuidanceHelper
         ])->shouldAllowMockingProtectedMethods()->makePartial();
 
-        $this->mockRequest = m::mock(\Laminas\Http\Request::class);
+        $this->mockRequest = m::mock(Request::class);
         $this->sut->shouldReceive('getRequest')->andReturn($this->mockRequest);
 
         $this->mockResponse = m::mock('stdClass');
         $this->sut->shouldReceive('handleCommand')->andReturn($this->mockResponse);
 
-        $this->mockParams = m::mock(\Laminas\Mvc\Controller\Plugin\Params::class);
+        $this->mockParams = m::mock(Params::class);
         $this->sut->shouldReceive('params')->andReturn($this->mockParams);
 
-        $this->mockForm = m::mock(\Common\Form\Form::class);
+        $this->mockForm = m::mock(Form::class);
         $this->mockForm->shouldReceive('get')->with('permission')->andReturnSelf();
 
         $this->mockTranslationHelper->shouldReceive('translate')->andReturnUsing(
@@ -231,7 +235,7 @@ class UserControllerTest extends MockeryTestCase
 
         $view = $this->sut->editAction();
 
-        $this->assertInstanceOf(\Common\Form\Form::class, $view->getVariable('form'));
+        $this->assertInstanceOf(Form::class, $view->getVariable('form'));
     }
 
     public function testSaveWithPostData()
@@ -380,7 +384,7 @@ class UserControllerTest extends MockeryTestCase
 
         $this->mockFlashMessengerHelper->shouldReceive('addSuccessMessage')->andReturnNull();
 
-        $mockFieldSet = m::mock();
+        $mockFieldSet = m::mock(ElementInterface::class);
         $mockElementForename = m::mock(Element::class);
         $mockFieldSet->shouldReceive('get')->with('forename')->once()->andReturn($mockElementForename);
         $mockElementFamilyName = m::mock(Element::class);
@@ -421,7 +425,7 @@ class UserControllerTest extends MockeryTestCase
 
         $view = $this->sut->editAction();
 
-        $this->assertInstanceOf(\Common\Form\Form::class, $view->getVariable('form'));
+        $this->assertInstanceOf(Form::class, $view->getVariable('form'));
     }
 
     public function testSaveGetsInvalidResponseAndRedirectsToIndex()

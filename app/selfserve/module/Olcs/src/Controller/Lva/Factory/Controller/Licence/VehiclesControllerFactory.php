@@ -20,7 +20,7 @@ use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Interop\Container\ContainerInterface;
 use Olcs\Controller\Licence\Vehicle\SwitchBoardControllerFactory;
 use Olcs\Controller\Lva\Licence\VehiclesController;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 class VehiclesControllerFactory extends BinaryFeatureToggleAwareControllerFactory
 {
@@ -56,8 +56,6 @@ class VehiclesControllerFactory extends BinaryFeatureToggleAwareControllerFactor
      */
     protected function createServiceWhenDisabled(ContainerInterface $container, $requestedName, array $options = null): VehiclesController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $formHelper = $container->get(FormHelperService::class);

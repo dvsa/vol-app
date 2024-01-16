@@ -8,7 +8,7 @@ use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableFactory;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
-use Laminas\Mvc\Controller\Plugin\FlashMessenger;
+use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\Licence\Vehicle\AbstractVehicleController;
 use Olcs\Form\Model\Form\Vehicle\ListVehicleSearch;

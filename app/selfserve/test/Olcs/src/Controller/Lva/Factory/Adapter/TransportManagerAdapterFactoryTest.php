@@ -11,7 +11,6 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\Lva\Adapters;
 use Olcs\Controller\Lva\Factory\Adapter as AdapterFactory;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * @covers Olcs\Controller\Lva\Factory\Adapter\VariationTransportManagerAdapterFactory
@@ -26,7 +25,7 @@ class TransportManagerAdapterFactoryTest extends MockeryTestCase
 
     public function setUp(): void
     {
-        $this->container = m::mock(ServiceLocatorInterface::class);
+        $this->container = m::mock(ContainerInterface::class);
 
         $closure = function ($class) {
             $map = [
@@ -41,23 +40,23 @@ class TransportManagerAdapterFactoryTest extends MockeryTestCase
         $this->container->shouldReceive('get')->andReturnUsing($closure);
     }
 
-    public function testCreateServiceLicence()
+    public function testInvokeLicence(): void
     {
         $factory = new AdapterFactory\LicenceTransportManagerAdapterFactory();
 
         static::assertInstanceOf(
             Adapters\LicenceTransportManagerAdapter::class,
-            $factory->createService($this->container)
+            $factory->__invoke($this->container, Adapters\LicenceTransportManagerAdapter::class)
         );
     }
 
-    public function testCreateServiceVariation()
+    public function testInvokeVariation(): void
     {
         $factory = new AdapterFactory\VariationTransportManagerAdapterFactory();
 
         static::assertInstanceOf(
             Adapters\VariationTransportManagerAdapter::class,
-            $factory->createService($this->container)
+            $factory->__invoke($this->container, Adapters\VariationTransportManagerAdapter::class)
         );
     }
 }

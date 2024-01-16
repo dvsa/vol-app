@@ -20,9 +20,8 @@ class StolenInfo
      *      "step": "any",
      *      "min": 0
      * })
-     * @Form\Validator({
-     *      "name": "ValidateIf",
-     *      "options": {
+     * @Form\Validator("ValidateIf",
+     *      options={
      *          "context_field": "stolen",
      *          "context_values": {"Y"},
      *          "inject_post_data": "stolenSection->stolen",
@@ -47,7 +46,7 @@ class StolenInfo
      *              }
      *          }
      *      }
-     * })
+     * )
      */
     public $number = null;
 
@@ -65,10 +64,9 @@ class StolenInfo
      *     "class":"govuk-textarea",
      *     "rows":"5"
      * })
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({
-     *      "name": "ValidateIf",
-     *      "options": {
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("ValidateIf",
+     *      options={
      *          "context_field": "stolen",
      *          "context_values": {"Y"},
      *          "inject_post_data": "stolenSection->stolen",
@@ -86,7 +84,7 @@ class StolenInfo
      *              }
      *          }
      *      }
-     * })
+     * )
      */
     public $details = null;
 }

@@ -4,8 +4,8 @@ declare(strict_types = 1);
 namespace Olcs\View\Helper\SessionTimeoutWarning;
 
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\factory\FactoryInterface;
+use Laminas\View\Helper\HeadMeta;
 
 class SessionTimeoutWarningFactory implements FactoryInterface
 {
@@ -24,18 +24,6 @@ class SessionTimeoutWarningFactory implements FactoryInterface
             $configInputFilter = new SessionTimeoutWarningFactoryConfigInputFilter();
         }
         $this->configInputFilter = $configInputFilter;
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return SessionTimeoutWarning
-     * @throws \Exception
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): SessionTimeoutWarning
-    {
-        return $this->__invoke($serviceLocator, SessionTimeoutWarning::class);
     }
 
     /**
@@ -65,12 +53,10 @@ class SessionTimeoutWarningFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : SessionTimeoutWarning
     {
-        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
-            $container = $container->getServiceLocator();
-        }
         $config = $container->get('Config')['session-timeout-warning-modal-helper'] ?? [];
         $this->validateConfiguration($config);
         return new SessionTimeoutWarning(
+            new HeadMeta(),
             $this->configInputFilter->getValue(
                 SessionTimeoutWarningFactoryConfigInputFilter::CONFIG_ENABLED
             ),

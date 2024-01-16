@@ -15,22 +15,13 @@ use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableFactory;
 use Interop\Container\ContainerInterface;
 use Laminas\Mvc\Controller\Plugin\Url;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
  * @see ListVehicleController
  */
 class ListVehicleControllerFactory implements FactoryInterface
 {
-    /**
-     * @inheritDoc
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): Dispatcher
-    {
-        return $this->__invoke($serviceLocator, Dispatcher::class);
-    }
-
     /**
      * @param ContainerInterface $container
      * @param $requestedName
@@ -40,23 +31,17 @@ class ListVehicleControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Dispatcher
     {
-        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
-            $sl = $container->getServiceLocator();
-        } else {
-            $sl = $container;
-        }
-
-        $controllerPluginManager = $sl->get('ControllerPluginManager');
+        $controllerPluginManager = $container->get('ControllerPluginManager');
 
         $controller = new ListVehicleController(
             $controllerPluginManager->get(HandleCommand::class),
             $controllerPluginManager->get(HandleQuery::class),
-            $sl->get(TranslationHelperService::class),
+            $container->get(TranslationHelperService::class),
             $urlHelper = $controllerPluginManager->get(Url::class),
-            $sl->get(ResponseHelperService::class),
-            $sl->get(TableFactory::class),
-            $sl->get(FormHelperService::class),
-            $sl->get(FlashMessengerHelperService::class),
+            $container->get(ResponseHelperService::class),
+            $container->get(TableFactory::class),
+            $container->get(FormHelperService::class),
+            $container->get(FlashMessengerHelperService::class),
             $redirectHelper = $controllerPluginManager->get(Redirect::class)
         );
         // Decorate controller

@@ -9,7 +9,7 @@ use Common\FeatureToggle;
  */
 class FeatureToggleConfig
 {
-    const SELFSERVE_SURRENDER_ENABLED = [
+    public const SELFSERVE_SURRENDER_ENABLED = [
         FeatureToggle::SELFSERVE_SURRENDER
     ];
 }

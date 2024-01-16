@@ -20,7 +20,7 @@ use Common\Test\MockeryTestCase;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Common\Service\Helper\TransportManagerHelperService;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 
 /**
@@ -32,18 +32,6 @@ class TransportManagersControllerTest extends MockeryTestCase
      * @var TransportManagersController
      */
     protected $sut;
-
-    /**
-     * @test
-     */
-    public function createService_IsCallable()
-    {
-        // Setup
-        $this->setUpSut();
-
-        // Assert
-        $this->assertIsCallable([$this->sut, 'createService']);
-    }
 
     /**
      * @test
@@ -72,7 +60,6 @@ class TransportManagersControllerTest extends MockeryTestCase
         // Assert
         $this->assertFalse($result);
     }
-
 
     protected function setUpSut()
     {

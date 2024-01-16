@@ -18,8 +18,8 @@ class NewTmUserDetails
      *     "short-label":"tm-add-user-forename"
      * })
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":35}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"max":35})
      */
     public $forename = null;
 
@@ -30,8 +30,8 @@ class NewTmUserDetails
      *     "short-label":"tm-add-user-familyName"
      * })
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":35}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"max":35})
      */
     public $familyName = null;
 
@@ -41,13 +41,13 @@ class NewTmUserDetails
      *     "label": "tm-add-user-birthDate",
      *     "short-label":"tm-add-user-birthDate",
      *     "create_empty_option": true,
-     *     "render_delimiters": "d m y"
+     *     "render_delimiters": true
      * })
      * @Form\Type("Common\Form\Elements\Custom\DateSelect")
-     * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
-     * @Form\Validator({"name":"DateNotInFuture"})
+     * @Form\Filter("DateSelectNullifier")
+     * @Form\Validator("\Common\Validator\Date")
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
+     * @Form\Validator("DateNotInFuture")
      */
     public $birthDate = null;
 
@@ -73,9 +73,9 @@ class NewTmUserDetails
      *     "hint":"tm-add-user-username.hint"
      * })
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Filter({"name":"Laminas\Filter\StringToLower"})
-     * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\UsernameCreate"})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Filter("Laminas\Filter\StringToLower")
+     * @Form\Validator("Dvsa\Olcs\Transfer\Validators\UsernameCreate")
      */
     public $username = null;
 
@@ -87,9 +87,9 @@ class NewTmUserDetails
      * })
      * @Form\Type("Text")
      * @Form\Required(false)
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\EmailAddress"})
-     * @Form\Validator({"name":"Common\Form\Elements\Validators\EmailConfirm","options":{"token":"emailConfirm"}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Dvsa\Olcs\Transfer\Validators\EmailAddress")
+     * @Form\Validator("Common\Form\Elements\Validators\EmailConfirm", options={"token":"emailConfirm"})
      */
     public $emailAddress = null;
 
@@ -101,7 +101,7 @@ class NewTmUserDetails
      * })
      * @Form\Type("Text")
      * @Form\Required(false)
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Filter("Laminas\Filter\StringTrim")
      */
     public $emailConfirm = null;
 

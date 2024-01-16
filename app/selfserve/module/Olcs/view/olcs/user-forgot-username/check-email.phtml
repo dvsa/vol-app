@@ -3,7 +3,7 @@
     <h1><?php echo $this->translate('user-forgot-username.page.check-email.title'); ?></h1>
     <div class="page-header__text"><div class="govuk-inset-text"><p>
         <?php echo $this->getHelperPluginManager()
-            ->getServiceLocator()->get('Helper\Translation')
+            ->get('Helper\Translation')
             ->translateReplace('user-forgot-username.page.check-email.guidance', [$this->emailAddress]); ?>
     </p></div></div>
   </div><!-- .page-header__wrapper -->
@@ -12,11 +12,11 @@
   <div class="article">
      <p>
         <?php echo $this->getHelperPluginManager()
-            ->getServiceLocator()->get('Helper\Translation')
+            ->get('Helper\Translation')
             ->translateReplace(
                 'user-forgot-username.page.check-email.content',
                 [
-                    $this->getHelperPluginManager()->getServiceLocator()->get('Helper\Url')->fromRoute('auth/login/GET')
+                    $this->getHelperPluginManager()->get('Helper\Url')->fromRoute('auth/login/GET')
                 ]
             ); ?>
      </p>

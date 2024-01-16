@@ -1,23 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: craig
- * Date: 09/03/2015
- * Time: 12:06
- */
 
 namespace Olcs\Form\Element;
 
 use Interop\Container\ContainerInterface;
 use Common\Service\Data\Search\Search;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
-/**
- * Class SearchFilterFieldsetFactory
- *
- * @package Olcs\Form\Element
- */
 class SearchFilterFieldsetFactory implements FactoryInterface
 {
     protected $options;
@@ -25,17 +13,6 @@ class SearchFilterFieldsetFactory implements FactoryInterface
     public function __construct($options)
     {
         $this->options = $options;
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator) : SearchFilterFieldset
-    {
-        return $this->__invoke($serviceLocator, SearchFilterFieldset::class);
     }
 
     /**
@@ -48,10 +25,6 @@ class SearchFilterFieldsetFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : SearchFilterFieldset
     {
-        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
-            $container = $container->getServiceLocator();
-        }
-
         $fs = new SearchFilterFieldset($this->options['name'], $this->options);
 
         $fs->setSearchService($container->get('DataServiceManager')->get(Search::class));

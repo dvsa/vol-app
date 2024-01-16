@@ -18,9 +18,7 @@ class VehicleConfirmationForm
 
     /**
      * @Form\Name("optionsFieldset")
-     * @Form\ComposedObject({
-     *     "target_object":"Olcs\Form\Model\Form\Vehicle\Fieldset\YesNo"
-     * })
+     * @Form\ComposedObject("Olcs\Form\Model\Form\Vehicle\Fieldset\YesNo")
      */
     public $optionsFieldset = null;
 

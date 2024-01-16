@@ -20,9 +20,8 @@ class CommunityLicenceStolen
     /**
      * @Form\AllowEmpty(true)
      * @Form\ContinueIfEmpty(true)
-     * @Form\Validator({
-     *     "name": "ValidateIf",
-     *      "options":{
+     * @Form\Validator("ValidateIf",
+     *      options={
      *          "context_field": "communityLicenceDocument",
      *          "context_values": {"stolen"},
      *          "inject_post_data" : "communityLicenceDocument->communityLicenceDocument",
@@ -51,7 +50,7 @@ class CommunityLicenceStolen
      *          },
      *     }
      * })
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Filter("Laminas\Filter\StringTrim")
      * @Form\Type("\Laminas\Form\Element\Textarea")
      * @Form\Attributes({
      *     "class" : "govuk-textarea",
@@ -59,7 +58,7 @@ class CommunityLicenceStolen
      * })
      * @Form\Options({
      *     "hint": "licence.surrender.operator_licence_stolen.text_area.hint"
-     * })
+     * )
      */
     public $details = null;
 }

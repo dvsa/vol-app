@@ -14,7 +14,7 @@ class SimpleSearch
     /**
      * @Form\Attributes({"class": "long", "placeholder": "", "label":"some"})
      * @Form\Type("Text")
-     * @Form\Validator({"name": "NotEmpty"})
+     * @Form\Validator("NotEmpty")
      * @Form\Options({
      *     "label": "search.form.label",
      *     "error-message": "simpleSearch_search-error"

@@ -3,22 +3,29 @@
     "description": "OLCS Self Service Web Site",
     "require": {
         "php": "^7.4",
-        "container-interop/container-interop": "^1.2",
         "doctrine/annotations": "^1.14.2",
-        "doctrine/doctrine-module": "^1",
+        "doctrine/doctrine-module": "^5",
         "dvsa/laminas-config-cloud-parameters": "^0.2.0",
         "laminas/laminas-authentication": "^2.6",
-        "laminas/laminas-eventmanager": "^2.6",
-        "laminas/laminas-form": "^2.13",
+        "laminas/laminas-cache": "^3.6",
+        "laminas/laminas-cache-storage-adapter-redis": "^2.4",
+        "laminas/laminas-eventmanager": "^3.0",
+        "laminas/laminas-filter": "^2.22",
+        "laminas/laminas-form": "^3.0",
         "laminas/laminas-http": "^2.8",
         "laminas/laminas-i18n": "^2.14",
-        "laminas/laminas-mvc": "^2.7",
+        "laminas/laminas-inputfilter": "^2.21",
+        "laminas/laminas-mvc": "^3.0",
+        "laminas/laminas-mvc-plugin-flashmessenger": "^1.8",
+        "laminas/laminas-mvc-plugin-prg": "^1.7",
+        "laminas/laminas-navigation": "^2.15",
         "laminas/laminas-serializer": "^2.10",
-        "laminas/laminas-servicemanager": "^2.7",
+        "laminas/laminas-servicemanager": "^3.0",
         "laminas/laminas-session": "^2.8",
-        "laminas/laminas-stdlib": "^2.7",
+        "laminas/laminas-stdlib": "^3.0",
+        "laminas/laminas-validator": "^2.25",
         "laminas/laminas-view": "^2.11",
-        "lm-commons/lmc-rbac-mvc": "^2.6",
+        "lm-commons/lmc-rbac-mvc": "^3.3",
         "olcs/olcs-auth": "^5.0.0",
         "olcs/olcs-common": "^5.0.0",
         "olcs/olcs-logging": "^5.0.0",
@@ -50,15 +57,17 @@
       "PermitsTest\\": "test/Permits/src"
     }
   },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "config": {
-        "sort-packages": true,
-        "allow-plugins": {
-            "bamarni/composer-bin-plugin": true,
-            "laminas/laminas-dependency-plugin": true
-        }
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "config": {
+    "allow-plugins": {
+      "laminas/laminas-dependency-plugin": true,
+      "bamarni/composer-bin-plugin": true
     },
+    "platform": {
+      "ext-redis": "4.3"
+    }
+  },
   "scripts": {
     "bin": "echo 'bin not installed'",
     "post-install-cmd": [

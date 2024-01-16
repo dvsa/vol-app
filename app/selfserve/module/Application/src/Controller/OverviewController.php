@@ -10,7 +10,7 @@ use Dvsa\Olcs\Application\View\Model\ApplicationOverview;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Lva\AbstractOverviewController;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 class OverviewController extends AbstractOverviewController
 {

@@ -14,7 +14,7 @@ use Dvsa\Olcs\Transfer\Query\Licence\LicenceRegisteredAddress as LicenceByNumber
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\Form\Form;
 use Laminas\View\Model\ViewModel;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * User Registration Controller

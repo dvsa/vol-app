@@ -8,7 +8,7 @@ use Olcs\FormService\Form\Lva\TransportManager\ApplicationTransportManager as Su
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 use Common\Service\Helper\FormHelperService;
 use Common\FormService\FormServiceManager;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Application TransportManager Test

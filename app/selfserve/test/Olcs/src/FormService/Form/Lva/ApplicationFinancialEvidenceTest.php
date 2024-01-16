@@ -2,23 +2,21 @@
 
 namespace OlcsTest\FormService\Form\Lva;
 
-use Common\Form\Element\DynamicMultiCheckbox;
-use Common\Form\Element\DynamicRadio;
-use Common\Form\Element\DynamicSelect;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Helper\UrlHelperService;
-use Common\Service\Translator\TranslationLoader;
-use Laminas\I18n\Translator\LoaderPluginManager;
-use Laminas\Mvc\Service\ServiceManagerConfig;
-use Laminas\ServiceManager\ServiceManager;
+use Common\Validator\ValidateIf;
+use Laminas\Form\ElementInterface;
+use Laminas\InputFilter\InputFilterInterface;
+use Laminas\Validator\ValidatorChain;
+use Laminas\Validator\ValidatorPluginManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\ApplicationFinancialEvidence;
 use Laminas\Form\Form;
 use Laminas\Http\Request;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Application Financial Evidence Form Test
@@ -43,93 +41,6 @@ class ApplicationFinancialEvidenceTest extends MockeryTestCase
     /** @var  m\MockInterface */
     protected $translator;
 
-    /**
-     * We can access service manager if we need to add a mock for certain applications
-     *
-     * @return \Laminas\ServiceManager\ServiceLocatorInterface
-     */
-    public function getServiceManager()
-    {
-            $serviceManager =  self::getRealServiceManager();
-            $serviceManager->setAllowOverride(true);
-
-            $serviceManager->get('FormElementManager')->setFactory(
-                'DynamicSelect',
-                function ($serviceLocator, $name, $requestedName) {
-                    $element = new DynamicSelect();
-                    $element->setValueOptions(
-                        [
-                            '1' => 'one',
-                            '2' => 'two',
-                            '3' => 'three'
-                        ]
-                    );
-                    return $element;
-                }
-            );
-
-            $serviceManager->get('FormElementManager')->setFactory(
-                'DynamicRadio',
-                function ($serviceLocator, $name, $requestedName) {
-                    $element = new DynamicRadio();
-                    $element->setValueOptions(
-                        [
-                            '1' => 'one',
-                            '2' => 'two',
-                            '3' => 'three'
-                        ]
-                    );
-                    return $element;
-                }
-            );
-
-            $serviceManager->get('FormElementManager')->setFactory(
-                'Common\Form\Element\DynamicMultiCheckbox',
-                function ($serviceLocator, $name, $requestedName) {
-                    $element = new DynamicMultiCheckbox();
-                    $element->setValueOptions(
-                        [
-                            '1' => 'one',
-                            '2' => 'two',
-                            '3' => 'three'
-                        ]
-                    );
-                    return $element;
-                }
-            );
-
-        return $serviceManager;
-    }
-
-    /**
-     * Added this method for backwards compatibility
-     *
-     * @return \Laminas\ServiceManager\ServiceManager
-     */
-    public static function getRealServiceManager()
-    {
-        $serviceManager = new ServiceManager(new ServiceManagerConfig());
-        $config = include 'config/application.config.php';
-        $serviceManager->setService('ApplicationConfig', $config);
-        $serviceManager->get('ModuleManager')->loadModules();
-        $serviceManager->setAllowOverride(true);
-
-        $mockTranslationLoader = m::mock(TranslationLoader::class);
-        $mockTranslationLoader->shouldReceive('load')->andReturn(['default' => ['en_GB' => []]]);
-        $mockTranslationLoader->shouldReceive('loadReplacements')->andReturn([]);
-        $serviceManager->setService(TranslationLoader::class, $mockTranslationLoader);
-
-        $pluginManager = new LoaderPluginManager($serviceManager);
-        $pluginManager->setService(TranslationLoader::class, $mockTranslationLoader);
-        $serviceManager->setService('TranslatorPluginManager', $pluginManager);
-
-        // Mess up the backend, so any real rest calls will fail
-        $config = $serviceManager->get('Config');
-        $config['service_api_mapping']['endpoints']['backend'] = 'http://some-fake-backend/';
-        $serviceManager->setService('Config', $config);
-
-        return $serviceManager;
-    }
 
     public function setUp(): void
     {
@@ -137,14 +48,9 @@ class ApplicationFinancialEvidenceTest extends MockeryTestCase
         $this->fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
         $this->urlHelper = m::mock(UrlHelperService::class);
         $this->translator = m::mock(TranslationHelperService::class);
+        $this->vpm = m::mock(ValidatorPluginManager::class);
 
-        $sm = $this->getServiceManager();
-        $sm->setService('Helper\Url', $this->urlHelper);
-        $sm->setService('Helper\Translation', $this->translator);
-
-        $this->fsm->shouldReceive('getServiceLocator')->andReturn($sm);
-
-        $this->sut = new ApplicationFinancialEvidence($this->fh, m::mock(AuthorizationService::class), $this->translator, $this->urlHelper);
+        $this->sut = new ApplicationFinancialEvidence($this->fh, m::mock(AuthorizationService::class), $this->translator, $this->urlHelper, $this->vpm);
     }
 
     public function testAlterForm()
@@ -163,7 +69,7 @@ class ApplicationFinancialEvidenceTest extends MockeryTestCase
             ->once()
             ->getMock();
 
-        $mockSaveButton = m::mock()
+        $mockSaveButton = m::mock(ElementInterface::class)
             ->shouldReceive('setLabel')
             ->with('lva.external.save_and_return.link')
             ->once()
@@ -175,7 +81,7 @@ class ApplicationFinancialEvidenceTest extends MockeryTestCase
             ->once()
             ->getMock();
 
-        $mockFormActions = m::mock()
+        $mockFormActions = m::mock(ElementInterface::class)
             ->shouldReceive('get')
             ->with('save')
             ->andReturn($mockSaveButton)
@@ -203,11 +109,11 @@ class ApplicationFinancialEvidenceTest extends MockeryTestCase
             ->shouldReceive('get')
             ->with('evidence')
             ->andReturn(
-                m::mock()
+                m::mock(ElementInterface::class)
                     ->shouldReceive('get')
                     ->with('uploadNowRadio')
                     ->andReturn(
-                        m::mock()
+                        m::mock(ElementInterface::class)
                             ->shouldReceive('setName')
                             ->with('uploadNow')
                             ->once()
@@ -217,7 +123,7 @@ class ApplicationFinancialEvidenceTest extends MockeryTestCase
                     ->shouldReceive('get')
                     ->with('uploadLaterRadio')
                     ->andReturn(
-                        m::mock()
+                        m::mock(ElementInterface::class)
                             ->shouldReceive('setName')
                             ->with('uploadNow')
                             ->once()
@@ -227,7 +133,7 @@ class ApplicationFinancialEvidenceTest extends MockeryTestCase
                     ->shouldReceive('get')
                     ->with('sendByPostRadio')
                     ->andReturn(
-                        m::mock()
+                        m::mock(ElementInterface::class)
                             ->shouldReceive('setName')
                             ->with('uploadNow')
                             ->once()
@@ -243,6 +149,26 @@ class ApplicationFinancialEvidenceTest extends MockeryTestCase
             ->getMock();
 
         $mockRequest = m::mock(Request::class);
+
+        $mockInputFilter = m::mock(InputFilterInterface::class);
+        $mockEvidenceInputFilter = m::mock(InputFilterInterface::class);
+        $mockUploadedFileCountInput = m::mock(ElementInterface::class);
+        $mockValidatorChain = m::mock(ValidatorChain::class);
+
+        $mockForm->shouldReceive('getInputFilter')->andReturn($mockInputFilter);
+        $mockInputFilter->shouldReceive('get')->with('evidence')->andReturn($mockEvidenceInputFilter);
+
+        $mockEvidenceInputFilter->shouldReceive('get')->with('uploadNowRadio')->andReturn(m::mock(ElementInterface::class)->shouldReceive('setRequired')->with(false)->getMock());
+        $mockEvidenceInputFilter->shouldReceive('get')->with('uploadLaterRadio')->andReturn(m::mock(ElementInterface::class)->shouldReceive('setRequired')->with(false)->getMock());
+        $mockEvidenceInputFilter->shouldReceive('get')->with('sendByPostRadio')->andReturn(m::mock(ElementInterface::class)->shouldReceive('setRequired')->with(false)->getMock());
+
+        $mockEvidenceInputFilter->shouldReceive('get')->with('uploadedFileCount')->andReturn($mockUploadedFileCountInput);
+        $mockUploadedFileCountInput->shouldReceive('getValidatorChain')->andReturn($mockValidatorChain);
+
+        $mockValidateIfValidator = m::mock(ValidateIf::class);
+        $this->vpm->shouldReceive('get')->with(ValidateIf::class)->andReturn($mockValidateIfValidator);
+        $mockValidateIfValidator->shouldReceive('setOptions')->once();
+        $mockValidatorChain->shouldReceive('attach')->with($mockValidateIfValidator)->once();
 
         $this->fh->shouldReceive('createFormWithRequest')
             ->once()

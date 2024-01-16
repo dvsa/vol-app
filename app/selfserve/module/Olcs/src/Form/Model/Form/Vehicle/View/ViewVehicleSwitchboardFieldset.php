@@ -51,14 +51,13 @@ class ViewVehicleSwitchboardFieldset
      *      }
      * })
      * @Form\Type("\Common\Form\Elements\Types\Radio")
-     * @Form\Validator({
-     *     "name": "\Laminas\Validator\NotEmpty",
-     *     "options": {
+     * @Form\Validator("\Laminas\Validator\NotEmpty",
+     *     options={
      *         "messages": {
      *             "isEmpty": "licence.vehicle.view.switchboard.error.is-empty"
      *         }
      *     }
-     * })
+     * )
      */
     public $options = null;
 
@@ -75,15 +74,12 @@ class ViewVehicleSwitchboardFieldset
      *     "class": "govuk-!-margin-right-2 govuk-select"
      * })
      * @Form\Type("Select")
-     * @Form\Validator({
-     *     "name": "\Laminas\Validator\Digits"
-     * })
-     * @Form\Validator({
-     *     "name": "\Laminas\Validator\GreaterThan",
-     *      "options": {
+     * @Form\Validator("\Laminas\Validator\Digits")
+     * @Form\Validator("\Laminas\Validator\GreaterThan",
+     *      options={
      *         "min": 0
      *     }
-     * })
+     * )
      */
     public $transferContent = null;
 }

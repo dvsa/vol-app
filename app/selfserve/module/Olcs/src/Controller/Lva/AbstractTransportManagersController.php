@@ -19,7 +19,7 @@ use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Abstract Transport Managers Controller

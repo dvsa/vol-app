@@ -9,7 +9,7 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableFactory;
 use Exception;
-use Laminas\Mvc\Controller\Plugin\FlashMessenger;
+use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Olcs\Form\Model\Form\Vehicle\AddVehicleSearch;
 use Olcs\Form\Model\Form\Vehicle\ConfirmVehicle;
 use Permits\Data\Mapper\MapperManager;

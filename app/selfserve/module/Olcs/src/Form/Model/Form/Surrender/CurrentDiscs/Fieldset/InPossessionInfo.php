@@ -20,9 +20,8 @@ class InPossessionInfo
      *      "step": "any",
      *      "min": 0
      * })
-     * @Form\Validator({
-     *      "name": "ValidateIf",
-     *      "options": {
+     * @Form\Validator("ValidateIf",
+     *      options={
      *          "context_field": "inPossession",
      *          "context_values": {"Y"},
      *          "inject_post_data": "possessionSection->inPossession",
@@ -47,7 +46,7 @@ class InPossessionInfo
      *              }
      *          }
      *      }
-     * })
+     * )
      */
     public $number = null;
 }

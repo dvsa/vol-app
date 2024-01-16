@@ -22,7 +22,7 @@ use Laminas\Http\Response;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\Lva\Adapters\LicencePeopleAdapter;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * @see \OlcsTest\Controller\Lva\Licence\PeopleControllerTest

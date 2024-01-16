@@ -7,7 +7,7 @@ use Common\FormService\FormServiceManager;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Table\TableFactory;
 use Laminas\Form\Form;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * @see \OlcsTest\FormService\Form\Lva\OperatingCentres\LicenceOperatingCentresTest

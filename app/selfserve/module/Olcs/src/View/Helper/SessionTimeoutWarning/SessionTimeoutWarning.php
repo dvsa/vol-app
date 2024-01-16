@@ -36,6 +36,8 @@ class SessionTimeoutWarning extends AbstractHelper implements HelperInterface
      */
     protected $timeoutRedirectUrl;
 
+    private HeadMeta $headMeta;
+
     /**
      * SessionTimeoutWarning constructor.
      * @param bool $enabled
@@ -43,11 +45,13 @@ class SessionTimeoutWarning extends AbstractHelper implements HelperInterface
      * @param string $timeoutRedirectUrl
      */
     public function __construct(
+        HeadMeta $headMeta,
         bool $enabled,
         int $secondsBeforeExpiryWarning,
         string $timeoutRedirectUrl
     )
     {
+        $this->headMeta = $headMeta;
         $this->enabled = $enabled;
         $this->secondsBeforeExpiryWarning = $secondsBeforeExpiryWarning;
         $this->timeoutRedirectUrl = $timeoutRedirectUrl;
@@ -65,13 +69,12 @@ class SessionTimeoutWarning extends AbstractHelper implements HelperInterface
             return '';
         }
 
-        $headMetaStack = new HeadMeta();
-        $headMetaStack->setView($this->getView());
-        $headMetaStack->appendName(self::META_TAG_NAME_SESSION_WARNING_TIMEOUT, $this->getWarningTimeout());
-        $headMetaStack->appendName(self::META_TAG_NAME_SESSION_REDIRECT_TIMEOUT, $this->getRedirectTimeout());
-        $headMetaStack->appendName(self::META_TAG_NAME_TIMEOUT_REDIRECT_URL, $this->timeoutRedirectUrl);
+        $this->headMeta->setView($this->getView());
+        $this->headMeta->appendName(self::META_TAG_NAME_SESSION_WARNING_TIMEOUT, $this->getWarningTimeout());
+        $this->headMeta->appendName(self::META_TAG_NAME_SESSION_REDIRECT_TIMEOUT, $this->getRedirectTimeout());
+        $this->headMeta->appendName(self::META_TAG_NAME_TIMEOUT_REDIRECT_URL, $this->timeoutRedirectUrl);
 
-        return $headMetaStack->toString($indent);
+        return $this->headMeta->toString($indent);
     }
 
     /**

@@ -13,7 +13,7 @@ use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Application\Summary as Qry;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\View\Model\ViewModel;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * External Abstract Summary Controller

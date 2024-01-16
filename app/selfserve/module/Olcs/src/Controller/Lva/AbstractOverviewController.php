@@ -11,7 +11,7 @@ use Dvsa\Olcs\Transfer\Command\Application\WithdrawApplication as WithdrawApplic
 use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
 use Dvsa\Olcs\Transfer\Query\Application\Summary as WithdrawQry;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Abstract External Overview Controller

@@ -3,23 +3,10 @@
 namespace Olcs\Service\Qa;
 
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class TemplateVarsGeneratorFactory implements FactoryInterface
 {
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return TemplateVarsGenerator
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator) : TemplateVarsGenerator
-    {
-        return $this->__invoke($serviceLocator, TemplateVarsGenerator::class);
-    }
-
     /**
      * @param ContainerInterface $container
      * @param $requestedName

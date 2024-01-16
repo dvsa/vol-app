@@ -19,6 +19,7 @@ use Permits\Controller\Config\Form\FormConfig;
 use Permits\Controller\Config\Params\ParamsConfig;
 use Permits\Data\Mapper\MapperManager;
 use Permits\View\Helper\IrhpApplicationSection;
+use RuntimeException;
 
 class LicenceController extends AbstractSelfserveController
 {

@@ -19,9 +19,9 @@ class UserRegistration
      * @Form\Required(true)
      * @Form\Attributes({"id":"username","placeholder":"","class":"medium", "required":false})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Filter({"name":"Laminas\Filter\StringToLower"})
-     * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\UsernameCreate"})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Filter("Laminas\Filter\StringToLower")
+     * @Form\Validator("Dvsa\Olcs\Transfer\Validators\UsernameCreate")
      */
     public $loginId = null;
 
@@ -29,8 +29,8 @@ class UserRegistration
      * @Form\Attributes({"id":"forename","placeholder":"","class":"medium", "required":false})
      * @Form\Options({"label":"first-name"})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":35}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"max":35})
      */
     public $forename = null;
 
@@ -38,8 +38,8 @@ class UserRegistration
      * @Form\Attributes({"id":"familyName","placeholder":"","class":"medium", "required":false})
      * @Form\Options({"label":"last-name"})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":35}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"max":35})
      */
     public $familyName = null;
 
@@ -47,9 +47,9 @@ class UserRegistration
      * @Form\Attributes({"class":"long"})
      * @Form\Options({"label":"email-address"})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\EmailAddress"})
-     * @Form\Validator({"name":"Common\Form\Elements\Validators\EmailConfirm","options":{"token":"emailConfirm"}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Dvsa\Olcs\Transfer\Validators\EmailAddress")
+     * @Form\Validator("Common\Form\Elements\Validators\EmailConfirm", options={"token":"emailConfirm"})
      */
     public $emailAddress = null;
 
@@ -57,7 +57,7 @@ class UserRegistration
      * @Form\Attributes({"class":"long"})
      * @Form\Options({"label":"confirm-email-address"})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Filter("Laminas\Filter\StringTrim")
      */
     public $emailConfirm = null;
 
@@ -80,17 +80,17 @@ class UserRegistration
      * @Form\Options({
      *     "label": "user-registration.field.licenceNumber.label",
      * })
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\NotEmpty","options":{"null"}})
-     * @Form\Validator({"name": "ValidateIf",
-     *      "options":{
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\NotEmpty", options={"null"})
+     * @Form\Validator("ValidateIf",
+     *      options={
      *          "context_field": "isLicenceHolder",
      *          "context_values": {"Y"},
      *          "validators": {
      *              {"name": "Laminas\Validator\StringLength", "options": {"min": 2, "max": 35}}
      *          }
      *      }
-     * })
+     * )
      */
     public $licenceNumber = null;
 
@@ -99,17 +99,17 @@ class UserRegistration
      * @Form\Type("Text")
      * @Form\Attributes({"class":"medium"})
      * @Form\Options({"label":"user-registration.field.organisationName.label"})
-     * @Form\Validator({"name":"Laminas\Validator\NotEmpty","options":{"null"}})
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name": "ValidateIf",
-     *      "options":{
+     * @Form\Validator("Laminas\Validator\NotEmpty", options={"null"})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("ValidateIf",
+     *      options={
      *          "context_field": "isLicenceHolder",
      *          "context_values": {"N"},
      *          "validators": {
      *              {"name": "Laminas\Validator\NotEmpty"}
      *          }
      *      }
-     * })
+     * )
      */
     public $organisationName = null;
 
@@ -124,16 +124,16 @@ class UserRegistration
      *     "category": "org_type",
      *     "exclude": {"org_t_ir"}
      * })
-     * @Form\Validator({"name": "Laminas\Validator\NotEmpty", "options": {"string"}})
-     * @Form\Validator({"name": "ValidateIf",
-     *      "options":{
+     * @Form\Validator("Laminas\Validator\NotEmpty", options={"string"})
+     * @Form\Validator("ValidateIf",
+     *      options={
      *          "context_field": "isLicenceHolder",
      *          "context_values": {"N"},
      *          "validators": {
      *              {"name": "Laminas\Validator\NotEmpty"}
      *          }
      *      }
-     * })
+     * )
      */
     public $businessType = null;
 

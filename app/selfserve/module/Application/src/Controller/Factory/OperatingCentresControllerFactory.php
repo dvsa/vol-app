@@ -14,9 +14,8 @@ use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Application\Controller\OperatingCentresController;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
-use ZfcRbac\Service\AuthorizationService;
+use Laminas\ServiceManager\Factory\FactoryInterface;
+use LmcRbacMvc\Service\AuthorizationService;
 
 class OperatingCentresControllerFactory implements FactoryInterface
 {
@@ -28,8 +27,6 @@ class OperatingCentresControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): OperatingCentresController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $formHelper = $container->get(FormHelperService::class);
@@ -55,17 +52,5 @@ class OperatingCentresControllerFactory implements FactoryInterface
             $stringHelper,
             $uploadHelper
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return OperatingCentresController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): OperatingCentresController
-    {
-        return $this->__invoke($serviceLocator, OperatingCentresController::class);
     }
 }

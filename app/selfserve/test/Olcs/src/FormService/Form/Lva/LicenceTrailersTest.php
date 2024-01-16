@@ -4,6 +4,7 @@ namespace OlcsTest\FormService\Form\Lva;
 
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Table\TableBuilder;
+use Laminas\Form\ElementInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\LicenceTrailers;
@@ -11,11 +12,6 @@ use Laminas\Form\Form;
 use Laminas\Http\Request;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 
-/**
- * Licence Trailers Form Test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 class LicenceTrailersTest extends MockeryTestCase
 {
     use ButtonsAlterations;
@@ -42,11 +38,11 @@ class LicenceTrailersTest extends MockeryTestCase
             ->shouldReceive('get')
             ->with('table')
             ->andReturn(
-                m::mock()
+                m::mock(ElementInterface::class)
                 ->shouldReceive('get')
                 ->with('table')
                 ->andReturn(
-                    m::mock()
+                    m::mock(ElementInterface::class)
                     ->shouldReceive('setTable')
                     ->with($mockTable)
                     ->once()
@@ -59,11 +55,11 @@ class LicenceTrailersTest extends MockeryTestCase
             ->shouldReceive('get')
             ->with('form-actions')
             ->andReturn(
-                m::mock()
+                m::mock(ElementInterface::class)
                 ->shouldReceive('get')
                 ->with('save')
                 ->andReturn(
-                    m::mock()
+                    m::mock(ElementInterface::class)
                     ->shouldReceive('setAttribute')
                     ->with('class', 'govuk-button')
                     ->once()

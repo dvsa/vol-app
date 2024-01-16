@@ -17,7 +17,7 @@ use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Lva\AbstractTransportManagersController;
 use Olcs\Controller\Lva\Adapters\VariationTransportManagerAdapter;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * External Variation Transport Managers Controller

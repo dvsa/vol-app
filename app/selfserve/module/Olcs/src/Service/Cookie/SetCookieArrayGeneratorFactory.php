@@ -3,23 +3,10 @@
 namespace Olcs\Service\Cookie;
 
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class SetCookieArrayGeneratorFactory implements FactoryInterface
 {
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return SetCookieArrayGenerator
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator) : SetCookieArrayGenerator
-    {
-        return $this->__invoke($serviceLocator, SetCookieArrayGenerator::class);
-    }
-
     /**
      * @param ContainerInterface $container
      * @param $requestedName

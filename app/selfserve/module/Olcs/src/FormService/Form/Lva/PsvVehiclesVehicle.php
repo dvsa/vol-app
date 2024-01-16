@@ -5,7 +5,7 @@ namespace Olcs\FormService\Form\Lva;
 use Common\FormService\Form\AbstractFormService;
 use Common\FormService\FormServiceManager;
 use Common\Service\Helper\FormHelperService;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Psv Vehicles Vehicle

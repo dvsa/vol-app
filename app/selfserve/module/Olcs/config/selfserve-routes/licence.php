@@ -15,8 +15,8 @@ use Olcs\Controller\Licence\Vehicle\TransferVehicleConfirmationController;
 use Olcs\Controller\Licence\Vehicle\TransferVehicleController;
 use Olcs\Controller\Licence\Vehicle\ListVehicleController;
 use Olcs\Controller\Licence\Vehicle\ViewVehicleController;
-use Laminas\Mvc\Router\Http\Method;
-use Laminas\Mvc\Router\Http\Segment;
+use Laminas\Router\Http\Method;
+use Laminas\Router\Http\Segment;
 
 return [
     [

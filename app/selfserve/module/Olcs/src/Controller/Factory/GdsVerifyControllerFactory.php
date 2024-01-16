@@ -8,10 +8,9 @@ use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Interop\Container\ContainerInterface;
 use Laminas\Cache\Storage\Adapter\Redis;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\GdsVerifyController;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 class GdsVerifyControllerFactory implements FactoryInterface
 {
@@ -23,8 +22,6 @@ class GdsVerifyControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): GdsVerifyController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $redis = $container->get(Redis::class);
@@ -40,17 +37,5 @@ class GdsVerifyControllerFactory implements FactoryInterface
             $scriptFactory,
             $flashMessengerHelper
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return GdsVerifyController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): GdsVerifyController
-    {
-        return $this->__invoke($serviceLocator, GdsVerifyController::class);
     }
 }

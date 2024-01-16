@@ -17,7 +17,7 @@ use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\Form\FormInterface;
 use Olcs\Controller\Lva\Traits\VariationWizardPageFormActionsTrait;
 use Olcs\Controller\Lva\Traits\VariationWizardPageWithSubsequentPageControllerTrait;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * External Director Change Variation Financial History Controller

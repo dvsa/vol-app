@@ -11,17 +11,14 @@ use Common\Service\Helper\UrlHelperService;
 use Common\Service\Lva\PeopleLvaService;
 use Common\Service\Table\TableBuilder;
 use Common\Service\Table\TableFactory;
-use Laminas\ServiceManager\AbstractFactoryInterface;
+use Laminas\ServiceManager\Factory\AbstractFactoryInterface;
 use Laminas\ServiceManager\Exception\InvalidServiceException;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 use Olcs\FormService\Form\Lva\Addresses\ApplicationAddresses;
 use Olcs\FormService\Form\Lva\Addresses\LicenceAddresses;
 use Olcs\FormService\Form\Lva\Addresses\VariationAddresses;
 use Olcs\FormService\Form\Lva\BusinessType\ApplicationBusinessType;
 use Olcs\FormService\Form\Lva\BusinessType\LicenceBusinessType;
 use Olcs\FormService\Form\Lva\BusinessType\VariationBusinessType;
-use Olcs\FormService\Form\Lva\GoodsVehicles\AddVehicleLicence;
-use Olcs\FormService\Form\Lva\GoodsVehicles\EditVehicleLicence;
 use Olcs\FormService\Form\Lva\OperatingCentre\LvaOperatingCentre;
 use Olcs\FormService\Form\Lva\OperatingCentres\ApplicationOperatingCentres;
 use Olcs\FormService\Form\Lva\OperatingCentres\LicenceOperatingCentres;
@@ -34,7 +31,7 @@ use Olcs\FormService\Form\Lva\TransportManager\ApplicationTransportManager;
 use Olcs\FormService\Form\Lva\TypeOfLicence\ApplicationTypeOfLicence;
 use Olcs\FormService\Form\Lva\TypeOfLicence\LicenceTypeOfLicence;
 use Olcs\FormService\Form\Lva\TypeOfLicence\VariationTypeOfLicence;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 class AbstractLvaFormServiceFactory implements AbstractFactoryInterface
 {
@@ -119,11 +116,6 @@ class AbstractLvaFormServiceFactory implements AbstractFactoryInterface
         return in_array($requestedName, self::FORM_SERVICE_CLASS_ALIASES);
     }
 
-    public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
-    {
-        return $this->canCreate($serviceLocator, $requestedName);
-    }
-
     public function __invoke($container, $requestedName, array $options = null)
     {
         /** @var FormServiceManager $formServiceLocator */
@@ -133,7 +125,7 @@ class AbstractLvaFormServiceFactory implements AbstractFactoryInterface
         /** @var TranslationHelperService $translator */
         /** @var TableBuilder $tableBuilder */
 
-        $serviceLocator = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
+        $serviceLocator = $container;
         $formHelper = $serviceLocator->get(FormHelperService::class);
 
         switch ($requestedName) {
@@ -255,7 +247,8 @@ class AbstractLvaFormServiceFactory implements AbstractFactoryInterface
                 $authService = $serviceLocator->get(AuthorizationService::class);
                 $translator = $serviceLocator->get(TranslationHelperService::class);
                 $urlHelper = $serviceLocator->get(UrlHelperService::class);
-                return new ApplicationFinancialEvidence($formHelper, $authService, $translator, $urlHelper);
+                $validatorPluginManager = $serviceLocator->get('ValidatorManager');
+                return new ApplicationFinancialEvidence($formHelper, $authService, $translator, $urlHelper, $validatorPluginManager);
             case self::FORM_SERVICE_CLASS_ALIASES['lva-application-vehicles_declarations']:
                 return new ApplicationVehiclesDeclarations($formHelper);
             case self::FORM_SERVICE_CLASS_ALIASES['lva-application-safety']:
@@ -314,10 +307,5 @@ class AbstractLvaFormServiceFactory implements AbstractFactoryInterface
             'AbstractLvaFormServiceFactory claimed to be able to supply instance of type "%s", but nothing was returned',
             $requestedName
         ));
-    }
-
-    public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
-    {
-        return $this->__invoke($serviceLocator, $requestedName);
     }
 }

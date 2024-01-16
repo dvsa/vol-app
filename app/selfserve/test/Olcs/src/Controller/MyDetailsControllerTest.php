@@ -2,6 +2,7 @@
 
 namespace OlcsTest\Controller;
 
+use Common\Form\Form;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
@@ -9,16 +10,14 @@ use Dvsa\Olcs\Transfer\Query\MyAccount\MyAccount as ItemDto;
 use Dvsa\Olcs\Transfer\Command\MyAccount\UpdateMyAccountSelfserve as UpdateDto;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\Form\Element;
+use Laminas\Form\ElementInterface;
+use Laminas\Http\Request;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Controller\MyDetailsController as Sut;
-use OlcsTest\Bootstrap;
 use ReflectionClass;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * Class My Details Controller Test
- */
 class MyDetailsControllerTest extends TestCase
 {
     protected $sut;
@@ -83,7 +82,7 @@ class MyDetailsControllerTest extends TestCase
             ]
         ];
 
-        $mockRequest = m::mock();
+        $mockRequest = m::mock(Request::class);
         $mockRequest->shouldReceive('isPost')->andReturn(false);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
@@ -92,13 +91,13 @@ class MyDetailsControllerTest extends TestCase
         $response->shouldReceive('getResult')->andReturn($rawEditData);
         $this->sut->shouldReceive('handleQuery')->with(m::type(ItemDto::class))->andReturn($response);
 
-        $mockFieldSet = m::mock();
+        $mockFieldSet = m::mock(ElementInterface::class);
         $mockElementForename = m::mock(Element::class);
         $mockFieldSet->shouldReceive('get')->with('forename')->once()->andReturn($mockElementForename);
         $mockElementFamilyName = m::mock(Element::class);
         $mockFieldSet->shouldReceive('get')->with('familyName')->once()->andReturn($mockElementFamilyName);
 
-        $mockForm = m::mock('Common\Form\Form');
+        $mockForm = m::mock(Form::class);
         $mockForm->shouldReceive('setData')->with($formattedData)->once();
         $mockForm->shouldReceive('get')->with('main')->andReturn($mockFieldSet)->once();
 
@@ -123,12 +122,12 @@ class MyDetailsControllerTest extends TestCase
 
         $view = $this->sut->editAction();
 
-        $this->assertInstanceOf('Common\Form\Form', $view->getVariable('form'));
+        $this->assertInstanceOf(Form::class, $view->getVariable('form'));
     }
 
     public function testEditActionForGetWithError()
     {
-        $mockRequest = m::mock();
+        $mockRequest = m::mock(Request::class);
         $mockRequest->shouldReceive('isPost')->andReturn(false);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
@@ -136,13 +135,13 @@ class MyDetailsControllerTest extends TestCase
         $response->shouldReceive('isOk')->andReturn(false);
         $this->sut->shouldReceive('handleQuery')->with(m::type(ItemDto::class))->andReturn($response);
 
-        $mockFieldSet = m::mock();
+        $mockFieldSet = m::mock(ElementInterface::class);
         $mockElementForename = m::mock(Element::class);
         $mockFieldSet->shouldReceive('get')->with('forename')->once()->andReturn($mockElementForename);
         $mockElementFamilyName = m::mock(Element::class);
         $mockFieldSet->shouldReceive('get')->with('familyName')->once()->andReturn($mockElementFamilyName);
 
-        $mockForm = m::mock('Common\Form\Form');
+        $mockForm = m::mock(Form::class);
         $mockForm->shouldReceive('setData')->never();
         $mockForm->shouldReceive('get')->with('main')->andReturn($mockFieldSet)->once();
 
@@ -172,7 +171,7 @@ class MyDetailsControllerTest extends TestCase
 
         $view = $this->sut->editAction();
 
-        $this->assertInstanceOf('Common\Form\Form', $view->getVariable('form'));
+        $this->assertInstanceOf(Form::class, $view->getVariable('form'));
     }
 
     public function testEditActionForPost()
@@ -208,7 +207,7 @@ class MyDetailsControllerTest extends TestCase
             ]
         ];
 
-        $mockRequest = m::mock();
+        $mockRequest = m::mock(Request::class);
         $mockRequest->shouldReceive('isPost')->andReturn(true);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
@@ -217,7 +216,7 @@ class MyDetailsControllerTest extends TestCase
         $response->shouldReceive('getResult')->andReturn($rawEditData);
         $this->sut->shouldReceive('handleQuery')->with(m::type(ItemDto::class))->andReturn($response);
 
-        $mockForm = m::mock('Common\Form\Form');
+        $mockForm = m::mock(Form::class);
         $mockForm->shouldReceive('setData')->twice()->with($postData);
         $mockForm->shouldReceive('isValid')->once()->andReturn(true);
         $mockForm->shouldReceive('getData')->once()->andReturn($postData);
@@ -293,7 +292,7 @@ class MyDetailsControllerTest extends TestCase
         $response->shouldReceive('getResult')->andReturn($rawEditData);
         $this->sut->shouldReceive('handleQuery')->with(m::type(ItemDto::class))->andReturn($response);
 
-        $mockFieldSet = m::mock();
+        $mockFieldSet = m::mock(ElementInterface::class);
         $mockElementForename = m::mock(Element::class);
         $mockFieldSet->shouldReceive('get')->with('forename')->once()->andReturn($mockElementForename);
         $mockElementFamilyName = m::mock(Element::class);
@@ -342,7 +341,7 @@ class MyDetailsControllerTest extends TestCase
 
         $view = $this->sut->editAction();
 
-        $this->assertInstanceOf('Common\Form\Form', $view->getVariable('form'));
+        $this->assertInstanceOf(Form::class, $view->getVariable('form'));
     }
 
     public function testEditActionForPostWithCancel()
@@ -378,7 +377,7 @@ class MyDetailsControllerTest extends TestCase
             ]
         ];
 
-        $mockRequest = m::mock();
+        $mockRequest = m::mock(Request::class);
         $mockRequest->shouldReceive('isPost')->andReturn(true);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
@@ -387,7 +386,7 @@ class MyDetailsControllerTest extends TestCase
         $response->shouldReceive('getResult')->andReturn($rawEditData);
         $this->sut->shouldReceive('handleQuery')->with(m::type(ItemDto::class))->andReturn($response);
 
-        $mockForm = m::mock('Common\Form\Form');
+        $mockForm = m::mock(Form::class);
         $mockForm->shouldReceive('setData')->once()->with($responseData);
 
         $this->mockformHelper

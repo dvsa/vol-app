@@ -3,23 +3,10 @@
 namespace Olcs\Service\Cookie;
 
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class CurrentPreferencesProviderFactory implements FactoryInterface
 {
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return CurrentPreferencesProvider
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator) : CurrentPreferencesProvider
-    {
-        return $this->__invoke($serviceLocator, CurrentPreferencesProvider::class);
-    }
-
     /**
      * @param ContainerInterface $container
      * @param $requestedName

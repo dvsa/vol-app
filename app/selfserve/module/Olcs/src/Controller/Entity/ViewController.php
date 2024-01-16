@@ -11,7 +11,7 @@ use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Query\Search\Licence as SearchLicence;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\Session\Container;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Entity View Controller

@@ -10,7 +10,7 @@ use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Query\BusRegSearchView\BusRegSearchViewList as ListDto;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\View\Model\ViewModel;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Class BusRegRegistrationsController

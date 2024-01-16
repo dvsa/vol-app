@@ -21,9 +21,8 @@ class OCRSOptIn
      *     "checked_value":"Y",
      *     "unchecked_value":"N",
      * })
-     * @Form\Validator({
-     *     "name":"Laminas\Validator\InArray",
-     *     "options": {
+     * @Form\Validator("Laminas\Validator\InArray",
+     *     options={
      *         "haystack": {
      *             "Y", "N"
      *         },
@@ -32,7 +31,7 @@ class OCRSOptIn
      *             Laminas\Validator\InArray::NOT_IN_ARRAY: "licence.vehicle.list.form.orcs.checkbox.invalid-value"
      *         }
      *     }
-     * })
+     * )
      */
     public $ocrsCheckbox = null;
 

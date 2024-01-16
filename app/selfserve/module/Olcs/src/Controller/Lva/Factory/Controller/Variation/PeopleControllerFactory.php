@@ -10,11 +10,10 @@ use Common\Service\Lva\VariationLvaService;
 use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\Lva\Adapters\VariationPeopleAdapter;
 use Olcs\Controller\Lva\Variation\PeopleController;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 class PeopleControllerFactory implements FactoryInterface
 {
@@ -26,8 +25,6 @@ class PeopleControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): PeopleController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $formHelper = $container->get(FormHelperService::class);
@@ -49,17 +46,5 @@ class PeopleControllerFactory implements FactoryInterface
             $lvaAdapter,
             $flashMessenegerHelper
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return PeopleController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): PeopleController
-    {
-        return $this->__invoke($serviceLocator, PeopleController::class);
     }
 }

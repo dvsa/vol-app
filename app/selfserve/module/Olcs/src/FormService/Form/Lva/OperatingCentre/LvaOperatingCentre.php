@@ -171,10 +171,6 @@ class LvaOperatingCentre extends CommonOperatingCentre
      */
     protected function getTranslator()
     {
-        if ($this->translator === null) {
-            $this->translator = $this->getServiceLocator()->get('Helper\Translation');
-        }
-
         return $this->translator;
     }
 
@@ -185,10 +181,6 @@ class LvaOperatingCentre extends CommonOperatingCentre
      */
     protected function getUrl()
     {
-        if ($this->urlHelper === null) {
-            $this->urlHelper = $this->getServiceLocator()->get('Helper\Url');
-        }
-
         return $this->urlHelper;
     }
 

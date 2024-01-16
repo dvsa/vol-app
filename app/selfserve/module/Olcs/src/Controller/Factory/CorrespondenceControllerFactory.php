@@ -6,10 +6,9 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\CorrespondenceController;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 class CorrespondenceControllerFactory implements FactoryInterface
 {
@@ -21,8 +20,6 @@ class CorrespondenceControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CorrespondenceController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
@@ -34,17 +31,5 @@ class CorrespondenceControllerFactory implements FactoryInterface
             $flashMessengerHelper,
             $tableFactory,
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return CorrespondenceController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): CorrespondenceController
-    {
-        return $this->__invoke($serviceLocator, CorrespondenceController::class);
     }
 }

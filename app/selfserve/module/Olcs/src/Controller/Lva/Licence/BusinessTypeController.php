@@ -13,8 +13,8 @@ use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
-use ZfcRbac\Identity\IdentityProviderInterface;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Identity\IdentityProviderInterface;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * External Licence Business Type Controller

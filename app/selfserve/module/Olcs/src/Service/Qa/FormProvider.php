@@ -2,9 +2,9 @@
 
 namespace Olcs\Service\Qa;
 
-use Common\Form\Annotation\CustomAnnotationBuilder;
 use Common\Service\Qa\FieldsetPopulator;
 use Common\Service\Qa\UsageContext;
+use Laminas\Form\Annotation\AnnotationBuilder;
 use Laminas\Form\Factory as LaminasFormFactory;
 use Laminas\Form\InputFilterProviderFieldset;
 use RuntimeException;
@@ -20,8 +20,8 @@ class FormProvider
     /** @var LaminasFormFactory */
     private $laminasFormFactory;
 
-    /** @var CustomAnnotationBuilder */
-    private $customAnnotationBuilder;
+    /** @var AnnotationBuilder */
+    private $annotationBuilder;
 
     /** @var array */
     private $submitOptionsMappings;
@@ -32,7 +32,7 @@ class FormProvider
      * @param FormFactory $formFactory
      * @param FieldsetPopulator $fieldsetPopulator
      * @param LaminasFormFactory $laminasFormFactory
-     * @param CustomAnnotationBuilder $customAnnotationBuilder
+     * @param AnnotationBuilder $annotationBuilder
      * @param array $submitOptionsMappings
      *
      * @return FormProvider
@@ -41,13 +41,13 @@ class FormProvider
         FormFactory $formFactory,
         FieldsetPopulator $fieldsetPopulator,
         LaminasFormFactory $laminasFormFactory,
-        CustomAnnotationBuilder $customAnnotationBuilder,
+        $annotationBuilder,
         array $submitOptionsMappings
     ) {
         $this->formFactory = $formFactory;
         $this->fieldsetPopulator = $fieldsetPopulator;
         $this->laminasFormFactory = $laminasFormFactory;
-        $this->customAnnotationBuilder = $customAnnotationBuilder;
+        $this->annotationBuilder = $annotationBuilder;
         $this->submitOptionsMappings = $submitOptionsMappings;
     }
 
@@ -68,7 +68,7 @@ class FormProvider
         $form = $this->formFactory->create('QaForm');
         $form->setApplicationStep($options);
 
-        $submitFieldsetSpec = $this->customAnnotationBuilder->getFormSpecification(
+        $submitFieldsetSpec = $this->annotationBuilder->getFormSpecification(
             $this->submitOptionsMappings[$submitOptionsName]
         );
 

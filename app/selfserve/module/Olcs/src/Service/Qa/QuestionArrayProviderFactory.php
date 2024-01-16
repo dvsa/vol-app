@@ -3,23 +3,10 @@
 namespace Olcs\Service\Qa;
 
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class QuestionArrayProviderFactory implements FactoryInterface
 {
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return QuestionArrayProvider
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator) : QuestionArrayProvider
-    {
-        return $this->__invoke($serviceLocator, QuestionArrayProvider::class);
-    }
-
     /**
      * @param ContainerInterface $container
      * @param $requestedName

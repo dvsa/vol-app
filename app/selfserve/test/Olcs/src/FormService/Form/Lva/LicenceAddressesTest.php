@@ -3,16 +3,12 @@
 namespace OlcsTest\FormService\Form\Lva;
 
 use Common\RefData;
+use Laminas\Form\ElementInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\Addresses\LicenceAddresses;
 use Laminas\Form\Form;
 
-/**
- * Licence Addresses Test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 class LicenceAddressesTest extends MockeryTestCase
 {
     protected $sut;
@@ -30,11 +26,11 @@ class LicenceAddressesTest extends MockeryTestCase
 
     public function testGetForm()
     {
-        $formActions = m::mock();
+        $formActions = m::mock(ElementInterface::class);
         $formActions->shouldReceive('get')
             ->with('save')
             ->andReturn(
-                m::mock()
+                m::mock(ElementInterface::class)
                 ->shouldReceive('setAttribute')
                 ->with('class', 'govuk-button')
                 ->once()

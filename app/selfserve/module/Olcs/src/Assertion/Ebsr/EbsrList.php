@@ -3,8 +3,8 @@
 namespace Olcs\Assertion\Ebsr;
 
 use Common\Rbac\User;
-use ZfcRbac\Assertion\AssertionInterface;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Assertion\AssertionInterface;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Check that the current user can access EBSR list

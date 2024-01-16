@@ -10,7 +10,7 @@ use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Query\Licence\OtherActiveLicences;
 use Laminas\Http\Response;
-use Laminas\Mvc\Controller\Plugin\FlashMessenger;
+use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\View\Model\ViewModel;
 use Olcs\DTO\Licence\OtherActiveLicenceListDTO;
 use Olcs\Exception\Licence\NoOtherLicencesFoundException;

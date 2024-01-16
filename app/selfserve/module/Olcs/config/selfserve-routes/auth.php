@@ -6,8 +6,8 @@ use Dvsa\Olcs\Auth\Controller\ExpiredPasswordController;
 use Dvsa\Olcs\Auth\Controller\ForgotPasswordController;
 use Dvsa\Olcs\Auth\Controller\LogoutController;
 use Dvsa\Olcs\Auth\Controller\ResetPasswordController;
-use Laminas\Mvc\Router\Http\Method;
-use Laminas\Mvc\Router\Http\Segment;
+use Laminas\Router\Http\Method;
+use Laminas\Router\Http\Segment;
 
 return [
     [
@@ -91,7 +91,7 @@ return [
                     ],
                 ],
                 'validate' => [
-                    'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                    'type' => \Laminas\Router\Http\Segment::class,
                     'options' => [
                         'route' => 'validate[/]',
                         'defaults' => [

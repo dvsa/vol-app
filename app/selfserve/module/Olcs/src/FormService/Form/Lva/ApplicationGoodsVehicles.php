@@ -7,7 +7,7 @@ use Common\Service\Helper\FormHelperService;
 use Laminas\Form\Form;
 use Olcs\FormService\Form\Lva\Traits\ButtonsAlterations;
 use Common\FormService\Form\Lva\ApplicationGoodsVehicles as CommonGoodsVehicles;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Application Goods vehicles

@@ -4,26 +4,10 @@ namespace Olcs\InputFilter;
 
 use Interop\Container\ContainerInterface;
 use Laminas\InputFilter\Input;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
-/**
- * Class EbsrPackFactory
- * @package Olcs\InputFilter
- */
 class EbsrPackFactory implements FactoryInterface
 {
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator) : Input
-    {
-        return $this->__invoke($serviceLocator, Input::class);
-    }
-
     /**
      * @param ContainerInterface $container
      * @param $requestedName

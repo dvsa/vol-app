@@ -2,10 +2,8 @@
 
 namespace Permits\Data\Mapper;
 
-use Laminas\ServiceManager\Config;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class MapperManagerFactory implements FactoryInterface
 {
@@ -26,13 +24,6 @@ class MapperManagerFactory implements FactoryInterface
             throw new \Exception('Mappers configuration not found');
         }
 
-        $configObject = new Config($config['mappers']);
-
-        return new MapperManager($configObject);
-    }
-
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        return $this($serviceLocator, MapperManager::class);
+        return new MapperManager($container, $config['mappers']);
     }
 }

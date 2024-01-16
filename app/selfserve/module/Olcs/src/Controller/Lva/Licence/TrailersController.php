@@ -18,7 +18,7 @@ use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\Mvc\MvcEvent;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Class TrailersController

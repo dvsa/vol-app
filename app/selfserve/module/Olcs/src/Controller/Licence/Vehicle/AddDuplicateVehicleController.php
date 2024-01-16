@@ -5,7 +5,7 @@ namespace Olcs\Controller\Licence\Vehicle;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableFactory;
-use Laminas\Mvc\Controller\Plugin\FlashMessenger;
+use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Olcs\Form\Model\Form\Vehicle\AddDuplicateVehicleConfirmation as AddDuplicateVehicleConfirmationForm;
 use Permits\Data\Mapper\MapperManager;
 

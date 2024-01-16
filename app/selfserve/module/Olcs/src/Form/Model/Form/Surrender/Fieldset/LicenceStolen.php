@@ -20,9 +20,8 @@ class LicenceStolen
     /**
      * @Form\AllowEmpty(true)
      * @Form\ContinueIfEmpty(true)
-     * @Form\Validator({
-     *     "name": "ValidateIf",
-     *      "options":{
+     * @Form\Validator("ValidateIf",
+     *      options={
      *          "context_field": "operatorLicenceDocument",
      *          "context_values": {"stolen"},
      *          "inject_post_data" : "operatorLicenceDocument->operatorLicenceDocument",
@@ -49,8 +48,8 @@ class LicenceStolen
      *              }
      *          }
      *      }
-     * })
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * )
+     * @Form\Filter("Laminas\Filter\StringTrim")
      * @Form\Type("\Laminas\Form\Element\Textarea")
      * @Form\Attributes({
      *     "class" : "govuk-textarea",

@@ -10,7 +10,7 @@ use Olcs\Controller\Lva\AbstractOverviewController;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 use Olcs\Service\Helper\ApplicationOverviewHelperService;
 use Olcs\View\Model\Variation\VariationOverview;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Variation Overview Controller

@@ -19,7 +19,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Controller\UserRegistrationController as Sut;
 use OlcsTest\Bootstrap;
 use ReflectionClass;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Class User Registration Controller Test

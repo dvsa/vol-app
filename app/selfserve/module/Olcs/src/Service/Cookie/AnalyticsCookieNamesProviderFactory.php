@@ -3,23 +3,10 @@
 namespace Olcs\Service\Cookie;
 
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class AnalyticsCookieNamesProviderFactory implements FactoryInterface
 {
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return AnalyticsCookieNamesProvider
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator) : AnalyticsCookieNamesProvider
-    {
-        return $this->__invoke($serviceLocator, AnalyticsCookieNamesProvider::class);
-    }
-
     /**
      * @param ContainerInterface $container
      * @param mixed $requestedName

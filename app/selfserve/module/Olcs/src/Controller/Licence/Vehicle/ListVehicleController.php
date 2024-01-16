@@ -30,7 +30,7 @@ use Laminas\Http\Response;
 use Laminas\InputFilter\Input;
 use Laminas\InputFilter\InputFilter;
 use Laminas\Mvc\Controller\Plugin\Url;
-use Laminas\Mvc\Router\RouteMatch;
+use Laminas\Router\RouteMatch;
 use Laminas\Stdlib\ResponseInterface;
 use Laminas\Validator\InArray;
 use Laminas\View\Model\ViewModel;

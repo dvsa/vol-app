@@ -3,23 +3,10 @@
 namespace Olcs\Controller\Cookie;
 
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class SettingsControllerFactory implements FactoryInterface
 {
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return SettingsController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator) : SettingsController
-    {
-        return $this->__invoke($serviceLocator, SettingsController::class);
-    }
-
     /**
      * @param ContainerInterface $container
      * @param $requestedName
@@ -30,9 +17,7 @@ class SettingsControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : SettingsController
     {
-        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
-            $container = $container->getServiceLocator();
-        }
+
         return new SettingsController(
             $container->get('CookieCurrentPreferencesProvider'),
             $container->get('CookieSetCookieArrayGenerator'),

@@ -3,28 +3,11 @@
 namespace Olcs\Controller\Listener;
 
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
-use ZfcRbac\Service\AuthorizationService;
+use Laminas\ServiceManager\Factory\FactoryInterface;
+use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * Class NavigationFactory
- * @author Ian Lindsay<ian@hemera-business-services.co.uk>
- */
 class NavigationFactory implements FactoryInterface
 {
-    /**
-     * Create navigation listener
-     *
-     * @param ServiceLocatorInterface $serviceLocator service locator
-     *
-     * @return Navigation
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): Navigation
-    {
-        return $this->__invoke($serviceLocator, Navigation::class);
-    }
-
     /**
      * @param ContainerInterface $container
      * @param $requestedName

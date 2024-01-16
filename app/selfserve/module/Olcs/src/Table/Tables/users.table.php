@@ -62,7 +62,7 @@ return array(
                 return ($row['id'] !== $this->authService->getIdentity()->getUserData()['id']);
             },
             'ariaDescription' => function ($row, $column) {
-                $column['formatter'] = 'Name';
+                $column['formatter'] = Name::class;
                 return $this->callFormatter($column, $row['contactDetails']['person']);
             },
             'deleteInputName' => 'action[delete][%d]',

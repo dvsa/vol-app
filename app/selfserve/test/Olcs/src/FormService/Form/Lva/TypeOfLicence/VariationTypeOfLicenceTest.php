@@ -3,6 +3,7 @@
 namespace OlcsTest\FormService\Form\Lva\TypeOfLicence;
 
 use Common\Service\Helper\FormHelperService;
+use Laminas\Form\ElementInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\TypeOfLicence\VariationTypeOfLicence;
@@ -12,13 +13,8 @@ use Laminas\Form\Element;
 use Laminas\Form\Fieldset;
 use Common\RefData;
 use Common\Form\Elements\InputFilters\Lva\BackToVariationActionLink;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * Variation Type of Licence Form Test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 class VariationTypeOfLicenceTest extends MockeryTestCase
 {
     /**
@@ -56,7 +52,7 @@ class VariationTypeOfLicenceTest extends MockeryTestCase
             ->with('lva-variation')
             ->once()
             ->andReturn(
-                m::mock()
+                m::mock(ElementInterface::class)
                 ->shouldReceive('alterForm')
                 ->with($mockForm)
                 ->once()
@@ -141,7 +137,7 @@ class VariationTypeOfLicenceTest extends MockeryTestCase
             ->with('licence-type')
             ->once();
 
-        $mockTolFieldset = m::mock()
+        $mockTolFieldset = m::mock(ElementInterface::class)
             ->shouldReceive('get')
             ->with('operator-location')
             ->andReturn($mockOperatorLocation)
@@ -214,7 +210,7 @@ class VariationTypeOfLicenceTest extends MockeryTestCase
                 ->shouldReceive('get')
                 ->with('form-actions')
                 ->andReturn(
-                    m::mock()
+                    m::mock(ElementInterface::class)
                     ->shouldReceive('has')
                     ->with('save')
                     ->once()
@@ -244,7 +240,7 @@ class VariationTypeOfLicenceTest extends MockeryTestCase
             $mockForm->shouldReceive('get')
                 ->with('form-actions')
                 ->andReturn(
-                    m::mock()
+                    m::mock(ElementInterface::class)
                     ->shouldReceive('add')
                     ->with(m::type(BackToVariationActionLink::class))
                     ->once()

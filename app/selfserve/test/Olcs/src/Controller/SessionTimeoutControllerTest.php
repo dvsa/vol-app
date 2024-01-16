@@ -5,19 +5,16 @@ namespace OlcsTest\Controller;
 
 use Common\Controller\Plugin\Redirect;
 use Common\Rbac\JWTIdentityProvider;
-use Common\Rbac\PidIdentityProvider;
 use Common\Rbac\User;
 use Common\Test\MocksServicesTrait;
 use Laminas\ServiceManager\ServiceManager;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Dvsa\Olcs\Auth\Service\Auth\CookieService;
-use Dvsa\Olcs\Auth\Service\Auth\LogoutService;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
 use Laminas\Mvc\Controller\PluginManager;
 use Laminas\Mvc\MvcEvent;
-use Laminas\Mvc\Router\Http\TreeRouteStack;
-use Laminas\Mvc\Router\RouteMatch;
+use Laminas\Router\Http\TreeRouteStack;
+use Laminas\Router\RouteMatch;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\Stdlib\Parameters;
 use Laminas\Uri\Http;
@@ -26,7 +23,7 @@ use Mockery as m;
 use Mockery\MockInterface;
 use Olcs\Controller\SessionTimeoutController;
 use Olcs\Controller\SessionTimeoutControllerFactory;
-use ZfcRbac\Identity\IdentityProviderInterface;
+use LmcRbacMvc\Identity\IdentityProviderInterface;
 
 /**
  * @see SessionTimeoutController
@@ -37,7 +34,7 @@ class SessionTimeoutControllerTest extends MockeryTestCase
 
     protected const COOKIE_NAME = 'cookie';
 
-    private $identityProviderClass = PidIdentityProvider::class;
+    private $identityProviderClass = JWTIdentityProvider::class;
 
     /**
      * @var ServiceManager
@@ -149,10 +146,6 @@ class SessionTimeoutControllerTest extends MockeryTestCase
 
         $this->setUpIdentityWithClearSession($this->identityProviderClass);
 
-        //Define Expectations
-        $logoutService = $this->resolveMockService($serviceLocator, 'Auth\LogoutService');
-        $logoutService->shouldReceive('logout')->once();
-
         // Execute
         $response = $sut->indexAction($request);
 
@@ -197,31 +190,6 @@ class SessionTimeoutControllerTest extends MockeryTestCase
     }
 
     /**
-     * @test
-     * @depends indexAction_RedirectsUserIfLoggedIn
-     */
-    public function indexAction_DestroyCookieIfLoggedIn()
-    {
-        // Setup
-        $serviceLocator = $this->setUpServiceLocator();
-        $request = $this->setUpRequest();
-        $sut = $this->setUpSut($serviceLocator, new Request());
-
-        $this->setUpIdentityWithClearSession($this->identityProviderClass);
-
-        //Define Expectations
-        $cookieService = $this->resolveMockService($serviceLocator, 'Auth/CookieService');
-        $cookieService->shouldReceive('destroyCookie')
-            ->once();
-
-        // Execute
-        $response = $sut->indexAction($request);
-
-        // Assert
-        $this->assertInstanceOf(Response::class, $response);
-    }
-
-    /**
      * "
      * @param ServiceLocatorInterface $serviceLocator
      * @return array
@@ -231,8 +199,6 @@ class SessionTimeoutControllerTest extends MockeryTestCase
         return [
             IdentityProviderInterface::class => $this->setUpIdentity($this->identityProviderClass),
             Redirect::class => $this->setUpRedirect(),
-            'Auth\CookieService' => $this->setUpCookies(),
-            'Auth\LogoutService' => $this->setUpMockService(LogoutService::class),
             'request' => $this->setUpMockService(Request::class),
         ];
     }
@@ -258,8 +224,7 @@ class SessionTimeoutControllerTest extends MockeryTestCase
      */
     protected function setUpPluginManager(ServiceLocatorInterface $serviceLocator): PluginManager
     {
-        $pluginManager = new PluginManager();
-        $pluginManager->setServiceLocator($serviceLocator);
+        $pluginManager = new PluginManager($serviceLocator);
         return $pluginManager;
     }
 
@@ -271,11 +236,9 @@ class SessionTimeoutControllerTest extends MockeryTestCase
      */
     protected function setUpSut(ServiceLocatorInterface $serviceLocator, Request $request): SessionTimeoutController
     {
-
         $routeMatch = new RouteMatch([]);
         $factory = new SessionTimeoutControllerFactory();
-        $instance = $factory->createService($serviceLocator);
-        $instance->setServiceLocator($serviceLocator);
+        $instance = $factory->__invoke($serviceLocator, SessionTimeoutController::class);
         $instance->setEvent($this->setUpMvcEvent($request, $routeMatch));
         $instance->setPluginManager($this->setUpPluginManager($serviceLocator));
 
@@ -351,19 +314,6 @@ class SessionTimeoutControllerTest extends MockeryTestCase
             ->andReturn($identity);
         $currentUser->expects('clearSession')
             ->withNoArgs();
-    }
-
-    /**
-     * @return m\MockInterface
-     */
-    protected function setUpCookies(): m\MockInterface
-    {
-        $cookie = $this->setUpMockService(CookieService::class);
-        $cookie->shouldReceive('getCookie')
-            ->andReturn(static::COOKIE_NAME)
-            ->byDefault();
-
-        return $cookie;
     }
 
     /**

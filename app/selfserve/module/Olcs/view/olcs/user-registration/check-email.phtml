@@ -1,6 +1,6 @@
 <?php
 /** @var \Common\Service\Helper\TranslationHelperService $translationHlp */
-$translationHlp = $this->getHelperPluginManager()->getServiceLocator()->get('Helper\Translation');
+$translationHlp = $this->getHelperPluginManager()->get('Helper\Translation');
 
 echo $this->partial(
     'partials/page-header-simple',
@@ -23,11 +23,11 @@ echo $this->partial(
     <div class="article">
       <p>
           <?php echo $this->getHelperPluginManager()
-            ->getServiceLocator()->get('Helper\Translation')
+            ->get('Helper\Translation')
             ->translateReplace(
                 'user-registration.page.check-email.content',
                 [
-                    $this->getHelperPluginManager()->getServiceLocator()->get('Helper\Url')->fromRoute('auth/login/GET')
+                    $this->getHelperPluginManager()->get('Helper\Url')->fromRoute('auth/login/GET')
                 ]
             ); ?>
       </p>

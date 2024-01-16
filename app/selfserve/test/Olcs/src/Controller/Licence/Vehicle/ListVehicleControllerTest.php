@@ -24,11 +24,12 @@ use Hamcrest\Core\IsAnything;
 use Hamcrest\Core\IsIdentical;
 use Hamcrest\Arrays\IsArrayContainingKey;
 use Hamcrest\Core\IsInstanceOf;
+use Laminas\Form\ElementInterface;
 use Laminas\Form\Form;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
 use Laminas\Mvc\Controller\Plugin\Url;
-use Laminas\Mvc\Router\Http\RouteMatch;
+use Laminas\Router\Http\RouteMatch;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\Stdlib\Parameters;
 use Laminas\Uri\Http;
@@ -924,7 +925,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     protected function setUpSut()
     {
         $factory = new ListVehicleControllerFactory();
-        $dispatcher = $factory->createService($this->serviceManager);
+        $dispatcher = $factory->__invoke($this->serviceManager, ListVehicleController::class);
         $this->sut = $dispatcher->getDelegate();
     }
 
@@ -1085,7 +1086,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $form = m::mock(Form::class);
         $form->shouldIgnoreMissing();
         $form->shouldReceive('get')->andReturnUsing(function () {
-            $mockFormElement = m::mock();
+            $mockFormElement = m::mock(ElementInterface::class);
             $mockFormElement->shouldIgnoreMissing();
             $mockFormElement->shouldReceive('setOption')->andReturnSelf()->byDefault();
             return $mockFormElement;

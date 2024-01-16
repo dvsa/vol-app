@@ -9,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\User\RemindUsernameSelfserve as RemindUsernameDto
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\Form\Form;
 use Laminas\View\Model\ViewModel;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * User Forgot Username Controller

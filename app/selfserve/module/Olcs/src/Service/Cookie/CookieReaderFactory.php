@@ -3,23 +3,10 @@
 namespace Olcs\Service\Cookie;
 
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class CookieReaderFactory implements FactoryInterface
 {
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return CookieReader
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator) : CookieReader
-    {
-        return $this->__invoke($serviceLocator, CookieReader::class);
-    }
-
     /**
      * @param ContainerInterface $container
      * @param $requestedName

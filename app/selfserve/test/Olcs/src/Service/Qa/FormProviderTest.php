@@ -2,7 +2,8 @@
 
 namespace OlcsTest\Service\Qa;
 
-use Common\Form\Annotation\CustomAnnotationBuilder;
+use ArrayObject;
+use Laminas\Form\Annotation\AnnotationBuilder;
 use Common\Service\Qa\FieldsetPopulator;
 use Common\Service\Qa\UsageContext;
 use Laminas\Form\Factory as LaminasFormFactory;
@@ -17,15 +18,15 @@ use RuntimeException;
 
 class FormProviderTest extends MockeryTestCase
 {
-    const OPTIONS = [
+    public const OPTIONS = [
         'option1Key' => 'option1Value',
         'option2Key' => 'option2Value'
     ];
 
-    const SUBMIT_OPTIONS_NAME = 'submit_options_type_1';
-    const SUBMIT_OPTIONS_FQCN = '\Fqcn\For\SubmitOptionsType1';
+    public const SUBMIT_OPTIONS_NAME = 'submit_options_type_1';
+    public const SUBMIT_OPTIONS_FQCN = '\Fqcn\For\SubmitOptionsType1';
 
-    const SUBMIT_OPTIONS_MAPPINGS = [
+    public const SUBMIT_OPTIONS_MAPPINGS = [
         self::SUBMIT_OPTIONS_NAME => self::SUBMIT_OPTIONS_FQCN
     ];
 
@@ -38,7 +39,7 @@ class FormProviderTest extends MockeryTestCase
     private $customAnnotationBuilder;
 
     private $formProvider;
-        
+
     public function setUp(): void
     {
         $this->formFactory = m::mock(FormFactory::class);
@@ -47,29 +48,25 @@ class FormProviderTest extends MockeryTestCase
 
         $this->laminasFormFactory = m::mock(LaminasFormFactory::class);
 
-        $this->customAnnotationBuilder = m::mock(CustomAnnotationBuilder::class);
+        $this->annotationBuilder = m::mock(new AnnotationBuilder())->makePartial();
 
         $this->formProvider = new FormProvider(
             $this->formFactory,
             $this->fieldsetPopulator,
             $this->laminasFormFactory,
-            $this->customAnnotationBuilder,
+            $this->annotationBuilder,
             self::SUBMIT_OPTIONS_MAPPINGS
         );
     }
 
     public function testGet()
     {
-        $annotationBuilderFormSpecification = [
-            'attribute1' => 'value1',
-            'attribute2' => 'value2',
-        ];
-
-        $expectedFormFactoryFormSpecification = [
-            'attribute1' => 'value1',
-            'attribute2' => 'value2',
-            'type' => InputFilterProviderFieldset::class,
-        ];
+        $annotationBuilderFormSpecification = new ArrayObject(
+            [
+                'attribute1' => 'value1',
+                'attribute2' => 'value2',
+            ]
+        );
 
         $fieldset = m::mock(Fieldset::class);
 
@@ -95,11 +92,17 @@ class FormProviderTest extends MockeryTestCase
             ->ordered();
 
         $this->laminasFormFactory->shouldReceive('create')
-            ->with($expectedFormFactoryFormSpecification)
+            ->with(m::on(function ($arg) {
+                return $arg instanceof ArrayObject &&
+                    isset($arg['attribute1']) &&
+                    isset($arg['attribute2']) &&
+                    $arg['attribute1'] === 'value1' &&
+                    $arg['attribute2'] === 'value2';
+            }))
             ->once()
             ->andReturn($fieldset);
 
-        $this->customAnnotationBuilder->shouldReceive('getFormSpecification')
+        $this->annotationBuilder->shouldReceive('getFormSpecification')
             ->with(self::SUBMIT_OPTIONS_FQCN)
             ->once()
             ->andReturn($annotationBuilderFormSpecification);

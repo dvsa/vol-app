@@ -11,9 +11,8 @@ use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Application\Controller\PaymentSubmissionController;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
-use ZfcRbac\Service\AuthorizationService;
+use Laminas\ServiceManager\Factory\FactoryInterface;
+use LmcRbacMvc\Service\AuthorizationService;
 
 class PaymentSubmissionControllerFactory implements FactoryInterface
 {
@@ -25,8 +24,6 @@ class PaymentSubmissionControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): PaymentSubmissionController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $translationHelper = $container->get(TranslationHelperService::class);
@@ -46,17 +43,5 @@ class PaymentSubmissionControllerFactory implements FactoryInterface
             $restrictionHelper,
             $stringHelper
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return PaymentSubmissionController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): PaymentSubmissionController
-    {
-        return $this->__invoke($serviceLocator, PaymentSubmissionController::class);
     }
 }

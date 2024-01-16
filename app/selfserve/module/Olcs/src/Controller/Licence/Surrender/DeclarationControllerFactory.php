@@ -9,8 +9,7 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableFactory;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Permits\Data\Mapper\MapperManager;
 
 class DeclarationControllerFactory implements FactoryInterface
@@ -24,23 +23,11 @@ class DeclarationControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DeclarationController
     {
-        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
-            $container = $container->getServiceLocator();
-        }
         $translationHelper = $container->get(TranslationHelperService::class);
         $formHelper = $container->get(FormHelperService::class);
         $tableBuilder = $container->get(TableFactory::class);
         $mapperManager = $container->get(MapperManager::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         return new DeclarationController($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessengerHelper);
-    }
-
-    /**
-     * @param ServiceLocatorInterface $serviceLocator
-     * @deprecated
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): DeclarationController
-    {
-        return $this->__invoke($serviceLocator, DeclarationController::class);
     }
 }

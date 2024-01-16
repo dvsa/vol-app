@@ -9,12 +9,11 @@ use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\DashboardController;
 use Olcs\Controller\UserController;
 use Olcs\View\Model\User;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 class UserControllerFactory implements FactoryInterface
 {
@@ -26,8 +25,6 @@ class UserControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): UserController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $user = $container->get(User::class);
@@ -47,17 +44,5 @@ class UserControllerFactory implements FactoryInterface
             $translationHelper,
             $guidanceHelper
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return UserController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): UserController
-    {
-        return $this->__invoke($serviceLocator, UserController::class);
     }
 }

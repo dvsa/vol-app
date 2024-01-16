@@ -8,8 +8,7 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableFactory;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Permits\Data\Mapper\MapperManager;
 
 class IrhpAwaitingFeeControllerFactory implements FactoryInterface
@@ -23,23 +22,10 @@ class IrhpAwaitingFeeControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IrhpAwaitingFeeController
     {
-        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
-            $container = $container->getServiceLocator();
-        }
         $translationHelper = $container->get(TranslationHelperService::class);
         $formHelper = $container->get(FormHelperService::class);
         $tableBuilder = $container->get(TableFactory::class);
         $mapperManager = $container->get(MapperManager::class);
         return new IrhpAwaitingFeeController($translationHelper, $formHelper, $tableBuilder, $mapperManager);
-    }
-
-    /**
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return IrhpAwaitingFeeController
-     * @deprecated
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): IrhpAwaitingFeeController
-    {
-        return $this->__invoke($serviceLocator, IrhpAwaitingFeeController::class);
     }
 }

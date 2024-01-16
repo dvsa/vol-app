@@ -2,6 +2,7 @@
 
 namespace OlcsTest\FormService\Form\Lva\People;
 
+use Laminas\Form\ElementInterface;
 use Mockery as m;
 use Common\Form\Form;
 use Common\FormService\FormServiceManager;
@@ -10,7 +11,7 @@ use Common\Service\Helper\FormHelperService;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 use Olcs\FormService\Form\Lva\People\ApplicationPeople as Sut;
 use Common\Form\Elements\Validators\TableRequiredValidator;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Application People Test
@@ -74,7 +75,7 @@ class ApplicationPeopleTest extends MockeryTestCase
         $formActions->shouldReceive('get')
             ->with('save')
             ->andReturn(
-                m::mock()
+                m::mock(ElementInterface::class)
                     ->shouldReceive('setLabel')
                     ->with('lva.external.return.link')
                     ->once()
@@ -111,7 +112,7 @@ class ApplicationPeopleTest extends MockeryTestCase
         $formActions->shouldReceive('get')
             ->with('save')
             ->andReturn(
-                m::mock()
+                m::mock(ElementInterface::class)
                     ->shouldReceive('setLabel')
                     ->with('lva.external.return.link')
                     ->once()

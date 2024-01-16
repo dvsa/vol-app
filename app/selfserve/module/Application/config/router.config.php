@@ -3,7 +3,7 @@
 return [
     'routes' => [
         'create_application' => [
-            'type' => \Laminas\Mvc\Router\Http\Segment::class,
+            'type' => \Laminas\Router\Http\Segment::class,
             'options' => [
                 'route' => '/application/create[/]',
                 'defaults' => [
@@ -14,7 +14,7 @@ return [
             ],
         ],
         'lva-application' => [
-            'type' => \Laminas\Mvc\Router\Http\Segment::class,
+            'type' => \Laminas\Router\Http\Segment::class,
             'options' => [
                 'route' => '/application/:application[/]',
                 'constraints' => [
@@ -39,7 +39,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                            'type' => \Laminas\Router\Http\Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -58,7 +58,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                            'type' => \Laminas\Router\Http\Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -77,7 +77,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                            'type' => \Laminas\Router\Http\Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -96,7 +96,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                            'type' => \Laminas\Router\Http\Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -115,7 +115,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                            'type' => \Laminas\Router\Http\Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -134,7 +134,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                            'type' => \Laminas\Router\Http\Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -153,7 +153,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                            'type' => \Laminas\Router\Http\Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -172,7 +172,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                            'type' => \Laminas\Router\Http\Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -191,7 +191,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                            'type' => \Laminas\Router\Http\Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -199,7 +199,7 @@ return [
                     ],
                 ],
                 'vehicles' => [
-                    'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                    'type' => \Laminas\Router\Http\Segment::class,
                     'options' => [
                         'route' => 'vehicles[/]',
                         'defaults' => [
@@ -210,7 +210,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                            'type' => \Laminas\Router\Http\Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -229,7 +229,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                            'type' => \Laminas\Router\Http\Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -248,7 +248,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                            'type' => \Laminas\Router\Http\Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -267,7 +267,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                            'type' => \Laminas\Router\Http\Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -286,7 +286,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                            'type' => \Laminas\Router\Http\Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -305,7 +305,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                            'type' => \Laminas\Router\Http\Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -324,7 +324,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                            'type' => \Laminas\Router\Http\Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -343,7 +343,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                            'type' => \Laminas\Router\Http\Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -362,7 +362,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                            'type' => \Laminas\Router\Http\Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -381,7 +381,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                            'type' => \Laminas\Router\Http\Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -400,7 +400,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                            'type' => \Laminas\Router\Http\Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -419,7 +419,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                            'type' => \Laminas\Router\Http\Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -438,7 +438,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                            'type' => \Laminas\Router\Http\Segment::class,
                             'options' => [
                                 'route' => ':action[/:child_id][/]',
                             ],
@@ -446,7 +446,7 @@ return [
                     ],
                 ],
                 'review' => [
-                    'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                    'type' => \Laminas\Router\Http\Segment::class,
                     'options' => [
                         'route' => 'review[/]',
                         'defaults' => [
@@ -456,7 +456,7 @@ return [
                     ],
                 ],
                 'declaration' => [
-                    'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                    'type' => \Laminas\Router\Http\Segment::class,
                     'options' => [
                         'route' => 'declaration[/]',
                         'defaults' => [
@@ -466,7 +466,7 @@ return [
                     ],
                 ],
                 'pay-and-submit' => [
-                    'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                    'type' => \Laminas\Router\Http\Segment::class,
                     'options' => [
                         'route' => 'pay-and-submit[/:redirect-back][/]',
                         'defaults' => [
@@ -480,7 +480,7 @@ return [
                     ],
                 ],
                 'payment' => [
-                    'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                    'type' => \Laminas\Router\Http\Segment::class,
                     'options' => [
                         'route' => 'payment[/stored-card-reference/:storedCardReference][/]',
                         'defaults' => [
@@ -493,7 +493,7 @@ return [
                     ],
                 ],
                 'submission-summary' => [
-                    'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                    'type' => \Laminas\Router\Http\Segment::class,
                     'options' => [
                         'route' => 'submission-summary[/]',
                         'defaults' => [
@@ -503,7 +503,7 @@ return [
                     ],
                 ],
                 'upload-evidence' => [
-                    'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                    'type' => \Laminas\Router\Http\Segment::class,
                     'options' => [
                         'route' => 'upload-evidence[/]',
                         'defaults' => [
@@ -513,7 +513,7 @@ return [
                     ],
                 ],
                 'summary' => [
-                    'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                    'type' => \Laminas\Router\Http\Segment::class,
                     'options' => [
                         'route' => 'summary[/:reference][/]',
                         'constraints' => [
@@ -526,7 +526,7 @@ return [
                     ],
                 ],
                 'result' => [
-                    'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                    'type' => \Laminas\Router\Http\Segment::class,
                     'options' => [
                         'route' => 'result[/]',
                         'defaults' => [
@@ -537,7 +537,7 @@ return [
                     ],
                 ],
                 'cancel' => [
-                    'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                    'type' => \Laminas\Router\Http\Segment::class,
                     'options' => [
                         'route' => 'cancel[/]',
                         'defaults' => [
@@ -547,7 +547,7 @@ return [
                     ],
                 ],
                 'withdraw' => [
-                    'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                    'type' => \Laminas\Router\Http\Segment::class,
                     'options' => [
                         'route' => 'withdraw[/]',
                         'defaults' => [
@@ -557,7 +557,7 @@ return [
                     ],
                 ],
                 'transport_manager_details' => [
-                    'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                    'type' => \Laminas\Router\Http\Segment::class,
                     'options' => [
                         'route' => 'transport-managers/details/:child_id[/]',
                         'constraints' => [
@@ -572,7 +572,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                            'type' => \Laminas\Router\Http\Segment::class,
                             'options' => [
                                 'route' => ':action[/:grand_child_id][/]',
                                 'constraints' => ['grand_child_id' => '[0-9\\,]+',],
@@ -581,7 +581,7 @@ return [
                     ],
                 ],
                 'transport_manager_check_answer' => [
-                    'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                    'type' => \Laminas\Router\Http\Segment::class,
                     'options' => [
                         'route' => 'transport-managers/check-answer/:child_id[/]',
                         'constraints' => [
@@ -596,7 +596,7 @@ return [
                     'may_terminate' => true,
                     'child_routes' => [
                         'action' => [
-                            'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                            'type' => \Laminas\Router\Http\Segment::class,
                             'options' => [
                                 'route' => ':action[/:grand_child_id][/]',
                                 'constraints' => ['grand_child_id' => '[0-9\\,]+',],
@@ -605,7 +605,7 @@ return [
                     ],
                 ],
                 'transport_manager_tm_declaration' => [
-                    'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                    'type' => \Laminas\Router\Http\Segment::class,
                     'options' => [
                         'route' => 'transport-managers/tm-declaration/:child_id[/]',
                         'constraints' => [
@@ -620,7 +620,7 @@ return [
                     'may_terminate' => true,
                 ],
                 'transport_manager_operator_declaration' => [
-                    'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                    'type' => \Laminas\Router\Http\Segment::class,
                     'options' => [
                         'route' => 'transport-managers/operator-declaration/:child_id[/]',
                         'constraints' => [
@@ -635,7 +635,7 @@ return [
                     'may_terminate' => true,
                 ],
                 'transport_manager_confirmation' => [
-                    'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                    'type' => \Laminas\Router\Http\Segment::class,
                     'options' => [
                         'route' => 'transport-managers/confirmation/:child_id[/]',
                         'constraints' => [

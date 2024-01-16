@@ -66,25 +66,23 @@ class SwitchBoard
      *      }
      * })
      * @Form\Type("\Common\Form\Elements\Types\Radio")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({
-     *     "name":"Laminas\Validator\NotEmpty",
-     *     "options":{
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\NotEmpty",
+     *     options={
      *         "messages": {
      *             "isEmpty": "licence.vehicle.switchboard.form.error.select-option"
      *         },
      *         "break_chain_on_failure": true,
      *     }
-     * })
-     * @Form\Validator({
-     *     "name":"Laminas\Validator\InArray",
-     *     "options": {
+     * )
+     * @Form\Validator("Laminas\Validator\InArray",
+     *     options={
      *         "haystack": {
      *             "add", "remove", "reprint", "transfer", "view", "view-removed"
      *         },
      *         "strict": true,
      *     }
-     * })
+     * )
      */
     public $options = null;
 }

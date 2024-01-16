@@ -4,6 +4,7 @@ namespace OlcsTest\FormService\Form\Lva;
 
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\UrlHelperService;
+use Laminas\Form\ElementInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\ApplicationConvictionsPenalties;
@@ -11,17 +12,9 @@ use Laminas\Form\Form;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 use Common\Form\Model\Form\Lva\Fieldset\ConvictionsPenaltiesData;
 use Common\Service\Helper\TranslationHelperService;
-use Common\Form\Model\Form\Lva\Fieldset\ConvictionsPenaltiesReadMoreLink;
 use Common\Form\Elements\InputFilters\ActionLink;
-use Common\FormService\FormServiceManager;
 use Laminas\Form\Element;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 
-/**
- * Application Convictions and Penalties Form Test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 class ApplicationConvictionsPenaltiesTest extends MockeryTestCase
 {
     use ButtonsAlterations;
@@ -66,7 +59,7 @@ class ApplicationConvictionsPenaltiesTest extends MockeryTestCase
                 \Hamcrest\Matchers::hasKeyValuePair('priority', \Hamcrest\Matchers::integerValue())
             );
 
-        $ConvictionsReadMoreLink = m::mock(ConvictionsPenaltiesReadMoreLink::class);
+        $ConvictionsReadMoreLink = m::mock(ElementInterface::class);
         $ConvictionsReadMoreLink
             ->shouldReceive('get')
             ->with('readMoreLink')->andReturn(

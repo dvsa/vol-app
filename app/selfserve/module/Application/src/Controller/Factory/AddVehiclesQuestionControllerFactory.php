@@ -27,8 +27,7 @@ use Dvsa\Olcs\Application\Controller\LvaVehicleController;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Interop\Container\ContainerInterface;
 use Laminas\Mvc\Controller\Plugin\Url;
-use Laminas\ServiceManager\FactoryInterface;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * @see AddVehiclesQuestionController
@@ -81,8 +80,6 @@ class AddVehiclesQuestionControllerFactory extends BinaryFeatureToggleAwareContr
      */
     protected function createServiceWhenDisabled(ContainerInterface $container, $requestedName, array $options = null): LvaVehicleController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $formHelper = $container->get(FormHelperService::class);
@@ -97,7 +94,7 @@ class AddVehiclesQuestionControllerFactory extends BinaryFeatureToggleAwareContr
         $restrictionHelper = $container->get(RestrictionHelperService::class);
         $stringHelper = $container->get(StringHelperService::class);
 
-        $instance = new LvaVehicleController(
+        return new LvaVehicleController(
             $niTextTranslationUtil,
             $authService,
             $formHelper,
@@ -112,10 +109,5 @@ class AddVehiclesQuestionControllerFactory extends BinaryFeatureToggleAwareContr
             $restrictionHelper,
             $stringHelper
         );
-
-        if ($instance instanceof FactoryInterface) {
-            $instance = $instance->createService($container);
-        }
-        return $instance;
     }
 }

@@ -7,10 +7,9 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\BusReg\BusRegBrowseController;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 class BusRegBrowseControllerFactory implements FactoryInterface
 {
@@ -22,8 +21,6 @@ class BusRegBrowseControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): BusRegBrowseController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
@@ -37,17 +34,5 @@ class BusRegBrowseControllerFactory implements FactoryInterface
             $flashMessengerHelper,
             $tableFactory
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return BusRegBrowseController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): BusRegBrowseController
-    {
-        return $this->__invoke($serviceLocator, BusRegBrowseController::class);
     }
 }

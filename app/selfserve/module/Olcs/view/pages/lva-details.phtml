@@ -43,7 +43,7 @@ echo $this->partial(
     <?php
     $statusTranslated = $this->translate($this->status);
     /** @var  \Common\Service\Helper\TranslationHelperService $translator */
-    $translator = $this->getHelperPluginManager()->getServiceLocator()->get('Helper\Translation');
+    $translator = $this->getHelperPluginManager()->get('Helper\Translation');
 
     if ($this->lva === 'application') {
       echo $translator->translateReplace(

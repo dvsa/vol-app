@@ -6,7 +6,7 @@ use Common\Rbac\User;
 use Olcs\Assertion\Ebsr\EbsrList as Sut;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Ebsr List Test

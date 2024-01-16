@@ -12,9 +12,8 @@ class LicenceInPossession
     /**
      * @Form\AllowEmpty(true)
      * @Form\ContinueIfEmpty(true)
-     * @Form\Validator({
-     *     "name": "ValidateIf",
-     *      "options":{
+     * @Form\Validator("ValidateIf",
+     *      options={
      *          "context_field": "operatorLicenceDocument",
      *          "context_values": {"possession"},
      *          "inject_post_data" : "operatorLicenceDocument->operatorLicenceDocument",
@@ -22,7 +21,7 @@ class LicenceInPossession
      *              {"name": "NotEmpty"}
      *          }
      *      }
-     * })
+     * )
      * @Form\Options({
      *      "label": "licence.surrender.operator_licence.possession.note",
      * })

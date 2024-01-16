@@ -10,11 +10,10 @@ use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\Lva\Licence\ConditionsUndertakingsController;
 use Olcs\Controller\Lva\Variation\UndertakingsController;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 class UndertakingsControllerFactory implements FactoryInterface
 {
@@ -26,8 +25,6 @@ class UndertakingsControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): UndertakingsController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $scriptFactory = $container->get(ScriptFactory::class);
@@ -47,17 +44,5 @@ class UndertakingsControllerFactory implements FactoryInterface
             $formHelper,
             $translationHelper
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return UndertakingsController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): UndertakingsController
-    {
-        return $this->__invoke($serviceLocator, UndertakingsController::class);
     }
 }

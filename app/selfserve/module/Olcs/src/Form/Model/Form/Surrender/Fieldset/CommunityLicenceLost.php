@@ -20,9 +20,8 @@ class CommunityLicenceLost
     /**
      * @Form\AllowEmpty(true)
      * @Form\ContinueIfEmpty(true)
-     * @Form\Validator({
-     *     "name": "ValidateIf",
-     *      "options":{
+     * @Form\Validator("ValidateIf",
+     *      options={
      *          "context_field": "communityLicenceDocument",
      *          "context_values": {"lost"},
      *          "inject_post_data" : "communityLicenceDocument->communityLicenceDocument",
@@ -51,9 +50,9 @@ class CommunityLicenceLost
      *          },
      *
      *      }
-     * })
+     * )
      * @Form\Type("\Laminas\Form\Element\Textarea")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Filter("Laminas\Filter\StringTrim")
      * @Form\Attributes({
      *     "class" : "govuk-textarea",
      *     "rows" : "5"

@@ -3,23 +3,10 @@
 namespace Olcs\Service\Cookie;
 
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class DeleteSetCookieGeneratorFactory implements FactoryInterface
 {
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return DeleteSetCookieGenerator
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator) : DeleteSetCookieGenerator
-    {
-        return $this->__invoke($serviceLocator, DeleteSetCookieGenerator::class);
-    }
-
     /**
      * @param ContainerInterface $container
      * @param $requestedName

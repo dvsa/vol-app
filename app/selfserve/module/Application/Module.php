@@ -21,7 +21,7 @@ class Module
             'router' => $this->loadRouterConfiguration(),
             'service_manager' => $serviceConfig['plugins'],
             'controllers' => $controllerConfig['plugins'],
-            'zfc_rbac' => include __DIR__ . '/config/authorization.config.php',
+            'lmc_rbac' => include __DIR__ . '/config/authorization.config.php',
             'view_manager' => $viewConfig['listener'],
             'view_helpers' => $viewConfig['plugins'],
             'validators' => $validationConfig['plugins'],

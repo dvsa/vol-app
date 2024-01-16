@@ -14,7 +14,7 @@ use Common\Service\Review\LicenceConditionsUndertakingsReviewService;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * External Licence Conditions Undertakings Controller

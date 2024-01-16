@@ -11,7 +11,7 @@ use Laminas\Form\Fieldset;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 use Common\FormService\FormServiceManager;
 use Common\Service\Table\TableBuilder;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Application Goods Vehicles Form Test

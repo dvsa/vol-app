@@ -3,11 +3,11 @@ namespace OlcsTest\Controller\Initializer;
 
 use Common\Controller\AbstractOlcsController;
 use Dvsa\Olcs\Auth\Controller\LoginController;
+use Interop\Container\ContainerInterface;
+use Laminas\Mvc\MvcEvent;
 use Olcs\Controller\Initializer\Navigation as NavigationInitializer;
 use Olcs\Controller\Listener\Navigation as NavigationListener;
 use Laminas\EventManager\EventManager as LaminasEventManager;
-use Laminas\ServiceManager\ServiceLocatorInterface;
-use Laminas\ServiceManager\ServiceManager;
 use Mockery as m;
 
 /**
@@ -15,22 +15,21 @@ use Mockery as m;
  */
 class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
 {
-    public function testInvoke()
+    public function testInvoke() :void
     {
         $navListener = m::mock(NavigationListener::class);
         $mockEventManager = m::mock(LaminasEventManager::class);
-        $mockEventManager->shouldReceive('attach')->once()->with($navListener);
+        $mockEventManager->expects('attach')->with(MvcEvent::EVENT_DISPATCH, [$navListener, 'onDispatch']);
 
-        /** @var ServiceManager|m\mock $sl */
-        $sl = m::mock(ServiceLocatorInterface::class);
-        $sl->shouldReceive('getServiceLocator->get')->with(NavigationListener::class)->andReturn($navListener);
+        $container = m::mock(ContainerInterface::class);
+        $container->expects('get')->with(NavigationListener::class)->andReturn($navListener);
 
         //this could be any controller or controller interface
         $instance = m::mock(AbstractOlcsController::class);
-        $instance->shouldReceive('getEventManager')->andReturn($mockEventManager);
+        $instance->expects('getEventManager')->andReturn($mockEventManager);
 
         $initializer = new NavigationInitializer();
-        $initializer($sl, $instance);
+        $initializer($container, $instance);
     }
 
     /**
@@ -40,46 +39,10 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
     {
         $instance = m::mock(LoginController::class);
         $instance->shouldNotReceive('getEventManager->attach');
-        $sl = m::mock(ServiceLocatorInterface::class);
-        $sl->shouldNotReceive('getServiceLocator->get')->with(NavigationListener::class);
+        $container = m::mock(ContainerInterface::class);
+        $container->shouldNotReceive('get');
 
         $initializer = new NavigationInitializer();
-        $initializer($sl, $instance);
-    }
-
-    /**
-     * @todo OLCS-28149
-     */
-    public function testInitialize()
-    {
-        $navListener = m::mock(NavigationListener::class);
-        $mockEventManager = m::mock(LaminasEventManager::class);
-        $mockEventManager->shouldReceive('attach')->once()->with($navListener);
-
-        /** @var ServiceManager|m\mock $sl */
-        $sl = m::mock(ServiceLocatorInterface::class);
-        $sl->shouldReceive('getServiceLocator->get')->with(NavigationListener::class)->andReturn($navListener);
-
-        //this could be any controller or controller interface
-        $instance = m::mock(AbstractOlcsController::class);
-        $instance->shouldReceive('getEventManager')->andReturn($mockEventManager);
-
-        $initializer = new NavigationInitializer();
-        $initializer->initialize($instance, $sl);
-    }
-
-    /**
-     * Check the initializer doesn't try to attach the nav listener on the login page
-     * @todo OLCS-28149
-     */
-    public function testInitializerFromLoginPage()
-    {
-        $instance = m::mock(LoginController::class);
-        $instance->shouldNotReceive('getEventManager->attach');
-        $sl = m::mock(ServiceLocatorInterface::class);
-        $sl->shouldNotReceive('getServiceLocator->get')->with(NavigationListener::class);
-
-        $initializer = new NavigationInitializer();
-        $initializer->initialize($instance, $sl);
+        $initializer($container, $instance);
     }
 }

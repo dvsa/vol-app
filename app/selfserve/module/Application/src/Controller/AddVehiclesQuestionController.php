@@ -20,9 +20,9 @@ use Dvsa\Olcs\Transfer\Command\Application\UpdateVehicles;
 use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQuery;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
-use Laminas\Mvc\Controller\Plugin\FlashMessenger;
+use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\Mvc\Controller\Plugin\Url;
-use Laminas\Mvc\Router\RouteMatch;
+use Laminas\Router\RouteMatch;
 use Laminas\View\Model\ViewModel;
 
 /**

@@ -16,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Controller\UserForgotUsernameController as Sut;
 use OlcsTest\Bootstrap;
 use ReflectionClass;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Class User Forgot Username Controller Test

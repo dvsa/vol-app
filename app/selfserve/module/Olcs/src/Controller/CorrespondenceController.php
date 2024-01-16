@@ -10,7 +10,7 @@ use Dvsa\Olcs\Transfer\Query\Correspondence\Correspondence;
 use Dvsa\Olcs\Transfer\Query\Correspondence\Correspondences;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\View\Model\ViewModel;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Class CorrespondenceController

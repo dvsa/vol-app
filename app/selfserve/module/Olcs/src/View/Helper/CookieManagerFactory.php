@@ -3,8 +3,7 @@
 namespace Olcs\View\Helper;
 
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class CookieManagerFactory implements FactoryInterface
 {
@@ -18,22 +17,7 @@ class CookieManagerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CookieManager
     {
-        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
-            $container = $container->getServiceLocator();
-        }
         $config = $container->get('Config');
         return new CookieManager($config);
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $services
-     *
-     * @return CookieManager
-     */
-    public function createService(ServiceLocatorInterface $services)
-    {
-        return $this->__invoke($services, CookieManager::class);
     }
 }

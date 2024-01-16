@@ -4,6 +4,7 @@ namespace Permits\Data\Mapper;
 
 use Common\Data\Mapper\MapperInterface;
 use Laminas\ServiceManager\AbstractPluginManager;
+use Psr\Container\ContainerInterface;
 
 class MapperManager extends AbstractPluginManager
 {

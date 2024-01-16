@@ -7,22 +7,11 @@ use Common\Service\Cqrs\Query\CachingQueryService;
 use Common\Service\Lva\VariationLvaService;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\Lva\Adapters\LicenceTransportManagerAdapter;
 
-/**
- * Factory for creation Licence Transport Manager Adapter
- *
- * @author Dmitry Golubev <dmitrij.golubev@valtech.co.uk>
- */
 class LicenceTransportManagerAdapterFactory implements FactoryInterface
 {
-    public function createService(ServiceLocatorInterface $serviceLocator): LicenceTransportManagerAdapter
-    {
-        return $this->__invoke($serviceLocator, LicenceTransportManagerAdapter::class);
-    }
-
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LicenceTransportManagerAdapter
     {
         $transferAnnotationBuilder = $container->get(AnnotationBuilder::class);

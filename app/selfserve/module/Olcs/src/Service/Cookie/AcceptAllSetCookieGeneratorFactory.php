@@ -3,21 +3,10 @@
 namespace Olcs\Service\Cookie;
 
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class AcceptAllSetCookieGeneratorFactory implements FactoryInterface
 {
-    /**
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed|void
-     * @deprecated Use __invoke instead.
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): AcceptAllSetCookieGenerator
-    {
-        return $this->__invoke($serviceLocator, AcceptAllSetCookieGenerator::class);
-    }
-
     /**
      * @param ContainerInterface $container
      * @param mixed $requestedName

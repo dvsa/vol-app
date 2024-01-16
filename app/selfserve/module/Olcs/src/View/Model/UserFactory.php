@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Olcs\View\Model;
 
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class UserFactory implements FactoryInterface
 {
@@ -16,13 +15,5 @@ class UserFactory implements FactoryInterface
             $container->get('Helper\Url'),
             $container->get('Table')
         );
-    }
-
-    /**
-     * @deprecated can be removed following Laminas 3.0 upgrade
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): User
-    {
-        return $this($serviceLocator, User::class);
     }
 }

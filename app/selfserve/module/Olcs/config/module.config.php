@@ -1,6 +1,7 @@
 <?php
 
-use Laminas\Mvc\Router\Http\Segment;
+use Laminas\Router\Http\Segment;
+use Laminas\Router\Http\HttpRouterFactory;
 use Olcs\Auth\Adapter\CommandAdapter;
 use Olcs\Auth\Adapter\CommandAdapterFactory;
 use Olcs\Auth\Adapter\SelfserveCommandAdapter;
@@ -41,6 +42,8 @@ use Olcs\Form\Element\SearchFilterFieldsetFactory;
 use Olcs\Form\Element\SearchOrderFieldset;
 use Olcs\Form\Element\SearchOrderFieldsetFactory;
 use Olcs\FormService\Form\Lva as LvaFormService;
+use Olcs\Logging\Log\Processor\CorrelationId;
+use Olcs\Logging\Log\Processor\CorrelationIdFactory;
 use Olcs\Service\Cookie as CookieService;
 use Olcs\Service\Processing as ProcessingService;
 use Olcs\Service\Qa as QaService;
@@ -519,7 +522,7 @@ $routes = [
         ]
     ],
     'govuk-account' => [
-        'type' => \Laminas\Mvc\Router\Http\Literal::class,
+        'type' => \Laminas\Router\Http\Literal::class,
         'options' => [
             'route' => '/govuk-account',
             'defaults' => [
@@ -529,7 +532,7 @@ $routes = [
         'may_terminate' => false,
         'child_routes' => [
             'process' => [
-                'type' => \Laminas\Mvc\Router\Http\Literal::class,
+                'type' => \Laminas\Router\Http\Literal::class,
                 'options' => [
                     'route' => '/process',
                     'defaults' => [
@@ -540,7 +543,7 @@ $routes = [
         ],
     ],
     'verify' => [
-        'type' => \Laminas\Mvc\Router\Http\Literal::class,
+        'type' => \Laminas\Router\Http\Literal::class,
         'options' => [
             'route' => '/verify',
             'defaults' => [
@@ -1194,7 +1197,7 @@ return array(
             'LvaDirectorChange/People' => \Olcs\Controller\Lva\DirectorChange\PeopleController::class,
             'LvaDirectorChange/FinancialHistory' => Olcs\Controller\Lva\DirectorChange\FinancialHistoryController::class,
             'LvaDirectorChange/LicenceHistory' => \Olcs\Controller\Lva\DirectorChange\LicenceHistoryController::class,
-            'LvaDirectorChange/ConvictionsPenalties' => \Olcs\Controller\Lva\DirectorChange\ConvictionsPenaltiesControllerFactory::class,
+            'LvaDirectorChange/ConvictionsPenalties' => \Olcs\Controller\Lva\DirectorChange\ConvictionsPenaltiesController::class,
             'LvaTransportManager/CheckAnswers' => \Olcs\Controller\Lva\TransportManager\CheckAnswersController::class,
             'LvaTransportManager/Confirmation' => \Olcs\Controller\Lva\TransportManager\ConfirmationController::class,
             'LvaTransportManager/OperatorDeclaration' => \Olcs\Controller\Lva\TransportManager\OperatorDeclarationController::class,
@@ -1422,8 +1425,14 @@ return array(
             LicenceTransportManagerAdapter::class => LicenceTransportManagerAdapterFactory::class,
             VariationTransportManagerAdapter::class => VariationTransportManagerAdapterFactory::class,
             VariationPeopleAdapter::class => VariationPeopleAdapterFactory::class,
+            \Olcs\Logging\Log\Processor\CorrelationId::class => \Olcs\Logging\Log\Processor\CorrelationIdFactory::class,
         ]
     ),
+    'log_processors' => [
+        'factories' => [
+            CorrelationId::class => CorrelationIdFactory::class,
+        ],
+    ],
     'search' => [
         'invokables' => [
             'operator'          => Common\Data\Object\Search\LicenceSelfserve::class, // Selfserve licence search
@@ -1576,12 +1585,12 @@ return array(
             'lva-variation-overview-submission' => LvaFormService\VariationOverviewSubmissionFactory::class,
         ]
     ],
-    'zfc_rbac' => [
+    'lmc_rbac' => [
         'assertion_map' => [
             'selfserve-ebsr-list' => \Olcs\Assertion\Ebsr\EbsrList::class,
         ],
         'guards' => [
-            'ZfcRbac\Guard\RoutePermissionsGuard' => [
+            'LmcRbacMvc\Guard\RoutePermissionsGuard' => [
                 // Dashboard Page
                 'dashboard' => ['selfserve-nav-dashboard'],
 

@@ -7,11 +7,10 @@ use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Interop\Container\ContainerInterface;
 use Laminas\Authentication\Storage\Session;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\DashboardController;
 use Olcs\Service\Processing\DashboardProcessingService;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 class DashboardControllerFactory implements FactoryInterface
 {
@@ -23,8 +22,6 @@ class DashboardControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DashboardController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $session = $container->get(Session::class);
@@ -40,17 +37,5 @@ class DashboardControllerFactory implements FactoryInterface
             $dataMapper,
             $tableFactory
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return DashboardController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): DashboardController
-    {
-        return $this->__invoke($serviceLocator, DashboardController::class);
     }
 }

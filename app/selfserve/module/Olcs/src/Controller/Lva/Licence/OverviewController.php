@@ -16,7 +16,7 @@ use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 use Olcs\Service\Helper\LicenceOverviewHelperService;
 use Olcs\View\Model\Licence\LicenceOverview;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Licence Overview Controller

@@ -15,7 +15,7 @@ use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
 use Laminas\Http\Request as HttpRequest;
 use Laminas\Mvc\MvcEvent;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+
 use Laminas\View\Helper\Placeholder;
 
 /**

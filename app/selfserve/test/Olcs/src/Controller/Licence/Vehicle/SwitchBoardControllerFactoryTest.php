@@ -12,7 +12,7 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\ResponseHelperService;
 use Common\Test\MockeryTestCase;
 use Common\Test\MocksServicesTrait;
-use Laminas\Mvc\Controller\Plugin\FlashMessenger;
+use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\Mvc\Controller\Plugin\Url;
 use Olcs\Session\LicenceVehicleManagement;
 
@@ -22,36 +22,6 @@ use Olcs\Session\LicenceVehicleManagement;
 class SwitchBoardControllerFactoryTest extends MockeryTestCase
 {
     use MocksServicesTrait;
-
-    /**
-     * @test
-     */
-    public function createService_IsCallable()
-    {
-        // Setup
-        $sut = $this->setUpSut();
-
-        // Assert
-        $this->assertIsCallable([$sut, 'createService']);
-    }
-
-    /**
-     * @test
-     * @depends createService_IsCallable
-     */
-    public function createService_ReturnsInstanceOfDispatcherWithSwitchBoardController()
-    {
-        // Setup
-        $serviceLocator = $this->setUpServiceLocator();
-        $sut = $this->setUpSut();
-
-        // Execute
-        $result = $sut->createService($serviceLocator);
-
-        // Assert
-        $this->assertInstanceOf(Dispatcher::class, $result);
-        $this->assertInstanceOf(SwitchBoardController::class, $result->getDelegate());
-    }
 
     /**
      * @test
@@ -91,9 +61,6 @@ class SwitchBoardControllerFactoryTest extends MockeryTestCase
         return new SwitchBoardControllerFactory();
     }
 
-    /**
-     *
-     */
     protected function setUpDefaultServices()
     {
         return [

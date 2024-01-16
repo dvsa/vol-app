@@ -39,7 +39,7 @@ class YesNo
      *      }
      * })
      * @Form\Type("\Common\Form\Elements\Types\Radio")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Filter("Laminas\Filter\StringTrim")
      * @Form\Required(false)
      */
     public $options = null;

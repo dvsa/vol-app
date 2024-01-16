@@ -13,7 +13,7 @@ use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\Session\Container;
 use Laminas\View\Model\ViewModel;
 use Olcs\Form\Model\Form\BusRegBrowseForm as Form;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Class BusRegBrowseController

@@ -3,24 +3,12 @@
 namespace Olcs\Service\Qa;
 
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
+
 use Laminas\Form\Factory as FormFactory;
 
 class FormProviderFactory implements FactoryInterface
 {
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return FormProvider
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator) : FormProvider
-    {
-        return $this->__invoke($serviceLocator, FormProvider::class);
-    }
-
     /**
      * @param ContainerInterface $container
      * @param $requestedName

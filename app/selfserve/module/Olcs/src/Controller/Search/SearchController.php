@@ -22,7 +22,7 @@ use Olcs\Form\Element\SearchOrderFieldset;
 use Olcs\Form\Model\Form\SearchFilter as SearchFilterForm;
 use Olcs\Form\Model\Form\SearchOperator;
 use Olcs\Form\Model\Form\SimpleSearch;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Search Controller

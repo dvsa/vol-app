@@ -20,9 +20,8 @@ class LostInfo
      *      "step": "any",
      *      "min": 0
      * })
-     * @Form\Validator({
-     *      "name": "ValidateIf",
-     *      "options": {
+     * @Form\Validator("ValidateIf",
+     *      options={
      *          "context_field": "lost",
      *          "context_values": {"Y"},
      *          "inject_post_data": "lostSection->lost",
@@ -47,7 +46,7 @@ class LostInfo
      *              }
      *          }
      *      }
-     * })
+     * )
      */
     public $number = null;
 
@@ -65,10 +64,9 @@ class LostInfo
      *     "class": "govuk-textarea",
      *     "rows": "5"
      * })
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({
-     *      "name": "ValidateIf",
-     *      "options": {
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("ValidateIf",
+     *      options={
      *          "context_field": "lost",
      *          "context_values": {"Y"},
      *          "inject_post_data": "lostSection->lost",
@@ -86,7 +84,7 @@ class LostInfo
      *              }
      *          }
      *      }
-     * })
+     * )
      */
     public $details = null;
 }

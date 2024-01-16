@@ -14,7 +14,7 @@ use Dvsa\Olcs\Transfer\Query\Bus\Ebsr\OrganisationUnprocessedList;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\Http\Request as HttpRequest;
 use Laminas\View\Model\ViewModel;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Class UploadsController
