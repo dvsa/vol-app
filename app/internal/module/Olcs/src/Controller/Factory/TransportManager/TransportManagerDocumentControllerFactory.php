@@ -8,8 +8,7 @@ use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\TransportManager\TransportManagerController;
 use Olcs\Controller\TransportManager\TransportManagerDocumentController;
@@ -25,15 +24,13 @@ class TransportManagerDocumentControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TransportManagerController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);
         $tableFactory = $container->get(TableFactory::class);
         $viewHelperManager = $container->get(HelperPluginManager::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         $translationHelper = $container->get(TranslationHelperService::class);
-        $navigation = $container->get('navigation');
+        $navigation = $container->get('Navigation');
         $docSubCategoryDataService = $container->get(DocumentSubCategory::class);
 
         return new TransportManagerDocumentController(
@@ -46,17 +43,5 @@ class TransportManagerDocumentControllerFactory implements FactoryInterface
             $navigation,
             $docSubCategoryDataService
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return TransportManagerController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): TransportManagerController
-    {
-        return $this->__invoke($serviceLocator, TransportManagerController::class);
     }
 }

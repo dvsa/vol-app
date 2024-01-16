@@ -7,7 +7,7 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Command\Application\WithdrawApplication;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Abstract Internal Withdraw Controller

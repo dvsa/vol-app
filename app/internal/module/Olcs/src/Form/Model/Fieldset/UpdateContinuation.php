@@ -38,7 +38,7 @@ class UpdateContinuation
      *     "label": "Total vehicle authorisation",
      * })
      * @Form\Type("Text")
-     * @Form\Validator({"name":"Digits"})
+     * @Form\Validator("Digits")
      */
     public $totalVehicleAuthorisation = null;
 
@@ -47,7 +47,7 @@ class UpdateContinuation
      *     "label": "Number of discs",
      * })
      * @Form\Type("Text")
-     * @Form\Validator({"name":"Digits"})
+     * @Form\Validator("Digits")
      */
     public $numberOfDiscs = null;
 
@@ -56,7 +56,7 @@ class UpdateContinuation
      *     "label": "Number of community licences",
      * })
      * @Form\Type("Text")
-     * @Form\Validator({"name":"Digits"})
+     * @Form\Validator("Digits")
      */
     public $numberOfCommunityLicences = null;
 

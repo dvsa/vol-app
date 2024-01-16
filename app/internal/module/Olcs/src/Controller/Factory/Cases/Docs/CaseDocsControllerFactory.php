@@ -7,8 +7,7 @@ use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Cases\Docs\CaseDocsController;
 use Olcs\Service\Data\DocumentSubCategory;
@@ -23,8 +22,6 @@ class CaseDocsControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CaseDocsController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);
         $tableFactory = $container->get(TableFactory::class);
@@ -40,17 +37,5 @@ class CaseDocsControllerFactory implements FactoryInterface
             $translationHelper,
             $docSubCategoryDataService
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return CaseDocsController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): CaseDocsController
-    {
-        return $this->__invoke($serviceLocator, CaseDocsController::class);
     }
 }

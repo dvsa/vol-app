@@ -18,7 +18,7 @@ class PartnerName extends Base
      * @Form\Options({"label":"Partner name"})
      * @Form\Type("Text")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":3,"max":35}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":3,"max":35})
      */
     public $description = null;
     /**

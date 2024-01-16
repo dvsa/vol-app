@@ -25,7 +25,7 @@ class GrantAuthorityForm
      *      },
      *     "category": "application_grant_authority",
      * })
-     * @Form\Validator({"name":"Laminas\Validator\InArray", "options": {
+     * @Form\Validator("Laminas\Validator\InArray", options={
      *     "haystack": {
      *         \Common\RefData::GRANT_AUTHORITY_DELEGATED,
      *         \Common\RefData::GRANT_AUTHORITY_TC,
@@ -34,13 +34,12 @@ class GrantAuthorityForm
      *     "messages": {
      *          Laminas\Validator\InArray::NOT_IN_ARRAY: "internal.application.decisions.grant.authority.validation.invalid"
      *     }
-     * }})
-     * @Form\Validator({
-     *      "name": "Laminas\Validator\NotEmpty",
-     *      "options": {
+     * })
+     * @Form\Validator("Laminas\Validator\NotEmpty",
+     *      options={
      *          "messages":{Laminas\Validator\NotEmpty::IS_EMPTY:"internal.application.decisions.grant.authority.validation.invalid"}
      *      }
-     * })
+     * )
      */
     public $grantAuthority;
 

@@ -43,8 +43,8 @@ class Cases extends Base
      * })
      * @Form\Required(false)
      * @Form\Type("TextArea")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":5,"max":1024}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":5,"max":1024})
      */
     public $description = null;
 
@@ -53,8 +53,8 @@ class Cases extends Base
      * @Form\Options({"label":"ECMS Number"})
      * @Form\Required(false)
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":2,"max":45}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":2,"max":45})
      */
     public $ecmsNo = null;
 
@@ -67,7 +67,7 @@ class Cases extends Base
      *     "category": "case_outcome"
      * })
      * @Form\Type("DynamicSelect")
-     * @Form\Filter({"name":"Common\Filter\NullToArray"})
+     * @Form\Filter("Common\Filter\NullToArray")
      */
     public $outcomes = null;
 }

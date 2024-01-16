@@ -11,11 +11,10 @@ use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\Lva\Variation\BusinessDetailsController;
-use ZfcRbac\Identity\IdentityProviderInterface;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Identity\IdentityProviderInterface;
+use LmcRbacMvc\Service\AuthorizationService;
 
 class BusinessDetailsControllerFactory implements FactoryInterface
 {
@@ -27,8 +26,7 @@ class BusinessDetailsControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): BusinessDetailsController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
+        
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $formHelper = $container->get(FormHelperService::class);
@@ -54,17 +52,5 @@ class BusinessDetailsControllerFactory implements FactoryInterface
             $fileUploadHelper,
             $navigation
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return BusinessDetailsController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): BusinessDetailsController
-    {
-        return $this->__invoke($serviceLocator, BusinessDetailsController::class);
     }
 }

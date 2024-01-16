@@ -10,8 +10,7 @@ use Common\Service\Helper\OppositionHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Application\Processing\ApplicationProcessingOverviewController;
 
@@ -25,8 +24,6 @@ class ApplicationProcessingOverviewControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ApplicationProcessingOverviewController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);
         $tableFactory = $container->get(TableFactory::class);
@@ -50,17 +47,5 @@ class ApplicationProcessingOverviewControllerFactory implements FactoryInterface
             $router,
             $navigation
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return ApplicationProcessingOverviewController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): ApplicationProcessingOverviewController
-    {
-        return $this->__invoke($serviceLocator, ApplicationProcessingOverviewController::class);
     }
 }

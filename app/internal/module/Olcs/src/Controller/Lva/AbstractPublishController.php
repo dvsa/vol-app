@@ -4,7 +4,7 @@ namespace Olcs\Controller\Lva;
 
 use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Abstract PublishController

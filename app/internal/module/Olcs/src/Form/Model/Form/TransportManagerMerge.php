@@ -26,7 +26,7 @@ class TransportManagerMerge
      *     "label": "form.tm-merge.to-tm-id",
      *     "short-label":"form.tm-merge.to-tm-id",
      * })
-     * @Form\Validator({"name":"Laminas\Validator\Digits"})
+     * @Form\Validator("Laminas\Validator\Digits")
      */
     public $toTmId = null;
 

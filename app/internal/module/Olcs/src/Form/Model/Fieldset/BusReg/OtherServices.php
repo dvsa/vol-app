@@ -15,7 +15,7 @@ class OtherServices extends \Olcs\Form\Model\Fieldset\Base
      * @Form\Required(false)
      * @Form\Type("Text")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":1,"max":70}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":1,"max":70})
      */
     public $serviceNo = null;
 }

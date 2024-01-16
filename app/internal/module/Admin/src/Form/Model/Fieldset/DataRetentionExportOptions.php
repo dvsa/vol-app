@@ -19,7 +19,7 @@ class DataRetentionExportOptions
      * @Form\Options({"label": "Date from"})
      * @Form\Required(true)
      * @Form\Type("DateSelect")
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator("Date", options={"format": "Y-m-d"})
      */
     public $startDate = null;
 
@@ -27,7 +27,7 @@ class DataRetentionExportOptions
      * @Form\Options({"label": "Date to"})
      * @Form\Required(true)
      * @Form\Type("DateSelect")
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator("Date", options={"format": "Y-m-d"})
      * @Form\Validator({
      *      "name": "DateCompare",
      *      "options": {

@@ -21,8 +21,8 @@ class LicenceStatusDecisionSurrender
      * })
      * @Form\Validator({"name": "\Laminas\Validator\NotEmpty"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
-     * @Form\Validator({"name":"\Common\Form\Elements\Validators\DateNotInFuture"})
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
+     * @Form\Validator("\Common\Form\Elements\Validators\DateNotInFuture")
      */
     public $surrenderDate = null;
 }

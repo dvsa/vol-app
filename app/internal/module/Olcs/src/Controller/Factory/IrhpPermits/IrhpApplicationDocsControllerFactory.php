@@ -8,8 +8,7 @@ use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\IrhpPermits\IrhpApplicationDocsController;
 use Olcs\Service\Data\DocumentSubCategory;
@@ -24,8 +23,6 @@ class IrhpApplicationDocsControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IrhpApplicationDocsController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);
         $tableFactory = $container->get(TableFactory::class);
@@ -43,17 +40,5 @@ class IrhpApplicationDocsControllerFactory implements FactoryInterface
             $docSubCategoryDataService,
             $translationHelper
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return IrhpApplicationDocsController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): IrhpApplicationDocsController
-    {
-        return $this->__invoke($serviceLocator, IrhpApplicationDocsController::class);
     }
 }

@@ -3,22 +3,18 @@
 namespace Olcs\Listener\RouteParam;
 
 use Interop\Container\ContainerInterface;
+use Laminas\EventManager\EventInterface;
 use Olcs\Controller\TransportManager\Details\TransportManagerDetailsResponsibilityController;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Dvsa\Olcs\Transfer\Query\Nr\ReputeUrl as ReputeUrlQry;
 use Common\RefData;
 
-/**
- * Class Cases
- * @package Olcs\Listener\RouteParam
- */
 class TransportManager implements ListenerAggregateInterface, FactoryInterface
 {
     use ListenerAggregateTrait;
@@ -40,12 +36,12 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
     protected $sidebarNavigation;
 
     /**
-     * @var \ZfcRbac\Service\AuthorizationService
+     * @var \LmcRbacMvc\Service\AuthorizationService
      */
     protected $authService;
 
     /**
-     * @return \ZfcRbac\Service\AuthorizationService
+     * @return \LmcRbacMvc\Service\AuthorizationService
      */
     public function getAuthService()
     {
@@ -97,7 +93,7 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
     /**
      * Set auth service
      *
-     * @param \ZfcRbac\Service\AuthorizationService $authorisationService
+     * @param \LmcRbacMvc\Service\AuthorizationService $authorisationService
      */
     public function setAuthService($authService)
     {
@@ -116,13 +112,12 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
         );
     }
 
-    /**
-     * @param RouteParam $e
-     */
-    public function onTransportManager(RouteParam $e)
+    public function onTransportManager(EventInterface $e)
     {
-        $id = $e->getValue();
-        $context = $e->getContext();
+        $routeParam = $e->getTarget();
+
+        $id = $routeParam->getValue();
+        $context = $routeParam->getContext();
         $data = $this->getTransportManager($id);
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
@@ -182,17 +177,6 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
                 ->findById('transport-manager-quick-actions-merge')
                 ->setVisible(false);
         }
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator) : TransportManager
-    {
-        return $this->__invoke($serviceLocator, TransportManager::class);
     }
 
     /**
@@ -256,7 +240,7 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
         $this->setQueryService($container->get('QueryService'));
         $this->setViewHelperManager($container->get('ViewHelperManager'));
         $this->setSidebarNavigation($container->get('right-sidebar'));
-        $this->setAuthService($container->get('ZfcRbac\Service\AuthorizationService'));
+        $this->setAuthService($container->get('LmcRbacMvc\Service\AuthorizationService'));
         return $this;
     }
 }

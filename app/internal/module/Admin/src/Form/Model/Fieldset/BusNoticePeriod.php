@@ -14,7 +14,7 @@ class BusNoticePeriod
      * @Form\Type("Text")
      * @Form\Attributes({"class":"medium"})
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":70}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"max":70})
      */
     public $noticeArea = null;
 
@@ -24,7 +24,7 @@ class BusNoticePeriod
      * @Form\Type("number")
      * @Form\Attributes({"class":"small"})
      * @Form\Filter({"name": "Digits"})
-     * @Form\Validator({"name": "Between", "options":{"min":0, "max":999}})
+     * @Form\Validator("Between", options={"min":0, "max":999})
      */
     public $standardPeriod = null;
 }

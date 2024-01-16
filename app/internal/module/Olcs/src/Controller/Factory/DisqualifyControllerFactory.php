@@ -7,8 +7,7 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\DisqualifyController;
 
@@ -22,8 +21,6 @@ class DisqualifyControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DisqualifyController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);
         $tableFactory = $container->get(TableFactory::class);
@@ -38,16 +35,5 @@ class DisqualifyControllerFactory implements FactoryInterface
             $flashMessengerHelper
         );
     }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return DisqualifyController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): DisqualifyController
-    {
-        return $this->__invoke($serviceLocator, DisqualifyController::class);
-    }
+    
 }

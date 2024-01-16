@@ -17,7 +17,7 @@ use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\Form\FormInterface;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 class LicenceGracePeriodsController extends AbstractController implements LicenceControllerInterface
 {

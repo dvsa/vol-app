@@ -1,14 +1,11 @@
 <?php
 
-/**
- * Organisation Furniture Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace OlcsTest\Listener\RouteParam;
 
 use Common\Service\Cqrs\Command\CommandSender;
 use Common\Service\Cqrs\Query\QuerySender;
+use Interop\Container\ContainerInterface;
+use Laminas\EventManager\Event;
 use Mockery\Adapter\Phpunit\MockeryTestCase as MockeryTestCase;
 use Olcs\Event\RouteParam;
 use Mockery as m;
@@ -16,11 +13,6 @@ use Olcs\Listener\RouteParam\OrganisationFurniture;
 use Olcs\Listener\RouteParams;
 use Laminas\View\Model\ViewModel;
 
-/**
- * Organisation Furniture Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class OrganisationFurnitureTest extends MockeryTestCase
 {
     /**
@@ -64,8 +56,10 @@ class OrganisationFurnitureTest extends MockeryTestCase
         $mockQuerySender->shouldReceive('send')->once()->andReturn($mockResponse);
         $mockResponse->shouldReceive('isOk')->with()->once()->andReturn(false);
 
-        $event = new RouteParam();
-        $event->setValue($id);
+        $routeParam = new RouteParam();
+        $routeParam->setValue($id);
+
+        $event = new Event(null, $routeParam);
 
         $this->expectException(\Common\Exception\ResourceNotFoundException::class);
 
@@ -135,8 +129,11 @@ class OrganisationFurnitureTest extends MockeryTestCase
 
         $this->setupOrganisation($orgData);
 
-        $event = new RouteParam();
-        $event->setValue($id);
+        $routeParam = new RouteParam();
+        $routeParam->setValue($id);
+
+        $event = new Event(null, $routeParam);
+
 
         $this->sut->onOrganisation($event);
     }
@@ -215,24 +212,26 @@ class OrganisationFurnitureTest extends MockeryTestCase
 
         $this->setupOrganisation($orgData);
 
-        $event = new RouteParam();
-        $event->setValue($id);
+        $routeParam = new RouteParam();
+        $routeParam->setValue($id);
+
+        $event = new Event(null, $routeParam);
 
         $this->sut->onOrganisation($event);
     }
 
-    public function testCreateService()
+    public function testInvoke()
     {
         $mockViewHelperManager = m::mock('Laminas\View\HelperPluginManager');
         $mockQuerySender = m::mock(QuerySender::class);
         $mockCommandSender = m::mock(CommandSender::class);
 
-        $mockSl = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
+        $mockSl = m::mock(ContainerInterface::class);
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('QuerySender')->andReturn($mockQuerySender);
         $mockSl->shouldReceive('get')->with('CommandSender')->andReturn($mockCommandSender);
 
-        $service = $this->sut->createService($mockSl);
+        $service = $this->sut->__invoke($mockSl, OrganisationFurniture::class);
 
         $this->assertSame($this->sut, $service);
         $this->assertSame($mockViewHelperManager, $this->sut->getViewHelperManager());

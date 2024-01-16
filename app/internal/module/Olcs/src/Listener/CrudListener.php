@@ -7,6 +7,7 @@
  */
 namespace Olcs\Listener;
 
+use Common\Service\Helper\FlashMessengerHelperService;
 use Laminas\Mvc\MvcEvent;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
@@ -40,17 +41,19 @@ class CrudListener implements ListenerAggregateInterface
     ];
 
     protected $crudConfig = [];
+    protected FlashMessengerHelperService $flashMessenger;
 
     /**
      * Pass the controller in
      *
      * @param \Laminas\Mvc\Controller\AbstractActionController $controller
      */
-    public function __construct($controller, $identifier = 'id', array $crudConfig = [])
+    public function __construct($controller, $identifier = 'id', array $crudConfig = [], FlashMessengerHelperService $flashMessenger)
     {
         $this->controller = $controller;
         $this->identifier = $identifier;
         $this->crudConfig = array_merge($this->defaultCrudConfig, $crudConfig);
+        $this->flashMessenger = $flashMessenger;
     }
 
     /**
@@ -69,7 +72,6 @@ class CrudListener implements ListenerAggregateInterface
      */
     public function onDispatch(MvcEvent $e)
     {
-        $serviceLocator = $this->controller->getServiceLocator();
         // If we are not posting we can return early
         $request = $e->getRequest();
         if (!$request->isPost()) {
@@ -79,7 +81,7 @@ class CrudListener implements ListenerAggregateInterface
         $postData = (array)$request->getPost();
 
         if ($this->hasCancelled($postData)) {
-            $serviceLocator->get('Helper\FlashMessenger')->addInfoMessage('flash-discarded-changes');
+            $this->flashMessenger->addInfoMessage('flash-discarded-changes');
             return $this->setResult($e, $this->controller->redirectTo([]));
         }
 
@@ -105,7 +107,7 @@ class CrudListener implements ListenerAggregateInterface
         $ids = $this->formatIds($postData);
 
         if ($actionConfig['requireRows'] && $ids === null) {
-            $serviceLocator->get('Helper\FlashMessenger')->addWarningMessage('please-select-row');
+            $this->flashMessenger->addWarningMessage('please-select-row');
             return $this->setResult($e, $this->controller->redirect()->refresh());
         }
 

@@ -19,7 +19,7 @@ class RouteParams implements EventManagerAwareInterface, ListenerAggregateInterf
     use EventManagerAwareTrait;
     use ListenerAggregateTrait;
 
-    const EVENT_PARAM = 'route.param.';
+    public const EVENT_PARAM = 'route.param.';
 
     /**
      * @var array
@@ -102,10 +102,10 @@ class RouteParams implements EventManagerAwareInterface, ListenerAggregateInterf
      */
     public function trigger($event, $value)
     {
+
         if ($this->hasEventBeenTriggered($event)) {
             return false;
         }
-
         $this->addTriggeredEvent($event);
 
         $e = new RouteParam();

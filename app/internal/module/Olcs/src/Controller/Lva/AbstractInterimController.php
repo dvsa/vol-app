@@ -22,7 +22,7 @@ use Dvsa\Olcs\Transfer\Command\Application\PrintInterimDocument;
 use Dvsa\Olcs\Transfer\Command\Application\RefuseInterim;
 use Dvsa\Olcs\Transfer\Query\Application\Interim;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Abstract Interim Controller

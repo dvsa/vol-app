@@ -2,11 +2,9 @@
 
 namespace OlcsTest\FormService\Form\Lva;
 
-use Common\Service\Table\TableBuilder;
 use Mockery as m;
 use Olcs\FormService\Form\Lva\Addresses;
 use Laminas\InputFilter\InputFilter;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\InputFilter\Input;
 
 /**

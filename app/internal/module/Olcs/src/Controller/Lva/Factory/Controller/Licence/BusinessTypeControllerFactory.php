@@ -12,11 +12,10 @@ use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\Lva\Licence\BusinessTypeController;
-use ZfcRbac\Identity\IdentityProviderInterface;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Identity\IdentityProviderInterface;
+use LmcRbacMvc\Service\AuthorizationService;
 
 class BusinessTypeControllerFactory implements FactoryInterface
 {
@@ -28,7 +27,6 @@ class BusinessTypeControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): BusinessTypeController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
 
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
@@ -57,17 +55,5 @@ class BusinessTypeControllerFactory implements FactoryInterface
             $lvaAdapter,
             $navigation
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return BusinessTypeController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): BusinessTypeController
-    {
-        return $this->__invoke($serviceLocator, BusinessTypeController::class);
     }
 }

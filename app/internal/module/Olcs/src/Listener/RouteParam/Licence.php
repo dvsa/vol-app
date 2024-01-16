@@ -9,11 +9,12 @@ use Common\Service\Data\Surrender;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Dvsa\Olcs\Transfer\Query\FeatureToggle\IsEnabled as IsEnabledQry;
 use Interop\Container\ContainerInterface;
+use Laminas\EventManager\EventInterface;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
 use Laminas\Navigation\Navigation;
-use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
@@ -27,9 +28,8 @@ use RuntimeException;
  */
 class Licence implements ListenerAggregateInterface, FactoryInterface
 {
-    use ListenerAggregateTrait,
-        ViewHelperManagerAwareTrait;
-
+    use ListenerAggregateTrait;
+    use ViewHelperManagerAwareTrait;
 
     private $annotationBuilderService;
     private $queryService;
@@ -155,12 +155,11 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         );
     }
 
-    /**
-     * @param RouteParam $e
-     */
-    public function onLicence(RouteParam $e)
+    public function onLicence(EventInterface $e)
     {
-        $licenceId = $e->getValue();
+        $routeParam = $e->getTarget();
+
+        $licenceId = $routeParam->getValue();
         $licence = $this->getLicenceMarkerData($licenceId);
 
         $this->getMarkerService()->addData('licence', $licence);
@@ -237,18 +236,6 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         return $response->getResult();
     }
 
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator) : Licence
-    {
-        return $this->__invoke($serviceLocator, Licence::class);
-    }
-
     public function getAnnotationBuilderService()
     {
         return $this->annotationBuilderService;
@@ -311,16 +298,18 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
             return false;
         }
 
-        if (in_array(
-            $licence['status']['id'],
-            [
+        if (
+            in_array(
+                $licence['status']['id'],
+                [
                 RefData::LICENCE_STATUS_REVOKED,
                 RefData::LICENCE_STATUS_TERMINATED,
                 RefData::LICENCE_STATUS_SURRENDERED,
                 RefData::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT,
                 RefData::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION,
-            ]
-        )) {
+                ]
+            )
+        ) {
             $sidebarNav->findById('licence-quick-actions-create-variation')->setVisible(0);
             return false;
         }
@@ -557,7 +546,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : Licence
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Licence
     {
         $this->setViewHelperManager($container->get('ViewHelperManager'));
         $this->setLicenceService($container->get('DataServiceManager')->get('Common\Service\Data\Licence'));

@@ -3,35 +3,16 @@
 namespace Olcs\Form\Element;
 
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
-/**
- * Class SubmissionSectionsFactory
- * @package Olcs\Form\Element
- */
 class SubmissionSectionsFactory implements FactoryInterface
 {
     /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator Form element manager
-     *
-     * @return SubmissionSections
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): SubmissionSections
-    {
-        return $this->__invoke($serviceLocator, SubmissionSections::class);
-    }
-
-    /**
      * Method to extract the case in order to get the transport manager and set it's id value as hidden field
-     *
-     * @param ServiceLocatorInterface $serviceLocator Service locator
      *
      * @return array
      */
-    private function getCase($serviceLocator)
+    private function getCase(ContainerInterface $serviceLocator)
     {
         $cpm = $serviceLocator->get('ControllerPluginManager');
         $params = $cpm->get('params');
@@ -52,10 +33,6 @@ class SubmissionSectionsFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SubmissionSections
     {
-        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
-            $container = $container->getServiceLocator();
-        }
-
         $formElementManager = $container->get('FormElementManager');
         $element = new SubmissionSections();
         // set up TM ID to trigger additional TM sections when generating element

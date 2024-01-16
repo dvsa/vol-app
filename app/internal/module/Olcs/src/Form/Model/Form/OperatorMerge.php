@@ -26,7 +26,7 @@ class OperatorMerge
      *     "label": "form.operator-merge.to-operator-id",
      *     "short-label":"form.operator-merge.to-operator-id",
      * })
-     * @Form\Validator({"name":"Laminas\Validator\Digits"})
+     * @Form\Validator("Laminas\Validator\Digits")
      */
     public $toOperatorId = null;
 
@@ -41,7 +41,7 @@ class OperatorMerge
      *     "context": "fromOperatorName",
      *     "use_groups": "false",
      * })
-     * @Form\Filter({"name":"Common\Filter\NullToArray"})
+     * @Form\Filter("Common\Filter\NullToArray")
      */
     public $licenceIds = null;
 
@@ -54,10 +54,10 @@ class OperatorMerge
      *     "short-label":"form.operator-merge.confirm",
      *  })
      * @Form\Type("OlcsCheckbox")
-     * @Form\Validator({"name":"Laminas\Validator\Identical","options": {
+     * @Form\Validator("Laminas\Validator\Identical", options={
      *  "token":"Y",
      *  "message":"form.operator-merge.confirm.validation"
-     * }})
+     * })
      */
     public $confirm = null;
 

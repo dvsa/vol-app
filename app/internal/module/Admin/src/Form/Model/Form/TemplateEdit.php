@@ -49,7 +49,7 @@ class TemplateEdit
      *     "label":"Template Markup",
      * })
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength", "options":{"max":65535}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"max":65535})
      */
     public $source;
 

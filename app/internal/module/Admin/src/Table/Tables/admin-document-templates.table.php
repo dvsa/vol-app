@@ -1,5 +1,6 @@
 <?php
 
+use Common\Service\Table\Formatter\Date;
 use Common\Service\Table\Formatter\DocumentDescription;
 use Common\Util\Escape;
 
@@ -74,7 +75,7 @@ return [
             'name' => 'lastModifiedOn',
             'sort' => 'lastModifiedOn',
             'formatter' => function ($row, $column) {
-                $column['formatter'] = 'Date';
+                $column['formatter'] = Date::class;
                 return empty($row['lastModifiedOn']) ? 'N/A' : $this->callFormatter($column, $row);
             }
         ],

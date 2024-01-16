@@ -4,8 +4,7 @@ declare(strict_types=1);
 namespace Olcs\Auth\Adapter;
 
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class InternalCommandAdapterFactory implements FactoryInterface
 {
@@ -19,15 +18,5 @@ class InternalCommandAdapterFactory implements FactoryInterface
     {
         $commandSender = $container->get('CommandSender');
         return new InternalCommandAdapter($commandSender);
-    }
-
-    /**
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return InternalCommandAdapter
-     * @deprecated
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): InternalCommandAdapter
-    {
-        return $this->__invoke($serviceLocator, null);
     }
 }

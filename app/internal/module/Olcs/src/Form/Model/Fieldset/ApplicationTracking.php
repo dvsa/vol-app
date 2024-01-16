@@ -7,8 +7,6 @@ use Laminas\Form\Annotation as Form;
 /**
  * Application Tracking fieldset
  *
- * @note This fieldset is augmented dynamically by the controller based on accessible sections
- * @see Olcs\Controller\Lva\Application\OverviewController
  */
 class ApplicationTracking
 {

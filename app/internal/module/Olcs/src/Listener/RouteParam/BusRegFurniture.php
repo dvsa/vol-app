@@ -7,23 +7,18 @@ use Common\Service\Cqrs\Command\CommandSenderAwareInterface;
 use Common\Service\Cqrs\Command\CommandSenderAwareTrait;
 use Common\Service\Cqrs\Query\QuerySenderAwareInterface;
 use Common\Service\Cqrs\Query\QuerySenderAwareTrait;
+use Laminas\EventManager\EventInterface;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use \Dvsa\Olcs\Transfer\Query\Bus\BusReg as ItemDto;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Common\Exception\ResourceNotFoundException;
 use Laminas\View\Model\ViewModel;
 
-/**
- * Bus Reg Furniture
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class BusRegFurniture implements
     ListenerAggregateInterface,
     FactoryInterface,
@@ -34,17 +29,6 @@ class BusRegFurniture implements
         ViewHelperManagerAwareTrait,
         QuerySenderAwareTrait,
         CommandSenderAwareTrait;
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator) : BusRegFurniture
-    {
-        return $this->__invoke($serviceLocator, BusRegFurniture::class);
-    }
 
     /**
      * {@inheritdoc}
@@ -58,12 +42,11 @@ class BusRegFurniture implements
         );
     }
 
-    /**
-     * @param RouteParam $e
-     */
-    public function onBusRegFurniture(RouteParam $e)
+    public function onBusRegFurniture(EventInterface $e)
     {
-        $id = $e->getValue();
+        $routeParam = $e->getTarget();
+
+        $id = $routeParam->getValue();
         $busReg = $this->getBusReg($id);
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');

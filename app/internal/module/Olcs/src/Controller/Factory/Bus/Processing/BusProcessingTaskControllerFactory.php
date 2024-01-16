@@ -6,9 +6,8 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Interop\Container\ContainerInterface;
-use Laminas\Mvc\Router\Http\TreeRouteStack;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\Router\Http\TreeRouteStack;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Bus\Processing\BusProcessingTaskController;
 use Olcs\Service\Data\SubCategory;
@@ -23,8 +22,6 @@ class BusProcessingTaskControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): BusProcessingTaskController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);
         $tableFactory = $container->get(TableFactory::class);
@@ -40,17 +37,5 @@ class BusProcessingTaskControllerFactory implements FactoryInterface
             $router,
             $subCategoryDataService
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return BusProcessingTaskController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): BusProcessingTaskController
-    {
-        return $this->__invoke($serviceLocator, BusProcessingTaskController::class);
     }
 }

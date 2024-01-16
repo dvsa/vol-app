@@ -4,24 +4,11 @@ namespace Olcs\View\Helper;
 
 use Common\Service\Table\Formatter\FormatterPluginManager;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Common\Service\Table\Formatter\Address as AddressFormatter;
 
-/**
- * Class MarkersFactory
- * @package Olcs\View\Helper
- */
-class AddressFactory implements \Laminas\ServiceManager\FactoryInterface
+class AddressFactory implements FactoryInterface
 {
-    /**
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return Address
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): Address
-    {
-        return $this->__invoke($serviceLocator, Address::class);
-    }
-
     /**
      * @param ContainerInterface $container
      * @param $requestedName
@@ -32,9 +19,6 @@ class AddressFactory implements \Laminas\ServiceManager\FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Address
     {
-        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
-            $container = $container->getServiceLocator();
-        }
         $addressFormatter = $container->get(FormatterPluginManager::class)->get(AddressFormatter::class);
         return new Address($addressFormatter);
     }

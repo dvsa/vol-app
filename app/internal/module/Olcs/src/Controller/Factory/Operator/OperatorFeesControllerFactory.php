@@ -13,14 +13,12 @@ use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
-use Olcs\Controller\Operator\OperatorBusinessDetailsController;
 use Olcs\Controller\Operator\OperatorController;
 use Olcs\Controller\Operator\OperatorFeesController;
 use Olcs\Service\Data\Licence;
-use ZfcRbac\Identity\IdentityProviderInterface;
+use LmcRbacMvc\Identity\IdentityProviderInterface;
 
 class OperatorFeesControllerFactory implements FactoryInterface
 {
@@ -32,8 +30,6 @@ class OperatorFeesControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): OperatorFeesController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);
         $tableFactory = $container->get(TableFactory::class);
@@ -44,7 +40,7 @@ class OperatorFeesControllerFactory implements FactoryInterface
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         $licenceDataService = $container->get(Licence::class);
         $queryService = $container->get(QueryService::class);
-        $navigation = $container->get('navigation');
+        $navigation = $container->get('Navigation');
         $translationHelper = $container->get(TranslationHelperService::class);
         $urlHelper = $container->get(UrlHelperService::class);
         $identityProvider = $container->get(IdentityProviderInterface::class);
@@ -65,17 +61,5 @@ class OperatorFeesControllerFactory implements FactoryInterface
             $urlHelper,
             $identityProvider
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return OperatorBusinessDetailsController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): OperatorFeesController
-    {
-        return $this->__invoke($serviceLocator, OperatorFeesController::class);
     }
 }

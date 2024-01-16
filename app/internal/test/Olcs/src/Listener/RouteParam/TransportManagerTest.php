@@ -2,11 +2,13 @@
 
 namespace OlcsTest\Listener\RouteParam;
 
+use Interop\Container\ContainerInterface;
+use Laminas\EventManager\Event;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\TransportManager\Details\TransportManagerDetailsResponsibilityController;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
-use Olcs\Listener\RouteParam\TransportManager as SystemUnderTest;
+use Olcs\Listener\RouteParam\TransportManager;
 use Mockery as m;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\Navigation\Navigation;
@@ -16,15 +18,11 @@ use Dvsa\Olcs\Transfer\Query\Tm\TransportManager as TmQry;
 use Dvsa\Olcs\Transfer\Query\Nr\ReputeUrl as ReputeQry;
 use Common\RefData;
 
-/**
- * Class ActionTest
- * @package OlcsTest\Listener\RouteParam
- */
 class TransportManagerTest extends MockeryTestCase
 {
     public function testAttach()
     {
-        $sut = new SystemUnderTest();
+        $sut = new TransportManager();
 
         /** @var EventManagerInterface $eventManager */
         $eventManager = m::mock(EventManagerInterface::class);
@@ -68,11 +66,12 @@ class TransportManagerTest extends MockeryTestCase
             ->with('transport-manager/details', ['transportManager' => $tm['id']], [], true)
             ->andReturn($url);
 
-        $sut = new SystemUnderTest();
+        $sut = new TransportManager();
 
-        $event = new RouteParam();
-        $event->setValue($tmId);
-        $event->setContext($context);
+        $routeParam = new RouteParam();
+        $routeParam->setValue($tmId);
+        $routeParam->setContext($context);
+        $event = new Event(null, $routeParam);
 
         $mockCheckRepute = m::mock(PageUri::class);
         $mockCheckRepute->shouldReceive('setVisible')->with(true)->andReturnSelf();
@@ -166,7 +165,7 @@ class TransportManagerTest extends MockeryTestCase
         $pageTitle = '<a class="govuk-link" href="'. $url . '">' . $tm['homeCd']['person']['forename'] . ' ';
         $pageTitle .= $tm['homeCd']['person']['familyName'] . '</a>';
 
-        $sut = new SystemUnderTest();
+        $sut = new TransportManager();
 
         $mockUrl = m::mock('stdClass');
         $mockUrl->shouldReceive('__invoke')
@@ -221,9 +220,11 @@ class TransportManagerTest extends MockeryTestCase
                     ->getMock()
             );
 
-        $event = new RouteParam();
-        $event->setValue($tmId);
-        $event->setContext($context);
+        $routeParam = new RouteParam();
+        $routeParam->setValue($tmId);
+        $routeParam->setContext($context);
+        $event = new Event(null, $routeParam);
+
         $sut->onTransportManager($event);
     }
 
@@ -249,7 +250,7 @@ class TransportManagerTest extends MockeryTestCase
         $pageTitle = '<a class="govuk-link" href="'. $url . '">' . $tm['homeCd']['person']['forename'] . ' ';
         $pageTitle .= $tm['homeCd']['person']['familyName'] . '</a>';
 
-        $sut = new SystemUnderTest();
+        $sut = new TransportManager();
 
         $mockUrl = m::mock('stdClass');
         $mockUrl->shouldReceive('__invoke')
@@ -296,13 +297,15 @@ class TransportManagerTest extends MockeryTestCase
                     ->getMock()
             );
 
-        $event = new RouteParam();
-        $event->setValue($tmId);
-        $event->setContext($context);
+        $routeParam = new RouteParam();
+        $routeParam->setValue($tmId);
+        $routeParam->setContext($context);
+        $event = new Event(null, $routeParam);
+
         $sut->onTransportManager($event);
     }
 
-    private function setupGetTransportManager(SystemUnderTest $sut, array $tmData = [], $reputeUrl = null)
+    private function setupGetTransportManager(TransportManager $sut, array $tmData = [], $reputeUrl = null)
     {
         $mockAnnotationBuilder = m::mock();
         $mockQueryService = m::mock();
@@ -361,7 +364,7 @@ class TransportManagerTest extends MockeryTestCase
     /**
      * Tests create service
      */
-    public function testCreateService()
+    public function testInvoke()
     {
         $mockAnnotationBuilder = m::mock();
         $mockQueryService = m::mock();
@@ -370,15 +373,15 @@ class TransportManagerTest extends MockeryTestCase
         $sidebarNav = m::mock(Navigation::class);
         $mockViewHelperManager = m::mock('Laminas\View\HelperPluginManager');
 
-        $mockSl = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
+        $mockSl = m::mock(ContainerInterface::class);
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('right-sidebar')->andReturn($sidebarNav);
         $mockSl->shouldReceive('get')->with('TransferAnnotationBuilder')->andReturn($mockAnnotationBuilder);
         $mockSl->shouldReceive('get')->with('QueryService')->andReturn($mockQueryService);
-        $mockSl->shouldReceive('get')->with('ZfcRbac\Service\AuthorizationService')->andReturn($mockAuthService);
+        $mockSl->shouldReceive('get')->with('LmcRbacMvc\Service\AuthorizationService')->andReturn($mockAuthService);
 
-        $sut = new SystemUnderTest();
-        $service = $sut->createService($mockSl);
+        $sut = new TransportManager();
+        $service = $sut->__invoke($mockSl, TransportManager::class);
 
         $this->assertSame($sut, $service);
         $this->assertSame($mockViewHelperManager, $sut->getViewHelperManager());

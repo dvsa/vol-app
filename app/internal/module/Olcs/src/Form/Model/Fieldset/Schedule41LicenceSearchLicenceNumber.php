@@ -17,8 +17,8 @@ class Schedule41LicenceSearchLicenceNumber
      * @Form\Options({
      *     "label": "Licence number",
      * })
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":2,"max":35}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":2,"max":35})
      */
     public $licenceNumber = null;
 }

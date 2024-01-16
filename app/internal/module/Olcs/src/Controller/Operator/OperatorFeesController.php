@@ -21,7 +21,7 @@ use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Traits\FeesActionTrait;
 use Olcs\Service\Data\Licence;
-use ZfcRbac\Identity\IdentityProviderInterface;
+use LmcRbacMvc\Identity\IdentityProviderInterface;
 
 /**
  * Operator Fees Controller

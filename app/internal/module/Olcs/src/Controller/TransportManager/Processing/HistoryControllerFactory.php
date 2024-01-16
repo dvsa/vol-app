@@ -8,8 +8,7 @@ use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableFactory;
 use Interop\Container\ContainerInterface;
 use Laminas\Navigation\Navigation;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class HistoryControllerFactory implements FactoryInterface
 {
@@ -24,7 +23,7 @@ class HistoryControllerFactory implements FactoryInterface
         $flashMessenger = $container->get(FlashMessengerHelperService::class);
         assert($flashMessenger instanceof FlashMessengerHelperService);
 
-        $navigation = $container->get('navigation');
+        $navigation = $container->get('Navigation');
         assert($navigation instanceof Navigation);
 
         $tableFactory = $container->get(TableFactory::class);
@@ -35,15 +34,6 @@ class HistoryControllerFactory implements FactoryInterface
             $flashMessenger,
             $navigation,
             $tableFactory
-        );
-    }
-    public function createService(ServiceLocatorInterface $serviceLocator): HistoryController
-    {
-        $container = method_exists($serviceLocator, 'getServiceLocator') ? $serviceLocator->getServiceLocator() : $serviceLocator;
-
-        return $this->__invoke(
-            $container,
-            HistoryController::class
         );
     }
 }

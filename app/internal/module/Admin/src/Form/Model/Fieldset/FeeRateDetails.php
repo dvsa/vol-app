@@ -46,8 +46,8 @@ class FeeRateDetails
      * @Form\Required(true)
      * @Form\Attributes({"required":true})
      * @Form\Type("DateSelect")
-     * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Filter("DateSelectNullifier")
+     * @Form\Validator("Date", options={"format": "Y-m-d"})
      * @Form\Validator({
      *      "name": "Dvsa\Olcs\Transfer\Validators\DateInFuture",
      *      "options": {
@@ -81,7 +81,7 @@ class FeeRateDetails
      * @Form\Options({
      *      "label":"Annual Value",
      * })
-     * @Form\Validator({"name":"Laminas\Validator\Digits"})
+     * @Form\Validator("Laminas\Validator\Digits")
      * @Form\Type("Laminas\Form\Element\Number")
      * @Form\Validator({
      *      "name": "Laminas\Validator\Between",
@@ -99,7 +99,7 @@ class FeeRateDetails
      * @Form\Options({
      *      "label":"Five Year Value",
      * })
-     * @Form\Validator({"name":"Laminas\Validator\Digits"})
+     * @Form\Validator("Laminas\Validator\Digits")
      * @Form\Type("Laminas\Form\Element\Number")
      * @Form\Validator({
      *      "name": "Laminas\Validator\Between",

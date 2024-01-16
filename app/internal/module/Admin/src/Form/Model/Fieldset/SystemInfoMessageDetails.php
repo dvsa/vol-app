@@ -48,7 +48,7 @@ class SystemInfoMessageDetails
      *     "label":"Message",
      * })
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength", "options":{"max":1024}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"max":1024})
      */
     public $description;
 

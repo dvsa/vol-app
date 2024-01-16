@@ -2,12 +2,13 @@
 
 namespace OlcsTest\FormService\Form\Lva;
 
+use Laminas\Form\ElementInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\Variation;
 use Laminas\Form\Fieldset;
 use Laminas\Form\Form;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Variation Test
@@ -35,7 +36,7 @@ class VariationTest extends MockeryTestCase
         $form->shouldReceive('has')->with('form-actions')->andReturn(true);
         $form->shouldReceive('get')->with('form-actions')->andReturn($formActions);
 
-        $mockSave = m::mock();
+        $mockSave = m::mock(ElementInterface::class);
         $mockSave->shouldReceive('setLabel')->once()->with('internal.save.button');
         $mockSave->shouldReceive('setAttribute')->once()->with('class', 'govuk-button');
 

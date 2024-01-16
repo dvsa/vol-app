@@ -7,8 +7,7 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Interop\Container\ContainerInterface;
 use Laminas\Navigation\Navigation;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class ProcessSubmissionControllerFactory implements FactoryInterface
 {
@@ -23,7 +22,7 @@ class ProcessSubmissionControllerFactory implements FactoryInterface
         $flashMessenger = $container->get(FlashMessengerHelperService::class);
         assert($flashMessenger instanceof FlashMessengerHelperService);
 
-        $navigation = $container->get('navigation');
+        $navigation = $container->get('Navigation');
         assert($navigation instanceof Navigation);
 
         return new ProcessSubmissionController(
@@ -31,15 +30,6 @@ class ProcessSubmissionControllerFactory implements FactoryInterface
             $formHelper,
             $flashMessenger,
             $navigation
-        );
-    }
-    public function createService(ServiceLocatorInterface $serviceLocator): ProcessSubmissionController
-    {
-        $container = method_exists($serviceLocator, 'getServiceLocator') ? $serviceLocator->getServiceLocator() : $serviceLocator;
-
-        return $this->__invoke(
-            $container,
-            ProcessSubmissionController::class
         );
     }
 }

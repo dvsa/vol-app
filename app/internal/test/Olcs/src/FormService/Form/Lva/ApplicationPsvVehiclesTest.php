@@ -4,7 +4,7 @@ namespace OlcsTest\FormService\Form\Lva;
 
 use Mockery as m;
 use Olcs\FormService\Form\Lva\ApplicationPsvVehicles;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Application Psv Vehicles Test

@@ -32,7 +32,7 @@ class ErruPenalty extends CaseBase
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator("Date", options={"format": "Y-m-d"})
      */
     public $startDate;
 
@@ -47,7 +47,7 @@ class ErruPenalty extends CaseBase
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator("Date", options={"format": "Y-m-d"})
      */
     public $endDate;
 
@@ -72,7 +72,7 @@ class ErruPenalty extends CaseBase
      * @Form\Required(false)
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":500}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"max":500})
      */
     public $reasonNotImposed;
 

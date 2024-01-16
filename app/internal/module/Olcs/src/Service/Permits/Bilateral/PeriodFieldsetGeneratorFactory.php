@@ -4,23 +4,10 @@ namespace Olcs\Service\Permits\Bilateral;
 
 use Interop\Container\ContainerInterface;
 use Laminas\Form\Factory as FormFactory;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class PeriodFieldsetGeneratorFactory implements FactoryInterface
 {
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return PeriodFieldsetGenerator
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator) : PeriodFieldsetGenerator
-    {
-        return $this->__invoke($serviceLocator, PeriodFieldsetGenerator::class);
-    }
-
     /**
      * @param ContainerInterface $container
      * @param $requestedName
@@ -29,7 +16,7 @@ class PeriodFieldsetGeneratorFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : PeriodFieldsetGenerator
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): PeriodFieldsetGenerator
     {
         $periodFieldsetGenerator = new PeriodFieldsetGenerator(
             new FormFactory()

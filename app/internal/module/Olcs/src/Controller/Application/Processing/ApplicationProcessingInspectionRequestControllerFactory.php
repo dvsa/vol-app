@@ -9,8 +9,7 @@ use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder as TransferAnnotationBuilder;
 use Interop\Container\ContainerInterface;
 use Laminas\Navigation\Navigation;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Service\Data\OperatingCentresForInspectionRequest;
 
 class ApplicationProcessingInspectionRequestControllerFactory implements FactoryInterface
@@ -26,7 +25,7 @@ class ApplicationProcessingInspectionRequestControllerFactory implements Factory
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         assert($flashMessengerHelper instanceof FlashMessengerHelperService);
 
-        $navigation = $container->get('navigation');
+        $navigation = $container->get('Navigation');
         assert($navigation instanceof Navigation);
 
         $transferAnnotationBuilder = $container->get(TransferAnnotationBuilder::class);
@@ -45,16 +44,6 @@ class ApplicationProcessingInspectionRequestControllerFactory implements Factory
             $transferAnnotationBuilder,
             $queryService,
             $operatingCentresForInspectionRequest
-        );
-    }
-
-    public function createService(ServiceLocatorInterface $serviceLocator): ApplicationProcessingInspectionRequestController
-    {
-        $container = method_exists($serviceLocator, 'getServiceLocator') ? $serviceLocator->getServiceLocator() : $serviceLocator;
-
-        return $this->__invoke(
-            $container,
-            ApplicationProcessingInspectionRequestController::class
         );
     }
 }

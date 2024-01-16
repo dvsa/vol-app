@@ -88,8 +88,8 @@ class GracePeriodDetails
      * @Form\Options({"label":"internal-licence-grace-periods-period-details-description"})
      * @Form\Required(false)
      * @Form\Type("TextArea")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":1,"max":90}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":1,"max":90})
      */
     public $description = null;
 }

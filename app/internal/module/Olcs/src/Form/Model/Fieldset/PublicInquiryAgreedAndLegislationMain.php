@@ -15,12 +15,12 @@ class PublicInquiryAgreedAndLegislationMain
      * @Form\Options({
      *     "label": "Agreed date",
      *     "create_empty_option": false,
-     *     "render_delimiters": "d m y"
+     *     "render_delimiters": true
      * })
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $agreedDate = null;
@@ -86,13 +86,13 @@ class PublicInquiryAgreedAndLegislationMain
      * @Form\Options({
      *     "label": "Date ECMS case first received by OTC",
      *     "create_empty_option": false,
-     *     "render_delimiters": "d m y",
+     *     "render_delimiters": true,
      *     "fieldsetClass": "pi_ecms_first_received_date"
      * })
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $ecmsFirstReceivedDate = null;
@@ -105,7 +105,7 @@ class PublicInquiryAgreedAndLegislationMain
      *     "disable_inarray_validator": false
      * })
      * @Form\Type("DynamicSelect")
-     * @Form\Validator({"name":"Olcs\Validator\TypeOfPI"})
+     * @Form\Validator("Olcs\Validator\TypeOfPI")
      */
     public $piTypes = null;
 
@@ -133,7 +133,7 @@ class PublicInquiryAgreedAndLegislationMain
      * @Form\Required(false)
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":5,"max":4000}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":5,"max":4000})
      */
     public $comment = null;
 

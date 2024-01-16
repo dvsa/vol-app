@@ -31,7 +31,7 @@ class IrfoGvPermit extends OrganisationBase
      *     "min_year_delta": "-40",
      * })
      * @Form\Type("YearSelect")
-     * @Form\Validator({"name":"Digits"})
+     * @Form\Validator("Digits")
      */
     public $yearRequired = null;
 
@@ -45,9 +45,9 @@ class IrfoGvPermit extends OrganisationBase
      *     "min_year_delta": "-40",
      * })
      * @Form\Type("DateSelect")
-     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Filter("DateSelectNullifier")
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
      */
     public $inForceDate;
 
@@ -62,7 +62,7 @@ class IrfoGvPermit extends OrganisationBase
      *     "hint": "The calculated expiry date is <span id=calculatedExpiryDateText>dd/mm/yyyy</span>",
      * })
      * @Form\Type("DateSelect")
-     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Filter("DateSelectNullifier")
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "expiryDate",
@@ -97,8 +97,8 @@ class IrfoGvPermit extends OrganisationBase
      * @Form\Type("TextArea")
      * @Form\Options({"label":"Exemption reason"})
      * @Form\Attributes({"class":"extra-long","id":"exemptionDetails", "required":false})
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\NotEmpty","options":{"null"}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\NotEmpty", options={"null"})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "isFeeExempt",
@@ -117,7 +117,7 @@ class IrfoGvPermit extends OrganisationBase
      * @Form\Attributes({"id":"","placeholder":"","class":"small"})
      * @Form\Options({"label": "No of copies required"})
      * @Form\Type("Text")
-     * @Form\Validator({"name":"Digits"})
+     * @Form\Validator("Digits")
      */
     public $noOfCopies = null;
 }

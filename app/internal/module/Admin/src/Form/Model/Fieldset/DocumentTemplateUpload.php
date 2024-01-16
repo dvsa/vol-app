@@ -64,7 +64,7 @@ class DocumentTemplateUpload
      * @Form\Options({
      *     "label": "Description"
      * })
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":255}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"max":255})
      * @Form\Type("Text")
      */
     public $description = null;
@@ -74,7 +74,7 @@ class DocumentTemplateUpload
      * @Form\Options({
      *     "label": "Template Slug Identifier (optional)",
      * })
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":100}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"max":100})
      * @Form\Type("Text")
      * @Form\Required(false)
      */

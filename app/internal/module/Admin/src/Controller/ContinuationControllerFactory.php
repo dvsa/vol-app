@@ -8,8 +8,7 @@ use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\Helper\Placeholder;
 
 class ContinuationControllerFactory implements FactoryInterface
@@ -31,11 +30,5 @@ class ContinuationControllerFactory implements FactoryInterface
             $tableFactory,
             $formHelper
         );
-    }
-    public function createService(ServiceLocatorInterface $serviceLocator): ContinuationController
-    {
-        $container = method_exists($serviceLocator, 'getServiceLocator') ? $serviceLocator->getServiceLocator() : $serviceLocator;
-
-        return $this->__invoke($container, ContinuationController::class);
     }
 }

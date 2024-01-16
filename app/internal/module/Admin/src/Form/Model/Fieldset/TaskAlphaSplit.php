@@ -36,7 +36,7 @@ class TaskAlphaSplit
      * })
      * @Form\Type("Text")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":50}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"max":50})
      * @Form\Validator({
      *     "name": "Laminas\Validator\Regex",
      *     "options": {

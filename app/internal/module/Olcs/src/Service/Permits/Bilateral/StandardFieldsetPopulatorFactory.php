@@ -2,22 +2,15 @@
 
 namespace Olcs\Service\Permits\Bilateral;
 
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\Containerinterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class StandardFieldsetPopulatorFactory implements FactoryInterface
 {
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return StandardFieldsetPopulator
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): StandardFieldsetPopulator
     {
         return new StandardFieldsetPopulator(
-            $serviceLocator->get(NoOfPermitsElementGenerator::class)
+            $container->get(NoOfPermitsElementGenerator::class)
         );
     }
 }

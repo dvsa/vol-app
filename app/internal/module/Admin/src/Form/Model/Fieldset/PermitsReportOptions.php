@@ -31,7 +31,7 @@ class PermitsReportOptions
      * @Form\Attributes({"required":false})
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator("Date", options={"format": "Y-m-d"})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $startDate = null;
@@ -47,7 +47,7 @@ class PermitsReportOptions
      * @Form\Attributes({"required":false})
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator("Date", options={"format": "Y-m-d"})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      * @Form\Validator({
      *      "name": "DateCompare",

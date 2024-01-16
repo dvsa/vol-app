@@ -7,8 +7,7 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Document\DocumentGenerationController;
 use Olcs\Service\Data\DocumentSubCategoryWithDocs;
@@ -23,8 +22,6 @@ class DocumentGenerationControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DocumentGenerationController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);
         $tableFactory = $container->get(TableFactory::class);
@@ -42,17 +39,5 @@ class DocumentGenerationControllerFactory implements FactoryInterface
             $flashMessangerHelper,
             $docSubcategoryWithDocsDataService
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return DocumentGenerationController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): DocumentGenerationController
-    {
-        return $this->__invoke($serviceLocator, DocumentGenerationController::class);
     }
 }

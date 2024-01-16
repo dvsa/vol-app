@@ -3,12 +3,8 @@
 namespace Olcs\Service\Helper;
 
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
-/**
- * LicenceOverviewHelperServiceFactory
- */
 class LicenceOverviewHelperServiceFactory implements FactoryInterface
 {
     /**
@@ -24,17 +20,5 @@ class LicenceOverviewHelperServiceFactory implements FactoryInterface
         return new LicenceOverviewHelperService(
             $container->get('Helper\Url')
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $services
-     *
-     * @return LicenceOverviewHelperService
-     */
-    public function createService(ServiceLocatorInterface $services): LicenceOverviewHelperService
-    {
-        return $this($services, LicenceOverviewHelperService::class);
     }
 }

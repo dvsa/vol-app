@@ -12,8 +12,7 @@ use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Operator\OperatorController;
 use Olcs\Controller\Operator\UnlicensedBusinessDetailsController;
@@ -29,8 +28,6 @@ class UnlicensedBusinessDetailsControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): UnlicensedBusinessDetailsController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);
         $tableFactory = $container->get(TableFactory::class);
@@ -41,7 +38,7 @@ class UnlicensedBusinessDetailsControllerFactory implements FactoryInterface
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         $licenceDataService = $container->get(Licence::class);
         $queryService = $container->get(QueryService::class);
-        $navigation = $container->get('navigation');
+        $navigation = $container->get('Navigation');
         $translationHelper = $container->get(TranslationHelperService::class);
 
         return new UnlicensedBusinessDetailsController(
@@ -58,17 +55,5 @@ class UnlicensedBusinessDetailsControllerFactory implements FactoryInterface
             $navigation,
             $translationHelper
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return UnlicensedBusinessDetailsController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): UnlicensedBusinessDetailsController
-    {
-        return $this->__invoke($serviceLocator, UnlicensedBusinessDetailsController::class);
     }
 }

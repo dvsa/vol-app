@@ -9,8 +9,7 @@ use Common\Service\Helper\ResponseHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\Helper\Placeholder;
 
 class ContinuationChecklistReminderControllerFactory implements FactoryInterface
@@ -35,11 +34,5 @@ class ContinuationChecklistReminderControllerFactory implements FactoryInterface
             $responseHelper,
             $tableFactory
         );
-    }
-    public function createService(ServiceLocatorInterface $serviceLocator): ContinuationChecklistReminderController
-    {
-        $container = method_exists($serviceLocator, 'getServiceLocator') ? $serviceLocator->getServiceLocator() : $serviceLocator;
-
-        return $this->__invoke($container, ContinuationChecklistReminderController::class);
     }
 }

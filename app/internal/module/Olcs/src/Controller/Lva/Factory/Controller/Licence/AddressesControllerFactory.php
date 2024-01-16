@@ -8,10 +8,9 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\Lva\Licence\AddressesController;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 class AddressesControllerFactory implements FactoryInterface
 {
@@ -23,8 +22,7 @@ class AddressesControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): AddressesController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
+        
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $formHelper = $container->get(FormHelperService::class);
@@ -42,17 +40,5 @@ class AddressesControllerFactory implements FactoryInterface
             $scriptFactory,
             $navigation
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return AddressesController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): AddressesController
-    {
-        return $this->__invoke($serviceLocator, AddressesController::class);
     }
 }

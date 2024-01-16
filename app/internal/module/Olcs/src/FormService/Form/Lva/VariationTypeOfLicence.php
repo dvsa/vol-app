@@ -6,7 +6,7 @@ use Common\FormService\FormServiceManager;
 use Common\Service\Helper\FormHelperService;
 use Laminas\Form\Form;
 use Common\FormService\Form\Lva\TypeOfLicence\VariationTypeOfLicence as CommonVariationTypeOfLicence;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Variation Type Of Licence

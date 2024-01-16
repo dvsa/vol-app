@@ -20,7 +20,7 @@ class EnvironmentalComplaint extends CaseBase
      * })
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator("Date", options={"format": "Y-m-d"})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      * @Form\Type("DateSelect")
      */
@@ -37,7 +37,7 @@ class EnvironmentalComplaint extends CaseBase
      * @Form\Required(true)
      * @Form\Attributes({"id":"description","class":"extra-long","name":"description", "required":false})
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":5,"max":4000}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":5,"max":4000})
      */
     public $description = null;
 
@@ -73,7 +73,7 @@ class EnvironmentalComplaint extends CaseBase
      * @Form\Options({"label":"Complainant first name"})
      * @Form\Type("Text")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":2,"max":35}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":2,"max":35})
      */
     public $complainantForename = null;
 
@@ -82,7 +82,7 @@ class EnvironmentalComplaint extends CaseBase
      * @Form\Options({"label":"Complainant family name"})
      * @Form\Type("Text")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":2,"max":35}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":2,"max":35})
      */
     public $complainantFamilyName = null;
 }

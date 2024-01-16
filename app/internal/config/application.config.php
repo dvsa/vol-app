@@ -3,19 +3,29 @@ $config = array(
     // This should be an array of module namespaces used in the application.
     'modules' => array(
         'Dvsa\LaminasConfigCloudParameters',
+        'Laminas\Log',
+        'Olcs\Logging',
+        'Laminas\Router',
+        'Laminas\Navigation',
+        'Laminas\Cache\Module',
+        'Laminas\Cache\Storage\Adapter\Redis',
+        'Laminas\I18n',
+        'Laminas\Mvc\Plugin\FlashMessenger',
+        'Laminas\Filter',
+        'Laminas\Validator',
+        'Laminas\Form',
         'Dvsa\Olcs\Auth',
         'Dvsa\Olcs\Utils',
         'Dvsa\Olcs\Transfer',
-        'ZfcRbac',
-        'Olcs\Logging',
-        'Dvsa\Olcs\Transfer',
+        'LmcRbacMvc',
+        'DoctrineModule',
         // Common should be included before our applications modules, so we can override common behaviour
-        'Common',
         'Soflomo\Purifier',
+        'Common',
         'Olcs',
         'Admin',
         // Required for annotation parsing
-        'DoctrineModule'
+
     ),
     // These are various options for the listeners attached to the ModuleManager
     'module_listener_options' => array(
@@ -80,8 +90,7 @@ if (file_exists(__DIR__ . '/../vendor/laminas/laminas-developer-tools/src/Module
     $config['modules'][] = 'Laminas\DeveloperTools';
 
     if (file_exists(__DIR__ . '/../vendor/san/san-session-toolbar/src/Module.php')) {
-        /** @todo once we're on Laminas 3, this line will be uncommented by VOL-3749  */
-        //$config['modules'][] = 'SanSessionToolbar';
+        $config['modules'][] = 'SanSessionToolbar';
     }
 }
 

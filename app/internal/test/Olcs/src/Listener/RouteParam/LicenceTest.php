@@ -6,7 +6,9 @@ use Common\Exception\DataServiceException;
 use Common\FeatureToggle;
 use Common\RefData;
 use Common\Service\Data\Surrender;
+use Interop\Container\ContainerInterface;
 use Dvsa\Olcs\Transfer\Query\FeatureToggle\IsEnabled;
+use Laminas\EventManager\Event;
 use Laminas\Navigation\Navigation;
 use Laminas\Navigation\Page\AbstractPage;
 use Laminas\View\Helper\Placeholder;
@@ -17,13 +19,7 @@ use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParam\Licence;
 use Olcs\Listener\RouteParams;
 use Olcs\Service\Marker\MarkerService;
-use RuntimeException;
 
-/**
- * Class LicenceTest
- *
- * @package OlcsTest\Listener\RouteParam
- */
 class LicenceTest extends TestCase
 {
     /**
@@ -133,10 +129,12 @@ class LicenceTest extends TestCase
     public function testOnLicenceQueryError()
     {
         $this->onLicenceSetup(32, false);
-        $event = new RouteParam();
-        $event->setValue(32);
+        $routeParam = new RouteParam();
+        $routeParam->setValue(32);
 
-        $this->expectException(RuntimeException::class);
+        $event = new Event(null, $routeParam);
+
+        $this->expectException(\RuntimeException::class);
 
         $this->sut->onLicence($event);
     }
@@ -213,8 +211,10 @@ class LicenceTest extends TestCase
 
         $this->sut->setMainNavigationService($mainNav);
 
-        $event = new RouteParam();
-        $event->setValue($licenceId);
+        $routeParam = new RouteParam();
+        $routeParam->setValue($licenceId);
+
+        $event = new Event(null, $routeParam);
 
         $this->sut->onLicence($event);
     }
@@ -254,8 +254,10 @@ class LicenceTest extends TestCase
         $this->sut->setNavigationService($mockSidebar);
         $this->mockMainNavigation($licence['goodsOrPsv']['id']);
 
-        $event = new RouteParam();
-        $event->setValue($licenceId);
+        $routeParam = new RouteParam();
+        $routeParam->setValue($licenceId);
+
+        $event = new Event(null, $routeParam);
 
         $this->sut->onLicence($event);
     }
@@ -300,8 +302,10 @@ class LicenceTest extends TestCase
         $this->mockHideButton($mockSidebar, 'licence-decisions-reset-to-valid');
         $this->sut->setNavigationService($mockSidebar);
         $this->mockMainNavigation($licence['goodsOrPsv']['id']);
-        $event = new RouteParam();
-        $event->setValue($licenceId);
+        $routeParam = new RouteParam();
+        $routeParam->setValue($licenceId);
+
+        $event = new Event(null, $routeParam);
 
         $this->sut->onLicence($event);
     }
@@ -349,9 +353,10 @@ class LicenceTest extends TestCase
 
         $this->mockMainNavigation($licence['goodsOrPsv']['id']);
 
+        $routeParam = new RouteParam();
+        $routeParam->setValue($licenceId);
 
-        $event = new RouteParam();
-        $event->setValue($licenceId);
+        $event = new Event(null, $routeParam);
 
         $this->sut->onLicence($event);
     }
@@ -399,8 +404,10 @@ class LicenceTest extends TestCase
 
         $this->mockMainNavigation($licence['goodsOrPsv']['id']);
 
-        $event = new RouteParam();
-        $event->setValue($licenceId);
+        $routeParam = new RouteParam();
+        $routeParam->setValue($licenceId);
+
+        $event = new Event(null, $routeParam);
 
         $this->sut->onLicence($event);
     }
@@ -452,8 +459,10 @@ class LicenceTest extends TestCase
 
         $this->mockMainNavigation($licence['goodsOrPsv']['id']);
 
-        $event = new RouteParam();
-        $event->setValue($licenceId);
+        $routeParam = new RouteParam();
+        $routeParam->setValue($licenceId);
+
+        $event = new Event(null, $routeParam);
 
         $this->sut->onLicence($event);
     }
@@ -504,9 +513,10 @@ class LicenceTest extends TestCase
 
         $this->mockMainNavigation($licence['goodsOrPsv']['id']);
 
+        $routeParam = new RouteParam();
+        $routeParam->setValue($licenceId);
 
-        $event = new RouteParam();
-        $event->setValue($licenceId);
+        $event = new Event(null, $routeParam);
 
         $this->sut->onLicence($event);
     }
@@ -558,13 +568,15 @@ class LicenceTest extends TestCase
 
         $this->mockMainNavigation($licence['goodsOrPsv']['id']);
 
-        $event = new RouteParam();
-        $event->setValue($licenceId);
+        $routeParam = new RouteParam();
+        $routeParam->setValue($licenceId);
+
+        $event = new Event(null, $routeParam);
 
         $this->sut->onLicence($event);
     }
 
-    public function testCreateService()
+    public function testInvoke()
     {
         $mockViewHelperManager = m::mock('Laminas\View\HelperPluginManager');
         $mockLicenceService = m::mock('Common\Service\Data\Licence');
@@ -575,7 +587,7 @@ class LicenceTest extends TestCase
         $mockMarkerService = m::mock(MarkerService::class);
         $mainNav = m::mock(Navigation::class);
 
-        $mockSl = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
+        $mockSl = m::mock(ContainerInterface::class);
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
         $mockSl->shouldReceive('get')->with('Common\Service\Data\Licence')->andReturn($mockLicenceService);
@@ -587,7 +599,7 @@ class LicenceTest extends TestCase
         $mockSl->shouldReceive('get')->with('Navigation')->andReturn($mainNav);
 
         $sut = new Licence();
-        $service = $sut->createService($mockSl);
+        $service = $sut->__invoke($mockSl, Licence::class);
 
         $this->assertSame($sut, $service);
         $this->assertSame($mockViewHelperManager, $sut->getViewHelperManager());
@@ -654,8 +666,10 @@ class LicenceTest extends TestCase
             'signatureType' => ['id' => $this->signatureType]
         ]);
         $this->sut->setSurrenderService($mockSurrenderService);
-        $event = new RouteParam();
-        $event->setValue($licenceId);
+        $routeParam = new RouteParam();
+        $routeParam->setValue($licenceId);
+
+        $event = new Event(null, $routeParam);
         $this->sut->onLicence($event);
     }
 
@@ -717,8 +731,10 @@ class LicenceTest extends TestCase
         ]);
         $this->sut->setSurrenderService($mockSurrenderService);
 
-        $event = new RouteParam();
-        $event->setValue($licenceId);
+        $routeParam = new RouteParam();
+        $routeParam->setValue($licenceId);
+
+        $event = new Event(null, $routeParam);
 
         $this->sut->onLicence($event);
     }
@@ -849,8 +865,10 @@ class LicenceTest extends TestCase
         );
         $this->sut->setSurrenderService($mockSurrenderService);
 
-        $event = new RouteParam();
-        $event->setValue($licenceId);
+        $routeParam = new RouteParam();
+        $routeParam->setValue($licenceId);
+
+        $event = new Event(null, $routeParam);
 
         $this->sut->onLicence($event);
     }

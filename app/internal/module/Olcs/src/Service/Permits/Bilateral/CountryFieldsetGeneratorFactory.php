@@ -4,23 +4,10 @@ namespace Olcs\Service\Permits\Bilateral;
 
 use Interop\Container\ContainerInterface;
 use Laminas\Form\Factory as FormFactory;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class CountryFieldsetGeneratorFactory implements FactoryInterface
 {
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return CountryFieldsetGenerator
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator) : CountryFieldsetGenerator
-    {
-        return $this->__invoke($serviceLocator, CountryFieldsetGenerator::class);
-    }
-
     /**
      * @param ContainerInterface $container
      * @param $requestedName

@@ -21,9 +21,6 @@ class FeesActionTraitTest extends MockeryTestCase
 
     /** @var \Common\Service\Helper\FormHelperService | m\MockInterface  */
     private $mockFormHlpr;
-    /** @var \Laminas\ServiceManager\ServiceLocatorInterface | m\MockInterface  */
-    private $mockSm;
-
 
     public function setUp(): void
     {
@@ -34,7 +31,6 @@ class FeesActionTraitTest extends MockeryTestCase
 
         $this->sut = m::mock(FeesActionTraitStub::class, [$this->mockFormHlpr])->makePartial();
         $this->sut
-            ->shouldReceive('getServiceLocator')->andReturn($this->mockSm)
             ->shouldReceive('getRequest')->andReturn($this->mockReq);
     }
 

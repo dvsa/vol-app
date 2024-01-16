@@ -9,9 +9,8 @@ use Common\Service\Helper\OppositionHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Interop\Container\ContainerInterface;
-use Laminas\Mvc\Router\Http\TreeRouteStack;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\Router\Http\TreeRouteStack;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Licence\Processing\LicenceProcessingOverviewController;
 use Olcs\Service\Data\SubCategory;
@@ -26,15 +25,13 @@ class LicenceProcessingOverviewControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LicenceProcessingOverviewController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);
         $tableFactory = $container->get(TableFactory::class);
         $viewHelperManager = $container->get(HelperPluginManager::class);
         $oppositionHelper = $container->get(OppositionHelperService::class);
         $complaintsHelper = $container->get(ComplaintsHelperService::class);
-        $navigation = $container->get('navigation');
+        $navigation = $container->get('Navigation');
         $subCategoryDataService = $container->get(SubCategory::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         $router = $container->get(TreeRouteStack::class);
@@ -51,17 +48,5 @@ class LicenceProcessingOverviewControllerFactory implements FactoryInterface
             $flashMessengerHelper,
             $router
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return LicenceProcessingOverviewController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): LicenceProcessingOverviewController
-    {
-        return $this->__invoke($serviceLocator, LicenceProcessingOverviewController::class);
     }
 }

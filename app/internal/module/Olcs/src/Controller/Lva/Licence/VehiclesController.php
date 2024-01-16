@@ -23,7 +23,7 @@ use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Olcs\Controller\Lva\AbstractGenericVehiclesController;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Internal Licence Vehicles Controller

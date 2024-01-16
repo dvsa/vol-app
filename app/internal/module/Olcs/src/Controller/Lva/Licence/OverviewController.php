@@ -20,7 +20,7 @@ use Laminas\View\Model\ViewModel;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
 use Olcs\Service\Helper\LicenceOverviewHelperService;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Internal Licence Overview Controller

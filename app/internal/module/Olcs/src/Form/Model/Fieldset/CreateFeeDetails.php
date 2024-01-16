@@ -35,7 +35,7 @@ class CreateFeeDetails
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator("Date", options={"format": "Y-m-d"})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $createdDate = null;
@@ -62,7 +62,7 @@ class CreateFeeDetails
      *     "label_attributes": {"id": "label-type"},
      *     "empty_option": "Please select"
      * })
-     * @Form\Validator({"name":"Laminas\Validator\NotEmpty","options":{"null"}})
+     * @Form\Validator("Laminas\Validator\NotEmpty", options={"null"})
      * @Form\Type("Select")
      * @Form\Validator({
      *      "name": "ValidateIf",
@@ -91,7 +91,7 @@ class CreateFeeDetails
      *     "label_attributes": {"id": "label-type"},
      *     "empty_option": "Please select"
      * })
-     * @Form\Validator({"name":"Laminas\Validator\NotEmpty","options":{"null"}})
+     * @Form\Validator("Laminas\Validator\NotEmpty", options={"null"})
      * @Form\Type("Select")
      * @Form\Validator({
      *      "name": "ValidateIf",

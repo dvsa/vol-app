@@ -3,19 +3,14 @@
 namespace Olcs\Listener\RouteParam;
 
 use Interop\Container\ContainerInterface;
+use Laminas\EventManager\EventInterface;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
-use Dvsa\Olcs\Transfer\Query\TransportManagerLicence\GetListByVariation;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
-/**
- * Class TransportManagerMarker
- * @package Olcs\Listener\RouteParam
- */
 class TransportManagerMarker implements ListenerAggregateInterface, FactoryInterface
 {
     use ListenerAggregateTrait;
@@ -95,34 +90,32 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
         );
     }
 
-    /**
-     * @param RouteParam $e
-     */
-    public function onTransportManagerMarker(RouteParam $e)
+    public function onTransportManagerMarker(EventInterface $e)
     {
+        $routeParam = $e->getTarget();
+
         $this->getMarkerService()->addData(
             'transportManager',
-            $this->getTransportManager($e->getValue())
+            $this->getTransportManager($routeParam->getValue())
         );
         $this->getMarkerService()->addData(
             'transportManagerApplications',
-            $this->getTransportManagerApplicationData(null, $e->getValue())
+            $this->getTransportManagerApplicationData(null, $routeParam->getValue())
         );
         $this->getMarkerService()->addData(
             'transportManagerLicences',
-            $this->getTransportManagerLicenceData(null, $e->getValue())
+            $this->getTransportManagerLicenceData(null, $routeParam->getValue())
         );
         $this->getMarkerService()->addData('page', 'transportManager');
     }
 
-    /**
-     * @param RouteParam $e
-     */
-    public function onLicenceTransportManagerMarker(RouteParam $e)
+    public function onLicenceTransportManagerMarker(EventInterface $e)
     {
+        $routeParam = $e->getTarget();
+
         $this->getMarkerService()->addData(
             'transportManagerLicences',
-            $this->getTransportManagerLicenceData($e->getValue())
+            $this->getTransportManagerLicenceData($routeParam->getValue())
         );
         $this->getMarkerService()->addData('page', 'transportManagerLicence');
     }
@@ -130,31 +123,22 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
     /**
      * @param RouteParam $e
      */
-    public function onApplicationTransportManagerMarker(RouteParam $e)
+    public function onApplicationTransportManagerMarker(EventInterface $e)
     {
+        $routeParam = $e->getTarget();
+
         $this->getMarkerService()->addData(
             'transportManagerApplications',
-            $this->getTransportManagerApplicationData($e->getValue())
+            $this->getTransportManagerApplicationData($routeParam->getValue())
         );
 
         $routeName = $this->getApplicationService()->getMvcEvent()->getRouteMatch()->getMatchedRouteName();
         if (substr($routeName, 0, 13) == 'lva-variation') {
-            $this->addTransportManagerFromLicenceData($e->getValue());
+            $this->addTransportManagerFromLicenceData($routeParam->getValue());
             $this->getMarkerService()->addData('page', 'transportManagerVariation');
         } else {
             $this->getMarkerService()->addData('page', 'transportManagerApplication');
         }
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator) : TransportManagerMarker
-    {
-        return $this->__invoke($serviceLocator, TransportManagerMarker::class);
     }
 
     public function getTransportManager($tmId)

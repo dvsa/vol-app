@@ -13,10 +13,9 @@ use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\Lva\Licence\VehiclesPsvController;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 class VehiclesPsvControllerFactory implements FactoryInterface
 {
@@ -28,8 +27,7 @@ class VehiclesPsvControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): VehiclesPsvController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
+        
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $formHelper = $container->get(FormHelperService::class);
@@ -57,17 +55,5 @@ class VehiclesPsvControllerFactory implements FactoryInterface
             $guidanceHelper,
             $navigation
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return VehiclesPsvController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): VehiclesPsvController
-    {
-        return $this->__invoke($serviceLocator, VehiclesPsvController::class);
     }
 }

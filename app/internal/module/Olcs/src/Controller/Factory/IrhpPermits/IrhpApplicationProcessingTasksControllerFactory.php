@@ -6,11 +6,11 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Interop\Container\ContainerInterface;
-use Laminas\Mvc\Router\Http\TreeRouteStack;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\Router\Http\TreeRouteStack;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingTasksController;
+use Olcs\Service\Data\SubCategory;
 
 class IrhpApplicationProcessingTasksControllerFactory implements FactoryInterface
 {
@@ -22,32 +22,20 @@ class IrhpApplicationProcessingTasksControllerFactory implements FactoryInterfac
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IrhpApplicationProcessingTasksController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);
         $tableFactory = $container->get(TableFactory::class);
         $viewHelperManager = $container->get(HelperPluginManager::class);
         $router = $container->get(TreeRouteStack::class);
+        $subCategoryDataService = $container->get(SubCategory::class);
 
         return new IrhpApplicationProcessingTasksController(
             $scriptFactory,
             $formHelper,
             $tableFactory,
             $viewHelperManager,
-            $router
+            $router,
+            $subCategoryDataService
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return IrhpApplicationProcessingTasksController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): IrhpApplicationProcessingTasksController
-    {
-        return $this->__invoke($serviceLocator, IrhpApplicationProcessingTasksController::class);
     }
 }

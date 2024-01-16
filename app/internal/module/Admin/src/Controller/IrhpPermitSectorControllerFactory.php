@@ -8,8 +8,7 @@ use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Script\ScriptFactory;
 use Interop\Container\ContainerInterface;
 use Laminas\Navigation\Navigation;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class IrhpPermitSectorControllerFactory implements FactoryInterface
 {
@@ -24,7 +23,7 @@ class IrhpPermitSectorControllerFactory implements FactoryInterface
         $flashMessenger = $container->get(FlashMessengerHelperService::class);
         assert($flashMessenger instanceof FlashMessengerHelperService);
 
-        $navigation = $container->get('navigation');
+        $navigation = $container->get('Navigation');
         assert($navigation instanceof Navigation);
 
         $scriptFactory = $container->get(ScriptFactory::class);
@@ -36,15 +35,6 @@ class IrhpPermitSectorControllerFactory implements FactoryInterface
             $flashMessenger,
             $navigation,
             $scriptFactory
-        );
-    }
-    public function createService(ServiceLocatorInterface $serviceLocator): IrhpPermitSectorController
-    {
-        $container = method_exists($serviceLocator, 'getServiceLocator') ? $serviceLocator->getServiceLocator() : $serviceLocator;
-
-        return $this->__invoke(
-            $container,
-            IrhpPermitSectorController::class
         );
     }
 }

@@ -2,25 +2,23 @@
 
 namespace OlcsTest\Form\Element;
 
+use Interop\Container\ContainerInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Olcs\Form\Element\SubmissionSections;
 use Olcs\Form\Element\SubmissionSectionsFactory;
 use Mockery as m;
 use Dvsa\OlcsTest\Controller\ControllerPluginManagerHelper;
 
-/**
- * Class SubmissionSectionsFactoryTest
- * @package OlcsTest\Form\Element
- */
 class SubmissionSectionsFactoryTest extends MockeryTestCase
 {
-    public function testCreateService()
+    public function testInvoke()
     {
         $caseId = 84;
         $transportManagerId = 3;
         $pluginManagerHelper = new ControllerPluginManagerHelper();
 
         $mockPluginManager = $pluginManagerHelper->getMockPluginManager(['params' => 'Params']);
-        $mockParamsPlugin = $mockPluginManager->get('params', '');
+        $mockParamsPlugin = $mockPluginManager->get('params');
         $mockParamsPlugin->shouldReceive('fromRoute')->with('case')
             ->andReturn($caseId);
 
@@ -37,7 +35,7 @@ class SubmissionSectionsFactoryTest extends MockeryTestCase
 
         $mockFormElementManager = m::mock('\Laminas\Form\FormElementManager');
 
-        $mockServiceLocator = m::mock('\Laminas\ServiceManager\ServiceLocatorInterface');
+        $mockServiceLocator = m::mock(ContainerInterface::class);
 
         $mockServiceLocator->shouldReceive('get')->with('FormElementManager')
             ->andReturn($mockFormElementManager);
@@ -50,7 +48,6 @@ class SubmissionSectionsFactoryTest extends MockeryTestCase
         $mockServiceLocator->shouldReceive('get')->with('params')
             ->andReturn($mockParamsPlugin);
 
-
         $mockHiddenElement = m::mock('Laminas\Form\Element\Hidden');
         $mockServiceLocator->shouldReceive('get')->with('Hidden')
             ->andReturn($mockHiddenElement);
@@ -62,10 +59,6 @@ class SubmissionSectionsFactoryTest extends MockeryTestCase
         $mockDynamicMultiCheckboxElement = m::mock('\Common\Form\Element\DynamicMultiCheckbox');
         $mockDynamicMultiCheckboxElement->shouldReceive('setOptions')->with(m::type('array'));
 
-
-
-
-        $mockFormElementManager->shouldReceive('getServiceLocator')->andReturn($mockServiceLocator);
         $mockFormElementManager->shouldReceive('get')->with('Hidden')->andReturn($mockHiddenElement);
         $mockFormElementManager->shouldReceive('get')->with('DynamicSelect')->andReturn($mockDynamicSelectElement);
         $mockFormElementManager->shouldReceive('get')->with('Submit')->andReturn($mockSubmitElement);
@@ -74,6 +67,6 @@ class SubmissionSectionsFactoryTest extends MockeryTestCase
             ->andReturn($mockDynamicMultiCheckboxElement);
 
         $sut = new SubmissionSectionsFactory();
-        $sut->createService($mockFormElementManager);
+        $sut->__invoke($mockServiceLocator, SubmissionSections::class);
     }
 }

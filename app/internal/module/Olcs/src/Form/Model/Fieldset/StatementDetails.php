@@ -48,7 +48,7 @@ class StatementDetails extends CaseBase
      * @Form\Options({"label":"Requestors first name"})
      * @Form\Type("Text")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":2,"max":35}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":2,"max":35})
      */
     public $requestorsForename = null;
 
@@ -57,7 +57,7 @@ class StatementDetails extends CaseBase
      * @Form\Options({"label":"Requestors last name"})
      * @Form\Type("Text")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":2,"max":35}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":2,"max":35})
      */
     public $requestorsFamilyName = null;
 
@@ -66,7 +66,7 @@ class StatementDetails extends CaseBase
      * @Form\Options({"label":"Requestor body"})
      * @Form\Type("Text")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":2,"max":40}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":2,"max":40})
      */
     public $requestorsBody = null;
 
@@ -80,7 +80,7 @@ class StatementDetails extends CaseBase
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      * @Form\Validator({
      *      "name": "DateCompare",
@@ -99,7 +99,7 @@ class StatementDetails extends CaseBase
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $requestedDate = null;
@@ -114,7 +114,7 @@ class StatementDetails extends CaseBase
      * @Form\Type("DateSelect")
      * @Form\Required(false)
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
      * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $issuedDate = null;
@@ -128,7 +128,7 @@ class StatementDetails extends CaseBase
      *     "category": "contact_method"
      * })
      * @Form\Type("DynamicSelect")
-     * @Form\Validator({"name": "NotEmpty", "options": {"null"}})
+     * @Form\Validator("NotEmpty", options={"null"})
      */
     public $contactType = null;
 
@@ -172,7 +172,7 @@ class StatementDetails extends CaseBase
      * })
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":5,"max":4000}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":5,"max":4000})
      */
     public $authorisersDecision = null;
 }

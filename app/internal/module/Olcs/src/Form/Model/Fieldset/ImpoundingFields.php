@@ -30,10 +30,10 @@ class ImpoundingFields
      *     "render_delimiters": false
      * })
      * @Form\Type("DateSelect")
-     * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
-     * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
+     * @Form\Filter("DateSelectNullifier")
+     * @Form\Validator("\Common\Validator\Date")
+     * @Form\Validator("Date", options={"format": "Y-m-d"})
+     * @Form\Validator("\Common\Form\Elements\Validators\DateNotInFuture")
      */
     public $applicationReceiptDate = null;
 
@@ -44,8 +44,8 @@ class ImpoundingFields
      * })
      *
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":1,"max":20}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":1,"max":20})
      */
     public $vrm = null;
 
@@ -72,9 +72,9 @@ class ImpoundingFields
      *     "render_delimiters": true,
      *     "pattern": "d MMMM y '</fieldset><fieldset><div class=""field""><label for=hearingDate>Hearing time</label>'HH:mm:ss'</div>'"
      * })
-     * @Form\Filter({"name":"Laminas\Filter\DateTimeSelect", "options":{"null_on_empty":true}})
-     * @Form\Validator({"name": "ValidateIf",
-     *      "options":{
+     * @Form\Filter("Laminas\Filter\DateTimeSelect", options={"null_on_empty":true})
+     * @Form\Validator("ValidateIf",
+     *      options={
      *          "context_field": "impoundingType",
      *          "context_values": {"impt_hearing"},
      *          "allow_empty" : true,
@@ -92,7 +92,7 @@ class ImpoundingFields
      *              }
      *          }
      *      }
-     * })
+     * )
      */
     public $hearingDate = null;
 
@@ -107,7 +107,7 @@ class ImpoundingFields
      *     "disable_inarray_validator": false,
      *     "other_option" : true
      * })
-     * @Form\Filter({"name":"Common\Filter\NullToArray"})
+     * @Form\Filter("Common\Filter\NullToArray")
      */
     public $venue = null;
 
@@ -116,10 +116,10 @@ class ImpoundingFields
      * @Form\Type("Text")
      * @Form\Options({"label":"Other hearing location"})
      * @Form\Attributes({"class":"medium","id":"venueOther"})
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\NotEmpty","options":{"null"}})
-     * @Form\Validator({"name": "ValidateIf",
-     *      "options":{
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\NotEmpty", options={"null"})
+     * @Form\Validator("ValidateIf",
+     *      options={
      *          "context_field": "impoundingType",
      *          "context_values": {"impt_hearing"},
      *          "validators": {
@@ -137,7 +137,7 @@ class ImpoundingFields
      *              }
      *          }
      *      }
-     * })
+     * )
      */
     public $venueOther = null;
 
@@ -151,7 +151,7 @@ class ImpoundingFields
      *     "disable_inarray_validator": false
      * })
      * @Form\Type("DynamicSelect")
-     * @Form\Filter({"name":"Common\Filter\NullToArray"})
+     * @Form\Filter("Common\Filter\NullToArray")
      */
     public $presidingTc = null;
 
@@ -165,7 +165,7 @@ class ImpoundingFields
      *     "category": "impound_outcome"
      * })
      * @Form\Type("DynamicSelect")
-     * @Form\Filter({"name":"Common\Filter\NullToArray"})
+     * @Form\Filter("Common\Filter\NullToArray")
      */
     public $outcome = null;
 
@@ -178,10 +178,10 @@ class ImpoundingFields
      * })
      * @Form\Required(false)
      * @Form\Type("DateSelect")
-     * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
-     * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
+     * @Form\Filter("DateSelectNullifier")
+     * @Form\Validator("\Common\Validator\Date")
+     * @Form\Validator("Date", options={"format": "Y-m-d"})
+     * @Form\Validator("\Common\Form\Elements\Validators\DateNotInFuture")
      */
     public $outcomeSentDate = null;
 
@@ -191,7 +191,7 @@ class ImpoundingFields
      * @Form\Required(false)
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":5,"max":4000}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":5,"max":4000})
      */
     public $notes = null;
 }

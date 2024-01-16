@@ -13,10 +13,9 @@ use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
 use Laminas\Form\FormElementManager;
 use Laminas\Mvc\MvcEvent;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\Session\Container;
-use ZfcRbac\Identity\IdentityProviderInterface;
+use LmcRbacMvc\Identity\IdentityProviderInterface;
 
 /**
  * Class HeaderSearch
@@ -121,18 +120,6 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
             ->get('placeholder')
             ->getContainer('searchFilter')
             ->set($searchFilterForm);
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator Service locator
-     *
-     * @return HeaderSearch
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): HeaderSearch
-    {
-        return $this->__invoke($serviceLocator, HeaderSearch::class);
     }
 
     /**

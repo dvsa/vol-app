@@ -28,7 +28,7 @@ class PublicInquiryHearingFields extends Base
      * @Form\Type("Text")
      * @Form\Attributes({"class":"medium","id":"venueOther", "required":false})
      * @Form\Options({"label":"Other venue"})
-     * @Form\Validator({"name": "NotEmpty", "options":{"null"}})
+     * @Form\Validator("NotEmpty", options={"null"})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "venue",
@@ -57,7 +57,7 @@ class PublicInquiryHearingFields extends Base
      * })
      * @Form\Filter({"name":"DateTimeSelect", "options":{"null_on_empty":true}})
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d H:i:s"}})
+     * @Form\Validator("Date", options={"format": "Y-m-d H:i:s"})
      */
     public $hearingDate;
 
@@ -106,7 +106,7 @@ class PublicInquiryHearingFields extends Base
      * @Form\Type("Text")
      * @Form\Attributes({"id":"","placeholder":"","class":"medium"})
      * @Form\Options({"label": "Number of witnesses"})
-     * @Form\Validator({"name":"Digits"})
+     * @Form\Validator("Digits")
      */
     public $witnesses;
 
@@ -160,7 +160,7 @@ class PublicInquiryHearingFields extends Base
      *     "create_empty_option": true,
      * })
      * @Form\Filter({"name":"DateSelect", "options":{"null_on_empty":true}})
-     * @Form\Validator({"name": "NotEmpty", "options":{"array"}})
+     * @Form\Validator("NotEmpty", options={"array"})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "isCancelled",
@@ -181,8 +181,8 @@ class PublicInquiryHearingFields extends Base
      * @Form\Type("TextArea")
      * @Form\Attributes({"class":"extra-long","id":"cancelledReason", "required":false})
      * @Form\Options({"label":"Cancelled reason"})
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name": "NotEmpty", "options":{"null"}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("NotEmpty", options={"null"})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "isCancelled",
@@ -215,7 +215,7 @@ class PublicInquiryHearingFields extends Base
      *     "field": "adjournedDate"
      * })
      * @Form\Filter({"name":"DateTimeSelect", "options":{"null_on_empty":true}})
-     * @Form\Validator({"name": "NotEmpty", "options":{"array"}})
+     * @Form\Validator("NotEmpty", options={"array"})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "isAdjourned",
@@ -236,7 +236,7 @@ class PublicInquiryHearingFields extends Base
      * @Form\Type("TextArea")
      * @Form\Attributes({"class":"extra-long","id":"", "required":false})
      * @Form\Options({"label":"Adjourned reason"})
-     * @Form\Validator({"name": "NotEmpty", "options":{"null"}})
+     * @Form\Validator("NotEmpty", options={"null"})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "isAdjourned",
@@ -262,7 +262,7 @@ class PublicInquiryHearingFields extends Base
      *     "use_groups": true,
      *     "empty_option": "Add definition option"
      * })
-     * @Form\Filter({"name":"Common\Filter\NullToArray"})
+     * @Form\Filter("Common\Filter\NullToArray")
      */
     public $definition = null;
 
@@ -272,7 +272,7 @@ class PublicInquiryHearingFields extends Base
      * @Form\Attributes({"class":"extra-long    js-definition-target","id":""})
      * @Form\Options({"label":"Details to be published"})
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":5, "max":4000}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":5, "max":4000})
      */
     public $details = null;
 

@@ -17,7 +17,7 @@ use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Interfaces\VariationControllerInterface;
 use Olcs\Controller\Lva\Traits;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Internal Variation Type Of Licence Controller

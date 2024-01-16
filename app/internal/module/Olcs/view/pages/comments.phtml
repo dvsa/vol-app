@@ -4,7 +4,7 @@ $form = $this->placeholder('form')->getValue();
 <?php if (count($form) > 0): ?>
 
 <h4>
-    <?php echo $this->navigation('navigation')->findOneBy('active', 1)->getLabel(); ?>
+    <?php echo $this->navigation('navigation')->findOneBy('active', true)->getLabel(); ?>
     <?php echo $this->translate('comments'); ?>
 </h4>
 

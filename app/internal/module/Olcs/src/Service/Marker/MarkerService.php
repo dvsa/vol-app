@@ -3,13 +3,8 @@
 namespace Olcs\Service\Marker;
 
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
-/**
- * MarkerService
- *
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
 class MarkerService implements FactoryInterface
 {
     /**
@@ -44,16 +39,6 @@ class MarkerService implements FactoryInterface
     }
 
     /**
-     * @param \Laminas\ServiceManager\ServiceLocatorInterface $serviceLocator
-     *
-     * @return MarkerService
-     */
-    public function createService(\Laminas\ServiceManager\ServiceLocatorInterface $serviceLocator) : MarkerService
-    {
-        return $this->__invoke($serviceLocator, MarkerService::class);
-    }
-
-    /**
      * Add data to populate markers
      *
      * @param string $key  A key eg "licence", "application"
@@ -74,8 +59,8 @@ class MarkerService implements FactoryInterface
         $markers = [];
 
         /* @var $marker MarkerInterface */
-        $markerServices = $this->getMarkerPluginManager()->getRegisteredServices();
-        foreach ($markerServices['invokableClasses'] as $markerName) {
+        $markerServices = $this->getMarkerPluginManager()->getMarkers();
+        foreach ($markerServices as $markerName) {
             $marker = $this->getMarkerPluginManager()->get($markerName);
 
             // set the data we have into the marker, it can then workout whether it can render or not

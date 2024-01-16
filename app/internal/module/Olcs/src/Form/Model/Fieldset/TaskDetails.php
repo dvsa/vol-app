@@ -37,9 +37,9 @@ class TaskDetails
      *     "max_year_delta": "+10"
      * })
      * @Form\Type("DateSelect")
-     * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
-     * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Validator("\Common\Validator\Date")
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
+     * @Form\Filter("DateSelectNullifier"})
      */
     public $actionDate = null;
 
@@ -83,8 +83,8 @@ class TaskDetails
      *     "label": "tasks.data.description"
      * })
      * @Form\Type("TextArea")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":2,"max":255}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":2,"max":255})
      */
     public $description = null;
 }

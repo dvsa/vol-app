@@ -7,8 +7,7 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Interop\Container\ContainerInterface;
 use Laminas\Navigation\Navigation;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
 
 class ConditionUndertakingControllerFactory implements FactoryInterface
@@ -24,7 +23,7 @@ class ConditionUndertakingControllerFactory implements FactoryInterface
         $flashMessenger = $container->get(FlashMessengerHelperService::class);
         assert($flashMessenger instanceof FlashMessengerHelperService);
 
-        $navigation = $container->get('navigation');
+        $navigation = $container->get('Navigation');
         assert($navigation instanceof Navigation);
 
         $viewHelperManager = $container->get('ViewHelperManager');
@@ -36,15 +35,6 @@ class ConditionUndertakingControllerFactory implements FactoryInterface
             $flashMessenger,
             $navigation,
             $viewHelperManager
-        );
-    }
-    public function createService(ServiceLocatorInterface $serviceLocator): ConditionUndertakingController
-    {
-        $container = method_exists($serviceLocator, 'getServiceLocator') ? $serviceLocator->getServiceLocator() : $serviceLocator;
-
-        return $this->__invoke(
-            $container,
-            ConditionUndertakingController::class
         );
     }
 }

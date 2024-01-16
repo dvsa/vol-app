@@ -11,6 +11,7 @@ namespace Olcs;
 use Common\Exception\ResourceNotFoundException;
 use Laminas\Mvc\ModuleRouteListener;
 use Laminas\Mvc\MvcEvent;
+use Laminas\Navigation\Service\DefaultNavigationFactory;
 use Laminas\View\Model\ViewModel;
 use Olcs\Listener\HeaderSearch;
 use Olcs\Listener\RouteParams;
@@ -45,7 +46,7 @@ class Module
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
 
-        $viewHelperManager = $e->getApplication()->getServiceManager()->get('viewHelperManager');
+        $viewHelperManager = $e->getApplication()->getServiceManager()->get('ViewHelperManager');
         $placeholder = $viewHelperManager->get('placeholder');
 
         $placeholder->getContainer('pageTitle')->setSeparator(' / ');
@@ -82,8 +83,11 @@ class Module
             }
         );
 
-        $eventManager->attach($e->getApplication()->getServiceManager()->get(RouteParams::class));
-        $eventManager->attach($e->getApplication()->getServiceManager()->get(HeaderSearch::class));
+        $headerSearch = $e->getApplication()->getServiceManager()->get(HeaderSearch::class);
+        $eventManager->attach(MvcEvent::EVENT_DISPATCH, [$headerSearch, 'onDispatch']);
+
+        $routeParams = $e->getApplication()->getServiceManager()->get(RouteParams::class);
+        $eventManager->attach(MvcEvent::EVENT_DISPATCH, [$routeParams, 'onDispatch']);
 
         $eventManager->attach(
             MvcEvent::EVENT_ROUTE,
@@ -97,13 +101,13 @@ class Module
                 $container = $e->getApplication()->getServiceManager();
                 $config = $container->get('Config');
 
+                /** @var RouteParams $routeParamsListener */
                 $routeParamsListener = $container->get(RouteParams::class);
-
                 foreach ($config['route_param_listeners'] as $interface => $listeners) {
                     if (is_a($controllerFQCN, $interface, true)) {
                         foreach ($listeners as $listener) {
                             $listenerInstance = $container->get($listener);
-                            $routeParamsListener->getEventManager()->attach($listenerInstance);
+                            $listenerInstance->attach($routeParamsListener->getEventManager());
                         }
                     }
                 }

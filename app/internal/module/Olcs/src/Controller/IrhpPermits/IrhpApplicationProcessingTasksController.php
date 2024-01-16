@@ -2,8 +2,14 @@
 
 namespace Olcs\Controller\IrhpPermits;
 
+use Common\Service\Helper\FormHelperService;
+use Common\Service\Script\ScriptFactory;
+use Common\Service\Table\TableFactory;
+use Laminas\Router\Http\TreeRouteStack;
+use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Interfaces\IrhpApplicationControllerInterface;
 use Olcs\Controller\Traits;
+use Olcs\Service\Data\SubCategory;
 
 /**
  * Irhp Application Processing Tasks Controller
@@ -13,6 +19,20 @@ class IrhpApplicationProcessingTasksController extends AbstractIrhpPermitProcess
 {
     use Traits\TaskActionTrait {
         Traits\TaskActionTrait::getTaskForm as traitGetTaskForm;
+    }
+
+    protected SubCategory $subCategoryDataService;
+
+    public function __construct(
+        ScriptFactory $scriptFactory,
+        FormHelperService $formHelper,
+        TableFactory $tableFactory,
+        HelperPluginManager $viewHelperManager,
+        TreeRouteStack $router,
+        SubCategory $subCategoryDataService)
+    {
+        $this->subCategoryDataService = $subCategoryDataService;
+        parent::__construct($scriptFactory, $formHelper, $tableFactory, $viewHelperManager, $router);
     }
 
     /**

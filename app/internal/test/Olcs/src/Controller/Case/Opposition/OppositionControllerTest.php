@@ -125,11 +125,11 @@ class OppositionControllerTest extends MockeryTestCase
                 'redirect' => 'Redirect'
             ]
         );
-        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams = $mockPluginManager->get('params');
         $mockParams->shouldReceive('fromRoute')->with('opposition')->andReturn($oppositionId);
         $mockParams->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
 
-        $mockRedirect = $mockPluginManager->get('redirect', '');
+        $mockRedirect = $mockPluginManager->get('redirect');
         $mockRedirect->shouldReceive('toRoute')->once()->with(
             'case_licence_docs_attachments/entity/generate',
             [

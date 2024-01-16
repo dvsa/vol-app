@@ -2,39 +2,33 @@
 
 namespace OlcsTest\Service\Marker;
 
+use Interop\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
+use Olcs\Service\Marker\MarkerPluginManager;
+use Olcs\Service\Marker\MarkerService;
 
-/**
- * MarkerServiceTest
- *
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
 class MarkerServiceTest extends TestCase
 {
-    /**
-     *
-     * @var \Olcs\Service\Marker\MarkerService
-     */
     protected $sut;
 
     public function setUp(): void
     {
-        $this->sut = new \Olcs\Service\Marker\MarkerService();
+        $this->sut = new MarkerService();
         parent::setUp();
     }
 
-    public function testCreateService()
+    public function testInvoke()
     {
-        $mockMarkerPlugin = m::mock(\Olcs\Service\Marker\MarkerPluginManager::class);
+        $mockMarkerPlugin = m::mock(MarkerPluginManager::class);
 
-        $mockSl = m::mock(\Laminas\ServiceManager\ServiceLocatorInterface::class);
-        $mockSl->shouldReceive('get')->with(\Olcs\Service\Marker\MarkerPluginManager::class)->once()
+        $mockSl = m::mock(ContainerInterface::class);
+        $mockSl->expects('get')->with(MarkerPluginManager::class)
             ->andReturn($mockMarkerPlugin);
 
-        $obj = $this->sut->createService($mockSl);
+        $obj = $this->sut->__invoke($mockSl, MarkerService::class);
 
-        $this->assertInstanceOf(\Olcs\Service\Marker\MarkerService::class, $obj);
+        $this->assertInstanceOf(MarkerService::class, $obj);
         $this->assertSame($mockMarkerPlugin, $this->sut->getMarkerPluginManager());
     }
 
@@ -44,17 +38,13 @@ class MarkerServiceTest extends TestCase
 
         $this->sut->addData('KEY', $data);
 
-        $mockMarkerPlugin = m::mock(\Olcs\Service\Marker\MarkerPluginManager::class);
+        $mockMarkerPlugin = m::mock(MarkerPluginManager::class);
         $this->sut->setMarkerPluginManager($mockMarkerPlugin);
 
         $mockMarker1 = m::mock();
         $mockMarker2 = m::mock();
 
-        $mockMarkerPlugin->shouldReceive('getRegisteredServices')->with()->once()->andReturn(
-            [
-                'invokableClasses' => ['mockMarker1', 'mockMarker2']
-            ]
-        );
+        $mockMarkerPlugin->shouldReceive('getMarkers')->with()->once()->andReturn(['mockMarker1', 'mockMarker2']);
 
         $mockMarkerPlugin->shouldReceive('get')->with('mockMarker1')->once()->andReturn($mockMarker1);
         $mockMarkerPlugin->shouldReceive('get')->with('mockMarker2')->once()->andReturn($mockMarker2);

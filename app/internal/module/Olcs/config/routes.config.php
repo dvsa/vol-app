@@ -26,7 +26,7 @@ use Olcs\Controller\IrhpPermits\IrhpApplicationProcessingReadHistoryController;
 use Olcs\Controller\Bus\Details\BusDetailsController;
 use Olcs\Controller\Bus\Service\BusServiceController;
 use Olcs\Controller\SearchController;
-use Laminas\Mvc\Router\Http\Segment;
+use Laminas\Router\Http\Segment;
 use Olcs\Controller\TransportManager as TmCntr;
 use Olcs\Controller\Operator as OperatorControllers;
 use Olcs\Controller\Application as ApplicationControllers;
@@ -279,7 +279,7 @@ $routes = [
                 'child_routes' => [
                     'GET' => [
                         'may_terminate' => true,
-                        'type' => \Laminas\Mvc\Router\Http\Method::class,
+                        'type' => \Laminas\Router\Http\Method::class,
                         'options' => [
                             'verb' => 'GET',
                             'defaults' => [
@@ -290,7 +290,7 @@ $routes = [
                     ],
                     'POST' => [
                         'may_terminate' => true,
-                        'type' => \Laminas\Mvc\Router\Http\Method::class,
+                        'type' => \Laminas\Router\Http\Method::class,
                         'options' => [
                             'verb' => 'POST',
                             'defaults' => [
@@ -301,14 +301,14 @@ $routes = [
                     ],
                     'withdraw' => [
                         'may_terminate' => false,
-                        'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                        'type' => \Laminas\Router\Http\Segment::class,
                         'options' => [
                             'route' => 'withdraw[/]',
                         ],
                         'child_routes' => [
                             'GET' => [
                                 'may_terminate' => true,
-                                'type' => \Laminas\Mvc\Router\Http\Method::class,
+                                'type' => \Laminas\Router\Http\Method::class,
                                 'options' => [
                                     'verb' => 'GET',
                                     'defaults' => [
@@ -319,7 +319,7 @@ $routes = [
                             ],
                             'POST' => [
                                 'may_terminate' => true,
-                                'type' => \Laminas\Mvc\Router\Http\Method::class,
+                                'type' => \Laminas\Router\Http\Method::class,
                                 'options' => [
                                     'verb' => 'POST',
                                     'defaults' => [
@@ -332,7 +332,7 @@ $routes = [
                     ],
                     'surrender-checks' => [
                         'may_terminate' => true,
-                        'type' => \Laminas\Mvc\Router\Http\Segment::class,
+                        'type' => \Laminas\Router\Http\Segment::class,
                         'options' => [
                             'route' => 'surrender-checks',
                             'defaults' => [
@@ -2096,7 +2096,7 @@ $routes['lva-licence']['child_routes'] = array_merge(
             'options' => array(
                 'route' => '',
                 'defaults' => array(
-                    'controller' => 'LvaLicence',
+                    'controller' => \Olcs\Controller\Lva\Licence\OverviewController::class,
                     'action' => 'index'
                 )
             )

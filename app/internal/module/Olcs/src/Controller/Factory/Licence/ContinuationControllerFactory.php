@@ -7,9 +7,9 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
+use Laminas\Validator\Translator\TranslatorInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
-use Laminas\Validator\LessThan;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Licence\ContinuationController;
 
@@ -23,8 +23,6 @@ class ContinuationControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ContinuationController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);
         $tableFactory = $container->get(TableFactory::class);
@@ -51,17 +49,5 @@ class ContinuationControllerFactory implements FactoryInterface
             $flashMessengerHelper,
             $lessThanValidator
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return ContinuationController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): ContinuationController
-    {
-        return $this->__invoke($serviceLocator, ContinuationController::class);
     }
 }

@@ -11,8 +11,7 @@ use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Operator\Cases\UnlicensedCasesOperatorController;
 use Olcs\Service\Data\Licence;
@@ -27,8 +26,6 @@ class UnlicensedCasesOperatorControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): UnlicensedCasesOperatorController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);
         $tableFactory = $container->get(TableFactory::class);
@@ -39,7 +36,7 @@ class UnlicensedCasesOperatorControllerFactory implements FactoryInterface
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         $licenceDataService = $container->get(Licence::class);
         $queryService = $container->get(QueryService::class);
-        $navigation = $container->get('navigation');
+        $navigation = $container->get('Navigation');
 
         return new UnlicensedCasesOperatorController(
             $scriptFactory,
@@ -54,17 +51,5 @@ class UnlicensedCasesOperatorControllerFactory implements FactoryInterface
             $queryService,
             $navigation,
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return UnlicensedCasesOperatorController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): UnlicensedCasesOperatorController
-    {
-        return $this->__invoke($serviceLocator, UnlicensedCasesOperatorController::class);
     }
 }

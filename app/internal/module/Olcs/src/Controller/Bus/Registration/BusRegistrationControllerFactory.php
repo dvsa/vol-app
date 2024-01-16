@@ -4,8 +4,7 @@ namespace Olcs\Controller\Bus\Registration;
 
 use Common\Service\Helper\FlashMessengerHelperService;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class BusRegistrationControllerFactory implements FactoryInterface
 {
@@ -16,15 +15,6 @@ class BusRegistrationControllerFactory implements FactoryInterface
 
         return new BusRegistrationController(
             $flashMessengerHelper
-        );
-    }
-
-    public function createService(ServiceLocatorInterface $serviceLocator): BusRegistrationController
-    {
-        $container = method_exists($serviceLocator, 'getServiceLocator') ? $serviceLocator->getServiceLocator() : $serviceLocator;
-        return $this->__invoke(
-            $container,
-            BusRegistrationController::class
         );
     }
 }

@@ -19,7 +19,7 @@ use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Olcs\Controller\Lva\AbstractInterimController;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Internal Application Interim Controller

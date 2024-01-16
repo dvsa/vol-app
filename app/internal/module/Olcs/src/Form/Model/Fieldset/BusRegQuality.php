@@ -41,19 +41,18 @@ class BusRegQuality extends BusRegDetails
      *     }
      * })
      *
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Filter("Laminas\Filter\StringTrim")
      *
      * @Form\Type("Textarea")
      * @Form\Required(false)
      *
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Filter("Laminas\Filter\StringTrim")
      *
-     * @Form\Validator({
-     *      "name": "Laminas\Validator\StringLength",
-     *      "options": {
+     * @Form\Validator("Laminas\Validator\StringLength",
+     *      options={
      *          "max":4000
      *      }
-     * })
+     * )
      */
     public $qualityPartnershipDetails;
 
@@ -110,14 +109,13 @@ class BusRegQuality extends BusRegDetails
      * @Form\Type("Textarea")
      * @Form\Required(false)
      *
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Filter("Laminas\Filter\StringTrim")
      *
-     * @Form\Validator({
-     *      "name": "Laminas\Validator\StringLength",
-     *      "options": {
+     * @Form\Validator("Laminas\Validator\StringLength",
+     *      options={
      *          "max":4000
      *      }
-     * })
+     * )
      */
     public $qualityContractDetails;
 }

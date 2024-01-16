@@ -1,10 +1,5 @@
 <?php
 
-/**
- * Transport Manager Furniture Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace OlcsTest\Listener\RouteParam;
 
 use Common\Exception\ResourceNotFoundException;
@@ -12,20 +7,16 @@ use Common\RefData;
 use Common\Service\Cqrs\Command\CommandSender;
 use Common\Service\Cqrs\Query\QuerySender;
 use Dvsa\Olcs\Transfer\Query\Tm\TransportManager as TransportManagerQry;
+use Interop\Container\ContainerInterface;
+use Laminas\EventManager\Event;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParam\TransportManagerFurniture;
 use Mockery as m;
 use Laminas\EventManager\EventManagerInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\View\HelperPluginManager;
 use Laminas\View\Model\ViewModel;
 
-/**
- * Transport Manager Furniture Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class TransportManagerFurnitureTest extends TestCase
 {
     /**
@@ -45,13 +36,13 @@ class TransportManagerFurnitureTest extends TestCase
 
         $this->sut = new TransportManagerFurniture();
 
-        $sl = m::mock(ServiceLocatorInterface::class);
+        $sl = m::mock(ContainerInterface::class);
 
         $sl->shouldReceive('get')->with('ViewHelperManager')->andReturn($this->mockViewHelperManager);
         $sl->shouldReceive('get')->with('QuerySender')->andReturn($this->mockQuerySender);
         $sl->shouldReceive('get')->with('CommandSender')->andReturn($this->mockCommandSender);
 
-        $this->sut->createService($sl);
+        $this->sut->__invoke($sl, TransportManagerFurniture::class);
     }
 
     public function testAttach()
@@ -69,8 +60,10 @@ class TransportManagerFurnitureTest extends TestCase
     {
         $this->expectException(ResourceNotFoundException::class);
 
-        $event = m::mock(RouteParam::class);
-        $event->shouldReceive('getValue')->andReturn(111);
+        $routeParam = new RouteParam();
+        $routeParam->setValue(111);
+
+        $event = new Event(null, $routeParam);
 
         $response = m::mock();
         $response->shouldReceive('isOk')->andReturn(false);
@@ -88,8 +81,10 @@ class TransportManagerFurnitureTest extends TestCase
             'id' => RefData::TRANSPORT_MANAGER_STATUS_CURRENT,
             'description' => 'Current'
         ];
-        $event = m::mock(RouteParam::class);
-        $event->shouldReceive('getValue')->andReturn(111);
+        $routeParam = new RouteParam();
+        $routeParam->setValue(111);
+
+        $event = new Event(null, $routeParam);
 
         $mockPlaceholder = m::mock();
         $mockPlaceholder->shouldReceive('getContainer')

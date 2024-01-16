@@ -4,20 +4,16 @@ namespace Olcs\Listener\RouteParam;
 
 use Interop\Container\ContainerInterface;
 use Common\RefData;
+use Laminas\EventManager\EventInterface;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Common\Exception\ResourceNotFoundException;
 
-/**
- * Class Application
- * @package Olcs\Listener\RouteParam
- */
 class Application implements ListenerAggregateInterface, FactoryInterface
 {
     use ListenerAggregateTrait;
@@ -140,15 +136,14 @@ class Application implements ListenerAggregateInterface, FactoryInterface
         );
     }
 
-    /**
-     * @param RouteParam $e
-     */
-    public function onApplication(RouteParam $e)
+    public function onApplication(EventInterface $e)
     {
-        $id = $e->getValue();
+        $routeParam = $e->getTarget();
+
+        $id = $routeParam->getValue();
         $application = $this->getApplication($id);
 
-        $e->getTarget()->trigger('licence', $application['licence']['id']);
+        $routeParam->getTarget()->trigger('licence', $application['licence']['id']);
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
         $placeholder->getContainer('application')->set($application);
@@ -256,17 +251,6 @@ class Application implements ListenerAggregateInterface, FactoryInterface
         }
 
         return $response->getResult();
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator) : Application
-    {
-        return $this->__invoke($serviceLocator, Application::class);
     }
 
     protected function shouldShowWithdrawButton($status)

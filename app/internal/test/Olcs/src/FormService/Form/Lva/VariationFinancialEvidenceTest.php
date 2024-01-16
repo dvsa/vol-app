@@ -4,11 +4,16 @@ namespace OlcsTest\FormService\Form\Lva;
 
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Helper\UrlHelperService;
+use Common\Validator\ValidateIf;
+use Laminas\Form\ElementInterface;
+use Laminas\InputFilter\InputFilter;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\Validator\ValidatorChain;
+use Laminas\Validator\ValidatorPluginManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\VariationFinancialEvidence;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * @covers Olcs\FormService\Form\Lva\VariationFinancialEvidence
@@ -33,6 +38,9 @@ class VariationFinancialEvidenceTest extends MockeryTestCase
         $this->fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
         $this->urlHelper = m::mock(UrlHelperService::class);
         $this->translator = m::mock(TranslationHelperService::class);
+        $this->validatorPluginManager = m::mock(ValidatorPluginManager::class);
+        $validateIf = $this->createMock(ValidateIf::class);
+        $this->validatorPluginManager->shouldReceive('get')->with(ValidateIf::class)->andReturn($validateIf);
 
         $serviceManager = $this->createMock(ServiceLocatorInterface::class);
         $serviceManager->method('get')->willReturnMap([
@@ -42,7 +50,13 @@ class VariationFinancialEvidenceTest extends MockeryTestCase
 
         $this->fsm->shouldReceive('getServiceLocator')->andReturn($serviceManager);
 
-        $this->sut = new VariationFinancialEvidence($this->formHelper, m::mock(AuthorizationService::class), $this->translator, $this->urlHelper);
+        $this->sut = new VariationFinancialEvidence(
+            $this->formHelper,
+            m::mock(\LmcRbacMvc\Service\AuthorizationService::class),
+            $this->translator,
+            $this->urlHelper,
+            $this->validatorPluginManager
+        );
     }
 
     public function testGetForm()
@@ -67,6 +81,17 @@ class VariationFinancialEvidenceTest extends MockeryTestCase
         // Mocks
         $mockForm = m::mock();
 
+        $validatorChain = m::mock(ValidatorChain::class);
+        $validatorChain->shouldReceive('attach');
+        $validatorChain->shouldReceive('getValidators')->andReturn([]);
+
+        $inputFilter = m::mock(InputFilter::class);
+        $inputFilter->shouldReceive('get')->andReturnSelf();
+        $inputFilter->shouldReceive('setRequired');
+        $inputFilter->shouldReceive('getValidatorChain')->andReturn($validatorChain);
+
+        $mockForm->shouldReceive('getInputFilter')->andReturn($inputFilter);
+
         $formActions = m::mock();
         $formActions->shouldReceive('has')->with('saveAndContinue')->andReturn(true);
         $formActions->shouldReceive('remove')->once()->with('saveAndContinue');
@@ -77,7 +102,7 @@ class VariationFinancialEvidenceTest extends MockeryTestCase
         $mockForm->shouldReceive('get')
             ->with('evidence')
             ->andReturn(
-                m::mock()
+                m::mock(ElementInterface::class)
                     ->shouldReceive('get')
                     ->with('uploadNowRadio')
                     ->andReturn(
@@ -91,7 +116,7 @@ class VariationFinancialEvidenceTest extends MockeryTestCase
                     ->shouldReceive('get')
                     ->with('uploadLaterRadio')
                     ->andReturn(
-                        m::mock()
+                        m::mock(ElementInterface::class)
                             ->shouldReceive('setName')
                             ->with('uploadNow')
                             ->once()
@@ -101,7 +126,7 @@ class VariationFinancialEvidenceTest extends MockeryTestCase
                     ->shouldReceive('get')
                     ->with('sendByPostRadio')
                     ->andReturn(
-                        m::mock()
+                        m::mock(ElementInterface::class)
                             ->shouldReceive('setName')
                             ->with('uploadNow')
                             ->once()

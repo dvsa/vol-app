@@ -2,28 +2,25 @@
 
 namespace OlcsTest\View\Helper;
 
+use Interop\Container\ContainerInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Olcs\View\Helper\SubmissionSectionMultipleTables;
 use Olcs\View\Helper\SubmissionSectionMultipleTablesFactory;
 use Mockery as m;
 
-/**
- * Class SubmissionSectionMultipleTablesFactoryTest
- * @package OlcsTest\Form\Element
- */
 class SubmissionSectionMultipleTablesFactoryTest extends MockeryTestCase
 {
-    public function testCreateService()
+    public function testInvoke()
     {
         $mockTranslator = m::mock('\Laminas\I18n\Translator\Translator');
 
-        $mockServiceLocator = m::mock('\Laminas\ServiceManager\ServiceLocatorInterface');
-        $mockServiceLocator->shouldReceive('getServiceLocator')->andReturnSelf();
+        $mockServiceLocator = m::mock(ContainerInterface::class);
         $mockServiceLocator->shouldReceive('get')->with('Translator')
             ->andReturn($mockTranslator);
 
         $sut = new SubmissionSectionMultipleTablesFactory();
-        $service = $sut->createService($mockServiceLocator);
+        $service = $sut->__invoke($mockServiceLocator, SubmissionSectionMultipleTables::class);
 
-        $this->assertInstanceOf('\Olcs\View\Helper\SubmissionSectionMultipleTables', $service);
+        $this->assertInstanceOf(SubmissionSectionMultipleTables::class, $service);
     }
 }

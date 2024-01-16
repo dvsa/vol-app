@@ -48,7 +48,7 @@ class BusProcessingRegistrationHistoryControllerTest extends MockeryTestCase
             ]
         );
 
-        $mockParams = $mockPluginManager->get('params', '');
+        $mockParams = $mockPluginManager->get('params');
         $mockParams->shouldReceive('fromRoute')->with('action', null)->andReturn('delete');
 
         $this->sut->setPluginManager($mockPluginManager);

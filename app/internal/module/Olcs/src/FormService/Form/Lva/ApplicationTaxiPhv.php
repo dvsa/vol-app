@@ -5,7 +5,7 @@ namespace Olcs\FormService\Form\Lva;
 use Common\FormService\Form\Lva\TaxiPhv as CommonTaxiPhv;
 use Common\Form\Form;
 use Common\Service\Helper\FormHelperService;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Application Taxi PHV Form

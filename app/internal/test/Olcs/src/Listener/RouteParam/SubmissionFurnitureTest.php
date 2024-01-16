@@ -1,14 +1,12 @@
 <?php
 
-/**
- * Cases Furniture Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace OlcsTest\Listener\RouteParam;
 
+use Common\Exception\ResourceNotFoundException;
 use Common\Service\Cqrs\Command\CommandSender;
 use Common\Service\Cqrs\Query\QuerySender;
+use Interop\Container\ContainerInterface;
+use Laminas\EventManager\Event;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParam\SubmissionsFurniture;
 use Olcs\Listener\RouteParams;
@@ -16,11 +14,6 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Laminas\View\Helper\Url;
 
-/**
- * Submissions Furniture Test
- *
- * @author Shaun Lizzio <shaun@lizzio.co.uk>
- */
 class SubmissionFurnitureTest extends MockeryTestCase
 {
     /**
@@ -82,8 +75,10 @@ class SubmissionFurnitureTest extends MockeryTestCase
             ]
         ];
 
-        $event = new RouteParam();
-        $event->setValue($id);
+        $routeParam = new RouteParam();
+        $routeParam->setValue($id);
+
+        $event = new Event(null, $routeParam);
 
         $this->setupMockCase($id, $case);
 
@@ -132,18 +127,18 @@ class SubmissionFurnitureTest extends MockeryTestCase
         $this->sut->onSubmission($event);
     }
 
-    public function testCreateService()
+    public function testInvoke()
     {
         $mockViewHelperManager = m::mock('Laminas\View\HelperPluginManager');
         $mockQuerySender = m::mock(QuerySender::class);
         $mockCommandSender = m::mock(CommandSender::class);
 
-        $mockSl = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
+        $mockSl = m::mock(ContainerInterface::class);
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('QuerySender')->andReturn($mockQuerySender);
         $mockSl->shouldReceive('get')->with('CommandSender')->andReturn($mockCommandSender);
 
-        $service = $this->sut->createService($mockSl);
+        $service = $this->sut->__invoke($mockSl, SubmissionsFurniture::class);
 
         $this->assertSame($this->sut, $service);
         $this->assertSame($mockViewHelperManager, $this->sut->getViewHelperManager());
@@ -153,11 +148,13 @@ class SubmissionFurnitureTest extends MockeryTestCase
 
     public function testOnCaseNotFound()
     {
-        $this->expectException(\Common\Exception\ResourceNotFoundException::class);
+        $this->expectException(ResourceNotFoundException::class);
         $id = 69;
 
-        $event = new RouteParam();
-        $event->setValue($id);
+        $routeParam = new RouteParam();
+        $routeParam->setValue($id);
+
+        $event = new Event(null, $routeParam);
 
         $mockQuerySender  = m::mock(QuerySender::class);
 

@@ -15,16 +15,16 @@ class PublicInquirySlaMain extends Base
      * @Form\Options({
      *     "label": "Call up letter issued",
      *     "create_empty_option": true,
-     *     "render_delimiters": "d m y",
+     *     "render_delimiters": true,
      *     "hint": "some hint",
      *     "category": "pi",
      *     "field": "callUpLetterDate"
      * })
      * @Form\Required(false)
      * @Form\Type("DateSelect")
-     * @Form\Filter({"name":"DateSelectNullifier"})
+     * @Form\Filter("DateSelectNullifier")
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $callUpLetterDate = null;
@@ -33,15 +33,15 @@ class PublicInquirySlaMain extends Base
      * @Form\Options({
      *     "label": "Brief sent",
      *     "create_empty_option": true,
-     *     "render_delimiters": "d m y",
+     *     "render_delimiters": true,
      *     "category": "pi",
      *     "field": "briefToTcDate"
      * })
      * @Form\Required(false)
      * @Form\Type("DateSelect")
-     * @Form\Filter({"name":"DateSelectNullifier"})
+     * @Form\Filter("DateSelectNullifier")
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $briefToTcDate = null;
@@ -64,7 +64,7 @@ class PublicInquirySlaMain extends Base
      *     "label": "Date of written decision",
      *     "create_empty_option": true,
      *     "pattern": "d MMMM y '{{SLA_HINT}}</fieldset>'",
-     *     "render_delimiters": "d m y",
+     *     "render_delimiters": true,
      *     "category": "pi",
      *     "field": "tcWrittenDecisionDate"
      * })
@@ -73,7 +73,7 @@ class PublicInquirySlaMain extends Base
      * @Form\AllowEmpty(true)
      * @Form\Input("\Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("DateSelect")
-     * @Form\Filter({"name":"DateSelectNullifier"})
+     * @Form\Filter("DateSelectNullifier")
      * @Form\Validator({
      *      "name": "ValidateIf",
      *      "options": {
@@ -94,7 +94,7 @@ class PublicInquirySlaMain extends Base
      * @Form\Options({
      *     "label": "Decision letter sent",
      *     "create_empty_option": true,
-     *     "render_delimiters": "d m y",
+     *     "render_delimiters": true,
      *     "category": "pi",
      *     "field": "decisionLetterSentDate"
      * })
@@ -103,7 +103,7 @@ class PublicInquirySlaMain extends Base
      * @Form\AllowEmpty(true)
      * @Form\Input("\Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("DateSelect")
-     * @Form\Filter({"name":"DateSelectNullifier"})
+     * @Form\Filter("DateSelectNullifier")
      * @Form\Validator({
      *      "name": "ValidateIf",
      *      "options": {
@@ -124,7 +124,7 @@ class PublicInquirySlaMain extends Base
      * @Form\Options({
      *     "label": "Date of written reason",
      *     "create_empty_option": true,
-     *     "render_delimiters": "d m y",
+     *     "render_delimiters": true,
      *     "category": "pi",
      *     "field": "tcWrittenReasonDate"
      * })
@@ -133,7 +133,7 @@ class PublicInquirySlaMain extends Base
      * @Form\AllowEmpty(true)
      * @Form\Input("\Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("DateSelect")
-     * @Form\Filter({"name":"DateSelectNullifier"})
+     * @Form\Filter("DateSelectNullifier")
      * @Form\Validator({
      *      "name": "ValidateIf",
      *      "options": {
@@ -154,7 +154,7 @@ class PublicInquirySlaMain extends Base
      * @Form\Options({
      *     "label": "Written reason letter sent",
      *     "create_empty_option": true,
-     *     "render_delimiters": "d m y",
+     *     "render_delimiters": true,
      *     "category": "pi",
      *     "field": "writtenReasonLetterDate"
      * })
@@ -163,7 +163,7 @@ class PublicInquirySlaMain extends Base
      * @Form\AllowEmpty(true)
      * @Form\Input("\Common\InputFilter\ContinueIfEmptyInput")
      * @Form\Type("DateSelect")
-     * @Form\Filter({"name":"DateSelectNullifier"})
+     * @Form\Filter("DateSelectNullifier")
      * @Form\Validator({
      *      "name": "ValidateIf",
      *      "options": {
@@ -184,14 +184,14 @@ class PublicInquirySlaMain extends Base
      * @Form\Options({
      *     "label": "Written decision letter sent",
      *     "create_empty_option": true,
-     *     "render_delimiters": "d m y",
+     *     "render_delimiters": true,
      *     "category": "pi",
      *     "field": "writtenDecisionLetterDate"
      * })
      * @Form\Required(false)
      * @Form\Type("DateSelect")
-     * @Form\Filter({"name":"DateSelectNullifier"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Filter("DateSelectNullifier")
+     * @Form\Validator("Date", options={"format": "Y-m-d"})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $writtenDecisionLetterDate = null;

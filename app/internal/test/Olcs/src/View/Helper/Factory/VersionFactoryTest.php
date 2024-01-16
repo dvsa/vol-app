@@ -3,9 +3,13 @@
 namespace OlcsTest\View\Helper;
 
 use Interop\Container\ContainerInterface;
+use Olcs\View\Helper\Version;
 use Olcs\View\Helper\Factory\VersionFactory;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \OLCS\View\Helper\Factory\VersionFactory
+ */
 class VersionFactoryTest extends TestCase
 {
     public function testFactoryWithNoVersionWillReturnNotSpecified()

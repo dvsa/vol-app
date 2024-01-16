@@ -51,8 +51,8 @@ class OpposerContact
      * @Form\Type("Text")
      * @Form\Attributes({"id":"email","placeholder":"","class":"medium", "required":false})
      * @Form\Options({"label":"Email"})
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\EmailAddress"})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Dvsa\Olcs\Transfer\Validators\EmailAddress")
      */
     public $emailAddress = null;
 }

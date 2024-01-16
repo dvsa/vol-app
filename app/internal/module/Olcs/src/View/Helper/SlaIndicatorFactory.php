@@ -2,25 +2,12 @@
 
 namespace Olcs\View\Helper;
 
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\Containerinterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
-/**
- * Class SlaIndicatorFactory
- *
- * @package Olcs\View\Helper
- *
- * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
- */
 class SlaIndicatorFactory implements FactoryInterface
 {
-    /**
-     * Create SlaIndicator with injected table builder
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return SubmissionSectionTable
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SlaIndicator
     {
         return new SlaIndicator();
     }

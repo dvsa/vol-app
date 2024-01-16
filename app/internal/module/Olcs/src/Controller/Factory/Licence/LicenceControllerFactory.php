@@ -9,8 +9,7 @@ use Common\Service\Helper\OppositionHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Application\ApplicationController;
 use Olcs\Controller\Licence\LicenceController;
@@ -25,15 +24,13 @@ class LicenceControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LicenceController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);
         $tableFactory = $container->get(TableFactory::class);
         $viewHelperManager = $container->get(HelperPluginManager::class);
         $oppositionHelper = $container->get(OppositionHelperService::class);
         $complaintsHelper = $container->get(ComplaintsHelperService::class);
-        $navigation = $container->get('navigation');
+        $navigation = $container->get('Navigation');
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
 
         return new LicenceController(
@@ -46,17 +43,5 @@ class LicenceControllerFactory implements FactoryInterface
             $navigation,
             $flashMessengerHelper
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return LicenceController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): LicenceController
-    {
-        return $this->__invoke($serviceLocator, LicenceController::class);
     }
 }

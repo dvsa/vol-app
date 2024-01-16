@@ -27,7 +27,7 @@ class OrganisationDetails
      * @Form\Attributes({"class":"medium"})
      * @Form\Options({"label":"Operator name"})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Filter("Laminas\Filter\StringTrim")
      */
     public $name = null;
 }

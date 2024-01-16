@@ -19,7 +19,7 @@ use Laminas\Http\Response;
 use Laminas\View\Model\ViewModel;
 use Olcs\Form\Model\Form\Grant as GrantApplicationForm;
 use Olcs\Form\Model\Form\GrantAuthorityForm;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Abstract Internal Grant Controller

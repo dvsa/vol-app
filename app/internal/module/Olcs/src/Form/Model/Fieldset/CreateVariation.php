@@ -15,7 +15,7 @@ class CreateVariation
      *     "label": "create-variation-application-received-date"
      * })
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
      * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $receivedDate;

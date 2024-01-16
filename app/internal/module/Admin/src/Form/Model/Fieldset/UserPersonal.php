@@ -16,7 +16,7 @@ class UserPersonal
      * @Form\Options({"label":"First name"})
      * @Form\Type("Text")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":35}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"max":35})
      */
     public $forename = null;
 
@@ -39,7 +39,7 @@ class UserPersonal
      * @Form\Type("DateSelect")
      * @Form\Required(false)
      * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator("Date", options={"format": "Y-m-d"})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $birthDate = null;

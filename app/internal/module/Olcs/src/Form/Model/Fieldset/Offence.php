@@ -28,16 +28,16 @@ class Offence extends Base
      * @Form\Type("Text")
      * @Form\Attributes({"placeholder":"First name","required":false})
      * @Form\Options({"label":"First name"})
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\NotEmpty","options":{"null"}})
-     * @Form\Validator({"name": "ValidateIf", "options": {
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\NotEmpty", options={"null"})
+     * @Form\Validator("ValidateIf", options={
      *     "context_field": "defendantType",
      *     "context_values": {"def_t_op", ""},
      *     "context_truth": false,
      *     "validators": {
      *          {"name":"Laminas\Validator\StringLength","options":{"min":2,"max":35}}
      *     }}
-     * })
+     * )
      */
     public $personFirstname = null;
 
@@ -46,16 +46,16 @@ class Offence extends Base
      * @Form\Type("Text")
      * @Form\Attributes({"placeholder":"Last name","required":false})
      * @Form\Options({"label":"Last name"})
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\NotEmpty","options":{"null"}})
-     * @Form\Validator({"name": "ValidateIf", "options": {
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\NotEmpty", options={"null"})
+     * @Form\Validator("ValidateIf", options={
      *     "context_field": "defendantType",
      *     "context_values": {"def_t_op", ""},
      *     "context_truth": false,
      *     "validators": {
      *          {"name":"Laminas\Validator\StringLength","options":{"min":2,"max":35}}
      *     }}
-     * })
+     * )
      */
     public $personLastname = null;
 
@@ -68,9 +68,9 @@ class Offence extends Base
      *     "render_delimiters": false
      * })
      * @Form\Attributes({"required":false})
-     * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name":"Laminas\Validator\NotEmpty","options":{"null"}})
-     * @Form\Validator({"name": "ValidateIf", "options": {
+     * @Form\Filter("DateSelectNullifier")
+     * @Form\Validator("Laminas\Validator\NotEmpty", options={"null"})
+     * @Form\Validator("ValidateIf", options={
      *     "context_field": "defendantType",
      *     "context_values": {"def_t_op", ""},
      *     "context_truth": false,
@@ -79,7 +79,7 @@ class Offence extends Base
      *          {"name": "Date", "options":{"format":"Y-m-d"}},
      *          {"name": "\Common\Form\Elements\Validators\DateNotInFuture"}
      *     }}
-     * })
+     * )
      */
     public $birthDate = null;
 
@@ -94,7 +94,7 @@ class Offence extends Base
      *     "category": "conv_category",
      *     "use_groups": true
      * })
-     * @Form\Filter({"name":"Common\Filter\NullToArray"})
+     * @Form\Filter("Common\Filter\NullToArray")
      * @Form\Validation({"name":"NotEmpty", "options": {"array"}})
      */
     public $convictionCategory = null;
@@ -112,15 +112,15 @@ class Offence extends Base
      * })
      * @Form\AllowEmpty(true)
      * @Form\Input("Common\InputFilter\ContinueIfEmptyInput")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name": "ValidateIf", "options": {
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("ValidateIf", options={
      *     "context_field": "convictionCategory",
      *     "context_values": {""},
      *     "context_truth": true,
      *     "validators": {
      *          {"name":"Laminas\Validator\StringLength","options":{"min":5,"max":4000}}
      *     }}
-     * })
+     * )
      */
     public $categoryText = null;
 
@@ -133,15 +133,14 @@ class Offence extends Base
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
-     * @Form\Filter({"name": "Laminas\Filter\DateSelect", "options": {"null_on_empty": true}})
-     * @Form\Validator({"name": "NotEmpty", "options": {"array"}})
-     * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
-     * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
-     * @Form\Validator({
-     *      "name": "DateCompare",
-     *      "options": {"compare_to":"convictionDate", "compare_to_label":"Conviction date", "operator": "lte"}
-     * })
+     * @Form\Filter("Laminas\Filter\DateSelect", options={"null_on_empty": true})
+     * @Form\Validator("NotEmpty", options={"array"})
+     * @Form\Validator("\Common\Validator\Date")
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
+     * @Form\Validator("\Common\Form\Elements\Validators\DateNotInFuture")
+     * @Form\Validator("DateCompare",
+     *      options={"compare_to":"convictionDate", "compare_to_label":"Conviction date", "operator": "lte"}
+     * )
      */
     public $offenceDate = null;
 
@@ -153,10 +152,10 @@ class Offence extends Base
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
-     * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
-     * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
+     * @Form\Filter("DateSelectNullifier")
+     * @Form\Validator("\Common\Validator\Date")
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
+     * @Form\Validator("\Common\Form\Elements\Validators\DateNotInFuture")
      */
     public $convictionDate = null;
 
@@ -177,8 +176,8 @@ class Offence extends Base
      * @Form\Type("Text")
      * @Form\Attributes({"class":"medium","id":""})
      * @Form\Options({"label":"Court/FPN"})
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":2,"max":70}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":2,"max":70})
      */
     public $court = null;
 
@@ -187,8 +186,8 @@ class Offence extends Base
      * @Form\Type("Text")
      * @Form\Attributes({"class":"medium","id":""})
      * @Form\Options({"label":"Penalty"})
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":255}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"max":255})
      */
     public $penalty = null;
 
@@ -197,8 +196,8 @@ class Offence extends Base
      * @Form\Type("Text")
      * @Form\Attributes({"class":"medium","id":""})
      * @Form\Options({"label":"Costs"})
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":2,"max":255}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":2,"max":255})
      */
     public $costs = null;
 
@@ -209,8 +208,8 @@ class Offence extends Base
      * @Form\Options({
      *     "label": "Conviction notes"
      * })
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":5,"max":4000}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":5,"max":4000})
      */
     public $notes = null;
 
@@ -221,8 +220,8 @@ class Offence extends Base
      * @Form\Options({
      *     "label": "Taken into consideration"
      * })
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":5,"max":4000}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":5,"max":4000})
      */
     public $takenIntoConsideration = null;
 

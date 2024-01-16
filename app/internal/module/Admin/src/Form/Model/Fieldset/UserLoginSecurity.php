@@ -18,7 +18,7 @@ class UserLoginSecurity
      * @Form\Type("Text")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Filter({"name":"Laminas\Filter\StringToLower"})
-     * @Form\Validator({"name":"Dvsa\Olcs\Transfer\Validators\UsernameCreate"})
+     * @Form\Validator("Dvsa\Olcs\Transfer\Validators\UsernameCreate")
      */
     public $loginId = null;
 

@@ -2,21 +2,19 @@
 
 namespace Olcs\Listener\RouteParam;
 
+use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
+use Laminas\EventManager\EventInterface;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use \Dvsa\Olcs\Transfer\Query\Cases\Cases as ItemDto;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Common\Exception\ResourceNotFoundException;
+use Psr\Container\ContainerInterface;
 
-/**
- * Class Cases
- * @package Olcs\Listener\RouteParam
- */
 class Cases implements ListenerAggregateInterface, FactoryInterface
 {
     use ListenerAggregateTrait;
@@ -35,6 +33,15 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
     protected $annotationBuilder;
 
     protected $queryService;
+
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
+    {
+        $this->navigationService = $container->get('Navigation');
+        $this->annotationBuilder = $container->get(AnnotationBuilder::class);
+        $this->queryService = $container->get('QueryService');
+        $this->viewHelperManager = $container->get('ViewHelperManager');
+        return $this;
+    }
 
     public function getAnnotationBuilder()
     {
@@ -93,23 +100,6 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->setAnnotationBuilder($serviceLocator->get('TransferAnnotationBuilder'));
-        $this->setQueryService($serviceLocator->get('QueryService'));
-        $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
-        $this->setNavigationService($serviceLocator->get('Navigation'));
-        $this->setSidebarNavigationService($serviceLocator->get('right-sidebar'));
-
-        return $this;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function attach(EventManagerInterface $events, $priority = 1)
@@ -121,14 +111,13 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
         );
     }
 
-    /**
-     * @param RouteParam $e
-     */
-    public function onCase(RouteParam $e)
+    public function onCase(EventInterface $e)
     {
-        $case = $this->getCase($e->getValue());
+        $routeParam = $e->getTarget();
 
-        $placeholder = $this->getViewHelperManager()->get('placeholder');
+        $case = $this->getCase($routeParam->getValue());
+
+        $placeholder = $this->viewHelperManager->get('placeholder');
         $placeholder->getContainer('case')->set($case);
 
         $latestNote = isset($case['latestNote']['comment']) ? $case['latestNote']['comment'] : '';
@@ -136,12 +125,12 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
 
         if (isset($case['licence']['id'])) {
             // Trigger the licence now - it won't trigger twice.
-            $e->getTarget()->trigger('licence', $case['licence']['id']);
+            $routeParam->getTarget()->trigger('licence', $case['licence']['id']);
         }
 
         if (isset($case['application']['id'])) {
             // Trigger the application now - it won't trigger twice.
-            $e->getTarget()->trigger('application', $case['application']['id']);
+            $routeParam->getTarget()->trigger('application', $case['application']['id']);
         }
 
         if (isset($case['transportManager']['id'])) {
@@ -156,7 +145,7 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
             $this->getNavigationService()->findOneById('case_processing_in_office_revocation')->setVisible(false);
 
             // Trigger the transportManager now - it won't trigger twice.
-            $e->getTarget()->trigger('transportManager', $case['transportManager']['id']);
+            $routeParam->getTarget()->trigger('transportManager', $case['transportManager']['id']);
         } else {
             $this->getNavigationService()->findOneById('case_processing_decisions')->setVisible(false);
         }

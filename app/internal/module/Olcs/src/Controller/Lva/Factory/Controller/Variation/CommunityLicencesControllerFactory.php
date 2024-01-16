@@ -11,10 +11,9 @@ use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\Lva\Variation\CommunityLicencesController;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 class CommunityLicencesControllerFactory implements FactoryInterface
 {
@@ -26,8 +25,7 @@ class CommunityLicencesControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CommunityLicencesController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
+        
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $formHelper = $container->get(FormHelperService::class);
@@ -51,17 +49,5 @@ class CommunityLicencesControllerFactory implements FactoryInterface
             $stringHelper,
             $navigation
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return CommunityLicencesController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): CommunityLicencesController
-    {
-        return $this->__invoke($serviceLocator, CommunityLicencesController::class);
     }
 }

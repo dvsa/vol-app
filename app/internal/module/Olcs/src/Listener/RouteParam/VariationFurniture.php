@@ -7,21 +7,16 @@ use Common\Service\Cqrs\Query\QuerySenderAwareInterface;
 use Common\Service\Cqrs\Query\QuerySenderAwareTrait;
 use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQuery;
 use Interop\Container\ContainerInterface;
+use Laminas\EventManager\EventInterface;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Laminas\View\Model\ViewModel;
 
-/**
- * Variation Furniture
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class VariationFurniture implements ListenerAggregateInterface, FactoryInterface, QuerySenderAwareInterface
 {
     use ListenerAggregateTrait,
@@ -40,22 +35,11 @@ class VariationFurniture implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @return \Laminas\Mvc\Router\RouteStackInterface
+     * @return \Laminas\Router\RouteStackInterface
      */
     public function getRouter()
     {
         return $this->router;
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator) : VariationFurniture
-    {
-        return $this->__invoke($serviceLocator, VariationFurniture::class);
     }
 
     /**
@@ -73,9 +57,11 @@ class VariationFurniture implements ListenerAggregateInterface, FactoryInterface
     /**
      * @param RouteParam $e
      */
-    public function onVariationFurniture(RouteParam $e)
+    public function onVariationFurniture(EventInterface $e)
     {
-        $id = $e->getValue();
+        $routeParam = $e->getTarget();
+
+        $id = $routeParam->getValue();
 
         $response = $this->getQuerySender()->send(ApplicationQuery::create(['id' => $id]));
 

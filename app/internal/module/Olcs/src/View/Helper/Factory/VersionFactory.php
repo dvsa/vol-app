@@ -4,28 +4,11 @@ namespace Olcs\View\Helper\Factory;
 
 use Interop\Container\ContainerInterface;
 use Olcs\View\Helper\Version;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
-/**
- * Class VersionFactory
- * @package Olcs\View\Helper\Factory
- */
 class VersionFactory implements FactoryInterface
 {
     public const DEFAULT_VERSION = 'Not specified';
-
-    /**
-     * Create version helper service
-     *
-     * @param ServiceLocatorInterface $serviceLocator Service Locator
-     *
-     * @return Version
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): Version
-    {
-        return $this->__invoke($serviceLocator, Version::class);
-    }
 
     /**
      * Get version number or default string from config
@@ -57,9 +40,6 @@ class VersionFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Version
     {
-        if (method_exists($container, 'getServiceLocator') && $container->getServiceLocator()) {
-            $container = $container->getServiceLocator();
-        }
         $config = $container->get('config');
         $version = $this->getVersion($config);
         $helper = new Version();

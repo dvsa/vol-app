@@ -17,7 +17,7 @@ use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Interfaces\VariationControllerInterface;
 use Olcs\Controller\Lva\AbstractSubmitController;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Variation Submit Controller

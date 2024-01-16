@@ -4,12 +4,8 @@ namespace Olcs\Service\Data;
 
 use Common\Service\Data\AbstractDataServiceServices;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
-/**
- * IrhpPermitPrintStockFactory
- */
 class IrhpPermitPrintStockFactory implements FactoryInterface
 {
     /**
@@ -26,17 +22,5 @@ class IrhpPermitPrintStockFactory implements FactoryInterface
             $container->get(AbstractDataServiceServices::class),
             $container->get('Helper\Translation')
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $services
-     *
-     * @return IrhpPermitPrintStock
-     */
-    public function createService(ServiceLocatorInterface $services): IrhpPermitPrintStock
-    {
-        return $this($services, IrhpPermitPrintStock::class);
     }
 }

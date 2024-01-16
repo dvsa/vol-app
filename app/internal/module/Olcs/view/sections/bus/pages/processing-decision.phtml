@@ -1,5 +1,5 @@
 <?php
-$header = $this->navigation('navigation')->findOneBy('active', 1)->getLabel();
+$header = $this->navigation('navigation')->findOneBy('active', true)->getLabel();
 
 $busReg = $this->placeholder('details')->getValue();
 

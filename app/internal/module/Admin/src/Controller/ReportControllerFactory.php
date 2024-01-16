@@ -6,8 +6,7 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\Helper\Placeholder;
 
 class ReportControllerFactory implements FactoryInterface
@@ -24,15 +23,6 @@ class ReportControllerFactory implements FactoryInterface
             $tableFactory,
             $formHelper,
             $placeholder
-        );
-    }
-    public function createService(ServiceLocatorInterface $serviceLocator): ReportController
-    {
-        $container = method_exists($serviceLocator, 'getServiceLocator') ? $serviceLocator->getServiceLocator() : $serviceLocator;
-
-        return $this->__invoke(
-            $container,
-            ReportController::class
         );
     }
 }

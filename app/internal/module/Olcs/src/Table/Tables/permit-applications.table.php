@@ -29,7 +29,7 @@ return [
         [
             'title' => 'dashboard-table-permit-application-num',
             'isNumeric' => true,
-            'formatter' => IrhpPermitsRequired::NAME,
+            'formatter' => IrhpPermitsRequired::class,
             'name' => 'permitsRequired',
         ],
         [

@@ -4,6 +4,7 @@ namespace OlcsTest\Listener;
 
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
+use Interop\Container\ContainerInterface;
 use Mockery as m;
 use Common\Rbac\User;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
@@ -14,12 +15,8 @@ use Olcs\Form\Model\Form;
 use Olcs\Listener\HeaderSearch;
 use Laminas\Mvc\MvcEvent;
 use Laminas\View\Helper\Placeholder;
-use ZfcRbac\Identity\IdentityProviderInterface;
+use LmcRbacMvc\Identity\IdentityProviderInterface;
 
-/**
- * Class HeaderSearchTest
- * @package OlcsTest\Listener
- */
 class HeaderSearchTest extends TestCase
 {
     /** @var \Olcs\Listener\HeaderSearch */
@@ -27,7 +24,6 @@ class HeaderSearchTest extends TestCase
 
     /** @var  m\MockInterface */
     private $mockFormHlp;
-    /** @var  m\MockInterface | \Laminas\ServiceManager\ServiceLocatorInterface */
     private $mockSm;
     /** @var  \Common\Service\Data\Search\Search | m\MockInterface  */
     private $mockSearchSrv;
@@ -47,7 +43,7 @@ class HeaderSearchTest extends TestCase
         $this->mockAuthService = m::mock(IdentityProviderInterface::class);
         $this->mockTransHelper = m::mock(TranslationHelperService::class);
 
-        $this->mockSm = m::mock(\Laminas\ServiceManager\ServiceLocatorInterface::class);
+        $this->mockSm = m::mock(ContainerInterface::class);
         $this->mockSm
             ->shouldReceive('get')->with('DataServiceManager')->andReturnSelf()
             ->shouldReceive('get')->with(FormHelperService::class)->andReturn($this->mockFormHlp)
@@ -135,7 +131,7 @@ class HeaderSearchTest extends TestCase
         $mockEvent->shouldReceive('getParams')->andReturn($params);
         $mockEvent->shouldReceive('getParam')->with('index')->andReturn($index);
 
-        $this->sut->createService($this->mockSm);
+        $this->sut->__invoke($this->mockSm, HeaderSearch::class);
         $this->sut->onDispatch($mockEvent);
     }
 
@@ -160,9 +156,9 @@ class HeaderSearchTest extends TestCase
         ];
     }
 
-    public function testCreateService()
+    public function testInvoke()
     {
-        $service = $this->sut->createService($this->mockSm);
+        $service = $this->sut->__invoke($this->mockSm, HeaderSearch::class);
 
         $this->assertSame($this->sut, $service);
         $this->assertSame($this->mockViewHlprMngr, $this->sut->getViewHelperManager());

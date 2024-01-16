@@ -23,7 +23,7 @@ use Dvsa\Olcs\Transfer\Command\Application\CreateVehicleListDocument as Applicat
 use Dvsa\Olcs\Transfer\Command\Licence\CreateVehicleListDocument as LicenceCreateDocument;
 use Dvsa\Olcs\Transfer\Query;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Abstract Generic Vehicles Goods Controller

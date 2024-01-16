@@ -7,24 +7,19 @@ use Common\Service\Cqrs\Command\CommandSenderAwareTrait;
 use Common\Service\Cqrs\Query\QuerySenderAwareInterface;
 use Common\Service\Cqrs\Query\QuerySenderAwareTrait;
 use Interop\Container\ContainerInterface;
+use Laminas\EventManager\EventInterface;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use \Dvsa\Olcs\Transfer\Query\Cases\Cases as ItemDto;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Common\Exception\ResourceNotFoundException;
 use Laminas\View\Helper\Url;
 use Laminas\View\Model\ViewModel;
 
-/**
- * Submissions Furniture
- *
- * @author Shaun Lizzio <shaun@lizzio.co.uk>
- */
 class SubmissionsFurniture implements
     ListenerAggregateInterface,
     FactoryInterface,
@@ -35,17 +30,6 @@ class SubmissionsFurniture implements
         ViewHelperManagerAwareTrait,
         QuerySenderAwareTrait,
         CommandSenderAwareTrait;
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator) : SubmissionsFurniture
-    {
-        return $this->__invoke($serviceLocator, SubmissionsFurniture::class);
-    }
 
     /**
      * {@inheritdoc}
@@ -59,12 +43,11 @@ class SubmissionsFurniture implements
         );
     }
 
-    /**
-     * @param RouteParam $e
-     */
-    public function onSubmission(RouteParam $e)
+    public function onSubmission(EventInterface $e)
     {
-        $id = $e->getValue();
+        $routeParam = $e->getTarget();
+
+        $id = $routeParam->getValue();
         $case = $this->getCase($id);
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');

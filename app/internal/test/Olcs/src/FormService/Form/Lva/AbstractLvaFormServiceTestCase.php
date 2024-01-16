@@ -2,6 +2,7 @@
 
 namespace OlcsTest\FormService\Form\Lva;
 
+use Laminas\Form\ElementInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
@@ -44,12 +45,12 @@ abstract class AbstractLvaFormServiceTestCase extends MockeryTestCase
             ->with('form-actions')
             ->once()
             ->andReturn(
-                m::mock()
+                m::mock(ElementInterface::class)
                     ->shouldReceive('get')
                     ->with('save')
                     ->once()
                     ->andReturn(
-                        m::mock()
+                        m::mock(ElementInterface::class)
                             ->shouldReceive('setLabel')
                             ->with('internal.save.button')
                             ->once()

@@ -37,7 +37,7 @@ class UserType
      * })
      * @Form\Attributes({"id":"team","placeholder":"", "required":false})
      * @Form\Type("DynamicSelect")
-     * @Form\Validator({"name": "NotEmpty", "options": {"null"}})
+     * @Form\Validator("NotEmpty", options={"null"})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "userType",

@@ -8,10 +8,9 @@ use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\Licence\LicenceGracePeriodsController;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 class LicenceGracePeriodsControllerFactory implements FactoryInterface
 {
@@ -23,15 +22,13 @@ class LicenceGracePeriodsControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LicenceGracePeriodsController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         $tableFactory = $container->get(TableFactory::class);
         $formHelper = $container->get(FormHelperService::class);
         $scriptFactory = $container->get(ScriptFactory::class);
-        $navigation = $container->get('navigation');
+        $navigation = $container->get('Navigation');
 
         return new LicenceGracePeriodsController(
             $niTextTranslationUtil,
@@ -42,17 +39,5 @@ class LicenceGracePeriodsControllerFactory implements FactoryInterface
             $scriptFactory,
             $navigation
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return LicenceGracePeriodsController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): LicenceGracePeriodsController
-    {
-        return $this->__invoke($serviceLocator, LicenceGracePeriodsController::class);
     }
 }

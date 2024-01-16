@@ -2,16 +2,15 @@
 
 namespace OlcsTest\Listener\RouteParam;
 
+use Interop\Container\ContainerInterface;
+use Laminas\EventManager\Event;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParam\BusRegMarker;
 use Mockery as m;
 use Olcs\Listener\RouteParams;
+use Olcs\Service\Marker\MarkerService;
 
-/**
- * Class BusRegMarkerTest
- * @package OlcsTest\Listener\RouteParam
- */
 class BusRegMarkerTest extends TestCase
 {
     public function setUp(): void
@@ -62,15 +61,17 @@ class BusRegMarkerTest extends TestCase
         $busRegId = 1;
         $busReg = ['id' => $busRegId];
 
-        $mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
+        $mockMarkerService = m::mock(MarkerService::class);
         $this->sut->setMarkerService($mockMarkerService);
 
         $this->setupBusRegMarker($busRegId, $busReg);
 
         $mockMarkerService->shouldReceive('addData')->with('busReg', $busReg);
 
-        $event = new RouteParam();
-        $event->setValue($busRegId);
+        $routeParam = new RouteParam();
+        $routeParam->setValue($busRegId);
+
+        $event = new Event(null, $routeParam);
 
         $this->sut->onBusRegMarker($event);
     }
@@ -81,26 +82,28 @@ class BusRegMarkerTest extends TestCase
 
         $this->setupBusRegMarker($busRegId, false);
 
-        $event = new RouteParam();
-        $event->setValue($busRegId);
+        $routeParam = new RouteParam();
+        $routeParam->setValue($busRegId);
+
+        $event = new Event(null, $routeParam);
 
         $this->expectException(\RuntimeException::class);
 
         $this->sut->onBusRegMarker($event);
     }
 
-    public function testCreateService()
+    public function testInvoke()
     {
         $mockTransferAnnotationBuilder = m::mock();
         $mockQueryService = m::mock();
-        $mockMarkerService = m::mock(\Olcs\Service\Marker\MarkerService::class);
+        $mockMarkerService = m::mock(MarkerService::class);
 
-        $mockSl = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
+        $mockSl = m::mock(ContainerInterface::class);
         $mockSl->shouldReceive('get')->with('TransferAnnotationBuilder')->andReturn($mockTransferAnnotationBuilder);
         $mockSl->shouldReceive('get')->with('QueryService')->andReturn($mockQueryService);
-        $mockSl->shouldReceive('get')->with(\Olcs\Service\Marker\MarkerService::class)->andReturn($mockMarkerService);
+        $mockSl->shouldReceive('get')->with(MarkerService::class)->andReturn($mockMarkerService);
 
-        $service = $this->sut->createService($mockSl);
+        $service = $this->sut->__invoke($mockSl, BusRegMarker::class);
 
         $this->assertSame($this->sut, $service);
         $this->assertSame($mockTransferAnnotationBuilder, $this->sut->getAnnotationBuilderService());

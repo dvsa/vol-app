@@ -12,7 +12,7 @@ use Common\RefData;
 
 return [
     'guards' => [
-        'ZfcRbac\Guard\RoutePermissionsGuard' =>[
+        'LmcRbacMvc\Guard\RoutePermissionsGuard' =>[
             // OLCS Module Routes
             '*processing/notes*' => [RefData::PERMISSION_INTERNAL_NOTES],
             '*case*' => [RefData::PERMISSION_INTERNAL_CASE],

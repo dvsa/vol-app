@@ -98,7 +98,7 @@ class PublicInquiryRegisterDecisionMain
      *     "disable_inarray_validator": false,
      *     "category":"pi_tm_decision"
      * })
-     * @Form\Filter({"name":"Common\Filter\NullToArray"})
+     * @Form\Filter("Common\Filter\NullToArray")
      */
     public $tmDecisions = [];
 
@@ -106,7 +106,7 @@ class PublicInquiryRegisterDecisionMain
      * @Form\Attributes({"id":"","placeholder":"","class":"small"})
      * @Form\Options({"label": "Number of witnesses"})
      * @Form\Type("Text")
-     * @Form\Validator({"name":"Digits"})
+     * @Form\Validator("Digits")
      */
     public $witnesses = null;
 
@@ -115,13 +115,13 @@ class PublicInquiryRegisterDecisionMain
      * @Form\Options({
      *     "label": "Date of decision",
      *     "create_empty_option": true,
-     *     "render_delimiters": "d m y"
+     *     "render_delimiters": true
      * })
      * @Form\Required(false)
      * @Form\Type("DateSelect")
-     * @Form\Filter({"name":"DateSelectNullifier"})
+     * @Form\Filter("DateSelectNullifier")
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $decisionDate = null;
@@ -131,13 +131,13 @@ class PublicInquiryRegisterDecisionMain
      * @Form\Options({
      *     "label": "Date of notification",
      *     "create_empty_option": true,
-     *     "render_delimiters": "d m y"
+     *     "render_delimiters": true
      * })
      * @Form\Required(false)
      * @Form\Type("DateSelect")
-     * @Form\Filter({"name":"DateSelectNullifier"})
+     * @Form\Filter("DateSelectNullifier")
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $notificationDate = null;
@@ -153,7 +153,7 @@ class PublicInquiryRegisterDecisionMain
      * })
      * @Form\Type("DynamicSelect")
      * @Form\Required(false)
-     * @Form\Filter({"name":"Common\Filter\NullToArray"})
+     * @Form\Filter("Common\Filter\NullToArray")
      */
     public $definition = null;
 
@@ -164,8 +164,8 @@ class PublicInquiryRegisterDecisionMain
      * })
      * @Form\Required(false)
      * @Form\Type("TextArea")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":5,"max":4000}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":5,"max":4000})
      */
     public $decisionNotes = null;
 

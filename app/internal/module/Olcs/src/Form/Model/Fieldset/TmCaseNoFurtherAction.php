@@ -33,9 +33,9 @@ class TmCaseNoFurtherAction extends CaseBase
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
-     * @Form\Filter({"name": "DateSelect", "options": {"null_on_empty": true}})
+     * @Form\Filter("DateSelect", options={"null_on_empty": true})
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
      */
     public $decisionDate = null;
 
@@ -48,8 +48,8 @@ class TmCaseNoFurtherAction extends CaseBase
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
-     * @Form\Filter({"name": "DateSelect", "options": {"null_on_empty": true}})
-     * @Form\Validator({"name": "NotEmpty", "options": {"array"}})
+     * @Form\Filter("DateSelect", options={"null_on_empty": true})
+     * @Form\Validator("NotEmpty", options={"array"})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "decisionDate",
@@ -79,7 +79,7 @@ class TmCaseNoFurtherAction extends CaseBase
      * @Form\Attributes({"class":"extra-long"})
      * @Form\Options({"label":"Reason why no further action"})
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":500}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"max":500})
      */
     public $noFurtherActionReason = null;
 

@@ -20,7 +20,7 @@ class SearchAdvanced
      * @Form\Type("\Laminas\Form\Element\Textarea")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Filter({"name":"Laminas\Filter\StringToLower"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":10,"max":100}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":10,"max":100})
      */
     public $address = null;
 

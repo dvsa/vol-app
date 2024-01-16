@@ -7,6 +7,7 @@
  */
 namespace OlcsTest\FormService\Form\Lva;
 
+use Laminas\Form\ElementInterface;
 use Mockery as m;
 use Olcs\FormService\Form\Lva\Undertakings;
 
@@ -32,12 +33,12 @@ class UndertakingsTest extends AbstractLvaFormServiceTestCase
             ->with('form-actions')
             ->once()
             ->andReturn(
-                m::mock()
+                m::mock(ElementInterface::class)
                     ->shouldReceive('get')
                     ->with('save')
                     ->once()
                     ->andReturn(
-                        m::mock()
+                        m::mock(ElementInterface::class)
                             ->shouldReceive('setLabel')
                             ->with('internal.save.button')
                             ->once()

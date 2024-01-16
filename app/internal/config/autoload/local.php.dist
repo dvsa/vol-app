@@ -133,25 +133,26 @@ return array(
         ],
     ],
     'caches' => [
-        \Laminas\Cache\Storage\Adapter\Redis::class => [
-            'adapter' => [
-                'name' => 'redis',
-                'options' => [
-                    'server' => [
-                        'host' => 'redis',
-                        'port' => 6379,
-                    ],
-                    'lib_options' => [
-                        \Redis::OPT_SERIALIZER => \Redis::SERIALIZER_IGBINARY
-                    ],
-                    'ttl' => 3600, //one hour, likely to be overridden based on use case
-                    'namespace' => 'zfcache',
+        'default-cache' => [
+            'adapter' => Laminas\Cache\Storage\Adapter\Redis::class,
+            'options' => [
+                'server' => [
+                    'host' => 'redis',
+                    'port' => 6379,
                 ],
-                'plugins' => [
-                    'exception_handler' => [
+                'lib_options' => [
+                    \Redis::OPT_SERIALIZER => \Redis::SERIALIZER_IGBINARY
+                ],
+                'ttl' => 3600, //one hour, likely to be overridden based on use case
+                'namespace' => 'zfcache',
+            ],
+            'plugins' => [
+                [
+                    'name' => 'exception_handler',
+                    'options' => [
                         'throw_exceptions' => false,
                     ],
-                ],
+                ]
             ],
         ],
     ],

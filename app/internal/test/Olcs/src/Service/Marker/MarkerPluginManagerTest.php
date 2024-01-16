@@ -2,6 +2,7 @@
 
 namespace OlcsTest\Service\Marker;
 
+use Interop\Container\Containerinterface;
 use Laminas\ServiceManager\Exception\InvalidServiceException;
 use Laminas\ServiceManager\Exception\RuntimeException;
 use Mockery as m;
@@ -22,17 +23,13 @@ class MarkerPluginManagerTest extends TestCase
 
     public function setUp(): void
     {
-        $this->sut = new \Olcs\Service\Marker\MarkerPluginManager();
+        $this->sut = new \Olcs\Service\Marker\MarkerPluginManager($this->createMock(Containerinterface::class));
         parent::setUp();
     }
 
     public function testConstructor()
     {
-        $mockConfig = m::mock(\Laminas\ServiceManager\ConfigInterface::class);
-
-        $mockConfig->shouldReceive('configureServiceManager')->twice();
-
-        $sut = new \Olcs\Service\Marker\MarkerPluginManager($mockConfig);
+        $sut = new \Olcs\Service\Marker\MarkerPluginManager($this->createMock(Containerinterface::class));
 
         $this->assertInstanceOf(\Olcs\Service\Marker\MarkerPluginManager::class, $sut);
     }
@@ -58,7 +55,7 @@ class MarkerPluginManagerTest extends TestCase
     {
         $mockPlugin = m::mock(MarkerInterface::class);
 
-        $this->assertNull($this->sut->validatePlugin($mockPlugin));
+        $this->assertNull($this->sut->validate($mockPlugin));
     }
 
     /**
@@ -66,8 +63,8 @@ class MarkerPluginManagerTest extends TestCase
      */
     public function testValidatePluginInvalid()
     {
-        $this->expectException(RuntimeException::class);
+        $this->expectException(\RuntimeException::class);
 
-        $this->sut->validatePlugin(null);
+        $this->sut->validate(null);
     }
 }

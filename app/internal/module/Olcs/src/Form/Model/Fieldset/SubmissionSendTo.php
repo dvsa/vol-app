@@ -67,7 +67,7 @@ class SubmissionSendTo extends Base
      * @Form\Options({
      *     "label":"Information Complete Date",
      *     "create_empty_option": false,
-     *     "render_delimiters": "d m y"
+     *     "render_delimiters": true
      *     })
      * @Form\Type("DateSelect")
      */

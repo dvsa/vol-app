@@ -12,10 +12,9 @@ use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\Lva\Application\TaxiPhvController;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 class TaxiPhvControllerFactory implements FactoryInterface
 {
@@ -27,8 +26,7 @@ class TaxiPhvControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TaxiPhvController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
+        
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $formHelper = $container->get(FormHelperService::class);
@@ -54,17 +52,5 @@ class TaxiPhvControllerFactory implements FactoryInterface
             $restrictionHelper,
             $navigation
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return TaxiPhvController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): TaxiPhvController
-    {
-        return $this->__invoke($serviceLocator, TaxiPhvController::class);
     }
 }

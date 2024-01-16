@@ -10,7 +10,7 @@ use Common\Controller\Plugin\Redirect;
 use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Auth\Service\Auth\CookieService;
 use Interop\Container\ContainerInterface;
-use Laminas\Mvc\Controller\Plugin\FlashMessenger;
+use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\Mvc\Controller\Plugin\Layout;
 use Laminas\Mvc\Controller\Plugin\Url;
 use Laminas\ServiceManager\ServiceLocatorInterface;
@@ -27,35 +27,6 @@ class LoginControllerFactoryTest extends MockeryTestCase
      * @var LoginControllerFactory
      */
     protected $sut;
-
-    /**
-     * @test
-     */
-    public function createService_IsCallable()
-    {
-        // Setup
-        $this->setUpSut();
-
-        // Assert
-        $this->assertIsCallable([$this->sut, 'createService']);
-    }
-
-    /**
-     * @test
-     * @depends createService_IsCallable
-     * @depends __invoke_IsCallable
-     */
-    public function createService_CallsInvoke()
-    {
-        // Setup
-        $this->sut = m::mock(LoginControllerFactory::class)->makePartial();
-
-        // Expectations
-        $this->sut->expects('__invoke')->once();
-
-        // Execute
-        $this->sut->createService($this->createMock(ServiceLocatorInterface::class));
-    }
 
     /**
      * @test

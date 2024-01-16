@@ -42,7 +42,7 @@ class QualificationDetails
      * @Form\Options({"label":"transport-manager.competences.form.serial"})
      * @Form\Type("Text")
      * @Form\Required(false)
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Filter("Laminas\Filter\StringTrim")
      * @Form\Validator({
      *     "name": "Laminas\Validator\StringLength",
      *     "options": {
@@ -61,11 +61,11 @@ class QualificationDetails
      *     "render_delimiters": false
      * })
      * @Form\Type("DateSelect")
-     * @Form\Filter({"name":"DateSelectNullifier"})
+     * @Form\Filter("DateSelectNullifier")
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
      * @Form\Validator({"name": "\Laminas\Validator\NotEmpty"})
-     * @Form\Validator({"name":"\Common\Form\Elements\Validators\DateNotInFuture"})
+     * @Form\Validator("\Common\Form\Elements\Validators\DateNotInFuture")
      */
     public $issuedDate = null;
 

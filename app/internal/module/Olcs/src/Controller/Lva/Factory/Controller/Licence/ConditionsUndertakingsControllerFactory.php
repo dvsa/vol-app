@@ -9,10 +9,9 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\Lva\Licence\ConditionsUndertakingsController;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 class ConditionsUndertakingsControllerFactory implements FactoryInterface
 {
@@ -24,8 +23,7 @@ class ConditionsUndertakingsControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ConditionsUndertakingsController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
+        
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $formHelper = $container->get(FormHelperService::class);
@@ -45,17 +43,5 @@ class ConditionsUndertakingsControllerFactory implements FactoryInterface
             $lvaAdapter,
             $navigation
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return ConditionsUndertakingsController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): ConditionsUndertakingsController
-    {
-        return $this->__invoke($serviceLocator, ConditionsUndertakingsController::class);
     }
 }

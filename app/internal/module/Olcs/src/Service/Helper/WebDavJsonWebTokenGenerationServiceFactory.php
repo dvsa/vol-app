@@ -2,9 +2,7 @@
 
 namespace Olcs\Service\Helper;
 
-use Laminas\ServiceManager\Config;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerInterface;
 
 class WebDavJsonWebTokenGenerationServiceFactory implements FactoryInterface
@@ -36,18 +34,6 @@ class WebDavJsonWebTokenGenerationServiceFactory implements FactoryInterface
             $this->getDefaultLifetimeSecondsFromConfig($config),
             $this->getUrlPatternConfig($config)
         );
-    }
-
-    /**
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return WebDavJsonWebTokenGenerationService
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     * @deprecated
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): WebDavJsonWebTokenGenerationService
-    {
-        return $this->__invoke($serviceLocator, WebDavJsonWebTokenGenerationService::class);
     }
 
     protected function getDefaultLifetimeSecondsFromConfig(array $config): int

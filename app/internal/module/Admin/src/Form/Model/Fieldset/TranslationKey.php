@@ -25,7 +25,7 @@ class TranslationKey
      * @Form\Options({
      *      "label": "New Translation Key"
      * })
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":512}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"max":512})
      * @Form\Type("Text")
      * @Form\Required(false)
      */
@@ -37,7 +37,7 @@ class TranslationKey
      * @Form\Options({
      *      "label": "Description"
      * })
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":512}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"max":512})
      * @Form\Type("Text")
      * @Form\Required(false)
      */

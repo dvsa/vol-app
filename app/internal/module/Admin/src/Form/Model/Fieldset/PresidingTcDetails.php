@@ -21,7 +21,7 @@ class PresidingTcDetails
      * @Form\Options({"label":"Name"})
      * @Form\Type("Text")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":70}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"max":70})
      */
     public $name = null;
 

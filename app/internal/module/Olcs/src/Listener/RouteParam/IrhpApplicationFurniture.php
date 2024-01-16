@@ -7,6 +7,8 @@ use Common\Service\Cqrs\Command\CommandSenderAwareInterface;
 use Common\Service\Cqrs\Command\CommandSenderAwareTrait;
 use Common\Service\Cqrs\Query\QuerySenderAwareInterface;
 use Common\Service\Cqrs\Query\QuerySenderAwareTrait;
+use Interop\Container\ContainerInterface;
+use Laminas\EventManager\EventInterface;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\ById as ItemDto;
@@ -16,7 +18,7 @@ use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
 use Laminas\Navigation\Navigation;
-use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Common\Exception\ResourceNotFoundException;
@@ -113,20 +115,14 @@ class IrhpApplicationFurniture implements
         return $this;
     }
 
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return $this
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $this->setQuerySender($serviceLocator->get('QuerySender'));
-        $this->setCommandSender($serviceLocator->get('CommandSender'));
-        $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
-        $this->setNavigationService($serviceLocator->get('Navigation'));
-        $this->setSidebarNavigationService($serviceLocator->get('right-sidebar'));
-        $this->setApplicationService($serviceLocator->get('Application'));
+        $this->setQuerySender($container->get('QuerySender'));
+        $this->setCommandSender($container->get('CommandSender'));
+        $this->setViewHelperManager($container->get('ViewHelperManager'));
+        $this->setNavigationService($container->get('Navigation'));
+        $this->setSidebarNavigationService($container->get('right-sidebar'));
+        $this->setApplicationService($container->get('Application'));
 
         return $this;
     }
@@ -143,12 +139,11 @@ class IrhpApplicationFurniture implements
         );
     }
 
-    /**
-     * @param RouteParam $e
-     */
-    public function onIrhpApplicationFurniture(RouteParam $e)
+    public function onIrhpApplicationFurniture(EventInterface $e)
     {
-        $id = $e->getValue();
+        $routeParam = $e->getTarget();
+
+        $id = $routeParam->getValue();
         $irhpApplication = $this->getIrhpApplication($id);
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');

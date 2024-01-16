@@ -2,9 +2,8 @@
 
 namespace Olcs\Service\Marker;
 
-use Laminas\ServiceManager\Config;
+use Psr\Container\ContainerInterface;
 use Laminas\Mvc\Service\AbstractPluginManagerFactory;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * MarkerPluginManagerFactory
@@ -15,11 +14,10 @@ class MarkerPluginManagerFactory extends AbstractPluginManagerFactory
 {
     const CONFIG_KEY = 'marker_plugins';
 
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): MarkerPluginManager
     {
-        $config = $serviceLocator->get('Config');
-        $configObject = new Config(!empty($config[static::CONFIG_KEY]) ? $config[static::CONFIG_KEY] : null);
+        $config = $container->get('Config');
 
-        return new MarkerPluginManager($configObject);
+        return new MarkerPluginManager($container, $config[self::CONFIG_KEY]);
     }
 }

@@ -111,7 +111,7 @@ class PermitStockDetails
      * @Form\Options({
      *      "label": "Period selection translation key "
      * })
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":512}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"max":512})
      * @Form\Type("Text")
      * @Form\Required(false)
      */
@@ -128,7 +128,7 @@ class PermitStockDetails
      * @Form\Type("DateSelect")
      * @Form\Filter({"name":"DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
      */
     public $validFrom = null;
 
@@ -143,7 +143,7 @@ class PermitStockDetails
      * @Form\Type("DateSelect")
      * @Form\Filter({"name":"DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
      */
     public $validTo = null;
 
@@ -153,7 +153,7 @@ class PermitStockDetails
      * @Form\Options({
      *      "label": "Quota"
      * })
-     * @Form\Validator({"name":"Laminas\Validator\Digits"})
+     * @Form\Validator("Laminas\Validator\Digits")
      * @Form\Type("Laminas\Form\Element\Number")
      * @Transfer\Validator({
      *      "name":"Laminas\Validator\Between",

@@ -18,5 +18,5 @@ return array(
             'Cache.SerializerPath' => sys_get_temp_dir(),
         ],
     ],
-    'zfc_rbac' => require('zfc_rbac.config.php'),
+    'lmc_rbac' => require('lmc_rbac.config.php'),
 );

@@ -2,17 +2,16 @@
 
 namespace OlcsTest\Listener\RouteParam;
 
+use Common\Exception\ResourceNotFoundException;
 use Common\RefData;
+use Interop\Container\ContainerInterface;
+use Laminas\EventManager\Event;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Olcs\Listener\RouteParam\BusRegId;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
-/**
- * Class BusRegIdTest
- * @package OlcsTest\Listener\RouteParam
- */
 class BusRegIdTest extends MockeryTestCase
 {
     /**
@@ -80,15 +79,16 @@ class BusRegIdTest extends MockeryTestCase
             ],
         ];
 
-        $event = new RouteParam();
-        $event->setValue($id);
-        $event->setTarget(
+        $routeParam = new RouteParam();
+        $routeParam->setValue($id);
+        $routeParam->setTarget(
             m::mock()
             ->shouldReceive('trigger')
             ->once()
             ->with('licence', 101)
             ->getMock()
         );
+        $event = new Event(null, $routeParam);
 
         $this->setupMockBusReg($id, $busReg);
 
@@ -132,20 +132,20 @@ class BusRegIdTest extends MockeryTestCase
         $this->sut->onBusRegId($event);
     }
 
-    public function testCreateService()
+    public function testInvoke()
     {
         $mockViewHelperManager = m::mock('Laminas\View\HelperPluginManager');
         $mockNavigation = m::mock();
         $mockTransferAnnotationBuilder = m::mock();
         $mockQueryService = m::mock();
 
-        $mockSl = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
+        $mockSl = m::mock(ContainerInterface::class);
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('Navigation')->andReturn($mockNavigation);
         $mockSl->shouldReceive('get')->with('TransferAnnotationBuilder')->andReturn($mockTransferAnnotationBuilder);
         $mockSl->shouldReceive('get')->with('QueryService')->andReturn($mockQueryService);
 
-        $service = $this->sut->createService($mockSl);
+        $service = $this->sut->__invoke($mockSl, BusRegId::class);
 
         $this->assertSame($this->sut, $service);
         $this->assertSame($mockViewHelperManager, $this->sut->getViewHelperManager());
@@ -156,12 +156,14 @@ class BusRegIdTest extends MockeryTestCase
 
     public function testOnBusRegIdNotFound()
     {
-        $this->expectException(\Common\Exception\ResourceNotFoundException::class);
+        $this->expectException(ResourceNotFoundException::class);
 
         $id = 69;
 
-        $event = new RouteParam();
-        $event->setValue($id);
+        $routeParam = new RouteParam();
+        $routeParam->setValue($id);
+
+        $event = new Event(null, $routeParam);
 
         $mockAnnotationBuilder = m::mock();
         $mockQueryService  = m::mock();

@@ -20,8 +20,8 @@ class AnnualTestHistory extends Base
      *     }
      * })
      * @Form\Type("TextArea")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":4000}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"max":4000})
      */
     public $annualTestHistory = null;
 }

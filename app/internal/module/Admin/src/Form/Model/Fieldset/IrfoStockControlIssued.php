@@ -13,7 +13,7 @@ class IrfoStockControlIssued
      * @Form\Attributes({"id":"","placeholder":"","class":"small"})
      * @Form\Options({"label": "IRFO GV Permit No"})
      * @Form\Type("Text")
-     * @Form\Validator({"name":"Digits"})
+     * @Form\Validator("Digits")
      * @Form\Validator({
      *     "name":"GreaterThan",
      *     "options": {

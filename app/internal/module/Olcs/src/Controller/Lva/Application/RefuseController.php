@@ -16,7 +16,7 @@ use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Lva\AbstractRefuseController;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Application Refuse Controller

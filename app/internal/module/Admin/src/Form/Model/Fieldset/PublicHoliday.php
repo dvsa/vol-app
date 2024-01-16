@@ -42,7 +42,7 @@ class PublicHoliday
      *      "max_year_delta": "+5",
      * })
      * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator("Date", options={"format": "Y-m-d"})
      */
     public $holidayDate = null;
 }

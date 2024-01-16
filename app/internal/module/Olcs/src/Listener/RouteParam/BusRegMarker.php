@@ -3,18 +3,14 @@
 namespace Olcs\Listener\RouteParam;
 
 use Interop\Container\ContainerInterface;
+use Laminas\EventManager\EventInterface;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
-/**
- * Class BusRegMarker
- * @package Olcs\Listener\RouteParam
- */
 class BusRegMarker implements ListenerAggregateInterface, FactoryInterface
 {
     use ListenerAggregateTrait;
@@ -72,24 +68,12 @@ class BusRegMarker implements ListenerAggregateInterface, FactoryInterface
         );
     }
 
-    /**
-     * @param RouteParam $e
-     */
-    public function onBusRegMarker(RouteParam $e)
+    public function onBusRegMarker(EventInterface $e)
     {
-        $busReg = $this->getBusRegData($e->getValue());
-        $this->getMarkerService()->addData('busReg', $busReg);
-    }
+        $routeParam = $e->getTarget();
 
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator) : BusRegMarker
-    {
-        return $this->__invoke($serviceLocator, BusRegMarker::class);
+        $busReg = $this->getBusRegData($routeParam->getValue());
+        $this->getMarkerService()->addData('busReg', $busReg);
     }
 
     /**

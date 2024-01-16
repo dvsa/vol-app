@@ -4,7 +4,12 @@ namespace OlcsTest\FormService\Form\Lva;
 
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Helper\UrlHelperService;
+use Common\Validator\ValidateIf;
+use Laminas\Form\ElementInterface;
+use Laminas\InputFilter\InputFilter;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\Validator\ValidatorChain;
+use Laminas\Validator\ValidatorPluginManager;
 use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -26,6 +31,8 @@ class FinancialEvidenceTest extends MockeryTestCase
     protected $urlHelper;
     /** @var  m\MockInterface */
     protected $translator;
+    /** @var  m\MockInterface */
+    protected $validatorPluginManager;
 
     public function setUp(): void
     {
@@ -33,6 +40,10 @@ class FinancialEvidenceTest extends MockeryTestCase
         $this->fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
         $this->urlHelper = m::mock(UrlHelperService::class);
         $this->translator = m::mock(TranslationHelperService::class);
+        $this->validatorPluginManager = m::mock(ValidatorPluginManager::class);
+
+        $validateIf = $this->createMock(ValidateIf::class);
+        $this->validatorPluginManager->shouldReceive('get')->with(ValidateIf::class)->andReturn($validateIf);
 
         $serviceManager = $this->createMock(ServiceLocatorInterface::class);
         $serviceManager->method('get')->willReturnMap([
@@ -40,9 +51,13 @@ class FinancialEvidenceTest extends MockeryTestCase
             ['Helper\Translation', $this->translator],
         ]);
 
-        $this->fsm->shouldReceive('getServiceLocator')->andReturn($serviceManager);
-
-        $this->sut = new FinancialEvidence($this->formHelper, m::mock(\ZfcRbac\Service\AuthorizationService::class), $this->translator, $this->urlHelper);
+        $this->sut = new FinancialEvidence(
+            $this->formHelper,
+            m::mock(\LmcRbacMvc\Service\AuthorizationService::class),
+            $this->translator,
+            $this->urlHelper,
+            $this->validatorPluginManager
+        );
     }
 
     public function testGetForm()
@@ -67,6 +82,17 @@ class FinancialEvidenceTest extends MockeryTestCase
         // Mocks
         $mockForm = m::mock();
 
+        $validatorChain = m::mock(ValidatorChain::class);
+        $validatorChain->shouldReceive('attach');
+        $validatorChain->shouldReceive('getValidators')->andReturn([]);
+
+        $inputFilter = m::mock(InputFilter::class);
+        $inputFilter->shouldReceive('get')->andReturnSelf();
+        $inputFilter->shouldReceive('setRequired');
+        $inputFilter->shouldReceive('getValidatorChain')->andReturn($validatorChain);
+
+        $mockForm->shouldReceive('getInputFilter')->andReturn($inputFilter);
+
         $formActions = m::mock();
         $formActions->shouldReceive('get->setLabel')->once();
 
@@ -74,11 +100,11 @@ class FinancialEvidenceTest extends MockeryTestCase
         $mockForm->shouldReceive('get')
             ->with('evidence')
             ->andReturn(
-                m::mock()
+                m::mock(ElementInterface::class)
                     ->shouldReceive('get')
                     ->with('uploadNowRadio')
                     ->andReturn(
-                        m::mock()
+                        m::mock(ElementInterface::class)
                         ->shouldReceive('setName')
                         ->with('uploadNow')
                         ->once()
@@ -88,7 +114,7 @@ class FinancialEvidenceTest extends MockeryTestCase
                     ->shouldReceive('get')
                     ->with('uploadLaterRadio')
                     ->andReturn(
-                        m::mock()
+                        m::mock(ElementInterface::class)
                             ->shouldReceive('setName')
                             ->with('uploadNow')
                             ->once()
@@ -98,7 +124,7 @@ class FinancialEvidenceTest extends MockeryTestCase
                     ->shouldReceive('get')
                     ->with('sendByPostRadio')
                     ->andReturn(
-                        m::mock()
+                        m::mock(ElementInterface::class)
                             ->shouldReceive('setName')
                             ->with('uploadNow')
                             ->once()

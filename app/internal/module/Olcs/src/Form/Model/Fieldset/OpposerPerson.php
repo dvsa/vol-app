@@ -14,8 +14,8 @@ class OpposerPerson
      * @Form\Type("Text")
      * @Form\Options({"label":"Contact first name"})
      * @Form\Attributes({"id":"forename","placeholder":"","class":"medium", "required":false})
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":35}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"max":35})
      */
     public $forename = null;
 
@@ -24,8 +24,8 @@ class OpposerPerson
      * @Form\Type("Text")
      * @Form\Options({"label":"Contact family name"})
      * @Form\Attributes({"id":"familyName","placeholder":"","class":"medium", "required":false})
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":35}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"max":35})
      */
     public $familyName = null;
 }

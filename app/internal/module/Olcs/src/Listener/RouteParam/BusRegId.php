@@ -3,21 +3,17 @@
 namespace Olcs\Listener\RouteParam;
 
 use Interop\Container\ContainerInterface;
+use Laminas\EventManager\EventInterface;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use \Dvsa\Olcs\Transfer\Query\Bus\BusReg as ItemDto;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Common\Exception\ResourceNotFoundException;
 
-/**
- * Class BusRegAId
- * @package Olcs\Listener\RouteParam
- */
 class BusRegId implements ListenerAggregateInterface, FactoryInterface
 {
     use ListenerAggregateTrait;
@@ -71,17 +67,6 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator) : BusRegId
-    {
-        return $this->__invoke($serviceLocator, BusRegId::class);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function attach(EventManagerInterface $events, $priority = 1)
@@ -93,12 +78,11 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
         );
     }
 
-    /**
-     * @param RouteParam $e
-     */
-    public function onBusRegId(RouteParam $e)
+    public function onBusRegId(EventInterface $e)
     {
-        $busReg = $this->getBusReg($e->getValue());
+        $routeParam = $e->getTarget();
+
+        $busReg = $this->getBusReg($routeParam->getValue());
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
         $placeholder->getContainer('busReg')->set($busReg);
@@ -108,10 +92,10 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
             $this->getNavigationService()->findOneById('licence_bus_short')->setVisible(false);
         }
 
-        $context = $e->getContext();
+        $context = $routeParam->getContext();
         if (isset($busReg['licence']['id']) && !isset($context['licence'])) {
             // trigger the licence listener
-            $e->getTarget()->trigger('licence', $busReg['licence']['id']);
+            $routeParam->getTarget()->trigger('licence', $busReg['licence']['id']);
         }
     }
 

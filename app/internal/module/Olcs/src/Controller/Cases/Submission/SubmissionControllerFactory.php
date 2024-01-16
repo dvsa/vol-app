@@ -9,8 +9,7 @@ use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Helper\UrlHelperService;
 use Interop\Container\ContainerInterface;
 use Laminas\Navigation\Navigation;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\Renderer\PhpRenderer as ViewRenderer;
 use Olcs\Service\Data\Submission;
 
@@ -27,7 +26,7 @@ class SubmissionControllerFactory implements FactoryInterface
         $flashMessenger = $container->get(FlashMessengerHelperService::class);
         assert($flashMessenger instanceof FlashMessengerHelperService);
 
-        $navigation = $container->get('navigation');
+        $navigation = $container->get('Navigation');
         assert($navigation instanceof Navigation);
 
         $urlHelper = $container->get(UrlHelperService::class);
@@ -52,15 +51,6 @@ class SubmissionControllerFactory implements FactoryInterface
             $viewRenderer,
             $submissionDataService,
             $uploadHelper
-        );
-    }
-    public function createService(ServiceLocatorInterface $serviceLocator): SubmissionController
-    {
-        $container = method_exists($serviceLocator, 'getServiceLocator') ? $serviceLocator->getServiceLocator() : $serviceLocator;
-
-        return $this->__invoke(
-            $container,
-            SubmissionController::class
         );
     }
 }

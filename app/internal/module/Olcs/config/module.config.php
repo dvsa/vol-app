@@ -11,6 +11,7 @@ use Common\Data\Object\Search\PsvDisc;
 use Common\Data\Object\Search\Publication;
 use Common\Data\Object\Search\User;
 use Common\Data\Object\Search\Vehicle;
+use Common\Form\Elements\Validators\TableRequiredValidator;
 use Common\Service\Data as CommonDataService;
 use Laminas\Cache\Service\StorageCacheAbstractServiceFactory;
 use Olcs\Auth;
@@ -587,6 +588,7 @@ return array(
             'script' => Script::class,
             'placeholder' => Placeholder::class,
             'table' => Table::class,
+
         )
     ),
     'view_manager' => array(
@@ -626,9 +628,14 @@ return array(
             'Olcs\View\Helper\SlaIndicator' => SlaIndicator::class,
             'showMarkers' => Olcs\View\Helper\MarkersFactory::class,
             'showVersion' => Olcs\View\Helper\Factory\VersionFactory::class,
+            \Common\View\Helper\EscapeHtml::class => \Common\View\Factory\Helper\EscapeHtmlFactory::class,
+            \Common\Form\View\Helper\FormElement::class => \Common\Form\View\Helper\FormElementFactory::class,
         ],
         'aliases' => [
-            'slaIndicator' => 'Olcs\View\Helper\SlaIndicator'
+            'formElement' => \Common\Form\View\Helper\FormElement::class,
+            'formelement' => \Common\Form\View\Helper\FormElement::class,
+            'slaIndicator' => 'Olcs\View\Helper\SlaIndicator',
+            'escapeHtml' => \Common\View\Helper\EscapeHtml::class
         ]
     ),
     'form' => [
@@ -664,18 +671,20 @@ return array(
             'Helper\ApplicationOverview' => HelperService\ApplicationOverviewHelperService::class,
             'Helper\LicenceOverview' => HelperService\LicenceOverviewHelperService::class,
             'Processing\CreateVariation' => ProcessingService\CreateVariationProcessingServiceFactory::class,
+            'LicenceListener' => LicenceListener::class
         ],
         'invokables' => [
             'ApplicationUtility' => 'Olcs\Service\Utility\ApplicationUtility',
-            \Olcs\Listener\RouteParams::class => \Olcs\Listener\RouteParams::class,
             Olcs\Service\Permits\Bilateral\MoroccoFieldsetPopulator::class =>
                 Olcs\Service\Permits\Bilateral\MoroccoFieldsetPopulator::class,
             \Olcs\Helper\ApplicationProcessingHelper::class => \Olcs\Helper\ApplicationProcessingHelper::class,
+            'Router' => Laminas\Router\Http\TreeRouteStack::class,
         ],
         'abstract_factories' => [
             StorageCacheAbstractServiceFactory::class,
         ],
         'factories' => array(
+            RouteParam\Licence::class => RouteParam\Licence::class,
             DataService\ActionToBeTaken::class => CommonDataService\RefDataFactory::class,
             DataService\ApplicationStatus::class => CommonDataService\AbstractListDataServiceFactory::class,
             DataService\AssignedToList::class => CommonDataService\AbstractListDataServiceFactory::class,
@@ -718,7 +727,10 @@ return array(
             DataService\UserListInternalExcludingLimitedReadOnlyUsers::class => CommonDataService\AbstractListDataServiceFactory::class,
             DataService\UserListInternalExcludingLimitedReadOnlyUsersSorted::class => CommonDataService\AbstractListDataServiceFactory::class,
             DataService\UserWithName::class => CommonDataService\AbstractDataServiceFactory::class,
+            CommonDataService\Search\Search::class => CommonDataService\Search\SearchFactory::class,
             ProcessingService\CreateVariationProcessingService::class => ProcessingService\CreateVariationProcessingServiceFactory::class,
+
+            DataService\AbstractPublicInquiryDataServices::class => DataService\AbstractPublicInquiryDataServicesFactory::class,
 
             HelperService\ApplicationOverviewHelperService::class => HelperService\ApplicationOverviewHelperServiceFactory::class,
             HelperService\LicenceOverviewHelperService::class => HelperService\LicenceOverviewHelperServiceFactory::class,
@@ -742,7 +754,7 @@ return array(
             SubmissionsFurniture::class => SubmissionsFurniture::class,
             TransportManagerFurniture::class => TransportManagerFurniture::class,
             IrhpApplicationFurniture::class => IrhpApplicationFurniture::class,
-            'Olcs\Listener\RouteParam\Cases' => 'Olcs\Listener\RouteParam\Cases',
+            Olcs\Listener\RouteParam\Cases::class => Olcs\Listener\RouteParam\Cases::class,
             LicenceListener::class => LicenceListener::class,
             'Olcs\Listener\RouteParam\CaseMarker' => 'Olcs\Listener\RouteParam\CaseMarker',
             RouteParam\Organisation::class => RouteParam\Organisation::class,
@@ -768,6 +780,10 @@ return array(
                 WebDavJsonWebTokenGenerationServiceFactory::class,
 
             Auth\Adapter\InternalCommandAdapter::class => Auth\Adapter\InternalCommandAdapterFactory::class,
+            'RoutePluginManager' => Laminas\Router\RoutePluginManagerFactory::class,
+            'navigation' => 'Laminas\Navigation\Service\DefaultNavigationFactory',
+            'Navigation' => 'Laminas\Navigation\Service\DefaultNavigationFactory',
+            \Olcs\Listener\RouteParams::class => \Olcs\Listener\RouteParamsFactory::class,
         )
     ),
     'form_elements' => [
@@ -846,7 +862,6 @@ return array(
         LicenceControllerInterface::class => [
             RouteParam\LicenceFurniture::class,
             RouteParam\Licence::class,
-            HeaderSearch::class
         ],
         OperatorControllerInterface::class => [
             RouteParam\Organisation::class,
@@ -877,7 +892,49 @@ return array(
         'invokables' => [
         ],
         'factories' => [
-            DataService\AbstractPublicInquiryDataServices::class => DataService\AbstractPublicInquiryDataServicesFactory::class,
+            DataService\ActionToBeTaken::class => CommonDataService\RefDataFactory::class,
+            DataService\ApplicationStatus::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\AssignedToList::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\BusNoticePeriod::class => CommonDataService\AbstractDataServiceFactory::class,
+            DataService\BusServiceType::class => CommonDataService\AbstractDataServiceFactory::class,
+            DataService\Cases::class => CommonDataService\AbstractDataServiceFactory::class,
+            DataService\Category::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\DocumentCategory::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\DocumentCategoryWithDocs::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\DocumentSubCategory::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\DocumentSubCategoryWithDocs::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\EmailTemplateCategory::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\IrfoCountry::class => CommonDataService\AbstractDataServiceFactory::class,
+            DataService\IrfoGvPermitType::class => CommonDataService\AbstractDataServiceFactory::class,
+            DataService\IrfoPsvAuthType::class => CommonDataService\AbstractDataServiceFactory::class,
+            DataService\IrhpPermitPrintCountry::class => CommonDataService\AbstractDataServiceFactory::class,
+            DataService\IrhpPermitPrintRangeType::class => DataService\IrhpPermitPrintRangeTypeFactory::class,
+            DataService\IrhpPermitPrintStock::class => DataService\IrhpPermitPrintStockFactory::class,
+            DataService\IrhpPermitPrintType::class => CommonDataService\AbstractDataServiceFactory::class,
+            DataService\Licence::class => DataService\LicenceFactory::class,
+            DataService\OperatingCentresForInspectionRequest::class => DataService\OperatingCentresForInspectionRequestFactory::class,
+            DataService\PaymentType::class => CommonDataService\RefDataFactory::class,
+            DataService\PresidingTc::class => CommonDataService\AbstractDataServiceFactory::class,
+            DataService\Printer::class => CommonDataService\AbstractDataServiceFactory::class,
+            DataService\ReportEmailTemplate::class => CommonDataService\AbstractDataServiceFactory::class,
+            DataService\ReportLetterTemplate::class => CommonDataService\AbstractDataServiceFactory::class,
+            DataService\ScannerCategory::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\ScannerSubCategory::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\SiPenaltyType::class => CommonDataService\AbstractDataServiceFactory::class,
+            DataService\SubCategory::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\SubCategoryDescription::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\Submission::class => DataService\SubmissionFactory::class,
+            DataService\SubmissionActionTypes::class => DataService\SubmissionActionTypesFactory::class,
+            DataService\TaskCategory::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\TaskSubCategory::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\Team::class => DataService\TeamFactory::class,
+            DataService\User::class => CommonDataService\AbstractDataServiceFactory::class,
+            DataService\UserInternalTeamList::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\UserListInternal::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\UserListInternalExcludingLimitedReadOnlyUsers::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\UserListInternalExcludingLimitedReadOnlyUsersSorted::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\UserWithName::class => CommonDataService\AbstractDataServiceFactory::class,
+            CommonDataService\Search\Search::class => CommonDataService\Search\SearchFactory::class,
             DataService\ImpoundingLegislation::class => DataService\ImpoundingLegislationFactory::class,
             DataService\LicenceDecisionLegislation::class => DataService\LicenceDecisionLegislationFactory::class,
             DataService\PublicInquiryDecision::class => DataService\AbstractPublicInquiryDataFactory::class,

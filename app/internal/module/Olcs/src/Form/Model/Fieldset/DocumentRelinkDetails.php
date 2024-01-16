@@ -43,7 +43,7 @@ class DocumentRelinkDetails
      * @Form\Options({"label":"Application ID"})
      * @Form\Type("Text")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":1,"max":255}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":1,"max":255})
      */
     public $targetId = null;
 

@@ -7,8 +7,7 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Interop\Container\ContainerInterface;
 use Laminas\Navigation\Navigation;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class OperatorProcessingNoteControllerFactory implements FactoryInterface
 {
@@ -23,7 +22,7 @@ class OperatorProcessingNoteControllerFactory implements FactoryInterface
         $flashMessengerHelperService = $container->get(FlashMessengerHelperService::class);
         assert($flashMessengerHelperService instanceof FlashMessengerHelperService);
 
-        $navigation = $container->get('navigation');
+        $navigation = $container->get('Navigation');
         assert($navigation instanceof Navigation);
 
         return new OperatorProcessingNoteController(
@@ -31,15 +30,6 @@ class OperatorProcessingNoteControllerFactory implements FactoryInterface
             $formHelper,
             $flashMessengerHelperService,
             $navigation
-        );
-    }
-    public function createService(ServiceLocatorInterface $serviceLocator): OperatorProcessingNoteController
-    {
-        $container = method_exists($serviceLocator, 'getServiceLocator') ? $serviceLocator->getServiceLocator() : $serviceLocator;
-
-        return $this->__invoke(
-            $container,
-            OperatorProcessingNoteController::class
         );
     }
 }

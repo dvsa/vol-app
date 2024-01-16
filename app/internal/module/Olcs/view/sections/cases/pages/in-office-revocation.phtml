@@ -4,7 +4,7 @@ $revoke = $this->placeholder('proposeToRevoke')->getValue();
 if (empty($revoke)) {
     echo $this->render('partials/read-only/empty',
         [
-            'header' => $this->navigation('navigation')->findOneBy('active', 1)->getLabel(),
+            'header' => $this->navigation('navigation')->findOneBy('active', true)->getLabel(),
             'helpText' => 'There is no in-office revocation',
             'url' => $this->url('processing_in_office_revocation', ['action' => 'add'], [], true),
             'label' => 'Add in-office revocation'

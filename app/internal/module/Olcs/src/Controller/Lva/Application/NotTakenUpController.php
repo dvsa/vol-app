@@ -11,7 +11,7 @@ use Dvsa\Olcs\Transfer\Command\Application\NotTakenUpApplication;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Lva\AbstractApplicationDecisionController;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Application Not Taken Up Controller

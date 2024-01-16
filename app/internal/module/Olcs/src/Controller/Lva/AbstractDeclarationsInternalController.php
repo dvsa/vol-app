@@ -9,7 +9,7 @@ use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Command\Application\UpdateAuthSignature;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Internal Application Undertakings Controller

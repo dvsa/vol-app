@@ -2,16 +2,14 @@
 
 namespace OlcsTest\Listener\RouteParam;
 
+use Interop\Container\ContainerInterface;
+use Laminas\EventManager\Event;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParam\Action;
 use Mockery as m;
 use Olcs\Listener\RouteParams;
 
-/**
- * Class ActionTest
- * @package OlcsTest\Listener\RouteParam
- */
 class ActionTest extends TestCase
 {
     public function testAttach()
@@ -29,10 +27,12 @@ class ActionTest extends TestCase
     {
         $action = 'add';
 
-        $event = new RouteParam();
-        $event->setValue($action);
+        $routeParam = new RouteParam();
+        $routeParam->setValue($action);
 
-        $mockRouter = m::mock('Laminas\Mvc\Router\RouteStackInterface');
+        $event = new Event(null, $routeParam);
+
+        $mockRouter = m::mock('Laminas\Router\RouteStackInterface');
         $mockRouter->shouldReceive('assemble')
             ->with(['action' => $action])
             ->andReturn('http://anything/');
@@ -52,15 +52,15 @@ class ActionTest extends TestCase
         $sut->onAction($event);
     }
 
-    public function testCreateService()
+    public function testInvoke()
     {
         $mockViewHelperManager = m::mock('Laminas\View\HelperPluginManager');
 
-        $mockSl = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
+        $mockSl = m::mock(ContainerInterface::class);
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
 
         $sut = new Action();
-        $service = $sut->createService($mockSl);
+        $service = $sut->__invoke($mockSl, Action::class);
 
         $this->assertSame($sut, $service);
         $this->assertSame($mockViewHelperManager, $sut->getViewHelperManager());

@@ -574,8 +574,8 @@ abstract class AbstractInternalController extends AbstractOlcsController
         $action = ucfirst($this->params()->fromRoute('action'));
 
         /**
- * @var Form $form
-*/
+        * @var Form $form
+        */
         $form = $this->getForm($formClass);
         $initialData = $mapperClass::mapFromResult($defaultDataProvider->provideParameters());
 
@@ -588,8 +588,8 @@ abstract class AbstractInternalController extends AbstractOlcsController
         $this->placeholder()->setPlaceholder('contentTitle', $contentTitle);
 
         /**
- * @var Request $request
-*/
+        * @var Request $request
+        */
         $request = $this->getRequest();
 
         if ($request->isPost()) {
@@ -656,8 +656,8 @@ abstract class AbstractInternalController extends AbstractOlcsController
         Logger::debug(__METHOD__);
 
         /**
- * @var Request $request
-*/
+        * @var Request $request
+        */
         $request = $this->getRequest();
         $action = ucfirst($this->params()->fromRoute('action'));
         $form = $this->getForm($formClass);
@@ -969,8 +969,8 @@ abstract class AbstractInternalController extends AbstractOlcsController
     {
         parent::attachDefaultListeners();
 
-        $listener = new CrudListener($this, $this->routeIdentifier, $this->crudConfig);
-        $this->getEventManager()->attach($listener);
+        $listener = new CrudListener($this, $this->routeIdentifier, $this->crudConfig, $this->flashMessengerHelperService);
+        $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, [$listener, 'onDispatch']);
 
         if (method_exists($this, 'setNavigationCurrentLocation')) {
             $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, array($this, 'setNavigationCurrentLocation'), 6);
@@ -1028,8 +1028,8 @@ abstract class AbstractInternalController extends AbstractOlcsController
     private function hasCancelledForm()
     {
         /**
- * @var Request $request
-*/
+        * @var Request $request
+        */
         $request = $this->getRequest();
 
         if (!$request->isPost()) {
@@ -1132,8 +1132,8 @@ abstract class AbstractInternalController extends AbstractOlcsController
     public function isButtonPressed($button, $data = null)
     {
         /**
- * @var Request $request
-*/
+        * @var Request $request
+        */
         $request = $this->getRequest();
 
         if (is_null($data)) {

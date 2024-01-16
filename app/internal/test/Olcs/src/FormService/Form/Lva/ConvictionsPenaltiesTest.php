@@ -6,9 +6,9 @@ use Common\Form\Elements\InputFilters\ActionLink;
 use Common\Form\Model\Form\Lva\Fieldset\ConvictionsPenaltiesReadMoreLink;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Helper\UrlHelperService;
+use Laminas\Form\ElementInterface;
 use Olcs\FormService\Form\Lva\ConvictionsPenalties;
 use Mockery as m;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Convictions & Penalties Form Service Test
@@ -40,12 +40,12 @@ class ConvictionsPenaltiesTest extends AbstractLvaFormServiceTestCase
             ->with('form-actions')
             ->once()
             ->andReturn(
-                m::mock()
+                m::mock(ElementInterface::class)
                     ->shouldReceive('get')
                     ->with('save')
                     ->once()
                     ->andReturn(
-                        m::mock()
+                        m::mock(ElementInterface::class)
                             ->shouldReceive('setLabel')
                             ->with('internal.save.button')
                             ->once()
@@ -55,7 +55,7 @@ class ConvictionsPenaltiesTest extends AbstractLvaFormServiceTestCase
             )
             ->getMock();
 
-        $ConvictionsReadMoreLink = m::mock(ConvictionsPenaltiesReadMoreLink::class);
+        $ConvictionsReadMoreLink = m::mock(ElementInterface::class);
         $ConvictionsReadMoreLink
             ->shouldReceive('get')
             ->with('readMoreLink')->andReturn(

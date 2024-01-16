@@ -49,7 +49,7 @@ class IrfoStockControl
      * @Form\Attributes({"id":"","placeholder":"","class":"small"})
      * @Form\Options({"label": "Serial No - Start"})
      * @Form\Type("Text")
-     * @Form\Validator({"name":"Digits"})
+     * @Form\Validator("Digits")
      * @Form\Validator({
      *     "name":"GreaterThan",
      *     "options": {
@@ -63,7 +63,7 @@ class IrfoStockControl
      * @Form\Attributes({"id":"","placeholder":"","class":"small"})
      * @Form\Options({"label": "Serial No - End"})
      * @Form\Type("Text")
-     * @Form\Validator({"name":"Digits"})
+     * @Form\Validator("Digits")
      * @Form\Validator({
      *     "name":"GreaterThan",
      *     "options": {

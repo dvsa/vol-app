@@ -2,10 +2,10 @@
 
 namespace Olcs\Listener\RouteParam;
 
-use Dvsa\Olcs\Transfer\Command\Publication\Bus;
 use Interop\Container\ContainerInterface;
 use Common\Service\Cqrs\Query\QueryService;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
+use Laminas\EventManager\EventInterface;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use \Dvsa\Olcs\Transfer\Query\Bus\BusRegDecision as ItemDto;
@@ -13,8 +13,7 @@ use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
 use Laminas\Navigation\Navigation;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Common\RefData;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Common\Exception\ResourceNotFoundException;
@@ -106,18 +105,6 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator the service locator
-     *
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator) : BusRegAction
-    {
-        return $this->__invoke($serviceLocator, BusRegAction::class);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function attach(EventManagerInterface $events, $priority = 1)
@@ -132,13 +119,13 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
     /**
      * Modify buttons for bus registration page
      *
-     * @param RouteParam $e The RouteParam event
-     *
      * @return void
      */
-    public function onBusRegAction(RouteParam $e)
+    public function onBusRegAction(EventInterface $e)
     {
-        $id = $e->getValue();
+        $routeParam = $e->getTarget();
+
+        $id = $routeParam->getValue();
         $busReg = $this->getBusReg($id);
 
         $sidebarNav = $this->getSidebarNavigationService();

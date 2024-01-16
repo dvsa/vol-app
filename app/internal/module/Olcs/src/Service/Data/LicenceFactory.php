@@ -4,12 +4,8 @@ namespace Olcs\Service\Data;
 
 use Common\Service\Data\AbstractDataServiceServices;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
-/**
- * LicenceFactory
- */
 class LicenceFactory implements FactoryInterface
 {
     /**
@@ -26,17 +22,5 @@ class LicenceFactory implements FactoryInterface
             $container->get(AbstractDataServiceServices::class),
             $container->get('Helper\FlashMessenger')
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $services
-     *
-     * @return Licence
-     */
-    public function createService(ServiceLocatorInterface $services): Licence
-    {
-        return $this($services, Licence::class);
     }
 }

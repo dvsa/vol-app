@@ -6,12 +6,8 @@ use Common\Service\Data\AbstractDataServiceServices;
 use Common\Service\Data\Application;
 use Common\Service\Data\Licence;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
-/**
- * AbstractPublicInquiryDataServicesFactory
- */
 class AbstractPublicInquiryDataServicesFactory implements FactoryInterface
 {
     /**
@@ -29,17 +25,5 @@ class AbstractPublicInquiryDataServicesFactory implements FactoryInterface
             $container->get(Application::class),
             $container->get(Licence::class)
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $services
-     *
-     * @return AbstractPublicInquiryDataServices
-     */
-    public function createService(ServiceLocatorInterface $services): AbstractPublicInquiryDataServices
-    {
-        return $this($services, AbstractPublicInquiryDataServices::class);
     }
 }

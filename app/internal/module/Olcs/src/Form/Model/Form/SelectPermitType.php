@@ -23,7 +23,7 @@ class SelectPermitType
      *     "service_name": "Common\Service\Data\IrhpPermitType",
      * })
      * @Form\Type("DynamicSelect")
-     * @Form\Validator({"name": "Laminas\Validator\NotEmpty"})
+     * @Form\Validator("Laminas\Validator\NotEmpty")
      */
     public $permitType = null;
 

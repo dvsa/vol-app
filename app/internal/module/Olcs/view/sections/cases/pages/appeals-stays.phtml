@@ -10,7 +10,7 @@ $stayRecords = $this->placeholder('stays')->getValue();
 if (empty($appeal)){
     echo $this->render('partials/read-only/empty',
         [
-            'header' => $this->navigation('navigation')->findOneBy('active', 1)->getLabel(),
+            'header' => $this->navigation('navigation')->findOneBy('active', true)->getLabel(),
             'helpText' => 'There is currently no appeal',
             'url' => $this->url('case_appeal', ['case' => $caseId, 'action' => 'add'], [], false),
             'label' => 'Add appeal',
@@ -20,7 +20,7 @@ if (empty($appeal)){
 } else {
     echo $this->render('partials/read-only/main',
         [
-            'header' => $this->navigation('navigation')->findOneBy('active', 1)->getLabel(),
+            'header' => $this->navigation('navigation')->findOneBy('active', true)->getLabel(),
             'actions' => [
                 [
                     'label' => 'Edit appeal',

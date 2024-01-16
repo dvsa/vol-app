@@ -145,10 +145,8 @@ class SubmissionSections extends LaminasElement implements ElementPrepareAwareIn
      * Prepare the form element (mostly used for rendering purposes)
      *
      * @param FormInterface $form Form - not currently used
-     *
-     * @return mixed
      */
-    public function prepareElement(FormInterface $form)
+    public function prepareElement(FormInterface $form): void
     {
         unset($form);
         $name = $this->getName();

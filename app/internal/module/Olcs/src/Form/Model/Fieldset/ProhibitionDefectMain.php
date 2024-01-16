@@ -17,7 +17,7 @@ class ProhibitionDefectMain extends Base
      * @Form\Options({"label":"Defect type"})
      * @Form\Type("Text")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":2,"max":255}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":2,"max":255})
      */
     public $defectType = null;
 
@@ -27,7 +27,7 @@ class ProhibitionDefectMain extends Base
      * @Form\Options({"label":"Definition"})
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":5,"max":1024}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":5,"max":1024})
      */
     public $notes = null;
 

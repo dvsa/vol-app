@@ -5,7 +5,7 @@ $data = $this->placeholder('details')->getValue();
 if (empty($data)) {
     echo $this->render('partials/read-only/empty',
         [
-            'header' => $this->navigation('navigation')->findOneBy('active', 1)->getLabel(),
+            'header' => $this->navigation('navigation')->findOneBy('active', true)->getLabel(),
             'helpText' => 'There are currently no decisions against this case',
             'multiUrl' => [
                 [

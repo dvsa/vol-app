@@ -19,7 +19,7 @@ use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 use Olcs\Controller\Lva\Traits\ApplicationOverviewTrait;
 use Olcs\Service\Helper\ApplicationOverviewHelperService;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Application Overview Controller

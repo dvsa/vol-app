@@ -16,7 +16,7 @@ class BusServiceNumberAndType extends BusRegDetails
      * @Form\Required(false)
      * @Form\Type("Text")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":1,"max":70}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":1,"max":70})
      */
     public $serviceNo = null;
 
@@ -41,7 +41,7 @@ class BusServiceNumberAndType extends BusRegDetails
      * @Form\Required(false)
      * @Form\Type("Text")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":1,"max":100}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":1,"max":100})
      */
     public $startPoint = null;
 
@@ -51,7 +51,7 @@ class BusServiceNumberAndType extends BusRegDetails
      * @Form\Required(false)
      * @Form\Type("Text")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":1,"max":100}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":1,"max":100})
      */
     public $finishPoint = null;
 
@@ -61,7 +61,7 @@ class BusServiceNumberAndType extends BusRegDetails
      * @Form\Required(false)
      * @Form\Type("Text")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":1,"max":255}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":1,"max":255})
      */
     public $via = null;
 
@@ -90,7 +90,7 @@ class BusServiceNumberAndType extends BusRegDetails
      * @Form\Required(false)
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":800}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"max":800})
      */
     public $otherDetails = null;
 
@@ -105,8 +105,8 @@ class BusServiceNumberAndType extends BusRegDetails
      * @Form\Type("DateSelect")
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
-     * @Form\Validator({"name":"Common\Form\Elements\Validators\DateNotInFuture"})
+     * @Form\Validator("Date", options={"format": "Y-m-d"})
+     * @Form\Validator("Common\Form\Elements\Validators\DateNotInFuture")
      */
     public $receivedDate = null;
 
@@ -120,7 +120,7 @@ class BusServiceNumberAndType extends BusRegDetails
      * @Form\Required(false)
      * @Form\Type("DateSelect")
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator("Date", options={"format": "Y-m-d"})
      * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $effectiveDate = null;
@@ -135,7 +135,7 @@ class BusServiceNumberAndType extends BusRegDetails
      * @Form\Required(false)
      * @Form\Type("DateSelect")
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d"}})
+     * @Form\Validator("Date", options={"format": "Y-m-d"})
      * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $endDate = null;

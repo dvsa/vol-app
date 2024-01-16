@@ -11,10 +11,8 @@ use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
-use Olcs\Controller\IndexController;
 use Olcs\Controller\Operator\OperatorController;
 use Olcs\Service\Data\Licence;
 
@@ -28,8 +26,6 @@ class OperatorControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): OperatorController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);
         $tableFactory = $container->get(TableFactory::class);
@@ -40,7 +36,7 @@ class OperatorControllerFactory implements FactoryInterface
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         $licenceDataService = $container->get(Licence::class);
         $queryService = $container->get(QueryService::class);
-        $navigation = $container->get('navigation');
+        $navigation = $container->get('Navigation');
 
         return new OperatorController(
             $scriptFactory,
@@ -55,17 +51,5 @@ class OperatorControllerFactory implements FactoryInterface
             $queryService,
             $navigation
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return IndexController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): OperatorController
-    {
-        return $this->__invoke($serviceLocator, OperatorController::class);
     }
 }

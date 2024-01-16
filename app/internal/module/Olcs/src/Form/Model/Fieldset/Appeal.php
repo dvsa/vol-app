@@ -19,7 +19,7 @@ class Appeal extends CaseBase
      * })
      * @Form\Type("DateSelect")
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
      * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $appealDate = null;
@@ -34,7 +34,7 @@ class Appeal extends CaseBase
      * @Form\Type("DateSelect")
      * @Form\Required(false)
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
      * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $deadlineDate = null;
@@ -45,7 +45,7 @@ class Appeal extends CaseBase
      * @Form\Required(false)
      * @Form\Type("Text")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":2,"max":20}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":2,"max":20})
      */
     public $appealNo = null;
 
@@ -75,7 +75,7 @@ class Appeal extends CaseBase
      * @Form\Required(false)
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":5,"max":4000}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":5,"max":4000})
      */
     public $outlineGround = null;
 
@@ -89,7 +89,7 @@ class Appeal extends CaseBase
      * @Form\Required(false)
      * @Form\Type("DateSelect")
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
      * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $hearingDate = null;
@@ -104,7 +104,7 @@ class Appeal extends CaseBase
      * @Form\Required(false)
      * @Form\Type("DateSelect")
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
      * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $decisionDate = null;
@@ -119,7 +119,7 @@ class Appeal extends CaseBase
      * @Form\Required(false)
      * @Form\Type("DateSelect")
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
      * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $papersDueTcDate = null;
@@ -134,7 +134,7 @@ class Appeal extends CaseBase
      * @Form\Required(false)
      * @Form\Type("DateSelect")
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
      * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $papersSentTcDate = null;
@@ -149,7 +149,7 @@ class Appeal extends CaseBase
      * @Form\Required(false)
      * @Form\Type("DateSelect")
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
      * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $papersDueDate = null;
@@ -164,7 +164,7 @@ class Appeal extends CaseBase
      * @Form\Required(false)
      * @Form\Type("DateSelect")
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date", "options":{"format":"Y-m-d"}})
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
      * @Form\Filter({"name": "DateSelectNullifier"})
      */
     public $papersSentDate = null;
@@ -189,7 +189,7 @@ class Appeal extends CaseBase
      * @Form\Required(false)
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":5,"max":4000}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":5,"max":4000})
      */
     public $comment = null;
 
@@ -210,7 +210,7 @@ class Appeal extends CaseBase
      *     "hint": "Please note, all associated stay information on this case will also be withdrawn",
      * })
      * @Form\Filter({"name":"DateSelect", "options":{"null_on_empty":true}})
-     * @Form\Validator({"name": "NotEmpty", "options": {"array"}})
+     * @Form\Validator("NotEmpty", options={"array"})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "isWithdrawn",

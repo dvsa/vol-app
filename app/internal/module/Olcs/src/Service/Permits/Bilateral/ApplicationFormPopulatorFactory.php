@@ -4,23 +4,10 @@ namespace Olcs\Service\Permits\Bilateral;
 
 use Interop\Container\ContainerInterface;
 use Laminas\Form\Factory as FormFactory;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class ApplicationFormPopulatorFactory implements FactoryInterface
 {
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return ApplicationFormPopulator
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator) : ApplicationFormPopulator
-    {
-        return $this->__invoke($serviceLocator, ApplicationFormPopulator::class);
-    }
-
     /**
      * @param ContainerInterface $container
      * @param $requestedName

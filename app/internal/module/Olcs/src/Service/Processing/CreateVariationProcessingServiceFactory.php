@@ -3,8 +3,7 @@
 namespace Olcs\Service\Processing;
 
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class CreateVariationProcessingServiceFactory implements FactoryInterface
 {
@@ -24,17 +23,5 @@ class CreateVariationProcessingServiceFactory implements FactoryInterface
             $container->get('CommandService'),
             $container->get('Helper\Date')
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $services
-     *
-     * @return CreateVariationProcessingService
-     */
-    public function createService(ServiceLocatorInterface $services)
-    {
-        return $this($services, CreateVariationProcessingService::class);
     }
 }

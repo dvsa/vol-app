@@ -10,8 +10,8 @@ use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\Form\Form;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
+use LmcRbacMvc\Service\AuthorizationService;
 use Olcs\Module;
-use ZfcRbac\Service\AuthorizationService;
 
 /**
  * Internal Application Undertakings Controller

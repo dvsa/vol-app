@@ -33,7 +33,7 @@ class SubmissionDecision extends Base
      *     "use_groups":true
      * })
      * @Form\Type("DynamicSelect")
-     * @Form\Filter({"name":"Common\Filter\NullToArray"})
+     * @Form\Filter("Common\Filter\NullToArray")
      */
     public $reasons = null;
 
@@ -47,9 +47,9 @@ class SubmissionDecision extends Base
      *     "column-size": "",
      * })
      * @Form\Type("TextArea")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Filter({"name":"htmlpurifier"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":5}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Filter("htmlpurifier")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":5})
      */
     public $comment = null;
 

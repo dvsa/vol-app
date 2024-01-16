@@ -7,8 +7,7 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Interop\Container\ContainerInterface;
 use Laminas\Navigation\Navigation;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class BusShortControllerFactory implements FactoryInterface
 {
@@ -23,7 +22,7 @@ class BusShortControllerFactory implements FactoryInterface
         $flashMessenger = $container->get(FlashMessengerHelperService::class);
         assert($flashMessenger instanceof FlashMessengerHelperService);
 
-        $navigation = $container->get('navigation');
+        $navigation = $container->get('Navigation');
         assert($navigation instanceof Navigation);
 
         return new BusShortController(
@@ -31,15 +30,6 @@ class BusShortControllerFactory implements FactoryInterface
             $formHelper,
             $flashMessenger,
             $navigation
-        );
-    }
-    public function createService(ServiceLocatorInterface $serviceLocator): BusShortController
-    {
-        $container = method_exists($serviceLocator, 'getServiceLocator') ? $serviceLocator->getServiceLocator() : $serviceLocator;
-
-        return $this->__invoke(
-            $container,
-            BusShortController::class
         );
     }
 }

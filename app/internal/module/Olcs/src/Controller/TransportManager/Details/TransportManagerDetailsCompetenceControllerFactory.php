@@ -2,7 +2,6 @@
 
 namespace Olcs\Controller\TransportManager\Details;
 
-use Common\Service\Cqrs\Query\CachingQueryService;
 use Common\Service\Cqrs\Query\QueryService;
 use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
@@ -12,8 +11,7 @@ use Common\Service\Helper\TransportManagerHelperService;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder as TransferAnnotationBuilder;
 use Interop\Container\ContainerInterface;
 use Laminas\Navigation\Navigation;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class TransportManagerDetailsCompetenceControllerFactory implements FactoryInterface
 {
@@ -28,7 +26,7 @@ class TransportManagerDetailsCompetenceControllerFactory implements FactoryInter
         $flashMessengerHelperService = $container->get(FlashMessengerHelperService::class);
         assert($flashMessengerHelperService instanceof FlashMessengerHelperService);
 
-        $navigation = $container->get('navigation');
+        $navigation = $container->get('Navigation');
         assert($navigation instanceof Navigation);
 
         $transferAnnotationBuilder = $container->get(TransferAnnotationBuilder::class);
@@ -51,15 +49,6 @@ class TransportManagerDetailsCompetenceControllerFactory implements FactoryInter
             $queryService,
             $transportMangerHelper,
             $uploadHelper
-        );
-    }
-    public function createService(ServiceLocatorInterface $serviceLocator): TransportManagerDetailsCompetenceController
-    {
-        $container = method_exists($serviceLocator, 'getServiceLocator') ? $serviceLocator->getServiceLocator() : $serviceLocator;
-
-        return $this->__invoke(
-            $container,
-            TransportManagerDetailsCompetenceController::class
         );
     }
 }

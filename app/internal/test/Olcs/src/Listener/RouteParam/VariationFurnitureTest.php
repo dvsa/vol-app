@@ -1,32 +1,22 @@
 <?php
 
-/**
- * Variation Furniture Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace OlcsTest\Listener\RouteParam;
 
 use Common\Exception\ResourceNotFoundException;
 use Common\RefData;
 use Common\Service\Cqrs\Query\QuerySender;
 use Dvsa\Olcs\Transfer\Query\Application\Application as VariationQry;
+use Interop\Container\ContainerInterface;
+use Laminas\EventManager\Event;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParam\VariationFurniture;
 use Mockery as m;
 use Laminas\EventManager\EventManagerInterface;
-use Laminas\Mvc\Router\RouteStackInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
-use Laminas\View\Helper\Url;
+use Laminas\Router\RouteStackInterface;
 use Laminas\View\HelperPluginManager;
 use Laminas\View\Model\ViewModel;
 
-/**
- * Variation Furniture Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class VariationFurnitureTest extends TestCase
 {
     /**
@@ -46,13 +36,13 @@ class VariationFurnitureTest extends TestCase
 
         $this->sut = new VariationFurniture();
 
-        $sl = m::mock(ServiceLocatorInterface::class);
+        $sl = m::mock(ContainerInterface::class);
 
         $sl->shouldReceive('get')->with('ViewHelperManager')->andReturn($this->mockViewHelperManager);
         $sl->shouldReceive('get')->with('QuerySender')->andReturn($this->mockQuerySender);
         $sl->shouldReceive('get')->with('Router')->andReturn($this->mockRouter);
 
-        $this->sut->createService($sl);
+        $this->sut->__invoke($sl, VariationFurniture::class);
     }
 
     public function testAttach()
@@ -70,8 +60,10 @@ class VariationFurnitureTest extends TestCase
     {
         $this->expectException(ResourceNotFoundException::class);
 
-        $event = m::mock(RouteParam::class);
-        $event->shouldReceive('getValue')->andReturn(111);
+        $routeParam = new RouteParam();
+        $routeParam->setValue(111);
+
+        $event = new Event(null, $routeParam);
 
         $response = m::mock();
         $response->shouldReceive('isOk')->andReturn(false);
@@ -85,9 +77,10 @@ class VariationFurnitureTest extends TestCase
 
     public function testOnVariationFurniture()
     {
-        $event = m::mock(RouteParam::class);
-        $event->shouldReceive('getValue')->andReturn(111);
+        $routeParam = new RouteParam();
+        $routeParam->setValue(111);
 
+        $event = new Event(null, $routeParam);
         $status = [
             'id' => RefData::APPLICATION_STATUS_VALID
         ];

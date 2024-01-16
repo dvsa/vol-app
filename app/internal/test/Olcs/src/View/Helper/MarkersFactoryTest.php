@@ -2,8 +2,11 @@
 
 namespace OlcsTest\View\Helper;
 
+use Interop\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
+use Olcs\Service\Marker\MarkerService;
+use Olcs\View\Helper\RenderMarkers;
 
 /**
  * Class MarkersFactoryTest
@@ -12,19 +15,19 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  */
 class MarkersFactoryTest extends TestCase
 {
-    public function testCreateService()
+    public function testInvoke()
     {
-        $mockMarkersService = m::mock(\Olcs\Service\Marker\MarkerService::class);
+        $mockMarkersService = m::mock(MarkerService::class);
 
-        $mockSl = m::mock(\Laminas\ServiceManager\ServiceLocatorInterface::class);
-        $mockSl->shouldReceive('get')->with(\Olcs\Service\Marker\MarkerService::class)->once()
+        $mockSl = m::mock(ContainerInterface::class);
+        $mockSl->shouldReceive('get')->with(MarkerService::class)->once()
             ->andReturn($mockMarkersService);
 
         $sut = new \Olcs\View\Helper\MarkersFactory();
 
-        $obj = $sut->createService($mockSl);
+        $obj = $sut->__invoke($mockSl, RenderMarkers::class);
 
-        $this->assertInstanceOf(\Olcs\View\Helper\RenderMarkers::class, $obj);
+        $this->assertInstanceOf(RenderMarkers::class, $obj);
         $this->assertSame($mockMarkersService, $obj->getMarkerService());
     }
 }

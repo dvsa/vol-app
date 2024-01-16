@@ -10,11 +10,10 @@ use Common\Service\Helper\UrlHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\IrhpPermits\IrhpApplicationFeesController;
-use ZfcRbac\Identity\IdentityProviderInterface;
+use LmcRbacMvc\Identity\IdentityProviderInterface;
 
 class IrhpApplicationFeesControllerFactory implements FactoryInterface
 {
@@ -26,8 +25,6 @@ class IrhpApplicationFeesControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IrhpApplicationFeesController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);
         $tableFactory = $container->get(TableFactory::class);
@@ -49,17 +46,5 @@ class IrhpApplicationFeesControllerFactory implements FactoryInterface
             $translationHelper,
             $dateHelper
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return IrhpApplicationFeesController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): IrhpApplicationFeesController
-    {
-        return $this->__invoke($serviceLocator, IrhpApplicationFeesController::class);
     }
 }

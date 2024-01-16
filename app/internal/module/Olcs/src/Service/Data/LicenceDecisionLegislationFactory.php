@@ -5,12 +5,8 @@ namespace Olcs\Service\Data;
 use Common\Service\Data\AbstractDataServiceServices;
 use Common\Service\Data\Licence;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
-/**
- * LicenceDecisionLegislationFactory
- */
 class LicenceDecisionLegislationFactory implements FactoryInterface
 {
     /**
@@ -27,17 +23,5 @@ class LicenceDecisionLegislationFactory implements FactoryInterface
             $container->get(AbstractDataServiceServices::class),
             $container->get(Licence::class)
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $services
-     *
-     * @return LicenceDecisionLegislation
-     */
-    public function createService(ServiceLocatorInterface $services): LicenceDecisionLegislation
-    {
-        return $this($services, LicenceDecisionLegislation::class);
     }
 }

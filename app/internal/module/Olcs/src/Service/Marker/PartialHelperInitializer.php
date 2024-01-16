@@ -3,14 +3,8 @@
 namespace Olcs\Service\Marker;
 
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\InitializerInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Initializer\InitializerInterface;
 
-/**
- * Class PartialHelperInitializer
- *
- * @package Dvsa\Olcs\Api\Service\Publication\Context
- */
 class PartialHelperInitializer implements InitializerInterface
 {
     /**
@@ -22,17 +16,9 @@ class PartialHelperInitializer implements InitializerInterface
     public function __invoke(ContainerInterface $container, $instance)
     {
         $instance->setPartialHelper(
-            $container->getServiceLocator()->get('ViewHelperManager')->get('partial')
+            $container->get('ViewHelperManager')->get('partial')
         );
 
         return $instance;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function initialize($instance, ServiceLocatorInterface $serviceLocator)
-    {
-        return $this($serviceLocator, $instance);
     }
 }

@@ -18,7 +18,7 @@ use Olcs\Controller\Interfaces\VariationControllerInterface;
 use Olcs\Controller\Lva\Traits\ApplicationOverviewTrait;
 use Olcs\Controller\Lva\Traits\VariationControllerTrait;
 use Olcs\Service\Helper\ApplicationOverviewHelperService;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Application Overview Controller

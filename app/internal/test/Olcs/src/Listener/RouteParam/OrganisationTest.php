@@ -2,9 +2,13 @@
 
 namespace OlcsTest\Listener\RouteParam;
 
+use Common\Exception\ResourceNotFoundException;
 use Common\Service\Cqrs\Query\CachingQueryService as QueryService;
 use Dvsa\Olcs\Transfer\Query\QueryContainerInterface;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
+use Interop\Container\ContainerInterface;
+use Laminas\EventManager\Event;
+use Laminas\View\HelperPluginManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Event\RouteParam;
@@ -14,12 +18,7 @@ use Olcs\Service\Marker\MarkerService;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\Navigation\AbstractContainer;
 use Laminas\Navigation\Navigation;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 
-/**
- * Class OrganisationTest
- * @package OlcsTest\Listener\RouteParam
- */
 class OrganisationTest extends MockeryTestCase
 {
     /** @var  m\MockInterface */
@@ -60,8 +59,8 @@ class OrganisationTest extends MockeryTestCase
             ->andReturn($this->mockResponse);
 
         //  mock Navigation
-        $this->mockSideBar = m::mock(\Laminas\Navigation\AbstractContainer::class);
-        $this->mocNavMenu = m::mock(\Laminas\Navigation\AbstractContainer::class);
+        $this->mockSideBar = m::mock(AbstractContainer::class);
+        $this->mocNavMenu = m::mock(AbstractContainer::class);
 
         $mockNavPlugin = m::mock(Navigation::class)
             ->shouldReceive('__invoke')
@@ -69,15 +68,14 @@ class OrganisationTest extends MockeryTestCase
             ->andReturn($this->mocNavMenu)
             ->getMock();
 
-        $helperMngr = m::mock(\Laminas\View\HelperPluginManager::class)
+        $helperMngr = m::mock(HelperPluginManager::class)
             ->shouldReceive('get')
             ->once()
             ->with('Navigation')
             ->andReturn($mockNavPlugin)
             ->getMock();
 
-        /** @var ServiceLocatorInterface|m\MockInterface $mockSl */
-        $mockSl = m::mock(ServiceLocatorInterface::class);
+        $mockSl = m::mock(ContainerInterface::class);
         $mockSl->shouldReceive('get')
             ->andReturnUsing(
                 function ($class) use ($helperMngr) {
@@ -94,7 +92,7 @@ class OrganisationTest extends MockeryTestCase
             );
 
         $this->sut = new Organisation();
-        $this->sut->createService($mockSl);
+        $this->sut->__invoke($mockSl, Organisation::class);
 
         parent::setUp();
     }
@@ -131,11 +129,13 @@ class OrganisationTest extends MockeryTestCase
             ->andReturn(false);
 
         //  expect
-        $this->expectException(\Common\Exception\ResourceNotFoundException::class);
+        $this->expectException(ResourceNotFoundException::class);
 
         //  call
-        $event = new RouteParam();
-        $event->setValue($id);
+        $routeParam = new RouteParam();
+        $routeParam->setValue($id);
+
+        $event = new Event(null, $routeParam);
 
         $this->sut->onOrganisation($event);
     }
@@ -170,8 +170,10 @@ class OrganisationTest extends MockeryTestCase
             ->andReturn($mockMenuItem);
 
         //  call
-        $event = new RouteParam();
-        $event->setValue($id);
+        $routeParam = new RouteParam();
+        $routeParam->setValue($id);
+
+        $event = new Event(null, $routeParam);
 
         $this->sut->onOrganisation($event);
     }
@@ -206,8 +208,10 @@ class OrganisationTest extends MockeryTestCase
         $this->mockSideBar->shouldReceive('findById')->never();
 
         //  call
-        $event = new RouteParam();
-        $event->setValue($id);
+        $routeParam = new RouteParam();
+        $routeParam->setValue($id);
+
+        $event = new Event(null, $routeParam);
 
         $this->sut->onOrganisation($event);
     }

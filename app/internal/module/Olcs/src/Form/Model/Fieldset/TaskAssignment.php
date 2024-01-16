@@ -22,7 +22,7 @@ class TaskAssignment
      *     "empty_option": "please-select",
      *     "error-message": "Team and/or owner must be selected",
      * })
-     * @Form\Validator({"name": "NotEmpty", "options": {"null"}})
+     * @Form\Validator("NotEmpty", options={"null"})
      * @Form\Validator({
      *     "name": "ValidateIf",
      *     "options":{
@@ -47,7 +47,7 @@ class TaskAssignment
      *     "service_name": "Olcs\Service\Data\UserListInternalExcludingLimitedReadOnlyUsers",
      *     "empty_option": "Unassigned",
      * })
-     * @Form\Validator({"name": "NotEmpty", "options": {"null"}})
+     * @Form\Validator("NotEmpty", options={"null"})
      */
     public $assignedToUser = null;
 }

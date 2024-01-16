@@ -1,15 +1,14 @@
 <?php
 
-/**
- * Licence Furniture Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 namespace OlcsTest\Listener\RouteParam;
 
 use Common\Exception\ResourceNotFoundException;
 use Common\Service\Cqrs\Command\CommandSender;
 use Common\Service\Cqrs\Query\QuerySender;
+use Interop\Container\ContainerInterface;
+use Laminas\EventManager\Event;
+use Laminas\EventManager\EventManagerInterface;
+use Laminas\View\HelperPluginManager;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParam\LicenceFurniture;
@@ -18,11 +17,6 @@ use Olcs\Listener\RouteParams;
 use Common\RefData;
 use Laminas\View\Model\ViewModel;
 
-/**
- * Licence Furniture Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class LicenceFurnitureTest extends TestCase
 {
     /**
@@ -51,7 +45,7 @@ class LicenceFurnitureTest extends TestCase
 
         $mockResult = m::mock();
 
-        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
+        $mockViewHelperManager = m::mock(HelperPluginManager::class);
         $this->sut->setViewHelperManager($mockViewHelperManager);
 
         $mockQuerySender->shouldReceive('send')->once()->andReturn($mockResult);
@@ -67,8 +61,10 @@ class LicenceFurnitureTest extends TestCase
     public function testOnLicenceQueryError()
     {
         $this->onLicenceSetup(false);
-        $event = new RouteParam();
-        $event->setValue(32);
+        $routeParam = new RouteParam();
+        $routeParam->setValue(32);
+
+        $event = new Event(null, $routeParam);
 
         $this->expectException(ResourceNotFoundException::class);
 
@@ -140,31 +136,36 @@ class LicenceFurnitureTest extends TestCase
             )
             ->getMock();
 
-        $mockViewHelperManager = m::mock('\Laminas\View\HelperPluginManager')
+        $mockViewHelperManager = m::mock(HelperPluginManager::class)
             ->shouldReceive('get')->once()->with('placeholder')->andReturn($mockPlaceholder)
             ->getMock();
 
         $this->sut->setViewHelperManager($mockViewHelperManager);
 
-        $event = new RouteParam();
-        $event->setValue($licenceId);
+        $routeParam = new RouteParam();
+        $routeParam->setValue($licenceId);
+
+        $event = new Event(null, $routeParam);
 
         $this->sut->onLicenceFurniture($event);
     }
 
-    public function testCreateService()
+    public function testInvoke()
     {
-        $mockViewHelperManager = m::mock('Laminas\View\HelperPluginManager');
+        $mockViewHelperManager = m::mock(HelperPluginManager::class);
         $mockQuerySender = m::mock(QuerySender::class);
         $mockCommandSender = m::mock(CommandSender::class);
+        $mockEventManager = m::mock(EventManagerInterface::class);
+        $mockEventManager->shouldReceive('attach')->once();
 
-        $mockSl = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
+        $mockSl = m::mock(ContainerInterface::class);
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('QuerySender')->andReturn($mockQuerySender);
         $mockSl->shouldReceive('get')->with('CommandSender')->andReturn($mockCommandSender);
+        $mockSl->shouldReceive('get')->with('EventManager')->andReturn($mockEventManager);
 
         $sut = new LicenceFurniture();
-        $service = $sut->createService($mockSl);
+        $service = $sut->__invoke($mockSl, LicenceFurniture::class);
 
         $this->assertSame($sut, $service);
         $this->assertSame($mockViewHelperManager, $sut->getViewHelperManager());

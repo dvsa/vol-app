@@ -32,9 +32,9 @@ class SubmissionSectionAddComment extends Base
      *     }
      * })
      * @Form\Type("TextArea")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Filter({"name":"htmlpurifier"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":5}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Filter("htmlpurifier")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":5})
      */
     public $comment = null;
 }

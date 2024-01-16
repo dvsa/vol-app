@@ -2,7 +2,6 @@
 
 namespace Olcs\Listener\RouteParam;
 
-use Interop\Container\ContainerInterface;
 use Common\Exception\ResourceNotFoundException;
 use Common\RefData;
 use Common\Service\Cqrs\Command\CommandSenderAwareInterface;
@@ -10,31 +9,27 @@ use Common\Service\Cqrs\Command\CommandSenderAwareTrait;
 use Common\Service\Cqrs\Query\QuerySenderAwareInterface;
 use Common\Service\Cqrs\Query\QuerySenderAwareTrait;
 use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQuery;
+use Laminas\EventManager\EventInterface;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Laminas\View\Model\ViewModel;
+use Psr\Container\ContainerInterface;
 
-/**
- * Application Furniture
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class ApplicationFurniture implements
     ListenerAggregateInterface,
     FactoryInterface,
     QuerySenderAwareInterface,
     CommandSenderAwareInterface
 {
-    use ListenerAggregateTrait,
-        ViewHelperManagerAwareTrait,
-        QuerySenderAwareTrait,
-        CommandSenderAwareTrait;
+    use ListenerAggregateTrait;
+    use ViewHelperManagerAwareTrait;
+    use QuerySenderAwareTrait;
+    use CommandSenderAwareTrait;
 
     private $router;
 
@@ -48,27 +43,11 @@ class ApplicationFurniture implements
     }
 
     /**
-     * @return \Laminas\Mvc\Router\RouteStackInterface
+     * @return \Laminas\Router\RouteStackInterface
      */
     public function getRouter()
     {
         return $this->router;
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
-        $this->setQuerySender($serviceLocator->get('QuerySender'));
-        $this->setRouter($serviceLocator->get('Router'));
-        $this->setCommandSender($serviceLocator->get('CommandSender'));
-
-        return $this;
     }
 
     /**
@@ -83,12 +62,11 @@ class ApplicationFurniture implements
         );
     }
 
-    /**
-     * @param RouteParam $e
-     */
-    public function onApplicationFurniture(RouteParam $e)
+    public function onApplicationFurniture(EventInterface $e)
     {
-        $id = $e->getValue();
+        $routeParam = $e->getTarget();
+
+        $id = $routeParam->getValue();
 
         // for performance reasons this query should be the same as used in other Application RouteListeners
         $response = $this->getQuerySender()->send(ApplicationQuery::create(['id' => $id]));
@@ -137,10 +115,10 @@ class ApplicationFurniture implements
     }
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $this->setViewHelperManager($serviceLocator->get('ViewHelperManager'));
-        $this->setQuerySender($serviceLocator->get('QuerySender'));
-        $this->setRouter($serviceLocator->get('Router'));
-        $this->setCommandSender($serviceLocator->get('CommandSender'));
+        $this->setViewHelperManager($container->get('ViewHelperManager'));
+        $this->setQuerySender($container->get('QuerySender'));
+        $this->setRouter($container->get('Router'));
+        $this->setCommandSender($container->get('CommandSender'));
         return $this;
     }
 }

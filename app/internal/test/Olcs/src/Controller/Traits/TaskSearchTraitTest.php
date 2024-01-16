@@ -4,7 +4,6 @@ namespace OlcsTest\Controller\Traits;
 
 use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Utils\Constants\FilterOptions;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Olcs\Service\Data\SubCategory as SubCategoryDS;

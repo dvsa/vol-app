@@ -12,7 +12,7 @@ use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Operator\OperatorBusinessDetailsController;
@@ -29,8 +29,6 @@ class OperatorBusinessDetailsControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): OperatorBusinessDetailsController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);
         $tableFactory = $container->get(TableFactory::class);
@@ -41,7 +39,7 @@ class OperatorBusinessDetailsControllerFactory implements FactoryInterface
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         $licenceDataService = $container->get(Licence::class);
         $queryService = $container->get(QueryService::class);
-        $navigation = $container->get('navigation');
+        $navigation = $container->get('Navigation');
         $translationHelper = $container->get(TranslationHelperService::class);
 
         return new OperatorBusinessDetailsController(
@@ -58,17 +56,5 @@ class OperatorBusinessDetailsControllerFactory implements FactoryInterface
             $navigation,
             $translationHelper
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return OperatorBusinessDetailsController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): OperatorBusinessDetailsController
-    {
-        return $this->__invoke($serviceLocator, OperatorBusinessDetailsController::class);
     }
 }

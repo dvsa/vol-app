@@ -2,7 +2,10 @@
 
 namespace OlcsTest\FormService\Form\Lva\OperatingCentres;
 
+use Laminas\Form\ElementInterface;
+use Laminas\InputFilter\InputFilter;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\Validator\ValidatorChain;
 use Olcs\FormService\Form\Lva\OperatingCentres\ApplicationOperatingCentres;
 use Common\Form\Elements\Types\Table;
 use Common\FormService\FormServiceManager;
@@ -61,7 +64,7 @@ class ApplicationOperatingCentresTest extends MockeryTestCase
             ->with('Lva\OperatingCentres')
             ->andReturn($this->form);
 
-        $this->sut = new ApplicationOperatingCentres($this->mockFormHelper, m::mock(\ZfcRbac\Service\AuthorizationService::class), $this->tableBuilder, $fsm);
+        $this->sut = new ApplicationOperatingCentres($this->mockFormHelper, m::mock(\LmcRbacMvc\Service\AuthorizationService::class), $this->tableBuilder, $fsm);
     }
 
     public function testGetForm()
@@ -85,8 +88,18 @@ class ApplicationOperatingCentresTest extends MockeryTestCase
         $this->mockFormHelper->shouldReceive('getValidator->setMessage')
             ->with('OperatingCentreNoOfOperatingCentres.required', 'required');
 
-        $mockTaElement = m::mock();
+        $mockTaElement = m::mock(ElementInterface::class);
         $this->form->shouldReceive('get')->with('dataTrafficArea')->once()->andReturn($mockTaElement);
+
+        $validatorChain = m::mock(ValidatorChain::class);
+        $validatorChain->shouldReceive('attach');
+        $validatorChain->shouldReceive('getValidators')->andReturn([]);
+
+        $inputFilter = m::mock(InputFilter::class);
+        $inputFilter->shouldReceive('get')->andReturnSelf();
+        $inputFilter->shouldReceive('getValidatorChain')->andReturn($validatorChain);
+
+        $this->form->shouldReceive('getInputFilter')->andReturn($inputFilter);
 
         $mockTaElement->shouldReceive('get->setValueOptions')->with('POSSIBLE_TRAFFIC_AREAS')->once();
         $mockTaElement->shouldReceive('remove')->with('trafficAreaSet')->once();

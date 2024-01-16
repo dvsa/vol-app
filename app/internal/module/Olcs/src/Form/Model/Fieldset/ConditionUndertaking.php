@@ -45,8 +45,8 @@ class ConditionUndertaking extends CaseBase
      *     "label": "Description"
      * })
      * @Form\Type("TextArea")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":5,"max":"8000"}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":5,"max":"8000"})
      */
     public $notes = null;
 

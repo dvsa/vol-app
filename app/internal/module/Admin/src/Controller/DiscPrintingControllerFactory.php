@@ -7,8 +7,7 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class DiscPrintingControllerFactory implements FactoryInterface
 {
@@ -25,11 +24,5 @@ class DiscPrintingControllerFactory implements FactoryInterface
             $flashMessengerHelper,
             $formHelper
         );
-    }
-    public function createService(ServiceLocatorInterface $serviceLocator): DiscPrintingController
-    {
-        $container = method_exists($serviceLocator, 'getServiceLocator') ? $serviceLocator->getServiceLocator() : $serviceLocator;
-
-        return $this->__invoke($container, DiscPrintingController::class);
     }
 }

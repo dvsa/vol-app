@@ -28,7 +28,7 @@ class DiscNumbering
      * })
      * @Form\Type("Text")
      * @Form\Filter({"name": "Digits"})
-     * @Form\Validator({"name": "GreaterThan", "options": {"min" : 0}})
+     * @Form\Validator("GreaterThan", options={"min" : 0})
      * @Form\Required(false)
      */
     public $maxPages = null;

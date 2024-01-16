@@ -3,23 +3,10 @@
 namespace Olcs\Data\Mapper;
 
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class IrhpApplicationFactory implements FactoryInterface
 {
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return IrhpApplication
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator) : IrhpApplication
-    {
-        return $this->__invoke($serviceLocator, IrhpApplication::class);
-    }
-
     /**
      * @param ContainerInterface $container
      * @param $requestedName

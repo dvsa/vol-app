@@ -32,9 +32,9 @@ class TmCaseUnfit extends CaseBase
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
-     * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
+     * @Form\Filter("DateSelectNullifier")
+     * @Form\Validator("\Common\Validator\Date")
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
      */
     public $decisionDate = null;
 
@@ -47,10 +47,10 @@ class TmCaseUnfit extends CaseBase
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
-     * @Form\Filter({"name": "DateSelect", "options": {"null_on_empty": true}})
-     * @Form\Validator({"name": "NotEmpty", "options": {"array"}})
-     * @Form\Validator({"name": "ValidateIf",
-     *      "options":{
+     * @Form\Filter("DateSelect", options={"null_on_empty": true})
+     * @Form\Validator("NotEmpty", options={"array"})
+     * @Form\Validator("ValidateIf",
+     *      options={
      *          "context_field": "decisionDate",
      *          "context_values": {"--"},
      *          "context_truth": false,
@@ -68,7 +68,7 @@ class TmCaseUnfit extends CaseBase
      *              }
      *          }
      *      }
-     * })
+     * )
      */
     public $notifiedDate = null;
 
@@ -81,9 +81,9 @@ class TmCaseUnfit extends CaseBase
      *     "max_year_delta": "+3",
      *     "min_year_delta": "-100",
      * })
-     * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
+     * @Form\Filter("DateSelectNullifier")
+     * @Form\Validator("\Common\Validator\Date")
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
      */
     public $unfitnessStartDate = null;
 
@@ -97,12 +97,11 @@ class TmCaseUnfit extends CaseBase
      *     "max_year_delta": "+12",
      *     "min_year_delta": "-100",
      * })
-     * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
-     * @Form\Validator({
-     *      "name": "ValidateIf",
-     *      "options": {
+     * @Form\Filter("DateSelectNullifier")
+     * @Form\Validator("\Common\Validator\Date")
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
+     * @Form\Validator("ValidateIf",
+     *      options={
      *          "context_field": "unfitnessEndDate",
      *          "context_values": {"--"},
      *          "context_truth": false,
@@ -118,7 +117,7 @@ class TmCaseUnfit extends CaseBase
      *              }
      *          }
      *      }
-     * })
+     * )
      */
     public $unfitnessEndDate = null;
 
@@ -142,7 +141,7 @@ class TmCaseUnfit extends CaseBase
      *     "disable_inarray_validator": false,
      *     "category": "tm_case_rehab"
      * })
-     * @Form\Filter({"name":"Common\Filter\NullToArray"})
+     * @Form\Filter("Common\Filter\NullToArray")
      */
     public $rehabMeasures = [];
 

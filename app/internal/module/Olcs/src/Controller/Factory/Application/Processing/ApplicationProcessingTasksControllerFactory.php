@@ -10,8 +10,7 @@ use Common\Service\Helper\OppositionHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Application\Processing\ApplicationProcessingTasksController;
 use Olcs\Service\Data\SubCategory;
@@ -26,8 +25,6 @@ class ApplicationProcessingTasksControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ApplicationProcessingTasksController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);
         $tableFactory = $container->get(TableFactory::class);
@@ -53,17 +50,5 @@ class ApplicationProcessingTasksControllerFactory implements FactoryInterface
             $subCategoryDataService,
             $navigation
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return ApplicationProcessingTasksController
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator): ApplicationProcessingTasksController
-    {
-        return $this->__invoke($serviceLocator, ApplicationProcessingTasksController::class);
     }
 }

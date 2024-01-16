@@ -8,13 +8,13 @@ use Common\Service\Cqrs\Command\CommandSenderAwareTrait;
 use Common\Service\Cqrs\Query\QuerySenderAwareInterface;
 use Common\Service\Cqrs\Query\QuerySenderAwareTrait;
 use Interop\Container\ContainerInterface;
+use Laminas\EventManager\EventInterface;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Laminas\View\Model\ViewModel;
 
@@ -35,17 +35,6 @@ class TransportManagerFurniture implements
         CommandSenderAwareTrait;
 
     /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator) : TransportManagerFurniture
-    {
-        return $this->__invoke($serviceLocator, TransportManagerFurniture::class);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function attach(EventManagerInterface $events, $priority = 1)
@@ -57,12 +46,11 @@ class TransportManagerFurniture implements
         );
     }
 
-    /**
-     * @param RouteParam $e
-     */
-    public function onTransportManager(RouteParam $e)
+    public function onTransportManager(EventInterface $e)
     {
-        $id = $e->getValue();
+        $routeParam = $e->getTarget();
+
+        $id = $routeParam->getValue();
         $data = $this->getTransportManager($id);
 
         $url = $this->getViewHelperManager()

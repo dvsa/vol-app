@@ -39,7 +39,7 @@ if ($case['canReopen']) {
 //case overview
 echo $this->render('partials/read-only/main',
     [
-        'header' => $this->navigation('navigation')->findOneBy('active', 1)->getLabel(),
+        'header' => $this->navigation('navigation')->findOneBy('active', true)->getLabel(),
         'actions' => $actions,
         'items' => [
             ['label' => 'Case type', 'value' => $case['caseType']['description']],

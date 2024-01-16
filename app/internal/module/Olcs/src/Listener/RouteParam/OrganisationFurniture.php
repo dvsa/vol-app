@@ -8,21 +8,16 @@ use Common\Service\Cqrs\Command\CommandSenderAwareTrait;
 use Common\Service\Cqrs\Query\QuerySenderAwareInterface;
 use Common\Service\Cqrs\Query\QuerySenderAwareTrait;
 use Interop\Container\ContainerInterface;
+use Laminas\EventManager\EventInterface;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Laminas\View\Model\ViewModel;
 
-/**
- * Organisation Furniture
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class OrganisationFurniture implements
     ListenerAggregateInterface,
     FactoryInterface,
@@ -33,17 +28,6 @@ class OrganisationFurniture implements
         ViewHelperManagerAwareTrait,
         QuerySenderAwareTrait,
         CommandSenderAwareTrait;
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator) : OrganisationFurniture
-    {
-        return $this->__invoke($serviceLocator, OrganisationFurniture::class);
-    }
 
     /**
      * {@inheritdoc}
@@ -57,12 +41,11 @@ class OrganisationFurniture implements
         );
     }
 
-    /**
-     * @param RouteParam $e
-     */
-    public function onOrganisation(RouteParam $e)
+    public function onOrganisation(EventInterface $e)
     {
-        $id = $e->getValue();
+        $routeParam = $e->getTarget();
+
+        $id = $routeParam->getValue();
 
         $organisation = $this->getOrganisation($id);
         $placeholder = $this->getViewHelperManager()->get('placeholder');

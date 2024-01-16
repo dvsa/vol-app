@@ -27,8 +27,8 @@ class ComplainantDetails
      * @Form\Attributes({"placeholder":"","class":"medium"})
      * @Form\Options({"label":"Complainant first name"})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":2,"max":35}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":2,"max":35})
      */
     public $forename = null;
 
@@ -36,8 +36,8 @@ class ComplainantDetails
      * @Form\Attributes({"placeholder":"","class":"medium"})
      * @Form\Options({"label":"Complainant last name"})
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":2,"max":35}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":2,"max":35})
      */
     public $familyName = null;
 }

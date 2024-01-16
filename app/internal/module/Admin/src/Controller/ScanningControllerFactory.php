@@ -6,8 +6,7 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Service\Data\ScannerSubCategory;
 use Olcs\Service\Data\SubCategoryDescription;
 
@@ -28,11 +27,5 @@ class ScanningControllerFactory implements FactoryInterface
             $subCategoryDescriptionDataService,
             $scriptFactory
         );
-    }
-    public function createService(ServiceLocatorInterface $serviceLocator): ScanningController
-    {
-        $container = method_exists($serviceLocator, 'getServiceLocator') ? $serviceLocator->getServiceLocator() : $serviceLocator;
-
-        return $this->__invoke($container, ScanningController::class);
     }
 }

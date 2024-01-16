@@ -8,7 +8,7 @@ use Common\RefData;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Table\TableFactory;
 use Laminas\Form\Form;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Application Operating Centres

@@ -9,13 +9,13 @@ use Common\Service\Cqrs\Command\CommandSenderAwareTrait;
 use Common\Service\Cqrs\Query\QuerySenderAwareInterface;
 use Common\Service\Cqrs\Query\QuerySenderAwareTrait;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence as LicenceQuery;
+use Laminas\EventManager\EventInterface;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Laminas\View\Model\ViewModel;
 
@@ -30,21 +30,10 @@ class LicenceFurniture implements
     QuerySenderAwareInterface,
     CommandSenderAwareInterface
 {
-    use ListenerAggregateTrait,
-        ViewHelperManagerAwareTrait,
-        QuerySenderAwareTrait,
-        CommandSenderAwareTrait;
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator) : LicenceFurniture
-    {
-        return $this->__invoke($serviceLocator, LicenceFurniture::class);
-    }
+    use ListenerAggregateTrait;
+    use ViewHelperManagerAwareTrait;
+    use QuerySenderAwareTrait;
+    use CommandSenderAwareTrait;
 
     /**
      * {@inheritdoc}
@@ -58,14 +47,11 @@ class LicenceFurniture implements
         );
     }
 
-    /**
-     * @param RouteParam $e RouteParam event
-     *
-     * @throws ResourceNotFoundException
-     */
-    public function onLicenceFurniture(RouteParam $e)
+    public function onLicenceFurniture(EventInterface $e)
     {
-        $id = $e->getValue();
+        $routeParam = $e->getTarget();
+
+        $id = $routeParam->getValue();
         $response = $this->getQuerySender()->send(LicenceQuery::create(['id' => $id]));
 
         if (!$response->isOk()) {
@@ -96,11 +82,19 @@ class LicenceFurniture implements
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : LicenceFurniture
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LicenceFurniture
     {
+        // Set dependencies
         $this->setViewHelperManager($container->get('ViewHelperManager'));
         $this->setQuerySender($container->get('QuerySender'));
         $this->setCommandSender($container->get('CommandSender'));
+
+        // Retrieve the application's event manager
+        $eventManager = $container->get('EventManager');
+
+        // Attach this listener to the event manager
+        $this->attach($eventManager);
+
         return $this;
     }
 }

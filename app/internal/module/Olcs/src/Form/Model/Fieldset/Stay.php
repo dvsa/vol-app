@@ -24,9 +24,9 @@ class Stay extends CaseBase
      *     "render_delimiters": false
      * })
      * @Form\Type("DateSelect")
-     * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
+     * @Form\Filter("DateSelectNullifier")
+     * @Form\Validator("\Common\Validator\Date")
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
      */
     public $requestDate = null;
 
@@ -39,10 +39,10 @@ class Stay extends CaseBase
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
-     * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
-     * @Form\Validator({"name": "ValidateIf",
-     *      "options":{
+     * @Form\Filter("DateSelectNullifier")
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
+     * @Form\Validator("ValidateIf",
+     *      options={
      *          "context_field": "requestDate",
      *          "context_values": {"--"},
      *          "context_truth": false,
@@ -59,7 +59,7 @@ class Stay extends CaseBase
      *              }
      *          }
      *      }
-     * })
+     * )
      */
     public $decisionDate = null;
 
@@ -89,8 +89,8 @@ class Stay extends CaseBase
      * })
      * @Form\Required(false)
      * @Form\Type("TextArea")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":5,"max":4000}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":5,"max":4000})
      */
     public $notes = null;
 
@@ -109,10 +109,10 @@ class Stay extends CaseBase
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
-     * @Form\Filter({"name":"DateSelect", "options":{"null_on_empty":true}})
-     * @Form\Validator({"name": "NotEmpty", "options": {"array"}})
-     * @Form\Validator({"name": "ValidateIf",
-     *      "options":{
+     * @Form\Filter("DateSelect", options={"null_on_empty":true})
+     * @Form\Validator("NotEmpty", options={"array"})
+     * @Form\Validator("ValidateIf",
+     *      options={
      *          "context_field": "isWithdrawn",
      *          "context_values": {"Y"},
      *          "validators": {
@@ -122,7 +122,7 @@ class Stay extends CaseBase
      *              {"name": "\Common\Form\Elements\Validators\DateNotInFuture"}
      *          }
      *      }
-     * })
+     * )
      */
     public $withdrawnDate = null;
 }

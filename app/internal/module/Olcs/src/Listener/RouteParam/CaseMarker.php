@@ -1,23 +1,16 @@
 <?php
-/**
- * This listener is for the Case Markers
- */
 
 namespace Olcs\Listener\RouteParam;
 
 use Interop\Container\ContainerInterface;
+use Laminas\EventManager\EventInterface;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
-/**
- * Class CaseMarker
- * @package Olcs\Listener\RouteParam
- */
 class CaseMarker implements ListenerAggregateInterface, FactoryInterface
 {
     use ListenerAggregateTrait;
@@ -75,12 +68,11 @@ class CaseMarker implements ListenerAggregateInterface, FactoryInterface
         );
     }
 
-    /**
-     * @param RouteParam $e
-     */
-    public function onCase(RouteParam $e)
+    public function onCase(EventInterface $e)
     {
-        $case = $this->getCaseData($e->getValue());
+        $routeParam = $e->getTarget();
+
+        $case = $this->getCaseData($routeParam->getValue());
         $this->getMarkerService()->addData('organisation', $case['licence']['organisation']);
         $this->getMarkerService()->addData('cases', [$case]);
         $this->getMarkerService()->addData('configCase', ['hideLink' => true]);
@@ -107,17 +99,6 @@ class CaseMarker implements ListenerAggregateInterface, FactoryInterface
         }
 
         return $response->getResult();
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator) : CaseMarker
-    {
-        return $this->__invoke($serviceLocator, CaseMarker::class);
     }
 
     /**

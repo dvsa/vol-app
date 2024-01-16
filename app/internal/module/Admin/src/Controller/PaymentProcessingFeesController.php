@@ -16,7 +16,7 @@ use Laminas\Mvc\Controller\AbstractActionController as LaminasAbstractActionCont
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits\FeesActionTrait;
-use ZfcRbac\Identity\IdentityProviderInterface;
+use LmcRbacMvc\Identity\IdentityProviderInterface;
 
 class PaymentProcessingFeesController extends LaminasAbstractActionController implements LeftViewProvider
 {

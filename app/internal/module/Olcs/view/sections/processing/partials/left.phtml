@@ -5,4 +5,5 @@ if (!$activePage) {
     throw new \RuntimeException('Cannot find active page to be able to display left menu');
 }
 
+
 echo $this->navigation($activePage->getParent())->menu()->setPartial('partials/vertical-navigation');

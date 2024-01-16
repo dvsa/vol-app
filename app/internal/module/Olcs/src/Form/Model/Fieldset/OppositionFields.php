@@ -41,7 +41,7 @@ class OppositionFields extends CaseBase
      * @Form\Attributes({"id":"contactDetailsDescription","placeholder":"","class":"extra-long"})
      * @Form\Options({"label":"Objector body"})
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min": 5, "max":255}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min": 5, "max":255})
      */
     public $contactDetailsDescription = null;
 
@@ -52,11 +52,11 @@ class OppositionFields extends CaseBase
      * @Form\Options({
      *     "label": "Date received",
      *     "create_empty_option": true,
-     *     "render_delimiters": "d m y"
+     *     "render_delimiters": true
      * })
      * @Form\Filter({"name": "DateSelectNullifier"})
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
      * @Form\Validator({"name": "\Common\Form\Elements\Validators\DateNotInFuture"})
      */
     public $raisedDate = null;
@@ -86,7 +86,7 @@ class OppositionFields extends CaseBase
      * })
      * @Form\Attributes({"id":"opposerType","placeholder":"", "required":false})
      * @Form\Filter({"name":"Common\Filter\NullToArray"})
-     * @Form\Validator({"name":"Laminas\Validator\NotEmpty","options":{"array"}})
+     * @Form\Validator("Laminas\Validator\NotEmpty", options={"array"})
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "oppositionType",
@@ -117,7 +117,7 @@ class OppositionFields extends CaseBase
      * @Form\Attributes({"class":"extra-long","id":"validNotes"})
      * @Form\Options({"label":"Valid details"})
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":4000}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"max":4000})
      */
     public $validNotes;
 
@@ -209,7 +209,7 @@ class OppositionFields extends CaseBase
      * @Form\Attributes({"class":"extra-long","id":""})
      * @Form\Options({"label":"Notes"})
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":4000}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"max":4000})
      */
     public $notes = null;
 }

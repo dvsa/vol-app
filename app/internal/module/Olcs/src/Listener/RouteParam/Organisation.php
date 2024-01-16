@@ -6,20 +6,16 @@ use Common\Exception\ResourceNotFoundException;
 use Common\Service\Cqrs\Query\CachingQueryService as QueryService;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Interop\Container\ContainerInterface;
+use Laminas\EventManager\EventInterface;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
 use Laminas\Navigation\AbstractContainer;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\Helper\Navigation;
 
-/**
- * Class Organisation
- * @package Olcs\Listener\RouteParam
- */
 class Organisation implements ListenerAggregateInterface, FactoryInterface
 {
     use ListenerAggregateTrait;
@@ -51,9 +47,11 @@ class Organisation implements ListenerAggregateInterface, FactoryInterface
     /**
      * @param RouteParam $e
      */
-    public function onOrganisation(RouteParam $e)
+    public function onOrganisation(EventInterface $e)
     {
-        $organisation = $this->getOrganisation($e->getValue());
+        $routeParam = $e->getTarget();
+
+        $organisation = $this->getOrganisation($routeParam->getValue());
 
         /** @var AbstractContainer $navigationPlugin */
         $navigationPlugin = $this->navigationPlugin->__invoke('navigation');
@@ -108,18 +106,6 @@ class Organisation implements ListenerAggregateInterface, FactoryInterface
         }
 
         return $response->getResult();
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     *
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator) : Organisation
-    {
-        return $this->__invoke($serviceLocator, Organisation::class);
     }
 
     /**

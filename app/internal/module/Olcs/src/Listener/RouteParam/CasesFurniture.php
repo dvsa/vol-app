@@ -7,24 +7,19 @@ use Common\Service\Cqrs\Command\CommandSenderAwareInterface;
 use Common\Service\Cqrs\Command\CommandSenderAwareTrait;
 use Common\Service\Cqrs\Query\QuerySenderAwareInterface;
 use Common\Service\Cqrs\Query\QuerySenderAwareTrait;
+use Laminas\EventManager\EventInterface;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use \Dvsa\Olcs\Transfer\Query\Cases\Cases as ItemDto;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Common\Exception\ResourceNotFoundException;
 use Laminas\View\Helper\Url;
 use Laminas\View\Model\ViewModel;
 
-/**
- * Cases Furniture
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
 class CasesFurniture implements
     ListenerAggregateInterface,
     FactoryInterface,
@@ -35,17 +30,6 @@ class CasesFurniture implements
         ViewHelperManagerAwareTrait,
         QuerySenderAwareTrait,
         CommandSenderAwareTrait;
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator) : CasesFurniture
-    {
-        return $this->__invoke($serviceLocator, CasesFurniture::class);
-    }
 
     /**
      * {@inheritdoc}
@@ -59,12 +43,11 @@ class CasesFurniture implements
         );
     }
 
-    /**
-     * @param RouteParam $e
-     */
-    public function onCase(RouteParam $e)
+    public function onCase(EventInterface $e)
     {
-        $id = $e->getValue();
+        $routeParam = $e->getTarget();
+
+        $id = $routeParam->getValue();
         $case = $this->getCase($id);
 
         $placeholder = $this->getViewHelperManager()->get('placeholder');
@@ -165,7 +148,7 @@ class CasesFurniture implements
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : CasesFurniture
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CasesFurniture
     {
         $this->setQuerySender($container->get('QuerySender'));
         $this->setCommandSender($container->get('CommandSender'));

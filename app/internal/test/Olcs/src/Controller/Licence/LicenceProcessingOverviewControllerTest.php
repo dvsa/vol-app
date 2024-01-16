@@ -8,21 +8,17 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\OppositionHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
-use Laminas\Mvc\Router\Http\TreeRouteStack;
+use Laminas\Router\Http\TreeRouteStack;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Licence\Processing\LicenceProcessingOverviewController;
-use Laminas\Mvc\Controller\Plugin\FlashMessenger;
-use Laminas\Mvc\Controller\Plugin\PluginInterface;
 use Laminas\Mvc\Controller\Plugin\Redirect;
 use Laminas\Mvc\Controller\PluginManager;
-use Laminas\Mvc\Controller\Plugin\Params;
-use Laminas\Mvc\Router\RouteMatch;
-use Laminas\View\Model\ViewModel;
+use Laminas\Router\RouteMatch;
 use Olcs\Service\Data\SubCategory;
-use Laminas\Http\Response;
 use Laminas\Mvc\MvcEvent;
 use Mockery as m;
+use Psr\Container\ContainerInterface;
 
 /**
  * Class LicenceProcessingOverviewControllerTest
@@ -83,11 +79,10 @@ class LicenceProcessingOverviewControllerTest extends \PHPUnit\Framework\TestCas
         $event->setRouter($router);
         $event->setRouteMatch($routeMatch);
 
-        $pluginManager = new PluginManager();
+        $pluginManager = new PluginManager($this->createMock(ContainerInterface::class));
 
         $controller->setEvent($event);
         $controller->setPluginManager($pluginManager);
-        $controller->setServiceLocator($this->createMock(ServiceLocatorInterface::class));
 
         return $controller;
     }

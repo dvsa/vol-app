@@ -9,16 +9,17 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\OppositionHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
-use Laminas\Mvc\Router\Http\TreeRouteStack;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\Router\Http\TreeRouteStack;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Application\Processing\ApplicationProcessingOverviewController;
 use Laminas\Mvc\Controller\Plugin\Redirect;
 use Laminas\Mvc\Controller\PluginManager;
-use Laminas\Mvc\Router\RouteMatch;
+use Laminas\Router\RouteMatch;
 use Laminas\Mvc\MvcEvent;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Psr\Container\ContainerInterface;
 
 class ApplicationProcessingOverviewControllerTest extends MockeryTestCase
 {
@@ -74,11 +75,10 @@ class ApplicationProcessingOverviewControllerTest extends MockeryTestCase
         $event->setRouter($router);
         $event->setRouteMatch($routeMatch);
 
-        $pluginManager = new PluginManager();
+        $pluginManager = new PluginManager($this->createMock(ContainerInterface::class));
 
         $controller->setEvent($event);
         $controller->setPluginManager($pluginManager);
-        $controller->setServiceLocator($this->createMock(ServiceLocatorInterface::class));
 
         return $controller;
     }

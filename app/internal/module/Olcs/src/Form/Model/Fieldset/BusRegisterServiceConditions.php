@@ -40,8 +40,8 @@ class BusRegisterServiceConditions
      * @Form\Options({"label":"Notes"})
      * @Form\Required(false)
      * @Form\Type("TextArea")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":255}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"max":255})
      */
     public $trcNotes = null;
 }

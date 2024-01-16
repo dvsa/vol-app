@@ -19,9 +19,9 @@ class NonPiFields extends CaseBase
      *     "create_empty_option": true,
      *     "render_delimiters": false
      * })
-     * @Form\Filter({"name": "DateSelectNullifier"})
-     * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name":"Date","options":{"format":"Y-m-d"}})
+     * @Form\Filter("DateSelectNullifier")
+     * @Form\Validator("\Common\Validator\Date")
+     * @Form\Validator("Date", options={"format":"Y-m-d"})
      */
     public $agreedByTcDate;
 
@@ -48,9 +48,9 @@ class NonPiFields extends CaseBase
      *     "pattern": "d MMMM y '</fieldset><fieldset><div class=""field""><label for=""hearingDate"">Meeting time</label>'HH:mm:ss'</div>'",
      *     "field": "hearingDate"
      * })
-     * @Form\Filter({"name": "DateTimeSelectNullifier"})
+     * @Form\Filter("DateTimeSelectNullifier")
      * @Form\Validator({"name": "\Common\Validator\Date"})
-     * @Form\Validator({"name": "Date", "options": {"format": "Y-m-d H:i:s"}})
+     * @Form\Validator("Date", options={"format": "Y-m-d H:i:s"})
      */
     public $hearingDate;
 
@@ -65,7 +65,7 @@ class NonPiFields extends CaseBase
      *     "disable_inarray_validator": false,
      *     "other_option" : true
      * })
-     * @Form\Filter({"name":"Common\Filter\NullToArray"})
+     * @Form\Filter("Common\Filter\NullToArray")
      */
     public $venue;
 
@@ -74,7 +74,7 @@ class NonPiFields extends CaseBase
      * @Form\Type("Text")
      * @Form\Attributes({"class":"medium","id":"venueOther", "required":false})
      * @Form\Options({"label":"Meeting venue other"})
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
+     * @Form\Filter("Laminas\Filter\StringTrim")
      * @Form\Validator({"name": "ValidateIf",
      *      "options":{
      *          "context_field": "venue",
@@ -93,9 +93,9 @@ class NonPiFields extends CaseBase
      * @Form\Type("Text")
      * @Form\Attributes({"id":"","placeholder":"","class":"small"})
      * @Form\Options({"label": "Number of witnesses"})
-     * @Form\Filter({"name":"Digits"})
-     * @Form\Validator({"name":"Laminas\Validator\Digits"})
-     * @Form\Validator({"name":"Laminas\Validator\Between","options":{"min":0,"max":99,"inclusive":true}})
+     * @Form\Filter("Digits")
+     * @Form\Validator("Laminas\Validator\Digits")
+     * @Form\Validator("Laminas\Validator\Between", options={"min":0,"max":99,"inclusive":true})
      */
     public $witnessCount;
 
@@ -104,8 +104,8 @@ class NonPiFields extends CaseBase
      * @Form\Attributes({"class":"long","id":""})
      * @Form\Options({"label":"Name of presiding staff member"})
      * @Form\Required(false)
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":0,"max":255}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":0,"max":255})
      */
     public $presidingStaffName = null;
 
@@ -119,7 +119,7 @@ class NonPiFields extends CaseBase
      *     "category": "non_pi_type_outcome",
      *     "disable_inarray_validator": false
      * })
-     * @Form\Filter({"name":"Common\Filter\NullToArray"})
+     * @Form\Filter("Common\Filter\NullToArray")
      */
     public $outcome = null;
 }

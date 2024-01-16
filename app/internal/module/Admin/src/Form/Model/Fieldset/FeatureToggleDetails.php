@@ -18,7 +18,7 @@ class FeatureToggleDetails
      * @Form\Type("Text")
      * @Form\Required(true)
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":32}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"max":32})
      */
     public $friendlyName = null;
 
@@ -28,7 +28,7 @@ class FeatureToggleDetails
      * @Form\Type("Text")
      * @Form\Required(true)
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":255}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"max":255})
      */
     public $configName = null;
 

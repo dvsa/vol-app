@@ -1,6 +1,6 @@
 <?php
 
-use Laminas\Mvc\Router\Http\Segment;
+use Laminas\Router\Http\Segment;
 use Admin\Listener\RouteParam\IrhpPermitAdminFurniture;
 use Admin\Listener\RouteParam;
 

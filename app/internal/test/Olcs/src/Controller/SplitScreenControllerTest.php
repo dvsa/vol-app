@@ -27,7 +27,6 @@ class SplitScreenControllerTest extends MockeryTestCase
     {
         $this->mockScriptFactory = m::mock(ScriptFactory::class)->makePartial();
         $this->sut = new SplitScreenController($this->mockScriptFactory);
-        $this->sut->setServiceLocator($this->createMock(ServiceLocatorInterface::class));
     }
 
     public function testIndexAction()

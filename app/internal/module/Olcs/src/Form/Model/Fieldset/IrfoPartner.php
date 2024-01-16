@@ -14,8 +14,8 @@ class IrfoPartner
      * @Form\Attributes({"class":"","id":"irfoPartner"})
      * @Form\Required(false)
      * @Form\Type("Text")
-     * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"min":1,"max":70}})
+     * @Form\Filter("Laminas\Filter\StringTrim")
+     * @Form\Validator("Laminas\Validator\StringLength", options={"min":1,"max":70})
      */
     public $name = null;
 }

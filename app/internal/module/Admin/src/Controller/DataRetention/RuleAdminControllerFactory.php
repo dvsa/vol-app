@@ -7,8 +7,7 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Interop\Container\ContainerInterface;
 use Laminas\Navigation\Navigation;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class RuleAdminControllerFactory implements FactoryInterface
 {
@@ -31,15 +30,6 @@ class RuleAdminControllerFactory implements FactoryInterface
             $formHelperService,
             $flashMessenger,
             $navigation
-        );
-    }
-    public function createService(ServiceLocatorInterface $serviceLocator): RuleAdminController
-    {
-        $container = method_exists($serviceLocator, 'getServiceLocator') ? $serviceLocator->getServiceLocator() : $serviceLocator;
-
-        return $this->__invoke(
-            $container,
-            RuleAdminController::class
         );
     }
 }

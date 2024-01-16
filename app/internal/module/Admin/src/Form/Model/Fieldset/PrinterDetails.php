@@ -21,7 +21,7 @@ class PrinterDetails
      * @Form\Options({"label":"Printer"})
      * @Form\Type("Text")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":45}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"max":45})
      */
     public $printerName = null;
 
@@ -31,7 +31,7 @@ class PrinterDetails
      * @Form\Type("Text")
      * @Form\Required(false)
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
-     * @Form\Validator({"name":"Laminas\Validator\StringLength","options":{"max":255}})
+     * @Form\Validator("Laminas\Validator\StringLength", options={"max":255})
      */
     public $description = null;
 }

@@ -2,15 +2,12 @@
 
 namespace OlcsTest\View\Helper;
 
+use Interop\Container\ContainerInterface;
 use Olcs\View\Helper\SubmissionSectionTable;
 use Olcs\View\Helper\SubmissionSectionTableFactory;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
-/**
- * Class SubmissionSectionDetails
- * @package OlcsTest\View\Helper
- */
 class SubmissionSectionTableTest extends TestCase
 {
     /**
@@ -25,7 +22,7 @@ class SubmissionSectionTableTest extends TestCase
 
         $mockView = m::mock('\Laminas\View\Renderer\PhpRenderer');
 
-        $mockViewHelper = m::mock('Olcs\View\Helper\SubmissionSectionTable');
+        $mockViewHelper = m::mock(SubmissionSectionTable::class);
 
         $mockViewHelper->shouldReceive('__invoke');
         $mockView->shouldReceive('plugin')->andReturn($mockViewHelper);
@@ -56,23 +53,6 @@ class SubmissionSectionTableTest extends TestCase
             $expected,
             $result
         );
-    }
-
-    public function testCreateService()
-    {
-        $mockTableBuilder = m::mock('\Common\Service\Table\TableFactory');
-
-        $mockSl = m::mock('\Laminas\ServiceManager\ServiceManager');
-
-        $mockSl->shouldReceive('get')
-            ->with('Table')
-            ->andReturn($mockTableBuilder);
-
-        $sut = new SubmissionSectionTableFactory();
-        $service = $sut->createService($mockSl);
-
-        $this->assertInstanceOf('Olcs\View\Helper\SubmissionSectionTable', $service);
-        $this->assertSame($mockTableBuilder, $service->getTableBuilder());
     }
 
     public function provideInvoke()

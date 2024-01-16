@@ -19,8 +19,8 @@ use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
-use ZfcRbac\Identity\IdentityProviderInterface;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Identity\IdentityProviderInterface;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Internal Licence Business Details Controller

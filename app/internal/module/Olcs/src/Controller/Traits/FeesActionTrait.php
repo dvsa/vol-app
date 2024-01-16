@@ -22,7 +22,7 @@ use Dvsa\Olcs\Transfer\Query\Transaction\Transaction as PaymentByIdQry;
 use Laminas\Form\Form;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
-use ZfcRbac\Identity\IdentityProviderInterface;
+use LmcRbacMvc\Identity\IdentityProviderInterface;
 
 /**
  * Fees action trait

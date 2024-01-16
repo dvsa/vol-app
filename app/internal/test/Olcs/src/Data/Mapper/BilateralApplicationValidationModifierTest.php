@@ -110,15 +110,18 @@ class BilateralApplicationValidationModifierTest extends MockeryTestCase
             ->with('NO')
             ->once();
 
-        $this->form->shouldReceive('getInputFilter')
-            ->withNoArgs()
-            ->andReturnSelf()
+        $inputFilter = m::mock(InputFilter::class);
+        $inputFilter
             ->shouldReceive('get')
             ->with('fields')
             ->andReturnSelf()
             ->shouldReceive('get')
             ->with('countries')
             ->andReturn($countriesInputFilter);
+
+        $this->form->shouldReceive('getInputFilter')
+            ->withNoArgs()
+            ->andReturn($inputFilter);
 
         $this->applicationFormPopulator->shouldReceive('populate')
             ->with($this->form, $data)

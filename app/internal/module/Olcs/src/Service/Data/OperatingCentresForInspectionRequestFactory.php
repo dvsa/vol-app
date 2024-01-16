@@ -4,12 +4,8 @@ namespace Olcs\Service\Data;
 
 use Common\Service\Data\AbstractDataServiceServices;
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
-/**
- * OperatingCentresForInspectionRequestFactory
- */
 class OperatingCentresForInspectionRequestFactory implements FactoryInterface
 {
     /**
@@ -26,17 +22,5 @@ class OperatingCentresForInspectionRequestFactory implements FactoryInterface
             $container->get(AbstractDataServiceServices::class),
             $container->get('Helper\FlashMessenger')
         );
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $services
-     *
-     * @return OperatingCentresForInspectionRequest
-     */
-    public function createService(ServiceLocatorInterface $services): OperatingCentresForInspectionRequest
-    {
-        return $this($services, OperatingCentresForInspectionRequest::class);
     }
 }

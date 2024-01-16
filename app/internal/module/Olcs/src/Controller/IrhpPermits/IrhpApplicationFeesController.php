@@ -12,7 +12,7 @@ use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Traits\FeesActionTrait;
-use ZfcRbac\Identity\IdentityProviderInterface;
+use LmcRbacMvc\Identity\IdentityProviderInterface;
 
 class IrhpApplicationFeesController extends AbstractIrhpPermitController
 {

@@ -15,12 +15,13 @@ use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Transfer\Command\Licence\Overview as OverviewCommand;
 use Dvsa\Olcs\Transfer\Query\Licence\Overview as OverviewQuery;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use Laminas\Form\ElementInterface;
 use Laminas\Form\Form;
 use Mockery as m;
 use Olcs\Controller\Lva\Licence\OverviewController;
 use Olcs\Service\Helper\LicenceOverviewHelperService;
 use OlcsTest\Controller\Lva\AbstractLvaControllerTestCase;
-use ZfcRbac\Service\AuthorizationService;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Internal Licencing Overview Controller Test
@@ -510,7 +511,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         ];
 
         $form->shouldReceive('get')->with('details')->andReturn(
-            m::mock()
+            m::mock(ElementInterface::class)
                 ->shouldReceive('get')
                     ->with('leadTcArea')
                     ->andReturn(

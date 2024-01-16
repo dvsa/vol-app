@@ -2,16 +2,16 @@
 
 namespace OlcsTest\Listener\RouteParam;
 
+use Common\Exception\ResourceNotFoundException;
+use Interop\Container\ContainerInterface;
+use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
+use Laminas\EventManager\Event;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Olcs\Listener\RouteParam\Cases;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
-/**
- * Class CasesTest
- * @package OlcsTest\Listener\RouteParam
- */
 class CasesTest extends MockeryTestCase
 {
     public function setUp(): void
@@ -74,15 +74,17 @@ class CasesTest extends MockeryTestCase
             ]
         ];
 
-        $event = new RouteParam();
-        $event->setValue($id);
-        $event->setTarget(
+        $routeParam = new RouteParam();
+        $routeParam->setValue($id);
+        $routeParam->setTarget(
             m::mock()
-            ->shouldReceive('trigger')->once()->with('application', 100)
-            ->shouldReceive('trigger')->once()->with('licence', 101)
-            ->shouldReceive('trigger')->once()->with('transportManager', 102)
-            ->getMock()
+                ->shouldReceive('trigger')->once()->with('application', 100)
+                ->shouldReceive('trigger')->once()->with('licence', 101)
+                ->shouldReceive('trigger')->once()->with('transportManager', 102)
+                ->getMock()
         );
+
+        $event = new Event(null, $routeParam);
 
         $this->setupMockCase($id, $case);
 
@@ -133,39 +135,38 @@ class CasesTest extends MockeryTestCase
         $this->sut->onCase($event);
     }
 
-    public function testCreateService()
+    public function testInvoke()
     {
         $mockViewHelperManager = m::mock('Laminas\View\HelperPluginManager');
         $mockNavigation = m::mock();
         $mockSidebar = m::mock();
         $mockTransferAnnotationBuilder = m::mock();
         $mockQueryService = m::mock();
+        $mockAnnotationBuilder = m::mock(AnnotationBuilder::class);
 
-        $mockSl = m::mock('Laminas\ServiceManager\ServiceLocatorInterface');
-        $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
+        $mockSl = m::mock(ContainerInterface::class);
         $mockSl->shouldReceive('get')->with('Navigation')->andReturn($mockNavigation);
-        $mockSl->shouldReceive('get')->with('right-sidebar')->andReturn($mockSidebar);
-        $mockSl->shouldReceive('get')->with('TransferAnnotationBuilder')->andReturn($mockTransferAnnotationBuilder);
+        $mockSl->shouldReceive('get')->with(AnnotationBuilder::class)->andReturn($mockAnnotationBuilder);
         $mockSl->shouldReceive('get')->with('QueryService')->andReturn($mockQueryService);
+        $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
 
-        $service = $this->sut->createService($mockSl);
+        $service = $this->sut->__invoke($mockSl, Cases::class);
 
         $this->assertSame($this->sut, $service);
-        $this->assertSame($mockViewHelperManager, $this->sut->getViewHelperManager());
-        $this->assertSame($mockTransferAnnotationBuilder, $this->sut->getAnnotationBuilder());
-        $this->assertSame($mockQueryService, $this->sut->getQueryService());
         $this->assertSame($mockNavigation, $this->sut->getNavigationService());
-        $this->assertSame($mockSidebar, $this->sut->getSidebarNavigationService());
+        $this->assertSame($mockAnnotationBuilder, $this->sut->getAnnotationBuilder());
     }
 
     public function testOnCaseNotFound()
     {
-        $this->expectException(\Common\Exception\ResourceNotFoundException::class);
+        $this->expectException(ResourceNotFoundException::class);
 
         $id = 69;
 
-        $event = new RouteParam();
-        $event->setValue($id);
+        $routeParam = new RouteParam();
+        $routeParam->setValue(69);
+
+        $event = new Event(null, $routeParam);
 
         $mockAnnotationBuilder = m::mock();
         $mockQueryService  = m::mock();

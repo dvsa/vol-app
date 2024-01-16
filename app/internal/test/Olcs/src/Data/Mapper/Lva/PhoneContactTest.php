@@ -3,6 +3,8 @@
 namespace OlcsTest\Data\Mapper\Lva;
 
 use Common\RefData;
+use Laminas\Form\Fieldset;
+use Laminas\Stdlib\PriorityList;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Data\Mapper\Lva\PhoneContact;
@@ -88,9 +90,15 @@ class PhoneContactTest extends MockeryTestCase
             ->shouldReceive('getName')->once()->andReturn('unit_Field2')
             ->getMock();
 
+        $fieldset = m::mock(Fieldset::class);
+        $elements = new PriorityList();
+        $elements->insert(1, $mockField);
+        $elements->insert(2, $mockField2);
+        $fieldset->shouldReceive('getIterator')->andReturn($elements);
+
         /** @var \Laminas\Form\Form $mockForm */
         $mockForm = m::mock(FormInterface::class)
-            ->shouldReceive('get')->once()->with(PhoneContact::DETAILS)->andReturn([$mockField, $mockField2])
+            ->shouldReceive('get')->once()->with(PhoneContact::DETAILS)->andReturn($fieldset)
             ->getMock();
 
         $actual = PhoneContact::mapFromErrors($mockForm, $errors);
