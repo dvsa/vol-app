@@ -39,7 +39,7 @@ class TaskDetails
      * @Form\Type("DateSelect")
      * @Form\Validator("\Common\Validator\Date")
      * @Form\Validator("Date", options={"format":"Y-m-d"})
-     * @Form\Filter("DateSelectNullifier"})
+     * @Form\Filter("DateSelectNullifier")
      */
     public $actionDate = null;
 
