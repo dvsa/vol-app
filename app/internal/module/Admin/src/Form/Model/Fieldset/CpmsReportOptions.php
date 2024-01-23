@@ -12,7 +12,6 @@ class CpmsReportOptions
     /**
      * @Form\Name("reportCode")
      * @Form\Type("Select")
-     * @Form\Label("Report type")
      * @Form\Attributes({
      *      "id": "reportCode",
      * })
