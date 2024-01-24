@@ -96,7 +96,7 @@ class PublicInquiryRegisterTmDecision extends CaseBase
      * @Form\Options({
      *     "label": "Definition",
      *     "disable_inarray_validator": false,
-     *     "service_name": "\Olcs\Service\Data\PublicInquiryDefinition",
+     *     "service_name": "Olcs\Service\Data\PublicInquiryDefinition",
      *     "use_groups": true,
      *     "empty_option": "Add definition option"
      * })
