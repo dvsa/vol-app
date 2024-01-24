@@ -95,7 +95,7 @@ class Offence extends Base
      *     "use_groups": true
      * })
      * @Form\Filter("Common\Filter\NullToArray")
-     * @Form\Validation({"name":"NotEmpty", "options": {"array"}})
+     * @Form\Validator("NotEmpty", options={"array"})
      */
     public $convictionCategory = null;
 
