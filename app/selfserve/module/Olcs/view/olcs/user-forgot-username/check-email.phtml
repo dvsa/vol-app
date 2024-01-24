@@ -12,7 +12,7 @@
         <?php echo $this->translateReplace(
                 'user-forgot-username.page.check-email.content',
                 [
-                    $this->getHelperPluginManager()->get('Helper\Url')->fromRoute('auth/login/GET')
+                    $this->url->fromRoute('auth/login/GET')
                 ]
             ); ?>
      </p>

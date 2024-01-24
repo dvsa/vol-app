@@ -42,19 +42,17 @@ echo $this->partial(
     <?php echo $this->form($filterForm); ?>
     <?php
     $statusTranslated = $this->translate($this->status);
-    /** @var  \Common\Service\Helper\TranslationHelperService $translator */
-    $translator = $this->getHelperPluginManager()->get('Helper\Translation');
 
     if ($this->lva === 'application') {
-      echo $translator->translateReplace(
+      echo $this->translateReplace(
           'markup-application-right-column', [$this->escapeHtml($reference), $statusTranslated]
       );
     } elseif ($this->lva === 'variation') {
-      echo $translator->translateReplace(
+      echo $this->translateReplace(
           'markup-variation-right-column', [$this->escapeHtml($reference), $statusTranslated]
       );
     } elseif ($this->lva === 'licence') {
-      echo $translator->translateReplace(
+      echo $this->translateReplace(
           'markup-licence-right-column',
           [
               $this->escapeHtml($this->licNo),
