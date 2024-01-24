@@ -1,6 +1,4 @@
 <?php
-/** @var \Common\Service\Helper\TranslationHelperService $translationHlp */
-$translationHlp = $this->getHelperPluginManager()->get('Helper\Translation');
 
 echo $this->partial(
     'partials/page-header-simple',
@@ -8,7 +6,7 @@ echo $this->partial(
         'pageTitle' => $this->pageTitle(),
         'pageHeaderText' =>
             '<div class="govuk-inset-text"><p>' .
-                $translationHlp->translateReplace(
+                $this->translateReplace(
                     'user-registration.page.check-email.guidance', [$this->emailAddress]
                 ) .
             '</p></div>',
@@ -18,13 +16,11 @@ echo $this->partial(
 ?>
 
 <div class="row">
-  
+
   <div class="two-thirds">
     <div class="article">
       <p>
-          <?php echo $this->getHelperPluginManager()
-            ->get('Helper\Translation')
-            ->translateReplace(
+          <?php echo $this->translateReplace(
                 'user-registration.page.check-email.content',
                 [
                     $this->getHelperPluginManager()->get('Helper\Url')->fromRoute('auth/login/GET')

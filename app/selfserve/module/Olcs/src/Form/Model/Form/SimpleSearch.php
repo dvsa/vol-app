@@ -7,7 +7,7 @@ use Laminas\Form\Annotation as Form;
 /**
  * @Form\Name("simple-search")
  * @Form\Attributes({"method":"post", "action":"", "role":"search"})
- * @Form\Hydrator("Laminas\Stdlib\Hydrator\ArraySerializable")
+ * @Form\Hydrator("Laminas\Hydrator\ArraySerializableHydrator")
  */
 class SimpleSearch
 {

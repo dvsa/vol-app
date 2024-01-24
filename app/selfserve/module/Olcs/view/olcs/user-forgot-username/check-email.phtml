@@ -2,18 +2,14 @@
   <div class="page-header__wrapper">
     <h1><?php echo $this->translate('user-forgot-username.page.check-email.title'); ?></h1>
     <div class="page-header__text"><div class="govuk-inset-text"><p>
-        <?php echo $this->getHelperPluginManager()
-            ->get('Helper\Translation')
-            ->translateReplace('user-forgot-username.page.check-email.guidance', [$this->emailAddress]); ?>
+        <?php echo $this->translateReplace('user-forgot-username.page.check-email.guidance', [$this->emailAddress]); ?>
     </p></div></div>
   </div><!-- .page-header__wrapper -->
 </div><!-- .page-header -->
 <div class="two-thirds">
   <div class="article">
      <p>
-        <?php echo $this->getHelperPluginManager()
-            ->get('Helper\Translation')
-            ->translateReplace(
+        <?php echo $this->translateReplace(
                 'user-forgot-username.page.check-email.content',
                 [
                     $this->getHelperPluginManager()->get('Helper\Url')->fromRoute('auth/login/GET')

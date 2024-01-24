@@ -5,16 +5,12 @@ if(!empty($this->results)) {
     $results = $this->results;
 }
 
-
-/** @var \Common\Service\Helper\TranslationHelperService $translationHlp */
-$translationHlp = $this->getHelperPluginManager()->get('Helper\Translation');
-
 echo $this->partial(
     'partials/page-header-simple',
     [
         'pageTitle' => $this->translate('search.result.title.' . $this->index),
         'pageHeaderText' =>
-            '<p>' . $translationHlp->translateReplace('search.result.subtitle.' . $this->index, [$count]) . '</p>' .
+            '<p>' . $this->translateReplace('search.result.subtitle.' . $this->index, [$count]) . '</p>' .
             (
                 $this->index === 'publication'
                 ? '<p>' . $this->translate('search.result.subtitle.publication.download') .'</p>'

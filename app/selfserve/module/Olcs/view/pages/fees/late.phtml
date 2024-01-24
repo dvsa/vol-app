@@ -13,8 +13,6 @@ echo $this->partial(
     ]
 );
 
-/** @var  \Common\Service\Helper\TranslationHelperService $translator */
-$translator = $this->getHelperPluginManager()->get('Helper\Translation');
 ?>
 
 
@@ -22,7 +20,7 @@ $translator = $this->getHelperPluginManager()->get('Helper\Translation');
 
   <div class="three-quarters">
 
-      <?php echo $translator->translateReplace(
+      <?php echo $this->translateReplace(
           'markup-late-fee',
           [$this->escapeHtml($licenceExpiryDate)]
       ); ?>

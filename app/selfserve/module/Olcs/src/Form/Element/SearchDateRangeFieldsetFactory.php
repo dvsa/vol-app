@@ -2,19 +2,12 @@
 
 namespace Olcs\Form\Element;
 
-use Interop\Container\ContainerInterface;
 use Common\Service\Data\Search\Search;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Psr\Container\ContainerInterface;
 
 class SearchDateRangeFieldsetFactory implements FactoryInterface
 {
-    protected $options;
-
-    public function __construct($options)
-    {
-        $this->options = $options;
-    }
-
     /**
      * @param ContainerInterface $container
      * @param $requestedName
@@ -25,7 +18,7 @@ class SearchDateRangeFieldsetFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : SearchDateRangeFieldset
     {
-        $fs = new SearchDateRangeFieldset($this->options['name'], $this->options);
+        $fs = new SearchDateRangeFieldset($options['name'], $options);
         $fs->setSearchService($container->get('DataServiceManager')->get(Search::class));
         return $fs;
     }

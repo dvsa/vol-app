@@ -2,15 +2,12 @@
 $count = $this->results->getTotal();
 $results = $this->results;
 
-/** @var \Common\Service\Helper\TranslationHelperService $translationHlp */
-$translationHlp = $this->getHelperPluginManager()->get('Helper\Translation');
-
 echo $this->partial(
     'partials/page-header-simple',
     [
         'pageTitle' => $this->translate('selfserve.search.busreg.browse.result.title'),
         'pageHeaderText' =>
-            '<p>' . $translationHlp->translateReplace('selfserve.search.busreg.browse.result.subtitle', [$count]) . '</p>',
+            '<p>' . $this->translateReplace('selfserve.search.busreg.browse.result.subtitle', [$count]) . '</p>',
         'pageHeaderTextEscape' => false,
         'backUrl' => [
             'url' => $this->url($this->backRoute),

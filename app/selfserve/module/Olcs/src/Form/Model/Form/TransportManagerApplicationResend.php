@@ -7,7 +7,7 @@ use Laminas\Form\Annotation as Form;
 /**
  * @Form\Name("transport-manager-application-resend")
  * @Form\Attributes({"method":"post", "action":""})
- * @Form\Hydrator("Laminas\Stdlib\Hydrator\ArraySerializable")
+ * @Form\Hydrator("Laminas\Hydrator\ArraySerializableHydrator")
  */
 class TransportManagerApplicationResend
 {
