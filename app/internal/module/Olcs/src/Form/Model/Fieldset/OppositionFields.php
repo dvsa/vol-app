@@ -166,7 +166,7 @@ class OppositionFields extends CaseBase
      *     "label": "Affected centre",
      *     "context":"licence",
      *     "disable_inarray_validator": false,
-     *     "service_name": "Common/Service/Data/OcContextListDataService",
+     *     "service_name": "Common\Service\Data\OcContextListDataService",
      *     "use_groups": "false"
      * })
      * @Form\Filter({"name":"Common\Filter\NullToArray"})
@@ -182,7 +182,7 @@ class OppositionFields extends CaseBase
      *     "label": "Affected centre",
      *     "context":"application",
      *     "disable_inarray_validator": false,
-     *     "service_name": "Common/Service/Data/OcContextListDataService",
+     *     "service_name": "Common\Service\Data\OcContextListDataService",
      *     "use_groups": "false"
      * })
      * @Form\Filter({"name":"Common\Filter\NullToArray"})

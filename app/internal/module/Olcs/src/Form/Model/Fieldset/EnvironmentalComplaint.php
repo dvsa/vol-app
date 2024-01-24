@@ -60,7 +60,7 @@ class EnvironmentalComplaint extends CaseBase
      *     "label": "Affected centre",
      *     "disable_inarray_validator": false,
      *     "context": "operatingCentre",
-     *     "service_name": "Common/Service/Data/LicenceOperatingCentre",
+     *     "service_name": "Common\Service\Data\LicenceOperatingCentre",
      *     "use_groups": "false"
      * })
      * @Form\Type("DynamicSelect")
