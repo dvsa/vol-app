@@ -27,8 +27,8 @@ class SearchOrderFieldsetFactoryTest extends TestCase
             )
             ->getMock();
 
-        $sut = new SearchOrderFieldsetFactory($options);
-        $result = $sut->__invoke($sl, SearchOrderFieldset::class);
+        $sut = new SearchOrderFieldsetFactory();
+        $result = $sut->__invoke($sl, SearchOrderFieldset::class, $options);
 
         $this->assertInstanceOf(SearchOrderFieldset::class, $result);
         $this->assertSame($service, $result->getSearchService());
