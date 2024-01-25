@@ -5,7 +5,9 @@ namespace OlcsTest\FormService\Form\Lva\OperatingCentre;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Helper\UrlHelperService;
 use Laminas\Form\ElementInterface;
+use Laminas\InputFilter\CollectionInputFilter;
 use Laminas\InputFilter\InputFilterInterface;
+use Laminas\InputFilter\InputInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\Form\Form;
@@ -115,14 +117,9 @@ class LvaOperatingCentreTest extends MockeryTestCase
         $postcodeInput = m::mock(InputInterface::class);
         $postcodeInput->shouldReceive('setRequired')->with(false)->once();
 
-        // Mock for searchPostcode input and its setRequired and setAllowEmpty methods
-        $searchPostcodeInput = m::mock(InputInterface::class);
-        $searchPostcodeInput->shouldReceive('setRequired')->with(false)->once();
-        $searchPostcodeInput->shouldReceive('setAllowEmpty')->with(true)->once();
-
         // Mock the collection of inputs for searchPostcode
         $inputsCollection = m::mock(CollectionInputFilter::class);
-        $inputsCollection->shouldReceive('getInputs')->andReturn([$searchPostcodeInput]);
+        $inputsCollection->shouldReceive('getInputs')->andReturn([m::mock(InputInterface::class)]);
 
         // Mock the InputFilter for address
         $addressInputFilter = m::mock(InputFilterInterface::class);
@@ -242,14 +239,9 @@ class LvaOperatingCentreTest extends MockeryTestCase
         $postcodeInput = m::mock(InputInterface::class);
         $postcodeInput->shouldReceive('setRequired')->with(false)->once();
 
-        // Mock for searchPostcode input and its setRequired and setAllowEmpty methods
-        $searchPostcodeInput = m::mock(InputInterface::class);
-        $searchPostcodeInput->shouldReceive('setRequired')->with(false)->once();
-        $searchPostcodeInput->shouldReceive('setAllowEmpty')->with(true)->once();
-
         // Mock the collection of inputs for searchPostcode
         $inputsCollection = m::mock(CollectionInputFilter::class);
-        $inputsCollection->shouldReceive('getInputs')->andReturn([$searchPostcodeInput]);
+        $inputsCollection->shouldReceive('getInputs')->andReturn([m::mock(InputInterface::class)]);
 
         // Mock the InputFilter for address
         $addressInputFilter = m::mock(InputFilterInterface::class);
