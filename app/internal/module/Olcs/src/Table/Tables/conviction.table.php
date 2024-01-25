@@ -7,7 +7,7 @@ return array(
     'variables' => array(
         'title' => 'Convictions',
         'titleSingular' => 'Conviction',
-        'empty_message' => 'There are no convicions'
+        'empty_message' => 'There are no convictions'
     ),
     'settings' => array(
         'crud' => array(
