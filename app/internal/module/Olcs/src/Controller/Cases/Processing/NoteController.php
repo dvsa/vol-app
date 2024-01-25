@@ -50,7 +50,7 @@ class NoteController extends AbstractInternalController implements CaseControlle
     public function getLeftView()
     {
         $view = new ViewModel();
-        $view->setTemplate('sections/cases/partials/left');
+        $view->setTemplate('sections/processing/partials/left');
 
         return $view;
     }

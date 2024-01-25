@@ -1,6 +1,6 @@
 <?php
 
-$currentSection = $this->navigation('navigation')->findOneBy('active', true);
+$currentSection = $this->navigation('Navigation')->findOneBy('active', true);
 $currentSectionParent = $currentSection->getParent();
 
 $case = $this->placeholder('case')->getValue();
