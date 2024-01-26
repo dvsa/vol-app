@@ -49,8 +49,7 @@ class FinancialEvidenceController extends Lva\AbstractFinancialEvidenceControlle
         AnnotationBuilder $transferAnnotationBuilder,
         CommandService $commandService,
         Lva\Adapters\VariationFinancialEvidenceAdapter $lvaAdapter,
-        FileUploadHelperService $uploadHelper,
-        ValidatorPluginManager $validatorPluginManager
+        FileUploadHelperService $uploadHelper
     ) {
         parent::__construct(
             $niTextTranslationUtil,
