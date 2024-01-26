@@ -23,7 +23,7 @@ echo $this->partial(
           <?php echo $this->translateReplace(
                 'user-registration.page.check-email.content',
                 [
-                    $this->url->fromRoute('auth/login/GET')
+                    $this->url('auth/login/GET')
                 ]
             ); ?>
       </p>
