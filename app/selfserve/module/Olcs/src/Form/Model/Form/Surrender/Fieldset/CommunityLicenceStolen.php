@@ -49,7 +49,7 @@ class CommunityLicenceStolen
      *              }
      *          },
      *     }
-     * })
+     * )
      * @Form\Filter("Laminas\Filter\StringTrim")
      * @Form\Type("\Laminas\Form\Element\Textarea")
      * @Form\Attributes({
@@ -58,7 +58,7 @@ class CommunityLicenceStolen
      * })
      * @Form\Options({
      *     "hint": "licence.surrender.operator_licence_stolen.text_area.hint"
-     * )
+     * })
      */
     public $details = null;
 }
