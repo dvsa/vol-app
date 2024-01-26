@@ -31,7 +31,7 @@ class UnlicensedOperator
     public $contact = null;
 
     /**
-     * @Form\Id("is-exempt)
+     * @Form\Attributes({"id":"is-exempt"})
      * @Form\Options({
      *     "checked_value": "Y",
      *     "unchecked_value": "N",
