@@ -618,7 +618,7 @@ return array(
             'piListData' => Olcs\View\Helper\PiListData::class,
             'formSubmissionSections' => Olcs\Form\View\Helper\SubmissionSections::class,
             'submissionSectionDetails' => Olcs\View\Helper\SubmissionSectionDetails::class,
-            'submissionSectionOverview' => Olcs\View\Helper\SubmissionSectionOverview::class,
+            'SubmissionSectionOverview' => Olcs\View\Helper\SubmissionSectionOverview::class,
             'surrenderDetails' => Olcs\View\Helper\SurrenderDetails::class,
         ],
         'factories' => [
