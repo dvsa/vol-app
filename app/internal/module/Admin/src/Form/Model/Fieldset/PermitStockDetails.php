@@ -155,13 +155,12 @@ class PermitStockDetails
      * })
      * @Form\Validator("Laminas\Validator\Digits")
      * @Form\Type("Laminas\Form\Element\Number")
-     * @Transfer\Validator({
-     *      "name":"Laminas\Validator\Between",
-     *      "options": {
+     * @Form\Validator("Laminas\Validator\Between",
+     *      options={
      *          "min": -1,
      *          "max": 9999999
      *      }
-     * })
+     * )
      * @Form\Required(false)
      */
     public $initialStock = null;

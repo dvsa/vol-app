@@ -66,12 +66,11 @@ class PermitRangeDetails
      * })
      * @Form\Validator("Laminas\Validator\Digits")
      * @Form\Type("Laminas\Form\Element\Number")
-     * @Transfer\Validator({
-     *      "name": "Laminas\Validator\GreaterThan",
-     *      "options": {
+     * @Form\Validator("Laminas\Validator\GreaterThan",
+     *      options={
      *          "min": "0"
      *      }
-     * })
+     * )
      */
     public $fromNo = null;
 
@@ -83,12 +82,11 @@ class PermitRangeDetails
      * })
      * @Form\Validator("Laminas\Validator\Digits")
      * @Form\Type("Laminas\Form\Element\Number")
-     * @Transfer\Validator({
-     *      "name": "Laminas\Validator\GreaterThan",
-     *      "options": {
+     * @Form\Validator("Laminas\Validator\GreaterThan",
+     *      options={
      *          "min": "0"
      *      }
-     * })
+     * )
      */
     public $toNo = null;
 
