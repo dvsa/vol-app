@@ -104,6 +104,6 @@ class AbstractController extends LaminasAbstractActionController
      */
     public function setTableFilters($filters)
     {
-        $this->viewHelperManager->get('placeholder')->getContainer('tableFilters')->set($filters);
+        $this->placeholder()->setPlaceholder('tableFilters', $filters);
     }
 }
