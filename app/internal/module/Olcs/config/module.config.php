@@ -704,7 +704,6 @@ return array(
             DataService\IrhpPermitPrintRangeType::class => DataService\IrhpPermitPrintRangeTypeFactory::class,
             DataService\IrhpPermitPrintStock::class => DataService\IrhpPermitPrintStockFactory::class,
             DataService\IrhpPermitPrintType::class => CommonDataService\AbstractDataServiceFactory::class,
-            DataService\Licence::class => DataService\LicenceFactory::class,
             DataService\OperatingCentresForInspectionRequest::class => DataService\OperatingCentresForInspectionRequestFactory::class,
             DataService\PaymentType::class => CommonDataService\RefDataFactory::class,
             DataService\PresidingTc::class => CommonDataService\AbstractDataServiceFactory::class,

@@ -4,6 +4,7 @@ namespace Olcs\Controller\Factory\Operator\Docs;
 
 use Common\Service\Cqrs\Command\CommandService;
 use Common\Service\Cqrs\Query\QueryService;
+use Common\Service\Data\PluginManager;
 use Common\Service\Helper\DateHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
@@ -36,7 +37,7 @@ class OperatorDocsControllerFactory implements FactoryInterface
         $transferAnnotationBuilder = $container->get(AnnotationBuilder::class);
         $commandService = $container->get(CommandService::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
-        $licenceDataService = $container->get(Licence::class);
+        $licenceDataService = $container->get(PluginManager::class)->get(Licence::class);
         $queryService = $container->get(QueryService::class);
         $navigation = $container->get('Navigation');
         $docSubCategoryDataService = $container->get(DocumentSubCategory::class);
