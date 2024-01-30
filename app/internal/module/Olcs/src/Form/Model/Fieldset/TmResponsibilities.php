@@ -35,6 +35,7 @@ class TmResponsibilities
      * @Form\Validator({
      *      "name":"Laminas\Validator\NotEmpty"
      * })
+     * @Form\Flags({"priority": -10})
      */
     public $tmType = null;
 
@@ -47,6 +48,7 @@ class TmResponsibilities
      * @Form\Required(true)
      * @Form\Attributes({"id":"","placeholder":"", "required":false})
      * @Form\Type("DynamicSelect")
+     * @Form\Flags({"priority": -20})
      */
     public $tmApplicationStatus = null;
 
@@ -62,6 +64,7 @@ class TmResponsibilities
      *     }
      * })
      * @Form\Type("Radio")
+     * @Form\Flags({"priority": -30})
      */
     public $isOwner = null;
 
@@ -70,12 +73,14 @@ class TmResponsibilities
      * @Form\Options({
      *     "label": "transport-manager.responsibilities.hours-per-week"
      * })
+     * @Form\Flags({"priority": -40})
      */
     public $hoursOfWeek = null;
 
     /**
      * @Form\Name("otherLicences")
      * @Form\ComposedObject("Common\Form\Model\Fieldset\Table")
+     * @Form\Flags({"priority": -50})
      */
     public $otherLicences = null;
 
@@ -99,12 +104,14 @@ class TmResponsibilities
      *          "max":4000
      *      }
      * })
+     * @Form\Flags({"priority": -60})
      */
     public $additionalInformation;
 
     /**
      * @Form\Attributes({"id":"file", "class": "file-upload"})
      * @Form\ComposedObject("\Common\Form\Model\Fieldset\MultipleFileUpload")
+     * @Form\Flags({"priority": -70})
      */
     public $file = null;
 
@@ -120,6 +127,7 @@ class TmResponsibilities
      *     }
      * })
      * @Form\Type("Radio")
+     * @Form\Flags({"priority": -80})
      */
     public $hasUndertakenTraining = null;
 }
