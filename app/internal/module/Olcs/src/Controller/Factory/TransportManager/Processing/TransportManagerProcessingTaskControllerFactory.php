@@ -2,16 +2,17 @@
 
 namespace Olcs\Controller\Factory\TransportManager\Processing;
 
+use Common\Service\Data\PluginManager;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
-use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\TransportManager\Processing\TransportManagerProcessingTaskController;
 use Olcs\Service\Data\SubCategory;
+use Psr\Container\ContainerInterface;
 
 class TransportManagerProcessingTaskControllerFactory implements FactoryInterface
 {
@@ -30,7 +31,7 @@ class TransportManagerProcessingTaskControllerFactory implements FactoryInterfac
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         $translationHelper = $container->get(TranslationHelperService::class);
         $navigation = $container->get('Navigation');
-        $subCategoryDataService = $container->get(SubCategory::class);
+        $subCategoryDataService = $container->get(PluginManager::class)->get(SubCategory::class);
 
         return new TransportManagerProcessingTaskController(
             $scriptFactory,

@@ -10,11 +10,11 @@ use Common\Service\Helper\OppositionHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
-use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Application\Docs\ApplicationDocsController;
 use Olcs\Service\Data\DocumentSubCategory;
+use Psr\Container\ContainerInterface;
 
 class ApplicationDocsControllerFactory implements FactoryInterface
 {
@@ -34,7 +34,7 @@ class ApplicationDocsControllerFactory implements FactoryInterface
         $oppositionHelper = $container->get(OppositionHelperService::class);
         $complaintsHelper = $container->get(ComplaintsHelperService::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
-        $docSubCategoryDataService = $container->get(DocumentSubCategory::class);
+        $docSubCategoryDataService = $container->get(PluginManager::class)->get(DocumentSubCategory::class);
         $translationHelper = $container->get(TranslationHelperService::class);
         $navigation = $container->get('Navigation');
 

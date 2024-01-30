@@ -12,12 +12,12 @@ use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
-use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Operator\Docs\OperatorDocsController;
 use Olcs\Service\Data\DocumentSubCategory;
 use Olcs\Service\Data\Licence;
+use Psr\Container\ContainerInterface;
 
 class OperatorDocsControllerFactory implements FactoryInterface
 {
@@ -40,7 +40,7 @@ class OperatorDocsControllerFactory implements FactoryInterface
         $licenceDataService = $container->get(PluginManager::class)->get(Licence::class);
         $queryService = $container->get(QueryService::class);
         $navigation = $container->get('Navigation');
-        $docSubCategoryDataService = $container->get(DocumentSubCategory::class);
+        $docSubCategoryDataService = $container->get(PluginManager::class)->get(DocumentSubCategory::class);
         $translationHelper = $container->get(TranslationHelperService::class);
 
         return new OperatorDocsController(

@@ -2,14 +2,15 @@
 
 namespace Admin\Controller;
 
+use Common\Service\Data\PluginManager;
 use Common\Service\Helper\DateHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
-use Interop\Container\ContainerInterface;
 use Laminas\Navigation\Navigation;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Service\Data\IrfoCountry;
+use Psr\Container\ContainerInterface;
 
 class IrfoStockControlControllerFactory implements FactoryInterface
 {
@@ -30,7 +31,7 @@ class IrfoStockControlControllerFactory implements FactoryInterface
         $dateHelperService = $container->get(DateHelperService::class);
         assert($dateHelperService instanceof DateHelperService);
 
-        $irfoCountryDataService = $container->get(IrfoCountry::class);
+        $irfoCountryDataService = $container->get(PluginManager::class)->get(IrfoCountry::class);
         assert($irfoCountryDataService instanceof IrfoCountry);
 
         return new IrfoStockControlController(

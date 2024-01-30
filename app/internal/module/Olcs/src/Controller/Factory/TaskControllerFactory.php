@@ -2,16 +2,17 @@
 
 namespace Olcs\Controller\Factory;
 
+use Common\Service\Data\PluginManager;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
-use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\TaskController;
 use Olcs\Service\Data\SubCategory;
 use Olcs\Service\Data\UserListInternalExcludingLimitedReadOnlyUsers;
+use Psr\Container\ContainerInterface;
 
 class TaskControllerFactory implements FactoryInterface
 {
@@ -28,8 +29,8 @@ class TaskControllerFactory implements FactoryInterface
         $tableFactory = $container->get(TableFactory::class);
         $viewHelperManager = $container->get(HelperPluginManager::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
-        $subCategoryDataService = $container->get(SubCategory::class);
-        $userListInternalExcLtdRdOnlyDataService = $container->get(UserListInternalExcludingLimitedReadOnlyUsers::class);
+        $subCategoryDataService = $container->get(PluginManager::class)->get(SubCategory::class);
+        $userListInternalExcLtdRdOnlyDataService = $container->get(PluginManager::class)->get(UserListInternalExcludingLimitedReadOnlyUsers::class);
 
         return new TaskController(
             $scriptFactory,

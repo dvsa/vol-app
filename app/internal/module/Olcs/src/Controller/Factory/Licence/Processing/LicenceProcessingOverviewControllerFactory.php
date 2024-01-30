@@ -2,18 +2,19 @@
 
 namespace Olcs\Controller\Factory\Licence\Processing;
 
+use Common\Service\Data\PluginManager;
 use Common\Service\Helper\ComplaintsHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\OppositionHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
-use Interop\Container\ContainerInterface;
 use Laminas\Router\Http\TreeRouteStack;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Licence\Processing\LicenceProcessingOverviewController;
 use Olcs\Service\Data\SubCategory;
+use Psr\Container\ContainerInterface;
 
 class LicenceProcessingOverviewControllerFactory implements FactoryInterface
 {
@@ -32,7 +33,7 @@ class LicenceProcessingOverviewControllerFactory implements FactoryInterface
         $oppositionHelper = $container->get(OppositionHelperService::class);
         $complaintsHelper = $container->get(ComplaintsHelperService::class);
         $navigation = $container->get('Navigation');
-        $subCategoryDataService = $container->get(SubCategory::class);
+        $subCategoryDataService = $container->get(PluginManager::class)->get(SubCategory::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         $router = $container->get(TreeRouteStack::class);
 

@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+use Laminas\Router\Http\Segment;
+use Laminas\Router\Http\Method;
+
 return [
     'auth' => [
         'type' => 'segment',

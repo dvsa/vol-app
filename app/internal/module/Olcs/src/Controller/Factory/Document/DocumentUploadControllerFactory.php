@@ -3,15 +3,16 @@
 namespace Olcs\Controller\Factory\Document;
 
 use Common\Service\AntiVirus\Scan;
+use Common\Service\Data\PluginManager;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
-use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Document\DocumentUploadController;
 use Olcs\Service\Data\DocumentSubCategory;
+use Psr\Container\ContainerInterface;
 
 class DocumentUploadControllerFactory implements FactoryInterface
 {
@@ -29,7 +30,7 @@ class DocumentUploadControllerFactory implements FactoryInterface
         $viewHelperManager = $container->get(HelperPluginManager::class);
         $config = $container->get('Config');
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
-        $documentSubCategoryDataService = $container->get(DocumentSubCategory::class);
+        $documentSubCategoryDataService = $container->get(PluginManager::class)->get(DocumentSubCategory::class);
         $avScan = $container->get(Scan::class);
 
         return new DocumentUploadController(

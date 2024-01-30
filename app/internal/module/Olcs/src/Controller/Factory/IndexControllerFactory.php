@@ -2,11 +2,11 @@
 
 namespace Olcs\Controller\Factory;
 
+use Common\Service\Data\PluginManager;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
-use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\IndexController;
@@ -21,6 +21,7 @@ use Olcs\Service\Data\SubCategoryDescription;
 use Olcs\Service\Data\TaskSubCategory;
 use Olcs\Service\Data\UserListInternal;
 use Olcs\Service\Data\UserListInternalExcludingLimitedReadOnlyUsers;
+use Psr\Container\ContainerInterface;
 
 class IndexControllerFactory implements FactoryInterface
 {
@@ -37,17 +38,17 @@ class IndexControllerFactory implements FactoryInterface
         $tableFactory = $container->get(TableFactory::class);
         $viewHelperManager = $container->get(HelperPluginManager::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
-        $userListInternalDataService = $container->get(UserListInternal::class);
-        $userListInternalExcludingDataService = $container->get(UserListInternalExcludingLimitedReadOnlyUsers::class);
-        $subCategoryDataService = $container->get(SubCategory::class);
-        $taskSubCategoryDataService = $container->get(TaskSubCategory::class);
-        $documentSubCategoryDataService = $container->get(DocumentSubCategory::class);
-        $documentSubCategoryWithDocsDataService = $container->get(DocumentSubCategoryWithDocs::class);
-        $scannerSubCategoryDataService = $container->get(ScannerSubCategory::class);
-        $subCategoryDescriptionDataService = $container->get(SubCategoryDescription::class);
-        $irhpPermitPrintCountryDataService = $container->get(IrhpPermitPrintCountry::class);
-        $irhpPermitPrintStockDataService = $container->get(IrhpPermitPrintStock::class);
-        $irhpPermitPrintRangeTypeDataService = $container->get(IrhpPermitPrintRangeType::class);
+        $userListInternalDataService = $container->get(PluginManager::class)->get(UserListInternal::class);
+        $userListInternalExcludingDataService = $container->get(PluginManager::class)->get(UserListInternalExcludingLimitedReadOnlyUsers::class);
+        $subCategoryDataService = $container->get(PluginManager::class)->get(SubCategory::class);
+        $taskSubCategoryDataService = $container->get(PluginManager::class)->get(TaskSubCategory::class);
+        $documentSubCategoryDataService = $container->get(PluginManager::class)->get(DocumentSubCategory::class);
+        $documentSubCategoryWithDocsDataService = $container->get(PluginManager::class)->get(DocumentSubCategoryWithDocs::class);
+        $scannerSubCategoryDataService = $container->get(PluginManager::class)->get(ScannerSubCategory::class);
+        $subCategoryDescriptionDataService = $container->get(PluginManager::class)->get(SubCategoryDescription::class);
+        $irhpPermitPrintCountryDataService = $container->get(PluginManager::class)->get(IrhpPermitPrintCountry::class);
+        $irhpPermitPrintStockDataService = $container->get(PluginManager::class)->get(IrhpPermitPrintStock::class);
+        $irhpPermitPrintRangeTypeDataService = $container->get(PluginManager::class)->get(IrhpPermitPrintRangeType::class);
 
         return new IndexController(
             $scriptFactory,

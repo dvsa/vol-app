@@ -2,14 +2,15 @@
 
 namespace Olcs\Controller\Factory\Cases\Processing;
 
+use Common\Service\Data\PluginManager;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
-use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Cases\Processing\TaskController;
 use Olcs\Service\Data\SubCategory;
+use Psr\Container\ContainerInterface;
 
 class TaskControllerFactory implements FactoryInterface
 {
@@ -26,7 +27,7 @@ class TaskControllerFactory implements FactoryInterface
         $tableFactory = $container->get(TableFactory::class);
         $viewHelperManager = $container->get(HelperPluginManager::class);
         $router = $container->get('router');
-        $subCategoryDataService = $container->get(SubCategory::class);
+        $subCategoryDataService = $container->get(PluginManager::class)->get(SubCategory::class);
 
         return new TaskController(
             $scriptFactory,

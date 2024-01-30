@@ -2,15 +2,16 @@
 
 namespace Olcs\Controller\Factory\Document;
 
+use Common\Service\Data\PluginManager;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
-use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Document\DocumentGenerationController;
 use Olcs\Service\Data\DocumentSubCategoryWithDocs;
+use Psr\Container\ContainerInterface;
 
 class DocumentGenerationControllerFactory implements FactoryInterface
 {
@@ -28,7 +29,7 @@ class DocumentGenerationControllerFactory implements FactoryInterface
         $viewHelperManager = $container->get(HelperPluginManager::class);
         $config = $container->get('Config');
         $flashMessangerHelper = $container->get(FlashMessengerHelperService::class);
-        $docSubcategoryWithDocsDataService = $container->get(DocumentSubCategoryWithDocs::class);
+        $docSubcategoryWithDocsDataService = $container->get(PluginManager::class)->get(DocumentSubCategoryWithDocs::class);
 
         return new DocumentGenerationController(
             $scriptFactory,

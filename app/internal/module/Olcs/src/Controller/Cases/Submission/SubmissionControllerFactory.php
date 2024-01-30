@@ -2,16 +2,17 @@
 
 namespace Olcs\Controller\Cases\Submission;
 
+use Common\Service\Data\PluginManager;
 use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Helper\UrlHelperService;
-use Interop\Container\ContainerInterface;
 use Laminas\Navigation\Navigation;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\Renderer\PhpRenderer as ViewRenderer;
 use Olcs\Service\Data\Submission;
+use Psr\Container\ContainerInterface;
 
 class SubmissionControllerFactory implements FactoryInterface
 {
@@ -37,7 +38,7 @@ class SubmissionControllerFactory implements FactoryInterface
         $viewRenderer = $container->get(ViewRenderer::class);
         assert($viewRenderer instanceof ViewRenderer);
 
-        $submissionDataService = $container->get(Submission::class);
+        $submissionDataService = $container->get(PluginManager::class)->get(Submission::class);
 
         $uploadHelper = $container->get(FileUploadHelperService::class);
 

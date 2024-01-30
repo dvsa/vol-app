@@ -4,20 +4,19 @@ use Common\Service\Table\Formatter\Date;
 
 return array(
     'variables' => array(
-        'title' => 'IRFO PSV Authorisation',
         'title' => 'IRFO PSV Authorisations'
     ),
     'settings' => array(
         'crud' => array(
             'actions' => array(
                 'renew' => array(
-                    'label' => 'Set to renew', 
-                    'class' => 'govuk-button js-require--multiple', 
+                    'label' => 'Set to renew',
+                    'class' => 'govuk-button js-require--multiple',
                     'requireRows' => true
                 ),
                 'print' => array(
-                    'label' => 'Print checklist', 
-                    'class' => 'govuk-button govuk-button--secondary js-require--multiple', 
+                    'label' => 'Print checklist',
+                    'class' => 'govuk-button govuk-button--secondary js-require--multiple',
                     'requireRows' => true
                 )
             )

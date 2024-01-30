@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Factory\Licence\Docs;
 
+use Common\Service\Data\PluginManager;
 use Common\Service\Helper\ComplaintsHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
@@ -9,11 +10,11 @@ use Common\Service\Helper\OppositionHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
-use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Licence\Docs\LicenceDocsController;
 use Olcs\Service\Data\DocumentSubCategory;
+use Psr\Container\ContainerInterface;
 
 class LicenceDocsControllerFactory implements FactoryInterface
 {
@@ -29,7 +30,7 @@ class LicenceDocsControllerFactory implements FactoryInterface
         $formHelper = $container->get(FormHelperService::class);
         $tableFactory = $container->get(TableFactory::class);
         $viewHelperManager = $container->get(HelperPluginManager::class);
-        $docSubCategoryDataService = $container->get(DocumentSubCategory::class);
+        $docSubCategoryDataService = $container->get(PluginManager::class)->get(DocumentSubCategory::class);
         $oppositionHelper = $container->get(OppositionHelperService::class);
         $complaintsHelper = $container->get(ComplaintsHelperService::class);
         $translationHelper = $container->get(TranslationHelperService::class);

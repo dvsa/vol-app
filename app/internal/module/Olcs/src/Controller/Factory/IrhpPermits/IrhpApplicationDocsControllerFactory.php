@@ -2,16 +2,17 @@
 
 namespace Olcs\Controller\Factory\IrhpPermits;
 
+use Common\Service\Data\PluginManager;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
-use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\IrhpPermits\IrhpApplicationDocsController;
 use Olcs\Service\Data\DocumentSubCategory;
+use Psr\Container\ContainerInterface;
 
 class IrhpApplicationDocsControllerFactory implements FactoryInterface
 {
@@ -28,7 +29,7 @@ class IrhpApplicationDocsControllerFactory implements FactoryInterface
         $tableFactory = $container->get(TableFactory::class);
         $viewHelperManager = $container->get(HelperPluginManager::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
-        $docSubCategoryDataService = $container->get(DocumentSubCategory::class);
+        $docSubCategoryDataService = $container->get(PluginManager::class)->get(DocumentSubCategory::class);
         $translationHelper = $container->get(TranslationHelperService::class);
 
         return new IrhpApplicationDocsController(

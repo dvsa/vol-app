@@ -11,12 +11,12 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
-use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Operator\OperatorProcessingTasksController;
 use Olcs\Service\Data\Licence;
 use Olcs\Service\Data\SubCategory;
+use Psr\Container\ContainerInterface;
 
 class OperatorProcessingTasksControllerFactory implements FactoryInterface
 {
@@ -39,7 +39,7 @@ class OperatorProcessingTasksControllerFactory implements FactoryInterface
         $licenceDataService = $container->get(PluginManager::class)->get(Licence::class);
         $queryService = $container->get(QueryService::class);
         $navigation = $container->get('Navigation');
-        $subCategoryDataService = $container->get(SubCategory::class);
+        $subCategoryDataService = $container->get(PluginManager::class)->get(SubCategory::class);
 
         return new OperatorProcessingTasksController(
             $scriptFactory,

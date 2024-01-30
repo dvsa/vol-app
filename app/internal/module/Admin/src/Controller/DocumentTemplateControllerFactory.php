@@ -3,13 +3,14 @@
 namespace Admin\Controller;
 
 use Common\Service\AntiVirus\Scan;
+use Common\Service\Data\PluginManager;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
-use Interop\Container\ContainerInterface;
 use Laminas\Navigation\Navigation;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Service\Data\SubCategory;
+use Psr\Container\ContainerInterface;
 
 class DocumentTemplateControllerFactory implements FactoryInterface
 {
@@ -30,7 +31,7 @@ class DocumentTemplateControllerFactory implements FactoryInterface
         $scannerAntiVirusService = $container->get(Scan::class);
         assert($scannerAntiVirusService instanceof Scan);
 
-        $subCategoryDataService = $container->get(SubCategory::class);
+        $subCategoryDataService = $container->get(PluginManager::class)->get(SubCategory::class);
         assert($subCategoryDataService instanceof SubCategory);
 
         return new DocumentTemplateController(

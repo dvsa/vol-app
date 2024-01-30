@@ -2,15 +2,16 @@
 
 namespace Olcs\Controller\Factory\Bus\Processing;
 
+use Common\Service\Data\PluginManager;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
-use Interop\Container\ContainerInterface;
 use Laminas\Router\Http\TreeRouteStack;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Bus\Processing\BusProcessingTaskController;
 use Olcs\Service\Data\SubCategory;
+use Psr\Container\ContainerInterface;
 
 class BusProcessingTaskControllerFactory implements FactoryInterface
 {
@@ -27,7 +28,7 @@ class BusProcessingTaskControllerFactory implements FactoryInterface
         $tableFactory = $container->get(TableFactory::class);
         $viewHelperManager = $container->get(HelperPluginManager::class);
         $router = $container->get(TreeRouteStack::class);
-        $subCategoryDataService = $container->get(SubCategory::class);
+        $subCategoryDataService = $container->get(PluginManager::class)->get(SubCategory::class);
 
         return new BusProcessingTaskController(
             $scriptFactory,
