@@ -38,7 +38,7 @@ class HistoryControllerFactory implements FactoryInterface
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         $licenceDataService = $container->get(PluginManager::class)->get(Licence::class);
         $queryService = $container->get(QueryService::class);
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
 
         return new HistoryController(
             $scriptFactory,

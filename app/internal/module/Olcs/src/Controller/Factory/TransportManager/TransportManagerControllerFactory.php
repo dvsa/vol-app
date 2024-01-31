@@ -28,7 +28,7 @@ class TransportManagerControllerFactory implements FactoryInterface
         $viewHelperManager = $container->get(HelperPluginManager::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         $translationHelper = $container->get(TranslationHelperService::class);
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
 
         return new TransportManagerController(
             $scriptFactory,

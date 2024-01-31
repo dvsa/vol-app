@@ -33,7 +33,7 @@ class DiscsControllerFactory implements FactoryInterface
         $tableFactory = $container->get(TableFactory::class);
         $guidanceHelper = $container->get(GuidanceHelperService::class);
         $scriptFactory  = $container->get(ScriptFactory::class);
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
 
         return new DiscsController(
             $niTextTranslationUtil,

@@ -41,7 +41,7 @@ class TransportManagersControllerFactory implements FactoryInterface
         $transportManagerHelper = $container->get(TransportManagerHelperService::class);
         $lvaAdapter = $container->get(VariationTransportManagerAdapter::class);
         $stringHelper = $container->get(StringHelperService::class);
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
 
         return new TransportManagersController(
             $niTextTranslationUtil,

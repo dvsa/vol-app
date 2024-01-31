@@ -28,7 +28,7 @@ class VehiclesPsvControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): VehiclesPsvController
     {
-        
+
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $formHelper = $container->get(FormHelperService::class);
@@ -41,7 +41,7 @@ class VehiclesPsvControllerFactory implements FactoryInterface
         $translationHelper = $container->get(TranslationHelperService::class);
         $guidanceHelper = $container->get(GuidanceHelperService::class);
         $stringHelper = $container->get(StringHelperService::class);
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
 
         return new VehiclesPsvController(
             $niTextTranslationUtil,

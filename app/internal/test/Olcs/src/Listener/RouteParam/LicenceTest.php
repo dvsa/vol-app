@@ -596,7 +596,7 @@ class LicenceTest extends TestCase
         $mockSl->shouldReceive('get')->with(MarkerService::class)->andReturn($mockMarkerService);
         $mockSl->shouldReceive('get')->with('TransferAnnotationBuilder')->andReturn($mockAnnotationBuilder);
         $mockSl->shouldReceive('get')->with('QueryService')->andReturn($mockQueryService);
-        $mockSl->shouldReceive('get')->with('Navigation')->andReturn($mainNav);
+        $mockSl->shouldReceive('get')->with('navigation')->andReturn($mainNav);
 
         $sut = new Licence();
         $service = $sut->__invoke($mockSl, Licence::class);

@@ -135,7 +135,7 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
         $this->setAnnotationBuilder($container->get('TransferAnnotationBuilder'));
         $this->setQueryService($container->get('QueryService'));
         $this->setViewHelperManager($container->get('ViewHelperManager'));
-        $this->setNavigationService($container->get('Navigation'));
+        $this->setNavigationService($container->get('navigation'));
         return $this;
     }
 }

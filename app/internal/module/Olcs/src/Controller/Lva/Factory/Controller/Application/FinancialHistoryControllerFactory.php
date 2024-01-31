@@ -25,7 +25,7 @@ class FinancialHistoryControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): FinancialHistoryController
     {
-        
+
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
@@ -35,7 +35,7 @@ class FinancialHistoryControllerFactory implements FactoryInterface
         $stringHelper = $container->get(StringHelperService::class);
         $uploadHelper = $container->get(FileUploadHelperService::class);
         $restrictionHelper = $container->get(RestrictionHelperService::class);
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
 
         return new FinancialHistoryController(
             $niTextTranslationUtil,

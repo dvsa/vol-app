@@ -41,7 +41,7 @@ class OperatorFeesControllerFactory implements FactoryInterface
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         $licenceDataService = $container->get(PluginManager::class)->get(Licence::class);
         $queryService = $container->get(QueryService::class);
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
         $translationHelper = $container->get(TranslationHelperService::class);
         $urlHelper = $container->get(UrlHelperService::class);
         $identityProvider = $container->get(IdentityProviderInterface::class);

@@ -27,7 +27,7 @@ class TransportManagersControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TransportManagersController
     {
-        
+
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $formHelper = $container->get(FormHelperService::class);
@@ -39,7 +39,7 @@ class TransportManagersControllerFactory implements FactoryInterface
         $transferAnnotationBuilder = $container->get(AnnotationBuilder::class);
         $transportManagerHelper = $container->get(TransportManagerHelperService::class);
         $lvaAdapter = $container->get(LicenceTransportManagerAdapter::class);
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
 
         return new TransportManagersController(
             $niTextTranslationUtil,

@@ -27,7 +27,7 @@ class FinancialEvidenceControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): FinancialEvidenceController
     {
-        
+
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $tableFactory = $container->get(TableFactory::class);
@@ -39,7 +39,7 @@ class FinancialEvidenceControllerFactory implements FactoryInterface
         $transferAnnotationBuilder = $container->get(AnnotationBuilder::class);
         $lvaAdapter = $container->get(VariationFinancialEvidenceAdapter::class);
         $uploadHelper = $container->get(FileUploadHelperService::class);
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
 
         return new FinancialEvidenceController(
             $niTextTranslationUtil,

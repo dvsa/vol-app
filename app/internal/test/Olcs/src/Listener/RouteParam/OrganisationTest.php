@@ -62,29 +62,23 @@ class OrganisationTest extends MockeryTestCase
         $this->mockSideBar = m::mock(AbstractContainer::class);
         $this->mocNavMenu = m::mock(AbstractContainer::class);
 
-        $mockNavPlugin = m::mock(Navigation::class)
+        $this->mockNavPlugin = m::mock(Navigation::class)
             ->shouldReceive('__invoke')
             ->with('navigation')
             ->andReturn($this->mocNavMenu)
             ->getMock();
 
-        $helperMngr = m::mock(HelperPluginManager::class)
-            ->shouldReceive('get')
-            ->once()
-            ->with('Navigation')
-            ->andReturn($mockNavPlugin)
-            ->getMock();
-
         $mockSl = m::mock(ContainerInterface::class);
         $mockSl->shouldReceive('get')
             ->andReturnUsing(
-                function ($class) use ($helperMngr) {
+                function ($class) {
                     $map = [
                         'TransferAnnotationBuilder' => $this->mockAnnotationBldr,
                         'QueryService' => $this->mockQuerySrv,
                         'right-sidebar' => $this->mockSideBar,
                         MarkerService::class => $this->mockMarkerSrv,
-                        'ViewHelperManager' => $helperMngr,
+                        'ViewHelperManager' => m::mock(HelperPluginManager::class),
+                        'navigation' => $this->mockNavPlugin,
                     ];
 
                     return $map[$class];

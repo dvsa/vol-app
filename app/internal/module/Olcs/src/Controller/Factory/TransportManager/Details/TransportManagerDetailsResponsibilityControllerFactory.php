@@ -34,7 +34,7 @@ class TransportManagerDetailsResponsibilityControllerFactory implements FactoryI
         $viewHelperManager = $container->get(HelperPluginManager::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         $translationHelper = $container->get(TranslationHelperService::class);
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
         $transportManagerHelper = $container->get(TransportManagerHelperService::class);
         $transferAnnotationBuilder = $container->get(AnnotationBuilder::class);
         $commandService = $container->get(CommandService::class);

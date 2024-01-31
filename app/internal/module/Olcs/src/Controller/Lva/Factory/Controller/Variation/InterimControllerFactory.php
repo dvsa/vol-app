@@ -24,7 +24,7 @@ class InterimControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): InterimController
     {
-        
+
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
@@ -33,7 +33,7 @@ class InterimControllerFactory implements FactoryInterface
         $tableFactory = $container->get(TableFactory::class);
         $stringHelper = $container->get(StringHelperService::class);
         $formServiceManager = $container->get(FormServiceManager::class);
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
 
         return new InterimController(
             $niTextTranslationUtil,

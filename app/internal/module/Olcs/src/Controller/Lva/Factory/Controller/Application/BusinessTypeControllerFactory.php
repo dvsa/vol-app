@@ -29,7 +29,7 @@ class BusinessTypeControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): BusinessTypeController
     {
-        
+
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $formHelper = $container->get(FormHelperService::class);
@@ -43,7 +43,7 @@ class BusinessTypeControllerFactory implements FactoryInterface
         $translationHelper = $container->get(TranslationHelperService::class);
         $lvaAdapter = $container->get(GenericBusinessTypeAdapter::class);
         $restrictionHelper = $container->get(RestrictionHelperService::class);
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
 
         return new BusinessTypeController(
             $niTextTranslationUtil,

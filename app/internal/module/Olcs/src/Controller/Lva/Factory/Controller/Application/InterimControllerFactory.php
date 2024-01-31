@@ -33,7 +33,7 @@ class InterimControllerFactory implements FactoryInterface
         $tableFactory = $container->get(TableFactory::class);
         $stringHelper = $container->get(StringHelperService::class);
         $restrictionHelper = $container->get(RestrictionHelperService::class);
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
 
         return new InterimController(
             $niTextTranslationUtil,

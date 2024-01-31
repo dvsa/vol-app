@@ -392,7 +392,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
         $this->setAnnotationBuilder($container->get('TransferAnnotationBuilder'));
         $this->setQueryService($container->get('QueryService'));
         $this->setViewHelperManager($container->get('ViewHelperManager'));
-        $this->setNavigationService($container->get('Navigation'));
+        $this->setNavigationService($container->get('navigation'));
         $this->setSidebarNavigationService($container->get('right-sidebar'));
         $this->setMarkerService($container->get(\Olcs\Service\Marker\MarkerService::class));
         $this->setApplicationService($container->get(\Common\Service\Data\Application::class));

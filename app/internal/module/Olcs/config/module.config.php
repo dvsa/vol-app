@@ -737,8 +737,6 @@ return array(
 
             Auth\Adapter\InternalCommandAdapter::class => Auth\Adapter\InternalCommandAdapterFactory::class,
             'RoutePluginManager' => Laminas\Router\RoutePluginManagerFactory::class,
-            'navigation' => 'Laminas\Navigation\Service\DefaultNavigationFactory',
-            'Navigation' => 'Laminas\Navigation\Service\DefaultNavigationFactory',
             \Olcs\Listener\RouteParams::class => \Olcs\Listener\RouteParamsFactory::class,
         )
     ),

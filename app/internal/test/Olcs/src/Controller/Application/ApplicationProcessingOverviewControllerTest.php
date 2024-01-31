@@ -47,7 +47,7 @@ class ApplicationProcessingOverviewControllerTest extends MockeryTestCase
         $mockComplaintsHelper = m::mock(ComplaintsHelperService::class);
         $mockFlashMessengerHelper = m::mock(FlashMessengerHelperService::class);
         $mockRouter = m::mock(TreeRouteStack::class);
-        $mockNavigation = m::mock('Navigation');
+        $mockNavigation = m::mock('navigation');
 
         $controller = new ApplicationProcessingOverviewController(
             $mockScriptFactory,

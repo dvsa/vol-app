@@ -277,7 +277,7 @@ class IrhpPermitAdminFurnitureTest extends TestCase
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('QuerySender')->andReturn($mockQuerySender);
         $mockSl->shouldReceive('get')->with('CommandSender')->andReturn($mockCommandSender);
-        $mockSl->shouldReceive('get')->with('Navigation')->andReturn($mockNavigation);
+        $mockSl->shouldReceive('get')->with('navigation')->andReturn($mockNavigation);
 
         $sut = new IrhpPermitAdminFurniture();
         $service = $sut->__invoke($mockSl, IrhpPermitAdminFurniture::class);

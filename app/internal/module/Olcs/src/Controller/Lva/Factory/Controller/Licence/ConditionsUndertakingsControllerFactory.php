@@ -23,7 +23,7 @@ class ConditionsUndertakingsControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ConditionsUndertakingsController
     {
-        
+
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $formHelper = $container->get(FormHelperService::class);
@@ -31,7 +31,7 @@ class ConditionsUndertakingsControllerFactory implements FactoryInterface
         $formServiceManager = $container->get(FormServiceManager::class);
         $tableFactory = $container->get(TableFactory::class);
         $lvaAdapter = $container->get(LicenceConditionsUndertakingsAdapter::class);
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
 
         return new ConditionsUndertakingsController(
             $niTextTranslationUtil,

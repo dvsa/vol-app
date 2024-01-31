@@ -32,7 +32,7 @@ class LicenceProcessingOverviewControllerFactory implements FactoryInterface
         $viewHelperManager = $container->get(HelperPluginManager::class);
         $oppositionHelper = $container->get(OppositionHelperService::class);
         $complaintsHelper = $container->get(ComplaintsHelperService::class);
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
         $subCategoryDataService = $container->get(PluginManager::class)->get(SubCategory::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         $router = $container->get(TreeRouteStack::class);

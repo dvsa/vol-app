@@ -39,7 +39,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         $this->mockAuthService = m::mock(AuthorizationService::class);
         $this->mockLicenceOverviewHelper = m::mock(LicenceOverviewHelperService::class);
         $this->mockFormHelper = m::mock(FormHelperService::class);
-        $this->mockNavigation = m::mock('Navigation');
+        $this->mockNavigation = m::mock('navigation');
         $this->mockFlashMessenger = m::mock(FlashMessengerHelperService::class);
         $this->mockController(OverviewController::class, [
            $this->mockNiTextTranslationUtil,

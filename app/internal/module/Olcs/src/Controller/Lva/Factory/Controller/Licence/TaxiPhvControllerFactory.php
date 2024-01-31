@@ -24,7 +24,7 @@ class TaxiPhvControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TaxiPhvController
     {
-        
+
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $formHelper = $container->get(FormHelperService::class);
@@ -33,7 +33,7 @@ class TaxiPhvControllerFactory implements FactoryInterface
         $tableFactory = $container->get(TableFactory::class);
         $scriptFactory = $container->get(ScriptFactory::class);
         $translationHelper = $container->get(TranslationHelperService::class);
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
 
         return new TaxiPhvController(
             $niTextTranslationUtil,

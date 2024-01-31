@@ -33,7 +33,7 @@ class ApplicationProcessingOverviewControllerFactory implements FactoryInterface
         $complaintsHelper = $container->get(ComplaintsHelperService::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         $router = $container->get('router');
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
 
         return new ApplicationProcessingOverviewController(
             $scriptFactory,

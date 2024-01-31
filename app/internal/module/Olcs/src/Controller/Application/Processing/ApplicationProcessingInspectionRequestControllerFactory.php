@@ -25,7 +25,7 @@ class ApplicationProcessingInspectionRequestControllerFactory implements Factory
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         assert($flashMessengerHelper instanceof FlashMessengerHelperService);
 
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
         assert($navigation instanceof Navigation);
 
         $transferAnnotationBuilder = $container->get(TransferAnnotationBuilder::class);

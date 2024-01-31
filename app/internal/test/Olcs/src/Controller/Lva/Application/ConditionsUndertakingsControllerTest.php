@@ -43,7 +43,7 @@ class ConditionsUndertakingsControllerTest extends AbstractLvaControllerTestCase
         $this->mockStringHelper = m::mock(StringHelperService::class);
         $this->mockLvaAdapter = m::mock(ApplicationConditionsUndertakingsAdapter::class);
         $this->mockRestrictionHelper = m::mock(RestrictionHelperService::class);
-        $this->mockNavigation = m::mock('Navigation');
+        $this->mockNavigation = m::mock('navigation');
 
         $this->mockController(
             ConditionsUndertakingsController::class,

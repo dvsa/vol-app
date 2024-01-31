@@ -31,7 +31,7 @@ class TransportManagerDocumentControllerFactory implements FactoryInterface
         $viewHelperManager = $container->get(HelperPluginManager::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         $translationHelper = $container->get(TranslationHelperService::class);
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
         $docSubCategoryDataService = $container->get(PluginManager::class)->get(DocumentSubCategory::class);
 
         return new TransportManagerDocumentController(

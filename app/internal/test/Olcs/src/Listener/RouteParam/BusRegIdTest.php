@@ -141,7 +141,7 @@ class BusRegIdTest extends MockeryTestCase
 
         $mockSl = m::mock(ContainerInterface::class);
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
-        $mockSl->shouldReceive('get')->with('Navigation')->andReturn($mockNavigation);
+        $mockSl->shouldReceive('get')->with('navigation')->andReturn($mockNavigation);
         $mockSl->shouldReceive('get')->with('TransferAnnotationBuilder')->andReturn($mockTransferAnnotationBuilder);
         $mockSl->shouldReceive('get')->with('QueryService')->andReturn($mockQueryService);
 

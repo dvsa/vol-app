@@ -36,7 +36,7 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
 
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
-        $this->navigationService = $container->get('Navigation');
+        $this->navigationService = $container->get('navigation');
         $this->annotationBuilder = $container->get(AnnotationBuilder::class);
         $this->queryService = $container->get('QueryService');
         $this->viewHelperManager = $container->get('ViewHelperManager');

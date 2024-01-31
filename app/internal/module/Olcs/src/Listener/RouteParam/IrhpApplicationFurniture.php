@@ -120,7 +120,7 @@ class IrhpApplicationFurniture implements
         $this->setQuerySender($container->get('QuerySender'));
         $this->setCommandSender($container->get('CommandSender'));
         $this->setViewHelperManager($container->get('ViewHelperManager'));
-        $this->setNavigationService($container->get('Navigation'));
+        $this->setNavigationService($container->get('navigation'));
         $this->setSidebarNavigationService($container->get('right-sidebar'));
         $this->setApplicationService($container->get('Application'));
 

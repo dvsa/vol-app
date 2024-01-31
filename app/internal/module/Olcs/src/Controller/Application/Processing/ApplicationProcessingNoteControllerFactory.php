@@ -22,7 +22,7 @@ class ApplicationProcessingNoteControllerFactory implements FactoryInterface
         $flashMessengerHelperService = $container->get(FlashMessengerHelperService::class);
         assert($flashMessengerHelperService instanceof FlashMessengerHelperService);
 
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
         assert($navigation instanceof Navigation);
 
         return new ApplicationProcessingNoteController(

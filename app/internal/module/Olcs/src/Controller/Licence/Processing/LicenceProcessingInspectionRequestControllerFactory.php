@@ -25,7 +25,7 @@ class LicenceProcessingInspectionRequestControllerFactory implements FactoryInte
         $flashMessenger = $container->get(FlashMessengerHelperService::class);
         assert($flashMessenger instanceof FlashMessengerHelperService);
 
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
         assert($navigation instanceof Navigation);
 
         $setUpOcListboxService = $container->get(OperatingCentresForInspectionRequest::class);

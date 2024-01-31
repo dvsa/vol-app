@@ -30,7 +30,7 @@ class TransportManagerDetailsPreviousHistoryControllerFactory implements Factory
         $viewHelperManager = $container->get(HelperPluginManager::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         $translationHelper = $container->get(TranslationHelperService::class);
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
         $transportManagerHelper = $container->get(TransportManagerHelperService::class);
         $uploadHelper = $container->get(FileUploadHelperService::class);
 

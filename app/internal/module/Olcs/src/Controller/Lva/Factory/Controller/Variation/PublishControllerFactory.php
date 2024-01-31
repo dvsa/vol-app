@@ -22,13 +22,13 @@ class PublishControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): PublishController
     {
-        
+
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $formHelper = $container->get(FormHelperService::class);
         $stringHelper = $container->get(StringHelperService::class);
         $formServiceManager = $container->get(FormServiceManager::class);
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
 
         return new PublishController(

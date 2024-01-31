@@ -22,14 +22,14 @@ class AddressesControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): AddressesController
     {
-        
+
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $formHelper = $container->get(FormHelperService::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         $formServiceManager = $container->get(FormServiceManager::class);
         $scriptFactory = $container->get(ScriptFactory::class);
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
 
         return new AddressesController(
             $niTextTranslationUtil,

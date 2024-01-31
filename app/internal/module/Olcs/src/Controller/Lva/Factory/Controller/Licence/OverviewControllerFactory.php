@@ -21,12 +21,12 @@ class OverviewControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): OverviewController
     {
-        
+
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $applicationOverviewHelper = $container->get(LicenceOverviewHelperService::class);
         $formHelper = $container->get(FormHelperService::class);
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
 
         return new OverviewController(

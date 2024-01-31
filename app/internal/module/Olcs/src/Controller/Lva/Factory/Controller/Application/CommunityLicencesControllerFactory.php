@@ -37,7 +37,7 @@ class CommunityLicencesControllerFactory implements FactoryInterface
         $commandService = $container->get(CommandService::class);
         $transferAnnotationBuilder = $container->get(AnnotationBuilder::class);
         $restrictionHelper = $container->get(RestrictionHelperService::class);
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
 
         return new CommunityLicencesController(
             $niTextTranslationUtil,

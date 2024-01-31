@@ -23,7 +23,7 @@ class OverviewControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): OverviewController
     {
-        
+
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $stringHelper = $container->get(StringHelperService::class);
@@ -31,7 +31,7 @@ class OverviewControllerFactory implements FactoryInterface
         $formHelper = $container->get(FormHelperService::class);
         $restrictionHelper = $container->get(RestrictionHelperService::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
 
         return new OverviewController(
             $niTextTranslationUtil,

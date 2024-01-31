@@ -23,7 +23,7 @@ class ReviveApplicationControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ReviveApplicationController
     {
-        
+
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
@@ -31,7 +31,7 @@ class ReviveApplicationControllerFactory implements FactoryInterface
         $formHelper = $container->get(FormHelperService::class);
         $stringHelper = $container->get(StringHelperService::class);
         $formServiceManager = $container->get(FormServiceManager::class);
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
 
         return new ReviveApplicationController(
             $niTextTranslationUtil,

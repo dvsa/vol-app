@@ -29,7 +29,7 @@ class ApplicationSchedule41ControllerFactory implements FactoryInterface
         $tableFactory = $container->get(TableFactory::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         $stringHelper = $container->get(StringHelperService::class);
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
         $restrictionHelper = $container->get(RestrictionHelperService::class);
 
         return new ApplicationSchedule41Controller(

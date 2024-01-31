@@ -24,7 +24,7 @@ class ConvictionsPenaltiesControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ConvictionsPenaltiesController
     {
-        
+
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $formHelper = $container->get(FormHelperService::class);
@@ -33,7 +33,7 @@ class ConvictionsPenaltiesControllerFactory implements FactoryInterface
         $tableFactory = $container->get(TableFactory::class);
         $scriptFactory = $container->get(ScriptFactory::class);
         $stringHelper = $container->get(StringHelperService::class);
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
 
         return new ConvictionsPenaltiesController(
             $niTextTranslationUtil,

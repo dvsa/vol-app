@@ -23,7 +23,7 @@ class PublicationControllerFactory implements FactoryInterface
         $flashMessenger = $container->get(FlashMessengerHelperService::class);
         assert($flashMessenger instanceof FlashMessengerHelperService);
 
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
         assert($navigation instanceof Navigation);
 
         $webDavJsonWebTokenGenerationService = $container->get(WebDavJsonWebTokenGenerationService::class);

@@ -551,7 +551,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         $this->setViewHelperManager($container->get('ViewHelperManager'));
         $this->setLicenceService($container->get('DataServiceManager')->get('Common\Service\Data\Licence'));
         $this->setNavigationService($container->get('right-sidebar'));
-        $this->setMainNavigationService($container->get('Navigation'));
+        $this->setMainNavigationService($container->get('navigation'));
         $this->setMarkerService($container->get(MarkerService::class));
         $this->setAnnotationBuilderService($container->get('TransferAnnotationBuilder'));
         $this->setQueryService($container->get('QueryService'));

@@ -27,7 +27,7 @@ class BusinessDetailsControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): BusinessDetailsController
     {
-        
+
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $formHelper = $container->get(FormHelperService::class);
@@ -39,7 +39,7 @@ class BusinessDetailsControllerFactory implements FactoryInterface
         $tableFactory = $container->get(TableFactory::class);
         $fileUploadHelper = $container->get(FileUploadHelperService::class);
         $restrictionHelper = $container->get(RestrictionHelperService::class);
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
 
         return new BusinessDetailsController(
             $niTextTranslationUtil,

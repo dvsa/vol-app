@@ -23,7 +23,7 @@ class TypeOfLicenceControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TypeOfLicenceController
     {
-        
+
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
@@ -31,7 +31,7 @@ class TypeOfLicenceControllerFactory implements FactoryInterface
         $formServiceManager = $container->get(FormServiceManager::class);
         $formHelper = $container->get(FormHelperService::class);
         $variationLvaService = $container->get(VariationLvaService::class);
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
 
         return new TypeOfLicenceController(
             $niTextTranslationUtil,
