@@ -3,6 +3,7 @@
 namespace Olcs\Controller\Application\Processing;
 
 use Common\Service\Cqrs\Query\CachingQueryService;
+use Common\Service\Data\PluginManager;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -34,7 +35,7 @@ class ApplicationProcessingInspectionRequestControllerFactory implements Factory
         $queryService = $container->get(CachingQueryService::class);
         assert($queryService instanceof CachingQueryService);
 
-        $operatingCentresForInspectionRequest = $container->get(OperatingCentresForInspectionRequest::class);
+        $operatingCentresForInspectionRequest = $container->get(PluginManager::class)->get(OperatingCentresForInspectionRequest::class);
 
         return new ApplicationProcessingInspectionRequestController(
             $translationHelper,

@@ -2,6 +2,7 @@
 
 namespace Admin\Controller;
 
+use Common\Service\Data\PluginManager;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -30,7 +31,7 @@ class TaskAllocationRulesControllerFactory implements FactoryInterface
         $tableFactory = $container->get(TableFactory::class);
         assert($tableFactory instanceof TableFactory);
 
-        $userListInternal = $container->get(UserListInternal::class);
+        $userListInternal = $container->get(PluginManager::class)->get(UserListInternal::class);
         assert($userListInternal instanceof UserListInternal);
 
         return new TaskAllocationRulesController(

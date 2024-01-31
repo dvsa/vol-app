@@ -2,6 +2,7 @@
 
 namespace Admin\Controller;
 
+use Common\Service\Data\PluginManager;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -35,7 +36,7 @@ class TeamControllerFactory implements FactoryInterface
         $tableFactory = $container->get(TableFactory::class);
         assert($tableFactory instanceof TableFactory);
 
-        $subCategory = $container->get(SubCategory::class);
+        $subCategory = $container->get(PluginManager::class)->get(SubCategory::class);
         assert($subCategory instanceof SubCategory);
 
         $userWithNameService = $container->get(UserWithName::class);
