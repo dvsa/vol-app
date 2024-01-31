@@ -25,7 +25,7 @@ class SearchControllerFactory implements FactoryInterface
         $authService = $container->get(AuthorizationService::class);
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);
-        $navigation = $container->get('Navigation');
+        $navigation = $container->get('navigation');
         $formElementManager = $container->get('FormElementManager');
         $viewHelperManager = $container->get('ViewHelperManager');
         $dataServiceManager = $container->get('DataServiceManager');

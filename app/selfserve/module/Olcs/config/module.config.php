@@ -1407,7 +1407,6 @@ return array(
             'CookieDeleteCookieNamesProvider' => CookieService\DeleteCookieNamesProviderFactory::class,
             ProcessingService\DashboardProcessingService::class => ProcessingService\DashboardProcessingServiceFactory::class,
             'Olcs\InputFilter\EbsrPackInput' => \Olcs\InputFilter\EbsrPackFactory::class,
-            'navigation' => Laminas\Navigation\Service\DefaultNavigationFactory::class,
             'Olcs\Navigation\DashboardNavigation' => Olcs\Navigation\DashboardNavigationFactory::class,
             Olcs\Controller\Listener\Navigation::class => Olcs\Controller\Listener\NavigationFactory::class,
             'QaFormProvider' => QaService\FormProviderFactory::class,
