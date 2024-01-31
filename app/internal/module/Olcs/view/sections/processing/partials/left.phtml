@@ -1,6 +1,6 @@
 <h4 class="title"><?php echo $this->translate('internal-licence-processing'); ?></h4>
 <?php
-$activePage = $this->navigation('Navigation')->findOneByActive(true);
+$activePage = $this->navigation('navigation')->findOneByActive(true);
 if (!$activePage) {
     throw new \RuntimeException('Cannot find active page to be able to display left menu');
 }

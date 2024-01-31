@@ -62,12 +62,6 @@ class OrganisationTest extends MockeryTestCase
         $this->mockSideBar = m::mock(AbstractContainer::class);
         $this->mocNavMenu = m::mock(AbstractContainer::class);
 
-        $this->mockNavPlugin = m::mock(Navigation::class)
-            ->shouldReceive('__invoke')
-            ->with('navigation')
-            ->andReturn($this->mocNavMenu)
-            ->getMock();
-
         $mockSl = m::mock(ContainerInterface::class);
         $mockSl->shouldReceive('get')
             ->andReturnUsing(
@@ -78,7 +72,7 @@ class OrganisationTest extends MockeryTestCase
                         'right-sidebar' => $this->mockSideBar,
                         MarkerService::class => $this->mockMarkerSrv,
                         'ViewHelperManager' => m::mock(HelperPluginManager::class),
-                        'navigation' => $this->mockNavPlugin,
+                        'navigation' => $this->mocNavMenu,
                     ];
 
                     return $map[$class];

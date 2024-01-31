@@ -54,7 +54,7 @@ class Organisation implements ListenerAggregateInterface, FactoryInterface
         $organisation = $this->getOrganisation($routeParam->getValue());
 
         /** @var AbstractContainer $navigationPlugin */
-        $navigationPlugin = $this->navigationPlugin->__invoke('navigation');
+        $navigationPlugin = $this->navigationPlugin;
 
         if ($organisation['isIrfo'] !== 'Y') {
             // hide IRFO navigation

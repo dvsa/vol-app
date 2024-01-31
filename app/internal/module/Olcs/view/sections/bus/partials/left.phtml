@@ -1,7 +1,7 @@
 <?php
 if (!isset($navigation)) {
 
-    $navigation = $this->navigation('Navigation');
+    $navigation = $this->navigation('navigation');
 
     if ($navigation) {
         $navigation = $navigation->findOneBy('active', true);
