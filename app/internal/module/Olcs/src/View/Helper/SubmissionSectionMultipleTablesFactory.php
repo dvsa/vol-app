@@ -2,8 +2,9 @@
 
 namespace Olcs\View\Helper;
 
-use Interop\Container\ContainerInterface;
+use Common\Service\Helper\TranslationHelperService;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Psr\Container\ContainerInterface;
 
 class SubmissionSectionMultipleTablesFactory implements FactoryInterface
 {
@@ -17,7 +18,7 @@ class SubmissionSectionMultipleTablesFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SubmissionSectionMultipleTables
     {
-        $translator = $container->get('Translator');
+        $translator = $container->get(TranslationHelperService::class);
         $service = new SubmissionSectionMultipleTables();
         $service->setTranslator($translator);
         return $service;

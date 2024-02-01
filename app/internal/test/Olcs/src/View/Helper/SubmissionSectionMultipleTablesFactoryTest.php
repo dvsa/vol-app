@@ -2,6 +2,7 @@
 
 namespace OlcsTest\View\Helper;
 
+use Common\Service\Helper\TranslationHelperService;
 use Interop\Container\ContainerInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\View\Helper\SubmissionSectionMultipleTables;
@@ -12,10 +13,10 @@ class SubmissionSectionMultipleTablesFactoryTest extends MockeryTestCase
 {
     public function testInvoke()
     {
-        $mockTranslator = m::mock('\Laminas\I18n\Translator\Translator');
+        $mockTranslator = m::mock(TranslationHelperService::class);
 
         $mockServiceLocator = m::mock(ContainerInterface::class);
-        $mockServiceLocator->shouldReceive('get')->with('Translator')
+        $mockServiceLocator->shouldReceive('get')->with(TranslationHelperService::class)
             ->andReturn($mockTranslator);
 
         $sut = new SubmissionSectionMultipleTablesFactory();
