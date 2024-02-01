@@ -2,6 +2,7 @@
 
 use Common\Service\Table\Formatter\BusRegStatus;
 use Common\Service\Table\Formatter\EbsrRegNumberLink;
+use Common\Service\Table\Formatter\EbsrVariationNumber;
 use Common\Service\Table\Formatter\StackValue;
 
 return array(
@@ -47,7 +48,7 @@ return array(
             'title' => 'selfserve-table-txc-inbox-variation',
             'isNumeric' => true,
             'formatter' => function ($data, $column) {
-                $column['formatter'] = 'EbsrVariationNumber';
+                $column['formatter'] = EbsrVariationNumber::class;
                 return $this->callFormatter($column, $data);
             }
         ),
