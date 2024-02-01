@@ -28,7 +28,8 @@ class CreateFeeDetails
      * @Form\Options({
      *      "short-label":"fees.created_date",
      *      "label":"fees.created_date",
-     *      "label_attributes": {"id": "label-createdDate"}
+     *      "label_attributes": {"id": "label-createdDate"},
+     *      "create_empty_option": true,
      * })
      * @Form\Required(true)
      * @Form\Attributes({"required":false, "id":"createdDate"})
