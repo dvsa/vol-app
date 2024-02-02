@@ -7,12 +7,12 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableFactory;
-use Interop\Container\ContainerInterface;
 use Laminas\Navigation\Navigation;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Service\Data\SubCategory;
 use Olcs\Service\Data\UserWithName;
+use Psr\Container\ContainerInterface;
 
 class TeamControllerFactory implements FactoryInterface
 {
@@ -39,7 +39,7 @@ class TeamControllerFactory implements FactoryInterface
         $subCategory = $container->get(PluginManager::class)->get(SubCategory::class);
         assert($subCategory instanceof SubCategory);
 
-        $userWithNameService = $container->get(UserWithName::class);
+        $userWithNameService = $container->get(PluginManager::class)->get(UserWithName::class);
         assert($userWithNameService instanceof UserWithName);
 
         return new TeamController(

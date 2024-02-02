@@ -100,6 +100,7 @@ trait FeesActionTrait
 
         $this->loadScripts(['forms/create-fee']);
 
+        $this->placeholder()->setPlaceholder('contentTitle', 'fees.create.title');
         return $this->renderView($view, 'fees.create.title');
     }
 
@@ -550,6 +551,7 @@ trait FeesActionTrait
         $view = new ViewModel(['form' => $form]);
         $view->setTemplate('pages/form');
 
+        $this->placeholder()->setPlaceholder('contentTitle', $title);
         return $this->renderView($view, $title);
     }
 
@@ -610,6 +612,7 @@ trait FeesActionTrait
         $view = new ViewModel(array('form' => $form));
         $view->setTemplate('pages/form');
 
+        $this->placeholder()->setPlaceholder('contentTitle', 'fees.refund.title');
         return $this->renderView($view, 'fees.refund.title');
     }
 
@@ -729,6 +732,7 @@ trait FeesActionTrait
         $view = new ViewModel(array('form' => $form));
         $view->setTemplate('pages/form');
 
+        $this->placeholder()->setPlaceholder('contentTitle', 'fees.reverse-transaction.title');
         return $this->renderView($view, 'fees.reverse-transaction.title');
     }
 

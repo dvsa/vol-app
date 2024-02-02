@@ -8,10 +8,10 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder as TransferAnnotationBuilder;
-use Interop\Container\ContainerInterface;
 use Laminas\Navigation\Navigation;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Service\Data\OperatingCentresForInspectionRequest;
+use Psr\Container\ContainerInterface;
 
 class ApplicationProcessingInspectionRequestControllerFactory implements FactoryInterface
 {
