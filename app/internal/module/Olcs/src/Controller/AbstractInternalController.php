@@ -455,7 +455,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
         $paramProvider->setParams($this->plugin('params'));
         $providedParameters = $this->modifyListQueryParameters($paramProvider->provideParameters());
         $response = $this->handleQuery($listDto::create($providedParameters));
-       
+
         if ($response->isOk()) {
             $data = $response->getResult();
             $this->listData = $data;
@@ -970,7 +970,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
         parent::attachDefaultListeners();
 
         $listener = new CrudListener($this, $this->routeIdentifier, $this->crudConfig, $this->flashMessengerHelperService);
-        $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, [$listener, 'onDispatch']);
+        $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, [$listener, 'onDispatch'], 2);
 
         if (method_exists($this, 'setNavigationCurrentLocation')) {
             $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, array($this, 'setNavigationCurrentLocation'), 6);
