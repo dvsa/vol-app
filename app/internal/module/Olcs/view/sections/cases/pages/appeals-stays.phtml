@@ -49,23 +49,23 @@ if (empty($appeal)){
                         'date' => $appeal['decisionDate'],
                         // NB! dateFormat is not an output format, it's an input format,
                         // we need it to convert the date to our standard formats (see list-item.phtml)
-                        'dateFormat' => \DB_DATE_FORMAT
+                        'dateFormat' => Common\Module::$dbDateFormat
                     ],
                     [
                         'label' => 'Papers due at TC/DTC',
                         'date' => $appeal['papersDueTcDate'],
-                        'dateFormat' => \DB_DATE_FORMAT
+                        'dateFormat' => Common\Module::$dbDateFormat
                     ],
                     [
                         'label' => 'Papers sent to TC/DTC',
                         'date' => $appeal['papersSentTcDate'],
-                        'dateFormat' => \DB_DATE_FORMAT
+                        'dateFormat' => Common\Module::$dbDateFormat
                     ],
                     ['label' => 'Papers due at tribunal', 'date' => $appeal['papersDueDate']],
                     [
                         'label' => 'Papers sent to tribunal',
                         'date' => $appeal['papersSentDate'],
-                        'dateFormat' => \DB_DATE_FORMAT
+                        'dateFormat' => Common\Module::$dbDateFormat
                     ],
                     ['label' => 'Outcome', 'value' => (isset($appeal['outcome']['description']) ?
                         $appeal['outcome']['description'] : '')],
