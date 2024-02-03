@@ -17,6 +17,7 @@ class BusServiceNumberAndType extends BusRegDetails
      * @Form\Type("Text")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator("Laminas\Validator\StringLength", options={"min":1,"max":70})
+     * @Form\Flags({"priority": -10})
      */
     public $serviceNo = null;
 
@@ -32,6 +33,7 @@ class BusServiceNumberAndType extends BusRegDetails
      *          "hint_at_bottom":true
      *     }
      * })
+     * @Form\Flags({"priority": -20})
      */
     public $otherServices = null;
 
@@ -42,6 +44,7 @@ class BusServiceNumberAndType extends BusRegDetails
      * @Form\Type("Text")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator("Laminas\Validator\StringLength", options={"min":1,"max":100})
+     * @Form\Flags({"priority": -30})
      */
     public $startPoint = null;
 
@@ -52,6 +55,7 @@ class BusServiceNumberAndType extends BusRegDetails
      * @Form\Type("Text")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator("Laminas\Validator\StringLength", options={"min":1,"max":100})
+     * @Form\Flags({"priority": -40})
      */
     public $finishPoint = null;
 
@@ -62,6 +66,7 @@ class BusServiceNumberAndType extends BusRegDetails
      * @Form\Type("Text")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator("Laminas\Validator\StringLength", options={"min":1,"max":255})
+     * @Form\Flags({"priority": -50})
      */
     public $via = null;
 
@@ -81,6 +86,7 @@ class BusServiceNumberAndType extends BusRegDetails
      * })
      * @Form\Type("DynamicSelect")
      * @Form\Filter({"name":"Common\Filter\NullToArray"})
+     * @Form\Flags({"priority": -60})
      */
     public $busServiceTypes = null;
 
@@ -91,6 +97,7 @@ class BusServiceNumberAndType extends BusRegDetails
      * @Form\Type("TextArea")
      * @Form\Filter({"name":"Laminas\Filter\StringTrim"})
      * @Form\Validator("Laminas\Validator\StringLength", options={"max":800})
+     * @Form\Flags({"priority": -70})
      */
     public $otherDetails = null;
 
@@ -107,6 +114,7 @@ class BusServiceNumberAndType extends BusRegDetails
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator("Date", options={"format": "Y-m-d"})
      * @Form\Validator("Common\Form\Elements\Validators\DateNotInFuture")
+     * @Form\Flags({"priority": -80})
      */
     public $receivedDate = null;
 
@@ -122,6 +130,7 @@ class BusServiceNumberAndType extends BusRegDetails
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator("Date", options={"format": "Y-m-d"})
      * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Flags({"priority": -90})
      */
     public $effectiveDate = null;
 
@@ -137,6 +146,7 @@ class BusServiceNumberAndType extends BusRegDetails
      * @Form\Validator({"name": "\Common\Validator\Date"})
      * @Form\Validator("Date", options={"format": "Y-m-d"})
      * @Form\Filter({"name": "DateSelectNullifier"})
+     * @Form\Flags({"priority": -100})
      */
     public $endDate = null;
 
@@ -149,6 +159,7 @@ class BusServiceNumberAndType extends BusRegDetails
      *     "disable_inarray_validator": false
      * })
      * @Form\Type("DynamicSelect")
+     * @Form\Flags({"priority": -110})
      */
     public $busNoticePeriod = null;
 }
