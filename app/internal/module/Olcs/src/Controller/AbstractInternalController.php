@@ -766,6 +766,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
 
         if ($confirm instanceof ViewModel) {
             $this->placeholder()->setPlaceholder('pageTitle', $modalTitle);
+            $this->placeholder()->setPlaceholder('contentTitle', $modalTitle);
             return $this->viewBuilder()->buildView($confirm);
         }
 
