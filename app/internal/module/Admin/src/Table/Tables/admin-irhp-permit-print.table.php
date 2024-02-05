@@ -1,6 +1,8 @@
 <?php
 
+use Common\Service\Table\Formatter\IrhpPermitRangeType;
 use Common\Service\Table\Formatter\IssuedPermitLicencePermitReference;
+use Common\Service\Table\Formatter\RefData;
 use Common\Util\Escape;
 
 return [
@@ -87,7 +89,7 @@ return [
             'title' => 'Issued date',
             'name' => 'issueDate',
             'sort' => 'issueDate',
-            'formatter' => 'DateTime',
+            'formatter' => \Common\Service\Table\Formatter\DateTime::class,
         ],
         [
             'title' => 'Country',
@@ -103,7 +105,7 @@ return [
                 return $this->callFormatter(
                     [
                         'name' => 'irhpPermitRangeType',
-                        'formatter' => 'IrhpPermitRangeType',
+                        'formatter' => IrhpPermitRangeType::class,
                     ],
                     $row['irhpPermitRange']
                 );
@@ -112,7 +114,7 @@ return [
         [
             'title' => 'Status',
             'name' => 'status',
-            'formatter' => 'RefData',
+            'formatter' => RefData::class,
         ],
         [
             'type' => 'Checkbox',
