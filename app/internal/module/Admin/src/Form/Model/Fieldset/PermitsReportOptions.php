@@ -12,7 +12,6 @@ class PermitsReportOptions
     /**
      * @Form\Name("id")
      * @Form\Type("Select")
-     * @Form\Label("Report type")
      * @Form\Attributes({
      *      "id": "id",
      * })
