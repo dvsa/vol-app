@@ -23,7 +23,7 @@ class AbstractPublicInquiryDataServicesFactory implements FactoryInterface
     {
         return new AbstractPublicInquiryDataServices(
             $container->get(AbstractDataServiceServices::class),
-            $container->get(Application::class),
+            $container->get(PluginManager::class)->get(Application::class),
             $container->get(PluginManager::class)->get(Licence::class)
         );
     }
