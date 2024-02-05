@@ -87,9 +87,9 @@ class ExportController extends AbstractInternalController implements LeftViewPro
                     return $this->responseHelperService
                         ->tableToCsv($this->getResponse(), $table, 'data-retention');
                 }
-                $this->$flashMessengerHelperService->addErrorMessage('No data retention items were found');
+                $this->flashMessengerHelperService->addErrorMessage('No data retention items were found');
             } else {
-                $this->$flashMessengerHelperService->addUnknownError();
+                $this->flashMessengerHelperService->addUnknownError();
             }
         }
 
