@@ -3,9 +3,10 @@
 namespace Olcs\Service\Data;
 
 use Common\Service\Data\Licence;
+use Common\Service\Data\PluginManager;
 use Common\Service\Data\RefDataServices;
-use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Psr\Container\ContainerInterface;
 
 class ImpoundingLegislationFactory implements FactoryInterface
 {
@@ -21,7 +22,7 @@ class ImpoundingLegislationFactory implements FactoryInterface
     {
         return new ImpoundingLegislation(
             $container->get(RefDataServices::class),
-            $container->get(Licence::class)
+            $container->get(PluginManager::class)->get(Licence::class)
         );
     }
 }

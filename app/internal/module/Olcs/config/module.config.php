@@ -843,8 +843,6 @@ return array(
         ]
     ],
     'data_services' => [
-        'invokables' => [
-        ],
         'factories' => [
             DataService\ActionToBeTaken::class => CommonDataService\RefDataFactory::class,
             DataService\ApplicationStatus::class => CommonDataService\AbstractListDataServiceFactory::class,

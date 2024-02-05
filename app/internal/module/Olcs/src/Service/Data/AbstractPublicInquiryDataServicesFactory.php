@@ -5,8 +5,9 @@ namespace Olcs\Service\Data;
 use Common\Service\Data\AbstractDataServiceServices;
 use Common\Service\Data\Application;
 use Common\Service\Data\Licence;
-use Interop\Container\ContainerInterface;
+use Common\Service\Data\PluginManager;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Psr\Container\ContainerInterface;
 
 class AbstractPublicInquiryDataServicesFactory implements FactoryInterface
 {
@@ -23,7 +24,7 @@ class AbstractPublicInquiryDataServicesFactory implements FactoryInterface
         return new AbstractPublicInquiryDataServices(
             $container->get(AbstractDataServiceServices::class),
             $container->get(Application::class),
-            $container->get(Licence::class)
+            $container->get(PluginManager::class)->get(Licence::class)
         );
     }
 }

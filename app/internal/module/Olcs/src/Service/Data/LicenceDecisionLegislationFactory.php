@@ -4,8 +4,9 @@ namespace Olcs\Service\Data;
 
 use Common\Service\Data\AbstractDataServiceServices;
 use Common\Service\Data\Licence;
-use Interop\Container\ContainerInterface;
+use Common\Service\Data\PluginManager;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Psr\Container\ContainerInterface;
 
 class LicenceDecisionLegislationFactory implements FactoryInterface
 {
@@ -21,7 +22,7 @@ class LicenceDecisionLegislationFactory implements FactoryInterface
     {
         return new LicenceDecisionLegislation(
             $container->get(AbstractDataServiceServices::class),
-            $container->get(Licence::class)
+            $container->get(PluginManager::class)->get(Licence::class)
         );
     }
 }
