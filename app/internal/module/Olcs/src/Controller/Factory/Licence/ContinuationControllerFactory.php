@@ -28,7 +28,7 @@ class ContinuationControllerFactory implements FactoryInterface
         $tableFactory = $container->get(TableFactory::class);
         $viewHelperManager = $container->get(HelperPluginManager::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
-        $translator = $container->get('Translator');
+        $translator = $container->get('translator');
 
         $validatorOptions = [
             'inclusive' => true,
