@@ -19,7 +19,7 @@ return array(
         array(
             'title' => 'Date of PI',
             'formatter' => function ($data) {
-                $date = date(\DATE_FORMAT, strtotime($data['hearingDate']));
+                $date = date(Common\Module::$dateFormat, strtotime($data['hearingDate']));
                 $url = $this->generateUrl(
                     ['action' => 'edit', 'id' => $data['id'], 'pi' => $data['pi']['id']],
                     'case_pi_hearing', true
