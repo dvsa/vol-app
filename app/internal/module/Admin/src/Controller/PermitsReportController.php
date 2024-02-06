@@ -9,6 +9,7 @@ use Admin\Form\Model\Form\PermitsReport;
 use Common\Form\Form;
 use Dvsa\Olcs\Transfer\Command\Permits\QueueReport;
 use Dvsa\Olcs\Transfer\Query\Permits\ReportList;
+use Laminas\Http\Response;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -22,9 +23,9 @@ class PermitsReportController extends AbstractInternalController implements Left
     /**
      * Process action - Index
      *
-     * @return ViewModel
+     * @return ViewModel|Response
      */
-    public function indexAction(): ViewModel
+    public function indexAction()
     {
         $form = $this->getForm(PermitsReport::class);
         $this->setSelectReportList($form);
