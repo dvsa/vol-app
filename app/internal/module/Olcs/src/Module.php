@@ -87,7 +87,7 @@ class Module
         $headerSearch->attach($eventManager);
 
         $routeParams = $e->getApplication()->getServiceManager()->get(RouteParams::class);
-        $eventManager->attach(MvcEvent::EVENT_DISPATCH, [$routeParams, 'onDispatch']);
+        $eventManager->attach(MvcEvent::EVENT_DISPATCH, [$routeParams, 'onDispatch'], 10);
 
         $eventManager->attach(
             MvcEvent::EVENT_ROUTE,
