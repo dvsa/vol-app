@@ -2,7 +2,6 @@
 
 namespace Olcs\Listener\RouteParam;
 
-use Interop\Container\ContainerInterface;
 use Common\RefData;
 use Laminas\EventManager\EventInterface;
 use Olcs\Event\RouteParam;
@@ -13,6 +12,8 @@ use Laminas\EventManager\ListenerAggregateTrait;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Common\Exception\ResourceNotFoundException;
+use Common\Service\Data\Application as ApplicationDataService;
+use Psr\Container\ContainerInterface;
 
 class Application implements ListenerAggregateInterface, FactoryInterface
 {
@@ -395,7 +396,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
         $this->setNavigationService($container->get('navigation'));
         $this->setSidebarNavigationService($container->get('right-sidebar'));
         $this->setMarkerService($container->get(\Olcs\Service\Marker\MarkerService::class));
-        $this->setApplicationService($container->get(\Common\Service\Data\Application::class));
+        $this->setApplicationService($container->get('DataServiceManager')->get(ApplicationDataService::class));
         return $this;
     }
 }
