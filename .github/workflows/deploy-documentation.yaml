@@ -35,6 +35,7 @@ jobs:
         with:
           node-version: "lts/*"
           cache: npm
+          cache-dependency-path: website/package-lock.json
 
       - run: npm ci
 
