@@ -1,0 +1,48 @@
+name: Deploy documentation
+
+on:
+  workflow_call:
+    inputs:
+      deploy:
+        description: "Whether to deploy"
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: documentation-${{ github.event.pull_request.id || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: ${{ inputs.deploy && 'Deploy' || 'Build' }}
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: website
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            website
+            docs
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - name: Deploy to GitHub Pages
+        if: ${{ inputs.deploy }}
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./website/build
