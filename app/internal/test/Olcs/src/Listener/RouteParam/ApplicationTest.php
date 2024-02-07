@@ -681,6 +681,7 @@ class ApplicationTest extends MockeryTestCase
         $mockSl->shouldReceive('get')->with('QueryService')->andReturn($mockQueryService);
         $mockSl->shouldReceive('get')->with(MarkerService::class)->andReturn($mockMarkerService);
         $mockSl->shouldReceive('get')->with('Common\Service\Data\Application')->andReturn($mockApplicationService);
+        $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
 
         $sut = new Application();
         $service = $sut->__invoke($mockSl, Application::class);
