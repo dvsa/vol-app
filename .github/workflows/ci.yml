@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  orchestrator:
+    name: Orchestrator
+    runs-on: ubuntu-latest
+    outputs:
+      should-build-docs: ${{ steps.changed-website-files.outputs.any_changed == 'true' || null }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: tj-actions/changed-files@v42
+        id: changed-website-files
+        with:
+          files: |
+            website/**
+            docs/**
+          since_last_remote_commit: true
+
+  docs:
+    name: Documentation
+    if: ${{ needs.orchestrator.outputs.should-build-docs }}
+    needs:
+      - orchestrator
+    uses: ./.github/workflows/deploy-documentation.yaml
+    with:
+      deploy: false
+    permissions:
+      contents: write

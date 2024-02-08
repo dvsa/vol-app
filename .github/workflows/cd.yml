@@ -1,0 +1,41 @@
+name: CD
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  orchestrator:
+    name: Orchestrator
+    needs:
+      - release-please
+    runs-on: ubuntu-latest
+    outputs:
+      should-deploy-docs: ${{ steps.changed-website-files.outputs.any_changed == 'true' || null }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: tj-actions/changed-files@v42
+        id: changed-website-files
+        with:
+          files: |
+            website/**
+            docs/**
+
+  docs:
+    name: Documentation
+    concurrency:
+      group: deploy-documentation
+    if: ${{ needs.orchestrator.outputs.should-deploy-docs }}
+    needs:
+      - orchestrator
+    uses: ./.github/workflows/deploy-documentation.yaml
+    with:
+      deploy: true
+    permissions:
+      contents: write
