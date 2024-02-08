@@ -76,6 +76,12 @@ class DashboardController extends AbstractController
                 'refreshToken' => $session['RefreshToken']]
         );
         $response = $this->handleCommand($redirectCmd);
+
+        if (!$response->isOk()) {
+            $this->flashMessenger()->addErrorMessage($response->getResult()['messages'][0]);
+            return $this->redirect()->toRoute('dashboard', [], [], true);
+        }
+
         $messages = $response->getResult()['messages'];
 
         $view = new \Laminas\View\Model\ViewModel();
