@@ -11,8 +11,6 @@ permissions:
 jobs:
   orchestrator:
     name: Orchestrator
-    needs:
-      - release-please
     runs-on: ubuntu-latest
     outputs:
       should-deploy-docs: ${{ steps.changed-website-files.outputs.any_changed == 'true' || null }}
