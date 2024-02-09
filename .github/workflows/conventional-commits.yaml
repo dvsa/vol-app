@@ -1,4 +1,4 @@
-name: Check PR title
+name: Conventional Commits
 
 on:
   pull_request:
@@ -22,7 +22,7 @@ concurrency:
 
 jobs:
   check-pr-title:
-    name: PR title
+    name: Check PR title
     runs-on: ubuntu-latest
     env:
       TITLE: ${{ inputs.title || github.event.pull_request.title }}
