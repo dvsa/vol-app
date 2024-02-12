@@ -1,12 +1,12 @@
 version: 2
 updates:
   - package-ecosystem: "npm"
-    directory: "/website"
+    directory: "/"
     versioning-strategy: "increase-if-necessary"
     schedule:
       interval: "weekly"
     groups:
-      dependencies:
+      root-dependencies:
         patterns:
           - "*"
 
@@ -16,5 +16,15 @@ updates:
       interval: "weekly"
     groups:
       github-action-dependencies:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "npm"
+    directory: "/website"
+    versioning-strategy: "increase-if-necessary"
+    schedule:
+      interval: "weekly"
+    groups:
+      dependencies:
         patterns:
           - "*"
