@@ -9,7 +9,7 @@ on:
   workflow_call:
     inputs:
       title:
-        description: 'PR title'
+        description: "PR title"
         type: string
         required: true
 
