@@ -25,6 +25,9 @@ jobs:
   warm-cache:
     name: Warm cache
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app/${{ inputs.project }}
     env:
       # Temporary until this repository becomes a mono-repository.
       REMOTE_REPOSITORY: ${{ inputs.project == 'api' && 'dvsa/olcs-backend' || format('dvsa/olcs-{0}', inputs.project) }}
