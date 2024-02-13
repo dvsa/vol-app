@@ -85,52 +85,29 @@ jobs:
         with:
           project-path: app/internal
 
-  api:
-    name: API
+  app:
+    name: App
     concurrency:
-      group: app-api-${{ needs.get-app-versions.outputs.api }}
+      group: app-${{ matrix.project }}-${{ needs.get-app-versions.outputs[matrix.project] }}
     needs:
       - orchestrator
       - get-app-versions
-    if: ${{ needs.orchestrator.outputs.should-build-app-api }}
+    if: ${{ needs.orchestrator.outputs.should-build-app }}
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - api
+          - selfserve
+          - internal
+        exclude:
+          - project: ${{ needs.orchestrator.outputs.should-build-app-api && 'ignored' || 'api' }}
+          - project: ${{ needs.orchestrator.outputs.should-build-app-selfserve && 'ignored' || 'selfserve' }}
+          - project: ${{ needs.orchestrator.outputs.should-build-app-internal && 'ignored' || 'internal' }}
     uses: ./.github/workflows/app.yaml
     with:
-      object-prefix: app-api-${{ needs.get-app-versions.outputs.api }}
-      project: api
-      should-upload: ${{ contains(github.event.pull_request.labels.*.name, 'deployed') }}
-    permissions:
-      contents: read
-      id-token: write
-
-  selfserve:
-    name: Selfserve
-    concurrency:
-      group: app-selfserve-${{ needs.get-app-versions.outputs.selfserve }}
-    needs:
-      - orchestrator
-      - get-app-versions
-    if: ${{ needs.orchestrator.outputs.should-build-app-selfserve }}
-    uses: ./.github/workflows/app.yaml
-    with:
-      object-prefix: app-selfserve-${{ needs.get-app-versions.outputs.selfserve }}
-      project: api
-      should-upload: ${{ contains(github.event.pull_request.labels.*.name, 'deployed') }}
-    permissions:
-      contents: read
-      id-token: write
-
-  internal:
-    name: Internal
-    concurrency:
-      group: app-internal-${{ needs.get-app-versions.outputs.internal }}
-    needs:
-      - orchestrator
-      - get-app-versions
-    if: ${{ needs.orchestrator.outputs.should-build-app-internal }}
-    uses: ./.github/workflows/app.yaml
-    with:
-      object-prefix: app-internal-${{ needs.get-app-versions.outputs.internal }}
-      project: api
+      object-prefix: app-${{ matrix.project }}-${{ needs.get-app-versions.outputs[matrix.project] }}
+      project: ${{ matrix.project }}
       should-upload: ${{ contains(github.event.pull_request.labels.*.name, 'deployed') }}
     permissions:
       contents: read
