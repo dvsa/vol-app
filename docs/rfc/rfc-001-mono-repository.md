@@ -11,10 +11,11 @@ The VOL project consists of three separate repositories: [olcs-backend](http://g
 ## Proposal
 
 Create a mono-repository by merging the following repositories:
-- [olcs-backend](http://github.com/dvsa/olcs-backend)
-- [olcs-selfserve](http://github.com/dvsa/olcs-selfserve)
-- [olcs-internal](http://github.com/dvsa/olcs-internal)
-- [vol-docker-compose](http://github.com/dvsa/vol-docker-compose)
+
+-   [olcs-backend](http://github.com/dvsa/olcs-backend)
+-   [olcs-selfserve](http://github.com/dvsa/olcs-selfserve)
+-   [olcs-internal](http://github.com/dvsa/olcs-internal)
+-   [vol-docker-compose](http://github.com/dvsa/vol-docker-compose)
 
 Subdirectories within the mono-repository will be named without their prefixes, i.e., `api`, `selfserve`, `internal`, and `vol-docker-compose` will be replaced.
 
@@ -32,8 +33,8 @@ GitHub Action workflows will be designed to execute only on sub-projects with de
 
 ## Implementation
 
-- Create a new repository named `vol-app`.
-- Adopt a directory structure similar to the following:
+-   Create a new repository named `vol-app`.
+-   Adopt a directory structure similar to the following:
     ```
     |__ `.github`
     |       |__ `workflows/`
@@ -53,4 +54,4 @@ GitHub Action workflows will be designed to execute only on sub-projects with de
     |__ `docker-compose.yaml`
     |__ ...
     ```
-- Import repositories while retaining their git history for relevant commits during the merge.
+-   Import repositories while retaining their git history for relevant commits during the merge.

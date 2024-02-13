@@ -15,6 +15,7 @@ Traditional documentation stored in platforms like Confluence is often difficult
 Documentation will be authored in Markdown and stored within the mono-repository (as proposed in RFC-001) under the `/docs` directory.
 
 Additional tools proposed include:
-- Utilizing the Docusaurus library to build the static site.
-- Using GitHub Pages for serving the documentation.
-- Employing GitHub Actions for deployment.
+
+-   Utilizing the Docusaurus library to build the static site.
+-   Using GitHub Pages for serving the documentation.
+-   Employing GitHub Actions for deployment.
