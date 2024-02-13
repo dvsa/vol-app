@@ -37,6 +37,11 @@ jobs:
           repository: ${{ env.REMOTE_REPOSITORY }}
           ref: ${{ inputs.ref || null }}
           path: app/${{ inputs.project }}
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "7.4"
+          extensions: intl, pdo_mysql, redis, mbstring
       - name: Get composer cache directory
         id: composer-cache
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
@@ -69,6 +74,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
+          php-version: "7.4"
           extensions: intl, pdo_mysql, redis, mbstring
       - name: Get composer cache directory
         id: composer-cache
@@ -113,6 +119,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
+          php-version: "7.4"
           extensions: intl, pdo_mysql, redis, mbstring
           tools: ${{ matrix.task.tools }}
       - name: Get composer cache directory
@@ -147,6 +154,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
+          php-version: "7.4"
           extensions: intl, pdo_mysql, redis, mbstring
       - name: Get composer cache directory
         id: composer-cache
