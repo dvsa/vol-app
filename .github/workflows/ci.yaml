@@ -25,19 +25,19 @@ jobs:
         with:
           files: |
             app/api/**
-          since_last_remote_commit: true
+          # since_last_remote_commit: true
       - uses: tj-actions/changed-files@v42
         id: changed-selfserve-files
         with:
           files: |
             app/selfserve/**
-          since_last_remote_commit: true
+          # since_last_remote_commit: true
       - uses: tj-actions/changed-files@v42
         id: changed-internal-files
         with:
           files: |
             app/internal/**
-          since_last_remote_commit: true
+          # since_last_remote_commit: true
       - uses: tj-actions/changed-files@v42
         id: changed-website-files
         with:
@@ -85,29 +85,52 @@ jobs:
         with:
           project-path: app/internal
 
-  app:
-    name: App
+  api:
+    name: API
     concurrency:
-      group: app-${{ matrix.project }}-${{ needs.get-app-versions.outputs[matrix.project] }}
+      group: app-api-${{ needs.get-app-versions.outputs.api }}
     needs:
       - orchestrator
       - get-app-versions
-    if: ${{ needs.orchestrator.outputs.should-build-app }}
-    strategy:
-      fail-fast: false
-      matrix:
-        project:
-          - api
-          - selfserve
-          - internal
-        exclude:
-          - project: ${{ needs.orchestrator.outputs.should-build-app-api && 'ignored' || 'api' }}
-          - project: ${{ needs.orchestrator.outputs.should-build-app-selfserve && 'ignored' || 'selfserve' }}
-          - project: ${{ needs.orchestrator.outputs.should-build-app-internal && 'ignored' || 'internal' }}
+    if: ${{ needs.orchestrator.outputs.should-build-app-api }}
     uses: ./.github/workflows/app.yaml
     with:
-      object-prefix: app-${{ matrix.project }}-${{ needs.get-app-versions.outputs[matrix.project] }}
-      project: ${{ matrix.project }}
+      object-prefix: app-api-${{ needs.get-app-versions.outputs.api }}
+      project: api
+      should-upload: ${{ contains(github.event.pull_request.labels.*.name, 'deployed') }}
+    permissions:
+      contents: read
+      id-token: write
+
+  selfserve:
+    name: Selfserve
+    concurrency:
+      group: app-selfserve-${{ needs.get-app-versions.outputs.selfserve }}
+    needs:
+      - orchestrator
+      - get-app-versions
+    if: ${{ needs.orchestrator.outputs.should-build-app-selfserve }}
+    uses: ./.github/workflows/app.yaml
+    with:
+      object-prefix: app-selfserve-${{ needs.get-app-versions.outputs.selfserve }}
+      project: api
+      should-upload: ${{ contains(github.event.pull_request.labels.*.name, 'deployed') }}
+    permissions:
+      contents: read
+      id-token: write
+
+  internal:
+    name: Internal
+    concurrency:
+      group: app-internal-${{ needs.get-app-versions.outputs.internal }}
+    needs:
+      - orchestrator
+      - get-app-versions
+    if: ${{ needs.orchestrator.outputs.should-build-app-internal }}
+    uses: ./.github/workflows/app.yaml
+    with:
+      object-prefix: app-internal-${{ needs.get-app-versions.outputs.internal }}
+      project: api
       should-upload: ${{ contains(github.event.pull_request.labels.*.name, 'deployed') }}
     permissions:
       contents: read
