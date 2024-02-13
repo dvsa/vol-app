@@ -11,11 +11,33 @@ jobs:
     name: Orchestrator
     runs-on: ubuntu-latest
     outputs:
+      should-build-app: ${{ steps.changed-api-files.outputs.any_changed == 'true' || steps.changed-selfserve-files.outputs.any_changed == 'true' || steps.changed-internal-files.outputs.any_changed == 'true' || null }}
+      should-build-app-api: ${{ steps.changed-api-files.outputs.any_changed == 'true' || null }}
+      should-build-app-selfserve: ${{ steps.changed-selfserve-files.outputs.any_changed == 'true' || null }}
+      should-build-app-internal: ${{ steps.changed-internal-files.outputs.any_changed == 'true' || null }}
       should-build-docs: ${{ steps.changed-website-files.outputs.any_changed == 'true' || null }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - uses: tj-actions/changed-files@v42
+        id: changed-api-files
+        with:
+          files: |
+            app/api/**
+          since_last_remote_commit: true
+      - uses: tj-actions/changed-files@v42
+        id: changed-selfserve-files
+        with:
+          files: |
+            app/selfserve/**
+          since_last_remote_commit: true
+      - uses: tj-actions/changed-files@v42
+        id: changed-internal-files
+        with:
+          files: |
+            app/internal/**
+          since_last_remote_commit: true
       - uses: tj-actions/changed-files@v42
         id: changed-website-files
         with:
@@ -34,3 +56,59 @@ jobs:
       deploy: false
     permissions:
       contents: write
+
+  get-app-versions:
+    name: Get latest app version
+    needs:
+      - orchestrator
+    if: ${{ needs.orchestrator.outputs.should-build-app }}
+    runs-on: ubuntu-latest
+    outputs:
+      api: ${{ steps.api-version.outputs.version }}
+      selfserve: ${{ steps.selfserve-version.outputs.version }}
+      internal: ${{ steps.internal-version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - id: api-version
+        uses: ./.github/actions/get-app-version
+        with:
+          project-path: app/api
+      - id: selfserve-version
+        uses: ./.github/actions/get-app-version
+        with:
+          project-path: app/selfserve
+      - id: internal-version
+        uses: ./.github/actions/get-app-version
+        with:
+          project-path: app/internal
+
+  app:
+    name: App
+    concurrency:
+      group: app-${{ matrix.project }}-${{ needs.get-app-versions.outputs[matrix.project] }}
+    needs:
+      - orchestrator
+      - get-app-versions
+    if: ${{ needs.orchestrator.outputs.should-build-app }}
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - api
+          - selfserve
+          - internal
+        exclude:
+          - project: ${{ needs.orchestrator.outputs.should-build-app-api && 'ignored' || 'api' }}
+          - project: ${{ needs.orchestrator.outputs.should-build-app-selfserve && 'ignored' || 'selfserve' }}
+          - project: ${{ needs.orchestrator.outputs.should-build-app-internal && 'ignored' || 'internal' }}
+    uses: ./.github/workflows/app.yaml
+    with:
+      object-prefix: app-${{ matrix.project }}-${{ needs.get-app-versions.outputs[matrix.project] }}
+      project: ${{ matrix.project }}
+      should-upload: ${{ contains(github.event.pull_request.labels.*.name, 'deployed') }}
+    permissions:
+      contents: read
+      id-token: write

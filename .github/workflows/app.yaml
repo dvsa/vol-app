@@ -1,0 +1,89 @@
+name: App
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: "The branch or tag ref to checkout"
+        type: string
+        required: false
+      project:
+        description: "The project name"
+        type: string
+        required: true
+        default: "all"
+      object-prefix:
+        type: string
+        description: The prefix that will be added to the object name
+        required: true
+      should-upload:
+        description: Whether to upload the artefact
+        type: boolean
+        required: true
+        default: false
+
+jobs:
+  verify:
+    name: Verify
+    if: ${{ inputs.should-upload }}
+    runs-on: ubuntu-latest
+    outputs:
+      object-exists: ${{ steps.check-s3.outputs.exists }}
+      artefact-name: ${{ inputs.project }}-${{ steps.prefix.outputs.safe-artefact-name }}
+    steps:
+      - name: Get app prefix
+        id: prefix
+        run: echo "safe-artefact-name=$(echo ${{ inputs.object-prefix }} | sed 's/[^a-zA-Z0-9.]/-/g')" >> $GITHUB_OUTPUT
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.TF_OIDC_ROLE }}
+          aws-region: ${{ vars.TF_AWS_REGION }}
+      - name: Check if artefacts exist
+        id: check-s3
+        run: |
+          exists=$(aws --output json s3api list-objects --bucket ${{ vars.ARTEFACT_BUCKET }} --prefix '${{ inputs.object-prefix }}' | jq '.Contents | length')
+
+          if [ $exists -gt 0 ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          fi
+
+  php:
+    name: PHP
+    needs:
+      - verify
+    if: ${{ always() && (needs.verify.result == 'skipped' || !needs.verify.outputs.object-exists) }}
+    uses: ./.github/workflows/php.yaml
+    with:
+      ref: ${{ inputs.ref }}
+      project: ${{ inputs.project }}
+      artefact-name: app-${{ needs.verify.outputs.artefact-name }}
+      upload-artefact: ${{ inputs.should-upload }}
+
+  upload:
+    name: Upload
+    needs:
+      - verify
+      - php
+    if: ${{ always() && inputs.should-upload && needs.php.result == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      id-token: write
+    steps:
+      - name: Get build artefact
+        uses: actions/download-artifact@v4
+        with:
+          name: app-${{ needs.verify.outputs.artefact-name }}
+      - name: Check if any files are ready for upload
+        id: check
+        run: echo "file-count=$(ls -R | wc -l)" >> $GITHUB_OUTPUT
+      - name: Configure AWS credentials
+        if: ${{ steps.check.outputs.file-count > 0 }}
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.TF_OIDC_ROLE }}
+          aws-region: ${{ vars.TF_AWS_REGION }}
+      - name: Upload Lambda artefacts to bucket
+        if: ${{ steps.check.outputs.file-count > 0 }}
+        run: aws s3 cp . s3://${{ vars.ARTEFACT_BUCKET }}/${{ inputs.object-prefix }}/ --recursive

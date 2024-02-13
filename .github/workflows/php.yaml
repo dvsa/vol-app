@@ -1,0 +1,163 @@
+name: PHP
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        type: string
+        required: false
+      artefact-name:
+        type: string
+        required: false
+      project:
+        type: string
+        required: true
+      retention-days:
+        type: number
+        required: false
+        default: 7
+      upload-artefact:
+        type: boolean
+        required: false
+        default: false
+
+jobs:
+  warm-cache:
+    name: Warm cache
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || null }}
+          sparse-checkout: app/${{ inputs.project }}
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+      - name: Cache Composer packages
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles(format('**/app/{0}/composer.lock', inputs.project)) }}
+          restore-keys: ${{ runner.os }}-composer-
+      - name: Install dependencies
+        run: composer install --no-progress --prefer-dist --optimize-autoloader
+
+  test:
+    name: Test
+    needs:
+      - warm-cache
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app/${{ inputs.project }}
+    env:
+      # Temporary until this repository becomes a mono-repository.
+      REMOTE_REPOSITORY: ${{ inputs.project == 'api' && 'dvsa/olcs-backend' || format('dvsa/olcs-{0}', inputs.project) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ env.REMOTE_REPOSITORY }}
+          ref: ${{ inputs.ref || null }}
+          path: app/${{ inputs.project }}
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          extensions: intl, pdo_mysql, redis, mbstring
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+      - name: Cache Composer packages
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles(format('**/app/{0}/composer.lock', inputs.project)) }}
+          restore-keys: ${{ runner.os }}-composer-
+      - name: Install dependencies
+        run: composer install --no-progress --prefer-dist --optimize-autoloader
+      - name: Test
+        run: vendor/bin/phpunit
+
+  static-analysis:
+    name: ${{ matrix.task.description }}
+    needs:
+      - warm-cache
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        task:
+          - description: PHPStan
+            command: phpstan analyze --no-progress
+            tools: phpstan
+          - description: PHP CodeSniffer
+            command: phpcs -q
+            tools: phpcs
+          - description: Psalm
+            command: psalm --no-progress --output-format=github
+            tools: psalm
+    env:
+      # Temporary until this repository becomes a mono-repository.
+      REMOTE_REPOSITORY: ${{ inputs.project == 'api' && 'dvsa/olcs-backend' || format('dvsa/olcs-{0}', inputs.project) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ env.REMOTE_REPOSITORY }}
+          ref: ${{ inputs.ref || null }}
+          path: app/${{ inputs.project }}
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          extensions: intl, pdo_mysql, redis, mbstring
+          tools: ${{ matrix.task.tools }}
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+      - name: Cache Composer packages
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles(format('**/app/{0}/composer.lock', inputs.project)) }}
+          restore-keys: ${{ runner.os }}-composer-
+      - name: Install Composer dependencies
+        run: composer install --no-progress --no-interaction
+      - name: Execute ${{ matrix.task.description }}
+        run: ${{ matrix.task.command }}
+
+  build:
+    name: Build
+    needs:
+      - test
+      - static-analysis
+    runs-on: ubuntu-latest
+    env:
+      # Temporary until this repository becomes a mono-repository.
+      REMOTE_REPOSITORY: ${{ inputs.project == 'api' && 'dvsa/olcs-backend' || format('dvsa/olcs-{0}', inputs.project) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ env.REMOTE_REPOSITORY }}
+          ref: ${{ inputs.ref || null }}
+          path: app/${{ inputs.project }}
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          extensions: intl, pdo_mysql, redis, mbstring
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+      - name: Cache Composer packages
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles(format('**/app/{0}/composer.lock', inputs.project)) }}
+          restore-keys: ${{ runner.os }}-composer-
+      - name: Install dependencies
+        run: composer install --no-progress --prefer-dist --no-dev --optimize-autoloader
+      - name: Archive
+        run: git archive --format=tar --output=../${{ inputs.project }}.tar HEAD app/${{ inputs.project }}
+      - name: Upload artefact
+        if: ${{ inputs.upload-artefact }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.artefact-name }}
+          path: ${{ inputs.project }}.tar
+          retention-days: ${{ inputs.retention-days }}
