@@ -96,6 +96,7 @@ jobs:
       - warm-cache
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         task:
           - description: PHPStan
