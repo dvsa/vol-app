@@ -62,7 +62,7 @@ jobs:
     with:
       ref: ${{ inputs.ref }}
       project: ${{ inputs.project }}
-      artefact-name: app-${{ needs.verify.outputs.artefact-name }}
+      artefact-name: ${{ inputs.project }}-${{ needs.verify.outputs.artefact-name }}
       upload-artefact: ${{ inputs.should-upload }}
 
   docker:
@@ -76,14 +76,14 @@ jobs:
       - name: Get build artefact
         uses: actions/download-artifact@v4
         with:
-          name: app-${{ needs.verify.outputs.artefact-name }}
+          name: ${{ inputs.project }}-${{ needs.verify.outputs.artefact-name }}
       ## Build...
       - name: Upload artefact
         if: ${{ inputs.should-upload }}
         uses: actions/upload-artifact@v4
         with:
           name: docker-${{ needs.verify.outputs.artefact-name }}
-          path: ${{ inputs.project }}.tar
+          path: ${{ inputs.project }}
           retention-days: 7
 
   upload:
