@@ -77,7 +77,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ inputs.project }}-${{ needs.verify.outputs.artefact-name }}
-      ## Build...
+      ## Build Dockerfile...
       - name: Upload artefact
         if: ${{ inputs.should-upload }}
         uses: actions/upload-artifact@v4
@@ -101,10 +101,4 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: docker-${{ needs.verify.outputs.artefact-name }}
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ vars.TF_OIDC_ROLE }}
-          aws-region: ${{ vars.TF_AWS_REGION }}
-      - name: Upload Docker image to artefact bucket
-        run: aws s3 cp . s3://${{ vars.ARTEFACT_BUCKET }}/${{ needs.verify.outputs.artefact-name }}/ --recursive
+      ## Upload to ECR...
