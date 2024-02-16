@@ -64,7 +64,7 @@ class CookieBannerListenerTest extends MockeryTestCase
     public function testAttach()
     {
         $em = m::mock(EventManagerInterface::class);
-        $em->shouldReceive('attach')->with(MvcEvent::EVENT_ROUTE, [$this->sut, 'onRoute'], 1);
+        $em->shouldReceive('attach')->once()->with(MvcEvent::EVENT_ROUTE, [$this->sut, 'onRoute'], 1);
 
         $this->sut->attach($em);
     }
@@ -74,7 +74,7 @@ class CookieBannerListenerTest extends MockeryTestCase
         $request = m::mock();
 
         $event = m::mock(MvcEvent::class);
-        $event->shouldReceive('getRequest')->andReturn($request);
+        $event->shouldReceive('getRequest')->once()->andReturn($request);
 
         $this->sut->onRoute($event);
     }

@@ -1,4 +1,5 @@
 <?php
+
 namespace OlcsTest\Controller\Initializer;
 
 use Common\Controller\AbstractOlcsController;
@@ -15,7 +16,7 @@ use Mockery as m;
  */
 class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
 {
-    public function testInvoke() :void
+    public function testInvoke(): void
     {
         $navListener = m::mock(NavigationListener::class);
         $mockEventManager = m::mock(LaminasEventManager::class);

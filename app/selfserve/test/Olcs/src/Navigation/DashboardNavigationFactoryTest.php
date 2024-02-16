@@ -3,7 +3,6 @@
 namespace OlcsTest\Navigation;
 
 use PHPUnit_Framework_TestCase;
-
 use Olcs\Navigation\DashboardNavigationFactory;
 
 /**
@@ -14,7 +13,7 @@ class DashboardNavigationFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetName()
     {
-        $sut = new DashboardNavigationFactory;
+        $sut = new DashboardNavigationFactory();
 
         $this->assertEquals('dashboard', $sut->getName());
     }

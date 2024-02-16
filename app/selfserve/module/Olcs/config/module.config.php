@@ -18,6 +18,7 @@ use Olcs\Controller\Factory\Ebsr\UploadsControllerFactory;
 use Olcs\Controller\Factory\IndexControllerFactory;
 use Olcs\Controller\Factory\MyDetailsControllerFactory;
 use Olcs\Controller\IndexController;
+use Common\Service\Data as CommonDataService;
 use Olcs\Controller\Licence\Vehicle\ListVehicleController;
 use Olcs\Controller\Lva\Adapters\ApplicationPeopleAdapter;
 use Olcs\Controller\Lva\Adapters\LicencePeopleAdapter;
@@ -45,6 +46,7 @@ use Olcs\FormService\Form\Lva as LvaFormService;
 use Olcs\Logging\Log\Processor\CorrelationId;
 use Olcs\Logging\Log\Processor\CorrelationIdFactory;
 use Olcs\Service\Cookie as CookieService;
+use Olcs\Service\Data as DataService;
 use Olcs\Service\Processing as ProcessingService;
 use Olcs\Service\Qa as QaService;
 use Olcs\Session\LicenceVehicleManagement;
@@ -435,6 +437,37 @@ $routes = [
                     ],
                 ]
             ]
+        ]
+    ],
+    'conversations' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/conversations[/]',
+            'defaults' => [
+                'controller' => Olcs\Controller\ConversationsController::class,
+                'action' => 'index'
+            ]
+        ],
+        'may_terminate' => true,
+        'child_routes' => [
+            'view' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => ':conversationId[/]',
+                    'defaults' => [
+                        'action' => 'view',
+                    ],
+                ]
+            ],
+            'new' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'new[/]',
+                    'defaults' => [
+                        'action' => 'add',
+                    ],
+                ]
+            ],
         ]
     ],
     'create_variation' => [
@@ -1044,6 +1077,11 @@ $applicationNavigation = array(
                     'label' => 'dashboard-nav-documents',
                     'route' => 'correspondence',
                 ),
+                array(
+                    'id' => 'dashboard-messaging',
+                    'label' => 'dashboard-nav-messaging',
+                    'route' => 'conversations',
+                ),
             ),
         ),
     ),
@@ -1301,25 +1339,26 @@ return array(
             Olcs\Controller\Licence\Surrender\PrintSignReturnController::class => Olcs\Controller\Licence\Surrender\PrintSignReturnControllerFactory::class,
             \Olcs\Controller\Licence\Surrender\InformationChangedController::class => \Olcs\Controller\Licence\Surrender\InformationChangedControllerFactory::class,
             // Licence - Vehicles
-            \Olcs\Controller\Licence\Vehicle\AddVehicleSearchController::class => \Olcs\Controller\Licence\Vehicle\AddVehicleSearchControllerFactory::class,
-            \Olcs\Controller\Licence\Vehicle\AddDuplicateVehicleController::class => \Olcs\Controller\Licence\Vehicle\AddDuplicateVehicleControllerFactory::class,
-            \Olcs\Controller\Licence\Vehicle\RemoveVehicleController::class => \Olcs\Controller\Licence\Vehicle\RemoveVehicleControllerFactory::class,
-            \Olcs\Controller\Licence\Vehicle\RemoveVehicleConfirmationController::class => \Olcs\Controller\Licence\Vehicle\RemoveVehicleConfirmationControllerFactory::class,
-            \Olcs\Controller\Licence\Vehicle\TransferVehicleController::class => \Olcs\Controller\Licence\Vehicle\TransferVehicleControllerFactory::class,
-            \Olcs\Controller\Licence\Vehicle\ViewVehicleController::class => \Olcs\Controller\Licence\Vehicle\ViewVehicleControllerFactory::class,
-            \Olcs\Controller\Licence\Vehicle\TransferVehicleConfirmationController::class => \Olcs\Controller\Licence\Vehicle\TransferVehicleConfirmationControllerFactory::class,
-            \Olcs\Controller\Licence\Vehicle\Reprint\ReprintLicenceVehicleDiscController::class => \Olcs\Controller\Licence\Vehicle\Reprint\ReprintLicenceVehicleDiscControllerFactory::class,
+            \Olcs\Controller\Licence\Vehicle\AddVehicleSearchController::class                              => \Olcs\Controller\Licence\Vehicle\AddVehicleSearchControllerFactory::class,
+            \Olcs\Controller\Licence\Vehicle\AddDuplicateVehicleController::class                           => \Olcs\Controller\Licence\Vehicle\AddDuplicateVehicleControllerFactory::class,
+            \Olcs\Controller\Licence\Vehicle\RemoveVehicleController::class                                 => \Olcs\Controller\Licence\Vehicle\RemoveVehicleControllerFactory::class,
+            \Olcs\Controller\Licence\Vehicle\RemoveVehicleConfirmationController::class                     => \Olcs\Controller\Licence\Vehicle\RemoveVehicleConfirmationControllerFactory::class,
+            \Olcs\Controller\Licence\Vehicle\TransferVehicleController::class                               => \Olcs\Controller\Licence\Vehicle\TransferVehicleControllerFactory::class,
+            \Olcs\Controller\Licence\Vehicle\ViewVehicleController::class                                   => \Olcs\Controller\Licence\Vehicle\ViewVehicleControllerFactory::class,
+            \Olcs\Controller\Licence\Vehicle\TransferVehicleConfirmationController::class                   => \Olcs\Controller\Licence\Vehicle\TransferVehicleConfirmationControllerFactory::class,
+            \Olcs\Controller\Licence\Vehicle\Reprint\ReprintLicenceVehicleDiscController::class             => \Olcs\Controller\Licence\Vehicle\Reprint\ReprintLicenceVehicleDiscControllerFactory::class,
             \Olcs\Controller\Licence\Vehicle\Reprint\ReprintLicenceVehicleDiscConfirmationController::class => \Olcs\Controller\Licence\Vehicle\Reprint\ReprintLicenceVehicleDiscConfirmationControllerFactory::class,
-            PromptController::class => \Olcs\Controller\PromptControllerFactory::class,
+            Olcs\Controller\ConversationsController::class                                                  => Olcs\Controller\Factory\ConversationsControllerFactory::class,
+            PromptController::class                                                                         => \Olcs\Controller\PromptControllerFactory::class,
             // Process Signature from GOV.UK Account
-            \Olcs\Controller\SignatureVerificationController::class => \Olcs\Controller\SignatureVerificationControllerFactory::class,
+            \Olcs\Controller\SignatureVerificationController::class                                         => \Olcs\Controller\SignatureVerificationControllerFactory::class,
             // LVA Controller Factories
-            LvaLicenceControllers\AddressesController::class => LvaLicenceControllerFactories\AddressesControllerFactory::class,
-            LvaLicenceControllers\BusinessDetailsController::class => LvaLicenceControllerFactories\BusinessDetailsControllerFactory::class,
-            LvaLicenceControllers\BusinessTypeController::class => LvaLicenceControllerFactories\BusinessTypeControllerFactory::class,
-            LvaLicenceControllers\ConditionsUndertakingsController::class => LvaLicenceControllerFactories\ConditionsUndertakingsControllerFactory::class,
-            LvaLicenceControllers\DiscsController::class => LvaLicenceControllerFactories\DiscsControllerFactory::class,
-            LvaLicenceControllers\OperatingCentresController::class => LvaLicenceControllerFactories\OperatingCentresControllerFactory::class,
+            LvaLicenceControllers\AddressesController::class                                                => LvaLicenceControllerFactories\AddressesControllerFactory::class,
+            LvaLicenceControllers\BusinessDetailsController::class                                          => LvaLicenceControllerFactories\BusinessDetailsControllerFactory::class,
+            LvaLicenceControllers\BusinessTypeController::class                                             => LvaLicenceControllerFactories\BusinessTypeControllerFactory::class,
+            LvaLicenceControllers\ConditionsUndertakingsController::class                                   => LvaLicenceControllerFactories\ConditionsUndertakingsControllerFactory::class,
+            LvaLicenceControllers\DiscsController::class                                                    => LvaLicenceControllerFactories\DiscsControllerFactory::class,
+            LvaLicenceControllers\OperatingCentresController::class                                         => LvaLicenceControllerFactories\OperatingCentresControllerFactory::class,
             LvaLicenceControllers\OverviewController::class => LvaLicenceControllerFactories\OverviewControllerFactory::class,
             LvaLicenceControllers\PeopleController::class => LvaLicenceControllerFactories\PeopleControllerFactory::class,
             LvaLicenceControllers\SafetyController::class => LvaLicenceControllerFactories\SafetyControllerFactory::class,
@@ -1425,7 +1464,7 @@ return array(
             VariationTransportManagerAdapter::class => VariationTransportManagerAdapterFactory::class,
             VariationPeopleAdapter::class => VariationPeopleAdapterFactory::class,
             \Olcs\Logging\Log\Processor\CorrelationId::class => \Olcs\Logging\Log\Processor\CorrelationIdFactory::class,
-        ]
+        ],
     ),
     'log_processors' => [
         'factories' => [
@@ -1467,6 +1506,11 @@ return array(
     'simple_date_format' => array(
         'default' => 'd-m-Y'
     ),
+    'data_services' => [
+        'factories' => [
+            DataService\MessagingAppOrLicNo::class => CommonDataService\AbstractListDataServiceFactory::class,
+        ],
+    ],
     'view_helpers' => array(
         'factories' => [
             \Olcs\View\Helper\SessionTimeoutWarning\SessionTimeoutWarning::class => \Olcs\View\Helper\SessionTimeoutWarning\SessionTimeoutWarningFactory::class,

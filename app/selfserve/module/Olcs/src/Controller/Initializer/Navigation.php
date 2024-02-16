@@ -1,4 +1,5 @@
 <?php
+
 namespace Olcs\Controller\Initializer;
 
 use Dvsa\Olcs\Auth\Controller\LoginController;

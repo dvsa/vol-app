@@ -1,0 +1,41 @@
+<?php
+echo $this->partial(
+  'partials/page-header-simple',
+  [
+    'pageTitle' => $this->translate('dashboard.messages.view.title'),
+  ],
+);
+?>
+
+<div class="row">
+  <div class="dashboard two-thirds js-body">
+    <?php
+    echo $this->flashMessengerAll();
+
+    /* @var \Laminas\View\Helper\Navigation\Menu $menu */
+    $menu = $this->navigation($this->navigation('navigation')->getContainer()->findBy('id', 'dashboard-licences-applications'))->menu();
+
+    echo $menu->setMinDepth(0)
+              ->setMaxDepth(0)
+              ->setPartial('partials/tabs-nav');
+    ?>
+    <details class="govuk-details" data-module="govuk-details">
+      <summary class="govuk-details__summary" aria-controls="details-content-operating-centre">
+        <span class="govuk-details__summary-text">
+            Send a reply
+        </span>
+      </summary>
+      <div class="govuk-details__text" id="details-content-operating-centre">
+        <?php
+        echo $this->formErrors($this->form);
+        echo $this->form($this->form);
+        ?>
+      </div>
+    </details>
+    <?php
+    echo $this->table;
+    ?>
+  </div>
+
+  <?php echo $this->partial('partials/conversations-right-column'); ?>
+</div>

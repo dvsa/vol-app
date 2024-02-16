@@ -38,9 +38,11 @@ class PsvVehiclesVehicleTest extends MockeryTestCase
         $this->fsm->setService('lva-vehicles-vehicle', $mockVehiclesVehicle);
 
         $mockVehiclesVehicle->shouldReceive('alterForm')
+            ->once()
             ->with($mockForm);
 
         $this->formHelper->shouldReceive('remove')
+            ->once()
             ->with($mockForm, 'licence-vehicle->receivedDate');
 
         $this->sut->alterForm($mockForm, $params);

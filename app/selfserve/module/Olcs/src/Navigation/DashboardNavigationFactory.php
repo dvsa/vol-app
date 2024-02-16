@@ -1,4 +1,5 @@
 <?php
+
 namespace Olcs\Navigation;
 
 use Laminas\Navigation\Service\AbstractNavigationFactory;
