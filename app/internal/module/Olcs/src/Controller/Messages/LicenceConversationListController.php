@@ -10,7 +10,9 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
 
-class LicenceConversationListController extends AbstractInternalController implements LeftViewProvider, LicenceControllerInterface, ToggleAwareInterface
+class LicenceConversationListController
+    extends AbstractInternalController
+    implements LeftViewProvider, LicenceControllerInterface, ToggleAwareInterface
 {
     protected $navigationId = 'conversations';
     protected $listVars = ['licence'];
@@ -26,7 +28,7 @@ class LicenceConversationListController extends AbstractInternalController imple
      */
     public function getLeftView()
     {
-        $view = new ViewModel();
+        $view = new ViewModel(['navigationId' => $this->navigationId]);
         $view->setTemplate('sections/messages/partials/left');
 
         return $view;

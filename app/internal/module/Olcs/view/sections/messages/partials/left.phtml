@@ -1,12 +1,5 @@
 <h4 class="title"><?php echo $this->translate('internal-licence-messages-sidebar'); ?></h4>
 <?php
-$activePage = $this->navigation('navigation')->findOneByActive(true);
-if (!$activePage) {
-    throw new \RuntimeException('Cannot find active page to be able to display left menu');
-}
+$currentSection = $this->navigation('navigation')->findById($this->navigationId);
 
-// Display the children pages as a menu.
-echo $this->navigation($activePage)->menu()->setPartial('partials/vertical-message-navigation');
-
-
-
+echo $this->navigation($currentSection)->menu()->setPartial('partials/vertical-message-navigation');

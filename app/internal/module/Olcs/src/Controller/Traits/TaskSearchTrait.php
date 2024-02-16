@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Traits;
 
+use Common\FeatureToggle;
 use Dvsa\Olcs\Transfer\Query\Task\TaskDetails;
 use Dvsa\Olcs\Transfer\Query\Task\TaskList;
 use Dvsa\Olcs\Utils\Constants\FilterOptions;
@@ -109,9 +110,6 @@ trait TaskSearchTrait
      */
     protected function getTaskTable($filters = [], $noCreate = false)
     {
-        /**
- * @var \Common\Service\Cqrs\Response $response
-*/
         $response = $this->handleQuery(TaskList::create($filters));
         $tasks = $response->getResult();
 

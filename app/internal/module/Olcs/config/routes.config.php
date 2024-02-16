@@ -769,8 +769,8 @@ $routes = [
                             'route' => 'new[/]',
                             'verb' => 'GET',
                             'defaults' => [
-                                'controller' => Olcs\Controller\Messages\LicenceNewConversationController::class,
-                                'action' => 'index'
+                                'controller' => Olcs\Controller\Messages\LicenceCreateConversationController::class,
+                                'action' => 'add'
                             ],
                         ],
                         'may_terminate' => true,
@@ -788,15 +788,59 @@ $routes = [
                     ],
                     'disable' => [
                         'type' => 'segment',
-                         'options' => [
-                             'route' => 'disable[/]',
-                             'verb' => 'GET',
-                             'defaults' => [
-                                 'controller' => Olcs\Controller\Messages\LicenceDisableConversationListController::class,
-                                 'action' => 'index'
-                             ]
-                         ],
-                         'may_terminate' => true,
+                        'options' => [
+                            'route' => 'disable[/]',
+                            'verb' => 'GET',
+                            'defaults' => [
+                                'controller' => Olcs\Controller\Messages\LicenceEnableDisableMessagingController::class,
+                                'action' => 'index',
+                                'type' => 'disable',
+                            ]
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'popup' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => 'popup[/]',
+                                    'verb' => 'POST',
+                                    'defaults' => [
+                                        'controller' => Olcs\Controller\Messages\LicenceEnableDisableMessagingController::class,
+                                        'action' => 'popup',
+                                        'type' => 'disable',
+                                    ],
+                                ],
+                                'may_terminate' => true,
+                            ],
+                        ],
+                    ],
+                    'enable' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'enable[/]',
+                            'verb' => 'GET',
+                            'defaults' => [
+                                'controller' => Olcs\Controller\Messages\LicenceEnableDisableMessagingController::class,
+                                'action' => 'index',
+                                'type' => 'enable',
+                            ]
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'popup' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => 'popup[/]',
+                                    'verb' => 'POST',
+                                    'defaults' => [
+                                        'controller' => Olcs\Controller\Messages\LicenceEnableDisableMessagingController::class,
+                                        'action' => 'popup',
+                                        'type' => 'enable',
+                                    ],
+                                ],
+                                'may_terminate' => true,
+                            ],
+                        ],
                     ],
                 ],
             ],
@@ -2600,10 +2644,10 @@ $routes['lva-application']['child_routes'] = array_merge(
                 'print-receipt' => $feePrintReceiptRoute,
             )
         ),
-      'conversation' => [
+        'conversation' => [
             'type' => 'segment',
             'options' => [
-                'route' => 'conversation',
+                'route' => 'conversation[/]',
                 'verb' => 'GET',
                 'defaults' => [
                     'controller' => Olcs\Controller\Messages\ApplicationConversationListController::class,
@@ -2618,9 +2662,9 @@ $routes['lva-application']['child_routes'] = array_merge(
                         'route' => ':conversation[/]',
                         'verb' => 'GET',
                         'defaults' => [
-                            'controller' =>  Olcs\Controller\Messages\LicenceConversationMessagesController::class,
+                            'controller' =>  Olcs\Controller\Messages\ApplicationConversationMessagesController::class,
                             'action' => 'index'
-                            ],
+                        ],
                     ],
                     'may_terminate' => true,
                 ],
@@ -2630,8 +2674,19 @@ $routes['lva-application']['child_routes'] = array_merge(
                         'route' => 'new[/]',
                         'verb' => 'GET',
                         'defaults' => [
-                            'controller' => Olcs\Controller\Messages\LicenceNewConversationController::class,
-                            'action' => 'index'
+                            'controller' => Olcs\Controller\Messages\ApplicationCreateConversationController::class,
+                            'action' => 'add'
+                        ],
+                    ],
+                    'may_terminate' => true,
+                ],
+                'close' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => ':conversation/close[/]',
+                        'defaults' => [
+                            'controller' => Olcs\Controller\Messages\ApplicationCloseConversationController::class,
+                            'action' => 'confirm'
                         ],
                     ],
                     'may_terminate' => true,
@@ -2642,11 +2697,55 @@ $routes['lva-application']['child_routes'] = array_merge(
                         'route' => 'disable[/]',
                         'verb' => 'GET',
                         'defaults' => [
-                            'controller' => Olcs\Controller\Messages\LicenceDisableConversationListController::class,
-                            'action' => 'index'
-                        ],
+                            'controller' => Olcs\Controller\Messages\ApplicationEnableDisableMessagingController::class,
+                            'action' => 'index',
+                            'type' => 'disable',
+                        ]
                     ],
                     'may_terminate' => true,
+                    'child_routes' => [
+                        'popup' => [
+                            'type' => 'segment',
+                            'options' => [
+                                'route' => 'popup[/]',
+                                'verb' => 'POST',
+                                'defaults' => [
+                                    'controller' => Olcs\Controller\Messages\ApplicationEnableDisableMessagingController::class,
+                                    'action' => 'popup',
+                                    'type' => 'disable',
+                                ],
+                            ],
+                            'may_terminate' => true,
+                        ],
+                    ],
+                ],
+                'enable' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => 'enable[/]',
+                        'verb' => 'GET',
+                        'defaults' => [
+                            'controller' => Olcs\Controller\Messages\ApplicationEnableDisableMessagingController::class,
+                            'action' => 'index',
+                            'type' => 'enable',
+                        ]
+                    ],
+                    'may_terminate' => true,
+                    'child_routes' => [
+                        'popup' => [
+                            'type' => 'segment',
+                            'options' => [
+                                'route' => 'popup[/]',
+                                'verb' => 'POST',
+                                'defaults' => [
+                                    'controller' => Olcs\Controller\Messages\ApplicationEnableDisableMessagingController::class,
+                                    'action' => 'popup',
+                                    'type' => 'enable',
+                                ],
+                            ],
+                            'may_terminate' => true,
+                        ],
+                    ],
                 ],
             ],
         ],

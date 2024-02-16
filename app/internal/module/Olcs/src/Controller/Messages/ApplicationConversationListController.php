@@ -10,7 +10,9 @@ use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 
-class ApplicationConversationListController extends AbstractInternalController implements LeftViewProvider, ApplicationControllerInterface, ToggleAwareInterface
+class ApplicationConversationListController
+    extends AbstractInternalController
+    implements LeftViewProvider, ApplicationControllerInterface, ToggleAwareInterface
 {
     protected $navigationId = 'application_conversations';
     protected $listVars = ['application'];
@@ -26,7 +28,7 @@ class ApplicationConversationListController extends AbstractInternalController i
      */
     public function getLeftView()
     {
-        $view = new ViewModel();
+        $view = new ViewModel(['navigationId' => $this->navigationId]);
         $view->setTemplate('sections/messages/partials/left');
 
         return $view;

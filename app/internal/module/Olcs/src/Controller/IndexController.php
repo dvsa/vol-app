@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller;
 
+use Common\FeatureToggle;
 use Common\RefData;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
@@ -10,6 +11,7 @@ use Common\Service\Table\TableFactory;
 use Laminas\View\HelperPluginManager;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
+use Dvsa\Olcs\Transfer\Query\FeatureToggle\IsEnabled as IsEnabledQry;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Controller\Traits\TaskSearchTrait;
 use Olcs\Service\Data\DocumentSubCategory;
@@ -95,8 +97,8 @@ class IndexController extends AbstractController implements LeftViewProvider
         $filters = $this->mapTaskFilters();
 
         /**
- * @var \Common\Service\Table\TableBuilder $table
-*/
+         * @var \Common\Service\Table\TableBuilder $table
+        */
         $table = null;
 
         // assignedToTeam or Category must be selected
@@ -138,6 +140,11 @@ class IndexController extends AbstractController implements LeftViewProvider
         $form = $this->getTaskForm($filters)
             ->remove('showTasks');
 
+        $messagingEnabled = $this->handleQuery(IsEnabledQry::create(['ids' => [FeatureToggle::MESSAGING]]))->getResult()['isEnabled'];
+        if (!$messagingEnabled) {
+            $form->remove('messaging');
+        }
+
         $left = new ViewModel(['form' => $form]);
         $left->setTemplate('sections/home/partials/left');
 
@@ -162,13 +169,12 @@ class IndexController extends AbstractController implements LeftViewProvider
                 break;
             case 'task-allocation-users':
                 /**
-     * @var \Olcs\Service\Data\UserListInternal $srv
-*/
+                 * @var \Olcs\Service\Data\UserListInternal $srv
+                */
                 $srv = $this->userListInternalDataService;
                 $srv->setTeamId($value);
 
-                $results =
-                [
+                $results = [
                     '' => 'Unassigned',
                     'alpha-split' => 'Alpha split',
                 ] +
@@ -177,61 +183,53 @@ class IndexController extends AbstractController implements LeftViewProvider
                 break;
             case 'users-internal':
                 /**
-     * @var \Olcs\Service\Data\UserListInternal $srv
-*/
+                 * @var \Olcs\Service\Data\UserListInternal $srv
+                */
                 $srv = $this->userListInternalDataService;
                 $srv->setTeamId($value);
 
-                $results =
-                [
+                $results = [
                     '' => ((int)$value > 0 ? 'Unassigned' : 'Please select'),
-                ] +
-                $srv->fetchListOptions(null);
+                ] + $srv->fetchListOptions(null);
 
                 break;
             case 'users-internal-exclude-limited-read-only':
                 /**
-     * @var \Olcs\Service\Data\UserListInternalExcludingLimitedReadOnlyUsers $srv
-*/
+                 * @var \Olcs\Service\Data\UserListInternalExcludingLimitedReadOnlyUsers $srv
+                */
                 $srv = $this->userListInternalExcludingDataService;
                 $srv->setTeamId($value);
-                $results =
-                [
+                $results = [
                     '' => ((int)$value > 0 ? 'Unassigned' : 'Please select'),
-                ] +
-                $srv->fetchListOptions(null);
+                ] + $srv->fetchListOptions(null);
+
                 break;
             case 'users':
                 $results = $this->getListDataUser($value, 'All');
                 break;
             case 'sub-categories':
-                $srv = $this->subCategoryDataService
-                ->setCategory($value);
+                $srv = $this->subCategoryDataService->setCategory($value);
                 $results = ['' => 'All'] + $srv->fetchListOptions();
                 break;
             case 'sub-categories-no-first-option':
                 $results = $this->subCategoryDataService
-                ->setCategory($value)
-                ->fetchListOptions();
+                    ->setCategory($value)
+                    ->fetchListOptions();
                 break;
             case 'task-sub-categories':
-                $srv = $this->taskSubCategoryDataService
-                ->setCategory($value);
+                $srv = $this->taskSubCategoryDataService->setCategory($value);
                 $results = ['' => 'All'] + $srv->fetchListOptions();
                 break;
             case 'document-sub-categories':
-                $srv = $this->documentSubCategoryDataService
-                ->setCategory($value);
+                $srv = $this->documentSubCategoryDataService->setCategory($value);
                 $results = ['' => 'All'] + $srv->fetchListOptions();
                 break;
             case 'document-sub-categories-with-docs':
-                $srv = $this->documentSubCategoryWithDocsDataService
-                ->setCategory($value);
+                $srv = $this->documentSubCategoryWithDocsDataService->setCategory($value);
                 $results = ['' => 'All'] + $srv->fetchListOptions();
                 break;
             case 'scanning-sub-categories':
-                $srv = $this->scannerSubCategoryDataService
-                ->setCategory($value);
+                $srv = $this->scannerSubCategoryDataService->setCategory($value);
                 $results = ['' => 'All'] + $srv->fetchListOptions();
                 break;
             case 'document-templates':
@@ -239,28 +237,29 @@ class IndexController extends AbstractController implements LeftViewProvider
                 break;
             case 'sub-category-descriptions':
                 $results =  $this->subCategoryDescriptionDataService
-                ->setSubCategory($value)
-                ->fetchListOptions();
+                    ->setSubCategory($value)
+                    ->fetchListOptions();
                 break;
             case 'irhp-permit-print-country':
                 $srv = $this->irhpPermitPrintCountryDataService
-                ->setIrhpPermitType($value);
+                    ->setIrhpPermitType($value);
                 $results = ['' => 'Please select'] + $srv->fetchListOptions();
                 break;
             case 'irhp-permit-print-stock-by-country':
                 $srv = $this->irhpPermitPrintStockDataService
-                ->setIrhpPermitType(RefData::IRHP_BILATERAL_PERMIT_TYPE_ID)
-                ->setCountry($value);
+                    ->setIrhpPermitType(RefData::IRHP_BILATERAL_PERMIT_TYPE_ID)
+                    ->setCountry($value);
                 $results = ['' => 'Please select'] + $srv->fetchListOptions();
+
                 break;
             case 'irhp-permit-print-stock-by-type':
                 $srv = $this->irhpPermitPrintStockDataService
-                ->setIrhpPermitType($value);
+                    ->setIrhpPermitType($value);
                 $results = ['' => 'Please select'] + $srv->fetchListOptions();
                 break;
             case 'irhp-permit-print-range-type-by-stock':
                 $srv = $this->irhpPermitPrintRangeTypeDataService
-                ->setIrhpPermitStock($value);
+                    ->setIrhpPermitStock($value);
                 $results = ['' => 'Please select'] + $srv->fetchListOptions();
                 break;
             default:

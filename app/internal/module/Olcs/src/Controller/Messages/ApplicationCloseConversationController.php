@@ -18,15 +18,15 @@ use Olcs\Controller\AbstractController;
 use Olcs\Data\Mapper\Task;
 use Olcs\Form\Model\Form\CloseConversation;
 
-class LicenceCloseConversationController extends AbstractCloseConversationController
+class ApplicationCloseConversationController extends AbstractCloseConversationController
 {
     protected function getRedirect(): Response
     {
         $params = [
-            'licence' => $this->params()->fromRoute('licence'),
-            'action'  => 'close',
+            'application' => $this->params()->fromRoute('application'),
+            'action'      => 'close',
 
         ];
-        return $this->redirect()->toRouteAjax('licence/conversation', $params);
+        return $this->redirect()->toRouteAjax('lva-application/conversation', $params);
     }
 }

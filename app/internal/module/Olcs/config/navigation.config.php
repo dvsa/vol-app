@@ -918,7 +918,7 @@ $nav = [
 
                                 ],
                                 [
-                                    'id' => 'conversation_list_new_conversation',
+                                    'id' => 'licence_new_conversation',
                                     'label' => 'New Conversation',
                                     'route' => 'licence/conversation/new',
                                     'class' => 'govuk-link--no-visited-state',
@@ -929,6 +929,13 @@ $nav = [
                                     'id' => 'conversation_list_disable_messaging',
                                     'label' => 'Disable Messaging',
                                     'route' => 'licence/conversation/disable',
+                                    'class' => 'govuk-link--no-visited-state',
+                                    'use_route_match' => true,
+                                ],
+                                [
+                                    'id' => 'conversation_list_enable_messaging',
+                                    'label' => 'Enable Messaging',
+                                    'route' => 'licence/conversation/enable',
                                     'class' => 'govuk-link--no-visited-state',
                                     'use_route_match' => true,
                                 ]
@@ -1396,16 +1403,23 @@ $nav = [
                             'use_route_match' => true,
                         ],
                         [
-                            'id' => 'conversation_list_new_conversation',
-                            'label' => 'New Message',
+                            'id' => 'application_new_conversation',
+                            'label' => 'New Conversation',
                             'route' => 'lva-application/conversation/new',
                             'class' => 'govuk-link--no-visited-state',
                             'use_route_match' => true,
                         ],
                         [
-                            'id' => 'conversation_list_disable_messaging',
+                            'id' => 'application_conversation_list_disable_messaging',
                             'label' => 'Disable Messaging',
                             'route' => 'lva-application/conversation/disable',
+                            'class' => 'govuk-link--no-visited-state',
+                            'use_route_match' => true,
+                        ],
+                        [
+                            'id' => 'application_conversation_list_enable_messaging',
+                            'label' => 'Enable Messaging',
+                            'route' => 'lva-application/conversation/enable',
                             'class' => 'govuk-link--no-visited-state',
                             'use_route_match' => true,
                         ]

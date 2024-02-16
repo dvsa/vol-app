@@ -1,0 +1,32 @@
+<?php echo $this->flashMessengerAll(); ?>
+
+<div class="table__header">
+  <div class="govuk-button-group">
+    <?php
+    /** @var \Common\Form\Form $form */
+    $form = $this->placeholder('message-actions')->getValue();
+
+    echo $this->formErrors($form);
+    echo $this->form($form);
+    ?>
+  </div>
+</div>
+
+<details class="govuk-details" data-module="govuk-details">
+  <summary class="govuk-details__summary" aria-controls="details-content-operating-centre">
+        <span class="govuk-details__summary-text">
+            Send a reply
+        </span>
+  </summary>
+  <div class="govuk-details__text" id="details-content-operating-centre">
+    <?php
+    /** @var \Common\Form\Form $replyForm */
+    $replyForm = $this->placeholder('send-reply')->getValue();
+
+    echo $this->formErrors($replyForm);
+    echo $this->form($replyForm);
+    ?>
+  </div>
+</details>
+
+<?php echo $this->placeholder('table')->getValue(); ?>

@@ -344,7 +344,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
     }
 
     /**
-     * Add's an entity
+     * Adds an entity
      *
      * @return mixed|ViewModel
      */
@@ -857,7 +857,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
         $action = $this->params()->fromRoute('action', null);
         $action = strtolower($action);
 
-        // intercept cancelled forms to allow alternative redirect config
+        // Intercept cancelled forms to allow alternative redirect config
         if ($this->hasCancelledForm() && isset($this->redirectConfig['cancel'])) {
             $action = 'cancel';
         }
@@ -870,12 +870,12 @@ abstract class AbstractInternalController extends AbstractOlcsController
 
         $config = $this->redirectConfig[$action];
 
-        //overrides the default action - case overview controller would use "details" here
+        // Overrides the default action - case overview controller would use "details" here
         if (isset($config['action'])) {
             $params['action'] = $config['action'];
         }
 
-        //allows us to reuse some route params but not others (with reUseParams set to false)
+        // Allows us to reuse some route params but not others (with reUseParams set to false)
         if (isset($config['routeMap'])) {
             foreach ($config['routeMap'] as $routeIdentifier => $routeParam) {
                 $params[$routeIdentifier] = $this->params()->fromRoute($routeParam, null);
@@ -892,22 +892,22 @@ abstract class AbstractInternalController extends AbstractOlcsController
 
         $redirect = [];
 
-        //if we're overriding the default route
+        // If we're overriding the default route
         if (isset($config['route'])) {
             $redirect['route'] = $config['route'];
         }
 
-        //if we're adding params
+        // If we're adding params
         if (!empty($params)) {
             $redirect['params'] = $params;
         }
 
-        //whether we're reusing params
+        // Whether we're reusing params
         if (isset($config['reUseParams'])) {
             $redirect['reUseParams'] = $config['reUseParams'];
         }
 
-        //  options
+        // Options
         if (isset($config['options'])) {
             $redirect['options'] = $config['options'];
         }

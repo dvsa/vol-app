@@ -8,18 +8,18 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
-use Olcs\Controller\Messages\LicenceCloseConversationController;
+use Olcs\Controller\Messages\ApplicationCloseConversationController;
 
-class LicenceCloseConversationControllerFactory implements FactoryInterface
+class ApplicationCloseConversationControllerFactory implements FactoryInterface
 {
     public function __invoke(
         ContainerInterface $container,
                            $requestedName,
         ?array             $options = null
-    ): LicenceCloseConversationController
+    ): ApplicationCloseConversationController
     {
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);
@@ -27,7 +27,7 @@ class LicenceCloseConversationControllerFactory implements FactoryInterface
         $viewHelperManager = $container->get(HelperPluginManager::class);
         $flashMessengerHelperService = $container->get(FlashMessengerHelperService::class);
 
-        return new LicenceCloseConversationController(
+        return new ApplicationCloseConversationController(
             $scriptFactory,
             $formHelper,
             $tableFactory,

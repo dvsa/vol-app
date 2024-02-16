@@ -5,34 +5,31 @@ namespace Olcs\Controller\Factory\Messages;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
-use Laminas\Navigation\Navigation;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
-use Olcs\Controller\Messages\LicenceDisableConversationListController;
+use Olcs\Controller\Messages\ApplicationCreateConversationController;
 
-class LicenceDisableConversationListControllerFactory implements FactoryInterface
+class ApplicationCreateConversationControllerFactory implements FactoryInterface
 {
     /**
      * @param  ContainerInterface $container
      * @param  $requestedName
      * @param  array|null         $options
-     * @return LicenceDisableConversationListController
+     * @return ApplicationCreateConversationController
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LicenceDisableConversationListController
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ApplicationCreateConversationController
     {
+        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
+
         $formHelper = $container->get(FormHelperService::class);
-        assert($formHelper instanceof FormHelperService);
 
         $translationHelper = $container->get(TranslationHelperService::class);
-        assert($translationHelper instanceof TranslationHelperService);
 
         $flashMessenger = $container->get(FlashMessengerHelperService::class);
-        assert($flashMessenger instanceof FlashMessengerHelperService);
 
         $navigation = $container->get('navigation');
-        assert($navigation instanceof Navigation);
 
-        return new LicenceDisableConversationListController(
+        return new ApplicationCreateConversationController(
             $translationHelper,
             $formHelper,
             $flashMessenger,

@@ -2,6 +2,7 @@
 
 namespace Olcs\Form\Model\Form;
 
+use Common\Form\Elements\InputFilters\Checkbox;
 use Laminas\Form\Annotation as Form;
 
 /**
@@ -95,6 +96,15 @@ class TasksHome
      * @Form\Type("\Laminas\Form\Element\Select")
      */
     public $showTasks = null;
+
+    /**
+     * @Form\Options({
+     * "label": "tasks.data.messages",
+     * "must_be_checked": true
+     * })
+     * @Form\Type(\Common\Form\Elements\InputFilters\Checkbox::class)
+     */
+    public ?Checkbox $messaging = null;
 
     /**
      * @Form\Attributes({"id":"","placeholder":""})
