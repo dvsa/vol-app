@@ -158,9 +158,12 @@ class ConversationsController extends AbstractController implements ToggleAwareI
         ];
 
         $response = $this->handleQuery(ByConversationQuery::create($params));
+        $canReply = false;
 
         if ($response->isOk()) {
             $messages = $response->getResult();
+            $canReply = !$messages['extra']['conversation']['isClosed'];
+            unset($messages['extra']);
         } else {
             $this->flashMessengerHelper->addErrorMessage('unknown-error');
             $messages = [];
@@ -174,8 +177,9 @@ class ConversationsController extends AbstractController implements ToggleAwareI
 
         $view = new ViewModel(
             [
-                'table' => $table,
-                'form'  => $form,
+                'table'    => $table,
+                'form'     => $form,
+                'canReply' => $canReply,
             ],
         );
         $view->setTemplate('messages-view');

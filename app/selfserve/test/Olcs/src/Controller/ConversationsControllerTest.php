@@ -78,7 +78,13 @@ class ConversationsControllerTest extends TestCase
         $mockResponse->shouldReceive('isOk')
                      ->andReturn(true);
         $mockResponse->shouldReceive('getResult')
-                     ->andReturn([]);
+                     ->andReturn([
+                         'extra' => [
+                             'conversation' => [
+                                 'isClosed' => true,
+                             ],
+                         ],
+                     ]);
 
         $mockHandleQuery = m::mock(HandleQuery::class)
                             ->makePartial();
