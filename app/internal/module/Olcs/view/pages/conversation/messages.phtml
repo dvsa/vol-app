@@ -12,21 +12,24 @@
   </div>
 </div>
 
-<details class="govuk-details" data-module="govuk-details">
-  <summary class="govuk-details__summary" aria-controls="details-content-operating-centre">
+
+<?php if ($this->placeholder('can-reply')->getValue()): ?>
+  <details class="govuk-details" data-module="govuk-details">
+    <summary class="govuk-details__summary" aria-controls="details-content-operating-centre">
         <span class="govuk-details__summary-text">
             Send a reply
         </span>
-  </summary>
-  <div class="govuk-details__text" id="details-content-operating-centre">
-    <?php
-    /** @var \Common\Form\Form $replyForm */
-    $replyForm = $this->placeholder('send-reply')->getValue();
+    </summary>
+    <div class="govuk-details__text" id="details-content-operating-centre">
+      <?php
+      /** @var \Common\Form\Form $replyForm */
+      $replyForm = $this->placeholder('send-reply')->getValue();
 
-    echo $this->formErrors($replyForm);
-    echo $this->form($replyForm);
-    ?>
-  </div>
-</details>
+      echo $this->formErrors($replyForm);
+      echo $this->form($replyForm);
+      ?>
+    </div>
+  </details>
+<?php endif; ?>
 
 <?php echo $this->placeholder('table')->getValue(); ?>

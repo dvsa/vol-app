@@ -74,12 +74,14 @@ abstract class AbstractConversationMessagesController
         $actionsForm = $this->getForm(LicenceMessageActions::class);
         $actionsForm->get('id')->setValue($this->params()->fromRoute('conversation'));
 
+        $this->placeholder()->setPlaceholder('can-reply', true);
         if ($response->getResult()['extra']['conversation']['isClosed']) {
             $actionsForm->get('form-actions')->get('close')->setAttribute('disabled', 'disabled');
             $actionsForm->get('form-actions')->get('close')->setAttribute(
                 'class',
                 'govuk-button govuk-button--warning govuk-button--disabled'
             );
+            $this->placeholder()->setPlaceholder('can-reply', false);
         }
 
         $this->placeholder()->setPlaceholder('message-actions', $actionsForm);

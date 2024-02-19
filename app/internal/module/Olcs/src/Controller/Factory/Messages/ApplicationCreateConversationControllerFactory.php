@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Olcs\Controller\Factory\Messages;
 
 use Common\Service\Helper\FlashMessengerHelperService;
@@ -11,22 +13,11 @@ use Olcs\Controller\Messages\ApplicationCreateConversationController;
 
 class ApplicationCreateConversationControllerFactory implements FactoryInterface
 {
-    /**
-     * @param  ContainerInterface $container
-     * @param  $requestedName
-     * @param  array|null         $options
-     * @return ApplicationCreateConversationController
-     */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ApplicationCreateConversationController
     {
-        $container = method_exists($container, 'getServiceLocator') ? $container->getServiceLocator() : $container;
-
         $formHelper = $container->get(FormHelperService::class);
-
         $translationHelper = $container->get(TranslationHelperService::class);
-
         $flashMessenger = $container->get(FlashMessengerHelperService::class);
-
         $navigation = $container->get('navigation');
 
         return new ApplicationCreateConversationController(
