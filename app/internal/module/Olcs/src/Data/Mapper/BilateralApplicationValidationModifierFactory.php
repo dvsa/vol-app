@@ -2,7 +2,7 @@
 
 namespace Olcs\Data\Mapper;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Service\Permits\Bilateral\ApplicationFormPopulator;
 

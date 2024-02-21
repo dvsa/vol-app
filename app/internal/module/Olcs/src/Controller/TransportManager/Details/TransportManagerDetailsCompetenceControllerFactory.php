@@ -9,7 +9,7 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Helper\TransportManagerHelperService;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder as TransferAnnotationBuilder;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\Navigation\Navigation;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 

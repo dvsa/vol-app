@@ -2,7 +2,7 @@
 
 namespace Olcs\Listener\RouteParam;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Common\Exception\ResourceNotFoundException;
 use Common\Service\Cqrs\Command\CommandSenderAwareInterface;
 use Common\Service\Cqrs\Command\CommandSenderAwareTrait;

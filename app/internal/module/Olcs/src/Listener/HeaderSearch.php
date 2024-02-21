@@ -3,7 +3,7 @@
 namespace Olcs\Listener;
 
 use Common\Service\Helper\FormHelperService;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Common\Service\Data\Search\Search as SearchService;
 use Common\Service\Helper\TranslationHelperService;
 use Olcs\Controller\SearchController;

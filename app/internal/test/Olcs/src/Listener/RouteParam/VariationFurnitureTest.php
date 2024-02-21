@@ -6,7 +6,7 @@ use Common\Exception\ResourceNotFoundException;
 use Common\RefData;
 use Common\Service\Cqrs\Query\QuerySender;
 use Dvsa\Olcs\Transfer\Query\Application\Application as VariationQry;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\EventManager\Event;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Event\RouteParam;

@@ -5,7 +5,7 @@ namespace OlcsTest\Listener\RouteParam;
 use Common\Service\Cqrs\Command\CommandSender;
 use Common\Service\Cqrs\Query\QuerySender;
 use Common\Service\Helper\UrlHelperService;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\EventManager\Event;
 use Laminas\View\HelperPluginManager;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;

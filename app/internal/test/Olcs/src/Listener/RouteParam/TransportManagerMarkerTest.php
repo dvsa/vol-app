@@ -3,7 +3,7 @@
 namespace OlcsTest\Listener\RouteParam;
 
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\EventManager\Event;
 use Laminas\EventManager\EventManagerInterface;
 use Mockery as m;

@@ -4,7 +4,7 @@ namespace Olcs\Service\Data;
 
 use Common\Service\Data\AbstractDataServiceServices;
 use Common\Service\Data\RefData;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class SubmissionActionTypesFactory implements FactoryInterface

@@ -2,7 +2,7 @@
 
 namespace Olcs\Listener\RouteParam;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\EventManager\EventInterface;
 use Olcs\Controller\TransportManager\Details\TransportManagerDetailsResponsibilityController;
 use Olcs\Event\RouteParam;

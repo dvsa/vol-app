@@ -2,7 +2,7 @@
 
 namespace Olcs\View\Helper;
 
-use Interop\Container\Containerinterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class SlaIndicatorFactory implements FactoryInterface

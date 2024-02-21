@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Olcs\Auth\Adapter;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class InternalCommandAdapterFactory implements FactoryInterface

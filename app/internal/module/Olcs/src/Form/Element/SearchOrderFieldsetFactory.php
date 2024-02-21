@@ -2,7 +2,7 @@
 
 namespace Olcs\Form\Element;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Common\Service\Data\Search\Search as SearchDataService;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 

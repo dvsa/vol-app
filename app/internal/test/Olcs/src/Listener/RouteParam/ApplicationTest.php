@@ -3,7 +3,7 @@
 namespace OlcsTest\Listener\RouteParam;
 
 use Common\RefData;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\EventManager\Event;
 use Olcs\Service\Marker\MarkerService;
 use Mockery\Adapter\Phpunit\MockeryTestCase;

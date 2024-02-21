@@ -3,7 +3,7 @@
 namespace Olcs\View\Helper;
 
 use Common\Service\Table\Formatter\FormatterPluginManager;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Common\Service\Table\Formatter\Address as AddressFormatter;
 

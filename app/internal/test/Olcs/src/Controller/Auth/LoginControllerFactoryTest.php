@@ -9,7 +9,7 @@ use Common\Controller\Plugin\CurrentUser;
 use Common\Controller\Plugin\Redirect;
 use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Auth\Service\Auth\CookieService;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\Mvc\Controller\Plugin\Layout;
 use Laminas\Mvc\Controller\Plugin\Url;

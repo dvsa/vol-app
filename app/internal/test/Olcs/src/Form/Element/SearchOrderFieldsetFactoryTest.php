@@ -3,7 +3,7 @@
 namespace OlcsTest\Form\Element;
 
 use Common\Service\Data\Search\Search as SearchDataService;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Olcs\Form\Element\SearchOrderFieldset;
 use Olcs\Form\Element\SearchOrderFieldsetFactory;
 use Mockery as m;

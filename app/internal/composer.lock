@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7f6462f1fe6665c8ee8450f7bd5f821b",
+    "content-hash": "a34ddb46d035cc246eacc4112a66b783",
     "packages": [
         {
             "name": "brick/varexporter",
@@ -4132,39 +4132,38 @@
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "5.0.0-beta.1",
+            "version": "v6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dvsa/olcs-auth.git",
-                "reference": "144eb3f73682efa55f284b8c523c8157bebd7def"
+                "reference": "0f6697ca81e8c169af0aca385781a52ac0b9dc55"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dvsa/olcs-auth/zipball/144eb3f73682efa55f284b8c523c8157bebd7def",
-                "reference": "144eb3f73682efa55f284b8c523c8157bebd7def",
+                "url": "https://api.github.com/repos/dvsa/olcs-auth/zipball/0f6697ca81e8c169af0aca385781a52ac0b9dc55",
+                "reference": "0f6697ca81e8c169af0aca385781a52ac0b9dc55",
                 "shasum": ""
             },
             "require": {
-                "container-interop/container-interop": "^1.2",
                 "laminas/laminas-authentication": "^2.5",
                 "laminas/laminas-form": "^3.0.0",
                 "laminas/laminas-http": "^2.5",
                 "laminas/laminas-mvc": "^3.3.0",
                 "laminas/laminas-mvc-plugin-flashmessenger": "^1.8",
-                "laminas/laminas-servicemanager": "^3.0.0",
+                "laminas/laminas-servicemanager": "^3.3",
                 "laminas/laminas-session": "^2.8.1",
                 "laminas/laminas-stdlib": "^3.0.0",
                 "laminas/laminas-view": "^2.11",
                 "lm-commons/lmc-rbac-mvc": "^3.3",
                 "php": "^7.4",
-                "psr/container": "^1.1.2"
+                "psr/container": "^1.1|^2"
             },
             "require-dev": {
                 "bamarni/composer-bin-plugin": "^1.8",
                 "johnkary/phpunit-speedtrap": "^4.0",
                 "mockery/mockery": "^1.6",
-                "olcs/olcs-common": "^5.0.0",
-                "olcs/olcs-transfer": "^5.0.0",
+                "olcs/olcs-common": "^6.0",
+                "olcs/olcs-transfer": "^6.0",
                 "phpunit/phpunit": "^9.6"
             },
             "type": "library",
@@ -4185,26 +4184,25 @@
             ],
             "description": "OLCS Authentication",
             "support": {
-                "source": "https://github.com/dvsa/olcs-auth/tree/5.0.0-beta.1"
+                "source": "https://github.com/dvsa/olcs-auth/tree/v6.0.0"
             },
-            "time": "2024-01-16T17:02:18+00:00"
+            "time": "2024-02-20T12:13:06+00:00"
         },
         {
             "name": "olcs/olcs-common",
-            "version": "v5.1.1",
+            "version": "v6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dvsa/olcs-common.git",
-                "reference": "73b1c0cf809b50138dd1f5b471905361f1cd868e"
+                "reference": "3f4192f5df14a23a77797c7acd0454856500a483"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/73b1c0cf809b50138dd1f5b471905361f1cd868e",
-                "reference": "73b1c0cf809b50138dd1f5b471905361f1cd868e",
+                "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/3f4192f5df14a23a77797c7acd0454856500a483",
+                "reference": "3f4192f5df14a23a77797c7acd0454856500a483",
                 "shasum": ""
             },
             "require": {
-                "container-interop/container-interop": "^1.2",
                 "ezyang/htmlpurifier": "^4.17",
                 "laminas/laminas-authentication": "^2.6",
                 "laminas/laminas-cache": "^3.0",
@@ -4222,10 +4220,11 @@
                 "laminas/laminas-stdlib": "^3.0",
                 "laminas/laminas-validator": "^2.11",
                 "laminas/laminas-view": "^2.11",
-                "olcs/olcs-logging": "^5.0.0",
-                "olcs/olcs-transfer": "^5.0.0",
-                "olcs/olcs-utils": "^5.0",
-                "php": "^7.4"
+                "olcs/olcs-logging": "^6.0",
+                "olcs/olcs-transfer": "^6.0",
+                "olcs/olcs-utils": "^6.0",
+                "php": "^7.4",
+                "psr/container": "^1.1|^2"
             },
             "require-dev": {
                 "bamarni/composer-bin-plugin": "^1.8",
@@ -4258,22 +4257,22 @@
             "notification-url": "https://packagist.org/downloads/",
             "description": "Common library for the OLCS Project",
             "support": {
-                "source": "https://github.com/dvsa/olcs-common/tree/v5.1.1"
+                "source": "https://github.com/dvsa/olcs-common/tree/v6.0.0"
             },
-            "time": "2024-02-16T10:40:20+00:00"
+            "time": "2024-02-20T12:08:06+00:00"
         },
         {
             "name": "olcs/olcs-logging",
-            "version": "5.0.0.beta1",
+            "version": "v6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dvsa/olcs-logging.git",
-                "reference": "41f38b368ec4bd6530b04396215e577bb466b494"
+                "reference": "558e3fbd7a53e1483658d2b2edd8c2de6bef220a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dvsa/olcs-logging/zipball/41f38b368ec4bd6530b04396215e577bb466b494",
-                "reference": "41f38b368ec4bd6530b04396215e577bb466b494",
+                "url": "https://api.github.com/repos/dvsa/olcs-logging/zipball/558e3fbd7a53e1483658d2b2edd8c2de6bef220a",
+                "reference": "558e3fbd7a53e1483658d2b2edd8c2de6bef220a",
                 "shasum": ""
             },
             "require": {
@@ -4284,6 +4283,7 @@
                 "laminas/laminas-session": "^2.8.7",
                 "laminas/laminas-stdlib": "^3.0",
                 "php": "^7.4",
+                "psr/container": "^1.1|^2",
                 "psr/log": "^1.0"
             },
             "require-dev": {
@@ -4310,22 +4310,22 @@
             ],
             "description": "Logging Module for OLCS",
             "support": {
-                "source": "https://github.com/dvsa/olcs-logging/tree/5.0.0.beta1"
+                "source": "https://github.com/dvsa/olcs-logging/tree/v6.0.0"
             },
-            "time": "2023-11-28T16:45:42+00:00"
+            "time": "2024-02-20T11:41:22+00:00"
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "v5.1.0",
+            "version": "v6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dvsa/olcs-transfer.git",
-                "reference": "b1fe910e1dafbf495367d16fe1953cf1aa9f88b6"
+                "reference": "147e9c70bb96e2e0da3f4828b582ec70c039f171"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dvsa/olcs-transfer/zipball/b1fe910e1dafbf495367d16fe1953cf1aa9f88b6",
-                "reference": "b1fe910e1dafbf495367d16fe1953cf1aa9f88b6",
+                "url": "https://api.github.com/repos/dvsa/olcs-transfer/zipball/147e9c70bb96e2e0da3f4828b582ec70c039f171",
+                "reference": "147e9c70bb96e2e0da3f4828b582ec70c039f171",
                 "shasum": ""
             },
             "require": {
@@ -4337,11 +4337,12 @@
                 "laminas/laminas-form": "^3.1.1",
                 "laminas/laminas-inputfilter": "^2.10.1",
                 "laminas/laminas-router": "^3.9",
-                "laminas/laminas-servicemanager": "^3.0",
+                "laminas/laminas-servicemanager": "^3.3",
                 "laminas/laminas-stdlib": "^3.0",
                 "laminas/laminas-validator": "^2.11.1",
                 "laminas/laminas-xml": "^1.4.0",
-                "php": "^7.4"
+                "php": "^7.4",
+                "psr/container": "^1.1|^2"
             },
             "require-dev": {
                 "bamarni/composer-bin-plugin": "^1.8",
@@ -4365,32 +4366,31 @@
             "notification-url": "https://packagist.org/downloads/",
             "description": "OLCS Transfer",
             "support": {
-                "source": "https://github.com/dvsa/olcs-transfer/tree/v5.1.0"
+                "source": "https://github.com/dvsa/olcs-transfer/tree/v6.0.0"
             },
-            "time": "2024-02-16T10:21:39+00:00"
+            "time": "2024-02-20T11:53:18+00:00"
         },
         {
             "name": "olcs/olcs-utils",
-            "version": "5.0.0-beta.2",
+            "version": "v6.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dvsa/olcs-utils.git",
-                "reference": "9ec3b807ff8ca1670989ced79010bd3db53f2010"
+                "reference": "d639bbac153fc7bf7c940b3ebf67c3a239011818"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dvsa/olcs-utils/zipball/9ec3b807ff8ca1670989ced79010bd3db53f2010",
-                "reference": "9ec3b807ff8ca1670989ced79010bd3db53f2010",
+                "url": "https://api.github.com/repos/dvsa/olcs-utils/zipball/d639bbac153fc7bf7c940b3ebf67c3a239011818",
+                "reference": "d639bbac153fc7bf7c940b3ebf67c3a239011818",
                 "shasum": ""
             },
             "require": {
-                "container-interop/container-interop": "^1.2",
                 "laminas/laminas-eventmanager": "^3.0",
                 "laminas/laminas-http": "^2.8",
                 "laminas/laminas-i18n": "^2.14",
                 "laminas/laminas-mvc": "^3.3",
                 "laminas/laminas-mvc-i18n": "^1.4",
-                "laminas/laminas-servicemanager": "^3.0",
+                "laminas/laminas-servicemanager": "^3.3",
                 "laminas/laminas-view": "^2.11",
                 "php": "^7.4",
                 "psr/container": "^1.1|^2.0"
@@ -4399,7 +4399,7 @@
                 "bamarni/composer-bin-plugin": "^1.8",
                 "johnkary/phpunit-speedtrap": "^4.0",
                 "mockery/mockery": "^1.6",
-                "olcs/olcs-logging": "^5.0.0",
+                "olcs/olcs-logging": "^6.0",
                 "phpunit/phpunit": "^9.6"
             },
             "type": "library",
@@ -4417,9 +4417,9 @@
             "notification-url": "https://packagist.org/downloads/",
             "description": "OLCS Utils",
             "support": {
-                "source": "https://github.com/dvsa/olcs-utils/tree/5.0.0-beta.2"
+                "source": "https://github.com/dvsa/olcs-utils/tree/v6.0.0"
             },
-            "time": "2023-12-19T14:01:18+00:00"
+            "time": "2024-02-20T11:46:06+00:00"
         },
         {
             "name": "psr/cache",

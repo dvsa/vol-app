@@ -5,7 +5,7 @@ namespace Olcs\Listener\RouteParam;
 use Common\Exception\ResourceNotFoundException;
 use Common\Service\Cqrs\Query\CachingQueryService as QueryService;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\EventManager\EventInterface;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;

@@ -7,7 +7,7 @@ use Common\RefData;
 use Common\Service\Cqrs\Command\CommandSender;
 use Common\Service\Cqrs\Query\QuerySender;
 use Dvsa\Olcs\Transfer\Query\Application\Application as ApplicationQry;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\EventManager\Event;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Event\RouteParam;

@@ -10,7 +10,7 @@ use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Lva\VariationLvaService;
 use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\Lva\Licence\OperatingCentresController;
 use LmcRbacMvc\Service\AuthorizationService;

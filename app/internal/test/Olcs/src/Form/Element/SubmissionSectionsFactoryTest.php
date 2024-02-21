@@ -2,7 +2,7 @@
 
 namespace OlcsTest\Form\Element;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Form\Element\SubmissionSections;
 use Olcs\Form\Element\SubmissionSectionsFactory;

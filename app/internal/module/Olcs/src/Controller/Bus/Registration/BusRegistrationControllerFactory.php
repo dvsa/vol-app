@@ -3,7 +3,7 @@
 namespace Olcs\Controller\Bus\Registration;
 
 use Common\Service\Helper\FlashMessengerHelperService;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class BusRegistrationControllerFactory implements FactoryInterface

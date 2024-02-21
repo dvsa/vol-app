@@ -2,7 +2,7 @@
 
 namespace OlcsTest\Service\Marker;
 
-use Interop\Container\Containerinterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Exception\InvalidServiceException;
 use Laminas\ServiceManager\Exception\RuntimeException;
 use Mockery as m;
@@ -23,13 +23,13 @@ class MarkerPluginManagerTest extends TestCase
 
     public function setUp(): void
     {
-        $this->sut = new \Olcs\Service\Marker\MarkerPluginManager($this->createMock(Containerinterface::class));
+        $this->sut = new \Olcs\Service\Marker\MarkerPluginManager($this->createMock(ContainerInterface::class));
         parent::setUp();
     }
 
     public function testConstructor()
     {
-        $sut = new \Olcs\Service\Marker\MarkerPluginManager($this->createMock(Containerinterface::class));
+        $sut = new \Olcs\Service\Marker\MarkerPluginManager($this->createMock(ContainerInterface::class));
 
         $this->assertInstanceOf(\Olcs\Service\Marker\MarkerPluginManager::class, $sut);
     }

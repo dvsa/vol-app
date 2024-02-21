@@ -2,7 +2,7 @@
 
 namespace Olcs\Service\Permits\Bilateral;
 
-use Interop\Container\Containerinterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class StandardFieldsetPopulatorFactory implements FactoryInterface

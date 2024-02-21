@@ -2,7 +2,7 @@
 
 namespace OlcsTest\View\Helper;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Olcs\View\Helper\SubmissionSectionTable;
 use Olcs\View\Helper\SubmissionSectionTableFactory;
 use Mockery as m;

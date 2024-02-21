@@ -3,7 +3,7 @@
 namespace Olcs\Service\Data;
 
 use Common\Service\Data\AbstractDataServiceServices;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class IrhpPermitPrintStockFactory implements FactoryInterface

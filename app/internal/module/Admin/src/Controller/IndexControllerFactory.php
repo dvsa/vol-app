@@ -2,7 +2,7 @@
 
 namespace Admin\Controller;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\Helper\Placeholder;
 

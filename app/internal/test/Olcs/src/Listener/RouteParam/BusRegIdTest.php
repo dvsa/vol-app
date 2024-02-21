@@ -4,7 +4,7 @@ namespace OlcsTest\Listener\RouteParam;
 
 use Common\Exception\ResourceNotFoundException;
 use Common\RefData;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\EventManager\Event;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;

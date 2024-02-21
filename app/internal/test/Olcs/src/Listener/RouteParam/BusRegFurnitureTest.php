@@ -6,7 +6,7 @@ use Common\Exception\ResourceNotFoundException;
 use Common\RefData;
 use Common\Service\Cqrs\Command\CommandSender;
 use Common\Service\Cqrs\Query\QuerySender;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\EventManager\Event;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParam\BusRegFurniture;

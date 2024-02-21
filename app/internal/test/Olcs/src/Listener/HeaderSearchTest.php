@@ -4,7 +4,7 @@ namespace OlcsTest\Listener;
 
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Common\Rbac\User;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;

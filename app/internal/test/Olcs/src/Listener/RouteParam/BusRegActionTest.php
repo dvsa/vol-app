@@ -6,7 +6,7 @@ use Common\Exception\ResourceNotFoundException;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Query\Bus\BusRegDecision;
 use Hamcrest\Type\IsString;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\EventManager\Event;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;

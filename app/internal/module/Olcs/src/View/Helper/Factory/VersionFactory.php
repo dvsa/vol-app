@@ -2,7 +2,7 @@
 
 namespace Olcs\View\Helper\Factory;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Olcs\View\Helper\Version;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 

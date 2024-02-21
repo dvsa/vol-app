@@ -6,7 +6,7 @@ use Common\Exception\DataServiceException;
 use Common\FeatureToggle;
 use Common\RefData;
 use Common\Service\Data\Surrender;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Dvsa\Olcs\Transfer\Query\FeatureToggle\IsEnabled;
 use Laminas\EventManager\Event;
 use Laminas\Navigation\Navigation;

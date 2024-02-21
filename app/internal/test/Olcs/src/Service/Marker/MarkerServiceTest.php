@@ -2,7 +2,7 @@
 
 namespace OlcsTest\Service\Marker;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Service\Marker\MarkerPluginManager;

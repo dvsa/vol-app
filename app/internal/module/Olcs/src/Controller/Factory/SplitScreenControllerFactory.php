@@ -3,7 +3,7 @@
 namespace Olcs\Controller\Factory;
 
 use Common\Service\Script\ScriptFactory;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\SplitScreenController;
 

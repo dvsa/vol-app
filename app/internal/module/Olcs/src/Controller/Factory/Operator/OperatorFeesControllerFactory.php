@@ -13,7 +13,7 @@ use Common\Service\Helper\UrlHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Operator\OperatorController;

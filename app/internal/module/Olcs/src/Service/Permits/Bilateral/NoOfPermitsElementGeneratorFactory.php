@@ -2,7 +2,7 @@
 
 namespace Olcs\Service\Permits\Bilateral;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\Form\Factory as FormFactory;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 

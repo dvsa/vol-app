@@ -3,7 +3,7 @@
 namespace OlcsTest\Listener\RouteParam;
 
 use Common\Exception\ResourceNotFoundException;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Laminas\EventManager\Event;
 use Olcs\Event\RouteParam;

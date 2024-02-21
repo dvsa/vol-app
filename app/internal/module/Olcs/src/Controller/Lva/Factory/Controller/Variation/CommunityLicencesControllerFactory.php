@@ -10,7 +10,7 @@ use Common\Service\Helper\StringHelperService;
 use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\Lva\Variation\CommunityLicencesController;
 use LmcRbacMvc\Service\AuthorizationService;

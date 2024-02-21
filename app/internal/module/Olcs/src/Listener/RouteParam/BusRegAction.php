@@ -2,7 +2,7 @@
 
 namespace Olcs\Listener\RouteParam;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Common\Service\Cqrs\Query\QueryService;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Laminas\EventManager\EventInterface;

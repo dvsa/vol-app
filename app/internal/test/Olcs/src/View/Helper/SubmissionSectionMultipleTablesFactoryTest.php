@@ -3,7 +3,7 @@
 namespace OlcsTest\View\Helper;
 
 use Common\Service\Helper\TranslationHelperService;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\View\Helper\SubmissionSectionMultipleTables;
 use Olcs\View\Helper\SubmissionSectionMultipleTablesFactory;

@@ -2,7 +2,7 @@
 
 namespace Olcs\Service\Processing;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class CreateVariationProcessingServiceFactory implements FactoryInterface

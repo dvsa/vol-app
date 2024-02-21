@@ -5,7 +5,7 @@ namespace Olcs\Controller\Factory\IrhpPermits;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\Router\Http\TreeRouteStack;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;

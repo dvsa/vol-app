@@ -12,7 +12,7 @@ use Common\Service\Helper\UrlHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\Lva\Licence\VehiclesPsvController;
 use LmcRbacMvc\Service\AuthorizationService;

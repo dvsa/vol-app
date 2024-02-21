@@ -8,7 +8,7 @@ use Common\RefData;
 use Common\Service\Data\Surrender;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Dvsa\Olcs\Transfer\Query\FeatureToggle\IsEnabled as IsEnabledQry;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\EventManager\EventInterface;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;

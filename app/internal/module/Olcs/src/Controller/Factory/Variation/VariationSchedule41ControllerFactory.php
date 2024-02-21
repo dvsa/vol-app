@@ -7,7 +7,7 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\StringHelperService;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\Variation\VariationSchedule41Controller;
 use LmcRbacMvc\Service\AuthorizationService;

@@ -11,7 +11,7 @@ use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\Lva\Application\TaxiPhvController;
 use LmcRbacMvc\Service\AuthorizationService;

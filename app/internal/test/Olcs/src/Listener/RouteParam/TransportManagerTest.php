@@ -2,7 +2,7 @@
 
 namespace OlcsTest\Listener\RouteParam;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\EventManager\Event;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\TransportManager\Details\TransportManagerDetailsResponsibilityController;

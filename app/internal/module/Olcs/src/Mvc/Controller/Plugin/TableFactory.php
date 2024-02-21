@@ -4,7 +4,7 @@ namespace Olcs\Mvc\Controller\Plugin;
 
 use Common\Service\Table\TableBuilder;
 use Common\Service\Table\TableBuilderFactory;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class TableFactory implements FactoryInterface

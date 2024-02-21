@@ -10,7 +10,7 @@ use Common\Service\Helper\RestrictionHelperService;
 use Common\Service\Helper\StringHelperService;
 use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\Lva\Application\FinancialHistoryController;
 use LmcRbacMvc\Service\AuthorizationService;

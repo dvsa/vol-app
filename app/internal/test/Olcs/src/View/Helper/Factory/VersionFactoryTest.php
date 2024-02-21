@@ -2,8 +2,7 @@
 
 namespace OlcsTest\View\Helper;
 
-use Interop\Container\ContainerInterface;
-use Olcs\View\Helper\Version;
+use Psr\Container\ContainerInterface;
 use Olcs\View\Helper\Factory\VersionFactory;
 use PHPUnit\Framework\TestCase;
 

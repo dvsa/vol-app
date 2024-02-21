@@ -2,7 +2,7 @@
 
 namespace OlcsTest\Service\Marker;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Olcs\Service\Marker\PartialHelperInitializer;
 use Laminas\View\HelperPluginManager;
 use Laminas\View\Helper\Partial;
