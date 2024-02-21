@@ -3,7 +3,7 @@
 namespace Olcs\Service\Qa;
 
 use Common\Form\QaForm;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 class FormFactory
 {

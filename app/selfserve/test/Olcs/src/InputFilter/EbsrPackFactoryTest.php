@@ -2,7 +2,7 @@
 
 namespace OlcsTest\InputFilter;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\InputFilter\Input;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;

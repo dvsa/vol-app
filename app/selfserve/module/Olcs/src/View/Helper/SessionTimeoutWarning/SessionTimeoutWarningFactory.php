@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace Olcs\View\Helper\SessionTimeoutWarning;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\factory\FactoryInterface;
 use Laminas\View\Helper\HeadMeta;
 

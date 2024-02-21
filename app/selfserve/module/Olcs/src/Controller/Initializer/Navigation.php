@@ -3,7 +3,7 @@
 namespace Olcs\Controller\Initializer;
 
 use Dvsa\Olcs\Auth\Controller\LoginController;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\Mvc\MvcEvent;
 use Laminas\ServiceManager\Initializer\InitializerInterface;
 use Olcs\Controller\Listener\Navigation as NavigationListener;

@@ -10,7 +10,7 @@ use Common\Controller\Plugin\CurrentUser;
 use Common\Controller\Plugin\Redirect;
 use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Auth\Container\AuthChallengeContainer;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Auth\Adapter\SelfserveCommandAdapter;

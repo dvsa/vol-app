@@ -13,7 +13,7 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\ResponseHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableFactory;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\Mvc\Controller\Plugin\Url;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 

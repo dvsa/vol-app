@@ -14,7 +14,7 @@ use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Application\Controller\FinancialEvidenceController;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use LmcRbacMvc\Service\AuthorizationService;
 

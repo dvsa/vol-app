@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Olcs\Controller\Lva\Factory\Adapter;
 
 use Common\Service\Lva\PeopleLvaService;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\Lva\Adapters\LicencePeopleAdapter;
 

@@ -2,7 +2,7 @@
 
 namespace OlcsTest\View\Helper\SessionTimeoutWarning;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Olcs\View\Helper\SessionTimeoutWarning\SessionTimeoutWarning;

@@ -13,7 +13,7 @@ use Common\Service\Cqrs\Response;
 use Common\Service\Lva\PeopleLvaService;
 use Common\Service\Table\TableBuilder;
 use Dvsa\Olcs\Transfer\Command\Licence\DeletePeopleViaVariation;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\Lva\Adapters\LicencePeopleAdapter;

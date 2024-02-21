@@ -10,7 +10,7 @@ use Common\Service\Helper\StringHelperService;
 use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Application\Controller\VehiclesDeclarationsController;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use LmcRbacMvc\Service\AuthorizationService;
 

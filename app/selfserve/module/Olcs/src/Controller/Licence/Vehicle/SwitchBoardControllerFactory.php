@@ -10,7 +10,7 @@ use Common\Controller\Plugin\Redirect;
 use Common\Form\FormValidator;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\ResponseHelperService;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\Mvc\Controller\Plugin\Url;
 use Laminas\ServiceManager\Factory\FactoryInterface;

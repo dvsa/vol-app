@@ -6,7 +6,7 @@ use Common\Controller\Lva\Adapters\LicenceLvaAdapter;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\Lva\Licence\VariationController;
 use Olcs\Service\Processing\CreateVariationProcessingService;

@@ -5,7 +5,7 @@ namespace Olcs\Controller\Factory\Entity;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\Entity\ViewController;
 use LmcRbacMvc\Service\AuthorizationService;

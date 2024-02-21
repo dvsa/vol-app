@@ -7,7 +7,7 @@ use Common\Service\Cqrs\Command\CommandService;
 use Common\Service\Cqrs\Query\CachingQueryService;
 use Common\Service\Lva\VariationLvaService;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder as TransferAnnotationBuilder;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * External Licence Transport Manager Adater

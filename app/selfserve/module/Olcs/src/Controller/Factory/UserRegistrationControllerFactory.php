@@ -8,7 +8,7 @@ use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Helper\UrlHelperService;
 use Common\Service\Script\ScriptFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\UserRegistrationController;
 use LmcRbacMvc\Service\AuthorizationService;

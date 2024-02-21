@@ -3,7 +3,7 @@
 namespace Olcs\Controller\Lva\Adapters;
 
 use Common\Service\Lva\PeopleLvaService;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * External Application People Adapter

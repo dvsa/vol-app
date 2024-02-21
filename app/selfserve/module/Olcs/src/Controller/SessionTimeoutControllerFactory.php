@@ -6,7 +6,7 @@ namespace Olcs\Controller;
 
 use Common\Controller\Dispatcher;
 use Common\Controller\Plugin\Redirect;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use LmcRbacMvc\Identity\IdentityProviderInterface;
 

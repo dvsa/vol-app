@@ -5,7 +5,7 @@
  */
 namespace OlcsTest\Mvc\Controller\Plugin;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Mvc\Controller\Plugin\Placeholder;

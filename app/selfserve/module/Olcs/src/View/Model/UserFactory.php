@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Olcs\View\Model;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class UserFactory implements FactoryInterface

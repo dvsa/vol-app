@@ -4,7 +4,7 @@ namespace OlcsTest\Controller\Initializer;
 
 use Common\Controller\AbstractOlcsController;
 use Dvsa\Olcs\Auth\Controller\LoginController;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\Mvc\MvcEvent;
 use Olcs\Controller\Initializer\Navigation as NavigationInitializer;
 use Olcs\Controller\Listener\Navigation as NavigationListener;

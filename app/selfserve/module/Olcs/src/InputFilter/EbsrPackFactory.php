@@ -2,7 +2,7 @@
 
 namespace Olcs\InputFilter;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\InputFilter\Input;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 

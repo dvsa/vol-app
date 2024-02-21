@@ -5,7 +5,7 @@ namespace Olcs\Controller\Factory\Ebsr;
 use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\Ebsr\UploadsController;
 use LmcRbacMvc\Service\AuthorizationService;

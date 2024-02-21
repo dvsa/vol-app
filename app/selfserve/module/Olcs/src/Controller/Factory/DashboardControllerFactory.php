@@ -5,7 +5,7 @@ namespace Olcs\Controller\Factory;
 use Common\Service\Table\DataMapper\DashboardTmApplications;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\Authentication\Storage\Session;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\DashboardController;

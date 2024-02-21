@@ -6,7 +6,7 @@ use Common\Service\Cqrs\Command\CommandService;
 use Common\Service\Cqrs\Query\CachingQueryService;
 use Common\Service\Lva\VariationLvaService;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\Lva\Adapters\LicenceTransportManagerAdapter;
 

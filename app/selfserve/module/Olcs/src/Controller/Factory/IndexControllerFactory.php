@@ -3,7 +3,7 @@
 namespace Olcs\Controller\Factory;
 
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\IndexController;
 use LmcRbacMvc\Service\AuthorizationService;

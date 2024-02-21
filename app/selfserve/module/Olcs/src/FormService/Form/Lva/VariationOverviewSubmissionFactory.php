@@ -4,7 +4,7 @@ namespace Olcs\FormService\Form\Lva;
 
 use Common\Service\Helper\FormHelperService;
 use Laminas\ServiceManager\Factory\FactoryInterface;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 class VariationOverviewSubmissionFactory implements FactoryInterface
 {

@@ -10,7 +10,7 @@ use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Application\Controller\PaymentSubmissionController;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use LmcRbacMvc\Service\AuthorizationService;
 

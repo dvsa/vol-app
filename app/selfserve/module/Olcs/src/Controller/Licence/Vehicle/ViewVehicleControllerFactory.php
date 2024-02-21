@@ -7,7 +7,7 @@ namespace Olcs\Controller\Licence\Vehicle;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableFactory;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Permits\Data\Mapper\MapperManager;
 

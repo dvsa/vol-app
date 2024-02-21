@@ -5,7 +5,7 @@ namespace Olcs\Controller\Lva\Factory\Adapter;
 use Common\Service\Cqrs\Command\CommandService;
 use Common\Service\Cqrs\Query\CachingQueryService;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\Lva\Adapters\VariationTransportManagerAdapter;
 use Psr\Container\ContainerExceptionInterface;

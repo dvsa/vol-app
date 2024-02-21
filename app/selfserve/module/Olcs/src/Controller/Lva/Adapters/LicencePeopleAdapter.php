@@ -13,7 +13,7 @@ use Common\Service\Lva\PeopleLvaService;
 use Common\Service\Table\TableBuilder;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\Command\Licence\DeletePeopleViaVariation;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\Form\Form;
 
 /**

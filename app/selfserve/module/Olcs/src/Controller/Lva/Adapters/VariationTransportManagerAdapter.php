@@ -6,7 +6,7 @@ use Common\Controller\Lva\Adapters\VariationTransportManagerAdapter as CommonAda
 use Common\Service\Cqrs\Command\CommandService;
 use Common\Service\Cqrs\Query\CachingQueryService;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder as TransferAnnotationBuilder;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Variation Transport Manager Adapter

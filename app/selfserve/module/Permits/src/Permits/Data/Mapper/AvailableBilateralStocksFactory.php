@@ -3,7 +3,7 @@
 namespace Permits\Data\Mapper;
 
 use Common\Service\Helper\TranslationHelperService;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class AvailableBilateralStocksFactory implements FactoryInterface

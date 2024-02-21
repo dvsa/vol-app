@@ -12,7 +12,7 @@ use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Application\Controller\BusinessDetailsController;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use LmcRbacMvc\Identity\IdentityProviderInterface;
 use LmcRbacMvc\Service\AuthorizationService;

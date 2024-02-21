@@ -4,7 +4,7 @@ namespace Permits\Data\Mapper;
 
 use Common\Service\Qa\Custom\Common\HtmlAdder;
 use Common\Service\Table\TableFactory;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class CandidatePermitSelectionFactory implements FactoryInterface

@@ -2,7 +2,7 @@
 
 namespace Permits\Data\Mapper;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Common\Data\Mapper\Permits\NoOfPermits as CommonNoOfPermits;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 

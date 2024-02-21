@@ -5,7 +5,7 @@ namespace OlcsTest\Controller\Lva\Adapters;
 use Common\RefData;
 use Common\Service\Lva\PeopleLvaService;
 use Dvsa\Olcs\Transfer\Command as TransferCmd;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Controller\Lva\Adapters\VariationPeopleAdapter;

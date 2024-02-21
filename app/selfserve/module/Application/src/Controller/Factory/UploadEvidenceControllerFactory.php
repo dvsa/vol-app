@@ -8,7 +8,7 @@ use Common\Service\Helper\RestrictionHelperService;
 use Common\Service\Helper\StringHelperService;
 use Dvsa\Olcs\Application\Controller\UploadEvidenceController;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use LmcRbacMvc\Service\AuthorizationService;
 

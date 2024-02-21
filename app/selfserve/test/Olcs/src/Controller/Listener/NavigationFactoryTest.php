@@ -4,7 +4,7 @@ namespace OlcsTest\Controller\Listener;
 
 use Common\Rbac\User as RbacUser;
 use Common\Service\Cqrs\Query\QuerySender;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Olcs\Controller\Listener\Navigation as NavigationListener;
 use Olcs\Controller\Listener\NavigationFactory;

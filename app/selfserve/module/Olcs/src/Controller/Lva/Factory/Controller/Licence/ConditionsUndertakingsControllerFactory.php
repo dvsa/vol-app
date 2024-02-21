@@ -5,7 +5,7 @@ namespace Olcs\Controller\Lva\Factory\Controller\Licence;
 use Common\Service\Helper\GuidanceHelperService;
 use Common\Service\Review\LicenceConditionsUndertakingsReviewService;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Olcs\Controller\Lva\Licence\ConditionsUndertakingsController;
 use LmcRbacMvc\Service\AuthorizationService;
