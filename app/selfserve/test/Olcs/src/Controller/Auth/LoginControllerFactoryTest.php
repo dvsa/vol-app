@@ -15,23 +15,15 @@ use Laminas\ServiceManager\ServiceManager;
 use Olcs\Auth\Adapter\SelfserveCommandAdapter;
 use Olcs\Controller\Auth\LoginController;
 use Olcs\Controller\Auth\LoginControllerFactory;
-use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Common\Test\MocksServicesTrait;
-use Mockery as m;
+use PHPUnit\Framework\TestCase;
 
-class LoginControllerFactoryTest extends MockeryTestCase
+class LoginControllerFactoryTest extends TestCase
 {
-    use MocksServicesTrait;
 
     /**
      * @var LoginControllerFactory
      */
     protected $sut;
-
-    public function setUp(): void
-    {
-        $this->setUpServiceManager();
-    }
 
     /**
      * @test
@@ -53,9 +45,21 @@ class LoginControllerFactoryTest extends MockeryTestCase
     {
         // Setup
         $this->setUpSut();
+        $serviceManager = $this->createMock(\Interop\Container\ContainerInterface::class);
+        $serviceManager->method('get')->willReturnMap([
+            [SelfserveCommandAdapter::class, $this->createMock(SelfserveCommandAdapter::class)],
+            [AuthenticationServiceInterface::class  , $this->createMock(AuthenticationServiceInterface::class)],
+            ['Auth\CookieService', $this->createMock(CookieService::class)],
+            [CurrentUser::class, $this->createMock(CurrentUser::class)],
+            [FlashMessenger::class, $this->createMock(FlashMessenger::class)],
+            [FormHelperService::class, $this->createMock(FormHelperService::class)],
+            [Redirect::class, $this->createMock(Redirect::class)],
+            [Url::class, $this->createMock(Url::class)],
+            ['ControllerPluginManager', $serviceManager]
+        ]);
 
         // Execute
-        $result = $this->sut->__invoke($this->serviceManager(), null);
+        $result = $this->sut->__invoke($serviceManager, null);
 
         // Assert
         $this->assertInstanceOf(Dispatcher::class, $result);
@@ -67,18 +71,4 @@ class LoginControllerFactoryTest extends MockeryTestCase
         $this->sut = new LoginControllerFactory();
     }
 
-    /**
-     * @param ServiceManager $serviceManager
-     */
-    protected function setUpDefaultServices(ServiceManager $serviceManager)
-    {
-        $serviceManager->setService(SelfserveCommandAdapter::class, $this->setUpMockService(SelfserveCommandAdapter::class));
-        $serviceManager->setService(AuthenticationServiceInterface::class, $this->setUpMockService(AuthenticationServiceInterface::class));
-        $serviceManager->setService('Auth\CookieService', $this->setUpMockService(CookieService::class));
-        $serviceManager->setService(CurrentUser::class, $this->setUpMockService(CurrentUser::class));
-        $serviceManager->setService(FlashMessenger::class, $this->setUpMockService(FlashMessenger::class));
-        $serviceManager->setService(FormHelperService::class, $this->setUpMockService(FormHelperService::class));
-        $serviceManager->setService(Redirect::class, $this->setUpMockService(Redirect::class));
-        $serviceManager->setService(Url::class, $this->setUpMockService(Url::class));
-    }
 }

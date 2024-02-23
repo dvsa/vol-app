@@ -15,7 +15,6 @@ use Common\Service\Helper\ResponseHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableBuilder;
 use Common\Service\Table\TableFactory;
-use Common\Test\MockeryTestCase;
 use Dvsa\Olcs\Transfer\Command\Licence\UpdateVehicles;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence;
 use Dvsa\Olcs\Transfer\Query\Licence\Vehicles;
@@ -24,11 +23,13 @@ use Hamcrest\Core\IsAnything;
 use Hamcrest\Core\IsIdentical;
 use Hamcrest\Arrays\IsArrayContainingKey;
 use Hamcrest\Core\IsInstanceOf;
+use Interop\Container\Containerinterface;
 use Laminas\Form\ElementInterface;
 use Laminas\Form\Form;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
 use Laminas\Mvc\Controller\Plugin\Url;
+use Laminas\Mvc\Controller\PluginManager;
 use Laminas\Router\Http\RouteMatch;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\Stdlib\Parameters;
@@ -36,20 +37,17 @@ use Laminas\Uri\Http;
 use Laminas\Validator\Translator\TranslatorInterface;
 use Laminas\View\Model\ViewModel;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
 use Olcs\Controller\Licence\Vehicle\ListVehicleController;
-use Olcs\Controller\Licence\Vehicle\ListVehicleControllerFactory;
 use Olcs\Form\Model\Form\Vehicle\ListVehicleSearch;
 use Olcs\Table\TableEnum;
-use Common\Test\MocksServicesTrait;
 
 /**
  * @see ListVehicleController
  */
 class ListVehicleControllerTest extends MockeryTestCase
 {
-    use MocksServicesTrait;
-
     protected const ROUTE_CONFIGURATION_FOR_LICENCE_WITH_REMOVED_VEHICLES_SHOWING_AND_FOCUSED = [
         'licence/vehicle/list/GET',
         [
@@ -80,13 +78,66 @@ class ListVehicleControllerTest extends MockeryTestCase
     protected $sut;
 
     /**
+     * @var HandleCommand
+     */
+    protected $commandHandlerMock;
+
+    /**
+     * @var HandleQuery
+     */
+    protected $queryHandlerMock;
+
+    /**
+     * @var TranslationHelperService
+     */
+    protected $translatorMock;
+
+    /**
+     * @var Url
+     */
+    protected $urlHelperMock;
+
+    /**
+     * @var ResponseHelperService
+     */
+    protected $responseHelperMock;
+
+    /**
+     * @var TableFactory
+     */
+    protected $tableFactoryMock;
+
+    /**
+     * @var FormHelperService
+     */
+    protected $formHelperMock;
+
+    /**
+     * @var FlashMessengerHelperService
+     */
+    protected $flashMessengerMock;
+
+    /**
+     * @var Redirect
+     */
+    protected $redirectHelperMock;
+
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
+    /**
+     * @var ServiceLocatorInterface
+     */
+    protected $serviceLocatorMock;
+
+    /**
      * @test
      */
     public function indexAction_IsCallable()
     {
-        // Setup
         $this->setUpSut();
-
         // Assert
         $this->assertIsCallable([$this->sut, 'indexAction']);
     }
@@ -96,15 +147,12 @@ class ListVehicleControllerTest extends MockeryTestCase
      */
     public function postAction_IsCallable()
     {
-        // Setup
         $this->setUpSut();
-
         // Assert
         $this->assertIsCallable([$this->sut, 'postAction']);
     }
 
     /**
-     * @depends indexAction_IsCallable
      * @test
      */
     public function indexAction_RespondsInHtmlFormat_WhenNoFormatIsProvided()
@@ -114,6 +162,8 @@ class ListVehicleControllerTest extends MockeryTestCase
         $request = $this->setUpRequest('/');
         $routeMatch = new RouteMatch([]);
 
+        $this->urlHelperMock->shouldReceive('fromRoute')->andReturn('licence/vehicle/list/GET');
+
         // Execute
         $result = $this->sut->indexAction($request, $routeMatch);
 
@@ -122,7 +172,6 @@ class ListVehicleControllerTest extends MockeryTestCase
     }
 
     /**
-     * @depends indexAction_IsCallable
      * @test
      */
     public function indexAction_RespondsInHtmlFormat_WhenHtmlFormatIsProvided()
@@ -141,7 +190,6 @@ class ListVehicleControllerTest extends MockeryTestCase
     }
 
     /**
-     * @depends indexAction_RespondsInHtmlFormat_WhenHtmlFormatIsProvided
      * @test
      */
     public function indexAction_RespondsInHtmlFormat_WithLicence()
@@ -151,14 +199,13 @@ class ListVehicleControllerTest extends MockeryTestCase
         $request = $this->setUpRequest('/');
         $routeMatch = new RouteMatch([]);
 
-        $queryHandler = $this->serviceManager->get(HandleQuery::class);
-        assert($queryHandler instanceof MockInterface, 'Expected instance of MockInterface');
+        assert($this->queryHandlerMock instanceof MockInterface, 'Expected instance of MockInterface');
         $licenceData = $this->setUpDefaultLicenceData();
         $licenceQueryMatcher = IsInstanceOf::anInstanceOf(Licence::class);
         $licenceQueryResponse = m::mock(QueryResponse::class);
         $licenceQueryResponse->shouldIgnoreMissing();
         $licenceQueryResponse->shouldReceive('getResult')->andReturn($licenceData);
-        $queryHandler->shouldReceive('__invoke')->with($licenceQueryMatcher)->andReturn($licenceQueryResponse);
+        $this->queryHandlerMock->shouldReceive('__invoke')->with($licenceQueryMatcher)->andReturn($licenceQueryResponse);
 
         // Execute
         $result = $this->sut->indexAction($request, $routeMatch);
@@ -196,13 +243,12 @@ class ListVehicleControllerTest extends MockeryTestCase
         $request = $this->setUpRequest('/');
         $licenceId = 1;
         $routeMatch = new RouteMatch($routeParams = ['licence' => $licenceId]);
-        $urlHelper = $this->resolveMockService($this->serviceManager, Url::class);
         $expectedUrl = "abcdefg";
 
         // Define Expectations
         $queryMatcher = IsArrayContainingKeyValuePair::hasKeyValuePair('format', 'csv');
         $optionsMatcher = IsArrayContainingKeyValuePair::hasKeyValuePair('query', $queryMatcher);
-        $urlHelper->shouldReceive('fromRoute')->with('licence/vehicle/list/GET', $routeParams, $optionsMatcher)->andReturn($expectedUrl);
+        $this->urlHelperMock->shouldReceive('fromRoute')->with('licence/vehicle/list/GET', $routeParams, $optionsMatcher)->andReturn($expectedUrl);
 
         // Execute
         $result = $this->sut->indexAction($request, $routeMatch);
@@ -212,7 +258,6 @@ class ListVehicleControllerTest extends MockeryTestCase
     }
 
     /**
-     * @depends indexAction_RespondsInHtmlFormat_WhenHtmlFormatIsProvided
      * @test
      */
     public function indexAction_RespondsInHtmlFormat_WithExportCurrentAndRemovedCsvAction_WithIncludeRemovedQueryParameter()
@@ -222,13 +267,12 @@ class ListVehicleControllerTest extends MockeryTestCase
         $request = $this->setUpRequest('/');
         $licenceId = 1;
         $routeMatch = new RouteMatch($routeParams = ['licence' => $licenceId]);
-        $urlHelper = $this->resolveMockService($this->serviceManager, Url::class);
         $expectedUrl = "abcdefg";
 
         // Define Expectations
         $queryMatcher = IsArrayContainingKey::hasKeyInArray('includeRemoved');
         $optionsMatcher = IsArrayContainingKeyValuePair::hasKeyValuePair('query', $queryMatcher);
-        $urlHelper->shouldReceive('fromRoute')->with('licence/vehicle/list/GET', $routeParams, $optionsMatcher)->andReturn($expectedUrl);
+        $this->urlHelperMock->shouldReceive('fromRoute')->with('licence/vehicle/list/GET', $routeParams, $optionsMatcher)->andReturn($expectedUrl);
 
         // Execute
         $result = $this->sut->indexAction($request, $routeMatch);
@@ -239,7 +283,6 @@ class ListVehicleControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_RespondsInHtmlFormat_WhenHtmlFormatIsProvided
      */
     public function indexAction_RespondsInHtmlFormat_AndConfiguresCurrentVehicleTable_Query()
     {
@@ -258,14 +301,16 @@ class ListVehicleControllerTest extends MockeryTestCase
         // Define Expectations
         $queryMatcher = IsIdentical::identicalTo($query);
         $paramsMatcher = IsArrayContainingKeyValuePair::hasKeyValuePair('query', $queryMatcher);
-        $this->expectTableToBePrepared($this->serviceManager, TableEnum::LICENCE_VEHICLE_LIST_CURRENT, null, $paramsMatcher);
+
+        $this->expectTableToBePrepared($this->serviceLocatorMock, TableEnum::LICENCE_VEHICLE_LIST_CURRENT, null, $paramsMatcher);
 
         // Execute
-        $this->sut->indexAction($request, $routeMatch);
+        $result = $this->sut->indexAction($request, $routeMatch);
+        // Assert
+        $this->assertInstanceOf(ViewModel::class, $result);
     }
 
     /**
-     * @depends indexAction_RespondsInHtmlFormat_WhenHtmlFormatIsProvided
      * @test
      */
     public function indexAction_RespondsInHtmlFormat_AndConfiguresCurrentVehicleTable_Page_WhenNoPageIsSetOnARequest()
@@ -277,14 +322,16 @@ class ListVehicleControllerTest extends MockeryTestCase
 
         // Define Expectations
         $paramsMatcher = IsArrayContainingKeyValuePair::hasKeyValuePair('page', 1);
-        $this->expectTableToBePrepared($this->serviceManager, TableEnum::LICENCE_VEHICLE_LIST_CURRENT, null, $paramsMatcher);
+        $this->expectTableToBePrepared($this->serviceLocatorMock, TableEnum::LICENCE_VEHICLE_LIST_CURRENT, null, $paramsMatcher);
 
         // Execute
-        $this->sut->indexAction($request, $routeMatch);
+        $result = $this->sut->indexAction($request, $routeMatch);
+
+        // Assert
+        $this->assertInstanceOf(ViewModel::class, $result);
     }
 
     /**
-     * @depends indexAction_RespondsInHtmlFormat_WhenHtmlFormatIsProvided
      * @test
      */
     public function indexAction_RespondsInHtmlFormat_AndConfiguresCurrentVehicleTable_Page_WhenEmptyPageIsSetOnARequest()
@@ -297,7 +344,7 @@ class ListVehicleControllerTest extends MockeryTestCase
 
         // Define Expectations
         $paramsMatcher = IsArrayContainingKeyValuePair::hasKeyValuePair('page', 1);
-        $this->expectTableToBePrepared($this->serviceManager, TableEnum::LICENCE_VEHICLE_LIST_CURRENT, null, $paramsMatcher);
+        $this->expectTableToBePrepared($this->serviceLocatorMock, TableEnum::LICENCE_VEHICLE_LIST_CURRENT, null, $paramsMatcher);
 
         // Execute
         $this->sut->indexAction($request, $routeMatch);
@@ -312,7 +359,6 @@ class ListVehicleControllerTest extends MockeryTestCase
     }
 
     /**
-     * @depends indexAction_RespondsInHtmlFormat_WhenHtmlFormatIsProvided
      * @dataProvider setUpRemovedTableTitleData
      * @test
      */
@@ -325,11 +371,10 @@ class ListVehicleControllerTest extends MockeryTestCase
         $routeMatch = new RouteMatch([]);
         $expectedTitle = 'foo';
         $results = array_fill(0, $total, ['id' => 6]);
-        $this->injectRemovedVehiclesQueryResultData($this->serviceManager, ['count' => $total, 'results' => $results]);
-        $translator = $this->resolveMockService($this->serviceManager, TranslationHelperService::class);
+        $this->injectRemovedVehiclesQueryResultData($this->serviceLocatorMock, ['count' => $total, 'results' => $results]);
 
         // Define Expectations
-        $translator->shouldReceive('translateReplace')->once()->with($expectedTranslationKey, [count($results)])->andReturn($expectedTitle);
+        $this->translatorMock->shouldReceive('translateReplace')->once()->with($expectedTranslationKey, [count($results)])->andReturn($expectedTitle);
 
         // Execute
         $result = $this->sut->indexAction($request, $routeMatch);
@@ -349,7 +394,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->setUpSut();
         $request = $this->setUpRequest('/');
         $routeMatch = new RouteMatch([]);
-        $this->injectRemovedVehiclesQueryResultData($this->serviceManager, ['count' => 0, 'results' => []]);
+        $this->injectRemovedVehiclesQueryResultData($this->serviceLocatorMock, ['count' => 0, 'results' => []]);
 
         // Execute
         $result = $this->sut->indexAction($request, $routeMatch);
@@ -369,7 +414,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->setUpSut();
         $request = $this->setUpRequest('/');
         $routeMatch = new RouteMatch([]);
-        $this->injectRemovedVehiclesQueryResultData($this->serviceManager, ['count' => 1, 'results' => []]);
+        $this->injectRemovedVehiclesQueryResultData($this->serviceLocatorMock, ['count' => 1, 'results' => []]);
 
         // Execute
         $result = $this->sut->indexAction($request, $routeMatch);
@@ -390,7 +435,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $request = $this->setUpRequest('/');
         $request->setQuery($this->parametersWhichIncludeRemoved());
         $routeMatch = new RouteMatch([]);
-        $this->injectRemovedVehiclesQueryResultData($this->serviceManager, ['count' => 1, 'results' => []]);
+        $this->injectRemovedVehiclesQueryResultData($this->serviceLocatorMock, ['count' => 1, 'results' => []]);
 
         // Execute
         $result = $this->sut->indexAction($request, $routeMatch);
@@ -410,7 +455,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $request = $this->setUpRequest('/');
         $request->setQuery($this->parametersWhichIncludeRemoved());
         $routeMatch = new RouteMatch([]);
-        $this->injectRemovedVehiclesQueryResultData($this->serviceManager, ['count' => 0, 'results' => []]);
+        $this->injectRemovedVehiclesQueryResultData($this->serviceLocatorMock, ['count' => 0, 'results' => []]);
 
         // Execute
         $result = $this->sut->indexAction($request, $routeMatch);
@@ -421,7 +466,6 @@ class ListVehicleControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_IsCallable
      */
     public function indexAction_ToggleUrlIncludesFragment_WhenQueryParamIsNotSet_AndALicenceHasOneRemovedVehicle()
     {
@@ -429,8 +473,8 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->setUpSut();
         $request = $this->setUpRequest('/');
         $routeMatch = new RouteMatch([]);
-        $this->injectRemovedVehiclesQueryResultData($this->serviceManager, ['count' => 1, 'results' => []]);
-        $this->urlHelper()
+        $this->injectRemovedVehiclesQueryResultData($this->serviceLocatorMock, ['count' => 1, 'results' => []]);
+        $this->urlHelperMock
             ->allows('fromRoute')
             ->with(...static::ROUTE_CONFIGURATION_FOR_LICENCE_WITH_REMOVED_VEHICLES_SHOWING_AND_FOCUSED)
             ->andReturn(static::A_URL);
@@ -439,7 +483,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $result = $this->sut->indexAction($request, $routeMatch);
 
         // Assert
-        $this->urlHelper()->shouldHaveReceived('fromRoute')->withArgs(static::ROUTE_CONFIGURATION_FOR_LICENCE_WITH_REMOVED_VEHICLES_SHOWING_AND_FOCUSED);
+        $this->urlHelperMock->shouldHaveReceived('fromRoute')->withArgs(static::ROUTE_CONFIGURATION_FOR_LICENCE_WITH_REMOVED_VEHICLES_SHOWING_AND_FOCUSED);
         $this->assertEquals(static::A_URL, $result->getVariable('toggleRemovedAction'));
     }
 
@@ -454,8 +498,8 @@ class ListVehicleControllerTest extends MockeryTestCase
         $request = $this->setUpRequest('/');
         $request->setQuery($this->parametersWhichIncludeRemoved());
         $routeMatch = new RouteMatch([]);
-        $this->injectRemovedVehiclesQueryResultData($this->serviceManager, ['count' => 1, 'results' => []]);
-        $this->urlHelper()
+        $this->injectRemovedVehiclesQueryResultData($this->serviceLocatorMock, ['count' => 1, 'results' => []]);
+        $this->urlHelperMock
             ->allows('fromRoute')
             ->with(...static::ROUTE_CONFIGURATION_FOR_LICENCE_WITHOUT_REMOVED_VEHICLES_SHOWING)
             ->andReturn(static::A_URL);
@@ -464,7 +508,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $result = $this->sut->indexAction($request, $routeMatch);
 
         // Assert
-        $this->urlHelper()->shouldHaveReceived('fromRoute')->withArgs(static::ROUTE_CONFIGURATION_FOR_LICENCE_WITHOUT_REMOVED_VEHICLES_SHOWING);
+        $this->urlHelperMock->shouldHaveReceived('fromRoute')->withArgs(static::ROUTE_CONFIGURATION_FOR_LICENCE_WITHOUT_REMOVED_VEHICLES_SHOWING);
         $this->assertEquals(static::A_URL, $result->getVariable('toggleRemovedAction'));
     }
 
@@ -488,7 +532,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->setUpSut();
         $request = $this->setUpRequest('foobarbaz');
         $routeMatch = new RouteMatch([]);
-        $this->injectRemovedVehiclesQueryResultData($this->serviceManager, ['count' => 0, 'results' => []]);
+        $this->injectRemovedVehiclesQueryResultData($this->serviceLocatorMock, ['count' => 0, 'results' => []]);
 
         // Execute
         $variables = (array) ($this->sut->indexAction($request, $routeMatch)->getVariables());
@@ -523,7 +567,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->setUpSut();
         $request = $this->setUpRequest('foobarbaz');
         $routeMatch = new RouteMatch([]);
-        $this->injectRemovedVehiclesQueryResultData($this->serviceManager, ['count' => 1, 'results' => []]);
+        $this->injectRemovedVehiclesQueryResultData($this->serviceLocatorMock, ['count' => 1, 'results' => []]);
 
         // Execute
         $variables = (array) ($this->sut->indexAction($request, $routeMatch)->getVariables());
@@ -544,7 +588,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->setUpSut();
         $request = $this->setUpRequest('foobarbaz', [$expectedQueryParam = ListVehicleController::QUERY_KEY_INCLUDE_REMOVED => '']);
         $routeMatch = new RouteMatch([]);
-        $this->injectRemovedVehiclesQueryResultData($this->serviceManager, ['count' => 1, 'results' => []]);
+        $this->injectRemovedVehiclesQueryResultData($this->serviceLocatorMock, ['count' => 1, 'results' => []]);
 
         // Execute
         $variables = (array) ($this->sut->indexAction($request, $routeMatch)->getVariables());
@@ -558,7 +602,6 @@ class ListVehicleControllerTest extends MockeryTestCase
     /**
      * @param string $type
      * @test
-     * @depends indexAction_SetShowRemovedVehiclesToTrue_WhenALicenceHasOneRemovedVehicle
      * @dataProvider buttonTranslationKeyTypes
      */
     public function indexAction_SetToggleRemovedVehiclesActionTitle_WithRelevantMessage_WhenQueryParamIsSet_AndLicenceHasRemovedVehicles(string $type)
@@ -568,7 +611,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $request = $this->setUpRequest('/');
         $request->setQuery($this->parametersWhichIncludeRemoved());
         $routeMatch = new RouteMatch([]);
-        $this->injectRemovedVehiclesQueryResultData($this->serviceManager, ['count' => 1, 'results' => []]);
+        $this->injectRemovedVehiclesQueryResultData($this->serviceLocatorMock, ['count' => 1, 'results' => []]);
         $expectedKey = sprintf('toggleRemovedVehiclesAction%s', ucfirst($type));
         $expectedTitle = sprintf('licence.vehicle.list.section.removed.action.hide-removed-vehicles.%s', $type);
 
@@ -584,7 +627,6 @@ class ListVehicleControllerTest extends MockeryTestCase
     /**
      * @param string $type
      * @test
-     * @depends indexAction_SetShowRemovedVehiclesToTrue_WhenALicenceHasOneRemovedVehicle
      * @dataProvider buttonTranslationKeyTypes
      */
     public function indexAction_DoesNotSetToggleRemovedVehiclesActionTitle_WhenQueryParamIsNotSet_AndLicenceDoesNotHaveRemovedVehicles(string $type)
@@ -594,7 +636,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $request = $this->setUpRequest('/');
         $request->setQuery($this->parametersWhichIncludeRemoved());
         $routeMatch = new RouteMatch([]);
-        $this->injectRemovedVehiclesQueryResultData($this->serviceManager, ['count' => 0, 'results' => []]);
+        $this->injectRemovedVehiclesQueryResultData($this->serviceLocatorMock, ['count' => 0, 'results' => []]);
         $expectedKey = sprintf('toggleRemovedVehiclesAction%s', ucfirst($type));
 
         // Execute
@@ -654,10 +696,10 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->setUpSut();
         $request = $this->setUpRequest('foobarbaz', $input);
         $routeMatch = new RouteMatch(['licence' => 1]);
-
         // Define Expectations
-        $redirectHelper = $this->resolveMockService($this->serviceManager, Redirect::class);
-        $redirectHelper->shouldReceive('refresh')->withNoArgs()->andReturn($expectedResponse = new Response())->once();
+        $this->flashMessengerMock->shouldReceive('addErrorMessage')->withAnyArgs()->once();
+        // Define Expectations
+        $this->redirectHelperMock->shouldReceive('refresh')->withNoArgs()->andReturn($expectedResponse = new Response())->once();
 
         // Execute
         $response = $this->sut->indexAction($request, $routeMatch);
@@ -679,10 +721,10 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->setUpSut();
         $request = $this->setUpRequest('foobarbaz', $input);
         $routeMatch = new RouteMatch(['licence' => 8]);
-        $flashMessenger = $this->resolveMockService($this->serviceManager, FlashMessengerHelperService::class);
 
         // Define Expectations
-        $flashMessenger->shouldReceive('addErrorMessage')->with($expectedFlashMessage)->once();
+        $this->flashMessengerMock->shouldReceive('addErrorMessage')->with($expectedFlashMessage)->once();
+        $this->redirectHelperMock->shouldReceive('refresh')->withNoArgs()->andReturn($expectedResponse = new Response())->once();
 
         // Execute
         $this->sut->indexAction($request, $routeMatch);
@@ -701,12 +743,12 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->setUpSut();
         $request = $this->setUpRequest('foobarbaz', $input);
         $routeMatch = new RouteMatch(['licence' => 8]);
-        $translator = $this->resolveMockService($this->serviceManager, TranslationHelperService::class);
-        $baseTranslator = $translator->getTranslator();
+        $baseTranslator = $this->translatorMock->getTranslator();
 
         // Define Expectations
         $baseTranslator->shouldReceive('translate')->with($expectedFlashMessage, IsAnything::anything())->atLeast()->once()->andReturn('');
-
+        $this->redirectHelperMock->shouldReceive('refresh')->withNoArgs()->andReturn($expectedResponse = new Response())->once();
+        $this->flashMessengerMock->shouldReceive('addErrorMessage')->withAnyArgs()->once();
         // Execute
         $this->sut->indexAction($request, $routeMatch);
     }
@@ -741,10 +783,9 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->setUpSut();
         $request = $this->setUpRequest('/');
         $routeMatch = new RouteMatch([]);
-        $queryHandler = $this->resolveMockService($this->serviceManager, HandleQuery::class);
 
         // Define Expectations
-        $queryHandler->shouldReceive('__invoke')->withArgs(function ($query) {
+        $this->queryHandlerMock->shouldReceive('__invoke')->withArgs(function ($query) {
             return $query instanceof Vehicles && $query->getIncludeActive() === false;
         })->once()->andReturns($this->setUpQueryResponse());
 
@@ -761,10 +802,9 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->setUpSut();
         $request = $this->setUpRequest('/');
         $routeMatch = new RouteMatch([]);
-        $queryHandler = $this->resolveMockService($this->serviceManager, HandleQuery::class);
 
         // Define Expectations
-        $queryHandler->shouldReceive('__invoke')->withArgs(function ($query) {
+        $this->queryHandlerMock->shouldReceive('__invoke')->withArgs(function ($query) {
             return $query instanceof Vehicles && $query->getIncludeRemoved() === true && $query->getSort() === 'removalDate';
         })->once()->andReturns($this->setUpQueryResponse());
 
@@ -781,10 +821,9 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->setUpSut();
         $request = $this->setUpRequest('/');
         $routeMatch = new RouteMatch([]);
-        $queryHandler = $this->resolveMockService($this->serviceManager, HandleQuery::class);
 
         // Define Expectations
-        $queryHandler->shouldReceive('__invoke')->withArgs(function ($query) {
+        $this->queryHandlerMock->shouldReceive('__invoke')->withArgs(function ($query) {
             return $query instanceof Vehicles && $query->getIncludeRemoved() === true && $query->getOrder() === 'DESC';
         })->once()->andReturns($this->setUpQueryResponse());
 
@@ -801,10 +840,9 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->setUpSut();
         $request = $this->setUpRequest('/');
         $routeMatch = new RouteMatch([]);
-        $queryHandler = $this->resolveMockService($this->serviceManager, HandleQuery::class);
 
         // Define Expectations
-        $queryHandler->shouldReceive('__invoke')->withArgs(function ($query) {
+        $this->queryHandlerMock->shouldReceive('__invoke')->withArgs(function ($query) {
             return $query instanceof Vehicles && $query->getIncludeRemoved() === true && $query->getLimit() === 10;
         })->once()->andReturns($this->setUpQueryResponse());
 
@@ -821,10 +859,9 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->setUpSut();
         $request = $this->setUpRequest('/');
         $routeMatch = new RouteMatch([]);
-        $queryHandler = $this->resolveMockService($this->serviceManager, HandleQuery::class);
 
         // Define Expectations
-        $queryHandler->shouldReceive('__invoke')->withArgs(function ($query) {
+        $this->queryHandlerMock->shouldReceive('__invoke')->withArgs(function ($query) {
             return $query instanceof Vehicles && $query->getIncludeRemoved() === true && $query->getPage() === 1;
         })->once()->andReturns($this->setUpQueryResponse());
 
@@ -833,7 +870,6 @@ class ListVehicleControllerTest extends MockeryTestCase
     }
 
     /**
-     * @depends postAction_IsCallable
      * @test
      */
     public function postAction_RespondsInHtmlFormat_SetsUserOCRSOptInPreference_CheckboxValidValuesRunsCommand()
@@ -842,14 +878,12 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->setUpSut();
         $request = $this->setUpRequest('/');
         $routeMatch = new RouteMatch([]);
-        $commandHandler = $this->resolveMockService($this->serviceManager, HandleCommand::class);
-        $formHelper = $this->resolveMockService($this->serviceManager, FormHelperService::class);
         $mockForm = $this->setUpForm();
         $mockForm->shouldReceive('getData')->andReturn(['ocrsCheckbox' => $expected = 'Y']);
-        $formHelper->shouldReceive('createForm')->andReturn($mockForm);
+        $this->formHelperMock->shouldReceive('createForm')->andReturn($mockForm);
 
         // Define Expectations
-        $commandHandler
+        $this->commandHandlerMock
             ->shouldReceive('__invoke')
             ->withArgs(function ($command) use ($expected) {
                 return $command instanceof UpdateVehicles && $command->getShareInfo() === $expected;
@@ -862,7 +896,6 @@ class ListVehicleControllerTest extends MockeryTestCase
     }
 
     /**
-     * @depends postAction_IsCallable
      * @test
      */
     public function postAction_RespondsInHtmlFormat_SetsUserOCRSOptInPreference_CheckboxInvalidValues_ReturnsIndexActionWithErrors()
@@ -871,15 +904,13 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->setUpSut();
         $request = $this->setUpRequest('/');
         $routeMatch = new RouteMatch([]);
-        $commandHandler = $this->resolveMockService($this->serviceManager, HandleCommand::class);
-        $formHelper = $this->resolveMockService($this->serviceManager, FormHelperService::class);
         $mockForm = $this->setUpForm();
         $mockForm->shouldReceive('isValid')->andReturnFalse();
-        $formHelper->shouldReceive('createForm')->andReturn($mockForm);
+        $this->formHelperMock->shouldReceive('createForm')->andReturn($mockForm);
 
         // Define Expectations
         $updateVehicleCommandMatcher = IsInstanceOf::anInstanceOf(UpdateVehicles::class);
-        $commandHandler->shouldReceive('__invoke')->with($updateVehicleCommandMatcher)->never();
+        $this->commandHandlerMock->shouldReceive('__invoke')->with($updateVehicleCommandMatcher)->never();
 
         // Execute
         $this->sut->postAction($request, $routeMatch);
@@ -895,7 +926,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $request = $this->setUpRequest('/foo/bar');
         $request->setQuery(new Parameters([ListVehicleSearch::FIELD_VEHICLE_SEARCH => [AbstractInputSearch::ELEMENT_INPUT_NAME => 'foo']]));
         $routeMatch = new RouteMatch([]);
-        $this->injectRemovedVehiclesQueryResultData($this->serviceManager, ['count' => 1, ['results' => []]]);
+        $this->injectRemovedVehiclesQueryResultData($this->serviceLocatorMock, ['count' => 1, ['results' => []]]);
 
         // Execute
         $result = (array) $this->sut->indexAction($request, $routeMatch)->getVariables();
@@ -906,43 +937,51 @@ class ListVehicleControllerTest extends MockeryTestCase
 
     protected function setUp(): void
     {
-        $this->setUpServiceManager();
-    }
-
-    public function setUpDefaultServices()
-    {
-        $this->serviceManager->setService(TableFactory::class, $this->setUpTableFactory());
-        $this->serviceManager->setService(TranslationHelperService::class, $this->setUpTranslator());
-        $this->serviceManager->setService(ResponseHelperService::class, $this->setUpResponseHelper());
-        $this->serviceManager->setService(FormHelperService::class, $this->setUpFormHelper());
-        $this->serviceManager->setService(FlashMessengerHelperService::class, $this->setUpFlashMessenger());
-        $this->serviceManager->setService(HandleCommand::class, $this->setUpCommandHandler());
-        $this->serviceManager->setService(HandleQuery::class, $this->setUpQueryHandler());
-        $this->urlHelper();
-        $this->serviceManager->setService(Redirect::class, $this->setUpRedirectHelper());
+        $this->commandHandlerMock = m::mock(HandleCommand::class);
+        $this->queryHandlerMock = m::mock(HandleQuery::class);
+        $this->translatorMock = m::mock(TranslationHelperService::class);
+        $this->urlHelperMock = m::mock(Url::class);
+        $this->responseHelperMock = m::mock(ResponseHelperService::class);
+        $this->tableFactoryMock = m::mock(TableFactory::class);
+        $this->formHelperMock = m::mock(FormHelperService::class);
+        $this->flashMessengerMock = m::mock(FlashMessengerHelperService::class);
+        $this->redirectHelperMock = m::mock(Redirect::class);
+        $this->serviceLocatorMock = m::mock(ServiceLocatorInterface::class);
     }
 
     protected function setUpSut()
     {
-        $factory = new ListVehicleControllerFactory();
-        $dispatcher = $factory->__invoke($this->serviceManager, ListVehicleController::class);
-        $this->sut = $dispatcher->getDelegate();
+        $this->setUpTranslator();
+        $this->setUpQueryHandler();
+        $this->setUpTableFactory();
+        $this->setUpFormHelper();
+        $this->urlHelper();
+
+        $this->sut = new ListVehicleController(
+            $this->commandHandlerMock,
+            $this->queryHandlerMock,
+            $this->translatorMock,
+            $this->urlHelperMock,
+            $this->responseHelperMock,
+            $this->tableFactoryMock,
+            $this->formHelperMock,
+            $this->flashMessengerMock,
+            $this->redirectHelperMock
+        );
     }
 
     /**
-     * @return HandleQuery
      */
-    protected function setUpQueryHandler(): HandleQuery
+    protected function setUpQueryHandler()
     {
         $instance = m::mock(HandleQuery::class);
-        $instance->shouldIgnoreMissing();
-        $instance->shouldReceive('__invoke')->andReturn($this->setUpQueryResponse())->byDefault();
-        $instance->shouldReceive('__invoke')->with(IsInstanceOf::anInstanceOf(Licence::class))->andReturnUsing(function ($query) {
+        $this->queryHandlerMock->shouldIgnoreMissing();
+        $this->queryHandlerMock->shouldReceive('__invoke')->andReturn($this->setUpQueryResponse())->byDefault();
+        $this->queryHandlerMock->shouldReceive('__invoke')->with(IsInstanceOf::anInstanceOf(Licence::class))->andReturnUsing(function ($query) {
             $licenceData = $this->setUpDefaultLicenceData();
             $licenceData['id'] = $query->getId();
             return $this->setUpQueryResponse($licenceData);
         })->byDefault();
-        return $instance;
     }
 
     /**
@@ -974,17 +1013,14 @@ class ListVehicleControllerTest extends MockeryTestCase
         return $instance;
     }
 
-    /**
-     * @return TableFactory
-     */
-    protected function setUpTableFactory(): TableFactory
+
+    protected function setUpTableFactory()
     {
         $instance = m::mock(TableFactory::class);
-        $instance->shouldIgnoreMissing();
-        $instance->shouldReceive('prepareTable', 'getTableBuilder')->andReturnUsing(function () {
+        $this->tableFactoryMock->shouldIgnoreMissing();
+        $this->tableFactoryMock->shouldReceive('prepareTable', 'getTableBuilder')->andReturnUsing(function () {
             return $this->setUpTableBuilder();
         })->byDefault();
-        return $instance;
     }
 
     /**
@@ -1012,17 +1048,13 @@ class ListVehicleControllerTest extends MockeryTestCase
         return $tableBuilder;
     }
 
-    /**
-     * @return MockInterface
-     */
-    protected function setUpTranslator(): MockInterface
+    protected function setUpTranslator()
     {
-        $instance = m::mock(TranslationHelperService::class);
-        $instance->shouldIgnoreMissing('');
-        $instance->shouldReceive('translate')->andReturnUsing(function ($val) {
+        $this->translatorMock->shouldIgnoreMissing('');
+        $this->translatorMock->shouldReceive('translate')->andReturnUsing(function ($val) {
             return $val;
         })->byDefault();
-        $instance->shouldReceive('translateReplace')->andReturnUsing(function ($message, $params) {
+        $this->translatorMock->shouldReceive('translateReplace')->andReturnUsing(function ($message, $params) {
             return $message . ':' . json_encode($params);
         })->byDefault();
 
@@ -1030,22 +1062,13 @@ class ListVehicleControllerTest extends MockeryTestCase
         $baseTranslator->shouldReceive('translate')->andReturnUsing(function ($val) {
             return $val;
         })->byDefault();
-        $instance->shouldReceive('getTranslator')->andReturn($baseTranslator)->byDefault();
-
-        return $instance;
+        $this->translatorMock->shouldReceive('getTranslator')->andReturn($baseTranslator)->byDefault();
     }
 
-    /**
-     * @return MockInterface|Url
-     */
-    protected function urlHelper(): MockInterface
+
+    protected function urlHelper()
     {
-        if (! $this->serviceManager->has(Url::class)) {
-            $instance = m::mock(Url::class);
-            $instance->shouldIgnoreMissing('');
-            $this->serviceManager->setService(Url::class, $instance);
-        }
-        return $this->serviceManager->get(Url::class);
+        $this->urlHelperMock->shouldIgnoreMissing('');
     }
 
     /**
@@ -1058,24 +1081,17 @@ class ListVehicleControllerTest extends MockeryTestCase
         return $instance;
     }
 
-    /**
-     * @return FormHelperService
-     */
-    protected function setUpFormHelper(): FormHelperService
+    protected function setUpFormHelper()
     {
-        $instance = m::mock(FormHelperService::class);
-        $instance->shouldIgnoreMissing();
+        $this->formHelperMock->shouldIgnoreMissing();
 
         $mockForm = $this->setUpForm();
-        $instance->shouldReceive('createForm')->andReturn($mockForm)->byDefault();
+        $this->formHelperMock->shouldReceive('createForm')->andReturn($mockForm)->byDefault();
 
         // Mock search form by default
         $searchForm = $this->setUpForm();
         $any = IsAnything::anything();
-        $instance->shouldReceive('createForm')->with(ListVehicleSearch::class, $any, $any)->andReturn($searchForm)->byDefault();
-
-
-        return $instance;
+        $this->formHelperMock->shouldReceive('createForm')->with(ListVehicleSearch::class, $any, $any)->andReturn($searchForm)->byDefault();
     }
 
     /**
@@ -1106,8 +1122,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     {
         $any = IsAnything::anything();
         $tableBuilder = $this->setUpTableBuilder();
-        $tableFactory = $this->resolveMockService($serviceLocator, TableFactory::class);
-        $tableFactory->shouldReceive('prepareTable')->with($tableName, $data ?? $any, $params ?? $any)->once()->andReturn($tableBuilder);
+        $this->tableFactoryMock->shouldReceive('prepareTable')->with($tableName, $data ?? $any, $params ?? $any)->once()->andReturn($tableBuilder);
         return $tableBuilder;
     }
 
@@ -1156,8 +1171,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     protected function injectRemovedVehiclesQueryResultData(ServiceLocatorInterface $serviceLocator, array $queryResultData)
     {
         $removedVehiclesQueryResponse = $this->setUpQueryResponse($queryResultData);
-        $queryHandler = $this->resolveMockService($serviceLocator, HandleQuery::class);
-        $queryHandler->shouldReceive('__invoke')->withArgs(function ($query) {
+        $this->queryHandlerMock->shouldReceive('__invoke')->withArgs(function ($query) {
             return $query instanceof Vehicles && $query->getIncludeActive() === false;
         })->andReturns($removedVehiclesQueryResponse)->byDefault();
     }

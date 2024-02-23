@@ -11,31 +11,68 @@ use Common\Form\FormValidator;
 use Common\Service\Cqrs\Response as QueryResponse;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\ResponseHelperService;
-use Common\Test\MockeryTestCase;
-use Common\Test\MocksServicesTrait;
 use Common\View\Helper\Panel;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence;
 use Hamcrest\Core\IsInstanceOf;
+use Interop\Container\Containerinterface;
 use Laminas\Form\Annotation\AnnotationBuilder;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
+use Laminas\Mvc\Controller\PluginManager;
 use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\Mvc\Controller\Plugin\Url;
 use Laminas\Router\Http\RouteMatch;
-use Laminas\ServiceManager\ServiceManager;
 use Laminas\Stdlib\Parameters;
 use Laminas\View\Model\ViewModel;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
 use Olcs\Controller\Licence\Vehicle\ListVehicleController;
 use Olcs\Controller\Licence\Vehicle\SwitchBoardController;
-use Olcs\Controller\Licence\Vehicle\SwitchBoardControllerFactory;
 use Olcs\Form\Model\Form\Vehicle\SwitchBoard;
 use Olcs\Session\LicenceVehicleManagement;
 
 class SwitchBoardControllerTest extends MockeryTestCase
 {
-    use MocksServicesTrait;
+    /**
+     * @var FlashMessenger
+     */
+    private $flashMessengerMock;
+
+    /**
+     * @var FormHelperService
+     */
+    private $formHelperMock;
+
+    /**
+     * @var HandleQuery
+     */
+    private $queryHandlerMock;
+
+    /**
+     * @var Redirect
+     */
+    private $redirectHelperMock;
+
+    /**
+     * @var ResponseHelperService
+     */
+    private $responseHelperMock;
+
+    /**
+     * @var LicenceVehicleManagement
+     */
+    private $sessionMock;
+
+    /**
+     * @var Url
+     */
+    private $urlHelperMock;
+
+    /**
+     * @var FormValidator
+     */
+    private $formValidatorMock;
 
     protected const VEHICLES_ROUTE = ['lva-licence/vehicles', [], [], true];
     protected const A_DECISION_VALUE = 'A_DECISION_VALUE';
@@ -56,14 +93,16 @@ class SwitchBoardControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_IsCallable
      */
     public function indexAction_ReturnsViewModel()
     {
         // Setup
         $this->setUpSut();
         $routeMatch = new RouteMatch([]);
-
+        // Define Expectations
+        $this->flashMessengerMock->shouldReceive('hasMessages')->withAnyArgs();
+        $this->flashMessengerMock->shouldReceive('getMessages')->withAnyArgs();
+        $this->urlHelperMock->shouldReceive('fromRoute')->withAnyArgs();
         // Execute
         $result = $this->sut->indexAction(new Request(), $routeMatch);
 
@@ -73,7 +112,6 @@ class SwitchBoardControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_ReturnsViewModel
      */
     public function indexAction_ReturnsViewModel_WithPanel_WhenFlashMessageHasPanelNamespace()
     {
@@ -82,8 +120,9 @@ class SwitchBoardControllerTest extends MockeryTestCase
         $routeMatch = new RouteMatch([]);
 
         // Define Expectations
-        $flashMessenger = $this->resolveMockService($this->serviceManager, FlashMessenger::class);
-        $flashMessenger->shouldReceive('getMessages')
+        $this->flashMessengerMock->shouldReceive('hasMessages')->withAnyArgs();
+        $this->urlHelperMock->shouldReceive('fromRoute')->withAnyArgs();
+        $this->flashMessengerMock->shouldReceive('getMessages')
             ->with('panel')
             ->andReturn(['title']);
 
@@ -101,7 +140,6 @@ class SwitchBoardControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_ReturnsViewModel_WithPanel_WhenFlashMessageHasPanelNamespace
      */
     public function indexAction_ReturnsViewModel_WithPanelBody_WhenFlashMessageHasPanelNamespaceSecondMessage()
     {
@@ -110,8 +148,9 @@ class SwitchBoardControllerTest extends MockeryTestCase
         $routeMatch = new RouteMatch([]);
 
         // Define Expectations
-        $flashMessenger = $this->resolveMockService($this->serviceManager, FlashMessenger::class);
-        $flashMessenger->shouldReceive('getMessages')
+        $this->flashMessengerMock->shouldReceive('hasMessages')->withAnyArgs();
+        $this->urlHelperMock->shouldReceive('fromRoute')->withAnyArgs();
+        $this->flashMessengerMock->shouldReceive('getMessages')
             ->with('panel')
             ->andReturn(['title', 'body']);
 
@@ -130,7 +169,6 @@ class SwitchBoardControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_ReturnsViewModel
      */
     public function indexAction_ReturnsViewModel_WithBackRouteToLicenceOverview()
     {
@@ -140,8 +178,9 @@ class SwitchBoardControllerTest extends MockeryTestCase
         $expectedUrl = 'licence/overview/link';
 
         // Define Expectations
-        $urlHelper = $this->resolveMockService($this->serviceManager, Url::class);
-        $urlHelper->shouldReceive('fromRoute')
+        $this->flashMessengerMock->shouldReceive('hasMessages')->withAnyArgs();
+        $this->flashMessengerMock->shouldReceive('getMessages')->withAnyArgs();
+        $this->urlHelperMock->shouldReceive('fromRoute')
             ->with(SwitchBoardController::ROUTE_LICENCE_OVERVIEW, [], [], true)
             ->andReturn($expectedUrl);
 
@@ -154,7 +193,6 @@ class SwitchBoardControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_ReturnsViewModel
      */
     public function indexAction_ReturnsViewModel_WithSwitchBoardForm()
     {
@@ -162,16 +200,18 @@ class SwitchBoardControllerTest extends MockeryTestCase
         $this->setUpSut();
         $routeMatch = new RouteMatch([]);
 
+        // Define Expectations
+        $this->flashMessengerMock->shouldReceive('hasMessages')->withAnyArgs();
+        $this->flashMessengerMock->shouldReceive('getMessages')->withAnyArgs();
+        $this->urlHelperMock->shouldReceive('fromRoute')->withAnyArgs();
         // Execute
         $result = $this->sut->indexAction(new Request(), $routeMatch);
-
         // Assert
         $this->assertInstanceOf(Form::class, $result->getVariable('form'));
     }
 
     /**
      * @test
-     * @depends indexAction_ReturnsViewModel_WithSwitchBoardForm
      */
     public function indexAction_SwitchBoardOnlyHasAdd_WhenLicenceHasNoVehicles()
     {
@@ -180,12 +220,14 @@ class SwitchBoardControllerTest extends MockeryTestCase
         $routeMatch = new RouteMatch([]);
 
         // Define expectations
+        $this->flashMessengerMock->shouldReceive('hasMessages')->withAnyArgs();
+        $this->flashMessengerMock->shouldReceive('getMessages')->withAnyArgs();
+        $this->urlHelperMock->shouldReceive('fromRoute')->withAnyArgs();
         $licenceData = $this->setUpDefaultLicenceData();
         $licenceData['activeVehicleCount'] = 0;
         $licenceData['totalVehicleCount'] = 0;
 
-        $queryHandler = $this->resolveMockService($this->serviceManager, HandleQuery::class);
-        $queryHandler->shouldReceive('__invoke')
+        $this->queryHandlerMock->shouldReceive('__invoke')
             ->with(IsInstanceOf::anInstanceOf(Licence::class))
             ->andReturn($this->setUpQueryResponse($licenceData));
 
@@ -205,7 +247,6 @@ class SwitchBoardControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_ReturnsViewModel
      */
     public function indexAction_SwitchBoardRemovesTransferOption_WhenLicenceIsNotMLH()
     {
@@ -214,11 +255,13 @@ class SwitchBoardControllerTest extends MockeryTestCase
         $routeMatch = new RouteMatch([]);
 
         // Define expectations
+        $this->flashMessengerMock->shouldReceive('hasMessages')->withAnyArgs();
+        $this->flashMessengerMock->shouldReceive('getMessages')->withAnyArgs();
+        $this->urlHelperMock->shouldReceive('fromRoute')->withAnyArgs();
         $licenceData = $this->setUpDefaultLicenceData();
         $licenceData['isMlh'] = false;
 
-        $queryHandler = $this->resolveMockService($this->serviceManager, HandleQuery::class);
-        $queryHandler->shouldReceive('__invoke')
+        $this->queryHandlerMock->shouldReceive('__invoke')
             ->with(IsInstanceOf::anInstanceOf(Licence::class))
             ->andReturn($this->setUpQueryResponse($licenceData));
 
@@ -234,7 +277,6 @@ class SwitchBoardControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_ReturnsViewModel
      */
     public function indexAction_SwitchBoardRemovesViewOptionButKeepsViewRemoved_WhenAllVehiclesHaveBeenRemoved()
     {
@@ -243,12 +285,14 @@ class SwitchBoardControllerTest extends MockeryTestCase
         $routeMatch = new RouteMatch([]);
 
         // Define expectations
+        $this->flashMessengerMock->shouldReceive('hasMessages')->withAnyArgs();
+        $this->flashMessengerMock->shouldReceive('getMessages')->withAnyArgs();
+        $this->urlHelperMock->shouldReceive('fromRoute')->withAnyArgs();
         $licenceData = $this->setUpDefaultLicenceData();
         $licenceData['activeVehicleCount'] = 0;
         $licenceData['totalVehicleCount'] = 1;
 
-        $queryHandler = $this->resolveMockService($this->serviceManager, HandleQuery::class);
-        $queryHandler->shouldReceive('__invoke')
+        $this->queryHandlerMock->shouldReceive('__invoke')
             ->with(IsInstanceOf::anInstanceOf(Licence::class))
             ->andReturn($this->setUpQueryResponse($licenceData));
 
@@ -264,7 +308,6 @@ class SwitchBoardControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_ReturnsViewModel
      */
     public function indexAction_SwitchBoardHasViewOptionRemovesViewRemoved_WhenNoVehiclesHaveBeenRemoved()
     {
@@ -273,12 +316,14 @@ class SwitchBoardControllerTest extends MockeryTestCase
         $routeMatch = new RouteMatch([]);
 
         // Define expectations
+        $this->flashMessengerMock->shouldReceive('hasMessages')->withAnyArgs();
+        $this->flashMessengerMock->shouldReceive('getMessages')->withAnyArgs();
+        $this->urlHelperMock->shouldReceive('fromRoute')->withAnyArgs();
         $licenceData = $this->setUpDefaultLicenceData();
         $licenceData['activeVehicleCount'] = 1;
         $licenceData['totalVehicleCount'] = 1;
 
-        $queryHandler = $this->resolveMockService($this->serviceManager, HandleQuery::class);
-        $queryHandler->shouldReceive('__invoke')
+        $this->queryHandlerMock->shouldReceive('__invoke')
             ->with(IsInstanceOf::anInstanceOf(Licence::class))
             ->andReturn($this->setUpQueryResponse($licenceData));
 
@@ -294,13 +339,12 @@ class SwitchBoardControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_IsCallable
      */
     public function indexAction_WithPost_ShouldReturnRedirectToIndexAction_WhenFormIsInvalid()
     {
         // Setup
         $this->setUpSut();
-        $this->formValidator()->allows('isValid')->andReturnUsing(function($form) {
+        $this->formValidatorMock->allows('isValid')->andReturnUsing(function ($form) {
             $form->isValid();
             return false;
         });
@@ -308,9 +352,14 @@ class SwitchBoardControllerTest extends MockeryTestCase
         $request = $this->setUpDecisionRequest(static::A_DECISION_VALUE);
 
         $routeMatch = new RouteMatch([]);
+        // Define expectations
+        $this->flashMessengerMock->shouldReceive('hasMessages')->withAnyArgs();
+        $this->flashMessengerMock->shouldReceive('addMessage')->withAnyArgs();
+        $this->flashMessengerMock->shouldReceive('addMessages')->withAnyArgs();
+        $this->flashMessengerMock->shouldReceive('getMessages')->withAnyArgs();
 
         // Expect
-        $this->redirectHelper()->expects('toRoute')->with(...static::VEHICLES_ROUTE)->andReturn($expectedResponse);
+        $this->redirectHelperMock->expects('toRoute')->with(...static::VEHICLES_ROUTE)->andReturn($expectedResponse);
 
         // Execute
         $result = $this->sut->indexAction($request, $routeMatch);
@@ -321,8 +370,6 @@ class SwitchBoardControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends      indexAction_IsCallable
-     * @depends      indexAction_ReturnsViewModel
      * @dataProvider indexAction_WithPost_ShouldRedirectToPage_DependantOnDecision_Provider
      */
     public function indexAction_WithPost_ShouldRedirectToPage_DependantOnDecision(string $request, int $activeVehicleCount, array $route)
@@ -332,8 +379,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
         $routeMatch = new RouteMatch([]);
 
         // Define expectations
-        $redirectHelper = $this->resolveMockService($this->serviceManager, Redirect::class);
-        $redirectHelper->expects('toRoute')
+        $this->redirectHelperMock->expects('toRoute')
             ->withArgs($route)
             ->andReturn($expectedResponse = new Response());
 
@@ -342,8 +388,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
         $licenceData['activeVehicleCount'] = $activeVehicleCount;
         $licenceData['totalVehicleCount'] = 1;
 
-        $queryHandler = $this->resolveMockService($this->serviceManager, HandleQuery::class);
-        $queryHandler->shouldReceive('__invoke')
+        $this->queryHandlerMock->shouldReceive('__invoke')
             ->with(IsInstanceOf::anInstanceOf(Licence::class))
             ->andReturn($this->setUpQueryResponse($licenceData));
 
@@ -427,77 +472,49 @@ class SwitchBoardControllerTest extends MockeryTestCase
 
     protected function setUp(): void
     {
-        $this->setUpServiceManager();
+        $this->flashMessengerMock = m::mock(FlashMessenger::class);
+        $this->formHelperMock  = m::mock(FormHelperService::class);
+        $this->queryHandlerMock  = m::mock(HandleQuery::class);
+        $this->redirectHelperMock  = m::mock(Redirect::class);
+        $this->responseHelperMock  = m::mock(ResponseHelperService::class);
+        $this->sessionMock  = new LicenceVehicleManagement();
+        $this->urlHelperMock  = m::mock(Url::class);
+        $this->formValidatorMock  = m::mock(FormValidator::class);
     }
 
-    /**
-     * @inheritDoc
-     */
-    protected function setUpDefaultServices(ServiceManager $serviceManager)
+    protected function setUpSut()
     {
-        $this->serviceManager->setService(FlashMessenger::class, $this->setUpMockService(FlashMessenger::class));
-        $this->serviceManager->setService(FormHelperService::class, $this->formHelper());
-        $this->serviceManager->setService(HandleQuery::class, $this->setupQueryHandler());
-        $this->serviceManager->setService(ResponseHelperService::class, $this->setUpMockService(ResponseHelperService::class));
-        $this->serviceManager->setService(Url::class, $this->setUpMockService(Url::class));
-        $this->serviceManager->setService(LicenceVehicleManagement::class, new LicenceVehicleManagement());
-        $this->redirectHelper();
+        // Create a mock container (similar to a service manager)
+        $this->formHelper();
+        $this->setupQueryHandler();
         $this->formValidator();
+
+        $this->sut = new SwitchBoardController(
+            $this->flashMessengerMock,
+            $this->formHelperMock,
+            $this->queryHandlerMock,
+            $this->redirectHelperMock,
+            $this->responseHelperMock,
+            $this->sessionMock,
+            $this->urlHelperMock,
+            $this->formValidatorMock
+        );
     }
 
-    /**
-     * @return SwitchBoardController
-     */
-    protected function setUpSut(): SwitchBoardController
+    protected function formValidator()
     {
-        $this->sut = (new SwitchBoardControllerFactory())->__invoke($this->serviceManager, SwitchBoardController::class)->getDelegate();
-        return $this->sut;
+        $this->formValidatorMock->allows('isValid')->andReturnUsing(function ($form) {
+            $form->isValid();
+            return true;
+        })->byDefault();
     }
 
-    /**
-     * @return MockInterface|Redirect
-     */
-    protected function redirectHelper(): MockInterface
+    protected function formHelper()
     {
-        if (! $this->serviceManager->has(Redirect::class)) {
-            $instance = $this->setUpMockService(Redirect::class);
-            $this->serviceManager->setService(Redirect::class, $instance);
-        }
-        return $this->serviceManager->get(Redirect::class);
-    }
-
-    /**
-     * @return MockInterface|FormValidator
-     */
-    protected function formValidator(): MockInterface
-    {
-        if (! $this->serviceManager->has(FormValidator::class)) {
-            $instance = $this->setUpMockService(FormValidator::class);
-            $instance->allows('isValid')->andReturnUsing(function ($form) {
-
-                $form->isValid();
-                return true;
-            })->byDefault();
-            $this->serviceManager->setService(FormValidator::class, $instance);
-        }
-        return $this->serviceManager->get(FormValidator::class);
-    }
-
-    /**
-     * @return MockInterface|FormHelperService
-     */
-    protected function formHelper(): MockInterface
-    {
-        if (! $this->serviceManager->has(FormHelperService::class)) {
-            $instance = $this->setUpMockService(FormHelperService::class);
-            $instance->shouldReceive('createForm')->andReturnUsing(function () {
-                $annotationBuilder = new AnnotationBuilder();
-                $form = $annotationBuilder->createForm(SwitchBoard::class);
-                return $form;
-            })->byDefault();
-            $this->serviceManager->setService(FormHelperService::class, $instance);
-        }
-        return $this->serviceManager->get(FormHelperService::class);
+        $this->formHelperMock->shouldReceive('createForm')->andReturnUsing(function () {
+            $annotationBuilder = new AnnotationBuilder();
+            return $annotationBuilder->createForm(SwitchBoard::class);
+        })->byDefault();
     }
 
     /**
@@ -514,13 +531,9 @@ class SwitchBoardControllerTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @return HandleQuery|m\LegacyMockInterface|MockInterface
-     */
     protected function setupQueryHandler()
     {
-        $instance = m::mock(HandleQuery::class);
-        $instance->shouldReceive('__invoke')
+        $this->queryHandlerMock->shouldReceive('__invoke')
             ->with(IsInstanceOf::anInstanceOf(Licence::class))
             ->andReturnUsing(function () {
                 return $this->setUpQueryResponse(
@@ -528,7 +541,6 @@ class SwitchBoardControllerTest extends MockeryTestCase
                 );
             })
             ->byDefault();
-        return $instance;
     }
 
     /**
@@ -551,9 +563,9 @@ class SwitchBoardControllerTest extends MockeryTestCase
         $request->setMethod(Request::METHOD_POST);
         $request->setPost(
             new Parameters([
-                    SwitchBoard::FIELD_OPTIONS_FIELDSET_NAME => [
-                        SwitchBoard::FIELD_OPTIONS_NAME => $value
-                    ]
+                SwitchBoard::FIELD_OPTIONS_FIELDSET_NAME => [
+                    SwitchBoard::FIELD_OPTIONS_NAME => $value
+                ]
             ])
         );
         return $request;
