@@ -82,7 +82,6 @@ jobs:
     name: Get latest app version
     needs:
       - orchestrator
-    if: ${{ needs.orchestrator.outputs.should-build-api || needs.orchestrator.outputs.should-build-selfserve || needs.orchestrator.outputs.should-build-internal }}
     runs-on: ubuntu-latest
     outputs:
       api: ${{ steps.api-version.outputs.version }}
@@ -146,7 +145,7 @@ jobs:
       - orchestrator
       - get-app-versions
       - app
-    if: ${{ needs.orchestrator.outputs.should-build-docker }}
+    if: ${{ always() && !cancelled() && !failure() && needs.orchestrator.outputs.should-build-docker }}
     strategy:
       fail-fast: false
       matrix:
