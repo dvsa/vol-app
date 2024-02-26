@@ -20,3 +20,22 @@
   display: block;
   position: relative;
 }
+
+.notification-count {
+  position: relative;
+  top: -0.1em;
+  margin-top: -0.5em;
+  width: 1.6em;
+  height: 1.6em;
+  border-radius: 50%;
+  background-color: #d4351c;
+  font-size: 0.8em;
+  display: inline-block;
+}
+
+.notification-count__number {
+  display: inline-block;
+  margin-top: 0.15em;
+  font-weight: bold;
+  color: white;
+}
