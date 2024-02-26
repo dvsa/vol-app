@@ -134,7 +134,7 @@ jobs:
     uses: ./.github/workflows/php.yaml
     with:
       project: ${{ matrix.project }}
-      should-upload-artefact: ${{ !needs.orchestrator.outputs.should-build-docker }}
+      should-upload-artefact: ${{ (!needs.orchestrator.outputs[format('should-build-{0}-docker', matrix.project)]) || false }}
       artefact-name: app-${{ matrix.project}}-${{ needs.get-app-versions.outputs[matrix.project] }}
     permissions:
       contents: read
@@ -161,7 +161,7 @@ jobs:
     with:
       project: ${{ matrix.project }}
       app-artefact-name: app-${{ matrix.project}}-${{ needs.get-app-versions.outputs[matrix.project] }}
-      should-upload-artefact-to-ecr: ${{ contains(github.event.pull_request.labels.*.name, 'deployed') }}
+      should-upload-artefact-to-ecr: false
     permissions:
       contents: read
       id-token: write

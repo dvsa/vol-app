@@ -110,6 +110,9 @@ jobs:
             tools: psalm
     # Remove once: https://dvsa.atlassian.net/browse/VOL-4787 & https://dvsa.atlassian.net/browse/VOL-4788 are resolved.
     continue-on-error: true
+    defaults:
+      run:
+        working-directory: app/${{ inputs.project }}
     env:
       # Temporary until this repository becomes a mono-repository: https://dvsa.atlassian.net/browse/VOL-4961.
       REMOTE_REPOSITORY: ${{ inputs.project == 'api' && 'dvsa/olcs-backend' || format('dvsa/olcs-{0}', inputs.project) }}
@@ -145,6 +148,9 @@ jobs:
       - test
       - static-analysis
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app/${{ inputs.project }}
     env:
       # Temporary until this repository becomes a mono-repository: https://dvsa.atlassian.net/browse/VOL-4961.
       REMOTE_REPOSITORY: ${{ inputs.project == 'api' && 'dvsa/olcs-backend' || format('dvsa/olcs-{0}', inputs.project) }}
