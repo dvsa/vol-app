@@ -107,10 +107,10 @@ jobs:
           project-path: app/internal
       - name: Add to summary
         run: |
-          echo "#### App versions:" >> $GITHUB_SUMMARY
-          echo "**API**: \`${{ steps.api-version.outputs.version }}\`" >> $GITHUB_SUMMARY
-          echo "**Selfserve**: \`${{ steps.selfserve-version.outputs.version }}\`" >> $GITHUB_SUMMARY
-          echo "**Internal**: \`${{ steps.internal-version.outputs.version }}\`" >> $GITHUB_SUMMARY
+          echo "#### App versions:" >> $GITHUB_STEP_SUMMARY
+          echo "**API**: \`${{ steps.api-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Selfserve**: \`${{ steps.selfserve-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Internal**: \`${{ steps.internal-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
 
   app:
     name: App
