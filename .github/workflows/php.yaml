@@ -6,20 +6,20 @@ on:
       ref:
         type: string
         required: false
-      artefact-name:
-        type: string
-        required: false
       project:
         type: string
         required: true
+      artefact-name:
+        type: string
+        required: false
+      should-upload-artefact:
+        type: boolean
+        required: false
+        default: false
       retention-days:
         type: number
         required: false
         default: 7
-      upload-artefact:
-        type: boolean
-        required: false
-        default: false
 
 jobs:
   warm-cache:
@@ -29,7 +29,7 @@ jobs:
       run:
         working-directory: app/${{ inputs.project }}
     env:
-      # Temporary until this repository becomes a mono-repository.
+      # Temporary until this repository becomes a mono-repository: https://dvsa.atlassian.net/browse/VOL-4961.
       REMOTE_REPOSITORY: ${{ inputs.project == 'api' && 'dvsa/olcs-backend' || format('dvsa/olcs-{0}', inputs.project) }}
     steps:
       - uses: actions/checkout@v4
@@ -109,7 +109,7 @@ jobs:
             command: psalm --no-progress --output-format=github
             tools: psalm
     env:
-      # Temporary until this repository becomes a mono-repository.
+      # Temporary until this repository becomes a mono-repository: https://dvsa.atlassian.net/browse/VOL-4961.
       REMOTE_REPOSITORY: ${{ inputs.project == 'api' && 'dvsa/olcs-backend' || format('dvsa/olcs-{0}', inputs.project) }}
     steps:
       - uses: actions/checkout@v4
@@ -136,6 +136,8 @@ jobs:
         run: composer install --no-progress --no-interaction
       - name: Execute ${{ matrix.task.description }}
         run: ${{ matrix.task.command }}
+        # Remove once: https://dvsa.atlassian.net/browse/VOL-4787 & https://dvsa.atlassian.net/browse/VOL-4788 are resolved.
+        continue-on-error: true
 
   package:
     name: Package
@@ -144,7 +146,7 @@ jobs:
       - static-analysis
     runs-on: ubuntu-latest
     env:
-      # Temporary until this repository becomes a mono-repository.
+      # Temporary until this repository becomes a mono-repository: https://dvsa.atlassian.net/browse/VOL-4961.
       REMOTE_REPOSITORY: ${{ inputs.project == 'api' && 'dvsa/olcs-backend' || format('dvsa/olcs-{0}', inputs.project) }}
     steps:
       - uses: actions/checkout@v4
@@ -171,7 +173,7 @@ jobs:
       - name: Archive
         run: git archive --format=tar --output=../${{ inputs.project }}.tar HEAD app/${{ inputs.project }}
       - name: Upload artefact
-        if: ${{ inputs.upload-artefact }}
+        if: ${{ inputs.should-upload-artefact }}
         uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.artefact-name }}

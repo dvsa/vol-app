@@ -12,9 +12,13 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       should-build-app: ${{ steps.changed-api-files.outputs.any_changed == 'true' || steps.changed-selfserve-files.outputs.any_changed == 'true' || steps.changed-internal-files.outputs.any_changed == 'true' || null }}
-      should-build-app-api: ${{ steps.changed-api-files.outputs.any_changed == 'true' || null }}
-      should-build-app-selfserve: ${{ steps.changed-selfserve-files.outputs.any_changed == 'true' || null }}
-      should-build-app-internal: ${{ steps.changed-internal-files.outputs.any_changed == 'true' || null }}
+      should-build-docker: ${{ steps.changed-api-docker-files.outputs.any_changed == 'true' || steps.changed-selfserve-docker-files.outputs.any_changed == 'true' || steps.changed-internal-docker-files.outputs.any_changed == 'true' || null }}
+      should-build-api: ${{ steps.changed-api-files.outputs.any_changed == 'true' || null }}
+      should-build-selfserve: ${{ steps.changed-selfserve-files.outputs.any_changed == 'true' || null }}
+      should-build-internal: ${{ steps.changed-internal-files.outputs.any_changed == 'true' || null }}
+      should-build-api-docker: ${{ steps.changed-api-docker-files.outputs.any_changed == 'true' || steps.changed-api-files.outputs.any_changed == 'true' || null }}
+      should-build-selfserve-docker: ${{ steps.changed-selfserve-docker-files.outputs.any_changed == 'true' || steps.changed-selfserve-files.outputs.any_changed == 'true' || null }}
+      should-build-internal-docker: ${{ steps.changed-internal-docker-files.outputs.any_changed == 'true' || steps.changed-internal-files.outputs.any_changed == 'true' || null }}
       should-build-docs: ${{ steps.changed-website-files.outputs.any_changed == 'true' || null }}
     steps:
       - uses: actions/checkout@v4
@@ -37,6 +41,23 @@ jobs:
         with:
           files: |
             app/internal/**
+      - uses: tj-actions/changed-files@v42
+        id: changed-api-docker-files
+        with:
+          files: |
+            infra/docker/api/**
+          # since_last_remote_commit: true
+      - uses: tj-actions/changed-files@v42
+        id: changed-selfserve-docker-files
+        with:
+          files: |
+            infra/docker/selfserve/**
+          # since_last_remote_commit: true
+      - uses: tj-actions/changed-files@v42
+        id: changed-internal-docker-files
+        with:
+          files: |
+            infra/docker/internal/**
           # since_last_remote_commit: true
       - uses: tj-actions/changed-files@v42
         id: changed-website-files
@@ -61,7 +82,7 @@ jobs:
     name: Get latest app version
     needs:
       - orchestrator
-    if: ${{ needs.orchestrator.outputs.should-build-app }}
+    if: ${{ needs.orchestrator.outputs.should-build-api || needs.orchestrator.outputs.should-build-selfserve || needs.orchestrator.outputs.should-build-internal }}
     runs-on: ubuntu-latest
     outputs:
       api: ${{ steps.api-version.outputs.version }}
@@ -84,6 +105,12 @@ jobs:
         uses: ./.github/actions/get-app-version
         with:
           project-path: app/internal
+      - name: Add to summary
+        run: |
+          echo "#### App versions:" >> $GITHUB_SUMMARY
+          echo "**API**: \`${{ steps.api-version.outputs.version }}\`" >> $GITHUB_SUMMARY
+          echo "**Selfserve**: \`${{ steps.selfserve-version.outputs.version }}\`" >> $GITHUB_SUMMARY
+          echo "**Internal**: \`${{ steps.internal-version.outputs.version }}\`" >> $GITHUB_SUMMARY
 
   app:
     name: App
@@ -92,7 +119,7 @@ jobs:
     needs:
       - orchestrator
       - get-app-versions
-    if: ${{ needs.orchestrator.outputs.should-build-app }}
+    if: ${{ needs.orchestrator.outputs.should-build-app || needs.orchestrator.outputs.should-build-docker }}
     strategy:
       fail-fast: false
       matrix:
@@ -101,14 +128,40 @@ jobs:
           - selfserve
           - internal
         exclude:
-          - project: ${{ needs.orchestrator.outputs.should-build-app-api && 'ignored' || 'api' }}
-          - project: ${{ needs.orchestrator.outputs.should-build-app-selfserve && 'ignored' || 'selfserve' }}
-          - project: ${{ needs.orchestrator.outputs.should-build-app-internal && 'ignored' || 'internal' }}
-    uses: ./.github/workflows/app.yaml
+          - project: ${{ (needs.orchestrator.outputs.should-build-api || needs.orchestrator.outputs.should-build-api-docker) && 'ignored' || 'api' }}
+          - project: ${{ (needs.orchestrator.outputs.should-build-selfserve || needs.orchestrator.outputs.should-build-selfserve-docker) && 'ignored' || 'selfserve' }}
+          - project: ${{ (needs.orchestrator.outputs.should-build-internal || needs.orchestrator.outputs.should-build-internal-docker) && 'ignored' || 'internal' }}
+    uses: ./.github/workflows/php.yaml
     with:
-      object-prefix: app-${{ matrix.project }}-${{ needs.get-app-versions.outputs[matrix.project] }}
       project: ${{ matrix.project }}
-      should-upload: ${{ contains(github.event.pull_request.labels.*.name, 'deployed') }}
+      should-upload-artefact: ${{ needs.orchestrator.outputs.should-build-docker }}
+      artefact-name: app-${{ matrix.project}}-${{ needs.get-app-versions.outputs[matrix.project] }}
+    permissions:
+      contents: read
+
+  docker:
+    name: Docker
+    needs:
+      - orchestrator
+      - get-app-versions
+      - app
+    if: ${{ needs.orchestrator.outputs.should-build-docker }}
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - api
+          - selfserve
+          - internal
+        exclude:
+          - project: ${{ needs.orchestrator.outputs.should-build-api-docker && 'ignored' || 'api' }}
+          - project: ${{ needs.orchestrator.outputs.should-build-selfserve-docker && 'ignored' || 'selfserve' }}
+          - project: ${{ needs.orchestrator.outputs.should-build-internal-docker && 'ignored' || 'internal' }}
+    uses: ./.github/workflows/docker.yaml
+    with:
+      project: ${{ matrix.project }}
+      app-artefact-name: app-${{ matrix.project}}-${{ needs.get-app-versions.outputs[matrix.project] }}
+      should-upload-artefact-to-ecr: ${{ contains(github.event.pull_request.labels.*.name, 'deployed') }}
     permissions:
       contents: read
       id-token: write
