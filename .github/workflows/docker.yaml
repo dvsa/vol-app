@@ -61,7 +61,7 @@ jobs:
           path: infra/docker/${{ inputs.project }}
       - uses: actions/download-artifact@v4
         with:
-          name: ${{ inputs.app-artefact-name }}
+          name: ${{ inputs.app-artefact-name }}.tar.gz
           path: app/${{ inputs.project }}
       - name: Build
         run: exit 0
