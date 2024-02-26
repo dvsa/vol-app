@@ -186,6 +186,6 @@ jobs:
         if: ${{ inputs.should-upload-artefact }}
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ inputs.artefact-name }}.tar.gz
-          path: app/${{ inputs.project }}
+          name: ${{ inputs.artefact-name }}
+          path: app/${{ inputs.project }}/${{ inputs.artefact-name }}.tar.gz
           retention-days: ${{ inputs.retention-days }}
