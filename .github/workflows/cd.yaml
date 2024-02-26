@@ -13,29 +13,11 @@ jobs:
     name: Orchestrator
     runs-on: ubuntu-latest
     outputs:
-      should-build-app-api: ${{ steps.changed-api-files.outputs.any_changed == 'true' || null }}
-      should-build-app-selfserve: ${{ steps.changed-selfserve-files.outputs.any_changed == 'true' || null }}
-      should-build-app-internal: ${{ steps.changed-internal-files.outputs.any_changed == 'true' || null }}
       should-deploy-docs: ${{ steps.changed-website-files.outputs.any_changed == 'true' || null }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: tj-actions/changed-files@v42
-        id: changed-api-files
-        with:
-          files: |
-            - app/api/**
-      - uses: tj-actions/changed-files@v42
-        id: changed-selfserve-files
-        with:
-          files: |
-            - app/selfserve/**
-      - uses: tj-actions/changed-files@v42
-        id: changed-internal-files
-        with:
-          files: |
-            - app/internal/**
       - uses: tj-actions/changed-files@v42
         id: changed-website-files
         with:
