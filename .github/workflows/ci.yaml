@@ -141,6 +141,8 @@ jobs:
 
   docker:
     name: Docker
+    concurrency:
+      group: docker-${{ matrix.project }}-${{ needs.get-app-versions.outputs[matrix.project] }}
     needs:
       - orchestrator
       - get-app-versions
