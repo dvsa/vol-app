@@ -100,10 +100,10 @@ jobs:
       matrix:
         task:
           - description: PHPStan
-            command: phpstan analyze --no-progress
+            command: phpstan analyze --no-progress -vvv --debug
             tools: phpstan
           - description: PHP CodeSniffer
-            command: phpcs -q
+            command: phpcs
             tools: phpcs
           - description: Psalm
             command: psalm --no-progress --output-format=github
