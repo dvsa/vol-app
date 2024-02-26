@@ -41,6 +41,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: "7.4"
+          coverage: none
           extensions: intl, pdo_mysql, redis, mbstring
       - name: Get composer cache directory
         id: composer-cache
@@ -75,6 +76,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: "7.4"
+          coverage: none
           extensions: intl, pdo_mysql, redis, mbstring
       - name: Get composer cache directory
         id: composer-cache
@@ -164,6 +166,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: "7.4"
+          coverage: none
           extensions: intl, pdo_mysql, redis, mbstring
       - name: Get composer cache directory
         id: composer-cache
