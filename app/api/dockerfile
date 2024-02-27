@@ -13,7 +13,7 @@ RUN apk add --no-cache \
 # Do we need Soffice, LPR and PDFUnite extensions based on VOL-4796 
 
 # opcache config file
-COPY ./conf/opcache.ini /etc/php7/conf.d/opcache.ini
+COPY ./conf/opcache.ini ${PHP_INI_DIR}/php.d/opcache.ini
 
 # nginx server config file
 COPY ./conf/nginx/api-server.conf /etc/nginx/conf.d/api-server.conf
@@ -22,7 +22,7 @@ COPY ./conf/nginx/api-server.conf /etc/nginx/conf.d/api-server.conf
 COPY . /var/www
 
 # Default command executed during container startup
-ENTRYPOINT ["supervisord"]
+ENTRYPOINT ["/bin/sh"]
 
 # Default startup command when container is launched
 CMD ["-c", "/etc/supervisord.conf", "-n"]

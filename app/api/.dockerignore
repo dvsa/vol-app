@@ -32,3 +32,6 @@ opcache.ini
 
 # Ignore any editor backup files
 *~
+
+# Dockerfile 
+Dockerfile
