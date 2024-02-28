@@ -54,7 +54,7 @@ OLCS.fileUpload = (function(document, $, undefined) {
     }
 
     var deleteResponse = OLCS.normaliseResponse(function(response) {
-      if (OLCS.modal.isVisible()) {
+      if (OLCS.modal.isVisible(true)) {
         OLCS.modal.updateBody(response.body);
       } else {
         F.render(mainBodySelector, response.body);
@@ -80,6 +80,7 @@ OLCS.fileUpload = (function(document, $, undefined) {
       var name           = $(container).data("group");
       var containerIndex = $(container).index(containerSelector);
       var sectionIdVal   = form.find("[name='sectionId']").val();
+      var correlationId  = form.find("[name='correlationId']").val();
       var security       = document.getElementById("security");
       var url            = form.attr("action") ? form.attr("action") : window.location.pathname;
       uploadInProgress = true;
@@ -127,6 +128,10 @@ OLCS.fileUpload = (function(document, $, undefined) {
 
       if (sectionIdVal) {
         fd.append("sectionId",sectionIdVal);
+      }
+
+      if (correlationId) {
+        fd.append("correlationId", correlationId);
       }
 
       fd.append(name + "[file]", file);

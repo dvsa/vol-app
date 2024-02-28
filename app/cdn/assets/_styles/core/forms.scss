@@ -313,6 +313,18 @@ input.govuk-input,
   }
 }
 
+td {
+  .file-uploader {
+    ul {
+      margin-left: 0;
+
+      li {
+        width: auto;
+      }
+    }
+  }
+}
+
 .attach-action {
 
   [type="file"] {
