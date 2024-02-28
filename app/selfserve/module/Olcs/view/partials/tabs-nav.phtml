@@ -7,6 +7,15 @@
         <?php echo $this->escapeHtml($this->translate($page->getLabel())); ?>
         <?php echo $page->get('count') ? '('.$page->get('count').')' : '';?>
         </a>
+        <?php if ($page->id == "dashboard-messaging" && $page->get('unreadMessageCount') > 0): ?>
+          <div class="notification-count">
+            <span class="notification-count__number">
+            <?php
+            echo $page->get('unreadMessageCount');
+            ?>
+            </span>
+          </div>
+        <?php endif; ?>
       </li>
     <?php endif; ?>
   <?php endforeach; ?>

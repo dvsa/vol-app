@@ -5,6 +5,7 @@ namespace Olcs\Controller\Listener;
 use Common\FeatureToggle;
 use Common\Rbac\User as RbacUser;
 use Common\Service\Cqrs\Query\QuerySender;
+use Dvsa\Olcs\Transfer\Query\Messaging\Messages\UnreadCountByOrganisationAndUser;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
@@ -168,6 +169,8 @@ class Navigation implements ListenerAggregateInterface
     {
         $this->navigation->findBy('id', 'dashboard-messaging')
             ->setVisible($shouldShowMessagesTab);
+
+        $this->addUnreadMessagingCount();
     }
 
     private function shouldShowMessagesTab(): bool
@@ -200,5 +203,27 @@ class Navigation implements ListenerAggregateInterface
     public function setGovUkReferers(array $govUkReferers): void
     {
         $this->govUkReferers = $govUkReferers;
+    }
+
+    public function getUnreadMessageCount(): int
+    {
+        $userOrganisationId = $this->identity->getUserData()['organisationUsers'][0]['organisation']['id'];
+
+        $unreadByOrganisation = $this->querySender->send(
+            UnreadCountByOrganisationAndUser::create(
+                [
+                    'organisation' => $userOrganisationId,
+                    'user' => $this->identity->getId(),
+                ]
+            )
+        );
+
+        return($unreadByOrganisation->getResult()['count'] ?? 0);
+    }
+
+    public function addUnreadMessagingCount(){
+        $this->navigation->findBy('id', 'dashboard-licences-applications')
+            ->findBy('id','dashboard-messaging')
+            ->set('unreadMessageCount', $this->getUnreadMessageCount());
     }
 }

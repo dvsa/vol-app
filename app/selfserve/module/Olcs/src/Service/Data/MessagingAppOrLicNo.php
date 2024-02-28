@@ -63,8 +63,7 @@ class MessagingAppOrLicNo extends AbstractListDataService
 
     private function prefixArrayKey(array &$array, string $prefix): void
     {
-        foreach ($array as $k => $v)
-        {
+        foreach ($array as $k => $v) {
             $array[$prefix . $k] = $v;
             unset($array[$k]);
         }

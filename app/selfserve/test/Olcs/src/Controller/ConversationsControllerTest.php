@@ -17,6 +17,7 @@ use Laminas\Http\Request;
 use Laminas\Http\Response as HttpResponse;
 use Laminas\Mvc\Controller\Plugin\Params;
 use Dvsa\Olcs\Transfer\Command\Messaging\Message\Create as CreateMessageCommand;
+use Laminas\Navigation\Navigation;
 use Laminas\View\Model\ViewModel;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
@@ -36,6 +37,7 @@ class ConversationsControllerTest extends TestCase
         $this->mockFlashMessengerHelper = m::mock(FlashMessengerHelperService::class)->makePartial();
         $this->mockTableFactory = m::mock(TableFactory::class)->makePartial();
         $this->mockFormHelperService = m::mock(FormHelperService::class)->makePartial();
+        $this->mockNavigation = m::mock(Navigation::class)->shouldIgnoreMissing();
         $this->mockForm = m::mock(Form::class);
         $this->mockParams = m::mock(Params::class);
 
@@ -49,6 +51,7 @@ class ConversationsControllerTest extends TestCase
         $this->setMockedProperties($reflectionClass, 'flashMessengerHelper', $this->mockFlashMessengerHelper);
         $this->setMockedProperties($reflectionClass, 'tableFactory', $this->mockTableFactory);
         $this->setMockedProperties($reflectionClass, 'formHelperService', $this->mockFormHelperService);
+        $this->setMockedProperties($reflectionClass, 'navigationService', $this->mockNavigation);
 
         $this->mockFormHelperService->shouldReceive('createForm')
                                     ->once()
@@ -119,6 +122,10 @@ class ConversationsControllerTest extends TestCase
                                    ['page' => 1, 'limit' => 10, 'conversation' => 1, 'query' => []],
                                )
                                ->andReturn($table);
+
+        $this->mockNavigation
+            ->shouldReceive('findBy->setActive')
+            ->once();
 
         $view = $this->sut->viewAction();
         $this->assertInstanceOf(ViewModel::class, $view);

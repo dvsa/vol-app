@@ -8,6 +8,7 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use Laminas\Navigation\Navigation;
 use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use LmcRbacMvc\Service\AuthorizationService;
@@ -25,6 +26,7 @@ class ConversationsControllerFactory implements FactoryInterface
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         $tableFactory = $container->get(TableFactory::class);
         $formHelperService = $container->get(FormHelperService::class);
+        $navigationService = $container->get(Navigation::class);
 
         return new ConversationsController(
             $niTextTranslationUtil,
@@ -32,6 +34,7 @@ class ConversationsControllerFactory implements FactoryInterface
             $flashMessengerHelper,
             $tableFactory,
             $formHelperService,
+            $navigationService
         );
     }
 }

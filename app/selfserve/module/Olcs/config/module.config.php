@@ -1081,6 +1081,13 @@ $applicationNavigation = array(
                     'id' => 'dashboard-messaging',
                     'label' => 'dashboard-nav-messaging',
                     'route' => 'conversations',
+                    'pages' => array(
+                        array(
+                            'id' => 'messaging-create-conversation',
+                            'label' => 'New Conversation',
+                            'route' => 'conversations/new',
+                        ),
+                    ),
                 ),
             ),
         ),
