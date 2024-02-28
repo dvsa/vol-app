@@ -22,6 +22,7 @@ OLCS.modal = (function(document, $, undefined) {
    */
   var selector  = '.modal';
   var wrapper   = '.modal__wrapper';
+  var noSessionWrapper   = 'div:not(#sessionTimeoutModal).modal__wrapper';
   var overlay   = '.overlay';
   var header    = '.modal__title';
   var content   = '.modal__content';
@@ -155,8 +156,9 @@ OLCS.modal = (function(document, $, undefined) {
 
   };
 
-  exports.isVisible = function() {
-    return $(wrapper).is(':visible');
+  exports.isVisible = function(ignoreSessionWindow) {
+    var relevantWrapper = ignoreSessionWindow === true ? noSessionWrapper : wrapper;
+    return $(relevantWrapper).is(':visible');
   };
 
   exports.updateBody = function(body) {
