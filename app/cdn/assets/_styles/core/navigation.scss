@@ -38,4 +38,16 @@
   margin-top: 0.15em;
   font-weight: bold;
   color: white;
+  text-align: center;
+  width: 100%;
+}
+
+.internal .horizontal-navigation .notification-count {
+  top: 1em;
+  left: -1em;
+}
+
+.internal .horizontal-navigation .current .notification-count {
+  top: 0.5em;
+  left: 0.3em;
 }
