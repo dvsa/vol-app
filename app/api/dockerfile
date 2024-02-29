@@ -1,19 +1,22 @@
 # installing the base image from ECR, tag is appended with v0.1 it may require discussion
-FROM $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/php-base:7.4.33-fpm-alpine3.16-v0.1
+# FROM $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/php-base:7.4.33-fpm-alpine3.16-v0.1
+
+FROM dvsa-base:latest
+
+USER root
 
 # Installing require pacakges
-RUN apk add --no-cache \
-        pdo_mysql \
-        redis \
-        intl \
-        igbinary \
-        opcache \
-        intl
+RUN apk add --update --no-cache icu-dev autoconf build-base && \
+    docker-php-ext-install pdo pdo_mysql opcache && \
+    docker-php-ext-configure intl && docker-php-ext-install intl && \
+# Install instruction in https://hub.docker.com/_/php
+    pecl install redis && \
+	docker-php-ext-enable redis
 
-# Do we need Soffice, LPR and PDFUnite extensions based on VOL-4796 
+USER www-data
 
 # opcache config file
-COPY ./conf/opcache.ini ${PHP_INI_DIR}/php.d/opcache.ini
+COPY ./conf/opcache/10-opcache.ini ${PHP_INI_DIR}/conf.d/10-opcache.ini
 
 # nginx server config file
 COPY ./conf/nginx/api-server.conf /etc/nginx/conf.d/api-server.conf
@@ -21,10 +24,7 @@ COPY ./conf/nginx/api-server.conf /etc/nginx/conf.d/api-server.conf
 # copy entire app directory excluding the content in dockerignore
 COPY . /var/www
 
-# Default command executed during container startup
-ENTRYPOINT ["/bin/sh"]
-
 # Default startup command when container is launched
-CMD ["-c", "/etc/supervisord.conf", "-n"]
+CMD ["supervisord", "-c", "/etc/supervisord.conf"]
 
 
