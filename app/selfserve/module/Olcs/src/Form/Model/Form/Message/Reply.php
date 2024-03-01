@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Olcs\Form\Model\Form\Message;
 
+use Common\Form\Model\Fieldset\MultipleFileUpload;
 use Laminas\Form\Annotation as Form;
 use Laminas\Form\Element\Hidden;
 use Olcs\Form\Model\Fieldset\Message\Reply as ReplyFieldset;
@@ -22,6 +23,12 @@ class Reply
      * @Form\Type(\Laminas\Form\Element\Hidden::class)
      */
     public ?Hidden $id = null;
+
+    /**
+     * @Form\Attributes({"value": ""})
+     * @Form\Type(\Laminas\Form\Element\Hidden::class)
+     */
+    public ?Hidden $correlationId = null;
 
     /**
      * @Form\Attributes({"value": "reply"})

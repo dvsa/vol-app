@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Olcs\Controller\Factory;
 
+use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Table\TableFactory;
@@ -27,6 +28,7 @@ class ConversationsControllerFactory implements FactoryInterface
         $tableFactory = $container->get(TableFactory::class);
         $formHelperService = $container->get(FormHelperService::class);
         $navigationService = $container->get(Navigation::class);
+        $uploadHolder = $container->get(FileUploadHelperService::class);
 
         return new ConversationsController(
             $niTextTranslationUtil,
@@ -34,7 +36,8 @@ class ConversationsControllerFactory implements FactoryInterface
             $flashMessengerHelper,
             $tableFactory,
             $formHelperService,
-            $navigationService
+            $navigationService,
+            $uploadHolder
         );
     }
 }

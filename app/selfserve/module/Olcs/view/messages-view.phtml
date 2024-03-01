@@ -21,7 +21,7 @@ echo $this->partial(
     ?>
 
     <?php if ($this->canReply): ?>
-      <details class="govuk-details" data-module="govuk-details">
+      <details class="govuk-details" data-module="govuk-details" <?php if ($this->openReply): ?>open<?php endif; ?>>
         <summary class="govuk-details__summary" aria-controls="details-content-operating-centre">
           <span class="govuk-details__summary-text">
               Send a reply

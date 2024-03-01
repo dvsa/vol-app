@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace Olcs\Controller;
 
+use Common\Category;
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Common\Controller\Lva\AbstractController;
 use Common\FeatureToggle;
 use Common\Form\Form;
+use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\Messaging\Conversation\Create;
 use Dvsa\Olcs\Transfer\Command\Messaging\Message\Create as CreateMessageCommand;
+use Dvsa\Olcs\Transfer\Query\Messaging\Documents;
 use Dvsa\Olcs\Transfer\Query\Messaging\Messages\ByConversation as ByConversationQuery;
 use Dvsa\Olcs\Transfer\Query\Messaging\Conversations\ByOrganisation as ByOrganisationQuery;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
@@ -36,6 +39,7 @@ class ConversationsController extends AbstractController implements ToggleAwareI
     protected TableFactory $tableFactory;
     protected FormHelperService $formHelperService;
     protected Navigation $navigationService;
+    protected FileUploadHelperService $uploadHelper;
 
     public function __construct(
         NiTextTranslation $niTextTranslationUtil,
@@ -43,12 +47,14 @@ class ConversationsController extends AbstractController implements ToggleAwareI
         FlashMessengerHelperService $flashMessengerHelper,
         TableFactory $tableFactory,
         FormHelperService $formHelperService,
-        Navigation $navigationService
+        Navigation $navigationService,
+        FileUploadHelperService $uploadHelper
     ) {
         $this->flashMessengerHelper = $flashMessengerHelper;
         $this->tableFactory = $tableFactory;
         $this->formHelperService = $formHelperService;
         $this->navigationService = $navigationService;
+        $this->uploadHelper = $uploadHelper;
 
         parent::__construct($niTextTranslationUtil, $authService);
     }
@@ -110,13 +116,17 @@ class ConversationsController extends AbstractController implements ToggleAwareI
     {
         $response = $this->handleCommand($this->mapFormDataToCommand($form));
         if (!$response->isOk()) {
-            $this->flashMessengerHelper->addErrorMessage('There was an server error when submitting your conversation; please try later');
+            $this->flashMessengerHelper->addErrorMessage(
+                'There was an server error when submitting your conversation; please try later',
+            );
             return $this->addAction();
         }
 
         $conversationId = $response->getResult()['id']['conversation'] ?? null;
         if (empty($conversationId)) {
-            $this->flashMessengerHelper->addErrorMessage('There was an server error when submitting your conversation; please try later');
+            $this->flashMessengerHelper->addErrorMessage(
+                'There was an server error when submitting your conversation; please try later',
+            );
             return $this->addAction();
         }
 
@@ -137,7 +147,7 @@ class ConversationsController extends AbstractController implements ToggleAwareI
 
         $appOrLicNoPrefix = substr($data['form-actions']['appOrLicNo'], 0, 1);
         $appOrLicNoSuffix = substr($data['form-actions']['appOrLicNo'], 1);
-        switch($appOrLicNoPrefix) {
+        switch ($appOrLicNoPrefix) {
             case MessagingAppOrLicNo::PREFIX_LICENCE:
                 $processedData['licence'] = $appOrLicNoSuffix;
                 break;
@@ -176,21 +186,25 @@ class ConversationsController extends AbstractController implements ToggleAwareI
         }
 
         $form = $this->formHelperService->createForm(ReplyForm::class, true, false);
+        $form->get('correlationId')->setValue(sha1(microtime()));
         $this->formHelperService->setFormActionFromRequest($form, $this->getRequest());
 
-        $table = $this->tableFactory
-            ->buildTable('messages-view', $messages, $params);
+        $table = $this->tableFactory->buildTable('messages-view', $messages, $params);
+
+        $canUploadFiles = $this->getCurrentOrganisation()['isMessagingFileUploadEnabled'];
 
         $view = new ViewModel(
             [
-                'table'    => $table,
-                'form'     => $form,
-                'canReply' => $canReply,
+                'table'          => $table,
+                'form'           => $form,
+                'canReply'       => $canReply,
+                'openReply'      => false,
+                'canUploadFiles' => $canUploadFiles,
             ],
         );
         $view->setTemplate('messages-view');
 
-        if ($this->getRequest()->isPost() && $this->params()->fromPost('action') === 'reply') {
+        if ($this->getRequest()->isPost()) {
             return $this->parseReply($view, $form);
         }
 
@@ -200,10 +214,21 @@ class ConversationsController extends AbstractController implements ToggleAwareI
     /** @return Response|ViewModel */
     protected function parseReply(ViewModel $view, Form $form)
     {
-        $form->setData((array)$this->params()->fromPost());
+        $form->setData((array)$this->getRequest()->getPost());
         $form->get('id')->setValue($this->params()->fromRoute('conversation'));
 
-        if (!$form->isValid()) {
+        $hasProcessedFiles = $this->processFiles(
+            $form,
+            'form-actions->file',
+            [$this, 'processFileUpload'],
+            [$this, 'deleteFile'],
+            [$this, 'getUploadedFiles'],
+            'form-actions->file->fileCount',
+        );
+
+        $view->setVariable('openReply', $hasProcessedFiles);
+
+        if ($hasProcessedFiles || $this->params()->fromPost('action') !== 'reply' || !$form->isValid()) {
             return $view;
         }
 
@@ -211,6 +236,7 @@ class ConversationsController extends AbstractController implements ToggleAwareI
             CreateMessageCommand::create(
                 [
                     'conversation'   => $this->params()->fromRoute('conversationId'),
+                    'correlationId'  => $this->getRequest()->getPost('correlationId'),
                     'messageContent' => $form->get('form-actions')->get('reply')->getValue(),
                 ],
             ),
@@ -224,5 +250,32 @@ class ConversationsController extends AbstractController implements ToggleAwareI
         $this->handleErrors($response->getResult());
 
         return parent::indexAction();
+    }
+
+    public function processFileUpload($file)
+    {
+        $dtoData = [
+            'category'              => Category::CATEGORY_LICENSING,
+            'subCategory'           => Category::DOC_SUB_CATEGORY_MESSAGING,
+            'description'           => $file['name'],
+            'isExternal'            => true,
+            'messagingConversation' => $this->params()->fromRoute('conversationId'),
+            'correlationId'         => $this->getRequest()->getPost('correlationId'),
+        ];
+
+        $this->uploadFile($file, $dtoData);
+    }
+
+    public function getUploadedFiles()
+    {
+        $params = [
+            'category'      => Category::CATEGORY_LICENSING,
+            'subCategory'   => Category::DOC_SUB_CATEGORY_MESSAGING,
+            'correlationId' => $this->getRequest()->getPost('correlationId'),
+        ];
+
+        $response = $this->handleQuery(Documents::create($params));
+
+        return $response->getResult();
     }
 }
