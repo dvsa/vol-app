@@ -18,7 +18,10 @@ class Reply
      *     "class": "extra-long",
      *     "maxlength": 1000
      * })
-     * @Form\Options({"label": "You can enter up to 1000 characters"})
+     * @Form\Options({
+     *     "label": "",
+     *     "hint": "You can enter up to 1000 characters"
+     * })
      * @Form\Required(true)
      * @Form\Type(Textarea::class)
      * @Form\Filter(StringTrim::class)

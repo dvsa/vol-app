@@ -7,6 +7,9 @@ namespace Olcs\Form\Model\Form\Message;
 use Laminas\Form\Annotation as Form;
 use Olcs\Form\Model\Fieldset\Message\Reply as ReplyFieldset;
 
+/**
+ * @Form\Type("Common\Form\Form")
+ */
 class Create
 {
     /**
