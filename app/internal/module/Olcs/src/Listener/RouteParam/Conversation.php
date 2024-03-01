@@ -8,6 +8,7 @@ use Common\Exception\ResourceNotFoundException;
 use Common\Service\Cqrs\Query\CachingQueryService as QueryService;
 use Dvsa\Olcs\Transfer\Query\Search\Licence as LicenceQuery;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
+use Laminas\Navigation\Navigation as SideNavigation;
 use Psr\Container\ContainerInterface;
 use Laminas\EventManager\EventInterface;
 use Olcs\Listener\RouteParams;
@@ -24,8 +25,9 @@ class Conversation implements ListenerAggregateInterface, FactoryInterface
 
     private AbstractContainer $sidebarNavigationService;
     private AnnotationBuilder $annotationBuilder;
-    private QueryService      $queryService;
-    private Navigation        $navigationPlugin;
+    private QueryService $queryService;
+    private Navigation $navigationPlugin;
+    private SideNavigation $sideNavigation;
 
     /** @param int $priority */
     public function attach(EventManagerInterface $events, $priority = 1): void
@@ -53,6 +55,21 @@ class Conversation implements ListenerAggregateInterface, FactoryInterface
         } else {
             $navigationPlugin->findBy('id', 'conversation_list_enable_messaging')->setVisible(false);
             $navigationPlugin->findBy('id', 'application_conversation_list_enable_messaging')->setVisible(false);
+            $this->showFileUploadButtons($licence);
+        }
+    }
+
+
+    protected function showFileUploadButtons(array $licence): void
+    {
+        $isFileUploadEnabled = $licence['organisation']['isMessagingFileUploadEnabled'];
+
+        if ($isFileUploadEnabled) {
+            $this->sideNavigation->findBy('id', 'licence-disable-file-uploads')->setVisible();
+            $this->sideNavigation->findBy('id', 'application-disable-file-uploads')->setVisible();
+        } else {
+            $this->sideNavigation->findBy('id', 'licence-enable-file-uploads')->setVisible();
+            $this->sideNavigation->findBy('id', 'application-enable-file-uploads')->setVisible();
         }
     }
 
@@ -73,6 +90,7 @@ class Conversation implements ListenerAggregateInterface, FactoryInterface
         $this->annotationBuilder = $container->get(AnnotationBuilder::class);
         $this->queryService = $container->get(QueryService::class);
         $this->navigationPlugin = $container->get('ViewHelperManager')->get('Navigation');
+        $this->sideNavigation = $container->get('right-sidebar');
 
         return $this;
     }
@@ -92,6 +110,11 @@ class Conversation implements ListenerAggregateInterface, FactoryInterface
         return $this->navigationPlugin;
     }
 
+    public function getSideNavigationPlugin(): SideNavigation
+    {
+        return $this->sideNavigation;
+    }
+
     public function setAnnotationBuilder(AnnotationBuilder $annotationBuilder): void
     {
         $this->annotationBuilder = $annotationBuilder;
@@ -105,5 +128,10 @@ class Conversation implements ListenerAggregateInterface, FactoryInterface
     public function setNavigationPlugin(Navigation $navigationPlugin): void
     {
         $this->navigationPlugin = $navigationPlugin;
+    }
+
+    public function setSideNavigationPlugin(SideNavigation $navigationPlugin): void
+    {
+        $this->sideNavigation = $navigationPlugin;
     }
 }

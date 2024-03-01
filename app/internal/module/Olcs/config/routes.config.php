@@ -763,6 +763,39 @@ $routes = [
                         ],
                         'may_terminate' => true,
                     ],
+                    'fileuploads' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'fileuploads/',
+                            'verb' => 'POST',
+                            'defaults' => [
+                                'controller' => \Olcs\Controller\Messages\EnableDisableFileUploadController::class,
+                            ],
+                        ],
+                        'may_terminate' => false,
+                        'child_routes' => [
+                            'enable' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => 'enable[/]',
+                                    'defaults' => [
+                                        'action' => 'enable',
+                                    ],
+                                ],
+                                'may_terminate' => true,
+                            ],
+                            'disable' => [
+                                'type' => 'segment',
+                                'options' => [
+                                    'route' => 'disable[/]',
+                                    'defaults' => [
+                                        'action' => 'disable',
+                                    ],
+                                ],
+                                'may_terminate' => true,
+                            ],
+                        ],
+                    ],
                     'new' => [
                         'type' => 'segment',
                         'options' => [
@@ -2667,6 +2700,38 @@ $routes['lva-application']['child_routes'] = array_merge(
                         ],
                     ],
                     'may_terminate' => true,
+                ],
+                'fileuploads' => [
+                    'type' => 'segment',
+                    'options' => [
+                        'route' => 'fileuploads/',
+                        'defaults' => [
+                            'controller' => \Olcs\Controller\Messages\EnableDisableFileUploadController::class,
+                        ],
+                    ],
+                    'may_terminate' => false,
+                    'child_routes' => [
+                        'enable' => [
+                            'type' => 'segment',
+                            'options' => [
+                                'route' => 'enable[/]',
+                                'defaults' => [
+                                    'action' => 'enable',
+                                ],
+                            ],
+                            'may_terminate' => true,
+                        ],
+                        'disable' => [
+                            'type' => 'segment',
+                            'options' => [
+                                'route' => 'disable[/]',
+                                'defaults' => [
+                                    'action' => 'disable',
+                                ],
+                            ],
+                            'may_terminate' => true,
+                        ],
+                    ],
                 ],
                 'new' => [
                     'type' => 'segment',

@@ -25,6 +25,22 @@ return [
                             'class' => 'govuk-button govuk-button--secondary js-modal-ajax'
                         ],
                         [
+                            'id' => 'licence-enable-file-uploads',
+                            'label' => 'Enable file uploads',
+                            'route' => 'licence/conversation/fileuploads/enable',
+                            'visible' => false,
+                            'use_route_match' => true,
+                            'class' => 'govuk-button govuk-button--secondary js-modal-ajax'
+                        ],
+                        [
+                            'id' => 'licence-disable-file-uploads',
+                            'label' => 'Disable file uploads',
+                            'route' => 'licence/conversation/fileuploads/disable',
+                            'visible' => false,
+                            'use_route_match' => true,
+                            'class' => 'govuk-button govuk-button--secondary js-modal-ajax'
+                        ],
+                        [
                             'id' => 'licence-quick-actions-print-licence',
                             'label' => 'Print licence',
                             'route' => 'print_licence',
@@ -376,6 +392,22 @@ return [
                             'use_route_match' => true,
                             'class' => 'govuk-button govuk-button--secondary',
                             'target' => '_blank',
+                        ],
+                        [
+                            'id' => 'application-enable-file-uploads',
+                            'label' => 'Enable file uploads',
+                            'route' => 'lva-application/conversation/fileuploads/enable',
+                            'visible' => false,
+                            'use_route_match' => true,
+                            'class' => 'govuk-button govuk-button--secondary js-modal-ajax'
+                        ],
+                        [
+                            'id' => 'application-disable-file-uploads',
+                            'label' => 'Disable file uploads',
+                            'route' => 'lva-application/conversation/fileuploads/disable',
+                            'visible' => false,
+                            'use_route_match' => true,
+                            'class' => 'govuk-button govuk-button--secondary js-modal-ajax'
                         ],
                         [
                             'id' => 'application-quick-actions-publish-application',

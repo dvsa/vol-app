@@ -312,6 +312,7 @@ return array(
             Olcs\Controller\Messages\ApplicationConversationListController::class   => Olcs\Controller\Factory\Messages\ApplicationConversationListControllerFactory::class,
             Olcs\Controller\Messages\LicenceConversationListController::class       => Olcs\Controller\Factory\Messages\LicenceConversationListControllerFactory::class,
             Olcs\Controller\Messages\ApplicationEnableDisableMessagingController::class => Olcs\Controller\Factory\Messages\ApplicationEnableDisableMessagingControllerFactory::class,
+            Olcs\Controller\Messages\EnableDisableFileUploadController::class => Olcs\Controller\Factory\Messages\EnableDisableFileUploadControllerFactory::class,
             Olcs\Controller\Messages\LicenceEnableDisableMessagingController::class => Olcs\Controller\Factory\Messages\LicenceEnableDisableMessagingControllerFactory::class,
             Olcs\Controller\Messages\ApplicationCreateConversationController::class => Olcs\Controller\Factory\Messages\ApplicationCreateConversationControllerFactory::class,
             Olcs\Controller\Messages\LicenceCreateConversationController::class     => Olcs\Controller\Factory\Messages\LicenceCreateConversationControllerFactory::class,
