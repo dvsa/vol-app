@@ -11,11 +11,54 @@ jobs:
     name: Orchestrator
     runs-on: ubuntu-latest
     outputs:
+      should-build-app: ${{ steps.changed-api-files.outputs.any_changed == 'true' || steps.changed-selfserve-files.outputs.any_changed == 'true' || steps.changed-internal-files.outputs.any_changed == 'true' || null }}
+      should-build-docker: ${{ steps.changed-api-docker-files.outputs.any_changed == 'true' || steps.changed-selfserve-docker-files.outputs.any_changed == 'true' || steps.changed-internal-docker-files.outputs.any_changed == 'true' || null }}
+      should-build-api: ${{ steps.changed-api-files.outputs.any_changed == 'true' || null }}
+      should-build-selfserve: ${{ steps.changed-selfserve-files.outputs.any_changed == 'true' || null }}
+      should-build-internal: ${{ steps.changed-internal-files.outputs.any_changed == 'true' || null }}
+      should-build-api-docker: ${{ steps.changed-api-docker-files.outputs.any_changed == 'true' || steps.changed-api-files.outputs.any_changed == 'true' || null }}
+      should-build-selfserve-docker: ${{ steps.changed-selfserve-docker-files.outputs.any_changed == 'true' || steps.changed-selfserve-files.outputs.any_changed == 'true' || null }}
+      should-build-internal-docker: ${{ steps.changed-internal-docker-files.outputs.any_changed == 'true' || steps.changed-internal-files.outputs.any_changed == 'true' || null }}
       should-build-docs: ${{ steps.changed-website-files.outputs.any_changed == 'true' || null }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - uses: tj-actions/changed-files@v42
+        id: changed-api-files
+        with:
+          files: |
+            app/api/**
+          # since_last_remote_commit: true
+      - uses: tj-actions/changed-files@v42
+        id: changed-selfserve-files
+        with:
+          files: |
+            app/selfserve/**
+          # since_last_remote_commit: true
+      - uses: tj-actions/changed-files@v42
+        id: changed-internal-files
+        with:
+          files: |
+            app/internal/**
+      - uses: tj-actions/changed-files@v42
+        id: changed-api-docker-files
+        with:
+          files: |
+            infra/docker/api/**
+          # since_last_remote_commit: true
+      - uses: tj-actions/changed-files@v42
+        id: changed-selfserve-docker-files
+        with:
+          files: |
+            infra/docker/selfserve/**
+          # since_last_remote_commit: true
+      - uses: tj-actions/changed-files@v42
+        id: changed-internal-docker-files
+        with:
+          files: |
+            infra/docker/internal/**
+          # since_last_remote_commit: true
       - uses: tj-actions/changed-files@v42
         id: changed-website-files
         with:
@@ -34,3 +77,93 @@ jobs:
       deploy: false
     permissions:
       contents: write
+
+  get-app-versions:
+    name: Get latest app version
+    needs:
+      - orchestrator
+    runs-on: ubuntu-latest
+    outputs:
+      api: ${{ steps.api-version.outputs.version }}
+      selfserve: ${{ steps.selfserve-version.outputs.version }}
+      internal: ${{ steps.internal-version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - id: api-version
+        uses: ./.github/actions/get-app-version
+        with:
+          project-path: app/api
+      - id: selfserve-version
+        uses: ./.github/actions/get-app-version
+        with:
+          project-path: app/selfserve
+      - id: internal-version
+        uses: ./.github/actions/get-app-version
+        with:
+          project-path: app/internal
+      - name: Add to summary
+        run: |
+          echo "#### App versions:" >> $GITHUB_STEP_SUMMARY
+          echo "**API**: \`${{ steps.api-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Selfserve**: \`${{ steps.selfserve-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Internal**: \`${{ steps.internal-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+
+  app:
+    name: App
+    concurrency:
+      group: app-${{ matrix.project }}-${{ needs.get-app-versions.outputs[matrix.project] }}
+    needs:
+      - orchestrator
+      - get-app-versions
+    if: ${{ needs.orchestrator.outputs.should-build-app || needs.orchestrator.outputs.should-build-docker }}
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - api
+          - selfserve
+          - internal
+        exclude:
+          - project: ${{ (needs.orchestrator.outputs.should-build-api || needs.orchestrator.outputs.should-build-api-docker) && 'ignored' || 'api' }}
+          - project: ${{ (needs.orchestrator.outputs.should-build-selfserve || needs.orchestrator.outputs.should-build-selfserve-docker) && 'ignored' || 'selfserve' }}
+          - project: ${{ (needs.orchestrator.outputs.should-build-internal || needs.orchestrator.outputs.should-build-internal-docker) && 'ignored' || 'internal' }}
+    uses: ./.github/workflows/php.yaml
+    with:
+      project: ${{ matrix.project }}
+      should-upload-artefact: ${{ !!needs.orchestrator.outputs[format('should-build-{0}-docker', matrix.project)] }}
+      artefact-name: app-${{ matrix.project}}-${{ needs.get-app-versions.outputs[matrix.project] }}
+      retention-days: 1
+    permissions:
+      contents: read
+
+  docker:
+    name: Docker
+    concurrency:
+      group: docker-${{ matrix.project }}-${{ needs.get-app-versions.outputs[matrix.project] }}
+    needs:
+      - orchestrator
+      - get-app-versions
+      - app
+    if: ${{ always() && !cancelled() && !failure() && needs.orchestrator.outputs.should-build-docker }}
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - api
+          - selfserve
+          - internal
+        exclude:
+          - project: ${{ needs.orchestrator.outputs.should-build-api-docker && 'ignored' || 'api' }}
+          - project: ${{ needs.orchestrator.outputs.should-build-selfserve-docker && 'ignored' || 'selfserve' }}
+          - project: ${{ needs.orchestrator.outputs.should-build-internal-docker && 'ignored' || 'internal' }}
+    uses: ./.github/workflows/docker.yaml
+    with:
+      project: ${{ matrix.project }}
+      app-artefact-name: app-${{ matrix.project}}-${{ needs.get-app-versions.outputs[matrix.project] }}
+      should-upload-artefact-to-ecr: false
+    permissions:
+      contents: read
+      id-token: write
