@@ -6,25 +6,32 @@ FROM dvsa-base:latest
 USER root
 
 # Installing require pacakges
-RUN apk add --update --no-cache icu-dev autoconf build-base && \
-    docker-php-ext-install pdo pdo_mysql opcache && \
-    docker-php-ext-configure intl && docker-php-ext-install intl && \
-# Install instruction in https://hub.docker.com/_/php
-    pecl install redis && \
-	docker-php-ext-enable redis
+RUN apk add --update --no-cache && \
+  apk add --virtual build-dependencies icu-dev \
+                                      autoconf \
+                                      build-base && \
+  docker-php-ext-configure intl && \
+  docker-php-ext-install pdo_mysql \
+                        opcache \
+                        intl && \
+  pecl install redis \
+              igbinary && \
+	docker-php-ext-enable redis \ 
+                        igbinary
 
 USER www-data
 
 # opcache config file
-COPY ./conf/opcache/10-opcache.ini ${PHP_INI_DIR}/conf.d/10-opcache.ini
+COPY ./10-opcache.ini ${PHP_INI_DIR}/conf.d/10-opcache.ini
 
 # nginx server config file
-COPY ./conf/nginx/api-server.conf /etc/nginx/conf.d/api-server.conf
+COPY ./backend.conf /etc/nginx/conf.d/backend.conf
+
+# Configure php-fpm configs
+COPY ./zzz-www.conf /usr/local/etc/php-fpm.d/zzz-www.conf
 
 # copy entire app directory excluding the content in dockerignore
-COPY . /var/www
+# COPY . /var/www
 
 # Default startup command when container is launched
 CMD ["supervisord", "-c", "/etc/supervisord.conf"]
-
-
