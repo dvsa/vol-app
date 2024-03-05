@@ -3,23 +3,20 @@
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\FormServiceManager;
+use Common\Rbac\Service\Permission;
 use Common\Service\Helper\FormHelperService;
 use Laminas\Form\Form;
 use Common\FormService\Form\Lva\TypeOfLicence\ApplicationTypeOfLicence as CommonApplicationTypeOfLicence;
-use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * Application Type Of Licence
- */
 class ApplicationTypeOfLicence extends CommonApplicationTypeOfLicence
 {
     protected FormHelperService $formHelper;
-    protected AuthorizationService $authService;
+    protected Permission $permissionService;
     protected FormServiceManager $formServiceLocator;
 
-    public function __construct(FormHelperService $formHelper, AuthorizationService $authService, FormServiceManager $formServiceLocator)
+    public function __construct(FormHelperService $formHelper, Permission $permissionService, FormServiceManager $formServiceLocator)
     {
-        parent::__construct($formHelper, $authService, $formServiceLocator);
+        parent::__construct($formHelper, $permissionService, $formServiceLocator);
     }
 
     /**

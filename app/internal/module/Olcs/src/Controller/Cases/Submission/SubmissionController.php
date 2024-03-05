@@ -3,6 +3,7 @@
 namespace Olcs\Controller\Cases\Submission;
 
 use Common\Controller\Traits\GenericUpload;
+use Common\Rbac\Service\Permission;
 use Common\Service\Data\CategoryDataService;
 use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
@@ -19,7 +20,6 @@ use Dvsa\Olcs\Transfer\Command\Submission\StoreSubmissionSnapshot;
 use Dvsa\Olcs\Transfer\Command\Submission\UpdateSubmission as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Submission\Submission as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Submission\SubmissionList as ListDto;
-use Laminas\Mvc\MvcEvent;
 use Laminas\Navigation\Navigation;
 use Laminas\Stdlib\ArrayUtils;
 use Laminas\View\Model\ViewModel;
@@ -190,6 +190,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
     protected FileUploadHelperService $uploadHelper;
     protected array $configHelper;
     protected ViewRenderer $viewRenderer;
+    private Permission $permissionService;
 
     public function __construct(
         TranslationHelperService $translationHelper,
@@ -200,12 +201,14 @@ class SubmissionController extends AbstractInternalController implements Submiss
         array $configHelper,
         ViewRenderer $viewRenderer,
         Submission $submissionDataService,
+        Permission $permissionService,
         FileUploadHelperService $uploadHelper
     ) {
         $this->urlHelper = $urlHelper;
         $this->configHelper = $configHelper;
         $this->viewRenderer = $viewRenderer;
         $this->submissionDataService = $submissionDataService;
+        $this->permissionService = $permissionService;
         $this->uploadHelper = $uploadHelper;
 
         parent::__construct($translationHelper, $formHelper, $flashMessenger, $navigation);
@@ -435,8 +438,9 @@ class SubmissionController extends AbstractInternalController implements Submiss
 
                 $allSectionsRefData = $this->getAllSectionsRefData();
                 $submissionConfig = $this->getSubmissionConfig();
+                $isInternalReadOnly = $this->permissionService->isInternalReadOnly();
 
-                $readOnly = (bool)($printView || $data['isClosed']);
+                $readOnly = ($printView || $data['isClosed'] || $isInternalReadOnly);
                 $this->placeholder()->setPlaceholder(
                     'selectedSectionsArray',
                     $this->generateSelectedSectionsArray($data, $allSectionsRefData, $submissionConfig, $readOnly)
@@ -446,6 +450,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
                 $this->placeholder()->setPlaceholder('submissionConfig', $submissionConfig['sections']);
                 $this->placeholder()->setPlaceholder('submission', $data);
                 $this->placeholder()->setPlaceholder('readonly', $readOnly);
+                $this->placeholder()->setPlaceholder('isInternalReadOnly', $isInternalReadOnly);
             }
         }
     }

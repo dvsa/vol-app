@@ -8,6 +8,7 @@ $submissionConfig = $this->placeholder('submissionConfig')->getValue();
 
 $allSections = $this->placeholder('allSections')->getValue();
 $readonly = $this->placeholder('readonly')->getValue();
+$isInternalReadOnly = $this->placeholder('isInternalReadOnly')->getValue();
 
 $freetext = '';
 
@@ -41,7 +42,7 @@ foreach ($allSections as $sectionId => $sectionDescription) {
     }
 }
 $actions = [];
-if ($submission['canClose']) {
+if ($submission['canClose'] && !$isInternalReadOnly) {
     $params = ['case' => $submission['case']['id'], 'submission' => $submission['id'], 'action' => 'close'];
     $closeActionUrl = [
         'label' => 'Close submission',
@@ -51,7 +52,7 @@ if ($submission['canClose']) {
     ];
     array_push($actions, $closeActionUrl);
 }
-if ($submission['canReopen']) {
+if ($submission['canReopen'] && !$isInternalReadOnly) {
     $params = ['case' => $submission['case']['id'], 'submission' => $submission['id'], 'action' => 'reopen'];
     $closeActionUrl = [
         'label' => 'Reopen submission',
@@ -96,17 +97,20 @@ array_push($actions, [
         ]
     )
 ]);
-array_push($actions, [
+
+if (!$isInternalReadOnly) {
+  array_push($actions, [
     'label' => 'Create snapshot',
     'class' => 'govuk-button govuk-button--secondary',
     'url' => $this->url(
-        'submission', [
-            'case' => $case['id'],
-            'action' => 'snapshot',
-            'submission' => $submission['id']
-        ]
+      'submission', [
+        'case' => $case['id'],
+        'action' => 'snapshot',
+        'submission' => $submission['id']
+      ]
     )
-]);
+  ]);
+}
 
 //last submission
 echo $this->render('partials/read-only/header',

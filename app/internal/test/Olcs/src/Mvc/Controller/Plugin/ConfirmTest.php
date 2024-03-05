@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Mvc\Controller\Plugin;
 
+use Common\Rbac\Service\Permission;
 use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
@@ -12,16 +15,13 @@ use Laminas\View\Renderer\PhpRenderer as ViewRenderer;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Controller\Cases\Submission\SubmissionController;
+use Olcs\Mvc\Controller\Plugin\Confirm;
 use Olcs\Service\Data\Submission;
 
-/**
- * Class ComfirmPluginTest
- *
- * @package OlcsTest\Mvc\Controller\Plugin
- */
 class ConfirmTest extends TestCase
 {
     protected $sut;
+    private $permissionService;
     public function setUp(): void
     {
 
@@ -33,6 +33,7 @@ class ConfirmTest extends TestCase
         $this->configHelper = array();
         $this->viewRenderer = m::mock(ViewRenderer::class);
         $this->submissionService = m::mock(Submission::class);
+        $this->permissionService = m::mock(Permission::class);
         $this->uploadHelper = m::mock(FileUploadHelperService::class);
         $this->sut = m::mock(SubmissionController::class, [
             $this->translationHelper,
@@ -43,6 +44,7 @@ class ConfirmTest extends TestCase
             $this->configHelper,
             $this->viewRenderer,
             $this->submissionService,
+            $this->permissionService,
             $this->uploadHelper
         ])->makePartial();
     }
@@ -50,9 +52,9 @@ class ConfirmTest extends TestCase
      * @group        confirmPlugin
      * @dataProvider dpTestInvokeGenerateForm
      */
-    public function testInvokeGenerateForm($confirmLabel, $cancelLabel, $defaultLabelParams)
+    public function testInvokeGenerateForm($confirmLabel, $cancelLabel, $defaultLabelParams): void
     {
-        $plugin = new \Olcs\Mvc\Controller\Plugin\Confirm();
+        $plugin = new Confirm();
         $this->configHelper = array();
         $mockFormCustomLabels = m::mock('Laminas\Form\Form')
             ->shouldReceive('getAttribute')
@@ -112,7 +114,7 @@ class ConfirmTest extends TestCase
         $this->assertInstanceOf('\Laminas\View\Model\ViewModel', $result);
     }
 
-    public function dpTestInvokeGenerateForm()
+    public function dpTestInvokeGenerateForm(): array
     {
         return [
             ['Continue', 'Cancel', true],
@@ -123,9 +125,9 @@ class ConfirmTest extends TestCase
     /**
      * @group confirmPlugin
      */
-    public function testInvokeProcessForm()
+    public function testInvokeProcessForm(): void
     {
-        $plugin = new \Olcs\Mvc\Controller\Plugin\Confirm();
+        $plugin = new Confirm();
 
         $mockForm = m::mock('Laminas\Form\Form');
         $mockForm->shouldReceive('setData')->withAnyArgs()->andReturn($mockForm);
@@ -164,9 +166,9 @@ class ConfirmTest extends TestCase
     /**
      * @group confirmPlugin
      */
-    public function testInvokeProcessInvalidForm()
+    public function testInvokeProcessInvalidForm(): void
     {
-        $plugin = new \Olcs\Mvc\Controller\Plugin\Confirm();
+        $plugin = new Confirm();
 
         $mockForm = m::mock('Laminas\Form\Form');
         $mockForm->shouldReceive('setData')->withAnyArgs()->andReturn($mockForm);

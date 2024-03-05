@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Cases\Submission;
 
+use Common\Rbac\Service\Permission;
 use Common\Service\Data\PluginManager;
 use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
@@ -39,7 +40,7 @@ class SubmissionControllerFactory implements FactoryInterface
         assert($viewRenderer instanceof ViewRenderer);
 
         $submissionDataService = $container->get(PluginManager::class)->get(Submission::class);
-
+        $permissionService = $container->get(Permission::class);
         $uploadHelper = $container->get(FileUploadHelperService::class);
 
         return new SubmissionController(
@@ -51,6 +52,7 @@ class SubmissionControllerFactory implements FactoryInterface
             $configHelper,
             $viewRenderer,
             $submissionDataService,
+            $permissionService,
             $uploadHelper
         );
     }

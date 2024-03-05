@@ -31,7 +31,7 @@ class FormSaveCancelPreview
      * })
      * @Form\Options({
      *     "label": "Cancel",
-     *     "keepForReadonly": true,
+     *     "keepForReadOnly": true,
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */
@@ -45,7 +45,7 @@ class FormSaveCancelPreview
      * })
      * @Form\Options({
      *     "label": "Preview",
-     *     "keepForReadonly": true,
+     *     "keepForReadOnly": true,
      * })
      * @Form\Type("\Common\Form\Elements\InputFilters\ActionButton")
      */

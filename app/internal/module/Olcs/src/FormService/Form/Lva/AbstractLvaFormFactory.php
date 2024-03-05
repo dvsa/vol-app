@@ -3,6 +3,7 @@
 namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\FormServiceManager;
+use Common\Rbac\Service\Permission;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Helper\UrlHelperService;
@@ -222,9 +223,9 @@ class AbstractLvaFormFactory implements AbstractFactoryInterface
                 $formServiceLocator = $serviceLocator->get(FormServiceManager::class);
                 return new LicenceTypeOfLicence($formHelper, $authService, $formServiceLocator);
             case self::FORM_SERVICE_CLASS_ALIASES['lva-application-type-of-licence']:
-                $authService = $serviceLocator->get(AuthorizationService::class);
+                $permissionService = $serviceLocator->get(Permission::class);
                 $formServiceLocator = $serviceLocator->get(FormServiceManager::class);
-                return new ApplicationTypeOfLicence($formHelper, $authService, $formServiceLocator);
+                return new ApplicationTypeOfLicence($formHelper, $permissionService, $formServiceLocator);
             case self::FORM_SERVICE_CLASS_ALIASES['lva-variation-type-of-licence']:
                 $authService = $serviceLocator->get(AuthorizationService::class);
                 $formServiceLocator = $serviceLocator->get(FormServiceManager::class);
