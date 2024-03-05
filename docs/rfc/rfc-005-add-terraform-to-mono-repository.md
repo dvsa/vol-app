@@ -93,5 +93,6 @@ This RFC will cover resources created with the following Terraform modules:
 
 -   https://github.com/terraform-aws-modules/terraform-aws-ecr
 -   https://github.com/terraform-aws-modules/terraform-aws-ecs
+-   https://github.com/terraform-aws-modules/terraform-aws-batch
 
 Any resources that support the above work can be included without requiring a new RFC. Subsequent RFCs can be created for larger collections of resources, such as networking or databases.
