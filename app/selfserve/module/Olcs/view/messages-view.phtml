@@ -20,6 +20,8 @@ echo $this->partial(
               ->setPartial('partials/tabs-nav');
     ?>
 
+    <h3><?php echo $this->subject; ?></h3>
+
     <?php if ($this->canReply): ?>
       <details class="govuk-details" data-module="govuk-details" <?php if ($this->openReply): ?>open<?php endif; ?>>
         <summary class="govuk-details__summary" aria-controls="details-content-operating-centre">

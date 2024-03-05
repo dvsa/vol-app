@@ -88,9 +88,16 @@ class ConversationsControllerTest extends TestCase
         $mockResponse->shouldReceive('getResult')
                      ->andReturn(
                          [
-                             'extra' => [
+                             'extra'       => [
                                  'conversation' => [
+                                     'subject'  => 'Banana',
                                      'isClosed' => true,
+                                 ],
+                                 'application' => [
+                                     'id' => 100000,
+                                 ],
+                                 'licence'     => [
+                                     'licNo' => 'OK1234',
                                  ],
                              ],
                          ],
