@@ -31,7 +31,7 @@ COPY ./backend.conf /etc/nginx/conf.d/backend.conf
 # Configure php-fpm configs
 COPY ./zzzz-www.conf /usr/local/etc/php-fpm.d/zzzz-www.conf
 
-# copy entire app directory excluding the content in dockerignore
+# place holder for copying application
 # COPY . /var/www
 
 # Default startup command when container is launched
