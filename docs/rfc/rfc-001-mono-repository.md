@@ -35,23 +35,24 @@ GitHub Action workflows will be designed to execute only on sub-projects with de
 
 -   Create a new repository named `vol-app`.
 -   Adopt a directory structure similar to the following:
-    ```
-    |__ `.github`
-    |       |__ `workflows/`
-    |            |__ `ci.yaml`
-    |            |__ `cd.yaml`
-    |__ `app`
-            |__ `api/`
-            |__ `internal/`
-            |__ `selfserve/`
-    |__ `infra` (optional)
-            |__ `terraform/`
-    |__ `vendor-bin/`
-            |__ `phpcs`
-            |__ `phpstan`
-            |__ `psalm`
-    |__ `.editorconfig`
-    |__ `docker-compose.yaml`
-    |__ ...
+    ```js
+    |-- `.github`
+    |       |-- `workflows/`
+    |       |    |-- `ci.yaml`
+    |       |    |-- `cd.yaml`
+    |-- `app`
+    |       |-- `api/`
+    |       |-- `internal/`
+    |       |-- `selfserve/`
+    |-- `infra`
+    |       |-- `terraform/` (Optional)
+    |       |-- `docker/`
+    |-- `vendor-bin/`
+    |       |-- `phpcs`
+    |       |-- `phpstan`
+    |       |-- `psalm`
+    |-- `.editorconfig`
+    |-- `docker-compose.yaml`
+    |-- ...
     ```
 -   Import repositories while retaining their git history for relevant commits during the merge.
