@@ -5,13 +5,17 @@ namespace Olcs\Controller;
 use Common\Controller\Traits as CommonTraits;
 use Common\Controller\Traits\GenericMethods;
 use Common\Controller\Traits\GenericRenderView;
+use Common\RefData;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Common\Util\FlashMessengerTrait;
+use Dvsa\Olcs\Transfer\Query\Messaging\Messages\UnreadCountByLicenceAndRoles;
 use Laminas\Mvc\Controller\AbstractActionController as LaminasAbstractActionController;
+use Laminas\Mvc\MvcEvent;
 use Laminas\View\HelperPluginManager;
 use Olcs\Controller\Traits as OlcsTraits;
+use Olcs\Logging\Log\Logger;
 
 /**
  * Abstract Controller

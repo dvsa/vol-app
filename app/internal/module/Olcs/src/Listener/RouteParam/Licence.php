@@ -5,9 +5,12 @@ namespace Olcs\Listener\RouteParam;
 use Common\Exception\DataServiceException;
 use Common\FeatureToggle;
 use Common\RefData;
+use Common\Service\Cqrs\Response;
 use Common\Service\Data\Surrender;
 use Common\View\Helper\PluginManagerAwareTrait as ViewHelperManagerAwareTrait;
 use Dvsa\Olcs\Transfer\Query\FeatureToggle\IsEnabled as IsEnabledQry;
+use Dvsa\Olcs\Transfer\Query\Messaging\Messages\UnreadCountByLicenceAndRoles;
+use Olcs\Logging\Log\Logger;
 use Psr\Container\ContainerInterface;
 use Laminas\EventManager\EventInterface;
 use Laminas\EventManager\EventManagerInterface;
@@ -155,6 +158,71 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         );
     }
 
+    /**
+     * Gets and applies the count to the 'Messages' navigation tab. This RouteParam is triggered from most other
+     * RouteParams (Application, Case, etc...).
+     *
+     * This has many checks and catches to prevent any errors from affecting the rest of internal as this code will
+     * be executed on most pages.
+     *
+     * As a result, errors will result in the counter dot appearing with a value of "E"; this is due to internal
+     * users may begin to rely on the visibility of the red counter dot appearing if there are new messages to be read
+     * and this ensures that they know that something is wrong, and that they should manually check.
+     *
+     * Any errors, although caught, displaying counter as "E" and moving on, will also result in a Logger::err().
+     *
+     * @param int $licence
+     * @return void
+     */
+    final public function fetchAndApplyUnreadConversationCountForLicenceToMessageTabs(int $licenceId, Navigation $navigationService): void
+    {
+        $query = UnreadCountByLicenceAndRoles::create([
+            'licence' => $licenceId,
+            'roles' => [
+                RefData::ROLE_SYSTEM_ADMIN,
+                RefData::ROLE_INTERNAL_ADMIN,
+                RefData::ROLE_INTERNAL_CASE_WORKER,
+                RefData::ROLE_INTERNAL_IRHP_ADMIN,
+                RefData::ROLE_INTERNAL_READ_ONLY,
+            ]
+        ]);
+
+        try {
+            /* @var Response $response */
+            $response = $this->getQueryService()->send($this->getAnnotationBuilderService()->createQuery($query));
+
+            if (!$response->isOk()) {
+                throw new \Exception(
+                    sprintf(
+                        'Received non-OK response: %s -- %s',
+                        $response->getStatusCode(),
+                        $response->getBody()
+                    )
+                );
+            }
+            $count = $response->getResult()['count'];
+        } catch (\Exception $e) {
+            $count = 'E';
+            Logger::err(
+                'Unable to get getUnreadConversationCountForLicence as non-OK response from UnreadCountByLicenceAndRoles query; defaulting to E',
+                [
+                    'query' => [
+                        'class' => get_class($query),
+                        'data' => $query->getArrayCopy(),
+                    ],
+                    'exception' => [
+                        'class' => get_class($e),
+                        'message' => $e->getMessage(),
+                        'trace' => $e->getTraceAsString(),
+                    ],
+                ]
+            );
+        }
+
+        $navigationService->findById('conversations')->set('unreadLicenceConversationCount', $count);
+        $navigationService->findById('application_conversations')->set('unreadLicenceConversationCount', $count);
+    }
+
     public function onLicence(EventInterface $e)
     {
         $routeParam = $e->getTarget();
@@ -186,7 +254,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         $licenceCategoryId = $licence['goodsOrPsv']['id'] ?? null;
         $navigationService = $this->getMainNavigationService();
 
-        $this->handleMessagingTabVisibility($licence, $navigationService);
+        $this->handleMessagingTabVisibility($licenceId, $navigationService);
 
         if ($licenceCategoryId === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
             $navigationService->findOneById('licence_bus')->setVisible(0);
@@ -559,16 +627,21 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
         return $this;
     }
 
-    private function handleMessagingTabVisibility($licence, $sidebarNav)
+    private function handleMessagingTabVisibility(int $licenceId, Navigation $navigationService): void
+    {
+        if ($this->isMessagingFeatureToggleEnabled()) {
+            $this->fetchAndApplyUnreadConversationCountForLicenceToMessageTabs($licenceId, $navigationService);
+        } else {
+            $navigationService->findById('conversations')->setVisible(0);
+            $navigationService->findById('application_conversations')->setVisible(0);
+        }
+    }
+
+    private function isMessagingFeatureToggleEnabled(): bool
     {
         $query = $this->getAnnotationBuilderService()->createQuery(
             IsEnabledQry::create(['ids' => [FeatureToggle::MESSAGING]])
         );
-        $isEnabled = $this->getQueryService()->send($query)->getResult()['isEnabled'];
-
-        if (!$isEnabled) {
-            $sidebarNav->findById('conversations')->setVisible(0);
-            $sidebarNav->findById('application_conversations')->setVisible(0);
-        }
+        return (bool)$this->getQueryService()->send($query)->getResult()['isEnabled'];
     }
 }

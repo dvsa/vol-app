@@ -4190,16 +4190,16 @@
         },
         {
             "name": "olcs/olcs-common",
-            "version": "v6.1.1",
+            "version": "v6.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dvsa/olcs-common.git",
-                "reference": "d41df68d432954432893acef7820b2bfb111d719"
+                "reference": "ac10aa245877287d298354c5ce14639e6cdf9f21"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/d41df68d432954432893acef7820b2bfb111d719",
-                "reference": "d41df68d432954432893acef7820b2bfb111d719",
+                "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/ac10aa245877287d298354c5ce14639e6cdf9f21",
+                "reference": "ac10aa245877287d298354c5ce14639e6cdf9f21",
                 "shasum": ""
             },
             "require": {
@@ -4257,9 +4257,9 @@
             "notification-url": "https://packagist.org/downloads/",
             "description": "Common library for the OLCS Project",
             "support": {
-                "source": "https://github.com/dvsa/olcs-common/tree/v6.1.1"
+                "source": "https://github.com/dvsa/olcs-common/tree/v6.2.1"
             },
-            "time": "2024-02-29T14:13:38+00:00"
+            "time": "2024-03-04T13:42:22+00:00"
         },
         {
             "name": "olcs/olcs-logging",
@@ -4316,16 +4316,16 @@
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "v6.2.1",
+            "version": "v6.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dvsa/olcs-transfer.git",
-                "reference": "a50522ac54115ef4f7c2ddabbda889f780ccd6e9"
+                "reference": "077a3c1f63fe2f08b4264234ab34641d9d7dff89"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dvsa/olcs-transfer/zipball/a50522ac54115ef4f7c2ddabbda889f780ccd6e9",
-                "reference": "a50522ac54115ef4f7c2ddabbda889f780ccd6e9",
+                "url": "https://api.github.com/repos/dvsa/olcs-transfer/zipball/077a3c1f63fe2f08b4264234ab34641d9d7dff89",
+                "reference": "077a3c1f63fe2f08b4264234ab34641d9d7dff89",
                 "shasum": ""
             },
             "require": {
@@ -4366,9 +4366,9 @@
             "notification-url": "https://packagist.org/downloads/",
             "description": "OLCS Transfer",
             "support": {
-                "source": "https://github.com/dvsa/olcs-transfer/tree/v6.2.1"
+                "source": "https://github.com/dvsa/olcs-transfer/tree/v6.3.0"
             },
-            "time": "2024-02-28T16:55:36+00:00"
+            "time": "2024-03-01T15:58:32+00:00"
         },
         {
             "name": "olcs/olcs-utils",
