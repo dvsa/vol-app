@@ -16,7 +16,10 @@ class LicenceMessageReply
      *     "class": "extra-long",
      *     "maxlength": 1000
      * })
-     * @Form\Options({"label": "You can enter up to 1000 characters"})
+     * @Form\Options({
+     *     "label": "You can enter up to 1000 characters",
+     *     "error-message": "Value is required and must be between 5 and 1000 characters."
+     * })
      * @Form\Required(true)
      * @Form\Type(\Laminas\Form\Element\Textarea::class)
      * @Form\Filter(\Laminas\Filter\StringTrim::class)

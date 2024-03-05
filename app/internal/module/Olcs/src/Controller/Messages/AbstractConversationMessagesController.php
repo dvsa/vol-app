@@ -113,6 +113,7 @@ abstract class AbstractConversationMessagesController
         $form->get('id')->setValue($this->params()->fromRoute('conversation'));
 
         if (!$form->isValid()) {
+            $this->placeholder()->setPlaceholder('open-reply', true);
             return parent::indexAction();
         }
 
