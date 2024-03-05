@@ -5,19 +5,22 @@ FROM dvsa-base:latest
 
 USER root
 
-# Installing require pacakges
+# Installing require dependencies
 RUN apk add --update --no-cache && \
-  apk add --virtual build-dependencies icu-dev \
-                                      autoconf \
-                                      build-base && \
-  docker-php-ext-configure intl && \
-  docker-php-ext-install pdo_mysql \
-                        opcache \
-                        intl && \
-  pecl install redis \
-              igbinary && \
-	docker-php-ext-enable redis \ 
-                        igbinary
+    apk add --virtual build-dependencies \
+                      icu-dev \
+                      autoconf \
+                      build-base && \
+    docker-php-ext-configure intl && \
+    docker-php-ext-install pdo_mysql \
+                           opcache \
+                           intl
+
+# Installing redis igbinary
+RUN pecl install igbinary && \
+    docker-php-ext-enable igbinary && \
+    pecl install -D 'enable-redis-igbinary="yes"' redis && \
+    docker-php-ext-enable redis
 
 USER www-data
 
@@ -28,7 +31,7 @@ COPY ./10-opcache.ini ${PHP_INI_DIR}/conf.d/10-opcache.ini
 COPY ./backend.conf /etc/nginx/conf.d/backend.conf
 
 # Configure php-fpm configs
-COPY ./zzz-www.conf /usr/local/etc/php-fpm.d/zzz-www.conf
+COPY ./zzzz-www.conf /usr/local/etc/php-fpm.d/zzzz-www.conf
 
 # copy entire app directory excluding the content in dockerignore
 # COPY . /var/www
