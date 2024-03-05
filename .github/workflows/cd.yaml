@@ -9,8 +9,26 @@ permissions:
   contents: read
 
 jobs:
+  release-please:
+    name: Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    outputs:
+      tag_name: ${{ steps.release.outputs.tag_name }}
+      release_created: ${{ steps.release.outputs.release_created }}
+    steps:
+      - uses: google-github-actions/release-please-action@v4
+        id: release
+        with:
+          release-type: node
+          target-branch: ${{ github.ref_name }}
+
   orchestrator:
     name: Orchestrator
+    needs:
+      - release-please
     runs-on: ubuntu-latest
     outputs:
       should-deploy-docs: ${{ steps.changed-website-files.outputs.any_changed == 'true' || null }}

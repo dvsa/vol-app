@@ -1,0 +1,39 @@
+name: Get app version
+
+inputs:
+  project-path:
+    description: The root path of the app project
+    required: true
+  ref:
+    description: The commit reference to use as a starting point for the version
+    required: true
+    default: "HEAD"
+
+outputs:
+  version:
+    description: The app version
+    value: ${{ steps.get-version.outputs.version }}
+
+runs:
+  using: "composite"
+  steps:
+    - id: get-version
+      shell: bash
+      run: |
+        LATEST_APP_COMMIT=$(git rev-list -1 --abbrev-commit ${{ inputs.ref }} -- ${{ inputs.project-path }})
+
+        COMMIT_RELEASE_VERSION=$(git describe --tags --abbrev=0 $LATEST_APP_COMMIT 2>/dev/null) || true
+
+        LATEST_RELEASE=$(git describe --tags --abbrev=0 ${{ inputs.reference }} 2>/dev/null) || true
+
+        if [[ $COMMIT_RELEASE_VERSION == $LATEST_RELEASE ]]; then
+          TAG=$(git describe --tags --exact-match $LATEST_APP_COMMIT 2>/dev/null) || true
+
+          if [[ -n $TAG ]]; then
+            echo "version=release/$TAG" >> $GITHUB_OUTPUT
+          else
+            echo "version=$LATEST_APP_COMMIT" >> $GITHUB_OUTPUT
+          fi
+        else
+          echo "version=release/$LATEST_RELEASE" >> $GITHUB_OUTPUT
+        fi
