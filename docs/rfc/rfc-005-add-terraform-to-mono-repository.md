@@ -18,7 +18,17 @@ Maintaining separate repositories necessitates duplicating GitHub Action workflo
 
 ## Proposal
 
-Building on the proposal from RFC-001, Terraform will be integrated into the mono repository to manage infrastructure as code, initially focusing on container-related resources.
+Building on the proposal from RFC-001, Terraform, limited to the scope below, will be integrated into the mono repository to manage infrastructure as code.
+
+### Scope
+
+This RFC will cover resources created with the following Terraform modules:
+
+-   https://github.com/terraform-aws-modules/terraform-aws-ecr
+-   https://github.com/terraform-aws-modules/terraform-aws-ecs
+-   https://github.com/terraform-aws-modules/terraform-aws-batch
+
+Any resources that support the above work can be included without requiring a new RFC. Subsequent RFCs should be created for larger collections of resources, such as networking or databases.
 
 ### Terraform Directory Structure
 
@@ -86,13 +96,3 @@ Terraform files will reside in the `infra/terraform` directory, organized as fol
 |       |       |       |-- ...
 |       |       |-- ...
 ```
-
-### Scope
-
-This RFC will cover resources created with the following Terraform modules:
-
--   https://github.com/terraform-aws-modules/terraform-aws-ecr
--   https://github.com/terraform-aws-modules/terraform-aws-ecs
--   https://github.com/terraform-aws-modules/terraform-aws-batch
-
-Any resources that support the above work can be included without requiring a new RFC. Subsequent RFCs can be created for larger collections of resources, such as networking or databases.
