@@ -14,7 +14,7 @@ The Terraform repository lacks automated versioning alignment with application c
 
 ### Duplication & Maintenance
 
-Maintaining separate repositories necessitates duplicating workflows across them to apply changes to both application and infrastructure. Each repository must check out code from the other, typically requiring the application code to utilize a Personal Access Token (PAT) for accessing private infrastructure code, adding to maintenance overhead.
+Maintaining separate repositories necessitates duplicating GitHub Action workflows across them to apply changes to both application and infrastructure. Each repository must also check out code from the other, typically requiring the application code to utilize a Personal Access Token (PAT) for accessing private infrastructure code, adding to maintenance overhead.
 
 ## Proposal
 
