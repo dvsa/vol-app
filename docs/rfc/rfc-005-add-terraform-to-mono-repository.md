@@ -28,12 +28,14 @@ Terraform files will reside in the `infra/terraform` directory, organized as fol
 |-- `terraform/`
 |       |-- `accounts/`
 |       |       |-- `nonprod/`
+|       |       |       |-- `backend.tf`
 |       |       |       |-- `main.tf`
 |       |       |       |-- `outputs.tf`
 |       |       |       |-- `provider.tf`
 |       |       |       |-- `variables.tf`
 |       |       |       |-- ...
 |       |       |-- `prod/`
+|       |       |       |-- `backend.tf`
 |       |       |       |-- `main.tf`
 |       |       |       |-- `outputs.tf`
 |       |       |       |-- `provider.tf`
@@ -41,24 +43,28 @@ Terraform files will reside in the `infra/terraform` directory, organized as fol
 |       |       |       |-- ...
 |       |-- `environments/`
 |       |       |-- `dev/`
+|       |       |       |-- `backend.tf`
 |       |       |       |-- `main.tf`
 |       |       |       |-- `outputs.tf`
 |       |       |       |-- `provider.tf`
 |       |       |       |-- `variables.tf`
 |       |       |       |-- ...
 |       |       |-- `int/`
+|       |       |       |-- `backend.tf`
 |       |       |       |-- `main.tf`
 |       |       |       |-- `outputs.tf`
 |       |       |       |-- `provider.tf`
 |       |       |       |-- `variables.tf`
 |       |       |       |-- ...
 |       |       |-- `prep/`
+|       |       |       |-- `backend.tf`
 |       |       |       |-- `main.tf`
 |       |       |       |-- `outputs.tf`
 |       |       |       |-- `provider.tf`
 |       |       |       |-- `variables.tf`
 |       |       |       |-- ...
 |       |       |-- `prod/`
+|       |       |       |-- `backend.tf`
 |       |       |       |-- `main.tf`
 |       |       |       |-- `outputs.tf`
 |       |       |       |-- `provider.tf`
