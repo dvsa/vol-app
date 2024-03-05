@@ -4,31 +4,26 @@ namespace Olcs\FormService\Form\Lva\TypeOfLicence;
 
 use Common\FormService\Form\Lva\TypeOfLicence\ApplicationTypeOfLicence as CommonLicenceTypeOfLicence;
 use Common\FormService\FormServiceManager;
+use Common\Rbac\Service\Permission;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\GuidanceHelperService;
 use Laminas\Form\Form;
-use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * Application Type Of Licence Form
- *
- * @author Alex Peshkov <alex.pehkov@valtech.co.uk>
- */
 class ApplicationTypeOfLicence extends CommonLicenceTypeOfLicence
 {
     protected FormHelperService $formHelper;
-    protected AuthorizationService $authService;
+    protected Permission $permissionService;
     protected GuidanceHelperService $guidanceHelper;
     protected FormServiceManager $formServiceLocator;
 
     public function __construct(
         FormHelperService $formHelper,
-        AuthorizationService $authService,
+        Permission $permissionService,
         GuidanceHelperService $guidanceHelper,
         FormServiceManager $formServiceLocator
     ) {
         $this->guidanceHelper = $guidanceHelper;
-        parent::__construct($formHelper, $authService, $formServiceLocator);
+        parent::__construct($formHelper, $permissionService, $formServiceLocator);
     }
     /**
      * Alter form

@@ -2,6 +2,7 @@
 
 namespace OlcsTest\FormService\Form\Lva\TypeOfLicence;
 
+use Common\Rbac\Service\Permission;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\GuidanceHelperService;
 use Laminas\Form\ElementInterface;
@@ -10,13 +11,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\TypeOfLicence\ApplicationTypeOfLicence;
 use Laminas\Form\Form;
 use Common\FormService\FormServiceManager;
-use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * Application Type of Licence Form Test
- *
- * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- */
 class ApplicationTypeOfLicenceTest extends MockeryTestCase
 {
     /**
@@ -27,17 +22,20 @@ class ApplicationTypeOfLicenceTest extends MockeryTestCase
     protected $fh;
 
     protected $fsm;
+    private $permission;
 
     public function setUp(): void
     {
         $this->fh = m::mock(FormHelperService::class)->makePartial();
         $this->guidanceHelper = m::mock(GuidanceHelperService::class);
         $this->fsm = m::mock(FormServiceManager::class)->makePartial();
-        $this->sut = new ApplicationTypeOfLicence($this->fh, m::mock(AuthorizationService::class), $this->guidanceHelper, $this->fsm);
+        $this->permission = m::mock(Permission::class);
+        $this->sut = new ApplicationTypeOfLicence($this->fh, $this->permission, $this->guidanceHelper, $this->fsm);
     }
 
-    public function testAlterForm()
+    public function testAlterForm(): void
     {
+        $this->permission->expects('isInternalReadOnly')->withNoArgs()->andReturnFalse();
 
         $mockForm = m::mock(Form::class)
             ->shouldReceive('get')
