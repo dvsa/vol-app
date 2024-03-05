@@ -20,6 +20,12 @@ echo $this->partial(
               ->setPartial('partials/tabs-nav');
     ?>
 
+    <div class="govuk-footer__heading">
+      <a href="<?php echo $this->backUrl; ?>" class="govuk-back-link">
+        <?php echo $this->translate('Back to conversations'); ?>
+      </a>
+    </div>
+
     <h3><?php echo $this->subject; ?></h3>
 
     <?php if ($this->canReply): ?>

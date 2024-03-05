@@ -103,6 +103,7 @@ class ConversationsController extends AbstractController implements ToggleAwareI
 
         $view = new ViewModel();
         $view->setVariable('form', $form);
+        $view->setVariable('backUrl', $this->url()->fromRoute('conversations'));
         $view->setTemplate('messages-new');
 
         return $view;
@@ -203,6 +204,7 @@ class ConversationsController extends AbstractController implements ToggleAwareI
                 'openReply'      => false,
                 'canUploadFiles' => $canUploadFiles,
                 'subject'        => $subject,
+                'backUrl'        => $this->url()->fromRoute('conversations'),
             ],
         );
         $view->setTemplate('messages-view');

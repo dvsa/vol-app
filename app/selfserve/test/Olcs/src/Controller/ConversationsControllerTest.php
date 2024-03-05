@@ -20,6 +20,7 @@ use Laminas\Http\Request;
 use Laminas\Http\Response as HttpResponse;
 use Laminas\Mvc\Controller\Plugin\Params;
 use Dvsa\Olcs\Transfer\Command\Messaging\Message\Create as CreateMessageCommand;
+use Laminas\Mvc\Controller\Plugin\Url;
 use Laminas\Navigation\Navigation;
 use Laminas\View\Model\ViewModel;
 use Mockery as m;
@@ -136,14 +137,24 @@ class ConversationsControllerTest extends TestCase
                      ],
                  );
 
+        $mockUrl = m::mock(Url::class);
+        $mockUrl->shouldReceive('fromRoute')
+                ->once()
+                ->with('conversations');
+
         $this->sut->shouldReceive('params')
                   ->andReturn($this->mockParams);
         $this->sut->shouldReceive('plugin')
                   ->with('handleQuery')
+                  ->once()
                   ->andReturn($mockHandleQuery);
         $this->sut->shouldReceive('plugin')
                   ->with('currentUser')
                   ->andReturn($mockUser);
+        $this->sut->shouldReceive('plugin')
+                  ->with('url')
+                  ->once()
+                  ->andReturn($mockUrl);
 
         $table = '<table/>';
 
