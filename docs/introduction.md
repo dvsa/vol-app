@@ -3,8 +3,16 @@ sidebar_position: 1
 slug: /
 ---
 
-# Overview
+# Introduction
 
-The VOL application documentation. This is a work-in-progress.
+The Vehicle Operator Licence (VOL) application documentation.
 
-The epic to create documentation is [here](https://dvsa.atlassian.net/browse/VOL-4970).
+This repository is a mono-repository, and contains the following:
+
+-   ![PHP](./assets/languages/php.svg) Application code (`/app`)
+-   ![Markdown](./assets/languages/markdown.svg) Documentation (`/docs`)
+-   ![Docker](./assets/languages/docker.svg) Application containers (`/infra/docker`)
+-   ![Terraform](./assets/languages/terraform.svg) Infrastructure As Code (`/infra/terraform`)
+-   ![TypeScript](./assets/languages/typescript.svg) Static site hosting the documentation (`/website`)
+
+The epic to expand documentation is [here](https://dvsa.atlassian.net/browse/VOL-4970).
