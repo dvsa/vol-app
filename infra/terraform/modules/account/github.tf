@@ -9,7 +9,7 @@ module "github" {
 
   oidc_role_policies = var.github_oidc_role_policies
 
-  subjects = [
-    "dvsa/vol-app:*",
+  repositories = [
+    "dvsa/vol-app",
   ]
 }

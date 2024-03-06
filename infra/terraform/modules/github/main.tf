@@ -1,7 +1,7 @@
 locals {
-  pull_request_subjects = [for subject in var.subjects : "${subject}:pull_request"]
+  pull_request_subjects = [for subject in var.repositories : "${subject}:pull_request"]
 
-  push_event_subjects = [for subject in var.subjects : "${subject}::ref:refs/heads/main"]
+  push_event_subjects = [for subject in var.repositories : "${subject}:ref:refs/heads/main"]
 }
 
 module "iam_github_oidc_provider" {
@@ -17,9 +17,9 @@ module "iam_github_oidc_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-role"
   version = "~> 5.24"
 
-  name = "github-actions-role"
+  name = "vol-app-github-actions-role"
 
-  subjects                 = var.push_event_subjects
+  subjects                 = local.push_event_subjects
   permissions_boundary_arn = var.oidc_role_permissions_boundary_arn
 
   policies = merge(var.oidc_role_policies, {
@@ -33,9 +33,9 @@ module "iam_github_oidc_readonly_role" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-role"
   version = "~> 5.24"
 
-  name = "github-actions-readonly-role"
+  name = "vol-app-github-actions-readonly-role"
 
-  subjects                 = var.pull_request_subjects
+  subjects                 = local.pull_request_subjects
   permissions_boundary_arn = var.oidc_role_permissions_boundary_arn
 
   policies = merge(var.oidc_role_policies, {

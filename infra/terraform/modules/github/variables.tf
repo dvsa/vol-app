@@ -1,6 +1,6 @@
-variable "subjects" {
+variable "repositories" {
   type        = list(string)
-  description = "The list of subjects to add to the OIDC role."
+  description = "The list of repositories to add to the OIDC role."
 }
 
 variable "create_oidc_provider" {
