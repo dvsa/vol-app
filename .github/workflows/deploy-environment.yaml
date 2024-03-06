@@ -88,7 +88,6 @@ jobs:
     # It is still possible to overwrite variables/secrets by using `format('ENV_{0}_SOME_VAR', inputs.environment)` - e.g. ENV_dev_VAR
     environment:
       name: ${{ (inputs.apply && !inputs.destroy) && (inputs.workspace || inputs.environment) || null }}
-      url: https://${{ fromJson(steps.terraform-output.outputs.json).domain_name }}
     outputs:
       terraform-output: ${{ steps.terraform-output.outputs.json }}
     env:
