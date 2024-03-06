@@ -24,14 +24,14 @@ jobs:
       should-build-docs: ${{ steps.changed-website-files.outputs.any_changed == 'true' || null }}
       # Terraform accounts
       should-plan-terraform-accounts: ${{ steps.changed-accounts-terraform-files.outputs.any_changed == 'true' || null }}
-      should-plan-nonprod-account-terraform: ${{ contains(steps.changed-accounts-terraform-files.outputs.all_changed_files, 'infra/terraform/accounts/nonprod') || null }}
-      should-plan-prod-account-terraform: ${{ contains(steps.changed-accounts-terraform-files.outputs.all_changed_files, 'infra/terraform/accounts/prod') || null }}
+      should-plan-nonprod-account-terraform: ${{ contains(steps.changed-environments-terraform-files.outputs.all_changed_files, 'infra/terraform/modules') || contains(steps.changed-accounts-terraform-files.outputs.all_changed_files, 'infra/terraform/accounts/nonprod') || null }}
+      should-plan-prod-account-terraform: ${{ contains(steps.changed-environments-terraform-files.outputs.all_changed_files, 'infra/terraform/modules') || contains(steps.changed-accounts-terraform-files.outputs.all_changed_files, 'infra/terraform/accounts/prod') || null }}
       # Terraform environments
       should-plan-terraform-environments: ${{ steps.changed-environments-terraform-files.outputs.any_changed == 'true' || null }}
-      should-plan-dev-environment-terraform: ${{ contains(steps.changed-environments-terraform-files.outputs.all_changed_files, 'infra/terraform/environments/dev') || null }}
-      should-plan-int-environment-terraform: ${{ contains(steps.changed-environments-terraform-files.outputs.all_changed_files, 'infra/terraform/environments/int') || null }}
-      should-plan-prep-environment-terraform: ${{ contains(steps.changed-environments-terraform-files.outputs.all_changed_files, 'infra/terraform/environments/prep') || null }}
-      should-plan-prod-environment-terraform: ${{ contains(steps.changed-environments-terraform-files.outputs.all_changed_files, 'infra/terraform/environments/prod') || null }}
+      should-plan-dev-environment-terraform: ${{ contains(steps.changed-environments-terraform-files.outputs.all_changed_files, 'infra/terraform/modules') || contains(steps.changed-environments-terraform-files.outputs.all_changed_files, 'infra/terraform/environments/dev') || null }}
+      should-plan-int-environment-terraform: ${{ contains(steps.changed-environments-terraform-files.outputs.all_changed_files, 'infra/terraform/modules') || contains(steps.changed-environments-terraform-files.outputs.all_changed_files, 'infra/terraform/environments/int') || null }}
+      should-plan-prep-environment-terraform: ${{ contains(steps.changed-environments-terraform-files.outputs.all_changed_files, 'infra/terraform/modules') || contains(steps.changed-environments-terraform-files.outputs.all_changed_files, 'infra/terraform/environments/prep') || null }}
+      should-plan-prod-environment-terraform: ${{ contains(steps.changed-environments-terraform-files.outputs.all_changed_files, 'infra/terraform/modules') || contains(steps.changed-environments-terraform-files.outputs.all_changed_files, 'infra/terraform/environments/prod') || null }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -87,8 +87,9 @@ jobs:
             infra/terraform/environments/{dev,int,prep,prod}/**
             infra/terraform/modules/**
           files_ignore: |
-            terraform/modules/account/**
-            terraform/modules/github/**
+            infra/terraform/modules/account/**
+            infra/terraform/modules/github/**
+            infra/terraform/modules/remote-state/**
           # since_last_remote_commit: true
       - uses: tj-actions/changed-files@v42
         id: changed-website-files
