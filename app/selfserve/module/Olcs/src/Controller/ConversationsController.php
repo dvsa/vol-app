@@ -261,7 +261,7 @@ class ConversationsController extends AbstractController implements ToggleAwareI
     {
         $dtoData = [
             'category'              => Category::CATEGORY_LICENSING,
-            'subCategory'           => Category::DOC_SUB_CATEGORY_MESSAGING,
+            'subCategory'           => Category::DOC_SUB_CATEGORY_OTHER_DOCUMENTS,
             'description'           => $file['name'],
             'isExternal'            => true,
             'messagingConversation' => $this->params()->fromRoute('conversationId'),
@@ -275,7 +275,7 @@ class ConversationsController extends AbstractController implements ToggleAwareI
     {
         $params = [
             'category'      => Category::CATEGORY_LICENSING,
-            'subCategory'   => Category::DOC_SUB_CATEGORY_MESSAGING,
+            'subCategory'   => Category::DOC_SUB_CATEGORY_OTHER_DOCUMENTS,
             'correlationId' => $this->getRequest()->getPost('correlationId'),
         ];
 
