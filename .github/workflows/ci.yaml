@@ -24,14 +24,14 @@ jobs:
       should-build-docs: ${{ steps.changed-website-files.outputs.any_changed == 'true' || null }}
       # Terraform accounts
       should-plan-terraform-accounts: ${{ steps.changed-accounts-terraform-files.outputs.any_changed == 'true' || null }}
-      should-plan-nonprod-account-terraform: ${{ contains(steps.changed-accounts-terraform-files.outputs.modified_files, 'infra/accounts/nonprod') || null }}
-      should-plan-prod-account-terraform: ${{ contains(steps.changed-accounts-terraform-files.outputs.modified_files, 'infra/accounts/prod') || null }}
+      should-plan-nonprod-account-terraform: ${{ contains(steps.changed-accounts-terraform-files.outputs.all_changed_files, 'infra/accounts/nonprod') || null }}
+      should-plan-prod-account-terraform: ${{ contains(steps.changed-accounts-terraform-files.outputs.all_changed_files, 'infra/accounts/prod') || null }}
       # Terraform environments
       should-plan-terraform-environments: ${{ steps.changed-environments-terraform-files.outputs.any_changed == 'true' || null }}
-      should-plan-dev-environment-terraform: ${{ contains(steps.changed-environments-terraform-files.outputs.modified_files, 'terraform/environments/dev') || null }}
-      should-plan-int-environment-terraform: ${{ contains(steps.changed-environments-terraform-files.outputs.modified_files, 'terraform/environments/int') || null }}
-      should-plan-prep-environment-terraform: ${{ contains(steps.changed-environments-terraform-files.outputs.modified_files, 'terraform/environments/prep') || null }}
-      should-plan-prod-environment-terraform: ${{ contains(steps.changed-environments-terraform-files.outputs.modified_files, 'terraform/environments/prod') || null }}
+      should-plan-dev-environment-terraform: ${{ contains(steps.changed-environments-terraform-files.outputs.all_changed_files, 'terraform/environments/dev') || null }}
+      should-plan-int-environment-terraform: ${{ contains(steps.changed-environments-terraform-files.outputs.all_changed_files, 'terraform/environments/int') || null }}
+      should-plan-prep-environment-terraform: ${{ contains(steps.changed-environments-terraform-files.outputs.all_changed_files, 'terraform/environments/prep') || null }}
+      should-plan-prod-environment-terraform: ${{ contains(steps.changed-environments-terraform-files.outputs.all_changed_files, 'terraform/environments/prod') || null }}
     steps:
       - uses: actions/checkout@v4
         with:
