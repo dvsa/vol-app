@@ -72,22 +72,23 @@ jobs:
             infra/docker/internal/**
           # since_last_remote_commit: true
       - uses: tj-actions/changed-files@v42
-        id: changed-environments-terraform-files
-        with:
-          files: |
-            terraform/environments/{dev,int,prep,prod}/**
-            terraform/modules/**
-          files_ignore: |
-            terraform/modules/account/**
-          # since_last_remote_commit: true
-      - uses: tj-actions/changed-files@v42
         id: changed-accounts-terraform-files
         with:
           files: |
-            terraform/accounts/**
-            terraform/modules/**
+            infra/terraform/accounts/**
+            infra/terraform/modules/**
           files_ignore: |
-            terraform/modules/service/**
+            infra/terraform/modules/service/**
+          # since_last_remote_commit: true
+      - uses: tj-actions/changed-files@v42
+        id: changed-environments-terraform-files
+        with:
+          files: |
+            infra/terraform/environments/{dev,int,prep,prod}/**
+            infra/terraform/modules/**
+          files_ignore: |
+            terraform/modules/account/**
+            terraform/modules/github/**
           # since_last_remote_commit: true
       - uses: tj-actions/changed-files@v42
         id: changed-website-files
