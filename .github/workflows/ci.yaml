@@ -211,7 +211,7 @@ jobs:
       matrix:
         account:
           - nonprod
-          - prod
+          #- prod
         exclude:
           - account: ${{ needs.orchestrator.outputs.should-plan-nonprod-account-terraform && 'ignored' || 'nonprod' }}
           - account: ${{ needs.orchestrator.outputs.should-plan-prod-account-terraform && 'ignored' || 'prod' }}
@@ -242,8 +242,8 @@ jobs:
         environment:
           - dev
           - int
-          - prep
-          - prod
+          #- prep
+          #- prod
         exclude:
           - environment: ${{ needs.orchestrator.outputs.should-plan-dev-environment-terraform && 'ignored' || 'dev' }}
           - environment: ${{ needs.orchestrator.outputs.should-plan-int-environment-terraform && 'ignored' || 'int' }}
