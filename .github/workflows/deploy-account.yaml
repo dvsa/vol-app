@@ -65,7 +65,7 @@ jobs:
       terraform-output: ${{ steps.terraform-output.outputs.json }}
     env:
       WORKING_DIR: infra/terraform/accounts/${{ inputs.account }}
-      AWS_OIDC_ROLE: ${{ vars[format('ACCOUNT_{0}_TF_OIDC_ROLE', inputs.account)] || vars.TF_OIDC_ROLE }}
+      AWS_OIDC_ROLE: ${{ vars[format('ACCOUNT_{0}_TF_OIDC{1}_ROLE', inputs.account, (inputs.apply && '' || '_READONLY'))] || vars.TF_OIDC_ROLE }}
       AWS_REGION: ${{ vars[format('ACCOUNT_{0}_TF_AWS_REGION', inputs.account)] || vars.TF_AWS_REGION }}
     defaults:
       run:
