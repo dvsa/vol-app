@@ -395,7 +395,50 @@ $nav = [
                             'use_route_match' => true,
                         ],
                     ]
-                ]
+                ],
+                [
+                    'id' => 'case_conversations',
+                    'tag' => 'messaging-menu',
+                    'visible' => false,
+                    'label' => 'Messages',
+                    'route' => 'case_conversation',
+                    'class' => 'govuk-link--no-visited-state',
+                    'use_route_match' => true,
+                    'pages' => [
+                        [
+                            'id' => 'case_conversations_list',
+                            'label' => 'Messages',
+                            'route' => 'case_conversation',
+                            'class' => 'govuk-link--no-visited-state',
+                            'use_route_match' => true,
+
+                        ],
+                        [
+                            'id' => 'case_new_conversation',
+                            'label' => 'New Conversation',
+                            'route' => 'case_conversation/new',
+                            'class' => 'govuk-link--no-visited-state',
+                            'use_route_match' => true,
+
+                        ],
+                        [
+                            'id' => 'case_conversation_list_disable_messaging',
+                            'label' => 'Disable Messaging',
+                            'route' => 'case_conversation/disable',
+                            'tag' => 'conversation_list_disable_messaging',
+                            'class' => 'govuk-link--no-visited-state',
+                            'use_route_match' => true,
+                        ],
+                        [
+                            'id' => 'case_conversation_list_enable_messaging',
+                            'label' => 'Enable Messaging',
+                            'route' => 'case_conversation/enable',
+                            'tag' => 'conversation_list_enable_messaging',
+                            'class' => 'govuk-link--no-visited-state',
+                            'use_route_match' => true,
+                        ]
+                    ],
+                ],
             ],
         ],
         [
@@ -613,6 +656,49 @@ $nav = [
                                         ],
                                     ]
                                 ],
+                                [
+                                    'id' => 'bus_conversations',
+                                    'tag' => 'messaging-menu',
+                                    'visible' => false,
+                                    'label' => 'Messages',
+                                    'route' => 'licence/bus_conversation',
+                                    'class' => 'govuk-link--no-visited-state',
+                                    'use_route_match' => true,
+                                    'pages' => [
+                                        [
+                                            'id' => 'bus_conversations_list',
+                                            'label' => 'Messages',
+                                            'route' => 'licence/bus_conversation',
+                                            'class' => 'govuk-link--no-visited-state',
+                                            'use_route_match' => true,
+
+                                        ],
+                                        [
+                                            'id' => 'bus_new_conversation',
+                                            'label' => 'New Conversation',
+                                            'route' => 'licence/bus_conversation/new',
+                                            'class' => 'govuk-link--no-visited-state',
+                                            'use_route_match' => true,
+
+                                        ],
+                                        [
+                                            'id' => 'bus_conversation_list_disable_messaging',
+                                            'label' => 'Disable Messaging',
+                                            'route' => 'licence/bus_conversation/disable',
+                                            'tag' => 'conversation_list_disable_messaging',
+                                            'class' => 'govuk-link--no-visited-state',
+                                            'use_route_match' => true,
+                                        ],
+                                        [
+                                            'id' => 'bus_conversation_list_enable_messaging',
+                                            'label' => 'Enable Messaging',
+                                            'route' => 'licence/bus_conversation/enable',
+                                            'tag' => 'conversation_list_enable_messaging',
+                                            'class' => 'govuk-link--no-visited-state',
+                                            'use_route_match' => true,
+                                        ]
+                                    ],
+                                ],
                             ]
                         ],
                         [
@@ -781,6 +867,47 @@ $nav = [
                                                 'id' => null
                                             ],
                                         ],
+                                        [
+                                            'id' => 'irhp_conversations',
+                                            'tag' => 'messaging-menu',
+                                            'visible' => false,
+                                            'label' => 'Messages',
+                                            'route' => 'licence/irhp-application-conversation',
+                                            'class' => 'govuk-link--no-visited-state',
+                                            'use_route_match' => true,
+                                            'pages' => [
+                                                [
+                                                    'id' => 'irhp_conversations_list',
+                                                    'label' => 'Messages',
+                                                    'route' => 'licence/irhp-application-conversation',
+                                                    'class' => 'govuk-link--no-visited-state',
+                                                    'use_route_match' => true,
+                                                ],
+                                                [
+                                                    'id' => 'irhp_new_conversation',
+                                                    'label' => 'New Conversation',
+                                                    'route' => 'licence/irhp-application-conversation/new',
+                                                    'class' => 'govuk-link--no-visited-state',
+                                                    'use_route_match' => true,
+                                                ],
+                                                [
+                                                    'id' => 'irhp_conversation_list_disable_messaging',
+                                                    'label' => 'Disable Messaging',
+                                                    'route' => 'licence/irhp-application-conversation/disable',
+                                                    'class' => 'govuk-link--no-visited-state',
+                                                    'tag' => 'conversation_list_disable_messaging',
+                                                    'use_route_match' => true,
+                                                ],
+                                                [
+                                                    'id' => 'irhp_conversation_list_enable_messaging',
+                                                    'label' => 'Enable Messaging',
+                                                    'route' => 'licence/irhp-application-conversation/enable',
+                                                    'class' => 'govuk-link--no-visited-state',
+                                                    'tag' => 'conversation_list_enable_messaging',
+                                                    'use_route_match' => true,
+                                                ]
+                                            ],
+                                        ],
                                     ],
                                 ],
                                 [
@@ -904,6 +1031,8 @@ $nav = [
                         ],
                         [
                             'id' => 'conversations',
+                            'tag' => 'messaging-menu',
+                            'visible' => false,
                             'label' => 'Messages',
                             'route' => 'licence/conversation',
                             'class' => 'govuk-link--no-visited-state',
@@ -929,6 +1058,7 @@ $nav = [
                                     'id' => 'conversation_list_disable_messaging',
                                     'label' => 'Disable Messaging',
                                     'route' => 'licence/conversation/disable',
+                                    'tag' => 'conversation_list_disable_messaging',
                                     'class' => 'govuk-link--no-visited-state',
                                     'use_route_match' => true,
                                 ],
@@ -936,6 +1066,7 @@ $nav = [
                                     'id' => 'conversation_list_enable_messaging',
                                     'label' => 'Enable Messaging',
                                     'route' => 'licence/conversation/enable',
+                                    'tag' => 'conversation_list_enable_messaging',
                                     'class' => 'govuk-link--no-visited-state',
                                     'use_route_match' => true,
                                 ]
@@ -1390,6 +1521,8 @@ $nav = [
                 ],
                 [
                     'id' => 'application_conversations',
+                    'tag' => 'messaging-menu',
+                    'visible' => false,
                     'label' => 'Messages',
                     'route' => 'lva-application/conversation',
                     'class' => 'govuk-link--no-visited-state',
@@ -1413,6 +1546,7 @@ $nav = [
                             'id' => 'application_conversation_list_disable_messaging',
                             'label' => 'Disable Messaging',
                             'route' => 'lva-application/conversation/disable',
+                            'tag' => 'conversation_list_disable_messaging',
                             'class' => 'govuk-link--no-visited-state',
                             'use_route_match' => true,
                         ],
@@ -1420,6 +1554,7 @@ $nav = [
                             'id' => 'application_conversation_list_enable_messaging',
                             'label' => 'Enable Messaging',
                             'route' => 'lva-application/conversation/enable',
+                            'tag' => 'conversation_list_enable_messaging',
                             'class' => 'govuk-link--no-visited-state',
                             'use_route_match' => true,
                         ]

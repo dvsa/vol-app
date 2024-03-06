@@ -19,7 +19,7 @@ use Laminas\View\HelperPluginManager;
 
 class EnableDisableFileUploadControllerFactory implements FactoryInterface
 {
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): EnableDisableFileUploadController
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);

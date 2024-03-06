@@ -53,6 +53,7 @@ use Olcs\Controller\Interfaces\BusRegControllerInterface;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\IrhpApplicationControllerInterface;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
+use Olcs\Controller\Interfaces\MessagingControllerInterface;
 use Olcs\Controller\Interfaces\OperatorControllerInterface;
 use Olcs\Controller\Interfaces\SubmissionControllerInterface;
 use Olcs\Controller\Interfaces\TransportManagerControllerInterface;
@@ -70,14 +71,6 @@ use Olcs\Controller\Lva\Factory\Controller\Licence as LvaLicenceControllerFactor
 use Olcs\Controller\Lva\Factory\Controller\Variation as LvaVariationControllerFactories;
 use Olcs\Controller\Lva\Licence as LvaLicenceControllers;
 use Olcs\Controller\Lva\Variation as LvaVariationControllers;
-use Olcs\Controller\Messages\ApplicationConversationListController;
-use Olcs\Controller\Messages\ApplicationCreateConversationController;
-use Olcs\Controller\Messages\ApplicationConversationMessagesController;
-use Olcs\Controller\Messages\ApplicationEnableDisableMessagingController;
-use Olcs\Controller\Messages\LicenceConversationListController;
-use Olcs\Controller\Messages\LicenceConversationMessagesController;
-use Olcs\Controller\Messages\LicenceCreateConversationController;
-use Olcs\Controller\Messages\LicenceEnableDisableMessagingController;
 use Olcs\Controller\Operator as OperatorControllers;
 use Olcs\Controller\Operator\HistoryController;
 use Olcs\Controller\Operator\OperatorBusinessDetailsController;
@@ -307,17 +300,32 @@ return array(
             LvaVariationControllers\VehiclesPsvController::class                    => LvaVariationControllerFactories\VehiclesPsvControllerFactory::class,
             LvaVariationControllers\WithdrawController::class                       => LvaVariationControllerFactories\WithdrawControllerFactory::class,
             Olcs\Controller\IndexController::class                                  => Olcs\Controller\Factory\IndexControllerFactory::class,
-            Olcs\Controller\Messages\ApplicationConversationMessagesController::class => Olcs\Controller\Factory\Messages\ApplicationConversationMessagesControllerFactory::class,
-            Olcs\Controller\Messages\LicenceConversationMessagesController::class   => Olcs\Controller\Factory\Messages\LicenceConversationMessagesControllerFactory::class,
-            Olcs\Controller\Messages\ApplicationConversationListController::class   => Olcs\Controller\Factory\Messages\ApplicationConversationListControllerFactory::class,
-            Olcs\Controller\Messages\LicenceConversationListController::class       => Olcs\Controller\Factory\Messages\LicenceConversationListControllerFactory::class,
-            Olcs\Controller\Messages\ApplicationEnableDisableMessagingController::class => Olcs\Controller\Factory\Messages\ApplicationEnableDisableMessagingControllerFactory::class,
+            Olcs\Controller\Messages\ApplicationConversationMessagesController::class => Olcs\Controller\Factory\Messages\ConversationMessagesControllerFactory::class,
+            Olcs\Controller\Messages\BusConversationMessagesController::class   => Olcs\Controller\Factory\Messages\ConversationMessagesControllerFactory::class,
+            Olcs\Controller\Messages\CaseConversationMessagesController::class   => Olcs\Controller\Factory\Messages\ConversationMessagesControllerFactory::class,
+            Olcs\Controller\Messages\IrhpApplicationConversationMessagesController::class   => Olcs\Controller\Factory\Messages\ConversationMessagesControllerFactory::class,
+            Olcs\Controller\Messages\LicenceConversationMessagesController::class   => Olcs\Controller\Factory\Messages\ConversationMessagesControllerFactory::class,
+            Olcs\Controller\Messages\ApplicationConversationListController::class   => Olcs\Controller\Factory\Messages\ConversationListControllerFactory::class,
+            Olcs\Controller\Messages\BusConversationListController::class       => Olcs\Controller\Factory\Messages\ConversationListControllerFactory::class,
+            Olcs\Controller\Messages\CaseConversationListController::class       => Olcs\Controller\Factory\Messages\ConversationListControllerFactory::class,
+            Olcs\Controller\Messages\IrhpApplicationConversationListController::class       => Olcs\Controller\Factory\Messages\ConversationListControllerFactory::class,
+            Olcs\Controller\Messages\LicenceConversationListController::class       => Olcs\Controller\Factory\Messages\ConversationListControllerFactory::class,
+            Olcs\Controller\Messages\ApplicationEnableDisableMessagingController::class => Olcs\Controller\Factory\Messages\EnableDisableMessagingControllerFactory::class,
+            Olcs\Controller\Messages\BusEnableDisableMessagingController::class => Olcs\Controller\Factory\Messages\EnableDisableMessagingControllerFactory::class,
+            Olcs\Controller\Messages\CaseEnableDisableMessagingController::class => Olcs\Controller\Factory\Messages\EnableDisableMessagingControllerFactory::class,
+            Olcs\Controller\Messages\IrhpApplicationEnableDisableMessagingController::class => Olcs\Controller\Factory\Messages\EnableDisableMessagingControllerFactory::class,
+            Olcs\Controller\Messages\LicenceEnableDisableMessagingController::class => Olcs\Controller\Factory\Messages\EnableDisableMessagingControllerFactory::class,
+            Olcs\Controller\Messages\ApplicationCreateConversationController::class => Olcs\Controller\Factory\Messages\CreateConversationControllerFactory::class,
+            Olcs\Controller\Messages\BusCreateConversationController::class     => Olcs\Controller\Factory\Messages\CreateConversationControllerFactory::class,
+            Olcs\Controller\Messages\CaseCreateConversationController::class     => Olcs\Controller\Factory\Messages\CreateConversationControllerFactory::class,
+            Olcs\Controller\Messages\IrhpApplicationCreateConversationController::class     => Olcs\Controller\Factory\Messages\CreateConversationControllerFactory::class,
+            Olcs\Controller\Messages\LicenceCreateConversationController::class     => Olcs\Controller\Factory\Messages\CreateConversationControllerFactory::class,
+            Olcs\Controller\Messages\ApplicationCloseConversationController::class  => Olcs\Controller\Factory\Messages\CloseConversationControllerFactory::class,
+            Olcs\Controller\Messages\BusCloseConversationController::class      => Olcs\Controller\Factory\Messages\CloseConversationControllerFactory::class,
+            Olcs\Controller\Messages\CaseCloseConversationController::class      => Olcs\Controller\Factory\Messages\CloseConversationControllerFactory::class,
+            Olcs\Controller\Messages\IrhpApplicationCloseConversationController::class      => Olcs\Controller\Factory\Messages\CloseConversationControllerFactory::class,
+            Olcs\Controller\Messages\LicenceCloseConversationController::class      => Olcs\Controller\Factory\Messages\CloseConversationControllerFactory::class,
             Olcs\Controller\Messages\EnableDisableFileUploadController::class => Olcs\Controller\Factory\Messages\EnableDisableFileUploadControllerFactory::class,
-            Olcs\Controller\Messages\LicenceEnableDisableMessagingController::class => Olcs\Controller\Factory\Messages\LicenceEnableDisableMessagingControllerFactory::class,
-            Olcs\Controller\Messages\ApplicationCreateConversationController::class => Olcs\Controller\Factory\Messages\ApplicationCreateConversationControllerFactory::class,
-            Olcs\Controller\Messages\LicenceCreateConversationController::class     => Olcs\Controller\Factory\Messages\LicenceCreateConversationControllerFactory::class,
-            Olcs\Controller\Messages\ApplicationCloseConversationController::class  => Olcs\Controller\Factory\Messages\ApplicationCloseConversationControllerFactory::class,
-            Olcs\Controller\Messages\LicenceCloseConversationController::class      => Olcs\Controller\Factory\Messages\LicenceCloseConversationControllerFactory::class,
             OperatorControllers\OperatorFeesController::class                       => OperatorControllerFactories\OperatorFeesControllerFactory::class,
             OperatorControllers\OperatorProcessingTasksController::class            => OperatorControllerFactories\OperatorProcessingTasksControllerFactory::class,
             OperatorControllers\UnlicensedBusinessDetailsController::class          => OperatorControllerFactories\UnlicensedBusinessDetailsControllerFactory::class,
@@ -340,6 +348,7 @@ return array(
             DocumentControllers\DocumentGenerationController::class => DocumentControllerFactories\DocumentGenerationControllerFactory::class,
             DocumentControllers\DocumentRelinkController::class => DocumentControllerFactories\DocumentRelinkControllerFactory::class,
             DocumentControllers\DocumentUploadController::class => DocumentControllerFactories\DocumentUploadControllerFactory::class,
+
             IrhpPermitsControllers\IrhpApplicationDocsController::class => IrhpPermitsControllerFactories\IrhpApplicationDocsControllerFactory::class,
             IrhpPermitsControllers\IrhpApplicationFeesController::class => IrhpPermitsControllerFactories\IrhpApplicationFeesControllerFactory::class,
             IrhpPermitsControllers\IrhpApplicationProcessingOverviewController::class => IrhpPermitsControllerFactories\IrhpApplicationProcessingOverviewControllerFactory::class,
@@ -846,28 +855,7 @@ return array(
             RouteParam\LicenceFurniture::class,
             RouteParam\Licence::class,
         ],
-        ApplicationEnableDisableMessagingController::class => [
-            RouteParam\Conversation::class,
-        ],
-        LicenceEnableDisableMessagingController::class => [
-            RouteParam\Conversation::class,
-        ],
-        ApplicationConversationListController::class => [
-            RouteParam\Conversation::class,
-        ],
-        LicenceConversationListController::class => [
-            RouteParam\Conversation::class,
-        ],
-        LicenceConversationMessagesController::class => [
-            RouteParam\Conversation::class,
-        ],
-        ApplicationConversationMessagesController::class => [
-            RouteParam\Conversation::class,
-        ],
-        LicenceCreateConversationController::class => [
-            RouteParam\Conversation::class,
-        ],
-        ApplicationCreateConversationController::class => [
+        MessagingControllerInterface::class => [
             RouteParam\Conversation::class,
         ],
     ],

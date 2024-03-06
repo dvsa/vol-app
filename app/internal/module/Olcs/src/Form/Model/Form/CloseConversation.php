@@ -6,6 +6,8 @@ namespace Olcs\Form\Model\Form;
 
 use Laminas\Form\Annotation as Form;
 use Laminas\Form\Element\Hidden;
+use Olcs\Form\Model\Fieldset\CloseConversationActions;
+use Olcs\Form\Model\Fieldset\CloseConversationText;
 
 /**
  * @codeCoverageIgnore No methods
@@ -24,13 +26,13 @@ class CloseConversation
 
     /**
      * @Form\Name("form-text")
-     * @Form\ComposedObject(\Olcs\Form\Model\Fieldset\CloseConversationText::class)
+     * @Form\ComposedObject(CloseConversationText::class)
      */
     public ?CloseConversationText $text = null;
 
     /**
      * @Form\Name("form-actions")
-     * @Form\ComposedObject(\Olcs\Form\Model\Fieldset\CloseConversationActions::class)
+     * @Form\ComposedObject(CloseConversationActions::class)
      */
     public ?CloseConversationActions $formActions = null;
 }

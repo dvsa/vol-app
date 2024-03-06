@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Olcs\Form\Model\Fieldset;
 
+use Common\Form\Elements\InputFilters\ActionButton;
 use Laminas\Form\Annotation as Form;
 
 /**
@@ -23,7 +24,7 @@ class CloseConversationActions
      * @Form\Options({
      *     "label": "End and archive conversation"
      * })
-     * @Form\Type(\Common\Form\Elements\InputFilters\ActionButton::class)
+     * @Form\Type(ActionButton::class)
      */
     public ?ActionButton $close = null;
 
@@ -37,7 +38,7 @@ class CloseConversationActions
      * @Form\Options({
      *     "label": "Cancel"
      * })
-     * @Form\Type(\Common\Form\Elements\InputFilters\ActionButton::class)
+     * @Form\Type(ActionButton::class)
      */
     public ?ActionButton $cancel = null;
 }

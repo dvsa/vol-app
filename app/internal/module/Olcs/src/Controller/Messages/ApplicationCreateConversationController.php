@@ -6,9 +6,7 @@ namespace Olcs\Controller\Messages;
 
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 
-class ApplicationCreateConversationController
-    extends AbstractCreateConversationController
-    implements ApplicationControllerInterface
+class ApplicationCreateConversationController extends AbstractCreateConversationController implements ApplicationControllerInterface
 {
     protected $navigationId = 'application_conversations';
 

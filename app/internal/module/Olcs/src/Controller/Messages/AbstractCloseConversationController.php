@@ -15,10 +15,11 @@ use Laminas\Http\Response;
 use Laminas\View\HelperPluginManager;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractController;
+use Olcs\Controller\Interfaces\MessagingControllerInterface;
 use Olcs\Data\Mapper\Task;
 use Olcs\Form\Model\Form\CloseConversation;
 
-abstract class AbstractCloseConversationController extends AbstractController implements ToggleAwareInterface
+abstract class AbstractCloseConversationController extends AbstractController implements ToggleAwareInterface, MessagingControllerInterface
 {
     protected array $toggleConfig = [
         'default' => [FeatureToggle::MESSAGING],

@@ -16,18 +16,16 @@ use Olcs\Controller\AbstractInternalController;
 use Dvsa\Olcs\Transfer\Query\Messaging\Messages\ByConversation;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Common\Controller\Interfaces\ToggleAwareInterface;
 use Common\FeatureToggle;
+use Olcs\Controller\Interfaces\MessagingControllerInterface;
 use Olcs\Controller\Interfaces\NavigationIdProvider;
 use Olcs\Form\Model\Form\LicenceMessageActions;
 use Olcs\Form\Model\Form\LicenceMessageReply;
 use Olcs\Mvc\Controller\ParameterProvider\GenericList;
 use Dvsa\Olcs\Transfer\Command\Messaging\Message\Create as CreateMessageCommand;
 
-abstract class AbstractConversationMessagesController
-    extends AbstractInternalController
-    implements LeftViewProvider, ApplicationControllerInterface, ToggleAwareInterface, NavigationIdProvider
+abstract class AbstractConversationMessagesController extends AbstractInternalController implements LeftViewProvider, ToggleAwareInterface, NavigationIdProvider, MessagingControllerInterface
 {
     protected $listDto = ByConversation::class;
     protected $topNavigationId = '';
@@ -53,6 +51,8 @@ abstract class AbstractConversationMessagesController
 
         $this->scriptFactory = $scriptFactory;
     }
+
+    abstract protected function getConversationViewRoute(): string;
 
     /**
      * @inheritDoc
@@ -124,8 +124,7 @@ abstract class AbstractConversationMessagesController
 
         if ($response->isOk()) {
             $this->flashMessengerHelperService->addSuccessMessage('Reply submitted successfully');
-            $route = $this->topNavigationId === 'application' ? 'lva-application' : 'licence';
-            return $this->redirect()->toRoute($route . '/conversation/view', $this->params()->fromRoute());
+            return $this->redirect()->toRoute($this->getConversationViewRoute(), $this->params()->fromRoute());
         }
 
         $this->handleErrors($response->getResult());

@@ -219,8 +219,10 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
             );
         }
 
-        $navigationService->findById('conversations')->set('unreadLicenceConversationCount', $count);
-        $navigationService->findById('application_conversations')->set('unreadLicenceConversationCount', $count);
+        array_map(
+            fn($page) => $page->set('unreadLicenceConversationCount', $count),
+            $navigationService->findBy('tag', 'messaging-menu', true)
+        );
     }
 
     public function onLicence(EventInterface $e)
@@ -629,12 +631,15 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
 
     private function handleMessagingTabVisibility(int $licenceId, Navigation $navigationService): void
     {
-        if ($this->isMessagingFeatureToggleEnabled()) {
-            $this->fetchAndApplyUnreadConversationCountForLicenceToMessageTabs($licenceId, $navigationService);
-        } else {
-            $navigationService->findById('conversations')->setVisible(0);
-            $navigationService->findById('application_conversations')->setVisible(0);
+        if (!$this->isMessagingFeatureToggleEnabled()) {
+            return;
         }
+
+        $this->fetchAndApplyUnreadConversationCountForLicenceToMessageTabs($licenceId, $navigationService);
+        array_map(
+            fn($page) => $page->setVisible(true),
+            $navigationService->findBy('tag', 'messaging-menu', true)
+        );
     }
 
     private function isMessagingFeatureToggleEnabled(): bool

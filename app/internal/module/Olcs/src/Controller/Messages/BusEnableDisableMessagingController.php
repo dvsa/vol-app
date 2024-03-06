@@ -7,11 +7,11 @@ namespace Olcs\Controller\Messages;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence;
 use Exception;
 use Laminas\View\Model\ViewModel;
-use Olcs\Controller\Interfaces\LicenceControllerInterface;
+use Olcs\Controller\Interfaces\BusRegControllerInterface;
 
-class LicenceEnableDisableMessagingController extends AbstractEnableDisableMessagingController implements LicenceControllerInterface
+class BusEnableDisableMessagingController extends AbstractEnableDisableMessagingController implements BusRegControllerInterface
 {
-    protected $navigationId = 'licence';
+    protected $navigationId = 'licence_bus';
 
     public function getLeftView(): ?ViewModel
     {
@@ -19,7 +19,7 @@ class LicenceEnableDisableMessagingController extends AbstractEnableDisableMessa
             return null;
         }
 
-        $view = new ViewModel(['navigationId' => 'conversations']);
+        $view = new ViewModel(['navigationId' => 'bus_conversations']);
         $view->setTemplate('sections/messages/partials/left');
 
         return $view;
@@ -27,7 +27,7 @@ class LicenceEnableDisableMessagingController extends AbstractEnableDisableMessa
 
     protected function getRoutePrefix(): string
     {
-        return 'licence/conversation';
+        return 'bus_conversation';
     }
 
     protected function getOrganisationId(): int
@@ -39,7 +39,7 @@ class LicenceEnableDisableMessagingController extends AbstractEnableDisableMessa
                     'Unexpected error when querying licence for organisation ID. Response: HTTP  %s :: %s',
                     $queryResponse->getStatusCode(),
                     $queryResponse->getBody(),
-                )
+                ),
             );
         }
         $queryResult = $queryResponse->getResult();

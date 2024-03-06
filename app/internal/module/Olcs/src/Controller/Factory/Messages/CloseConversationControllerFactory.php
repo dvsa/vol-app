@@ -11,15 +11,10 @@ use Common\Service\Table\TableFactory;
 use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
-use Olcs\Controller\Messages\ApplicationCloseConversationController;
 
-class ApplicationCloseConversationControllerFactory implements FactoryInterface
+class CloseConversationControllerFactory implements FactoryInterface
 {
-    public function __invoke(
-        ContainerInterface $container,
-                           $requestedName,
-        ?array             $options = null
-    ): ApplicationCloseConversationController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);
@@ -27,7 +22,7 @@ class ApplicationCloseConversationControllerFactory implements FactoryInterface
         $viewHelperManager = $container->get(HelperPluginManager::class);
         $flashMessengerHelperService = $container->get(FlashMessengerHelperService::class);
 
-        return new ApplicationCloseConversationController(
+        return new $requestedName(
             $scriptFactory,
             $formHelper,
             $tableFactory,

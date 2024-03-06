@@ -9,18 +9,17 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
-use Olcs\Controller\Messages\ApplicationCreateConversationController;
 
-class ApplicationCreateConversationControllerFactory implements FactoryInterface
+class CreateConversationControllerFactory implements FactoryInterface
 {
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ApplicationCreateConversationController
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $formHelper = $container->get(FormHelperService::class);
         $translationHelper = $container->get(TranslationHelperService::class);
         $flashMessenger = $container->get(FlashMessengerHelperService::class);
         $navigation = $container->get('navigation');
 
-        return new ApplicationCreateConversationController(
+        return new $requestedName(
             $translationHelper,
             $formHelper,
             $flashMessenger,

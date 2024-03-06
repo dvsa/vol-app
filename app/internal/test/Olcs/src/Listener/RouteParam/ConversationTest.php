@@ -89,7 +89,7 @@ class ConversationTest extends TestCase
                      ->andReturnTrue();
 
         $mockAbstractPage->shouldReceive('setVisible')
-                         ->times(4)
+                         ->twice()
                          ->with(false);
 
         $mockNavigation->shouldReceive('__invoke')
@@ -131,12 +131,8 @@ class ConversationTest extends TestCase
                      ->andReturn($result);
         $mockNavigationPlugin->shouldReceive('findBy')
                              ->once()
-                             ->with('id', 'conversation_list_enable_messaging')
-                             ->andReturn($mockAbstractPage);
-        $mockNavigationPlugin->shouldReceive('findBy')
-                             ->once()
-                             ->with('id', 'application_conversation_list_enable_messaging')
-                             ->andReturn($mockAbstractPage);
+                             ->with('tag', 'conversation_list_enable_messaging', true)
+                             ->andReturn([$mockAbstractPage]);
         $sut->onConversation($e);
 
         $result = [
@@ -149,12 +145,8 @@ class ConversationTest extends TestCase
                      ->andReturn($result);
         $mockNavigationPlugin->shouldReceive('findBy')
                              ->once()
-                             ->with('id', 'conversation_list_disable_messaging')
-                             ->andReturn($mockAbstractPage);
-        $mockNavigationPlugin->shouldReceive('findBy')
-                             ->once()
-                             ->with('id', 'application_conversation_list_disable_messaging')
-                             ->andReturn($mockAbstractPage);
+                             ->with('tag', 'conversation_list_disable_messaging', true)
+                             ->andReturn([$mockAbstractPage]);
 
         $sut->onConversation($e);
     }

@@ -37,6 +37,112 @@ return [
             ]
         ]
     ],
+    'case_conversation' => [
+        'type' => 'segment',
+        'options' => [
+            'route' => '/case/:case/conversation[/]',
+            'verb' => 'GET',
+            'defaults' => [
+                'controller' => Olcs\Controller\Messages\CaseConversationListController::class,
+                'action' => 'index',
+                'type' => 'case',
+            ],
+        ],
+        'may_terminate' => true,
+        'child_routes' => [
+            'view' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => ':conversation[/]',
+                    'verb' => 'GET',
+                    'defaults' => [
+                        'controller' => Olcs\Controller\Messages\CaseConversationMessagesController::class,
+                        'action' => 'index'
+                    ],
+                ],
+                'may_terminate' => true,
+            ],
+            'new' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'new[/]',
+                    'verb' => 'GET',
+                    'defaults' => [
+                        'controller' => Olcs\Controller\Messages\CaseCreateConversationController::class,
+                        'action' => 'add'
+                    ],
+                ],
+                'may_terminate' => true,
+            ],
+            'close' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => ':conversation/close[/]',
+                    'defaults' => [
+                        'controller' => Olcs\Controller\Messages\CaseCloseConversationController::class,
+                        'action' => 'confirm'
+                    ],
+                ],
+                'may_terminate' => true,
+            ],
+            'disable' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'disable[/]',
+                    'verb' => 'GET',
+                    'defaults' => [
+                        'controller' => Olcs\Controller\Messages\CaseEnableDisableMessagingController::class,
+                        'action' => 'index',
+                        'type' => 'disable',
+                    ]
+                ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'popup' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'popup[/]',
+                            'verb' => 'POST',
+                            'defaults' => [
+                                'controller' => Olcs\Controller\Messages\CaseEnableDisableMessagingController::class,
+                                'action' => 'popup',
+                                'type' => 'disable',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                    ],
+                ],
+            ],
+            'enable' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => 'enable[/]',
+                    'verb' => 'GET',
+                    'defaults' => [
+                        'controller' => Olcs\Controller\Messages\CaseEnableDisableMessagingController::class,
+                        'action' => 'index',
+                        'type' => 'enable',
+                    ]
+                ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'popup' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'popup[/]',
+                            'verb' => 'POST',
+                            'defaults' => [
+                                'controller' => Olcs\Controller\Messages\CaseEnableDisableMessagingController::class,
+                                'action' => 'popup',
+                                'type' => 'enable',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                    ],
+                ],
+            ],
+        ],
+    ],
     'case_opposition' => [
         'type' => 'segment',
         'options' => [

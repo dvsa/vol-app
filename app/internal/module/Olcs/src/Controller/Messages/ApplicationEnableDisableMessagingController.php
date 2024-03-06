@@ -10,9 +10,7 @@ use Exception;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 
-class ApplicationEnableDisableMessagingController
-    extends AbstractEnableDisableMessagingController
-    implements ApplicationControllerInterface
+class ApplicationEnableDisableMessagingController extends AbstractEnableDisableMessagingController implements ApplicationControllerInterface
 {
     protected $navigationId = 'application';
 
@@ -30,7 +28,7 @@ class ApplicationEnableDisableMessagingController
 
     protected function getRoutePrefix(): string
     {
-        return 'lva-application';
+        return 'lva-application/conversation';
     }
 
     protected function getOrganisationId(): int

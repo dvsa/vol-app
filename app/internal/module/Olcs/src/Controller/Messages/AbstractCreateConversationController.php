@@ -8,18 +8,16 @@ use Common\FeatureToggle;
 use Dvsa\Olcs\Transfer\Command\Messaging\Conversation\Create;
 use Dvsa\Olcs\Transfer\Query\Messaging\ApplicationLicenceList\ByApplicationToOrganisation;
 use Dvsa\Olcs\Transfer\Query\Messaging\ApplicationLicenceList\ByLicenceToOrganisation;
+use Dvsa\Olcs\Transfer\Query\Messaging\ApplicationLicenceList\ByCaseToOrganisation;
 use Laminas\Mvc\MvcEvent;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
-use Olcs\Controller\Interfaces\ApplicationControllerInterface;
 use Olcs\Controller\Interfaces\LeftViewProvider;
-use Olcs\Controller\Interfaces\LicenceControllerInterface;
+use Olcs\Controller\Interfaces\MessagingControllerInterface;
 use Olcs\Form\Model\Form\Conversation;
 use RuntimeException;
 
-class AbstractCreateConversationController
-    extends AbstractInternalController
-    implements LeftViewProvider, ApplicationControllerInterface, ToggleAwareInterface
+class AbstractCreateConversationController extends AbstractInternalController implements LeftViewProvider, ToggleAwareInterface, MessagingControllerInterface
 {
     protected $mapperClass = DefaultMapper::class;
 
@@ -58,6 +56,11 @@ class AbstractCreateConversationController
             $applicationId = $this->params()->fromRoute('application');
             $data = $this->handleQuery(
                 ByApplicationToOrganisation::create(['application' => $applicationId])
+            );
+        } elseif ($this->params()->fromRoute('case')) {
+            $caseId = $this->params()->fromRoute('case');
+            $data = $this->handleQuery(
+                ByCaseToOrganisation::create(['case' => $caseId])
             );
         } else {
             throw new RuntimeException('Error: licence or application required');

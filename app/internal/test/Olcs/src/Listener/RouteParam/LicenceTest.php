@@ -7,6 +7,7 @@ use Common\FeatureToggle;
 use Common\RefData;
 use Common\Service\Cqrs\Response;
 use Common\Service\Data\Surrender;
+use Laminas\Navigation\Page\Mvc;
 use Psr\Container\ContainerInterface;
 use Dvsa\Olcs\Transfer\Query\FeatureToggle\IsEnabled;
 use Laminas\EventManager\Event;
@@ -216,9 +217,6 @@ class LicenceTest extends TestCase
 
         $this->sut->setMainNavigationService($mainNav);
 
-        $this->mockHideButton($this->sut->getMainNavigationService(),'conversations');
-        $this->mockHideButton($this->sut->getMainNavigationService(), 'application_conversations');
-
         $routeParam = new RouteParam();
         $routeParam->setValue($licenceId);
 
@@ -261,9 +259,6 @@ class LicenceTest extends TestCase
         $this->mockHideButton($mockSidebar, 'licence-decisions-reset-to-valid');
         $this->sut->setNavigationService($mockSidebar);
         $this->mockMainNavigation($licence['goodsOrPsv']['id']);
-
-        $this->mockHideButton($this->sut->getMainNavigationService(),'conversations');
-        $this->mockHideButton($this->sut->getMainNavigationService(), 'application_conversations');
 
         $routeParam = new RouteParam();
         $routeParam->setValue($licenceId);
@@ -314,9 +309,6 @@ class LicenceTest extends TestCase
         $this->sut->setNavigationService($mockSidebar);
         $this->mockMainNavigation($licence['goodsOrPsv']['id']);
 
-        $this->mockHideButton($this->sut->getMainNavigationService(),'conversations');
-        $this->mockHideButton($this->sut->getMainNavigationService(), 'application_conversations');
-
         $routeParam = new RouteParam();
         $routeParam->setValue($licenceId);
 
@@ -365,11 +357,8 @@ class LicenceTest extends TestCase
         $this->mockHideButton($mockSidebar, 'licence-decisions-reset-to-valid');
         $this->sut->setNavigationService($mockSidebar);
 
-
         $this->mockMainNavigation($licence['goodsOrPsv']['id']);
 
-        $this->mockHideButton($this->sut->getMainNavigationService(),'conversations');
-        $this->mockHideButton($this->sut->getMainNavigationService(), 'application_conversations');
 
         $routeParam = new RouteParam();
         $routeParam->setValue($licenceId);
@@ -421,9 +410,6 @@ class LicenceTest extends TestCase
         $this->sut->setNavigationService($mockSidebar);
 
         $this->mockMainNavigation($licence['goodsOrPsv']['id']);
-
-        $this->mockHideButton($this->sut->getMainNavigationService(),'conversations');
-        $this->mockHideButton($this->sut->getMainNavigationService(), 'application_conversations');
 
         $routeParam = new RouteParam();
         $routeParam->setValue($licenceId);
@@ -480,9 +466,6 @@ class LicenceTest extends TestCase
 
         $this->mockMainNavigation($licence['goodsOrPsv']['id']);
 
-        $this->mockHideButton($this->sut->getMainNavigationService(),'conversations');
-        $this->mockHideButton($this->sut->getMainNavigationService(), 'application_conversations');
-
         $routeParam = new RouteParam();
         $routeParam->setValue($licenceId);
 
@@ -536,9 +519,6 @@ class LicenceTest extends TestCase
         $this->sut->setNavigationService($mockSidebar);
 
         $this->mockMainNavigation($licence['goodsOrPsv']['id']);
-
-        $this->mockHideButton($this->sut->getMainNavigationService(),'conversations');
-        $this->mockHideButton($this->sut->getMainNavigationService(), 'application_conversations');
 
         $routeParam = new RouteParam();
         $routeParam->setValue($licenceId);
@@ -594,9 +574,6 @@ class LicenceTest extends TestCase
         $this->sut->setNavigationService($mockSidebar);
 
         $this->mockMainNavigation($licence['goodsOrPsv']['id']);
-
-        $this->mockHideButton($this->sut->getMainNavigationService(),'conversations');
-        $this->mockHideButton($this->sut->getMainNavigationService(), 'application_conversations');
 
         $routeParam = new RouteParam();
         $routeParam->setValue($licenceId);
@@ -691,9 +668,6 @@ class LicenceTest extends TestCase
         $this->signatureType = RefData::SIGNATURE_TYPE_DIGITAL_SIGNATURE;
         $this->mockMainNavigation($licence['goodsOrPsv']['id'], true);
 
-        $this->mockHideButton($this->sut->getMainNavigationService(),'conversations');
-        $this->mockHideButton($this->sut->getMainNavigationService(), 'application_conversations');
-
         $mockSurrenderService = m::mock(Surrender::class);
         $mockSurrenderService->shouldReceive('fetchSurrenderData')->with(4)->times(1)->andReturn([
             'signatureType' => ['id' => $this->signatureType]
@@ -757,9 +731,6 @@ class LicenceTest extends TestCase
 
         $this->signatureType = RefData::SIGNATURE_TYPE_PHYSICAL_SIGNATURE;
         $this->mockMainNavigation($licence['goodsOrPsv']['id'], true);
-
-        $this->mockHideButton($this->sut->getMainNavigationService(),'conversations');
-        $this->mockHideButton($this->sut->getMainNavigationService(), 'application_conversations');
 
         $mockSurrenderService = m::mock(Surrender::class);
         $mockSurrenderService->shouldReceive('fetchSurrenderData')->with(4)->times(1)->andReturn([
@@ -895,9 +866,6 @@ class LicenceTest extends TestCase
         $this->signatureType = RefData::SIGNATURE_TYPE_DIGITAL_SIGNATURE;
         $this->mockMainNavigation($licence['goodsOrPsv']['id'], true);
 
-        $this->mockHideButton($this->sut->getMainNavigationService(),'conversations');
-        $this->mockHideButton($this->sut->getMainNavigationService(), 'application_conversations');
-
         $mockSurrenderService = m::mock(Surrender::class);
         $mockSurrenderService->shouldReceive('fetchSurrenderData')->with(4)->times(1)->andThrow(
             new DataServiceException('TEST')
@@ -976,29 +944,19 @@ class LicenceTest extends TestCase
         $this->sut->setNavigationService($mockSidebar);
         $this->mockMainNavigation($licence['goodsOrPsv']['id']);
 
-        $this->sut->getMainNavigationService()
-            ->expects('findById')
-            ->with('conversations')
-            ->once()
-            ->andReturn(
-                m::namedMock('conversations')
-                    ->shouldReceive('set')
-                    ->with('unreadLicenceConversationCount', $count)
-                    ->once()
-                    ->getMock()
-            );
+        $mockPage = m::mock(Mvc::class);
+        $mockPage->shouldReceive('setVisible')
+                 ->once()
+                 ->with(true);
+        $mockPage->shouldReceive('set')
+                 ->once()
+                 ->with('unreadLicenceConversationCount', 1);
 
         $this->sut->getMainNavigationService()
-            ->expects('findById')
-            ->with('application_conversations')
-            ->once()
-            ->andReturn(
-                m::namedMock('application_conversations')
-                    ->shouldReceive('set')
-                    ->with('unreadLicenceConversationCount', $count)
-                    ->once()
-                    ->getMock()
-            );
+                    ->shouldReceive('findBy')
+                    ->twice()
+                    ->with('tag', 'messaging-menu', true)
+                    ->andReturn([$mockPage]);
 
         $routeParam = new RouteParam();
         $routeParam->setValue($licenceId);

@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace Olcs\Controller\Messages;
 
+use Olcs\Controller\Interfaces\CaseControllerInterface;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
 
-class LicenceCreateConversationController extends AbstractCreateConversationController implements LicenceControllerInterface
+class CaseCreateConversationController extends AbstractCreateConversationController implements CaseControllerInterface
 {
-    protected $navigationId = 'conversations';
+    protected $navigationId = 'case_conversations';
 
     protected $redirectConfig = [
         'add' => [
-            'route' => 'licence/conversation/view',
+            'route' => 'case_conversation/view',
             'resultIdMap' => [
+                'case' => 'case',
                 'conversation' => 'conversation',
                 'licence' => 'licence'
             ],

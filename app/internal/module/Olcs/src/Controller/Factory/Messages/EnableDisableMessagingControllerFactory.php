@@ -15,11 +15,10 @@ use Common\Service\Table\TableFactory;
 use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\HelperPluginManager;
-use Olcs\Controller\Messages\LicenceEnableDisableMessagingController;
 
-class LicenceEnableDisableMessagingControllerFactory implements FactoryInterface
+class EnableDisableMessagingControllerFactory implements FactoryInterface
 {
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LicenceEnableDisableMessagingController
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);
@@ -31,7 +30,7 @@ class LicenceEnableDisableMessagingControllerFactory implements FactoryInterface
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);
         $urlHelper = $container->get(UrlHelperService::class);
 
-        return new LicenceEnableDisableMessagingController(
+        return new $requestedName(
             $scriptFactory,
             $formHelper,
             $tableFactory,
