@@ -141,7 +141,7 @@ jobs:
           echo "changes=$(terraform-bin show -json -no-color tfplan | jq -r -c '[.resource_changes[] | select(.change.actions[0] != "no-op") | {action: .change.actions[0], address: .address}] | group_by(.action) | map({(.[0].action): map(.address)}) | add')" >> $GITHUB_OUTPUT
 
       - uses: actions/github-script@v7
-        if: ${{ always() && ! inputs.apply && github.event_name == 'pull_request' }}
+        if: ${{ always() && !cancelled() && !failure() && ! inputs.apply && github.event_name == 'pull_request' }}
         env:
           PLAN: "${{ steps.plan.outputs.stdout }}"
           CHANGES: "${{ steps.show.outputs.changes }}"
@@ -235,7 +235,7 @@ jobs:
         run: terraform workspace select default && terraform workspace delete ${{ inputs.workspace }}
 
       - name: Set outputs
-        if: ${{ always() && !inputs.destroy }}
+        if: ${{ always() && !cancelled() && !failure() && !inputs.destroy }}
         id: terraform-output
         run: |
           echo "json=$(terraform-bin output -json -no-color | jq -r -c 'to_entries | map({(.key): .value.value}) | add')" >> $GITHUB_OUTPUT
