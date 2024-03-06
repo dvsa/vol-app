@@ -191,7 +191,7 @@ jobs:
         run: terraform apply -no-color -input=false -auto-approve ${{ inputs.terraform-args || '' }}
 
       - name: Set outputs
-        if: ${{ always() && !cancelled() && !failure() ) }}
+        if: ${{ always() && !cancelled() && !failure() }}
         id: terraform-output
         run: |
           echo "json=$(terraform-bin output -json -no-color | jq -r -c 'to_entries | map({(.key): .value.value}) | add')" >> $GITHUB_OUTPUT
