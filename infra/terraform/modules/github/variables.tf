@@ -27,6 +27,12 @@ variable "oidc_role_policies" {
   default     = {}
 }
 
+variable "oidc_readonly_role_policies" {
+  type        = map(string)
+  description = "The map of policies to attach to the OIDC readonly role."
+  default     = {}
+}
+
 variable "oidc_role_permissions_boundary_arn" {
   type        = string
   description = "The ARN of the permissions boundary to use for the role."

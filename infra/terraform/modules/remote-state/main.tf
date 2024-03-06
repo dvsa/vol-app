@@ -5,7 +5,7 @@ locals {
   identifier = var.environment != null ? "${var.identifier}-${local.account_id}-${var.environment}-terraform-state" : "${var.identifier}-${local.account_id}-terraform-state"
 }
 
-module "s3_input" {
+module "s3" {
   count = var.create_bucket ? 1 : 0
 
   source  = "terraform-aws-modules/s3-bucket/aws"
@@ -57,4 +57,55 @@ module "dynamodb_table" {
   ]
 
   point_in_time_recovery_enabled = true
+}
+
+module "dynamodb_state_lock_policy" {
+  count = var.create_dynamodb_policy ? 1 : 0
+
+  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version = "~> 5.28"
+
+  name = "${local.identifier}-lock-policy"
+  description = "Policy to allow access to the Terraform state lock"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "dynamodb:DescribeTable",
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "dynamodb:DeleteItem"
+        ]
+        Resource = module.dynamodb_table.dynamodb_table_arn
+      }
+    ]
+  })
+}
+
+module "s3_state_policy" {
+  count = var.create_bucket && var.create_bucket_policy ? 1 : 0
+
+  source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
+  version = "~> 5.28"
+
+  name = "${local.identifier}-policy"
+  description = "Policy to allow access to the Terraform state in S3"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:ListBucket"
+        ]
+        Resource = module.s3[0].s3_bucket_arn
+      }
+    ]
+  })
 }

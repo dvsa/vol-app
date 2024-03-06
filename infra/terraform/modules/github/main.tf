@@ -38,7 +38,7 @@ module "iam_github_oidc_readonly_role" {
   subjects                 = local.pull_request_subjects
   permissions_boundary_arn = var.oidc_role_permissions_boundary_arn
 
-  policies = merge(var.oidc_role_policies, {
+  policies = merge(var.oidc_readonly_role_policies, {
     ReadOnlyAccess = "arn:aws:iam::aws:policy/ReadOnlyAccess",
   })
 }

@@ -9,3 +9,9 @@ variable "github_oidc_role_policies" {
   description = "A map of policy names to policy ARNs to attach to the OIDC role."
   default     = {}
 }
+
+variable "github_oidc_readonly_role_policies" {
+  type        = map(string)
+  description = "The map of policies to attach to the OIDC readonly role."
+  default     = {}
+}

@@ -4,6 +4,11 @@ locals {
 
 module "account" {
   source = "../../modules/account"
+
+  github_oidc_readonly_role_policies = {
+    DynamodbStateLock = "arn:aws:iam::054614622558:policy/vol-app-054614622558-terraform-state-lock-policy",
+    S3StateLock       = "arn:aws:iam::054614622558:policy/vol-app-054614622558-terraform-state-policy"
+  }
 }
 
 # Imported as this provider has been created by the `vol-terraform` repository.
@@ -12,7 +17,7 @@ import {
   id = "arn:aws:iam::054614622558:oidc-provider/token.actions.githubusercontent.com"
 }
 
-module "remote-state" {
+module "environment-remote-state" {
   for_each = toset(local.environments)
 
   source = "../../modules/remote-state"

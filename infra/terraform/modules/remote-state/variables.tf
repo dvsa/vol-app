@@ -14,3 +14,15 @@ variable "create_bucket" {
   description = "Whether to create a state bucket or not."
   default     = true
 }
+
+variable "create_bucket_policy" {
+  type        = bool
+  description = "Whether to create a policy for the S3 bucket or not."
+  default     = true
+}
+
+variable "create_dynamodb_policy" {
+  type        = bool
+  description = "Whether to create a policy for the DynamoDB table or not."
+  default     = true
+}
