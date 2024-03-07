@@ -187,7 +187,10 @@ jobs:
             ## Terraform plan for environment: \`${{ inputs.workspace || inputs.environment }}\`
 
             **Commit:** ${{ github.event.pull_request.head.sha }}
-            **App version:** ${{ inputs.app-version }}
+            \n
+            **API version:** ${{ inputs.api-image-tag }}
+            **Selfserve version:** ${{ inputs.selfserve-image-tag }}
+            **Internal version:** ${{ inputs.internal-image-tag }}
 
             ### Plan summary
 
