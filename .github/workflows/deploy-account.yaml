@@ -122,8 +122,6 @@ jobs:
               return comment.user.type === 'Bot' && comment.body.includes('data-gh-workflow="${{ inputs.account }}-account-plan"')
             })
 
-            const changes = JSON.parse(process.env.CHANGES) || {};
-
             let summary = "";
 
             const actionIcons = {
@@ -134,6 +132,12 @@ jobs:
               "no-op": "🚫"
             };
 
+            let changes = {};
+
+            try {
+              changes = JSON.parse(process.env.CHANGES);
+            } catch (e) {}
+
             Object.keys(changes).forEach(action => {
               summary += `**${actionIcons[action]} ${action.charAt(0).toUpperCase() + action.slice(1)}s**\n\n\`\`\`tf\n`;
 
@@ -143,10 +147,6 @@ jobs:
 
               summary += "\`\`\`\n";
             });
-
-            if (changes.length) {
-              summary += "No changes detected\n";
-            }
 
             const output = `
             ## Terraform plan for account: \`${{ inputs.account }}\`
