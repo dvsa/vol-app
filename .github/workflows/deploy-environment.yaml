@@ -169,9 +169,9 @@ jobs:
 
             let changes = {};
 
-            try {
-              changes = JSON.parse(process.env.CHANGES);
-            } catch (e) {}
+            if (process.env.CHANGES) {
+              changes = JSON.parse(process.env.CHANGES) || {};
+            }
 
             Object.keys(changes).forEach(action => {
               summary += `**${actionIcons[action]} ${action.charAt(0).toUpperCase() + action.slice(1)}s**\n\n\`\`\`tf\n`;
