@@ -23,11 +23,10 @@ RUN apk del build-dependencies
 USER www-data
 
 # opcache config file
-COPY ./10-opcache.ini ${PHP_INI_DIR}/conf.d/10-opcache.ini
+COPY ./php.ini ${PHP_INI_DIR}/conf.d/1000-php.ini
 
 # nginx server config file
 COPY ./backend.conf /etc/nginx/conf.d/backend.conf
-COPY ./secure_headers.conf /etc/nginx/conf.d/secure_headers.conf
 
 # Configure php-fpm configs
 COPY ./www.conf /usr/local/etc/php-fpm.d/zzzz-www.conf
