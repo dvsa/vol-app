@@ -234,9 +234,7 @@ jobs:
     needs:
       - get-version
       - orchestrator
-      # Can be skipped sometimes if only environment files changed but is required if it is run. This means `always()` is required.
-      - terraform-account
-    if: ${{ always() && !cancelled() && !failure() && needs.orchestrator.outputs.should-plan-terraform-environments }}
+    if: ${{ needs.orchestrator.outputs.should-plan-terraform-environments }}
     strategy:
       fail-fast: false
       matrix:
