@@ -45,6 +45,7 @@ class ConversationsControllerTest extends TestCase
         $this->mockForm = m::mock(Form::class);
         $this->mockParams = m::mock(Params::class);
         $this->mockUploadHelper = m::mock(FileUploadHelperService::class);
+        $this->mockUser = m::mock(User::class);
 
         $this->sut = m::mock(Sut::class)
                       ->makePartial()
@@ -122,8 +123,7 @@ class ConversationsControllerTest extends TestCase
                          ->with('conversationId')
                          ->andReturn(1);
 
-        $mockUser = m::mock(User::class);
-        $mockUser->shouldReceive('getUserData')
+        $this->mockUser->shouldReceive('getUserData')
                  ->once()
                  ->andReturn(
                      [
@@ -150,7 +150,7 @@ class ConversationsControllerTest extends TestCase
                   ->andReturn($mockHandleQuery);
         $this->sut->shouldReceive('plugin')
                   ->with('currentUser')
-                  ->andReturn($mockUser);
+                  ->andReturn($this->mockUser);
         $this->sut->shouldReceive('plugin')
                   ->with('url')
                   ->once()
@@ -329,6 +329,20 @@ class ConversationsControllerTest extends TestCase
                   ->once()
                   ->with('redirect')
                   ->andReturn($mockRedirect);
+
+        $this->mockUser->shouldReceive('getUserData')
+                       ->once()
+                       ->andReturn(
+                           [
+                               'organisationUsers' => [
+                                   [
+                                       'organisation' => [
+                                           'isMessagingFileUploadEnabled' => true,
+                                       ],
+                                   ],
+                               ],
+                           ],
+                       );
 
         $this->testViewAction();
     }

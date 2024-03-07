@@ -195,6 +195,9 @@ class ConversationsController extends AbstractController implements ToggleAwareI
         $table = $this->tableFactory->buildTable('messages-view', $messages, $params);
 
         $canUploadFiles = $this->getCurrentOrganisation()['isMessagingFileUploadEnabled'];
+        if (!$canUploadFiles) {
+            $form->get('form-actions')->remove('file');
+        }
 
         $view = new ViewModel(
             [
@@ -222,16 +225,19 @@ class ConversationsController extends AbstractController implements ToggleAwareI
         $form->setData((array)$this->getRequest()->getPost());
         $form->get('id')->setValue($this->params()->fromRoute('conversation'));
 
-        $hasProcessedFiles = $this->processFiles(
-            $form,
-            'form-actions->file',
-            [$this, 'processFileUpload'],
-            [$this, 'deleteFile'],
-            [$this, 'getUploadedFiles'],
-            'form-actions->file->fileCount',
-        );
+        $hasProcessedFiles = false;
+        if ($this->getCurrentOrganisation()['isMessagingFileUploadEnabled']) {
+            $hasProcessedFiles = $this->processFiles(
+                $form,
+                'form-actions->file',
+                [$this, 'processFileUpload'],
+                [$this, 'deleteFile'],
+                [$this, 'getUploadedFiles'],
+                'form-actions->file->fileCount',
+            );
 
-        $view->setVariable('openReply', $hasProcessedFiles);
+            $view->setVariable('openReply', $hasProcessedFiles);
+        }
 
         if ($hasProcessedFiles || $this->params()->fromPost('action') !== 'reply' || !$form->isValid()) {
             return $view;
