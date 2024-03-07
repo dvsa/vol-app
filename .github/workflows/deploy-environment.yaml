@@ -225,9 +225,9 @@ jobs:
         id: apply
         if: ${{ inputs.apply }}
         env:
-          TFVAR_API_IMAGE_TAG: ${{ inputs.api-image-tag }}
-          TFVAR_SELFSERVE_IMAGE_TAG: ${{ inputs.selfserve-image-tag }}
-          TFVAR_INTERNAL_VERSION: ${{ inputs.internal-image-tag }}
+          TFVAR_api_image_tag: ${{ inputs.api-image-tag }}
+          TFVAR_selfserve_image_tag: ${{ inputs.selfserve-image-tag }}
+          TFVAR_internal_image_tag: ${{ inputs.internal-image-tag }}
         run: terraform apply ${{ inputs.destroy && '-destroy ' || '' }} -no-color -input=false -auto-approve ${{ inputs.terraform-args || '' }}
 
       - name: Delete workspace
