@@ -65,7 +65,7 @@ module "dynamodb_state_lock_policy" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
   version = "~> 5.28"
 
-  name = "${local.identifier}-lock-policy"
+  name        = "${local.identifier}-lock-policy"
   description = "Policy to allow access to the Terraform state lock"
 
   policy = jsonencode({
@@ -91,7 +91,7 @@ module "s3_state_policy" {
   source  = "terraform-aws-modules/iam/aws//modules/iam-policy"
   version = "~> 5.28"
 
-  name = "${local.identifier}-policy"
+  name        = "${local.identifier}-policy"
   description = "Policy to allow access to the Terraform state in S3"
 
   policy = jsonencode({

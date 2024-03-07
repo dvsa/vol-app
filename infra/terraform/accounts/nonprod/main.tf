@@ -29,6 +29,6 @@ module "account" {
       DynamodbStateLock = "arn:aws:iam::054614622558:policy/vol-app-054614622558-terraform-state-lock-policy",
       S3StateLock       = "arn:aws:iam::054614622558:policy/vol-app-054614622558-terraform-state-policy"
     },
-    { for env, remote-state in module.environment-remote-state: "${title(env)}DynamodbStateLock" => remote-state.dynamodb_state_lock_policy_arn }
+    { for env, remote-state in module.environment-remote-state : "${title(env)}DynamodbStateLock" => remote-state.dynamodb_state_lock_policy_arn }
   )
 }

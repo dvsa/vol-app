@@ -7,7 +7,7 @@ module "github" {
   create_oidc_role          = true
   create_oidc_readonly_role = true
 
-  oidc_role_policies = var.github_oidc_role_policies
+  oidc_role_policies          = var.github_oidc_role_policies
   oidc_readonly_role_policies = var.github_oidc_readonly_role_policies
 
   repositories = [
