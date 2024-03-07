@@ -1,14 +1,5 @@
 locals {
-  environments = []
-}
-
-module "account" {
-  source = "../../modules/account"
-
-  github_oidc_readonly_role_policies = {
-    DynamodbStateLock = "arn:aws:iam::054614622558:policy/vol-app-054614622558-terraform-state-lock-policy",
-    S3StateLock       = "arn:aws:iam::054614622558:policy/vol-app-054614622558-terraform-state-policy"
-  }
+  environments = ["dev"]
 }
 
 # Imported as this provider has been created by the `vol-terraform` repository.
@@ -28,4 +19,16 @@ module "environment-remote-state" {
 
   # Environments will re-use the same bucket as the account.
   create_bucket = false
+}
+
+module "account" {
+  source = "../../modules/account"
+
+  github_oidc_readonly_role_policies = merge(
+    {
+      DynamodbStateLock = "arn:aws:iam::054614622558:policy/vol-app-054614622558-terraform-state-lock-policy",
+      S3StateLock       = "arn:aws:iam::054614622558:policy/vol-app-054614622558-terraform-state-policy"
+    },
+    { for env, remote-state in module.environment-remote-state: "${title(env)}DynamodbStateLock" => remote-state.dynamodb_state_lock_policy_arn }
+  )
 }
