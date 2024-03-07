@@ -14,4 +14,5 @@ jobs:
       - uses: terraform-docs/gh-actions@main
         with:
           find-dir: "infra/terraform/modules"
+          git-commit-message: "docs: update terraform docs"
           git-push: true
