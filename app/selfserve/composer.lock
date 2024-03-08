@@ -3982,16 +3982,16 @@
         },
         {
             "name": "olcs/olcs-common",
-            "version": "v6.2.2",
+            "version": "v6.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dvsa/olcs-common.git",
-                "reference": "fa9e8e8566f3e088d11f7c6eb9042578dd17c79d"
+                "reference": "8bfb0f071dd6db100e7f7f60e46c47845efa3e18"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/fa9e8e8566f3e088d11f7c6eb9042578dd17c79d",
-                "reference": "fa9e8e8566f3e088d11f7c6eb9042578dd17c79d",
+                "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/8bfb0f071dd6db100e7f7f60e46c47845efa3e18",
+                "reference": "8bfb0f071dd6db100e7f7f60e46c47845efa3e18",
                 "shasum": ""
             },
             "require": {
@@ -4049,9 +4049,9 @@
             "notification-url": "https://packagist.org/downloads/",
             "description": "Common library for the OLCS Project",
             "support": {
-                "source": "https://github.com/dvsa/olcs-common/tree/v6.2.2"
+                "source": "https://github.com/dvsa/olcs-common/tree/v6.3.1"
             },
-            "time": "2024-03-05T13:03:07+00:00"
+            "time": "2024-03-08T12:05:18+00:00"
         },
         {
             "name": "olcs/olcs-logging",
@@ -4164,16 +4164,16 @@
         },
         {
             "name": "olcs/olcs-utils",
-            "version": "v6.0.0",
+            "version": "v6.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dvsa/olcs-utils.git",
-                "reference": "d639bbac153fc7bf7c940b3ebf67c3a239011818"
+                "reference": "81f54b9e367400e4478364e8c2622fbce3f65f61"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dvsa/olcs-utils/zipball/d639bbac153fc7bf7c940b3ebf67c3a239011818",
-                "reference": "d639bbac153fc7bf7c940b3ebf67c3a239011818",
+                "url": "https://api.github.com/repos/dvsa/olcs-utils/zipball/81f54b9e367400e4478364e8c2622fbce3f65f61",
+                "reference": "81f54b9e367400e4478364e8c2622fbce3f65f61",
                 "shasum": ""
             },
             "require": {
@@ -4190,7 +4190,6 @@
             "require-dev": {
                 "bamarni/composer-bin-plugin": "^1.8",
                 "johnkary/phpunit-speedtrap": "^4.0",
-                "mockery/mockery": "^1.6",
                 "olcs/olcs-logging": "^6.0",
                 "phpunit/phpunit": "^9.6"
             },
@@ -4209,9 +4208,9 @@
             "notification-url": "https://packagist.org/downloads/",
             "description": "OLCS Utils",
             "support": {
-                "source": "https://github.com/dvsa/olcs-utils/tree/v6.0.0"
+                "source": "https://github.com/dvsa/olcs-utils/tree/v6.1.0"
             },
-            "time": "2024-02-20T11:46:06+00:00"
+            "time": "2024-03-07T14:35:46+00:00"
         },
         {
             "name": "psr/cache",
@@ -8024,5 +8023,5 @@
     "platform-overrides": {
         "ext-redis": "4.3"
     },
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
