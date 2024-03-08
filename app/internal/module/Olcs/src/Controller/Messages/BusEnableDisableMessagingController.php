@@ -27,7 +27,7 @@ class BusEnableDisableMessagingController extends AbstractEnableDisableMessaging
 
     protected function getRoutePrefix(): string
     {
-        return 'bus_conversation';
+        return 'licence/bus_conversation';
     }
 
     protected function getOrganisationId(): int

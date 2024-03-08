@@ -11,10 +11,11 @@ class IrhpApplicationCloseConversationController extends AbstractCloseConversati
     protected function getRedirect(): Response
     {
         $params = [
-            'licence' => $this->params()->fromRoute('licence'),
-            'action'  => 'close',
+            'licence'   => $this->params()->fromRoute('licence'),
+            'irhpAppId' => $this->params()->fromRoute('irhpAppId'),
+            'action'    => 'close',
 
         ];
-        return $this->redirect()->toRouteAjax('licence/irhp_conversations', $params);
+        return $this->redirect()->toRouteAjax('licence/irhp-application-conversation', $params);
     }
 }

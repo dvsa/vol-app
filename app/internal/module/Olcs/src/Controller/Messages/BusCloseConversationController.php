@@ -11,11 +11,11 @@ class BusCloseConversationController extends AbstractCloseConversationController
     protected function getRedirect(): Response
     {
         $params = [
-            'bus' => $this->params()->fromRoute('bus'),
+            'busRegId' => $this->params()->fromRoute('busRegId'),
             'licence' => $this->params()->fromRoute('licence'),
             'action'  => 'close',
 
         ];
-        return $this->redirect()->toRouteAjax('bus_conversation', $params);
+        return $this->redirect()->toRouteAjax('licence/bus_conversation', $params);
     }
 }

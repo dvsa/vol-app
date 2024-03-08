@@ -27,7 +27,7 @@ class IrhpApplicationEnableDisableMessagingController extends AbstractEnableDisa
 
     protected function getRoutePrefix(): string
     {
-        return 'licence/irhp_conversations';
+        return 'licence/irhp-application-conversation';
     }
 
     protected function getOrganisationId(): int

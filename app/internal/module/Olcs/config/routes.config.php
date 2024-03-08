@@ -1339,7 +1339,7 @@ $routes = [
                                     'route' => 'popup[/]',
                                     'verb' => 'POST',
                                     'defaults' => [
-                                        'controller' => Olcs\Controller\Messages\CaseEnableDisableMessagingController::class,
+                                        'controller' => Olcs\Controller\Messages\IrhpApplicationEnableDisableMessagingController::class,
                                         'action' => 'popup',
                                         'type' => 'enable',
                                     ],

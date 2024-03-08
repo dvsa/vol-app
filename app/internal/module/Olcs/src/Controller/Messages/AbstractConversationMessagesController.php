@@ -93,14 +93,8 @@ abstract class AbstractConversationMessagesController extends AbstractInternalCo
         $action = strtolower($this->params()->fromPost('action'));
         switch ($action) {
             case 'end and archive conversation':
-                $params = [
-                    'application' => $this->params()->fromRoute('application'),
-                    'licence' => $this->params()->fromRoute('licence'),
-                    'conversation' => $this->params()->fromRoute('conversation'),
-                    'action' => $this->params()->fromRoute('confirm'),
-                ];
-                $route = $this->topNavigationId === 'application' ? 'lva-application' : 'licence';
-                return $this->redirect()->toRoute($route . '/conversation/close', $params);
+                $route = str_replace('/view', '/close', $this->getConversationViewRoute());
+                return $this->redirect()->toRoute($route, [], [], true);
             case 'reply':
                 return $this->parseReply($replyForm);
         }

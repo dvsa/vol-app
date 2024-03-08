@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Olcs\Controller\Messages;
 
+use Dvsa\Olcs\Transfer\Query\Cases\Cases;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence;
 use Exception;
 use Laminas\View\Model\ViewModel;
@@ -32,7 +33,7 @@ class CaseEnableDisableMessagingController extends AbstractEnableDisableMessagin
 
     protected function getOrganisationId(): int
     {
-        $queryResponse = $this->handleQuery(Licence::create(['id' => $this->params()->fromRoute('licence')]));
+        $queryResponse = $this->handleQuery(Cases::create(['id' => $this->params()->fromRoute('case')]));
         if (!$queryResponse->isOk()) {
             throw new Exception(
                 sprintf(
@@ -44,6 +45,6 @@ class CaseEnableDisableMessagingController extends AbstractEnableDisableMessagin
         }
         $queryResult = $queryResponse->getResult();
 
-        return $queryResult['organisation']['id'];
+        return $queryResult['licence']['organisation']['id'];
     }
 }
