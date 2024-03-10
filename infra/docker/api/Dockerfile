@@ -3,8 +3,6 @@ FROM $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/php-base:7.4.33-fpm-alpin
 
 USER root
 
-USER root
-
 # Installing require dependencies
 RUN apk add --update --no-cache \
                       icu-dev \
