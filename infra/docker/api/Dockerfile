@@ -3,22 +3,20 @@ FROM $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/php-base:7.4.33-fpm-alpin
 
 USER root
 
+USER root
+
 # Installing require dependencies
 RUN apk add --update --no-cache \
-    && apk add --virtual build-dependencies \
+                      icu-dev \
                       autoconf \
                       g++ \
-                      make
-                           
-# Install, redis, igbinary, and pdo_mysql PHP extensions
-RUN docker-php-ext-install pdo_mysql opcache \ 
+                      make \
     && pecl install igbinary \
     && docker-php-ext-enable igbinary \
+    && docker-php-ext-install intl pdo_mysql opcache \ 
     && pecl install -D 'enable-redis-igbinary="yes"' redis \
-    && docker-php-ext-enable redis
-
-# delete all the dependencies not required after make 
-RUN apk del build-dependencies
+    && docker-php-ext-enable redis \
+    && apk del --purge autoconf g++ make
 
 USER www-data
 
@@ -32,7 +30,7 @@ COPY ./backend.conf /etc/nginx/conf.d/backend.conf
 COPY ./www.conf /usr/local/etc/php-fpm.d/zzzz-www.conf
 
 # place holder for copying application
-# ADD ./api.tar.gz /var/www
+ ADD ./backend.tar.gz /var/www
 
-# Default startup command when container is launched
-CMD ["supervisord", "-c", "/etc/supervisord.conf"]
+# Default startup command when container is launched is in the base image
+
