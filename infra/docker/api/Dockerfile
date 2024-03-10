@@ -28,7 +28,7 @@ COPY ./backend.conf /etc/nginx/conf.d/backend.conf
 COPY ./www.conf /usr/local/etc/php-fpm.d/zzzz-www.conf
 
 # place holder for copying application
- ADD ./backend.tar.gz /var/www
+# ADD ./backend.tar.gz /var/www
 
 # Default startup command when container is launched is in the base image
 
