@@ -43,7 +43,7 @@ jobs:
     needs:
       - check-ecr
     runs-on: ubuntu-latest
-    if: ${{ always() && (needs.check-ecr.result == 'skipped' || !needs.check-ecr.outputs.image-exists) }}
+    if: ${{ always() && !cancelled() && !failure() && (needs.check-ecr.result == 'skipped' || !needs.check-ecr.outputs.image-exists) }}
     steps:
       - name: Lint
         run: exit 0
@@ -53,7 +53,7 @@ jobs:
     needs:
       - check-ecr
     runs-on: ubuntu-latest
-    if: ${{ always() && (needs.check-ecr.result == 'skipped' || !needs.check-ecr.outputs.image-exists) }}
+    if: ${{ always() && !cancelled() && !failure() && (needs.check-ecr.result == 'skipped' || !needs.check-ecr.outputs.image-exists) }}
     steps:
       - uses: actions/checkout@v4
         with:
