@@ -16,12 +16,12 @@ const generateTerraformDocs = (filenames) => {
 
   return [
     ...modules.map((module) => `terraform-docs markdown --output-file ${module}/README.md ${module}`),
-    "git add terraform/modules/**/README.md",
+    "git add infra/terraform/modules/**/README.md",
   ];
 };
 
 export default {
   "*": ["prettier --ignore-unknown --write"],
   "*.{tf,tfvars}": ["terraform fmt"],
-  "terraform/modules/**/*": generateTerraformDocs,
+  "infra/terraform/modules/**/*": generateTerraformDocs,
 };
