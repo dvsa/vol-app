@@ -7,7 +7,8 @@
     }],
     "require": {
         "php": "^7.4",
-        "dvsa/laminas-config-cloud-parameters": "^0.1.0",
+        "ext-redis": "*",
+        "dvsa/laminas-config-cloud-parameters": "^0.2.0",
         "laminas/laminas-authentication": "^2.5",
         "laminas/laminas-cache": "^3.0",
         "laminas/laminas-cache-storage-adapter-redis": "^2.0",
@@ -41,7 +42,8 @@
         "saeven/zf3-purifier": "^1.1",
         "doctrine/doctrine-module": "^5",
         "laminas/laminas-serializer": "^2.5",
-        "psr/container": "^1.1|^2"
+        "psr/container": "^1.1|^2",
+        "aws/aws-sdk-php": "^3.300"
     },
     "require-dev": {
         "johnkary/phpunit-speedtrap": "^4.0",

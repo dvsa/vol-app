@@ -17,7 +17,7 @@ node_modules
 /.vscode
 test/coverage/
 .scannerwork/
-
+config/development.config.php
 vendor-bin/**/composer.lock
 .phpunit.result.cache
 

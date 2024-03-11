@@ -1,13 +1,17 @@
 <?php
 
-return array(
-    // Debugging, display environment and version on interface
-    'version' => [
-        'environment' => 'Local Dev',
-        'release' => (file_exists(__DIR__ . '/../version') ? file_get_contents(__DIR__ . '/../version') : '')
+return [
+    'config_parameters' => [
+        'providers' => new \Laminas\Stdlib\ArrayUtils\MergeReplaceKey([]),
     ],
 
-    // New Backend service
+    // Debugging, display environment and version on interface
+    'version' => [
+        'environment' => 'localdev',
+        'release' => (file_exists(__DIR__ . '/../version') ? file_get_contents(__DIR__ . '/../version') : ''),
+        'description' => 'olcs.localdev',
+    ],
+
     'api_router' => [
         'routes' => [
             'api' => [
@@ -29,18 +33,10 @@ return array(
             // Backend service URI *Environment specific*
             'backend' => [
                 'url' => 'backend-nginx',
-                'options' => [
-                    'adapter' => \Laminas\Http\Client\Adapter\Curl::class,
-                    'timeout' => 60,
-                ]
             ],
             // Postcode/Address service URI *Environment specific*
             'postcode' => [
-                'url' => 'http://address.reg.olcs.dev-dvsacloud.uk/',
-                'options' => [
-                    'adapter' => \Laminas\Http\Client\Adapter\Curl::class,
-                    'timeout' => 60,
-                ]
+                'url' => 'backend-nginx',
             ],
         ]
     ],
@@ -48,13 +44,14 @@ return array(
     // Document service
     'windows_7_document_share' => [
         // File hyperlink to document
-        'uri_pattern' => 'file://///<host>/OLCS/olcs/%s',
+        'uri_pattern' => ''
     ],
     'windows_10_document_share' => [
-        'uri_pattern' => 'http://<url>/OLCS/olcs/%s',
+        // File hyperlink to document
+        'uri_pattern' => ''
     ],
     'northern_i_document_share' => [
-        'uri_pattern' => 'webdav://///fs01.olcs.mgt.mtpdvsa/OLCS/olcs/%s',
+        'uri_pattern' => ''
     ],
 
     // WebDav
@@ -63,12 +60,12 @@ return array(
         // Can be a path to a .pem file or base64 encoded private key in PEM format.
         'private_key' => '',
         // The default length in seconds the JWT is valid for.
-        'default_lifetime_seconds' => 3600,
+        'default_lifetime_seconds' => 21600,
         // The URL pattern for a WebDAV URL. JWT followed by Document Path will be sprintf'ed into this value.
-        'url_pattern' => 'ms-word:ofe|u|https://iuweb.da.olcs.dev-dvsacloud.uk/documents-dav/%%s/olcs/%%s'
+        'url_pattern' => ''
     ],
 
-    // Asset path, URI to olcs-static (CSS, JS, etc) *Environment specific*
+    // Asset path, URI to olcs-static (CSS, JS, etc] *Environment specific*
     'asset_path' => 'http://localhost:7001',
 
     'openam' => [
@@ -78,14 +75,6 @@ return array(
         ]
     ],
 
-    'view_manager' => array(
-        'template_map' => array(
-            // Dev versions of 404 and error
-            'error/404' => __DIR__ . '/../../module/Olcs/view/error/dev-404.phtml',
-            'error/403' => __DIR__ . '/../../module/Olcs/view/error/dev-403.phtml',
-            'error/index' => __DIR__ . '/../../module/Olcs/view/error/dev-index.phtml'
-        ),
-    ),
     /**
      * Configure the location of the application log
      */
@@ -103,9 +92,7 @@ return array(
 
     // enable the virus scanning of uploaded files
     // To disable scanning comment out this section or set 'cliCommand' to ""
-    'antiVirus' => [
-        //'cliCommand' => 'clamscan %s',
-    ],
+    'antiVirus' => new \Laminas\Stdlib\ArrayUtils\MergeReplaceKey([]),
 
     // Show extra debug info in flash messages
     'debug' => [
@@ -128,8 +115,8 @@ return array(
         'enabled' => true,
         // sets the ttl for cqrs cache - note that these caches are also used by selfserve
         'ttl' => [
-            \Dvsa\Olcs\Transfer\Query\CacheableMediumTermQueryInterface::class => 600, //10 minutes
-            \Dvsa\Olcs\Transfer\Query\CacheableLongTermQueryInterface::class => 43200, //12 hours
+            \Dvsa\Olcs\Transfer\Query\CacheableMediumTermQueryInterface::class => 600,
+            \Dvsa\Olcs\Transfer\Query\CacheableLongTermQueryInterface::class => 43200,
         ],
     ],
     'caches' => [
@@ -138,30 +125,13 @@ return array(
             'options' => [
                 'server' => [
                     'host' => 'redis',
-                    'port' => 6379,
                 ],
-                'lib_options' => [
-                    \Redis::OPT_SERIALIZER => \Redis::SERIALIZER_IGBINARY
-                ],
-                'ttl' => 3600, //one hour, likely to be overridden based on use case
-                'namespace' => 'zfcache',
-            ],
-            'plugins' => [
-                [
-                    'name' => 'exception_handler',
-                    'options' => [
-                        'throw_exceptions' => false,
-                    ],
-                ]
             ],
         ],
     ],
-    'html-purifier-cache-dir' => '/var/tmp/htmlPurifierCache',
+    'html-purifier-cache-dir' => '/tmp',
 
     'auth' => [
         'user_unique_id_salt' => '1234',
-        'realm' => 'internal',
-        'session_name' => 'Identity',
-        'identity_provider' => \Common\Rbac\JWTIdentityProvider::class
     ],
-);
+];
