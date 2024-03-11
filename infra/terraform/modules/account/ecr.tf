@@ -8,7 +8,7 @@ module "ecr" {
   source  = "terraform-aws-modules/ecr/aws"
   version = "~> 1.6"
 
-  repository_name = "vol-app-${each.key}"
+  repository_name = "vol-app/${each.key}"
 
   repository_read_access_arns       = var.ecr_read_access_arns
   repository_read_write_access_arns = var.ecr_read_write_access_arns
