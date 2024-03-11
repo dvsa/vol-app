@@ -52,6 +52,4 @@ module "ecr" {
       filter_type    = "WILDCARD"
     }
   ]
-
-  repository_force_delete = true
 }
