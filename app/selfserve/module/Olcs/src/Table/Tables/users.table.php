@@ -59,7 +59,7 @@ return array(
             'type' => 'ActionLinks',
             'isRemoveVisible' => function ($row) {
                 /** $var TableBuilder $this */
-                return ($row['id'] !== $this->authService->getIdentity()->getUserData()['id']);
+                return $this->permissionService->isSelf($row['id']);
             },
             'ariaDescription' => function ($row, $column) {
                 $column['formatter'] = Name::class;
