@@ -1,7 +1,9 @@
 # installing the base image from ECR, tag is appended with v0.1
-FROM $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/php-base:7.4.33-fpm-alpine3.16-v0.1
+FROM $AWS_ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com/php-7.4:v0.1
 
 USER root
+
+RUN docker-php-ext-install intl pdo_mysql opcache 
 
 # Installing require dependencies
 RUN apk add --update --no-cache \
@@ -10,15 +12,13 @@ RUN apk add --update --no-cache \
                       g++ \
                       make \
     && pecl install igbinary \
-    && docker-php-ext-enable igbinary \
-    && docker-php-ext-install intl pdo_mysql opcache \ 
     && pecl install -D 'enable-redis-igbinary="yes"' redis \
-    && docker-php-ext-enable redis \
+    && docker-php-ext-enable igbinary redis \
     && apk del --purge autoconf g++ make
 
 USER www-data
 
-# opcache config file
+# php config file
 COPY ./php.ini ${PHP_INI_DIR}/conf.d/1000-php.ini
 
 # nginx server config file
