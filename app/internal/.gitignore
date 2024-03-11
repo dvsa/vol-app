@@ -20,6 +20,7 @@ test/coverage/
 config/development.config.php
 vendor-bin/**/composer.lock
 .phpunit.result.cache
+data/cache/*
 
 # Non-dist files for the static analysis.
 # This allows developers to set a different (more strict) static analysis locally.
