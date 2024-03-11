@@ -1,11 +1,10 @@
 <!-- BEGIN_TF_DOCS -->
-
 ## Requirements
 
-| Name                                                                     | Version  |
-| ------------------------------------------------------------------------ | -------- |
-| <a name="requirement_terraform"></a> [terraform](#requirement_terraform) | >= 1.0   |
-| <a name="requirement_aws"></a> [aws](#requirement_aws)                   | >= 5.0.0 |
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0.0 |
 
 ## Providers
 
@@ -13,11 +12,11 @@ No providers.
 
 ## Modules
 
-| Name                                                                                                                       | Source                                                          | Version |
-| -------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- | ------- |
-| <a name="module_iam_github_oidc_provider"></a> [iam_github_oidc_provider](#module_iam_github_oidc_provider)                | terraform-aws-modules/iam/aws//modules/iam-github-oidc-provider | ~> 5.24 |
-| <a name="module_iam_github_oidc_readonly_role"></a> [iam_github_oidc_readonly_role](#module_iam_github_oidc_readonly_role) | terraform-aws-modules/iam/aws//modules/iam-github-oidc-role     | ~> 5.24 |
-| <a name="module_iam_github_oidc_role"></a> [iam_github_oidc_role](#module_iam_github_oidc_role)                            | terraform-aws-modules/iam/aws//modules/iam-github-oidc-role     | ~> 5.24 |
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_iam_github_oidc_provider"></a> [iam\_github\_oidc\_provider](#module\_iam\_github\_oidc\_provider) | terraform-aws-modules/iam/aws//modules/iam-github-oidc-provider | ~> 5.24 |
+| <a name="module_iam_github_oidc_readonly_role"></a> [iam\_github\_oidc\_readonly\_role](#module\_iam\_github\_oidc\_readonly\_role) | terraform-aws-modules/iam/aws//modules/iam-github-oidc-role | ~> 5.24 |
+| <a name="module_iam_github_oidc_role"></a> [iam\_github\_oidc\_role](#module\_iam\_github\_oidc\_role) | terraform-aws-modules/iam/aws//modules/iam-github-oidc-role | ~> 5.24 |
 
 ## Resources
 
@@ -25,20 +24,19 @@ No resources.
 
 ## Inputs
 
-| Name                                                                                                                                    | Description                                                               | Type           | Default | Required |
-| --------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | -------------- | ------- | :------: |
-| <a name="input_create_oidc_provider"></a> [create_oidc_provider](#input_create_oidc_provider)                                           | Whether to create an OIDC provider.                                       | `bool`         | `true`  |    no    |
-| <a name="input_create_oidc_readonly_role"></a> [create_oidc_readonly_role](#input_create_oidc_readonly_role)                            | Whether to create a readonly OIDC role. This is useful for pull requests. | `bool`         | `true`  |    no    |
-| <a name="input_create_oidc_role"></a> [create_oidc_role](#input_create_oidc_role)                                                       | Whether to create an OIDC role.                                           | `bool`         | `true`  |    no    |
-| <a name="input_oidc_readonly_role_policies"></a> [oidc_readonly_role_policies](#input_oidc_readonly_role_policies)                      | The map of policies to attach to the OIDC readonly role.                  | `map(string)`  | `{}`    |    no    |
-| <a name="input_oidc_role_permissions_boundary_arn"></a> [oidc_role_permissions_boundary_arn](#input_oidc_role_permissions_boundary_arn) | The ARN of the permissions boundary to use for the role.                  | `string`       | `null`  |    no    |
-| <a name="input_oidc_role_policies"></a> [oidc_role_policies](#input_oidc_role_policies)                                                 | The map of policies to attach to the OIDC role.                           | `map(string)`  | `{}`    |    no    |
-| <a name="input_repositories"></a> [repositories](#input_repositories)                                                                   | The list of repositories to add to the OIDC role.                         | `list(string)` | n/a     |   yes    |
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_create_oidc_provider"></a> [create\_oidc\_provider](#input\_create\_oidc\_provider) | Whether to create an OIDC provider. | `bool` | `true` | no |
+| <a name="input_create_oidc_readonly_role"></a> [create\_oidc\_readonly\_role](#input\_create\_oidc\_readonly\_role) | Whether to create a readonly OIDC role. This is useful for pull requests. | `bool` | `true` | no |
+| <a name="input_create_oidc_role"></a> [create\_oidc\_role](#input\_create\_oidc\_role) | Whether to create an OIDC role. | `bool` | `true` | no |
+| <a name="input_oidc_readonly_role_policies"></a> [oidc\_readonly\_role\_policies](#input\_oidc\_readonly\_role\_policies) | The map of policies to attach to the OIDC readonly role. | `map(string)` | `{}` | no |
+| <a name="input_oidc_role_permissions_boundary_arn"></a> [oidc\_role\_permissions\_boundary\_arn](#input\_oidc\_role\_permissions\_boundary\_arn) | The ARN of the permissions boundary to use for the role. | `string` | `null` | no |
+| <a name="input_oidc_role_policies"></a> [oidc\_role\_policies](#input\_oidc\_role\_policies) | The map of policies to attach to the OIDC role. | `map(string)` | `{}` | no |
+| <a name="input_repositories"></a> [repositories](#input\_repositories) | The list of repositories to add to the OIDC role. | `list(string)` | n/a | yes |
 
 ## Outputs
 
-| Name                                                                       | Description                     |
-| -------------------------------------------------------------------------- | ------------------------------- |
-| <a name="output_oidc_role_arn"></a> [oidc_role_arn](#output_oidc_role_arn) | The ARN of the GitHub OIDC role |
-
+| Name | Description |
+|------|-------------|
+| <a name="output_oidc_role_arn"></a> [oidc\_role\_arn](#output\_oidc\_role\_arn) | The ARN of the GitHub OIDC role |
 <!-- END_TF_DOCS -->

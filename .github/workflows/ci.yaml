@@ -200,6 +200,29 @@ jobs:
       contents: read
       id-token: write
 
+  terraform-lint:
+    name: Lint Terraform
+    if: ${{ needs.orchestrator.outputs.should-plan-terraform-accounts || needs.orchestrator.outputs.should-plan-terraform-environments }}
+    needs:
+      - orchestrator
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infra/terraform
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: infra/terraform
+      - run: terraform fmt -check -no-color -recursive
+      - uses: actions/cache@v4
+        name: Cache plugin dir
+        with:
+          path: ~/.tflint.d/plugins
+          key: tflint-${{ hashFiles('infra/terraform/.tflint.hcl') }}
+      - uses: terraform-linters/setup-tflint@v4
+      - run: tflint --init --recursive --config=$(realpath .tflint.hcl)
+      - run: tflint --recursive --config=$(realpath .tflint.hcl) -f compact
+
   terraform-account:
     name: Terraform Account
     concurrency:
