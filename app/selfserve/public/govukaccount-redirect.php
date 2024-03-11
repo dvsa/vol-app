@@ -2,7 +2,11 @@
 
     declare(strict_types=1);
 
-    $config = require '../config/autoload/local.php';
+    include __DIR__ . '/../vendor/autoload.php';
+
+    $container = require __DIR__ . '/../config/container.php';
+    $config = $container->get('Config');
+
     $config = $config['govukaccount-redirect'];
     $referer = $_SERVER['HTTP_REFERER'] ?? null;
 
