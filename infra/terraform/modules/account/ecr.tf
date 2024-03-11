@@ -1,13 +1,19 @@
+locals {
+  repositories = ["api", "selfserve", "internal"]
+}
+
 module "ecr" {
+  for_each = toset(local.repositories)
+
   source  = "terraform-aws-modules/ecr/aws"
   version = "~> 1.6"
 
-  repository_name = "vol-app"
+  repository_name = "vol-app-${each.key}"
 
   repository_read_access_arns       = var.ecr_read_access_arns
   repository_read_write_access_arns = var.ecr_read_write_access_arns
 
-  create_lifecycle_policy           = true
+  create_lifecycle_policy = true
   repository_lifecycle_policy = jsonencode({
     rules = [
       {
@@ -46,7 +52,7 @@ module "ecr" {
       scan_frequency = "SCAN_ON_PUSH"
       filter         = "*"
       filter_type    = "WILDCARD"
-    }, {
+      }, {
       scan_frequency = "CONTINUOUS_SCAN"
       filter         = "v*"
       filter_type    = "WILDCARD"
