@@ -15,3 +15,15 @@ variable "github_oidc_readonly_role_policies" {
   description = "The map of policies to attach to the OIDC readonly role."
   default     = {}
 }
+
+variable "ecr_read_access_arns" {
+  type        = list(string)
+  description = "The list of ARNs to attach to the ECR read role."
+  default     = []
+}
+
+variable "ecr_read_write_access_arns" {
+  type        = list(string)
+  description = "The list of ARNs to attach to the ECR read-write role."
+  default     = []
+}
