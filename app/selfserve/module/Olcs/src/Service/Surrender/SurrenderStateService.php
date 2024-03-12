@@ -6,10 +6,10 @@ use Common\RefData;
 
 class SurrenderStateService
 {
-    const STATE_EXPIRED = 'surrender_application_expired';
-    const STATE_INFORMATION_CHANGED = 'surrender_application_changed';
-    const STATE_WITHDRAWN = 'surrender_application_withdrawn';
-    const STATE_OK = 'surrender_application_ok';
+    public const STATE_EXPIRED = 'surrender_application_expired';
+    public const STATE_INFORMATION_CHANGED = 'surrender_application_changed';
+    public const STATE_WITHDRAWN = 'surrender_application_withdrawn';
+    public const STATE_OK = 'surrender_application_ok';
 
     private $surrenderData;
 

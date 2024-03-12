@@ -785,9 +785,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $routeMatch = new RouteMatch([]);
 
         // Define Expectations
-        $this->queryHandlerMock->shouldReceive('__invoke')->withArgs(function ($query) {
-            return $query instanceof Vehicles && $query->getIncludeActive() === false;
-        })->once()->andReturns($this->setUpQueryResponse());
+        $this->queryHandlerMock->shouldReceive('__invoke')->withArgs(fn($query) => $query instanceof Vehicles && $query->getIncludeActive() === false)->once()->andReturns($this->setUpQueryResponse());
 
         // Execute
         $this->sut->indexAction($request, $routeMatch);
@@ -804,9 +802,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $routeMatch = new RouteMatch([]);
 
         // Define Expectations
-        $this->queryHandlerMock->shouldReceive('__invoke')->withArgs(function ($query) {
-            return $query instanceof Vehicles && $query->getIncludeRemoved() === true && $query->getSort() === 'removalDate';
-        })->once()->andReturns($this->setUpQueryResponse());
+        $this->queryHandlerMock->shouldReceive('__invoke')->withArgs(fn($query) => $query instanceof Vehicles && $query->getIncludeRemoved() === true && $query->getSort() === 'removalDate')->once()->andReturns($this->setUpQueryResponse());
 
         // Execute
         $this->sut->indexAction($request, $routeMatch);
@@ -823,9 +819,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $routeMatch = new RouteMatch([]);
 
         // Define Expectations
-        $this->queryHandlerMock->shouldReceive('__invoke')->withArgs(function ($query) {
-            return $query instanceof Vehicles && $query->getIncludeRemoved() === true && $query->getOrder() === 'DESC';
-        })->once()->andReturns($this->setUpQueryResponse());
+        $this->queryHandlerMock->shouldReceive('__invoke')->withArgs(fn($query) => $query instanceof Vehicles && $query->getIncludeRemoved() === true && $query->getOrder() === 'DESC')->once()->andReturns($this->setUpQueryResponse());
 
         // Execute
         $this->sut->indexAction($request, $routeMatch);
@@ -842,9 +836,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $routeMatch = new RouteMatch([]);
 
         // Define Expectations
-        $this->queryHandlerMock->shouldReceive('__invoke')->withArgs(function ($query) {
-            return $query instanceof Vehicles && $query->getIncludeRemoved() === true && $query->getLimit() === 10;
-        })->once()->andReturns($this->setUpQueryResponse());
+        $this->queryHandlerMock->shouldReceive('__invoke')->withArgs(fn($query) => $query instanceof Vehicles && $query->getIncludeRemoved() === true && $query->getLimit() === 10)->once()->andReturns($this->setUpQueryResponse());
 
         // Execute
         $this->sut->indexAction($request, $routeMatch);
@@ -861,9 +853,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $routeMatch = new RouteMatch([]);
 
         // Define Expectations
-        $this->queryHandlerMock->shouldReceive('__invoke')->withArgs(function ($query) {
-            return $query instanceof Vehicles && $query->getIncludeRemoved() === true && $query->getPage() === 1;
-        })->once()->andReturns($this->setUpQueryResponse());
+        $this->queryHandlerMock->shouldReceive('__invoke')->withArgs(fn($query) => $query instanceof Vehicles && $query->getIncludeRemoved() === true && $query->getPage() === 1)->once()->andReturns($this->setUpQueryResponse());
 
         // Execute
         $this->sut->indexAction($request, $routeMatch);
@@ -885,9 +875,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         // Define Expectations
         $this->commandHandlerMock
             ->shouldReceive('__invoke')
-            ->withArgs(function ($command) use ($expected) {
-                return $command instanceof UpdateVehicles && $command->getShareInfo() === $expected;
-            })
+            ->withArgs(fn($command) => $command instanceof UpdateVehicles && $command->getShareInfo() === $expected)
             ->once()
             ->andReturn(null);
 
@@ -1018,9 +1006,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     {
         $instance = m::mock(TableFactory::class);
         $this->tableFactoryMock->shouldIgnoreMissing();
-        $this->tableFactoryMock->shouldReceive('prepareTable', 'getTableBuilder')->andReturnUsing(function () {
-            return $this->setUpTableBuilder();
-        })->byDefault();
+        $this->tableFactoryMock->shouldReceive('prepareTable', 'getTableBuilder')->andReturnUsing(fn() => $this->setUpTableBuilder())->byDefault();
     }
 
     /**
@@ -1051,17 +1037,11 @@ class ListVehicleControllerTest extends MockeryTestCase
     protected function setUpTranslator()
     {
         $this->translatorMock->shouldIgnoreMissing('');
-        $this->translatorMock->shouldReceive('translate')->andReturnUsing(function ($val) {
-            return $val;
-        })->byDefault();
-        $this->translatorMock->shouldReceive('translateReplace')->andReturnUsing(function ($message, $params) {
-            return $message . ':' . json_encode($params);
-        })->byDefault();
+        $this->translatorMock->shouldReceive('translate')->andReturnUsing(fn($val) => $val)->byDefault();
+        $this->translatorMock->shouldReceive('translateReplace')->andReturnUsing(fn($message, $params) => $message . ':' . json_encode($params))->byDefault();
 
         $baseTranslator = m::mock(TranslatorInterface::class);
-        $baseTranslator->shouldReceive('translate')->andReturnUsing(function ($val) {
-            return $val;
-        })->byDefault();
+        $baseTranslator->shouldReceive('translate')->andReturnUsing(fn($val) => $val)->byDefault();
         $this->translatorMock->shouldReceive('getTranslator')->andReturn($baseTranslator)->byDefault();
     }
 
@@ -1171,9 +1151,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     protected function injectRemovedVehiclesQueryResultData(ServiceLocatorInterface $serviceLocator, array $queryResultData)
     {
         $removedVehiclesQueryResponse = $this->setUpQueryResponse($queryResultData);
-        $this->queryHandlerMock->shouldReceive('__invoke')->withArgs(function ($query) {
-            return $query instanceof Vehicles && $query->getIncludeActive() === false;
-        })->andReturns($removedVehiclesQueryResponse)->byDefault();
+        $this->queryHandlerMock->shouldReceive('__invoke')->withArgs(fn($query) => $query instanceof Vehicles && $query->getIncludeActive() === false)->andReturns($removedVehiclesQueryResponse)->byDefault();
     }
 
     /**

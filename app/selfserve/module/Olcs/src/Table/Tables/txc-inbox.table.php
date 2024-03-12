@@ -5,54 +5,54 @@ use Common\Service\Table\Formatter\EbsrRegNumberLink;
 use Common\Service\Table\Formatter\EbsrVariationNumber;
 use Common\Service\Table\Formatter\StackValue;
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'title' => 'selfserve-table-txc-inbox-heading'
-    ),
-    'settings' => array(
-        'crud' => array(
+    ],
+    'settings' => [
+        'crud' => [
             'formName' => 'txc-inbox',
-            'actions' => array(
-                'mark-as-read' => array(
+            'actions' => [
+                'mark-as-read' => [
                     'value' => 'Mark as read',
                     'requireRows' => true
-                )
-            )
-        ),
-        'paginate' => array(
-            'limit' => array(
+                ]
+            ]
+        ],
+        'paginate' => [
+            'limit' => [
                 'default' => 25,
-                'options' => array(25, 50, 100)
-            )
-        )
-    ),
-    'columns' => array(
-        array(
+                'options' => [25, 50, 100]
+            ]
+        ]
+    ],
+    'columns' => [
+        [
             'permissionRequisites' => ['local-authority-admin', 'local-authority-user'],
             'title' => 'Organisation',
             'stack' => 'busReg->licence->organisation->name',
             'formatter' => StackValue::class,
-        ),
-        array(
+        ],
+        [
             'title' => 'selfserve-table-txc-inbox-reg-number',
             'formatter' => function ($data, $column) {
                 $column['formatter'] = EbsrRegNumberLink::class;
                 return $this->callFormatter($column, $data);
             }
-        ),
-        array(
+        ],
+        [
             'title' => 'Status',
             'formatter' => BusRegStatus::class
-        ),
-        array(
+        ],
+        [
             'title' => 'selfserve-table-txc-inbox-variation',
             'isNumeric' => true,
             'formatter' => function ($data, $column) {
                 $column['formatter'] = EbsrVariationNumber::class;
                 return $this->callFormatter($column, $data);
             }
-        ),
-        array(
+        ],
+        [
             'title' => 'selfserve-table-txc-inbox-service-numbers',
             'isNumeric' => true,
             'formatter' => function ($data) {
@@ -68,8 +68,8 @@ return array(
                 }
                 return $string;
             }
-        ),
-        array(
+        ],
+        [
             'title' => 'selfserve-table-txc-inbox-uploaded',
             'formatter' => function ($row) {
                 // DateTime formatter require data set at root of array
@@ -79,11 +79,11 @@ return array(
 
                 return '';
             }
-        ),
-        array(
+        ],
+        [
             'permissionRequisites' => ['local-authority-admin', 'local-authority-user'],
             'width' => 'checkbox',
             'format' => '{{[elements/checkbox]}}'
-        )
-    )
-);
+        ]
+    ]
+];

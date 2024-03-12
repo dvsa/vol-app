@@ -41,7 +41,7 @@ class DashboardProcessingService
 
         foreach ($licences as &$licence) {
             $licence['type'] = $licence['licenceType']['id'];
-            $licence['trafficArea'] = isset($licence['trafficArea']['name']) ? $licence['trafficArea']['name'] : '';
+            $licence['trafficArea'] = $licence['trafficArea']['name'] ?? '';
         }
 
         foreach ($applications as &$application) {

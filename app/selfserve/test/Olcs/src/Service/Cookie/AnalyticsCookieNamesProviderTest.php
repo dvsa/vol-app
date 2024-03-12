@@ -9,13 +9,13 @@ use Laminas\Http\Header\Cookie;
 
 class AnalyticsCookieNamesProviderTest extends MockeryTestCase
 {
-    const HOSTNAME = 'host.name';
+    public const HOSTNAME = 'host.name';
 
-    const GID_KEY = '_gid';
-    const GAT_KEY = '_gat';
-    const GA_KEY = '_ga';
-    const GAT_1_KEY = '_gat_xyz';
-    const GAT_2_KEY = '_gat_boo';
+    public const GID_KEY = '_gid';
+    public const GAT_KEY = '_gat';
+    public const GA_KEY = '_ga';
+    public const GAT_1_KEY = '_gat_xyz';
+    public const GAT_2_KEY = '_gat_boo';
 
     private $cookieContents = [
         self::GID_KEY => 'abcd1234',

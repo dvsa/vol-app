@@ -22,7 +22,7 @@ class ExternalControllerTraitTest extends MockeryTestCase
 
     protected function setUp(): void
     {
-        $this->sut = m::mock('OlcsTest\Controller\Lva\Traits\Stubs\ExternalControllerTraitStub')
+        $this->sut = m::mock(\OlcsTest\Controller\Lva\Traits\Stubs\ExternalControllerTraitStub::class)
             ->makePartial();
     }
 

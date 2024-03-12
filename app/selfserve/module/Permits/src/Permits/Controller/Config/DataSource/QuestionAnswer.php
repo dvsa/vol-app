@@ -10,6 +10,6 @@ use Olcs\Controller\Config\DataSource\AbstractDataSource;
  */
 class QuestionAnswer extends AbstractDataSource
 {
-    const DATA_KEY = 'questionAnswer';
+    public const DATA_KEY = 'questionAnswer';
     protected $dto = QuestionAnswerDto::class;
 }

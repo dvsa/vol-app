@@ -16,7 +16,7 @@ use Olcs\Controller\Lva\Adapters\VariationPeopleAdapter;
  */
 class VariationPeopleAdapterTest extends MockeryTestCase
 {
-    const APP_ID = 999;
+    public const APP_ID = 999;
 
     /** @var  VariationPeopleAdapter | m\MockInterface */
     protected $sut;

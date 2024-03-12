@@ -12,8 +12,8 @@ use Laminas\Form\Annotation as Form;
  */
 class ViewVehicleSwitchboard
 {
-    const FIELD_OPTIONS_FIELDSET_NAME = 'optionsFieldset';
-    const FIELD_OPTIONS_NAME = 'options';
+    public const FIELD_OPTIONS_FIELDSET_NAME = 'optionsFieldset';
+    public const FIELD_OPTIONS_NAME = 'options';
 
     /**
      * @Form\Name("optionsFieldset")

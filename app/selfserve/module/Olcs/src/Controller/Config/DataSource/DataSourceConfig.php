@@ -9,11 +9,11 @@ use Olcs\Controller\Config\DataSource\Licence as LicenceDto;
  */
 class DataSourceConfig
 {
-    const LICENCE = [
+    public const LICENCE = [
         LicenceDto::class => []
     ];
 
-    const SURRENDER = [
+    public const SURRENDER = [
         Surrender::class =>[]
     ];
 }

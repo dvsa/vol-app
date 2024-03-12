@@ -10,6 +10,6 @@ use Olcs\Controller\Config\DataSource\AbstractDataSource;
  */
 class IrhpMaxStockPermits extends AbstractDataSource
 {
-    const DATA_KEY = 'maxStockPermits';
+    public const DATA_KEY = 'maxStockPermits';
     protected $dto = IrhpMaxStockPermitsDto::class;
 }

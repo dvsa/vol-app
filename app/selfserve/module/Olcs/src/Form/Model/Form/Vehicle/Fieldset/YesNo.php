@@ -13,8 +13,8 @@ use Laminas\Form\Annotation as Form;
  */
 class YesNo
 {
-    const OPTION_YES = 'yes';
-    const OPTION_NO = 'no';
+    public const OPTION_YES = 'yes';
+    public const OPTION_NO = 'no';
 
     /**
      * @Form\Options({

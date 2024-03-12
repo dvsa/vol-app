@@ -26,14 +26,14 @@ use Olcs\Session\LicenceVehicleManagement;
  */
 class SwitchBoardController
 {
-    const ROUTE_LICENCE_VEHICLE_ADD = 'licence/vehicle/add/GET';
-    const ROUTE_LICENCE_VEHICLE_REMOVE = 'licence/vehicle/remove/GET';
-    const ROUTE_LICENCE_VEHICLE_REPRINT = 'licence/vehicle/reprint/GET';
-    const ROUTE_LICENCE_VEHICLE_TRANSFER = 'licence/vehicle/transfer/GET';
-    const ROUTE_LICENCE_VEHICLE_LIST = 'licence/vehicle/list/GET';
-    const ROUTE_LICENCE_OVERVIEW = 'lva-licence';
+    public const ROUTE_LICENCE_VEHICLE_ADD = 'licence/vehicle/add/GET';
+    public const ROUTE_LICENCE_VEHICLE_REMOVE = 'licence/vehicle/remove/GET';
+    public const ROUTE_LICENCE_VEHICLE_REPRINT = 'licence/vehicle/reprint/GET';
+    public const ROUTE_LICENCE_VEHICLE_TRANSFER = 'licence/vehicle/transfer/GET';
+    public const ROUTE_LICENCE_VEHICLE_LIST = 'licence/vehicle/list/GET';
+    public const ROUTE_LICENCE_OVERVIEW = 'lva-licence';
 
-    const PANEL_FLASH_MESSENGER_NAMESPACE = 'panel';
+    public const PANEL_FLASH_MESSENGER_NAMESPACE = 'panel';
     protected const FLASH_MESSAGE_INPUT_NAMESPACE = 'switchboard-input';
     /**
      * @var FlashMessenger

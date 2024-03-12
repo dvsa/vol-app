@@ -61,7 +61,7 @@ trait ApplicationControllerTrait
      *
      * @return ViewModel
      */
-    protected function render($titleSuffix, Form $form = null, $variables = array())
+    protected function render($titleSuffix, Form $form = null, $variables = [])
     {
         $this->attachCurrentMessages();
 

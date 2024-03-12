@@ -5,13 +5,13 @@ use Common\Service\Table\Formatter\Translate;
 use Common\Util\Escape;
 
 $variationNo = 1;
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'title' => 'Registration history'
-    ),
-    'settings' => array(),
-    'columns' => array(
-        array(
+    ],
+    'settings' => [],
+    'columns' => [
+        [
             'title' => 'Reg No.',
             'formatter' => function ($data) {
                 if (isset($data['id'])) {
@@ -23,7 +23,7 @@ return array(
                         );
                     } else {
                         return '<a href="' . $this->generateUrl(
-                            array('action' => 'details', 'busRegId' => $data['id']),
+                            ['action' => 'details', 'busRegId' => $data['id']],
                             'bus-registration/details',
                             false
                         ) . '" class="govuk-link">' . $data['regNo'] . '</a>';
@@ -31,18 +31,18 @@ return array(
                 }
                 return '';
             }
-        ),
-        array(
+        ],
+        [
             'title' => 'Var No.',
             'isNumeric' => true,
             'name' => 'variationNo'
-        ),
-        array(
+        ],
+        [
             'title' => 'Status',
             'formatter' => Translate::class,
             'name' => 'status->description',
-        ),
-        array(
+        ],
+        [
             'title' => 'Application type',
             'formatter' => function ($data, $column) {
                 if ($data['isTxcApp'] == 'Y') {
@@ -55,23 +55,23 @@ return array(
                     return $this->translator->translate('Manual');
                 }
             }
-        ),
-        array(
+        ],
+        [
             'title' => 'Date received',
             'formatter' => Date::class,
             'name' => 'receivedDate'
-        ),
-        array(
+        ],
+        [
             'title' => 'Date effective',
             'formatter' => Date::class,
             'name' => 'effectiveDate'
-        ),
-        array(
+        ],
+        [
             'title' => 'End date',
             'formatter' => Date::class,
             'name' => 'endDate'
-        ),
-        array(
+        ],
+        [
             'title' => 'Action',
             'width' => 'checkbox',
             'formatter' => function ($data) {
@@ -79,6 +79,6 @@ return array(
                     return '<input type="radio" aria-label="Delete ' . Escape::htmlAttr($data['regNo']) . '" name="id" value="' . Escape::htmlAttr($data['id']) . '">';
                 }
             },
-        )
-    )
-);
+        ]
+    ]
+];

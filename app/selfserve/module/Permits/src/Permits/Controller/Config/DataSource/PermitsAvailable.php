@@ -10,6 +10,6 @@ use Olcs\Controller\Config\DataSource\AbstractDataSource;
  */
 class PermitsAvailable extends AbstractDataSource
 {
-    const DATA_KEY = 'permitsAvailable';
+    public const DATA_KEY = 'permitsAvailable';
     protected $dto = PermitsAvailableDto::class;
 }

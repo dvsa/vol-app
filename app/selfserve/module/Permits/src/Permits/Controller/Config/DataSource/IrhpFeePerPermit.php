@@ -10,6 +10,6 @@ use Olcs\Controller\Config\DataSource\AbstractDataSource;
  */
 class IrhpFeePerPermit extends AbstractDataSource
 {
-    const DATA_KEY = 'feePerPermit';
+    public const DATA_KEY = 'feePerPermit';
     protected $dto = IrhpFeePerPermitDto::class;
 }

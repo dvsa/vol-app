@@ -15,7 +15,7 @@ use Laminas\View\Helper\AbstractHelper;
  */
 class AnswerFormatter extends AbstractHelper
 {
-    const SEPARATOR = '<br/>';
+    public const SEPARATOR = '<br/>';
 
     /**
      * Expects a Q&A answer in the form of $data['question'], $data['answer'] etc

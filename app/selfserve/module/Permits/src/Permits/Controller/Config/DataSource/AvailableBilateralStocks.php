@@ -10,7 +10,7 @@ use Olcs\Controller\Config\DataSource\AbstractDataSource;
  */
 class AvailableBilateralStocks extends AbstractDataSource
 {
-    const DATA_KEY = 'stocks';
+    public const DATA_KEY = 'stocks';
     protected $dto = AvailableBilateralDto::class;
     protected $paramsMap = [
         'country' => 'country',

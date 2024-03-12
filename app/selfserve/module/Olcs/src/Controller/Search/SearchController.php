@@ -145,7 +145,7 @@ class SearchController extends AbstractController
             'person' => 'person',
         ];
 
-        return isset($mapping[$searchBy]) ? $mapping[$searchBy] : null;
+        return $mapping[$searchBy] ?? null;
     }
 
     /**
@@ -304,7 +304,7 @@ class SearchController extends AbstractController
             'vehicle-external' => 'search-vehicle-external',
         ];
 
-        return isset($mapping[$index]) ? $mapping[$index] : 'search';
+        return $mapping[$index] ?? 'search';
     }
 
     /**

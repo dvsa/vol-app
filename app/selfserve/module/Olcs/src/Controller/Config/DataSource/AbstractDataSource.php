@@ -9,7 +9,7 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
  */
 class AbstractDataSource implements DataSourceInterface
 {
-    const DATA_KEY = 'changeMe'; //key for when multiple sources are used within a single controller
+    public const DATA_KEY = 'changeMe'; //key for when multiple sources are used within a single controller
 
     protected $dto;
     protected $paramsMap = ['id' => 'id'];

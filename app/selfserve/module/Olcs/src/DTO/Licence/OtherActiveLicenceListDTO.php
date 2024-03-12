@@ -24,8 +24,6 @@ class OtherActiveLicenceListDTO extends DataTransferObject
     public function getOtherLicences()
     {
         $otherActiveLicenceData = $this->data['otherActiveLicences'] ?? null;
-        return array_map(function ($licenceData) {
-            return new LicenceDTO($licenceData);
-        }, is_array($otherActiveLicenceData) ? $otherActiveLicenceData : []);
+        return array_map(fn($licenceData) => new LicenceDTO($licenceData), is_array($otherActiveLicenceData) ? $otherActiveLicenceData : []);
     }
 }

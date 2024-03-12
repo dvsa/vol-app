@@ -266,15 +266,15 @@ abstract class AbstractUndertakingsController extends AbstractController
     {
         $goodsOrPsv  = $applicationData['goodsOrPsv']['id'];
 
-        $output = array(
-            'declarationsAndUndertakings' => array(
+        $output = [
+            'declarationsAndUndertakings' => [
                 'version' => $applicationData['version'],
                 'id' => $applicationData['id'],
-            )
-        );
+            ]
+        ];
 
         if ($goodsOrPsv === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
-            $interim = array();
+            $interim = [];
             if (!is_null($applicationData['interimReason'])) {
                 $interim['goodsApplicationInterim'] = "Y";
                 $interim['YContent']['goodsApplicationInterimReason'] = $applicationData['interimReason'];

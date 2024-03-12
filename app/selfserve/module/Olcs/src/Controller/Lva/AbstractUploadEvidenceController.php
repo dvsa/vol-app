@@ -166,9 +166,7 @@ abstract class AbstractUploadEvidenceController extends AbstractController
         foreach ($data['operatingCentres'] as $aocData) {
             if ($aocData['operatingCentre']['id'] === $this->operatingCentreId) {
                 $documents = $aocData['operatingCentre']['adDocuments'];
-                return array_filter($documents, function ($document) {
-                    return $document['isPostSubmissionUpload'];
-                });
+                return array_filter($documents, fn($document) => $document['isPostSubmissionUpload']);
             }
         }
 

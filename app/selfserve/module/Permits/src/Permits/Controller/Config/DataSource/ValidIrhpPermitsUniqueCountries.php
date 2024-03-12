@@ -10,7 +10,7 @@ use Olcs\Controller\Config\DataSource\AbstractDataSource;
  */
 class ValidIrhpPermitsUniqueCountries extends AbstractDataSource
 {
-    const DATA_KEY = 'validIrhpPermitsUniqueCountries';
+    public const DATA_KEY = 'validIrhpPermitsUniqueCountries';
     protected $dto = UniqueCountriesDto::class;
     protected $paramsMap = [
         'licence' => 'licence',

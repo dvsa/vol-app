@@ -87,7 +87,7 @@ class AbstractSummaryControllerTest extends MockeryTestCase
                     return 'RENDERED';
                 }
             )
-            ->shouldReceive('params->fromRoute')->with('reference')->twice()->andReturn('REF');
+            ->shouldReceive('params->fromRoute')->with('reference')->andReturn('REF');
 
         $this->assertSame('RENDERED', $this->sut->indexAction());
     }
@@ -132,7 +132,7 @@ class AbstractSummaryControllerTest extends MockeryTestCase
                     return 'RENDERED';
                 }
             )
-            ->shouldReceive('params->fromRoute')->with('reference')->twice()->andReturn('REF');
+            ->shouldReceive('params->fromRoute')->with('reference')->andReturn('REF');
 
         $this->assertSame('RENDERED', $this->sut->indexAction());
     }

@@ -13,15 +13,15 @@ use InvalidArgumentException;
  */
 class ContentWithPartialsViewModelTest extends MockeryTestCase
 {
-    const AN_EXCEPTION_MESSAGE_WHEN_NO_PARTIALS_ARE_PROVIDED = 'Expected at least one partial to be provided';
-    const THE_PARTIALS_VARIABLE = 'partials';
-    const A_PARTIAL = 'A PARTIAL';
-    const A_SECOND_PARTIAL = 'A SECOND PARTIAL';
-    const THE_CONTENT_VARIABLE = 'content';
-    const AN_EMPTY_CONTENT = '';
-    const THE_CONTENT_WITH_PARTIALS_TEMPLATE = 'partials/content-with-partials';
-    const OVERWRITE_VARIABLES = true;
-    const AN_INVALID_PARTIALS_VALUE = 'AN_INVALID_PARTIALS_VALUE';
+    public const AN_EXCEPTION_MESSAGE_WHEN_NO_PARTIALS_ARE_PROVIDED = 'Expected at least one partial to be provided';
+    public const THE_PARTIALS_VARIABLE = 'partials';
+    public const A_PARTIAL = 'A PARTIAL';
+    public const A_SECOND_PARTIAL = 'A SECOND PARTIAL';
+    public const THE_CONTENT_VARIABLE = 'content';
+    public const AN_EMPTY_CONTENT = '';
+    public const THE_CONTENT_WITH_PARTIALS_TEMPLATE = 'partials/content-with-partials';
+    public const OVERWRITE_VARIABLES = true;
+    public const AN_INVALID_PARTIALS_VALUE = 'AN_INVALID_PARTIALS_VALUE';
 
     /**
      * @var ContentWithPartialsViewModel

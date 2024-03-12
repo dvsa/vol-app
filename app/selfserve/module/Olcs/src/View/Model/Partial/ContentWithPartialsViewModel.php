@@ -21,7 +21,7 @@ class ContentWithPartialsViewModel extends ViewModel
      */
     public function __construct($variables = null, $options = null)
     {
-        $variables[static::CONTENT_VARIABLE] = $variables[static::CONTENT_VARIABLE] ?? '';
+        $variables[static::CONTENT_VARIABLE] ??= '';
         parent::__construct($variables, $options);
         $this->setTemplate(static::DEFAULT_TEMPLATE);
     }

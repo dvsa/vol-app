@@ -14,7 +14,7 @@ class ViewAndAmendYourLicenceViewModel extends ContentWithPartialsViewModel
      */
     public function __construct($variables = null, $options = null)
     {
-        $variables[parent::CONTENT_VARIABLE] = $variables[parent::CONTENT_VARIABLE] ?? 'licence.vehicle.switchboard.choose-different-option.text';
+        $variables[parent::CONTENT_VARIABLE] ??= 'licence.vehicle.switchboard.choose-different-option.text';
         $variables[parent::PARTIALS_VARIABLE] = [
             $variables['anchor'] ?? new AnchorViewModel([
                 'route' => ['lva-licence', [], [], true],

@@ -93,7 +93,7 @@ class GdsVerifyController extends AbstractController
 
         $this->scriptFactory->loadFile('verify-request');
 
-        return new ViewModel(array('form' => $form));
+        return new ViewModel(['form' => $form]);
     }
 
     /**

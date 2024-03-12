@@ -6,7 +6,7 @@ use Laminas\Form\Annotation as Form;
 
 class VehicleTransferFormActions extends VehicleFormActions
 {
-    const LICENCE_FIELD = 'licence';
+    public const LICENCE_FIELD = 'licence';
 
     /**
      * @Form\Required(false)

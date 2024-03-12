@@ -7,9 +7,9 @@ use Laminas\View\Model\ViewModel;
 
 abstract class LvaOverviewSection extends ViewModel
 {
-    protected $variables = array(
+    protected $variables = [
         'enabled' => true
-    );
+    ];
 
     /**
      * Holds the section reference
@@ -55,8 +55,7 @@ abstract class LvaOverviewSection extends ViewModel
         switch ($ref) {
             case 'people':
                 // change the section name based on org type
-                $orgType = isset($data['licence']['organisation']['type']['id']) ?
-                    $data['licence']['organisation']['type']['id'] : $data['organisation']['type']['id'];
+                $orgType = $data['licence']['organisation']['type']['id'] ?? $data['organisation']['type']['id'];
 
                 $sectionName .= '.' . $orgType;
                 break;

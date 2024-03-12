@@ -11,6 +11,6 @@ use Olcs\Controller\Config\DataSource\AbstractDataSource;
 class PermitApplication extends AbstractDataSource
 {
     /** @todo this should be something more specific e.g. permitApplication but it's a BC break for current views */
-    const DATA_KEY = 'application';
+    public const DATA_KEY = 'application';
     protected $dto = PermitApplicationDto::class;
 }

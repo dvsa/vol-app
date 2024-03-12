@@ -25,11 +25,11 @@ use Permits\Data\Mapper\RemovedCountries as RemovedCountriesMapper;
  */
 class FormConfig
 {
-    const FORM_CANCEL_PERMIT_APP_KEY = 'cancelPermitApp';
-    const FORM_WITHDRAW_PERMIT_APP_KEY = 'withdrawPermitApp';
-    const FORM_OPTIONS = 'mapForFormOptions';
+    public const FORM_CANCEL_PERMIT_APP_KEY = 'cancelPermitApp';
+    public const FORM_WITHDRAW_PERMIT_APP_KEY = 'withdrawPermitApp';
+    public const FORM_OPTIONS = 'mapForFormOptions';
 
-    const FORM_TYPE = [
+    public const FORM_TYPE = [
         'type' => [
             'formClass' => 'TypeForm',
             'dataSource' => AvailableTypesDataSource::DATA_KEY,
@@ -40,7 +40,7 @@ class FormConfig
         ],
     ];
 
-    const FORM_YEAR = [
+    public const FORM_YEAR = [
         'sectors' => [
             'formClass' => 'YearForm',
             'dataRouteParam' => 'type',
@@ -52,7 +52,7 @@ class FormConfig
         ],
     ];
 
-    const FORM_STOCK = [
+    public const FORM_STOCK = [
         'sectors' => [
             'formClass' => 'StockForm',
             'dataRouteParam' => 'type',
@@ -64,7 +64,7 @@ class FormConfig
         ],
     ];
 
-    const FORM_BILATERAL_STOCK = [
+    public const FORM_BILATERAL_STOCK = [
         'stocks' => [
             'formClass' => 'PeriodSelect',
             'dataRouteParam' => 'type',
@@ -76,7 +76,7 @@ class FormConfig
         ],
     ];
 
-    const FORM_ADD_LICENCE = [
+    public const FORM_ADD_LICENCE = [
         'licence' => [
             'formClass' => 'LicenceForm',
             'dataParam' => 'active',
@@ -88,14 +88,14 @@ class FormConfig
         ],
     ];
 
-    const FORM_IRHP_DECLARATION = [
+    public const FORM_IRHP_DECLARATION = [
         'declaration' => [
             'formClass' => 'DeclarationForm',
             'dataSource' => IrhpApplicationDataSource::DATA_KEY,
         ],
     ];
 
-    const FORM_FEE = [
+    public const FORM_FEE = [
         'fee' => [
             'formClass' => 'FeesForm',
             'dataSource' => IrhpApplicationDataSource::DATA_KEY,
@@ -106,31 +106,31 @@ class FormConfig
         ],
     ];
 
-    const FORM_CANCEL_PERMIT_APP = [
+    public const FORM_CANCEL_PERMIT_APP = [
         self::FORM_CANCEL_PERMIT_APP_KEY => [
             'formClass' => 'CancelApplicationForm',
         ],
     ];
 
-    const FORM_WITHDRAW_PERMIT_APP = [
+    public const FORM_WITHDRAW_PERMIT_APP = [
         self::FORM_CANCEL_PERMIT_APP_KEY => [
             'formClass' => 'WithdrawApplicationForm',
         ],
     ];
 
-    const FORM_ACCEPT_AND_PAY = [
+    public const FORM_ACCEPT_AND_PAY = [
         'acceptAndPay' => [
             'formClass' => 'AcceptAndPayForm',
         ],
     ];
 
-    const FORM_DECLINE_PERMIT = [
+    public const FORM_DECLINE_PERMIT = [
         'decline' => [
             'formClass' => 'DeclineApplicationForm',
         ],
     ];
 
-    const FORM_COUNTRIES = [
+    public const FORM_COUNTRIES = [
         'countries' => [
             'formClass' => 'CountriesForm',
             'dataSource' => IrhpApplicationDataSource::DATA_KEY,
@@ -141,7 +141,7 @@ class FormConfig
         ],
     ];
 
-    const FORM_COUNTRIES_CONFIRMATION = [
+    public const FORM_COUNTRIES_CONFIRMATION = [
         'countries' => [
             'formClass' => 'CountriesConfirmationForm',
             'mapper' => [
@@ -151,7 +151,7 @@ class FormConfig
         ],
     ];
 
-    const FORM_NO_OF_PERMITS = [
+    public const FORM_NO_OF_PERMITS = [
         'noOfPermits' => [
             'formClass' => 'NoOfPermitsForm',
             'dataSource' => IrhpApplicationDataSource::DATA_KEY,
@@ -162,33 +162,33 @@ class FormConfig
         ],
     ];
 
-    const FORM_IRHP_CHECK_ANSWERS = [
+    public const FORM_IRHP_CHECK_ANSWERS = [
         'checkAnswers' => [
             'formClass' => 'CheckAnswersForm',
             'dataSource' => IrhpApplicationDataSource::DATA_KEY,
         ],
     ];
 
-    const FORM_IRHP_IPA_CHECK_ANSWERS = [
+    public const FORM_IRHP_IPA_CHECK_ANSWERS = [
         'checkAnswers' => [
             'formClass' => 'IpaCheckAnswersForm',
             'dataSource' => IrhpApplicationDataSource::DATA_KEY,
         ],
     ];
 
-    const FORM_CANCEL_IRHP_APP = [
+    public const FORM_CANCEL_IRHP_APP = [
         self::FORM_CANCEL_PERMIT_APP_KEY => [
             'formClass' => 'CancelApplicationForm',
         ],
     ];
 
-    const FORM_IRHP_OVERVIEW_SUBMIT = [
+    public const FORM_IRHP_OVERVIEW_SUBMIT = [
         'irhpOverviewSubmit' => [
             'formClass' => 'IrhpOverviewSubmitForm',
         ]
     ];
 
-    const FORM_CANDIDATE_PERMIT_SELECTION = [
+    public const FORM_CANDIDATE_PERMIT_SELECTION = [
         'candidatePermitSelection' => [
             'formClass' => 'CandidatePermitSelectionForm',
             'dataSource' => IrhpApplicationDataSource::DATA_KEY,

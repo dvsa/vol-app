@@ -64,19 +64,19 @@ class LoginControllerTest extends MockeryTestCase
      */
     protected $authChallengeContainerMock;
 
-    const EMPTY_FORM_DATA = [
+    public const EMPTY_FORM_DATA = [
         'username' => null,
         'password' => null,
         'csrf' => null,
     ];
 
-    const AUTHENTICATION_RESULT_SUCCESSFUL = [
+    public const AUTHENTICATION_RESULT_SUCCESSFUL = [
         Result::SUCCESS,
         [],
         []
     ];
 
-    const AUTHENTICATION_RESULT_CHALLENGE_NEW_PASSWORD_REQUIRED = [
+    public const AUTHENTICATION_RESULT_CHALLENGE_NEW_PASSWORD_REQUIRED = [
         LoginController::AUTH_SUCCESS_WITH_CHALLENGE,
         [],
         [
@@ -87,17 +87,17 @@ class LoginControllerTest extends MockeryTestCase
             'challengeSession' => 'challengeSession'
         ]
     ];
-    const AUTHENTICATION_RESULT_CHALLENGE_UNSUPPORTED = [
+    public const AUTHENTICATION_RESULT_CHALLENGE_UNSUPPORTED = [
         LoginController::AUTH_SUCCESS_WITH_CHALLENGE,
         [],
         [
             'challengeName' => 'UnsupportedChallenge',
         ]
     ];
-    const AUTHENTICATION_RESULT_FAILURE = [Result::FAILURE, [], ['failed']];
-    const AUTHENTICATION_RESULT_USER_NOT_EXIST = [Result::FAILURE_IDENTITY_NOT_FOUND, [], ['Authentication Failed']];
-    const AUTHENTICATION_RESULT_CREDENTIAL_INVALID = [Result::FAILURE_CREDENTIAL_INVALID, [], ['Authentication Failed']];
-    const AUTHENTICATION_RESULT_FAILURE_ACCOUNT_DISABLED = [LoginController::AUTH_FAILURE_ACCOUNT_DISABLED, [], ['account-disabled']];
+    public const AUTHENTICATION_RESULT_FAILURE = [Result::FAILURE, [], ['failed']];
+    public const AUTHENTICATION_RESULT_USER_NOT_EXIST = [Result::FAILURE_IDENTITY_NOT_FOUND, [], ['Authentication Failed']];
+    public const AUTHENTICATION_RESULT_CREDENTIAL_INVALID = [Result::FAILURE_CREDENTIAL_INVALID, [], ['Authentication Failed']];
+    public const AUTHENTICATION_RESULT_FAILURE_ACCOUNT_DISABLED = [LoginController::AUTH_FAILURE_ACCOUNT_DISABLED, [], ['account-disabled']];
 
     /**
      * @var LoginController

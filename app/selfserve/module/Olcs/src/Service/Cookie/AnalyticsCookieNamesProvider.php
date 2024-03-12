@@ -6,9 +6,9 @@ use Laminas\Http\Header\Cookie;
 
 class AnalyticsCookieNamesProvider implements CookieNamesProviderInterface
 {
-    const GAT_PREFIX = '_gat_';
+    public const GAT_PREFIX = '_gat_';
 
-    const LEGACY_COOKIE_DOMAIN = '.vehicle-operator-licensing.service.gov.uk';
+    public const LEGACY_COOKIE_DOMAIN = '.vehicle-operator-licensing.service.gov.uk';
 
     /** @var string */
     private $domain;

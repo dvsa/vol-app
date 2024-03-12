@@ -10,7 +10,7 @@ use Olcs\Controller\Config\DataSource\AbstractDataSource;
  */
 class Licence extends AbstractDataSource
 {
-    const DATA_KEY = 'licence';
+    public const DATA_KEY = 'licence';
     protected $dto = LicenceDto::class;
 
     protected $paramsMap = ['licence' => 'id'];

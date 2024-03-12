@@ -13,50 +13,50 @@ use Laminas\View\Model\ViewModel;
  */
 class IrhpApplicationSection extends AbstractHelper
 {
-    const ROUTE_PERMITS = 'permits';
-    const ROUTE_TYPE = 'permits/type';
-    const ROUTE_YEAR = 'permits/year';
-    const ROUTE_STOCK = 'permits/stock';
-    const ROUTE_WINDOW_CLOSED = 'permits/window-closed';
-    const ROUTE_PERMITS_EXHAUSTED = 'permits/exhausted';
-    const ROUTE_MAX_PERMITTED_REACHED_FOR_STOCK = 'permits/max-permitted-reached-for-stock';
-    const ROUTE_MAX_PERMITTED_REACHED_FOR_TYPE ='permits/max-permitted-reached-for-type';
-    const ROUTE_NOT_ELIGIBLE = 'permits/not-eligible';
-    const ROUTE_NO_LICENCES = 'permits/no-licences';
-    const ROUTE_ADD_LICENCE = 'permits/add-licence';
-    const ROUTE_APPLICATION_OVERVIEW = 'permits/application';
-    const ROUTE_COUNTRIES = 'permits/application/countries';
-    const ROUTE_COUNTRIES_CONFIRMATION = 'permits/application/countries-confirmation';
-    const ROUTE_IPA_QUESTION = 'permits/application/ipa/question';
-    const ROUTE_IPA_CHECK_ANSWERS = 'permits/application/ipa/check-answers';
-    const ROUTE_NO_OF_PERMITS = 'permits/application/no-of-permits';
-    const ROUTE_CHECK_ANSWERS = 'permits/application/check-answers';
-    const ROUTE_DECLARATION = 'permits/application/declaration';
-    const ROUTE_QUESTION = 'permits/application/question';
-    const ROUTE_FEE = 'permits/application/fee';
-    const ROUTE_UNDER_CONSIDERATION = 'permits/application/under-consideration';
-    const ROUTE_SUBMITTED = 'permits/application/submitted';
-    const ROUTE_AWAITING_FEE = 'permits/application/awaiting-fee';
-    const ROUTE_UNPAID_PERMITS = 'permits/application/unpaid-permits';
-    const ROUTE_PAYMENT_ACTION = 'permits/application/payment';
-    const ROUTE_PAYMENT_RESULT_ACTION = 'permits/application/payment-result';
-    const ROUTE_ESSENTIAL_INFORMATION = 'permits/application/essential-information';
-    const ROUTE_PERIOD = 'permits/application/period';
-    const ROUTE_CANDIDATE_SELECTION = 'permits/application/candidate-selection';
+    public const ROUTE_PERMITS = 'permits';
+    public const ROUTE_TYPE = 'permits/type';
+    public const ROUTE_YEAR = 'permits/year';
+    public const ROUTE_STOCK = 'permits/stock';
+    public const ROUTE_WINDOW_CLOSED = 'permits/window-closed';
+    public const ROUTE_PERMITS_EXHAUSTED = 'permits/exhausted';
+    public const ROUTE_MAX_PERMITTED_REACHED_FOR_STOCK = 'permits/max-permitted-reached-for-stock';
+    public const ROUTE_MAX_PERMITTED_REACHED_FOR_TYPE ='permits/max-permitted-reached-for-type';
+    public const ROUTE_NOT_ELIGIBLE = 'permits/not-eligible';
+    public const ROUTE_NO_LICENCES = 'permits/no-licences';
+    public const ROUTE_ADD_LICENCE = 'permits/add-licence';
+    public const ROUTE_APPLICATION_OVERVIEW = 'permits/application';
+    public const ROUTE_COUNTRIES = 'permits/application/countries';
+    public const ROUTE_COUNTRIES_CONFIRMATION = 'permits/application/countries-confirmation';
+    public const ROUTE_IPA_QUESTION = 'permits/application/ipa/question';
+    public const ROUTE_IPA_CHECK_ANSWERS = 'permits/application/ipa/check-answers';
+    public const ROUTE_NO_OF_PERMITS = 'permits/application/no-of-permits';
+    public const ROUTE_CHECK_ANSWERS = 'permits/application/check-answers';
+    public const ROUTE_DECLARATION = 'permits/application/declaration';
+    public const ROUTE_QUESTION = 'permits/application/question';
+    public const ROUTE_FEE = 'permits/application/fee';
+    public const ROUTE_UNDER_CONSIDERATION = 'permits/application/under-consideration';
+    public const ROUTE_SUBMITTED = 'permits/application/submitted';
+    public const ROUTE_AWAITING_FEE = 'permits/application/awaiting-fee';
+    public const ROUTE_UNPAID_PERMITS = 'permits/application/unpaid-permits';
+    public const ROUTE_PAYMENT_ACTION = 'permits/application/payment';
+    public const ROUTE_PAYMENT_RESULT_ACTION = 'permits/application/payment-result';
+    public const ROUTE_ESSENTIAL_INFORMATION = 'permits/application/essential-information';
+    public const ROUTE_PERIOD = 'permits/application/period';
+    public const ROUTE_CANDIDATE_SELECTION = 'permits/application/candidate-selection';
 
-    const ROUTE_CANCEL_APPLICATION = 'permits/application/cancel';
-    const ROUTE_CANCEL_CONFIRMATION = self::ROUTE_CANCEL_APPLICATION . '/confirmation';
-    const ROUTE_WITHDRAW_APPLICATION = 'permits/application/withdraw';
-    const ROUTE_WITHDRAW_CONFIRMATION = self::ROUTE_WITHDRAW_APPLICATION . '/confirmation';
-    const ROUTE_DECLINE_APPLICATION = 'permits/application/decline';
-    const ROUTE_DECLINE_CONFIRMATION = self::ROUTE_DECLINE_APPLICATION . '/confirmation';
+    public const ROUTE_CANCEL_APPLICATION = 'permits/application/cancel';
+    public const ROUTE_CANCEL_CONFIRMATION = self::ROUTE_CANCEL_APPLICATION . '/confirmation';
+    public const ROUTE_WITHDRAW_APPLICATION = 'permits/application/withdraw';
+    public const ROUTE_WITHDRAW_CONFIRMATION = self::ROUTE_WITHDRAW_APPLICATION . '/confirmation';
+    public const ROUTE_DECLINE_APPLICATION = 'permits/application/decline';
+    public const ROUTE_DECLINE_CONFIRMATION = self::ROUTE_DECLINE_APPLICATION . '/confirmation';
 
-    const ROUTE_PRINT_RECEIPT = 'permits/print-receipt';
+    public const ROUTE_PRINT_RECEIPT = 'permits/print-receipt';
 
     /**
      * list of overview routes and the field denoting completion status
      */
-    const ROUTE_ORDER = [
+    public const ROUTE_ORDER = [
         RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID => [
             self::ROUTE_NO_OF_PERMITS => 'permitsRequired',
             self::ROUTE_CHECK_ANSWERS => 'checkedAnswers',
@@ -67,15 +67,15 @@ class IrhpApplicationSection extends AbstractHelper
     /**
      * @todo pasted here temporarily while getting this working - move to a reusable helper/formatter
      */
-    const SECTION_COMPLETION_CANNOT_START = 'section_sts_csy';
-    const SECTION_COMPLETION_NOT_STARTED = 'section_sts_nys';
-    const SECTION_COMPLETION_INCOMPLETE = 'section_sts_inc';
-    const SECTION_COMPLETION_COMPLETED = 'section_sts_com';
+    public const SECTION_COMPLETION_CANNOT_START = 'section_sts_csy';
+    public const SECTION_COMPLETION_NOT_STARTED = 'section_sts_nys';
+    public const SECTION_COMPLETION_INCOMPLETE = 'section_sts_inc';
+    public const SECTION_COMPLETION_COMPLETED = 'section_sts_com';
 
     /**
      * @todo pasted here temporarily while getting this working - move to a reusable helper/formatter
      */
-    const COMPLETION_STATUS = [
+    public const COMPLETION_STATUS = [
         self::SECTION_COMPLETION_CANNOT_START => 'Can\'t start yet',
         self::SECTION_COMPLETION_NOT_STARTED => 'Not started yet',
         self::SECTION_COMPLETION_INCOMPLETE => 'Incomplete',
@@ -85,7 +85,7 @@ class IrhpApplicationSection extends AbstractHelper
     /**
      * @todo pasted here temporarily while getting this working - move to a reusable helper/formatter
      */
-    const COMPLETION_STATUS_COLOUR = [
+    public const COMPLETION_STATUS_COLOUR = [
         self::SECTION_COMPLETION_CANNOT_START => 'grey',
         self::SECTION_COMPLETION_NOT_STARTED => 'grey',
         self::SECTION_COMPLETION_INCOMPLETE => 'orange',

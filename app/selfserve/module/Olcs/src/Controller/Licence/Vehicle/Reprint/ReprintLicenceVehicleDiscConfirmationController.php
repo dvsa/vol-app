@@ -72,9 +72,7 @@ class ReprintLicenceVehicleDiscConfirmationController extends AbstractVehicleCon
             'licNo' => $this->data['licence']['licNo'],
             'form' => $this->form,
             'backLink' => $this->getLink('licence/vehicle/reprint/GET'),
-            'vrmList' => array_map(function (LicenceVehicleDTO $licenceVehicle) {
-                return $licenceVehicle->getVehicle()->getVrm();
-            }, $licenceVehicles),
+            'vrmList' => array_map(fn(LicenceVehicleDTO $licenceVehicle) => $licenceVehicle->getVehicle()->getVrm(), $licenceVehicles),
             'vrmListInfoText' => 'licence.vehicle.reprint.confirm.list.hint.singular'
         ];
 
@@ -153,8 +151,6 @@ class ReprintLicenceVehicleDiscConfirmationController extends AbstractVehicleCon
             throw new VehiclesNotFoundWithIdsException($vehicleIds);
         }
         $licenceVehicles = $queryResult->getResult()['results'] ?? [];
-        return array_map(function ($licenceVehicle) {
-            return new LicenceVehicleDTO($licenceVehicle);
-        }, $licenceVehicles);
+        return array_map(fn($licenceVehicle) => new LicenceVehicleDTO($licenceVehicle), $licenceVehicles);
     }
 }

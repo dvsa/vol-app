@@ -142,11 +142,8 @@ class LicenceController extends AbstractSelfserveController
         $result = $response->getResult();
 
         $stockId = $this->routeParams['stock'];
-        if (isset($result['years'][$stockId])) {
-            return $result['years'][$stockId];
-        }
 
-        return '';
+        return $result['years'][$stockId] ?? '';
     }
 
     /**
@@ -166,11 +163,8 @@ class LicenceController extends AbstractSelfserveController
         $result = $response->getResult();
 
         $stockId = $this->routeParams['stock'];
-        if (isset($result['stocks'][$stockId]['year'])) {
-            return $result['stocks'][$stockId]['year'];
-        }
 
-        return '';
+        return $result['stocks'][$stockId]['year'] ?? '';
     }
 
     /**

@@ -10,7 +10,7 @@ use Olcs\Controller\Config\DataSource\AbstractDataSource;
  */
 class MaxPermittedReachedForStock extends AbstractDataSource
 {
-    const DATA_KEY = 'maxPermittedReached';
+    public const DATA_KEY = 'maxPermittedReached';
     protected $dto = MaxPermittedReachedByStockAndLicenceDto::class;
     protected $paramsMap = [
         'stock' => 'irhpPermitStock',

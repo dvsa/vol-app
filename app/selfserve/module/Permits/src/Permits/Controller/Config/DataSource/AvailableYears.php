@@ -10,7 +10,7 @@ use Olcs\Controller\Config\DataSource\AbstractDataSource;
  */
 class AvailableYears extends AbstractDataSource
 {
-    const DATA_KEY = 'years';
+    public const DATA_KEY = 'years';
     protected $dto = AvailableYearsDto::class;
     protected $paramsMap = [
         'type' => 'type'

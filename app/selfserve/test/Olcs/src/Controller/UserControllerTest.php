@@ -93,9 +93,7 @@ class UserControllerTest extends MockeryTestCase
         $this->mockForm->shouldReceive('get')->with('permission')->andReturnSelf();
 
         $this->mockTranslationHelper->shouldReceive('translate')->andReturnUsing(
-            function ($arg) {
-                return $arg . "_translated";
-            }
+            fn($arg) => $arg . "_translated"
         );
 
         $this->mockGuidanceHelper->shouldReceive('append');
@@ -189,24 +187,24 @@ class UserControllerTest extends MockeryTestCase
 
     public function testSaveExistingRecord()
     {
-        $rawEditData = array(
+        $rawEditData = [
             'id' => 3,
             'version' => 1,
             'loginId' => 'stevefox',
-            'contactDetails' => array(
+            'contactDetails' => [
                 'emailAddress' => 'steve@example.com',
                 'id' => 106,
                 'version' => 1,
-                'person' => array(
+                'person' => [
                     'familyName' => 'Fox',
                     'forename' => 'Steve',
                     'id' => 82,
                     'version' => 1,
-                ),
-            ),
+                ],
+            ],
             'permission' => 'user',
             'translateToWelsh' => 'Y',
-        );
+        ];
 
         $id = 3;
 
@@ -240,8 +238,8 @@ class UserControllerTest extends MockeryTestCase
 
     public function testSaveWithPostData()
     {
-        $rawEditData = array(
-            'main' => array(
+        $rawEditData = [
+            'main' => [
                 'loginId' => 'stevefox',
                 'forename' => 'Steve',
                 'familyName' => 'Fox',
@@ -251,8 +249,8 @@ class UserControllerTest extends MockeryTestCase
                 'id' => '3',
                 'version' => '1',
                 'translateToWelsh' => 'Y',
-            ),
-        );
+            ],
+        ];
 
         $this->mockResponse->shouldReceive('isOk')->andReturn(true);
 
@@ -286,8 +284,8 @@ class UserControllerTest extends MockeryTestCase
 
     public function testAddAction()
     {
-        $rawEditData = array(
-            'main' => array(
+        $rawEditData = [
+            'main' => [
                 'loginId' => 'stevefox',
                 'forename' => 'Steve',
                 'familyName' => 'Fox',
@@ -296,8 +294,8 @@ class UserControllerTest extends MockeryTestCase
                 'permission' => 'admin',
                 'version' => '1',
                 'translateToWelsh' => 'Y',
-            ),
-        );
+            ],
+        ];
 
         $this->mockResponse->shouldReceive('isOk')->andReturn(true);
 
@@ -349,24 +347,24 @@ class UserControllerTest extends MockeryTestCase
 
     public function testSaveExistingRecordLocksNameFields()
     {
-        $rawEditData = array(
+        $rawEditData = [
             'id' => 3,
             'version' => 1,
             'loginId' => 'stevefox',
-            'contactDetails' => array(
+            'contactDetails' => [
                 'emailAddress' => 'steve@example.com',
                 'id' => 106,
                 'version' => 1,
-                'person' => array(
+                'person' => [
                     'familyName' => 'Fox',
                     'forename' => 'Steve',
                     'id' => 82,
                     'version' => 1,
-                ),
-            ),
+                ],
+            ],
             'permission' => 'user',
             'translateToWelsh' => 'Y',
-        );
+        ];
 
         $id = 3;
 

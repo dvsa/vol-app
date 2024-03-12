@@ -92,13 +92,11 @@ class FormProviderTest extends MockeryTestCase
             ->ordered();
 
         $this->laminasFormFactory->shouldReceive('create')
-            ->with(m::on(function ($arg) {
-                return $arg instanceof ArrayObject &&
-                    isset($arg['attribute1']) &&
-                    isset($arg['attribute2']) &&
-                    $arg['attribute1'] === 'value1' &&
-                    $arg['attribute2'] === 'value2';
-            }))
+            ->with(m::on(fn($arg) => $arg instanceof ArrayObject &&
+                isset($arg['attribute1']) &&
+                isset($arg['attribute2']) &&
+                $arg['attribute1'] === 'value1' &&
+                $arg['attribute2'] === 'value2'))
             ->once()
             ->andReturn($fieldset);
 

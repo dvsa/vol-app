@@ -23,7 +23,7 @@ class AnchorViewModel extends ViewModel
      */
     public function __construct($variables = null, $options = null)
     {
-        $variables[static::CLASS_VARIABLE] = $variables[static::CLASS_VARIABLE] ?? static::DEFAULT_CLASS;
+        $variables[static::CLASS_VARIABLE] ??= static::DEFAULT_CLASS;
         parent::__construct($variables, $options);
         $this->setTemplate(static::DEFAULT_TEMPLATE);
     }

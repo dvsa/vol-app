@@ -38,9 +38,7 @@ class AbstractOverviewSubmissionTest extends MockeryTestCase
         $this->mockTranslationHelper
             ->shouldReceive('translateReplace')
             ->andReturnUsing(
-                function ($text, $params) {
-                    return '_TRLTD_' . $text . '[' . implode('|', $params) . ']';
-                }
+                fn($text, $params) => '_TRLTD_' . $text . '[' . implode('|', $params) . ']'
             );
 
         $this->mockFormHlp = m::mock(\Common\Service\Helper\FormHelperService::class)->makePartial();

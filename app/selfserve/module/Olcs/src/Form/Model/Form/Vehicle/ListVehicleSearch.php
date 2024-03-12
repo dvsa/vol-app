@@ -14,7 +14,7 @@ use Laminas\Form\Annotation as Form;
  */
 class ListVehicleSearch
 {
-    const FIELD_VEHICLE_SEARCH = 'vehicleSearch';
+    public const FIELD_VEHICLE_SEARCH = 'vehicleSearch';
 
     /**
      * @Form\Name("vehicleSearch")

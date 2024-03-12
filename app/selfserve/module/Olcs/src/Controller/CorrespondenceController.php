@@ -120,9 +120,9 @@ class CorrespondenceController extends AbstractController
 
         return $this->redirect()->toRoute(
             'getfile',
-            array(
+            [
                 'identifier' => $correspondence['document']['id']
-            )
+            ]
         );
     }
 
@@ -136,14 +136,12 @@ class CorrespondenceController extends AbstractController
     protected function formatTableData(array $docs = [])
     {
         $docs['results'] = array_map(
-            function ($correspondence) {
-                return array(
-                    'id' => $correspondence['id'],
-                    'correspondence' => $correspondence,
-                    'licence' => $correspondence['licence'],
-                    'date' => $correspondence['createdOn'],
-                );
-            },
+            fn($correspondence) => [
+                'id' => $correspondence['id'],
+                'correspondence' => $correspondence,
+                'licence' => $correspondence['licence'],
+                'date' => $correspondence['createdOn'],
+            ],
             $docs['results']
         );
 

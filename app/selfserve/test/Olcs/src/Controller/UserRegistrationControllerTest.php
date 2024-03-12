@@ -69,7 +69,7 @@ class UserRegistrationControllerTest extends TestCase
         $termsAgreedElement = new \Laminas\Form\Element();
         $termsAgreedElement->setLabel('termsAgreedLabel');
 
-        $mockForm = m::mock('Common\Form\Form');
+        $mockForm = m::mock(\Common\Form\Form::class);
         $mockForm
             ->shouldReceive('get')
             ->with('fields')
@@ -104,7 +104,7 @@ class UserRegistrationControllerTest extends TestCase
 
         $view = $this->sut->addAction();
 
-        $this->assertInstanceOf('Laminas\View\Model\ViewModel', $view);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $view);
     }
 
     public function testAddActionForPostWithCancel()
@@ -113,7 +113,7 @@ class UserRegistrationControllerTest extends TestCase
         $mockRequest->shouldReceive('isPost')->andReturn(true);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
-        $mockForm = m::mock('Common\Form\Form');
+        $mockForm = m::mock(\Common\Form\Form::class);
 
         $this->mockFormHelper
             ->shouldReceive('createFormWithRequest')
@@ -151,7 +151,7 @@ class UserRegistrationControllerTest extends TestCase
         $mockRequest->shouldReceive('isPost')->andReturn(true);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
-        $mockForm = m::mock('Common\Form\Form');
+        $mockForm = m::mock(\Common\Form\Form::class);
         $mockForm->shouldReceive('setData')->once()->with($postData);
         $mockForm->shouldReceive('isValid')->once()->andReturn(true);
         $mockForm->shouldReceive('getData')->once()->andReturn($postData);
@@ -181,7 +181,7 @@ class UserRegistrationControllerTest extends TestCase
 
         $view = $this->sut->addAction();
 
-        $this->assertInstanceOf('Laminas\View\Model\ViewModel', $view);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $view);
         $this->assertEquals('olcs/user-registration/check-email', $view->getTemplate());
     }
 
@@ -208,7 +208,7 @@ class UserRegistrationControllerTest extends TestCase
         $termsAgreedElement = new \Laminas\Form\Element();
         $termsAgreedElement->setLabel('termsAgreedLabel');
 
-        $mockForm = m::mock('Common\Form\Form');
+        $mockForm = m::mock(\Common\Form\Form::class);
         $mockForm->shouldReceive('setData')->twice()->with($postData);
         $mockForm->shouldReceive('isValid')->once()->andReturn(true);
         $mockForm->shouldReceive('getData')->once()->andReturn($postData);
@@ -256,7 +256,7 @@ class UserRegistrationControllerTest extends TestCase
 
         $view = $this->sut->addAction();
 
-        $this->assertInstanceOf('Laminas\View\Model\ViewModel', $view);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $view);
     }
 
     public function testAddActionForPostWithLic()
@@ -292,12 +292,12 @@ class UserRegistrationControllerTest extends TestCase
         $mockRequest->shouldReceive('isPost')->andReturn(true);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
-        $mockForm = m::mock('Common\Form\Form');
+        $mockForm = m::mock(\Common\Form\Form::class);
         $mockForm->shouldReceive('setData')->once()->with($formattedPostData);
         $mockForm->shouldReceive('isValid')->once()->andReturn(true);
         $mockForm->shouldReceive('getData')->once()->andReturn($formattedPostData);
 
-        $mockFormAddress = m::mock('Common\Form\Form');
+        $mockFormAddress = m::mock(\Common\Form\Form::class);
         $mockFormAddress->shouldReceive('setData')->once()->with($formattedPostData);
 
         $this->mockFormHelper
@@ -339,7 +339,7 @@ class UserRegistrationControllerTest extends TestCase
 
         $view = $this->sut->addAction();
 
-        $this->assertInstanceOf('Laminas\View\Model\ViewModel', $view);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $view);
         $this->assertEquals('olcs/user-registration/check-details', $view->getTemplate());
     }
 
@@ -379,7 +379,7 @@ class UserRegistrationControllerTest extends TestCase
         $termsAgreedElement = new \Laminas\Form\Element();
         $termsAgreedElement->setLabel('termsAgreedLabel');
 
-        $mockForm = m::mock('Common\Form\Form');
+        $mockForm = m::mock(\Common\Form\Form::class);
         $mockForm->shouldReceive('setData')->twice()->with($formattedPostData);
         $mockForm->shouldReceive('isValid')->once()->andReturn(true);
         $mockForm->shouldReceive('getData')->once()->andReturn($formattedPostData);
@@ -424,7 +424,7 @@ class UserRegistrationControllerTest extends TestCase
 
         $view = $this->sut->addAction();
 
-        $this->assertInstanceOf('Laminas\View\Model\ViewModel', $view);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $view);
     }
 
     public function testAddActionForPostWithLicConfirmed()
@@ -460,7 +460,7 @@ class UserRegistrationControllerTest extends TestCase
         $mockRequest->shouldReceive('isPost')->andReturn(true);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
-        $mockForm = m::mock('Common\Form\Form');
+        $mockForm = m::mock(\Common\Form\Form::class);
         $mockForm->shouldReceive('setData')->once()->with($formattedPostData);
         $mockForm->shouldReceive('isValid')->once()->andReturn(true);
         $mockForm->shouldReceive('getData')->once()->andReturn($formattedPostData);
@@ -490,7 +490,7 @@ class UserRegistrationControllerTest extends TestCase
 
         $view = $this->sut->addAction();
 
-        $this->assertInstanceOf('Laminas\View\Model\ViewModel', $view);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $view);
         $this->assertEquals('olcs/user-registration/account-created', $view->getTemplate());
     }
 
@@ -530,7 +530,7 @@ class UserRegistrationControllerTest extends TestCase
         $termsAgreedElement = new \Laminas\Form\Element();
         $termsAgreedElement->setLabel('termsAgreedLabel');
 
-        $mockForm = m::mock('Common\Form\Form');
+        $mockForm = m::mock(\Common\Form\Form::class);
         $mockForm->shouldReceive('setData')->twice()->with($formattedPostData);
         $mockForm->shouldReceive('isValid')->once()->andReturn(true);
         $mockForm->shouldReceive('getData')->once()->andReturn($formattedPostData);
@@ -574,6 +574,6 @@ class UserRegistrationControllerTest extends TestCase
 
         $view = $this->sut->addAction();
 
-        $this->assertInstanceOf('Laminas\View\Model\ViewModel', $view);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $view);
     }
 }

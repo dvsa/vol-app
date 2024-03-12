@@ -15,7 +15,7 @@ abstract class LvaOverview extends ViewModel
      * @param array $data
      * @param array $sections
      */
-    public function __construct($data, array $sections = array())
+    public function __construct($data, array $sections = [])
     {
         $overviewSections = [];
 

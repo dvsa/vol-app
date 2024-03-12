@@ -74,9 +74,9 @@ class UploadsController extends AbstractController
         $hasProcessedFiles = $this->processFiles(
             $form,
             'fields->files',
-            array($this, 'processEbsrFileUpload'),
-            array($this, 'deleteFile'),
-            array($this, 'getUploadedPacks'),
+            [$this, 'processEbsrFileUpload'],
+            [$this, 'deleteFile'],
+            [$this, 'getUploadedPacks'],
             'fields->uploadedFileCount'
         );
 

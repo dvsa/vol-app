@@ -21,7 +21,7 @@ class ExternalControllerTraitStub extends AbstractActionController
 
     use ExternalControllerTrait;
 
-    public function callRender($title, $form = null, $variables = array())
+    public function callRender($title, $form = null, $variables = [])
     {
         return $this->render($title, $form, $variables);
     }

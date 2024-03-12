@@ -31,7 +31,7 @@ class SearchControllerTest extends TestCase
 
         $view = $this->sut->indexAction();
 
-        $this->assertInstanceOf('\Laminas\View\Model\ViewModel', $view);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $view);
         $this->assertEquals('search/index', $view->getTemplate());
     }
 }

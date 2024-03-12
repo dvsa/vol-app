@@ -17,12 +17,12 @@ use Laminas\Form\Annotation as Form;
  */
 class ViewVehicleSwitchboardFieldset
 {
-    const ATTR_OPTIONS = 'options';
-    const ATTR_TRANSFER_CONTENT = 'transferContent';
+    public const ATTR_OPTIONS = 'options';
+    public const ATTR_TRANSFER_CONTENT = 'transferContent';
 
-    const RADIO_OPTION_REMOVE = 'remove';
-    const RADIO_OPTION_REPRINT = 'reprint';
-    const RADIO_OPTION_TRANSFER = 'transfer';
+    public const RADIO_OPTION_REMOVE = 'remove';
+    public const RADIO_OPTION_REPRINT = 'reprint';
+    public const RADIO_OPTION_TRANSFER = 'transfer';
 
     /**
      * @Form\Attributes({

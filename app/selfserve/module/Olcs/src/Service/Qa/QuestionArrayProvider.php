@@ -7,7 +7,7 @@ use RuntimeException;
 
 class QuestionArrayProvider
 {
-    const ONLY_HTML_ESCAPE_SUPPORTED = 'Selfserve only currently supports the htmlEscape filter for question text';
+    public const ONLY_HTML_ESCAPE_SUPPORTED = 'Selfserve only currently supports the htmlEscape filter for question text';
 
     /** @var FormattedTranslateableTextParametersGenerator */
     private $formattedTranslateableTextParametersGenerator;

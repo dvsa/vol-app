@@ -68,34 +68,34 @@ $configRoutes = $sectionConfig->getAllRoutes();
 unset($configRoutes['lva-application']);
 
 $sections = $sectionConfig->getAllReferences();
-$applicationDetailsPages = array();
-$licenceDetailsPages = array();
-$variationDetailsPages = array();
+$applicationDetailsPages = [];
+$licenceDetailsPages = [];
+$variationDetailsPages = [];
 
 foreach ($sections as $section) {
-    $applicationDetailsPages['application_' . $section] = array(
+    $applicationDetailsPages['application_' . $section] = [
         'id' => 'application_' . $section,
         'label' => 'section.name.' . $section,
         'route' => 'lva-application/' . $section,
         'params' => ['action' => 'index'],
         'use_route_match' => true
-    );
+    ];
 
-    $licenceDetailsPages['licence_' . $section] = array(
+    $licenceDetailsPages['licence_' . $section] = [
         'id' => 'licence_' . $section,
         'label' => 'section.name.' . $section,
         'route' => 'lva-licence/' . $section,
         'params' => ['action' => 'index'],
         'use_route_match' => true
-    );
+    ];
 
-    $variationDetailsPages['variation_' . $section] = array(
+    $variationDetailsPages['variation_' . $section] = [
         'id' => 'variation_' . $section,
         'label' => 'section.name.' . $section,
         'route' => 'lva-variation/' . $section,
         'params' => ['action' => 'index'],
         'use_route_match' => true
-    );
+    ];
 }
 
 $routes = [
@@ -667,229 +667,229 @@ foreach ($files as $config) {
 
 $configRoutes['lva-variation']['child_routes'] = array_merge(
     $configRoutes['lva-variation']['child_routes'],
-    array(
-        'review' => array(
+    [
+        'review' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'review[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => 'LvaVariation/Review',
                     'action' => 'index'
-                )
-            )
-        ),
-        'submission-summary' => array(
+                ]
+            ]
+        ],
+        'submission-summary' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'submission-summary[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => 'LvaVariation/Summary',
                     'action' => 'postSubmitSummary'
-                )
-            )
-        ),
-        'upload-evidence' => array(
+                ]
+            ]
+        ],
+        'upload-evidence' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'upload-evidence[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => 'LvaVariation/UploadEvidence',
                     'action' => 'index'
-                )
-            )
-        ),
-        'summary' => array(
+                ]
+            ]
+        ],
+        'summary' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'summary[/:reference][/]',
-                'constraints' => array(
+                'constraints' => [
                     'reference' => '[0-9A-Za-z]+-[0-9A-F\-]+',
-                ),
-                'defaults' => array(
+                ],
+                'defaults' => [
                     'controller' => 'LvaVariation/Summary',
                     'action' => 'index'
-                )
-            )
-        ),
-        'pay-and-submit' => array(
+                ]
+            ]
+        ],
+        'pay-and-submit' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'pay-and-submit[/:redirect-back][/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => 'LvaVariation/PaymentSubmission',
                     'action' => 'payAndSubmit',
                     'redirect-back' => 'overview',
-                ),
-                'constraints' => array(
+                ],
+                'constraints' => [
                     'redirect-back' => '[a-z\-]+',
-                ),
-            )
-        ),
-        'payment' => array(
+                ],
+            ]
+        ],
+        'payment' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'payment[/stored-card-reference/:storedCardReference][/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => 'LvaVariation/PaymentSubmission',
                     'action' => 'index'
-                ),
-                'constraints' => array(
+                ],
+                'constraints' => [
                     'storedCardReference' => '[0-9A-Za-z]+-[0-9A-F\-]+',
-                ),
-            )
-        ),
-        'result' => array(
+                ],
+            ]
+        ],
+        'result' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'result[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => 'LvaVariation/PaymentSubmission',
                     'action' => 'payment-result',
 
-                )
-            )
-        ),
-        'cancel' => array(
+                ]
+            ]
+        ],
+        'cancel' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'cancel[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => 'LvaVariation',
                     'action' => 'cancel'
-                )
-            )
-        ),
-        'withdraw' => array(
+                ]
+            ]
+        ],
+        'withdraw' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'withdraw[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => 'LvaVariation',
                     'action' => 'withdraw'
-                )
-            )
-        ),
-    )
+                ]
+            ]
+        ],
+    ]
 );
 
 $configRoutes['lva-licence']['child_routes'] = array_merge(
     $configRoutes['lva-licence']['child_routes'],
-    array(
-        'variation' => array(
+    [
+        'variation' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'variation[/:redirectRoute][/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => 'LvaLicence/Variation',
                     'action' => 'index'
-                )
-            )
-        )
-    )
+                ]
+            ]
+        ]
+    ]
 );
 
 foreach (['variation'] as $lva) {
     $configRoutes['lva-' . $lva]['child_routes'] = array_merge(
         $configRoutes['lva-' . $lva]['child_routes'],
-        array(
-            'transport_manager_details' => array(
+        [
+            'transport_manager_details' => [
                 'type' => 'segment',
-                'options' => array(
+                'options' => [
                     'route' => 'transport-managers/details/:child_id[/]',
-                    'constraints' => array(
+                    'constraints' => [
                         'child_id' => '[0-9]+',
                         'grand_child_id' => '[0-9]+'
-                    ),
-                    'defaults' => array(
+                    ],
+                    'defaults' => [
                         'controller' => 'Lva' . ucfirst($lva) . '/TransportManagers',
                         'action' => 'details'
-                    )
-                ),
+                    ]
+                ],
                 'may_terminate' => true,
-                'child_routes' => array(
-                    'action' => array(
+                'child_routes' => [
+                    'action' => [
                         'type' => 'segment',
-                        'options' => array(
+                        'options' => [
                             'route' => ':action[/:grand_child_id][/]',
-                            'constraints' => array(
+                            'constraints' => [
                                 'grand_child_id' => '[0-9\,]+'
-                            ),
-                        )
-                    ),
-                )
-            ),
-            'transport_manager_check_answer' => array(
+                            ],
+                        ]
+                    ],
+                ]
+            ],
+            'transport_manager_check_answer' => [
                 'type' => 'segment',
-                'options' => array(
+                'options' => [
                     'route' => 'transport-managers/check-answer/:child_id[/]',
-                    'constraints' => array(
+                    'constraints' => [
                         'child_id' => '[0-9]+',
                         'grand_child_id' => '[0-9]+'
-                    ),
-                    'defaults' => array(
+                    ],
+                    'defaults' => [
                         'controller' => 'LvaTransportManager/CheckAnswers',
                         'action' => 'index'
-                    )
-                ),
+                    ]
+                ],
                 'may_terminate' => true,
-                'child_routes' => array(
-                    'action' => array(
+                'child_routes' => [
+                    'action' => [
                         'type' => 'segment',
-                        'options' => array(
+                        'options' => [
                             'route' => ':action[/:grand_child_id][/]',
-                            'constraints' => array(
+                            'constraints' => [
                                 'grand_child_id' => '[0-9\,]+'
-                            ),
-                        )
-                    ),
-                ),
-            ),
-            'transport_manager_tm_declaration' => array(
+                            ],
+                        ]
+                    ],
+                ],
+            ],
+            'transport_manager_tm_declaration' => [
                 'type' => 'segment',
-                'options' => array(
+                'options' => [
                     'route' => 'transport-managers/tm-declaration/:child_id[/]',
-                    'constraints' => array(
+                    'constraints' => [
                         'child_id' => '[0-9]+',
                         'grand_child_id' => '[0-9]+'
-                    ),
-                    'defaults' => array(
+                    ],
+                    'defaults' => [
                         'controller' => 'LvaTransportManager/TmDeclaration',
                         'action' => 'index'
-                    )
-                ),
+                    ]
+                ],
                 'may_terminate' => true,
-            ),
-            'transport_manager_operator_declaration' => array(
+            ],
+            'transport_manager_operator_declaration' => [
                 'type' => 'segment',
-                'options' => array(
+                'options' => [
                     'route' => 'transport-managers/operator-declaration/:child_id[/]',
-                    'constraints' => array(
+                    'constraints' => [
                         'child_id' => '[0-9]+',
                         'grand_child_id' => '[0-9]+'
-                    ),
-                    'defaults' => array(
+                    ],
+                    'defaults' => [
                         'controller' => 'LvaTransportManager/OperatorDeclaration',
                         'action' => 'index'
-                    )
-                ),
+                    ]
+                ],
                 'may_terminate' => true,
-            ),
-            'transport_manager_confirmation' => array(
+            ],
+            'transport_manager_confirmation' => [
                 'type' => 'segment',
-                'options' => array(
+                'options' => [
                     'route' => 'transport-managers/confirmation/:child_id[/]',
-                    'constraints' => array(
+                    'constraints' => [
                         'child_id' => '[0-9]+',
                         'grand_child_id' => '[0-9]+'
-                    ),
-                    'defaults' => array(
+                    ],
+                    'defaults' => [
                         'controller' => 'LvaTransportManager/Confirmation',
                         'action' => 'index'
-                    )
-                ),
+                    ]
+                ],
                 'may_terminate' => true,
-            )
-        )
+            ]
+        ]
     );
 
     ${$lva . 'DetailsPages'}[$lva . '_transport_managers']['pages'] = [
@@ -941,76 +941,76 @@ foreach (['licence', 'application', 'variation'] as $lva) {
     }
 }
 
-$applicationNavigation = array(
+$applicationNavigation = [
     'id' => 'dashboard-applications',
     'label' => 'Home',
     'route' => 'dashboard',
     'class' => 'proposition-nav__item',
-    'pages' => array(
-        array(
+    'pages' => [
+        [
             'id' => 'application-summary',
             'label' => 'Application summary',
             'route' => 'lva-application/summary',
             'use_route_match' => true
-        ),
-        array(
+        ],
+        [
             'id' => 'application-submission-summary',
             'label' => 'Application summary',
             'route' => 'lva-application/submission-summary',
             'use_route_match' => true,
-            'pages' => array(
-                array(
+            'pages' => [
+                [
                     'id' => 'application-upload-evidence',
                     'label' => 'Upload evidence',
                     'route' => 'lva-application/upload-evidence',
                     'use_route_match' => true
-                ),
-            ),
-        ),
-        array(
+                ],
+            ],
+        ],
+        [
             'id' => 'application',
             'label' => 'Application overview',
             'route' => 'lva-application',
             'use_route_match' => true,
             'pages' => $applicationDetailsPages
-        ),
-        array(
+        ],
+        [
             'id' => 'licence',
             'label' => 'Licence overview',
             'route' => 'lva-licence',
             'use_route_match' => true,
             'pages' => $licenceDetailsPages
-        ),
-        array(
+        ],
+        [
             'id' => 'variation-summary',
             'label' => 'Application summary',
             'route' => 'lva-variation/summary',
             'use_route_match' => true
-        ),
-        array(
+        ],
+        [
             'id' => 'variation-submission-summary',
             'label' => 'Application summary',
             'route' => 'lva-variation/submission-summary',
             'use_route_match' => true,
-            'pages' => array(
-                array(
+            'pages' => [
+                [
                     'id' => 'variation-upload-evidence',
                     'label' => 'Upload evidence',
                     'route' => 'lva-variation/upload-evidence',
                     'use_route_match' => true
-                ),
-            ),
-        ),
-        array(
+                ],
+            ],
+        ],
+        [
             'id' => 'variation',
             'label' => 'Application overview',
             'route' => 'lva-variation',
             'use_route_match' => true,
             'pages' => $variationDetailsPages
-        ),
+        ],
         // Duplicate entry for TM page, corrects the breadcrumb when the user only has access to
         // lva-tm page
-        array(
+        [
             'id' => 'application_transport_managers_details',
             'label' => 'section.name.transport_managers.details',
             'route' => 'lva-application/transport_manager_details',
@@ -1023,8 +1023,8 @@ $applicationNavigation = array(
                 ]
             ],
             'use_route_match' => true
-        ),
-        array(
+        ],
+        [
             'id' => 'variation_transport_managers_details',
             'label' => 'section.name.transport_managers.details',
             'route' => 'lva-variation/transport_manager_details',
@@ -1037,207 +1037,207 @@ $applicationNavigation = array(
                 ]
             ],
             'use_route_match' => true
-        ),
-        array(
+        ],
+        [
             'id' => 'dashboard-licences-applications',
             'label' => 'Licences / Applications',
             'route' => 'dashboard',
             'class' => 'proposition-nav__item',
-            'pages' => array(
+            'pages' => [
                 // dashboard tabs
-                array(
+                [
                     'id' => 'dashboard-licences',
                     'label' => 'dashboard-nav-licences',
                     'route' => 'dashboard',
-                ),
-                array(
+                ],
+                [
                     'id' => 'dashboard-permits',
                     'label' => 'dashboard-nav-permits',
                     'route' => 'permits',
-                ),
-                array(
+                ],
+                [
                     'id' => 'dashboard-fees',
                     'label' => 'dashboard-nav-fees',
                     'route' => 'fees',
-                    'pages' => array(
-                        array(
+                    'pages' => [
+                        [
                             'id' => 'pay-fees',
                             'label' => 'Pay',
                             'route' => 'fees/pay',
-                        ),
-                        array(
+                        ],
+                        [
                             'id' => 'pay-fees-receipt',
                             'label' => 'Pay',
                             'route' => 'fees/receipt',
-                        ),
-                    ),
-                ),
-                array(
+                        ],
+                    ],
+                ],
+                [
                     'id' => 'dashboard-correspondence',
                     'label' => 'dashboard-nav-documents',
                     'route' => 'correspondence',
-                ),
-                array(
+                ],
+                [
                     'id' => 'dashboard-messaging',
                     'label' => 'dashboard-nav-messaging',
                     'route' => 'conversations',
-                    'pages' => array(
-                        array(
+                    'pages' => [
+                        [
                             'id' => 'messaging-create-conversation',
                             'label' => 'New Conversation',
                             'route' => 'conversations/new',
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
-);
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+];
 
-$busRegNav = array(
+$busRegNav = [
     'id' => 'bus-registration',
     'label' => 'Bus registrations',
     'route' => 'bus-registration',
     'action' => 'index',
-    'pages' => array(
-        array(
+    'pages' => [
+        [
             'id' => 'bus-registration-details',
             'label' => 'Details',
             'route' => 'bus-registration/details',
             'action' => 'details',
             'use_route_match' => true
-        ),
-        array(
+        ],
+        [
             'id' => 'bus-registration-ebsr',
             'label' => 'EBSR',
             'route' => 'bus-registration/ebsr',
             'use_route_match' => true
-        )
-    )
-);
+        ]
+    ]
+];
 
-$searchNavigation = array(
+$searchNavigation = [
     'id' => 'search',
     'label' => 'search',
     'route' => 'search',
     'class' => 'proposition-nav__item',
-    'pages' => array(
+    'pages' => [
         // --
 
-        array(
+        [
             'id' => 'search-operator',
             'label' => 'search-list-operator',
             'route' => 'search-operator',
             'use_route_match' => true,
             'class' => 'govuk-link',
-        ),
-        array(
+        ],
+        [
             'id' => 'search-publication',
             'label' => 'search-list-publications',
             'route' => 'search-publication',
             'use_route_match' => true,
             'class' => 'govuk-link',
-        ),
-        array(
+        ],
+        [
             'id' => 'search-bus',
             'label' => 'search-list-bus-registrations',
             'route' => 'search-bus',
             'use_route_match' => true,
             'class' => 'govuk-link',
-        ),
-        array(
+        ],
+        [
             'id' => 'search-vehicle-external',
             'label' => 'search-list-vehicles',
             'route' => 'search-vehicle-external',
             'use_route_match' => true,
             'class' => 'govuk-link',
-        )
-    )
-);
+        ]
+    ]
+];
 
-$busRegSearchTabs = array(
+$busRegSearchTabs = [
     'id' => 'search-bus-tabs',
     'label' => 'search',
     'route' => 'search-bus',
-    'pages' => array(
+    'pages' => [
         // bus search tabs
-        array(
+        [
             'id' => 'search-bus',
             'label' => 'search',
             'route' => 'search-bus',
             'use_route_match' => true,
             'class' => 'search-navigation__item',
-        ),
-        array(
+        ],
+        [
             'id' => 'search-bus-browse',
             'label' => 'view',
             'route' => 'search-bus/browse',
-        ),
-    ),
-);
+        ],
+    ],
+];
 
-$myAccountNav = array(
+$myAccountNav = [
     'id' => 'your-account',
     'label' => 'selfserve-dashboard-topnav-your-account',
     'route' => 'your-account',
     'action' => 'edit',
-    'pages' => array(
-        array(
+    'pages' => [
+        [
             'id' => 'change-password',
             'label' => 'Change password',
             'route' => 'change-password',
             'action' => 'index',
             'use_route_match' => true,
-        ),
-    )
-);
-return array(
-    'router' => array(
+        ],
+    ]
+];
+return [
+    'router' => [
         'routes' => array_merge($routes, $configRoutes),
-    ),
-    'controllers' => array(
-        'initializers' => array(
+    ],
+    'controllers' => [
+        'initializers' => [
             Olcs\Controller\Initializer\Navigation::class
-        ),
-        'lva_controllers' => array(
+        ],
+        'lva_controllers' => [
             'LvaLicence'                            => Olcs\Controller\Lva\Licence\OverviewController::class,
-            'LvaLicence/Variation'                  => 'Olcs\Controller\Lva\Licence\VariationController',
-            'LvaLicence/TypeOfLicence'              => 'Olcs\Controller\Lva\Licence\TypeOfLicenceController',
-            'LvaLicence/BusinessType'               => 'Olcs\Controller\Lva\Licence\BusinessTypeController',
-            'LvaLicence/BusinessDetails'            => 'Olcs\Controller\Lva\Licence\BusinessDetailsController',
-            'LvaLicence/Addresses'                  => 'Olcs\Controller\Lva\Licence\AddressesController',
+            'LvaLicence/Variation'                  => \Olcs\Controller\Lva\Licence\VariationController::class,
+            'LvaLicence/TypeOfLicence'              => \Olcs\Controller\Lva\Licence\TypeOfLicenceController::class,
+            'LvaLicence/BusinessType'               => \Olcs\Controller\Lva\Licence\BusinessTypeController::class,
+            'LvaLicence/BusinessDetails'            => \Olcs\Controller\Lva\Licence\BusinessDetailsController::class,
+            'LvaLicence/Addresses'                  => \Olcs\Controller\Lva\Licence\AddressesController::class,
             'LvaLicence/People'                     => \Olcs\Controller\Lva\Licence\PeopleController::class,
-            'LvaLicence/OperatingCentres'           => 'Olcs\Controller\Lva\Licence\OperatingCentresController',
+            'LvaLicence/OperatingCentres'           => \Olcs\Controller\Lva\Licence\OperatingCentresController::class,
             'LvaLicence/TransportManagers'          => Olcs\Controller\Lva\Licence\TransportManagersController::class,
             'LvaLicence/Vehicles'                   => \Olcs\Controller\Lva\Licence\VehiclesController::class,
-            'LvaLicence/VehiclesPsv'                => 'Olcs\Controller\Lva\Licence\VehiclesPsvController',
-            'LvaLicence/Trailers'                   => 'Olcs\Controller\Lva\Licence\TrailersController',
-            'LvaLicence/Safety'                     => 'Olcs\Controller\Lva\Licence\SafetyController',
-            'LvaLicence/TaxiPhv'                    => 'Olcs\Controller\Lva\Licence\TaxiPhvController',
-            'LvaLicence/Discs'                      => 'Olcs\Controller\Lva\Licence\DiscsController',
-            'LvaLicence/ConditionsUndertakings'     => 'Olcs\Controller\Lva\Licence\ConditionsUndertakingsController',
-            'LvaVariation'                          => 'Olcs\Controller\Lva\Variation\OverviewController',
-            'LvaVariation/TypeOfLicence'            => 'Olcs\Controller\Lva\Variation\TypeOfLicenceController',
-            'LvaVariation/BusinessType'             => 'Olcs\Controller\Lva\Variation\BusinessTypeController',
-            'LvaVariation/BusinessDetails'          => 'Olcs\Controller\Lva\Variation\BusinessDetailsController',
-            'LvaVariation/Addresses'                => 'Olcs\Controller\Lva\Variation\AddressesController',
-            'LvaVariation/People'                   => 'Olcs\Controller\Lva\Variation\PeopleController',
-            'LvaVariation/OperatingCentres'         => 'Olcs\Controller\Lva\Variation\OperatingCentresController',
+            'LvaLicence/VehiclesPsv'                => \Olcs\Controller\Lva\Licence\VehiclesPsvController::class,
+            'LvaLicence/Trailers'                   => \Olcs\Controller\Lva\Licence\TrailersController::class,
+            'LvaLicence/Safety'                     => \Olcs\Controller\Lva\Licence\SafetyController::class,
+            'LvaLicence/TaxiPhv'                    => \Olcs\Controller\Lva\Licence\TaxiPhvController::class,
+            'LvaLicence/Discs'                      => \Olcs\Controller\Lva\Licence\DiscsController::class,
+            'LvaLicence/ConditionsUndertakings'     => \Olcs\Controller\Lva\Licence\ConditionsUndertakingsController::class,
+            'LvaVariation'                          => \Olcs\Controller\Lva\Variation\OverviewController::class,
+            'LvaVariation/TypeOfLicence'            => \Olcs\Controller\Lva\Variation\TypeOfLicenceController::class,
+            'LvaVariation/BusinessType'             => \Olcs\Controller\Lva\Variation\BusinessTypeController::class,
+            'LvaVariation/BusinessDetails'          => \Olcs\Controller\Lva\Variation\BusinessDetailsController::class,
+            'LvaVariation/Addresses'                => \Olcs\Controller\Lva\Variation\AddressesController::class,
+            'LvaVariation/People'                   => \Olcs\Controller\Lva\Variation\PeopleController::class,
+            'LvaVariation/OperatingCentres'         => \Olcs\Controller\Lva\Variation\OperatingCentresController::class,
             'LvaVariation/TransportManagers'        => Olcs\Controller\Lva\Variation\TransportManagersController::class,
-            'LvaVariation/Vehicles'                 => 'Olcs\Controller\Lva\Variation\VehiclesController',
-            'LvaVariation/VehiclesPsv'              => 'Olcs\Controller\Lva\Variation\VehiclesPsvController',
-            'LvaVariation/Safety'                   => 'Olcs\Controller\Lva\Variation\SafetyController',
-            'LvaVariation/TaxiPhv'                  => 'Olcs\Controller\Lva\Variation\TaxiPhvController',
-            'LvaVariation/Discs'                    => 'Olcs\Controller\Lva\Variation\DiscsController',
-            'LvaVariation/Undertakings'             => 'Olcs\Controller\Lva\Variation\UndertakingsController',
-            'LvaVariation/FinancialEvidence'        => 'Olcs\Controller\Lva\Variation\FinancialEvidenceController',
-            'LvaVariation/VehiclesDeclarations'     => 'Olcs\Controller\Lva\Variation\VehiclesDeclarationsController',
-            'LvaVariation/FinancialHistory'         => 'Olcs\Controller\Lva\Variation\FinancialHistoryController',
-            'LvaVariation/LicenceHistory'           => 'Olcs\Controller\Lva\Variation\LicenceHistoryController',
-            'LvaVariation/ConvictionsPenalties'     => 'Olcs\Controller\Lva\Variation\ConvictionsPenaltiesController',
-            'LvaVariation/Summary'                  => 'Olcs\Controller\Lva\Variation\SummaryController',
+            'LvaVariation/Vehicles'                 => \Olcs\Controller\Lva\Variation\VehiclesController::class,
+            'LvaVariation/VehiclesPsv'              => \Olcs\Controller\Lva\Variation\VehiclesPsvController::class,
+            'LvaVariation/Safety'                   => \Olcs\Controller\Lva\Variation\SafetyController::class,
+            'LvaVariation/TaxiPhv'                  => \Olcs\Controller\Lva\Variation\TaxiPhvController::class,
+            'LvaVariation/Discs'                    => \Olcs\Controller\Lva\Variation\DiscsController::class,
+            'LvaVariation/Undertakings'             => \Olcs\Controller\Lva\Variation\UndertakingsController::class,
+            'LvaVariation/FinancialEvidence'        => \Olcs\Controller\Lva\Variation\FinancialEvidenceController::class,
+            'LvaVariation/VehiclesDeclarations'     => \Olcs\Controller\Lva\Variation\VehiclesDeclarationsController::class,
+            'LvaVariation/FinancialHistory'         => \Olcs\Controller\Lva\Variation\FinancialHistoryController::class,
+            'LvaVariation/LicenceHistory'           => \Olcs\Controller\Lva\Variation\LicenceHistoryController::class,
+            'LvaVariation/ConvictionsPenalties'     => \Olcs\Controller\Lva\Variation\ConvictionsPenaltiesController::class,
+            'LvaVariation/Summary'                  => \Olcs\Controller\Lva\Variation\SummaryController::class,
             'LvaVariation/UploadEvidence'           => \Olcs\Controller\Lva\Variation\UploadEvidenceController::class,
-            'LvaVariation/PaymentSubmission'        => 'Olcs\Controller\Lva\Variation\PaymentSubmissionController',
+            'LvaVariation/PaymentSubmission'        => \Olcs\Controller\Lva\Variation\PaymentSubmissionController::class,
             'LvaVariation/Review'                   => \Common\Controller\Lva\ReviewController::class,
             'LvaDirectorChange/People' => \Olcs\Controller\Lva\DirectorChange\PeopleController::class,
             'LvaDirectorChange/FinancialHistory' => Olcs\Controller\Lva\DirectorChange\FinancialHistoryController::class,
@@ -1247,7 +1247,7 @@ return array(
             'LvaTransportManager/Confirmation' => \Olcs\Controller\Lva\TransportManager\ConfirmationController::class,
             'LvaTransportManager/OperatorDeclaration' => \Olcs\Controller\Lva\TransportManager\OperatorDeclarationController::class,
             'LvaTransportManager/TmDeclaration' => \Olcs\Controller\Lva\TransportManager\TmDeclarationController::class,
-        ),
+        ],
         'aliases' => [
             'LvaLicence'                            => LvaLicenceControllers\OverviewController::class,
             'LvaLicence/Variation'                  => LvaLicenceControllers\VariationController::class,
@@ -1299,12 +1299,12 @@ return array(
             'Dashboard' => Olcs\Controller\DashboardController::class,
             'Olcs\Ebsr\Uploads' => \Olcs\Controller\Ebsr\UploadsController::class,
         ],
-        'invokables' => array(
+        'invokables' => [
             'DeclarationFormController' => \Olcs\Controller\Lva\DeclarationFormController::class,
             'Dashboard' => Olcs\Controller\DashboardController::class,
             'Search\Result' => 'Olcs\Controller\Search\ResultController',
-        ),
-        'factories' => array(
+        ],
+        'factories' => [
 
             IndexController::class => IndexControllerFactory::class,
             CookieSettingsController::class => CookieSettingsControllerFactory::class,
@@ -1408,15 +1408,15 @@ return array(
             LvaDirectorChangeControllers\FinancialHistoryController::class => LvaDirectorChangeControllerFactories\FinancialHistoryControllerFactory::class,
             LvaDirectorChangeControllers\LicenceHistoryController::class => LvaDirectorChangeControllerFactories\LicenceHistoryControllerFactory::class,
             LvaDirectorChangeControllers\PeopleController::class => LvaDirectorChangeControllerFactories\PeopleControllerFactory::class,
-        ),
-    ),
+        ],
+    ],
     'local_forms_path' => __DIR__ . '/../src/Form/Forms/',
-    'tables' => array(
-        'config' => array(
+    'tables' => [
+        'config' => [
             __DIR__ . '/../src/Table/Tables/'
-        )
-    ),
-    'service_manager' => array(
+        ]
+    ],
+    'service_manager' => [
         'aliases' => [
             'LicencePeopleAdapter' => LicencePeopleAdapter::class,
             'VariationTransportManagerAdapter' => VariationTransportManagerAdapter::class,
@@ -1426,7 +1426,7 @@ return array(
             'DashboardProcessingService' => ProcessingService\DashboardProcessingService::class,
             'Processing\CreateVariation' => ProcessingService\CreateVariationProcessingService::class,
         ],
-        'invokables' => array(
+        'invokables' => [
             'CookieCookieStateFactory' => CookieService\CookieStateFactory::class,
             'CookiePreferencesFactory' => CookieService\PreferencesFactory::class,
             'CookieSetCookieFactory' => CookieService\SetCookieFactory::class,
@@ -1435,7 +1435,7 @@ return array(
             'QaIrhpApplicationViewGenerator' => QaService\ViewGenerator\IrhpApplicationViewGenerator::class,
             'QaIrhpPermitApplicationViewGenerator' => QaService\ViewGenerator\IrhpPermitApplicationViewGenerator::class,
             LicenceVehicleManagement::class => LicenceVehicleManagement::class
-        ),
+        ],
         'abstract_factories' => [
             \Laminas\Cache\Service\StorageCacheAbstractServiceFactory::class,
         ],
@@ -1472,7 +1472,7 @@ return array(
             VariationPeopleAdapter::class => VariationPeopleAdapterFactory::class,
             \Olcs\Logging\Log\Processor\CorrelationId::class => \Olcs\Logging\Log\Processor\CorrelationIdFactory::class,
         ],
-    ),
+    ],
     'log_processors' => [
         'factories' => [
             CorrelationId::class => CorrelationIdFactory::class,
@@ -1501,43 +1501,43 @@ return array(
             'SearchOrderFieldset' => SearchOrderFieldset::class
         ]
     ],
-    'controller_plugins' => array(
-        'invokables' => array(),
+    'controller_plugins' => [
+        'invokables' => [],
         'factories' => [
             \Olcs\Mvc\Controller\Plugin\Placeholder::class => \Olcs\Mvc\Controller\Plugin\PlaceholderFactory::class,
         ],
-        'aliases' => array(
+        'aliases' => [
             'placeholder' => \Olcs\Mvc\Controller\Plugin\Placeholder::class,
-        )
-    ),
-    'simple_date_format' => array(
+        ]
+    ],
+    'simple_date_format' => [
         'default' => 'd-m-Y'
-    ),
+    ],
     'data_services' => [
         'factories' => [
             DataService\MessagingAppOrLicNo::class => CommonDataService\AbstractListDataServiceFactory::class,
         ],
     ],
-    'view_helpers' => array(
+    'view_helpers' => [
         'factories' => [
             \Olcs\View\Helper\SessionTimeoutWarning\SessionTimeoutWarning::class => \Olcs\View\Helper\SessionTimeoutWarning\SessionTimeoutWarningFactory::class,
             'cookieManager' => \Olcs\View\Helper\CookieManagerFactory::class,
         ],
-        'aliases' => array(
+        'aliases' => [
             'sessionTimeoutWarning' => \Olcs\View\Helper\SessionTimeoutWarning\SessionTimeoutWarning::class,
-        ),
-        'invokables' => array(
+        ],
+        'invokables' => [
             'generatePeopleList' => \Olcs\View\Helper\GeneratePeopleList::class,
             'tmCheckAnswersChangeLink' => \Olcs\View\Helper\TmCheckAnswersChangeLink::class,
-        )
-    ),
-    'view_manager' => array(
+        ]
+    ],
+    'view_manager' => [
         'display_not_found_reason' => true,
         'display_exceptions' => true,
         'doctype' => 'HTML5',
         'not_found_template' => 'error/404',
         'exception_template' => 'error/index',
-        'template_map' => array(
+        'template_map' => [
             'layout/layout' => __DIR__ . '/../view/layouts/base.phtml',
             'auth/layout' => __DIR__ . '/../view/layouts/base.phtml',
             'auth/login' => __DIR__ . '/../view/pages/auth/login.phtml',
@@ -1550,80 +1550,80 @@ return array(
             'error/404' => __DIR__ . '/../view/error/404.phtml',
             'error/403' => __DIR__ . '/../view/error/404.phtml',
             'error/index' => __DIR__ . '/../view/error/index.phtml'
-        ),
-        'template_path_stack' => array(
+        ],
+        'template_path_stack' => [
             __DIR__ . '/../../../vendor/olcs/olcs-common/Common/view',
             __DIR__ . '/../view'
-        )
-    ),
-    'navigation' => array(
-        'default' => array(
+        ]
+    ],
+    'navigation' => [
+        'default' => [
             $applicationNavigation,
             $searchNavigation,
             $busRegSearchTabs,
             $busRegNav,
             $myAccountNav,
-            array(
+            [
                 'id' => 'home',
                 'label' => 'Home',
                 'route' => 'index',
-                'pages' => array(
-                    array(
+                'pages' => [
+                    [
                         'id' => 'selfserve-topnav-home',
                         'label' => 'selfserve-dashboard-topnav-home',
                         'route' => 'dashboard',
                         'class' => 'proposition-nav__item',
-                    ),
-                    array(
+                    ],
+                    [
                         'id' => 'selfserve-topnav-bus-registration',
                         'label' => 'selfserve-dashboard-topnav-bus-registrations',
                         'route' => 'busreg-registrations',
                         'action' => 'index',
                         'use_route_match' => true,
                         'class' => 'proposition-nav__item',
-                    ),
-                    array(
+                    ],
+                    [
                         'id' => 'selfserve-topnav-search',
                         'label' => 'search',
                         'route' => 'search',
                         'class' => 'proposition-nav__item',
                         'visible' => false,
-                    ),
-                    array(
+                    ],
+                    [
                         'id' => 'selfserve-topnav-manage-users',
                         'label' => 'Manage users',
                         'route' => 'manage-user',
                         'action' => 'index',
                         'use_route_match' => true,
                         'class' => 'proposition-nav__item',
-                    ),
-                    array(
+                    ],
+                    [
                         'id' => 'selfserve-topnav-your-account',
                         'label' => 'selfserve-dashboard-topnav-your-account',
                         'route' => 'your-account',
                         'class' => 'proposition-nav__item',
-                    ),
-                    array(
+                    ],
+                    [
                         'id' => 'selfserve-topnav-sign-out',
                         'label' => 'selfserve-dashboard-topnav-sign-out',
                         'route' => 'auth/logout',
                         'class' => 'proposition-nav__item',
-                    )
-                ),
-            ),
-            array(
+                    ]
+                ],
+            ],
+            [
                 'id' => 'signin',
                 'route' => 'auth/login/GET', //@todo is this used?
-                'pages' => array(
-                    array(
+                'pages' => [
+                    [
                         'id' => 'forgot-password',
                         'label' => 'auth.forgot-password.label',
                         'route' => 'auth/forgot-password',
-                    )
-                )
-            )
-        )
-    ),
+                    ]
+                ]
+            ]
+        ]
+    ],
     'asset_path' => '//dev_dvsa-static.web01.olcs.mgt.mtpdvsa',
     'form_service_manager' => [
         'abstract_factories' => [
@@ -1640,7 +1640,7 @@ return array(
             'selfserve-ebsr-list' => \Olcs\Assertion\Ebsr\EbsrList::class,
         ],
         'guards' => [
-            'LmcRbacMvc\Guard\RoutePermissionsGuard' => [
+            \LmcRbacMvc\Guard\RoutePermissionsGuard::class => [
                 // Dashboard Page
                 'dashboard' => ['selfserve-nav-dashboard'],
 
@@ -1703,4 +1703,4 @@ return array(
             'options_bilateral' => \Permits\Form\Model\Fieldset\SubmitOnly::class,
         ]
     ]
-);
+];

@@ -20,7 +20,7 @@ use Laminas\ServiceManager\ServiceManager;
  */
 class LicenceTransportManagerAdapterTest extends MockeryTestCase
 {
-    const LICENCE_ID = 612;
+    public const LICENCE_ID = 612;
 
     /** @var  LicenceTransportManagerAdapter|\Mockery\MockInterface */
     protected $sut;

@@ -27,10 +27,10 @@ class ApplicationBusinessTypeTest extends MockeryTestCase
 
     public function setUp(): void
     {
-        $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
+        $this->fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
         $this->fh = m::mock(FormHelperService::class)->makePartial();
         $this->authService = m::mock(AuthorizationService::class);
-        $this->guidanceHelper = m::mock('\Common\Service\Helper\GuidanceHelperService');
+        $this->guidanceHelper = m::mock(\Common\Service\Helper\GuidanceHelperService::class);
 
         $this->sut = new ApplicationBusinessType($this->fh, $this->authService, $this->guidanceHelper, $this->fsm);
     }

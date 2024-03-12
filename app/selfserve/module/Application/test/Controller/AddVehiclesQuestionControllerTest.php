@@ -729,9 +729,7 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->sut->indexAction($request, $this->routeMatch());
 
         // Assert
-        $this->commandSender()->shouldHaveReceived('send')->withArgs(function ($command) {
-            return $this->assertCommandUpdatesVehicleSectionToBeIncomplete($command);
-        });
+        $this->commandSender()->shouldHaveReceived('send')->withArgs(fn($command) => $this->assertCommandUpdatesVehicleSectionToBeIncomplete($command));
     }
 
     /**
@@ -771,9 +769,7 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         }
 
         // Assert
-        $this->commandSender()->shouldHaveReceived('send')->withArgs(function ($command) {
-            return $this->assertCommandUpdatesVehicleSectionToBeIncomplete($command);
-        });
+        $this->commandSender()->shouldHaveReceived('send')->withArgs(fn($command) => $this->assertCommandUpdatesVehicleSectionToBeIncomplete($command));
     }
 
     /**
@@ -816,9 +812,7 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->sut->indexAction($request, $this->routeMatch());
 
         // Assert
-        $this->commandSender()->shouldHaveReceived('send')->withArgs(function ($command) {
-            return $this->assertCommandUpdatesVehicleSectionToBeCompleted($command);
-        });
+        $this->commandSender()->shouldHaveReceived('send')->withArgs(fn($command) => $this->assertCommandUpdatesVehicleSectionToBeCompleted($command));
     }
 
     /**
@@ -836,9 +830,7 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->sut->indexAction($request, $this->routeMatch());
 
         // Assert
-        $this->commandSender()->shouldHaveReceived('send')->withArgs(function ($command) {
-            return $this->assertCommandUpdatesVehicleSectionToBeCompleted($command);
-        });
+        $this->commandSender()->shouldHaveReceived('send')->withArgs(fn($command) => $this->assertCommandUpdatesVehicleSectionToBeCompleted($command));
     }
 
     /**
@@ -1186,9 +1178,7 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
                 return $response;
             })->byDefault();
 
-            $instance->allows('__invoke')->with(IsInstanceOf::anInstanceOf(Application::class))->andReturnUsing(function () {
-                return $this->applicationCqrsResponse();
-            })->byDefault();
+            $instance->allows('__invoke')->with(IsInstanceOf::anInstanceOf(Application::class))->andReturnUsing(fn() => $this->applicationCqrsResponse())->byDefault();
 
             $this->serviceManager->setService(HandleQuery::class, $instance);
         }
@@ -1270,9 +1260,7 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
     {
         if (! $this->serviceManager->has(CommandSender::class)) {
             $instance = $this->setUpMockService(CommandSender::class);
-            $instance->allows('send')->andReturnUsing(function () {
-                return $this->cqrsResponse();
-            })->byDefault();
+            $instance->allows('send')->andReturnUsing(fn() => $this->cqrsResponse())->byDefault();
             $this->serviceManager->setService(CommandSender::class, $instance);
         }
         return $this->serviceManager->get(CommandSender::class);

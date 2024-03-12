@@ -38,7 +38,7 @@ class LicenceOverview extends LvaOverview
      * @param array $sections  Sections?
      * @param array $variables Variables?
      */
-    public function __construct($data, array $sections = array(), $variables = array())
+    public function __construct($data, array $sections = [], $variables = [])
     {
         $this->setVariables($variables);
 

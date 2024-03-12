@@ -20,9 +20,7 @@ class ApplicationOverviewSection extends LvaOverviewSection
         $filter = new \Laminas\Filter\Word\DashToCamelCase();
         $index = lcfirst($filter->filter(str_replace('_', '-', $ref)));
 
-        $status = isset($data['applicationCompletion'][$index . 'Status'])
-            ? $data['applicationCompletion'][$index . 'Status']
-            : null;
+        $status = $data['applicationCompletion'][$index . 'Status'] ?? null;
 
         switch ($status) {
             case 1:

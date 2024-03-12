@@ -5,63 +5,61 @@ use Common\Service\Table\Formatter\Date;
 use Common\Service\Table\Formatter\EbsrRegNumberLink;
 use Common\Service\Table\Formatter\EbsrVariationNumber;
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'titleSingular' => 'Bus registration',
         'title' => 'Bus registrations'
-    ),
-    'settings' => array(
-        'paginate' => array(
-            'limit' => array(
+    ],
+    'settings' => [
+        'paginate' => [
+            'limit' => [
                 'default' => 25,
-                'options' => array(25, 50, 100)
-            )
-        )
-    ),
-    'columns' => array(
-        array(
+                'options' => [25, 50, 100]
+            ]
+        ]
+    ],
+    'columns' => [
+        [
             'permissionRequisites' => ['local-authority-admin', 'local-authority-user'],
             'title' => 'Organisation',
             'name' => 'organisationName'
-        ),
-        array(
+        ],
+        [
             'title' => 'Bus registration No.',
             'formatter' => function ($data, $column) {
                 $column['formatter'] = EbsrRegNumberLink::class;
                 return $this->callFormatter($column, $data);
             }
-        ),
-        array(
+        ],
+        [
             'title' => 'Status',
             'formatter' => BusRegStatus::class
-        ),
-        array(
+        ],
+        [
             'title' => 'Variation No.',
             'isNumeric' => true,
             'formatter' => EbsrVariationNumber::class
-        ),
-        array(
+        ],
+        [
             'title' => 'Service No.',
             'isNumeric' => true,
-            'formatter' => function ($row) {
-                return str_replace('(', ' (', $row['serviceNo']);
-            }
-        ),
-        array(
+            'formatter' => fn($row) => str_replace('(', ' (', $row['serviceNo'])
+        ],
+        [
             'title' => '1st-registered-cancelled',
             'name' => 'date1stReg',
             'formatter' => function ($data, $column) {
                 $column['formatter'] = Date::class;
                 return $this->callFormatter($column, $data);
             },
-        ),
-        array(
+        ],
+        [
             'title' => 'Starting point',
             'name' => 'startPoint'
-        ),
-        array(
+        ],
+        [
             'title' => 'Finishing point',
             'name' => 'finishPoint'
-        )
-    )
-);
+        ]
+    ]
+];

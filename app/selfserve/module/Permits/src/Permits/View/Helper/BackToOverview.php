@@ -11,9 +11,9 @@ use Laminas\View\Helper\AbstractHelper;
  */
 class BackToOverview extends AbstractHelper
 {
-    const STANDARD_BACK_LINK_LABEL = 'common.link.back.label';
+    public const STANDARD_BACK_LINK_LABEL = 'common.link.back.label';
 
-    const BACK_LINK_LABELS = [
+    public const BACK_LINK_LABELS = [
         self::STANDARD_BACK_LINK_LABEL,
         'common.link.back-to-permits.label',
     ];

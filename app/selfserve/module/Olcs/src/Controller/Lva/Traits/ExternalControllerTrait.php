@@ -67,7 +67,7 @@ trait ExternalControllerTrait
     {
         $organisation = $this->getCurrentOrganisation();
 
-        return (isset($organisation['id'])) ? $organisation['id'] : null;
+        return $organisation['id'] ?? null;
     }
 
     /**
@@ -109,7 +109,7 @@ trait ExternalControllerTrait
      *
      * @return ViewModel
      */
-    protected function render($titleSuffix, Form $form = null, $variables = array())
+    protected function render($titleSuffix, Form $form = null, $variables = [])
     {
         $this->attachCurrentMessages();
 
@@ -118,7 +118,7 @@ trait ExternalControllerTrait
         }
 
         $params = array_merge(
-            array('title' => 'lva.section.title.' . $titleSuffix, 'form' => $form),
+            ['title' => 'lva.section.title.' . $titleSuffix, 'form' => $form],
             $variables
         );
         if ($this->lva === 'licence') {
@@ -172,8 +172,7 @@ trait ExternalControllerTrait
         switch ($sectionName) {
             case 'people':
                 // change the section name based on org type
-                $orgType = isset($data['licence']['organisation']['type']['id']) ?
-                    $data['licence']['organisation']['type']['id'] : $data['organisation']['type']['id'];
+                $orgType = $data['licence']['organisation']['type']['id'] ?? $data['organisation']['type']['id'];
 
                 $sectionTitle .= '.' . $orgType;
                 break;

@@ -6,7 +6,7 @@ use Laminas\Http\Header\SetCookie;
 
 class PreferencesSetCookieGenerator
 {
-    const COOKIE_PATH = '/';
+    public const COOKIE_PATH = '/';
 
     /** @var SetCookieFactory */
     private $setCookieFactory;

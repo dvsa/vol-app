@@ -12,9 +12,9 @@ use Laminas\View\Helper\HelperInterface;
  */
 class SessionTimeoutWarning extends AbstractHelper implements HelperInterface
 {
-    const META_TAG_NAME_SESSION_WARNING_TIMEOUT = 'session-warning-timeout';
-    const META_TAG_NAME_SESSION_REDIRECT_TIMEOUT = 'session-redirect-timeout';
-    const META_TAG_NAME_TIMEOUT_REDIRECT_URL = 'timeout-redirect-url';
+    public const META_TAG_NAME_SESSION_WARNING_TIMEOUT = 'session-warning-timeout';
+    public const META_TAG_NAME_SESSION_REDIRECT_TIMEOUT = 'session-redirect-timeout';
+    public const META_TAG_NAME_TIMEOUT_REDIRECT_URL = 'timeout-redirect-url';
     /**
      * Determines if the session timeout warning modal helper is enabled.
      * Required.

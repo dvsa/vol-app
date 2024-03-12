@@ -29,8 +29,8 @@ class ApplicationBusinessDetailsTest extends MockeryTestCase
 
     public function setUp(): void
     {
-        $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
-        $this->fh = m::mock('\Common\Service\Helper\FormHelperService')->makePartial();
+        $this->fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
+        $this->fh = m::mock(\Common\Service\Helper\FormHelperService::class)->makePartial();
 
         $this->sut = new ApplicationBusinessDetails($this->fh, $this->fsm);
     }

@@ -156,9 +156,7 @@ class ListVehicleController
             }
             return $this->redirectHelper->refresh();
         }
-        $input = array_filter(array_merge($inputFilter->getValues(), $inputFilter->getUnknown()), function ($val) {
-            return $val !== null;
-        });
+        $input = array_filter(array_merge($inputFilter->getValues(), $inputFilter->getUnknown()), fn($val) => $val !== null);
 
         $format = $input['format'] ?? static::FORMAT_HTML;
         if ($format === static::FORMAT_CSV) {
@@ -452,8 +450,7 @@ class ListVehicleController
         // Add hidden fields for any other data that is not search related
         $extraFormData = array_diff_key($data, array_flip([ListVehicleSearch::FIELD_VEHICLE_SEARCH]));
         while (! empty($extraFormData)) {
-            end($extraFormData);
-            $key = key($extraFormData);
+            $key = array_key_last($extraFormData);
             $value = array_pop($extraFormData);
             if (is_array($value)) {
                 foreach ($value as $arrayItemKey => $arrayItemValue) {

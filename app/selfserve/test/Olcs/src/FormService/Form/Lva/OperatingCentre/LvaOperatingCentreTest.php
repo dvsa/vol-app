@@ -42,23 +42,17 @@ class LvaOperatingCentreTest extends MockeryTestCase
         $mockTranslator = m::mock(TranslationHelperService::class);
         $mockTranslator->shouldReceive('translate')
             ->andReturnUsing(
-                function ($string) {
-                    return 'translated-' . $string;
-                }
+                fn($string) => 'translated-' . $string
             )
             ->shouldReceive('translateReplace')
             ->andReturnUsing(
-                function ($string, $vars) {
-                    return 'translated-' . $string . '-' . implode('-', $vars);
-                }
+                fn($string, $vars) => 'translated-' . $string . '-' . implode('-', $vars)
             );
 
         $mockUrl = m::mock(UrlHelperService::class);
         $mockUrl->shouldReceive('fromRoute')
             ->andReturnUsing(
-                function ($route, $params) {
-                    return $route . '-' . implode('-', $params);
-                }
+                fn($route, $params) => $route . '-' . implode('-', $params)
             );
 
         $this->sut = new LvaOperatingCentre($this->formHelper, $mockTranslator, $mockUrl);

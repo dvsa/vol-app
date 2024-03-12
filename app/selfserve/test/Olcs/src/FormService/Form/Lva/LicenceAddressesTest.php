@@ -19,7 +19,7 @@ class LicenceAddressesTest extends MockeryTestCase
 
     public function setUp(): void
     {
-        $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService')->makePartial();
+        $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class)->makePartial();
 
         $this->sut = new LicenceAddresses($this->formHelper);
     }

@@ -127,9 +127,7 @@ class TransferVehicleConfirmationController extends AbstractVehicleController
             'form' => $this->form,
             'backLink' => $this->getLink(static::ROUTE_TRANSFER_INDEX),
             'destinationLicenceId' => $destinationLicence->getId(),
-            'vrmList' => array_map(function (LicenceVehicleDTO $licenceVehicle) {
-                return $licenceVehicle->getVehicle()->getVrm();
-            }, $licenceVehicles),
+            'vrmList' => array_map(fn(LicenceVehicleDTO $licenceVehicle) => $licenceVehicle->getVehicle()->getVrm(), $licenceVehicles),
         ];
         if (count($licenceVehicles) !== 1) {
             $confirmHeaderKey = 'licence.vehicle.transfer.confirm.header.plural';
@@ -241,7 +239,7 @@ class TransferVehicleConfirmationController extends AbstractVehicleController
                 );
             }
             if (isset($errors['LIC_TRAN_2']) || isset($errors['LIC_TRAN_3'])) {
-                $invalidVehiclesJson = isset($errors['LIC_TRAN_2']) ? $errors['LIC_TRAN_2'] : $errors['LIC_TRAN_3'];
+                $invalidVehiclesJson = $errors['LIC_TRAN_2'] ?? $errors['LIC_TRAN_3'];
                 $invalidVehicleVrms = json_decode($invalidVehiclesJson, true);
                 throw new LicenceAlreadyAssignedVehicleException(
                     $destinationLicence->getId(),
@@ -331,8 +329,6 @@ class TransferVehicleConfirmationController extends AbstractVehicleController
             throw new VehiclesNotFoundWithIdsException($vehicleIds);
         }
         $licenceVehicles = $queryResult->getResult()['results'] ?? [];
-        return array_map(function ($licenceVehicle) {
-            return new LicenceVehicleDTO($licenceVehicle);
-        }, $licenceVehicles);
+        return array_map(fn($licenceVehicle) => new LicenceVehicleDTO($licenceVehicle), $licenceVehicles);
     }
 }

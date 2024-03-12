@@ -21,7 +21,7 @@ class LicenceNotFoundWithIdException extends Exception
     public function __construct(int $licenceId, string $message = null, int $code = 0, Throwable $previous = null)
     {
         $this->licenceId = $licenceId;
-        $message = null === $message ? sprintf('Licence was not found with id: "%s".', $licenceId) : $message;
+        $message ??= sprintf('Licence was not found with id: "%s".', $licenceId);
         parent::__construct($message, $code, $previous);
     }
 

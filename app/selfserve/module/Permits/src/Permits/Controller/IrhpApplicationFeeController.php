@@ -192,7 +192,7 @@ class IrhpApplicationFeeController extends AbstractSelfserveController
         $id = $this->params()->fromRoute('id', -1);
         $queryStringData = (array)$this->getRequest()->getQuery();
 
-        $reference = isset($queryStringData['receipt_reference']) ? $queryStringData['receipt_reference'] : null;
+        $reference = $queryStringData['receipt_reference'] ?? null;
 
         $dtoData = [
             'reference' => $reference,

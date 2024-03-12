@@ -6,17 +6,17 @@ use RuntimeException;
 
 class Preferences
 {
-    const COOKIE_NAME = 'cookie_policy';
+    public const COOKIE_NAME = 'cookie_policy';
 
-    const KEY_ANALYTICS = 'analytics';
-    const KEY_SETTINGS = 'settings';
+    public const KEY_ANALYTICS = 'analytics';
+    public const KEY_SETTINGS = 'settings';
 
-    const KEYS = [
+    public const KEYS = [
         self::KEY_ANALYTICS,
         self::KEY_SETTINGS,
     ];
 
-    const DEFAULT_PREFERENCE_VALUE = false;
+    public const DEFAULT_PREFERENCE_VALUE = false;
 
     /** @var array */
     private $preferences;

@@ -57,7 +57,7 @@ class UserForgotUsernameControllerTest extends TestCase
         $mockRequest->shouldReceive('isPost')->andReturn(false);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
-        $mockForm = m::mock('Common\Form\Form');
+        $mockForm = m::mock(\Common\Form\Form::class);
 
         $this->mockformHelper
             ->shouldReceive('createFormWithRequest')
@@ -67,7 +67,7 @@ class UserForgotUsernameControllerTest extends TestCase
 
         $view = $this->sut->indexAction();
 
-        $this->assertInstanceOf('Laminas\View\Model\ViewModel', $view);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $view);
         $this->assertEquals('olcs/user-forgot-username/index', $view->getTemplate());
     }
 
@@ -77,7 +77,7 @@ class UserForgotUsernameControllerTest extends TestCase
         $mockRequest->shouldReceive('isPost')->andReturn(true);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
-        $mockForm = m::mock('Common\Form\Form');
+        $mockForm = m::mock(\Common\Form\Form::class);
 
         $this->mockformHelper
             ->shouldReceive('createFormWithRequest')
@@ -108,7 +108,7 @@ class UserForgotUsernameControllerTest extends TestCase
         $mockRequest->shouldReceive('isPost')->andReturn(true);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
-        $mockForm = m::mock('Common\Form\Form');
+        $mockForm = m::mock(\Common\Form\Form::class);
         $mockForm->shouldReceive('setData')->once()->with($postData);
         $mockForm->shouldReceive('isValid')->once()->andReturn(true);
         $mockForm->shouldReceive('getData')->once()->andReturn($postData);
@@ -142,7 +142,7 @@ class UserForgotUsernameControllerTest extends TestCase
 
         $view = $this->sut->indexAction();
 
-        $this->assertInstanceOf('Laminas\View\Model\ViewModel', $view);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $view);
         $this->assertEquals('olcs/user-forgot-username/check-email', $view->getTemplate());
     }
 
@@ -159,7 +159,7 @@ class UserForgotUsernameControllerTest extends TestCase
         $mockRequest->shouldReceive('isPost')->andReturn(true);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
-        $mockForm = m::mock('Common\Form\Form');
+        $mockForm = m::mock(\Common\Form\Form::class);
         $mockForm->shouldReceive('setData')->once()->with($postData);
         $mockForm->shouldReceive('isValid')->once()->andReturn(true);
         $mockForm->shouldReceive('getData')->once()->andReturn($postData);
@@ -193,7 +193,7 @@ class UserForgotUsernameControllerTest extends TestCase
 
         $view = $this->sut->indexAction();
 
-        $this->assertInstanceOf('Laminas\View\Model\ViewModel', $view);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $view);
         $this->assertEquals('olcs/user-forgot-username/ask-admin', $view->getTemplate());
     }
 
@@ -210,7 +210,7 @@ class UserForgotUsernameControllerTest extends TestCase
         $mockRequest->shouldReceive('isPost')->andReturn(true);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
-        $mockForm = m::mock('Common\Form\Form');
+        $mockForm = m::mock(\Common\Form\Form::class);
         $mockForm->shouldReceive('setData')->once()->with($postData);
         $mockForm->shouldReceive('isValid')->once()->andReturn(true);
         $mockForm->shouldReceive('getData')->once()->andReturn($postData);
@@ -241,7 +241,7 @@ class UserForgotUsernameControllerTest extends TestCase
 
         $view = $this->sut->indexAction();
 
-        $this->assertInstanceOf('Laminas\View\Model\ViewModel', $view);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $view);
         $this->assertEquals('olcs/user-forgot-username/index', $view->getTemplate());
     }
 
@@ -258,7 +258,7 @@ class UserForgotUsernameControllerTest extends TestCase
         $mockRequest->shouldReceive('isPost')->andReturn(true);
         $this->sut->shouldReceive('getRequest')->andReturn($mockRequest);
 
-        $mockForm = m::mock('Common\Form\Form');
+        $mockForm = m::mock(\Common\Form\Form::class);
         $mockForm->shouldReceive('setData')->once()->with($postData);
         $mockForm->shouldReceive('isValid')->once()->andReturn(true);
         $mockForm->shouldReceive('getData')->once()->andReturn($postData);
@@ -286,7 +286,7 @@ class UserForgotUsernameControllerTest extends TestCase
 
         $view = $this->sut->indexAction();
 
-        $this->assertInstanceOf('Laminas\View\Model\ViewModel', $view);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $view);
         $this->assertEquals('olcs/user-forgot-username/index', $view->getTemplate());
     }
 }

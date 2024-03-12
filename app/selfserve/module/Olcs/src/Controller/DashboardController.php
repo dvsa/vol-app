@@ -173,9 +173,7 @@ class DashboardController extends AbstractController
     private function isNiFlagTrue($dashboardData)
     {
         $licencesApplications = array_merge($dashboardData['licences'], $dashboardData['applications']);
-        $niFlags = array_filter(array_column($licencesApplications, 'niFlag'), function ($niFlag) {
-            return $niFlag === 'Y';
-        });
+        $niFlags = array_filter(array_column($licencesApplications, 'niFlag'), fn($niFlag) => $niFlag === 'Y');
         return count($niFlags) >= 1;
     }
 

@@ -147,17 +147,13 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->view->shouldReceive('translate')
             ->times(3)
             ->andReturnUsing(
-                function ($arg) {
-                    return 'translated ' . $arg;
-                }
+                fn($arg) => 'translated ' . $arg
             );
 
         $this->view->shouldReceive('escapeHtml')
             ->times(3)
             ->andReturnUsing(
-                function ($arg) {
-                    return 'escaped and ' . $arg;
-                }
+                fn($arg) => 'escaped and ' . $arg
             );
 
         $expected =
@@ -187,9 +183,7 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->view->shouldReceive('translate')
             ->times(3)
             ->andReturnUsing(
-                function ($arg) {
-                    return 'translated ' . $arg;
-                }
+                fn($arg) => 'translated ' . $arg
             );
 
         $this->view->shouldReceive('escapeHtml')->never();

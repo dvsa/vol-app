@@ -25,7 +25,7 @@ class Create
      * @Form\Type(\Common\Form\Element\DynamicSelect::class)
      * @Form\Required(true)
      */
-    public ?DynamicSelect $messageSubject;
+    public ?DynamicSelect $messageSubject = null;
 
     /**
      * @Form\Options({
@@ -41,7 +41,7 @@ class Create
      * @Form\Type(\Common\Form\Element\DynamicSelect::class)
      * @Form\Required(true)
      */
-    public ?DynamicSelect $appOrLicNo;
+    public ?DynamicSelect $appOrLicNo = null;
 
     /**
      * @Form\Attributes({
@@ -63,7 +63,7 @@ class Create
      * @Form\Attributes({"value": "markup-messaging-new-conversation-timeframe"})
      * @Form\Type(\Common\Form\Elements\Types\GuidanceTranslated::class)
      */
-    public ?GuidanceTranslated $guidance;
+    public ?GuidanceTranslated $guidance = null;
 
     /**
      * @Form\Attributes({

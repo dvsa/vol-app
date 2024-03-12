@@ -7,14 +7,14 @@ namespace Permits\Controller\Config\Params;
  */
 class ParamsConfig
 {
-    const NEW_APPLICATION = [
+    public const NEW_APPLICATION = [
         'route' => [
             'type',
             'year'
         ],
     ];
 
-    const ID_FROM_ROUTE = [
+    public const ID_FROM_ROUTE = [
         'route' => [
             'id'
         ],

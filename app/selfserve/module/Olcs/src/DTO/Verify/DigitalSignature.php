@@ -4,13 +4,13 @@ namespace Olcs\DTO\Verify;
 
 final class DigitalSignature
 {
-    const KEY_APPLICATION_ID = 'applicationId';
-    const KEY_LVA = 'lva';
-    const KEY_ROLE = 'role';
-    const KEY_CONTINUATION_DETAIL_ID = 'continuationDetailId';
-    const KEY_TRANSPORT_MANAGER_APPLICATION_ID = 'transportManagerApplicationId';
-    const KEY_LICENCE_ID = 'licenceId';
-    const KEY_VERIFY_ID = 'verifyId';
+    public const KEY_APPLICATION_ID = 'applicationId';
+    public const KEY_LVA = 'lva';
+    public const KEY_ROLE = 'role';
+    public const KEY_CONTINUATION_DETAIL_ID = 'continuationDetailId';
+    public const KEY_TRANSPORT_MANAGER_APPLICATION_ID = 'transportManagerApplicationId';
+    public const KEY_LICENCE_ID = 'licenceId';
+    public const KEY_VERIFY_ID = 'verifyId';
 
     private $applicationId;
     private $lva;

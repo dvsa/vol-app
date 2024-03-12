@@ -33,13 +33,13 @@ class LicenceSoleTraderTest extends MockeryTestCase
 
     public function setUp(): void
     {
-        $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService');
+        $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
 
         $this->mockLicenceService = m::mock(Form::class);
         $this->peopleLvaService = m::mock(PeopleLvaService::class);
 
         /** @var FormServiceManager fsm */
-        $this->fsm = m::mock('\Common\FormService\FormServiceManager')->makePartial();
+        $this->fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
 
         $this->fsm->setService('lva-licence', $this->mockLicenceService);
 

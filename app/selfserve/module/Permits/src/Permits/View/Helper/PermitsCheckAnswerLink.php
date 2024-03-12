@@ -11,7 +11,7 @@ use Laminas\View\Helper\AbstractHelper;
  */
 class PermitsCheckAnswerLink extends AbstractHelper
 {
-    const LINK_TEMPLATE = '<a class="%s" href="%s">%s<span class="govuk-visually-hidden">%s</span></a>';
+    public const LINK_TEMPLATE = '<a class="%s" href="%s">%s<span class="govuk-visually-hidden">%s</span></a>';
 
     /**
      * Generate a link with optional context for accessibility

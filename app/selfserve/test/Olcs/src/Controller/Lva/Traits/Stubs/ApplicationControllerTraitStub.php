@@ -16,7 +16,7 @@ class ApplicationControllerTraitStub extends AbstractActionController
 
     use ApplicationControllerTrait;
 
-    public function callRender($title, $form = null, $variables = array())
+    public function callRender($title, $form = null, $variables = [])
     {
         return $this->render($title, $form, $variables);
     }

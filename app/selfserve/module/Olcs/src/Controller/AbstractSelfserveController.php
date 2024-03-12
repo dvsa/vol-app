@@ -192,9 +192,9 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     public function onDispatch(MvcEvent $e)
     {
         $params = $this->params();
-        $this->routeParams = $params->fromRoute() ? $params->fromRoute() : [];
-        $this->postParams = $params->fromPost() ? $params->fromPost() : [];
-        $this->queryParams = $params->fromQuery() ? $params->fromQuery() : [];
+        $this->routeParams = $params->fromRoute() ?: [];
+        $this->postParams = $params->fromPost() ?: [];
+        $this->queryParams = $params->fromQuery() ?: [];
         $this->action = strtolower($e->getRouteMatch()->getParam('action'));
 
         /** @todo find a better place for these */
@@ -327,7 +327,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
                     }
                 }
 
-                $saveAndReturnStep = isset($config['saveAndReturnStep']) ? $config['saveAndReturnStep'] : '';
+                $saveAndReturnStep = $config['saveAndReturnStep'] ?? '';
 
                 // If mapper implements this method use it to set redirect params.
                 if (method_exists($mapper, 'processRedirectParams')) {
@@ -356,7 +356,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     public function fetchHandlePostParams()
     {
         $config = $this->configsForAction('postConfig');
-        $params = isset($config['defaultParams']) ? $config['defaultParams'] : [];
+        $params = $config['defaultParams'] ?? [];
 
         if (isset($config['params']['route'])) {
             foreach ($config['params']['route'] as $param) {
@@ -410,7 +410,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
             $data = $this->handleResponse($response);
 
             if (isset($config['mapper'])) {
-                $mapper = isset($config['mapper']) ? $config['mapper'] : DefaultMapper::class;
+                $mapper = $config['mapper'] ?? DefaultMapper::class;
                 $data = $this->mapperManager->get($mapper)->mapForDisplay($data);
             }
 
@@ -497,8 +497,8 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
         $tableConfig = $this->configsForAction('tableConfig');
 
         foreach ($tableConfig as $name => $config) {
-            $tableData = isset($this->data[$config['dataSource']]) ? $this->data[$config['dataSource']] : [];
-            $this->tables[$name] = $this->getTable($config['tableName'], $tableData, $this->queryParams);
+            $tableData = $this->data[$config['dataSource']] ?? [];
+            $this->tables[$name] = $this->getTable($config['tableName'], $tableData);
         }
     }
 
@@ -790,7 +790,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     {
         $organisation = $this->getCurrentOrganisation();
 
-        return (isset($organisation['id'])) ? $organisation['id'] : null;
+        return $organisation['id'] ?? null;
     }
 
     /**
@@ -829,7 +829,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
             $this->handleResponse($conditionalResponse);
         }
 
-        $conditionalQueryParams = isset($config['conditional']['query']) ? $config['conditional']['query'] : [];
+        $conditionalQueryParams = $config['conditional']['query'] ?? [];
 
         return $this->handleSaveAndReturnStep(
             $this->postParams,

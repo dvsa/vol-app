@@ -9,7 +9,7 @@ use Laminas\Mvc\MvcEvent;
 
 class IrhpApplicationViewGenerator implements ViewGeneratorInterface
 {
-    const ERR_NOT_SUPPORTED = 'IrhpApplicationViewGenerator does not support redirection requests';
+    public const ERR_NOT_SUPPORTED = 'IrhpApplicationViewGenerator does not support redirection requests';
 
     /**
      * {@inheritdoc}

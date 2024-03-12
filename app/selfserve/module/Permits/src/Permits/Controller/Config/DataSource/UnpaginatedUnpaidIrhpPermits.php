@@ -10,7 +10,7 @@ use Olcs\Controller\Config\DataSource\AbstractDataSource;
  */
 class UnpaginatedUnpaidIrhpPermits extends AbstractDataSource
 {
-    const DATA_KEY = 'unpaginatedUnpaidPermits';
+    public const DATA_KEY = 'unpaginatedUnpaidPermits';
     protected $dto = GetListByIrhpApplicationUnpaged::class;
     protected $paramsMap = [
         'id' => 'irhpApplication',

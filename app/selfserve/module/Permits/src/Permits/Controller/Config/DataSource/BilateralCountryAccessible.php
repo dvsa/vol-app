@@ -10,7 +10,7 @@ use Olcs\Controller\Config\DataSource\AbstractDataSource;
  */
 class BilateralCountryAccessible extends AbstractDataSource
 {
-    const DATA_KEY = 'bilateralCountryAccessible';
+    public const DATA_KEY = 'bilateralCountryAccessible';
     protected $dto = BilateralCountryAccessibleQry::class;
     protected $paramsMap = ['id' => 'id', 'country' => 'country'];
 }

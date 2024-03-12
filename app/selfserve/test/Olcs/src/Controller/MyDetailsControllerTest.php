@@ -52,23 +52,23 @@ class MyDetailsControllerTest extends TestCase
 
     public function testEditActionForGet()
     {
-        $rawEditData = array(
+        $rawEditData = [
             'id' => 3,
             'version' => 1,
             'loginId' => 'stevefox',
-            'contactDetails' => array(
+            'contactDetails' => [
                 'emailAddress' => 'steve@example.com',
                 'id' => 106,
                 'version' => 1,
-                'person' => array(
+                'person' => [
                     'familyName' => 'Fox',
                     'forename' => 'Steve',
                     'id' => 82,
                     'version' => 1,
-                ),
-            ),
+                ],
+            ],
             'translateToWelsh' => 'Y',
-        );
+        ];
         $formattedData = [
             'main' => [
                 'id' => 3,
@@ -176,23 +176,23 @@ class MyDetailsControllerTest extends TestCase
 
     public function testEditActionForPost()
     {
-        $rawEditData = array(
+        $rawEditData = [
             'id' => 3,
             'version' => 1,
             'loginId' => 'stevefox',
-            'contactDetails' => array(
+            'contactDetails' => [
                 'emailAddress' => 'steve@example.com',
                 'id' => 106,
                 'version' => 1,
-                'person' => array(
+                'person' => [
                     'familyName' => 'Fox',
                     'forename' => 'Steve',
                     'id' => 82,
                     'version' => 1,
-                ),
-            ),
+                ],
+            ],
             'translateToWelsh' => 'Y',
-        );
+        ];
 
         $postData = [
             'main' => [
@@ -243,7 +243,7 @@ class MyDetailsControllerTest extends TestCase
             ->with('generic.updated.success');
 
         $this->sut->shouldReceive('redirect->toRoute')
-            ->with('your-account', ['action' => 'edit'], array(), false)
+            ->with('your-account', ['action' => 'edit'], [], false)
             ->once()
             ->andReturn('REDIRECT');
 
@@ -252,23 +252,23 @@ class MyDetailsControllerTest extends TestCase
 
     public function testEditActionForPostWithError()
     {
-        $rawEditData = array(
+        $rawEditData = [
             'id' => 3,
             'version' => 1,
             'loginId' => 'stevefox',
-            'contactDetails' => array(
+            'contactDetails' => [
                 'emailAddress' => 'steve@example.com',
                 'id' => 106,
                 'version' => 1,
-                'person' => array(
+                'person' => [
                     'familyName' => 'Fox',
                     'forename' => 'Steve',
                     'id' => 82,
                     'version' => 1,
-                ),
-            ),
+                ],
+            ],
             'translateToWelsh' => 'Y',
-        );
+        ];
 
         $postData = [
             'main' => [
@@ -298,7 +298,7 @@ class MyDetailsControllerTest extends TestCase
         $mockElementFamilyName = m::mock(Element::class);
         $mockFieldSet->shouldReceive('get')->with('familyName')->once()->andReturn($mockElementFamilyName);
 
-        $mockForm = m::mock('Common\Form\Form');
+        $mockForm = m::mock(\Common\Form\Form::class);
         $mockForm->shouldReceive('setData')->twice()->with($postData);
         $mockForm->shouldReceive('isValid')->once()->andReturn(true);
         $mockForm->shouldReceive('getData')->once()->andReturn($postData);
@@ -346,23 +346,23 @@ class MyDetailsControllerTest extends TestCase
 
     public function testEditActionForPostWithCancel()
     {
-        $rawEditData = array(
+        $rawEditData = [
             'id' => 3,
             'version' => 1,
             'loginId' => 'stevefox',
-            'contactDetails' => array(
+            'contactDetails' => [
                 'emailAddress' => 'steve@example.com',
                 'id' => 106,
                 'version' => 1,
-                'person' => array(
+                'person' => [
                     'familyName' => 'Fox',
                     'forename' => 'Steve',
                     'id' => 82,
                     'version' => 1,
-                ),
-            ),
+                ],
+            ],
             'translateToWelsh' => 'Y',
-        );
+        ];
 
         $responseData = [
             'main' => [
@@ -398,7 +398,7 @@ class MyDetailsControllerTest extends TestCase
         $this->sut->shouldReceive('isButtonPressed')->with('cancel')->once()->andReturn(true);
 
         $this->sut->shouldReceive('redirect->toRoute')
-            ->with('your-account', ['action' => 'edit'], array(), false)
+            ->with('your-account', ['action' => 'edit'], [], false)
             ->once()
             ->andReturn('REDIRECT');
 

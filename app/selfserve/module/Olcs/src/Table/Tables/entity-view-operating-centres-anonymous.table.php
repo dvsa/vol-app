@@ -2,18 +2,18 @@
 
 use Common\Service\Table\Formatter\Address;
 
-return array(
-    'variables' => array(),
-    'settings' => array(),
-    'attributes' => array(),
-    'columns' => array(
-        array(
+return [
+    'variables' => [],
+    'settings' => [],
+    'attributes' => [],
+    'columns' => [
+        [
             'title' => 'search-result-label-operating-centre',
             'addressFields' => 'FULL',
             'formatter' => Address::class,
             'name' => 'operatingCentre->address'
-        ),
-        array(
+        ],
+        [
             'title' => 'search-result-label-vehicles',
             'isNumeric' => true,
             'formatter' => function ($data, $column) {
@@ -23,8 +23,8 @@ return array(
                 return $data['noOfVehiclesRequired'];
             },
             'name' => 'noOfVehiclesRequired'
-        ),
-        array(
+        ],
+        [
             'title' => 'search-result-label-trailers',
             'isNumeric' => true,
             'formatter' => function ($data, $column) {
@@ -33,6 +33,6 @@ return array(
                 }
                 return $data['noOfTrailersRequired'];
             }
-        )
-    )
-);
+        ]
+    ]
+];

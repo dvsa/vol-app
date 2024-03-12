@@ -36,7 +36,7 @@ class DashboardControllerTest extends MockeryTestCase
 
     public function setUp(): void
     {
-        $this->sut = m::mock('\Olcs\Controller\DashboardController')
+        $this->sut = m::mock(\Olcs\Controller\DashboardController::class)
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
 
@@ -44,7 +44,7 @@ class DashboardControllerTest extends MockeryTestCase
         $this->mockDashboardTmApplicationsDataMapper = m::mock(DashboardTmApplications::class);
         $this->mockTableFactory = m::mock(TableFactory::class);
 
-        $reflectionClass = new ReflectionClass('\Olcs\Controller\DashboardController');
+        $reflectionClass = new ReflectionClass(\Olcs\Controller\DashboardController::class);
         $reflectionProperty = $reflectionClass->getProperty('dashboardProcessingService');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->sut, $this->mockDashboardProcessingService);
@@ -146,7 +146,7 @@ class DashboardControllerTest extends MockeryTestCase
 
         $view = $this->sut->indexAction();
 
-        $this->assertInstanceOf('\Laminas\View\Model\ViewModel', $view);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $view);
         $this->assertEquals('dashboard', $view->getTemplate());
         $this->assertEquals(['apps'], $view->getVariable('applications'));
         $this->assertEquals(['vars'], $view->getVariable('variations'));
@@ -189,7 +189,7 @@ class DashboardControllerTest extends MockeryTestCase
 
         $view = $this->sut->indexAction();
 
-        $this->assertInstanceOf('\Laminas\View\Model\ViewModel', $view);
+        $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $view);
         $this->assertEquals('dashboard-tm', $view->getTemplate());
         $this->assertEquals('TABLE', $view->getVariable('applicationsTable'));
     }

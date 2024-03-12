@@ -1,16 +1,16 @@
 <?php
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'titleSingular' => 'Bus registration',
         'title' => 'Bus registrations'
-    ),
-    'settings' => array(
-        'paginate' => array(
-            'limit' => array(
+    ],
+    'settings' => [
+        'paginate' => [
+            'limit' => [
                 'default' => 25,
-                'options' => array(25, 50, 100)
-            )
-        ),
+                'options' => [25, 50, 100]
+            ]
+        ],
         'layout' => 'bus-reg-browse',
-    )
-);
+    ]
+];

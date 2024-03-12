@@ -535,11 +535,9 @@ class SwitchBoardControllerTest extends MockeryTestCase
     {
         $this->queryHandlerMock->shouldReceive('__invoke')
             ->with(IsInstanceOf::anInstanceOf(Licence::class))
-            ->andReturnUsing(function () {
-                return $this->setUpQueryResponse(
-                    $this->setUpDefaultLicenceData()
-                );
-            })
+            ->andReturnUsing(fn() => $this->setUpQueryResponse(
+                $this->setUpDefaultLicenceData()
+            ))
             ->byDefault();
     }
 

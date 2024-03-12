@@ -7,81 +7,75 @@ use Common\Service\Table\Formatter\RefDataStatus;
 use Common\Service\Table\Formatter\StackValue;
 use Common\Util\Escape;
 
-return array(
-    'variables' => array(),
-    'settings' => array(
-        'paginate' => array(
-            'limit' => array(
+return [
+    'variables' => [],
+    'settings' => [
+        'paginate' => [
+            'limit' => [
                 'default' => 10,
-                'options' => array(10, 25, 50)
-            ),
-        ),
-    ),
-    'attributes' => array(),
-    'columns' => array(
-        array(
+                'options' => [10, 25, 50]
+            ],
+        ],
+    ],
+    'attributes' => [],
+    'columns' => [
+        [
             'title' => 'permits.irhp.valid.permits.table.permit-no',
             'isNumeric' => true,
             'name' => 'permitNumber',
-            'formatter' => function ($row) {
-                return '<b>' . Escape::html($row['permitNumber']) . '</b>';
-            },
-        ),
-        array(
+            'formatter' => fn($row) => '<b>' . Escape::html($row['permitNumber']) . '</b>',
+        ],
+        [
             'title' => 'permits.irhp.valid.permits.table.application-no',
             'isNumeric' => true,
             'name' => 'irhpApplication',
             'stack' => 'irhpPermitApplication->relatedApplication->id',
             'formatter' => StackValue::class,
-        ),
-        array(
+        ],
+        [
             'title' => 'permits.irhp.valid.permits.table.emissions-standard',
             'name' => 'emissionsCategory',
             'stack' => 'irhpPermitRange->emissionsCategory->description',
             'formatter' => StackValue::class,
-        ),
-        array(
+        ],
+        [
             'title' => 'permits.irhp.valid.permits.table.constrained.countries',
             'name' => 'constrainedCountries',
             'formatter' => ConstrainedCountriesList::class,
-        ),
-        array(
+        ],
+        [
             'title' => 'permits.irhp.valid.permits.table.issue-date',
             'name' => 'issueDate',
             'formatter' => Date::class,
-        ),
-        array(
+        ],
+        [
             'title' => 'permits.irhp.valid.permits.table.use-by-date',
             'name' => 'useByDate',
-            'formatter' => function ($row) {
-                return $this->callFormatter(
-                    [
-                        'name' => 'useByDate',
-                        'formatter' => Date::class,
-                    ],
-                    [
-                        'useByDate' => $row['ceasedDate'],
-                    ]
-                );
-            }
-        ),
-        array(
+            'formatter' => fn($row) => $this->callFormatter(
+                [
+                    'name' => 'useByDate',
+                    'formatter' => Date::class,
+                ],
+                [
+                    'useByDate' => $row['ceasedDate'],
+                ]
+            )
+        ],
+        [
             'title' => 'status',
             'name' => 'status',
-            'formatter' => function ($row) {
-                return $this->callFormatter(
-                    [
-                        'name' => 'status',
-                        'formatter' => RefDataStatus::class,
+            'formatter' => fn($row) => $this->callFormatter(
+                [
+                    'name' => 'status',
+                    'formatter' => RefDataStatus::class,
+                ],
+                [
+                    'status' => [
+                        'id' => RefData::PERMIT_VALID,
+                        'description' => RefData::PERMIT_VALID
                     ],
-                    [
-                        'status' => [
-                            'id' => RefData::PERMIT_VALID,
-                            'description' => RefData::PERMIT_VALID
-                        ],
-                    ]
-                );
-            }
-        ),
-    )
-);
+                ]
+            )
+        ],
+    ]
+];

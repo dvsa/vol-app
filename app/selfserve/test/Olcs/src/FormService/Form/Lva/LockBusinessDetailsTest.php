@@ -19,7 +19,7 @@ class LockBusinessDetailsTest extends MockeryTestCase
 
     public function setUp(): void
     {
-        $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService');
+        $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
 
         $this->sut = new LockBusinessDetails($this->formHelper);
     }
@@ -53,7 +53,7 @@ class LockBusinessDetailsTest extends MockeryTestCase
         // Params
         $form = m::mock();
         $fieldset = m::mock();
-        $companyNumber = m::mock('\Laminas\Form\Element');
+        $companyNumber = m::mock(\Laminas\Form\Element::class);
 
         // Expectations
         $form->shouldReceive('get')
@@ -92,7 +92,7 @@ class LockBusinessDetailsTest extends MockeryTestCase
         // Params
         $form = m::mock();
         $fieldset = m::mock();
-        $name = m::mock('\Laminas\Form\Element');
+        $name = m::mock(\Laminas\Form\Element::class);
 
         // Expectations
         $form->shouldReceive('get')
@@ -128,8 +128,8 @@ class LockBusinessDetailsTest extends MockeryTestCase
         // Params
         $form = m::mock();
         $fieldset = m::mock();
-        $name = m::mock('\Laminas\Form\Element');
-        $companyNumber = m::mock('\Laminas\Form\Element');
+        $name = m::mock(\Laminas\Form\Element::class);
+        $companyNumber = m::mock(\Laminas\Form\Element::class);
 
         // Expectations
         $form->shouldReceive('get')

@@ -55,10 +55,8 @@ class CheckAnswersController extends AbstractController
 
         $translator = $this->translationHelper;
 
-        list($title, $defaultParams, $form) = $this->getPageLayout(
-            $translator,
-            $this->tma,
-            $this->tma['id']
+        [$title, $defaultParams, $form] = $this->getPageLayout(
+            $translator
         );
 
         $this->changeTmaStatusToDetailsSubmittedIfDetailsChecked();
@@ -155,7 +153,7 @@ class CheckAnswersController extends AbstractController
         ];
 
         $form = $this->getConfirmationForm();
-        return array($title, $defaultParams, $form);
+        return [$title, $defaultParams, $form];
     }
 
     private function redirectToTmDeclarationPage(): \Laminas\Http\Response

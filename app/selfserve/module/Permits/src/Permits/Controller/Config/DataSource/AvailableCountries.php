@@ -10,6 +10,6 @@ use Olcs\Controller\Config\DataSource\AbstractDataSource;
  */
 class AvailableCountries extends AbstractDataSource
 {
-    const DATA_KEY = 'countries';
+    public const DATA_KEY = 'countries';
     protected $dto = AvailableCountriesDto::class;
 }

@@ -182,7 +182,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
         $applicationId = $this->getApplicationId();
 
         $queryStringData = (array)$this->getRequest()->getQuery();
-        $reference = isset($queryStringData['receipt_reference']) ? $queryStringData['receipt_reference'] : null;
+        $reference = $queryStringData['receipt_reference'] ?? null;
 
         $dtoData = [
             'reference' => $reference,

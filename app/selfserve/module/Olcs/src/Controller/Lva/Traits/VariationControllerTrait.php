@@ -62,9 +62,7 @@ trait VariationControllerTrait
         );
 
         $sections = array_map(
-            function ($value) {
-                return ['status' => $value];
-            },
+            fn($value) => ['status' => $value],
             $sections
         );
         return $sections;

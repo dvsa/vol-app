@@ -52,7 +52,7 @@ class IrhpValidPermitsController extends AbstractSelfserveController
         $this->templateVarsConfig['generic']['browserTitle'] = $title;
         $this->templateVarsConfig['generic']['title'] = $title;
 
-        $selectedCountryId = isset($this->queryParams['country']) ? $this->queryParams['country'] : null;
+        $selectedCountryId = $this->queryParams['country'] ?? null;
         $this->data['selectedCountryId'] = $selectedCountryId;
 
         parent::mergeTemplateVars();

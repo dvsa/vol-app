@@ -16,7 +16,7 @@ class EbsrPackFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void
     {
-        $mockValidator = m::mock('\Laminas\Validator\AbstractValidator');
+        $mockValidator = m::mock(\Laminas\Validator\AbstractValidator::class);
         $mockValidator->shouldReceive('setOptions');
         $mockSL = m::mock(ContainerInterface::class);
         $mockSL->shouldReceive('get->get')->andReturn($mockValidator);

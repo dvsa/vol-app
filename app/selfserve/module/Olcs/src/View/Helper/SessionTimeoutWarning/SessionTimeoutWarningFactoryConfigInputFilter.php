@@ -13,9 +13,9 @@ use Laminas\Validator\Uri;
 
 class SessionTimeoutWarningFactoryConfigInputFilter extends InputFilter
 {
-    const CONFIG_ENABLED = 'enabled';
-    const CONFIG_SECONDS_BEFORE_EXPIRY_WARNING = 'seconds-before-expiry-warning';
-    const CONFIG_TIMEOUT_REDIRECT_URL = 'timeout-redirect-url';
+    public const CONFIG_ENABLED = 'enabled';
+    public const CONFIG_SECONDS_BEFORE_EXPIRY_WARNING = 'seconds-before-expiry-warning';
+    public const CONFIG_TIMEOUT_REDIRECT_URL = 'timeout-redirect-url';
 
     /**
      * @var Input

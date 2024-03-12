@@ -361,7 +361,7 @@ class UserController extends AbstractController
 
             $crudAction = null;
             if (isset($data['table'])) {
-                $crudAction = $this->getCrudAction(array($data));
+                $crudAction = $this->getCrudAction([$data]);
             }
 
             if ($crudAction !== null) {

@@ -10,7 +10,7 @@ use Olcs\Controller\Config\DataSource\AbstractDataSource;
  */
 class AvailableStocks extends AbstractDataSource
 {
-    const DATA_KEY = 'stocks';
+    public const DATA_KEY = 'stocks';
     protected $dto = AvailableStocksDto::class;
     protected $paramsMap = [
         'type' => 'irhpPermitType',
