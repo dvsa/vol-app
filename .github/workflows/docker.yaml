@@ -9,13 +9,22 @@ on:
       project:
         type: string
         required: true
+      app-artefact-name:
+        type: string
+        required: true
       should-upload-artefact-to-ecr:
         type: boolean
         required: true
         default: false
-      app-artefact-name:
-        type: string
-        required: true
+      is-release:
+        type: boolean
+        required: false
+        default: false
+
+env:
+  WORKING_DIR: infra/docker/${{ inputs.project }}
+  AWS_OIDC_ROLE: ${{ vars[format('ACCOUNT_nonprod_TF_OIDC{1}_ROLE', (inputs.should-upload-artefact-to-ecr && '' || '_READONLY'))] || vars[format('TF_OIDC{0}_ROLE', (inputs.should-upload-artefact-to-ecr && '' || '_READONLY'))] }}
+  AWS_REGION: ${{ vars.TF_AWS_REGION }}
 
 jobs:
   check-ecr:
@@ -31,12 +40,17 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ vars.TF_OIDC_ROLE }}
-          aws-region: ${{ vars.TF_AWS_REGION }}
+          role-to-assume: ${{ env.AWS_OIDC_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+
       - name: Check if image already exists in ECR
         id: check-ecr
-        # Check if the image already exists in ECR, so we don't have to build it again.
-        run: exit 0
+        run: |
+          exists=$(aws ecr list-images --repository-name $PROJECT --filter tagStatus=TAGGED --query 'imageIds[?ends_with(imageTag, `'$OBJECT_PREFIX'`)]' | jq length)
+
+          if [ $exists -gt 0 ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          fi
 
   lint:
     name: Lint
@@ -45,8 +59,14 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ always() && !cancelled() && !failure() && (needs.check-ecr.result == 'skipped' || !needs.check-ecr.outputs.image-exists) }}
     steps:
-      - name: Lint
-        run: exit 0
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || null }}
+          path: ${{ env.WORKING_DIR }}
+
+      - uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile
 
   build:
     name: Build
@@ -58,10 +78,63 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.ref || null }}
-          path: infra/docker/${{ inputs.project }}
+          path: ${{ env.WORKING_DIR }}
+
       - uses: actions/download-artifact@v4
         with:
           name: ${{ inputs.app-artefact-name }}
           path: app/${{ inputs.project }}
-      - name: Build
-        run: exit 0
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: vol-app/${{ inputs.project }}/${{ inputs.app-artefact-name }}
+          tags: |
+            type=sha,format=short
+            type=semver,enable=${{ inputs.is-release }},pattern={{version}},value=${{ inputs.app-artefact-name }}
+            type=raw,enable=${{ !inputs.is-release }},value=rc-${{ inputs.app-artefact-name }}
+
+      - name: Configure AWS credentials
+        if: ${{ inputs.should-upload-artefact-to-ecr }}
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.AWS_OIDC_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to ECR
+        if: ${{ inputs.should-upload-artefact-to-ecr }}
+        uses: docker/login-action@v3
+        with:
+          registry: 054614622558.dkr.ecr.eu-west-1.amazonaws.com
+
+      - name: Build and push Docker image
+        id: build-and-push
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ env.WORKING_DIR }}
+          platforms: linux/amd64,linux/arm64
+          push: ${{ inputs.should-upload-artefact-to-ecr }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Setup Notation CLI
+        if: ${{ inputs.should-upload-artefact-to-ecr }}
+        uses: notaryproject/notation-action/setup@v1
+        with:
+          version: "1.1.0"
+
+      - name: Sign artefact
+        if: ${{ inputs.should-upload-artefact-to-ecr }}
+        uses: notaryproject/notation-action/sign@v1
+        with:
+          plugin_name: aws-signer
+          plugin_url: https://d2hvyiie56hcat.cloudfront.net/linux/amd64/plugin/latest/notation-aws-signer-plugin.zip
+          plugin_checksum: cccfe8fdcdf853d83fd57ffc80524eddda75ad7ae9d9a257b087007230ec02f9
+          key_id: ${{ vars.AWS_SIGNER_PROFILE_ARN || 'blahblah' }} # TODO: Replace with the ARN of the AWS Signer profile.
+          target_artifact_reference: 054614622558.dkr.ecr.eu-west-1.amazonaws.com/${{ steps.build-and-push.outputs.digest }}
