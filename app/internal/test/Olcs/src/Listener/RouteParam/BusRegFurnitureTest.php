@@ -40,7 +40,7 @@ class BusRegFurnitureTest extends MockeryTestCase
 
     public function testAttach()
     {
-        $mockEventManager = m::mock('Laminas\EventManager\EventManagerInterface');
+        $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
         $mockEventManager->shouldReceive('attach')->once()
             ->with(RouteParams::EVENT_PARAM . 'busRegId', [$this->sut, 'onBusRegFurniture'], 1);
 
@@ -136,7 +136,7 @@ class BusRegFurnitureTest extends MockeryTestCase
             )
             ->getMock();
 
-        $mockViewHelperManager = m::mock('\Laminas\View\HelperPluginManager')
+        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class)
             ->shouldReceive('get')
             ->once()
             ->with('placeholder')
@@ -160,7 +160,7 @@ class BusRegFurnitureTest extends MockeryTestCase
 
     public function testInvoke()
     {
-        $mockViewHelperManager = m::mock('Laminas\View\HelperPluginManager');
+        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
         $mockQuerySender = m::mock(QuerySender::class);
         $mockCommandSender = m::mock(CommandSender::class);
 

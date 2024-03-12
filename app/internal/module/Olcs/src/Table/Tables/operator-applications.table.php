@@ -3,44 +3,40 @@
 use Common\Service\Table\Formatter\Date;
 use Common\Service\Table\Formatter\RefData;
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'titleSingular' => 'Application',
         'title' => 'Applications'
-    ),
-    'settings' => array(
-        'paginate' => array(
-            'limit' => array(
+    ],
+    'settings' => [
+        'paginate' => [
+            'limit' => [
                 'default' => 25,
-                'options' => array(10, 25, 50)
-            )
-        ),
-    ),
-    'columns' => array(
-        array(
+                'options' => [10, 25, 50]
+            ]
+        ],
+    ],
+    'columns' => [
+        [
             'title' => 'Licence/App No.',
-            'formatter' => function ($row) {
-                return '<a class="govuk-link" href="' . $this->generateUrl(
-                    array('application' => $row['id']),
-                    'lva-application'
-                ) . '">' . $row['licence']['licNo'] .'/'. $row['id'] . '</a>';
-            }
-        ),
-        array(
+            'formatter' => fn($row) => '<a class="govuk-link" href="' . $this->generateUrl(
+                ['application' => $row['id']],
+                'lva-application'
+            ) . '">' . $row['licence']['licNo'] .'/'. $row['id'] . '</a>'
+        ],
+        [
             'title' => 'Type',
-            'formatter' => function ($row) {
-                return $row['isVariation'] ? 'Variation' : 'New';
-            }
-        ),
-        array(
+            'formatter' => fn($row) => $row['isVariation'] ? 'Variation' : 'New'
+        ],
+        [
             'title' => 'Received',
             'formatter' => Date::class,
             'name' => 'receivedDate'
-        ),
-        array(
+        ],
+        [
             'title' => 'Status',
             'formatter' => RefData::class,
             'name' => 'status'
-        ),
-    )
-);
+        ],
+    ]
+];

@@ -2,67 +2,61 @@
 
 use Common\Service\Table\Formatter\Date;
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'titleSingular' => 'PSV Authorisation',
         'title' => 'PSV Authorisations'
-    ),
-    'settings' => array(
-        'crud' => array(
-            'actions' => array(
-                'add' => array('class' => 'govuk-button'),
-                'edit' => array('requireRows' => true, 'class' => 'govuk-button govuk-button--secondary js-require--one'),
-                'reset' => array(
+    ],
+    'settings' => [
+        'crud' => [
+            'actions' => [
+                'add' => ['class' => 'govuk-button'],
+                'edit' => ['requireRows' => true, 'class' => 'govuk-button govuk-button--secondary js-require--one'],
+                'reset' => [
                     'requireRows' => true,
                     'class' => 'govuk-button govuk-button--secondary js-require--one',
                     'label' => 'Reset'
-                ),
-            )
-        ),
-        'paginate' => array(
-            'limit' => array(
+                ],
+            ]
+        ],
+        'paginate' => [
+            'limit' => [
                 'default' => 10,
-                'options' => array(10, 25, 50)
-            )
-        )
-    ),
-    'columns' => array(
-        array(
+                'options' => [10, 25, 50]
+            ]
+        ]
+    ],
+    'columns' => [
+        [
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}'
-        ),
-        array(
+        ],
+        [
             'title' => 'Authorisation Id',
             'isNumeric' => true,
-            'formatter' => function ($data, $column) {
-                return '<a href="' . $this->generateUrl(
-                    array('action' => 'edit', 'id' => $data['id']),
-                    'operator/irfo/psv-authorisations',
-                    true
-                ) . '" class="govuk-link js-modal-ajax">' . $data['id'] . '</a>';
-            }
-        ),
-        array(
+            'formatter' => fn($data, $column) => '<a href="' . $this->generateUrl(
+                ['action' => 'edit', 'id' => $data['id']],
+                'operator/irfo/psv-authorisations',
+                true
+            ) . '" class="govuk-link js-modal-ajax">' . $data['id'] . '</a>'
+        ],
+        [
             'title' => 'IRFO File Number',
             'name' => 'irfoFileNo'
-        ),
-        array(
+        ],
+        [
             'title' => 'In force date',
             'formatter' => Date::class,
             'name' => 'inForceDate'
-        ),
-        array(
+        ],
+        [
             'title' => 'Type',
-            'formatter' => function ($data, $column) {
-                return $data['irfoPsvAuthType']['description'];
-            }
-        ),
-        array(
+            'formatter' => fn($data, $column) => $data['irfoPsvAuthType']['description']
+        ],
+        [
             'title' => 'Status',
-            'formatter' => function ($data, $column) {
-                return $data['status']['description'];
-            }
-        )
-    )
-);
+            'formatter' => fn($data, $column) => $data['status']['description']
+        ]
+    ]
+];

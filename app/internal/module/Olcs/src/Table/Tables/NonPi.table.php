@@ -3,30 +3,30 @@
 use Common\Service\Table\Formatter\Date;
 use Olcs\Module;
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'title' => 'Not Pi',
-    ),
-    'settings' => array(
-        'crud' => array(
+    ],
+    'settings' => [
+        'crud' => [
             'formName' => 'NonPi',
-            'actions' => array(
-                'add' => array('class' => 'govuk-button'),
-                'edit' => array('requireRows' => true, 'class' => 'govuk-button govuk-button--secondary js-require--one'),
-                'delete' => array('requireRows' => true, 'class' => 'govuk-button govuk-button--warning js-require--one')
-            )
-        ),
-        'paginate' => array(
-            'limit' => array(
+            'actions' => [
+                'add' => ['class' => 'govuk-button'],
+                'edit' => ['requireRows' => true, 'class' => 'govuk-button govuk-button--secondary js-require--one'],
+                'delete' => ['requireRows' => true, 'class' => 'govuk-button govuk-button--warning js-require--one']
+            ]
+        ],
+        'paginate' => [
+            'limit' => [
                 'default' => 10,
-                'options' => array(10, 25, 50)
-            )
-        )
-    ),
-    'attributes' => array(
-    ),
-    'columns' => array(
-        array(
+                'options' => [10, 25, 50]
+            ]
+        ]
+    ],
+    'attributes' => [
+    ],
+    'columns' => [
+        [
             'title' => 'Meeting date',
             'formatter' => function ($data, $column) {
                 $url = $this->generateUrl(
@@ -37,22 +37,20 @@ return array(
                 return '<a class="govuk-link" href="' . $url . '">' . date(Module::$dateTimeSecFormat, strtotime($data['hearingDate'])) . '</a>';
             },
             'name' => 'id'
-        ),
-        array(
+        ],
+        [
             'title' => 'Meeting venue',
-            'formatter' => function ($data) {
-                return (isset($data['venue']['name']) ? $data['venue']['name'] : $data['venueOther']);
-            }
-        ),
-        array(
+            'formatter' => fn($data) => $data['venue']['name'] ?? $data['venueOther']
+        ],
+        [
             'title' => 'Witness Count',
             'isNumeric' => true,
             'name' => 'witnessCount'
-        ),
-        array(
+        ],
+        [
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}'
-        )
-    )
-);
+        ]
+    ]
+];

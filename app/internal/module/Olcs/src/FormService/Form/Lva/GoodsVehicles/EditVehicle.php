@@ -31,7 +31,7 @@ class EditVehicle
     {
         if ($params['isRemoved']) {
             $this->formHelper->disableElements($form->get('data'));
-            $this->formHelper->disableElements($form->get('licence-vehicle'), ['removalDate']);
+            $this->formHelper->disableElements($form->get('licence-vehicle'));
 
             $this->formHelper->enableElements($form->get('licence-vehicle')->get('removalDate'));
             $this->formHelper->enableElements($form->get('data')->get('version'));

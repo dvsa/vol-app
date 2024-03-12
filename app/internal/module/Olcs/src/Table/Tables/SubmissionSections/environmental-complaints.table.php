@@ -2,42 +2,40 @@
 
 use Common\Service\Table\Formatter\Address;
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'id' => 'environmental-complaints',
         'action_route' => [
             'route' => 'submission_update_table',
             'params' => ['section' => 'environmental-complaints']
         ],
         'title' => 'Environmental complaints'
-    ),
-    'settings' => array(
-        'crud' => array(
+    ],
+    'settings' => [
+        'crud' => [
             'formName' => 'environmental-complaints',
-            'actions' => array(
-                'refresh-table' => array('label' => 'Refresh table', 'class' => 'govuk-button govuk-button--secondary', 'requireRows' => false),
-                'delete-row' => array('label' => 'Delete row', 'class' => 'govuk-button govuk-button--secondary js-require--multiple', 'requireRows' => true)
-            ),
+            'actions' => [
+                'refresh-table' => ['label' => 'Refresh table', 'class' => 'govuk-button govuk-button--secondary', 'requireRows' => false],
+                'delete-row' => ['label' => 'Delete row', 'class' => 'govuk-button govuk-button--secondary js-require--multiple', 'requireRows' => true]
+            ],
             'action_field_name' => 'formAction'
-        ),
+        ],
         'submission_section' => 'display'
-    ),
-    'attributes' => array(
+    ],
+    'attributes' => [
         'name' => 'environmental-complaints'
-    ),
-    'columns' => array(
-        array(
+    ],
+    'columns' => [
+        [
             'title' => 'Date received',
             'name' => 'complaintDate'
-        ),
-        array(
+        ],
+        [
             'title' => 'Complainant',
-            'formatter' => function ($data, $column) {
-                return $data['complainantForename'] . ' ' .
-                $data['complainantFamilyName'];
-            }
-        ),
-        array(
+            'formatter' => fn($data, $column) => $data['complainantForename'] . ' ' .
+            $data['complainantFamilyName']
+        ],
+        [
             'title' => 'OC Address',
             'width' => '350px',
             'formatter' => function ($data, $column) {
@@ -50,27 +48,24 @@ return array(
                 return $addressList;
             },
             'name' => 'operatingCentres'
-        ),
-        array(
+        ],
+        [
             'title' => 'Description',
             'name' => 'description',
             'formatter' => \Common\Service\Table\Formatter\Comment::class,
             'append' => '...'
-        ),
-        array(
+        ],
+        [
             'title' => 'Status',
-            'formatter' => function ($data, $column) {
-
-                return empty($data['closeDate']) ?
-                    $this->translator->translate('Open') : $this->translator->translate('Closed');
-            }
-        ),
-        array(
+            'formatter' => fn($data, $column) => empty($data['closeDate']) ?
+                $this->translator->translate('Open') : $this->translator->translate('Closed')
+        ],
+        [
             'type' => 'Checkbox',
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/checkbox]}}',
             'hideWhenDisabled' => true
-        ),
-    )
-);
+        ],
+    ]
+];

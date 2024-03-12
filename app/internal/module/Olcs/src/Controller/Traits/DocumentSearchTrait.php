@@ -54,9 +54,7 @@ trait DocumentSearchTrait
         // nuke any empty values
         return array_filter(
             $filters,
-            function ($v) {
-                return $v === false || !empty($v);
-            }
+            fn($v) => $v === false || !empty($v)
         );
     }
 
@@ -202,9 +200,7 @@ trait DocumentSearchTrait
         $el->setValueOptions(
             array_filter(
                 $options + $el->getValueOptions(),
-                function ($arg) {
-                    return $arg !== null;
-                }
+                fn($arg) => $arg !== null
             )
         );
     }

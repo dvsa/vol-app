@@ -2,31 +2,31 @@
 
 use Common\Service\Table\Formatter\OrganisationLink;
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'titleSingular' => 'Operator',
         'title' => 'Operators',
-    ),
-    'settings' => array(
-        'crud' => array(
-            'actions' => array(
-                'export' => array(
+    ],
+    'settings' => [
+        'crud' => [
+            'actions' => [
+                'export' => [
                     'class' => 'govuk-button', 
                     'requireRows' => true
-                )
-            )
-        ),
-        'paginate' => array(
-            'limit' => array(
+                ]
+            ]
+        ],
+        'paginate' => [
+            'limit' => [
                 'default' => 10,
-                'options' => array(10, 25, 50)
-            )
-        )
-    ),
-    'attributes' => array(
-    ),
-    'columns' => array(
-        array(
+                'options' => [10, 25, 50]
+            ]
+        ]
+    ],
+    'attributes' => [
+    ],
+    'columns' => [
+        [
             'title' => 'ID',
             'name' => 'id',
             'formatter' => function ($row) {
@@ -41,12 +41,12 @@ return array(
                     ]
                 );
             }
-        ),
-        array(
+        ],
+        [
             'title' => 'Operator',
             'name' => 'name',
-        ),
-        array(
+        ],
+        [
             'title' => 'CPID',
             'name' => 'cpid',
             'formatter' => function ($row) {
@@ -56,6 +56,6 @@ return array(
 
                 return $row['cpid']['description'];
             }
-        ),
-    )
-);
+        ],
+    ]
+];

@@ -36,12 +36,12 @@ class InspectionRequest
 
     public static function mapEnforcementAreaFromLicence(array $data)
     {
-        return isset($data['enforcementArea']['name']) ? $data['enforcementArea']['name'] : '';
+        return $data['enforcementArea']['name'] ?? '';
     }
 
     public static function mapEnforcementAreaFromApplication(array $data)
     {
-        return isset($data['licence']['enforcementArea']['name']) ? $data['licence']['enforcementArea']['name'] : '';
+        return $data['licence']['enforcementArea']['name'] ?? '';
     }
 
     public static function mapFromErrors($form, array $errors)

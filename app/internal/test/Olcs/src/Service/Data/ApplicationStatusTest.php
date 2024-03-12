@@ -14,7 +14,7 @@ use Laminas\Http\Response;
  */
 class ApplicationStatusTest extends AbstractListDataServiceTestCase
 {
-    const ORG_ID = 9999;
+    public const ORG_ID = 9999;
 
     /** @var ApplicationStatus */
     private $sut;

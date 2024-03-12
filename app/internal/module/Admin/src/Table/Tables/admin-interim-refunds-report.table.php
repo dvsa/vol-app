@@ -6,7 +6,7 @@ use Common\Service\Table\Formatter\InternalLicenceNumberLink;
 use Common\Service\Table\Formatter\OrganisationLink;
 use Common\Service\Table\Formatter\RefData;
 
-return array(
+return [
     'variables' => [
         'title' => 'Interim Refunds',
         'titleSingular' => 'Interim Refund',
@@ -25,14 +25,12 @@ return array(
         [
             'title' => 'Operator Name',
             'sort' => 'o.name',
-            'formatter' => function ($data) {
-                return $this->callFormatter(
-                    [
-                        'formatter' => OrganisationLink::class,
-                    ],
-                    $data['licence']
-                );
-            }
+            'formatter' => fn($data) => $this->callFormatter(
+                [
+                    'formatter' => OrganisationLink::class,
+                ],
+                $data['licence']
+            )
         ],
         [
             'title' => 'Date Fee Invoiced',
@@ -53,9 +51,7 @@ return array(
             'formatter' => function ($data) {
                 $refundTransaction = array_filter(
                     $data['feeTransactions'],
-                    function ($transaction) {
-                        return $transaction['amount'] < 0;
-                    }
+                    fn($transaction) => $transaction['amount'] < 0
                 );
                 $refundTransaction = array_shift($refundTransaction);
                 return $this->callFormatter(
@@ -74,4 +70,4 @@ return array(
             'formatter' => RefData::class
         ],
     ]
-);
+];

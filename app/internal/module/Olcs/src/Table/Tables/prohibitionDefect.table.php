@@ -1,49 +1,47 @@
 <?php
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'titleSingular' => 'Prohibition defect',
         'title' => 'Prohibition defects'
-    ),
-    'settings' => array(
-        'crud' => array(
-            'actions' => array(
-                'add' => array('class' => 'govuk-button'),
-                'edit' => array('requireRows' => true, 'class' => 'govuk-button govuk-button--secondary js-require--one'),
-                'delete' => array('requireRows' => true, 'class' => 'govuk-button govuk-button--warning js-require--one')
-            )
-        ),
-        'paginate' => array(
-            'limit' => array(
+    ],
+    'settings' => [
+        'crud' => [
+            'actions' => [
+                'add' => ['class' => 'govuk-button'],
+                'edit' => ['requireRows' => true, 'class' => 'govuk-button govuk-button--secondary js-require--one'],
+                'delete' => ['requireRows' => true, 'class' => 'govuk-button govuk-button--warning js-require--one']
+            ]
+        ],
+        'paginate' => [
+            'limit' => [
                 'default' => 10,
-                'options' => array(10, 25, 50)
-            )
-        )
-    ),
-    'columns' => array(
-        array(
+                'options' => [10, 25, 50]
+            ]
+        ]
+    ],
+    'columns' => [
+        [
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}'
-        ),
-        array(
+        ],
+        [
             'title' => 'Defect type',
-            'formatter' => function ($data, $column) {
-                return '<a href="' . $this->generateUrl(
-                    array(
-                        'action' => 'edit',
-                        'prohibition' => $data['prohibition']['id'],
-                        'id' => $data['id']
-                    ),
-                    'case_prohibition_defect',
-                    true
-                ) . '" class="govuk-link js-modal-ajax">' . $data['defectType'] . '</a>';
-            }
-        ),
-        array(
+            'formatter' => fn($data, $column) => '<a href="' . $this->generateUrl(
+                [
+                    'action' => 'edit',
+                    'prohibition' => $data['prohibition']['id'],
+                    'id' => $data['id']
+                ],
+                'case_prohibition_defect',
+                true
+            ) . '" class="govuk-link js-modal-ajax">' . $data['defectType'] . '</a>'
+        ],
+        [
             'title' => 'Notes',
             'formatter' => \Common\Service\Table\Formatter\Comment::class,
             'name' => 'notes',
-        )
-    )
-);
+        ]
+    ]
+];

@@ -38,7 +38,7 @@ class OrganisationFurnitureTest extends MockeryTestCase
 
     public function testAttach()
     {
-        $mockEventManager = m::mock('Laminas\EventManager\EventManagerInterface');
+        $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
         $mockEventManager->shouldReceive('attach')->once()
             ->with(RouteParams::EVENT_PARAM . 'organisation', [$this->sut, 'onOrganisation'], 1);
 
@@ -121,7 +121,7 @@ class OrganisationFurnitureTest extends MockeryTestCase
             )
             ->getMock();
 
-        $mockViewHelperManager = m::mock('\Laminas\View\HelperPluginManager')
+        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class)
             ->shouldReceive('get')->once()->with('placeholder')->andReturn($mockPlaceholder)
             ->getMock();
 
@@ -204,7 +204,7 @@ class OrganisationFurnitureTest extends MockeryTestCase
             )
             ->getMock();
 
-        $mockViewHelperManager = m::mock('\Laminas\View\HelperPluginManager')
+        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class)
             ->shouldReceive('get')->once()->with('placeholder')->andReturn($mockPlaceholder)
             ->getMock();
 
@@ -222,7 +222,7 @@ class OrganisationFurnitureTest extends MockeryTestCase
 
     public function testInvoke()
     {
-        $mockViewHelperManager = m::mock('Laminas\View\HelperPluginManager');
+        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
         $mockQuerySender = m::mock(QuerySender::class);
         $mockCommandSender = m::mock(CommandSender::class);
 

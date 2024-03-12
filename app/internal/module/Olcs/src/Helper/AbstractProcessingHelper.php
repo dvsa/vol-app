@@ -19,12 +19,12 @@ abstract class AbstractProcessingHelper
      *
      * @var array
      */
-    protected $sections = array(
-        'publications' => array(),
-        'inspection-request' => array(),
-        'notes' => array(),
-        'tasks' => array()
-    );
+    protected $sections = [
+        'publications' => [],
+        'inspection-request' => [],
+        'notes' => [],
+        'tasks' => []
+    ];
 
     /**
      * Gets sections

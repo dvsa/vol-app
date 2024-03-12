@@ -45,9 +45,7 @@ trait TaskSearchTrait
         // nuke any empty values too
         return array_filter(
             $filters,
-            function ($v) {
-                return $v === false || !empty($v);
-            }
+            fn($v) => $v === false || !empty($v)
         );
     }
 
@@ -267,9 +265,7 @@ trait TaskSearchTrait
         $el->setValueOptions(
             array_filter(
                 $options + $el->getValueOptions(),
-                function ($arg) {
-                    return $arg !== null;
-                }
+                fn($arg) => $arg !== null
             )
         );
     }

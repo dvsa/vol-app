@@ -2,37 +2,33 @@
 
 use Common\Service\Table\Formatter\InterimVehiclesCheckbox;
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'title' => 'internal.interim.vehicles.table.header',
         'within_form' => true
-    ),
-    'settings' => array(
-        'crud' => array(
-            'actions' => array(),
+    ],
+    'settings' => [
+        'crud' => [
+            'actions' => [],
             'formName' => 'vehicles'
-        ),
-    ),
-    'columns' => array(
-        array(
+        ],
+    ],
+    'columns' => [
+        [
             'title' => 'internal.interim.vehicles.table.vrm',
             'name' => 'vrm',
-            'formatter' => function ($data) {
-                return $data['vehicle']['vrm'];
-            },
-        ),
-        array(
+            'formatter' => fn($data) => $data['vehicle']['vrm'],
+        ],
+        [
             'title' => 'internal.interim.vehicles.table.weight',
             'name' => 'platedWeight',
-            'formatter' => function ($data) {
-                return $data['vehicle']['platedWeight'];
-            },
-        ),
-        array(
+            'formatter' => fn($data) => $data['vehicle']['platedWeight'],
+        ],
+        [
             'title' => 'internal.interim.vehicles.table.listed',
             'width' => 'checkbox',
             'formatter' => InterimVehiclesCheckbox::class,
             'name' => 'listed'
-        ),
-    )
-);
+        ],
+    ]
+];

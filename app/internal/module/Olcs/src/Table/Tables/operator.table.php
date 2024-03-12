@@ -2,69 +2,65 @@
 
 use Common\Service\Table\Formatter\Date;
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'title' => 'Operators',
         'titleSingular' => 'Operator',
-    ),
-    'settings' => array(
-        'paginate' => array(
-            'limit' => array(
+    ],
+    'settings' => [
+        'paginate' => [
+            'limit' => [
                 'default' => 10,
-                'options' => array(10, 25, 50)
-            )
-        ),
-        'crud' => array(
-            'actions' => array(
-                'createOperator' => array('class' => 'govuk-button', 'value' => 'Create operator'),
-                'createTransportManager' => array('class' => 'govuk-button govuk-button--secondary', 'value' => 'Create transport manager')
-            )
-        ),
-    ),
-    'attributes' => array(
-    ),
-    'columns' => array(
-        array(
+                'options' => [10, 25, 50]
+            ]
+        ],
+        'crud' => [
+            'actions' => [
+                'createOperator' => ['class' => 'govuk-button', 'value' => 'Create operator'],
+                'createTransportManager' => ['class' => 'govuk-button govuk-button--secondary', 'value' => 'Create transport manager']
+            ]
+        ],
+    ],
+    'attributes' => [
+    ],
+    'columns' => [
+        [
             'title' => 'Lic no/status',
             'sort' => 'licNo',
-            'formatter' => function ($row) {
-                return '<a class="govuk-link" href="' . $this->generateUrl(
-                    array('licence' => $row['licenceId']),
-                    'licence'
-                ) . '">' . $row['licNo'] . '</a><br/>' . $row['status'];
-            },
-        ),
-        array(
+            'formatter' => fn($row) => '<a class="govuk-link" href="' . $this->generateUrl(
+                ['licence' => $row['licenceId']],
+                'licence'
+            ) . '">' . $row['licNo'] . '</a><br/>' . $row['status'],
+        ],
+        [
             'title' => 'App ID/status',
             'isNumeric' => true,
             'format' => '{{appNumber}}<br/>{{appStatus}}',
             'sort' => 'appId'
-        ),
-        array(
+        ],
+        [
             'title' => 'Op/trading name',
-            'formatter' => function ($data) {
-                return '<a class="govuk-link" href="' . $this->generateUrl(
-                    array('operator' => $data['organisation_id']),
-                    'operator/business-details'
-                ) . '">' . $data['name'] . '</a><br/>' . $data['status'];
-            },
+            'formatter' => fn($data) => '<a class="govuk-link" href="' . $this->generateUrl(
+                ['operator' => $data['organisation_id']],
+                'operator/business-details'
+            ) . '">' . $data['name'] . '</a><br/>' . $data['status'],
             'sort' => 'operatorName'
-        ),
-        array(
+        ],
+        [
             'title' => 'Entity / Lic Type',
             'format' => '{{organisation_type}} / {{licence_type}}',
-        ),
-        array(
+        ],
+        [
             'title' => 'Last act CN/Date',
             'name' => 'last_updated_on',
             'formatter' => Date::class,
             'sort' => 'lastActionDate'
-        ),
-        array(
+        ],
+        [
             'title' => 'Correspondence address',
             'formatter' => function ($data) {
-                $parts = array();
-                foreach (array('address_line1', 'address_line2', 'address_line3', 'postcode') as $item) {
+                $parts = [];
+                foreach (['address_line1', 'address_line2', 'address_line3', 'postcode'] as $item) {
                     if (!empty($data[$item])) {
                         $parts[] = $data[$item];
                     }
@@ -73,29 +69,29 @@ return array(
                 return implode(', ', $parts);
             },
             'sort' => 'correspondenceAddress'
-        ),
-        array(
+        ],
+        [
             'title' => 'Cases',
             'formatter' => function ($data) {
                 if (isset($data['caseCount']) && (int) $data['caseCount'] > 0) {
                     return '<a class="govuk-link" href="' . $this->generateUrl(
-                        array('licence' => $data['licenceId']),
+                        ['licence' => $data['licenceId']],
                         'licence/cases',
                         false
                     ) . '">' . $data['caseCount'] . '</a>';
                 } else {
                     return '<a class="govuk-link" href="' . $this->generateUrl(
-                        array('licence' => $data['licenceId'], 'action' => 'add'),
+                        ['licence' => $data['licenceId'], 'action' => 'add'],
                         'case'
                     ) . '">[Add Case]</a>';
                 }
             }
-        ),
-        array(
+        ],
+        [
             'title' => 'MLH',
             'format' => '[MLH]'
-        ),
-        array(
+        ],
+        [
             'title' => 'Info',
             'formatter' => function ($data, $column) {
                 $string = '<span class="tooltip">';
@@ -118,6 +114,6 @@ return array(
                 }
                 return $string;
             }
-        )
-    )
-);
+        ]
+    ]
+];

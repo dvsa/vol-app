@@ -50,16 +50,12 @@ return [
         [
             'title' => 'Type',
             'name' => 'type',
-            'formatter' => function ($row) {
-                return Escape::html($row['irhpPermitRange']['irhpPermitStock']['irhpPermitType']['name']['description']);
-            },
+            'formatter' => fn($row) => Escape::html($row['irhpPermitRange']['irhpPermitStock']['irhpPermitType']['name']['description']),
         ],
         [
             'title' => 'Minimum emission standard',
             'name' => 'emissionsCategory',
-            'formatter' => function ($row) {
-                return Escape::html($row['irhpPermitRange']['emissionsCategory']['description']);
-            },
+            'formatter' => fn($row) => Escape::html($row['irhpPermitRange']['emissionsCategory']['description']),
         ],
         [
             'title' => 'Not valid to travel to',
@@ -69,22 +65,18 @@ return [
         [
             'title' => 'Country',
             'name' => 'country',
-            'formatter' => function ($row) {
-                return Escape::html($row['irhpPermitRange']['irhpPermitStock']['country']['countryDesc']);
-            },
+            'formatter' => fn($row) => Escape::html($row['irhpPermitRange']['irhpPermitStock']['country']['countryDesc']),
         ],
         [
             'title' => 'Usage',
             'name' => 'usage',
-            'formatter' => function ($row) {
-                return $this->callFormatter(
-                    [
-                        'name' => 'irhpPermitRangeType',
-                        'formatter' => IrhpPermitRangeType::class,
-                    ],
-                    $row['irhpPermitRange']
-                );
-            }
+            'formatter' => fn($row) => $this->callFormatter(
+                [
+                    'name' => 'irhpPermitRangeType',
+                    'formatter' => IrhpPermitRangeType::class,
+                ],
+                $row['irhpPermitRange']
+            )
         ],
         [
             'title' => 'Issued date',

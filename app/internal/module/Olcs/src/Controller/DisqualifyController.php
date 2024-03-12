@@ -183,7 +183,7 @@ class DisqualifyController extends AbstractController
         }
 
         $organisation = $response->getResult();
-        $disqualification = isset($organisation['disqualifications'][0]) ? $organisation['disqualifications'][0] : null;
+        $disqualification = $organisation['disqualifications'][0] ?? null;
 
         $data = [
             'name' => $organisation['name'],
@@ -220,8 +220,7 @@ class DisqualifyController extends AbstractController
         }
 
         $person = $response->getResult();
-        $disqualification = isset($person['disqualifications'][0]) ?
-            $person['disqualifications'][0] : null;
+        $disqualification = $person['disqualifications'][0] ?? null;
 
         $data = [
             'name' => $person['forename'] . ' ' . $person['familyName'],

@@ -33,7 +33,7 @@ class IrhpApplicationFurnitureTest extends TestCase
 
     public function testAttach()
     {
-        $mockEventManager = m::mock('Laminas\EventManager\EventManagerInterface');
+        $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
         $mockEventManager->shouldReceive('attach')->once()
             ->with(
                 RouteParams::EVENT_PARAM . 'irhpAppId',
@@ -141,7 +141,7 @@ class IrhpApplicationFurnitureTest extends TestCase
             )
             ->getMock();
 
-        $mockViewHelperManager = m::mock('\Laminas\View\HelperPluginManager')
+        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class)
             ->shouldReceive('get')->once()->with('placeholder')->andReturn($mockPlaceholder)
             ->shouldReceive('get')->once()->with('Url')->andReturn(
                 m::mock(Url::class)
@@ -156,9 +156,9 @@ class IrhpApplicationFurnitureTest extends TestCase
         $this->sut->shouldReceive('getGrantability')->with($irhpApplication)
             ->andReturn(['grantable' => $data['isGrantable']]);
 
-        $mockNavigation = m::mock('Laminas\Navigation\Navigation');
+        $mockNavigation = m::mock(\Laminas\Navigation\Navigation::class);
 
-        $mockSidebarNavigation = m::mock('Laminas\Navigation\Navigation');
+        $mockSidebarNavigation = m::mock(\Laminas\Navigation\Navigation::class);
         $mockSidebarNavigation
             ->shouldReceive('findOneBy')->once()->with('id', 'irhp-application-quick-actions-cancel')->andReturn(
                 m::mock()->shouldReceive('setVisible')->once()->with($expected['isCancelVisible'])->getMock()
@@ -312,11 +312,11 @@ class IrhpApplicationFurnitureTest extends TestCase
     public function testInvoke()
     {
         $mockViewHelperManager = m::mock(HelperPluginManager::class);
-        $mockNavigation = m::mock('Laminas\Navigation\Navigation');
+        $mockNavigation = m::mock(\Laminas\Navigation\Navigation::class);
         $mockQuerySender = m::mock(QuerySender::class);
         $mockCommandSender = m::mock(CommandSender::class);
-        $mockSidebar = m::mock('Laminas\Navigation\Navigation');
-        $mockApplication = m::mock('Laminas\Mvc\Application');
+        $mockSidebar = m::mock(\Laminas\Navigation\Navigation::class);
+        $mockApplication = m::mock(\Laminas\Mvc\Application::class);
 
         $mockSl = m::mock(ContainerInterface::class);
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);

@@ -3,33 +3,33 @@
 use Common\Service\Table\Formatter\Name;
 use Common\Service\Table\Formatter\NoteUrl;
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'title' => 'Notes',
         'titleSingular' => 'Note',
-    ),
-    'settings' => array(
-        'crud' => array(
-            'actions' => array(
-                'add' => array('class' => 'govuk-button'),
-                'edit' => array('requireRows' => true, 'class' => 'govuk-button govuk-button--secondary js-require--multiple'),
-                'delete' => array('requireRows' => true, 'class' => 'govuk-button govuk-button--warning js-require--multiple')
-            )
-        ),
-        'paginate' => array(
-            'limit' => array(
+    ],
+    'settings' => [
+        'crud' => [
+            'actions' => [
+                'add' => ['class' => 'govuk-button'],
+                'edit' => ['requireRows' => true, 'class' => 'govuk-button govuk-button--secondary js-require--multiple'],
+                'delete' => ['requireRows' => true, 'class' => 'govuk-button govuk-button--warning js-require--multiple']
+            ]
+        ],
+        'paginate' => [
+            'limit' => [
                 'default' => 10,
-                'options' => array(10, 25, 50, 100)
-            )
-        ),
+                'options' => [10, 25, 50, 100]
+            ]
+        ],
         'useQuery' => true
-    ),
-    'columns' => array(
-        array(
+    ],
+    'columns' => [
+        [
             'title' => 'Created',
             'formatter' => NoteUrl::class,
-        ),
-        array(
+        ],
+        [
             'title' => 'Author',
             'formatter' => function ($data, $column) {
 
@@ -37,13 +37,13 @@ return array(
 
                 return $this->callFormatter($column, $data['createdBy']['contactDetails']['person']);
             }
-        ),
-        array(
+        ],
+        [
             'title' => 'Note',
             'formatter' => \Common\Service\Table\Formatter\Comment::class,
             'name' => 'comment',
-        ),
-        array(
+        ],
+        [
             'title' => 'Note type',
             'formatter' => function ($data) {
 
@@ -72,15 +72,15 @@ return array(
 
                 return 'BR ' . $data['busReg']['regNo'];
             }
-        ),
-        array(
+        ],
+        [
             'title' => 'Priority',
             'name' => 'priority',
-        ),
-        array(
+        ],
+        [
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}'
-        ),
-    )
-);
+        ],
+    ]
+];

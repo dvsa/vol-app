@@ -35,9 +35,9 @@ class LicenceProcessingHelperTest extends \PHPUnit\Framework\TestCase
                 'title' => 'internal-licence-processing-' . $section . '-title',
                 'route' => 'licence/processing/' . $section,
                 'use_route_match' => true,
-                'params' => array(
+                'params' => [
                     'licence' => $licenceId
-                ),
+                ],
                 'active' => $activeSection == $section ? true : false
             ];
         }

@@ -10,14 +10,14 @@ use Laminas\View\Helper\AbstractHelper;
  */
 class SubmissionSectionMultipleTables extends AbstractHelper
 {
-    const DEFAULT_VIEW = 'sections/cases/pages/submission/table';
+    public const DEFAULT_VIEW = 'sections/cases/pages/submission/table';
 
     /**
      * View map
      *
      * @var array
      */
-    protected $viewMap = array();
+    protected $viewMap = [];
 
     /**
      * @var \Laminas\I18n\Translator\Translator
@@ -37,7 +37,7 @@ class SubmissionSectionMultipleTables extends AbstractHelper
      * @param bool $readonly
      * @return string
      */
-    public function __invoke($submissionSection = '', $data = array(), $readonly = false, $submissionVersion = null)
+    public function __invoke($submissionSection = '', $data = [], $readonly = false, $submissionVersion = null)
     {
         if (empty($submissionSection)) {
             return '';
@@ -59,13 +59,11 @@ class SubmissionSectionMultipleTables extends AbstractHelper
     {
         $html = '';
 
-        $viewTemplate = isset($this->viewMap[$submissionSection]) ?
-            $this->viewMap[$submissionSection] : self::DEFAULT_VIEW;
+        $viewTemplate = $this->viewMap[$submissionSection] ?? self::DEFAULT_VIEW;
 
         $tableViewHelper = $this->getView()->plugin('SubmissionSectionTable');
 
-        $tables = isset($data['data']['tables']) ?
-            $data['data']['tables'] : [];
+        $tables = $data['data']['tables'] ?? [];
         foreach ($tables as $subSection => $tableData) {
             $html .= $tableViewHelper(
                 $subSection,

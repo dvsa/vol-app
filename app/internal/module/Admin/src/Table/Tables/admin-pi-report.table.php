@@ -6,67 +6,63 @@ use Common\Service\Table\Formatter\PiReportName;
 use Common\Service\Table\Formatter\PiReportRecord;
 use Common\Service\Table\Formatter\VenueAddress;
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'titleSingular' => 'Public Inquiry',
         'title' => 'Public Inquiries'
-    ),
-    'settings' => array(
-        'crud' => array(
-            'actions' => array(
-            )
-        ),
-        'paginate' => array(
-            'limit' => array(
+    ],
+    'settings' => [
+        'crud' => [
+            'actions' => [
+            ]
+        ],
+        'paginate' => [
+            'limit' => [
                 'default' => 25,
-                'options' => array(10, 25, 50)
-            )
-        )
-    ),
-    'attributes' => array(
-    ),
-    'columns' => array(
-        array(
+                'options' => [10, 25, 50]
+            ]
+        ]
+    ],
+    'attributes' => [
+    ],
+    'columns' => [
+        [
             'title' => 'Case Id',
             'isNumeric' => true,
-            'formatter' => function ($data) {
-                return $this->callFormatter(
-                    [
-                        'formatter' => CaseLink::class,
-                    ],
-                    $data['pi']['case']
-                );
-            }
-        ),
-        array(
+            'formatter' => fn($data) => $this->callFormatter(
+                [
+                    'formatter' => CaseLink::class,
+                ],
+                $data['pi']['case']
+            )
+        ],
+        [
             'title' => 'Record',
             'formatter' => PiReportRecord::class
-        ),
-        array(
+        ],
+        [
             'title' => 'Name',
             'formatter' => PiReportName::class
-        ),
-        array(
+        ],
+        [
             'title' => 'PI Date & Time',
-            'formatter' => function ($data) {
-                return $this->callFormatter(
-                    [
-                        'name' => 'hearingDate',
-                        'formatter' => \Common\Service\Table\Formatter\DateTime::class
-                    ],
-                    $data
-                ).
-                $this->callFormatter(
-                    [
-                        'formatter' => PiHearingStatus::class,
-                    ],
-                    $data
-                );
-            }
-        ),
-        array(
+            'formatter' => fn($data) => $this->callFormatter(
+                [
+                    'name' => 'hearingDate',
+                    'formatter' => \Common\Service\Table\Formatter\DateTime::class
+                ],
+                $data
+            ).
+            $this->callFormatter(
+                [
+                    'formatter' => PiHearingStatus::class,
+                ],
+                $data
+            )
+        ],
+        [
             'title' => 'Venue',
             'formatter' => VenueAddress::class
-        ),
-    )
-);
+        ],
+    ]
+];

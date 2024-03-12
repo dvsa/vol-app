@@ -94,7 +94,7 @@ class LicenceDecisionsController extends AbstractController implements
         }
 
         if (isset($result['suitableForDecisions']) && is_array($result['suitableForDecisions'])) {
-            $messages = array();
+            $messages = [];
             foreach ($result['suitableForDecisions'] as $key => $value) {
                 if (!$value) {
                     continue;
@@ -125,9 +125,9 @@ class LicenceDecisionsController extends AbstractController implements
         }
 
         $view = $this->getViewWithLicence(
-            array(
+            [
                 'form' => $form
-            )
+            ]
         );
 
         $view->setTemplate('pages/form');
@@ -177,10 +177,10 @@ class LicenceDecisionsController extends AbstractController implements
         $form = $this->getDecisionForm(
             'LicenceStatusDecisionCurtail',
             $licenceStatus,
-            array(
+            [
                 'curtailFrom' => 'startDate',
                 'curtailTo' => 'endDate'
-            )
+            ]
         );
 
         $form->get('licence-decision-legislation')->get('decisions')->setValue($licenceStatus['legislationDecisions']);
@@ -193,18 +193,18 @@ class LicenceDecisionsController extends AbstractController implements
 
                 $response = $this->saveDecisionForLicence(
                     $licenceId,
-                    array(
+                    [
                         'status' => RefData::LICENCE_STATUS_RULE_CURTAILED,
                         'startDate' => $formData['licence-decision']['curtailFrom'],
                         'endDate' => $formData['licence-decision']['curtailTo'],
                         'decisions' => $formData['licence-decision-legislation']['decisions']
-                    ),
+                    ],
                     $licenceStatus
                 );
 
                 if ($response->isOk()) {
                     $this->flashMessenger()->addSuccessMessage('licence-status.curtailment.message.save.success');
-                    return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
+                    return $this->redirectToRouteAjax('licence', ['licence' => $licenceId]);
                 }
             }
         }
@@ -254,9 +254,9 @@ class LicenceDecisionsController extends AbstractController implements
         $form = $this->getDecisionForm(
             'LicenceStatusDecisionRevoke',
             $licenceStatus,
-            array(
+            [
                 'revokeFrom' => 'startDate'
-            )
+            ]
         );
         $form->get('licence-decision-legislation')->get('decisions')->setValue($licenceStatus['legislationDecisions']);
 
@@ -268,17 +268,17 @@ class LicenceDecisionsController extends AbstractController implements
 
                 $response = $this->saveDecisionForLicence(
                     $licenceId,
-                    array(
+                    [
                         'status' => RefData::LICENCE_STATUS_RULE_REVOKED,
                         'startDate' => $formData['licence-decision']['revokeFrom'],
                         'decisions' => $formData['licence-decision-legislation']['decisions']
-                    ),
+                    ],
                     $licenceStatus
                 );
 
                 if ($response->isOk()) {
                     $this->flashMessenger()->addSuccessMessage('licence-status.revocation.message.save.success');
-                    return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
+                    return $this->redirectToRouteAjax('licence', ['licence' => $licenceId]);
                 }
             }
         }
@@ -328,10 +328,10 @@ class LicenceDecisionsController extends AbstractController implements
         $form = $this->getDecisionForm(
             'LicenceStatusDecisionSuspend',
             $licenceStatus,
-            array(
+            [
                 'suspendFrom' => 'startDate',
                 'suspendTo' => 'endDate'
-            )
+            ]
         );
         $form->get('licence-decision-legislation')->get('decisions')->setValue($licenceStatus['legislationDecisions']);
 
@@ -342,18 +342,18 @@ class LicenceDecisionsController extends AbstractController implements
                 $formData = $form->getData();
                 $response = $this->saveDecisionForLicence(
                     $licenceId,
-                    array(
+                    [
                         'status' => RefData::LICENCE_STATUS_RULE_SUSPENDED,
                         'startDate' => $formData['licence-decision']['suspendFrom'],
                         'endDate' => $formData['licence-decision']['suspendTo'],
                         'decisions' => $formData['licence-decision-legislation']['decisions']
-                    ),
+                    ],
                     $licenceStatus
                 );
 
                 if ($response->isOk()) {
                     $this->flashMessenger()->addSuccessMessage('licence-status.suspension.message.save.success');
-                    return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
+                    return $this->redirectToRouteAjax('licence', ['licence' => $licenceId]);
                 }
             }
         }
@@ -395,7 +395,7 @@ class LicenceDecisionsController extends AbstractController implements
 
                 if ($response->isOk()) {
                     $this->flashMessenger()->addSuccessMessage('licence-status.reset.message.save.success');
-                    return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
+                    return $this->redirectToRouteAjax('licence', ['licence' => $licenceId]);
                 }
             }
         }
@@ -440,7 +440,7 @@ class LicenceDecisionsController extends AbstractController implements
                 $response = $this->handleCommand($this->undoCommand);
                 if ($response->isOk()) {
                     $this->flashMessenger()->addSuccessMessage('The licence surrender has been undone');
-                    return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
+                    return $this->redirectToRouteAjax('licence', ['licence' => $licenceId]);
                 }
             }
         }
@@ -481,7 +481,7 @@ class LicenceDecisionsController extends AbstractController implements
 
                 if ($response->isOk()) {
                     $this->flashMessenger()->addSuccessMessage('licence-status.surrender.message.save.success');
-                    return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
+                    return $this->redirectToRouteAjax('licence', ['licence' => $licenceId]);
                 }
             }
         }
@@ -523,7 +523,7 @@ class LicenceDecisionsController extends AbstractController implements
 
                 if ($response->isOk()) {
                     $this->flashMessenger()->addSuccessMessage('licence-status.terminate.message.save.success');
-                    return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
+                    return $this->redirectToRouteAjax('licence', ['licence' => $licenceId]);
                 }
             }
         }
@@ -550,7 +550,7 @@ class LicenceDecisionsController extends AbstractController implements
         $command = $command::create(
             [
                 'id' => $data['licenceId'],
-                'decisions' => isset($data['decisions']) ? $data['decisions'] : []
+                'decisions' => $data['decisions'] ?? []
             ]
         );
 
@@ -561,9 +561,9 @@ class LicenceDecisionsController extends AbstractController implements
 
             return $this->redirectToRouteAjax(
                 'licence',
-                array(
+                [
                     'licence' => $data['licenceId']
-                )
+                ]
             );
         }
     }
@@ -577,7 +577,7 @@ class LicenceDecisionsController extends AbstractController implements
      *
      * @return mixed The form.
      */
-    private function getDecisionForm($name = null, $status = null, array $keys = array())
+    private function getDecisionForm($name = null, $status = null, array $keys = [])
     {
         $formHelper = $this->formHelper;
         $form = $formHelper->createFormWithRequest($name, $this->getRequest());
@@ -586,9 +586,7 @@ class LicenceDecisionsController extends AbstractController implements
             return $form->setData(
                 $this->formatDataForFormUpdate(
                     array_map(
-                        function ($key) use ($status) {
-                            return $status[$key];
-                        },
+                        fn($key) => $status[$key],
                         $keys
                     )
                 )
@@ -609,7 +607,7 @@ class LicenceDecisionsController extends AbstractController implements
      *
      * @return LicenceControllerInterface
      */
-    private function saveDecisionForLicence($licenceId = null, array $data = array(), $statusRule = null)
+    private function saveDecisionForLicence($licenceId = null, array $data = [], $statusRule = null)
     {
         $data['licence'] = $licenceId;
 
@@ -618,10 +616,10 @@ class LicenceDecisionsController extends AbstractController implements
             $command->exchangeArray(
                 array_merge(
                     $data,
-                    array(
+                    [
                         'id' => $statusRule['id'],
                         'version' => $statusRule['version']
-                    )
+                    ]
                 )
             );
 
@@ -664,9 +662,9 @@ class LicenceDecisionsController extends AbstractController implements
     {
         return $this->redirectToRoute(
             'licence/' . $decision . '-licence',
-            array(
+            [
                 'licence' => $licence
-            )
+            ]
         );
     }
 
@@ -720,9 +718,9 @@ class LicenceDecisionsController extends AbstractController implements
 
             return $this->redirectToRouteAjax(
                 'licence',
-                array(
+                [
                     'licence' => $licence
-                )
+                ]
             );
         }
 
@@ -738,16 +736,16 @@ class LicenceDecisionsController extends AbstractController implements
      * @return array The formatted data
      */
     private function formatDataForFormUpdate(
-        array $licenceDecision = array(),
-        array $decisions = array()
+        array $licenceDecision = [],
+        array $decisions = []
     ) {
-        return array(
-            'licence-decision-affect-immediate' => array(
+        return [
+            'licence-decision-affect-immediate' => [
                 'immediateAffect' => 'N',
-            ),
+            ],
             'licence-decision' => $licenceDecision,
             'licence-decision-legislation' => $decisions
-        );
+        ];
     }
 
     /**

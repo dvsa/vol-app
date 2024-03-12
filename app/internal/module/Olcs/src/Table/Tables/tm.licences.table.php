@@ -2,12 +2,12 @@
 
 use Common\Service\Table\Formatter\SumColumns;
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'title' => 'transport-manager.responsibilities.table.licences'
-    ),
-    'columns' => array(
-        array(
+    ],
+    'columns' => [
+        [
             'title' => 'Manager type',
             'name' => 'tmType',
             'formatter' => function ($row) {
@@ -17,8 +17,8 @@ return array(
                 ((isset($row['tmType']['description']) && $row['tmType']['description']) ?
                     $row['tmType']['description'] : 'Not set') . '</a>';
             },
-        ),
-        array(
+        ],
+        [
             'title' => 'Licence No',
             'name' => 'licence',
             'formatter' => function ($row) {
@@ -26,20 +26,18 @@ return array(
                 $url = $this->generateUrl($routeParams, 'lva-licence/transport_managers');
                 return '<a class="govuk-link" href="'. $url . '">' . $row['licence']['licNo'] . '</a>';
             },
-        ),
-        array(
+        ],
+        [
             'title' => 'Operator name',
             'name' => 'operatorName',
-            'formatter' => function ($row) {
-                return $row['licence']['organisation']['name'];
-            },
-        ),
-        array(
+            'formatter' => fn($row) => $row['licence']['organisation']['name'],
+        ],
+        [
             'title' => 'Hours per week',
             'isNumeric' => true,
             'name' => 'hours',
             'formatter' => SumColumns::class,
             'columns' => ['hoursMon', 'hoursTue', 'hoursWed', 'hoursThu', 'hoursFri', 'hoursSat', 'hoursSun']
-        ),
-    )
-);
+        ],
+    ]
+];

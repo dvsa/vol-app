@@ -28,7 +28,7 @@ class ApplicationProcessingPublicationsController extends AbstractInternalContro
     protected $formClass = PublicationForm::class;
     protected $updateCommand = UpdatePublicationLink::class;
     protected $deleteCommand = DeletePublicationLink::class;
-    protected $inlineScripts = array('indexAction' => ['table-actions']);
+    protected $inlineScripts = ['indexAction' => ['table-actions']];
     protected $addContentTitle = 'Add publication';
     protected $editContentTitle = 'Edit publication';
 

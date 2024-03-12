@@ -1672,15 +1672,15 @@ $routes = [
                     ]
                 ]
             ],
-            'irfo' => array(
+            'irfo' => [
                 'type' => 'segment',
-                'options' => array(
+                'options' => [
                     'route' => 'irfo[/]',
-                    'defaults' => array(
+                    'defaults' => [
                         'controller' => Olcs\Controller\Operator\OperatorIrfoDetailsController::class,
                         'action' => 'index'
-                    )
-                ),
+                    ]
+                ],
                 'may_terminate' => true,
                 'child_routes' => [
                     'details' => [
@@ -1725,16 +1725,16 @@ $routes = [
                         ],
                     ],
                 ],
-            ),
-            'processing' => array(
+            ],
+            'processing' => [
                 'type' => 'segment',
-                'options' => array(
+                'options' => [
                     'route' => 'processing[/]',
-                    'defaults' => array(
+                    'defaults' => [
                         'controller' => OperatorControllers\HistoryController::class,
                         'action' => 'index'
-                    )
-                ),
+                    ]
+                ],
                 'may_terminate' => true,
                 'child_routes' => [
                     'history' => [
@@ -1782,7 +1782,7 @@ $routes = [
                         ]
                     ],
                 ],
-            ),
+            ],
             'fees' => [
                 'type' => 'segment',
                 'options' => [
@@ -2380,166 +2380,166 @@ $routes = array_merge($routes, $sectionConfig->getAllRoutes());
 
 $routes['lva-licence']['child_routes'] = array_merge(
     $routes['lva-licence']['child_routes'],
-    array(
-        'overview' => array(
+    [
+        'overview' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => '',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => \Olcs\Controller\Lva\Licence\OverviewController::class,
                     'action' => 'index'
-                )
-            )
-        ),
-        'variation' => array(
+                ]
+            ]
+        ],
+        'variation' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'variation[/:redirectRoute][/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => 'LvaLicence/Variation',
                     'action' => 'index'
-                )
-            )
-        )
-    )
+                ]
+            ]
+        ]
+    ]
 );
 
 $routes['lva-variation']['child_routes'] = array_merge(
     $routes['lva-variation']['child_routes'],
-    array(
-        'review' => array(
+    [
+        'review' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'review[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => 'LvaVariation/Review',
                     'action' => 'index'
-                )
-            )
-        ),
-        'interim' => array(
+                ]
+            ]
+        ],
+        'interim' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'interim[/:action][/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => 'InterimVariationController',
                     'action' => 'index'
-                )
-            )
-        ),
-        'grant' => array(
+                ]
+            ]
+        ],
+        'grant' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'grant[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => 'LvaVariation/Grant',
                     'action' => 'grant'
-                )
-            )
-        ),
-        'withdraw' => array(
+                ]
+            ]
+        ],
+        'withdraw' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'withdraw[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => 'LvaVariation/Withdraw',
                     'action' => 'index'
-                )
-            )
-        ),
-        'refuse' => array(
+                ]
+            ]
+        ],
+        'refuse' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'refuse[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => 'LvaVariation/Refuse',
                     'action' => 'index'
-                )
-            )
-        ),
-        'revive-application' => array(
+                ]
+            ]
+        ],
+        'revive-application' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'revive-application[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => 'LvaVariation/Revive',
                     'action' => 'index'
-                )
-            )
-        ),
-        'approve-schedule-41' => array(
+                ]
+            ]
+        ],
+        'approve-schedule-41' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'approve-schedule-41[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => 'VariationSchedule41Controller',
                     'action' => 'approveSchedule41'
-                )
-            )
-        ),
-        'reset-schedule-41' => array(
+                ]
+            ]
+        ],
+        'reset-schedule-41' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'reset-schedule-41[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => 'VariationSchedule41Controller',
                     'action' => 'resetSchedule41'
-                )
-            )
-        ),
-        'refuse-schedule-41' => array(
+                ]
+            ]
+        ],
+        'refuse-schedule-41' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'refuse-schedule-41[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => 'VariationSchedule41Controller',
                     'action' => 'refuseSchedule41'
-                )
-            )
-        ),
-        'schedule41' => array(
+                ]
+            ]
+        ],
+        'schedule41' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'schedule41[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => 'VariationSchedule41Controller',
                     'action' => 'licenceSearch'
-                )
-            ),
+                ]
+            ],
             'may_terminate' => true,
-            'child_routes' => array(
-                'transfer' => array(
+            'child_routes' => [
+                'transfer' => [
                     'type' => 'segment',
-                    'options' => array(
+                    'options' => [
                         'route' => 'transfer[/:licNo][/]',
-                        'defaults' => array(
+                        'defaults' => [
                             'controller' => 'VariationSchedule41Controller',
                             'action' => 'transfer'
-                        )
-                    )
-                )
-            )
-        ),
-        'publish' => array(
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        'publish' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'publish[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => 'LvaVariation/Publish',
                     'action' => 'index'
-                )
-            )
-        ),
-        'submit' => array(
+                ]
+            ]
+        ],
+        'submit' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'submit[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => 'LvaVariation/Submit',
                     'action' => 'index'
-                )
-            )
-        ),
+                ]
+            ]
+        ],
         'overview' => [
             'type' => Segment::class,
             'options' => [
@@ -2550,185 +2550,185 @@ $routes['lva-variation']['child_routes'] = array_merge(
                 ],
             ],
         ],
-    )
+    ]
 );
 
 $routes['lva-application']['child_routes'] = array_merge(
     $routes['lva-application']['child_routes'],
-    array(
-        'review' => array(
+    [
+        'review' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'review[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => 'LvaApplication/Review',
                     'action' => 'index'
-                )
-            )
-        ),
-        'grant' => array(
+                ]
+            ]
+        ],
+        'grant' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'grant[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => 'LvaApplication/Grant',
                     'action' => 'grant'
-                )
-            )
-        ),
-        'undo-grant' => array(
+                ]
+            ]
+        ],
+        'undo-grant' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'undo-grant[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => ApplicationControllers\ApplicationController::class,
                     'action' => 'undoGrant'
-                )
-            )
-        ),
-        'not-taken-up' => array(
+                ]
+            ]
+        ],
+        'not-taken-up' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'not-taken-up[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => 'LvaApplication/NotTakenUp',
                     'action' => 'index'
-                )
-            )
-        ),
-        'revive-application' => array(
+                ]
+            ]
+        ],
+        'revive-application' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'revive-application[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => 'LvaApplication/ReviveApplication',
                     'action' => 'index'
-                )
-            )
-        ),
-        'withdraw' => array(
+                ]
+            ]
+        ],
+        'withdraw' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'withdraw[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => 'LvaApplication/Withdraw',
                     'action' => 'index'
-                )
-            )
-        ),
-        'refuse' => array(
+                ]
+            ]
+        ],
+        'refuse' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'refuse[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => 'LvaApplication/Refuse',
                     'action' => 'index'
-                )
-            )
-        ),
-        'submit' => array(
+                ]
+            ]
+        ],
+        'submit' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'submit[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => 'LvaApplication/Submit',
                     'action' => 'index'
-                )
-            )
-        ),
-        'schedule41' => array(
+                ]
+            ]
+        ],
+        'schedule41' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'schedule41[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => ApplicationControllers\ApplicationSchedule41Controller::class,
                     'action' => 'licenceSearch'
-                )
-            ),
+                ]
+            ],
             'may_terminate' => true,
-            'child_routes' => array(
-                'transfer' => array(
+            'child_routes' => [
+                'transfer' => [
                     'type' => 'segment',
-                    'options' => array(
+                    'options' => [
                         'route' => 'transfer[/:licNo][/]',
-                        'defaults' => array(
+                        'defaults' => [
                             'controller' => ApplicationControllers\ApplicationSchedule41Controller::class,
                             'action' => 'transfer'
-                        )
-                    )
-                )
-            )
-        ),
-        'approve-schedule-41' => array(
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        'approve-schedule-41' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'approve-schedule-41[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => ApplicationControllers\ApplicationSchedule41Controller::class,
                     'action' => 'approveSchedule41'
-                )
-            )
-        ),
-        'reset-schedule-41' => array(
+                ]
+            ]
+        ],
+        'reset-schedule-41' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'reset-schedule-41[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => ApplicationControllers\ApplicationSchedule41Controller::class,
                     'action' => 'resetSchedule41'
-                )
-            )
-        ),
-        'refuse-schedule-41' => array(
+                ]
+            ]
+        ],
+        'refuse-schedule-41' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'refuse-schedule-41[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => ApplicationControllers\ApplicationSchedule41Controller::class,
                     'action' => 'refuseSchedule41'
-                )
-            )
-        ),
-        'overview' => array(
+                ]
+            ]
+        ],
+        'overview' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => '',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => 'LvaApplication',
                     'action' => 'index'
-                )
-            )
-        ),
-        'change-of-entity' => array(
+                ]
+            ]
+        ],
+        'change-of-entity' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'change-of-entity[/:changeId][/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => ApplicationControllers\ApplicationController::class,
                     'action' => 'changeOfEntity'
-                )
-            )
-        ),
-        'case' => array(
+                ]
+            ]
+        ],
+        'case' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'case[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => ApplicationControllers\ApplicationController::class,
                     'action' => 'case'
-                )
-            )
-        ),
-        'opposition' => array(
+                ]
+            ]
+        ],
+        'opposition' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'opposition[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => ApplicationControllers\ApplicationController::class,
                     'action' => 'opposition'
-                )
-            )
-        ),
+                ]
+            ]
+        ],
         'documents' => [
             'type' => 'segment',
             'options' => [
@@ -2797,15 +2797,15 @@ $routes['lva-application']['child_routes'] = array_merge(
                 ],
             ],
         ],
-        'processing' => array(
+        'processing' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'processing[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => ApplicationControllers\Processing\ApplicationProcessingOverviewController::class,
                     'action' => 'index'
-                )
-            ),
+                ]
+            ],
             'may_terminate' => true,
             'child_routes' => [
                 'publications' => [
@@ -2873,23 +2873,23 @@ $routes['lva-application']['child_routes'] = array_merge(
                     ],
                 ],
             ],
-        ),
-        'fees' => array(
+        ],
+        'fees' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'fees[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => ApplicationControllers\Fees\ApplicationFeesController::class,
                     'action' => 'fees',
-                )
-            ),
+                ]
+            ],
             'may_terminate' => true,
-            'child_routes' => array(
+            'child_routes' => [
                 'fee_action' => $feeActionRoute,
                 'fee_type_ajax' => $feeTypeAjaxRoute,
                 'print-receipt' => $feePrintReceiptRoute,
-            )
-        ),
+            ]
+        ],
         'conversation' => [
             'type' => 'segment',
             'options' => [
@@ -3028,27 +3028,27 @@ $routes['lva-application']['child_routes'] = array_merge(
                 ],
             ],
         ],
-        'interim' => array(
+        'interim' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'interim[/:action][/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => 'InterimApplicationController',
                     'action' => 'index'
-                )
-            )
-        ),
-        'publish' => array(
+                ]
+            ]
+        ],
+        'publish' => [
             'type' => 'segment',
-            'options' => array(
+            'options' => [
                 'route' => 'publish[/]',
-                'defaults' => array(
+                'defaults' => [
                     'controller' => 'LvaApplication/Publish',
                     'action' => 'index'
-                )
-            )
-        ),
-    )
+                ]
+            ]
+        ],
+    ]
 );
 
 /**

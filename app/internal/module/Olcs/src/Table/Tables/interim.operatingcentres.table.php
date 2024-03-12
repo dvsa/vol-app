@@ -3,37 +3,37 @@
 use Common\Service\Table\Formatter\Address;
 use Common\Service\Table\Formatter\InterimOcCheckbox;
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'title' => 'internal.interim.operatingcentres.table.header',
         'within_form' => true
-    ),
-    'settings' => array(
+    ],
+    'settings' => [
         'within_form' => true,
-        'crud' => array(
-            'actions' => array(),
+        'crud' => [
+            'actions' => [],
             'formName' => 'operatingCentres'
-        ),
-    ),
-    'columns' => array(
-        array(
+        ],
+    ],
+    'columns' => [
+        [
             'title' => 'internal.interim.operatingcentres.table.address',
             'name' => 'operatingCentre->address',
             'formatter' => Address::class
-        ),
-        array(
+        ],
+        [
             'title' => 'internal.interim.operatingcentres.table.vehicles',
             'name' => 'noOfVehiclesRequired',
-        ),
-        array(
+        ],
+        [
             'title' => 'internal.interim.operatingcentres.table.trailers',
             'name' => 'noOfTrailersRequired',
-        ),
-        array(
+        ],
+        [
             'title' => 'internal.interim.operatingcentres.table.listed',
             'width' => 'checkbox',
             'formatter' => InterimOcCheckbox::class,
             'name' => 'listed'
-        ),
-    )
-);
+        ],
+    ]
+];

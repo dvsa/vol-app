@@ -233,7 +233,7 @@ class DocumentGenerationController extends AbstractDocumentController
 
         $data = array_merge($defaultData, $data);
 
-        $details = isset($data['details']) ? $data['details'] : [];
+        $details = $data['details'] ?? [];
 
         $catId = (int)$details['category'];
 
@@ -286,7 +286,7 @@ class DocumentGenerationController extends AbstractDocumentController
 
             $description = (empty($bookmark['description']) ? $bookmark['name'] : $bookmark['description']);
 
-            $paragraphs = (array) ($bookmark['docParagraphBookmarks'] ? $bookmark['docParagraphBookmarks'] : null);
+            $paragraphs = (array) ($bookmark['docParagraphBookmarks'] ?: null);
             if (0 === count($paragraphs)) {
                 continue;
             }

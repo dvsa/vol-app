@@ -38,9 +38,7 @@ class IrhpPermitPrintRangeTypeTest extends AbstractDataServiceTestCase
         $this->translationHelper = m::mock(TranslationHelperService::class);
         $this->translationHelper->shouldReceive('translate')
             ->andReturnUsing(
-                function ($text) {
-                    return $text . '-translated';
-                }
+                fn($text) => $text . '-translated'
             );
 
         $this->sut = new IrhpPermitPrintRangeType(

@@ -3,60 +3,58 @@
 use Common\Service\Table\Formatter\PrinterDocumentCategory;
 use Common\Service\Table\Formatter\PrinterException;
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'title' => ' Printers exceptions',
         'titleSingular' => ' Printers exception',
         'within_form' => true
-    ),
-    'settings' => array(
-        'crud' => array(
+    ],
+    'settings' => [
+        'crud' => [
             'formName' => 'printerExceptions',
-            'actions' => array(
-                'addRule' => array(
+            'actions' => [
+                'addRule' => [
                     'class' => 'govuk-button', 
                     'requireRows' => false, 
                     'label' => 'add'
-                ),
-                'editRule' => array(
+                ],
+                'editRule' => [
                     'requireRows' => true, 
                     'class' => 'govuk-button govuk-button--secondary js-require--one', 
                     'label' => 'edit'
-                ),
-                'deleteRule' => array(
+                ],
+                'deleteRule' => [
                     'requireRows' => true, 
                     'class' => 'govuk-button govuk-button--warning js-require--one',
                     'label' => 'delete'
-                )
-            )
-        ),
+                ]
+            ]
+        ],
         'showTotal' => true
-    ),
-    'attributes' => array(
-    ),
-    'columns' => array(
-        array(
+    ],
+    'attributes' => [
+    ],
+    'columns' => [
+        [
             'title' => 'Exception',
             'name' => 'exception',
             'formatter' => PrinterException::class
-        ),
-        array(
+        ],
+        [
             'title' => 'Document categories',
             'name' => 'documentCategories',
             'formatter' => PrinterDocumentCategory::class
-        ),
-        array(
+        ],
+        [
             'title' => 'Designated printer',
             'name' => 'printerName',
             'sort' => 'printerName',
-            'formatter' => function ($row) {
-                return $row['printer']['printerName'];
-            },
-        ),
-        array(
+            'formatter' => fn($row) => $row['printer']['printerName'],
+        ],
+        [
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}'
-        ),
-    )
-);
+        ],
+    ]
+];

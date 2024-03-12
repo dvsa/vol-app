@@ -200,11 +200,11 @@ class PiController extends AbstractInternalController implements CaseControllerI
         //if we've got this far then we're loading the Pi details page
         $this->forward()->dispatch(
             \Olcs\Controller\Cases\PublicInquiry\HearingController::class,
-            array(
+            [
                 'action' => 'index',
                 'case' => $pi['case']['id'],
                 'pi' => $pi['id']
-            )
+            ]
         );
 
         return $this->details(

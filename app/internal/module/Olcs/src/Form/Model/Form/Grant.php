@@ -11,7 +11,7 @@ use Laminas\Form\Annotation as Form;
  */
 class Grant
 {
-    const FIELD_GRANT_AUTHORITY = 'grant-authority';
+    public const FIELD_GRANT_AUTHORITY = 'grant-authority';
 
     /**
      * @Form\Name("messages")

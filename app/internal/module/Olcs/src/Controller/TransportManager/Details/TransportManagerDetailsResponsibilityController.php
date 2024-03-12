@@ -60,8 +60,8 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
     protected $tmResponsiblitiesDetails = null;
 
     protected $dtoToType = [
-        'Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetForResponsibilities' => 'app',
-        'Dvsa\Olcs\Transfer\Query\TransportManagerLicence\GetForResponsibilities' => 'lic'
+        \Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetForResponsibilities::class => 'app',
+        \Dvsa\Olcs\Transfer\Query\TransportManagerLicence\GetForResponsibilities::class => 'lic'
     ];
 
     /**
@@ -244,7 +244,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         $id = $this->getFromRoute('id');
 
         $dataToSave = $this->transportManagerHelper
-            ->getResponsibilityFileData($tmId, $file);
+            ->getResponsibilityFileData($tmId);
         if ($action === 'edit-tm-application') {
             $key = 'application';
             $data = $this->tmResponsiblitiesDetails['app'];
@@ -306,9 +306,9 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         $processed = $this->processFiles(
             $form,
             'details->file',
-            array($this, 'processAdditionalInformationFileUpload'),
-            array($this, 'deleteFile'),
-            array($this, 'getDocuments')
+            [$this, 'processAdditionalInformationFileUpload'],
+            [$this, 'deleteFile'],
+            [$this, 'getDocuments']
         );
 
         /**
@@ -379,9 +379,9 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         $processed = $this->processFiles(
             $form,
             'details->file',
-            array($this, 'processAdditionalInformationFileUpload'),
-            array($this, 'deleteFile'),
-            array($this, 'getDocuments')
+            [$this, 'processAdditionalInformationFileUpload'],
+            [$this, 'deleteFile'],
+            [$this, 'getDocuments']
         );
 
         if ($request->isPost()) {
@@ -529,7 +529,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
                 return $this->redirectToIndex();
             }
         }
-        $id = ($idToDelete) ? $idToDelete : $this->getFromRoute('id');
+        $id = $idToDelete ?: $this->getFromRoute('id');
         if (!$id) {
             $ids = $this->params()->fromQuery('id');
         } elseif (!is_array($id)) {

@@ -10,7 +10,7 @@ use Laminas\Form\FormInterface;
  */
 class PhoneContact implements MapperInterface
 {
-    const DETAILS = 'details';
+    public const DETAILS = 'details';
 
     /**
      * Should map data from a result array into an array suitable for a form
@@ -23,11 +23,11 @@ class PhoneContact implements MapperInterface
     {
         return [
             self::DETAILS => [
-                'phoneNumber' => isset($data['phoneNumber']) ? $data['phoneNumber'] : null,
-                'phoneContactType' => isset($data['phoneContactType']) ? $data['phoneContactType'] : null,
+                'phoneNumber' => $data['phoneNumber'] ?? null,
+                'phoneContactType' => $data['phoneContactType'] ?? null,
                 'contactDetailsId' => $data['contactDetails']['id'],
-                'id' => isset($data['id']) ? $data['id'] : null,
-                'version' => isset($data['version']) ? $data['version'] : null,
+                'id' => $data['id'] ?? null,
+                'version' => $data['version'] ?? null,
             ],
         ];
     }

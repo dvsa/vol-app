@@ -43,7 +43,7 @@ class DisqualifyControllerTest extends MockeryTestCase
         $this->sut->shouldReceive('params->fromRoute')->with('person')->once()->andReturn(false);
         $this->sut->shouldReceive('params->fromRoute')->with('organisation')->once()->andReturn(false);
 
-        $this->expectException(\RuntimeException::class, 'Must specify organisation or person');
+        $this->expectException(\RuntimeException::class);
 
         $this->sut->indexAction();
     }
@@ -273,7 +273,7 @@ class DisqualifyControllerTest extends MockeryTestCase
 
         $mockResponse->shouldReceive('isOk')->with()->once()->andReturn(false);
 
-        $this->expectException(\RuntimeException::class, 'Error getting organisation');
+        $this->expectException(\RuntimeException::class);
         $this->sut->getOrganisation(512);
     }
 
@@ -290,7 +290,7 @@ class DisqualifyControllerTest extends MockeryTestCase
 
         $mockResponse->shouldReceive('isOk')->with()->once()->andReturn(false);
 
-        $this->expectException(\RuntimeException::class, 'Error getting person');
+        $this->expectException(\RuntimeException::class);
         $this->sut->getPerson(512);
     }
 

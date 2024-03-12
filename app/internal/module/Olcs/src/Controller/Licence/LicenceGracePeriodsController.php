@@ -201,9 +201,9 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
 
         $this->formHelper->remove($form, 'form-actions->addAnother');
         $form->setData(
-            array(
+            [
                 'details' => $gracePeriod
-            )
+            ]
         );
 
         return $this->render('edit-grace-period', $form);
@@ -268,11 +268,11 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
             ->removeFieldList(
                 $form,
                 'form-actions',
-                array(
+                [
                     'submit',
                     'addAnother',
                     'cancel'
-                )
+                ]
             );
 
         $form->get('table')->get('table')->setTable(
@@ -302,7 +302,7 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
      */
     protected function getTableData(array $gracePeriods)
     {
-        $tableData = array();
+        $tableData = [];
         foreach ($gracePeriods['results'] as $gracePeriod) {
             $tableData[] = [
                 'id' => $gracePeriod['id'],
@@ -325,9 +325,9 @@ class LicenceGracePeriodsController extends AbstractController implements Licenc
     {
         return $this->redirect()->toRouteAjax(
             'licence/grace-periods',
-            array(
+            [
                 'licence' => $this->params()->fromRoute('licence', null)
-            )
+            ]
         );
     }
 }

@@ -3,44 +3,42 @@
 use Common\Service\Table\Formatter\Date;
 use Common\Service\Table\Formatter\PublicationNumber;
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'title' => 'Published'
-    ),
-    'settings' => array(
-        'paginate' => array(
-            'limit' => array(
+    ],
+    'settings' => [
+        'paginate' => [
+            'limit' => [
                 'default' => 25,
-                'options' => array(10, 25, 50)
-            )
-        )
-    ),
-    'attributes' => array(
-    ),
-    'columns' => array(
-        array(
+                'options' => [10, 25, 50]
+            ]
+        ]
+    ],
+    'attributes' => [
+    ],
+    'columns' => [
+        [
             'title' => 'Traffic Area',
             'name' => 'trafficArea',
-            'formatter' => function ($row) {
-                return $row['trafficArea']['name'];
-            }
-        ),
-        array(
+            'formatter' => fn($row) => $row['trafficArea']['name']
+        ],
+        [
             'title' => 'Publication No.',
             'isNumeric' => true,
             'formatter' => PublicationNumber::class,
             'name' => 'publicationNo',
             'sort' => 'publicationNo',
-        ),
-        array(
+        ],
+        [
             'title' => 'Document Type',
             'name' => 'pubType',
-        ),
-        array(
+        ],
+        [
             'title' => 'Publication date',
             'name' => 'pubDate',
             'sort' => 'pubDate',
             'formatter' => Date::class
-        ),
-    )
-);
+        ],
+    ]
+];

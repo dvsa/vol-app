@@ -2,55 +2,55 @@
 
 use Common\Service\Table\Formatter\Date;
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'title' => 'Prohibitions',
         'titleSingular' => 'Prohibition',
         'empty_message' => 'There are no prohibitions'
-    ),
-    'settings' => array(
-        'crud' => array(
-            'actions' => array(
-                'add' => array('class' => 'govuk-button', 'label' => 'Add prohibition'),
-                'edit' => array('requireRows' => true, 'class' => 'govuk-button govuk-button--secondary js-require--one'),
-                'delete' => array('requireRows' => true, 'class' => 'govuk-button govuk-button--warning js-require--one')
-            )
-        ),
-        'paginate' => array(
-            'limit' => array(
+    ],
+    'settings' => [
+        'crud' => [
+            'actions' => [
+                'add' => ['class' => 'govuk-button', 'label' => 'Add prohibition'],
+                'edit' => ['requireRows' => true, 'class' => 'govuk-button govuk-button--secondary js-require--one'],
+                'delete' => ['requireRows' => true, 'class' => 'govuk-button govuk-button--warning js-require--one']
+            ]
+        ],
+        'paginate' => [
+            'limit' => [
                 'default' => 10,
-                'options' => array(10, 25, 50)
-            )
-        )
-    ),
-    'columns' => array(
-        array(
+                'options' => [10, 25, 50]
+            ]
+        ]
+    ],
+    'columns' => [
+        [
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}'
-        ),
-        array(
+        ],
+        [
             'title' => 'Prohibition date',
             'formatter' => function ($data, $column) {
                     $column['formatter'] = Date::class;
                     return '<a class="govuk-link" href="' . $this->generateUrl(
-                        array('prohibition' => $data['id']),
+                        ['prohibition' => $data['id']],
                         'case_prohibition_defect',
                         true
                     ) . '">' . $this->callFormatter($column, $data) . '</a>';
             },
             'name' => 'prohibitionDate'
-        ),
-        array(
+        ],
+        [
             'title' => 'Cleared date',
             'formatter' => Date::class,
             'name' => 'clearedDate',
-        ),
-        array(
+        ],
+        [
             'title' => 'Vehicle',
             'format' => '{{vrm}}'
-        ),
-        array(
+        ],
+        [
             'title' => 'Trailer',
             'formatter' => function ($data) {
                 switch ($data['isTrailer']) {
@@ -62,16 +62,14 @@ return array(
                         return '-';
                 }
             }
-        ),
-        array(
+        ],
+        [
             'title' => 'Imposed at',
             'format' => '{{imposedAt}}'
-        ),
-        array(
+        ],
+        [
             'title' => 'Type',
-            'formatter' => function ($data) {
-                return $data['prohibitionType']['description'];
-            }
-        )
-    )
-);
+            'formatter' => fn($data) => $data['prohibitionType']['description']
+        ]
+    ]
+];

@@ -74,7 +74,7 @@ class ConditionsUndertakingsControllerTest extends AbstractLvaControllerTestCase
 
         $this->mockLvaAdapter->shouldReceive('getTableData')
             ->with(7)
-            ->andReturn(array('foo' => 'bar'))
+            ->andReturn(['foo' => 'bar'])
             ->shouldReceive('alterTable')
             ->with(m::mock())
             ->shouldReceive('getTableName')

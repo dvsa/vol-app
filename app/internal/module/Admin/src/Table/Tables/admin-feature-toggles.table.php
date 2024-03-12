@@ -3,47 +3,47 @@
 use Common\Service\Table\Formatter\FeatureToggleEditLink;
 use Common\Service\Table\Formatter\RefDataStatus;
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'titleSingular' => 'Feature toggle',
         'title' => 'Feature toggles'
-    ),
-    'settings' => array(
-        'crud' => array(
-            'actions' => array(
-                'add' => array('class' => 'govuk-button', 'requireRows' => false),
-                'edit' => array('requireRows' => true, 'class' => 'govuk-button govuk-button--secondary js-require--one'),
-                'delete' => array('requireRows' => true, 'class' => 'govuk-button govuk-button--warning js-require--one')
-            )
-        ),
-        'paginate' => array(
-            'limit' => array(
+    ],
+    'settings' => [
+        'crud' => [
+            'actions' => [
+                'add' => ['class' => 'govuk-button', 'requireRows' => false],
+                'edit' => ['requireRows' => true, 'class' => 'govuk-button govuk-button--secondary js-require--one'],
+                'delete' => ['requireRows' => true, 'class' => 'govuk-button govuk-button--warning js-require--one']
+            ]
+        ],
+        'paginate' => [
+            'limit' => [
                 'default' => 25,
-                'options' => array(10, 25, 50)
-            ),
-        )
-    ),
-    'attributes' => array(
-    ),
-    'columns' => array(
-        array(
+                'options' => [10, 25, 50]
+            ],
+        ]
+    ],
+    'attributes' => [
+    ],
+    'columns' => [
+        [
             'title' => 'Name',
             'name' => 'friendlyName',
             'formatter' => FeatureToggleEditLink::class
-        ),
-        array(
+        ],
+        [
             'title' => 'Handler (or config key)',
             'name' => 'configName',
-        ),
-        array(
+        ],
+        [
             'title' => 'Status',
             'name' => 'status',
             'formatter' => RefDataStatus::class
-        ),
-        array(
+        ],
+        [
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}'
-        ),
-    )
-);
+        ],
+    ]
+];

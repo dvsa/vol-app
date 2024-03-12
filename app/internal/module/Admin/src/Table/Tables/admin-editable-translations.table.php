@@ -39,9 +39,7 @@ return [
             'title' => 'Content Key',
             'name' => 'translationKey',
             'sort' => 'translationKey',
-            'formatter' => function ($row) {
-                return Escape::html($row['translationKey']);
-            },
+            'formatter' => fn($row) => Escape::html($row['translationKey']),
         ],
         [
             'title' => 'Description',
@@ -50,7 +48,7 @@ return [
         ],
         [
             'title' => '',
-            'formatter' => function ($data, $column = array()) {
+            'formatter' => function ($data, $column = []) {
                 $url = $this->urlHelper->fromRoute(
                     'admin-dashboard/admin-editable-translations',
                     [

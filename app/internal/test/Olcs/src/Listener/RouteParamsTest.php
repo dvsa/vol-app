@@ -18,7 +18,7 @@ class RouteParamsTest extends TestCase
     {
         $sut = new RouteParams();
 
-        $mockEventManager = m::mock('Laminas\EventManager\EventManagerInterface');
+        $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
         $mockEventManager->shouldReceive('attach')->once()
             ->with(MvcEvent::EVENT_DISPATCH, [$sut, 'onDispatch'], 20);
 
@@ -29,7 +29,7 @@ class RouteParamsTest extends TestCase
     {
         $params = ['test' => 'value'];
 
-        $mockEvent = m::mock('Laminas\Mvc\MvcEvent');
+        $mockEvent = m::mock(\Laminas\Mvc\MvcEvent::class);
         $mockEvent->shouldReceive('getRouteMatch->getParams')->andReturn($params);
 
         $sut = new RouteParams();
@@ -45,7 +45,7 @@ class RouteParamsTest extends TestCase
             return true;
         };
 
-        $mockEventManager = m::mock('Laminas\EventManager\EventManagerInterface');
+        $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
         $mockEventManager->shouldIgnoreMissing();
         $mockEventManager->shouldReceive('trigger')->with(RouteParams::EVENT_PARAM . 'test', m::on($matcher))->once();
 

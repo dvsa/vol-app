@@ -37,9 +37,9 @@ class ApplicationProcessingHelperTest extends \PHPUnit\Framework\TestCase
                 'title' => 'internal-application-processing-' . $section . '-title',
                 'route' => 'lva-application/processing/' . $section,
                 'use_route_match' => true,
-                'params' => array(
+                'params' => [
                     'application' => $applicationId
-                ),
+                ],
                 'active' => $activeSection == $section ? true : false
             ];
         }

@@ -1,22 +1,22 @@
 <?php
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'titleSingular' => 'Hearing',
         'title' => 'Hearings',
-    ),
-    'settings' => array(
-        'paginate' => array(
-            'limit' => array(
+    ],
+    'settings' => [
+        'paginate' => [
+            'limit' => [
                 'default' => 10,
-                'options' => array(10, 25, 50)
-            )
-        )
-    ),
-    'attributes' => array(
-    ),
-    'columns' => array(
-        array(
+                'options' => [10, 25, 50]
+            ]
+        ]
+    ],
+    'attributes' => [
+    ],
+    'columns' => [
+        [
             'title' => 'Date of PI',
             'formatter' => function ($data) {
                 $date = date(Common\Module::$dateFormat, strtotime($data['hearingDate']));
@@ -27,20 +27,18 @@ return array(
                 return '<a href="' . $url . '" class="govuk-link js-modal-ajax">' . $date . '</a>';
             },
             'name' => 'id'
-        ),
-        array(
+        ],
+        [
             'title' => 'Venue',
-            'formatter' => function ($data) {
-                return (isset($data['venue']['name']) ? $data['venue']['name'] : $data['venueOther']);
-            }
-        ),
-        array(
+            'formatter' => fn($data) => $data['venue']['name'] ?? $data['venueOther']
+        ],
+        [
             'title' => 'Adjourned',
             'name' => 'isAdjourned'
-        ),
-        array(
+        ],
+        [
             'title' => 'Cancelled',
             'name' => 'isCancelled'
-        ),
-    )
-);
+        ],
+    ]
+];

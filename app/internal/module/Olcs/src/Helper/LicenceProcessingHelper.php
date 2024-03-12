@@ -25,17 +25,17 @@ class LicenceProcessingHelper extends AbstractProcessingHelper
     {
         $sections = $this->getSections();
 
-        $navigation = array();
+        $navigation = [];
 
         foreach (array_keys($sections) as $section) {
-            $navigation[] = array(
+            $navigation[] = [
                 'label' => 'internal-licence-processing-' . $section . '-label',
                 'title' => 'internal-licence-processing-' . $section . '-title',
                 'route' => 'licence/processing/' . $section,
                 'use_route_match' => true,
                 'params' => ['licence' => $id],
                 'active' => $section == $activeSection
-            );
+            ];
         }
 
         return $navigation;

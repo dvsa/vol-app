@@ -50,25 +50,19 @@ return [
             'title' => 'Category',
             'name' => 'category',
             'sort' => 'category',
-            'formatter' => function ($row) {
-                return empty($row['categoryName']) ? '' : Escape::html($row['categoryName']);
-            },
+            'formatter' => fn($row) => empty($row['categoryName']) ? '' : Escape::html($row['categoryName']),
         ],
         [
             'title' => 'Subcategory',
             'name' => 'subCategory',
             'sort' => 'subCategory',
-            'formatter' => function ($row) {
-                return empty($row['subCategoryName']) ? '' : Escape::html($row['subCategoryName']);
-            },
+            'formatter' => fn($row) => empty($row['subCategoryName']) ? '' : Escape::html($row['subCategoryName']),
         ],
         [
             'title' => 'Identifier',
             'name' => 'filename',
             'sort' => 'filename',
-            'formatter' => function ($row) {
-                return Escape::html(ltrim($row['filename'], '/'));
-            },
+            'formatter' => fn($row) => Escape::html(ltrim($row['filename'], '/')),
         ],
         [
             'title' => 'Edited date',

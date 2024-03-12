@@ -2,52 +2,46 @@
 
 use Common\Service\Table\Formatter\Date;
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'titleSingular' => 'GV Permit',
         'title' => 'GV Permits'
-    ),
-    'settings' => array(
-        'crud' => array(
-            'actions' => array(
-                'add' => array('class' => 'govuk-button'),
-            )
-        ),
-        'paginate' => array(
-            'limit' => array(
+    ],
+    'settings' => [
+        'crud' => [
+            'actions' => [
+                'add' => ['class' => 'govuk-button'],
+            ]
+        ],
+        'paginate' => [
+            'limit' => [
                 'default' => 10,
-                'options' => array(10, 25, 50)
-            )
-        )
-    ),
-    'columns' => array(
-        array(
+                'options' => [10, 25, 50]
+            ]
+        ]
+    ],
+    'columns' => [
+        [
             'title' => 'Permit Id',
             'isNumeric' => true,
-            'formatter' => function ($data) {
-                return '<a href="' . $this->generateUrl(
-                    array('action' => 'details', 'id' => $data['id']),
-                    'operator/irfo/gv-permits',
-                    true
-                ) . '" class="govuk-link js-modal-ajax">' . $data['id'] . '</a>';
-            }
-        ),
-        array(
+            'formatter' => fn($data) => '<a href="' . $this->generateUrl(
+                ['action' => 'details', 'id' => $data['id']],
+                'operator/irfo/gv-permits',
+                true
+            ) . '" class="govuk-link js-modal-ajax">' . $data['id'] . '</a>'
+        ],
+        [
             'title' => 'In force date',
             'formatter' => Date::class,
             'name' => 'inForceDate'
-        ),
-        array(
+        ],
+        [
             'title' => 'Type',
-            'formatter' => function ($data, $column) {
-                return $data['irfoGvPermitType']['description'];
-            }
-        ),
-        array(
+            'formatter' => fn($data, $column) => $data['irfoGvPermitType']['description']
+        ],
+        [
             'title' => 'Status',
-            'formatter' => function ($data, $column) {
-                return $data['irfoPermitStatus']['description'];
-            }
-        )
-    )
-);
+            'formatter' => fn($data, $column) => $data['irfoPermitStatus']['description']
+        ]
+    ]
+];

@@ -63,7 +63,7 @@ class CaseMarker implements ListenerAggregateInterface, FactoryInterface
     {
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'case',
-            array($this, 'onCase'),
+            [$this, 'onCase'],
             $priority
         );
     }

@@ -2,31 +2,29 @@
 
 use Common\Service\Table\Formatter\Date;
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'title' => 'Data retention export'
-    ),
-    'settings' => array(
-    ),
-    'attributes' => array(
-    ),
-    'columns' => array(
-        array(
+    ],
+    'settings' => [
+    ],
+    'attributes' => [
+    ],
+    'columns' => [
+        [
             'title' => 'Description',
-            'formatter' => function ($row) {
-                return sprintf(
-                    '%s %s [%s] [%s]',
-                    $row['organisationName'],
-                    $row['licNo'],
-                    $row['entityName'],
-                    $row['entityPk']
-                );
-            },
-        ),
-        array(
+            'formatter' => fn($row) => sprintf(
+                '%s %s [%s] [%s]',
+                $row['organisationName'],
+                $row['licNo'],
+                $row['entityName'],
+                $row['entityPk']
+            ),
+        ],
+        [
             'title' => 'Deleted date',
             'formatter' => Date::class,
             'name' => 'deletedDate',
-        ),
-    )
-);
+        ],
+    ]
+];

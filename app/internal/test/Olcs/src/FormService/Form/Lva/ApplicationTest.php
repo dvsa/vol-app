@@ -22,7 +22,7 @@ class ApplicationTest extends MockeryTestCase
 
     public function setUp(): void
     {
-        $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService');
+        $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
         $this->sut = new Application($this->formHelper, m::mock(AuthorizationService::class));
     }
 

@@ -4,7 +4,7 @@ namespace Olcs\Mvc\Controller\ParameterProvider;
 
 class AddFormDefaultData extends AbstractParameterProvider
 {
-    const FROM_ROUTE = 'route';
+    public const FROM_ROUTE = 'route';
     private $config;
 
     public function __construct($config)

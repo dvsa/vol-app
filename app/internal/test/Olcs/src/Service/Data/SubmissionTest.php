@@ -160,7 +160,7 @@ class SubmissionTest extends TestCase
 
     private function getMockSectionRefData()
     {
-        return array (
+        return  [
             'introduction' => 'Introduction',
             'case-summary' => 'Case summary',
             'case-outline' => 'Case outline',
@@ -209,6 +209,6 @@ class SubmissionTest extends TestCase
             'surrender' => 'Surrender',
             'annex' => 'Annex',
             'statements' => 'Statements'
-        );
+        ];
     }
 }

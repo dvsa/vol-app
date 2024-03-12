@@ -43,7 +43,7 @@ class LicenceTest extends TestCase
 
     public function testAttach()
     {
-        $mockEventManager = m::mock('Laminas\EventManager\EventManagerInterface');
+        $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
         $mockEventManager->shouldReceive('attach')->once()
             ->with(RouteParams::EVENT_PARAM . 'licence', [$this->sut, 'onLicence'], 1);
 
@@ -585,8 +585,8 @@ class LicenceTest extends TestCase
 
     public function testInvoke()
     {
-        $mockViewHelperManager = m::mock('Laminas\View\HelperPluginManager');
-        $mockLicenceService = m::mock('Common\Service\Data\Licence');
+        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
+        $mockLicenceService = m::mock(\Common\Service\Data\Licence::class);
         $mockSurrenderService = m::mock(Surrender::class);
         $mockNavigation = m::mock(Navigation::class); // 'right-sidebar'
         $mockAnnotationBuilder = m::mock();
@@ -597,8 +597,8 @@ class LicenceTest extends TestCase
         $mockSl = m::mock(ContainerInterface::class);
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('DataServiceManager')->andReturnSelf();
-        $mockSl->shouldReceive('get')->with('Common\Service\Data\Licence')->andReturn($mockLicenceService);
-        $mockSl->shouldReceive('get')->with('Common\Service\Data\Surrender')->andReturn($mockSurrenderService);
+        $mockSl->shouldReceive('get')->with(\Common\Service\Data\Licence::class)->andReturn($mockLicenceService);
+        $mockSl->shouldReceive('get')->with(\Common\Service\Data\Surrender::class)->andReturn($mockSurrenderService);
         $mockSl->shouldReceive('get')->with('right-sidebar')->andReturn($mockNavigation);
         $mockSl->shouldReceive('get')->with(MarkerService::class)->andReturn($mockMarkerService);
         $mockSl->shouldReceive('get')->with('TransferAnnotationBuilder')->andReturn($mockAnnotationBuilder);

@@ -63,12 +63,12 @@ class BusServiceControllerTest extends MockeryTestCase
 
         $type = 'foo';
 
-        $mockTableFieldset = m::mock('\Laminas\Form\Fieldset');
+        $mockTableFieldset = m::mock(\Laminas\Form\Fieldset::class);
 
-        $mockConditionsFieldset = m::mock('\Laminas\Form\Fieldset');
+        $mockConditionsFieldset = m::mock(\Laminas\Form\Fieldset::class);
         $mockConditionsFieldset->shouldReceive('get')->with('table')->andReturn($mockTableFieldset);
 
-        $mockForm = m::mock('\Laminas\Form\Form');
+        $mockForm = m::mock(\Laminas\Form\Form::class);
         $mockForm->shouldReceive('get')->with('conditions')->andReturn($mockConditionsFieldset);
         $mockForm->shouldReceive('hasAttribute')->with('action')->andReturnNull();
         $mockForm->shouldReceive('setAttribute')->with('action', '');
@@ -155,7 +155,7 @@ class BusServiceControllerTest extends MockeryTestCase
             ->once()
             ->andReturn($params);
 
-        $mockFieldset = m::mock('\Laminas\Form\Element');
+        $mockFieldset = m::mock(\Laminas\Form\Element::class);
         $mockFieldset->shouldReceive('get')->with('fields')->andReturn($mockFieldset);
         $mockFieldset->shouldReceive('remove')
             ->times($opNotifiedLaPteRemoved ? 1 : 0)
@@ -174,7 +174,7 @@ class BusServiceControllerTest extends MockeryTestCase
             ->times($timetableRemoved ? 1 : 0)
             ->andReturnSelf();
 
-        $mockForm = m::mock('\Laminas\Form\Form');
+        $mockForm = m::mock(\Laminas\Form\Form::class);
         $mockForm->shouldReceive('get')->with('fields')->andReturn($mockFieldset);
         $mockForm->shouldReceive('get')
             ->with('timetable')

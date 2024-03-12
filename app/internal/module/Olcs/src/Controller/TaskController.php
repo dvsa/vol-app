@@ -665,8 +665,8 @@ class TaskController extends AbstractController
             'assignment' => $data,
             'assignedBy' => $data,
             'lastModifiedBy' => $data,
-            'id' => isset($data['id']) ? $data['id'] : '',
-            'version' => isset($data['version']) ? $data['version'] : ''
+            'id' => $data['id'] ?? '',
+            'version' => $data['version'] ?? ''
         ];
     }
 
@@ -715,7 +715,7 @@ class TaskController extends AbstractController
      */
     protected function getLinkForTaskForm()
     {
-        list($taskType, $taskTypeId, $linkDisplay, $caseId) = $this->getTaskTypeDetails();
+        [$taskType, $taskTypeId, $linkDisplay, $caseId] = $this->getTaskTypeDetails();
 
         $method = 'getLinkForTaskFormFor' . ucfirst($taskType);
         if (method_exists($this, $method)) {
@@ -741,7 +741,7 @@ class TaskController extends AbstractController
 
         $url = $this->url()->fromRoute('lva-licence', ['licence' => $taskTypeId]);
 
-        return sprintf('<a class="govuk-link" href="%s">%s</a>', $url, $linkDisplay ? $linkDisplay : $licence['licNo']);
+        return sprintf('<a class="govuk-link" href="%s">%s</a>', $url, $linkDisplay ?: $licence['licNo']);
     }
 
     /**
@@ -899,7 +899,7 @@ class TaskController extends AbstractController
      */
     protected function getLinkMarkup($url, $linkDisplay, $fallback)
     {
-        return sprintf('<a class="govuk-link" href="%s">%s</a>', $url, $linkDisplay ? $linkDisplay : $fallback);
+        return sprintf('<a class="govuk-link" href="%s">%s</a>', $url, $linkDisplay ?: $fallback);
     }
 
     /**

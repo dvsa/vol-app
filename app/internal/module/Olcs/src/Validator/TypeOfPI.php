@@ -10,7 +10,7 @@ use Laminas\Validator\AbstractValidator;
  */
 class TypeOfPI extends AbstractValidator
 {
-    const TM_ONLY   = 'tmOnly';
+    public const TM_ONLY   = 'tmOnly';
 
     /**
      * Digits filter used for validation
@@ -24,9 +24,9 @@ class TypeOfPI extends AbstractValidator
      *
      * @var array
      */
-    protected $messageTemplates = array(
+    protected $messageTemplates = [
         self::TM_ONLY      => "Invalid types selected. 'Transport Manager only' must be the only option selected",
-    );
+    ];
 
     /**
      * Returns true if type of pi is a selection of options OR transport manager only

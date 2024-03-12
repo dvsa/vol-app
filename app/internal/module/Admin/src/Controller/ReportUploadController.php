@@ -112,10 +112,10 @@ class ReportUploadController extends AbstractInternalController implements LeftV
         $fileField = $form->get('fields')->get('file');
         $files = $this->getRequest()->getFiles()->toArray();
 
-        $file = (isset($files['fields']['file']) ? $files['fields']['file'] : null);
+        $file = ($files['fields']['file'] ?? null);
 
         if ($file === null || $file['error'] !== UPLOAD_ERR_OK) {
-            $errNr = (isset($file['error']) ? $file['error'] : self::ERR_UPLOAD_DEF);
+            $errNr = ($file['error'] ?? self::ERR_UPLOAD_DEF);
 
             // add validation error message
             $fileField->setMessages([self::FILE_UPLOAD_ERR_PREFIX . $errNr]);
@@ -140,7 +140,7 @@ class ReportUploadController extends AbstractInternalController implements LeftV
             return $form;
         }
 
-        $mimeType = (isset($file['type']) ? $file['type'] : null);
+        $mimeType = ($file['type'] ?? null);
 
         $response = $this->handleCommand(
             Upload::create(

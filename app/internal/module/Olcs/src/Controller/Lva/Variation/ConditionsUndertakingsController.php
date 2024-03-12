@@ -97,7 +97,7 @@ class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertaking
 
         return $this->redirect()->toRouteAjax(
             $this->getBaseRoute(),
-            array($this->getIdentifierIndex() => $this->getIdentifier())
+            [$this->getIdentifierIndex() => $this->getIdentifier()]
         );
     }
 
@@ -108,6 +108,6 @@ class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertaking
      */
     protected function getRenderVariables()
     {
-        return array('title' => null);
+        return ['title' => null];
     }
 }

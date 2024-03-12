@@ -115,11 +115,7 @@ class CpmsReportController extends AbstractInternalController implements LeftVie
      */
     private function getReportName($code)
     {
-        if (isset($this->reports[$code])) {
-            return $this->reports[$code];
-        }
-
-        return "Unknown";
+        return $this->reports[$code] ?? "Unknown";
     }
 
     /**

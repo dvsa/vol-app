@@ -155,9 +155,9 @@ trait VariationControllerTrait
         $variationStatuses = $applicationData['applicationCompletion'];
         $filter = $this->stringHelper;
 
-        $sections = array(
-            'overview' => array('class' => 'no-background', 'route' => 'lva-variation')
-        );
+        $sections = [
+            'overview' => ['class' => 'no-background', 'route' => 'lva-variation']
+        ];
 
         $status = $applicationData['status']['id'];
         // if status is valid then only show Overview section

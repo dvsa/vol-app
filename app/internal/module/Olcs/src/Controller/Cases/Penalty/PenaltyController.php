@@ -52,9 +52,9 @@ class PenaltyController extends AbstractInternalController implements CaseContro
      *
      * @var array
      */
-    protected $inlineScripts = array(
+    protected $inlineScripts = [
         'indexAction' => ['table-actions']
-    );
+    ];
 
     protected TableFactory $tableFactory;
 

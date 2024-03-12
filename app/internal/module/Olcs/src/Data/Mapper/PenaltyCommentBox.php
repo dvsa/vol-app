@@ -11,5 +11,5 @@ use Laminas\Form\FormInterface;
  */
 class PenaltyCommentBox extends AbstractCommentMapper implements MapperInterface
 {
-    const COMMENT_FIELD = 'penaltiesNote'; //needs to be constant as methods called statically
+    public const COMMENT_FIELD = 'penaltiesNote'; //needs to be constant as methods called statically
 }

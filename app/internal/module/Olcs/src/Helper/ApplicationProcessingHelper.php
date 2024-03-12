@@ -25,17 +25,17 @@ class ApplicationProcessingHelper extends AbstractProcessingHelper
     {
         $sections = $this->getSections();
 
-        $navigation = array();
+        $navigation = [];
 
         foreach (array_keys($sections) as $section) {
-            $navigation[] = array(
+            $navigation[] = [
                 'label' => 'internal-application-processing-' . $section . '-label',
                 'title' => 'internal-application-processing-' . $section . '-title',
                 'route' => 'lva-application/processing/' . $section,
                 'use_route_match' => true,
                 'params' => ['application' => $id],
                 'active' => $section == $activeSection
-            );
+            ];
         }
 
         return $navigation;

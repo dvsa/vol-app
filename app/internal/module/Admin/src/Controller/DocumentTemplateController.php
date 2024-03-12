@@ -165,10 +165,10 @@ class DocumentTemplateController extends AbstractInternalController implements L
     {
         $fileField = $form->get('fields')->get('file');
         $files = $this->getRequest()->getFiles()->toArray();
-        $file = (isset($files['fields']['file']) ? $files['fields']['file'] : null);
+        $file = ($files['fields']['file'] ?? null);
 
         if ($file === null || $file['error'] !== UPLOAD_ERR_OK) {
-            $errNr = (isset($file['error']) ? $file['error'] : self::ERR_UPLOAD_DEF);
+            $errNr = ($file['error'] ?? self::ERR_UPLOAD_DEF);
 
             // add validation error message
             $fileField->setMessages([self::FILE_UPLOAD_ERR_PREFIX . $errNr]);
@@ -191,7 +191,7 @@ class DocumentTemplateController extends AbstractInternalController implements L
             return $form;
         }
 
-        $mimeType = (isset($file['type']) ? $file['type'] : null);
+        $mimeType = ($file['type'] ?? null);
 
         $dtoData = [
             'id' => $data['fields']['id'],
@@ -251,8 +251,7 @@ class DocumentTemplateController extends AbstractInternalController implements L
      */
     protected function alterFormForEdit($form, $formData)
     {
-        $defaultCategory = isset($formData['fields']['category']) ?
-            $formData['fields']['category'] : Category::CATEGORY_APPLICATION;
+        $defaultCategory = $formData['fields']['category'] ?? Category::CATEGORY_APPLICATION;
 
         $this->subCategoryDataService
             ->setCategory($defaultCategory);

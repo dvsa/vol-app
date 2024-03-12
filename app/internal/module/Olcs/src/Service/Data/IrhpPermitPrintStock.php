@@ -16,7 +16,7 @@ use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintStock;
  */
 class IrhpPermitPrintStock extends AbstractDataService implements ListDataInterface
 {
-    const COUNTRY_ID_MOROCCO = 'MA';
+    public const COUNTRY_ID_MOROCCO = 'MA';
 
     /**
      * @var TranslationHelperService

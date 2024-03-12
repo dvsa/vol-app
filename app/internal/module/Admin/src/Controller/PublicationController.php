@@ -20,7 +20,7 @@ class PublicationController extends AbstractInternalController implements LeftVi
 {
     protected $navigationId = 'admin-dashboard/admin-publication';
     protected $listVars = [];
-    protected $inlineScripts = array('indexAction' => ['table-actions', 'file-link']);
+    protected $inlineScripts = ['indexAction' => ['table-actions', 'file-link']];
     protected $listDto = PendingList::class;
     protected $tableName = 'admin-publication';
     protected $crudConfig = [

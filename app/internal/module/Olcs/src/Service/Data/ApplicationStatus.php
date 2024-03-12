@@ -45,7 +45,7 @@ class ApplicationStatus extends AbstractListDataService
 
         $result = $response->getResult();
 
-        $this->setData($key, (isset($result['results']) ? $result['results'] : null));
+        $this->setData($key, ($result['results'] ?? null));
 
         return $this->getData($key);
     }

@@ -185,10 +185,10 @@ class LicenceOverviewHelperService
      */
     public function getPreviousEntityDataForLicence($licence)
     {
-        $previousData = array(
+        $previousData = [
             'operator' => null,
             'licence' => null
-        );
+        ];
 
         if (empty($licence['changeOfEntitys'])) {
             return $previousData;

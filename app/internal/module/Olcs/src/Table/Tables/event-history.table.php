@@ -3,30 +3,30 @@
 use Common\Service\Table\Formatter\EventHistoryDescription;
 use Common\Service\Table\Formatter\EventHistoryUser;
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'title' => 'Change history entries',
         'titleSingular' => 'Change history entry',
-    ),
-    'settings' => array(
-        'paginate' => array(
-            'limit' => array(
+    ],
+    'settings' => [
+        'paginate' => [
+            'limit' => [
                 'default' => 25,
-                'options' => array(10, 25, 50)
-            )
-        ),
-        'crud' => array(
-            'actions' => array()
-        ),
-    ),
-    'attributes' => array(
-    ),
-    'columns' => array(
-        array(
+                'options' => [10, 25, 50]
+            ]
+        ],
+        'crud' => [
+            'actions' => []
+        ],
+    ],
+    'attributes' => [
+    ],
+    'columns' => [
+        [
             'title' => 'Details',
             'formatter' => EventHistoryDescription::class,
-        ),
-        array(
+        ],
+        [
             'title' => 'Info',
             'name' => 'eventData',
             'formatter' => function ($row) {
@@ -40,24 +40,22 @@ return array(
 
                 return $eventData;
             }
-        ),
-        array(
+        ],
+        [
             'title' => 'App. Id',
             'isNumeric' => true,
             'name' => 'appId',
-            'formatter' => function ($row) {
-                return isset($row['application']['id']) ? $row['application']['id'] : null;
-            }
-        ),
-        array(
+            'formatter' => fn($row) => $row['application']['id'] ?? null
+        ],
+        [
             'title' => 'Date',
             'name' => 'eventDatetime',
             'formatter' => \Common\Service\Table\Formatter\DateTime::class,
             'sort' => 'eventDatetime',
-        ),
-        array(
+        ],
+        [
             'title' => 'By',
             'formatter' => EventHistoryUser::class
-        )
-    )
-);
+        ]
+    ]
+];

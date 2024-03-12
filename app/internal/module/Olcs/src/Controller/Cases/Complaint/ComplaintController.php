@@ -119,7 +119,7 @@ class ComplaintController extends AbstractInternalController implements
      *
      * @var array
      */
-    protected $inlineScripts = array(
+    protected $inlineScripts = [
         'indexAction' => ['table-actions']
-    );
+    ];
 }

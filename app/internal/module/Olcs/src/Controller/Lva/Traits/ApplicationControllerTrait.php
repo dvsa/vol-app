@@ -51,7 +51,7 @@ trait ApplicationControllerTrait
      *
      * @return \Laminas\View\Model\ViewModel|null
      */
-    protected function render($content, Form $form = null, $variables = array())
+    protected function render($content, Form $form = null, $variables = [])
     {
         if (! ($content instanceof ViewModel)) {
             $sectionParams = array_merge(
@@ -119,9 +119,9 @@ trait ApplicationControllerTrait
         $applicationStatuses = $applicationCompletion['applicationCompletion'];
         $filter = $this->stringHelper;
 
-        $sections = array(
-            'overview' => array('class' => 'no-background', 'route' => 'lva-application', 'enabled' => true)
-        );
+        $sections = [
+            'overview' => ['class' => 'no-background', 'route' => 'lva-application', 'enabled' => true]
+        ];
 
         $status = $applicationCompletion['status']['id'];
         // if status is valid then only show Overview section

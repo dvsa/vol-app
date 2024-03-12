@@ -12,7 +12,7 @@ use Laminas\Form\FormInterface;
  */
 class PublicHoliday implements MapperInterface
 {
-    const FIELDS = 'fields';
+    public const FIELDS = 'fields';
 
     private static $areas_fields = ['isEngland', 'isWales', 'isScotland', 'isNi'];
 
@@ -34,9 +34,7 @@ class PublicHoliday implements MapperInterface
                 'id' => $data['id'],
                 'areas' => array_filter(
                     self::$areas_fields,
-                    function ($fld) use ($data) {
-                        return (isset($data[$fld]) && $data[$fld] === 'Y');
-                    }
+                    fn($fld) => isset($data[$fld]) && $data[$fld] === 'Y'
                 ),
                 'holidayDate' => $data['publicHolidayDate'],
             ],

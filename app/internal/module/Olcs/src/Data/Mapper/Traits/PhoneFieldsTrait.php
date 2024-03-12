@@ -15,10 +15,10 @@ trait PhoneFieldsTrait
      *
      * @var array
      */
-    protected static $phoneTypes = array(
+    protected static $phoneTypes = [
         'primary' => RefData::PHONE_TYPE_PRIMARY,
         'secondary' => RefData::PHONE_TYPE_SECONDARY,
-    );
+    ];
 
     /**
      * Get fields from result
@@ -35,7 +35,7 @@ trait PhoneFieldsTrait
         foreach ($phoneContacts as $phoneContact) {
             // map form type
             $type = $phoneContact['phoneContactType']['id'];
-            $phoneType = isset($typeMap[$type]) ? $typeMap[$type] : '';
+            $phoneType = $typeMap[$type] ?? '';
 
             if (!empty($phoneType)) {
                 $fields['phone_'.$phoneType] = $phoneContact['phoneNumber'];

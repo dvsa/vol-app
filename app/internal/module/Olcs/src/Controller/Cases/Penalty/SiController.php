@@ -34,9 +34,9 @@ class SiController extends AbstractInternalController implements CaseControllerI
      *
      * @var array
      */
-    protected $inlineScripts = array(
+    protected $inlineScripts = [
         'indexAction' => ['table-actions']
-    );
+    ];
 
     /*
      * Variables for controlling table/list rendering

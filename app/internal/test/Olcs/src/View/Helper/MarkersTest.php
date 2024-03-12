@@ -22,8 +22,8 @@ class MarkersTest extends MockeryTestCase
     {
         $sut = new Markers();
 
-        $mockView = m::mock('\Laminas\View\Renderer\PhpRenderer');
-        $mockViewHelper = m::mock('\Laminas\View\Helper\Url');
+        $mockView = m::mock(\Laminas\View\Renderer\PhpRenderer::class);
+        $mockViewHelper = m::mock(\Laminas\View\Helper\Url::class);
         $mockViewHelper->shouldReceive('__invoke');
         $mockView->shouldReceive('plugin')->andReturn($mockViewHelper);
 

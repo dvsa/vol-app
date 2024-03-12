@@ -122,18 +122,18 @@ class TransportManagerTest extends MockeryTestCase
 
         $this->setupGetTransportManager($sut, $tm, $reputeUrl);
 
-        $mockContainer = m::mock('Laminas\View\Helper\Placeholder\Container');
+        $mockContainer = m::mock(\Laminas\View\Helper\Placeholder\Container::class);
         $mockContainer->shouldReceive('prepend')->with($pageTitle);
         $mockContainer->shouldReceive('set')->with($tm);
 
-        $mockPlaceholder = m::mock('Laminas\View\Helper\Placeholder');
+        $mockPlaceholder = m::mock(\Laminas\View\Helper\Placeholder::class);
         $mockPlaceholder->shouldReceive('getContainer')->with('pageTitle')->andReturn($mockContainer);
         $mockPlaceholder->shouldReceive('getContainer')->with('transportManager')->andReturn($mockContainer);
         $mockPlaceholder->shouldReceive('getContainer')->once()->with('note')->andReturn(
             m::mock()->shouldReceive('set')->once()->with($tm['latestNote']['comment'])->getMock()
         );
 
-        $mockViewHelperManager = m::mock('Laminas\View\HelperPluginManager');
+        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
         $mockViewHelperManager->shouldReceive('get')->with('pageTitle')->andReturn($mockContainer);
         $mockViewHelperManager->shouldReceive('get')->with('url')->andReturn($mockUrl);
@@ -184,18 +184,18 @@ class TransportManagerTest extends MockeryTestCase
 
         $this->setupGetTransportManager($sut, $tm);
 
-        $mockContainer = m::mock('Laminas\View\Helper\Placeholder\Container');
+        $mockContainer = m::mock(\Laminas\View\Helper\Placeholder\Container::class);
         $mockContainer->shouldReceive('prepend')->with($pageTitle);
         $mockContainer->shouldReceive('set')->with($tm);
 
-        $mockPlaceholder = m::mock('Laminas\View\Helper\Placeholder');
+        $mockPlaceholder = m::mock(\Laminas\View\Helper\Placeholder::class);
         $mockPlaceholder->shouldReceive('getContainer')->with('pageTitle')->andReturn($mockContainer);
         $mockPlaceholder->shouldReceive('getContainer')->with('transportManager')->andReturn($mockContainer);
         $mockPlaceholder->shouldReceive('getContainer')->once()->with('note')->andReturn(
             m::mock()->shouldReceive('set')->once()->with($tm['latestNote']['comment'])->getMock()
         );
 
-        $mockViewHelperManager = m::mock('Laminas\View\HelperPluginManager');
+        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
         $mockViewHelperManager->shouldReceive('get')->with('pageTitle')->andReturn($mockContainer);
         $mockViewHelperManager->shouldReceive('get')->with('url')->andReturn($mockUrl);
@@ -269,18 +269,18 @@ class TransportManagerTest extends MockeryTestCase
 
         $this->setupGetTransportManager($sut, $tm);
 
-        $mockContainer = m::mock('Laminas\View\Helper\Placeholder\Container');
+        $mockContainer = m::mock(\Laminas\View\Helper\Placeholder\Container::class);
         $mockContainer->shouldReceive('prepend')->with($pageTitle);
         $mockContainer->shouldReceive('set')->with($tm);
 
-        $mockPlaceholder = m::mock('Laminas\View\Helper\Placeholder');
+        $mockPlaceholder = m::mock(\Laminas\View\Helper\Placeholder::class);
         $mockPlaceholder->shouldReceive('getContainer')->with('pageTitle')->andReturn($mockContainer);
         $mockPlaceholder->shouldReceive('getContainer')->with('transportManager')->andReturn($mockContainer);
         $mockPlaceholder->shouldReceive('getContainer')->once()->with('note')->andReturn(
             m::mock()->shouldReceive('set')->once()->with($tm['latestNote']['comment'])->getMock()
         );
 
-        $mockViewHelperManager = m::mock('Laminas\View\HelperPluginManager');
+        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
         $mockViewHelperManager->shouldReceive('get')->with('pageTitle')->andReturn($mockContainer);
         $mockViewHelperManager->shouldReceive('get')->with('url')->andReturn($mockUrl);
@@ -371,14 +371,14 @@ class TransportManagerTest extends MockeryTestCase
         $mockAuthService= m::mock();
 
         $sidebarNav = m::mock(Navigation::class);
-        $mockViewHelperManager = m::mock('Laminas\View\HelperPluginManager');
+        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
 
         $mockSl = m::mock(ContainerInterface::class);
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);
         $mockSl->shouldReceive('get')->with('right-sidebar')->andReturn($sidebarNav);
         $mockSl->shouldReceive('get')->with('TransferAnnotationBuilder')->andReturn($mockAnnotationBuilder);
         $mockSl->shouldReceive('get')->with('QueryService')->andReturn($mockQueryService);
-        $mockSl->shouldReceive('get')->with('LmcRbacMvc\Service\AuthorizationService')->andReturn($mockAuthService);
+        $mockSl->shouldReceive('get')->with(\LmcRbacMvc\Service\AuthorizationService::class)->andReturn($mockAuthService);
 
         $sut = new TransportManager();
         $service = $sut->__invoke($mockSl, TransportManager::class);

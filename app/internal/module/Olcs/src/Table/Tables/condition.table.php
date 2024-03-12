@@ -2,70 +2,58 @@
 
 use Common\Service\Table\Formatter\Address;
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'title' => 'Conditions & undertakings',
         'empty_message' => 'There are no conditions or undertakings'
-    ),
-    'settings' => array(
-        'crud' => array(
+    ],
+    'settings' => [
+        'crud' => [
             'formName' => 'conditions',
-            'actions' => array(
-                'add' => array('class' => 'govuk-button', 'label' => 'Add condition or undertaking'),
-                'edit' => array('requireRows' => true, 'class' => 'govuk-button govuk-button--secondary js-require--one'),
-                'delete' => array('requireRows' => true, 'class' => 'govuk-button govuk-button--warning js-require--one')
-            )
-        )
-    ),
-    'columns' => array(
-        array(
+            'actions' => [
+                'add' => ['class' => 'govuk-button', 'label' => 'Add condition or undertaking'],
+                'edit' => ['requireRows' => true, 'class' => 'govuk-button govuk-button--secondary js-require--one'],
+                'delete' => ['requireRows' => true, 'class' => 'govuk-button govuk-button--warning js-require--one']
+            ]
+        ]
+    ],
+    'columns' => [
+        [
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}'
-        ),
-        array(
+        ],
+        [
             'title' => 'No.',
-            'formatter' => function ($data, $column) {
-                return '<a href="' . $this->generateUrl(
-                    array('action' => 'edit', 'id' => $data['id']),
-                    'case_conditions_undertakings',
-                    true
-                ) . '" class="govuk-link js-modal-ajax">' . $data['id'] . '</a>';
-            },
+            'formatter' => fn($data, $column) => '<a href="' . $this->generateUrl(
+                ['action' => 'edit', 'id' => $data['id']],
+                'case_conditions_undertakings',
+                true
+            ) . '" class="govuk-link js-modal-ajax">' . $data['id'] . '</a>',
             'isNumeric' => true,
             'name' => 'id'
-        ),
-        array(
+        ],
+        [
             'title' => 'Type',
-            'formatter' => function ($data, $column) {
-                return $this->translator->translate($data['conditionType']['description']);
-            },
-        ),
-        array(
+            'formatter' => fn($data, $column) => $this->translator->translate($data['conditionType']['description']),
+        ],
+        [
             'title' => 'Added via',
-            'formatter' => function ($data, $column) {
-                return $this->translator->translate($data['addedVia']['description']);
-            },
-        ),
-        array(
+            'formatter' => fn($data, $column) => $this->translator->translate($data['addedVia']['description']),
+        ],
+        [
             'title' => 'Fulfilled',
-            'formatter' => function ($data, $column) {
-                return $data['isFulfilled'] == 'Y' ? 'Yes' : 'No';
-            },
-        ),
-        array(
+            'formatter' => fn($data, $column) => $data['isFulfilled'] == 'Y' ? 'Yes' : 'No',
+        ],
+        [
             'title' => 'Status',
-            'formatter' => function ($data, $column) {
-                return $data['isDraft'] == 'Y' ? 'Draft' : 'Approved';
-            },
-        ),
-        array(
+            'formatter' => fn($data, $column) => $data['isDraft'] == 'Y' ? 'Draft' : 'Approved',
+        ],
+        [
             'title' => 'Attached to',
-            'formatter' => function ($data, $column) {
-                return $this->translator->translate($data['attachedTo']['description']);
-            },
-        ),
-        array(
+            'formatter' => fn($data, $column) => $this->translator->translate($data['attachedTo']['description']),
+        ],
+        [
             'title' => 'OC address',
             'width' => '300px',
             'formatter' => function ($data, $column) {
@@ -79,6 +67,6 @@ return array(
 
                 return 'N/a';
             }
-        ),
-    )
-);
+        ],
+    ]
+];

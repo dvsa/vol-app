@@ -162,7 +162,7 @@ class OperatorFeesController extends OperatorController
 
         $post = $request->getPost()->toArray();
         // populate GV Permit and PSV Auth dropdowns
-        $currentFeeType = isset($post['fee-details']['feeType']) ? $post['fee-details']['feeType'] : null;
+        $currentFeeType = $post['fee-details']['feeType'] ?? null;
         $data = $this->fetchFeeTypeListData(null, $currentFeeType);
 
         if (isset($data['extra']['valueOptions']['irfoGvPermit'])) {

@@ -81,13 +81,13 @@ class ApplicationController extends AbstractController implements ApplicationCon
         $applicationId = $this->params()->fromRoute('application', null);
 
         $canHaveCases = $this->dataServiceManager
-            ->get('Common\Service\Data\Application')->canHaveCases($applicationId);
+            ->get(\Common\Service\Data\Application::class)->canHaveCases($applicationId);
 
         if (!$canHaveCases) {
             $this->flashMessengerHelper
                 ->addErrorMessage('The application has no cases');
 
-            return $this->redirect()->toRouteAjax('lva-application', array('application' => $applicationId));
+            return $this->redirect()->toRouteAjax('lva-application', ['application' => $applicationId]);
         }
 
         $params = [
@@ -101,7 +101,7 @@ class ApplicationController extends AbstractController implements ApplicationCon
         $params = array_merge(
             $params,
             $this->getRequest()->getQuery()->toArray(),
-            array('query' => $this->getRequest()->getQuery())
+            ['query' => $this->getRequest()->getQuery()]
         );
 
         $dtoData = CasesByApplication::create($params);
@@ -221,7 +221,7 @@ class ApplicationController extends AbstractController implements ApplicationCon
                 }
             }
 
-            return $this->redirect()->toRouteAjax('lva-application', array('application' => $id));
+            return $this->redirect()->toRouteAjax('lva-application', ['application' => $id]);
         }
 
         $formHelper = $this->formHelper;
@@ -230,7 +230,7 @@ class ApplicationController extends AbstractController implements ApplicationCon
 
         $form->get('messages')->get('message')->setValue('confirm-undo-grant-application');
 
-        $view = new ViewModel(array('form' => $form));
+        $view = new ViewModel(['form' => $form]);
         $view->setTemplate('pages/form');
 
         return $this->renderView($view, 'Undo grant application');
@@ -274,9 +274,9 @@ class ApplicationController extends AbstractController implements ApplicationCon
             }
             return $this->redirectToRouteAjax(
                 'lva-application/overview',
-                array(
+                [
                     'application' => $applicationId
-                )
+                ]
             );
         }
 
@@ -288,9 +288,9 @@ class ApplicationController extends AbstractController implements ApplicationCon
             $response = $this->handleQuery($dto);
             $changeOfEntityData = $response->getResult();
             $form->setData(
-                array(
+                [
                     'change-details' => $changeOfEntityData
-                )
+                ]
             );
         } else {
             $form->get('form-actions')->remove('remove');
@@ -327,14 +327,14 @@ class ApplicationController extends AbstractController implements ApplicationCon
 
                 return $this->redirectToRouteAjax(
                     'lva-application/overview',
-                    array(
+                    [
                         'application' => $applicationId
-                    )
+                    ]
                 );
             }
         }
 
-        $view = new ViewModel(array('form' => $form));
+        $view = new ViewModel(['form' => $form]);
         $view->setTemplate('pages/form');
 
         return $this->renderView($view, 'Change Entity');

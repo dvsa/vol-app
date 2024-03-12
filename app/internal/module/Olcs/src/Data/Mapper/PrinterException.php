@@ -32,8 +32,7 @@ class PrinterException implements MapperInterface
                     'id' => $data['id'],
                     'version' => $data['version'],
                     'teamOrUser' => isset($data['user']['id']) ? 'user' : 'team',
-                    'team' => isset($data['team']['id']) ? $data['team']['id'] :
-                        (isset($data['team']) ? $data['team'] : null)
+                    'team' => $data['team']['id'] ?? $data['team'] ?? null
                 ],
                 'team-printer' => [
                     'printer' => $data['printer']['id'],
@@ -44,7 +43,7 @@ class PrinterException implements MapperInterface
                     'printer' => $data['printer']['id'],
                     'subCategoryUser' => $data['subCategory']['id'],
                     'categoryUser' => $data['subCategory']['category']['id'],
-                    'user' => isset($data['user']['id']) ? $data['user']['id'] : null
+                    'user' => $data['user']['id'] ?? null
                 ],
             ];
         }

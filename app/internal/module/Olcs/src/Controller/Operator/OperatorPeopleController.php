@@ -150,7 +150,7 @@ class OperatorPeopleController extends AbstractInternalController implements
         ];
 
         //  alter table
-        $type = isset($data['type']['id']) ? $data['type']['id'] : null;
+        $type = $data['type']['id'] ?? null;
 
         $table = $this->table()->buildTable('operator-people', $tableData, []);
 

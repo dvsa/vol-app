@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
     'application-name' => 'internal',
     'application_version' => (file_exists(__DIR__ . '/../version') ? file_get_contents(__DIR__ . '/../version') : ''),
     'cqrs_client' => [
@@ -19,4 +19,4 @@ return array(
         ],
     ],
     'lmc_rbac' => require('lmc_rbac.config.php'),
-);
+];

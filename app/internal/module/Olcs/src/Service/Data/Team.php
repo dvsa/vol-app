@@ -15,8 +15,8 @@ use Dvsa\Olcs\Transfer\Query\Team\TeamListData as TeamQry;
  */
 class Team extends AbstractDataService implements ListDataInterface
 {
-    const DEFAULT_ORDER = 'ASC';
-    const DEFAULT_SORT = 'name';
+    public const DEFAULT_ORDER = 'ASC';
+    public const DEFAULT_SORT = 'name';
 
     /**
      * @var int

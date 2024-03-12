@@ -241,14 +241,14 @@ class SearchController extends AbstractController implements LeftViewProvider
             } else {
                 $this->flashMessengerHelper->addErrorMessage('unknown-error');
             }
-            return $this->redirect()->toRouteAjax('search', array('index' => 'vehicle', 'action' => 'search'));
+            return $this->redirect()->toRouteAjax('search', ['index' => 'vehicle', 'action' => 'search']);
         }
 
         $formHelper = $this->formHelper;
         $form = $formHelper->createFormWithRequest('GenericConfirmation', $this->getRequest());
         $form->get('messages')->get('message')->setValue('form.vehicle.removeSection26.confirm');
 
-        $view = new ViewModel(array('form' => $form));
+        $view = new ViewModel(['form' => $form]);
         $view->setTemplate('pages/form');
 
         return $this->renderView($view, 'Remove section 26');
@@ -274,14 +274,14 @@ class SearchController extends AbstractController implements LeftViewProvider
             } else {
                 $this->flashMessengerHelper->addErrorMessage('unknown-error');
             }
-            return $this->redirect()->toRouteAjax('search', array('index' => 'vehicle', 'action' => 'search'));
+            return $this->redirect()->toRouteAjax('search', ['index' => 'vehicle', 'action' => 'search']);
         }
 
         $formHelper = $this->formHelper;
         $form = $formHelper->createFormWithRequest('GenericConfirmation', $this->getRequest());
         $form->get('messages')->get('message')->setValue('form.vehicle.setSection26.confirm');
 
-        $view = new ViewModel(array('form' => $form));
+        $view = new ViewModel(['form' => $form]);
         $view->setTemplate('pages/form');
 
         return $this->renderView($view, 'Remove section 26');
@@ -309,7 +309,7 @@ class SearchController extends AbstractController implements LeftViewProvider
          * causing an error in zf2 url builder. I am informed by (CR) that this advanced search is disappearing soon
          * anyway
          */
-        $url = $this->url()->fromRoute('operators/operators-params', [], array('query' => $data));
+        $url = $this->url()->fromRoute('operators/operators-params', [], ['query' => $data]);
 
         return $this->redirect()->toUrl($url);
     }

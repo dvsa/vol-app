@@ -25,7 +25,7 @@ trait OperatorControllerTrait
 
         if ($organisationId) {
             $org = $this->getBusinessDetailsData($organisationId);
-            $this->pageTitle = isset($org['name']) ? $org['name'] : '';
+            $this->pageTitle = $org['name'] ?? '';
             $variables['disable'] = false;
         } else {
             $org = null;

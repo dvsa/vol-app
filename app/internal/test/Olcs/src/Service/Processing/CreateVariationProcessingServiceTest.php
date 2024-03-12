@@ -51,7 +51,7 @@ class CreateVariationProcessingServiceTest extends MockeryTestCase
 
     public function testGetDataFromForm()
     {
-        $form = m::mock('\Laminas\Form\Form');
+        $form = m::mock(\Laminas\Form\Form::class);
 
         $form->shouldReceive('getData')
             ->andReturn(['data' => ['foo' => 'bar']]);
@@ -99,7 +99,7 @@ class CreateVariationProcessingServiceTest extends MockeryTestCase
     public function testGetForm()
     {
         // Params
-        $mockRequest = m::mock('\Laminas\Http\Request');
+        $mockRequest = m::mock(\Laminas\Http\Request::class);
 
         // Mocks
         $mockForm = m::mock();
@@ -125,7 +125,7 @@ class CreateVariationProcessingServiceTest extends MockeryTestCase
     public function testGetFormWithPost()
     {
         // Params
-        $mockRequest = m::mock('\Laminas\Http\Request');
+        $mockRequest = m::mock(\Laminas\Http\Request::class);
         $postData = ['foo' => 'bar'];
 
         // Mocks

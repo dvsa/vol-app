@@ -3,82 +3,76 @@
 use Common\Service\Table\Formatter\Date;
 use Common\Service\Table\Formatter\InspectionRequestId;
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'title' => 'Inspection requests',
         'titleSingular' => 'Inspection request'
-    ),
-    'settings' => array(
-        'paginate' => array(
-            'limit' => array(
+    ],
+    'settings' => [
+        'paginate' => [
+            'limit' => [
                 'default' => 10,
-                'options' => array(10, 25, 50)
-            )
-        ),
-        'crud' => array(
+                'options' => [10, 25, 50]
+            ]
+        ],
+        'crud' => [
             'formName' => 'inspectionReport',
-            'actions' => array(
-                'add' => array('class' => 'govuk-button'),
-                'edit' => array('requireRows' => true, 'class' => 'govuk-button govuk-button--secondary js-require--one'),
-                'delete' => array(
+            'actions' => [
+                'add' => ['class' => 'govuk-button'],
+                'edit' => ['requireRows' => true, 'class' => 'govuk-button govuk-button--secondary js-require--one'],
+                'delete' => [
                     'requireRows' => true,
                     'class' => 'govuk-button govuk-button--warning js-require--one',
                     'label' => 'Remove'
-                )
-            )
-        ),
-    ),
-    'attributes' => array(
-    ),
-    'columns' => array(
-        array(
+                ]
+            ]
+        ],
+    ],
+    'attributes' => [
+    ],
+    'columns' => [
+        [
             'title' => 'ID',
             'isNumeric' => true,
             'sort' => 'id',
             'name' => 'id',
             'formatter' => InspectionRequestId::class
-        ),
-        array(
+        ],
+        [
             'title' => 'Report type',
-            'formatter' => function ($row) {
-                return $row['reportType']['description'];
-            },
+            'formatter' => fn($row) => $row['reportType']['description'],
             'name' => 'reportType',
             'sort' => 'reportType'
-        ),
-        array(
+        ],
+        [
             'title' => 'Date requested',
             'name' => 'requestDate',
             'formatter' => Date::class,
             'sort' => 'requestDate'
-        ),
-        array(
+        ],
+        [
             'title' => 'Due date',
             'name' => 'dueDate',
             'formatter' => Date::class,
             'sort' => 'duetDate'
-        ),
-        array(
+        ],
+        [
             'title' => 'Application ID',
             'isNumeric' => true,
-            'formatter' => function ($row) {
-                return $row['application']['id'];
-            },
+            'formatter' => fn($row) => $row['application']['id'],
             'name' => 'applicationId',
             'sort' => 'applicationId'
-        ),
-        array(
+        ],
+        [
             'title' => 'Result status',
-            'formatter' => function ($row) {
-                return $row['resultType']['description'];
-            },
+            'formatter' => fn($row) => $row['resultType']['description'],
             'name' => 'resultType',
             'sort' => 'resultType'
-        ),
-        array(
+        ],
+        [
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/checkbox]}}'
-        )
-    )
-);
+        ]
+    ]
+];

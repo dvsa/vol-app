@@ -1,39 +1,37 @@
 <?php
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'id' => 'transport-managers',
         'action_route' => [
             'route' => 'submission_update_table',
             'params' => ['section' => 'transport-managers']
         ],
         'title' => 'Transport managers'
-    ),
-    'settings' => array(
-        'crud' => array(
+    ],
+    'settings' => [
+        'crud' => [
             'formName' => 'transport-managers',
-            'actions' => array(
-                'refresh-table' => array('label' => 'Refresh table', 'class' => 'govuk-button govuk-button--secondary', 'requireRows' => false),
-                'delete-row' => array('label' => 'Delete row', 'class' => 'govuk-button govuk-button--secondary js-require--multiple', 'requireRows' => true)
-            ),
+            'actions' => [
+                'refresh-table' => ['label' => 'Refresh table', 'class' => 'govuk-button govuk-button--secondary', 'requireRows' => false],
+                'delete-row' => ['label' => 'Delete row', 'class' => 'govuk-button govuk-button--secondary js-require--multiple', 'requireRows' => true]
+            ],
             'action_field_name' => 'formAction'
-        ),
+        ],
         'submission_section' => 'display',
-    ),
-    'attributes' => array(
+    ],
+    'attributes' => [
         'name' => 'transport-managers'
-    ),
-    'columns' => array(
-        array(
+    ],
+    'columns' => [
+        [
             'title' => 'Name',
-            'formatter' => function ($data) {
-                return $data['title'] . ' ' . $data['forename'] . ' ' . $data['familyName'];
-            }
-        ),
-        array(
+            'formatter' => fn($data) => $data['title'] . ' ' . $data['forename'] . ' ' . $data['familyName']
+        ],
+        [
             'title' => 'DOB',
             'name' => 'birthDate'
-        ),
-        array(
+        ],
+        [
             'title' => 'Other Licences / Applications',
             'formatter' => function ($data) {
                 $returnString = '';
@@ -44,23 +42,21 @@ return array(
                 }
                 return $returnString;
             },
-        ),
-        array(
+        ],
+        [
             'title' => 'Qualifications',
-            'formatter' => function ($data) {
-                return implode(', ', $data['qualifications']);
-            }
-        ),
-        array(
+            'formatter' => fn($data) => implode(', ', $data['qualifications'])
+        ],
+        [
             'title' => 'Type',
             'name' => 'tmType'
-        ),
-        array(
+        ],
+        [
             'type' => 'Checkbox',
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/checkbox]}}',
             'hideWhenDisabled' => true
-        ),
-    )
-);
+        ],
+    ]
+];

@@ -705,9 +705,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
 
                 $methodName = preg_replace_callback(
                     "#\-([A-z])#",
-                    function ($letter) use ($action) {
-                        return strtoupper($letter[1]);
-                    },
+                    fn($letter) => strtoupper($letter[1]),
                     $action
                 );
                 if (method_exists($this, 'alterFormFor' . $methodName)) {
@@ -976,10 +974,10 @@ abstract class AbstractInternalController extends AbstractOlcsController
         $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, [$listener, 'onDispatch'], 2);
 
         if (method_exists($this, 'setNavigationCurrentLocation')) {
-            $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, array($this, 'setNavigationCurrentLocation'), 6);
+            $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, [$this, 'setNavigationCurrentLocation'], 6);
         }
 
-        $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, array($this, 'attachScripts'), -100);
+        $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, [$this, 'attachScripts'], -100);
     }
 
     /**
@@ -1015,9 +1013,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
             $scripts = array_merge($scripts, $this->inlineScripts[$action]);
         }
 
-        $callback = function ($item) {
-            return !is_array($item);
-        };
+        $callback = fn($item) => !is_array($item);
         $globalScripts = array_filter($this->inlineScripts, $callback);
 
         return array_merge($scripts, $globalScripts);
@@ -1059,9 +1055,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
             $scripts = array_merge($scripts, $this->scriptFiles[$action]);
         }
 
-        $callback = function ($item) {
-            return !is_array($item);
-        };
+        $callback = fn($item) => !is_array($item);
         $globalScripts = array_filter($this->scriptFiles, $callback);
 
         return array_merge($scripts, $globalScripts);
@@ -1157,7 +1151,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
     {
         $query = $this->getRequest()->getUri()->getQuery();
         $action = $table->getVariable('action');
-        if ($query && strpos('?', $action) === false) {
+        if ($query && strpos('?', (string) $action) === false) {
             $action .= '?' . $query;
             $table->setVariable('action', $action);
         }

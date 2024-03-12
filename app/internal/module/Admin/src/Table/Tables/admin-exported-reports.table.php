@@ -4,21 +4,21 @@ use Common\Service\Table\Formatter\Date;
 use Common\Service\Table\Formatter\DocumentDescription;
 use Common\Service\Table\Formatter\FileExtension;
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'titleSingular' => 'Exported report',
         'title' => 'Exported reports',
-    ),
-    'settings' => array(
-        'paginate' => array(
-            'limit' => array(
+    ],
+    'settings' => [
+        'paginate' => [
+            'limit' => [
                 'default' => 10,
-                'options' => array(10, 25, 50)
-            )
-        )
-    ),
-    'columns' => array(
-        array(
+                'options' => [10, 25, 50]
+            ]
+        ]
+    ],
+    'columns' => [
+        [
             'title' => 'Description',
             'name' => 'description',
             'formatter' => function ($row) {
@@ -28,16 +28,16 @@ return array(
                     $row
                 );
             }
-        ),
-        array(
+        ],
+        [
             'title' => 'Category',
             'name' => 'categoryName',
-        ),
-        array(
+        ],
+        [
             'title' => 'Subcategory',
             'name' => 'documentSubCategoryName',
-        ),
-        array(
+        ],
+        [
             'title' => 'Format',
             'name' => 'filename',
             'formatter' => function ($row) {
@@ -47,11 +47,11 @@ return array(
                     $row
                 );
             }
-        ),
-        array(
+        ],
+        [
             'title' => 'Date',
             'name' => 'issuedDate',
             'formatter' => Date::class
-        ),
-    )
-);
+        ],
+    ]
+];

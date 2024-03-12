@@ -19,7 +19,7 @@ class SearchFilterFieldsetTest extends TestCase
 {
     public function testSearchAwareTraitByProxy()
     {
-        $service = m::mock('Common\Service\Data\Search\Search');
+        $service = m::mock(\Common\Service\Data\Search\Search::class);
 
         $sut = new SearchFilterFieldset;
 
@@ -33,7 +33,7 @@ class SearchFilterFieldsetTest extends TestCase
         $filter->shouldReceive('getTitle')->twice()->andReturn('Title');
         $filters = [$filter, $filter];
 
-        $service = m::mock('Common\Service\Data\Search\Search');
+        $service = m::mock(\Common\Service\Data\Search\Search::class);
         $service->shouldReceive('getFilters')->withNoArgs()->andReturn($filters);
 
         $sut = new SearchFilterFieldset;

@@ -13,7 +13,7 @@ use Mockery as m;
  */
 class SubCategoryTest extends AbstractListDataServiceTestCase
 {
-    const CAT_ID = 8001;
+    public const CAT_ID = 8001;
 
     /** @var SubCategory */
     private $sut;

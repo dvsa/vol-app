@@ -105,12 +105,12 @@ class ImpoundingController extends AbstractInternalController implements CaseCon
      *
      * @var array
      */
-    protected $inlineScripts = array(
+    protected $inlineScripts = [
         'addAction' => ['forms/impounding'],
         'editAction' => ['forms/impounding'],
         'deleteAction' => ['forms/impounding'],
         'indexAction' => ['table-actions']
-    );
+    ];
 
     /**
      * Defines additional allowed POST actions

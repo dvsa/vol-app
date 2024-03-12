@@ -78,6 +78,6 @@ class UnlicensedOperatorLicenceVehicle implements MapperInterface
 
     private static function getFromDataIfSet($data, $field)
     {
-        return isset($data[$field]) ? $data[$field] : null;
+        return $data[$field] ?? null;
     }
 }

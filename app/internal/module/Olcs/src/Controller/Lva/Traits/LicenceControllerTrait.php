@@ -188,9 +188,9 @@ trait LicenceControllerTrait
      */
     protected function getSectionsForView()
     {
-        $sections = array(
-            'overview' => array('route' => 'lva-licence')
-        );
+        $sections = [
+            'overview' => ['route' => 'lva-licence']
+        ];
 
         $licence = $this->getLicence();
         $isPsv = ($licence['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_PSV);
@@ -204,7 +204,7 @@ trait LicenceControllerTrait
                 $sectionKey = 'operating_centres.lgv';
             }
 
-            $sections[$sectionKey] = array('route' => 'lva-licence/' . $section);
+            $sections[$sectionKey] = ['route' => 'lva-licence/' . $section];
         }
 
         return $sections;

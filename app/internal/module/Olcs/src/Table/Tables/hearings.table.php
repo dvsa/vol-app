@@ -3,35 +3,35 @@
 use Common\Service\Table\Formatter\Date;
 use Olcs\Module;
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'titleSingular' => 'Hearing',
         'title' => 'Hearings'
-    ),
-    'settings' => array(
-        'crud' => array(
+    ],
+    'settings' => [
+        'crud' => [
             'formName' => 'conviction',
-            'actions' => array(
-                'addHearing' => array('class' => 'govuk-button', 'value' => 'Add Hearing'),
-                'editHearing' => array('requireRows' => true, 'value' => 'Edit Hearing')
-            )
-        ),
-        'paginate' => array(
-            'limit' => array(
+            'actions' => [
+                'addHearing' => ['class' => 'govuk-button', 'value' => 'Add Hearing'],
+                'editHearing' => ['requireRows' => true, 'value' => 'Edit Hearing']
+            ]
+        ],
+        'paginate' => [
+            'limit' => [
                 'default' => 10,
-                'options' => array(10, 25, 50)
-            )
-        )
-    ),
-    'attributes' => array(
-    ),
-    'columns' => array(
-        array(
+                'options' => [10, 25, 50]
+            ]
+        ]
+    ],
+    'attributes' => [
+    ],
+    'columns' => [
+        [
             'title' => '&nbsp;',
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}'
-        ),
-        array(
+        ],
+        [
             'title' => 'Hearing Date',
             'formatter' => function ($data, $column) {
 
@@ -41,20 +41,18 @@ return array(
                 return '<a class="govuk-link" href="' . $url . '">' . date(Module::$dateFormat, strtotime($data['hearingDate'])) . '</a>';
             },
             'name' => 'id'
-        ),
-        array(
+        ],
+        [
             'title' => 'Is Adjourned',
             'name' => 'isAdjourned'
-        ),
-        array(
+        ],
+        [
             'title' => 'Venue',
             'name' => 'venue'
-        ),
-        array(
+        ],
+        [
             'title' => 'Presiding TC',
-            'formatter' => function ($data) {
-                return $data['presidingTc']['name'];
-            }
-        ),
-    )
-);
+            'formatter' => fn($data) => $data['presidingTc']['name']
+        ],
+    ]
+];

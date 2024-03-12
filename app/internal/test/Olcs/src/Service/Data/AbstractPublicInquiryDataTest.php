@@ -11,8 +11,8 @@ use Olcs\Service\Data\AbstractPublicInquiryData;
  */
 class AbstractPublicInquiryDataTest extends MockeryTestCase
 {
-    const LIC_ID = 9999;
-    const APP_ID = 8888;
+    public const LIC_ID = 9999;
+    public const APP_ID = 8888;
 
     /** @var  m\MockInterface | AbstractPublicInquiryData */
     private $sut;

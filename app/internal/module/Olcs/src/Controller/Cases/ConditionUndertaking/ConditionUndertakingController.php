@@ -141,9 +141,9 @@ class ConditionUndertakingController extends AbstractInternalController implemen
      *
      * @var array
      */
-    protected $inlineScripts = array(
+    protected $inlineScripts = [
         'indexAction' => ['table-actions']
-    );
+    ];
 
     /**
      * Alter Form for add

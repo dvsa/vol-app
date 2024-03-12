@@ -3,24 +3,24 @@
 use Common\Service\Table\Formatter\SumColumns;
 use Common\Service\Table\Formatter\TmApplicationManagerType;
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'title' => 'transport-manager.responsibilities.table.applications'
-    ),
-    'settings' => array(
-        'crud' => array(
-            'actions' => array(
-                'add' => array('label' => 'Add', 'class' => 'govuk-button'),
-            )
-        ),
-    ),
-    'columns' => array(
-        array(
+    ],
+    'settings' => [
+        'crud' => [
+            'actions' => [
+                'add' => ['label' => 'Add', 'class' => 'govuk-button'],
+            ]
+        ],
+    ],
+    'columns' => [
+        [
             'title' => 'Manager Type',
             'name' => 'tmType',
             'formatter' => TmApplicationManagerType::class
-        ),
-        array(
+        ],
+        [
             'title' => 'Application ID',
             'name' => 'application',
             'formatter' => function ($row) {
@@ -32,25 +32,23 @@ return array(
                     $row['application']['licence']['licNo'] . '/' . $row['application']['id'] .
                     '</a>';
             },
-        ),
-        array(
+        ],
+        [
             'title' => 'Operator name',
             'name' => 'operatorName',
-            'formatter' => function ($row) {
-                return $row['application']['licence']['organisation']['name'];
-            },
-        ),
-        array(
+            'formatter' => fn($row) => $row['application']['licence']['organisation']['name'],
+        ],
+        [
             'title' => 'Hours per week',
             'isNumeric' => true,
             'name' => 'hours',
             'formatter' => SumColumns::class,
             'columns' => ['hoursMon', 'hoursTue', 'hoursWed', 'hoursThu', 'hoursFri', 'hoursSat', 'hoursSun']
-        ),
-        array(
+        ],
+        [
             'title' => 'markup-table-th-remove', //this is a view partial from olcs-common
             'type' => 'ActionLinks',
             'deleteInputName' => 'table[action][delete-tm-application][%d]'
-        ),
-    )
-);
+        ],
+    ]
+];

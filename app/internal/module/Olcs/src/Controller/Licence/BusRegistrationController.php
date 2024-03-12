@@ -46,9 +46,9 @@ class BusRegistrationController extends AbstractInternalController implements
      *
      * @var array
      */
-    protected $inlineScripts = array(
+    protected $inlineScripts = [
         'indexAction' => ['forms/filter', 'table-actions']
-    );
+    ];
 
     /**
      * Set left view

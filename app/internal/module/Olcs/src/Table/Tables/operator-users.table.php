@@ -26,23 +26,17 @@ return [
         ],
         [
             'title' => 'First name',
-            'formatter' => function ($row) {
-                return Escape::html($row['contactDetails']['person']['forename']);
-            }
+            'formatter' => fn($row) => Escape::html($row['contactDetails']['person']['forename'])
 
         ],
         [
             'title' => 'Last name',
-            'formatter' => function ($row) {
-                return Escape::html($row['contactDetails']['person']['familyName']);
-            }
+            'formatter' => fn($row) => Escape::html($row['contactDetails']['person']['familyName'])
         ],
         [
             'title' => 'Role',
             'name' => 'role',
-            'formatter' => function ($row) {
-                return empty($row['roles']) ? 'N/A' : Escape::html($row['roles'][0]['description']);
-            }
+            'formatter' => fn($row) => empty($row['roles']) ? 'N/A' : Escape::html($row['roles'][0]['description'])
         ]
     ]
 ];

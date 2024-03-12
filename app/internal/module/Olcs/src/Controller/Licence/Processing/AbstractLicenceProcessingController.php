@@ -30,7 +30,7 @@ abstract class AbstractLicenceProcessingController extends LicenceController imp
 {
     use ProcessingControllerTrait;
 
-    protected $helperClass = '\Olcs\Helper\LicenceProcessingHelper';
+    protected $helperClass = \Olcs\Helper\LicenceProcessingHelper::class;
 
     protected SubCategory $subCategoryDataService;
     protected TreeRouteStack $router;

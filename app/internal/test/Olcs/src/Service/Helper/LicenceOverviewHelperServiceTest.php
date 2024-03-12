@@ -45,9 +45,9 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
         $this->urlHelperService->shouldReceive('fromRoute')
             ->with(
                 'licence/grace-periods',
-                array(
+                [
                     'licence' => $licenceData['id'],
-                )
+                ]
             )
             ->andReturn('GRACE_PERIOD_URL')
             ->shouldReceive('fromRoute')

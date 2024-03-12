@@ -86,11 +86,11 @@ class OppositionController extends AbstractInternalController implements CaseCon
      *
      * @var array
      */
-    protected $inlineScripts = array(
+    protected $inlineScripts = [
         'indexAction' => ['table-actions'],
         'addAction' => ['forms/opposition'],
         'editAction' => ['forms/opposition'],
-    );
+    ];
 
     /**
      * index Action

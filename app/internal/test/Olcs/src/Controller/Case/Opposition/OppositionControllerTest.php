@@ -56,7 +56,7 @@ class OppositionControllerTest extends MockeryTestCase
             'oorDate' => '2015-02-01'
         ];
 
-        $sut = m::mock('Olcs\Controller\Cases\Opposition\OppositionController')
+        $sut = m::mock(\Olcs\Controller\Cases\Opposition\OppositionController::class)
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
 

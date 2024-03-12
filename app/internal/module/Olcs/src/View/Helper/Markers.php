@@ -21,7 +21,7 @@ class Markers extends AbstractHelper
             $markup = '<div class="notice-container">';
             foreach ($markers[$markerType] as $marker) {
                 // style should be one of 'success'|'warning'|'info'|'danger', default is 'warning'
-                $type = isset($marker['style']) ? $marker['style'] : 'warning';
+                $type = $marker['style'] ?? 'warning';
                 $markup .= '<p class="notice--'.$type.'">';
                 $content = $this->insertPlaceholders($marker);
 

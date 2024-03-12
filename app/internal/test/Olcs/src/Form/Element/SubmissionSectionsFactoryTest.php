@@ -29,11 +29,11 @@ class SubmissionSectionsFactoryTest extends MockeryTestCase
             ]
         ];
 
-        $mockCaseService = m::mock('Olcs\Service\Data\Cases');
+        $mockCaseService = m::mock(\Olcs\Service\Data\Cases::class);
         $mockCaseService->shouldReceive('fetchData')->with($caseId)
             ->andReturn($caseData);
 
-        $mockFormElementManager = m::mock('\Laminas\Form\FormElementManager');
+        $mockFormElementManager = m::mock(\Laminas\Form\FormElementManager::class);
 
         $mockServiceLocator = m::mock(ContainerInterface::class);
 
@@ -43,20 +43,20 @@ class SubmissionSectionsFactoryTest extends MockeryTestCase
             ->andReturnSelf();
         $mockServiceLocator->shouldReceive('get')->with('DataServiceManager')
             ->andReturnSelf();
-        $mockServiceLocator->shouldReceive('get')->with('Olcs\Service\Data\Cases')
+        $mockServiceLocator->shouldReceive('get')->with(\Olcs\Service\Data\Cases::class)
             ->andReturn($mockCaseService);
         $mockServiceLocator->shouldReceive('get')->with('params')
             ->andReturn($mockParamsPlugin);
 
-        $mockHiddenElement = m::mock('Laminas\Form\Element\Hidden');
+        $mockHiddenElement = m::mock(\Laminas\Form\Element\Hidden::class);
         $mockServiceLocator->shouldReceive('get')->with('Hidden')
             ->andReturn($mockHiddenElement);
         $mockHiddenElement->shouldReceive('setValue')->with($transportManagerId);
-        $mockDynamicSelectElement = m::mock('\Common\Form\Element\DynamicSelect');
+        $mockDynamicSelectElement = m::mock(\Common\Form\Element\DynamicSelect::class);
         $mockDynamicSelectElement->shouldReceive('setOptions')->with(m::type('array'));
-        $mockSubmitElement = m::mock('Laminas\Form\Element\Submit');
+        $mockSubmitElement = m::mock(\Laminas\Form\Element\Submit::class);
         $mockSubmitElement->shouldReceive('setOptions')->with(m::type('array'));
-        $mockDynamicMultiCheckboxElement = m::mock('\Common\Form\Element\DynamicMultiCheckbox');
+        $mockDynamicMultiCheckboxElement = m::mock(\Common\Form\Element\DynamicMultiCheckbox::class);
         $mockDynamicMultiCheckboxElement->shouldReceive('setOptions')->with(m::type('array'));
 
         $mockFormElementManager->shouldReceive('get')->with('Hidden')->andReturn($mockHiddenElement);

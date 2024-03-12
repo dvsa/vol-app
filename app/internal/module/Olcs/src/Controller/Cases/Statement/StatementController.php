@@ -104,9 +104,9 @@ class StatementController extends AbstractInternalController implements CaseCont
      *
      * @var array
      */
-    protected $inlineScripts = array(
+    protected $inlineScripts = [
         'indexAction' => ['table-actions']
-    );
+    ];
 
     protected $crudConfig = [
         'generate' => ['requireRows' => true],

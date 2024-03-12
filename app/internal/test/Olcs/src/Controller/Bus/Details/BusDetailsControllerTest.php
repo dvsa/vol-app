@@ -119,7 +119,7 @@ class BusDetailsControllerTest extends MockeryTestCase
             ->once()
             ->andReturn($params);
 
-        $mockForm = m::mock('\Laminas\Form\Form');
+        $mockForm = m::mock(\Laminas\Form\Form::class);
         $mockForm->shouldReceive('setOption')
             ->times($readonly ? 1 : 0)
             ->with('readonly', true);

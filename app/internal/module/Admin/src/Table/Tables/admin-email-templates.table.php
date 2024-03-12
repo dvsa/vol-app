@@ -29,9 +29,7 @@ return [
         [
             'title' => 'Language',
             'name' => 'language',
-            'formatter' => function ($row) {
-                return $row['locale'] === 'en_GB' ? 'English' : 'Welsh';
-            },
+            'formatter' => fn($row) => $row['locale'] === 'en_GB' ? 'English' : 'Welsh',
         ],
         [
             'title' => 'Format',

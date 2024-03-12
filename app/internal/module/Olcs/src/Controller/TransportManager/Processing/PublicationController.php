@@ -32,7 +32,7 @@ class PublicationController extends AbstractInternalController implements
     protected $addContentTitle = 'Add publication';
     protected $editContentTitle = 'Edit publication';
 
-    protected $inlineScripts = array('indexAction' => ['table-actions']);
+    protected $inlineScripts = ['indexAction' => ['table-actions']];
 
     public function getLeftView()
     {

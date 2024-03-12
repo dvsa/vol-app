@@ -11,7 +11,7 @@ use Laminas\Form\FormInterface;
  */
 class SystemInfoMessageTest extends MockeryTestCase
 {
-    const ID = 9999;
+    public const ID = 9999;
 
     public function testMapFromResult()
     {

@@ -22,9 +22,9 @@ class SubmissionSectionOverviewTest extends TestCase
     {
         $sut = new SubmissionSectionOverview();
 
-        $mockView = m::mock('\Laminas\View\Renderer\PhpRenderer');
+        $mockView = m::mock(\Laminas\View\Renderer\PhpRenderer::class);
 
-        $mockViewHelper = m::mock('Olcs\View\Helper\SubmissionSectionOverview');
+        $mockViewHelper = m::mock(\Olcs\View\Helper\SubmissionSectionOverview::class);
 
         $mockViewHelper->shouldReceive('__invoke');
         $mockView->shouldReceive('plugin')->andReturn($mockViewHelper);
@@ -50,7 +50,7 @@ class SubmissionSectionOverviewTest extends TestCase
     {
         $sut = new SubmissionSectionOverview();
 
-        $mockView = m::mock('\Laminas\View\Renderer\RendererInterface');
+        $mockView = m::mock(\Laminas\View\Renderer\RendererInterface::class);
 
         $mockView->shouldReceive('render');
 

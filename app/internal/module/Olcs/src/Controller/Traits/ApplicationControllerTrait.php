@@ -66,12 +66,12 @@ trait ApplicationControllerTrait
     {
         $data = $this->getApplication($this->params('application'));
 
-        return array(
+        return [
             'applicationId' => $data['id'],
             'licNo' => $data['licence']['licNo'],
             'licenceId' => $data['licence']['id'],
             'companyName' => $data['licence']['organisation']['name']
-        );
+        ];
     }
 
     /**
@@ -97,7 +97,7 @@ trait ApplicationControllerTrait
      * @param  array $variables
      * @return \Laminas\View\Model\ViewModel
      */
-    protected function getViewWithApplication($variables = array())
+    protected function getViewWithApplication($variables = [])
     {
         $application = $this->getApplication();
         $goodsOrPsv = $application['licence']['goodsOrPsv']['id'] ?? null;

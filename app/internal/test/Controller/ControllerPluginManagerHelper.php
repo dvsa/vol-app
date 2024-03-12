@@ -27,7 +27,7 @@ class ControllerPluginManagerHelper
      */
     public function getMockPluginManager($plugins)
     {
-        $mockPluginManager = m::mock('Laminas\Mvc\Controller\PluginManager');
+        $mockPluginManager = m::mock(\Laminas\Mvc\Controller\PluginManager::class);
         $mockPluginManager->shouldReceive('setController');
 
         foreach ($plugins as $name => $class) {

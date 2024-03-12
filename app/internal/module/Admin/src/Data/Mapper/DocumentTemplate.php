@@ -12,7 +12,7 @@ use Laminas\Form\FormInterface;
  */
 class DocumentTemplate implements MapperInterface
 {
-    const TEMPLATE_PATH_PREFIXES = [
+    public const TEMPLATE_PATH_PREFIXES = [
         'templates' => 'root',
         'templates/NI' => 'ni',
         'templates/GB' => 'gb',

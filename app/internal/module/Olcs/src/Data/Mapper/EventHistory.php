@@ -32,7 +32,7 @@ class EventHistory
             $data['user']['contactDetails']['person']['familyName'] : $data['user']['loginId'];
 
         //  prepare details
-        $details = isset($data['eventHistoryDetails']) ? $data['eventHistoryDetails'] : [];
+        $details = $data['eventHistoryDetails'] ?? [];
 
         $dateFields = ['open_date', 'closed_date', 'deleted_date'];
         array_walk(

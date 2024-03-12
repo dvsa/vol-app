@@ -23,7 +23,7 @@ trait LicenceControllerTrait
      * @param  array $variables
      * @return \Laminas\View\Model\ViewModel
      */
-    protected function getViewWithLicence($variables = array())
+    protected function getViewWithLicence($variables = [])
     {
         $licence = $this->getLicence();
         if ($licence['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {

@@ -13,9 +13,9 @@ use Dvsa\Olcs\Transfer\Query as TransferQry;
  */
 class Category extends AbstractListDataService
 {
-    const TYPE_IS_SCAN = 1;
-    const TYPE_IS_DOC = 2;
-    const TYPE_IS_TASK = 3;
+    public const TYPE_IS_SCAN = 1;
+    public const TYPE_IS_DOC = 2;
+    public const TYPE_IS_TASK = 3;
 
     protected static $sort = 'description';
     protected static $order = 'ASC';
@@ -62,7 +62,7 @@ class Category extends AbstractListDataService
 
         $result = $response->getResult();
 
-        $this->setData('categories', (isset($result['results']) ? $result['results'] : null));
+        $this->setData('categories', ($result['results'] ?? null));
 
         return $this->getData('categories');
     }

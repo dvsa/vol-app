@@ -24,15 +24,15 @@ class SubmissionSectionMultipleTablesTest extends TestCase
     {
         $sut = new SubmissionSectionMultipleTables();
 
-        $translatorMock = m::mock('\Laminas\I18n\Translator\Translator');
+        $translatorMock = m::mock(\Laminas\I18n\Translator\Translator::class);
         $translatorMock->shouldReceive('translate')->with(m::type('string'))->andReturn('foo');
 
         $sut->setTranslator($translatorMock);
 
-        $mockView = m::mock('\Laminas\View\Renderer\PhpRenderer');
+        $mockView = m::mock(\Laminas\View\Renderer\PhpRenderer::class);
 
-        $mockViewHelper = m::mock('Olcs\View\Helper\SubmissionSectionMultipleTables');
-        $mockTableHelper = m::mock('Olcs\View\Helper\SubmissionSectionTable');
+        $mockViewHelper = m::mock(\Olcs\View\Helper\SubmissionSectionMultipleTables::class);
+        $mockTableHelper = m::mock(\Olcs\View\Helper\SubmissionSectionTable::class);
         $mockTableHelper->shouldReceive('__invoke')->andReturn('<table></table>');
 
         $mockViewHelper->shouldReceive('__invoke');

@@ -47,7 +47,7 @@ class TmQualification
 
     public static function mapFromDocumentsResult(array $data)
     {
-        return isset($data['result']) ? $data['result'] : [];
+        return $data['result'] ?? [];
     }
 
     public static function mapFromResult(array $data)

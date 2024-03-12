@@ -274,7 +274,7 @@ trait FeesActionTrait
             'vatInfo' => $fee['vatInfo'],
             'created' => $fee['invoicedDate'],
             'outstanding' => $fee['outstanding'],
-            'status' => isset($fee['feeStatus']['description']) ? $fee['feeStatus']['description'] : '',
+            'status' => $fee['feeStatus']['description'] ?? '',
             'fee' => $fee
         ];
 
@@ -538,7 +538,7 @@ trait FeesActionTrait
                 }
 
                 $formData = $form->getData();
-                $address = isset($formData['address']) ? $formData['address'] : null;
+                $address = $formData['address'] ?? null;
                 return $this->initiatePaymentRequest(
                     $feeIds,
                     $formData['details'],
@@ -609,7 +609,7 @@ trait FeesActionTrait
             }
         }
 
-        $view = new ViewModel(array('form' => $form));
+        $view = new ViewModel(['form' => $form]);
         $view->setTemplate('pages/form');
 
         $this->placeholder()->setPlaceholder('contentTitle', 'fees.refund.title');
@@ -729,7 +729,7 @@ trait FeesActionTrait
         );
         $form->get('messages')->get('message')->setValue($message);
 
-        $view = new ViewModel(array('form' => $form));
+        $view = new ViewModel(['form' => $form]);
         $view->setTemplate('pages/form');
 
         $this->placeholder()->setPlaceholder('contentTitle', 'fees.reverse-transaction.title');
@@ -920,11 +920,8 @@ trait FeesActionTrait
     protected function fetchFeeTypeValueOptions($effectiveDate = null, $currentFeeType = null)
     {
         $data = $this->fetchFeeTypeListData($effectiveDate, $currentFeeType);
-        if (isset($data['extra']['valueOptions']['feeType'])) {
-            return $data['extra']['valueOptions']['feeType'];
-        }
 
-        return [];
+        return $data['extra']['valueOptions']['feeType'] ?? [];
     }
 
     /**
@@ -1442,12 +1439,10 @@ trait FeesActionTrait
 
         // map to format that the JS expects :-/
         $feeTypes = array_map(
-            function ($id, $description) {
-                return array(
-                    'value' => $id,
-                    'label'  => $description,
-                );
-            },
+            fn($id, $description) => [
+                'value' => $id,
+                'label'  => $description,
+            ],
             array_keys($valueOptions),
             $valueOptions
         );

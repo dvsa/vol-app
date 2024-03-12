@@ -12,7 +12,7 @@ use Laminas\Form\FormInterface;
  */
 class IrhpPermitWindow implements MapperInterface
 {
-    const PERMIT_WINDOW_DETAILS = 'permitWindowDetails';
+    public const PERMIT_WINDOW_DETAILS = 'permitWindowDetails';
 
     /**
      * Should map data from a result array into an array suitable for a form
@@ -24,7 +24,7 @@ class IrhpPermitWindow implements MapperInterface
     public static function mapFromResult(array $data): array
     {
         $mappedData[self::PERMIT_WINDOW_DETAILS] = $data;
-        $mappedData[self::PERMIT_WINDOW_DETAILS]['stockId'] = isset($data['stockId']) ? $data['stockId'] : $data['irhpPermitStock']['id'];
+        $mappedData[self::PERMIT_WINDOW_DETAILS]['stockId'] = $data['stockId'] ?? $data['irhpPermitStock']['id'];
         return $mappedData;
     }
 

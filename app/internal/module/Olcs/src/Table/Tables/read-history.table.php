@@ -3,30 +3,30 @@
 use Common\Service\Table\Formatter\Date;
 use Common\Service\Table\Formatter\StackValueReplacer;
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'title' => 'Access history'
-    ),
-    'settings' => array(
-        'paginate' => array(
-            'limit' => array(
+    ],
+    'settings' => [
+        'paginate' => [
+            'limit' => [
                 'default' => 25,
-                'options' => array(10, 25, 50)
-            )
-        )
-    ),
-    'attributes' => array(
-    ),
-    'columns' => array(
-        array(
+                'options' => [10, 25, 50]
+            ]
+        ]
+    ],
+    'attributes' => [
+    ],
+    'columns' => [
+        [
             'title' => 'Date',
             'name' => 'createdOn',
             'formatter' => Date::class
-        ),
-        array(
+        ],
+        [
             'title' => 'User',
             'formatter' => StackValueReplacer::class,
             'stringFormat' => '{user->contactDetails->person->forename} {user->contactDetails->person->familyName}'
-        )
-    )
-);
+        ]
+    ]
+];

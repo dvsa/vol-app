@@ -20,76 +20,76 @@ class UnlicensedOperatorBusinessDetailsTest extends TestCase
 {
     public function testMapFromResult()
     {
-        $input = array (
+        $input =  [
             'id' => 121,
             'version' => 1,
             'isUnlicensed' => true,
             'name' => 'Dan Ltd v3',
-            'licences' => array (
-                0 => array (
-                    'correspondenceCd' => array (
-                        'address' => array (
+            'licences' =>  [
+                0 =>  [
+                    'correspondenceCd' =>  [
+                        'address' =>  [
                             'addressLine1' => '386 Harehills Lane',
                             'addressLine2' => 'Harehills',
                             'addressLine3' => '',
                             'addressLine4' => '',
                             'adminArea' => null,
-                            'countryCode' => array (
+                            'countryCode' =>  [
                                 'countryDesc' => 'United Kingdom',
                                 'id' => 'GB',
-                                ),
+                                ],
                             'id' => 137,
                             'postcode' => 'LS9 6NF',
                             'town' => 'Leeds',
                             'version' => 1,
-                            ),
+                            ],
                         'emailAddress' => 'foo@bar.com',
                         'id' => 160,
                         'version' => 2,
-                        'phoneContacts' => array (
-                            0 => array (
+                        'phoneContacts' =>  [
+                            0 =>  [
                                 'id' => 38,
-                                'phoneContactType' => array (
+                                'phoneContactType' =>  [
                                     'description' => 'Business',
                                     'id' => 'phone_t_primary',
-                                ),
+                                ],
                                 'phoneNumber' => '11111',
                                 'version' => 1,
-                            ),
-                            1 => array (
+                            ],
+                            1 =>  [
                                 'id' => 39,
-                                'phoneContactType' => array (
+                                'phoneContactType' =>  [
                                     'description' => 'Home',
                                     'id' => 'phone_t_secondary',
-                                ),
+                                ],
                                 'phoneNumber' => '22222',
                                 'version' => 2,
-                            ),
-                        ),
-                    ),
-                    'goodsOrPsv' => array (
+                            ],
+                        ],
+                    ],
+                    'goodsOrPsv' =>  [
                         'description' => 'Public Service Vehicle',
                         'id' => 'lcat_psv',
-                    ),
+                    ],
                     'id' => 716,
                     'licNo' => null,
                     'licenceType' => null,
                     'niFlag' => 'N',
                     'status' => null,
-                    'trafficArea' => array (
+                    'trafficArea' =>  [
                         'id' => 'G',
                         'name' => 'Wales',
                         'version' => 1,
-                    ),
+                    ],
                     'version' => 1,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $output = Sut::mapFromResult($input);
 
-        $expected = array (
-            'operator-details' => array (
+        $expected =  [
+            'operator-details' =>  [
                 'id' => 121,
                 'version' => 1,
                 'name' => 'Dan Ltd v3',
@@ -97,23 +97,23 @@ class UnlicensedOperatorBusinessDetailsTest extends TestCase
                 'contactDetailsId' => 160,
                 'contactDetailsVersion' => 2,
                 'trafficArea' => 'G',
-            ),
-            'correspondenceAddress' => array (
+            ],
+            'correspondenceAddress' =>  [
                 'addressLine1' => '386 Harehills Lane',
                 'addressLine2' => 'Harehills',
                 'addressLine3' => '',
                 'addressLine4' => '',
                 'adminArea' => null,
-                'countryCode' => array (
+                'countryCode' =>  [
                     'countryDesc' => 'United Kingdom',
                     'id' => 'GB',
-                ),
+                ],
                 'id' => 137,
                 'postcode' => 'LS9 6NF',
                 'town' => 'Leeds',
                 'version' => 1,
-            ),
-            'contact' => array (
+            ],
+            'contact' =>  [
                 'phone_primary' => '11111',
                 'phone_primary_id' => 38,
                 'phone_primary_version' => 1,
@@ -121,16 +121,16 @@ class UnlicensedOperatorBusinessDetailsTest extends TestCase
                 'phone_secondary_id' => 39,
                 'phone_secondary_version' => 2,
                 'email' => 'foo@bar.com',
-                ),
-            );
+                ],
+            ];
 
         $this->assertEquals($expected, $output);
     }
 
     public function testMapFromForm()
     {
-        $input = array (
-            'operator-details' => array (
+        $input =  [
+            'operator-details' =>  [
                 'name' => 'Dan Ltd v3',
                 'id' => '121',
                 'version' => '1',
@@ -138,8 +138,8 @@ class UnlicensedOperatorBusinessDetailsTest extends TestCase
                 'trafficArea' => 'G',
                 'contactDetailsId' => '160',
                 'contactDetailsVersion' => '2',
-            ),
-            'correspondenceAddress' => array (
+            ],
+            'correspondenceAddress' =>  [
                 'addressLine1' => '15 Allerton Grange Vale',
                 'addressLine2' => '',
                 'addressLine3' => '',
@@ -148,8 +148,8 @@ class UnlicensedOperatorBusinessDetailsTest extends TestCase
                 'postcode' => 'LS17 6LS',
                 'id' => '137',
                 'version' => '1',
-            ),
-            'contact' => array (
+            ],
+            'contact' =>  [
                 'phone_primary' => '012345',
                 'phone_primary_id' => '38',
                 'phone_primary_version' => '1',
@@ -157,22 +157,22 @@ class UnlicensedOperatorBusinessDetailsTest extends TestCase
                 'phone_secondary_id' => '39',
                 'phone_secondary_version' => '2',
                 'email' => 'foo@bar.com',
-            ),
+            ],
             'isExempt' => false
-        );
+        ];
 
         $output = Sut::mapFromForm($input);
 
-        $expected = array (
+        $expected =  [
             'name' => 'Dan Ltd v3',
             'operatorType' => 'lcat_psv',
             'id' => '121',
             'version' => '1',
             'trafficArea' => 'G',
-            'contactDetails' => array (
+            'contactDetails' =>  [
                 'id' => '160',
                 'version' => '2',
-                'address' => array (
+                'address' =>  [
                     'addressLine1' => '15 Allerton Grange Vale',
                     'addressLine2' => '',
                     'addressLine3' => '',
@@ -181,25 +181,25 @@ class UnlicensedOperatorBusinessDetailsTest extends TestCase
                     'postcode' => 'LS17 6LS',
                     'id' => '137',
                     'version' => '1',
-                ),
-                'phoneContacts' => array(
-                    array(
+                ],
+                'phoneContacts' => [
+                    [
                         'id' => '38',
                         'version' => '1',
                         'phoneNumber' => '012345',
                         'phoneContactType' => 'phone_t_primary',
-                    ),
-                    array(
+                    ],
+                    [
                         'id' => '39',
                         'version' => '2',
                         'phoneNumber' => '123456',
                         'phoneContactType' => 'phone_t_secondary',
-                    ),
-                ),
+                    ],
+                ],
                 'emailAddress' => 'foo@bar.com',
-            ),
+            ],
             'isExempt' => false
-        );
+        ];
 
         $this->assertEquals($expected, $output);
     }

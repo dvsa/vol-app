@@ -18,7 +18,7 @@ class SubmissionActionTypes extends AbstractDataService implements ListDataInter
     /**
      * Ref data category ID for submission action types
      */
-    const EBSR_REF_DATA_CATEGORY_ID = 'sub_st_rec';
+    public const EBSR_REF_DATA_CATEGORY_ID = 'sub_st_rec';
 
     /** @var RefData */
     protected $refDataService;

@@ -2,89 +2,81 @@
 
 use Common\Service\Table\Formatter\Date;
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'title' => 'IRFO PSV Authorisations'
-    ),
-    'settings' => array(
-        'crud' => array(
-            'actions' => array(
-                'renew' => array(
+    ],
+    'settings' => [
+        'crud' => [
+            'actions' => [
+                'renew' => [
                     'label' => 'Set to renew',
                     'class' => 'govuk-button js-require--multiple',
                     'requireRows' => true
-                ),
-                'print' => array(
+                ],
+                'print' => [
                     'label' => 'Print checklist',
                     'class' => 'govuk-button govuk-button--secondary js-require--multiple',
                     'requireRows' => true
-                )
-            )
-        ),
-        'paginate' => array(
-            'limit' => array(
+                ]
+            ]
+        ],
+        'paginate' => [
+            'limit' => [
                 'default' => 25,
-                'options' => array(10, 25, 50)
-            )
-        )
-    ),
-    'attributes' => array(
-    ),
-    'columns' => array(
-        array(
+                'options' => [10, 25, 50]
+            ]
+        ]
+    ],
+    'attributes' => [
+    ],
+    'columns' => [
+        [
             'title' => 'Auth Id',
             'isNumeric' => true,
-            'formatter' => function ($data) {
-                return sprintf(
-                    '<a href="%s" class="govuk-link js-modal-ajax">%s</a>',
-                    $this->generateUrl(
-                        array('action' => 'edit', 'id' => $data['id'], 'organisation' => $data['organisation']['id']),
-                        'operator/irfo/psv-authorisations',
-                        false
-                    ),
-                    $data['id']
-                );
-            }
-        ),
-        array(
+            'formatter' => fn($data) => sprintf(
+                '<a href="%s" class="govuk-link js-modal-ajax">%s</a>',
+                $this->generateUrl(
+                    ['action' => 'edit', 'id' => $data['id'], 'organisation' => $data['organisation']['id']],
+                    'operator/irfo/psv-authorisations',
+                    false
+                ),
+                $data['id']
+            )
+        ],
+        [
             'title' => 'Operator',
-            'formatter' => function ($data) {
-                return sprintf(
-                    '<a href="%s" class="govuk-link js-modal-ajax">%s</a>',
-                    $this->generateUrl(
-                        array('action' => 'edit', 'organisation' => $data['organisation']['id']),
-                        'operator/irfo/details',
-                        false
-                    ),
-                    $data['organisation']['name']
-                );
-            }
-        ),
-        array(
+            'formatter' => fn($data) => sprintf(
+                '<a href="%s" class="govuk-link js-modal-ajax">%s</a>',
+                $this->generateUrl(
+                    ['action' => 'edit', 'organisation' => $data['organisation']['id']],
+                    'operator/irfo/details',
+                    false
+                ),
+                $data['organisation']['name']
+            )
+        ],
+        [
             'title' => 'In force date',
             'name' => 'inForceDate',
             'formatter' => Date::class
-        ),
-        array(
+        ],
+        [
             'title' => 'Expiry date',
             'name' => 'expiryDate',
             'formatter' => Date::class
-        ),
-        array(
+        ],
+        [
             'title' => 'Status',
-            'formatter' => function ($data) {
-                return $data['status']['description'];
-            }
-        ),
-        array(
+            'formatter' => fn($data) => $data['status']['description']
+        ],
+        [
             'title' => 'Type',
-            'formatter' => function ($data) {
-                return $data['irfoPsvAuthType']['description'];
-            }
-        ),
-        array(
+            'formatter' => fn($data) => $data['irfoPsvAuthType']['description']
+        ],
+        [
             'type' => 'Checkbox',
             'width' => 'checkbox',
-        ),
-    )
-);
+        ],
+    ]
+];

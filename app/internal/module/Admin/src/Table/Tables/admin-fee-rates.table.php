@@ -35,9 +35,7 @@ return [
             'title' => 'Fee Type',
             'name' => 'feeType',
             'sort' => 'ftft.id',
-            'formatter' => function ($row, $column) {
-                return Escape::html($row['feeType']['id']);
-            }
+            'formatter' => fn($row, $column) => Escape::html($row['feeType']['id'])
         ],
         [
             'title' => 'Description',

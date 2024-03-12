@@ -97,10 +97,10 @@ class DocumentUploadController extends AbstractDocumentController
 
         $files = $this->getRequest()->getFiles()->toArray();
 
-        $file = (isset($files['details']['file']) ? $files['details']['file'] : null);
+        $file = ($files['details']['file'] ?? null);
 
         if ($file === null || $file['error'] !== UPLOAD_ERR_OK) {
-            $errNr = (isset($file['error']) ? $file['error'] : self::ERR_UPLOAD_DEF);
+            $errNr = ($file['error'] ?? self::ERR_UPLOAD_DEF);
 
             // add validation error message to element, with reason upload errored
             $form->get('details')->get('file')->setMessages([self::FILE_UPLOAD_ERR_PREFIX . $errNr]);
@@ -125,7 +125,7 @@ class DocumentUploadController extends AbstractDocumentController
             return null;
         }
 
-        $mimeType = (isset($file['type']) ? $file['type'] : null);
+        $mimeType = ($file['type'] ?? null);
 
         $data = array_merge(
             $data,

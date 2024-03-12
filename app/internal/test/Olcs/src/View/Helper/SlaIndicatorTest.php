@@ -12,9 +12,9 @@ use Olcs\View\Helper\SlaIndicator;
  */
 class SlaIndicatorTest extends \PHPUnit\Framework\TestCase
 {
-    const INACTIVE_HTML = '<span class="status grey">Inactive</span>';
-    const FAIL_HTML = '<span class="status red">Fail</span>';
-    const PASS_HTML = '<span class="status green">Pass</span>';
+    public const INACTIVE_HTML = '<span class="status grey">Inactive</span>';
+    public const FAIL_HTML = '<span class="status red">Fail</span>';
+    public const PASS_HTML = '<span class="status green">Pass</span>';
 
     /**
      * Tests the invoke method.
@@ -23,7 +23,7 @@ class SlaIndicatorTest extends \PHPUnit\Framework\TestCase
     {
         $sut = new SlaIndicator();
 
-        $this->assertInstanceOf('Olcs\View\Helper\SlaIndicator', $sut);
+        $this->assertInstanceOf(\Olcs\View\Helper\SlaIndicator::class, $sut);
         $this->assertSame($sut, $sut());
     }
 
@@ -104,7 +104,7 @@ class SlaIndicatorTest extends \PHPUnit\Framework\TestCase
 
     public function provideGenerateItemCases()
     {
-        foreach ($this->provideHasTargetBeenMetCases() as list($date, $target, $result)) {
+        foreach ($this->provideHasTargetBeenMetCases() as [$date, $target, $result]) {
             yield [
                 [
                     'date' => $date,

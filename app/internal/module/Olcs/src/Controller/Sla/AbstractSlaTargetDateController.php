@@ -79,9 +79,9 @@ abstract class AbstractSlaTargetDateController extends AbstractInternalControlle
      *
      * @var array
      */
-    protected $inlineScripts = array(
+    protected $inlineScripts = [
         'indexAction' => ['table-actions']
-    );
+    ];
 
     protected function getEntityType()
     {

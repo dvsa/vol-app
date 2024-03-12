@@ -77,14 +77,14 @@ class ContinuationController extends AbstractController
                 if ($this->isButtonPressed('submit')) {
                     $this->updateContinuation($continuationDetail, $form->getData());
                     $this->addSuccessMessage('update-continuation.saved');
-                    return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
+                    return $this->redirectToRouteAjax('licence', ['licence' => $licenceId]);
                 }
 
                 if ($this->isButtonPressed('continueLicence')) {
                     $this->updateContinuation($continuationDetail, $form->getData());
                     if ($this->continueLicence($continuationDetail['licence'], $form)) {
                         $this->addSuccessMessage('update-continuation.success');
-                        return $this->redirectToRouteAjax('licence', array('licence' => $licenceId));
+                        return $this->redirectToRouteAjax('licence', ['licence' => $licenceId]);
                     }
                 }
             }
@@ -238,7 +238,7 @@ class ContinuationController extends AbstractController
     protected function populateFormDefaultValues($form, $continuationDetail, $numNotCeasedDiscs)
     {
         $licence = $continuationDetail['licence'];
-        $data = array(
+        $data = [
             'fields' => [
                 'received' => $continuationDetail['received'],
                 'checklistStatus' => $continuationDetail['status']['id'],
@@ -246,7 +246,7 @@ class ContinuationController extends AbstractController
                 'numberOfCommunityLicences' => $continuationDetail['totCommunityLicences'],
                 'numberOfDiscs' => $continuationDetail['totPsvDiscs'],
             ]
-        );
+        ];
         // if values not in continuationDetails then get from licence
         if ($data['fields']['totalVehicleAuthorisation'] == null) {
             $data['fields']['totalVehicleAuthorisation'] = $licence['totAuthVehicles'];

@@ -12,7 +12,7 @@ use CommonTest\Common\Service\Data\AbstractListDataServiceTestCase;
  */
 class DocumentSubCategoryTest extends AbstractListDataServiceTestCase
 {
-    const CAT_ID = 8001;
+    public const CAT_ID = 8001;
 
     /** @var DocumentSubCategory */
     private $sut;

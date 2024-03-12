@@ -4,34 +4,34 @@ use Common\Service\Table\Formatter\LicenceTypeShort;
 use Common\Service\Table\Formatter\StackValue;
 use Common\Service\Table\Formatter\StackValueReplacer;
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'title' => 'Continuations',
         'titleSingular' => 'Continuation',
-    ),
-    'settings' => array(
-        'crud' => array(
-            'actions' => array(
-                'generate-letters' => array(
+    ],
+    'settings' => [
+        'crud' => [
+            'actions' => [
+                'generate-letters' => [
                     'label' => 'Generate letters',
                     'class' => 'govuk-button js-require--multiple',
                     'requireRows' => true
-                ),
-                'export' => array(
+                ],
+                'export' => [
                     'label' => 'Export',
                     'class' => 'govuk-button govuk-button--secondary js-disable-crud js-require--multiple',
                     'requireRows' => true
-                ),
-            )
-        ),
-    ),
-    'columns' => array(
-        array(
+                ],
+            ]
+        ],
+    ],
+    'columns' => [
+        [
             'title' => 'Operator name',
             'stack' => ['licence', 'organisation', 'name'],
             'formatter' => StackValue::class
-        ),
-        array(
+        ],
+        [
             'title' => 'Licence',
             'stringFormat' => '<a class="govuk-link" href="[LINK]">{licence->licNo}</a> ({licence->status->description})',
             'formatter' => StackValueReplacer::class,
@@ -40,22 +40,20 @@ return array(
             'params' => [
                 'licence' => '{licence->id}'
             ]
-        ),
-        array(
+        ],
+        [
             'title' => 'Licence type',
             'formatter' => LicenceTypeShort::class
-        ),
-        array(
+        ],
+        [
             'title' => 'Method',
-            'formatter' => function ($data) {
-                return ($data['licence']['organisation']['allowEmail'] === 'Y' ? 'Email' : 'Post');
-            }
-        ),
-        array(
+            'formatter' => fn($data) => $data['licence']['organisation']['allowEmail'] === 'Y' ? 'Email' : 'Post'
+        ],
+        [
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'type' => 'Checkbox',
             'disableIfRowIsDisabled' => true,
-        )
-    )
-);
+        ]
+    ]
+];

@@ -429,10 +429,10 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
             ->shouldReceive('fromRoute')
             ->with(
                 'lva-application/change-of-entity',
-                array(
+                [
                     'application' => $application['id'],
                     'changeId' => $application['licence']['changeOfEntitys'][0]['id']
-                )
+                ]
             )
             ->andReturn('CHANGE_OF_ENTITY_URL');
 

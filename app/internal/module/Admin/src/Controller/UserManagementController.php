@@ -35,11 +35,11 @@ class UserManagementController extends AbstractInternalController implements Lef
      *
      * @var array
      */
-    protected $inlineScripts = array(
+    protected $inlineScripts = [
         'indexAction' => ['table-actions'],
         'addAction' => ['forms/user-type'],
         'editAction' => ['forms/user-type'],
-    );
+    ];
 
     protected $routeIdentifier = 'user';
 
@@ -269,7 +269,7 @@ class UserManagementController extends AbstractInternalController implements Lef
             $form->get('userType')
                 ->get('applicationTransportManagers')
                 ->get('application')
-                ->setMessages(array('Please enter a valid application number'));
+                ->setMessages(['Please enter a valid application number']);
         } else {
             $tmList = $this->fetchTmListOptionsByApplicationId($applicationId);
 
@@ -277,7 +277,7 @@ class UserManagementController extends AbstractInternalController implements Lef
                 $form->get('userType')
                     ->get('applicationTransportManagers')
                     ->get('application')
-                    ->setMessages(array('No transport managers found for application'));
+                    ->setMessages(['No transport managers found for application']);
             } else {
                 $form->get('userType')
                     ->get('transportManager')

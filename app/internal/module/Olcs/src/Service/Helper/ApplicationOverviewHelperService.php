@@ -73,7 +73,7 @@ class ApplicationOverviewHelperService
             'changeOfEntity'            => (
                 (boolean)$application['isVariation'] ?
                 null :
-                $this->getChangeOfEntity($application, $licence)
+                $this->getChangeOfEntity($application)
             ),
 
             'receivesMailElectronically' => (
@@ -166,22 +166,22 @@ class ApplicationOverviewHelperService
      */
     public function getChangeOfEntity($application)
     {
-        $args = array(
+        $args = [
             'application' => $application['id'],
-        );
+        ];
 
         $changeOfEntity = $application['licence']['changeOfEntitys'];
 
         if (!empty($changeOfEntity)) {
-            $text = array(
+            $text = [
                 'Yes', 'update details'
-            );
+            ];
 
             $args['changeId'] = $changeOfEntity[0]['id'];
         } else {
-            $text = array(
+            $text = [
                 'No', 'add details'
-            );
+            ];
         }
 
         $url = $this->urlHelperService->fromRoute('lva-application/change-of-entity', $args);

@@ -27,20 +27,20 @@ use Olcs\Form\Model\Form\Auth\LoginForm;
 
 class LoginController implements InjectApplicationEventInterface
 {
-    const FLASH_MESSAGE_NAMESPACE_INPUT = 'login-input';
-    const FLASH_MESSAGE_NAMESPACE_AUTH_ERROR = 'auth-error';
-    const TRANSLATION_KEY_SUFFIX_AUTH_INVALID_USERNAME_OR_PASSWORD = 'Authentication Failed';
-    const TRANSLATION_KEY_SUFFIX_AUTH_ACCOUNT_DISABLED = 'account-disabled';
+    public const FLASH_MESSAGE_NAMESPACE_INPUT = 'login-input';
+    public const FLASH_MESSAGE_NAMESPACE_AUTH_ERROR = 'auth-error';
+    public const TRANSLATION_KEY_SUFFIX_AUTH_INVALID_USERNAME_OR_PASSWORD = 'Authentication Failed';
+    public const TRANSLATION_KEY_SUFFIX_AUTH_ACCOUNT_DISABLED = 'account-disabled';
 
-    const AUTH_SUCCESS_WITH_CHALLENGE = 2;
-    const AUTH_FAILURE_ACCOUNT_DISABLED = -5;
+    public const AUTH_SUCCESS_WITH_CHALLENGE = 2;
+    public const AUTH_FAILURE_ACCOUNT_DISABLED = -5;
 
-    const ROUTE_AUTH_EXPIRED_PASSWORD = 'auth/expired-password';
-    const ROUTE_AUTH_LOGIN_GET = 'auth/login/GET';
-    const ROUTE_DASHBOARD = 'dashboard';
-    const DVSA_OLCS_AUTH_CLIENT_OPENAM = 'Dvsa\Olcs\Auth\Client\OpenAm';
-    const CHALLENGE_NEW_PASSWORD_REQUIRED = 'NEW_PASSWORD_REQUIRED';
-    const DVSA_OLCS_AUTH_CLIENT_COGNITO = 'Dvsa\Olcs\Auth\Client\CognitoAdapter';
+    public const ROUTE_AUTH_EXPIRED_PASSWORD = 'auth/expired-password';
+    public const ROUTE_AUTH_LOGIN_GET = 'auth/login/GET';
+    public const ROUTE_DASHBOARD = 'dashboard';
+    public const DVSA_OLCS_AUTH_CLIENT_OPENAM = 'Dvsa\Olcs\Auth\Client\OpenAm';
+    public const CHALLENGE_NEW_PASSWORD_REQUIRED = 'NEW_PASSWORD_REQUIRED';
+    public const DVSA_OLCS_AUTH_CLIENT_COGNITO = 'Dvsa\Olcs\Auth\Client\CognitoAdapter';
 
     /**
      * @var ValidatableAdapterInterface

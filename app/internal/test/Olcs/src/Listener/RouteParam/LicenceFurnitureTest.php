@@ -31,7 +31,7 @@ class LicenceFurnitureTest extends TestCase
 
     public function testAttach()
     {
-        $mockEventManager = m::mock('Laminas\EventManager\EventManagerInterface');
+        $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
         $mockEventManager->shouldReceive('attach')->once()
             ->with(RouteParams::EVENT_PARAM . 'licence', [$this->sut, 'onLicenceFurniture'], 1);
 

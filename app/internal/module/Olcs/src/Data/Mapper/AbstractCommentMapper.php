@@ -11,7 +11,7 @@ use Laminas\Form\FormInterface;
  */
 class AbstractCommentMapper implements MapperInterface
 {
-    const COMMENT_FIELD = ''; //needs to be constant as methods called statically
+    public const COMMENT_FIELD = ''; //needs to be constant as methods called statically
 
     /**
      * Should map data from a result array into an array suitable for a form

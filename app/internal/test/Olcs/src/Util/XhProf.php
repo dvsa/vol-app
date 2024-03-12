@@ -9,9 +9,9 @@ namespace OlcsTest\Util;
  */
 class XhProf implements \PHPUnit_Framework_TestListener
 {
-    protected $runs = array();
+    protected $runs = [];
 
-    protected $options = array();
+    protected $options = [];
 
     protected $suites = 0;
 
@@ -24,7 +24,7 @@ class XhProf implements \PHPUnit_Framework_TestListener
      *
      * @param array $options
      */
-    public function __construct(array $options = array())
+    public function __construct(array $options = [])
     {
         if (!isset($options['appNamespace'])) {
             throw new \InvalidArgumentException('The "appNamespace" option is not set.');

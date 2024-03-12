@@ -2,36 +2,36 @@
 
 use Common\Service\Table\Formatter\AddressLines;
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'id' => 'conditions',
         'action_route' => [
             'route' => 'submission_update_table',
             'params' => ['section' => 'conditions-and-undertakings', 'subSection' => 'conditions']
         ],
         'title' => 'Conditions'
-    ),
-    'settings' => array(
-        'crud' => array(
+    ],
+    'settings' => [
+        'crud' => [
             'formName' => 'conditions',
-            'actions' => array(
-                'refresh-table' => array('label' => 'Refresh table', 'class' => 'govuk-button govuk-button--secondary', 'requireRows' => false),
-                'delete-row' => array('label' => 'Delete row', 'class' => 'govuk-button govuk-button--secondary js-require--multiple', 'requireRows' => true)
-            ),
+            'actions' => [
+                'refresh-table' => ['label' => 'Refresh table', 'class' => 'govuk-button govuk-button--secondary', 'requireRows' => false],
+                'delete-row' => ['label' => 'Delete row', 'class' => 'govuk-button govuk-button--secondary js-require--multiple', 'requireRows' => true]
+            ],
             'action_field_name' => 'formAction'
-        ),
+        ],
         'submission_section' => 'display'
-    ),
-    'attributes' => array(
+    ],
+    'attributes' => [
         'name' => 'conditions'
-    ),
-    'columns' => array(
-        array(
+    ],
+    'columns' => [
+        [
             'title' => 'No.',
             'width' => '8%',
             'name' => 'id'
-        ),
-        array(
+        ],
+        [
             'title' => 'Added via',
             'width' => '8%',
             'formatter' => function ($data, $column) {
@@ -39,47 +39,43 @@ return array(
                     .$data['parentId'];
                 return $string;
             },
-        ),
-        array(
+        ],
+        [
             'title' => 'Fulfilled',
             'width' => '8%',
-            'formatter' => function ($data, $column) {
-                return $data['isFulfilled'] == 'Y' ? 'Yes' : 'No';
-            },
-        ),
-        array(
+            'formatter' => fn($data, $column) => $data['isFulfilled'] == 'Y' ? 'Yes' : 'No',
+        ],
+        [
             'title' => 'Status',
             'width' => '8%',
-            'formatter' => function ($data, $column) {
-                return $data['isDraft'] == 'Y' ? 'Draft' : 'Approved';
-            },
-        ),
-        array(
+            'formatter' => fn($data, $column) => $data['isDraft'] == 'Y' ? 'Draft' : 'Approved',
+        ],
+        [
             'title' => 'Attached to',
             'width' => '8%',
             'formatter' => function ($data, $column) {
                 $attachedTo = $data['attachedTo'] == 'Operating Centre' ? 'OC' : $data['attachedTo'];
                 return $this->translator->translate($attachedTo);
             }
-        ),
-        array(
+        ],
+        [
             'title' => 'OC Address',
             'width' => '20%',
             'formatter' => AddressLines::class,
             'name' => 'OcAddress'
-        ),
-        array(
+        ],
+        [
             'title' => 'Notes',
             'width' => '40%',
             'name' => 'notes',
             'formatter' => \Common\Service\Table\Formatter\Comment::class,
-        ),
-        array(
+        ],
+        [
             'type' => 'Checkbox',
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/checkbox]}}',
             'hideWhenDisabled' => true
-        ),
-    )
-);
+        ],
+    ]
+];

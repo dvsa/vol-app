@@ -13,7 +13,7 @@ use Olcs\Controller\Interfaces\LeftViewProvider;
 class PublishedPublicationController extends AbstractInternalController implements LeftViewProvider
 {
     protected $navigationId = 'admin-dashboard/admin-publication/published';
-    protected $inlineScripts = array('indexAction' => ['file-link']);
+    protected $inlineScripts = ['indexAction' => ['file-link']];
     protected $listDto = PublishedList::class;
     protected $tableName = 'admin-published-publication';
     protected $filterForm = PublishedPublicationFilter::class;

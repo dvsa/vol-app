@@ -27,11 +27,11 @@ class LicenceGoodsVehiclesTest extends MockeryTestCase
     public function setUp(): void
     {
         $this->sm = $this->createMock(ServiceLocatorInterface::class);
-        $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService');
+        $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
         $this->formHelper
             ->shouldReceive('getServiceLocator')
             ->andReturn($this->sm);
-        $this->formService = m::mock('\Common\FormService\FormServiceManager')->makePartial();
+        $this->formService = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
 
         $this->sut = new LicenceGoodsVehicles($this->formHelper, m::mock(AuthorizationService::class), $this->formService);
     }
@@ -39,12 +39,12 @@ class LicenceGoodsVehiclesTest extends MockeryTestCase
     public function testGetForm()
     {
         // Params
-        $mockTable = m::mock('\Common\Service\Table\TableBuilder');
+        $mockTable = m::mock(\Common\Service\Table\TableBuilder::class);
         $isCrudPressed = true;
 
         // Mocks
         $mockForm = m::mock();
-        $mockTableElement = m::mock('\Laminas\Form\Fieldset');
+        $mockTableElement = m::mock(\Laminas\Form\Fieldset::class);
         $mockValidator = m::mock();
 
         $this->sm->method('get')->with('oneRowInTablesRequired')->willReturn($mockValidator);

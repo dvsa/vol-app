@@ -102,7 +102,7 @@ class UserListInternal extends AbstractListDataService
 
         $result = $response->getResult();
 
-        $this->setData('userlist', (isset($result['results']) ? $result['results'] : null));
+        $this->setData('userlist', ($result['results'] ?? null));
 
         return $this->getData('userlist');
     }

@@ -30,15 +30,13 @@ return [
                 'options' => [10, 25, 50, 100]
             ],
         ],
-        'row-disabled-callback' => function ($row) {
-            return in_array(
-                $row['status']['id'],
-                [
-                    Common\RefData::IRHP_PERMIT_STATUS_AWAITING_PRINTING,
-                    Common\RefData::IRHP_PERMIT_STATUS_PRINTING,
-                ]
-            );
-        },
+        'row-disabled-callback' => fn($row) => in_array(
+            $row['status']['id'],
+            [
+                Common\RefData::IRHP_PERMIT_STATUS_AWAITING_PRINTING,
+                Common\RefData::IRHP_PERMIT_STATUS_PRINTING,
+            ]
+        ),
     ],
     'attributes' => [
     ],
@@ -74,16 +72,12 @@ return [
         [
             'title' => 'Type',
             'name' => 'type',
-            'formatter' => function ($row) {
-                return Escape::html($row['irhpPermitRange']['irhpPermitStock']['irhpPermitType']['name']['description']);
-            },
+            'formatter' => fn($row) => Escape::html($row['irhpPermitRange']['irhpPermitStock']['irhpPermitType']['name']['description']),
         ],
         [
             'title' => 'Minimum emission standard',
             'name' => 'emissionsCategory',
-            'formatter' => function ($row) {
-                return Escape::html($row['irhpPermitRange']['emissionsCategory']['description']);
-            },
+            'formatter' => fn($row) => Escape::html($row['irhpPermitRange']['emissionsCategory']['description']),
         ],
         [
             'title' => 'Issued date',
@@ -94,22 +88,18 @@ return [
         [
             'title' => 'Country',
             'name' => 'country',
-            'formatter' => function ($row) {
-                return Escape::html($row['irhpPermitRange']['irhpPermitStock']['country']['countryDesc']);
-            },
+            'formatter' => fn($row) => Escape::html($row['irhpPermitRange']['irhpPermitStock']['country']['countryDesc']),
         ],
         [
             'title' => 'Usage',
             'name' => 'usage',
-            'formatter' => function ($row) {
-                return $this->callFormatter(
-                    [
-                        'name' => 'irhpPermitRangeType',
-                        'formatter' => IrhpPermitRangeType::class,
-                    ],
-                    $row['irhpPermitRange']
-                );
-            }
+            'formatter' => fn($row) => $this->callFormatter(
+                [
+                    'name' => 'irhpPermitRangeType',
+                    'formatter' => IrhpPermitRangeType::class,
+                ],
+                $row['irhpPermitRange']
+            )
         ],
         [
             'title' => 'Status',

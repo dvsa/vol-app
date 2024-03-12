@@ -73,6 +73,6 @@ class ConditionsUndertakingsController extends Lva\AbstractConditionsUndertaking
      */
     protected function getRenderVariables()
     {
-        return array('title' => null);
+        return ['title' => null];
     }
 }

@@ -123,7 +123,7 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
         $placeholder = $this->getViewHelperManager()->get('placeholder');
         $placeholder->getContainer('transportManager')->set($data);
 
-        $latestNote = isset($data['latestNote']['comment']) ? $data['latestNote']['comment'] : '';
+        $latestNote = $data['latestNote']['comment'] ?? '';
         $placeholder->getContainer('note')->set($latestNote);
 
         //only show print form link for one controller and action
@@ -240,7 +240,7 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
         $this->setQueryService($container->get('QueryService'));
         $this->setViewHelperManager($container->get('ViewHelperManager'));
         $this->setSidebarNavigation($container->get('right-sidebar'));
-        $this->setAuthService($container->get('LmcRbacMvc\Service\AuthorizationService'));
+        $this->setAuthService($container->get(\LmcRbacMvc\Service\AuthorizationService::class));
         return $this;
     }
 }

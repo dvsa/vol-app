@@ -111,9 +111,8 @@ class ScanningController extends LaminasAbstractActionController
                             'categoryId' => $details['category'],
                             'subCategoryId' => $details['subCategory'],
                             'entityIdentifier' => $details['entityIdentifier'],
-                            'descriptionId' => (isset($details['description'])) ? $details['description'] : null,
-                            'description' => (isset($details['otherDescription'])) ?
-                                $details['otherDescription'] : null,
+                            'descriptionId' => $details['description'] ?? null,
+                            'description' => $details['otherDescription'] ?? null,
                             'dateReceived' => $dateReceived,
                         ]
                     )

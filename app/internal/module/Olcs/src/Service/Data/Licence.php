@@ -15,8 +15,8 @@ use Dvsa\Olcs\Transfer\Query\Licence\GetList as GetLicenceListQry;
  */
 class Licence extends AbstractDataService implements ListDataInterface
 {
-    const DEFAULT_ORDER = 'ASC';
-    const DEFAULT_SORT = 'licNo';
+    public const DEFAULT_ORDER = 'ASC';
+    public const DEFAULT_SORT = 'licNo';
 
     /**
      * @var int
@@ -72,7 +72,7 @@ class Licence extends AbstractDataService implements ListDataInterface
         $ret = [];
 
         foreach ($data as $datum) {
-            $ret[$datum['id']] = isset($datum['licNo']) ? $datum['licNo'] : $datum['id'];
+            $ret[$datum['id']] = $datum['licNo'] ?? $datum['id'];
         }
 
         return $ret;

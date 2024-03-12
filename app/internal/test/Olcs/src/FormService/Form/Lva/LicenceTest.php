@@ -23,7 +23,7 @@ class LicenceTest extends MockeryTestCase
 
     public function setUp(): void
     {
-        $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService');
+        $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
 
         $this->sut = new Licence($this->formHelper, m::mock(AuthorizationService::class));
     }

@@ -49,7 +49,7 @@ class EmailTemplateCategory extends AbstractListDataService
 
         $result = $response->getResult();
 
-        $this->setData('categories', (isset($result['results']) ? $result['results'] : null));
+        $this->setData('categories', ($result['results'] ?? null));
         $data = $this->getData('categories');
         $data[] = [
             'description' => 'Header/Footer',

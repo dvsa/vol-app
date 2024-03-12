@@ -979,7 +979,7 @@ return [
             'user-details' => 'UserDetailsNavigation'
         ],
         'factories' => [
-            'UserDetailsNavigation' => 'Admin\Navigation\UserDetailsNavigationFactory',
+            'UserDetailsNavigation' => \Admin\Navigation\UserDetailsNavigationFactory::class,
             IrhpPermitAdminFurniture::class => IrhpPermitAdminFurniture::class,
         ]
     ],

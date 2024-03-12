@@ -28,7 +28,7 @@ class OperatorBusinessDetails implements MapperInterface
                 'company_number' => $data['companyOrLlpNo']
             ]
         ];
-        $registeredAddress = isset($data['contactDetails']['address']) ? $data['contactDetails']['address'] : null;
+        $registeredAddress = $data['contactDetails']['address'] ?? null;
 
         if (isset($data['organisationPersons']) && count($data['organisationPersons'])) {
             $operatorDetails['firstName'] = $data['organisationPersons'][0]['person']['forename'];
@@ -63,30 +63,18 @@ class OperatorBusinessDetails implements MapperInterface
             'cpid' => !empty($data['operator-cpid']['type']) ?
                 $data['operator-cpid']['type'] : null,
             'businessType' => $data['operator-business-type']['type'],
-            'companyNumber' => isset($data['operator-details']['companyNumber']['company_number']) ?
-                $data['operator-details']['companyNumber']['company_number'] : null,
-            'name' => isset($data['operator-details']['name']) ?
-                $data['operator-details']['name'] : null,
-            'natureOfBusiness' => isset($data['operator-details']['natureOfBusiness']) ?
-                $data['operator-details']['natureOfBusiness'] : null,
-            'firstName' => isset($data['operator-details']['firstName']) ?
-                $data['operator-details']['firstName'] : null,
-            'lastName' => isset($data['operator-details']['lastName']) ?
-                $data['operator-details']['lastName'] : null,
-            'personId' => isset($data['operator-details']['personId']) ?
-                $data['operator-details']['personId'] : null,
-            'personVersion' => isset($data['operator-details']['personVersion']) ?
-                $data['operator-details']['personVersion'] : null,
-            'id' => isset($data['operator-details']['id']) ?
-                $data['operator-details']['id'] : null,
-            'version' => isset($data['operator-details']['version']) ?
-                $data['operator-details']['version'] : null,
-            'address' => isset($data['registeredAddress']) ?
-                $data['registeredAddress'] : null,
-            'isIrfo' => isset($data['operator-details']['isIrfo']) ?
-                $data['operator-details']['isIrfo'] : null,
-            'allowEmail' => isset($data['operator-details']['allowEmail']) ?
-                $data['operator-details']['allowEmail'] : null
+            'companyNumber' => $data['operator-details']['companyNumber']['company_number'] ?? null,
+            'name' => $data['operator-details']['name'] ?? null,
+            'natureOfBusiness' => $data['operator-details']['natureOfBusiness'] ?? null,
+            'firstName' => $data['operator-details']['firstName'] ?? null,
+            'lastName' => $data['operator-details']['lastName'] ?? null,
+            'personId' => $data['operator-details']['personId'] ?? null,
+            'personVersion' => $data['operator-details']['personVersion'] ?? null,
+            'id' => $data['operator-details']['id'] ?? null,
+            'version' => $data['operator-details']['version'] ?? null,
+            'address' => $data['registeredAddress'] ?? null,
+            'isIrfo' => $data['operator-details']['isIrfo'] ?? null,
+            'allowEmail' => $data['operator-details']['allowEmail'] ?? null
         ];
 
         return $mapped;
@@ -118,7 +106,7 @@ class OperatorBusinessDetails implements MapperInterface
         $formMessages = [];
         foreach ($errors as $field => $fieldErrors) {
             if (is_string($fieldErrors)) {
-                $fieldErrors = array($fieldErrors);
+                $fieldErrors = [$fieldErrors];
             }
             foreach ($fieldErrors as $message) {
                 if (in_array($field, $operatorDetails)) {

@@ -28,7 +28,7 @@ abstract class AbstractApplicationProcessingController extends ApplicationContro
 {
     use ProcessingControllerTrait;
 
-    protected $helperClass = '\Olcs\Helper\ApplicationProcessingHelper';
+    protected $helperClass = \Olcs\Helper\ApplicationProcessingHelper::class;
 
     protected TreeRouteStack $router;
 

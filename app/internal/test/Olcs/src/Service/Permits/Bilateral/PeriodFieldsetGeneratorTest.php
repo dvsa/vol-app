@@ -22,16 +22,16 @@ use Laminas\Form\Fieldset;
  */
 class PeriodFieldsetGeneratorTest extends TestCase
 {
-    const FIELDSET_POPULATOR_TYPE_2_NAME = 'populatorType2';
+    public const FIELDSET_POPULATOR_TYPE_2_NAME = 'populatorType2';
 
-    const PERIOD_ID = 45;
+    public const PERIOD_ID = 45;
 
-    const PERIOD_FIELDS = [
+    public const PERIOD_FIELDS = [
         'fieldData1',
         'fieldData2'
     ];
 
-    const PERIOD_DATA = [
+    public const PERIOD_DATA = [
         'id' => self::PERIOD_ID,
         'fields' => self::PERIOD_FIELDS,
     ];

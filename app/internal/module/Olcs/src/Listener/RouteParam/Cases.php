@@ -120,7 +120,7 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
         $placeholder = $this->viewHelperManager->get('placeholder');
         $placeholder->getContainer('case')->set($case);
 
-        $latestNote = isset($case['latestNote']['comment']) ? $case['latestNote']['comment'] : '';
+        $latestNote = $case['latestNote']['comment'] ?? '';
         $placeholder->getContainer('note')->set($latestNote);
 
         if (isset($case['licence']['id'])) {

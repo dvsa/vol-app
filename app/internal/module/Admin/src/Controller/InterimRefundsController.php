@@ -52,7 +52,7 @@ class InterimRefundsController extends AbstractInternalController implements Lef
         $request = $this->getRequest();
 
         $eomDate = $this->dateHelper->getDate('Y-m-t');
-        list($year, $month, $lastDay) = explode('-', $eomDate);
+        [$year, $month, $lastDay] = explode('-', $eomDate);
 
         $filters = array_merge(
             [

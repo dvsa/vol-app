@@ -336,14 +336,12 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
         $formHelper = $this->formHelperService;
         $formHelper->remove($form, 'form-actions->addAnother');
 
-        $defaultCategory = isset($formData['team-printer']['categoryTeam']) ?
-            $formData['team-printer']['categoryTeam'] : Category::CATEGORY_APPLICATION;
+        $defaultCategory = $formData['team-printer']['categoryTeam'] ?? Category::CATEGORY_APPLICATION;
 
         $this->subCategory
             ->setCategory($defaultCategory);
 
-        $defaultTeam = isset($formData['exception-details']['team']) ?
-            $formData['exception-details']['team'] : $this->params()->fromRoute('team', null);
+        $defaultTeam = $formData['exception-details']['team'] ?? $this->params()->fromRoute('team', null);
 
         $this->userWithName
             ->setTeam($defaultTeam);
@@ -364,8 +362,7 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
         $this->subCategory
             ->setCategory(Category::CATEGORY_APPLICATION);
 
-        $defaultTeam = isset($formData['exception-details']['team']) ?
-            $formData['exception-details']['team'] : $this->params()->fromRoute('team', null);
+        $defaultTeam = $formData['exception-details']['team'] ?? $this->params()->fromRoute('team', null);
         $this->userWithName
             ->setTeam($defaultTeam);
 
@@ -384,12 +381,12 @@ class TeamController extends AbstractInternalController implements LeftViewProvi
         $formHelper = $this->formHelperService;
         $form = $formHelper->createForm($name);
         $formHelper->setFormActionFromRequest($form, $this->getRequest());
-        if ($name === 'Admin\Form\Model\Form\Team') {
+        if ($name === \Admin\Form\Model\Form\Team::class) {
             $formHelper->populateFormTable(
                 $form->get('team-details')->get('printerExceptions'),
                 $this->getExceptionsTable()
             );
-        } elseif ($name === 'Admin\Form\Model\Form\PrinterException') {
+        } elseif ($name === \Admin\Form\Model\Form\PrinterException::class) {
             $teamId = $this->params()->fromRoute('team');
             $this->userWithName->setTeam($teamId);
         }

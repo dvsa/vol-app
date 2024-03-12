@@ -11,9 +11,9 @@ use Laminas\Form\FormInterface;
  */
 class OperatorTransfer
 {
-    const ERR_INVALID_ID = 'ERR_INVALID_ID';
-    const ERR_NO_LICENCES = 'ERR_NO_LICENCES';
-    const DEFAULT_KEY = 'toOperatorId';
+    public const ERR_INVALID_ID = 'ERR_INVALID_ID';
+    public const ERR_NO_LICENCES = 'ERR_NO_LICENCES';
+    public const DEFAULT_KEY = 'toOperatorId';
 
     /**
      * Map from errors

@@ -118,10 +118,10 @@ class SubmissionController extends AbstractInternalController implements Submiss
      *
      * @var array
      */
-    protected $inlineScripts = array(
+    protected $inlineScripts = [
         'addAction' => ['forms/submission'],
         'editAction' => ['forms/submission']
-    );
+    ];
 
     protected $persist = true;
 
@@ -652,9 +652,9 @@ class SubmissionController extends AbstractInternalController implements Submiss
                     $this->processFiles(
                         $attachmentsForm,
                         'attachments',
-                        array($this, 'processSectionFileUpload'),
-                        array($this, 'deleteSubmissionAttachment'),
-                        array($this, 'loadFiles')
+                        [$this, 'processSectionFileUpload'],
+                        [$this, 'deleteSubmissionAttachment'],
+                        [$this, 'loadFiles']
                     );
 
                     $selectedSectionsArray[$sectionId]['attachmentsForm'] = $attachmentsForm;
@@ -732,7 +732,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
             if ($document['subCategory']['id'] === $this->sectionSubcategory) {
                 $document['url'] = $urlHelper->fromRoute(
                     'getfile',
-                    array('identifier' => $document['id'])
+                    ['identifier' => $document['id']]
                 );
                 $sectionDocuments[] = $document;
             }

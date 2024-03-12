@@ -2,68 +2,63 @@
 
 use Common\Service\Table\Formatter\Date;
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'title' => 'Statements',
         'titleSingular' => 'Statement',
         'empty_message' => 'There are no statements'
-    ),
-    'settings' => array(
-        'crud' => array(
-            'actions' => array(
-                'add' => array('class' => 'govuk-button', 'label' => 'Add statement'),
-                'edit' => array('class' => 'govuk-button govuk-button--secondary js-require--one', 'requireRows' => true),
-                'generate' => array(
+    ],
+    'settings' => [
+        'crud' => [
+            'actions' => [
+                'add' => ['class' => 'govuk-button', 'label' => 'Add statement'],
+                'edit' => ['class' => 'govuk-button govuk-button--secondary js-require--one', 'requireRows' => true],
+                'generate' => [
                     'requireRows' => true,
                     'class' => 'govuk-button govuk-button--secondary js-require--one',
                     'label' => 'Generate Letter'
-                ),
-                'delete' => array('class' => 'govuk-button govuk-button--warning js-require--one', 'requireRows' => true)
-            )
-        )
-    ),
-    'columns' => array(
-        array(
+                ],
+                'delete' => ['class' => 'govuk-button govuk-button--warning js-require--one', 'requireRows' => true]
+            ]
+        ]
+    ],
+    'columns' => [
+        [
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/radio]}}'
-        ),
-        array(
+        ],
+        [
             'title' => 'Date requested',
             'formatter' => function ($data, $column) {
                 $column['formatter'] = Date::Class;
                 return '<a href="' . $this->generateUrl(
-                    array('action' => 'edit', 'statement' => $data['id']),
+                    ['action' => 'edit', 'statement' => $data['id']],
                     'case_statement',
                     true
                 ) . '" class="govuk-link js-modal-ajax">' . $this->callFormatter($column, $data) . '</a>';
             },
             'name' => 'requestedDate'
-        ),
-        array(
+        ],
+        [
             'title' => 'Requested by',
-            'formatter' => function ($data, $column) {
-                return $data['requestorsContactDetails']['person']['forename'] . ' ' .
-                    $data['requestorsContactDetails']['person']['familyName'];
-            }
-        ),
-        array(
+            'formatter' => fn($data, $column) => $data['requestorsContactDetails']['person']['forename'] . ' ' .
+                $data['requestorsContactDetails']['person']['familyName']
+        ],
+        [
             'title' => 'Statement type',
-            'formatter' => function ($data, $column) {
-
-                return $data['statementType']['description'];
-            },
-        ),
-        array(
+            'formatter' => fn($data, $column) => $data['statementType']['description'],
+        ],
+        [
             'title' => 'Date stopped',
             'formatter' => Date::class,
             'name' => 'stoppedDate'
-        ),
-        array(
+        ],
+        [
             'title' => 'Requestor body',
             'name' => 'requestorsBody'
-        ),
-        array(
+        ],
+        [
             'title' => 'Date issued',
             'formatter' => function ($data, $column) {
                 $column['formatter'] = Date::class;
@@ -73,10 +68,10 @@ return array(
                 );
             },
             'name' => 'issuedDate'
-        ),
-        array(
+        ],
+        [
             'title' => 'VRM',
             'name' => 'vrm'
-        ),
-    )
-);
+        ],
+    ]
+];

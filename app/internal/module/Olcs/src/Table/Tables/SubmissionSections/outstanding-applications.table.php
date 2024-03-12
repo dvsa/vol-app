@@ -1,29 +1,29 @@
 <?php
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'id' => 'outstanding-applications',
         'title' => 'Outstanding applications',
         'action_route' => [
             'route' => 'submission_update_table',
             'params' => ['section' => 'outstanding-applications']
         ],
-    ),
-    'settings' => array(
-        'crud' => array(
+    ],
+    'settings' => [
+        'crud' => [
             'formName' => 'outstanding-applications',
-            'actions' => array(
-                'refresh-table' => array('label' => 'Refresh table', 'class' => 'govuk-button govuk-button--secondary', 'requireRows' => false),
-                'delete-row' => array('label' => 'Delete row', 'class' => 'govuk-button govuk-button--secondary js-require--multiple', 'requireRows' => true)
-            ),
+            'actions' => [
+                'refresh-table' => ['label' => 'Refresh table', 'class' => 'govuk-button govuk-button--secondary', 'requireRows' => false],
+                'delete-row' => ['label' => 'Delete row', 'class' => 'govuk-button govuk-button--secondary js-require--multiple', 'requireRows' => true]
+            ],
             'action_field_name' => 'formAction'
-        ),
+        ],
         'submission_section' => 'display',
-    ),
-    'attributes' => array(
+    ],
+    'attributes' => [
         'name' => 'outstanding-applications'
-    ),
-    'columns' => array(
-        array(
+    ],
+    'columns' => [
+        [
             'title' => 'Application No',
             'formatter' => function ($data) {
                 $string = $data['id'];
@@ -33,16 +33,16 @@ return array(
 
                 return $string;
             }
-        ),
-        array(
+        ],
+        [
             'title' => 'Application type',
             'name' => 'applicationType'
-        ),
-        array(
+        ],
+        [
             'title' => 'Received date',
             'name' => 'receivedDate'
-        ),
-        array(
+        ],
+        [
             'title' => 'OOO/OOR',
             'formatter' => function ($data, $column) {
                 $string = ' - ';
@@ -54,13 +54,13 @@ return array(
                 }
                 return $string;
             }
-        ),
-        array(
+        ],
+        [
             'type' => 'Checkbox',
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common
             'width' => 'checkbox',
             'format' => '{{[elements/checkbox]}}',
             'hideWhenDisabled' => true
-        )
-    )
-);
+        ]
+    ]
+];

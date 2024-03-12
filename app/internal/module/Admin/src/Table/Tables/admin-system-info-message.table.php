@@ -35,12 +35,9 @@ return [
         [
             'title' => 'Displayed to',
             'sort' => 'isInternal',
-            'formatter' => function ($row) {
-                return ($row['isInternal'] === 'Y'
-                    ? 'Internal'
-                    : 'Self serve'
-                );
-            }
+            'formatter' => fn($row) => $row['isInternal'] === 'Y'
+                ? 'Internal'
+                : 'Self serve'
         ],
         [
             'title' => 'Start',

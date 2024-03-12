@@ -39,7 +39,7 @@ class SlaIndicator extends AbstractHelper
             'date' => $queryResult[$dateFieldName],
             'suffix' => $this->hasTargetBeenMet(
                 $queryResult[$dateFieldName],
-                isset($queryResult[$dateFieldName . 'Target']) ? $queryResult[$dateFieldName . 'Target'] : null
+                $queryResult[$dateFieldName . 'Target'] ?? null
             ),
         ];
     }

@@ -153,7 +153,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
 
         $this->getViewHelperManager()->get('placeholder')
             ->getContainer('note')
-            ->set(isset($application['latestNote']['comment']) ? $application['latestNote']['comment'] : '');
+            ->set($application['latestNote']['comment'] ?? '');
 
         $sidebarNav = $this->getSidebarNavigationService();
 
@@ -284,11 +284,11 @@ class Application implements ListenerAggregateInterface, FactoryInterface
     {
         return in_array(
             $status,
-            array(
+            [
                 \Common\RefData::APPLICATION_STATUS_NOT_TAKEN_UP,
                 \Common\RefData::APPLICATION_STATUS_WITHDRAWN,
                 \Common\RefData::APPLICATION_STATUS_REFUSED,
-            )
+            ]
         );
     }
 
@@ -335,12 +335,12 @@ class Application implements ListenerAggregateInterface, FactoryInterface
     {
         return !in_array(
             $status,
-            array(
+            [
                 \Common\RefData::APPLICATION_STATUS_NOT_TAKEN_UP,
                 \Common\RefData::APPLICATION_STATUS_WITHDRAWN,
                 \Common\RefData::APPLICATION_STATUS_REFUSED,
                 \Common\RefData::APPLICATION_STATUS_VALID,
-            )
+            ]
         );
     }
 

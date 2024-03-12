@@ -12,7 +12,7 @@ use Laminas\Form\FormInterface;
  */
 class SystemInfoMessage implements MapperInterface
 {
-    const DETAILS = 'details';
+    public const DETAILS = 'details';
 
     /**
      * Should map data from a result array into an array suitable for a form

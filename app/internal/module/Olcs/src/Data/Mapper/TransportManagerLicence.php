@@ -11,7 +11,7 @@ class TransportManagerLicence
 {
     public static function mapFromResultForTable(array $data)
     {
-        return isset($data['results']) ? $data['results'] : [];
+        return $data['results'] ?? [];
     }
 
     public static function mapFromResult(array $data = [])

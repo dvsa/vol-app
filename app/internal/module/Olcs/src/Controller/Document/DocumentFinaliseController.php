@@ -179,7 +179,7 @@ class DocumentFinaliseController extends AbstractDocumentController
                 $this->flashMessengerHelper->addUnknownError();
             } elseif ($resp->isClientError()) {
                 $respResult = $resp->getResult();
-                $errMsgs = (isset($respResult['messages']) ? $respResult['messages'] : []);
+                $errMsgs = ($respResult['messages'] ?? []);
                 foreach ($errMsgs as $err) {
                     $this->flashMessengerHelper->addCurrentErrorMessage($err);
                 }

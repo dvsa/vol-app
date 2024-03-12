@@ -73,7 +73,7 @@ class AppealController extends AbstractInternalController implements CaseControl
         'case' => 'route'
     ];
 
-    protected $inlineScripts = array('forms/hearings-appeal');
+    protected $inlineScripts = ['forms/hearings-appeal'];
 
     /**
      * Allows override of default behaviour for redirects. See Case Overview Controller

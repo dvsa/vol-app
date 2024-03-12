@@ -20,9 +20,7 @@ return [
         [
             'title' => 'Permit No.',
             'name' => 'permitNumber',
-            'formatter' => function ($row) {
-                return 'Not known';
-            },
+            'formatter' => fn($row) => 'Not known',
         ],
         [
             'title' => 'Issued date',
@@ -37,16 +35,12 @@ return [
         [
             'title' => 'Replacement',
             'name' => 'successful',
-            'formatter' => function () {
-                return 'No';
-            },
+            'formatter' => fn() => 'No',
         ],
         [
             'title' => 'Status',
             'name' => 'version',
-            'formatter' => function () {
-                return 'Pending';
-            },
+            'formatter' => fn() => 'Pending',
         ]
     ],
 ];

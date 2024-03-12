@@ -20,7 +20,7 @@ class TransportManagerApplication
      */
     public static function mapFromResultForTable(array $data)
     {
-        return isset($data['extra']['tmApplications']) ? $data['extra']['tmApplications'] : [];
+        return $data['extra']['tmApplications'] ?? [];
     }
 
     /**

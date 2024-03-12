@@ -153,7 +153,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
     {
         $this->listeners[] = $events->attach(
             RouteParams::EVENT_PARAM . 'licence',
-            array($this, 'onLicence'),
+            [$this, 'onLicence'],
             $priority
         );
     }
@@ -245,7 +245,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
 
         $this->getViewHelperManager()->get('placeholder')
             ->getContainer('note')
-            ->set(isset($licence['latestNote']['comment']) ? $licence['latestNote']['comment'] : '');
+            ->set($licence['latestNote']['comment'] ?? '');
         $this->getViewHelperManager()->get('placeholder')
             ->getContainer('isPriorityNote')
             ->set(isset($licence['latestNote']['priority']) && $licence['latestNote']['priority'] === 'Y');
@@ -619,7 +619,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Licence
     {
         $this->setViewHelperManager($container->get('ViewHelperManager'));
-        $this->setLicenceService($container->get('DataServiceManager')->get('Common\Service\Data\Licence'));
+        $this->setLicenceService($container->get('DataServiceManager')->get(\Common\Service\Data\Licence::class));
         $this->setNavigationService($container->get('right-sidebar'));
         $this->setMainNavigationService($container->get('navigation'));
         $this->setMarkerService($container->get(MarkerService::class));

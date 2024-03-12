@@ -1,29 +1,29 @@
 <?php
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'titleSingular' => 'Printer',
         'title' => 'Printers'
-    ),
-    'settings' => array(
-        'crud' => array(
-            'actions' => array(
-                'add' => array('class' => 'govuk-button', 'requireRows' => false),
-                'edit' => array('requireRows' => true, 'class' => 'govuk-button govuk-button--secondary js-require--one'),
-                'delete' => array('requireRows' => true, 'class' => 'govuk-button govuk-button--warning js-require--one')
-            )
-        ),
-        'paginate' => array(
-            'limit' => array(
+    ],
+    'settings' => [
+        'crud' => [
+            'actions' => [
+                'add' => ['class' => 'govuk-button', 'requireRows' => false],
+                'edit' => ['requireRows' => true, 'class' => 'govuk-button govuk-button--secondary js-require--one'],
+                'delete' => ['requireRows' => true, 'class' => 'govuk-button govuk-button--warning js-require--one']
+            ]
+        ],
+        'paginate' => [
+            'limit' => [
                 'default' => 25,
-                'options' => array(10, 25, 50)
-            ),
-        )
-    ),
-    'attributes' => array(
-    ),
-    'columns' => array(
-        array(
+                'options' => [10, 25, 50]
+            ],
+        ]
+    ],
+    'attributes' => [
+    ],
+    'columns' => [
+        [
             'title' => 'Printer',
             'name' => 'printerName',
             'sort' => 'printerName',
@@ -33,15 +33,15 @@ return array(
                 $url = $this->generateUrl($routeParams, $route);
                 return '<a href="'. $url . '" class="govuk-link js-modal-ajax">' . $row['printerName'] .'</a>';
             },
-        ),
-        array(
+        ],
+        [
             'title' => 'Description',
             'name' => 'description',
             'sort' => 'description'
-        ),
-        array(
+        ],
+        [
             'type' => 'Checkbox',
             'width' => 'checkbox',
-        ),
-    )
-);
+        ],
+    ]
+];

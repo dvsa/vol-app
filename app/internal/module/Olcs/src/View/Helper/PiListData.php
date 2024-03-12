@@ -17,7 +17,7 @@ class PiListData extends AbstractHelper
     public function __invoke($data)
     {
         if (is_array($data) && !empty($data)) {
-            return implode(', ', array_map(array($this, 'formatItem'), $data));
+            return implode(', ', array_map([$this, 'formatItem'], $data));
         }
 
         return 'None selected';

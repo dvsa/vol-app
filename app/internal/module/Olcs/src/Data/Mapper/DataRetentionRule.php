@@ -26,7 +26,7 @@ class DataRetentionRule implements MapperInterface
         $mappedData['maxDataSet'] = $data['maxDataSet'];
         $mappedData['isEnabled'] = $data['isEnabled'] ? 'Y' : 'N';
         $mappedData['actionType'] = $data['actionType']['id'];
-        return array('ruleDetails' => $mappedData);
+        return ['ruleDetails' => $mappedData];
     }
 
     /**

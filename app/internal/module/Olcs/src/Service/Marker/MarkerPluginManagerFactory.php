@@ -12,7 +12,7 @@ use Laminas\Mvc\Service\AbstractPluginManagerFactory;
  */
 class MarkerPluginManagerFactory extends AbstractPluginManagerFactory
 {
-    const CONFIG_KEY = 'marker_plugins';
+    public const CONFIG_KEY = 'marker_plugins';
 
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): MarkerPluginManager
     {

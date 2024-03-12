@@ -45,20 +45,18 @@ return [
         [
             'title' => 'dashboard-table-permit-application-status',
             'name' => 'status',
-            'formatter' => function ($row) {
-                return $this->callFormatter(
-                    [
-                        'name' => 'status',
-                        'formatter' => RefDataStatus::class,
+            'formatter' => fn($row) => $this->callFormatter(
+                [
+                    'name' => 'status',
+                    'formatter' => RefDataStatus::class,
+                ],
+                [
+                    'status' => [
+                        'id' => $row['statusId'],
+                        'description' => $row['statusDescription'],
                     ],
-                    [
-                        'status' => [
-                            'id' => $row['statusId'],
-                            'description' => $row['statusDescription'],
-                        ],
-                    ]
-                );
-            }
+                ]
+            )
         ]
     ],
 ];

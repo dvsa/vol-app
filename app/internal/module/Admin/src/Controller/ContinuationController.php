@@ -76,7 +76,7 @@ class ContinuationController extends AbstractController
         if ($request->isPost() && $form->isValid()) {
             $data = $form->getData();
 
-            list($year, $month) = explode('-', $data['details']['date']);
+            [$year, $month] = explode('-', $data['details']['date']);
 
             if ($data['details']['type'] === self::CONTINUATION_TYPE_IRFO) {
                 // redirect to irfo psv auth continuation page
@@ -155,7 +155,7 @@ class ContinuationController extends AbstractController
         } else {
             $filters = [];
         }
-        list($tableData, $data) = $this->getContinuationData($id, $filters);
+        [$tableData, $data] = $this->getContinuationData($id, $filters);
 
         $period = date('M Y', strtotime($data['year'] . '-' . $data['month'] . '-01'));
 

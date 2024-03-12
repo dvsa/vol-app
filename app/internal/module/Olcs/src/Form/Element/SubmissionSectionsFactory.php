@@ -17,7 +17,7 @@ class SubmissionSectionsFactory implements FactoryInterface
         $cpm = $serviceLocator->get('ControllerPluginManager');
         $params = $cpm->get('params');
         $caseId = $params->fromRoute('case');
-        $caseService = $serviceLocator->get('DataServiceManager')->get('Olcs\Service\Data\Cases');
+        $caseService = $serviceLocator->get('DataServiceManager')->get(\Olcs\Service\Data\Cases::class);
         $case = $caseService->fetchData($caseId);
 
         return $case;

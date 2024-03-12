@@ -16,7 +16,7 @@ class ActionTest extends TestCase
     {
         $sut = new Action();
 
-        $mockEventManager = m::mock('Laminas\EventManager\EventManagerInterface');
+        $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
         $mockEventManager->shouldReceive('attach')->once()
             ->with(RouteParams::EVENT_PARAM . 'action', [$sut, 'onAction'], 1);
 
@@ -32,18 +32,18 @@ class ActionTest extends TestCase
 
         $event = new Event(null, $routeParam);
 
-        $mockRouter = m::mock('Laminas\Router\RouteStackInterface');
+        $mockRouter = m::mock(\Laminas\Router\RouteStackInterface::class);
         $mockRouter->shouldReceive('assemble')
             ->with(['action' => $action])
             ->andReturn('http://anything/');
 
-        $mockContainer = m::mock('Laminas\View\Helper\Placeholder\Container');
+        $mockContainer = m::mock(\Laminas\View\Helper\Placeholder\Container::class);
         $mockContainer->shouldReceive('set')->with($action);
 
-        $mockPlaceholder = m::mock('Laminas\View\Helper\Placeholder');
+        $mockPlaceholder = m::mock(\Laminas\View\Helper\Placeholder::class);
         $mockPlaceholder->shouldReceive('getContainer')->with('action')->andReturn($mockContainer);
 
-        $mockViewHelperManager = m::mock('Laminas\View\HelperPluginManager');
+        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
         $mockViewHelperManager->shouldReceive('get')->with('placeholder')->andReturn($mockPlaceholder);
 
         $sut = new Action();
@@ -54,7 +54,7 @@ class ActionTest extends TestCase
 
     public function testInvoke()
     {
-        $mockViewHelperManager = m::mock('Laminas\View\HelperPluginManager');
+        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
 
         $mockSl = m::mock(ContainerInterface::class);
         $mockSl->shouldReceive('get')->with('ViewHelperManager')->andReturn($mockViewHelperManager);

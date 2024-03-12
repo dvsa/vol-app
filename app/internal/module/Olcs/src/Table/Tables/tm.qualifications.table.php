@@ -2,22 +2,22 @@
 
 use Common\Service\Table\Formatter\Date;
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'title' => 'transport-manager.competences.table.qualification',
         'dataAttributes' => [
             'data-hard-refresh' => 1
         ]
-    ),
-    'settings' => array(
-        'crud' => array(
-            'actions' => array(
-                'add' => array('class' => 'govuk-button'),
-            )
-        )
-    ),
-    'columns' => array(
-        array(
+    ],
+    'settings' => [
+        'crud' => [
+            'actions' => [
+                'add' => ['class' => 'govuk-button'],
+            ]
+        ]
+    ],
+    'columns' => [
+        [
             'title' => 'Type',
             'name' => 'qualificationType',
             'sort' => 'qualificationType',
@@ -32,30 +32,28 @@ return array(
                     . $row['qualificationType']['description']
                     . '</a>';
             },
-        ),
-        array(
+        ],
+        [
             'title' => 'Serial No.',
             'name' => 'serialNo',
             'sort' => 'serialNo',
-        ),
-        array(
+        ],
+        [
             'title' => 'Date',
             'name' => 'issuedDate',
             'formatter' => Date::class,
             'sort' => 'issuedDate',
-        ),
-        array(
+        ],
+        [
             'title' => 'Country',
             'name' => 'Country',
             'sort' => 'Country',
-            'formatter' => function ($row) {
-                return $row['countryCode']['countryDesc'];
-            },
-        ),
-        array(
+            'formatter' => fn($row) => $row['countryCode']['countryDesc'],
+        ],
+        [
             'title' => 'markup-table-th-remove', //this is a view partial from olcs-common
             'type' => 'ActionLinks',
             'deleteInputName' => 'action[delete][%d]'
-        ),
-    )
-);
+        ],
+    ]
+];

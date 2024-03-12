@@ -59,9 +59,7 @@ return [
         [
             'title' => 'SS Visibility',
             'name' => 'hiddenSS',
-            'formatter' => function ($row) {
-                return $row['hiddenSs'] ? 'Hidden' : 'Visible';
-            },
+            'formatter' => fn($row) => $row['hiddenSs'] ? 'Hidden' : 'Visible',
         ],
         [
             'title' => 'markup-table-th-action', //this is a view partial from olcs-common

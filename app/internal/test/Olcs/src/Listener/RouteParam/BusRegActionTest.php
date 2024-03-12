@@ -126,7 +126,7 @@ class BusRegActionTest extends MockeryTestCase
 
     public function testInvoke()
     {
-        $mockViewHelperManager = m::mock('Laminas\View\HelperPluginManager');
+        $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
         $mockSidebar = m::mock();
         $mockTransferAnnotationBuilder = m::mock();
         $mockQueryService = m::mock();

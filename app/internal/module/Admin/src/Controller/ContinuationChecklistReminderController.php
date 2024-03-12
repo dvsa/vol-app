@@ -64,11 +64,11 @@ class ContinuationChecklistReminderController extends AbstractController
         }
 
         $nowDate = $this->dateHelper->getDate('Y-m');
-        list($year, $month) = explode('-', $nowDate);
+        [$year, $month] = explode('-', $nowDate);
 
         $filterForm = $this->getChecklistReminderFilterForm($month, $year);
         if ($filterForm->isValid()) {
-            list($year, $month) = explode('-', $filterForm->getData()['filters']['date']);
+            [$year, $month] = explode('-', $filterForm->getData()['filters']['date']);
         }
 
         $response = $this->handleQuery(

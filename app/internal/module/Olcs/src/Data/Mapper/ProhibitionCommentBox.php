@@ -11,5 +11,5 @@ use Laminas\Form\FormInterface;
  */
 class ProhibitionCommentBox extends AbstractCommentMapper implements MapperInterface
 {
-    const COMMENT_FIELD = 'prohibitionNote'; //needs to be constant as methods called statically
+    public const COMMENT_FIELD = 'prohibitionNote'; //needs to be constant as methods called statically
 }

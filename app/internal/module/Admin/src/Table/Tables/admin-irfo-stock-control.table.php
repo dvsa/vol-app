@@ -1,38 +1,38 @@
 <?php
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'titleSingular' => 'IRFO permit',
         'title' => 'IRFO permits'
-    ),
-    'settings' => array(
-        'crud' => array(
-            'actions' => array(
-                'add' => array('class' => 'govuk-button', 'requireRows' => false),
-                'in-stock' => array(
+    ],
+    'settings' => [
+        'crud' => [
+            'actions' => [
+                'add' => ['class' => 'govuk-button', 'requireRows' => false],
+                'in-stock' => [
                     'label' => 'In Stock', 'class' => 'govuk-button govuk-button--secondary js-require--multiple', 'requireRows' => true
-                ),
-                'issued' => array('class' => 'govuk-button govuk-button--secondary js-require--multiple', 'requireRows' => true),
-                'void' => array('class' => 'govuk-button govuk-button--secondary js-require--multiple', 'requireRows' => true),
-                'returned' => array('class' => 'govuk-button govuk-button--secondary js-require--multiple', 'requireRows' => true)
-            )
-        ),
-        'paginate' => array(
-            'limit' => array(
+                ],
+                'issued' => ['class' => 'govuk-button govuk-button--secondary js-require--multiple', 'requireRows' => true],
+                'void' => ['class' => 'govuk-button govuk-button--secondary js-require--multiple', 'requireRows' => true],
+                'returned' => ['class' => 'govuk-button govuk-button--secondary js-require--multiple', 'requireRows' => true]
+            ]
+        ],
+        'paginate' => [
+            'limit' => [
                 'default' => 25,
-                'options' => array(10, 25, 50)
-            )
-        )
-    ),
-    'attributes' => array(
-    ),
-    'columns' => array(
-        array(
+                'options' => [10, 25, 50]
+            ]
+        ]
+    ],
+    'attributes' => [
+    ],
+    'columns' => [
+        [
             'title' => 'Serial number',
             'isNumeric' => true,
             'name' => 'serialNo',
-        ),
-        array(
+        ],
+        [
             'title' => 'Permit No',
             'isNumeric' => true,
             'formatter' => function ($data) {
@@ -43,19 +43,19 @@ return array(
                 return sprintf(
                     '<a href="%s" class="govuk-link js-modal-ajax">%s</a>',
                     $this->generateUrl(
-                        array(
+                        [
                             'action' => 'details',
                             'id' => $data['irfoGvPermit']['id'],
                             'organisation' => $data['irfoGvPermit']['organisation']['id']
-                        ),
+                        ],
                         'operator/irfo/gv-permits',
                         false
                     ),
                     $data['irfoGvPermit']['id']
                 );
             }
-        ),
-        array(
+        ],
+        [
             'title' => 'Operator',
             'formatter' => function ($data) {
                 if (empty($data['irfoGvPermit']['organisation']['id'])) {
@@ -65,25 +65,23 @@ return array(
                 return sprintf(
                     '<a class="govuk-link" href="%s">%s</a>',
                     $this->generateUrl(
-                        array(
+                        [
                             'organisation' => $data['irfoGvPermit']['organisation']['id']
-                        ),
+                        ],
                         'operator/irfo/gv-permits',
                         false
                     ),
                     $data['irfoGvPermit']['organisation']['name']
                 );
             }
-        ),
-        array(
+        ],
+        [
             'title' => 'Status',
-            'formatter' => function ($data) {
-                return $data['status']['description'];
-            }
-        ),
-        array(
+            'formatter' => fn($data) => $data['status']['description']
+        ],
+        [
             'type' => 'Checkbox',
             'width' => 'checkbox',
-        ),
-    )
-);
+        ],
+    ]
+];

@@ -20,7 +20,7 @@ trait ControllerTestTrait
 
     protected function mockController($className, array $constructorParams = [])
     {
-        $this->request = m::mock('\Laminas\Http\Request')->makePartial();
+        $this->request = m::mock(\Laminas\Http\Request::class)->makePartial();
 
         // If constructor params are provided, pass them to the mock, otherwise mock without them
         if (!empty($constructorParams)) {
@@ -83,7 +83,7 @@ trait ControllerTestTrait
 
     protected function createMockForm($formName)
     {
-        $mockForm = m::mock('\Common\Form\Form');
+        $mockForm = m::mock(\Common\Form\Form::class);
 
         $formHelper = $this->getMockFormHelper();
 
@@ -101,7 +101,7 @@ trait ControllerTestTrait
     protected function getMockFormHelper()
     {
         if ($this->formHelper === null) {
-            $this->formHelper = m::mock('\Common\Service\Helper\FormHelperService');
+            $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
             $this->setService('Helper\Form', $this->formHelper);
         }
         return $this->formHelper;

@@ -96,7 +96,7 @@ class BusNoticePeriodTest extends AbstractDataServiceTestCase
 
         $this->mockHandleQuery($mockResponse);
 
-        $this->sut->fetchListData([]);
+        $this->sut->fetchListData();
     }
 
     /**

@@ -20,7 +20,7 @@ class SubmissionSectionTableTest extends TestCase
     {
         $sut = new SubmissionSectionTable();
 
-        $mockView = m::mock('\Laminas\View\Renderer\PhpRenderer');
+        $mockView = m::mock(\Laminas\View\Renderer\PhpRenderer::class);
 
         $mockViewHelper = m::mock(SubmissionSectionTable::class);
 
@@ -30,7 +30,7 @@ class SubmissionSectionTableTest extends TestCase
 
         $sut->setView($mockView);
 
-        $mockTableBuilder = m::mock('\Common\Service\Table\TableFactory');
+        $mockTableBuilder = m::mock(\Common\Service\Table\TableFactory::class);
         $mockTableBuilder->shouldReceive('buildTable')
             ->withAnyArgs()
             ->andReturnSelf();

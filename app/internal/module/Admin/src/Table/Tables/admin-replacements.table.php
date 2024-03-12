@@ -38,10 +38,9 @@ return [
             'title' => 'Placeholder',
             'name' => 'placeholder',
             'sort' => 'placeholder',
-            'formatter' => function ($row) {
+            'formatter' => fn($row) =>
                 // Replaces standard curly braces with html entity codes to avoid table helper variable replacement
-                return str_replace(['{', '}'], ['&#123;', '&#125;'], Escape::html($row['placeholder']));
-            },
+                str_replace(['{', '}'], ['&#123;', '&#125;'], Escape::html($row['placeholder'])),
         ],
         [
             'title' => 'Replacement Text',

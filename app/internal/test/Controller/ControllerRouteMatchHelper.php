@@ -17,7 +17,7 @@ class ControllerRouteMatchHelper
      * @param array $routerConfig
      * @return \Laminas\Mvc\MvcEvent
      */
-    public function getMockRouteMatch($params = array(), $routerConfig = array())
+    public function getMockRouteMatch($params = [], $routerConfig = [])
     {
         $routeMatch = new RouteMatch($params);
         $event      = new MvcEvent();

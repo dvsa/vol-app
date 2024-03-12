@@ -21,10 +21,10 @@ class DiscPrinting
         // sort prefixes alphabetically by label
         asort($prefixes);
         foreach ($prefixes as $id => $result) {
-            $retv[] = array(
+            $retv[] = [
                 'value' => $id,
                 'label' => $result
-            );
+            ];
         }
         return $retv;
     }
@@ -33,27 +33,22 @@ class DiscPrinting
     {
         $data = [];
         $data['niFlag'] =
-            isset($params['operator-location']['niFlag']) ? $params['operator-location']['niFlag'] :
-                (isset($params['niFlag']) ? $params['niFlag'] : '');
+            $params['operator-location']['niFlag'] ?? $params['niFlag'] ?? '';
         $data['operatorType'] =
-            isset($params['operator-type']['goodsOrPsv']) ? $params['operator-type']['goodsOrPsv'] :
-                (isset($params['operatorType']) ? $params['operatorType'] : '');
+            $params['operator-type']['goodsOrPsv'] ?? $params['operatorType'] ?? '';
         $data['licenceType'] =
-            isset($params['licence-type']['licenceType']) ? $params['licence-type']['licenceType'] :
-                (isset($params['licenceType']) ? $params['licenceType'] : '');
+            $params['licence-type']['licenceType'] ?? $params['licenceType'] ?? '';
         $data['startNumber'] =
-            isset($params['discs-numbering']['startNumber']) ? $params['discs-numbering']['startNumber'] :
-                (isset($params['startNumberEntered']) ? $params['startNumberEntered'] : null);
+            $params['discs-numbering']['startNumber'] ?? $params['startNumberEntered'] ?? null;
         $data['discSequence'] =
-            isset($params['prefix']['discSequence']) ? $params['prefix']['discSequence'] :
-                (isset($params['discSequence']) ? $params['discSequence'] : '');
+            $params['prefix']['discSequence'] ?? $params['discSequence'] ?? '';
         $data['maxPages'] = (isset($params['discs-numbering']) && isset($params['discs-numbering']['maxPages']))
             ? $params['discs-numbering']['maxPages']
-            : (isset($params['maxPages']) ? $params['maxPages'] : null);
-        $data['discPrefix'] = isset($params['discPrefix']) ? $params['discPrefix'] : '';
-        $data['isSuccessfull'] = isset($params['isSuccessfull']) ? $params['isSuccessfull'] : '';
-        $data['endNumber'] = isset($params['endNumber']) ? $params['endNumber'] : '';
-        $data['queueId'] = isset($params['queueId']) ? $params['queueId'] : '';
+            : ($params['maxPages'] ?? null);
+        $data['discPrefix'] = $params['discPrefix'] ?? '';
+        $data['isSuccessfull'] = $params['isSuccessfull'] ?? '';
+        $data['endNumber'] = $params['endNumber'] ?? '';
+        $data['queueId'] = $params['queueId'] ?? '';
         return $data;
     }
 

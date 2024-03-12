@@ -1,23 +1,21 @@
 <?php
 
-return array(
-    'variables' => array(
+return [
+    'variables' => [
         'titleSingular' => 'Requested penalty',
         'title' => 'Requested penalties'
-    ),
-    'settings' => array(
+    ],
+    'settings' => [
 
-    ),
-    'columns' => array(
-        array(
+    ],
+    'columns' => [
+        [
             'title' => 'Penalty type',
-            'formatter' => function ($data) {
-                return $data['siPenaltyRequestedType']['id'] . ' - ' . $data['siPenaltyRequestedType']['description'];
-            },
-        ),
-        array(
+            'formatter' => fn($data) => $data['siPenaltyRequestedType']['id'] . ' - ' . $data['siPenaltyRequestedType']['description'],
+        ],
+        [
             'title' => 'Duration',
             'name' => 'duration',
-        ),
-    )
-);
+        ],
+    ]
+];
