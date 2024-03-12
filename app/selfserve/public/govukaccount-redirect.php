@@ -2,6 +2,8 @@
 
     declare(strict_types=1);
 
+    chdir(dirname(__DIR__));
+
     include __DIR__ . '/../vendor/autoload.php';
 
     $container = require __DIR__ . '/../config/container.php';
