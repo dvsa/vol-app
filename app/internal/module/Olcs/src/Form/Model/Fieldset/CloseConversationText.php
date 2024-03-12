@@ -15,7 +15,7 @@ class CloseConversationText
     /**
      * @Form\Type(PlainText::class)
      * @Form\Attributes({
-     *     "value": "The conversation will be removed from the Inbox and a transcript will be archived in docs and attachments tab."
+     *     "value": "messaging.close-conversation.popup"
      * })
      */
     public ?PlainText $text = null;
