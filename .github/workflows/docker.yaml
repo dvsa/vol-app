@@ -23,6 +23,7 @@ on:
 
 env:
   WORKING_DIR: infra/docker/${{ inputs.project }}
+  ECR_REGISTRY: 054614622558.dkr.ecr.eu-west-1.amazonaws.com
   AWS_OIDC_ROLE: ${{ vars[format('ACCOUNT_nonprod_TF_OIDC{0}_ROLE', (inputs.should-upload-artefact-to-ecr && '' || '_READONLY'))] || vars[format('TF_OIDC{0}_ROLE', (inputs.should-upload-artefact-to-ecr && '' || '_READONLY'))] }}
   AWS_REGION: ${{ vars.TF_AWS_REGION }}
 
@@ -46,7 +47,7 @@ jobs:
       - name: Check if image already exists in ECR
         id: check-ecr
         run: |
-          exists=$(aws ecr list-images --repository-name $PROJECT --filter tagStatus=TAGGED --query 'imageIds[?ends_with(imageTag, `'$OBJECT_PREFIX'`)]' | jq length)
+          exists=$(aws ecr list-images --repository-name vol-app/$PROJECT --filter tagStatus=TAGGED --query 'imageIds[?ends_with(imageTag, `'$OBJECT_PREFIX'`)]' | jq length)
 
           if [ $exists -gt 0 ]; then
             echo "exists=true" >> $GITHUB_OUTPUT
@@ -92,7 +93,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: vol-app/${{ inputs.project }}/${{ inputs.app-artefact-name }}
+          images: ${{ env.ECR_REGISTRY }}/vol-app/${{ inputs.project }}/${{ inputs.app-artefact-name }}
           tags: |
             type=sha,format=short
             type=semver,enable=${{ inputs.is-release }},pattern={{version}},value=${{ inputs.app-artefact-name }}
@@ -109,7 +110,7 @@ jobs:
         if: ${{ inputs.should-upload-artefact-to-ecr }}
         uses: docker/login-action@v3
         with:
-          registry: 054614622558.dkr.ecr.eu-west-1.amazonaws.com
+          registry: ${{ env.ECR_REGISTRY }}
 
       - name: Build ${{ inputs.should-upload-artefact-to-ecr && 'and push ' || '' }}Docker image
         id: build-and-push
@@ -137,4 +138,4 @@ jobs:
           plugin_url: https://d2hvyiie56hcat.cloudfront.net/linux/amd64/plugin/latest/notation-aws-signer-plugin.zip
           plugin_checksum: cccfe8fdcdf853d83fd57ffc80524eddda75ad7ae9d9a257b087007230ec02f9
           key_id: arn:aws:signer:eu-west-1:054614622558:/signing-profiles/vol_app_20240313124948142600000001
-          target_artifact_reference: 054614622558.dkr.ecr.eu-west-1.amazonaws.com/vol-app/${{ inputs.project }}/${{ inputs.app-artefact-name }}@${{ steps.build-and-push.outputs.digest }}
+          target_artifact_reference: ${{ env.ECR_REGISTRY }}/vol-app/${{ inputs.project }}/${{ inputs.app-artefact-name }}@${{ steps.build-and-push.outputs.digest }}
