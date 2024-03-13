@@ -52,10 +52,15 @@ module "ecr" {
       scan_frequency = "SCAN_ON_PUSH"
       filter         = "*"
       filter_type    = "WILDCARD"
-      }, {
+    },
+    {
       scan_frequency = "CONTINUOUS_SCAN"
       filter         = "v*"
       filter_type    = "WILDCARD"
     }
   ]
+}
+
+resource "aws_signer_signing_profile" "this" {
+  platform_id = "Notation-OCI-SHA384-ECDSA"
 }
