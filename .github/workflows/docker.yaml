@@ -23,7 +23,7 @@ on:
 
 env:
   WORKING_DIR: infra/docker/${{ inputs.project }}
-  AWS_OIDC_ROLE: ${{ vars[format('ACCOUNT_nonprod_TF_OIDC{1}_ROLE', (inputs.should-upload-artefact-to-ecr && '' || '_READONLY'))] || vars[format('TF_OIDC{0}_ROLE', (inputs.should-upload-artefact-to-ecr && '' || '_READONLY'))] }}
+  AWS_OIDC_ROLE: ${{ vars[format('ACCOUNT_nonprod_TF_OIDC{0}_ROLE', (inputs.should-upload-artefact-to-ecr && '' || '_READONLY'))] || vars[format('TF_OIDC{0}_ROLE', (inputs.should-upload-artefact-to-ecr && '' || '_READONLY'))] }}
   AWS_REGION: ${{ vars.TF_AWS_REGION }}
 
 jobs:
