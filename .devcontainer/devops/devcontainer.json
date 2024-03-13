@@ -1,0 +1,26 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20"
+    },
+    "ghcr.io/devcontainers/features/terraform:1": {
+      "terragrunt": "none",
+      "installTerraformDocs": true
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": ["dbaeumer.vscode-eslint", "EditorConfig.EditorConfig", "github.vscode-github-actions"]
+    }
+  },
+  "containerEnv": {
+    "AWS_ACCESS_KEY_ID": "test",
+    "AWS_SECRET_ACCESS_KEY": "test",
+    "AWS_DEFAULT_REGION": "eu-west-1"
+  },
+  "postCreateCommand": {
+    "npm-root": "npm install",
+    "npm-website": "cd website && npm install"
+  }
+}
