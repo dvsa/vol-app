@@ -93,7 +93,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.ECR_REGISTRY }}/vol-app/${{ inputs.project }}/${{ inputs.app-artefact-name }}
+          images: ${{ env.ECR_REGISTRY }}/vol-app/${{ inputs.project }}
           tags: |
             type=sha,format=short
             type=semver,enable=${{ inputs.is-release }},pattern={{version}},value=${{ inputs.app-artefact-name }}

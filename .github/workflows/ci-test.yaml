@@ -48,8 +48,6 @@ jobs:
       fail-fast: false
       matrix:
         project:
-          - api
-          - selfserve
           - internal
     uses: ./.github/workflows/php.yaml
     with:
@@ -71,8 +69,6 @@ jobs:
       fail-fast: false
       matrix:
         project:
-          - api
-          - selfserve
           - internal
     uses: ./.github/workflows/docker.yaml
     with:
