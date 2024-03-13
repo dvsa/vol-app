@@ -63,4 +63,6 @@ module "ecr" {
 
 resource "aws_signer_signing_profile" "this" {
   platform_id = "Notation-OCI-SHA384-ECDSA"
+
+  name_prefix = "vol_app_"
 }
