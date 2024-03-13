@@ -194,6 +194,7 @@ jobs:
     uses: ./.github/workflows/docker.yaml
     with:
       project: ${{ matrix.project }}
+      version: ${{ needs.get-version.outputs[matrix.project] }}
       app-artefact-name: app-${{ matrix.project}}-${{ needs.get-version.outputs[matrix.project] }}
       should-upload-artefact-to-ecr: false
     permissions:

@@ -9,6 +9,9 @@ on:
       project:
         type: string
         required: true
+      version:
+        type: string
+        required: true
       app-artefact-name:
         type: string
         required: true
@@ -36,7 +39,7 @@ jobs:
       image-exists: ${{ steps.check-ecr.outputs.exists }}
     env:
       PROJECT: ${{ inputs.project }}
-      OBJECT_PREFIX: ${{ inputs.app-artefact-name }}
+      OBJECT_PREFIX: ${{ inputs.version }}
     steps:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -96,8 +99,8 @@ jobs:
           images: ${{ env.ECR_REGISTRY }}/vol-app/${{ inputs.project }}
           tags: |
             type=sha,format=short
-            type=semver,enable=${{ inputs.is-release }},pattern={{version}},value=${{ inputs.app-artefact-name }}
-            type=raw,enable=${{ !inputs.is-release }},value=rc-${{ inputs.app-artefact-name }}
+            type=semver,enable=${{ inputs.is-release }},pattern={{version}},value=${{ inputs.version }}
+            type=raw,enable=${{ !inputs.is-release }},value=rc-${{ inputs.version }}
 
       - name: Configure AWS credentials
         if: ${{ inputs.should-upload-artefact-to-ecr }}
