@@ -38,5 +38,6 @@ No resources.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_oidc_readonly_role_arn"></a> [oidc\_readonly\_role\_arn](#output\_oidc\_readonly\_role\_arn) | The ARN of the GitHub Readonly OIDC role |
 | <a name="output_oidc_role_arn"></a> [oidc\_role\_arn](#output\_oidc\_role\_arn) | The ARN of the GitHub OIDC role |
 <!-- END_TF_DOCS -->

@@ -10,8 +10,19 @@ module "ecr" {
 
   repository_name = "vol-app/${each.key}"
 
-  repository_read_access_arns       = var.ecr_read_access_arns
-  repository_read_write_access_arns = var.ecr_read_write_access_arns
+  repository_read_access_arns = concat(
+    [
+      module.github[0].oidc_readonly_role_arn,
+    ],
+    var.ecr_read_access_arns
+  )
+
+  repository_read_write_access_arns = concat(
+    [
+      module.github[0].oidc_role_arn,
+    ],
+    var.ecr_read_write_access_arns
+  )
 
   create_lifecycle_policy = true
   repository_lifecycle_policy = jsonencode({
