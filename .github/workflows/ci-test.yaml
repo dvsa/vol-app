@@ -7,10 +7,43 @@ permissions:
   contents: read
 
 jobs:
+  get-version:
+    name: Get latest app version
+    runs-on: ubuntu-latest
+    outputs:
+      api: ${{ steps.api-version.outputs.version }}
+      selfserve: ${{ steps.selfserve-version.outputs.version }}
+      internal: ${{ steps.internal-version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - id: api-version
+        uses: ./.github/actions/get-app-version
+        with:
+          project-path: app/api
+      - id: selfserve-version
+        uses: ./.github/actions/get-app-version
+        with:
+          project-path: app/selfserve
+      - id: internal-version
+        uses: ./.github/actions/get-app-version
+        with:
+          project-path: app/internal
+      - name: Add to summary
+        run: |
+          echo "#### App versions:" >> $GITHUB_STEP_SUMMARY
+          echo "**API**: \`${{ steps.api-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Selfserve**: \`${{ steps.selfserve-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Internal**: \`${{ steps.internal-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+
   app:
     name: App
     concurrency:
-      group: app-${{ matrix.project }}-test
+      group: app-${{ matrix.project }}-${{ needs.get-version.outputs[matrix.project] }}
+    needs:
+      - get-version
     strategy:
       fail-fast: false
       matrix:
@@ -22,7 +55,7 @@ jobs:
     with:
       project: ${{ matrix.project }}
       should-upload-artefact: true
-      artefact-name: app-${{ matrix.project}}-test
+      artefact-name: app-${{ matrix.project}}-${{ needs.get-version.outputs[matrix.project] }}
       retention-days: 1
     permissions:
       contents: read
@@ -31,6 +64,7 @@ jobs:
     name: Docker
     needs:
       - app
+      - get-version
     concurrency:
       group: docker-${{ matrix.project }}-test
     strategy:
@@ -43,8 +77,8 @@ jobs:
     uses: ./.github/workflows/docker.yaml
     with:
       project: ${{ matrix.project }}
-      app-artefact-name: app-${{ matrix.project}}-test
-      should-upload-artefact-to-ecr: false
+      app-artefact-name: app-${{ matrix.project}}-${{ needs.get-version.outputs[matrix.project] }}
+      should-upload-artefact-to-ecr: true
     permissions:
       contents: read
       id-token: write
