@@ -94,11 +94,32 @@ class ConversationsController extends AbstractController implements ToggleAwareI
     public function addAction(): ViewModel
     {
         $form = $this->formHelperService->createForm(CreateForm::class, true, false);
-        if ($this->getRequest()->isPost()) {
+        $form->get('correlationId')->setValue(sha1(microtime()));
+
+        $isPost = $this->getRequest()->isPost();
+        $canUploadFiles = $this->getCurrentOrganisation()['isMessagingFileUploadEnabled'];
+        if (!$canUploadFiles) {
+            $form->get('form-actions')->remove('file');
+        }
+
+        if ($isPost) {
             $form->setData($this->getRequest()->getPost());
-            if ($form->isValid()) {
-                return $this->submitConversation($form);
-            }
+        }
+
+        $hasProcessedFiles = false;
+        if ($canUploadFiles && $isPost) {
+            $hasProcessedFiles = $this->processFiles(
+                $form,
+                'form-actions->file',
+                [$this, 'processFileUpload'],
+                [$this, 'deleteFile'],
+                [$this, 'getUploadedFiles'],
+                'form-actions->file->fileCount',
+            );
+        }
+
+        if (!$hasProcessedFiles && $isPost && $form->isValid()) {
+            return $this->submitConversation($form);
         }
 
         $view = new ViewModel();
@@ -144,6 +165,7 @@ class ConversationsController extends AbstractController implements ToggleAwareI
         $processedData = [
             'messageSubject' => $data['form-actions']['messageSubject'],
             'messageContent' => $data['form-actions']['messageContent'],
+            'correlationId'  => $data['correlationId'],
         ];
 
         $appOrLicNoPrefix = substr($data['form-actions']['appOrLicNo'], 0, 1);

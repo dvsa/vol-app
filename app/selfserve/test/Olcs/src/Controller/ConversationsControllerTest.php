@@ -17,7 +17,6 @@ use Laminas\Form\Element\Hidden;
 use Laminas\Form\Element\Text;
 use Laminas\Form\Fieldset;
 use Laminas\Http\Request;
-use Laminas\Http\Response as HttpResponse;
 use Laminas\Mvc\Controller\Plugin\Params;
 use Dvsa\Olcs\Transfer\Command\Messaging\Message\Create as CreateMessageCommand;
 use Laminas\Mvc\Controller\Plugin\Url;
@@ -26,6 +25,7 @@ use Laminas\View\Model\ViewModel;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Controller\ConversationsController as Sut;
+use Olcs\Form\Model\Form\Message\Create;
 use Olcs\Form\Model\Form\Message\Reply;
 use ReflectionClass;
 use LmcRbacMvc\Service\AuthorizationService;
@@ -59,7 +59,17 @@ class ConversationsControllerTest extends TestCase
         $this->setMockedProperties($reflectionClass, 'formHelperService', $this->mockFormHelperService);
         $this->setMockedProperties($reflectionClass, 'navigationService', $this->mockNavigation);
         $this->setMockedProperties($reflectionClass, 'uploadHelper', $this->mockUploadHelper);
+    }
 
+    public function setMockedProperties(ReflectionClass $reflectionClass, string $property, $value): void
+    {
+        $reflectionProperty = $reflectionClass->getProperty($property);
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->sut, $value);
+    }
+
+    public function testViewAction(): void
+    {
         $this->mockFormHelperService->shouldReceive('createForm')
                                     ->once()
                                     ->with(Reply::class, true, false)
@@ -73,17 +83,7 @@ class ConversationsControllerTest extends TestCase
                                             return true;
                                         },
                                     );
-    }
 
-    public function setMockedProperties(ReflectionClass $reflectionClass, string $property, $value): void
-    {
-        $reflectionProperty = $reflectionClass->getProperty($property);
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($this->sut, $value);
-    }
-
-    public function testViewAction(): void
-    {
         $mockResponse = m::mock(Response::class);
         $mockResponse->shouldReceive('isOk')
                      ->andReturn(true);
@@ -184,6 +184,84 @@ class ConversationsControllerTest extends TestCase
         $this->assertEquals($table, $view->getVariable('table'));
     }
 
+    public function testAdd(): void
+    {
+        $mockUrl = m::mock(Url::class);
+        $mockUrl->shouldReceive('fromRoute')
+                ->once()
+                ->with('conversations')
+                ->andReturn('/back/route');
+
+        $this->mockUser->shouldReceive('getUserData')
+                       ->once()
+                       ->andReturn(
+                           [
+                               'organisationUsers' => [
+                                   [
+                                       'organisation' => [
+                                           'isMessagingFileUploadEnabled' => true,
+                                       ],
+                                   ],
+                               ],
+                           ],
+                       );
+        $this->sut->shouldReceive('plugin')
+                  ->with('currentUser')
+                  ->andReturn($this->mockUser);
+        $this->sut->shouldReceive('plugin')
+                  ->with('url')
+                  ->once()
+                  ->andReturn($mockUrl);
+
+        $this->mockFormHelperService->shouldReceive('createForm')
+                                    ->once()
+                                    ->with(Create::class, true, false)
+                                    ->andReturn($this->mockForm);
+
+        $mockFormElement = m::mock(Hidden::class);
+        $mockFormElement->shouldReceive('setValue')
+                        ->once();
+
+        $this->mockForm->shouldReceive('get')
+                       ->once()
+                       ->with('correlationId')
+                       ->andReturn($mockFormElement);
+
+        $this->mockForm->shouldReceive('setData')
+                       ->once()
+                       ->with([]);
+
+        $mockRequest = m::mock(Request::class);
+        $mockRequest->shouldReceive('isPost')
+                    ->once()
+                    ->andReturn(true);
+        $mockRequest->shouldReceive('getPost')
+                    ->once()
+                    ->andReturn([]);
+
+        $this->sut->shouldReceive('getRequest')
+                  ->twice()
+                  ->andReturn($mockRequest);
+
+        $this->mockForm->shouldReceive('isValid')
+                       ->once()
+                       ->andReturn(false);
+
+        $this->sut->shouldReceive('processFiles')
+            ->once()
+            ->with(
+                $this->mockForm,
+                'form-actions->file',
+                [$this->sut, 'processFileUpload'],
+                [$this->sut, 'deleteFile'],
+                [$this->sut, 'getUploadedFiles'],
+                'form-actions->file->fileCount',
+            );
+
+        $view = $this->sut->addAction();
+        $this->assertInstanceOf(ViewModel::class, $view);
+    }
+
     public function testReply(): void
     {
         $mockRequest = m::mock(Request::class);
@@ -228,13 +306,11 @@ class ConversationsControllerTest extends TestCase
         $mockCommandHandler = m::mock(HandleCommand::class);
         $mockCommandHandler->shouldReceive('__invoke')
                            ->once()
-                           ->withArgs(
-                               function ($command) {
-                                   $this->assertInstanceOf(CreateMessageCommand::class, $command);
+                           ->withArgs(function ($command) {
+                               $this->assertInstanceOf(CreateMessageCommand::class, $command);
 
-                                   return true;
-                               },
-                           )
+                               return true;
+                           })
                            ->andReturn($mockCommandReturn);
 
         $this->sut->shouldReceive('plugin')
