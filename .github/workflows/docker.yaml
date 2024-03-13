@@ -64,6 +64,8 @@ jobs:
           ref: ${{ inputs.ref || null }}
           path: ${{ env.WORKING_DIR }}
 
+      - run: ls -la ${{ env.WORKING_DIR }}
+
       - uses: hadolint/hadolint-action@v3.1.0
         with:
           dockerfile: ${{ env.WORKING_DIR }}/Dockerfile
