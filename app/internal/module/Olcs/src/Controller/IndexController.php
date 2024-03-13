@@ -105,6 +105,7 @@ class IndexController extends AbstractController implements LeftViewProvider
         if (
             empty($filters['assignedToTeam'])
             && empty($filters['category'])
+            && (int)$filters['messaging'] !== 1
         ) {
             $table = $this->getTable('tasks-no-create', []);
             $table->setEmptyMessage('tasks.search.error.filter.needed');
