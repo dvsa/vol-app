@@ -7,30 +7,30 @@ permissions:
   contents: read
 
 jobs:
-  # app:
-  #   name: App
-  #   concurrency:
-  #     group: app-${{ matrix.project }}-${{ needs.get-version.outputs[matrix.project] }}
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       project:
-  #         - api
-  #         - selfserve
-  #         - internal
-  #   uses: ./.github/workflows/php.yaml
-  #   with:
-  #     project: ${{ matrix.project }}
-  #     should-upload-artefact: true
-  #     artefact-name: app-${{ matrix.project}}-test
-  #     retention-days: 1
-  #   permissions:
-  #     contents: read
+  app:
+    name: App
+    concurrency:
+      group: app-${{ matrix.project }}-test
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - api
+          - selfserve
+          - internal
+    uses: ./.github/workflows/php.yaml
+    with:
+      project: ${{ matrix.project }}
+      should-upload-artefact: true
+      artefact-name: app-${{ matrix.project}}-test
+      retention-days: 1
+    permissions:
+      contents: read
 
   docker:
     name: Docker
-    # needs:
-    #   - app
+    needs:
+      - app
     concurrency:
       group: docker-${{ matrix.project }}-test
     strategy:
