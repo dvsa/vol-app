@@ -2,6 +2,8 @@
 
 [![CI](https://github.com/dvsa/vol-app/actions/workflows/ci.yaml/badge.svg)](https://github.com/dvsa/vol-app/actions/workflows/ci.yaml) [![CD](https://github.com/dvsa/vol-app/actions/workflows/cd.yaml/badge.svg)](https://github.com/dvsa/vol-app/actions/workflows/cd.yaml)
 
+---
+
 The `vol-app` repository is the mono-repository for the Vehicle Operator Licence (VOL) application. It is a web application that allows users to apply for a vehicle operator licence, manage their licence and view their licence history.
 
 Production: https://www.vehicle-operator-licensing.service.gov.uk/
