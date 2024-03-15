@@ -4,30 +4,17 @@ declare(strict_types=1);
 
 namespace Olcs\Form\Model\Fieldset\Message;
 
-use Common\Form\Elements\InputFilters\ActionButton;
 use Common\Form\Model\Fieldset\MultipleFileUpload;
 use Laminas\Form\Annotation as Form;
-use Laminas\Form\Element\Textarea;
-use Laminas\Filter\StringTrim;
-use Laminas\Validator\StringLength;
 
 class Reply
 {
     /**
-     * @Form\Attributes({
-     *     "class": "extra-long",
-     *     "maxlength": 1000
-     * })
-     * @Form\Options({
-     *     "label": "",
-     *     "hint": "You can enter up to 1000 characters"
-     * })
-     * @Form\Required(true)
-     * @Form\Type(Textarea::class)
-     * @Form\Filter(StringTrim::class)
-     * @Form\Validator(StringLength::class, options={"min": 5, "max": 1000})
+     * @Form\Name("inputs")
+     * @Form\Attributes({"id": "inputs"})
+     * @Form\ComposedObject(ReplyInput::class)
      */
-    public ?TextArea $reply = null;
+    public ?ReplyInput $inputs = null;
 
     /**
      * @Form\Name("file")
@@ -37,16 +24,9 @@ class Reply
     public ?MultipleFileUpload $file = null;
 
     /**
-     * @Form\Attributes({
-     *     "type": "submit",
-     *     "data-module": "govuk-button",
-     *     "class": "govuk-button govuk-button--default",
-     *     "id": "send"
-     * })
-     * @Form\Options({
-     *     "label": "Send message"
-     * })
-     * @Form\Type(ActionButton::class)
+     * @Form\Name("actions")
+     * @Form\Attributes({"id": "actions"})
+     * @Form\ComposedObject(Actions::class)
      */
-    public ?ActionButton $send = null;
+    public ?Actions $send = null;
 }

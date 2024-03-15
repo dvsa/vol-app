@@ -12,23 +12,23 @@ use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Table\TableFactory;
+use Dvsa\Olcs\Transfer\Command\Messaging\Message\Create as CreateMessageCommand;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\Form\Element\Hidden;
 use Laminas\Form\Element\Text;
 use Laminas\Form\Fieldset;
 use Laminas\Http\Request;
 use Laminas\Mvc\Controller\Plugin\Params;
-use Dvsa\Olcs\Transfer\Command\Messaging\Message\Create as CreateMessageCommand;
 use Laminas\Mvc\Controller\Plugin\Url;
 use Laminas\Navigation\Navigation;
 use Laminas\View\Model\ViewModel;
+use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Controller\ConversationsController as Sut;
 use Olcs\Form\Model\Form\Message\Create;
 use Olcs\Form\Model\Form\Message\Reply;
 use ReflectionClass;
-use LmcRbacMvc\Service\AuthorizationService;
 
 class ConversationsControllerTest extends TestCase
 {
@@ -46,6 +46,7 @@ class ConversationsControllerTest extends TestCase
         $this->mockParams = m::mock(Params::class);
         $this->mockUploadHelper = m::mock(FileUploadHelperService::class);
         $this->mockUser = m::mock(User::class);
+        $this->mockFormActions = m::mock(Fieldset::class);
 
         $this->sut = m::mock(Sut::class)
                       ->makePartial()
@@ -90,15 +91,15 @@ class ConversationsControllerTest extends TestCase
         $mockResponse->shouldReceive('getResult')
                      ->andReturn(
                          [
-                             'extra'       => [
+                             'extra' => [
                                  'conversation' => [
                                      'subject'  => 'Banana',
                                      'isClosed' => true,
                                  ],
-                                 'application' => [
+                                 'application'  => [
                                      'id' => 100000,
                                  ],
-                                 'licence'     => [
+                                 'licence'      => [
                                      'licNo' => 'OK1234',
                                  ],
                              ],
@@ -124,18 +125,18 @@ class ConversationsControllerTest extends TestCase
                          ->andReturn(1);
 
         $this->mockUser->shouldReceive('getUserData')
-                 ->once()
-                 ->andReturn(
-                     [
-                         'organisationUsers' => [
-                             [
-                                 'organisation' => [
-                                     'isMessagingFileUploadEnabled' => true,
-                                 ],
-                             ],
-                         ],
-                     ],
-                 );
+                       ->once()
+                       ->andReturn(
+                           [
+                               'organisationUsers' => [
+                                   [
+                                       'organisation' => [
+                                           'isMessagingFileUploadEnabled' => true,
+                                       ],
+                                   ],
+                               ],
+                           ],
+                       );
 
         $mockUrl = m::mock(Url::class);
         $mockUrl->shouldReceive('fromRoute')
@@ -179,6 +180,20 @@ class ConversationsControllerTest extends TestCase
                        ->with('correlationId')
                        ->andReturn($mockFormElement);
 
+        $this->mockFormActions->shouldReceive('get')
+                              ->once()
+                              ->with('actions')
+                              ->andReturn($this->mockFormActions);
+
+        $this->mockFormActions->shouldReceive('remove')
+                              ->zeroOrMoreTimes()
+                              ->with('guidance');
+
+        $this->mockForm->shouldReceive('get')
+                       ->once()
+                       ->with('form-actions')
+                       ->andReturn($this->mockFormActions);
+
         $view = $this->sut->viewAction();
         $this->assertInstanceOf(ViewModel::class, $view);
         $this->assertEquals($table, $view->getVariable('table'));
@@ -221,11 +236,28 @@ class ConversationsControllerTest extends TestCase
         $mockFormElement = m::mock(Hidden::class);
         $mockFormElement->shouldReceive('setValue')
                         ->once();
+        $mockFormElement->shouldReceive('getAttribute')
+                        ->once()
+                        ->with('class')
+                        ->andReturn('file-upload');
+        $mockFormElement->shouldReceive('setAttribute')
+                        ->once()
+                        ->with('class', 'file-upload last');
 
         $this->mockForm->shouldReceive('get')
                        ->once()
                        ->with('correlationId')
                        ->andReturn($mockFormElement);
+
+        $this->mockFormActions->shouldReceive('get')
+                              ->once()
+                              ->with('file')
+                              ->andReturn($mockFormElement);
+
+        $this->mockForm->shouldReceive('get')
+                       ->once()
+                       ->with('form-actions')
+                       ->andReturn($this->mockFormActions);
 
         $this->mockForm->shouldReceive('setData')
                        ->once()
@@ -248,15 +280,15 @@ class ConversationsControllerTest extends TestCase
                        ->andReturn(false);
 
         $this->sut->shouldReceive('processFiles')
-            ->once()
-            ->with(
-                $this->mockForm,
-                'form-actions->file',
-                [$this->sut, 'processFileUpload'],
-                [$this->sut, 'deleteFile'],
-                [$this->sut, 'getUploadedFiles'],
-                'form-actions->file->fileCount',
-            );
+                  ->once()
+                  ->with(
+                      $this->mockForm,
+                      'form-actions->file',
+                      [$this->sut, 'processFileUpload'],
+                      [$this->sut, 'deleteFile'],
+                      [$this->sut, 'getUploadedFiles'],
+                      'form-actions->file->fileCount',
+                  );
 
         $view = $this->sut->addAction();
         $this->assertInstanceOf(ViewModel::class, $view);
@@ -330,15 +362,21 @@ class ConversationsControllerTest extends TestCase
                        ->with('id')
                        ->andReturn($mockFormElement);
 
-        $mockFormActionsElement = m::mock(Fieldset::class);
-        $mockFormActionsElement->shouldReceive('get')
-                               ->once()
-                               ->with('reply')
-                               ->andReturn($mockFormElement);
+        $this->mockFormActions->shouldReceive('get')
+                              ->once()
+                              ->with('reply')
+                              ->andReturn($mockFormElement);
+        $this->mockFormActions->shouldReceive('remove')
+                              ->once()
+                              ->with('guidance');
         $this->mockForm->shouldReceive('get')
                        ->once()
                        ->with('form-actions')
-                       ->andReturn($mockFormActionsElement);
+                       ->andReturn($this->mockFormActions);
+
+        $this->mockFormActions->shouldReceive('get')
+                              ->with('inputs')
+                              ->andReturn($this->mockFormActions);
 
         $this->mockForm->shouldReceive('isValid')
                        ->once()

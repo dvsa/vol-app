@@ -96,6 +96,9 @@ class ConversationsController extends AbstractController implements ToggleAwareI
         $form = $this->formHelperService->createForm(CreateForm::class, true, false);
         $form->get('correlationId')->setValue(sha1(microtime()));
 
+        $fileFieldset = $form->get('form-actions')->get('file');
+        $fileFieldset->setAttribute('class', $fileFieldset->getAttribute('class') . ' last');
+
         $isPost = $this->getRequest()->isPost();
         $canUploadFiles = $this->getCurrentOrganisation()['isMessagingFileUploadEnabled'];
         if (!$canUploadFiles) {
@@ -163,13 +166,13 @@ class ConversationsController extends AbstractController implements ToggleAwareI
     {
         $data = $form->getData();
         $processedData = [
-            'messageSubject' => $data['form-actions']['messageSubject'],
-            'messageContent' => $data['form-actions']['messageContent'],
+            'messageSubject' => $data['form-actions']['inputs']['messageSubject'],
+            'messageContent' => $data['form-actions']['inputs']['messageContent'],
             'correlationId'  => $data['correlationId'],
         ];
 
-        $appOrLicNoPrefix = substr($data['form-actions']['appOrLicNo'], 0, 1);
-        $appOrLicNoSuffix = substr($data['form-actions']['appOrLicNo'], 1);
+        $appOrLicNoPrefix = substr($data['form-actions']['inputs']['appOrLicNo'], 0, 1);
+        $appOrLicNoSuffix = substr($data['form-actions']['inputs']['appOrLicNo'], 1);
         switch ($appOrLicNoPrefix) {
             case MessagingAppOrLicNo::PREFIX_LICENCE:
                 $processedData['licence'] = $appOrLicNoSuffix;
@@ -215,6 +218,8 @@ class ConversationsController extends AbstractController implements ToggleAwareI
         $this->formHelperService->setFormActionFromRequest($form, $this->getRequest());
 
         $table = $this->tableFactory->buildTable('messages-view', $messages, $params);
+
+        $form->get('form-actions')->get('actions')->remove('guidance');
 
         $canUploadFiles = $this->getCurrentOrganisation()['isMessagingFileUploadEnabled'];
         if (!$canUploadFiles) {
@@ -270,7 +275,7 @@ class ConversationsController extends AbstractController implements ToggleAwareI
                 [
                     'conversation'   => $this->params()->fromRoute('conversationId'),
                     'correlationId'  => $this->getRequest()->getPost('correlationId'),
-                    'messageContent' => $form->get('form-actions')->get('reply')->getValue(),
+                    'messageContent' => $form->get('form-actions')->get('inputs')->get('reply')->getValue(),
                 ],
             ),
         );
