@@ -147,7 +147,7 @@ return [
     ],
 
     // The domain value needed to delete GA cookies
-    'google-ga-domain' => '.ssweb.%domain%',
+    'google-ga-domain' => '.%olcs_ss_cookie%',
 
     'cache-encryption' => [
         'node_suffix' => 'ssweb',
