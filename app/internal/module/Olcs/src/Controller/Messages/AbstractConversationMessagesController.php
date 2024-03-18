@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Olcs\Controller\Messages;
 
 use Common\Form\Form;
+use Common\RefData;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -53,6 +54,15 @@ abstract class AbstractConversationMessagesController extends AbstractInternalCo
     }
 
     abstract protected function getConversationViewRoute(): string;
+
+    /** @param array $parameters */
+    protected function modifyListQueryParameters($parameters)
+    {
+        $parameters['includeReadRoles'] = 1;
+        $parameters['readRoles'] = [RefData::ROLE_OPERATOR_ADMIN, RefData::ROLE_OPERATOR_TM, RefData::ROLE_OPERATOR_USER];
+
+        return $parameters;
+    }
 
     /**
      * @inheritDoc
