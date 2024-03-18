@@ -33,6 +33,10 @@ return [
             }
         ],
         [
+            'title' => 'Sub Category',
+            'formatter' => fn($row) => $row['subCategory']['subCategoryName'] ?? 'N/A'
+        ],
+        [
             'title' => 'Criteria',
             'formatter' => TaskAllocationCriteria::class,
         ],

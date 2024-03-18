@@ -7,6 +7,7 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableFactory;
+use Olcs\Service\Data\SubCategory;
 use Psr\Container\ContainerInterface;
 use Laminas\Navigation\Navigation;
 use Laminas\ServiceManager\Factory\FactoryInterface;
@@ -34,13 +35,16 @@ class TaskAllocationRulesControllerFactory implements FactoryInterface
         $userListInternal = $container->get(PluginManager::class)->get(UserListInternal::class);
         assert($userListInternal instanceof UserListInternal);
 
+        $subCategory = $container->get(PluginManager::class)->get(SubCategory::class);
+
         return new TaskAllocationRulesController(
             $translationHelper,
             $formHelperService,
             $flashMessenger,
             $navigation,
             $tableFactory,
-            $userListInternal
+            $userListInternal,
+            $subCategory
         );
     }
 }

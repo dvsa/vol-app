@@ -14,7 +14,7 @@ OLCS.ready(function() {
           // if not ID then adding, therefore remove alpha-split option
           $(this).find('option[value="alpha-split"]').remove()
       }
-  })
+  });
 
   OLCS.cascadeForm({
     cascade: false,

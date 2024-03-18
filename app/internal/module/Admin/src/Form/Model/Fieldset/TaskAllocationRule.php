@@ -17,6 +17,12 @@ class TaskAllocationRule
         IdTrait;
 
     /**
+     * @Form\Attributes({"value": "Criteria:"})
+     * @Form\Type("Common\Form\Elements\Types\GuidanceTranslated")
+     */
+    public $headingCriteria = null;
+
+    /**
      * @Form\Attributes({"id":"category","placeholder":""})
      * @Form\Options({
      *     "short-label": "Category",
@@ -31,6 +37,22 @@ class TaskAllocationRule
      * @Form\Type("DynamicSelect")
      */
     public $category = null;
+
+    /**
+     * @Form\Attributes({"id":"subCategory","placeholder":""})
+     * @Form\Options({
+     *     "short-label": "Sub category",
+     *     "label": "Sub category",
+     *     "service_name": "Olcs\Service\Data\SubCategory",
+     *     "context": {
+     *       "isTaskCategory": "Y"
+     *     },
+     *     "empty_option": "Not applicable"
+     * })
+     * @Form\Required(false)
+     * @Form\Type("DynamicSelect")
+     */
+    public $subCategory = null;
 
     /**
      * @Form\Name("goodsOrPsv")
@@ -87,6 +109,12 @@ class TaskAllocationRule
      * @Form\Type("DynamicSelect")
      */
     public $trafficArea = null;
+
+    /**
+     * @Form\Attributes({"value": "Assign to:"})
+     * @Form\Type("Common\Form\Elements\Types\GuidanceTranslated")
+     */
+    public $headingAssignTo = null;
 
     /**
      * @Form\Type("Hidden")

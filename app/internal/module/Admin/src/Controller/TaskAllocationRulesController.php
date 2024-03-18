@@ -16,6 +16,7 @@ use Dvsa\Olcs\Transfer\Query\TaskAllocationRule\GetList as ListDto;
 use Laminas\Navigation\Navigation;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Data\Mapper\TaskAllocationRule as Mapper;
+use Olcs\Service\Data\SubCategory;
 use Olcs\Service\Data\UserListInternal;
 
 class TaskAllocationRulesController extends AbstractInternalController
@@ -31,10 +32,17 @@ class TaskAllocationRulesController extends AbstractInternalController
      * @var array
      */
     protected $inlineScripts = [
-        'editAction' => ['table-actions', 'forms/task-alpha-split'],
-        'addAction' => ['table-actions', 'forms/task-alpha-split'],
+        'editAction' => [
+            'table-actions',
+            'forms/task-alpha-split',
+            'forms/selected-category-subcategory-filtering',
+        ],
+        'addAction' => [
+            'table-actions',
+            'forms/task-alpha-split',
+            'forms/selected-category-subcategory-filtering',
+        ],
     ];
-
 
     // list
     protected $tableName = 'task-allocation-rules';
@@ -90,18 +98,22 @@ class TaskAllocationRulesController extends AbstractInternalController
     ];
 
     protected TableFactory $tableFactory;
-    protected UserListInternal $userListInternal;
+    protected UserListInternal $userListInternalDataService;
+
+    protected SubCategory $subCategoryDataService;
 
     public function __construct(
-        TranslationHelperService $translationHelperService,
-        FormHelperService $formHelper,
+        TranslationHelperService    $translationHelperService,
+        FormHelperService           $formHelper,
         FlashMessengerHelperService $flashMessengerHelperService,
-        Navigation $navigation,
-        TableFactory $tableFactory,
-        UserListInternal $userListInternal
+        Navigation                  $navigation,
+        TableFactory                $tableFactory,
+        UserListInternal            $userListInternalDataService,
+        SubCategory                 $subCategoryDataService
     ) {
         $this->tableFactory = $tableFactory;
-        $this->userListInternal = $userListInternal;
+        $this->userListInternalDataService = $userListInternalDataService;
+        $this->subCategoryDataService = $subCategoryDataService;
         parent::__construct($translationHelperService, $formHelper, $flashMessengerHelperService, $navigation);
     }
     /**
@@ -168,10 +180,16 @@ class TaskAllocationRulesController extends AbstractInternalController
      */
     public function alterFormForEdit(\Common\Form\Form $form, $formData)
     {
-        // Setup the initial list of users in the dropdown dependant on the team
+        // Setup initial user list based on current team
         if (isset($formData['details']['team']['id'])) {
-            $this->userListInternal
+            $this->userListInternalDataService
                 ->setTeamId($formData['details']['team']['id']);
+        }
+
+        // Setup initial sub-categories filter based on current category
+        if (isset($formData['details']['category']['id'])) {
+            $this->subCategoryDataService
+                ->setCategory($formData['details']['category']['id']);
         }
 
         /* @var $formHelper \Common\Service\Helper\FormHelperService */
@@ -312,7 +330,7 @@ class TaskAllocationRulesController extends AbstractInternalController
     {
         $teamId = $this->params()->fromRoute('team');
         if ((int)$teamId) {
-            $this->userListInternal->setTeamId($teamId);
+            $this->userListInternalDataService->setTeamId($teamId);
         }
     }
 

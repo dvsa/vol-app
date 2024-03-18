@@ -5,11 +5,6 @@ namespace OlcsTest\Data\Mapper;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Data\Mapper\TaskAllocationRule as Sut;
 
-/**
- * TaskAllocationRuleTest
- *
- * @author Mat Evans <mat.evans@valtech.co.uk>
- */
 class TaskAllocationRuleTest extends MockeryTestCase
 {
     public function testMapFromResult()
@@ -18,6 +13,7 @@ class TaskAllocationRuleTest extends MockeryTestCase
             'id' => 1404,
             'version' => 33,
             'category' => 'CAT',
+            'subCategory' => 'SUBCAT',
             'goodsOrPsv' => ['id' => 'GOODS'],
             'isMlh' => '',
             'trafficArea' => 'TA',
@@ -29,6 +25,7 @@ class TaskAllocationRuleTest extends MockeryTestCase
                 'id' => 1404,
                 'version' => 33,
                 'category' => 'CAT',
+                'subCategory' => 'SUBCAT',
                 'goodsOrPsv' => 'GOODS',
                 'isMlh' => 'N',
                 'trafficArea' => 'TA',
@@ -46,6 +43,7 @@ class TaskAllocationRuleTest extends MockeryTestCase
             'id' => 1404,
             'version' => 33,
             'category' => 'CAT',
+            'subCategory' => 'SUBCAT',
             'goodsOrPsv' => ['id' => 'GOODS'],
             'isMlh' => '',
             'trafficArea' => 'TA',
@@ -58,6 +56,7 @@ class TaskAllocationRuleTest extends MockeryTestCase
                 'id' => 1404,
                 'version' => 33,
                 'category' => 'CAT',
+                'subCategory' => 'SUBCAT',
                 'goodsOrPsv' => 'GOODS',
                 'isMlh' => 'N',
                 'trafficArea' => 'TA',
@@ -83,6 +82,7 @@ class TaskAllocationRuleTest extends MockeryTestCase
                 'id' => 1404,
                 'version' => 33,
                 'category' => 'CAT',
+                'subCategory' => 'SUBCAT',
                 'goodsOrPsv' => 'lcat_gv',
                 'isMlh' => 'N',
                 'trafficArea' => 'TA',
@@ -95,6 +95,7 @@ class TaskAllocationRuleTest extends MockeryTestCase
             'id' => 1404,
             'version' => 33,
             'category' => 'CAT',
+            'subCategory' => 'SUBCAT',
             'goodsOrPsv' => 'lcat_gv',
             'isMlh' => 'N',
             'trafficArea' => 'TA',
@@ -111,6 +112,7 @@ class TaskAllocationRuleTest extends MockeryTestCase
                 'id' => 1404,
                 'version' => 33,
                 'category' => 'CAT',
+                'subCategory' => 'SUBCAT',
                 'goodsOrPsv' => 'na',
                 'isMlh' => 'N',
                 'trafficArea' => 'TA',
@@ -123,6 +125,7 @@ class TaskAllocationRuleTest extends MockeryTestCase
             'id' => 1404,
             'version' => 33,
             'category' => 'CAT',
+            'subCategory' => 'SUBCAT',
             'goodsOrPsv' => null,
             'isMlh' => null,
             'trafficArea' => 'TA',
@@ -139,6 +142,7 @@ class TaskAllocationRuleTest extends MockeryTestCase
                 'id' => 1404,
                 'version' => 33,
                 'category' => 'CAT',
+                'subCategory' => 'SUBCAT',
                 'goodsOrPsv' => 'lcat_gv',
                 'isMlh' => 'N',
                 'trafficArea' => 'TA',
@@ -151,6 +155,7 @@ class TaskAllocationRuleTest extends MockeryTestCase
             'id' => 1404,
             'version' => 33,
             'category' => 'CAT',
+            'subCategory' => 'SUBCAT',
             'goodsOrPsv' => 'lcat_gv',
             'isMlh' => 'N',
             'trafficArea' => 'TA',
