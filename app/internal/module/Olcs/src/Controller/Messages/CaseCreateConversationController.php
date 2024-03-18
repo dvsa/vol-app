@@ -42,6 +42,7 @@ class CaseCreateConversationController extends AbstractCreateConversationControl
 
             $queryResult = $queryResponse->getResult();
             $this->licence = (string)$queryResult['licence']['id'];
+            $this->application = (string)$queryResult['application']['id'];
         }
 
         return parent::onDispatch($e);
