@@ -34,7 +34,7 @@
         "laminas/laminas-view": "^2.5",
         "lm-commons/lmc-rbac-mvc": "^3.0",
         "firebase/php-jwt": "^6.0",
-        "olcs/olcs-auth": "^6.0.0",
+        "olcs/olcs-auth": "^7.0",
         "olcs/olcs-common": "^6.0.0",
         "olcs/olcs-logging": "^6.0.0",
         "olcs/olcs-transfer": "^6.0.0",

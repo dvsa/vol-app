@@ -49,7 +49,7 @@ use Olcs\View\Builder\BuilderInterface as ViewBuilderInterface;
  * @method Response handleQuery(QueryInterface $query)
  * @method Response handleCommand(CommandInterface $query)
  * @method Redirect redirect()
- * @method Plugin\Confirm confirm(string $string, bool $setTerminal, string|null $custom, string $customConfirmBtn , string $customCancelBtn)
+ * @method Plugin\Confirm confirm(string $label, bool $setTerminal = false, string $custom = '', string $confirmBtnLabel = 'Continue', string $cancelBtnLabel = 'Cancel') Invokes a confirmation dialog with optional parameters for customization.
  */
 abstract class AbstractInternalController extends AbstractOlcsController
 {

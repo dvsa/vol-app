@@ -99,8 +99,8 @@ class TransportManagerController extends AbstractController implements Transport
         $transportManagerId = (int) $this->params()->fromRoute('transportManager');
 
         /**
- * @var \Laminas\Http\Request $request
-*/
+        * @var \Laminas\Http\Request $request
+        */
         $request = $this->getRequest();
         if ($request->isPost()) {
             $data = (array)$request->getPost();

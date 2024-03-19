@@ -1,4 +1,5 @@
 <?php
+
 namespace AdminTest\Data\Mapper;
 
 use Mockery as m;

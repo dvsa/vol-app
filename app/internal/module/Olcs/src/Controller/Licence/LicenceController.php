@@ -27,6 +27,7 @@ class LicenceController extends AbstractController implements LicenceControllerI
     protected ComplaintsHelperService $complaintsHelper;
 
     protected $navigation;
+    protected $lva;
 
     protected FlashMessengerHelperService $flashMessengerHelper;
 

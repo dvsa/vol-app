@@ -57,7 +57,6 @@ class XhProf implements \PHPUnit_Framework_TestListener
      */
     public function addError(\PHPUnit_Framework_Test $test, Exception $e, $time)
     {
-
     }
 
     /**
@@ -69,7 +68,6 @@ class XhProf implements \PHPUnit_Framework_TestListener
      */
     public function addFailure(\PHPUnit_Framework_Test $test, \PHPUnit_Framework_AssertionFailedError $e, $time)
     {
-
     }
 
     /**
@@ -81,7 +79,6 @@ class XhProf implements \PHPUnit_Framework_TestListener
      */
     public function addIncompleteTest(\PHPUnit_Framework_Test $test, \Exception $e, $time)
     {
-
     }
 
     /**
@@ -94,7 +91,6 @@ class XhProf implements \PHPUnit_Framework_TestListener
      */
     public function addRiskyTest(\PHPUnit_Framework_Test $test, \Exception $e, $time)
     {
-
     }
 
     /**
@@ -106,7 +102,6 @@ class XhProf implements \PHPUnit_Framework_TestListener
      */
     public function addSkippedTest(\PHPUnit_Framework_Test $test, \Exception $e, $time)
     {
-
     }
 
     /**
@@ -144,7 +139,6 @@ class XhProf implements \PHPUnit_Framework_TestListener
         $execTime = (int)($this->et - $this->st) * 100;
 
         if ($execTime > 200) {
-
             $runs = new \XHProfRuns_Default();
             $run = $runs->save_run($data, $this->options['appNamespace']);
 
@@ -175,7 +169,6 @@ class XhProf implements \PHPUnit_Framework_TestListener
     {
         $this->suites--;
         if ($this->suites == 0) {
-
             krsort($this->runs);
 
             foreach ($this->runs as $time => $runs) {

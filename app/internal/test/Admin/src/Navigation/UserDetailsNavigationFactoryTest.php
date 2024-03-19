@@ -21,7 +21,7 @@ class UserDetailsNavigationFactoryTest extends MockeryTestCase
 {
     public function testGetName()
     {
-        $sut = new UserDetailsNavigationFactory;
+        $sut = new UserDetailsNavigationFactory();
 
         $this->assertEquals('user-details', $sut->getName());
     }

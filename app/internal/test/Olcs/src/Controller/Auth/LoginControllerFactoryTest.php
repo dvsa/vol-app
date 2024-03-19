@@ -53,7 +53,6 @@ class LoginControllerFactoryTest extends MockeryTestCase
         $sm->method('get')->willReturnMap([
             [InternalCommandAdapter::class, $this->createMock(InternalCommandAdapter::class)],
             [AuthenticationServiceInterface::class, $this->createMock(AuthenticationServiceInterface::class)],
-            ['Auth\CookieService', $this->createMock(CookieService::class)],
             [CurrentUser::class, $this->createMock(CurrentUser::class)],
             [FlashMessenger::class, $this->createMock(FlashMessenger::class)],
             [FormHelperService::class, $this->createMock(FormHelperService::class)],

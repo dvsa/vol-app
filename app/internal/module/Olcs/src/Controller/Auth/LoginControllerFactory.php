@@ -31,7 +31,6 @@ class LoginControllerFactory implements FactoryInterface
         $controller = new LoginController(
             $container->get(InternalCommandAdapter::class),
             $container->get(AuthenticationServiceInterface::class),
-            $container->get('Auth\CookieService'),
             $controllerPluginManager->get(CurrentUser::class),
             $controllerPluginManager->get(FlashMessenger::class),
             $container->get(FormHelperService::class),

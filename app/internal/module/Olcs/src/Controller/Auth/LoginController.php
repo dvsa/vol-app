@@ -8,7 +8,6 @@ use Common\Controller\Plugin\CurrentUser;
 use Common\Controller\Plugin\Redirect;
 use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Auth\Container\AuthChallengeContainer;
-use Dvsa\Olcs\Auth\Service\Auth\CookieService;
 use Laminas\Authentication\Adapter\ValidatableAdapterInterface;
 use Laminas\Authentication\Result;
 use Laminas\EventManager\Event;
@@ -23,7 +22,6 @@ use Laminas\Mvc\InjectApplicationEventInterface;
 use Laminas\Router\Http\RouteMatch;
 use Laminas\View\Model\ViewModel;
 use Olcs\Form\Model\Form\Auth\Login;
-use Olcs\Form\Model\Form\Auth\LoginForm;
 
 class LoginController implements InjectApplicationEventInterface
 {
@@ -38,7 +36,6 @@ class LoginController implements InjectApplicationEventInterface
     public const ROUTE_AUTH_EXPIRED_PASSWORD = 'auth/expired-password';
     public const ROUTE_AUTH_LOGIN_GET = 'auth/login/GET';
     public const ROUTE_DASHBOARD = 'dashboard';
-    public const DVSA_OLCS_AUTH_CLIENT_OPENAM = 'Dvsa\Olcs\Auth\Client\OpenAm';
     public const CHALLENGE_NEW_PASSWORD_REQUIRED = 'NEW_PASSWORD_REQUIRED';
     public const DVSA_OLCS_AUTH_CLIENT_COGNITO = 'Dvsa\Olcs\Auth\Client\CognitoAdapter';
 
@@ -49,11 +46,6 @@ class LoginController implements InjectApplicationEventInterface
 
     /** @var AuthenticationServiceInterface */
     protected $authenticationService;
-
-    /**
-     * @var CookieService
-     */
-    private $cookieService;
 
     /**
      * @var event;
@@ -99,7 +91,6 @@ class LoginController implements InjectApplicationEventInterface
      * LoginController constructor.
      * @param ValidatableAdapterInterface $authenticationAdapter
      * @param AuthenticationServiceInterface $authenticationService
-     * @param CookieService $cookieService
      * @param CurrentUser $currentUser
      * @param FlashMessenger $flashMessenger
      * @param FormHelperService $formHelper
@@ -111,7 +102,6 @@ class LoginController implements InjectApplicationEventInterface
     public function __construct(
         ValidatableAdapterInterface $authenticationAdapter,
         AuthenticationServiceInterface $authenticationService,
-        CookieService $cookieService,
         CurrentUser $currentUser,
         FlashMessenger $flashMessenger,
         FormHelperService $formHelper,
@@ -122,7 +112,6 @@ class LoginController implements InjectApplicationEventInterface
     ) {
         $this->authenticationAdapter = $authenticationAdapter;
         $this->authenticationService = $authenticationService;
-        $this->cookieService = $cookieService;
         $this->currentUser = $currentUser;
         $this->flashMessenger = $flashMessenger;
         $this->formHelper = $formHelper;
@@ -281,6 +270,8 @@ class LoginController implements InjectApplicationEventInterface
     }
 
     /**
+     * Handles successful authentication.
+     *
      * @param Result $result
      * @param Response $response
      * @param Request $request
@@ -288,38 +279,13 @@ class LoginController implements InjectApplicationEventInterface
      */
     private function handleSuccessfulAuthentication(Result $result, Response $response, Request $request)
     {
-        switch ($result->getIdentity()['provider']) {
-            case static::DVSA_OLCS_AUTH_CLIENT_OPENAM:
-                return $this->handleSuccessOpenAMResult($result->getIdentity(), $request, $response);
-            case self::DVSA_OLCS_AUTH_CLIENT_COGNITO:
-                return $this->handleSuccessCognitoResult();
-            default:
-                return $this->redirectHelper->toRoute(static::ROUTE_AUTH_LOGIN_GET);
-        }
-    }
+        $identityProvider = $result->getIdentity()['provider'];
 
-    /**
-     * @param array $identity
-     * @param Request $request
-     * @param Response $response
-     * @return Response
-     */
-    private function handleSuccessOpenAMResult(array $identity, Request $request, Response $response)
-    {
-        $gotoUrl = $request->getQuery('goto', '');
-
-        $this->cookieService->createTokenCookie($response, $identity['tokenId'], false);
-
-        // The "goto" URL added by openAm is always http, if we are running https, then need to change it
-        if ($request->getUri()->getScheme() === 'https') {
-            $gotoUrl = str_replace('http://', 'https://', $gotoUrl);
+        if ($identityProvider === self::DVSA_OLCS_AUTH_CLIENT_COGNITO) {
+            return $this->handleSuccessCognitoResult();
         }
 
-        if ($this->validateGotoUrl($gotoUrl, $request)) {
-            return $this->redirectHelper->toUrl($gotoUrl);
-        }
-
-        return $this->redirectHelper->toRoute(static::ROUTE_DASHBOARD);
+        return $this->redirectHelper->toRoute(static::ROUTE_AUTH_LOGIN_GET);
     }
 
     /**
@@ -361,10 +327,7 @@ class LoginController implements InjectApplicationEventInterface
         switch ($messages['challengeName']) {
             case AuthChallengeContainer::CHALLENEGE_NEW_PASWORD_REQUIRED:
                 $this->applyAuthChallengeContainer($messages);
-                return $this->redirectHelper->toRoute(
-                    self::ROUTE_AUTH_EXPIRED_PASSWORD,
-                    $messages['challengeParameters'] // TODO: Remove passing this in once OpenAM removed
-                );
+                return $this->redirectHelper->toRoute(self::ROUTE_AUTH_EXPIRED_PASSWORD);
             default:
                 // Unsupported challenge so redirect to login page
                 return $this->redirectHelper->toRoute(self::ROUTE_AUTH_LOGIN_GET);
@@ -376,12 +339,6 @@ class LoginController implements InjectApplicationEventInterface
      */
     private function applyAuthChallengeContainer(array $messages): void
     {
-        // OpenAM this key won't exist so we skip adding into session
-        // TODO: Remove this check once OpenAM is removed
-        if (!array_key_exists('USER_ID_FOR_SRP', $messages['challengeParameters'])) {
-            return;
-        }
-
         $this->authChallengeContainer
             ->setChallengeName($messages['challengeName'])
             ->setChallengeSession($messages['challengeSession'])

@@ -45,6 +45,8 @@ class SubmissionController extends AbstractInternalController implements Submiss
 
     protected $routeIdentifier = 'submission';
 
+    protected $sectionId;
+
     /**
      * @var array
      */

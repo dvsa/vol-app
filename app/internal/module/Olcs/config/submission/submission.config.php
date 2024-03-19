@@ -1,4 +1,5 @@
 <?php
+
 return [
     'mandatory-sections' => [
         'case-summary',
