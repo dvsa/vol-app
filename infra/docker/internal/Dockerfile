@@ -3,8 +3,7 @@
 ##
 
 # installing the base image from ECR, tag is appended with v0.1
-# FROM 245185850403.dkr.ecr.eu-west-1.amazonaws.com/php-7.4:v0.1
-FROM php-7.4:v0.1
+FROM 245185850403.dkr.ecr.eu-west-1.amazonaws.com/php-7.4:v0.1
 
 USER root
 
@@ -21,10 +20,10 @@ RUN apk add --update --no-cache \
 
 RUN docker-php-ext-install intl pdo_mysql opcache
 
-# check opcache enabled and configured ??
-
 USER www-data
 
+# pass the tar.gz bundle via docker build command
+# e.g. docker build --build-arg olcs_internal=olcs_internal.tar.gz --build-arg olcs_static=olcs_static.tar.gz
 ARG olcs_internal
 ARG olcs_static
 
