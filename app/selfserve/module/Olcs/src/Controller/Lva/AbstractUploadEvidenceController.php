@@ -23,6 +23,8 @@ abstract class AbstractUploadEvidenceController extends AbstractController
 
     protected string $location = 'external';
 
+    protected $operatingCentreId;
+
     /**
      * Data from API
      * @var array

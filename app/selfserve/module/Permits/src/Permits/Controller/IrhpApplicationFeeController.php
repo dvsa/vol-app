@@ -34,6 +34,8 @@ class IrhpApplicationFeeController extends AbstractSelfserveController
     use GenericReceipt;
     use FlashMessengerTrait;
 
+    protected $lva;
+
     private const FEE_BREAKDOWN_TABLES = [
         RefData::IRHP_BILATERAL_PERMIT_TYPE_ID => 'irhp-fee-breakdown-bilateral',
         RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID => 'irhp-fee-breakdown-multilateral',
@@ -274,5 +276,9 @@ class IrhpApplicationFeeController extends AbstractSelfserveController
         $this->data = $this->mapperManager
             ->get(IrhpApplicationFeeSummary::class)
             ->mapForDisplay($this->data);
+    }
+
+    protected function checkForRedirect($lvaId) {
+        return null;
     }
 }

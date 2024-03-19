@@ -4,6 +4,9 @@ namespace Olcs\Service\Qa;
 
 class TemplateVarsGenerator
 {
+    protected QuestionArrayProvider $questionArrayProvider;
+    protected GuidanceTemplateVarsAdder $guidanceTemplateVarsAdder;
+
     /**
      * Create service instance
      *

@@ -2,7 +2,7 @@
 
 namespace Permits\Controller\Config\DataSource;
 
-use Dvsa\Olcs\Transfer\Query\Permits\ById as PermitApplicationDto;
+use Dvsa\Olcs\Transfer\Query\IrhpApplication\ById as PermitApplicationDto;
 use Olcs\Controller\Config\DataSource\AbstractDataSource;
 
 /**

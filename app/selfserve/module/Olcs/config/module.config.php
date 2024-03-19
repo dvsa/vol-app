@@ -1528,7 +1528,6 @@ return [
         ],
         'invokables' => [
             'generatePeopleList' => \Olcs\View\Helper\GeneratePeopleList::class,
-            'tmCheckAnswersChangeLink' => \Olcs\View\Helper\TmCheckAnswersChangeLink::class,
         ]
     ],
     'view_manager' => [

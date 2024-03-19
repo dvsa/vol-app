@@ -27,6 +27,7 @@ class ConditionsUndertakingsController extends Lva\AbstractController
 
     protected $lva = 'licence';
     protected string $location = 'external';
+    protected $lvaAdapter;
 
     protected LicenceConditionsUndertakingsReviewService $licenceConditionsUndertakingsReviewSvc;
     protected GuidanceHelperService $guidanceHelper;

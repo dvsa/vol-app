@@ -2,7 +2,7 @@
 
 namespace Olcs\Controller\Initializer;
 
-use Dvsa\Olcs\Auth\Controller\LoginController;
+use Olcs\Controller\Auth\LoginController;
 use Psr\Container\ContainerInterface;
 use Laminas\Mvc\MvcEvent;
 use Laminas\ServiceManager\Initializer\InitializerInterface;

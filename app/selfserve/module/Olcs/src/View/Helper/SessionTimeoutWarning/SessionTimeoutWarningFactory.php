@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace Olcs\View\Helper\SessionTimeoutWarning;
 
 use Psr\Container\ContainerInterface;
-use Laminas\ServiceManager\factory\FactoryInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\View\Helper\HeadMeta;
 
 class SessionTimeoutWarningFactory implements FactoryInterface

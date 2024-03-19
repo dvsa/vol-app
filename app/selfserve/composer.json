@@ -31,7 +31,7 @@
         "laminas/laminas-validator": "^2.25",
         "laminas/laminas-view": "^2.11",
         "lm-commons/lmc-rbac-mvc": "^3.3",
-        "olcs/olcs-auth": "^6.0.0",
+        "olcs/olcs-auth": "^7.0",
         "olcs/olcs-common": "^6.0.0",
         "olcs/olcs-logging": "^6.0.0",
         "olcs/olcs-transfer": "^6.0.0",

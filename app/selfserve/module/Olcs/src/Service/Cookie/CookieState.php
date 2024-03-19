@@ -7,13 +7,16 @@ use RuntimeException;
 
 class CookieState
 {
+    protected bool $isValid;
+    protected ?Preferences $preferences;
+
     /**
      * Create instance
      *
      * @param bool $isValid
      * @param Preferences|null $preferences
      *
-     * @return CookieState
+     * @return void
      */
     public function __construct($isValid, ?Preferences $preferences = null)
     {

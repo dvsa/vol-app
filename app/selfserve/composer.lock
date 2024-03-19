@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "936886d26b36257c1f6c11299365d459",
+    "content-hash": "e4f87135e54265df9ac1b53850be6a9e",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -4464,16 +4464,16 @@
         },
         {
             "name": "olcs/olcs-auth",
-            "version": "v6.0.0",
+            "version": "v7.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dvsa/olcs-auth.git",
-                "reference": "0f6697ca81e8c169af0aca385781a52ac0b9dc55"
+                "reference": "09167d5ab9bced8febb632bcb41dec8e45bfd8ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dvsa/olcs-auth/zipball/0f6697ca81e8c169af0aca385781a52ac0b9dc55",
-                "reference": "0f6697ca81e8c169af0aca385781a52ac0b9dc55",
+                "url": "https://api.github.com/repos/dvsa/olcs-auth/zipball/09167d5ab9bced8febb632bcb41dec8e45bfd8ca",
+                "reference": "09167d5ab9bced8febb632bcb41dec8e45bfd8ca",
                 "shasum": ""
             },
             "require": {
@@ -4516,9 +4516,9 @@
             ],
             "description": "OLCS Authentication",
             "support": {
-                "source": "https://github.com/dvsa/olcs-auth/tree/v6.0.0"
+                "source": "https://github.com/dvsa/olcs-auth/tree/v7.0.0"
             },
-            "time": "2024-02-20T12:13:06+00:00"
+            "time": "2024-03-19T12:26:01+00:00"
         },
         {
             "name": "olcs/olcs-common",
@@ -8761,7 +8761,8 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.4"
+        "php": "^7.4",
+        "ext-redis": "*"
     },
     "platform-dev": [],
     "platform-overrides": {

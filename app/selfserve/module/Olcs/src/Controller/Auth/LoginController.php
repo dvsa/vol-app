@@ -34,7 +34,6 @@ class LoginController
     public const ROUTE_AUTH_EXPIRED_PASSWORD = 'auth/expired-password';
     public const ROUTE_AUTH_LOGIN_GET = 'auth/login/GET';
     public const ROUTE_INDEX = 'index';
-    public const DVSA_OLCS_AUTH_CLIENT_OPENAM = 'Dvsa\Olcs\Auth\Client\OpenAm';
     public const CHALLENGE_NEW_PASSWORD_REQUIRED = 'NEW_PASSWORD_REQUIRED';
     public const DVSA_OLCS_AUTH_CLIENT_COGNITO = 'Dvsa\Olcs\Auth\Client\CognitoAdapter';
 
@@ -259,9 +258,7 @@ class LoginController
             case AuthChallengeContainer::CHALLENEGE_NEW_PASWORD_REQUIRED:
                 $this->applyAuthChallengeContainer($messages);
                 return $this->redirectHelper->toRoute(
-                    self::ROUTE_AUTH_EXPIRED_PASSWORD,
-                    $messages['challengeParameters'] // TODO: Remove passing this in once OpenAM removed
-                );
+                    self::ROUTE_AUTH_EXPIRED_PASSWORD);
             default:
                 // Unsupported challenge so redirect to login page
                 Logger::warn('Received unexpected challenge from AWS Cognito', $messages);
@@ -274,12 +271,6 @@ class LoginController
      */
     private function applyAuthChallengeContainer(array $messages): void
     {
-        // OpenAM this key won't exist so we skip adding into session
-        // TODO: Remove this check once OpenAM is removed
-        if (!array_key_exists('USER_ID_FOR_SRP', $messages['challengeParameters'])) {
-            return;
-        }
-
         $this->authChallengeContainer
             ->setChallengeName($messages['challengeName'])
             ->setChallengeSession($messages['challengeSession'])

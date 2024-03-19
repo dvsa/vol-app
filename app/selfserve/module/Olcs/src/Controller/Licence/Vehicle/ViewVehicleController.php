@@ -16,7 +16,7 @@ use Laminas\Form\Element\Select;
 use Laminas\Form\Form;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
-use Laminas\Mvc\Controller\Plugin\FlashMessenger;
+use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\Router\RouteMatch;
 use Laminas\View\Model\ViewModel;
 use Olcs\DTO\Licence\OtherActiveLicenceListDTO;

@@ -102,6 +102,7 @@ class InformationChangedController extends AbstractSurrenderController
         if ($this->hasInformationChanged()) {
             return 'markup-licence-surrender-information-changed-content-changed';
         }
+        return '';
     }
 
     public function alterForm($form)

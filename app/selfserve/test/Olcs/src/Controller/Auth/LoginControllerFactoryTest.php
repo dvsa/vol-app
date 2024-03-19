@@ -49,7 +49,6 @@ class LoginControllerFactoryTest extends TestCase
         $serviceManager->method('get')->willReturnMap([
             [SelfserveCommandAdapter::class, $this->createMock(SelfserveCommandAdapter::class)],
             [AuthenticationServiceInterface::class  , $this->createMock(AuthenticationServiceInterface::class)],
-            ['Auth\CookieService', $this->createMock(CookieService::class)],
             [CurrentUser::class, $this->createMock(CurrentUser::class)],
             [FlashMessenger::class, $this->createMock(FlashMessenger::class)],
             [FormHelperService::class, $this->createMock(FormHelperService::class)],

@@ -10,21 +10,18 @@ use Common\Controller\Plugin\Redirect;
 use Common\Rbac\User;
 use Common\Service\Helper\FormHelperService;
 use Dvsa\Olcs\Auth\Container\AuthChallengeContainer;
-use Interop\Container\Containerinterface;
 use Laminas\Authentication\Result;
 use Laminas\Form\Annotation\AnnotationBuilder;
 use Laminas\Form\Form;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
 use Laminas\Http\Response as HttpResponse;
-use Laminas\Mvc\Controller\PluginManager;
 use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\Router\Http\RouteMatch;
 use Laminas\Stdlib\Parameters;
 use Laminas\View\Model\ViewModel;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Mockery\MockInterface;
 use Olcs\Auth\Adapter\SelfserveCommandAdapter;
 use Olcs\Controller\Auth\LoginController;
 use Olcs\Form\Model\Form\Auth\Login;
@@ -411,7 +408,7 @@ class LoginControllerTest extends MockeryTestCase
         $this->authenticationAdapterMock->allows('setCredential')->andReturn($this->identity())->byDefault();
 
         // Expect
-        $this->redirectHelperMock->expects()->toRoute(LoginController::ROUTE_AUTH_EXPIRED_PASSWORD, ['USER_ID_FOR_SRP' => 'username'])->andReturn($this->redirect());
+        $this->redirectHelperMock->expects()->toRoute(LoginController::ROUTE_AUTH_EXPIRED_PASSWORD)->andReturn($this->redirect());
 
         // Execute
         $this->sut->postAction($request, new RouteMatch([]), new Response());
