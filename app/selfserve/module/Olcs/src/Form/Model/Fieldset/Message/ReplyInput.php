@@ -8,6 +8,7 @@ use Laminas\Filter\StringTrim;
 use Laminas\Form\Annotation as Form;
 use Laminas\Form\Element\Textarea;
 use Laminas\Validator\StringLength;
+use Laminas\Validator\NotEmpty;
 
 class ReplyInput
 {
@@ -23,7 +24,22 @@ class ReplyInput
      * @Form\Required(true)
      * @Form\Type(Textarea::class)
      * @Form\Filter(StringTrim::class)
-     * @Form\Validator(StringLength::class, options={"min": 5, "max": 1000})
+     * @Form\Validator(NotEmpty::class,
+     *     options={
+     *         "messages":{NotEmpty::IS_EMPTY: "messaging.form.message.content.empty.error_message"},
+     *     },
+     *     breakChainOnFailure=true
+     *  )
+     * @Form\Validator(StringLength::class,
+     *     options={
+     *         "min": 5,
+     *         "max": 1000,
+     *         "messages": {
+     *              StringLength::TOO_SHORT: "messaging.form.message.content.too_short.error_message",
+     *              StringLength::TOO_LONG: "messaging.form.message.content.too_long.error_message",
+     *          }
+     *     }
+     * )
      */
     public ?TextArea $reply = null;
 }
