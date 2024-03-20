@@ -6,8 +6,9 @@ namespace Olcs\Form\Model\Fieldset;
 
 use Common\Form\Elements\InputFilters\ActionButton;
 use Laminas\Form\Annotation as Form;
-use Laminas\Form\Element\File;
 use Laminas\Form\Element\Textarea;
+use Laminas\Validator\StringLength;
+use Laminas\Validator\NotEmpty;
 
 class LicenceMessageReply
 {
@@ -18,12 +19,27 @@ class LicenceMessageReply
      * })
      * @Form\Options({
      *     "label": "You can enter up to 1000 characters",
-     *     "error-message": "Value is required and must be between 5 and 1000 characters."
      * })
-     * @Form\Required(true)
      * @Form\Type(\Laminas\Form\Element\Textarea::class)
      * @Form\Filter(\Laminas\Filter\StringTrim::class)
-     * @Form\Validator(\Laminas\Validator\StringLength::class, options={"min": 5, "max": 1000})
+     * @Form\Validator(NotEmpty::class,
+     *     options={
+     *         "messages": {
+     *             NotEmpty::IS_EMPTY: "messaging.form.message.content.empty.error_message"
+     *         },
+     *     },
+     *     breakChainOnFailure=true
+     *   )
+     * @Form\Validator(StringLength::class,
+     *      options={
+     *          "min": 5,
+     *          "max": 1000,
+     *          "messages": {
+     *               StringLength::TOO_SHORT: "messaging.form.message.content.too_short.error_message",
+     *               StringLength::TOO_LONG: "messaging.form.message.content.too_long.error_message",
+     *           }
+     *      }
+     *  )
      */
     public ?TextArea $reply = null;
 
