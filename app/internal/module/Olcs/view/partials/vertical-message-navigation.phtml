@@ -1,29 +1,41 @@
 <ul class="vertical-navigation" role="menu">
+  <?php
+
+  use Laminas\Form\Form;
+  use Laminas\Navigation\Page\AbstractPage;
+
+  /** @var AbstractPage $page */
+  foreach ($this->container as $page) : ?>
+
     <?php
-    use Laminas\Navigation\Page\AbstractPage;
-    /** @var AbstractPage $page */
-    foreach ($this->container as $page) : ?>
-            
-        <?php
-        if($page instanceof AbstractPage)
-        {
-            if (! $this->navigation()->accept($page, false)) {
-                continue;
-            }
-        }
+    if ($page instanceof AbstractPage && !$this->navigation()->accept($page, false)) {
+      continue;
+    }
 
-        $isActive = $page->isActive();
-        $isVisible = $page->isVisible();
+    $isActive = $page->isActive();
+    $isVisible = $page->isVisible();
 
-        ?>
-        <?php if($isVisible): ?>
-            <li class="vertical-navigation__item <?php echo $isActive ? 'current' : ''; ?>">
-                <?php if ($isActive) : ?>
-                    <span><?php echo $this->translate($page->getLabel()); ?></span>
-                <?php else: ?>
-                    <a class="govuk-link--no-visited-state" href="<?php echo $page->getHref();  ?>"><?php echo $this->translate($page->getLabel());; ?></a>
-                <?php endif; ?>
-            </li>
+    ?>
+    <?php if ($isVisible): ?>
+      <li class="vertical-navigation__item <?php echo $isActive ? 'current' : ''; ?>">
+        <?php if ($isActive) : ?>
+          <span><?php echo $this->translate($page->getLabel()); ?></span>
+        <?php else: ?>
+          <a class="govuk-link--no-visited-state" href="<?php echo $page->getHref(); ?>">
+            <?php echo $this->translate($page->getLabel()); ?></a>
         <?php endif; ?>
-    <?php endforeach; ?>
+      </li>
+    <?php endif; ?>
+  <?php endforeach; ?>
+  <?php
+  $tableFilters = $this->placeholder('tableFilters')->getValue();
+
+  if ($tableFilters instanceof Form) {
+    ?>
+    <li class="vertical-navigation__item">
+      <?php echo $this->form($tableFilters); ?>
+    </li>
+    <?php
+  }
+  ?>
 </ul><!-- .vertical-navigation -->
