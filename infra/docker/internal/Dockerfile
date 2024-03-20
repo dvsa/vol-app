@@ -1,7 +1,3 @@
-##
- # Copyright © Amazon.com and Affiliates: This deliverable is considered Developed Content as defined in the AWS Service Terms and the SOW between the parties dated 2024-01-16.
-##
-
 # installing the base image from ECR, tag is appended with v0.1
 FROM 245185850403.dkr.ecr.eu-west-1.amazonaws.com/php-7.4:v0.1
 
