@@ -124,7 +124,6 @@ return [
             \Dvsa\Olcs\Transfer\Query\CacheableLongTermQueryInterface::class => 43200, //12 hours
         ],
     ],
-    'html-purifier-cache-dir' => '/tmp',
 
     'verify' => [
         'forwarder' => [

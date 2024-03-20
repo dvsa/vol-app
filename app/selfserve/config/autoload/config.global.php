@@ -189,7 +189,7 @@ return [
         ],
     ],
 
-    'html-purifier-cache-dir' => '/var/tmp/htmlPurifierCache',
+    'html-purifier-cache-dir' => 'data/cache/HtmlPurifier',
 
     'verify' => [
         'forwarder' => [
