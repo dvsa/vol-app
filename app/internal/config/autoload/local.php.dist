@@ -129,8 +129,6 @@ return [
             ],
         ],
     ],
-    'html-purifier-cache-dir' => '/tmp',
-
     'auth' => [
         'user_unique_id_salt' => '1234',
     ],

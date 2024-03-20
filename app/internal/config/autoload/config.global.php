@@ -160,7 +160,7 @@ return [
             ],
         ],
     ],
-    'html-purifier-cache-dir' => '/var/tmp/htmlPurifierCache',
+    'html-purifier-cache-dir' => 'data/cache/HtmlPurifier',
 
     'auth' => [
         'user_unique_id_salt' => '%user_unique_id_salt%',
