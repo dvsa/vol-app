@@ -82,7 +82,7 @@ class MarkerService implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : MarkerService
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): MarkerService
     {
         $this->setMarkerPluginManager($container->get(\Olcs\Service\Marker\MarkerPluginManager::class));
         return $this;

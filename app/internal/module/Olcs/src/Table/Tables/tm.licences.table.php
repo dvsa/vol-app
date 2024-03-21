@@ -1,6 +1,7 @@
 <?php
 
 use Common\Service\Table\Formatter\SumColumns;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -11,6 +12,10 @@ return [
             'title' => 'Manager type',
             'name' => 'tmType',
             'formatter' => function ($row) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $routeParams = ['id' => $row['id'], 'action' => 'edit-tm-licence'];
                 $url = $this->generateUrl($routeParams);
                 return '<a class="govuk-link" href="' . $url . '">' .
@@ -22,9 +27,13 @@ return [
             'title' => 'Licence No',
             'name' => 'licence',
             'formatter' => function ($row) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $routeParams = ['licence' => $row['licence']['id']];
                 $url = $this->generateUrl($routeParams, 'lva-licence/transport_managers');
-                return '<a class="govuk-link" href="'. $url . '">' . $row['licence']['licNo'] . '</a>';
+                return '<a class="govuk-link" href="' . $url . '">' . $row['licence']['licNo'] . '</a>';
             },
         ],
         [

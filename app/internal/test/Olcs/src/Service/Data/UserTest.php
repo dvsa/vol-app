@@ -6,6 +6,7 @@
  * @author someone <someone@valtech.co.uk>
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
+
 namespace OlcsTest\Service\Data;
 
 use Common\Exception\DataServiceException;

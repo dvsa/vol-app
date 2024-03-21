@@ -5,6 +5,7 @@
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery as m;

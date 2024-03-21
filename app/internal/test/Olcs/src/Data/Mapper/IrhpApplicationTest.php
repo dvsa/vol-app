@@ -349,7 +349,7 @@ class IrhpApplicationTest extends MockeryTestCase
                 ]
             ]
         ];
- 
+
         $data = [
             'topFields' => $topFields,
             'bottomFields' => $bottomFields,
@@ -379,7 +379,7 @@ class IrhpApplicationTest extends MockeryTestCase
                 ]
             ]
         );
-        
+
         $this->assertEquals(
             $expected,
             $this->sut->mapFromForm($data)

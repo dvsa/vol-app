@@ -1,6 +1,7 @@
 <?php
 
 use Common\Service\Table\Formatter\Address;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -39,6 +40,10 @@ return [
             'title' => 'OC Address',
             'width' => '350px',
             'formatter' => function ($data, $column) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $column['formatter'] = Address::class;
                 $addressList = '';
                 foreach ($data['ocAddress'] as $operatingCentre) {
@@ -57,8 +62,12 @@ return [
         ],
         [
             'title' => 'Status',
-            'formatter' => fn($data, $column) => empty($data['closeDate']) ?
-                $this->translator->translate('Open') : $this->translator->translate('Closed')
+            'formatter' => fn($data, $column) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                empty($data['closeDate']) ? $this->translator->translate('Open') : $this->translator->translate('Closed')
         ],
         [
             'type' => 'Checkbox',

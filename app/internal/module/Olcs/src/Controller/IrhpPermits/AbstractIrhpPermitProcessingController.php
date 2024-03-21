@@ -18,6 +18,8 @@ abstract class AbstractIrhpPermitProcessingController extends AbstractIrhpPermit
 
     protected TreeRouteStack $router;
 
+    protected string $helperClass;
+
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,

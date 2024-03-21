@@ -8,8 +8,8 @@ namespace Olcs\Controller\Traits;
  */
 trait GenerateActionTrait
 {
-    protected abstract function getDocumentGenerateRoute();
-    protected abstract function getDocumentGenerateRouteParams();
+    abstract protected function getDocumentGenerateRoute();
+    abstract protected function getDocumentGenerateRouteParams();
 
     /**
      * Generate action.

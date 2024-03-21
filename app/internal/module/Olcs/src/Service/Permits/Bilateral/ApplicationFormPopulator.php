@@ -38,7 +38,7 @@ class ApplicationFormPopulator
      * @param Form $form
      * @param array $data
      *
-     * @return array
+     * @return void
      */
     public function populate(Form $form, array $data)
     {

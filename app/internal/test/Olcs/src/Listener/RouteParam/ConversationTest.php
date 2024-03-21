@@ -68,16 +68,16 @@ class ConversationTest extends TestCase
                        ->twice()
                        ->andReturn('7');
 
-        $mockAnnotationBuilder->shouldReceive('createQuery')
-                              ->twice()
-                              ->withArgs(
-                                  function ($licence) {
-                                      $this->assertInstanceOf(Licence::class, $licence);
-                                      $this->assertEquals(7, $licence->getId());
-
-                                      return true;
-                                  },
-                              )->andReturn($mockQuery);
+        $mockAnnotationBuilder
+            ->shouldReceive('createQuery')
+            ->twice()
+            ->withArgs(
+                function ($licence) {
+                    $this->assertInstanceOf(Licence::class, $licence);
+                    $this->assertEquals(7, $licence->getId());
+                    return true;
+                },
+            )->andReturn($mockQuery);
 
         $mockQueryService->shouldReceive('send')
                          ->twice()

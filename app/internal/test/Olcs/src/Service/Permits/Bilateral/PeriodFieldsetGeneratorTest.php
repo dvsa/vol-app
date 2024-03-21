@@ -5,6 +5,7 @@
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
+
 namespace OlcsTest\Service\Permits\Bilateral;
 
 use Olcs\Service\Permits\Bilateral\FieldsetPopulatorInterface;
@@ -39,7 +40,7 @@ class PeriodFieldsetGeneratorTest extends TestCase
     private $formFactory;
 
     private $periodFieldsetGenerator;
-    
+
     private $fieldsetPopulatorType2;
 
     public function setUp(): void

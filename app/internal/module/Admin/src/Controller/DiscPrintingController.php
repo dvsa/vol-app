@@ -17,6 +17,7 @@ use Dvsa\Olcs\Transfer\Command\PsvDisc\ConfirmPrinting as ConfirmPrintingPsvDto;
 use Dvsa\Olcs\Transfer\Command\PsvDisc\PrintDiscs as PrintDiscsPsvDto;
 use Dvsa\Olcs\Transfer\Query\DiscSequence\DiscPrefixes as DiscPrefixesQry;
 use Dvsa\Olcs\Transfer\Query\DiscSequence\DiscsNumbering as DiscsNumberingQry;
+use Laminas\Form\FormInterface;
 use Laminas\Mvc\Controller\AbstractActionController as LaminasAbstractActionController;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
@@ -75,7 +76,7 @@ class DiscPrintingController extends LaminasAbstractActionController implements 
         $inlineScripts = ['disc-printing'];
 
         if ($this->getRequest()->isPost()) {
-            $this->formPost($form, 'processForm');
+            $this->formPost($form, [$this, 'processForm']);
             if ($this->hasDiscsToPrint) {
                 $inlineScripts[] = 'disc-printing-popup';
             }
@@ -157,9 +158,9 @@ class DiscPrintingController extends LaminasAbstractActionController implements 
     /**
      * Alter form when we have all data set
      *
-     * @param \Common\Form\Form $form Form
+     * @param FormInterface $form Form
      *
-     * @return \Common\Form\Form
+     * @return FormInterface
      */
     protected function alterFormBeforeValidation($form)
     {

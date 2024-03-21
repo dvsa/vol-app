@@ -61,7 +61,7 @@ class LicenceDecisionLegislation extends AbstractDataService implements ListData
          * implements the LicenceControllerInterface which is configured to attach the licence Listener.
          * The listener looks for a licence Id and sets it.
          */
-        $context = empty($context)? $this->getLicenceContext() : $context;
+        $context = empty($context) ? $this->getLicenceContext() : $context;
 
         $data = $this->fetchListData($context);
 

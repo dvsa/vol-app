@@ -3,6 +3,7 @@
 use Common\Service\Table\Formatter\IrhpPermitRangeType;
 use Common\Service\Table\Formatter\IssuedPermitLicencePermitReference;
 use Common\Service\Table\Formatter\RefData;
+use Common\Service\Table\TableBuilder;
 use Common\Util\Escape;
 
 return [
@@ -42,6 +43,10 @@ return [
             'isNumeric' => true,
             'name' => 'id',
             'formatter' => function ($row) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $relatedApplication = $row['irhpPermitApplication']['relatedApplication'];
 
                 return $this->callFormatter(
@@ -81,13 +86,18 @@ return [
         [
             'title' => 'Usage',
             'name' => 'usage',
-            'formatter' => fn($row) => $this->callFormatter(
-                [
-                    'name' => 'irhpPermitRangeType',
-                    'formatter' => IrhpPermitRangeType::class,
-                ],
-                $row['irhpPermitRange']
-            )
+            'formatter' => fn($row) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                $this->callFormatter(
+                    [
+                        'name' => 'irhpPermitRangeType',
+                        'formatter' => IrhpPermitRangeType::class,
+                    ],
+                    $row['irhpPermitRange']
+                )
         ],
         [
             'title' => 'Status',

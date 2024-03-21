@@ -1,16 +1,16 @@
-$(function() {
+$(function () {
 
-  "use strict";
+    "use strict";
 
-  OLCS.cascadeForm({
-    form: "form[method=post]",
-    rulesets: {
-      "fields": {
-        "*": true,
-        "venueOther": function() {
-          return OLCS.formHelper("fields", "venue").val() === "other";
+    OLCS.cascadeForm({
+        form: "form[method=post]",
+        rulesets: {
+            "fields": {
+                "*": true,
+                "venueOther": function () {
+                    return OLCS.formHelper("fields", "venue").val() === "other";
+                }
+            }
         }
-      }
-    }
-  });
+    });
 });

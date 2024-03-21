@@ -11,8 +11,8 @@ use Laminas\Form\Annotation as Form;
  */
 class FinancialStandingRate
 {
-    use VersionTrait,
-        IdTrait;
+    use VersionTrait;
+    use IdTrait;
 
     /**
      * @Form\Name("goodsOrPsv")

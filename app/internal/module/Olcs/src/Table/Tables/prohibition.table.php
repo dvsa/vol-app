@@ -1,6 +1,7 @@
 <?php
 
 use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -32,6 +33,10 @@ return [
         [
             'title' => 'Prohibition date',
             'formatter' => function ($data, $column) {
+                    /**
+                     * @var TableBuilder $this
+                     * @psalm-scope-this TableBuilder
+                     */
                     $column['formatter'] = Date::class;
                     return '<a class="govuk-link" href="' . $this->generateUrl(
                         ['prohibition' => $data['id']],

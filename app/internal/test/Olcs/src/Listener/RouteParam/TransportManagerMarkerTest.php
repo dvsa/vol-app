@@ -131,7 +131,7 @@ class TransportManagerMarkerTest extends MockeryTestCase
     {
         $this->mockQuery(['id' => 12], 'TM');
         $this->mockMarkerService->shouldReceive('addData')
-            ->with('transportManager', ['result'=>'TM', 'results'=>'TM'])->once();
+            ->with('transportManager', ['result' => 'TM', 'results' => 'TM'])->once();
 
         $this->mockQuery(
             [

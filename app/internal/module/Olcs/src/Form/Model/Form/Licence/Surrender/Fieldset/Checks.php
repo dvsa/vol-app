@@ -6,7 +6,6 @@ use Laminas\Form\Annotation as Form;
 
 class Checks
 {
-
     /**
      * @Form\Type("Checkbox")
      * @Form\Attributes({

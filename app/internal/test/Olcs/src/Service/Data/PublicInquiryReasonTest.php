@@ -89,9 +89,9 @@ class PublicInquiryReasonTest extends AbstractPublicInquiryDataTestCase
             ->andReturn(
                 [
                     'id' => 7,
-                    'niFlag'=> $niFlag,
-                    'goodsOrPsv' => ['id'=> $goodsOrPsv],
-                    'trafficArea' => ['id'=> 'B']
+                    'niFlag' => $niFlag,
+                    'goodsOrPsv' => ['id' => $goodsOrPsv],
+                    'trafficArea' => ['id' => 'B']
                 ]
             )
             ->once();

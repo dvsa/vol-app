@@ -1,6 +1,7 @@
 <?php
 
 use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -25,6 +26,10 @@ return [
         [
             'title' => 'Offence date from',
             'formatter' => function ($data, $column) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $url = $this->generateUrl(['action' => 'details', 'id' => $data['id']], 'offence', true);
                 $class = 'govuk-link js-modal-ajax';
 

@@ -5,6 +5,7 @@
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
+
 namespace OlcsTest\Form\Element\Permits;
 
 use Olcs\Form\Element\Permits\BilateralNoOfPermitsElement;
@@ -32,7 +33,7 @@ class BilateralNoOfPermitsElementTest extends TestCase
                 ]
             ],
         ];
-    
+
         $bilateralNoOfPermitsElement = new BilateralNoOfPermitsElement($elementName);
 
         $this->assertEquals(

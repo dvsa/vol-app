@@ -5,6 +5,7 @@
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
+
 namespace OlcsTest\Service\Data;
 
 use Common\Exception\DataServiceException;

@@ -103,7 +103,7 @@ class TaskController extends AbstractController
             $form->get('assignment')->get('assignedToUser')->setEmptyOption('please-select');
         }
 
-        $this->formPost($form, 'processAssignTask');
+        $this->formPost($form, [$this, 'processAssignTask']);
 
         if ($this->getResponse()->getContent() !== '') {
             return $this->getResponse();
@@ -129,7 +129,7 @@ class TaskController extends AbstractController
     public function closeAction()
     {
         $form = $this->getForm('TaskClose');
-        $this->formPost($form, 'processCloseTask');
+        $this->formPost($form, [$this, 'processCloseTask']);
 
         if ($this->getResponse()->getContent() !== '') {
             return $this->getResponse();

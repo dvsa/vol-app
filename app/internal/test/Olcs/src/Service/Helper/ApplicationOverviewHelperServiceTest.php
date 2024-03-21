@@ -5,6 +5,7 @@
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
+
 namespace OlcsTest\Service\Helper;
 
 use Common\RefData;
@@ -79,7 +80,7 @@ class ApplicationOverviewHelperServiceTest extends MockeryTestCase
 
         $this->urlHelperService
             ->shouldReceive('fromRoute')
-            ->with('lva-'.$lva.'/interim', [], [], true)
+            ->with('lva-' . $lva . '/interim', [], [], true)
             ->andReturn('INTERIM_URL')
             ->shouldReceive('fromRoute')
             ->with('lva-application/change-of-entity', ['application' => 69])

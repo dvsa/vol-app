@@ -1,6 +1,7 @@
 <?php
 
 use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\TableBuilder;
 
 $variationNo = 1;
 return [
@@ -23,11 +24,16 @@ return [
     'columns' => [
         [
             'title' => 'Reg No.',
-            'formatter' => fn($data) => '<a class="govuk-link" href="' . $this->generateUrl(
-                ['action' => 'index', 'busRegId' => $data['id']],
-                'licence/bus-details/service',
-                true
-            ) . '">' . $data['regNo'] . '</a>',
+            'formatter' => fn($data) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                '<a class="govuk-link" href="' . $this->generateUrl(
+                    ['action' => 'index', 'busRegId' => $data['id']],
+                    'licence/bus-details/service',
+                    true
+                ) . '">' . $data['regNo'] . '</a>',
         ],
         [
             'title' => 'Var No.',
@@ -41,6 +47,10 @@ return [
         [
             'title' => 'Application type',
             'formatter' => function ($data, $column) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 if ($data['isTxcApp'] == 'Y') {
                     if ($data['ebsrRefresh'] == 'Y') {
                         return $this->translator->translate('EBSR Data Refresh');

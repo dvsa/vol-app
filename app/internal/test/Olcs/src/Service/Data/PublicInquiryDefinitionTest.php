@@ -34,7 +34,7 @@ class PublicInquiryDefinitionTest extends AbstractPublicInquiryDataTestCase
             ->withNoArgs()
             ->once()
             ->andReturn(
-                ['niFlag'=> true, 'goodsOrPsv' => ['id'=>'lcat_gv'], 'trafficArea' => ['id' => 'B']]
+                ['niFlag' => true, 'goodsOrPsv' => ['id' => 'lcat_gv'], 'trafficArea' => ['id' => 'B']]
             );
 
         $this->sut->setData('pid', $this->definitions);
@@ -46,7 +46,7 @@ class PublicInquiryDefinitionTest extends AbstractPublicInquiryDataTestCase
             ],
             'Category C' => [
                 'label' => 'Category C',
-                'options'=>[15 => 'Description 2']
+                'options' => [15 => 'Description 2']
             ]
         ];
 

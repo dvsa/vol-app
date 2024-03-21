@@ -1,3 +1,3 @@
-OLCS.ready(function() {
-  OLCS.crudTableHandler();
+OLCS.ready(function () {
+    OLCS.crudTableHandler();
 });

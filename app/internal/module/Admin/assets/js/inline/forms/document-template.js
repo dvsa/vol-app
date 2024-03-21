@@ -1,4 +1,4 @@
-OLCS.ready(function() {
+OLCS.ready(function () {
     "use strict";
 
     OLCS.cascadeForm({

@@ -8,6 +8,7 @@ use Dvsa\Olcs\Transfer\Command\Cases\DeleteCase as DeleteCaseCommand;
 use Dvsa\Olcs\Transfer\Command\Cases\ReopenCase as ReopenCmd;
 use Dvsa\Olcs\Transfer\Command\Cases\UpdateCase as UpdateCaseCommand;
 use Dvsa\Olcs\Transfer\Query\Cases\Cases as CasesDto;
+use Laminas\Form\FormInterface;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
@@ -242,10 +243,10 @@ class OverviewController extends AbstractInternalController implements
     /**
      * Alter Form to remove case type options depending on where the case was added from.
      *
-     * @param \Common\Controller\Form $form        form
+     * @param FormInterface           $form        form
      * @param array                   $initialData initialData
      *
-     * @return \Common\Controller\Form
+     * @return FormInterface
      */
     public function alterFormForAdd($form, $initialData)
     {
@@ -260,10 +261,10 @@ class OverviewController extends AbstractInternalController implements
     /**
      * Alter Form to remove case type options depending on where the case was added from.
      *
-     * @param \Common\Controller\Form $form        form
+     * @param FormInterface           $form        form
      * @param array                   $initialData initialData
      *
-     * @return \Common\Controller\Form
+     * @return FormInterface
      */
     public function alterFormForEdit($form, $initialData)
     {
@@ -297,12 +298,12 @@ class OverviewController extends AbstractInternalController implements
     /**
      * Works out the case types
      *
-     * @param \Common\Controller\Form $form             form
+     * @param FormInterface           $form             form
      * @param int                     $application      application
      * @param int                     $transportManager transportManager
      * @param int                     $licence          licence
      *
-     * @return \Common\Controller\Form
+     * @return FormInterface
      */
     private function getFormCaseTypes($form, $application, $transportManager, $licence)
     {

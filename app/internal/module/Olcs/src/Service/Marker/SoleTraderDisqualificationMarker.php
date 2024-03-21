@@ -13,7 +13,8 @@ class SoleTraderDisqualificationMarker extends AbstractMarker
     {
         $data = $this->getData();
 
-        if (!isset($data['organisation']['type']) ||
+        if (
+            !isset($data['organisation']['type']) ||
             $data['organisation']['type']['id'] !== \Common\RefData::ORG_TYPE_SOLE_TRADER
         ) {
             return false;

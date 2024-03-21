@@ -354,7 +354,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * @param array                      $licence    licence data
-     * @param Laminas\Navigation\Navigation $sidebarNav side bar navigation object
+     * @param Navigation $sidebarNav side bar navigation object
      *
      * @return boolean whether 'Create variation' button is shown or not
      */
@@ -389,7 +389,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * @param array                      $licence    licence data
-     * @param Laminas\Navigation\Navigation $sidebarNav side bar navigation object
+     * @param Navigation $sidebarNav side bar navigation object
      *
      * @return boolean whether 'Print' button is shown or not
      */
@@ -411,7 +411,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * @param array                      $licence    licence data
-     * @param Laminas\Navigation\Navigation $sidebarNav side bar navigation object
+     * @param Navigation $sidebarNav side bar navigation object
      *
      * @return boolean whether 'Curtail' 'Revoke' and 'Suspend' buttons are shown or not
      */
@@ -441,9 +441,9 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * @param array                      $licence    licence data
-     * @param Laminas\Navigation\Navigation $sidebarNav side bar navigation object
+     * @param Navigation $sidebarNav side bar navigation object
      *
-     * @return boolean whether 'Reset to valid' button is shown or not
+     * @return void
      */
     protected function showHideResetToValidButton($licence, $sidebarNav)
     {
@@ -461,7 +461,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * @param array                      $licence    licence data
-     * @param Laminas\Navigation\Navigation $sidebarNav side bar navigation object
+     * @param Navigation $sidebarNav side bar navigation object
      *
      * @return boolean whether 'Surrender' button is shown or not
      */
@@ -493,7 +493,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * @param array                      $licence    licence data
-     * @param Laminas\Navigation\Navigation $sidebarNav side bar navigation object
+     * @param Navigation $sidebarNav side bar navigation object
      *
      * @return boolean whether 'Terminate' button is shown or not
      */
@@ -523,7 +523,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * @param array                      $licence    licence data
-     * @param Laminas\Navigation\Navigation $sidebarNav side bar navigation object
+     * @param Navigation $sidebarNav side bar navigation object
      *
      * @return boolean whether 'Undo termination' button is shown or not
      */
@@ -540,7 +540,7 @@ class Licence implements ListenerAggregateInterface, FactoryInterface
 
     /**
      * @param array                      $licence    licence data
-     * @param Laminas\Navigation\Navigation $sidebarNav side bar navigation object
+     * @param Navigation $sidebarNav side bar navigation object
      *
      * @return boolean whether 'Undo surrender' button is shown or not
      */

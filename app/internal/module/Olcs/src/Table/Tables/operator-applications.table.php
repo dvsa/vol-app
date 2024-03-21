@@ -2,6 +2,7 @@
 
 use Common\Service\Table\Formatter\Date;
 use Common\Service\Table\Formatter\RefData;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -19,10 +20,15 @@ return [
     'columns' => [
         [
             'title' => 'Licence/App No.',
-            'formatter' => fn($row) => '<a class="govuk-link" href="' . $this->generateUrl(
-                ['application' => $row['id']],
-                'lva-application'
-            ) . '">' . $row['licence']['licNo'] .'/'. $row['id'] . '</a>'
+            'formatter' => fn($row) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                '<a class="govuk-link" href="' . $this->generateUrl(
+                    ['application' => $row['id']],
+                    'lva-application'
+                ) . '">' . $row['licence']['licNo'] . '/' . $row['id'] . '</a>'
         ],
         [
             'title' => 'Type',

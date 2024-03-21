@@ -72,7 +72,7 @@ class DocumentUploadController extends AbstractDocumentController
         $this->documentSubcategoryDataService
             ->setCategory($category);
 
-        $form = $this->generateFormWithData('UploadDocument', 'processUpload', $data);
+        $form = $this->generateFormWithData('UploadDocument', [$this, 'processUpload'], $data);
 
         $this->loadScripts(['upload-document']);
 

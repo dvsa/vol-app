@@ -77,7 +77,7 @@ class IrhpPermitPrintRangeType extends AbstractDataService implements ListDataIn
         $optionData = [];
 
         foreach ($data as $datum) {
-            $optionData[$datum] = $this->translator->translate('permits.irhp.range.type.'.$datum);
+            $optionData[$datum] = $this->translator->translate('permits.irhp.range.type.' . $datum);
         }
 
         return $optionData;

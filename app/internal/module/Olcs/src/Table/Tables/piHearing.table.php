@@ -1,5 +1,6 @@
 <?php
 
+use Common\Service\Table\TableBuilder;
 use Olcs\Module;
 
 return [
@@ -42,13 +43,18 @@ return [
         [
             'title' => 'Date of PI',
             'formatter' => function ($data) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $date = date(Module::$dateFormat, strtotime($data['hearingDate']));
                 if (!empty($data['pi']['closedDate'])) {
                     return $date;
                 } else {
                     $url = $this->generateUrl(
                         ['action' => 'edit', 'id' => $data['id'], 'pi' => $data['pi']['id']],
-                        'case_pi_hearing', true
+                        'case_pi_hearing',
+                        true
                     );
                     return '<a href="' . $url . '" class="govuk-link js-modal-ajax">' . $date . '</a>';
                 }

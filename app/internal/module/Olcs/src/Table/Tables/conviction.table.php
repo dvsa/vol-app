@@ -2,6 +2,7 @@
 
 use Common\Service\Table\Formatter\ConvictionDescription;
 use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -37,7 +38,10 @@ return [
         [
             'title' => 'Date of conviction',
             'formatter' => function ($data, $column) {
-
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $url = $this->generateUrl(['action' => 'edit', 'conviction' => $data['id']], 'conviction', true);
                 $class = 'govuk-link js-modal-ajax';
                 if ($data['convictionDate'] == null) {
@@ -57,8 +61,11 @@ return [
         [
             'title' => 'Name / defendant type',
             'formatter' => function ($data, $column) {
-
-                                $person = $data['personFirstname'] . ' ' . $data['personLastname'];
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                $person = $data['personFirstname'] . ' ' . $data['personLastname'];
                 $organisationName = $data['operatorName'];
                 $name = ($organisationName == '' ? $person : $organisationName) . ' <br /> '
                       . $this->translator->translate($data['defendantType']['description']);

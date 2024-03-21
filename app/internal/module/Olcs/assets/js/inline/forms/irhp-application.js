@@ -15,8 +15,8 @@ $(function () {
     var isEditableStatus = (status === STATUS_NYS || status === STATUS_UC);
     var isRoadworthiness = (permitTypeId === COR_VEHICLE_ID || permitTypeId === COR_TRAILER_ID)
 
-    if(permitTypeId === ECMT_REMOVAL_ID) {
-        $("#irhpApplication").submit(function( event ) {
+    if (permitTypeId === ECMT_REMOVAL_ID) {
+        $("#irhpApplication").submit(function ( event ) {
             if (!declaration.prop("checked")) {
                 event.preventDefault();
                 var closestEl = declaration.closest($("div.field"));
@@ -31,7 +31,7 @@ $(function () {
     }
 
     if (!isEditableStatus) {
-        $("fieldset[data-group='qa'] > fieldset[data-enabled='false']").each(function() {
+        $("fieldset[data-group='qa'] > fieldset[data-enabled='false']").each(function () {
             $(this).css("background-color", "#ddd");
             $(this).find(":input").prop("disabled", true);
         });

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace OlcsTest\Controller\Auth;
@@ -80,7 +81,7 @@ class LoginControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_IsCallable()
+    public function indexActionIsCallable()
     {
         // Setup
         $controller = $this->setUpSut();
@@ -91,9 +92,9 @@ class LoginControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_IsCallable
+     * @depends indexActionIsCallable
      */
-    public function indexAction_RedirectsToDashboard_WhenUserAlreadyLoggedIn()
+    public function indexActionRedirectsToDashboardWhenUserAlreadyLoggedIn()
     {
         $identity = $this->createMock(User::class);
         $identity->method('isAnonymous')->willReturn(true);
@@ -114,7 +115,7 @@ class LoginControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_ReturnsViewModel()
+    public function indexActionReturnsViewModel()
     {
         // Setup
         $identity = $this->createMock(User::class);
@@ -136,7 +137,7 @@ class LoginControllerTest extends MockeryTestCase
      * @test
      * @depends indexAction_ReturnsViewModel
      */
-    public function indexAction_ReturnsViewModel_WithLoginForm()
+    public function indexActionReturnsViewModelWithLoginForm()
     {
         // Setup
         $identity = $this->createMock(User::class);
@@ -159,7 +160,7 @@ class LoginControllerTest extends MockeryTestCase
      * @test
      * @depends indexAction_ReturnsViewModel
      */
-    public function indexAction_ReturnsViewModel_WithFailureReason_WhenAuthenticationFails()
+    public function indexActionReturnsViewModelWithFailureReasonWhenAuthenticationFails()
     {
         // Setup
         $identity = $this->createMock(User::class);
@@ -200,7 +201,7 @@ class LoginControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function postAction_IsCallable()
+    public function postActionIsCallable()
     {
         // Setup
 
@@ -212,9 +213,9 @@ class LoginControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends postAction_IsCallable
+     * @depends postActionIsCallable
      */
-    protected function postAction_RedirectsToDashboard_WhenUserAlreadyLoggedIn()
+    protected function postActionRedirectsToDashboardWhenUserAlreadyLoggedIn()
     {
         $identity = $this->createMock(User::class);
         $identity->method('isAnonymous')->willReturn(true);
@@ -231,9 +232,9 @@ class LoginControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends postAction_IsCallable
+     * @depends postActionIsCallable
      */
-    public function postAction_FlashesFormData_WhenFormInvalid()
+    public function postActionFlashesFormDataWhenFormInvalid()
     {
         // Setup
         $identity = $this->createMock(User::class);
@@ -265,7 +266,7 @@ class LoginControllerTest extends MockeryTestCase
      * @test
      * @depends postAction_IsCallable
      */
-    public function postAction_SuccessfulCognitoAuth_RedirectsToDashboard()
+    public function postActionSuccessfulCognitoAuthRedirectsToDashboard()
     {
         // Setup
         $identity = $this->createMock(User::class);
@@ -290,9 +291,9 @@ class LoginControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends postAction_IsCallable
+     * @depends postActionIsCallable
      */
-    public function postAction_UnknownProvider_RedirectsToLogin()
+    public function postActionUnknownProviderRedirectsToLogin()
     {
         // Setup
         $identity = $this->createMock(User::class);
@@ -314,9 +315,9 @@ class LoginControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends postAction_IsCallable
+     * @depends postActionIsCallable
      */
-    public function postAction_NewPasswordRequiredChallenge_StoresChallengeInSession()
+    public function postActionNewPasswordRequiredChallengeStoresChallengeInSession()
     {
         // Setup
         $identity = $this->createMock(User::class);
@@ -347,9 +348,9 @@ class LoginControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends postAction_NewPasswordRequiredChallenge_StoresChallengeInSession
+     * @depends postActionNewPasswordRequiredChallengeStoresChallengeInSession
      */
-    public function postAction_NewPasswordRequiredChallenge_RedirectsToExpiredPassword()
+    public function postActionNewPasswordRequiredChallengeRedirectsToExpiredPassword()
     {
         // Setup
         $controller = $this->setUpSut();
@@ -371,9 +372,9 @@ class LoginControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends postAction_IsCallable
+     * @depends postActionIsCallable
      */
-    public function postAction_UnsupportedChallenge_RedirectsToLoginPage()
+    public function postActionUnsupportedChallengeRedirectsToLoginPage()
     {
         // Setup
         $identity = $this->createMock(User::class);
@@ -394,9 +395,9 @@ class LoginControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends postAction_IsCallable
+     * @depends postActionIsCallable
      */
-    public function postAction_FailedAuthentication_RedirectsToLoginPage()
+    public function postActionFailedAuthenticationRedirectsToLoginPage()
     {
         // Setup
         $identity = $this->createMock(User::class);
@@ -417,9 +418,9 @@ class LoginControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends postAction_IsCallable
+     * @depends postActionIsCallable
      */
-    public function postAction_FailedAuthentication_FlashesInvalidUsernameOrPasswordByDefault()
+    public function postActionFailedAuthenticationFlashesInvalidUsernameOrPasswordByDefault()
     {
         // Setup
         $identity = $this->createMock(User::class);
@@ -451,9 +452,9 @@ class LoginControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends postAction_IsCallable
+     * @depends postActionIsCallable
      */
-    public function postAction_FailedAuthentication_FlashesInvalidUsernameOrPasswordWhenUserNotExists()
+    public function postActionFailedAuthenticationFlashesInvalidUsernameOrPasswordWhenUserNotExists()
     {
         // Setup
         $identity = $this->createMock(User::class);
@@ -485,9 +486,9 @@ class LoginControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends postAction_IsCallable
+     * @depends postActionIsCallable
      */
-    public function postAction_FailedAuthentication_FlashesInvalidUsernameOrPasswordWhenPasswordIncorrect()
+    public function postActionFailedAuthenticationFlashesInvalidUsernameOrPasswordWhenPasswordIncorrect()
     {
         // Setup
         $identity = $this->createMock(User::class);
@@ -519,9 +520,9 @@ class LoginControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends postAction_IsCallable
+     * @depends postActionIsCallable
      */
-    public function postAction_FailedAuthentication_FlashesAccountDisabledWhenAuthenticationResult_IsFailureAccountDisabled()
+    public function postActionFailedAuthenticationFlashesAccountDisabledWhenAuthenticationResultIsFailureAccountDisabled()
     {
         // Setup
         $identity = $this->createMock(User::class);

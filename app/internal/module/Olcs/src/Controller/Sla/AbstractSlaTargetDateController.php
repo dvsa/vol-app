@@ -6,6 +6,7 @@ use Dvsa\Olcs\Transfer\Command\System\CreateSlaTargetDate as CreateDto;
 use Dvsa\Olcs\Transfer\Command\System\UpdateSlaTargetDate as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Document\Document;
 use Dvsa\Olcs\Transfer\Query\System\SlaTargetDate as ItemDto;
+use Laminas\Form\FormInterface;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Data\Mapper\SlaTargetDate as Mapper;
 use Olcs\Form\Model\Form\SlaTargetDate as Form;
@@ -62,19 +63,6 @@ abstract class AbstractSlaTargetDateController extends AbstractInternalControlle
     ];
 
     /**
-     * Variables for controlling the delete action.
-     * Command is required, as are itemParams from above
-     */
-    protected $deleteCommand = DeleteDto::class;
-    protected $deleteModalTitle = 'internal.delete-action-trait.title';
-
-    /**
-     * Variables for controlling the delete action.
-     * Format is: required => supplied
-     */
-    protected $deleteParams = ['id' => 'slaId'];
-
-    /**
      * Any inline scripts needed in this section
      *
      * @var array
@@ -82,11 +70,6 @@ abstract class AbstractSlaTargetDateController extends AbstractInternalControlle
     protected $inlineScripts = [
         'indexAction' => ['table-actions']
     ];
-
-    protected function getEntityType()
-    {
-        return $this->entityType;
-    }
 
     public function addSlaAction()
     {
@@ -101,9 +84,9 @@ abstract class AbstractSlaTargetDateController extends AbstractInternalControlle
     /**
      * Alter Form to add the entity description to the form.
      *
-     * @param  \Common\Controller\Form $form
+     * @param  FormInterface $form
      * @param  array                   $initialData
-     * @return \Common\Controller\Form
+     * @return FormInterface
      */
     public function alterFormForAddSla($form, $initialData)
     {

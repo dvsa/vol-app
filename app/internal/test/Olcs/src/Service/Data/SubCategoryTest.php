@@ -68,7 +68,7 @@ class SubCategoryTest extends AbstractListDataServiceTestCase
         $data = [
             [
                 'id' => 9999,
-                'subCategoryName'=> 'EXPECTED'
+                'subCategoryName' => 'EXPECTED'
             ],
         ];
         $this->sut->setCategory(self::CAT_ID);

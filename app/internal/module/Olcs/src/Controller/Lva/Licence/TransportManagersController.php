@@ -114,7 +114,8 @@ class TransportManagersController extends Lva\AbstractTransportManagersControlle
     {
 
         if (!$this->isLastTmLicence()) {
-            return parent::delete();
+            parent::delete();
+            return null;
         }
 
         /**

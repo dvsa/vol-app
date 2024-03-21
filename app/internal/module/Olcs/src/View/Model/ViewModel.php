@@ -5,6 +5,7 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace Olcs\View\Model;
 
 use Laminas\View\Model\ViewModel as LaminasViewModel;

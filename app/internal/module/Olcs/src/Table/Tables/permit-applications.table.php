@@ -5,6 +5,7 @@ use Common\Service\Table\Formatter\InternalLicencePermitReference;
 use Common\Service\Table\Formatter\IrhpPermitsRequired;
 use Common\Service\Table\Formatter\IrhpPermitTypeWithValidityDate;
 use Common\Service\Table\Formatter\RefDataStatus;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -45,18 +46,23 @@ return [
         [
             'title' => 'dashboard-table-permit-application-status',
             'name' => 'status',
-            'formatter' => fn($row) => $this->callFormatter(
-                [
-                    'name' => 'status',
-                    'formatter' => RefDataStatus::class,
-                ],
-                [
-                    'status' => [
-                        'id' => $row['statusId'],
-                        'description' => $row['statusDescription'],
+            'formatter' => fn($row) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                $this->callFormatter(
+                    [
+                        'name' => 'status',
+                        'formatter' => RefDataStatus::class,
                     ],
-                ]
-            )
+                    [
+                        'status' => [
+                            'id' => $row['statusId'],
+                            'description' => $row['statusDescription'],
+                        ],
+                    ]
+                )
         ]
     ],
 ];

@@ -4,6 +4,7 @@ use Common\Service\Table\Formatter\ConstrainedCountriesList;
 use Common\Service\Table\Formatter\IrhpPermitNumberInternal;
 use Common\Service\Table\Formatter\IrhpPermitRangeType;
 use Common\Service\Table\Formatter\RefDataStatus;
+use Common\Service\Table\TableBuilder;
 use Common\Util\Escape;
 
 return [
@@ -51,13 +52,18 @@ return [
         [
             'title' => 'Type',
             'name' => 'type',
-            'formatter' => fn($row) => $this->callFormatter(
-                [
-                    'name' => 'irhpPermitRangeType',
-                    'formatter' => IrhpPermitRangeType::class,
-                ],
-                $row['irhpPermitRange']
-            ),
+            'formatter' => fn($row) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                $this->callFormatter(
+                    [
+                        'name' => 'irhpPermitRangeType',
+                        'formatter' => IrhpPermitRangeType::class,
+                    ],
+                    $row['irhpPermitRange']
+                ),
         ],
         [
             'title' => 'Country',

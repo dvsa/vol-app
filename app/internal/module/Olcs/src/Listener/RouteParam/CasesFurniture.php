@@ -10,7 +10,7 @@ use Common\Service\Cqrs\Query\QuerySenderAwareTrait;
 use Laminas\EventManager\EventInterface;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
-use \Dvsa\Olcs\Transfer\Query\Cases\Cases as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Cases\Cases as ItemDto;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
@@ -26,10 +26,10 @@ class CasesFurniture implements
     QuerySenderAwareInterface,
     CommandSenderAwareInterface
 {
-    use ListenerAggregateTrait,
-        ViewHelperManagerAwareTrait,
-        QuerySenderAwareTrait,
-        CommandSenderAwareTrait;
+    use ListenerAggregateTrait;
+    use ViewHelperManagerAwareTrait;
+    use QuerySenderAwareTrait;
+    use CommandSenderAwareTrait;
 
     /**
      * {@inheritdoc}

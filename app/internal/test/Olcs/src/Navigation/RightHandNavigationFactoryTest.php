@@ -14,7 +14,7 @@ class RightHandNavigationFactoryTest extends TestCase
 {
     public function testGetName()
     {
-        $sut = new RightHandNavigationFactory;
+        $sut = new RightHandNavigationFactory();
 
         $this->assertEquals('right-sidebar', $sut->getName());
     }

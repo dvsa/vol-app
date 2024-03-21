@@ -134,7 +134,6 @@ class OrganisationFurnitureTest extends MockeryTestCase
 
         $event = new Event(null, $routeParam);
 
-
         $this->sut->onOrganisation($event);
     }
 

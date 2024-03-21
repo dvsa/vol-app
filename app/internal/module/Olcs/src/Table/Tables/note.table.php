@@ -2,6 +2,7 @@
 
 use Common\Service\Table\Formatter\Name;
 use Common\Service\Table\Formatter\NoteUrl;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -32,7 +33,10 @@ return [
         [
             'title' => 'Author',
             'formatter' => function ($data, $column) {
-
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $column['formatter'] = Name::class;
 
                 return $this->callFormatter($column, $data['createdBy']['contactDetails']['person']);

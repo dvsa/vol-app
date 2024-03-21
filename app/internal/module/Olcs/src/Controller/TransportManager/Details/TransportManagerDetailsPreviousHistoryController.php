@@ -71,8 +71,8 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
         $formHelper = $this->formHelper;
 
         /**
- * @var \Laminas\Form\FormInterface $form
-*/
+         * @var \Laminas\Form\FormInterface $form
+        */
         $form = $formHelper->createForm('TmPreviousHistory');
 
         $this->transportManagerHelper
@@ -158,7 +158,7 @@ class TransportManagerDetailsPreviousHistoryController extends AbstractTransport
             $form = $this->populateEditForm($form, $formName);
         }
 
-        $this->formPost($form, 'processForm');
+        $this->formPost($form, [$this, 'processForm']);
 
         if ($this->getResponse()->getContent() !== "") {
             return $this->getResponse();

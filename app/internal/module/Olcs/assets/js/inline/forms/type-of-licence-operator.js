@@ -6,7 +6,8 @@ OLCS.ready(function () {
 
     var F = OLCS.formHelper;
 
-    function setupCascade() {
+    function setupCascade()
+    {
 
         var operatorType = F("type-of-licence", "operator-type");
         var licenceType = F.findInput('type-of-licence', 'licence-type');
@@ -53,7 +54,7 @@ OLCS.ready(function () {
                     'selector:#ltyp_sr_radio_group': function () {
                         return operatorType.filter(':checked').val() === 'lcat_psv';
                     },
-                    'selector:div[id$=\'ltyp_si_content\']': function() {
+                    'selector:div[id$=\'ltyp_si_content\']': function () {
                         var isGoods = trafficArea.val() == "N" ||
                             operatorType.filter(':checked').val() == 'lcat_gv';
 
@@ -62,7 +63,7 @@ OLCS.ready(function () {
                             licenceType.filter(':checked').val() == 'ltyp_si'
                         );
                     },
-                    '#lgv-declaration': function() {
+                    '#lgv-declaration': function () {
                         var isGoods = trafficArea.val() == "N" ||
                             operatorType.filter(':checked').val() == 'lcat_gv';
 

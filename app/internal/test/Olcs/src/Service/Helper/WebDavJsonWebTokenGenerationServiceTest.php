@@ -1,6 +1,6 @@
 <?php
 
-namespace OlcsTest\src\Service\Helper;
+namespace OlcsTest\Service\Helper;
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -27,9 +27,9 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
 
     /**
      * @test
-     * @dataProvider dataProvider_DefaultLifetimeSeconds_NotGreaterThanZero
+     * @dataProvider dataProviderDefaultLifetimeSecondsNotGreaterThanZero
      */
-    public function construct_WithDefaultLifetimeSeconds_NotGreaterThanZero_ThrowsException(int $defaultLifetimeSeconds): void
+    public function constructWithDefaultLifetimeSecondsNotGreaterThanZeroThrowsException(int $defaultLifetimeSeconds): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionCode(0x11);
@@ -42,7 +42,7 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
         );
     }
 
-    public function dataProvider_DefaultLifetimeSeconds_NotGreaterThanZero(): array
+    public function dataProviderDefaultLifetimeSecondsNotGreaterThanZero(): array
     {
         return [
             'Zero (int)' => [0],
@@ -52,9 +52,9 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
 
     /**
      * @test
-     * @dataProvider dataProvider_WithInvalidPrivateKey_InvalidVariants
+     * @dataProvider dataProviderWithInvalidPrivateKeyInvalidVariants
      */
-    public function construct_WithInvalidPrivateKey_ThrowsException(string $privateKey): void
+    public function constructWithInvalidPrivateKeyThrowsException(string $privateKey): void
     {
         if (!extension_loaded('openssl')) {
             $this->markAsRisky();
@@ -72,7 +72,7 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
         );
     }
 
-    public function dataProvider_WithInvalidPrivateKey_InvalidVariants(): array
+    public function dataProviderWithInvalidPrivateKeyInvalidVariants(): array
     {
         return [
             'Base64 Encoded Positive Integer (int > string)' => [base64_encode(1)],
@@ -84,9 +84,9 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
 
     /**
      * @test
-     * @dataProvider dataProvider_WithInvalidPrivateKey_Base64OrPath_InvalidVariants
+     * @dataProvider dataProviderWithInvalidPrivateKeyBase64OrPathInvalidVariants
      */
-    public function construct_WithInvalidPrivateKey_InvalidPathOrBase64_ThrowsException(string $privateKey): void
+    public function constructWithInvalidPrivateKeyInvalidPathOrBase64ThrowsException(string $privateKey): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionCode(0x21);
@@ -99,7 +99,7 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
         );
     }
 
-    public function dataProvider_WithInvalidPrivateKey_Base64OrPath_InvalidVariants(): array
+    public function dataProviderWithInvalidPrivateKeyBase64OrPathInvalidVariants(): array
     {
         return [
             'Base64 Encoded Zero (int > string)' => [base64_encode(0)],
@@ -111,7 +111,7 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
     /**
      * @test
      */
-    public function generateToken_IsCallable(): void
+    public function generateTokenIsCallable(): void
     {
         $this->sut = new WebDavJsonWebTokenGenerationService(
             static::JWT_PRIVATE_KEY_BASE64,
@@ -123,9 +123,9 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends generateToken_IsCallable
+     * @depends generateTokenIsCallable
      */
-    public function generateToken_WithPrivateKeyAsBase64_ReturnsJsonWebToken(): void
+    public function generateTokenWithPrivateKeyAsBase64ReturnsJsonWebToken(): void
     {
         $this->sut = new WebDavJsonWebTokenGenerationService(
             static::JWT_PRIVATE_KEY_BASE64,
@@ -145,9 +145,9 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends generateToken_IsCallable
+     * @depends generateTokenIsCallable
      */
-    public function generateToken_WithPrivateKeyAsFile_ReturnsJsonWebToken(): void
+    public function generateTokenWithPrivateKeyAsFileReturnsJsonWebToken(): void
     {
         file_put_contents(static::JWT_PRIVATE_KEY_TEMP_PATH, base64_decode(static::JWT_PRIVATE_KEY_BASE64, true), LOCK_EX);
 
@@ -169,9 +169,9 @@ class WebDavJsonWebTokenGenerationServiceTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends generateToken_IsCallable
+     * @depends generateTokenIsCallable
      */
-    public function generateToken_WithPrivateKeyAsBase64_ReturnsJsonWebToken_WithIssuedAtAndExpiry(): void
+    public function generateTokenWithPrivateKeyAsBase64ReturnsJsonWebTokenWithIssuedAtAndExpiry(): void
     {
         $this->sut = new WebDavJsonWebTokenGenerationService(
             static::JWT_PRIVATE_KEY_BASE64,

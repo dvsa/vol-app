@@ -1,6 +1,7 @@
 <?php
 
 use Common\Service\Table\Formatter\AddressLines;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -35,8 +36,12 @@ return [
             'title' => 'Added via',
             'width' => '8%',
             'formatter' => function ($data, $column) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $string = $this->translator->translate($data['addedVia']) . ' '
-                    .$data['parentId'];
+                    . $data['parentId'];
                 return $string;
             }
         ],
@@ -54,6 +59,10 @@ return [
             'title' => 'Attached to',
             'width' => '8%',
             'formatter' => function ($data, $column) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $attachedTo = $data['attachedTo'] == 'Operating Centre' ? 'OC' : $data['attachedTo'];
                 return $this->translator->translate($attachedTo);
             }

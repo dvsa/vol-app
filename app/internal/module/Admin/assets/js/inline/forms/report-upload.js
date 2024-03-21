@@ -10,7 +10,8 @@ $(function () {
     var emailTemplate = $("#emailTemplate");
     var selectedReportType = reportType.val();
 
-    function toggle(reportType) {
+    function toggle(reportType)
+    {
         if (reportType === BULK_LETTER) {
             docTemplateContainer.removeClass("js-hidden");
             docTemplate.prop("disabled", false);
@@ -34,7 +35,8 @@ $(function () {
 
     toggle(selectedReportType);
 
-    function wrapError(selectBox) {
+    function wrapError(selectBox)
+    {
         var closestEl = selectBox.closest($("div.field"));
         if (!closestEl.hasClass("hasErrors")) {
             closestEl.addClass("hasErrors").wrap("<div class='validation-wrapper'></div>")

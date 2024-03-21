@@ -1,6 +1,7 @@
 <?php
 
 use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\TableBuilder;
 use Common\Util\Escape;
 
 return [
@@ -47,6 +48,10 @@ return [
             'name' => 'effectiveFrom',
             'sort' => 'effectiveFrom',
             'formatter' => function ($row, $column) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $column['formatter'] = Date::class;
                 return empty($row['effectiveFrom']) ? 'N/A' : $this->callFormatter($column, $row);
             }

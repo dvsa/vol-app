@@ -1,6 +1,7 @@
 <?php
 
 use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -31,7 +32,11 @@ return [
         [
             'title' => 'Date requested',
             'formatter' => function ($data, $column) {
-                $column['formatter'] = Date::Class;
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                $column['formatter'] = Date::class;
                 return '<a href="' . $this->generateUrl(
                     ['action' => 'edit', 'statement' => $data['id']],
                     'case_statement',
@@ -61,6 +66,10 @@ return [
         [
             'title' => 'Date issued',
             'formatter' => function ($data, $column) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $column['formatter'] = Date::class;
                 return (!empty($data['issuedDate']) ?
                     $this->callFormatter($column, $data) :

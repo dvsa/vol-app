@@ -6,7 +6,7 @@ use Psr\Container\ContainerInterface;
 use Laminas\EventManager\EventInterface;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
-use \Dvsa\Olcs\Transfer\Query\Bus\BusReg as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Bus\BusReg as ItemDto;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
@@ -102,7 +102,7 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
     /**
      * Get the Bus Reg data
      *
-     * @param id $id
+     * @param string $id
      * @return array
      * @throws ResourceNotFoundException
      */
@@ -130,7 +130,7 @@ class BusRegId implements ListenerAggregateInterface, FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : BusRegId
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): BusRegId
     {
         $this->setAnnotationBuilder($container->get('TransferAnnotationBuilder'));
         $this->setQueryService($container->get('QueryService'));

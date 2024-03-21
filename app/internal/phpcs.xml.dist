@@ -5,6 +5,7 @@
   <file>./config</file>
   <file>./test</file>
 
+  <extensions>php</extensions>
   <exclude-pattern>*/vendor/*</exclude-pattern>
 
   <rule ref="./vendor-bin/phpcs/vendor/dvsa/coding-standards/src/Profiles/DVSA/CS/ruleset.xml" />

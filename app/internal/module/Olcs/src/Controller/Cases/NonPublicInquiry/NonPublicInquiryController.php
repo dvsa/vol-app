@@ -109,8 +109,6 @@ class NonPublicInquiryController extends AbstractInternalController implements C
     /**
      * Action called if matched action does not exist
      *
-     * @todo really?
-     *
      * @return array
      */
     public function notFoundAction()

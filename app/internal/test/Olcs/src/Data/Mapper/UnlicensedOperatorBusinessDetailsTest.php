@@ -5,6 +5,7 @@
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery as m;

@@ -6,7 +6,7 @@ use Laminas\ServiceManager\AbstractPluginManager;
 use Psr\Container\ContainerInterface;
 
 /**
- * Class MarkerPluginManager
+ * @template-extends AbstractPluginManager<MarkerInterface>
  */
 class MarkerPluginManager extends AbstractPluginManager
 {

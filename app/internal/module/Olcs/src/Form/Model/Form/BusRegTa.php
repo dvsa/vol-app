@@ -13,7 +13,6 @@ use Laminas\Form\Annotation as Form;
  */
 class BusRegTa
 {
-
     /**
      * @Form\Name("fields")
      * @Form\Options({"label":"","class":""})

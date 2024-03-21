@@ -15,7 +15,7 @@ class IrhpApplicationFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : IrhpApplication
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IrhpApplication
     {
         return new IrhpApplication(
             $container->get('QaApplicationStepsPostDataTransformer')

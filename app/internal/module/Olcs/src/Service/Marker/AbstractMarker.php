@@ -31,7 +31,7 @@ abstract class AbstractMarker implements MarkerInterface
     {
         $partialHelper = $this->getPartialHelper();
 
-        return $partialHelper('marker/'. $template, $variables);
+        return $partialHelper('marker/' . $template, $variables);
     }
 
     /**

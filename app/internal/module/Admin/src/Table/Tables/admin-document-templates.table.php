@@ -2,6 +2,7 @@
 
 use Common\Service\Table\Formatter\Date;
 use Common\Service\Table\Formatter\DocumentDescription;
+use Common\Service\Table\TableBuilder;
 use Common\Util\Escape;
 
 return [
@@ -39,6 +40,10 @@ return [
             'name' => 'description',
             'sort' => 'description',
             'formatter' => function ($row) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $column['formatter'] = DocumentDescription::class;
                 return $this->callFormatter(
                     $column,
@@ -69,6 +74,10 @@ return [
             'name' => 'lastModifiedOn',
             'sort' => 'lastModifiedOn',
             'formatter' => function ($row, $column) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $column['formatter'] = Date::class;
                 return empty($row['lastModifiedOn']) ? 'N/A' : $this->callFormatter($column, $row);
             }

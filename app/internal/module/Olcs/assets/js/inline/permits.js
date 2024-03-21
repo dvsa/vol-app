@@ -10,13 +10,15 @@ OLCS.ready(function () {
         filter: ".js-body"
     });
 
-    if (!$(".js-rows").length) $(".filters").hide();
+    if (!$(".js-rows").length) {
+        $(".filters").hide();
+    }
 
     // Add event handler for Permits Form Back button click. Prevent default on Cancel, allow to continue on OK.
     $("#backToPermitList").click(function (e) {
         if (!confirm("Going back will lose any unsaved changes. Are you sure? ")) {
             e.preventDefault();
-        }else{
+        } else {
             parent.history.back();
         }
     });

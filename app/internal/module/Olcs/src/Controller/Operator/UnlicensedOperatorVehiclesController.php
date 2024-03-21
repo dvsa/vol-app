@@ -3,6 +3,7 @@
 namespace Olcs\Controller\Operator;
 
 use Common\RefData;
+use Common\Service\Table\TableBuilder;
 use Dvsa\Olcs\Transfer\Command\LicenceVehicle\CreateUnlicensedOperatorLicenceVehicle as CreateDto;
 use Dvsa\Olcs\Transfer\Command\LicenceVehicle\DeleteUnlicensedOperatorLicenceVehicle as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\LicenceVehicle\UpdateUnlicensedOperatorLicenceVehicle as UpdateDto;
@@ -103,9 +104,9 @@ class UnlicensedOperatorVehiclesController extends AbstractInternalController im
     /**
      * Alter table presentation depending on operator type
      *
-     * @param  Table $table
+     * @param  TableBuilder $table
      * @param  array $data
-     * @return Table
+     * @return TableBuilder
      */
     protected function alterTable($table, $data)
     {

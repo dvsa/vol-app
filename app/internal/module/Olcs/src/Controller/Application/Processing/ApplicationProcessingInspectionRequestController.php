@@ -14,6 +14,7 @@ use Dvsa\Olcs\Transfer\Query\Application\EnforcementArea as AppEnforcementAreaQr
 use Dvsa\Olcs\Transfer\Query\InspectionRequest\ApplicationInspectionRequestList as ApplicationInspectionRequestListQry;
 use Dvsa\Olcs\Transfer\Query\InspectionRequest\InspectionRequest as InspectionRequestQry;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder as TransferAnnotationBuilder;
+use Laminas\Http\Response;
 use Laminas\Navigation\Navigation;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
@@ -175,7 +176,7 @@ class ApplicationProcessingInspectionRequestController extends AbstractInternalC
     /**
      * Redirect to index
      *
-     * @return Redirect
+     * @return Response
      */
     public function redirectToIndex()
     {

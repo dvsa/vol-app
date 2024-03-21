@@ -6,7 +6,7 @@ use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Laminas\EventManager\EventInterface;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
-use \Dvsa\Olcs\Transfer\Query\Cases\Cases as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Cases\Cases as ItemDto;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
@@ -154,7 +154,7 @@ class Cases implements ListenerAggregateInterface, FactoryInterface
     /**
      * Get the Case data
      *
-     * @param id $id
+     * @param string $id
      * @return array
      * @throws ResourceNotFoundException
      */

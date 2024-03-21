@@ -5,6 +5,7 @@ use Common\Service\Table\Formatter\PiHearingStatus;
 use Common\Service\Table\Formatter\PiReportName;
 use Common\Service\Table\Formatter\PiReportRecord;
 use Common\Service\Table\Formatter\VenueAddress;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -29,12 +30,17 @@ return [
         [
             'title' => 'Case Id',
             'isNumeric' => true,
-            'formatter' => fn($data) => $this->callFormatter(
-                [
-                    'formatter' => CaseLink::class,
-                ],
-                $data['pi']['case']
-            )
+            'formatter' => fn($data) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                $this->callFormatter(
+                    [
+                        'formatter' => CaseLink::class,
+                    ],
+                    $data['pi']['case']
+                )
         ],
         [
             'title' => 'Record',
@@ -46,13 +52,18 @@ return [
         ],
         [
             'title' => 'PI Date & Time',
-            'formatter' => fn($data) => $this->callFormatter(
-                [
+            'formatter' => fn($data) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                $this->callFormatter(
+                    [
                     'name' => 'hearingDate',
                     'formatter' => \Common\Service\Table\Formatter\DateTime::class
-                ],
-                $data
-            ).
+                    ],
+                    $data
+                ) .
             $this->callFormatter(
                 [
                     'formatter' => PiHearingStatus::class,

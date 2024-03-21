@@ -132,7 +132,7 @@ class EnvironmentalComplaintController extends AbstractInternalController implem
     /**
      * Generate action.
      *
-     * @return \Laminas\Http\Response\
+     * @return \Laminas\Http\Response
      */
     public function generateAction()
     {

@@ -5,6 +5,7 @@
  *
  * @author shaun.lizzio@valtech.co.uk>
  */
+
 namespace OlcsTest\Form\Element;
 
 use Olcs\Form\Element\SubmissionSections;
@@ -91,7 +92,7 @@ class SubmissionSectionsTest extends TestCase
             ]
         );
         $mockMultiCheckbox->shouldReceive('setValueOptions');
-        $mockMultiCheckbox->shouldReceive('setOptions')->with(['label_position'=>'append']);
+        $mockMultiCheckbox->shouldReceive('setOptions')->with(['label_position' => 'append']);
         $mockMultiCheckbox->shouldReceive('setName')->with($name . '[sections]');
 
         $sut->setSections($mockMultiCheckbox);
@@ -145,7 +146,7 @@ class SubmissionSectionsTest extends TestCase
             ]
         );
         $mockMultiCheckbox->shouldReceive('setValueOptions');
-        $mockMultiCheckbox->shouldReceive('setOptions')->with(['label_position'=>'append']);
+        $mockMultiCheckbox->shouldReceive('setOptions')->with(['label_position' => 'append']);
         $mockMultiCheckbox->shouldReceive('setName')->with($name . '[sections]');
 
         $sut->setSections($mockMultiCheckbox);

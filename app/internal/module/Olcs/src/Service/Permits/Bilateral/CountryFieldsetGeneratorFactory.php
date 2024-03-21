@@ -16,7 +16,7 @@ class CountryFieldsetGeneratorFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : CountryFieldsetGenerator
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CountryFieldsetGenerator
     {
         return new CountryFieldsetGenerator(
             $container->get('Helper\Translation'),

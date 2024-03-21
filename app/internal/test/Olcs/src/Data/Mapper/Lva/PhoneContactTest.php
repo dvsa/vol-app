@@ -65,7 +65,7 @@ class PhoneContactTest extends MockeryTestCase
         /** @var \Laminas\Form\FormInterface $mockForm */
         $mockForm = m::mock(FormInterface::class);
 
-        static::assertEquals([], PhoneContact::mapFromErrors($mockForm, ['messages'=> []]));
+        static::assertEquals([], PhoneContact::mapFromErrors($mockForm, ['messages' => []]));
     }
 
     public function testMapFromErrors()

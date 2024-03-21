@@ -1,4 +1,5 @@
 <?php
+
 // Clear APCu cache (assumes context is Apache and PHP 5.5)
 if (function_exists('apcu_clear_cache')) {
     if (apcu_clear_cache()) {

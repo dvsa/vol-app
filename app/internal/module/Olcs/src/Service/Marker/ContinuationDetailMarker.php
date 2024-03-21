@@ -25,7 +25,7 @@ class ContinuationDetailMarker extends AbstractMarker
         return $this->renderPartial(
             'continuation',
             [
-                'dateTime' => new \DateTime($continuation['year'] .'-'. $continuation['month'] .'-01'),
+                'dateTime' => new \DateTime($continuation['year'] . '-' . $continuation['month'] . '-01'),
                 'licenceId' => $data['licence']['id'],
             ]
         );

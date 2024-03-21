@@ -24,7 +24,7 @@ class RouteParamTest extends \PHPUnit\Framework\TestCase
         $sut = new RouteParam();
         $this->assertNull($sut->getContext());
 
-        $sut->setContext(['test'=>'value']);
-        $this->assertEquals(['test'=>'value'], $sut->getContext());
+        $sut->setContext(['test' => 'value']);
+        $this->assertEquals(['test' => 'value'], $sut->getContext());
     }
 }

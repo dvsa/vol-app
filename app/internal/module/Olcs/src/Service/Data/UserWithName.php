@@ -27,8 +27,10 @@ class UserWithName extends User
         }
 
         foreach ($data as $datum) {
-            if (isset($datum['contactDetails']['person']['forename']) &&
-                $datum['contactDetails']['person']['familyName']) {
+            if (
+                isset($datum['contactDetails']['person']['forename']) &&
+                $datum['contactDetails']['person']['familyName']
+            ) {
                 $ret[$datum['id']] = $datum['contactDetails']['person']['forename'] . ' ' .
                     $datum['contactDetails']['person']['familyName'];
             } else {

@@ -2,6 +2,7 @@
 
 use Common\Service\Table\Formatter\Date;
 use Common\Service\Table\Formatter\YesNo;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -27,15 +28,20 @@ return [
         [
             'title' => 'Penalty ID',
             'isNumeric' => true,
-            'formatter' => fn($data) => '<a href="' . $this->generateUrl(
-                [
-                    'action' => 'edit',
-                    'id' => $data['id'],
-                    'si' => $data['seriousInfringement']['id']
-                ],
-                'case_penalty_applied',
-                true
-            ) . '" class="govuk-link js-modal-ajax">' . $data['id'] . '</a>',
+            'formatter' => fn($data) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                '<a href="' . $this->generateUrl(
+                    [
+                        'action' => 'edit',
+                        'id' => $data['id'],
+                        'si' => $data['seriousInfringement']['id']
+                    ],
+                    'case_penalty_applied',
+                    true
+                ) . '" class="govuk-link js-modal-ajax">' . $data['id'] . '</a>',
             'hideWhenDisabled' => true
         ],
         [
@@ -45,6 +51,10 @@ return [
         [
             'title' => 'Start date',
             'formatter' => function ($data, $column) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $column['formatter'] = Date::class;
                 return $this->callFormatter($column, $data);
             },
@@ -53,6 +63,10 @@ return [
         [
             'title' => 'End date',
             'formatter' => function ($data, $column) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $column['formatter'] = Date::class;
                 return $this->callFormatter($column, $data);
             },

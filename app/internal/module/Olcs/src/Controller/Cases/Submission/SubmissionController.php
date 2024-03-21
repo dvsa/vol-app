@@ -420,7 +420,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
      * @param array $params    params
      * @param bool  $printView printview
      *
-     * @return array
+     * @return array|void
      */
     private function generateSubmissionView($params, $printView = false)
     {
@@ -694,7 +694,7 @@ class SubmissionController extends AbstractInternalController implements Submiss
      *
      * @param array $file file
      *
-     * @return int $id of file
+     * @return void
      */
     public function processSectionFileUpload($file)
     {

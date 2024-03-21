@@ -28,7 +28,7 @@ trait ApplicationControllerTrait
     /**
      * Hook into the dispatch before the controller action is executed
      *
-     * @return array|bool
+     * @return array|bool|void
      */
     protected function preDispatch()
     {
@@ -39,6 +39,7 @@ trait ApplicationControllerTrait
             return $this->redirect()->toRoute($newRouteName, [], [], true);
         }
 
+        // @phpstan-ignore-next-line
         return $this->checkForRedirect($this->getApplicationId());
     }
 

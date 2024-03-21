@@ -1,6 +1,7 @@
 <?php
 
 use Common\Service\Table\Formatter\Address;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -25,21 +26,36 @@ return [
         ],
         [
             'title' => 'No.',
-            'formatter' => fn($data, $column) => '<a href="' . $this->generateUrl(
-                ['action' => 'edit', 'id' => $data['id']],
-                'case_conditions_undertakings',
-                true
-            ) . '" class="govuk-link js-modal-ajax">' . $data['id'] . '</a>',
+            'formatter' => fn($data, $column) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                '<a href="' . $this->generateUrl(
+                    ['action' => 'edit', 'id' => $data['id']],
+                    'case_conditions_undertakings',
+                    true
+                ) . '" class="govuk-link js-modal-ajax">' . $data['id'] . '</a>',
             'isNumeric' => true,
             'name' => 'id'
         ],
         [
             'title' => 'Type',
-            'formatter' => fn($data, $column) => $this->translator->translate($data['conditionType']['description']),
+            'formatter' => fn($data, $column) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                $this->translator->translate($data['conditionType']['description']),
         ],
         [
             'title' => 'Added via',
-            'formatter' => fn($data, $column) => $this->translator->translate($data['addedVia']['description']),
+            'formatter' => fn($data, $column) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                $this->translator->translate($data['addedVia']['description']),
         ],
         [
             'title' => 'Fulfilled',
@@ -51,15 +67,22 @@ return [
         ],
         [
             'title' => 'Attached to',
-            'formatter' => fn($data, $column) => $this->translator->translate($data['attachedTo']['description']),
+            'formatter' => fn($data, $column) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                $this->translator->translate($data['attachedTo']['description']),
         ],
         [
             'title' => 'OC address',
             'width' => '300px',
             'formatter' => function ($data, $column) {
-
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 if (isset($data['operatingCentre']['address'])) {
-
                     $column['formatter'] = Address::class;
 
                     return $this->callFormatter($column, $data['operatingCentre']['address']);

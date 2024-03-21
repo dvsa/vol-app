@@ -1,5 +1,7 @@
 <?php
 
+use Common\Service\Table\TableBuilder;
+
 return [
     'variables' => [
         'titleSingular' => 'Prohibition defect',
@@ -28,15 +30,20 @@ return [
         ],
         [
             'title' => 'Defect type',
-            'formatter' => fn($data, $column) => '<a href="' . $this->generateUrl(
-                [
+            'formatter' => fn($data, $column) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                '<a href="' . $this->generateUrl(
+                    [
                     'action' => 'edit',
                     'prohibition' => $data['prohibition']['id'],
                     'id' => $data['id']
-                ],
-                'case_prohibition_defect',
-                true
-            ) . '" class="govuk-link js-modal-ajax">' . $data['defectType'] . '</a>'
+                    ],
+                    'case_prohibition_defect',
+                    true
+                ) . '" class="govuk-link js-modal-ajax">' . $data['defectType'] . '</a>'
         ],
         [
             'title' => 'Notes',

@@ -1,5 +1,6 @@
 <?php
 
+use Common\Service\Table\TableBuilder;
 use Common\Util\Escape;
 
 return [
@@ -12,7 +13,10 @@ return [
             'title' => 'Username',
             'name' => 'loginId',
             'formatter' => function ($row, $col) {
-
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $url = $this->urlHelper->fromRoute(
                     'admin-dashboard/admin-user-management',
                     [
@@ -20,7 +24,7 @@ return [
                         'user' => $row['id']
                     ]
                 );
-                return '<a class="govuk-link" href="'.$url.'">'.Escape::html($row['loginId']).'</a>';
+                return '<a class="govuk-link" href="' . $url . '">' . Escape::html($row['loginId']) . '</a>';
             }
 
         ],

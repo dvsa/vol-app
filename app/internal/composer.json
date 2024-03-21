@@ -56,16 +56,15 @@
     "autoload": {
         "psr-4": {
             "Olcs\\": "module/Olcs/src",
-            "Admin\\": "module/Admin/src",
-            "Common\\": "vendor/olcs/olcs-common/Common/src/Common",
-            "CommonTest\\": "vendor/olcs/olcs-common/test/Common/src/"
+            "Admin\\": "module/Admin/src"
         }
     },
     "autoload-dev": {
         "psr-4": {
             "Dvsa\\OlcsTest\\": "./test",
             "OlcsTest\\": "./test/Olcs/src",
-            "AdminTest\\": "./test/Admin/src"
+            "AdminTest\\": "./test/Admin/src",
+            "CommonTest\\": "vendor/olcs/olcs-common/test/Common/src/"
         }
     },
     "minimum-stability": "dev",

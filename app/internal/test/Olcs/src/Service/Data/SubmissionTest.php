@@ -1,4 +1,5 @@
 <?php
+
 namespace OlcsTest\Service\Data;
 
 use Common\Service\Data\RefData;

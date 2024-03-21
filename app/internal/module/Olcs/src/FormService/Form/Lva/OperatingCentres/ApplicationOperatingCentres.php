@@ -37,7 +37,7 @@ class ApplicationOperatingCentres extends AbstractOperatingCentres
     {
         $this->formServiceLocator->get('lva-application')->alterForm($form);
 
-        parent::alterForm($form, $params);
+        return parent::alterForm($form, $params);
     }
 
     /**

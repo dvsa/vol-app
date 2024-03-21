@@ -5,6 +5,7 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace OlcsTest\Controller\Lva\Traits\Stubs;
 
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;

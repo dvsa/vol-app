@@ -35,5 +35,4 @@ class DisqualifyControllerFactory implements FactoryInterface
             $flashMessengerHelper
         );
     }
-
 }

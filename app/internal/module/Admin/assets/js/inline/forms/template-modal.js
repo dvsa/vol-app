@@ -1,14 +1,14 @@
 $(function () {
     "use strict";
 
-    var modalTemplate = '<div class="modal previewModal">'+
-                        '  <div class="modal__header"><h1 class="modal__title previewTitle"></h1></div>'+
-                        '  <div class="modal__content previewContent">'+
-                        '    <div class="js-content"></div>'+
-                        '      <div class="previewControls"><select id="dataSetSelect" class="js-hidden"></select><a id="previewClose">Back to Edit</a></div>'+
-                        '      <div id="previewPane"></div>'+
-                        '    </div>'+
-                        '  </div>'+
+    var modalTemplate = '<div class="modal previewModal">' +
+                        '  <div class="modal__header"><h1 class="modal__title previewTitle"></h1></div>' +
+                        '  <div class="modal__content previewContent">' +
+                        '    <div class="js-content"></div>' +
+                        '      <div class="previewControls"><select id="dataSetSelect" class="js-hidden"></select><a id="previewClose">Back to Edit</a></div>' +
+                        '      <div id="previewPane"></div>' +
+                        '    </div>' +
+                        '  </div>' +
                         '</div>';
 
     var previewData = {};
@@ -16,36 +16,37 @@ $(function () {
     function populatePreview()
     {
         var previewContent = previewData[$("#dataSetSelect").val()];
-        if($("#format").val() === "plain"){
-            previewContent = '<pre class="wordwrap">'+previewContent+'</pre>';
+        if ($("#format").val() === "plain") {
+            previewContent = '<pre class="wordwrap">' + previewContent + '</pre>';
         }
 
         $("#dataSetSelect").removeClass("js-hidden");
         $("#previewPane").html(previewContent);
     }
 
-    function hideEditShowPreview() {
+    function hideEditShowPreview()
+    {
         //Tag and hide the main modal div, add the preview template defined above into the modal wrapper div
         $(".modal").addClass("editModal js-hidden");
         $(".modal__wrapper").prepend(modalTemplate);
-        $(".previewTitle").html("Preview: "+$("#description").val());
+        $(".previewTitle").html("Preview: " + $("#description").val());
     }
 
-    $("#preview").click(function() {
+    $("#preview").click(function () {
         $(this).html("Please Wait");
 
         // Perform an xhr POST with the template ID, and current source from edit window.
         var previewPost = $.post(
-                $("#jsonUrl").val(),
-                {
-                    source : $("#source").val(),
-                    id : $("#id").val(),
-                    security: $("#security").val()
+            $("#jsonUrl").val(),
+            {
+                source : $("#source").val(),
+                id : $("#id").val(),
+                security: $("#security").val()
                 }
-            );
+        );
 
         // POST success handler - Preview worked
-        previewPost.done(function( data ) {
+        previewPost.done(function ( data ) {
             //Remove unnecessary var set for debugging purposes and populate var in parent scope.
             delete data.correlationId;
             previewData = data;
@@ -64,11 +65,11 @@ $(function () {
         });
 
         // POST error handler - Preview render failed - show error
-        previewPost.fail(function(data) {
+        previewPost.fail(function (data) {
             hideEditShowPreview();
             delete data.responseJSON.correlationId;
             $.each(data.responseJSON, function (dataset, error) {
-                $("#previewPane").html("<h3>Dataset: "+dataset+"</h3>"+"<pre class='wordwrap'>"+error+"</pre>");
+                $("#previewPane").html("<h3>Dataset: " + dataset + "</h3>" + "<pre class='wordwrap'>" + error + "</pre>");
             });
         });
     });

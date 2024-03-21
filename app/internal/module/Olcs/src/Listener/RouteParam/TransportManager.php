@@ -2,6 +2,7 @@
 
 namespace Olcs\Listener\RouteParam;
 
+use Common\Exception\ResourceNotFoundException;
 use Psr\Container\ContainerInterface;
 use Laminas\EventManager\EventInterface;
 use Olcs\Controller\TransportManager\Details\TransportManagerDetailsResponsibilityController;
@@ -127,7 +128,8 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
         $placeholder->getContainer('note')->set($latestNote);
 
         //only show print form link for one controller and action
-        if ($context['controller'] == TransportManagerDetailsResponsibilityController::class
+        if (
+            $context['controller'] == TransportManagerDetailsResponsibilityController::class
              && $context['action'] == 'edit-tm-application'
         ) {
              $this->getSidebarNavigation()
@@ -185,7 +187,6 @@ class TransportManager implements ListenerAggregateInterface, FactoryInterface
      * @param int   $id Transport Manager ID
      *
      * @return array
-     * @throws ResourceNotFoundException
      */
     private function getTransportManager($id)
     {

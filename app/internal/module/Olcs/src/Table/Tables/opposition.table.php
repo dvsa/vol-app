@@ -2,6 +2,7 @@
 
 use Common\Service\Table\Formatter\Date;
 use Common\Service\Table\Formatter\RefData;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -33,6 +34,10 @@ return [
             'title' => 'Date received',
             'name' => 'raisedDate',
             'formatter' => function ($data, $column) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $column['formatter'] = Date::class;
                 return '<a href="' . $this->generateUrl(
                     ['action' => 'edit', 'opposition' => $data['id']],

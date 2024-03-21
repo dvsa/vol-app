@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Olcs\Controller\Interfaces;
-
 
 /**
  * Interface HeaderTemplateProvider

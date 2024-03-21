@@ -5,6 +5,7 @@
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
+
 namespace OlcsTest\Service\Helper;
 
 use Common\RefData;
@@ -267,7 +268,7 @@ class LicenceOverviewHelperServiceTest extends MockeryTestCase
                     'operatingCentres' => [],
                     'tradingName' => 'JSH R Us',
                     'complaintsCount' => 0,
-                    'openCases' =>[
+                    'openCases' => [
                         ['id' => 2, 'publicInquiry' => null],
                         ['id' => 3, 'publicInquiry' => null],
                         ['id' => 4, 'publicInquiry' => ['id' => 99]],

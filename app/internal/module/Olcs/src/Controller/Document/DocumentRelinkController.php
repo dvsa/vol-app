@@ -127,7 +127,7 @@ class DocumentRelinkController extends AbstractDocumentController
      * @param array              $post post
      * @param \Laminas\Form\Form $form form
      *
-     * @return Response
+     * @return Response|void
      */
     protected function processRelink($post, $form)
     {

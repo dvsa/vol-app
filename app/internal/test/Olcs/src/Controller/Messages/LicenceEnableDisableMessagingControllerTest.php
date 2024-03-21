@@ -103,15 +103,16 @@ class LicenceEnableDisableMessagingControllerTest extends AbstractLvaControllerT
                              ->once()
                              ->with($mockForm, $this->request);
 
-        $this->sut->shouldReceive('render')
-                  ->once()
-                  ->withArgs(
-                      function ($view, $title) {
-                          $this->assertInstanceOf(ViewModel::class, $view);
-                          $this->assertEquals('Enable messaging', $title);
-                          return true;
-                      },
-                  );
+        $this->sut
+            ->shouldReceive('render')
+            ->once()
+            ->withArgs(
+                function ($view, $title) {
+                    $this->assertInstanceOf(ViewModel::class, $view);
+                    $this->assertEquals('Enable messaging', $title);
+                    return true;
+                },
+            );
 
         $this->sut->indexAction();
     }
@@ -195,17 +196,18 @@ class LicenceEnableDisableMessagingControllerTest extends AbstractLvaControllerT
         $this->request->shouldReceive('isPost')
                       ->andReturn(true);
 
-        $mockHandleCommand->shouldReceive('__invoke')
-                          ->once()
-                          ->withArgs(
-                              function ($command) {
-                                  $this->assertInstanceOf(Enable::class, $command);
-                                  $this->assertEquals(7, $command->getOrganisation());
+        $mockHandleCommand
+            ->shouldReceive('__invoke')
+            ->once()
+            ->withArgs(
+                function ($command) {
+                    $this->assertInstanceOf(Enable::class, $command);
+                    $this->assertEquals(7, $command->getOrganisation());
 
-                                  return true;
-                              },
-                          )
-                          ->andReturn($mockCommandResponse);
+                    return true;
+                },
+            )
+            ->andReturn($mockCommandResponse);
 
         $mockCommandResponse->shouldReceive('isOk')
                             ->once()

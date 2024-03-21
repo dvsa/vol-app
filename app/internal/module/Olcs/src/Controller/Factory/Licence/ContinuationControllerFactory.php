@@ -41,7 +41,6 @@ class ContinuationControllerFactory implements FactoryInterface
         $lessThanValidator = $container->get('ValidatorManager')->get(LessThan::class);
         $lessThanValidator->setOptions($validatorOptions);
 
-
         return new ContinuationController(
             $scriptFactory,
             $formHelper,

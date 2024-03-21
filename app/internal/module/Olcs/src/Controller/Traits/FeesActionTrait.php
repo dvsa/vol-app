@@ -85,7 +85,7 @@ trait FeesActionTrait
             if ($this->isButtonPressed('cancel')) {
                 return $this->redirectToList();
             }
-            $this->formPost($form, 'createFee', [$form]);
+            $this->formPost($form, [$this, 'createFee'], [$form]);
         }
 
         if ($this->getResponse()->getContent() !== '') {
@@ -595,8 +595,8 @@ trait FeesActionTrait
             if ($form->isValid()) {
                 $dtoData = $this->refundFeeDtoData($data);
                 /**
- * @var Response $response
-*/
+                 * @var Response $response
+                 */
                 $response = $this->handleCommand(
                     RefundFeeCmd::create($dtoData)
                 );
@@ -929,7 +929,7 @@ trait FeesActionTrait
      *
      * @param  string $effectiveDate  string presentation of DateTime
      * @param  int    $currentFeeType
-     * @return array
+     * @return array|void
      */
     protected function fetchFeeTypeListData($effectiveDate = null, $currentFeeType = null)
     {
@@ -990,12 +990,11 @@ trait FeesActionTrait
         if ($this->isButtonPressed('pay')) {
             $this->redirectToPay();
         } elseif ($this->isButtonPressed('recommend')) {
-            $this->formPost($form, 'recommendWaive');
+            $this->formPost($form, [$this, 'recommendWaive']);
         } elseif ($this->isButtonPressed('reject')) {
-            $this->validateForm = false;
-            $this->formPost($form, 'rejectWaive');
+            $this->formPost($form, [$this, 'rejectWaive']);
         } elseif ($this->isButtonPressed('approve')) {
-            $this->formPost($form, 'approveWaive');
+            $this->formPost($form, [$this, 'approveWaive']);
         } elseif ($this->isButtonPressed('cancel')) {
             $this->redirectToList();
         }

@@ -58,7 +58,7 @@ class TransportManagerTest extends MockeryTestCase
 
         $url = '#';
 
-        $pageTitle = '<a class="govuk-link" href="'. $url . '">' . $tm['homeCd']['person']['forename'] . ' ';
+        $pageTitle = '<a class="govuk-link" href="' . $url . '">' . $tm['homeCd']['person']['forename'] . ' ';
         $pageTitle .= $tm['homeCd']['person']['familyName'] . '</a>';
 
         $mockUrl = m::mock('stdClass');
@@ -162,7 +162,7 @@ class TransportManagerTest extends MockeryTestCase
         ];
 
         $url = '#';
-        $pageTitle = '<a class="govuk-link" href="'. $url . '">' . $tm['homeCd']['person']['forename'] . ' ';
+        $pageTitle = '<a class="govuk-link" href="' . $url . '">' . $tm['homeCd']['person']['forename'] . ' ';
         $pageTitle .= $tm['homeCd']['person']['familyName'] . '</a>';
 
         $sut = new TransportManager();
@@ -247,7 +247,7 @@ class TransportManagerTest extends MockeryTestCase
         ];
 
         $url = '#';
-        $pageTitle = '<a class="govuk-link" href="'. $url . '">' . $tm['homeCd']['person']['forename'] . ' ';
+        $pageTitle = '<a class="govuk-link" href="' . $url . '">' . $tm['homeCd']['person']['forename'] . ' ';
         $pageTitle .= $tm['homeCd']['person']['familyName'] . '</a>';
 
         $sut = new TransportManager();
@@ -368,7 +368,7 @@ class TransportManagerTest extends MockeryTestCase
     {
         $mockAnnotationBuilder = m::mock();
         $mockQueryService = m::mock();
-        $mockAuthService= m::mock();
+        $mockAuthService = m::mock();
 
         $sidebarNav = m::mock(Navigation::class);
         $mockViewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);

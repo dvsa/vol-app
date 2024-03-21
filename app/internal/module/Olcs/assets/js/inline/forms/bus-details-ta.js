@@ -1,9 +1,9 @@
-$(function() {
+$(function () {
 
-  "use strict";
+    "use strict";
 
-  OLCS.multiFilter({
-    from: "#trafficAreas",
-    to: "#localAuthoritys"
-  });
+    OLCS.multiFilter({
+        from: "#trafficAreas",
+        to: "#localAuthoritys"
+    });
 });

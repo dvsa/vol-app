@@ -22,12 +22,12 @@ class Markers extends AbstractHelper
             foreach ($markers[$markerType] as $marker) {
                 // style should be one of 'success'|'warning'|'info'|'danger', default is 'warning'
                 $type = $marker['style'] ?? 'warning';
-                $markup .= '<p class="notice--'.$type.'">';
+                $markup .= '<p class="notice--' . $type . '">';
                 $content = $this->insertPlaceholders($marker);
 
                 // make first line bold
                 $content = explode("\n", $content);
-                $content[0] = '<b>'.$content[0].'</b>';
+                $content[0] = '<b>' . $content[0] . '</b>';
                 $content = implode("\n", $content);
 
                 // split content on new lines
@@ -55,7 +55,7 @@ class Markers extends AbstractHelper
                     array_push(
                         $contentPlaceholders,
                         '<a ' .
-                        (isset($data['class']) ? 'class="'. $data['class'] . '" ' : 'class="govuk-link"') .
+                        (isset($data['class']) ? 'class="' . $data['class'] . '" ' : 'class="govuk-link"') .
                         'href="' . $urlHelper($data['route'], $data['params']) . '">' . $data['linkText'] .
                         '</a>' . "\n"
                     );

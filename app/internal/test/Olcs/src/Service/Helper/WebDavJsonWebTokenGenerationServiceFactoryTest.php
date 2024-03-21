@@ -1,6 +1,6 @@
 <?php
 
-namespace OlcsTest\src\Service\Helper;
+namespace OlcsTest\Service\Helper;
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -67,7 +67,7 @@ class WebDavJsonWebTokenGenerationServiceFactoryTest extends MockeryTestCase
     /**
      * @test
      */
-    public function __invoke_IsCallable(): void
+    public function invokeIsCallable(): void
     {
         // Setup
         $this->setUpSut();
@@ -80,7 +80,7 @@ class WebDavJsonWebTokenGenerationServiceFactoryTest extends MockeryTestCase
      * @test
      * @depends __invoke_IsCallable
      */
-    public function __invoke_ReturnsAnInstanceOfWebDavJsonWebTokenGenerationService()
+    public function invokeReturnsAnInstanceOfWebDavJsonWebTokenGenerationService()
     {
         // Setup
         $sm = $this->createMock(ContainerInterface::class);
@@ -97,9 +97,9 @@ class WebDavJsonWebTokenGenerationServiceFactoryTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends __invoke_IsCallable
+     * @depends invokeIsCallable
      */
-    public function __invoke_ThrowsException_WhenPrivateKeyEmpty()
+    public function invokeThrowsExceptionWhenPrivateKeyEmpty()
     {
         // Setup
         $sm = $this->createMock(ContainerInterface::class);
@@ -118,9 +118,9 @@ class WebDavJsonWebTokenGenerationServiceFactoryTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends __invoke_IsCallable
+     * @depends invokeIsCallable
      */
-    public function __invoke_ThrowsException_WhenPrivateNotSet()
+    public function invokeThrowsExceptionWhenPrivateNotSet()
     {
         // Setup
         $sm = $this->createMock(ContainerInterface::class);
@@ -139,9 +139,9 @@ class WebDavJsonWebTokenGenerationServiceFactoryTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends __invoke_IsCallable
+     * @depends invokeIsCallable
      */
-    public function __invoke_ThrowsException_WhenDefaultLifetimeSecondsEmpty()
+    public function invokeThrowsExceptionWhenDefaultLifetimeSecondsEmpty()
     {
         // Setup
         $sm = $this->createMock(ContainerInterface::class);
@@ -160,9 +160,9 @@ class WebDavJsonWebTokenGenerationServiceFactoryTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends __invoke_IsCallable
+     * @depends invokeIsCallable
      */
-    public function __invoke_ThrowsException_WhenDefaultLifetimeSecondsNotSet()
+    public function invokeThrowsExceptionWhenDefaultLifetimeSecondsNotSet()
     {
         // Setup
         $sm = $this->createMock(ContainerInterface::class);
@@ -181,9 +181,9 @@ class WebDavJsonWebTokenGenerationServiceFactoryTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends __invoke_IsCallable
+     * @depends invokeIsCallable
      */
-    public function __invoke_ThrowsException_WhenUrlPatternNotSet()
+    public function invokeThrowsExceptionWhenUrlPatternNotSet()
     {
         // Setup
         $sm = $this->createMock(ContainerInterface::class);

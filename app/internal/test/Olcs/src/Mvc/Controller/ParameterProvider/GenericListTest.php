@@ -1,6 +1,5 @@
 <?php
 
-
 namespace OlcsTest\Mvc\Controller\ParameterProvider;
 
 use Olcs\Mvc\Controller\ParameterProvider\GenericList;

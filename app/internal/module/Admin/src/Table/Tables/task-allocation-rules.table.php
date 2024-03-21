@@ -2,6 +2,7 @@
 
 use Common\Service\Table\Formatter\TaskAllocationCriteria;
 use Common\Service\Table\Formatter\TaskAllocationUser;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -25,11 +26,15 @@ return [
         [
             'title' => 'Category',
             'formatter' => function ($row) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $url = $this->generateUrl(
                     ['id' => $row['id'], 'action' => 'edit'],
                     'admin-dashboard/task-allocation-rules'
                 );
-                return '<a class="govuk-link" href="'. $url . '">' . $row['category']['description'] .'</a>';
+                return '<a class="govuk-link" href="' . $url . '">' . $row['category']['description'] . '</a>';
             }
         ],
         [

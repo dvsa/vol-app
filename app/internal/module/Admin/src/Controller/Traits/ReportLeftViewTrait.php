@@ -23,7 +23,7 @@ trait ReportLeftViewTrait
         ];
 
         if ($this->currentUser()->getUserData()['dataAccess']['isIrfo']) {
-            unset ($viewData['removePageIds']);
+            unset($viewData['removePageIds']);
         }
 
         $view = new ViewModel(

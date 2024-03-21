@@ -19,24 +19,24 @@ $(function () {
 
     getLanguages();
 
-    function getLanguages() {
+    function getLanguages()
+    {
         $.get(jsonBaseUrl + "languages", function (result) {
             var current = " current";
             $.each(result.languages, function (idx, lang) {
                     var hideClass = (idx === "en_GB") ? "" : " js-hidden";
                     var tabTemplate =
-                        `<li id="tab{idx}" class="horizontal-navigation__item transKeyTab${current}" data-lang="${idx}" style="padding: 0px; margin: 0px;">
-                            <a class="govuk-link" id="transKeyEnGB" href="#">${lang.label}</a>
-                       </li>`;
+                        ` < li id = "tab{idx}" class = "horizontal-navigation__item transKeyTab${current}" data - lang = "${idx}" style = "padding: 0px; margin: 0px;" >
+                            < a class = "govuk-link" id = "transKeyEnGB" href = "#" > ${lang.label} < / a >
+                       <  / li > `;
                     var textAreaTemplate =
-                        `<div class="langFields field ${hideClass}">
-                                <textarea name="fields[translationsArray][${idx}]" id="input-${idx}" class="extra-long"></textarea>
-                        </div>`;
+                        ` < div class = "langFields field ${hideClass}" >
+                                < textarea name = "fields[translationsArray][${idx}]" id = "input-${idx}" class = "extra-long" > < / textarea >
+                        <  / div > `;
                     $("#languageTabs").append(tabTemplate);
                     fieldset.prepend(textAreaTemplate);
                     current = "";
-                }
-            );
+            });
             fieldset.removeClass("hidden");
             if (addedit == "edit") {
                 getTranslatedText();
@@ -48,8 +48,10 @@ $(function () {
         });
     }
 
-    function getTranslatedText() {
-        $.get(jsonBaseUrl + "gettext/" + $("#id").val(),
+    function getTranslatedText()
+    {
+        $.get(
+            jsonBaseUrl + "gettext/" + $("#id").val(),
             function (response) {
                 $.each(response[resultsKey], function (ix, text) {
                     $("#input-" + text.language.isoCode).val(text[translationVar]);

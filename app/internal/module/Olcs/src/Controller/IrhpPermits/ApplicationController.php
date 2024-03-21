@@ -72,7 +72,7 @@ class ApplicationController extends AbstractInternalController implements LeftVi
     /**
      * Override to handle the Table from POST when Apply clicked and redirect to the Add form.
      *
-     * @return Response
+     * @return Response|void
      */
     protected function handleIndexPost()
     {

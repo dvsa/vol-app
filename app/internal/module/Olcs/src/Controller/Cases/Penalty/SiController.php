@@ -10,6 +10,7 @@ use Dvsa\Olcs\Transfer\Command\Cases\UpdatePenaltiesNote as CommentUpdateDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Cases as CaseDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Si\Si as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Si\SiList as ListDto;
+use Laminas\Http\Response;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
@@ -117,7 +118,7 @@ class SiController extends AbstractInternalController implements CaseControllerI
     /**
      * Index action
      *
-     * @return HttpResponse
+     * @return Response
      */
     public function indexAction()
     {
@@ -135,7 +136,7 @@ class SiController extends AbstractInternalController implements CaseControllerI
     /**
      * Sends the response back to Erru
      *
-     * @return HttpResponse
+     * @return Response
      */
     public function sendAction()
     {

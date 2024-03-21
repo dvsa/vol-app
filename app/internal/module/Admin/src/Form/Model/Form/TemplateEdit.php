@@ -12,7 +12,6 @@ use Laminas\Form\Annotation as Form;
  */
 class TemplateEdit
 {
-
     /**
      * @Form\Attributes({"value":""})
      * @Form\Type("Hidden")

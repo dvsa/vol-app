@@ -25,7 +25,6 @@ use Dvsa\Olcs\Transfer\Command\IrhpApplication\Withdraw;
 use Dvsa\Olcs\Transfer\Command\IrhpCandidatePermit\Create as CandidatePermitCreateCmd;
 use Dvsa\Olcs\Transfer\Command\IrhpCandidatePermit\Delete as CandidatePermitDeleteCmd;
 use Dvsa\Olcs\Transfer\Command\IrhpCandidatePermit\Update as CandidatePermitUpdateCmd;
-use Dvsa\Olcs\Transfer\Command\Permits\AcceptEcmtPermits;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\ApplicationPath;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\BilateralMetadata;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\ById as ItemDto;
@@ -512,57 +511,6 @@ class IrhpApplicationController extends AbstractInternalController implements
         );
     }
 
-
-    /**
-     * Handles click of the Decline button on right sidebar
-     *
-     * @return \Laminas\Http\Response
-     */
-    public function declineAction()
-    {
-        return $this->confirmCommand(
-            new ConfirmItem($this->deleteParams),
-            DeclineDTO::class,
-            'Are you sure?',
-            'Decline Permits. Are you sure?',
-            'Offer of permits successfully declined.'
-        );
-    }
-
-    /**
-     * Handles click of the Accept button on right sidebar
-     *
-     * @return \Laminas\Http\Response
-     */
-    public function acceptAction()
-    {
-        $response = $this->handleQuery(ItemDto::create(['id' => $this->params()->fromRoute('irhpAppId')]));
-        $irhpPermit = $response->getResult();
-        $fee = $this->getOutstandingFee($irhpPermit['fees'], RefData::IRHP_GV_ISSUE_FEE_TYPE);
-        if ($fee) {
-            return $this->redirect()
-                ->toRoute(
-                    'licence/irhp-fees/fee_action',
-                    [
-                        'action' => 'pay-fees',
-                        'fee' => $fee['id']
-                    ],
-                    [],
-                    true
-                );
-        } elseif ($irhpPermit['isAwaitingFee']) {
-            // There was no outstanding fees for this application (already been paid) so they have been
-            // paid or waived, so allow acceptance to progress.
-            return $this->confirmCommand(
-                new ConfirmItem($this->deleteParams),
-                AcceptEcmtPermits::class,
-                'Are you sure?',
-                'Accept ECMT Permit Offer. Are you sure?',
-                'Permit Application Accepted'
-            );
-        }
-    }
-
     /**
      * Handles click of the Revive Application button on right sidebar
      *
@@ -1021,7 +969,7 @@ class IrhpApplicationController extends AbstractInternalController implements
     public function preGrantAddAction()
     {
         return $this->add(
-            IrhpCandidatePermitForm::Class,
+            IrhpCandidatePermitForm::class,
             new AddFormDefaultData(['irhpPermitApplication' => 34252354]),
             CandidatePermitCreateCmd::class,
             IrhpCandidatePermitMapper::class,

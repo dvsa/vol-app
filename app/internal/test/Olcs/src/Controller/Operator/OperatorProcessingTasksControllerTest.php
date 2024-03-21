@@ -1,7 +1,9 @@
 <?php
+
 /**
  * Operator tasks controller tests
  */
+
 namespace OlcsTest\Controller\Operator;
 
 use Olcs\Controller\Operator\OperatorProcessingTasksController as Sut;

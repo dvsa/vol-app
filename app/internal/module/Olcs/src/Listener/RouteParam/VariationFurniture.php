@@ -19,15 +19,15 @@ use Laminas\View\Model\ViewModel;
 
 class VariationFurniture implements ListenerAggregateInterface, FactoryInterface, QuerySenderAwareInterface
 {
-    use ListenerAggregateTrait,
-        ViewHelperManagerAwareTrait,
-        QuerySenderAwareTrait;
+    use ListenerAggregateTrait;
+    use ViewHelperManagerAwareTrait;
+    use QuerySenderAwareTrait;
 
     private $router;
 
     /**
      * @param $router
-     * @return $this
+     * @return void
      */
     public function setRouter($router)
     {
@@ -94,7 +94,7 @@ class VariationFurniture implements ListenerAggregateInterface, FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : VariationFurniture
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): VariationFurniture
     {
         $this->setViewHelperManager($container->get('ViewHelperManager'));
         $this->setQuerySender($container->get('QuerySender'));

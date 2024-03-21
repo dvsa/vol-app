@@ -1,4 +1,5 @@
 <?php
+
 namespace Olcs\Mvc\Controller\Plugin;
 
 use Laminas\Mvc\Controller\Plugin\AbstractPlugin;

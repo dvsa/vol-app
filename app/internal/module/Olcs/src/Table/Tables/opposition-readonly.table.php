@@ -3,6 +3,7 @@
 use Common\Service\Table\Formatter\Date;
 use Common\Service\Table\Formatter\Name;
 use Common\Service\Table\Formatter\RefData;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -15,11 +16,16 @@ return [
         [
             'title' => 'Case No.',
             'isNumeric' => true,
-            'formatter' => fn($row) => '<a class="govuk-link" href="' . $this->generateUrl(
-                ['case' => $row['case']['id'], 'tab' => 'overview'],
-                'case_opposition',
-                false
-            ) . '">' . $row['case']['id'] . '</a>'
+            'formatter' => fn($row) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                '<a class="govuk-link" href="' . $this->generateUrl(
+                    ['case' => $row['case']['id'], 'tab' => 'overview'],
+                    'case_opposition',
+                    false
+                ) . '">' . $row['case']['id'] . '</a>'
         ],
         [
             'title' => 'Case status',

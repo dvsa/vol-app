@@ -36,10 +36,10 @@ class IrhpApplicationFurniture implements
     QuerySenderAwareInterface,
     CommandSenderAwareInterface
 {
-    use ListenerAggregateTrait,
-        ViewHelperManagerAwareTrait,
-        QuerySenderAwareTrait,
-        CommandSenderAwareTrait;
+    use ListenerAggregateTrait;
+    use ViewHelperManagerAwareTrait;
+    use QuerySenderAwareTrait;
+    use CommandSenderAwareTrait;
 
     /**
      * @var Navigation
@@ -169,7 +169,8 @@ class IrhpApplicationFurniture implements
                 ->setVisible(true);
         }
 
-        if ($irhpApplication['status']['id'] == RefData::PERMIT_APP_STATUS_UNDER_CONSIDERATION
+        if (
+            $irhpApplication['status']['id'] == RefData::PERMIT_APP_STATUS_UNDER_CONSIDERATION
             && $irhpApplication['businessProcess']['id'] == RefData::BUSINESS_PROCESS_APGG
         ) {
             $grantability = $this->getGrantability($irhpApplication);
@@ -254,7 +255,7 @@ class IrhpApplicationFurniture implements
     private function getPageTitle(array $irhpApplication)
     {
         $urlPlugin = $this->getViewHelperManager()->get('Url');
-        $escaper = new Escaper;
+        $escaper = new Escaper();
         $licUrl = $urlPlugin->__invoke('licence/irhp-application', ['licence' => $irhpApplication['licence']['id']], [], false);
         return '<a class="govuk-link" href="' . $licUrl . '">' . $escaper->escapeHtml($irhpApplication['licence']['licNo']) . '</a>' . '/' . $escaper->escapeHtml($irhpApplication['id']);
     }

@@ -5,6 +5,7 @@ use Common\Service\Table\Formatter\FeeAmount;
 use Common\Service\Table\Formatter\InternalLicenceNumberLink;
 use Common\Service\Table\Formatter\OrganisationLink;
 use Common\Service\Table\Formatter\RefData;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -25,12 +26,17 @@ return [
         [
             'title' => 'Operator Name',
             'sort' => 'o.name',
-            'formatter' => fn($data) => $this->callFormatter(
-                [
-                    'formatter' => OrganisationLink::class,
-                ],
-                $data['licence']
-            )
+            'formatter' => fn($data) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                $this->callFormatter(
+                    [
+                        'formatter' => OrganisationLink::class,
+                    ],
+                    $data['licence']
+                )
         ],
         [
             'title' => 'Date Fee Invoiced',
@@ -49,6 +55,10 @@ return [
             'title' => 'Date of Refund',
             'sort' => 'ftr.createdOn',
             'formatter' => function ($data) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $refundTransaction = array_filter(
                     $data['feeTransactions'],
                     fn($transaction) => $transaction['amount'] < 0

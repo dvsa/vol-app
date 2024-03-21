@@ -1,7 +1,9 @@
 <?php
+
 /**
  * Case decisions controller tests
  */
+
 namespace OlcsTest\Controller\Cases\Processing;
 
 use Olcs\Controller\Cases\Processing\DecisionsController as Sut;

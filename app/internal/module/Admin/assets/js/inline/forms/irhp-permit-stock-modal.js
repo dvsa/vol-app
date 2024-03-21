@@ -26,11 +26,13 @@ $(function () {
     var permitCategory = $("#permitCategory");
     var permitCategoryFields = $(".permitCategoryFields");
 
-    function getSelectedTypeId() {
+    function getSelectedTypeId()
+    {
         return parseInt(typeSelect.val(), 10);
     }
 
-    function toggle() {
+    function toggle()
+    {
         var typeId = getSelectedTypeId();
 
         if (typeId === BILATERAL_ID) {
@@ -65,7 +67,7 @@ $(function () {
         toggle();
     });
 
-    country.change(function() {
+    country.change(function () {
         toggle();
     });
 

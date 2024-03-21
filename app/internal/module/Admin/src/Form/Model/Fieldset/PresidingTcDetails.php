@@ -13,8 +13,8 @@ use Laminas\Form\Annotation as Form;
  */
 class PresidingTcDetails
 {
-    use VersionTrait,
-        IdTrait;
+    use VersionTrait;
+    use IdTrait;
 
     /**
      * @Form\Attributes({"placeholder":"","class":"medium"})

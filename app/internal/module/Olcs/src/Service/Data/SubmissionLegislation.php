@@ -29,7 +29,7 @@ class SubmissionLegislation extends AbstractPublicInquiryData
     /**
      * Format data for drop down. Note data-in-office-revokation flag used to set attribute against the option. JS
      * then used to filter out.
-     * 
+     *
      * @param array $data Data
      *
      * @return array

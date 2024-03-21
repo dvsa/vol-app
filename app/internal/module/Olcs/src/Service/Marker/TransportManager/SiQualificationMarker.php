@@ -70,7 +70,8 @@ class SiQualificationMarker extends \Olcs\Service\Marker\AbstractMarker
 
         $tms = [];
         foreach ($mergedTmasTmls as $tmaOrTml) {
-            if ($tmaOrTml['transportManager']['requireSiGbQualification'] &&
+            if (
+                $tmaOrTml['transportManager']['requireSiGbQualification'] &&
                 !$tmaOrTml['transportManager']['hasValidSiGbQualification']
             ) {
                 // add and eliminate duplicates
@@ -79,7 +80,8 @@ class SiQualificationMarker extends \Olcs\Service\Marker\AbstractMarker
         }
         if (isset($data['transportManagersFromLicence'])) {
             foreach ($data['transportManagersFromLicence'] as $tml) {
-                if ($tml['transportManager']['requireSiGbQualificationOnVariation'] &&
+                if (
+                    $tml['transportManager']['requireSiGbQualificationOnVariation'] &&
                     !$tml['transportManager']['hasValidSiGbQualification']
                 ) {
                     // add and eliminate duplicates
@@ -104,7 +106,8 @@ class SiQualificationMarker extends \Olcs\Service\Marker\AbstractMarker
 
         $tms = [];
         foreach ($mergedTmasTmls as $tmaOrTml) {
-            if ($tmaOrTml['transportManager']['requireSiNiQualification'] &&
+            if (
+                $tmaOrTml['transportManager']['requireSiNiQualification'] &&
                 !$tmaOrTml['transportManager']['hasValidSiNiQualification']
             ) {
                 // add and eliminate duplicates
@@ -113,7 +116,8 @@ class SiQualificationMarker extends \Olcs\Service\Marker\AbstractMarker
         }
         if (isset($data['transportManagersFromLicence'])) {
             foreach ($data['transportManagersFromLicence'] as $tml) {
-                if ($tml['transportManager']['requireSiNiQualificationOnVariation'] &&
+                if (
+                    $tml['transportManager']['requireSiNiQualificationOnVariation'] &&
                     !$tml['transportManager']['hasValidSiNiQualification']
                 ) {
                     // add and eliminate duplicates
@@ -129,7 +133,7 @@ class SiQualificationMarker extends \Olcs\Service\Marker\AbstractMarker
     /**
      * Merge together the TMAs and TMLs
      *
-     * @param type $data
+     * @param array $data
      *
      * @return array
      */

@@ -2,6 +2,7 @@
 
 namespace Olcs\View\Helper;
 
+use Laminas\Form\ElementInterface;
 use Laminas\I18n\Translator\TranslatorInterface as Translator;
 use Laminas\I18n\Translator\TranslatorAwareInterface;
 use Laminas\View\Helper\AbstractHelper;

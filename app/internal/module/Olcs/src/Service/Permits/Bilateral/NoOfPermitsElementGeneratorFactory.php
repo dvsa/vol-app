@@ -16,7 +16,7 @@ class NoOfPermitsElementGeneratorFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : NoOfPermitsElementGenerator
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): NoOfPermitsElementGenerator
     {
         return new NoOfPermitsElementGenerator(
             $container->get('Helper\Translation'),

@@ -37,7 +37,7 @@ class AbstractPublicInquiryDataTest extends MockeryTestCase
         $licData = [
             'applications' => [
                 0 => [
-                    'id'=> self::APP_ID,
+                    'id' => self::APP_ID,
                 ],
             ],
         ];

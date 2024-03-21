@@ -13,8 +13,8 @@ $(function () {
     });
 
     // Force a selection of TC or Other User from the toggleable select boxes.
-    $("button[name='form-actions\[submit]'\]").click(function(e) {
-        if($('.result-selected').length < 1) {
+    $("button[name='form-actions\[submit]'\]").click(function (e) {
+        if ($('.result-selected').length < 1) {
             e.preventDefault();
             alert('You must select a TC/DTC or Other Recipient');
         }

@@ -1,6 +1,7 @@
 <?php
 
 use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -34,27 +35,37 @@ return [
         [
             'title' => 'Auth Id',
             'isNumeric' => true,
-            'formatter' => fn($data) => sprintf(
-                '<a href="%s" class="govuk-link js-modal-ajax">%s</a>',
-                $this->generateUrl(
-                    ['action' => 'edit', 'id' => $data['id'], 'organisation' => $data['organisation']['id']],
-                    'operator/irfo/psv-authorisations',
-                    false
-                ),
-                $data['id']
-            )
+            'formatter' => fn($data) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                sprintf(
+                    '<a href="%s" class="govuk-link js-modal-ajax">%s</a>',
+                    $this->generateUrl(
+                        ['action' => 'edit', 'id' => $data['id'], 'organisation' => $data['organisation']['id']],
+                        'operator/irfo/psv-authorisations',
+                        false
+                    ),
+                    $data['id']
+                )
         ],
         [
             'title' => 'Operator',
-            'formatter' => fn($data) => sprintf(
-                '<a href="%s" class="govuk-link js-modal-ajax">%s</a>',
-                $this->generateUrl(
-                    ['action' => 'edit', 'organisation' => $data['organisation']['id']],
-                    'operator/irfo/details',
-                    false
-                ),
-                $data['organisation']['name']
-            )
+            'formatter' => fn($data) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                sprintf(
+                    '<a href="%s" class="govuk-link js-modal-ajax">%s</a>',
+                    $this->generateUrl(
+                        ['action' => 'edit', 'organisation' => $data['organisation']['id']],
+                        'operator/irfo/details',
+                        false
+                    ),
+                    $data['organisation']['name']
+                )
         ],
         [
             'title' => 'In force date',

@@ -18,7 +18,6 @@ class IrfoGvPermit implements MapperInterface
      */
     public static function mapFromResult(array $data)
     {
-        // TODO - find better way of injecting to mappers
         if (!empty($data['now'])) {
             $now = $data['now'];
             unset($data['now']);

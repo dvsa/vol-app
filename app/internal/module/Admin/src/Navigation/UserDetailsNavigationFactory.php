@@ -1,4 +1,5 @@
 <?php
+
 namespace Admin\Navigation;
 
 use Laminas\Navigation\Service\AbstractNavigationFactory;

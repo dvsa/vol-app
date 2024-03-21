@@ -9,7 +9,8 @@ $(function () {
 
     fetchRanges();
 
-    function formatRangeLabel(item) {
+    function formatRangeLabel(item)
+    {
         let rangeCountries = item.countrys.map(function (country) {
             return country.id;
         });
@@ -22,13 +23,16 @@ $(function () {
         return rangeLabel;
     }
 
-    function fetchRanges() {
+    function fetchRanges()
+    {
         OLCS.preloader.show("modal");
-        $.post(rangesUrl.val(),
+        $.post(
+            rangesUrl.val(),
             {
                 irhpPermitApplication: irhpPermitApplication.val(),
                 security: csrfToken.val()
-            }, function (data) {
+            },
+            function (data) {
                 $.each(data.ranges, function (i, item) {
                     rangeSelect.append($("<option>", {
                         value: item.id,
@@ -38,6 +42,7 @@ $(function () {
                 });
                 $(".rangeSelectBox").removeClass("js-hidden");
                 OLCS.preloader.hide();
-            });
+            }
+        );
     }
 });

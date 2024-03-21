@@ -1,4 +1,5 @@
 <?php
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery as m;
@@ -36,14 +37,14 @@ class SubmissionSectionCommentTest extends MockeryTestCase
                     'id' => 987,
                     'submission' => ['id' => 100],
                     'submissionSection' => 'case-summary',
-                    'comment' =>'test',
+                    'comment' => 'test',
                 ],
                 [
                     'fields' => [
                         'id' => 987,
                         'submission' => 100,
                         'submissionSection' => 'case-summary',
-                        'comment' =>'test',
+                        'comment' => 'test',
                     ],
                 ]
             ],
@@ -51,12 +52,12 @@ class SubmissionSectionCommentTest extends MockeryTestCase
             [
                 [
                     'id' => 987,
-                    'comment' =>'test'
+                    'comment' => 'test'
                 ],
                 [
                     'fields' => [
                         'id' => 987,
-                        'comment' =>'test'
+                        'comment' => 'test'
                     ],
                 ]
             ]

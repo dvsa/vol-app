@@ -5,6 +5,7 @@
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
+
 namespace OlcsTest\Service\Permits\Bilateral;
 
 use Olcs\Service\Permits\Bilateral\ApplicationFormPopulator;

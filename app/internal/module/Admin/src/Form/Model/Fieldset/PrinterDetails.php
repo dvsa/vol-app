@@ -13,8 +13,8 @@ use Common\Form\Model\Form\Traits\VersionTrait;
  */
 class PrinterDetails
 {
-    use VersionTrait,
-        IdTrait;
+    use VersionTrait;
+    use IdTrait;
 
     /**
      * @Form\Attributes({"placeholder":"","class":"medium"})

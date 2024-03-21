@@ -10,7 +10,6 @@ use Laminas\Form\Annotation as Form;
  */
 class FeeActions
 {
-
     /**
      * @Form\Attributes({
      *     "type":"submit",

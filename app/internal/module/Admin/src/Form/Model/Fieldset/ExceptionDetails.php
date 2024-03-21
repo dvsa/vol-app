@@ -13,8 +13,8 @@ use Common\Form\Model\Form\Traits\VersionTrait;
  */
 class ExceptionDetails
 {
-    use IdTrait,
-        VersionTrait;
+    use IdTrait;
+    use VersionTrait;
 
     /**
      * @Form\Name("teamOrUser")

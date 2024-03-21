@@ -2,6 +2,7 @@
 
 use Common\Service\Table\Formatter\Address;
 use Common\Service\Table\Formatter\ConditionsUndertakingsType;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -18,7 +19,12 @@ return [
         ],
         [
             'title' => 'Added via',
-            'formatter' => fn($data, $column) => $this->translator->translate($data['addedVia']['description']),
+            'formatter' => fn($data, $column) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                $this->translator->translate($data['addedVia']['description']),
         ],
         [
             'title' => 'Fulfilled',
@@ -30,15 +36,22 @@ return [
         ],
         [
             'title' => 'Attached to',
-            'formatter' => fn($data, $column) => $this->translator->translate($data['attachedTo']['description']),
+            'formatter' => fn($data, $column) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                $this->translator->translate($data['attachedTo']['description']),
         ],
         [
             'title' => 'OC address',
             'width' => '300px',
             'formatter' => function ($data, $column) {
-
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 if (isset($data['operatingCentre']['address'])) {
-
                     $column['formatter'] = Address::class;
 
                     return $this->callFormatter($column, $data['operatingCentre']['address']);

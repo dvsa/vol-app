@@ -5,6 +5,7 @@
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
+
 namespace Olcs\Data\Mapper;
 
 use Common\Data\Mapper\MapperInterface;

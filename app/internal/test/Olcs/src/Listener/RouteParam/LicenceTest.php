@@ -79,7 +79,7 @@ class LicenceTest extends TestCase
                     $this->assertSame(['id' => $licenceId], $dto->getArrayCopy());
                     return 'QUERY';
                 }
-        );
+            );
 
         $mockQueryService->shouldReceive('send')->with('QUERY')->once()->andReturn($mockResult);
 
@@ -358,7 +358,6 @@ class LicenceTest extends TestCase
         $this->sut->setNavigationService($mockSidebar);
 
         $this->mockMainNavigation($licence['goodsOrPsv']['id']);
-
 
         $routeParam = new RouteParam();
         $routeParam->setValue($licenceId);
@@ -860,7 +859,6 @@ class LicenceTest extends TestCase
         $this->mockHideButton($mockSidebar, 'licence-decisions-undo-terminate');
         $this->mockHideButton($mockSidebar, 'licence-decisions-surrender');
         $this->mockHideButton($mockSidebar, 'licence-quick-actions-create-variation');
-
 
         $this->sut->setNavigationService($mockSidebar);
         $this->signatureType = RefData::SIGNATURE_TYPE_DIGITAL_SIGNATURE;

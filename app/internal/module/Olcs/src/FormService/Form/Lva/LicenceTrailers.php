@@ -4,6 +4,8 @@ namespace Olcs\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\CommonLicenceTrailers as CommonLicenceTrailers;
 use Common\Service\Helper\FormHelperService;
+use Common\Service\Table\TableBuilder;
+use Laminas\Form\Form;
 
 /**
  * Licence Trailers
@@ -22,9 +24,9 @@ class LicenceTrailers extends CommonLicenceTrailers
     /**
      * Make form alterations
      *
-     * @param \Laminas\Form\Form $form
+     * @param Form $form
      * @param TableBuilder $table
-     * @return \Laminas\Form\Form
+     * @return Form
      */
     protected function alterForm($form, $table)
     {

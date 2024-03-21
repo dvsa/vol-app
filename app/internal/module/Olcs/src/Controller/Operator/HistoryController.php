@@ -3,6 +3,7 @@
 namespace Olcs\Controller\Operator;
 
 use Dvsa\Olcs\Transfer\Query\EventHistory\EventHistory as ItemDto;
+use Laminas\Form\FormInterface;
 use Laminas\View\Model\ViewModel;
 use Olcs\Data\Mapper\EventHistory as Mapper;
 use Olcs\Form\Model\Form\EventHistory as EventHistorytForm;
@@ -145,7 +146,7 @@ class HistoryController extends OperatorController
      *
      * @param array $data data
      *
-     * @return Form
+     * @return FormInterface
      */
     protected function getEventHistoryDetailsForm($data)
     {

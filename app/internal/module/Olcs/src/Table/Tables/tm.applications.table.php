@@ -2,6 +2,7 @@
 
 use Common\Service\Table\Formatter\SumColumns;
 use Common\Service\Table\Formatter\TmApplicationManagerType;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -24,11 +25,15 @@ return [
             'title' => 'Application ID',
             'name' => 'application',
             'formatter' => function ($row) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $routeParams = ['application' => $row['application']['id']];
                 $route = $row['application']['isVariation'] ?
                     'lva-variation/transport_managers' : 'lva-application/transport_managers';
                 $url = $this->generateUrl($routeParams, $route);
-                return '<a class="govuk-link" href="'. $url . '">' .
+                return '<a class="govuk-link" href="' . $url . '">' .
                     $row['application']['licence']['licNo'] . '/' . $row['application']['id'] .
                     '</a>';
             },

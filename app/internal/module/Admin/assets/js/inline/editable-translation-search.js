@@ -8,15 +8,16 @@ $(function () {
     var jsonBaseUrl = $("#jsonBaseUrl").val();
     const urlParams = new URLSearchParams(window.location.search);
 
-    var delayAjax = (function(){
+    var delayAjax = (function () {
         var timer = 0;
-        return function(callback){
-            clearTimeout (timer);
+        return function (callback) {
+            clearTimeout(timer);
             timer = setTimeout(callback, 1200);
         };
     })();
 
-    function showAutocomplete() {
+    function showAutocomplete()
+    {
         var pos = searchBox.position();
         var height = searchBox.outerHeight();
         autcompleteDiv.css({
@@ -28,7 +29,7 @@ $(function () {
     }
 
     // On pageload, pre-populate the searchbox with the last term GET'ed.
-    if(urlParams.has("translationSearch")) {
+    if (urlParams.has("translationSearch")) {
         searchBox.val(urlParams.get("translationSearch"));
     }
 
@@ -39,29 +40,33 @@ $(function () {
         event.preventDefault();
     });
 
-    searchBox.keyup(function(e) {
-        if (e.keyCode === 27) autcompleteDiv.toggle();
+    searchBox.keyup(function (e) {
+        if (e.keyCode === 27) {
+            autcompleteDiv.toggle();
+        }
     });
 
     // Autocomplete functionality for the key search box
     searchBox.keypress(function (event) {
         if (searchBox.val().length > 2) {
-            delayAjax(function(){
-                $.get(jsonBaseUrl+"xhrsearch",
+            delayAjax(function () {
+                $.get(
+                    jsonBaseUrl + "xhrsearch",
                     {translationSearch: searchBox.val()}
-                    ).done(function (data) {
-                    searchResults.empty();
-                    $.each(data.results, function (index, result) {
-                        searchResults.append("<div class=\"translationAcRow\"><strong><a class=\"govuk-link\" href=\""+jsonBaseUrl+"details/" + result.id + "\">" + result.id + "</a></strong><br>" + result.description + "</div>");
-                    });
-                    showAutocomplete();
+                ).done(function (data) {
+                        searchResults.empty();
+                        $.each(data.results, function (index, result) {
+                            searchResults.append("<div class=\"translationAcRow\"><strong><a class=\"govuk-link\" href=\"" + jsonBaseUrl + "details/" + result.id + "\">" + result.id + "</a></strong><br>" + result.description + "</div>");
+                        });
+                        showAutocomplete();
                 });
             });
         }
     });
 
     // Event listener to detect if user clicks outside of auto-complete list to dismiss results pane
-    function hideAutocompleteDiv(selector) {
+    function hideAutocompleteDiv(selector)
+    {
         const outsideClickListener = (event) => {
             const $target = $(event.target);
             if (!$target.closest(selector).length && $(selector).is(":visible")) {

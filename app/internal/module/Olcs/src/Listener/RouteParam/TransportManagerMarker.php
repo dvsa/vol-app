@@ -214,7 +214,7 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
      *
      * @param int $variationId Variation ID
      *
-     * @return array
+     * @return void
      * @throws \RuntimeException
      */
     protected function addTransportManagerFromLicenceData($variationId)
@@ -245,7 +245,7 @@ class TransportManagerMarker implements ListenerAggregateInterface, FactoryInter
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : TransportManagerMarker
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TransportManagerMarker
     {
         $this->setMarkerService($container->get(\Olcs\Service\Marker\MarkerService::class));
         $this->setAnnotationBuilderService($container->get('TransferAnnotationBuilder'));

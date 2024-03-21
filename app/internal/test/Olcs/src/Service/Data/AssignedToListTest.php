@@ -178,7 +178,7 @@ class AssignedToListTest extends AbstractListDataServiceTestCase
         $expected = [
             $this->currentUser['id'] =>
                 $this->currentUser['contactDetails']['person']['forename']
-                .' '.$this->currentUser['contactDetails']['person']['familyName'],
+                . ' ' . $this->currentUser['contactDetails']['person']['familyName'],
             'unassigned' => 'Not assigned',
             'all' => 'All',
             5 => 'Paul Aldridge',
@@ -234,7 +234,7 @@ class AssignedToListTest extends AbstractListDataServiceTestCase
                 'options' => [
                     $this->currentUser['id'] =>
                         $this->currentUser['contactDetails']['person']['forename']
-                        .' '.$this->currentUser['contactDetails']['person']['familyName'],
+                        . ' ' . $this->currentUser['contactDetails']['person']['familyName'],
                     'unassigned' => 'Not assigned',
                     'all' => 'All'
                 ]

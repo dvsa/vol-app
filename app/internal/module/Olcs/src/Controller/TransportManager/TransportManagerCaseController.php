@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\TransportManager;
 
+use Common\Form\Form;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
@@ -60,9 +61,9 @@ class TransportManagerCaseController extends AbstractInternalController implemen
     /**
      * Alter Form to remove case type options depending on where the case was added from.
      *
-     * @param  \Common\Controller\Form $form
-     * @param  array                   $initialData
-     * @return \Common\Controller\Form
+     * @param  Form $form
+     * @param  array $initialData
+     * @return Form
      */
     public function alterFormForAdd($form, $initialData)
     {
@@ -72,9 +73,9 @@ class TransportManagerCaseController extends AbstractInternalController implemen
     /**
      * Alter Form to remove case type options depending on where the case was added from.
      *
-     * @param  \Common\Controller\Form $form
+     * @param  Form $form
      * @param  array                   $initialData
-     * @return \Common\Controller\Form
+     * @return Form
      */
     public function alterFormForEdit($form, $initialData)
     {
@@ -84,8 +85,8 @@ class TransportManagerCaseController extends AbstractInternalController implemen
     /**
      * Works out the case types
      *
-     * @param  \Common\Controller\Form $form
-     * @return \Common\Controller\Form
+     * @param  Form $form
+     * @return Form
      */
     private function getFormCaseTypes($form)
     {

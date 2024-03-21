@@ -1,6 +1,7 @@
 <?php
 
 use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -35,11 +36,16 @@ return [
         [
             'title' => 'Authorisation Id',
             'isNumeric' => true,
-            'formatter' => fn($data, $column) => '<a href="' . $this->generateUrl(
-                ['action' => 'edit', 'id' => $data['id']],
-                'operator/irfo/psv-authorisations',
-                true
-            ) . '" class="govuk-link js-modal-ajax">' . $data['id'] . '</a>'
+            'formatter' => fn($data, $column) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                '<a href="' . $this->generateUrl(
+                    ['action' => 'edit', 'id' => $data['id']],
+                    'operator/irfo/psv-authorisations',
+                    true
+                ) . '" class="govuk-link js-modal-ajax">' . $data['id'] . '</a>'
         ],
         [
             'title' => 'IRFO File Number',

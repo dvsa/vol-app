@@ -1,4 +1,5 @@
 <?php
+
 namespace OlcsTest\Data\Mapper;
 
 use Mockery as m;
@@ -11,7 +12,6 @@ use Laminas\Form\Form;
  */
 class OperatorTransferTest extends MockeryTestCase
 {
-
     /**
      * @dataProvider fromErrorsProvider
      */

@@ -15,7 +15,6 @@ use Olcs\Form\Element\SubmissionSections  as SubmissionSectionsElement;
  */
 class SubmissionSections extends AbstractHelper
 {
-
     /**
      * Render a SubmissionSections element from the provided $element
      *

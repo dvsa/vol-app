@@ -1,4 +1,7 @@
 <?php
+
+use Common\Service\Table\TableBuilder;
+
 return [
     'variables' => [
         'id' => 'oppositions',
@@ -34,11 +37,16 @@ return [
         [
             'title' => 'Date received',
             'name' => 'dateReceived',
-            'formatter' => fn($data, $column) => '<a class="govuk-link" href="' . $this->generateUrl(
-                ['action' => 'edit', 'opposition' => $data['id']],
-                'case_opposition',
-                true
-            ) . '">' . $data['dateReceived'] . '</a>',
+            'formatter' => fn($data, $column) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                '<a class="govuk-link" href="' . $this->generateUrl(
+                    ['action' => 'edit', 'opposition' => $data['id']],
+                    'case_opposition',
+                    true
+                ) . '">' . $data['dateReceived'] . '</a>',
         ],
         [
             'title' => 'Contact name',

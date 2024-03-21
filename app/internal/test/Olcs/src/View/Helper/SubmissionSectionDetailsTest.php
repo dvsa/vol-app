@@ -1,6 +1,5 @@
 <?php
 
-
 namespace OlcsTest\View\Helper;
 
 use Olcs\View\Helper\SubmissionSectionDetails;

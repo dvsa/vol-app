@@ -234,7 +234,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
     /**
      * Get the Application data
      *
-     * @param id $id
+     * @param string $id
      * @return array
      * @throws ResourceNotFoundException
      */
@@ -271,7 +271,8 @@ class Application implements ListenerAggregateInterface, FactoryInterface
 
     protected function shouldShowUndoGrantButton($application)
     {
-        if (!$application['isVariation']
+        if (
+            !$application['isVariation']
             && $application['status']['id'] === \Common\RefData::APPLICATION_STATUS_GRANTED
         ) {
             return ($application['goodsOrPsv']['id'] === \Common\RefData::LICENCE_CATEGORY_GOODS_VEHICLE);
@@ -388,7 +389,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : Application
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Application
     {
         $this->setAnnotationBuilder($container->get('TransferAnnotationBuilder'));
         $this->setQueryService($container->get('QueryService'));

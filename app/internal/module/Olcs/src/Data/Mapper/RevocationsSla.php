@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Olcs\Data\Mapper;
 
 use Common\Data\Mapper\MapperInterface;
@@ -12,7 +11,6 @@ use Common\Data\Mapper\MapperInterface;
  */
 class RevocationsSla implements MapperInterface
 {
-
     /**
      * @param array $data data
      *
@@ -38,7 +36,6 @@ class RevocationsSla implements MapperInterface
                     $formData['fields'][$key] = $value['id'];
                 }
             }
-
         }
         return $formData;
     }

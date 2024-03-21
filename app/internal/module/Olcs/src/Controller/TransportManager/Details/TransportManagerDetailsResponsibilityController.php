@@ -3,6 +3,7 @@
 namespace Olcs\Controller\TransportManager\Details;
 
 use Common\Controller\Traits\CheckForCrudAction;
+use Common\Form\Form;
 use Common\Service\Cqrs\Command\CommandService;
 use Common\Service\Cqrs\Query\QueryService;
 use Common\Service\Helper\FileUploadHelperService;
@@ -184,7 +185,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         $view = $this->getViewWithTm(['form' => $form]);
         $view->setTemplate('pages/form');
 
-        $this->formPost($form, 'processAddForm');
+        $this->formPost($form, [$this, 'processAddForm']);
 
         if ($this->getResponse()->getContent() !== '') {
             return $this->getResponse();
@@ -490,9 +491,9 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      * Check for alternative crud action
      * Need this to handle edit other licence action when clicking the table link
      *
-     * @param string $action Action
+     * @param string|array $action Action
      *
-     * @return \Laminas\Http\Response
+     * @return \Laminas\Http\Response|void
      */
     protected function checkForAlternativeCrudAction($action)
     {
@@ -774,7 +775,6 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         if ($response->isOk()) {
             $result = $response->getResult();
             if ($showMessage) {
-                // @todo: There is a bug. Messages can't be displayed after the redirect. Need to fix in future stories.
                 $this->flashMessenger()->addSuccessMessage($message);
             }
             return $this->redirectToIndex();
@@ -910,9 +910,6 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             return $this->redirectToAction($redirectAction, $redirectId);
         }
 
-        /**
- * @var \Laminas\Form\FormInterface $form
-*/
         $form = $this->getForm('TmOtherLicence');
 
         $view = new ViewModel(['form' => $form]);
@@ -922,8 +919,8 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
             $form = $this->populateOtherLicenceEditForm($form, $type, $redirectAction, $redirectId);
         }
 
-        $this->otherLicenceform = $form;
-        $this->formPost($form, 'processOtherLicenceForm');
+        $this->otherLicenceForm = $form;
+        $this->formPost($form, [$this, 'processOtherLicenceForm']);
 
         if ($this->getResponse()->getContent() !== '') {
             return $this->getResponse();
@@ -974,7 +971,7 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
      *
      * @param array $data Data
      *
-     * @return \Laminas\Http\Response
+     * @return \Laminas\Http\Response|void
      */
     protected function processOtherLicenceForm($data)
     {
@@ -989,8 +986,8 @@ class TransportManagerDetailsResponsibilityController extends AbstractTransportM
         $dto = $dtoClass::create($mappedData);
         $command = $this->transferAnnotationBuilder->createCommand($dto);
         /**
- * @var \Common\Service\Cqrs\Response $response
-*/
+         ** @var \Common\Service\Cqrs\Response $response
+         */
         $response = $this->commandService->send($command);
         if ($response->isClientError()) {
             $errors = OtherLicenceMapper::mapFromErrors($this->otherLicenceForm, $response->getResult()['messages']);

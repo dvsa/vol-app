@@ -16,7 +16,7 @@ class BilateralApplicationValidationModifierFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : BilateralApplicationValidationModifier
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): BilateralApplicationValidationModifier
     {
         return new BilateralApplicationValidationModifier(
             $container->get(ApplicationFormPopulator::class)

@@ -6,6 +6,7 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace OlcsTest\View\Model;
 
 use Olcs\View\Model\ViewModel;

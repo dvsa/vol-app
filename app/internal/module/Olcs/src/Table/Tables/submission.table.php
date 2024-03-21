@@ -4,6 +4,7 @@ use Common\Service\Table\Formatter\Date;
 use Common\Service\Table\Formatter\HideIfClosedRadio;
 use Common\Service\Table\Formatter\Name;
 use Common\Service\Table\Formatter\YesNo;
+use Common\Service\Table\TableBuilder;
 use Olcs\Module;
 
 return [
@@ -38,11 +39,16 @@ return [
         ],
         [
             'title' => 'Submission No.',
-            'formatter' => fn($row) => '<a class="govuk-link" href="' . $this->generateUrl(
-                ['submission' => $row['id'], 'action' => 'details'],
-                'submission',
-                true
-            ) . '">' . $row['id'] . '</a>',
+            'formatter' => fn($row) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                '<a class="govuk-link" href="' . $this->generateUrl(
+                    ['submission' => $row['id'], 'action' => 'details'],
+                    'submission',
+                    true
+                ) . '">' . $row['id'] . '</a>',
             'sort' => 'id'
         ],
         [
@@ -67,6 +73,10 @@ return [
         [
             'title' => 'Currently with',
             'formatter' => function ($data, $column) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $column['formatter'] = Name::class;
                 if (!empty($data['recipientUser']['contactDetails']['person'])) {
                     return $this->callFormatter($column, $data['recipientUser']['contactDetails']['person']);

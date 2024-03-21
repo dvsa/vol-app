@@ -37,7 +37,6 @@ class Rule450Marker extends \Olcs\Service\Marker\AbstractMarker
         }
 
         return $html;
-
     }
 
     protected function getTransportManagerRequiringMarkers($data)
@@ -47,13 +46,15 @@ class Rule450Marker extends \Olcs\Service\Marker\AbstractMarker
         $tms = [];
         foreach ($mergedTmasTmls as $tmaOrTml) {
             //  they are a TM type of 'External' or 'Both'
-            if ($tmaOrTml['transportManager']['tmType']['id'] !== \Common\RefData::TRANSPORT_MANAGER_TYPE_BOTH &&
+            if (
+                $tmaOrTml['transportManager']['tmType']['id'] !== \Common\RefData::TRANSPORT_MANAGER_TYPE_BOTH &&
                 $tmaOrTml['transportManager']['tmType']['id'] !== \Common\RefData::TRANSPORT_MANAGER_TYPE_EXTERNAL
             ) {
                 continue;
             }
 
-            if ($tmaOrTml['transportManager']['associatedOrganisationCount'] > 4 ||
+            if (
+                $tmaOrTml['transportManager']['associatedOrganisationCount'] > 4 ||
                 $tmaOrTml['transportManager']['associatedTotalAuthVehicles'] > 50
             ) {
                 // add and eliminate duplicates
@@ -68,7 +69,7 @@ class Rule450Marker extends \Olcs\Service\Marker\AbstractMarker
     /**
      * Merge together the TMAs and TMLs
      *
-     * @param type $data
+     * @param array $data
      *
      * @return array
      */

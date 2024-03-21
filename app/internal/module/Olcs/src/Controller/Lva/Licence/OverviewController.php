@@ -16,6 +16,7 @@ use Dvsa\Olcs\Transfer\Command\Licence\Overview as OverviewCmd;
 use Dvsa\Olcs\Transfer\Command\Licence\PrintLicence;
 use Dvsa\Olcs\Transfer\Query\Licence\Overview as LicenceQry;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
+use Laminas\Form\FormInterface;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\Interfaces\LicenceControllerInterface;
 use Olcs\Controller\Lva\Traits\LicenceControllerTrait;
@@ -151,7 +152,7 @@ class OverviewController extends AbstractController implements LicenceController
     /**
      * get method overview form
      *
-     * @return Common\Form\Form
+     * @return FormInterface
      */
     protected function getOverviewForm()
     {
@@ -162,10 +163,10 @@ class OverviewController extends AbstractController implements LicenceController
     /**
      * Form presentation logic
      *
-     * @param Common\Form\Form $form    form
+     * @param FormInterface $form    form
      * @param array            $licence licence
      *
-     * @return Common\Form\Form
+     * @return FormInterface
      */
     protected function alterForm($form, $licence)
     {

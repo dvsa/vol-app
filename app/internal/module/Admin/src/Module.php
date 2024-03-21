@@ -5,6 +5,7 @@
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
+
 namespace Admin;
 
 use Laminas\Mvc\ModuleRouteListener;
@@ -17,7 +18,6 @@ use Laminas\Mvc\MvcEvent;
  */
 class Module
 {
-
     public function onBootstrap(MvcEvent $event)
     {
         $eventManager = $event->getApplication()->getEventManager();

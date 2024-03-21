@@ -1,12 +1,12 @@
-OLCS.ready(function() {
-  'use strict';
+OLCS.ready(function () {
+    'use strict';
 
   // reload form when business type changed
-  $(document).on('change', '#businessType', function() {
-    var form = $('#operator');
-    var button = $('#refresh');
+    $(document).on('change', '#businessType', function () {
+        var form = $('#operator');
+        var button = $('#refresh');
 
-    OLCS.formHelper.pressButton(form, button);
-    form.submit();
-  });
+        OLCS.formHelper.pressButton(form, button);
+        form.submit();
+    });
 });

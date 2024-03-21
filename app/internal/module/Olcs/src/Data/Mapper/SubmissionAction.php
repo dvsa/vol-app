@@ -26,7 +26,8 @@ class SubmissionAction implements MapperInterface
             }
         }
 
-        if (!empty($formData['fields']['isDecision']) && ($formData['fields']['isDecision'] === 'Y')
+        if (
+            !empty($formData['fields']['isDecision']) && ($formData['fields']['isDecision'] === 'Y')
             && !empty($formData['fields']['actionTypes'])
         ) {
             // for decision it is not a multi-select

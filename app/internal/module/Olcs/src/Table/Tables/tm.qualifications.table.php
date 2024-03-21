@@ -1,6 +1,7 @@
 <?php
 
 use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -22,6 +23,10 @@ return [
             'name' => 'qualificationType',
             'sort' => 'qualificationType',
             'formatter' => function ($row) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $url = $this->generateUrl(
                     ['id' => $row['id'], 'action' => 'edit'],
                     'transport-manager/details/competences'

@@ -16,7 +16,7 @@ class Schedule41LicenceSearch
      * @Form\Name("licence-number")
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\Schedule41LicenceSearchLicenceNumber")
      */
-    public $licenceNumber= null;
+    public $licenceNumber = null;
 
     /**
      * @Form\Name("form-actions")

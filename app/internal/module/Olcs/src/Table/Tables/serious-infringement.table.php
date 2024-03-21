@@ -1,6 +1,7 @@
 <?php
 
 use Common\Service\Table\Formatter\RefData;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -26,11 +27,16 @@ return [
         [
             'title' => 'Id',
             'isNumeric' => true,
-            'formatter' => fn($data) => sprintf(
-                '<a href="%s" class="govuk-link js-modal-ajax">%s</a>',
-                $this->generateUrl(['action' => 'edit', 'id' => $data['id']], 'case_penalty'),
-                $data['id']
-            )
+            'formatter' => fn($data) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                sprintf(
+                    '<a href="%s" class="govuk-link js-modal-ajax">%s</a>',
+                    $this->generateUrl(['action' => 'edit', 'id' => $data['id']], 'case_penalty'),
+                    $data['id']
+                )
         ],
         [
             'title' => 'Category',

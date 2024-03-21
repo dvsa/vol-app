@@ -29,10 +29,10 @@ class TransportManagerFurniture implements
     QuerySenderAwareInterface,
     CommandSenderAwareInterface
 {
-    use ListenerAggregateTrait,
-        ViewHelperManagerAwareTrait,
-        QuerySenderAwareTrait,
-        CommandSenderAwareTrait;
+    use ListenerAggregateTrait;
+    use ViewHelperManagerAwareTrait;
+    use QuerySenderAwareTrait;
+    use CommandSenderAwareTrait;
 
     /**
      * {@inheritdoc}
@@ -103,7 +103,7 @@ class TransportManagerFurniture implements
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : TransportManagerFurniture
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TransportManagerFurniture
     {
         $this->setQuerySender($container->get('QuerySender'));
         $this->setCommandSender($container->get('CommandSender'));

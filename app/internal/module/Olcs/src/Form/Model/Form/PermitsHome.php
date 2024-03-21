@@ -12,7 +12,6 @@ use Laminas\Form\Annotation as Form;
  */
 class PermitsHome
 {
-
     /**
      * @Form\Options({
      *     "label": "<h4>Filter Applications by:</h4>",

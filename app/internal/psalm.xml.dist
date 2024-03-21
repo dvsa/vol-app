@@ -11,5 +11,8 @@
     <directory name="module"/>
     <directory name="public"/>
     <directory name="config"/>
+    <ignoreFiles>
+        <directory name="vendor" />
+    </ignoreFiles>
   </projectFiles>
 </psalm>

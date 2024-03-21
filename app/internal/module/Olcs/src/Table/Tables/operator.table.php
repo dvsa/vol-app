@@ -1,6 +1,7 @@
 <?php
 
 use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -27,10 +28,15 @@ return [
         [
             'title' => 'Lic no/status',
             'sort' => 'licNo',
-            'formatter' => fn($row) => '<a class="govuk-link" href="' . $this->generateUrl(
-                ['licence' => $row['licenceId']],
-                'licence'
-            ) . '">' . $row['licNo'] . '</a><br/>' . $row['status'],
+            'formatter' => fn($row) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                '<a class="govuk-link" href="' . $this->generateUrl(
+                    ['licence' => $row['licenceId']],
+                    'licence'
+                ) . '">' . $row['licNo'] . '</a><br/>' . $row['status'],
         ],
         [
             'title' => 'App ID/status',
@@ -40,10 +46,15 @@ return [
         ],
         [
             'title' => 'Op/trading name',
-            'formatter' => fn($data) => '<a class="govuk-link" href="' . $this->generateUrl(
-                ['operator' => $data['organisation_id']],
-                'operator/business-details'
-            ) . '">' . $data['name'] . '</a><br/>' . $data['status'],
+            'formatter' => fn($data) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                '<a class="govuk-link" href="' . $this->generateUrl(
+                    ['operator' => $data['organisation_id']],
+                    'operator/business-details'
+                ) . '">' . $data['name'] . '</a><br/>' . $data['status'],
             'sort' => 'operatorName'
         ],
         [
@@ -73,6 +84,10 @@ return [
         [
             'title' => 'Cases',
             'formatter' => function ($data) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 if (isset($data['caseCount']) && (int) $data['caseCount'] > 0) {
                     return '<a class="govuk-link" href="' . $this->generateUrl(
                         ['licence' => $data['licenceId']],
@@ -94,6 +109,10 @@ return [
         [
             'title' => 'Info',
             'formatter' => function ($data, $column) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $string = '<span class="tooltip">';
                 $string .= !empty($data['startDate']) ?
                         ucfirst($this->translator->translate('start')) . ': ' .

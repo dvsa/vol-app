@@ -2,6 +2,7 @@
 
 use Common\Service\Table\Formatter\Address;
 use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -35,6 +36,10 @@ return [
         [
             'title' => 'Date received',
             'formatter' => function ($data, $column) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $column['formatter'] = Date::class;
                 return '<a href="' . $this->generateUrl(
                     ['action' => 'edit', 'complaint' => $data['id']],
@@ -53,6 +58,10 @@ return [
             'title' => 'OC Address',
             'width' => '350px',
             'formatter' => function ($data, $column) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $column['formatter'] = Address::class;
                 $addressList = '';
                 if (!empty($data['operatingCentres'])) {

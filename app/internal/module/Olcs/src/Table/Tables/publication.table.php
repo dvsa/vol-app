@@ -1,6 +1,7 @@
 <?php
 
 use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\TableBuilder;
 use Olcs\Module;
 
 return [
@@ -26,11 +27,15 @@ return [
         [
             'title' => 'Created',
             'formatter' => function ($data, $column) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $column['formatter'] = Date::class;
                 $lva = $column['lva'] ?? 'licence';
                 return '<a href="' . $this->generateUrl(
                     ['action' => 'edit', 'id' => $data['id']],
-                    $lva .'/processing/publications',
+                    $lva . '/processing/publications',
                     true
                 ) . '" class="govuk-link js-modal-ajax">' . $this->callFormatter($column, $data) . '</a>';
             },

@@ -14,17 +14,17 @@ return [
             'formName' => 'printerExceptions',
             'actions' => [
                 'addRule' => [
-                    'class' => 'govuk-button', 
-                    'requireRows' => false, 
+                    'class' => 'govuk-button',
+                    'requireRows' => false,
                     'label' => 'add'
                 ],
                 'editRule' => [
-                    'requireRows' => true, 
-                    'class' => 'govuk-button govuk-button--secondary js-require--one', 
+                    'requireRows' => true,
+                    'class' => 'govuk-button govuk-button--secondary js-require--one',
                     'label' => 'edit'
                 ],
                 'deleteRule' => [
-                    'requireRows' => true, 
+                    'requireRows' => true,
                     'class' => 'govuk-button govuk-button--warning js-require--one',
                     'label' => 'delete'
                 ]

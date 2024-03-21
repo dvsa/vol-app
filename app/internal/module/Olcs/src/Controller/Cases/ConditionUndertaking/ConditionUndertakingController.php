@@ -13,6 +13,7 @@ use Dvsa\Olcs\Transfer\Command\ConditionUndertaking\Update as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Cases\CasesWithLicence as CasesWithLicenceDto;
 use Dvsa\Olcs\Transfer\Query\Cases\ConditionUndertaking\ConditionUndertakingList as ListDto;
 use Dvsa\Olcs\Transfer\Query\ConditionUndertaking\Get as ItemDto;
+use Laminas\Form\FormInterface;
 use Laminas\Navigation\Navigation;
 use Laminas\View\HelperPluginManager;
 use Laminas\View\Model\ViewModel;
@@ -148,7 +149,7 @@ class ConditionUndertakingController extends AbstractInternalController implemen
     /**
      * Alter Form for add
      *
-     * @param \Common\Controller\Form $form        form
+     * @param FormInterface           $form        form
      * @param array                   $initialData initialData
      *
      * @return ViewModel
@@ -161,10 +162,10 @@ class ConditionUndertakingController extends AbstractInternalController implemen
     /**
      * Alter Form for edit
      *
-     * @param \Common\Controller\Form $form        form
+     * @param FormInterface           $form        form
      * @param array                   $initialData initialData
      *
-     * @return \Common\Controller\Form
+     * @return FormInterface
      */
     public function alterFormForEdit($form, $initialData)
     {
@@ -174,10 +175,10 @@ class ConditionUndertakingController extends AbstractInternalController implemen
     /**
      * Alter Form based on Case details
      *
-     * @param \Common\Controller\Form $form        form
+     * @param FormInterface           $form        form
      * @param array                   $initialData initialData
      *
-     * @return \Common\Controller\Form
+     * @return FormInterface
      */
     private function alterFormForCase($form, $initialData)
     {

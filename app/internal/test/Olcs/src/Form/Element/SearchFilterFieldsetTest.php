@@ -1,9 +1,11 @@
 <?php
+
 /**
  * SearchFilterFieldset Test
  *
  * @author Valtech <uk@valtech.co.uk>
  */
+
 namespace OlcsTest\Form\Element;
 
 use Olcs\Form\Element\SearchFilterFieldset;
@@ -21,7 +23,7 @@ class SearchFilterFieldsetTest extends TestCase
     {
         $service = m::mock(\Common\Service\Data\Search\Search::class);
 
-        $sut = new SearchFilterFieldset;
+        $sut = new SearchFilterFieldset();
 
         $this->assertSame($service, $sut->setSearchService($service)->getSearchService());
     }
@@ -36,7 +38,7 @@ class SearchFilterFieldsetTest extends TestCase
         $service = m::mock(\Common\Service\Data\Search\Search::class);
         $service->shouldReceive('getFilters')->withNoArgs()->andReturn($filters);
 
-        $sut = new SearchFilterFieldset;
+        $sut = new SearchFilterFieldset();
 
         $this->assertCount($sut->count(), 2);
     }

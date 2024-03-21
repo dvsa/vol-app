@@ -10,7 +10,8 @@ $(function () {
     var licenceTypes = $(licenceTypesSelector);
     var vehicleTypeFieldset = $('#fieldset-vehicle-type');
 
-    function toggle() {
+    function toggle()
+    {
         var selectable = shouldVehicleTypeBeSelectable();
         var $naRadioButton = vehicleTypeFieldset.find('input[value="fin_sta_veh_typ_na"]');
 
@@ -27,7 +28,8 @@ $(function () {
         vehicleTypeFieldset.find('input[value!="fin_sta_veh_typ_na"]').prop("disabled", !selectable);
     }
 
-    function shouldVehicleTypeBeSelectable() {
+    function shouldVehicleTypeBeSelectable()
+    {
         var selectedOperatorType = $(selectedOperatorTypeSelector).val();
         var selectedLicenceType = $(selectedLicenceTypeSelector).val();
         return selectedOperatorType == "lcat_gv" && selectedLicenceType == "ltyp_si";
@@ -37,7 +39,7 @@ $(function () {
         toggle();
     });
 
-    licenceTypes.change(function() {
+    licenceTypes.change(function () {
         toggle();
     });
 

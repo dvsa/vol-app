@@ -168,8 +168,8 @@ class UnlicensedOperatorBusinessDetails implements MapperInterface
 
         // contactDetails phoneContact errors
         foreach (['business', 'home', 'mobile', 'fax'] as $type) {
-            if (isset($errors['contactDetails'][$type.'PhoneContact'])) {
-                $formMessages['contact']['phone_'.$type] = $errors['contactDetails'][$type.'PhoneContact'];
+            if (isset($errors['contactDetails'][$type . 'PhoneContact'])) {
+                $formMessages['contact']['phone_' . $type] = $errors['contactDetails'][$type . 'PhoneContact'];
             }
         }
 

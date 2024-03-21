@@ -10,7 +10,6 @@ use Laminas\Form\Annotation as Form;
  */
 class BusRegVariationReason
 {
-
     /**
      * @Form\Attributes({"id":"variationReasons","placeholder":"","multiple":"multiple",
      *     "class":"chosen-select-large"})

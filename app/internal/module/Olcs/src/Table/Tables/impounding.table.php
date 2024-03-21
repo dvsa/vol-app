@@ -1,6 +1,7 @@
 <?php
 
 use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -36,6 +37,10 @@ return [
         [
             'title' => 'Application received',
             'formatter' => function ($data, $column) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $column['formatter'] = Date::class;
                 return '<a href="' . $this->generateUrl(
                     ['action' => 'edit', 'impounding' => $data['id']],
@@ -47,7 +52,12 @@ return [
         ],
         [
             'title' => 'Type',
-            'formatter' => fn($data, $column) => $this->translator->translate($data['impoundingType']['id'])
+            'formatter' => fn($data, $column) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                $this->translator->translate($data['impoundingType']['id'])
         ],
         [
             'title' => 'Presiding TC/DTC/HTRU/DHTRU',
@@ -55,11 +65,20 @@ return [
         ],
         [
             'title' => 'Outcome',
-            'formatter' => fn($data, $column) => isset($data['outcome']['id']) ? $this->translator->translate($data['outcome']['id']) : ''
+            'formatter' => fn($data, $column) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                isset($data['outcome']['id']) ? $this->translator->translate($data['outcome']['id']) : ''
         ],
         [
             'title' => 'Outcome sent',
             'formatter' => function ($data, $column) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $column['formatter'] = Date::class;
                 return $this->callFormatter($column, $data);
             },

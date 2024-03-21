@@ -1,6 +1,5 @@
 <?php
 
-
 namespace OlcsTest\Mvc\Controller\ParameterProvider;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;

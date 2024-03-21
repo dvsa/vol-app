@@ -1,6 +1,7 @@
 <?php
 
 use Common\Service\Table\Formatter\OrganisationLink;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -11,7 +12,7 @@ return [
         'crud' => [
             'actions' => [
                 'export' => [
-                    'class' => 'govuk-button', 
+                    'class' => 'govuk-button',
                     'requireRows' => true
                 ]
             ]
@@ -30,6 +31,10 @@ return [
             'title' => 'ID',
             'name' => 'id',
             'formatter' => function ($row) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $column['formatter'] = OrganisationLink::class;
                 return $this->callFormatter(
                     $column,

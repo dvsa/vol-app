@@ -10,25 +10,25 @@ $(function () {
     if (permitTypeId === BILATERAL_ID) {
         setCountryVisibility();
 
-        $bilateralContainer.find("select").each(function() {
+        $bilateralContainer.find("select").each(function () {
             updateFieldsFromSelect(this);
         });
 
-        $bilateralContainer.on("change", "select", function() {
+        $bilateralContainer.on("change", "select", function () {
             updateFieldsFromSelect(this);
         });
 
-        $bilateralContainer.find("[data-role='period']").each(function() {
+        $bilateralContainer.find("[data-role='period']").each(function () {
             setTextboxDisability($(this));
         });
 
-        $bilateralContainer.on("propertychange change keyup paste input", "input[type='text']", function() { 
+        $bilateralContainer.on("propertychange change keyup paste input", "input[type='text']", function () {
             setTextboxDisability(
                 $(this).closest("[data-role='period']")
             )
         });
 
-        $('body').on("change", "#addOrRemoveCountriesContainer input[type='checkbox']", function() {
+        $('body').on("change", "#addOrRemoveCountriesContainer input[type='checkbox']", function () {
             var $modalWrapper = $(".modal__wrapper");
             var $applyButton = $modalWrapper.find(".primary-button");
 
@@ -39,10 +39,10 @@ $(function () {
             }
         });
 
-        $('body').on("click", "#addOrRemoveCountriesApplyButton", function(event) {
+        $('body').on("click", "#addOrRemoveCountriesApplyButton", function (event) {
             var $modalWrapper = $(".modal__wrapper");
 
-            $modalWrapper.find("input[type='checkbox']").each(function() {
+            $modalWrapper.find("input[type='checkbox']").each(function () {
                 var $countryFieldset = $bilateralContainer.find("fieldset[data-id='" + this.value + "']");
                 if ($(this).is(":checked")) {
                     $countryFieldset.removeClass("hidden");
@@ -55,15 +55,15 @@ $(function () {
             event.preventDefault();
         });
 
-        $('body').on("click", "#addOrRemoveCountriesCancelButton", function(event) {
+        $('body').on("click", "#addOrRemoveCountriesCancelButton", function (event) {
             OLCS.modal.hide();
             event.preventDefault();
         });
 
-        $("#addOrRemoveCountriesButton").on("click", function(event) {
+        $("#addOrRemoveCountriesButton").on("click", function (event) {
             var markup = "<div id=\"addOrRemoveCountriesContainer\">" +
                 "<div style=\"padding-bottom: 20px;\"></div>" +
-                "<fieldset class=\"govuk-button-group\">" + 
+                "<fieldset class=\"govuk-button-group\">" +
                 "<a id=\"addOrRemoveCountriesApplyButton\" class=\"govuk-button primary-button\" href=\"\">Apply</a>" +
                 "<a id=\"addOrRemoveCountriesCancelButton\" class=\"govuk-button govuk-button--secondary\" href=\"\">Cancel</a>" +
                 "</fieldset>" +
@@ -72,7 +72,7 @@ $(function () {
             OLCS.modal.show(markup, "Add or remove countries");
             var $innerContainer = $("#addOrRemoveCountriesContainer > div");
 
-            $bilateralContainer.find("fieldset[data-role='country']").each(function() {
+            $bilateralContainer.find("fieldset[data-role='country']").each(function () {
                 var $fieldset = $(this);
 
                 var inputAttributes = {
@@ -95,10 +95,10 @@ $(function () {
             event.preventDefault();
         });
 
-        $("#irhpApplication").on("submit", function(event) {
+        $("#irhpApplication").on("submit", function (event) {
             var selectedCountries = [];
 
-            $bilateralContainer.find("fieldset[data-role='country']").each(function() {
+            $bilateralContainer.find("fieldset[data-role='country']").each(function () {
                 var $fieldset = $(this);
 
                 if (!$(this).hasClass("hidden")) {
@@ -112,10 +112,11 @@ $(function () {
         });
     }
 
-    function setCountryVisibility() {
+    function setCountryVisibility()
+    {
         var selectedCountryIds = $("#selectedCountriesCsv").val().split(",");
 
-        $bilateralContainer.find("fieldset[data-role='country']").each(function() {
+        $bilateralContainer.find("fieldset[data-role='country']").each(function () {
             var $fieldset = $(this);
 
             if (!selectedCountryIds.includes($fieldset.data("id"))) {
@@ -124,7 +125,8 @@ $(function () {
         });
     }
 
-    function setTextboxDisability($periodElement) {
+    function setTextboxDisability($periodElement)
+    {
         var $standardCountryContainer = $periodElement.closest("fieldset[data-role='country'][data-type='standard']");
         if ($standardCountryContainer.length == 0) {
             return;
@@ -133,7 +135,7 @@ $(function () {
         var $siblingTextboxes = $periodElement.find("input[type='text']");
         var enabledFieldNameSegment = "periods";
 
-        $siblingTextboxes.each(function() {
+        $siblingTextboxes.each(function () {
             var $textbox = $(this);
             if (isNormalInteger($textbox.val())) {
                 var textboxName = $textbox.attr("name");
@@ -146,7 +148,7 @@ $(function () {
             }
         });
 
-        $siblingTextboxes.each(function() {
+        $siblingTextboxes.each(function () {
             var $textbox = $(this);
             if ($textbox.attr("name").indexOf(enabledFieldNameSegment) != -1) {
                 $textbox.removeAttr("disabled");
@@ -157,13 +159,15 @@ $(function () {
         });
     }
 
-    function updateFieldsFromSelect(select) {
+    function updateFieldsFromSelect(select)
+    {
         var $countryContainer = $(select).closest("fieldset[data-role='country']");
         $countryContainer.find("fieldset[data-role='period']").addClass("hidden");
         $countryContainer.find("fieldset[id='period" + select.value + "']").removeClass("hidden");
     }
 
-    function isNormalInteger(str) {
+    function isNormalInteger(str)
+    {
         var n = Math.floor(Number(str));
         return n !== Infinity && String(n) === str && n > 0;
     }

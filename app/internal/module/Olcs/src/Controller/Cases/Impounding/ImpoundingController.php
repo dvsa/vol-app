@@ -8,6 +8,7 @@ use Dvsa\Olcs\Transfer\Command\Cases\Impounding\DeleteImpounding as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\Cases\Impounding\UpdateImpounding as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Impounding\Impounding as ItemDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Impounding\ImpoundingList as ListDto;
+use Laminas\Form\FormInterface;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
@@ -126,10 +127,10 @@ class ImpoundingController extends AbstractInternalController implements CaseCon
     /**
      * Alter form for TM cases, set pubType and trafficAreas to be visible for publishing
      *
-     * @param \Common\Controller\Form $form        form
+     * @param FormInterface $form        form
      * @param array                   $initialData initialData
      *
-     * @return \Common\Controller\Form
+     * @return FormInterface
      */
     public function alterFormForEdit($form, $initialData)
     {

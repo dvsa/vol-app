@@ -1,4 +1,5 @@
 <?php
+
 return [
     'variables' => [
         'id' => 'convictions-and-penalties',

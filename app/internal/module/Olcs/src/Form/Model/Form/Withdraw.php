@@ -11,7 +11,6 @@ use Laminas\Form\Annotation as Form;
  */
 class Withdraw
 {
-
     /**
      * @Form\Name("withdraw-details")
      * @Form\ComposedObject("Olcs\Form\Model\Fieldset\WithdrawDetails")

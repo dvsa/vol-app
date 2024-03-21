@@ -1,5 +1,5 @@
-OLCS.ready(function() {
-  "use strict";
+OLCS.ready(function () {
+    "use strict";
 
-  OLCS.splitScreen();
+    OLCS.splitScreen();
 });

@@ -14,11 +14,11 @@ trait ListDataTrait
      *
      * @param int         $categoryId    Category to filter by
      * @param int         $subCategoryId Sub category to filter by
-     * @param bool|string $firstOption   First Option
+     * @param ?string $firstOption   First Option
      *
      * @return array
      */
-    public function getListDataDocTemplates($categoryId = null, $subCategoryId = null, $firstOption = false)
+    public function getListDataDocTemplates($categoryId = null, $subCategoryId = null, $firstOption = null)
     {
         $dto = \Dvsa\Olcs\Transfer\Query\DocTemplate\GetList::create(
             [
@@ -35,11 +35,11 @@ trait ListDataTrait
     /**
      * Get a list of teams
      *
-     * @param string $firstOption @see getListDataOptions
+     * @param ?string $firstOption @see getListDataOptions
      *
      * @return array
      */
-    public function getListDataTeam($firstOption = false)
+    public function getListDataTeam($firstOption = null)
     {
         $dto = \Dvsa\Olcs\Transfer\Query\Team\TeamListData::create(
             [
@@ -55,11 +55,11 @@ trait ListDataTrait
      * Get a list of users
      *
      * @param int    $teamId      Option team to filter by
-     * @param string $firstOption @see getListDataOptions
+     * @param ?string $firstOption @see getListDataOptions
      *
      * @return array of User login ID's
      */
-    public function getListDataUser($teamId = null, $firstOption = false)
+    public function getListDataUser($teamId = null, $firstOption = null)
     {
         $params = [
             'order' => 'ASC',
@@ -81,11 +81,11 @@ trait ListDataTrait
      * Get a list of Enforcement areas for a traffic area
      *
      * @param string $trafficArea Traffic area
-     * @param string $firstOption @see getListDataOptions
+     * @param ?string $firstOption @see getListDataOptions
      *
      * @return array of enforcement areas eg ['21' => 'Nottingham', etc]
      */
-    public function getListDataEnforcementArea($trafficArea, $firstOption = false)
+    public function getListDataEnforcementArea($trafficArea, $firstOption = null)
     {
         $params = [
             'id' => $trafficArea,
@@ -121,12 +121,12 @@ trait ListDataTrait
      * @param TranferQry\QueryInterface $dto         Dto
      * @param string                    $keyName     The key from the dto response to use as the select options id
      * @param string                    $valueName   The key from the dto response to use as the select options text
-     * @param bool|string|array         $firstOption false = disable first option, or a string of the text for the first
+     * @param bool|string|array|null        $firstOption false = disable first option, or a string of the text for the first
      *                                               option
      *
      * @return array
      */
-    private function getListDataOptions($dto, $keyName, $valueName, $firstOption = false)
+    private function getListDataOptions($dto, $keyName, $valueName, $firstOption = null)
     {
         /** @var \Common\Service\Cqrs\Response $response */
         $response = $this->handleQuery($dto);

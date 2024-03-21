@@ -3,6 +3,7 @@
 use Common\Service\Table\Formatter\Date;
 use Common\Service\Table\Formatter\DocumentDescription;
 use Common\Service\Table\Formatter\FileExtension;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -22,6 +23,10 @@ return [
             'title' => 'Description',
             'name' => 'description',
             'formatter' => function ($row) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $column['formatter'] = DocumentDescription::class;
                 return $this->callFormatter(
                     $column,
@@ -41,6 +46,10 @@ return [
             'title' => 'Format',
             'name' => 'filename',
             'formatter' => function ($row) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $column['formatter'] = FileExtension::class;
                 return $this->callFormatter(
                     $column,

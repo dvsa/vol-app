@@ -29,8 +29,8 @@ class IrhpApplicationProcessingTasksController extends AbstractIrhpPermitProcess
         TableFactory $tableFactory,
         HelperPluginManager $viewHelperManager,
         TreeRouteStack $router,
-        SubCategory $subCategoryDataService)
-    {
+        SubCategory $subCategoryDataService
+    ) {
         $this->subCategoryDataService = $subCategoryDataService;
         parent::__construct($scriptFactory, $formHelper, $tableFactory, $viewHelperManager, $router);
     }

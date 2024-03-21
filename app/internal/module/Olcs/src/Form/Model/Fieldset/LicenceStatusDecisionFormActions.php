@@ -11,7 +11,6 @@ use Laminas\Form\Annotation as Form;
  */
 class LicenceStatusDecisionFormActions
 {
-
     /**
      * @Form\Attributes({
      *     "type":"submit",

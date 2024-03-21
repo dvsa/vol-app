@@ -28,6 +28,11 @@ class OperatorController extends AbstractController implements OperatorControlle
     use Traits\ListDataTrait;
 
     /**
+     * @var null|string
+     */
+    protected $pageTitle;
+
+    /**
      * @var string
      */
     protected $subNavRoute;

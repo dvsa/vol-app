@@ -1,6 +1,7 @@
 <?php
 
 use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -14,6 +15,10 @@ return [
         [
             'title' => 'Final decision date',
             'formatter' => function ($data, $column) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $column['formatter'] = Date::class;
                 return $this->callFormatter($column, $data);
             },
@@ -26,6 +31,10 @@ return [
         [
             'title' => 'Start date',
             'formatter' => function ($data, $column) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $column['formatter'] = Date::class;
                 return $this->callFormatter($column, $data);
             },
@@ -34,6 +43,10 @@ return [
         [
             'title' => 'End date',
             'formatter' => function ($data, $column) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $column['formatter'] = Date::class;
                 return $this->callFormatter($column, $data);
             },

@@ -38,9 +38,9 @@ trait PhoneFieldsTrait
             $phoneType = $typeMap[$type] ?? '';
 
             if (!empty($phoneType)) {
-                $fields['phone_'.$phoneType] = $phoneContact['phoneNumber'];
-                $fields['phone_'.$phoneType . '_id'] = $phoneContact['id'];
-                $fields['phone_'.$phoneType . '_version'] = $phoneContact['version'];
+                $fields['phone_' . $phoneType] = $phoneContact['phoneNumber'];
+                $fields['phone_' . $phoneType . '_id'] = $phoneContact['id'];
+                $fields['phone_' . $phoneType . '_version'] = $phoneContact['version'];
             }
         }
 

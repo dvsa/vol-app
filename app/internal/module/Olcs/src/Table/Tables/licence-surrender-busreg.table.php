@@ -1,25 +1,31 @@
 <?php
 
 use Common\Service\Table\Formatter\Date;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
         'title' => ' active bus registrations associated with this licence.'
     ],
     'attributes' => [
-        'name'=>'busRegistrations'
+        'name' => 'busRegistrations'
     ],
-    'settings' =>[
-        'showTotal'=>true
+    'settings' => [
+        'showTotal' => true
     ],
     'columns' => [
         [
             'title' => 'Reg No.',
-            'formatter' => fn($data) => '<a class="govuk-link" href="' . $this->generateUrl(
-                ['action' => 'index', 'busRegId' => $data['id']],
-                'licence/bus-details/service',
-                true
-            ) . '">' . $data['regNo'] . '</a>',
+            'formatter' => fn($data) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                '<a class="govuk-link" href="' . $this->generateUrl(
+                    ['action' => 'index', 'busRegId' => $data['id']],
+                    'licence/bus-details/service',
+                    true
+                ) . '">' . $data['regNo'] . '</a>',
         ],
         [
             'title' => 'Var No.',

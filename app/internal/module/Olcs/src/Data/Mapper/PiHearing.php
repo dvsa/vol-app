@@ -37,7 +37,8 @@ class PiHearing implements MapperInterface
             $formData['fields']['venue'] = 'other';
         }
 
-        if (!isset($formData['fields']['isFullDay']) ||
+        if (
+            !isset($formData['fields']['isFullDay']) ||
             ($formData['fields']['isFullDay'] !== 'N' && $formData['fields']['isFullDay'] !== 'Y')
         ) {
             $formData['fields']['isFullDay'] = 'not-set';
@@ -107,7 +108,7 @@ class PiHearing implements MapperInterface
                     /** @var DateTimeSelect $e */
                     $piDate = DateTimeHelper::format($value, Module::$dateFormat);
                     $form->get('fields')->get('hearingDate')->setMessages(
-                        ['Hearing date must be after or the same as the PI agreed date '. $piDate]
+                        ['Hearing date must be after or the same as the PI agreed date ' . $piDate]
                     );
                     unset($errors['messages'][$key]);
                 }

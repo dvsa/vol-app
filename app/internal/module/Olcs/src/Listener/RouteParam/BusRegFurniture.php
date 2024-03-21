@@ -10,7 +10,7 @@ use Common\Service\Cqrs\Query\QuerySenderAwareTrait;
 use Laminas\EventManager\EventInterface;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
-use \Dvsa\Olcs\Transfer\Query\Bus\BusReg as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Bus\BusReg as ItemDto;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
@@ -25,10 +25,10 @@ class BusRegFurniture implements
     QuerySenderAwareInterface,
     CommandSenderAwareInterface
 {
-    use ListenerAggregateTrait,
-        ViewHelperManagerAwareTrait,
-        QuerySenderAwareTrait,
-        CommandSenderAwareTrait;
+    use ListenerAggregateTrait;
+    use ViewHelperManagerAwareTrait;
+    use QuerySenderAwareTrait;
+    use CommandSenderAwareTrait;
 
     /**
      * {@inheritdoc}
@@ -102,7 +102,7 @@ class BusRegFurniture implements
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : BusRegFurniture
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): BusRegFurniture
     {
         $this->setQuerySender($container->get('QuerySender'));
         $this->setCommandSender($container->get('CommandSender'));

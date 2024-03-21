@@ -13,6 +13,7 @@ use Dvsa\Olcs\Transfer\Command\TaskAllocationRule\DeleteList as DeleteDto;
 use Dvsa\Olcs\Transfer\Command\TaskAllocationRule\Update as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\TaskAllocationRule\Get as ItemDto;
 use Dvsa\Olcs\Transfer\Query\TaskAllocationRule\GetList as ListDto;
+use Laminas\Form\FormInterface;
 use Laminas\Navigation\Navigation;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Data\Mapper\TaskAllocationRule as Mapper;
@@ -103,13 +104,13 @@ class TaskAllocationRulesController extends AbstractInternalController
     protected SubCategory $subCategoryDataService;
 
     public function __construct(
-        TranslationHelperService    $translationHelperService,
-        FormHelperService           $formHelper,
+        TranslationHelperService $translationHelperService,
+        FormHelperService $formHelper,
         FlashMessengerHelperService $flashMessengerHelperService,
-        Navigation                  $navigation,
-        TableFactory                $tableFactory,
-        UserListInternal            $userListInternalDataService,
-        SubCategory                 $subCategoryDataService
+        Navigation $navigation,
+        TableFactory $tableFactory,
+        UserListInternal $userListInternalDataService,
+        SubCategory $subCategoryDataService
     ) {
         $this->tableFactory = $tableFactory;
         $this->userListInternalDataService = $userListInternalDataService;
@@ -208,9 +209,9 @@ class TaskAllocationRulesController extends AbstractInternalController
     /**
      * Alter the Task allocation rule form when adding
      *
-     * @param Form $form Form
+     * @param FormInterface $form Form
      *
-     * @return Form
+     * @return FormInterface
      */
     protected function alterFormForAdd($form)
     {
@@ -291,9 +292,9 @@ class TaskAllocationRulesController extends AbstractInternalController
     /**
      * Alter form for add alpha split
      *
-     * @param Form $form Form
+     * @param FormInterface $form Form
      *
-     * @return Form
+     * @return FormInterface
      */
     protected function alterFormForAddAlphasplit($form)
     {
@@ -306,9 +307,9 @@ class TaskAllocationRulesController extends AbstractInternalController
     /**
      * Alter form for add alpha split
      *
-     * @param Form $form Form
+     * @param FormInterface $form Form
      *
-     * @return Form
+     * @return FormInterface
      */
     protected function alterFormForEditAlphasplit($form)
     {

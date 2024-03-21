@@ -5,6 +5,7 @@
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
+
 namespace OlcsTest\Service\Permits\Bilateral;
 
 use Common\Service\Qa\Custom\Bilateral\NoOfPermitsElement;

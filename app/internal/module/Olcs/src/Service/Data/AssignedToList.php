@@ -12,7 +12,6 @@ use Dvsa\Olcs\Transfer\Query as TransferQry;
  */
 class AssignedToList extends UserListInternal
 {
-
     /**
      * Prepend current user, Not assigned and All options to list
      *

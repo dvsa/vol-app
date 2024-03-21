@@ -14,8 +14,9 @@ OLCS.ready(function () {
         "stock_accept_unexpected_fail": "An attempt has been made to run scoring acceptance, but an unexpected error was encountered."
     };
 
-    function updateStatus(statusUrl) {
-        $.get(statusUrl, function(data) {
+    function updateStatus(statusUrl)
+    {
+        $.get(statusUrl, function (data) {
             var divContent = "<h2>Current status: " + data.stockStatusMessage + "</h2>";
             divContent += "<ul style=\"position: relative; left: 30px;\">";
             divContent += "<li>" + stockCaptions[data.stockStatusId] + "</li>";
@@ -76,11 +77,12 @@ OLCS.ready(function () {
             $("#postScoringReportButton").css("visibility", postScoringReportVisibility);
 
             $("#statusContainer").html(divContent);
-            setTimeout(function() { updateStatus(statusUrl); }, 2500);
+            setTimeout(function () {
+                updateStatus(statusUrl); }, 2500);
         });
     }
 
-    $("#deviation").on("input propertychange paste", function() {
+    $("#deviation").on("input propertychange paste", function () {
         var deviationValue = $("#deviation").val();
         var $runWithDeviationButton = $("#runWithDeviationButton");
 

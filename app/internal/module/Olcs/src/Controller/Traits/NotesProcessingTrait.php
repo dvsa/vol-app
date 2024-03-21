@@ -2,6 +2,9 @@
 
 namespace Olcs\Controller\Traits;
 
+use Common\Service\Table\TableBuilder;
+use Laminas\Form\FormInterface;
+
 /**
  * Notes Processing Trait
  */
@@ -10,9 +13,9 @@ trait NotesProcessingTrait
     /**
      * Alter table
      *
-     * @param  \Olcs\Controller\Table $table
+     * @param  TableBuilder $table
      * @param  array                  $data
-     * @return \Olcs\Controller\Table
+     * @return TableBuilder
      */
     protected function alterTable($table, $data)
     {
@@ -23,9 +26,9 @@ trait NotesProcessingTrait
     /**
      * Alter form for add
      *
-     * @param  Form  $form
+     * @param  FormInterface  $form
      * @param  array $data
-     * @return Form
+     * @return FormInterface
      */
     protected function alterFormForAdd($form, $data)
     {
@@ -36,9 +39,9 @@ trait NotesProcessingTrait
     /**
      * Alter form for edit
      *
-     * @param  Form  $form
+     * @param  FormInterface  $form
      * @param  array $data
-     * @return Form
+     * @return FormInterface
      */
     protected function alterFormForEdit($form, $data)
     {

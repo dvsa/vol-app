@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: craig
@@ -31,7 +32,7 @@ class SearchFilterFieldset extends Fieldset
         foreach ($this->getSearchService()->getFilters() as $filterClass) {
 
             /** @var \Laminas\Form\Element\Select $select */
-            $select = new Select;
+            $select = new Select();
             $select->setName($filterClass->getKey());
             $select->setLabel($filterClass->getTitle());
             $select->setEmptyOption('All');

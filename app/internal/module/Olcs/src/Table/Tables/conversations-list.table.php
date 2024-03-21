@@ -2,7 +2,6 @@
 
 use Common\Service\Table\Formatter\InternalConversationLink;
 
-
 return [
     'variables' => [
         'id' => 'conversations-list-table',

@@ -1,4 +1,5 @@
 <?php
+
 return [
     'id'    => 'root',
     'label' => 'Right sidebar',

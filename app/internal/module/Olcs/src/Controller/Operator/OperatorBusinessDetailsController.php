@@ -256,7 +256,7 @@ class OperatorBusinessDetailsController extends OperatorController implements Le
      * @param string             $action      action
      * @param string             $routePrefix routePrefix
      *
-     * @return ViewModel
+     * @return ViewModel|void
      */
     protected function saveForm($form, $action, $routePrefix = 'operator')
     {

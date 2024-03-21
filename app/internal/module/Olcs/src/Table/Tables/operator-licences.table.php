@@ -3,6 +3,7 @@
 use Common\Service\Table\Formatter\Date;
 use Common\Service\Table\Formatter\LicenceTypeShort;
 use Common\Service\Table\Formatter\RefData;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -14,10 +15,15 @@ return [
     'columns' => [
         [
             'title' => 'Licence No.',
-            'formatter' => fn($row) => '<a class="govuk-link" href="' . $this->generateUrl(
-                ['licence' => $row['id']],
-                'licence'
-            ) . '">' . $row['licNo'] . '</a>'
+            'formatter' => fn($row) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                '<a class="govuk-link" href="' . $this->generateUrl(
+                    ['licence' => $row['id']],
+                    'licence'
+                ) . '">' . $row['licNo'] . '</a>'
         ],
         [
             'title' => 'Type',

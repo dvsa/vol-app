@@ -3,6 +3,7 @@
 use Common\Service\Table\Formatter\Address;
 use Common\Service\Table\Formatter\Date;
 use Common\Service\Table\Formatter\Name;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -14,11 +15,16 @@ return [
         [
             'title' => 'Case No.',
             'isNumeric' => true,
-            'formatter' => fn($row) => '<a class="govuk-link" href="' . $this->generateUrl(
-                ['case' => $row['case']['id'], 'tab' => 'overview'],
-                'case_opposition',
-                false
-            ) . '">' . $row['case']['id'] . '</a>'
+            'formatter' => fn($row) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                '<a class="govuk-link" href="' . $this->generateUrl(
+                    ['case' => $row['case']['id'], 'tab' => 'overview'],
+                    'case_opposition',
+                    false
+                ) . '">' . $row['case']['id'] . '</a>'
         ],
         [
             'title' => 'Date received',
@@ -33,6 +39,10 @@ return [
         [
             'title' => 'OC Address',
             'formatter' => function ($data, $column) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $column['formatter'] = Address::class;
                 $addressList = '';
                 foreach ($data['operatingCentres'] as $operatingCentre) {

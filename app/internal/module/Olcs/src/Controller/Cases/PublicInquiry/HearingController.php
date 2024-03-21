@@ -9,6 +9,7 @@ use Dvsa\Olcs\Transfer\Query\Cases\Pi as PiDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Pi\Hearing as PiHearingDto;
 use Dvsa\Olcs\Transfer\Query\Cases\Pi\HearingList as PiHearingListDto;
 use Laminas\Form\Form as LaminasForm;
+use Laminas\Form\FormInterface;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\CaseControllerInterface;
@@ -181,9 +182,9 @@ class HearingController extends AbstractInternalController implements CaseContro
     /**
      * Alter form for TM cases, set pubType and trafficAreas to be visible for publishing
      *
-     * @param \Common\Controller\Form $form form
+     * @param FormInterface $form form
      *
-     * @return \Common\Controller\Form
+     * @return FormInterface
      */
     public function alterFormForAdd($form)
     {
@@ -204,9 +205,9 @@ class HearingController extends AbstractInternalController implements CaseContro
     /**
      * Alter form for TM cases, set pubType and trafficAreas to be visible for publishing
      *
-     * @param \Common\Controller\Form $form form
+     * @param FormInterface $form form
      *
-     * @return \Common\Controller\Form
+     * @return FormInterface
      */
     public function alterFormForEdit($form)
     {

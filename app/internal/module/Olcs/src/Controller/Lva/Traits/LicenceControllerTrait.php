@@ -11,6 +11,7 @@ namespace Olcs\Controller\Lva\Traits;
 
 use Common\RefData;
 use Laminas\Form\Form;
+use Laminas\Http\Response;
 use Laminas\Session\Container;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\Interfaces\LeftViewProvider;
@@ -31,7 +32,7 @@ trait LicenceControllerTrait
     /**
      * Hook into the dispatch before the controller action is executed
      *
-     * @return null|Laminas\Http\Response
+     * @return Response|null
      */
     protected function preDispatch()
     {
@@ -166,7 +167,7 @@ trait LicenceControllerTrait
     /**
      * Gets the search form for the header, it is cached on the object so that the search query is maintained
      *
-     * @return Laminas\Session\Container
+     * @return Container
      */
     public function getSearchForm()
     {

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace OlcsTest\Controller\Auth;
@@ -31,7 +32,7 @@ class LoginControllerFactoryTest extends MockeryTestCase
     /**
      * @test
      */
-    public function __invoke_IsCallable(): void
+    public function invokeIsCallable(): void
     {
         // Setup
         $this->setUpSut();
@@ -42,9 +43,9 @@ class LoginControllerFactoryTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends __invoke_IsCallable
+     * @depends invokeIsCallable
      */
-    public function __invoke_ReturnsAnInstanceOfDispatcherWithLoginController()
+    public function invokeReturnsAnInstanceOfDispatcherWithLoginController()
     {
         // Setup
         $this->setUpSut();

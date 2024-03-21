@@ -970,7 +970,7 @@ abstract class AbstractInternalController extends AbstractOlcsController
     {
         parent::attachDefaultListeners();
 
-        $listener = new CrudListener($this, $this->routeIdentifier, $this->crudConfig, $this->flashMessengerHelperService);
+        $listener = new CrudListener($this, $this->flashMessengerHelperService, $this->routeIdentifier, $this->crudConfig);
         $this->getEventManager()->attach(MvcEvent::EVENT_DISPATCH, [$listener, 'onDispatch'], 2);
 
         if (method_exists($this, 'setNavigationCurrentLocation')) {

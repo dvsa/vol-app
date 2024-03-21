@@ -10,7 +10,6 @@ use Laminas\Form\Annotation as Form;
  */
 class SubmissionInformationComplete extends Base
 {
-
     /**
      * @Form\Options({
      *     "label": "Information completed date",

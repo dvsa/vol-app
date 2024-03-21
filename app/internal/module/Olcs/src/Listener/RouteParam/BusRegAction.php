@@ -8,7 +8,7 @@ use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Laminas\EventManager\EventInterface;
 use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
-use \Dvsa\Olcs\Transfer\Query\Bus\BusRegDecision as ItemDto;
+use Dvsa\Olcs\Transfer\Query\Bus\BusRegDecision as ItemDto;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
@@ -203,7 +203,7 @@ class BusRegAction implements ListenerAggregateInterface, FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : BusRegAction
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): BusRegAction
     {
         $this->setAnnotationBuilder($container->get('TransferAnnotationBuilder'));
         $this->setQueryService($container->get('QueryService'));

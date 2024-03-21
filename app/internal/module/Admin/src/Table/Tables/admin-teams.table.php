@@ -1,5 +1,7 @@
 <?php
 
+use Common\Service\Table\TableBuilder;
+
 return [
     'variables' => [
         'titleSingular' => 'Team',
@@ -28,10 +30,14 @@ return [
             'name' => 'name',
             'sort' => 'name',
             'formatter' => function ($row) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $routeParams = ['team' => $row['id'], 'action' => 'edit'];
                 $route = 'admin-dashboard/admin-team-management';
                 $url = $this->generateUrl($routeParams, $route);
-                return '<a class="govuk-link" href="'. $url . '">' . $row['name'] .'</a>';
+                return '<a class="govuk-link" href="' . $url . '">' . $row['name'] . '</a>';
             },
         ],
         [

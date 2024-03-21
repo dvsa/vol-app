@@ -388,7 +388,6 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
                 $formField,
                 $this->mockLessThanValidator
             );
-
         } else {
             $this->mockFormHelper->expects('disableElement')->with($mockForm, $formField);
         }

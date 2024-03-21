@@ -1,5 +1,6 @@
 <?php
 
+use Common\Service\Table\TableBuilder;
 use Common\Util\Escape;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
@@ -49,6 +50,10 @@ return [
         [
             'title' => '',
             'formatter' => function ($data, $column = []) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $url = $this->urlHelper->fromRoute(
                     'admin-dashboard/admin-editable-translations',
                     [

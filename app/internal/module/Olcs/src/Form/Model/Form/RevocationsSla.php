@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Olcs\Form\Model\Form;
 
 use Laminas\Form\Annotation as Form;
@@ -14,7 +13,6 @@ use Laminas\Form\Annotation as Form;
  */
 class RevocationsSla
 {
-
     /**
      * @Form\Name("fields")
      * @Form\Attributes({"class":"govuk-button-group"})

@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Application\Processing;
 
+use Common\Service\Table\TableBuilder;
 use Dvsa\Olcs\Transfer\Command\Publication\DeletePublicationLink;
 use Dvsa\Olcs\Transfer\Command\Publication\UpdatePublicationLink;
 use Dvsa\Olcs\Transfer\Query\Publication\PublicationLink as PublicationLinkDto;
@@ -83,10 +84,10 @@ class ApplicationProcessingPublicationsController extends AbstractInternalContro
      * Override in derived classes to alter table *presentation* based on the
      * list data
      *
-     * @param Table $table table
+     * @param TableBuilder $table table
      * @param array $data  table
      *
-     * @return Table
+     * @return TableBuilder
      */
     protected function alterTable($table, $data)
     {

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Olcs\Mvc\Controller\ParameterProvider;
 
 use Laminas\Mvc\Controller\Plugin\Params;

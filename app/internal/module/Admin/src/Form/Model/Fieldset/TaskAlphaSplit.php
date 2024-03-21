@@ -12,8 +12,8 @@ use Laminas\Form\Annotation as Form;
  */
 class TaskAlphaSplit
 {
-    use VersionTrait,
-        IdTrait;
+    use VersionTrait;
+    use IdTrait;
 
     /**
      * @Form\Attributes({"id":"user","placeholder":""})

@@ -13,8 +13,8 @@ use Laminas\Form\Annotation as Form;
  */
 class TaskAllocationRule
 {
-    use VersionTrait,
-        IdTrait;
+    use VersionTrait;
+    use IdTrait;
 
     /**
      * @Form\Attributes({"value": "Criteria:"})

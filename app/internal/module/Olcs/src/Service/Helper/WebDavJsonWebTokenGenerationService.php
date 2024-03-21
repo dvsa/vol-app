@@ -48,7 +48,7 @@ class WebDavJsonWebTokenGenerationService
 
     protected function parsePrivateKey(string $privateKey): string
     {
-        $privateKey = @file_exists($privateKey) ? file_get_contents($privateKey): base64_decode($privateKey, true);
+        $privateKey = @file_exists($privateKey) ? file_get_contents($privateKey) : base64_decode($privateKey, true);
 
         if (!$privateKey) {
             throw new \InvalidArgumentException('private_key: the value is not a valid path to or base64 encoded private key', 0x21);

@@ -5,6 +5,7 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace Olcs\Listener;
 
 use Common\Service\Helper\FlashMessengerHelperService;
@@ -48,7 +49,7 @@ class CrudListener implements ListenerAggregateInterface
      *
      * @param \Laminas\Mvc\Controller\AbstractActionController $controller
      */
-    public function __construct($controller, $identifier = 'id', array $crudConfig = [], FlashMessengerHelperService $flashMessenger)
+    public function __construct($controller, FlashMessengerHelperService $flashMessenger, $identifier = 'id', array $crudConfig = [])
     {
         $this->controller = $controller;
         $this->identifier = $identifier;

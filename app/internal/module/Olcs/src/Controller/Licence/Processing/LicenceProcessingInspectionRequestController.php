@@ -14,6 +14,7 @@ use Dvsa\Olcs\Transfer\Query\InspectionRequest\InspectionRequest as InspectionRe
 use Dvsa\Olcs\Transfer\Query\InspectionRequest\LicenceInspectionRequestList as LicenceInspectionRequestListQry;
 use Dvsa\Olcs\Transfer\Query\Licence\EnforcementArea as LicEnforcementAreaQry;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
+use Laminas\Mvc\Controller\Plugin\Redirect;
 use Laminas\Navigation\Navigation;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
@@ -178,7 +179,7 @@ class LicenceProcessingInspectionRequestController extends AbstractInternalContr
     /**
      * Redirect to index
      *
-     * @return Redirect
+     * @return \Laminas\Http\Response
      */
     public function redirectToIndex()
     {

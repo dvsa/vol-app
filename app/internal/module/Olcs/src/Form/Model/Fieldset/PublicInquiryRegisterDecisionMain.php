@@ -11,7 +11,6 @@ use Laminas\Form\Annotation as Form;
  */
 class PublicInquiryRegisterDecisionMain
 {
-
     /**
      * @Form\Attributes({"id":"","placeholder":"","class":"medium"})
      * @Form\Options({

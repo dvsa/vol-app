@@ -3,6 +3,7 @@
 /**
  * Licence Overview Helper Service
  */
+
 namespace Olcs\Service\Helper;
 
 use Common\Service\Helper\UrlHelperService;
@@ -142,7 +143,8 @@ class LicenceOverviewHelperService
         $type = $licence['licenceType']['id'] ?? null;
         $goodsOrPsv = $licence['goodsOrPsv']['id'] ?? null;
 
-        if ($type == RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL
+        if (
+            $type == RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL
             || ($goodsOrPsv == RefData::LICENCE_CATEGORY_PSV
                 && $type == RefData::LICENCE_TYPE_RESTRICTED)
         ) {

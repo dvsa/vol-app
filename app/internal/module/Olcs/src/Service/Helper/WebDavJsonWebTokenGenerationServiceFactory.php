@@ -26,7 +26,7 @@ class WebDavJsonWebTokenGenerationServiceFactory implements FactoryInterface
         if (array_key_exists(static::CONFIG_KEY_NAMESPACE, $config)) {
             $config = $config[static::CONFIG_KEY_NAMESPACE];
         } else {
-            throw new \InvalidArgumentException('Config does not contain CONFIG_KEY: '. static::CONFIG_KEY_NAMESPACE);
+            throw new \InvalidArgumentException('Config does not contain CONFIG_KEY: ' . static::CONFIG_KEY_NAMESPACE);
         }
 
         return new WebDavJsonWebTokenGenerationService(

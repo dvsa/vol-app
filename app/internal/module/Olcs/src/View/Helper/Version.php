@@ -1,4 +1,5 @@
 <?php
+
 namespace Olcs\View\Helper;
 
 use Laminas\View\Helper\AbstractHelper;

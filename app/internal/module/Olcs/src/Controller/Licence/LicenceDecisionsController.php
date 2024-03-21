@@ -11,6 +11,7 @@ use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
+use Common\Service\Validation\CommandInterface;
 use Dvsa\Olcs\Transfer\Command\Licence\CurtailLicence;
 use Dvsa\Olcs\Transfer\Command\Licence\ResetToValid;
 use Dvsa\Olcs\Transfer\Command\Licence\RevokeLicence;
@@ -143,7 +144,6 @@ class LicenceDecisionsController extends AbstractController implements
     public function curtailAction()
     {
         $licenceId = $this->fromRoute('licence');
-        // @todo it seems that the following part never going to work and possibly can be removed
         $licenceStatus = $this->fromRoute('status', null);
 
         if (!is_null($licenceStatus)) {
@@ -165,11 +165,11 @@ class LicenceDecisionsController extends AbstractController implements
         if ($this->isButtonPressed('affectImmediate')) {
             $postData = $this->getRequest()->getPost();
             return $this->affectImmediate(
+                CurtailLicence::class,
                 array_merge(
                     ['licenceId' => $licenceId],
                     ['decisions' => $postData['licence-decision-legislation']['decisions']]
                 ),
-                CurtailLicence::class,
                 'licence-status.curtailment.message.save.success'
             );
         }
@@ -220,7 +220,6 @@ class LicenceDecisionsController extends AbstractController implements
     public function revokeAction()
     {
         $licenceId = $this->fromRoute('licence');
-        // @todo it seems that the following part never going to work and possibly can be removed
         $licenceStatus = $this->fromRoute('status', null);
         if (!is_null($licenceStatus)) {
             if ($this->isButtonPressed('remove')) {
@@ -242,11 +241,11 @@ class LicenceDecisionsController extends AbstractController implements
             $postData = $this->getRequest()->getPost();
 
             return $this->affectImmediate(
+                RevokeLicence::class,
                 array_merge(
                     ['licenceId' => $licenceId],
                     ['decisions' => $postData['licence-decision-legislation']['decisions']]
                 ),
-                RevokeLicence::class,
                 'licence-status.revocation.message.save.success'
             );
         }
@@ -295,7 +294,6 @@ class LicenceDecisionsController extends AbstractController implements
     {
         $licenceId = $this->fromRoute('licence');
 
-        // @todo it seems that the following part never going to work and possibly can be removed
         $licenceStatus = $this->fromRoute('status', null);
         if (!is_null($licenceStatus)) {
             if ($this->isButtonPressed('remove')) {
@@ -316,11 +314,11 @@ class LicenceDecisionsController extends AbstractController implements
         if ($this->isButtonPressed('affectImmediate')) {
             $postData = $this->getRequest()->getPost();
             return $this->affectImmediate(
+                SuspendLicence::class,
                 array_merge(
                     ['licenceId' => $licenceId],
                     ['decisions' => $postData['licence-decision-legislation']['decisions']]
                 ),
-                SuspendLicence::class,
                 'licence-status.suspension.message.save.success'
             );
         }
@@ -539,13 +537,13 @@ class LicenceDecisionsController extends AbstractController implements
     /**
      * If a xNow e.g. curtailNow method has been pressed then redirect.
      *
+     * @param class-string<CommandInterface> $command
      * @param array       $data    The licence id.
-     * @param null|string $command The command to use.
      * @param null|string $message The message to display
      *
-     * @return \Laminas\Http\Response A redirection response.
+     * @return \Laminas\Http\Response|void A redirection response.
      */
-    private function affectImmediate($data = [], $command = null, $message = null)
+    private function affectImmediate($command, $data = [], $message = null)
     {
         $command = $command::create(
             [

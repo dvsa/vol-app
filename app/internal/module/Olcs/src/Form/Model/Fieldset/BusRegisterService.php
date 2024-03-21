@@ -10,7 +10,6 @@ use Laminas\Form\Annotation as Form;
  */
 class BusRegisterService extends Base
 {
-
     /**
      * @Form\Type("Radio")
      * @Form\Options({

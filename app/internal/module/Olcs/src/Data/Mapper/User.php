@@ -77,7 +77,7 @@ class User implements MapperInterface
                     if (!empty($data['transportManager']['homeCd']['person']['familyName'])) {
                         $formData['userType']['currentTransportManagerName']
                             = $data['transportManager']['homeCd']['person']['forename']
-                                .' '.$data['transportManager']['homeCd']['person']['familyName'];
+                                . ' ' . $data['transportManager']['homeCd']['person']['familyName'];
                     }
                     break;
                 case 'partner':
@@ -152,7 +152,7 @@ class User implements MapperInterface
                 break;
         }
 
-        $commandData['contactDetails']['person']= $data['userPersonal'];
+        $commandData['contactDetails']['person'] = $data['userPersonal'];
         $commandData['contactDetails']['emailAddress'] = $data['userContactDetails']['emailAddress'];
         $commandData['contactDetails']['phoneContacts'] = self::mapPhoneContactsFromForm($data['userContactDetails']);
         $commandData['contactDetails']['address'] = $data['address'];

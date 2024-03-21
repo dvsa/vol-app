@@ -38,7 +38,7 @@ return [
             'width' => 'checkbox',
             'formatter' => function ($data) {
                 $checked = $data['wanted'] ? 'checked' : '';
-                return '<input type="checkbox" name="id[]" value="' . $data['id'] . '" '.$checked.'>';
+                return '<input type="checkbox" name="id[]" value="' . $data['id'] . '" ' . $checked . '>';
             },
         ],
     ],

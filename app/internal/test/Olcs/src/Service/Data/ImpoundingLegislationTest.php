@@ -61,9 +61,9 @@ class ImpoundingLegislationTest extends RefDataTestCase
             ->andReturn(
                 [
                     'id' => 7,
-                    'niFlag'=> $niFlag,
-                    'goodsOrPsv' => ['id'=> $goodsOrPsv],
-                    'trafficArea' => ['id'=> 'B']
+                    'niFlag' => $niFlag,
+                    'goodsOrPsv' => ['id' => $goodsOrPsv],
+                    'trafficArea' => ['id' => 'B']
                 ]
             );
 
@@ -82,9 +82,9 @@ class ImpoundingLegislationTest extends RefDataTestCase
             ->andReturn(
                 [
                     'id' => 7,
-                    'niFlag'=> 'Y',
-                    'goodsOrPsv' => ['id'=> 'lcat_gv'],
-                    'trafficArea' => ['id'=> 'B']
+                    'niFlag' => 'Y',
+                    'goodsOrPsv' => ['id' => 'lcat_gv'],
+                    'trafficArea' => ['id' => 'B']
                 ]
             );
 

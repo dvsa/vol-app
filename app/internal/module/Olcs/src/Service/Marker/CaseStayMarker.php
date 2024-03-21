@@ -48,7 +48,8 @@ class CaseStayMarker extends AbstractMarker
         $casesWithStays = [];
 
         foreach ($data['cases'] as $case) {
-            if (empty($case['appeal']) ||
+            if (
+                empty($case['appeal']) ||
                 (!empty($case['appeal']['decisionDate']) && !empty($case['appeal']['outcome'])) ||
                 !empty($case['appeal']['withdrawnDate'])
             ) {

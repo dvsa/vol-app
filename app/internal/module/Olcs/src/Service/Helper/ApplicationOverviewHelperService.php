@@ -3,6 +3,7 @@
 /**
  * Application Overview Helper Service
  */
+
 namespace Olcs\Service\Helper;
 
 use Common\Service\Helper\UrlHelperService;
@@ -71,7 +72,7 @@ class ApplicationOverviewHelperService
             'openCases'                 => $this->licenceOverviewHelperService->getOpenCases($licence),
 
             'changeOfEntity'            => (
-                (boolean)$application['isVariation'] ?
+                (bool)$application['isVariation'] ?
                 null :
                 $this->getChangeOfEntity($application)
             ),
@@ -135,13 +136,14 @@ class ApplicationOverviewHelperService
      */
     public function getInterimStatus($application, $lva)
     {
-        if (isset($application['goodsOrPsv']['id'])
+        if (
+            isset($application['goodsOrPsv']['id'])
             && $application['goodsOrPsv']['id'] == RefData::LICENCE_CATEGORY_PSV
         ) {
             return null;
         }
 
-        $url = $this->urlHelperService->fromRoute('lva-'.$lva.'/interim', [], [], true);
+        $url = $this->urlHelperService->fromRoute('lva-' . $lva . '/interim', [], [], true);
 
         if (isset($application['interimStatus']['id']) && !empty($application['interimStatus']['id'])) {
             $interimStatus = sprintf(

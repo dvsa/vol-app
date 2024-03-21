@@ -23,6 +23,8 @@ class TaskController extends AbstractController implements CaseControllerInterfa
     protected TreeRouteStack $router;
     protected SubCategory $subCategoryDataService;
 
+    protected string $helperClass;
+
     public function __construct(
         ScriptFactory $scriptFactory,
         FormHelperService $formHelper,

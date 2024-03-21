@@ -43,7 +43,7 @@ class ImpoundingLegislation extends RefData
      */
     public function fetchListOptions($context = null, $useGroups = false)
     {
-        $params = empty($context)? $this->getLicenceContext() : $context;
+        $params = empty($context) ? $this->getLicenceContext() : $context;
 
         //decide which ref data category we need
         if (empty($params)) {

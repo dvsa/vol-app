@@ -57,7 +57,7 @@ class SubCategoryDescriptionTest extends AbstractListDataServiceTestCase
         $data = [
             [
                 'id' => 9999,
-                'description'=> 'EXPECTED'
+                'description' => 'EXPECTED'
             ],
         ];
 

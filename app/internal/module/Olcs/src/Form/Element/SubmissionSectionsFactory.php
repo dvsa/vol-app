@@ -2,6 +2,7 @@
 
 namespace Olcs\Form\Element;
 
+use Common\Form\Element\Button;
 use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
@@ -54,7 +55,7 @@ class SubmissionSectionsFactory implements FactoryInterface
             ]
         );
         $element->setSubmissionType($submissionType);
-        /** @var \Common\Form\Element\Button $submissionTypeSubmit */
+        /** @var Button $submissionTypeSubmit */
         $submissionTypeSubmit = $formElementManager->get('Submit');
         $submissionTypeSubmit->setOptions(
             [
@@ -64,7 +65,6 @@ class SubmissionSectionsFactory implements FactoryInterface
             ]
         );
         $element->setSubmissionTypeSubmit($submissionTypeSubmit);
-        /** @var \Common\Form\Element\SubmissionSections $submissionSections */
         $sections = $formElementManager->get('DynamicMultiCheckbox');
         $sectionOptions = [
             'label' => 'Sections',

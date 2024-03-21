@@ -16,7 +16,7 @@ $(function () {
 
     submitBtn.hide();
 
-    countriesContainer.delegate("input", "change", function() {
+    countriesContainer.delegate("input", "change", function () {
         if (countriesContainer.find("input:checked").length) {
             submitBtn.show();
         } else {
@@ -42,13 +42,14 @@ $(function () {
 
     yearSelect.change(function () {
         stockSelect.empty();
-        if( yearSelect.val() == "2019") {
+        if ( yearSelect.val() == "2019") {
             $(".stock").addClass("js-hidden");
         }
         fetchStocks();
     });
 
-    function fetchBilateralCountries() {
+    function fetchBilateralCountries()
+    {
         OLCS.preloader.show("modal");
         $.post("../../irhp-application/available-countries", {security: csrfToken.val()}, function (data) {
             if (data.countries.length) {
@@ -72,7 +73,8 @@ $(function () {
         });
     }
 
-    function fetchYears() {
+    function fetchYears()
+    {
         OLCS.preloader.show("modal");
         $.post("../../irhp-application/available-years", {permitType: typeSelect.val(), security: csrfToken.val()}, function (data) {
             yearSelect.append($("<option>", {
@@ -90,7 +92,8 @@ $(function () {
         });
     }
 
-    function fetchStocks() {
+    function fetchStocks()
+    {
         OLCS.preloader.show("modal");
         $.post("../../irhp-application/available-stocks", {
             permitType: typeSelect.val(),
@@ -103,7 +106,7 @@ $(function () {
                     text : item.periodName
                 }));
             });
-            if(
+            if (
                 HAS_STOCK_SELECTION.includes(typeSelect.val())
                 && yearSelect.val() !== "2019"
             ) {
@@ -114,4 +117,3 @@ $(function () {
         });
     }
 });
-

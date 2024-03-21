@@ -43,7 +43,8 @@ class CaseAppealMarker extends AbstractMarker
                 continue;
             }
 
-            if (empty($case['appeal']['withdrawnDate']) &&
+            if (
+                empty($case['appeal']['withdrawnDate']) &&
                 (empty($case['appeal']['decisionDate']) || empty($case['appeal']['outcome']))
             ) {
                 $casesWithAppeals[] = $case;

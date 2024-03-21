@@ -1,3 +1,3 @@
-OLCS.ready(function() {
-  OLCS.surrenderDetails.init();
+OLCS.ready(function () {
+    OLCS.surrenderDetails.init();
 });

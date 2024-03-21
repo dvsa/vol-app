@@ -135,8 +135,10 @@ class TransportManagerApplication
     {
         $status = $data['tmApplicationStatus']['id'];
 
-        if ($data['tmApplicationStatus']['id'] === RefData::TMA_STATUS_DETAILS_CHECKED ||
-            $data['tmApplicationStatus']['id'] === RefData::TMA_STATUS_DETAILS_SUBMITTED) {
+        if (
+            $data['tmApplicationStatus']['id'] === RefData::TMA_STATUS_DETAILS_CHECKED ||
+            $data['tmApplicationStatus']['id'] === RefData::TMA_STATUS_DETAILS_SUBMITTED
+        ) {
             $status = RefData::TMA_STATUS_INCOMPLETE;
         } elseif ($data['tmApplicationStatus']['id'] === RefData::TMA_STATUS_OPERATOR_APPROVED) {
             $status = RefData::TMA_STATUS_TM_SIGNED;

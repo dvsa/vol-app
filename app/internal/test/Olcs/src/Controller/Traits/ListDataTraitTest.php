@@ -60,7 +60,7 @@ class ListDataTraitTest extends MockeryTestCase
 
     public function testGetListDataOptions()
     {
-        $respResult =[
+        $respResult = [
             'results' => [
                 [
                     'id' => 'unit_Id1',

@@ -98,7 +98,7 @@ class DocumentFinaliseController extends AbstractDocumentController
             'template' => $link,
         ];
 
-        $form = $this->generateFormWithData('FinaliseDocument', 'processSaveLetter', $data, false);
+        $form = $this->generateFormWithData('FinaliseDocument', [$this, 'processSaveLetter'], $data, false);
 
         foreach ($data as $key => $value) {
             $form->get($key)->setAttribute('value', $value);

@@ -1,4 +1,4 @@
-$(function() {
+$(function () {
     "use strict";
     OLCS.cascadeForm({
         cascade: false,
@@ -10,10 +10,10 @@ $(function() {
                 "selector:.__sra-yes": function () {
                     return OLCS.formHelper.isChecked("fields", "isSubmissionRequiredForAction", "1");
                 },
-                "selector:.__ior-revoke":function() {
+                "selector:.__ior-revoke":function () {
                     return OLCS.formHelper.isSelected("fields", "actionToBeTaken", "ptr_action_to_be_taken_revoke");
                 },
-                "selector:.__ior-nfa":function() {
+                "selector:.__ior-nfa":function () {
                     return OLCS.formHelper.isSelected("fields", "actionToBeTaken", "ptr_action_to_be_taken_nfa");
                 },
                 "selector:.__ior-warning": function () {

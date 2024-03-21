@@ -79,7 +79,8 @@ class SubmissionSectionMultipleTables extends AbstractHelper
         $data['tables'] = $html;
 
         // config set to remove the section header if an overview already has it
-        if (isset($data['config']['show_multiple_tables_section_header']) &&
+        if (
+            isset($data['config']['show_multiple_tables_section_header']) &&
             $data['config']['show_multiple_tables_section_header'] == false
         ) {
             return $html;

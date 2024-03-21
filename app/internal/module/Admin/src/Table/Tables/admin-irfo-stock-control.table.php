@@ -1,5 +1,7 @@
 <?php
 
+use Common\Service\Table\TableBuilder;
+
 return [
     'variables' => [
         'titleSingular' => 'IRFO permit',
@@ -36,6 +38,10 @@ return [
             'title' => 'Permit No',
             'isNumeric' => true,
             'formatter' => function ($data) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 if (empty($data['irfoGvPermit']['id'])) {
                     return '';
                 }
@@ -58,6 +64,10 @@ return [
         [
             'title' => 'Operator',
             'formatter' => function ($data) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 if (empty($data['irfoGvPermit']['organisation']['id'])) {
                     return '';
                 }

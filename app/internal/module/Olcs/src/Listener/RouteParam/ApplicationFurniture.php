@@ -35,7 +35,7 @@ class ApplicationFurniture implements
 
     /**
      * @param $router
-     * @return $this
+     * @return void
      */
     public function setRouter($router)
     {

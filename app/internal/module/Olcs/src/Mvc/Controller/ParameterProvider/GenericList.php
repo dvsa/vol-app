@@ -53,7 +53,7 @@ class GenericList extends AbstractParameterProvider
             function ($item) {
                 if (is_array($item) && !empty($item['year']) && !empty($item['month']) && !empty($item['day'])) {
                     // looks like a date - convert to string format
-                    return $item['year'].'-'.$item['month'].'-'.$item['day'];
+                    return $item['year'] . '-' . $item['month'] . '-' . $item['day'];
                 }
                 return $item;
             },

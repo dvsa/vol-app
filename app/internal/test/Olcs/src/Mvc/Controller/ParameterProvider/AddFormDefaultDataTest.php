@@ -1,6 +1,5 @@
 <?php
 
-
 namespace OlcsTest\Mvc\Controller\ParameterProvider;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
@@ -25,7 +24,7 @@ class AddFormDefaultDataTest extends TestCase
 
         $mockParams->shouldReceive('fromRoute')->with('case')->andReturn(21);
 
-        $sut = new AddFormDefaultData(['case' =>AddFormDefaultData::FROM_ROUTE, 'static' => 'value']);
+        $sut = new AddFormDefaultData(['case' => AddFormDefaultData::FROM_ROUTE, 'static' => 'value']);
         $sut->setParams($mockParams);
         $data = $sut->provideParameters();
 
