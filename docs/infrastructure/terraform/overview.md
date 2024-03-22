@@ -42,7 +42,7 @@ There are 2 AWS accounts:
 
 The accounts also contain resources that are managed in the [vol-terraform](https://github.com/dvsa/vol-terraform) repository.
 
-The infrastructure managed in this repository is defined in [RFC-005](docs/rfc/rfc-005-add-terraform-to-mono-repository.md).
+The infrastructure managed in this repository is defined in [RFC-005](../../rfc/rfc-005-add-terraform-to-mono-repository.md).
 
 :::
 
