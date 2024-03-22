@@ -44,7 +44,7 @@ How to run: _automatically applied by any modern IDE_
 
 #### PHP_CodeSniffer
 
-Source: https://github.com/squizlabs/PHP_CodeSniffer
+Source: https://github.com/squizlabs/PHP_CodeSniffer  
 How to install: _automatically installed by Composer_  
 How to run: `composer run-script phpcs`
 
