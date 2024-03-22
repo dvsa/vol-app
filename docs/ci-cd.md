@@ -32,7 +32,7 @@ Various tools run on CI to ensure the quality of the codebase:
 
 -   [PHPStan](https://github.com/phpstan/phpstan)
 -   [Psalm](https://github.com/vimeo/psalm)
--   [PHP_CodeSniffer](https://github.com/PHP-CS-Fixer/PHP-CS-Fixer)
+-   [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer)
 
 #### Security
 
