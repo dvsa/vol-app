@@ -5,10 +5,10 @@ USER root
 
 # Installing require dependencies
 RUN apk add --update --no-cache \
-                      icu-dev \
-                      autoconf \
-                      g++ \
-                      make \
+                      icu-dev~=71.1 \
+                      autoconf~=2.71  \
+                      g++~=11.2.1  \
+                      make=~4.3 \
     && pecl install igbinary \
     && pecl install -D 'enable-redis-igbinary="yes"' redis \
     && docker-php-ext-enable igbinary redis \
