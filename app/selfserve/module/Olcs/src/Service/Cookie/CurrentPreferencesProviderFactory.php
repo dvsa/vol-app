@@ -15,7 +15,7 @@ class CurrentPreferencesProviderFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : CurrentPreferencesProvider
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CurrentPreferencesProvider
     {
         return new CurrentPreferencesProvider(
             $container->get('CookieCookieReader'),

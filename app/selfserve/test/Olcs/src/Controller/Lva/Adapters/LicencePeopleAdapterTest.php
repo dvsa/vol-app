@@ -53,7 +53,7 @@ class LicencePeopleAdapterTest extends MockeryTestCase
             ->shouldAllowMockingProtectedMethods();
     }
 
-    public function testAlterFormForOrganisationCantModify()
+    public function testAlterFormForOrganisationCantModify(): void
     {
         $this->sut->shouldReceive('canModify')->andReturn(false);
 
@@ -64,7 +64,7 @@ class LicencePeopleAdapterTest extends MockeryTestCase
         $this->sut->alterFormForOrganisation($this->mockForm, $this->mockTbl);
     }
 
-    public function testAlterFormForOrganisationCanModify()
+    public function testAlterFormForOrganisationCanModify(): void
     {
         $this->sut->shouldReceive('canModify')->once()->andReturn(true);
         $this->sut->shouldReceive('getOrganisationType')->andReturn(RefData::ORG_TYPE_REGISTERED_COMPANY);
@@ -84,14 +84,19 @@ class LicencePeopleAdapterTest extends MockeryTestCase
      * @param $isExceptionalOrg
      * @param $expect
      */
-    public function testCanModify($isExceptionalOrg, $expect)
+    public function testCanModify($isExceptionalOrg, $expect): void
     {
         $this->sut->shouldReceive('isExceptionalOrganisation')->andReturn($isExceptionalOrg);
 
         static::assertEquals($expect, $this->sut->canModify());
     }
 
-    public function dpTestCanModify()
+    /**
+     * @return bool[][]
+     *
+     * @psalm-return list{array{isExceptionalOrg: true, expect: false}, array{isExceptionalOrg: false, expect: true}}
+     */
+    public function dpTestCanModify(): array
     {
         return [
             [
@@ -105,7 +110,7 @@ class LicencePeopleAdapterTest extends MockeryTestCase
         ];
     }
 
-    public function testGetDeleteCommand()
+    public function testGetDeleteCommand(): void
     {
         $this->sut->shouldReceive('getLicenceId')->andReturn(999);
         $this->sut->shouldReceive('handleCommand')

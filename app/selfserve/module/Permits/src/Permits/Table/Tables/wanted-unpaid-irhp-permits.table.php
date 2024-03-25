@@ -8,7 +8,6 @@ return [
     'variables' => [],
     'settings' => [],
     'attributes' => [
-        // TODO: tidy up when more time available
         'style' => 'margin-bottom: 20px'
     ],
     'columns' => [

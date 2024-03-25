@@ -15,7 +15,7 @@ class TemplateVarsGeneratorFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : TemplateVarsGenerator
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TemplateVarsGenerator
     {
         return new TemplateVarsGenerator(
             $container->get('QaQuestionArrayProvider'),

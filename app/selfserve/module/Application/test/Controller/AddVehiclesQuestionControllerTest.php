@@ -198,7 +198,7 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_IsCallable()
+    public function indexActionIsCallable(): void
     {
         // Setup
         $this->setUpSut();
@@ -209,9 +209,9 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_IsCallable
+     * @depends indexActionIsCallable
      */
-    public function indexAction_WhenGetting_ReturnsViewModel(): ViewModel
+    public function indexActionWhenGettingReturnsViewModel(): ViewModel
     {
         // Setup
         $this->setUpSut();
@@ -228,10 +228,12 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_WhenGetting_ReturnsViewModel
+     *
+     * @depends indexActionWhenGettingReturnsViewModel
+     *
      * @param ViewModel $viewModel
      */
-    public function indexAction_WhenGetting_ReturnsViewModel_WithTheCorrectTemplate(ViewModel $viewModel)
+    public function indexActionWhenGettingReturnsViewModelWithTheCorrectTemplate(ViewModel $viewModel): void
     {
         // Assert
         $this->assertEquals(static::ADD_VEHICLES_VIEW_TEMPLATE, $viewModel->getTemplate());
@@ -239,9 +241,10 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_WhenGetting_ReturnsViewModel
+     *
+     * @depends indexActionWhenGettingReturnsViewModel
      */
-    public function indexAction_WhenGetting_ReturnsViewModel_WithABackLink_ToTheApplicationOverviewPage()
+    public function indexActionWhenGettingReturnsViewModelWithABackLinkToTheApplicationOverviewPage(): void
     {
         // Setup
         $this->setUpSut();
@@ -259,9 +262,10 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_WhenGetting_ReturnsViewModel
+     *
+     * @depends indexActionWhenGettingReturnsViewModel
      */
-    public function indexAction_WhenGetting_ReturnsViewModel_WithForm()
+    public function indexActionWhenGettingReturnsViewModelWithForm(): void
     {
         // Setup
         $this->setUpSut();
@@ -277,9 +281,10 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_WhenGetting_ReturnsViewModel_WithForm
+     *
+     * @depends indexActionWhenGettingReturnsViewModelWithForm
      */
-    public function indexAction_WhenGetting_ReturnsViewModel_WithForm_WithoutData()
+    public function indexActionWhenGettingReturnsViewModelWithFormWithoutData(): void
     {
         // Setup
         $this->setUpSut();
@@ -298,9 +303,10 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_WhenGetting_ReturnsViewModel_WithForm
+     *
+     * @depends indexActionWhenGettingReturnsViewModelWithForm
      */
-    public function indexAction_WhenGetting_ReturnsViewModel_WithForm_WithData_WhenInputHasBeenFlashed()
+    public function indexActionWhenGettingReturnsViewModelWithFormWithDataWhenInputHasBeenFlashed(): void
     {
         // Setup
         $this->setUpSut();
@@ -322,9 +328,10 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_WhenGetting_ReturnsViewModel_WithForm
+     *
+     * @depends indexActionWhenGettingReturnsViewModelWithForm
      */
-    public function indexAction_WhenGetting_ReturnsViewModel_WithForm_WithNoPreSelected_WhenAUserHasCompletedTheVehicleSectionWithoutVehicles()
+    public function indexActionWhenGettingReturnsViewModelWithFormWithNoPreSelectedWhenAUserHasCompletedTheVehicleSectionWithoutVehicles(): void
     {
         // Setup
         $this->setUpSut();
@@ -340,14 +347,15 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         assert($form instanceof AddVehiclesQuestionForm);
 
         // Assert
-        $this->assertSame(static::RADIO_OPTION_NO, $form->getRadioInput()->getValue());
+        $this->assertSame(static::RADIO_OPTION_NO, $form->getRadioInput()->getValue('application-version'));
     }
 
     /**
      * @test
-     * @depends indexAction_WhenGetting_ReturnsViewModel_WithForm
+     *
+     * @depends indexActionWhenGettingReturnsViewModelWithForm
      */
-    public function indexAction_WhenGetting_AndUserHasAlreadyAddedVehicles_ThrowResourceNotFoundException()
+    public function indexActionWhenGettingAndUserHasAlreadyAddedVehiclesThrowResourceNotFoundException(): void
     {
         // Setup
         $this->setUpSut();
@@ -366,9 +374,10 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_IsCallable
+     *
+     * @depends indexActionIsCallable
      */
-    public function indexAction_WhenGetting_AndAUserProvidesTheIdOfAVariation_ReturnsA404()
+    public function indexActionWhenGettingAndAUserProvidesTheIdOfAVariationReturnsA404(): void
     {
         // Setup
         $this->setUpSut();
@@ -389,9 +398,10 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_IsCallable
+     *
+     * @depends indexActionIsCallable
      */
-    public function indexAction_WhenGetting_AndAUserProvidesAnApplicationIdWhichDoesNotExist_ReturnsA404()
+    public function indexActionWhenGettingAndAUserProvidesAnApplicationIdWhichDoesNotExistReturnsA404(): void
     {
         // Setup
         $this->setUpSut();
@@ -409,9 +419,10 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_IsCallable
+     *
+     * @depends indexActionIsCallable
      */
-    public function indexAction_WhenGetting_AndAUserProvidesAnApplicationWhichHasAStatusOtherThenNotSubmitted_ReturnsARedirectToTheSubmissionSummaryPage()
+    public function indexActionWhenGettingAndAUserProvidesAnApplicationWhichHasAStatusOtherThenNotSubmittedReturnsARedirectToTheSubmissionSummaryPage(): void
     {
         // Setup
         $this->setUpSut();
@@ -431,14 +442,18 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @param int $invalidStatusCode
+     *
      * @throws BadCommandResponseException
      * @throws BailOutException
      * @throws ResourceNotFoundException
+     *
      * @test
-     * @depends indexAction_IsCallable
+     *
+     * @depends indexActionIsCallable
+     *
      * @dataProvider invalidCqrsResponseStatusCodesDataProvider
      */
-    public function indexAction_WhenGetting_ThrowsExceptionIfApplicationResponseHasAStatusOtherThen200(int $invalidStatusCode)
+    public function indexActionWhenGettingThrowsExceptionIfApplicationResponseHasAStatusOtherThen200(int $invalidStatusCode): void
     {
         // Setup
         $this->setUpSut();
@@ -456,9 +471,10 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_IsCallable
+     *
+     * @depends indexActionIsCallable
      */
-    public function indexAction_WhenGetting_AndAUserProvidesAnApplicationWhichDoesNotHaveTheLicenceCategoryGoods_ReturnA404()
+    public function indexActionWhenGettingAndAUserProvidesAnApplicationWhichDoesNotHaveTheLicenceCategoryGoodsReturnA404(): void
     {
         // Setup
         $this->setUpSut();
@@ -477,9 +493,10 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_IsCallable
+     *
+     * @depends indexActionIsCallable
      */
-    public function indexAction_WhenGetting_AndAUserProvidesAnApplicationWhichHasAnUnsupportedLicenceType_ReturnA404()
+    public function indexActionWhenGettingAndAUserProvidesAnApplicationWhichHasAnUnsupportedLicenceTypeReturnA404(): void
     {
         // Setup
         $this->setUpSut();
@@ -510,15 +527,19 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @param string $licenceType
+     *
      * @throws BadCommandResponseException
      * @throws BadQueryResponseException
      * @throws BailOutException
      * @throws ResourceNotFoundException
+     *
      * @test
-     * @depends indexAction_IsCallable
+     *
+     * @depends indexActionIsCallable
+     *
      * @dataProvider supportedLicenceTypeDataProvider
      */
-    public function indexAction_WhenGetting_AndAUserProvidesAnApplicationWithASupportedLicenceType_DoesNotReturnA404(string $licenceType)
+    public function indexActionWhenGettingAndAUserProvidesAnApplicationWithASupportedLicenceTypeDoesNotReturnA404(string $licenceType): void
     {
         // Setup
         $this->setUpSut();
@@ -558,9 +579,10 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_IsCallable
+     *
+     * @depends indexActionIsCallable
      */
-    public function indexAction_WhenPosting_AndUserHasAlreadyAddedVehicles_ThrowResourceNotFoundException()
+    public function indexActionWhenPostingAndUserHasAlreadyAddedVehiclesThrowResourceNotFoundException(): void
     {
         // Setup
         $this->setUpSut();
@@ -579,11 +601,14 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @param array $invalidInputSet
+     *
      * @test
-     * @depends indexAction_IsCallable
+     *
+     * @depends indexActionIsCallable
+     *
      * @dataProvider invalidInputSetDataProvider
      */
-    public function indexAction_WhenPosting_AndAUserHasSuppliedInvalidInput_RedirectBack(array $invalidInputSet)
+    public function indexActionWhenPostingAndAUserHasSuppliedInvalidInputRedirectBack(array $invalidInputSet): void
     {
         // Setup
         $this->setUpSut();
@@ -605,9 +630,10 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_IsCallable
+     *
+     * @depends indexActionIsCallable
      */
-    public function indexAction_WhenPosting_AndAUserHasSuppliedInvalidInput_FlashTheUsersInput_WithCustomNamespace()
+    public function indexActionWhenPostingAndAUserHasSuppliedInvalidInputFlashTheUsersInputWithCustomNamespace(): void
     {
         // Setup
         $this->setUpSut();
@@ -627,9 +653,10 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_IsCallable
+     *
+     * @depends indexActionIsCallable
      */
-    public function indexAction_WhenPosting_AndAUserHasSuppliedInvalidInput_FlashTheUsersInput_WithJson()
+    public function indexActionWhenPostingAndAUserHasSuppliedInvalidInputFlashTheUsersInputWithJson(): void
     {
         // Setup
         $this->setUpSut();
@@ -649,9 +676,10 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_WhenPosting_AndAUserHasSuppliedInvalidInput_FlashTheUsersInput_WithJson
+     *
+     * @depends indexActionWhenPostingAndAUserHasSuppliedInvalidInputFlashTheUsersInputWithJson
      */
-    public function indexAction_WhenPosting_AndAUserHasSuppliedInvalidInput_FlashTheUsersInput_WithJson_ContainingOriginalInput()
+    public function indexActionWhenPostingAndAUserHasSuppliedInvalidInputFlashTheUsersInputWithJsonContainingOriginalInput(): void
     {
         // Setup
         $this->setUpSut();
@@ -670,9 +698,10 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_WhenPosting_AndAUserHasSuppliedInvalidInput_FlashTheUsersInput_WithJson
+     *
+     * @depends indexActionWhenPostingAndAUserHasSuppliedInvalidInputFlashTheUsersInputWithJson
      */
-    public function indexAction_WhenPosting_AndAUserHasSuppliedInvalidInput_FlashTheUsersInput_WithJson_ContainingOriginalInput_FilteredByForm()
+    public function indexActionWhenPostingAndAUserHasSuppliedInvalidInputFlashTheUsersInputWithJsonContainingOriginalInputFilteredByForm(): void
     {
         // Setup
         $this->setUpSut();
@@ -691,9 +720,10 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_IsCallable
+     *
+     * @depends indexActionIsCallable
      */
-    public function indexAction_WhenPosting_AndAUserSelectsReturnToOverview_AndYes_RedirectsAUserToOverview()
+    public function indexActionWhenPostingAndAUserSelectsReturnToOverviewAndYesRedirectsAUserToOverview(): void
     {
         // Setup
         $this->enablePopulationOfCsrfDataBeforeFormValidation();
@@ -716,9 +746,10 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_IsCallable
+     *
+     * @depends indexActionIsCallable
      */
-    public function indexAction_WhenPosting_AndAUserSelectsReturnToOverview_AndYes_UpdateVehicleSectionStatusToIncomplete()
+    public function indexActionWhenPostingAndAUserSelectsReturnToOverviewAndYesUpdateVehicleSectionStatusToIncomplete(): void
     {
         // Setup
         $this->enablePopulationOfCsrfDataBeforeFormValidation();
@@ -734,9 +765,10 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_IsCallable
+     *
+     * @depends indexActionIsCallable
      */
-    public function indexAction_WhenPosting_WhenAUserSelectsNext_AndYes_ReturnsA404()
+    public function indexActionWhenPostingWhenAUserSelectsNextAndYesReturnsA404(): void
     {
         // Setup
         $this->enablePopulationOfCsrfDataBeforeFormValidation();
@@ -753,9 +785,10 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_IsCallable
+     *
+     * @depends indexActionIsCallable
      */
-    public function indexAction_WhenPosting_WhenAUserSelectsNext_AndYes_UpdateVehicleSectionStatusToIncomplete()
+    public function indexActionWhenPostingWhenAUserSelectsNextAndYesUpdateVehicleSectionStatusToIncomplete(): void
     {
         // Setup
         $this->enablePopulationOfCsrfDataBeforeFormValidation();
@@ -774,9 +807,10 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_IsCallable
+     *
+     * @depends indexActionIsCallable
      */
-    public function indexAction_WhenPosting_WhenAUserSelectNext_AndNo_RedirectsToTheSafetyAndComplianceStep()
+    public function indexActionWhenPostingWhenAUserSelectNextAndNoRedirectsToTheSafetyAndComplianceStep(): void
     {
         // Setup
         $this->enablePopulationOfCsrfDataBeforeFormValidation();
@@ -799,9 +833,10 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_IsCallable
+     *
+     * @depends indexActionIsCallable
      */
-    public function indexAction_WhenPosting_WhenAUserSelectsNext_AndNo_UpdateVehicleSectionStatusToComplete()
+    public function indexActionWhenPostingWhenAUserSelectsNextAndNoUpdateVehicleSectionStatusToComplete(): void
     {
         // Setup
         $this->enablePopulationOfCsrfDataBeforeFormValidation();
@@ -817,9 +852,10 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_IsCallable
+     *
+     * @depends indexActionIsCallable
      */
-    public function indexAction_WhenPosting_WhenAUserSelectsSaveAndReturnToOverview_AndTheNoRadioOptionIsSelected_UpdateVehicleSectionStatusToComplete()
+    public function indexActionWhenPostingWhenAUserSelectsSaveAndReturnToOverviewAndTheNoRadioOptionIsSelectedUpdateVehicleSectionStatusToComplete(): void
     {
         // Setup
         $this->enablePopulationOfCsrfDataBeforeFormValidation();
@@ -836,7 +872,7 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_WhenPosting_WhenAUserSelectsSaveAndReturnToOverview_AndTheNoRadioOptionIsSelected_UpdateVehicleSectionStatusToComplete_ExposesBailOutExceptionsFromTheCommandHandler()
+    public function indexActionWhenPostingWhenAUserSelectsSaveAndReturnToOverviewAndTheNoRadioOptionIsSelectedUpdateVehicleSectionStatusToCompleteExposesBailOutExceptionsFromTheCommandHandler(): void
     {
         // Setup
         $this->enablePopulationOfCsrfDataBeforeFormValidation();
@@ -864,14 +900,18 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @param int $invalidStatusCode
+     *
      * @throws BadCommandResponseException
      * @throws BailOutException
      * @throws ResourceNotFoundException
+     *
      * @test
-     * @depends indexAction_WhenPosting_WhenAUserSelectsSaveAndReturnToOverview_AndTheNoRadioOptionIsSelected_UpdateVehicleSectionStatusToComplete
+     *
+     * @depends indexActionWhenPostingWhenAUserSelectsSaveAndReturnToOverviewAndTheNoRadioOptionIsSelectedUpdateVehicleSectionStatusToComplete
+     *
      * @dataProvider invalidCqrsResponseStatusCodesDataProvider
      */
-    public function indexAction_WhenPosting_WhenAUserSelectsSaveAndReturnToOverview_AndTheUserHasSelectedNotToAddVehicleDetails_ThrowsExceptionIfCommandResponseHasAStatusOtherThen200(int $invalidStatusCode)
+    public function indexActionWhenPostingWhenAUserSelectsSaveAndReturnToOverviewAndTheUserHasSelectedNotToAddVehicleDetailsThrowsExceptionIfCommandResponseHasAStatusOtherThen200(int $invalidStatusCode): void
     {
         // Setup
         $this->enablePopulationOfCsrfDataBeforeFormValidation();
@@ -889,9 +929,10 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_WhenPosting_WhenAUserSelectsSaveAndReturnToOverview_AndTheNoRadioOptionIsSelected_UpdateVehicleSectionStatusToComplete
+     *
+     * @depends indexActionWhenPostingWhenAUserSelectsSaveAndReturnToOverviewAndTheNoRadioOptionIsSelectedUpdateVehicleSectionStatusToComplete
      */
-    public function indexAction_WhenPosting_WhenAUserSelectsSaveAndReturnToOverview_AndTheUserHasSelectedNotToAddVehicleDetails_ExposesBailOutExceptionsFromTheCommandHandler()
+    public function indexActionWhenPostingWhenAUserSelectsSaveAndReturnToOverviewAndTheUserHasSelectedNotToAddVehicleDetailsExposesBailOutExceptionsFromTheCommandHandler(): void
     {
         // Setup
         $this->enablePopulationOfCsrfDataBeforeFormValidation();
@@ -909,9 +950,10 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_IsCallable
+     *
+     * @depends indexActionIsCallable
      */
-    public function indexAction_WhenPosting_WhenAUserSelectsSaveAndReturnToOverview_AndTheUserHasSelectedNotToAddVehicleDetails_RedirectsAUserToTheApplicationOverview()
+    public function indexActionWhenPostingWhenAUserSelectsSaveAndReturnToOverviewAndTheUserHasSelectedNotToAddVehicleDetailsRedirectsAUserToTheApplicationOverview(): void
     {
         // Setup
         $this->enablePopulationOfCsrfDataBeforeFormValidation();
@@ -931,10 +973,11 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_IsCallable
-     * @depends indexAction_WhenGetting_AndAUserProvidesTheIdOfAVariation_ReturnsA404
+     *
+     * @depends indexActionIsCallable
+     * @depends indexActionWhenGettingAndAUserProvidesTheIdOfAVariationReturnsA404
      */
-    public function indexAction_WhenPosting_AndAUserProvidesTheIdOfAVariation_ReturnsA404()
+    public function indexActionWhenPostingAndAUserProvidesTheIdOfAVariationReturnsA404(): void
     {
         // Setup
         $this->setUpSut();
@@ -955,10 +998,11 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_IsCallable
-     * @depends indexAction_WhenGetting_AndAUserProvidesAnApplicationIdWhichDoesNotExist_ReturnsA404
+     *
+     * @depends indexActionIsCallable
+     * @depends indexActionWhenGettingAndAUserProvidesAnApplicationIdWhichDoesNotExistReturnsA404
      */
-    public function indexAction_WhenPosting_AndAUserProvidesAnApplicationIdWhichDoesNotExist_ReturnsA404()
+    public function indexActionWhenPostingAndAUserProvidesAnApplicationIdWhichDoesNotExistReturnsA404(): void
     {
         // Setup
         $this->setUpSut();
@@ -976,10 +1020,11 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_IsCallable
-     * @depends indexAction_WhenGetting_AndAUserProvidesAnApplicationWhichHasAStatusOtherThenNotSubmitted_ReturnsARedirectToTheSubmissionSummaryPage
+     *
+     * @depends indexActionIsCallable
+     * @depends indexActionWhenGettingAndAUserProvidesAnApplicationWhichHasAStatusOtherThenNotSubmittedReturnsARedirectToTheSubmissionSummaryPage
      */
-    public function indexAction_WhenPosting_AndAUserProvidesAnApplicationWhichHasAStatusOtherThenNotSubmitted_ReturnsARedirectToTheSubmissionSummaryPage()
+    public function indexActionWhenPostingAndAUserProvidesAnApplicationWhichHasAStatusOtherThenNotSubmittedReturnsARedirectToTheSubmissionSummaryPage(): void
     {
         // Setup
         $this->setUpSut();
@@ -999,15 +1044,19 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @param int $invalidStatusCode
+     *
      * @throws BadCommandResponseException
      * @throws BailOutException
      * @throws ResourceNotFoundException
+     *
      * @test
-     * @depends indexAction_IsCallable
+     *
+     * @depends indexActionIsCallable
+     * @depends indexActionWhenGettingThrowsExceptionIfApplicationResponseHasAStatusOtherThen200
+     *
      * @dataProvider invalidCqrsResponseStatusCodesDataProvider
-     * @depends indexAction_WhenGetting_ThrowsExceptionIfApplicationResponseHasAStatusOtherThen200
      */
-    public function indexAction_WhenPosting_ThrowsExceptionIfApplicationResponseHasAStatusOtherThen200(int $invalidStatusCode)
+    public function indexActionWhenPostingThrowsExceptionIfApplicationResponseHasAStatusOtherThen200(int $invalidStatusCode): void
     {
         // Setup
         $this->setUpSut();
@@ -1025,10 +1074,11 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_IsCallable
-     * @depends indexAction_WhenGetting_AndAUserProvidesAnApplicationWhichDoesNotHaveTheLicenceCategoryGoods_ReturnA404
+     *
+     * @depends indexActionIsCallable
+     * @depends indexActionWhenGettingAndAUserProvidesAnApplicationWhichDoesNotHaveTheLicenceCategoryGoodsReturnA404
      */
-    public function indexAction_WhenPosting_AndAUserProvidesAnApplicationWhichDoesNotHaveTheLicenceCategoryGoods_ReturnA404()
+    public function indexActionWhenPostingAndAUserProvidesAnApplicationWhichDoesNotHaveTheLicenceCategoryGoodsReturnA404(): void
     {
         // Setup
         $this->setUpSut();
@@ -1047,10 +1097,11 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_IsCallable
-     * @depends indexAction_WhenGetting_AndAUserProvidesAnApplicationWhichHasAnUnsupportedLicenceType_ReturnA404
+     *
+     * @depends indexActionIsCallable
+     * @depends indexActionWhenGettingAndAUserProvidesAnApplicationWhichHasAnUnsupportedLicenceTypeReturnA404
      */
-    public function indexAction_WhenPosting_AndAUserProvidesAnApplicationWhichHasAnUnsupportedLicenceType_ReturnA404()
+    public function indexActionWhenPostingAndAUserProvidesAnApplicationWhichHasAnUnsupportedLicenceTypeReturnA404(): void
     {
         // Setup
         $this->setUpSut();
@@ -1069,16 +1120,20 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
 
     /**
      * @param string $licenceType
+     *
      * @throws BadCommandResponseException
      * @throws BadQueryResponseException
      * @throws BailOutException
      * @throws ResourceNotFoundException
+     *
      * @test
-     * @depends indexAction_IsCallable
-     * @depends indexAction_WhenGetting_AndAUserProvidesAnApplicationWithASupportedLicenceType_DoesNotReturnA404
+     *
+     * @depends indexActionIsCallable
+     * @depends indexActionWhenGettingAndAUserProvidesAnApplicationWithASupportedLicenceTypeDoesNotReturnA404
+     *
      * @dataProvider supportedLicenceTypeDataProvider
      */
-    public function indexAction_WhenPosting_AndAUserProvidesAnApplicationWithASupportedLicenceType_DoesNotReturnA404(string $licenceType)
+    public function indexActionWhenPostingAndAUserProvidesAnApplicationWithASupportedLicenceTypeDoesNotReturnA404(string $licenceType): void
     {
         // Setup
         $this->setUpSut();
@@ -1107,7 +1162,7 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         $this->setUpServiceManager();
     }
 
-    protected function setUpSut()
+    protected function setUpSut(): void
     {
         $this->sut = new AddVehiclesQuestionController(
             $this->urlHelper(),
@@ -1119,6 +1174,9 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         );
     }
 
+    /**
+     * @return void
+     */
     protected function setUpDefaultServices()
     {
         $this->redirectHelper();
@@ -1151,9 +1209,6 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
     }
 
 
-    /**
-     * @return MockInterface|Url
-     */
     protected function urlHelper(): MockInterface
     {
         if (!$this->serviceManager->has(Url::class)) {
@@ -1165,9 +1220,6 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         return $instance;
     }
 
-    /**
-     * @return MockInterface|HandleQuery
-     */
     protected function queryHandler(): MockInterface
     {
         if (!$this->serviceManager->has(HandleQuery::class)) {
@@ -1187,9 +1239,6 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         return $instance;
     }
 
-    /**
-     * @return MockInterface|Redirect
-     */
     protected function redirectHelper(): MockInterface
     {
         if (!$this->serviceManager->has(Redirect::class)) {
@@ -1202,9 +1251,6 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         return $instance;
     }
 
-    /**
-     * @return MockInterface|FlashMessenger
-     */
     protected function flashMessenger(): MockInterface
     {
         if (!$this->serviceManager->has('FlashMessenger')) {
@@ -1235,7 +1281,7 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         return $this->serviceManager->get(FormValidator::class);
     }
 
-    protected function enablePopulationOfCsrfDataBeforeFormValidation()
+    protected function enablePopulationOfCsrfDataBeforeFormValidation(): void
     {
         $this->serviceManager->setService(FormValidator::class, FormValidatorBuilder::aValidator()->populateCsrfDataBeforeValidating()->build());
     }
@@ -1253,9 +1299,6 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
         return $this->serviceManager->get(HandleCommand::class);
     }
 
-    /**
-     * @return MockInterface|CommandSender
-     */
     protected function commandSender(): MockInterface
     {
         if (! $this->serviceManager->has(CommandSender::class)) {
@@ -1303,7 +1346,7 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
     protected function invalidCqrsResponse(int $statusCode = null): Response
     {
         $httpResponse = new HttpResponse();
-        $httpResponse->setStatusCode($statusCode?? \Laminas\Http\Response::STATUS_CODE_500);
+        $httpResponse->setStatusCode($statusCode ?? \Laminas\Http\Response::STATUS_CODE_500);
         $response = new Response($httpResponse);
         $response->setResult([]);
         return $response;

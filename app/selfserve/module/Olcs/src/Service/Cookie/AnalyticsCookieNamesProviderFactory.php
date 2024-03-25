@@ -15,7 +15,7 @@ class AnalyticsCookieNamesProviderFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : AnalyticsCookieNamesProvider
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): AnalyticsCookieNamesProvider
     {
         $config = $container->get('Config');
         return new AnalyticsCookieNamesProvider($config['google-ga-domain']);

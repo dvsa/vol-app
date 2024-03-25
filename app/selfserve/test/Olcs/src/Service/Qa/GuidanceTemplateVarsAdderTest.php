@@ -68,7 +68,7 @@ class GuidanceTemplateVarsAdderTest extends MockeryTestCase
         ];
     }
 
-    public function testAddWithHtmlEscapeFilter()
+    public function testAddWithHtmlEscapeFilter(): void
     {
         $guidanceTranslatedText = 'Guidance translated text';
 
@@ -88,7 +88,7 @@ class GuidanceTemplateVarsAdderTest extends MockeryTestCase
         );
     }
 
-    public function testAddWithRawFilter()
+    public function testAddWithRawFilter(): void
     {
         $additionalGuidanceTranslatedText = 'Additional guidance translated text';
 
@@ -111,7 +111,7 @@ class GuidanceTemplateVarsAdderTest extends MockeryTestCase
         );
     }
 
-    public function testAddWithSourceArrayElementNotPresent()
+    public function testAddWithSourceArrayElementNotPresent(): void
     {
         $this->assertEquals(
             $this->templateVars,
@@ -119,7 +119,7 @@ class GuidanceTemplateVarsAdderTest extends MockeryTestCase
         );
     }
 
-    public function testUnhandledFilterName()
+    public function testUnhandledFilterName(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unhandled filter name currency');

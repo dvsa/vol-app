@@ -13,7 +13,7 @@ class VehiclesVehicle
         $this->formHelper = $formHelper;
     }
 
-    public function alterForm($form)
+    public function alterForm($form): void
     {
         $this->formHelper->remove($form, 'licence-vehicle->specifiedDate');
         $this->formHelper->remove($form, 'licence-vehicle->removalDate');

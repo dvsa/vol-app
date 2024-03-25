@@ -74,6 +74,8 @@ class IrhpApplicationPeriodController extends AbstractSelfserveController
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function handlePost()
     {

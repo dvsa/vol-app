@@ -51,7 +51,7 @@ class LicenceTransportManagerAdapterTest extends MockeryTestCase
         );
     }
 
-    public function testAddMessages()
+    public function testAddMessages(): void
     {
         $this->mockLvaVariationSrv
             ->shouldReceive('addVariationMessage')

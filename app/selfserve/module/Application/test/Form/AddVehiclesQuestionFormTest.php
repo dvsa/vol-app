@@ -43,7 +43,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
     protected const YES_VALUE_OPTION_LABEL = 'Yes';
     protected const YES_VALUE_OPTION_VALUE = 1;
     protected const NO_VALUE_OPTION_KEY = 'no';
-    protected const NO_VALUE_OPTION_LABEL= 'No';
+    protected const NO_VALUE_OPTION_LABEL = 'No';
     protected const NO_VALUE_OPTION_VALUE = 0;
     protected const NO_VALUE_OPTION_CONDITIONAL_CONTENT = 'application.vehicle.add-details.radio.option.no.conditional-content';
     protected const VALUE_OPTION_SELECTED_KEY = 'selected';
@@ -71,7 +71,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
     /**
      * @test
      */
-    public function __construct_InitialisesACsrfElement()
+    public function constructInitialisesACsrfElement()
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -86,7 +86,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
     /**
      * @test
      */
-    public function __construct_InitialisesANextButtonElement()
+    public function constructInitialisesANextButtonElement()
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -101,7 +101,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
     /**
      * @test
      */
-    public function __construct_InitialisesAReturnToOverviewButtonElement()
+    public function constructInitialisesAReturnToOverviewButtonElement()
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -116,7 +116,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
     /**
      * @test
      */
-    public function __construct_InitialisesARadioElement()
+    public function constructInitialisesARadioElement()
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -131,7 +131,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
     /**
      * @test
      */
-    public function __construct_InitialisesAnApplicationVersionElement()
+    public function constructInitialisesAnApplicationVersionElement()
     {
         // Setup
         $this->setUpSut(static::AN_APPLICATION_VERSION_ELEMENT_NAME);
@@ -146,7 +146,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
     /**
      * @test
      */
-    public function getNextButtonElement_IsCallable()
+    public function getNextButtonElementIsCallable(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -157,10 +157,11 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getNextButtonElement_IsCallable
-     * @depends __construct_InitialisesANextButtonElement
+     *
+     * @depends getNextButtonElementIsCallable
+     * @depends _constructInitialisesANextButtonElement
      */
-    public function getNextButtonElement_ReturnsAnInstanceOfButton()
+    public function getNextButtonElementReturnsAnInstanceOfButton(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -171,9 +172,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getNextButtonElement_ReturnsAnInstanceOfButton
+     *
+     * @depends getNextButtonElementReturnsAnInstanceOfButton
      */
-    public function getNextButtonElement_ReturnsAnInstanceOfButton_WithAName()
+    public function getNextButtonElementReturnsAnInstanceOfButtonWithAName(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -184,9 +186,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getNextButtonElement_ReturnsAnInstanceOfButton
+     *
+     * @depends getNextButtonElementReturnsAnInstanceOfButton
      */
-    public function getNextButtonElement_ReturnsAnInstanceOfButton_WithAValue()
+    public function getNextButtonElementReturnsAnInstanceOfButtonWithAValue(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -197,9 +200,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getNextButtonElement_ReturnsAnInstanceOfButton
+     *
+     * @depends getNextButtonElementReturnsAnInstanceOfButton
      */
-    public function getNextButtonElement_ReturnsAnInstanceOfButton_WithALabel()
+    public function getNextButtonElementReturnsAnInstanceOfButtonWithALabel(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -211,7 +215,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
     /**
      * @test
      */
-    public function getReturnToOverviewButtonElement_IsCallable()
+    public function getReturnToOverviewButtonElementIsCallable(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -222,9 +226,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends __construct_InitialisesAReturnToOverviewButtonElement
+     *
+     * @depends _constructInitialisesAReturnToOverviewButtonElement
      */
-    public function getReturnToOverviewButtonElement_ReturnsAnInstanceOfButton()
+    public function getReturnToOverviewButtonElementReturnsAnInstanceOfButton(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -238,9 +243,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getReturnToOverviewButtonElement_ReturnsAnInstanceOfButton
+     *
+     * @depends getReturnToOverviewButtonElementReturnsAnInstanceOfButton
      */
-    public function getReturnToOverviewButtonElement_ReturnsAnInstanceOfButton_WithAName()
+    public function getReturnToOverviewButtonElementReturnsAnInstanceOfButtonWithAName(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -254,9 +260,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getReturnToOverviewButtonElement_ReturnsAnInstanceOfButton
+     *
+     * @depends getReturnToOverviewButtonElementReturnsAnInstanceOfButton
      */
-    public function getReturnToOverviewButtonElement_ReturnsAnInstanceOfButton_WithAValue()
+    public function getReturnToOverviewButtonElementReturnsAnInstanceOfButtonWithAValue(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -270,9 +277,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getReturnToOverviewButtonElement_ReturnsAnInstanceOfButton
+     *
+     * @depends getReturnToOverviewButtonElementReturnsAnInstanceOfButton
      */
-    public function getReturnToOverviewButtonElement_ReturnsAnInstanceOfButton_WithALabel()
+    public function getReturnToOverviewButtonElementReturnsAnInstanceOfButtonWithALabel(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -287,7 +295,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
     /**
      * @test
      */
-    public function getRadioElement_IsCallable()
+    public function getRadioElementIsCallable(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -298,10 +306,11 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getRadioElement_IsCallable
-     * @depends __construct_InitialisesARadioElement
+     *
+     * @depends getRadioElementIsCallable
+     * @depends _constructInitialisesARadioElement
      */
-    public function getRadioElement_ReturnsARadio()
+    public function getRadioElementReturnsARadio(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -315,9 +324,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getRadioElement_ReturnsARadio
+     *
+     * @depends getRadioElementReturnsARadio
      */
-    public function getRadioElement_ReturnsARadio_WithName()
+    public function getRadioElementReturnsARadioWithName(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -331,9 +341,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getRadioElement_ReturnsARadio
+     *
+     * @depends getRadioElementReturnsARadio
      */
-    public function getRadioElement_ReturnsARadio_WithLabel()
+    public function getRadioElementReturnsARadioWithLabel(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -347,9 +358,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getRadioElement_ReturnsARadio
+     *
+     * @depends getRadioElementReturnsARadio
      */
-    public function getRadioElement_ReturnsARadio_WithHintOption()
+    public function getRadioElementReturnsARadioWithHintOption(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -363,9 +375,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getRadioElement_ReturnsARadio
+     *
+     * @depends getRadioElementReturnsARadio
      */
-    public function getRadioElement_ReturnsARadio_WithYesOption()
+    public function getRadioElementReturnsARadioWithYesOption(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -379,9 +392,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getRadioElement_ReturnsARadio_WithYesOption
+     *
+     * @depends getRadioElementReturnsARadioWithYesOption
      */
-    public function getRadioElement_ReturnsARadio_WithYesOption_ThatIsNotSelected()
+    public function getRadioElementReturnsARadioWithYesOptionThatIsNotSelected(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -395,9 +409,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getRadioElement_ReturnsARadio_WithYesOption
+     *
+     * @depends getRadioElementReturnsARadioWithYesOption
      */
-    public function getRadioElement_ReturnsARadio_WithYesOption_WithLabel()
+    public function getRadioElementReturnsARadioWithYesOptionWithLabel(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -411,9 +426,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getRadioElement_ReturnsARadio
+     *
+     * @depends getRadioElementReturnsARadio
      */
-    public function getRadioElement_ReturnsARadio_WithYesOption_WithValue()
+    public function getRadioElementReturnsARadioWithYesOptionWithValue(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -427,9 +443,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getRadioElement_ReturnsARadio
+     *
+     * @depends getRadioElementReturnsARadio
      */
-    public function getRadioElement_ReturnsARadio_WithNoOption()
+    public function getRadioElementReturnsARadioWithNoOption(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -443,9 +460,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getRadioElement_ReturnsARadio_WithNoOption
+     *
+     * @depends getRadioElementReturnsARadioWithNoOption
      */
-    public function getRadioElement_ReturnsARadio_WithNoOption_ThatIsNotSelected()
+    public function getRadioElementReturnsARadioWithNoOptionThatIsNotSelected(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -459,9 +477,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getRadioElement_ReturnsARadio_WithNoOption
+     *
+     * @depends getRadioElementReturnsARadioWithNoOption
      */
-    public function getRadioElement_ReturnsARadio_WithNoOption_WithLabel()
+    public function getRadioElementReturnsARadioWithNoOptionWithLabel(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -475,9 +494,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getRadioElement_ReturnsARadio_WithNoOption
+     *
+     * @depends getRadioElementReturnsARadioWithNoOption
      */
-    public function getRadioElement_ReturnsARadio_WithNoOption_WithValue()
+    public function getRadioElementReturnsARadioWithNoOptionWithValue(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -491,9 +511,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getRadioElement_ReturnsARadio_WithNoOption
+     *
+     * @depends getRadioElementReturnsARadioWithNoOption
      */
-    public function getRadioElement_ReturnsARadio_WithNoOption_WithConditionalContent()
+    public function getRadioElementReturnsARadioWithNoOptionWithConditionalContent(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -508,7 +529,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
     /**
      * @test
      */
-    public function getSubmitInput_IsCallable()
+    public function getSubmitInputIsCallable(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -519,9 +540,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getSubmitInput_IsCallable
+     *
+     * @depends getSubmitInputIsCallable
      */
-    public function getSubmitInput_ReturnsAnInput()
+    public function getSubmitInputReturnsAnInput(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -532,9 +554,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getSubmitInput_ReturnsAnInput
+     *
+     * @depends getSubmitInputReturnsAnInput
      */
-    public function getSubmitInput_ReturnsInstanceOfInputInterface_ThatIsRequired()
+    public function getSubmitInputReturnsInstanceOfInputInterfaceThatIsRequired(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -549,9 +572,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getSubmitInput_ReturnsAnInput
+     *
+     * @depends getSubmitInputReturnsAnInput
      */
-    public function getSubmitInput_ReturnsInstanceOfInputInterface_ThatRejectsAnInvalidValue()
+    public function getSubmitInputReturnsInstanceOfInputInterfaceThatRejectsAnInvalidValue(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -566,9 +590,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getSubmitInput_ReturnsInstanceOfInputInterface_ThatRejectsAnInvalidValue
+     *
+     * @depends getSubmitInputReturnsInstanceOfInputInterfaceThatRejectsAnInvalidValue
      */
-    public function getSubmitInput_ReturnsInstanceOfInputInterface_ThatRejectsAnInvalidValue_WithACustomMessage()
+    public function getSubmitInputReturnsInstanceOfInputInterfaceThatRejectsAnInvalidValueWithACustomMessage(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -584,7 +609,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
     /**
      * @test
      */
-    public function getRadioInput_IsCallable()
+    public function getRadioInputIsCallable(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -595,10 +620,11 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getRadioInput_IsCallable
-     * @depends __construct_InitialisesARadioElement
+     *
+     * @depends getRadioInputIsCallable
+     * @depends _constructInitialisesARadioElement
      */
-    public function getRadioInput_ReturnsAnInput()
+    public function getRadioInputReturnsAnInput(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -623,10 +649,12 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getRadioInput_ReturnsAnInput
+     *
+     * @depends getRadioInputReturnsAnInput
+     *
      * @dataProvider validSubmitValuesDataProvider
      */
-    public function getRadioInput_ReturnsInputFilter_ThatAcceptsValidValues(string $value)
+    public function getRadioInputReturnsInputFilterThatAcceptsValidValues(string $value): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -641,9 +669,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getRadioInput_ReturnsAnInput
+     *
+     * @depends getRadioInputReturnsAnInput
      */
-    public function getRadioInput_ReturnsInputFilter_ThatIsRequired()
+    public function getRadioInputReturnsInputFilterThatIsRequired(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -672,11 +701,14 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @param mixed $value
+     *
      * @test
-     * @depends getRadioInput_ReturnsAnInput
+     *
+     * @depends getRadioInputReturnsAnInput
+     *
      * @dataProvider invalidRadioValueDataProvider
      */
-    public function getRadioInput_ReturnsInputFilter_ThatRejectsAnInvalidValue($value)
+    public function getRadioInputReturnsInputFilterThatRejectsAnInvalidValue($value): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -691,9 +723,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getRadioInput_ReturnsAnInput
+     *
+     * @depends getRadioInputReturnsAnInput
      */
-    public function getRadioInput_ReturnsInputFilter_ThatRejectsAnInvalidValue_WithCustomMessageFor_InArray_NotInArrayRule()
+    public function getRadioInputReturnsInputFilterThatRejectsAnInvalidValueWithCustomMessageForInArrayNotInArrayRule(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -740,7 +773,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
     /**
      * @test
      */
-    public function isValid_IsCallable()
+    public function isValidIsCallable(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -752,7 +785,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
     /**
      * @test
      */
-    public function userHasOptedToContinueToTheNextStep_IsCallable()
+    public function userHasOptedToContinueToTheNextStepIsCallable(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -763,11 +796,12 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends userHasOptedToContinueToTheNextStep_IsCallable
-     * @depends __construct_InitialisesANextButtonElement
-     * @depends isValid_IsCallable
+     *
+     * @depends userHasOptedToContinueToTheNextStepIsCallable
+     * @depends _constructInitialisesANextButtonElement
+     * @depends isValidIsCallable
      */
-    public function userHasOptedToContinueToTheNextStep_ReturnsTrueWhenSubmitValueIsNext()
+    public function userHasOptedToContinueToTheNextStepReturnsTrueWhenSubmitValueIsNext(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -783,11 +817,12 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends userHasOptedToContinueToTheNextStep_IsCallable
-     * @depends __construct_InitialisesANextButtonElement
-     * @depends isValid_IsCallable
+     *
+     * @depends userHasOptedToContinueToTheNextStepIsCallable
+     * @depends _constructInitialisesANextButtonElement
+     * @depends isValidIsCallable
      */
-    public function userHasOptedToContinueToTheNextStep_ReturnsFalseWhenSubmitValueIsOverview()
+    public function userHasOptedToContinueToTheNextStepReturnsFalseWhenSubmitValueIsOverview(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -803,11 +838,12 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends userHasOptedToContinueToTheNextStep_IsCallable
-     * @depends __construct_InitialisesANextButtonElement
-     * @depends isValid_IsCallable
+     *
+     * @depends userHasOptedToContinueToTheNextStepIsCallable
+     * @depends _constructInitialisesANextButtonElement
+     * @depends isValidIsCallable
      */
-    public function userHasOptedToContinueToTheNextStep_ReturnsFalseWhenSubmitValueIsInvalid()
+    public function userHasOptedToContinueToTheNextStepReturnsFalseWhenSubmitValueIsInvalid(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -824,7 +860,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
     /**
      * @test
      */
-    public function userHasOptedToSubmitVehicleDetails_IsCallable()
+    public function userHasOptedToSubmitVehicleDetailsIsCallable(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -835,13 +871,16 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @param mixed $yesValue
+     *
      * @test
-     * @depends userHasOptedToSubmitVehicleDetails_IsCallable
-     * @depends __construct_InitialisesARadioElement
-     * @depends isValid_IsCallable
+     *
+     * @depends userHasOptedToSubmitVehicleDetailsIsCallable
+     * @depends _constructInitialisesARadioElement
+     * @depends isValidIsCallable
+     *
      * @dataProvider yesRadioValidValuesDataProvider
      */
-    public function userHasOptedToSubmitVehicleDetails_ReturnsTrueWhenRadioValueIsYes($yesValue)
+    public function userHasOptedToSubmitVehicleDetailsReturnsTrueWhenRadioValueIsYes($yesValue): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -857,13 +896,16 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @param mixed $noValue
+     *
      * @test
-     * @depends userHasOptedToSubmitVehicleDetails_IsCallable
-     * @depends __construct_InitialisesARadioElement
-     * @depends isValid_IsCallable
+     *
+     * @depends userHasOptedToSubmitVehicleDetailsIsCallable
+     * @depends _constructInitialisesARadioElement
+     * @depends isValidIsCallable
+     *
      * @dataProvider noRadioValidValuesDataProvider
      */
-    public function userHasOptedToSubmitVehicleDetails_ReturnsFalseWhenRadioValueIsNo($noValue)
+    public function userHasOptedToSubmitVehicleDetailsReturnsFalseWhenRadioValueIsNo($noValue): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -879,11 +921,12 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends userHasOptedToSubmitVehicleDetails_IsCallable
-     * @depends __construct_InitialisesARadioElement
-     * @depends isValid_IsCallable
+     *
+     * @depends userHasOptedToSubmitVehicleDetailsIsCallable
+     * @depends _constructInitialisesARadioElement
+     * @depends isValidIsCallable
      */
-    public function userHasOptedToSubmitVehicleDetails_ReturnsFalseWhenRadioValueIsInvalid()
+    public function userHasOptedToSubmitVehicleDetailsReturnsFalseWhenRadioValueIsInvalid(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -900,7 +943,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
     /**
      * @test
      */
-    public function userHasOptedNotToSubmitVehicleDetails_IsCallable()
+    public function userHasOptedNotToSubmitVehicleDetailsIsCallable(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -911,13 +954,16 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @param mixed $noValue
+     *
      * @test
-     * @depends userHasOptedNotToSubmitVehicleDetails_IsCallable
-     * @depends __construct_InitialisesARadioElement
-     * @depends isValid_IsCallable
+     *
+     * @depends userHasOptedNotToSubmitVehicleDetailsIsCallable
+     * @depends _constructInitialisesARadioElement
+     * @depends isValidIsCallable
+     *
      * @dataProvider noRadioValidValuesDataProvider
      */
-    public function userHasOptedNotToSubmitVehicleDetails_ReturnsTrueWhenRadioValueIsNo($noValue)
+    public function userHasOptedNotToSubmitVehicleDetailsReturnsTrueWhenRadioValueIsNo($noValue): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -933,13 +979,16 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @param mixed $yesValue
+     *
      * @test
-     * @depends userHasOptedNotToSubmitVehicleDetails_IsCallable
-     * @depends __construct_InitialisesARadioElement
-     * @depends isValid_IsCallable
+     *
+     * @depends userHasOptedNotToSubmitVehicleDetailsIsCallable
+     * @depends _constructInitialisesARadioElement
+     * @depends isValidIsCallable
+     *
      * @dataProvider yesRadioValidValuesDataProvider
      */
-    public function userHasOptedNotToSubmitVehicleDetails_ReturnsFalseWhenRadioValueIsYes($yesValue)
+    public function userHasOptedNotToSubmitVehicleDetailsReturnsFalseWhenRadioValueIsYes($yesValue): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -955,11 +1004,12 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends userHasOptedNotToSubmitVehicleDetails_IsCallable
-     * @depends __construct_InitialisesARadioElement
-     * @depends isValid_IsCallable
+     *
+     * @depends userHasOptedNotToSubmitVehicleDetailsIsCallable
+     * @depends _constructInitialisesARadioElement
+     * @depends isValidIsCallable
      */
-    public function userHasOptedNotToSubmitVehicleDetails_ReturnsFalseWhenRadioValueIsInvalid()
+    public function userHasOptedNotToSubmitVehicleDetailsReturnsFalseWhenRadioValueIsInvalid(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -976,7 +1026,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
     /**
      * @test
      */
-    public function getApplicationVersionElement_IsCallable()
+    public function getApplicationVersionElementIsCallable(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -987,10 +1037,11 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getApplicationVersionElement_IsCallable
-     * @depends __construct_InitialisesAnApplicationVersionElement
+     *
+     * @depends getApplicationVersionElementIsCallable
+     * @depends _constructInitialisesAnApplicationVersionElement
      */
-    public function getApplicationVersionElement_ReturnsInstanceOfHidden()
+    public function getApplicationVersionElementReturnsInstanceOfHidden(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -1005,7 +1056,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
     /**
      * @test
      */
-    public function getApplicationVersionInput_IsCallable()
+    public function getApplicationVersionInputIsCallable(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -1016,9 +1067,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getApplicationVersionInput_IsCallable
+     *
+     * @depends getApplicationVersionInputIsCallable
      */
-    public function getApplicationVersionInput_ReturnsAnInput()
+    public function getApplicationVersionInputReturnsAnInput(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -1032,9 +1084,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getApplicationVersionInput_IsCallable
+     *
+     * @depends getApplicationVersionInputIsCallable
      */
-    public function getApplicationVersionInput_ReturnsAnInstanceOfInput_WithAnEmptyValidatorChain()
+    public function getApplicationVersionInputReturnsAnInstanceOfInputWithAnEmptyValidatorChain(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -1048,9 +1101,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends getApplicationVersionInput_ReturnsAnInput
+     *
+     * @depends getApplicationVersionInputReturnsAnInput
      */
-    public function getApplicationVersionInput_IsNotRequired()
+    public function getApplicationVersionInputIsNotRequired(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -1065,7 +1119,7 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
     /**
      * @test
      */
-    public function selectNo_IsCallable()
+    public function selectNoIsCallable(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -1076,9 +1130,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends selectNo_IsCallable
+     *
+     * @depends selectNoIsCallable
      */
-    public function selectNo_ReturnsSelf()
+    public function selectNoReturnsSelf(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -1092,9 +1147,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends selectNo_IsCallable
+     *
+     * @depends selectNoIsCallable
      */
-    public function selectNo_AddsRadioToData()
+    public function selectNoAddsRadioToData(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -1109,10 +1165,11 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends selectNo_IsCallable
-     * @depends getRadioInput_ReturnsAnInput
+     *
+     * @depends selectNoIsCallable
+     * @depends getRadioInputReturnsAnInput
      */
-    public function selectNo_AddsRadioToInputFilterData()
+    public function selectNoAddsRadioToInputFilterData(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -1122,13 +1179,13 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $result->isValid();
 
         // Assert
-        $this->assertSame(static::NO_VALUE_OPTION_VALUE, $this->sut->getRadioInput()->getValue());
+        $this->assertSame(static::NO_VALUE_OPTION_VALUE, $this->sut->getRadioInput()->getValue('application-version'));
     }
 
     /**
      * @test
      */
-    public function selectYes_IsCallable()
+    public function selectYesIsCallable(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -1139,9 +1196,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends selectYes_IsCallable
+     *
+     * @depends selectYesIsCallable
      */
-    public function selectYes_ReturnsSelf()
+    public function selectYesReturnsSelf(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -1155,9 +1213,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends selectYes_IsCallable
+     *
+     * @depends selectYesIsCallable
      */
-    public function selectYes_AddsRadioToData()
+    public function selectYesAddsRadioToData(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -1172,10 +1231,11 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends selectYes_IsCallable
-     * @depends getRadioInput_ReturnsAnInput
+     *
+     * @depends selectYesIsCallable
+     * @depends getRadioInputReturnsAnInput
      */
-    public function selectYes_AddsRadioToInputFilterData()
+    public function selectYesAddsRadioToInputFilterData(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -1185,13 +1245,13 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $result->isValid();
 
         // Assert
-        $this->assertSame(static::YES_VALUE_OPTION_VALUE, $this->sut->getRadioInput()->getValue());
+        $this->assertSame(static::YES_VALUE_OPTION_VALUE, $this->sut->getRadioInput()->getValue('application-version'));
     }
 
     /**
      * @test
      */
-    public function setApplicationVersion_IsCallable()
+    public function setApplicationVersionIsCallable(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -1202,9 +1262,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends setApplicationVersion_IsCallable
+     *
+     * @depends setApplicationVersionIsCallable
      */
-    public function setApplicationVersion_ReturnsSelf()
+    public function setApplicationVersionReturnsSelf(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -1218,9 +1279,10 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends setApplicationVersion_IsCallable
+     *
+     * @depends setApplicationVersionIsCallable
      */
-    public function setApplicationVersion_AddsApplicationVersionToData()
+    public function setApplicationVersionAddsApplicationVersionToData(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -1235,10 +1297,11 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends setApplicationVersion_IsCallable
-     * @depends getApplicationVersionInput_ReturnsAnInput
+     *
+     * @depends setApplicationVersionIsCallable
+     * @depends getApplicationVersionInputReturnsAnInput
      */
-    public function setApplicationVersion_AddsApplicationVersionToInputFilterData()
+    public function setApplicationVersionAddsApplicationVersionToInputFilterData(): void
     {
         // Setup
         $this->setUpSut(static::A_FORM_NAME);
@@ -1248,13 +1311,13 @@ class AddVehiclesQuestionFormTest extends MockeryTestCase
         $result->isValid();
 
         // Assert
-        $this->assertSame(static::AN_APPLICATION_VERSION, $this->sut->getApplicationVersionInput()->getValue());
+        $this->assertSame(static::AN_APPLICATION_VERSION, $this->sut->getApplicationVersionInput()->getValue('application-version'));
     }
 
     /**
      * @param string $name
      */
-    protected function setUpSut(string $name)
+    protected function setUpSut(string $name): void
     {
         $this->sut = new AddVehiclesQuestionForm($name);
     }

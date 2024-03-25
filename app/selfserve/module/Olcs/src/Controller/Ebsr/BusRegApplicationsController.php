@@ -81,7 +81,7 @@ class BusRegApplicationsController extends AbstractController
     /**
      * Lists all EBSR's with filter search form
      *
-     * @return array|Response|ViewModel
+     * @return Response|ViewModel|null
      */
     public function indexAction()
     {
@@ -229,7 +229,7 @@ class BusRegApplicationsController extends AbstractController
     /**
      * Search result :: Bus registration details page
      *
-     * @return ViewModel
+     * @return ViewModel|array|null
      */
     public function searchDetailsAction()
     {
@@ -248,7 +248,7 @@ class BusRegApplicationsController extends AbstractController
     /**
      * Bus registration details page
      *
-     * @return ViewModel
+     * @return Response|ViewModel|array|null
      */
     public function detailsAction()
     {
@@ -350,9 +350,9 @@ class BusRegApplicationsController extends AbstractController
      * @param int  $busRegId     the bus reg id
      * @param bool $isSearchPage Is this for the search version of the page
      *
-     * @return array|string
+     * @return null|string
      */
-    private function fetchVariationHistoryTable($busRegId, $isSearchPage)
+    private function fetchVariationHistoryTable($busRegId, $isSearchPage): ?string
     {
         /** @var \Common\Service\Table\TableBuilder $tableBuilder */
         $tableBuilder = $this->tableFactory;

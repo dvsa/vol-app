@@ -13,7 +13,7 @@ class CookieStateTest extends MockeryTestCase
     /**
      * @dataProvider dpIsValid
      */
-    public function testIsValid($isValid)
+    public function testIsValid($isValid): void
     {
         $sut = new CookieState($isValid, m::mock(Preferences::class));
 
@@ -23,7 +23,12 @@ class CookieStateTest extends MockeryTestCase
         );
     }
 
-    public function dpIsValid()
+    /**
+     * @return bool[][]
+     *
+     * @psalm-return list{list{true}, list{false}}
+     */
+    public function dpIsValid(): array
     {
         return [
             [true],
@@ -31,7 +36,7 @@ class CookieStateTest extends MockeryTestCase
         ];
     }
 
-    public function testGetPreferencesWhenIsValid()
+    public function testGetPreferencesWhenIsValid(): void
     {
         $preferences = m::mock(Preferences::class);
 
@@ -43,7 +48,7 @@ class CookieStateTest extends MockeryTestCase
         );
     }
 
-    public function testGetPreferencesWhenIsNotValid()
+    public function testGetPreferencesWhenIsNotValid(): void
     {
         $this->expectException(RuntimeException::class);
 
@@ -52,7 +57,7 @@ class CookieStateTest extends MockeryTestCase
         $sut->getPreferences();
     }
 
-    public function testIsActiveWhenIsValid()
+    public function testIsActiveWhenIsValid(): void
     {
         $preferences = m::mock(Preferences::class);
         $preferences->shouldReceive('isActive')
@@ -70,7 +75,7 @@ class CookieStateTest extends MockeryTestCase
         $this->assertFalse($sut->isActive(Preferences::KEY_SETTINGS));
     }
 
-    public function testIsActiveWhenIsNotValid()
+    public function testIsActiveWhenIsNotValid(): void
     {
         $sut = new CookieState(false);
 

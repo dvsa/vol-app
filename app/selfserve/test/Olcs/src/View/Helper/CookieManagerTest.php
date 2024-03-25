@@ -22,7 +22,7 @@ class CookieManagerTest extends MockeryTestCase
         $this->sut = new CookieManager($this->config);
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $this->assertEquals('"TEST"', $this->sut->__invoke());
     }

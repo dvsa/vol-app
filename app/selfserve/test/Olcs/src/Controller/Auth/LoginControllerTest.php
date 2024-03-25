@@ -116,7 +116,7 @@ class LoginControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_IsCallable()
+    public function indexActionIsCallable(): void
     {
         // Setup
 
@@ -129,7 +129,7 @@ class LoginControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_RedirectsToDashboard_WhenUserAlreadyLoggedIn()
+    public function indexActionRedirectsToDashboardWhenUserAlreadyLoggedIn(): void
     {
         // Setup
         $this->setUpSut();
@@ -145,7 +145,7 @@ class LoginControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_ReturnsViewModel()
+    public function indexActionReturnsViewModel(): void
     {
         // Setup
         $this->setUpSut();
@@ -162,7 +162,7 @@ class LoginControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_ReturnsViewModel_WithLoginForm()
+    public function indexActionReturnsViewModelWithLoginForm(): void
     {
         // Setup
         $this->setUpSut();
@@ -179,7 +179,7 @@ class LoginControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_SetsFormData_WhenHasBeenStoredInSession()
+    public function indexActionSetsFormDataWhenHasBeenStoredInSession(): void
     {
         // Setup
         $this->setUpSut();
@@ -210,7 +210,7 @@ class LoginControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_ReturnsViewModel_WithFailureReason_WhenAuthenticationFails()
+    public function indexActionReturnsViewModelWithFailureReasonWhenAuthenticationFails(): void
     {
         // Setup
         $this->setUpSut();
@@ -236,7 +236,7 @@ class LoginControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function postAction_IsCallable()
+    public function postActionIsCallable(): void
     {
         // Setup
 
@@ -249,7 +249,7 @@ class LoginControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    protected function postAction_RedirectsToDashboard_WhenUserAlreadyLoggedIn()
+    protected function postActionRedirectsToDashboardWhenUserAlreadyLoggedIn(): void
     {
         // Setup
         $this->setUpSut();
@@ -265,7 +265,7 @@ class LoginControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function postAction_FlashesFormData_WhenFormInvalid()
+    public function postActionFlashesFormDataWhenFormInvalid(): void
     {
         // Setup
         $this->setUpSut();
@@ -285,7 +285,7 @@ class LoginControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function postAction_SuccessfulAuth_RedirectsToDashBoard_WhenGotoNotPresent()
+    public function postActionSuccessfulAuthRedirectsToDashBoardWhenGotoNotPresent(): void
     {
         // Setup
         $this->setUpSut();
@@ -306,7 +306,7 @@ class LoginControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function postAction_SuccessfulAuth_RedirectsToGoto_WhenPresentAndValid()
+    public function postActionSuccessfulAuthRedirectsToGotoWhenPresentAndValid(): void
     {
         // Setup
         $this->setUpSut();
@@ -332,7 +332,7 @@ class LoginControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function postAction_SuccessfulOAuth_RedirectsToDashboard_WhenGotoPresentAndInvalid()
+    public function postActionSuccessfulOAuthRedirectsToDashboardWhenGotoPresentAndInvalid(): void
     {
         // Setup
         $this->setUpSut();
@@ -357,7 +357,7 @@ class LoginControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function postAction_NewPasswordRequiredChallenge_StoresChallengeInSession()
+    public function postActionNewPasswordRequiredChallengeStoresChallengeInSession(): void
     {
         // Setup
         $this->setUpSut();
@@ -390,7 +390,7 @@ class LoginControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function postAction_NewPasswordRequiredChallenge_RedirectsToExpiredPassword()
+    public function postActionNewPasswordRequiredChallengeRedirectsToExpiredPassword(): void
     {
         // Setup
         $this->setUpSut();
@@ -417,7 +417,7 @@ class LoginControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function postAction_UnsupportedChallenge_RedirectsToLoginPage()
+    public function postActionUnsupportedChallengeRedirectsToLoginPage(): void
     {
         // Setup
         $this->setUpSut();
@@ -440,7 +440,7 @@ class LoginControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function postAction_FailedAuthentication_RedirectsToLoginPage()
+    public function postActionFailedAuthenticationRedirectsToLoginPage(): void
     {
         // Setup
         $this->setUpSut();
@@ -464,7 +464,7 @@ class LoginControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function postAction_FailedAuthentication_FlashesInvalidUsernameOrPasswordByDefault()
+    public function postActionFailedAuthenticationFlashesInvalidUsernameOrPasswordByDefault(): void
     {
         // Setup
         $this->setUpSut();
@@ -490,7 +490,7 @@ class LoginControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function postAction_FailedAuthentication_FlashesInvalidUsernameOrPasswordWhenUserNotExists()
+    public function postActionFailedAuthenticationFlashesInvalidUsernameOrPasswordWhenUserNotExists(): void
     {
         // Setup
         $this->setUpSut();
@@ -514,7 +514,7 @@ class LoginControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function postAction_FailedAuthentication_FlashesInvalidUsernameOrPasswordWhenPasswordIncorrect()
+    public function postActionFailedAuthenticationFlashesInvalidUsernameOrPasswordWhenPasswordIncorrect(): void
     {
         // Setup
         $this->setUpSut();
@@ -538,7 +538,7 @@ class LoginControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function postAction_FailedAuthentication_FlashesAccountDisabledWhenAuthenticationResult_IsFailureAccountDisabled()
+    public function postActionFailedAuthenticationFlashesAccountDisabledWhenAuthenticationResultIsFailureAccountDisabled(): void
     {
         // Setup
         $this->setUpSut();
@@ -559,7 +559,7 @@ class LoginControllerTest extends MockeryTestCase
         $this->sut->postAction($request, new RouteMatch([]), new Response());
     }
 
-    protected function setUpSut()
+    protected function setUpSut(): void
     {
         $this->setUpDefaultServices();
         $this->sut = new LoginController(
@@ -573,26 +573,26 @@ class LoginControllerTest extends MockeryTestCase
         );
     }
 
-    protected function setUpDefaultServices()
+    protected function setUpDefaultServices(): void
     {
         $this->currentUser();
         $this->formHelper();
         $this->redirectHelper();
     }
 
-    protected function currentUser()
+    protected function currentUser(): void
     {
         $this->currentUserMock->allows('getIdentity')->andReturn($this->identity())->byDefault();
     }
 
-    protected function identity(bool $isAnonymous = true)
+    protected function identity(bool $isAnonymous = true): m\LegacyMockInterface
     {
         $identity = m::mock(User::class);
         $identity->shouldReceive('isAnonymous')->andReturn($isAnonymous);
         return $identity;
     }
 
-    protected function formHelper()
+    protected function formHelper(): void
     {
         $this->formHelperMock->allows('createForm')->andReturnUsing(function () {
             $formBuilder = new AnnotationBuilder();
@@ -600,7 +600,7 @@ class LoginControllerTest extends MockeryTestCase
         })->byDefault();
     }
 
-    protected function redirectHelper()
+    protected function redirectHelper(): void
     {
         $this->redirectHelperMock->allows('toRoute')->andReturn($this->redirect())->byDefault();
     }
@@ -629,7 +629,7 @@ class LoginControllerTest extends MockeryTestCase
         return $request;
     }
 
-    private static function setupLogger()
+    private static function setupLogger(): void
     {
         $logWriter = new \Laminas\Log\Writer\Mock();
         $logger = new \Laminas\Log\Logger();

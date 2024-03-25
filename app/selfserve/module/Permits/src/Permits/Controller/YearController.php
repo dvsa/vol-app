@@ -71,6 +71,8 @@ class YearController extends AbstractSelfserveController
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function retrieveData()
     {
@@ -86,6 +88,8 @@ class YearController extends AbstractSelfserveController
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function mergeTemplateVars()
     {
@@ -102,7 +106,9 @@ class YearController extends AbstractSelfserveController
      * @param array $config
      * @param array $params
      *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings (PHPMD.UnusedFormalParameter)
+     *
+     * @return void
      */
     public function handlePostCommand(array &$config, array $params)
     {

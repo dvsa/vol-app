@@ -32,7 +32,7 @@ class ApplicationPeople extends CommonApplicationPeople
      * @param Form  $form   Form
      * @param array $params Parameters for form
      *
-     * @return Form
+     * @return void
      */
     public function alterForm(Form $form, array $params = [])
     {

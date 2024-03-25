@@ -24,7 +24,7 @@ class TypeOfLicenceControllerTest extends m\Adapter\Phpunit\MockeryTestCase
     /**
      * Tests index details action for licence entity Non Partner
      */
-    public function testCannotUpdateLicenceTypeReturnsMessageToChangeToVariation()
+    public function testCannotUpdateLicenceTypeReturnsMessageToChangeToVariation(): void
     {
         $this->assertInstanceOf(AbstractTypeOfLicenceController::class, new TypeOfLicenceController(
             m::mock(NiTextTranslation::class)->makePartial(),

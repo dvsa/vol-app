@@ -13,7 +13,6 @@ use Dvsa\Olcs\Application\Controller\FinancialHistoryController;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
-
 use LmcRbacMvc\Service\AuthorizationService;
 
 class FinancialHistoryControllerFactory implements FactoryInterface

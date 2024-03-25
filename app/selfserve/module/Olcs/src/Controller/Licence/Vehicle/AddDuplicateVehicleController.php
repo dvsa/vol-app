@@ -63,7 +63,7 @@ class AddDuplicateVehicleController extends AbstractVehicleController
     }
 
     /**
-     * @return \Laminas\Http\Response
+     * @return \Laminas\Http\Response|\Laminas\View\Model\ViewModel|null
      */
     public function postAction()
     {

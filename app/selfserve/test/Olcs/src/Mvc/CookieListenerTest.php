@@ -3,6 +3,7 @@
 /**
  * Cookie Listener Test
  */
+
 namespace OlcsTest\Mvc;
 
 use Mockery as m;
@@ -37,7 +38,7 @@ class CookieListenerTest extends MockeryTestCase
         $this->sut = new CookieListener($this->cookieReader, $this->placeholder);
     }
 
-    public function testAttach()
+    public function testAttach(): void
     {
         $em = m::mock(EventManagerInterface::class);
         $em->shouldReceive('attach')->with(MvcEvent::EVENT_ROUTE, [$this->sut, 'onRoute'], 1)->once();
@@ -45,7 +46,7 @@ class CookieListenerTest extends MockeryTestCase
         $this->sut->attach($em);
     }
 
-    public function testOnRouteNonHttp()
+    public function testOnRouteNonHttp(): void
     {
         $request = m::mock();
 
@@ -58,7 +59,7 @@ class CookieListenerTest extends MockeryTestCase
         $this->sut->onRoute($event);
     }
 
-    public function testOnRoute()
+    public function testOnRoute(): void
     {
         $isActive = true;
 

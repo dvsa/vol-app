@@ -94,6 +94,9 @@ class IrhpApplicationCountryController extends AbstractSelfserveController
         return parent::onDispatch($e);
     }
 
+    /**
+     * @return void
+     */
     public function mergeTemplateVars()
     {
         if (!isset($this->queryParams['fromOverview'])) {
@@ -109,6 +112,8 @@ class IrhpApplicationCountryController extends AbstractSelfserveController
     /**
      * Extend method to allow the selected checkboxes to be determined by a list of country codes specified on the
      * querystring. Used by back button and cancel button on countries confirmation page
+     *
+     * @return void
      */
     public function retrieveForms()
     {

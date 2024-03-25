@@ -30,6 +30,8 @@ class ApplicationBusinessDetails extends CommonApplicationBusinessDetails
      *
      * @param Form  $form   form
      * @param array $params params
+     *
+     * @return void
      */
     public function alterForm($form, $params)
     {

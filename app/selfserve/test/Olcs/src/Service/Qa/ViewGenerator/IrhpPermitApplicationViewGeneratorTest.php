@@ -21,7 +21,7 @@ class IrhpPermitApplicationViewGeneratorTest extends MockeryTestCase
         $this->irhpPermitApplicationViewGenerator = new IrhpPermitApplicationViewGenerator();
     }
 
-    public function testGetTemplateName()
+    public function testGetTemplateName(): void
     {
         $this->assertEquals(
             'permits/single-question-bilateral',
@@ -29,7 +29,7 @@ class IrhpPermitApplicationViewGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function testGetAdditionalViewVariablesPreviousStepPresent()
+    public function testGetAdditionalViewVariablesPreviousStepPresent(): void
     {
         $matchedRouteName = 'ipaQuestion';
         $countryName = 'Germany';
@@ -78,7 +78,7 @@ class IrhpPermitApplicationViewGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function testGetAdditionalViewVariablesPreviousStepNotPresent()
+    public function testGetAdditionalViewVariablesPreviousStepNotPresent(): void
     {
         $countryName = 'Germany';
         $countryCode = 'DE';
@@ -121,7 +121,7 @@ class IrhpPermitApplicationViewGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function testHandleRedirectionRequestOverview()
+    public function testHandleRedirectionRequestOverview(): void
     {
         $routeParams = ['id' => 100007];
 
@@ -141,7 +141,7 @@ class IrhpPermitApplicationViewGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function testHandleRedirectionRequestCancel()
+    public function testHandleRedirectionRequestCancel(): void
     {
         $id = 100007;
         $slug = 'page-slug';
@@ -181,7 +181,7 @@ class IrhpPermitApplicationViewGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function testHandleRedirectionRequestException()
+    public function testHandleRedirectionRequestException(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage(

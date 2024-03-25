@@ -43,14 +43,17 @@ class MyDetailsControllerTest extends TestCase
         $this->setMockedProperties($reflectionClass, 'formHelper', $this->mockformHelper);
     }
 
-    public function setMockedProperties($reflectionClass, $property, $value)
+    /**
+     * @psalm-param ReflectionClass<Sut> $reflectionClass
+     */
+    public function setMockedProperties(ReflectionClass $reflectionClass, string $property, m\LegacyMockInterface $value): void
     {
         $reflectionProperty = $reflectionClass->getProperty($property);
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->sut, $value);
     }
 
-    public function testEditActionForGet()
+    public function testEditActionForGet(): void
     {
         $rawEditData = [
             'id' => 3,
@@ -125,7 +128,7 @@ class MyDetailsControllerTest extends TestCase
         $this->assertInstanceOf(Form::class, $view->getVariable('form'));
     }
 
-    public function testEditActionForGetWithError()
+    public function testEditActionForGetWithError(): void
     {
         $mockRequest = m::mock(Request::class);
         $mockRequest->shouldReceive('isPost')->andReturn(false);
@@ -174,7 +177,7 @@ class MyDetailsControllerTest extends TestCase
         $this->assertInstanceOf(Form::class, $view->getVariable('form'));
     }
 
-    public function testEditActionForPost()
+    public function testEditActionForPost(): void
     {
         $rawEditData = [
             'id' => 3,
@@ -250,7 +253,7 @@ class MyDetailsControllerTest extends TestCase
         $this->assertEquals('REDIRECT', $this->sut->editAction());
     }
 
-    public function testEditActionForPostWithError()
+    public function testEditActionForPostWithError(): void
     {
         $rawEditData = [
             'id' => 3,
@@ -344,7 +347,7 @@ class MyDetailsControllerTest extends TestCase
         $this->assertInstanceOf(Form::class, $view->getVariable('form'));
     }
 
-    public function testEditActionForPostWithCancel()
+    public function testEditActionForPostWithCancel(): void
     {
         $rawEditData = [
             'id' => 3,

@@ -74,6 +74,8 @@ class IrhpApplicationController extends AbstractSelfserveController
 
     /**
      * Retrieve data for the specified DTOs
+     *
+     * @return void
      */
     public function retrieveData()
     {

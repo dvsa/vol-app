@@ -15,7 +15,7 @@ class ViewGeneratorProviderFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : ViewGeneratorProvider
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ViewGeneratorProvider
     {
         $viewGeneratorProvider = new ViewGeneratorProvider();
         $viewGeneratorProvider->registerViewGenerator(

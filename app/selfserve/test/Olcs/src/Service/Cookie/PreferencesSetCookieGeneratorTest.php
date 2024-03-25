@@ -12,7 +12,7 @@ use Laminas\Http\Header\SetCookie;
 
 class PreferencesSetCookieGeneratorTest extends MockeryTestCase
 {
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $setCookie = m::mock(SetCookie::class);
 

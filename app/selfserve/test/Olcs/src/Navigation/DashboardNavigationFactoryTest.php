@@ -11,7 +11,7 @@ use Olcs\Navigation\DashboardNavigationFactory;
  */
 class DashboardNavigationFactoryTest extends \PHPUnit\Framework\TestCase
 {
-    public function testGetName()
+    public function testGetName(): void
     {
         $sut = new DashboardNavigationFactory();
 

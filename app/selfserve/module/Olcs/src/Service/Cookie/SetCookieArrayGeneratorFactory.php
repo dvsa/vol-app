@@ -15,7 +15,7 @@ class SetCookieArrayGeneratorFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : SetCookieArrayGenerator
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SetCookieArrayGenerator
     {
         return new SetCookieArrayGenerator(
             $container->get('CookieDeleteCookieNamesProvider'),

@@ -161,7 +161,7 @@ class MyDetailsController extends AbstractController
     /**
      * @param Form $form
      */
-    private function lockNameFields(Form $form)
+    private function lockNameFields(Form $form): void
     {
         $fieldSet = $form->get('main');
 

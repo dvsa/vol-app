@@ -30,7 +30,7 @@ class SignatureVerificationController extends AbstractSelfserveController
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager);
     }
 
-    public function indexAction()
+    public function indexAction(): \Laminas\Http\Response
     {
         $response = $this->handleCommand(ProcessAuthResponse::create([
             'error' => $this->getRequest()->getQuery('error'),

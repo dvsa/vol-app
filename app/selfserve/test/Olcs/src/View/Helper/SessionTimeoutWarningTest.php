@@ -16,8 +16,8 @@ class SessionTimeoutWarningTest extends MockeryTestCase
      * Stores ini_get('session.gc_maxlifetime').
      */
     private int $sessionGcMaxLifeTime;
-    private CONST secondsBeforeExpiryWarning = 60;
-    private CONST timeoutRedirectUrl = 'some-url';
+    private const SECONDS_BEFORE_TIMEOUT_WARNING = 60;
+    private const TIMEOUT_REDIRECT_URL = 'some-url';
 
     public function setUp(): void
     {
@@ -27,7 +27,7 @@ class SessionTimeoutWarningTest extends MockeryTestCase
     /**
      * @test
      */
-    public function generateHeadMetaTags_ConfigSetToDisabled_RendersNothing(): void
+    public function generateHeadMetaTagsConfigSetToDisabledRendersNothing(): void
     {
         $headMeta = m::mock(HeadMeta::class);
         $sut = $this->setupSessionTimeoutWarning($headMeta);
@@ -38,21 +38,24 @@ class SessionTimeoutWarningTest extends MockeryTestCase
     /**
      * @test
      */
-    public function generateHeadMetaTags_ConfigSetToEnabled_RendersMetaTags(): void
+    public function generateHeadMetaTagsConfigSetToEnabledRendersMetaTags(): void
     {
         $indent = 999;
-        $warningTimeout = $this->sessionGcMaxLifeTime - self::secondsBeforeExpiryWarning;
+        $warningTimeout = $this->sessionGcMaxLifeTime - self::SECONDS_BEFORE_TIMEOUT_WARNING;
         $expectedResult = 'some-string';
 
         $headMeta = m::mock(HeadMeta::class);
         $headMeta->expects('appendName')->with(
-            SessionTimeoutWarning::META_TAG_NAME_SESSION_WARNING_TIMEOUT, $warningTimeout
+            SessionTimeoutWarning::META_TAG_NAME_SESSION_WARNING_TIMEOUT,
+            $warningTimeout
         );
         $headMeta->expects('appendName')->with(
-            SessionTimeoutWarning::META_TAG_NAME_SESSION_REDIRECT_TIMEOUT, $this->sessionGcMaxLifeTime
+            SessionTimeoutWarning::META_TAG_NAME_SESSION_REDIRECT_TIMEOUT,
+            $this->sessionGcMaxLifeTime
         );
         $headMeta->expects('appendName')->with(
-            SessionTimeoutWarning::META_TAG_NAME_TIMEOUT_REDIRECT_URL, self::timeoutRedirectUrl
+            SessionTimeoutWarning::META_TAG_NAME_TIMEOUT_REDIRECT_URL,
+            self::TIMEOUT_REDIRECT_URL
         );
         $headMeta->expects('toString')->with($indent)->andReturn($expectedResult);
 
@@ -66,24 +69,23 @@ class SessionTimeoutWarningTest extends MockeryTestCase
      * Builds a SessionTimeoutWarning object with default mocks.
      *
      * @param bool $enabled
-     * @param int $secondsBeforeExpiryWarning
+     * @param int $SECONDS_BEFORE_TIMEOUT_WARNING
      * @param int $secondsAppendToSessionTimeout
-     * @param string $timeoutRedirectUrl
+     * @param string $TIMEOUT_REDIRECT_URL
      * @return SessionTimeoutWarning
      */
     private function setupSessionTimeoutWarning(
         HeadMeta $headMeta,
         bool $enabled = false
-    ): SessionTimeoutWarning
-    {
+    ): SessionTimeoutWarning {
         $mockedView = m::mock(RendererInterface::class);
         $headMeta->shouldReceive('setView')->with($mockedView);
 
         $sut = new SessionTimeoutWarning(
             $headMeta,
             $enabled,
-            self::secondsBeforeExpiryWarning,
-            self::timeoutRedirectUrl
+            self::SECONDS_BEFORE_TIMEOUT_WARNING,
+            self::TIMEOUT_REDIRECT_URL
         );
 
         $sut->setView($mockedView);

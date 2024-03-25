@@ -19,7 +19,7 @@ class AddVehicle
         $this->formHelper = $formHelper;
     }
 
-    public function getForm($request, $params = [])
+    public function getForm($request, $params = []): \Laminas\Form\FormInterface
     {
         $form = $this->formHelper->createFormWithRequest('Lva\AddGoodsVehicle', $request);
 
@@ -28,7 +28,7 @@ class AddVehicle
         return $form;
     }
 
-    protected function alterForm($form, $params)
+    protected function alterForm(\Laminas\Form\FormInterface $form, $params): void
     {
         if ($params['spacesRemaining'] < 2) {
             $form->get('form-actions')->remove('addAnother');

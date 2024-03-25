@@ -2,6 +2,7 @@
 
 use Common\Service\Table\Formatter\DashboardApplicationLink;
 use Common\Service\Table\Formatter\RefDataStatus;
+use Common\Service\Table\TableBuilder;
 
 $translationPrefix = 'dashboard-table-variations';
 
@@ -20,18 +21,23 @@ return [
         ],
         [
             'title' => 'dashboard-table-variations-status',
-            'formatter' => fn($row) => $this->callFormatter(
-                [
+            'formatter' => fn($row) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                $this->callFormatter(
+                    [
                     'name' => 'status',
                     'formatter' => RefDataStatus::class,
-                ],
-                [
+                    ],
+                    [
                     'status' => [
                         'id' => $row['status']['id'],
                         'description' => $row['status']['description'],
                     ],
-                ]
-            )
+                    ]
+                )
         ],
     ]
 ];

@@ -53,14 +53,19 @@ class VariationPeopleAdapterTest extends MockeryTestCase
     /**
      * @dataProvider dpTestCanModify
      */
-    public function testCanModify($isExceptionalOrg, $expect)
+    public function testCanModify($isExceptionalOrg, $expect): void
     {
         $this->sut->shouldReceive('isExceptionalOrganisation')->andReturn($isExceptionalOrg);
 
         static::assertEquals($expect, $this->sut->canModify());
     }
 
-    public function dpTestCanModify()
+    /**
+     * @return bool[][]
+     *
+     * @psalm-return list{array{isExceptionalOrg: true, expect: false}, array{isExceptionalOrg: false, expect: true}}
+     */
+    public function dpTestCanModify(): array
     {
         return [
             [
@@ -77,7 +82,7 @@ class VariationPeopleAdapterTest extends MockeryTestCase
     /**
      * @dataProvider dpTestGetTableConfig
      */
-    public function testGetTableConfig($useDeltas, $expect)
+    public function testGetTableConfig($useDeltas, $expect): void
     {
         $this->mockTbl->shouldReceive('prepareTable')
             ->once()
@@ -90,7 +95,12 @@ class VariationPeopleAdapterTest extends MockeryTestCase
         $this->sut->createTable();
     }
 
-    public function dpTestGetTableConfig()
+    /**
+     * @return (bool|string)[][]
+     *
+     * @psalm-return list{array{useDeltas: false, expect: 'lva-people'}, array{useDeltas: true, expect: 'lva-variation-people'}}
+     */
+    public function dpTestGetTableConfig(): array
     {
         return [
             [
@@ -104,7 +114,7 @@ class VariationPeopleAdapterTest extends MockeryTestCase
         ];
     }
 
-    public function testAlterFormForOrganisationCantModify()
+    public function testAlterFormForOrganisationCantModify(): void
     {
         $this->sut->shouldReceive('canModify')->andReturn(false);
 
@@ -117,7 +127,7 @@ class VariationPeopleAdapterTest extends MockeryTestCase
         $this->sut->alterFormForOrganisation($this->mockForm, $this->mockTbl);
     }
 
-    public function testAlterFormForOrganisationCanModify()
+    public function testAlterFormForOrganisationCanModify(): void
     {
         $this->sut
             ->shouldReceive('canModify')->andReturn(true)
@@ -133,7 +143,7 @@ class VariationPeopleAdapterTest extends MockeryTestCase
         $this->sut->alterFormForOrganisation($this->mockForm, $this->mockTbl);
     }
 
-    public function testAlterAddOrEditFormForOrganisationCanNotModify()
+    public function testAlterAddOrEditFormForOrganisationCanNotModify(): void
     {
         $this->mockPplSrv->shouldReceive('lockPersonForm')
             ->once()
@@ -146,7 +156,7 @@ class VariationPeopleAdapterTest extends MockeryTestCase
         $this->sut->alterAddOrEditFormForOrganisation($this->mockForm);
     }
 
-    public function testAlterAddOrEditFormForOrganisationCanModify()
+    public function testAlterAddOrEditFormForOrganisationCanModify(): void
     {
         $this->mockPplSrv->shouldReceive('lockPersonForm')->never();
 
@@ -154,7 +164,7 @@ class VariationPeopleAdapterTest extends MockeryTestCase
         $this->sut->alterAddOrEditFormForOrganisation($this->mockForm);
     }
 
-    public function testGetCreateCommand()
+    public function testGetCreateCommand(): void
     {
         $this->sut
             ->shouldReceive('getApplicationId')->andReturn(self::APP_ID)
@@ -175,7 +185,7 @@ class VariationPeopleAdapterTest extends MockeryTestCase
         $this->sut->create($data);
     }
 
-    public function testGetUpdateCommand()
+    public function testGetUpdateCommand(): void
     {
         $this->sut
             ->shouldReceive('getApplicationId')->andReturn(self::APP_ID)
@@ -198,7 +208,7 @@ class VariationPeopleAdapterTest extends MockeryTestCase
         $this->sut->update($data);
     }
 
-    public function testGetDeleteCommand()
+    public function testGetDeleteCommand(): void
     {
         $this->sut
             ->shouldReceive('getApplicationId')->andReturn(self::APP_ID)

@@ -16,7 +16,7 @@ use Laminas\Form\Form;
  */
 class NoOfPermitsTest extends TestCase
 {
-    public function testMapForFormOptions()
+    public function testMapForFormOptions(): void
     {
         $data = [
             'inputDataKey1' => 'inputDataValue1',

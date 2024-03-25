@@ -54,7 +54,7 @@ class UploadsController extends AbstractController
     /**
      * Uploads EBSR packs and optionally queues for processing
      *
-     * @return ViewModel
+     * @return ViewModel|\Laminas\Http\Response
      */
     public function uploadAction()
     {

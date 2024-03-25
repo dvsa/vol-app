@@ -39,7 +39,7 @@ class DeleteCookieNamesProvider
      * @param string $preferenceName
      * @param CookieNamesProviderInterface $cookieNamesProvider
      */
-    public function registerCookieNamesProvider($preferenceName, CookieNamesProviderInterface $cookieNamesProvider)
+    public function registerCookieNamesProvider($preferenceName, CookieNamesProviderInterface $cookieNamesProvider): void
     {
         $this->cookieNamesProviders[$preferenceName] = $cookieNamesProvider;
     }

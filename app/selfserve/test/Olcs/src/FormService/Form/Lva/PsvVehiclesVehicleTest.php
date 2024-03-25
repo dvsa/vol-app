@@ -29,7 +29,7 @@ class PsvVehiclesVehicleTest extends MockeryTestCase
         $this->sut = new PsvVehiclesVehicle($this->formHelper, $this->fsm);
     }
 
-    public function testAlterForm()
+    public function testAlterForm(): void
     {
         $mockForm = m::mock();
         $params = [];

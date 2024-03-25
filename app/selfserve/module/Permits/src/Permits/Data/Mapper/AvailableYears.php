@@ -126,7 +126,7 @@ class AvailableYears implements MapperInterface
      * @param int $year
      * @param string $translationPrefix
      */
-    private function singleOption(Form $form, $year, $translationPrefix)
+    private function singleOption(Form $form, $year, $translationPrefix): void
     {
         $markup = sprintf(
             '<p class="govuk-body-l">%s</p>',
@@ -166,7 +166,7 @@ class AvailableYears implements MapperInterface
      * @param array $years
      * @param string $selectedYear
      */
-    private function multipleOptions(Form $form, $years, $selectedYear)
+    private function multipleOptions(Form $form, $years, $selectedYear): void
     {
         $valueOptions = [];
 

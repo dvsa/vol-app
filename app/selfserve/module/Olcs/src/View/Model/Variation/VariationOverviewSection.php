@@ -5,6 +5,7 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace Olcs\View\Model\Variation;
 
 use Olcs\View\Model\LvaOverviewSection;

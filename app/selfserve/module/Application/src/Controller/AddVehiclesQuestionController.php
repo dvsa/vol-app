@@ -167,14 +167,14 @@ class AddVehiclesQuestionController
         }
 
         if ($form->userHasOptedToSubmitVehicleDetails()) {
-            $this->updateVehicleSectionStatusToIncomplete($applicationId, $form->getApplicationVersionInput()->getValue());
+            $this->updateVehicleSectionStatusToIncomplete($applicationId, $form->getApplicationVersionInput()->getValue('application-version'));
             if ($form->userHasOptedToContinueToTheNextStep()) {
                 throw new ResourceNotFoundException('This path still needs to be implemented');
             }
         }
 
         if ($form->userHasOptedNotToSubmitVehicleDetails()) {
-            $this->updateVehicleSectionStatusToComplete($applicationId, $form->getApplicationVersionInput()->getValue());
+            $this->updateVehicleSectionStatusToComplete($applicationId, $form->getApplicationVersionInput()->getValue('application-version'));
             if ($form->userHasOptedToContinueToTheNextStep()) {
                 return $this->redirectHelper->toRoute('lva-application/safety', ['application' => $applicationId]);
             }
@@ -237,31 +237,36 @@ class AddVehiclesQuestionController
     /**
      * @param int $applicationId
      * @param mixed $applicationVersion
+     *
      * @throws BadCommandResponseException
      * @throws BailOutException
      */
-    protected function updateVehicleSectionStatusToComplete(int $applicationId, $applicationVersion)
+    protected function updateVehicleSectionStatusToComplete(int $applicationId, $applicationVersion): void
     {
-        return $this->updateVehicleSectionStatus($applicationId, $applicationVersion, false);
+        $this->updateVehicleSectionStatus($applicationId, $applicationVersion, false);
     }
 
     /**
      * @param int $applicationId
      * @param mixed $applicationVersion
+     *
      * @throws BadCommandResponseException
      * @throws BailOutException
      */
-    protected function updateVehicleSectionStatusToIncomplete(int $applicationId, $applicationVersion)
+    protected function updateVehicleSectionStatusToIncomplete(int $applicationId, $applicationVersion): void
     {
-        return $this->updateVehicleSectionStatus($applicationId, $applicationVersion, true);
+        $this->updateVehicleSectionStatus($applicationId, $applicationVersion, true);
     }
 
     /**
      * @param int $applicationId
      * @param mixed $applicationVersion
      * @param bool $intendingToEnterVehicleDetails
+     *
      * @throws BadCommandResponseException
      * @throws BailOutException
+     *
+     * @return void
      */
     protected function updateVehicleSectionStatus(int $applicationId, $applicationVersion, bool $intendingToEnterVehicleDetails)
     {

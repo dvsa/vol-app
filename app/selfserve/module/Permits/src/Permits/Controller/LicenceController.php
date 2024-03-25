@@ -80,6 +80,8 @@ class LicenceController extends AbstractSelfserveController
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function mergeTemplateVars()
     {
@@ -170,6 +172,8 @@ class LicenceController extends AbstractSelfserveController
     /**
      * @param array $config
      * @param array $params
+     *
+     * @return void
      */
     public function handlePostCommand(array &$config, array $params)
     {

@@ -29,7 +29,7 @@ class LicenceTrailersTest extends MockeryTestCase
         $this->sut = new LicenceTrailers($this->fh);
     }
 
-    public function testAlterForm()
+    public function testAlterForm(): void
     {
         $mockRequest = m::mock(Request::class);
         $mockTable = m::mock(TableBuilder::class);

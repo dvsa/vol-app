@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace Olcs\View\Helper\SessionTimeoutWarning;
 
@@ -51,7 +52,7 @@ class SessionTimeoutWarningFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : SessionTimeoutWarning
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SessionTimeoutWarning
     {
         $config = $container->get('Config')['session-timeout-warning-modal-helper'] ?? [];
         $this->validateConfiguration($config);

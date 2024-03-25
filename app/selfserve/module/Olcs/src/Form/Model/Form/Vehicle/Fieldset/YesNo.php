@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Olcs\Form\Model\Form\Vehicle\Fieldset;
 
 use Laminas\Form\Annotation as Form;

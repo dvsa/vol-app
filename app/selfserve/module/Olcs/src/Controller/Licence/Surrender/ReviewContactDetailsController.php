@@ -35,6 +35,9 @@ class ReviewContactDetailsController extends AbstractSurrenderController
         return $this->renderView($this->getViewVariables());
     }
 
+    /**
+     * @return \Laminas\Http\Response|\Laminas\View\Model\ViewModel
+     */
     public function postAction()
     {
         if ($this->markContactsComplete()) {
@@ -74,7 +77,7 @@ class ReviewContactDetailsController extends AbstractSurrenderController
         return $this->updateSurrender(RefData::SURRENDER_STATUS_CONTACTS_COMPLETE);
     }
 
-    protected function getNextStep()
+    protected function getNextStep(): string
     {
         $surrenderStateService = new SurrenderStateService();
         $surrenderStateService->setSurrenderData($this->data['surrender']);

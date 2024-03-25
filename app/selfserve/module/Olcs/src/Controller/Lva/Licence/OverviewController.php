@@ -90,9 +90,9 @@ class OverviewController extends AbstractController implements MethodToggleAware
     /**
      * Process action - Print
      *
-     * @return \Laminas\Http\Response
+     * @return \Laminas\Http\Response|null
      */
-    public function printAction()
+    public function printAction(): ?\Laminas\Http\Response
     {
         $cmd = PrintLicence::create(
             [
@@ -157,7 +157,7 @@ class OverviewController extends AbstractController implements MethodToggleAware
     }
 
 
-    protected function showSurrenderLink(array $data, LicenceOverview $viewModel)
+    protected function showSurrenderLink(array $data, LicenceOverview $viewModel): void
     {
         if ($data['isLicenceSurrenderAllowed']) {
             $dto = ByLicence::create(['id' => $data['id']]);

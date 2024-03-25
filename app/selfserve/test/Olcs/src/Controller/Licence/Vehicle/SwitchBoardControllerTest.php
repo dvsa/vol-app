@@ -81,7 +81,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_IsCallable()
+    public function indexActionIsCallable(): void
     {
         // Setup
 
@@ -94,7 +94,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_ReturnsViewModel()
+    public function indexActionReturnsViewModel(): void
     {
         // Setup
         $this->setUpSut();
@@ -113,7 +113,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_ReturnsViewModel_WithPanel_WhenFlashMessageHasPanelNamespace()
+    public function indexActionReturnsViewModelWithPanelWhenFlashMessageHasPanelNamespace(): void
     {
         // Setup
         $this->setUpSut();
@@ -141,7 +141,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_ReturnsViewModel_WithPanelBody_WhenFlashMessageHasPanelNamespaceSecondMessage()
+    public function indexActionReturnsViewModelWithPanelBodyWhenFlashMessageHasPanelNamespaceSecondMessage(): void
     {
         // Setup
         $this->setUpSut();
@@ -170,7 +170,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_ReturnsViewModel_WithBackRouteToLicenceOverview()
+    public function indexActionReturnsViewModelWithBackRouteToLicenceOverview(): void
     {
         // Setup
         $this->setUpSut();
@@ -194,7 +194,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_ReturnsViewModel_WithSwitchBoardForm()
+    public function indexActionReturnsViewModelWithSwitchBoardForm(): void
     {
         // Setup
         $this->setUpSut();
@@ -213,7 +213,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_SwitchBoardOnlyHasAdd_WhenLicenceHasNoVehicles()
+    public function indexActionSwitchBoardOnlyHasAddWhenLicenceHasNoVehicles(): void
     {
         // Setup
         $this->setUpSut();
@@ -248,7 +248,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_SwitchBoardRemovesTransferOption_WhenLicenceIsNotMLH()
+    public function indexActionSwitchBoardRemovesTransferOptionWhenLicenceIsNotMLH(): void
     {
         // Setup
         $this->setUpSut();
@@ -278,7 +278,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_SwitchBoardRemovesViewOptionButKeepsViewRemoved_WhenAllVehiclesHaveBeenRemoved()
+    public function indexActionSwitchBoardRemovesViewOptionButKeepsViewRemovedWhenAllVehiclesHaveBeenRemoved(): void
     {
         // Setup
         $this->setUpSut();
@@ -309,7 +309,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_SwitchBoardHasViewOptionRemovesViewRemoved_WhenNoVehiclesHaveBeenRemoved()
+    public function indexActionSwitchBoardHasViewOptionRemovesViewRemovedWhenNoVehiclesHaveBeenRemoved(): void
     {
         // Setup
         $this->setUpSut();
@@ -340,7 +340,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_WithPost_ShouldReturnRedirectToIndexAction_WhenFormIsInvalid()
+    public function indexActionWithPostShouldReturnRedirectToIndexActionWhenFormIsInvalid(): void
     {
         // Setup
         $this->setUpSut();
@@ -370,9 +370,10 @@ class SwitchBoardControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @dataProvider indexAction_WithPost_ShouldRedirectToPage_DependantOnDecision_Provider
+     *
+     * @dataProvider indexActionWithPostShouldRedirectToPageDependantOnDecisionProvider
      */
-    public function indexAction_WithPost_ShouldRedirectToPage_DependantOnDecision(string $request, int $activeVehicleCount, array $route)
+    public function indexActionWithPostShouldRedirectToPageDependantOnDecision(string $request, int $activeVehicleCount, array $route): void
     {
         // Setup
         $this->setUpSut();
@@ -399,7 +400,12 @@ class SwitchBoardControllerTest extends MockeryTestCase
         $this->assertSame($expectedResponse, $response);
     }
 
-    public function indexAction_WithPost_ShouldRedirectToPage_DependantOnDecision_Provider()
+    /**
+     * @return (((string|string[])[]|string|true)[]|int|string)[][]
+     *
+     * @psalm-return array{'Add decision': list{'add', 1, list{'licence/vehicle/add/GET', array<never, never>, array<never, never>, true}}, 'Remove Decision': list{'remove', 1, list{'licence/vehicle/remove/GET', array<never, never>, array<never, never>, true}}, 'Reprint decision': list{'reprint', 1, list{'licence/vehicle/reprint/GET', array<never, never>, array<never, never>, true}}, 'Transfer decision': list{'transfer', 1, list{'licence/vehicle/transfer/GET', array<never, never>, array<never, never>, true}}, 'View decision': list{'view', 1, list{'licence/vehicle/list/GET', array<never, never>, array<never, never>, true}}, 'View removed decision': list{'view-removed', 0, list{'licence/vehicle/list/GET', array<never, never>, array{query: array{includeRemoved: ''}, fragment: 'removed-table'}, true}}}
+     */
+    public function indexActionWithPostShouldRedirectToPageDependantOnDecisionProvider(): array
     {
         return [
             'Add decision' => [
@@ -482,7 +488,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
         $this->formValidatorMock  = m::mock(FormValidator::class);
     }
 
-    protected function setUpSut()
+    protected function setUpSut(): void
     {
         // Create a mock container (similar to a service manager)
         $this->formHelper();
@@ -501,7 +507,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
         );
     }
 
-    protected function formValidator()
+    protected function formValidator(): void
     {
         $this->formValidatorMock->allows('isValid')->andReturnUsing(function ($form) {
             $form->isValid();
@@ -509,7 +515,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
         })->byDefault();
     }
 
-    protected function formHelper()
+    protected function formHelper(): void
     {
         $this->formHelperMock->shouldReceive('createForm')->andReturnUsing(function () {
             $annotationBuilder = new AnnotationBuilder();
@@ -531,7 +537,7 @@ class SwitchBoardControllerTest extends MockeryTestCase
         ];
     }
 
-    protected function setupQueryHandler()
+    protected function setupQueryHandler(): void
     {
         $this->queryHandlerMock->shouldReceive('__invoke')
             ->with(IsInstanceOf::anInstanceOf(Licence::class))
@@ -543,7 +549,6 @@ class SwitchBoardControllerTest extends MockeryTestCase
 
     /**
      * @param mixed $data
-     * @return QueryResponse|MockInterface
      */
     protected function setUpQueryResponse(array $data): QueryResponse
     {

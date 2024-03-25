@@ -32,7 +32,7 @@ class ApplicationLicenceHistoryTest extends MockeryTestCase
         $this->sut = new ApplicationLicenceHistory($this->fh);
     }
 
-    public function testAlterForm()
+    public function testAlterForm(): void
     {
         $mockForm = m::mock(Form::class);
 

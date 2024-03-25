@@ -65,6 +65,8 @@ class TypeController extends AbstractSelfserveController
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function retrieveData()
     {
@@ -81,6 +83,8 @@ class TypeController extends AbstractSelfserveController
     /**
      * @param array $config
      * @param array $params
+     *
+     * @return void
      */
     public function handlePostCommand(array &$config, array $params)
     {

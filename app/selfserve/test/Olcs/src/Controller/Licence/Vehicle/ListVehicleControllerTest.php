@@ -135,7 +135,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_IsCallable()
+    public function indexActionIsCallable(): void
     {
         $this->setUpSut();
         // Assert
@@ -145,7 +145,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function postAction_IsCallable()
+    public function postActionIsCallable(): void
     {
         $this->setUpSut();
         // Assert
@@ -155,7 +155,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_RespondsInHtmlFormat_WhenNoFormatIsProvided()
+    public function indexActionRespondsInHtmlFormatWhenNoFormatIsProvided(): void
     {
         // Setup
         $this->setUpSut();
@@ -174,7 +174,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_RespondsInHtmlFormat_WhenHtmlFormatIsProvided()
+    public function indexActionRespondsInHtmlFormatWhenHtmlFormatIsProvided(): void
     {
         // Setup
         $this->setUpSut();
@@ -192,7 +192,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_RespondsInHtmlFormat_WithLicence()
+    public function indexActionRespondsInHtmlFormatWithLicence(): void
     {
         // Setup
         $this->setUpSut();
@@ -215,10 +215,11 @@ class ListVehicleControllerTest extends MockeryTestCase
     }
 
     /**
-     * @depends indexAction_RespondsInHtmlFormat_WhenHtmlFormatIsProvided
+     * @depends indexActionRespondsInHtmlFormatWhenHtmlFormatIsProvided
+     *
      * @test
      */
-    public function indexAction_RespondsInHtmlFormat_WithExportCurrentAndRemovedCsvAction()
+    public function indexActionRespondsInHtmlFormatWithExportCurrentAndRemovedCsvAction(): void
     {
         // Setup
         $this->setUpSut();
@@ -233,10 +234,11 @@ class ListVehicleControllerTest extends MockeryTestCase
     }
 
     /**
-     * @depends indexAction_RespondsInHtmlFormat_WhenHtmlFormatIsProvided
+     * @depends indexActionRespondsInHtmlFormatWhenHtmlFormatIsProvided
+     *
      * @test
      */
-    public function indexAction_RespondsInHtmlFormat_WithExportCurrentAndRemovedCsvAction_WithFormatQueryParameter()
+    public function indexActionRespondsInHtmlFormatWithExportCurrentAndRemovedCsvActionWithFormatQueryParameter(): void
     {
         // Setup
         $this->setUpSut();
@@ -260,7 +262,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_RespondsInHtmlFormat_WithExportCurrentAndRemovedCsvAction_WithIncludeRemovedQueryParameter()
+    public function indexActionRespondsInHtmlFormatWithExportCurrentAndRemovedCsvActionWithIncludeRemovedQueryParameter(): void
     {
         // Setup
         $this->setUpSut();
@@ -284,7 +286,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_RespondsInHtmlFormat_AndConfiguresCurrentVehicleTable_Query()
+    public function indexActionRespondsInHtmlFormatAndConfiguresCurrentVehicleTableQuery(): void
     {
         // Setup
         $this->setUpSut();
@@ -313,7 +315,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_RespondsInHtmlFormat_AndConfiguresCurrentVehicleTable_Page_WhenNoPageIsSetOnARequest()
+    public function indexActionRespondsInHtmlFormatAndConfiguresCurrentVehicleTablePageWhenNoPageIsSetOnARequest(): void
     {
         // Setup
         $this->setUpSut();
@@ -334,7 +336,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_RespondsInHtmlFormat_AndConfiguresCurrentVehicleTable_Page_WhenEmptyPageIsSetOnARequest()
+    public function indexActionRespondsInHtmlFormatAndConfiguresCurrentVehicleTablePageWhenEmptyPageIsSetOnARequest(): void
     {
         // Setup
         $this->setUpSut();
@@ -350,7 +352,12 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->sut->indexAction($request, $routeMatch);
     }
 
-    public function setUpRemovedTableTitleData()
+    /**
+     * @return (int|string)[][]
+     *
+     * @psalm-return array{'title when table total not equal to one': list{2, 'licence.vehicle.list.section.removed.header.title.plural'}, 'title when table total is one': list{1, 'licence.vehicle.list.section.removed.header.title.singular'}}
+     */
+    public function setUpRemovedTableTitleData(): array
     {
         return [
             'title when table total not equal to one' => [2, 'licence.vehicle.list.section.removed.header.title.plural'],
@@ -360,9 +367,10 @@ class ListVehicleControllerTest extends MockeryTestCase
 
     /**
      * @dataProvider setUpRemovedTableTitleData
+     *
      * @test
      */
-    public function indexAction_RespondsInHtmlFormat_WithCorrectRemovedVehicleTableTitle(int $total, string $expectedTranslationKey)
+    public function indexActionRespondsInHtmlFormatWithCorrectRemovedVehicleTableTitle(int $total, string $expectedTranslationKey): void
     {
         // Setup
         $this->setUpSut();
@@ -386,9 +394,10 @@ class ListVehicleControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_RespondsInHtmlFormat_WhenHtmlFormatIsProvided
+     *
+     * @depends indexActionRespondsInHtmlFormatWhenHtmlFormatIsProvided
      */
-    public function indexAction_SetShowRemovedVehiclesToFalse_WhenALicenceHasNoRemovedVehicles()
+    public function indexActionSetShowRemovedVehiclesToFalseWhenALicenceHasNoRemovedVehicles(): void
     {
         // Setup
         $this->setUpSut();
@@ -406,9 +415,10 @@ class ListVehicleControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_RespondsInHtmlFormat_WhenHtmlFormatIsProvided
+     *
+     * @depends indexActionRespondsInHtmlFormatWhenHtmlFormatIsProvided
      */
-    public function indexAction_SetShowRemovedVehiclesToTrue_WhenALicenceHasOneRemovedVehicle()
+    public function indexActionSetShowRemovedVehiclesToTrueWhenALicenceHasOneRemovedVehicle(): void
     {
         // Setup
         $this->setUpSut();
@@ -426,9 +436,10 @@ class ListVehicleControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_SetShowRemovedVehiclesToTrue_WhenALicenceHasOneRemovedVehicle
+     *
+     * @depends indexActionSetShowRemovedVehiclesToTrueWhenALicenceHasOneRemovedVehicle
      */
-    public function indexAction_SetsExpandRemovedVehicles_WhenQueryParamIsSet_AndALicenceHasOneRemovedVehicle()
+    public function indexActionSetsExpandRemovedVehiclesWhenQueryParamIsSetAndALicenceHasOneRemovedVehicle(): void
     {
         // Setup
         $this->setUpSut();
@@ -446,9 +457,10 @@ class ListVehicleControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_SetShowRemovedVehiclesToTrue_WhenALicenceHasOneRemovedVehicle
+     *
+     * @depends indexActionSetShowRemovedVehiclesToTrueWhenALicenceHasOneRemovedVehicle
      */
-    public function indexAction_DoesNotSetExpandRemovedVehicles_WhenQueryParamIsSet_AndThereAreNoRemovedVehicles()
+    public function indexActionDoesNotSetExpandRemovedVehiclesWhenQueryParamIsSetAndThereAreNoRemovedVehicles(): void
     {
         // Setup
         $this->setUpSut();
@@ -467,7 +479,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_ToggleUrlIncludesFragment_WhenQueryParamIsNotSet_AndALicenceHasOneRemovedVehicle()
+    public function indexActionToggleUrlIncludesFragmentWhenQueryParamIsNotSetAndALicenceHasOneRemovedVehicle(): void
     {
         // Setup
         $this->setUpSut();
@@ -489,9 +501,10 @@ class ListVehicleControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends indexAction_IsCallable
+     *
+     * @depends indexActionIsCallable
      */
-    public function indexAction_ToggleUrlDoesNotIncludeFragment_WhenQueryParamIsSet_AndALicenceHasOneRemovedVehicle()
+    public function indexActionToggleUrlDoesNotIncludeFragmentWhenQueryParamIsSetAndALicenceHasOneRemovedVehicle(): void
     {
         // Setup
         $this->setUpSut();
@@ -526,7 +539,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_DoesNotSetToggleRemovedVehiclesAction_WhenNoRemovedVehicles()
+    public function indexActionDoesNotSetToggleRemovedVehiclesActionWhenNoRemovedVehicles(): void
     {
         // Setup
         $this->setUpSut();
@@ -544,7 +557,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_DoesNotSetToggleRemovedVehiclesAction_WhenSearching()
+    public function indexActionDoesNotSetToggleRemovedVehiclesActionWhenSearching(): void
     {
         // Setup
         $this->setUpSut();
@@ -561,7 +574,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_SetToggleRemovedVehiclesAction_ToShowRemovedVehicles_WhenNoQueryParamIsSet()
+    public function indexActionSetToggleRemovedVehiclesActionToShowRemovedVehiclesWhenNoQueryParamIsSet(): void
     {
         // Setup
         $this->setUpSut();
@@ -582,7 +595,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_SetToggleRemovedVehiclesAction_ToHideRemovedVehicles_WhenQueryParamIsSet()
+    public function indexActionSetToggleRemovedVehiclesActionToHideRemovedVehiclesWhenQueryParamIsSet(): void
     {
         // Setup
         $this->setUpSut();
@@ -601,10 +614,12 @@ class ListVehicleControllerTest extends MockeryTestCase
 
     /**
      * @param string $type
+     *
      * @test
+     *
      * @dataProvider buttonTranslationKeyTypes
      */
-    public function indexAction_SetToggleRemovedVehiclesActionTitle_WithRelevantMessage_WhenQueryParamIsSet_AndLicenceHasRemovedVehicles(string $type)
+    public function indexActionSetToggleRemovedVehiclesActionTitleWithRelevantMessageWhenQueryParamIsSetAndLicenceHasRemovedVehicles(string $type): void
     {
         // Setup
         $this->setUpSut();
@@ -626,10 +641,12 @@ class ListVehicleControllerTest extends MockeryTestCase
 
     /**
      * @param string $type
+     *
      * @test
+     *
      * @dataProvider buttonTranslationKeyTypes
      */
-    public function indexAction_DoesNotSetToggleRemovedVehiclesActionTitle_WhenQueryParamIsNotSet_AndLicenceDoesNotHaveRemovedVehicles(string $type)
+    public function indexActionDoesNotSetToggleRemovedVehiclesActionTitleWhenQueryParamIsNotSetAndLicenceDoesNotHaveRemovedVehicles(string $type): void
     {
         // Setup
         $this->setUpSut();
@@ -686,11 +703,14 @@ class ListVehicleControllerTest extends MockeryTestCase
 
     /**
      * @param array $input
-     * @depends indexAction_IsCallable
+     *
+     * @depends indexActionIsCallable
+     *
      * @dataProvider invalidInputDataProvider
+     *
      * @test
      */
-    public function indexAction_ValidatesInput_WhenInvalid_ReturnsRedirectResponse(array $input)
+    public function indexActionValidatesInputWhenInvalidReturnsRedirectResponse(array $input): void
     {
         // Setup
         $this->setUpSut();
@@ -711,11 +731,14 @@ class ListVehicleControllerTest extends MockeryTestCase
     /**
      * @param array $input
      * @param string $expectedFlashMessage
-     * @depends indexAction_IsCallable
+     *
+     * @depends indexActionIsCallable
+     *
      * @dataProvider invalidInputDataProvider
+     *
      * @test
      */
-    public function indexAction_ValidatesInput_WhenInvalid_FlashesValidationMessages(array $input, string $expectedFlashMessage)
+    public function indexActionValidatesInputWhenInvalidFlashesValidationMessages(array $input, string $expectedFlashMessage): void
     {
         // Setup
         $this->setUpSut();
@@ -733,11 +756,14 @@ class ListVehicleControllerTest extends MockeryTestCase
     /**
      * @param array $input
      * @param string $expectedFlashMessage
-     * @depends indexAction_IsCallable
+     *
+     * @depends indexActionIsCallable
+     *
      * @dataProvider invalidInputDataProvider
+     *
      * @test
      */
-    public function indexAction_ValidatesInput_WhenInvalid_TranslatesValidationMessages(array $input, string $expectedFlashMessage)
+    public function indexActionValidatesInputWhenInvalidTranslatesValidationMessages(array $input, string $expectedFlashMessage): void
     {
         // Setup
         $this->setUpSut();
@@ -755,11 +781,14 @@ class ListVehicleControllerTest extends MockeryTestCase
 
     /**
      * @param array $input
-     * @depends indexAction_IsCallable
+     *
+     * @depends indexActionIsCallable
+     *
      * @dataProvider validInputDataProvider
+     *
      * @test
      */
-    public function indexAction_ValidatesInput_WhenValid_ReturnsViewModel(array $input)
+    public function indexActionValidatesInputWhenValidReturnsViewModel(array $input): void
     {
         // Setup
         $this->setUpSut();
@@ -777,7 +806,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_ReturnsRemovedVehiclesTable_ExcludingActiveVehicles()
+    public function indexActionReturnsRemovedVehiclesTableExcludingActiveVehicles(): void
     {
         // Setup
         $this->setUpSut();
@@ -794,7 +823,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_ReturnsRemovedVehiclesTable_SortedByDefault()
+    public function indexActionReturnsRemovedVehiclesTableSortedByDefault(): void
     {
         // Setup
         $this->setUpSut();
@@ -811,7 +840,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_ReturnsRemovedVehiclesTable_OrderedByDefault()
+    public function indexActionReturnsRemovedVehiclesTableOrderedByDefault(): void
     {
         // Setup
         $this->setUpSut();
@@ -828,7 +857,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_ReturnsRemovedVehiclesTable_LimitsTo10ByDefault()
+    public function indexActionReturnsRemovedVehiclesTableLimitsTo10ByDefault(): void
     {
         // Setup
         $this->setUpSut();
@@ -845,7 +874,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_ReturnsRemovedVehiclesTable_SetsPageToFirstPageByDefault()
+    public function indexActionReturnsRemovedVehiclesTableSetsPageToFirstPageByDefault(): void
     {
         // Setup
         $this->setUpSut();
@@ -862,7 +891,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function postAction_RespondsInHtmlFormat_SetsUserOCRSOptInPreference_CheckboxValidValuesRunsCommand()
+    public function postActionRespondsInHtmlFormatSetsUserOCRSOptInPreferenceCheckboxValidValuesRunsCommand(): void
     {
         // Setup
         $this->setUpSut();
@@ -886,7 +915,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function postAction_RespondsInHtmlFormat_SetsUserOCRSOptInPreference_CheckboxInvalidValues_ReturnsIndexActionWithErrors()
+    public function postActionRespondsInHtmlFormatSetsUserOCRSOptInPreferenceCheckboxInvalidValuesReturnsIndexActionWithErrors(): void
     {
         // Setup
         $this->setUpSut();
@@ -904,10 +933,11 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->sut->postAction($request, $routeMatch);
     }
 
+
     /**
      * @test
      */
-    public function indexAction_HidesRemovedVehicles_WhenSearching_AndLicenceHasRemovedVehicles()
+    public function indexActionHidesRemovedVehiclesWhenSearchingAndLicenceHasRemovedVehicles(): void
     {
         // Setup
         $this->setUpSut();
@@ -937,7 +967,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->serviceLocatorMock = m::mock(ServiceLocatorInterface::class);
     }
 
-    protected function setUpSut()
+    protected function setUpSut(): void
     {
         $this->setUpTranslator();
         $this->setUpQueryHandler();
@@ -958,9 +988,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         );
     }
 
-    /**
-     */
-    protected function setUpQueryHandler()
+    protected function setUpQueryHandler(): void
     {
         $instance = m::mock(HandleQuery::class);
         $this->queryHandlerMock->shouldIgnoreMissing();
@@ -986,10 +1014,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @return HandleCommand
-     */
-    protected function setUpCommandHandler(): HandleCommand
+    protected function setUpCommandHandler(): m\LegacyMockInterface
     {
         $instance = m::mock(HandleCommand::class);
         $instance->shouldIgnoreMissing();
@@ -1002,7 +1027,7 @@ class ListVehicleControllerTest extends MockeryTestCase
     }
 
 
-    protected function setUpTableFactory()
+    protected function setUpTableFactory(): void
     {
         $instance = m::mock(TableFactory::class);
         $this->tableFactoryMock->shouldIgnoreMissing();
@@ -1011,7 +1036,6 @@ class ListVehicleControllerTest extends MockeryTestCase
 
     /**
      * @param mixed $data
-     * @return QueryResponse|MockInterface
      */
     protected function setUpQueryResponse($data = ['count' => 0, 'results' => []]): QueryResponse
     {
@@ -1034,7 +1058,7 @@ class ListVehicleControllerTest extends MockeryTestCase
         return $tableBuilder;
     }
 
-    protected function setUpTranslator()
+    protected function setUpTranslator(): void
     {
         $this->translatorMock->shouldIgnoreMissing('');
         $this->translatorMock->shouldReceive('translate')->andReturnUsing(fn($val) => $val)->byDefault();
@@ -1046,22 +1070,19 @@ class ListVehicleControllerTest extends MockeryTestCase
     }
 
 
-    protected function urlHelper()
+    protected function urlHelper(): void
     {
         $this->urlHelperMock->shouldIgnoreMissing('');
     }
 
-    /**
-     * @return ResponseHelperService
-     */
-    protected function setUpResponseHelper(): ResponseHelperService
+    protected function setUpResponseHelper(): m\LegacyMockInterface
     {
         $instance = m::mock(ResponseHelperService::class);
         $instance->shouldIgnoreMissing();
         return $instance;
     }
 
-    protected function setUpFormHelper()
+    protected function setUpFormHelper(): void
     {
         $this->formHelperMock->shouldIgnoreMissing();
 
@@ -1074,9 +1095,6 @@ class ListVehicleControllerTest extends MockeryTestCase
         $this->formHelperMock->shouldReceive('createForm')->with(ListVehicleSearch::class, $any, $any)->andReturn($searchForm)->byDefault();
     }
 
-    /**
-     * @return MockInterface|Form
-     */
     protected function setUpForm(): MockInterface
     {
         $form = m::mock(Form::class);
@@ -1106,9 +1124,6 @@ class ListVehicleControllerTest extends MockeryTestCase
         return $tableBuilder;
     }
 
-    /**
-     * @return MockInterface|FlashMessengerHelperService
-     */
     protected function setUpFlashMessenger(): MockInterface
     {
         $messenger = m::mock(FlashMessengerHelperService::class);
@@ -1134,9 +1149,6 @@ class ListVehicleControllerTest extends MockeryTestCase
         return $request;
     }
 
-    /**
-     * @return MockInterface|Redirect
-     */
     protected function setUpRedirectHelper(): MockInterface
     {
         $instance = m::mock(Redirect::class);
@@ -1148,7 +1160,7 @@ class ListVehicleControllerTest extends MockeryTestCase
      * @param ServiceLocatorInterface $serviceLocator
      * @param array $queryResultData
      */
-    protected function injectRemovedVehiclesQueryResultData(ServiceLocatorInterface $serviceLocator, array $queryResultData)
+    protected function injectRemovedVehiclesQueryResultData(ServiceLocatorInterface $serviceLocator, array $queryResultData): void
     {
         $removedVehiclesQueryResponse = $this->setUpQueryResponse($queryResultData);
         $this->queryHandlerMock->shouldReceive('__invoke')->withArgs(fn($query) => $query instanceof Vehicles && $query->getIncludeActive() === false)->andReturns($removedVehiclesQueryResponse)->byDefault();

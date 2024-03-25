@@ -219,6 +219,7 @@ class PeopleController extends Lva\AbstractPeopleController
      * Redirect to the people index and display a permission flash message
      *
      * @return Response
+     * @psalm-suppress UndefinedDocblockClass
      */
     private function redirectToIndexWithPermissionError()
     {

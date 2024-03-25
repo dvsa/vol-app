@@ -31,7 +31,7 @@ class ApplicationSafetyTest extends MockeryTestCase
         $this->sut = new ApplicationSafety($this->fh);
     }
 
-    public function testAlterForm()
+    public function testAlterForm(): void
     {
         $mockForm = m::mock(Form::class);
 

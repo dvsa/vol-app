@@ -61,7 +61,7 @@ class LvaOperatingCentreTest extends MockeryTestCase
     /**
      * @dataProvider paramsProvider
      */
-    public function testAlterFormNi($params)
+    public function testAlterFormNi($params): void
     {
         $form = m::mock(Form::class)
             ->shouldReceive('get')
@@ -183,7 +183,7 @@ class LvaOperatingCentreTest extends MockeryTestCase
     /**
      * @dataProvider gbParamsProvider
      */
-    public function testAlterFormGb($params)
+    public function testAlterFormGb($params): void
     {
         $form = m::mock(Form::class)
             ->shouldReceive('get')
@@ -250,7 +250,6 @@ class LvaOperatingCentreTest extends MockeryTestCase
 
         // ... existing mocks ...
 
-
         $adSendByPost = m::mock(ElementInterface::class);
         $adSendByPost->shouldReceive('setValue')
             ->once()
@@ -304,7 +303,12 @@ class LvaOperatingCentreTest extends MockeryTestCase
         $this->sut->alterForm($form, $params);
     }
 
-    public function paramsProvider()
+    /**
+     * @return ((int|int[])[]|bool|int|mixed|string)[][][]
+     *
+     * @psalm-return list{list{array{id: 124, isPsv: false, canAddAnother: true, canUpdateAddress: true, wouldIncreaseRequireAdditionalAdvertisement: false, niFlag: 'Y', licNo: 'AB12345', applicationId: 111, isVariation: false, templateFile: string, guide: mixed}}, list{array{id: 124, isPsv: false, canAddAnother: true, canUpdateAddress: true, wouldIncreaseRequireAdditionalAdvertisement: false, trafficArea: array{isNi: 1}, licNo: 'AB12345', applicationId: 111, isVariation: false, templateFile: string, guide: mixed}}, list{array{id: 124, isPsv: false, canAddAnother: true, canUpdateAddress: true, wouldIncreaseRequireAdditionalAdvertisement: false, licence: array{trafficArea: array{isNi: 1}}, licNo: 'AB12345', applicationId: 111, isVariation: false, templateFile: string, guide: mixed}}, list{array{id: 124, isPsv: false, canAddAnother: true, canUpdateAddress: true, wouldIncreaseRequireAdditionalAdvertisement: false, licence: array{trafficArea: array{isNi: 1}}, licNo: 'AB12345', applicationId: 111, isVariation: true, templateFile: string, guide: mixed}}}
+     */
+    public function paramsProvider(): array
     {
         return [
             [
@@ -380,7 +384,12 @@ class LvaOperatingCentreTest extends MockeryTestCase
         ];
     }
 
-    public function gbParamsProvider()
+    /**
+     * @return ((int|int[])[]|bool|int|mixed|string)[][][]
+     *
+     * @psalm-return list{list{array{id: 124, isPsv: false, canAddAnother: true, canUpdateAddress: true, wouldIncreaseRequireAdditionalAdvertisement: false, niFlag: 'N', licNo: 'AB12345', applicationId: 111, isVariation: false, templateFile: string, guide: mixed}}, list{array{id: 124, isPsv: false, canAddAnother: true, canUpdateAddress: true, wouldIncreaseRequireAdditionalAdvertisement: false, trafficArea: array{isNi: 0}, licNo: 'AB12345', applicationId: 111, isVariation: false, templateFile: string, guide: mixed}}, list{array{id: 124, isPsv: false, canAddAnother: true, canUpdateAddress: true, wouldIncreaseRequireAdditionalAdvertisement: false, licence: array{trafficArea: array{isNi: 0}}, licNo: 'AB12345', applicationId: 111, isVariation: false, templateFile: string, guide: mixed}}, list{array{id: 124, isPsv: false, canAddAnother: true, canUpdateAddress: true, wouldIncreaseRequireAdditionalAdvertisement: false, licNo: 'AB12345', applicationId: 111, isVariation: false, templateFile: string, guide: mixed}}, list{array{id: 124, isPsv: false, canAddAnother: true, canUpdateAddress: true, wouldIncreaseRequireAdditionalAdvertisement: false, licNo: 'AB12345', applicationId: 111, isVariation: true, templateFile: string, guide: mixed}}}
+     */
+    public function gbParamsProvider(): array
     {
         return [
             [

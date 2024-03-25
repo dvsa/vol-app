@@ -19,7 +19,7 @@ class SettingsController extends AbstractOlcsController
     /** @var CurrentPreferencesProvider */
     private $currentPreferencesProvider;
 
-    /** @var SetCookieGenerator */
+    /** @var SetCookieArrayGenerator */
     private $setCookieArrayGenerator;
 
     /** @var PreferencesFactory */
@@ -46,6 +46,8 @@ class SettingsController extends AbstractOlcsController
 
     /**
      * Generic action
+     *
+     * @return ViewModel|\Laminas\Http\Response
      */
     public function genericAction()
     {

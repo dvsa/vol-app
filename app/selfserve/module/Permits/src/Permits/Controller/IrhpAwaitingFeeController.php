@@ -111,6 +111,8 @@ class IrhpAwaitingFeeController extends AbstractSelfserveController
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function retrieveData()
     {

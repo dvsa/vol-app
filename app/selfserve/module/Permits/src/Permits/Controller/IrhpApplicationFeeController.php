@@ -232,14 +232,14 @@ class IrhpApplicationFeeController extends AbstractSelfserveController
     /**
      * @param CqrsResponse $response payment response
      */
-    protected function handlePaymentError(CqrsResponse $response)
+    protected function handlePaymentError(CqrsResponse $response): void
     {
         if (!$response->isOk()) {
             $this->addErrorMessage('payment-failed');
         }
     }
 
-    protected function redirectOnError()
+    protected function redirectOnError(): HttpResponse
     {
         $irhpAppData = $this->data[IrhpAppDataSource::DATA_KEY];
 
@@ -251,6 +251,8 @@ class IrhpApplicationFeeController extends AbstractSelfserveController
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function retrieveTables()
     {
@@ -268,6 +270,8 @@ class IrhpApplicationFeeController extends AbstractSelfserveController
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function retrieveData()
     {
@@ -278,7 +282,8 @@ class IrhpApplicationFeeController extends AbstractSelfserveController
             ->mapForDisplay($this->data);
     }
 
-    protected function checkForRedirect($lvaId) {
+    protected function checkForRedirect($lvaId)
+    {
         return null;
     }
 }

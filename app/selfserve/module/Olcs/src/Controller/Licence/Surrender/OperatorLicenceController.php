@@ -53,7 +53,7 @@ class OperatorLicenceController extends AbstractSurrenderController
         return $this->createView();
     }
 
-    public function submitAction()
+    public function submitAction(): \Laminas\View\Model\ViewModel
     {
         $formData = (array)$this->getRequest()->getPost();
         $this->form->setData($formData);

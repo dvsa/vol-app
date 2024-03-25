@@ -53,14 +53,17 @@ class UserRegistrationControllerTest extends TestCase
         $this->setMockedProperties($reflectionClass, 'translationHelper', $this->mockTranslationHelper);
     }
 
-    public function setMockedProperties($reflectionClass, $property, $value)
+    /**
+     * @psalm-param ReflectionClass<Sut> $reflectionClass
+     */
+    public function setMockedProperties(ReflectionClass $reflectionClass, string $property, m\LegacyMockInterface $value): void
     {
         $reflectionProperty = $reflectionClass->getProperty($property);
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->sut, $value);
     }
 
-    public function testAddActionForGet()
+    public function testAddActionForGet(): void
     {
         $mockRequest = m::mock();
         $mockRequest->shouldReceive('isPost')->andReturn(false);
@@ -107,7 +110,7 @@ class UserRegistrationControllerTest extends TestCase
         $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $view);
     }
 
-    public function testAddActionForPostWithCancel()
+    public function testAddActionForPostWithCancel(): void
     {
         $mockRequest = m::mock();
         $mockRequest->shouldReceive('isPost')->andReturn(true);
@@ -131,7 +134,7 @@ class UserRegistrationControllerTest extends TestCase
         $this->assertEquals('REDIRECT', $this->sut->addAction());
     }
 
-    public function testAddActionForPostWithOrg()
+    public function testAddActionForPostWithOrg(): void
     {
         $postData = [
             'fields' => [
@@ -185,7 +188,7 @@ class UserRegistrationControllerTest extends TestCase
         $this->assertEquals('olcs/user-registration/check-email', $view->getTemplate());
     }
 
-    public function testAddActionForPostWithOrgError()
+    public function testAddActionForPostWithOrgError(): void
     {
         $postData = [
             'fields' => [
@@ -259,7 +262,7 @@ class UserRegistrationControllerTest extends TestCase
         $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $view);
     }
 
-    public function testAddActionForPostWithLic()
+    public function testAddActionForPostWithLic(): void
     {
         $postData = [
             'fields' => [
@@ -343,7 +346,7 @@ class UserRegistrationControllerTest extends TestCase
         $this->assertEquals('olcs/user-registration/check-details', $view->getTemplate());
     }
 
-    public function testAddActionForPostWithLicError()
+    public function testAddActionForPostWithLicError(): void
     {
         $postData = [
             'fields' => [
@@ -427,7 +430,7 @@ class UserRegistrationControllerTest extends TestCase
         $this->assertInstanceOf(\Laminas\View\Model\ViewModel::class, $view);
     }
 
-    public function testAddActionForPostWithLicConfirmed()
+    public function testAddActionForPostWithLicConfirmed(): void
     {
         $postData = [
             'fields' => [
@@ -494,7 +497,7 @@ class UserRegistrationControllerTest extends TestCase
         $this->assertEquals('olcs/user-registration/account-created', $view->getTemplate());
     }
 
-    public function testAddActionForPostWithLicConfirmedError()
+    public function testAddActionForPostWithLicConfirmedError(): void
     {
         $postData = [
             'fields' => [

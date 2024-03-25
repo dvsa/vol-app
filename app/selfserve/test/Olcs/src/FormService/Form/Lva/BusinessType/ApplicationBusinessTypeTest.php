@@ -35,7 +35,7 @@ class ApplicationBusinessTypeTest extends MockeryTestCase
         $this->sut = new ApplicationBusinessType($this->fh, $this->authService, $this->guidanceHelper, $this->fsm);
     }
 
-    public function testGetFormWithoutInforceLicencesOrWithNoSubmittedLicenceApplication()
+    public function testGetFormWithoutInforceLicencesOrWithNoSubmittedLicenceApplication(): void
     {
         $inForceLicences = false;
         $hasOrganisationSubmittedLicenceApplication = false;
@@ -60,7 +60,7 @@ class ApplicationBusinessTypeTest extends MockeryTestCase
         $this->assertSame($mockForm, $form);
     }
 
-    public function testGetFormWithInforceLicences()
+    public function testGetFormWithInforceLicences(): void
     {
         $inForceLicences = true;
         $hasOrganisationSubmittedLicenceApplication = false;
@@ -131,7 +131,7 @@ class ApplicationBusinessTypeTest extends MockeryTestCase
         $this->assertSame($mockForm, $form);
     }
 
-    public function testGetFormWithSubmittedLicenceApplication()
+    public function testGetFormWithSubmittedLicenceApplication(): void
     {
         $inForceLicences = false;
         $hasOrganisationSubmittedLicenceApplication = true;

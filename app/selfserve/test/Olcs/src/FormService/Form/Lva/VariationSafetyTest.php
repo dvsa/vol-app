@@ -31,7 +31,7 @@ class VariationSafetyTest extends MockeryTestCase
         $this->sut = new VariationSafety($this->fh);
     }
 
-    public function testAlterForm()
+    public function testAlterForm(): void
     {
         $mockForm = m::mock(Form::class);
 

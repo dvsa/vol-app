@@ -52,6 +52,8 @@ class IrhpUnderConsiderationController extends AbstractSelfserveController
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function retrieveData()
     {

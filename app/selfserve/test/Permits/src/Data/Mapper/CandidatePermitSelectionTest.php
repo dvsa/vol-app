@@ -18,7 +18,7 @@ use Laminas\Form\Form;
  */
 class CandidatePermitSelectionTest extends TestCase
 {
-    public function testMapForFormOptions()
+    public function testMapForFormOptions(): void
     {
         $unpaginatedUnpaidPermits = [
             'results' => [

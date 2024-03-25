@@ -66,6 +66,8 @@ class IrhpStockController extends AbstractSelfserveController
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function retrieveData()
     {
@@ -81,6 +83,8 @@ class IrhpStockController extends AbstractSelfserveController
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function mergeTemplateVars()
     {
@@ -97,7 +101,9 @@ class IrhpStockController extends AbstractSelfserveController
      * @param array $config
      * @param array $params
      *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings (PHPMD.UnusedFormalParameter)
+     *
+     * @return void
      */
     public function handlePostCommand(array &$config, array $params)
     {

@@ -9,5 +9,8 @@
 >
   <projectFiles>
     <directory name="module"/>
+    <ignoreFiles>
+          <directory name="vendor" />
+        </ignoreFiles>
   </projectFiles>
 </psalm>

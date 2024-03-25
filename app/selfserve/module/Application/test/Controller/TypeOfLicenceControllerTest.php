@@ -19,7 +19,7 @@ class TypeOfLicenceControllerTest extends AbstractLvaControllerTestCase
     /**
      * Test custom render method
      */
-    public function testRenderCreateSetsDefaultStepNumber()
+    public function testRenderCreateSetsDefaultStepNumber(): void
     {
         $form = m::mock(Form::class);
         $view = $this->sut->renderCreateApplication('my_page', $form);

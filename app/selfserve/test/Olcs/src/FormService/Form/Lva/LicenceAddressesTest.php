@@ -24,7 +24,7 @@ class LicenceAddressesTest extends MockeryTestCase
         $this->sut = new LicenceAddresses($this->formHelper);
     }
 
-    public function testGetForm()
+    public function testGetForm(): void
     {
         $formActions = m::mock(ElementInterface::class);
         $formActions->shouldReceive('get')

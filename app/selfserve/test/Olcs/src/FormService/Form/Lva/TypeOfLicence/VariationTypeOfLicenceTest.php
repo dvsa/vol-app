@@ -36,7 +36,7 @@ class VariationTypeOfLicenceTest extends MockeryTestCase
     /**
      * @dataProvider paramsProvider
      */
-    public function testAlterForm($params, $removeElement, $accessToLicenceType)
+    public function testAlterForm($params, $removeElement, $accessToLicenceType): void
     {
         $mockForm = m::mock(Form::class);
 
@@ -67,7 +67,12 @@ class VariationTypeOfLicenceTest extends MockeryTestCase
         $this->assertSame($mockForm, $form);
     }
 
-    public function paramsProvider()
+    /**
+     * @return ((bool|string)[]|int|string)[][]
+     *
+     * @psalm-return list{list{array{canUpdateLicenceType: true, canBecomeSpecialRestricted: true, currentLicenceType: 'foo', currentVehicleType: 'bar'}, 'form-actions->cancel', 2}, list{array{canUpdateLicenceType: true, canBecomeSpecialRestricted: false, currentLicenceType: 'foo', currentVehicleType: 'bar'}, 'form-actions->cancel', 3}, list{array{canUpdateLicenceType: false, canBecomeSpecialRestricted: true, currentLicenceType: 'foo', currentVehicleType: 'bar'}, 'form-actions', 3}}
+     */
+    public function paramsProvider(): array
     {
         return [
             [
@@ -103,7 +108,7 @@ class VariationTypeOfLicenceTest extends MockeryTestCase
         ];
     }
 
-    public function mockLockElements($mockForm, $params, $accessToLicenceType)
+    public function mockLockElements(m\LegacyMockInterface $mockForm, $params, $accessToLicenceType): void
     {
         $mockOperatorLocation = m::mock(Element::class)
             ->shouldReceive('setLabel')

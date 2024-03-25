@@ -8,6 +8,8 @@ trait ReviewRedirect
 {
     /**
      * @param MvcEvent $e
+     *
+     * @return void
      */
     public function onDispatch(MvcEvent $e)
     {

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Olcs\Controller\Lva\Traits;
 
 use Laminas\Http\Response;

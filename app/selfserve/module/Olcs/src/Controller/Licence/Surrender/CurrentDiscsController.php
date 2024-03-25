@@ -56,6 +56,9 @@ class CurrentDiscsController extends AbstractSurrenderController
         return $this->renderView($params);
     }
 
+    /**
+     * @return \Laminas\Http\Response|\Laminas\View\Model\ViewModel
+     */
     public function postAction()
     {
         $this->form = $this->getForm(CurrentDiscs::class);
@@ -101,7 +104,7 @@ class CurrentDiscsController extends AbstractSurrenderController
         return $expectedDiscCount === $enteredDiscCount;
     }
 
-    private function fetchEnteredDiscCount($formData): int
+    private function fetchEnteredDiscCount(array $formData): int
     {
         $data = CurrentDiscsMapper::mapFromForm($formData);
 
@@ -133,7 +136,7 @@ class CurrentDiscsController extends AbstractSurrenderController
         ];
     }
 
-    private function skip()
+    private function skip(): void
     {
         if ($this->getNumberOfDiscs() === 0) {
             $this->nextStep('licence/surrender/operator-licence/GET');

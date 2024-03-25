@@ -5,6 +5,7 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace OlcsTest\Mvc;
 
 use Common\Service\Helper\UrlHelperService;
@@ -61,7 +62,7 @@ class CookieBannerListenerTest extends MockeryTestCase
         );
     }
 
-    public function testAttach()
+    public function testAttach(): void
     {
         $em = m::mock(EventManagerInterface::class);
         $em->shouldReceive('attach')->once()->with(MvcEvent::EVENT_ROUTE, [$this->sut, 'onRoute'], 1);
@@ -69,7 +70,7 @@ class CookieBannerListenerTest extends MockeryTestCase
         $this->sut->attach($em);
     }
 
-    public function testOnRouteNonHttp()
+    public function testOnRouteNonHttp(): void
     {
         $request = m::mock();
 
@@ -79,7 +80,7 @@ class CookieBannerListenerTest extends MockeryTestCase
         $this->sut->onRoute($event);
     }
 
-    public function testOnRouteAcceptAllCookiesRedirect()
+    public function testOnRouteAcceptAllCookiesRedirect(): void
     {
         $redirectUrl = '/redirect/url?param1Name=param1Value&param2Name=param2Value';
 
@@ -160,7 +161,7 @@ class CookieBannerListenerTest extends MockeryTestCase
         $this->sut->onRoute($event);
     }
 
-    public function testOnRouteDisplayConfirmation()
+    public function testOnRouteDisplayConfirmation(): void
     {
         $request = m::mock(Request::class);
         $request->shouldReceive('getQuery')
@@ -190,7 +191,7 @@ class CookieBannerListenerTest extends MockeryTestCase
     /**
      * @dataProvider dpOnRouteDisplayBanner
      */
-    public function testOnRouteDisplayBanner($bannerVisible, $expectedCookieBannerMode)
+    public function testOnRouteDisplayBanner($bannerVisible, $expectedCookieBannerMode): void
     {
         $request = m::mock(Request::class);
         $request->shouldReceive('getQuery')
@@ -221,7 +222,12 @@ class CookieBannerListenerTest extends MockeryTestCase
         $this->sut->onRoute($event);
     }
 
-    public function dpOnRouteDisplayBanner()
+    /**
+     * @return (bool|string)[][]
+     *
+     * @psalm-return list{list{true, 'banner'}, list{false, ''}}
+     */
+    public function dpOnRouteDisplayBanner(): array
     {
         return [
             [true, 'banner'],

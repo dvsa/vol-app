@@ -74,6 +74,9 @@ class IrhpCheckAnswersController extends AbstractSelfserveController
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager);
     }
 
+    /**
+     * @return void
+     */
     public function retrieveData()
     {
         parent::retrieveData();

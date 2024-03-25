@@ -221,9 +221,10 @@ class Navigation implements ListenerAggregateInterface
         return($unreadByOrganisation->getResult()['count'] ?? 0);
     }
 
-    public function addUnreadMessagingCount(){
+    public function addUnreadMessagingCount(): void
+    {
         $this->navigation->findBy('id', 'dashboard-licences-applications')
-            ->findBy('id','dashboard-messaging')
+            ->findBy('id', 'dashboard-messaging')
             ->set('unreadMessageCount', $this->getUnreadMessageCount());
     }
 }

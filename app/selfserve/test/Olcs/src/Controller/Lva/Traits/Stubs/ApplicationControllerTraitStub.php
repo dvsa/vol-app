@@ -12,11 +12,11 @@ use Laminas\Mvc\Controller\AbstractActionController;
  */
 class ApplicationControllerTraitStub extends AbstractActionController
 {
-    protected $lva = 'application';
-
     use ApplicationControllerTrait;
 
-    public function callRender($title, $form = null, $variables = [])
+    protected $lva = 'application';
+
+    public function callRender($title, $form = null, $variables = []): \Laminas\View\Model\ViewModel
     {
         return $this->render($title, $form, $variables);
     }

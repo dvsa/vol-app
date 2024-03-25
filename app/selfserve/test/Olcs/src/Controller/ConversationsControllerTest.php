@@ -62,7 +62,7 @@ class ConversationsControllerTest extends TestCase
         $this->setMockedProperties($reflectionClass, 'uploadHelper', $this->mockUploadHelper);
     }
 
-    public function setMockedProperties(ReflectionClass $reflectionClass, string $property, $value): void
+    public function setMockedProperties(ReflectionClass $reflectionClass, string $property, m\LegacyMockInterface $value): void
     {
         $reflectionProperty = $reflectionClass->getProperty($property);
         $reflectionProperty->setAccessible(true);

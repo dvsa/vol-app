@@ -70,7 +70,7 @@ class CommunityLicenceController extends AbstractSurrenderController
          return $this->createView();
     }
 
-    public function submitAction()
+    public function submitAction(): \Laminas\View\Model\ViewModel
     {
 
         $formData = (array)$this->getRequest()->getPost();

@@ -21,7 +21,7 @@ class LicencesAvailableTest extends TestCase
         $this->licencesAvailable = new LicencesAvailable();
     }
 
-    public function testMapForFormOptionsEcmtRestricted()
+    public function testMapForFormOptionsEcmtRestricted(): void
     {
         $inputData = [
             'licencesAvailable' => [
@@ -87,7 +87,7 @@ class LicencesAvailableTest extends TestCase
         );
     }
 
-    public function testMultiLicence()
+    public function testMultiLicence(): void
     {
         $inputData = [
             'licencesAvailable' => [
@@ -155,7 +155,7 @@ class LicencesAvailableTest extends TestCase
         );
     }
 
-    public function testActiveWarning()
+    public function testActiveWarning(): void
     {
         $inputData = [
             'licencesAvailable' => [

@@ -5,6 +5,7 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace Olcs\Controller\Lva;
 
 use Common\RefData;
@@ -51,7 +52,7 @@ class DeclarationFormController extends AbstractActionController
         return $layout;
     }
 
-    protected function determineTitle($data)
+    protected function determineTitle($data): string
     {
         if ($data['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
             return 'application-review-title-gv-declaration';
@@ -64,7 +65,7 @@ class DeclarationFormController extends AbstractActionController
         return 'application-review-title-psv-declaration';
     }
 
-    protected function determineSignatureLabel($data)
+    protected function determineSignatureLabel($data): string
     {
         switch ($data['licence']['organisation']['type']['id']) {
             case RefData::ORG_TYPE_SOLE_TRADER:

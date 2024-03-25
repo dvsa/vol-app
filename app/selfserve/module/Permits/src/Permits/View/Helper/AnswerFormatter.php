@@ -11,7 +11,6 @@ use Laminas\View\Helper\AbstractHelper;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  *
- * TODO: this is expected to be redundant following the EMCT->IRHP migration
  */
 class AnswerFormatter extends AbstractHelper
 {

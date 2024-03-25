@@ -23,7 +23,7 @@ class QuestionArrayProviderTest extends MockeryTestCase
         $this->sut = new QuestionArrayProvider($this->formattedTranslateableTextParametersGenerator);
     }
 
-    public function testGetWithHtmlEscapeFilter()
+    public function testGetWithHtmlEscapeFilter(): void
     {
         $questionKey = 'questionKey';
 
@@ -64,7 +64,7 @@ class QuestionArrayProviderTest extends MockeryTestCase
         );
     }
 
-    public function testExceptionOnRawFilter()
+    public function testExceptionOnRawFilter(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage(QuestionArrayProvider::ONLY_HTML_ESCAPE_SUPPORTED);

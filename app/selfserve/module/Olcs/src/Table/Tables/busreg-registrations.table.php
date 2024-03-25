@@ -4,6 +4,7 @@ use Common\Service\Table\Formatter\BusRegStatus;
 use Common\Service\Table\Formatter\Date;
 use Common\Service\Table\Formatter\EbsrRegNumberLink;
 use Common\Service\Table\Formatter\EbsrVariationNumber;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -28,6 +29,10 @@ return [
             'title' => 'Bus registration No.',
             'formatter' => function ($data, $column) {
                 $column['formatter'] = EbsrRegNumberLink::class;
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 return $this->callFormatter($column, $data);
             }
         ],
@@ -43,13 +48,22 @@ return [
         [
             'title' => 'Service No.',
             'isNumeric' => true,
-            'formatter' => fn($row) => str_replace('(', ' (', $row['serviceNo'])
+            'formatter' => fn($row) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                str_replace('(', ' (', $row['serviceNo'])
         ],
         [
             'title' => '1st-registered-cancelled',
             'name' => 'date1stReg',
             'formatter' => function ($data, $column) {
                 $column['formatter'] = Date::class;
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 return $this->callFormatter($column, $data);
             },
         ],

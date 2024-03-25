@@ -54,7 +54,7 @@ class LicencePeopleAdapter extends AbstractPeopleAdapter
      *
      * @param \Laminas\Form\Form $form form
      *
-     * @return mixed
+     * @return void
      */
     public function alterAddOrEditFormForOrganisation(Form $form)
     {

@@ -5,6 +5,7 @@ use Common\Service\Table\Formatter\IrhpPermitRangeType;
 use Common\Service\Table\Formatter\NullableNumber;
 use Common\Service\Table\Formatter\RefDataStatus;
 use Common\Service\Table\Formatter\StackValue;
+use Common\Service\Table\TableBuilder;
 use Common\Util\Escape;
 use Common\RefData;
 
@@ -36,20 +37,30 @@ return [
         [
             'title' => 'permits.irhp.valid.permits.table.country',
             'name' => 'country',
-            'formatter' => fn($row, $column) => Escape::html(
-                $this->translator->translate($row['irhpPermitRange']['irhpPermitStock']['country']['countryDesc'])
-            ),
+            'formatter' => fn($row, $column) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                 Escape::html(
+                     $this->translator->translate($row['irhpPermitRange']['irhpPermitStock']['country']['countryDesc'])
+                 ),
         ],
         [
             'title' => 'permits.irhp.valid.permits.table.type',
             'name' => 'type',
-            'formatter' => fn($row) => $this->callFormatter(
-                [
+            'formatter' => fn($row) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                $this->callFormatter(
+                    [
                     'name' => 'irhpPermitRangeType',
                     'formatter' => IrhpPermitRangeType::class,
-                ],
-                $row['irhpPermitRange']
-            )
+                    ],
+                    $row['irhpPermitRange']
+                )
         ],
         [
             'title' => 'permits.irhp.valid.permits.table.issued-date',
@@ -69,18 +80,23 @@ return [
         [
             'title' => 'status',
             'name' => 'status',
-            'formatter' => fn($row) => $this->callFormatter(
-                [
+            'formatter' => fn($row) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                $this->callFormatter(
+                    [
                     'name' => 'status',
                     'formatter' => RefDataStatus::class,
-                ],
-                [
+                    ],
+                    [
                     'status' => [
                         'id' => RefData::PERMIT_VALID,
                         'description' => RefData::PERMIT_VALID
                     ],
-                ]
-            )
+                    ]
+                )
         ],
     ]
 ];

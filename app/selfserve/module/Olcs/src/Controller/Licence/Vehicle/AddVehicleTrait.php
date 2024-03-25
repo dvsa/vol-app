@@ -54,7 +54,6 @@ trait AddVehicleTrait
         }
 
         if ($this->isGoods()) {
-            // TODO: What if we get a goods vehicle with no plated weight?
             $commandData['platedWeight'] = $platedWeight;
             return CreateGoodsVehicle::create($commandData);
         }

@@ -2,6 +2,7 @@
 
 use Common\Service\Table\Formatter\Date;
 use Common\Service\Table\Formatter\RefData;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -14,6 +15,10 @@ return [
             'title' => 'search-result-label-lic-no',
             'formatter' => function ($data) {
                 if (isset($data['id'])) {
+                    /**
+                     * @var TableBuilder $this
+                     * @psalm-scope-this TableBuilder
+                     */
                     return '<a href="' . $this->generateUrl(
                         ['entity' => 'licence', 'entityId' => $data['id']],
                         'entity-view',

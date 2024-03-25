@@ -278,7 +278,7 @@ class ViewController extends AbstractController
      * @param TableBuilder $tableBuilder
      * @param array $data
      */
-    private function alterOperatingCentresTableForLgv(TableBuilder $tableBuilder, array $data)
+    private function alterOperatingCentresTableForLgv(TableBuilder $tableBuilder, array $data): void
     {
         $isMixedWithLgv = ($data['vehicleType']['id'] === RefData::APP_VEHICLE_TYPE_MIXED) && ($data['totAuthLgvVehicles'] !== null);
 

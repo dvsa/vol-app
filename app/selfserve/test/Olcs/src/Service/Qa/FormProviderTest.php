@@ -59,7 +59,7 @@ class FormProviderTest extends MockeryTestCase
         );
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $annotationBuilderFormSpecification = new ArrayObject(
             [
@@ -111,7 +111,7 @@ class FormProviderTest extends MockeryTestCase
         );
     }
 
-    public function testGetException()
+    public function testGetException(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('No submit options mapping found for submit_options_type_xyz');

@@ -33,6 +33,9 @@ class CookieManager extends AbstractHelper implements HelperInterface
         return $this->getConfig('cookie-manager');
     }
 
+    /**
+     * @return false|string
+     */
     private function getConfig(string $name)
     {
         return json_encode($this->config[$name]);

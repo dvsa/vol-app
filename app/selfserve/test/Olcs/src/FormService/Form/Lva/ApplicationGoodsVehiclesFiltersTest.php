@@ -5,6 +5,7 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace OlcsTest\FormService\Form\Lva;
 
 use PHPUnit_Framework_TestCase;
@@ -24,7 +25,7 @@ class ApplicationGoodsVehiclesFiltersTest extends \PHPUnit\Framework\TestCase
         $this->sut = new ApplicationGoodsVehiclesFilters();
     }
 
-    public function testGetForm()
+    public function testGetForm(): void
     {
         $this->assertNull($this->sut->getForm());
     }

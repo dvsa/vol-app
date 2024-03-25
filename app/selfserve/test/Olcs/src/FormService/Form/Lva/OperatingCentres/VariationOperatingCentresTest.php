@@ -68,7 +68,7 @@ class VariationOperatingCentresTest extends MockeryTestCase
         $this->sut = new VariationOperatingCentres($this->mockFormHelper, m::mock(AuthorizationService::class), $this->tableBuilder, $fsm, $this->translator);
     }
 
-    public function testGetForm()
+    public function testGetForm(): void
     {
         $params = [
             'operatingCentres' => [],
@@ -241,12 +241,11 @@ class VariationOperatingCentresTest extends MockeryTestCase
         // Mock the form to return the input filter mock
         $this->form->shouldReceive('getInputFilter')->andReturn($inputFilterMock);
 
-
         $form = $this->sut->getForm($params);
         $this->assertSame($this->form, $form);
     }
 
-    protected function mockPopulateFormTable($data)
+    protected function mockPopulateFormTable(array $data): m\LegacyMockInterface
     {
         $table = m::mock(TableBuilder::class);
         $tableElement = m::mock(Fieldset::class);

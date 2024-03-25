@@ -34,7 +34,7 @@ class LvaOverviewTest extends MockeryTestCase
     /**
      * @test
      */
-    public function __construct_InitialisesEmptySectionsVariable()
+    public function constructInitialisesEmptySectionsVariable()
     {
         // Setup
         $this->setUpSut(static::EMPTY_DATA);
@@ -45,9 +45,9 @@ class LvaOverviewTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends __construct_InitialisesEmptySectionsVariable
+     * @depends constructInitialisesEmptySectionsVariable
      */
-    public function __construct_InitialisesSectionsVariable_WhenProvidedSectionWhichIsAnArray_WithSection(): LvaOverviewSection
+    public function constructInitialisesSectionsVariableWhenProvidedSectionWhichIsAnArrayWithSection(): LvaOverviewSection
     {
         // Setup
         $this->setUpSut(static::DATA, static::COLLECTION_OF_ONE_SECTION_FORMATTED_AS_AN_ARRAY);
@@ -61,9 +61,9 @@ class LvaOverviewTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends __construct_InitialisesSectionsVariable_WhenProvidedSectionWhichIsAnArray_WithSection
+     * @depends constructInitialisesSectionsVariableWhenProvidedSectionWhichIsAnArrayWithSection
      */
-    public function __construct_InitialisesSectionsVariable_WhenProvidedSectionWhichIsAnArray_WithSection_WithRef(LvaOverviewSection $section)
+    public function constructInitialisesSectionsVariableWhenProvidedSectionWhichIsAnArrayWithSectionWithRef(LvaOverviewSection $section)
     {
         // Assert
         $this->assertEquals(static::FIRST_SECTION_ARRAY_KEY, $section->ref);
@@ -71,9 +71,9 @@ class LvaOverviewTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends __construct_InitialisesSectionsVariable_WhenProvidedSectionWhichIsAnArray_WithSection
+     * @depends constructInitialisesSectionsVariableWhenProvidedSectionWhichIsAnArrayWithSection
      */
-    public function __construct_InitialisesSectionsVariable_WhenProvidedSectionWhichIsAnArray_WithSection_WithMode(LvaOverviewSection $section)
+    public function constructInitialisesSectionsVariableWhenProvidedSectionWhichIsAnArrayWithSectionWithMode(LvaOverviewSection $section)
     {
         // Assert
         $this->assertEquals(static::COLLECTION_OF_ONE_SECTION_FORMATTED_AS_AN_ARRAY[static::FIRST_SECTION_ARRAY_KEY], $section->mode);
@@ -81,9 +81,9 @@ class LvaOverviewTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends __construct_InitialisesSectionsVariable_WhenProvidedSectionWhichIsAnArray_WithSection
+     * @depends constructInitialisesSectionsVariableWhenProvidedSectionWhichIsAnArrayWithSection
      */
-    public function __construct_InitialisesSectionsVariable_WhenProvidedSectionWhichIsAnArray_WithSection_WithData(LvaOverviewSection $section)
+    public function constructInitialisesSectionsVariableWhenProvidedSectionWhichIsAnArrayWithSectionWithData(LvaOverviewSection $section)
     {
         // Assert
         $this->assertEquals(array_merge(static::DATA, static::SECTION_NUMBER_DATA), $section->data);
@@ -91,9 +91,9 @@ class LvaOverviewTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends __construct_InitialisesEmptySectionsVariable
+     * @depends constructInitialisesEmptySectionsVariable
      */
-    public function __construct_InitialisesSectionsVariable_WhenProvidedSectionReference_WithSection(): LvaOverviewSection
+    public function constructInitialisesSectionsVariableWhenProvidedSectionReferenceWithSection(): LvaOverviewSection
     {
         // Setup
         $this->setUpSutWithSectionModelThatDoesNotTakeAModeWhenConstructed(static::DATA, static::COLLECTION_OF_ONE_SECTION_REFERENCE);
@@ -107,10 +107,10 @@ class LvaOverviewTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends __construct_InitialisesSectionsVariable_WhenProvidedSectionReference_WithSection
+     * @depends constructInitialisesSectionsVariableWhenProvidedSectionReferenceWithSection
      * @param LvaOverviewSection $overviewSection
      */
-    public function __construct_InitialisesSectionsVariable_WhenProvidedSectionReference_WithSection_WithRef(LvaOverviewSection $overviewSection)
+    public function constructInitialisesSectionsVariableWhenProvidedSectionReferenceWithSectionWithRef(LvaOverviewSection $overviewSection)
     {
         // Assert
         $this->assertEquals(static::SECTION_REFERENCE, $overviewSection->ref);
@@ -118,10 +118,10 @@ class LvaOverviewTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends __construct_InitialisesSectionsVariable_WhenProvidedSectionReference_WithSection
+     * @depends constructInitialisesSectionsVariableWhenProvidedSectionReferenceWithSection
      * @param LvaOverviewSection $overviewSection
      */
-    public function __construct_InitialisesSectionsVariable_WhenProvidedSectionReference_WithSection_WithData(LvaOverviewSection $overviewSection)
+    public function constructInitialisesSectionsVariableWhenProvidedSectionReferenceWithSectionWithData(LvaOverviewSection $overviewSection)
     {
         // Assert
         $this->assertEquals(static::DATA, $overviewSection->data);
@@ -129,10 +129,10 @@ class LvaOverviewTest extends MockeryTestCase
 
     protected function setUpSut(...$args): void
     {
-        $this->sut = new class(...$args) extends LvaOverview {
+        $this->sut = new class (...$args) extends LvaOverview {
             protected function newSectionModel(...$args): LvaOverviewSection
             {
-                return new class(...$args) extends LvaOverviewSection
+                return new class (...$args) extends LvaOverviewSection
                 {
                     public $ref;
                     public $data;
@@ -156,10 +156,10 @@ class LvaOverviewTest extends MockeryTestCase
      */
     protected function setUpSutWithSectionModelThatDoesNotTakeAModeWhenConstructed(...$args): void
     {
-        $this->sut = new class(...$args) extends LvaOverview {
+        $this->sut = new class (...$args) extends LvaOverview {
             protected function newSectionModel(...$args): LvaOverviewSection
             {
-                return new class(...$args) extends LvaOverviewSection
+                return new class (...$args) extends LvaOverviewSection
                 {
                     public $ref;
                     public $data;

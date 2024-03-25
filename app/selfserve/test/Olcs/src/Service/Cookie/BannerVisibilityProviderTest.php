@@ -30,7 +30,7 @@ class BannerVisibilityProviderTest extends MockeryTestCase
     /**
      * @dataProvider dpFalseOnExemptRoute
      */
-    public function testFalseOnExemptRoute($routeName)
+    public function testFalseOnExemptRoute($routeName): void
     {
         $this->mvcEvent->shouldReceive('getRouteMatch->getMatchedRouteName')
             ->withNoArgs()
@@ -41,7 +41,12 @@ class BannerVisibilityProviderTest extends MockeryTestCase
         );
     }
 
-    public function dpFalseOnExemptRoute()
+    /**
+     * @return string[][]
+     *
+     * @psalm-return list{list{'cookies/settings'}}
+     */
+    public function dpFalseOnExemptRoute(): array
     {
         return [
             ['cookies/settings'],
@@ -51,7 +56,7 @@ class BannerVisibilityProviderTest extends MockeryTestCase
     /**
      * @dataProvider dpNonExemptRoute
      */
-    public function testNonExemptRoute($cookieStateIsValid, $expected)
+    public function testNonExemptRoute($cookieStateIsValid, $expected): void
     {
         $cookie = m::mock(Cookie::class);
 
@@ -62,7 +67,7 @@ class BannerVisibilityProviderTest extends MockeryTestCase
         $this->mvcEvent->shouldReceive('getRequest->getCookie')
             ->withNoArgs()
             ->andReturn($cookie);
-    
+
         $cookieState = m::mock(CookieState::class);
         $cookieState->shouldReceive('isValid')
             ->withNoArgs()
@@ -78,7 +83,12 @@ class BannerVisibilityProviderTest extends MockeryTestCase
         );
     }
 
-    public function dpNonExemptRoute()
+    /**
+     * @return bool[][]
+     *
+     * @psalm-return list{list{true, false}, list{false, true}}
+     */
+    public function dpNonExemptRoute(): array
     {
         return [
             [true, false],

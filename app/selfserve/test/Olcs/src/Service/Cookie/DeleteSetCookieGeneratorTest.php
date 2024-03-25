@@ -11,7 +11,7 @@ use Laminas\Http\Header\SetCookie;
 
 class DeleteSetCookieGeneratorTest extends MockeryTestCase
 {
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $setCookie = m::mock(SetCookie::class);
         $dataName = 'cookieName';

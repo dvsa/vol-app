@@ -90,8 +90,10 @@ class ConversationsController extends AbstractController implements ToggleAwareI
 
     /**
      * @throws \Exception
+     *
+     * @return Response|ViewModel
      */
-    public function addAction(): ViewModel
+    public function addAction()
     {
         $form = $this->formHelperService->createForm(CreateForm::class, true, false);
         $form->get('correlationId')->setValue(sha1(microtime()));
@@ -290,7 +292,7 @@ class ConversationsController extends AbstractController implements ToggleAwareI
         return parent::indexAction();
     }
 
-    public function processFileUpload($file)
+    public function processFileUpload($file): void
     {
         $dtoData = [
             'category'              => Category::CATEGORY_LICENSING,

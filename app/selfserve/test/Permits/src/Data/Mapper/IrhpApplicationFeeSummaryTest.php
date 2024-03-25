@@ -54,7 +54,7 @@ class IrhpApplicationFeeSummaryTest extends TestCase
         );
     }
 
-    public function testMapForDisplayBilateralNothingPaid()
+    public function testMapForDisplayBilateralNothingPaid(): void
     {
         $applicationRef = 'OB1234567/1';
         $dateReceived = '2020-12-25';
@@ -145,7 +145,7 @@ class IrhpApplicationFeeSummaryTest extends TestCase
         );
     }
 
-    public function testMapForDisplayBilateralPartiallyPaid()
+    public function testMapForDisplayBilateralPartiallyPaid(): void
     {
         $applicationRef = 'OB1234567/1';
         $dateReceived = '2020-12-25';
@@ -269,7 +269,7 @@ class IrhpApplicationFeeSummaryTest extends TestCase
         );
     }
 
-    public function testMapForDisplayBilateralFullyPaid()
+    public function testMapForDisplayBilateralFullyPaid(): void
     {
         $applicationRef = 'OB1234567/1';
         $dateReceived = '2020-12-25';
@@ -365,7 +365,7 @@ class IrhpApplicationFeeSummaryTest extends TestCase
         );
     }
 
-    public function testMapForDisplayMultilateral()
+    public function testMapForDisplayMultilateral(): void
     {
         $applicationRef = 'OB1234567/1';
         $dateReceived = '2020-12-25';
@@ -445,7 +445,7 @@ class IrhpApplicationFeeSummaryTest extends TestCase
         );
     }
 
-    public function testMapForDisplayEcmtRemoval()
+    public function testMapForDisplayEcmtRemoval(): void
     {
         $applicationRef = 'OB1234567/1';
         $dateReceived = '2020-12-25';
@@ -562,7 +562,7 @@ class IrhpApplicationFeeSummaryTest extends TestCase
     /**
      * @dataProvider dpTestMapForDisplayEcmtAnnualAndShortTerm
      */
-    public function testMapForDisplayEcmtAnnualAndShortTerm($permitTypeId)
+    public function testMapForDisplayEcmtAnnualAndShortTerm($permitTypeId): void
     {
         $isUnderConsideration = false;
         $isAwaitingFee = false;
@@ -705,7 +705,12 @@ class IrhpApplicationFeeSummaryTest extends TestCase
         );
     }
 
-    public function dpTestMapForDisplayEcmtAnnualAndShortTerm()
+    /**
+     * @return int[][]
+     *
+     * @psalm-return list{list{1}, list{2}}
+     */
+    public function dpTestMapForDisplayEcmtAnnualAndShortTerm(): array
     {
         return [
             [RefData::ECMT_PERMIT_TYPE_ID],
@@ -713,7 +718,7 @@ class IrhpApplicationFeeSummaryTest extends TestCase
         ];
     }
 
-    public function testMapForDisplayEcmtShortTermUnderConsideration()
+    public function testMapForDisplayEcmtShortTermUnderConsideration(): void
     {
         $isUnderConsideration = true;
         $isAwaitingFee = false;
@@ -865,7 +870,7 @@ class IrhpApplicationFeeSummaryTest extends TestCase
         );
     }
 
-    public function testMapForDisplayEcmtShortTermAwaitingFee()
+    public function testMapForDisplayEcmtShortTermAwaitingFee(): void
     {
         $isUnderConsideration = false;
         $isAwaitingFee = true;
@@ -1029,7 +1034,7 @@ class IrhpApplicationFeeSummaryTest extends TestCase
         );
     }
 
-    public function testMapForDisplayEcmtShortTermCanViewCandidatePermits()
+    public function testMapForDisplayEcmtShortTermCanViewCandidatePermits(): void
     {
         $isUnderConsideration = false;
         $isAwaitingFee = true;
@@ -1214,7 +1219,7 @@ class IrhpApplicationFeeSummaryTest extends TestCase
         );
     }
 
-    public function testMapForDisplayUnsupportedException()
+    public function testMapForDisplayUnsupportedException(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unsupported permit type id 57');

@@ -14,6 +14,6 @@ class DataSourceConfig
     ];
 
     public const SURRENDER = [
-        Surrender::class =>[]
+        Surrender::class => []
     ];
 }

@@ -3,6 +3,7 @@
 use Common\Service\Table\Formatter\Date;
 use Common\Service\Table\Formatter\Translate;
 use Common\Service\Table\Formatter\YesNo;
+use Common\Service\Table\TableBuilder;
 
 $translationPrefix = 'entity-view-table-conditions-undertakings.table';
 
@@ -32,10 +33,15 @@ return [
         ],
         [
             'title' => $translationPrefix . '.status',
-            'formatter' => fn($data, $col) => $this->translator->translate(
-                'common.table.status.' .
-                ($data['isDraft'] === 'Y' ? 'draft' : 'approved')
-            )
+            'formatter' => fn($data, $col) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                $this->translator->translate(
+                    'common.table.status.' .
+                    ($data['isDraft'] === 'Y' ? 'draft' : 'approved')
+                )
         ]
     ]
 ];

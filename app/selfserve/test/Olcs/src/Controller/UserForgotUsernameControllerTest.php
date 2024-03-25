@@ -44,14 +44,17 @@ class UserForgotUsernameControllerTest extends TestCase
         $this->setMockedProperties($reflectionClass, 'formHelper', $this->mockformHelper);
     }
 
-    public function setMockedProperties($reflectionClass, $property, $value)
+    /**
+     * @psalm-param ReflectionClass<Sut> $reflectionClass
+     */
+    public function setMockedProperties(ReflectionClass $reflectionClass, string $property, m\LegacyMockInterface $value): void
     {
         $reflectionProperty = $reflectionClass->getProperty($property);
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->sut, $value);
     }
 
-    public function testIndexActionForGet()
+    public function testIndexActionForGet(): void
     {
         $mockRequest = m::mock();
         $mockRequest->shouldReceive('isPost')->andReturn(false);
@@ -71,7 +74,7 @@ class UserForgotUsernameControllerTest extends TestCase
         $this->assertEquals('olcs/user-forgot-username/index', $view->getTemplate());
     }
 
-    public function testIndexActionForPostWithCancel()
+    public function testIndexActionForPostWithCancel(): void
     {
         $mockRequest = m::mock();
         $mockRequest->shouldReceive('isPost')->andReturn(true);
@@ -95,7 +98,7 @@ class UserForgotUsernameControllerTest extends TestCase
         $this->assertEquals('REDIRECT', $this->sut->indexAction());
     }
 
-    public function testIndexActionForPostSingle()
+    public function testIndexActionForPostSingle(): void
     {
         $postData = [
             'fields' => [
@@ -146,7 +149,7 @@ class UserForgotUsernameControllerTest extends TestCase
         $this->assertEquals('olcs/user-forgot-username/check-email', $view->getTemplate());
     }
 
-    public function testIndexActionForPostMultiple()
+    public function testIndexActionForPostMultiple(): void
     {
         $postData = [
             'fields' => [
@@ -197,7 +200,7 @@ class UserForgotUsernameControllerTest extends TestCase
         $this->assertEquals('olcs/user-forgot-username/ask-admin', $view->getTemplate());
     }
 
-    public function testIndexActionForPostNotFound()
+    public function testIndexActionForPostNotFound(): void
     {
         $postData = [
             'fields' => [
@@ -245,7 +248,7 @@ class UserForgotUsernameControllerTest extends TestCase
         $this->assertEquals('olcs/user-forgot-username/index', $view->getTemplate());
     }
 
-    public function testIndexActionForPostWithError()
+    public function testIndexActionForPostWithError(): void
     {
         $postData = [
             'fields' => [

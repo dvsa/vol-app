@@ -45,7 +45,7 @@ class ApplicationPeopleTest extends MockeryTestCase
         $this->sut = new Sut($this->formHelper, m::mock(AuthorizationService::class));
     }
 
-    public function testGetFormAndCanModify()
+    public function testGetFormAndCanModify(): void
     {
         $formActions = m::mock(Form::class);
         $formActions->shouldReceive('has')->with('cancel')->andReturn(true);
@@ -64,7 +64,7 @@ class ApplicationPeopleTest extends MockeryTestCase
         $this->sut->getForm(['canModify' => true, 'isPartnership' => false]);
     }
 
-    public function testGetFormAndCannotModify()
+    public function testGetFormAndCannotModify(): void
     {
         $formActions = m::mock(Form::class);
         $formActions->shouldReceive('has')->with('save')->andReturn(true);
@@ -101,7 +101,7 @@ class ApplicationPeopleTest extends MockeryTestCase
         $this->sut->getForm(['canModify' => false, 'isPartnership' => false]);
     }
 
-    public function testGetFormPartnership()
+    public function testGetFormPartnership(): void
     {
         $formActions = m::mock(Form::class);
         $formActions->shouldReceive('has')->with('save')->andReturn(true);

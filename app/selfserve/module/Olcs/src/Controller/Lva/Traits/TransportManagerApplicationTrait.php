@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Lva\Traits;
 
+use Common\Data\Mapper\Lva\TransportManagerApplication;
 use Common\RefData;
 use Dvsa\Olcs\Transfer\Command;
 use Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetDetails;
@@ -9,8 +10,11 @@ use Laminas\Mvc\MvcEvent;
 
 trait TransportManagerApplicationTrait
 {
-    protected $tma;
+    protected TransportManagerApplication $tma;
 
+    /**
+     * @return void
+     */
     public function onDispatch(MvcEvent $e)
     {
         $tmaId = (int)$this->params('child_id');

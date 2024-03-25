@@ -36,7 +36,7 @@ class CurrentPreferencesProviderTest extends MockeryTestCase
         $this->sut = new CurrentPreferencesProvider($this->cookieReader, $this->preferencesFactory);
     }
 
-    public function testReturnStoredPreferencesWhenCookieExists()
+    public function testReturnStoredPreferencesWhenCookieExists(): void
     {
         $cookie = m::mock(Cookie::class);
 
@@ -58,7 +58,7 @@ class CurrentPreferencesProviderTest extends MockeryTestCase
         );
     }
 
-    public function testReturnDefaultPreferencesWhenCookieMissingOrInvalid()
+    public function testReturnDefaultPreferencesWhenCookieMissingOrInvalid(): void
     {
         $cookie = null;
 

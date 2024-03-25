@@ -33,7 +33,7 @@ class ViewGeneratorProviderTest extends MockeryTestCase
         );
     }
 
-    public function testGetByRouteName()
+    public function testGetByRouteName(): void
     {
         $this->assertSame(
             $this->irhpApplicationViewGenerator,
@@ -41,7 +41,7 @@ class ViewGeneratorProviderTest extends MockeryTestCase
         );
     }
 
-    public function testGetByRouteNameNotFound()
+    public function testGetByRouteNameNotFound(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('No view generator found for route test/route');

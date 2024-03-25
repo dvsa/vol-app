@@ -13,9 +13,10 @@ class SessionTimeoutWarningFactoryTest extends MockeryTestCase
 {
     /**
      * @test
+     *
      * @throws \Exception
      */
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $container = m::mock(ContainerInterface::class);
         $container->expects('get')->with('Config')->andReturn([]);
@@ -45,9 +46,10 @@ class SessionTimeoutWarningFactoryTest extends MockeryTestCase
 
     /**
      * @test
+     *
      * @depends testInvoke
      */
-    public function testInvokeWithInvalidConfigurationThrowsException()
+    public function testInvokeWithInvalidConfigurationThrowsException(): void
     {
         $container = m::mock(ContainerInterface::class);
         $container->expects('get')->with('Config')->andReturn([]);

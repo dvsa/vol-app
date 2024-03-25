@@ -33,7 +33,7 @@ class UserForgotUsernameController extends AbstractController
     /**
      * Index action
      *
-     * @return ViewModel
+     * @return ViewModel|\Laminas\Http\Response
      */
     public function indexAction()
     {

@@ -27,7 +27,7 @@ class AvailableBilateralStocksTest extends \Mockery\Adapter\Phpunit\MockeryTestC
         $this->sut = new AvailableBilateralStocks($this->translationHelperService);
     }
 
-    public function testMapForFormOptionsSingle()
+    public function testMapForFormOptionsSingle(): void
     {
         $inputData = [
             IrhpApplicationDataSource::DATA_KEY => [
@@ -88,7 +88,7 @@ class AvailableBilateralStocksTest extends \Mockery\Adapter\Phpunit\MockeryTestC
         );
     }
 
-    public function testMapForFormOptionsMultipleNotMorocco()
+    public function testMapForFormOptionsMultipleNotMorocco(): void
     {
         $inputData = [
             IrhpApplicationDataSource::DATA_KEY => [
@@ -179,7 +179,7 @@ class AvailableBilateralStocksTest extends \Mockery\Adapter\Phpunit\MockeryTestC
         );
     }
 
-    public function testMapForFormOptionsMultipleMorocco()
+    public function testMapForFormOptionsMultipleMorocco(): void
     {
         $inputData = [
             IrhpApplicationDataSource::DATA_KEY => [
@@ -275,7 +275,7 @@ class AvailableBilateralStocksTest extends \Mockery\Adapter\Phpunit\MockeryTestC
         );
     }
 
-    public function testProcessRedirectParams()
+    public function testProcessRedirectParams(): void
     {
         $stockId7Slug = 'slug-seven';
 

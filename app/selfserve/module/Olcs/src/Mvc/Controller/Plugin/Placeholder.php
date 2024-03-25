@@ -35,8 +35,11 @@ class Placeholder extends AbstractPlugin
     /**
      * @param $name
      * @param $value
+     *
+     * @psalm-param 'key' $name
+     * @psalm-param 'value' $value
      */
-    public function setPlaceholder($name, $value)
+    public function setPlaceholder(string $name, string $value): void
     {
         $this->placeholder->getContainer($name)->set($value);
     }

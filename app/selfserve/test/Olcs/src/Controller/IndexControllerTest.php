@@ -22,7 +22,7 @@ class IndexControllerTest extends MockeryTestCase
             ->makePartial();
     }
 
-    public function testIndexLogin()
+    public function testIndexLogin(): void
     {
         $this->sut->shouldReceive('currentUser->getIdentity')
             ->once()
@@ -36,7 +36,7 @@ class IndexControllerTest extends MockeryTestCase
         static::assertEquals('REDIRECT', $this->sut->indexAction());
     }
 
-    public function testIndexLoginAnon()
+    public function testIndexLoginAnon(): void
     {
         $mockIdentity = new User();
         $mockIdentity->setUserType(User::USER_TYPE_ANON);
@@ -53,7 +53,7 @@ class IndexControllerTest extends MockeryTestCase
         static::assertEquals('REDIRECT', $this->sut->indexAction());
     }
 
-    public function testIndexLoginNotIdentified()
+    public function testIndexLoginNotIdentified(): void
     {
         $mockIdentity = new User();
         $mockIdentity->setUserType(User::USER_TYPE_NOT_IDENTIFIED);
@@ -67,7 +67,7 @@ class IndexControllerTest extends MockeryTestCase
         $this->sut->indexAction();
     }
 
-    public function testIndexDashboard()
+    public function testIndexDashboard(): void
     {
         $mockIdentity = new User();
         $mockIdentity->setUserType(User::USER_TYPE_OPERATOR);
@@ -89,7 +89,7 @@ class IndexControllerTest extends MockeryTestCase
         static::assertEquals('REDIRECT', $this->sut->indexAction());
     }
 
-    public function testIndexPrompt()
+    public function testIndexPrompt(): void
     {
         $mockIdentity = new User();
         $mockIdentity->setUserType(User::USER_TYPE_OPERATOR);
@@ -111,7 +111,7 @@ class IndexControllerTest extends MockeryTestCase
         static::assertEquals('REDIRECT', $this->sut->indexAction());
     }
 
-    public function testIndexBusReg()
+    public function testIndexBusReg(): void
     {
         $mockIdentity = new User();
         $mockIdentity->setUserType(User::USER_TYPE_LOCAL_AUTHORITY);
@@ -132,7 +132,7 @@ class IndexControllerTest extends MockeryTestCase
         static::assertEquals('REDIRECT', $this->sut->indexAction());
     }
 
-    public function testIndexSearch()
+    public function testIndexSearch(): void
     {
         $mockIdentity = new User();
         $mockIdentity->setUserType(User::USER_TYPE_OPERATOR);

@@ -29,7 +29,7 @@ class LicencePsvVehiclesTest extends MockeryTestCase
         $this->sut = new LicencePsvVehicles($this->formHelper, m::mock(AuthorizationService::class));
     }
 
-    public function testGetForm()
+    public function testGetForm(): void
     {
         $mockLicenceVehicles = m::mock(Form::class);
         $this->fsm->setService('lva-licence-vehicles_psv', $mockLicenceVehicles);

@@ -1,7 +1,9 @@
 <?php
+
 /**
  * Class Search Controller Test
  */
+
 namespace OlcsTest\Controller\Search;
 
 use Mockery as m;
@@ -22,7 +24,7 @@ class SearchControllerTest extends TestCase
             ->shouldAllowMockingProtectedMethods();
     }
 
-    public function testIndexActionWithoutIndex()
+    public function testIndexActionWithoutIndex(): void
     {
         $this->sut->shouldReceive('params->fromRoute')
             ->with('index')

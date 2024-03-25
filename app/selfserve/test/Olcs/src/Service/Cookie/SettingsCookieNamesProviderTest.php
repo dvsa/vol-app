@@ -9,7 +9,7 @@ use Laminas\Http\Header\Cookie;
 
 class SettingsCookieNamesProviderTest extends MockeryTestCase
 {
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $cookie = m::mock(Cookie::class);
 

@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 use Olcs\Controller\Licence\Surrender\DestroyController;
 use Olcs\Controller\Licence\Surrender\InformationChangedController;

@@ -5,6 +5,7 @@
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
+
 namespace OlcsTest\View\Model\Variation;
 
 use Olcs\View\Model\Variation\VariationOverview;
@@ -21,7 +22,7 @@ class VariationOverviewTest extends \PHPUnit\Framework\TestCase
      *
      * @group variationOverview
      */
-    public function testSetVariables()
+    public function testSetVariables(): void
     {
         $data = [
             'id' => 1,

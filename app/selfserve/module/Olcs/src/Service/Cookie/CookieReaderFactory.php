@@ -15,7 +15,7 @@ class CookieReaderFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : CookieReader
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CookieReader
     {
         return new CookieReader(
             $container->get('CookieCookieStateFactory'),

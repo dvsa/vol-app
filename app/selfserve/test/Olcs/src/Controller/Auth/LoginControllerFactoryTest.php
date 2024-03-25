@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace OlcsTest\Controller\Auth;
@@ -8,10 +9,8 @@ use Common\Controller\Dispatcher;
 use Common\Controller\Plugin\CurrentUser;
 use Common\Controller\Plugin\Redirect;
 use Common\Service\Helper\FormHelperService;
-use Dvsa\Olcs\Auth\Service\Auth\CookieService;
 use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\Mvc\Controller\Plugin\Url;
-use Laminas\ServiceManager\ServiceManager;
 use Olcs\Auth\Adapter\SelfserveCommandAdapter;
 use Olcs\Controller\Auth\LoginController;
 use Olcs\Controller\Auth\LoginControllerFactory;
@@ -19,7 +18,6 @@ use PHPUnit\Framework\TestCase;
 
 class LoginControllerFactoryTest extends TestCase
 {
-
     /**
      * @var LoginControllerFactory
      */
@@ -28,7 +26,7 @@ class LoginControllerFactoryTest extends TestCase
     /**
      * @test
      */
-    public function __invoke_IsCallable(): void
+    public function invokeIsCallable(): void
     {
         // Setup
         $this->setUpSut();
@@ -39,9 +37,9 @@ class LoginControllerFactoryTest extends TestCase
 
     /**
      * @test
-     * @depends __invoke_IsCallable
+     * @depends invokeIsCallable
      */
-    public function __invoke_ReturnsAnInstanceOfDispatcherWithLoginController()
+    public function invokeReturnsAnInstanceOfDispatcherWithLoginController()
     {
         // Setup
         $this->setUpSut();
@@ -69,5 +67,4 @@ class LoginControllerFactoryTest extends TestCase
     {
         $this->sut = new LoginControllerFactory();
     }
-
 }

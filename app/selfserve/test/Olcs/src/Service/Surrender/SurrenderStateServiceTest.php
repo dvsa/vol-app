@@ -11,7 +11,7 @@ class SurrenderStateServiceTest extends TestCase
     /**
      * @dataProvider fetchRouteDataProvider
      */
-    public function testFetchRoute($surrender, $expectedRoute)
+    public function testFetchRoute($surrender, $expectedRoute): void
     {
         $service = new SurrenderStateService();
         $service->setSurrenderData($surrender);
@@ -21,7 +21,7 @@ class SurrenderStateServiceTest extends TestCase
     /**
      * @dataProvider hasExpiredProvider
      */
-    public function testHasExpired($surrender, $expected)
+    public function testHasExpired($surrender, $expected): void
     {
         $service = new SurrenderStateService();
         $service->setSurrenderData($surrender);
@@ -31,14 +31,19 @@ class SurrenderStateServiceTest extends TestCase
     /**
      * @dataProvider getStateProvider
      */
-    public function testGetState($surrender, $expectedState)
+    public function testGetState($surrender, $expectedState): void
     {
         $service = new SurrenderStateService();
         $service->setSurrenderData($surrender);
         $this->assertSame($expectedState, $service->getState());
     }
 
-    public function fetchRouteDataProvider()
+    /**
+     * @return ((string|string[])[][]|string)[][]
+     *
+     * @psalm-return array{status_start: array{surrender: array{status: array{id: 'surr_sts_start'}}, route: 'licence/surrender/review-contact-details/GET'}, status_contacts_complete: array{surrender: array{status: array{id: 'surr_sts_contacts_complete'}}, route: 'licence/surrender/current-discs/GET'}, status_discs_complete: array{surrender: array{status: array{id: 'surr_sts_discs_complete'}}, route: 'licence/surrender/operator-licence/GET'}, status_lic_docs_complete_is_IL: array{surrender: array{status: array{id: 'surr_sts_lic_docs_complete'}, licence: array{licenceType: array{id: 'ltyp_si'}}}, route: 'licence/surrender/community-licence/GET'}, status_lic_docs_complete_is_not_IL: array{surrender: array{status: array{id: 'surr_sts_lic_docs_complete'}, licence: array{licenceType: array{id: 'ltyp_sn'}}}, route: 'licence/surrender/review/GET'}, status_comm_lic_docs_complete: array{surrender: array{status: array{id: 'surr_sts_comm_lic_docs_complete'}}, route: 'licence/surrender/review/GET'}, status_details_confirmed: array{surrender: array{status: array{id: 'surr_sts_details_confirmed'}}, route: 'licence/surrender/review/GET'}, default: array{surrender: array{status: array{id: 'surr_sts_signed'}}, route: 'lva-licence'}}
+     */
+    public function fetchRouteDataProvider(): array
     {
         return [
             'status_start' => [
@@ -118,7 +123,12 @@ class SurrenderStateServiceTest extends TestCase
         ];
     }
 
-    public function hasExpiredProvider()
+    /**
+     * @return ((null|string)[]|bool)[][]
+     *
+     * @psalm-return array{has_created_and_is_expired: array{surrender: array{createdOn: '2019-01-31 14:13:09', lastModifiedOn: null}, expected: true}, has_created_modified_and_is_expired: array{surrender: array{createdOn: '2019-01-31 14:13:09', lastModifiedOn: '2019-02-01 14:13:09'}, expected: true}, has_created_and_is_not_expired: array{surrender: array{createdOn: string, lastModifiedOn: null}, expected: false}, has_created_modified_and_is_not_expired: array{surrender: array{createdOn: string, lastModifiedOn: string}, expected: false}}
+     */
+    public function hasExpiredProvider(): array
     {
         return [
             'has_created_and_is_expired' => [
@@ -152,7 +162,12 @@ class SurrenderStateServiceTest extends TestCase
         ];
     }
 
-    public function getStateProvider()
+    /**
+     * @return (((int|string|string[])[]|int|null|string)[]|string)[][]
+     *
+     * @psalm-return array{application_started: array{surrender: array{status: array{id: 'surr_sts_start'}, createdOn: string, lastModifiedOn: null}, expected: 'surrender_application_ok'}, application_withdrawn: array{surrender: array{status: array{id: 'surr_sts_withdrawn'}, createdOn: string, lastModifiedOn: null}, expected: 'surrender_application_withdrawn'}, application_expired: array{surrender: array{status: array{id: 'surr_sts_discs_complete'}, createdOn: '2019-01-31 14:13:09', lastModifiedOn: null}, expected: 'surrender_application_expired'}, goods_disc_count_information_changed: array{surrender: array{status: array{id: 'surr_sts_discs_complete'}, discDestroyed: null, discLost: 10, discStolen: null, createdOn: '2019-01-31 14:13:09', lastModifiedOn: string, addressLastModified: string, licence: array{goodsOrPsv: array{id: 'lcat_gv'}}, goodsDiscsOnLicence: array{discCount: 8}}, expected: 'surrender_application_changed'}, psv_disc_count_information_changed: array{surrender: array{status: array{id: 'surr_sts_discs_complete'}, discDestroyed: null, discLost: 9, discStolen: null, createdOn: '2019-01-31 14:13:09', lastModifiedOn: string, addressLastModified: string, licence: array{goodsOrPsv: array{id: 'lcat_psv'}}, psvDiscsOnLicence: array{discCount: 5}}, expected: 'surrender_application_changed'}, address_information_changed: array{surrender: array{status: array{id: 'surr_sts_discs_complete'}, discDestroyed: null, discLost: 10, discStolen: null, createdOn: '2019-01-31 14:13:09', lastModifiedOn: string, addressLastModified: string, licence: array{goodsOrPsv: array{id: 'lcat_gv'}}, goodsDiscsOnLicence: array{discCount: 10}}, expected: 'surrender_application_changed'}, address_information_not_modified: array{surrender: array{status: array{id: 'surr_sts_discs_complete'}, discDestroyed: null, discLost: 10, discStolen: null, createdOn: '2019-01-31 14:13:09', lastModifiedOn: string, addressLastModified: null, licence: array{goodsOrPsv: array{id: 'lcat_gv'}}, goodsDiscsOnLicence: array{discCount: 10}}, expected: 'surrender_application_ok'}, not_expired_and_not_changed: array{surrender: array{status: array{id: 'surr_sts_discs_complete'}, discDestroyed: null, discLost: 10, discStolen: null, createdOn: '2019-01-31 14:13:09', lastModifiedOn: string, addressLastModified: string, licence: array{goodsOrPsv: array{id: 'lcat_gv'}}, goodsDiscsOnLicence: array{discCount: 10}}, expected: 'surrender_application_ok'}}
+     */
+    public function getStateProvider(): array
     {
         return [
             'application_started' => [

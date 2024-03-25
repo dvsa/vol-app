@@ -11,7 +11,7 @@ use Laminas\Http\Header\Cookie;
 
 class DeleteCookieNamesProviderTest extends MockeryTestCase
 {
-    public function testGetNames()
+    public function testGetNames(): void
     {
         $cookie = m::mock(Cookie::class);
 

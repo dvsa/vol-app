@@ -31,7 +31,7 @@ class VariationAddressesTest extends MockeryTestCase
         $this->sut = new VariationAddresses($this->fh);
     }
 
-    public function testAlterForm()
+    public function testAlterForm(): void
     {
         $mockForm = m::mock(Form::class);
 

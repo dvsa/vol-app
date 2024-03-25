@@ -1,9 +1,11 @@
 <?php
+
 /**
  * SearchDateRangeFieldset Test
  *
  * @author Valtech <uk@valtech.co.uk>
  */
+
 namespace OlcsTest\Form\Element;
 
 use Olcs\Form\Element\SearchDateRangeFieldset;
@@ -17,16 +19,16 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  */
 class SearchDateRangeFieldsetTest extends TestCase
 {
-    public function testSearchAwareTraitByProxy()
+    public function testSearchAwareTraitByProxy(): void
     {
         $service = m::mock(\Common\Service\Data\Search\Search::class);
 
-        $sut = new SearchDateRangeFieldset;
+        $sut = new SearchDateRangeFieldset();
 
         $this->assertSame($service, $sut->setSearchService($service)->getSearchService());
     }
 
-    public function initTest()
+    public function initTest(): void
     {
         $filter = m::mock('stdClass');
         $filter->shouldReceive('getKey')->twice()->andReturn('Key');
@@ -36,7 +38,7 @@ class SearchDateRangeFieldsetTest extends TestCase
         $service = m::mock(\Common\Service\Data\Search\Search::class);
         $service->shouldReceive('getFilters')->withNoArgs()->andReturn($filters);
 
-        $sut = new SearchDateRangeFieldset;
+        $sut = new SearchDateRangeFieldset();
 
         $this->assertCount($sut->count(), 2);
     }

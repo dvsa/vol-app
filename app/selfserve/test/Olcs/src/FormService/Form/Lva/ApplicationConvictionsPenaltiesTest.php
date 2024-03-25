@@ -36,7 +36,11 @@ class ApplicationConvictionsPenaltiesTest extends MockeryTestCase
         $this->sut = new ApplicationConvictionsPenalties($this->formHelper, $this->translator, $this->urlHelper);
     }
 
-    public function checkAlterForm($guidePath, $guideName)
+    /**
+     * @psalm-param '/guides/convictions-and-penalties-guidance-gb/'|'/guides/convictions-and-penalties-guidance-ni/' $guidePath
+     * @psalm-param 'convictions-and-penalties-guidance-gb'|'convictions-and-penalties-guidance-ni' $guideName
+     */
+    public function checkAlterForm(string $guidePath, string $guideName): void
     {
         $this->translator
             ->shouldReceive('translate')
@@ -86,7 +90,7 @@ class ApplicationConvictionsPenaltiesTest extends MockeryTestCase
         $this->assertSame($form, $actual);
     }
 
-    public function checkGetFormNi()
+    public function checkGetFormNi(): void
     {
         $this->checkAlterForm(
             '/guides/convictions-and-penalties-guidance-ni/',
@@ -94,7 +98,7 @@ class ApplicationConvictionsPenaltiesTest extends MockeryTestCase
         );
     }
 
-    public function checkGetFormGb()
+    public function checkGetFormGb(): void
     {
         $this->checkAlterForm(
             '/guides/convictions-and-penalties-guidance-gb/',
@@ -102,7 +106,7 @@ class ApplicationConvictionsPenaltiesTest extends MockeryTestCase
         );
     }
 
-    public function testAlterForm()
+    public function testAlterForm(): void
     {
         $this->checkGetFormGb();
         $this->setUp();

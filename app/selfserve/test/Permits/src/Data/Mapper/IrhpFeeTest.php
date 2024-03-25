@@ -25,7 +25,7 @@ class IrhpFeeTest extends TestCase
         $this->form = m::mock(Form::class);
     }
 
-    public function testMapForFormOptionsBilateralWithoutFees()
+    public function testMapForFormOptionsBilateralWithoutFees(): void
     {
         $data = [
             'application' => [
@@ -54,7 +54,7 @@ class IrhpFeeTest extends TestCase
     /**
      * @dataProvider dpMapForFormOptionsOther
      */
-    public function testMapForFormOptionsOther($isBilateral, $hasOutstandingFees)
+    public function testMapForFormOptionsOther($isBilateral, $hasOutstandingFees): void
     {
         $data = [
             'application' => [
@@ -69,7 +69,12 @@ class IrhpFeeTest extends TestCase
         $this->irhpFee->mapForFormOptions($data, $this->form);
     }
 
-    public function dpMapForFormOptionsOther()
+    /**
+     * @return bool[][]
+     *
+     * @psalm-return list{list{false, false}, list{false, true}, list{true, true}}
+     */
+    public function dpMapForFormOptionsOther(): array
     {
         return [
             [false, false],

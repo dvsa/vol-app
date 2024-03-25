@@ -56,6 +56,9 @@ class RemoveVehicleController extends AbstractVehicleController
         return $this->createView();
     }
 
+    /**
+     * @return ViewModel|\Laminas\Http\Response
+     */
     public function postAction()
     {
         $action = array_keys($this->getRequest()->getPost('formActions'))[0];
@@ -95,7 +98,7 @@ class RemoveVehicleController extends AbstractVehicleController
         ];
     }
 
-    protected function alterVehicleForm()
+    protected function alterVehicleForm(): void
     {
         $this->form->get('formActions')
             ->get('action')
@@ -106,7 +109,7 @@ class RemoveVehicleController extends AbstractVehicleController
             ->setAttribute('title', 'licence.vehicle.remove.button.cancel.title');
     }
 
-    protected function alterSearchForm()
+    protected function alterSearchForm(): void
     {
         /** @var Form $form */
         $form = $this->forms['searchForm'];

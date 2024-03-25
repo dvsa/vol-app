@@ -24,7 +24,7 @@ class VehiclesVehicleTest extends MockeryTestCase
         $this->sut = new VehiclesVehicle($this->formHelper);
     }
 
-    public function testAlterForm()
+    public function testAlterForm(): void
     {
         $mockForm = m::mock();
 

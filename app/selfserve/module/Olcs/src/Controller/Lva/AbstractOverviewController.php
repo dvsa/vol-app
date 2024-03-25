@@ -88,6 +88,8 @@ abstract class AbstractOverviewController extends AbstractController
      * Process action : Cancel
      *
      * @return \Common\View\Model\Section|\Laminas\Http\Response
+     *
+     * @psalm-suppress UndefinedDocblockClass
      */
     public function cancelAction()
     {
@@ -120,7 +122,6 @@ abstract class AbstractOverviewController extends AbstractController
     public function withdrawAction()
     {
         $id = $this->params()->fromRoute('application');
-        //@todo create a cut down query just for this purpose.
         $dto = WithdrawQry::create(['id' => $id]);
         $response = $this->handleQuery($dto);
         $data = $response->getResult();

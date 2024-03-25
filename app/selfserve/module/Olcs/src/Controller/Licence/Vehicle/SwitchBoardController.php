@@ -13,6 +13,7 @@ use Common\View\Helper\Panel;
 use Dvsa\Olcs\Transfer\Query\Licence\Licence;
 use Laminas\Form\Form;
 use Laminas\Http\Request;
+use Laminas\Http\Response;
 use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use Laminas\Mvc\Controller\Plugin\Url;
 use Laminas\Router\RouteMatch;
@@ -232,8 +233,6 @@ class SwitchBoardController
             $form->setData($formData);
             $this->formValidator->isValid($form);
         }
-
-
 
         return $form;
     }

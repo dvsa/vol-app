@@ -12,7 +12,7 @@ use Mockery as m;
  */
 trait ButtonsAlterations
 {
-    protected function mockAlterButtons($form, $formHelper, $formActions = null)
+    protected function mockAlterButtons($form, $formHelper, $formActions = null): void
     {
         if ($formActions === null) {
             $formActions = m::mock(ElementInterface::class);

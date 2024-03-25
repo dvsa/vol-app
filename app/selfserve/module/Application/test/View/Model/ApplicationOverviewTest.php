@@ -9,7 +9,7 @@ class ApplicationOverviewTest extends \PHPUnit\Framework\TestCase
      *
      * @group applicationOverview
      */
-    public function testSetVariables()
+    public function testSetVariables(): void
     {
         $data = [
             'id' => 1,
@@ -30,7 +30,7 @@ class ApplicationOverviewTest extends \PHPUnit\Framework\TestCase
     /**
      * @dataProvider progressProvider
      */
-    public function testProgressCalculation($sections, $expectedX, $expectedY)
+    public function testProgressCalculation($sections, $expectedX, $expectedY): void
     {
         $data = [
             'id'                   => 1,
@@ -56,7 +56,12 @@ class ApplicationOverviewTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedY, $variables['progressY']);
     }
 
-    public function progressProvider()
+    /**
+     * @return (bool[][]|int)[][]
+     *
+     * @psalm-return array{'no sections': list{array<never, never>, 0, 0}, '1 section': list{array{type_of_licence: array{enabled: true, complete: false}}, 0, 1}, '2 sections': list{array{type_of_licence: array{enabled: true, complete: false}, business_type: array{enabled: true, complete: false}}, 0, 2}, '2 sections 1 complete': list{array{type_of_licence: array{enabled: true, complete: false}, business_type: array{enabled: true, complete: true}}, 1, 2}, 'all complete': list{array{type_of_licence: array{enabled: true, complete: true}, business_type: array{enabled: true, complete: true}, business_details: array{enabled: true, complete: true}}, 3, 3}}
+     */
+    public function progressProvider(): array
     {
         return [
             'no sections' => [[], 0, 0],

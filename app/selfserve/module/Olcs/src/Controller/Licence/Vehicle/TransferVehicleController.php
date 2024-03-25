@@ -144,7 +144,7 @@ class TransferVehicleController extends AbstractVehicleController
     /**
      * @throws NoOtherLicencesFoundException
      */
-    protected function alterVehicleForm()
+    protected function alterVehicleForm(): void
     {
         $this->form->get('formActions')
             ->get('action')
@@ -162,7 +162,10 @@ class TransferVehicleController extends AbstractVehicleController
      *
      * @param Form $form
      * @param int $licenceId
+     *
      * @throws NoOtherLicencesFoundException
+     *
+     * @return void
      */
     protected function setFormLicenceOptions(Form $form, int $licenceId)
     {
@@ -205,7 +208,7 @@ class TransferVehicleController extends AbstractVehicleController
         return new OtherActiveLicenceListDTO(is_array($result) ? $result : []);
     }
 
-    protected function alterSearchForm()
+    protected function alterSearchForm(): void
     {
         /** @var Form $form */
         $form = $this->forms['searchForm'];

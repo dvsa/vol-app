@@ -31,7 +31,7 @@ class ApplicationAddressesTest extends MockeryTestCase
         $this->sut = new ApplicationAddresses($this->fh);
     }
 
-    public function testAlterForm()
+    public function testAlterForm(): void
     {
         $mockForm = m::mock(Form::class);
         $this->mockAlterButtons($mockForm, $this->fh);

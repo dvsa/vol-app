@@ -5,6 +5,9 @@ namespace Permits\Data\Mapper;
 use Common\Data\Mapper\MapperInterface;
 use Laminas\ServiceManager\AbstractPluginManager;
 
+/**
+ * @extends AbstractPluginManager<MapperInterface>
+ */
 class MapperManager extends AbstractPluginManager
 {
     protected $instanceOf = MapperInterface::class;

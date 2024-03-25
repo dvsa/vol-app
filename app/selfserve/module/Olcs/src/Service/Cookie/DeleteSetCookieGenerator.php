@@ -20,7 +20,7 @@ class DeleteSetCookieGenerator
      * @param SetCookieFactory $setCookieFactory
      * @param CookieExpiryGenerator $cookieExpiryGenerator
      *
-     * @return SetCookieGenerator
+     * @return SetCookieArrayGenerator
      */
     public function __construct(
         SetCookieFactory $setCookieFactory,

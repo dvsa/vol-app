@@ -405,7 +405,7 @@ class UserController extends AbstractController
     /**
      * @param Form $form
      */
-    protected function lockNameFields(Form $form)
+    protected function lockNameFields(Form $form): void
     {
         $fieldSet = $form->get('main');
 

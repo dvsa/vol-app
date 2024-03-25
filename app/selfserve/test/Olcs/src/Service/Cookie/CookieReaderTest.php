@@ -36,7 +36,7 @@ class CookieReaderTest extends MockeryTestCase
     /**
      * @dataProvider dpFalseCookieStateWhenNotCookieObject
      */
-    public function testFalseCookieStateWhenNotCookieObject($cookie)
+    public function testFalseCookieStateWhenNotCookieObject($cookie): void
     {
         $this->cookieStateFactory->shouldReceive('create')
             ->with(false)
@@ -49,7 +49,12 @@ class CookieReaderTest extends MockeryTestCase
         );
     }
 
-    public function dpFalseCookieStateWhenNotCookieObject()
+    /**
+     * @return (\stdClass|null|string)[][]
+     *
+     * @psalm-return list{list{null}, list{\stdClass}, list{'cookie'}}
+     */
+    public function dpFalseCookieStateWhenNotCookieObject(): array
     {
         return [
             [null],
@@ -58,7 +63,7 @@ class CookieReaderTest extends MockeryTestCase
         ];
     }
 
-    public function testFalseCookieStateWhenInvalidJson()
+    public function testFalseCookieStateWhenInvalidJson(): void
     {
         $json = '{"field1"=>"value1", "field2&:"value2"}';
         $cookie = new Cookie([Preferences::COOKIE_NAME => $json]);
@@ -74,7 +79,7 @@ class CookieReaderTest extends MockeryTestCase
         );
     }
 
-    public function testFalseCookieStateWhenInvalidDecodedJsonContent()
+    public function testFalseCookieStateWhenInvalidDecodedJsonContent(): void
     {
         $json = '{"field1":"value1","field2":"value2"}';
         $decodedJson = [
@@ -100,7 +105,7 @@ class CookieReaderTest extends MockeryTestCase
         );
     }
 
-    public function testTrueCookieState()
+    public function testTrueCookieState(): void
     {
         $json = '{"settings":true,"analytics":false}';
         $decodedJson = [

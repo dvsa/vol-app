@@ -77,6 +77,9 @@ class IrhpPermitAppCheckAnswersController extends AbstractSelfserveController
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager);
     }
 
+    /**
+     * @return void
+     */
     public function mergeTemplateVars()
     {
         $backUri = IrhpApplicationSection::ROUTE_IPA_QUESTION;
@@ -95,6 +98,9 @@ class IrhpPermitAppCheckAnswersController extends AbstractSelfserveController
         parent::mergeTemplateVars();
     }
 
+    /**
+     * @return void
+     */
     public function retrieveData()
     {
         parent::retrieveData();

@@ -4,6 +4,7 @@ use Common\RefData;
 use Common\Service\Table\Formatter\Date;
 use Common\Service\Table\Formatter\RefDataStatus;
 use Common\Service\Table\Formatter\StackValue;
+use Common\Service\Table\TableBuilder;
 use Common\Util\Escape;
 
 return [
@@ -40,16 +41,21 @@ return [
             'title' => 'permits.irhp.valid.permits.table.start-date',
             'name' => 'issueDate',
             'formatter' => Date::class,
-        ],
-        [
+            ],
+            [
             'title' => 'permits.irhp.valid.permits.table.expiry-date',
             'name' => 'expiryDate',
             'formatter' => Date::class,
-        ],
-        [
+            ],
+            [
             'title' => 'status',
             'name' => 'status',
-            'formatter' => fn($row) => $this->callFormatter(
+            'formatter' => fn($row) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+            $this->callFormatter(
                 [
                     'name' => 'status',
                     'formatter' => RefDataStatus::class,
@@ -61,6 +67,6 @@ return [
                     ],
                 ]
             )
-        ],
+            ],
     ]
 ];

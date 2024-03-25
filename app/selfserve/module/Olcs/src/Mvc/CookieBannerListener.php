@@ -5,6 +5,7 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace Olcs\Mvc;
 
 use Common\Service\Helper\UrlHelperService;
@@ -15,7 +16,6 @@ use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\EventManager\ListenerAggregateTrait;
 use Laminas\Http\Request as HttpRequest;
 use Laminas\Mvc\MvcEvent;
-
 use Laminas\View\Helper\Placeholder;
 
 /**
@@ -71,6 +71,8 @@ class CookieBannerListener implements ListenerAggregateInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function onRoute(MvcEvent $e)
     {

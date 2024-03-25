@@ -113,6 +113,7 @@ class FeesController extends AbstractController
 
     /**
      * Pay Fees action
+     * @psalm-suppress UndefinedDocblockClass
      */
     public function payFeesAction()
     {
@@ -176,7 +177,7 @@ class FeesController extends AbstractController
         return $view;
     }
 
-    public function handleResultAction()
+    public function handleResultAction(): \Laminas\Http\Response
     {
         $queryStringData = (array)$this->getRequest()->getQuery();
 
@@ -210,7 +211,7 @@ class FeesController extends AbstractController
         return $this->redirectToIndex();
     }
 
-    public function receiptAction()
+    public function receiptAction(): ViewModel
     {
         $paymentRef = $this->params()->fromRoute('reference');
 
@@ -221,7 +222,10 @@ class FeesController extends AbstractController
         return $view;
     }
 
-    protected function getOutstandingFeeDataForOrganisation($organisationId)
+    /**
+     * @param int|null $organisationId
+     */
+    protected function getOutstandingFeeDataForOrganisation(?int $organisationId)
     {
         $query = OutstandingFees::create(['id' => $organisationId, 'hideExpired' => true]);
         $response = $this->handleQuery($query);
@@ -231,7 +235,10 @@ class FeesController extends AbstractController
         return $response->getResult();
     }
 
-    protected function getOutstandingFeesForOrganisation($organisationId)
+    /**
+     * @param int|null $organisationId
+     */
+    protected function getOutstandingFeesForOrganisation(?int $organisationId)
     {
         $result = $this->getOutstandingFeeDataForOrganisation($organisationId);
         return $result['outstandingFees'];
@@ -252,8 +259,10 @@ class FeesController extends AbstractController
      * Get fees by ID(s) from params, note these *must* be a subset of the
      * outstanding fees for the current organisation - any invalid IDs are
      * ignored
+     *
+     * @psalm-return list<mixed>
      */
-    protected function getFeesFromParams()
+    protected function getFeesFromParams(): array
     {
         $fees = [];
 
@@ -272,12 +281,15 @@ class FeesController extends AbstractController
         return $fees;
     }
 
-    protected function getForm()
+    protected function getForm(): \Common\Form\Form
     {
         return $this->formHelper
             ->createForm('FeePayment');
     }
 
+    /**
+     * @return \Laminas\Http\Response|null
+     */
     protected function checkActionRedirect()
     {
         if ($this->getRequest()->isPost()) {
@@ -293,12 +305,12 @@ class FeesController extends AbstractController
         }
     }
 
-    protected function redirectToIndex()
+    protected function redirectToIndex(): \Laminas\Http\Response
     {
         return $this->redirect()->toRoute('fees');
     }
 
-    protected function redirectToReceipt($reference)
+    protected function redirectToReceipt($reference): \Laminas\Http\Response
     {
         return $this->redirect()->toRoute('fees/receipt', ['reference' => $reference]);
     }
@@ -308,6 +320,8 @@ class FeesController extends AbstractController
      *
      * @param array $feeIds
      * @param string|false $storedCardReference A refernce to the stored card to use
+     *
+     * @return \Common\View\Model\Section|\Laminas\Http\Response
      */
     protected function payOutstandingFees(array $feeIds, $storedCardReference = false)
     {

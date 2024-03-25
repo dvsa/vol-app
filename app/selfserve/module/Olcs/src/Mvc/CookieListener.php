@@ -3,6 +3,7 @@
 /**
  * Cookie Listener
  */
+
 namespace Olcs\Mvc;
 
 use Olcs\Service\Cookie\CookieReader;
@@ -50,6 +51,8 @@ class CookieListener implements ListenerAggregateInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @return void
      */
     public function onRoute(MvcEvent $e)
     {

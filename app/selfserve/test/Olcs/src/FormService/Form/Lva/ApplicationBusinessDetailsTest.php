@@ -35,7 +35,7 @@ class ApplicationBusinessDetailsTest extends MockeryTestCase
         $this->sut = new ApplicationBusinessDetails($this->fh, $this->fsm);
     }
 
-    public function testAlterFormWithoutInforceLicences()
+    public function testAlterFormWithoutInforceLicences(): void
     {
         // Params
         $form = m::mock();
@@ -62,7 +62,7 @@ class ApplicationBusinessDetailsTest extends MockeryTestCase
         $this->sut->alterForm($form, $params);
     }
 
-    public function testAlterFormWithInforceLicences()
+    public function testAlterFormWithInforceLicences(): void
     {
         // Params
         $form = m::mock();
@@ -95,7 +95,7 @@ class ApplicationBusinessDetailsTest extends MockeryTestCase
         $this->sut->alterForm($form, $params);
     }
 
-    public function testAlterFormWithoutSubmittedLicenceApplication()
+    public function testAlterFormWithoutSubmittedLicenceApplication(): void
     {
         // Params
         $form = m::mock();
@@ -129,7 +129,7 @@ class ApplicationBusinessDetailsTest extends MockeryTestCase
         $this->sut->alterForm($form, $params);
     }
 
-    public function testAlterFormWithSubmittedLicenceApplication()
+    public function testAlterFormWithSubmittedLicenceApplication(): void
     {
         // Params
         $form = m::mock();

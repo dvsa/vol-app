@@ -5,6 +5,7 @@
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
+
 namespace OlcsTest\View\Helper;
 
 use Mockery as m;
@@ -21,7 +22,7 @@ class GeneratePeopleListTest extends MockeryTestCase
     /**
      * Test render no persons
      */
-    public function testInvokeEmpty()
+    public function testInvokeEmpty(): void
     {
         $sut = new GeneratePeopleList();
 
@@ -41,7 +42,7 @@ class GeneratePeopleListTest extends MockeryTestCase
     /**
      * Test render single person
      */
-    public function testInvokeSingle()
+    public function testInvokeSingle(): void
     {
         $sut = new GeneratePeopleList();
 
@@ -61,7 +62,7 @@ class GeneratePeopleListTest extends MockeryTestCase
     /**
      * Test invoke multiple people
      */
-    public function testInvokeMultiple()
+    public function testInvokeMultiple(): void
     {
         $sut = new GeneratePeopleList();
 
@@ -85,7 +86,7 @@ class GeneratePeopleListTest extends MockeryTestCase
     /**
      * Test render no persons
      */
-    public function testRenderEmpty()
+    public function testRenderEmpty(): void
     {
         $sut = new GeneratePeopleList();
 
@@ -105,7 +106,7 @@ class GeneratePeopleListTest extends MockeryTestCase
     /**
      * Test render single person
      */
-    public function testRenderSingle()
+    public function testRenderSingle(): void
     {
         $sut = new GeneratePeopleList();
 
@@ -125,7 +126,7 @@ class GeneratePeopleListTest extends MockeryTestCase
     /**
      * Test render multiple people
      */
-    public function testRenderMultiple()
+    public function testRenderMultiple(): void
     {
         $sut = new GeneratePeopleList();
 
@@ -150,12 +151,15 @@ class GeneratePeopleListTest extends MockeryTestCase
      * Generates test data of $count people
      *
      * @param $count
+     *
      * @return array
+     *
+     * @psalm-param 0|1|2 $count
      */
-    private function getTestPeopleArray($count)
+    private function getTestPeopleArray(int $count)
     {
         $testData = [];
-        for ($i=0; $i<$count; $i++) {
+        for ($i = 0; $i < $count; $i++) {
             $testData[$i] = [
                 'person' => [
                     'forename' => 'John' . $i,

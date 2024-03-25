@@ -8,9 +8,12 @@ class ControllerPluginManagerHelper
 {
     /**
      * @param $class
+     *
      * @return m\MockInterface
+     *
+     * @psalm-param 'Params'|'Url'|'handleQuery' $class
      */
-    public function getMockPlugin($class)
+    public function getMockPlugin(string $class)
     {
         if (strpos($class, '\\') === false) {
             $class = 'Laminas\Mvc\Controller\Plugin\\' . $class;
@@ -22,10 +25,13 @@ class ControllerPluginManagerHelper
     }
 
     /**
-     * @param $plugins
+     * @param string[] $plugins
+     *
      * @return m\MockInterface|\Laminas\Mvc\Controller\PluginManager
+     *
+     * @psalm-param array{handleQuery: 'handleQuery', url: 'Url', params: 'Params'} $plugins
      */
-    public function getMockPluginManager($plugins)
+    public function getMockPluginManager(array $plugins)
     {
         $mockPluginManager = m::mock(\Laminas\Mvc\Controller\PluginManager::class);
         $mockPluginManager->shouldReceive('setController');

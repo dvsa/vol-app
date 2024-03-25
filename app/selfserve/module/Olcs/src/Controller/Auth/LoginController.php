@@ -98,6 +98,9 @@ class LoginController
         $this->authChallengeContainer = $authChallengeContainer;
     }
 
+    /**
+     * @return Response|ViewModel
+     */
     public function indexAction()
     {
         if (!$this->currentUser->getIdentity()->isAnonymous()) {
@@ -187,9 +190,10 @@ class LoginController
 
     /**
      * Store form data in session
+     *
      * @param $form
      */
-    protected function storeFormData($form)
+    protected function storeFormData(Form $form): void
     {
         $this->flashMessenger->addMessage(json_encode($form->getData()), static::FLASH_MESSAGE_NAMESPACE_INPUT);
     }
@@ -258,7 +262,8 @@ class LoginController
             case AuthChallengeContainer::CHALLENEGE_NEW_PASWORD_REQUIRED:
                 $this->applyAuthChallengeContainer($messages);
                 return $this->redirectHelper->toRoute(
-                    self::ROUTE_AUTH_EXPIRED_PASSWORD);
+                    self::ROUTE_AUTH_EXPIRED_PASSWORD
+                );
             default:
                 // Unsupported challenge so redirect to login page
                 Logger::warn('Received unexpected challenge from AWS Cognito', $messages);

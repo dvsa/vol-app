@@ -11,6 +11,7 @@ namespace Olcs\FormService\Form\Lva;
 use Common\FormService\Form\Lva\BusinessDetails\VariationBusinessDetails as CommonVariationBusinessDetails;
 use Common\FormService\FormServiceManager;
 use Common\Service\Helper\FormHelperService;
+use Laminas\Form\Form;
 
 /**
  * Variation Business Details Form
@@ -32,6 +33,8 @@ class VariationBusinessDetails extends CommonVariationBusinessDetails
      *
      * @param Form  $form   form
      * @param array $params params
+     *
+     * @return void
      */
     public function alterForm($form, $params)
     {

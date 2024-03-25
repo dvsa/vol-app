@@ -17,6 +17,7 @@ use Laminas\Http\PhpEnvironment\Response as PhpEnvironmentResponse;
 use Laminas\Http\Response as HttpResponse;
 use Laminas\Mvc\MvcEvent;
 use Laminas\View\Model\ViewModel;
+use Olcs\Controller\Config\DataSource\AbstractDataSource;
 use Olcs\Controller\Config\DataSource\DataSourceInterface;
 use Olcs\Logging\Log\Logger;
 use Permits\Data\Mapper\MapperManager;
@@ -212,7 +213,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
         return parent::onDispatch($e);
     }
 
-    public function genericView()
+    public function genericView(): ViewModel
     {
         $view = new ViewModel();
 
@@ -226,6 +227,9 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
         return $view;
     }
 
+    /**
+     * @return void
+     */
     public function mergeTemplateVars()
     {
         $this->template = $this->templateConfig[$this->action] ?? $this->templateConfig['default'];
@@ -233,7 +237,7 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
         $this->data = array_merge($this->data, $templateVars);
     }
 
-    public function setBrowserTitle()
+    public function setBrowserTitle(): void
     {
         if (isset($this->data['browserTitle'])) {
             $prepend = '';
@@ -255,6 +259,9 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
         }
     }
 
+    /**
+     * @return HttpResponse|ViewModel
+     */
     public function genericAction()
     {
         $response = $this->handlePost();
@@ -288,6 +295,8 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
     /**
      * @todo handle redirects, currently just assumes a "next step" is present
      * @todo need to put in some error handling to help devs diagnose bad config etc.
+     *
+     * @return HttpResponse|null
      */
     public function handlePost()
     {
@@ -379,6 +388,8 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
 
     /**
      * Retrieve data for the specified DTOs
+     *
+     * @return void
      */
     public function retrieveData()
     {
@@ -400,8 +411,9 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
             }
 
             /**
-             * @var DataSourceInterface $source
+             * @var AbstractDataSource $source
              * @var QueryInterface $query
+             * @psalm-suppress UndefinedClass
              */
             $source = new $dataSource();
             $query = $source->queryFromParams(array_merge($this->routeParams, $this->queryParams));
@@ -432,6 +444,8 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
 
     /**
      * Retrieve the configured forms, and set the data
+     *
+     * @return void
      */
     public function retrieveForms()
     {
@@ -487,6 +501,8 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
 
     /**
      * Retrieve the configured tables
+     *
+     * @return void
      */
     public function retrieveTables()
     {
@@ -506,6 +522,8 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      * @todo only checks that a value matches, needs a wider range of conditions + ability to call custom methods
      * also needs to be made easier to check multiple conditions at once, and fail more elegantly (throw exception?) in
      * cases of bad/missing config
+     *
+     * @return HttpResponse|null
      */
     public function checkConditionalDisplay()
     {
@@ -590,9 +608,10 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      * @todo needs to handle response errors :)
      *
      * @param CqrsResponse $response
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     *
+     * @SuppressWarnings (PHPMD.UnusedFormalParameter)
      */
-    protected function handleResponseErrors(CqrsResponse $response)
+    protected function handleResponseErrors(CqrsResponse $response): void
     {
         //handle response errors
     }
@@ -845,6 +864,8 @@ abstract class AbstractSelfserveController extends AbstractOlcsController
      *
      * @param array $config
      * @param array $params
+     *
+     * @return array|null
      */
     protected function handlePostCommand(array &$config, array $params)
     {

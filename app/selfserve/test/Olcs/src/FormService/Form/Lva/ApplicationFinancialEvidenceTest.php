@@ -34,7 +34,7 @@ class ApplicationFinancialEvidenceTest extends MockeryTestCase
 
     /** @var  \Common\FormService\FormServiceManager */
     protected $fsm;
-    /** @var  var FormHelperService */
+    /** @var  FormHelperService */
     protected $fh;
     /** @var  m\MockInterface */
     protected $urlHelper;
@@ -53,7 +53,7 @@ class ApplicationFinancialEvidenceTest extends MockeryTestCase
         $this->sut = new ApplicationFinancialEvidence($this->fh, m::mock(AuthorizationService::class), $this->translator, $this->urlHelper, $this->vpm);
     }
 
-    public function testAlterForm()
+    public function testAlterForm(): void
     {
         $this->translator
             ->shouldReceive('translateReplace')

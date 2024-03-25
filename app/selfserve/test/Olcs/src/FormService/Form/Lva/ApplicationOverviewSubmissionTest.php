@@ -32,7 +32,7 @@ class ApplicationOverviewSubmissionTest extends MockeryTestCase
         $this->sut = new ApplicationOverviewSubmissionStub($mockTranslationHelper, $this->mockFormHlp);
     }
 
-    public function testAlterFormReadySubmit()
+    public function testAlterFormReadySubmit(): void
     {
         $data = [
             'outstandingFeeTotal' => -1,
@@ -50,7 +50,7 @@ class ApplicationOverviewSubmissionTest extends MockeryTestCase
         $this->sut->alterForm($this->mockForm, $data, $params);
     }
 
-    public function testAlterFormNotReadyNoFee()
+    public function testAlterFormNotReadyNoFee(): void
     {
         $data = [
             'outstandingFeeTotal' => -1,
@@ -78,7 +78,7 @@ class ApplicationOverviewSubmissionTest extends MockeryTestCase
         $this->sut->alterForm($this->mockForm, $data, $params);
     }
 
-    private function mockParentCall()
+    private function mockParentCall(): void
     {
         //  mock expected parent call
         $mockElm = m::mock(\Laminas\Form\Element::class)->makePartial();

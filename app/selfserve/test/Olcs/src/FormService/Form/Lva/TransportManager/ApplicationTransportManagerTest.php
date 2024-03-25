@@ -34,7 +34,7 @@ class ApplicationTransportManagerTest extends MockeryTestCase
         $this->sut = new Sut($this->formHelper, m::mock(AuthorizationService::class));
     }
 
-    public function testGetForm()
+    public function testGetForm(): void
     {
         $form = m::mock();
 

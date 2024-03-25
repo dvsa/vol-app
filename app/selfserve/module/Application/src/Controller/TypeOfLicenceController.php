@@ -100,6 +100,8 @@ class TypeOfLicenceController extends AbstractTypeOfLicenceController
 
     /**
      * Create application action
+     *
+     * @return Section|\Laminas\Http\Response
      */
     public function createApplicationAction()
     {

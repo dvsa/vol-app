@@ -5,6 +5,7 @@
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
+
 namespace OlcsTest\Controller\Lva\Traits;
 
 use OlcsTest\Bootstrap;
@@ -26,7 +27,7 @@ class ExternalControllerTraitTest extends MockeryTestCase
             ->makePartial();
     }
 
-    public function testRenderWithViewModelReturnsViewModel()
+    public function testRenderWithViewModelReturnsViewModel(): void
     {
         $this->sut->shouldReceive('attachCurrentMessages');
 
@@ -38,7 +39,7 @@ class ExternalControllerTraitTest extends MockeryTestCase
         );
     }
 
-    public function testRenderWithNormalRequest()
+    public function testRenderWithNormalRequest(): void
     {
         $this->sut->shouldReceive('attachCurrentMessages')
             ->shouldReceive('getRequest')
@@ -92,7 +93,7 @@ class ExternalControllerTraitTest extends MockeryTestCase
         );
     }
 
-    public function testRenderWithXmlHttpRequest()
+    public function testRenderWithXmlHttpRequest(): void
     {
         $this->sut->shouldReceive('attachCurrentMessages')
             ->shouldReceive('getRequest')

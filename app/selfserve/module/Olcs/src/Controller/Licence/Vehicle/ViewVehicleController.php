@@ -133,7 +133,7 @@ class ViewVehicleController extends AbstractVehicleController
      * @param Request $request
      * @param RouteMatch $routeMatch
      */
-    protected function prepareForm(Form $form, Request $request, RouteMatch $routeMatch)
+    protected function prepareForm(Form $form, Request $request, RouteMatch $routeMatch): void
     {
         $input = $request->isPost() ? $request->getPost()->toArray() : [];
         $licenceId = (int) $routeMatch->getParam('licence');
@@ -162,7 +162,7 @@ class ViewVehicleController extends AbstractVehicleController
      * @param Select $select
      * @param array $licences
      */
-    protected function setLicenceSelectValueOptions(Select $select, array $licences)
+    protected function setLicenceSelectValueOptions(Select $select, array $licences): void
     {
         $select->setValueOptions($this->prepareLicenceSelectValueOptions($licences));
         $select->setEmptyOption("licence.vehicle.view.switchboard.option.transfer.select.empty-option");

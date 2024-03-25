@@ -34,9 +34,9 @@ class VariationOverviewSubmissionTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider  dpTestAlterForm
+     * @dataProvider dpTestAlterForm
      */
-    public function testAlterFormDescription($section, $expect)
+    public function testAlterFormDescription($section, $expect): void
     {
         //  mock expected parent call
         $this->mockParentCall();
@@ -74,7 +74,12 @@ class VariationOverviewSubmissionTest extends MockeryTestCase
         );
     }
 
-    public function dpTestAlterForm()
+    /**
+     * @return ((int|string)[]|string)[][]
+     *
+     * @psalm-return list{array{section: array{status: 'unit_ExpectedStatus'}, expect: 'variation.overview.submission.desc.notchanged'}, array{section: array{status: 1}, expect: 'variation.overview.submission.desc.req-attention'}, array{section: array{status: 2}, expect: 'variation.overview.submission.desc.must-submit'}}
+     */
+    public function dpTestAlterForm(): array
     {
         return [
             [
@@ -98,7 +103,7 @@ class VariationOverviewSubmissionTest extends MockeryTestCase
         ];
     }
 
-    private function mockParentCall()
+    private function mockParentCall(): void
     {
         //  mock expected parent call
         $mockElm = m::mock(\Laminas\Form\Element::class)->makePartial();

@@ -34,7 +34,7 @@ class ViewGeneratorProvider
      * @param string $routeName
      * @param ViewGeneratorInterface $viewGenerator
      */
-    public function registerViewGenerator($routeName, ViewGeneratorInterface $viewGenerator)
+    public function registerViewGenerator($routeName, ViewGeneratorInterface $viewGenerator): void
     {
         $this->viewGenerators[$routeName] = $viewGenerator;
     }

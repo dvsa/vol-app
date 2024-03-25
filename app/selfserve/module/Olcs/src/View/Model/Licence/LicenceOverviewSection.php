@@ -5,6 +5,7 @@
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
+
 namespace Olcs\View\Model\Licence;
 
 use Olcs\View\Model\LvaOverviewSection;

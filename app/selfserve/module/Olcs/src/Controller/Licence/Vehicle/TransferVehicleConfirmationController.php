@@ -179,9 +179,10 @@ class TransferVehicleConfirmationController extends AbstractVehicleController
      * Flashes a message to the user when a licence with a given id has no vehicles.
      *
      * @param int $licenceId
+     *
      * @throws Exception
      */
-    protected function flashIfLicenceHasNoVehicles(int $licenceId)
+    protected function flashIfLicenceHasNoVehicles(int $licenceId): void
     {
         $licence = $this->getLicenceById($licenceId);
         $activeVehicleCount = $licence->getActiveVehicleCount();
@@ -198,7 +199,7 @@ class TransferVehicleConfirmationController extends AbstractVehicleController
      * @param LicenceDTO $destinationLicence
      * @param array $vehicleIds
      */
-    protected function flashTransferOfVehiclesCompleted(LicenceDTO $destinationLicence, array $vehicleIds)
+    protected function flashTransferOfVehiclesCompleted(LicenceDTO $destinationLicence, array $vehicleIds): void
     {
         if (count($vehicleIds) === 1) {
             $message = $this->translationHelper->translateReplace(
@@ -220,7 +221,10 @@ class TransferVehicleConfirmationController extends AbstractVehicleController
      * @param int $currentLicenceId
      * @param array $vehicleIds
      * @param LicenceDTO $destinationLicence
+     *
      * @throws Exception
+     *
+     * @return void
      */
     protected function transferVehicles(int $currentLicenceId, array $vehicleIds, LicenceDTO $destinationLicence)
     {

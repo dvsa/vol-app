@@ -44,7 +44,7 @@ class CreateVariationProcessingService
         $this->commandService = $commandService;
     }
 
-    public function getForm(Request $request)
+    public function getForm(Request $request): \Laminas\Form\FormInterface
     {
         $form = $this->formHelper->createFormWithRequest('GenericConfirmation', $request);
 

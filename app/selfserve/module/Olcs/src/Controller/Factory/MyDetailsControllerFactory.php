@@ -18,7 +18,6 @@ class MyDetailsControllerFactory implements FactoryInterface
      * @param ContainerInterface $container
      * @param $requestedName
      * @param array|null $options
-     * @return DashboardController
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): MyDetailsController
     {

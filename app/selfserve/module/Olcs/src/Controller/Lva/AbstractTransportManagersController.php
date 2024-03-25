@@ -135,6 +135,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
             return $this->redirect()->toRouteAjax("lva-{$this->lva}/transport_manager_details", [], [], true);
         } else {
             $this->flashMessengerHelper->addErrorMessage('unknown-error');
+            return $this->redirect()->refresh();
         }
     }
 
@@ -190,6 +191,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
                 return $this->page3($tma, $isUserTm);
             case RefData::TMA_STATUS_RECEIVED:
                 return $this->page4($tma);
+            default:
+                throw new \RuntimeException("Unexpected TMA status: {$tma['tmApplicationStatus']['id']}");
         }
     }
 
@@ -842,10 +845,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      * Handle the upload of transport manager certificates
      *
      * @param array $file File data
-     *
-     * @return array
      */
-    public function processCertificateUpload($file)
+    public function processCertificateUpload($file): bool
     {
         $data = $this->transportManagerHelper
             ->getCertificateFileData($this->tma['transportManager']['id'], $file);
@@ -870,10 +871,8 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      * Handle the upload of responsibility files
      *
      * @param array $file File data
-     *
-     * @return array
      */
-    public function processResponsibilityFileUpload($file)
+    public function processResponsibilityFileUpload($file): bool
     {
         $data = $this->transportManagerHelper
             ->getResponsibilityFileData($this->tma['transportManager']['id']);
@@ -999,7 +998,7 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
         return $formData;
     }
 
-    private function formatYesNo($value)
+    private function formatYesNo($value): ?string
     {
         if ($value === null) {
             return null;
@@ -1102,21 +1101,22 @@ abstract class AbstractTransportManagersController extends CommonAbstractTmContr
      *
      * @param int $lvaId LVA id
      *
-     * @return \Common\Service\Cqrs\Response|\Laminas\Http\Response
+     * @return \Common\Service\Cqrs\Response|\Laminas\Http\Response|null
      */
     protected function checkForRedirect($lvaId)
     {
-        if ($this->isButtonPressed('cancel')) {
-            // If we are on a sub-section, we need to go back to the section
-            $action = $this->params('action');
-            $childId = $this->params('child_id');
-            $normalRedirect = ['details', 'index', 'addTm', 'add'];
-            if ($childId !== null && !in_array($action, $normalRedirect)) {
-                return $this->backToDetails();
-            }
-
-            return $this->handleCancelRedirect($lvaId);
+        if (!$this->isButtonPressed('cancel')) {
+            return null;
         }
+
+        $action = $this->params('action');
+        $childId = $this->params('child_id');
+        $normalRedirect = ['details', 'index', 'addTm', 'add'];
+        if ($childId !== null && !in_array($action, $normalRedirect)) {
+            return $this->backToDetails();
+        }
+
+        return $this->handleCancelRedirect($lvaId);
     }
 
     /**

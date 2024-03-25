@@ -9,7 +9,7 @@ use Laminas\View\Model\ViewModel;
 
 class ApplicationOverviewSectionTest extends MockeryTestCase
 {
-    public function testViewWithRequiresAttention()
+    public function testViewWithRequiresAttention(): void
     {
         $sectionDetails = ['enabled' => true];
         $ref = 'type_of_licence';
@@ -32,7 +32,7 @@ class ApplicationOverviewSectionTest extends MockeryTestCase
         $this->assertEquals(1, $viewModel->getVariable('sectionNumber'));
     }
 
-    public function testViewWithUpdated()
+    public function testViewWithUpdated(): void
     {
         $sectionDetails = ['enabled' => true];
         $ref = 'type_of_licence';
@@ -55,7 +55,7 @@ class ApplicationOverviewSectionTest extends MockeryTestCase
         $this->assertEquals(1, $viewModel->getVariable('sectionNumber'));
     }
 
-    public function testViewWithUnchanged()
+    public function testViewWithUnchanged(): void
     {
         $sectionDetails = ['enabled' => false];
         $ref = 'type_of_licence';
@@ -81,7 +81,7 @@ class ApplicationOverviewSectionTest extends MockeryTestCase
     /**
      * @dataProvider dpTestViewForPeople
      */
-    public function testViewForPeople($data)
+    public function testViewForPeople($data): void
     {
         $sectionDetails = ['enabled' => true];
         $ref = 'people';
@@ -92,7 +92,12 @@ class ApplicationOverviewSectionTest extends MockeryTestCase
         $this->assertEquals('section.name.people.org_t_llp', $viewModel->getVariable('name'));
     }
 
-    public function dpTestViewForPeople()
+    /**
+     * @return (((string|string[])[]|int)[]|int|string)[][][]
+     *
+     * @psalm-return array{'org type from licence': array{data: array{id: 1, idIndex: 'application', sectionNumber: 1, applicationCompletion: array{peopleStatus: 1}, licence: array{organisation: array{type: array{id: 'org_t_llp'}}}}}, 'org type from organisation': array{data: array{id: 1, idIndex: 'application', sectionNumber: 1, applicationCompletion: array{peopleStatus: 1}, organisation: array{type: array{id: 'org_t_llp'}}}}}
+     */
+    public function dpTestViewForPeople(): array
     {
         return [
             'org type from licence' => [
@@ -133,7 +138,7 @@ class ApplicationOverviewSectionTest extends MockeryTestCase
     /**
      * @dataProvider dpTestViewForOperatingCentres
      */
-    public function testViewForOperatingCentres($data, $expected)
+    public function testViewForOperatingCentres($data, $expected): void
     {
         $sectionDetails = ['enabled' => true];
         $ref = 'operating_centres';
@@ -144,7 +149,12 @@ class ApplicationOverviewSectionTest extends MockeryTestCase
         $this->assertEquals($expected, $viewModel->getVariable('name'));
     }
 
-    public function dpTestViewForOperatingCentres()
+    /**
+     * @return (((int|string)[]|int|string)[]|string)[][]
+     *
+     * @psalm-return array{'vehicleType not set': array{data: array{id: 1, idIndex: 'application', sectionNumber: 1, applicationCompletion: array{operatingCentresStatus: 1}}, expected: 'section.name.operating_centres'}, 'vehicleType set to LGV': array{data: array{id: 1, idIndex: 'application', sectionNumber: 1, applicationCompletion: array{operatingCentresStatus: 1}, vehicleType: array{id: 'app_veh_type_lgv'}}, expected: 'section.name.operating_centres.lgv'}, 'vehicleType set to mixed': array{data: array{id: 1, idIndex: 'application', sectionNumber: 1, applicationCompletion: array{operatingCentresStatus: 1}, vehicleType: array{id: 'app_veh_type_mixed'}}, expected: 'section.name.operating_centres'}}
+     */
+    public function dpTestViewForOperatingCentres(): array
     {
         return [
             'vehicleType not set' => [

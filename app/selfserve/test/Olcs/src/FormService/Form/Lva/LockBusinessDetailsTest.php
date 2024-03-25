@@ -24,7 +24,7 @@ class LockBusinessDetailsTest extends MockeryTestCase
         $this->sut = new LockBusinessDetails($this->formHelper);
     }
 
-    public function testAlterFormWithoutCompanyNumberOrName()
+    public function testAlterFormWithoutCompanyNumberOrName(): void
     {
         // Params
         $form = m::mock();
@@ -48,7 +48,7 @@ class LockBusinessDetailsTest extends MockeryTestCase
         $this->sut->alterForm($form);
     }
 
-    public function testAlterFormWithCompanyNumberWithoutName()
+    public function testAlterFormWithCompanyNumberWithoutName(): void
     {
         // Params
         $form = m::mock();
@@ -87,7 +87,7 @@ class LockBusinessDetailsTest extends MockeryTestCase
         $this->sut->alterForm($form);
     }
 
-    public function testAlterFormWithoutCompanyNumberWithName()
+    public function testAlterFormWithoutCompanyNumberWithName(): void
     {
         // Params
         $form = m::mock();
@@ -123,7 +123,7 @@ class LockBusinessDetailsTest extends MockeryTestCase
         $this->sut->alterForm($form);
     }
 
-    public function testAlterFormWithCompanyNumberAndName()
+    public function testAlterFormWithCompanyNumberAndName(): void
     {
         // Params
         $form = m::mock();

@@ -33,7 +33,7 @@ class ApplicationFinancialHistoryTest extends MockeryTestCase
         $this->sut = new ApplicationFinancialHistory($this->fh, m::mock(TranslationHelperService::class));
     }
 
-    public function testAlterForm()
+    public function testAlterForm(): void
     {
         $mockForm = m::mock(Form::class);
         $mockRequest = m::mock(Request::class);

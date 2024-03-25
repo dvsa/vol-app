@@ -46,7 +46,7 @@ class AbstractOverviewSubmissionTest extends MockeryTestCase
         $this->sut = new AbstractOverviewSubmissionStub($this->mockTranslationHelper, $this->mockFormHlp);
     }
 
-    public function testGetForm()
+    public function testGetForm(): void
     {
         $data = ['data'];
         $params = [
@@ -65,7 +65,7 @@ class AbstractOverviewSubmissionTest extends MockeryTestCase
         static::assertSame($this->mockForm, $sut->getForm($data, $params));
     }
 
-    public function testAlterFormReadySubmitWithFee()
+    public function testAlterFormReadySubmitWithFee(): void
     {
         $data = [
             'outstandingFeeTotal' => 999,
@@ -94,7 +94,7 @@ class AbstractOverviewSubmissionTest extends MockeryTestCase
         $this->sut->alterForm($this->mockForm, $data, $params);
     }
 
-    public function testAlterFormNotReadyNoFee()
+    public function testAlterFormNotReadyNoFee(): void
     {
         $data = [
             'outstandingFeeTotal' => -1,

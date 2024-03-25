@@ -18,7 +18,7 @@ trait ControllerTestTrait
     protected $formHelper;
     protected $services = [];
 
-    protected function mockController($className, array $constructorParams = [])
+    protected function mockController($className, array $constructorParams = []): void
     {
         $this->request = m::mock(\Laminas\Http\Request::class)->makePartial();
 
@@ -62,7 +62,7 @@ trait ControllerTestTrait
         return $this->sut;
     }
 
-    protected function setPost($data = [])
+    protected function setPost($data = []): void
     {
         $this->request
             ->shouldReceive('isPost')
@@ -71,7 +71,7 @@ trait ControllerTestTrait
             ->andReturn($data);
     }
 
-    protected function shouldRemoveElements($form, $elements)
+    protected function shouldRemoveElements($form, $elements): void
     {
         $helper = $this->mockFormHelper;
         foreach ($elements as $e) {
@@ -81,7 +81,7 @@ trait ControllerTestTrait
         }
     }
 
-    protected function createMockForm($formName)
+    protected function createMockForm($formName): \Mockery\LegacyMockInterface
     {
         $mockForm = m::mock(\Common\Form\Form::class);
 
@@ -146,7 +146,7 @@ trait ControllerTestTrait
         array $result,
         $ok = true,
         $times = 1
-    ) {
+    ): void {
         $response = m::mock()
             ->shouldReceive('isOk')
             ->andReturn($ok)

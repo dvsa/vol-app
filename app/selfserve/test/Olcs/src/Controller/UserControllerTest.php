@@ -104,7 +104,7 @@ class UserControllerTest extends MockeryTestCase
         m::close();
     }
 
-    public function testIndexAction()
+    public function testIndexAction(): void
     {
         $page = '2';
         $sort = 'name';
@@ -146,7 +146,7 @@ class UserControllerTest extends MockeryTestCase
         $this->assertInstanceOf(User::class, $actual);
     }
 
-    public function testIndexActionNotOk()
+    public function testIndexActionNotOk(): void
     {
         $page = '2';
         $sort = 'name';
@@ -185,7 +185,7 @@ class UserControllerTest extends MockeryTestCase
         $this->assertInstanceOf(User::class, $actual);
     }
 
-    public function testSaveExistingRecord()
+    public function testSaveExistingRecord(): void
     {
         $rawEditData = [
             'id' => 3,
@@ -236,7 +236,7 @@ class UserControllerTest extends MockeryTestCase
         $this->assertInstanceOf(Form::class, $view->getVariable('form'));
     }
 
-    public function testSaveWithPostData()
+    public function testSaveWithPostData(): void
     {
         $rawEditData = [
             'main' => [
@@ -282,7 +282,7 @@ class UserControllerTest extends MockeryTestCase
         $this->assertEquals('EXPECT', $this->sut->editAction());
     }
 
-    public function testAddAction()
+    public function testAddAction(): void
     {
         $rawEditData = [
             'main' => [
@@ -327,7 +327,7 @@ class UserControllerTest extends MockeryTestCase
         $this->assertEquals('EXPECT', $this->sut->addAction());
     }
 
-    public function testDeleteActionCheckHimself()
+    public function testDeleteActionCheckHimself(): void
     {
         $userId = 9999;
 
@@ -345,7 +345,7 @@ class UserControllerTest extends MockeryTestCase
         $this->assertEquals('EXPECT', $this->sut->deleteAction());
     }
 
-    public function testSaveExistingRecordLocksNameFields()
+    public function testSaveExistingRecordLocksNameFields(): void
     {
         $rawEditData = [
             'id' => 3,
@@ -426,7 +426,7 @@ class UserControllerTest extends MockeryTestCase
         $this->assertInstanceOf(Form::class, $view->getVariable('form'));
     }
 
-    public function testSaveGetsInvalidResponseAndRedirectsToIndex()
+    public function testSaveGetsInvalidResponseAndRedirectsToIndex(): void
     {
         $id = 3;
 

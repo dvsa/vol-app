@@ -3,6 +3,7 @@
 /**
  * Placeholder Test
  */
+
 namespace OlcsTest\Mvc\Controller\Plugin;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -31,7 +32,7 @@ class PlaceholderTest extends MockeryTestCase
         $this->sut = new Placeholder($this->viewPlaceholder);
     }
 
-    public function testSetPlaceholder()
+    public function testSetPlaceholder(): void
     {
         $this->assertEquals('', (string)$this->viewPlaceholder->getContainer('key'));
 

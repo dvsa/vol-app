@@ -73,7 +73,7 @@ class ViewControllerTest extends MockeryTestCase
     /**
      * Tests index details action for licence entity Non Partner, mixed with lgv
      */
-    public function testIndexActionNonPartnerMixedWithLgv()
+    public function testIndexActionNonPartnerMixedWithLgv(): void
     {
         $entity = 'licence';
         $entityId = 7;
@@ -171,7 +171,7 @@ class ViewControllerTest extends MockeryTestCase
     /**
      * Tests index details action for licence entity Non Partner, mixed without lgv
      */
-    public function testIndexActionNonPartnerMixedWithoutLgv()
+    public function testIndexActionNonPartnerMixedWithoutLgv(): void
     {
         $entity = 'licence';
         $entityId = 7;
@@ -248,7 +248,7 @@ class ViewControllerTest extends MockeryTestCase
     /**
      * Tests index details action for licence entity for Partner, mixed with lgv
      */
-    public function testIndexActionPartnerMixedWithLgv()
+    public function testIndexActionPartnerMixedWithLgv(): void
     {
         $entity = 'licence';
         $entityId = 7;
@@ -364,7 +364,7 @@ class ViewControllerTest extends MockeryTestCase
     /**
      * Tests index details action for licence entity for Partner, mixed without lgv
      */
-    public function testIndexActionPartnerMixedWithoutLgv()
+    public function testIndexActionPartnerMixedWithoutLgv(): void
     {
         $entity = 'licence';
         $entityId = 7;

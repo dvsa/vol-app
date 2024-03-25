@@ -31,7 +31,7 @@ class ApplicationVehiclesDeclarationsTest extends MockeryTestCase
         $this->sut = new ApplicationVehiclesDeclarations($this->fh);
     }
 
-    public function testAlterForm()
+    public function testAlterForm(): void
     {
         $mockForm = m::mock(Form::class);
 

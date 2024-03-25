@@ -62,7 +62,8 @@ class RemoveVehicleConfirmationController extends AbstractVehicleController
     }
 
     /**
-     * @return \Laminas\Http\Response
+     * @return \Laminas\Http\Response|\Laminas\View\Model\ViewModel
+     *
      * @throws \Exception
      */
     public function postAction()

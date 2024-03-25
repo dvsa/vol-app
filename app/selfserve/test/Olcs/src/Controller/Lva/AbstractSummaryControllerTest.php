@@ -33,7 +33,7 @@ class AbstractSummaryControllerTest extends MockeryTestCase
      * @param $niFlag
      * @param $isNi
      */
-    public function testIndexAction($niFlag, $isNi)
+    public function testIndexAction($niFlag, $isNi): void
     {
         $applicationData = [
             'id' => 712,
@@ -53,7 +53,7 @@ class AbstractSummaryControllerTest extends MockeryTestCase
                 'description' => 'In-Force'
             ],
             'niFlag' => $niFlag,
-            'canWithdraw' =>false
+            'canWithdraw' => false
         ];
         $this->sut
             ->shouldReceive('getIdentifier')->with()->once()->andReturn(712)
@@ -92,7 +92,12 @@ class AbstractSummaryControllerTest extends MockeryTestCase
         $this->assertSame('RENDERED', $this->sut->indexAction());
     }
 
-    public function indexActionProvider()
+    /**
+     * @return (bool|null|string)[][]
+     *
+     * @psalm-return list{list{'Y', true}, list{'N', false}, list{null, false}}
+     */
+    public function indexActionProvider(): array
     {
         return [
             ['Y', true],
@@ -104,7 +109,7 @@ class AbstractSummaryControllerTest extends MockeryTestCase
     /**
      * @dataProvider dataProviderImportantText
      */
-    public function testImportantText($isVariation, $goodsOrPsv, $licenceType, $expected)
+    public function testImportantText($isVariation, $goodsOrPsv, $licenceType, $expected): void
     {
         $applicationData = [
             'id' => 712,
@@ -137,7 +142,12 @@ class AbstractSummaryControllerTest extends MockeryTestCase
         $this->assertSame('RENDERED', $this->sut->indexAction());
     }
 
-    public function dataProviderImportantText()
+    /**
+     * @return (bool|string)[][]
+     *
+     * @psalm-return list{list{true, 'lcat_gv', 'XX', 'application-summary-important-goods-var'}, list{false, 'lcat_gv', 'XX', 'application-summary-important-goods-app'}, list{true, 'lcat_psv', 'XX', 'application-summary-important-psv-var'}, list{false, 'lcat_psv', 'XX', 'application-summary-important-psv-app'}, list{false, 'lcat_psv', 'ltyp_sr', 'application-summary-important-psv-app-sr'}}
+     */
+    public function dataProviderImportantText(): array
     {
         return [
             // isVariation, goodsOrPsv, licence type, expected

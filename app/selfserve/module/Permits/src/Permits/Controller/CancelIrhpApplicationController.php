@@ -86,6 +86,9 @@ class CancelIrhpApplicationController extends AbstractSelfserveController
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager);
     }
 
+    /**
+     * @return void
+     */
     public function mergeTemplateVars()
     {
         if (isset($this->queryParams['fromBilateralCabotage'])) {
@@ -99,6 +102,9 @@ class CancelIrhpApplicationController extends AbstractSelfserveController
         parent::mergeTemplateVars();
     }
 
+    /**
+     * @return void
+     */
     private function handleCabotageBacklink()
     {
         if (!isset($this->queryParams['slug']) || !isset($this->queryParams['ipa'])) {
@@ -117,6 +123,9 @@ class CancelIrhpApplicationController extends AbstractSelfserveController
         ];
     }
 
+    /**
+     * @return void
+     */
     private function handleIrhpApplicationBackLink()
     {
         $slug = $this->queryParams['fromIrhpApplication'];

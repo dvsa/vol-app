@@ -20,7 +20,7 @@ class IrhpApplicationSection extends AbstractHelper
     public const ROUTE_WINDOW_CLOSED = 'permits/window-closed';
     public const ROUTE_PERMITS_EXHAUSTED = 'permits/exhausted';
     public const ROUTE_MAX_PERMITTED_REACHED_FOR_STOCK = 'permits/max-permitted-reached-for-stock';
-    public const ROUTE_MAX_PERMITTED_REACHED_FOR_TYPE ='permits/max-permitted-reached-for-type';
+    public const ROUTE_MAX_PERMITTED_REACHED_FOR_TYPE = 'permits/max-permitted-reached-for-type';
     public const ROUTE_NOT_ELIGIBLE = 'permits/not-eligible';
     public const ROUTE_NO_LICENCES = 'permits/no-licences';
     public const ROUTE_ADD_LICENCE = 'permits/add-licence';
@@ -111,7 +111,8 @@ class IrhpApplicationSection extends AbstractHelper
         }
 
         // this is kept for backward compatibility only until everything is migrated to the Q&A solution
-        if (!isset($application['irhpPermitType']['id'])
+        if (
+            !isset($application['irhpPermitType']['id'])
             || !isset(self::ROUTE_ORDER[$application['irhpPermitType']['id']])
         ) {
             return [];

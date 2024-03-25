@@ -58,6 +58,7 @@ class DashboardController extends AbstractController
     /**
      * POST required data to DVSA Reports URL, handle response and perform redirect.
      *
+     * @return ViewModel|\Laminas\Http\Response
      */
     public function topsreportAction()
     {
@@ -94,7 +95,7 @@ class DashboardController extends AbstractController
     /**
      * Dashboard index action
      *
-     * @return ViewModel
+     * @return ViewModel|\Laminas\Http\Response
      */
     public function indexAction()
     {
@@ -113,7 +114,7 @@ class DashboardController extends AbstractController
     /**
      * Get the Standard Dashboard view
      *
-     * @return ViewModel
+     * @return ViewModel|\Laminas\Http\Response
      */
     protected function standardDashboardView()
     {
@@ -161,8 +162,10 @@ class DashboardController extends AbstractController
 
     /**
      * Perform dashboard data Qry
+     *
+     * @param int|null $organisationId
      */
-    protected function getDashboardData($organisationId)
+    protected function getDashboardData(?int $organisationId)
     {
         // retrieve data
         $query = DashboardQry::create(['id' => $organisationId]);
@@ -170,7 +173,7 @@ class DashboardController extends AbstractController
         return $response->getResult()['dashboard'];
     }
 
-    private function isNiFlagTrue($dashboardData)
+    private function isNiFlagTrue($dashboardData): bool
     {
         $licencesApplications = array_merge($dashboardData['licences'], $dashboardData['applications']);
         $niFlags = array_filter(array_column($licencesApplications, 'niFlag'), fn($niFlag) => $niFlag === 'Y');

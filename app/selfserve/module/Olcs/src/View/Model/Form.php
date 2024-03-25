@@ -5,6 +5,7 @@
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
+
 namespace Olcs\View\Model;
 
 use Laminas\Form\Form as LaminasForm;

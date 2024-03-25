@@ -5,6 +5,7 @@
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
+
 namespace OlcsTest\View\Model\Variation;
 
 use Common\RefData;
@@ -19,7 +20,7 @@ use Laminas\View\Model\ViewModel;
  */
 class VariationOverviewSectionTest extends MockeryTestCase
 {
-    public function testViewWithRequiresAttention()
+    public function testViewWithRequiresAttention(): void
     {
         $sectionDetails = ['status' => RefData::VARIATION_STATUS_REQUIRES_ATTENTION];
         $ref = 'type_of_licence';
@@ -40,7 +41,7 @@ class VariationOverviewSectionTest extends MockeryTestCase
         $this->assertNull($viewModel->getVariable('sectionNumber')); // OLCS-7016;
     }
 
-    public function testViewWithUpdated()
+    public function testViewWithUpdated(): void
     {
         $sectionDetails = ['status' => RefData::VARIATION_STATUS_UPDATED];
         $ref = 'type_of_licence';
@@ -60,7 +61,7 @@ class VariationOverviewSectionTest extends MockeryTestCase
         $this->assertNull($viewModel->getVariable('sectionNumber'));
     }
 
-    public function testViewWithUnchanged()
+    public function testViewWithUnchanged(): void
     {
         $sectionDetails = ['status' => RefData::VARIATION_STATUS_UNCHANGED];
         $ref = 'type_of_licence';
@@ -80,7 +81,7 @@ class VariationOverviewSectionTest extends MockeryTestCase
         $this->assertNull($viewModel->getVariable('sectionNumber'));
     }
 
-    public function testViewWithNotEnabled()
+    public function testViewWithNotEnabled(): void
     {
         $sectionDetails = ['status' => RefData::VARIATION_STATUS_UNCHANGED, 'enabled' => 0];
         $ref = 'type_of_licence';
@@ -104,7 +105,7 @@ class VariationOverviewSectionTest extends MockeryTestCase
     /**
      * @dataProvider dpTestViewForPeople
      */
-    public function testViewForPeople($data)
+    public function testViewForPeople($data): void
     {
         $sectionDetails = ['status' => RefData::VARIATION_STATUS_REQUIRES_ATTENTION];
         $ref = 'people';
@@ -115,7 +116,12 @@ class VariationOverviewSectionTest extends MockeryTestCase
         $this->assertEquals('section.name.people.org_t_llp', $viewModel->getVariable('name'));
     }
 
-    public function dpTestViewForPeople()
+    /**
+     * @return ((string|string[])[][]|int|string)[][][]
+     *
+     * @psalm-return array{'org type from licence': array{data: array{id: 1, idIndex: 'application', sectionNumber: 1, licence: array{organisation: array{type: array{id: 'org_t_llp'}}}}}, 'org type from organisation': array{data: array{id: 1, idIndex: 'application', sectionNumber: 1, organisation: array{type: array{id: 'org_t_llp'}}}}}
+     */
+    public function dpTestViewForPeople(): array
     {
         return [
             'org type from licence' => [
@@ -150,7 +156,7 @@ class VariationOverviewSectionTest extends MockeryTestCase
     /**
      * @dataProvider dpTestViewForOperatingCentres
      */
-    public function testViewForOperatingCentres($data, $expected)
+    public function testViewForOperatingCentres($data, $expected): void
     {
         $sectionDetails = ['status' => RefData::VARIATION_STATUS_REQUIRES_ATTENTION];
         $ref = 'operating_centres';
@@ -161,7 +167,12 @@ class VariationOverviewSectionTest extends MockeryTestCase
         $this->assertEquals($expected, $viewModel->getVariable('name'));
     }
 
-    public function dpTestViewForOperatingCentres()
+    /**
+     * @return ((int|string|string[])[]|string)[][]
+     *
+     * @psalm-return array{'vehicleType not set': array{data: array{id: 1, idIndex: 'application', sectionNumber: 1}, expected: 'section.name.operating_centres'}, 'vehicleType set to LGV': array{data: array{id: 1, idIndex: 'application', sectionNumber: 1, vehicleType: array{id: 'app_veh_type_lgv'}}, expected: 'section.name.operating_centres.lgv'}, 'vehicleType set to mixed': array{data: array{id: 1, idIndex: 'application', sectionNumber: 1, vehicleType: array{id: 'app_veh_type_mixed'}}, expected: 'section.name.operating_centres'}}
+     */
+    public function dpTestViewForOperatingCentres(): array
     {
         return [
             'vehicleType not set' => [

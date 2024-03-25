@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Olcs\View\Helper\SessionTimeoutWarning;
@@ -49,8 +50,7 @@ class SessionTimeoutWarning extends AbstractHelper implements HelperInterface
         bool $enabled,
         int $secondsBeforeExpiryWarning,
         string $timeoutRedirectUrl
-    )
-    {
+    ) {
         $this->headMeta = $headMeta;
         $this->enabled = $enabled;
         $this->secondsBeforeExpiryWarning = $secondsBeforeExpiryWarning;

@@ -79,7 +79,7 @@ class StartController extends AbstractSelfserveController implements ToggleAware
     /**
      * startAction
      *
-     * @return \Laminas\View\Model\ViewModel | Response
+     * @return Response
      */
     public function startAction()
     {
@@ -105,10 +105,15 @@ class StartController extends AbstractSelfserveController implements ToggleAware
             $this->flashMessengerHelper->addUnknownError();
         }
 
-        $this->redirect()->refresh();
+        return $this->redirect()->refresh();
     }
 
-    private function getGvData()
+    /**
+     * @return (string|string[])[]
+     *
+     * @psalm-return array{pageTitle: 'licence.surrender.start.title.gv', cancelBus: list{''}}
+     */
+    private function getGvData(): array
     {
         return [
             'pageTitle' => 'licence.surrender.start.title.gv',
@@ -116,7 +121,12 @@ class StartController extends AbstractSelfserveController implements ToggleAware
         ];
     }
 
-    private function getPsvData($translateService)
+    /**
+     * @return (array|string)[]
+     *
+     * @psalm-return array{pageTitle: 'licence.surrender.start.title.psv', cancelBus: list{mixed}}
+     */
+    private function getPsvData(Translator $translateService): array
     {
         return [
             'pageTitle' => 'licence.surrender.start.title.psv',
@@ -127,7 +137,7 @@ class StartController extends AbstractSelfserveController implements ToggleAware
     /**
      * getView
      *
-     * @param Licence    $licence
+     * @param array    $licence
      * @param Translator $translateService
      *
      * @return \Laminas\View\Model\ViewModel

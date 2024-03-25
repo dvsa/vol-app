@@ -17,7 +17,7 @@ class PermitTypeTitleTest extends TestCase
         $this->pageTypeTitle = new PermitTypeTitle();
     }
 
-    public function testMapForDisplay()
+    public function testMapForDisplay(): void
     {
         $data = [
             'checkedAnswers' => 1,

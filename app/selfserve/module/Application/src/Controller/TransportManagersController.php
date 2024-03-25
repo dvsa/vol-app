@@ -17,7 +17,6 @@ use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
-
 use Olcs\Controller\Lva\AbstractTransportManagersController;
 use Olcs\Controller\Lva\Traits\ApplicationControllerTrait;
 use LmcRbacMvc\Service\AuthorizationService;

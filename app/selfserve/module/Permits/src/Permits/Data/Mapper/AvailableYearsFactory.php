@@ -16,7 +16,7 @@ class AvailableYearsFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : AvailableYears
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): AvailableYears
     {
         return new AvailableYears(
             $container->get(TranslationHelperService::class)

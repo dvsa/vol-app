@@ -47,6 +47,9 @@ class ReviewController extends AbstractSurrenderController
         return $this->createView();
     }
 
+    /**
+     * @return \Laminas\Http\Response
+     */
     public function confirmationAction()
     {
         $this->updateSurrender(RefData::SURRENDER_STATUS_DETAILS_CONFIRMED);

@@ -5,6 +5,7 @@ use Common\Service\Table\Formatter\Date;
 use Common\Service\Table\Formatter\NullableNumber;
 use Common\Service\Table\Formatter\RefDataStatus;
 use Common\Service\Table\Formatter\StackValue;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [],
@@ -44,31 +45,41 @@ return [
         [
             'title' => 'permits.irhp.valid.permits.table.expiry-date',
             'name' => 'expiryDate',
-            'formatter' => fn($row) => $this->callFormatter(
-                [
+            'formatter' => fn($row) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                $this->callFormatter(
+                    [
                     'name' => 'expiryDate',
                     'formatter' => Date::class,
-                ],
-                [
+                    ],
+                    [
                     'expiryDate' => $row['irhpPermitRange']['irhpPermitStock']['validTo'] ?? null,
-                ]
-            )
+                    ]
+                )
         ],
         [
             'title' => 'status',
             'name' => 'status',
-            'formatter' => fn($row) => $this->callFormatter(
-                [
+            'formatter' => fn($row) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                $this->callFormatter(
+                    [
                     'name' => 'status',
                     'formatter' => RefDataStatus::class,
-                ],
-                [
+                    ],
+                    [
                     'status' => [
                         'id' => RefData::PERMIT_VALID,
                         'description' => RefData::PERMIT_VALID
                     ],
-                ]
-            )
+                    ]
+                )
         ],
     ]
 ];

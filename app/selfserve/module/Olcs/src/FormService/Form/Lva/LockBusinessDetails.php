@@ -13,7 +13,7 @@ class LockBusinessDetails
         $this->formHelper = $formHelper;
     }
 
-    public function alterForm($form)
+    public function alterForm($form): void
     {
         $fieldset = $form->get('data');
 

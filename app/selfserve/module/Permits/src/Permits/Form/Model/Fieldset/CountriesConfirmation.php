@@ -1,4 +1,5 @@
 <?php
+
 namespace Permits\Form\Model\Fieldset;
 
 use Laminas\Form\Annotation as Form;
@@ -20,7 +21,7 @@ class CountriesConfirmation
      * @Form\Type("\Common\Form\Elements\Types\Html")
      */
     public $removedCountries = null;
-    
+
     /**
      * @Form\Name("confirmation")
      * @Form\Options({

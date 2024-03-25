@@ -34,7 +34,7 @@ class AnchorViewModelTest extends MockeryTestCase
     /**
      * @test
      */
-    public function __construct_ThrowsExceptionIfRouteAndUrlAreProvided()
+    public function constructThrowsExceptionIfRouteAndUrlAreProvided()
     {
         // Expect
         $this->expectException(InvalidArgumentException::class);
@@ -47,7 +47,7 @@ class AnchorViewModelTest extends MockeryTestCase
     /**
      * @test
      */
-    public function __construct_SetsTemplate()
+    public function constructSetsTemplate()
     {
         // Execute
         $this->setUpSut();
@@ -59,7 +59,7 @@ class AnchorViewModelTest extends MockeryTestCase
     /**
      * @test
      */
-    public function __construct_AppliesADefaultClass()
+    public function constructAppliesADefaultClass()
     {
         // Execute
         $this->setUpSut();
@@ -71,7 +71,7 @@ class AnchorViewModelTest extends MockeryTestCase
     /**
      * @test
      */
-    public function __construct_OverridesDefaultClass_WhenCustomClassIsProvided()
+    public function constructOverridesDefaultClassWhenCustomClassIsProvided()
     {
         // Execute
         $this->setUpSut([static::THE_CLASS_VARIABLE_KEY => static::A_CUSTOM_CLASS]);
@@ -83,7 +83,7 @@ class AnchorViewModelTest extends MockeryTestCase
     /**
      * @test
      */
-    public function setVariable_isCallable()
+    public function setVariableisCallable(): void
     {
         // Setup
         $this->setUpSut();
@@ -94,9 +94,10 @@ class AnchorViewModelTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends setVariable_isCallable
+     *
+     * @depends setVariableisCallable
      */
-    public function setVariable_ThrowsExceptionIfRouteIsProvided_WhileUrlIsAlreadySet()
+    public function setVariableThrowsExceptionIfRouteIsProvidedWhileUrlIsAlreadySet(): void
     {
         // Setup
         $this->setUpSut([static::THE_URL_VARIABLE_KEY => static::A_URL]);
@@ -111,9 +112,10 @@ class AnchorViewModelTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends setVariable_isCallable
+     *
+     * @depends setVariableisCallable
      */
-    public function setVariable_ThrowsExceptionIfUrlIsProvided_WhileRouteIsAlreadySet()
+    public function setVariableThrowsExceptionIfUrlIsProvidedWhileRouteIsAlreadySet(): void
     {
         // Setup
         $this->setUpSut([static::THE_ROUTE_VARIABLE_KEY => static::A_ROUTE]);
@@ -129,7 +131,7 @@ class AnchorViewModelTest extends MockeryTestCase
     /**
      * @test
      */
-    public function setVariables_isCallable()
+    public function setVariablesisCallable(): void
     {
         // Setup
         $this->setUpSut();
@@ -140,9 +142,10 @@ class AnchorViewModelTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends setVariables_isCallable
+     *
+     * @depends setVariablesisCallable
      */
-    public function setVariables_ThrowsExceptionIfRouteAndUrlAreProvided()
+    public function setVariablesThrowsExceptionIfRouteAndUrlAreProvided(): void
     {
         // Setup
         $this->setUpSut();
@@ -157,9 +160,10 @@ class AnchorViewModelTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends setVariables_isCallable
+     *
+     * @depends setVariablesisCallable
      */
-    public function setVariables_OverwritesRoute_WhenUrlIsAlreadySet()
+    public function setVariablesOverwritesRouteWhenUrlIsAlreadySet(): void
     {
         // Setup
         $this->setUpSut([static::THE_URL_VARIABLE_KEY => static::A_URL]);
@@ -173,9 +177,10 @@ class AnchorViewModelTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends setVariables_isCallable
+     *
+     * @depends setVariablesisCallable
      */
-    public function setVariables_ThrowsExceptionIfNotOverwriting_AndVariablesContainsRoute_WhileUrlIsAlreadySet()
+    public function setVariablesThrowsExceptionIfNotOverwritingAndVariablesContainsRouteWhileUrlIsAlreadySet(): void
     {
         // Setup
         $this->setUpSut([static::THE_URL_VARIABLE_KEY => static::A_URL]);
@@ -190,9 +195,10 @@ class AnchorViewModelTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends setVariables_isCallable
+     *
+     * @depends setVariablesisCallable
      */
-    public function setVariables_OverwritesUrl_WhenRouteIsAlreadySet()
+    public function setVariablesOverwritesUrlWhenRouteIsAlreadySet(): void
     {
         // Setup
         $this->setUpSut([static::THE_ROUTE_VARIABLE_KEY => static::A_ROUTE]);
@@ -206,9 +212,10 @@ class AnchorViewModelTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends setVariables_isCallable
+     *
+     * @depends setVariablesisCallable
      */
-    public function setVariables_ThrowsExceptionIfNotOverwriting_AndVariablesContainsUrl_WhileRouteIsAlreadySet()
+    public function setVariablesThrowsExceptionIfNotOverwritingAndVariablesContainsUrlWhileRouteIsAlreadySet(): void
     {
         // Setup
         $this->setUpSut([static::THE_ROUTE_VARIABLE_KEY => static::A_ROUTE]);

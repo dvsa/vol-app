@@ -36,6 +36,9 @@ class AddressDetailsController extends AbstractSurrenderController
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessengerHelper);
     }
 
+    /**
+     * @return \Laminas\Http\Response|\Laminas\View\Model\ViewModel
+     */
     public function indexAction()
     {
         /** @var \Laminas\Http\Request $request */

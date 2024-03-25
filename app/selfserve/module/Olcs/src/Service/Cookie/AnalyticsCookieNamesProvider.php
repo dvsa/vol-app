@@ -27,8 +27,12 @@ class AnalyticsCookieNamesProvider implements CookieNamesProviderInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @return (int|string)[][]
+     *
+     * @psalm-return non-empty-list<array{domain: string, name: array-key}>
      */
-    public function getNames(Cookie $cookie)
+    public function getNames(Cookie $cookie): array
     {
         $names = [
             '_gid',

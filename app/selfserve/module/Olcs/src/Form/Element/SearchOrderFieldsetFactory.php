@@ -16,7 +16,7 @@ class SearchOrderFieldsetFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : SearchOrderFieldset
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SearchOrderFieldset
     {
         $fs = new SearchOrderFieldset($options['name'], $options);
         $fs->setSearchService($container->get('DataServiceManager')->get(Search::class));

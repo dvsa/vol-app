@@ -19,7 +19,7 @@ class IrhpApplicationViewGeneratorTest extends MockeryTestCase
         $this->irhpApplicationViewGenerator = new IrhpApplicationViewGenerator();
     }
 
-    public function testGetTemplateName()
+    public function testGetTemplateName(): void
     {
         $this->assertEquals(
             'permits/single-question',
@@ -27,7 +27,7 @@ class IrhpApplicationViewGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function testGetAdditionalViewVariables()
+    public function testGetAdditionalViewVariables(): void
     {
         $applicationReference = 'OB12345 / 100001';
 
@@ -53,7 +53,7 @@ class IrhpApplicationViewGeneratorTest extends MockeryTestCase
         );
     }
 
-    public function testHandleRedirectionRequest()
+    public function testHandleRedirectionRequest(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage(IrhpApplicationViewGenerator::ERR_NOT_SUPPORTED);

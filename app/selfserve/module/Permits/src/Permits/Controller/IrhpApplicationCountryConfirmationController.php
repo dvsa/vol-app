@@ -80,6 +80,8 @@ class IrhpApplicationCountryConfirmationController extends AbstractSelfserveCont
     /**
      * Extend method to generate lists of removed and selected country codes from input passed in via querystring
      * or post data
+     *
+     * @return void
      */
     public function retrieveData()
     {
@@ -111,6 +113,8 @@ class IrhpApplicationCountryConfirmationController extends AbstractSelfserveCont
 
     /**
      * Extend method to add the list of selected countries to the querystring on the back button
+     *
+     * @return void
      */
     public function mergeTemplateVars()
     {

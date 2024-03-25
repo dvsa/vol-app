@@ -16,7 +16,7 @@ class QaControllerFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : QaController
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): QaController
     {
         return new QaController(
             $container->get('QaFormProvider'),

@@ -36,7 +36,7 @@ class VariationBusinessTypeTest extends MockeryTestCase
     /**
      * @dataProvider dpGetForm
      */
-    public function testGetForm($hasInforceLicences, $hasOrganisationSubmittedLicenceApplication)
+    public function testGetForm($hasInforceLicences, $hasOrganisationSubmittedLicenceApplication): void
     {
         $mockElement = m::mock(Element::class);
 
@@ -94,7 +94,12 @@ class VariationBusinessTypeTest extends MockeryTestCase
         $this->assertSame($mockForm, $form);
     }
 
-    public function dpGetForm()
+    /**
+     * @return bool[][]
+     *
+     * @psalm-return list{list{true, true}, list{true, false}, list{false, true}, list{false, false}}
+     */
+    public function dpGetForm(): array
     {
         return [
             [

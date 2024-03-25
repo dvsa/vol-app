@@ -24,7 +24,7 @@ class AvailableStocksTest extends TestCase
     /**
      * @dataProvider dpTestExceptionNotSupported
      */
-    public function testExceptionNotSupported($typeId)
+    public function testExceptionNotSupported($typeId): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('This mapper does not support permit type ' . $typeId);
@@ -39,7 +39,12 @@ class AvailableStocksTest extends TestCase
         );
     }
 
-    public function dpTestExceptionNotSupported()
+    /**
+     * @return int[][]
+     *
+     * @psalm-return list{list{1}, list{3}, list{4}, list{5}}
+     */
+    public function dpTestExceptionNotSupported(): array
     {
         return [
             [RefData::ECMT_PERMIT_TYPE_ID],
@@ -49,7 +54,7 @@ class AvailableStocksTest extends TestCase
         ];
     }
 
-    public function testEcmtShortTermSingleOption()
+    public function testEcmtShortTermSingleOption(): void
     {
         $data = [
             'type' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
@@ -110,7 +115,7 @@ class AvailableStocksTest extends TestCase
         $this->assertEquals($expectedData, $returnedData);
     }
 
-    public function testEcmtShortTermMultipleOptions()
+    public function testEcmtShortTermMultipleOptions(): void
     {
         $data = [
             'type' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,

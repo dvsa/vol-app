@@ -87,7 +87,7 @@ class AvailableBilateralStocks implements MapperInterface
      * @param string|null $selectedCountryStock
      * @param bool $isMorocco
      */
-    private function multipleStockOptions(Form $form, array $stocks, ?string $selectedCountryStock, $isMorocco)
+    private function multipleStockOptions(Form $form, array $stocks, ?string $selectedCountryStock, $isMorocco): void
     {
         $valueOptions = [];
 
@@ -115,7 +115,7 @@ class AvailableBilateralStocks implements MapperInterface
      * @param Form $form
      * @param array $stock
      */
-    private function singleStockOption(Form $form, array $stock)
+    private function singleStockOption(Form $form, array $stock): void
     {
         $markup = sprintf(
             '<p class="govuk-body-l">%s %s</p>',

@@ -6,6 +6,7 @@ use Common\Service\Table\Formatter\EbsrDocumentLink;
 use Common\Service\Table\Formatter\EbsrDocumentStatus;
 use Common\Service\Table\Formatter\EbsrRegNumberLink;
 use Common\Service\Table\Formatter\EbsrVariationNumber;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -31,6 +32,10 @@ return [
             'title' => 'selfserve-table-ebsr-submissions-file-name',
             'formatter' => function ($data, $column) {
                 $column['formatter'] = EbsrDocumentLink::class;
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 return $this->callFormatter($column, $data);
             }
         ],
@@ -42,6 +47,10 @@ return [
             'title' => 'selfserve-table-ebsr-submissions-reg-number',
             'formatter' => function ($data, $column) {
                 $column['formatter'] = EbsrRegNumberLink::class;
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 return $this->callFormatter($column, $data);
             }
         ],
@@ -50,6 +59,10 @@ return [
             'isNumeric' => true,
             'formatter' => function ($data, $column) {
                 $column['formatter'] = EbsrVariationNumber::class;
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 return $this->callFormatter($column, $data);
             }
         ],
@@ -78,6 +91,10 @@ return [
             'title' => 'selfserve-table-ebsr-submissions-uploaded',
             'formatter' => function ($data, $column) {
                 $column['formatter'] = Date::class;
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 return $this->callFormatter($column, $data);
             },
             'name' => 'submittedDate'

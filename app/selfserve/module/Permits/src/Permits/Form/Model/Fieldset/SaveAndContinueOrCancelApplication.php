@@ -1,4 +1,5 @@
 <?php
+
 namespace Permits\Form\Model\Fieldset;
 
 use Laminas\Form\Annotation as Form;

@@ -38,7 +38,7 @@ class BusRegRegistrationsController extends AbstractController
     /**
      * Lists all Bus Reg's with filter search form
      *
-     * @return \Laminas\View\Model\ViewModel
+     * @return ViewModel|\Laminas\Http\Response
      */
     public function indexAction()
     {
@@ -108,10 +108,13 @@ class BusRegRegistrationsController extends AbstractController
      * LAs get the txc-inbox table to match the results returned. Operators get the ebsr-submissions table.
      *
      * @param $result
-     * @param $params
+     * @param (array|mixed)[] $params
+     *
      * @return string
+     *
+     * @psalm-param array{organisationId: mixed, busRegStatus: mixed, licId: mixed, page: mixed, order: mixed, limit: mixed, sort: mixed, query: array{organisationId: mixed, busRegStatus: mixed, licId: mixed, page: mixed, order: mixed, limit: mixed, sort: mixed}} $params
      */
-    private function generateTable($result, $params)
+    private function generateTable($result, array $params)
     {
         /** @var \Common\Service\Table\TableBuilder $tableBuilder */
         $tableBuilder = $this->tableFactory;
@@ -153,9 +156,13 @@ class BusRegRegistrationsController extends AbstractController
      *
      * @param null $title
      * @param null $subtitle
+     * @param (array|false|mixed|string)[] $data
+     *
      * @return \Laminas\View\Model\ViewModel
+     *
+     * @psalm-param array{pageTitle?: 'bus-registrations-index-title', searchForm?: mixed, activeTab?: 'registrations', showNav?: false, tabs?: array} $data
      */
-    private function generateLayout($data = [])
+    private function generateLayout(array $data = [])
     {
         $layout = new \Laminas\View\Model\ViewModel(
             $data
@@ -171,9 +178,12 @@ class BusRegRegistrationsController extends AbstractController
      *
      * @param $template
      * @param array $data
+     *
      * @return ViewModel
+     *
+     * @psalm-param 'olcs/bus-registration/index' $template
      */
-    private function generateContent($template, $data = [])
+    private function generateContent(string $template, $data = [])
     {
         $content = new ViewModel($data);
 
@@ -184,10 +194,13 @@ class BusRegRegistrationsController extends AbstractController
     /**
      * Get and setup the filter form
      *
-     * @param $params
+     * @param (array|mixed)[] $params
+     *
      * @return mixed
+     *
+     * @psalm-param array{organisationId: mixed, busRegStatus: mixed, licId: mixed, page: mixed, order: mixed, limit: mixed, sort: mixed, query: array{organisationId: mixed, busRegStatus: mixed, licId: mixed, page: mixed, order: mixed, limit: mixed, sort: mixed}} $params
      */
-    public function getFilterForm($params)
+    public function getFilterForm(array $params)
     {
         /** @var \Common\Form\Form $filterForm */
         $filterForm = $this->formHelper->createForm('BusRegRegistrationsFilterForm');

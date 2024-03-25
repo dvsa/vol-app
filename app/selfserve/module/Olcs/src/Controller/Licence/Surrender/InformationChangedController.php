@@ -56,6 +56,9 @@ class InformationChangedController extends AbstractSurrenderController
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessengerHelper);
     }
 
+    /**
+     * @return \Laminas\Http\Response|\Laminas\View\Model\ViewModel
+     */
     public function indexAction()
     {
         $this->surrenderState = $this->surrenderStateService->setSurrenderData($this->data['surrender'])->getState();
@@ -69,7 +72,7 @@ class InformationChangedController extends AbstractSurrenderController
         return $this->createView();
     }
 
-    public function submitAction()
+    public function submitAction(): \Laminas\Http\Response
     {
         if ($this->surrenderStateService->setSurrenderData($this->data['surrender'])->hasExpired()) {
             if (!$this->deleteSurrender() || !$this->createSurrender()) {
@@ -137,7 +140,7 @@ class InformationChangedController extends AbstractSurrenderController
         return $this->surrenderState === SurrenderStateService::STATE_INFORMATION_CHANGED;
     }
 
-    protected function deleteSurrender()
+    protected function deleteSurrender(): bool
     {
         try {
             $response = $this->handleCommand(Delete::create(['id' => $this->licenceId]));
@@ -147,6 +150,9 @@ class InformationChangedController extends AbstractSurrenderController
         }
     }
 
+    /**
+     * @return bool|null
+     */
     protected function createSurrender()
     {
         try {

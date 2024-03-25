@@ -37,6 +37,9 @@ class DeclarationController extends AbstractSurrenderController
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager, $flashMessengerHelper);
     }
 
+    /**
+     * @return Response|\Laminas\View\Model\ViewModel
+     */
     public function indexAction()
     {
         if ($this->getRequest()->isPost()) {
@@ -57,6 +60,9 @@ class DeclarationController extends AbstractSurrenderController
         return $this->renderView($params);
     }
 
+    /**
+     * @return Response|null
+     */
     public function processSignForm()
     {
         $form = $this->getForm(DeclarationSign::class);
@@ -151,7 +157,12 @@ class DeclarationController extends AbstractSurrenderController
         ];
     }
 
-    private function getBottomLinkRouteAndText()
+    /**
+     * @return null|string[]
+     *
+     * @psalm-return array{bottomLinkRoute: string, bottomLinkText: 'lva.section.title.transport-manager-application.print-sign'}|null
+     */
+    private function getBottomLinkRouteAndText(): ?array
     {
         if ($this->data['surrender']['disableSignatures'] === false) {
             return [

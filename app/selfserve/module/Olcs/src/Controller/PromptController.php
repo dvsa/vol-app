@@ -30,6 +30,8 @@ class PromptController extends AbstractSelfserveController
 
     /**
      * {@inheritdoc}
+     *
+     * @return \Laminas\Http\Response|null
      */
     public function checkConditionalDisplay()
     {

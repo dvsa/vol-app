@@ -1,6 +1,7 @@
 <?php
 
 use Common\Service\Table\Formatter\Name;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -31,6 +32,10 @@ return [
             'action' => 'edit',
             'formatter' => function ($row, $column) {
                 $column['formatter'] = Name::class;
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 return $this->callFormatter($column, $row['contactDetails']['person']);
             }
         ],
@@ -43,7 +48,12 @@ return [
             'formatter' => fn($row, $column) => implode(
                 ',',
                 array_map(
-                    fn($role) => $this->translator->translate('role.' . $role['role']),
+                    fn($role) =>
+                        /**
+                         * @var TableBuilder $this
+                         * @psalm-scope-this TableBuilder
+                         */
+                        $this->translator->translate('role.' . $role['role']),
                     $row['roles']
                 )
             )
@@ -52,10 +62,17 @@ return [
             'title' => 'markup-table-th-remove', //this is a view partial from olcs-common
             'type' => 'ActionLinks',
             'isRemoveVisible' => fn($row) =>
-                /** $var TableBuilder $this */
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 $this->permissionService->isSelf($row['id']),
             'ariaDescription' => function ($row, $column) {
                 $column['formatter'] = Name::class;
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 return $this->callFormatter($column, $row['contactDetails']['person']);
             },
             'deleteInputName' => 'action[delete][%d]',

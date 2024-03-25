@@ -19,7 +19,7 @@ class EditVehicle
         $this->formHelper = $formHelper;
     }
 
-    public function getForm($request, $params = [])
+    public function getForm($request, $params = []): \Laminas\Form\FormInterface
     {
         $form = $this->formHelper->createFormWithRequest('Lva\EditGoodsVehicle', $request);
 
@@ -28,7 +28,7 @@ class EditVehicle
         return $form;
     }
 
-    protected function alterForm($form, $params)
+    protected function alterForm(\Laminas\Form\FormInterface $form, $params): void
     {
         if ($params['isRemoved']) {
             $this->formHelper->disableElements($form->get('data'));

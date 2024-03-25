@@ -29,7 +29,7 @@ class VariationBusinessDetailsTest extends MockeryTestCase
         $this->sut = new VariationBusinessDetails($this->fh, $this->fsm);
     }
 
-    public function testAlterForm()
+    public function testAlterForm(): void
     {
         // Params
         $form = m::mock();

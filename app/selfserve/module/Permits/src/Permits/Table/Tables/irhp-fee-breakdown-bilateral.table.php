@@ -1,5 +1,6 @@
 <?php
 
+use Common\Service\Table\TableBuilder;
 use Common\Util\Escape;
 use Common\View\Helper\CurrencyFormatter;
 
@@ -16,9 +17,14 @@ return [
         [
             'title' => 'permits.irhp.fee-breakdown.type',
             'name' => 'type',
-            'formatter' => fn($row, $column) => Escape::html(
-                $this->translator->translate($row['type'])
-            ),
+            'formatter' => fn($row, $column) =>
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
+                Escape::html(
+                    $this->translator->translate($row['type'])
+                ),
         ],
         [
             'title' => 'permits.irhp.fee-breakdown.number-of-permits',

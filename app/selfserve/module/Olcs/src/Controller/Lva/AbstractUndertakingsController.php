@@ -197,6 +197,7 @@ abstract class AbstractUndertakingsController extends AbstractController
             }
             return $this->redirect()->toUrl($urlResult->getResult()['messages'][0]);
         }
+        throw new \RuntimeException("Unexpected issue determining next step.");
     }
 
     /**

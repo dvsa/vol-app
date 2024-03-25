@@ -81,6 +81,9 @@ class IrhpApplicationDeclarationController extends AbstractSelfserveController
         ],
     ];
 
+    /**
+     * @return void
+     */
     public function mergeTemplateVars()
     {
         // declaration text is permit type specific

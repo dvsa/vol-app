@@ -116,10 +116,8 @@ trait VariationWizardPageControllerTrait
 
     /**
      * Handle the cancel action and return to start
-     *
-     * @return Response
      */
-    protected function handleCancelRedirect()
+    protected function handleCancelRedirect(): \Laminas\Http\Response
     {
         $this->handleCommand(DeleteVariation::create(['id' => $this->getIdentifier()]))->getResult();
         return $this->redirectToStartRoute();

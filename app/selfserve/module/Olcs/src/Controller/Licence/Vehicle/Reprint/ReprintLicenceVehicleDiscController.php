@@ -125,7 +125,7 @@ class ReprintLicenceVehicleDiscController extends AbstractVehicleController
     /**
      * @param Form $form
      */
-    protected function configureFormActionsForIndex(Form $form)
+    protected function configureFormActionsForIndex(Form $form): void
     {
         $form->get('formActions')
             ->get('action')
@@ -140,7 +140,7 @@ class ReprintLicenceVehicleDiscController extends AbstractVehicleController
      * @param Form $form
      * @param Request $request
      */
-    protected function configureSearchFormForIndex(Form $form, Request $request)
+    protected function configureSearchFormForIndex(Form $form, Request $request): void
     {
         $form->get('vehicleSearch')
             ->setOption('legend', 'licence.vehicle.table.search.reprint.legend');

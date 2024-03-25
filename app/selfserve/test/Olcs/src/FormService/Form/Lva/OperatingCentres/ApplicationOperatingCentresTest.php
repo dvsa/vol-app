@@ -70,7 +70,7 @@ class ApplicationOperatingCentresTest extends MockeryTestCase
         $this->sut = new ApplicationOperatingCentres($this->mockFormHelper, $this->authService, $this->tableBuilder, $fsm);
     }
 
-    public function testGetForm()
+    public function testGetForm(): void
     {
         $params = [
             'operatingCentres' => [],
@@ -152,7 +152,7 @@ class ApplicationOperatingCentresTest extends MockeryTestCase
         $this->assertSame($this->form, $form);
     }
 
-    protected function mockPopulateFormTable($data)
+    protected function mockPopulateFormTable(array $data): m\LegacyMockInterface
     {
         $columns = [
             'noOfVehiclesRequired' => [

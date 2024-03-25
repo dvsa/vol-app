@@ -4,6 +4,7 @@ use Common\Service\Table\Formatter\BusRegStatus;
 use Common\Service\Table\Formatter\EbsrRegNumberLink;
 use Common\Service\Table\Formatter\EbsrVariationNumber;
 use Common\Service\Table\Formatter\StackValue;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [
@@ -37,6 +38,10 @@ return [
             'title' => 'selfserve-table-txc-inbox-reg-number',
             'formatter' => function ($data, $column) {
                 $column['formatter'] = EbsrRegNumberLink::class;
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 return $this->callFormatter($column, $data);
             }
         ],
@@ -49,6 +54,10 @@ return [
             'isNumeric' => true,
             'formatter' => function ($data, $column) {
                 $column['formatter'] = EbsrVariationNumber::class;
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 return $this->callFormatter($column, $data);
             }
         ],

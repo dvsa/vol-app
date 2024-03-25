@@ -38,6 +38,8 @@ class ApplicationBusinessType extends CommonApplicationBusinessType
      *
      * @param Form  $form   form
      * @param array $params params
+     *
+     * @return void
      */
     protected function alterForm(Form $form, $params)
     {

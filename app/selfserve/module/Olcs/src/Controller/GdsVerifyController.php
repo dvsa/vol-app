@@ -239,7 +239,10 @@ class GdsVerifyController extends AbstractController
      *
      * @param array $types
      * @param string $verifyId
+     *
      * @throw \RuntimeException
+     *
+     * @return void
      */
     private function createAndStoreDigitalSignature(array $types, string $verifyId)
     {

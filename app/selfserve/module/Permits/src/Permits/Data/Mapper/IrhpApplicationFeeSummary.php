@@ -17,6 +17,7 @@ use RuntimeException;
 class IrhpApplicationFeeSummary implements MapperInterface
 {
     use MapFromResultTrait;
+
     public const APP_REFERENCE_HEADING = 'permits.page.fee.application.reference';
     public const APP_DATE_HEADING = 'permits.page.fee.application.date';
     public const FEE_PER_PERMIT_HEADING = 'permits.irhp.fee-breakdown.fee-per-permit';
@@ -692,6 +693,7 @@ class IrhpApplicationFeeSummary implements MapperInterface
                 return $fee;
             }
         }
+        return [];
     }
 
     /**

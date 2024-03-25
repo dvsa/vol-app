@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Olcs\Session;
 
 class LicenceVehicleManagement extends \Laminas\Session\Container

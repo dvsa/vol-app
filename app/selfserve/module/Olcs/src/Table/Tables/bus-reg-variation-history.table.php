@@ -2,6 +2,7 @@
 
 use Common\Service\Table\Formatter\Date;
 use Common\Service\Table\Formatter\Translate;
+use Common\Service\Table\TableBuilder;
 use Common\Util\Escape;
 
 $variationNo = 1;
@@ -15,6 +16,10 @@ return [
             'title' => 'Reg No.',
             'formatter' => function ($data) {
                 if (isset($data['id'])) {
+                    /**
+                     * @var TableBuilder $this
+                     * @psalm-scope-this TableBuilder
+                     */
                     if ((bool)$this->getVariable('isSearchPage') === true) {
                         return sprintf(
                             '<a href="%s" class="govuk-link">%s</a>',
@@ -45,6 +50,10 @@ return [
         [
             'title' => 'Application type',
             'formatter' => function ($data, $column) {
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 if ($data['isTxcApp'] == 'Y') {
                     if ($data['ebsrRefresh'] == 'Y') {
                         return $this->translator->translate('EBSR Data Refresh');

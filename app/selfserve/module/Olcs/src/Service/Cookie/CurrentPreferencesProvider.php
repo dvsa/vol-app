@@ -31,16 +31,16 @@ class CurrentPreferencesProvider
      *
      * @param mixed $cookie
      *
-     * @return Preferences
+     * @return Preferences|null
      */
-    public function getPreferences($cookie)
+    public function getPreferences($cookie): ?Preferences
     {
         $cookieState = $this->cookieReader->getState($cookie);
 
         if ($cookieState->isValid()) {
             return $cookieState->getPreferences();
         }
-        
+
         return $this->preferencesFactory->create();
     }
 }

@@ -3,6 +3,7 @@
 use Common\Service\Table\Formatter\Address;
 use Common\Service\Table\Formatter\Date;
 use Common\Service\Table\Formatter\YesNo;
+use Common\Service\Table\TableBuilder;
 
 return [
     'variables' => [],
@@ -38,6 +39,10 @@ return [
             'name' => 'createdOn',
             'formatter' => function ($row, $column) {
                 $column['formatter'] = Date::class;
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 return $this->callFormatter($column, $row['operatingCentre']);
             }
         ],
@@ -49,6 +54,10 @@ return [
                 if (empty($row['deletedDate'])) {
                     return 'NA';
                 }
+                /**
+                 * @var TableBuilder $this
+                 * @psalm-scope-this TableBuilder
+                 */
                 return $this->callFormatter($column, $row['deletedDate']);
             }
         ]

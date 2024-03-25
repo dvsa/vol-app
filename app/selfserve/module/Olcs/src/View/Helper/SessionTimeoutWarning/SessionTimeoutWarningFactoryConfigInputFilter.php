@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 
 namespace Olcs\View\Helper\SessionTimeoutWarning;
 
@@ -45,7 +46,7 @@ class SessionTimeoutWarningFactoryConfigInputFilter extends InputFilter
 
         $this->enabled
             ->getValidatorChain()
-            ->attach(new NotEmpty)
+            ->attach(new NotEmpty())
             ->attach($inArray);
 
         $this->add($this->enabled);
@@ -53,19 +54,19 @@ class SessionTimeoutWarningFactoryConfigInputFilter extends InputFilter
         $this->secondsBeforeExpiryWarning = new Input(self::CONFIG_SECONDS_BEFORE_EXPIRY_WARNING);
         $this->secondsBeforeExpiryWarning
             ->getValidatorChain()
-            ->attach(new NotEmpty)
-            ->attach(new Digits);
+            ->attach(new NotEmpty())
+            ->attach(new Digits());
         $this->secondsBeforeExpiryWarning
             ->getFilterChain()
-            ->attach(new ToInt);
+            ->attach(new ToInt());
 
         $this->add($this->secondsBeforeExpiryWarning);
 
         $this->timeoutRedirectUrl = new Input(self::CONFIG_TIMEOUT_REDIRECT_URL);
         $this->timeoutRedirectUrl
             ->getValidatorChain()
-            ->attach(new NotEmpty)
-            ->attach(new Uri);
+            ->attach(new NotEmpty())
+            ->attach(new Uri());
 
         $this->add($this->timeoutRedirectUrl);
     }

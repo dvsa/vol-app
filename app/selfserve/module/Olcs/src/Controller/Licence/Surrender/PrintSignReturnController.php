@@ -48,6 +48,9 @@ class PrintSignReturnController extends AbstractSurrenderController
     }
 
 
+    /**
+     * @return ViewModel|\Laminas\Http\Response
+     */
     public function printAction()
     {
         $params = [
@@ -83,7 +86,7 @@ class PrintSignReturnController extends AbstractSurrenderController
     }
 
 
-    protected function determineTitle()
+    protected function determineTitle(): string
     {
         if ($this->data['surrender']['licence']['goodsOrPsv']['id'] === RefData::LICENCE_CATEGORY_GOODS_VEHICLE) {
             return "licence.surrender.print-sign-return.form.title.gv";

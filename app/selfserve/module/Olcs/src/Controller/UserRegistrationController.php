@@ -48,7 +48,7 @@ class UserRegistrationController extends AbstractController
     /**
      * Method used for the registration form page
      *
-     * @return \Laminas\Http\Response|ViewModel
+     * @return ViewModel|\Laminas\Http\Response|null
      */
     public function addAction()
     {

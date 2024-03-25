@@ -27,7 +27,7 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->sut->setView($this->view);
     }
 
-    public function testInvokeBoolean()
+    public function testInvokeBoolean(): void
     {
         $input = [
             'question' => 'qanda.question',
@@ -67,7 +67,7 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
         self::assertEquals($expected, $this->sut->__invoke($input));
     }
 
-    public function testInvokeBooleanNoEscape()
+    public function testInvokeBooleanNoEscape(): void
     {
         $input = [
             'question' => 'qanda.question',
@@ -99,7 +99,7 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
         self::assertEquals($expected, $this->sut->__invoke($input));
     }
 
-    public function testInvokeInteger()
+    public function testInvokeInteger(): void
     {
         $input = [
             'question' => 'qanda.question',
@@ -117,7 +117,7 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
     /**
      * Tests a single answer is converted to an array containing one answer and is still processed correctly
      */
-    public function testInvokeWithAnswerNotArray()
+    public function testInvokeWithAnswerNotArray(): void
     {
         $input = [
             'question' => 'qanda.question',
@@ -133,7 +133,7 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
      *
      * @dataProvider dpInvokeOther
      */
-    public function testInvokeOther($questionType)
+    public function testInvokeOther($questionType): void
     {
         $input = [
             'question' => 'qanda.question',
@@ -169,7 +169,7 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
      *
      * @dataProvider dpInvokeOther
      */
-    public function testInvokeOtherNoEscape($questionType)
+    public function testInvokeOtherNoEscape($questionType): void
     {
         $input = [
             'question' => 'qanda.question',
@@ -196,7 +196,12 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
         self::assertEquals($expected, $this->sut->__invoke($input));
     }
 
-    public function dpInvokeOther()
+    /**
+     * @return string[][]
+     *
+     * @psalm-return list{list{'question_type_string'}, list{'question_type_custom'}}
+     */
+    public function dpInvokeOther(): array
     {
         return [
             [RefData::QUESTION_TYPE_STRING],

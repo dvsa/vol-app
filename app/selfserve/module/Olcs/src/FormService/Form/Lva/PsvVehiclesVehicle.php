@@ -22,7 +22,7 @@ class PsvVehiclesVehicle
         $this->formHelper = $formHelper;
         $this->formServiceLocator = $formServiceLocator;
     }
-    public function alterForm($form)
+    public function alterForm($form): void
     {
         $this->formServiceLocator->get('lva-vehicles-vehicle')->alterForm($form);
 

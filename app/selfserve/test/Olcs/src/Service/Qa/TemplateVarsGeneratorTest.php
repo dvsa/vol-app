@@ -10,7 +10,7 @@ use Olcs\Service\Qa\TemplateVarsGenerator;
 
 class TemplateVarsGeneratorTest extends MockeryTestCase
 {
-    public function testGenerate()
+    public function testGenerate(): void
     {
         $untranslatedQuestionData = [
             'filter' => 'htmlEscape',

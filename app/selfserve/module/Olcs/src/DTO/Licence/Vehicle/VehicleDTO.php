@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Olcs\DTO\Licence\Vehicle;
 
 use Olcs\DTO\DataTransferObject;

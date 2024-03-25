@@ -1,3 +1,3 @@
-OLCS.ready(function() {
+OLCS.ready(function () {
     OLCS.accessibleMoreActionsButton.init();
 });

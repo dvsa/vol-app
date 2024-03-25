@@ -17,7 +17,7 @@ class AvailableCountriesTest extends TestCase
     /**
      * @dataProvider dpTestMapForFormOptions
      */
-    public function testMapForFormOptions($data, $expected, $expectedValueOptions, $expectedValue)
+    public function testMapForFormOptions($data, $expected, $expectedValueOptions, $expectedValue): void
     {
         $mockForm = m::mock(Form::class);
         $mockForm->shouldReceive('get')
@@ -42,7 +42,12 @@ class AvailableCountriesTest extends TestCase
         );
     }
 
-    public function dpTestMapForFormOptions()
+    /**
+     * @return ((string|string[][])[]|string)[][][]
+     *
+     * @psalm-return array{'empty list': array{data: array{countries: array{countries: array<never, never>}, application: array{countrys: array<never, never>}}, expected: array{countries: array{countries: array<never, never>}, application: array{countrys: array<never, never>}}, expectedValueOptions: array<never, never>, expectedValue: array<never, never>}, 'list with data - nothing already selected': array{data: array{countries: array{countries: list{array{id: 'NL', countryDesc: 'name 1'}, array{id: 'FR', countryDesc: 'name 2'}, array{id: 'DE', countryDesc: 'name 3'}, array{id: 'PT', countryDesc: 'name 4'}}}, application: array{countrys: array<never, never>}}, expected: array{countries: array{countries: list{array{id: 'NL', countryDesc: 'name 1'}, array{id: 'FR', countryDesc: 'name 2'}, array{id: 'DE', countryDesc: 'name 3'}, array{id: 'PT', countryDesc: 'name 4'}}}, application: array{countrys: array<never, never>}}, expectedValueOptions: list{array{value: 'NL', label: 'name 1', hint: 'name 1'}, array{value: 'FR', label: 'name 2', hint: 'name 2'}, array{value: 'DE', label: 'name 3', hint: 'name 3'}, array{value: 'PT', label: 'name 4', hint: 'name 4'}}, expectedValue: array<never, never>}, 'list with data - some already selected': array{data: array{countries: array{countries: list{array{id: 'NL', countryDesc: 'name 1'}, array{id: 'FR', countryDesc: 'name 2'}, array{id: 'DE', countryDesc: 'name 3'}, array{id: 'PT', countryDesc: 'name 4'}}}, application: array{countrys: list{array{id: 'NL'}, array{id: 'DE'}}}}, expected: array{countries: array{countries: list{array{id: 'NL', countryDesc: 'name 1'}, array{id: 'FR', countryDesc: 'name 2'}, array{id: 'DE', countryDesc: 'name 3'}, array{id: 'PT', countryDesc: 'name 4'}}}, application: array{countrys: list{array{id: 'NL'}, array{id: 'DE'}}}}, expectedValueOptions: list{array{value: 'NL', label: 'name 1', hint: 'name 1'}, array{value: 'FR', label: 'name 2', hint: 'name 2'}, array{value: 'DE', label: 'name 3', hint: 'name 3'}, array{value: 'PT', label: 'name 4', hint: 'name 4'}}, expectedValue: list{'NL', 'DE'}}}
+     */
+    public function dpTestMapForFormOptions(): array
     {
         return [
             'empty list' => [

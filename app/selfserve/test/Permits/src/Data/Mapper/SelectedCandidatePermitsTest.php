@@ -10,7 +10,7 @@ use Permits\Data\Mapper\SelectedCandidatePermits;
  */
 class SelectedCandidatePermitsTest extends TestCase
 {
-    public function testMapFromForm()
+    public function testMapFromForm(): void
     {
         $data = [
             'fields' => [

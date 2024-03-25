@@ -36,7 +36,7 @@ class RemovedCountries implements MapperInterface
      * @param array $data
      * @param Form $form
      */
-    public function populateRemovedCountries(array $data, $form)
+    public function populateRemovedCountries(array $data, $form): void
     {
         $availableCountriesMap = [];
         foreach ($data[AvailableCountries::DATA_KEY]['countries'] as $country) {

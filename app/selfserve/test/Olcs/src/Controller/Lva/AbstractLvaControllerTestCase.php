@@ -14,9 +14,4 @@ use OlcsTest\Controller\Traits\ControllerTestTrait;
 abstract class AbstractLvaControllerTestCase extends MockeryTestCase
 {
     use ControllerTestTrait;
-
-    protected function getServiceManager()
-    {
-        return Bootstrap::getServiceManager();
-    }
 }

@@ -27,7 +27,7 @@ class User extends ViewModel
      * @param array $data
      * @param array $params
      */
-    public function setUsers(array $data, array $params = [])
+    public function setUsers(array $data, array $params = []): void
     {
         $this->setVariable('users', $this->getTable('users', $data, $params));
     }

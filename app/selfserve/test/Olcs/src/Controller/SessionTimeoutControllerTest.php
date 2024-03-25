@@ -35,7 +35,7 @@ class SessionTimeoutControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_IsCallable()
+    public function indexActionIsCallable(): void
     {
         $this->setUpSut();
         // Assert
@@ -45,7 +45,7 @@ class SessionTimeoutControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_ReturnsViewModelIfIdentityIsAnonymous()
+    public function indexActionReturnsViewModelIfIdentityIsAnonymous(): void
     {
         $this->setUpSut();
         // Define Expectations
@@ -63,7 +63,7 @@ class SessionTimeoutControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_ReturnsViewModelIfIdentityIsNull()
+    public function indexActionReturnsViewModelIfIdentityIsNull(): void
     {
         $this->setUpSut();
         // Define Expectations
@@ -79,7 +79,7 @@ class SessionTimeoutControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function indexAction_LogsOutUserIfLoggedIn()
+    public function indexActionLogsOutUserIfLoggedIn(): void
     {
         $this->setUpSut();
         //setup
@@ -102,9 +102,10 @@ class SessionTimeoutControllerTest extends MockeryTestCase
 
     /**
      * @test
+     *
      * @dataProvider dpIdentityProviderClass
      */
-    public function indexAction_RedirectsUserIfLoggedIn(string $identityProviderClass)
+    public function indexActionRedirectsUserIfLoggedIn(string $identityProviderClass): void
     {
         $this->setUpSut();
         // Setup
@@ -144,7 +145,7 @@ class SessionTimeoutControllerTest extends MockeryTestCase
      * @param Request $request
      * @param RouteMatch|null $routeMatch
      */
-    protected function setUpSut()
+    protected function setUpSut(): void
     {
         $this->sut = new SessionTimeoutController(
             $this->identityProviderMock,

@@ -2,6 +2,7 @@
 
 namespace Olcs\Controller\Lva\TransportManager;
 
+use Common\Data\Mapper\Lva\TransportManagerApplication;
 use Common\RefData;
 use Common\Service\Cqrs\Command\CommandService;
 use Common\Service\Helper\FormHelperService;

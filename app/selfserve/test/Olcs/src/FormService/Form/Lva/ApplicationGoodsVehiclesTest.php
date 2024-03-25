@@ -38,7 +38,7 @@ class ApplicationGoodsVehiclesTest extends MockeryTestCase
         $this->sut = new ApplicationGoodsVehicles($this->fh, m::mock(AuthorizationService::class), $this->fsm);
     }
 
-    public function testAlterForm()
+    public function testAlterForm(): void
     {
         $mockFieldset = m::mock(Fieldset::class);
         $mockTable = m::mock(TableBuilder::class);

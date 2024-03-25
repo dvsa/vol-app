@@ -25,13 +25,12 @@ class EbsrListTest extends MockeryTestCase
 
     /**
      * @dataProvider getAssertDataProvider
-     *
      */
     public function testAssert(
         $userType,
         $userData,
         $expected
-    ) {
+    ): void {
         $currentUser = m::mock(User::class)->makePartial();
         $currentUser->shouldReceive('getUserType')->andReturn($userType);
         $currentUser->shouldReceive('getUserData')->andReturn($userData);
@@ -41,7 +40,12 @@ class EbsrListTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->assert($this->auth));
     }
 
-    public function getAssertDataProvider()
+    /**
+     * @return (bool|bool[]|string)[][]
+     *
+     * @psalm-return list{list{'local-authority', array<never, never>, true}, list{'operator', array{hasActivePsvLicence: true}, true}, list{'operator', array{hasActivePsvLicence: false}, false}, list{'partner', array<never, never>, false}}
+     */
+    public function getAssertDataProvider(): array
     {
         return [
             // local authority

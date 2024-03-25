@@ -28,7 +28,7 @@ trait ExternalControllerTrait
      *
      * @return \Laminas\Http\Response
      */
-    protected function handleCancelRedirect($lvaId)
+    protected function handleCancelRedirect($lvaId): \Laminas\Http\Response
     {
         return $this->goToOverview($lvaId);
     }

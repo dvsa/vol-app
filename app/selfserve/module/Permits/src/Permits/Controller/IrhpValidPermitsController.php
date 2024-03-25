@@ -44,6 +44,9 @@ class IrhpValidPermitsController extends AbstractSelfserveController
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager);
     }
 
+    /**
+     * @return void
+     */
     public function mergeTemplateVars()
     {
         // overwrite default page title
@@ -58,6 +61,9 @@ class IrhpValidPermitsController extends AbstractSelfserveController
         parent::mergeTemplateVars();
     }
 
+    /**
+     * @return void
+     */
     public function retrieveTables()
     {
         if ($this->data[IrhpPermitType::DATA_KEY]['isBilateral']) {

@@ -8,8 +8,12 @@ class SettingsCookieNamesProvider implements CookieNamesProviderInterface
 {
     /**
      * {@inheritdoc}
+     *
+     * @return (null|string)[][]
+     *
+     * @psalm-return list{array{name: 'langPref', domain: null}, array{name: 'cookie_seen', domain: null}}
      */
-    public function getNames(Cookie $cookie)
+    public function getNames(Cookie $cookie): array
     {
         return [
             [

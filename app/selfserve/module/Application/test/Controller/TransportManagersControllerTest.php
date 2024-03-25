@@ -36,7 +36,7 @@ class TransportManagersControllerTest extends MockeryTestCase
     /**
      * @test
      */
-    public function isInitialized_IsCallable()
+    public function isInitializedIsCallable(): void
     {
         // Setup
         $this->setUpSut();
@@ -47,9 +47,10 @@ class TransportManagersControllerTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends isInitialized_IsCallable
+     *
+     * @depends isInitializedIsCallable
      */
-    public function isInitialized_ReturnsFalseBeforeCreateServiceIsCalled()
+    public function isInitializedReturnsFalseBeforeCreateServiceIsCalled(): void
     {
         // Setup
         $this->setUpSut();
@@ -61,7 +62,7 @@ class TransportManagersControllerTest extends MockeryTestCase
         $this->assertFalse($result);
     }
 
-    protected function setUpSut()
+    protected function setUpSut(): void
     {
         $mockNiTextTranslationUtil = m::mock(NiTextTranslation::class)->makePartial();
         $mockAuthService = m::mock(AuthorizationService::class)->makePartial();

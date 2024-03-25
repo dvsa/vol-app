@@ -4,7 +4,6 @@ namespace Olcs\Service\Qa;
 
 use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
-
 use Laminas\Form\Factory as FormFactory;
 
 class FormProviderFactory implements FactoryInterface
@@ -17,7 +16,7 @@ class FormProviderFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : FormProvider
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): FormProvider
     {
         $config = $container->get('Config');
         return new FormProvider(

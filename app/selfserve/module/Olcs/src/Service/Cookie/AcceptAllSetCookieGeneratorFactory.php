@@ -15,7 +15,7 @@ class AcceptAllSetCookieGeneratorFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : AcceptAllSetCookieGenerator
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): AcceptAllSetCookieGenerator
     {
         return new AcceptAllSetCookieGenerator(
             $container->get('CookiePreferencesSetCookieGenerator'),

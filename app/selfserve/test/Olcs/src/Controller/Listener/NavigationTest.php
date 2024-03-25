@@ -52,7 +52,7 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->messagingToggle = 'messaging';
     }
 
-    public function testAttach()
+    public function testAttach(): void
     {
         /** @var \Laminas\EventManager\EventManagerInterface | m\MockInterface $mockEventManager */
         $mockEventManager = m::mock(\Laminas\EventManager\EventManagerInterface::class);
@@ -62,7 +62,7 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->sut->attach($mockEventManager);
     }
 
-    public function testOnDispatchWithNoReferalAnonymousUser()
+    public function testOnDispatchWithNoReferalAnonymousUser(): void
     {
         $this->mockIdentity->shouldReceive('isAnonymous')->once()->withNoArgs()->andReturn(true);
 
@@ -140,7 +140,7 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
     /**
      * @dataProvider dpDispatchNoReferer
      */
-    public function testOnDispatchWithNoReferal($eligibleForPermits)
+    public function testOnDispatchWithNoReferal($eligibleForPermits): void
     {
         $this->mockIdentity->shouldReceive('isAnonymous')->once()->withNoArgs()->andReturn(false);
 
@@ -178,7 +178,12 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
         );
     }
 
-    public function dpDispatchNoReferer()
+    /**
+     * @return bool[][]
+     *
+     * @psalm-return list{list{true}, list{false}}
+     */
+    public function dpDispatchNoReferer(): array
     {
         return [
             [true],
@@ -186,7 +191,7 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
         ];
     }
 
-    public function testOnDispatchWithGovUkReferalMatch()
+    public function testOnDispatchWithGovUkReferalMatch(): void
     {
         $uri = 'uri';
         $this->sut->setGovUkReferers([$uri]);
@@ -229,7 +234,7 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
     /**
      * @dataProvider dpDispatchWithoutMatchedReferer
      */
-    public function testOnDispatchWithNoGovUkReferal($eligibleForPermits)
+    public function testOnDispatchWithNoGovUkReferal($eligibleForPermits): void
     {
         $this->mockIdentity->shouldReceive('isAnonymous')
             ->andReturn(false);
@@ -271,7 +276,12 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
         );
     }
 
-    public function dpDispatchWithoutMatchedReferer()
+    /**
+     * @return bool[][]
+     *
+     * @psalm-return list{list{true}, list{false}}
+     */
+    public function dpDispatchWithoutMatchedReferer(): array
     {
         return [
             [true],
@@ -279,7 +289,8 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
         ];
     }
 
-    public function navigationExpectations(){
+    public function navigationExpectations(): void
+    {
         $this->mockNavigation
             ->shouldReceive('findBy')
             ->twice()
@@ -315,5 +326,4 @@ class NavigationTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->mockResponse->shouldReceive('getResult')
             ->once();
     }
-
 }

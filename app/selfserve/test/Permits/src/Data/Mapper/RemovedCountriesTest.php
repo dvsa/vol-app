@@ -16,7 +16,7 @@ use Laminas\Form\Form;
  */
 class RemovedCountriesTest extends TestCase
 {
-    public function testMapForFormOptions()
+    public function testMapForFormOptions(): void
     {
         $validatedSelectedCountryCodesCsv = 'FR,CH';
 

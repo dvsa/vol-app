@@ -72,6 +72,7 @@ abstract class AbstractPaymentSubmissionController extends AbstractController
      * Index action
      *
      * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
+     * @psalm-suppress UndefinedDocblockClass
      */
     public function indexAction()
     {

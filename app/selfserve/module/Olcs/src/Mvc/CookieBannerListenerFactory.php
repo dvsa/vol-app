@@ -15,7 +15,7 @@ class CookieBannerListenerFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : CookieBannerListener
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CookieBannerListener
     {
         return new CookieBannerListener(
             $container->get('CookieAcceptAllSetCookieGenerator'),

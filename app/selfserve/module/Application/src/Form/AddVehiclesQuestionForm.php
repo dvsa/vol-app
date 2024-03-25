@@ -49,7 +49,7 @@ class AddVehiclesQuestionForm extends Form implements InputFilterAwareInterface,
         $this->initialiseApplicationVersion();
     }
 
-    protected function initialiseSubmit()
+    protected function initialiseSubmit(): void
     {
         // Build elements
         $nextButtonElement = new SubmitButton(static::NEXT_BUTTON, 'Next');
@@ -92,14 +92,14 @@ class AddVehiclesQuestionForm extends Form implements InputFilterAwareInterface,
     }
 
     /**
-     * @return InputInterface
+     * @return InputInterface|\Laminas\InputFilter\InputFilterInterface
      */
-    public function getSubmitInput(): InputInterface
+    public function getSubmitInput()
     {
         return $this->getInputFilter()->get(static::SUBMIT);
     }
 
-    protected function initialiseRadio()
+    protected function initialiseRadio(): void
     {
         $radioElement = new RadioVertical(static::RADIO);
         $radioElement->setLabel('application.vehicle.add-details.radio.label');
@@ -145,9 +145,9 @@ class AddVehiclesQuestionForm extends Form implements InputFilterAwareInterface,
     }
 
     /**
-     * @return InputInterface
+     * @return InputInterface|\Laminas\InputFilter\InputFilterInterface
      */
-    public function getRadioInput(): InputInterface
+    public function getRadioInput()
     {
         return $this->getInputFilter()->get(static::RADIO);
     }
@@ -198,7 +198,7 @@ class AddVehiclesQuestionForm extends Form implements InputFilterAwareInterface,
         return $this->getData()[static::RADIO] === static::NO;
     }
 
-    protected function initialiseApplicationVersion()
+    protected function initialiseApplicationVersion(): void
     {
         // Build element
         $applicationVersionInput = new Hidden(static::APPLICATION_VERSION);
@@ -219,9 +219,9 @@ class AddVehiclesQuestionForm extends Form implements InputFilterAwareInterface,
     }
 
     /**
-     * @return InputInterface
+     * @return InputInterface|\Laminas\InputFilter\InputFilterInterface
      */
-    public function getApplicationVersionInput(): InputInterface
+    public function getApplicationVersionInput()
     {
         return $this->getInputFilter()->get(static::APPLICATION_VERSION);
     }

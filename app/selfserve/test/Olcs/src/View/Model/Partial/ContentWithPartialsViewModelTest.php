@@ -31,7 +31,7 @@ class ContentWithPartialsViewModelTest extends MockeryTestCase
     /**
      * @test
      */
-    public function __construct_ThrowsException_IfNoPartialsAreProvided()
+    public function constructThrowsExceptionIfNoPartialsAreProvided()
     {
         // Expect
         $this->expectException(InvalidArgumentException::class);
@@ -44,7 +44,7 @@ class ContentWithPartialsViewModelTest extends MockeryTestCase
     /**
      * @test
      */
-    public function __construct_ThrowsException_IfEmptyPartialsAreProvided()
+    public function constructThrowsExceptionIfEmptyPartialsAreProvided()
     {
         // Expect
         $this->expectException(InvalidArgumentException::class);
@@ -57,7 +57,7 @@ class ContentWithPartialsViewModelTest extends MockeryTestCase
     /**
      * @test
      */
-    public function __construct_SetsEmptyContent_IfNoneProvided()
+    public function constructSetsEmptyContentIfNoneProvided()
     {
         // Execute
         $this->setUpSut([static::THE_PARTIALS_VARIABLE => [static::A_PARTIAL]]);
@@ -69,7 +69,7 @@ class ContentWithPartialsViewModelTest extends MockeryTestCase
     /**
      * @test
      */
-    public function __construct_SetsTemplate()
+    public function constructSetsTemplate()
     {
         // Execute
         $this->setUpSut([static::THE_PARTIALS_VARIABLE => [static::A_PARTIAL]]);
@@ -81,7 +81,7 @@ class ContentWithPartialsViewModelTest extends MockeryTestCase
     /**
      * @test
      */
-    public function setVariable_IsCallable()
+    public function setVariableIsCallable(): void
     {
         // Setup
         $this->setUpSut([static::THE_PARTIALS_VARIABLE => [static::A_PARTIAL]]);
@@ -92,9 +92,10 @@ class ContentWithPartialsViewModelTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends setVariable_IsCallable
+     *
+     * @depends setVariableIsCallable
      */
-    public function setVariable_SetsPartials()
+    public function setVariableSetsPartials(): void
     {
         // Setup
         $this->setUpSut([static::THE_PARTIALS_VARIABLE => [static::A_PARTIAL]]);
@@ -108,9 +109,10 @@ class ContentWithPartialsViewModelTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends setVariable_IsCallable
+     *
+     * @depends setVariableIsCallable
      */
-    public function setVariable_ThrowsException_WhenProvidingPartials_ThatAreEmpty()
+    public function setVariableThrowsExceptionWhenProvidingPartialsThatAreEmpty(): void
     {
         // Setup
         $this->setUpSut([static::THE_PARTIALS_VARIABLE => [static::A_PARTIAL]]);
@@ -125,9 +127,10 @@ class ContentWithPartialsViewModelTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends setVariable_IsCallable
+     *
+     * @depends setVariableIsCallable
      */
-    public function setVariable_ThrowsException_WhenProvidingPartials_ThatAreNotAnArray()
+    public function setVariableThrowsExceptionWhenProvidingPartialsThatAreNotAnArray(): void
     {
         // Setup
         $this->setUpSut([static::THE_PARTIALS_VARIABLE => [static::A_PARTIAL]]);
@@ -143,7 +146,7 @@ class ContentWithPartialsViewModelTest extends MockeryTestCase
     /**
      * @test
      */
-    public function setVariables_IsCallable()
+    public function setVariablesIsCallable(): void
     {
         // Setup
         $this->setUpSut([static::THE_PARTIALS_VARIABLE => [static::A_PARTIAL]]);
@@ -154,9 +157,10 @@ class ContentWithPartialsViewModelTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends setVariables_IsCallable
+     *
+     * @depends setVariablesIsCallable
      */
-    public function setVariables_SetsPartials()
+    public function setVariablesSetsPartials(): void
     {
         // Setup
         $this->setUpSut([static::THE_PARTIALS_VARIABLE => [static::A_PARTIAL]]);
@@ -170,9 +174,10 @@ class ContentWithPartialsViewModelTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends setVariables_IsCallable
+     *
+     * @depends setVariablesIsCallable
      */
-    public function setVariables_ThrowsException_WhenAddingPartialsThatAreEmpty()
+    public function setVariablesThrowsExceptionWhenAddingPartialsThatAreEmpty(): void
     {
         // Setup
         $this->setUpSut([static::THE_PARTIALS_VARIABLE => [static::A_PARTIAL]]);
@@ -187,9 +192,10 @@ class ContentWithPartialsViewModelTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends setVariables_IsCallable
+     *
+     * @depends setVariablesIsCallable
      */
-    public function setVariables_ThrowsExceptionWhenOverwriting_WithoutPartials()
+    public function setVariablesThrowsExceptionWhenOverwritingWithoutPartials(): void
     {
         // Setup
         $this->setUpSut([static::THE_PARTIALS_VARIABLE => [static::A_PARTIAL]]);
@@ -204,9 +210,10 @@ class ContentWithPartialsViewModelTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends setVariables_IsCallable
+     *
+     * @depends setVariablesIsCallable
      */
-    public function setVariables_ThrowsExceptionWhenOverwriting_WithInvalidPartials()
+    public function setVariablesThrowsExceptionWhenOverwritingWithInvalidPartials(): void
     {
         // Setup
         $this->setUpSut([static::THE_PARTIALS_VARIABLE => [static::A_PARTIAL]]);
@@ -221,9 +228,10 @@ class ContentWithPartialsViewModelTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends setVariables_IsCallable
+     *
+     * @depends setVariablesIsCallable
      */
-    public function setVariables_ThrowsExceptionWhenOverwriting_WithEmptyPartials()
+    public function setVariablesThrowsExceptionWhenOverwritingWithEmptyPartials(): void
     {
         // Setup
         $this->setUpSut([static::THE_PARTIALS_VARIABLE => [static::A_PARTIAL]]);

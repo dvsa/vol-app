@@ -6,7 +6,6 @@ use Laminas\Form\Annotation as Form;
 
 class InPossession
 {
-
     /**
      * @Form\Type("OlcsCheckbox")
      * @Form\Attributes({"class":"govuk-checkboxes__item"})

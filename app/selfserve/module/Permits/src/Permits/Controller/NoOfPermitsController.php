@@ -63,6 +63,9 @@ class NoOfPermitsController extends AbstractSelfserveController
     ) {
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager);
     }
+    /**
+     * @return \Laminas\Http\Response|null
+     */
     public function handlePost()
     {
         if (isset($this->postParams['Submit']['SelectOtherCountriesButton'])) {

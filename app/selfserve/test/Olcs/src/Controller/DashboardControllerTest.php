@@ -58,7 +58,12 @@ class DashboardControllerTest extends MockeryTestCase
         $reflectionProperty->setValue($this->sut, $this->mockTableFactory);
     }
 
-    public function dataProviderCorrectDashboardShown()
+    /**
+     * @return bool[][]
+     *
+     * @psalm-return list{list{true, true, true}, list{true, false, true}, list{false, true, false}, list{false, false, true}}
+     */
+    public function dataProviderCorrectDashboardShown(): array
     {
         return [
             [true, true, true],
@@ -70,11 +75,12 @@ class DashboardControllerTest extends MockeryTestCase
 
     /**
      * @dataProvider dataProviderCorrectDashboardShown
-     * @param type $permissionSelfserveLva
-     * @param type $permissionSelfserveTmDashboard
-     * @param type $standardView
+     *
+     * @param bool $permissionSelfserveLva
+     * @param bool $permissionSelfserveTmDashboard
+     * @param bool $standardView
      */
-    public function testCorrectDashboardShown($permissionSelfserveLva, $permissionSelfserveTmDashboard, $standardView)
+    public function testCorrectDashboardShown($permissionSelfserveLva, $permissionSelfserveTmDashboard, $standardView): void
     {
         $this->sut->shouldReceive('isGranted')
             ->with(RefData::PERMISSION_SELFSERVE_LVA)
@@ -94,7 +100,7 @@ class DashboardControllerTest extends MockeryTestCase
         $this->sut->indexAction();
     }
 
-    public function testDashboardStandard()
+    public function testDashboardStandard(): void
     {
         $organisationId = 45;
 
@@ -153,7 +159,7 @@ class DashboardControllerTest extends MockeryTestCase
         $this->assertEquals(['lics'], $view->getVariable('licences'));
     }
 
-    public function testDashboardTransportManager()
+    public function testDashboardTransportManager(): void
     {
         $this->sut->shouldReceive('isGranted')
             ->with(RefData::PERMISSION_SELFSERVE_TM_DASHBOARD)

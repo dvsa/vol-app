@@ -37,7 +37,7 @@ class DestroyController extends AbstractSurrenderController
         return $this->renderView($params);
     }
 
-    public function continueAction()
+    public function continueAction(): \Laminas\Http\Response
     {
         return $this->redirect()->toRoute('licence/surrender/declaration/GET', [], [], true);
     }

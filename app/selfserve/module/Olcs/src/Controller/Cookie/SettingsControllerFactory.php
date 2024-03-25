@@ -15,7 +15,7 @@ class SettingsControllerFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) : SettingsController
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SettingsController
     {
 
         return new SettingsController(

@@ -81,7 +81,7 @@ class QaController extends AbstractOlcsController
     /**
      * Index action
      *
-     * @return ViewModel
+     * @return ViewModel|\Laminas\Http\Response
      */
     public function indexAction()
     {
@@ -242,7 +242,7 @@ class QaController extends AbstractOlcsController
      *
      * @param array $file File
      */
-    public function processFileUpload(array $file)
+    public function processFileUpload(array $file): void
     {
         $this->documents = null;
 

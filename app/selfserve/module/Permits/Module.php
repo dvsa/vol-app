@@ -4,7 +4,12 @@ namespace Permits;
 
 class Module
 {
-    public function getAutoloaderConfig()
+    /**
+     * @return string[][][]
+     *
+     * @psalm-return array{'Laminas\\Loader\\StandardAutoloader'::class: array{namespaces: array{Permits: '/home/andy/olcs/olcs-selfserve/module/Permits/src/'}}}
+     */
+    public function getAutoloaderConfig(): array
     {
         return [
             \Laminas\Loader\StandardAutoloader::class => [

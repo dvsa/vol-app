@@ -5,6 +5,7 @@
  *
  * @author Rob Caiger <rob.caiger@clocal.co.uk>
  */
+
 namespace Olcs\Controller\Lva\Traits;
 
 use Common\Controller\Lva\Traits\CommonVariationControllerTrait;
@@ -16,8 +17,7 @@ use Common\Controller\Lva\Traits\CommonVariationControllerTrait;
  */
 trait VariationControllerTrait
 {
-    use ApplicationControllerTrait,
-        CommonVariationControllerTrait {
+    use ApplicationControllerTrait, CommonVariationControllerTrait {
             CommonVariationControllerTrait::preDispatch insteadof ApplicationControllerTrait;
             CommonVariationControllerTrait::goToNextSection insteadof ApplicationControllerTrait;
     }

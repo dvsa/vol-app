@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use Dvsa\Olcs\Auth\Controller\ChangePasswordController;

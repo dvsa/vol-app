@@ -16,7 +16,7 @@ class ApplicationPeopleAdapterTest extends MockeryTestCase
     /**
      * @dataProvider dpTestCanModify
      */
-    public function testCanModify($isExcOrg, $isInForce, $expect)
+    public function testCanModify($isExcOrg, $isInForce, $expect): void
     {
         $data = [
             'hasInforceLicences' => $isInForce,
@@ -39,7 +39,12 @@ class ApplicationPeopleAdapterTest extends MockeryTestCase
         static::assertEquals($expect, $sut->canModify());
     }
 
-    public function dpTestCanModify()
+    /**
+     * @return bool[][]
+     *
+     * @psalm-return list{array{inForce: false, isExcOrg: true, expect: true}, array{inForce: true, isExcOrg: false, expect: true}, array{isExcOrg: true, inForce: true, expect: false}}
+     */
+    public function dpTestCanModify(): array
     {
         return [
             [

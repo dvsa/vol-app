@@ -26,7 +26,7 @@ class SwitchBoardControllerFactoryTest extends MockeryTestCase
     /**
      * @test
      */
-    public function __invoke_IsCallable()
+    public function invokeIsCallable()
     {
         // Setup
         $sut = $this->setUpSut();
@@ -37,9 +37,9 @@ class SwitchBoardControllerFactoryTest extends MockeryTestCase
 
     /**
      * @test
-     * @depends __invoke_IsCallable
+     * @depends invokeIsCallable
      */
-    public function __invoke_ReturnsInstanceOfDispatcherWithSwitchBoardController()
+    public function invokeReturnsInstanceOfDispatcherWithSwitchBoardController()
     {
         // Setup
         $serviceLocator = $this->setUpServiceLocator();
@@ -53,15 +53,17 @@ class SwitchBoardControllerFactoryTest extends MockeryTestCase
         $this->assertInstanceOf(SwitchBoardController::class, $result->getDelegate());
     }
 
-    /**
-     * @return FormElementMessageFormatterFactory
-     */
     protected function setUpSut(): SwitchBoardControllerFactory
     {
         return new SwitchBoardControllerFactory();
     }
 
-    protected function setUpDefaultServices()
+    /**
+     * @return (FormValidator|LicenceVehicleManagement|\Mockery\MockInterface)[]
+     *
+     * @psalm-return array{'Laminas\\Mvc\\Plugin\\FlashMessenger\\FlashMessenger'::class: \Mockery\MockInterface, 'Common\\Service\\Helper\\FormHelperService'::class: \Mockery\MockInterface, 'Common\\Controller\\Plugin\\HandleQuery'::class: \Mockery\MockInterface, 'Common\\Controller\\Plugin\\Redirect'::class: \Mockery\MockInterface, 'Common\\Service\\Helper\\ResponseHelperService'::class: \Mockery\MockInterface, 'Laminas\\Mvc\\Controller\\Plugin\\Url'::class: \Mockery\MockInterface, 'Olcs\\Session\\LicenceVehicleManagement'::class: LicenceVehicleManagement, 'Common\\Form\\FormValidator'::class: FormValidator}
+     */
+    protected function setUpDefaultServices(): array
     {
         return [
             FlashMessenger::class => $this->setUpMockService(FlashMessenger::class),

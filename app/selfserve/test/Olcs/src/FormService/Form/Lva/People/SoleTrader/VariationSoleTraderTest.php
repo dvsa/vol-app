@@ -50,7 +50,7 @@ class VariationSoleTraderTest extends MockeryTestCase
     /**
      * @dataProvider noDisqualifyProvider
      */
-    public function testGetFormNoDisqualify($params)
+    public function testGetFormNoDisqualify($params): void
     {
         $params['canModify'] = true;
 
@@ -81,7 +81,7 @@ class VariationSoleTraderTest extends MockeryTestCase
         $this->sut->getForm($params);
     }
 
-    public function testGetForm()
+    public function testGetForm(): void
     {
         $params = [
             'location' => 'internal',
@@ -91,7 +91,7 @@ class VariationSoleTraderTest extends MockeryTestCase
             'disqualifyUrl' => 'foo'
         ];
 
-        $formActions = m::mock( ElementInterface::class);
+        $formActions = m::mock(ElementInterface::class);
         $formActions->shouldReceive('has')->with('save')->andReturn(true);
         $formActions->shouldReceive('remove')->once()->with('save');
         $formActions->shouldReceive('has')->with('cancel')->andReturn(true);
@@ -119,7 +119,7 @@ class VariationSoleTraderTest extends MockeryTestCase
         $this->sut->getForm($params);
     }
 
-    public function testGetFormCantModify()
+    public function testGetFormCantModify(): void
     {
         $params = [
             'location' => 'internal',
@@ -162,7 +162,12 @@ class VariationSoleTraderTest extends MockeryTestCase
         $this->sut->getForm($params);
     }
 
-    public function noDisqualifyProvider()
+    /**
+     * @return (int|null|string|true)[][][]
+     *
+     * @psalm-return list{list{array{location: 'external'}}, list{array{location: 'internal', personId: null}}, list{array{location: 'internal', personId: 123, isDisqualified: true}}}
+     */
+    public function noDisqualifyProvider(): array
     {
         return [
             [

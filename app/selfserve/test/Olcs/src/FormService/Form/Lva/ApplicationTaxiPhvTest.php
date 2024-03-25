@@ -35,7 +35,7 @@ class ApplicationTaxiPhvTest extends MockeryTestCase
         $this->sut = new ApplicationTaxiPhv($this->formHelper, m::mock(AuthorizationService::class));
     }
 
-    public function testGetForm()
+    public function testGetForm(): void
     {
         $formActions = m::mock();
         $formActions->shouldReceive('has')->with('save')->andReturn(true);

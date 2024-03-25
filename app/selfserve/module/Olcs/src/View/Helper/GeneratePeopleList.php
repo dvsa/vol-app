@@ -5,6 +5,7 @@
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
+
 namespace Olcs\View\Helper;
 
 use Laminas\View\Helper\AbstractHelper;
@@ -22,7 +23,10 @@ class GeneratePeopleList extends AbstractHelper
         return $this->render($people, $label);
     }
 
-    public function render($people = [], $labelKey = '')
+    /**
+     * @psalm-param ''|'multiple'|'single' $labelKey
+     */
+    public function render(array $people = [], string $labelKey = '')
     {
         if (!empty($people)) {
             for ($i = 0; $i < count($people); $i++) {

@@ -181,11 +181,12 @@ class AddVehicleSearchController extends AbstractVehicleController
     }
 
     /**
-     * @param $vehicleData
+     * @param array|null $vehicleData
      * @param null $searchedVrm
+     *
      * @return array
      */
-    private function createViewParametersForConfirmation($vehicleData, $searchedVrm = null): array
+    private function createViewParametersForConfirmation(?array $vehicleData, $searchedVrm = null): array
     {
         return array_merge(
             $this->getViewVariables(),
