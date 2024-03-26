@@ -1,19 +1,15 @@
-##
- # Copyright © Amazon.com and Affiliates: This deliverable is considered Developed Content as defined in the AWS Service Terms and the SOW between the parties dated 2024-01-16.
-##
 
-# installing the base image from ECR, tag is appended with v0.1
-# FROM 245185850403.dkr.ecr.eu-west-1.amazonaws.com/php-7.4:v0.1
+FROM 245185850403.dkr.ecr.eu-west-1.amazonaws.com/php-7.4:v0.1
 FROM php-7.4:v0.1
 
 USER root
 
 # Installing require dependencies
 RUN apk add --update --no-cache \
-                      icu-dev \
-                      autoconf \
-                      g++ \
-                      make \
+                      icu-dev~=71.1 \
+                      autoconf~=2.71 \
+                      g++~=11.2.1  \
+                      make~=4.3 \
     && pecl install igbinary \
     && pecl install -D 'enable-redis-igbinary="yes"' redis \
     && docker-php-ext-enable igbinary redis \
@@ -25,6 +21,8 @@ RUN docker-php-ext-install intl pdo_mysql opcache
 
 USER www-data
 
+# pass the tar.gz bundle via docker build command
+# e.g. docker build --build-arg olcs_internal=olcs_internal.tar.gz --build-arg olcs_static=olcs_static.tar.gz
 ARG olcs_selfserv
 ARG olcs_static
 
