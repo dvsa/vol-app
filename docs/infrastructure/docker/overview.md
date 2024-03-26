@@ -35,11 +35,11 @@ block-beta
 
 The following repositories are used to store the Docker images for the application components:
 
-| ECR Repository                                                                                | Application path |
-| --------------------------------------------------------------------------------------------- | ---------------- |
-| [`vol-app/api`](https://054614622558.dkr.ecr.eu-west-1.amazonaws.com/vol-app/api)             | `app/api`        |
-| [`vol-app/selfserve`](https://054614622558.dkr.ecr.eu-west-1.amazonaws.com/vol-app/selfserve) | `app/selfserve`  |
-| [`vol-app/internal`](https://054614622558.dkr.ecr.eu-west-1.amazonaws.com/vol-app/internal)   | `app/internal`   |
+| ECR Repository                                                                                | Dockerfile Path                                                                              | Application path                                                           |
+| --------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| [`vol-app/api`](https://054614622558.dkr.ecr.eu-west-1.amazonaws.com/vol-app/api)             | [`infra/docker/api`](https://github.com/dvsa/vol-app/tree/main/infra/docker/api)             | [`app/api`](https://github.com/dvsa/vol-app/tree/main/app/api)             |
+| [`vol-app/selfserve`](https://054614622558.dkr.ecr.eu-west-1.amazonaws.com/vol-app/selfserve) | [`infra/docker/selfserve`](https://github.com/dvsa/vol-app/tree/main/infra/docker/selfserve) | [`app/selfserve`](https://github.com/dvsa/vol-app/tree/main/app/selfserve) |
+| [`vol-app/internal`](https://054614622558.dkr.ecr.eu-west-1.amazonaws.com/vol-app/internal)   | [`infra/docker/internal`](https://github.com/dvsa/vol-app/tree/main/infra/docker/internal)   | [`app/internal`](https://github.com/dvsa/vol-app/tree/main/app/internal)   |
 
 # Image tagging
 
