@@ -1,6 +1,6 @@
 # installing the base image from ECR, tag is appended with v0.1
-# FROM 245185850403.dkr.ecr.eu-west-1.amazonaws.com/php-7.4:v0.1
-FROM php-base
+FROM 245185850403.dkr.ecr.eu-west-1.amazonaws.com/php-7.4:v0.1
+
 
 USER root
 
