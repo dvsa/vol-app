@@ -5,7 +5,7 @@ sidebar_position: 10
 # Overview
 
 VOL app infrastructure is deployed using Terraform. The Terraform code is located in
-the [/infra/terraform](https://github.com/dvsa/vol-transXchange/tree/main/terraform) directory.
+the [/infra/terraform](https://github.com/dvsa/vol-app/tree/main/infra/terraform) directory.
 
 The Terraform code is split into multiple modules, located
 in [/modules](https://github.com/dvsa/vol-app/tree/main/infra/terraform/modules/) directory. Each module will contain an

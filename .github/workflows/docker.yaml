@@ -100,7 +100,6 @@ jobs:
           tags: |
             type=sha,format=short
             type=semver,enable=${{ inputs.is-release }},pattern={{version}},value=${{ inputs.version }}
-            type=raw,enable=${{ !inputs.is-release }},value=rc-${{ inputs.version }}
 
       - name: Configure AWS credentials
         if: ${{ inputs.should-upload-artefact-to-ecr }}
