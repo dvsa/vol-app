@@ -34,6 +34,8 @@ return [
             'fetch_tmp_document' => [RefData::PERMISSION_INTERNAL_DOCUMENTS],
             'note' => [RefData::PERMISSION_INTERNAL_NOTES],
 
+            '*conversation*' => [RefData::PERMISSION_CAN_LIST_CONVERSATIONS],
+
             // CLI module Routes
             'batch-licence-status' => ['*'],
             'batch-cns' => ['*'],
