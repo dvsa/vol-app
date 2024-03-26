@@ -26,7 +26,12 @@ abstract class AbstractConversationListController extends AbstractInternalContro
      */
     public function getLeftView()
     {
+        $formAction = $this->url()->fromRoute(
+            $this->getEvent()->getRouteMatch()->getMatchedRouteName(),
+            $this->params()->fromRoute(),
+        );
         $filterForm = $this->getForm(ConversationFilter::class);
+        $filterForm->setAttribute('action', $formAction);
         $filterForm->setData($this->getRequest()->getQuery());
 
         $view = new ViewModel(['navigationId' => $this->navigationId]);
