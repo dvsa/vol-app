@@ -77,4 +77,4 @@ The CD workflow is triggered by a successful merge to the default branch (`main`
 
 **Workflow**: [.github/workflows/cd.yaml](https://github.com/dvsa/vol-app/blob/main/.github/workflows/cd.yaml).
 
-![CD workflow](./assets/cd.png) -
+![CD workflow](./assets/cd.png)
