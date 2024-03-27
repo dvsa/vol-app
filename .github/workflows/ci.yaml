@@ -106,7 +106,7 @@ jobs:
       - orchestrator
     uses: ./.github/workflows/deploy-documentation.yaml
     with:
-      deploy: false
+      deploy: true
     permissions:
       contents: read
       pages: write
