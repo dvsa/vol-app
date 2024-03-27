@@ -189,7 +189,7 @@ jobs:
       - name: Apply
         id: apply
         if: ${{ inputs.apply }}
-        run: terraform plan -no-color -input=false ${{ inputs.terraform-args || '' }}
+        run: terraform apply -no-color -input=false -auto-approve ${{ inputs.terraform-args || '' }}
 
       - name: Set outputs
         if: ${{ always() && !cancelled() && !failure() }}

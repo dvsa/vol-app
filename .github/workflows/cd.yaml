@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - add-cd-workflow
 
 permissions:
   contents: read
@@ -33,27 +32,27 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       # Docs
-      should-deploy-docs: null
+      should-deploy-docs: ${{ steps.changed-website-files.outputs.any_changed == 'true' || null }}
       # App
-      should-build-app: true
-      should-build-api: null
-      should-build-selfserve: true
-      should-build-internal: null
+      should-build-app: ${{ steps.changed-api-files.outputs.any_changed == 'true' || steps.changed-selfserve-files.outputs.any_changed == 'true' || steps.changed-internal-files.outputs.any_changed == 'true' || null }}
+      should-build-api: ${{ steps.changed-api-files.outputs.any_changed == 'true' || null }}
+      should-build-selfserve: ${{ steps.changed-selfserve-files.outputs.any_changed == 'true' || null }}
+      should-build-internal: ${{ steps.changed-internal-files.outputs.any_changed == 'true' || null }}
       # Docker
-      should-build-and-push-docker: true
-      should-build-and-push-api-docker: null
-      should-build-and-push-selfserve-docker: true
-      should-build-and-push-internal-docker: null
+      should-build-and-push-docker: ${{ steps.changed-api-docker-files.outputs.any_changed == 'true' || steps.changed-selfserve-docker-files.outputs.any_changed == 'true' || steps.changed-internal-docker-files.outputs.any_changed == 'true' || null }}
+      should-build-and-push-api-docker: ${{ steps.changed-api-docker-files.outputs.any_changed == 'true' || steps.changed-api-files.outputs.any_changed == 'true' || null }}
+      should-build-and-push-selfserve-docker: ${{ steps.changed-selfserve-docker-files.outputs.any_changed == 'true' || steps.changed-selfserve-files.outputs.any_changed == 'true' || null }}
+      should-build-and-push-internal-docker: ${{ steps.changed-internal-docker-files.outputs.any_changed == 'true' || steps.changed-internal-files.outputs.any_changed == 'true' || null }}
       # Terraform accounts
-      should-apply-terraform-accounts: true
-      should-apply-nonprod-account-terraform: true
-      should-apply-prod-account-terraform: true
+      should-apply-terraform-accounts: ${{ steps.changed-accounts-terraform-files.outputs.any_changed == 'true' || null }}
+      should-apply-nonprod-account-terraform: ${{ contains(steps.changed-accounts-terraform-files.outputs.all_changed_files, 'infra/terraform/modules') || contains(steps.changed-accounts-terraform-files.outputs.all_changed_files, 'infra/terraform/accounts/nonprod') || null }}
+      should-apply-prod-account-terraform: ${{ contains(steps.changed-accounts-terraform-files.outputs.all_changed_files, 'infra/terraform/modules') || contains(steps.changed-accounts-terraform-files.outputs.all_changed_files, 'infra/terraform/accounts/prod') || null }}
       # Terraform environments
-      should-apply-terraform-environments: true
-      should-apply-dev-environment-terraform: true
-      should-apply-int-environment-terraform: true
-      should-apply-prep-environment-terraform: true
-      should-apply-prod-environment-terraform: true
+      should-apply-terraform-environments: ${{ steps.changed-environments-terraform-files.outputs.any_changed == 'true' || null }}
+      should-apply-dev-environment-terraform: ${{ contains(steps.changed-environments-terraform-files.outputs.all_changed_files, 'infra/terraform/modules') || contains(steps.changed-environments-terraform-files.outputs.all_changed_files, 'infra/terraform/environments/dev') || null }}
+      should-apply-int-environment-terraform: ${{ contains(steps.changed-environments-terraform-files.outputs.all_changed_files, 'infra/terraform/modules') || contains(steps.changed-environments-terraform-files.outputs.all_changed_files, 'infra/terraform/environments/int') || null }}
+      should-apply-prep-environment-terraform: ${{ contains(steps.changed-environments-terraform-files.outputs.all_changed_files, 'infra/terraform/modules') || contains(steps.changed-environments-terraform-files.outputs.all_changed_files, 'infra/terraform/environments/prep') || null }}
+      should-apply-prod-environment-terraform: ${{ contains(steps.changed-environments-terraform-files.outputs.all_changed_files, 'infra/terraform/modules') || contains(steps.changed-environments-terraform-files.outputs.all_changed_files, 'infra/terraform/environments/prod') || null }}
     steps:
       - uses: actions/checkout@v4
         with:
