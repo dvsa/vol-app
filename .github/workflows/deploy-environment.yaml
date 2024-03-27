@@ -61,6 +61,7 @@ on:
       apply:
         type: boolean
         required: true
+        default: false
       destroy:
         type: boolean
         required: false
