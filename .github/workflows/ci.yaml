@@ -247,7 +247,6 @@ jobs:
     uses: ./.github/workflows/deploy-account.yaml
     with:
       account: ${{ matrix.account }}
-      apply: false
     permissions:
       contents: read
       id-token: write
@@ -281,7 +280,6 @@ jobs:
       api-image-tag: ${{ needs.get-version.outputs.api }}
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
-      apply: false
     permissions:
       contents: read
       id-token: write
