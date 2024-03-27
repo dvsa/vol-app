@@ -33,17 +33,17 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       # Docs
-      should-deploy-docs: false
+      should-deploy-docs: null
       # App
       should-build-app: true
-      should-build-api: false
+      should-build-api: null
       should-build-selfserve: true
-      should-build-internal: false
+      should-build-internal: null
       # Docker
       should-build-and-push-docker: true
-      should-build-and-push-api-docker: false
+      should-build-and-push-api-docker: null
       should-build-and-push-selfserve-docker: true
-      should-build-and-push-internal-docker: false
+      should-build-and-push-internal-docker: null
       # Terraform accounts
       should-apply-terraform-accounts: true
       should-apply-nonprod-account-terraform: true
