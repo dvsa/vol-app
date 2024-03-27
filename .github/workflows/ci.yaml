@@ -101,7 +101,6 @@ jobs:
 
   docs:
     name: Documentation
-    if: ${{ needs.orchestrator.outputs.should-build-docs }}
     needs:
       - orchestrator
     uses: ./.github/workflows/deploy-documentation.yaml
