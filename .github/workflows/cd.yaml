@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - add-cd-workflow
 
 permissions:
   contents: read
@@ -31,11 +32,80 @@ jobs:
       - release-please
     runs-on: ubuntu-latest
     outputs:
-      should-deploy-docs: ${{ steps.changed-website-files.outputs.any_changed == 'true' || null }}
+      # Docs
+      should-deploy-docs: false
+      # App
+      should-build-app: true
+      should-build-api: false
+      should-build-selfserve: true
+      should-build-internal: false
+      # Docker
+      should-build-and-push-docker: true
+      should-build-and-push-api-docker: false
+      should-build-and-push-selfserve-docker: true
+      should-build-and-push-internal-docker: false
+      # Terraform accounts
+      should-apply-terraform-accounts: true
+      should-apply-nonprod-account-terraform: true
+      should-apply-prod-account-terraform: true
+      # Terraform environments
+      should-apply-terraform-environments: true
+      should-apply-dev-environment-terraform: true
+      should-apply-int-environment-terraform: true
+      should-apply-prep-environment-terraform: true
+      should-apply-prod-environment-terraform: true
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - uses: tj-actions/changed-files@v43
+        id: changed-api-files
+        with:
+          files: |
+            app/api/**
+      - uses: tj-actions/changed-files@v43
+        id: changed-selfserve-files
+        with:
+          files: |
+            app/selfserve/**
+      - uses: tj-actions/changed-files@v43
+        id: changed-internal-files
+        with:
+          files: |
+            app/internal/**
+      - uses: tj-actions/changed-files@v43
+        id: changed-api-docker-files
+        with:
+          files: |
+            infra/docker/api/**
+      - uses: tj-actions/changed-files@v43
+        id: changed-selfserve-docker-files
+        with:
+          files: |
+            infra/docker/selfserve/**
+      - uses: tj-actions/changed-files@v43
+        id: changed-internal-docker-files
+        with:
+          files: |
+            infra/docker/internal/**
+      - uses: tj-actions/changed-files@v43
+        id: changed-accounts-terraform-files
+        with:
+          files: |
+            infra/terraform/accounts/**
+            infra/terraform/modules/**
+          files_ignore: |
+            infra/terraform/modules/service/**
+      - uses: tj-actions/changed-files@v43
+        id: changed-environments-terraform-files
+        with:
+          files: |
+            infra/terraform/environments/{dev,int,prep,prod}/**
+            infra/terraform/modules/**
+          files_ignore: |
+            infra/terraform/modules/account/**
+            infra/terraform/modules/github/**
+            infra/terraform/modules/remote-state/**
       - uses: tj-actions/changed-files@v43
         id: changed-website-files
         with:
@@ -45,9 +115,9 @@ jobs:
 
   docs:
     name: Documentation
+    if: ${{ needs.orchestrator.outputs.should-deploy-docs }}
     concurrency:
       group: deploy-documentation
-    if: ${{ needs.orchestrator.outputs.should-deploy-docs }}
     needs:
       - orchestrator
     uses: ./.github/workflows/deploy-documentation.yaml
@@ -55,3 +125,211 @@ jobs:
       deploy: true
     permissions:
       contents: write
+
+  get-version:
+    name: Get latest app versions
+    needs:
+      - orchestrator
+    runs-on: ubuntu-latest
+    outputs:
+      api: ${{ steps.api-version.outputs.version }}
+      selfserve: ${{ steps.selfserve-version.outputs.version }}
+      internal: ${{ steps.internal-version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: api-version
+        uses: ./.github/actions/get-app-version
+        with:
+          project-path: app/api
+      - id: selfserve-version
+        uses: ./.github/actions/get-app-version
+        with:
+          project-path: app/selfserve
+      - id: internal-version
+        uses: ./.github/actions/get-app-version
+        with:
+          project-path: app/internal
+      - name: Add to summary
+        run: |
+          echo "#### App versions:" >> $GITHUB_STEP_SUMMARY
+          echo "**API**: \`${{ steps.api-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Selfserve**: \`${{ steps.selfserve-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Internal**: \`${{ steps.internal-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+
+  app:
+    name: App
+    if: ${{ needs.orchestrator.outputs.should-build-app || needs.orchestrator.outputs.should-build-and-push-docker }}
+    concurrency:
+      group: app-${{ matrix.project }}-${{ needs.get-version.outputs[matrix.project] }}
+    needs:
+      - orchestrator
+      - get-version
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - api
+          - selfserve
+          - internal
+        exclude:
+          - project: ${{ (needs.orchestrator.outputs.should-build-api || needs.orchestrator.outputs.should-build-and-push-api-docker) && 'ignored' || 'api' }}
+          - project: ${{ (needs.orchestrator.outputs.should-build-selfserve || needs.orchestrator.outputs.should-build-and-push-selfserve-docker) && 'ignored' || 'selfserve' }}
+          - project: ${{ (needs.orchestrator.outputs.should-build-internal || needs.orchestrator.outputs.should-build-and-push-internal-docker) && 'ignored' || 'internal' }}
+    uses: ./.github/workflows/php.yaml
+    with:
+      project: ${{ matrix.project }}
+      should-upload-artefact: true
+      artefact-name: app-${{ matrix.project}}-${{ needs.get-version.outputs[matrix.project] }}
+      retention-days: 1
+    permissions:
+      contents: read
+
+  docker:
+    name: Docker
+    if: ${{ always() && !cancelled() && !failure() && needs.orchestrator.outputs.should-build-and-push-docker }}
+    concurrency:
+      group: docker-${{ matrix.project }}-${{ needs.get-version.outputs[matrix.project] }}
+    needs:
+      - orchestrator
+      - get-version
+      - app
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - api
+          - selfserve
+          - internal
+        exclude:
+          - project: ${{ needs.orchestrator.outputs.should-build-and-push-api-docker && 'ignored' || 'api' }}
+          - project: ${{ needs.orchestrator.outputs.should-build-and-push-selfserve-docker && 'ignored' || 'selfserve' }}
+          - project: ${{ needs.orchestrator.outputs.should-build-and-push-internal-docker && 'ignored' || 'internal' }}
+    uses: ./.github/workflows/docker.yaml
+    with:
+      project: ${{ matrix.project }}
+      version: ${{ needs.get-version.outputs[matrix.project] }}
+      app-artefact-name: app-${{ matrix.project}}-${{ needs.get-version.outputs[matrix.project] }}
+      should-upload-artefact-to-ecr: true
+    permissions:
+      contents: read
+      id-token: write
+
+  terraform-account-nonprod:
+    name: Account (nonprod)
+    if: ${{ needs.orchestrator.outputs.should-apply-nonprod-account-terraform }}
+    concurrency:
+      group: terraform-account-nonprod
+    needs:
+      - orchestrator
+    uses: ./.github/workflows/deploy-account.yaml
+    with:
+      account: nonprod
+      apply: false
+    permissions:
+      contents: read
+      id-token: write
+    secrets: inherit
+
+  terraform-env-dev:
+    name: Environment (dev)
+    if: ${{ always() && !cancelled() && !failure() }}
+    concurrency:
+      group: terraform-environment-dev
+    needs:
+      - get-version
+      - orchestrator
+      - terraform-account-nonprod
+    uses: ./.github/workflows/deploy-environment.yaml
+    with:
+      environment: dev
+      api-image-tag: ${{ needs.get-version.outputs.api }}
+      selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
+      internal-image-tag: ${{ needs.get-version.outputs.internal }}
+      apply: false
+    permissions:
+      contents: read
+      id-token: write
+    secrets: inherit
+
+  terraform-env-int:
+    name: Environment (int)
+    if: ${{ needs.terraform-env-dev.result == 'success' }}
+    concurrency:
+      group: terraform-environment-int
+    needs:
+      - get-version
+      - orchestrator
+      - terraform-env-dev
+    uses: ./.github/workflows/deploy-environment.yaml
+    with:
+      environment: int
+      api-image-tag: ${{ needs.get-version.outputs.api }}
+      selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
+      internal-image-tag: ${{ needs.get-version.outputs.internal }}
+      apply: false
+    permissions:
+      contents: read
+      id-token: write
+    secrets: inherit
+
+  terraform-account-prod:
+    name: Account (prod)
+    if: ${{ needs.orchestrator.outputs.should-apply-terraform-accounts && needs.release-please.outputs.release_created && needs.terraform-env-int.result == 'success' }}
+    concurrency:
+      group: terraform-account-prod
+    needs:
+      - release-please
+      - orchestrator
+      - terraform-env-int
+    uses: ./.github/workflows/deploy-account.yaml
+    with:
+      account: prod
+      apply: false
+    permissions:
+      contents: read
+      id-token: write
+    secrets: inherit
+
+  terraform-env-prep:
+    name: Environment (prep)
+    if: ${{ always() && !cancelled() && !failure() }}
+    concurrency:
+      group: terraform-environment-prep
+    needs:
+      - get-version
+      - orchestrator
+      - terraform-account-prod
+    uses: ./.github/workflows/deploy-environment.yaml
+    with:
+      environment: prep
+      api-image-tag: ${{ needs.get-version.outputs.api }}
+      selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
+      internal-image-tag: ${{ needs.get-version.outputs.internal }}
+      apply: false
+    permissions:
+      contents: read
+      id-token: write
+    secrets: inherit
+
+  terraform-env-prod:
+    name: Environment (prod)
+    if: ${{ needs.orchestrator.outputs.should-apply-prod-environment-terraform }}
+    concurrency:
+      group: terraform-environment-prod
+    needs:
+      - get-version
+      - orchestrator
+      - terraform-env-prep
+    uses: ./.github/workflows/deploy-environment.yaml
+    with:
+      environment: prod
+      api-image-tag: ${{ needs.get-version.outputs.api }}
+      selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
+      internal-image-tag: ${{ needs.get-version.outputs.internal }}
+      apply: false
+    permissions:
+      contents: read
+      id-token: write
+    secrets: inherit

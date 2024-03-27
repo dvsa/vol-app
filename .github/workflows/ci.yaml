@@ -11,6 +11,8 @@ jobs:
     name: Orchestrator
     runs-on: ubuntu-latest
     outputs:
+      # Docs
+      should-build-docs: ${{ steps.changed-website-files.outputs.any_changed == 'true' || null }}
       # App
       should-build-app: ${{ steps.changed-api-files.outputs.any_changed == 'true' || steps.changed-selfserve-files.outputs.any_changed == 'true' || steps.changed-internal-files.outputs.any_changed == 'true' || null }}
       should-build-api: ${{ steps.changed-api-files.outputs.any_changed == 'true' || null }}
@@ -21,7 +23,6 @@ jobs:
       should-build-api-docker: ${{ steps.changed-api-docker-files.outputs.any_changed == 'true' || steps.changed-api-files.outputs.any_changed == 'true' || null }}
       should-build-selfserve-docker: ${{ steps.changed-selfserve-docker-files.outputs.any_changed == 'true' || steps.changed-selfserve-files.outputs.any_changed == 'true' || null }}
       should-build-internal-docker: ${{ steps.changed-internal-docker-files.outputs.any_changed == 'true' || steps.changed-internal-files.outputs.any_changed == 'true' || null }}
-      should-build-docs: ${{ steps.changed-website-files.outputs.any_changed == 'true' || null }}
       # Terraform accounts
       should-plan-terraform-accounts: ${{ steps.changed-accounts-terraform-files.outputs.any_changed == 'true' || null }}
       should-plan-nonprod-account-terraform: ${{ contains(steps.changed-accounts-terraform-files.outputs.all_changed_files, 'infra/terraform/modules') || contains(steps.changed-accounts-terraform-files.outputs.all_changed_files, 'infra/terraform/accounts/nonprod') || null }}
@@ -111,7 +112,7 @@ jobs:
       contents: write
 
   get-version:
-    name: Get latest app version
+    name: Get latest app versions
     needs:
       - orchestrator
     runs-on: ubuntu-latest
@@ -248,7 +249,6 @@ jobs:
       contents: read
       id-token: write
       pull-requests: write
-      deployments: write
     secrets: inherit
 
   terraform-env:
@@ -283,5 +283,4 @@ jobs:
       contents: read
       id-token: write
       pull-requests: write
-      deployments: write
     secrets: inherit
