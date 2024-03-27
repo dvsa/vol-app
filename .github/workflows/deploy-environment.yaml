@@ -30,6 +30,7 @@ on:
         required: true
       apply:
         type: boolean
+        required: true
         description: "Apply the terraform?"
         default: false
       terraform-args:
@@ -59,7 +60,6 @@ on:
         required: true
       apply:
         type: boolean
-        required: true
         default: false
       destroy:
         type: boolean
