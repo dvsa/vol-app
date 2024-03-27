@@ -230,6 +230,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
+      pull-requests: write
     secrets: inherit
 
   terraform-env-dev:
@@ -251,6 +252,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
+      pull-requests: write
     secrets: inherit
 
   terraform-env-int:
@@ -272,6 +274,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
+      pull-requests: write
     secrets: inherit
 
   terraform-account-prod:
@@ -290,6 +293,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
+      pull-requests: write
     secrets: inherit
 
   terraform-env-prep:
@@ -311,6 +315,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
+      pull-requests: write
     secrets: inherit
 
   terraform-env-prod:
@@ -332,4 +337,5 @@ jobs:
     permissions:
       contents: read
       id-token: write
+      pull-requests: write
     secrets: inherit
