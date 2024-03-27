@@ -73,7 +73,7 @@ jobs:
           dockerfile: ${{ env.WORKING_DIR }}/Dockerfile
 
   build:
-    name: Build
+    name: Build ${{ inputs.should-upload-artefact-to-ecr && 'and push to ECR' || '' }}
     needs:
       - check-ecr
     runs-on: ubuntu-latest
