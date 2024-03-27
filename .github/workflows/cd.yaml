@@ -228,7 +228,7 @@ jobs:
     uses: ./.github/workflows/deploy-account.yaml
     with:
       account: nonprod
-      apply: false
+      apply: true
     permissions:
       contents: read
       id-token: write
@@ -250,7 +250,7 @@ jobs:
       api-image-tag: ${{ needs.get-version.outputs.api }}
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
-      apply: false
+      apply: true
     permissions:
       contents: read
       id-token: write
@@ -272,7 +272,7 @@ jobs:
       api-image-tag: ${{ needs.get-version.outputs.api }}
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
-      apply: false
+      apply: true
     permissions:
       contents: read
       id-token: write
@@ -291,7 +291,7 @@ jobs:
     uses: ./.github/workflows/deploy-account.yaml
     with:
       account: prod
-      apply: false
+      apply: true
     permissions:
       contents: read
       id-token: write
@@ -313,7 +313,7 @@ jobs:
       api-image-tag: ${{ needs.get-version.outputs.api }}
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
-      apply: false
+      apply: true
     permissions:
       contents: read
       id-token: write
@@ -335,7 +335,7 @@ jobs:
       api-image-tag: ${{ needs.get-version.outputs.api }}
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
-      apply: false
+      apply: true
     permissions:
       contents: read
       id-token: write
