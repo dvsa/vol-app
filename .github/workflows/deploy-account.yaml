@@ -35,7 +35,6 @@ on:
         required: true
       apply:
         type: boolean
-        required: true
         default: false
       terraform-args:
         type: string
