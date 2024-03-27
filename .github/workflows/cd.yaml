@@ -243,6 +243,7 @@ jobs:
     needs:
       - get-version
       - orchestrator
+      - docker
       - terraform-account-nonprod
     uses: ./.github/workflows/deploy-environment.yaml
     with:
