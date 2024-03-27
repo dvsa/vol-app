@@ -109,7 +109,9 @@ jobs:
     with:
       deploy: false
     permissions:
-      contents: write
+      contents: read
+      pages: write
+      id-token: write
 
   get-version:
     name: Get latest app versions
