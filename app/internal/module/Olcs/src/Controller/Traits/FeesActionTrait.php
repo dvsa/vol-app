@@ -85,7 +85,7 @@ trait FeesActionTrait
             if ($this->isButtonPressed('cancel')) {
                 return $this->redirectToList();
             }
-            $this->formPost($form, [$this, 'createFee'], [$form]);
+            $this->formPost($form, [$this, 'createFee']);
         }
 
         if ($this->getResponse()->getContent() !== '') {
@@ -1007,6 +1007,7 @@ trait FeesActionTrait
      */
     protected function recommendWaive($data)
     {
+        $data = $data['validData'];
         $dto = RecommendWaiveCmd::create(
             [
                 'id' => $data['fee-details']['id'],
@@ -1025,6 +1026,7 @@ trait FeesActionTrait
      */
     protected function rejectWaive($data)
     {
+        $data = $data['validData'];
         $dto = RejectWaiveCmd::create(
             [
                 'id' => $data['fee-details']['id'],
@@ -1042,6 +1044,7 @@ trait FeesActionTrait
      */
     protected function approveWaive($data)
     {
+        $data = $data['validData'];
         $dto = ApproveWaiveCmd::create(
             [
                 'id' => $data['fee-details']['id'],
@@ -1340,8 +1343,11 @@ trait FeesActionTrait
      *
      * @param array $data
      */
-    protected function createFee($data, $form)
+    protected function createFee($data)
     {
+        $form = $data['form'];
+        $data = $data['validData'];
+
         $dtoData = $this->getCreateFeeDtoData($data);
 
         $dto = CreateFeeCmd::create($dtoData);

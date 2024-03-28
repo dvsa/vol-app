@@ -109,12 +109,15 @@ class DiscPrintingController extends LaminasAbstractActionController implements 
     /**
      * Process form
      *
-     * @param \Common\Form\Form $form Form
+     * @param array $data
      *
      * @return void
      */
-    protected function processForm(array $data, \Common\Form\Form $form)
+    protected function processForm(array $data)
     {
+        $form = $data['form'];
+        $data = $data['validData'];
+
         $params = $this->getFlattenParams($data);
 
         $this->hasDiscsToPrint = false;
