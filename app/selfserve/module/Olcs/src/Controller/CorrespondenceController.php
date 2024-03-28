@@ -15,7 +15,7 @@ use LmcRbacMvc\Service\AuthorizationService;
 /**
  * Class CorrespondenceController
  *
- * List an operators correspondence.
+ * List an operator's correspondence.
  *
  * @package Olcs\Controller
  *

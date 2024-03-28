@@ -21,7 +21,7 @@ class NavigationFactory implements FactoryInterface
         return new Navigation(
             $container->get('navigation'),
             $container->get('QuerySender'),
-            $container->get(AuthorizationService::class)->getIdentity()
+            $container->get(AuthorizationService::class)
         );
     }
 }

@@ -3,7 +3,9 @@
 namespace Olcs\Controller\Listener;
 
 use Common\FeatureToggle;
+use Common\Rbac\Service\Permission;
 use Common\Rbac\User as RbacUser;
+use Common\RefData;
 use Common\Service\Cqrs\Query\QuerySender;
 use Dvsa\Olcs\Transfer\Query\Messaging\Messages\UnreadCountByOrganisationAndUser;
 use Laminas\EventManager\EventManagerInterface;
@@ -13,6 +15,7 @@ use Laminas\Http\Header\Referer as HttpReferer;
 use Laminas\Http\PhpEnvironment\Request as HttpRequest;
 use Laminas\Mvc\MvcEvent;
 use Laminas\Navigation\Navigation as LaminasNavigation;
+use LmcRbacMvc\Service\AuthorizationService;
 
 /**
  * Class Navigation
@@ -32,10 +35,7 @@ class Navigation implements ListenerAggregateInterface
      */
     protected $querySender;
 
-    /**
-     * @var RbacUser $identity
-     */
-    protected $identity;
+    protected AuthorizationService $authService;
 
     /**
      * @var array
@@ -58,11 +58,11 @@ class Navigation implements ListenerAggregateInterface
      *
      * @return void
      */
-    public function __construct(LaminasNavigation $navigation, QuerySender $querySender, RbacUser $identity)
+    public function __construct(LaminasNavigation $navigation, QuerySender $querySender, AuthorizationService $authService)
     {
         $this->navigation = $navigation;
         $this->querySender = $querySender;
-        $this->identity = $identity;
+        $this->authService = $authService;
     }
 
     /**
@@ -86,7 +86,7 @@ class Navigation implements ListenerAggregateInterface
         $this->togglePermitsMenus($shouldShowPermitsTab);
 
         $shouldShowMessagesTab = $this->shouldShowMessagesTab();
-        $this->toggleMessagesTab($shouldShowMessagesTab);
+        $this->prepareMessagesTab($shouldShowMessagesTab);
     }
 
     /**
@@ -127,11 +127,11 @@ class Navigation implements ListenerAggregateInterface
      */
     private function isEligibleForPermits(): bool
     {
-        if ($this->identity->isAnonymous()) {
+        if ($this->authService->getIdentity()->isAnonymous()) {
             return false;
         }
 
-        $response = $this->identity->getUserData();
+        $response = $this->authService->getIdentity()->getUserData();
         return $response['eligibleForPermits'] ?? false;
     }
 
@@ -159,25 +159,31 @@ class Navigation implements ListenerAggregateInterface
     }
 
     /**
-     * Toggle Messaging menus
+     * Toggle Messaging menus and add count if needed
      *
      * @param bool $shouldShowMessagesTab whether to show messages tab
      *
      * @return void
      */
-    private function toggleMessagesTab(bool $shouldShowMessagesTab): void
+    private function prepareMessagesTab(bool $shouldShowMessagesTab): void
     {
         $this->navigation->findBy('id', 'dashboard-messaging')
             ->setVisible($shouldShowMessagesTab);
 
-        $this->addUnreadMessagingCount();
+        if ($shouldShowMessagesTab) {
+            $this->addUnreadMessagingCount();
+        }
     }
 
     private function shouldShowMessagesTab(): bool
     {
+        if (!$this->authService->isGranted(RefData::PERMISSION_CAN_LIST_CONVERSATIONS)) {
+            return false;
+        };
+
         $messagingToggleEnabled = $this->querySender->featuresEnabled([FeatureToggle::MESSAGING]);
 
-        $userData = $this->identity->getUserData();
+        $userData = $this->authService->getIdentity()->getUserData();
 
         $hasOrganisationSubmittedLicenceApplication = $userData['hasOrganisationSubmittedLicenceApplication'];
 
@@ -207,13 +213,13 @@ class Navigation implements ListenerAggregateInterface
 
     public function getUnreadMessageCount(): int
     {
-        $userOrganisationId = $this->identity->getUserData()['organisationUsers'][0]['organisation']['id'];
+        $userOrganisationId = $this->authService->getIdentity()->getUserData()['organisationUsers'][0]['organisation']['id'];
 
         $unreadByOrganisation = $this->querySender->send(
             UnreadCountByOrganisationAndUser::create(
                 [
                     'organisation' => $userOrganisationId,
-                    'user' => $this->identity->getId(),
+                    'user' => $this->authService->getIdentity()->getId(),
                 ]
             )
         );
