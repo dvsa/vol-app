@@ -19,8 +19,6 @@ class CheckAnswersController extends AbstractController
     use ExternalControllerTrait;
     use TransportManagerApplicationTrait;
 
-    protected $tma;
-
     protected FormHelperService $formHelper;
     protected TranslationHelperService $translationHelper;
     protected AnnotationBuilder $transferAnnotationBuilder;

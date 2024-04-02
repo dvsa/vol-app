@@ -10,7 +10,7 @@ use Laminas\Mvc\MvcEvent;
 
 trait TransportManagerApplicationTrait
 {
-    protected TransportManagerApplication $tma;
+    protected array $tma;
 
     /**
      * @return void

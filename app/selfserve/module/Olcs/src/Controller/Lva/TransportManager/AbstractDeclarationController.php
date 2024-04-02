@@ -34,11 +34,6 @@ abstract class AbstractDeclarationController extends AbstractController
     protected CommandService $commandService;
 
     /**
-     * @var TransportManagerApplication
-     */
-    protected TransportManagerApplication $tma;
-
-    /**
      * @param NiTextTranslation $niTextTranslationUtil
      * @param AuthorizationService $authService
      * @param TranslationHelperService $translationHelper
