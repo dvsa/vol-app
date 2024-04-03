@@ -44,11 +44,9 @@ jobs:
       should-build-and-push-selfserve-docker: ${{ steps.changed-selfserve-docker-files.outputs.any_changed == 'true' || steps.changed-selfserve-files.outputs.any_changed == 'true' || null }}
       should-build-and-push-internal-docker: ${{ steps.changed-internal-docker-files.outputs.any_changed == 'true' || steps.changed-internal-files.outputs.any_changed == 'true' || null }}
       # Terraform accounts
-      should-apply-terraform-accounts: ${{ steps.changed-accounts-terraform-files.outputs.any_changed == 'true' || null }}
       should-apply-nonprod-account-terraform: ${{ contains(steps.changed-accounts-terraform-files.outputs.all_changed_files, 'infra/terraform/modules') || contains(steps.changed-accounts-terraform-files.outputs.all_changed_files, 'infra/terraform/accounts/nonprod') || null }}
       should-apply-prod-account-terraform: ${{ contains(steps.changed-accounts-terraform-files.outputs.all_changed_files, 'infra/terraform/modules') || contains(steps.changed-accounts-terraform-files.outputs.all_changed_files, 'infra/terraform/accounts/prod') || null }}
       # Terraform environments
-      should-apply-terraform-environments: ${{ steps.changed-environments-terraform-files.outputs.any_changed == 'true' || null }}
       should-apply-dev-environment-terraform: ${{ contains(steps.changed-environments-terraform-files.outputs.all_changed_files, 'infra/terraform/modules') || contains(steps.changed-environments-terraform-files.outputs.all_changed_files, 'infra/terraform/environments/dev') || null }}
       should-apply-int-environment-terraform: ${{ contains(steps.changed-environments-terraform-files.outputs.all_changed_files, 'infra/terraform/modules') || contains(steps.changed-environments-terraform-files.outputs.all_changed_files, 'infra/terraform/environments/int') || null }}
       should-apply-prep-environment-terraform: ${{ contains(steps.changed-environments-terraform-files.outputs.all_changed_files, 'infra/terraform/modules') || contains(steps.changed-environments-terraform-files.outputs.all_changed_files, 'infra/terraform/environments/prep') || null }}
@@ -236,7 +234,7 @@ jobs:
 
   terraform-env-dev:
     name: Environment (dev)
-    if: ${{ always() && !cancelled() && !failure() }}
+    if: ${{ always() && !cancelled() && !failure() && (needs.orchestrator.outputs.should-apply-dev-environment-terraform || needs.orchestrator.outputs.should-build-and-push-docker || needs.orchestrator.outputs.should-build-app) }}
     concurrency:
       group: terraform-environment-dev
     needs:
@@ -259,7 +257,7 @@ jobs:
 
   terraform-env-int:
     name: Environment (int)
-    if: ${{ needs.terraform-env-dev.result == 'success' }}
+    if: ${{ needs.orchestrator.outputs.should-apply-int-environment-terraform || needs.orchestrator.outputs.should-build-and-push-docker || needs.orchestrator.outputs.should-build-app }}
     concurrency:
       group: terraform-environment-int
     needs:
@@ -281,7 +279,7 @@ jobs:
 
   terraform-account-prod:
     name: Account (prod)
-    if: ${{ needs.orchestrator.outputs.should-apply-terraform-accounts && needs.release-please.outputs.release_created && needs.terraform-env-int.result == 'success' }}
+    if: ${{ always() && !cancelled() && !failure() && needs.release-please.outputs.release_created && needs.orchestrator.outputs.should-apply-prod-account-terraform }}
     concurrency:
       group: terraform-account-prod
     needs:
@@ -300,7 +298,7 @@ jobs:
 
   terraform-env-prep:
     name: Environment (prep)
-    if: ${{ always() && !cancelled() && !failure() }}
+    if: ${{ always() && !cancelled() && !failure() && needs.orchestrator.outputs.should-apply-prep-environment-terraform || needs.orchestrator.outputs.should-build-and-push-docker || needs.orchestrator.outputs.should-build-app }}
     concurrency:
       group: terraform-environment-prep
     needs:
@@ -322,7 +320,7 @@ jobs:
 
   terraform-env-prod:
     name: Environment (prod)
-    if: ${{ needs.orchestrator.outputs.should-apply-prod-environment-terraform }}
+    if: ${{ needs.orchestrator.outputs.should-apply-prod-environment-terraform || needs.orchestrator.outputs.should-build-and-push-docker || needs.orchestrator.outputs.should-build-app }}
     concurrency:
       group: terraform-environment-prod
     needs:

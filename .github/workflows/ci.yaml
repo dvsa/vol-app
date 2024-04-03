@@ -149,12 +149,12 @@ jobs:
 
   app:
     name: App
+    if: ${{ needs.orchestrator.outputs.should-build-app || needs.orchestrator.outputs.should-build-docker }}
     concurrency:
       group: app-${{ matrix.project }}-${{ needs.get-version.outputs[matrix.project] }}
     needs:
       - orchestrator
       - get-version
-    if: ${{ needs.orchestrator.outputs.should-build-app || needs.orchestrator.outputs.should-build-docker }}
     strategy:
       fail-fast: false
       matrix:
@@ -177,13 +177,13 @@ jobs:
 
   docker:
     name: Docker
+    if: ${{ always() && !cancelled() && !failure() && needs.orchestrator.outputs.should-build-docker }}
     concurrency:
       group: docker-${{ matrix.project }}-${{ needs.get-version.outputs[matrix.project] }}
     needs:
       - orchestrator
       - get-version
       - app
-    if: ${{ always() && !cancelled() && !failure() && needs.orchestrator.outputs.should-build-docker }}
     strategy:
       fail-fast: false
       matrix:
@@ -230,9 +230,9 @@ jobs:
 
   terraform-account:
     name: Terraform Account
+    if: ${{ needs.orchestrator.outputs.should-plan-terraform-accounts }}
     concurrency:
       group: terraform-account-${{ matrix.account }}
-    if: ${{ needs.orchestrator.outputs.should-plan-terraform-accounts }}
     needs:
       - orchestrator
     strategy:
@@ -255,12 +255,12 @@ jobs:
 
   terraform-env:
     name: Terraform Environment
+    if: ${{ needs.orchestrator.outputs.should-plan-terraform-environments }}
     concurrency:
       group: terraform-environment-${{ matrix.environment }}
     needs:
       - get-version
       - orchestrator
-    if: ${{ needs.orchestrator.outputs.should-plan-terraform-environments }}
     strategy:
       fail-fast: false
       matrix:
