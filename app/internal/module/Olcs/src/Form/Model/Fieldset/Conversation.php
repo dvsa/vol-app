@@ -39,7 +39,6 @@ class Conversation
      * @Form\Attributes({
      *     "class": "extra-long",
      *     "id": "",
-     *     "maxlength": 1000
      * })
      * @Form\Options({
      *     "label": "You can enter up to 1000 characters",
