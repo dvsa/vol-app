@@ -15,7 +15,6 @@ class ReplyInput
     /**
      * @Form\Attributes({
      *     "class": "extra-long",
-     *     "maxlength": 1000
      * })
      * @Form\Options({
      *     "label": "",
