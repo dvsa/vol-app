@@ -31,37 +31,9 @@ env:
   AWS_REGION: ${{ vars.TF_AWS_REGION }}
 
 jobs:
-  check-ecr:
-    name: Check ECR
-    if: ${{ inputs.should-upload-artefact-to-ecr }}
-    runs-on: ubuntu-latest
-    outputs:
-      image-exists: ${{ steps.check-ecr.outputs.exists }}
-    env:
-      PROJECT: ${{ inputs.project }}
-      OBJECT_PREFIX: ${{ inputs.version }}
-    steps:
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ env.AWS_OIDC_ROLE }}
-          aws-region: ${{ env.AWS_REGION }}
-
-      - name: Check if image already exists in ECR
-        id: check-ecr
-        run: |
-          exists=$(aws ecr list-images --repository-name vol-app/$PROJECT --filter tagStatus=TAGGED --query 'imageIds[?ends_with(imageTag, `'$OBJECT_PREFIX'`)]' | jq length)
-
-          if [ $exists -gt 0 ]; then
-            echo "exists=true" >> $GITHUB_OUTPUT
-          fi
-
   lint:
     name: Lint
-    needs:
-      - check-ecr
     runs-on: ubuntu-latest
-    if: ${{ always() && !cancelled() && !failure() && (needs.check-ecr.result == 'skipped' || !needs.check-ecr.outputs.image-exists) }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -74,10 +46,7 @@ jobs:
 
   build:
     name: Build ${{ inputs.should-upload-artefact-to-ecr && 'and push to ECR' || '' }}
-    needs:
-      - check-ecr
     runs-on: ubuntu-latest
-    if: ${{ always() && !cancelled() && !failure() && (needs.check-ecr.result == 'skipped' || !needs.check-ecr.outputs.image-exists) }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -100,6 +69,7 @@ jobs:
           tags: |
             type=sha,format=short
             type=semver,enable=${{ inputs.is-release }},pattern={{version}},value=${{ inputs.version }}
+            type=raw,value=latest
 
       - name: Configure AWS credentials
         if: ${{ inputs.should-upload-artefact-to-ecr }}
@@ -113,6 +83,11 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: ${{ env.ECR_REGISTRY }}
+
+      - name: Untag existing latest image
+        if: ${{ inputs.should-upload-artefact-to-ecr }}
+        run: |
+          aws ecr batch-delete-image --repository-name vol-app/${{ inputs.project }} --image-ids imageTag=latest
 
       - name: Build ${{ inputs.should-upload-artefact-to-ecr && 'and push ' || '' }}Docker image
         id: build-and-push

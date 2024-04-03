@@ -48,20 +48,20 @@ The Docker images are tagged during the CD pipeline with the following tags:
 ```mermaid
 gitGraph
     commit id: "[git-sha1]"
-    commit tag: "v1.0.0" id: "1.0.0, 1.0, 1, [git-sha2]"
+    commit tag: "v1.0.0" id: "1.0.0, [git-sha2]"
     commit id: "[git-sha3]"
     commit id: "[git-sha4]"
-    commit tag: "v1.1.0" id: "1.1.0, 1.1, 1, [git-sha5]"
-    commit tag: "v1.1.1" id: "1.1.1, 1.1, 1, [git-sha6]"
+    commit tag: "v1.1.0" id: "1.1.0, [git-sha5]"
+    commit tag: "v1.1.1" id: "1.1.1, [git-sha6]"
     commit id: "[git-sha7]"
     commit id: "[git-sha8]"
-    commit tag: "v1.2.0" id: "1.2.0, 1.2, 1, [git-sha9]"
-    commit id: "[git-sha10], latest"
+    commit tag: "v1.2.0" id: "1.2.0, [git-sha9]"
+    commit id: "latest, [git-sha10]"
 ```
 
 :::info
 
-**Mutable tags**: `latest`, `[major].[minor]`, & `[major]`.
+**Mutable tags**: `latest`
 
 **Immutable tags**: `[major].[minor].[patch]`, & `[git-sha]`.
 
