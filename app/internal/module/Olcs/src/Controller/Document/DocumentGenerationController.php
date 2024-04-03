@@ -118,6 +118,7 @@ class DocumentGenerationController extends AbstractDocumentController
      */
     protected function processGenerateDocument($data)
     {
+        $data = $data['validData'];
         $routeParams = $this->params()->fromRoute();
 
         $queryData = array_merge($data, $routeParams);

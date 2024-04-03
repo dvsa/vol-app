@@ -86,12 +86,13 @@ class DocumentUploadController extends AbstractDocumentController
      * Process file uploads
      *
      * @param array $data Form data
-     * @param Form  $form Form to display messages
      *
      * @return Form|\Laminas\Http\Response
      */
-    public function processUpload($data, Form $form)
+    public function processUpload($data)
     {
+        $form = $data['form'];
+        $data = $data['validData'];
         $routeParams = $this->params()->fromRoute();
         $type = $routeParams['type'];
 
