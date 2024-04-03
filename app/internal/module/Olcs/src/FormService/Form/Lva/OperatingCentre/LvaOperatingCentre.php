@@ -17,8 +17,6 @@ use Common\Data\Mapper\Lva\OperatingCentre as OperatingCentreMapper;
  */
 class LvaOperatingCentre extends CommonOperatingCentre
 {
-    protected FormHelperService $formHelper;
-
     public function __construct(FormHelperService $formHelper)
     {
         $this->formHelper = $formHelper;

@@ -4731,16 +4731,16 @@
         },
         {
             "name": "olcs/olcs-common",
-            "version": "v6.6.1",
+            "version": "v6.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dvsa/olcs-common.git",
-                "reference": "bb6c0f34f3850c40b6787798acf62ca7ca961252"
+                "reference": "6ab22846b578ae63e6666897a0eebbb50c95ef8c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/bb6c0f34f3850c40b6787798acf62ca7ca961252",
-                "reference": "bb6c0f34f3850c40b6787798acf62ca7ca961252",
+                "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/6ab22846b578ae63e6666897a0eebbb50c95ef8c",
+                "reference": "6ab22846b578ae63e6666897a0eebbb50c95ef8c",
                 "shasum": ""
             },
             "require": {
@@ -4756,11 +4756,14 @@
                 "laminas/laminas-inputfilter": "^2.10",
                 "laminas/laminas-modulemanager": "^2.9",
                 "laminas/laminas-mvc": "^3.0",
+                "laminas/laminas-mvc-plugin-flashmessenger": "^1.8.1",
+                "laminas/laminas-mvc-plugin-prg": "^1.7",
                 "laminas/laminas-navigation": "^2.15",
                 "laminas/laminas-servicemanager": "^3.3",
                 "laminas/laminas-stdlib": "^3.0",
+                "laminas/laminas-text": "^2.9",
                 "laminas/laminas-validator": "^2.11",
-                "laminas/laminas-view": "^2.11",
+                "laminas/laminas-view": "^2.23",
                 "olcs/olcs-logging": "^6.0",
                 "olcs/olcs-transfer": "^6.0",
                 "olcs/olcs-utils": "^6.0",
@@ -4776,6 +4779,7 @@
                 "lm-commons/lmc-rbac-mvc": "^3.3",
                 "mikey179/vfsstream": "~v1.6.11",
                 "mockery/mockery": "^1.6.7",
+                "phpstan/phpstan-mockery": "^1.1",
                 "phpunit/phpunit": "^9.6",
                 "symfony/filesystem": "^5.4",
                 "symfony/lock": "^5.4"
@@ -4798,9 +4802,9 @@
             "notification-url": "https://packagist.org/downloads/",
             "description": "Common library for the OLCS Project",
             "support": {
-                "source": "https://github.com/dvsa/olcs-common/tree/v6.6.1"
+                "source": "https://github.com/dvsa/olcs-common/tree/v6.7.0"
             },
-            "time": "2024-03-26T11:00:05+00:00"
+            "time": "2024-04-03T09:08:51+00:00"
         },
         {
             "name": "olcs/olcs-logging",
