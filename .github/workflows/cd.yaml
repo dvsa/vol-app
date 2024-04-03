@@ -55,37 +55,37 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: tj-actions/changed-files@v43
+      - uses: tj-actions/changed-files@v44
         id: changed-api-files
         with:
           files: |
             app/api/**
-      - uses: tj-actions/changed-files@v43
+      - uses: tj-actions/changed-files@v44
         id: changed-selfserve-files
         with:
           files: |
             app/selfserve/**
-      - uses: tj-actions/changed-files@v43
+      - uses: tj-actions/changed-files@v44
         id: changed-internal-files
         with:
           files: |
             app/internal/**
-      - uses: tj-actions/changed-files@v43
+      - uses: tj-actions/changed-files@v44
         id: changed-api-docker-files
         with:
           files: |
             infra/docker/api/**
-      - uses: tj-actions/changed-files@v43
+      - uses: tj-actions/changed-files@v44
         id: changed-selfserve-docker-files
         with:
           files: |
             infra/docker/selfserve/**
-      - uses: tj-actions/changed-files@v43
+      - uses: tj-actions/changed-files@v44
         id: changed-internal-docker-files
         with:
           files: |
             infra/docker/internal/**
-      - uses: tj-actions/changed-files@v43
+      - uses: tj-actions/changed-files@v44
         id: changed-accounts-terraform-files
         with:
           files: |
@@ -93,7 +93,7 @@ jobs:
             infra/terraform/modules/**
           files_ignore: |
             infra/terraform/modules/service/**
-      - uses: tj-actions/changed-files@v43
+      - uses: tj-actions/changed-files@v44
         id: changed-environments-terraform-files
         with:
           files: |
@@ -103,7 +103,7 @@ jobs:
             infra/terraform/modules/account/**
             infra/terraform/modules/github/**
             infra/terraform/modules/remote-state/**
-      - uses: tj-actions/changed-files@v43
+      - uses: tj-actions/changed-files@v44
         id: changed-website-files
         with:
           files: |
