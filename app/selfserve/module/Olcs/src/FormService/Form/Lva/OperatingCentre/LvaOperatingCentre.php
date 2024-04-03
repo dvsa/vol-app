@@ -17,7 +17,6 @@ use Laminas\Form\Form;
  */
 class LvaOperatingCentre extends CommonOperatingCentre
 {
-    protected FormHelperService $formHelper;
     protected TranslationHelperService $translator;
     protected UrlHelperService $urlHelper;
 

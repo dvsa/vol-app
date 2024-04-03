@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "60e05df75d7cd0112588301da2e097f7",
+    "content-hash": "e4f87135e54265df9ac1b53850be6a9e",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -3883,6 +3883,64 @@
             "time": "2022-08-24T13:56:50+00:00"
         },
         {
+            "name": "laminas/laminas-text",
+            "version": "2.9.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laminas/laminas-text.git",
+                "reference": "8879e75d03e09b0d6787e6680cfa255afd4645a7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laminas/laminas-text/zipball/8879e75d03e09b0d6787e6680cfa255afd4645a7",
+                "reference": "8879e75d03e09b0d6787e6680cfa255afd4645a7",
+                "shasum": ""
+            },
+            "require": {
+                "laminas/laminas-servicemanager": "^3.4",
+                "laminas/laminas-stdlib": "^3.6",
+                "php": "^7.3 || ~8.0.0 || ~8.1.0"
+            },
+            "conflict": {
+                "zendframework/zend-text": "*"
+            },
+            "require-dev": {
+                "laminas/laminas-coding-standard": "~1.0.0",
+                "phpunit/phpunit": "^9.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Laminas\\Text\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Create FIGlets and text-based tables",
+            "homepage": "https://laminas.dev",
+            "keywords": [
+                "laminas",
+                "text"
+            ],
+            "support": {
+                "chat": "https://laminas.dev/chat",
+                "docs": "https://docs.laminas.dev/laminas-text/",
+                "forum": "https://discourse.laminas.dev",
+                "issues": "https://github.com/laminas/laminas-text/issues",
+                "rss": "https://github.com/laminas/laminas-text/releases.atom",
+                "source": "https://github.com/laminas/laminas-text"
+            },
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
+            "time": "2021-09-02T16:50:53+00:00"
+        },
+        {
             "name": "laminas/laminas-uri",
             "version": "2.9.1",
             "source": {
@@ -4522,16 +4580,16 @@
         },
         {
             "name": "olcs/olcs-common",
-            "version": "v6.6.1",
+            "version": "v6.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dvsa/olcs-common.git",
-                "reference": "bb6c0f34f3850c40b6787798acf62ca7ca961252"
+                "reference": "6ab22846b578ae63e6666897a0eebbb50c95ef8c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/bb6c0f34f3850c40b6787798acf62ca7ca961252",
-                "reference": "bb6c0f34f3850c40b6787798acf62ca7ca961252",
+                "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/6ab22846b578ae63e6666897a0eebbb50c95ef8c",
+                "reference": "6ab22846b578ae63e6666897a0eebbb50c95ef8c",
                 "shasum": ""
             },
             "require": {
@@ -4547,11 +4605,14 @@
                 "laminas/laminas-inputfilter": "^2.10",
                 "laminas/laminas-modulemanager": "^2.9",
                 "laminas/laminas-mvc": "^3.0",
+                "laminas/laminas-mvc-plugin-flashmessenger": "^1.8.1",
+                "laminas/laminas-mvc-plugin-prg": "^1.7",
                 "laminas/laminas-navigation": "^2.15",
                 "laminas/laminas-servicemanager": "^3.3",
                 "laminas/laminas-stdlib": "^3.0",
+                "laminas/laminas-text": "^2.9",
                 "laminas/laminas-validator": "^2.11",
-                "laminas/laminas-view": "^2.11",
+                "laminas/laminas-view": "^2.23",
                 "olcs/olcs-logging": "^6.0",
                 "olcs/olcs-transfer": "^6.0",
                 "olcs/olcs-utils": "^6.0",
@@ -4567,6 +4628,7 @@
                 "lm-commons/lmc-rbac-mvc": "^3.3",
                 "mikey179/vfsstream": "~v1.6.11",
                 "mockery/mockery": "^1.6.7",
+                "phpstan/phpstan-mockery": "^1.1",
                 "phpunit/phpunit": "^9.6",
                 "symfony/filesystem": "^5.4",
                 "symfony/lock": "^5.4"
@@ -4589,9 +4651,9 @@
             "notification-url": "https://packagist.org/downloads/",
             "description": "Common library for the OLCS Project",
             "support": {
-                "source": "https://github.com/dvsa/olcs-common/tree/v6.6.1"
+                "source": "https://github.com/dvsa/olcs-common/tree/v6.7.0"
             },
-            "time": "2024-03-26T11:00:05+00:00"
+            "time": "2024-04-03T09:08:51+00:00"
         },
         {
             "name": "olcs/olcs-logging",

@@ -55,7 +55,7 @@ class VariationPeopleAdapter extends AbstractPeopleAdapter
      *
      * @return void
      */
-    public function alterFormForOrganisation(Form $form, $table)
+    public function alterFormForOrganisation(Form $form, $table): void
     {
         if ($this->canModify()) {
             parent::alterFormForOrganisation($form, $table);
