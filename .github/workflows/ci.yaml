@@ -36,42 +36,42 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: tj-actions/changed-files@v43
+      - uses: tj-actions/changed-files@v44
         id: changed-api-files
         with:
           files: |
             app/api/**
           # since_last_remote_commit: true
-      - uses: tj-actions/changed-files@v43
+      - uses: tj-actions/changed-files@v44
         id: changed-selfserve-files
         with:
           files: |
             app/selfserve/**
           # since_last_remote_commit: true
-      - uses: tj-actions/changed-files@v43
+      - uses: tj-actions/changed-files@v44
         id: changed-internal-files
         with:
           files: |
             app/internal/**
-      - uses: tj-actions/changed-files@v43
+      - uses: tj-actions/changed-files@v44
         id: changed-api-docker-files
         with:
           files: |
             infra/docker/api/**
           # since_last_remote_commit: true
-      - uses: tj-actions/changed-files@v43
+      - uses: tj-actions/changed-files@v44
         id: changed-selfserve-docker-files
         with:
           files: |
             infra/docker/selfserve/**
           # since_last_remote_commit: true
-      - uses: tj-actions/changed-files@v43
+      - uses: tj-actions/changed-files@v44
         id: changed-internal-docker-files
         with:
           files: |
             infra/docker/internal/**
           # since_last_remote_commit: true
-      - uses: tj-actions/changed-files@v43
+      - uses: tj-actions/changed-files@v44
         id: changed-accounts-terraform-files
         with:
           files: |
@@ -80,7 +80,7 @@ jobs:
           files_ignore: |
             infra/terraform/modules/service/**
           # since_last_remote_commit: true
-      - uses: tj-actions/changed-files@v43
+      - uses: tj-actions/changed-files@v44
         id: changed-environments-terraform-files
         with:
           files: |
@@ -91,7 +91,7 @@ jobs:
             infra/terraform/modules/github/**
             infra/terraform/modules/remote-state/**
           # since_last_remote_commit: true
-      - uses: tj-actions/changed-files@v43
+      - uses: tj-actions/changed-files@v44
         id: changed-website-files
         with:
           files: |
