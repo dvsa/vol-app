@@ -1,3 +1,15 @@
+variable "github_oidc_subjects" {
+  type        = list(string)
+  description = "The list of GitHub subjects to allow in the OIDC role."
+  default     = []
+}
+
+variable "github_oidc_readonly_subjects" {
+  type        = list(string)
+  description = "The list of GitHub subjects to allow in the OIDC readonly role."
+  default     = []
+}
+
 variable "create_github_resources" {
   type        = bool
   description = "Whether to create the GitHub resources."

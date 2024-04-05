@@ -33,7 +33,9 @@
 | <a name="input_ecr_read_access_arns"></a> [ecr\_read\_access\_arns](#input\_ecr\_read\_access\_arns) | The list of ARNs to attach to the ECR read role. | `list(string)` | `[]` | no |
 | <a name="input_ecr_read_write_access_arns"></a> [ecr\_read\_write\_access\_arns](#input\_ecr\_read\_write\_access\_arns) | The list of ARNs to attach to the ECR read-write role. | `list(string)` | `[]` | no |
 | <a name="input_github_oidc_readonly_role_policies"></a> [github\_oidc\_readonly\_role\_policies](#input\_github\_oidc\_readonly\_role\_policies) | The map of policies to attach to the OIDC readonly role. | `map(string)` | `{}` | no |
+| <a name="input_github_oidc_readonly_subjects"></a> [github\_oidc\_readonly\_subjects](#input\_github\_oidc\_readonly\_subjects) | The list of GitHub subjects to allow in the OIDC readonly role. | `list(string)` | `[]` | no |
 | <a name="input_github_oidc_role_policies"></a> [github\_oidc\_role\_policies](#input\_github\_oidc\_role\_policies) | A map of policy names to policy ARNs to attach to the OIDC role. | `map(string)` | `{}` | no |
+| <a name="input_github_oidc_subjects"></a> [github\_oidc\_subjects](#input\_github\_oidc\_subjects) | The list of GitHub subjects to allow in the OIDC role. | `list(string)` | `[]` | no |
 
 ## Outputs
 

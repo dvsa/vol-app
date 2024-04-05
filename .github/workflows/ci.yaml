@@ -11,6 +11,8 @@ jobs:
     name: Orchestrator
     runs-on: ubuntu-latest
     outputs:
+      # Docs
+      should-build-docs: ${{ steps.changed-website-files.outputs.any_changed == 'true' || null }}
       # App
       should-build-app: ${{ steps.changed-api-files.outputs.any_changed == 'true' || steps.changed-selfserve-files.outputs.any_changed == 'true' || steps.changed-internal-files.outputs.any_changed == 'true' || null }}
       should-build-api: ${{ steps.changed-api-files.outputs.any_changed == 'true' || null }}
@@ -21,7 +23,6 @@ jobs:
       should-build-api-docker: ${{ steps.changed-api-docker-files.outputs.any_changed == 'true' || steps.changed-api-files.outputs.any_changed == 'true' || null }}
       should-build-selfserve-docker: ${{ steps.changed-selfserve-docker-files.outputs.any_changed == 'true' || steps.changed-selfserve-files.outputs.any_changed == 'true' || null }}
       should-build-internal-docker: ${{ steps.changed-internal-docker-files.outputs.any_changed == 'true' || steps.changed-internal-files.outputs.any_changed == 'true' || null }}
-      should-build-docs: ${{ steps.changed-website-files.outputs.any_changed == 'true' || null }}
       # Terraform accounts
       should-plan-terraform-accounts: ${{ steps.changed-accounts-terraform-files.outputs.any_changed == 'true' || null }}
       should-plan-nonprod-account-terraform: ${{ contains(steps.changed-accounts-terraform-files.outputs.all_changed_files, 'infra/terraform/modules') || contains(steps.changed-accounts-terraform-files.outputs.all_changed_files, 'infra/terraform/accounts/nonprod') || null }}
@@ -113,7 +114,8 @@ jobs:
       id-token: write
 
   get-version:
-    name: Get latest app version
+    name: Get latest app versions
+    if: ${{ needs.orchestrator.outputs.should-build-app || needs.orchestrator.outputs.should-build-docker || needs.orchestrator.outputs.should-plan-terraform-environments }}
     needs:
       - orchestrator
     runs-on: ubuntu-latest
@@ -147,12 +149,12 @@ jobs:
 
   app:
     name: App
+    if: ${{ needs.orchestrator.outputs.should-build-app || needs.orchestrator.outputs.should-build-docker }}
     concurrency:
       group: app-${{ matrix.project }}-${{ needs.get-version.outputs[matrix.project] }}
     needs:
       - orchestrator
       - get-version
-    if: ${{ needs.orchestrator.outputs.should-build-app || needs.orchestrator.outputs.should-build-docker }}
     strategy:
       fail-fast: false
       matrix:
@@ -175,13 +177,13 @@ jobs:
 
   docker:
     name: Docker
+    if: ${{ always() && !cancelled() && !failure() && needs.orchestrator.outputs.should-build-docker }}
     concurrency:
       group: docker-${{ matrix.project }}-${{ needs.get-version.outputs[matrix.project] }}
     needs:
       - orchestrator
       - get-version
       - app
-    if: ${{ always() && !cancelled() && !failure() && needs.orchestrator.outputs.should-build-docker }}
     strategy:
       fail-fast: false
       matrix:
@@ -228,9 +230,9 @@ jobs:
 
   terraform-account:
     name: Terraform Account
+    if: ${{ needs.orchestrator.outputs.should-plan-terraform-accounts }}
     concurrency:
       group: terraform-account-${{ matrix.account }}
-    if: ${{ needs.orchestrator.outputs.should-plan-terraform-accounts }}
     needs:
       - orchestrator
     strategy:
@@ -245,22 +247,20 @@ jobs:
     uses: ./.github/workflows/deploy-account.yaml
     with:
       account: ${{ matrix.account }}
-      apply: false
     permissions:
       contents: read
       id-token: write
       pull-requests: write
-      deployments: write
     secrets: inherit
 
   terraform-env:
     name: Terraform Environment
+    if: ${{ needs.orchestrator.outputs.should-plan-terraform-environments }}
     concurrency:
       group: terraform-environment-${{ matrix.environment }}
     needs:
       - get-version
       - orchestrator
-    if: ${{ needs.orchestrator.outputs.should-plan-terraform-environments }}
     strategy:
       fail-fast: false
       matrix:
@@ -280,10 +280,8 @@ jobs:
       api-image-tag: ${{ needs.get-version.outputs.api }}
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
-      apply: false
     permissions:
       contents: read
       id-token: write
       pull-requests: write
-      deployments: write
     secrets: inherit
