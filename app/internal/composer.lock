@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3e0506d70388deacab54511c9c2eba99",
+    "content-hash": "d4a195e60274e784f9385050f82860b7",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -4734,16 +4734,16 @@
         },
         {
             "name": "olcs/olcs-common",
-            "version": "v6.7.4",
+            "version": "v6.7.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dvsa/olcs-common.git",
-                "reference": "d121826676e7685abd7c89521cbbc3bfcd76eb7d"
+                "reference": "2ba8951e4cc42677df028ad9db75a406b4450001"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/d121826676e7685abd7c89521cbbc3bfcd76eb7d",
-                "reference": "d121826676e7685abd7c89521cbbc3bfcd76eb7d",
+                "url": "https://api.github.com/repos/dvsa/olcs-common/zipball/2ba8951e4cc42677df028ad9db75a406b4450001",
+                "reference": "2ba8951e4cc42677df028ad9db75a406b4450001",
                 "shasum": ""
             },
             "require": {
@@ -4767,7 +4767,7 @@
                 "laminas/laminas-text": "^2.9",
                 "laminas/laminas-validator": "^2.11",
                 "laminas/laminas-view": "^2.23",
-                "olcs/olcs-logging": "^6.0",
+                "olcs/olcs-logging": "^6.0|^7.0",
                 "olcs/olcs-transfer": "^6.0",
                 "olcs/olcs-utils": "^6.0",
                 "php": "^7.4",
@@ -4805,32 +4805,32 @@
             "notification-url": "https://packagist.org/downloads/",
             "description": "Common library for the OLCS Project",
             "support": {
-                "source": "https://github.com/dvsa/olcs-common/tree/v6.7.4"
+                "source": "https://github.com/dvsa/olcs-common/tree/v6.7.5"
             },
-            "time": "2024-04-08T10:36:00+00:00"
+            "time": "2024-04-08T11:39:12+00:00"
         },
         {
             "name": "olcs/olcs-logging",
-            "version": "v6.0.0",
+            "version": "v7.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dvsa/olcs-logging.git",
-                "reference": "558e3fbd7a53e1483658d2b2edd8c2de6bef220a"
+                "reference": "b7a4c1672ce4ad34d16e58b74abfae461405b55d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dvsa/olcs-logging/zipball/558e3fbd7a53e1483658d2b2edd8c2de6bef220a",
-                "reference": "558e3fbd7a53e1483658d2b2edd8c2de6bef220a",
+                "url": "https://api.github.com/repos/dvsa/olcs-logging/zipball/b7a4c1672ce4ad34d16e58b74abfae461405b55d",
+                "reference": "b7a4c1672ce4ad34d16e58b74abfae461405b55d",
                 "shasum": ""
             },
             "require": {
-                "laminas/laminas-console": "^2.7",
+                "ext-json": "*",
                 "laminas/laminas-eventmanager": "^3.0",
                 "laminas/laminas-log": "^2.12",
                 "laminas/laminas-mvc": "^3.3",
                 "laminas/laminas-session": "^2.8.7",
                 "laminas/laminas-stdlib": "^3.0",
-                "php": "^7.4",
+                "php": "^7.4|^8.0",
                 "psr/container": "^1.1|^2",
                 "psr/log": "^1.0"
             },
@@ -4838,6 +4838,7 @@
                 "bamarni/composer-bin-plugin": "^1.8",
                 "johnkary/phpunit-speedtrap": "^4.0",
                 "mockery/mockery": "^1.6",
+                "phpstan/phpstan-mockery": "^1.1",
                 "phpunit/phpunit": "^9.6"
             },
             "type": "library",
@@ -4858,9 +4859,9 @@
             ],
             "description": "Logging Module for OLCS",
             "support": {
-                "source": "https://github.com/dvsa/olcs-logging/tree/v6.0.0"
+                "source": "https://github.com/dvsa/olcs-logging/tree/v7.2.0"
             },
-            "time": "2024-02-20T11:41:22+00:00"
+            "time": "2024-04-08T11:11:14+00:00"
         },
         {
             "name": "olcs/olcs-transfer",

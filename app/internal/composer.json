@@ -36,7 +36,7 @@
         "firebase/php-jwt": "^6.0",
         "olcs/olcs-auth": "^7.0",
         "olcs/olcs-common": "^6.0.0",
-        "olcs/olcs-logging": "^6.0.0",
+        "olcs/olcs-logging": "^7.2",
         "olcs/olcs-transfer": "^6.0.0",
         "olcs/olcs-utils": "^6.0.0",
         "saeven/zf3-purifier": "^1.1",
