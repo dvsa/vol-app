@@ -21,8 +21,6 @@ class ConfirmationController extends AbstractController
 
     public const OPERATOR_MARKUP = 'markup-tma-confirmation-operator';
 
-    protected $tma;
-
     protected $markup = self::OPERATOR_MARKUP;
 
     protected $signature;
