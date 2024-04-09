@@ -56,3 +56,16 @@ There are 2 fixed environments in each AWS account:
 | `int`  | Integration    | `nonprod` | `eu-west-1` |
 | `prep` | Pre-production | `dvsa`    | `eu-west-1` |
 | `prod` | Production     | `dvsa`    | `eu-west-1` |
+
+:::danger
+
+During the transition to the new infrastructure. The environments above will map to the existing environments in the current infrastructure.
+
+| Environment | Existing Environment | Account   |
+| ----------- | -------------------- | --------- |
+| `dev`       | `dev`                | `nonprod` |
+| `int`       | `qa`                 | `nonprod` |
+| `prep`      | `pp`                 | `dvsa`    |
+| `prod`      | `app`                | `dvsa`    |
+
+:::
