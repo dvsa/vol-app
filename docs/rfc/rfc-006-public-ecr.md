@@ -8,9 +8,7 @@ This RFC proposes storing application images in a publicly accessible Docker reg
 
 ### Accessibility
 
-Accessing images in private repositories requires authentication and appropriate IAM permissions. This introduces additional steps required for onboarding/offboarding, deployment, testing, and local development.
-
-These images do not contain sensitive information and the intention is to make the code that builds these images, open-source.
+Accessing images in private repositories requires authentication and appropriate IAM permissions. This introduces additional steps required for onboarding/offboarding, deployment, testing, and local development. The images don't contain sensitive information, and the aim is to open-source the code responsible for building them.
 
 ### Automated version maintenance
 
@@ -18,9 +16,9 @@ Dependabot will require an AWS access key and secret to be able to determine the
 
 ## Proposal
 
-During the CI/CD workflow we will push the images to the GitHub Container Registry (GHCR) alongside the existing push to the existing private ECR. This will allow us to continue to take advantage of ECR scanning and lifecycle policies while making the images more accessible.
+During the CI/CD workflow, we'll push images to both the GitHub Container Registry (GHCR) and the private ECR. This maintains the advantages of ECR scanning and lifecycle policies while improving image accessibility.
 
-GHCR will only be used as a mirror for the images in the private ECR and will not be used in the deployment process.
+GHCR serves as a mirror for private ECR images and won't be involved in the deployment process.
 
 GHCR is [free](https://docs.github.com/en/billing/managing-billing-for-github-packages/about-billing-for-github-packages) for public repositories and has a generous storage limit.
 
@@ -28,12 +26,12 @@ GHCR is [free](https://docs.github.com/en/billing/managing-billing-for-github-pa
 
 ### Changing the ECR to public
 
-[ECR image scanning](https://github.com/aws/containers-roadmap/issues/2208) & [lifecycle policies](https://github.com/aws/containers-roadmap/issues/1268) are not available for public ECR repositories at the moment and both deemed important features at this time.
+Public ECR repositories currently lack important features like [ECR image scanning](https://github.com/aws/containers-roadmap/issues/2208) and [lifecycle policies](https://github.com/aws/containers-roadmap/issues/1268).
 
 ### Using a pull-through cache from the private ECR in a public ECR
 
-[ECR to ECR pull through cache is not supported yet.](https://github.com/aws/containers-roadmap/issues/2208)
+Unfortunately, [ECR to ECR pull-through caching isn't supported yet](https://github.com/aws/containers-roadmap/issues/2208).
 
 ### Pushing to a Public ECR in addition to the private ECR
 
-This offers the same benefits as pushing to GHCR but pushing to GHCR improves visibility on the GitHub UI and removes the need to setup an IAM permission allowing the GitHub Actions runner to push images the public ECR.
+While this provides similar benefits, pushing to GHCR enhances visibility on the GitHub UI and eliminates the need for an IAM permission setup for GitHub Actions runners to push images to the public ECR.
