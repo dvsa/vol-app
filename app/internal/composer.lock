@@ -4865,16 +4865,16 @@
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "v6.7.0",
+            "version": "v6.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dvsa/olcs-transfer.git",
-                "reference": "85f3a7282e1754a5659678c048530ae467ca0ce7"
+                "reference": "b7fd659e4fbfa5518d8a00a52e30283c15e4b97b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dvsa/olcs-transfer/zipball/85f3a7282e1754a5659678c048530ae467ca0ce7",
-                "reference": "85f3a7282e1754a5659678c048530ae467ca0ce7",
+                "url": "https://api.github.com/repos/dvsa/olcs-transfer/zipball/b7fd659e4fbfa5518d8a00a52e30283c15e4b97b",
+                "reference": "b7fd659e4fbfa5518d8a00a52e30283c15e4b97b",
                 "shasum": ""
             },
             "require": {
@@ -4884,7 +4884,7 @@
                 "laminas/laminas-crypt": "^3.4.0",
                 "laminas/laminas-filter": "^2.9.4",
                 "laminas/laminas-form": "^3.1.1",
-                "laminas/laminas-inputfilter": "^2.10.1",
+                "laminas/laminas-inputfilter": "^2.21",
                 "laminas/laminas-router": "^3.9",
                 "laminas/laminas-servicemanager": "^3.3",
                 "laminas/laminas-stdlib": "^3.0",
@@ -4898,6 +4898,7 @@
                 "doctrine/annotations": "^1.14.2",
                 "johnkary/phpunit-speedtrap": "^4.0",
                 "mockery/mockery": "^1.6",
+                "phpstan/phpstan-mockery": "^1.1",
                 "phpunit/phpunit": "^9.6"
             },
             "type": "library",
@@ -4915,9 +4916,9 @@
             "notification-url": "https://packagist.org/downloads/",
             "description": "OLCS Transfer",
             "support": {
-                "source": "https://github.com/dvsa/olcs-transfer/tree/v6.7.0"
+                "source": "https://github.com/dvsa/olcs-transfer/tree/v6.8.0"
             },
-            "time": "2024-03-19T09:33:01+00:00"
+            "time": "2024-04-08T19:45:16+00:00"
         },
         {
             "name": "olcs/olcs-utils",
