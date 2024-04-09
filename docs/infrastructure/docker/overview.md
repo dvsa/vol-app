@@ -16,7 +16,6 @@ The VOL application images are built up of the following high-level layers:
 ---
 config:
     securityLevel: "loose"
-    theme: neutral
 ---
 block-beta
     block:image
