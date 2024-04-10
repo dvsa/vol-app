@@ -4865,16 +4865,16 @@
         },
         {
             "name": "olcs/olcs-transfer",
-            "version": "v6.8.0",
+            "version": "v6.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dvsa/olcs-transfer.git",
-                "reference": "b7fd659e4fbfa5518d8a00a52e30283c15e4b97b"
+                "reference": "c20738f0e8550ce4dbd785e67ab718a5d7762f33"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dvsa/olcs-transfer/zipball/b7fd659e4fbfa5518d8a00a52e30283c15e4b97b",
-                "reference": "b7fd659e4fbfa5518d8a00a52e30283c15e4b97b",
+                "url": "https://api.github.com/repos/dvsa/olcs-transfer/zipball/c20738f0e8550ce4dbd785e67ab718a5d7762f33",
+                "reference": "c20738f0e8550ce4dbd785e67ab718a5d7762f33",
                 "shasum": ""
             },
             "require": {
@@ -4916,9 +4916,9 @@
             "notification-url": "https://packagist.org/downloads/",
             "description": "OLCS Transfer",
             "support": {
-                "source": "https://github.com/dvsa/olcs-transfer/tree/v6.8.0"
+                "source": "https://github.com/dvsa/olcs-transfer/tree/v6.8.1"
             },
-            "time": "2024-04-08T19:45:16+00:00"
+            "time": "2024-04-10T09:07:29+00:00"
         },
         {
             "name": "olcs/olcs-utils",
