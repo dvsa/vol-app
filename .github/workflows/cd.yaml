@@ -214,6 +214,7 @@ jobs:
     permissions:
       contents: read
       id-token: write
+      packages: write
 
   terraform-account-nonprod:
     name: Account (nonprod)

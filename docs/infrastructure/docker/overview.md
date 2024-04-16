@@ -8,6 +8,12 @@ Docker images are built and pushed to ECR during the CD pipeline, refer to the [
 
 ![Docker Images](../../assets/docker-images.png)
 
+:::info
+
+Images are also pushed to the GitHub Container Registry (GHCR) for public access. Refer to the [RFC-006](../../rfc/rfc-006-public-ecr.md) for more details.
+
+:::
+
 # Layers
 
 The VOL application images are built up of the following high-level layers:

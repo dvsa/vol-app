@@ -26,7 +26,8 @@ on:
 
 env:
   WORKING_DIR: infra/docker/${{ inputs.project }}
-  ECR_REGISTRY: 054614622558.dkr.ecr.eu-west-1.amazonaws.com
+  REGISTRY: 054614622558.dkr.ecr.eu-west-1.amazonaws.com
+  REGISTRY_MIRROR: ghcr.io
   AWS_OIDC_ROLE: ${{ vars[format('ACCOUNT_nonprod_TF_OIDC{0}_ROLE', (inputs.should-upload-artefact-to-ecr && '' || '_READONLY'))] || (inputs.should-upload-artefact-to-ecr && vars.TF_OIDC_ROLE || vars.TF_OIDC_READONLY_ROLE) }}
   AWS_REGION: ${{ vars.TF_AWS_REGION }}
 
@@ -65,7 +66,9 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.ECR_REGISTRY }}/vol-app/${{ inputs.project }}
+          images: |
+            ${{ env.REGISTRY }}/vol-app/${{ inputs.project }}
+            ${{ env.REGISTRY_MIRROR }}/dvsa/vol-app/${{ inputs.project }}
           tags: |
             type=sha,format=short
             type=semver,enable=${{ inputs.is-release }},pattern={{version}},value=${{ inputs.version }}
@@ -82,9 +85,17 @@ jobs:
         if: ${{ inputs.should-upload-artefact-to-ecr }}
         uses: docker/login-action@v3
         with:
-          registry: ${{ env.ECR_REGISTRY }}
+          registry: ${{ env.REGISTRY }}
 
-      - name: Untag existing latest image
+      - name: Login to GHCR
+        if: ${{ inputs.should-upload-artefact-to-ecr }}
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY_MIRROR }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Untag existing latest image in ECR
         if: ${{ inputs.should-upload-artefact-to-ecr }}
         run: |
           aws ecr batch-delete-image --repository-name vol-app/${{ inputs.project }} --image-ids imageTag=latest
@@ -115,4 +126,4 @@ jobs:
           plugin_url: https://d2hvyiie56hcat.cloudfront.net/linux/amd64/plugin/latest/notation-aws-signer-plugin.zip
           plugin_checksum: cccfe8fdcdf853d83fd57ffc80524eddda75ad7ae9d9a257b087007230ec02f9
           key_id: arn:aws:signer:eu-west-1:054614622558:/signing-profiles/vol_app_20240313124948142600000001
-          target_artifact_reference: ${{ env.ECR_REGISTRY }}/vol-app/${{ inputs.project }}@${{ steps.build-and-push.outputs.digest }}
+          target_artifact_reference: ${{ env.REGISTRY }}/vol-app/${{ inputs.project }}@${{ steps.build-and-push.outputs.digest }}
