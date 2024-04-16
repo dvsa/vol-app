@@ -34,8 +34,6 @@ module "service" {
 
   environment = "dev"
 
-  domain_name = "dev.olcs.dev-dvsacloud.uk"
-
   services = {
     "api" = {
       cpu    = 1024
