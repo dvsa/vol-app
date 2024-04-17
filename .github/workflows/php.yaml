@@ -181,7 +181,7 @@ jobs:
       - name: Install dependencies
         run: composer install --no-progress --prefer-dist --no-dev --optimize-autoloader
       - name: Archive
-        run: git archive --output=${{ inputs.artefact-name }}.tar.gz HEAD
+        run: tar -czf ${{ inputs.artefact-name }}.tar.gz *
       - name: Upload artefact
         if: ${{ inputs.should-upload-artefact }}
         uses: actions/upload-artifact@v4
