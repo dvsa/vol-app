@@ -15,9 +15,7 @@ RUN apk add icu-dev \
     && docker-php-ext-configure intl && docker-php-ext-install intl \
     && apk del icu-dev
 
-USER www-data
-
-# php config file
+# PHP config file
 COPY ./php.ini ${PHP_INI_DIR}/conf.d/1000-php.ini
 
 ADD --chown=www-data ./api.tar.gz /var/www/html
