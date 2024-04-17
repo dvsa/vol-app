@@ -5,6 +5,7 @@ on:
     inputs:
       ref:
         type: string
+        default: 5.3.0
         required: false
       project:
         type: string
