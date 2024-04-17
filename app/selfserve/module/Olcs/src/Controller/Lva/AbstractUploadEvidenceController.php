@@ -287,15 +287,10 @@ abstract class AbstractUploadEvidenceController extends AbstractController
         $this->getFinancialEvidenceData(true);
     }
 
-    /**
-     * Get list of financial evidence documents
-     *
-     * @return array
-     */
-    public function financialEvidenceLoadFileUpload()
+    /** Get list of financial evidence documents */
+    public function financialEvidenceLoadFileUpload(): array
     {
-        $financialEvidenceData = $this->getFinancialEvidenceData();
-        return $financialEvidenceData['documents'];
+        return array_filter($this->getFinancialEvidenceData()['documents'], fn($doc) => $doc['isPostSubmissionUpload']);
     }
 
     /**
@@ -324,14 +319,10 @@ abstract class AbstractUploadEvidenceController extends AbstractController
         $this->getData(true);
     }
 
-    /**
-     * Get list of supporting evidence documents
-     *
-     * @return array
-     */
-    public function supportingEvidenceLoadFileUpload()
+    /** Get list of supporting evidence documents */
+    public function supportingEvidenceLoadFileUpload(): array
     {
-        return $this->getData()['supportingEvidence'];
+        return array_filter($this->getData()['supportingEvidence'], fn($doc) => $doc['isPostSubmissionUpload']);
     }
 
     /**
