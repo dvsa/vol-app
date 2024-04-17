@@ -21,10 +21,6 @@ COPY ./php.ini ${PHP_INI_DIR}/conf.d/1000-php.ini
 ADD --chown=www-data ./api.tar.gz /var/www/html
 
 # nginx server config file
-COPY ./backend.conf /etc/nginx/conf.d/backend.conf
+COPY api.conf /etc/nginx/conf.d/api.conf
 
-# place holder for copying application
-# ADD ./backend.tar.gz /var/www
-
-# Default startup command when container is launched is in the base image
-
+USER www-data
