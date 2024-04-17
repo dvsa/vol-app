@@ -20,6 +20,8 @@ USER www-data
 # php config file
 COPY ./php.ini ${PHP_INI_DIR}/conf.d/1000-php.ini
 
+ADD --chown=www-data ./api.tar.gz /var/www/html
+
 # nginx server config file
 COPY ./backend.conf /etc/nginx/conf.d/backend.conf
 
