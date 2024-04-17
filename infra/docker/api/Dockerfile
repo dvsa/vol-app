@@ -9,6 +9,11 @@ RUN apk add --no-cache pcre-dev $PHPIZE_DEPS \
     && docker-php-ext-enable redis igbinary \
     && apk del pcre-dev $PHPIZE_DEPS
 
+RUN apk add icu-dev \
+    && docker-php-ext-install mysqli pdo_mysql \
+    && docker-php-ext-install opcache \
+    && docker-php-ext-configure intl && docker-php-ext-install intl \
+    && apk del icu-dev
 
 USER www-data
 
