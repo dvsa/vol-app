@@ -146,6 +146,10 @@ class SearchController extends AbstractController implements LeftViewProvider
 
         $this->loadScripts(['table-actions']);
 
+        if ($searchIndex === 'people') {
+            $this->loadScripts(['people-search']);
+        }
+
         $form = $elasticSearch->getFiltersForm();
         $elasticSearch->processSearchData();
 
