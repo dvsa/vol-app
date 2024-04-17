@@ -66,7 +66,7 @@ return [
                  * @var TableBuilder $this
                  * @psalm-scope-this TableBuilder
                  */
-                $this->permissionService->isSelf($row['id']),
+                $this->permissionService->canManageSelfserveUsers(),
             'ariaDescription' => function ($row, $column) {
                 $column['formatter'] = Name::class;
                 /**
