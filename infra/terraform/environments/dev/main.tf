@@ -47,6 +47,31 @@ module "service" {
         data.aws_security_group.this["API"].id
       ]
     }
+
+    "internal" = {
+      cpu    = 1024
+      memory = 4096
+
+      image = "${data.aws_ecr_repository.this["internal"].repository_url}:${var.internal_image_tag}"
+
+      subnet_ids = data.aws_subnets.this["IUWEB"].ids
+
+      security_group_ids = [
+        data.aws_security_group.this["IUWEB"].id
+      ]
+    }
+
+    "selfserve" = {
+      cpu    = 1024
+      memory = 4096
+
+      image = "${data.aws_ecr_repository.this["selfserve"].repository_url}:${var.selfserve_image_tag}"
+
+      subnet_ids = data.aws_subnets.this["SSWEB"].ids
+
+      security_group_ids = [
+        data.aws_security_group.this["SSWEB"].id
+      ]
+    }
   }
 }
-
