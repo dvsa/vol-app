@@ -5,6 +5,7 @@ on:
     inputs:
       ref:
         type: string
+        default: 5.3.0
         required: false
       project:
         type: string
@@ -181,11 +182,11 @@ jobs:
       - name: Install dependencies
         run: composer install --no-progress --prefer-dist --no-dev --optimize-autoloader
       - name: Archive
-        run: git archive --output=${{ inputs.artefact-name }}.tar.gz HEAD
+        run: tar -czf ${{ inputs.project }}.tar.gz *
       - name: Upload artefact
         if: ${{ inputs.should-upload-artefact }}
         uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.artefact-name }}
-          path: app/${{ inputs.project }}/${{ inputs.artefact-name }}.tar.gz
+          path: app/${{ inputs.project }}/${{ inputs.project }}.tar.gz
           retention-days: ${{ inputs.retention-days }}
