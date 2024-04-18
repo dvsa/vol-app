@@ -53,6 +53,8 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles(format('**/app/{0}/composer.lock', inputs.project)) }}
           restore-keys: ${{ runner.os }}-composer-
       - name: Install dependencies
+        run: composer update
+      - name: Install dependencies
         run: composer install --no-progress --prefer-dist --optimize-autoloader
 
   test:
