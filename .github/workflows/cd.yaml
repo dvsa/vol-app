@@ -299,7 +299,7 @@ jobs:
 
   terraform-env-prep:
     name: Environment (prep)
-    if: ${{ always() && !cancelled() && !failure() && needs.release-please.outputs.release_created && needs.orchestrator.outputs.should-apply-prep-environment-terraform || needs.orchestrator.outputs.should-build-and-push-docker || needs.orchestrator.outputs.should-build-app }}
+    if: ${{ always() && !cancelled() && !failure() && needs.release-please.outputs.release_created && (needs.orchestrator.outputs.should-apply-prep-environment-terraform || needs.orchestrator.outputs.should-build-and-push-docker || needs.orchestrator.outputs.should-build-app) }}
     concurrency:
       group: terraform-environment-prep
     needs:
@@ -322,7 +322,7 @@ jobs:
 
   terraform-env-prod:
     name: Environment (prod)
-    if: ${{ needs.release-please.outputs.release_created && needs.orchestrator.outputs.should-apply-prod-environment-terraform || needs.orchestrator.outputs.should-build-and-push-docker || needs.orchestrator.outputs.should-build-app }}
+    if: ${{ needs.release-please.outputs.release_created && (needs.orchestrator.outputs.should-apply-prod-environment-terraform || needs.orchestrator.outputs.should-build-and-push-docker || needs.orchestrator.outputs.should-build-app) }}
     concurrency:
       group: terraform-environment-prod
     needs:
