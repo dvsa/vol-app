@@ -104,7 +104,7 @@ module "efs" {
   access_points = {
     data_cache = {
       root_directory = {
-        path = "/${var.services[each.key]}/data/cache"
+        path = "/${each.key}/data/cache"
         creation_info = {
           owner_gid   = 1001
           owner_uid   = 1001
