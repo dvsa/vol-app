@@ -70,7 +70,7 @@ jobs:
             ${{ env.REGISTRY }}/vol-app/${{ inputs.project }}
             ${{ env.REGISTRY_MIRROR }}/dvsa/vol-app/${{ inputs.project }}
           tags: |
-            type=sha,format=short
+            type=sha,prefix=,format=short
             type=semver,enable=${{ inputs.is-release }},pattern={{version}},value=${{ inputs.version }}
             type=raw,value=latest
 
