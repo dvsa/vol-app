@@ -170,7 +170,7 @@ jobs:
     with:
       project: ${{ matrix.project }}
       should-upload-artefact: ${{ !!needs.orchestrator.outputs[format('should-build-{0}-docker', matrix.project)] }}
-      artefact-name: app-${{ matrix.project}}-${{ needs.get-version.outputs[matrix.project] }}
+      artefact-name: ${{ matrix.project}}
       retention-days: 1
     permissions:
       contents: read
@@ -199,7 +199,7 @@ jobs:
     with:
       project: ${{ matrix.project }}
       version: ${{ needs.get-version.outputs[matrix.project] }}
-      app-artefact-name: app-${{ matrix.project}}-${{ needs.get-version.outputs[matrix.project] }}
+      app-artefact-name: ${{ matrix.project}}
       should-upload-artefact-to-ecr: false
     permissions:
       contents: read
